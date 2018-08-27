@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.copier.portfolio;
@@ -14,23 +14,23 @@ import com.opengamma.master.security.ManageableSecurity;
 public class VerbosePortfolioCopierVisitor extends PortfolioCopierStats {
 
   @Override
-  public void error(String message) {
+  public void error(final String message) {
     System.out.println("Error: " + message);
   }
   @Override
-  public void info(String message, ManageablePosition position, ManageableSecurity[] securities) {
+  public void info(final String message, final ManageablePosition position, final ManageableSecurity[] securities) {
     super.info(message, position, securities);
     if (message != null && message.length() > 0) {
       System.out.print("[" + message + "] ");
     }
     System.out.print("Wrote position '" + position.getName() + "' and securities [");
-    for (ManageableSecurity security : securities) {
+    for (final ManageableSecurity security : securities) {
       System.out.print(" '" + security.getName() + "'");
     }
     System.out.println(" ]");
   }
   @Override
-  public void info(String message) {
+  public void info(final String message) {
     System.out.println(message);
   }
 

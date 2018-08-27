@@ -44,13 +44,13 @@ public class IRFutureOptionSecurityFudgeBuilder extends AbstractFudgeBuilder imp
   public static final String OPTION_TYPE_FIELD_NAME = "optionType";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, IRFutureOptionSecurity object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final IRFutureOptionSecurity object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     IRFutureOptionSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
-  public static void toFudgeMsg(FudgeSerializer serializer, IRFutureOptionSecurity object, final MutableFudgeMsg msg) {
+  public static void toFudgeMsg(final FudgeSerializer serializer, final IRFutureOptionSecurity object, final MutableFudgeMsg msg) {
     FinancialSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     addToMessage(msg, EXCHANGE_FIELD_NAME, object.getExchange());
     addToMessage(msg, EXPIRY_FIELD_NAME, ExpiryFudgeBuilder.toFudgeMsg(serializer, object.getExpiry()));
@@ -64,13 +64,13 @@ public class IRFutureOptionSecurityFudgeBuilder extends AbstractFudgeBuilder imp
   }
 
   @Override
-  public IRFutureOptionSecurity buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    IRFutureOptionSecurity object = new IRFutureOptionSecurity();
+  public IRFutureOptionSecurity buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final IRFutureOptionSecurity object = new IRFutureOptionSecurity();
     IRFutureOptionSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     return object;
   }
 
-  public static void fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg, IRFutureOptionSecurity object) {
+  public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final IRFutureOptionSecurity object) {
     FinancialSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     object.setExchange(msg.getString(EXCHANGE_FIELD_NAME));
     object.setExpiry(ExpiryFudgeBuilder.fromFudgeMsg(deserializer, msg.getMessage(EXPIRY_FIELD_NAME)));

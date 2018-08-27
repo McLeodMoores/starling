@@ -23,15 +23,15 @@ public class YieldCurveData {
   private final Map<ExternalIdBundle, Double> _dataPoints;
   private final Map<ExternalId, ExternalIdBundle> _index;
 
-  public YieldCurveData(InterpolatedYieldCurveSpecificationWithSecurities curveSpec,
-                        Map<ExternalIdBundle, Double> dataPoints) {
+  public YieldCurveData(final InterpolatedYieldCurveSpecificationWithSecurities curveSpec,
+                        final Map<ExternalIdBundle, Double> dataPoints) {
     ArgumentChecker.notNull(curveSpec, "curveSpec");
     ArgumentChecker.notEmpty(dataPoints, "dataPoints");
     _curveSpec = curveSpec;
     _dataPoints = ImmutableMap.copyOf(dataPoints);
-    Map<ExternalId, ExternalIdBundle> index = Maps.newHashMap();
-    for (ExternalIdBundle bundle : dataPoints.keySet()) {
-      for (ExternalId id : bundle) {
+    final Map<ExternalId, ExternalIdBundle> index = Maps.newHashMap();
+    for (final ExternalIdBundle bundle : dataPoints.keySet()) {
+      for (final ExternalId id : bundle) {
         index.put(id, bundle);
       }
     }
@@ -98,7 +98,7 @@ public class YieldCurveData {
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }

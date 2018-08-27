@@ -55,12 +55,12 @@ public final class InterestRateSwapNotional extends InterestRateNotional {
   private List<Rate.ShiftType> _shiftTypes;
 
   //@Override
-  public <T> T accept(InterestRateSwapNotionalVisitor<LocalDate, T> visitor, LocalDate period) {
+  public <T> T accept(final InterestRateSwapNotionalVisitor<LocalDate, T> visitor, final LocalDate period) {
     return visitor.visitInterestRateSwapNotional(this, period);
   }
 
   //@Override
-  public <T> T accept(InterestRateSwapNotionalVisitor<Object , T> visitor) {
+  public <T> T accept(final InterestRateSwapNotionalVisitor<Object , T> visitor) {
     return visitor.visitInterestRateSwapNotional(this);
   }
 
@@ -123,7 +123,7 @@ public final class InterestRateSwapNotional extends InterestRateNotional {
    * @param types the shift types for each step in the schedule
    * @return the notional schedule
    */
-  public static InterestRateSwapNotional of(Currency ccy, final List<LocalDate> dates, final List<Double> notionals, List<Rate.ShiftType> types) {
+  public static InterestRateSwapNotional of(final Currency ccy, final List<LocalDate> dates, final List<Double> notionals, final List<Rate.ShiftType> types) {
     ArgumentChecker.noNulls(dates, "dates");
     ArgumentChecker.noNulls(notionals, "notionals");
     ArgumentChecker.noNulls(types, "types");
@@ -145,8 +145,8 @@ public final class InterestRateSwapNotional extends InterestRateNotional {
    * @param notionals the notional values that take effect
    * @return the notional schedule
    */
-  public static InterestRateSwapNotional of(Currency ccy, final List<LocalDate> dates, final List<Double> notionals) {
-    List<Rate.ShiftType> types = Lists.newArrayListWithExpectedSize(notionals.size());
+  public static InterestRateSwapNotional of(final Currency ccy, final List<LocalDate> dates, final List<Double> notionals) {
+    final List<Rate.ShiftType> types = Lists.newArrayListWithExpectedSize(notionals.size());
     for (int i = 0; i < dates.size(); i++) {
       types.add(Rate.ShiftType.OUTRIGHT);
     }
@@ -160,11 +160,11 @@ public final class InterestRateSwapNotional extends InterestRateNotional {
    * @param notional the notional value
    * @return the constant notional
    */
-  public static InterestRateSwapNotional of(Currency ccy, final double notional) {
+  public static InterestRateSwapNotional of(final Currency ccy, final double notional) {
     return new InterestRateSwapNotional(ccy, notional);
   }
 
-  private InterestRateSwapNotional(Currency ccy, List<LocalDate> overridePeriods, List<Double> notionals, List<Rate.ShiftType> types) {
+  private InterestRateSwapNotional(final Currency ccy, final List<LocalDate> overridePeriods, final List<Double> notionals, final List<Rate.ShiftType> types) {
     super(ccy, ArgumentChecker.notEmpty(notionals, "notionals").iterator().next());
     ArgumentChecker.isTrue(overridePeriods.size() == notionals.size(), "Different overrides & notionals");
     ArgumentChecker.isTrue(overridePeriods.size() == types.size(), "Different overrides & adjustment types");

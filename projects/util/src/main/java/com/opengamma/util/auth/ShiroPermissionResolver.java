@@ -51,7 +51,7 @@ public final class ShiroPermissionResolver implements PermissionResolver {
         .maximumSize(1000)
         .build(new CacheLoader<String, Permission>() {
           @Override
-          public Permission load(String permissionStr) {
+          public Permission load(final String permissionStr) {
             return doResolvePermission(permissionStr);
           }
         });
@@ -73,13 +73,13 @@ public final class ShiroPermissionResolver implements PermissionResolver {
    * <p>
    * This allows different implementations of the {@code Permission} interface
    * to be created based on a prefix.
-   * 
+   *
    * @param resolver  the permission resolver, not null
    * @throws IllegalArgumentException if the prefix is already registered
    */
-  public void register(PrefixedPermissionResolver resolver) {
+  public void register(final PrefixedPermissionResolver resolver) {
     ArgumentChecker.notNull(resolver, "resolver");
-    PrefixedPermissionResolver existing = _prefixed.putIfAbsent(resolver.getPrefix(), resolver);
+    final PrefixedPermissionResolver existing = _prefixed.putIfAbsent(resolver.getPrefix(), resolver);
     if (existing != null && existing.equals(resolver) == false) {
       throw new IllegalArgumentException("Prefix is already registered");
     }
@@ -90,17 +90,17 @@ public final class ShiroPermissionResolver implements PermissionResolver {
    * Resolves the permission from string to object form.
    * <p>
    * This uses a cache to speed up comparisons.
-   * 
+   *
    * @param permissionString  the permission string, not null
    * @return the permission object, not null
    * @throws InvalidPermissionStringException if the permission string is invalid
    */
   @Override
-  public Permission resolvePermission(String permissionString) {
+  public Permission resolvePermission(final String permissionString) {
     ArgumentChecker.notNull(permissionString, "permissionString");
     try {
       return _cache.getUnchecked(permissionString);
-    } catch (UncheckedExecutionException ex) {
+    } catch (final UncheckedExecutionException ex) {
       // cache annoyingly wraps underlying runtime exceptions, so unwrap and rethrow
       Throwables.propagateIfPossible(ex.getCause());
       throw ex;
@@ -111,15 +111,15 @@ public final class ShiroPermissionResolver implements PermissionResolver {
    * Resolves a set of permissions from string to object form.
    * <p>
    * The returned set of permissions may be smaller than the input set.
-   * 
+   *
    * @param permissionStrings  the set of permission strings, not null
    * @return the set of permission objects, not null
    * @throws InvalidPermissionStringException if the permission string is invalid
    */
-  public ImmutableList<Permission> resolvePermissions(String... permissionStrings) {
+  public ImmutableList<Permission> resolvePermissions(final String... permissionStrings) {
     ArgumentChecker.notNull(permissionStrings, "permissionStrings");
-    ImmutableList.Builder<Permission> builder = ImmutableList.builder();
-    for (String permissionString : permissionStrings) {
+    final ImmutableList.Builder<Permission> builder = ImmutableList.builder();
+    for (final String permissionString : permissionStrings) {
       builder.add(resolvePermission(permissionString));
     }
     return builder.build();
@@ -129,15 +129,15 @@ public final class ShiroPermissionResolver implements PermissionResolver {
    * Resolves a set of permissions from string to object form.
    * <p>
    * The returned set of permissions may be smaller than the input set.
-   * 
+   *
    * @param permissionStrings  the set of permission strings, not null
    * @return the set of permission objects, not null
    * @throws InvalidPermissionStringException if the permission string is invalid
    */
-  public ImmutableSet<Permission> resolvePermissions(Collection<String> permissionStrings) {
+  public ImmutableSet<Permission> resolvePermissions(final Collection<String> permissionStrings) {
     ArgumentChecker.notNull(permissionStrings, "permissionStrings");
-    ImmutableSet.Builder<Permission> builder = ImmutableSet.builder();
-    for (String permissionString : permissionStrings) {
+    final ImmutableSet.Builder<Permission> builder = ImmutableSet.builder();
+    for (final String permissionString : permissionStrings) {
       builder.add(resolvePermission(permissionString));
     }
     return builder.build();
@@ -150,24 +150,24 @@ public final class ShiroPermissionResolver implements PermissionResolver {
    * The first collection contains the set of permissions held by the subject.
    * The second collection contains the permissions that are required.
    * This returns true if the set of subject permissions grants all the required permissions.
-   * 
+   *
    * @param subjectPermissions  the set of permissions held by the subject, not null
    * @param requiredPermissions  the permissions that are required, not null
    * @return true if all the required permissions are granted
    */
-  public boolean isPermittedAll(Collection<Permission> subjectPermissions, Collection<Permission> requiredPermissions) {
+  public boolean isPermittedAll(final Collection<Permission> subjectPermissions, final Collection<Permission> requiredPermissions) {
     // try bulk check
-    for (Permission subjectPermission : subjectPermissions) {
+    for (final Permission subjectPermission : subjectPermissions) {
       if (subjectPermission instanceof ExtendedPermission) {
-        ExtendedPermission subjectPerm = (ExtendedPermission) subjectPermission;
-        Boolean implied = subjectPerm.checkImpliesAll(requiredPermissions, false);
+        final ExtendedPermission subjectPerm = (ExtendedPermission) subjectPermission;
+        final Boolean implied = subjectPerm.checkImpliesAll(requiredPermissions, false);
         if (implied != null) {
           return implied.booleanValue();
         }
       }
     }
     // normal non-bulk check
-    for (Permission requiredPermission : requiredPermissions) {
+    for (final Permission requiredPermission : requiredPermissions) {
       if (implies(subjectPermissions, requiredPermission) == false) {
         return false;
       }
@@ -176,8 +176,8 @@ public final class ShiroPermissionResolver implements PermissionResolver {
   }
 
   // does one of the subject permissions imply the required permission
-  private boolean implies(Collection<? extends Permission> subjectPermissions, Permission requiredPermission) {
-    for (Permission subjectPermission : subjectPermissions) {
+  private boolean implies(final Collection<? extends Permission> subjectPermissions, final Permission requiredPermission) {
+    for (final Permission subjectPermission : subjectPermissions) {
       if (subjectPermission.implies(requiredPermission)) {
         return true;
       }
@@ -191,19 +191,19 @@ public final class ShiroPermissionResolver implements PermissionResolver {
    * The first collection contains the set of permissions held by the subject.
    * The second collection contains the permissions that are required.
    * This returns true if the set of subject permissions grants all the required permissions.
-   * 
+   *
    * @param subjectPermissions  the set of permissions held by the subject, not null
    * @param requiredPermissions  the permissions that are required, not null
    * @throws UnauthenticatedException if permission was denied due to invalid user authentication
    * @throws UnauthorizedException if the user does not have the requested permission
    * @throws AuthorizationException if permission was denied due to some other issue
    */
-  public void checkPermissions(Collection<Permission> subjectPermissions, Collection<Permission> requiredPermissions) {
+  public void checkPermissions(final Collection<Permission> subjectPermissions, final Collection<Permission> requiredPermissions) {
     // try bulk check
-    for (Permission subjectPermission : subjectPermissions) {
+    for (final Permission subjectPermission : subjectPermissions) {
       if (subjectPermission instanceof ExtendedPermission) {
-        ExtendedPermission subjectPerm = (ExtendedPermission) subjectPermission;
-        Boolean implied = subjectPerm.checkImpliesAll(requiredPermissions, true);
+        final ExtendedPermission subjectPerm = (ExtendedPermission) subjectPermission;
+        final Boolean implied = subjectPerm.checkImpliesAll(requiredPermissions, true);
         if (implied != null) {
           if (implied) {
             return;
@@ -213,14 +213,14 @@ public final class ShiroPermissionResolver implements PermissionResolver {
       }
     }
     // normal non-bulk check
-    for (Permission requiredPermission : requiredPermissions) {
+    for (final Permission requiredPermission : requiredPermissions) {
       checkImplies(subjectPermissions, requiredPermission);
     }
   }
 
   // does one of the subject permissions imply the required permission, exception if not
-  private void checkImplies(Collection<? extends Permission> subjectPermissions, Permission requiredPermission) {
-    for (Permission subjectPermission : subjectPermissions) {
+  private void checkImplies(final Collection<? extends Permission> subjectPermissions, final Permission requiredPermission) {
+    for (final Permission subjectPermission : subjectPermissions) {
       if (subjectPermission instanceof ExtendedPermission) {
         if (((ExtendedPermission) subjectPermission).checkImplies(requiredPermission)) {
           return;
@@ -242,13 +242,13 @@ public final class ShiroPermissionResolver implements PermissionResolver {
    * Otherwise, the standard permission is used.
    * <p>
    * This is called directly from the cache.
-   * 
+   *
    * @param permissionString  the permission string, not null
    * @return the new permission object, not null
    * @throws InvalidPermissionStringException if the permission string is invalid
    */
-  private Permission doResolvePermission(String permissionString) {
-    for (PrefixedPermissionResolver prefixedResolver : _prefixed.values()) {
+  private Permission doResolvePermission(final String permissionString) {
+    for (final PrefixedPermissionResolver prefixedResolver : _prefixed.values()) {
       if (permissionString.startsWith(prefixedResolver.getPrefix())) {
         return prefixedResolver.resolvePermission(permissionString);
       }

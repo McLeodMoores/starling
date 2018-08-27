@@ -46,30 +46,31 @@ public class FudgeObjectXMLConsumer extends FudgeBase implements MessageBodyRead
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
-    FudgeMessageBuilder<?> builder = getFudgeContext().getObjectDictionary().getMessageBuilder(type);
+  public boolean isReadable(final Class<?> type, final Type genericType, final Annotation[] annotations, final MediaType mediaType) {
+    final FudgeMessageBuilder<?> builder = getFudgeContext().getObjectDictionary().getMessageBuilder(type);
     return type != String.class &&  // allow manually created JSON string to work
-        ((builder != null && !builder.getClass().getCanonicalName().equals("org.fudgemsg.mapping.JavaBeanBuilder")) ||
+        (builder != null && !builder.getClass().getCanonicalName().equals("org.fudgemsg.mapping.JavaBeanBuilder") ||
           type == FudgeMsgEnvelope.class);
   }
 
   @Override
   public Object readFrom(
-      Class<Object> type,
-      Type genericType,
-      Annotation[] annotations,
-      MediaType mediaType,
-      MultivaluedMap<String, String> httpHeaders,
-      InputStream entityStream) throws IOException, WebApplicationException {
-    
-    InputStreamReader entityReader = new InputStreamReader(entityStream, Charsets.UTF_8);
+      final Class<Object> type,
+      final Type genericType,
+      final Annotation[] annotations,
+      final MediaType mediaType,
+      final MultivaluedMap<String, String> httpHeaders,
+      final InputStream entityStream) throws IOException, WebApplicationException {
+
+    final InputStreamReader entityReader = new InputStreamReader(entityStream, Charsets.UTF_8);
     @SuppressWarnings("resource")  // wraps stream that cannot be closed here
+    final
     FudgeMsgReader reader = new FudgeMsgReader(new FudgeXMLStreamReader(getFudgeContext(), entityReader));
-    FudgeMsg message = reader.nextMessage();
+    final FudgeMsg message = reader.nextMessage();
     if (message == null) {
       return null;
     }
-    FudgeDeserializer deser = new FudgeDeserializer(getFudgeContext());
+    final FudgeDeserializer deser = new FudgeDeserializer(getFudgeContext());
     return deser.fudgeMsgToObject(type, message);
   }
 

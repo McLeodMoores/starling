@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.web.server;
@@ -52,18 +52,18 @@ public class AggregatedViewDefinitionManager {
   private final PortfolioMaster _userPortfolioMaster;
   private final Map<String, AggregationFunction<?>> _portfolioAggregators;
   private final SavePortfolio _portfolioSaver;
-  
+
   private final ReentrantLock _lock = new ReentrantLock();
   private final Map<Pair<UniqueId, List<String>>, PortfolioReference> _aggregatedPortfolios = Maps.newHashMap();
   private final Map<Pair<UniqueId, List<String>>, ViewDefinitionReference> _aggregatedViewDefinitions = Maps.newHashMap();
 
-  public AggregatedViewDefinitionManager(PositionSource positionSource,
-                                         SecuritySource securitySource,
-                                         ConfigSource combinedConfigSource,
-                                         ConfigMaster userConfigMaster,
-                                         PortfolioMaster userPortfolioMaster,
-                                         PositionMaster userPositionMaster,
-                                         Map<String, AggregationFunction<?>> portfolioAggregators) {
+  public AggregatedViewDefinitionManager(final PositionSource positionSource,
+                                         final SecuritySource securitySource,
+                                         final ConfigSource combinedConfigSource,
+                                         final ConfigMaster userConfigMaster,
+                                         final PortfolioMaster userPortfolioMaster,
+                                         final PositionMaster userPositionMaster,
+                                         final Map<String, AggregationFunction<?>> portfolioAggregators) {
     _positionSource = positionSource;
     _securitySource = securitySource;
     _combinedConfigSource = combinedConfigSource;
@@ -72,12 +72,12 @@ public class AggregatedViewDefinitionManager {
     _portfolioAggregators = portfolioAggregators;
     _portfolioSaver = new SavePortfolio(Executors.newSingleThreadExecutor(), userPortfolioMaster, userPositionMaster);
   }
-  
+
   public Set<String> getAggregatorNames() {
     return ImmutableSet.copyOf(_portfolioAggregators.keySet());
   }
-  
-  public UniqueId getViewDefinitionId(UniqueId baseViewDefinitionId, String aggregatorName) {
+
+  public UniqueId getViewDefinitionId(final UniqueId baseViewDefinitionId, final String aggregatorName) {
     List<String> aggregators;
     if (aggregatorName != null) {
       aggregators = Collections.singletonList(aggregatorName);
@@ -87,41 +87,41 @@ public class AggregatedViewDefinitionManager {
     return getViewDefinitionId(baseViewDefinitionId, aggregators);
   }
 
-  public UniqueId getViewDefinitionId(UniqueId baseViewDefinitionId, List<String> aggregatorNames) {
+  public UniqueId getViewDefinitionId(final UniqueId baseViewDefinitionId, final List<String> aggregatorNames) {
     // TODO: what about changes to the base view definition?
     ArgumentChecker.notNull(baseViewDefinitionId, "baseViewDefinitionId");
     ArgumentChecker.notNull(aggregatorNames, "aggregatorNames");
-    ViewDefinition baseViewDefinition = (ViewDefinition) _combinedConfigSource.get(baseViewDefinitionId).getValue();
+    final ViewDefinition baseViewDefinition = (ViewDefinition) _combinedConfigSource.get(baseViewDefinitionId).getValue();
     if (baseViewDefinition == null) {
       throw new OpenGammaRuntimeException("Unknown view definition with unique ID " + baseViewDefinitionId);
     }
-    UniqueId basePortfolioId = baseViewDefinition.getPortfolioId();
+    final UniqueId basePortfolioId = baseViewDefinition.getPortfolioId();
     if (aggregatorNames.isEmpty() || basePortfolioId == null) {
       return baseViewDefinitionId;
     }
-    Pair<UniqueId, List<String>> aggregatedViewDefinitionKey = Pairs.of(baseViewDefinition.getUniqueId(), aggregatorNames);
-    Pair<UniqueId, List<String>> aggregatedPortfolioKey = Pairs.of(basePortfolioId, aggregatorNames);
+    final Pair<UniqueId, List<String>> aggregatedViewDefinitionKey = Pairs.of(baseViewDefinition.getUniqueId(), aggregatorNames);
+    final Pair<UniqueId, List<String>> aggregatedPortfolioKey = Pairs.of(basePortfolioId, aggregatorNames);
     _lock.lock();
     try {
       ViewDefinitionReference aggregatedViewDefinitionReference = _aggregatedViewDefinitions.get(aggregatedViewDefinitionKey);
       if (aggregatedViewDefinitionReference == null) {
         PortfolioReference aggregatedPortfolioReference = _aggregatedPortfolios.get(aggregatedPortfolioKey);
         if (aggregatedPortfolioReference == null) {
-          UniqueId aggregatedPortfolioId = aggregatePortfolio(basePortfolioId, aggregatorNames);
+          final UniqueId aggregatedPortfolioId = aggregatePortfolio(basePortfolioId, aggregatorNames);
           aggregatedPortfolioReference = new PortfolioReference(basePortfolioId, aggregatedPortfolioId);
           _aggregatedPortfolios.put(aggregatedPortfolioKey, aggregatedPortfolioReference);
         }
-        String aggregatedViewDefinitionName = getAggregatedViewDefinitionName(baseViewDefinition.getName(), aggregatorNames);
-        ViewDefinition aggregatedViewDefinition = baseViewDefinition.copyWith(aggregatedViewDefinitionName,
+        final String aggregatedViewDefinitionName = getAggregatedViewDefinitionName(baseViewDefinition.getName(), aggregatorNames);
+        final ViewDefinition aggregatedViewDefinition = baseViewDefinition.copyWith(aggregatedViewDefinitionName,
                                                                               aggregatedPortfolioReference.incrementReferenceCount(),
                                                                               baseViewDefinition.getMarketDataUser());
-        
+
         // Treat as a transient view definition that should not be persistent
         //aggregatedViewDefinition.setPersistent(false);
-        
-        ConfigItem<ViewDefinition> configItem = ConfigItem.of(aggregatedViewDefinition);
+
+        final ConfigItem<ViewDefinition> configItem = ConfigItem.of(aggregatedViewDefinition);
         configItem.setName(aggregatedViewDefinition.getName());
-        UniqueId viewDefinitionId = _userConfigMaster.add(new ConfigDocument(configItem)).getUniqueId();
+        final UniqueId viewDefinitionId = _userConfigMaster.add(new ConfigDocument(configItem)).getUniqueId();
         aggregatedViewDefinitionReference = new ViewDefinitionReference(viewDefinitionId, aggregatedPortfolioReference);
         _aggregatedViewDefinitions.put(aggregatedViewDefinitionKey, aggregatedViewDefinitionReference);
       }
@@ -130,8 +130,8 @@ public class AggregatedViewDefinitionManager {
       _lock.unlock();
     }
   }
-  
-  public void releaseViewDefinition(UniqueId baseViewDefinitionId, String aggregatorName) {
+
+  public void releaseViewDefinition(final UniqueId baseViewDefinitionId, final String aggregatorName) {
     List<String> aggregatorNames;
     if (aggregatorName != null) {
       aggregatorNames = Collections.singletonList(aggregatorName);
@@ -141,19 +141,19 @@ public class AggregatedViewDefinitionManager {
     releaseViewDefinition(baseViewDefinitionId, aggregatorNames);
   }
 
-  public void releaseViewDefinition(UniqueId baseViewDefinitionId, List<String> aggregatorNames) {
-    Pair<UniqueId, List<String>> aggregatedViewDefinitionKey = Pairs.of(baseViewDefinitionId, aggregatorNames);
-    ViewDefinitionReference viewDefinitionReference = _aggregatedViewDefinitions.get(aggregatedViewDefinitionKey);
+  public void releaseViewDefinition(final UniqueId baseViewDefinitionId, final List<String> aggregatorNames) {
+    final Pair<UniqueId, List<String>> aggregatedViewDefinitionKey = Pairs.of(baseViewDefinitionId, aggregatorNames);
+    final ViewDefinitionReference viewDefinitionReference = _aggregatedViewDefinitions.get(aggregatedViewDefinitionKey);
     if (viewDefinitionReference == null) {
       return;
     }
     _lock.lock();
     try {
       if (viewDefinitionReference.decrementReferenceCount() <= 0) {
-        PortfolioReference portfolioReference = viewDefinitionReference.getPortfolioReference();
+        final PortfolioReference portfolioReference = viewDefinitionReference.getPortfolioReference();
         if (portfolioReference.decrementReferenceCount() <= 0) {
           _userPortfolioMaster.remove(portfolioReference.getPortfolioId());
-          Pair<UniqueId, List<String>> aggregatedPortfolioKey = Pairs.of(portfolioReference.getBasePortfolioId(), aggregatorNames);
+          final Pair<UniqueId, List<String>> aggregatedPortfolioKey = Pairs.of(portfolioReference.getBasePortfolioId(), aggregatorNames);
           _aggregatedPortfolios.remove(aggregatedPortfolioKey);
         }
         _userConfigMaster.remove(viewDefinitionReference.getViewDefinitionId());
@@ -163,71 +163,71 @@ public class AggregatedViewDefinitionManager {
       _lock.unlock();
     }
   }
-  
-  private String getAggregatedViewDefinitionName(String baseViewDefinitionName, List<String> aggregatorNames) {
+
+  private String getAggregatedViewDefinitionName(final String baseViewDefinitionName, final List<String> aggregatorNames) {
     return baseViewDefinitionName + " aggregated by " + StringUtils.join(aggregatorNames, ", ");
   }
 
-  private UniqueId aggregatePortfolio(UniqueId basePortfolioId, List<String> aggregatorNames) {
+  private UniqueId aggregatePortfolio(final UniqueId basePortfolioId, final List<String> aggregatorNames) {
     // REVIEW jonathan 2011-11-13 -- portfolio aggregation is currently painful. The positions obtained from the
     // position source during the orginal portfolio lookup contain munged identifiers that do not correspond to
     // anything in the position master. We end up rewriting the positions even though there is no need, then we cannot
     // clean them up when the portfolio is no longer required in case other portfolios have now referenced the new
     // positions.
-    Portfolio basePortfolio = _positionSource.getPortfolio(basePortfolioId, VersionCorrection.LATEST);
-    Portfolio resolvedPortfolio =
+    final Portfolio basePortfolio = _positionSource.getPortfolio(basePortfolioId, VersionCorrection.LATEST);
+    final Portfolio resolvedPortfolio =
         PortfolioCompiler.resolvePortfolio(basePortfolio, Executors.newSingleThreadExecutor(), _securitySource);
-    List<AggregationFunction<?>> aggregationFunctions = Lists.newArrayListWithCapacity(aggregatorNames.size());
-    for (String aggregatorName : aggregatorNames) {
-      AggregationFunction<?> aggregationFunction = _portfolioAggregators.get(aggregatorName);
+    final List<AggregationFunction<?>> aggregationFunctions = Lists.newArrayListWithCapacity(aggregatorNames.size());
+    for (final String aggregatorName : aggregatorNames) {
+      final AggregationFunction<?> aggregationFunction = _portfolioAggregators.get(aggregatorName);
       if (aggregationFunction == null) {
         throw new OpenGammaRuntimeException("Unknown aggregator '" + aggregatorName + "'");
       }
       aggregationFunctions.add(aggregationFunction);
     }
-    PortfolioAggregator aggregator = new PortfolioAggregator(aggregationFunctions);
-    Portfolio aggregatedPortfolio = aggregator.aggregate(resolvedPortfolio);
+    final PortfolioAggregator aggregator = new PortfolioAggregator(aggregationFunctions);
+    final Portfolio aggregatedPortfolio = aggregator.aggregate(resolvedPortfolio);
     return _portfolioSaver.savePortfolio(aggregatedPortfolio, false);
   }
-  
+
   //-------------------------------------------------------------------------
   private static class PortfolioReference {
-    
+
     private final UniqueId _basePortfolioId;
     private final UniqueId _portfolioId;
     private long _referenceCount;
-    
-    public PortfolioReference(UniqueId basePortfolioId, UniqueId portfolioId) {
+
+    public PortfolioReference(final UniqueId basePortfolioId, final UniqueId portfolioId) {
       _basePortfolioId = basePortfolioId;
       _portfolioId = portfolioId;
     }
-    
+
     public UniqueId getBasePortfolioId() {
       return _basePortfolioId;
     }
-    
+
     public UniqueId getPortfolioId() {
       return _portfolioId;
     }
-    
+
     public UniqueId incrementReferenceCount() {
       _referenceCount++;
       return _portfolioId;
     }
-    
+
     public long decrementReferenceCount() {
       return --_referenceCount;
     }
-    
+
   }
-  
+
   private static class ViewDefinitionReference {
-    
+
     private final UniqueId _viewDefinitionId;
     private final PortfolioReference _portfolioReference;
     private long _referenceCount;
-    
-    public ViewDefinitionReference(UniqueId viewDefinitionId, PortfolioReference portfolioReference) {
+
+    public ViewDefinitionReference(final UniqueId viewDefinitionId, final PortfolioReference portfolioReference) {
       _viewDefinitionId = viewDefinitionId;
       _portfolioReference = portfolioReference;
     }
@@ -235,20 +235,20 @@ public class AggregatedViewDefinitionManager {
     public UniqueId getViewDefinitionId() {
       return _viewDefinitionId;
     }
-    
+
     public PortfolioReference getPortfolioReference() {
       return _portfolioReference;
     }
-    
+
     public UniqueId incrementReferenceCount() {
       _referenceCount++;
       return _viewDefinitionId;
     }
-    
+
     public long decrementReferenceCount() {
       return --_referenceCount;
     }
-    
+
   }
 
 }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.spring;
@@ -18,15 +18,15 @@ import com.opengamma.util.SingletonFactoryBean;
 public class ResourcePathFactoryBean extends SingletonFactoryBean<String> {
 
   private String _resource;
-  
+
   public String getResource() {
     return _resource;
   }
-  
-  public void setResource(String resource) {
+
+  public void setResource(final String resource) {
     _resource = resource;
   }
-  
+
   @Override
   protected String createObject() {
     ArgumentChecker.notNull(getResource(), "resource");
@@ -37,7 +37,7 @@ public class ResourcePathFactoryBean extends SingletonFactoryBean<String> {
     try {
       // Get URL of resource which may be of the form 'classpath:'
       return ResourceUtils.getURL(getResource()).toString();
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw new OpenGammaRuntimeException("Error obtaining URI of resource " + getResource(), e);
     }
   }

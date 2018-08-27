@@ -23,42 +23,42 @@ public class BySchemeFakeSubscriptionSelector implements FakeSubscriptionSelecto
 
   private final Set<ExternalScheme> _toFake;
 
-  public BySchemeFakeSubscriptionSelector(String... toFakes) {
+  public BySchemeFakeSubscriptionSelector(final String... toFakes) {
     this(getSchemes(toFakes));
   }
 
-  public BySchemeFakeSubscriptionSelector(ExternalScheme... toFakes) {
+  public BySchemeFakeSubscriptionSelector(final ExternalScheme... toFakes) {
     this(Sets.newHashSet(toFakes));
   }
 
-  public BySchemeFakeSubscriptionSelector(Set<ExternalScheme> toFake) {
+  public BySchemeFakeSubscriptionSelector(final Set<ExternalScheme> toFake) {
     _toFake = toFake;
   }
 
   @Override
   public ObjectsPair<Collection<LiveDataSpecification>, Collection<LiveDataSpecification>> splitShouldFake(
-      FakeSubscriptionBloombergLiveDataServer server, Collection<LiveDataSpecification> specs) {
+      final FakeSubscriptionBloombergLiveDataServer server, final Collection<LiveDataSpecification> specs) {
     if (specs.isEmpty()) {
       return ObjectsPair.of((Collection<LiveDataSpecification>) new ArrayList<LiveDataSpecification>(), (Collection<LiveDataSpecification>) new ArrayList<LiveDataSpecification>());
     }
-    
-    Set<LiveDataSpecification> fakes = new HashSet<LiveDataSpecification>();
-    Set<LiveDataSpecification> underlyings = new HashSet<LiveDataSpecification>();
-    
-    
-    for (LiveDataSpecification liveDataSpecification : specs) {
+
+    final Set<LiveDataSpecification> fakes = new HashSet<>();
+    final Set<LiveDataSpecification> underlyings = new HashSet<>();
+
+
+    for (final LiveDataSpecification liveDataSpecification : specs) {
       if (shouldFake(liveDataSpecification)) {
         fakes.add(liveDataSpecification);
       } else {
         underlyings.add(liveDataSpecification);
       }
     }
-    
+
     return ObjectsPair.of((Collection<LiveDataSpecification>) underlyings, (Collection<LiveDataSpecification>) fakes);
   }
 
-  private boolean shouldFake(LiveDataSpecification liveDataSpecification) {
-    for (ExternalScheme scheme : _toFake) {
+  private boolean shouldFake(final LiveDataSpecification liveDataSpecification) {
+    for (final ExternalScheme scheme : _toFake) {
       if (liveDataSpecification.getIdentifier(scheme) != null) {
         return true;
       }
@@ -66,9 +66,9 @@ public class BySchemeFakeSubscriptionSelector implements FakeSubscriptionSelecto
     return false;
   }
 
-  private static Set<ExternalScheme> getSchemes(String[] schemes) {
-    HashSet<ExternalScheme> ret = new HashSet<ExternalScheme>();
-    for (String scheme : schemes) {
+  private static Set<ExternalScheme> getSchemes(final String[] schemes) {
+    final HashSet<ExternalScheme> ret = new HashSet<>();
+    for (final String scheme : schemes) {
       ret.add(ExternalScheme.of(scheme));
     }
     return ret;

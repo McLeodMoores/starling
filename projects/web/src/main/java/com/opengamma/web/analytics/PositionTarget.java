@@ -15,7 +15,7 @@ public class PositionTarget extends RowTarget {
   /** The position ID */
   private final UniqueId _positionId;
 
-  /* package */ PositionTarget(String name, UniqueId nodeId, UniqueId positionId) {
+  /* package */ PositionTarget(final String name, final UniqueId nodeId, final UniqueId positionId) {
     super(name, nodeId);
     _positionId = positionId;
   }

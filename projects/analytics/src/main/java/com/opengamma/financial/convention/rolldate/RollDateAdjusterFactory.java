@@ -28,7 +28,7 @@ public final class RollDateAdjusterFactory
   //-------------------------------------------------------------------------
   /**
    * Finds an adjuster by name, ignoring case.
-   * 
+   *
    * @param name  the name of the instance to find, not null
    * @return the adjuster, not null
    * @throws IllegalArgumentException if the name is not found
@@ -51,14 +51,14 @@ public final class RollDateAdjusterFactory
 
   /**
    * Gets the named adjuster.
-   * 
+   *
    * @param name  the name, not null
    * @return the adjuster, not null
    * @throws IllegalArgumentException if the adjuster was not found in the map
    * @deprecated Use {@link #of(String)} or {@link #instance(String)}.
    */
   @Deprecated
-  public static RollDateAdjuster getAdjuster(String name) {
+  public static RollDateAdjuster getAdjuster(final String name) {
     return INSTANCE.instance(name);
   }
 

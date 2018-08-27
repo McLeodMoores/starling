@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.tree;
@@ -9,12 +9,12 @@ import com.google.common.primitives.Doubles;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Gap call option pays 0 if S <= K1 and S-K2 if S > K1, whereas gap put option pays K2-S if S < K1 and 0 if S >= K1, 
+ * Gap call option pays 0 if S <= K1 and S-K2 if S > K1, whereas gap put option pays K2-S if S < K1 and 0 if S >= K1,
  * where S is asset price at expiry.
  */
 public class GapOptionFunctionProvider extends OptionFunctionProvider1D {
 
-  private double _payoffStrike;
+  private final double _payoffStrike;
 
   /**
    * @param strike Strike price, K1
@@ -76,12 +76,12 @@ public class GapOptionFunctionProvider extends OptionFunctionProvider1D {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_payoffStrike);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -91,7 +91,7 @@ public class GapOptionFunctionProvider extends OptionFunctionProvider1D {
     if (!(obj instanceof GapOptionFunctionProvider)) {
       return false;
     }
-    GapOptionFunctionProvider other = (GapOptionFunctionProvider) obj;
+    final GapOptionFunctionProvider other = (GapOptionFunctionProvider) obj;
     if (Double.doubleToLongBits(_payoffStrike) != Double.doubleToLongBits(other._payoffStrike)) {
       return false;
     }

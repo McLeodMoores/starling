@@ -27,7 +27,7 @@ public abstract class AbstractCompletedResultsCall implements Function<ViewResul
   private ViewDeltaResultModel _delta;
   private InMemoryViewDeltaResultModel _deltaCopy;
 
-  public AbstractCompletedResultsCall(ViewComputationResultModel full, ViewDeltaResultModel delta) {
+  public AbstractCompletedResultsCall(final ViewComputationResultModel full, final ViewDeltaResultModel delta) {
     update(full, delta);
   }
 
@@ -58,7 +58,7 @@ public abstract class AbstractCompletedResultsCall implements Function<ViewResul
 
   protected abstract void oldResult(ViewComputationResultModel full);
 
-  public void update(ViewComputationResultModel full, ViewDeltaResultModel delta) {
+  public void update(final ViewComputationResultModel full, final ViewDeltaResultModel delta) {
     if (full != null) {
       if (_full != null) {
         final Instant previous = _full.getCalculationTime();

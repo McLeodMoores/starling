@@ -24,14 +24,14 @@ public class RemoteServer extends ToolContext {
    * @return A remote server populated with remote component instances.
    */
   @SuppressWarnings("unchecked")
-  public static <T extends RemoteServer> T create(String url, Class<T> type) {
+  public static <T extends RemoteServer> T create(final String url, final Class<T> type) {
     String httpUrl;
     if (url.startsWith(HTTP_PREFIX)) {
       httpUrl = url;
     } else {
       httpUrl = HTTP_PREFIX + url;
     }
-    return (T) ToolContextUtils.getToolContext(httpUrl, type);
+    return ToolContextUtils.getToolContext(httpUrl, type);
   }
 
   /**
@@ -39,7 +39,7 @@ public class RemoteServer extends ToolContext {
    * @param url The URL of the server. Doesn't require the "/jax" suffix.
    * @return A remote server populated with remote component instances.
    */
-  public static RemoteServer create(String url) {
+  public static RemoteServer create(final String url) {
     return create(url, RemoteServer.class);
   }
 }

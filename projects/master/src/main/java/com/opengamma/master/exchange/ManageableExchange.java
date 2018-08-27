@@ -77,7 +77,7 @@ public class ManageableExchange extends DirectBean implements Exchange, Serializ
    * The detailed information about when an exchange is open or closed, not null.
    */
   @PropertyDefinition
-  private final List<ManageableExchangeDetail> _detail = new ArrayList<ManageableExchangeDetail>();
+  private final List<ManageableExchangeDetail> _detail = new ArrayList<>();
 
   /**
    * Creates an exchange.
@@ -87,13 +87,13 @@ public class ManageableExchange extends DirectBean implements Exchange, Serializ
 
   /**
    * Creates an exchange specifying the values of the main fields.
-   * 
+   *
    * @param identifiers  the bundle of identifiers that define the exchange, not null
    * @param name  the name of the exchange, for display purposes, not null
    * @param regionBundle  the region external identifier bundle where the exchange is located, null if not applicable (dark pool, electronic, ...)
    * @param timeZone  the time-zone, may be null
    */
-  public ManageableExchange(ExternalIdBundle identifiers, String name, ExternalIdBundle regionBundle, ZoneId timeZone) {
+  public ManageableExchange(final ExternalIdBundle identifiers, final String name, final ExternalIdBundle regionBundle, final ZoneId timeZone) {
     ArgumentChecker.notNull(identifiers, "identifiers");
     ArgumentChecker.notNull(name, "name");
     setExternalIdBundle(identifiers);
@@ -104,11 +104,12 @@ public class ManageableExchange extends DirectBean implements Exchange, Serializ
 
   /**
    * Returns an independent clone of this exchange.
-   * 
+   *
    * @return the clone, not null
    */
+  @Override
   public ManageableExchange clone() {
-    ManageableExchange cloned = new ManageableExchange();
+    final ManageableExchange cloned = new ManageableExchange();
     cloned._uniqueId = _uniqueId;
     cloned._name = _name;
     cloned._externalIdBundle = _externalIdBundle;
@@ -120,17 +121,17 @@ public class ManageableExchange extends DirectBean implements Exchange, Serializ
   //-------------------------------------------------------------------------
   /**
    * Adds an external identifier to the bundle representing this exchange.
-   * 
+   *
    * @param exchangeId  the identifier to add, not null
    */
-  public void addExternalId(ExternalId exchangeId) {
+  public void addExternalId(final ExternalId exchangeId) {
     setExternalIdBundle(getExternalIdBundle().withExternalId(exchangeId));
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the ISO MIC code.
-   * 
+   *
    * @return the value of the property
    */
   public String getISOMic() {
@@ -139,10 +140,10 @@ public class ManageableExchange extends DirectBean implements Exchange, Serializ
 
   /**
    * Sets the ISO MIC code, stored in the identifier set.
-   * 
+   *
    * @param isoMicCode  the exchange MIC to set, null to remove any defined ISO MIC
    */
-  public void setISOMic(String isoMicCode) {
+  public void setISOMic(final String isoMicCode) {
     setExternalIdBundle(getExternalIdBundle().withoutScheme(ExternalSchemes.ISO_MIC));
     if (isoMicCode != null) {
       addExternalId(ExternalSchemes.isoMicExchangeId(isoMicCode));

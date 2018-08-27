@@ -43,7 +43,7 @@ public class LegalEntityHistoryResult extends AbstractHistoryResult<LegalEntityD
    *
    * @param coll the collection of documents to add, not null
    */
-  public LegalEntityHistoryResult(Collection<LegalEntityDocument> coll) {
+  public LegalEntityHistoryResult(final Collection<LegalEntityDocument> coll) {
     super(coll);
   }
 
@@ -55,9 +55,9 @@ public class LegalEntityHistoryResult extends AbstractHistoryResult<LegalEntityD
    * @return the legal entities, not null
    */
   public List<ManageableLegalEntity> getLegalEntities() {
-    List<ManageableLegalEntity> result = new ArrayList<ManageableLegalEntity>();
+    final List<ManageableLegalEntity> result = new ArrayList<>();
     if (getDocuments() != null) {
-      for (LegalEntityDocument doc : getDocuments()) {
+      for (final LegalEntityDocument doc : getDocuments()) {
         result.add(doc.getLegalEntity());
       }
     }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.web.json;
@@ -16,21 +16,21 @@ public final class FXForwardCurveSpecificationJSONBuilder extends AbstractJSONBu
   public static final FXForwardCurveSpecificationJSONBuilder INSTANCE = new FXForwardCurveSpecificationJSONBuilder();
   /** JSON template */
   private static final String TEMPLATE = createTemplate();
-  
+
   /**
    * Private constructor
    */
   private FXForwardCurveSpecificationJSONBuilder() {
   }
-  
+
   @Override
-  public FXForwardCurveSpecification fromJSON(String json) {
-    ArgumentChecker.notNull(json, "JSON document");    
+  public FXForwardCurveSpecification fromJSON(final String json) {
+    ArgumentChecker.notNull(json, "JSON document");
     return fromJSON(FXForwardCurveSpecification.class, json);
   }
 
   @Override
-  public String toJSON(FXForwardCurveSpecification object) {
+  public String toJSON(final FXForwardCurveSpecification object) {
     ArgumentChecker.notNull(object, "FXForwardCurveSpecification");
     return fudgeToJson(object);
   }

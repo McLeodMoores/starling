@@ -36,7 +36,7 @@ public class DataViewCycleResource extends AbstractDataResource {
 
   private final ViewCycle _cycle;
 
-  public DataViewCycleResource(ViewCycle cycle) {
+  public DataViewCycleResource(final ViewCycle cycle) {
     _cycle = cycle;
   }
 
@@ -45,7 +45,7 @@ public class DataViewCycleResource extends AbstractDataResource {
   public Response getName() {
     return responseOkObject(_cycle.getName());
   }
-  
+
   @GET
   @Path(PATH_UNIQUE_ID)
   public Response getUniqueId() {
@@ -69,7 +69,7 @@ public class DataViewCycleResource extends AbstractDataResource {
   public Response getDuration() {
     return responseOkObject(_cycle.getDuration());
   }
-  
+
   @GET
   @Path(PATH_EXECUTION_OPTIONS)
   public Response getExecutionOptions() {
@@ -89,15 +89,15 @@ public class DataViewCycleResource extends AbstractDataResource {
 
   @POST
   @Path(PATH_QUERY_CACHES)
-  public Response queryComputationCaches(ComputationCycleQuery query) {
-    ComputationCacheResponse response = _cycle.queryComputationCaches(query);
+  public Response queryComputationCaches(final ComputationCycleQuery query) {
+    final ComputationCacheResponse response = _cycle.queryComputationCaches(query);
     return responseOkObject(response);
   }
 
   @POST
   @Path(PATH_QUERY_RESULTS)
-  public Response queryResults(ComputationCycleQuery query) {
-    ComputationResultsResponse response = _cycle.queryResults(query);
+  public Response queryResults(final ComputationCycleQuery query) {
+    final ComputationResultsResponse response = _cycle.queryResults(query);
     return responseOkObject(response);
   }
 

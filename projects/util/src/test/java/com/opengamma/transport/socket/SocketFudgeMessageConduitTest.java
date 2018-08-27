@@ -28,23 +28,23 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.INTEGRATION)
 public class SocketFudgeMessageConduitTest {
   public void simpleTest() throws Exception {
-    CollectingFudgeMessageReceiver collectingReceiver = new CollectingFudgeMessageReceiver();
-    ServerSocketFudgeMessageReceiver socketReceiver = new ServerSocketFudgeMessageReceiver(collectingReceiver, FudgeContext.GLOBAL_DEFAULT);
+    final CollectingFudgeMessageReceiver collectingReceiver = new CollectingFudgeMessageReceiver();
+    final ServerSocketFudgeMessageReceiver socketReceiver = new ServerSocketFudgeMessageReceiver(collectingReceiver, FudgeContext.GLOBAL_DEFAULT);
     socketReceiver.start();
-    
-    SocketFudgeMessageSender sender = new SocketFudgeMessageSender();
+
+    final SocketFudgeMessageSender sender = new SocketFudgeMessageSender();
     sender.setInetAddress(InetAddress.getLocalHost());
     sender.setPortNumber(socketReceiver.getPortNumber());
-    
+
     MutableFudgeMsg msg = FudgeContext.GLOBAL_DEFAULT.newMessage();
     msg.add("RATM", "Bombtrack");
     msg.add("You Know", "It's All Of That");
     sender.send(msg);
-    
+
     msg = FudgeContext.GLOBAL_DEFAULT.newMessage();
     msg.add("Anger", "is a gift");
     sender.send(msg);
-    
+
     int nChecks = 0;
     while(collectingReceiver.getMessages().size() < 2) {
       Thread.sleep(100);
@@ -53,7 +53,7 @@ public class SocketFudgeMessageConduitTest {
         fail("Didn't receive messages in 2 seconds");
       }
     }
-    
+
     FudgeMsgEnvelope envelope = null;
     envelope = collectingReceiver.getMessages().get(0);
     assertNotNull(envelope);
@@ -67,7 +67,7 @@ public class SocketFudgeMessageConduitTest {
     assertNotNull(envelope.getMessage());
     assertEquals("is a gift", envelope.getMessage().getString("Anger"));
     assertEquals(1, envelope.getMessage().getNumFields());
-    
+
     sender.stop();
     socketReceiver.stop();
   }
@@ -76,20 +76,20 @@ public class SocketFudgeMessageConduitTest {
     final CollectingFudgeMessageReceiver receiver = new CollectingFudgeMessageReceiver() {
       private final AtomicInteger _concurrency = new AtomicInteger(0);
       @Override
-      public void messageReceived(FudgeContext fudgeContext, FudgeMsgEnvelope msgEnvelope) {
+      public void messageReceived(final FudgeContext fudgeContext, final FudgeMsgEnvelope msgEnvelope) {
         final int concurrency = _concurrency.incrementAndGet();
         if (concurrency > maxConcurrency.get()) {
           maxConcurrency.set(concurrency);
         }
         try {
           Thread.sleep (1000);
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
         }
         _concurrency.decrementAndGet();
         super.messageReceived(fudgeContext, msgEnvelope);
       }
     };
-    final ServerSocketFudgeMessageReceiver server = (executor != null) ? new ServerSocketFudgeMessageReceiver(receiver, FudgeContext.GLOBAL_DEFAULT, executor)
+    final ServerSocketFudgeMessageReceiver server = executor != null ? new ServerSocketFudgeMessageReceiver(receiver, FudgeContext.GLOBAL_DEFAULT, executor)
         : new ServerSocketFudgeMessageReceiver(receiver, FudgeContext.GLOBAL_DEFAULT);
     server.start();
     final SocketFudgeMessageSender sender = new SocketFudgeMessageSender();
@@ -108,7 +108,7 @@ public class SocketFudgeMessageConduitTest {
         parallelSendTest(null, concurrencyMax);
         assertEquals(1, concurrencyMax.get());
         break; // success
-      } catch (AssertionError ex) {
+      } catch (final AssertionError ex) {
         continue;
       }
     }
@@ -121,7 +121,7 @@ public class SocketFudgeMessageConduitTest {
         parallelSendTest(Executors.newCachedThreadPool(), concurrencyMax);
         assertEquals(2, concurrencyMax.get());
         break; // success
-      } catch (AssertionError ex) {
+      } catch (final AssertionError ex) {
         continue;
       }
     }

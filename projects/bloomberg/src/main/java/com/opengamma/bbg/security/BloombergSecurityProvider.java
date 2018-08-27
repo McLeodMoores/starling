@@ -36,30 +36,30 @@ public final class BloombergSecurityProvider extends AbstractSecurityProvider {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param refDataProvider  the reference data provider, not null
    * @param exchangeDataProvider  the data provider, not null
    */
-  public BloombergSecurityProvider(ReferenceDataProvider refDataProvider, ExchangeDataProvider exchangeDataProvider) {
+  public BloombergSecurityProvider(final ReferenceDataProvider refDataProvider, final ExchangeDataProvider exchangeDataProvider) {
     super(BLOOMBERG_DATA_SOURCE_NAME);
     _bloombergBulkSecurityLoader = new BloombergBulkSecurityLoader(refDataProvider, exchangeDataProvider);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  protected SecurityProviderResult doBulkGet(SecurityProviderRequest request) {
-    Map<ExternalIdBundle, ManageableSecurity> map = _bloombergBulkSecurityLoader.loadSecurity(request.getExternalIdBundles());
+  protected SecurityProviderResult doBulkGet(final SecurityProviderRequest request) {
+    final Map<ExternalIdBundle, ManageableSecurity> map = _bloombergBulkSecurityLoader.loadSecurity(request.getExternalIdBundles());
     return new SecurityProviderResult(map);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Creates a unique identifier.
-   * 
+   *
    * @param value  the value, not null
    * @return a Bloomberg unique identifier, not null
    */
-  public static UniqueId createUniqueId(String value) {
+  public static UniqueId createUniqueId(final String value) {
     return UniqueId.of(BLOOMBERG_SCHEME, value);
   }
 

@@ -47,10 +47,10 @@ public class PositionMapper {
    * @param securityMaster For looking up securities
    * @param versionCorrection Version correction used when querying the masters
    */
-  public PositionMapper(PortfolioMaster portfolioMaster,
-                        PositionMaster positionMaster,
-                        SecurityMaster securityMaster,
-                        VersionCorrection versionCorrection) {
+  public PositionMapper(final PortfolioMaster portfolioMaster,
+                        final PositionMaster positionMaster,
+                        final SecurityMaster securityMaster,
+                        final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(portfolioMaster, "portfolioMaster");
     ArgumentChecker.notNull(positionMaster, "positionMaster");
     ArgumentChecker.notNull(securityMaster, "securityMaster");
@@ -69,7 +69,7 @@ public class PositionMapper {
    * @param positionMaster For looking up positions
    * @param securityMaster For looking up securities
    */
-  public PositionMapper(PortfolioMaster portfolioMaster, PositionMaster positionMaster, SecurityMaster securityMaster) {
+  public PositionMapper(final PortfolioMaster portfolioMaster, final PositionMaster positionMaster, final SecurityMaster securityMaster) {
     this(portfolioMaster, positionMaster, securityMaster, VersionCorrection.LATEST);
   }
 
@@ -80,9 +80,9 @@ public class PositionMapper {
    * @param <T> Type of the function's result
    * @return Values returned from the function, not including any nulls
    */
-  public <T> List<T> map(String portfolioObjectId, Function<T> function) {
-    ObjectId objectId = ObjectId.parse(portfolioObjectId);
-    ManageablePortfolio portfolio = _portfolioMaster.get(objectId, _versionCorrection).getPortfolio();
+  public <T> List<T> map(final String portfolioObjectId, final Function<T> function) {
+    final ObjectId objectId = ObjectId.parse(portfolioObjectId);
+    final ManageablePortfolio portfolio = _portfolioMaster.get(objectId, _versionCorrection).getPortfolio();
     return map(portfolio.getRootNode(), function);
   }
 
@@ -93,8 +93,8 @@ public class PositionMapper {
    * @param <T> Type of the function's result
    * @return Values returned from the function, not including any nulls
    */
-  public <T> List<T> map(ObjectId portfolioId, Function<T> function) {
-    ManageablePortfolio portfolio = _portfolioMaster.get(portfolioId, _versionCorrection).getPortfolio();
+  public <T> List<T> map(final ObjectId portfolioId, final Function<T> function) {
+    final ManageablePortfolio portfolio = _portfolioMaster.get(portfolioId, _versionCorrection).getPortfolio();
     return map(portfolio.getRootNode(), function);
   }
 
@@ -106,13 +106,13 @@ public class PositionMapper {
    * @param <T> Type of the function's result
    * @return Values returned from the function, not including any nulls
    */
-  public <T> List<T> map(UniqueId unversionedPortfolioId, Function<T> function) {
+  public <T> List<T> map(final UniqueId unversionedPortfolioId, final Function<T> function) {
     if (unversionedPortfolioId.isVersioned()) {
       throw new IllegalArgumentException("Portfolio ID " + unversionedPortfolioId + " should be unversioned, " +
                                               "version/correction is set in the constructor");
     }
-    ObjectId objectId = unversionedPortfolioId.getObjectId();
-    ManageablePortfolio portfolio = _portfolioMaster.get(objectId, _versionCorrection).getPortfolio();
+    final ObjectId objectId = unversionedPortfolioId.getObjectId();
+    final ManageablePortfolio portfolio = _portfolioMaster.get(objectId, _versionCorrection).getPortfolio();
     return map(portfolio.getRootNode(), function);
   }
 
@@ -123,29 +123,29 @@ public class PositionMapper {
    * @param <T> Type of the function's result
    * @return Values returned from the function, not including any nulls
    */
-  public <T> List<T> map(ManageablePortfolioNode node, Function<T> function) {
-    List<T> results = Lists.newArrayList();
-    for (ObjectId positionId : node.getPositionIds()) {
-      ManageablePosition position = _positionMaster.get(positionId, _versionCorrection).getPosition();
+  public <T> List<T> map(final ManageablePortfolioNode node, final Function<T> function) {
+    final List<T> results = Lists.newArrayList();
+    for (final ObjectId positionId : node.getPositionIds()) {
+      final ManageablePosition position = _positionMaster.get(positionId, _versionCorrection).getPosition();
       if (position == null) {
         throw new DataNotFoundException("No position found with ID " + positionId + " and " +
                                             "version-correction " + _versionCorrection);
       }
-      ManageableSecurity security = (ManageableSecurity) position.getSecurityLink().resolve(_securitySource);
-      ExternalId underlyingId = FinancialSecurityUtils.getUnderlyingId(security);
+      final ManageableSecurity security = (ManageableSecurity) position.getSecurityLink().resolve(_securitySource);
+      final ExternalId underlyingId = FinancialSecurityUtils.getUnderlyingId(security);
       ManageableSecurity underlying;
       if (underlyingId != null) {
-        SecuritySearchResult searchResult = _securityMaster.search(new SecuritySearchRequest(underlyingId));
+        final SecuritySearchResult searchResult = _securityMaster.search(new SecuritySearchRequest(underlyingId));
         underlying = searchResult.getFirstSecurity();
       } else {
         underlying = null;
       }
-      T result = function.apply(node, position, security, underlying);
+      final T result = function.apply(node, position, security, underlying);
       if (result != null) {
         results.add(result);
       }
     }
-    for (ManageablePortfolioNode childNode : node.getChildNodes()) {
+    for (final ManageablePortfolioNode childNode : node.getChildNodes()) {
       results.addAll(map(childNode, function));
     }
     return results;

@@ -25,10 +25,10 @@ public class DataChangeManagerResource extends AbstractDataResource {
 
   /**
    * Creates a new instance.
-   * 
+   *
    * @param changeManager  the change manager, not null
    */
-  public DataChangeManagerResource(ChangeManager changeManager) {
+  public DataChangeManagerResource(final ChangeManager changeManager) {
     if (changeManager instanceof JmsChangeManager == false) {
       throw new UnsupportedOperationException("Only JmsChangeManager can be published over REST");
     }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.component.factory.provider;
@@ -52,12 +52,12 @@ public class SecurityProviderComponentFactory extends AbstractComponentFactory {
   /**
    * Initializes the security provider, setting up component information and REST.
    * Override using {@link #createSecurityProvider(ComponentRepository)}.
-   * 
+   *
    * @param repo  the component repository, not null
    * @param configuration  the remaining configuration, not null
    */
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
     final SecurityProvider provider = createSecurityProvider(repo);
     final ComponentInfo info = new ComponentInfo(SecurityProvider.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
@@ -75,11 +75,11 @@ public class SecurityProviderComponentFactory extends AbstractComponentFactory {
    * <p>
    * This implementation uses {@link NoneFoundSecurityProvider} and is intended
    * to be subclassed.
-   * 
+   *
    * @param repo  the component repository, only used to register secondary items like lifecycle, not null
    * @return the provider, not null
    */
-  protected SecurityProvider createSecurityProvider(ComponentRepository repo) {
+  protected SecurityProvider createSecurityProvider(final ComponentRepository repo) {
     return new NoneFoundSecurityProvider();
   }
 

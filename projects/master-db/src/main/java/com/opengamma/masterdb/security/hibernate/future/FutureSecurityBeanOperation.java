@@ -60,9 +60,9 @@ public final class FutureSecurityBeanOperation
     final FutureBundleBean futureBundleBean) {
     final Set<ExternalIdBean> identifierBeans = futureBundleBean
       .getIdentifiers();
-    final Set<ExternalId> identifiers = new HashSet<ExternalId>(
+    final Set<ExternalId> identifiers = new HashSet<>(
       identifierBeans.size());
-    for (ExternalIdBean identifierBean : identifierBeans) {
+    for (final ExternalIdBean identifierBean : identifierBeans) {
       identifiers.add(externalIdBeanToExternalId(identifierBean));
     }
     return new BondFutureDeliverable(ExternalIdBundle.of(identifiers),
@@ -72,16 +72,16 @@ public final class FutureSecurityBeanOperation
   @Override
   public FutureSecurity createSecurity(final OperationContext context,
                                        final FutureSecurityBean bean) {
-    FutureSecurity sec = bean.accept(
+    final FutureSecurity sec = bean.accept(
       new FutureSecurityBean.Visitor<FutureSecurity>() {
 
         @Override
-        public FutureSecurity visitBondFutureType(BondFutureBean bean) {
+        public FutureSecurity visitBondFutureType(final BondFutureBean bean) {
           final Set<FutureBundleBean> basketBeans = bean
             .getBasket();
-          final Set<BondFutureDeliverable> basket = new HashSet<BondFutureDeliverable>(
+          final Set<BondFutureDeliverable> basket = new HashSet<>(
             basketBeans.size());
-          for (FutureBundleBean basketBean : basketBeans) {
+          for (final FutureBundleBean basketBean : basketBeans) {
             basket.add(futureBundleBeanToBondFutureDeliverable(basketBean));
           }
           return new BondFutureSecurity(
@@ -98,7 +98,7 @@ public final class FutureSecurityBeanOperation
         }
 
         @Override
-        public FutureSecurity visitFXFutureType(ForeignExchangeFutureBean bean) {
+        public FutureSecurity visitFXFutureType(final ForeignExchangeFutureBean bean) {
           final FXFutureSecurity security = new FXFutureSecurity(
             expiryBeanToExpiry(bean.getExpiry()), bean
             .getTradingExchange().getName(), bean
@@ -113,7 +113,7 @@ public final class FutureSecurityBeanOperation
         }
 
         @Override
-        public FutureSecurity visitInterestRateFutureType(InterestRateFutureBean bean) {
+        public FutureSecurity visitInterestRateFutureType(final InterestRateFutureBean bean) {
           return new InterestRateFutureSecurity(
             expiryBeanToExpiry(bean.getExpiry()),
             bean.getTradingExchange().getName(),
@@ -125,7 +125,7 @@ public final class FutureSecurityBeanOperation
         }
 
         @Override
-        public FutureSecurity visitAgricultureFutureType(AgricultureFutureBean bean) {
+        public FutureSecurity visitAgricultureFutureType(final AgricultureFutureBean bean) {
           final AgricultureFutureSecurity security = new AgricultureFutureSecurity(
             expiryBeanToExpiry(bean.getExpiry()),
             bean.getTradingExchange().getName(),
@@ -142,7 +142,7 @@ public final class FutureSecurityBeanOperation
         }
 
         @Override
-        public FutureSecurity visitEnergyFutureType(EnergyFutureBean bean) {
+        public FutureSecurity visitEnergyFutureType(final EnergyFutureBean bean) {
           final EnergyFutureSecurity security = new EnergyFutureSecurity(
             expiryBeanToExpiry(bean.getExpiry()),
             bean.getTradingExchange().getName(),
@@ -160,7 +160,7 @@ public final class FutureSecurityBeanOperation
         }
 
         @Override
-        public FutureSecurity visitMetalFutureType(MetalFutureBean bean) {
+        public FutureSecurity visitMetalFutureType(final MetalFutureBean bean) {
           final MetalFutureSecurity security = new MetalFutureSecurity(
             expiryBeanToExpiry(bean.getExpiry()),
             bean.getTradingExchange().getName(),
@@ -178,7 +178,7 @@ public final class FutureSecurityBeanOperation
         }
 
         @Override
-        public FutureSecurity visitIndexFutureType(IndexFutureBean bean) {
+        public FutureSecurity visitIndexFutureType(final IndexFutureBean bean) {
           final IndexFutureSecurity security = new IndexFutureSecurity(
             expiryBeanToExpiry(bean.getExpiry()),
             bean.getTradingExchange().getName(),
@@ -192,7 +192,7 @@ public final class FutureSecurityBeanOperation
         }
 
         @Override
-        public FutureSecurity visitStockFutureType(StockFutureBean bean) {
+        public FutureSecurity visitStockFutureType(final StockFutureBean bean) {
           final StockFutureSecurity security = new StockFutureSecurity(
             expiryBeanToExpiry(bean.getExpiry()),
             bean.getTradingExchange().getName(),
@@ -206,7 +206,7 @@ public final class FutureSecurityBeanOperation
         }
 
         @Override
-        public FutureSecurity visitEquityFutureType(EquityFutureBean bean) {
+        public FutureSecurity visitEquityFutureType(final EquityFutureBean bean) {
           final EquityFutureSecurity security = new EquityFutureSecurity(
             expiryBeanToExpiry(bean.getExpiry()),
             bean.getTradingExchange().getName(),
@@ -220,7 +220,7 @@ public final class FutureSecurityBeanOperation
         }
 
         @Override
-        public FutureSecurity visitEquityIndexDividendFutureType(EquityIndexDividendFutureBean bean) {
+        public FutureSecurity visitEquityIndexDividendFutureType(final EquityIndexDividendFutureBean bean) {
           final EquityIndexDividendFutureSecurity security = new EquityIndexDividendFutureSecurity(
             expiryBeanToExpiry(bean.getExpiry()),
             bean.getTradingExchange().getName(),
@@ -234,7 +234,7 @@ public final class FutureSecurityBeanOperation
         }
 
         @Override
-        public FutureSecurity visitFederalFundsFutureType(FederalFundsFutureBean bean) {
+        public FutureSecurity visitFederalFundsFutureType(final FederalFundsFutureBean bean) {
           final FederalFundsFutureSecurity security = new FederalFundsFutureSecurity(
               expiryBeanToExpiry(bean.getExpiry()),
               bean.getTradingExchange().getName(),
@@ -257,59 +257,59 @@ public final class FutureSecurityBeanOperation
       new FutureSecurityBean.Visitor<FutureSecurityBean>() {
 
         @Override
-        public FutureSecurityBean visitAgricultureFutureType(AgricultureFutureBean bean) {
+        public FutureSecurityBean visitAgricultureFutureType(final AgricultureFutureBean bean) {
           return bean;
         }
 
         @Override
-        public FutureSecurityBean visitBondFutureType(BondFutureBean bean) {
+        public FutureSecurityBean visitBondFutureType(final BondFutureBean bean) {
           final List<FutureBundleBean> basket = secMasterSession.getFutureBundleBeans(now, bean);
-          bean.setBasket(new HashSet<FutureBundleBean>(basket));
+          bean.setBasket(new HashSet<>(basket));
           return bean;
         }
 
         @Override
-        public FutureSecurityBean visitEnergyFutureType(EnergyFutureBean bean) {
+        public FutureSecurityBean visitEnergyFutureType(final EnergyFutureBean bean) {
           return bean;
         }
 
         @Override
-        public FutureSecurityBean visitFXFutureType(ForeignExchangeFutureBean bean) {
+        public FutureSecurityBean visitFXFutureType(final ForeignExchangeFutureBean bean) {
           return bean;
         }
 
         @Override
-        public FutureSecurityBean visitIndexFutureType(IndexFutureBean bean) {
+        public FutureSecurityBean visitIndexFutureType(final IndexFutureBean bean) {
           return bean;
         }
 
         @Override
-        public FutureSecurityBean visitInterestRateFutureType(InterestRateFutureBean bean) {
+        public FutureSecurityBean visitInterestRateFutureType(final InterestRateFutureBean bean) {
           return bean;
         }
 
         @Override
-        public FutureSecurityBean visitMetalFutureType(MetalFutureBean bean) {
+        public FutureSecurityBean visitMetalFutureType(final MetalFutureBean bean) {
           return bean;
         }
 
         @Override
-        public FutureSecurityBean visitStockFutureType(StockFutureBean bean) {
+        public FutureSecurityBean visitStockFutureType(final StockFutureBean bean) {
           return bean;
         }
 
         @Override
-        public FutureSecurityBean visitEquityFutureType(EquityFutureBean bean) {
+        public FutureSecurityBean visitEquityFutureType(final EquityFutureBean bean) {
           return bean;
         }
 
         @Override
-        public FutureSecurityBean visitEquityIndexDividendFutureType(EquityIndexDividendFutureBean bean) {
+        public FutureSecurityBean visitEquityIndexDividendFutureType(final EquityIndexDividendFutureBean bean) {
           return bean;
         }
 
         @Override
-        public FutureSecurityBean visitFederalFundsFutureType(FederalFundsFutureBean bean) {
+        public FutureSecurityBean visitFederalFundsFutureType(final FederalFundsFutureBean bean) {
           return bean;
         }
       });
@@ -330,68 +330,68 @@ public final class FutureSecurityBeanOperation
       }
 
       @Override
-      public Object visitAgricultureFutureType(AgricultureFutureBean bean) {
+      public Object visitAgricultureFutureType(final AgricultureFutureBean bean) {
         postPersistCommodityFuture();
         return null;
       }
 
       @Override
-      public Object visitBondFutureType(BondFutureBean bean) {
+      public Object visitBondFutureType(final BondFutureBean bean) {
         postPersistFuture();
         secMasterSession.persistFutureBundleBeans(now, bean);
         return null;
       }
 
       @Override
-      public Object visitEnergyFutureType(EnergyFutureBean bean) {
+      public Object visitEnergyFutureType(final EnergyFutureBean bean) {
         postPersistCommodityFuture();
         return null;
       }
 
       @Override
-      public Object visitEquityFutureType(EquityFutureBean bean) {
+      public Object visitEquityFutureType(final EquityFutureBean bean) {
         postPersistFuture();
         return null;
       }
 
       @Override
-      public Object visitEquityIndexDividendFutureType(EquityIndexDividendFutureBean bean) {
+      public Object visitEquityIndexDividendFutureType(final EquityIndexDividendFutureBean bean) {
         postPersistFuture();
         return null;
       }
 
       @Override
-      public Object visitFXFutureType(ForeignExchangeFutureBean bean) {
+      public Object visitFXFutureType(final ForeignExchangeFutureBean bean) {
         postPersistFuture();
         return null;
       }
 
       @Override
-      public Object visitIndexFutureType(IndexFutureBean bean) {
+      public Object visitIndexFutureType(final IndexFutureBean bean) {
         postPersistFuture();
         return null;
       }
 
       @Override
-      public Object visitInterestRateFutureType(InterestRateFutureBean bean) {
+      public Object visitInterestRateFutureType(final InterestRateFutureBean bean) {
         postPersistFuture();
         return null;
       }
 
       @Override
-      public Object visitMetalFutureType(MetalFutureBean bean) {
+      public Object visitMetalFutureType(final MetalFutureBean bean) {
         postPersistCommodityFuture();
         return null;
       }
 
       @Override
-      public Object visitStockFutureType(StockFutureBean bean) {
+      public Object visitStockFutureType(final StockFutureBean bean) {
         postPersistFuture();
         return null;
       }
-      
+
       @Override
-      public Object visitFederalFundsFutureType(FederalFundsFutureBean bean) {
+      public Object visitFederalFundsFutureType(final FederalFundsFutureBean bean) {
         postPersistFuture();
         return null;
       }
@@ -435,13 +435,13 @@ public final class FutureSecurityBeanOperation
 
       @Override
       public AgricultureFutureBean visitAgricultureFutureSecurity(
-        AgricultureFutureSecurity security) {
+        final AgricultureFutureSecurity security) {
         return createCommodityFutureBean(new AgricultureFutureBean(), security);
       }
 
       @Override
       public BondFutureBean visitBondFutureSecurity(
-        BondFutureSecurity security) {
+        final BondFutureSecurity security) {
         final BondFutureBean bean = createFutureBean(new BondFutureBean(), security);
         bean.setFirstDeliveryDate(dateTimeWithZoneToZonedDateTimeBean(security
           .getFirstDeliveryDate()));
@@ -449,17 +449,17 @@ public final class FutureSecurityBeanOperation
           .getLastDeliveryDate()));
         final Collection<BondFutureDeliverable> basket = security
           .getBasket();
-        final Set<FutureBundleBean> basketBeans = new HashSet<FutureBundleBean>(
+        final Set<FutureBundleBean> basketBeans = new HashSet<>(
           basket.size());
-        for (BondFutureDeliverable deliverable : basket) {
+        for (final BondFutureDeliverable deliverable : basket) {
           final FutureBundleBean deliverableBean = new FutureBundleBean();
           deliverableBean.setFuture(bean);
           deliverableBean.setConversionFactor(deliverable
             .getConversionFactor());
           final Set<ExternalId> identifiers = deliverable
             .getIdentifiers().getExternalIds();
-          final Set<ExternalIdBean> identifierBeans = new HashSet<ExternalIdBean>();
-          for (ExternalId identifier : identifiers) {
+          final Set<ExternalIdBean> identifierBeans = new HashSet<>();
+          for (final ExternalId identifier : identifiers) {
             identifierBeans
               .add(externalIdToExternalIdBean(identifier));
           }
@@ -472,9 +472,9 @@ public final class FutureSecurityBeanOperation
 
       @Override
       public EnergyFutureBean visitEnergyFutureSecurity(
-        EnergyFutureSecurity security) {
+        final EnergyFutureSecurity security) {
         final EnergyFutureBean bean = createCommodityFutureBean(new EnergyFutureBean(), security);
-        ExternalId underlying = security.getUnderlyingId();
+        final ExternalId underlying = security.getUnderlyingId();
         if (underlying != null) {
           bean.setUnderlying(externalIdToExternalIdBean(underlying));
         }
@@ -483,7 +483,7 @@ public final class FutureSecurityBeanOperation
 
       @Override
       public ForeignExchangeFutureBean visitFXFutureSecurity(
-        FXFutureSecurity security) {
+        final FXFutureSecurity security) {
         final ForeignExchangeFutureBean bean = createFutureBean(new ForeignExchangeFutureBean(), security);
         bean.setNumerator(secMasterSession
           .getOrCreateCurrencyBean(security.getNumerator()
@@ -497,7 +497,7 @@ public final class FutureSecurityBeanOperation
 
       @Override
       public InterestRateFutureBean visitInterestRateFutureSecurity(
-        InterestRateFutureSecurity security) {
+        final InterestRateFutureSecurity security) {
         final InterestRateFutureBean bean = createFutureBean(new InterestRateFutureBean(), security);
         bean.setUnderlying(externalIdToExternalIdBean(security.getUnderlyingId()));
         return bean;
@@ -505,9 +505,9 @@ public final class FutureSecurityBeanOperation
 
       @Override
       public MetalFutureBean visitMetalFutureSecurity(
-        MetalFutureSecurity security) {
+        final MetalFutureSecurity security) {
         final MetalFutureBean bean = createCommodityFutureBean(new MetalFutureBean(), security);
-        ExternalId underlying = security.getUnderlyingId();
+        final ExternalId underlying = security.getUnderlyingId();
         if (underlying != null) {
           bean.setUnderlying(externalIdToExternalIdBean(security.getUnderlyingId()));
         }
@@ -516,7 +516,7 @@ public final class FutureSecurityBeanOperation
 
       @Override
       public IndexFutureBean visitIndexFutureSecurity(
-        IndexFutureSecurity security) {
+        final IndexFutureSecurity security) {
         final IndexFutureBean bean = createFutureBean(new IndexFutureBean(), security);
         bean.setUnderlying(externalIdToExternalIdBean(security
           .getUnderlyingId()));
@@ -525,7 +525,7 @@ public final class FutureSecurityBeanOperation
 
       @Override
       public StockFutureBean visitStockFutureSecurity(
-        StockFutureSecurity security) {
+        final StockFutureSecurity security) {
         final StockFutureBean bean = createFutureBean(new StockFutureBean(), security);
         bean.setUnderlying(externalIdToExternalIdBean(security
           .getUnderlyingId()));
@@ -534,7 +534,7 @@ public final class FutureSecurityBeanOperation
 
       @Override
       public EquityFutureBean visitEquityFutureSecurity(
-        EquityFutureSecurity security) {
+        final EquityFutureSecurity security) {
         // TODO Case: Confirm this add is correct
         final EquityFutureBean bean = createFutureBean(new EquityFutureBean(), security);
         bean.setUnderlying(externalIdToExternalIdBean(security
@@ -544,16 +544,16 @@ public final class FutureSecurityBeanOperation
 
       @Override
       public EquityIndexDividendFutureBean visitEquityIndexDividendFutureSecurity(
-        EquityIndexDividendFutureSecurity security) {
+        final EquityIndexDividendFutureSecurity security) {
         // TODO Case: Confirm this add is correct
         final EquityIndexDividendFutureBean bean = createFutureBean(new EquityIndexDividendFutureBean(), security);
         bean.setUnderlying(externalIdToExternalIdBean(security
           .getUnderlyingId()));
         return bean;
       }
-      
+
       @Override
-      public FutureSecurityBean visitFederalFundsFutureSecurity(FederalFundsFutureSecurity security) {
+      public FutureSecurityBean visitFederalFundsFutureSecurity(final FederalFundsFutureSecurity security) {
         final FederalFundsFutureBean bean = createFutureBean(new FederalFundsFutureBean(), security);
         bean.setUnderlying(externalIdToExternalIdBean(security
             .getUnderlyingId()));

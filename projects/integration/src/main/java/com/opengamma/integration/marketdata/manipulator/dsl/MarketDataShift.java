@@ -45,7 +45,7 @@ public final class MarketDataShift implements StructureManipulator<Double>, Immu
   private final double _shift;
 
   @ImmutableConstructor
-  /* package */ MarketDataShift(ScenarioShiftType shiftType, double shift) {
+  /* package */ MarketDataShift(final ScenarioShiftType shiftType, final double shift) {
     _shiftType = ArgumentChecker.notNull(shiftType, "shiftType");
     if (Double.isInfinite(shift) || Double.isNaN(shift)) {
       throw new IllegalArgumentException("shift must not be infinite or NaN. value=" + shift);
@@ -54,7 +54,7 @@ public final class MarketDataShift implements StructureManipulator<Double>, Immu
   }
 
   @Override
-  public Double execute(Double value, ValueSpecification valueSpecification, FunctionExecutionContext executionContext) {
+  public Double execute(final Double value, final ValueSpecification valueSpecification, final FunctionExecutionContext executionContext) {
     switch (_shiftType) {
       case ABSOLUTE:
         return value + _shift;

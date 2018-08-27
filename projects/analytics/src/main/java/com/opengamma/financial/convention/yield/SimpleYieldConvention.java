@@ -191,7 +191,7 @@ public class SimpleYieldConvention implements YieldConvention, Serializable {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_name == null) ? 0 : _name.toUpperCase().hashCode());
+    result = prime * result + (_name == null ? 0 : _name.toUpperCase().hashCode());
     return result;
   }
 
@@ -199,7 +199,7 @@ public class SimpleYieldConvention implements YieldConvention, Serializable {
   /**
    * Note this is not case sensitive
    */
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -209,7 +209,7 @@ public class SimpleYieldConvention implements YieldConvention, Serializable {
     if (!(obj instanceof SimpleYieldConvention)) {
       return false;
     }
-    SimpleYieldConvention other = (SimpleYieldConvention) obj;
+    final SimpleYieldConvention other = (SimpleYieldConvention) obj;
     if (_name == null) {
       if (other._name != null) {
         return false;

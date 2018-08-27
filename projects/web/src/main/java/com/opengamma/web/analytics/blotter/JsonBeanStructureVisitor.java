@@ -61,7 +61,7 @@ import com.opengamma.util.ArgumentChecker;
   private final BeanHierarchy _beanHierarchy;
   private final StringConvert _stringConvert;
 
-  /* package */ JsonBeanStructureVisitor(Set<MetaBean> metaBeans) {
+  /* package */ JsonBeanStructureVisitor(final Set<MetaBean> metaBeans) {
     ArgumentChecker.notNull(metaBeans, "metaBeans");
     _beanHierarchy = new BeanHierarchy(metaBeans);
     // TODO parameter for this
@@ -69,54 +69,54 @@ import com.opengamma.util.ArgumentChecker;
   }
 
   @Override
-  public void visitMetaBean(MetaBean metaBean) {
+  public void visitMetaBean(final MetaBean metaBean) {
     // TODO configurable field name
     _json.clear();
     _json.put("type", metaBean.beanType().getSimpleName());
   }
 
   @Override
-  public void visitBeanProperty(MetaProperty<?> property, BeanTraverser traverser) {
-    Set<Class<? extends Bean>> argumentTypes = _beanHierarchy.subtypes(property.propertyType());
+  public void visitBeanProperty(final MetaProperty<?> property, final BeanTraverser traverser) {
+    final Set<Class<? extends Bean>> argumentTypes = _beanHierarchy.subtypes(property.propertyType());
     if (argumentTypes.isEmpty()) {
       throw new OpenGammaRuntimeException("No bean types are available to satisfy property " + property);
     }
-    List<String> beanTypeNames = Lists.newArrayListWithCapacity(argumentTypes.size());
-    for (Class<? extends Bean> argumentType : argumentTypes) {
+    final List<String> beanTypeNames = Lists.newArrayListWithCapacity(argumentTypes.size());
+    for (final Class<? extends Bean> argumentType : argumentTypes) {
       beanTypeNames.add(argumentType.getSimpleName());
     }
     _json.put(property.name(), optional(property, StringUtils.join(beanTypeNames, "|")));
   }
 
   @Override
-  public void visitCollectionProperty(MetaProperty<?> property, BeanTraverser traverser) {
+  public void visitCollectionProperty(final MetaProperty<?> property, final BeanTraverser traverser) {
     _json.put(property.name(), arrayType(property));
   }
 
   @Override
-  public void visitSetProperty(MetaProperty<?> property, BeanTraverser traverser) {
+  public void visitSetProperty(final MetaProperty<?> property, final BeanTraverser traverser) {
     _json.put(property.name(), arrayType(property));
   }
 
   @Override
-  public void visitListProperty(MetaProperty<?> property, BeanTraverser traverser) {
+  public void visitListProperty(final MetaProperty<?> property, final BeanTraverser traverser) {
     _json.put(property.name(), arrayType(property));
   }
 
   @Override
-  public void visitMapProperty(MetaProperty<?> property, BeanTraverser traverser) {
-    Class<? extends Bean> beanType = property.metaBean().beanType();
-    Class<?> keyType = JodaBeanUtils.mapKeyType(property, beanType);
-    Class<?> valueType = JodaBeanUtils.mapValueType(property, beanType);
+  public void visitMapProperty(final MetaProperty<?> property, final BeanTraverser traverser) {
+    final Class<? extends Bean> beanType = property.metaBean().beanType();
+    final Class<?> keyType = JodaBeanUtils.mapKeyType(property, beanType);
+    final Class<?> valueType = JodaBeanUtils.mapValueType(property, beanType);
     _json.put(property.name(), optional(property,  "{" + typeFor(keyType) + ":" + typeFor(valueType) + "}"));
   }
 
   @Override
-  public void visitProperty(MetaProperty<?> property, BeanTraverser traverser) {
+  public void visitProperty(final MetaProperty<?> property, final BeanTraverser traverser) {
     _json.put(property.name(), optional(property, typeFor(property)));
   }
 
-  private static String optional(MetaProperty<?> property, String type) {
+  private static String optional(final MetaProperty<?> property, final String type) {
     if (nullable(property)) {
       return type + "?";
     } else {
@@ -129,33 +129,33 @@ import com.opengamma.util.ArgumentChecker;
     return new JSONObject(_json);
   }
 
-  private String arrayType(MetaProperty<?> property) {
+  private String arrayType(final MetaProperty<?> property) {
     return optional(property, "[" + typeFor(property.propertyType()) + "]");
   }
 
-  private String typeFor(MetaProperty<?> property) {
+  private String typeFor(final MetaProperty<?> property) {
     return typeFor(property.propertyType());
   }
 
-  private String typeFor(Class<?> type) {
-    String typeName = TYPES.get(type);
+  private String typeFor(final Class<?> type) {
+    final String typeName = TYPES.get(type);
     if (typeName != null) {
       return typeName;
     } else {
       try {
         _stringConvert.findConverter(type);
         return STRING;
-      } catch (Exception e) {
+      } catch (final Exception e) {
         throw new OpenGammaRuntimeException("No type mapping found for class " + type.getName(), e);
       }
     }
   }
 
-  private static boolean nullable(MetaProperty<?> property) {
+  private static boolean nullable(final MetaProperty<?> property) {
     if (property.propertyType().isPrimitive()) {
       return false;
     } else {
-      PropertyDefinition definitionAnnotation = property.annotation(PropertyDefinition.class);
+      final PropertyDefinition definitionAnnotation = property.annotation(PropertyDefinition.class);
       return !definitionAnnotation.validate().equals("notNull");
     }
   }

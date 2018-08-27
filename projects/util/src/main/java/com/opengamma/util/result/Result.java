@@ -70,7 +70,7 @@ public abstract class Result<T> {
    * If the calculation was actually successful then an an IllegalStateException will be thrown.
    * To avoid this, check the result status using {@link #isSuccess()}
    * or {@link #getStatus()} first.
-   * 
+   *
    * @return the failures associated with a failure result, empty if successful
    */
   public abstract ImmutableSet<Failure> getFailures();
@@ -105,7 +105,7 @@ public abstract class Result<T> {
    * @param function  the function to transform the value with, not null
    * @return the new result, not null
    */
-  public <U> Result<U> flatMap(Function<T, Result<U>> function) {
+  public <U> Result<U> flatMap(final Function<T, Result<U>> function) {
     return ifSuccess(function);
   }
 
@@ -171,7 +171,7 @@ public abstract class Result<T> {
   public <U> Result<U> map(final ResultMapper<T, U> function) {
     return flatMap(new Function<T, Result<U>>() {
       @Override
-      public Result<U> apply(T input) {
+      public Result<U> apply(final T input) {
         return function.map(getValue());
       }
     });
@@ -185,7 +185,7 @@ public abstract class Result<T> {
    * @param <U> the type of the value
    * @return a successful result wrapping the value
    */
-  public static <U> Result<U> success(U value) {
+  public static <U> Result<U> success(final U value) {
     return new SuccessResult<>(value);
   }
 
@@ -201,7 +201,7 @@ public abstract class Result<T> {
    * @param <U> the expected type of the result
    * @return a failure result
    */
-  public static <U> Result<U> failure(FailureStatus status, String message, Object... messageArgs) {
+  public static <U> Result<U> failure(final FailureStatus status, final String message, final Object... messageArgs) {
     return FailureResult.of(new Failure(status, formatMessage(message, messageArgs)));
   }
 
@@ -217,7 +217,7 @@ public abstract class Result<T> {
    * @param <U> the expected type of the result
    * @return a failure result
    */
-  public static <U> Result<U> failure(Exception exception, String message, Object... messageArgs) {
+  public static <U> Result<U> failure(final Exception exception, final String message, final Object... messageArgs) {
     return FailureResult.of(new Failure(exception, formatMessage(message, messageArgs)));
   }
 
@@ -228,7 +228,7 @@ public abstract class Result<T> {
    * @param <U> the expected type of the result
    * @return a failure result
    */
-  public static <U> Result<U> failure(Exception exception) {
+  public static <U> Result<U> failure(final Exception exception) {
     return FailureResult.of(new Failure(exception));
   }
 
@@ -240,7 +240,7 @@ public abstract class Result<T> {
    * @param <U> the expected type of the result
    * @return a failure result
    */
-  public static <U> Result<U> failure(FailureStatus status, Exception exception) {
+  public static <U> Result<U> failure(final FailureStatus status, final Exception exception) {
     return FailureResult.of(new Failure(status, exception));
   }
 
@@ -257,18 +257,18 @@ public abstract class Result<T> {
    * @param <U> the expected type of the result
    * @return a failure result
    */
-  public static <U> Result<U> failure(FailureStatus status, Exception exception, String message, Object... messageArgs) {
+  public static <U> Result<U> failure(final FailureStatus status, final Exception exception, final String message, final Object... messageArgs) {
     return FailureResult.of(new Failure(status, formatMessage(message, messageArgs), exception));
   }
 
   /**
    * Formats the message using SLF4J.
-   * 
+   *
    * @param message  the message
    * @param messageArgs  the arguments for the message
    * @return the formatted message
    */
-  private static String formatMessage(String message, Object[] messageArgs) {
+  private static String formatMessage(final String message, final Object[] messageArgs) {
     return MessageFormatter.arrayFormat(message, messageArgs).getMessage();
   }
 
@@ -282,7 +282,7 @@ public abstract class Result<T> {
    * @throws IllegalArgumentException if the result is a success
    */
   @SuppressWarnings("unchecked")
-  public static <U> Result<U> failure(Result<?> result) {
+  public static <U> Result<U> failure(final Result<?> result) {
     if (result.isSuccess()) {
       throw new IllegalArgumentException("Result must be a failure");
     }
@@ -306,18 +306,18 @@ public abstract class Result<T> {
    * @return a failed result wrapping multiple other failed results
    * @throws IllegalArgumentException if all of the results are successes
    */
-  public static <U> Result<U> failure(Result<?> result1, Result<?> result2, Result<?>... results) {
+  public static <U> Result<U> failure(final Result<?> result1, final Result<?> result2, final Result<?>... results) {
     ArgumentChecker.notNull(result1, "result1");
     ArgumentChecker.notNull(result2, "result2");
 
-    List<Failure> failures = new ArrayList<>();
+    final List<Failure> failures = new ArrayList<>();
     if (!result1.isSuccess()) {
       failures.addAll(result1.getFailures());
     }
     if (!result2.isSuccess()) {
       failures.addAll(result2.getFailures());
     }
-    for (Result<?> result : results) {
+    for (final Result<?> result : results) {
       if (!result.isSuccess()) {
         failures.addAll(result.getFailures());
       }
@@ -344,11 +344,11 @@ public abstract class Result<T> {
    * @return a failed result wrapping multiple other failed results
    * @throws IllegalArgumentException if results is empty or contains nothing but successes
    */
-  public static <U> Result<U> failure(Iterable<Result<?>> results) {
+  public static <U> Result<U> failure(final Iterable<Result<?>> results) {
     ArgumentChecker.notEmpty(results, "results");
 
-    List<Failure> failures = new ArrayList<>();
-    for (Result<?> result : results) {
+    final List<Failure> failures = new ArrayList<>();
+    for (final Result<?> result : results) {
       if (!result.isSuccess()) {
         failures.addAll(result.getFailures());
       }
@@ -363,12 +363,12 @@ public abstract class Result<T> {
   //-------------------------------------------------------------------------
   /**
    * Checks if all the results are successful.
-   * 
+   *
    * @param results  the results to check
    * @return true if all of the results are successes
    */
-  public static boolean allSuccessful(Result<?>... results) {
-    for (Result<?> result : results) {
+  public static boolean allSuccessful(final Result<?>... results) {
+    for (final Result<?> result : results) {
       if (!result.isSuccess()) {
         return false;
       }
@@ -378,12 +378,12 @@ public abstract class Result<T> {
 
   /**
    * Checks if all the results are successful.
-   * 
+   *
    * @param results  the results to check
    * @return true if all of the results are successes
    */
-  public static boolean allSuccessful(Iterable<? extends Result<?>> results) {
-    for (Result<?> result : results) {
+  public static boolean allSuccessful(final Iterable<? extends Result<?>> results) {
+    for (final Result<?> result : results) {
       if (!result.isSuccess()) {
         return false;
       }
@@ -393,21 +393,21 @@ public abstract class Result<T> {
 
   /**
    * Checks if any of the results are failures.
-   * 
+   *
    * @param results  the results to check
    * @return true if any of the results are failures
    */
-  public static boolean anyFailures(Result<?>... results) {
+  public static boolean anyFailures(final Result<?>... results) {
     return !allSuccessful(results);
   }
 
   /**
    * Checks if any of the results are failures.
-   * 
+   *
    * @param results  the results to check
    * @return true if any of the results are failures
    */
-  public static boolean anyFailures(Iterable<? extends Result<?>> results) {
+  public static boolean anyFailures(final Iterable<? extends Result<?>> results) {
     return !allSuccessful(results);
   }
 

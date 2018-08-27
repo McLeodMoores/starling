@@ -40,7 +40,7 @@ public final class YieldCurveDataPointShift implements ImmutableBean {
   private final double _shift;
 
   @ImmutableConstructor
-  /* package */ YieldCurveDataPointShift(Period tenor, double shift) {
+  /* package */ YieldCurveDataPointShift(final Period tenor, final double shift) {
     _tenor = tenor;
     _shift = shift;
   }

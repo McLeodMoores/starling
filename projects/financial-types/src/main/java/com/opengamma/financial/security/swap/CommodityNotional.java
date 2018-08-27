@@ -31,7 +31,7 @@ public class CommodityNotional extends Notional {
 
   //-------------------------------------------------------------------------
   @Override
-  public <T> T accept(NotionalVisitor<T> visitor) {
+  public <T> T accept(final NotionalVisitor<T> visitor) {
     return visitor.visitCommodityNotional(this);
   }
 

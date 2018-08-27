@@ -37,37 +37,37 @@ public class MarketDataDistributor {
    * Which subscription this distributor belongs to.
    */
   private final Subscription _subscription;
-  
-  /** These listener(s) actually publish the data */ 
+
+  /** These listener(s) actually publish the data */
   private final Collection<MarketDataSender> _marketDataSenders;
   /**
    * Last known values of ALL fully normalized fields that were
    * sent to clients. This is not the last message as such
    * because the last message might not have included all the fields.
    * Instead, because the last value of ALL fields is stored,
-   * this store provides a current snapshot of the entire state of the 
-   * market data line.   
+   * this store provides a current snapshot of the entire state of the
+   * market data line.
    */
   private final LastKnownValueStore _lastKnownValues;
-  /** 
+  /**
    * A history store to be used by the FieldHistoryUpdater normalization rule.
-   * Fields stored in this history could either be completely unnormalized, 
-   * partially normalized, or fully normalized.   
+   * Fields stored in this history could either be completely unnormalized,
+   * partially normalized, or fully normalized.
    */
   private final FieldHistoryStore _history = new FieldHistoryStore();
   /**
-   * Stores how many normalized messages have been sent to clients.  
+   * Stores how many normalized messages have been sent to clients.
    */
   private final AtomicLong _numMessagesSent = new AtomicLong(0);
   /**
-   * Whether this distributor is persistent. 
+   * Whether this distributor is persistent.
    * <p>
    * True = a persistent distributor, should survive a server restart.
    * False = a non-persistent distributor. Will die if the server is
    * restarted.
    */
   private boolean _persistent;
-  /** 
+  /**
    * When this distributor should stop distributing
    * data if no heartbeats are received from clients.
    * <p>
@@ -79,23 +79,23 @@ public class MarketDataDistributor {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param distributionSpec  What data should be distributed, how and where.
    * @param subscription  Which subscription this distributor belongs to.
    * @param marketDataSenderFactory  Used to create listener(s) that actually publish the data
    * @param persistent  Whether this distributor is persistent.
-   * @param lkvStoreProvider The factory for LastKnownValue stores. 
+   * @param lkvStoreProvider The factory for LastKnownValue stores.
    */
-  public MarketDataDistributor(DistributionSpecification distributionSpec,
-      Subscription subscription,
-      MarketDataSenderFactory marketDataSenderFactory,
-      boolean persistent,
-      LastKnownValueStoreProvider lkvStoreProvider) {
+  public MarketDataDistributor(final DistributionSpecification distributionSpec,
+      final Subscription subscription,
+      final MarketDataSenderFactory marketDataSenderFactory,
+      final boolean persistent,
+      final LastKnownValueStoreProvider lkvStoreProvider) {
     ArgumentChecker.notNull(distributionSpec, "Distribution spec");
     ArgumentChecker.notNull(subscription, "Subscription");
     ArgumentChecker.notNull(marketDataSenderFactory, "Market data sender factory");
     ArgumentChecker.notNull(lkvStoreProvider, "LKV Store Provider");
-    
+
     _distributionSpec = distributionSpec;
     _subscription = subscription;
     _marketDataSenders = marketDataSenderFactory.create(this);
@@ -103,9 +103,9 @@ public class MarketDataDistributor {
       throw new IllegalStateException("Null returned by " + marketDataSenderFactory);
     }
     setPersistent(persistent);
-    
+
     _lastKnownValues = lkvStoreProvider.newInstance(distributionSpec.getMarketDataId(), distributionSpec.getNormalizationRuleSet().getId());
-    
+
     // Initialize history with last known values.
     // This does nothing in the default state (where the LKV is empty) but
     // in case where the LKV is backed by a persistent store will prep the
@@ -116,7 +116,7 @@ public class MarketDataDistributor {
   //-------------------------------------------------------------------------
   /**
    * Gets the distribution specification.
-   * 
+   *
    * @return the distribution specification, not null
    */
   public DistributionSpecification getDistributionSpec() {
@@ -125,7 +125,7 @@ public class MarketDataDistributor {
 
   /**
    * Gets the live data specification.
-   * 
+   *
    * @return the specification of the data
    */
   public LiveDataSpecification getFullyQualifiedLiveDataSpecification() {
@@ -134,7 +134,7 @@ public class MarketDataDistributor {
 
   /**
    * Gets the subscription details.
-   * 
+   *
    * @return the subscription details
    */
   public Subscription getSubscription() {
@@ -143,7 +143,7 @@ public class MarketDataDistributor {
 
   /**
    * Gets the number of messages sent.
-   * 
+   *
    * @return the message count
    */
   public long getNumMessagesSent() {
@@ -153,17 +153,17 @@ public class MarketDataDistributor {
   //-------------------------------------------------------------------------
   /**
    * Gets a snapshot of data, returning the latest value.
-   * 
+   *
    * @return the latest value, not null
    */
   public LiveDataValueUpdateBean getSnapshot() {
-    FudgeMsg lastKnownValues = getLastKnownValues();
+    final FudgeMsg lastKnownValues = getLastKnownValues();
     if (lastKnownValues == null) {
       return null;
     }
     return new LiveDataValueUpdateBean(
-        getNumMessagesSent(), // 0-based as it should be 
-        getDistributionSpec().getFullyQualifiedLiveDataSpecification(), 
+        getNumMessagesSent(), // 0-based as it should be
+        getDistributionSpec().getFullyQualifiedLiveDataSpecification(),
         lastKnownValues);
   }
 
@@ -175,72 +175,72 @@ public class MarketDataDistributor {
     }
     return _lastKnownValues.getFields();
   }
-  
-  private synchronized void updateLastKnownValues(FudgeMsg lastKnownValue) {
+
+  private synchronized void updateLastKnownValues(final FudgeMsg lastKnownValue) {
     _lastKnownValues.updateFields(lastKnownValue);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Normalizes the data.
-   * 
+   *
    * @param msg  the message received from underlying market data API in its native format
    * @return the normalized message. Null if in the process of normalization,
    * the message became empty and therefore should not be sent.
    */
-  private FudgeMsg normalize(FudgeMsg msg) {
-    FudgeMsg normalizedMsg = _distributionSpec.getNormalizedMessage(msg, _subscription.getSecurityUniqueId(), _history);
+  private FudgeMsg normalize(final FudgeMsg msg) {
+    final FudgeMsg normalizedMsg = _distributionSpec.getNormalizedMessage(msg, _subscription.getSecurityUniqueId(), _history);
     return normalizedMsg;
   }
 
   /**
-   * Updates field history without sending any market data to field receivers. 
-   * 
+   * Updates field history without sending any market data to field receivers.
+   *
    * @param msg Unnormalized market data from underlying market data API.
    */
-  public synchronized void updateFieldHistory(FudgeMsg msg) {
-    FudgeMsg normalizedMsg = normalize(msg);
+  public synchronized void updateFieldHistory(final FudgeMsg msg) {
+    final FudgeMsg normalizedMsg = normalize(msg);
     if (normalizedMsg != null) {
       updateLastKnownValues(normalizedMsg);
     }
   }
 
   /**
-   * Sends normalized market data to field receivers. 
+   * Sends normalized market data to field receivers.
    * <p>
    * Serialized to ensure a well-defined distribution order for this topic.
-   * 
+   *
    * @param liveDataFields Unnormalized market data from underlying market data API.
    */
-  public synchronized void distributeLiveData(FudgeMsg liveDataFields) {
+  public synchronized void distributeLiveData(final FudgeMsg liveDataFields) {
     FudgeMsg normalizedMsg;
     try {
       normalizedMsg = normalize(liveDataFields);
-    } catch (RuntimeException e) {
+    } catch (final RuntimeException e) {
       LOGGER.error("Normalizing " + liveDataFields + " to " + this + " failed.", e);
       return;
     }
-    
+
     if (normalizedMsg != null) {
       updateLastKnownValues(normalizedMsg);
-      
-      LiveDataValueUpdateBean data = new LiveDataValueUpdateBean(
+
+      final LiveDataValueUpdateBean data = new LiveDataValueUpdateBean(
           getNumMessagesSent(), // 0-based as it should be
           getDistributionSpec().getFullyQualifiedLiveDataSpecification(),
           normalizedMsg);
-      
+
       LOGGER.debug("{}: Sending Live Data update {}", this, data);
-      
-      for (MarketDataSender sender : _marketDataSenders) {
+
+      for (final MarketDataSender sender : _marketDataSenders) {
         try {
           sender.sendMarketData(data);
-        } catch (RuntimeException e) {
+        } catch (final RuntimeException e) {
           LOGGER.error(sender + " failed", e);
         }
       }
-      
+
       _numMessagesSent.incrementAndGet();
-    
+
     } else {
       LOGGER.debug("{}: Not sending Live Data update (message extinguished).", this);
     }
@@ -249,7 +249,7 @@ public class MarketDataDistributor {
   //-------------------------------------------------------------------------
   /**
    * Gets the expiry instant.
-   * 
+   *
    * @return the millisecond instant from UTC epoch, or null if the distributor never expires
    */
   public synchronized Long getExpiry() {
@@ -258,30 +258,30 @@ public class MarketDataDistributor {
 
   /**
    * Sets the expiry instant.
-   * 
+   *
    * @param expiry  the millisecond instant from UTC epoch, or null if the distributor never expires.
    */
-  public synchronized void setExpiry(Long expiry) {
+  public synchronized void setExpiry(final Long expiry) {
     _expiry = expiry;
   }
 
   /**
    * Extends the expiry instant to a number of milliseconds in the future.
-   * 
+   *
    * @param timeoutExtensionMillis  the extension duration
    */
-  public synchronized void extendExpiry(long timeoutExtensionMillis) {
+  public synchronized void extendExpiry(final long timeoutExtensionMillis) {
     setExpiry(System.currentTimeMillis() + timeoutExtensionMillis);
   }
 
   /**
    * Checks if this has expired.
-   * 
+   *
    * @return true if expired
    */
   public synchronized boolean hasExpired() {
     if (isPersistent()) {
-      return false;      
+      return false;
     }
     if (getExpiry() == null) {
       return false;
@@ -296,7 +296,7 @@ public class MarketDataDistributor {
    * True = a persistent distributor, should survive a server restart.
    * False = a non-persistent distributor. Will die if the server is
    * restarted.
-   * 
+   *
    * @return whether this distributor is persistent
    */
   public synchronized boolean isPersistent() {
@@ -305,17 +305,17 @@ public class MarketDataDistributor {
 
   /**
    * Sets the persistent flag.
-   * 
+   *
    * @param persistent  whether this is persistent
    */
-  public synchronized void setPersistent(boolean persistent) {
+  public synchronized void setPersistent(final boolean persistent) {
     _persistent = persistent;
   }
 
   //-------------------------------------------------------------------------
   @Override
   public String toString() {
-    return "MarketDataDistributor[" + getDistributionSpec().toString() +  "]";    
+    return "MarketDataDistributor[" + getDistributionSpec().toString() +  "]";
   }
 
 }

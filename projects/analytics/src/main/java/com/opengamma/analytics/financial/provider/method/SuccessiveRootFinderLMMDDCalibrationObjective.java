@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.method;
@@ -48,7 +48,7 @@ public class SuccessiveRootFinderLMMDDCalibrationObjective extends SuccessiveRoo
   private final double[][] _volatilityInit;
 
   /**
-   * Constructor of the objective function with the Hull-White parameters. The parameters range and accuracy are set at some default value 
+   * Constructor of the objective function with the Hull-White parameters. The parameters range and accuracy are set at some default value
    * (minimum: 1.0E-6; maximum: 1.0, function value accuracy: 1.0E-4; parameter absolute accuracy: 1.0E-9).
    * @param parameters The Hull-White parameters.
    * @param ccy The currency for which the LMM parameters are valid (LMM on the discounting curve).
@@ -74,7 +74,7 @@ public class SuccessiveRootFinderLMMDDCalibrationObjective extends SuccessiveRoo
    * @param multicurves The multi-curves provider.
    */
   @Override
-  public void setMulticurves(MulticurveProviderInterface multicurves) {
+  public void setMulticurves(final MulticurveProviderInterface multicurves) {
     _lmmProvider = new LiborMarketModelDisplacedDiffusionProvider(multicurves, _lmmParameters, _ccyLMM);
   }
 
@@ -95,7 +95,7 @@ public class SuccessiveRootFinderLMMDDCalibrationObjective extends SuccessiveRoo
   }
 
   @Override
-  public void setInstrument(InstrumentDerivative instrument) {
+  public void setInstrument(final InstrumentDerivative instrument) {
     super.setInstrument(instrument);
   }
 
@@ -111,7 +111,7 @@ public class SuccessiveRootFinderLMMDDCalibrationObjective extends SuccessiveRoo
    * Sets the start index.
    * @param startIndex The start index.
    */
-  public void setStartIndex(int startIndex) {
+  public void setStartIndex(final int startIndex) {
     _startIndex = startIndex;
   }
 
@@ -127,7 +127,7 @@ public class SuccessiveRootFinderLMMDDCalibrationObjective extends SuccessiveRoo
    * Sets the end index.
    * @param endIndex The end index.
    */
-  public void setEndIndex(int endIndex) {
+  public void setEndIndex(final int endIndex) {
     _endIndex = endIndex;
   }
 
@@ -140,9 +140,9 @@ public class SuccessiveRootFinderLMMDDCalibrationObjective extends SuccessiveRoo
   }
 
   @Override
-  public Double evaluate(Double x) {
-    int nbVol = _endIndex - _startIndex + 1;
-    double[][] volChanged = new double[nbVol][_lmmParameters.getNbFactor()];
+  public Double evaluate(final Double x) {
+    final int nbVol = _endIndex - _startIndex + 1;
+    final double[][] volChanged = new double[nbVol][_lmmParameters.getNbFactor()];
     for (int loopperiod = 0; loopperiod < nbVol; loopperiod++) {
       for (int loopfact = 0; loopfact < _lmmParameters.getNbFactor(); loopfact++) {
         volChanged[loopperiod][loopfact] = _volatilityInit[loopperiod + _startIndex][loopfact] * x;

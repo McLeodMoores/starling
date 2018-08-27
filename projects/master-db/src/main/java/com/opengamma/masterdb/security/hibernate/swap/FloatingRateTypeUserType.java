@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.swap;
@@ -19,7 +19,7 @@ public class FloatingRateTypeUserType extends EnumUserType<FloatingRateType> {
   }
 
   @Override
-  protected String enumToStringNoCache(FloatingRateType value) {
+  protected String enumToStringNoCache(final FloatingRateType value) {
     switch (value) {
       case IBOR:
         return "ibor";

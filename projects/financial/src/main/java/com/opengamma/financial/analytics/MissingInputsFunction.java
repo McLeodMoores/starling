@@ -217,13 +217,13 @@ public class MissingInputsFunction extends AbstractFunction implements CompiledF
     } else {
       final Set<String> aggregationStyle = constraints.getValues(ValuePropertyNames.AGGREGATION);
       final String full = getAggregationStyleFull();
-      if ((aggregationStyle == null) || aggregationStyle.isEmpty()) {
+      if (aggregationStyle == null || aggregationStyle.isEmpty()) {
         // No constraint or wild-card - assume FULL and make it optional for the inputs
         desiredValue = new ValueRequirement(desiredValue.getValueName(), desiredValue.getTargetReference(), constraints.copy().withoutAny(ValuePropertyNames.AGGREGATION)
             .withOptional(ValuePropertyNames.AGGREGATION).with(ValuePropertyNames.AGGREGATION, full).get());
       } else if (aggregationStyle.contains(full)) {
         // Constraint allows FULL - make it optional for the inputs
-        if ((aggregationStyle.size() != 1) || !constraints.isOptional(ValuePropertyNames.AGGREGATION)) {
+        if (aggregationStyle.size() != 1 || !constraints.isOptional(ValuePropertyNames.AGGREGATION)) {
           desiredValue = new ValueRequirement(desiredValue.getValueName(), desiredValue.getTargetReference(), constraints.copy().withoutAny(ValuePropertyNames.AGGREGATION)
               .withOptional(ValuePropertyNames.AGGREGATION).with(ValuePropertyNames.AGGREGATION, full).get());
         }
@@ -231,7 +231,7 @@ public class MissingInputsFunction extends AbstractFunction implements CompiledF
         final String missing = getAggregationStyleMissing();
         if (aggregationStyle.contains(missing)) {
           // Constraint allows MISSING - make it optional for the inputs
-          if ((aggregationStyle.size() != 1) || !constraints.isOptional(ValuePropertyNames.AGGREGATION)) {
+          if (aggregationStyle.size() != 1 || !constraints.isOptional(ValuePropertyNames.AGGREGATION)) {
             desiredValue = new ValueRequirement(desiredValue.getValueName(), desiredValue.getTargetReference(), constraints.copy().withoutAny(ValuePropertyNames.AGGREGATION)
                 .withOptional(ValuePropertyNames.AGGREGATION).with(ValuePropertyNames.AGGREGATION, missing).get());
           }
@@ -262,7 +262,7 @@ public class MissingInputsFunction extends AbstractFunction implements CompiledF
     final String missing = getAggregationStyleMissing();
     boolean resultFull = false;
     boolean resultMissing = false;
-    for (ValueRequirement input : inputs.values()) {
+    for (final ValueRequirement input : inputs.values()) {
       final Set<String> inputAgg = input.getConstraints().getValues(ValuePropertyNames.AGGREGATION);
       if (inputAgg != null) {
         if (inputAgg.contains(full)) {
@@ -277,10 +277,10 @@ public class MissingInputsFunction extends AbstractFunction implements CompiledF
       resultFull = true;
       resultMissing = true;
     }
-    final Set<ValueSpecification> results = Sets.newHashSetWithExpectedSize(underlyingResults.size() * ((resultFull && resultMissing) ? 2 : 1));
+    final Set<ValueSpecification> results = Sets.newHashSetWithExpectedSize(underlyingResults.size() * (resultFull && resultMissing ? 2 : 1));
     for (final ValueSpecification underlyingResult : underlyingResults) {
       final ValueProperties properties = underlyingResult.getProperties();
-      if ((properties.getProperties() != null) && properties.getProperties().isEmpty()) {
+      if (properties.getProperties() != null && properties.getProperties().isEmpty()) {
         results.add(underlyingResult);
       } else {
         final ValueProperties.Builder builder = properties.copy();

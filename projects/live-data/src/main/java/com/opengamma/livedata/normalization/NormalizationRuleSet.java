@@ -24,54 +24,54 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
  * An ordered set of normalization rules.
  */
 public class NormalizationRuleSet {
-  
+
   private static final Logger LOGGER = LoggerFactory.getLogger(NormalizationRuleSet.class);
-  
+
   private final String _id;
   private final String _jmsTopicSuffix;
   private final List<NormalizationRule> _rules;
-  
+
   /* Useful for tests */
-  public NormalizationRuleSet(String id) {
-    this(id, id, Collections.<NormalizationRule>emptyList()); 
+  public NormalizationRuleSet(final String id) {
+    this(id, id, Collections.<NormalizationRule>emptyList());
   }
-  
+
   /* Also useful for tests */
-  public NormalizationRuleSet(String id, NormalizationRule... rules) {
+  public NormalizationRuleSet(final String id, final NormalizationRule... rules) {
     this(id, id, Lists.newArrayList(rules));
   }
-  
-  public NormalizationRuleSet(String id, 
-      String jmsTopicSuffix,
-      List<NormalizationRule> rules) {
+
+  public NormalizationRuleSet(final String id,
+      final String jmsTopicSuffix,
+      final List<NormalizationRule> rules) {
     ArgumentChecker.notNull(id, "Rule set ID");
     ArgumentChecker.notNull(jmsTopicSuffix, "Jms Topic Suffix");
     ArgumentChecker.notNull(rules, "StandardRules");
     _id = id;
-    
+
     if (!jmsTopicSuffix.isEmpty() && !jmsTopicSuffix.startsWith(JmsTopicNameResolver.SEPARATOR)) {
       _jmsTopicSuffix = JmsTopicNameResolver.SEPARATOR + jmsTopicSuffix;
     } else {
       _jmsTopicSuffix = jmsTopicSuffix;
     }
-    
-    _rules = new ArrayList<NormalizationRule>(rules);    
+
+    _rules = new ArrayList<>(rules);
   }
-  
+
   /**
    * Gets a normalized message.
    * This is done by applying the set of normalization rules
-   * to the raw message. 
-   * 
+   * to the raw message.
+   *
    * @param msg message received from underlying market data API in its native format.
    * @param securityUniqueId  the data provider's unique ID of the security, not null
-   * @param fieldHistory history of field values  
+   * @param fieldHistory history of field values
    * @return the normalized message. Null if one of the normalization rules
    * rejected the message.
    */
-  public FudgeMsg getNormalizedMessage(FudgeMsg msg, String securityUniqueId, FieldHistoryStore fieldHistory) {
+  public FudgeMsg getNormalizedMessage(final FudgeMsg msg, final String securityUniqueId, final FieldHistoryStore fieldHistory) {
     MutableFudgeMsg normalizedMsg = OpenGammaFudgeContext.getInstance().newMessage(msg);
-    for (NormalizationRule rule : _rules) {
+    for (final NormalizationRule rule : _rules) {
       normalizedMsg = rule.apply(normalizedMsg, securityUniqueId, fieldHistory);
       if (normalizedMsg == null) {
         // One of the rules rejected the message entirely.
@@ -82,22 +82,22 @@ public class NormalizationRuleSet {
     LOGGER.debug("Applying rule set {} to message {} produced normalized message {}", new Object[] {getId(), msg, normalizedMsg});
     return normalizedMsg;
   }
-  
+
   /**
    * Gets the ID of this normalization rule set.
-   * 
+   *
    * @return the ID of this normalization rule set.
    */
   public String getId() {
     return _id;
   }
-  
+
   /**
    * Gets the Jms topic suffix of this normalization rule set.
    * <p>
    * The return value, if non-empty, will always start with {@link JmsTopicNameResolver#SEPARATOR}.
    * However, an empty string is also a possibility.
-   * 
+   *
    * @return the JMS topic suffix
    */
   public String getJmsTopicSuffix() {
@@ -108,12 +108,12 @@ public class NormalizationRuleSet {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_id == null) ? 0 : _id.hashCode());
+    result = prime * result + (_id == null ? 0 : _id.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -123,7 +123,7 @@ public class NormalizationRuleSet {
     if (getClass() != obj.getClass()) {
       return false;
     }
-    NormalizationRuleSet other = (NormalizationRuleSet) obj;
+    final NormalizationRuleSet other = (NormalizationRuleSet) obj;
     if (_id == null) {
       if (other._id != null) {
         return false;
@@ -133,5 +133,5 @@ public class NormalizationRuleSet {
     }
     return true;
   }
-  
+
 }

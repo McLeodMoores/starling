@@ -26,28 +26,28 @@ public class HolidayQueryTool extends AbstractTool<ToolContext> {
 
   /**
    * Main method to run the tool.
-   * 
+   *
    * @param args  the standard tool arguments, not null
    */
-  public static void main(String[] args) {  // CSIGNORE
+  public static void main(final String[] args) {  // CSIGNORE
     new HolidayQueryTool().invokeAndTerminate(args);
   }
 
   //-------------------------------------------------------------------------
   @Override
   protected void doRun() {
-    ToolContext toolContext = getToolContext();
-    CommandLine commandLine = getCommandLine();
-    boolean verbose = commandLine.hasOption("verbose");
-    if ((commandLine.hasOption("today") && commandLine.hasOption("yesterday")) || 
-        (commandLine.hasOption("date") && commandLine.hasOption("today")) ||
-        (commandLine.hasOption("date") && commandLine.hasOption("yesterday"))) {
+    final ToolContext toolContext = getToolContext();
+    final CommandLine commandLine = getCommandLine();
+    final boolean verbose = commandLine.hasOption("verbose");
+    if (commandLine.hasOption("today") && commandLine.hasOption("yesterday") ||
+        commandLine.hasOption("date") && commandLine.hasOption("today") ||
+        commandLine.hasOption("date") && commandLine.hasOption("yesterday")) {
       System.err.println("Can only return today OR yesterday OR date!");
       System.exit(2);
     }
-    String ccyStr = commandLine.getOptionValue("ccy");
+    final String ccyStr = commandLine.getOptionValue("ccy");
     try {
-      Currency ccy = Currency.of(ccyStr);
+      final Currency ccy = Currency.of(ccyStr);
       LocalDate date = null;
       if (commandLine.hasOption("yesterday")) {
         date = LocalDate.now().minusDays(1);
@@ -56,7 +56,7 @@ public class HolidayQueryTool extends AbstractTool<ToolContext> {
       } else if (commandLine.hasOption("date")) {
         try {
           date = (LocalDate) DateTimeFormatter.BASIC_ISO_DATE.parse(commandLine.getOptionValue("date"));
-        } catch (Exception e) {
+        } catch (final Exception e) {
           System.err.println("Could not parse date, should be YYYYMMDD format");
           System.exit(2);
         }
@@ -64,7 +64,7 @@ public class HolidayQueryTool extends AbstractTool<ToolContext> {
         System.err.println("Must specify either today or yesterday option");
         System.exit(2);
       }
-      boolean isHoliday = toolContext.getHolidaySource().isHoliday(date, ccy);
+      final boolean isHoliday = toolContext.getHolidaySource().isHoliday(date, ccy);
       if (isHoliday) {
         if (verbose) {
           System.out.println("Day was a holiday");
@@ -76,16 +76,16 @@ public class HolidayQueryTool extends AbstractTool<ToolContext> {
         }
         System.exit(1);
       }
-    } catch (IllegalArgumentException iae) {
+    } catch (final IllegalArgumentException iae) {
       System.err.println("Invalid currency code");
       System.exit(2);
     }
   }
-  
+
 
   @Override
-  protected Options createOptions(boolean mandatoryConfig) {
-    Options options = super.createOptions(mandatoryConfig);
+  protected Options createOptions(final boolean mandatoryConfig) {
+    final Options options = super.createOptions(mandatoryConfig);
     options.addOption(createCurrencyOption());
     options.addOption(createTodayOption());
     options.addOption(createYesterdayOption());
@@ -103,7 +103,7 @@ public class HolidayQueryTool extends AbstractTool<ToolContext> {
                         .withLongOpt("currency")
                         .create("ccy");
   }
-  
+
   @SuppressWarnings("static-access")
   private Option createTodayOption() {
     return OptionBuilder.isRequired(false)
@@ -120,7 +120,7 @@ public class HolidayQueryTool extends AbstractTool<ToolContext> {
                         .withLongOpt("yesterday")
                         .create("y");
   }
-  
+
   @SuppressWarnings("static-access")
   private Option createDateOption() {
     return OptionBuilder.isRequired(false)
@@ -130,7 +130,7 @@ public class HolidayQueryTool extends AbstractTool<ToolContext> {
                         .withLongOpt("yesterday")
                         .create("y");
   }
-  
+
   @SuppressWarnings("static-access")
   private Option createVerboseOption() {
     return OptionBuilder.isRequired(false)
@@ -139,16 +139,17 @@ public class HolidayQueryTool extends AbstractTool<ToolContext> {
                         .withLongOpt("verbose")
                         .create("v");
   }
-  
+
+  @Override
   protected Class<?> getEntryPointClass() {
     return getClass();
   }
 
   @Override
-  protected void usage(Options options) {
-    HelpFormatter formatter = new HelpFormatter();
+  protected void usage(final Options options) {
+    final HelpFormatter formatter = new HelpFormatter();
     formatter.setWidth(120);
     formatter.printHelp("config-import-export-tool.sh [file...]", options, true);
   }
-  
+
 }

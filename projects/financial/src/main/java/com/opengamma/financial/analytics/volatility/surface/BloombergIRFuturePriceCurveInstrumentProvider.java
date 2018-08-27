@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.volatility.surface;
@@ -21,7 +21,7 @@ import com.opengamma.id.ExternalScheme;
  *  Tied closely to BloombergIRFutureInstrumentProviderUtils.
  */
 public class BloombergIRFuturePriceCurveInstrumentProvider implements FuturePriceCurveInstrumentProvider<Number> {
-  
+
   private static final DecimalFormat FORMATTER = new DecimalFormat("##.###");
   static { FORMATTER.setMinimumFractionDigits(3); }
 
@@ -32,11 +32,11 @@ public class BloombergIRFuturePriceCurveInstrumentProvider implements FuturePric
 
   /**
    * @param futurePrefix Two character string representing future type. e.g ED, ER, IR (See WIR in BBG)
-   * @param postfix Generally, "Comdty" 
+   * @param postfix Generally, "Comdty"
    * @param dataFieldName Expecting MarketDataRequirementNames.MARKET_VALUE
    * @param tickerScheme Expecting BLOOMBERG_TICKER_WEAK or BLOOMBERG_TICKER
    */
-  public BloombergIRFuturePriceCurveInstrumentProvider(final String futurePrefix, final String postfix, final String dataFieldName, String tickerScheme) {
+  public BloombergIRFuturePriceCurveInstrumentProvider(final String futurePrefix, final String postfix, final String dataFieldName, final String tickerScheme) {
     Validate.notNull(futurePrefix, "future option prefix");
     Validate.notNull(postfix, "postfix");
     Validate.notNull(dataFieldName, "data field name");
@@ -47,10 +47,10 @@ public class BloombergIRFuturePriceCurveInstrumentProvider implements FuturePric
     _tickerScheme = tickerScheme;
   }
 
-  /** If a 4th argument is not provided, constructor uses BLOOMBERG_TICKER_WEAK as its ExternalScheme 
+  /** If a 4th argument is not provided, constructor uses BLOOMBERG_TICKER_WEAK as its ExternalScheme
    * @param futurePrefix Two character string representing future type. e.g ED, ER, IR (See WIR in BBG)
-   * @param postfix Generally, "Comdty" 
-   * @param dataFieldName Expecting MarketDataRequirementNames.MARKET_PRICE 
+   * @param postfix Generally, "Comdty"
+   * @param dataFieldName Expecting MarketDataRequirementNames.MARKET_PRICE
    */
   public BloombergIRFuturePriceCurveInstrumentProvider(final String futurePrefix, final String postfix, final String dataFieldName) {
     Validate.notNull(futurePrefix, "future option prefix");
@@ -82,7 +82,7 @@ public class BloombergIRFuturePriceCurveInstrumentProvider implements FuturePric
   public ExternalId getInstrument(final Number futureNumber, final LocalDate curveDate) {
     final StringBuffer ticker = new StringBuffer();
     ticker.append(_futurePrefix);
-    
+
     // nQuartersDelay is used to handle mid-curve options
     int nQuartersDelay = 0;
     if ("0R".equals(_futurePrefix)) {
@@ -106,7 +106,7 @@ public class BloombergIRFuturePriceCurveInstrumentProvider implements FuturePric
   public String getTickerScheme() {
     return _tickerScheme;
   }
-  
+
   @Override
   public String getDataFieldName() {
     return _dataFieldName;

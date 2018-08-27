@@ -40,32 +40,32 @@ public class PositionSearchResult extends AbstractSearchResult<PositionDocument>
 
   /**
    * Creates an instance from a collection of documents.
-   * 
+   *
    * @param coll  the collection of documents to add, not null
    */
-  public PositionSearchResult(Collection<PositionDocument> coll) {
+  public PositionSearchResult(final Collection<PositionDocument> coll) {
     super(coll);
   }
 
   /**
    * Creates an instance specifying the version-correction searched for.
-   * 
+   *
    * @param versionCorrection  the version-correction of the data, not null
    */
-  public PositionSearchResult(VersionCorrection versionCorrection) {
+  public PositionSearchResult(final VersionCorrection versionCorrection) {
     setVersionCorrection(versionCorrection);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the returned positions from within the documents.
-   * 
+   *
    * @return the positions, not null
    */
   public List<ManageablePosition> getPositions() {
-    List<ManageablePosition> result = new ArrayList<ManageablePosition>();
+    final List<ManageablePosition> result = new ArrayList<>();
     if (getDocuments() != null) {
-      for (PositionDocument doc : getDocuments()) {
+      for (final PositionDocument doc : getDocuments()) {
         result.add(doc.getPosition());
       }
     }
@@ -74,7 +74,7 @@ public class PositionSearchResult extends AbstractSearchResult<PositionDocument>
 
   /**
    * Gets the first position, or null if no documents.
-   * 
+   *
    * @return the first position, null if none
    */
   public ManageablePosition getFirstPosition() {
@@ -86,7 +86,7 @@ public class PositionSearchResult extends AbstractSearchResult<PositionDocument>
    * <p>
    * This throws an exception if more than 1 result is actually available.
    * Thus, this method implies an assumption about uniqueness of the queried position.
-   * 
+   *
    * @return the matching position, not null
    * @throws IllegalStateException if no position was found
    */

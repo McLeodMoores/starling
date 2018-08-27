@@ -15,7 +15,7 @@ public class HistoricalTimeSeriesSnapshotter extends OpenGammaComponentServer {
 
   /**
    * Main method to start an OpenGamma JVM process for development.
-   * 
+   *
    * @param args  the arguments
    */
   public static void main(String[] args) { // CSIGNORE

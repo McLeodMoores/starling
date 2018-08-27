@@ -26,7 +26,7 @@ public class QuerySecurityDbSecurityMasterWorkerGetTest extends AbstractDbSecuri
   private static final Logger LOGGER = LoggerFactory.getLogger(QuerySecurityDbSecurityMasterWorkerGetTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public QuerySecurityDbSecurityMasterWorkerGetTest(String databaseType, String databaseVersion) {
+  public QuerySecurityDbSecurityMasterWorkerGetTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion, true);
     LOGGER.info("running testcases for {}", databaseType);
   }
@@ -39,55 +39,55 @@ public class QuerySecurityDbSecurityMasterWorkerGetTest extends AbstractDbSecuri
 
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_getSecurity_versioned_notFoundId() {
-    UniqueId uniqueId = UniqueId.of("DbSec", "0", "0");
+    final UniqueId uniqueId = UniqueId.of("DbSec", "0", "0");
     _secMaster.get(uniqueId);
   }
 
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_getSecurity_versioned_notFoundVersion() {
-    UniqueId uniqueId = UniqueId.of("DbSec", "101", "1");
+    final UniqueId uniqueId = UniqueId.of("DbSec", "101", "1");
     _secMaster.get(uniqueId);
   }
 
   @Test
   public void test_getSecurity_versioned_oneSecurityKey() {
-    UniqueId uniqueId = UniqueId.of("DbSec", "101", "0");
-    SecurityDocument test = _secMaster.get(uniqueId);
+    final UniqueId uniqueId = UniqueId.of("DbSec", "101", "0");
+    final SecurityDocument test = _secMaster.get(uniqueId);
     assert101(test);
   }
 
   @Test
   public void test_getSecurity_versioned_twoSecurityKeys() {
-    UniqueId uniqueId = UniqueId.of("DbSec", "102", "0");
-    SecurityDocument test = _secMaster.get(uniqueId);
+    final UniqueId uniqueId = UniqueId.of("DbSec", "102", "0");
+    final SecurityDocument test = _secMaster.get(uniqueId);
     assert102(test);
   }
 
   @Test
   public void test_getSecurity_versioned_notLatest() {
-    UniqueId uniqueId = UniqueId.of("DbSec", "201", "0");
-    SecurityDocument test = _secMaster.get(uniqueId);
+    final UniqueId uniqueId = UniqueId.of("DbSec", "201", "0");
+    final SecurityDocument test = _secMaster.get(uniqueId);
     assert201(test);
   }
 
   @Test
   public void test_getSecurity_versioned_latest() {
-    UniqueId uniqueId = UniqueId.of("DbSec", "201", "1");
-    SecurityDocument test = _secMaster.get(uniqueId);
+    final UniqueId uniqueId = UniqueId.of("DbSec", "201", "1");
+    final SecurityDocument test = _secMaster.get(uniqueId);
     assert202(test);
   }
 
   //-------------------------------------------------------------------------
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_getSecurity_unversioned_notFound() {
-    UniqueId uniqueId = UniqueId.of("DbSec", "0");
+    final UniqueId uniqueId = UniqueId.of("DbSec", "0");
     _secMaster.get(uniqueId);
   }
 
   @Test
   public void test_getSecurity_unversioned() {
-    UniqueId oid = UniqueId.of("DbSec", "201");
-    SecurityDocument test = _secMaster.get(oid);
+    final UniqueId oid = UniqueId.of("DbSec", "201");
+    final SecurityDocument test = _secMaster.get(oid);
     assert202(test);
   }
 

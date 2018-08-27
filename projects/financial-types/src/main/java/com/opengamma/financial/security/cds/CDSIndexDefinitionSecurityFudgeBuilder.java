@@ -26,7 +26,7 @@ import com.opengamma.util.time.Tenor;
  */
 @FudgeBuilderFor(CreditDefaultSwapIndexDefinitionSecurity.class)
 public class CDSIndexDefinitionSecurityFudgeBuilder extends AbstractFudgeBuilder implements FudgeBuilder<CreditDefaultSwapIndexDefinitionSecurity> {
-  
+
   /** Field name. */
   public static final String VERSION_FLD = "version";
   /** Field name. */
@@ -41,49 +41,49 @@ public class CDSIndexDefinitionSecurityFudgeBuilder extends AbstractFudgeBuilder
   public static final String TERMS_FLD = "terms";
   /** Field name. */
   public static final String COMPONENTS_FLD = "components";
- 
+
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, CreditDefaultSwapIndexDefinitionSecurity object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final CreditDefaultSwapIndexDefinitionSecurity object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     CDSIndexDefinitionSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
-  public static void toFudgeMsg(FudgeSerializer serializer, CreditDefaultSwapIndexDefinitionSecurity security, final MutableFudgeMsg msg) {
+  public static void toFudgeMsg(final FudgeSerializer serializer, final CreditDefaultSwapIndexDefinitionSecurity security, final MutableFudgeMsg msg) {
     FinancialSecurityFudgeBuilder.toFudgeMsg(serializer, security, msg);
     addToMessage(msg, VERSION_FLD, security.getVersion());
     addToMessage(msg, SERIES_FLD, security.getSeries());
     addToMessage(msg, FAMILY_FLD, security.getFamily());
     addToMessage(msg, CURRENCY_FLD, security.getCurrency());
     addToMessage(msg, RECOVERY_RATE_FLD, security.getRecoveryRate());
-    for (Tenor tenor : security.getTerms()) {
+    for (final Tenor tenor : security.getTerms()) {
       addToMessage(serializer, msg, TERMS_FLD, tenor, Tenor.class);
     }
-    for (CreditDefaultSwapIndexComponent component : security.getComponents()) {
+    for (final CreditDefaultSwapIndexComponent component : security.getComponents()) {
       addToMessage(serializer, msg, COMPONENTS_FLD, component, CreditDefaultSwapIndexComponent.class);
     }
   }
 
   @Override
-  public CreditDefaultSwapIndexDefinitionSecurity buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    CreditDefaultSwapIndexDefinitionSecurity security = new CreditDefaultSwapIndexDefinitionSecurity();
+  public CreditDefaultSwapIndexDefinitionSecurity buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final CreditDefaultSwapIndexDefinitionSecurity security = new CreditDefaultSwapIndexDefinitionSecurity();
     CDSIndexDefinitionSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, security);
     return security;
   }
 
-  public static void fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg, CreditDefaultSwapIndexDefinitionSecurity security) {
+  public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final CreditDefaultSwapIndexDefinitionSecurity security) {
     FinancialSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, security);
-    
-    List<FudgeField> termsFields = msg.getAllByName(TERMS_FLD);
-    List<Tenor> tenors = Lists.newArrayList();
-    for (FudgeField field : termsFields) {
+
+    final List<FudgeField> termsFields = msg.getAllByName(TERMS_FLD);
+    final List<Tenor> tenors = Lists.newArrayList();
+    for (final FudgeField field : termsFields) {
       tenors.add(deserializer.fieldValueToObject(Tenor.class, field));
     }
     security.setTerms(CDSIndexTerms.of(tenors));
-    
-    List<FudgeField> componentsFields = msg.getAllByName(COMPONENTS_FLD);
-    List<CreditDefaultSwapIndexComponent> components = Lists.newArrayList();
-    for (FudgeField field : componentsFields) {
+
+    final List<FudgeField> componentsFields = msg.getAllByName(COMPONENTS_FLD);
+    final List<CreditDefaultSwapIndexComponent> components = Lists.newArrayList();
+    for (final FudgeField field : componentsFields) {
       components.add(deserializer.fieldValueToObject(CreditDefaultSwapIndexComponent.class, field));
     }
     security.setComponents(CDSIndexComponentBundle.of(components));

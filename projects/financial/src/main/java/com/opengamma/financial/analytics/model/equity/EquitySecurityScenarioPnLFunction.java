@@ -52,7 +52,7 @@ public class EquitySecurityScenarioPnLFunction extends AbstractFunction.NonCompi
   }
 
   @Override
-  public Set<ComputedValue> execute(FunctionExecutionContext executionContext, FunctionInputs inputs, ComputationTarget target, Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
 
     // Get equity price (market value)
     final EquitySecurity equity = (EquitySecurity) target.getSecurity();
@@ -61,9 +61,9 @@ public class EquitySecurityScenarioPnLFunction extends AbstractFunction.NonCompi
     // Get shift to price, if provided, and hence PNL
     final double pnl;
 
-    ValueProperties constraints = desiredValues.iterator().next().getConstraints();
-    String stockConstraint = constraints.getValues(PRICE_SHIFT).iterator().next();
-    String priceShiftTypeConstraint = constraints.getValues(PRICE_SHIFT_TYPE).iterator().next();
+    final ValueProperties constraints = desiredValues.iterator().next().getConstraints();
+    final String stockConstraint = constraints.getValues(PRICE_SHIFT).iterator().next();
+    final String priceShiftTypeConstraint = constraints.getValues(PRICE_SHIFT_TYPE).iterator().next();
 
     if (stockConstraint.equals("")) {
       pnl = 0.0;
@@ -95,8 +95,8 @@ public class EquitySecurityScenarioPnLFunction extends AbstractFunction.NonCompi
   }
 
   @Override
-  public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target) {
-    ValueProperties properties = createValueProperties()
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
+    final ValueProperties properties = createValueProperties()
         .withAny(PRICE_SHIFT).withAny(PRICE_SHIFT_TYPE)
         .withAny(VOL_SHIFT).withAny(VOL_SHIFT_TYPE)
         .with(ValuePropertyNames.CURRENCY, FinancialSecurityUtils.getCurrency(target.getSecurity()).getCode())
@@ -106,7 +106,7 @@ public class EquitySecurityScenarioPnLFunction extends AbstractFunction.NonCompi
 
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
-    ValueSpecification input = inputs.keySet().iterator().next();
+    final ValueSpecification input = inputs.keySet().iterator().next();
     if (getValueRequirementName().equals(input.getValueName())) {
       return inputs.keySet();
     } else {
@@ -119,7 +119,7 @@ public class EquitySecurityScenarioPnLFunction extends AbstractFunction.NonCompi
    * The only requirement for the present value of an EquitySecurity is the MARKET_VALUE. <p>
    * We also use getRequirements to set defaults for the shift properties.
    */
-  public Set<ValueRequirement> getRequirements(FunctionCompilationContext context, ComputationTarget target, ValueRequirement desiredValue) {
+  public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
 
     // Test constraints are provided, else set to ""
     final ValueProperties constraints = desiredValue.getConstraints();

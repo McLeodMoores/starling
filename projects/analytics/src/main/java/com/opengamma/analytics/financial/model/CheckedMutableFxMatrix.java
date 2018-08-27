@@ -15,7 +15,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.CurrencyAmount;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
-public class CheckedMutableFxMatrix extends FXMatrix {
+public final class CheckedMutableFxMatrix extends FXMatrix {
 
   public static CheckedMutableFxMatrix of() {
     return new CheckedMutableFxMatrix();

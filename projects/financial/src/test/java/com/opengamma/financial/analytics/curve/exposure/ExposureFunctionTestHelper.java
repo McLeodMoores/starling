@@ -138,7 +138,7 @@ public class ExposureFunctionTestHelper {
    * @param security the security to be wrapped.
    * @return the security inside a trade instance.
    */
-  public static Trade getTrade(Security security) {
+  public static Trade getTrade(final Security security) {
     return new SimpleTrade(security, BigDecimal.ONE, COUNTERPARTY, LocalDate.now(), OffsetTime.now());
   }
 

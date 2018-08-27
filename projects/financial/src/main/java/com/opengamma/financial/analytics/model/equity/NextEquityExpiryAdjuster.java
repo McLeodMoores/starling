@@ -33,7 +33,7 @@ public class NextEquityExpiryAdjuster implements TemporalAdjuster {
   private final Set<Month> _immFutureQuarters = EnumSet.of(Month.MARCH, Month.JUNE, Month.SEPTEMBER, Month.DECEMBER);
 
   @Override
-  public Temporal adjustInto(Temporal temporal) {
+  public Temporal adjustInto(final Temporal temporal) {
     LocalDate date = LocalDate.from(temporal);
     if (_immFutureQuarters.contains(date.getMonth()) &&
         date.with(DAY_OF_MONTH).isAfter(date)) { // in a quarter

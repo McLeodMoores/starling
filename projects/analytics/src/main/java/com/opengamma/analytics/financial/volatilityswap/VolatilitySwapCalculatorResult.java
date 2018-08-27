@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.volatilityswap;
@@ -186,18 +186,18 @@ public class VolatilitySwapCalculatorResult {
     result = prime * result + Arrays.hashCode(_callWeights);
     long temp;
     temp = Double.doubleToLongBits(_cash);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + Arrays.hashCode(_putPrices);
     result = prime * result + Arrays.hashCode(_putWeights);
     temp = Double.doubleToLongBits(_straddlePrice);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_straddleWeight);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -207,7 +207,7 @@ public class VolatilitySwapCalculatorResult {
     if (!(obj instanceof VolatilitySwapCalculatorResult)) {
       return false;
     }
-    VolatilitySwapCalculatorResult other = (VolatilitySwapCalculatorResult) obj;
+    final VolatilitySwapCalculatorResult other = (VolatilitySwapCalculatorResult) obj;
     if (!Arrays.equals(_callPrices, other._callPrices)) {
       return false;
     }

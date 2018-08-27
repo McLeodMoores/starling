@@ -99,10 +99,10 @@ public class PortfolioLoader {
    * @param logToSystemOut should logging go to system out or standard logger
    * @param structure the portfolio structure, preserve existing structure if null, flatten if zero-length array,
    */
-  public PortfolioLoader(ToolContext toolContext, String portfolioName, String securityType, String fileName,
-                         boolean write, boolean verbose, boolean mergePositions,
-                         boolean keepCurrentPositions, boolean ignoreVersion, boolean logToSystemOut,
-                         String[] structure) {
+  public PortfolioLoader(final ToolContext toolContext, final String portfolioName, final String securityType, final String fileName,
+                         final boolean write, final boolean verbose, final boolean mergePositions,
+                         final boolean keepCurrentPositions, final boolean ignoreVersion, final boolean logToSystemOut,
+                         final String[] structure) {
 
     ArgumentChecker.notNull(toolContext, "toolContext ");
     ArgumentChecker.isTrue(!write || portfolioName != null, "Portfolio name must be specified if writing to a master");
@@ -126,18 +126,18 @@ public class PortfolioLoader {
    */
   public void execute() {
 
-    for (PositionReader positionReader : constructPortfolioReaders(_fileName, _securityType, _ignoreVersion)) {
+    for (final PositionReader positionReader : constructPortfolioReaders(_fileName, _securityType, _ignoreVersion)) {
 
       // Get the name of the portfolio from the reader if it supplies one
-      String name = positionReader.getPortfolioName();
+      final String name = positionReader.getPortfolioName();
 
-      String portfolioName = name != null ? name : _suggestedPortfolioName;
-      PositionWriter positionWriter =
+      final String portfolioName = name != null ? name : _suggestedPortfolioName;
+      final PositionWriter positionWriter =
           constructPortfolioWriter(_toolContext, portfolioName, _write, _mergePositions, _keepCurrentPositions);
-      SimplePortfolioCopier portfolioCopier = new SimplePortfolioCopier(_structure);
+      final SimplePortfolioCopier portfolioCopier = new SimplePortfolioCopier(_structure);
 
       // Create visitor for verbose/quiet mode
-      PortfolioCopierVisitor portfolioCopierVisitor =
+      final PortfolioCopierVisitor portfolioCopierVisitor =
           _verbose ? new VerbosePortfolioCopierVisitor() : new QuietPortfolioCopierVisitor();
 
       // Call the portfolio loader with the supplied arguments
@@ -149,11 +149,11 @@ public class PortfolioLoader {
     }
   }
 
-  private PositionWriter constructPortfolioWriter(ToolContext toolContext,
-                                                   String portfolioName,
-                                                   boolean write,
-                                                   boolean mergePositions,
-                                                   boolean keepCurrentPositions) {
+  private PositionWriter constructPortfolioWriter(final ToolContext toolContext,
+                                                   final String portfolioName,
+                                                   final boolean write,
+                                                   final boolean mergePositions,
+                                                   final boolean keepCurrentPositions) {
 
     if (write) {
 
@@ -178,7 +178,7 @@ public class PortfolioLoader {
     }
   }
 
-  private Iterable<? extends PositionReader> constructPortfolioReaders(String filename, String securityType, boolean ignoreVersion) {
+  private Iterable<? extends PositionReader> constructPortfolioReaders(final String filename, final String securityType, final boolean ignoreVersion) {
 
     switch (SheetFormat.of(filename)) {
 
@@ -198,7 +198,7 @@ public class PortfolioLoader {
         // XMl multi-asset portfolio
         try {
           return new XmlFileReader(new FileInputStream(filename), new SchemaRegister());
-        } catch (FileNotFoundException e) {
+        } catch (final FileNotFoundException e) {
           throw new OpenGammaRuntimeException("Cannot find file: " + filename, e);
         }
 

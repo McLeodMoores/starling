@@ -16,7 +16,7 @@ public class SchemaRegister {
       new SchemaVersion("1.0"), new PortfolioConversionV1_0()
   );
 
-  public PortfolioConversion getConverterForSchema(SchemaVersion version) {
+  public PortfolioConversion getConverterForSchema(final SchemaVersion version) {
     return REGISTER.get(version);
   }
 

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.payments.derivative;
@@ -76,7 +76,7 @@ public class CouponIborAverageFixingDates extends Coupon {
   }
 
   @Override
-  public CouponIborAverageFixingDates withNotional(double notional) {
+  public CouponIborAverageFixingDates withNotional(final double notional) {
     return new CouponIborAverageFixingDates(getCurrency(), getPaymentTime(), getPaymentYearFraction(), notional, getIndex(), getFixingTime(), getWeight(), getFixingPeriodStartTime(),
         getFixingPeriodEndTime(), getFixingPeriodAccrualFactor(), _amountAccrued);
   }
@@ -143,18 +143,18 @@ public class CouponIborAverageFixingDates extends Coupon {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_amountAccrued);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + Arrays.hashCode(_fixingPeriodAccrualFactor);
     result = prime * result + Arrays.hashCode(_fixingPeriodEndTime);
     result = prime * result + Arrays.hashCode(_fixingPeriodStartTime);
     result = prime * result + Arrays.hashCode(_fixingTime);
-    result = prime * result + ((_index == null) ? 0 : _index.hashCode());
+    result = prime * result + (_index == null ? 0 : _index.hashCode());
     result = prime * result + Arrays.hashCode(_weight);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -164,7 +164,7 @@ public class CouponIborAverageFixingDates extends Coupon {
     if (!(obj instanceof CouponIborAverageFixingDates)) {
       return false;
     }
-    CouponIborAverageFixingDates other = (CouponIborAverageFixingDates) obj;
+    final CouponIborAverageFixingDates other = (CouponIborAverageFixingDates) obj;
     if (Double.doubleToLongBits(_amountAccrued) != Double.doubleToLongBits(other._amountAccrued)) {
       return false;
     }

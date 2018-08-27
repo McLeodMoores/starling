@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.enginedb.stats;
@@ -51,7 +51,7 @@ public class DbFunctionCostsMaster implements FunctionCostsMaster {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param dbConnector  the database connector, not null
    */
   public DbFunctionCostsMaster(final DbConnector dbConnector) {
@@ -64,7 +64,7 @@ public class DbFunctionCostsMaster implements FunctionCostsMaster {
   //-------------------------------------------------------------------------
   /**
    * Gets the external SQL bundle.
-   * 
+   *
    * @return the external SQL bundle, not null
    */
   public ElSqlBundle getElSqlBundle() {
@@ -73,17 +73,17 @@ public class DbFunctionCostsMaster implements FunctionCostsMaster {
 
   /**
    * Sets the external SQL bundle.
-   * 
+   *
    * @param bundle  the external SQL bundle, not null
    */
-  public void setElSqlBundle(ElSqlBundle bundle) {
+  public void setElSqlBundle(final ElSqlBundle bundle) {
     _externalSqlBundle = bundle;
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the database connector.
-   * 
+   *
    * @return the database connector, not null
    */
   public DbConnector getDbConnector() {
@@ -93,7 +93,7 @@ public class DbFunctionCostsMaster implements FunctionCostsMaster {
   //-------------------------------------------------------------------------
   /**
    * Gets the time-source that determines the current time.
-   * 
+   *
    * @return the time-source, not null
    */
   public Clock getClock() {
@@ -102,7 +102,7 @@ public class DbFunctionCostsMaster implements FunctionCostsMaster {
 
   /**
    * Sets the time-source.
-   * 
+   *
    * @param timeSource  the time-source, not null
    */
   public void setClock(final Clock timeSource) {
@@ -116,10 +116,10 @@ public class DbFunctionCostsMaster implements FunctionCostsMaster {
     final DbMapSqlParameterSource args = new DbMapSqlParameterSource().addValue("version_key", "schema_patch");
     final NamedParameterJdbcOperations namedJdbc = getDbConnector().getJdbcTemplate();
     final String sql = getElSqlBundle().getSql("GetSchemaVersion", args);
-    String version = namedJdbc.queryForObject(sql, args, String.class);
+    final String version = namedJdbc.queryForObject(sql, args, String.class);
     return Integer.parseInt(version);
   }
-  
+
   //-------------------------------------------------------------------------
   @Override
   public FunctionCostsDocument load(final String configuration, final String functionId, Instant versionAsOf) {
@@ -147,7 +147,7 @@ public class DbFunctionCostsMaster implements FunctionCostsMaster {
     ArgumentChecker.notNull(costs.getConfigurationName(), "costs.configurationName");
     ArgumentChecker.notNull(costs.getFunctionId(), "costs.functionId");
     costs.setVersion(Instant.now(getClock()));
-    
+
     final DbMapSqlParameterSource args = new DbMapSqlParameterSource()
       .addValue("configuration", costs.getConfigurationName().trim())
       .addValue("function", costs.getFunctionId().trim())
@@ -157,7 +157,7 @@ public class DbFunctionCostsMaster implements FunctionCostsMaster {
       .addValue("data_output_cost", costs.getDataOutputCost());
     final String sql = getElSqlBundle().getSql("InsertCosts", args);
     getDbConnector().getJdbcTemplate().update(sql, args);
-    
+
     // delete older data
     final DbMapSqlParameterSource deleteArgs = new DbMapSqlParameterSource()
       .addValue("configuration", costs.getConfigurationName().trim())
@@ -166,14 +166,14 @@ public class DbFunctionCostsMaster implements FunctionCostsMaster {
       .addValue("keep_rows", 20);
     final String deleteSql = getElSqlBundle().getSql("DeleteOld", deleteArgs);
     getDbConnector().getJdbcTemplate().update(deleteSql, deleteArgs);
-    
+
     return costs;
   }
 
   //-------------------------------------------------------------------------
   /**
    * Returns a string summary of this master.
-   * 
+   *
    * @return the string summary, not null
    */
   @Override
@@ -186,12 +186,12 @@ public class DbFunctionCostsMaster implements FunctionCostsMaster {
    * Mapper from SQL rows to a FunctionCostsDocument.
    */
   protected final class FunctionCostsDocumentExtractor implements ResultSetExtractor<List<FunctionCostsDocument>> {
-    private List<FunctionCostsDocument> _documents = new ArrayList<FunctionCostsDocument>();
+    private final List<FunctionCostsDocument> _documents = new ArrayList<>();
 
     @Override
     public List<FunctionCostsDocument> extractData(final ResultSet rs) throws SQLException, DataAccessException {
       while (rs.next()) {
-        FunctionCostsDocument doc = new FunctionCostsDocument();
+        final FunctionCostsDocument doc = new FunctionCostsDocument();
         doc.setConfigurationName(rs.getString("CONFIGURATION"));
         doc.setFunctionId(rs.getString("FUNCTION_NAME"));
         doc.setVersion(DbDateUtils.fromSqlTimestamp(rs.getTimestamp("VERSION_INSTANT")));

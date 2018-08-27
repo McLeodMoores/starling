@@ -21,11 +21,11 @@ import com.sun.jersey.spi.container.ContainerResponseFilter;
 public class NoCachingFilter implements ContainerResponseFilter {
 
   @Override
-  public ContainerResponse filter(ContainerRequest request, ContainerResponse response) {
+  public ContainerResponse filter(final ContainerRequest request, final ContainerResponse response) {
     if (request.getMethod().equalsIgnoreCase("GET") == false) {
       return response;
     }
-    MultivaluedMap<String, Object> headers = response.getHttpHeaders();
+    final MultivaluedMap<String, Object> headers = response.getHttpHeaders();
     if (headers.containsKey(HttpHeaders.ETAG) == false &&
         headers.containsKey(HttpHeaders.CACHE_CONTROL) == false &&
         headers.containsKey(HttpHeaders.EXPIRES) == false) {

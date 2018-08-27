@@ -34,15 +34,15 @@ public class PortfolioAggregatorTest {
 
   @Test(enabled = false)
   public void multipleInstancesOfSamePosition() {
-    SimplePortfolio portfolio = new SimplePortfolio(id("portfolio"), "portfolio");
-    SimplePortfolioNode root = new SimplePortfolioNode(id("root"), "root");
-    SimplePortfolioNode node1 = new SimplePortfolioNode(id("node1"), "node1");
-    SimplePortfolioNode node2 = new SimplePortfolioNode(id("node2"), "node2");
-    ExternalId securityId = ExternalId.of("sec", "123");
-    SimplePosition position = new SimplePosition(id("position"), BigDecimal.ONE, securityId);
-    SimpleCounterparty counterparty = new SimpleCounterparty(ExternalId.of("cpty", "123"));
-    SimpleSecurityLink securityLink = new SimpleSecurityLink(securityId);
-    Trade trade = new SimpleTrade(securityLink, BigDecimal.ONE, counterparty, LocalDate.now(), OffsetTime.now());
+    final SimplePortfolio portfolio = new SimplePortfolio(id("portfolio"), "portfolio");
+    final SimplePortfolioNode root = new SimplePortfolioNode(id("root"), "root");
+    final SimplePortfolioNode node1 = new SimplePortfolioNode(id("node1"), "node1");
+    final SimplePortfolioNode node2 = new SimplePortfolioNode(id("node2"), "node2");
+    final ExternalId securityId = ExternalId.of("sec", "123");
+    final SimplePosition position = new SimplePosition(id("position"), BigDecimal.ONE, securityId);
+    final SimpleCounterparty counterparty = new SimpleCounterparty(ExternalId.of("cpty", "123"));
+    final SimpleSecurityLink securityLink = new SimpleSecurityLink(securityId);
+    final Trade trade = new SimpleTrade(securityLink, BigDecimal.ONE, counterparty, LocalDate.now(), OffsetTime.now());
     position.addTrade(trade);
     portfolio.setRootNode(root);
     node1.addPosition(position);
@@ -50,15 +50,15 @@ public class PortfolioAggregatorTest {
     root.addChildNode(node1);
     root.addChildNode(node2);
 
-    CounterpartyAggregationFunction fn = new CounterpartyAggregationFunction();
-    Portfolio aggregate = new PortfolioAggregator(fn).aggregate(portfolio);
-    PortfolioNode aggregateRoot = aggregate.getRootNode();
+    final CounterpartyAggregationFunction fn = new CounterpartyAggregationFunction();
+    final Portfolio aggregate = new PortfolioAggregator(fn).aggregate(portfolio);
+    final PortfolioNode aggregateRoot = aggregate.getRootNode();
     assertEquals(1, aggregateRoot.getChildNodes().size());
-    PortfolioNode node = aggregateRoot.getChildNodes().get(0);
+    final PortfolioNode node = aggregateRoot.getChildNodes().get(0);
     assertEquals(1, node.getPositions().size());
   }
 
-  private static UniqueId id(String value) {
+  private static UniqueId id(final String value) {
     return UniqueId.of("scheme", value);
   }
 }

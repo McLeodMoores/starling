@@ -453,22 +453,22 @@ public class FinancialSecurityVisitorSameValueAdapter<T> implements FinancialSec
   }
 
   @Override
-  public T visitStandardCDSSecurity(StandardCDSSecurity security) {
+  public T visitStandardCDSSecurity(final StandardCDSSecurity security) {
     return _value;
   }
 
   @Override
-  public T visitLegacyCDSSecurity(LegacyCDSSecurity security) {
+  public T visitLegacyCDSSecurity(final LegacyCDSSecurity security) {
     return _value;
   }
 
   @Override
-  public T visitIndexCDSSecurity(IndexCDSSecurity security) {
+  public T visitIndexCDSSecurity(final IndexCDSSecurity security) {
     return _value;
   }
 
   @Override
-  public T visitIndexCDSDefinitionSecurity(IndexCDSDefinitionSecurity security) {
+  public T visitIndexCDSDefinitionSecurity(final IndexCDSDefinitionSecurity security) {
     return _value;
   }
 }

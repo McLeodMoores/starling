@@ -35,29 +35,29 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
  * Checks entitlements against a LiveData server by sending the server a Fudge message.
  */
 public class DistributedEntitlementChecker {
-  
+
   /**
    * If no response from server is received within this period of time, throw exception
    */
   public static final long TIMEOUT_MS = 5000;
-  
+
   private static final Logger LOGGER = LoggerFactory.getLogger(DistributedEntitlementChecker.class);
   private final FudgeRequestSender _requestSender;
   private final FudgeContext _fudgeContext;
-  
-  public DistributedEntitlementChecker(FudgeRequestSender requestSender) {
+
+  public DistributedEntitlementChecker(final FudgeRequestSender requestSender) {
     this(requestSender, OpenGammaFudgeContext.getInstance());
   }
-  
-  public DistributedEntitlementChecker(FudgeRequestSender requestSender, FudgeContext fudgeContext) {
+
+  public DistributedEntitlementChecker(final FudgeRequestSender requestSender, final FudgeContext fudgeContext) {
     ArgumentChecker.notNull(requestSender, "Request Sender");
     ArgumentChecker.notNull(fudgeContext, "Fudge Context");
     _requestSender = requestSender;
     _fudgeContext = fudgeContext;
   }
 
-  public Map<LiveDataSpecification, Boolean> isEntitled(UserPrincipal user,
-      Collection<LiveDataSpecification> specifications) {
+  public Map<LiveDataSpecification, Boolean> isEntitled(final UserPrincipal user,
+      final Collection<LiveDataSpecification> specifications) {
     LOGGER.info("Checking entitlements by {} to {}", user, specifications);
 
     final Map<LiveDataSpecification, Boolean> returnValue = new HashMap<>();
@@ -68,50 +68,50 @@ public class DistributedEntitlementChecker {
       return returnValue;
     }
 
-    FudgeMsg requestMessage = composeRequestMessage(user, specifications);
-    
+    final FudgeMsg requestMessage = composeRequestMessage(user, specifications);
+
     final CountDownLatch latch = new CountDownLatch(1);
-    
+
     _requestSender.sendRequest(requestMessage, new FudgeMessageReceiver() {
-      
+
       @Override
-      public void messageReceived(FudgeContext fudgeContext,
-          FudgeMsgEnvelope msgEnvelope) {
-        
-        FudgeMsg msg = msgEnvelope.getMessage();
-        EntitlementResponseMsg responseMsg = EntitlementResponseMsg.fromFudgeMsg(new FudgeDeserializer(fudgeContext), msg);
-        for (EntitlementResponse response : responseMsg.getResponses()) {
+      public void messageReceived(final FudgeContext fudgeContext,
+          final FudgeMsgEnvelope msgEnvelope) {
+
+        final FudgeMsg msg = msgEnvelope.getMessage();
+        final EntitlementResponseMsg responseMsg = EntitlementResponseMsg.fromFudgeMsg(new FudgeDeserializer(fudgeContext), msg);
+        for (final EntitlementResponse response : responseMsg.getResponses()) {
           returnValue.put(response.getLiveDataSpecification(), response.getIsEntitled());
         }
         latch.countDown();
       }
     });
-    
+
     boolean success;
     try {
       success = latch.await(TIMEOUT_MS, TimeUnit.MILLISECONDS);
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
       Thread.interrupted();
       throw new OpenGammaRuntimeException("Interrupted", e);
     }
-    
+
     if (!success) {
       throw new OpenGammaRuntimeException("Timeout. Waited for entitlement response for " + TIMEOUT_MS + " with no response.");
     }
-    
+
     LOGGER.info("Got entitlement response {}", returnValue);
     return returnValue;
   }
-  
-  public boolean isEntitled(UserPrincipal user,
-      LiveDataSpecification specification) {
-    Map<LiveDataSpecification, Boolean> entitlements = isEntitled(user, Collections.singleton(specification));
+
+  public boolean isEntitled(final UserPrincipal user,
+      final LiveDataSpecification specification) {
+    final Map<LiveDataSpecification, Boolean> entitlements = isEntitled(user, Collections.singleton(specification));
     return entitlements.get(specification);
   }
 
-  private FudgeMsg composeRequestMessage(UserPrincipal user,
-      Collection<LiveDataSpecification> specifications) {
-    EntitlementRequest request = new EntitlementRequest(user, specifications);
+  private FudgeMsg composeRequestMessage(final UserPrincipal user,
+      final Collection<LiveDataSpecification> specifications) {
+    final EntitlementRequest request = new EntitlementRequest(user, specifications);
     return request.toFudgeMsg(new FudgeSerializer(_fudgeContext));
   }
 

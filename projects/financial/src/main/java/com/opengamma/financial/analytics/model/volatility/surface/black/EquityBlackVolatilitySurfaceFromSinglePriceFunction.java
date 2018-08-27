@@ -55,7 +55,7 @@ import com.opengamma.util.time.Expiry;
 import com.opengamma.util.time.ExpiryAccuracy;
 
 /**
-* Produces a {@link ValueRequirementNames#BLACK_VOLATILITY_SURFACE} 
+* Produces a {@link ValueRequirementNames#BLACK_VOLATILITY_SURFACE}
 * from Forward and Discounting Curves, and the Option's {@link MarketDataRequirementNames#MARKET_VALUE} or {@link ValueRequirementNames#MARK_PREVIOUS}.<p>
 */
 public class EquityBlackVolatilitySurfaceFromSinglePriceFunction extends AbstractFunction.NonCompiledInvoker {
@@ -79,17 +79,17 @@ public class EquityBlackVolatilitySurfaceFromSinglePriceFunction extends Abstrac
 
   @Override
   public ComputationTargetType getTargetType() {
-    return ComputationTargetType.SECURITY; 
+    return ComputationTargetType.SECURITY;
   }
 
   @Override
-  public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
     final ValueProperties properties = getResultProperties();
     return Collections.singleton(new ValueSpecification(ValueRequirementNames.BLACK_VOLATILITY_SURFACE, target.toSpecification(), properties));
   }
 
   public ValueProperties getResultProperties() {
-    ValueProperties properties = createValueProperties()
+    final ValueProperties properties = createValueProperties()
         .withAny(ValuePropertyNames.DISCOUNTING_CURVE_NAME)
         .withAny(ValuePropertyNames.CURVE_CALCULATION_CONFIG)
         .withAny(ValuePropertyNames.FORWARD_CURVE_NAME)
@@ -98,19 +98,19 @@ public class EquityBlackVolatilitySurfaceFromSinglePriceFunction extends Abstrac
     return properties;
   }
 
-  private ValueProperties getResultProperties(Set<ValueRequirement> desiredValues) {
+  private ValueProperties getResultProperties(final Set<ValueRequirement> desiredValues) {
     return desiredValues.iterator().next().getConstraints();
   }
-  
-  protected Set<ValueRequirement> getAddlRequirements(FunctionCompilationContext context, ComputationTarget target, ValueRequirement desiredValue) {
+
+  protected Set<ValueRequirement> getAddlRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     return Collections.emptySet();
   }
 
   @Override
-  public Set<ValueRequirement> getRequirements(FunctionCompilationContext context, ComputationTarget target, ValueRequirement desiredValue) {
+  public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final ValueProperties constraints = desiredValue.getConstraints();
-    Set<ValueRequirement> requirements = Sets.newHashSet();
-    
+    final Set<ValueRequirement> requirements = Sets.newHashSet();
+
     // 1. Market/Closing Value Requirement
     requirements.add(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, target.toSpecification()));
 
@@ -131,12 +131,12 @@ public class EquityBlackVolatilitySurfaceFromSinglePriceFunction extends Abstrac
         .get();
     final ValueRequirement discountCurveRequirement = new ValueRequirement(ValueRequirementNames.YIELD_CURVE, ComputationTargetSpecification.of(ccy), fundingCurveProperties);
     requirements.add(discountCurveRequirement);
-    
+
     // 3. Forward Curve Requirement
     final String forwardCurveName = constraints.getStrictValue(ValuePropertyNames.FORWARD_CURVE_NAME);
     if (forwardCurveName == null) {
       return null;
-    }   
+    }
     final String forwardCurveCalculationMethod = constraints.getStrictValue(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD);
     if (forwardCurveCalculationMethod == null) {
       return null;
@@ -153,7 +153,7 @@ public class EquityBlackVolatilitySurfaceFromSinglePriceFunction extends Abstrac
     }
     if (security instanceof EquityIndexFutureOptionSecurity) {
       final SecuritySource securitySource = context.getSecuritySource();
-      IndexFutureSecurity future = (IndexFutureSecurity) securitySource.getSingle(ExternalIdBundle.of(underlyingId), context.getComputationTargetResolver().getVersionCorrection());
+      final IndexFutureSecurity future = (IndexFutureSecurity) securitySource.getSingle(ExternalIdBundle.of(underlyingId), context.getComputationTargetResolver().getVersionCorrection());
       if (future == null) {
         LOGGER.debug("Did not find anything in SecuritySource for ExternalId: {}", underlyingId);
         return null;
@@ -167,25 +167,25 @@ public class EquityBlackVolatilitySurfaceFromSinglePriceFunction extends Abstrac
     } else {
       requirements.add(new ValueRequirement(ValueRequirementNames.FORWARD_CURVE, ComputationTargetType.PRIMITIVE, underlyingId, forwardCurveProperties));
     }
-    
+
     // 4. Add any additional requirements, and return
-    Set<ValueRequirement> addlRequirements = getAddlRequirements(context, target, desiredValue);
+    final Set<ValueRequirement> addlRequirements = getAddlRequirements(context, target, desiredValue);
     if (addlRequirements != null) {
       requirements.addAll(addlRequirements);
     }
     return requirements;
   }
-  
+
   @Override
-  public Set<ComputedValue> execute(FunctionExecutionContext executionContext, FunctionInputs inputs, ComputationTarget target, Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
     final BlackVolatilitySurface<?> blackVolSurf = getVolatilitySurface(executionContext, inputs, target, desiredValues);
     final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.BLACK_VOLATILITY_SURFACE, target.toSpecification(), getResultProperties(desiredValues));
     return Collections.singleton(new ComputedValue(spec, blackVolSurf));
   }
-  
+
   // The Volatility Surface is simply a single point, which must be inferred from the market value
   protected BlackVolatilitySurface<?> getVolatilitySurface(final FunctionExecutionContext executionContext,
-      final FunctionInputs inputs, final ComputationTarget target, Set<ValueRequirement> desiredValues) {
+      final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
 
     // First, get the market value
     final ComputedValue optionPriceValue = inputs.getComputedValue(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, target.toSpecification()));
@@ -194,7 +194,7 @@ public class EquityBlackVolatilitySurfaceFromSinglePriceFunction extends Abstrac
       return null;
     }
     final Double spotOptionPrice = (Double) optionPriceValue.getValue();
-    
+
     // From the Security, we get strike and expiry information to compute implied volatility
     final double strike;
     final Expiry expiry;
@@ -234,7 +234,7 @@ public class EquityBlackVolatilitySurfaceFromSinglePriceFunction extends Abstrac
     final double discountFactor = getDiscountingCurve(inputs).getDiscountFactor(timeToExpiry);
 
     // From the option value, we invert the Black formula
-    double forwardOptionPrice = spotOptionPrice / discountFactor;
+    final double forwardOptionPrice = spotOptionPrice / discountFactor;
     final Double impliedVol;
     final double intrinsic = Math.max(0.0, (forward - strike) * (isCall ? 1.0 : -1.0));
     if (intrinsic >= forwardOptionPrice) {
@@ -251,13 +251,13 @@ public class EquityBlackVolatilitySurfaceFromSinglePriceFunction extends Abstrac
     final BlackVolatilitySurfaceMoneyness impliedVolatilitySurface = new BlackVolatilitySurfaceMoneyness(surface, forwardCurve);
     return impliedVolatilitySurface;
   }
-  
-  protected Double getImpliedVolIfPriceBelowPayoff(final FunctionInputs inputs, final ComputationTarget target, 
+
+  protected Double getImpliedVolIfPriceBelowPayoff(final FunctionInputs inputs, final ComputationTarget target,
       final double discountFactor, final double forward, final double strike, final double timeToExpiry, final boolean isCall) {
     LOGGER.error("Setting implied volatility to null");
     return null;
   }
-  
+
   protected YieldCurve getDiscountingCurve(final FunctionInputs inputs) {
     final Object discountingObject = inputs.getValue(ValueRequirementNames.YIELD_CURVE);
     if (discountingObject == null) {
@@ -268,7 +268,7 @@ public class EquityBlackVolatilitySurfaceFromSinglePriceFunction extends Abstrac
     }
     return (YieldCurve) discountingObject;
   }
-  
+
   protected ForwardCurve getForwardCurve(final FunctionInputs inputs) {
     final Object forwardCurveObject = inputs.getValue(ValueRequirementNames.FORWARD_CURVE);
     if (forwardCurveObject == null) {

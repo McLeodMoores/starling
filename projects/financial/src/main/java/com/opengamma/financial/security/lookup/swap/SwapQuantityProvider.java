@@ -14,7 +14,7 @@ import com.opengamma.financial.security.swap.SwapSecurity;
 public class SwapQuantityProvider implements SecurityValueProvider<SwapSecurity> {
 
   @Override
-  public Double getValue(SwapSecurity security) {
+  public Double getValue(final SwapSecurity security) {
     // the quantity is from the fixed leg or the pay leg for float/float swaps
     return new QuantityVisitor().visit(security).getFirst();
   }

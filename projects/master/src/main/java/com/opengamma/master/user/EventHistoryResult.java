@@ -49,10 +49,10 @@ public abstract class EventHistoryResult implements Bean {
    * Creates an instance.
    * <p>
    * The result will be sorted even if the input is not.
-   * 
+   *
    * @param events  the history events, not null
    */
-  protected EventHistoryResult(Iterable<HistoryEvent> events) {
+  protected EventHistoryResult(final Iterable<HistoryEvent> events) {
     JodaBeanUtils.notNull(events, "history");
     _events.addAll(Ordering.<HistoryEvent>natural().sortedCopy(events));
   }

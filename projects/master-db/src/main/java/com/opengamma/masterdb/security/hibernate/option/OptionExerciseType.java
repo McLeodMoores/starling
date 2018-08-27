@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.option;
@@ -27,26 +27,26 @@ public enum OptionExerciseType {
   /** European */
   EUROPEAN;
 
-  public static OptionExerciseType identify(ExerciseType exerciseType) {
+  public static OptionExerciseType identify(final ExerciseType exerciseType) {
     return exerciseType.accept(new ExerciseTypeVisitor<OptionExerciseType>() {
 
       @Override
-      public OptionExerciseType visitAmericanExerciseType(AmericanExerciseType exerciseType) {
+      public OptionExerciseType visitAmericanExerciseType(final AmericanExerciseType exerciseType) {
         return AMERICAN;
       }
 
       @Override
-      public OptionExerciseType visitAsianExerciseType(AsianExerciseType exerciseType) {
+      public OptionExerciseType visitAsianExerciseType(final AsianExerciseType exerciseType) {
         return ASIAN;
       }
 
       @Override
-      public OptionExerciseType visitBermudanExerciseType(BermudanExerciseType exerciseType) {
+      public OptionExerciseType visitBermudanExerciseType(final BermudanExerciseType exerciseType) {
         return BERMUDAN;
       }
 
       @Override
-      public OptionExerciseType visitEuropeanExerciseType(EuropeanExerciseType exerciseType) {
+      public OptionExerciseType visitEuropeanExerciseType(final EuropeanExerciseType exerciseType) {
         return EUROPEAN;
       }
 

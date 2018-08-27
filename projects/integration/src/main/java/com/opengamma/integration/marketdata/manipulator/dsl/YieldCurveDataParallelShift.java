@@ -49,19 +49,19 @@ public final class YieldCurveDataParallelShift implements StructureManipulator<Y
   private final double _shift;
 
   @ImmutableConstructor
-  /* package */ YieldCurveDataParallelShift(ScenarioShiftType shiftType, double shift) {
+  /* package */ YieldCurveDataParallelShift(final ScenarioShiftType shiftType, final double shift) {
     _shiftType = ArgumentChecker.notNull(shiftType, "shiftType");
     _shift = shift;
   }
 
   @Override
-  public YieldCurveData execute(YieldCurveData curveData,
-                                ValueSpecification valueSpec,
-                                FunctionExecutionContext executionContext) {
+  public YieldCurveData execute(final YieldCurveData curveData,
+                                final ValueSpecification valueSpec,
+                                final FunctionExecutionContext executionContext) {
     LOGGER.debug("Shifting curve data {} by {}", curveData.getCurveSpecification().getName(), _shift);
-    Map<ExternalIdBundle, Double> dataPoints = curveData.getDataPoints();
-    Map<ExternalIdBundle, Double> shiftedPoints = Maps.newHashMapWithExpectedSize(dataPoints.size());
-    for (Map.Entry<ExternalIdBundle, Double> entry : dataPoints.entrySet()) {
+    final Map<ExternalIdBundle, Double> dataPoints = curveData.getDataPoints();
+    final Map<ExternalIdBundle, Double> shiftedPoints = Maps.newHashMapWithExpectedSize(dataPoints.size());
+    for (final Map.Entry<ExternalIdBundle, Double> entry : dataPoints.entrySet()) {
       switch (_shiftType) {
         case ABSOLUTE:
           shiftedPoints.put(entry.getKey(), entry.getValue() + _shift);

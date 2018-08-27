@@ -19,11 +19,11 @@ import com.opengamma.util.ArgumentChecker;
 /*package*/ class ViewComputationCacheKey implements Serializable {
 
   private static final long serialVersionUID = 1L;
-  
+
   private final UniqueId _viewCycleId;
   private final String _calculationConfigurationName;
-  
-  public ViewComputationCacheKey(UniqueId viewCycleId, String calculationConfigurationName) {
+
+  public ViewComputationCacheKey(final UniqueId viewCycleId, final String calculationConfigurationName) {
     ArgumentChecker.notNull(viewCycleId, "viewCycleId");
     ArgumentChecker.notNull(calculationConfigurationName, "calculationConfigurationName");
     _viewCycleId = viewCycleId;
@@ -32,7 +32,7 @@ import com.opengamma.util.ArgumentChecker;
 
   /**
    * Gets the unique identifer of the view cycle.
-   * 
+   *
    * @return the unique identifier of the view cycle, not null
    */
   public UniqueId getViewCycleId() {
@@ -41,7 +41,7 @@ import com.opengamma.util.ArgumentChecker;
 
   /**
    * Gets the calculation configuration name.
-   * 
+   *
    * @return the calculation configuration name, not null
    */
   public String getCalculationConfigurationName() {
@@ -58,7 +58,7 @@ import com.opengamma.util.ArgumentChecker;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -68,7 +68,7 @@ import com.opengamma.util.ArgumentChecker;
     if (!(obj instanceof ViewComputationCacheKey)) {
       return false;
     }
-    ViewComputationCacheKey other = (ViewComputationCacheKey) obj;
+    final ViewComputationCacheKey other = (ViewComputationCacheKey) obj;
     if (!_calculationConfigurationName.equals(other._calculationConfigurationName)) {
       return false;
     }

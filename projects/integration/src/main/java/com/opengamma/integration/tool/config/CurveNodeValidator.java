@@ -47,7 +47,7 @@ import com.opengamma.util.time.Tenor;
  */
 public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
   /**
-   * 
+   *
    */
   private final ValidationNode _validationNode;
   private final CurveNodeIdMapper _curveNodeIdMapper;
@@ -55,7 +55,7 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
   private final SecuritySource _securitySource;
   private final ConfigSource _configSource;
   private final LocalDate _curveDate;
- 
+
   /**
    * @param curveDate
    * @param configValidationUtils
@@ -63,7 +63,7 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
    * @param validationNode
    * @param curveNodeIdMapper
    */
-  public CurveNodeValidator(LocalDate curveDate, ConfigValidationUtils configValidationUtils, SecuritySource securitySource, ValidationNode validationNode, CurveNodeIdMapper curveNodeIdMapper, ConfigSource configSource) {
+  public CurveNodeValidator(final LocalDate curveDate, final ConfigValidationUtils configValidationUtils, final SecuritySource securitySource, final ValidationNode validationNode, final CurveNodeIdMapper curveNodeIdMapper, final ConfigSource configSource) {
     _curveDate = curveDate;
     _configValidationUtils = configValidationUtils;
     _securitySource = securitySource;
@@ -71,10 +71,10 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
     _curveNodeIdMapper = curveNodeIdMapper;
     _configSource = configSource;
   }
-  
 
-  ValidationNode createInvalidCurveNodeValidationNode(Tenor tenor, Class<? extends CurveNode> curveNodeType, ValidationNode parentNode, String message) {
-    ValidationNode validationNode = new ValidationNode();
+
+  ValidationNode createInvalidCurveNodeValidationNode(final Tenor tenor, final Class<? extends CurveNode> curveNodeType, final ValidationNode parentNode, final String message) {
+    final ValidationNode validationNode = new ValidationNode();
     validationNode.setName(tenor.toFormattedString());
     validationNode.setType(curveNodeType);
     if (message != null) {
@@ -86,24 +86,24 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
   }
 
   @Override
-  public Void visitBondNode(BondNode node) {
+  public Void visitBondNode(final BondNode node) {
     ExternalId bondNodeId;
     try {
       bondNodeId = _curveNodeIdMapper.getBondNodeId(_curveDate, node.getMaturityTenor());
-    } catch (OpenGammaRuntimeException ogre) {
+    } catch (final OpenGammaRuntimeException ogre) {
       bondNodeId = null;
     }
     ValidationNode bondNodeValidationNode;
     if (bondNodeId != null) {
       try {
-        Security bond = _securitySource.getSingle(bondNodeId.toBundle());  
+        final Security bond = _securitySource.getSingle(bondNodeId.toBundle());
         if (bond == null) {
           bondNodeValidationNode = createInvalidCurveNodeValidationNode(node.getMaturityTenor(), BondNode.class, _validationNode, "Bond " + bondNodeId + " not found in security master");
         } else {
           bondNodeValidationNode = createInvalidCurveNodeValidationNode(node.getMaturityTenor(), BondNode.class, _validationNode, null);
         }
-      } catch (IllegalArgumentException iae) {
-        bondNodeValidationNode = createInvalidCurveNodeValidationNode(node.getMaturityTenor(), BondNode.class, _validationNode, 
+      } catch (final IllegalArgumentException iae) {
+        bondNodeValidationNode = createInvalidCurveNodeValidationNode(node.getMaturityTenor(), BondNode.class, _validationNode,
             "Bond " + bondNodeId + " error thrown by security master when resolving, probably invalid ID format");
       }
     } else {
@@ -113,11 +113,11 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
   }
 
   @Override
-  public Void visitCalendarSwapNode(CalendarSwapNode node) {
+  public Void visitCalendarSwapNode(final CalendarSwapNode node) {
     ExternalId calendarNodeId;
     try {
       calendarNodeId = _curveNodeIdMapper.getCalendarSwapNodeId(_curveDate, node.getStartTenor(), node.getStartDateNumber(), node.getEndDateNumber());
-    } catch (OpenGammaRuntimeException ogre) {
+    } catch (final OpenGammaRuntimeException ogre) {
       calendarNodeId = null;
     }
     ValidationNode calendarSwapValidationNode;
@@ -126,17 +126,17 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
     } else {
       calendarSwapValidationNode = createInvalidCurveNodeValidationNode(node.getStartTenor(), CalendarSwapNode.class, _validationNode, null);
     }
-    ValidationNode validationNode = new ValidationNode();
+    final ValidationNode validationNode = new ValidationNode();
     validationNode.setName(node.getSwapConvention().getValue());
     if (_configValidationUtils.conventionExists(node.getSwapConvention())) {
-      ManageableConvention convention = _configValidationUtils.getConvention(node.getSwapConvention());
+      final ManageableConvention convention = _configValidationUtils.getConvention(node.getSwapConvention());
       validationNode.setType(convention.getClass());
     } else {
       validationNode.setType(Convention.class);
       validationNode.getErrors().add("Can't find swap convention using ID " + node.getSwapConvention());
       validationNode.setError(true);
     }
-    ValidationNode validationNode2 = new ValidationNode();
+    final ValidationNode validationNode2 = new ValidationNode();
     validationNode2.setName(node.getSwapConvention().getValue());
     if (_configSource.get(DateSet.class, node.getDateSetName(), VersionCorrection.LATEST) != null) {
       validationNode2.setType(DateSet.class);
@@ -150,11 +150,11 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
   }
 
   @Override
-  public Void visitCashNode(CashNode node) {
+  public Void visitCashNode(final CashNode node) {
     ExternalId cashNodeId;
     try {
       cashNodeId = _curveNodeIdMapper.getCashNodeId(_curveDate, node.getMaturityTenor());
-    } catch (OpenGammaRuntimeException ogre) {
+    } catch (final OpenGammaRuntimeException ogre) {
       cashNodeId = null;
     }
     ValidationNode cashNodeValidationNode;
@@ -163,10 +163,10 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
     } else {
       cashNodeValidationNode = createInvalidCurveNodeValidationNode(node.getMaturityTenor(), CashNode.class, _validationNode, null);
     }
-    ValidationNode validationNode = new ValidationNode();
+    final ValidationNode validationNode = new ValidationNode();
     validationNode.setName(node.getConvention().getValue());
     if (_configValidationUtils.conventionExists(node.getConvention())) {
-      ManageableConvention convention = _configValidationUtils.getConvention(node.getConvention());
+      final ManageableConvention convention = _configValidationUtils.getConvention(node.getConvention());
       validationNode.setType(convention.getClass());
     } else {
       validationNode.setType(Convention.class);
@@ -178,11 +178,11 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
   }
 
   @Override
-  public Void visitContinuouslyCompoundedRateNode(ContinuouslyCompoundedRateNode node) {
+  public Void visitContinuouslyCompoundedRateNode(final ContinuouslyCompoundedRateNode node) {
     ExternalId continuouslyCompoundedRateNodeId;
     try {
       continuouslyCompoundedRateNodeId = _curveNodeIdMapper.getContinuouslyCompoundedRateNodeId(_curveDate, node.getTenor());
-    } catch (OpenGammaRuntimeException ogre) {
+    } catch (final OpenGammaRuntimeException ogre) {
       continuouslyCompoundedRateNodeId = null;
     }
     if (continuouslyCompoundedRateNodeId == null) {
@@ -196,11 +196,11 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
   }
 
   @Override
-  public Void visitPeriodicallyCompoundedRateNode(PeriodicallyCompoundedRateNode node) {
+  public Void visitPeriodicallyCompoundedRateNode(final PeriodicallyCompoundedRateNode node) {
     ExternalId id;
     try {
       id = _curveNodeIdMapper.getPeriodicallyCompoundedRateNodeId(_curveDate, node.getTenor());
-    } catch (OpenGammaRuntimeException ogre) {
+    } catch (final OpenGammaRuntimeException ogre) {
       id = null;
     }
     if (id == null) {
@@ -214,11 +214,11 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
   }
 
   @Override
-  public Void visitCreditSpreadNode(CreditSpreadNode node) {
+  public Void visitCreditSpreadNode(final CreditSpreadNode node) {
     ExternalId creditSpreadNodeId;
     try {
       creditSpreadNodeId = _curveNodeIdMapper.getCreditSpreadNodeId(_curveDate, node.getTenor());
-    } catch (OpenGammaRuntimeException ogre) {
+    } catch (final OpenGammaRuntimeException ogre) {
       creditSpreadNodeId = null;
     }
     if (creditSpreadNodeId == null) {
@@ -232,11 +232,11 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
   }
 
   @Override
-  public Void visitDeliverableSwapFutureNode(DeliverableSwapFutureNode node) {
+  public Void visitDeliverableSwapFutureNode(final DeliverableSwapFutureNode node) {
     ExternalId nodeId;
     try {
       nodeId = _curveNodeIdMapper.getDeliverableSwapFutureNodeId(_curveDate, node.getStartTenor(), node.getFutureTenor(), node.getFutureNumber());
-    } catch (OpenGammaRuntimeException ogre) {
+    } catch (final OpenGammaRuntimeException ogre) {
       nodeId = null;
     }
     ValidationNode dsValidationNode;
@@ -248,7 +248,7 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
     ValidationNode validationNode = new ValidationNode();
     validationNode.setName(node.getFutureConvention().getValue());
     if (_configValidationUtils.conventionExists(node.getFutureConvention())) {
-      ManageableConvention convention = _configValidationUtils.getConvention(node.getFutureConvention());
+      final ManageableConvention convention = _configValidationUtils.getConvention(node.getFutureConvention());
       validationNode.setType(convention.getClass());
     } else {
       validationNode.setType(Convention.class);
@@ -259,7 +259,7 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
     validationNode = new ValidationNode();
     validationNode.setName(node.getSwapConvention().getValue());
     if (_configValidationUtils.conventionExists(node.getSwapConvention())) {
-      ManageableConvention convention = _configValidationUtils.getConvention(node.getSwapConvention());
+      final ManageableConvention convention = _configValidationUtils.getConvention(node.getSwapConvention());
       validationNode.setType(convention.getClass());
     } else {
       validationNode.setType(Convention.class);
@@ -271,11 +271,11 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
   }
 
   @Override
-  public Void visitDiscountFactorNode(DiscountFactorNode node) {
+  public Void visitDiscountFactorNode(final DiscountFactorNode node) {
     ExternalId nodeId;
     try {
       nodeId = _curveNodeIdMapper.getDiscountFactorNodeId(_curveDate, node.getTenor());
-    } catch (OpenGammaRuntimeException ogre) {
+    } catch (final OpenGammaRuntimeException ogre) {
       nodeId = null;
     }
     if (nodeId == null) {
@@ -289,11 +289,11 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
   }
 
   @Override
-  public Void visitFRANode(FRANode node) {
+  public Void visitFRANode(final FRANode node) {
     ExternalId nodeId;
     try {
       nodeId = _curveNodeIdMapper.getFRANodeId(_curveDate, node.getFixingEnd());
-    } catch (OpenGammaRuntimeException ogre) {
+    } catch (final OpenGammaRuntimeException ogre) {
       nodeId = null;
     }
     ValidationNode dsValidationNode;
@@ -302,10 +302,10 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
     } else {
       dsValidationNode = createInvalidCurveNodeValidationNode(node.getFixingEnd(), FRANode.class, _validationNode, null);
     }
-    ValidationNode validationNode = new ValidationNode();
+    final ValidationNode validationNode = new ValidationNode();
     validationNode.setName(node.getConvention().getValue());
     if (_configValidationUtils.conventionExists(node.getConvention())) {
-      ManageableConvention convention = _configValidationUtils.getConvention(node.getConvention());
+      final ManageableConvention convention = _configValidationUtils.getConvention(node.getConvention());
       validationNode.setType(convention.getClass());
     } else {
       validationNode.setType(Convention.class);
@@ -317,9 +317,9 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
   }
 
   @Override
-  public Void visitFXForwardNode(FXForwardNode node) {
-    Map<Tenor, CurveInstrumentProvider> fxForwardNodeIds = _curveNodeIdMapper.getFXForwardNodeIds();
-    CurveInstrumentProvider curveInstrumentProvider = fxForwardNodeIds.get(node.getMaturityTenor());
+  public Void visitFXForwardNode(final FXForwardNode node) {
+    final Map<Tenor, CurveInstrumentProvider> fxForwardNodeIds = _curveNodeIdMapper.getFXForwardNodeIds();
+    final CurveInstrumentProvider curveInstrumentProvider = fxForwardNodeIds.get(node.getMaturityTenor());
     ExternalId nodeId;
     if (curveInstrumentProvider instanceof StaticCurvePointsInstrumentProvider) {
       nodeId = curveInstrumentProvider.getInstrument(_curveDate, node.getMaturityTenor());
@@ -332,10 +332,10 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
     } else {
       fxValidationNode = createInvalidCurveNodeValidationNode(node.getMaturityTenor(), FXForwardNode.class, _validationNode, null);
     }
-    ValidationNode validationNode = new ValidationNode();
+    final ValidationNode validationNode = new ValidationNode();
     validationNode.setName(node.getFxForwardConvention().getValue());
     if (_configValidationUtils.conventionExists(node.getFxForwardConvention())) {
-      ManageableConvention convention = _configValidationUtils.getConvention(node.getFxForwardConvention());
+      final ManageableConvention convention = _configValidationUtils.getConvention(node.getFxForwardConvention());
       validationNode.setType(convention.getClass());
     } else {
       validationNode.setType(Convention.class);
@@ -347,11 +347,11 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
   }
 
   @Override
-  public Void visitRollDateFRANode(RollDateFRANode node) {
+  public Void visitRollDateFRANode(final RollDateFRANode node) {
     ExternalId nodeId;
     try {
       nodeId = _curveNodeIdMapper.getIMMFRANodeId(_curveDate, node.getStartTenor(), node.getRollDateStartNumber(), node.getRollDateEndNumber());
-    } catch (OpenGammaRuntimeException ogre) {
+    } catch (final OpenGammaRuntimeException ogre) {
       nodeId = null;
     }
     ValidationNode dsValidationNode;
@@ -360,10 +360,10 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
     } else {
       dsValidationNode = createInvalidCurveNodeValidationNode(node.getStartTenor(), RollDateFRANode.class, _validationNode, null);
     }
-    ValidationNode validationNode = new ValidationNode();
+    final ValidationNode validationNode = new ValidationNode();
     validationNode.setName(node.getRollDateFRAConvention().getValue());
     if (_configValidationUtils.conventionExists(node.getRollDateFRAConvention())) {
-      ManageableConvention convention = _configValidationUtils.getConvention(node.getRollDateFRAConvention());
+      final ManageableConvention convention = _configValidationUtils.getConvention(node.getRollDateFRAConvention());
       validationNode.setType(convention.getClass());
     } else {
       validationNode.setType(Convention.class);
@@ -375,11 +375,11 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
   }
 
   @Override
-  public Void visitRollDateSwapNode(RollDateSwapNode node) {
+  public Void visitRollDateSwapNode(final RollDateSwapNode node) {
     ExternalId nodeId;
     try {
       nodeId = _curveNodeIdMapper.getIMMSwapNodeId(_curveDate, node.getStartTenor(), node.getRollDateStartNumber(), node.getRollDateEndNumber());
-    } catch (OpenGammaRuntimeException ogre) {
+    } catch (final OpenGammaRuntimeException ogre) {
       nodeId = null;
     }
     ValidationNode dsValidationNode;
@@ -388,10 +388,10 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
     } else {
       dsValidationNode = createInvalidCurveNodeValidationNode(node.getStartTenor(), RollDateSwapNode.class, _validationNode, null);
     }
-    ValidationNode validationNode = new ValidationNode();
+    final ValidationNode validationNode = new ValidationNode();
     validationNode.setName(node.getRollDateSwapConvention().getValue());
     if (_configValidationUtils.conventionExists(node.getRollDateSwapConvention())) {
-      ManageableConvention convention = _configValidationUtils.getConvention(node.getRollDateSwapConvention());
+      final ManageableConvention convention = _configValidationUtils.getConvention(node.getRollDateSwapConvention());
       validationNode.setType(convention.getClass());
     } else {
       validationNode.setType(Convention.class);
@@ -403,11 +403,11 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
   }
 
   @Override
-  public Void visitRateFutureNode(RateFutureNode node) {
+  public Void visitRateFutureNode(final RateFutureNode node) {
     ExternalId nodeId;
     try {
       nodeId = _curveNodeIdMapper.getRateFutureNodeId(_curveDate, node.getStartTenor(), node.getFutureTenor(), node.getFutureNumber());
-    } catch (OpenGammaRuntimeException ogre) {
+    } catch (final OpenGammaRuntimeException ogre) {
       nodeId = null;
     }
     ValidationNode dsValidationNode;
@@ -416,10 +416,10 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
     } else {
       dsValidationNode = createInvalidCurveNodeValidationNode(node.getStartTenor(), RateFutureNode.class, _validationNode, null);
     }
-    ValidationNode validationNode = new ValidationNode();
+    final ValidationNode validationNode = new ValidationNode();
     validationNode.setName(node.getFutureConvention().getValue());
     if (_configValidationUtils.conventionExists(node.getFutureConvention())) {
-      ManageableConvention convention = _configValidationUtils.getConvention(node.getFutureConvention());
+      final ManageableConvention convention = _configValidationUtils.getConvention(node.getFutureConvention());
       validationNode.setType(convention.getClass());
     } else {
       validationNode.setType(Convention.class);
@@ -431,11 +431,11 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
   }
 
   @Override
-  public Void visitSwapNode(SwapNode node) {
+  public Void visitSwapNode(final SwapNode node) {
     ExternalId nodeId;
     try {
       nodeId = _curveNodeIdMapper.getSwapNodeId(_curveDate, node.getMaturityTenor());
-    } catch (OpenGammaRuntimeException ogre) {
+    } catch (final OpenGammaRuntimeException ogre) {
       nodeId = null;
     }
     ValidationNode sValidationNode;
@@ -447,7 +447,7 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
     ValidationNode validationNode = new ValidationNode();
     validationNode.setName(node.getPayLegConvention().getValue());
     if (_configValidationUtils.conventionExists(node.getPayLegConvention())) {
-      ManageableConvention convention = _configValidationUtils.getConvention(node.getPayLegConvention());
+      final ManageableConvention convention = _configValidationUtils.getConvention(node.getPayLegConvention());
       validationNode.setType(convention.getClass());
     } else {
       validationNode.setType(Convention.class);
@@ -458,7 +458,7 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
     validationNode = new ValidationNode();
     validationNode.setName(node.getReceiveLegConvention().getValue());
     if (_configValidationUtils.conventionExists(node.getReceiveLegConvention())) {
-      ManageableConvention convention = _configValidationUtils.getConvention(node.getReceiveLegConvention());
+      final ManageableConvention convention = _configValidationUtils.getConvention(node.getReceiveLegConvention());
       validationNode.setType(convention.getClass());
     } else {
       validationNode.setType(Convention.class);
@@ -470,11 +470,11 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
   }
 
   @Override
-  public Void visitThreeLegBasisSwapNode(ThreeLegBasisSwapNode node) {
+  public Void visitThreeLegBasisSwapNode(final ThreeLegBasisSwapNode node) {
     ExternalId nodeId;
     try {
       nodeId = _curveNodeIdMapper.getThreeLegBasisSwapNodeId(_curveDate, node.getMaturityTenor());
-    } catch (OpenGammaRuntimeException ogre) {
+    } catch (final OpenGammaRuntimeException ogre) {
       nodeId = null;
     }
     ValidationNode sValidationNode;
@@ -486,7 +486,7 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
     ValidationNode validationNode = new ValidationNode();
     validationNode.setName(node.getPayLegConvention().getValue());
     if (_configValidationUtils.conventionExists(node.getPayLegConvention())) {
-      ManageableConvention convention = _configValidationUtils.getConvention(node.getPayLegConvention());
+      final ManageableConvention convention = _configValidationUtils.getConvention(node.getPayLegConvention());
       validationNode.setType(convention.getClass());
     } else {
       validationNode.setType(Convention.class);
@@ -497,7 +497,7 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
     validationNode = new ValidationNode();
     validationNode.setName(node.getReceiveLegConvention().getValue());
     if (_configValidationUtils.conventionExists(node.getReceiveLegConvention())) {
-      ManageableConvention convention = _configValidationUtils.getConvention(node.getReceiveLegConvention());
+      final ManageableConvention convention = _configValidationUtils.getConvention(node.getReceiveLegConvention());
       validationNode.setType(convention.getClass());
     } else {
       validationNode.setType(Convention.class);
@@ -508,7 +508,7 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
     validationNode = new ValidationNode();
     validationNode.setName(node.getSpreadLegConvention().getValue());
     if (_configValidationUtils.conventionExists(node.getSpreadLegConvention())) {
-      ManageableConvention convention = _configValidationUtils.getConvention(node.getSpreadLegConvention());
+      final ManageableConvention convention = _configValidationUtils.getConvention(node.getSpreadLegConvention());
       validationNode.setType(convention.getClass());
     } else {
       validationNode.setType(Convention.class);
@@ -520,11 +520,11 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
   }
 
   @Override
-  public Void visitZeroCouponInflationNode(ZeroCouponInflationNode node) {
+  public Void visitZeroCouponInflationNode(final ZeroCouponInflationNode node) {
     ExternalId nodeId;
     try {
       nodeId = _curveNodeIdMapper.getSwapNodeId(_curveDate, node.getTenor());
-    } catch (OpenGammaRuntimeException ogre) {
+    } catch (final OpenGammaRuntimeException ogre) {
       nodeId = null;
     }
     ValidationNode sValidationNode;
@@ -536,7 +536,7 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
     ValidationNode validationNode = new ValidationNode();
     validationNode.setName(node.getFixedLegConvention().getValue());
     if (_configValidationUtils.conventionExists(node.getFixedLegConvention())) {
-      ManageableConvention convention = _configValidationUtils.getConvention(node.getFixedLegConvention());
+      final ManageableConvention convention = _configValidationUtils.getConvention(node.getFixedLegConvention());
       validationNode.setType(convention.getClass());
     } else {
       validationNode.setType(Convention.class);
@@ -547,7 +547,7 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
     validationNode = new ValidationNode();
     validationNode.setName(node.getInflationLegConvention().getValue());
     if (_configValidationUtils.conventionExists(node.getInflationLegConvention())) {
-      ManageableConvention convention = _configValidationUtils.getConvention(node.getInflationLegConvention());
+      final ManageableConvention convention = _configValidationUtils.getConvention(node.getInflationLegConvention());
       validationNode.setType(convention.getClass());
     } else {
       validationNode.setType(Convention.class);
@@ -560,24 +560,24 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
 
 
   @Override
-  public Void visitBillNode(BillNode node) {
+  public Void visitBillNode(final BillNode node) {
     ExternalId billNodeId;
     try {
       billNodeId = _curveNodeIdMapper.getBillNodeId(_curveDate, node.getMaturityTenor());
-    } catch (OpenGammaRuntimeException ogre) {
+    } catch (final OpenGammaRuntimeException ogre) {
       billNodeId = null;
     }
     ValidationNode billNodeValidationNode;
     if (billNodeId != null) {
       try {
-        Security bill = _securitySource.getSingle(billNodeId.toBundle());  
+        final Security bill = _securitySource.getSingle(billNodeId.toBundle());
         if (bill == null) {
           billNodeValidationNode = createInvalidCurveNodeValidationNode(node.getMaturityTenor(), BillNode.class, _validationNode, "Bill " + billNodeId + " not found in security master");
         } else {
           billNodeValidationNode = createInvalidCurveNodeValidationNode(node.getMaturityTenor(), BillNode.class, _validationNode, null);
         }
-      } catch (IllegalArgumentException iae) {
-        billNodeValidationNode = createInvalidCurveNodeValidationNode(node.getMaturityTenor(), BillNode.class, _validationNode, 
+      } catch (final IllegalArgumentException iae) {
+        billNodeValidationNode = createInvalidCurveNodeValidationNode(node.getMaturityTenor(), BillNode.class, _validationNode,
             "Bond " + billNodeId + " error thrown by security master when resolving, probably invalid ID format");
       }
     } else {

@@ -79,7 +79,7 @@ public class DbRoleMaster
   /**
    * SQL order by.
    */
-  protected static final EnumMap<RoleSearchSortOrder, String> ORDER_BY_MAP = new EnumMap<RoleSearchSortOrder, String>(RoleSearchSortOrder.class);
+  protected static final EnumMap<RoleSearchSortOrder, String> ORDER_BY_MAP = new EnumMap<>(RoleSearchSortOrder.class);
   static {
     ORDER_BY_MAP.put(RoleSearchSortOrder.OBJECT_ID_ASC, "oid ASC");
     ORDER_BY_MAP.put(RoleSearchSortOrder.OBJECT_ID_DESC, "oid DESC");
@@ -96,7 +96,7 @@ public class DbRoleMaster
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param dbConnector  the database connector, not null
    */
   public DbRoleMaster(final DbConnector dbConnector) {
@@ -105,33 +105,33 @@ public class DbRoleMaster
   }
 
   @Override
-  public void registerMetrics(MetricRegistry summaryRegistry, MetricRegistry detailedRegistry, String namePrefix) {
+  public void registerMetrics(final MetricRegistry summaryRegistry, final MetricRegistry detailedRegistry, final String namePrefix) {
     super.registerMetrics(summaryRegistry, detailedRegistry, namePrefix);
     _searchTimer = summaryRegistry.timer(namePrefix + ".search");
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean nameExists(String roleName) {
+  public boolean nameExists(final String roleName) {
     ArgumentChecker.notNull(roleName, "roleName");
     return doNameExists(roleName);
   }
 
   @Override
-  public ManageableRole getByName(String roleName) {
+  public ManageableRole getByName(final String roleName) {
     ArgumentChecker.notNull(roleName, "roleName");
     LOGGER.debug("getByName {}", roleName);
-    
-    ObjectId oid = lookupName(roleName, OnDeleted.EXCEPTION);
+
+    final ObjectId oid = lookupName(roleName, OnDeleted.EXCEPTION);
     return doGetById(oid, new RoleExtractor());
   }
 
   @Override
-  public ManageableRole getById(ObjectId objectId) {
+  public ManageableRole getById(final ObjectId objectId) {
     ArgumentChecker.notNull(objectId, "objectId");
     LOGGER.debug("getById {}", objectId);
     checkScheme(objectId);
-    
+
     return doGetById(objectId, new RoleExtractor());
   }
 
@@ -148,7 +148,7 @@ public class DbRoleMaster
    * @return the information, not null
    */
   @Override
-  Pair<UniqueId, Instant> doAddInTransaction(ManageableRole role) {
+  Pair<UniqueId, Instant> doAddInTransaction(final ManageableRole role) {
     // check if role exists
     if (doNameExists(role.getRoleName())) {
       throw new DataDuplicationException("Role already exists: " + role.getRoleName());
@@ -162,7 +162,7 @@ public class DbRoleMaster
     insertAssociatedUsers(docOid, role);
     insertAssociatedPermissions(docOid, role);
     insertAssociatedRoles(docOid, role);
-    HistoryEvent event = HistoryEvent.of(HistoryEventType.ADDED, uniqueId, "system", now, ImmutableList.<String>of());
+    final HistoryEvent event = HistoryEvent.of(HistoryEventType.ADDED, uniqueId, "system", now, ImmutableList.<String>of());
     insertEvent(event, USR_ROLE_EVENT_SEQ);
     return Pairs.of(uniqueId, now);
   }
@@ -180,12 +180,12 @@ public class DbRoleMaster
    * @return the updated document, not null
    */
   @Override
-  Pair<UniqueId, Instant> doUpdateInTransaction(ManageableRole role) {
-    ObjectId objectId = role.getObjectId();
-    String oldVersion = role.getUniqueId().getVersion();
-    ManageableRole current = getById(objectId);
-    int newVersion = Integer.parseInt(oldVersion) + 1;
-    UniqueId newUniqueId = objectId.atVersion(Integer.toString(newVersion));
+  Pair<UniqueId, Instant> doUpdateInTransaction(final ManageableRole role) {
+    final ObjectId objectId = role.getObjectId();
+    final String oldVersion = role.getUniqueId().getVersion();
+    final ManageableRole current = getById(objectId);
+    final int newVersion = Integer.parseInt(oldVersion) + 1;
+    final UniqueId newUniqueId = objectId.atVersion(Integer.toString(newVersion));
     // validate
     if (current.equals(role)) {
       return Pairs.of(newUniqueId, null);  // no change
@@ -201,7 +201,7 @@ public class DbRoleMaster
       insertNameLookup(role.getRoleName(), current.getObjectId());
     }
     // update
-    long docOid = extractOid(objectId);
+    final long docOid = extractOid(objectId);
     updateMain(docOid, newVersion, role);
     if (current.getAssociatedUsers().equals(role.getAssociatedUsers()) == false) {
       deleteAssociatedUsers(docOid);
@@ -216,51 +216,51 @@ public class DbRoleMaster
       insertAssociatedRoles(docOid, role);
     }
     final Instant now = now();
-    List<String> changes = calculateChanges(current, role);
-    HistoryEvent event = HistoryEvent.of(HistoryEventType.CHANGED, newUniqueId, "system", now, changes);
+    final List<String> changes = calculateChanges(current, role);
+    final HistoryEvent event = HistoryEvent.of(HistoryEventType.CHANGED, newUniqueId, "system", now, changes);
     insertEvent(event, USR_ROLE_EVENT_SEQ);
     return Pairs.of(newUniqueId, now);
   }
 
-  private List<String> calculateChanges(ManageableRole current, ManageableRole updated) {
-    List<String> changes = new ArrayList<>();
+  private List<String> calculateChanges(final ManageableRole current, final ManageableRole updated) {
+    final List<String> changes = new ArrayList<>();
     // changes
     createChange(changes, current, updated, ManageableRole.meta().roleName());
     createChange(changes, current, updated, ManageableRole.meta().description());
     // added permission
-    Set<String> addedUsers = new TreeSet<>(updated.getAssociatedUsers());
+    final Set<String> addedUsers = new TreeSet<>(updated.getAssociatedUsers());
     addedUsers.removeAll(current.getAssociatedUsers());
-    for (String permission : addedUsers) {
+    for (final String permission : addedUsers) {
       changes.add(StringUtils.left("Added user: " + permission, 255));
     }
     // removed permission
-    Set<String> removedUsers = new TreeSet<>(current.getAssociatedUsers());
+    final Set<String> removedUsers = new TreeSet<>(current.getAssociatedUsers());
     removedUsers.removeAll(updated.getAssociatedUsers());
-    for (String permission : removedUsers) {
+    for (final String permission : removedUsers) {
       changes.add(StringUtils.left("Removed user: " + permission, 255));
     }
     // added permission
-    Set<String> addedPermissions = new TreeSet<>(updated.getAssociatedPermissions());
+    final Set<String> addedPermissions = new TreeSet<>(updated.getAssociatedPermissions());
     addedPermissions.removeAll(current.getAssociatedPermissions());
-    for (String permission : addedPermissions) {
+    for (final String permission : addedPermissions) {
       changes.add(StringUtils.left("Added permission: " + permission, 255));
     }
     // removed permission
-    Set<String> removedPermissions = new TreeSet<>(current.getAssociatedPermissions());
+    final Set<String> removedPermissions = new TreeSet<>(current.getAssociatedPermissions());
     removedPermissions.removeAll(updated.getAssociatedPermissions());
-    for (String permission : removedPermissions) {
+    for (final String permission : removedPermissions) {
       changes.add(StringUtils.left("Removed permission: " + permission, 255));
     }
     // added permission
-    Set<String> addedRoles = new TreeSet<>(updated.getAssociatedRoles());
+    final Set<String> addedRoles = new TreeSet<>(updated.getAssociatedRoles());
     addedRoles.removeAll(current.getAssociatedRoles());
-    for (String permission : addedRoles) {
+    for (final String permission : addedRoles) {
       changes.add(StringUtils.left("Added role: " + permission, 255));
     }
     // removed permission
-    Set<String> removedRoles = new TreeSet<>(current.getAssociatedRoles());
+    final Set<String> removedRoles = new TreeSet<>(current.getAssociatedRoles());
     removedRoles.removeAll(updated.getAssociatedRoles());
-    for (String permission : removedRoles) {
+    for (final String permission : removedRoles) {
       changes.add(StringUtils.left("Removed role: " + permission, 255));
     }
     return changes;
@@ -268,7 +268,7 @@ public class DbRoleMaster
 
   //-------------------------------------------------------------------------
   @Override
-  public UniqueId save(ManageableRole role) {
+  public UniqueId save(final ManageableRole role) {
     ArgumentChecker.notNull(role, "role");
     LOGGER.debug("save {}", role.getRoleName());
     if (role.getUniqueId() != null) {
@@ -280,7 +280,7 @@ public class DbRoleMaster
 
   //-------------------------------------------------------------------------
   @Override
-  public void removeByName(String roleName) {
+  public void removeByName(final String roleName) {
     doRemoveByName(roleName);
   }
 
@@ -297,40 +297,40 @@ public class DbRoleMaster
    */
   @Override
   Instant doRemoveInTransaction(final ObjectId objectId) {
-    ManageableRole current = getById(objectId);
-    int newVersion = Integer.parseInt(current.getUniqueId().getVersion()) + 1;
-    UniqueId newUniqueId = objectId.atVersion(Integer.toString(newVersion));
-    
-    long docOid = extractOid(objectId);
+    final ManageableRole current = getById(objectId);
+    final int newVersion = Integer.parseInt(current.getUniqueId().getVersion()) + 1;
+    final UniqueId newUniqueId = objectId.atVersion(Integer.toString(newVersion));
+
+    final long docOid = extractOid(objectId);
     deleteAssociatedUsers(docOid);
     deleteAssociatedPermissions(docOid);
     deleteAssociatedRoles(docOid);
     deleteMain(docOid);
     updateNameLookupToDeleted(docOid);
-    Instant now = now();
-    HistoryEvent event = HistoryEvent.of(HistoryEventType.REMOVED, newUniqueId, "system", now, ImmutableList.<String>of());
+    final Instant now = now();
+    final HistoryEvent event = HistoryEvent.of(HistoryEventType.REMOVED, newUniqueId, "system", now, ImmutableList.<String>of());
     insertEvent(event, USR_ROLE_EVENT_SEQ);
     return now;
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public RoleSearchResult search(RoleSearchRequest request) {
+  public RoleSearchResult search(final RoleSearchRequest request) {
     ArgumentChecker.notNull(request, "request");
     ArgumentChecker.notNull(request.getPagingRequest(), "request.pagingRequest");
     LOGGER.debug("search {}", request);
-    if ((request.getObjectIds() != null && request.getObjectIds().isEmpty())) {
-      Paging paging = Paging.of(request.getPagingRequest(), 0);
+    if (request.getObjectIds() != null && request.getObjectIds().isEmpty()) {
+      final Paging paging = Paging.of(request.getPagingRequest(), 0);
       return new RoleSearchResult(paging, new ArrayList<ManageableRole>());
     }
-    
+
     try (Timer.Context context = _searchTimer.time()) {
       return doSearch(request);
     }
   }
 
-  private RoleSearchResult doSearch(RoleSearchRequest request) {
-    PagingRequest pagingRequest = request.getPagingRequest();
+  private RoleSearchResult doSearch(final RoleSearchRequest request) {
+    final PagingRequest pagingRequest = request.getPagingRequest();
     // setup args
     final DbMapSqlParameterSource args = createParameterSource()
       .addValueNullIgnored("role_name_ci", caseInsensitive(getDialect().sqlWildcardAdjustValue(request.getRoleName())))
@@ -338,8 +338,8 @@ public class DbRoleMaster
       .addValueNullIgnored("assoc_perm", request.getAssociatedPermission())
       .addValueNullIgnored("assoc_role", request.getAssociatedRole());
     if (request.getObjectIds() != null) {
-      StringBuilder buf = new StringBuilder(request.getObjectIds().size() * 10);
-      for (ObjectId objectId : request.getObjectIds()) {
+      final StringBuilder buf = new StringBuilder(request.getObjectIds().size() * 10);
+      for (final ObjectId objectId : request.getObjectIds()) {
         checkScheme(objectId);
         buf.append(extractOid(objectId)).append(", ");
       }
@@ -350,10 +350,10 @@ public class DbRoleMaster
     args.addValue("paging_offset", pagingRequest.getFirstItem());
     args.addValue("paging_fetch", pagingRequest.getPagingSize());
     // search
-    String[] sql = {getElSqlBundle().getSql("Search", args), getElSqlBundle().getSql("SearchCount", args)};
+    final String[] sql = {getElSqlBundle().getSql("Search", args), getElSqlBundle().getSql("SearchCount", args)};
     final NamedParameterJdbcOperations namedJdbc = getJdbcTemplate();
     Paging paging;
-    List<ManageableRole> results = new ArrayList<>();
+    final List<ManageableRole> results = new ArrayList<>();
     if (pagingRequest.equals(PagingRequest.ALL)) {
       paging = Paging.of(pagingRequest, results);
       results.addAll(namedJdbc.query(sql[0], args, new RoleExtractor()));
@@ -371,7 +371,7 @@ public class DbRoleMaster
 
   //-------------------------------------------------------------------------
   @Override
-  public RoleEventHistoryResult eventHistory(RoleEventHistoryRequest request) {
+  public RoleEventHistoryResult eventHistory(final RoleEventHistoryRequest request) {
     ArgumentChecker.notNull(request, "request");
     LOGGER.debug("eventHistory {}", request);
     ObjectId objectId = request.getObjectId();
@@ -379,25 +379,25 @@ public class DbRoleMaster
       objectId = lookupName(request.getRoleName(), OnDeleted.RETURN_ID);
     }
     checkScheme(objectId);
-    
+
     return new RoleEventHistoryResult(doEventHistory(objectId));
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public UserAccount resolveAccount(UserAccount account) {
+  public UserAccount resolveAccount(final UserAccount account) {
     ArgumentChecker.notNull(account, "account");
-    SimpleUserAccount resolved = SimpleUserAccount.from(account);
-    
+    final SimpleUserAccount resolved = SimpleUserAccount.from(account);
+
     final DbMapSqlParameterSource args = createParameterSource()
         .addValue("user_name_ci", caseInsensitive(account.getUserName()));
     final String sql = getElSqlBundle().getSql("GetResolvedRoles", args);
-    List<Map<String, Object>> result = getJdbcTemplate().queryForList(sql, args);
-    for (Map<String, Object> row : result) {
-      Object role = row.get("ROLE_NAME");
+    final List<Map<String, Object>> result = getJdbcTemplate().queryForList(sql, args);
+    for (final Map<String, Object> row : result) {
+      final Object role = row.get("ROLE_NAME");
       if (role != null) {
         resolved.getRoles().add(role.toString());
-        Object perm = row.get("ASSOC_PERM");
+        final Object perm = row.get("ASSOC_PERM");
         if (perm != null) {
           resolved.getPermissions().add(perm.toString());
         }
@@ -407,15 +407,15 @@ public class DbRoleMaster
   }
 
   //-------------------------------------------------------------------------
-  private void insertMain(long docOid, ManageableRole role) {
+  private void insertMain(final long docOid, final ManageableRole role) {
     final DbMapSqlParameterSource docArgs = mainArgs(docOid, 0, role);
     final String sqlDoc = getElSqlBundle().getSql("InsertMain", docArgs);
     getJdbcTemplate().update(sqlDoc, docArgs);
   }
 
-  private void insertAssociatedUsers(long docOid, ManageableRole role) {
-    final List<DbMapSqlParameterSource> argsList = new ArrayList<DbMapSqlParameterSource>();
-    for (String assoc : role.getAssociatedUsers()) {
+  private void insertAssociatedUsers(final long docOid, final ManageableRole role) {
+    final List<DbMapSqlParameterSource> argsList = new ArrayList<>();
+    for (final String assoc : role.getAssociatedUsers()) {
       argsList.add(createParameterSource()
         .addValue("id", nextId("usr_role_assocuser_seq"))
         .addValue("doc_id", docOid)
@@ -425,9 +425,9 @@ public class DbRoleMaster
     getJdbcTemplate().batchUpdate(sql, argsList.toArray(new DbMapSqlParameterSource[argsList.size()]));
   }
 
-  private void insertAssociatedPermissions(long docOid, ManageableRole role) {
-    final List<DbMapSqlParameterSource> argsList = new ArrayList<DbMapSqlParameterSource>();
-    for (String assoc : role.getAssociatedPermissions()) {
+  private void insertAssociatedPermissions(final long docOid, final ManageableRole role) {
+    final List<DbMapSqlParameterSource> argsList = new ArrayList<>();
+    for (final String assoc : role.getAssociatedPermissions()) {
       argsList.add(createParameterSource()
         .addValue("id", nextId("usr_role_assocperm_seq"))
         .addValue("doc_id", docOid)
@@ -437,9 +437,9 @@ public class DbRoleMaster
     getJdbcTemplate().batchUpdate(sql, argsList.toArray(new DbMapSqlParameterSource[argsList.size()]));
   }
 
-  private void insertAssociatedRoles(long docOid, ManageableRole role) {
-    final List<DbMapSqlParameterSource> argsList = new ArrayList<DbMapSqlParameterSource>();
-    for (String assoc : role.getAssociatedRoles()) {
+  private void insertAssociatedRoles(final long docOid, final ManageableRole role) {
+    final List<DbMapSqlParameterSource> argsList = new ArrayList<>();
+    for (final String assoc : role.getAssociatedRoles()) {
       argsList.add(createParameterSource()
         .addValue("id", nextId("usr_role_assocrole_seq"))
         .addValue("doc_id", docOid)
@@ -450,13 +450,13 @@ public class DbRoleMaster
   }
 
   //-------------------------------------------------------------------------
-  private void updateMain(long docOid, int version, ManageableRole role) {
+  private void updateMain(final long docOid, final int version, final ManageableRole role) {
     final DbMapSqlParameterSource docArgs = mainArgs(docOid, version, role);
     final String sqlDoc = getElSqlBundle().getSql("UpdateMain", docArgs);
     getJdbcTemplate().update(sqlDoc, docArgs);
   }
 
-  private DbMapSqlParameterSource mainArgs(long docOid, int version, ManageableRole role) {
+  private DbMapSqlParameterSource mainArgs(final long docOid, final int version, final ManageableRole role) {
     final DbMapSqlParameterSource docArgs = createParameterSource()
       .addValue("doc_id", docOid)
       .addValue("version", version)
@@ -467,28 +467,28 @@ public class DbRoleMaster
   }
 
   //-------------------------------------------------------------------------
-  private void deleteMain(long docOid) {
+  private void deleteMain(final long docOid) {
     final DbMapSqlParameterSource args = createParameterSource()
         .addValue("doc_id", docOid);
     final String sql = getElSqlBundle().getSql("DeleteMain", args);
     getJdbcTemplate().update(sql, args);
   }
 
-  private void deleteAssociatedUsers(long docOid) {
+  private void deleteAssociatedUsers(final long docOid) {
     final DbMapSqlParameterSource args = createParameterSource()
         .addValue("doc_id", docOid);
     final String sql = getElSqlBundle().getSql("DeleteAssocUsers", args);
     getJdbcTemplate().update(sql, args);
   }
 
-  private void deleteAssociatedPermissions(long docOid) {
+  private void deleteAssociatedPermissions(final long docOid) {
     final DbMapSqlParameterSource args = createParameterSource()
         .addValue("doc_id", docOid);
     final String sql = getElSqlBundle().getSql("DeleteAssocPerms", args);
     getJdbcTemplate().update(sql, args);
   }
 
-  private void deleteAssociatedRoles(long docOid) {
+  private void deleteAssociatedRoles(final long docOid) {
     final DbMapSqlParameterSource args = createParameterSource()
         .addValue("doc_id", docOid);
     final String sql = getElSqlBundle().getSql("DeleteAssocRoles", args);
@@ -502,10 +502,10 @@ public class DbRoleMaster
   final class RoleExtractor implements ResultSetExtractor<List<ManageableRole>> {
     private long _previousDocId = -1L;
     private ManageableRole _currRole;
-    private Set<String> _currUsers = new HashSet<>();
-    private Set<String> _currPermissions = new HashSet<>();
-    private Set<String> _currRoles = new HashSet<>();
-    private List<ManageableRole> _roles = new ArrayList<>();
+    private final Set<String> _currUsers = new HashSet<>();
+    private final Set<String> _currPermissions = new HashSet<>();
+    private final Set<String> _currRoles = new HashSet<>();
+    private final List<ManageableRole> _roles = new ArrayList<>();
 
     @Override
     public List<ManageableRole> extractData(final ResultSet rs) throws SQLException, DataAccessException {
@@ -524,15 +524,15 @@ public class DbRoleMaster
           _currPermissions.clear();
           _currRoles.clear();
         }
-        String assocUser = rs.getString("ASSOC_USER");
+        final String assocUser = rs.getString("ASSOC_USER");
         if (assocUser != null) {
           _currUsers.add(assocUser);
         }
-        String assocPerm = rs.getString("ASSOC_PERM");
+        final String assocPerm = rs.getString("ASSOC_PERM");
         if (assocPerm != null) {
           _currPermissions.add(assocPerm);
         }
-        String assocRole = rs.getString("ASSOC_ROLE");
+        final String assocRole = rs.getString("ASSOC_ROLE");
         if (assocRole != null) {
           _currRoles.add(assocRole);
         }
@@ -547,9 +547,9 @@ public class DbRoleMaster
     }
 
     private void buildRole(final ResultSet rs, final long docId) throws SQLException {
-      int version = rs.getInt("VERSION");
-      UniqueId uniqueId = UniqueId.of(getUniqueIdScheme(), Long.toString(docId), Integer.toString(version));
-      ManageableRole role = new ManageableRole(rs.getString("ROLE_NAME"));
+      final int version = rs.getInt("VERSION");
+      final UniqueId uniqueId = UniqueId.of(getUniqueIdScheme(), Long.toString(docId), Integer.toString(version));
+      final ManageableRole role = new ManageableRole(rs.getString("ROLE_NAME"));
       role.setUniqueId(uniqueId);
       role.setDescription(rs.getString("DESCRIPTION"));
       _currRole = role;

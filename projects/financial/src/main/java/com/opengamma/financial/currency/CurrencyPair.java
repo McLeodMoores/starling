@@ -10,6 +10,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 import org.joda.beans.Bean;
+import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
 import org.joda.beans.ImmutableBean;
 import org.joda.beans.ImmutableConstructor;
@@ -31,7 +32,6 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
-import org.joda.beans.BeanBuilder;
 
 /**
  * An ordered pair of currencies for quoting rates in FX deals.
@@ -71,12 +71,12 @@ public final class CurrencyPair implements ImmutableBean, UniqueIdentifiable {
   //-------------------------------------------------------------------------
   /**
    * Obtains a currency pair from a string with format AAA/BBB.
-   * 
+   *
    * @param base  the base currency, not null
    * @param counter  the counter currency, not null
    * @return the currency pair, not null
    */
-  public static CurrencyPair of(Currency base, Currency counter) {
+  public static CurrencyPair of(final Currency base, final Currency counter) {
     return new CurrencyPair(base, counter);
   }
 
@@ -84,30 +84,30 @@ public final class CurrencyPair implements ImmutableBean, UniqueIdentifiable {
    * Parses a currency pair from a string with format AAA/BBB.
    * <p>
    * The parsed format is '${baseCurrency}/${counterCurrency}'.
-   * 
+   *
    * @param pairStr  the currency pair as a string AAA/BBB, not null
    * @return the currency pair, not null
    */
   @FromString
-  public static CurrencyPair parse(String pairStr) {
+  public static CurrencyPair parse(final String pairStr) {
     ArgumentChecker.notNull(pairStr, "pairStr");
     if (pairStr.length() != 7) {
       throw new IllegalArgumentException("Currency pair format must be AAA/BBB");
     }
-    Currency base = Currency.of(pairStr.substring(0, 3));
-    Currency counter = Currency.of(pairStr.substring(4));
+    final Currency base = Currency.of(pairStr.substring(0, 3));
+    final Currency counter = Currency.of(pairStr.substring(4));
     return new CurrencyPair(base, counter);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Creates an instance.
-   * 
+   *
    * @param base the base currency, not null
    * @param counter the counter currency, not null
    */
   @ImmutableConstructor
-  private CurrencyPair(Currency base, Currency counter) {
+  private CurrencyPair(final Currency base, final Currency counter) {
     ArgumentChecker.notNull(base, "base");
     ArgumentChecker.notNull(counter, "counter");
     if (base.equals(counter)) {
@@ -122,7 +122,7 @@ public final class CurrencyPair implements ImmutableBean, UniqueIdentifiable {
    * Gets the name of the pair, formed from the two currencies.
    * <p>
    * The format is '${baseCurrency}/${counterCurrency}'.
-   * 
+   *
    * @return Base currency code / Counter currency code, not null
    */
   public String getName() {
@@ -133,7 +133,7 @@ public final class CurrencyPair implements ImmutableBean, UniqueIdentifiable {
    * Gets the inverse currency pair.
    * <p>
    * The inverse pair has the same currencies but in reverse order.
-   * 
+   *
    * @return the inverse pair, not null
    */
   public CurrencyPair inverse() {
@@ -142,11 +142,11 @@ public final class CurrencyPair implements ImmutableBean, UniqueIdentifiable {
 
   /**
    * Indicates if the currency pair contains the supplied currency as either its base or counter.
-   * 
+   *
    * @param currency  the currency to check against the pair, null returns false
    * @return true if the currency is either the base or counter currency in the pair
    */
-  public boolean contains(Currency currency) {
+  public boolean contains(final Currency currency) {
     return _base.equals(currency) || _counter.equals(currency);
   }
 
@@ -156,12 +156,12 @@ public final class CurrencyPair implements ImmutableBean, UniqueIdentifiable {
    * If the supplied currency is the pair's base, then the counter currency is returned.
    * If the supplied currency is the pair's counter, then the base currency is returned.
    * Otherwise an exception is thrown.
-   * 
+   *
    * @param currency  the currency to find the complement for
    * @return the complementing currency, not null
    * @throws IllegalArgumentException if the supplied currency is not a member of the pair
    */
-  public Currency getComplement(Currency currency) {
+  public Currency getComplement(final Currency currency) {
     if (_base.equals(currency)) {
       return _counter;
     } else if (_counter.equals(currency)) {
@@ -176,7 +176,7 @@ public final class CurrencyPair implements ImmutableBean, UniqueIdentifiable {
    * <p>
    * This allows the pair to be used in certain contexts where a {@code UniqueId} is needed.
    * This uses the scheme 'CurrencyPair'.
-   * 
+   *
    * @return the unique identifier, not null
    */
   @Override
@@ -189,7 +189,7 @@ public final class CurrencyPair implements ImmutableBean, UniqueIdentifiable {
    * Returns the formatted string version of the currency pair.
    * <p>
    * The format is '${baseCurrency}/${counterCurrency}'.
-   * 
+   *
    * @return the formatted string, not null
    */
   @Override

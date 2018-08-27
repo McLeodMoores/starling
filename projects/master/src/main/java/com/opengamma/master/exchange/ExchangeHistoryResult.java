@@ -40,23 +40,23 @@ public class ExchangeHistoryResult extends AbstractHistoryResult<ExchangeDocumen
 
   /**
    * Creates an instance from a collection of documents.
-   * 
+   *
    * @param coll  the collection of documents to add, not null
    */
-  public ExchangeHistoryResult(Collection<ExchangeDocument> coll) {
+  public ExchangeHistoryResult(final Collection<ExchangeDocument> coll) {
     super(coll);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the returned exchanges from within the documents.
-   * 
+   *
    * @return the exchanges, not null
    */
   public List<ManageableExchange> getExchanges() {
-    List<ManageableExchange> result = new ArrayList<ManageableExchange>();
+    final List<ManageableExchange> result = new ArrayList<>();
     if (getDocuments() != null) {
-      for (ExchangeDocument doc : getDocuments()) {
+      for (final ExchangeDocument doc : getDocuments()) {
         result.add(doc.getExchange());
       }
     }
@@ -65,7 +65,7 @@ public class ExchangeHistoryResult extends AbstractHistoryResult<ExchangeDocumen
 
   /**
    * Gets the first exchange, or null if no documents.
-   * 
+   *
    * @return the first exchange, null if none
    */
   public ManageableExchange getFirstExchange() {
@@ -77,7 +77,7 @@ public class ExchangeHistoryResult extends AbstractHistoryResult<ExchangeDocumen
    * <p>
    * This throws an exception if more than 1 result is actually available.
    * Thus, this method implies an assumption about uniqueness of the queried exchange.
-   * 
+   *
    * @return the matching exchange, not null
    * @throws IllegalStateException if no exchange was found
    */

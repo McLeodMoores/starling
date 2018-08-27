@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.swap;
@@ -17,9 +17,9 @@ public class InterpolationMethodUserType extends EnumUserType<InterpolationMetho
   public InterpolationMethodUserType() {
     super(InterpolationMethod.class, InterpolationMethod.values());
   }
-  
+
   @Override
-  protected String enumToStringNoCache(InterpolationMethod value) {
+  protected String enumToStringNoCache(final InterpolationMethod value) {
     switch (value) {
       case MONTH_START_LINEAR:
         return "month_start_linear";

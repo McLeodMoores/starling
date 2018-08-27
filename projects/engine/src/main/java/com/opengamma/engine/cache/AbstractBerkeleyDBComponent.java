@@ -31,8 +31,8 @@ public abstract class AbstractBerkeleyDBComponent implements Lifecycle {
   // Runtime state:
   private final AtomicBoolean _started = new AtomicBoolean(false);
   private Database _database;
-  
-  protected AbstractBerkeleyDBComponent(Environment dbEnvironment, String databaseName) {
+
+  protected AbstractBerkeleyDBComponent(final Environment dbEnvironment, final String databaseName) {
     ArgumentChecker.notNull(dbEnvironment, "dbEnvironment");
     ArgumentChecker.notNull(databaseName, "databaseName");
     _dbEnvironment = dbEnvironment;
@@ -67,7 +67,7 @@ public abstract class AbstractBerkeleyDBComponent implements Lifecycle {
    * Sets the database field.
    * @param database  the database
    */
-  private void setDatabase(Database database) {
+  private void setDatabase(final Database database) {
     _database = database;
   }
 
@@ -79,17 +79,17 @@ public abstract class AbstractBerkeleyDBComponent implements Lifecycle {
   @Override
   public void start() {
     LOGGER.info("Starting, and opening Database.");
-    DatabaseConfig dbConfig = getDatabaseConfig();
-    Database database = getDbEnvironment().openDatabase(null, getDatabaseName(), dbConfig);
+    final DatabaseConfig dbConfig = getDatabaseConfig();
+    final Database database = getDbEnvironment().openDatabase(null, getDatabaseName(), dbConfig);
     setDatabase(database);
     postStartInitialization();
     _started.set(true);
   }
-  
+
   protected abstract DatabaseConfig getDatabaseConfig();
-  
+
   protected void postStartInitialization() {
-    
+
   }
 
   @Override

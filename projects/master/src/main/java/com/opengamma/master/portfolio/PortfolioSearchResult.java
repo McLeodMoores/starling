@@ -43,32 +43,32 @@ public class PortfolioSearchResult extends AbstractSearchResult<PortfolioDocumen
 
   /**
    * Creates an instance from a collection of documents.
-   * 
+   *
    * @param coll  the collection of documents to add, not null
    */
-  public PortfolioSearchResult(Collection<PortfolioDocument> coll) {
+  public PortfolioSearchResult(final Collection<PortfolioDocument> coll) {
     super(coll);
   }
 
   /**
    * Creates an instance specifying the version-correction searched for.
-   * 
+   *
    * @param versionCorrection  the version-correction of the data, not null
    */
-  public PortfolioSearchResult(VersionCorrection versionCorrection) {
+  public PortfolioSearchResult(final VersionCorrection versionCorrection) {
     setVersionCorrection(versionCorrection);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the returned portfolios from within the documents.
-   * 
+   *
    * @return the portfolios, not null
    */
   public List<ManageablePortfolio> getPortfolios() {
-    List<ManageablePortfolio> result = new ArrayList<ManageablePortfolio>();
+    final List<ManageablePortfolio> result = new ArrayList<>();
     if (getDocuments() != null) {
-      for (PortfolioDocument doc : getDocuments()) {
+      for (final PortfolioDocument doc : getDocuments()) {
         result.add(doc.getPortfolio());
       }
     }
@@ -77,7 +77,7 @@ public class PortfolioSearchResult extends AbstractSearchResult<PortfolioDocumen
 
   /**
    * Gets the first portfolio, or null if no documents.
-   * 
+   *
    * @return the first portfolio, null if none
    */
   public ManageablePortfolio getFirstPortfolio() {
@@ -89,7 +89,7 @@ public class PortfolioSearchResult extends AbstractSearchResult<PortfolioDocumen
    * <p>
    * This throws an exception if more than 1 result is actually available.
    * Thus, this method implies an assumption about uniqueness of the queried portfolio.
-   * 
+   *
    * @return the matching portfolio, not null
    * @throws IllegalStateException if no portfolio was found
    */

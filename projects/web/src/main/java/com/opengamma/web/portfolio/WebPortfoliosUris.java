@@ -25,7 +25,7 @@ public class WebPortfoliosUris {
    * Creates an instance.
    * @param data  the web data, not null
    */
-  public WebPortfoliosUris(WebPortfoliosData data) {
+  public WebPortfoliosUris(final WebPortfoliosData data) {
     _data = data;
   }
 

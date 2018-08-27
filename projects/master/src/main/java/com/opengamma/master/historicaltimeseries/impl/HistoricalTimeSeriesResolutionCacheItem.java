@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.historicaltimeseries.impl;
@@ -30,13 +30,13 @@ public class HistoricalTimeSeriesResolutionCacheItem {
   private final AtomicBoolean _allInvalid = new AtomicBoolean();
   private final Set<LocalDate> _invalidDates = Collections.newSetFromMap(new ConcurrentHashMap<LocalDate, Boolean>());
   private final ConcurrentMap<ExternalIdWithDates, HistoricalTimeSeriesResolutionResult> _results = new ConcurrentHashMap<>();
-  
-  public HistoricalTimeSeriesResolutionCacheItem(ExternalId externalId) {
+
+  public HistoricalTimeSeriesResolutionCacheItem(final ExternalId externalId) {
     _externalId = externalId;
   }
 
   //-------------------------------------------------------------------------
-  public boolean isInvalid(LocalDate validityDate) {
+  public boolean isInvalid(final LocalDate validityDate) {
     if (_allInvalid.get()) {
       return true;
     }
@@ -45,8 +45,8 @@ public class HistoricalTimeSeriesResolutionCacheItem {
     }
     return _invalidDates.contains(validityDate);
   }
-  
-  public void putInvalid(LocalDate validityDate) {
+
+  public void putInvalid(final LocalDate validityDate) {
     if (validityDate == null) {
       if (_results.size() != 0) {
         throw new OpenGammaRuntimeException("Already have " + _results.size() + " valid results for " + _externalId + " but attempted to mark every date as invalid");
@@ -57,18 +57,18 @@ public class HistoricalTimeSeriesResolutionCacheItem {
       _invalidDates.add(validityDate);
     }
   }
-  
+
   //-------------------------------------------------------------------------
-  public HistoricalTimeSeriesResolutionResult get(LocalDate validityDate) {
-    for (Map.Entry<ExternalIdWithDates, HistoricalTimeSeriesResolutionResult> result : _results.entrySet()) {
+  public HistoricalTimeSeriesResolutionResult get(final LocalDate validityDate) {
+    for (final Map.Entry<ExternalIdWithDates, HistoricalTimeSeriesResolutionResult> result : _results.entrySet()) {
       if (result.getKey().isValidOn(validityDate)) {
         return result.getValue();
       }
     }
     return null;
   }
-  
-  public void put(ExternalIdWithDates externalIdWithDates, HistoricalTimeSeriesResolutionResult result) {
+
+  public void put(final ExternalIdWithDates externalIdWithDates, final HistoricalTimeSeriesResolutionResult result) {
     ArgumentChecker.notNull(externalIdWithDates, "externalIdWithDates");
     ArgumentChecker.notNull(result, "result");
     if (!_externalId.equals(externalIdWithDates.getExternalId())) {
@@ -79,5 +79,5 @@ public class HistoricalTimeSeriesResolutionCacheItem {
     }
     _results.putIfAbsent(externalIdWithDates, result);
   }
-  
+
 }

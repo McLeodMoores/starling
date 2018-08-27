@@ -27,14 +27,15 @@ public class AsianExerciseType extends ExerciseType {
    */
   public AsianExerciseType() {
   }
-  
+
+  @Override
   public String getName() {
     return "Asian";
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public <T> T accept(ExerciseTypeVisitor<T> visitor) {
+  public <T> T accept(final ExerciseTypeVisitor<T> visitor) {
     return visitor.visitAsianExerciseType(this);
   }
 

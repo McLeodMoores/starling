@@ -15,7 +15,7 @@ import com.opengamma.master.AbstractDocument;
 /**
  * Base class for wrapping masters to trap calls to record user based information,
  * allowing clean up and hooks for access control logics if needed.
- * 
+ *
  * @param <D>  the type of the document
  */
 public abstract class AbstractFinancialUserMaster<D extends AbstractDocument> implements AbstractChangeProvidingMaster<D> {
@@ -41,7 +41,7 @@ public abstract class AbstractFinancialUserMaster<D extends AbstractDocument> im
   private void setupChangeListener() {
     changeManager().addChangeListener(new ChangeListener() {
       @Override
-      public void entityChanged(ChangeEvent event) {
+      public void entityChanged(final ChangeEvent event) {
         if (event.getType().equals(ChangeType.REMOVED)) {
           _tracker.deleted(_userName, _clientName, _type, event.getObjectId());
         } else if (event.getType().equals(ChangeType.ADDED)) {
@@ -59,13 +59,13 @@ public abstract class AbstractFinancialUserMaster<D extends AbstractDocument> im
    * @param tracker  the tracker, not null
    * @param type  the data type, not null
    */
-  public AbstractFinancialUserMaster(String userName, String clientName, FinancialUserDataTracker tracker, FinancialUserDataType type) {
+  public AbstractFinancialUserMaster(final String userName, final String clientName, final FinancialUserDataTracker tracker, final FinancialUserDataType type) {
     _userName = userName;
     _clientName = clientName;
     _tracker = tracker;
     _type = type;
   }
-  
+
   protected void init() {
     setupChangeListener();
   }
@@ -76,7 +76,7 @@ public abstract class AbstractFinancialUserMaster<D extends AbstractDocument> im
    * @param client  the client, not null
    * @param type  the data type, not null
    */
-  public AbstractFinancialUserMaster(FinancialClient client, FinancialUserDataType type) {
+  public AbstractFinancialUserMaster(final FinancialClient client, final FinancialUserDataType type) {
     _userName = client.getUserName();
     _clientName = client.getClientName();
     _tracker = client.getUserDataTracker();
@@ -84,11 +84,11 @@ public abstract class AbstractFinancialUserMaster<D extends AbstractDocument> im
   }
 
   //-------------------------------------------------------------------------
-  protected void created(ObjectId oid) {
+  protected void created(final ObjectId oid) {
     _tracker.created(_userName, _clientName, _type, oid);
   }
 
-  protected void deleted(ObjectId oid) {
+  protected void deleted(final ObjectId oid) {
     _tracker.deleted(_userName, _clientName, _type, oid);
   }
 

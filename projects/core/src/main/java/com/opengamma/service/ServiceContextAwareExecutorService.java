@@ -31,7 +31,7 @@ public class ServiceContextAwareExecutorService implements ExecutorService {
   /**
    * @param delegate the underlying {@link ExecutorService} used to execute tasks
    */
-  public ServiceContextAwareExecutorService(ExecutorService delegate) {
+  public ServiceContextAwareExecutorService(final ExecutorService delegate) {
     _delegateExecutor = ArgumentChecker.notNull(delegate, "delegate");
   }
 
@@ -56,57 +56,57 @@ public class ServiceContextAwareExecutorService implements ExecutorService {
   }
 
   @Override
-  public boolean awaitTermination(long timeout, TimeUnit unit) throws InterruptedException {
+  public boolean awaitTermination(final long timeout, final TimeUnit unit) throws InterruptedException {
     return _delegateExecutor.awaitTermination(timeout, unit);
   }
 
   @Override
-  public <T> Future<T> submit(Callable<T> task) {
+  public <T> Future<T> submit(final Callable<T> task) {
     return _delegateExecutor.submit(new ServiceContextAwareCallable<>(task));
   }
 
   @Override
-  public <T> Future<T> submit(Runnable task, T result) {
+  public <T> Future<T> submit(final Runnable task, final T result) {
     return _delegateExecutor.submit(new ServiceContextAwareRunnable(task), result);
   }
 
   @Override
-  public Future<?> submit(Runnable task) {
+  public Future<?> submit(final Runnable task) {
     return _delegateExecutor.submit(new ServiceContextAwareRunnable(task));
   }
 
   @Override
-  public <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks) throws InterruptedException {
+  public <T> List<Future<T>> invokeAll(final Collection<? extends Callable<T>> tasks) throws InterruptedException {
     return _delegateExecutor.invokeAll(wrapTasks(tasks));
   }
 
   @Override
-  public <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks, long timeout, TimeUnit unit) throws InterruptedException {
+  public <T> List<Future<T>> invokeAll(final Collection<? extends Callable<T>> tasks, final long timeout, final TimeUnit unit) throws InterruptedException {
     return _delegateExecutor.invokeAll(wrapTasks(tasks), timeout, unit);
   }
 
   @Override
-  public <T> T invokeAny(Collection<? extends Callable<T>> tasks) throws InterruptedException, ExecutionException {
+  public <T> T invokeAny(final Collection<? extends Callable<T>> tasks) throws InterruptedException, ExecutionException {
     return _delegateExecutor.invokeAny(wrapTasks(tasks));
   }
 
   @Override
-  public <T> T invokeAny(Collection<? extends Callable<T>> tasks, long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+  public <T> T invokeAny(final Collection<? extends Callable<T>> tasks, final long timeout, final TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
     return _delegateExecutor.invokeAny(wrapTasks(tasks), timeout, unit);
   }
 
   @Override
-  public void execute(Runnable command) {
+  public void execute(final Runnable command) {
     _delegateExecutor.execute(new ServiceContextAwareRunnable(command));
   }
 
   /**
    * @return the tasks wrapped in instances of {@link ServiceContextAwareCallable}.
    */
-  private <T> List<Callable<T>> wrapTasks(Collection<? extends Callable<T>> tasks) {
-    List<Callable<T>> taskList = new ArrayList<>(tasks.size());
+  private <T> List<Callable<T>> wrapTasks(final Collection<? extends Callable<T>> tasks) {
+    final List<Callable<T>> taskList = new ArrayList<>(tasks.size());
 
-    for (Callable<T> task : tasks) {
+    for (final Callable<T> task : tasks) {
       taskList.add(new ServiceContextAwareCallable<>(task));
     }
     return taskList;
@@ -123,7 +123,7 @@ public class ServiceContextAwareExecutorService implements ExecutorService {
     /** The service context used to initialize {@link ThreadLocalServiceContext} before task execution. */
     private final ServiceContext _serviceContext;
 
-    private ServiceContextAwareCallable(Callable<T> delegateCallable) {
+    private ServiceContextAwareCallable(final Callable<T> delegateCallable) {
       _delegateCallable = delegateCallable;
       _serviceContext = ThreadLocalServiceContext.getInstance();
     }
@@ -150,7 +150,7 @@ public class ServiceContextAwareExecutorService implements ExecutorService {
     /** The service context used to initialize {@link ThreadLocalServiceContext} before task execution. */
     private final ServiceContext _serviceContext;
 
-    private ServiceContextAwareRunnable(Runnable delegateRunnable) {
+    private ServiceContextAwareRunnable(final Runnable delegateRunnable) {
       _delegateRunnable = delegateRunnable;
       _serviceContext = ThreadLocalServiceContext.getInstance();
     }

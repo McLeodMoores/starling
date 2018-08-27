@@ -27,7 +27,7 @@ import com.opengamma.util.paging.Paging;
 
 /**
  * Result providing a list of Uids with paging.
- * 
+ *
  */
 @PublicSPI
 @BeanDefinition
@@ -42,7 +42,7 @@ public abstract class UidsResult extends DirectBean {
    * The documents, not null.
    */
   @PropertyDefinition
-  private final List<UniqueId> _uids = new ArrayList<UniqueId>();
+  private final List<UniqueId> _uids = new ArrayList<>();
 
   /**
    * Creates an instance.
@@ -54,7 +54,7 @@ public abstract class UidsResult extends DirectBean {
    * Creates an instance.
    * @param uids the list of Uids to add, not null
    */
-  public UidsResult(List<UniqueId> uids) {
+  public UidsResult(final List<UniqueId> uids) {
     _uids.addAll(uids);
     _paging = Paging.ofAll(uids);
   }

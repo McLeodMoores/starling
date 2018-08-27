@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.finitedifference;
@@ -15,7 +15,7 @@ import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class UniformMeshing extends MeshingFunction {
 
@@ -25,10 +25,10 @@ public class UniformMeshing extends MeshingFunction {
   private final double[] _fpValues;
 
   /**
-   * Crates a set of points (mesh) equally spaced between 0.0 and 1.0 inclusive 
-   * @param nPoints Number of points in the mesh 
+   * Crates a set of points (mesh) equally spaced between 0.0 and 1.0 inclusive
+   * @param nPoints Number of points in the mesh
    */
-  public UniformMeshing(int nPoints) {
+  public UniformMeshing(final int nPoints) {
     super(nPoints);
     _db = null;
     _fpIndicies = null;
@@ -36,12 +36,12 @@ public class UniformMeshing extends MeshingFunction {
   }
 
   /**
-   * Crates a set of points (mesh) approximately equally spaced between 0.0 and 1.0 inclusive, such that the specified <em>fixedPoints</em> are included as points 
-   * @param nPoints Number of points in the mesh 
-   * @param fixedPoints Set of points that must be in the mesh. <b>Note:</b> the mesh can be far from uniform if fixed-points are close together and/or a small 
+   * Crates a set of points (mesh) approximately equally spaced between 0.0 and 1.0 inclusive, such that the specified <em>fixedPoints</em> are included as points
+   * @param nPoints Number of points in the mesh
+   * @param fixedPoints Set of points that must be in the mesh. <b>Note:</b> the mesh can be far from uniform if fixed-points are close together and/or a small
    * number of points are used
    */
-  public UniformMeshing(int nPoints, final double[] fixedPoints) {
+  public UniformMeshing(final int nPoints, final double[] fixedPoints) {
     super(nPoints);
     ArgumentChecker.notNull(fixedPoints, "null fixed Points");
 
@@ -76,7 +76,7 @@ public class UniformMeshing extends MeshingFunction {
       // prevent points sharing index
       if (m != FunctionUtils.unique(_fpIndicies).length) {
         for (int ii = 1; ii < m; ii++) {
-          int step = _fpIndicies[ii] - _fpIndicies[ii - 1];
+          final int step = _fpIndicies[ii] - _fpIndicies[ii - 1];
           if (step < 1) {
             _fpIndicies[ii] += 1 - step;
           }
@@ -97,7 +97,7 @@ public class UniformMeshing extends MeshingFunction {
       if (_fpIndicies[m - 1] >= nPoints - 1) {
         _fpIndicies[m - 1] = nPoints - 2;
         for (int ii = 1; ii < m - 1; ii++) {
-          int step = _fpIndicies[m - ii] - _fpIndicies[m - ii - 1];
+          final int step = _fpIndicies[m - ii] - _fpIndicies[m - ii - 1];
           if (step < 1) {
             _fpIndicies[m - ii - 1] += step - 1;
           } else {
@@ -116,18 +116,18 @@ public class UniformMeshing extends MeshingFunction {
       y[0] = 0.0;
       System.arraycopy(_fpValues, 0, y, 1, m);
       y[m + 1] = 1.0;
-      Interpolator1DDataBundle data = INTERPOLATOR.getDataBundleFromSortedArrays(x, y);
+      final Interpolator1DDataBundle data = INTERPOLATOR.getDataBundleFromSortedArrays(x, y);
       final double grad = 1.0 / (nPoints - 1);
       _db = new Interpolator1DCubicSplineDataBundle(data, grad, grad);
     }
   }
 
-  protected int getFixedPointIndex(int i) {
+  protected int getFixedPointIndex(final int i) {
     return Arrays.binarySearch(_fpIndicies, i);
   }
 
   @Override
-  public Double evaluate(Integer x) {
+  public Double evaluate(final Integer x) {
     if (x < 0 || x >= getNumberOfPoints()) {
       throw new IllegalArgumentException("index out of range");
     }
@@ -140,7 +140,7 @@ public class UniformMeshing extends MeshingFunction {
     }
 
     if (_db == null) {
-      return ((double) x) / (getNumberOfPoints() - 1);
+      return (double) x / (getNumberOfPoints() - 1);
     }
 
     // avoid interpolator lookup if requested value is a fixed value

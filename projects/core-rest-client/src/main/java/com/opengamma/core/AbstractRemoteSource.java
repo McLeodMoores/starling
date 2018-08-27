@@ -17,7 +17,7 @@ import com.opengamma.util.rest.AbstractRemoteClient;
 
 /**
  * An abstract source providing remote access.
- * 
+ *
  * @param <T> the type returned by the source
  */
 @PublicSPI
@@ -27,7 +27,7 @@ public abstract class AbstractRemoteSource<T>
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param baseUri the base target URI for all RESTful web services, not null
    */
   public AbstractRemoteSource(final URI baseUri) {
@@ -36,7 +36,7 @@ public abstract class AbstractRemoteSource<T>
 
   //-------------------------------------------------------------------------
   @Override
-  public Map<UniqueId, T> get(Collection<UniqueId> uniqueIds) {
+  public Map<UniqueId, T> get(final Collection<UniqueId> uniqueIds) {
     return AbstractSource.get(this, uniqueIds);
   }
 

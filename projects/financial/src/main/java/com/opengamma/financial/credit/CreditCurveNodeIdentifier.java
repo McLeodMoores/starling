@@ -57,7 +57,7 @@ public final class CreditCurveNodeIdentifier {
    */
   public static CreditCurveNodeIdentifier forCdsIndex(final String redCode, final Period term) {
 
-    String idValue = convertRed(redCode) + SEPARATOR + term.toString();
+    final String idValue = convertRed(redCode) + SEPARATOR + term.toString();
     return new CreditCurveNodeIdentifier(CDS_INDEX_SCHEME, idValue);
   }
 
@@ -79,7 +79,7 @@ public final class CreditCurveNodeIdentifier {
                                                         final String seniority,
                                                         final String restructuringClause) {
 
-    String idValue = generateCdsId(ticker, redCode, currency, term, seniority, restructuringClause);
+    final String idValue = generateCdsId(ticker, redCode, currency, term, seniority, restructuringClause);
     return new CreditCurveNodeIdentifier(SAMEDAY_CDS_SCHEME, idValue);
   }
 
@@ -101,25 +101,25 @@ public final class CreditCurveNodeIdentifier {
                                                         final String seniority,
                                                         final String restructuringClause) {
 
-    String idValue = generateCdsId(ticker, redCode, currency, term, seniority, restructuringClause);
+    final String idValue = generateCdsId(ticker, redCode, currency, term, seniority, restructuringClause);
     return new CreditCurveNodeIdentifier(COMPOSITE_CDS_SCHEME, idValue);
   }
 
-  private static String generateCdsId(String ticker,
-                                      String redCode,
-                                      Currency currency,
-                                      Period term,
-                                      String seniority,
-                                      String restructuringClause) {
+  private static String generateCdsId(final String ticker,
+                                      final String redCode,
+                                      final Currency currency,
+                                      final Period term,
+                                      final String seniority,
+                                      final String restructuringClause) {
     return ticker + SEPARATOR + convertRed(redCode) + SEPARATOR + currency.getCode() + SEPARATOR +
         seniority + SEPARATOR + restructuringClause + SEPARATOR + term.toString();
   }
 
-  private static String convertRed(String redCode) {
+  private static String convertRed(final String redCode) {
     return redCode.replace("_", "-");
   }
 
-  private CreditCurveNodeIdentifier(ExternalScheme creditCurveScheme, String idValue) {
+  private CreditCurveNodeIdentifier(final ExternalScheme creditCurveScheme, final String idValue) {
 
     ArgumentChecker.notNull(creditCurveScheme, "creditCurveScheme");
     ArgumentChecker.notNull(idValue, "idValue");

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.collateralmodel;
@@ -12,7 +12,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Class to define a CSA to an ISDA Master Agreement used to define the terms of a collateral agreement between two counterparties 
+ * Class to define a CSA to an ISDA Master Agreement used to define the terms of a collateral agreement between two counterparties
  */
 public class CreditSupportAnnexDefinition {
 
@@ -74,12 +74,12 @@ public class CreditSupportAnnexDefinition {
       final int marginPeriodOfRisk,
       final int collateralLiquidationHorizon,
       final CollateralType collateralType,
-      CollateralRate collateralRate,
+      final CollateralRate collateralRate,
       final Currency collateralCurrency,
       final MarginCallFrequency marginCallFrequency,
       final boolean substituteCollateral,
       final boolean rehypothecateCollateral,
-      CollateralRoundingConvention collateralRoundingConvention,
+      final CollateralRoundingConvention collateralRoundingConvention,
       final CollateralDefinition collateral) {
 
     // ----------------------------------------------------------------------------------------------------------------------------------------

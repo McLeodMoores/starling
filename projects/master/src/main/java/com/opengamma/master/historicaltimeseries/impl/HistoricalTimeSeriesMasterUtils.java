@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.historicaltimeseries.impl;
@@ -32,10 +32,10 @@ import com.opengamma.util.ArgumentChecker;
 public class HistoricalTimeSeriesMasterUtils {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(HistoricalTimeSeriesMasterUtils.class);
-  
+
   private final HistoricalTimeSeriesMaster _htsMaster;
-  
-  public HistoricalTimeSeriesMasterUtils(HistoricalTimeSeriesMaster htsMaster) {
+
+  public HistoricalTimeSeriesMasterUtils(final HistoricalTimeSeriesMaster htsMaster) {
     _htsMaster = htsMaster;
   }
 
@@ -45,7 +45,7 @@ public class HistoricalTimeSeriesMasterUtils {
    * versions of intersecting points will be corrected to the new ones.
    * After that, points later than the existing latest point of the time series will
    * be appended.
-   * 
+   *
    * @param description  a description of the time-series for display purposes, not null
    * @param dataSource  the data source, not null
    * @param dataProvider  the data provider, not null
@@ -55,13 +55,13 @@ public class HistoricalTimeSeriesMasterUtils {
    * @param timeSeries  the time-series, not null
    * @return the unique identifier of the time-series
    */
-  public UniqueId writeTimeSeries(String description, String dataSource, String dataProvider, String dataField,
-      String observationTime, ObjectId oId, LocalDateDoubleTimeSeries timeSeries) {
-    
+  public UniqueId writeTimeSeries(final String description, final String dataSource, final String dataProvider, final String dataField,
+      final String observationTime, final ObjectId oId, final LocalDateDoubleTimeSeries timeSeries) {
+
     UniqueId uId = oId.atLatestVersion();
-    
-    ManageableHistoricalTimeSeries existingManageableTs = _htsMaster.getTimeSeries(uId);
-    LocalDateDoubleTimeSeries existingTs = existingManageableTs.getTimeSeries();
+
+    final ManageableHistoricalTimeSeries existingManageableTs = _htsMaster.getTimeSeries(uId);
+    final LocalDateDoubleTimeSeries existingTs = existingManageableTs.getTimeSeries();
 
     if (existingTs.isEmpty()) {
       uId = _htsMaster.updateTimeSeriesDataPoints(oId, timeSeries);
@@ -69,14 +69,14 @@ public class HistoricalTimeSeriesMasterUtils {
     } else {
       // There is a non-empty matching time-series already in the master so update it to reflect the new time-series
       // 1: 'correct' any differences in the subseries already present
-      LocalDateDoubleTimeSeries tsIntersection = timeSeries.subSeries(existingTs.getEarliestTime(), true, existingTs.getLatestTime(), true);
+      final LocalDateDoubleTimeSeries tsIntersection = timeSeries.subSeries(existingTs.getEarliestTime(), true, existingTs.getLatestTime(), true);
       if (!tsIntersection.equals(existingTs)) {
         LOGGER.debug("Correcting time series " + oId + "[" + dataField + "] from " + existingTs.getEarliestTime() + " to " + existingTs.getLatestTime());
         uId = _htsMaster.correctTimeSeriesDataPoints(oId, tsIntersection);
       }
       // 2: 'update' the time-series to add any new, later points
       if (existingTs.getLatestTime().isBefore(timeSeries.getLatestTime())) {
-        LocalDateDoubleTimeSeries newSeries = timeSeries.subSeries(existingTs.getLatestTime(), false, timeSeries.getLatestTime(), true);
+        final LocalDateDoubleTimeSeries newSeries = timeSeries.subSeries(existingTs.getLatestTime(), false, timeSeries.getLatestTime(), true);
         if (newSeries.size() > 0) {
           LOGGER.debug("Updating time series " + oId + "[" + dataField + "] from " + newSeries.getEarliestTime() + " to " + newSeries.getLatestTime());
           uId = _htsMaster.updateTimeSeriesDataPoints(oId, newSeries);
@@ -84,40 +84,40 @@ public class HistoricalTimeSeriesMasterUtils {
       }
       // 3: 'update' the time-series to add any new, earlier points
       if (timeSeries.getEarliestTime().isBefore(existingTs.getEarliestTime())) {
-        LocalDateDoubleTimeSeries newSeries = timeSeries.subSeries(timeSeries.getEarliestTime(), true, existingTs.getEarliestTime(), false);
+        final LocalDateDoubleTimeSeries newSeries = timeSeries.subSeries(timeSeries.getEarliestTime(), true, existingTs.getEarliestTime(), false);
         if (newSeries.size() > 0) {
           LOGGER.debug("Updating time series " + oId + "[" + dataField + "] from " + newSeries.getEarliestTime() + " to " + newSeries.getLatestTime());
           uId = _htsMaster.updateTimeSeriesDataPoints(oId, newSeries);
-        }  
+        }
       }
     }
     return uId;
   }
-  
+
   /**
    * Updates an existing time-series in the master.
    * @param uniqueId  the unique identifier of the time-series to be updated, not null
    * @param timeSeries  the time-series, not null
    * @return the unique identifier of the time-series
    */
-  public UniqueId writeTimeSeries(UniqueId uniqueId, LocalDateDoubleTimeSeries timeSeries) {
-    
-    ManageableHistoricalTimeSeries existingManageableTs = _htsMaster.getTimeSeries(uniqueId);
-    LocalDateDoubleTimeSeries existingTs = existingManageableTs.getTimeSeries();
+  public UniqueId writeTimeSeries(UniqueId uniqueId, final LocalDateDoubleTimeSeries timeSeries) {
+
+    final ManageableHistoricalTimeSeries existingManageableTs = _htsMaster.getTimeSeries(uniqueId);
+    final LocalDateDoubleTimeSeries existingTs = existingManageableTs.getTimeSeries();
     if (existingTs.isEmpty()) {
       _htsMaster.updateTimeSeriesDataPoints(uniqueId, timeSeries);
       LOGGER.debug("Updating time series " + uniqueId + " with all as currently emtpy)");
     } else {
       // There is a matching time-series already in the master so update it to reflect the new time-series
       // 1: 'correct' any differences in the subseries already present
-      LocalDateDoubleTimeSeries tsIntersection = timeSeries.subSeries(existingTs.getEarliestTime(), true, existingTs.getLatestTime(), true);
+      final LocalDateDoubleTimeSeries tsIntersection = timeSeries.subSeries(existingTs.getEarliestTime(), true, existingTs.getLatestTime(), true);
       if (!tsIntersection.equals(existingTs)) {
         LOGGER.debug("Correcting time series " + uniqueId + " from " + existingTs.getEarliestTime() + " to " + existingTs.getLatestTime());
         uniqueId = _htsMaster.correctTimeSeriesDataPoints(uniqueId.getObjectId(), tsIntersection);
       }
       // 2: 'update' the time-series to add any new, later points
       if (existingTs.getLatestTime().isBefore(timeSeries.getLatestTime())) {
-        LocalDateDoubleTimeSeries newSeries = timeSeries.subSeries(existingTs.getLatestTime(), false, timeSeries.getLatestTime(), true);
+        final LocalDateDoubleTimeSeries newSeries = timeSeries.subSeries(existingTs.getLatestTime(), false, timeSeries.getLatestTime(), true);
         if (newSeries.size() > 0) {
           LOGGER.debug("Updating time series " + uniqueId + " from " + newSeries.getEarliestTime() + " to " + newSeries.getLatestTime());
           uniqueId = _htsMaster.updateTimeSeriesDataPoints(uniqueId, newSeries);
@@ -126,12 +126,12 @@ public class HistoricalTimeSeriesMasterUtils {
     }
     return uniqueId;
   }
-  
+
   //-------------------------------------------------------------------------
   /**
-   * Adds or updates a time-series in the master.  Can be a sub-set of the data points present and will not 'erase' 
+   * Adds or updates a time-series in the master.  Can be a sub-set of the data points present and will not 'erase'
    * points that are missing, only supplement them.
-   * 
+   *
    * @param description  a description of the time-series for display purposes, not null
    * @param dataSource  the data source, not null
    * @param dataProvider  the data provider, not null
@@ -141,16 +141,16 @@ public class HistoricalTimeSeriesMasterUtils {
    * @param timeSeries  the time-series, not null
    * @return the unique identifier of the time-series
    */
-  public UniqueId writeTimeSeries(String description, String dataSource, String dataProvider, String dataField,
-      String observationTime, ExternalIdBundle externalIdBundle, LocalDateDoubleTimeSeries timeSeries) {
+  public UniqueId writeTimeSeries(final String description, final String dataSource, final String dataProvider, final String dataField,
+      final String observationTime, final ExternalIdBundle externalIdBundle, final LocalDateDoubleTimeSeries timeSeries) {
     return writeTimeSeries(description, dataSource, dataProvider, dataField, observationTime, externalIdBundle, null,
         timeSeries);
   }
-  
+
   /**
-   * Adds or updates a time-series in the master.  Can be a sub-set of the data points present and will not 'erase' 
+   * Adds or updates a time-series in the master.  Can be a sub-set of the data points present and will not 'erase'
    * points that are missing, only supplement them.
-   * 
+   *
    * @param description  a description of the time-series for display purposes, not null
    * @param dataSource  the data source, not null
    * @param dataProvider  the data provider, not null
@@ -161,9 +161,9 @@ public class HistoricalTimeSeriesMasterUtils {
    * @param timeSeries  the time-series, not null
    * @return the unique identifier of the time-series
    */
-  public UniqueId writeTimeSeries(String description, String dataSource, String dataProvider, String dataField,
-      String observationTime, ExternalIdBundle externalIdBundle, ExternalIdSearchType externalIdSearchType,
-      LocalDateDoubleTimeSeries timeSeries) {
+  public UniqueId writeTimeSeries(final String description, final String dataSource, final String dataProvider, final String dataField,
+      final String observationTime, final ExternalIdBundle externalIdBundle, final ExternalIdSearchType externalIdSearchType,
+      final LocalDateDoubleTimeSeries timeSeries) {
     ArgumentChecker.notNull(description, "description");
     ArgumentChecker.notNull(dataSource, "dataSource");
     ArgumentChecker.notNull(dataProvider, "dataProvider");
@@ -171,8 +171,8 @@ public class HistoricalTimeSeriesMasterUtils {
     ArgumentChecker.notNull(observationTime, "observationTime");
     ArgumentChecker.notNull(externalIdBundle, "externalIdBundle");
     ArgumentChecker.notNull(timeSeries, "timeSeries");
-    
-    HistoricalTimeSeriesInfoSearchRequest htsSearchReq = new HistoricalTimeSeriesInfoSearchRequest();
+
+    final HistoricalTimeSeriesInfoSearchRequest htsSearchReq = new HistoricalTimeSeriesInfoSearchRequest();
     ExternalIdSearch idSearch = ExternalIdSearch.of(externalIdBundle);
     if (externalIdSearchType != null) {
       idSearch = idSearch.withSearchType(externalIdSearchType);
@@ -182,36 +182,36 @@ public class HistoricalTimeSeriesMasterUtils {
     htsSearchReq.setDataProvider(dataProvider);
     htsSearchReq.setDataField(dataField);
     htsSearchReq.setObservationTime(observationTime);
-    HistoricalTimeSeriesInfoSearchResult searchResult = _htsMaster.search(htsSearchReq);
+    final HistoricalTimeSeriesInfoSearchResult searchResult = _htsMaster.search(htsSearchReq);
     if (searchResult.getDocuments().size() > 0) {
       if (searchResult.getDocuments().size() > 1) {
         LOGGER.warn("Found multiple time-series matching search. Will only update the first. Search {} returned {}", htsSearchReq, searchResult.getInfoList());
       }
       // update existing time series
-      HistoricalTimeSeriesInfoDocument existingTsDoc = searchResult.getFirstDocument();
+      final HistoricalTimeSeriesInfoDocument existingTsDoc = searchResult.getFirstDocument();
       return writeTimeSeries(description, dataSource, dataProvider, dataField, observationTime, existingTsDoc.getObjectId(), timeSeries);
     } else {
       // add new time series
-      ManageableHistoricalTimeSeriesInfo info = new ManageableHistoricalTimeSeriesInfo();
+      final ManageableHistoricalTimeSeriesInfo info = new ManageableHistoricalTimeSeriesInfo();
       info.setDataField(dataField);
       info.setDataSource(dataSource);
       info.setDataProvider(dataProvider);
       info.setObservationTime(observationTime);
       info.setExternalIdBundle(ExternalIdBundleWithDates.of(externalIdBundle));
       info.setName(description);
-      HistoricalTimeSeriesInfoDocument htsInfoDoc = new HistoricalTimeSeriesInfoDocument();
+      final HistoricalTimeSeriesInfoDocument htsInfoDoc = new HistoricalTimeSeriesInfoDocument();
       htsInfoDoc.setInfo(info);
-      
-      HistoricalTimeSeriesInfoDocument addedInfoDoc = _htsMaster.add(htsInfoDoc);
+
+      final HistoricalTimeSeriesInfoDocument addedInfoDoc = _htsMaster.add(htsInfoDoc);
       LOGGER.debug("Adding time series " + externalIdBundle + " from " + timeSeries.getEarliestTime() + " to " + timeSeries.getLatestTime());
       return _htsMaster.updateTimeSeriesDataPoints(addedInfoDoc.getInfo().getTimeSeriesObjectId(), timeSeries);
     }
   }
-  
+
   /**
    * Adds or updates a time-series in the master.  Will not "erase" any existing point, just
    * used to add a new point.
-   * 
+   *
    * @param description  a description of the time-series for display purposes, not null
    * @param dataSource  the data source, not null
    * @param dataProvider  the data provider, not null
@@ -222,9 +222,9 @@ public class HistoricalTimeSeriesMasterUtils {
    * @param value the value, not null
    * @return the unique identifier of the time-series
    */
-  public UniqueId writeTimeSeriesPoint(String description, String dataSource, String dataProvider, String dataField,
-      String observationTime, ExternalIdBundle externalIdBundle, LocalDate date, double value) {
-    LocalDateDoubleTimeSeries ts = ImmutableLocalDateDoubleTimeSeries.of(date, value);
+  public UniqueId writeTimeSeriesPoint(final String description, final String dataSource, final String dataProvider, final String dataField,
+      final String observationTime, final ExternalIdBundle externalIdBundle, final LocalDate date, final double value) {
+    final LocalDateDoubleTimeSeries ts = ImmutableLocalDateDoubleTimeSeries.of(date, value);
     return writeTimeSeries(description, dataSource, dataProvider, dataField, observationTime, externalIdBundle, ts);
   }
 

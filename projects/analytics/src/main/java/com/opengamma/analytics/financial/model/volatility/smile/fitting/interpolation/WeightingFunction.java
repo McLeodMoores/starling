@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.smile.fitting.interpolation;
@@ -48,7 +48,7 @@ public abstract class WeightingFunction {
    * @param x An arbitrary point
    * @return y
    */
-  private double getY(double[] xs, int lowerBoundIndex, double x) {
+  private double getY(final double[] xs, final int lowerBoundIndex, final double x) {
     ArgumentChecker.notNull(xs, "strikes");
     ArgumentChecker.notNegative(lowerBoundIndex, "index");
     ArgumentChecker.isTrue(lowerBoundIndex <= xs.length - 2, "index cannot be larger than {}, have {}", xs.length - 2, lowerBoundIndex);

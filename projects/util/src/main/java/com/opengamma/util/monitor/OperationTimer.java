@@ -40,7 +40,7 @@ public class OperationTimer {
 
   /**
    * Gets the underlying reporter.
-   * 
+   *
    * @return the reporter, not null
    */
   public static OperationTimeReporter getReporter() {
@@ -50,12 +50,12 @@ public class OperationTimer {
   //-------------------------------------------------------------------------
   /**
    * Creates a new instance and starts the timer.
-   * 
+   *
    * @param logger  the logger for reporting, not null
    * @param format  the format for reporting, not null
    * @param arguments  the arguments for reporting, not null
    */
-  public OperationTimer(Logger logger, String format, Object... arguments) {
+  public OperationTimer(final Logger logger, final String format, final Object... arguments) {
     ArgumentChecker.notNull(logger, "logger");
     ArgumentChecker.notNull(format, "format");
     _startTime = System.nanoTime();
@@ -66,13 +66,13 @@ public class OperationTimer {
 
   /**
    * Stops the timer and write the report.
-   * 
+   *
    * @return the time in milliseconds
    */
   public long finished() {
-    long stopTime = System.nanoTime();
-    long duration = stopTime - _startTime;
-    long durationInMilliseconds = duration / 1000000;
+    final long stopTime = System.nanoTime();
+    final long duration = stopTime - _startTime;
+    final long durationInMilliseconds = duration / 1000000;
     getReporter().report(durationInMilliseconds, _logger, _format, _arguments);
     return durationInMilliseconds;
   }

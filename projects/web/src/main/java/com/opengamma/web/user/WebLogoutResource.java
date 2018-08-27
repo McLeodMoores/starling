@@ -44,21 +44,21 @@ public class WebLogoutResource extends AbstractWebResource {
   //-------------------------------------------------------------------------
   @GET
   public Response get(
-      @Context HttpServletRequest hsr,
-      @Context UriInfo uriInfo,
-      @QueryParam("redirect") String redirectUri) {
-    redirectUri = StringUtils.trimToNull(redirectUri);
+      @Context final HttpServletRequest hsr,
+      @Context final UriInfo uriInfo,
+      @QueryParam("redirect") final String redirectUri) {
+    final String trimmedRedirectUri = StringUtils.trimToNull(redirectUri);
     try {
       AuthUtils.getSubject().logout();
       hsr.getSession().invalidate();
-    } catch (SessionException ex) {
+    } catch (final SessionException ex) {
       LOGGER.debug("Ignoring session exception during logout", ex);
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       LOGGER.debug("Ignoring unexpected exception during logout", ex);
     }
     URI uri;
-    if (redirectUri != null) {
-      uri = uriInfo.getBaseUri().resolve(redirectUri);
+    if (trimmedRedirectUri != null) {
+      uri = uriInfo.getBaseUri().resolve(trimmedRedirectUri);
     } else {
       uri = WebHomeResource.uri(uriInfo);
     }
@@ -67,8 +67,8 @@ public class WebLogoutResource extends AbstractWebResource {
 
   @POST
   public Response post(
-      @Context HttpServletRequest hsr,
-      @Context UriInfo uriInfo) {
+      @Context final HttpServletRequest hsr,
+      @Context final UriInfo uriInfo) {
     // allow logout by POST for ease of use
     return get(hsr, uriInfo, null);
   }
@@ -76,11 +76,11 @@ public class WebLogoutResource extends AbstractWebResource {
   //-------------------------------------------------------------------------
   /**
    * Builds a URI for this page.
-   * 
+   *
    * @param uriInfo  the uriInfo, not null
    * @return the URI, not null
    */
-  public static URI uri(UriInfo uriInfo) {
+  public static URI uri(final UriInfo uriInfo) {
     return uriInfo.getBaseUriBuilder().path(WebLogoutResource.class).build();
   }
 

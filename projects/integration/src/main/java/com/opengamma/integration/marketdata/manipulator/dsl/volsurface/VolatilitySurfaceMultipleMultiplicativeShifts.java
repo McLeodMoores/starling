@@ -34,7 +34,7 @@ public class VolatilitySurfaceMultipleMultiplicativeShifts implements StructureM
   private final double[] _y;
   private final double[] _shifts;
 
-  public VolatilitySurfaceMultipleMultiplicativeShifts(double[] x, double[] y, double[] shifts) {
+  public VolatilitySurfaceMultipleMultiplicativeShifts(final double[] x, final double[] y, final double[] shifts) {
     ArgumentChecker.notNull(x, "x");
     ArgumentChecker.notNull(y, "y");
     ArgumentChecker.notNull(shifts, "shifts");
@@ -44,9 +44,9 @@ public class VolatilitySurfaceMultipleMultiplicativeShifts implements StructureM
   }
 
   @Override
-  public VolatilitySurface execute(VolatilitySurface surface,
-                                   ValueSpecification valueSpecification,
-                                   FunctionExecutionContext executionContext) {
+  public VolatilitySurface execute(final VolatilitySurface surface,
+                                   final ValueSpecification valueSpecification,
+                                   final FunctionExecutionContext executionContext) {
     return surface.withMultipleMultiplicativeShifts(_x, _y, _shifts);
   }
 
@@ -56,17 +56,17 @@ public class VolatilitySurfaceMultipleMultiplicativeShifts implements StructureM
   }
 
   public MutableFudgeMsg toFudgeMsg(final FudgeSerializer serializer) {
-    MutableFudgeMsg msg = serializer.newMessage();
+    final MutableFudgeMsg msg = serializer.newMessage();
     serializer.addToMessage(msg, SHIFTS, null, _shifts);
     serializer.addToMessage(msg, X, null, _x);
     serializer.addToMessage(msg, Y, null, _y);
     return msg;
   }
 
-  public static VolatilitySurfaceMultipleMultiplicativeShifts fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg) {
-    double[] shift = deserializer.fieldValueToObject(double[].class, msg.getByName(SHIFTS));
-    double[] x = deserializer.fieldValueToObject(double[].class, msg.getByName(X));
-    double[] y = deserializer.fieldValueToObject(double[].class, msg.getByName(Y));
+  public static VolatilitySurfaceMultipleMultiplicativeShifts fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final double[] shift = deserializer.fieldValueToObject(double[].class, msg.getByName(SHIFTS));
+    final double[] x = deserializer.fieldValueToObject(double[].class, msg.getByName(X));
+    final double[] y = deserializer.fieldValueToObject(double[].class, msg.getByName(Y));
     return new VolatilitySurfaceMultipleMultiplicativeShifts(x, y, shift);
   }
 
@@ -76,7 +76,7 @@ public class VolatilitySurfaceMultipleMultiplicativeShifts implements StructureM
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }

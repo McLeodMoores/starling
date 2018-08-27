@@ -44,9 +44,9 @@ public class FutureSecurityValueDeltaFunction extends AbstractFunction.NonCompil
   }
 
   @Override
-  public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
 
-    ValueProperties.Builder properties = createValueProperties().with(ValuePropertyNames.CURRENCY, FinancialSecurityUtils.getCurrency(target.getSecurity()).getCode());
+    final ValueProperties.Builder properties = createValueProperties().with(ValuePropertyNames.CURRENCY, FinancialSecurityUtils.getCurrency(target.getSecurity()).getCode());
 
     if (target.getSecurity() instanceof InterestRateFutureSecurity) {
       properties.withAny(ValuePropertyNames.SCALE);
@@ -56,7 +56,7 @@ public class FutureSecurityValueDeltaFunction extends AbstractFunction.NonCompil
   }
 
   @Override
-  public Set<ValueRequirement> getRequirements(FunctionCompilationContext context, ComputationTarget target, ValueRequirement desiredValue) {
+  public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     if (target.getSecurity() instanceof InterestRateFutureSecurity) {
       // Confirm Scale is set, by user or by default
       final ValueProperties constraints = desiredValue.getConstraints();
@@ -70,8 +70,8 @@ public class FutureSecurityValueDeltaFunction extends AbstractFunction.NonCompil
   }
 
   @Override
-  public Set<ComputedValue> execute(FunctionExecutionContext executionContext, FunctionInputs inputs, ComputationTarget target, Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
-    FutureSecurity security = (FutureSecurity) target.getSecurity();
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+    final FutureSecurity security = (FutureSecurity) target.getSecurity();
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     ValueProperties.Builder properties = desiredValue.getConstraints().copy()
         .with(ValuePropertyNames.CURRENCY, FinancialSecurityUtils.getCurrency(security).getCode());

@@ -44,7 +44,7 @@ public class TimeChangedCharacteristicExponent implements CharacteristicExponent
   private final CharacteristicExponent _timeChange;
 
   /**
-   * 
+   *
    * @param base The base characteristic exponent, not null
    * @param timeChange The characteristic exponent to time change, not null
    */
@@ -70,13 +70,13 @@ public class TimeChangedCharacteristicExponent implements CharacteristicExponent
   }
 
   @Override
-  public ComplexNumber getValue(ComplexNumber u, double t) {
-    Function1D<ComplexNumber, ComplexNumber> func = getFunction(t);
+  public ComplexNumber getValue(final ComplexNumber u, final double t) {
+    final Function1D<ComplexNumber, ComplexNumber> func = getFunction(t);
     return func.evaluate(u);
   }
 
   /**
-   * 
+   *
    * @return the smaller $alpha_{max}$ of the base characteristic exponent and the time-changed characteristic exponent
    */
   @Override
@@ -85,7 +85,7 @@ public class TimeChangedCharacteristicExponent implements CharacteristicExponent
   }
 
   /**
-   * 
+   *
    * @return the larger $alpha_{min}$ of the base characteristic exponent and the time-changed characteristic exponent
    */
   @Override
@@ -137,12 +137,12 @@ public class TimeChangedCharacteristicExponent implements CharacteristicExponent
   }
 
   @Override
-  public ComplexNumber[] getCharacteristicExponentAdjoint(ComplexNumber u, double t) {
+  public ComplexNumber[] getCharacteristicExponentAdjoint(final ComplexNumber u, final double t) {
     throw new NotImplementedException();
   }
 
   @Override
-  public Function1D<ComplexNumber, ComplexNumber[]> getAdjointFunction(double t) {
+  public Function1D<ComplexNumber, ComplexNumber[]> getAdjointFunction(final double t) {
     throw new NotImplementedException();
   }
 

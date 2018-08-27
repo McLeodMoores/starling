@@ -30,7 +30,7 @@ public enum SnapshotType {
 
   private String _text;
 
-  SnapshotType(String text) {
+  SnapshotType(final String text) {
     this._text = text;
 
   }
@@ -39,9 +39,9 @@ public enum SnapshotType {
     return this._text;
   }
 
-  public static SnapshotType from(String text) {
+  public static SnapshotType from(final String text) {
     if (text != null) {
-      for (SnapshotType column : SnapshotType.values()) {
+      for (final SnapshotType column : SnapshotType.values()) {
         if (text.equalsIgnoreCase(column._text)) {
           return column;
         }

@@ -37,8 +37,6 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.sf.ehcache.CacheManager;
-
 import org.apache.commons.lang.StringUtils;
 import org.fudgemsg.FudgeContext;
 import org.fudgemsg.FudgeField;
@@ -117,6 +115,8 @@ import com.opengamma.util.time.Expiry;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
+import net.sf.ehcache.CacheManager;
+
 /**
  * Utilities for working with data in the Bloomberg schema.
  * <p>
@@ -158,7 +158,7 @@ public final class BloombergDataUtils {
    */
   private static final Map<String, String> RIC_TO_BBG_MAP;
   static {
-    RIC_TO_BBG_MAP = new HashMap<String, String>();
+    RIC_TO_BBG_MAP = new HashMap<>();
     RIC_TO_BBG_MAP.put("EDD", "FD");
     RIC_TO_BBG_MAP.put("EDM", "0D");
     RIC_TO_BBG_MAP.put("EDD", "FD");
@@ -225,16 +225,16 @@ public final class BloombergDataUtils {
     return bloombergTickerPattern;
   }
 
-  public static Collection<NormalizationRuleSet> getDefaultNormalizationRules(final ReferenceDataProvider referenceDataProvider, final CacheManager cacheManager, ExternalScheme bbgScheme) {
+  public static Collection<NormalizationRuleSet> getDefaultNormalizationRules(final ReferenceDataProvider referenceDataProvider, final CacheManager cacheManager, final ExternalScheme bbgScheme) {
     ArgumentChecker.notNull(cacheManager, "cacheManager");
 
-    final Collection<NormalizationRuleSet> returnValue = new ArrayList<NormalizationRuleSet>();
+    final Collection<NormalizationRuleSet> returnValue = new ArrayList<>();
     returnValue.add(StandardRules.getNoNormalization());
 
-    final List<NormalizationRule> openGammaRules = new ArrayList<NormalizationRule>();
+    final List<NormalizationRule> openGammaRules = new ArrayList<>();
 
     // Filter out non-price updates
-    List<String> standardFields = new ArrayList<>(STANDARD_FIELDS_LIST);
+    final List<String> standardFields = new ArrayList<>(STANDARD_FIELDS_LIST);
     standardFields.add(BloombergConstants.EID_LIVE_DATA_FIELD);
     standardFields.add(BloombergConstants.EID_DATA.toString());
     openGammaRules.add(new FieldFilter(standardFields));
@@ -303,7 +303,7 @@ public final class BloombergDataUtils {
     final BloombergFixedRateHistoricalTimeSeriesNormalizer div100 = new BloombergFixedRateHistoricalTimeSeriesNormalizer(new HistoricalTimeSeriesAdjustment.DivideBy(100.0));
     fieldAdjustmentMap.addFieldAdjustment(MarketDataRequirementNames.SETTLE_PRICE, null, BloombergConstants.BBG_FIELD_SETTLE_PRICE, rateNormalizer);
     fieldAdjustmentMap.addFieldAdjustment(MarketDataRequirementNames.MARKET_VALUE, null, BloombergConstants.BBG_FIELD_LAST_PRICE, rateNormalizer);
-    fieldAdjustmentMap.addFieldAdjustment(BloombergConstants.BBG_FIELD_LAST_PRICE, null, BloombergConstants.BBG_FIELD_LAST_PRICE, rateNormalizer); 
+    fieldAdjustmentMap.addFieldAdjustment(BloombergConstants.BBG_FIELD_LAST_PRICE, null, BloombergConstants.BBG_FIELD_LAST_PRICE, rateNormalizer);
     fieldAdjustmentMap.addFieldAdjustment(MarketDataRequirementNames.VOLUME, null, BloombergConstants.BBG_FIELD_VOLUME, null);
     fieldAdjustmentMap.addFieldAdjustment(MarketDataRequirementNames.YIELD_YIELD_TO_MATURITY_MID, null, BloombergConstants.BBG_FIELD_YIELD_TO_MATURITY_MID, null);
     fieldAdjustmentMap.addFieldAdjustment(MarketDataRequirementNames.DIVIDEND_YIELD, null, BloombergConstants.BBG_FIELD_DIVIDEND_YIELD, div100);
@@ -390,7 +390,7 @@ public final class BloombergDataUtils {
       //return date.calendar().getTime();
     } else if (datatype == Datatype.SEQUENCE) {
       final int numValues = valueElement.numValues();
-      final List<FudgeMsg> valueAsList = new ArrayList<FudgeMsg>(numValues);
+      final List<FudgeMsg> valueAsList = new ArrayList<>(numValues);
       for (int i = 0; i < numValues; i++) {
         final Element sequenceElem = valueElement.getValueAsElement(i);
         final FudgeMsg sequenceElemAsMsg = parseElement(sequenceElem);
@@ -412,8 +412,8 @@ public final class BloombergDataUtils {
   }
 
   public static Set<String> getIndexMembers(final ReferenceDataProvider refDataProvider, final String indexTicker) {
-    final Set<String> result = new TreeSet<String>();
-    final Set<String> bbgFields = new HashSet<String>();
+    final Set<String> result = new TreeSet<>();
+    final Set<String> bbgFields = new HashSet<>();
     bbgFields.add("INDX_MEMBERS");
     bbgFields.add("INDX_MEMBERS2");
     bbgFields.add("INDX_MEMBERS3");
@@ -450,7 +450,7 @@ public final class BloombergDataUtils {
 
   public static Set<ExternalId> getOptionChain(final ReferenceDataProvider refDataProvider, final String securityID) {
     ArgumentChecker.notNull(securityID, "security name");
-    final Set<ExternalId> result = new TreeSet<ExternalId>();
+    final Set<ExternalId> result = new TreeSet<>();
     final FudgeMsg fieldData = refDataProvider.getReferenceData(Collections.singleton(securityID), Collections.singleton(FIELD_OPT_CHAIN)).get(securityID);
     if (fieldData == null) {
       LOGGER.info("Reference data for security {} cannot be null", securityID);
@@ -470,7 +470,7 @@ public final class BloombergDataUtils {
   /**
    * Get the future chain for a security. There may be futures on multiple exchanges - in general need to restrict to exchanges using the same currency. Equities: restrict to One Chicago futures with
    * a lead market maker (e.g. AAPL=G3 OC Equity)
-   * 
+   *
    * @param refDataProvider the reference data provider
    * @param securityID the security
    * @return the (ordered)
@@ -500,12 +500,12 @@ public final class BloombergDataUtils {
 
   /**
    * Checks if the specified field contains valid data.
-   * 
+   *
    * @param name the field name, not null
    * @return true if the field is valid
    */
   public static boolean isValidField(final String name) {
-    return ON_OFF_FIELDS.contains(name) || (StringUtils.isNotBlank(name) && !name.equalsIgnoreCase("N.A"));
+    return ON_OFF_FIELDS.contains(name) || StringUtils.isNotBlank(name) && !name.equalsIgnoreCase("N.A");
   }
 
   public static ExternalIdBundleWithDates parseIdentifiers(final FudgeMsg fieldData, final String firstTradeDateField, final String lastTradeDateField) {
@@ -518,7 +518,7 @@ public final class BloombergDataUtils {
     final String validFromStr = firstTradeDateField != null ? fieldData.getString(firstTradeDateField) : null;
     final String validToStr = lastTradeDateField != null ? fieldData.getString(lastTradeDateField) : null;
 
-    final Set<ExternalIdWithDates> identifiers = new HashSet<ExternalIdWithDates>();
+    final Set<ExternalIdWithDates> identifiers = new HashSet<>();
     if (isValidField(bbgUnique)) {
       final ExternalId buid = ExternalSchemes.bloombergBuidSecurityId(bbgUnique);
       identifiers.add(ExternalIdWithDates.of(buid, null, null));
@@ -564,7 +564,7 @@ public final class BloombergDataUtils {
    */
   public static ExternalIdBundleWithDates addTwoDigitYearCode(final ExternalIdBundleWithDates bundleWithDates) {
     ArgumentChecker.notNull(bundleWithDates, "bundleWithDates");
-    final Set<ExternalIdWithDates> identifiers = new HashSet<ExternalIdWithDates>();
+    final Set<ExternalIdWithDates> identifiers = new HashSet<>();
     for (final ExternalIdWithDates identifierWithDates : bundleWithDates) {
       final ExternalId identifier = identifierWithDates.toExternalId();
       final String identifierValue = identifier.getValue();
@@ -613,14 +613,14 @@ public final class BloombergDataUtils {
 
   /**
    * Given a position master, it pulls the current positions identifier bundles.
-   * 
+   *
    * @param positionMaster the position master, not-null
    * @return a set of bundles of current positions
    */
   public static Set<ExternalIdBundle> getCurrentIdentifiers(final PositionMaster positionMaster) {
     ArgumentChecker.notNull(positionMaster, "positionMaster");
     final PositionSearchRequest searchRequest = new PositionSearchRequest();
-    final Set<ExternalIdBundle> securities = new HashSet<ExternalIdBundle>();
+    final Set<ExternalIdBundle> securities = new HashSet<>();
     for (final PositionDocument doc : PositionSearchIterator.iterable(positionMaster, searchRequest)) {
       securities.add(doc.getPosition().getSecurityLink().getExternalId()); // TODO: doesn't work if linked by object id
     }
@@ -629,7 +629,7 @@ public final class BloombergDataUtils {
 
   /**
    * Removes duplicate whitespace from the specified field.
-   * 
+   *
    * @param field the field name, not null
    * @param replacement the replacement string, not null
    * @return the stripped field, not null
@@ -670,7 +670,7 @@ public final class BloombergDataUtils {
 
   /**
    * Convert bundles to preferred bloomberg keys. Where possible these keys will be BUIDs [BBG-87]
-   * 
+   *
    * @param identifiers the collection of bundles, not null
    * @param refDataProvider the ReferenceDataProvider to use to resolve bundles not containing BUIDs, not null
    * @return BiMap of bloomberg key (hopefully a buid key) to bundle, not null
@@ -679,7 +679,7 @@ public final class BloombergDataUtils {
     ArgumentChecker.notNull(identifiers, "identifiers");
     ArgumentChecker.notNull(refDataProvider, "refDataProvider");
 
-    final Set<String> nonBuids = new HashSet<String>();
+    final Set<String> nonBuids = new HashSet<>();
     final BiMap<String, ExternalIdBundle> bundle2Bbgkey = HashBiMap.create();
     for (final ExternalIdBundle identifierBundle : identifiers) {
       final ExternalId preferredIdentifier = BloombergDomainIdentifierResolver.resolvePreferredIdentifier(identifierBundle);
@@ -717,7 +717,7 @@ public final class BloombergDataUtils {
 
   /**
    * Splits a ticker at the market sector, returning a pair of the ticker excluding the market sector and the market sector itself.
-   * 
+   *
    * @param ticker the ticker, not null
    * @return a pair of the ticker excluding the market sector, and the market sector, not null
    */
@@ -745,7 +745,7 @@ public final class BloombergDataUtils {
 
   /**
    * Generates an equity option ticker from details about the option.
-   * 
+   *
    * @param underlyingTicker the ticker of the underlying equity, not null
    * @param expiry the option expiry, not null
    * @param optionType the option type, not null
@@ -756,11 +756,11 @@ public final class BloombergDataUtils {
     ArgumentChecker.notNull(underlyingTicker, "underlyingTicker");
     ArgumentChecker.notNull(expiry, "expiry");
     ArgumentChecker.notNull(optionType, "optionType");
-    Pair<String, String> tickerMarketSectorPair = splitTickerAtMarketSector(underlyingTicker);
-    DateTimeFormatter expiryFormatter = DateTimeFormatter.ofPattern("MM/dd/yy");
-    DecimalFormat strikeFormat = new DecimalFormat("0.###");
-    String strikeString = strikeFormat.format(strike);
-    StringBuilder sb = new StringBuilder();
+    final Pair<String, String> tickerMarketSectorPair = splitTickerAtMarketSector(underlyingTicker);
+    final DateTimeFormatter expiryFormatter = DateTimeFormatter.ofPattern("MM/dd/yy");
+    final DecimalFormat strikeFormat = new DecimalFormat("0.###");
+    final String strikeString = strikeFormat.format(strike);
+    final StringBuilder sb = new StringBuilder();
     sb.append(tickerMarketSectorPair.getFirst())
         .append(' ')
         .append(expiry.getExpiry().format(expiryFormatter))
@@ -792,7 +792,7 @@ public final class BloombergDataUtils {
       return null;
     }
     ric = ric.trim().toUpperCase();
-    final String front = ric.substring(0, (Character.isDigit(ric.charAt(0)) ? 4 : 3));
+    final String front = ric.substring(0, Character.isDigit(ric.charAt(0)) ? 4 : 3);
     if (RIC_TO_BBG_MAP.containsKey(front)) {
       return RIC_TO_BBG_MAP.get(front);
     } else {
@@ -800,9 +800,9 @@ public final class BloombergDataUtils {
     }
   }
 
-  public static ExternalId futureBundleToGenericFutureTicker(ExternalIdBundle bundle, ZonedDateTime now, OffsetTime futureExpiryTime, ZoneId futureExpiryTimeZone) {
-    ZonedDateTime nextExpiry = now.toLocalDate().with(MONTHLY_EXPIRY_ADJUSTER).atTime(now.toLocalTime()).atZone(now.getZone());
-    ExternalId bbgTicker = bundle.getExternalId(ExternalSchemes.BLOOMBERG_TICKER);
+  public static ExternalId futureBundleToGenericFutureTicker(final ExternalIdBundle bundle, final ZonedDateTime now, final OffsetTime futureExpiryTime, final ZoneId futureExpiryTimeZone) {
+    final ZonedDateTime nextExpiry = now.toLocalDate().with(MONTHLY_EXPIRY_ADJUSTER).atTime(now.toLocalTime()).atZone(now.getZone());
+    final ExternalId bbgTicker = bundle.getExternalId(ExternalSchemes.BLOOMBERG_TICKER);
     if (bbgTicker == null) {
       throw new OpenGammaRuntimeException("Could not find a Bloomberg Ticker in the supplied bundle " + bundle.toString());
     }
@@ -819,24 +819,24 @@ public final class BloombergDataUtils {
         year = Integer.parseInt(code.substring(3, 4));
 
         final int thisYear = now.getYear();
-        if ((thisYear % 10) > year) {
-          year = ((thisYear / 10) * 10) + 10 + year;
-        } else if ((thisYear % 10) == year) {
+        if (thisYear % 10 > year) {
+          year = thisYear / 10 * 10 + 10 + year;
+        } else if (thisYear % 10 == year) {
           // This code assumes that the code is for this year, so constructs a trial date using the year and month and adjusts it forward to the expiry
           // note we're not taking into account exchange closing time here.
           final Month month = MONTH_CODE.inverse().get(monthCode);
           if (month == null) {
             throw new OpenGammaRuntimeException("Invalid month code " + monthCode);
           }
-          LocalDate nextExpiryIfThisYear = LocalDate.of((((thisYear / 10) * 10) + year), month, 1).with(MONTHLY_EXPIRY_ADJUSTER);
-          ZonedDateTime nextExpiryDateTimeIfThisYear = nextExpiryIfThisYear.atTime(futureExpiryTime).atZoneSimilarLocal(futureExpiryTimeZone);
+          final LocalDate nextExpiryIfThisYear = LocalDate.of(thisYear / 10 * 10 + year, month, 1).with(MONTHLY_EXPIRY_ADJUSTER);
+          final ZonedDateTime nextExpiryDateTimeIfThisYear = nextExpiryIfThisYear.atTime(futureExpiryTime).atZoneSimilarLocal(futureExpiryTimeZone);
           if (now.isAfter(nextExpiryDateTimeIfThisYear)) {
-            year = ((thisYear / 10) * 10) + 10 + year;
+            year = thisYear / 10 * 10 + 10 + year;
           } else {
-            year = ((thisYear / 10) * 10) + year;
+            year = thisYear / 10 * 10 + year;
           }
         } else {
-          year = ((thisYear / 10) * 10) + year;
+          year = thisYear / 10 * 10 + year;
         }
       } else if (code.length() > 5 && code.charAt(5) == ' ') {
         // five letter futures code
@@ -856,11 +856,11 @@ public final class BloombergDataUtils {
       // phew.
       // now we generate the expiry of the future from the code:
       // Again, note that we're not taking into account exchange trading hours.
-      LocalDate expiryDate = LocalDate.of(year, MONTH_CODE.inverse().get(monthCode), 1).with(MONTHLY_EXPIRY_ADJUSTER);
-      ZonedDateTime expiry = expiryDate.atTime(futureExpiryTime).atZoneSimilarLocal(futureExpiryTimeZone);
-      int quarters = (int) nextExpiry.until(expiry, MONTHS) / 3;
-      int genericFutureNumber = quarters + 1;
-      StringBuilder sb = new StringBuilder();
+      final LocalDate expiryDate = LocalDate.of(year, MONTH_CODE.inverse().get(monthCode), 1).with(MONTHLY_EXPIRY_ADJUSTER);
+      final ZonedDateTime expiry = expiryDate.atTime(futureExpiryTime).atZoneSimilarLocal(futureExpiryTimeZone);
+      final int quarters = (int) nextExpiry.until(expiry, MONTHS) / 3;
+      final int genericFutureNumber = quarters + 1;
+      final StringBuilder sb = new StringBuilder();
       sb.append(typeCode);
       sb.append(genericFutureNumber);
       sb.append(" ");
@@ -875,25 +875,28 @@ public final class BloombergDataUtils {
   //-------------------------------------------------------------------------
   /**
    * Resolves the data provider name.
-   * 
+   *
    * @param dataProvider the data provider, null returns the unknown value
    * @return the resolver data provider, not null
    */
   public static String resolveDataProvider(final String dataProvider) {
-    return (dataProvider == null || dataProvider.equalsIgnoreCase(DATA_PROVIDER_UNKNOWN) || dataProvider.equalsIgnoreCase(DEFAULT_DATA_PROVIDER) ? DEFAULT_DATA_PROVIDER : dataProvider);
+    return dataProvider == null || dataProvider.equalsIgnoreCase(DATA_PROVIDER_UNKNOWN) || dataProvider.equalsIgnoreCase(DEFAULT_DATA_PROVIDER) ? DEFAULT_DATA_PROVIDER : dataProvider;
   }
 
   /**
    * Resolves the data provider to provide an observation time.
-   * 
+   *
    * @param dataProvider the data provider, null returns the unknown value
    * @return the corresponding observation time for the given data provider
    */
-  public static String resolveObservationTime(String dataProvider) {
+  public static String resolveObservationTime(final String dataProvider) {
+    final String dataProviderToUse;
     if (dataProvider == null || dataProvider.equalsIgnoreCase(DATA_PROVIDER_UNKNOWN) || dataProvider.equalsIgnoreCase(DEFAULT_DATA_PROVIDER)) {
-      dataProvider = DEFAULT_DATA_PROVIDER;
+      dataProviderToUse = DEFAULT_DATA_PROVIDER;
+    } else {
+      dataProviderToUse = dataProvider;
     }
-    return OBSERVATION_TIME_MAP.get(dataProvider);
+    return OBSERVATION_TIME_MAP.get(dataProviderToUse);
 
   }
 
@@ -911,7 +914,7 @@ public final class BloombergDataUtils {
 
   /**
    * Returns future month code for a given month
-   * 
+   *
    * @param month the month of year, not null
    * @return the future month code, null if not available
    */

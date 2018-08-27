@@ -40,19 +40,19 @@ public class RegionSearchResult extends AbstractSearchResult<RegionDocument> {
 
   /**
    * Creates an instance from a collection of documents.
-   * 
+   *
    * @param coll  the collection of documents to add, not null
    */
-  public RegionSearchResult(Collection<RegionDocument> coll) {
+  public RegionSearchResult(final Collection<RegionDocument> coll) {
     super(coll);
   }
 
   /**
    * Creates an instance specifying the version-correction searched for.
-   * 
+   *
    * @param versionCorrection  the version-correction of the data, not null
    */
-  public RegionSearchResult(VersionCorrection versionCorrection) {
+  public RegionSearchResult(final VersionCorrection versionCorrection) {
     setVersionCorrection(versionCorrection);
   }
 
@@ -64,9 +64,9 @@ public class RegionSearchResult extends AbstractSearchResult<RegionDocument> {
    * @return the regions, not null
    */
   public List<ManageableRegion> getRegions() {
-    List<ManageableRegion> result = new ArrayList<ManageableRegion>();
+    final List<ManageableRegion> result = new ArrayList<>();
     if (getDocuments() != null) {
-      for (RegionDocument doc : getDocuments()) {
+      for (final RegionDocument doc : getDocuments()) {
         result.add(doc.getRegion());
       }
     }

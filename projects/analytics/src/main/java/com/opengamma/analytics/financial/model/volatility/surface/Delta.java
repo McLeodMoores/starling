@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.surface;
@@ -30,7 +30,7 @@ public class Delta implements StrikeType {
 
 
   @Override
-  public Delta with(double value) {
+  public Delta with(final double value) {
     return new Delta(value);
   }
 

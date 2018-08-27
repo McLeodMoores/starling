@@ -5,7 +5,6 @@
  */
 package com.opengamma.integration.regression;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -53,55 +52,55 @@ public final class CalculationResultKey implements ImmutableBean, Comparable<Cal
   @PropertyDefinition
   private final ObjectId _targetId;
 
-  public static CalculationResultKey forPosition(String calcConfigName,
-                                                 String valueName,
-                                                 ValueProperties properties,
-                                                 ObjectId positionId) {
+  public static CalculationResultKey forPosition(final String calcConfigName,
+                                                 final String valueName,
+                                                 final ValueProperties properties,
+                                                 final ObjectId positionId) {
     ArgumentChecker.notNull(positionId, "positionId");
     return new CalculationResultKey(calcConfigName, valueName, properties, null, positionId);
   }
 
-  public static CalculationResultKey forCurrency(String calcConfigName,
-                                                 String valueName,
-                                                 ValueProperties properties,
-                                                 ObjectId currencyId) {
+  public static CalculationResultKey forCurrency(final String calcConfigName,
+                                                 final String valueName,
+                                                 final ValueProperties properties,
+                                                 final ObjectId currencyId) {
     ArgumentChecker.notNull(currencyId, "currencyId");
     return new CalculationResultKey(calcConfigName, valueName, properties, null, currencyId);
   }
 
-  public static CalculationResultKey forPositionWithParentNode(String calcConfigName,
-                                                               String valueName,
-                                                               ValueProperties properties,
-                                                               List<String> path,
-                                                               ObjectId positionId) {
+  public static CalculationResultKey forPositionWithParentNode(final String calcConfigName,
+                                                               final String valueName,
+                                                               final ValueProperties properties,
+                                                               final List<String> path,
+                                                               final ObjectId positionId) {
     ArgumentChecker.notNull(path, "path");
     ArgumentChecker.notNull(positionId, "positionId");
     return new CalculationResultKey(calcConfigName, valueName, properties, path, positionId);
   }
 
-  public static CalculationResultKey forNode(String calcConfigName,
-                                             String valueName,
-                                             ValueProperties properties,
-                                             List<String> path) {
+  public static CalculationResultKey forNode(final String calcConfigName,
+                                             final String valueName,
+                                             final ValueProperties properties,
+                                             final List<String> path) {
     ArgumentChecker.notNull(path, "path");
     return new CalculationResultKey(calcConfigName, valueName, properties, path, null);
   }
 
-  public static CalculationResultKey forTrade(String calcConfigName,
-                                              String valueName,
-                                              ValueProperties properties,
-                                              ObjectId tradeId) {
+  public static CalculationResultKey forTrade(final String calcConfigName,
+                                              final String valueName,
+                                              final ValueProperties properties,
+                                              final ObjectId tradeId) {
     ArgumentChecker.notNull(tradeId, "tradeId");
     return new CalculationResultKey(calcConfigName, valueName, properties, null, tradeId);
   }
 
   // TODO can't let this be regenerated because of a joda beans bug handling nullable lists
   @ImmutableConstructor
-  private CalculationResultKey(String calcConfigName,
-                              String valueName,
-                              ValueProperties properties,
-                              List<String> path,
-                              ObjectId targetId) {
+  private CalculationResultKey(final String calcConfigName,
+                              final String valueName,
+                              final ValueProperties properties,
+                              final List<String> path,
+                              final ObjectId targetId) {
     ArgumentChecker.notNull(calcConfigName, "calcConfigName");
     ArgumentChecker.notNull(valueName, "valueName");
     ArgumentChecker.notNull(properties, "properties");
@@ -118,7 +117,7 @@ public final class CalculationResultKey implements ImmutableBean, Comparable<Cal
   }
 
   @Override
-  public int compareTo(CalculationResultKey other) {
+  public int compareTo(final CalculationResultKey other) {
     return new CompareToBuilder()
         .append(getCalcConfigName(), other.getCalcConfigName())
         .append(getTargetId(), other.getTargetId())
@@ -128,7 +127,7 @@ public final class CalculationResultKey implements ImmutableBean, Comparable<Cal
         .toComparison();
   }
 
-  private static int comparePaths(List<String> path1, List<String> path2) {
+  private static int comparePaths(final List<String> path1, final List<String> path2) {
     if (path1 == null && path2 == null) {
       return 0;
     }
@@ -145,9 +144,9 @@ public final class CalculationResultKey implements ImmutableBean, Comparable<Cal
     } else if (path2.isEmpty()) {
       return 1;
     } else {
-      String s1 = path1.get(0);
-      String s2 = path2.get(0);
-      int cmp = s1.compareTo(s2);
+      final String s1 = path1.get(0);
+      final String s2 = path2.get(0);
+      final int cmp = s1.compareTo(s2);
       if (cmp != 0) {
         return cmp;
       } else {

@@ -21,12 +21,12 @@ import com.opengamma.timeseries.date.localdate.ImmutableLocalDateDoubleTimeSerie
 public class ImmutableLocalDateDoubleTimeSeriesFudgeBuilder implements FudgeBuilder<ImmutableLocalDateDoubleTimeSeries> {
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, ImmutableLocalDateDoubleTimeSeries object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final ImmutableLocalDateDoubleTimeSeries object) {
     return DoubleTimeSeriesFudgeBuilder.INSTANCE.buildMessage(serializer, object);
   }
 
   @Override
-  public ImmutableLocalDateDoubleTimeSeries buildObject(FudgeDeserializer deserializer, FudgeMsg message) {
+  public ImmutableLocalDateDoubleTimeSeries buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
     return (ImmutableLocalDateDoubleTimeSeries) DoubleTimeSeriesFudgeBuilder.INSTANCE.buildObject(deserializer, message);
   }
 

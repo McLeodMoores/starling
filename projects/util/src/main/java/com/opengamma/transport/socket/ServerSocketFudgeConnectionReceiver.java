@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.transport.socket;
@@ -74,7 +74,7 @@ public class ServerSocketFudgeConnectionReceiver extends AbstractServerSocketPro
   }
 
   @Override
-  protected void socketOpened(Socket socket) {
+  protected void socketOpened(final Socket socket) {
     ArgumentChecker.notNull(socket, "socket");
     LOGGER.info("Opened socket to remote side {}", socket.getRemoteSocketAddress());
     InputStream is;
@@ -82,7 +82,7 @@ public class ServerSocketFudgeConnectionReceiver extends AbstractServerSocketPro
     try {
       is = socket.getInputStream();
       os = socket.getOutputStream();
-    } catch (IOException e) {
+    } catch (final IOException e) {
       LOGGER.warn("Unable to open InputStream and OutputStream for socket {}", new Object[] {socket}, e);
       return;
     }
@@ -210,10 +210,10 @@ public class ServerSocketFudgeConnectionReceiver extends AbstractServerSocketPro
         }
 
         @Override
-        public void send(FudgeMsg message) {
+        public void send(final FudgeMsg message) {
           try {
             _writer.write(message);
-          } catch (FudgeRuntimeIOException e) {
+          } catch (final FudgeRuntimeIOException e) {
             terminateWithError("Unable to write message to underlying stream - terminating connection", e.getCause());
             throw e;
           }
@@ -233,7 +233,7 @@ public class ServerSocketFudgeConnectionReceiver extends AbstractServerSocketPro
         }
 
         @Override
-        public void setFudgeMessageReceiver(FudgeMessageReceiver receiver) {
+        public void setFudgeMessageReceiver(final FudgeMessageReceiver receiver) {
           _receiver = receiver;
         }
 
@@ -262,7 +262,7 @@ public class ServerSocketFudgeConnectionReceiver extends AbstractServerSocketPro
       final FudgeMsgEnvelope envelope;
       try {
         envelope = _reader.nextMessageEnvelope();
-      } catch (FudgeRuntimeIOException e) {
+      } catch (final FudgeRuntimeIOException e) {
         terminateWithError("Unable to read message from underlying stream - terminating connection", e.getCause());
         return;
       }
@@ -286,7 +286,7 @@ public class ServerSocketFudgeConnectionReceiver extends AbstractServerSocketPro
       } else {
         try {
           getUnderlying().connectionReceived(getFudgeContext(), envelope, _connection);
-        } catch (Exception e) {
+        } catch (final Exception e) {
           LOGGER.warn("Unable to dispatch connection to receiver", e);
         }
       }
@@ -295,7 +295,7 @@ public class ServerSocketFudgeConnectionReceiver extends AbstractServerSocketPro
     private void dispatchReceiver(final FudgeMessageReceiver receiver, final FudgeMsgEnvelope envelope) {
       try {
         receiver.messageReceived(getFudgeContext(), envelope);
-      } catch (Exception e) {
+      } catch (final Exception e) {
         LOGGER.warn("Unable to dispatch message to receiver", e);
       }
     }
@@ -324,7 +324,7 @@ public class ServerSocketFudgeConnectionReceiver extends AbstractServerSocketPro
         try {
           LOGGER.debug("Closing socket");
           _socket.close();
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
           LOGGER.warn("Couldn't close socket to release blocked I/O", ex.getMessage());
         }
       }

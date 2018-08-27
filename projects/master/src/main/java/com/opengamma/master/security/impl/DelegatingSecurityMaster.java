@@ -47,7 +47,7 @@ public class DelegatingSecurityMaster extends UniqueIdSchemeDelegator<SecurityMa
    *
    * @param defaultMaster the master to use when no scheme matches, not null
    */
-  public DelegatingSecurityMaster(SecurityMaster defaultMaster) {
+  public DelegatingSecurityMaster(final SecurityMaster defaultMaster) {
     super(defaultMaster);
     _changeManager = defaultMaster.changeManager();
   }
@@ -58,12 +58,12 @@ public class DelegatingSecurityMaster extends UniqueIdSchemeDelegator<SecurityMa
    * @param defaultMaster the master to use when no scheme matches, not null
    * @param schemePrefixToMasterMap  the map of masters by scheme to switch on, not null
    */
-  public DelegatingSecurityMaster(SecurityMaster defaultMaster, Map<String, SecurityMaster> schemePrefixToMasterMap) {
+  public DelegatingSecurityMaster(final SecurityMaster defaultMaster, final Map<String, SecurityMaster> schemePrefixToMasterMap) {
     super(defaultMaster, schemePrefixToMasterMap);
-    AggregatingChangeManager changeManager = new AggregatingChangeManager();
-    
+    final AggregatingChangeManager changeManager = new AggregatingChangeManager();
+
     changeManager.addChangeManager(defaultMaster.changeManager());
-    for (SecurityMaster master : schemePrefixToMasterMap.values()) {
+    for (final SecurityMaster master : schemePrefixToMasterMap.values()) {
       changeManager.addChangeManager(master.changeManager());
     }
     _changeManager = changeManager;
@@ -71,15 +71,15 @@ public class DelegatingSecurityMaster extends UniqueIdSchemeDelegator<SecurityMa
 
   //-------------------------------------------------------------------------
   @Override
-  public SecurityHistoryResult history(SecurityHistoryRequest request) {
+  public SecurityHistoryResult history(final SecurityHistoryRequest request) {
     ArgumentChecker.notNull(request, "request");
     return chooseDelegate(request.getObjectId().getScheme()).history(request);
   }
 
   @Override
-  public SecuritySearchResult search(SecuritySearchRequest request) {
+  public SecuritySearchResult search(final SecuritySearchRequest request) {
     ArgumentChecker.notNull(request, "request");
-    String uniqueIdScheme = request.getUniqueIdScheme();
+    final String uniqueIdScheme = request.getUniqueIdScheme();
     if (uniqueIdScheme == null) {
       return getDefaultDelegate().search(request);
     }
@@ -87,22 +87,22 @@ public class DelegatingSecurityMaster extends UniqueIdSchemeDelegator<SecurityMa
   }
 
   @Override
-  public SecurityDocument get(UniqueId uniqueId) {
+  public SecurityDocument get(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     return chooseDelegate(uniqueId.getScheme()).get(uniqueId);
   }
 
   @Override
-  public SecurityDocument get(ObjectIdentifiable objectId, VersionCorrection versionCorrection) {
+  public SecurityDocument get(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     return chooseDelegate(objectId.getObjectId().getScheme()).get(objectId, versionCorrection);
   }
 
   @Override
-  public SecurityDocument add(SecurityDocument document) {
+  public SecurityDocument add(final SecurityDocument document) {
     ArgumentChecker.notNull(document, "document");
-    UniqueId uniqueId = document.getUniqueId();
+    final UniqueId uniqueId = document.getUniqueId();
     if (uniqueId == null) {
       return getDefaultDelegate().add(document);
     }
@@ -110,19 +110,19 @@ public class DelegatingSecurityMaster extends UniqueIdSchemeDelegator<SecurityMa
   }
 
   @Override
-  public SecurityDocument update(SecurityDocument document) {
+  public SecurityDocument update(final SecurityDocument document) {
     ArgumentChecker.notNull(document, "document");
     return chooseDelegate(document.getObjectId().getScheme()).update(document);
   }
 
   @Override
-  public void remove(ObjectIdentifiable objectIdentifiable) {
+  public void remove(final ObjectIdentifiable objectIdentifiable) {
     ArgumentChecker.notNull(objectIdentifiable, "objectIdentifiable");
     chooseDelegate(objectIdentifiable.getObjectId().getScheme()).remove(objectIdentifiable);
   }
 
   @Override
-  public SecurityDocument correct(SecurityDocument document) {
+  public SecurityDocument correct(final SecurityDocument document) {
     ArgumentChecker.notNull(document, "document");
     return chooseDelegate(document.getObjectId().getScheme()).correct(document);
   }
@@ -133,60 +133,60 @@ public class DelegatingSecurityMaster extends UniqueIdSchemeDelegator<SecurityMa
   }
 
   @Override
-  public UniqueId addVersion(ObjectIdentifiable objectId, SecurityDocument documentToAdd) {
+  public UniqueId addVersion(final ObjectIdentifiable objectId, final SecurityDocument documentToAdd) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(documentToAdd, "documentToAdd");
     return chooseDelegate(objectId.getObjectId().getScheme()).addVersion(objectId, documentToAdd);
   }
 
   @Override
-  public List<UniqueId> replaceVersion(UniqueId uniqueId, List<SecurityDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersion(final UniqueId uniqueId, final List<SecurityDocument> replacementDocuments) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
     return chooseDelegate(uniqueId.getScheme()).replaceVersion(uniqueId, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceAllVersions(ObjectIdentifiable objectId, List<SecurityDocument> replacementDocuments) {
+  public List<UniqueId> replaceAllVersions(final ObjectIdentifiable objectId, final List<SecurityDocument> replacementDocuments) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
     return chooseDelegate(objectId.getObjectId().getScheme()).replaceAllVersions(objectId, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceVersions(ObjectIdentifiable objectId, List<SecurityDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersions(final ObjectIdentifiable objectId, final List<SecurityDocument> replacementDocuments) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
     return chooseDelegate(objectId.getObjectId().getScheme()).replaceVersions(objectId, replacementDocuments);
   }
 
   @Override
-  public UniqueId replaceVersion(SecurityDocument replacementDocument) {
+  public UniqueId replaceVersion(final SecurityDocument replacementDocument) {
     ArgumentChecker.notNull(replacementDocument, "replacementDocument");
     ArgumentChecker.notNull(replacementDocument.getObjectId(), "replacementDocument.getObjectId");
     return chooseDelegate(replacementDocument.getObjectId().getScheme()).replaceVersion(replacementDocument);
   }
 
   @Override
-  public void removeVersion(UniqueId uniqueId) {
+  public void removeVersion(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     chooseDelegate(uniqueId.getScheme()).removeVersion(uniqueId);
   }
-    
+
   @Override
-  public Map<UniqueId, SecurityDocument> get(Collection<UniqueId> uniqueIds) {
-    Map<UniqueId, SecurityDocument> resultMap = newHashMap();
-    for (UniqueId uniqueId : uniqueIds) {
-      SecurityDocument doc = get(uniqueId);
+  public Map<UniqueId, SecurityDocument> get(final Collection<UniqueId> uniqueIds) {
+    final Map<UniqueId, SecurityDocument> resultMap = newHashMap();
+    for (final UniqueId uniqueId : uniqueIds) {
+      final SecurityDocument doc = get(uniqueId);
       resultMap.put(uniqueId, doc);
     }
     return resultMap;
   }
 
   @Override
-  public SecurityMetaDataResult metaData(SecurityMetaDataRequest request) {
+  public SecurityMetaDataResult metaData(final SecurityMetaDataRequest request) {
     ArgumentChecker.notNull(request, "request");
-    String uniqueIdScheme = request.getUniqueIdScheme();
+    final String uniqueIdScheme = request.getUniqueIdScheme();
     if (uniqueIdScheme == null) {
       return getDefaultDelegate().metaData(request);
     }

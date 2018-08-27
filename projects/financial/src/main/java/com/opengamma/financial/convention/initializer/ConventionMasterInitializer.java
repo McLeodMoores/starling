@@ -39,7 +39,7 @@ public abstract class ConventionMasterInitializer {
 
   /**
    * Initializes the specified master.
-   * 
+   *
    * @param master  the master to initialize, not null
    * @deprecated use the init() that also takes a SecurityMaster
    */
@@ -54,28 +54,28 @@ public abstract class ConventionMasterInitializer {
    * @param master  the master to initialize, not null
    * @param securityMaster the security master, not null
    */
-  public void init(ConventionMaster master, SecurityMaster securityMaster) {
+  public void init(final ConventionMaster master, final SecurityMaster securityMaster) {
     init(master);
   }
 
   /**
    * Adds a convention to the specified master.
-   * 
+   *
    * @param master  the master to initialize, not null
    * @param convention  the convention to add, null ignored
    */
-  protected void addConvention(ConventionMaster master, ManageableConvention convention) {
+  protected void addConvention(final ConventionMaster master, final ManageableConvention convention) {
     if (convention != null) {
-      ConventionSearchRequest request = new ConventionSearchRequest();
+      final ConventionSearchRequest request = new ConventionSearchRequest();
       request.setName(convention.getName());
-      ConventionSearchResult result = master.search(request);
+      final ConventionSearchResult result = master.search(request);
       switch (result.getDocuments().size()) {
         case 0:
           master.add(new ConventionDocument(convention));
           break;
         case 1:
           if (JodaBeanUtils.equalIgnoring(convention, result.getFirstConvention(), ManageableConvention.meta().uniqueId()) == false) {
-            ConventionDocument doc = result.getFirstDocument();
+            final ConventionDocument doc = result.getFirstDocument();
             doc.setConvention(convention);
             master.update(doc);
           }
@@ -83,7 +83,7 @@ public abstract class ConventionMasterInitializer {
         default:
           // these are supposed to be unique by name in the database
           LOGGER.warn("Multiple conventions with the same name in database: " + convention.getName());
-          for (ManageableConvention similar : result.getConventions()) {
+          for (final ManageableConvention similar : result.getConventions()) {
             if (JodaBeanUtils.equalIgnoring(convention, similar, ManageableConvention.meta().uniqueId())) {
               return;  // already in database
             }
@@ -94,7 +94,7 @@ public abstract class ConventionMasterInitializer {
     }
   }
 
-  protected void addSecurity(SecurityMaster securityMaster, ManageableSecurity security) {
+  protected void addSecurity(final SecurityMaster securityMaster, final ManageableSecurity security) {
     if (securityMaster == null) {
       LOGGER.warn("Tried to add a security to aid convention lookup but no security master set: " + security.getName());
       return;

@@ -22,7 +22,7 @@ import com.opengamma.master.security.SecuritySearchResult;
 
 /**
  * A {@link SecurityMaster} which delegates its calls to a list of underlying {@link SecurityMaster}s.
- * 
+ *
  * This class extends {@link ChangeProvidingCombinedMaster} to implement methods specific to the {@link SecurityMaster}.
  */
 public class CombinedSecurityMaster extends ChangeProvidingCombinedMaster<SecurityDocument, SecurityMaster> implements SecurityMaster {
@@ -40,15 +40,15 @@ public class CombinedSecurityMaster extends ChangeProvidingCombinedMaster<Securi
   public SecuritySearchResult search(final SecuritySearchRequest overallRequest) {
     final SecuritySearchResult overallResult = new SecuritySearchResult();
     pagedSearch(new SecuritySearchStrategy() {
-      
+
       @Override
-      public AbstractDocumentsResult<SecurityDocument> search(SecurityMaster master, SecuritySearchRequest searchRequest) {
-        SecuritySearchResult masterResult = master.search(searchRequest);
+      public AbstractDocumentsResult<SecurityDocument> search(final SecurityMaster master, final SecuritySearchRequest searchRequest) {
+        final SecuritySearchResult masterResult = master.search(searchRequest);
         overallResult.setVersionCorrection(masterResult.getVersionCorrection());
         return masterResult;
       }
     }, overallResult, overallRequest);
-    
+
 
     return overallResult;
   }
@@ -58,8 +58,8 @@ public class CombinedSecurityMaster extends ChangeProvidingCombinedMaster<Securi
    */
   private interface SecuritySearchStrategy extends SearchStrategy<SecurityDocument, SecurityMaster, SecuritySearchRequest> { }
 
-  
-  
+
+
   /**
    * Callback interface for the search operation to sort, filter and process results.
    */
@@ -68,8 +68,8 @@ public class CombinedSecurityMaster extends ChangeProvidingCombinedMaster<Securi
 
   public void search(final SecuritySearchRequest request, final SearchCallback callback) {
     // TODO: parallel operation of any search requests
-    List<SecuritySearchResult> results = Lists.newArrayList();
-    for (SecurityMaster master : getMasterList()) {
+    final List<SecuritySearchResult> results = Lists.newArrayList();
+    for (final SecurityMaster master : getMasterList()) {
       results.add(master.search(request));
     }
     search(results, callback);
@@ -81,12 +81,12 @@ public class CombinedSecurityMaster extends ChangeProvidingCombinedMaster<Securi
     if (master != null) {
       return master.history(request);
     }
-    return (new Try<SecurityHistoryResult>() {
+    return new Try<SecurityHistoryResult>() {
       @Override
       public SecurityHistoryResult tryMaster(final SecurityMaster master) {
         return master.history(request);
       }
-    }).each(request.getObjectId().getScheme());
+    }.each(request.getObjectId().getScheme());
   }
 
 }

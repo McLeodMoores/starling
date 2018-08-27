@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.tree;
@@ -9,12 +9,12 @@ import com.google.common.primitives.Doubles;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- *  The payoff of European exchange-one-asset-for-another option is max(Q1 * S1 - Q2 * S2, 0) at expiration, 
+ *  The payoff of European exchange-one-asset-for-another option is max(Q1 * S1 - Q2 * S2, 0) at expiration,
  *  where Q1 is the quantity of asset S1 and Q2 is the quantity of asset S2.
  */
 public class EuropeanExchangeOptionFunctionProvider extends OptionFunctionProvider2D {
-  private double _quantity1;
-  private double _quantity2;
+  private final double _quantity1;
+  private final double _quantity2;
 
   /**
    * @param timeToExpiry Time to expiry
@@ -50,6 +50,7 @@ public class EuropeanExchangeOptionFunctionProvider extends OptionFunctionProvid
     return values;
   }
 
+  @Override
   public double[][] getPayoffAtExpiryTrinomial(final double assetPrice1, final double assetPrice2, final double middleOverDown1, final double middleOverDown2) {
     final int nNodes = 2 * getNumberOfSteps() + 1;
 
@@ -98,14 +99,14 @@ public class EuropeanExchangeOptionFunctionProvider extends OptionFunctionProvid
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_quantity1);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_quantity2);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -115,7 +116,7 @@ public class EuropeanExchangeOptionFunctionProvider extends OptionFunctionProvid
     if (!(obj instanceof EuropeanExchangeOptionFunctionProvider)) {
       return false;
     }
-    EuropeanExchangeOptionFunctionProvider other = (EuropeanExchangeOptionFunctionProvider) obj;
+    final EuropeanExchangeOptionFunctionProvider other = (EuropeanExchangeOptionFunctionProvider) obj;
     if (Double.doubleToLongBits(_quantity1) != Double.doubleToLongBits(other._quantity1)) {
       return false;
     }

@@ -32,7 +32,7 @@ public abstract class ConfigLink<T> implements Link<T> {
    * @param type the type of object being linked to, not null
    * @return a config link, not null
    */
-  public static <C> ConfigLink<C> resolvable(String name, Class<C> type) {
+  public static <C> ConfigLink<C> resolvable(final String name, final Class<C> type) {
     return new ResolvableConfigLink<>(name, type, new ServiceContextConfigLinkResolver<C>());
   }
 
@@ -48,7 +48,7 @@ public abstract class ConfigLink<T> implements Link<T> {
    * VersionCorrectionProvider necessary to resolve, not null
    * @return a config link, not null
    */
-  public static <C> ConfigLink<C> resolvable(String name, Class<C> type, ServiceContext serviceContext) {
+  public static <C> ConfigLink<C> resolvable(final String name, final Class<C> type, final ServiceContext serviceContext) {
     return new ResolvableConfigLink<>(name, type, new ServiceContextConfigLinkResolver<C>(serviceContext));
   }
 
@@ -61,7 +61,7 @@ public abstract class ConfigLink<T> implements Link<T> {
    * @param config the config to embed in the link, not null
    * @return the config link, not null
    */
-  public static <C> ConfigLink<C> resolved(C config) {
+  public static <C> ConfigLink<C> resolved(final C config) {
     return new ResolvedConfigLink<>(config);
   }
 }

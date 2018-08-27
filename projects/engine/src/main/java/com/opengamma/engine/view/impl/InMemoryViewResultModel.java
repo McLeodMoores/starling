@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.view.impl;
@@ -41,8 +41,8 @@ public abstract class InMemoryViewResultModel implements ViewResultModel, Serial
   private Instant _calculationTime;
   private Duration _calculationDuration;
   private VersionCorrection _versionCorrection;
-  private final Map<String, ViewCalculationResultModelImpl> _resultsByConfiguration = new HashMap<String, ViewCalculationResultModelImpl>();
-  private final Map<ComputationTargetSpecification, ViewTargetResultModelImpl> _resultsByTarget = new HashMap<ComputationTargetSpecification, ViewTargetResultModelImpl>();
+  private final Map<String, ViewCalculationResultModelImpl> _resultsByConfiguration = new HashMap<>();
+  private final Map<ComputationTargetSpecification, ViewTargetResultModelImpl> _resultsByTarget = new HashMap<>();
 
   public InMemoryViewResultModel() {
   }
@@ -53,7 +53,7 @@ public abstract class InMemoryViewResultModel implements ViewResultModel, Serial
 
   /**
    * Updates the data held in this model with data from (and about) a delta cycle.
-   * 
+   *
    * @param delta the delta results, not null
    */
   public void update(final ViewResultModel delta) {
@@ -63,15 +63,15 @@ public abstract class InMemoryViewResultModel implements ViewResultModel, Serial
     setCalculationTime(delta.getCalculationTime());
     setCalculationDuration(delta.getCalculationDuration());
     setVersionCorrection(delta.getVersionCorrection());
-    for (String calculationConfiguration : delta.getCalculationConfigurationNames()) {
+    for (final String calculationConfiguration : delta.getCalculationConfigurationNames()) {
       final ViewCalculationResultModel deltaConfigResults = delta.getCalculationResult(calculationConfiguration);
       ViewCalculationResultModelImpl calcConfigResults = _resultsByConfiguration.get(calculationConfiguration);
       if (calcConfigResults == null) {
         calcConfigResults = new ViewCalculationResultModelImpl();
         _resultsByConfiguration.put(calculationConfiguration, calcConfigResults);
       }
-      for (ComputationTargetSpecification target : deltaConfigResults.getAllTargets()) {
-        for (ComputedValueResult value : deltaConfigResults.getAllValues(target)) {
+      for (final ComputationTargetSpecification target : deltaConfigResults.getAllTargets()) {
+        for (final ComputedValueResult value : deltaConfigResults.getAllValues(target)) {
           calcConfigResults.addValue(target, value);
           ViewTargetResultModelImpl targetResults = _resultsByTarget.get(target);
           if (targetResults == null) {
@@ -94,7 +94,7 @@ public abstract class InMemoryViewResultModel implements ViewResultModel, Serial
     return _viewProcessId;
   }
 
-  public void setViewProcessId(UniqueId viewProcessId) {
+  public void setViewProcessId(final UniqueId viewProcessId) {
     _viewProcessId = viewProcessId;
   }
 
@@ -103,7 +103,7 @@ public abstract class InMemoryViewResultModel implements ViewResultModel, Serial
     return _viewCycleId;
   }
 
-  public void setViewCycleId(UniqueId viewCycleId) {
+  public void setViewCycleId(final UniqueId viewCycleId) {
     _viewCycleId = viewCycleId;
   }
 
@@ -112,7 +112,7 @@ public abstract class InMemoryViewResultModel implements ViewResultModel, Serial
     return _viewCycleExecutionOptions;
   }
 
-  public void setViewCycleExecutionOptions(ViewCycleExecutionOptions viewCycleExecutionOptions) {
+  public void setViewCycleExecutionOptions(final ViewCycleExecutionOptions viewCycleExecutionOptions) {
     _viewCycleExecutionOptions = viewCycleExecutionOptions;
   }
 
@@ -121,7 +121,7 @@ public abstract class InMemoryViewResultModel implements ViewResultModel, Serial
     return _calculationTime;
   }
 
-  public void setCalculationTime(Instant calculationTime) {
+  public void setCalculationTime(final Instant calculationTime) {
     _calculationTime = calculationTime;
   }
 
@@ -130,7 +130,7 @@ public abstract class InMemoryViewResultModel implements ViewResultModel, Serial
     return _calculationDuration;
   }
 
-  public void setCalculationDuration(Duration calculationDuration) {
+  public void setCalculationDuration(final Duration calculationDuration) {
     _calculationDuration = calculationDuration;
   }
 
@@ -139,7 +139,7 @@ public abstract class InMemoryViewResultModel implements ViewResultModel, Serial
     return _versionCorrection;
   }
 
-  public void setVersionCorrection(VersionCorrection versionCorrection) {
+  public void setVersionCorrection(final VersionCorrection versionCorrection) {
     _versionCorrection = versionCorrection;
   }
 
@@ -177,29 +177,29 @@ public abstract class InMemoryViewResultModel implements ViewResultModel, Serial
   }
 
   @Override
-  public ViewCalculationResultModel getCalculationResult(String calcConfigurationName) {
+  public ViewCalculationResultModel getCalculationResult(final String calcConfigurationName) {
     return _resultsByConfiguration.get(calcConfigurationName);
   }
 
   @Override
-  public ViewTargetResultModel getTargetResult(ComputationTargetSpecification targetSpecification) {
+  public ViewTargetResultModel getTargetResult(final ComputationTargetSpecification targetSpecification) {
     return _resultsByTarget.get(targetSpecification);
   }
 
   @Override
   public List<ViewResultEntry> getAllResults() {
-    final ArrayList<ViewResultEntry> results = new ArrayList<ViewResultEntry>();
-    for (Map.Entry<String, ViewCalculationResultModelImpl> config : _resultsByConfiguration.entrySet()) {
+    final ArrayList<ViewResultEntry> results = new ArrayList<>();
+    for (final Map.Entry<String, ViewCalculationResultModelImpl> config : _resultsByConfiguration.entrySet()) {
       final Collection<ComputationTargetSpecification> targets = config.getValue().getAllTargets();
-      int numTargets = targets.size();
+      final int numTargets = targets.size();
       int totalComputedValues = 0;
       int targetsSeen = 0;
-      for (ComputationTargetSpecification target : targets) {
+      for (final ComputationTargetSpecification target : targets) {
         final Collection<ComputedValueResult> computedValues = config.getValue().getAllValues(target);
         totalComputedValues += computedValues.size();
         targetsSeen++;
         results.ensureCapacity(numTargets * (totalComputedValues / targetsSeen));
-        for (ComputedValueResult computedValue : computedValues) {
+        for (final ComputedValueResult computedValue : computedValues) {
           results.add(new ViewResultEntry(config.getKey(), computedValue));
         }
       }
@@ -209,8 +209,8 @@ public abstract class InMemoryViewResultModel implements ViewResultModel, Serial
 
   @Override
   public Set<String> getAllOutputValueNames() {
-    Set<String> outputValueNames = new HashSet<String>();
-    for (ViewResultEntry result : getAllResults()) {
+    final Set<String> outputValueNames = new HashSet<>();
+    for (final ViewResultEntry result : getAllResults()) {
       outputValueNames.add(result.getComputedValue().getSpecification().getValueName());
     }
     return outputValueNames;

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.security.auditlog;
@@ -24,7 +24,7 @@ import com.opengamma.util.ArgumentChecker;
  * is not given, the host name of the local host is used.
  */
 public abstract class AbstractAuditLogger implements AuditLogger {
-  
+
   private final String _originatingSystem;
 
   public AbstractAuditLogger() {
@@ -36,35 +36,35 @@ public abstract class AbstractAuditLogger implements AuditLogger {
    *          Name of the system that emitted the log message.
    *          Examples might be "view-processor-5" or "bloomberg-server".
    */
-  public AbstractAuditLogger(String originatingSystem) {
+  public AbstractAuditLogger(final String originatingSystem) {
     ArgumentChecker.notNull(originatingSystem,
         "Name of originating system");
     _originatingSystem = originatingSystem;
   }
-  
+
   public static String getDefaultOriginatingSystem() {
     try {
       return InetAddress.getLocalHost().getHostName();
-    } catch (UnknownHostException e) {
+    } catch (final UnknownHostException e) {
       throw new OpenGammaRuntimeException("Cannot obtain local host name", e);
     }
   }
 
   @Override
-  public final void log(String user, String object, String operation,
-      String description, boolean success) {
+  public final void log(final String user, final String object, final String operation,
+      final String description, final boolean success) {
     log(user, _originatingSystem, object, operation, description, success);
   }
 
   @Override
-  public final void log(String user, String object, String operation,
-      boolean success) {
+  public final void log(final String user, final String object, final String operation,
+      final boolean success) {
     log(user, object, operation, null, success);
   }
 
   /**
    * Logs a message to an audit log.
-   * 
+   *
    * @param user
    *          User name of the current user. May not be null.
    * @param originatingSystem
@@ -85,8 +85,8 @@ public abstract class AbstractAuditLogger implements AuditLogger {
    */
   public abstract void log(String user, String originatingSystem,
       String object, String operation, String description, boolean success);
-  
-  /** 
+
+  /**
    * Flushes log entries stored in memory into the database.
    * Only relevant for loggers with an in-memory cache.
    */

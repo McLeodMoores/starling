@@ -42,11 +42,11 @@ public class RectangularViewportDefinition extends ViewportDefinition {
    * @param format
    * @param enableLogging
    */
-  /* package */ RectangularViewportDefinition(int version,
-                                              List<Integer> rows,
-                                              List<Integer> columns,
-                                              TypeFormatter.Format format,
-                                              Boolean enableLogging) {
+  /* package */ RectangularViewportDefinition(final int version,
+                                              final List<Integer> rows,
+                                              final List<Integer> columns,
+                                              final TypeFormatter.Format format,
+                                              final Boolean enableLogging) {
     super(version, enableLogging);
     ArgumentChecker.notNull(format, "format");
     _format = format;
@@ -61,15 +61,15 @@ public class RectangularViewportDefinition extends ViewportDefinition {
   }
 
   @Override
-  public boolean isValidFor(GridStructure grid) {
+  public boolean isValidFor(final GridStructure grid) {
     if (!_rows.isEmpty()) {
-      int maxRow = _rows.get(_rows.size() - 1);
+      final int maxRow = _rows.get(_rows.size() - 1);
       if (maxRow >= grid.getRowCount()) {
         return false;
       }
     }
     if (!_columns.isEmpty()) {
-      int maxCol = _columns.get(_columns.size() - 1);
+      final int maxCol = _columns.get(_columns.size() - 1);
       if (maxCol >= grid.getColumnCount()) {
         return false;
       }
@@ -81,18 +81,18 @@ public class RectangularViewportDefinition extends ViewportDefinition {
   // scrolling up triggers a node collapse
   // scrolling down or expanding the viewport down triggers a node expansion
   @Override
-  Pair<Integer, Boolean> getChangedNode(ViewportDefinition viewportDefinition) {
+  Pair<Integer, Boolean> getChangedNode(final ViewportDefinition viewportDefinition) {
     // Viewport definitions other than RectangularViewportDefinitions do not have changed nodes so just return null
     if (!(viewportDefinition instanceof RectangularViewportDefinition)) {
       return null;
     }
-    List<Integer> newRows = ((RectangularViewportDefinition) viewportDefinition).getRows();
+    final List<Integer> newRows = ((RectangularViewportDefinition) viewportDefinition).getRows();
 
     //if the first rows aren't equal the user has scrolled, or if there are no rows, return null
     // TODO this logic doesn't cover these cases:
     //   * the user expands the viewport downwards by resizing the window
     //   * the user scrolls the viewport down but the previous top row is still included in the off-screen buffer zone
-    if (_rows.isEmpty() || newRows.isEmpty() || (!_rows.get(0).equals(newRows.get(0)))) {
+    if (_rows.isEmpty() || newRows.isEmpty() || !_rows.get(0).equals(newRows.get(0))) {
       return null;
     }
     // if the first rows are equal and the viewport has changed then the user has either expanded or collapsed a node
@@ -115,8 +115,8 @@ public class RectangularViewportDefinition extends ViewportDefinition {
       // if this object's row index is greater then the node has collapsed
       // the the other object's row index is greater then the node has expanded
       // the expanded / collapsed node is the row before the unequal row
-      int oldRow = _rows.get(i);
-      int newRow = newRows.get(i);
+      final int oldRow = _rows.get(i);
+      final int newRow = newRows.get(i);
       if (oldRow == newRow) {
         continue;
       }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode;
@@ -21,7 +21,7 @@ public class LocalNodeJobInvoker extends SimpleCalculationNodeInvocationContaine
 
   private static final Logger LOGGER = LoggerFactory.getLogger(LocalNodeJobInvoker.class);
 
-  private final AtomicReference<JobInvokerRegister> _notifyWhenAvailable = new AtomicReference<JobInvokerRegister>();
+  private final AtomicReference<JobInvokerRegister> _notifyWhenAvailable = new AtomicReference<>();
   private final CapabilitySet _capabilitySet = new CapabilitySet();
 
   private String _invokerId = "local";
@@ -52,11 +52,11 @@ public class LocalNodeJobInvoker extends SimpleCalculationNodeInvocationContaine
 
   /**
    * For injecting capabilities from spring.
-   * 
+   *
    * @param parameters capabilities
    */
   public void setCapabilities(final Map<String, Double> parameters) {
-    for (Map.Entry<String, Double> parameter : parameters.entrySet()) {
+    for (final Map.Entry<String, Double> parameter : parameters.entrySet()) {
       setCapability(parameter.getKey(), parameter.getValue());
     }
   }
@@ -80,7 +80,7 @@ public class LocalNodeJobInvoker extends SimpleCalculationNodeInvocationContaine
 
   private void addTail(final Collection<CalculationJob> tails, final ExecutionReceiver executionReceiver) {
     if (tails != null) {
-      for (CalculationJob tail : tails) {
+      for (final CalculationJob tail : tails) {
         addJob(tail, executionReceiver, null);
         addTail(tail.getTail(), executionReceiver);
       }
@@ -96,12 +96,12 @@ public class LocalNodeJobInvoker extends SimpleCalculationNodeInvocationContaine
     final ExecutionReceiver executionReceiver = new ExecutionReceiver() {
 
       @Override
-      public void executionComplete(CalculationJobResult result) {
+      public void executionComplete(final CalculationJobResult result) {
         receiver.jobCompleted(result);
       }
 
       @Override
-      public void executionFailed(SimpleCalculationNode node, Exception exception) {
+      public void executionFailed(final SimpleCalculationNode node, final Exception exception) {
         LOGGER.warn("Exception thrown by job execution", exception);
         receiver.jobFailed(LocalNodeJobInvoker.this, node.getNodeId(), exception);
       }
@@ -114,14 +114,14 @@ public class LocalNodeJobInvoker extends SimpleCalculationNodeInvocationContaine
 
   @Override
   public void cancel(final Collection<CalculationJobSpecification> jobs) {
-    for (CalculationJobSpecification job : jobs) {
+    for (final CalculationJobSpecification job : jobs) {
       cancel(job);
     }
   }
 
   @Override
   public boolean isAlive(final Collection<CalculationJobSpecification> jobs) {
-    for (CalculationJobSpecification job : jobs) {
+    for (final CalculationJobSpecification job : jobs) {
       if (!isAlive(job)) {
         return false;
       }

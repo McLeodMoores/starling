@@ -52,13 +52,13 @@ public class EquityBarrierOptionSecurityFudgeBuilder extends AbstractFudgeBuilde
   public static final String BARRIER_LEVEL_FIELD_NAME = "barrierLevel";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, EquityBarrierOptionSecurity object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final EquityBarrierOptionSecurity object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     EquityBarrierOptionSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
-  public static void toFudgeMsg(FudgeSerializer serializer, EquityBarrierOptionSecurity object, final MutableFudgeMsg msg) {
+  public static void toFudgeMsg(final FudgeSerializer serializer, final EquityBarrierOptionSecurity object, final MutableFudgeMsg msg) {
     FinancialSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     addToMessage(msg, OPTION_TYPE_FIELD_NAME, object.getOptionType());
     addToMessage(msg, STRIKE_FIELD_NAME, object.getStrike());
@@ -76,13 +76,13 @@ public class EquityBarrierOptionSecurityFudgeBuilder extends AbstractFudgeBuilde
   }
 
   @Override
-  public EquityBarrierOptionSecurity buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    EquityBarrierOptionSecurity object = new EquityBarrierOptionSecurity();
+  public EquityBarrierOptionSecurity buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final EquityBarrierOptionSecurity object = new EquityBarrierOptionSecurity();
     EquityBarrierOptionSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     return object;
   }
 
-  public static void fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg, EquityBarrierOptionSecurity object) {
+  public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final EquityBarrierOptionSecurity object) {
     FinancialSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     object.setOptionType(msg.getFieldValue(OptionType.class, msg.getByName(OPTION_TYPE_FIELD_NAME)));
     object.setStrike(msg.getDouble(STRIKE_FIELD_NAME));

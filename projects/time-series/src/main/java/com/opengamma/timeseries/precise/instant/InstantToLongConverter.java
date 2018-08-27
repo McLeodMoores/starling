@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.timeseries.precise.instant;
@@ -29,12 +29,12 @@ public final class InstantToLongConverter {
    * Converts a {@code Instant} to a {@code long}.
    * <p>
    * See the class Javadoc for the format of the {@code long}.
-   * 
+   *
    * @param instant  the instant to convert, not null
    * @return the {@code long} equivalent
    * @throws IllegalArgumentException if the instant is too large
    */
-  public static long convertToLong(Instant instant) {
+  public static long convertToLong(final Instant instant) {
     if (instant.equals(Instant.MAX)) {
       return Long.MAX_VALUE;
     }
@@ -42,9 +42,9 @@ public final class InstantToLongConverter {
       return Long.MIN_VALUE;
     }
     try {
-      long secs = Jdk8Methods.safeMultiply(instant.getEpochSecond(), 1_000_000_000);
+      final long secs = Jdk8Methods.safeMultiply(instant.getEpochSecond(), 1_000_000_000);
       return Jdk8Methods.safeAdd(secs, instant.getNano());
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       throw new IllegalArgumentException("Instant is too large/small: " + instant);
     }
   }
@@ -53,11 +53,11 @@ public final class InstantToLongConverter {
    * Converts a {@code long} to an {@code Instant}.
    * <p>
    * See the class Javadoc for the format of the {@code long}.
-   * 
+   *
    * @param instant  the {@code long} nanos to convert, not null
    * @return the {@code Instant} equivalent, not null
    */
-  public static Instant convertToInstant(long instant) {
+  public static Instant convertToInstant(final long instant) {
     if (instant == Long.MAX_VALUE) {
       return Instant.MAX;
     }

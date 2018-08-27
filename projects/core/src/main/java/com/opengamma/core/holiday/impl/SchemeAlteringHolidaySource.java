@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.holiday.impl;
@@ -35,14 +35,14 @@ import com.opengamma.util.money.Currency;
  */
 public class SchemeAlteringHolidaySource implements HolidaySource {
   private final HolidaySource _underlying;
-  private final Map<String, String> _schemeMappings = new ConcurrentHashMap<String, String>();
-  
-  public SchemeAlteringHolidaySource(HolidaySource underlying) {
+  private final Map<String, String> _schemeMappings = new ConcurrentHashMap<>();
+
+  public SchemeAlteringHolidaySource(final HolidaySource underlying) {
     ArgumentChecker.notNull(underlying, "underlying");
     _underlying = underlying;
   }
-  
-  public void addMapping(String sourceScheme, String targetScheme) {
+
+  public void addMapping(final String sourceScheme, final String targetScheme) {
     ArgumentChecker.notNull(sourceScheme, "sourceScheme");
     ArgumentChecker.notNull(targetScheme, "targetScheme");
     _schemeMappings.put(sourceScheme, targetScheme);
@@ -55,76 +55,76 @@ public class SchemeAlteringHolidaySource implements HolidaySource {
   public HolidaySource getUnderlying() {
     return _underlying;
   }
-  
-  protected String translateScheme(String scheme) {
+
+  protected String translateScheme(final String scheme) {
     String result = _schemeMappings.get(scheme);
     if (result == null) {
       result = scheme;
     }
     return result;
   }
-  
-  protected ExternalId translateExternalId(ExternalId externalId) {
-    String newScheme = translateScheme(externalId.getScheme().getName());
+
+  protected ExternalId translateExternalId(final ExternalId externalId) {
+    final String newScheme = translateScheme(externalId.getScheme().getName());
     return ExternalId.of(newScheme, externalId.getValue());
   }
-  
+
   @Override
-  public Holiday get(UniqueId uniqueId) {
+  public Holiday get(final UniqueId uniqueId) {
     return getUnderlying().get(uniqueId);
   }
 
   @Override
-  public Holiday get(ObjectId objectId, VersionCorrection versionCorrection) {
+  public Holiday get(final ObjectId objectId, final VersionCorrection versionCorrection) {
     return getUnderlying().get(objectId, versionCorrection);
   }
 
   @Override
-  public Map<UniqueId, Holiday> get(Collection<UniqueId> uniqueIds) {
+  public Map<UniqueId, Holiday> get(final Collection<UniqueId> uniqueIds) {
     return getUnderlying().get(uniqueIds);
   }
 
   @Override
-  public Map<ObjectId, Holiday> get(Collection<ObjectId> objectIds, VersionCorrection versionCorrection) {
+  public Map<ObjectId, Holiday> get(final Collection<ObjectId> objectIds, final VersionCorrection versionCorrection) {
     return getUnderlying().get(objectIds, versionCorrection);
   }
 
   @Override
-  public Collection<Holiday> get(HolidayType holidayType,
-                                 ExternalIdBundle regionOrExchangeIds) {
+  public Collection<Holiday> get(final HolidayType holidayType,
+                                 final ExternalIdBundle regionOrExchangeIds) {
     return getUnderlying().get(holidayType, regionOrExchangeIds);
   }
 
   @Override
-  public Collection<Holiday> get(Currency currency) {
+  public Collection<Holiday> get(final Currency currency) {
     return getUnderlying().get(currency);
   }
 
   @Override
-  public boolean isHoliday(LocalDate dateToCheck, Currency currency) {
+  public boolean isHoliday(final LocalDate dateToCheck, final Currency currency) {
     return getUnderlying().isHoliday(dateToCheck, currency);
   }
 
   @Override
-  public boolean isHoliday(LocalDate dateToCheck, HolidayType holidayType, ExternalIdBundle regionOrExchangeIds) {
+  public boolean isHoliday(final LocalDate dateToCheck, final HolidayType holidayType, final ExternalIdBundle regionOrExchangeIds) {
     ArgumentChecker.notNull(dateToCheck, "dateToCheck");
     ArgumentChecker.notNull(regionOrExchangeIds, "regionOrExchangeIds");
-    
-    Set<ExternalId> translatedIds = new HashSet<ExternalId>();
-    for (ExternalId externalId : regionOrExchangeIds.getExternalIds()) {
-      ExternalId translatedId = translateExternalId(externalId);
+
+    final Set<ExternalId> translatedIds = new HashSet<>();
+    for (final ExternalId externalId : regionOrExchangeIds.getExternalIds()) {
+      final ExternalId translatedId = translateExternalId(externalId);
       translatedIds.add(translatedId);
     }
-    ExternalIdBundle translatedBundle = ExternalIdBundle.of(translatedIds);
-    
+    final ExternalIdBundle translatedBundle = ExternalIdBundle.of(translatedIds);
+
     return getUnderlying().isHoliday(dateToCheck, holidayType, translatedBundle);
   }
 
   @Override
-  public boolean isHoliday(LocalDate dateToCheck, HolidayType holidayType, ExternalId regionOrExchangeId) {
+  public boolean isHoliday(final LocalDate dateToCheck, final HolidayType holidayType, final ExternalId regionOrExchangeId) {
     ArgumentChecker.notNull(dateToCheck, "dateToCheck");
     ArgumentChecker.notNull(regionOrExchangeId, "regionOrExchangeId");
-    ExternalId translatedId = translateExternalId(regionOrExchangeId);
+    final ExternalId translatedId = translateExternalId(regionOrExchangeId);
     return getUnderlying().isHoliday(dateToCheck, holidayType, translatedId);
   }
 

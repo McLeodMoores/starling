@@ -140,14 +140,14 @@ public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
    * @param fixedRates The fixed rates, not null
    */
   @ImmutableConstructor
-  public FixedLegCashFlows(List<LocalDate> startAccrualDates,
-                           List<LocalDate> endAccrualDates,
-                           List<Double> discountFactors,
-                           List<Double> paymentTimes,
-                           List<Double> paymentFractions,
-                           List<CurrencyAmount> paymentAmounts,
-                           List<CurrencyAmount> notionals,
-                           List<Double> fixedRates) {
+  public FixedLegCashFlows(final List<LocalDate> startAccrualDates,
+                           final List<LocalDate> endAccrualDates,
+                           final List<Double> discountFactors,
+                           final List<Double> paymentTimes,
+                           final List<Double> paymentFractions,
+                           final List<CurrencyAmount> paymentAmounts,
+                           final List<CurrencyAmount> notionals,
+                           final List<Double> fixedRates) {
 
     ArgumentChecker.notNull(startAccrualDates, "startAccrualDates");
     ArgumentChecker.notNull(endAccrualDates, "endAccrualDates");
@@ -167,7 +167,7 @@ public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
     _paymentAmounts = Collections.unmodifiableList(Lists.newArrayList(paymentAmounts));
     _fixedRates = Collections.unmodifiableList(Lists.newArrayList(fixedRates));
 
-    int n = startAccrualDates.size();
+    final int n = startAccrualDates.size();
     ArgumentChecker.isTrue(n == endAccrualDates.size(), "Must have same number of start and end accrual dates");
     ArgumentChecker.isTrue(n == discountFactors.size(), "Must have same number of start accrual dates and discount factors");
     ArgumentChecker.isTrue(n == paymentTimes.size(), "Must have same number of start accrual dates and payment times");
@@ -183,14 +183,14 @@ public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
    */
   @DerivedProperty
   public List<CurrencyAmount> getDiscountedPaymentAmounts() {
-    List<CurrencyAmount> cashflows = new ArrayList<>();
+    final List<CurrencyAmount> cashflows = new ArrayList<>();
     for (int i = 0; i < getNumberOfCashFlows(); i++) {
-      CurrencyAmount payment = getPaymentAmounts().get(i);
+      final CurrencyAmount payment = getPaymentAmounts().get(i);
       if (payment == null) {
         cashflows.add(null);
         continue;
       }
-      double df = getDiscountFactors().get(i);
+      final double df = getDiscountFactors().get(i);
       cashflows.add(CurrencyAmount.of(payment.getCurrency(), payment.getAmount() * df));
     }
     return cashflows;

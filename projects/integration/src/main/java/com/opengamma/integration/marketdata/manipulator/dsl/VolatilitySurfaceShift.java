@@ -5,23 +5,24 @@
  */
 package com.opengamma.integration.marketdata.manipulator.dsl;
 
-import org.joda.beans.BeanDefinition;
-import org.joda.beans.ImmutableBean;
-import org.joda.beans.ImmutableConstructor;
-import org.joda.beans.PropertyDefinition;
-
-import com.opengamma.util.ArgumentChecker;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
+
 import org.joda.beans.Bean;
+import org.joda.beans.BeanDefinition;
+import org.joda.beans.ImmutableBean;
+import org.joda.beans.ImmutableConstructor;
 import org.joda.beans.JodaBeanUtils;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
+import org.joda.beans.PropertyDefinition;
 import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
+
+import com.opengamma.util.ArgumentChecker;
 
 /**
  * Defines the shift applied to a single point in a volatility surface.
@@ -45,7 +46,7 @@ public final class VolatilitySurfaceShift implements ImmutableBean {
    * @param shift
    */
   @ImmutableConstructor
-  /* package */ VolatilitySurfaceShift(Object x, Object y, Number shift) {
+  /* package */ VolatilitySurfaceShift(final Object x, final Object y, final Number shift) {
     ArgumentChecker.notNull(x, "x");
     ArgumentChecker.notNull(y, "y");
     ArgumentChecker.notNull(shift, "shift");

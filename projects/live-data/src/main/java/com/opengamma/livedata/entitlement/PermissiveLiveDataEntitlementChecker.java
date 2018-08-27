@@ -14,7 +14,7 @@ import com.opengamma.livedata.UserPrincipal;
 public class PermissiveLiveDataEntitlementChecker extends AbstractEntitlementChecker {
 
   @Override
-  public boolean isEntitled(UserPrincipal user, LiveDataSpecification requestedSpecification) {
+  public boolean isEntitled(final UserPrincipal user, final LiveDataSpecification requestedSpecification) {
     return true;
   }
 

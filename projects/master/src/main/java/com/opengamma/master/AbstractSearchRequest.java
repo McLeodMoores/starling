@@ -68,7 +68,7 @@ public abstract class AbstractSearchRequest extends DirectBean implements PagedR
    *
    * @param versionCorrection  the version-correction, null converted to LATEST
    */
-  public void setVersionCorrection(VersionCorrection versionCorrection) {
+  public void setVersionCorrection(final VersionCorrection versionCorrection) {
     this._versionCorrection = Objects.firstNonNull(versionCorrection, VersionCorrection.LATEST);
   }
 
@@ -79,17 +79,17 @@ public abstract class AbstractSearchRequest extends DirectBean implements PagedR
    * @param document  the document to match, null or inappropriate document type returns false
    * @return true if matches
    */
-  public boolean matches(AbstractDocument document) {
+  public boolean matches(final AbstractDocument document) {
     if (getVersionCorrection() == null) {
       return true;
     }
-    Instant versionFrom = Objects.firstNonNull(document.getVersionFromInstant(), Instant.MIN);
-    Instant versionTo = Objects.firstNonNull(document.getVersionToInstant(), Instant.MAX);
-    Instant correctionFrom = Objects.firstNonNull(document.getCorrectionFromInstant(), Instant.MIN);
-    Instant correctionTo = Objects.firstNonNull(document.getCorrectionToInstant(), Instant.MAX);
-    VersionCorrection locked = getVersionCorrection().withLatestFixed(OpenGammaClock.getInstance().instant());
-    Instant versionPoint = locked.getVersionAsOf();
-    Instant corrrectionPoint = locked.getCorrectedTo();
+    final Instant versionFrom = Objects.firstNonNull(document.getVersionFromInstant(), Instant.MIN);
+    final Instant versionTo = Objects.firstNonNull(document.getVersionToInstant(), Instant.MAX);
+    final Instant correctionFrom = Objects.firstNonNull(document.getCorrectionFromInstant(), Instant.MIN);
+    final Instant correctionTo = Objects.firstNonNull(document.getCorrectionToInstant(), Instant.MAX);
+    final VersionCorrection locked = getVersionCorrection().withLatestFixed(OpenGammaClock.getInstance().instant());
+    final Instant versionPoint = locked.getVersionAsOf();
+    final Instant corrrectionPoint = locked.getCorrectedTo();
     return versionPoint.isBefore(versionTo) &&
         !versionFrom.isAfter(versionPoint) &&
         corrrectionPoint.isBefore(correctionTo) &&

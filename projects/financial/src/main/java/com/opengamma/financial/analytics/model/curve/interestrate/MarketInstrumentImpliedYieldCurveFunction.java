@@ -206,12 +206,12 @@ public class MarketInstrumentImpliedYieldCurveFunction extends AbstractFunction.
     final String fundingCurveName;
     if (ValueRequirementNames.YIELD_CURVE.equals(desiredValue.getValueName())) {
       final Set<String> curveNames = desiredValue.getConstraints().getValues(ValuePropertyNames.CURVE);
-      if ((curveNames == null) || (curveNames.size() != 1)) {
+      if (curveNames == null || curveNames.size() != 1) {
         return null;
       }
       final String curveName = curveNames.iterator().next();
       final Set<String> fundingCurveNames = desiredValue.getConstraints().getValues(YieldCurveFunction.PROPERTY_FUNDING_CURVE);
-      if ((fundingCurveNames == null) || fundingCurveNames.isEmpty()) {
+      if (fundingCurveNames == null || fundingCurveNames.isEmpty()) {
         fundingCurveName = curveName;
       } else {
         if (fundingCurveNames.size() != 1) {
@@ -220,7 +220,7 @@ public class MarketInstrumentImpliedYieldCurveFunction extends AbstractFunction.
         fundingCurveName = fundingCurveNames.iterator().next();
       }
       final Set<String> forwardCurveNames = desiredValue.getConstraints().getValues(YieldCurveFunction.PROPERTY_FORWARD_CURVE);
-      if ((forwardCurveNames == null) || forwardCurveNames.isEmpty()) {
+      if (forwardCurveNames == null || forwardCurveNames.isEmpty()) {
         forwardCurveName = curveName;
       } else {
         if (forwardCurveNames.size() != 1) {
@@ -231,11 +231,11 @@ public class MarketInstrumentImpliedYieldCurveFunction extends AbstractFunction.
     } else {
       // Jacobian and Coupon sensitivities must specify a funding and forward curve (possibly the same name)
       final Set<String> fundingCurveNames = desiredValue.getConstraints().getValues(YieldCurveFunction.PROPERTY_FUNDING_CURVE);
-      if ((fundingCurveNames == null) || (fundingCurveNames.size() != 1)) {
+      if (fundingCurveNames == null || fundingCurveNames.size() != 1) {
         return null;
       }
       final Set<String> forwardCurveNames = desiredValue.getConstraints().getValues(YieldCurveFunction.PROPERTY_FORWARD_CURVE);
-      if ((forwardCurveNames == null) || (forwardCurveNames.size() != 1)) {
+      if (forwardCurveNames == null || forwardCurveNames.size() != 1) {
         return null;
       }
       fundingCurveName = fundingCurveNames.iterator().next();
@@ -393,14 +393,14 @@ public class MarketInstrumentImpliedYieldCurveFunction extends AbstractFunction.
     return specification.getInterpolator();
   }
 
-  private Set<ComputedValue> execute(FunctionExecutionContext executionContext,
-                                     ComputationTargetSpecification targetSpec,
-                                     String curveName,
-                                     YieldCurveData curveData,
-                                     HistoricalTimeSeriesBundle timeSeries,
-                                     boolean createYieldCurve,
-                                     boolean createJacobian,
-                                     boolean createSensitivities) {
+  private Set<ComputedValue> execute(final FunctionExecutionContext executionContext,
+                                     final ComputationTargetSpecification targetSpec,
+                                     final String curveName,
+                                     final YieldCurveData curveData,
+                                     final HistoricalTimeSeriesBundle timeSeries,
+                                     final boolean createYieldCurve,
+                                     final boolean createJacobian,
+                                     final boolean createSensitivities) {
     final Clock snapshotClock = executionContext.getValuationClock();
     final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
     final List<InstrumentDerivative> derivatives = new ArrayList<>();
@@ -501,18 +501,18 @@ public class MarketInstrumentImpliedYieldCurveFunction extends AbstractFunction.
     return result;
   }
 
-  private Set<ComputedValue> execute(FunctionExecutionContext executionContext,
-                                     ComputationTargetSpecification targetSpec,
-                                     String forwardCurveName,
-                                     YieldCurveData forwardCurveData,
-                                     HistoricalTimeSeriesBundle forwardTimeSeries,
-                                     String fundingCurveName,
-                                     YieldCurveData fundingCurveData,
-                                     HistoricalTimeSeriesBundle fundingTimeSeries,
-                                     boolean createForwardYieldCurve,
-                                     boolean createFundingYieldCurve,
-                                     boolean createJacobian,
-                                     boolean createSensitivities) {
+  private Set<ComputedValue> execute(final FunctionExecutionContext executionContext,
+                                     final ComputationTargetSpecification targetSpec,
+                                     final String forwardCurveName,
+                                     final YieldCurveData forwardCurveData,
+                                     final HistoricalTimeSeriesBundle forwardTimeSeries,
+                                     final String fundingCurveName,
+                                     final YieldCurveData fundingCurveData,
+                                     final HistoricalTimeSeriesBundle fundingTimeSeries,
+                                     final boolean createForwardYieldCurve,
+                                     final boolean createFundingYieldCurve,
+                                     final boolean createJacobian,
+                                     final boolean createSensitivities) {
     final Clock snapshotClock = executionContext.getValuationClock();
     final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
     final List<InstrumentDerivative> derivatives = new ArrayList<>();

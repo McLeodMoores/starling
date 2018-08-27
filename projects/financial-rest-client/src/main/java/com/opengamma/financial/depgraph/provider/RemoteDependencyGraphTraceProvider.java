@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.depgraph.provider;
@@ -38,16 +38,16 @@ public class RemoteDependencyGraphTraceProvider extends AbstractRemoteClient imp
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param baseUri the target URI for all RESTful web services, not null
    */
-  public RemoteDependencyGraphTraceProvider(URI baseUri) {
+  public RemoteDependencyGraphTraceProvider(final URI baseUri) {
     super(baseUri);
   }
 
   @Override
-  public DependencyGraphBuildTrace getTrace(DependencyGraphTraceBuilderProperties properties) {
-    URI uri = buildUri(properties);
+  public DependencyGraphBuildTrace getTrace(final DependencyGraphTraceBuilderProperties properties) {
+    final URI uri = buildUri(properties);
 
     return accessRemote(uri).get(DependencyGraphBuildTrace.class);
   }
@@ -58,25 +58,25 @@ public class RemoteDependencyGraphTraceProvider extends AbstractRemoteClient imp
    * @return a full URI
    */
   @VisibleForTesting
-  URI buildUri(DependencyGraphTraceBuilderProperties properties) {
+  URI buildUri(final DependencyGraphTraceBuilderProperties properties) {
     URI uri = getBaseUri();
 
     //process single value properties:
-    String calcConfigName = properties.getCalculationConfigurationName();
+    final String calcConfigName = properties.getCalculationConfigurationName();
     uri = DependencyGraphTraceProviderUris.uriCalculationConfigurationName(uri, calcConfigName);
 
-    ValueProperties defaultProperties = properties.getDefaultProperties();
+    final ValueProperties defaultProperties = properties.getDefaultProperties();
     uri = DependencyGraphTraceProviderUris.uriDefaultProperties(uri, defaultProperties);
 
-    List<MarketDataSpecification> marketData = properties.getMarketData();
+    final List<MarketDataSpecification> marketData = properties.getMarketData();
     if (marketData != null) {
       uri = DependencyGraphTraceProviderUris.uriMarketData(uri, marketData);
     }
 
-    VersionCorrection resolutionTime = properties.getResolutionTime();
+    final VersionCorrection resolutionTime = properties.getResolutionTime();
     uri = DependencyGraphTraceProviderUris.uriResolutionTime(uri, resolutionTime);
 
-    Instant valuationTime = properties.getValuationTime();
+    final Instant valuationTime = properties.getValuationTime();
     if (valuationTime != null) {
       uri = DependencyGraphTraceProviderUris.uriValuationTime(uri, valuationTime);
     }
@@ -92,28 +92,28 @@ public class RemoteDependencyGraphTraceProvider extends AbstractRemoteClient imp
    * @param uri the uri to append to
    * @param requirements the requirements to append
    */
-  private URI processRequirements(URI uri, Collection<ValueRequirement> requirements) {
-    for (ValueRequirement valueRequirement : requirements) {
+  private URI processRequirements(URI uri, final Collection<ValueRequirement> requirements) {
+    for (final ValueRequirement valueRequirement : requirements) {
 
-      String valueName = valueRequirement.getValueName();
+      final String valueName = valueRequirement.getValueName();
 
-      ValueProperties constraints = valueRequirement.getConstraints();
+      final ValueProperties constraints = valueRequirement.getConstraints();
 
-      String contraintStr = constraints.isEmpty() ? "" : constraints.toString();
+      final String contraintStr = constraints.isEmpty() ? "" : constraints.toString();
 
-      String constrainedValueName = valueName + contraintStr;
+      final String constrainedValueName = valueName + contraintStr;
 
-      ComputationTargetReference targetReference = valueRequirement.getTargetReference();
-      String targetType = targetReference.getType().toString();
+      final ComputationTargetReference targetReference = valueRequirement.getTargetReference();
+      final String targetType = targetReference.getType().toString();
 
       if (targetReference instanceof ComputationTargetRequirement) {
-        ComputationTargetRequirement requirement = (ComputationTargetRequirement) targetReference;
-        Set<ExternalId> externalIds = requirement.getIdentifiers().getExternalIds();
+        final ComputationTargetRequirement requirement = (ComputationTargetRequirement) targetReference;
+        final Set<ExternalId> externalIds = requirement.getIdentifiers().getExternalIds();
         ArgumentChecker.isTrue(externalIds.size() == 1, "One (and only one) external id must be specified currently.");
-        ExternalId externalId = Iterables.get(externalIds, 0);
+        final ExternalId externalId = Iterables.get(externalIds, 0);
         uri = DependencyGraphTraceProviderUris.uriValueRequirementByExternalId(uri, constrainedValueName, targetType, externalId);
       } else if (targetReference instanceof ComputationTargetSpecification) {
-        UniqueId uniqueId = ((ComputationTargetSpecification) targetReference).getUniqueId();
+        final UniqueId uniqueId = ((ComputationTargetSpecification) targetReference).getUniqueId();
         uri = DependencyGraphTraceProviderUris.uriValueRequirementByUniqueId(uri, constrainedValueName, targetType, uniqueId);
       } else {
         throw new IllegalArgumentException(format("Unrecognised ValueRequirement class: %s", ValueRequirement.class.getName()));

@@ -17,24 +17,24 @@ public class GetResultsFailedNode extends AbstractFailureWithRequirementsNode {
 
   private static final String NAME = "GetResultsFailed";
 
-  public GetResultsFailedNode(Object parent, ValueRequirement valueRequirement, String function, ValueSpecification desiredOutput, Map<ValueSpecification, ValueRequirement> satisfied) {
+  public GetResultsFailedNode(final Object parent, final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput, final Map<ValueSpecification, ValueRequirement> satisfied) {
     super(parent, valueRequirement, function, desiredOutput, satisfied, "Requirements");
   }
 
   @Override
-  public Object getColumn(int column) {
-    if (column == 0) { 
+  public Object getColumn(final int column) {
+    if (column == 0) {
       return NAME;
     }
     return null;
   }
-  
+
   @Override
-  public boolean equals(Object o) {
-    boolean result = super.equals(o);
+  public boolean equals(final Object o) {
+    final boolean result = super.equals(o);
     return result && o instanceof GetResultsFailedNode;
   }
-  
+
   // hashCode from super class
 
 }

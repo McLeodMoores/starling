@@ -16,22 +16,22 @@ public class ViewDefinitionCompilationFailedCall implements Function<ViewResultL
 
   private final Instant _valuationTime;
   private final Exception _exception;
-  
-  public ViewDefinitionCompilationFailedCall(Instant valuationTime, Exception exception) {
+
+  public ViewDefinitionCompilationFailedCall(final Instant valuationTime, final Exception exception) {
     _valuationTime = valuationTime;
     _exception = exception;
   }
-  
+
   public Instant getValuationTime() {
     return _valuationTime;
   }
-  
+
   public Exception getException() {
     return _exception;
   }
-  
+
   @Override
-  public Object apply(ViewResultListener listener) {
+  public Object apply(final ViewResultListener listener) {
     listener.viewDefinitionCompilationFailed(getValuationTime(), getException());
     return null;
   }

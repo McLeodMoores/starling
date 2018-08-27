@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.exec.plan;
@@ -19,8 +19,6 @@ import java.io.ObjectOutputStream;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
-
-import net.sf.ehcache.CacheManager;
 
 import org.mockito.Mockito;
 import org.testng.annotations.AfterClass;
@@ -46,6 +44,8 @@ import com.opengamma.engine.view.impl.ExecutionLogModeSource;
 import com.opengamma.id.UniqueId;
 import com.opengamma.util.ehcache.EHCacheUtils;
 import com.opengamma.util.test.TestGroup;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Test.
@@ -157,8 +157,8 @@ public class CachingExecutionPlannerTest {
   private GraphExecutionPlanner createExecutionPlanner() {
     return new GraphExecutionPlanner() {
       @Override
-      public GraphExecutionPlan createPlan(DependencyGraph graph, ExecutionLogModeSource logModeSource, long functionInitialisationId, Set<ValueSpecification> sharedValues,
-          Map<ValueSpecification, FunctionParameters> parameters) {
+      public GraphExecutionPlan createPlan(final DependencyGraph graph, final ExecutionLogModeSource logModeSource, final long functionInitialisationId, final Set<ValueSpecification> sharedValues,
+          final Map<ValueSpecification, FunctionParameters> parameters) {
         return new GraphExecutionPlan(graph.getCalculationConfigurationName(), 0L, Collections.<PlannedJob>emptySet(), 0, 0d, 0d, 0d);
       }
     };

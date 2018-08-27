@@ -15,7 +15,7 @@ public class IssuerTypeBean extends EnumBean {
   protected IssuerTypeBean() {
   }
 
-  public IssuerTypeBean(String issuerType) {
+  public IssuerTypeBean(final String issuerType) {
     super(issuerType);
   }
 

@@ -62,7 +62,7 @@ public class MdcAwareThreadPoolExecutor extends ThreadPoolExecutor {
    *
    * @param factory the factory to use when the executor creates a new thread
    */
-  public MdcAwareThreadPoolExecutor(ThreadFactory factory) {
+  public MdcAwareThreadPoolExecutor(final ThreadFactory factory) {
     super(0, Integer.MAX_VALUE, 60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(), factory);
   }
 
@@ -81,22 +81,22 @@ public class MdcAwareThreadPoolExecutor extends ThreadPoolExecutor {
    * by the {@code execute} method.
    * @param factory the factory to use when the executor creates a new thread
    */
-  public MdcAwareThreadPoolExecutor(int coreThreads,
-                                    int maxThreads,
-                                    long keepAliveTime,
-                                    TimeUnit timeUnit,
-                                    BlockingQueue<Runnable> queue,
-                                    ThreadFactory factory) {
+  public MdcAwareThreadPoolExecutor(final int coreThreads,
+                                    final int maxThreads,
+                                    final long keepAliveTime,
+                                    final TimeUnit timeUnit,
+                                    final BlockingQueue<Runnable> queue,
+                                    final ThreadFactory factory) {
     super(coreThreads, maxThreads, keepAliveTime, timeUnit, queue, factory);
   }
 
   @Override
-  protected void beforeExecute(Thread t, Runnable task) {
+  protected void beforeExecute(final Thread t, final Runnable task) {
 
     // This method is called by the worker thread before it executes the
     // specified task. Therefore we can insert the MDC information and it will
     // be available as the task is executed
-    Map<String, String> contextMap = _diagnosticContexts.get(task);
+    final Map<String, String> contextMap = _diagnosticContexts.get(task);
     if (contextMap != null) {
       MDC.setContextMap(contextMap);
     }
@@ -107,7 +107,7 @@ public class MdcAwareThreadPoolExecutor extends ThreadPoolExecutor {
   }
 
   @Override
-  protected void afterExecute(Runnable task, Throwable t) {
+  protected void afterExecute(final Runnable task, final Throwable t) {
 
     // This method is called by the worker thread after it has executed the
     // specified task.
@@ -122,14 +122,14 @@ public class MdcAwareThreadPoolExecutor extends ThreadPoolExecutor {
   }
 
   @Override
-  public void execute(Runnable command) {
+  public void execute(final Runnable command) {
     recordDiagnosticContext(command);
     super.execute(command);
   }
 
   @Override
-  public boolean remove(Runnable task) {
-    boolean success = super.remove(task);
+  public boolean remove(final Runnable task) {
+    final boolean success = super.remove(task);
     // If remove fails then task has already been started and the
     // job will be removed when the task completes
     if (success) {
@@ -139,8 +139,8 @@ public class MdcAwareThreadPoolExecutor extends ThreadPoolExecutor {
   }
 
   @SuppressWarnings("unchecked")
-  private void recordDiagnosticContext(Runnable task) {
-    Map<String, String> contextMap = MDC.getCopyOfContextMap();
+  private void recordDiagnosticContext(final Runnable task) {
+    final Map<String, String> contextMap = MDC.getCopyOfContextMap();
     if (contextMap != null) {
       _diagnosticContexts.put(task, contextMap);
     }

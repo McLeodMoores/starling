@@ -45,10 +45,10 @@ public class TimeSeriesLoaderTool extends AbstractTool<ToolContext> {
   //-------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
+   *
    * @param args  the arguments, not null
    */
-  public static void main(String[] args) { //CSIGNORE
+  public static void main(final String[] args) { //CSIGNORE
     new TimeSeriesLoaderTool().invokeAndTerminate(args);
   }
 
@@ -56,10 +56,10 @@ public class TimeSeriesLoaderTool extends AbstractTool<ToolContext> {
   /**
    * Loads the test portfolio into the position master.
    */
-  @Override 
+  @Override
   protected void doRun() {
-    String fileName = getCommandLine().getOptionValue(FILE_NAME_OPT);
-    SheetFormat sheetFormat = SheetFormat.of(fileName);
+    final String fileName = getCommandLine().getOptionValue(FILE_NAME_OPT);
+    final SheetFormat sheetFormat = SheetFormat.of(fileName);
     try {
       new TimeSeriesLoader(getToolContext().getHistoricalTimeSeriesMaster()).run(
           sheetFormat,
@@ -71,50 +71,50 @@ public class TimeSeriesLoaderTool extends AbstractTool<ToolContext> {
           getCommandLine().getOptionValue(TIME_SERIES_IDSCHEME_OPT),
           getCommandLine().getOptionValue(TIME_SERIES_DATEFORMAT_OPT),
           getCommandLine().hasOption(WRITE_OPT));
-    } catch (FileNotFoundException e) {
+    } catch (final FileNotFoundException e) {
       throw new OpenGammaRuntimeException("Could not find portfolio file", e);
     }
   }
 
   @Override
-  protected  Options createOptions(boolean contextProvided) {
-    
-    Options options = super.createOptions(contextProvided);
-    
-    Option filenameOption = new Option(
+  protected  Options createOptions(final boolean contextProvided) {
+
+    final Options options = super.createOptions(contextProvided);
+
+    final Option filenameOption = new Option(
         FILE_NAME_OPT, "filename", true, "The path to the file containing data to import (CSV or ZIP)");
     filenameOption.setRequired(true);
     options.addOption(filenameOption);
-    
-    Option timeSeriesDataSourceOption = new Option(
+
+    final Option timeSeriesDataSourceOption = new Option(
         TIME_SERIES_DATASOURCE_OPT, "source", true, "The name of the time series data source");
     options.addOption(timeSeriesDataSourceOption);
-    
-    Option timeSeriesDataProviderOption = new Option(
+
+    final Option timeSeriesDataProviderOption = new Option(
         TIME_SERIES_DATAPROVIDER_OPT, "provider", true, "The name of the time series data provider");
     options.addOption(timeSeriesDataProviderOption);
-    
-    Option timeSeriesDataFieldOption = new Option(
+
+    final Option timeSeriesDataFieldOption = new Option(
         TIME_SERIES_DATAFIELD_OPT, "field", true, "The name of the time series data field");
     options.addOption(timeSeriesDataFieldOption);
-    
-    Option timeSeriesObservationTimeOption = new Option(
+
+    final Option timeSeriesObservationTimeOption = new Option(
         TIME_SERIES_OBSERVATIONTIME_OPT, "time", true, "The time series observation time");
     options.addOption(timeSeriesObservationTimeOption);
-    
-    Option timeSeriesIdSchemeOption = new Option(
+
+    final Option timeSeriesIdSchemeOption = new Option(
         TIME_SERIES_IDSCHEME_OPT, "scheme", true, "The time series ID scheme (e.g. RIC)");
     options.addOption(timeSeriesIdSchemeOption);
-    
-    Option timeSeriesDateFormatOption = new Option(
+
+    final Option timeSeriesDateFormatOption = new Option(
         TIME_SERIES_DATEFORMAT_OPT, "date", true, "The JodaTime date format (e.g. yyyyMMdd)");
     options.addOption(timeSeriesDateFormatOption);
-    
-    Option writeOption = new Option(
-        WRITE_OPT, "write", false, 
+
+    final Option writeOption = new Option(
+        WRITE_OPT, "write", false,
         "Actually persists the time series to the database if specified, otherwise pretty-prints without persisting");
     options.addOption(writeOption);
-        
+
     return options;
   }
 

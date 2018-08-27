@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.volatility.surface;
@@ -110,22 +110,22 @@ public class EquityOptionVolatilitySurfaceDataFunctionDeprecated extends Abstrac
     _results = Collections.singleton(_result);
   }
 
-  public static <T extends Comparable<? super T>> List<T> asSortedList(Collection<T> c) {
-    List<T> list = new ArrayList<T>(c);
+  public static <T extends Comparable<? super T>> List<T> asSortedList(final Collection<T> c) {
+    final List<T> list = new ArrayList<>(c);
     java.util.Collections.sort(list);
     return list;
   }
 
   /**
    * // Computes active expiry dates, which fall on the Saturday following the 3rd Friday of an expiry month
-   * 
+   *
    * @param valDate The evaluation date
    * @return The expiry dates
    */
   public static TreeSet<LocalDate> getExpirySet(final LocalDate valDate) {
 
     final TemporalAdjuster thirdFriday = TemporalAdjusters.dayOfWeekInMonth(3, DayOfWeek.FRIDAY);
-    TreeSet<LocalDate> expirySet = new TreeSet<LocalDate>();
+    final TreeSet<LocalDate> expirySet = new TreeSet<>();
 
     // Add the next six months' Expiries although they are not guaranteed to be traded
     final LocalDate thisMonthsExpiry = valDate.with(thirdFriday).plusDays(1);
@@ -153,7 +153,7 @@ public class EquityOptionVolatilitySurfaceDataFunctionDeprecated extends Abstrac
 
   /**
    * Dynamically return an array of strikes given an underlying spot level of the index or price.
-   * 
+   *
    * @param spot Spot value of the underlying ( e.g. index, stock )
    * @param relativeWidth Strike bounds are specified simply: [ spot * ( 1 - width), spot * ( 1 + width) ]
    * @param stepSize Difference between each strike in the resulting set. // TODO Extend beyond integer
@@ -179,8 +179,8 @@ public class EquityOptionVolatilitySurfaceDataFunctionDeprecated extends Abstrac
     kMax = Math.rint(kMax + (stepSize - kMax % stepSize));
 
     // Fill in
-    int nStrikes = (int) Math.round(1 + (kMax - kMin) / stepSize);
-    Double[] strikes = new Double[nStrikes];
+    final int nStrikes = (int) Math.round(1 + (kMax - kMin) / stepSize);
+    final Double[] strikes = new Double[nStrikes];
     for (int i = 0; i < nStrikes; i++) {
       strikes[i] = kMin + i * stepSize;
     }
@@ -190,13 +190,13 @@ public class EquityOptionVolatilitySurfaceDataFunctionDeprecated extends Abstrac
 
   public static <X, Y> Set<ValueRequirement> buildRequirements(final VolatilitySurfaceSpecification specification, final VolatilitySurfaceDefinition<X, Y> definition,
       final ZonedDateTime atInstant) {
-    final Set<ValueRequirement> result = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> result = new HashSet<>();
     final BloombergEquityOptionVolatilitySurfaceInstrumentProvider provider = (BloombergEquityOptionVolatilitySurfaceInstrumentProvider) specification.getSurfaceInstrumentProvider();
-    Object[] expiries = getExpirySet(atInstant.toLocalDate()).toArray();
+    final Object[] expiries = getExpirySet(atInstant.toLocalDate()).toArray();
 
     // !!!!!!!!! SUPPOSE We have some value in the definition that provides us with an estimate of the center strike
-    Double strikeCenter = 131.3;
-    Object[] strikes = getStrikes(strikeCenter, 0.6, 5);
+    final Double strikeCenter = 131.3;
+    final Object[] strikes = getStrikes(strikeCenter, 0.6, 5);
     for (final Object x : expiries) { // // FIXME Was: definition.getXs()
       for (final Object y : strikes) { // FIXME Was: definition.getYs()) {
         provider.init(true); // generate puts
@@ -261,9 +261,9 @@ public class EquityOptionVolatilitySurfaceDataFunctionDeprecated extends Abstrac
           return Collections.emptySet();
         }
         final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
-        final Map<Pair<Object, Object>, Double> volatilityValues = new HashMap<Pair<Object, Object>, Double>();
+        final Map<Pair<Object, Object>, Double> volatilityValues = new HashMap<>();
 
-        Object[] expiries = getExpirySet(atZDT.toLocalDate()).toArray();
+        final Object[] expiries = getExpirySet(atZDT.toLocalDate()).toArray();
         for (final Object x : _definition.getXs()) {
           for (final Object y : _definition.getYs()) {
             final double strike = (Double) y;
@@ -283,7 +283,7 @@ public class EquityOptionVolatilitySurfaceDataFunctionDeprecated extends Abstrac
             }
           }
         }
-        final VolatilitySurfaceData<?, ?> volSurfaceData = new VolatilitySurfaceData<Object, Object>(_definition.getName(), _specification.getName(), _definition.getTarget().getUniqueId(),
+        final VolatilitySurfaceData<?, ?> volSurfaceData = new VolatilitySurfaceData<>(_definition.getName(), _specification.getName(), _definition.getTarget().getUniqueId(),
             expiries, _definition.getYs(), volatilityValues);
         final ComputedValue resultValue = new ComputedValue(_result, volSurfaceData);
         return Collections.singleton(resultValue);

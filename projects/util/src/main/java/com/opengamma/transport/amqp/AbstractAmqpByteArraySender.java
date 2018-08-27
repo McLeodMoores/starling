@@ -20,12 +20,12 @@ public class AbstractAmqpByteArraySender {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param amqpTemplate  the template, not null
    * @param exchange  the exchange, not null
    * @param routingKey  the routing key, not null
    */
-  public AbstractAmqpByteArraySender(AmqpTemplate amqpTemplate, String exchange, String routingKey) {
+  public AbstractAmqpByteArraySender(final AmqpTemplate amqpTemplate, final String exchange, final String routingKey) {
     ArgumentChecker.notNull(amqpTemplate, "amqpTemplate");
     ArgumentChecker.notNull(exchange, "exchange");
     ArgumentChecker.notNull(routingKey, "routingKey");
@@ -37,7 +37,7 @@ public class AbstractAmqpByteArraySender {
   //-------------------------------------------------------------------------
   /**
    * Gets the template.
-   * 
+   *
    * @return the template, not null
    */
   public AmqpTemplate getAmqpTemplate() {
@@ -46,7 +46,7 @@ public class AbstractAmqpByteArraySender {
 
   /**
    * Gets the exchange.
-   * 
+   *
    * @return the exchange, not null
    */
   public String getExchange() {
@@ -55,7 +55,7 @@ public class AbstractAmqpByteArraySender {
 
   /**
    * Gets the routing key.
-   * 
+   *
    * @return the routing key, not null
    */
   public String getRoutingKey() {

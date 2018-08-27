@@ -21,72 +21,70 @@ import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
-import com.opengamma.engine.cache.BerkeleyDBBinaryDataStore;
-import com.opengamma.engine.cache.BerkeleyDBViewComputationCacheSource;
 import com.opengamma.util.monitor.OperationTimer;
 import com.opengamma.util.test.TestGroup;
 import com.sleepycat.je.Environment;
 
 /**
- * 
+ *
  */
 @Test(groups = TestGroup.INTEGRATION)
 public class BerkeleyDBValueSpecificationIdentifierBinaryDataStoreTest {
   private static final Logger LOGGER = LoggerFactory.getLogger(BerkeleyDBValueSpecificationIdentifierBinaryDataStoreTest.class);
 
-  private static Set<File> s_dbDirsToDelete = new HashSet<File>();
-  
-  protected File createDbDir(String methodName) {
-    File tmpDir = new File(System.getProperty("java.io.tmpdir"));
-    File dbDir = new File(tmpDir, "BerkeleyDBBinaryDataStore-" + System.currentTimeMillis() + "-" + methodName);
+  private static Set<File> s_dbDirsToDelete = new HashSet<>();
+
+  protected File createDbDir(final String methodName) {
+    final File tmpDir = new File(System.getProperty("java.io.tmpdir"));
+    final File dbDir = new File(tmpDir, "BerkeleyDBBinaryDataStore-" + System.currentTimeMillis() + "-" + methodName);
     dbDir.mkdirs();
     s_dbDirsToDelete.add(dbDir);
     return dbDir;
   }
-  
+
   @AfterClass(alwaysRun = true)
   public static void deleteDbDirs() {
-    for (File f : s_dbDirsToDelete) {
+    for (final File f : s_dbDirsToDelete) {
       try {
         LOGGER.info("Deleting temp directory {}", f);
         FileUtils.deleteDirectory(f);
-      } catch (IOException ioe) {
+      } catch (final IOException ioe) {
         LOGGER.warn("Unable to recursively delete directory {}", f);
         // Just swallow it.
       }
     }
     s_dbDirsToDelete.clear();
   }
-  
+
   public void putPerformanceTest() {
     final int numEntries = 5000;
     final int minEntrySize = 50;
     final int maxEntrySize = 1000;
     final Random random = new Random();
-    
-    File dbDir = createDbDir("putPerformanceTest");
-    Environment dbEnvironment = BerkeleyDBViewComputationCacheSource.constructDatabaseEnvironment(dbDir, false);
-    
-    BerkeleyDBBinaryDataStore dataStore = new BerkeleyDBBinaryDataStore(dbEnvironment, "putPerformanceTest");
+
+    final File dbDir = createDbDir("putPerformanceTest");
+    final Environment dbEnvironment = BerkeleyDBViewComputationCacheSource.constructDatabaseEnvironment(dbDir, false);
+
+    final BerkeleyDBBinaryDataStore dataStore = new BerkeleyDBBinaryDataStore(dbEnvironment, "putPerformanceTest");
     dataStore.start();
-    
-    OperationTimer timer = new OperationTimer(LOGGER, "Writing {} entries", numEntries);
-    
-    int randRange = maxEntrySize - minEntrySize;
+
+    final OperationTimer timer = new OperationTimer(LOGGER, "Writing {} entries", numEntries);
+
+    final int randRange = maxEntrySize - minEntrySize;
     for (int i = 0; i < numEntries; i++) {
-      int nBytes = minEntrySize + random.nextInt(randRange);
-      byte[] bytes = new byte[nBytes];
+      final int nBytes = minEntrySize + random.nextInt(randRange);
+      final byte[] bytes = new byte[nBytes];
       random.nextBytes(bytes);
       dataStore.put(i, bytes);
     }
-    
-    long numMillis = timer.finished();
 
-    double msPerPut = ((double) numMillis) / ((double) numEntries);
-    double putsPerSecond = 1000.0 / msPerPut;
-    
+    final long numMillis = timer.finished();
+
+    final double msPerPut = (double) numMillis / (double) numEntries;
+    final double putsPerSecond = 1000.0 / msPerPut;
+
     LOGGER.info("for {} entries, {} ms/put, {} puts/sec", new Object[] {numEntries, msPerPut, putsPerSecond});
-    
+
     dataStore.delete();
     dataStore.stop();
     dbEnvironment.close();
@@ -99,100 +97,100 @@ public class BerkeleyDBValueSpecificationIdentifierBinaryDataStoreTest {
     final int minEntrySize = 50;
     final int maxEntrySize = 1000;
     final Random random = new Random();
-    
-    File dbDir = createDbDir("getPerformanceTest");
-    Environment dbEnvironment = BerkeleyDBViewComputationCacheSource.constructDatabaseEnvironment(dbDir, false);
-    
-    BerkeleyDBBinaryDataStore dataStore = new BerkeleyDBBinaryDataStore(dbEnvironment, "getPerformanceTest");
+
+    final File dbDir = createDbDir("getPerformanceTest");
+    final Environment dbEnvironment = BerkeleyDBViewComputationCacheSource.constructDatabaseEnvironment(dbDir, false);
+
+    final BerkeleyDBBinaryDataStore dataStore = new BerkeleyDBBinaryDataStore(dbEnvironment, "getPerformanceTest");
     dataStore.start();
-    
-    int randRange = maxEntrySize - minEntrySize;
+
+    final int randRange = maxEntrySize - minEntrySize;
     for (int i = 0; i < numEntries; i++) {
-      int nBytes = minEntrySize + random.nextInt(randRange);
-      byte[] bytes = new byte[nBytes];
+      final int nBytes = minEntrySize + random.nextInt(randRange);
+      final byte[] bytes = new byte[nBytes];
       random.nextBytes(bytes);
       dataStore.put(i, bytes);
     }
-    
-    OperationTimer timer = new OperationTimer(LOGGER, "Loading {} entries", numGets);
+
+    final OperationTimer timer = new OperationTimer(LOGGER, "Loading {} entries", numGets);
     for (int j = 0; j < numCycles; j++) {
       for (int i = 0; i < numEntries; i++) {
-        byte[] data = dataStore.get(i);
+        final byte[] data = dataStore.get(i);
         assertNotNull(data);
         assertTrue(data.length >= minEntrySize);
         assertTrue(data.length <= maxEntrySize);
       }
     }
-    
-    long numMillis = timer.finished();
 
-    double msPerGet = ((double) numMillis) / ((double) numGets);
-    double getsPerSecond = 1000.0 / msPerGet;
-    
+    final long numMillis = timer.finished();
+
+    final double msPerGet = (double) numMillis / (double) numGets;
+    final double getsPerSecond = 1000.0 / msPerGet;
+
     LOGGER.info("for {} gets, {} ms/get, {} gets/sec", new Object[] {numGets, msPerGet, getsPerSecond});
-    
+
     dataStore.delete();
     dataStore.stop();
     dbEnvironment.close();
   }
-  
+
   public void parallelPutGetTest() throws InterruptedException {
     final int numEntries = 5000;
     final int numCycles = 1;
     final int numGets = numCycles * numEntries;
     final Random random = new Random();
-    
-    File dbDir = createDbDir("parallelPutGetTest");
-    Environment dbEnvironment = BerkeleyDBViewComputationCacheSource.constructDatabaseEnvironment(dbDir, false);
-    
+
+    final File dbDir = createDbDir("parallelPutGetTest");
+    final Environment dbEnvironment = BerkeleyDBViewComputationCacheSource.constructDatabaseEnvironment(dbDir, false);
+
     final BerkeleyDBBinaryDataStore dataStore = new BerkeleyDBBinaryDataStore(dbEnvironment, "parallelPutGetTest");
     dataStore.start();
-    
+
     final AtomicLong currentMaxIdentifier = new AtomicLong(0L);
     final byte[] bytes = new byte[100];
     random.nextBytes(bytes);
-    Thread tPut = new Thread(new Runnable() {
+    final Thread tPut = new Thread(new Runnable() {
       @Override
       public void run() {
-        OperationTimer timer = new OperationTimer(LOGGER, "Putting {} entries", numEntries);
+        final OperationTimer timer = new OperationTimer(LOGGER, "Putting {} entries", numEntries);
         for (int i = 0; i < numEntries; i++) {
           random.nextBytes(bytes);
           dataStore.put(i, bytes);
           currentMaxIdentifier.set(i);
         }
-        long numMillis = timer.finished();
+        final long numMillis = timer.finished();
 
-        double msPerPut = ((double) numMillis) / ((double) numGets);
-        double putsPerSecond = 1000.0 / msPerPut;
-        
+        final double msPerPut = (double) numMillis / (double) numGets;
+        final double putsPerSecond = 1000.0 / msPerPut;
+
         LOGGER.info("for {} puts, {} ms/put, {} puts/sec", new Object[] {numEntries, msPerPut, putsPerSecond});
       }
-      
+
     }, "Putter");
-    
+
     class GetRunner implements Runnable {
       @Override
       public void run() {
-        OperationTimer timer = new OperationTimer(LOGGER, "Getting {} entries", numGets);
+        final OperationTimer timer = new OperationTimer(LOGGER, "Getting {} entries", numGets);
         for (int i = 0; i < numGets; i++) {
-          int maxIdentifier = (int) currentMaxIdentifier.get();
-          long actualIdentifier = random.nextInt(maxIdentifier);
+          final int maxIdentifier = (int) currentMaxIdentifier.get();
+          final long actualIdentifier = random.nextInt(maxIdentifier);
           dataStore.get(actualIdentifier);
         }
-        long numMillis = timer.finished();
+        final long numMillis = timer.finished();
 
-        double msPerGet = ((double) numMillis) / ((double) numGets);
-        double getsPerSecond = 1000.0 / msPerGet;
-        
+        final double msPerGet = (double) numMillis / (double) numGets;
+        final double getsPerSecond = 1000.0 / msPerGet;
+
         LOGGER.info("for {} gets, {} ms/get, {} gets/sec", new Object[] {numGets, msPerGet, getsPerSecond});
       }
     };
-    Thread tGet1 = new Thread(new GetRunner(), "getter-1");
-    Thread tGet2 = new Thread(new GetRunner(), "getter-2");
+    final Thread tGet1 = new Thread(new GetRunner(), "getter-1");
+    final Thread tGet2 = new Thread(new GetRunner(), "getter-2");
     //Thread tGet3 = new Thread(new GetRunner(), "getter-3");
     //Thread tGet4 = new Thread(new GetRunner(), "getter-4");
     //Thread tGet5 = new Thread(new GetRunner(), "getter-5");
-    
+
     tPut.start();
     Thread.sleep(5L);
     tGet1.start();
@@ -200,14 +198,14 @@ public class BerkeleyDBValueSpecificationIdentifierBinaryDataStoreTest {
     //tGet3.start();
     //tGet4.start();
     //tGet5.start();
-    
+
     tPut.join();
     tGet1.join();
     tGet2.join();
     //tGet3.join();
     //tGet4.join();
     //tGet5.join();
-    
+
     dataStore.delete();
     dataStore.stop();
     dbEnvironment.close();

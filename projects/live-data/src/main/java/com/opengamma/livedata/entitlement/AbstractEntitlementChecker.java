@@ -19,7 +19,7 @@ import com.opengamma.livedata.UserPrincipal;
  * To use this class, override one or other of the two {@code isEntitled()} methods.
  * <p>
  * The simpler option is to override {@link #isEntitled(UserPrincipal, LiveDataSpecification)}.
- * <p> 
+ * <p>
  * The more complex option is to override the bulk {@link #isEntitled(UserPrincipal, Collection)}.
  * This is advisable if you need to make a remote call to an external service and want your
  * implementation to be efficient.
@@ -27,16 +27,16 @@ import com.opengamma.livedata.UserPrincipal;
 public abstract class AbstractEntitlementChecker implements LiveDataEntitlementChecker {
 
   @Override
-  public boolean isEntitled(UserPrincipal user, LiveDataSpecification requestedSpecification) {
-    Map<LiveDataSpecification, Boolean> result = isEntitled(user, Collections.singleton(requestedSpecification));
+  public boolean isEntitled(final UserPrincipal user, final LiveDataSpecification requestedSpecification) {
+    final Map<LiveDataSpecification, Boolean> result = isEntitled(user, Collections.singleton(requestedSpecification));
     return result.get(requestedSpecification);
   }
 
   @Override
-  public Map<LiveDataSpecification, Boolean> isEntitled(UserPrincipal user, Collection<LiveDataSpecification> requestedSpecifications) {
-    Map<LiveDataSpecification, Boolean> returnValue = new HashMap<LiveDataSpecification, Boolean>();
-    for (LiveDataSpecification spec : requestedSpecifications) {
-      boolean entitled = isEntitled(user, spec);
+  public Map<LiveDataSpecification, Boolean> isEntitled(final UserPrincipal user, final Collection<LiveDataSpecification> requestedSpecifications) {
+    final Map<LiveDataSpecification, Boolean> returnValue = new HashMap<>();
+    for (final LiveDataSpecification spec : requestedSpecifications) {
+      final boolean entitled = isEntitled(user, spec);
       returnValue.put(spec, entitled);
     }
     return returnValue;

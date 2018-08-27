@@ -74,36 +74,36 @@ public class WebUsersResource extends AbstractWebUserResource {
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String getHTML(
-      @QueryParam("pgIdx") Integer pgIdx,
-      @QueryParam("pgNum") Integer pgNum,
-      @QueryParam("pgSze") Integer pgSze,
-      @QueryParam("sort") String sort,
-      @QueryParam("username") String username,
-      @QueryParam("name") String name,
-      @QueryParam("email") String email,
-      @QueryParam("idscheme") String idScheme,
-      @QueryParam("idvalue") String idValue,
-      @QueryParam("userId") List<String> userIdStrs,
-      @Context UriInfo uriInfo) {
-    sort = StringUtils.trimToNull(sort);
-    username = StringUtils.trimToNull(username);
-    name = StringUtils.trimToNull(name);
-    email = StringUtils.trimToNull(email);
-    idScheme = StringUtils.trimToNull(idScheme);
-    idValue = StringUtils.trimToNull(idValue);
-    PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
-    UserSearchSortOrder so = buildSortOrder(sort, UserSearchSortOrder.NAME_ASC);
-    FlexiBean out = createSearchResultData(pr, so, username, name, email, idScheme, idValue, userIdStrs, uriInfo);
+      @QueryParam("pgIdx") final Integer pgIdx,
+      @QueryParam("pgNum") final Integer pgNum,
+      @QueryParam("pgSze") final Integer pgSze,
+      @QueryParam("sort") final String sort,
+      @QueryParam("username") final String username,
+      @QueryParam("name") final String name,
+      @QueryParam("email") final String email,
+      @QueryParam("idscheme") final String idScheme,
+      @QueryParam("idvalue") final String idValue,
+      @QueryParam("userId") final List<String> userIdStrs,
+      @Context final UriInfo uriInfo) {
+    final String trimmedSort = StringUtils.trimToNull(sort);
+    final String trimmedUsername = StringUtils.trimToNull(username);
+    final String trimmedName = StringUtils.trimToNull(name);
+    final String trimmedEmail = StringUtils.trimToNull(email);
+    final String trimmedIdScheme = StringUtils.trimToNull(idScheme);
+    final String trimmedIdValue = StringUtils.trimToNull(idValue);
+    final PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
+    final UserSearchSortOrder so = buildSortOrder(trimmedSort, UserSearchSortOrder.NAME_ASC);
+    final FlexiBean out = createSearchResultData(pr, so, trimmedUsername, trimmedName, trimmedEmail, trimmedIdScheme, trimmedIdValue, userIdStrs, uriInfo);
     return getFreemarker().build(USERS_PAGE, out);
   }
 
   private FlexiBean createSearchResultData(
-      PagingRequest pr, UserSearchSortOrder so,
-      String username, String name, String email, String idScheme, String idValue,
-      List<String> userIdStrs, UriInfo uriInfo) {
-    FlexiBean out = createRootData();
-    
-    UserSearchRequest searchRequest = new UserSearchRequest();
+      final PagingRequest pr, final UserSearchSortOrder so,
+      final String username, final String name, final String email, final String idScheme, final String idValue,
+      final List<String> userIdStrs, final UriInfo uriInfo) {
+    final FlexiBean out = createRootData();
+
+    final UserSearchRequest searchRequest = new UserSearchRequest();
     searchRequest.setPagingRequest(pr);
     searchRequest.setSortOrder(so);
     searchRequest.setUserName(username);
@@ -111,13 +111,13 @@ public class WebUsersResource extends AbstractWebUserResource {
     searchRequest.setEmailAddress(email);
     searchRequest.setAlternateIdScheme(StringUtils.trimToNull(idScheme));
     searchRequest.setAlternateIdValue(StringUtils.trimToNull(idValue));
-    for (String userIdStr : userIdStrs) {
+    for (final String userIdStr : userIdStrs) {
       searchRequest.addObjectId(ObjectId.parse(userIdStr));
     }
     out.put("searchRequest", searchRequest);
-    
+
     if (data().getUriInfo().getQueryParameters().size() > 0) {
-      UserSearchResult searchResult = data().getUserMaster().search(searchRequest);
+      final UserSearchResult searchResult = data().getUserMaster().search(searchRequest);
       out.put("searchResult", searchResult);
       out.put("paging", new WebPaging(searchResult.getPaging(), uriInfo));
     }
@@ -129,28 +129,28 @@ public class WebUsersResource extends AbstractWebUserResource {
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
   public Response postHTML(
-      @FormParam("username") String userName,
-      @FormParam("password") String password,
-      @FormParam("email") String email,
-      @FormParam("displayname") String displayName,
-      @FormParam("locale") String locale,
-      @FormParam("timezone") String zone,
-      @FormParam("datestyle") String dateStyle,
-      @FormParam("timestyle") String timeStyle) {
+      @FormParam("username") final String userName,
+      @FormParam("password") final String password,
+      @FormParam("email") final String email,
+      @FormParam("displayname") final String displayName,
+      @FormParam("locale") final String locale,
+      @FormParam("timezone") final String zone,
+      @FormParam("datestyle") final String dateStyle,
+      @FormParam("timestyle") final String timeStyle) {
     try {
-      UserForm form = new UserForm(userName, password, email, displayName, locale, zone, dateStyle, timeStyle);
-      ManageableUser added = form.add(data().getUserMaster(), data().getPasswordService());
-      URI uri = WebUserResource.uri(data(), added.getUserName());
+      final UserForm form = new UserForm(userName, password, email, displayName, locale, zone, dateStyle, timeStyle);
+      final ManageableUser added = form.add(data().getUserMaster(), data().getPasswordService());
+      final URI uri = WebUserResource.uri(data(), added.getUserName());
       return Response.seeOther(uri).build();
-      
-    } catch (UserFormException ex) {
+
+    } catch (final UserFormException ex) {
       ex.logUnexpected(LOGGER);
-      FlexiBean out = createRootData();
+      final FlexiBean out = createRootData();
       out.put("username", userName);
       out.put("displayname", displayName);
       out.put("timezone", zone);
       out.put("email", email);
-      for (UserFormError error : ex.getErrors()) {
+      for (final UserFormError error : ex.getErrors()) {
         out.put("err_" + error.toLowerCamel(), true);
       }
       return Response.ok(getFreemarker().build(USER_ADD_PAGE, out)).build();
@@ -159,18 +159,18 @@ public class WebUsersResource extends AbstractWebUserResource {
 
   //-------------------------------------------------------------------------
   @Path("name/{userName}")
-  public WebUserResource findUser(@PathParam("userName") String userName) {
+  public WebUserResource findUser(@PathParam("userName") final String userName) {
     data().setUriUserName(userName);
     try {
-      ManageableUser user = data().getUserMaster().getByName(userName);
+      final ManageableUser user = data().getUserMaster().getByName(userName);
       data().setUser(user);
-    } catch (DataNotFoundException ex) {
-      UserEventHistoryRequest request = new UserEventHistoryRequest(userName);
+    } catch (final DataNotFoundException ex) {
+      final UserEventHistoryRequest request = new UserEventHistoryRequest(userName);
       try {
         data().getUserMaster().eventHistory(request);
-        ManageableUser user = new ManageableUser(userName);
+        final ManageableUser user = new ManageableUser(userName);
         data().setUser(user);
-      } catch (DataNotFoundException ex2) {
+      } catch (final DataNotFoundException ex2) {
         throw ex;
       }
     }
@@ -182,9 +182,10 @@ public class WebUsersResource extends AbstractWebUserResource {
    * Creates the output root data.
    * @return the output root data, not null
    */
+  @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
-    UserSearchRequest searchRequest = new UserSearchRequest();
+    final FlexiBean out = super.createRootData();
+    final UserSearchRequest searchRequest = new UserSearchRequest();
     out.put("searchRequest", searchRequest);
     return out;
   }
@@ -195,8 +196,8 @@ public class WebUsersResource extends AbstractWebUserResource {
    * @param data  the data, not null
    * @return the URI, not null
    */
-  public static URI uri(WebUserData data) {
-    UriBuilder builder = data.getUriInfo().getBaseUriBuilder().path(WebUsersResource.class);
+  public static URI uri(final WebUserData data) {
+    final UriBuilder builder = data.getUriInfo().getBaseUriBuilder().path(WebUsersResource.class);
     return builder.build();
   }
 

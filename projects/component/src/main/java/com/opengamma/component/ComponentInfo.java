@@ -51,7 +51,7 @@ public class ComponentInfo implements Bean {
    * The extensible set of attributes that help describe the component.
    */
   @PropertyDefinition(validate = "notNull")
-  private final Map<String, String> _attributes = new HashMap<String, String>();
+  private final Map<String, String> _attributes = new HashMap<>();
 
   /**
    * Creates an instance.
@@ -61,11 +61,11 @@ public class ComponentInfo implements Bean {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param type  the component type, not null
    * @param classifier  the classifier, not null
    */
-  public ComponentInfo(Class<?> type, String classifier) {
+  public ComponentInfo(final Class<?> type, final String classifier) {
     setType(type);
     setClassifier(classifier);
   }
@@ -73,18 +73,18 @@ public class ComponentInfo implements Bean {
   //-------------------------------------------------------------------------
   /**
    * Checks if this component matches the specified type and classifier.
-   * 
+   *
    * @param type  the type of the component, typically an interface
    * @param classifier  the classifier of the type, used to name instances of the same type
    * @return true if it matches
    */
-  public boolean matches(Class<?> type, String classifier) {
+  public boolean matches(final Class<?> type, final String classifier) {
     return getType().equals(type) && getClassifier().equals(classifier);
   }
 
   /**
    * Converts this info to a key.
-   * 
+   *
    * @return the key for the component, not null
    */
   public ComponentKey toComponentKey() {
@@ -100,22 +100,22 @@ public class ComponentInfo implements Bean {
    * @param key  the key to add, not null
    * @param value  the value to add, not null
    */
-  public void addAttribute(String key, Object value) {
+  public void addAttribute(final String key, final Object value) {
     ArgumentChecker.notNull(key, "key");
     ArgumentChecker.notNull(value, "value");
-    String str = JodaBeanUtils.stringConverter().convertToString(value);
+    final String str = JodaBeanUtils.stringConverter().convertToString(value);
     _attributes.put(key, str);
   }
 
   /**
    * Gets a single attribute ensuring the value is not null.
-   * 
+   *
    * @param key  the attribute key, not null
    * @return the value of the attribute, not null
    * @throws IllegalArgumentException if there is no attribute mapped to the key
    */
-  public String getAttribute(String key) {
-    String attr = _attributes.get(key);
+  public String getAttribute(final String key) {
+    final String attr = _attributes.get(key);
     if (attr == null) {
       throw new IllegalArgumentException("Unknown attribute '" + key + "': " + toComponentKey());
     }

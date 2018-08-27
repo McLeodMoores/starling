@@ -29,8 +29,8 @@ import com.opengamma.util.jms.JmsConnector;
 /**
  * This {@link MarketDataSender} sends market data to JMS.
  * <p>
- * When the sender loses connection to JMS, it starts building a 
- * cumulative delta of changes. This cumulative delta is published when 
+ * When the sender loses connection to JMS, it starts building a
+ * cumulative delta of changes. This cumulative delta is published when
  * the sender reconnects.
  */
 public class JmsSender implements MarketDataSender {
@@ -69,12 +69,12 @@ public class JmsSender implements MarketDataSender {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param jmsConnector  the JMS connector, not null
    * @param distributor  the distributor, not null
    * @param fudgeContext  the Fudge context, not null
    */
-  public JmsSender(JmsConnector jmsConnector, MarketDataDistributor distributor, FudgeContext fudgeContext) {
+  public JmsSender(final JmsConnector jmsConnector, final MarketDataDistributor distributor, final FudgeContext fudgeContext) {
     ArgumentChecker.notNull(jmsConnector, "jmsConnector");
     ArgumentChecker.notNull(distributor, "Market data distributor");
     ArgumentChecker.notNull(fudgeContext, "fudgeContext");
@@ -91,17 +91,17 @@ public class JmsSender implements MarketDataSender {
 
   //-------------------------------------------------------------------------
   @Override
-  public void sendMarketData(LiveDataValueUpdateBean data) {
+  public void sendMarketData(final LiveDataValueUpdateBean data) {
     _lock.acquireUninterruptibly();
     try {
       _cumulativeDelta.liveDataReceived(data.getFields());
-      _lastSequenceNumber = data.getSequenceNumber(); 
-      
+      _lastSequenceNumber = data.getSequenceNumber();
+
       if (_interrupted) {
         LOGGER.debug("{}: Interrupted - not sending message", this);
         return;
       }
-      
+
       send();
     } finally {
       _lock.release();
@@ -109,35 +109,35 @@ public class JmsSender implements MarketDataSender {
   }
 
   private void send() {
-    DistributionSpecification distributionSpec = getDistributor().getDistributionSpec();
-    
-    LiveDataValueUpdateBean liveDataValueUpdateBean = new LiveDataValueUpdateBean(
-        _lastSequenceNumber, 
-        distributionSpec.getFullyQualifiedLiveDataSpecification(), 
+    final DistributionSpecification distributionSpec = getDistributor().getDistributionSpec();
+
+    final LiveDataValueUpdateBean liveDataValueUpdateBean = new LiveDataValueUpdateBean(
+        _lastSequenceNumber,
+        distributionSpec.getFullyQualifiedLiveDataSpecification(),
         _cumulativeDelta.getLastKnownValues());
     LOGGER.debug("{}: Sending Live Data update {}", this, liveDataValueUpdateBean);
-    
-    FudgeMsg fudgeMsg = LiveDataValueUpdateBeanFudgeBuilder.toFudgeMsg(new FudgeSerializer(_fudgeContext), liveDataValueUpdateBean);
-    String destinationName = distributionSpec.getJmsTopic();
+
+    final FudgeMsg fudgeMsg = LiveDataValueUpdateBeanFudgeBuilder.toFudgeMsg(new FudgeSerializer(_fudgeContext), liveDataValueUpdateBean);
+    final String destinationName = distributionSpec.getJmsTopic();
     final byte[] bytes = _fudgeContext.toByteArray(fudgeMsg);
-    
+
     _jmsConnector.getJmsTemplateTopic().send(destinationName, new MessageCreator() {
       @Override
-      public Message createMessage(Session session) throws JMSException {
+      public Message createMessage(final Session session) throws JMSException {
         // TODO kirk 2009-10-30 -- We want to put stuff in the properties as well I think.
-        BytesMessage bytesMessage = session.createBytesMessage();
+        final BytesMessage bytesMessage = session.createBytesMessage();
         bytesMessage.writeBytes(bytes);
         return bytesMessage;
       }
     });
-    
+
     _cumulativeDelta.clear();
   }
 
   //-------------------------------------------------------------------------
   /**
    * Checks if the sender is interrupted.
-   * 
+   *
    * @return true if interrupted
    */
   public boolean isInterrupted() {
@@ -157,7 +157,7 @@ public class JmsSender implements MarketDataSender {
    * if a send is not already active. Note that it is not safe to call this method from the JMS
    * invoked transportResume message. For example ActiveMQ holds a lock to do an initial 'send'
    * and then gains a lock for the failover while another thread holds the lock for the failover
-   * as it calls the notifications so sending will cause deadlock. 
+   * as it calls the notifications so sending will cause deadlock.
    */
   public void transportResumed() {
     LOGGER.info("Transport resumed {}", this);
@@ -169,7 +169,7 @@ public class JmsSender implements MarketDataSender {
         if (!_cumulativeDelta.isEmpty()) {
           send();
         }
-      } catch (RuntimeException e) {
+      } catch (final RuntimeException e) {
         LOGGER.error("transportResumed() failed", e);
       } finally {
         _lock.release();
@@ -179,7 +179,7 @@ public class JmsSender implements MarketDataSender {
 
   @Override
   public String toString() {
-    return "JmsSender[" + _distributor.getDistributionSpec().toString() +  "]";    
+    return "JmsSender[" + _distributor.getDistributionSpec().toString() +  "]";
   }
 
 }

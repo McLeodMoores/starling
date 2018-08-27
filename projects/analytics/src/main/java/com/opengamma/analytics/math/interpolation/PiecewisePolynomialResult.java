@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.interpolation;
@@ -19,18 +19,18 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
  */
 public class PiecewisePolynomialResult {
 
-  private DoubleMatrix1D _knots;
-  private DoubleMatrix2D _coefMatrix;
-  private int _nIntervals;
-  private int _order;
-  private int _dim;
+  private final DoubleMatrix1D _knots;
+  private final DoubleMatrix2D _coefMatrix;
+  private final int _nIntervals;
+  private final int _order;
+  private final int _dim;
 
   /**
    * Constructor
-   * @param knots 
-   * @param coefMatrix 
-   * @param order 
-   * @param dim 
+   * @param knots
+   * @param coefMatrix
+   * @param order
+   * @param dim
    */
   public PiecewisePolynomialResult(final DoubleMatrix1D knots, final DoubleMatrix2D coefMatrix, final int order, final int dim) {
 
@@ -76,7 +76,7 @@ public class PiecewisePolynomialResult {
 
   /**
    * Access _dim
-   * @return Dimension of spline 
+   * @return Dimension of spline
    */
   public int getDimensions() {
     return _dim;
@@ -94,7 +94,7 @@ public class PiecewisePolynomialResult {
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -104,7 +104,7 @@ public class PiecewisePolynomialResult {
     if (!(obj instanceof PiecewisePolynomialResult)) {
       return false;
     }
-    PiecewisePolynomialResult other = (PiecewisePolynomialResult) obj;
+    final PiecewisePolynomialResult other = (PiecewisePolynomialResult) obj;
     if (!_coefMatrix.equals(other._coefMatrix)) {
       return false;
     }

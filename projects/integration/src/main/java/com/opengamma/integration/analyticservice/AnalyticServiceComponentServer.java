@@ -17,10 +17,10 @@ public class AnalyticServiceComponentServer extends OpenGammaComponentServer {
 
   /**
    * Main method to start an OpenGamma JVM process.
-   * 
+   *
    * @param args  the arguments
    */
-  public static void main(String[] args) { // CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     if (!new AnalyticServiceComponentServer().run(args)) {
       ShutdownUtils.exit(-1);
     }

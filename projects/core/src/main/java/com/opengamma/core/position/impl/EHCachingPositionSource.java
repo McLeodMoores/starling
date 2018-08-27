@@ -11,10 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,6 +34,10 @@ import com.opengamma.util.map.Map2;
 import com.opengamma.util.map.WeakValueHashMap2;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
+
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
 
 /**
  * A cache decorating a {@code PositionSource}.
@@ -113,12 +113,12 @@ public class EHCachingPositionSource implements PositionSource {
     }
 
     @Override
-    public void setAttributes(Map<String, String> attributes) {
+    public void setAttributes(final Map<String, String> attributes) {
       throw new UnsupportedOperationException();
     }
 
     @Override
-    public void addAttribute(String key, String value) {
+    public void addAttribute(final String key, final String value) {
       throw new UnsupportedOperationException();
     }
 
@@ -140,8 +140,8 @@ public class EHCachingPositionSource implements PositionSource {
   }
 
   private final ConcurrentMap<UniqueId, Object> _frontPositionOrTradeCache = new MapMaker().weakValues().makeMap();
-  private final Map2<VersionCorrection, UniqueId, Object> _frontCacheByUID = new WeakValueHashMap2<VersionCorrection, UniqueId, Object>(HashMap2.STRONG_KEYS);
-  private final Map2<VersionCorrection, ObjectId, Object> _frontCacheByOID = new WeakValueHashMap2<VersionCorrection, ObjectId, Object>(HashMap2.STRONG_KEYS);
+  private final Map2<VersionCorrection, UniqueId, Object> _frontCacheByUID = new WeakValueHashMap2<>(HashMap2.STRONG_KEYS);
+  private final Map2<VersionCorrection, ObjectId, Object> _frontCacheByOID = new WeakValueHashMap2<>(HashMap2.STRONG_KEYS);
 
   private final VersionCorrectionLockListener _frontCacheCleaner = new VersionCorrectionLockListener() {
     @Override
@@ -151,11 +151,11 @@ public class EHCachingPositionSource implements PositionSource {
     }
   };
 
-  private final WeakInstanceCache<PortfolioNode> _nodes = new WeakInstanceCache<PortfolioNode>();
+  private final WeakInstanceCache<PortfolioNode> _nodes = new WeakInstanceCache<>();
 
   /**
    * Creates the cache around an underlying position source.
-   * 
+   *
    * @param underlying the underlying data, not null
    * @param cacheManager the cache manager, not null
    */
@@ -178,7 +178,7 @@ public class EHCachingPositionSource implements PositionSource {
   //-------------------------------------------------------------------------
   /**
    * Gets the underlying source of positions.
-   * 
+   *
    * @return the underlying source of positions, not null
    */
   protected PositionSource getUnderlying() {
@@ -187,7 +187,7 @@ public class EHCachingPositionSource implements PositionSource {
 
   /**
    * Gets the cache manager.
-   * 
+   *
    * @return the cache manager, not null
    */
   protected CacheManager getCacheManager() {
@@ -211,7 +211,7 @@ public class EHCachingPositionSource implements PositionSource {
       final Position newPosition = addToFrontCache(nodePosition, versionCorrection);
       if (newPosition != nodePosition) {
         if (newPositions == null) {
-          newPositions = new ArrayList<Position>(nodePositions.size());
+          newPositions = new ArrayList<>(nodePositions.size());
           for (int j = 0; j < i; j++) {
             newPositions.add(nodePositions.get(j));
           }
@@ -230,7 +230,7 @@ public class EHCachingPositionSource implements PositionSource {
       final PortfolioNode newChild = addToFrontCache(nodeChild, versionCorrection);
       if (newChild != nodeChild) {
         if (newChildren == null) {
-          newChildren = new ArrayList<PortfolioNode>(nodeChildren.size());
+          newChildren = new ArrayList<>(nodeChildren.size());
           for (int j = 0; j < i; j++) {
             newChildren.add(nodeChildren.get(j));
           }
@@ -242,11 +242,11 @@ public class EHCachingPositionSource implements PositionSource {
         }
       }
     }
-    if ((newPositions != null) || (newChildren != null)) {
+    if (newPositions != null || newChildren != null) {
       final SimplePortfolioNode newNode = new SimplePortfolioNode(node.getUniqueId(), node.getName());
       newNode.setParentNodeId(node.getParentNodeId());
-      newNode.addPositions((newPositions != null) ? newPositions : node.getPositions());
-      newNode.addChildNodes((newChildren != null) ? newChildren : node.getChildNodes());
+      newNode.addPositions(newPositions != null ? newPositions : node.getPositions());
+      newNode.addChildNodes(newChildren != null ? newChildren : node.getChildNodes());
       node = newNode;
     }
     node = _nodes.get(node);
@@ -257,7 +257,7 @@ public class EHCachingPositionSource implements PositionSource {
     return node;
   }
 
-  protected Portfolio addToFrontCache(Portfolio portfolio, final VersionCorrection versionCorrection) {
+  protected Portfolio addToFrontCache(final Portfolio portfolio, final VersionCorrection versionCorrection) {
     final PortfolioNode newRoot = addToFrontCache(portfolio.getRootNode(), versionCorrection);
     if (newRoot != portfolio.getRootNode()) {
       final Portfolio newPortfolio = new CachedPortfolio(portfolio, newRoot);

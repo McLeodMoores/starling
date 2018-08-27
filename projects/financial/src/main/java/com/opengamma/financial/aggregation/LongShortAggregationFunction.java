@@ -543,22 +543,22 @@ public class LongShortAggregationFunction implements AggregationFunction<String>
     }
 
     @Override
-    public String visitStandardCDSSecurity(StandardCDSSecurity security) {
+    public String visitStandardCDSSecurity(final StandardCDSSecurity security) {
       return null;
     }
 
     @Override
-    public String visitLegacyCDSSecurity(LegacyCDSSecurity security) {
+    public String visitLegacyCDSSecurity(final LegacyCDSSecurity security) {
       return null;
     }
 
     @Override
-    public String visitIndexCDSSecurity(IndexCDSSecurity security) {
+    public String visitIndexCDSSecurity(final IndexCDSSecurity security) {
       return null;
     }
 
     @Override
-    public String visitIndexCDSDefinitionSecurity(IndexCDSDefinitionSecurity security) {
+    public String visitIndexCDSDefinitionSecurity(final IndexCDSDefinitionSecurity security) {
       return null;
     }
   }

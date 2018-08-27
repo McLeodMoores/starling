@@ -33,10 +33,10 @@ public class ResultsFormatterTest {
    */
   @Test
   public void formatHistoryForValueNameWithUnknownType() {
-    ResultsFormatter formatter = new ResultsFormatter();
-    UniqueId uid = UniqueId.of("scheme", "value");
-    ComputationTargetSpecification spec = new ComputationTargetSpecification(ComputationTargetType.POSITION, uid);
-    ValueProperties props = ValueProperties.builder().with(ValuePropertyNames.FUNCTION, "fn").get();
+    final ResultsFormatter formatter = new ResultsFormatter();
+    final UniqueId uid = UniqueId.of("scheme", "value");
+    final ComputationTargetSpecification spec = new ComputationTargetSpecification(ComputationTargetType.POSITION, uid);
+    final ValueProperties props = ValueProperties.builder().with(ValuePropertyNames.FUNCTION, "fn").get();
     // if this works without an exception then the bug is fixed
     formatter.format(123d, new ValueSpecification("unknown value name", spec, props), TypeFormatter.Format.HISTORY, null);
   }
@@ -44,9 +44,9 @@ public class ResultsFormatterTest {
   @Test
   public void currencyAmountCanHaveCurrencyOutput() {
 
-    ResultsFormatter formatter = new ResultsFormatter();
-    CurrencyAmount value = CurrencyAmount.of(Currency.USD, 123.45);
-    Object result = formatter.format(value, null, TypeFormatter.Format.CELL, null);
+    final ResultsFormatter formatter = new ResultsFormatter();
+    final CurrencyAmount value = CurrencyAmount.of(Currency.USD, 123.45);
+    final Object result = formatter.format(value, null, TypeFormatter.Format.CELL, null);
 
     assertTrue(result instanceof String);
     assertEquals(result, "USD 123.45");
@@ -55,9 +55,9 @@ public class ResultsFormatterTest {
   @Test
   public void currencyAmountCanHaveCurrencySuppressed() {
 
-    ResultsFormatter formatter = new ResultsFormatter(SUPPRESS_CURRENCY);
-    CurrencyAmount value = CurrencyAmount.of(Currency.USD, 123.45);
-    Object result = formatter.format(value, null, TypeFormatter.Format.CELL, null);
+    final ResultsFormatter formatter = new ResultsFormatter(SUPPRESS_CURRENCY);
+    final CurrencyAmount value = CurrencyAmount.of(Currency.USD, 123.45);
+    final Object result = formatter.format(value, null, TypeFormatter.Format.CELL, null);
 
     assertTrue(result instanceof String);
     assertEquals(result, "123.45");
@@ -66,8 +66,8 @@ public class ResultsFormatterTest {
   @Test
   public void unknownValueSpecCanHaveCurrencyOutput() {
 
-    ResultsFormatter formatter = new ResultsFormatter();
-    Object result = formatter.format(123.45,
+    final ResultsFormatter formatter = new ResultsFormatter();
+    final Object result = formatter.format(123.45,
                                      buildValueSpecificationWithCurrency("unknown value name"),
                                      TypeFormatter.Format.CELL,
                                      null);
@@ -81,8 +81,8 @@ public class ResultsFormatterTest {
   @Test
   public void unknownValueSpecCanHaveCurrencySuppressed() {
 
-    ResultsFormatter formatter = new ResultsFormatter(SUPPRESS_CURRENCY);
-    Object result = formatter.format(123.45,
+    final ResultsFormatter formatter = new ResultsFormatter(SUPPRESS_CURRENCY);
+    final Object result = formatter.format(123.45,
                                      buildValueSpecificationWithCurrency("unknown value name"),
                                      TypeFormatter.Format.CELL,
                                      null);
@@ -96,8 +96,8 @@ public class ResultsFormatterTest {
   @Test
   public void knownValueSpecCanHaveCurrencyOutput() {
 
-    ResultsFormatter formatter = new ResultsFormatter();
-    Object result = formatter.format(123.45, buildValueSpecificationWithCurrency(ValueRequirementNames.PRESENT_VALUE), TypeFormatter.Format.CELL, null);
+    final ResultsFormatter formatter = new ResultsFormatter();
+    final Object result = formatter.format(123.45, buildValueSpecificationWithCurrency(ValueRequirementNames.PRESENT_VALUE), TypeFormatter.Format.CELL, null);
 
     assertTrue(result instanceof String);
 
@@ -108,8 +108,8 @@ public class ResultsFormatterTest {
   @Test
   public void knownValueSpecCanHaveCurrencySuppressed() {
 
-    ResultsFormatter formatter = new ResultsFormatter(SUPPRESS_CURRENCY);
-    Object result = formatter.format(123.45, buildValueSpecificationWithCurrency(ValueRequirementNames.PRESENT_VALUE), TypeFormatter.Format.CELL, null);
+    final ResultsFormatter formatter = new ResultsFormatter(SUPPRESS_CURRENCY);
+    final Object result = formatter.format(123.45, buildValueSpecificationWithCurrency(ValueRequirementNames.PRESENT_VALUE), TypeFormatter.Format.CELL, null);
 
     assertTrue(result instanceof String);
 
@@ -117,12 +117,12 @@ public class ResultsFormatterTest {
     assertEquals(result, "123");
   }
 
-  private ValueSpecification buildValueSpecificationWithCurrency(String valueName) {
+  private ValueSpecification buildValueSpecificationWithCurrency(final String valueName) {
 
-    UniqueId uid = UniqueId.of("scheme", "value");
-    ComputationTargetSpecification cts = new ComputationTargetSpecification(ComputationTargetType.POSITION, uid);
+    final UniqueId uid = UniqueId.of("scheme", "value");
+    final ComputationTargetSpecification cts = new ComputationTargetSpecification(ComputationTargetType.POSITION, uid);
 
-    ValueProperties props = ValueProperties.builder()
+    final ValueProperties props = ValueProperties.builder()
         .with(ValuePropertyNames.FUNCTION, "fn")
         .with(ValuePropertyNames.CURRENCY, "USD")
         .get();

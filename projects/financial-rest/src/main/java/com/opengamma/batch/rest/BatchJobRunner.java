@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.batch.rest;
@@ -43,13 +43,13 @@ import com.opengamma.util.jms.JmsConnector;
 import com.opengamma.util.jms.JmsConnectorFactoryBean;
 
 /**
- * The entry point for running OpenGamma batches. 
+ * The entry point for running OpenGamma batches.
  */
 public class BatchJobRunner {
 
   /** Logger. */
   private static final Logger LOGGER = LoggerFactory.getLogger(BatchJobRunner.class);
-  
+
   static {
     StartupUtils.init();
   }
@@ -59,16 +59,16 @@ public class BatchJobRunner {
    */
   private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd");
 
-  static LocalDate parseDate(String date) {
+  static LocalDate parseDate(final String date) {
     return LocalDate.parse(date, DATE_FORMATTER);
   }
 
-  static Instant parseTime(String date) {
+  static Instant parseTime(final String date) {
     return OffsetDateTime.parse(date, DATE_FORMATTER).toInstant();
   }
 
-  private static RunCreationMode getRunCreationMode(CommandLine line, Properties configProperties, String configPropertysFile) {
-    String runCreationMode = getProperty("runCreationMode", line, configProperties, configPropertysFile, false);
+  private static RunCreationMode getRunCreationMode(final CommandLine line, final Properties configProperties, final String configPropertysFile) {
+    final String runCreationMode = getProperty("runCreationMode", line, configProperties, configPropertysFile, false);
     if (runCreationMode != null) {
       if (runCreationMode.equalsIgnoreCase("auto")) {
         return RunCreationMode.AUTO;
@@ -88,8 +88,8 @@ public class BatchJobRunner {
     }
   }
 
-  private static LocalDate getObservationDate(CommandLine line, Properties configProperties, String configPropertysFile) {
-    String observationDate = getProperty("observationDate", line, configProperties, configPropertysFile, false);
+  private static LocalDate getObservationDate(final CommandLine line, final Properties configProperties, final String configPropertysFile) {
+    final String observationDate = getProperty("observationDate", line, configProperties, configPropertysFile, false);
     if (observationDate != null) {
       return parseDate(observationDate);
     } else {
@@ -98,8 +98,8 @@ public class BatchJobRunner {
   }
 
 
-  private static Instant getValuationTime(CommandLine line, Properties configProperties, String configPropertysFile) {
-    String observationDate = getProperty("valuationTime", line, configProperties, configPropertysFile, false);
+  private static Instant getValuationTime(final CommandLine line, final Properties configProperties, final String configPropertysFile) {
+    final String observationDate = getProperty("valuationTime", line, configProperties, configPropertysFile, false);
     if (observationDate != null) {
       return parseTime(observationDate);
     } else {
@@ -107,8 +107,8 @@ public class BatchJobRunner {
     }
   }
 
-  private static UniqueId getViewDefinitionUniqueId(CommandLine line, Properties configProperties) {
-    String view = getProperty("view", line, configProperties);
+  private static UniqueId getViewDefinitionUniqueId(final CommandLine line, final Properties configProperties) {
+    final String view = getProperty("view", line, configProperties);
     if (view != null) {
       return UniqueId.parse(view);
     } else {
@@ -119,43 +119,43 @@ public class BatchJobRunner {
   /**
    * Creates an runs a batch job based on a properties file and configuration.
    */
-  public static void main(String[] args) throws Exception {  // CSIGNORE
+  public static void main(final String[] args) throws Exception {  // CSIGNORE
     if (args.length == 0) {
       usage();
       System.exit(-1);
     }
-    
+
     CommandLine line = null;
     Properties configProperties = null;
-    
+
     final String propertyFile = "batchJob.properties";
 
     String configPropertyFile = null;
 
     if (System.getProperty(propertyFile) != null) {
-      configPropertyFile = System.getProperty(propertyFile);      
+      configPropertyFile = System.getProperty(propertyFile);
       try {
-        FileInputStream fis = new FileInputStream(configPropertyFile);
+        final FileInputStream fis = new FileInputStream(configPropertyFile);
         configProperties = new Properties();
         configProperties.load(fis);
         fis.close();
-      } catch (FileNotFoundException e) {
+      } catch (final FileNotFoundException e) {
         LOGGER.error("The system cannot find " + configPropertyFile);
         System.exit(-1);
       }
     } else {
       try {
-        FileInputStream fis = new FileInputStream(propertyFile);
+        final FileInputStream fis = new FileInputStream(propertyFile);
         configProperties = new Properties();
         configProperties.load(fis);
         fis.close();
         configPropertyFile = propertyFile;
-      } catch (FileNotFoundException e) {
+      } catch (final FileNotFoundException e) {
         // there is no config file so we expect command line arguments
         try {
-          CommandLineParser parser = new PosixParser();
+          final CommandLineParser parser = new PosixParser();
           line = parser.parse(getOptions(), args);
-        } catch (ParseException e2) {
+        } catch (final ParseException e2) {
           usage();
           System.exit(-1);
         }
@@ -168,41 +168,41 @@ public class BatchJobRunner {
       runCreationMode = RunCreationMode.AUTO;
     }
 
-    String engineURI = getProperty("engineURI", line, configProperties, configPropertyFile);
+    final String engineURI = getProperty("engineURI", line, configProperties, configPropertyFile);
 
-    String brokerURL = getProperty("brokerURL", line, configProperties, configPropertyFile);
+    final String brokerURL = getProperty("brokerURL", line, configProperties, configPropertyFile);
 
-    Instant valuationTime = getValuationTime(line, configProperties, configPropertyFile);
-    LocalDate observationDate = getObservationDate(line, configProperties, configPropertyFile);
+    final Instant valuationTime = getValuationTime(line, configProperties, configPropertyFile);
+    final LocalDate observationDate = getObservationDate(line, configProperties, configPropertyFile);
 
-    UniqueId viewDefinitionUniqueId = getViewDefinitionUniqueId(line, configProperties);
+    final UniqueId viewDefinitionUniqueId = getViewDefinitionUniqueId(line, configProperties);
 
     URI vpBase;
     try {
       vpBase = new URI(engineURI);
-    } catch (URISyntaxException ex) {
+    } catch (final URISyntaxException ex) {
       throw new OpenGammaRuntimeException("Invalid URI", ex);
     }
 
-    ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory(brokerURL);
+    final ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory(brokerURL);
     activeMQConnectionFactory.setWatchTopicAdvisories(false);
 
-    JmsConnectorFactoryBean jmsConnectorFactoryBean = new JmsConnectorFactoryBean();
+    final JmsConnectorFactoryBean jmsConnectorFactoryBean = new JmsConnectorFactoryBean();
     jmsConnectorFactoryBean.setConnectionFactory(activeMQConnectionFactory);
     jmsConnectorFactoryBean.setName("Masters");
 
-    JmsConnector jmsConnector = jmsConnectorFactoryBean.getObjectCreating();
-    ScheduledExecutorService heartbeatScheduler = Executors.newSingleThreadScheduledExecutor();
+    final JmsConnector jmsConnector = jmsConnectorFactoryBean.getObjectCreating();
+    final ScheduledExecutorService heartbeatScheduler = Executors.newSingleThreadScheduledExecutor();
     try {
-      ViewProcessor vp = new RemoteViewProcessor(
+      final ViewProcessor vp = new RemoteViewProcessor(
           vpBase,
           jmsConnector,
           heartbeatScheduler);
-      ViewClient vc = vp.createViewClient(UserPrincipal.getLocalUser());
+      final ViewClient vc = vp.createViewClient(UserPrincipal.getLocalUser());
 
-      HistoricalMarketDataSpecification marketDataSpecification = MarketData.historical(observationDate, null);
+      final HistoricalMarketDataSpecification marketDataSpecification = MarketData.historical(observationDate, null);
 
-      ViewExecutionOptions executionOptions = ExecutionOptions.batch(valuationTime, marketDataSpecification, null);
+      final ViewExecutionOptions executionOptions = ExecutionOptions.batch(valuationTime, marketDataSpecification, null);
 
       vc.attachToViewProcess(viewDefinitionUniqueId, executionOptions);
       vc.waitForCompletion();
@@ -211,15 +211,15 @@ public class BatchJobRunner {
     }
   }
 
-  private static String getProperty(String property, CommandLine line, Properties configProperties) {
+  private static String getProperty(final String property, final CommandLine line, final Properties configProperties) {
     return getProperty(property, line, configProperties, null);
   }
 
-  private static String getProperty(String propertyName, CommandLine line, Properties properties, String configPropertysFile) {
+  private static String getProperty(final String propertyName, final CommandLine line, final Properties properties, final String configPropertysFile) {
     return getProperty(propertyName, line, properties, configPropertysFile, true);
   }
 
-  private static String getProperty(String propertyName, CommandLine line, Properties properties, String configPropertysFile, boolean required) {
+  private static String getProperty(final String propertyName, final CommandLine line, final Properties properties, final String configPropertysFile, final boolean required) {
     String optionValue = null;
     if (line != null) {
       optionValue = line.getOptionValue(propertyName);
@@ -243,12 +243,12 @@ public class BatchJobRunner {
   }
 
   public static void usage() {
-    HelpFormatter formatter = new HelpFormatter();
+    final HelpFormatter formatter = new HelpFormatter();
     formatter.printHelp("java [-DbatchJob.properties={property file}] com.opengamma.financial.batch.BatchJobRunner [options]", getOptions());
   }
 
   private static Options getOptions() {
-    Options options = new Options();
+    final Options options = new Options();
 
     //options.addOption("reason", true, "Run reason. Default - Manual run started on {yyyy-MM-ddTHH:mm:ssZZ} by {user.name}.");
 

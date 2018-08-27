@@ -37,7 +37,7 @@ public final class PairFudgeBuilder implements FudgeBuilder<Pair<?, ?>> {
   public static final String SECOND_FIELD_NAME = "second";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, Pair<?, ?> object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final Pair<?, ?> object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     if (object instanceof LongObjectPair || object instanceof LongDoublePair) {
       msg.add("firstLong", object.getFirst());
@@ -69,7 +69,7 @@ public final class PairFudgeBuilder implements FudgeBuilder<Pair<?, ?>> {
   }
 
   @Override
-  public Pair<?, ?> buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
+  public Pair<?, ?> buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     final Long firstLong = msg.getLong("firstLong");
     if (firstLong != null) {
       final Double secondDouble = msg.getDouble("secondDouble");

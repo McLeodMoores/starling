@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.cds;
@@ -33,7 +33,7 @@ public final class CDSSecurityBeanOperation extends AbstractSecurityBeanOperatio
   }
 
   @Override
-  public CDSSecurityBean createBean(OperationContext context, HibernateSecurityMasterDao secMasterSession, CDSSecurity security) {
+  public CDSSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession, final CDSSecurity security) {
     final CDSSecurityBean bean = new CDSSecurityBean();
     bean.setNotional(security.getNotional());
     bean.setRecoveryRate(security.getRecoveryRate());
@@ -54,7 +54,7 @@ public final class CDSSecurityBeanOperation extends AbstractSecurityBeanOperatio
   }
 
   @Override
-  public CDSSecurity createSecurity(OperationContext context, CDSSecurityBean bean) {
+  public CDSSecurity createSecurity(final OperationContext context, final CDSSecurityBean bean) {
     return new CDSSecurity(
       bean.getNotional(),
       bean.getRecoveryRate(),

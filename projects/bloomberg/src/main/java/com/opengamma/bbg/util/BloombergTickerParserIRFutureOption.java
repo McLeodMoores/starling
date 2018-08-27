@@ -27,30 +27,30 @@ import com.opengamma.id.ExternalId;
  * </p>
  */
 public class BloombergTickerParserIRFutureOption extends BloombergTickerParserFutureOption {
-  
+
   /** the type - need to store this as there are multiple possibilities */
   private String _type;
 
   /**
    * Create a parser
-   * @param ticker a legal Bloomberg ticker, as string.  
+   * @param ticker a legal Bloomberg ticker, as string.
    */
-  public BloombergTickerParserIRFutureOption(String ticker) {
+  public BloombergTickerParserIRFutureOption(final String ticker) {
     super(ticker);
   }
-  
+
   /**
    * Create a parser
-   * @param identifier a legal Bloomberg ticker, with {@link com.opengamma.id.ExternalScheme} 
-   * of {@link com.opengamma.core.id.ExternalSchemes#BLOOMBERG_TICKER}.  
+   * @param identifier a legal Bloomberg ticker, with {@link com.opengamma.id.ExternalScheme}
+   * of {@link com.opengamma.core.id.ExternalSchemes#BLOOMBERG_TICKER}.
    */
-  public BloombergTickerParserIRFutureOption(ExternalId identifier) {
+  public BloombergTickerParserIRFutureOption(final ExternalId identifier) {
     super(identifier);
   }
 
   /**
    * The type
-   * @return the type 
+   * @return the type
    */
   @Override
   public String getTypeName() {
@@ -64,7 +64,7 @@ public class BloombergTickerParserIRFutureOption extends BloombergTickerParserFu
   }
 
   @Override
-  protected void parse(Matcher matcher) {
+  protected void parse(final Matcher matcher) {
     super.parse(matcher);
     _type = matcher.group(6);
   }

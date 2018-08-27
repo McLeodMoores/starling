@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.position.impl;
@@ -36,19 +36,19 @@ public class MockPositionSource implements PositionSource {
   /**
    * The portfolios.
    */
-  private final Map<ObjectId, Portfolio> _portfolios = new ConcurrentHashMap<ObjectId, Portfolio>();
+  private final Map<ObjectId, Portfolio> _portfolios = new ConcurrentHashMap<>();
   /**
    * A cache of nodes by identifier.
    */
-  private final Map<ObjectId, PortfolioNode> _nodes = new ConcurrentHashMap<ObjectId, PortfolioNode>();
+  private final Map<ObjectId, PortfolioNode> _nodes = new ConcurrentHashMap<>();
   /**
    * A cache of positions by identifier.
    */
-  private final Map<ObjectId, Position> _positions = new ConcurrentHashMap<ObjectId, Position>();
+  private final Map<ObjectId, Position> _positions = new ConcurrentHashMap<>();
   /**
    * A cache of trades by identifier.
    */
-  private final Map<ObjectId, Trade> _trades = new ConcurrentHashMap<ObjectId, Trade>();
+  private final Map<ObjectId, Trade> _trades = new ConcurrentHashMap<>();
   /**
    * The suppler of unique identifiers.
    */
@@ -66,7 +66,7 @@ public class MockPositionSource implements PositionSource {
   public Portfolio getPortfolio(final UniqueId uniqueId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
-    Portfolio portfolio = _portfolios.get(uniqueId.getObjectId());
+    final Portfolio portfolio = _portfolios.get(uniqueId.getObjectId());
     if (portfolio == null) {
       throw new DataNotFoundException("Portfolio not found: " + uniqueId);
     }
@@ -74,10 +74,10 @@ public class MockPositionSource implements PositionSource {
   }
 
   @Override
-  public Portfolio getPortfolio(ObjectId objectId, VersionCorrection versionCorrection) {
+  public Portfolio getPortfolio(final ObjectId objectId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
-    Portfolio portfolio = _portfolios.get(objectId);
+    final Portfolio portfolio = _portfolios.get(objectId);
     if (portfolio == null) {
       throw new DataNotFoundException("Portfolio not found: " + objectId);
     }
@@ -88,7 +88,7 @@ public class MockPositionSource implements PositionSource {
   public PortfolioNode getPortfolioNode(final UniqueId uniqueId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
-    PortfolioNode node = _nodes.get(uniqueId.getObjectId());
+    final PortfolioNode node = _nodes.get(uniqueId.getObjectId());
     if (node == null) {
       throw new DataNotFoundException("PortfolioNode not found: " + uniqueId);
     }
@@ -96,9 +96,9 @@ public class MockPositionSource implements PositionSource {
   }
 
   @Override
-  public Position getPosition(UniqueId uniqueId) {
+  public Position getPosition(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
-    Position position = _positions.get(uniqueId.getObjectId());
+    final Position position = _positions.get(uniqueId.getObjectId());
     if (position == null) {
       throw new DataNotFoundException("Position not found: " + uniqueId);
     }
@@ -109,7 +109,7 @@ public class MockPositionSource implements PositionSource {
   public Position getPosition(final ObjectId objectId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
-    Position position = _positions.get(objectId);
+    final Position position = _positions.get(objectId);
     if (position == null) {
       throw new DataNotFoundException("Position not found: " + objectId);
     }
@@ -117,9 +117,9 @@ public class MockPositionSource implements PositionSource {
   }
 
   @Override
-  public Trade getTrade(UniqueId uniqueId) {
+  public Trade getTrade(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
-    Trade trade = _trades.get(uniqueId.getObjectId());
+    final Trade trade = _trades.get(uniqueId.getObjectId());
     if (trade == null) {
       throw new DataNotFoundException("Trade not found: " + uniqueId);
     }
@@ -135,7 +135,7 @@ public class MockPositionSource implements PositionSource {
   //-------------------------------------------------------------------------
   /**
    * Gets the list of all portfolio identifiers.
-   * 
+   *
    * @return the portfolio identifiers, unmodifiable, not null
    */
   public Set<ObjectId> getPortfolioIds() {
@@ -144,58 +144,58 @@ public class MockPositionSource implements PositionSource {
 
   /**
    * Adds a portfolio to the master.
-   * 
+   *
    * @param portfolio  the portfolio to add, not null
    */
-  public void addPortfolio(Portfolio portfolio) {
+  public void addPortfolio(final Portfolio portfolio) {
     ArgumentChecker.notNull(portfolio, "portfolio");
-    
+
     _portfolios.put(portfolio.getUniqueId().getObjectId(), portfolio);
     addToCache(portfolio.getUniqueId().getValue(), null, portfolio.getRootNode());
   }
 
   /**
    * Adds a node to the cache.
-   * 
+   *
    * @param portfolioId  the id, not null
    * @param node  the node to add, not null
    */
-  private void addToCache(String portfolioId, UniqueId parentNode, PortfolioNode node) {
+  private void addToCache(final String portfolioId, final UniqueId parentNode, final PortfolioNode node) {
     // node
     if (node instanceof SimplePortfolioNode) {
-      SimplePortfolioNode nodeImpl = (SimplePortfolioNode) node;
+      final SimplePortfolioNode nodeImpl = (SimplePortfolioNode) node;
       nodeImpl.setUniqueId(_uniqueIdSupplier.getWithValuePrefix(portfolioId + "-"));
       nodeImpl.setParentNodeId(parentNode);
     }
     _nodes.put(node.getUniqueId().getObjectId(), node);
-    
+
     // position
-    for (Position position : node.getPositions()) {
+    for (final Position position : node.getPositions()) {
       if (position instanceof SimplePosition) {
-        SimplePosition positionImpl = (SimplePosition) position;
+        final SimplePosition positionImpl = (SimplePosition) position;
         positionImpl.setUniqueId(_uniqueIdSupplier.getWithValuePrefix(portfolioId + "-"));
-        
+
         //add trades
-        for (Trade trade : positionImpl.getTrades()) {
+        for (final Trade trade : positionImpl.getTrades()) {
           IdUtils.setInto(trade, _uniqueIdSupplier.getWithValuePrefix(portfolioId + "-"));
           _trades.put(trade.getUniqueId().getObjectId(), trade);
         }
       }
       _positions.put(position.getUniqueId().getObjectId(), position);
     }
-    
+
     // recurse
-    for (PortfolioNode child : node.getChildNodes()) {
+    for (final PortfolioNode child : node.getChildNodes()) {
       addToCache(portfolioId, node.getUniqueId(), child);
     }
   }
 
   /**
    * Removes a portfolio from the master.
-   * 
+   *
    * @param portfolio  the portfolio to remove, not null
    */
-  public void removePortfolio(Portfolio portfolio) {
+  public void removePortfolio(final Portfolio portfolio) {
     ArgumentChecker.notNull(portfolio, "portfolio");
     _portfolios.remove(portfolio.getUniqueId().getObjectId());
     removeFromCache(portfolio.getRootNode());
@@ -203,18 +203,18 @@ public class MockPositionSource implements PositionSource {
 
   /**
    * Removes a node from the cache
-   * 
+   *
    * @param node  the node to remove, not null
    */
-  private void removeFromCache(PortfolioNode node) {
+  private void removeFromCache(final PortfolioNode node) {
     _nodes.remove(node.getUniqueId().getObjectId());
-    for (Position position : node.getPositions()) {
-      for (Trade trade : position.getTrades()) {
+    for (final Position position : node.getPositions()) {
+      for (final Trade trade : position.getTrades()) {
         _trades.remove(trade.getUniqueId().getObjectId());
       }
       _positions.remove(position.getUniqueId().getObjectId());
     }
-    for (PortfolioNode child : node.getChildNodes()) {
+    for (final PortfolioNode child : node.getChildNodes()) {
       removeFromCache(child);
     }
   }

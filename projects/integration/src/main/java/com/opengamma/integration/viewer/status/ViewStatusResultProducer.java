@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.viewer.status;
@@ -22,40 +22,40 @@ import freemarker.template.Template;
 public class ViewStatusResultProducer {
   /**
    * Produce view result with the given aggregation parameters
-   * 
+   *
    * @param aggregator the view status aggregator, not null
    * @param format the result format type, not null
    * @param aggregateType the list of aggregation type in the desired order, not null
    * @return the string representation of the result
    */
-  public String statusResult(ViewStatusResultAggregator aggregator, ResultFormat format, AggregateType aggregateType) {
+  public String statusResult(final ViewStatusResultAggregator aggregator, final ResultFormat format, final AggregateType aggregateType) {
     ArgumentChecker.notNull(aggregator, "aggregator");
     ArgumentChecker.notNull(format, "format");
     ArgumentChecker.notNull(aggregateType, "aggregateType");
-    
-    ViewStatusModel viewStatusModel = aggregator.aggregate(aggregateType);
+
+    final ViewStatusModel viewStatusModel = aggregator.aggregate(aggregateType);
     return formatResultModel(format, viewStatusModel);
   }
 
-  private String formatResultModel(ResultFormat format, ViewStatusModel viewStatusModel) {
-    StringWriter stringWriter = new StringWriter();
-    Configuration cfg = new Configuration();
+  private String formatResultModel(final ResultFormat format, final ViewStatusModel viewStatusModel) {
+    final StringWriter stringWriter = new StringWriter();
+    final Configuration cfg = new Configuration();
     try {
       cfg.setClassForTemplateLoading(ViewStatusResultProducer.class, "");
-      String templateName = getTemplateName(format);
-      Template template = cfg.getTemplate(templateName);
-      Map<String, Object> input = new HashMap<String, Object>();
+      final String templateName = getTemplateName(format);
+      final Template template = cfg.getTemplate(templateName);
+      final Map<String, Object> input = new HashMap<>();
       input.put("viewStatus", viewStatusModel);
       template.process(input, stringWriter);
       stringWriter.flush();
 
-    } catch (Exception e) {
+    } catch (final Exception e) {
       throw new OpenGammaRuntimeException("Error generating html format for View status report", e);
-    } 
+    }
     return stringWriter.toString();
   }
-  
-  private String getTemplateName(ResultFormat format) {
+
+  private String getTemplateName(final ResultFormat format) {
     switch (format) {
       case HTML:
         return "view-status-html.ftl";

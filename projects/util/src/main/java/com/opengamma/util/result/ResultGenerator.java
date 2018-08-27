@@ -57,7 +57,7 @@ public class ResultGenerator {
    * @deprecated use {@link Result#success(Object)}
    */
   @Deprecated
-  public static <T> Result<T> success(T value) {
+  public static <T> Result<T> success(final T value) {
     return Result.success(value);
   }
 
@@ -74,7 +74,7 @@ public class ResultGenerator {
    * @deprecated use {@link Result#failure(FailureStatus, String, Object...)}
    */
   @Deprecated
-  public static <T> Result<T> failure(FailureStatus status, String message, Object... messageArgs) {
+  public static <T> Result<T> failure(final FailureStatus status, final String message, final Object... messageArgs) {
     return Result.failure(status, message, messageArgs);
   }
 
@@ -89,7 +89,7 @@ public class ResultGenerator {
    * @deprecated use {@link Result#failure(Exception, String, Object...)}
    */
   @Deprecated
-  public static <T> Result<T> failure(String message, Exception cause) {
+  public static <T> Result<T> failure(final String message, final Exception cause) {
     return Result.failure(cause, message);
   }
 
@@ -103,7 +103,7 @@ public class ResultGenerator {
    * @deprecated use {@link Result#failure(Exception)}
    */
   @Deprecated
-  public static <T> Result<T> failure(Exception cause) {
+  public static <T> Result<T> failure(final Exception cause) {
     return Result.failure(cause);
   }
 
@@ -117,7 +117,7 @@ public class ResultGenerator {
    * @deprecated use {@link Result#failure(Result)}
    */
   @Deprecated
-  public static <T> Result<T> propagateFailure(Result<?> result) {
+  public static <T> Result<T> propagateFailure(final Result<?> result) {
     return Result.failure(result);
   }
 
@@ -136,7 +136,7 @@ public class ResultGenerator {
   public static <T, U> Result<U> map(final Result<T> result, final ResultMapper<T, U> mapper) {
     return result.flatMap(new Function<T, Result<U>>() {
       @Override
-      public Result<U> apply(T input) {
+      public Result<U> apply(final T input) {
         return mapper.map(input);
       }
     });
@@ -150,7 +150,7 @@ public class ResultGenerator {
    * @deprecated use {@link Result#anyFailures(Result[])}
    */
   @Deprecated
-  public static boolean anyFailures(Result<?>... results) {
+  public static boolean anyFailures(final Result<?>... results) {
     return Result.anyFailures(results);
   }
 
@@ -168,20 +168,20 @@ public class ResultGenerator {
    * @deprecated use {@link Result#failure(Result, Result, Result[])}
    */
   @Deprecated
-  public static <T> Result<T> propagateFailures(Result<?> result1, Result<?> result2, Result<?>... results) {
+  public static <T> Result<T> propagateFailures(final Result<?> result1, final Result<?> result2, final Result<?>... results) {
     return Result.failure(result1, result2, results);
   }
 
   /**
    * Propagates failures.
-   * 
+   *
    * @param <T>  the result type
    * @param results  the set of results
    * @return the result
    * @deprecated use {@link Result#failure(Iterable)}
    */
   @Deprecated
-  public static <T> Result<T> propagateFailures(Collection<Result<?>> results) {
+  public static <T> Result<T> propagateFailures(final Collection<Result<?>> results) {
     return Result.failure(results);
   }
 

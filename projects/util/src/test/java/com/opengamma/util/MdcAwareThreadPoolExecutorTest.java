@@ -33,7 +33,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class MdcAwareThreadPoolExecutorTest {
 
-  private ExecutorService createMdcAwareService(int threads) {
+  private ExecutorService createMdcAwareService(final int threads) {
     return new MdcAwareThreadPoolExecutor(threads,
                                               threads,
                                               60,
@@ -42,7 +42,7 @@ public class MdcAwareThreadPoolExecutorTest {
                                               new NamedThreadPoolFactory("mdcAware"));
   }
 
-  private ExecutorService createStandardService(int threads) {
+  private ExecutorService createStandardService(final int threads) {
     return new ThreadPoolExecutor(threads,
                                               threads,
                                               60,
@@ -112,30 +112,30 @@ public class MdcAwareThreadPoolExecutorTest {
     assertThat(checkCount.get(), is(12));
   }
 
-  private void createStarterThreads(int qty,
+  private void createStarterThreads(final int qty,
                                     final ExecutorService service,
                                     final AtomicInteger checkCount,
                                     final boolean mdcPropagationExpected) {
 
-    Set<Thread> threads = new HashSet<>();
+    final Set<Thread> threads = new HashSet<>();
     for (int i = 0; i < qty; i++) {
 
       final int value = i;
       threads.add(new Thread(new Runnable() {
         @Override
         public void run() {
-          Map<String, String> contextMap = new HashMap<>();
+          final Map<String, String> contextMap = new HashMap<>();
           contextMap.put("some_key" + value, "somevalue");
           contextMap.put("name", Thread.currentThread().getName());
           System.out.println("Putting MDC values: " + contextMap);
           MDC.setContextMap(contextMap);
-          Map<String, String> expectedContext = mdcPropagationExpected ? contextMap : null;
+          final Map<String, String> expectedContext = mdcPropagationExpected ? contextMap : null;
           service.execute(createCheckJob(expectedContext, checkCount));
         }
       }, "starter" + i));
     }
     System.out.println("Threads created - MDC contains: " + MDC.getCopyOfContextMap());
-    for (Thread thread : threads) {
+    for (final Thread thread : threads) {
       thread.start();
     }
     System.out.println("Threads started - MDC contains: " + MDC.getCopyOfContextMap());
@@ -148,12 +148,13 @@ public class MdcAwareThreadPoolExecutorTest {
       @Override
       public void run() {
         @SuppressWarnings("unchecked")
+        final
         Map<String, String> mdc = MDC.getCopyOfContextMap();
         System.out.println("Running on thread-" + Thread.currentThread().getName() + " => " + mdc) ;
         try {
           assertThat(mdc, is(expectedContext));
           checkCount.incrementAndGet();
-        } catch (Throwable e) {
+        } catch (final Throwable e) {
           System.out.println(e);
         }
       }

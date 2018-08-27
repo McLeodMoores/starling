@@ -16,7 +16,7 @@ public class DistributorTrace {
   private final boolean _isPersistent;
   private final long _messagesSent;
 
-  public DistributorTrace(String jmsTopic, String expiry, boolean hasExpired, boolean persistent, long messagesSent) {
+  public DistributorTrace(final String jmsTopic, final String expiry, final boolean hasExpired, final boolean persistent, final long messagesSent) {
     _jmsTopic = jmsTopic;
     _expiry = expiry;
     _hasExpired = hasExpired;

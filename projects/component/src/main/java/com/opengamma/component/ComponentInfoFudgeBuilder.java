@@ -36,60 +36,60 @@ public class ComponentInfoFudgeBuilder extends AbstractFudgeBuilder implements F
   public static final String ATTRIBUTES_FIELD_NAME = "attributes";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, ComponentInfo object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final ComponentInfo object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     ComponentInfoFudgeBuilder.toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
-  public static MutableFudgeMsg toFudgeMsg(FudgeSerializer serializer, ComponentInfo object) {
+  public static MutableFudgeMsg toFudgeMsg(final FudgeSerializer serializer, final ComponentInfo object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     ComponentInfoFudgeBuilder.toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
-  public static void toFudgeMsg(FudgeSerializer serializer, ComponentInfo object, final MutableFudgeMsg msg) {
+  public static void toFudgeMsg(final FudgeSerializer serializer, final ComponentInfo object, final MutableFudgeMsg msg) {
     addToMessage(msg, TYPE_FIELD_NAME, object.getType().getName());
     addToMessage(msg, CLASSIFIER_FIELD_NAME, object.getClassifier());
     if (object.getUri() != null) {
       addToMessage(msg, URI_FIELD_NAME, object.getUri().toString());
     }
-    MutableFudgeMsg attributesMsg = serializer.newMessage();
-    for (Entry<String, String> entry : object.getAttributes().entrySet()) {
+    final MutableFudgeMsg attributesMsg = serializer.newMessage();
+    for (final Entry<String, String> entry : object.getAttributes().entrySet()) {
       attributesMsg.add(entry.getKey(), entry.getValue());
     }
     addToMessage(msg, ATTRIBUTES_FIELD_NAME, attributesMsg);
   }
 
   @Override
-  public ComponentInfo buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    ComponentInfo object = new ComponentInfo();
+  public ComponentInfo buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final ComponentInfo object = new ComponentInfo();
     ComponentInfoFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     return object;
   }
 
-  public static ComponentInfo fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg) {
-    ComponentInfo object = new ComponentInfo();
+  public static ComponentInfo fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final ComponentInfo object = new ComponentInfo();
     ComponentInfoFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     return object;
   }
 
-  public static void fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg, ComponentInfo object) {
-    String typeStr = msg.getString(TYPE_FIELD_NAME);
+  public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final ComponentInfo object) {
+    final String typeStr = msg.getString(TYPE_FIELD_NAME);
     try {
       object.setType(ComponentInfoFudgeBuilder.class.getClassLoader().loadClass(typeStr));
-    } catch (ClassNotFoundException ex) {
+    } catch (final ClassNotFoundException ex) {
       // ignore, as server may have classes that are not in the client classpath
       object.setType(ClassNotFoundException.class);
       object.addAttribute(ClassNotFoundException.class.getName(), typeStr);
     }
     object.setClassifier(msg.getString(CLASSIFIER_FIELD_NAME));
-    String uriStr = msg.getString(URI_FIELD_NAME);
+    final String uriStr = msg.getString(URI_FIELD_NAME);
     if (uriStr != null) {
       object.setUri(URI.create(uriStr));
     }
-    FudgeMsg attributes = msg.getMessage(ATTRIBUTES_FIELD_NAME);
-    for (FudgeField field : attributes) {
+    final FudgeMsg attributes = msg.getMessage(ATTRIBUTES_FIELD_NAME);
+    for (final FudgeField field : attributes) {
       object.addAttribute(field.getName(), field.getValue().toString());
     }
   }

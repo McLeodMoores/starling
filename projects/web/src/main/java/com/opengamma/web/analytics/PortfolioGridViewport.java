@@ -26,7 +26,7 @@ public class PortfolioGridViewport extends MainGridViewport {
   /** The node structure. */
   private  ViewportNodeStructure _nodeStructure;
   /** The current expanded paths. */
-  private Set<List<
+  private final Set<List<
       String>> _currentExpandedPaths;
   /** Row and column structure of the grid. */
   private MainGridStructure _gridStructure;
@@ -40,15 +40,15 @@ public class PortfolioGridViewport extends MainGridViewport {
    * @param cycle The view cycle from the previous calculation cycle
    * @param cache The current results
    */
-  PortfolioGridViewport(MainGridStructure gridStructure,
-                        String callbackId,
-                        String structureCallbackId,
-                        ViewportDefinition viewportDefinition,
-                        ViewCycle cycle,
-                        ResultsCache cache) {
+  PortfolioGridViewport(final MainGridStructure gridStructure,
+                        final String callbackId,
+                        final String structureCallbackId,
+                        final ViewportDefinition viewportDefinition,
+                        final ViewCycle cycle,
+                        final ResultsCache cache) {
     super(callbackId, structureCallbackId, viewportDefinition);
     _gridStructure = gridStructure;
-    Set<List<String>> expandedPaths = getExpandedPaths(gridStructure.getRootNode(),
+    final Set<List<String>> expandedPaths = getExpandedPaths(gridStructure.getRootNode(),
                                                        Collections.<String>emptyList(),
                                                        gridStructure.getTargetLookup());
     _nodeStructure = new ViewportNodeStructure(getGridStructure().getRootNode(),
@@ -58,14 +58,14 @@ public class PortfolioGridViewport extends MainGridViewport {
     update(viewportDefinition, cycle, cache);
   }
 
-  private static Set<List<String>> getExpandedPaths(AnalyticsNode node, List<String> parentPath, TargetLookup targetLookup) {
-    Set<List<String>> paths = Sets.newHashSet();
-    List<String> path = Lists.newArrayList(parentPath);
+  private static Set<List<String>> getExpandedPaths(final AnalyticsNode node, final List<String> parentPath, final TargetLookup targetLookup) {
+    final Set<List<String>> paths = Sets.newHashSet();
+    final List<String> path = Lists.newArrayList(parentPath);
     path.add(targetLookup.getRow(node.getStartRow()).getName());
     if (!node.isCollapsed()) {
       paths.add(path);
     }
-    for (AnalyticsNode childNode : node.getChildren()) {
+    for (final AnalyticsNode childNode : node.getChildren()) {
       paths.addAll(getExpandedPaths(childNode, path, targetLookup));
     }
     return paths;
@@ -81,8 +81,8 @@ public class PortfolioGridViewport extends MainGridViewport {
    * called when the first set of results arrives after a view def recompilation
    * @param gridStructure The latest structure of the grid
    */
-  public void updateResultsAndStructure(PortfolioGridStructure gridStructure) {
-    ViewportNodeStructure node = new ViewportNodeStructure(gridStructure.getRootNode(),
+  public void updateResultsAndStructure(final PortfolioGridStructure gridStructure) {
+    final ViewportNodeStructure node = new ViewportNodeStructure(gridStructure.getRootNode(),
                                                            gridStructure.getTargetLookup(),
                                                            _currentExpandedPaths);
     setViewportDefinition(ViewportDefinition.createEmpty(0));
@@ -97,7 +97,7 @@ public class PortfolioGridViewport extends MainGridViewport {
    * @param cache The current results
    */
   @Override
-  public void update(ViewportDefinition viewportDefinition, ViewCycle viewCycle, ResultsCache cache) {
+  public void update(final ViewportDefinition viewportDefinition, final ViewCycle viewCycle, final ResultsCache cache) {
     ArgumentChecker.notNull(viewportDefinition, "viewportDefinition");
     ArgumentChecker.notNull(cache, "cache");
     if (!viewportDefinition.isValidFor(getGridStructure())) {
@@ -105,13 +105,13 @@ public class PortfolioGridViewport extends MainGridViewport {
                                              viewportDefinition + ", grid: " + getGridStructure());
     }
     if (getDefinition()  != null) {
-      Pair<Integer, Boolean> changedNode = getDefinition().getChangedNode(viewportDefinition);
+      final Pair<Integer, Boolean> changedNode = getDefinition().getChangedNode(viewportDefinition);
       // if this is null then the user scrolled the viewport and didn't expand or collapse a node
       if (changedNode != null) {
-        Integer rowIndex = changedNode.getFirst();
+        final Integer rowIndex = changedNode.getFirst();
         // was it expanded or collapsed
-        Boolean expanded = changedNode.getSecond();
-        List<String> path = _nodeStructure.getPathForRow(rowIndex);
+        final Boolean expanded = changedNode.getSecond();
+        final List<String> path = _nodeStructure.getPathForRow(rowIndex);
         LOGGER.debug("Node at row {} {}", rowIndex.toString(), expanded ? "expanded" : "collapsed");
         //System.out.println("Row: " + rowIndex.toString() + " Expanded: " + expanded.toString() + " Path: " + path);
         if (expanded) {

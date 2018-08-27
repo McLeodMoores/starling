@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.exchange.impl;
@@ -78,6 +78,7 @@ public class DataExchangeResource extends AbstractDocumentDataResource<ExchangeD
    *
    * @return the unique identifier, not null
    */
+  @Override
   public ObjectId getUrlId() {
     return _urlResourceId;
   }
@@ -88,56 +89,64 @@ public class DataExchangeResource extends AbstractDocumentDataResource<ExchangeD
    *
    * @return the exchange master, not null
    */
+  @Override
   public ExchangeMaster getMaster() {
     return getExchangesResource().getExchangeMaster();
   }
 
   @GET
   @Path("versions")
-  public Response history(@Context UriInfo uriInfo) {
-    ExchangeHistoryRequest request = RestUtils.decodeQueryParams(uriInfo, ExchangeHistoryRequest.class);
+  public Response history(@Context final UriInfo uriInfo) {
+    final ExchangeHistoryRequest request = RestUtils.decodeQueryParams(uriInfo, ExchangeHistoryRequest.class);
     if (getUrlId().equals(request.getObjectId()) == false) {
       throw new IllegalArgumentException("Document objectId does not match URI");
     }
-    ExchangeHistoryResult result = getMaster().history(request);
+    final ExchangeHistoryResult result = getMaster().history(request);
     return responseOkObject(result);
   }
 
+  @Override
   @GET
-  public Response get(@QueryParam("versionAsOf") String versionAsOf, @QueryParam("correctedTo") String correctedTo) {
+  public Response get(@QueryParam("versionAsOf") final String versionAsOf, @QueryParam("correctedTo") final String correctedTo) {
     return super.get(versionAsOf, correctedTo);
   }
 
+  @Override
   @POST
-  public Response update(@Context UriInfo uriInfo, ExchangeDocument request) {
+  public Response update(@Context final UriInfo uriInfo, final ExchangeDocument request) {
     return super.update(uriInfo, request);
   }
 
+  @Override
   @DELETE
   public void remove() {
     super.remove();
   }
 
+  @Override
   @GET
   @Path("versions/{versionId}")
-  public Response getVersioned(@PathParam("versionId") String versionId) {
+  public Response getVersioned(@PathParam("versionId") final String versionId) {
     return super.getVersioned(versionId);
   }
 
+  @Override
   @PUT
   @Path("versions/{versionId}")
-  public Response replaceVersion(@PathParam("versionId") String versionId, List<ExchangeDocument> replacementDocuments) {
+  public Response replaceVersion(@PathParam("versionId") final String versionId, final List<ExchangeDocument> replacementDocuments) {
     return super.replaceVersion(versionId, replacementDocuments);
   }
 
+  @Override
   @PUT
-  public Response replaceVersions(List<ExchangeDocument> replacementDocuments) {
+  public Response replaceVersions(final List<ExchangeDocument> replacementDocuments) {
     return super.replaceVersions(replacementDocuments);
   }
 
+  @Override
   @PUT
   @Path("all")
-  public Response replaceAllVersions(List<ExchangeDocument> replacementDocuments) {
+  public Response replaceAllVersions(final List<ExchangeDocument> replacementDocuments) {
     return super.replaceAllVersions(replacementDocuments);
   }
 

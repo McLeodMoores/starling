@@ -15,7 +15,7 @@ public final class ThetaBlackBondFuturesCalculator extends InstrumentDerivativeV
    * The singleton.
    */
   private static final ThetaBlackBondFuturesCalculator INSTANCE = new ThetaBlackBondFuturesCalculator();
-  
+
   /**
    * Returns a singleton of the calculator.
    * @return the calculator.
@@ -23,25 +23,25 @@ public final class ThetaBlackBondFuturesCalculator extends InstrumentDerivativeV
   public static ThetaBlackBondFuturesCalculator getInstance() {
     return INSTANCE;
   }
-  
+
   /**
    * Singleton constructor.
    */
   private ThetaBlackBondFuturesCalculator() {
   }
-  
+
   /**
    * Pricing method for theta.
    */
   private static final BondFuturesOptionMarginSecurityBlackBondFuturesMethod METHOD = BondFuturesOptionMarginSecurityBlackBondFuturesMethod.getInstance();
-  
+
   @Override
-  public Double visitBondFuturesOptionMarginSecurity(BondFuturesOptionMarginSecurity option, BlackBondFuturesProviderInterface data) {
+  public Double visitBondFuturesOptionMarginSecurity(final BondFuturesOptionMarginSecurity option, final BlackBondFuturesProviderInterface data) {
     return METHOD.theta(option, data);
   }
-  
+
   @Override
-  public Double visitBondFuturesOptionMarginTransaction(BondFuturesOptionMarginTransaction option, BlackBondFuturesProviderInterface data) {
+  public Double visitBondFuturesOptionMarginTransaction(final BondFuturesOptionMarginTransaction option, final BlackBondFuturesProviderInterface data) {
     return METHOD.theta(option.getUnderlyingSecurity(), data);
   }
 }

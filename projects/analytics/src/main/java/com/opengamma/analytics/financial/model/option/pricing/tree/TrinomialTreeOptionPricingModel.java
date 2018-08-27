@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.tree;
@@ -15,12 +15,12 @@ import com.opengamma.analytics.financial.model.volatility.BlackScholesFormulaRep
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
 
   @Override
-  public double getPrice(LatticeSpecification lattice, OptionFunctionProvider1D function, double spot, double volatility, double interestRate, double dividend) {
+  public double getPrice(final LatticeSpecification lattice, final OptionFunctionProvider1D function, final double spot, final double volatility, final double interestRate, final double dividend) {
     ArgumentChecker.notNull(lattice, "lattice");
     ArgumentChecker.notNull(function, "function");
     ArgumentChecker.isTrue(spot > 0., "Spot should be positive");
@@ -30,7 +30,7 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
     ArgumentChecker.isTrue(Doubles.isFinite(interestRate), "interestRate should be finite");
     ArgumentChecker.isTrue(Doubles.isFinite(dividend), "dividend should be finite");
 
-    final LatticeSpecification modLattice = (lattice instanceof TimeVaryingLatticeSpecification) ? new TrigeorgisLatticeSpecification() : lattice;
+    final LatticeSpecification modLattice = lattice instanceof TimeVaryingLatticeSpecification ? new TrigeorgisLatticeSpecification() : lattice;
     if (function instanceof BarrierOptionFunctionProvider) {
       final BarrierOptionFunctionProvider barrierFunction = (BarrierOptionFunctionProvider) function;
       if (barrierFunction.getChecker().checkOut(spot) || barrierFunction.getChecker().checkStrikeBehindBarrier()) {
@@ -66,7 +66,7 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
   }
 
   @Override
-  public double getPrice(OptionFunctionProvider1D function, double spot, double[] volatility, double[] interestRate, double[] dividend) {
+  public double getPrice(final OptionFunctionProvider1D function, final double spot, final double[] volatility, final double[] interestRate, final double[] dividend) {
     ArgumentChecker.notNull(function, "function");
     ArgumentChecker.notNull(volatility, "volatility");
     ArgumentChecker.notNull(interestRate, "interestRate");
@@ -129,7 +129,7 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
   }
 
   @Override
-  public double getPrice(LatticeSpecification lattice, OptionFunctionProvider1D function, double spot, double volatility, double interestRate, DividendFunctionProvider dividend) {
+  public double getPrice(final LatticeSpecification lattice, final OptionFunctionProvider1D function, final double spot, final double volatility, final double interestRate, final DividendFunctionProvider dividend) {
     ArgumentChecker.notNull(lattice, "lattice");
     ArgumentChecker.notNull(function, "function");
     ArgumentChecker.notNull(dividend, "dividend");
@@ -140,7 +140,7 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
     ArgumentChecker.isTrue(Doubles.isFinite(volatility), "volatility should be finite");
     ArgumentChecker.isTrue(Doubles.isFinite(interestRate), "interestRate should be finite");
 
-    final LatticeSpecification modLattice = (lattice instanceof TimeVaryingLatticeSpecification) ? new TrigeorgisLatticeSpecification() : lattice;
+    final LatticeSpecification modLattice = lattice instanceof TimeVaryingLatticeSpecification ? new TrigeorgisLatticeSpecification() : lattice;
     if (function instanceof BarrierOptionFunctionProvider) {
       final BarrierOptionFunctionProvider barrierFunction = (BarrierOptionFunctionProvider) function;
       if (barrierFunction.getChecker().checkOut(spot) || barrierFunction.getChecker().checkStrikeBehindBarrier()) {
@@ -206,8 +206,8 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
   }
 
   @Override
-  public double getPrice(OptionFunctionProvider2D function, double spot1, double spot2, double volatility1, double volatility2, double correlation, double interestRate, double dividend1,
-      double dividend2) {
+  public double getPrice(final OptionFunctionProvider2D function, final double spot1, final double spot2, final double volatility1, final double volatility2, final double correlation, final double interestRate, final double dividend1,
+      final double dividend2) {
     ArgumentChecker.notNull(function, "function");
 
     ArgumentChecker.isTrue(spot1 > 0., "spot1 should be positive");
@@ -265,7 +265,7 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
   }
 
   @Override
-  public GreekResultCollection getGreeks(LatticeSpecification lattice, OptionFunctionProvider1D function, double spot, double volatility, double interestRate, double dividend) {
+  public GreekResultCollection getGreeks(final LatticeSpecification lattice, final OptionFunctionProvider1D function, final double spot, final double volatility, final double interestRate, final double dividend) {
     ArgumentChecker.notNull(lattice, "lattice");
     ArgumentChecker.notNull(function, "function");
     ArgumentChecker.isTrue(spot > 0., "Spot should be positive");
@@ -276,7 +276,7 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
     ArgumentChecker.isTrue(Doubles.isFinite(dividend), "dividend should be finite");
 
     final GreekResultCollection collection = new GreekResultCollection();
-    final LatticeSpecification modLattice = (lattice instanceof TimeVaryingLatticeSpecification) ? new TrigeorgisLatticeSpecification() : lattice;
+    final LatticeSpecification modLattice = lattice instanceof TimeVaryingLatticeSpecification ? new TrigeorgisLatticeSpecification() : lattice;
 
     final int nSteps = function.getNumberOfSteps();
     final double strike = function.getStrike();
@@ -335,7 +335,7 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
   }
 
   @Override
-  public GreekResultCollection getGreeks(OptionFunctionProvider1D function, double spot, double[] volatility, double[] interestRate, double[] dividend) {
+  public GreekResultCollection getGreeks(final OptionFunctionProvider1D function, final double spot, final double[] volatility, final double[] interestRate, final double[] dividend) {
     ArgumentChecker.notNull(function, "function");
     ArgumentChecker.notNull(volatility, "volatility");
     ArgumentChecker.notNull(interestRate, "interestRate");
@@ -420,7 +420,7 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
   }
 
   @Override
-  public GreekResultCollection getGreeks(LatticeSpecification lattice, OptionFunctionProvider1D function, double spot, double volatility, double interestRate, DividendFunctionProvider dividend) {
+  public GreekResultCollection getGreeks(final LatticeSpecification lattice, final OptionFunctionProvider1D function, final double spot, final double volatility, final double interestRate, final DividendFunctionProvider dividend) {
     ArgumentChecker.notNull(lattice, "lattice");
     ArgumentChecker.notNull(function, "function");
     ArgumentChecker.notNull(dividend, "dividend");
@@ -432,7 +432,7 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
     ArgumentChecker.isTrue(Doubles.isFinite(interestRate), "interestRate should be finite");
 
     final GreekResultCollection collection = new GreekResultCollection();
-    final LatticeSpecification modLattice = (lattice instanceof TimeVaryingLatticeSpecification) ? new TrigeorgisLatticeSpecification() : lattice;
+    final LatticeSpecification modLattice = lattice instanceof TimeVaryingLatticeSpecification ? new TrigeorgisLatticeSpecification() : lattice;
 
     final int nSteps = function.getNumberOfSteps();
     final double strike = function.getStrike();
@@ -536,8 +536,8 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
   }
 
   @Override
-  public double[] getGreeks(OptionFunctionProvider2D function, double spot1, double spot2, double volatility1, double volatility2, double correlation, double interestRate, double dividend1,
-      double dividend2) {
+  public double[] getGreeks(final OptionFunctionProvider2D function, final double spot1, final double spot2, final double volatility1, final double volatility2, final double correlation, final double interestRate, final double dividend1,
+      final double dividend2) {
     ArgumentChecker.notNull(function, "function");
 
     ArgumentChecker.isTrue(spot1 > 0., "spot1 should be positive");
@@ -656,7 +656,7 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
     final double spot = data.getSpot();
     final double interestRate = data.getInterestRate(timeToExpiry);
     final double cost = data.getCostOfCarry();
-    double volatility = data.getVolatility(timeToExpiry, strike);
+    final double volatility = data.getVolatility(timeToExpiry, strike);
 
     final double dt = timeToExpiry / nSteps;
     final double discount = Math.exp(-interestRate * dt);
@@ -697,7 +697,7 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
           for (int k = j + 1; k < nNodes; ++k) {
             adSecLocal[j] -= (assetPriceLocal[k] - assetPriceLocal[j - 1]) * adSecLocal[k];
           }
-          adSecLocal[j] /= (assetPriceLocal[j] - assetPriceLocal[j - 1]);
+          adSecLocal[j] /= assetPriceLocal[j] - assetPriceLocal[j - 1];
         }
         ++position;
         for (int j = 0; j < position; ++j) {
@@ -705,7 +705,7 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
           for (int k = 0; k < j; ++k) {
             adSecLocal[j] -= (assetPriceLocal[j + 1] - assetPriceLocal[k]) * adSecLocal[k];
           }
-          adSecLocal[j] /= (assetPriceLocal[j + 1] - assetPriceLocal[j]);
+          adSecLocal[j] /= assetPriceLocal[j + 1] - assetPriceLocal[j];
         }
 
         if (i != nSteps) {
@@ -729,7 +729,7 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
                 prob[j][0] = 0.5 * ((assetPrice[j + 2] - fwd) / (assetPrice[j + 2] - assetPrice[j]) + (assetPrice[j + 1] - fwd) / (assetPrice[j + 1] - assetPrice[j]));
               } else if (fwd < assetPrice[j + 2] && fwd > assetPrice[j + 1]) {
                 prob[j][2] = 0.5 * ((fwd - assetPrice[j + 1]) / (assetPrice[j + 2] - assetPrice[j]) + (fwd - assetPrice[j]) / (assetPrice[j + 2] - assetPrice[j]));
-                prob[j][0] = 0.5 * (assetPrice[j + 2] - fwd) / (assetPrice[j + 2]);
+                prob[j][0] = 0.5 * (assetPrice[j + 2] - fwd) / assetPrice[j + 2];
               }
               prob[j][1] = 1. - prob[j][0] - prob[j][2];
             }

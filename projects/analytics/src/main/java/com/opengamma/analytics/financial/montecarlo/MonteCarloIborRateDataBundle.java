@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.montecarlo;
@@ -34,7 +34,7 @@ public class MonteCarloIborRateDataBundle {
    * @param impactAmount The reference amounts at the impact dates.
    * @param impactIndex The Ibor index of each cash flow.
    */
-  public MonteCarloIborRateDataBundle(double[][][] pathIborRate, double[] delta, double[][] impactAmount, int[][] impactIndex) {
+  public MonteCarloIborRateDataBundle(final double[][][] pathIborRate, final double[] delta, final double[][] impactAmount, final int[][] impactIndex) {
     _pathIborRate = pathIborRate;
     _delta = delta;
     _impactAmount = impactAmount;

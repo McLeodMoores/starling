@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.component.factory.engine;
@@ -110,12 +110,12 @@ public class MarketDataProviderResolverComponentFactory extends AbstractComponen
     final ComponentInfo info = new ComponentInfo(MarketDataProviderResolver.class, getClassifier());
     repo.registerComponent(info, resolver);
   }
-  
+
   private MarketDataProviderFactory initAlwaysAvailableMarketDataProviderFactory() {
     return new AlwaysAvailableMarketDataProviderFactory();
   }
 
-  private MarketDataProviderFactory initRandomizingMarketDataProviderFactory(MarketDataProviderResolver resolver) {
+  private MarketDataProviderFactory initRandomizingMarketDataProviderFactory(final MarketDataProviderResolver resolver) {
     return new RandomizingMarketDataProviderFactory(resolver);
   }
 
@@ -135,7 +135,7 @@ public class MarketDataProviderResolverComponentFactory extends AbstractComponen
     return new CombinedMarketDataProviderFactory(underlyingResolver);
   }
 
-  protected MarketDataProviderFactory initHistoricalShockMarketDataProviderFactory(MarketDataProviderResolver underlyingResolver) {
+  protected MarketDataProviderFactory initHistoricalShockMarketDataProviderFactory(final MarketDataProviderResolver underlyingResolver) {
     return new HistoricalShockMarketDataProviderFactory(underlyingResolver);
   }
 

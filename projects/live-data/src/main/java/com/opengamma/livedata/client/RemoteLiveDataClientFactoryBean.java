@@ -51,7 +51,7 @@ public class RemoteLiveDataClientFactoryBean extends SingletonFactoryBean<Distri
     return _subscriptionTopic;
   }
 
-  public void setEntitlementTopic(String entitlementTopic) {
+  public void setEntitlementTopic(final String entitlementTopic) {
     _entitlementTopic = entitlementTopic;
   }
 
@@ -59,7 +59,7 @@ public class RemoteLiveDataClientFactoryBean extends SingletonFactoryBean<Distri
     return _entitlementTopic;
   }
 
-  public void setHeartbeatTopic(String heartbeatTopic) {
+  public void setHeartbeatTopic(final String heartbeatTopic) {
     _heartbeatTopic = heartbeatTopic;
   }
 
@@ -69,7 +69,7 @@ public class RemoteLiveDataClientFactoryBean extends SingletonFactoryBean<Distri
 
   /**
    * Sets the maximum number of concurrent JMS requests that will be made. Each concurrent request requires a thread to be allocated.
-   * 
+   *
    * @param maxConcurrentRequests maximum requests - set to 0 or negative for unlimited
    */
   public void setMaxConcurrentRequests(final int maxConcurrentRequests) {
@@ -82,7 +82,7 @@ public class RemoteLiveDataClientFactoryBean extends SingletonFactoryBean<Distri
 
   /**
    * Returns the maximum number of concurrent JMS requests that will be made. Each concurrent request requires a thread to be allocated.
-   * 
+   *
    * @return maximum requests
    */
   public int getMaxConcurrentRequests() {
@@ -103,7 +103,7 @@ public class RemoteLiveDataClientFactoryBean extends SingletonFactoryBean<Distri
         JmsLiveDataClient.DEFAULT_NUM_SESSIONS);
     liveDataClient.setFudgeContext(OpenGammaFudgeContext.getInstance());
     if (getHeartbeatTopic() != null) {
-      JmsByteArrayMessageSender jmsHeartbeatSender = new JmsByteArrayMessageSender(getHeartbeatTopic(), jmsTemplate);
+      final JmsByteArrayMessageSender jmsHeartbeatSender = new JmsByteArrayMessageSender(getHeartbeatTopic(), jmsTemplate);
       liveDataClient.setHeartbeatMessageSender(jmsHeartbeatSender);
     }
     liveDataClient.start();
@@ -114,7 +114,7 @@ public class RemoteLiveDataClientFactoryBean extends SingletonFactoryBean<Distri
 
   @Override
   public void destroy() {
-    LiveDataClient ldc = getObject();
+    final LiveDataClient ldc = getObject();
     if (ldc != null) {
       ldc.close();
     }

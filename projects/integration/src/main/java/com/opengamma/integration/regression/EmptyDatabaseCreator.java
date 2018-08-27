@@ -52,7 +52,7 @@ public class EmptyDatabaseCreator {
     final Properties allProperties = createProperties(configFile);
 
     //loosely adds support for includes:
-    for (Properties lastProperties = allProperties; lastProperties.containsKey(MANAGER_INCLUDE); ) {
+    for (Properties lastProperties = allProperties; lastProperties.containsKey(MANAGER_INCLUDE);) {
       final Properties properties = createProperties(lastProperties.getProperty(MANAGER_INCLUDE));
       allProperties.putAll(properties);
       lastProperties = properties;

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.csv;
@@ -17,29 +17,29 @@ import org.fudgemsg.FudgeContext;
 import org.fudgemsg.FudgeMsg;
 import org.fudgemsg.MutableFudgeMsg;
 
-import au.com.bytecode.opencsv.CSVReader;
-
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 
+import au.com.bytecode.opencsv.CSVReader;
+
 /**
- * 
+ *
  */
 public class FudgeMsgCSVIterator implements Iterator<FudgeMsg> {
-  
+
   private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
-  
+
   private CSVReader _csvReader;
   private String[] _header;
   private String[] _currentRow;
-  
-  public FudgeMsgCSVIterator(InputStream input, char separator, char quotechar, char escape) {
+
+  public FudgeMsgCSVIterator(final InputStream input, final char separator, final char quotechar, final char escape) {
     ArgumentChecker.notNull(input, "inputstream");
     ArgumentChecker.notNull(separator, "separator");
     ArgumentChecker.notNull(quotechar, "quotechar");
     ArgumentChecker.notNull(escape, "escape");
-    
+
     try {
       _csvReader = new CSVReader(new BufferedReader(new InputStreamReader(input)), separator, quotechar, escape);
       _header = _csvReader.readNext();
@@ -48,7 +48,7 @@ public class FudgeMsgCSVIterator implements Iterator<FudgeMsg> {
       } else {
         trimColumnHeaders();
       }
-    } catch (IOException ex) {
+    } catch (final IOException ex) {
       throw new OpenGammaRuntimeException("IO Exception trying to read next line", ex);
     }
   }
@@ -63,7 +63,7 @@ public class FudgeMsgCSVIterator implements Iterator<FudgeMsg> {
   public boolean hasNext() {
     try {
       _currentRow = _csvReader.readNext();
-    } catch (IOException ex) {
+    } catch (final IOException ex) {
       throw new OpenGammaRuntimeException("IO Exception trying to read next row", ex);
     }
     if (_currentRow == null) {
@@ -75,10 +75,10 @@ public class FudgeMsgCSVIterator implements Iterator<FudgeMsg> {
 
   @Override
   public FudgeMsg next() {
-    MutableFudgeMsg currentMsg = FUDGE_CONTEXT.newMessage();
-    int size = getMessageSize();
+    final MutableFudgeMsg currentMsg = FUDGE_CONTEXT.newMessage();
+    final int size = getMessageSize();
     for (int i = 0; i < size; i++) {
-      String currentRow = StringUtils.trimToNull(_currentRow[i]);
+      final String currentRow = StringUtils.trimToNull(_currentRow[i]);
       if (currentRow != null) {
         currentMsg.add(_header[i], currentRow);
       }

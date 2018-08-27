@@ -47,19 +47,19 @@ public class MergedOutputLinearAggregationPortfolioNodeFunction extends Abstract
   }
 
   @Override
-  public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
     return ImmutableSet.of(ValueSpecification.of(ValueRequirementNames.MERGED_OUTPUT, target.toSpecification(), ValueProperties.all()));
   }
 
   @Override
-  public Set<ValueRequirement> getRequirements(FunctionCompilationContext context, ComputationTarget target, ValueRequirement desiredValue) {
-    String mergedOutputName = desiredValue.getConstraint(ValuePropertyNames.NAME);
-    ViewCalculationConfiguration calcConfig = context.getViewCalculationConfiguration();
-    MergedOutput mergedOutput = calcConfig.getMergedOutput(mergedOutputName);
+  public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+    final String mergedOutputName = desiredValue.getConstraint(ValuePropertyNames.NAME);
+    final ViewCalculationConfiguration calcConfig = context.getViewCalculationConfiguration();
+    final MergedOutput mergedOutput = calcConfig.getMergedOutput(mergedOutputName);
     if (mergedOutput == null) {
       return null;
     }
-    final Set<ValueRequirement> requirements = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> requirements = new HashSet<>();
     final PortfolioNode node = target.getPortfolioNode();
     for (final Position position : node.getPositions()) {
       requirements.add(new ValueRequirement(ValueRequirementNames.MERGED_OUTPUT, ComputationTargetType.POSITION, position.getUniqueId(), desiredValue.getConstraints()));
@@ -69,24 +69,24 @@ public class MergedOutputLinearAggregationPortfolioNodeFunction extends Abstract
     }
     return requirements;
   }
-  
+
   @Override
-  public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target, Map<ValueSpecification, ValueRequirement> inputs) {
-    ValueRequirement exampleInput = Iterables.getFirst(inputs.values(), null);
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+    final ValueRequirement exampleInput = Iterables.getFirst(inputs.values(), null);
     if (exampleInput == null) {
       return null;
     }
-    String mergedOutputName = exampleInput.getConstraint(ValuePropertyNames.NAME);
-    ValueProperties properties = createValueProperties().with(ValuePropertyNames.NAME, mergedOutputName).get();
+    final String mergedOutputName = exampleInput.getConstraint(ValuePropertyNames.NAME);
+    final ValueProperties properties = createValueProperties().with(ValuePropertyNames.NAME, mergedOutputName).get();
     return ImmutableSet.of(ValueSpecification.of(ValueRequirementNames.MERGED_OUTPUT, target.toSpecification(), properties));
   }
 
   @Override
-  public Set<ComputedValue> execute(FunctionExecutionContext executionContext, FunctionInputs inputs, ComputationTarget target, Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
     // TODO jonathan 2014-01-13 -- as a proof-of-concept this supports aggregating very specific types. It should be
-    // extended as required. 
-    ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);
-    String mergedOutputName = desiredValue.getConstraint(ValuePropertyNames.NAME);
+    // extended as required.
+    final ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);
+    final String mergedOutputName = desiredValue.getConstraint(ValuePropertyNames.NAME);
     Object value = null;
     for (final ComputedValue input : inputs.getAllValues()) {
       Object inputValue = input.getValue();
@@ -95,15 +95,15 @@ public class MergedOutputLinearAggregationPortfolioNodeFunction extends Abstract
           continue;
         }
       }
-      String ccyCode = input.getSpecification().getProperty(ValuePropertyNames.CURRENCY);
-      Currency ccy = ccyCode != null ? Currency.parse(ccyCode) : null;
+      final String ccyCode = input.getSpecification().getProperty(ValuePropertyNames.CURRENCY);
+      final Currency ccy = ccyCode != null ? Currency.parse(ccyCode) : null;
       if (ccy != null) {
         // When merging outputs we want to allow aggregation across currencies, so we add another dimension to known
         // data structures to include the currency
         if (inputValue instanceof Double) {
           inputValue = CurrencyAmount.of(ccy, (double) inputValue);
         } else if (inputValue instanceof DoubleLabelledMatrix1D) {
-          DoubleLabelledMatrix1D inputMatrix = (DoubleLabelledMatrix1D) inputValue;
+          final DoubleLabelledMatrix1D inputMatrix = (DoubleLabelledMatrix1D) inputValue;
           // TODO jonathan 2014-01-08 -- an optional constraint should control whether we aggregate by key or label
           // We default to this since we usually want to see the matrix aggregated across currencies by label (e.g. 7D)
           // rather than repeating labels where the keys are slightly different (e.g. due to holiday differences)
@@ -116,7 +116,7 @@ public class MergedOutputLinearAggregationPortfolioNodeFunction extends Abstract
               new double[][] {inputMatrix.getValues()}, inputMatrix.getValuesTitle());
         }
       }
-      String requirementDisplayName = ValueRequirementNames.MERGED_OUTPUT + " (" + mergedOutputName + ")";
+      final String requirementDisplayName = ValueRequirementNames.MERGED_OUTPUT + " (" + mergedOutputName + ")";
       value = addValue(value, inputValue, requirementDisplayName);
     }
     if (value == null) {
@@ -124,14 +124,14 @@ public class MergedOutputLinearAggregationPortfolioNodeFunction extends Abstract
     }
     return Collections.singleton(new ComputedValue(new ValueSpecification(ValueRequirementNames.MERGED_OUTPUT, target.toSpecification(), desiredValue.getConstraints()), value));
   }
-  
-  protected Object addValue(Object previousSum, Object currentValue, String requirementDisplayName) {
+
+  protected Object addValue(final Object previousSum, final Object currentValue, final String requirementDisplayName) {
     if (previousSum == null) {
       return currentValue;
     }
     if (previousSum instanceof DoubleCurrencyLabelledMatrix2D && currentValue instanceof DoubleCurrencyLabelledMatrix2D) {
-      DoubleCurrencyLabelledMatrix2D previousSumMatrix = (DoubleCurrencyLabelledMatrix2D) previousSum;
-      DoubleCurrencyLabelledMatrix2D currentValueMatrix = (DoubleCurrencyLabelledMatrix2D) currentValue;
+      final DoubleCurrencyLabelledMatrix2D previousSumMatrix = (DoubleCurrencyLabelledMatrix2D) previousSum;
+      final DoubleCurrencyLabelledMatrix2D currentValueMatrix = (DoubleCurrencyLabelledMatrix2D) currentValue;
       return previousSumMatrix.addUsingDoubleLabels(currentValueMatrix);
     }
     return SumUtils.addValue(previousSum, currentValue, requirementDisplayName);
@@ -141,5 +141,5 @@ public class MergedOutputLinearAggregationPortfolioNodeFunction extends Abstract
   public boolean canHandleMissingInputs() {
     return true;
   }
-  
+
 }

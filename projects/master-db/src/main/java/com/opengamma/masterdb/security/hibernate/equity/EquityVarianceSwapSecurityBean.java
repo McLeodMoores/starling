@@ -56,12 +56,13 @@ public class EquityVarianceSwapSecurityBean extends SecurityBean {
   private ExternalIdBean _spotUnderlyingIdentifier;
   @PropertyDefinition
   private double _strike;
- 
-  public boolean equals(Object other) {
+
+  @Override
+  public boolean equals(final Object other) {
     if (!(other instanceof EquityVarianceSwapSecurityBean)) {
       return false;
     }
-    EquityVarianceSwapSecurityBean swap = (EquityVarianceSwapSecurityBean) other;
+    final EquityVarianceSwapSecurityBean swap = (EquityVarianceSwapSecurityBean) other;
     if (getId() != -1 && swap.getId() != -1) {
       return getId().longValue() == swap.getId().longValue();
     }
@@ -78,7 +79,8 @@ public class EquityVarianceSwapSecurityBean extends SecurityBean {
         .append(getStrike(), swap.getStrike())
         .isEquals();
   }
-  
+
+  @Override
   public int hashCode() {
     return new HashCodeBuilder().append(getAnnualizationFactor())
         .append(getCurrency())
@@ -93,7 +95,8 @@ public class EquityVarianceSwapSecurityBean extends SecurityBean {
         .append(getStrike())
         .toHashCode();
   }
-  
+
+  @Override
   public String toString() {
     return ToStringBuilder.reflectionToString(this);
   }

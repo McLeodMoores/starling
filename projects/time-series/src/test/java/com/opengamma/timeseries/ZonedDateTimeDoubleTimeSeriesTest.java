@@ -13,33 +13,33 @@ import org.threeten.bp.ZonedDateTime;
  * Test.
  */
 public abstract class ZonedDateTimeDoubleTimeSeriesTest extends DoubleTimeSeriesTest<ZonedDateTime> {
-  
-  protected ZonedDateTime makeDate(int year, int month, int day) {
-    ZonedDateTime one = ZonedDateTime.of(LocalDateTime.of(year, month, day, 0, 0), ZoneOffset.UTC);//ZoneId.of(java.util.TimeZone.getDefault().getID()));
+
+  protected ZonedDateTime makeDate(final int year, final int month, final int day) {
+    final ZonedDateTime one = ZonedDateTime.of(LocalDateTime.of(year, month, day, 0, 0), ZoneOffset.UTC);//ZoneId.of(java.util.TimeZone.getDefault().getID()));
     return one;
   }
-  
+
   @Override
   protected ZonedDateTime[] testTimes() {
-    ZonedDateTime one = makeDate(2010, 2, 8);
-    ZonedDateTime two = makeDate(2010, 2, 9);
-    ZonedDateTime three = makeDate(2010, 2, 10);
-    ZonedDateTime four = makeDate(2010, 2, 11);
-    ZonedDateTime five = makeDate(2010, 2, 12);
-    ZonedDateTime six = makeDate(2010, 2, 13);
+    final ZonedDateTime one = makeDate(2010, 2, 8);
+    final ZonedDateTime two = makeDate(2010, 2, 9);
+    final ZonedDateTime three = makeDate(2010, 2, 10);
+    final ZonedDateTime four = makeDate(2010, 2, 11);
+    final ZonedDateTime five = makeDate(2010, 2, 12);
+    final ZonedDateTime six = makeDate(2010, 2, 13);
     return new ZonedDateTime[] { one, two, three, four, five, six };
   }
 
   @Override
   protected ZonedDateTime[] testTimes2() {
-    ZonedDateTime one = makeDate(2010, 2, 11);
-    ZonedDateTime two = makeDate(2010, 2, 12);
-    ZonedDateTime three = makeDate(2010, 2, 13);
-    ZonedDateTime four = makeDate(2010, 2, 14);
-    ZonedDateTime five = makeDate(2010, 2, 15);
-    ZonedDateTime six = makeDate(2010, 2, 16);
+    final ZonedDateTime one = makeDate(2010, 2, 11);
+    final ZonedDateTime two = makeDate(2010, 2, 12);
+    final ZonedDateTime three = makeDate(2010, 2, 13);
+    final ZonedDateTime four = makeDate(2010, 2, 14);
+    final ZonedDateTime five = makeDate(2010, 2, 15);
+    final ZonedDateTime six = makeDate(2010, 2, 16);
     return new ZonedDateTime[] { one, two, three, four, five, six };
-  } 
+  }
 
   @Override
   protected ZonedDateTime[] emptyTimes() {

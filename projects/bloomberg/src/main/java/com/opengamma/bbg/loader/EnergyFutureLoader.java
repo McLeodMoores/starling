@@ -69,7 +69,7 @@ public final class EnergyFutureLoader extends SecurityLoader {
       FIELD_ID_ISIN,
       FIELD_ID_SEDOL1,
       FIELD_FUT_VAL_PT);
-  
+
   /**
    * The valid Bloomberg future categories for Energy Futures
    */
@@ -79,24 +79,24 @@ public final class EnergyFutureLoader extends SecurityLoader {
    * Creates an instance.
    * @param referenceDataProvider  the provider, not null
    */
-  public EnergyFutureLoader(ReferenceDataProvider referenceDataProvider) {
+  public EnergyFutureLoader(final ReferenceDataProvider referenceDataProvider) {
     super(LOGGER, referenceDataProvider, SecurityType.ENERGY_FUTURE);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  protected ManageableSecurity createSecurity(FudgeMsg fieldData) {
-    String expiryDate = fieldData.getString(FIELD_FUT_LAST_TRADE_DT);
-    String futureTradingHours = fieldData.getString(FIELD_FUT_TRADING_HRS);
-    String micExchangeCode = fieldData.getString(FIELD_ID_MIC_PRIM_EXCH);
-    String currencyStr = fieldData.getString(FIELD_CRNCY);    
-    String category = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUTURES_CATEGORY), " ");
-    Double unitNumber = fieldData.getDouble(FIELD_FUT_CONT_SIZE);
-    String unitName = fieldData.getString(FIELD_FUT_TRADING_UNITS);
-    String underlyingTicker = fieldData.getString(FIELD_UNDL_SPOT_TICKER);
-    String name = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUT_LONG_NAME), " ");
-    String bbgUnique = fieldData.getString(FIELD_ID_BBG_UNIQUE);
-    double unitAmount = Double.valueOf(fieldData.getString(FIELD_FUT_VAL_PT));
+  protected ManageableSecurity createSecurity(final FudgeMsg fieldData) {
+    final String expiryDate = fieldData.getString(FIELD_FUT_LAST_TRADE_DT);
+    final String futureTradingHours = fieldData.getString(FIELD_FUT_TRADING_HRS);
+    final String micExchangeCode = fieldData.getString(FIELD_ID_MIC_PRIM_EXCH);
+    final String currencyStr = fieldData.getString(FIELD_CRNCY);
+    final String category = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUTURES_CATEGORY), " ");
+    final Double unitNumber = fieldData.getDouble(FIELD_FUT_CONT_SIZE);
+    final String unitName = fieldData.getString(FIELD_FUT_TRADING_UNITS);
+    final String underlyingTicker = fieldData.getString(FIELD_UNDL_SPOT_TICKER);
+    final String name = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUT_LONG_NAME), " ");
+    final String bbgUnique = fieldData.getString(FIELD_ID_BBG_UNIQUE);
+    final double unitAmount = Double.valueOf(fieldData.getString(FIELD_FUT_VAL_PT));
 
     if (!isValidField(bbgUnique)) {
       LOGGER.warn("bbgUnique is null, cannot construct energy future security");
@@ -139,13 +139,13 @@ public final class EnergyFutureLoader extends SecurityLoader {
         underlying = ExternalSchemes.bloombergTickerSecurityId(underlyingTicker + " " + "Comdty");
       }
     }
-    Expiry expiry = decodeExpiry(expiryDate, futureTradingHours);
+    final Expiry expiry = decodeExpiry(expiryDate, futureTradingHours);
     if (expiry == null) {
       return null;
     }
-    Currency currency = Currency.parse(currencyStr);
+    final Currency currency = Currency.parse(currencyStr);
 
-    EnergyFutureSecurity security = new EnergyFutureSecurity(expiry, micExchangeCode, micExchangeCode, currency, unitAmount, category);
+    final EnergyFutureSecurity security = new EnergyFutureSecurity(expiry, micExchangeCode, micExchangeCode, currency, unitAmount, category);
     security.setUnitNumber(unitNumber);
     security.setUnitName(unitName);
     security.setUnderlyingId(underlying);

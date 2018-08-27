@@ -1,32 +1,16 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.batch.rest;
 
 import java.net.URI;
-import java.util.List;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
-import com.opengamma.batch.BatchMaster;
-import com.opengamma.batch.domain.RiskRun;
-import com.opengamma.engine.view.ViewResultEntry;
 import com.opengamma.id.ObjectId;
-import com.opengamma.transport.jaxrs.FudgeRest;
-import com.opengamma.util.ArgumentChecker;
-import com.opengamma.util.paging.Paging;
-import com.opengamma.util.paging.PagingRequest;
-import com.opengamma.util.rest.AbstractDataResource;
-import com.opengamma.util.tuple.Pair;
 
 /**
  * RESTful resource for batch.
@@ -41,8 +25,8 @@ public class DataBatchRunUris {
    * @param baseUri  the base URI, not null
    * @return the URI, not null
    */
-  public static URI uriSearch(URI baseUri) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("run/search");
+  public static URI uriSearch(final URI baseUri) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("run/search");
     return bld.build();
   }
 
@@ -53,18 +37,18 @@ public class DataBatchRunUris {
    * @param batchRunId  the resource identifier, not null
    * @return the URI, not null
    */
-  public static URI uri(URI baseUri, ObjectId batchRunId) {
+  public static URI uri(final URI baseUri, final ObjectId batchRunId) {
     return UriBuilder.fromUri(baseUri).path("/run/{uid}").build(batchRunId);
   }
 
   /**
    * Builds a URI for getBatchValues.
-   * 
+   *
    * @param baseUri  the base URI, not null
-   * @param batchRunId the batch id which values we want to build the uri for                          
+   * @param batchRunId the batch id which values we want to build the uri for
    * @return the URI, not null
    */
-  public static URI uriBatchValues(URI baseUri, ObjectId batchRunId) {
+  public static URI uriBatchValues(final URI baseUri, final ObjectId batchRunId) {
     return UriBuilder.fromUri(baseUri).path("/run/{uid}/values").build(batchRunId);
   }
 

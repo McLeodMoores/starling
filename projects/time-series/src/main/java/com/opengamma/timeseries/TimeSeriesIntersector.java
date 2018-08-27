@@ -10,11 +10,11 @@ package com.opengamma.timeseries;
  */
 public final class TimeSeriesIntersector {
 
-  public static DoubleTimeSeries<?>[] intersect(DoubleTimeSeries<?>... series) {
+  public static DoubleTimeSeries<?>[] intersect(final DoubleTimeSeries<?>... series) {
     if (series.length <= 1) {
       return series;
     }
-    
+
     //Make the smallest series we can
     for (int i = 1; i < series.length; i++) {
       series[0] = series[0].intersectionFirstValue(series[i]);

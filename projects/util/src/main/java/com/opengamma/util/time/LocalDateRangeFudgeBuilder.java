@@ -28,7 +28,7 @@ public final class LocalDateRangeFudgeBuilder extends AbstractFudgeBuilder imple
 
   //-------------------------------------------------------------------------
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, LocalDateRange object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final LocalDateRange object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     toFudgeMsg(serializer, object, msg);
     return msg;

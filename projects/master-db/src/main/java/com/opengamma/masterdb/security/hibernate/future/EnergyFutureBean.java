@@ -13,7 +13,7 @@ import com.opengamma.financial.security.future.EnergyFutureSecurity;
 public class EnergyFutureBean extends CommodityFutureBean {
 
   @Override
-  public <T> T accept(Visitor<T> visitor) {
+  public <T> T accept(final Visitor<T> visitor) {
     return visitor.visitEnergyFutureType(this);
   }
 

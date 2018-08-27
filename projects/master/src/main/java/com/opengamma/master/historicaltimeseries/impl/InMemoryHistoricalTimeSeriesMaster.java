@@ -63,7 +63,7 @@ public class InMemoryHistoricalTimeSeriesMaster
   /**
    * A cache of time-series points by identifier.
    */
-  private final ConcurrentMap<ObjectId, LocalDateDoubleTimeSeries> _storePoints = new ConcurrentHashMap<ObjectId, LocalDateDoubleTimeSeries>();
+  private final ConcurrentMap<ObjectId, LocalDateDoubleTimeSeries> _storePoints = new ConcurrentHashMap<>();
 
   /**
    * Creates an instance.
@@ -102,7 +102,7 @@ public class InMemoryHistoricalTimeSeriesMaster
 
   //-------------------------------------------------------------------------
   @Override
-  protected void validateDocument(HistoricalTimeSeriesInfoDocument document) {
+  protected void validateDocument(final HistoricalTimeSeriesInfoDocument document) {
     ArgumentChecker.notNull(document, "document");
     if (document.getUniqueId() != null) {
       validateId(document.getUniqueId());
@@ -118,33 +118,33 @@ public class InMemoryHistoricalTimeSeriesMaster
 
   //-------------------------------------------------------------------------
   @Override
-  public HistoricalTimeSeriesInfoMetaDataResult metaData(HistoricalTimeSeriesInfoMetaDataRequest request) {
+  public HistoricalTimeSeriesInfoMetaDataResult metaData(final HistoricalTimeSeriesInfoMetaDataRequest request) {
     ArgumentChecker.notNull(request, "request");
-    HistoricalTimeSeriesInfoMetaDataResult result = new HistoricalTimeSeriesInfoMetaDataResult();
+    final HistoricalTimeSeriesInfoMetaDataResult result = new HistoricalTimeSeriesInfoMetaDataResult();
     if (request.isDataFields()) {
-      Set<String> types = new HashSet<String>();
-      for (HistoricalTimeSeriesInfoDocument doc : _store.values()) {
+      final Set<String> types = new HashSet<>();
+      for (final HistoricalTimeSeriesInfoDocument doc : _store.values()) {
         types.add(doc.getInfo().getDataField());
       }
       result.getDataFields().addAll(types);
     }
     if (request.isDataSources()) {
-      Set<String> types = new HashSet<String>();
-      for (HistoricalTimeSeriesInfoDocument doc : _store.values()) {
+      final Set<String> types = new HashSet<>();
+      for (final HistoricalTimeSeriesInfoDocument doc : _store.values()) {
         types.add(doc.getInfo().getDataSource());
       }
       result.getDataSources().addAll(types);
     }
     if (request.isDataProviders()) {
-      Set<String> types = new HashSet<String>();
-      for (HistoricalTimeSeriesInfoDocument doc : _store.values()) {
+      final Set<String> types = new HashSet<>();
+      for (final HistoricalTimeSeriesInfoDocument doc : _store.values()) {
         types.add(doc.getInfo().getDataProvider());
       }
       result.getDataProviders().addAll(types);
     }
     if (request.isObservationTimes()) {
-      Set<String> types = new HashSet<String>();
-      for (HistoricalTimeSeriesInfoDocument doc : _store.values()) {
+      final Set<String> types = new HashSet<>();
+      for (final HistoricalTimeSeriesInfoDocument doc : _store.values()) {
         types.add(doc.getInfo().getObservationTime());
       }
       result.getObservationTimes().addAll(types);
@@ -154,15 +154,15 @@ public class InMemoryHistoricalTimeSeriesMaster
 
   //-------------------------------------------------------------------------
   @Override
-  public HistoricalTimeSeriesInfoSearchResult search(HistoricalTimeSeriesInfoSearchRequest request) {
+  public HistoricalTimeSeriesInfoSearchResult search(final HistoricalTimeSeriesInfoSearchRequest request) {
     ArgumentChecker.notNull(request, "request");
-    final List<HistoricalTimeSeriesInfoDocument> list = new ArrayList<HistoricalTimeSeriesInfoDocument>();
-    for (HistoricalTimeSeriesInfoDocument doc : _store.values()) {
+    final List<HistoricalTimeSeriesInfoDocument> list = new ArrayList<>();
+    for (final HistoricalTimeSeriesInfoDocument doc : _store.values()) {
       if (request.matches(doc)) {
         list.add(doc);
       }
     }
-    HistoricalTimeSeriesInfoSearchResult result = new HistoricalTimeSeriesInfoSearchResult();
+    final HistoricalTimeSeriesInfoSearchResult result = new HistoricalTimeSeriesInfoSearchResult();
     result.setPaging(Paging.of(request.getPagingRequest(), list));
     result.getDocuments().addAll(request.getPagingRequest().select(list));
     return result;
@@ -176,7 +176,7 @@ public class InMemoryHistoricalTimeSeriesMaster
 
   //-------------------------------------------------------------------------
   @Override
-  public HistoricalTimeSeriesInfoDocument get(final ObjectIdentifiable objectKey, VersionCorrection versionCorrection) {
+  public HistoricalTimeSeriesInfoDocument get(final ObjectIdentifiable objectKey, final VersionCorrection versionCorrection) {
     validateId(objectKey);
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     final ObjectId objectId = objectKey.getObjectId();
@@ -247,7 +247,7 @@ public class InMemoryHistoricalTimeSeriesMaster
 
   //-------------------------------------------------------------------------
   @Override
-  public HistoricalTimeSeriesInfoHistoryResult history(HistoricalTimeSeriesInfoHistoryRequest request) {
+  public HistoricalTimeSeriesInfoHistoryResult history(final HistoricalTimeSeriesInfoHistoryRequest request) {
     ArgumentChecker.notNull(request, "request");
     ArgumentChecker.notNull(request.getObjectId(), "request.objectId");
 
@@ -262,22 +262,26 @@ public class InMemoryHistoricalTimeSeriesMaster
 
   //-------------------------------------------------------------------------
 
-  public ManageableHistoricalTimeSeries getTimeSeries(UniqueId uniqueId) {
+  @Override
+  public ManageableHistoricalTimeSeries getTimeSeries(final UniqueId uniqueId) {
     return getTimeSeries(uniqueId.getObjectId(), VersionCorrection.LATEST);
   }
 
-  public ManageableHistoricalTimeSeries getTimeSeries(UniqueId uniqueId, HistoricalTimeSeriesGetFilter filter) {
+  @Override
+  public ManageableHistoricalTimeSeries getTimeSeries(final UniqueId uniqueId, final HistoricalTimeSeriesGetFilter filter) {
     return getTimeSeries(uniqueId.getObjectId(), VersionCorrection.LATEST, filter);
   }
 
-  public ManageableHistoricalTimeSeries getTimeSeries(ObjectIdentifiable objectId, VersionCorrection versionCorrection) {
+  @Override
+  public ManageableHistoricalTimeSeries getTimeSeries(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
     return getTimeSeries(objectId, versionCorrection, HistoricalTimeSeriesGetFilter.ofRange(null, null));
   }
 
-  public ManageableHistoricalTimeSeries getTimeSeries(ObjectIdentifiable objectKey, VersionCorrection versionCorrection, HistoricalTimeSeriesGetFilter filter) {
+  @Override
+  public ManageableHistoricalTimeSeries getTimeSeries(final ObjectIdentifiable objectKey, final VersionCorrection versionCorrection, final HistoricalTimeSeriesGetFilter filter) {
     validateId(objectKey);
-    LocalDate fromDateInclusive = Objects.firstNonNull(filter.getEarliestDate(), LocalDate.of(1000, 1, 1));  // TODO: JSR-310 min/max date
-    LocalDate toDateInclusive = Objects.firstNonNull(filter.getLatestDate(), LocalDate.of(9999, 1, 1));
+    final LocalDate fromDateInclusive = Objects.firstNonNull(filter.getEarliestDate(), LocalDate.of(1000, 1, 1));  // TODO: JSR-310 min/max date
+    final LocalDate toDateInclusive = Objects.firstNonNull(filter.getLatestDate(), LocalDate.of(9999, 1, 1));
     ArgumentChecker.inOrderOrEqual(fromDateInclusive, toDateInclusive, "fromDateInclusive", "toDateInclusive");
     final ObjectId objectId = objectKey.getObjectId();
 
@@ -290,11 +294,11 @@ public class InMemoryHistoricalTimeSeriesMaster
       existingSeries = ImmutableLocalDateDoubleTimeSeries.EMPTY_SERIES;
     }
 
-    // Filter points by date range and max points to return 
+    // Filter points by date range and max points to return
     // Heeds LocalDateDoubleTimeSeries convention: inclusive start, exclusive end
     LocalDateDoubleTimeSeries subSeries = existingSeries.subSeries(fromDateInclusive, toDateInclusive.plusDays(1));
-    Integer maxPoints = filter.getMaxPoints();
-    if (((maxPoints != null) && (Math.abs(maxPoints) < subSeries.size()))) {
+    final Integer maxPoints = filter.getMaxPoints();
+    if (maxPoints != null && Math.abs(maxPoints) < subSeries.size()) {
       subSeries = maxPoints >= 0 ? subSeries.head(maxPoints) : subSeries.tail(-maxPoints);
     }
 
@@ -309,7 +313,7 @@ public class InMemoryHistoricalTimeSeriesMaster
 
   //-------------------------------------------------------------------------
   @Override
-  public UniqueId updateTimeSeriesDataPoints(ObjectIdentifiable objectKey, LocalDateDoubleTimeSeries series) {
+  public UniqueId updateTimeSeriesDataPoints(final ObjectIdentifiable objectKey, final LocalDateDoubleTimeSeries series) {
     ArgumentChecker.notNull(objectKey, "objectKey");
     ArgumentChecker.notNull(series, "series");
     final ObjectId objectId = objectKey.getObjectId();
@@ -319,7 +323,7 @@ public class InMemoryHistoricalTimeSeriesMaster
       if (existingSeries.size() > 0 && !(series.getLatestTime().isBefore(existingSeries.getEarliestTime()) || series.getEarliestTime().isAfter(existingSeries.getLatestTime()))) {
         throw new IllegalArgumentException("Unable to add time-series as dates overlap");
       }
-      LocalDateDoubleTimeSeries newSeries = existingSeries.noIntersectionOperation(series);
+      final LocalDateDoubleTimeSeries newSeries = existingSeries.noIntersectionOperation(series);
       if (_storePoints.replace(objectId, existingSeries, newSeries) == false) {
         throw new IllegalArgumentException("Concurrent modification");
       }
@@ -336,14 +340,14 @@ public class InMemoryHistoricalTimeSeriesMaster
 
   //-------------------------------------------------------------------------
   @Override
-  public UniqueId correctTimeSeriesDataPoints(ObjectIdentifiable objectKey, LocalDateDoubleTimeSeries series) {
+  public UniqueId correctTimeSeriesDataPoints(final ObjectIdentifiable objectKey, final LocalDateDoubleTimeSeries series) {
     ArgumentChecker.notNull(objectKey, "objectKey");
     ArgumentChecker.notNull(series, "series");
     final ObjectId objectId = objectKey.getObjectId();
 
-    LocalDateDoubleTimeSeries existingSeries = _storePoints.get(objectId);
+    final LocalDateDoubleTimeSeries existingSeries = _storePoints.get(objectId);
     if (existingSeries != null) {
-      LocalDateDoubleTimeSeries newSeries = existingSeries.unionOperate(series, DoubleTimeSeriesOperators.SECOND_OPERATOR);
+      final LocalDateDoubleTimeSeries newSeries = existingSeries.unionOperate(series, DoubleTimeSeriesOperators.SECOND_OPERATOR);
       if (_storePoints.replace(objectId, existingSeries, newSeries) == false) {
         throw new IllegalArgumentException("Concurrent modification");
       }
@@ -360,21 +364,21 @@ public class InMemoryHistoricalTimeSeriesMaster
 
   //-------------------------------------------------------------------------
   @Override
-  public UniqueId removeTimeSeriesDataPoints(ObjectIdentifiable objectKey, LocalDate fromDateInclusive, LocalDate toDateInclusive) {
+  public UniqueId removeTimeSeriesDataPoints(final ObjectIdentifiable objectKey, final LocalDate fromDateInclusive, final LocalDate toDateInclusive) {
     ArgumentChecker.notNull(objectKey, "objectKey");
-    fromDateInclusive = Objects.firstNonNull(fromDateInclusive, LocalDate.of(1000, 1, 1));  // TODO: JSR-310 min/max date
-    toDateInclusive = Objects.firstNonNull(toDateInclusive, LocalDate.of(9999, 1, 1));
-    ArgumentChecker.inOrderOrEqual(fromDateInclusive, toDateInclusive, "fromDateInclusive", "toDateInclusive");
+    final LocalDate fromDate = Objects.firstNonNull(fromDateInclusive, LocalDate.MIN);
+    final LocalDate toDate = Objects.firstNonNull(toDateInclusive, LocalDate.MAX);
+    ArgumentChecker.inOrderOrEqual(fromDate, toDate, "fromDate", "toDate");
     final ObjectId objectId = objectKey.getObjectId();
 
-    LocalDateDoubleTimeSeries existingSeries = _storePoints.get(objectId);
+    final LocalDateDoubleTimeSeries existingSeries = _storePoints.get(objectId);
     if (existingSeries == null) {
       return objectId.atLatestVersion();
     }
-    LocalDateDoubleTimeSeriesBuilder bld = existingSeries.toBuilder();
-    for (LocalDateDoubleEntryIterator it = bld.iterator(); it.hasNext(); ) {
-      LocalDate date = it.nextTime();
-      if (date.isBefore(fromDateInclusive) == false && date.isAfter(toDateInclusive) == false) {
+    final LocalDateDoubleTimeSeriesBuilder bld = existingSeries.toBuilder();
+    for (final LocalDateDoubleEntryIterator it = bld.iterator(); it.hasNext();) {
+      final LocalDate date = it.nextTime();
+      if (date.isBefore(fromDate) == false && date.isAfter(toDate) == false) {
         it.remove();
       }
     }
@@ -385,11 +389,11 @@ public class InMemoryHistoricalTimeSeriesMaster
   }
 
   //-------------------------------------------------------------------------
-  private long validateId(ObjectIdentifiable objectId) {
+  private long validateId(final ObjectIdentifiable objectId) {
     ArgumentChecker.notNull(objectId, "objectId");
     try {
       return Long.parseLong(objectId.getObjectId().getValue());
-    } catch (NumberFormatException ex) {
+    } catch (final NumberFormatException ex) {
       throw new IllegalArgumentException("Invalid objectId " + objectId);
     }
   }

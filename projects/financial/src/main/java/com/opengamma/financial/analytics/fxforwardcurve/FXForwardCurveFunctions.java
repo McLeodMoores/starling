@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.fxforwardcurve;
@@ -26,7 +26,7 @@ public class FXForwardCurveFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Default instance of a repository configuration source exposing the functions from this package.
-   * 
+   *
    * @return the configuration source exposing functions from this package
    */
   public static FunctionConfigurationSource instance() {
@@ -66,14 +66,14 @@ public class FXForwardCurveFunctions extends AbstractFunctionConfigurationBean {
       return _configMaster;
     }
 
-    protected void addFXForwardCurveFunctions(List<FunctionConfiguration> functions, String ccy1, String ccy2, String curveName) {
+    protected void addFXForwardCurveFunctions(final List<FunctionConfiguration> functions, final String ccy1, final String ccy2, final String curveName) {
       functions.add(functionConfiguration(FXForwardCurveDefinitionFunction.class, ccy1, ccy2, curveName));
       functions.add(functionConfiguration(FXForwardCurveSpecificationFunction.class, ccy1, ccy2, curveName));
     }
 
     @Override
-    protected void addAllConfigurations(List<FunctionConfiguration> functions) {
-      final ConfigSearchRequest<FXForwardCurveDefinition> searchRequest = new ConfigSearchRequest<FXForwardCurveDefinition>();
+    protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
+      final ConfigSearchRequest<FXForwardCurveDefinition> searchRequest = new ConfigSearchRequest<>();
       searchRequest.setType(FXForwardCurveDefinition.class);
       searchRequest.setVersionCorrection(getVersionCorrection());
       for (final ConfigDocument configDocument : ConfigSearchIterator.iterable(getConfigMaster(), searchRequest)) {
@@ -86,13 +86,13 @@ public class FXForwardCurveFunctions extends AbstractFunctionConfigurationBean {
         if (underscore <= 0) {
           continue;
         }
-        String curveName = documentName.substring(0, underscore);
-        String currencies = documentName.substring(underscore + 1);
+        final String curveName = documentName.substring(0, underscore);
+        final String currencies = documentName.substring(underscore + 1);
         if (currencies.length() != 6) {
           continue;
         }
-        String ccy1 = currencies.substring(0, 3);
-        String ccy2 = currencies.substring(3);
+        final String ccy1 = currencies.substring(0, 3);
+        final String ccy2 = currencies.substring(3);
         addFXForwardCurveFunctions(functions, ccy1, ccy2, curveName);
       }
     }
@@ -104,7 +104,7 @@ public class FXForwardCurveFunctions extends AbstractFunctionConfigurationBean {
   }
 
   @Override
-  protected void addAllConfigurations(List<FunctionConfiguration> functions) {
+  protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
   }
 
 }

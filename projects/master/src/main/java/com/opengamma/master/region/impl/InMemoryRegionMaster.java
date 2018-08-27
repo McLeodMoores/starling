@@ -89,14 +89,14 @@ public class InMemoryRegionMaster
   @Override
   public RegionSearchResult search(final RegionSearchRequest request) {
     ArgumentChecker.notNull(request, "request");
-    final List<RegionDocument> list = new ArrayList<RegionDocument>();
-    for (RegionDocument doc : _store.values()) {
+    final List<RegionDocument> list = new ArrayList<>();
+    for (final RegionDocument doc : _store.values()) {
       if (request.matches(doc)) {
         list.add(doc);
       }
     }
     Collections.sort(list, RegionDocumentComparator.ASC);
-    RegionSearchResult result = new RegionSearchResult();
+    final RegionSearchResult result = new RegionSearchResult();
     result.setPaging(Paging.of(request.getPagingRequest(), list));
     result.getDocuments().addAll(request.getPagingRequest().select(list));
     return result;
@@ -197,7 +197,7 @@ public class InMemoryRegionMaster
   }
 
   @Override
-  protected void validateDocument(RegionDocument document) {
+  protected void validateDocument(final RegionDocument document) {
     ArgumentChecker.notNull(document, "document");
     ArgumentChecker.notNull(document.getRegion(), "document.region");
   }

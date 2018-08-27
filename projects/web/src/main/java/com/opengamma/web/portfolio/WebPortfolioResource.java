@@ -46,25 +46,25 @@ public class WebPortfolioResource extends AbstractWebPortfolioResource {
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String getHTML() {
-    FlexiBean out = createPortfolioData();
+    final FlexiBean out = createPortfolioData();
     return getFreemarker().build(HTML_DIR + "portfolio.ftl", out);
   }
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public Response getJSON() {
-    FlexiBean out = createPortfolioData();
+    final FlexiBean out = createPortfolioData();
     return Response.ok(getFreemarker().build(JSON_DIR + "portfolio.ftl", out)).build();
   }
 
   private FlexiBean createPortfolioData() {
-    PortfolioDocument doc = data().getPortfolio();
-    PositionSearchRequest positionSearch = new PositionSearchRequest();
+    final PortfolioDocument doc = data().getPortfolio();
+    final PositionSearchRequest positionSearch = new PositionSearchRequest();
     positionSearch.setPositionObjectIds(doc.getPortfolio().getRootNode().getPositionIds());
-    PositionSearchResult positionsResult = data().getPositionMaster().search(positionSearch);
+    final PositionSearchResult positionsResult = data().getPositionMaster().search(positionSearch);
     resolveSecurities(positionsResult.getPositions());
-        
-    FlexiBean out = createRootData();
+
+    final FlexiBean out = createRootData();
     out.put("positionsResult", positionsResult);
     out.put("positions", positionsResult.getPositions());
     return out;
@@ -74,44 +74,44 @@ public class WebPortfolioResource extends AbstractWebPortfolioResource {
   @PUT
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
-  public Response putHTML(@FormParam("name") String name, @FormParam("hidden") Boolean isHidden) {
-    PortfolioDocument doc = data().getPortfolio();
+  public Response putHTML(@FormParam("name") String name, @FormParam("hidden") final Boolean isHidden) {
+    final PortfolioDocument doc = data().getPortfolio();
     if (doc.isLatest() == false) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
-    
+
     name = StringUtils.trimToNull(name);
-    DocumentVisibility visibility = BooleanUtils.isTrue(isHidden) ? DocumentVisibility.HIDDEN : DocumentVisibility.VISIBLE;
+    final DocumentVisibility visibility = BooleanUtils.isTrue(isHidden) ? DocumentVisibility.HIDDEN : DocumentVisibility.VISIBLE;
     if (name == null) {
-      FlexiBean out = createRootData();
+      final FlexiBean out = createRootData();
       out.put("err_nameMissing", true);
-      String html = getFreemarker().build(HTML_DIR + "portfolio-update.ftl", out);
+      final String html = getFreemarker().build(HTML_DIR + "portfolio-update.ftl", out);
       return Response.ok(html).build();
     }
-    URI uri = updatePortfolio(name, visibility, doc);
+    final URI uri = updatePortfolio(name, visibility, doc);
     return Response.seeOther(uri).build();
   }
 
   @PUT
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response putJSON(@FormParam("name") String name, @FormParam("hidden") Boolean isHidden) {
-    PortfolioDocument doc = data().getPortfolio();
+  public Response putJSON(@FormParam("name") String name, @FormParam("hidden") final Boolean isHidden) {
+    final PortfolioDocument doc = data().getPortfolio();
     if (doc.isLatest() == false) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
     name = StringUtils.trimToNull(name);
-    DocumentVisibility visibility = BooleanUtils.isTrue(isHidden) ? DocumentVisibility.HIDDEN : DocumentVisibility.VISIBLE;
+    final DocumentVisibility visibility = BooleanUtils.isTrue(isHidden) ? DocumentVisibility.HIDDEN : DocumentVisibility.VISIBLE;
     updatePortfolio(name, visibility, doc);
     return Response.ok().build();
   }
 
-  private URI updatePortfolio(String name, DocumentVisibility visibility, PortfolioDocument doc) {
+  private URI updatePortfolio(final String name, final DocumentVisibility visibility, PortfolioDocument doc) {
     doc.getPortfolio().setName(name);
     doc.setVisibility(visibility);
     doc = data().getPortfolioMaster().update(doc);
     data().setPortfolio(doc);
-    URI uri = WebPortfolioResource.uri(data());
+    final URI uri = WebPortfolioResource.uri(data());
     return uri;
   }
 
@@ -119,22 +119,22 @@ public class WebPortfolioResource extends AbstractWebPortfolioResource {
   @DELETE
   @Produces(MediaType.TEXT_HTML)
   public Response deleteHTML() {
-    PortfolioDocument doc = data().getPortfolio();
+    final PortfolioDocument doc = data().getPortfolio();
     if (doc.isLatest() == false) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
-    }  
+    }
     data().getPortfolioMaster().remove(doc.getUniqueId());
-    URI uri = WebPortfolioResource.uri(data());
+    final URI uri = WebPortfolioResource.uri(data());
     return Response.seeOther(uri).build();
   }
 
   @DELETE
   @Produces(MediaType.APPLICATION_JSON)
   public Response deleteJSON() {
-    PortfolioDocument doc = data().getPortfolio();
+    final PortfolioDocument doc = data().getPortfolio();
     if (doc.isLatest()) {
       data().getPortfolioMaster().remove(doc.getUniqueId());
-    }  
+    }
     return Response.ok().build();
   }
 
@@ -143,9 +143,10 @@ public class WebPortfolioResource extends AbstractWebPortfolioResource {
    * Creates the output root data.
    * @return the output root data, not null
    */
+  @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
-    PortfolioDocument doc = data().getPortfolio();
+    final FlexiBean out = super.createRootData();
+    final PortfolioDocument doc = data().getPortfolio();
     out.put("portfolioDoc", doc);
     out.put("portfolio", doc.getPortfolio());
     out.put("childNodes", doc.getPortfolio().getRootNode().getChildNodes());
@@ -182,7 +183,7 @@ public class WebPortfolioResource extends AbstractWebPortfolioResource {
    * @return the URI, not null
    */
   public static URI uri(final WebPortfoliosData data, final UniqueId overridePortfolioId) {
-    String portfolioId = data.getBestPortfolioUriId(overridePortfolioId);
+    final String portfolioId = data.getBestPortfolioUriId(overridePortfolioId);
     return data.getUriInfo().getBaseUriBuilder().path(WebPortfolioResource.class).build(portfolioId);
   }
 

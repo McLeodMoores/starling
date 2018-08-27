@@ -11,7 +11,7 @@ import java.util.Set;
 import com.opengamma.core.security.Security;
 
 /**
- * 
+ *
  *
  * @author yomi
  */
@@ -29,7 +29,7 @@ public class SecurityMasterResponseMessage {
   /**
    * @param allSecurityTypes the allSecurityTypes to set
    */
-  public void setAllSecurityTypes(Set<String> allSecurityTypes) {
+  public void setAllSecurityTypes(final Set<String> allSecurityTypes) {
     _allSecurityTypes = allSecurityTypes;
   }
   /**
@@ -41,7 +41,7 @@ public class SecurityMasterResponseMessage {
   /**
    * @param securities the securities to set
    */
-  public void setSecurities(Collection<Security> securities) {
+  public void setSecurities(final Collection<Security> securities) {
     _securities = securities;
   }
   /**
@@ -53,7 +53,7 @@ public class SecurityMasterResponseMessage {
   /**
    * @param security the security to set
    */
-  public void setSecurity(Security security) {
+  public void setSecurity(final Security security) {
     _security = security;
   }
   /**
@@ -65,8 +65,8 @@ public class SecurityMasterResponseMessage {
   /**
    * @param optionChain the optionChain to set
    */
-  public void setOptionChain(Set<String> optionChain) {
+  public void setOptionChain(final Set<String> optionChain) {
     _optionChain = optionChain;
   }
-  
+
 }

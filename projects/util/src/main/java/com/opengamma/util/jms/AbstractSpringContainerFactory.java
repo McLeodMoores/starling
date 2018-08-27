@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.jms;
@@ -13,22 +13,22 @@ import org.springframework.jms.listener.DefaultMessageListenerContainer;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public abstract class AbstractSpringContainerFactory {
   /**
    * The JMS connection factory.
    */
   private final ConnectionFactory _connectionFactory;
-  
-  protected AbstractSpringContainerFactory(ConnectionFactory connectionFactory) {
+
+  protected AbstractSpringContainerFactory(final ConnectionFactory connectionFactory) {
     ArgumentChecker.notNull(connectionFactory, "connectionFactory");
     _connectionFactory = connectionFactory;
   }
 
   /**
    * Gets the connection factory.
-   * 
+   *
    * @return the connection factory, not null
    */
   public ConnectionFactory getConnectionFactory() {
@@ -37,15 +37,15 @@ public abstract class AbstractSpringContainerFactory {
 
   /**
    * Creates a container to receive JMS messages.
-   * 
+   *
    * @param connectionFactory  the JMS connection factory, not null
    * @param destinationName  the queue or topic name, not null
    * @param isPubSub true if this is for a topic
    * @param listener  the listener, not null
    * @return the container, not null
    */
-  protected DefaultMessageListenerContainer doCreate(ConnectionFactory connectionFactory, String destinationName, boolean isPubSub, Object listener) {
-    DefaultMessageListenerContainer jmsContainer = new DefaultMessageListenerContainer();
+  protected DefaultMessageListenerContainer doCreate(final ConnectionFactory connectionFactory, final String destinationName, final boolean isPubSub, final Object listener) {
+    final DefaultMessageListenerContainer jmsContainer = new DefaultMessageListenerContainer();
     jmsContainer.setConnectionFactory(connectionFactory);
     jmsContainer.setDestinationName(destinationName);
     jmsContainer.setPubSubDomain(isPubSub);
@@ -65,10 +65,10 @@ public abstract class AbstractSpringContainerFactory {
 
     /**
      * Creates an instance.
-     * 
+     *
      * @param jmsContainer  the container, not null
      */
-    OpenGammaSpringJmsContainer(AbstractMessageListenerContainer jmsContainer) {
+    OpenGammaSpringJmsContainer(final AbstractMessageListenerContainer jmsContainer) {
       ArgumentChecker.notNull(jmsContainer, "jmsContainer");
       _jmsContainer = jmsContainer;
       _jmsContainer.afterPropertiesSet();

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode;
@@ -41,7 +41,7 @@ import com.opengamma.util.async.Cancelable;
     }
 
     public synchronized void addCallback(final DispatchableJob job) {
-      DispatchableJob[] jobs = new DispatchableJob[_jobs.length + 1];
+      final DispatchableJob[] jobs = new DispatchableJob[_jobs.length + 1];
       System.arraycopy(_jobs, 0, jobs, 1, _jobs.length);
       jobs[0] = job;
       _jobs = jobs;
@@ -66,13 +66,13 @@ import com.opengamma.util.async.Cancelable;
 
     @Override
     public boolean cancel(final boolean mayInterruptIfRunning) {
-      DispatchableJob[] jobs = _jobs;
+      final DispatchableJob[] jobs = _jobs;
       if (jobs.length == 0) {
         // Nothing here to cancel - probably already finished
         return false;
       } else {
         boolean result = true;
-        for (DispatchableJob job : jobs) {
+        for (final DispatchableJob job : jobs) {
           result &= job.cancel(mayInterruptIfRunning);
         }
         return result;
@@ -86,12 +86,12 @@ import com.opengamma.util.async.Cancelable;
   private final AtomicBoolean _completed = new AtomicBoolean(false);
   private final long _jobCreationTime;
   private final CapabilityRequirements _capabilityRequirements;
-  private final AtomicReference<DispatchableJobTimeout> _timeout = new AtomicReference<DispatchableJobTimeout>();
+  private final AtomicReference<DispatchableJobTimeout> _timeout = new AtomicReference<>();
   private final CancelHandle _cancelHandle;
 
   /**
    * Creates a new dispatchable job for submission to the invokers.
-   * 
+   *
    * @param dispatcher the parent dispatcher that manages the invokers
    * @param job the root job to send
    */
@@ -105,7 +105,7 @@ import com.opengamma.util.async.Cancelable;
 
   /**
    * Creates a new dispatchable job for submission to the invokers.
-   * 
+   *
    * @param creater the source job with the parameters for construction
    * @param job the root job to send
    */
@@ -158,7 +158,7 @@ import com.opengamma.util.async.Cancelable;
     LOGGER.info("Job {} completed on node {}", this, result.getComputeNodeId());
     resultReceiver.resultReceived(result);
     final long durationNanos = getDurationNanos();
-    LOGGER.debug("Reported time = {}ms, non-executing job time = {}ms", (double) result.getDuration() / 1000000d, ((double) durationNanos - (double) result.getDuration()) / 1000000d);
+    LOGGER.debug("Reported time = {}ms, non-executing job time = {}ms", result.getDuration() / 1000000d, ((double) durationNanos - (double) result.getDuration()) / 1000000d);
     if (getDispatcher().getStatisticsGatherer() != null) {
       final int size = result.getResultItems().size();
       getDispatcher().getStatisticsGatherer().jobCompleted(result.getComputeNodeId(), size, result.getDuration(), getDurationNanos());
@@ -169,10 +169,10 @@ import com.opengamma.util.async.Cancelable;
 
   @Override
   public void jobFailed(final JobInvoker jobInvoker, final String computeNodeId, final Exception exception) {
-    LOGGER.warn("Job {} failed, {}", this, (exception != null) ? exception.getMessage() : "no exception passed");
+    LOGGER.warn("Job {} failed, {}", this, exception != null ? exception.getMessage() : "no exception passed");
     if (_completed.getAndSet(true) == false) {
       cancelTimeout(null);
-      DispatchableJob retry = prepareRetryJob(jobInvoker);
+      final DispatchableJob retry = prepareRetryJob(jobInvoker);
       if (retry != null) {
         if (retry == this) {
           // We're scheduled to retry
@@ -199,7 +199,7 @@ import com.opengamma.util.async.Cancelable;
 
   protected void notifyFailure(final CalculationJob job, final CalculationJobResultItem failure, final JobResultReceiver resultReceiver) {
     final int size = job.getJobItems().size();
-    final List<CalculationJobResultItem> failureItems = new ArrayList<CalculationJobResultItem>(size);
+    final List<CalculationJobResultItem> failureItems = new ArrayList<>(size);
     for (int i = 0; i < size; i++) {
       failureItems.add(failure);
     }
@@ -220,7 +220,7 @@ import com.opengamma.util.async.Cancelable;
         LOGGER.error("Aborted job {} with {}", this, exception);
       }
       // REVIEW jonathan 2012-11-01 -- where's the 'real' execution log here?
-      MutableExecutionLog executionLog = new MutableExecutionLog(ExecutionLogMode.INDICATORS);
+      final MutableExecutionLog executionLog = new MutableExecutionLog(ExecutionLogMode.INDICATORS);
       executionLog.setException(exception);
       fail(getJob(), CalculationJobResultItemBuilder.of(executionLog).toResultItem());
     } else {
@@ -263,7 +263,7 @@ import com.opengamma.util.async.Cancelable;
 
   private void extendTimeout(final long remainingMillis, final boolean resetTimeAccrued) {
     final DispatchableJobTimeout timeout = _timeout.get();
-    if ((timeout != null) && timeout.isActive()) {
+    if (timeout != null && timeout.isActive()) {
       LOGGER.debug("Extending timeout on job {}", getJob().getSpecification().getJobId());
       timeout.extend(Math.min(remainingMillis, getDispatcher().getMaxJobExecutionTime()), resetTimeAccrued);
     }
@@ -284,7 +284,7 @@ import com.opengamma.util.async.Cancelable;
 
   protected abstract void cancel(final JobInvoker jobInvoker);
 
-  private boolean cancel(boolean mayInterruptIfRunning) {
+  private boolean cancel(final boolean mayInterruptIfRunning) {
     LOGGER.info("Cancelling job {}", this);
     while (_completed.getAndSet(true) != false) {
       Thread.yield();

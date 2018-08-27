@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.marketdata.spec;
@@ -14,11 +14,11 @@ import org.joda.beans.MetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
- * 
+ *
  */
 @BeanDefinition(hierarchy = "immutable")
 public class LatestHistoricalMarketDataSpecification extends HistoricalMarketDataSpecification implements MarketDataSpecification {
-  
+
   private static final long serialVersionUID = 1L;
 
   /**
@@ -26,13 +26,13 @@ public class LatestHistoricalMarketDataSpecification extends HistoricalMarketDat
    */
   public LatestHistoricalMarketDataSpecification() {
   }
-  
+
   /**
    * Creates an instance, specifying the time series resolver key
-   * 
+   *
    * @param timeSeriesResolverKey the time series resolver key, not null
    */
-  public LatestHistoricalMarketDataSpecification(String timeSeriesResolverKey) {
+  public LatestHistoricalMarketDataSpecification(final String timeSeriesResolverKey) {
     super(timeSeriesResolverKey);
   }
 

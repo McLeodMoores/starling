@@ -11,8 +11,6 @@ import org.joda.beans.MetaProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import au.com.bytecode.opencsv.CSVWriter;
-
 import com.opengamma.component.tool.AbstractTool;
 import com.opengamma.financial.tool.ToolContext;
 import com.opengamma.master.security.ManageableSecurity;
@@ -23,6 +21,8 @@ import com.opengamma.master.security.SecuritySearchRequest;
 import com.opengamma.master.security.SecuritySearchResult;
 import com.opengamma.scripts.Scriptable;
 import com.opengamma.util.paging.PagingRequest;
+
+import au.com.bytecode.opencsv.CSVWriter;
 
 /**
  * Tool to generate a template for doing field mapping tasks
@@ -36,34 +36,34 @@ public class SecurityFieldMappingTemplateGenerator extends AbstractTool<ToolCont
   //-------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
+   *
    * @param args  the standard tool arguments, not null
    */
-  public static void main(String[] args) {  // CSIGNORE
+  public static void main(final String[] args) {  // CSIGNORE
     new SecurityFieldMappingTemplateGenerator().invokeAndTerminate(args);
   }
 
   //-------------------------------------------------------------------------
   @Override
   protected void doRun() throws Exception {
-    CSVWriter csvWriter = new CSVWriter(new FileWriter(getCommandLine().getArgs()[0]));
-    SecurityMaster securityMaster = getToolContext().getSecurityMaster();
-    SecurityMetaDataRequest metaRequest = new SecurityMetaDataRequest();
-    SecurityMetaDataResult metaData = securityMaster.metaData(metaRequest);
-    for (String securityType : metaData.getSecurityTypes()) {
+    final CSVWriter csvWriter = new CSVWriter(new FileWriter(getCommandLine().getArgs()[0]));
+    final SecurityMaster securityMaster = getToolContext().getSecurityMaster();
+    final SecurityMetaDataRequest metaRequest = new SecurityMetaDataRequest();
+    final SecurityMetaDataResult metaData = securityMaster.metaData(metaRequest);
+    for (final String securityType : metaData.getSecurityTypes()) {
       LOGGER.info("Processing security type " + securityType);
-      SecuritySearchRequest searchRequest = new SecuritySearchRequest();
+      final SecuritySearchRequest searchRequest = new SecuritySearchRequest();
       searchRequest.setName("*");
       searchRequest.setSecurityType(securityType);
       searchRequest.setPagingRequest(PagingRequest.ONE);
-      SecuritySearchResult search = securityMaster.search(searchRequest);
+      final SecuritySearchResult search = securityMaster.search(searchRequest);
       LOGGER.info("Search returned " + search.getPaging().getTotalItems() + " securities");
       dumpSecurityStructure(csvWriter, securityType, search.getFirstSecurity());
     }
     csvWriter.close();
   }
 
-  private void dumpSecurityStructure(CSVWriter csvWriter, String securityType, ManageableSecurity firstSecurity) {
+  private void dumpSecurityStructure(final CSVWriter csvWriter, final String securityType, final ManageableSecurity firstSecurity) {
     if (firstSecurity == null) {
       LOGGER.error("null security passed to dumpSecurityStructure");
       return;
@@ -72,13 +72,13 @@ public class SecurityFieldMappingTemplateGenerator extends AbstractTool<ToolCont
     csvWriter.writeNext(new String[] {securityType });
     csvWriter.writeNext(new String[] {firstSecurity.metaBean().beanName() });
     csvWriter.writeNext(new String[] {"Type", "Name", "Example"});
-    Iterable<MetaProperty<?>> metaPropertyIterable = firstSecurity.metaBean().metaPropertyIterable();
-    for (MetaProperty<?> metaProperty : metaPropertyIterable) {
+    final Iterable<MetaProperty<?>> metaPropertyIterable = firstSecurity.metaBean().metaPropertyIterable();
+    for (final MetaProperty<?> metaProperty : metaPropertyIterable) {
       LOGGER.info("Field" + metaProperty.name());
       String strValue;
       try {
         strValue = metaProperty.getString(firstSecurity);
-      } catch (IllegalStateException ise) {
+      } catch (final IllegalStateException ise) {
         strValue = metaProperty.get(firstSecurity).toString();
       }
       csvWriter.writeNext(new String[] {metaProperty.propertyType().getSimpleName(), metaProperty.name(), strValue });

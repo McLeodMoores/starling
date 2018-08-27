@@ -25,21 +25,21 @@ import com.opengamma.id.ExternalId;
  * </p>
  */
 public class BloombergTickerParserBondFutureOption extends BloombergTickerParserFutureOption {
-  
+
   /**
    * Create a parser
-   * @param ticker a legal Bloomberg ticker, as string.  
+   * @param ticker a legal Bloomberg ticker, as string.
    */
-  public BloombergTickerParserBondFutureOption(String ticker) {
+  public BloombergTickerParserBondFutureOption(final String ticker) {
     super(ticker);
   }
-  
+
   /**
    * Create a parser
-   * @param identifier a legal Bloomberg ticker, with {@link com.opengamma.id.ExternalScheme} 
-   * of {@link com.opengamma.core.id.ExternalSchemes#BLOOMBERG_TICKER}.  
+   * @param identifier a legal Bloomberg ticker, with {@link com.opengamma.id.ExternalScheme}
+   * of {@link com.opengamma.core.id.ExternalSchemes#BLOOMBERG_TICKER}.
    */
-  public BloombergTickerParserBondFutureOption(ExternalId identifier) {
+  public BloombergTickerParserBondFutureOption(final ExternalId identifier) {
     super(identifier);
   }
 }

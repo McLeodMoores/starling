@@ -12,10 +12,6 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;
 
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
-
 import org.fudgemsg.FudgeContext;
 import org.fudgemsg.FudgeMsg;
 import org.fudgemsg.mapping.FudgeSerializer;
@@ -27,6 +23,10 @@ import com.opengamma.bbg.referencedata.ReferenceData;
 import com.opengamma.bbg.referencedata.ReferenceDataProvider;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
+
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
 
 /**
  * Decorates a reference data provider, adding caching.
@@ -53,17 +53,17 @@ public class EHValueCachingReferenceDataProvider extends AbstractValueCachingRef
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param underlying  the underlying reference data provider, not null
    * @param cacheManager  the cache manager, not null
    */
   public EHValueCachingReferenceDataProvider(final ReferenceDataProvider underlying, final CacheManager cacheManager) {
-    this(underlying, cacheManager, OpenGammaFudgeContext.getInstance());    
+    this(underlying, cacheManager, OpenGammaFudgeContext.getInstance());
   }
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param underlying  the underlying reference data provider, not null
    * @param cacheManager  the cache manager, not null
    * @param fudgeContext  the Fudge context, not null
@@ -79,7 +79,7 @@ public class EHValueCachingReferenceDataProvider extends AbstractValueCachingRef
   //-------------------------------------------------------------------------
   /**
    * Gets the cache manager.
-   * 
+   *
    * @return the cache manager, not null
    */
   public CacheManager getCacheManager() {
@@ -88,11 +88,11 @@ public class EHValueCachingReferenceDataProvider extends AbstractValueCachingRef
 
   //-------------------------------------------------------------------------
   @Override
-  protected Map<String, ReferenceData> loadFieldValues(Set<String> identifiers) {
-    Map<String, ReferenceData> result = Maps.newTreeMap();
-    FudgeSerializer serializer = new FudgeSerializer(getFudgeContext());
-    for (String identifier : identifiers) {
-      ReferenceData cachedResult = loadStateFromCache(serializer, identifier);
+  protected Map<String, ReferenceData> loadFieldValues(final Set<String> identifiers) {
+    final Map<String, ReferenceData> result = Maps.newTreeMap();
+    final FudgeSerializer serializer = new FudgeSerializer(getFudgeContext());
+    for (final String identifier : identifiers) {
+      final ReferenceData cachedResult = loadStateFromCache(serializer, identifier);
       if (cachedResult != null) {
         result.put(identifier, cachedResult);
       }
@@ -101,15 +101,15 @@ public class EHValueCachingReferenceDataProvider extends AbstractValueCachingRef
   }
 
   @Override
-  protected void saveFieldValues(ReferenceData result) {
-    String identifier = result.getIdentifier();
-    FudgeMsg fieldData = result.getFieldValues();
-    
+  protected void saveFieldValues(final ReferenceData result) {
+    final String identifier = result.getIdentifier();
+    final FudgeMsg fieldData = result.getFieldValues();
+
     if (identifier != null && fieldData != null) {
       LOGGER.info("Persisting fields for \"{}\": {}", identifier, result.getFieldValues());
-      Object cachedObject = createCachedObject(result);
+      final Object cachedObject = createCachedObject(result);
       LOGGER.debug("cachedObject={}", cachedObject);
-      Element element = new Element(identifier, cachedObject);
+      final Element element = new Element(identifier, cachedObject);
       _cache.put(element);
     }
   }
@@ -117,16 +117,16 @@ public class EHValueCachingReferenceDataProvider extends AbstractValueCachingRef
   //-------------------------------------------------------------------------
   /**
    * Loads the state from the cache.
-   * 
+   *
    * @param serializer  the Fudge serializer, not null
    * @param identifier  the identifier, not null
    * @return the result, null if not found
    */
-  protected ReferenceData loadStateFromCache(FudgeSerializer serializer, String identifier) {
-    Element element = _cache.get(identifier);
+  protected ReferenceData loadStateFromCache(final FudgeSerializer serializer, final String identifier) {
+    final Element element = _cache.get(identifier);
     if (element != null) {
       LOGGER.debug("Have security data for des {} in cache", identifier);
-      Object fromCache = element.getObjectValue();
+      final Object fromCache = element.getObjectValue();
       LOGGER.debug("cachedObject={}", fromCache);
       return parseCachedObject(fromCache);
     }
@@ -217,23 +217,23 @@ public class EHValueCachingReferenceDataProvider extends AbstractValueCachingRef
   //-------------------------------------------------------------------------
   /**
    * Parse the cached object.
-   * 
+   *
    * @param fromCache  the data from the cache, not null
    * @return the result, not null
    */
-  protected ReferenceData parseCachedObject(Object fromCache) {
-    CachedReferenceData rd = (CachedReferenceData) fromCache;
+  protected ReferenceData parseCachedObject(final Object fromCache) {
+    final CachedReferenceData rd = (CachedReferenceData) fromCache;
     return new ReferenceData(rd.getSecurity(), rd.getFieldDataMsg(getFudgeContext()));
   }
 
   /**
    * Creates the cached object.
-   * 
+   *
    * @param refDataResult  the reference data result.
    * @return the cache object, not null
    */
-  protected Object createCachedObject(ReferenceData refDataResult) {
-    CachedReferenceData result = new CachedReferenceData();
+  protected Object createCachedObject(final ReferenceData refDataResult) {
+    final CachedReferenceData result = new CachedReferenceData();
     result.setSecurity(refDataResult.getIdentifier());
     result.setFieldDataMsg(getFudgeContext().newMessage(refDataResult.getFieldValues()), getFudgeContext());
     return result;

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.livedata.server;
@@ -36,11 +36,11 @@ public class PersistentSubscriptionManagerMBean {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param manager  the underlying persistent subscription manager, not null
    */
-  public PersistentSubscriptionManagerMBean(AbstractPersistentSubscriptionManager manager) {
-    ArgumentChecker.notNull(manager, "manager");   
+  public PersistentSubscriptionManagerMBean(final AbstractPersistentSubscriptionManager manager) {
+    ArgumentChecker.notNull(manager, "manager");
     _manager = manager;
   }
 
@@ -49,7 +49,7 @@ public class PersistentSubscriptionManagerMBean {
   public long getNumberOfPersistentSubscriptions() {
     try {
       return _manager.getApproximateNumberOfPersistentSubscriptions();
-    } catch (RuntimeException e) {
+    } catch (final RuntimeException e) {
       LOGGER.error("getNumberOfPersistentSubscriptions() failed", e);
       throw new RuntimeException(e.getMessage());
     }
@@ -59,7 +59,7 @@ public class PersistentSubscriptionManagerMBean {
   public Set<String> getPersistentSubscriptions() {
     try {
       return _manager.getPersistentSubscriptions();
-    } catch (RuntimeException e) {
+    } catch (final RuntimeException e) {
       LOGGER.error("getPersistentSubscriptions() failed", e);
       throw new RuntimeException(e.getMessage());
     }
@@ -70,7 +70,7 @@ public class PersistentSubscriptionManagerMBean {
   public void refresh() {
     try {
       _manager.refresh();
-    } catch (RuntimeException e) {
+    } catch (final RuntimeException e) {
       LOGGER.error("refresh() failed", e);
       throw new RuntimeException(e.getMessage());
     }
@@ -80,7 +80,7 @@ public class PersistentSubscriptionManagerMBean {
   public void save() {
     try {
       _manager.save();
-    } catch (RuntimeException e) {
+    } catch (final RuntimeException e) {
       LOGGER.error("save() failed", e);
       throw new RuntimeException(e.getMessage());
     }
@@ -89,10 +89,10 @@ public class PersistentSubscriptionManagerMBean {
   @ManagedOperation(description = "Adds a persistent subscription. If the subscription already exists, makes it persistent.")
   @ManagedOperationParameters({
       @ManagedOperationParameter(name = "securityUniqueId", description = "Security unique ID. Server type dependent.)") })
-  public void addPersistentSubscription(String securityUniqueId) {
+  public void addPersistentSubscription(final String securityUniqueId) {
     try {
       _manager.addPersistentSubscription(securityUniqueId);
-    } catch (RuntimeException e) {
+    } catch (final RuntimeException e) {
       LOGGER.error("addPersistentSubscription(" + securityUniqueId + ")  failed", e);
       throw new RuntimeException(e.getMessage());
     }
@@ -102,10 +102,10 @@ public class PersistentSubscriptionManagerMBean {
       + " Returns true if a subscription was actually made non-persistent, false otherwise.")
   @ManagedOperationParameters({
       @ManagedOperationParameter(name = "securityUniqueId", description = "Security unique ID. Server type dependent.)") })
-  public boolean removePersistentSubscription(String securityUniqueId) {
+  public boolean removePersistentSubscription(final String securityUniqueId) {
     try {
       return _manager.removePersistentSubscription(securityUniqueId);
-    } catch (RuntimeException e) {
+    } catch (final RuntimeException e) {
       LOGGER.error("removePersistentSubscription(" + securityUniqueId + ") failed", e);
       throw new RuntimeException(e.getMessage());
     }

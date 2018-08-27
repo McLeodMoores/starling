@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.view.worker.jmx;
@@ -17,7 +17,7 @@ public final class StaticSequencePartitioningViewProcessWorkerFactory implements
 
   private final com.opengamma.engine.view.worker.StaticSequencePartitioningViewProcessWorkerFactory _factory;
 
-  private StaticSequencePartitioningViewProcessWorkerFactory(com.opengamma.engine.view.worker.StaticSequencePartitioningViewProcessWorkerFactory factory) {
+  private StaticSequencePartitioningViewProcessWorkerFactory(final com.opengamma.engine.view.worker.StaticSequencePartitioningViewProcessWorkerFactory factory) {
     _factory = factory;
   }
 
@@ -29,7 +29,7 @@ public final class StaticSequencePartitioningViewProcessWorkerFactory implements
     final ObjectName name = new ObjectName("com.opengamma:type=ViewProcessWorkerFactory,name=StaticSequencePartitioningViewProcessWorkerFactory");
     try {
       server.registerMBean(this, name);
-    } catch (InstanceAlreadyExistsException e) {
+    } catch (final InstanceAlreadyExistsException e) {
       server.unregisterMBean(name);
       server.registerMBean(this, name);
     }
@@ -42,7 +42,7 @@ public final class StaticSequencePartitioningViewProcessWorkerFactory implements
   // StaticSequencePartitioningViewProcessWorkerFactoryBean
 
   @Override
-  public void setNumConcurrentWorkersPerProcess(int saturation) {
+  public void setNumConcurrentWorkersPerProcess(final int saturation) {
     getFactory().setSaturation(saturation);
   }
 
@@ -52,7 +52,7 @@ public final class StaticSequencePartitioningViewProcessWorkerFactory implements
   }
 
   @Override
-  public void setMinimumCyclesPerWorker(int cycles) {
+  public void setMinimumCyclesPerWorker(final int cycles) {
     getFactory().setMinimumCycles(cycles);
   }
 
@@ -62,7 +62,7 @@ public final class StaticSequencePartitioningViewProcessWorkerFactory implements
   }
 
   @Override
-  public void setMaximumCyclesPerWorker(int cycles) {
+  public void setMaximumCyclesPerWorker(final int cycles) {
     getFactory().setMaximumCycles(cycles);
   }
 

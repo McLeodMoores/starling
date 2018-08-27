@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.timeseries.precise;
@@ -15,7 +15,7 @@ import com.opengamma.timeseries.TimeSeriesUtils;
 
 /**
  * Abstract implementation of {@code InstantObjectTimeSeries}.
- * 
+ *
  * @param <T>  the instant type
  * @param <V>  the value being viewed over time
  */
@@ -30,7 +30,7 @@ public abstract class AbstractPreciseObjectTimeSeries<T, V> implements PreciseOb
   //-------------------------------------------------------------------------
   /**
    * Converts the specified instant to the {@code long} form.
-   * 
+   *
    * @param instant  the instant to convert, not null
    * @return the {@code long} instant
    */
@@ -38,7 +38,7 @@ public abstract class AbstractPreciseObjectTimeSeries<T, V> implements PreciseOb
 
   /**
    * Converts the specified instant from the {@code long} form.
-   * 
+   *
    * @param instant  the {@code long} instant to convert
    * @return the instant, not null
    */
@@ -46,7 +46,7 @@ public abstract class AbstractPreciseObjectTimeSeries<T, V> implements PreciseOb
 
   /**
    * Creates an array of the correct T type.
-   * 
+   *
    * @param size  the size of the array to create
    * @return the array, not null
    */
@@ -60,17 +60,17 @@ public abstract class AbstractPreciseObjectTimeSeries<T, V> implements PreciseOb
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean containsTime(T instant) {
+  public boolean containsTime(final T instant) {
     return containsTime(convertToLong(instant));
   }
 
   @Override
-  public V getValue(T instant) {
+  public V getValue(final T instant) {
     return getValue(convertToLong(instant));
   }
 
   @Override
-  public T getTimeAtIndex(int index) {
+  public T getTimeAtIndex(final int index) {
     return convertFromLong(getTimeAtIndexFast(index));
   }
 
@@ -92,7 +92,7 @@ public abstract class AbstractPreciseObjectTimeSeries<T, V> implements PreciseOb
       private int _index = -1;
       @Override
       public boolean hasNext() {
-        return (_index + 1) < size();
+        return _index + 1 < size();
       }
       @Override
       public T next() {
@@ -113,7 +113,7 @@ public abstract class AbstractPreciseObjectTimeSeries<T, V> implements PreciseOb
   public List<T> times() {
     return new AbstractList<T>() {
       @Override
-      public T get(int index) {
+      public T get(final int index) {
         return getTimeAtIndex(index);
       }
       @Override
@@ -129,8 +129,8 @@ public abstract class AbstractPreciseObjectTimeSeries<T, V> implements PreciseOb
 
   @Override
   public T[] timesArray() {
-    long[] times = timesArrayFast();
-    T[] result = createArray(times.length);
+    final long[] times = timesArrayFast();
+    final T[] result = createArray(times.length);
     for (int i = 0; i < times.length; i++) {
       result[i] = convertFromLong(times[i]);
     }
@@ -143,7 +143,7 @@ public abstract class AbstractPreciseObjectTimeSeries<T, V> implements PreciseOb
       private int _index = -1;
       @Override
       public boolean hasNext() {
-        return (_index + 1) < size();
+        return _index + 1 < size();
       }
       @Override
       public V next() {
@@ -164,7 +164,7 @@ public abstract class AbstractPreciseObjectTimeSeries<T, V> implements PreciseOb
   public List<V> values() {
     return new AbstractList<V>() {
       @Override
-      public V get(int index) {
+      public V get(final int index) {
         return getValueAtIndex(index);
       }
       @Override
@@ -180,12 +180,12 @@ public abstract class AbstractPreciseObjectTimeSeries<T, V> implements PreciseOb
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (obj == this) {
       return true;
     }
     if (obj instanceof PreciseDoubleTimeSeries) {
-      PreciseDoubleTimeSeries<?> other = (PreciseDoubleTimeSeries<?>) obj;
+      final PreciseDoubleTimeSeries<?> other = (PreciseDoubleTimeSeries<?>) obj;
       return Arrays.equals(timesArrayFast(), other.timesArrayFast()) &&
               Arrays.equals(valuesArray(), other.valuesArray());
     }

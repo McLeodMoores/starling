@@ -26,11 +26,11 @@ public class CounterpartyAggregationFunction implements AggregationFunction<Stri
 
 
   @Override
-  public String classifyPosition(Position position) {
+  public String classifyPosition(final Position position) {
     if (position.getTrades().size() == 0) {
       return UNKNOWN;
     } else {
-      Trade trade = position.getTrades().iterator().next();
+      final Trade trade = position.getTrades().iterator().next();
       if (trade.getCounterparty() != null) {
         return trade.getCounterparty().getExternalId().getValue();
       } else {
@@ -50,7 +50,7 @@ public class CounterpartyAggregationFunction implements AggregationFunction<Stri
   }
 
   @Override
-  public int compare(String o1, String o2) {
+  public int compare(final String o1, final String o2) {
     if (o1.equals(UNKNOWN)) {
       if (o2.equals(UNKNOWN)) {
         return 0;

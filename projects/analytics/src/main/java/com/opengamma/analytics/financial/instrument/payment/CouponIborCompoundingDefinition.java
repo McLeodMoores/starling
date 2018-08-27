@@ -79,7 +79,7 @@ public class CouponIborCompoundingDefinition extends CouponDefinition implements
    * The accrual factors (or year fraction) associated with the fixing periods in the Index day count convention.
    */
   private final double[] _fixingPeriodAccrualFactors;
-  
+
   /**
    * The rate of the first compounded period.
    */
@@ -375,7 +375,7 @@ public class CouponIborCompoundingDefinition extends CouponDefinition implements
    * @return The compounded coupon.
    */
   public static CouponIborCompoundingDefinition from(final double notional, final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate, final IborIndex index,
-      final StubType stub, final BusinessDayConvention businessDayConvention, final boolean endOfMonth, final Calendar calendar, RollDateAdjuster adjuster) {
+      final StubType stub, final BusinessDayConvention businessDayConvention, final boolean endOfMonth, final Calendar calendar, final RollDateAdjuster adjuster) {
     ArgumentChecker.notNull(accrualStartDate, "Accrual start date");
     ArgumentChecker.notNull(accrualEndDate, "Accrual end date");
     ArgumentChecker.notNull(index, "Index");
@@ -460,7 +460,7 @@ public class CouponIborCompoundingDefinition extends CouponDefinition implements
   public double[] getFixingPeriodAccrualFactors() {
     return _fixingPeriodAccrualFactors;
   }
-  
+
   /**
    * Returns the rate of the first compound period.  This is an optional field and may return {@link Double#NaN}.
    * @return the rate of the first compound period.
@@ -506,7 +506,7 @@ public class CouponIborCompoundingDefinition extends CouponDefinition implements
     final int nbSubPeriods = _fixingDates.length;
     int nbFixed = 0;
     double ratioAccrued = 1.0;
-    while ((nbFixed < nbSubPeriods) && (dateConversion.isAfter(_fixingDates[nbFixed].toLocalDate()))) {
+    while (nbFixed < nbSubPeriods && dateConversion.isAfter(_fixingDates[nbFixed].toLocalDate())) {
       final ZonedDateTime rezonedFixingDate = _fixingDates[nbFixed].toLocalDate().atStartOfDay(ZoneOffset.UTC);
       final Double fixedRate = indexFixingTimeSeries.getValue(rezonedFixingDate);
       if (fixedRate == null) {
@@ -515,7 +515,7 @@ public class CouponIborCompoundingDefinition extends CouponDefinition implements
       ratioAccrued *= 1.0 + _paymentAccrualFactors[nbFixed] * fixedRate;
       nbFixed++;
     }
-    if ((nbFixed < nbSubPeriods) && dateConversion.equals(_fixingDates[nbFixed].toLocalDate())) {
+    if (nbFixed < nbSubPeriods && dateConversion.equals(_fixingDates[nbFixed].toLocalDate())) {
       final ZonedDateTime rezonedFixingDate = _fixingDates[nbFixed].toLocalDate().atStartOfDay(ZoneOffset.UTC);
       final Double fixedRate = indexFixingTimeSeries.getValue(rezonedFixingDate);
       if (fixedRate != null) {
@@ -572,8 +572,8 @@ public class CouponIborCompoundingDefinition extends CouponDefinition implements
       ratioAccrued *= 1.0 + _paymentAccrualFactors[0] * _initialRate;
       nbFixed++;
     }
-    
-    while ((nbFixed < nbSubPeriods) && (dateConversion.isAfter(_fixingDates[nbFixed].toLocalDate()))) {
+
+    while (nbFixed < nbSubPeriods && dateConversion.isAfter(_fixingDates[nbFixed].toLocalDate())) {
       final ZonedDateTime rezonedFixingDate = _fixingDates[nbFixed].toLocalDate().atStartOfDay(ZoneOffset.UTC);
       final Double fixedRate = indexFixingTimeSeries.getValue(rezonedFixingDate);
       if (fixedRate == null) {
@@ -582,7 +582,7 @@ public class CouponIborCompoundingDefinition extends CouponDefinition implements
       ratioAccrued *= 1.0 + _paymentAccrualFactors[nbFixed] * fixedRate;
       nbFixed++;
     }
-    if ((nbFixed < nbSubPeriods) && dateConversion.equals(_fixingDates[nbFixed].toLocalDate())) {
+    if (nbFixed < nbSubPeriods && dateConversion.equals(_fixingDates[nbFixed].toLocalDate())) {
       final ZonedDateTime rezonedFixingDate = _fixingDates[nbFixed].toLocalDate().atStartOfDay(ZoneOffset.UTC);
       final Double fixedRate = indexFixingTimeSeries.getValue(rezonedFixingDate);
       if (fixedRate != null) {
@@ -638,7 +638,7 @@ public class CouponIborCompoundingDefinition extends CouponDefinition implements
     result = prime * result + Arrays.hashCode(_paymentAccrualFactors);
     long temp;
     temp = Double.doubleToLongBits(_initialRate);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

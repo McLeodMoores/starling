@@ -48,7 +48,7 @@ public class WebMarketDataSnapshotResource extends AbstractWebMarketDataSnapshot
     final FlexiBean out = createRootData();
     return getFreemarker().build(HTML_DIR + "snapshot.ftl", out);
   }
-  
+
   //-------------------------------------------------------------------------
   @PUT
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -77,7 +77,7 @@ public class WebMarketDataSnapshotResource extends AbstractWebMarketDataSnapshot
     final URI uri = updateSnapshot(name, parseXML(xml, ManageableMarketDataSnapshot.class));
     return Response.seeOther(uri).build();
   }
-  
+
   private URI updateSnapshot(final String name, final ManageableMarketDataSnapshot snapshot) {
     final MarketDataSnapshotDocument oldDoc = data().getSnapshot();
     MarketDataSnapshotDocument doc = new MarketDataSnapshotDocument(snapshot);
@@ -88,7 +88,7 @@ public class WebMarketDataSnapshotResource extends AbstractWebMarketDataSnapshot
     final URI uri = WebMarketDataSnapshotResource.uri(data());
     return uri;
   }
-  
+
   //-------------------------------------------------------------------------
   @DELETE
   @Produces(MediaType.TEXT_HTML)

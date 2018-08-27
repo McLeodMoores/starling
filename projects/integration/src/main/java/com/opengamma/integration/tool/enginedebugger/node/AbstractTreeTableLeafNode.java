@@ -11,7 +11,7 @@ package com.opengamma.integration.tool.enginedebugger.node;
 public abstract class AbstractTreeTableLeafNode implements TreeTableNode {
 
   @Override
-  public Object getChildAt(int index) {
+  public Object getChildAt(final int index) {
     return null;
   }
 
@@ -21,7 +21,7 @@ public abstract class AbstractTreeTableLeafNode implements TreeTableNode {
   }
 
   @Override
-  public int getIndexOfChild(Object child) {
+  public int getIndexOfChild(final Object child) {
     return -1;
   }
 

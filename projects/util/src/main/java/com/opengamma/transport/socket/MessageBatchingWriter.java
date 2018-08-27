@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.transport.socket;
@@ -83,7 +83,7 @@ public class MessageBatchingWriter {
           return;
         } else {
           // Another thread is already writing
-          messages = new LinkedList<FudgeMsg>();
+          messages = new LinkedList<>();
           _messages = messages;
         }
       } else {
@@ -120,7 +120,7 @@ public class MessageBatchingWriter {
     } else {
       try {
         _writingLock.acquire();
-      } catch (InterruptedException e) {
+      } catch (final InterruptedException e) {
         throw new OpenGammaRuntimeException("Interrupted", e);
       }
       synchronized (this) {

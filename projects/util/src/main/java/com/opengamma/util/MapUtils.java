@@ -25,7 +25,7 @@ public final class MapUtils {
    * Puts the value into the map if the key is not present.
    * <p>
    * This is most useful in building up a map of maps, or similar structure.
-   * 
+   *
    * @param <K> the map key type
    * @param <V> the map value type
    * @param map  the map  to populate, not null
@@ -33,8 +33,8 @@ public final class MapUtils {
    * @param value  the value
    * @return the contents of the map for the key
    */
-  public static <K, V> V putIfAbsentGet(Map<K, V> map, K key, V value) {
-    V existing = map.get(key);
+  public static <K, V> V putIfAbsentGet(final Map<K, V> map, final K key, final V value) {
+    final V existing = map.get(key);
     if (existing != null) {
       return existing;
     }

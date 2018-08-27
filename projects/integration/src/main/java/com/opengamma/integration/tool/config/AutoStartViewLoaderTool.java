@@ -54,10 +54,10 @@ public class AutoStartViewLoaderTool extends AbstractTool<ToolContext> {
   //-------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
+   *
    * @param args  the standard tool arguments, not null
    */
-  public static void main(String[] args) { //CSIGNORE
+  public static void main(final String[] args) { //CSIGNORE
     new AutoStartViewLoaderTool().invokeAndTerminate(args);
   }
 
@@ -65,30 +65,30 @@ public class AutoStartViewLoaderTool extends AbstractTool<ToolContext> {
   @Override
   protected void doRun() throws Exception {
 
-    String viewName = getCommandLine().getOptionValue(VIEW_DEFINITION);
-    UniqueId viewDefinitionId = lookupViewDefinition(viewName);
-    AutoStartViewDefinition viewDef = new AutoStartViewDefinition(
+    final String viewName = getCommandLine().getOptionValue(VIEW_DEFINITION);
+    final UniqueId viewDefinitionId = lookupViewDefinition(viewName);
+    final AutoStartViewDefinition viewDef = new AutoStartViewDefinition(
         viewDefinitionId.toLatest(),
         ExecutionOptions.infinite(parseMarketDataSpecifications(), parseExecutionFlags(), VersionCorrection.LATEST));
 
-    ConfigMaster configMaster = getToolContext().getConfigMaster();
+    final ConfigMaster configMaster = getToolContext().getConfigMaster();
     configMaster.add(new ConfigDocument(ConfigItem.of(viewDef, viewName + " Auto Start")));
   }
 
   private List<MarketDataSpecification> parseMarketDataSpecifications() {
 
-    List<MarketDataSpecification> marketDataSpecifications = new ArrayList<>();
-    String[] values = getCommandLine().getOptionValues(MARKET_DATA_SPECIFICATIONS);
-    for (String value : values) {
+    final List<MarketDataSpecification> marketDataSpecifications = new ArrayList<>();
+    final String[] values = getCommandLine().getOptionValues(MARKET_DATA_SPECIFICATIONS);
+    for (final String value : values) {
       marketDataSpecifications.add(parseMarketDataSpecification(value));
     }
     return marketDataSpecifications;
   }
 
-  private MarketDataSpecification parseMarketDataSpecification(String value) {
+  private MarketDataSpecification parseMarketDataSpecification(final String value) {
 
     // Format is expected to be Live:Activ,Snapshot:MySpecialSnap etc.
-    String[] parsed = value.split(":");
+    final String[] parsed = value.split(":");
     if (parsed.length != 2 || parsed[0].isEmpty() || parsed[1].isEmpty()) {
       throw new OpenGammaRuntimeException("Unable to parse market data spec from [" + value +
                                               "] - needs to be of the form <Type>:<Name> e.g. Live:Bloomberg");
@@ -108,34 +108,34 @@ public class AutoStartViewLoaderTool extends AbstractTool<ToolContext> {
 
   private EnumSet<ViewExecutionFlags> parseExecutionFlags() {
 
-    Set<ViewExecutionFlags> flags = new HashSet<>();
-    String[] values = getCommandLine().getOptionValues(EXECUTION_FLAGS);
-    for (String value : values) {
+    final Set<ViewExecutionFlags> flags = new HashSet<>();
+    final String[] values = getCommandLine().getOptionValues(EXECUTION_FLAGS);
+    for (final String value : values) {
       flags.add(ViewExecutionFlags.valueOf(value));
     }
     return EnumSet.copyOf(flags);
   }
 
-  private UniqueId lookupViewDefinition(String viewName) {
+  private UniqueId lookupViewDefinition(final String viewName) {
     return getToolContext().getConfigSource().getLatestByName(ViewDefinition.class, viewName).getUniqueId();
   }
 
   @Override
-  protected Options createOptions(boolean mandatoryConfigResource) {
+  protected Options createOptions(final boolean mandatoryConfigResource) {
 
-    Options options = super.createOptions(mandatoryConfigResource);
+    final Options options = super.createOptions(mandatoryConfigResource);
 
-    Option viewDefinitionOption = new Option(VIEW_DEFINITION, "viewDefinition", true, "View definition to be used");
+    final Option viewDefinitionOption = new Option(VIEW_DEFINITION, "viewDefinition", true, "View definition to be used");
     viewDefinitionOption.setRequired(true);
     options.addOption(viewDefinitionOption);
 
-    Option flagsOption = new Option(EXECUTION_FLAGS, "executionFlags", true, "Comma separated list of execution flags to be used");
+    final Option flagsOption = new Option(EXECUTION_FLAGS, "executionFlags", true, "Comma separated list of execution flags to be used");
     flagsOption.setRequired(true);
     flagsOption.setArgs(Option.UNLIMITED_VALUES);
     flagsOption.setValueSeparator(',');
     options.addOption(flagsOption);
 
-    Option marketDataOption = new Option(MARKET_DATA_SPECIFICATIONS, "marketDataSpecifications", true, "Comma separated list of market data specifications to be used");
+    final Option marketDataOption = new Option(MARKET_DATA_SPECIFICATIONS, "marketDataSpecifications", true, "Comma separated list of market data specifications to be used");
     marketDataOption.setRequired(true);
     marketDataOption.setArgs(Option.UNLIMITED_VALUES);
     marketDataOption.setValueSeparator(',');

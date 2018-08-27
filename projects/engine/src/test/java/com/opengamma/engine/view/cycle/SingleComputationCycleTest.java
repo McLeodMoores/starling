@@ -48,29 +48,29 @@ public class SingleComputationCycleTest {
   public void testInterruptCycle() throws InterruptedException {
     TestLifecycle.begin();
     try {
-      ViewProcessorTestEnvironment env = new ViewProcessorTestEnvironment();
-      BlockingDependencyGraphExecutorFactory dgef = new BlockingDependencyGraphExecutorFactory(TIMEOUT);
+      final ViewProcessorTestEnvironment env = new ViewProcessorTestEnvironment();
+      final BlockingDependencyGraphExecutorFactory dgef = new BlockingDependencyGraphExecutorFactory(TIMEOUT);
       env.setDependencyGraphExecutorFactory(dgef);
       env.init();
 
-      ViewProcessorImpl vp = env.getViewProcessor();
+      final ViewProcessorImpl vp = env.getViewProcessor();
       vp.start();
 
-      ViewClient client = vp.createViewClient(UserPrincipal.getTestUser());
+      final ViewClient client = vp.createViewClient(UserPrincipal.getTestUser());
       client.attachToViewProcess(env.getViewDefinition().getUniqueId(), ExecutionOptions.infinite(MarketData.live()));
 
-      BlockingDependencyGraphExecutor executor = dgef.getExecutorInstance();
+      final BlockingDependencyGraphExecutor executor = dgef.getExecutorInstance();
       assertTrue(executor.awaitFirstRun(TIMEOUT));
 
       // We're now blocked in the execution of the initial cycle
       assertFalse(executor.wasInterrupted());
 
       // Interrupting should cause everything to terminate gracefully
-      ViewProcessImpl viewProcess = env.getViewProcess(vp, client.getUniqueId());
-      ViewProcessWorker worker = env.getCurrentWorker(viewProcess);
+      final ViewProcessImpl viewProcess = env.getViewProcess(vp, client.getUniqueId());
+      final ViewProcessWorker worker = env.getCurrentWorker(viewProcess);
       worker.terminate();
       worker.join(TIMEOUT);
-      for (int i = 0; (i < TIMEOUT / 10) && !executor.wasInterrupted(); i++) {
+      for (int i = 0; i < TIMEOUT / 10 && !executor.wasInterrupted(); i++) {
         Thread.sleep(10);
       }
       assertTrue(executor.wasInterrupted());
@@ -83,12 +83,12 @@ public class SingleComputationCycleTest {
 
     private final BlockingDependencyGraphExecutor _instance;
 
-    public BlockingDependencyGraphExecutorFactory(long timeoutMillis) {
+    public BlockingDependencyGraphExecutorFactory(final long timeoutMillis) {
       _instance = new BlockingDependencyGraphExecutor(timeoutMillis);
     }
 
     @Override
-    public DependencyGraphExecutor createExecutor(SingleComputationCycle cycle) {
+    public DependencyGraphExecutor createExecutor(final SingleComputationCycle cycle) {
       return _instance;
     }
 
@@ -104,11 +104,11 @@ public class SingleComputationCycleTest {
     private final CountDownLatch _firstRunLatch = new CountDownLatch(1);
     private final AtomicBoolean _wasInterrupted = new AtomicBoolean();
 
-    public BlockingDependencyGraphExecutor(long timeoutMillis) {
+    public BlockingDependencyGraphExecutor(final long timeoutMillis) {
       _timeout = timeoutMillis;
     }
 
-    public boolean awaitFirstRun(long timeoutMillis) throws InterruptedException {
+    public boolean awaitFirstRun(final long timeoutMillis) throws InterruptedException {
       return _firstRunLatch.await(timeoutMillis, TimeUnit.MILLISECONDS);
     }
 
@@ -117,14 +117,14 @@ public class SingleComputationCycleTest {
     }
 
     @Override
-    public DependencyGraphExecutionFuture execute(DependencyGraph graph, Set<ValueSpecification> sharedValues, Map<ValueSpecification, FunctionParameters> parameters) {
-      final FutureTask<String> future = new FutureTask<String>(new Runnable() {
+    public DependencyGraphExecutionFuture execute(final DependencyGraph graph, final Set<ValueSpecification> sharedValues, final Map<ValueSpecification, FunctionParameters> parameters) {
+      final FutureTask<String> future = new FutureTask<>(new Runnable() {
         @Override
         public void run() {
           _firstRunLatch.countDown();
           try {
             Thread.sleep(_timeout);
-          } catch (InterruptedException e) {
+          } catch (final InterruptedException e) {
             _wasInterrupted.set(true);
           }
         }
@@ -134,7 +134,7 @@ public class SingleComputationCycleTest {
       return new DependencyGraphExecutionFuture() {
 
         @Override
-        public boolean cancel(boolean mayInterruptIfRunning) {
+        public boolean cancel(final boolean mayInterruptIfRunning) {
           return future.cancel(mayInterruptIfRunning);
         }
 
@@ -154,12 +154,12 @@ public class SingleComputationCycleTest {
         }
 
         @Override
-        public String get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+        public String get(final long timeout, final TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
           return future.get(timeout, unit);
         }
 
         @Override
-        public void setListener(Listener listener) {
+        public void setListener(final Listener listener) {
           // No-op
         }
 

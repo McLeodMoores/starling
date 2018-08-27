@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.method;
@@ -55,7 +55,7 @@ public abstract class SuccessiveRootFinderCalibrationObjective extends Function1
    * @param fxMatrix The exchange rate to convert the present values in a unique currency.
    * @param ccy The unique currency in which all present values are converted.
    */
-  public SuccessiveRootFinderCalibrationObjective(FXMatrix fxMatrix, Currency ccy) {
+  public SuccessiveRootFinderCalibrationObjective(final FXMatrix fxMatrix, final Currency ccy) {
     _fxMatrix = fxMatrix;
     _ccy = ccy;
   }
@@ -64,7 +64,7 @@ public abstract class SuccessiveRootFinderCalibrationObjective extends Function1
    * Sets the instrument to calibrate.
    * @param instrument The instrument.
    */
-  public void setInstrument(InstrumentDerivative instrument) {
+  public void setInstrument(final InstrumentDerivative instrument) {
     _instrument = instrument;
   }
 
@@ -72,7 +72,7 @@ public abstract class SuccessiveRootFinderCalibrationObjective extends Function1
    * Sets the price of the instrument to calibrate.
    * @param price The price.
    */
-  public void setPrice(double price) {
+  public void setPrice(final double price) {
     _price = price;
   }
 
@@ -112,7 +112,7 @@ public abstract class SuccessiveRootFinderCalibrationObjective extends Function1
    * Sets the minimum value of the parameter to calibrate.
    * @param minimumParameter The minimum value.
    */
-  public void setMinimumParameter(double minimumParameter) {
+  public void setMinimumParameter(final double minimumParameter) {
     _minimumParameter = minimumParameter;
   }
 
@@ -128,7 +128,7 @@ public abstract class SuccessiveRootFinderCalibrationObjective extends Function1
    * Sets the maximum value of the parameter to calibrate.
    * @param maximumParameter The maximum value.
    */
-  public void setMaximumParameter(double maximumParameter) {
+  public void setMaximumParameter(final double maximumParameter) {
     _maximumParameter = maximumParameter;
   }
 
@@ -144,7 +144,7 @@ public abstract class SuccessiveRootFinderCalibrationObjective extends Function1
    * Sets the function value accuracy of the calibration.
    * @param functionValueAccuracy The function value accuracy.
    */
-  public void setFunctionValueAccuracy(double functionValueAccuracy) {
+  public void setFunctionValueAccuracy(final double functionValueAccuracy) {
     _functionValueAccuracy = functionValueAccuracy;
   }
 
@@ -160,7 +160,7 @@ public abstract class SuccessiveRootFinderCalibrationObjective extends Function1
    * Sets the parameter absolute accuracy of the calibration.
    * @param variableAbsoluteAccuracy The parameter absolute accuracy.
    */
-  public void setVariableAbsoluteAccuracy(double variableAbsoluteAccuracy) {
+  public void setVariableAbsoluteAccuracy(final double variableAbsoluteAccuracy) {
     _variableAbsoluteAccuracy = variableAbsoluteAccuracy;
   }
 

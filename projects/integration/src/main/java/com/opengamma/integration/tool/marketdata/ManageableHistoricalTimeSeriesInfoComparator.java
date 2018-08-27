@@ -15,18 +15,18 @@ import com.opengamma.master.historicaltimeseries.ManageableHistoricalTimeSeriesI
 public class ManageableHistoricalTimeSeriesInfoComparator implements Comparator<ManageableHistoricalTimeSeriesInfo> {
 
   @Override
-  public int compare(ManageableHistoricalTimeSeriesInfo first, ManageableHistoricalTimeSeriesInfo second) {
-    int name = first.getName().compareTo(second.getName());
+  public int compare(final ManageableHistoricalTimeSeriesInfo first, final ManageableHistoricalTimeSeriesInfo second) {
+    final int name = first.getName().compareTo(second.getName());
     if (name != 0) { return name; }
-    int dataField = first.getDataField().compareTo(second.getDataField());
+    final int dataField = first.getDataField().compareTo(second.getDataField());
     if (dataField != 0) { return dataField; }
-    int dataSource = first.getDataSource().compareTo(second.getDataSource());
+    final int dataSource = first.getDataSource().compareTo(second.getDataSource());
     if (dataSource != 0) { return dataSource; }
-    int dataProvider = first.getDataProvider().compareTo(second.getDataProvider());
+    final int dataProvider = first.getDataProvider().compareTo(second.getDataProvider());
     if (dataProvider != 0) { return dataProvider; }
-    int observationTime = first.getObservationTime().compareTo(second.getObservationTime());
+    final int observationTime = first.getObservationTime().compareTo(second.getObservationTime());
     if (observationTime != 0) { return observationTime; }
-    int externalIdBundle = first.getExternalIdBundle().compareTo(second.getExternalIdBundle());
+    final int externalIdBundle = first.getExternalIdBundle().compareTo(second.getExternalIdBundle());
     return externalIdBundle;
   }
 

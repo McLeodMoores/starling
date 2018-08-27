@@ -235,9 +235,9 @@ public class CouponIborCompoundingSimpleSpreadDefinition extends CouponDefinitio
   /**
    * Builds an Ibor compounded coupon from a total period and the Ibor index. The Ibor day count is used to compute the accrual factors.
    * If required the stub of the sub-periods will be short and last. The payment date is the adjusted end accrual date.
-   * The payment accrual factors are in the day count of the index. 
+   * The payment accrual factors are in the day count of the index.
    * @param notional The coupon notional.
-   * @param accrualStartDate The first accrual date. 
+   * @param accrualStartDate The first accrual date.
    * @param accrualEndDate The end accrual date.
    * @param index The underlying Ibor index.
    * @param spread The spread paid above the Ibor rate.
@@ -392,17 +392,17 @@ public class CouponIborCompoundingSimpleSpreadDefinition extends CouponDefinitio
     if (!Double.isNaN(_initialRate)) { // Force the initial rate to be used
       nbFixed++;
     }
-    while ((nbFixed < nbSubPeriods) && (dateLocal.isAfter(_fixingDates[nbFixed].toLocalDate()))) { // If fixing is strictly before today, period has fixed
+    while (nbFixed < nbSubPeriods && dateLocal.isAfter(_fixingDates[nbFixed].toLocalDate())) { // If fixing is strictly before today, period has fixed
       nbFixed++;
     }
-    if ((nbFixed < nbSubPeriods) && (dateLocal.equals(_fixingDates[nbFixed].toLocalDate()))) { // Not all periods already fixed, checking if todays fixing is available
+    if (nbFixed < nbSubPeriods && dateLocal.equals(_fixingDates[nbFixed].toLocalDate())) { // Not all periods already fixed, checking if todays fixing is available
       final ZonedDateTime rezonedFixingDateNext = ZonedDateTime.of(LocalDateTime.of(_fixingDates[nbFixed].toLocalDate(), LocalTime.of(0, 0)), ZoneOffset.UTC);
       final Double fixedRate = indexFixingTimeSeries.getValue(rezonedFixingDateNext);
       if (fixedRate != null) {
         nbFixed++;
       }
     }
-    double[] rateFixed = new double[nbFixed];
+    final double[] rateFixed = new double[nbFixed];
     double cpa = 1.0d;
     for (int loopsub = 0; loopsub < nbFixed; loopsub++) {
       if (!Double.isNaN(_initialRate) && loopsub == 0) {
@@ -419,7 +419,7 @@ public class CouponIborCompoundingSimpleSpreadDefinition extends CouponDefinitio
       }
     }
     if (nbFixed == nbSubPeriods) { // All dates already fixed: CouponFixed
-      double rate = (cpa - 1.0d) / getPaymentYearFraction() + _spread;
+      final double rate = (cpa - 1.0d) / getPaymentYearFraction() + _spread;
       return new CouponFixed(getCurrency(), paymentTime, getPaymentYearFraction(), getNotional(), rate, getAccrualStartDate(), getAccrualEndDate());
     }
     // Copying the remaining periods
@@ -458,10 +458,10 @@ public class CouponIborCompoundingSimpleSpreadDefinition extends CouponDefinitio
     result = prime * result + Arrays.hashCode(_fixingSubperiodAccrualFactors);
     result = prime * result + Arrays.hashCode(_fixingSubperiodEndDates);
     result = prime * result + Arrays.hashCode(_fixingSubperiodStartDates);
-    result = prime * result + ((_index == null) ? 0 : _index.hashCode());
+    result = prime * result + (_index == null ? 0 : _index.hashCode());
     long temp;
     temp = Double.doubleToLongBits(_spread);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + Arrays.hashCode(_subperiodAccrualEndDates);
     result = prime * result + Arrays.hashCode(_subperiodAccrualFactors);
     result = prime * result + Arrays.hashCode(_subperiodAccrualStartDates);
@@ -469,7 +469,7 @@ public class CouponIborCompoundingSimpleSpreadDefinition extends CouponDefinitio
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -479,7 +479,7 @@ public class CouponIborCompoundingSimpleSpreadDefinition extends CouponDefinitio
     if (getClass() != obj.getClass()) {
       return false;
     }
-    CouponIborCompoundingSimpleSpreadDefinition other = (CouponIborCompoundingSimpleSpreadDefinition) obj;
+    final CouponIborCompoundingSimpleSpreadDefinition other = (CouponIborCompoundingSimpleSpreadDefinition) obj;
     if (!Arrays.equals(_fixingDates, other._fixingDates)) {
       return false;
     }

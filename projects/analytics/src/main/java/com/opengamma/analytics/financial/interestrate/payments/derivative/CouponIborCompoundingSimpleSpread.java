@@ -185,20 +185,20 @@ public class CouponIborCompoundingSimpleSpread extends Coupon implements Deposit
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_compoundingPeriodAmountAccumulated);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + Arrays.hashCode(_fixingPeriodsAccrualFactors);
     result = prime * result + Arrays.hashCode(_fixingPeriodsEndTimes);
     result = prime * result + Arrays.hashCode(_fixingPeriodsStartTimes);
     result = prime * result + Arrays.hashCode(_fixingTimes);
-    result = prime * result + ((_index == null) ? 0 : _index.hashCode());
+    result = prime * result + (_index == null ? 0 : _index.hashCode());
     temp = Double.doubleToLongBits(_spread);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + Arrays.hashCode(_periodsAccrualFactors);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -208,7 +208,7 @@ public class CouponIborCompoundingSimpleSpread extends Coupon implements Deposit
     if (getClass() != obj.getClass()) {
       return false;
     }
-    CouponIborCompoundingSimpleSpread other = (CouponIborCompoundingSimpleSpread) obj;
+    final CouponIborCompoundingSimpleSpread other = (CouponIborCompoundingSimpleSpread) obj;
     if (Double.doubleToLongBits(_compoundingPeriodAmountAccumulated) != Double.doubleToLongBits(other._compoundingPeriodAmountAccumulated)) {
       return false;
     }

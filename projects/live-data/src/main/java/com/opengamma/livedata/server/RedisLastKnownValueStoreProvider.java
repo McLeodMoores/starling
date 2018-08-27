@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.livedata.server;
@@ -10,11 +10,11 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.opengamma.id.ExternalId;
+
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
-
-import com.opengamma.id.ExternalId;
 
 /**
  * An implemention of {@link LastKnownValueStoreProvider} which backs onto Redis.
@@ -36,7 +36,7 @@ import com.opengamma.id.ExternalId;
  *       of updating Redis, set this to false on all but the master updating
  *       version.</dd>
  * </dl>
- * 
+ *
  */
 public class RedisLastKnownValueStoreProvider implements LastKnownValueStoreProvider {
   private static final Logger LOGGER = LoggerFactory.getLogger(RedisLastKnownValueStoreProvider.class);
@@ -59,7 +59,7 @@ public class RedisLastKnownValueStoreProvider implements LastKnownValueStoreProv
    * Sets the server.
    * @param server  the server
    */
-  public void setServer(String server) {
+  public void setServer(final String server) {
     _server = server;
   }
 
@@ -75,7 +75,7 @@ public class RedisLastKnownValueStoreProvider implements LastKnownValueStoreProv
    * Sets the port.
    * @param port  the port
    */
-  public void setPort(int port) {
+  public void setPort(final int port) {
     _port = port;
   }
 
@@ -91,7 +91,7 @@ public class RedisLastKnownValueStoreProvider implements LastKnownValueStoreProv
    * Sets the globalPrefix.
    * @param globalPrefix  the globalPrefix
    */
-  public void setGlobalPrefix(String globalPrefix) {
+  public void setGlobalPrefix(final String globalPrefix) {
     _globalPrefix = globalPrefix;
   }
 
@@ -107,27 +107,27 @@ public class RedisLastKnownValueStoreProvider implements LastKnownValueStoreProv
    * Sets the writeThrough.
    * @param writeThrough  the writeThrough
    */
-  public void setWriteThrough(boolean writeThrough) {
+  public void setWriteThrough(final boolean writeThrough) {
     _writeThrough = writeThrough;
   }
 
   @Override
-  public LastKnownValueStore newInstance(ExternalId security, String normalizationRuleSetId) {
+  public LastKnownValueStore newInstance(final ExternalId security, final String normalizationRuleSetId) {
     initIfNecessary();
-    String redisKey = generateRedisKey(security, normalizationRuleSetId);
+    final String redisKey = generateRedisKey(security, normalizationRuleSetId);
     LOGGER.debug("Creating Redis LKV store on {}/{} with key name {}", new Object[] {security, normalizationRuleSetId, redisKey});
     updateIdentifiers(security);
-    RedisLastKnownValueStore store = new RedisLastKnownValueStore(_jedisPool, redisKey, isWriteThrough());
+    final RedisLastKnownValueStore store = new RedisLastKnownValueStore(_jedisPool, redisKey, isWriteThrough());
     return store;
   }
-  
+
   /**
    * @param security
    * @param normalizationRuleSetId
    * @return
    */
-  private String generateRedisKey(ExternalId security, String normalizationRuleSetId) {
-    StringBuilder sb = new StringBuilder();
+  private String generateRedisKey(final ExternalId security, final String normalizationRuleSetId) {
+    final StringBuilder sb = new StringBuilder();
     if (getGlobalPrefix() != null) {
       sb.append(getGlobalPrefix());
     }
@@ -139,18 +139,18 @@ public class RedisLastKnownValueStoreProvider implements LastKnownValueStoreProv
     sb.append("]");
     return sb.toString();
   }
-  
+
   private String generateAllSchemesKey() {
-    StringBuilder sb = new StringBuilder();
+    final StringBuilder sb = new StringBuilder();
     if (getGlobalPrefix() != null) {
       sb.append(getGlobalPrefix());
     }
     sb.append("-<ALL_SCHEMES>");
     return sb.toString();
   }
-  
-  private String generatePerSchemeKey(String scheme) {
-    StringBuilder sb = new StringBuilder();
+
+  private String generatePerSchemeKey(final String scheme) {
+    final StringBuilder sb = new StringBuilder();
     if (getGlobalPrefix() != null) {
       sb.append(getGlobalPrefix());
     }
@@ -167,27 +167,27 @@ public class RedisLastKnownValueStoreProvider implements LastKnownValueStoreProv
     synchronized (this) {
       assert _jedisPool == null;
       LOGGER.info("Connecting to {}:{}. Write-through set to: {}", new Object[] {getServer(), getPort(), _writeThrough});
-      JedisPoolConfig poolConfig = new JedisPoolConfig();
+      final JedisPoolConfig poolConfig = new JedisPoolConfig();
       //poolConfig.set...
-      JedisPool pool = new JedisPool(poolConfig, getServer(), getPort());
+      final JedisPool pool = new JedisPool(poolConfig, getServer(), getPort());
       _jedisPool = pool;
-      
+
       _isInitialized = true;
     }
   }
-  
-  protected void updateIdentifiers(ExternalId security) {
-    Jedis jedis = _jedisPool.getResource();
+
+  protected void updateIdentifiers(final ExternalId security) {
+    final Jedis jedis = _jedisPool.getResource();
     jedis.sadd(generateAllSchemesKey(), security.getScheme().getName());
     jedis.sadd(generatePerSchemeKey(security.getScheme().getName()), security.getValue());
     _jedisPool.returnResource(jedis);
   }
 
   @Override
-  public Set<String> getAllIdentifiers(String identifierScheme) {
+  public Set<String> getAllIdentifiers(final String identifierScheme) {
     initIfNecessary();
-    Jedis jedis = _jedisPool.getResource();
-    Set<String> allMembers = jedis.smembers(generatePerSchemeKey(identifierScheme));
+    final Jedis jedis = _jedisPool.getResource();
+    final Set<String> allMembers = jedis.smembers(generatePerSchemeKey(identifierScheme));
     _jedisPool.returnResource(jedis);
     LOGGER.info("Loaded {} identifiers from Jedis (full contents in Debug level log)", allMembers.size());
     if (LOGGER.isDebugEnabled()) {
@@ -197,13 +197,13 @@ public class RedisLastKnownValueStoreProvider implements LastKnownValueStoreProv
   }
 
   @Override
-  public boolean isAvailable(ExternalId security, String normalizationRuleSetId) {
+  public boolean isAvailable(final ExternalId security, final String normalizationRuleSetId) {
     initIfNecessary();
-    String redisKey = generateRedisKey(security, normalizationRuleSetId);
-    Jedis jedis = _jedisPool.getResource();
-    boolean isAvailable = jedis.exists(redisKey);
+    final String redisKey = generateRedisKey(security, normalizationRuleSetId);
+    final Jedis jedis = _jedisPool.getResource();
+    final boolean isAvailable = jedis.exists(redisKey);
     _jedisPool.returnResource(jedis);
     return isAvailable;
   }
-  
+
 }

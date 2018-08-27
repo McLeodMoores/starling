@@ -59,7 +59,7 @@ public final class Failure implements ImmutableBean {
    * @param message the failure message, not null
    * @param cause the cause, not null
    */
-  Failure(FailureStatus status, String message, Exception cause) {
+  Failure(final FailureStatus status, final String message, final Exception cause) {
     _status = ArgumentChecker.notNull(status, "status");
     _message = ArgumentChecker.notEmpty(message, "message");
     _causeType = ArgumentChecker.notNull(cause, "cause").getClass();
@@ -70,7 +70,7 @@ public final class Failure implements ImmutableBean {
    * @param status the status, not null
    * @param message the failure message, not null
    */
-  Failure(FailureStatus status, String message) {
+  Failure(final FailureStatus status, final String message) {
     _status = ArgumentChecker.notNull(status, "status");
     _message = ArgumentChecker.notEmpty(message, "message");
     _stackTrace = Throwables.getStackTraceAsString(new Exception());
@@ -81,7 +81,7 @@ public final class Failure implements ImmutableBean {
    * @param status the status, not null
    * @param cause the cause, not null
    */
-  Failure(FailureStatus status, Exception cause) {
+  Failure(final FailureStatus status, final Exception cause) {
     this(status, getMessage(cause), cause);
   }
 
@@ -89,25 +89,25 @@ public final class Failure implements ImmutableBean {
    * @param cause the cause, not null
    * @param message the failure message, not null
    */
-  Failure(Exception cause, String message) {
+  Failure(final Exception cause, final String message) {
     this(FailureStatus.ERROR, message, cause);
   }
 
   /**
    * @param cause the cause, not null
    */
-  Failure(Exception cause) {
+  Failure(final Exception cause) {
     this(FailureStatus.ERROR, cause);
   }
 
   /**
    * Extracts the message from an exception.
-   * 
+   *
    * @param cause  an exception that caused a failure
    * @return the exception's message or it's simple class name if it doesn't have one
    */
-  private static String getMessage(Exception cause) {
-    String message = ArgumentChecker.notNull(cause, "cause").getMessage();
+  private static String getMessage(final Exception cause) {
+    final String message = ArgumentChecker.notNull(cause, "cause").getMessage();
     return !StringUtils.isEmpty(message) ? message : cause.getClass().getSimpleName();
   }
 

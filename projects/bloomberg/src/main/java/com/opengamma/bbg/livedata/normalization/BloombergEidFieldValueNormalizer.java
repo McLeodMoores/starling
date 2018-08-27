@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.bbg.livedata.normalization;
@@ -18,7 +18,7 @@ import com.opengamma.livedata.server.FieldHistoryStore;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 
 /**
- * 
+ *
  */
 public class BloombergEidFieldValueNormalizer implements NormalizationRule {
 
@@ -27,16 +27,16 @@ public class BloombergEidFieldValueNormalizer implements NormalizationRule {
   private final FudgeContext _fudgeContext = OpenGammaFudgeContext.getInstance();
 
   @Override
-  public MutableFudgeMsg apply(MutableFudgeMsg msg, String securityUniqueId, FieldHistoryStore fieldHistory) {
-    MutableFudgeMsg normalizedMsg = _fudgeContext.newMessage();
-    FudgeDeserializer fudgeDeserializer = new FudgeDeserializer(_fudgeContext);
+  public MutableFudgeMsg apply(final MutableFudgeMsg msg, final String securityUniqueId, final FieldHistoryStore fieldHistory) {
+    final MutableFudgeMsg normalizedMsg = _fudgeContext.newMessage();
+    final FudgeDeserializer fudgeDeserializer = new FudgeDeserializer(_fudgeContext);
 
-    for (FudgeField field : msg) {
+    for (final FudgeField field : msg) {
       if (field.getName().equalsIgnoreCase(EID_LIVE_DATA) || field.getName().equalsIgnoreCase(EID_REF_DATA)) {
         try {
-          Integer eidValue = fudgeDeserializer.fieldValueToObject(Integer.class, field);
-          normalizedMsg.add(PermissionUtils.LIVE_DATA_PERMISSION_FIELD, BloombergPermissions.createEidPermissionString((int) eidValue));
-        } catch (Exception ex) {
+          final Integer eidValue = fudgeDeserializer.fieldValueToObject(Integer.class, field);
+          normalizedMsg.add(PermissionUtils.LIVE_DATA_PERMISSION_FIELD, BloombergPermissions.createEidPermissionString(eidValue));
+        } catch (final Exception ex) {
           //ignore
         }
       } else {

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.payments.derivative;
@@ -54,8 +54,8 @@ public final class CouponONArithmeticAverageSpreadSimplified extends Coupon {
    * @param spread The spread rate paid above the arithmetic average.
    * @param paymentAccrualFactor The year fraction of the full coupon.
    */
-  private CouponONArithmeticAverageSpreadSimplified(Currency currency, double paymentTime, double paymentYearFraction, double notional, IndexON index, final double fixingPeriodStartTime,
-      double fixingPeriodEndTime, double fixingPeriodAccrualFactor, final double spread) {
+  private CouponONArithmeticAverageSpreadSimplified(final Currency currency, final double paymentTime, final double paymentYearFraction, final double notional, final IndexON index, final double fixingPeriodStartTime,
+      final double fixingPeriodEndTime, final double fixingPeriodAccrualFactor, final double spread) {
     super(currency, paymentTime, paymentYearFraction, notional);
     _index = index;
     _fixingPeriodStartTime = fixingPeriodStartTime;
@@ -77,8 +77,8 @@ public final class CouponONArithmeticAverageSpreadSimplified extends Coupon {
    * @param spread The spread rate paid above the arithmetic average.
    * @return The coupon.
    */
-  public static CouponONArithmeticAverageSpreadSimplified from(double paymentTime, double paymentAccrualFactor, double notional, IndexON index, final double fixingPeriodStartTime,
-      double fixingPeriodEndTime, double fixingPeriodAccrualFactor, final double spread) {
+  public static CouponONArithmeticAverageSpreadSimplified from(final double paymentTime, final double paymentAccrualFactor, final double notional, final IndexON index, final double fixingPeriodStartTime,
+      final double fixingPeriodEndTime, final double fixingPeriodAccrualFactor, final double spread) {
     ArgumentChecker.notNull(index, "Index");
     return new CouponONArithmeticAverageSpreadSimplified(index.getCurrency(), paymentTime, paymentAccrualFactor, notional, index, fixingPeriodStartTime, fixingPeriodEndTime,
         fixingPeriodAccrualFactor, spread);
@@ -133,18 +133,18 @@ public final class CouponONArithmeticAverageSpreadSimplified extends Coupon {
   }
 
   @Override
-  public Coupon withNotional(double notional) {
+  public Coupon withNotional(final double notional) {
     return null; // TODO
   }
 
   @Override
-  public <S, T> T accept(InstrumentDerivativeVisitor<S, T> visitor, S data) {
+  public <S, T> T accept(final InstrumentDerivativeVisitor<S, T> visitor, final S data) {
     ArgumentChecker.notNull(visitor, "visitor");
     return visitor.visitCouponONArithmeticAverageSpreadSimplified(this, data);
   }
 
   @Override
-  public <T> T accept(InstrumentDerivativeVisitor<?, T> visitor) {
+  public <T> T accept(final InstrumentDerivativeVisitor<?, T> visitor) {
     ArgumentChecker.notNull(visitor, "visitor");
     return visitor.visitCouponONArithmeticAverageSpreadSimplified(this);
   }
@@ -155,19 +155,19 @@ public final class CouponONArithmeticAverageSpreadSimplified extends Coupon {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_fixingPeriodEndTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_fixingPeriodStartTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _index.hashCode();
     temp = Double.doubleToLongBits(_spread);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_spreadAmount);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -177,7 +177,7 @@ public final class CouponONArithmeticAverageSpreadSimplified extends Coupon {
     if (getClass() != obj.getClass()) {
       return false;
     }
-    CouponONArithmeticAverageSpreadSimplified other = (CouponONArithmeticAverageSpreadSimplified) obj;
+    final CouponONArithmeticAverageSpreadSimplified other = (CouponONArithmeticAverageSpreadSimplified) obj;
     if (Double.doubleToLongBits(_fixingPeriodEndTime) != Double.doubleToLongBits(other._fixingPeriodEndTime)) {
       return false;
     }

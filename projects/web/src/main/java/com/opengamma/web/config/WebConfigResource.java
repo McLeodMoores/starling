@@ -95,29 +95,29 @@ public class WebConfigResource extends AbstractWebConfigResource {
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
   public Response putHTML(
-      @FormParam("name") String name,
-      @FormParam(CONFIG_XML) String configXml) {
+      @FormParam("name") final String name,
+      @FormParam(CONFIG_XML) final String configXml) {
     if (!data().getConfig().isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
 
-    name = StringUtils.trimToNull(name);
-    configXml = StringUtils.trimToNull(configXml);
-    if (name == null || configXml == null) {
+    final String trimmedName = StringUtils.trimToNull(name);
+    final String trimmedConfigXml = StringUtils.trimToNull(configXml);
+    if (trimmedName == null || trimmedConfigXml == null) {
       final FlexiBean out = createRootData();
-      out.put(CONFIG_XML, StringEscapeUtils.escapeJavaScript(StringUtils.defaultString(configXml)));
-      if (name == null) {
+      out.put(CONFIG_XML, StringEscapeUtils.escapeJavaScript(StringUtils.defaultString(trimmedConfigXml)));
+      if (trimmedName == null) {
         out.put("err_nameMissing", true);
       }
-      if (configXml == null) {
+      if (trimmedConfigXml == null) {
         out.put("err_xmlMissing", true);
       }
       final String html = getFreemarker().build(HTML_DIR + "config-update.ftl", out);
       return Response.ok(html).build();
     }
 
-    final Object parsed = parseXML(configXml, data().getConfig().getConfig().getType());
-    final URI uri = updateConfig(name, parsed);
+    final Object parsed = parseXML(trimmedConfigXml, data().getConfig().getConfig().getType());
+    final URI uri = updateConfig(trimmedName, parsed);
     return Response.seeOther(uri).build();
   }
 
@@ -125,28 +125,28 @@ public class WebConfigResource extends AbstractWebConfigResource {
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.APPLICATION_JSON)
   public Response putJSON(
-      @FormParam("name") String name,
-      @FormParam("configJSON") String json,
-      @FormParam(CONFIG_XML) String configXml) {
+      @FormParam("name") final String name,
+      @FormParam("configJSON") final String json,
+      @FormParam(CONFIG_XML) final String configXml) {
     if (!data().getConfig().isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
 
-    name = StringUtils.trimToNull(name);
-    json = StringUtils.trimToNull(json);
-    configXml = StringUtils.trimToNull(configXml);
+    final String trimmedName = StringUtils.trimToNull(name);
+    final String trimmedJson = StringUtils.trimToNull(json);
+    final String trimmedConfigXml = StringUtils.trimToNull(configXml);
     // JSON allows a null config to just change the name
-    if (name == null) {
+    if (trimmedName == null) {
       return Response.status(Status.BAD_REQUEST).build();
     }
     Object configValue = null;
-    if (json != null) {
-      configValue = parseJSON(json);
-    } else if (configXml != null) {
-      final Object parsed = parseXML(configXml, data().getConfig().getConfig().getType());
+    if (trimmedJson != null) {
+      configValue = parseJSON(trimmedJson);
+    } else if (trimmedConfigXml != null) {
+      final Object parsed = parseXML(trimmedConfigXml, data().getConfig().getConfig().getType());
       configValue = parsed;
     }
-    updateConfig(name, configValue);
+    updateConfig(trimmedName, configValue);
     return Response.ok().build();
   }
 

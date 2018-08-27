@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.viewer.status.impl;
@@ -66,14 +66,14 @@ import com.opengamma.util.tuple.Pair;
  * View status calculation task
  */
 public class ViewStatusCalculationTask implements Callable<PerViewStatusResult> {
-  
+
   private final class ViewStatusResultListener extends AbstractViewResultListener {
     private final CountDownLatch _latch;
     private final PerViewStatusResult _statusResult;
     private final ViewDefinition _viewDefinition;
-    private AtomicLong _count = new AtomicLong(0);
+    private final AtomicLong _count = new AtomicLong(0);
 
-    private ViewStatusResultListener(CountDownLatch latch, PerViewStatusResult statusResult, ViewDefinition viewDefinition) {
+    private ViewStatusResultListener(final CountDownLatch latch, final PerViewStatusResult statusResult, final ViewDefinition viewDefinition) {
       _latch = latch;
       _statusResult = statusResult;
       _viewDefinition = viewDefinition;
@@ -85,15 +85,15 @@ public class ViewStatusCalculationTask implements Callable<PerViewStatusResult> 
     }
 
     @Override
-    public void viewDefinitionCompiled(CompiledViewDefinition compiledViewDefinition, boolean hasMarketDataPermissions) {
+    public void viewDefinitionCompiled(final CompiledViewDefinition compiledViewDefinition, final boolean hasMarketDataPermissions) {
       LOGGER.error("View definition compiled");
-      CompiledViewCalculationConfiguration compiledCalculationConfiguration = compiledViewDefinition.getCompiledCalculationConfiguration(DEFAULT_CALC_CONFIG);
-      Map<ValueSpecification, Set<ValueRequirement>> terminalOutputs = compiledCalculationConfiguration.getTerminalOutputSpecifications();
-      for (ValueSpecification valueSpec : terminalOutputs.keySet()) {
-        ComputationTargetType computationTargetType = valueSpec.getTargetSpecification().getType();
+      final CompiledViewCalculationConfiguration compiledCalculationConfiguration = compiledViewDefinition.getCompiledCalculationConfiguration(DEFAULT_CALC_CONFIG);
+      final Map<ValueSpecification, Set<ValueRequirement>> terminalOutputs = compiledCalculationConfiguration.getTerminalOutputSpecifications();
+      for (final ValueSpecification valueSpec : terminalOutputs.keySet()) {
+        final ComputationTargetType computationTargetType = valueSpec.getTargetSpecification().getType();
         if (isValidTargetType(computationTargetType)) {
-          UniqueId uniqueId = valueSpec.getTargetSpecification().getUniqueId();
-          String currency = getCurrency(uniqueId, computationTargetType);
+          final UniqueId uniqueId = valueSpec.getTargetSpecification().getUniqueId();
+          final String currency = getCurrency(uniqueId, computationTargetType);
           if (currency != null) {
             _statusResult.put(new ViewStatusKeyBean(_securityType, valueSpec.getValueName(), currency, computationTargetType.getName()), ViewStatus.NO_VALUE);
           } else {
@@ -113,12 +113,13 @@ public class ViewStatusCalculationTask implements Callable<PerViewStatusResult> 
       }
     }
 
-    public void cycleStarted(ViewCycleMetadata cycleInfo) {
+    @Override
+    public void cycleStarted(final ViewCycleMetadata cycleInfo) {
       LOGGER.debug("Cycle started");
     }
 
     @Override
-    public void cycleExecutionFailed(ViewCycleExecutionOptions executionOptions, Exception exception) {
+    public void cycleExecutionFailed(final ViewCycleExecutionOptions executionOptions, final Exception exception) {
       LOGGER.debug("Cycle execution failed", exception);
     }
 
@@ -128,17 +129,17 @@ public class ViewStatusCalculationTask implements Callable<PerViewStatusResult> 
     }
 
     @Override
-    public void processTerminated(boolean executionInterrupted) {
+    public void processTerminated(final boolean executionInterrupted) {
       LOGGER.debug("Process terminated");
     }
 
     @Override
-    public void clientShutdown(Exception e) {
+    public void clientShutdown(final Exception e) {
       LOGGER.debug("Client shutdown");
     }
 
     @Override
-    public void cycleFragmentCompleted(ViewComputationResultModel fullResult, ViewDeltaResultModel deltaResult) {
+    public void cycleFragmentCompleted(final ViewComputationResultModel fullResult, final ViewDeltaResultModel deltaResult) {
       LOGGER.debug("cycle fragment completed");
     }
 
@@ -154,9 +155,9 @@ public class ViewStatusCalculationTask implements Callable<PerViewStatusResult> 
 
   private static final String MIXED_CURRENCY = "MIXED_CURRENCY";
   private static final Logger LOGGER = LoggerFactory.getLogger(ViewStatusCalculationTask.class);
-  
+
   private static final String DEFAULT_CALC_CONFIG = "Default";
-  
+
   private final String _securityType;
   private final Set<String> _valueRequirementNames;
   private final UniqueId _portfolioId;
@@ -165,16 +166,16 @@ public class ViewStatusCalculationTask implements Callable<PerViewStatusResult> 
   private final CurrenciesAggregationFunction _currenciesAggrFunction;
   private final Map<UniqueId, String> _targetCurrenciesCache = Maps.newConcurrentMap();
   private final MarketDataSpecification _marketDataSpecification;
-  
-  public ViewStatusCalculationTask(ToolContext toolcontext, UniqueId portfolioId, UserPrincipal user, String securityType, 
-      Collection<String> valueRequirementNames, MarketDataSpecification marketDataSpecification) {
+
+  public ViewStatusCalculationTask(final ToolContext toolcontext, final UniqueId portfolioId, final UserPrincipal user, final String securityType,
+      final Collection<String> valueRequirementNames, final MarketDataSpecification marketDataSpecification) {
     ArgumentChecker.notNull(portfolioId, "portfolioId");
     ArgumentChecker.notNull(securityType, "securityType");
     ArgumentChecker.notNull(valueRequirementNames, "valueRequirementNames");
     ArgumentChecker.notNull(user, "user");
     ArgumentChecker.notNull(toolcontext, "toolcontext");
     ArgumentChecker.notNull(marketDataSpecification, "marketDataSpecification");
-    
+
     _portfolioId = portfolioId;
     _user = user;
     _securityType = securityType;
@@ -187,7 +188,7 @@ public class ViewStatusCalculationTask implements Callable<PerViewStatusResult> 
   @Override
   public PerViewStatusResult call() throws Exception {
     LOGGER.debug("Start calculating result for security:{} with values{}", _securityType, Sets.newTreeSet(_valueRequirementNames).toString());
-    
+
     final PerViewStatusResult statusResult = new PerViewStatusResult(_securityType);
     //No need to do any work if there are no ValueRequirements to compute
     if (_valueRequirementNames.isEmpty()) {
@@ -200,7 +201,7 @@ public class ViewStatusCalculationTask implements Callable<PerViewStatusResult> 
     final CountDownLatch latch = new CountDownLatch(1);
     client.setResultListener(new ViewStatusResultListener(latch, statusResult, viewDefinition));
     client.attachToViewProcess(viewDefinition.getUniqueId(), ExecutionOptions.infinite(_marketDataSpecification));
-   
+
     try {
       LOGGER.info("main thread waiting");
       if (!latch.await(30, TimeUnit.SECONDS)) {
@@ -215,7 +216,7 @@ public class ViewStatusCalculationTask implements Callable<PerViewStatusResult> 
     return statusResult;
   }
 
-  
+
 
   protected boolean isValidTargetType(final ComputationTargetType computationTargetType) {
     if (ComputationTargetType.POSITION.isCompatible(computationTargetType) || ComputationTargetType.PORTFOLIO.isCompatible(computationTargetType) ||
@@ -225,9 +226,9 @@ public class ViewStatusCalculationTask implements Callable<PerViewStatusResult> 
     return false;
   }
 
-  private void removeViewDefinition(ViewDefinition viewDefinition) {
+  private void removeViewDefinition(final ViewDefinition viewDefinition) {
     LOGGER.debug("Removing ViewDefintion with id: {}", viewDefinition.getUniqueId());
-    ConfigMaster configMaster = _toolContext.getConfigMaster();
+    final ConfigMaster configMaster = _toolContext.getConfigMaster();
     configMaster.remove(viewDefinition.getUniqueId().getObjectId());
     LOGGER.debug("ViewDefinition {} removed", viewDefinition.getUniqueId());
   }
@@ -239,26 +240,26 @@ public class ViewStatusCalculationTask implements Callable<PerViewStatusResult> 
     viewDefinition.setMinDeltaCalculationPeriod(500L);
     viewDefinition.setMinFullCalculationPeriod(500L);
 
-    ViewCalculationConfiguration defaultCalConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
-    for (String requiredOutput : _valueRequirementNames) {
+    final ViewCalculationConfiguration defaultCalConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
+    for (final String requiredOutput : _valueRequirementNames) {
       defaultCalConfig.addPortfolioRequirementName(_securityType, requiredOutput);
     }
     viewDefinition.addViewCalculationConfiguration(defaultCalConfig);
     return storeViewDefinition(viewDefinition);
   }
-  
+
   private ViewDefinition storeViewDefinition(final ViewDefinition viewDefinition) {
     ConfigItem<ViewDefinition> config = ConfigItem.of(viewDefinition, viewDefinition.getName(), ViewDefinition.class);
     config = ConfigMasterUtils.storeByName(_toolContext.getConfigMaster(), config);
     return config.getValue();
   }
-  
+
   private void processGraphFailResult(final PerViewStatusResult statusResult) {
-    PositionSource positionSource = _toolContext.getPositionSource();
-    Portfolio portfolio = positionSource.getPortfolio(_portfolioId, VersionCorrection.LATEST);
-    List<Position> positions = PortfolioAggregator.flatten(portfolio);
-    Set<String> currencies = Sets.newHashSet();
-    for (Position position : positions) {
+    final PositionSource positionSource = _toolContext.getPositionSource();
+    final Portfolio portfolio = positionSource.getPortfolio(_portfolioId, VersionCorrection.LATEST);
+    final List<Position> positions = PortfolioAggregator.flatten(portfolio);
+    final Set<String> currencies = Sets.newHashSet();
+    for (final Position position : positions) {
       if (position.getSecurity() == null) {
         position.getSecurityLink().resolve(_toolContext.getSecuritySource());
       }
@@ -266,26 +267,26 @@ public class ViewStatusCalculationTask implements Callable<PerViewStatusResult> 
         currencies.add(getCurrency(position.getUniqueId(), ComputationTargetType.POSITION));
       }
     }
-    for (String valueName : _valueRequirementNames) {
-      for (String currency : currencies) {
+    for (final String valueName : _valueRequirementNames) {
+      for (final String currency : currencies) {
         statusResult.put(new ViewStatusKeyBean(_securityType, valueName, currency, ComputationTargetType.POSITION.getName()), ViewStatus.GRAPH_FAIL);
       }
     }
   }
-  
-  private void processStatusResult(ViewComputationResultModel fullResult, PerViewStatusResult statusResult) {
-    ViewCalculationResultModel calculationResult = fullResult.getCalculationResult(DEFAULT_CALC_CONFIG);
-    Collection<ComputationTargetSpecification> allTargets = calculationResult.getAllTargets();
-    for (ComputationTargetSpecification targetSpec : allTargets) {
-      ComputationTargetType targetType = targetSpec.getSpecification().getType();
+
+  private void processStatusResult(final ViewComputationResultModel fullResult, final PerViewStatusResult statusResult) {
+    final ViewCalculationResultModel calculationResult = fullResult.getCalculationResult(DEFAULT_CALC_CONFIG);
+    final Collection<ComputationTargetSpecification> allTargets = calculationResult.getAllTargets();
+    for (final ComputationTargetSpecification targetSpec : allTargets) {
+      final ComputationTargetType targetType = targetSpec.getSpecification().getType();
       if (isValidTargetType(targetType)) {
-        Map<Pair<String, ValueProperties>, ComputedValueResult> values = calculationResult.getValues(targetSpec);
-        for (Map.Entry<Pair<String, ValueProperties>, ComputedValueResult> valueEntry : values.entrySet()) {
-          String valueName = valueEntry.getKey().getFirst();
-          String currency = getCurrency(targetSpec.getUniqueId(), targetType);
+        final Map<Pair<String, ValueProperties>, ComputedValueResult> values = calculationResult.getValues(targetSpec);
+        for (final Map.Entry<Pair<String, ValueProperties>, ComputedValueResult> valueEntry : values.entrySet()) {
+          final String valueName = valueEntry.getKey().getFirst();
+          final String currency = getCurrency(targetSpec.getUniqueId(), targetType);
           LOGGER.debug("{} currency returned for id:{} targetType:{}", currency, targetSpec.getUniqueId(), targetType);
           if (currency != null) {
-            ComputedValueResult computedValue = valueEntry.getValue();
+            final ComputedValueResult computedValue = valueEntry.getValue();
             if (isGoodValue(computedValue)) {
               statusResult.put(new ViewStatusKeyBean(_securityType, valueName, currency, targetType.getName()), ViewStatus.VALUE);
             }
@@ -296,25 +297,25 @@ public class ViewStatusCalculationTask implements Callable<PerViewStatusResult> 
       }
     }
   }
-  
-  private String getCurrency(UniqueId uniqueId, ComputationTargetType computationTargetType) {
+
+  private String getCurrency(final UniqueId uniqueId, final ComputationTargetType computationTargetType) {
     synchronized (_targetCurrenciesCache) {
       String currency = _targetCurrenciesCache.get(uniqueId);
       if (currency == null) {
         if (ComputationTargetType.PORTFOLIO_NODE.isCompatible(computationTargetType) || ComputationTargetType.PORTFOLIO.isCompatible(computationTargetType)) {
           currency = MIXED_CURRENCY;
         } else if (ComputationTargetType.POSITION.isCompatible(computationTargetType)) {
-          PositionSource positionSource = _toolContext.getPositionSource();
-          Position position = positionSource.getPosition(uniqueId);
+          final PositionSource positionSource = _toolContext.getPositionSource();
+          final Position position = positionSource.getPosition(uniqueId);
           if (position.getSecurity() == null) {
             position.getSecurityLink().resolve(_toolContext.getSecuritySource());
           }
           if (position.getSecurity() != null) {
             currency = _currenciesAggrFunction.classifyPosition(position);
-          } 
+          }
         } else if (ComputationTargetType.TRADE.isCompatible(computationTargetType)) {
-          PositionSource positionSource = _toolContext.getPositionSource();
-          Trade trade = positionSource.getTrade(uniqueId);
+          final PositionSource positionSource = _toolContext.getPositionSource();
+          final Trade trade = positionSource.getTrade(uniqueId);
           if (trade.getSecurity() == null) {
             trade.getSecurityLink().resolve(_toolContext.getSecuritySource());
           }
@@ -330,7 +331,7 @@ public class ViewStatusCalculationTask implements Callable<PerViewStatusResult> 
       return currency;
     }
   }
-  
+
   private boolean isGoodValue(final ComputedValueResult computedValue) {
     if (computedValue == null || computedValue.getValue() == null || StringUtils.EMPTY.equals(computedValue.getValue())) {
       return false;
@@ -338,5 +339,5 @@ public class ViewStatusCalculationTask implements Callable<PerViewStatusResult> 
       return !(computedValue.getValue() instanceof MissingValue);
     }
   }
-  
+
 }

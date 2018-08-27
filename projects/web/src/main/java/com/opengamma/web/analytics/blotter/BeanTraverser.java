@@ -35,18 +35,18 @@ import com.opengamma.util.ArgumentChecker;
     _decorators = Collections.emptyList();
   }
 
-  /* package */ BeanTraverser(BeanVisitorDecorator... decorators) {
+  /* package */ BeanTraverser(final BeanVisitorDecorator... decorators) {
     _decorators = Arrays.asList(decorators);
     // first decorator in the list should be on the outside, need to reverse before wrapping
     Collections.reverse(_decorators);
   }
 
-  /* package */ Object traverse(MetaBean metaBean, BeanVisitor<?> visitor) {
-    BeanVisitor<?> decoratedVisitor = decorate(visitor);
+  /* package */ Object traverse(final MetaBean metaBean, final BeanVisitor<?> visitor) {
+    final BeanVisitor<?> decoratedVisitor = decorate(visitor);
     decoratedVisitor.visitMetaBean(metaBean);
-    List<BeanTraversalFailure> failures = Lists.newArrayList();
-    for (MetaProperty<?> property : metaBean.metaPropertyIterable()) {
-      Class<?> propertyType = property.propertyType();
+    final List<BeanTraversalFailure> failures = Lists.newArrayList();
+    for (final MetaProperty<?> property : metaBean.metaPropertyIterable()) {
+      final Class<?> propertyType = property.propertyType();
       try {
         if (Bean.class.isAssignableFrom(propertyType)) {
           decoratedVisitor.visitBeanProperty(property, this);
@@ -61,7 +61,7 @@ import com.opengamma.util.ArgumentChecker;
         } else {
           decoratedVisitor.visitProperty(property, this);
         }
-      } catch (Exception e) {
+      } catch (final Exception e) {
         failures.add(new BeanTraversalFailure(e, property));
       }
     }
@@ -72,9 +72,9 @@ import com.opengamma.util.ArgumentChecker;
     }
   }
 
-  private BeanVisitor<?> decorate(BeanVisitor<?> visitor) {
+  private BeanVisitor<?> decorate(final BeanVisitor<?> visitor) {
     BeanVisitor<?> decoratedVisitor = visitor;
-    for (BeanVisitorDecorator decorator : _decorators) {
+    for (final BeanVisitorDecorator decorator : _decorators) {
       decoratedVisitor = decorator.decorate(decoratedVisitor);
     }
     return decoratedVisitor;
@@ -91,7 +91,7 @@ import com.opengamma.util.ArgumentChecker;
   /** The visited property. */
   private final MetaProperty<?> _property;
 
-  /* package */ BeanTraversalFailure(Exception exception, MetaProperty<?> property) {
+  /* package */ BeanTraversalFailure(final Exception exception, final MetaProperty<?> property) {
     ArgumentChecker.notNull(exception, "exception");
     ArgumentChecker.notNull(property, "property");
     _exception = exception;
@@ -104,7 +104,7 @@ import com.opengamma.util.ArgumentChecker;
 
   @Override
   public String toString() {
-    String message = _exception.getMessage() == null ? null : "'" + _exception.getMessage() + "'";
+    final String message = _exception.getMessage() == null ? null : "'" + _exception.getMessage() + "'";
     return "[" + _property.toString() + ", " + message + "]";
   }
 }
@@ -118,14 +118,14 @@ import com.opengamma.util.ArgumentChecker;
   /** Serialization version. */
   private static final long serialVersionUID = -3048022694152981946L;
 
-  /* package */ BeanTraversalException(MetaBean metaBean, BeanVisitor<?> visitor, List<BeanTraversalFailure> failures) {
+  /* package */ BeanTraversalException(final MetaBean metaBean, final BeanVisitor<?> visitor, final List<BeanTraversalFailure> failures) {
     super(buildMessage(metaBean, visitor, failures));
-    for (BeanTraversalFailure failure : failures) {
+    for (final BeanTraversalFailure failure : failures) {
       addSuppressed(failure.getException());
     }
   }
 
-  private static String buildMessage(MetaBean metaBean, BeanVisitor<?> visitor, List<BeanTraversalFailure> failures) {
+  private static String buildMessage(final MetaBean metaBean, final BeanVisitor<?> visitor, final List<BeanTraversalFailure> failures) {
     ArgumentChecker.notNull(metaBean, "metaBean");
     ArgumentChecker.notEmpty(failures, "failures");
     ArgumentChecker.notNull(visitor, "visitor");

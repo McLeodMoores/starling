@@ -30,7 +30,7 @@ public class FactorExposureDataFudgeBuilder extends AbstractFudgeBuilder impleme
   private static final String NODE_FIELD_NAME = "node";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, FactorExposureData object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final FactorExposureData object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     serializer.addToMessage(msg, FACTOR_SET_ID_FIELD_NAME, null, object.getFactorSetId());
     serializer.addToMessage(msg, FACTOR_TYPE_FIELD_NAME, null, object.getFactorType().getFactorType());
@@ -40,13 +40,13 @@ public class FactorExposureDataFudgeBuilder extends AbstractFudgeBuilder impleme
   }
 
   @Override
-  public FactorExposureData buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    Long factorSetId = msg.getLong(FACTOR_SET_ID_FIELD_NAME);
-    String factorTypeStr = msg.getString(FACTOR_TYPE_FIELD_NAME);
-    FactorType factorType = FactorType.of(factorTypeStr);
-    String factorName = msg.getString(FACTOR_NAME_FIELD_NAME);
-    String node = msg.getString(NODE_FIELD_NAME);
-    FactorExposureData exposureData = new FactorExposureData(factorSetId, factorType, factorName, node);
+  public FactorExposureData buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final Long factorSetId = msg.getLong(FACTOR_SET_ID_FIELD_NAME);
+    final String factorTypeStr = msg.getString(FACTOR_TYPE_FIELD_NAME);
+    final FactorType factorType = FactorType.of(factorTypeStr);
+    final String factorName = msg.getString(FACTOR_NAME_FIELD_NAME);
+    final String node = msg.getString(NODE_FIELD_NAME);
+    final FactorExposureData exposureData = new FactorExposureData(factorSetId, factorType, factorName, node);
     return exposureData;
   }
 

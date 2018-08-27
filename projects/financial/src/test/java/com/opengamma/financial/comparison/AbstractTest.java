@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.comparison;
@@ -135,7 +135,7 @@ import com.opengamma.util.time.Expiry;
   }
 
   //-------------------------------------------------------------------------
-  private static ZonedDateTime zdt(int y, int m, int d, int hr, int min, int sec, int nanos, ZoneId zone) {
+  private static ZonedDateTime zdt(final int y, final int m, final int d, final int hr, final int min, final int sec, final int nanos, final ZoneId zone) {
     return LocalDateTime.of(y, m, d, hr, min, sec, nanos).atZone(zone);
   }
 

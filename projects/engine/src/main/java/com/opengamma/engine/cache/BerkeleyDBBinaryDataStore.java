@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.cache;
@@ -50,7 +50,7 @@ public class BerkeleyDBBinaryDataStore extends AbstractBerkeleyDBComponent imple
     @Override
     public byte[] get(final long identifier) {
       LongBinding.longToEntry(identifier, _key);
-      OperationStatus opStatus = getDatabase().get(getTransaction(), _key, _value, LockMode.READ_UNCOMMITTED);
+      final OperationStatus opStatus = getDatabase().get(getTransaction(), _key, _value, LockMode.READ_UNCOMMITTED);
       switch (opStatus) {
         case SUCCESS:
           return _value.getData();
@@ -64,7 +64,7 @@ public class BerkeleyDBBinaryDataStore extends AbstractBerkeleyDBComponent imple
     public void put(final long identifier, final byte[] data) {
       LongBinding.longToEntry(identifier, _key);
       _value.setData(data);
-      OperationStatus opStatus = getDatabase().put(getTransaction(), _key, _value);
+      final OperationStatus opStatus = getDatabase().put(getTransaction(), _key, _value);
       switch (opStatus) {
         case SUCCESS:
           return;
@@ -87,7 +87,7 @@ public class BerkeleyDBBinaryDataStore extends AbstractBerkeleyDBComponent imple
 
   private BlockingQueue<Worker.Request> _requests;
 
-  public BerkeleyDBBinaryDataStore(Environment dbEnvironment, String databaseName) {
+  public BerkeleyDBBinaryDataStore(final Environment dbEnvironment, final String databaseName) {
     super(dbEnvironment, databaseName);
   }
 
@@ -95,7 +95,7 @@ public class BerkeleyDBBinaryDataStore extends AbstractBerkeleyDBComponent imple
   public void start() {
     synchronized (this) {
       if (_requests == null) {
-        _requests = new LinkedBlockingQueue<Worker.Request>();
+        _requests = new LinkedBlockingQueue<>();
         // TODO: We can have multiple worker threads -- will that be good or bad?
         final Thread worker = new Thread(new Worker(_requests));
         worker.setName("BerkeleyDBBinaryDataStore-Worker");
@@ -118,7 +118,7 @@ public class BerkeleyDBBinaryDataStore extends AbstractBerkeleyDBComponent imple
 
   @Override
   protected DatabaseConfig getDatabaseConfig() {
-    DatabaseConfig dbConfig = new DatabaseConfig();
+    final DatabaseConfig dbConfig = new DatabaseConfig();
     dbConfig.setAllowCreate(true);
     dbConfig.setTransactional(false);
     // TODO kirk 2010-08-07 -- For Batch operation, this should be set to false probably.
@@ -170,7 +170,7 @@ public class BerkeleyDBBinaryDataStore extends AbstractBerkeleyDBComponent imple
   }
 
   @Override
-  public byte[] get(long identifier) {
+  public byte[] get(final long identifier) {
     if (!isRunning()) {
       LOGGER.info("Starting on first call as wasn't called as part of lifecycle interface");
       start();
@@ -201,7 +201,7 @@ public class BerkeleyDBBinaryDataStore extends AbstractBerkeleyDBComponent imple
   }
 
   @Override
-  public void put(long identifier, byte[] data) {
+  public void put(final long identifier, final byte[] data) {
     if (!isRunning()) {
       LOGGER.info("Starting on first call as wasn't called as part of lifecycle interface");
       start();

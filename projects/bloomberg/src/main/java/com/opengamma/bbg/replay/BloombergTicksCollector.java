@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.bbg.replay;
@@ -63,31 +63,31 @@ public class BloombergTicksCollector implements Lifecycle {
    */
   public static final String DEFAULT_ROOT_DIR = "/tickData";
 
-  private BloombergConnector _bloombergConnector;
+  private final BloombergConnector _bloombergConnector;
   private List<Session> _sessionList = Lists.newArrayList();
-      
-  private List<String> _options = Lists.newArrayList();
-  private AtomicBoolean _bbgSessionStarted = new AtomicBoolean();
-  private List<SubscriptionList> _subscriptionsList = Lists.newArrayList();
-  
-  private ReferenceDataProvider _refDataProvider;
-  private String _rootDir;
+
+  private final List<String> _options = Lists.newArrayList();
+  private final AtomicBoolean _bbgSessionStarted = new AtomicBoolean();
+  private final List<SubscriptionList> _subscriptionsList = Lists.newArrayList();
+
+  private final ReferenceDataProvider _refDataProvider;
+  private final String _rootDir;
   private BloombergTickWriter _ticksWriterJob;
   private Thread _ticksWriterThread;
-  private BlockingQueue<FudgeMsg> _allTicksQueue = new LinkedBlockingQueue<FudgeMsg>();
-  private String _trackFile;
-  private int _bbgSessions;
-  
-  private StorageMode _storageMode;
-  
-  public BloombergTicksCollector(BloombergConnector sessionOptions, ReferenceDataProvider refDataProvider) {
+  private final BlockingQueue<FudgeMsg> _allTicksQueue = new LinkedBlockingQueue<>();
+  private final String _trackFile;
+  private final int _bbgSessions;
+
+  private final StorageMode _storageMode;
+
+  public BloombergTicksCollector(final BloombergConnector sessionOptions, final ReferenceDataProvider refDataProvider) {
     this(sessionOptions, refDataProvider, DEFAULT_ROOT_DIR, DEFAULT_TRACK_FILE, DEFAULT_SESSION_SIZE, DEFAULT_STORAGE_MODE);
   }
-  
-  public BloombergTicksCollector(BloombergConnector sessionOptions, ReferenceDataProvider refDataProvider, String rootDir) {
+
+  public BloombergTicksCollector(final BloombergConnector sessionOptions, final ReferenceDataProvider refDataProvider, final String rootDir) {
     this(sessionOptions, refDataProvider, rootDir, DEFAULT_TRACK_FILE, DEFAULT_SESSION_SIZE, DEFAULT_STORAGE_MODE);
   }
-  
+
   /**
    * @param sessionOptions the bloomberg session options, not null.
    * @param refDataProvider the reference data provider, not null
@@ -96,9 +96,9 @@ public class BloombergTicksCollector implements Lifecycle {
    * @param bbgSessions the number of bloomberg sessions to create, must be positive
    * @param storageMode the storage mode, not null
    */
-  public BloombergTicksCollector(BloombergConnector sessionOptions, ReferenceDataProvider refDataProvider, 
-      String rootDir, String trackFile, int bbgSessions, StorageMode storageMode) {
-    
+  public BloombergTicksCollector(final BloombergConnector sessionOptions, final ReferenceDataProvider refDataProvider,
+      final String rootDir, final String trackFile, final int bbgSessions, final StorageMode storageMode) {
+
     ArgumentChecker.notNull(sessionOptions, "SessionOptions");
     ArgumentChecker.notNull(refDataProvider, "BloombergRefDataProvider");
     ArgumentChecker.notNull(rootDir, "RootDir");
@@ -118,8 +118,8 @@ public class BloombergTicksCollector implements Lifecycle {
 
   //-------------------------------------------------------------------------
   private void checkRootDir() {
-    File file = new File(_rootDir);
-    if (!file.isDirectory()) { 
+    final File file = new File(_rootDir);
+    if (!file.isDirectory()) {
       LOGGER.warn("{} root directory does not exist", _rootDir);
       throw new IllegalArgumentException(_rootDir + " is not a directory");
     }
@@ -136,7 +136,7 @@ public class BloombergTicksCollector implements Lifecycle {
 
   @Override
   public synchronized boolean isRunning() {
-    return (_bbgSessionStarted.get() == true || (_ticksWriterThread != null && _ticksWriterThread.isAlive()));
+    return _bbgSessionStarted.get() == true || _ticksWriterThread != null && _ticksWriterThread.isAlive();
   }
 
   @Override
@@ -146,59 +146,59 @@ public class BloombergTicksCollector implements Lifecycle {
       LOGGER.info("BloombergTickStorage already started");
       return;
     }
-    
-    Map<String, String> ticker2Buid = BloombergDataUtils.getBUID(_refDataProvider, loadSecurities());
+
+    final Map<String, String> ticker2Buid = BloombergDataUtils.getBUID(_refDataProvider, loadSecurities());
     doSnapshot(ticker2Buid);
-    
+
     //setup writer thread
-    BloombergTickWriter tickWriter = new BloombergTickWriter(FUDGE_CONTEXT, _allTicksQueue, ticker2Buid, _rootDir, _storageMode);
-    Thread thread = new Thread(tickWriter, "TicksWriter");
+    final BloombergTickWriter tickWriter = new BloombergTickWriter(FUDGE_CONTEXT, _allTicksQueue, ticker2Buid, _rootDir, _storageMode);
+    final Thread thread = new Thread(tickWriter, "TicksWriter");
     thread.start();
     _ticksWriterJob = tickWriter;
     _ticksWriterThread = thread;
-        
+
     createSubscriptions(ticker2Buid.keySet());
     boolean sessionCreated = false;
     try {
       sessionCreated = createSession();
-    } catch (Exception e) {
+    } catch (final Exception e) {
       throw new OpenGammaRuntimeException("Session cannot be open to Bloomberg", e);
     }
     _bbgSessionStarted.set(sessionCreated);
   }
 
   private Set<String> loadSecurities() {
-    Set<String> bloombergKeys = Sets.newHashSet();
+    final Set<String> bloombergKeys = Sets.newHashSet();
     try {
-      for (ExternalId identifier : BloombergDataUtils.identifierLoader(new FileReader(_trackFile))) {
+      for (final ExternalId identifier : BloombergDataUtils.identifierLoader(new FileReader(_trackFile))) {
         bloombergKeys.add(BloombergDomainIdentifierResolver.toBloombergKey(identifier));
       }
-    } catch (FileNotFoundException ex) {
+    } catch (final FileNotFoundException ex) {
       throw new OpenGammaRuntimeException(_trackFile + " cannot be found", ex);
     }
     return bloombergKeys;
   }
-  
-  private void doSnapshot(Map<String, String> ticker2Buid) {
-    ReferenceDataProvider refDataProvider = _refDataProvider;
-    Map<String, FudgeMsg> refDataValues = refDataProvider.getReferenceDataIgnoreCache(ticker2Buid.keySet(), BloombergDataUtils.STANDARD_FIELDS_SET);
-    
-    for (String bloombergKey : ticker2Buid.keySet()) {
-      FudgeMsg result = refDataValues.get(bloombergKey);
+
+  private void doSnapshot(final Map<String, String> ticker2Buid) {
+    final ReferenceDataProvider refDataProvider = _refDataProvider;
+    final Map<String, FudgeMsg> refDataValues = refDataProvider.getReferenceDataIgnoreCache(ticker2Buid.keySet(), BloombergDataUtils.STANDARD_FIELDS_SET);
+
+    for (final String bloombergKey : ticker2Buid.keySet()) {
+      final FudgeMsg result = refDataValues.get(bloombergKey);
       if (result == null) {
         throw new OpenGammaRuntimeException("Result for " + bloombergKey + " was not found");
       }
-      
-      MutableFudgeMsg tickMsg = FUDGE_CONTEXT.newMessage();
-      Instant instant = Clock.systemUTC().instant();
-      long epochMillis = instant.toEpochMilli();
+
+      final MutableFudgeMsg tickMsg = FUDGE_CONTEXT.newMessage();
+      final Instant instant = Clock.systemUTC().instant();
+      final long epochMillis = instant.toEpochMilli();
       tickMsg.add(RECEIVED_TS_KEY, epochMillis);
       tickMsg.add(SECURITY_KEY, bloombergKey);
       tickMsg.add(FIELDS_KEY, result);
       tickMsg.add(BUID_KEY, ticker2Buid.get(bloombergKey));
       try {
         _allTicksQueue.put(tickMsg);
-      } catch (InterruptedException ex) {
+      } catch (final InterruptedException ex) {
         Thread.interrupted();
         throw new OpenGammaRuntimeException("Unable to do snaphot for " + bloombergKey, ex);
       }
@@ -208,20 +208,20 @@ public class BloombergTicksCollector implements Lifecycle {
   /**
    * @param bloombergKeys
    */
-  private void createSubscriptions(Set<String> bloombergKeys) {
+  private void createSubscriptions(final Set<String> bloombergKeys) {
     LOGGER.debug("creating subscriptions list for {} securities", bloombergKeys.size());
     for (int i = 0; i < _bbgSessions; i++) {
       _subscriptionsList.add(new SubscriptionList());
     }
     int counter = 0;
-    for (String bloombergKey : bloombergKeys) {
-      int index = counter % _bbgSessions;
-      SubscriptionList subscriptions = _subscriptionsList.get(index);
+    for (final String bloombergKey : bloombergKeys) {
+      final int index = counter % _bbgSessions;
+      final SubscriptionList subscriptions = _subscriptionsList.get(index);
       subscriptions.add(new Subscription(bloombergKey, BloombergDataUtils.STANDARD_FIELDS_LIST, _options,
           new CorrelationID(bloombergKey)));
       counter++;
     }
-    
+
   }
 
   @Override
@@ -232,15 +232,15 @@ public class BloombergTicksCollector implements Lifecycle {
   }
 
   /**
-   * 
+   *
    */
   public void stopBloombergSession() {
     LOGGER.info("stopping bloomberg session");
     if (_bbgSessionStarted.get()) {
-      for (Session session : _sessionList) {
+      for (final Session session : _sessionList) {
         try {
           session.stop();
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
           Thread.interrupted();
           LOGGER.warn("Interrupted while waiting for session to stop", e);
         }
@@ -251,7 +251,7 @@ public class BloombergTicksCollector implements Lifecycle {
   }
 
   /**
-   * 
+   *
    */
   public void stopTicksWriterThreads() {
     LOGGER.info("Stopping ticks writer thread");
@@ -259,14 +259,14 @@ public class BloombergTicksCollector implements Lifecycle {
       if (_ticksWriterJob != null) {
         try {
           _allTicksQueue.put(BloombergTickReplayUtils.getTerminateMessage());
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
           Thread.interrupted();
           LOGGER.warn("interrupted from waiting to put terminate message on queue");
         }
       }
       try {
         _ticksWriterThread.join();
-      } catch (InterruptedException e) {
+      } catch (final InterruptedException e) {
         Thread.interrupted();
         LOGGER.warn("Interrupted while waiting for ticks writer thread to terminate", e);
       }
@@ -276,15 +276,15 @@ public class BloombergTicksCollector implements Lifecycle {
   }
 
   private boolean createSession() throws Exception {
-    for (Session session : _sessionList) {
+    for (final Session session : _sessionList) {
       if (session != null) {
         session.stop();
       }
     }
     LOGGER.info("Connecting to {} ", SessionOptionsUtils.toString(_bloombergConnector.getSessionOptions()));
-    BloombergTickCollectorHandler handler = new BloombergTickCollectorHandler(_allTicksQueue, this);
+    final BloombergTickCollectorHandler handler = new BloombergTickCollectorHandler(_allTicksQueue, this);
     for (int i = 0; i < _bbgSessions; i++) {
-      Session session = new Session(_bloombergConnector.getSessionOptions(), handler);
+      final Session session = new Session(_bloombergConnector.getSessionOptions(), handler);
       if (!session.start()) {
         LOGGER.info("Failed to start session");
         return false;
@@ -297,10 +297,10 @@ public class BloombergTicksCollector implements Lifecycle {
       _sessionList.add(session);
     }
     LOGGER.info("Connected successfully\n");
-    
+
     LOGGER.info("Subscribing ...");
     int index = 0;
-    for (Session session : _sessionList) {
+    for (final Session session : _sessionList) {
       session.subscribe(_subscriptionsList.get(index));
       index++;
     }

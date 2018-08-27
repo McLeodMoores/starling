@@ -30,7 +30,7 @@ public final class StripInstrumentTypeFudgeSecondaryType extends SecondaryFieldT
   }
 
   @Override
-  public String secondaryToPrimary(StripInstrumentType object) {
+  public String secondaryToPrimary(final StripInstrumentType object) {
     return object.name();
   }
 

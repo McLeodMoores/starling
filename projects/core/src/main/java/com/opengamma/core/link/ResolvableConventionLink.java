@@ -45,19 +45,19 @@ public class ResolvableConventionLink<T extends Convention> extends ConventionLi
   // of the bean
   private final LinkResolver<ExternalIdBundle, T> _resolver;
 
-  /* package */ ResolvableConventionLink(ExternalIdBundle identifier,
-                                         Class<T> type,
-                                         LinkResolver<ExternalIdBundle, T> linkResolver) {
+  /* package */ ResolvableConventionLink(final ExternalIdBundle identifier,
+                                         final Class<T> type,
+                                         final LinkResolver<ExternalIdBundle, T> linkResolver) {
     this(LinkIdentifier.of(identifier, type), linkResolver);
   }
 
   @ImmutableConstructor
-  private ResolvableConventionLink(LinkIdentifier<ExternalIdBundle, T> linkIdentifier) {
+  private ResolvableConventionLink(final LinkIdentifier<ExternalIdBundle, T> linkIdentifier) {
     this(linkIdentifier, new ServiceContextConventionLinkResolver<T>());
   }
 
-  private ResolvableConventionLink(LinkIdentifier<ExternalIdBundle, T> linkIdentifier,
-                                   LinkResolver<ExternalIdBundle, T> linkResolver) {
+  private ResolvableConventionLink(final LinkIdentifier<ExternalIdBundle, T> linkIdentifier,
+                                   final LinkResolver<ExternalIdBundle, T> linkResolver) {
     _identifier = linkIdentifier;
     _resolver = ArgumentChecker.notNull(linkResolver, "linkResolver");
   }

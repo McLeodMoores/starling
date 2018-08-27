@@ -24,15 +24,15 @@ public final class MongoTestUtils {
   //-------------------------------------------------------------------------
   /**
    * Makes a connector suitable for testing.
-   * 
+   *
    * @param testName  the name of the testing database, used as a suffix, not null
    * @param makeUnique  whether to make the connector unique by date-time
    * @return the Mongo connector, not null
    */
-  public static MongoConnector makeTestConnector(String testName, boolean makeUnique) {
-    MongoConnectorFactoryBean factory = new MongoConnectorFactoryBean();
+  public static MongoConnector makeTestConnector(final String testName, final boolean makeUnique) {
+    final MongoConnectorFactoryBean factory = new MongoConnectorFactoryBean();
     factory.setName("MongoTestUtils");
-    Properties properties = TestProperties.getTestProperties();
+    final Properties properties = TestProperties.getTestProperties();
     factory.setHost(properties.getProperty("mongoServer.host"));
     factory.setPort(Integer.parseInt(properties.getProperty("mongoServer.port")));
     factory.setDatabaseName(System.getProperty("user.name").replace('.', '_') + "_unit");

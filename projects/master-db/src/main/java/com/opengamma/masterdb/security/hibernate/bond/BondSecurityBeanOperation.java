@@ -45,8 +45,8 @@ public final class BondSecurityBeanOperation extends AbstractSecurityBeanOperati
     return bean.getBondType().accept(new FinancialSecurityVisitorAdapter<BondSecurity>() {
 
       @Override
-      public BondSecurity visitCorporateBondSecurity(CorporateBondSecurity bond) {
-        BondSecurity bondSecurity = new CorporateBondSecurity(bean.getIssuerName(), bean.getIssuerType().getName(), bean.getIssuerDomicile(), bean.getMarket().getName(),
+      public BondSecurity visitCorporateBondSecurity(final CorporateBondSecurity bond) {
+        final BondSecurity bondSecurity = new CorporateBondSecurity(bean.getIssuerName(), bean.getIssuerType().getName(), bean.getIssuerDomicile(), bean.getMarket().getName(),
           currencyBeanToCurrency(bean.getCurrency()), yieldConventionBeanToYieldConvention(bean.getYieldConvention()),
           expiryBeanToExpiry(bean.getLastTradeDate()), bean.getCouponType().getName(), bean.getCouponRate(),
           frequencyBeanToFrequency(bean.getCouponFrequency()), dayCountBeanToDayCount(bean.getDayCountConvention()),
@@ -62,8 +62,8 @@ public final class BondSecurityBeanOperation extends AbstractSecurityBeanOperati
       }
 
       @Override
-      public BondSecurity visitGovernmentBondSecurity(GovernmentBondSecurity bond) {
-        BondSecurity bondSecurity = new GovernmentBondSecurity(bean.getIssuerName(), bean.getIssuerType().getName(), bean.getIssuerDomicile(),
+      public BondSecurity visitGovernmentBondSecurity(final GovernmentBondSecurity bond) {
+        final BondSecurity bondSecurity = new GovernmentBondSecurity(bean.getIssuerName(), bean.getIssuerType().getName(), bean.getIssuerDomicile(),
           bean.getMarket().getName(), currencyBeanToCurrency(bean.getCurrency()),
           yieldConventionBeanToYieldConvention(bean.getYieldConvention()), expiryBeanToExpiry(bean.getLastTradeDate()),
           bean.getCouponType().getName(), bean.getCouponRate(), frequencyBeanToFrequency(bean.getCouponFrequency()),
@@ -78,8 +78,8 @@ public final class BondSecurityBeanOperation extends AbstractSecurityBeanOperati
       }
 
       @Override
-      public BondSecurity visitMunicipalBondSecurity(MunicipalBondSecurity bond) {
-        BondSecurity bondSecurity = new MunicipalBondSecurity(bean.getIssuerName(), bean.getIssuerType().getName(), bean.getIssuerDomicile(),
+      public BondSecurity visitMunicipalBondSecurity(final MunicipalBondSecurity bond) {
+        final BondSecurity bondSecurity = new MunicipalBondSecurity(bean.getIssuerName(), bean.getIssuerType().getName(), bean.getIssuerDomicile(),
           bean.getMarket().getName(), currencyBeanToCurrency(bean.getCurrency()),
           yieldConventionBeanToYieldConvention(bean.getYieldConvention()), expiryBeanToExpiry(bean.getLastTradeDate()),
           bean.getCouponType().getName(), bean.getCouponRate(), frequencyBeanToFrequency(bean.getCouponFrequency()),
@@ -93,10 +93,10 @@ public final class BondSecurityBeanOperation extends AbstractSecurityBeanOperati
         bondSecurity.setGuaranteeType(bean.getGuaranteeType() != null ? bean.getGuaranteeType().getName() : null);
         return bondSecurity;
       }
-      
+
       @Override
-      public BondSecurity visitInflationBondSecurity(InflationBondSecurity bond) {
-        BondSecurity bondSecurity = new InflationBondSecurity(bean.getIssuerName(), bean.getIssuerType().getName(), bean.getIssuerDomicile(),
+      public BondSecurity visitInflationBondSecurity(final InflationBondSecurity bond) {
+        final BondSecurity bondSecurity = new InflationBondSecurity(bean.getIssuerName(), bean.getIssuerType().getName(), bean.getIssuerDomicile(),
           bean.getMarket().getName(), currencyBeanToCurrency(bean.getCurrency()),
           yieldConventionBeanToYieldConvention(bean.getYieldConvention()), expiryBeanToExpiry(bean.getLastTradeDate()),
           bean.getCouponType().getName(), bean.getCouponRate(), frequencyBeanToFrequency(bean.getCouponFrequency()),

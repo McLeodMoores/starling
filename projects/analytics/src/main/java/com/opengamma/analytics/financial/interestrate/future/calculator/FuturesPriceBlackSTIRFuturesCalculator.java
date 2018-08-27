@@ -60,9 +60,9 @@ public final class FuturesPriceBlackSTIRFuturesCalculator extends InstrumentDeri
     final double priceSecurity = BLACK_FUNCTION.getPriceFunction(option).evaluate(dataBlack);
     return priceSecurity;
   }
-  
+
   @Override
-  public Double visitInterestRateFutureOptionMarginTransaction(InterestRateFutureOptionMarginTransaction option, BlackSTIRFuturesProviderInterface data) {
+  public Double visitInterestRateFutureOptionMarginTransaction(final InterestRateFutureOptionMarginTransaction option, final BlackSTIRFuturesProviderInterface data) {
     return visitInterestRateFutureOptionMarginSecurity(option.getUnderlyingSecurity(), data);
   }
 

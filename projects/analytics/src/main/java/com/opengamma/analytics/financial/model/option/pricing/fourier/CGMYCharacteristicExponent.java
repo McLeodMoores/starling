@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.fourier;
@@ -63,21 +63,21 @@ public class CGMYCharacteristicExponent implements CharacteristicExponent {
     _maxAlpha = _m - 1.0;
     _r1 = Math.pow(_m, _y) + Math.pow(_g, _y);
     _r2 = _c * GAMMA_FUNCTION.evaluate(-_y);
-    _r3 = (Math.pow(_m - 1, _y) + Math.pow(_g + 1, _y) - _r1);
+    _r3 = Math.pow(_m - 1, _y) + Math.pow(_g + 1, _y) - _r1;
   }
 
   @Override
   public Function1D<ComplexNumber, ComplexNumber> getFunction(final double t) {
     return new Function1D<ComplexNumber, ComplexNumber>() {
       @Override
-      public ComplexNumber evaluate(ComplexNumber u) {
+      public ComplexNumber evaluate(final ComplexNumber u) {
         return getValue(u, t);
       }
     };
   }
 
   @Override
-  public ComplexNumber getValue(ComplexNumber u, double t) {
+  public ComplexNumber getValue(final ComplexNumber u, final double t) {
     final double r2 = t * _r2;
     final ComplexNumber complexR3 = new ComplexNumber(r2 * _r3);
     if (u.getReal() == 0.0) {
@@ -130,7 +130,7 @@ public class CGMYCharacteristicExponent implements CharacteristicExponent {
   }
 
   /**
-   * 
+   *
    * @return $M - 1$
    */
   @Override
@@ -139,7 +139,7 @@ public class CGMYCharacteristicExponent implements CharacteristicExponent {
   }
 
   /**
-   * 
+   *
    * @return $-G - 1$
    */
   @Override
@@ -153,13 +153,13 @@ public class CGMYCharacteristicExponent implements CharacteristicExponent {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_c);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_g);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_m);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_y);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
@@ -188,12 +188,12 @@ public class CGMYCharacteristicExponent implements CharacteristicExponent {
   }
 
   @Override
-  public ComplexNumber[] getCharacteristicExponentAdjoint(ComplexNumber u, double t) {
+  public ComplexNumber[] getCharacteristicExponentAdjoint(final ComplexNumber u, final double t) {
     throw new NotImplementedException();
   }
 
   @Override
-  public Function1D<ComplexNumber, ComplexNumber[]> getAdjointFunction(double t) {
+  public Function1D<ComplexNumber, ComplexNumber[]> getAdjointFunction(final double t) {
     throw new NotImplementedException();
   }
 

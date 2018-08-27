@@ -47,38 +47,38 @@ public class BloombergJmsTopicNameResolverTest {
 
   //-------------------------------------------------------------------------
   @Test(enabled = false)
-  private void testResolve(NormalizationRuleSet rules) {
-    
-    ReferenceDataProvider rdp = _server.getReferenceDataProvider();
-    BloombergIdResolver idResolver = new BloombergIdResolver(rdp);
-    
-    BloombergJmsTopicNameResolver topicNameResolver = new BloombergJmsTopicNameResolver(rdp);
-    
-    ExternalId aaplEquity = idResolver.resolve(
+  private void testResolve(final NormalizationRuleSet rules) {
+
+    final ReferenceDataProvider rdp = _server.getReferenceDataProvider();
+    final BloombergIdResolver idResolver = new BloombergIdResolver(rdp);
+
+    final BloombergJmsTopicNameResolver topicNameResolver = new BloombergJmsTopicNameResolver(rdp);
+
+    final ExternalId aaplEquity = idResolver.resolve(
         ExternalIdBundle.of(ExternalSchemes.bloombergTickerSecurityId("AAPL US Equity")));
     String spec = topicNameResolver.resolve(new JmsTopicNameResolveRequest(aaplEquity, rules));
     assertEquals("LiveData.Bloomberg.Equity.NASDAQ GS.AAPL" + rules.getJmsTopicSuffix(), spec);
-    
-    ExternalId usDomesticBond = idResolver.resolve(
+
+    final ExternalId usDomesticBond = idResolver.resolve(
         ExternalIdBundle.of(ExternalSchemes.cusipSecurityId("607059AT9")));
     spec = topicNameResolver.resolve(new JmsTopicNameResolveRequest(usDomesticBond, rules));
     assertEquals("LiveData.Bloomberg.Bond.MOBIL CORP.607059AT9" + rules.getJmsTopicSuffix(), spec);
-    
-    ExternalId globalBond = idResolver.resolve(
+
+    final ExternalId globalBond = idResolver.resolve(
         ExternalIdBundle.of(ExternalSchemes.cusipSecurityId("4581X0AD0")));
     spec = topicNameResolver.resolve(new JmsTopicNameResolveRequest(globalBond, rules));
     assertEquals("LiveData.Bloomberg.Bond.INTER-AMERICAN DEVEL BK.US4581X0AD07" + rules.getJmsTopicSuffix(), spec);
-    
-    Set<ExternalId> options = BloombergDataUtils.getOptionChain(rdp, "AAPL US Equity");
+
+    final Set<ExternalId> options = BloombergDataUtils.getOptionChain(rdp, "AAPL US Equity");
     assertFalse(options.isEmpty());
-    ExternalId aaplOptionId = options.iterator().next();
-    ExternalId aaplOption = idResolver.resolve(ExternalIdBundle.of(aaplOptionId));
+    final ExternalId aaplOptionId = options.iterator().next();
+    final ExternalId aaplOption = idResolver.resolve(ExternalIdBundle.of(aaplOptionId));
     spec = topicNameResolver.resolve(new JmsTopicNameResolveRequest(aaplOption, rules));
     assertTrue(spec.startsWith("LiveData.Bloomberg.EquityOption.AAPL US."));
     assertTrue(spec.endsWith(rules.getJmsTopicSuffix()));
-    
+
     // bulk request
-    Map<JmsTopicNameResolveRequest, String> request2TopicName = topicNameResolver.resolve(
+    final Map<JmsTopicNameResolveRequest, String> request2TopicName = topicNameResolver.resolve(
         Sets.newHashSet(
             new JmsTopicNameResolveRequest(aaplEquity, rules),
             new JmsTopicNameResolveRequest(usDomesticBond, rules)));
@@ -91,7 +91,7 @@ public class BloombergJmsTopicNameResolverTest {
 
   @Test
   public void emptyNormalization() {
-    testResolve(new NormalizationRuleSet(""));    
+    testResolve(new NormalizationRuleSet(""));
   }
 
   @Test

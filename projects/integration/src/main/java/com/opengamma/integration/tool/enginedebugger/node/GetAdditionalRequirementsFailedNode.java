@@ -17,22 +17,22 @@ public class GetAdditionalRequirementsFailedNode extends AbstractFailureWithRequ
 
   private static final String NAME = "GetAdditionalRequirementsFailed";
 
-  public GetAdditionalRequirementsFailedNode(Object parent, ValueRequirement valueRequirement, String function, 
-                                             ValueSpecification desiredOutput, Map<ValueSpecification, ValueRequirement> requirements) {
+  public GetAdditionalRequirementsFailedNode(final Object parent, final ValueRequirement valueRequirement, final String function,
+                                             final ValueSpecification desiredOutput, final Map<ValueSpecification, ValueRequirement> requirements) {
     super(parent, valueRequirement, function, desiredOutput, requirements, "Requirements");
   }
 
   @Override
-  public Object getColumn(int column) {
+  public Object getColumn(final int column) {
     if (column == 0) {
       return NAME;
     }
     return null;
   }
-  
+
   @Override
-  public boolean equals(Object o) {
-    boolean result = super.equals(o);
+  public boolean equals(final Object o) {
+    final boolean result = super.equals(o);
     return result && o instanceof GetAdditionalRequirementsFailedNode;
   }
 

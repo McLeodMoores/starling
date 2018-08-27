@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.bbg.util;
@@ -34,8 +34,8 @@ public class BloombergDomainIdentifierResolverTest {
   }
 
   @Test(dataProvider = "resolver")
-  public void toBloombergKey(ExternalId externalId, String ignoredDataProvider, String expectedBbgKey) {
-    String bbgKey = BloombergDomainIdentifierResolver.toBloombergKey(externalId);
+  public void toBloombergKey(final ExternalId externalId, final String ignoredDataProvider, final String expectedBbgKey) {
+    final String bbgKey = BloombergDomainIdentifierResolver.toBloombergKey(externalId);
     assertNotNull(bbgKey);
     assertEquals(expectedBbgKey, bbgKey);
   }
@@ -53,8 +53,8 @@ public class BloombergDomainIdentifierResolverTest {
   }
 
   @Test(dataProvider = "resolverWithProvider")
-  public void toBloombergKeyWithDataProvider(ExternalId externalId, String dataProvider, String expectedBbgKey) {
-    String bbgKey = BloombergDomainIdentifierResolver.toBloombergKeyWithDataProvider(externalId, dataProvider);
+  public void toBloombergKeyWithDataProvider(final ExternalId externalId, final String dataProvider, final String expectedBbgKey) {
+    final String bbgKey = BloombergDomainIdentifierResolver.toBloombergKeyWithDataProvider(externalId, dataProvider);
     assertNotNull(bbgKey);
     assertEquals(expectedBbgKey, bbgKey);
   }

@@ -43,7 +43,7 @@ public class FloatingLeg extends SwapLeg {
   @XmlElement(name = "calendar")
   private Set<Calendar> _fixingCalendars;
 
-  private FixingIndex fixingIndex;
+  private FixingIndex _fixingIndex;
 
   @XmlElement(name = "spread")
   private BigDecimal _spread;
@@ -70,7 +70,7 @@ public class FloatingLeg extends SwapLeg {
     return _resetFrequency;
   }
 
-  public void setResetFrequency(String resetFrequency) {
+  public void setResetFrequency(final String resetFrequency) {
     this._resetFrequency = resetFrequency;
   }
 
@@ -78,7 +78,7 @@ public class FloatingLeg extends SwapLeg {
     return _compoundingMethod;
   }
 
-  public void setCompoundingMethod(String compoundingMethod) {
+  public void setCompoundingMethod(final String compoundingMethod) {
     this._compoundingMethod = compoundingMethod;
   }
 
@@ -86,7 +86,7 @@ public class FloatingLeg extends SwapLeg {
     return _resetLag;
   }
 
-  public void setResetLag(String resetLag) {
+  public void setResetLag(final String resetLag) {
     this._resetLag = resetLag;
   }
 
@@ -94,7 +94,7 @@ public class FloatingLeg extends SwapLeg {
     return _resetType;
   }
 
-  public void setResetType(ResetType resetType) {
+  public void setResetType(final ResetType resetType) {
     _resetType = resetType;
   }
 
@@ -102,7 +102,7 @@ public class FloatingLeg extends SwapLeg {
     return _stubPeriodCouponAdjustment;
   }
 
-  public void setStubPeriodCouponAdjustment(StubPeriodCouponAdjustment stubPeriodCouponAdjustment) {
+  public void setStubPeriodCouponAdjustment(final StubPeriodCouponAdjustment stubPeriodCouponAdjustment) {
     _stubPeriodCouponAdjustment = stubPeriodCouponAdjustment;
   }
 
@@ -110,23 +110,23 @@ public class FloatingLeg extends SwapLeg {
     return _fixingCalendars;
   }
 
-  public void setFixingCalendars(Set<Calendar> fixingCalendars) {
+  public void setFixingCalendars(final Set<Calendar> fixingCalendars) {
     this._fixingCalendars = fixingCalendars;
   }
 
   public FixingIndex getFixingIndex() {
-    return fixingIndex;
+    return _fixingIndex;
   }
 
-  public void setFixingIndex(FixingIndex fixingIndex) {
-    this.fixingIndex = fixingIndex;
+  public void setFixingIndex(final FixingIndex fixingIndex) {
+    this._fixingIndex = fixingIndex;
   }
 
   public BigDecimal getSpread() {
     return _spread;
   }
 
-  public void setSpread(BigDecimal spread) {
+  public void setSpread(final BigDecimal spread) {
     this._spread = spread;
   }
 
@@ -134,7 +134,7 @@ public class FloatingLeg extends SwapLeg {
     return _gearing;
   }
 
-  public void setGearing(BigDecimal gearing) {
+  public void setGearing(final BigDecimal gearing) {
     this._gearing = gearing;
   }
 }

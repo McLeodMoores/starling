@@ -135,25 +135,25 @@ public class CurrencyMatrixSeriesSourcingFunction extends AbstractCurrencyMatrix
     final ValueProperties desiredConstraints = desiredValue.getConstraints();
     final ValueProperties.Builder requiredConstraints = ValueProperties.builder();
     Set<String> values = desiredConstraints.getValues(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY);
-    if ((values == null) || values.isEmpty()) {
+    if (values == null || values.isEmpty()) {
       requiredConstraints.with(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY, DateConstraint.NULL.toString());
     } else {
       requiredConstraints.with(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY, values);
     }
     values = desiredConstraints.getValues(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY);
-    if ((values == null) || values.isEmpty()) {
+    if (values == null || values.isEmpty()) {
       requiredConstraints.with(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY, HistoricalTimeSeriesFunctionUtils.YES_VALUE);
     } else {
       requiredConstraints.with(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY, values);
     }
     values = desiredConstraints.getValues(HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY);
-    if ((values == null) || values.isEmpty()) {
+    if (values == null || values.isEmpty()) {
       requiredConstraints.with(HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY, DateConstraint.VALUATION_TIME.toString());
     } else {
       requiredConstraints.with(HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY, values);
     }
     values = desiredConstraints.getValues(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY);
-    if ((values == null) || values.isEmpty()) {
+    if (values == null || values.isEmpty()) {
       requiredConstraints.with(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY, HistoricalTimeSeriesFunctionUtils.YES_VALUE);
     } else {
       requiredConstraints.with(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY, values);
@@ -162,7 +162,7 @@ public class CurrencyMatrixSeriesSourcingFunction extends AbstractCurrencyMatrix
   }
 
   @Override
-  protected boolean getRequirements(FunctionCompilationContext context, ValueRequirement desiredValue, CurrencyMatrix matrix, Set<ValueRequirement> requirements, Currency source, Currency target) {
+  protected boolean getRequirements(final FunctionCompilationContext context, final ValueRequirement desiredValue, final CurrencyMatrix matrix, final Set<ValueRequirement> requirements, final Currency source, final Currency target) {
     return getRequirements(matrix, new ExternalIdBundleResolver(context.getComputationTargetResolver()), requirements, new HashSet<Pair<Currency, Currency>>(), Pairs.of(source, target),
         getRequirementConstraints(desiredValue));
   }
@@ -215,7 +215,7 @@ public class CurrencyMatrixSeriesSourcingFunction extends AbstractCurrencyMatrix
   }
 
   @Override
-  protected Object getRate(CurrencyMatrix matrix, ValueRequirement desiredValue, FunctionExecutionContext executionContext, FunctionInputs inputs, Currency source, Currency target) {
+  protected Object getRate(final CurrencyMatrix matrix, final ValueRequirement desiredValue, final FunctionExecutionContext executionContext, final FunctionInputs inputs, final Currency source, final Currency target) {
     return getRate(matrix, new ExternalIdBundleResolver(executionContext.getComputationTargetResolver()), inputs, source, target, getRequirementConstraints(desiredValue));
   }
 

@@ -20,7 +20,7 @@ public enum UserSearchSortOrder implements Comparator<ManageableUser> {
    */
   OBJECT_ID_ASC {
     @Override
-    public int compare(ManageableUser obj1, ManageableUser obj2) {
+    public int compare(final ManageableUser obj1, final ManageableUser obj2) {
       return obj1.getObjectId().compareTo(obj2.getObjectId());
     }
   },
@@ -29,7 +29,7 @@ public enum UserSearchSortOrder implements Comparator<ManageableUser> {
    */
   OBJECT_ID_DESC {
     @Override
-    public int compare(ManageableUser obj1, ManageableUser obj2) {
+    public int compare(final ManageableUser obj1, final ManageableUser obj2) {
       return obj2.getObjectId().compareTo(obj1.getObjectId());
     }
   },
@@ -38,7 +38,7 @@ public enum UserSearchSortOrder implements Comparator<ManageableUser> {
    */
   NAME_ASC {
     @Override
-    public int compare(ManageableUser obj1, ManageableUser obj2) {
+    public int compare(final ManageableUser obj1, final ManageableUser obj2) {
       return ObjectUtils.compare(obj1.getUserName(), obj2.getUserName(), true);
     }
   },
@@ -47,7 +47,7 @@ public enum UserSearchSortOrder implements Comparator<ManageableUser> {
    */
   NAME_DESC {
     @Override
-    public int compare(ManageableUser obj1, ManageableUser obj2) {
+    public int compare(final ManageableUser obj1, final ManageableUser obj2) {
       return ObjectUtils.compare(obj2.getUserName(), obj1.getUserName(), true);
     }
   };

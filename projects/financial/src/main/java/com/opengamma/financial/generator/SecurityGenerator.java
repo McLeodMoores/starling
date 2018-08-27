@@ -96,7 +96,7 @@ import com.opengamma.util.tuple.Pair;
 
 /**
  * Utility class for constructing parameters to random (but reasonable) securities.
- * 
+ *
  * @param <T> the security type, or a common super type if multiple types are being produced
  */
 public abstract class SecurityGenerator<T extends ManageableSecurity> {
@@ -135,7 +135,7 @@ public abstract class SecurityGenerator<T extends ManageableSecurity> {
   private ExchangeMaster _exchangeMaster;
   private SecurityMaster _securityMaster;
   private String _currencyCurveName;
-  private final Map<Currency, String> _curveCalculationConfig = new HashMap<Currency, String>();
+  private final Map<Currency, String> _curveCalculationConfig = new HashMap<>();
   private ExternalScheme _preferredScheme;
   private Function2<Currency, Currency, ExternalId> _spotRateIdentifier;
   private ConventionSource _conventionSource;
@@ -525,7 +525,7 @@ public abstract class SecurityGenerator<T extends ManageableSecurity> {
 
   /**
    * Returns the date unchanged if this is a working day, otherwise advances the date.
-   * 
+   *
    * @param zdt the date to consider
    * @param currency the currency identifying the holiday zone
    * @return the original or adjusted date
@@ -553,7 +553,7 @@ public abstract class SecurityGenerator<T extends ManageableSecurity> {
 
   /**
    * Returns the date unchanged if this is a working day, otherwise retreats the date.
-   * 
+   *
    * @param zdt the date to consider
    * @param currency the currency identifying the holiday zone
    * @return the original or adjusted date
@@ -581,14 +581,14 @@ public abstract class SecurityGenerator<T extends ManageableSecurity> {
 
   /**
    * Creates a new random, but reasonable, security.
-   * 
+   *
    * @return the new security, or null if no security can be generated
    */
   public abstract T createSecurity();
 
   /**
    * Creates a new random, but reasonable, trade.
-   * 
+   *
    * @param quantityGenerator the supplied quantity generator
    * @param securityPersister the supplied security persister
    * @param counterPartyGenerator the supplied counter party generator

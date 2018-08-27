@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.target.resolver;
@@ -41,7 +41,7 @@ public abstract class AbstractIdentifierResolver implements IdentifierResolver {
     }
     try {
       jobs.join();
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
       throw new OpenGammaRuntimeException("Interrupted", e);
     }
     return result;
@@ -99,7 +99,7 @@ public abstract class AbstractIdentifierResolver implements IdentifierResolver {
     }
     try {
       jobs.join();
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
       throw new OpenGammaRuntimeException("Interrupted", e);
     }
     return result;
@@ -139,12 +139,12 @@ public abstract class AbstractIdentifierResolver implements IdentifierResolver {
   // IdentifierResolver
 
   @Override
-  public Map<ExternalIdBundle, UniqueId> resolveExternalIds(Collection<ExternalIdBundle> identifiers, VersionCorrection versionCorrection) {
+  public Map<ExternalIdBundle, UniqueId> resolveExternalIds(final Collection<ExternalIdBundle> identifiers, final VersionCorrection versionCorrection) {
     return resolveExternalIds(this, identifiers, versionCorrection);
   }
 
   @Override
-  public Map<ObjectId, UniqueId> resolveObjectIds(Collection<ObjectId> identifiers, VersionCorrection versionCorrection) {
+  public Map<ObjectId, UniqueId> resolveObjectIds(final Collection<ObjectId> identifiers, final VersionCorrection versionCorrection) {
     return resolveObjectIds(this, identifiers, versionCorrection);
   }
 

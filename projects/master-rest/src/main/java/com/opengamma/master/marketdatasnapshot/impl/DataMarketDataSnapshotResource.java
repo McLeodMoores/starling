@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.marketdatasnapshot.impl;
@@ -78,6 +78,7 @@ public class DataMarketDataSnapshotResource extends AbstractDocumentDataResource
    *
    * @return the unique identifier, not null
    */
+  @Override
   public ObjectId getUrlId() {
     return _urlResourceId;
   }
@@ -88,14 +89,15 @@ public class DataMarketDataSnapshotResource extends AbstractDocumentDataResource
    *
    * @return the snapshot master, not null
    */
+  @Override
   public MarketDataSnapshotMaster getMaster() {
     return getMarketDataSnapshotsResource().getMarketDataSnapshotMaster();
   }
 
   @GET
   @Path("versions")
-  public Response history(@Context UriInfo uriInfo) {
-    MarketDataSnapshotHistoryRequest request = RestUtils.decodeQueryParams(uriInfo, MarketDataSnapshotHistoryRequest.class);
+  public Response history(@Context final UriInfo uriInfo) {
+    final MarketDataSnapshotHistoryRequest request = RestUtils.decodeQueryParams(uriInfo, MarketDataSnapshotHistoryRequest.class);
     if (request.getObjectId() != null) {
       if (!request.getObjectId().equals(getUrlId())) {
         throw new IllegalArgumentException("Document objectId " + request.getObjectId() + " does not match URI " + getUrlId());
@@ -103,46 +105,53 @@ public class DataMarketDataSnapshotResource extends AbstractDocumentDataResource
     } else {
       request.setObjectId(getUrlId());
     }
-    MarketDataSnapshotHistoryResult result = getMaster().history(request);
+    final MarketDataSnapshotHistoryResult result = getMaster().history(request);
     return responseOkObject(result);
   }
 
+  @Override
   @GET
-  public Response get(@QueryParam("versionAsOf") String versionAsOf, @QueryParam("correctedTo") String correctedTo) {
+  public Response get(@QueryParam("versionAsOf") final String versionAsOf, @QueryParam("correctedTo") final String correctedTo) {
     return super.get(versionAsOf, correctedTo);
   }
 
+  @Override
   @POST
-  public Response update(@Context UriInfo uriInfo, MarketDataSnapshotDocument request) {
+  public Response update(@Context final UriInfo uriInfo, final MarketDataSnapshotDocument request) {
     return super.update(uriInfo, request);
   }
 
+  @Override
   @DELETE
   public void remove() {
     super.remove();
   }
 
+  @Override
   @GET
   @Path("versions/{versionId}")
-  public Response getVersioned(@PathParam("versionId") String versionId) {
+  public Response getVersioned(@PathParam("versionId") final String versionId) {
     return super.getVersioned(versionId);
   }
 
 
+  @Override
   @PUT
   @Path("versions/{versionId}")
-  public Response replaceVersion(@PathParam("versionId") String versionId, List<MarketDataSnapshotDocument> replacementDocuments) {
+  public Response replaceVersion(@PathParam("versionId") final String versionId, final List<MarketDataSnapshotDocument> replacementDocuments) {
     return super.replaceVersion(versionId, replacementDocuments);
   }
 
+  @Override
   @PUT
-  public Response replaceVersions(List<MarketDataSnapshotDocument> replacementDocuments) {
+  public Response replaceVersions(final List<MarketDataSnapshotDocument> replacementDocuments) {
     return super.replaceVersions(replacementDocuments);
   }
 
+  @Override
   @PUT
   @Path("all")
-  public Response replaceAllVersions(List<MarketDataSnapshotDocument> replacementDocuments) {
+  public Response replaceAllVersions(final List<MarketDataSnapshotDocument> replacementDocuments) {
     return super.replaceAllVersions(replacementDocuments);
   }
 

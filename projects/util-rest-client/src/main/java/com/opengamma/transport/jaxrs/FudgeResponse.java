@@ -20,7 +20,7 @@ public final class FudgeResponse {
   //-------------------------------------------------------------------------
   /**
    * Unwraps an object by checking if it is a {@code FudgeResponse}.
-   * 
+   *
    * @param value  the value to unwrap, not null
    * @return the unwrapped value or the input value, not null
    */
@@ -33,30 +33,30 @@ public final class FudgeResponse {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param value  the value to return, not null
    * @return the wrapper, not null
    */
-  public static FudgeResponse of(Object value) {
+  public static FudgeResponse of(final Object value) {
     return new FudgeResponse(value);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Creates an instance.
-   * 
+   *
    * @param value  the value to return, not null
    * @deprecated Use factory method
    */
   @Deprecated
-  public FudgeResponse(Object value) {
+  public FudgeResponse(final Object value) {
     _value = value;
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the value.
-   * 
+   *
    * @return the value, not null
    */
   public Object getValue() {
@@ -65,12 +65,12 @@ public final class FudgeResponse {
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
     if (obj instanceof FudgeResponse) {
-      FudgeResponse other = (FudgeResponse) obj;
+      final FudgeResponse other = (FudgeResponse) obj;
       if (_value != null ? !_value.equals(other._value) : other._value != null) {
         return false;
       }

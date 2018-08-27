@@ -39,9 +39,9 @@ public class RemoteViewProcessorComponentFactory extends AbstractRemoteComponent
 
   //-------------------------------------------------------------------------
   @Override
-  protected void initComponent(ComponentRepository repo, ComponentInfo info) {
+  protected void initComponent(final ComponentRepository repo, final ComponentInfo info) {
     if (ViewProcessor.class.isAssignableFrom(info.getType())) {
-      ViewProcessor viewProcessor = new RemoteViewProcessor(info.getUri(), _jmsConnector, Executors.newSingleThreadScheduledExecutor());
+      final ViewProcessor viewProcessor = new RemoteViewProcessor(info.getUri(), _jmsConnector, Executors.newSingleThreadScheduledExecutor());
       repo.registerComponent(info, viewProcessor);
       if (isPublishRest()) {
         repo.getRestComponents().republish(info);

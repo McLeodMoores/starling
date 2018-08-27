@@ -37,7 +37,7 @@ of knowing the client is still there.
   private final String _userId;
   private final String _clientId;
   private final long _timeout;
-  private ConnectionManager _connectionManager;
+  private final ConnectionManager _connectionManager;
 
   /**
    * @param connectionManager The manager of the connection being timed
@@ -45,7 +45,7 @@ of knowing the client is still there.
    * @param clientId The ID of the connection
    * @param timeout The maximum time in milliseconds the connection is allowed to be idle
    */
-  ConnectionTimeoutTask(ConnectionManager connectionManager, String userId, String clientId, long timeout) {
+  ConnectionTimeoutTask(final ConnectionManager connectionManager, final String userId, final String clientId, final long timeout) {
     _connectionManager = connectionManager;
     _userId = userId;
     _clientId = clientId;

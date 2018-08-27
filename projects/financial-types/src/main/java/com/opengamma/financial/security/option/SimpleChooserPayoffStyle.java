@@ -54,12 +54,12 @@ public class SimpleChooserPayoffStyle extends PayoffStyle {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param chooseDate  the choose date, not null
    * @param underlyingStrike  the underlying strike
    * @param underlyingExpiry  the underlying expiry, not null
    */
-  public SimpleChooserPayoffStyle(ZonedDateTime chooseDate, double underlyingStrike, Expiry underlyingExpiry) {
+  public SimpleChooserPayoffStyle(final ZonedDateTime chooseDate, final double underlyingStrike, final Expiry underlyingExpiry) {
     setChooseDate(chooseDate);
     setUnderlyingStrike(underlyingStrike);
     setUnderlyingExpiry(underlyingExpiry);
@@ -67,7 +67,7 @@ public class SimpleChooserPayoffStyle extends PayoffStyle {
 
   //-------------------------------------------------------------------------
   @Override
-  public <T> T accept(PayoffStyleVisitor<T> visitor) {
+  public <T> T accept(final PayoffStyleVisitor<T> visitor) {
     return visitor.visitSimpleChooserPayoffStyle(this);
   }
 

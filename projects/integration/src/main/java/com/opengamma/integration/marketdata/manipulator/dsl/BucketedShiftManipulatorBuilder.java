@@ -13,10 +13,10 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
 /**
- * Builder for bucketed shifts 
+ * Builder for bucketed shifts
  */
 public class BucketedShiftManipulatorBuilder {
-  
+
   /** Selector whose selected items will be modified by the manipulators from this builder. */
   private final YieldCurveSelector _selector;
 
@@ -28,13 +28,13 @@ public class BucketedShiftManipulatorBuilder {
 
   private final List<YieldCurveBucketedShift> _shiftList = Lists.newArrayList();
 
-  /* package */ BucketedShiftManipulatorBuilder(YieldCurveSelector selector, Scenario scenario, ScenarioShiftType shiftType) {
+  /* package */ BucketedShiftManipulatorBuilder(final YieldCurveSelector selector, final Scenario scenario, final ScenarioShiftType shiftType) {
     _selector = selector;
     _scenario = scenario;
     _shiftType = shiftType;
   }
-  
-  
+
+
   /**
    * Apply a bucketed shift to a range
    * @param start Period between the valuation date and the start of the shift
@@ -42,21 +42,21 @@ public class BucketedShiftManipulatorBuilder {
    * @param shift shift amount
    * @return this
    */
-  public BucketedShiftManipulatorBuilder shift(Period start, Period end, Number shift) {
-    YieldCurveBucketedShift bucketedShift = new YieldCurveBucketedShift(start, end, shift.doubleValue());
+  public BucketedShiftManipulatorBuilder shift(final Period start, final Period end, final Number shift) {
+    final YieldCurveBucketedShift bucketedShift = new YieldCurveBucketedShift(start, end, shift.doubleValue());
     _shiftList.add(bucketedShift);
     return this;
   }
-  
-  
+
+
   /**
    * Apply shifts to the scenario.
    * Should only be called once per {@link BucketedShiftManipulatorBuilder}.
    */
   public void build() {
-    YieldCurveBucketedShiftManipulator shifts =
+    final YieldCurveBucketedShiftManipulator shifts =
         new YieldCurveBucketedShiftManipulator(_shiftType, ImmutableList.copyOf(_shiftList));
     _scenario.add(_selector, shifts);
   }
-  
+
 }

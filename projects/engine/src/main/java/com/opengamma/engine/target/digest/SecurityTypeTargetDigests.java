@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.target.digest;
@@ -67,7 +67,7 @@ public class SecurityTypeTargetDigests extends AbstractTargetDigests {
         if (existing != null) {
           return existing;
         }
-        final Map<K, V> newData = new HashMap<K, V>(data);
+        final Map<K, V> newData = new HashMap<>(data);
         newData.put(key, value);
         _data = newData;
       }
@@ -100,7 +100,7 @@ public class SecurityTypeTargetDigests extends AbstractTargetDigests {
   public SecurityTypeTargetDigests() {
     addHandler(ComputationTargetType.POSITION, new TargetDigests() {
       @Override
-      public Object getDigest(FunctionCompilationContext context, ComputationTargetSpecification targetSpec) {
+      public Object getDigest(final FunctionCompilationContext context, final ComputationTargetSpecification targetSpec) {
         final ComputationTarget target = context.getComputationTargetResolver().resolve(targetSpec);
         if (target != null) {
           return getPositionDigest(target.getPosition());
@@ -111,7 +111,7 @@ public class SecurityTypeTargetDigests extends AbstractTargetDigests {
     });
     addHandler(ComputationTargetType.TRADE, new TargetDigests() {
       @Override
-      public Object getDigest(FunctionCompilationContext context, ComputationTargetSpecification targetSpec) {
+      public Object getDigest(final FunctionCompilationContext context, final ComputationTargetSpecification targetSpec) {
         final ComputationTarget target = context.getComputationTargetResolver().resolve(targetSpec);
         if (target != null) {
           return getTradeDigest(target.getTrade());
@@ -122,7 +122,7 @@ public class SecurityTypeTargetDigests extends AbstractTargetDigests {
     });
     addHandler(ComputationTargetType.SECURITY, new TargetDigests() {
       @Override
-      public Object getDigest(FunctionCompilationContext context, ComputationTargetSpecification targetSpec) {
+      public Object getDigest(final FunctionCompilationContext context, final ComputationTargetSpecification targetSpec) {
         final ComputationTarget target = context.getComputationTargetResolver().resolve(targetSpec);
         if (target != null) {
           return getSecurityDigest(target.getSecurity());
@@ -133,15 +133,15 @@ public class SecurityTypeTargetDigests extends AbstractTargetDigests {
     });
   }
 
-  protected Object getPositionDigest(Position position) {
+  protected Object getPositionDigest(final Position position) {
     return _positions.get(getSecurityDigest(position.getSecurity()));
   }
 
-  protected Object getTradeDigest(Trade trade) {
+  protected Object getTradeDigest(final Trade trade) {
     return _trades.get(getSecurityDigest(trade.getSecurity()));
   }
 
-  protected Object getSecurityDigest(Security security) {
+  protected Object getSecurityDigest(final Security security) {
     return security.getSecurityType();
   }
 

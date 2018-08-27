@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.cds;
@@ -23,7 +23,7 @@ import com.opengamma.masterdb.security.hibernate.OperationContext;
 import com.opengamma.masterdb.security.hibernate.swap.NotionalBeanOperation;
 
 /**
- * 
+ *
  */
 public final class CreditDefaultSwapIndexSecurityBeanOperation extends AbstractSecurityBeanOperation<CreditDefaultSwapIndexSecurity, CreditDefaultSwapIndexSecurityBean> {
 
@@ -38,11 +38,11 @@ public final class CreditDefaultSwapIndexSecurityBeanOperation extends AbstractS
 
 
   @Override
-  public CreditDefaultSwapIndexSecurityBean createBean(OperationContext context,
-                                                       HibernateSecurityMasterDao secMasterSession,
-                                                       CreditDefaultSwapIndexSecurity security) {
+  public CreditDefaultSwapIndexSecurityBean createBean(final OperationContext context,
+                                                       final HibernateSecurityMasterDao secMasterSession,
+                                                       final CreditDefaultSwapIndexSecurity security) {
 
-    CreditDefaultSwapIndexSecurityBean bean = new CreditDefaultSwapIndexSecurityBean();
+    final CreditDefaultSwapIndexSecurityBean bean = new CreditDefaultSwapIndexSecurityBean();
 
     bean.setAdjustEffectiveDate(security.isAdjustEffectiveDate());
     bean.setAdjustMaturityDate(security.isAdjustMaturityDate());
@@ -71,8 +71,8 @@ public final class CreditDefaultSwapIndexSecurityBeanOperation extends AbstractS
   }
 
   @Override
-  public CreditDefaultSwapIndexSecurity createSecurity(OperationContext context,
-                                                       CreditDefaultSwapIndexSecurityBean bean) {
+  public CreditDefaultSwapIndexSecurity createSecurity(final OperationContext context,
+                                                       final CreditDefaultSwapIndexSecurityBean bean) {
 
     return new CreditDefaultSwapIndexSecurity(
         bean.getBuy(), externalIdBeanToExternalId(bean.getProtectionBuyer()), externalIdBeanToExternalId(bean.getProtectionSeller()),

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.user;
@@ -31,20 +31,20 @@ public class RoleFormException extends OpenGammaRuntimeException {
 
   /**
    * Creates an instance of the exception.
-   * 
+   *
    * @param errors  the list of errors, not null
    */
-  public RoleFormException(List<RoleFormError> errors) {
+  public RoleFormException(final List<RoleFormError> errors) {
     super("Role form is invalid");
     _errors = ImmutableList.copyOf(errors);
   }
 
   /**
    * Creates an instance of the exception.
-   * 
+   *
    * @param ex  the unexpected exception, not null
    */
-  public RoleFormException(RuntimeException ex) {
+  public RoleFormException(final RuntimeException ex) {
     super("Unexpected error during role mutation", ex);
     _errors = ImmutableList.of(RoleFormError.UNEXPECTED);
   }
@@ -52,7 +52,7 @@ public class RoleFormException extends OpenGammaRuntimeException {
   //-------------------------------------------------------------------------
   /**
    * Gets the list of errors.
-   * 
+   *
    * @return the list of errors, not null
    */
   public ImmutableList<RoleFormError> getErrors() {
@@ -61,10 +61,10 @@ public class RoleFormException extends OpenGammaRuntimeException {
 
   /**
    * Logs if the error is unexpected.
-   * 
+   *
    * @param logger  the logger, not null
    */
-  public void logUnexpected(Logger logger) {
+  public void logUnexpected(final Logger logger) {
     if (_errors.contains(RoleFormError.UNEXPECTED)) {
       logger.warn(getMessage(), this);
     }

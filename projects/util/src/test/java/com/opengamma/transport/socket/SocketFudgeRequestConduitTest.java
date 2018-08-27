@@ -34,31 +34,31 @@ public class SocketFudgeRequestConduitTest {
 
   @Test(invocationCount = 5, successPercentage = 19)
   public void simpleTest() throws Exception {
-    CollectingFudgeMessageReceiver collectingReceiver = new CollectingFudgeMessageReceiver();
-    FudgeRequestReceiver requestReceiver = new FudgeRequestReceiver() {
+    final CollectingFudgeMessageReceiver collectingReceiver = new CollectingFudgeMessageReceiver();
+    final FudgeRequestReceiver requestReceiver = new FudgeRequestReceiver() {
       @Override
-      public FudgeMsg requestReceived(FudgeDeserializer deserializer, FudgeMsgEnvelope requestEnvelope) {
-        MutableFudgeMsg response = deserializer.getFudgeContext().newMessage();
+      public FudgeMsg requestReceived(final FudgeDeserializer deserializer, final FudgeMsgEnvelope requestEnvelope) {
+        final MutableFudgeMsg response = deserializer.getFudgeContext().newMessage();
         response.add("TheTime", System.nanoTime());
         return response;
       }
     };
-    ServerSocketFudgeRequestDispatcher requestDispatcher = new ServerSocketFudgeRequestDispatcher(requestReceiver, FudgeContext.GLOBAL_DEFAULT);
+    final ServerSocketFudgeRequestDispatcher requestDispatcher = new ServerSocketFudgeRequestDispatcher(requestReceiver, FudgeContext.GLOBAL_DEFAULT);
     requestDispatcher.start();
-    
-    SocketFudgeRequestSender sender = new SocketFudgeRequestSender();
+
+    final SocketFudgeRequestSender sender = new SocketFudgeRequestSender();
     sender.setInetAddress(InetAddress.getLocalHost());
     sender.setPortNumber(requestDispatcher.getPortNumber());
-    
+
     MutableFudgeMsg msg = FudgeContext.GLOBAL_DEFAULT.newMessage();
     msg.add("RATM", "Bombtrack");
     msg.add("You Know", "It's All Of That");
     sender.sendRequest(msg, collectingReceiver);
-    
+
     msg = FudgeContext.GLOBAL_DEFAULT.newMessage();
     msg.add("Anger", "is a gift");
     sender.sendRequest(msg, collectingReceiver);
-    
+
     int nChecks = 0;
     while (collectingReceiver.getMessages().size() < 2) {
       Thread.sleep(100);
@@ -67,24 +67,24 @@ public class SocketFudgeRequestConduitTest {
         fail("Didn't receive messages in 2 seconds");
       }
     }
-    
+
     FudgeMsgEnvelope envelope = null;
     envelope = collectingReceiver.getMessages().get(0);
     assertNotNull(envelope);
     assertNotNull(envelope.getMessage());
-    Long firstTimestamp = envelope.getMessage().getLong("TheTime");
+    final Long firstTimestamp = envelope.getMessage().getLong("TheTime");
     assertNotNull(firstTimestamp);
     assertEquals(1, envelope.getMessage().getNumFields());
 
     envelope = collectingReceiver.getMessages().get(1);
     assertNotNull(envelope);
     assertNotNull(envelope.getMessage());
-    Long secondTimestamp = envelope.getMessage().getLong("TheTime");
+    final Long secondTimestamp = envelope.getMessage().getLong("TheTime");
     assertNotNull(firstTimestamp);
     assertEquals(1, envelope.getMessage().getNumFields());
-    
+
     assertTrue(secondTimestamp > firstTimestamp);
-    
+
     sender.stop();
     requestDispatcher.stop();
   }
@@ -92,24 +92,24 @@ public class SocketFudgeRequestConduitTest {
   //-------------------------------------------------------------------------
   private void parallelSendTest(final ExecutorService executor, final AtomicInteger maxConcurrency) throws Exception {
     final CollectingFudgeMessageReceiver collectingReceiver = new CollectingFudgeMessageReceiver();
-    FudgeRequestReceiver requestReceiver = new FudgeRequestReceiver() {
+    final FudgeRequestReceiver requestReceiver = new FudgeRequestReceiver() {
       private final AtomicInteger _concurrency = new AtomicInteger(0);
 
       @Override
-      public FudgeMsg requestReceived(FudgeDeserializer deserializer, FudgeMsgEnvelope requestEnvelope) {
+      public FudgeMsg requestReceived(final FudgeDeserializer deserializer, final FudgeMsgEnvelope requestEnvelope) {
         final int concurrency = _concurrency.incrementAndGet();
         if (concurrency > maxConcurrency.get()) {
           maxConcurrency.set(concurrency);
         }
         try {
           Thread.sleep(1000);
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
         }
         _concurrency.decrementAndGet();
         return requestEnvelope.getMessage();
       }
     };
-    ServerSocketFudgeRequestDispatcher requestDispatcher = (executor != null) ? new ServerSocketFudgeRequestDispatcher(requestReceiver, FudgeContext.GLOBAL_DEFAULT, executor)
+    final ServerSocketFudgeRequestDispatcher requestDispatcher = executor != null ? new ServerSocketFudgeRequestDispatcher(requestReceiver, FudgeContext.GLOBAL_DEFAULT, executor)
         : new ServerSocketFudgeRequestDispatcher(requestReceiver, FudgeContext.GLOBAL_DEFAULT);
     requestDispatcher.start();
 

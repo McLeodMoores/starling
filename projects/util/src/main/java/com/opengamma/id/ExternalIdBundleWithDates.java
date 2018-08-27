@@ -15,10 +15,10 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.TreeSet;
 
 import org.apache.commons.lang.text.StrBuilder;
 import org.joda.beans.Bean;
+import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
 import org.joda.beans.ImmutableBean;
 import org.joda.beans.JodaBeanUtils;
@@ -33,7 +33,6 @@ import org.threeten.bp.LocalDate;
 
 import com.google.common.collect.ImmutableSortedSet;
 import com.opengamma.util.ArgumentChecker;
-import org.joda.beans.BeanBuilder;
 
 /**
  * A bundle of external identifiers with validity dates.
@@ -71,36 +70,36 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
   //-------------------------------------------------------------------------
   /**
    * Obtains an {@code ExternalIdBundleWithDates} from an array of identifiers.
-   * 
+   *
    * @param externalIds  the array of external identifiers, no nulls, not null
    * @return the bundle, not null
    */
-  public static ExternalIdBundleWithDates of(ExternalIdWithDates... externalIds) {
+  public static ExternalIdBundleWithDates of(final ExternalIdWithDates... externalIds) {
     ArgumentChecker.notNull(externalIds, "identifiers");
     return new ExternalIdBundleWithDates(externalIds);
   }
 
   /**
    * Obtains an {@code ExternalIdBundleWithDates} from an iterable of identifiers.
-   * 
+   *
    * @param externalIds the iterable of external identifiers, not null
    * @return the identifier bundle with dates set to null, not null
    */
-  public static ExternalIdBundleWithDates of(Iterable<ExternalIdWithDates> externalIds) {
+  public static ExternalIdBundleWithDates of(final Iterable<ExternalIdWithDates> externalIds) {
     ArgumentChecker.notNull(externalIds, "externalIds");
     return create(externalIds);
   }
 
   /**
    * Obtains an {@code ExternalIdBundleWithDates} from a bundle of identifiers.
-   * 
+   *
    * @param bundle the identifier bundle, not null
    * @return the identifier bundle with dates set to null, not null
    */
-  public static ExternalIdBundleWithDates of(ExternalIdBundle bundle) {
+  public static ExternalIdBundleWithDates of(final ExternalIdBundle bundle) {
     ArgumentChecker.notNull(bundle, "bundle");
-    Set<ExternalIdWithDates> identifiers = new HashSet<ExternalIdWithDates>();
-    for (ExternalId identifier : bundle) {
+    final Set<ExternalIdWithDates> identifiers = new HashSet<>();
+    for (final ExternalId identifier : bundle) {
       identifiers.add(ExternalIdWithDates.of(identifier, null, null));
     }
     return new ExternalIdBundleWithDates(identifiers);
@@ -108,11 +107,11 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
 
   /**
    * Obtains an {@code ExternalIdBundleWithDates} from a collection of identifiers.
-   * 
+   *
    * @param externalIds  the collection of external identifiers, validated
    * @return the bundle, not null
    */
-  private static ExternalIdBundleWithDates create(Iterable<ExternalIdWithDates> externalIds) {
+  private static ExternalIdBundleWithDates create(final Iterable<ExternalIdWithDates> externalIds) {
     return new ExternalIdBundleWithDates(ImmutableSortedSet.copyOf(externalIds));
   }
 
@@ -126,11 +125,11 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
 
   /**
    * Creates a bundle from an array of identifiers.
-   * 
+   *
    * @param externalIds  the array of identifiers, null returns an empty bundle
    */
-  public ExternalIdBundleWithDates(ExternalIdWithDates... externalIds) {
-    if ((externalIds == null) || (externalIds.length == 0)) {
+  public ExternalIdBundleWithDates(final ExternalIdWithDates... externalIds) {
+    if (externalIds == null || externalIds.length == 0) {
       _externalIds = ImmutableSortedSet.of();
     } else {
       ArgumentChecker.noNulls(externalIds, "externalIds");
@@ -140,10 +139,10 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
 
   /**
    * Creates a bundle from a collection of identifiers.
-   * 
+   *
    * @param externalIds  the collection of identifiers, null returns an empty bundle, no nulls in array
    */
-  public ExternalIdBundleWithDates(Collection<? extends ExternalIdWithDates> externalIds) {
+  public ExternalIdBundleWithDates(final Collection<? extends ExternalIdWithDates> externalIds) {
     if (externalIds == null) {
       _externalIds = ImmutableSortedSet.of();
     } else {
@@ -156,13 +155,13 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
   /**
    * Returns a new bundle with the specified identifier added.
    * This instance is immutable and unaffected by this method call.
-   * 
+   *
    * @param externalId  the identifier to add to the returned bundle, not null
    * @return the new bundle, not null
    */
-  public ExternalIdBundleWithDates withExternalId(ExternalIdWithDates externalId) {
+  public ExternalIdBundleWithDates withExternalId(final ExternalIdWithDates externalId) {
     ArgumentChecker.notNull(externalId, "externalId");
-    Set<ExternalIdWithDates> ids = new HashSet<ExternalIdWithDates>(_externalIds);
+    final Set<ExternalIdWithDates> ids = new HashSet<>(_externalIds);
     if (ids.add(externalId) == false) {
       return this;
     }
@@ -172,13 +171,13 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
   /**
    * Returns a new bundle with the specified identifier removed.
    * This instance is immutable and unaffected by this method call.
-   * 
+   *
    * @param externalId  the identifier to remove from the returned bundle, not null
    * @return the new bundle, not null
    */
-  public ExternalIdBundleWithDates withoutExternalId(ExternalIdWithDates externalId) {
+  public ExternalIdBundleWithDates withoutExternalId(final ExternalIdWithDates externalId) {
     ArgumentChecker.notNull(externalId, "externalId");
-    Set<ExternalIdWithDates> ids = new HashSet<ExternalIdWithDates>(_externalIds);
+    final Set<ExternalIdWithDates> ids = new HashSet<>(_externalIds);
     if (ids.remove(externalId) == false) {
       return this;
     }
@@ -188,13 +187,13 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
   /**
    * Returns a new bundle with all references to the specified scheme removed.
    * This instance is immutable and unaffected by this method call.
-   * 
+   *
    * @param scheme  the scheme to remove from the returned bundle, null ignored
    * @return the new bundle, not null
    */
-  public ExternalIdBundleWithDates withoutScheme(ExternalScheme scheme) {
-    Set<ExternalIdWithDates> ids = new HashSet<ExternalIdWithDates>(_externalIds.size());
-    for (ExternalIdWithDates id : _externalIds) {
+  public ExternalIdBundleWithDates withoutScheme(final ExternalScheme scheme) {
+    final Set<ExternalIdWithDates> ids = new HashSet<>(_externalIds.size());
+    for (final ExternalIdWithDates id : _externalIds) {
       if (id.getExternalId().isScheme(scheme) == false) {
         ids.add(id);
       }
@@ -205,7 +204,7 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
   //-------------------------------------------------------------------------
   /**
    * Gets the number of identifiers in the bundle.
-   * 
+   *
    * @return the bundle size, zero or greater
    */
   public int size() {
@@ -214,7 +213,7 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
 
   /**
    * Returns an iterator over the identifiers in the bundle.
-   * 
+   *
    * @return the identifiers in the bundle, not null
    */
   @Override
@@ -224,13 +223,13 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
 
   /**
    * Checks if this bundle contains all the keys from the specified bundle.
-   * 
+   *
    * @param bundle  the bundle to search for, empty returns true, not null
    * @return true if this bundle contains all the keys from the specified bundle
    */
-  public boolean containsAll(ExternalIdBundleWithDates bundle) {
+  public boolean containsAll(final ExternalIdBundleWithDates bundle) {
     ArgumentChecker.notNull(bundle, "bundle");
-    for (ExternalIdWithDates externalId : bundle.getExternalIds()) {
+    for (final ExternalIdWithDates externalId : bundle.getExternalIds()) {
       if (_externalIds.contains(externalId) == false) {
         return false;
       }
@@ -240,13 +239,13 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
 
   /**
    * Checks if this bundle contains any key from the specified bundle.
-   * 
+   *
    * @param bundle  the bundle to search for, empty returns false, not null
    * @return true if this bundle contains any key from the specified bundle
    */
-  public boolean containsAny(ExternalIdBundleWithDates bundle) {
+  public boolean containsAny(final ExternalIdBundleWithDates bundle) {
     ArgumentChecker.notNull(bundle, "bundle");
-    for (ExternalIdWithDates externalId : bundle.getExternalIds()) {
+    for (final ExternalIdWithDates externalId : bundle.getExternalIds()) {
       if (_externalIds.contains(externalId)) {
         return true;
       }
@@ -256,22 +255,22 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
 
   /**
    * Checks if this bundle contains the specified key.
-   * 
+   *
    * @param externalId  the identifier to search for, null returns false
    * @return true if this bundle contains any key from the specified bundle
    */
-  public boolean contains(ExternalIdWithDates externalId) {
+  public boolean contains(final ExternalIdWithDates externalId) {
     return externalId != null && _externalIds.contains(externalId);
   }
 
   /**
    * Converts this bundle to a list of formatted strings.
-   * 
+   *
    * @return the list of identifiers as strings, not null
    */
   public List<String> toStringList() {
-    List<String> list = new ArrayList<String>();
-    for (ExternalIdWithDates id : this) {
+    final List<String> list = new ArrayList<>();
+    for (final ExternalIdWithDates id : this) {
       list.add(id.toString());
     }
     return list;
@@ -282,7 +281,7 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
    * <p>
    * This returns all the identifiers ignoring the validity dates.
    * See {@link #toBundle(LocalDate)} for a better choice.
-   * 
+   *
    * @return the equivalent bundle, without the dates, not null
    */
   public ExternalIdBundle toBundle() {
@@ -291,13 +290,13 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
 
   /**
    * Returns the bundle without dates as of a specific date.
-   * 
+   *
    * @param validOn  the validity date, null returns all
    * @return the equivalent bundle, without the dates, not null
    */
-  public ExternalIdBundle toBundle(LocalDate validOn) {
-    Set<ExternalId> ids = new HashSet<ExternalId>();
-    for (ExternalIdWithDates identifier : _externalIds) {
+  public ExternalIdBundle toBundle(final LocalDate validOn) {
+    final Set<ExternalId> ids = new HashSet<>();
+    for (final ExternalIdWithDates identifier : _externalIds) {
       if (identifier.isValidOn(validOn)) {
         ids.add(identifier.toExternalId());
       }
@@ -308,12 +307,12 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
   //-------------------------------------------------------------------
   /**
    * Compares the bundles.
-   * 
+   *
    * @param other  the other external identifier, not null
    * @return negative if this is less, zero if equal, positive if greater
    */
   @Override
-  public int compareTo(ExternalIdBundleWithDates other) {
+  public int compareTo(final ExternalIdBundleWithDates other) {
     final Set<ExternalIdWithDates> mySet = getExternalIds();
     final Set<ExternalIdWithDates> otherSet = other.getExternalIds();
     if (mySet.size() < otherSet.size()) {
@@ -322,10 +321,10 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
     if (mySet.size() > otherSet.size()) {
       return 1;
     }
-    final List<ExternalIdWithDates> myList = new ArrayList<ExternalIdWithDates>(mySet); // already sorted as TreeSet
-    final List<ExternalIdWithDates> otherList = new ArrayList<ExternalIdWithDates>(otherSet); // already sorted as TreeSet
+    final List<ExternalIdWithDates> myList = new ArrayList<>(mySet); // already sorted as TreeSet
+    final List<ExternalIdWithDates> otherList = new ArrayList<>(otherSet); // already sorted as TreeSet
     for (int i = 0; i < myList.size(); i++) {
-      int c = myList.get(i).compareTo(otherList.get(i));
+      final int c = myList.get(i).compareTo(otherList.get(i));
       if (c != 0) {
         return c;
       }
@@ -334,12 +333,12 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
     if (obj instanceof ExternalIdBundleWithDates) {
-      ExternalIdBundleWithDates other = (ExternalIdBundleWithDates) obj;
+      final ExternalIdBundleWithDates other = (ExternalIdBundleWithDates) obj;
       return _externalIds.equals(other._externalIds);
     }
     return false;
@@ -359,7 +358,7 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
 
   /**
    * Returns a string representation of the bundle.
-   * 
+   *
    * @return a string representation of the bundle, not null
    */
   @Override

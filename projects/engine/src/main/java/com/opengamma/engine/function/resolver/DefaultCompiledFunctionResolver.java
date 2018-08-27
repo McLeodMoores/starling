@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.resolver;
@@ -83,7 +83,7 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
 
     /**
      * Groups the rules into priority levels, sorts these and returns a structure that can iterate over them in descending priority order.
-     * 
+     *
      * @returns the prioritized rules or null if there are none
      */
     Iterable<Collection<ResolutionRule>> prioritize();
@@ -105,7 +105,7 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
     /**
      * All of the rules, in an arbitrary order.
      */
-    private final LinkedList<ResolutionRule> _rules = new LinkedList<ResolutionRule>();
+    private final LinkedList<ResolutionRule> _rules = new LinkedList<>();
     /**
      * All of the listeners to be notified when a rule is added.
      */
@@ -116,20 +116,20 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
       if (_rules.isEmpty()) {
         return null;
       } else {
-        final Map<Integer, Collection<ResolutionRule>> priorityToRules = new HashMap<Integer, Collection<ResolutionRule>>();
-        for (ResolutionRule rule : _rules) {
+        final Map<Integer, Collection<ResolutionRule>> priorityToRules = new HashMap<>();
+        for (final ResolutionRule rule : _rules) {
           Collection<ResolutionRule> rules = priorityToRules.get(rule.getPriority());
           if (rules == null) {
-            rules = new LinkedList<ResolutionRule>();
+            rules = new LinkedList<>();
             priorityToRules.put(rule.getPriority(), rules);
           }
           rules.add(rule);
         }
         final Integer[] priorities = priorityToRules.keySet().toArray(new Integer[priorityToRules.size()]);
         Arrays.sort(priorities);
-        final Collection<Collection<ResolutionRule>> rules = new ArrayList<Collection<ResolutionRule>>(priorities.length);
+        final Collection<Collection<ResolutionRule>> rules = new ArrayList<>(priorities.length);
         for (int i = priorities.length; --i >= 0;) {
-          final List<ResolutionRule> list = new ArrayList<ResolutionRule>(priorityToRules.get(priorities[i]));
+          final List<ResolutionRule> list = new ArrayList<>(priorityToRules.get(priorities[i]));
           Collections.sort(list, RULE_COMPARATOR);
           rules.add(list);
         }
@@ -148,10 +148,10 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
     @Override
     public void addListener(final ChainedRuleBundle listener) {
       if (_listeners == null) {
-        _listeners = new ArrayList<ChainedRuleBundle>();
+        _listeners = new ArrayList<>();
       }
       _listeners.add(listener);
-      for (ResolutionRule rule : _rules) {
+      for (final ResolutionRule rule : _rules) {
         listener.addRule(rule);
       }
     }
@@ -160,7 +160,7 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
     public void addRule(final ResolutionRule rule) {
       _rules.add(rule);
       if (_listeners != null) {
-        for (ChainedRuleBundle listener : _listeners) {
+        for (final ChainedRuleBundle listener : _listeners) {
           listener.addRule(rule);
         }
       }
@@ -178,7 +178,7 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
 
     public static ChainedRuleBundle of(final ChainedRuleBundle a, final ChainedRuleBundle b) {
       if (a instanceof FoldedChainedRuleBundle) {
-        final Collection<ChainedRuleBundle> bundles = new ArrayList<ChainedRuleBundle>(((FoldedChainedRuleBundle) a)._bundles);
+        final Collection<ChainedRuleBundle> bundles = new ArrayList<>(((FoldedChainedRuleBundle) a)._bundles);
         if (b instanceof FoldedChainedRuleBundle) {
           bundles.addAll(((FoldedChainedRuleBundle) b)._bundles);
         } else {
@@ -204,14 +204,14 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
 
     @Override
     public void addListener(final ChainedRuleBundle listener) {
-      for (ChainedRuleBundle bundle : _bundles) {
+      for (final ChainedRuleBundle bundle : _bundles) {
         bundle.addListener(listener);
       }
     }
 
     @Override
     public void addRule(final ResolutionRule rule) {
-      for (ChainedRuleBundle bundle : _bundles) {
+      for (final ChainedRuleBundle bundle : _bundles) {
         bundle.addRule(rule);
       }
     }
@@ -225,15 +225,15 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
     public FoldedCompiledRuleBundle(final Iterable<Collection<ResolutionRule>> a, final Iterable<Collection<ResolutionRule>> b) {
       final Iterator<Collection<ResolutionRule>> aItr = a.iterator();
       Collection<ResolutionRule> aRules = aItr.next();
-      int aPriority = aRules.iterator().next().getPriority();
+      final int aPriority = aRules.iterator().next().getPriority();
       final Iterator<Collection<ResolutionRule>> bItr = b.iterator();
       Collection<ResolutionRule> bRules = bItr.next();
-      int bPriority = bRules.iterator().next().getPriority();
+      final int bPriority = bRules.iterator().next().getPriority();
       do {
         if (aPriority == bPriority) {
-          final Set<ResolutionRule> rules = new HashSet<ResolutionRule>(aRules);
+          final Set<ResolutionRule> rules = new HashSet<>(aRules);
           rules.addAll(bRules);
-          final List<ResolutionRule> list = new ArrayList<ResolutionRule>(rules);
+          final List<ResolutionRule> list = new ArrayList<>(rules);
           Collections.sort(list, RULE_COMPARATOR);
           add(list);
           aRules = null;
@@ -255,7 +255,7 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
             bRules = bItr.next();
           }
         }
-      } while ((aRules != null) && (bRules != null));
+      } while (aRules != null && bRules != null);
       if (aRules != null) {
         do {
           add(aRules);
@@ -302,7 +302,7 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
   /**
    * The rules by target type. The map values are {@link ChainedRuleBundle} instances during construction, after which return an iterator giving the rules in blocks of descending priority order.
    */
-  private final ComputationTargetTypeMap<Iterable<Collection<ResolutionRule>>> _type2Rules = new ComputationTargetTypeMap<Iterable<Collection<ResolutionRule>>>(FOLD_RULES);
+  private final ComputationTargetTypeMap<Iterable<Collection<ResolutionRule>>> _type2Rules = new ComputationTargetTypeMap<>(FOLD_RULES);
 
   /**
    * The total number of unique rules.
@@ -322,11 +322,11 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
   /**
    * Function definition lookup.
    */
-  private final Map<String, CompiledFunctionDefinition> _functions = new HashMap<String, CompiledFunctionDefinition>();
+  private final Map<String, CompiledFunctionDefinition> _functions = new HashMap<>();
 
   /**
    * Creates a resolver.
-   * 
+   *
    * @param functionCompilationContext the context, not null
    */
   public DefaultCompiledFunctionResolver(final FunctionCompilationContext functionCompilationContext) {
@@ -335,11 +335,11 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
 
   /**
    * Creates a resolver.
-   * 
+   *
    * @param functionCompilationContext the context, not null
    * @param resolutionRules the resolution rules, not null
    */
-  public DefaultCompiledFunctionResolver(final FunctionCompilationContext functionCompilationContext, Collection<ResolutionRule> resolutionRules) {
+  public DefaultCompiledFunctionResolver(final FunctionCompilationContext functionCompilationContext, final Collection<ResolutionRule> resolutionRules) {
     ArgumentChecker.notNull(functionCompilationContext, "functionCompilationContext");
     ArgumentChecker.notNull(resolutionRules, "resolutionRules");
     _functionCompilationContext = functionCompilationContext;
@@ -361,7 +361,7 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
 
     @Override
     public Void visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final DefaultCompiledFunctionResolver self) {
-      for (ComputationTargetType type : types) {
+      for (final ComputationTargetType type : types) {
         type.accept(this, self);
       }
       return null;
@@ -381,11 +381,11 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
     }
 
     private void insertBundle(final Class<?> clazz, final DefaultCompiledFunctionResolver self) {
-      if ((clazz != null) && UniqueIdentifiable.class.isAssignableFrom(clazz)) {
+      if (clazz != null && UniqueIdentifiable.class.isAssignableFrom(clazz)) {
         @SuppressWarnings("unchecked")
         final ComputationTargetType type = ComputationTargetType.of((Class<? extends UniqueIdentifiable>) clazz);
         if (self._type2Rules.getDirect(type) == null) {
-          for (Class<?> superClazz : clazz.getInterfaces()) {
+          for (final Class<?> superClazz : clazz.getInterfaces()) {
             insertBundle(superClazz, self);
           }
           insertBundle(clazz.getSuperclass(), self);
@@ -404,10 +404,10 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
 
   /**
    * Adds a single rule to the resolver. Rules must be added before calling {@link #compileRules} to pre-process them into the data structures used for resolution.
-   * 
+   *
    * @param resolutionRule the rule to add, not null
    */
-  public void addRule(ResolutionRule resolutionRule) {
+  public void addRule(final ResolutionRule resolutionRule) {
     final ComputationTargetType type = resolutionRule.getParameterizedFunction().getFunction().getTargetType();
     type.accept(CREATE_CHANGED_RULE_BUNDLE, this);
     final Iterable<Collection<ResolutionRule>> rules = _type2Rules.getDirect(type);
@@ -424,11 +424,11 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
 
   /**
    * Adds rules to the resolver. Rules must be added before calling {@link #compileRules} to pre-process them into the data structures used for resolution.
-   * 
+   *
    * @param resolutionRules the rules to add, no nulls, not null
    */
-  public void addRules(Iterable<ResolutionRule> resolutionRules) {
-    for (ResolutionRule resolutionRule : resolutionRules) {
+  public void addRules(final Iterable<ResolutionRule> resolutionRules) {
+    for (final ResolutionRule resolutionRule : resolutionRules) {
       addRule(resolutionRule);
     }
   }
@@ -446,7 +446,7 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
         final Iterable<Collection<ResolutionRule>> rules = ((ChainedRuleBundle) v).prioritize();
         if (rules != null) {
           e.setValue(rules);
-          for (Collection<ResolutionRule> rule : rules) {
+          for (final Collection<ResolutionRule> rule : rules) {
             count += rule.size();
           }
         } else {
@@ -459,9 +459,9 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
 
   @Override
   public Collection<ResolutionRule> getAllResolutionRules() {
-    final Set<ResolutionRule> rules = new HashSet<ResolutionRule>();
-    for (Iterable<Collection<ResolutionRule>> typeRules : _type2Rules.values()) {
-      for (Collection<ResolutionRule> priorityRules : typeRules) {
+    final Set<ResolutionRule> rules = new HashSet<>();
+    for (final Iterable<Collection<ResolutionRule>> typeRules : _type2Rules.values()) {
+      for (final Collection<ResolutionRule> priorityRules : typeRules) {
         rules.addAll(priorityRules);
       }
     }
@@ -470,7 +470,7 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
 
   /**
    * Gets the function compilation context.
-   * 
+   *
    * @return the context, not null
    */
   protected FunctionCompilationContext getFunctionCompilationContext() {
@@ -497,8 +497,8 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
         return Collections.singleton(reducedSpecification);
       }
     } else {
-      final Collection<ValueSpecification> result = new ArrayList<ValueSpecification>(specifications.size());
-      for (ValueSpecification specification : specifications) {
+      final Collection<ValueSpecification> result = new ArrayList<>(specifications.size());
+      for (final ValueSpecification specification : specifications) {
         result.add(reduceMemory(specification, resolver));
       }
       return result;
@@ -521,14 +521,14 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
       final Iterable<Collection<ResolutionRule>> typeRules = _type2Rules.get(target.getType());
       if (typeRules != null) {
         try {
-          final Map<ComputationTargetType, ComputationTarget> adjusted = new HashMap<ComputationTargetType, ComputationTarget>();
-          for (Collection<ResolutionRule> rules : typeRules) {
+          final Map<ComputationTargetType, ComputationTarget> adjusted = new HashMap<>();
+          for (final Collection<ResolutionRule> rules : typeRules) {
             assert resolutions + rules.size() <= resolutionRules.length;
-            for (ResolutionRule rule : rules) {
+            for (final ResolutionRule rule : rules) {
               final ComputationTarget adjustedTarget = rule.adjustTarget(adjusted, target);
               if (adjustedTarget != null) {
                 final Set<ValueSpecification> results = rule.getResults(adjustedTarget, getFunctionCompilationContext());
-                if ((results != null) && !results.isEmpty()) {
+                if (results != null && !results.isEmpty()) {
                   resolutionRules[resolutions] = rule;
                   resolutionResults[resolutions] = reduceMemory(results, resolver);
                   resolutions++;
@@ -536,7 +536,7 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
               }
             }
           }
-        } catch (RuntimeException e) {
+        } catch (final RuntimeException e) {
           LOGGER.error("Couldn't process rules for {}: {}", target, e.getMessage());
           LOGGER.info("Caught exception", e);
           // Now have an incomplete rule set for the target, possibly even an empty one
@@ -617,7 +617,7 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
       if (_next == null) {
         findNext(_context.getComputationTargetResolver().resolve(_target));
       }
-      Triple<ParameterizedFunction, ValueSpecification, Collection<ValueSpecification>> next = _next;
+      final Triple<ParameterizedFunction, ValueSpecification, Collection<ValueSpecification>> next = _next;
       _next = null;
       return next;
     }

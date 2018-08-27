@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.batch.rest;
@@ -66,7 +66,7 @@ public class DataMarketDataUris extends AbstractDataResource {
   //-------------------------------------------------------------------------
   @GET
   public Response get() {
-    MarketData result = getMaster().getMarketDataById(_marketDataId);
+    final MarketData result = getMaster().getMarketDataById(_marketDataId);
     return responseOkObject(result);
   }
 
@@ -77,15 +77,15 @@ public class DataMarketDataUris extends AbstractDataResource {
 
   @GET
   @Path("values")
-  public Response getDataValues(PagingRequest paging) {
-    Pair<List<MarketDataValue>, Paging> result = getMaster().getMarketDataValues(_marketDataId, paging);
+  public Response getDataValues(final PagingRequest paging) {
+    final Pair<List<MarketDataValue>, Paging> result = getMaster().getMarketDataValues(_marketDataId, paging);
     return responseOkObject(result);
   }
 
   @PUT
   @Path("values")
   @Consumes(FudgeRest.MEDIA)
-  public void addDataValues(Set<MarketDataValue> dataValues) {
+  public void addDataValues(final Set<MarketDataValue> dataValues) {
     getMaster().addValuesToMarketData(_marketDataId, dataValues);
   }
 
@@ -97,8 +97,8 @@ public class DataMarketDataUris extends AbstractDataResource {
    * @param marketDataId  the id of market data
    * @return the URI, not null
    */
-  public static URI uriMarketDataValues(URI baseUri, ObjectId marketDataId) {
-    return UriBuilder.fromUri(baseUri).path("/marketDataSnapshot/{id}/values").build(marketDataId);  
+  public static URI uriMarketDataValues(final URI baseUri, final ObjectId marketDataId) {
+    return UriBuilder.fromUri(baseUri).path("/marketDataSnapshot/{id}/values").build(marketDataId);
   }
 
   /**
@@ -107,7 +107,7 @@ public class DataMarketDataUris extends AbstractDataResource {
    * @param baseUri  the base URI, not null
    * @return the URI, not null
    */
-  public static URI uriMarketData(URI baseUri) {
+  public static URI uriMarketData(final URI baseUri) {
     return UriBuilder.fromUri(baseUri).path("/marketDataSnapshot").build();
   }
 
@@ -118,7 +118,7 @@ public class DataMarketDataUris extends AbstractDataResource {
    * @param marketDataId  the id of market data
    * @return the URI, not null
    */
-  public static URI uriMarketData(URI baseUri, ObjectId marketDataId) {
+  public static URI uriMarketData(final URI baseUri, final ObjectId marketDataId) {
     return UriBuilder.fromUri(baseUri).path("/marketDataSnapshot/{id}").build(marketDataId);
   }
 

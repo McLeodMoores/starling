@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.transport.socket;
@@ -35,15 +35,15 @@ public class MessageBatchingWriterTest {
 
   private static final class DelayingOutputStream extends OutputStream {
 
-    private final Map<Thread, AtomicInteger> _writes = new HashMap<Thread, AtomicInteger>();
+    private final Map<Thread, AtomicInteger> _writes = new HashMap<>();
     private final AtomicBoolean _writing = new AtomicBoolean();
 
     @Override
-    public void write(int b) throws IOException {
+    public void write(final int b) throws IOException {
       assertFalse(_writing.getAndSet(true));
       try {
         Thread.sleep(10);
-      } catch (InterruptedException e) {
+      } catch (final InterruptedException e) {
         throw new OpenGammaRuntimeException("Interrupted", e);
       }
       AtomicInteger count = _writes.get(Thread.currentThread());
@@ -88,7 +88,7 @@ public class MessageBatchingWriterTest {
         public void run() {
           try {
             Thread.sleep(10);
-          } catch (InterruptedException e) {
+          } catch (final InterruptedException e) {
             fail();
           }
           switch (id) {
@@ -109,8 +109,8 @@ public class MessageBatchingWriterTest {
       };
     }
     threads[0].start();
-    for (int i = 0; i < threads.length; i++) {
-      threads[i].join();
+    for (final Thread thread : threads) {
+      thread.join();
     }
     // Thread 0 should have written 1 message.
     // Thread 1 should have batched up 2 messages.

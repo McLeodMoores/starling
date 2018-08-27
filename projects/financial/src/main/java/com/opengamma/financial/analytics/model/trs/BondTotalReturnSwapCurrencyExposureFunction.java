@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.trs;
@@ -29,20 +29,20 @@ import com.opengamma.financial.security.swap.BondTotalReturnSwapSecurity;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * 
+ *
  */
 public class BondTotalReturnSwapCurrencyExposureFunction extends BondTotalReturnSwapFunction {
   private static final InstrumentDerivativeVisitor<ParameterIssuerProviderInterface, MultipleCurrencyAmount> CALCULATOR =
       CurrencyExposureIssuerCalculator.getInstance();
   /**
-   * 
+   *
    */
   public BondTotalReturnSwapCurrencyExposureFunction() {
     super(FX_CURRENCY_EXPOSURE);
   }
-  
+
   @Override
-  public CompiledFunctionDefinition compile(FunctionCompilationContext context, Instant atInstant) {
+  public CompiledFunctionDefinition compile(final FunctionCompilationContext context, final Instant atInstant) {
     return new BondTotalReturnSwapCompiledFunction(getTargetToDefinitionConverter(context),
         getDefinitionToDerivativeConverter(context), false) {
 
@@ -52,18 +52,18 @@ public class BondTotalReturnSwapCurrencyExposureFunction extends BondTotalReturn
       }
 
       @Override
-      protected Set<ComputedValue> getValues(FunctionExecutionContext executionContext, FunctionInputs inputs, ComputationTarget target, Set<ValueRequirement> desiredValues,
-          InstrumentDerivative derivative, FXMatrix fxMatrix) {
-        
-        Set<ComputedValue> results = Sets.newHashSet();
-        for (ValueRequirement desiredValue : desiredValues) {
-          ParameterIssuerProviderInterface issuerCurves = getMergedWithIssuerProviders(inputs, fxMatrix);
-          
-          MultipleCurrencyAmount exposure = derivative.accept(CALCULATOR, issuerCurves);
-          ComputedValue result = new ComputedValue(ValueSpecification.of(FX_CURRENCY_EXPOSURE, target.toSpecification(), desiredValue.getConstraints()), exposure);
+      protected Set<ComputedValue> getValues(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues,
+          final InstrumentDerivative derivative, final FXMatrix fxMatrix) {
+
+        final Set<ComputedValue> results = Sets.newHashSet();
+        for (final ValueRequirement desiredValue : desiredValues) {
+          final ParameterIssuerProviderInterface issuerCurves = getMergedWithIssuerProviders(inputs, fxMatrix);
+
+          final MultipleCurrencyAmount exposure = derivative.accept(CALCULATOR, issuerCurves);
+          final ComputedValue result = new ComputedValue(ValueSpecification.of(FX_CURRENCY_EXPOSURE, target.toSpecification(), desiredValue.getConstraints()), exposure);
           results.add(result);
         }
-        
+
         return results;
       }
 

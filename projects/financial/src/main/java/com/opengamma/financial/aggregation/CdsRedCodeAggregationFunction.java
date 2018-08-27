@@ -22,13 +22,13 @@ public class CdsRedCodeAggregationFunction extends AbstractRedCodeHandlingCdsAgg
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param securitySource  the security source, not null
    */
-  public CdsRedCodeAggregationFunction(SecuritySource securitySource) {
+  public CdsRedCodeAggregationFunction(final SecuritySource securitySource) {
     super(NAME, securitySource, new RedCodeHandler<String>() {
       @Override
-      public String extract(String redCode) {
+      public String extract(final String redCode) {
         return redCode;
       }
     });
@@ -36,7 +36,7 @@ public class CdsRedCodeAggregationFunction extends AbstractRedCodeHandlingCdsAgg
 
   //-------------------------------------------------------------------------
   @Override
-  protected String handleExtractedData(String redCode) {
+  protected String handleExtractedData(final String redCode) {
     return redCode;
   }
 

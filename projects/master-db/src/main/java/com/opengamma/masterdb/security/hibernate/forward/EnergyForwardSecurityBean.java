@@ -13,7 +13,7 @@ import com.opengamma.financial.security.forward.EnergyForwardSecurity;
 public class EnergyForwardSecurityBean extends CommodityForwardSecurityBean {
 
   @Override
-  public <T> T accept(Visitor<T> visitor) {
+  public <T> T accept(final Visitor<T> visitor) {
     return visitor.visitEnergyForwardType(this);
   }
 

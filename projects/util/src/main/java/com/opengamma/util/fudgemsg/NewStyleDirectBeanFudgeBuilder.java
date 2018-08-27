@@ -30,7 +30,7 @@ import com.google.common.collect.ImmutableSet;
 
 /**
  * Builder to convert DirectBean to and from Fudge.
- * 
+ *
  * @param <T> the bean type
  */
 public final class NewStyleDirectBeanFudgeBuilder<T extends Bean> implements FudgeBuilder<T> {
@@ -47,15 +47,15 @@ public final class NewStyleDirectBeanFudgeBuilder<T extends Bean> implements Fud
    * @return the bean builder, not null
    */
   public static <R extends Bean> NewStyleDirectBeanFudgeBuilder<R> of(final Class<R> cls) {
-    MetaBean meta = JodaBeanUtils.metaBean(cls);
-    return new NewStyleDirectBeanFudgeBuilder<R>(meta);
+    final MetaBean meta = JodaBeanUtils.metaBean(cls);
+    return new NewStyleDirectBeanFudgeBuilder<>(meta);
   }
 
   /**
    * Constructor.
    * @param metaBean  the meta-bean, not null
    */
-  public NewStyleDirectBeanFudgeBuilder(MetaBean metaBean) {
+  public NewStyleDirectBeanFudgeBuilder(final MetaBean metaBean) {
     _metaBean = metaBean;
   }
 
@@ -63,18 +63,18 @@ public final class NewStyleDirectBeanFudgeBuilder<T extends Bean> implements Fud
   // TODO: FudgeFieldName and Ordinal annotations
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, T bean) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final T bean) {
     try {
-      MutableFudgeMsg msg = serializer.newMessage();
-      for (MetaProperty<?> prop : bean.metaBean().metaPropertyIterable()) {
+      final MutableFudgeMsg msg = serializer.newMessage();
+      for (final MetaProperty<?> prop : bean.metaBean().metaPropertyIterable()) {
         if (prop.style().isReadable()) {
-          Object obj = prop.get(bean);
+          final Object obj = prop.get(bean);
           serializer.addToMessageWithClassHeaders(msg, prop.name(), null, obj, prop.propertyType()); // ignores null
         }
       }
       addClassHeader(msg, bean.getClass(), Bean.class);
       return msg;
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       throw new FudgeRuntimeException("Unable to serialize: " + _metaBean.beanName(), ex);
     }
   }
@@ -82,10 +82,10 @@ public final class NewStyleDirectBeanFudgeBuilder<T extends Bean> implements Fud
   //-------------------------------------------------------------------------
   @SuppressWarnings("unchecked")
   @Override
-  public T buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
+  public T buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     try {
-      BeanBuilder<T> builder = (BeanBuilder<T>) _metaBean.builder();
-      for (MetaProperty<?> mp : _metaBean.metaPropertyIterable()) {
+      final BeanBuilder<T> builder = (BeanBuilder<T>) _metaBean.builder();
+      for (final MetaProperty<?> mp : _metaBean.metaPropertyIterable()) {
         if (mp.style().isBuildable()) {
           final FudgeField field = msg.getByName(mp.name());
           if (field != null) {
@@ -110,7 +110,7 @@ public final class NewStyleDirectBeanFudgeBuilder<T extends Bean> implements Fud
                   value = deserializer.fieldValueToObject(mp.propertyType(), field);
                 }
               }
-            } catch (IllegalArgumentException ex) {
+            } catch (final IllegalArgumentException ex) {
               if (field.getValue() instanceof String == false) {
                 throw ex;
               }
@@ -123,7 +123,7 @@ public final class NewStyleDirectBeanFudgeBuilder<T extends Bean> implements Fud
         }
       }
       return builder.build();
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       throw new FudgeRuntimeException("Unable to deserialize: " + _metaBean.beanName(), ex);
     }
   }

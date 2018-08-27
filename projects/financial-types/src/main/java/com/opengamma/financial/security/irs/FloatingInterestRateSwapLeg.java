@@ -44,7 +44,7 @@ public class FloatingInterestRateSwapLeg extends InterestRateSwapLeg {
    */
   @PropertyDefinition
   private RateAveragingMethod _rateAveragingMethod;
-  
+
   /**
    * The number of days to cutoff the rate averaging.
    */
@@ -84,41 +84,41 @@ public class FloatingInterestRateSwapLeg extends InterestRateSwapLeg {
    */
   @PropertyDefinition
   private FloatingInterestRateSwapLegSchedule _schedule;
-  
+
   /**
    * The reference rate external id.
    */
   @PropertyDefinition(validate = "notNull")
   private ExternalId _floatingReferenceRateId;
-  
+
   /**
    * The floating rate type.
    */
   @PropertyDefinition(validate = "notNull")
   private FloatingRateType _floatingRateType;
-  
+
   /*
    * Reset period parameters
    */
-  
+
   /**
    * The calendars used to adjust the reset period dates.
    */
   @PropertyDefinition
   private Set<ExternalId> _resetPeriodCalendars = Sets.newHashSet();
-  
+
   /**
    * The business day convention used to adjust the reset period dates.
    */
   @PropertyDefinition(validate = "notNull")
   private BusinessDayConvention _resetPeriodBusinessDayConvention;
-  
+
   /**
    * The frequency of the reset periods.
    */
   @PropertyDefinition(validate = "notNull")
   private Frequency _resetPeriodFrequency;
-  
+
   /**
    * Flag that describes whether the reset date is relative to the start or end of the accrual periods.
    */
@@ -128,25 +128,25 @@ public class FloatingInterestRateSwapLeg extends InterestRateSwapLeg {
   /*
    * Fixing date parameters
    */
-  
+
   /**
    * The calendars used to adjust the fixing dates.
    */
   @PropertyDefinition
   private Set<ExternalId> _fixingDateCalendars = Sets.newHashSet();
-  
+
   /**
    * The business day convention used to adjust the fixing dates.
    */
   @PropertyDefinition(validate = "notNull")
   private BusinessDayConvention _fixingDateBusinessDayConvention;
-  
+
   /**
    * The number of days offset of the fixing dates, relative to the accrual periods.
    */
   @PropertyDefinition
   private int _fixingDateOffset;
-  
+
   /**
    * The type of days offset, relative to the accrual periods.
    */
@@ -154,7 +154,7 @@ public class FloatingInterestRateSwapLeg extends InterestRateSwapLeg {
   private OffsetType _fixingDateOffsetType;
 
   @Override
-  public <T> T accept(InterestRateSwapLegVisitor<T> visitor) {
+  public <T> T accept(final InterestRateSwapLegVisitor<T> visitor) {
     return visitor.visitFloatingInterestRateSwapLeg(this);
   }
 

@@ -47,7 +47,7 @@ public abstract class SimpleAbstractInMemoryMaster<D extends AbstractDocument>
   /**
    * A cache of documents by identifier.
    */
-  protected final ConcurrentMap<ObjectId, D> _store = new ConcurrentHashMap<ObjectId, D>();  // CSIGNORE
+  protected final ConcurrentMap<ObjectId, D> _store = new ConcurrentHashMap<>();  // CSIGNORE
   /**
    * The supplied of identifiers.
    */
@@ -62,13 +62,13 @@ public abstract class SimpleAbstractInMemoryMaster<D extends AbstractDocument>
    */
   private boolean _cloneResults = true;
 
-  
+
   /**
    * Creates an instance.
-   * 
+   *
    * @param defaultOidScheme  the default object identifier scheme, not null
    */
-  public SimpleAbstractInMemoryMaster(String defaultOidScheme) {
+  public SimpleAbstractInMemoryMaster(final String defaultOidScheme) {
     this(new ObjectIdSupplier(defaultOidScheme));
   }
 
@@ -78,7 +78,7 @@ public abstract class SimpleAbstractInMemoryMaster<D extends AbstractDocument>
    * @param defaultOidScheme  the default object identifier scheme, not null
    * @param changeManager  the change manager, not null
    */
-  public SimpleAbstractInMemoryMaster(String defaultOidScheme, final ChangeManager changeManager) {
+  public SimpleAbstractInMemoryMaster(final String defaultOidScheme, final ChangeManager changeManager) {
     this(new ObjectIdSupplier(defaultOidScheme), changeManager);
   }
 
@@ -106,7 +106,7 @@ public abstract class SimpleAbstractInMemoryMaster<D extends AbstractDocument>
 
   /**
    * Whether to clone all results when searching. True by default.
-   * 
+   *
    * @return whether results are cloned.
    */
   public boolean isCloneResults() {
@@ -118,14 +118,14 @@ public abstract class SimpleAbstractInMemoryMaster<D extends AbstractDocument>
    *
    * @param cloneResults whether to clone results when searching.
    */
-  public void setCloneResults(boolean cloneResults) {
+  public void setCloneResults(final boolean cloneResults) {
     _cloneResults = cloneResults;
   }
 
   //-------------------------------------------------------------------------
   /**
    * Validates the specified document.
-   * 
+   *
    * @param document  the document to validate, null to be validated
    */
   protected abstract void validateDocument(D document);
@@ -137,20 +137,20 @@ public abstract class SimpleAbstractInMemoryMaster<D extends AbstractDocument>
 
   //-------------------------------------------------------------------------
   @Override
-  public final List<UniqueId> replaceVersions(ObjectIdentifiable objectIdentifiable, List<D> replacementDocuments) {
+  public final List<UniqueId> replaceVersions(final ObjectIdentifiable objectIdentifiable, final List<D> replacementDocuments) {
     return replaceAllVersions(objectIdentifiable.getObjectId(), replacementDocuments);
   }
 
   @Override
-  public final List<UniqueId> replaceVersion(UniqueId uniqueId, List<D> replacementDocuments) {
+  public final List<UniqueId> replaceVersion(final UniqueId uniqueId, final List<D> replacementDocuments) {
     return replaceAllVersions(uniqueId.getObjectId(), replacementDocuments);
   }
 
   @Override
-  public final List<UniqueId> replaceAllVersions(ObjectIdentifiable objectId, List<D> replacementDocuments) {
+  public final List<UniqueId> replaceAllVersions(final ObjectIdentifiable objectId, final List<D> replacementDocuments) {
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
     ArgumentChecker.notNull(objectId, "objectId");
-    for (D replacementDocument : replacementDocuments) {
+    for (final D replacementDocument : replacementDocuments) {
       validateDocument(replacementDocument);
     }
     final Instant now = Instant.now();
@@ -165,48 +165,48 @@ public abstract class SimpleAbstractInMemoryMaster<D extends AbstractDocument>
       _store.remove(objectId.getObjectId());
       _changeManager.entityChanged(ChangeType.REMOVED, objectId.getObjectId(), null, null, now);
       return Collections.emptyList();
-      
+
     } else {
-      Instant storedVersionFrom = storedDocument.getVersionFromInstant();
-      Instant storedVersionTo = storedDocument.getVersionToInstant();
-      
-      List<D> orderedReplacementDocuments = MasterUtils.adjustVersionInstants(now, storedVersionFrom, storedVersionTo, replacementDocuments);
-      D lastReplacementDocument = orderedReplacementDocuments.get(orderedReplacementDocuments.size() - 1);
+      final Instant storedVersionFrom = storedDocument.getVersionFromInstant();
+      final Instant storedVersionTo = storedDocument.getVersionToInstant();
+
+      final List<D> orderedReplacementDocuments = MasterUtils.adjustVersionInstants(now, storedVersionFrom, storedVersionTo, replacementDocuments);
+      final D lastReplacementDocument = orderedReplacementDocuments.get(orderedReplacementDocuments.size() - 1);
       // Start of fix for no id
-      UniqueId newUniqueId = objectId.getObjectId().atLatestVersion();
+      final UniqueId newUniqueId = objectId.getObjectId().atLatestVersion();
       lastReplacementDocument.setUniqueId(newUniqueId);
       if (lastReplacementDocument.getValue() instanceof MutableUniqueIdentifiable) {
-        MutableUniqueIdentifiable muidable = (MutableUniqueIdentifiable) lastReplacementDocument.getValue();
+        final MutableUniqueIdentifiable muidable = (MutableUniqueIdentifiable) lastReplacementDocument.getValue();
         muidable.setUniqueId(newUniqueId);
       }
       // end fix for no id
       if (_store.replace(objectId.getObjectId(), storedDocument, lastReplacementDocument) == false) {
         throw new IllegalArgumentException("Concurrent modification");
       }
-      
-      Instant versionFromInstant = functional(orderedReplacementDocuments).first().getVersionFromInstant();
-      Instant versionToInstant = functional(orderedReplacementDocuments).last().getVersionToInstant();
+
+      final Instant versionFromInstant = functional(orderedReplacementDocuments).first().getVersionFromInstant();
+      final Instant versionToInstant = functional(orderedReplacementDocuments).last().getVersionToInstant();
       changeManager().entityChanged(ChangeType.CHANGED, objectId.getObjectId(), versionFromInstant, versionToInstant, now);
-      
+
       updateCaches(objectId, lastReplacementDocument);
-      
+
       return ImmutableList.of(lastReplacementDocument.getUniqueId());
     }
   }
-  
+
   /**
    * Subclasses that support additional caching should override this method.
-   * 
+   *
    * @param replacedObject The version removed (possibly null)
    * @param updatedDocument  The version added (possibly null)
    */
-  protected void updateCaches(ObjectIdentifiable replacedObject, D updatedDocument) {
+  protected void updateCaches(final ObjectIdentifiable replacedObject, final D updatedDocument) {
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public final UniqueId addVersion(ObjectIdentifiable objectId, D documentToAdd) {
-    List<UniqueId> result = replaceVersions(objectId, Collections.singletonList(documentToAdd));
+  public final UniqueId addVersion(final ObjectIdentifiable objectId, final D documentToAdd) {
+    final List<UniqueId> result = replaceVersions(objectId, Collections.singletonList(documentToAdd));
     if (result.isEmpty()) {
       return null;
     } else {
@@ -220,8 +220,8 @@ public abstract class SimpleAbstractInMemoryMaster<D extends AbstractDocument>
   }
 
   @Override
-  public final UniqueId replaceVersion(D replacementDocument) {
-    List<UniqueId> result = replaceVersion(replacementDocument.getUniqueId(), Collections.singletonList(replacementDocument));
+  public final UniqueId replaceVersion(final D replacementDocument) {
+    final List<UniqueId> result = replaceVersion(replacementDocument.getUniqueId(), Collections.singletonList(replacementDocument));
     if (result.isEmpty()) {
       return null;
     } else {
@@ -231,10 +231,10 @@ public abstract class SimpleAbstractInMemoryMaster<D extends AbstractDocument>
 
   //-------------------------------------------------------------------------
   @Override
-  public Map<UniqueId, D> get(Collection<UniqueId> uniqueIds) {
-    Map<UniqueId, D> resultMap = newHashMap();
-    for (UniqueId uniqueId : uniqueIds) {
-      D doc = get(uniqueId);
+  public Map<UniqueId, D> get(final Collection<UniqueId> uniqueIds) {
+    final Map<UniqueId, D> resultMap = newHashMap();
+    for (final UniqueId uniqueId : uniqueIds) {
+      final D doc = get(uniqueId);
       resultMap.put(uniqueId, doc);
     }
     return resultMap;

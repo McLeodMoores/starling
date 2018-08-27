@@ -5,24 +5,21 @@
  */
 package com.opengamma.integration.marketdata.manipulator.dsl;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import org.joda.beans.Bean;
 import org.joda.beans.BeanDefinition;
-import org.joda.beans.ImmutableConstructor;
+import org.joda.beans.JodaBeanUtils;
+import org.joda.beans.MetaProperty;
 import org.joda.beans.PropertyDefinition;
+import org.joda.beans.impl.direct.DirectMetaProperty;
+import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
 import com.google.common.collect.ImmutableList;
 import com.opengamma.util.ArgumentChecker;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import org.joda.beans.Bean;
-import org.joda.beans.JodaBeanUtils;
-import org.joda.beans.MetaProperty;
-import org.joda.beans.impl.direct.DirectMetaProperty;
-import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
  * Shifts a volatility surface whose X axis is time.
@@ -36,22 +33,22 @@ public final class DateDoubleSurfaceShift extends VolatilitySurfaceShiftManipula
   @PropertyDefinition(validate = "notNull")
   private final List<Period> _xValues;
 
-  /* package */ DateDoubleSurfaceShift(ScenarioShiftType shiftType,
-                                       double[] shiftValues,
-                                       List<Period> xValues,
-                                       double[] yValues) {
+  /* package */ DateDoubleSurfaceShift(final ScenarioShiftType shiftType,
+                                       final double[] shiftValues,
+                                       final List<Period> xValues,
+                                       final double[] yValues) {
     super(shiftType, shiftValues);
     _xValues = ArgumentChecker.notEmpty(xValues, "xValues");
     _yValues = ArgumentChecker.notEmpty(yValues, "yValues");
   }
 
   @Override
-  protected double[] getXValues(ZonedDateTime valuationTime) {
+  protected double[] getXValues(final ZonedDateTime valuationTime) {
     return yearFractions(_xValues, valuationTime);
   }
 
   @Override
-  protected double[] getYValues(ZonedDateTime valuationTime) {
+  protected double[] getYValues(final ZonedDateTime valuationTime) {
     return _yValues;
   }
 

@@ -83,13 +83,13 @@ public class EquitySecurity extends FinancialSecurity {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param exchange  the exchange, not null
    * @param exchangeCode  the exchange code, not null
    * @param companyName  the company name, not null
    * @param currency  the currency, not null
    */
-  public EquitySecurity(String exchange, String exchangeCode, String companyName, Currency currency) {
+  public EquitySecurity(final String exchange, final String exchangeCode, final String companyName, final Currency currency) {
     super(SECURITY_TYPE);
     setExchange(exchange);
     setExchangeCode(exchangeCode);
@@ -99,7 +99,7 @@ public class EquitySecurity extends FinancialSecurity {
 
   //-------------------------------------------------------------------------
   @Override
-  public final <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public final <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitEquitySecurity(this);
   }
 

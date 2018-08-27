@@ -25,10 +25,10 @@ public class StyleTag {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param data  the request data, not null
    */
-  public StyleTag(WebBundlesData data) {
+  public StyleTag(final WebBundlesData data) {
     ArgumentChecker.notNull(data, "data");
     _data = data;
   }
@@ -36,21 +36,21 @@ public class StyleTag {
   //-------------------------------------------------------------------------
   /**
    * Outputs the HTML for the bundle.
-   * 
+   *
    * @param bundleId  the bundle ID, not null
    * @param media  the media type, not null
    * @param inline  whether to inline the script
    * @return the HTML for the bundle, may be null
    */
-  public String print(String bundleId, String media, boolean inline) {
+  public String print(final String bundleId, final String media, final boolean inline) {
     ArgumentChecker.notNull(bundleId, "bundleId");
     ArgumentChecker.notNull(media, "media");
-    Bundle bundle = _data.getBundleManager().getBundle(bundleId);
+    final Bundle bundle = _data.getBundleManager().getBundle(bundleId);
     if (bundle == null) {
       LOGGER.warn("{} not available ", bundleId);
       return "";
     }
-    DeployMode mode = _data.getMode();
+    final DeployMode mode = _data.getMode();
     switch (mode) {
       case DEV:
         return inline ? printDevInline(bundle, media) : printDevLinked(bundle, media);
@@ -62,8 +62,8 @@ public class StyleTag {
     }
   }
 
-  private String printProdInline(Bundle bundle, String media) {
-    StringBuilder buf = new StringBuilder();
+  private String printProdInline(final Bundle bundle, final String media) {
+    final StringBuilder buf = new StringBuilder();
     buf.append("<style type=\"text/css\" media=\"");
     buf.append(media);
     buf.append("\">\n");
@@ -72,9 +72,9 @@ public class StyleTag {
     return buf.toString();
   }
 
-  private String printProdLinked(Bundle bundle, String media) {
-    WebBundlesUris uris = new WebBundlesUris(_data);
-    StringBuilder buf = new StringBuilder();
+  private String printProdLinked(final Bundle bundle, final String media) {
+    final WebBundlesUris uris = new WebBundlesUris(_data);
+    final StringBuilder buf = new StringBuilder();
     buf.append("<link rel=\"stylesheet\" type=\"text/css\" media=\"");
     buf.append(media);
     buf.append("\" href=\"");
@@ -84,8 +84,8 @@ public class StyleTag {
     return buf.toString();
   }
 
-  private String printDevInline(Bundle bundle, String media) {
-    StringBuilder buf = new StringBuilder();
+  private String printDevInline(final Bundle bundle, final String media) {
+    final StringBuilder buf = new StringBuilder();
     buf.append("<style type=\"text/css\" media=\"");
     buf.append(media);
     buf.append("\">\n");
@@ -94,12 +94,12 @@ public class StyleTag {
     return buf.toString();
   }
 
-  private String printDevLinked(Bundle bundle, String media) {
+  private String printDevLinked(Bundle bundle, final String media) {
     bundle = _data.getDevBundleManager().getBundle(bundle.getId());  // reload from dev manager
-    WebBundlesUris uris = new WebBundlesUris(_data);
-    StringBuilder buf = new StringBuilder();
+    final WebBundlesUris uris = new WebBundlesUris(_data);
+    final StringBuilder buf = new StringBuilder();
     buf.append("<style type=\"text/css\" media=\"all\">\n");
-    String imports = BundleUtils.buildImports(bundle, uris);
+    final String imports = BundleUtils.buildImports(bundle, uris);
     buf.append(imports);
     buf.append("</style>");
     return buf.toString();

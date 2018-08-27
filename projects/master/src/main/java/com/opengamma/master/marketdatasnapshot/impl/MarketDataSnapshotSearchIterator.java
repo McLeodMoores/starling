@@ -27,7 +27,7 @@ public class MarketDataSnapshotSearchIterator extends AbstractSearchIterator<Mar
    * Creates an instance based on a request.
    * <p>
    * The request will be altered during the iteration.
-   * 
+   *
    * @param master  the underlying master, not null
    * @param request  the request object, not null
    * @return an iterable suitable for use in a for-each loop, not null
@@ -47,17 +47,17 @@ public class MarketDataSnapshotSearchIterator extends AbstractSearchIterator<Mar
    * Creates an instance based on a request.
    * <p>
    * The request will be altered during the iteration.
-   * 
+   *
    * @param master  the underlying master, not null
    * @param request  the request object, not null
    */
-  public MarketDataSnapshotSearchIterator(MarketDataSnapshotMaster master, MarketDataSnapshotSearchRequest request) {
+  public MarketDataSnapshotSearchIterator(final MarketDataSnapshotMaster master, final MarketDataSnapshotSearchRequest request) {
     super(master, request);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  protected MarketDataSnapshotSearchResult doSearch(MarketDataSnapshotSearchRequest request) {
+  protected MarketDataSnapshotSearchResult doSearch(final MarketDataSnapshotSearchRequest request) {
     return getMaster().search(request);
   }
 

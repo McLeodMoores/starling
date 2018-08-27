@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.security.option;
@@ -19,22 +19,22 @@ public class ExerciseTypeNameVisitor implements ExerciseTypeVisitor<String> {
   private static final String EUROPEAN = "European";
 
   @Override
-  public String visitAmericanExerciseType(AmericanExerciseType exerciseType) {
+  public String visitAmericanExerciseType(final AmericanExerciseType exerciseType) {
     return AMERICAN;
   }
 
   @Override
-  public String visitAsianExerciseType(AsianExerciseType exerciseType) {
+  public String visitAsianExerciseType(final AsianExerciseType exerciseType) {
     return ASIAN;
   }
 
   @Override
-  public String visitBermudanExerciseType(BermudanExerciseType exerciseType) {
+  public String visitBermudanExerciseType(final BermudanExerciseType exerciseType) {
     return BERMUDAN;
   }
 
   @Override
-  public String visitEuropeanExerciseType(EuropeanExerciseType exerciseType) {
+  public String visitEuropeanExerciseType(final EuropeanExerciseType exerciseType) {
     return EUROPEAN;
   }
 

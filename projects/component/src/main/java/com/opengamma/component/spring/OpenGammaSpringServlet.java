@@ -51,13 +51,13 @@ public class OpenGammaSpringServlet extends SpringServlet {
   }
 
   @Override
-  public void init(ServletConfig config) throws ServletException {
+  public void init(final ServletConfig config) throws ServletException {
     super.init(config);
   }
 
   @Override
-  protected ResourceConfig getDefaultResourceConfig(Map<String, Object> props, WebConfig webConfig) throws ServletException {
-    DefaultResourceConfig cfg = new DefaultResourceConfig();
+  protected ResourceConfig getDefaultResourceConfig(final Map<String, Object> props, final WebConfig webConfig) throws ServletException {
+    final DefaultResourceConfig cfg = new DefaultResourceConfig();
     if (props.containsKey(ResourceConfig.PROPERTY_CONTAINER_REQUEST_FILTERS) == false) {
       props.put(ResourceConfig.PROPERTY_CONTAINER_REQUEST_FILTERS, new ArrayList<Object>(Arrays.asList(new HttpMethodFilter(), new UrlSuffixFilter())));
     }
@@ -69,14 +69,14 @@ public class OpenGammaSpringServlet extends SpringServlet {
   }
 
   @Override
-  protected void initiate(ResourceConfig rc, WebApplication wa) {
-    Application app = createApplication();
+  protected void initiate(final ResourceConfig rc, final WebApplication wa) {
+    final Application app = createApplication();
     try {
       // initialize the Jetty system
       rc.add(app);
       wa.initiate(rc, new SpringComponentProviderFactory(rc, getContext()));
-      
-    } catch (RuntimeException ex) {
+
+    } catch (final RuntimeException ex) {
       LOGGER.error("Exception occurred during intialization", ex);
       throw ex;
     }
@@ -84,14 +84,14 @@ public class OpenGammaSpringServlet extends SpringServlet {
 
   /**
    * Creates the JaxRs application from the repository.
-   * 
+   *
    * @return the application, not null
    */
   protected Application createApplication() {
-    ComponentRepository repo = ComponentRepository.getFromServletContext(getServletContext());
+    final ComponentRepository repo = ComponentRepository.getFromServletContext(getServletContext());
     final Set<Object> singletons = repo.getRestComponents().buildJaxRsSingletons();
     final Set<Class<?>> classes = repo.getRestComponents().buildJaxRsClasses();
-    Application app = new Application() {
+    final Application app = new Application() {
       @Override
       public Set<Class<?>> getClasses() {
         return classes;

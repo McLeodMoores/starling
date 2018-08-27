@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.blacklist;
@@ -28,7 +28,7 @@ public class FunctionBlacklistRuleSet implements Set<FunctionBlacklistRule> {
   private static final Logger LOGGER = LoggerFactory.getLogger(FunctionBlacklistRuleSet.class);
   private static final int MAX_TTL = 86400;
 
-  private final Map<FunctionBlacklistRule, Long> _rules = new ConcurrentHashMap<FunctionBlacklistRule, Long>();
+  private final Map<FunctionBlacklistRule, Long> _rules = new ConcurrentHashMap<>();
   private volatile int _minimumTTL;
   private final Cleaner _cleaner;
 
@@ -41,7 +41,7 @@ public class FunctionBlacklistRuleSet implements Set<FunctionBlacklistRule> {
     public Cleaner(final FunctionBlacklistRuleSet ref, final ScheduledExecutorService executor, final int minimumTTL) {
       LOGGER.debug("Creating cleaner for {} at {}s", ref, minimumTTL);
       _executor = executor;
-      _ref = new WeakReference<FunctionBlacklistRuleSet>(ref);
+      _ref = new WeakReference<>(ref);
       _future = executor.scheduleWithFixedDelay(this, minimumTTL, minimumTTL, TimeUnit.SECONDS);
     }
 
@@ -84,7 +84,7 @@ public class FunctionBlacklistRuleSet implements Set<FunctionBlacklistRule> {
   }
 
   @Override
-  public boolean contains(Object o) {
+  public boolean contains(final Object o) {
     return _rules.keySet().contains(o);
   }
 
@@ -121,7 +121,7 @@ public class FunctionBlacklistRuleSet implements Set<FunctionBlacklistRule> {
   }
 
   @Override
-  public <T> T[] toArray(T[] a) {
+  public <T> T[] toArray(final T[] a) {
     return _rules.keySet().toArray(a);
   }
 
@@ -132,7 +132,7 @@ public class FunctionBlacklistRuleSet implements Set<FunctionBlacklistRule> {
   }
 
   @Override
-  public boolean remove(Object o) {
+  public boolean remove(final Object o) {
     if (!_rules.keySet().remove(o)) {
       return false;
     }
@@ -141,20 +141,20 @@ public class FunctionBlacklistRuleSet implements Set<FunctionBlacklistRule> {
   }
 
   @Override
-  public boolean containsAll(Collection<?> c) {
+  public boolean containsAll(final Collection<?> c) {
     return _rules.keySet().containsAll(c);
   }
 
   @Override
-  public boolean addAll(Collection<? extends FunctionBlacklistRule> c) {
-    for (FunctionBlacklistRule rule : c) {
+  public boolean addAll(final Collection<? extends FunctionBlacklistRule> c) {
+    for (final FunctionBlacklistRule rule : c) {
       add(rule, _minimumTTL);
     }
     return true;
   }
 
   @Override
-  public boolean retainAll(Collection<?> c) {
+  public boolean retainAll(final Collection<?> c) {
     boolean changed = false;
     final Iterator<FunctionBlacklistRule> itr = iterator();
     while (itr.hasNext()) {
@@ -167,9 +167,9 @@ public class FunctionBlacklistRuleSet implements Set<FunctionBlacklistRule> {
   }
 
   @Override
-  public boolean removeAll(Collection<?> c) {
+  public boolean removeAll(final Collection<?> c) {
     boolean changed = false;
-    for (Object o : c) {
+    for (final Object o : c) {
       changed |= remove(o);
     }
     return changed;
@@ -186,7 +186,7 @@ public class FunctionBlacklistRuleSet implements Set<FunctionBlacklistRule> {
 
   public void add(final FunctionBlacklistRule rule, final int timeToLive) {
     ArgumentChecker.notNegativeOrZero(timeToLive, "timeToLive");
-    final long expiry = System.nanoTime() + (long) timeToLive * 1000000000L;
+    final long expiry = System.nanoTime() + timeToLive * 1000000000L;
     if (_rules.put(rule, expiry) == null) {
       onAdd(rule);
     }
@@ -205,7 +205,7 @@ public class FunctionBlacklistRuleSet implements Set<FunctionBlacklistRule> {
     final long time = System.nanoTime();
     _minimumTTL = MAX_TTL + 1;
     final Iterator<Map.Entry<FunctionBlacklistRule, Long>> itr = _rules.entrySet().iterator();
-    long lowestTTL = (long) MAX_TTL * 1000000000L;
+    long lowestTTL = MAX_TTL * 1000000000L;
     while (itr.hasNext()) {
       final Map.Entry<FunctionBlacklistRule, Long> entry = itr.next();
       final long ttl = entry.getValue() - time;
@@ -230,7 +230,7 @@ public class FunctionBlacklistRuleSet implements Set<FunctionBlacklistRule> {
 
   /**
    * Called when a rule has been added to the set. This is provided so that a subclass may perform specific actions. This is called after the rule has been added.
-   * 
+   *
    * @param rule the rule that was added to the set
    */
   protected void onAdd(final FunctionBlacklistRule rule) {
@@ -240,7 +240,7 @@ public class FunctionBlacklistRuleSet implements Set<FunctionBlacklistRule> {
   /**
    * Called when a rule added to the set is removed, perhaps because it's reached its expiry. This is provided so that a subclass may perform specific actions. This is called after the rule has been
    * removed.
-   * 
+   *
    * @param rule the rule that was removed from the set
    */
   protected void onRemove(final FunctionBlacklistRule rule) {

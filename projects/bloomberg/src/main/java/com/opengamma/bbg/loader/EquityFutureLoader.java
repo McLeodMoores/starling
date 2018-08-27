@@ -74,23 +74,23 @@ public class EquityFutureLoader extends SecurityLoader {
    * Creates an instance.
    * @param referenceDataProvider  the provider, not null
    */
-  public EquityFutureLoader(ReferenceDataProvider referenceDataProvider) {
+  public EquityFutureLoader(final ReferenceDataProvider referenceDataProvider) {
     super(LOGGER, referenceDataProvider, SecurityType.EQUITY_FUTURE);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  protected ManageableSecurity createSecurity(FudgeMsg fieldData) {
-    String expiryDate = fieldData.getString(FIELD_FUT_LAST_TRADE_DT);
-    String futureTradingHours = fieldData.getString(FIELD_FUT_TRADING_HRS);
-    String micExchangeCode = fieldData.getString(FIELD_ID_MIC_PRIM_EXCH);
-    String currencyStr = fieldData.getString(FIELD_CRNCY);
-    String underlyingTicker = fieldData.getString(FIELD_UNDL_SPOT_TICKER);
-    String name = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUT_LONG_NAME), " ");
-    String category = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUTURES_CATEGORY), " ");
-    String bbgUnique = fieldData.getString(FIELD_ID_BBG_UNIQUE);
-    String marketSector = fieldData.getString(FIELD_MARKET_SECTOR_DES);
-    String unitAmount = fieldData.getString(FIELD_FUT_VAL_PT);
+  protected ManageableSecurity createSecurity(final FudgeMsg fieldData) {
+    final String expiryDate = fieldData.getString(FIELD_FUT_LAST_TRADE_DT);
+    final String futureTradingHours = fieldData.getString(FIELD_FUT_TRADING_HRS);
+    final String micExchangeCode = fieldData.getString(FIELD_ID_MIC_PRIM_EXCH);
+    final String currencyStr = fieldData.getString(FIELD_CRNCY);
+    final String underlyingTicker = fieldData.getString(FIELD_UNDL_SPOT_TICKER);
+    final String name = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUT_LONG_NAME), " ");
+    final String category = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUTURES_CATEGORY), " ");
+    final String bbgUnique = fieldData.getString(FIELD_ID_BBG_UNIQUE);
+    final String marketSector = fieldData.getString(FIELD_MARKET_SECTOR_DES);
+    final String unitAmount = fieldData.getString(FIELD_FUT_VAL_PT);
 
     if (!isValidField(bbgUnique)) {
       LOGGER.warn("bbgUnique is null, cannot construct EquityFutureSecurity");
@@ -121,18 +121,18 @@ public class EquityFutureLoader extends SecurityLoader {
       underlying = ExternalSchemes.bloombergTickerSecurityId(underlyingTicker + " " + marketSector);
     }
 
-    Currency currency = Currency.parse(currencyStr);
+    final Currency currency = Currency.parse(currencyStr);
 
-    Expiry expiry = decodeExpiry(expiryDate, futureTradingHours);
+    final Expiry expiry = decodeExpiry(expiryDate, futureTradingHours);
     if (expiry == null) {
       return null;
     }
 
     // FIXME: Case - treatment of Settlement Date
     LOGGER.warn("Creating EquityFutureSecurity - settlementDate set equal to expiryDate. Missing lag.");
-    ZonedDateTime settlementDate = expiry.getExpiry();
+    final ZonedDateTime settlementDate = expiry.getExpiry();
 
-    EquityFutureSecurity security = new EquityFutureSecurity(expiry, micExchangeCode, micExchangeCode, currency, Double.valueOf(unitAmount), settlementDate, underlying, category);
+    final EquityFutureSecurity security = new EquityFutureSecurity(expiry, micExchangeCode, micExchangeCode, currency, Double.valueOf(unitAmount), settlementDate, underlying, category);
     security.setName(name);
     // set identifiers
     parseIdentifiers(fieldData, security);

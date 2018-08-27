@@ -32,9 +32,9 @@ public abstract class AbstractSecurityLoader implements SecurityLoader {
 
   //-------------------------------------------------------------------------
   @Override
-  public UniqueId loadSecurity(ExternalIdBundle externalIdBundle) {
-    SecurityLoaderRequest request = SecurityLoaderRequest.create(externalIdBundle);
-    SecurityLoaderResult result = loadSecurities(request);
+  public UniqueId loadSecurity(final ExternalIdBundle externalIdBundle) {
+    final SecurityLoaderRequest request = SecurityLoaderRequest.create(externalIdBundle);
+    final SecurityLoaderResult result = loadSecurities(request);
     if (result.getResultMap().size() == 0) {
       throw new OpenGammaRuntimeException("Unable to load security: " + externalIdBundle);
     }
@@ -42,21 +42,21 @@ public abstract class AbstractSecurityLoader implements SecurityLoader {
   }
 
   @Override
-  public Map<ExternalIdBundle, UniqueId> loadSecurities(Iterable<ExternalIdBundle> externalIdBundles) {
-    SecurityLoaderRequest request = SecurityLoaderRequest.create(externalIdBundles);
-    SecurityLoaderResult result = loadSecurities(request);
+  public Map<ExternalIdBundle, UniqueId> loadSecurities(final Iterable<ExternalIdBundle> externalIdBundles) {
+    final SecurityLoaderRequest request = SecurityLoaderRequest.create(externalIdBundles);
+    final SecurityLoaderResult result = loadSecurities(request);
     return result.getResultMap();
   }
 
   @Override
-  public SecurityLoaderResult loadSecurities(SecurityLoaderRequest request) {
+  public SecurityLoaderResult loadSecurities(final SecurityLoaderRequest request) {
     ArgumentChecker.notNull(request, "request");
-    
+
     // short-cut empty case
     if (request.getExternalIdBundles().isEmpty()) {
       return new SecurityLoaderResult();
     }
-    
+
     // get securities
     return doBulkLoad(request);
   }
@@ -64,7 +64,7 @@ public abstract class AbstractSecurityLoader implements SecurityLoader {
   //-------------------------------------------------------------------------
   /**
    * Loads the securities.
-   * 
+   *
    * @param request  the request, with a non-empty list of bundles, not null
    * @return the result, not null
    */

@@ -43,8 +43,8 @@ public class NamedUsersPortfolioPermissionProvider implements ViewPortfolioPermi
    * who is allowed to see it. Portfolios not listed have no
    * restrictions on who can view them. Not null.
    */
-  public NamedUsersPortfolioPermissionProvider(Set<String> restrictedUsers,
-                                               Map<String, String> portfolioUserMapping) {
+  public NamedUsersPortfolioPermissionProvider(final Set<String> restrictedUsers,
+                                               final Map<String, String> portfolioUserMapping) {
     ArgumentChecker.notNull(restrictedUsers, "restrictedUsers");
     ArgumentChecker.notNull(portfolioUserMapping, "portfolioUserMapping");
     _restrictedUsers = restrictedUsers;
@@ -52,7 +52,7 @@ public class NamedUsersPortfolioPermissionProvider implements ViewPortfolioPermi
   }
 
   @Override
-  public PortfolioFilter createPortfolioFilter(UserPrincipal user) {
+  public PortfolioFilter createPortfolioFilter(final UserPrincipal user) {
 
     return _restrictedUsers.contains(user.getUserName()) ?
         new NodeCheckingPortfolioFilter(new UserPermissionNodeChecker(_portfolioUserMapping, user)) :

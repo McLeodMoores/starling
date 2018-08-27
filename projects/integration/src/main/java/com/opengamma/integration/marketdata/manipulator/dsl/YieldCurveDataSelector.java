@@ -18,21 +18,21 @@ import com.opengamma.util.money.Currency;
  */
 public final class YieldCurveDataSelector extends Selector {
 
-  /* package */ YieldCurveDataSelector(Set<String> calcConfigNames,
-                                       Set<String> names,
-                                       Set<Currency> currencies,
-                                       Pattern nameMatchPattern,
-                                       Pattern nameLikePattern) {
+  /* package */ YieldCurveDataSelector(final Set<String> calcConfigNames,
+                                       final Set<String> names,
+                                       final Set<Currency> currencies,
+                                       final Pattern nameMatchPattern,
+                                       final Pattern nameLikePattern) {
     super(calcConfigNames, names, currencies, nameMatchPattern, nameLikePattern);
   }
 
   @Override
-  boolean matches(ValueSpecification valueSpecification) {
+  boolean matches(final ValueSpecification valueSpecification) {
     if (!ValueRequirementNames.YIELD_CURVE_DATA.equals(valueSpecification.getValueName())) {
       return false;
     }
-    Currency currency = Currency.of(valueSpecification.getTargetSpecification().getUniqueId().getValue());
-    String curve = valueSpecification.getProperties().getStrictValue(ValuePropertyNames.CURVE);
+    final Currency currency = Currency.of(valueSpecification.getTargetSpecification().getUniqueId().getValue());
+    final String curve = valueSpecification.getProperties().getStrictValue(ValuePropertyNames.CURVE);
     if (curve == null) {
       return false;
     }

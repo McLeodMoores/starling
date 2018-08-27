@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.web.json;
@@ -13,17 +13,17 @@ import com.opengamma.util.ArgumentChecker;
  */
 @SuppressWarnings("rawtypes")
 public final class VolatilityCubeDefinitionJSONBuilder extends AbstractJSONBuilder<VolatilityCubeDefinition> {
-     
+
   /**
    * Singleton
    */
   public static final VolatilityCubeDefinitionJSONBuilder INSTANCE = new VolatilityCubeDefinitionJSONBuilder();
-  
+
   /**
    * JSON template
    */
   private static final String TEMPLATE = createTemplate();
-  
+
   /**
    * Restricted constructor
    */
@@ -35,13 +35,13 @@ public final class VolatilityCubeDefinitionJSONBuilder extends AbstractJSONBuild
   }
 
   @Override
-  public VolatilityCubeDefinition fromJSON(String json) {
+  public VolatilityCubeDefinition fromJSON(final String json) {
     ArgumentChecker.notNull(json, "JSON document");
     return fromJSON(VolatilityCubeDefinition.class, json);
   }
 
   @Override
-  public String toJSON(VolatilityCubeDefinition volatilityCubeDefinition) {
+  public String toJSON(final VolatilityCubeDefinition volatilityCubeDefinition) {
     ArgumentChecker.notNull(volatilityCubeDefinition, "volatilityCubeDefinition");
     return fudgeToJson(volatilityCubeDefinition);
   }

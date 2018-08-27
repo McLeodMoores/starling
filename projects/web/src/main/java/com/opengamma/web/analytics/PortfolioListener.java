@@ -20,7 +20,7 @@ import com.opengamma.util.ArgumentChecker;
   private final AnalyticsView _view;
   private final PositionSource _positionSource;
 
-  /* package */ PortfolioListener(ObjectId portfolioId, AnalyticsView view, PositionSource positionSource) {
+  /* package */ PortfolioListener(final ObjectId portfolioId, final AnalyticsView view, final PositionSource positionSource) {
     ArgumentChecker.notNull(view, "view");
     ArgumentChecker.notNull(positionSource, "positionSource");
     _portfolioId = portfolioId;
@@ -35,7 +35,7 @@ import com.opengamma.util.ArgumentChecker;
   }
 
   @Override
-  public void entityChanged(ChangeEvent event) {
+  public void entityChanged(final ChangeEvent event) {
     if (event.getObjectId().equals(_portfolioId)) {
       _view.portfolioChanged();
     }

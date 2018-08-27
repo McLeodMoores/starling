@@ -19,11 +19,6 @@ import org.threeten.bp.ZonedDateTime;
 import com.opengamma.analytics.financial.credit.DebtSeniority;
 import com.opengamma.analytics.financial.credit.RestructuringClause;
 import com.opengamma.core.id.ExternalSchemes;
-import com.opengamma.core.legalentity.Rating;
-import com.opengamma.core.obligor.CreditRating;
-import com.opengamma.core.obligor.CreditRatingFitch;
-import com.opengamma.core.obligor.CreditRatingMoodys;
-import com.opengamma.core.obligor.CreditRatingStandardAndPoors;
 import com.opengamma.core.obligor.Region;
 import com.opengamma.core.obligor.Sector;
 import com.opengamma.core.position.Position;
@@ -85,54 +80,54 @@ public class ObligorMarkitSectorAggregatorFunctionTest {
   @Test
   public void testPositionWithUnlocatableSecurityIsIgnored() {
 
-    Position posn = new SimplePosition(BigDecimal.ONE, ExternalId.of("SEC_ID", "9999"));
+    final Position posn = new SimplePosition(BigDecimal.ONE, ExternalId.of("SEC_ID", "9999"));
     assertEquals(_aggregator.classifyPosition(posn), "N/A");
   }
 
   @Test
   public void testPositionSecurityWithoutObligorIsIgnored() {
 
-    SecurityDocument document = new SecurityDocument();
-    CashSecurity security = new CashSecurity(Currency.of("USD"),
+    final SecurityDocument document = new SecurityDocument();
+    final CashSecurity security = new CashSecurity(Currency.of("USD"),
                                              ExternalSchemes.financialRegionId("US"),
                                              ZonedDateTime.now(),
                                              ZonedDateTime.now().plusYears(5),
                                              DayCounts.ACT_360,
                                              0.05,
                                              100000);
-    ExternalId secId = ExternalId.of("SEC_ID", "12345");
+    final ExternalId secId = ExternalId.of("SEC_ID", "12345");
     security.addExternalId(secId);
     document.setSecurity(security);
     _securityMaster.add(document);
 
-    Position posn = new SimplePosition(BigDecimal.ONE, secId);
+    final Position posn = new SimplePosition(BigDecimal.ONE, secId);
     assertEquals(_aggregator.classifyPosition(posn), "N/A");
   }
 
   @Test
   public void testObligorWithMatchingRedCodeIsUsed() {
 
-    ExternalIdBundle bundle = ExternalIdBundle.of(ExternalId.of(ExternalSchemes.MARKIT_RED_CODE, "39FF64"), ExternalId.of("TICKEER", "Ticker"));
-    ManageableLegalEntity legalEntity = new ManageableLegalEntity("ShortName", bundle);
+    final ExternalIdBundle bundle = ExternalIdBundle.of(ExternalId.of(ExternalSchemes.MARKIT_RED_CODE, "39FF64"), ExternalId.of("TICKEER", "Ticker"));
+    final ManageableLegalEntity legalEntity = new ManageableLegalEntity("ShortName", bundle);
     legalEntity.getAttributes().put("region", Region.NORTHAMERICA.name());
     legalEntity.getAttributes().put("sector", Sector.FINANCIALS.name());
     legalEntity.getAttributes().put("country", "US");
 
     _legalEntityMaster.add(new LegalEntityDocument(legalEntity));
 
-    SecurityDocument document = new SecurityDocument();
-    ManageableSecurity cds = createCdsWithRedCode("39FF64");
-    ExternalId secId = ExternalId.of("SEC_ID", "12345");
+    final SecurityDocument document = new SecurityDocument();
+    final ManageableSecurity cds = createCdsWithRedCode("39FF64");
+    final ExternalId secId = ExternalId.of("SEC_ID", "12345");
     cds.addExternalId(secId);
     document.setSecurity(cds);
     _securityMaster.add(document);
 
-    Position posn = new SimplePosition(BigDecimal.ONE, secId);
+    final Position posn = new SimplePosition(BigDecimal.ONE, secId);
 
     assertEquals(_aggregator.classifyPosition(posn), "FINANCIALS");
   }
 
-  private StandardVanillaCDSSecurity createCdsWithRedCode(String redcode) {
+  private StandardVanillaCDSSecurity createCdsWithRedCode(final String redcode) {
     return new StandardVanillaCDSSecurity(true, ExternalId.of("EXTERNAL_CODE", "ProtBuyer"),
                                                             ExternalId.of("EXTERNAL_CODE" ,"ProtSeller"), ExternalSchemes.markItRedCode(redcode),
                                                             DebtSeniority.SNRFOR, RestructuringClause.MM, ExternalSchemes.financialRegionId("US"),
@@ -143,7 +138,7 @@ public class ObligorMarkitSectorAggregatorFunctionTest {
                                                             new InterestRateNotional(Currency.USD, 500000), 500, createZdt(2013,3,21), true);
   }
 
-  private ZonedDateTime createZdt(int year, int month, int day) {
+  private ZonedDateTime createZdt(final int year, final int month, final int day) {
     return ZonedDateTime.of(LocalDate.of(year, month, day).atStartOfDay(), ZoneOffset.UTC);
   }
 

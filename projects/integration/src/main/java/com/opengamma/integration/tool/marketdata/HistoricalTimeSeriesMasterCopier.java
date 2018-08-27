@@ -31,51 +31,51 @@ import com.opengamma.master.historicaltimeseries.impl.HistoricalTimeSeriesMaster
  */
 public class HistoricalTimeSeriesMasterCopier {
   private static final Logger LOGGER = LoggerFactory.getLogger(HistoricalTimeSeriesMasterCopier.class);
-  
-  private HistoricalTimeSeriesMaster _sourceMaster;
-  private HistoricalTimeSeriesMaster _destinationMaster;
 
-  public HistoricalTimeSeriesMasterCopier(HistoricalTimeSeriesMaster sourceMaster, HistoricalTimeSeriesMaster destinationMaster) {
+  private final HistoricalTimeSeriesMaster _sourceMaster;
+  private final HistoricalTimeSeriesMaster _destinationMaster;
+
+  public HistoricalTimeSeriesMasterCopier(final HistoricalTimeSeriesMaster sourceMaster, final HistoricalTimeSeriesMaster destinationMaster) {
     _sourceMaster = sourceMaster;
     _destinationMaster = destinationMaster;
   }
-  
-  public void copy(boolean fastCopy, boolean deleteDestinationSeriesNotInSource, boolean verbose, boolean noAdditions) {
-    HistoricalTimeSeriesInfoSearchRequest infoSearchRequest = new HistoricalTimeSeriesInfoSearchRequest();
-    HistoricalTimeSeriesInfoSearchResult sourceSearchResult = _sourceMaster.search(infoSearchRequest);
-    List<ManageableHistoricalTimeSeriesInfo> sourceInfoList = sourceSearchResult.getInfoList();
-    HistoricalTimeSeriesInfoSearchResult destSearchResult = _destinationMaster.search(infoSearchRequest);
-    List<ManageableHistoricalTimeSeriesInfo> destInfoList = destSearchResult.getInfoList();
-    Set<ManageableHistoricalTimeSeriesInfo> bothInfoSetSource = new TreeSet<ManageableHistoricalTimeSeriesInfo>(new ManageableHistoricalTimeSeriesInfoComparator());
+
+  public void copy(final boolean fastCopy, final boolean deleteDestinationSeriesNotInSource, final boolean verbose, final boolean noAdditions) {
+    final HistoricalTimeSeriesInfoSearchRequest infoSearchRequest = new HistoricalTimeSeriesInfoSearchRequest();
+    final HistoricalTimeSeriesInfoSearchResult sourceSearchResult = _sourceMaster.search(infoSearchRequest);
+    final List<ManageableHistoricalTimeSeriesInfo> sourceInfoList = sourceSearchResult.getInfoList();
+    final HistoricalTimeSeriesInfoSearchResult destSearchResult = _destinationMaster.search(infoSearchRequest);
+    final List<ManageableHistoricalTimeSeriesInfo> destInfoList = destSearchResult.getInfoList();
+    final Set<ManageableHistoricalTimeSeriesInfo> bothInfoSetSource = new TreeSet<>(new ManageableHistoricalTimeSeriesInfoComparator());
     bothInfoSetSource.addAll(sourceInfoList);
     bothInfoSetSource.retainAll(destInfoList);
-    Set<ManageableHistoricalTimeSeriesInfo> bothInfoSetDestination = new TreeSet<ManageableHistoricalTimeSeriesInfo>(new ManageableHistoricalTimeSeriesInfoComparator());
+    final Set<ManageableHistoricalTimeSeriesInfo> bothInfoSetDestination = new TreeSet<>(new ManageableHistoricalTimeSeriesInfoComparator());
     bothInfoSetDestination.addAll(destInfoList);
     bothInfoSetDestination.retainAll(sourceInfoList);
-    Map<ManageableHistoricalTimeSeriesInfo, UniqueId> infoToSourceUniqueIds = Maps.newHashMap();
+    final Map<ManageableHistoricalTimeSeriesInfo, UniqueId> infoToSourceUniqueIds = Maps.newHashMap();
     // we have have two sets containing the TS in both, with the ids from the source in one and the ids from the dest in the other
     // now build a map of info->source uid
-    for (ManageableHistoricalTimeSeriesInfo info : bothInfoSetSource) {
+    for (final ManageableHistoricalTimeSeriesInfo info : bothInfoSetSource) {
       infoToSourceUniqueIds.put(info, info.getUniqueId());
     }
     // step through the destination results and look up the corresponding source id.
-    for (ManageableHistoricalTimeSeriesInfo info : bothInfoSetDestination) {
+    for (final ManageableHistoricalTimeSeriesInfo info : bothInfoSetDestination) {
       if (infoToSourceUniqueIds.containsKey(info)) {
         if (verbose) {
           System.out.println("Time series " + info + " is in source and destination");
         }
-        UniqueId sourceId = infoToSourceUniqueIds.get(info);
-        UniqueId destinationId = info.getUniqueId();
+        final UniqueId sourceId = infoToSourceUniqueIds.get(info);
+        final UniqueId destinationId = info.getUniqueId();
         diffAndCopy(sourceId, destinationId, fastCopy, verbose);
       } else {
         throw new OpenGammaRuntimeException("Couldn't find info in set, which is supposed to be impossible");
       }
     }
     if (!noAdditions) {
-      Set<ManageableHistoricalTimeSeriesInfo> sourceNotDestinationInfo = new TreeSet<ManageableHistoricalTimeSeriesInfo>(new ManageableHistoricalTimeSeriesInfoComparator());
+      final Set<ManageableHistoricalTimeSeriesInfo> sourceNotDestinationInfo = new TreeSet<>(new ManageableHistoricalTimeSeriesInfoComparator());
       sourceNotDestinationInfo.addAll(sourceInfoList);
       sourceNotDestinationInfo.removeAll(destInfoList);
-      for (ManageableHistoricalTimeSeriesInfo info : sourceNotDestinationInfo) {
+      for (final ManageableHistoricalTimeSeriesInfo info : sourceNotDestinationInfo) {
         if (verbose) {
           System.out.println("Time series " + info + " is in source but not destination");
         }
@@ -83,10 +83,10 @@ public class HistoricalTimeSeriesMasterCopier {
       }
     }
     if (deleteDestinationSeriesNotInSource) {
-      Set<ManageableHistoricalTimeSeriesInfo> destinationNotSourceInfo = new TreeSet<ManageableHistoricalTimeSeriesInfo>(new ManageableHistoricalTimeSeriesInfoComparator());
+      final Set<ManageableHistoricalTimeSeriesInfo> destinationNotSourceInfo = new TreeSet<>(new ManageableHistoricalTimeSeriesInfoComparator());
       destinationNotSourceInfo.addAll(destInfoList);
       destinationNotSourceInfo.removeAll(sourceInfoList);
-      for (ManageableHistoricalTimeSeriesInfo info : destinationNotSourceInfo) {
+      for (final ManageableHistoricalTimeSeriesInfo info : destinationNotSourceInfo) {
         delete(info);
         if (verbose) {
           System.out.println("Deleted time series " + info + " which is in destination but not source");
@@ -94,35 +94,35 @@ public class HistoricalTimeSeriesMasterCopier {
       }
     }
   }
-  
-  private void delete(ManageableHistoricalTimeSeriesInfo info) {
+
+  private void delete(final ManageableHistoricalTimeSeriesInfo info) {
     _destinationMaster.remove(info.getUniqueId());
 
   }
 
-  private void add(ManageableHistoricalTimeSeriesInfo sourceInfo, boolean verbose) {
-    HistoricalTimeSeriesMasterUtils destinationMasterUtils = new HistoricalTimeSeriesMasterUtils(_destinationMaster);
-    HistoricalTimeSeries series  = _destinationMaster.getTimeSeries(sourceInfo.getUniqueId());
-    destinationMasterUtils.writeTimeSeries(sourceInfo.getName(), 
+  private void add(final ManageableHistoricalTimeSeriesInfo sourceInfo, final boolean verbose) {
+    final HistoricalTimeSeriesMasterUtils destinationMasterUtils = new HistoricalTimeSeriesMasterUtils(_destinationMaster);
+    final HistoricalTimeSeries series  = _destinationMaster.getTimeSeries(sourceInfo.getUniqueId());
+    destinationMasterUtils.writeTimeSeries(sourceInfo.getName(),
                                            sourceInfo.getDataSource(),
                                            sourceInfo.getDataProvider(),
-                                           sourceInfo.getDataField(), 
-                                           sourceInfo.getObservationTime(), 
+                                           sourceInfo.getDataField(),
+                                           sourceInfo.getObservationTime(),
                                            sourceInfo.getExternalIdBundle().toBundle(),
                                            series.getTimeSeries());
     if (verbose) {
       System.out.println("Added new time series to destination with " + series.getTimeSeries().size() + " data points");
     }
   }
-  
-  private boolean diffAndCopy(UniqueId sourceId, UniqueId destinationId, boolean fastCopy, boolean verbose) {
+
+  private boolean diffAndCopy(final UniqueId sourceId, final UniqueId destinationId, final boolean fastCopy, final boolean verbose) {
     if (fastCopy) {
       ManageableHistoricalTimeSeries sourceTimeSeries = _sourceMaster.getTimeSeries(sourceId, HistoricalTimeSeriesGetFilter.ofLatestPoint());
-      ManageableHistoricalTimeSeries destTimeSeries = _destinationMaster.getTimeSeries(destinationId, HistoricalTimeSeriesGetFilter.ofLatestPoint());
+      final ManageableHistoricalTimeSeries destTimeSeries = _destinationMaster.getTimeSeries(destinationId, HistoricalTimeSeriesGetFilter.ofLatestPoint());
       if (!sourceTimeSeries.getTimeSeries().equals(destTimeSeries.getTimeSeries())) {
-        HistoricalTimeSeriesGetFilter filter = new HistoricalTimeSeriesGetFilter();
-        LocalDate lastSourceDate = sourceTimeSeries.getTimeSeries().getLatestTime();
-        LocalDate lastDestinationDate = destTimeSeries.getTimeSeries().getLatestTime();
+        final HistoricalTimeSeriesGetFilter filter = new HistoricalTimeSeriesGetFilter();
+        final LocalDate lastSourceDate = sourceTimeSeries.getTimeSeries().getLatestTime();
+        final LocalDate lastDestinationDate = destTimeSeries.getTimeSeries().getLatestTime();
         if (lastSourceDate.isAfter(lastDestinationDate)) {
           filter.setEarliestDate(lastDestinationDate.plusDays(1));
           filter.setLatestDate(lastSourceDate);
@@ -145,10 +145,10 @@ public class HistoricalTimeSeriesMasterCopier {
       return false;
     } else {
       ManageableHistoricalTimeSeries sourceTimeSeries = _sourceMaster.getTimeSeries(sourceId);
-      ManageableHistoricalTimeSeries destTimeSeries = _destinationMaster.getTimeSeries(destinationId);
+      final ManageableHistoricalTimeSeries destTimeSeries = _destinationMaster.getTimeSeries(destinationId);
       if (!sourceTimeSeries.getTimeSeries().equals(destTimeSeries.getTimeSeries())) {
         sourceTimeSeries = _sourceMaster.getTimeSeries(sourceId);
-        HistoricalTimeSeriesMasterUtils masterUtils = new HistoricalTimeSeriesMasterUtils(_destinationMaster);
+        final HistoricalTimeSeriesMasterUtils masterUtils = new HistoricalTimeSeriesMasterUtils(_destinationMaster);
         masterUtils.writeTimeSeries(destinationId, sourceTimeSeries.getTimeSeries());
         if (verbose) {
           System.out.println("Full (slow) copy of source data to destination");
@@ -159,7 +159,7 @@ public class HistoricalTimeSeriesMasterCopier {
       return sourceTimeSeries.getTimeSeries().equals(destTimeSeries.getTimeSeries());
     }
   }
-  
+
 
 }
 

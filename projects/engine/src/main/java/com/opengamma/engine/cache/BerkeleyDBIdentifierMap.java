@@ -1,15 +1,9 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.cache;
-
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.longs.LongCollection;
-import it.unimi.dsi.fastutil.objects.Object2LongMap;
-import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -54,6 +48,12 @@ import com.sleepycat.je.DatabaseEntry;
 import com.sleepycat.je.Environment;
 import com.sleepycat.je.LockMode;
 import com.sleepycat.je.OperationStatus;
+
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.longs.LongCollection;
+import it.unimi.dsi.fastutil.objects.Object2LongMap;
+import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
 
 /**
  * An implementation of {@link IdentifierMap} that backs all lookups in a Berkeley DB table. Internally, it maintains an {@link AtomicLong} to allocate the next identifier to be used.
@@ -107,7 +107,7 @@ public class BerkeleyDBIdentifierMap implements IdentifierMap, Lifecycle {
       try (Timer.Context context = _getIdentifierTimer.time()) {
         final byte[] specAsBytes = ValueSpecificationStringEncoder.encodeAsString(spec).getBytes(Charset.forName("UTF-8"));
         _valueSpecKey.setData(specAsBytes);
-        OperationStatus status = _valueSpecificationToIdentifier.getDatabase().get(getTransaction(), _valueSpecKey, _identifier, LockMode.READ_COMMITTED);
+        final OperationStatus status = _valueSpecificationToIdentifier.getDatabase().get(getTransaction(), _valueSpecKey, _identifier, LockMode.READ_COMMITTED);
         switch (status) {
           case NOTFOUND:
             return allocateNewIdentifier(spec);
@@ -121,8 +121,8 @@ public class BerkeleyDBIdentifierMap implements IdentifierMap, Lifecycle {
     }
 
     public Object2LongMap<ValueSpecification> getIdentifiers(final Collection<ValueSpecification> specs) {
-      final Object2LongMap<ValueSpecification> result = new Object2LongOpenHashMap<ValueSpecification>();
-      for (ValueSpecification spec : specs) {
+      final Object2LongMap<ValueSpecification> result = new Object2LongOpenHashMap<>();
+      for (final ValueSpecification spec : specs) {
         result.put(spec, getIdentifier(spec));
       }
       return result;
@@ -139,8 +139,8 @@ public class BerkeleyDBIdentifierMap implements IdentifierMap, Lifecycle {
     }
 
     public Long2ObjectMap<ValueSpecification> getValueSpecifications(final long[] identifiers) {
-      final Long2ObjectMap<ValueSpecification> result = new Long2ObjectOpenHashMap<ValueSpecification>();
-      for (long identifier : identifiers) {
+      final Long2ObjectMap<ValueSpecification> result = new Long2ObjectOpenHashMap<>();
+      for (final long identifier : identifiers) {
         result.put(identifier, getValueSpecification(identifier));
       }
       return result;
@@ -175,7 +175,7 @@ public class BerkeleyDBIdentifierMap implements IdentifierMap, Lifecycle {
 
   /**
    * Gets the fudgeContext field.
-   * 
+   *
    * @return the fudgeContext
    */
   public FudgeContext getFudgeContext() {
@@ -242,7 +242,7 @@ public class BerkeleyDBIdentifierMap implements IdentifierMap, Lifecycle {
   }
 
   @Override
-  public Object2LongMap<ValueSpecification> getIdentifiers(Collection<ValueSpecification> specs) {
+  public Object2LongMap<ValueSpecification> getIdentifiers(final Collection<ValueSpecification> specs) {
     ArgumentChecker.notNull(specs, "specs");
     if (!isRunning()) {
       LOGGER.info("Starting on first call as wasn't called as part of lifecycle interface");
@@ -305,7 +305,7 @@ public class BerkeleyDBIdentifierMap implements IdentifierMap, Lifecycle {
   }
 
   @Override
-  public Long2ObjectMap<ValueSpecification> getValueSpecifications(LongCollection identifiers) {
+  public Long2ObjectMap<ValueSpecification> getValueSpecifications(final LongCollection identifiers) {
     if (!isRunning()) {
       LOGGER.info("Starting on first call as wasn't called as part of lifecycle interface");
       start();
@@ -313,8 +313,8 @@ public class BerkeleyDBIdentifierMap implements IdentifierMap, Lifecycle {
     return new GetValueSpecificationsRequest(identifiers.toLongArray()).run(_requests);
   }
 
-  protected byte[] convertSpecificationToByteArray(ValueSpecification valueSpec) {
-    FudgeMsg msg = getFudgeContext().toFudgeMsg(valueSpec).getMessage();
+  protected byte[] convertSpecificationToByteArray(final ValueSpecification valueSpec) {
+    final FudgeMsg msg = getFudgeContext().toFudgeMsg(valueSpec).getMessage();
     return getFudgeContext().toByteArray(msg);
   }
 
@@ -324,7 +324,7 @@ public class BerkeleyDBIdentifierMap implements IdentifierMap, Lifecycle {
   }
 
   protected DatabaseConfig getDatabaseConfig() {
-    DatabaseConfig dbConfig = new DatabaseConfig();
+    final DatabaseConfig dbConfig = new DatabaseConfig();
     dbConfig.setAllowCreate(true);
     dbConfig.setTransactional(true);
     return dbConfig;
@@ -338,7 +338,7 @@ public class BerkeleyDBIdentifierMap implements IdentifierMap, Lifecycle {
   @Override
   public synchronized void start() {
     if (_requests == null) {
-      _requests = new LinkedBlockingQueue<Worker.Request>();
+      _requests = new LinkedBlockingQueue<>();
       _valueSpecificationToIdentifier.start();
       _identifierToValueSpecification.start();
       // TODO: We can have multiple worker threads -- will that be good or bad?
@@ -358,7 +358,7 @@ public class BerkeleyDBIdentifierMap implements IdentifierMap, Lifecycle {
       _requests = null;
       try {
         _worker.join(5000L);
-      } catch (InterruptedException ie) {
+      } catch (final InterruptedException ie) {
         LOGGER.warn("Interrupted while waiting for worker to finish.");
       }
       _worker = null;
@@ -381,7 +381,7 @@ public class BerkeleyDBIdentifierMap implements IdentifierMap, Lifecycle {
       final String[] typeStrings = new String[types.size()];
       final StringBuilder tmp = new StringBuilder();
       int index = 0;
-      for (ComputationTargetType type : types) {
+      for (final ComputationTargetType type : types) {
         tmp.delete(0, tmp.length());
         type.accept(this, tmp);
         typeStrings[index++] = tmp.toString();
@@ -403,7 +403,7 @@ public class BerkeleyDBIdentifierMap implements IdentifierMap, Lifecycle {
     public Void visitNestedComputationTargetTypes(final List<ComputationTargetType> types, final StringBuilder builder) {
       builder.append('[');
       boolean comma = false;
-      for (ComputationTargetType type : types) {
+      for (final ComputationTargetType type : types) {
         if (comma) {
           builder.append(',');
         } else {
@@ -456,7 +456,7 @@ public class BerkeleyDBIdentifierMap implements IdentifierMap, Lifecycle {
 
   };
 
-  /* package */static String encodeAsString(ValueSpecification valueSpec) {
+  /* package */static String encodeAsString(final ValueSpecification valueSpec) {
     final StringBuilder builder = new StringBuilder(valueSpec.getValueName());
     builder.append(',');
     encodeAsString(builder, valueSpec.getProperties());
@@ -472,13 +472,13 @@ public class BerkeleyDBIdentifierMap implements IdentifierMap, Lifecycle {
     }
     if (ValueProperties.isNearInfiniteProperties(properties)) {
       builder.append("INF-");
-      final List<String> values = new ArrayList<String>(ValueProperties.all().getUnsatisfied(properties));
+      final List<String> values = new ArrayList<>(ValueProperties.all().getUnsatisfied(properties));
       Collections.sort(values);
       builder.append(values);
       return;
     }
-    Map<String, Set<String>> props = Maps.newTreeMap();
-    for (String propName : properties.getProperties()) {
+    final Map<String, Set<String>> props = Maps.newTreeMap();
+    for (final String propName : properties.getProperties()) {
       props.put(propName, Sets.newTreeSet(properties.getValues(propName)));
     }
     builder.append(props);

@@ -5,7 +5,6 @@
  */
 package com.opengamma.integration.marketdata.manipulator.dsl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -57,31 +56,31 @@ public final class YieldCurveDataBucketedShiftManipulator implements ImmutableBe
   private final ImmutableList<YieldCurveBucketedShift> _shifts;
 
   @ImmutableConstructor
-  public YieldCurveDataBucketedShiftManipulator(ScenarioShiftType shiftType, List<YieldCurveBucketedShift> shifts) {
+  public YieldCurveDataBucketedShiftManipulator(final ScenarioShiftType shiftType, final List<YieldCurveBucketedShift> shifts) {
     _shiftType = ArgumentChecker.notNull(shiftType, "shiftType");
     _shifts = ImmutableList.copyOf(ArgumentChecker.notEmpty(shifts, "shifts"));
   }
 
   @Override
-  public YieldCurveData execute(YieldCurveData curveData,
-                                ValueSpecification valueSpecification,
-                                FunctionExecutionContext executionContext) {
-    ZonedDateTime valuationTime = ZonedDateTime.now(executionContext.getValuationClock());
-    Map<ExternalIdBundle, Double> data = Maps.newHashMap(curveData.getDataPoints());
-    Map<ExternalId, ExternalIdBundle> index = curveData.getIndex();
-    for (YieldCurveBucketedShift shift : _shifts) {
-      for (FixedIncomeStripWithSecurity strip : curveData.getCurveSpecification().getStrips()) {
-        Period stripPeriod = strip.getTenor().getPeriod();
-        Period shiftStart = shift.getStart();
-        Period shiftEnd = shift.getEnd();
-        ZonedDateTime stripTime = valuationTime.plus(stripPeriod);
-        ZonedDateTime shiftStartTime = valuationTime.plus(shiftStart);
-        ZonedDateTime shiftEndTime = valuationTime.plus(shiftEnd);
+  public YieldCurveData execute(final YieldCurveData curveData,
+                                final ValueSpecification valueSpecification,
+                                final FunctionExecutionContext executionContext) {
+    final ZonedDateTime valuationTime = ZonedDateTime.now(executionContext.getValuationClock());
+    final Map<ExternalIdBundle, Double> data = Maps.newHashMap(curveData.getDataPoints());
+    final Map<ExternalId, ExternalIdBundle> index = curveData.getIndex();
+    for (final YieldCurveBucketedShift shift : _shifts) {
+      for (final FixedIncomeStripWithSecurity strip : curveData.getCurveSpecification().getStrips()) {
+        final Period stripPeriod = strip.getTenor().getPeriod();
+        final Period shiftStart = shift.getStart();
+        final Period shiftEnd = shift.getEnd();
+        final ZonedDateTime stripTime = valuationTime.plus(stripPeriod);
+        final ZonedDateTime shiftStartTime = valuationTime.plus(shiftStart);
+        final ZonedDateTime shiftEndTime = valuationTime.plus(shiftEnd);
 
         if (stripTime.compareTo(shiftStartTime) >= 0 && stripTime.compareTo(shiftEndTime) <= 0) {
-          ExternalIdBundle bundle = index.get(strip.getSecurityIdentifier());
-          boolean future = (strip.getInstrumentType() == StripInstrumentType.FUTURE);
-          Double originalData = data.get(bundle);
+          final ExternalIdBundle bundle = index.get(strip.getSecurityIdentifier());
+          final boolean future = strip.getInstrumentType() == StripInstrumentType.FUTURE;
+          final Double originalData = data.get(bundle);
           Double stripData;
 
           // futures are quoted the other way round from other instruments

@@ -10,7 +10,7 @@ package com.opengamma.integration.marketdata.manipulator.dsl;
  */
 public class YieldCurveDataSelectorBuilder extends Selector.Builder {
 
-  /* package */ YieldCurveDataSelectorBuilder(Scenario scenario) {
+  /* package */ YieldCurveDataSelectorBuilder(final Scenario scenario) {
     super(scenario);
   }
 
@@ -19,19 +19,19 @@ public class YieldCurveDataSelectorBuilder extends Selector.Builder {
   }
 
   @Override
-  public YieldCurveDataSelectorBuilder named(String... names) {
+  public YieldCurveDataSelectorBuilder named(final String... names) {
     super.named(names);
     return this;
   }
 
   @Override
-  public YieldCurveDataSelectorBuilder currencies(String... codes) {
+  public YieldCurveDataSelectorBuilder currencies(final String... codes) {
     super.currencies(codes);
     return this;
   }
 
   @Override
-  public YieldCurveDataSelectorBuilder nameMatches(String regex) {
+  public YieldCurveDataSelectorBuilder nameMatches(final String regex) {
     super.nameMatches(regex);
     return this;
   }

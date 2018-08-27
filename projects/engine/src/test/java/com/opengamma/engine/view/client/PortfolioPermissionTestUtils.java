@@ -19,25 +19,25 @@ import com.opengamma.id.UniqueId;
 
 /* package */ class PortfolioPermissionTestUtils {
 
-  /* package */ static NodeChecker createMappedNodeChecker(Map<Integer, PortfolioPermission> permissions) {
+  /* package */ static NodeChecker createMappedNodeChecker(final Map<Integer, PortfolioPermission> permissions) {
 
     final Map<String, PortfolioPermission> converted = new HashMap<>();
-    for (Map.Entry<Integer, PortfolioPermission> entry : permissions.entrySet()) {
+    for (final Map.Entry<Integer, PortfolioPermission> entry : permissions.entrySet()) {
       converted.put("node-" + entry.getKey(), entry.getValue());
     }
 
     return new NodeChecker() {
       @Override
-      public PortfolioPermission check(PortfolioNode node) {
+      public PortfolioPermission check(final PortfolioNode node) {
         return converted.get(node.getName());
       }
     };
   }
 
-  /* package */ static SimplePortfolioNode nodeTree(int id, PortfolioNode... children) {
+  /* package */ static SimplePortfolioNode nodeTree(final int id, final PortfolioNode... children) {
 
-    String nodeId = "node-" + id;
-    SimplePortfolioNode node = new SimplePortfolioNode(UniqueId.of("TEST", nodeId), nodeId);
+    final String nodeId = "node-" + id;
+    final SimplePortfolioNode node = new SimplePortfolioNode(UniqueId.of("TEST", nodeId), nodeId);
     node.addChildNodes(Arrays.asList(children));
     return node;
   }
@@ -53,7 +53,7 @@ import com.opengamma.id.UniqueId;
   private static NodeChecker createConstantNodeChecker(final PortfolioPermission permission) {
     return new NodeChecker() {
       @Override
-      public PortfolioPermission check(PortfolioNode node) {
+      public PortfolioPermission check(final PortfolioNode node) {
         return permission;
       }
     };

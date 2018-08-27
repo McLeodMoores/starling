@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.config.impl;
@@ -21,7 +21,7 @@ import com.opengamma.util.ArgumentChecker;
 public class DataConfigSourceUris {
   /**
    * Builds a URI.
-   * 
+   *
    * @param baseUri the base URI, not null
    * @param name the name, may be null
    * @param versionCorrection the version to fetch, null means latest

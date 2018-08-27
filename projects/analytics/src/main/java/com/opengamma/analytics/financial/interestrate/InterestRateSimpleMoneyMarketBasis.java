@@ -6,7 +6,7 @@
 package com.opengamma.analytics.financial.interestrate;
 
 /**
- * Class describing interest rate quoted as simple interest a money market basis: discount factor = 1/(1+r*t). 
+ * Class describing interest rate quoted as simple interest a money market basis: discount factor = 1/(1+r*t).
  */
 public class InterestRateSimpleMoneyMarketBasis extends InterestRate {
 
@@ -14,27 +14,27 @@ public class InterestRateSimpleMoneyMarketBasis extends InterestRate {
    * Constructor.
    * @param rate The rate in the simple interest money market basis: discount factor = 1/(1+r*t).
    */
-  public InterestRateSimpleMoneyMarketBasis(double rate) {
+  public InterestRateSimpleMoneyMarketBasis(final double rate) {
     super(rate);
   }
 
   @Override
-  public double getDiscountFactor(double t) {
+  public double getDiscountFactor(final double t) {
     return 1.0 / (1 + getRate() * t);
   }
 
   @Override
-  public InterestRate fromContinuous(ContinuousInterestRate continuous) {
+  public InterestRate fromContinuous(final ContinuousInterestRate continuous) {
     throw new UnsupportedOperationException("Can not convert from continuous compounding to simple interest rate");
   }
 
   @Override
-  public double fromContinuousDerivative(ContinuousInterestRate continuous) {
+  public double fromContinuousDerivative(final ContinuousInterestRate continuous) {
     throw new UnsupportedOperationException("Can not convert from continuous compounding to simple interest rate");
   }
 
   @Override
-  public InterestRate fromPeriodic(PeriodicInterestRate periodic) {
+  public InterestRate fromPeriodic(final PeriodicInterestRate periodic) {
     throw new UnsupportedOperationException("Can not convert from periodic compounding to simple interest rate");
   }
 
@@ -44,7 +44,7 @@ public class InterestRateSimpleMoneyMarketBasis extends InterestRate {
   }
 
   @Override
-  public PeriodicInterestRate toPeriodic(int periodsPerYear) {
+  public PeriodicInterestRate toPeriodic(final int periodsPerYear) {
     throw new UnsupportedOperationException("Can not convert from simple interest rate to periodic compounding");
   }
 

@@ -37,10 +37,10 @@ public class ViewportResults {
    * @param viewportDefinition Definition of the rows and columns in the viewport
    * @param columns The columns in the viewport's grid
    */
-  /* package */ ViewportResults(List<ResultsCell> allResults,
-                                ViewportDefinition viewportDefinition,
-                                GridColumnGroups columns,
-                                Duration calculationDuration, Instant valuationTime) {
+  /* package */ ViewportResults(final List<ResultsCell> allResults,
+                                final ViewportDefinition viewportDefinition,
+                                final GridColumnGroups columns,
+                                final Duration calculationDuration, final Instant valuationTime) {
     ArgumentChecker.notNull(allResults, "allResults");
     ArgumentChecker.notNull(columns, "columns");
     ArgumentChecker.notNull(viewportDefinition, "viewportDefinition");
@@ -75,7 +75,7 @@ public class ViewportResults {
   /* package */ Duration getCalculationDuration() {
     return _calculationDuration;
   }
-  
+
   /**
    * Gets the calculationTime.
    * @return the calculationTime
@@ -83,11 +83,11 @@ public class ViewportResults {
   public Instant getValuationTime() {
     return _valuationTime;
   }
-  
+
   /* package */ ViewportDefinition getViewportDefinition() {
     return _viewportDefinition;
   }
-  
+
   /**
    * Gets the columns.
    * @return the columns
@@ -102,10 +102,10 @@ public class ViewportResults {
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj);
   }
-  
+
   @Override
   public String toString() {
     return ToStringBuilder.reflectionToString(this);

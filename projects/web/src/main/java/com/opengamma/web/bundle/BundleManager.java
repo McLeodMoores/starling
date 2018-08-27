@@ -26,7 +26,7 @@ public class BundleManager {
   /**
    * The map of bundles by ID.
    */
-  private Map<String, Bundle> _bundleMap = new ConcurrentHashMap<String, Bundle>();
+  private final Map<String, Bundle> _bundleMap = new ConcurrentHashMap<>();
 
   /**
    * Creates an instance.
@@ -37,32 +37,32 @@ public class BundleManager {
   //-------------------------------------------------------------------------
   /**
    * Looks up a bundle by ID.
-   * 
+   *
    * @param id  the ID to look up, not null
    * @return the bundle, null if not found
    */
-  public Bundle getBundle(String id) {
+  public Bundle getBundle(final String id) {
     return _bundleMap.get(id);
   }
 
   /**
    * Adds a bundle to the manager.
-   * 
+   *
    * @param bundle  the bundle to add, not null
    */
-  public void addBundle(Bundle bundle) {
+  public void addBundle(final Bundle bundle) {
     ArgumentChecker.notNull(bundle, "bundle");
     ArgumentChecker.notNull(bundle.getId(), "bundle.id");
-    
+
     // recursively add children as well
-    for (Bundle loop : bundle.getAllBundles()) {
+    for (final Bundle loop : bundle.getAllBundles()) {
       _bundleMap.put(loop.getId(), loop);
     }
   }
 
   /**
    * Gets the set of all bundle IDs.
-   * 
+   *
    * @return the unmodifiable bundle ID set, not null
    */
   public Set<String> getBundleIds() {
@@ -71,8 +71,8 @@ public class BundleManager {
 
   @Override
   public String toString() {
-    ToStringBuilder builder = new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE);
-    for (Entry<String, Bundle> entry : _bundleMap.entrySet()) {
+    final ToStringBuilder builder = new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE);
+    for (final Entry<String, Bundle> entry : _bundleMap.entrySet()) {
       builder.append(entry.getKey(), entry.getValue().toString());
     }
     return builder.toString();

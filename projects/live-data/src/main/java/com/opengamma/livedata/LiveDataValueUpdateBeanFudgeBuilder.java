@@ -26,17 +26,17 @@ public class LiveDataValueUpdateBeanFudgeBuilder implements FudgeBuilder<LiveDat
   public static final String FIELDS_FIELD_NAME = "fields";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, LiveDataValueUpdateBean object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final LiveDataValueUpdateBean object) {
     return LiveDataValueUpdateBeanFudgeBuilder.toFudgeMsg(serializer, object);
   }
 
-  public static MutableFudgeMsg toFudgeMsg(FudgeSerializer serializer, LiveDataValueUpdateBean object) {
+  public static MutableFudgeMsg toFudgeMsg(final FudgeSerializer serializer, final LiveDataValueUpdateBean object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     LiveDataValueUpdateBeanFudgeBuilder.toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
-  public static void toFudgeMsg(FudgeSerializer serializer, LiveDataValueUpdateBean object, final MutableFudgeMsg msg) {
+  public static void toFudgeMsg(final FudgeSerializer serializer, final LiveDataValueUpdateBean object, final MutableFudgeMsg msg) {
     msg.add(SEQUENCE_NUMBER_FIELD_NAME, object.getSequenceNumber());
     if (object.getSpecification() != null) {
       msg.add(SPECIFICATION_FIELD_NAME, LiveDataSpecificationFudgeBuilder.toFudgeMsg(serializer, object.getSpecification()));
@@ -48,14 +48,14 @@ public class LiveDataValueUpdateBeanFudgeBuilder implements FudgeBuilder<LiveDat
   }
 
   @Override
-  public LiveDataValueUpdateBean buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
+  public LiveDataValueUpdateBean buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     return LiveDataValueUpdateBeanFudgeBuilder.fromFudgeMsg(deserializer, msg);
   }
 
-  public static LiveDataValueUpdateBean fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg) {
-    Long sequenceNumber = msg.getLong(SEQUENCE_NUMBER_FIELD_NAME);
-    FudgeMsg specificationFields = msg.getMessage(SPECIFICATION_FIELD_NAME);
-    FudgeMsg fields = msg.getMessage(FIELDS_FIELD_NAME);
+  public static LiveDataValueUpdateBean fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final Long sequenceNumber = msg.getLong(SEQUENCE_NUMBER_FIELD_NAME);
+    final FudgeMsg specificationFields = msg.getMessage(SPECIFICATION_FIELD_NAME);
+    final FudgeMsg fields = msg.getMessage(FIELDS_FIELD_NAME);
     // REVIEW kirk 2009-10-28 -- Right thing to do here?
     if (sequenceNumber == null) {
       return null;
@@ -66,7 +66,7 @@ public class LiveDataValueUpdateBeanFudgeBuilder implements FudgeBuilder<LiveDat
     if (fields == null) {
       return null;
     }
-    LiveDataSpecification spec = LiveDataSpecificationFudgeBuilder.fromFudgeMsg(deserializer, specificationFields);
+    final LiveDataSpecification spec = LiveDataSpecificationFudgeBuilder.fromFudgeMsg(deserializer, specificationFields);
     return new LiveDataValueUpdateBean(sequenceNumber, spec, fields);
   }
 

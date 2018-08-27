@@ -43,7 +43,7 @@ import com.opengamma.util.ArgumentChecker;
  * Exposure function that returns the contract type as an {@link ExternalId} for a given trade.
  */
 public class ContractCategoryExposureFunction implements ExposureFunction {
-  
+
   /**
    * The name of the exposure function.
    */
@@ -51,7 +51,7 @@ public class ContractCategoryExposureFunction implements ExposureFunction {
 
   /** Contract identifier */
   public static final String CONTRACT_IDENTIFIER = "ContractType";
-  
+
   private final ContractTypeVisitor _visitor;
 
   /**
@@ -66,10 +66,10 @@ public class ContractCategoryExposureFunction implements ExposureFunction {
   public String getName() {
     return NAME;
   }
-  
+
   @Override
-  public List<ExternalId> getIds(Trade trade) {
-    Security security = trade.getSecurity();
+  public List<ExternalId> getIds(final Trade trade) {
+    final Security security = trade.getSecurity();
     if (security instanceof FinancialSecurity) {
       return ((FinancialSecurity) security).accept(_visitor);
     }
@@ -83,19 +83,19 @@ public class ContractCategoryExposureFunction implements ExposureFunction {
   private static List<ExternalId> getContractType(final CommodityForwardSecurity security) {
     return Arrays.asList(ExternalId.of(ContractCategoryExposureFunction.CONTRACT_IDENTIFIER, security.getContractCategory()));
   }
-  
+
   /**
-   * Implementation of the FinancialSecurityVisitor that returns the contract type for a security. If the security does 
+   * Implementation of the FinancialSecurityVisitor that returns the contract type for a security. If the security does
    * not have a contract type, then null is returned.
    */
   private static final class ContractTypeVisitor extends FinancialSecurityVisitorSameValueAdapter<List<ExternalId>> {
-    
+
     private final SecuritySource _securitySource;
-    
+
     /**
-     * Default constructor that initialises the default returned value to null.  
+     * Default constructor that initialises the default returned value to null.
      */
-    public ContractTypeVisitor(SecuritySource securitySource) {
+    public ContractTypeVisitor(final SecuritySource securitySource) {
       super(null);
       _securitySource = ArgumentChecker.notNull(securitySource, "securitySource");
     }

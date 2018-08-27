@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.provider.permission.impl;
@@ -39,11 +39,11 @@ final class ProviderBasedPermission implements ExtendedPermission {
 
   /**
    * Creates an instance of the permission.
-   * 
+   *
    * @param provider  the underlying permission check provider, not null
    * @param permissionString  the permission string, not null
    */
-  ProviderBasedPermission(PermissionCheckProvider provider, String permissionString) {
+  ProviderBasedPermission(final PermissionCheckProvider provider, final String permissionString) {
     _provider = ArgumentChecker.notNull(provider, "provider");
     _permissionString = ArgumentChecker.notNull(permissionString, "permissionString");
   }
@@ -57,12 +57,12 @@ final class ProviderBasedPermission implements ExtendedPermission {
   // this permission is the permission I have
   // the other permission is the permission being checked
   @Override
-  public boolean implies(Permission requiredPermission) {
+  public boolean implies(final Permission requiredPermission) {
     if (requiredPermission instanceof ProviderBasedPermission == false) {
       return false;
     }
-    ProviderBasedPermission requiredPerm = (ProviderBasedPermission) requiredPermission;
-    UserPrincipals user = (UserPrincipals) AuthUtils.getSubject().getSession().getAttribute(UserPrincipals.ATTRIBUTE_KEY);
+    final ProviderBasedPermission requiredPerm = (ProviderBasedPermission) requiredPermission;
+    final UserPrincipals user = (UserPrincipals) AuthUtils.getSubject().getSession().getAttribute(UserPrincipals.ATTRIBUTE_KEY);
     if (user == null) {
       return false;
     }
@@ -70,35 +70,35 @@ final class ProviderBasedPermission implements ExtendedPermission {
   }
 
   @Override
-  public boolean checkImplies(Permission requiredPermission) {
+  public boolean checkImplies(final Permission requiredPermission) {
     if (requiredPermission instanceof ProviderBasedPermission == false) {
       return false;
     }
-    ProviderBasedPermission requiredPerm = (ProviderBasedPermission) requiredPermission;
-    UserPrincipals user = (UserPrincipals) AuthUtils.getSubject().getSession().getAttribute(UserPrincipals.ATTRIBUTE_KEY);
+    final ProviderBasedPermission requiredPerm = (ProviderBasedPermission) requiredPermission;
+    final UserPrincipals user = (UserPrincipals) AuthUtils.getSubject().getSession().getAttribute(UserPrincipals.ATTRIBUTE_KEY);
     if (user == null) {
       throw new UnauthenticatedException("Permission denied: User not logged in: " + requiredPermission);
     }
-    PermissionCheckProviderRequest request = PermissionCheckProviderRequest.createGet(
+    final PermissionCheckProviderRequest request = PermissionCheckProviderRequest.createGet(
         user.getAlternateIds(), user.getNetworkAddress(), requiredPerm.getPermissionString());
-    PermissionCheckProviderResult result = _provider.isPermitted(request);
+    final PermissionCheckProviderResult result = _provider.isPermitted(request);
     result.checkErrors();
     return result.isPermitted(requiredPerm.getPermissionString());
   }
 
   @Override
-  public Boolean checkImpliesAll(Collection<Permission> requiredPermissions, boolean exceptionsOnError) {
+  public Boolean checkImpliesAll(final Collection<Permission> requiredPermissions, final boolean exceptionsOnError) {
     if (requiredPermissions.isEmpty()) {
       return Boolean.TRUE;
     }
-    Set<String> required = new HashSet<>();
-    for (Permission requiredPermission : requiredPermissions) {
+    final Set<String> required = new HashSet<>();
+    for (final Permission requiredPermission : requiredPermissions) {
       if (requiredPermission instanceof ProviderBasedPermission == false) {
         return null;
       }
       required.add(((ProviderBasedPermission) requiredPermission).getPermissionString());
     }
-    UserPrincipals user = (UserPrincipals) AuthUtils.getSubject().getSession().getAttribute(UserPrincipals.ATTRIBUTE_KEY);
+    final UserPrincipals user = (UserPrincipals) AuthUtils.getSubject().getSession().getAttribute(UserPrincipals.ATTRIBUTE_KEY);
     if (user == null) {
       if (exceptionsOnError) {
         throw new UnauthenticatedException("Permission denied: User not logged in: " + required);
@@ -106,9 +106,9 @@ final class ProviderBasedPermission implements ExtendedPermission {
         return Boolean.FALSE;
       }
     }
-    PermissionCheckProviderRequest request = PermissionCheckProviderRequest.createGet(
+    final PermissionCheckProviderRequest request = PermissionCheckProviderRequest.createGet(
         user.getAlternateIds(), user.getNetworkAddress(), required);
-    PermissionCheckProviderResult result = _provider.isPermitted(request);
+    final PermissionCheckProviderResult result = _provider.isPermitted(request);
     if (exceptionsOnError) {
       result.checkErrors();
     }
@@ -117,9 +117,9 @@ final class ProviderBasedPermission implements ExtendedPermission {
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (obj instanceof ProviderBasedPermission) {
-      ProviderBasedPermission other = (ProviderBasedPermission) obj;
+      final ProviderBasedPermission other = (ProviderBasedPermission) obj;
       return getPermissionString().equals(other.getPermissionString());
     }
     return false;

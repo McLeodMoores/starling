@@ -34,7 +34,7 @@ public abstract class RegressionIO {
 
     /**
      * Initializes any internal context needed by an I/O instance for {@link #read} operations.
-     * 
+     *
      * @param context the previous context (created by {@link #write} for example) or null if none
      * @return the context object, or null if none required
      */
@@ -42,7 +42,7 @@ public abstract class RegressionIO {
 
     /**
      * Initializes any internal context needed by an I/O instance for {@link #write} operations.
-     * 
+     *
      * @param context the previous context (created by {@link #write} for example) or null if none
      * @return the context object, or null if none required
      */
@@ -50,7 +50,7 @@ public abstract class RegressionIO {
 
     /**
      * Returns a logical file extension, if any.
-     * 
+     *
      * @param context the context object returned by {@link #init}
      * @return the logical extension, for example ".txt", or null if none
      */
@@ -58,7 +58,7 @@ public abstract class RegressionIO {
 
     /**
      * Formats an object to an output stream.
-     * 
+     *
      * @param context the context object returned by {@link #init}
      * @param o the object to write, not null
      * @param dest the target stream, not null
@@ -67,7 +67,7 @@ public abstract class RegressionIO {
 
     /**
      * Decodes an object from an input stream.
-     * 
+     *
      * @param context the context object returned by {@link #init}
      * @param in the input stream, not null
      * @return the object read, not null
@@ -76,7 +76,7 @@ public abstract class RegressionIO {
 
     /**
      * Terminates a context returned by {@link #initRead}.
-     * 
+     *
      * @param context the value returned by a previous call to {@code initRead}.
      * @return the updated context, or null if none now exists
      */
@@ -84,7 +84,7 @@ public abstract class RegressionIO {
 
     /**
      * Terminates a context returned by {@link #initWrite}.
-     * 
+     *
      * @param context the value returned by a previous call to {@code initWrite}.
      * @return the updated context, or null if none now exists
      */
@@ -104,7 +104,7 @@ public abstract class RegressionIO {
 
   /**
    * Creates a new instance.
-   * 
+   *
    * @param baseFile the base file - the exact meaning will depend on the sub-class, not null
    * @param format the format to use for each object, not null
    */
@@ -115,7 +115,7 @@ public abstract class RegressionIO {
 
   /**
    * Returns the base location - the exact meaning will depend on the sub-class.
-   * 
+   *
    * @return the base location, not null
    */
   protected File getBaseFile() {
@@ -124,7 +124,7 @@ public abstract class RegressionIO {
 
   /**
    * Returns the format to use for each object.
-   * 
+   *
    * @return the format, not null
    */
   protected Format getFormat() {
@@ -133,7 +133,7 @@ public abstract class RegressionIO {
 
   /**
    * Returns the current format context.
-   * 
+   *
    * @return the format context, if any
    */
   protected Object getFormatContext() {
@@ -149,7 +149,7 @@ public abstract class RegressionIO {
 
   /**
    * Writes out an object.
-   * 
+   *
    * @param type the type classifier, null for none
    * @param o the object to write out, not null
    * @param identifier the object identifier, must be unique within a given object type, not null
@@ -160,12 +160,12 @@ public abstract class RegressionIO {
    * Bulk write operation.
    * <p>
    * The default implementation just calls {@link #write} but a sub-class might have a more efficient/appropriate form to use.
-   * 
+   *
    * @param type the type classifier, null for none
    * @param os the objects to write out, as a map of identifier to value, not null
    */
   public void write(final String type, final Map<String, Object> os) throws IOException {
-    for (Map.Entry<String, Object> oe : os.entrySet()) {
+    for (final Map.Entry<String, Object> oe : os.entrySet()) {
       write(type, oe.getValue(), oe.getKey());
     }
   }
@@ -186,7 +186,7 @@ public abstract class RegressionIO {
 
   /**
    * Reads an object.
-   * 
+   *
    * @param type the type classifier, null for none
    * @param identifier the object identifier, must be unique within a given object type, not null
    * @return the read object, not null
@@ -195,7 +195,7 @@ public abstract class RegressionIO {
 
   /**
    * Enumerates all available objects for a type.
-   * 
+   *
    * @param type the type classifier, null for none
    * @return the object identifiers, not null
    */
@@ -205,14 +205,14 @@ public abstract class RegressionIO {
    * Bulk read operation to fetch an object sub-set.
    * <p>
    * The default implementation just calls {@link #read(String,String)} but a sub-class might have a more efficient/appropriate form to use.
-   * 
+   *
    * @param type the type classifier, null for none
    * @param identifiers the object identifiers to read, not null
    * @return the objects as a map from identifiers to values, not null
    */
   public Map<String, Object> read(final String type, final Collection<String> identifiers) throws IOException {
     final Map<String, Object> result = Maps.newHashMapWithExpectedSize(identifiers.size());
-    for (String identifier : identifiers) {
+    for (final String identifier : identifiers) {
       result.put(identifier, read(type, identifier));
     }
     return result;
@@ -222,7 +222,7 @@ public abstract class RegressionIO {
    * Bulk read operation to fetch all objects.
    * <p>
    * The default implementation just calls {@link #enumObjects} and {@link #read(String,Collection)} but a sub-class might have a more efficient/appropriate form to use.
-   * 
+   *
    * @param type the type classifier, null for none
    * @return the objects as a map of identifiers to values, not null
    */
@@ -246,13 +246,13 @@ public abstract class RegressionIO {
     }
   }
 
-  protected boolean isIdentifierIncluded(String name) {
-    String ext = getFormat().getLogicalFileExtension(getFormatContext());
+  protected boolean isIdentifierIncluded(final String name) {
+    final String ext = getFormat().getLogicalFileExtension(getFormatContext());
     return ext == null || name.endsWith(ext);
   }
-  
-  protected String stripIdentifierExtension(String name) {
-    String ext = getFormat().getLogicalFileExtension(getFormatContext());
+
+  protected String stripIdentifierExtension(final String name) {
+    final String ext = getFormat().getLogicalFileExtension(getFormatContext());
     if (ext == null) {
       return name;
     } else if (name.endsWith(ext)) {

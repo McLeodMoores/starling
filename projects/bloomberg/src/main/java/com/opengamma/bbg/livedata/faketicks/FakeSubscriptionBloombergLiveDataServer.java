@@ -22,10 +22,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CountDownLatch;
 
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
-
 import org.fudgemsg.FudgeMsg;
 import org.fudgemsg.FudgeMsgEnvelope;
 import org.slf4j.Logger;
@@ -42,6 +38,10 @@ import com.opengamma.livedata.server.Subscription;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.ehcache.EHCacheUtils;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
+
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
 
 /**
  * A live data server which fakes out Bloomberg subscriptions for some tickers.
@@ -60,7 +60,7 @@ public class FakeSubscriptionBloombergLiveDataServer extends StandardLiveDataSer
   /**
    * The subscriptions that have been made.
    */
-  private final ConcurrentMap<String, Object> _subscriptions = new ConcurrentHashMap<String, Object>();
+  private final ConcurrentMap<String, Object> _subscriptions = new ConcurrentHashMap<>();
   /**
    * The cache of values.
    */
@@ -84,12 +84,12 @@ public class FakeSubscriptionBloombergLiveDataServer extends StandardLiveDataSer
    * <p>
    * The distribution specification resolver, entitlement checker and market data sender factory
    * are set by the constructor based on the underlying server.
-   * 
+   *
    * @param underlying  the underlying server, not null
    * @param uniqueIdDomain  the external identifier scheme that this live data server handles, not null
    * @param cacheManager  the cache manager, not null
    */
-  public FakeSubscriptionBloombergLiveDataServer(BloombergLiveDataServer underlying, ExternalScheme uniqueIdDomain, CacheManager cacheManager) {
+  public FakeSubscriptionBloombergLiveDataServer(final BloombergLiveDataServer underlying, final ExternalScheme uniqueIdDomain, final CacheManager cacheManager) {
     super(cacheManager);
     ArgumentChecker.notNull(underlying, "underlying");
     ArgumentChecker.notNull(uniqueIdDomain, "uniqueIdDomain");
@@ -99,8 +99,8 @@ public class FakeSubscriptionBloombergLiveDataServer extends StandardLiveDataSer
     setDistributionSpecificationResolver(getDistributionSpecificationResolver(underlying.getDistributionSpecificationResolver()));
     setEntitlementChecker(underlying.getEntitlementChecker());
     setMarketDataSenderFactory(underlying.getMarketDataSenderFactory());
-    
-    String snapshotCacheName = "FakeSubscriptionBloombergLiveDataServer.SnapshotValues";
+
+    final String snapshotCacheName = "FakeSubscriptionBloombergLiveDataServer.SnapshotValues";
     EHCacheUtils.addCache(cacheManager, snapshotCacheName);
     _snapshotValues = EHCacheUtils.getCacheFromManager(cacheManager, snapshotCacheName);
   }
@@ -113,9 +113,9 @@ public class FakeSubscriptionBloombergLiveDataServer extends StandardLiveDataSer
   @Override
   protected void doConnect() {
     _timer = new Timer(FakeSubscriptionBloombergLiveDataServer.class.getSimpleName(), true);
-    
+
     _timer.schedule(new TimerTask() {
-      
+
       @Override
       public void run() {
         updateAll();
@@ -124,27 +124,27 @@ public class FakeSubscriptionBloombergLiveDataServer extends StandardLiveDataSer
   }
 
   private void updateAll() {
-    Set<String> idsToUpdate = _subscriptions.keySet();
+    final Set<String> idsToUpdate = _subscriptions.keySet();
     LOGGER.info("Requerying {} in order to fake ticks", idsToUpdate);
-    Map<String, FudgeMsg> doSnapshot = doUnderlyingSnapshot(idsToUpdate);
-    for (Entry<String, FudgeMsg> entry : doSnapshot.entrySet()) {
+    final Map<String, FudgeMsg> doSnapshot = doUnderlyingSnapshot(idsToUpdate);
+    for (final Entry<String, FudgeMsg> entry : doSnapshot.entrySet()) {
       liveDataReceived(entry.getKey(), entry.getValue());
     }
   }
 
   @Override
-  protected Map<String, FudgeMsg> doSnapshot(Collection<String> uniqueIds) {
+  protected Map<String, FudgeMsg> doSnapshot(final Collection<String> uniqueIds) {
     ArgumentChecker.notNull(uniqueIds, "Unique IDs");
     if (uniqueIds.isEmpty()) {
       return Collections.emptyMap();
     }
-    
-    Map<String, FudgeMsg> result = new HashMap<String, FudgeMsg>();
-    Set<String> uidsToQuery = new HashSet<String>();
-    for (String uid : uniqueIds) {
-      Element cached = _snapshotValues.get(uid);
+
+    final Map<String, FudgeMsg> result = new HashMap<>();
+    final Set<String> uidsToQuery = new HashSet<>();
+    for (final String uid : uniqueIds) {
+      final Element cached = _snapshotValues.get(uid);
       if (cached != null && cached.getObjectValue() != null) {
-        CachedPerSecuritySnapshotResult cachedResult = (CachedPerSecuritySnapshotResult) cached.getObjectValue();
+        final CachedPerSecuritySnapshotResult cachedResult = (CachedPerSecuritySnapshotResult) cached.getObjectValue();
         result.put(uid, cachedResult._fieldData);
       } else {
         uidsToQuery.add(uid);
@@ -153,21 +153,21 @@ public class FakeSubscriptionBloombergLiveDataServer extends StandardLiveDataSer
     if (uidsToQuery.isEmpty()) {
       return result;
     }
-    
-    Map<String, FudgeMsg> underlyingResult = doUnderlyingSnapshot(uidsToQuery);
+
+    final Map<String, FudgeMsg> underlyingResult = doUnderlyingSnapshot(uidsToQuery);
     result.putAll(underlyingResult);
     return result;
   }
 
-  private Map<String, FudgeMsg> doUnderlyingSnapshot(Set<String> uidsToQuery) {
-    Map<String, FudgeMsg> result = _underlying.doSnapshot(uidsToQuery);
-    
-    for (Entry<String, FudgeMsg> entry : result.entrySet()) {
+  private Map<String, FudgeMsg> doUnderlyingSnapshot(final Set<String> uidsToQuery) {
+    final Map<String, FudgeMsg> result = _underlying.doSnapshot(uidsToQuery);
+
+    for (final Entry<String, FudgeMsg> entry : result.entrySet()) {
       //In the case of a race there may already be an entry here, but it's consistent
-      String uid = entry.getKey();
+      final String uid = entry.getKey();
       _snapshotValues.put(new Element(uid, new CachedPerSecuritySnapshotResult(entry.getValue())));
     }
-    
+
     _snapshotValues.flush();
     return result;
   }
@@ -178,7 +178,7 @@ public class FakeSubscriptionBloombergLiveDataServer extends StandardLiveDataSer
    */
   private static class CachedPerSecuritySnapshotResult implements Serializable {
     private static final long serialVersionUID = 1L;
-    
+
     private FudgeMsg _fieldData;
 
     private static class Inner implements Serializable {
@@ -186,30 +186,30 @@ public class FakeSubscriptionBloombergLiveDataServer extends StandardLiveDataSer
       private byte[] _data;
     }
 
-    public CachedPerSecuritySnapshotResult(FudgeMsg value) {
+    public CachedPerSecuritySnapshotResult(final FudgeMsg value) {
       _fieldData = value;
     }
 
-    private void writeObject(ObjectOutputStream out) throws IOException {
+    private void writeObject(final ObjectOutputStream out) throws IOException {
       if (_fieldData == null) {
         out.writeObject(new Inner());
         return;
       }
 
-      byte[] bytes = OpenGammaFudgeContext.getInstance().toByteArray(_fieldData);
-      Inner wrapper = new Inner();
+      final byte[] bytes = OpenGammaFudgeContext.getInstance().toByteArray(_fieldData);
+      final Inner wrapper = new Inner();
       wrapper._data = bytes;
       out.writeObject(wrapper);
       out.flush();
     }
 
-    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-      Inner wrapper = (Inner) in.readObject();
-      byte[] bytes = wrapper._data;
+    private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException {
+      final Inner wrapper = (Inner) in.readObject();
+      final byte[] bytes = wrapper._data;
       if (bytes == null) {
         _fieldData = null;
       } else {
-        FudgeMsgEnvelope envelope = OpenGammaFudgeContext.getInstance().deserialize(bytes);
+        final FudgeMsgEnvelope envelope = OpenGammaFudgeContext.getInstance().deserialize(bytes);
         _fieldData = envelope.getMessage();
       }
     }
@@ -220,7 +220,7 @@ public class FakeSubscriptionBloombergLiveDataServer extends StandardLiveDataSer
   protected void doDisconnect() {
     final CountDownLatch timerCancelledLatch = new CountDownLatch(1);
     _timer.schedule(new TimerTask() {
-      
+
       @Override
       public void run() {
         LOGGER.info("Cancelling fake subscriptions");
@@ -231,7 +231,7 @@ public class FakeSubscriptionBloombergLiveDataServer extends StandardLiveDataSer
     try {
       LOGGER.info("Waiting for fake subscriptions to stop");
       timerCancelledLatch.await();
-    } catch (InterruptedException ex) {
+    } catch (final InterruptedException ex) {
       throw new OpenGammaRuntimeException("Interrupted whilst disconnecting", ex);
     }
     LOGGER.info("Fake subscriptions to stopped");
@@ -239,30 +239,30 @@ public class FakeSubscriptionBloombergLiveDataServer extends StandardLiveDataSer
   }
 
   @Override
-  protected Map<String, Object> doSubscribe(Collection<String> uniqueIds) {
+  protected Map<String, Object> doSubscribe(final Collection<String> uniqueIds) {
     ArgumentChecker.notNull(uniqueIds, "Unique IDs");
     if (uniqueIds.isEmpty()) {
       return Collections.emptyMap();
     }
-    
-    Map<String, Object> subscriptions = new HashMap<String, Object>();
-    for (String uniqueId : uniqueIds) {
+
+    final Map<String, Object> subscriptions = new HashMap<>();
+    for (final String uniqueId : uniqueIds) {
       LOGGER.info("Faking subscription to {}", uniqueId);
       subscriptions.put(uniqueId, uniqueId);
     }
-    
+
     _subscriptions.putAll(subscriptions);
     return subscriptions;
   }
 
   @Override
-  protected void doUnsubscribe(Collection<Object> subscriptionHandles) {
+  protected void doUnsubscribe(final Collection<Object> subscriptionHandles) {
     ArgumentChecker.notNull(subscriptionHandles, "Subscription handles");
     if (subscriptionHandles.isEmpty()) {
       return;
     }
-    
-    for (Object subscriptionHandle : subscriptionHandles) {
+
+    for (final Object subscriptionHandle : subscriptionHandles) {
       LOGGER.info("Removing fake subscription to {}", subscriptionHandle);
       _subscriptions.remove(subscriptionHandle);
     }
@@ -274,13 +274,13 @@ public class FakeSubscriptionBloombergLiveDataServer extends StandardLiveDataSer
   }
 
   @Override
-  protected boolean snapshotOnSubscriptionStartRequired(Subscription subscription) {
+  protected boolean snapshotOnSubscriptionStartRequired(final Subscription subscription) {
     return true;
   }
 
   /**
    * Gets the reference data provider from the underlying.
-   * 
+   *
    * @return the reference data provider, not null
    */
   public ReferenceDataProvider getReferenceDataProvider() {

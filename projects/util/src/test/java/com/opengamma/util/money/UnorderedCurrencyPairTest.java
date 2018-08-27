@@ -24,14 +24,14 @@ public class UnorderedCurrencyPairTest {
   // of(Currency,Currency)
   //-----------------------------------------------------------------------
   public void test_of_CurrencyCurrency_order1() {
-    UnorderedCurrencyPair test = UnorderedCurrencyPair.of(Currency.GBP, Currency.USD);
+    final UnorderedCurrencyPair test = UnorderedCurrencyPair.of(Currency.GBP, Currency.USD);
     assertEquals(Currency.GBP, test.getFirstCurrency());
     assertEquals(Currency.USD, test.getSecondCurrency());
     assertEquals("GBPUSD", test.toString());
   }
 
   public void test_of_CurrencyCurrency_order2() {
-    UnorderedCurrencyPair test = UnorderedCurrencyPair.of(Currency.USD, Currency.GBP);
+    final UnorderedCurrencyPair test = UnorderedCurrencyPair.of(Currency.USD, Currency.GBP);
     assertEquals(Currency.GBP, test.getFirstCurrency());
     assertEquals(Currency.USD, test.getSecondCurrency());
     assertEquals("GBPUSD", test.toString());
@@ -53,9 +53,9 @@ public class UnorderedCurrencyPairTest {
   @Test
   public void test_parse_String() {
     assertEquals(UnorderedCurrencyPair.of(Currency.AUD, Currency.EUR), UnorderedCurrencyPair.parse("AUDEUR"));
-    UnorderedCurrencyPair pair1 = UnorderedCurrencyPair.of(Currency.EUR, Currency.USD);
+    final UnorderedCurrencyPair pair1 = UnorderedCurrencyPair.of(Currency.EUR, Currency.USD);
     assertEquals(pair1, UnorderedCurrencyPair.parse(pair1.toString()));
-    UnorderedCurrencyPair pair2 = UnorderedCurrencyPair.of(Currency.USD, Currency.EUR);
+    final UnorderedCurrencyPair pair2 = UnorderedCurrencyPair.of(Currency.USD, Currency.EUR);
     assertEquals(pair2, UnorderedCurrencyPair.parse(pair2.toString()));
   }
 
@@ -69,7 +69,7 @@ public class UnorderedCurrencyPairTest {
     };
   }
   @Test(dataProvider = "badParse", expectedExceptions = IllegalArgumentException.class)
-  public void test_parse_String_bad(String input) {
+  public void test_parse_String_bad(final String input) {
     UnorderedCurrencyPair.parse(input);
   }
 
@@ -77,24 +77,24 @@ public class UnorderedCurrencyPairTest {
   // equals() hashCode()
   //-----------------------------------------------------------------------
   public void test_equals_hashCode() {
-    UnorderedCurrencyPair a = UnorderedCurrencyPair.of(Currency.GBP, Currency.USD);
-    UnorderedCurrencyPair b = UnorderedCurrencyPair.of(Currency.USD, Currency.GBP);
-    UnorderedCurrencyPair c = UnorderedCurrencyPair.of(Currency.USD, Currency.EUR);
-    
+    final UnorderedCurrencyPair a = UnorderedCurrencyPair.of(Currency.GBP, Currency.USD);
+    final UnorderedCurrencyPair b = UnorderedCurrencyPair.of(Currency.USD, Currency.GBP);
+    final UnorderedCurrencyPair c = UnorderedCurrencyPair.of(Currency.USD, Currency.EUR);
+
     assertEquals(a.equals(a), true);
     assertEquals(b.equals(b), true);
     assertEquals(c.equals(c), true);
-    
+
     assertEquals(a.equals(b), true);
     assertEquals(b.equals(a), true);
     assertEquals(a.hashCode() == b.hashCode(), true);
-    
+
     assertEquals(a.equals(c), false);
     assertEquals(b.equals(c), false);
   }
 
   public void test_equals_false() {
-    UnorderedCurrencyPair a = UnorderedCurrencyPair.of(Currency.GBP, Currency.USD);
+    final UnorderedCurrencyPair a = UnorderedCurrencyPair.of(Currency.GBP, Currency.USD);
     assertEquals(a.equals(null), false);
     assertEquals(a.equals("String"), false);
     assertEquals(a.equals(new Object()), false);
@@ -104,7 +104,7 @@ public class UnorderedCurrencyPairTest {
   // uniqueId
   //-----------------------------------------------------------------------
   public void test_of_UniqueId() {
-    UnorderedCurrencyPair test = UnorderedCurrencyPair.of(UniqueId.of(UnorderedCurrencyPair.OBJECT_SCHEME, "USDGBP"));
+    final UnorderedCurrencyPair test = UnorderedCurrencyPair.of(UniqueId.of(UnorderedCurrencyPair.OBJECT_SCHEME, "USDGBP"));
     assertEquals(Currency.GBP, test.getFirstCurrency());
     assertEquals(Currency.USD, test.getSecondCurrency());
     assertEquals(ObjectId.of(UnorderedCurrencyPair.OBJECT_SCHEME, "GBPUSD"), test.getObjectId());

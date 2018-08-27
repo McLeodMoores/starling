@@ -42,22 +42,22 @@ public class SwapTradeSecurityExtractor extends TradeSecurityExtractor<SwapTrade
    *
    * @param trade the trade to perform extraction on
    */
-  public SwapTradeSecurityExtractor(SwapTrade trade) {
+  public SwapTradeSecurityExtractor(final SwapTrade trade) {
     super(trade);
   }
 
   //-------------------------------------------------------------------------
   @Override
   public ManageableSecurity[] extractSecurities() {
-    SwapTrade trade = getTrade();
+    final SwapTrade trade = getTrade();
 
-    List<SwapLeg> payLegs = Lists.newArrayList(trade.getPayLegs());
-    List<SwapLeg> recLegs = Lists.newArrayList(trade.getReceiveLegs());
+    final List<SwapLeg> payLegs = Lists.newArrayList(trade.getPayLegs());
+    final List<SwapLeg> recLegs = Lists.newArrayList(trade.getReceiveLegs());
 
     Preconditions.checkState(payLegs.size() == 1, format("Swaps must have one (and only one) pay leg. Found %d", payLegs.size()));
     Preconditions.checkState(recLegs.size() == 1, format("Swaps must have one (and only one) receive leg. Found %d", recLegs.size()));
 
-    ManageableSecurity security = new SwapSecurity(
+    final ManageableSecurity security = new SwapSecurity(
         convertLocalDate(trade.getTradeDate()),
         convertLocalDate(trade.getEffectiveDate()),
         convertLocalDate(trade.getMaturityDate()),
@@ -74,7 +74,7 @@ public class SwapTradeSecurityExtractor extends TradeSecurityExtractor<SwapTrade
    * @return the converted leg.
    * @throws PortfolioParsingException if the leg is not of type {@link FixedLeg} or {@link FloatingLeg}.
    */
-  private com.opengamma.financial.security.swap.SwapLeg convertLeg(SwapLeg leg) {
+  private com.opengamma.financial.security.swap.SwapLeg convertLeg(final SwapLeg leg) {
     if (leg instanceof FixedLeg) {
       return convertFixedLeg((FixedLeg) leg);
     } else if (leg instanceof FloatingLeg) {
@@ -84,46 +84,46 @@ public class SwapTradeSecurityExtractor extends TradeSecurityExtractor<SwapTrade
     }
   }
 
-  private com.opengamma.financial.security.swap.SwapLeg convertFixedLeg(FixedLeg fixedLeg) {
+  private com.opengamma.financial.security.swap.SwapLeg convertFixedLeg(final FixedLeg fixedLeg) {
 
-    Notional notional = extractNotional(fixedLeg);
+    final Notional notional = extractNotional(fixedLeg);
 
-    DayCount dayCount = DayCountFactory.of(fixedLeg.getDayCount());
-    Frequency frequency = SimpleFrequencyFactory.of(fixedLeg.getFrequency());
-    ExternalId region = extractRegion(fixedLeg);
-    BusinessDayConvention businessDayConvention = BusinessDayConventionFactory.of(fixedLeg.getBusinessDayConvention());
-    boolean isEndOfMonth = fixedLeg.isEndOfMonth();
+    final DayCount dayCount = DayCountFactory.of(fixedLeg.getDayCount());
+    final Frequency frequency = SimpleFrequencyFactory.of(fixedLeg.getFrequency());
+    final ExternalId region = extractRegion(fixedLeg);
+    final BusinessDayConvention businessDayConvention = BusinessDayConventionFactory.of(fixedLeg.getBusinessDayConvention());
+    final boolean isEndOfMonth = fixedLeg.isEndOfMonth();
     return new FixedInterestRateLeg(dayCount, frequency, region, businessDayConvention, notional, isEndOfMonth,
         convertRate(fixedLeg.getRate()));
   }
 
-  private com.opengamma.financial.security.swap.SwapLeg convertFloatingLeg(FloatingLeg floatingLeg) {
+  private com.opengamma.financial.security.swap.SwapLeg convertFloatingLeg(final FloatingLeg floatingLeg) {
 
-    Notional notional = extractNotional(floatingLeg);
+    final Notional notional = extractNotional(floatingLeg);
 
-    ExternalId region = extractRegion(floatingLeg);
-    DayCount dayCount = DayCountFactory.of(floatingLeg.getDayCount());
-    Frequency frequency = SimpleFrequencyFactory.of(floatingLeg.getFrequency());
-    BusinessDayConvention businessDayConvention = BusinessDayConventionFactory.of(floatingLeg.getBusinessDayConvention());
-    boolean isEndOfMonth = floatingLeg.isEndOfMonth();
+    final ExternalId region = extractRegion(floatingLeg);
+    final DayCount dayCount = DayCountFactory.of(floatingLeg.getDayCount());
+    final Frequency frequency = SimpleFrequencyFactory.of(floatingLeg.getFrequency());
+    final BusinessDayConvention businessDayConvention = BusinessDayConventionFactory.of(floatingLeg.getBusinessDayConvention());
+    final boolean isEndOfMonth = floatingLeg.isEndOfMonth();
 
-    FixingIndex fixingIndex = floatingLeg.getFixingIndex();
-    ExternalId referenceRate = fixingIndex.getIndex().toExternalId();
-    FloatingRateType rateType = FloatingRateType.valueOf(fixingIndex.getRateType().toString());
+    final FixingIndex fixingIndex = floatingLeg.getFixingIndex();
+    final ExternalId referenceRate = fixingIndex.getIndex().toExternalId();
+    final FloatingRateType rateType = FloatingRateType.valueOf(fixingIndex.getRateType().toString());
 
     return new FloatingInterestRateLeg(dayCount, frequency, region, businessDayConvention, notional, isEndOfMonth,
         referenceRate, rateType);
   }
 
-  private Notional extractNotional(SwapLeg floatingLeg) {
+  private Notional extractNotional(final SwapLeg floatingLeg) {
     return new InterestRateNotional(floatingLeg.getCurrency(), floatingLeg.getNotional().doubleValue());
   }
 
-  private ExternalId extractRegion(SwapLeg floatingLeg) {
+  private ExternalId extractRegion(final SwapLeg floatingLeg) {
     return extractRegion(floatingLeg.getPaymentCalendars());
   }
 
-  private double convertRate(BigDecimal rate) {
+  private double convertRate(final BigDecimal rate) {
     return rate.divide(new BigDecimal(100)).doubleValue();
   }
 

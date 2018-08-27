@@ -53,8 +53,8 @@ public final class AutoStartViewDefinition implements ImmutableBean {
    */
   @ImmutableConstructor
   public AutoStartViewDefinition(
-      UniqueId underlyingViewDefinitionId,
-      ViewExecutionOptions executionOptions) {
+      final UniqueId underlyingViewDefinitionId,
+      final ViewExecutionOptions executionOptions) {
 
     ArgumentChecker.notNull(underlyingViewDefinitionId, "underlyingViewDefinitionId");
     ArgumentChecker.notNull(executionOptions, "executionOptions");

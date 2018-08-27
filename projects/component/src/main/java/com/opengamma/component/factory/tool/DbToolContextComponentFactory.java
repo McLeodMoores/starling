@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.component.factory.tool;
@@ -72,11 +72,11 @@ public class DbToolContextComponentFactory extends AbstractComponentFactory {
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
-    DbToolContext dbToolContext = new DbToolContext();
-    Map<String, MetaProperty<?>> mapTarget = new HashMap<String, MetaProperty<?>>(dbToolContext.metaBean().metaPropertyMap());
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
+    final DbToolContext dbToolContext = new DbToolContext();
+    final Map<String, MetaProperty<?>> mapTarget = new HashMap<>(dbToolContext.metaBean().metaPropertyMap());
     mapTarget.keySet().retainAll(this.metaBean().metaPropertyMap().keySet());
-    for (MetaProperty<?> mp : mapTarget.values()) {
+    for (final MetaProperty<?> mp : mapTarget.values()) {
       mp.set(dbToolContext, mp.get(this));
     }
     final String catalog = getCatalog(getJdbcUrl());
@@ -84,8 +84,8 @@ public class DbToolContextComponentFactory extends AbstractComponentFactory {
       dbToolContext.setCatalog(catalog);
     }
     if (getSchemaNamesList() != null) {
-      Set<String> schemaGroups = new HashSet<String>();
-      for (String schemaGroup : getSchemaNamesList().split(",")) {
+      final Set<String> schemaGroups = new HashSet<>();
+      for (final String schemaGroup : getSchemaNamesList().split(",")) {
         schemaGroups.add(schemaGroup.toLowerCase().trim());
       }
       dbToolContext.setSchemaNames(schemaGroups);
@@ -109,9 +109,9 @@ public class DbToolContextComponentFactory extends AbstractComponentFactory {
     if (!jdbcUrl.contains(MSSQL_DB_PROP)) {
       throw new OpenGammaRuntimeException(String.format("MSSQL url must contain %s: %s", MSSQL_DB_PROP, jdbcUrl));
     }
-    String[] fragments = jdbcUrl.split(MSSQL_DELIMITER);
+    final String[] fragments = jdbcUrl.split(MSSQL_DELIMITER);
     String catalog = null;
-    for (String fragment : fragments) {
+    for (final String fragment : fragments) {
       if (fragment.startsWith(MSSQL_DB_PROP)) {
         catalog = fragment.substring(fragment.indexOf(MSSQL_DB_PROP) + MSSQL_DB_PROP.length());
       }
@@ -127,7 +127,7 @@ public class DbToolContextComponentFactory extends AbstractComponentFactory {
       return "";
     }
     // REVIEW jonathan 2012-10-12 -- workaround for PLAT-2745
-    int lastSlashIdx = jdbcUrl.lastIndexOf("/");
+    final int lastSlashIdx = jdbcUrl.lastIndexOf("/");
     if (lastSlashIdx == -1) {
       throw new OpenGammaRuntimeException("JDBC URL must contain '/' before the database name");
     }

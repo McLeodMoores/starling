@@ -42,13 +42,13 @@ public class IndexFutureSecurity extends FutureSecurity {
     super();
   }
 
-  public IndexFutureSecurity(Expiry expiry, String tradingExchange, String settlementExchange, Currency currency, double unitAmount, String category) {
+  public IndexFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency, final double unitAmount, final String category) {
     super(expiry, tradingExchange, settlementExchange, currency, unitAmount, category);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitIndexFutureSecurity(this);
   }
 

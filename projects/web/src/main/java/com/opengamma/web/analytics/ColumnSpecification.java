@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.web.analytics;
@@ -22,7 +22,7 @@ public class ColumnSpecification {
   /** Column header. */
   private final String _header;
 
-  /* package */ ColumnSpecification(String calcConfigName, String valueName, ValueProperties valueProperties, String header) {
+  /* package */ ColumnSpecification(final String calcConfigName, final String valueName, final ValueProperties valueProperties, final String header) {
     ArgumentChecker.notNull(calcConfigName, "calcConfigName");
     ArgumentChecker.notNull(valueName, "valueName");
     ArgumentChecker.notNull(valueProperties, "valueProperties");
@@ -33,7 +33,7 @@ public class ColumnSpecification {
     _header = header;
   }
 
-  /* package */ ColumnSpecification(String calcConfigName, String valueName, ValueProperties valueProperties) {
+  /* package */ ColumnSpecification(final String calcConfigName, final String valueName, final ValueProperties valueProperties) {
     this(calcConfigName, valueName, valueProperties, valueName);
   }
 
@@ -54,14 +54,14 @@ public class ColumnSpecification {
   }
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(final Object o) {
     if (this == o) {
       return true;
     }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ColumnSpecification that = (ColumnSpecification) o;
+    final ColumnSpecification that = (ColumnSpecification) o;
 
     if (!_calcConfigName.equals(that._calcConfigName)) {
       return false;

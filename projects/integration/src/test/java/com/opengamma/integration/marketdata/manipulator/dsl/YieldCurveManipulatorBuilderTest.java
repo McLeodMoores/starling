@@ -23,50 +23,50 @@ import com.opengamma.util.test.TestGroup;
 public class YieldCurveManipulatorBuilderTest {
 
   private YieldCurveManipulatorBuilder _builder;
-  
+
   private StructureManipulator<?> _manipulatorResult; //added via the scenario
-  
+
   @BeforeMethod
   public void beforeMethod() {
-    YieldCurveSelector mockSelector = Mockito.mock(YieldCurveSelector.class);
+    final YieldCurveSelector mockSelector = Mockito.mock(YieldCurveSelector.class);
     //builder which assigns the created manipulator to _manipulatorResult
     _builder = new YieldCurveManipulatorBuilder(mockSelector, new Scenario("test") {
 
       @Override
-      void add(DistinctMarketDataSelector selector, StructureManipulator<?> manipulator) {
+      void add(final DistinctMarketDataSelector selector, final StructureManipulator<?> manipulator) {
         YieldCurveManipulatorBuilderTest.this._manipulatorResult = manipulator;
       }
-      
+
     });
   }
-  
+
   @Test
   public void bucketedShifts() {
     _builder.bucketedShifts(ScenarioShiftType.ABSOLUTE, bucketedShift(Period.ofYears(1), Period.ofYears(2), 3));
-    
-    YieldCurveBucketedShiftManipulator result = (YieldCurveBucketedShiftManipulator) _manipulatorResult;
-    
+
+    final YieldCurveBucketedShiftManipulator result = (YieldCurveBucketedShiftManipulator) _manipulatorResult;
+
     assertTrue("One shift expected", 1 == result.getShifts().size());
 
-    YieldCurveBucketedShift shift = result.getShifts().get(0);
-    
+    final YieldCurveBucketedShift shift = result.getShifts().get(0);
+
     assertEquals(Period.ofYears(1), shift.getStart());
     assertEquals(Period.ofYears(2), shift.getEnd());
     assertEquals(3., shift.getShift());
-    
-    
+
+
   }
 
   @Test
   public void pointShifts() {
     _builder.pointShifts(ScenarioShiftType.ABSOLUTE, pointShift(1, 2));
-    
-    YieldCurvePointShiftManipulator result = (YieldCurvePointShiftManipulator)_manipulatorResult;
-    
+
+    final YieldCurvePointShiftManipulator result = (YieldCurvePointShiftManipulator)_manipulatorResult;
+
     assertTrue("One shift expected", 1 == result.getPointShifts().size());
-    
-    YieldCurvePointShift shift = result.getPointShifts().get(0);
-    
+
+    final YieldCurvePointShift shift = result.getPointShifts().get(0);
+
     assertEquals(1, shift.getPointIndex());
     assertEquals(2d, shift.getShift());
   }

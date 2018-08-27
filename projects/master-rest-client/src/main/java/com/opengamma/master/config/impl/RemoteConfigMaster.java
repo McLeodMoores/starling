@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.config.impl;
@@ -47,16 +47,16 @@ public class RemoteConfigMaster
    * @param baseUri  the base target URI for all RESTful web services, not null
    * @param changeManager  the change manager, not null
    */
-  public RemoteConfigMaster(final URI baseUri, ChangeManager changeManager) {
+  public RemoteConfigMaster(final URI baseUri, final ChangeManager changeManager) {
     super(baseUri, changeManager);
   }
-  
+
   //-------------------------------------------------------------------------
   @Override
-  public ConfigMetaDataResult metaData(ConfigMetaDataRequest request) {
+  public ConfigMetaDataResult metaData(final ConfigMetaDataRequest request) {
     ArgumentChecker.notNull(request, "request");
-    
-    URI uri = DataConfigMasterUris.uriMetaData(getBaseUri(), request);
+
+    final URI uri = DataConfigMasterUris.uriMetaData(getBaseUri(), request);
     return accessRemote(uri).get(ConfigMetaDataResult.class);
   }
 
@@ -66,7 +66,7 @@ public class RemoteConfigMaster
   public <R> ConfigSearchResult<R> search(final ConfigSearchRequest<R> request) {
     ArgumentChecker.notNull(request, "request");
 
-    URI uri = DataConfigMasterUris.uriSearch(getBaseUri());
+    final URI uri = DataConfigMasterUris.uriSearch(getBaseUri());
     return accessRemote(uri).post(ConfigSearchResult.class, request);
   }
 
@@ -76,7 +76,7 @@ public class RemoteConfigMaster
     ArgumentChecker.notNull(uniqueId, "uniqueId");
 
     if (uniqueId.isVersioned()) {
-      URI uri = DataConfigUris.uriVersion(getBaseUri(), uniqueId);
+      final URI uri = DataConfigUris.uriVersion(getBaseUri(), uniqueId);
       return accessRemote(uri).get(ConfigDocument.class);
     } else {
       return get(uniqueId, VersionCorrection.LATEST);
@@ -88,7 +88,7 @@ public class RemoteConfigMaster
   public ConfigDocument get(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(objectId, "objectId");
 
-    URI uri = DataConfigUris.uri(getBaseUri(), objectId, versionCorrection);
+    final URI uri = DataConfigUris.uri(getBaseUri(), objectId, versionCorrection);
     return accessRemote(uri).get(ConfigDocument.class);
   }
 
@@ -98,7 +98,7 @@ public class RemoteConfigMaster
     ArgumentChecker.notNull(document, "document");
     ArgumentChecker.notNull(document.getConfig(), "document.config");
 
-    URI uri = DataConfigMasterUris.uriAdd(getBaseUri());
+    final URI uri = DataConfigMasterUris.uriAdd(getBaseUri());
     return accessRemote(uri).post(ConfigDocument.class, document);
   }
 
@@ -109,7 +109,7 @@ public class RemoteConfigMaster
     ArgumentChecker.notNull(document.getConfig(), "document.config");
     ArgumentChecker.notNull(document.getUniqueId(), "document.uniqueId");
 
-    URI uri = DataConfigUris.uri(getBaseUri(), document.getUniqueId(), null);
+    final URI uri = DataConfigUris.uri(getBaseUri(), document.getUniqueId(), null);
     return accessRemote(uri).post(ConfigDocument.class, document);
   }
 
@@ -118,7 +118,7 @@ public class RemoteConfigMaster
   public void remove(final ObjectIdentifiable objectIdentifiable) {
     ArgumentChecker.notNull(objectIdentifiable, "objectIdentifiable");
 
-    URI uri = DataConfigUris.uri(getBaseUri(), objectIdentifiable, null);
+    final URI uri = DataConfigUris.uri(getBaseUri(), objectIdentifiable, null);
     accessRemote(uri).delete();
   }
 
@@ -129,7 +129,7 @@ public class RemoteConfigMaster
     ArgumentChecker.notNull(request, "request");
     ArgumentChecker.notNull(request.getObjectId(), "request.objectId");
 
-    URI uri = DataConfigUris.uriVersions(getBaseUri(), request.getObjectId(), request);
+    final URI uri = DataConfigUris.uriVersions(getBaseUri(), request.getObjectId(), request);
     return accessRemote(uri).get(ConfigHistoryResult.class);
   }
 
@@ -140,46 +140,46 @@ public class RemoteConfigMaster
     ArgumentChecker.notNull(document.getConfig(), "document.config");
     ArgumentChecker.notNull(document.getUniqueId(), "document.uniqueId");
 
-    URI uri = DataConfigUris.uriVersion(getBaseUri(), document.getUniqueId());
+    final URI uri = DataConfigUris.uriVersion(getBaseUri(), document.getUniqueId());
     return accessRemote(uri).post(ConfigDocument.class, document);
   }
 
   @Override
-  public List<UniqueId> replaceVersion(UniqueId uniqueId, List<ConfigDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersion(final UniqueId uniqueId, final List<ConfigDocument> replacementDocuments) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
-    for (ConfigDocument replacementDocument : replacementDocuments) {
+    for (final ConfigDocument replacementDocument : replacementDocuments) {
       ArgumentChecker.notNull(replacementDocument, "replacementDocument");
       ArgumentChecker.notNull(replacementDocument.getConfig(), "replacementDocument.config");
     }
 
-    URI uri = DataConfigUris.uriVersion(getBaseUri(), uniqueId);
+    final URI uri = DataConfigUris.uriVersion(getBaseUri(), uniqueId);
     return accessRemote(uri).put(new GenericType<List<UniqueId>>() {
     }, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceAllVersions(ObjectIdentifiable objectId, List<ConfigDocument> replacementDocuments) {
+  public List<UniqueId> replaceAllVersions(final ObjectIdentifiable objectId, final List<ConfigDocument> replacementDocuments) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
-    for (ConfigDocument replacementDocument : replacementDocuments) {
+    for (final ConfigDocument replacementDocument : replacementDocuments) {
       ArgumentChecker.notNull(replacementDocument, "replacementDocument");
       ArgumentChecker.notNull(replacementDocument.getConfig(), "replacementDocument.config");
     }
-    URI uri = DataConfigUris.uriAll(getBaseUri(), objectId, null, null);
+    final URI uri = DataConfigUris.uriAll(getBaseUri(), objectId, null, null);
     return accessRemote(uri).put(new GenericType<List<UniqueId>>() {
     }, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceVersions(ObjectIdentifiable objectId, List<ConfigDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersions(final ObjectIdentifiable objectId, final List<ConfigDocument> replacementDocuments) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
-    for (ConfigDocument replacementDocument : replacementDocuments) {
+    for (final ConfigDocument replacementDocument : replacementDocuments) {
       ArgumentChecker.notNull(replacementDocument, "replacementDocument");
       ArgumentChecker.notNull(replacementDocument.getConfig(), "replacementDocument.config");
     }
-    URI uri = DataConfigUris.uri(getBaseUri(), objectId, null);
+    final URI uri = DataConfigUris.uri(getBaseUri(), objectId, null);
     return accessRemote(uri).put(new GenericType<List<UniqueId>>() {
     }, replacementDocuments);
   }

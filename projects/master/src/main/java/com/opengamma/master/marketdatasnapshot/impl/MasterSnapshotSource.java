@@ -61,10 +61,10 @@ public class MasterSnapshotSource
   //-------------------------------------------------------------------------
   @Override
   public void addChangeListener(final UniqueId uniqueId, final MarketDataSnapshotChangeListener listener) {
-    ChangeListener changeListener = new ChangeListener() {
+    final ChangeListener changeListener = new ChangeListener() {
       @Override
-      public void entityChanged(ChangeEvent event) {
-        ObjectId changedId = event.getObjectId();
+      public void entityChanged(final ChangeEvent event) {
+        final ObjectId changedId = event.getObjectId();
         if (changedId != null && changedId.getScheme().equals(uniqueId.getScheme()) &&
             changedId.getValue().equals(uniqueId.getValue())) {
           //TODO This is over cautious in the case of corrections to non latest versions
@@ -77,22 +77,22 @@ public class MasterSnapshotSource
   }
 
   @Override
-  public void removeChangeListener(UniqueId uid, MarketDataSnapshotChangeListener listener) {
-    ChangeListener changeListener = _registeredListeners.remove(Pairs.of(uid, listener));
+  public void removeChangeListener(final UniqueId uid, final MarketDataSnapshotChangeListener listener) {
+    final ChangeListener changeListener = _registeredListeners.remove(Pairs.of(uid, listener));
     getMaster().changeManager().removeChangeListener(changeListener);
   }
 
 
   @Override
-  public <S extends NamedSnapshot> S getSingle(Class<S> type,
-                                               String snapshotName,
-                                               VersionCorrection versionCorrection) {
+  public <S extends NamedSnapshot> S getSingle(final Class<S> type,
+                                               final String snapshotName,
+                                               final VersionCorrection versionCorrection) {
 
     // Try to find an exact match using the name and type first. If this doesn't work
     // (perhaps as the type searched for is a superclass of the type held), we search
     // again by name only and check the type after.
     // TODO - review usage patterns, do we normally hit or miss using type. If names are generally unique searching by type is potentially redundant
-    TypedSnapshotSearcher<S> searcher =
+    final TypedSnapshotSearcher<S> searcher =
         new TypedSnapshotSearcher<>(getMaster(), type, snapshotName, versionCorrection);
     return searcher.search();
   }
@@ -141,10 +141,10 @@ public class MasterSnapshotSource
      * @param  snapshotName the name of the snapshot being searched for
      * @param  versionCorrection the version correction of the snapshot being searched for
      */
-    public TypedSnapshotSearcher(MarketDataSnapshotMaster master,
-                                 Class<S> type,
-                                 String snapshotName,
-                                 VersionCorrection versionCorrection) {
+    public TypedSnapshotSearcher(final MarketDataSnapshotMaster master,
+                                 final Class<S> type,
+                                 final String snapshotName,
+                                 final VersionCorrection versionCorrection) {
       _master = ArgumentChecker.notNull(master, "master");
       _type = ArgumentChecker.notNull(type, "type");
       _snapshotName = ArgumentChecker.notNull(snapshotName, "snapshotName");
@@ -160,19 +160,19 @@ public class MasterSnapshotSource
      * @throws DataNotFoundException if no matching snapshot can be found
      */
     public S search() {
-      S result = findWithMatchingType();
+      final S result = findWithMatchingType();
       return result != null ? result : findWithGeneralType();
     }
 
     private S findWithMatchingType() {
-      MarketDataSnapshotSearchRequest request = createBaseSearchRequest();
+      final MarketDataSnapshotSearchRequest request = createBaseSearchRequest();
       request.setType(_type);
       return selectResult(_master.search(request).getNamedSnapshots(), true);
     }
 
     private S findWithGeneralType() {
-      MarketDataSnapshotSearchRequest request = createBaseSearchRequest();
-      S result = selectResult(_master.search(request).getNamedSnapshots(), false);
+      final MarketDataSnapshotSearchRequest request = createBaseSearchRequest();
+      final S result = selectResult(_master.search(request).getNamedSnapshots(), false);
 
       if (result != null) {
         return result;
@@ -183,14 +183,14 @@ public class MasterSnapshotSource
     }
 
     private MarketDataSnapshotSearchRequest createBaseSearchRequest() {
-      MarketDataSnapshotSearchRequest request = new MarketDataSnapshotSearchRequest();
+      final MarketDataSnapshotSearchRequest request = new MarketDataSnapshotSearchRequest();
       request.setName(_snapshotName);
       request.setVersionCorrection(_versionCorrection);
       return request;
     }
 
-    private S selectResult(List<NamedSnapshot> results, boolean warnOnTypeMismatch) {
-      List<S> filtered = filterForCorrectType(results, warnOnTypeMismatch);
+    private S selectResult(final List<NamedSnapshot> results, final boolean warnOnTypeMismatch) {
+      final List<S> filtered = filterForCorrectType(results, warnOnTypeMismatch);
       if (filtered.size() < results.size()) {
         LOGGER.info("Filtered out {} snapshot(s) where type is not: {}", results.size() - filtered.size(), _type);
       }
@@ -198,11 +198,11 @@ public class MasterSnapshotSource
       return selectFirst(filtered);
     }
 
-    private List<S> filterForCorrectType(List<NamedSnapshot> results, boolean warnOnTypeMismatch) {
+    private List<S> filterForCorrectType(final List<NamedSnapshot> results, final boolean warnOnTypeMismatch) {
 
-      ImmutableList.Builder<S> builder = ImmutableList.builder();
+      final ImmutableList.Builder<S> builder = ImmutableList.builder();
 
-      for (NamedSnapshot snapshot : results) {
+      for (final NamedSnapshot snapshot : results) {
 
         if (_type.isAssignableFrom(snapshot.getClass())) {
           builder.add(_type.cast(snapshot));
@@ -215,7 +215,7 @@ public class MasterSnapshotSource
       return builder.build();
     }
 
-    private S selectFirst(List<S> filtered) {
+    private S selectFirst(final List<S> filtered) {
       if (filtered.isEmpty()) {
         return null;
       }

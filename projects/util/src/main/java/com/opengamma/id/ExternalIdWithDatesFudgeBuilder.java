@@ -28,7 +28,7 @@ public final class ExternalIdWithDatesFudgeBuilder extends AbstractFudgeBuilder 
 
   //-------------------------------------------------------------------------
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, ExternalIdWithDates object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final ExternalIdWithDates object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     toFudgeMsg(serializer, object, msg);
     return msg;
@@ -59,9 +59,9 @@ public final class ExternalIdWithDatesFudgeBuilder extends AbstractFudgeBuilder 
     if (msg == null) {
       return null;
     }
-    ExternalId identifier = ExternalIdFudgeBuilder.fromFudgeMsg(msg);
-    LocalDate validFrom = msg.getValue(LocalDate.class, VALID_FROM_FIELD_NAME);
-    LocalDate validTo = msg.getValue(LocalDate.class, VALID_TO_FIELD_NAME);
+    final ExternalId identifier = ExternalIdFudgeBuilder.fromFudgeMsg(msg);
+    final LocalDate validFrom = msg.getValue(LocalDate.class, VALID_FROM_FIELD_NAME);
+    final LocalDate validTo = msg.getValue(LocalDate.class, VALID_TO_FIELD_NAME);
     return ExternalIdWithDates.of(identifier, validFrom, validTo);
   }
 

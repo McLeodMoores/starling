@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode;
@@ -61,7 +61,7 @@ public class RemoteNodeClient extends SimpleCalculationNodeInvocationContainer i
 
     @Override
     protected void visitCancelMessage(final Cancel message) {
-      for (CalculationJobSpecification job : message.getJob()) {
+      for (final CalculationJobSpecification job : message.getJob()) {
         cancel(job);
       }
     }
@@ -97,7 +97,7 @@ public class RemoteNodeClient extends SimpleCalculationNodeInvocationContainer i
 
     @Override
     protected void visitIsAliveMessage(final IsAlive message) {
-      for (CalculationJobSpecification job : message.getJob()) {
+      for (final CalculationJobSpecification job : message.getJob()) {
         if (!isAlive(job)) {
           sendMessage(new Failure(job, "isAlive returned false", ""));
         }
@@ -123,7 +123,7 @@ public class RemoteNodeClient extends SimpleCalculationNodeInvocationContainer i
     connection.setFudgeMessageReceiver(this);
     try {
       setHostId(Inet4Address.getLocalHost().getHostName());
-    } catch (UnknownHostException e) {
+    } catch (final UnknownHostException e) {
       setHostId("ANONYMOUS");
     }
   }
@@ -193,12 +193,12 @@ public class RemoteNodeClient extends SimpleCalculationNodeInvocationContainer i
 
   /**
    * Needs to run sequentially, preserving network message order.
-   * 
+   *
    * @param fudgeContext the Fudge context for processing the message
    * @param msgEnvelope the received message
    */
   @Override
-  public void messageReceived(FudgeContext fudgeContext, FudgeMsgEnvelope msgEnvelope) {
+  public void messageReceived(final FudgeContext fudgeContext, final FudgeMsgEnvelope msgEnvelope) {
     final FudgeMsg msg = msgEnvelope.getMessage();
     LOGGER.debug("Received ({} fields) from {}", msg.getNumFields(), _connection);
     final FudgeDeserializer deserializer = new FudgeDeserializer(fudgeContext);

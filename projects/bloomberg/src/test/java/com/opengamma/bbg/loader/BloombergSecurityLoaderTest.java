@@ -112,7 +112,7 @@ public class BloombergSecurityLoaderTest extends AbstractDbTest {
   private DefaultSecurityLoader _securityLoader;
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public BloombergSecurityLoaderTest(String databaseType, String databaseVersion) {
+  public BloombergSecurityLoaderTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion);
     LOGGER.info("running testcases for {}", databaseType);
   }
@@ -124,7 +124,7 @@ public class BloombergSecurityLoaderTest extends AbstractDbTest {
   }
 
   @Override
-  protected void initDbConnectorFactory(DbConnectorFactoryBean factory) {
+  protected void initDbConnectorFactory(final DbConnectorFactoryBean factory) {
     factory.setHibernateMappingFiles(new HibernateMappingFiles[] {new HibernateSecurityMasterFiles() });
   }
 
@@ -133,9 +133,9 @@ public class BloombergSecurityLoaderTest extends AbstractDbTest {
   protected void doSetUpClass() {
     _bbgProvider = BloombergTestUtils.getBloombergReferenceDataProvider();
     _bbgProvider.start();
-    ReferenceDataProvider cachingProvider = BloombergTestUtils.getMongoCachingReferenceDataProvider(_bbgProvider);
-    ExchangeDataProvider exchangeProvider = DefaultExchangeDataProvider.getInstance();
-    BloombergSecurityProvider secProvider = new BloombergSecurityProvider(cachingProvider, exchangeProvider );
+    final ReferenceDataProvider cachingProvider = BloombergTestUtils.getMongoCachingReferenceDataProvider(_bbgProvider);
+    final ExchangeDataProvider exchangeProvider = DefaultExchangeDataProvider.getInstance();
+    final BloombergSecurityProvider secProvider = new BloombergSecurityProvider(cachingProvider, exchangeProvider );
     _securityMaster = new DbSecurityMaster(getDbConnector());
     _securityMaster.setDetailProvider(new HibernateSecurityMasterDetailProvider());
     _securityLoader = new DefaultSecurityLoader(_securityMaster, secProvider);
@@ -151,18 +151,18 @@ public class BloombergSecurityLoaderTest extends AbstractDbTest {
   }
 
   //-------------------------------------------------------------------------
-  private void assertLoadAndSaveSecurity(FinancialSecurity expected) {
+  private void assertLoadAndSaveSecurity(final FinancialSecurity expected) {
     //test we can load security from bloomberg
-    ExternalIdBundle identifierBundle = expected.getExternalIdBundle();
+    final ExternalIdBundle identifierBundle = expected.getExternalIdBundle();
 
-    Map<ExternalIdBundle, UniqueId> loadedSecurities = _securityLoader.loadSecurities(Collections.singleton(identifierBundle));
+    final Map<ExternalIdBundle, UniqueId> loadedSecurities = _securityLoader.loadSecurities(Collections.singleton(identifierBundle));
     assertNotNull(loadedSecurities);
     assertEquals(1, loadedSecurities.size());
-    UniqueId uid = loadedSecurities.get(identifierBundle);
+    final UniqueId uid = loadedSecurities.get(identifierBundle);
     assertNotNull(uid);
 
     //test we can add and read from secmaster
-    SecurityDocument securityDocument = _securityMaster.get(uid);
+    final SecurityDocument securityDocument = _securityMaster.get(uid);
     assertNotNull(securityDocument);
 
     final Security fromSecMaster = securityDocument.getSecurity();
@@ -175,39 +175,39 @@ public class BloombergSecurityLoaderTest extends AbstractDbTest {
       }
 
       @Override
-      public Void visitCorporateBondSecurity(CorporateBondSecurity security) {
+      public Void visitCorporateBondSecurity(final CorporateBondSecurity security) {
         assertSecurity();
         return null;
       }
 
       @Override
-      public Void visitGovernmentBondSecurity(GovernmentBondSecurity security) {
+      public Void visitGovernmentBondSecurity(final GovernmentBondSecurity security) {
         assertSecurity();
         return null;
       }
 
       @Override
-      public Void visitMunicipalBondSecurity(MunicipalBondSecurity security) {
+      public Void visitMunicipalBondSecurity(final MunicipalBondSecurity security) {
         assertSecurity();
         return null;
       }
 
       @Override
-      public Void visitCashSecurity(CashSecurity security) {
+      public Void visitCashSecurity(final CashSecurity security) {
         assertSecurity();
         return null;
       }
 
       @Override
-      public Void visitCashFlowSecurity(CashFlowSecurity security) {
+      public Void visitCashFlowSecurity(final CashFlowSecurity security) {
         assertSecurity();
         return null;
       }
 
       @Override
-      public Void visitEquitySecurity(EquitySecurity security) {
+      public Void visitEquitySecurity(final EquitySecurity security) {
         assertTrue(fromSecMaster instanceof EquitySecurity);
-        EquitySecurity actual = (EquitySecurity) fromSecMaster;
+        final EquitySecurity actual = (EquitySecurity) fromSecMaster;
 
         assertEquals(security.getCompanyName(), actual.getCompanyName());
         assertEquals(security.getCurrency(), actual.getCurrency());
@@ -223,74 +223,74 @@ public class BloombergSecurityLoaderTest extends AbstractDbTest {
       }
 
       @Override
-      public Void visitFRASecurity(FRASecurity security) {
+      public Void visitFRASecurity(final FRASecurity security) {
         assertSecurity();
         return null;
       }
 
       @Override
-      public Void visitAgricultureFutureSecurity(AgricultureFutureSecurity security) {
+      public Void visitAgricultureFutureSecurity(final AgricultureFutureSecurity security) {
         return visitFutureSecurity(security);
       }
 
       @Override
-      public Void visitBondFutureSecurity(BondFutureSecurity security) {
+      public Void visitBondFutureSecurity(final BondFutureSecurity security) {
         return visitFutureSecurity(security);
       }
 
       @Override
-      public Void visitEnergyFutureSecurity(EnergyFutureSecurity security) {
+      public Void visitEnergyFutureSecurity(final EnergyFutureSecurity security) {
         return visitFutureSecurity(security);
       }
 
       @Override
-      public Void visitEquityFutureSecurity(EquityFutureSecurity security) {
+      public Void visitEquityFutureSecurity(final EquityFutureSecurity security) {
         return visitFutureSecurity(security);
       }
 
       @Override
-      public Void visitEquityIndexDividendFutureSecurity(EquityIndexDividendFutureSecurity security) {
+      public Void visitEquityIndexDividendFutureSecurity(final EquityIndexDividendFutureSecurity security) {
         return visitFutureSecurity(security);
       }
 
       @Override
-      public Void visitFXFutureSecurity(FXFutureSecurity security) {
+      public Void visitFXFutureSecurity(final FXFutureSecurity security) {
         return visitFutureSecurity(security);
       }
 
       @Override
-      public Void visitIndexFutureSecurity(IndexFutureSecurity security) {
+      public Void visitIndexFutureSecurity(final IndexFutureSecurity security) {
         return visitFutureSecurity(security);
       }
 
       @Override
-      public Void visitInterestRateFutureSecurity(InterestRateFutureSecurity security) {
+      public Void visitInterestRateFutureSecurity(final InterestRateFutureSecurity security) {
         return visitFutureSecurity(security);
       }
 
       @Override
-      public Void visitMetalFutureSecurity(MetalFutureSecurity security) {
+      public Void visitMetalFutureSecurity(final MetalFutureSecurity security) {
         return visitFutureSecurity(security);
       }
 
       @Override
-      public Void visitStockFutureSecurity(StockFutureSecurity security) {
+      public Void visitStockFutureSecurity(final StockFutureSecurity security) {
         return visitFutureSecurity(security);
       }
 
-      private Void visitFutureSecurity(FutureSecurity security) {
+      private Void visitFutureSecurity(final FutureSecurity security) {
         security.accept(new FinancialSecurityVisitorAdapter<Void>() {
 
           @Override
-          public Void visitAgricultureFutureSecurity(AgricultureFutureSecurity security) {
+          public Void visitAgricultureFutureSecurity(final AgricultureFutureSecurity security) {
             assertSecurity();
             return null;
           }
 
           @Override
-          public Void visitBondFutureSecurity(BondFutureSecurity security) {
+          public Void visitBondFutureSecurity(final BondFutureSecurity security) {
             assertTrue("Security is instance of: " + fromSecMaster.getClass().getName(), fromSecMaster instanceof BondFutureSecurity);
-            BondFutureSecurity actual = (BondFutureSecurity) fromSecMaster;
+            final BondFutureSecurity actual = (BondFutureSecurity) fromSecMaster;
 
             assertEquals(new HashSet<>(security.getBasket()), new HashSet<>(actual.getBasket()));
 
@@ -308,47 +308,47 @@ public class BloombergSecurityLoaderTest extends AbstractDbTest {
             assertNotNull(actual.getUniqueId());
 
             //test underlying is loaded as well
-            for (BondFutureDeliverable deliverable : security.getBasket()) {
-              ExternalIdBundle identifiers = deliverable.getIdentifiers();
+            for (final BondFutureDeliverable deliverable : security.getBasket()) {
+              final ExternalIdBundle identifiers = deliverable.getIdentifiers();
               assertUnderlyingIsLoaded(identifiers);
             }
             return null;
           }
 
           @Override
-          public Void visitEnergyFutureSecurity(EnergyFutureSecurity security) {
+          public Void visitEnergyFutureSecurity(final EnergyFutureSecurity security) {
             assertSecurity();
             return null;
           }
 
           @Override
-          public Void visitEquityFutureSecurity(EquityFutureSecurity security) {
+          public Void visitEquityFutureSecurity(final EquityFutureSecurity security) {
             assertSecurity();
             return null;
           }
 
           @Override
-          public Void visitEquityIndexDividendFutureSecurity(EquityIndexDividendFutureSecurity security) {
+          public Void visitEquityIndexDividendFutureSecurity(final EquityIndexDividendFutureSecurity security) {
             assertSecurity();
             return null;
           }
 
           @Override
-          public Void visitFXFutureSecurity(FXFutureSecurity security) {
+          public Void visitFXFutureSecurity(final FXFutureSecurity security) {
             assertSecurity();
             return null;
           }
 
           @Override
-          public Void visitIndexFutureSecurity(IndexFutureSecurity security) {
+          public Void visitIndexFutureSecurity(final IndexFutureSecurity security) {
             assertSecurity();
             return null;
           }
 
           @Override
-          public Void visitInterestRateFutureSecurity(InterestRateFutureSecurity security) {
+          public Void visitInterestRateFutureSecurity(final InterestRateFutureSecurity security) {
             assertTrue(fromSecMaster instanceof InterestRateFutureSecurity);
-            InterestRateFutureSecurity actual = (InterestRateFutureSecurity) fromSecMaster;
+            final InterestRateFutureSecurity actual = (InterestRateFutureSecurity) fromSecMaster;
             assertEquals(security.getCurrency(), actual.getCurrency());
             assertEquals(security.getExpiry(), actual.getExpiry());
             assertEquals(security.getExternalIdBundle(), actual.getExternalIdBundle());
@@ -363,13 +363,13 @@ public class BloombergSecurityLoaderTest extends AbstractDbTest {
           }
 
           @Override
-          public Void visitMetalFutureSecurity(MetalFutureSecurity security) {
+          public Void visitMetalFutureSecurity(final MetalFutureSecurity security) {
             assertSecurity();
             return null;
           }
 
           @Override
-          public Void visitStockFutureSecurity(StockFutureSecurity security) {
+          public Void visitStockFutureSecurity(final StockFutureSecurity security) {
             assertSecurity();
             return null;
           }
@@ -378,15 +378,15 @@ public class BloombergSecurityLoaderTest extends AbstractDbTest {
       }
 
       @Override
-      public Void visitSwapSecurity(SwapSecurity security) {
+      public Void visitSwapSecurity(final SwapSecurity security) {
         assertSecurity();
         return null;
       }
 
       @Override
-      public Void visitEquityIndexOptionSecurity(EquityIndexOptionSecurity security) {
+      public Void visitEquityIndexOptionSecurity(final EquityIndexOptionSecurity security) {
         assertTrue(fromSecMaster instanceof EquityIndexOptionSecurity);
-        EquityIndexOptionSecurity actual = (EquityIndexOptionSecurity) fromSecMaster;
+        final EquityIndexOptionSecurity actual = (EquityIndexOptionSecurity) fromSecMaster;
 
         assertEquals(security.getCurrency(), actual.getCurrency());
 
@@ -405,9 +405,9 @@ public class BloombergSecurityLoaderTest extends AbstractDbTest {
       }
 
       @Override
-      public Void visitEquityOptionSecurity(EquityOptionSecurity security) {
+      public Void visitEquityOptionSecurity(final EquityOptionSecurity security) {
         assertTrue(fromSecMaster instanceof EquityOptionSecurity);
-        EquityOptionSecurity actual = (EquityOptionSecurity) fromSecMaster;
+        final EquityOptionSecurity actual = (EquityOptionSecurity) fromSecMaster;
 
         assertEquals(security.getCurrency(), actual.getCurrency());
 
@@ -424,39 +424,39 @@ public class BloombergSecurityLoaderTest extends AbstractDbTest {
         assertNotNull(actual.getUniqueId());
 
         //test underlying is loaded as well
-        ExternalId underlyingIdentifier = security.getUnderlyingId();
+        final ExternalId underlyingIdentifier = security.getUnderlyingId();
         assertUnderlyingIsLoaded(underlyingIdentifier);
         return null;
       }
 
       @Override
-      public Void visitEquityBarrierOptionSecurity(EquityBarrierOptionSecurity security) {
-        assertSecurity();
-        return null;
-      }
-      
-      @Override
-      public Void visitFXOptionSecurity(FXOptionSecurity security) {
-        assertSecurity();
-        return null;
-      }
-      
-      @Override
-      public Void visitNonDeliverableFXOptionSecurity(NonDeliverableFXOptionSecurity security) {
+      public Void visitEquityBarrierOptionSecurity(final EquityBarrierOptionSecurity security) {
         assertSecurity();
         return null;
       }
 
       @Override
-      public Void visitSwaptionSecurity(SwaptionSecurity security) {
+      public Void visitFXOptionSecurity(final FXOptionSecurity security) {
         assertSecurity();
         return null;
       }
 
       @Override
-      public Void visitIRFutureOptionSecurity(IRFutureOptionSecurity security) {
+      public Void visitNonDeliverableFXOptionSecurity(final NonDeliverableFXOptionSecurity security) {
+        assertSecurity();
+        return null;
+      }
+
+      @Override
+      public Void visitSwaptionSecurity(final SwaptionSecurity security) {
+        assertSecurity();
+        return null;
+      }
+
+      @Override
+      public Void visitIRFutureOptionSecurity(final IRFutureOptionSecurity security) {
         assertTrue(fromSecMaster instanceof IRFutureOptionSecurity);
-        IRFutureOptionSecurity actual = (IRFutureOptionSecurity) fromSecMaster;
+        final IRFutureOptionSecurity actual = (IRFutureOptionSecurity) fromSecMaster;
 
         assertEquals(security.getCurrency(), actual.getCurrency());
 
@@ -468,22 +468,22 @@ public class BloombergSecurityLoaderTest extends AbstractDbTest {
         assertEquals(security.getPointValue(), actual.getPointValue());
         assertEquals(security.getStrike(), actual.getStrike());
         assertEquals(security.getUnderlyingId(), actual.getUnderlyingId());
-        
+
         assertEquals(security.getExternalIdBundle(), actual.getExternalIdBundle());
         assertEquals(security.getName(), actual.getName());
         assertEquals(security.getSecurityType(), actual.getSecurityType());
         assertNotNull(actual.getUniqueId());
 
         //test underlying is loaded as well
-        ExternalId underlyingIdentifier = security.getUnderlyingId();
+        final ExternalId underlyingIdentifier = security.getUnderlyingId();
         assertUnderlyingIsLoaded(underlyingIdentifier);
-        return null;           
+        return null;
       }
 
       @Override
-      public Void visitCommodityFutureOptionSecurity(CommodityFutureOptionSecurity security) {
+      public Void visitCommodityFutureOptionSecurity(final CommodityFutureOptionSecurity security) {
         assertTrue(fromSecMaster instanceof CommodityFutureOptionSecurity);
-        CommodityFutureOptionSecurity actual = (CommodityFutureOptionSecurity) fromSecMaster;
+        final CommodityFutureOptionSecurity actual = (CommodityFutureOptionSecurity) fromSecMaster;
 
         assertEquals(security.getCurrency(), actual.getCurrency());
 
@@ -495,22 +495,22 @@ public class BloombergSecurityLoaderTest extends AbstractDbTest {
         assertEquals(security.getPointValue(), actual.getPointValue());
         assertEquals(security.getStrike(), actual.getStrike());
         assertEquals(security.getUnderlyingId(), actual.getUnderlyingId());
-        
+
         assertEquals(security.getExternalIdBundle(), actual.getExternalIdBundle());
         assertEquals(security.getName(), actual.getName());
         assertEquals(security.getSecurityType(), actual.getSecurityType());
         assertNotNull(actual.getUniqueId());
 
         //test underlying is loaded as well
-        ExternalId underlyingIdentifier = security.getUnderlyingId();
+        final ExternalId underlyingIdentifier = security.getUnderlyingId();
         assertUnderlyingIsLoaded(underlyingIdentifier);
         return null;
       }
 
       @Override
-      public Void visitFxFutureOptionSecurity(FxFutureOptionSecurity security) {
+      public Void visitFxFutureOptionSecurity(final FxFutureOptionSecurity security) {
         assertTrue(fromSecMaster instanceof FxFutureOptionSecurity);
-        FxFutureOptionSecurity actual = (FxFutureOptionSecurity) fromSecMaster;
+        final FxFutureOptionSecurity actual = (FxFutureOptionSecurity) fromSecMaster;
 
         assertEquals(security.getCurrency(), actual.getCurrency());
 
@@ -529,16 +529,16 @@ public class BloombergSecurityLoaderTest extends AbstractDbTest {
         assertNotNull(actual.getUniqueId());
 
         //test underlying is loaded as well
-        ExternalId underlyingIdentifier = security.getUnderlyingId();
+        final ExternalId underlyingIdentifier = security.getUnderlyingId();
         assertUnderlyingIsLoaded(underlyingIdentifier);
         return null;
       }
 
       @Override
-      public Void visitEquityIndexDividendFutureOptionSecurity(EquityIndexDividendFutureOptionSecurity security) {
+      public Void visitEquityIndexDividendFutureOptionSecurity(final EquityIndexDividendFutureOptionSecurity security) {
 
         assertTrue(fromSecMaster instanceof EquityIndexDividendFutureOptionSecurity);
-        EquityIndexDividendFutureOptionSecurity actual = (EquityIndexDividendFutureOptionSecurity) fromSecMaster;
+        final EquityIndexDividendFutureOptionSecurity actual = (EquityIndexDividendFutureOptionSecurity) fromSecMaster;
 
         assertEquals(security.getCurrency(), actual.getCurrency());
 
@@ -557,7 +557,7 @@ public class BloombergSecurityLoaderTest extends AbstractDbTest {
         assertNotNull(actual.getUniqueId());
 
         //test underlying is loaded as well
-        ExternalId underlyingIdentifier = security.getUnderlyingId();
+        final ExternalId underlyingIdentifier = security.getUnderlyingId();
         assertUnderlyingIsLoaded(underlyingIdentifier);
         return null;
       }
@@ -566,7 +566,7 @@ public class BloombergSecurityLoaderTest extends AbstractDbTest {
       public Void visitEquityIndexFutureOptionSecurity(final EquityIndexFutureOptionSecurity security) {
 
         assertTrue(fromSecMaster instanceof EquityIndexFutureOptionSecurity);
-        EquityIndexFutureOptionSecurity actual = (EquityIndexFutureOptionSecurity) fromSecMaster;
+        final EquityIndexFutureOptionSecurity actual = (EquityIndexFutureOptionSecurity) fromSecMaster;
 
         assertEquals(security.getCurrency(), actual.getCurrency());
 
@@ -585,77 +585,77 @@ public class BloombergSecurityLoaderTest extends AbstractDbTest {
         assertNotNull(actual.getUniqueId());
 
         //test underlying is loaded as well
-        ExternalId underlyingIdentifier = security.getUnderlyingId();
+        final ExternalId underlyingIdentifier = security.getUnderlyingId();
         assertUnderlyingIsLoaded(underlyingIdentifier);
         return null;
       }
 
       @Override
-      public Void visitFXBarrierOptionSecurity(FXBarrierOptionSecurity security) {
+      public Void visitFXBarrierOptionSecurity(final FXBarrierOptionSecurity security) {
         assertSecurity();
         return null;
       }
 
        @Override
-      public Void visitFXForwardSecurity(FXForwardSecurity security) {
+      public Void visitFXForwardSecurity(final FXForwardSecurity security) {
         assertSecurity();
         return null;
       }
 
       @Override
-      public Void visitNonDeliverableFXForwardSecurity(NonDeliverableFXForwardSecurity security) {
-        assertSecurity();      
+      public Void visitNonDeliverableFXForwardSecurity(final NonDeliverableFXForwardSecurity security) {
+        assertSecurity();
         return null;
       }
-      
+
 
       @Override
-      public Void visitCapFloorSecurity(CapFloorSecurity security) {
+      public Void visitCapFloorSecurity(final CapFloorSecurity security) {
         assertSecurity();
         return null;
       }
 
       @Override
-      public Void visitCapFloorCMSSpreadSecurity(CapFloorCMSSpreadSecurity security) {
+      public Void visitCapFloorCMSSpreadSecurity(final CapFloorCMSSpreadSecurity security) {
         assertSecurity();
         return null;
       }
 
       @Override
-      public Void visitEquityVarianceSwapSecurity(EquityVarianceSwapSecurity security) {
+      public Void visitEquityVarianceSwapSecurity(final EquityVarianceSwapSecurity security) {
         assertSecurity();
         return null;
       }
 
       @Override
-      public Void visitFXDigitalOptionSecurity(FXDigitalOptionSecurity security) {
+      public Void visitFXDigitalOptionSecurity(final FXDigitalOptionSecurity security) {
         assertSecurity();
         return null;
       }
 
       @Override
-      public Void visitNonDeliverableFXDigitalOptionSecurity(NonDeliverableFXDigitalOptionSecurity security) {
+      public Void visitNonDeliverableFXDigitalOptionSecurity(final NonDeliverableFXDigitalOptionSecurity security) {
         assertSecurity();
         return null;
       }
 
-    	@Override
-    	public Void visitSimpleZeroDepositSecurity(SimpleZeroDepositSecurity security) {
-    		assertSecurity();
-    		return null;
-    	}
+      @Override
+      public Void visitSimpleZeroDepositSecurity(final SimpleZeroDepositSecurity security) {
+        assertSecurity();
+        return null;
+      }
 
-    	@Override
-    	public Void visitPeriodicZeroDepositSecurity(PeriodicZeroDepositSecurity security) {
-    		assertSecurity();
-    		return null;
-    	}
+      @Override
+      public Void visitPeriodicZeroDepositSecurity(final PeriodicZeroDepositSecurity security) {
+        assertSecurity();
+        return null;
+      }
 
-    	@Override
-    	public Void visitContinuousZeroDepositSecurity(ContinuousZeroDepositSecurity security) {
-    		assertSecurity();
-    		return null;
-    	}
+      @Override
+      public Void visitContinuousZeroDepositSecurity(final ContinuousZeroDepositSecurity security) {
+        assertSecurity();
+        return null;
+      }
     });
   }
 
@@ -705,8 +705,8 @@ public class BloombergSecurityLoaderTest extends AbstractDbTest {
     assertUnderlyingIsLoaded(ExternalIdBundle.of(underlyingIdentifier));
   }
 
-  private void assertUnderlyingIsLoaded(ExternalIdBundle identifiers) {
-    SecuritySearchResult result = _securityMaster.search(new SecuritySearchRequest(identifiers));
+  private void assertUnderlyingIsLoaded(final ExternalIdBundle identifiers) {
+    final SecuritySearchResult result = _securityMaster.search(new SecuritySearchRequest(identifiers));
     assertNotNull(result);
     assertFalse(result.getDocuments().isEmpty());
     assertNotNull(result.getFirstDocument().getSecurity());

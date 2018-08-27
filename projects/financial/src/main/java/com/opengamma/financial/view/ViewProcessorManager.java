@@ -44,23 +44,23 @@ public class ViewProcessorManager implements Lifecycle {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ViewProcessorManager.class);
 
-  private final Set<ViewProcessorInternal> _viewProcessors = new HashSet<ViewProcessorInternal>();
-  private final Set<CompiledFunctionService> _functions = new HashSet<CompiledFunctionService>();
-  private final Collection<ChangeProvider> _masters = new ArrayList<ChangeProvider>();
+  private final Set<ViewProcessorInternal> _viewProcessors = new HashSet<>();
+  private final Set<CompiledFunctionService> _functions = new HashSet<>();
+  private final Collection<ChangeProvider> _masters = new ArrayList<>();
   private final ReentrantLock _lifecycleLock = new ReentrantLock();
   private final ReentrantLock _changeLock = new ReentrantLock();
   private final ExecutorService _executor = NamedThreadPoolFactory.newCachedThreadPool("ViewProcessorManager", true);
-  private final Set<ObjectId> _watchSet = new HashSet<ObjectId>();
-  private final Set<WatchSetProvider> _watchSetProviders = new HashSet<WatchSetProvider>();
+  private final Set<ObjectId> _watchSet = new HashSet<>();
+  private final Set<WatchSetProvider> _watchSetProviders = new HashSet<>();
   private final ChangeListener _masterListener = new ChangeListener() {
     @Override
-    public void entityChanged(ChangeEvent event) {
+    public void entityChanged(final ChangeEvent event) {
       if (_watchSet.contains(event.getObjectId())) {
         ViewProcessorManager.this.onMasterChanged(event.getObjectId());
       }
     }
   };
-  private Set<ObjectId> _pendingChanges = new HashSet<ObjectId>();
+  private Set<ObjectId> _pendingChanges = new HashSet<>();
   private boolean _isRunning;
 
   public ViewProcessorManager() {
@@ -148,21 +148,21 @@ public class ViewProcessorManager implements Lifecycle {
       if (!_isRunning) {
         _changeLock.lock();
         try {
-          for (ChangeProvider master : _masters) {
+          for (final ChangeProvider master : _masters) {
             master.changeManager().addChangeListener(_masterListener);
           }
-          for (ViewProcessorInternal viewProcessor : _viewProcessors) {
+          for (final ViewProcessorInternal viewProcessor : _viewProcessors) {
             viewProcessor.getFunctionCompilationService().getFunctionRepositoryFactory().changeManager().addChangeListener(_masterListener);
           }
         } finally {
           _changeLock.unlock();
         }
         _functions.clear();
-        for (ViewProcessorInternal viewProcessor : _viewProcessors) {
+        for (final ViewProcessorInternal viewProcessor : _viewProcessors) {
           _functions.add(viewProcessor.getFunctionCompilationService());
         }
         LOGGER.info("Initializing functions");
-        for (CompiledFunctionService function : _functions) {
+        for (final CompiledFunctionService function : _functions) {
           final Set<ObjectId> watch = function.initialize();
           _watchSet.addAll(watch);
           addAlternateWatchSet(watch);
@@ -170,7 +170,7 @@ public class ViewProcessorManager implements Lifecycle {
         reinitializeWatchSet();
         LOGGER.debug("WatchSet = {}", _watchSet);
         LOGGER.info("Starting view processors");
-        for (ViewProcessorInternal viewProcessor : _viewProcessors) {
+        for (final ViewProcessorInternal viewProcessor : _viewProcessors) {
           viewProcessor.start();
         }
         _isRunning = true;
@@ -185,11 +185,11 @@ public class ViewProcessorManager implements Lifecycle {
     _lifecycleLock.lock();
     try {
       if (_isRunning) {
-        for (ViewProcessorInternal viewProcessor : _viewProcessors) {
+        for (final ViewProcessorInternal viewProcessor : _viewProcessors) {
           viewProcessor.stop();
           viewProcessor.getFunctionCompilationService().getFunctionRepositoryFactory().changeManager().removeChangeListener(_masterListener);
         }
-        for (ChangeProvider master : _masters) {
+        for (final ChangeProvider master : _masters) {
           master.changeManager().removeChangeListener(_masterListener);
         }
         _masters.clear();
@@ -212,7 +212,7 @@ public class ViewProcessorManager implements Lifecycle {
           public void run() {
             try {
               reinitializeFunctions();
-            } catch (Throwable t) {
+            } catch (final Throwable t) {
               LOGGER.error("Error reinitializing", t);
             }
           }
@@ -230,20 +230,20 @@ public class ViewProcessorManager implements Lifecycle {
     _lifecycleLock.lock();
     LOGGER.info("Begin configuration change");
     try {
-      final List<Runnable> resumes = new ArrayList<Runnable>(_viewProcessors.size());
-      final List<Future<Runnable>> suspends = new ArrayList<Future<Runnable>>(_viewProcessors.size());
+      final List<Runnable> resumes = new ArrayList<>(_viewProcessors.size());
+      final List<Future<Runnable>> suspends = new ArrayList<>(_viewProcessors.size());
       LOGGER.debug("Suspending view processors");
-      for (ViewProcessorInternal viewProcessor : _viewProcessors) {
+      for (final ViewProcessorInternal viewProcessor : _viewProcessors) {
         suspends.add(viewProcessor.suspend(_executor));
       }
       while (!suspends.isEmpty()) {
         final Future<Runnable> future = suspends.remove(suspends.size() - 1);
         try {
           resumes.add(future.get(3000, TimeUnit.MILLISECONDS));
-        } catch (TimeoutException e) {
+        } catch (final TimeoutException e) {
           LOGGER.warn("Timeout waiting for view to suspend");
           suspends.add(future);
-        } catch (Throwable t) {
+        } catch (final Throwable t) {
           LOGGER.warn("Couldn't suspend view", t);
         }
       }
@@ -251,26 +251,26 @@ public class ViewProcessorManager implements Lifecycle {
       _changeLock.lock();
       try {
         pendingChanges = _pendingChanges;
-        _pendingChanges = new HashSet<ObjectId>();
+        _pendingChanges = new HashSet<>();
       } finally {
         _changeLock.unlock();
       }
       LOGGER.trace("Pending changed = {}", pendingChanges);
       LOGGER.debug("Re-initializing functions");
       _watchSet.clear();
-      for (CompiledFunctionService functions : _functions) {
+      for (final CompiledFunctionService functions : _functions) {
         try {
           final Set<ObjectId> watch = functions.reinitialize();
           _watchSet.addAll(watch);
           addAlternateWatchSet(watch);
-        } catch (Throwable t) {
+        } catch (final Throwable t) {
           LOGGER.error("Error reinitializing functions", t);
         }
       }
       reinitializeWatchSet();
       LOGGER.trace("WatchSet = {}", _watchSet);
       LOGGER.debug("Resuming view processors");
-      for (Runnable resume : resumes) {
+      for (final Runnable resume : resumes) {
         resume.run();
       }
       LOGGER.info("Configuration change complete");
@@ -285,7 +285,7 @@ public class ViewProcessorManager implements Lifecycle {
   }
 
   private void addAlternateWatchSet(final Set<ObjectId> watchSet) {
-    for (WatchSetProvider provider : _watchSetProviders) {
+    for (final WatchSetProvider provider : _watchSetProviders) {
       final Set<ObjectId> additional = provider.getAdditionalWatchSet(watchSet);
       if (additional != null) {
         _watchSet.addAll(additional);

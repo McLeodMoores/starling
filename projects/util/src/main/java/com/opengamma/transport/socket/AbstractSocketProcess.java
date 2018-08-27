@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.transport.socket;
@@ -36,7 +36,7 @@ import com.opengamma.util.monitor.ReportingInputStream;
 import com.opengamma.util.monitor.ReportingOutputStream;
 
 /**
- * 
+ *
  *
  */
 public abstract class AbstractSocketProcess implements Lifecycle, EndPointDescriptionProvider {
@@ -57,12 +57,12 @@ public abstract class AbstractSocketProcess implements Lifecycle, EndPointDescri
   /**
    * @param inetAddress the inetAddress to set
    */
-  public void setInetAddress(InetAddress inetAddress) {
+  public void setInetAddress(final InetAddress inetAddress) {
     _inetAddresses = Collections.singleton(inetAddress);
   }
 
-  public void setInetAddresses(Collection<InetAddress> inetAddresses) {
-    _inetAddresses = new ArrayList<InetAddress>(inetAddresses);
+  public void setInetAddresses(final Collection<InetAddress> inetAddresses) {
+    _inetAddresses = new ArrayList<>(inetAddresses);
   }
 
   public void setAddress(final String host) throws UnknownHostException {
@@ -79,13 +79,13 @@ public abstract class AbstractSocketProcess implements Lifecycle, EndPointDescri
   /**
    * @param portNumber the portNumber to set
    */
-  public void setPortNumber(int portNumber) {
+  public void setPortNumber(final int portNumber) {
     _portNumber = portNumber;
   }
 
   /**
    * Set the connection parameters based on the end point description of a server.
-   * 
+   *
    * @param endPoint An end-point description.
    */
   public void setServer(final FudgeMsg endPoint) {
@@ -93,12 +93,12 @@ public abstract class AbstractSocketProcess implements Lifecycle, EndPointDescri
     if (!SocketEndPointDescriptionProvider.TYPE_VALUE.equals(endPoint.getString(SocketEndPointDescriptionProvider.TYPE_KEY))) {
       throw new IllegalArgumentException("End point is not a ServerSocket - " + endPoint);
     }
-    final Collection<InetAddress> addresses = new HashSet<InetAddress>();
-    for (FudgeField addr : endPoint.getAllByName(SocketEndPointDescriptionProvider.ADDRESS_KEY)) {
+    final Collection<InetAddress> addresses = new HashSet<>();
+    for (final FudgeField addr : endPoint.getAllByName(SocketEndPointDescriptionProvider.ADDRESS_KEY)) {
       final String host = endPoint.getFieldValue(String.class, addr);
       try {
         addresses.addAll(Arrays.asList(InetAddress.getAllByName(host)));
-      } catch (UnknownHostException e) {
+      } catch (final UnknownHostException e) {
         LOGGER.warn("Unknown host {}", host);
       }
     }
@@ -127,7 +127,7 @@ public abstract class AbstractSocketProcess implements Lifecycle, EndPointDescri
   public synchronized void start() {
     ArgumentChecker.notNullInjected(getInetAddresses(), "Remote InetAddress");
     ArgumentChecker.isTrue(getPortNumber() > 0, "Must specify valid portNumber property");
-    if (_started && (_socket != null)) {
+    if (_started && _socket != null) {
       LOGGER.warn("Already connected to {}", _socket.getRemoteSocketAddress());
     } else {
       openRemoteConnection();
@@ -139,7 +139,7 @@ public abstract class AbstractSocketProcess implements Lifecycle, EndPointDescri
     LOGGER.info("Opening remote connection to {}:{}", getInetAddresses(), getPortNumber());
     OutputStream os = null;
     InputStream is = null;
-    for (InetAddress addr : getInetAddresses()) {
+    for (final InetAddress addr : getInetAddresses()) {
       try {
         _socket = new Socket();
         _socket.connect(new InetSocketAddress(addr, getPortNumber()), 3000);
@@ -147,12 +147,12 @@ public abstract class AbstractSocketProcess implements Lifecycle, EndPointDescri
         os = _socket.getOutputStream();
         is = _socket.getInputStream();
         break;
-      } catch (IOException ioe) {
+      } catch (final IOException ioe) {
         LOGGER.debug("Couldn't connect to {}:{}", addr, getPortNumber());
         if (_socket != null) {
           try {
             _socket.close();
-          } catch (IOException e) {
+          } catch (final IOException e) {
             // Ignore
           }
           _socket = null;
@@ -174,7 +174,7 @@ public abstract class AbstractSocketProcess implements Lifecycle, EndPointDescri
         if (_socket.isConnected()) {
           try {
             _socket.close();
-          } catch (IOException e) {
+          } catch (final IOException e) {
             LOGGER.warn("Unable to close connected socket to {}", new Object[] {_socket.getRemoteSocketAddress() }, e);
           }
         }
@@ -188,7 +188,7 @@ public abstract class AbstractSocketProcess implements Lifecycle, EndPointDescri
   }
 
   protected boolean exceptionForcedByClose(final Exception e) {
-    return (e instanceof SocketException) && "Socket closed".equals(e.getMessage());
+    return e instanceof SocketException && "Socket closed".equals(e.getMessage());
   }
 
   protected abstract void socketOpened(Socket socket, BufferedOutputStream os, BufferedInputStream is);
@@ -201,7 +201,7 @@ public abstract class AbstractSocketProcess implements Lifecycle, EndPointDescri
     final MutableFudgeMsg desc = fudgeContext.newMessage();
     desc.add(SocketEndPointDescriptionProvider.TYPE_KEY, SocketEndPointDescriptionProvider.TYPE_VALUE);
     if (getInetAddresses() != null) {
-      for (InetAddress addr : getInetAddresses()) {
+      for (final InetAddress addr : getInetAddresses()) {
         desc.add(SocketEndPointDescriptionProvider.ADDRESS_KEY, addr.getHostAddress());
       }
     }

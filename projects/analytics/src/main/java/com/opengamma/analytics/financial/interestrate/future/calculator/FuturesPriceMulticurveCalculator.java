@@ -40,7 +40,7 @@ public final class FuturesPriceMulticurveCalculator extends InstrumentDerivative
   private FuturesPriceMulticurveCalculator() {
   }
 
-  /** Implementation note: The pricing of some futures is done by calling the PresentValueDiscountingCalculator on the underlying. 
+  /** Implementation note: The pricing of some futures is done by calling the PresentValueDiscountingCalculator on the underlying.
    *    The present value calculator refers to the futures calculator, that creates a circular reference of static methods.              */
   private static final PresentValueDiscountingCalculator PVDC = PresentValueDiscountingCalculator.getInstance();
 
@@ -75,7 +75,7 @@ public final class FuturesPriceMulticurveCalculator extends InstrumentDerivative
   }
 
   /**
-   * The price is 1+underlying swap present value. 
+   * The price is 1+underlying swap present value.
    * There is no adjustment for margining and no correction for discounting between futures settlement and valuation date.
    * @param futures The futures security.
    * @param multicurve The multi-curve provider.
@@ -85,12 +85,12 @@ public final class FuturesPriceMulticurveCalculator extends InstrumentDerivative
   public Double visitSwapFuturesPriceDeliverableSecurity(final SwapFuturesPriceDeliverableSecurity futures, final ParameterProviderInterface multicurve) {
     ArgumentChecker.notNull(futures, "futures");
     ArgumentChecker.notNull(multicurve, "multi-curve provider");
-    MultipleCurrencyAmount pv = futures.getUnderlyingSwap().accept(PVDC, multicurve.getMulticurveProvider());
+    final MultipleCurrencyAmount pv = futures.getUnderlyingSwap().accept(PVDC, multicurve.getMulticurveProvider());
     return 1.0d + pv.getAmount(futures.getCurrency());
   }
 
   @Override
-  public Double visitSwapFuturesPriceDeliverableTransaction(SwapFuturesPriceDeliverableTransaction futures, ParameterProviderInterface data) {
+  public Double visitSwapFuturesPriceDeliverableTransaction(final SwapFuturesPriceDeliverableTransaction futures, final ParameterProviderInterface data) {
     return visitSwapFuturesPriceDeliverableSecurity(futures.getUnderlyingSecurity(), data);
   }
 }

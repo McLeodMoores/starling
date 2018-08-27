@@ -29,7 +29,7 @@ public final class ExternalIdBundleWithDatesFudgeBuilder extends AbstractFudgeBu
 
   //-------------------------------------------------------------------------
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, ExternalIdBundleWithDates object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final ExternalIdBundleWithDates object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     toFudgeMsg(serializer, object, msg);
     return msg;
@@ -45,7 +45,7 @@ public final class ExternalIdBundleWithDatesFudgeBuilder extends AbstractFudgeBu
   }
 
   public static void toFudgeMsg(final FudgeSerializer serializer, final ExternalIdBundleWithDates object, final MutableFudgeMsg msg) {
-    for (ExternalIdWithDates externalId : object) {
+    for (final ExternalIdWithDates externalId : object) {
       addToMessage(msg, ID_FIELD_NAME, ExternalIdWithDatesFudgeBuilder.toFudgeMsg(serializer, externalId));
     }
   }
@@ -60,8 +60,8 @@ public final class ExternalIdBundleWithDatesFudgeBuilder extends AbstractFudgeBu
     if (msg == null) {
       return null;
     }
-    Set<ExternalIdWithDates> ids = new HashSet<ExternalIdWithDates>();
-    for (FudgeField field : msg.getAllByName(ID_FIELD_NAME)) {
+    final Set<ExternalIdWithDates> ids = new HashSet<>();
+    for (final FudgeField field : msg.getAllByName(ID_FIELD_NAME)) {
       ids.add(ExternalIdWithDatesFudgeBuilder.fromFudgeMsg(deserializer, (FudgeMsg) field.getValue()));
     }
     return ExternalIdBundleWithDates.of(ids);

@@ -12,14 +12,14 @@ import com.opengamma.util.money.CurrencyAmount;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * 
+ *
  */
 public class MultipleCurrencyAmountConverter implements ResultConverter<MultipleCurrencyAmount> {
 
   @Override
-  public Map<String, Double> convert(String valueName, MultipleCurrencyAmount value) {
-    Map<String, Double> returnValue = new HashMap<String, Double>();
-    for (CurrencyAmount currencyAmount : value.getCurrencyAmounts()) {
+  public Map<String, Double> convert(final String valueName, final MultipleCurrencyAmount value) {
+    final Map<String, Double> returnValue = new HashMap<>();
+    for (final CurrencyAmount currencyAmount : value.getCurrencyAmounts()) {
       returnValue.put(valueName + "[" + currencyAmount.getCurrency().getCode() + "]", currencyAmount.getAmount());
     }
     return returnValue;

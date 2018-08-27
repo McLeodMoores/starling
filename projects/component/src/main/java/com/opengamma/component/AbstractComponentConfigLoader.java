@@ -27,11 +27,11 @@ public abstract class AbstractComponentConfigLoader {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param logger  the logger, not null
    * @param properties  the properties in use, not null
    */
-  public AbstractComponentConfigLoader(ComponentLogger logger, ConfigProperties properties) {
+  public AbstractComponentConfigLoader(final ComponentLogger logger, final ConfigProperties properties) {
     _logger = logger;
     _properties = properties;
   }
@@ -39,7 +39,7 @@ public abstract class AbstractComponentConfigLoader {
   //-------------------------------------------------------------------------
   /**
    * Gets the logger.
-   * 
+   *
    * @return the logger, not null
    */
   public ComponentLogger getLogger() {
@@ -48,7 +48,7 @@ public abstract class AbstractComponentConfigLoader {
 
   /**
    * Gets the properties.
-   * 
+   *
    * @return the properties, not null
    */
   public ConfigProperties getProperties() {
@@ -58,15 +58,15 @@ public abstract class AbstractComponentConfigLoader {
   //-------------------------------------------------------------------------
   /**
    * Reads lines from the resource.
-   * 
+   *
    * @param resource  the resource to read, not null
    * @return the lines, not null
    * @throws ComponentConfigException if the resource cannot be read
    */
-  protected List<String> readLines(Resource resource) {
+  protected List<String> readLines(final Resource resource) {
     try {
       return IOUtils.readLines(resource.getInputStream(), "UTF8");
-    } catch (IOException ex) {
+    } catch (final IOException ex) {
       throw new ComponentConfigException("Unable to read resource: " + resource, ex);
     }
   }

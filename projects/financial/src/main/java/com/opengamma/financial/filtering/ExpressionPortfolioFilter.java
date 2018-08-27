@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.filtering;
@@ -35,7 +35,7 @@ public class ExpressionPortfolioFilter extends AbstractFilteringFunction {
 
   /**
    * Creates a new filter from a string expression (in the Expr.g form)
-   * 
+   *
    * @param expression string expression
    * @deprecated Use the alternative constructor so that the parsing dialect is explicit
    */
@@ -46,7 +46,7 @@ public class ExpressionPortfolioFilter extends AbstractFilteringFunction {
 
   /**
    * Creates a new filter from an arbitrary user expression
-   * 
+   *
    * @param expression the parsed user expression
    */
   public ExpressionPortfolioFilter(final UserExpression expression) {
@@ -96,20 +96,20 @@ public class ExpressionPortfolioFilter extends AbstractFilteringFunction {
 
     @Override
     public Map<String, String> getAttributes() {
-      Map<String, String> allAttributes = Maps.newHashMap();
-      for (Trade trade : _trades) {
+      final Map<String, String> allAttributes = Maps.newHashMap();
+      for (final Trade trade : _trades) {
         allAttributes.putAll(trade.getAttributes());
       }
       return allAttributes;
     }
 
     @Override
-    public void setAttributes(Map<String, String> attributes) {
+    public void setAttributes(final Map<String, String> attributes) {
       throw new UnsupportedOperationException();
     }
 
     @Override
-    public void addAttribute(String key, String value) {
+    public void addAttribute(final String key, final String value) {
       throw new UnsupportedOperationException();
     }
 
@@ -170,7 +170,7 @@ public class ExpressionPortfolioFilter extends AbstractFilteringFunction {
           if (value != null) {
             return value;
           } else {
-            for (Trade trade : position.getTrades()) {
+            for (final Trade trade : position.getTrades()) {
               value = trade.getAttributes().get(name);
               if (value != null) {
                 return value;
@@ -181,7 +181,7 @@ public class ExpressionPortfolioFilter extends AbstractFilteringFunction {
         }
       } else if (object instanceof AnyTradeAttribute) {
         final AnyTradeAttribute trades = (AnyTradeAttribute) object;
-        for (Trade trade : trades.getTrades()) {
+        for (final Trade trade : trades.getTrades()) {
           final Object value = trade.getAttributes().get(name);
           if (value != null) {
             return value;

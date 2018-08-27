@@ -29,7 +29,7 @@ import com.opengamma.id.UniqueIdSupplier;
  * The mapper also creates the unique identifier using the specified scheme.
  * <p>
  * This class is mutable and thread-safe via synchronization.
- * 
+ *
  * @param <T> the type of the object being referred to by the identifiers
  */
 /* package */ class ExternalIdBundleMapper<T> {
@@ -37,7 +37,7 @@ import com.opengamma.id.UniqueIdSupplier;
   private final ReentrantReadWriteLock _lock = new ReentrantReadWriteLock();
   private final WriteLock _writeLock = _lock.writeLock();
   private final ReadLock _readLock = _lock.readLock();
-  
+
   private final Multimap<ExternalId, T> _toMap = HashMultimap.create();
   private final Multimap<T, ExternalId> _fromMap = HashMultimap.create();
   private final BiMap<UniqueId, T> _uniqueIdMap = HashBiMap.create();
@@ -45,32 +45,32 @@ import com.opengamma.id.UniqueIdSupplier;
 
   /**
    * Constructor taking the name of the scheme to use for the unique identifiers that this class generates.
-   * 
+   *
    * @param uniqueIdScheme  the scheme to use for the automatically allocated unique identifiers
    */
-  ExternalIdBundleMapper(String uniqueIdScheme) {
+  ExternalIdBundleMapper(final String uniqueIdScheme) {
     _idSupplier = new UniqueIdSupplier(uniqueIdScheme);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Adds a mapping from a bundle to an object.
-   * 
+   *
    * @param bundle  the bundle that the object is referred to as, not null
    * @param obj  the object being referred to, not null
    * @return the created unique identifier, not null
    */
-  UniqueId add(ExternalIdBundle bundle, T obj) {
+  UniqueId add(final ExternalIdBundle bundle, final T obj) {
     _writeLock.lock();
     try {
       _fromMap.putAll(obj, bundle.getExternalIds());
-      for (ExternalId identifier : bundle.getExternalIds()) {
+      for (final ExternalId identifier : bundle.getExternalIds()) {
         _toMap.put(identifier, obj);
       }
       if (_uniqueIdMap.inverse().containsKey(obj)) {
         return _uniqueIdMap.inverse().get(obj);
       } else {
-        UniqueId uniqueId = _idSupplier.get();
+        final UniqueId uniqueId = _idSupplier.get();
         _uniqueIdMap.put(uniqueId, obj);
         return uniqueId;
       }
@@ -84,16 +84,16 @@ import com.opengamma.id.UniqueIdSupplier;
    * Gets those objects which match the specified bundle.
    * <p>
    * Note that this method erroneously treats a bundle as a collection of individual identifiers.
-   * 
+   *
    * @param bundle  the bundle to search for, not null
    * @return the matching objects, not null
    */
-  Collection<T> get(ExternalIdBundle bundle) {
+  Collection<T> get(final ExternalIdBundle bundle) {
     _readLock.lock();
     try {
       // TODO: semantics are wrong
-      Collection<T> results = new HashSet<T>();
-      for (ExternalId identifier : bundle) {
+      final Collection<T> results = new HashSet<>();
+      for (final ExternalId identifier : bundle) {
         if (_toMap.containsKey(identifier)) {
           results.addAll(_toMap.get(identifier));
         }
@@ -106,11 +106,11 @@ import com.opengamma.id.UniqueIdSupplier;
 
   /**
    * Gets those objects which match the specified bundle.
-   * 
+   *
    * @param externalId  the external identifier to search for, not null
    * @return the matching objects, not null
    */
-  Collection<T> get(ExternalId externalId) {
+  Collection<T> get(final ExternalId externalId) {
     _readLock.lock();
     try {
       return _toMap.get(externalId);
@@ -121,11 +121,11 @@ import com.opengamma.id.UniqueIdSupplier;
 
   /**
    * Gets those objects which match the specified unique identifier.
-   * 
+   *
    * @param uniqueId  the unique identifier to search for, not null
    * @return the matching objects, not null
    */
-  T get(UniqueId uniqueId) {
+  T get(final UniqueId uniqueId) {
     _readLock.lock();
     try {
       return _uniqueIdMap.get(uniqueId);
@@ -133,11 +133,11 @@ import com.opengamma.id.UniqueIdSupplier;
       _readLock.unlock();
     }
   }
-  
+
   /**
    * Gets all objects in the mapper.
-   * 
-   * @return an unmodifiable collection of all the objects in the mapper, not null 
+   *
+   * @return an unmodifiable collection of all the objects in the mapper, not null
    */
   Collection<T> getAll() {
     _readLock.lock();

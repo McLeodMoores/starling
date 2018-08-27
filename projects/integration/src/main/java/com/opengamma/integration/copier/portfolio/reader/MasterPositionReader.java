@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.copier.portfolio.reader;
@@ -38,21 +38,21 @@ public class MasterPositionReader implements PositionReader {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(PositionReader.class);
 
-  private PortfolioMaster _portfolioMaster;
-  private PositionMaster _positionMaster;
-  private SecuritySource _securitySource;
-  
-  private PortfolioDocument _portfolioDocument;
+  private final PortfolioMaster _portfolioMaster;
+  private final PositionMaster _positionMaster;
+  private final SecuritySource _securitySource;
+
+  private final PortfolioDocument _portfolioDocument;
 
   private ManageablePortfolioNode _currentNode;
-  private Stack<Iterator<ManageablePortfolioNode>> _nodeIteratorStack;
+  private final Stack<Iterator<ManageablePortfolioNode>> _nodeIteratorStack;
   private Iterator<ManageablePortfolioNode> _nodeIterator;
   private Iterator<ObjectId> _positionIdIterator;
-  
-  
-  public MasterPositionReader(String portfolioName, PortfolioMaster portfolioMaster,
-                              PositionMaster positionMaster, SecuritySource securitySource) {
-    
+
+
+  public MasterPositionReader(final String portfolioName, final PortfolioMaster portfolioMaster,
+                              final PositionMaster positionMaster, final SecuritySource securitySource) {
+
     ArgumentChecker.notEmpty(portfolioName, "portfolioName");
     ArgumentChecker.notNull(portfolioMaster, "portfolioMaster");
     ArgumentChecker.notNull(positionMaster, "positionMaster");
@@ -60,62 +60,62 @@ public class MasterPositionReader implements PositionReader {
 
     _portfolioMaster = portfolioMaster;
     _positionMaster = positionMaster;
-    _securitySource = securitySource;   
+    _securitySource = securitySource;
     _portfolioDocument = openPortfolio(portfolioName);
-    
+
     if (_portfolioDocument == null) {
       throw new OpenGammaRuntimeException("Portfolio " + portfolioName + " could not be opened");
     }
     _currentNode = _portfolioDocument.getPortfolio().getRootNode();
 
-    List<ManageablePortfolioNode> rootNodeList = new ArrayList<ManageablePortfolioNode>(); 
+    final List<ManageablePortfolioNode> rootNodeList = new ArrayList<>();
     rootNodeList.add(_portfolioDocument.getPortfolio().getRootNode());
-    
+
     _nodeIterator = rootNodeList.iterator();
-    _nodeIteratorStack = new Stack<Iterator<ManageablePortfolioNode>>();
+    _nodeIteratorStack = new Stack<>();
     _positionIdIterator = _nodeIterator.next().getPositionIds().iterator();
   }
-  
+
   @Override
   public ObjectsPair<ManageablePosition, ManageableSecurity[]> readNext() {
-    
-    ObjectId positionId = getNextPositionId();    
+
+    final ObjectId positionId = getNextPositionId();
     if (positionId == null) {
       return null;
     } else {
       ManageablePosition position;
       try {
         position = _positionMaster.get(positionId, VersionCorrection.LATEST).getPosition();
-      } catch (Throwable t) {
+      } catch (final Throwable t) {
         return ObjectsPair.of(null, null);
       }
 
       // Write the related security(ies)
-      ManageableSecurityLink sLink = position.getSecurityLink();
-      Security security = sLink.resolveQuiet(_securitySource);
-      if ((security != null) && (security instanceof ManageableSecurity)) {
-        
+      final ManageableSecurityLink sLink = position.getSecurityLink();
+      final Security security = sLink.resolveQuiet(_securitySource);
+      if (security != null && security instanceof ManageableSecurity) {
+
         // Find underlying security
         // TODO support multiple underlyings; unfortunately the system does not provide a standard way
         // to retrieve underlyings
         if (((ManageableSecurity) security).propertyNames().contains("underlyingId")) {
-          ExternalId id = (ExternalId) ((ManageableSecurity) security).property("underlyingId").get();
-        
+          final ExternalId id = (ExternalId) ((ManageableSecurity) security).property("underlyingId").get();
+
           Security underlying;
           try {
             underlying = _securitySource.getSingle(id.toBundle());
             if (underlying != null) {
-              return ObjectsPair.of(position, 
+              return ObjectsPair.of(position,
                   new ManageableSecurity[] {(ManageableSecurity) security, (ManageableSecurity) underlying});
             } else {
               LOGGER.warn("Could not resolve underlying " + id + " for security " + security.getName());
             }
-          } catch (Throwable e) {
+          } catch (final Throwable e) {
             // Underlying not found
             LOGGER.warn("Error trying to resolve underlying " + id + " for security " + security.getName());
           }
         }
-        return ObjectsPair.of(position, 
+        return ObjectsPair.of(position,
               new ManageableSecurity[] {(ManageableSecurity) security});
 
       } else {
@@ -127,10 +127,10 @@ public class MasterPositionReader implements PositionReader {
 
   @Override
   public String[] getCurrentPath() {
-    Stack<ManageablePortfolioNode> stack = 
+    final Stack<ManageablePortfolioNode> stack =
         _portfolioDocument.getPortfolio().getRootNode().findNodeStackByObjectId(_currentNode.getUniqueId());
     stack.remove(0);
-    String[] result = new String[stack.size()];
+    final String[] result = new String[stack.size()];
     int i = stack.size();
     while (!stack.isEmpty()) {
       result[--i] = stack.pop().getName();
@@ -149,23 +149,23 @@ public class MasterPositionReader implements PositionReader {
   }
 
   /**
-   * Walks the tree, depth-first, and returns the next position's id. Uses _positionIdIterator, 
+   * Walks the tree, depth-first, and returns the next position's id. Uses _positionIdIterator,
    * _nodeIterator and _nodeIteratorStack to maintain location state across calls.
    * @return
    */
   private ObjectId getNextPositionId() {
-    
+
     while (true) {
       // Return the next position in the current portfolio node's list, if any there
       if (_positionIdIterator.hasNext()) {
         return _positionIdIterator.next();
-        
+
       // Current node's positions exhausted, find another node
-      } else {  
+      } else {
         // Go down to current node's child nodes to find more positions (depth-first)
         _nodeIteratorStack.push(_nodeIterator);
         _nodeIterator = _currentNode.getChildNodes().iterator();
-  
+
         // If there are no more nodes here pop back up until a node is available
         while (!_nodeIterator.hasNext()) {
           if (!_nodeIteratorStack.isEmpty()) {
@@ -174,21 +174,21 @@ public class MasterPositionReader implements PositionReader {
             return null;
           }
         }
-        
+
         // Go to the next node and start fetching positions there
         _currentNode = _nodeIterator.next();
         _positionIdIterator = _currentNode.getPositionIds().iterator();
       }
     }
   }
-        
-  private PortfolioDocument openPortfolio(String portfolioName) {
-    
-    PortfolioSearchRequest portSearchRequest = new PortfolioSearchRequest();
+
+  private PortfolioDocument openPortfolio(final String portfolioName) {
+
+    final PortfolioSearchRequest portSearchRequest = new PortfolioSearchRequest();
     portSearchRequest.setName(portfolioName);
-    PortfolioSearchResult portSearchResult = _portfolioMaster.search(portSearchRequest);
-    PortfolioDocument portfolioDoc = portSearchResult.getFirstDocument();
-    
+    final PortfolioSearchResult portSearchResult = _portfolioMaster.search(portSearchRequest);
+    final PortfolioDocument portfolioDoc = portSearchResult.getFirstDocument();
+
     return portfolioDoc;
   }
 

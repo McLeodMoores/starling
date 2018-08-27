@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.region.impl;
@@ -35,7 +35,7 @@ public class RemoteRegionSource extends AbstractRemoteSource<Region> implements 
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param baseUri the base target URI for all RESTful web services, not null
    */
   public RemoteRegionSource(final URI baseUri) {
@@ -53,7 +53,7 @@ public class RemoteRegionSource extends AbstractRemoteSource<Region> implements 
   public Region get(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
 
-    URI uri = DataRegionSourceUris.uriGet(getBaseUri(), uniqueId);
+    final URI uri = DataRegionSourceUris.uriGet(getBaseUri(), uniqueId);
     return accessRemote(uri).get(Region.class);
   }
 
@@ -62,7 +62,7 @@ public class RemoteRegionSource extends AbstractRemoteSource<Region> implements 
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
 
-    URI uri = DataRegionSourceUris.uriGet(getBaseUri(), objectId, versionCorrection);
+    final URI uri = DataRegionSourceUris.uriGet(getBaseUri(), objectId, versionCorrection);
     return accessRemote(uri).get(Region.class);
   }
 
@@ -72,58 +72,58 @@ public class RemoteRegionSource extends AbstractRemoteSource<Region> implements 
     ArgumentChecker.notNull(bundle, "bundle");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
 
-    URI uri = DataRegionSourceUris.uriSearch(getBaseUri(), versionCorrection, bundle);
+    final URI uri = DataRegionSourceUris.uriSearch(getBaseUri(), versionCorrection, bundle);
     return accessRemote(uri).get(FudgeListWrapper.class).getList();
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public Region getHighestLevelRegion(ExternalId externalId) {
+  public Region getHighestLevelRegion(final ExternalId externalId) {
     try {
       return getHighestLevelRegion(ExternalIdBundle.of(externalId));
-    } catch (DataNotFoundException ex) {
+    } catch (final DataNotFoundException ex) {
       return null;
-    } catch (UniformInterfaceException404NotFound ex) {
+    } catch (final UniformInterfaceException404NotFound ex) {
       return null;
     }
   }
 
   @Override
-  public Region getHighestLevelRegion(ExternalIdBundle bundle) {
+  public Region getHighestLevelRegion(final ExternalIdBundle bundle) {
     ArgumentChecker.notNull(bundle, "bundle");
 
     try {
-      URI uri = DataRegionSourceUris.uriSearchHighest(getBaseUri(), bundle);
+      final URI uri = DataRegionSourceUris.uriSearchHighest(getBaseUri(), bundle);
       return accessRemote(uri).get(Region.class);
-    } catch (DataNotFoundException ex) {
+    } catch (final DataNotFoundException ex) {
       return null;
-    } catch (UniformInterfaceException404NotFound ex) {
+    } catch (final UniformInterfaceException404NotFound ex) {
       return null;
     }
   }
 
   @Override
-  public Map<ExternalIdBundle, Collection<Region>> getAll(Collection<ExternalIdBundle> bundles, VersionCorrection versionCorrection) {
+  public Map<ExternalIdBundle, Collection<Region>> getAll(final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
     return AbstractSourceWithExternalBundle.getAll(this, bundles, versionCorrection);
   }
 
   @Override
-  public Collection<Region> get(ExternalIdBundle bundle) {
+  public Collection<Region> get(final ExternalIdBundle bundle) {
     return AbstractSourceWithExternalBundle.get(this, bundle);
   }
 
   @Override
-  public Region getSingle(ExternalIdBundle bundle) {
+  public Region getSingle(final ExternalIdBundle bundle) {
     return AbstractSourceWithExternalBundle.getSingle(this, bundle);
   }
 
   @Override
-  public Region getSingle(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
+  public Region getSingle(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     return AbstractSourceWithExternalBundle.getSingle(this, bundle, versionCorrection);
   }
 
   @Override
-  public Map<ExternalIdBundle, Region> getSingle(Collection<ExternalIdBundle> bundles, VersionCorrection versionCorrection) {
+  public Map<ExternalIdBundle, Region> getSingle(final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
     return AbstractSourceWithExternalBundle.getSingle(this, bundles, versionCorrection);
   }
 

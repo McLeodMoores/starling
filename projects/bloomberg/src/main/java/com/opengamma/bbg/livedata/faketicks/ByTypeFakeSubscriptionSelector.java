@@ -27,51 +27,51 @@ public class ByTypeFakeSubscriptionSelector implements FakeSubscriptionSelector 
 
   private final Set<String> _toFake;
 
-  public ByTypeFakeSubscriptionSelector(String... toFakes) {
+  public ByTypeFakeSubscriptionSelector(final String... toFakes) {
     this(Sets.newHashSet(toFakes));
   }
 
-  public ByTypeFakeSubscriptionSelector(Set<String> toFake) {
+  public ByTypeFakeSubscriptionSelector(final Set<String> toFake) {
     _toFake = toFake;
   }
 
   @Override
   public ObjectsPair<Collection<LiveDataSpecification>, Collection<LiveDataSpecification>> splitShouldFake(
-      FakeSubscriptionBloombergLiveDataServer server, Collection<LiveDataSpecification> specs) {
+      final FakeSubscriptionBloombergLiveDataServer server, final Collection<LiveDataSpecification> specs) {
     if (specs.isEmpty()) {
       return ObjectsPair.of((Collection<LiveDataSpecification>) new ArrayList<LiveDataSpecification>(), (Collection<LiveDataSpecification>) new ArrayList<LiveDataSpecification>());
     }
-    
-    Set<LiveDataSpecification> fakes = new HashSet<LiveDataSpecification>();
-    Set<LiveDataSpecification> underlyings = new HashSet<LiveDataSpecification>();
-    
-    Map<LiveDataSpecification, DistributionSpecification> resolved = server.getDistributionSpecificationResolver().resolve(specs);
-    
-    Map<String, Set<LiveDataSpecification>> specsBySecurityId = new HashMap<String, Set<LiveDataSpecification>>();
-    
-    for (java.util.Map.Entry<LiveDataSpecification, DistributionSpecification> entry : resolved.entrySet()) {
+
+    final Set<LiveDataSpecification> fakes = new HashSet<>();
+    final Set<LiveDataSpecification> underlyings = new HashSet<>();
+
+    final Map<LiveDataSpecification, DistributionSpecification> resolved = server.getDistributionSpecificationResolver().resolve(specs);
+
+    final Map<String, Set<LiveDataSpecification>> specsBySecurityId = new HashMap<>();
+
+    for (final java.util.Map.Entry<LiveDataSpecification, DistributionSpecification> entry : resolved.entrySet()) {
       if (entry.getValue() == null) {
         //Subscription won't work.  Presume we want a real subscription.
         underlyings.add(entry.getKey());
         continue;
       }
-      String buid = BloombergDomainIdentifierResolver.toBloombergKey(entry.getValue().getMarketDataId());
+      final String buid = BloombergDomainIdentifierResolver.toBloombergKey(entry.getValue().getMarketDataId());
       Set<LiveDataSpecification> set = specsBySecurityId.get(buid);
       if (set == null) {
-        set = new HashSet<LiveDataSpecification>();
+        set = new HashSet<>();
         specsBySecurityId.put(buid, set);
       }
       set.add(entry.getKey());
     }
-    
-    Set<String> buids = specsBySecurityId.keySet();
 
-    ReferenceDataProvider refDataProvider = server.getReferenceDataProvider();
-    
+    final Set<String> buids = specsBySecurityId.keySet();
+
+    final ReferenceDataProvider refDataProvider = server.getReferenceDataProvider();
+
     if (buids.size() > 0) {
-      Map<String, String> values = refDataProvider.getReferenceDataValues(buids, BloombergConstants.FIELD_SECURITY_TYP);
-      for (String buid : buids) {
-        String type = values.get(buid);
+      final Map<String, String> values = refDataProvider.getReferenceDataValues(buids, BloombergConstants.FIELD_SECURITY_TYP);
+      for (final String buid : buids) {
+        final String type = values.get(buid);
         if (type != null && _toFake.contains(type)) {
           fakes.addAll(specsBySecurityId.get(buid));
         } else {

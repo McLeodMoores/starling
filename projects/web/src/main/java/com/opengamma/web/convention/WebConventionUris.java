@@ -23,7 +23,7 @@ public class WebConventionUris {
    * Creates an instance.
    * @param data  the web data, not null
    */
-  public WebConventionUris(WebConventionData data) {
+  public WebConventionUris(final WebConventionData data) {
     _data = data;
   }
 

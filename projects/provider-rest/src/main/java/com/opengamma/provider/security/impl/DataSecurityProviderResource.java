@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.provider.security.impl;
@@ -35,7 +35,7 @@ public class DataSecurityProviderResource extends AbstractDataResource {
 
   /**
    * Creates the resource, exposing the underlying provider over REST.
-   * 
+   *
    * @param securityProvider  the underlying provider, not null
    */
   public DataSecurityProviderResource(final SecurityProvider securityProvider) {
@@ -46,7 +46,7 @@ public class DataSecurityProviderResource extends AbstractDataResource {
   //-------------------------------------------------------------------------
   /**
    * Gets the security provider.
-   * 
+   *
    * @return the security provider, not null
    */
   public SecurityProvider getSecurityProvider() {
@@ -55,7 +55,7 @@ public class DataSecurityProviderResource extends AbstractDataResource {
 
   //-------------------------------------------------------------------------
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
@@ -68,8 +68,8 @@ public class DataSecurityProviderResource extends AbstractDataResource {
 
   @POST  // should be a get, but query is too large
   @Path("securityGet")
-  public Response getSecurity(SecurityProviderRequest request) {
-    SecurityProviderResult result = getSecurityProvider().getSecurities(request);
+  public Response getSecurity(final SecurityProviderRequest request) {
+    final SecurityProviderResult result = getSecurityProvider().getSecurities(request);
     return responseOkObject(result);
   }
 

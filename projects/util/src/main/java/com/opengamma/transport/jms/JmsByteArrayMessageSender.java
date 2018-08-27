@@ -29,7 +29,7 @@ public class JmsByteArrayMessageSender extends AbstractJmsByteArraySender implem
 
   /**
    * Creates an instance associated with a destination and template.
-   * 
+   *
    * @param destinationName  the destination name, not null
    * @param jmsTemplate  the template, not null
    */
@@ -43,7 +43,7 @@ public class JmsByteArrayMessageSender extends AbstractJmsByteArraySender implem
     LOGGER.debug("Sending message size {} to {}", message.length, getDestinationName());
     getJmsTemplate().send(getDestinationName(), new MessageCreator() {
       @Override
-      public Message createMessage(Session session) throws JMSException {
+      public Message createMessage(final Session session) throws JMSException {
         final BytesMessage bytesMessage = session.createBytesMessage();
         bytesMessage.writeBytes(message);
         return bytesMessage;

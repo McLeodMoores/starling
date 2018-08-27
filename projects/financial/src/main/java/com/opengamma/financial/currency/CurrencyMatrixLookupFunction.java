@@ -75,11 +75,11 @@ public class CurrencyMatrixLookupFunction extends AbstractFunction.NonCompiledIn
     return CurrencyPair.TYPE;
   }
 
-  private ValueSpecification createSpotRateResult(ComputationTargetSpecification targetSpec, ValueProperties properties) {
+  private ValueSpecification createSpotRateResult(final ComputationTargetSpecification targetSpec, final ValueProperties properties) {
     return new ValueSpecification(ValueRequirementNames.SPOT_RATE, targetSpec, properties);
   }
 
-  private ValueSpecification createHistoricalTimeSeriesResult(ComputationTargetSpecification targetSpec, ValueProperties properties) {
+  private ValueSpecification createHistoricalTimeSeriesResult(final ComputationTargetSpecification targetSpec, ValueProperties properties) {
     properties = properties.copy()
         .withAny(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY)
         .with(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY, HistoricalTimeSeriesFunctionUtils.NO_VALUE, HistoricalTimeSeriesFunctionUtils.YES_VALUE)
@@ -88,7 +88,7 @@ public class CurrencyMatrixLookupFunction extends AbstractFunction.NonCompiledIn
     return new ValueSpecification(ValueRequirementNames.HISTORICAL_FX_TIME_SERIES, targetSpec, properties);
   }
 
-  private ValueSpecification createTimeSeriesLatestResult(ComputationTargetSpecification targetSpec, ValueProperties properties) {
+  private ValueSpecification createTimeSeriesLatestResult(final ComputationTargetSpecification targetSpec, final ValueProperties properties) {
     return new ValueSpecification(ValueRequirementNames.HISTORICAL_TIME_SERIES_LATEST, targetSpec, properties);
   }
 
@@ -107,7 +107,7 @@ public class CurrencyMatrixLookupFunction extends AbstractFunction.NonCompiledIn
         .with(AbstractCurrencyMatrixSourcingFunction.TARGET_CURRENCY_PROPERTY, currencies.getBase().getCode());
     ExternalIdBundle matrixIdentifiers = null;
     if (desiredValue.getConstraints().getProperties() != null) {
-      for (String constraintName : desiredValue.getConstraints().getProperties()) {
+      for (final String constraintName : desiredValue.getConstraints().getProperties()) {
         if (ValuePropertyNames.FUNCTION.equals(constraintName) || constraintName.startsWith(ValuePropertyNames.OUTPUT_RESERVED_PREFIX)) {
           continue;
         }
@@ -119,8 +119,8 @@ public class CurrencyMatrixLookupFunction extends AbstractFunction.NonCompiledIn
             if (values.size() == 1) {
               matrixIdentifiers = ExternalId.of(CurrencyMatrixResolver.IDENTIFIER_SCHEME, values.iterator().next()).toBundle();
             } else {
-              final Collection<ExternalId> identifiers = new ArrayList<ExternalId>(values.size());
-              for (String matrixName : values) {
+              final Collection<ExternalId> identifiers = new ArrayList<>(values.size());
+              for (final String matrixName : values) {
                 identifiers.add(ExternalId.of(CurrencyMatrixResolver.IDENTIFIER_SCHEME, matrixName));
               }
               matrixIdentifiers = ExternalIdBundle.of(identifiers);
@@ -147,11 +147,11 @@ public class CurrencyMatrixLookupFunction extends AbstractFunction.NonCompiledIn
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
     final Set<ValueSpecification> results = Sets.newHashSetWithExpectedSize(inputs.size());
-    for (Map.Entry<ValueSpecification, ValueRequirement> inputEntry : inputs.entrySet()) {
-      ValueProperties.Builder properties = createValueProperties();
+    for (final Map.Entry<ValueSpecification, ValueRequirement> inputEntry : inputs.entrySet()) {
+      final ValueProperties.Builder properties = createValueProperties();
       properties.with(CURRENCY_MATRIX_NAME_PROPERTY, inputEntry.getValue().getTargetReference().getRequirement().getIdentifiers().getValue(CurrencyMatrixResolver.IDENTIFIER_SCHEME));
       final ValueProperties inputProperties = inputEntry.getKey().getProperties();
-      for (String propertyName : inputProperties.getProperties()) {
+      for (final String propertyName : inputProperties.getProperties()) {
         if (!AbstractCurrencyMatrixSourcingFunction.SOURCE_CURRENCY_PROPERTY.equals(propertyName)
             && !AbstractCurrencyMatrixSourcingFunction.TARGET_CURRENCY_PROPERTY.equals(propertyName)
             && !ValuePropertyNames.FUNCTION.equals(propertyName)) {
@@ -171,7 +171,7 @@ public class CurrencyMatrixLookupFunction extends AbstractFunction.NonCompiledIn
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
     final Set<ComputedValue> results = Sets.newHashSetWithExpectedSize(desiredValues.size());
-    for (ValueRequirement desiredValue : desiredValues) {
+    for (final ValueRequirement desiredValue : desiredValues) {
       final Object input = inputs.getValue(desiredValue.getValueName());
       results.add(new ComputedValue(new ValueSpecification(desiredValue.getValueName(), target.toSpecification(), desiredValue.getConstraints()), input));
     }

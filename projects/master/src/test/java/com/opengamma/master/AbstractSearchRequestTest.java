@@ -23,7 +23,7 @@ public class AbstractSearchRequestTest {
 
   @DataProvider(name = "timeBounds")
   Object[][] data_timeBounds() {
-    Instant now = Instant.now();
+    final Instant now = Instant.now();
     return new Object[][] {
         {null, null, null, true},
         {null, now.minusSeconds(20), null, true},
@@ -44,9 +44,9 @@ public class AbstractSearchRequestTest {
   }
 
   @Test(dataProvider = "timeBounds")
-  public void test_matches_versions(Instant instant, Instant start, Instant end, boolean expected) {
-    Mock mock = new Mock();
-    MockDoc mockDoc = new MockDoc();
+  public void test_matches_versions(final Instant instant, final Instant start, final Instant end, final boolean expected) {
+    final Mock mock = new Mock();
+    final MockDoc mockDoc = new MockDoc();
     mockDoc.setVersionFromInstant(start);
     mockDoc.setVersionToInstant(end);
     mockDoc.setCorrectionFromInstant(Instant.MIN);
@@ -55,9 +55,9 @@ public class AbstractSearchRequestTest {
   }
 
   @Test(dataProvider = "timeBounds")
-  public void test_matches_corrections(Instant instant, Instant start, Instant end, boolean expected) {
-    Mock mock = new Mock();
-    MockDoc mockDoc = new MockDoc();
+  public void test_matches_corrections(final Instant instant, final Instant start, final Instant end, final boolean expected) {
+    final Mock mock = new Mock();
+    final MockDoc mockDoc = new MockDoc();
     mockDoc.setVersionFromInstant(Instant.MIN);
     mockDoc.setVersionToInstant(Instant.MAX);
     mockDoc.setCorrectionFromInstant(start);
@@ -80,7 +80,7 @@ public class AbstractSearchRequestTest {
       return null;
     }
     @Override
-    public void setUniqueId(UniqueId uniqueId) {
+    public void setUniqueId(final UniqueId uniqueId) {
     }
   }
 

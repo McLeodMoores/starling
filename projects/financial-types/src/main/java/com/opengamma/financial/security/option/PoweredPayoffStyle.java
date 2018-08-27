@@ -41,16 +41,16 @@ public class PoweredPayoffStyle extends PayoffStyle {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param power  the power
    */
-  public PoweredPayoffStyle(double power) {
+  public PoweredPayoffStyle(final double power) {
     setPower(power);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public <T> T accept(PayoffStyleVisitor<T> visitor) {
+  public <T> T accept(final PayoffStyleVisitor<T> visitor) {
     return visitor.visitPoweredPayoffStyle(this);
   }
 

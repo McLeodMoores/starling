@@ -50,45 +50,45 @@ public class RiskValueProperties extends DirectBean {
   public RiskValueProperties() {
   }
 
-  public RiskValueProperties(ValueProperties requirement) {
+  public RiskValueProperties(final ValueProperties requirement) {
     setSyntheticForm(synthesize(requirement));
   }
 
-  private static String escape(Pattern p, String s) {
+  private static String escape(final Pattern p, final String s) {
     return p.matcher(s).replaceAll("\\\\$0");
   }
 
-  private static String unescape(String s) {
+  private static String unescape(final String s) {
     return s.replaceAll("\\\\", "");
   }
 
-  public static String synthesize(ValueProperties requirement) {
+  public static String synthesize(final ValueProperties requirement) {
     try {
-      JSONObject json = new JSONObject();
+      final JSONObject json = new JSONObject();
       if (ValueProperties.all() == requirement) {
         json.put("infinity", true).toString();
       } else if (ValueProperties.isNearInfiniteProperties(requirement)) {
         //ValueProperties.NearlyInfinitePropertiesImpl nearlyInifite = (ValueProperties.NearlyInfinitePropertiesImpl) requirement;
-        final List<String> nearlyInfinite = new ArrayList<String>(ValueProperties.all().getUnsatisfied(requirement));
+        final List<String> nearlyInfinite = new ArrayList<>(ValueProperties.all().getUnsatisfied(requirement));
         Collections.sort(nearlyInfinite);
-        JSONArray without = new JSONArray();
-        for (String value : nearlyInfinite) {
+        final JSONArray without = new JSONArray();
+        for (final String value : nearlyInfinite) {
           without.put(escape(ESCAPE_PATTERN, value));
         }
         json.put("without", without);
       } else {
-        JSONArray properties = new JSONArray();
+        final JSONArray properties = new JSONArray();
         if (requirement.getProperties() != null) {
-          for (String property : functional(requirement.getProperties()).sort()) {
-            JSONObject propertyJson = new JSONObject();
+          for (final String property : functional(requirement.getProperties()).sort()) {
+            final JSONObject propertyJson = new JSONObject();
 
             propertyJson.put("name", property);
             if (requirement.isOptional(property)) {
               propertyJson.put("optional", true);
             }
 
-            JSONArray values = new JSONArray();
-            for (String value : functional(requirement.getValues(property)).sort()) {
+            final JSONArray values = new JSONArray();
+            for (final String value : functional(requirement.getValues(property)).sort()) {
               values.put(escape(ESCAPE_PATTERN, value));
             }
             propertyJson.put("values", values);
@@ -98,37 +98,37 @@ public class RiskValueProperties extends DirectBean {
         json.put("properties", properties);
       }
       return json.toString();
-    } catch (JSONException e) {
+    } catch (final JSONException e) {
       throw new RuntimeException(e);
     }
   }
 
-  public static ValueProperties parseJson(String source) {
+  public static ValueProperties parseJson(final String source) {
     try {
-      JSONObject json = new JSONObject(source);
+      final JSONObject json = new JSONObject(source);
 
       if (json.has("infinity") && json.getBoolean("infinity")) {
         return ValueProperties.all();
       } else if (json.has("without")) {
-        JSONArray without = json.getJSONArray("without");
-        ValueProperties.Builder builder = ValueProperties.all().copy();
+        final JSONArray without = json.getJSONArray("without");
+        final ValueProperties.Builder builder = ValueProperties.all().copy();
         for (int i = 0; i < without.length(); i++) {
-          String value = unescape(without.getString(i));
+          final String value = unescape(without.getString(i));
           builder.withoutAny(value);
         }
         return builder.get();
       } else if (json.has("properties")) {
-        ValueProperties.Builder builder = ValueProperties.builder();
-        JSONArray properties = json.getJSONArray("properties");
+        final ValueProperties.Builder builder = ValueProperties.builder();
+        final JSONArray properties = json.getJSONArray("properties");
         for (int i = 0; i < properties.length(); i++) {
-          JSONObject property = properties.getJSONObject(i);
-          String propertyName = property.getString("name");
+          final JSONObject property = properties.getJSONObject(i);
+          final String propertyName = property.getString("name");
           if (property.has("optional") && property.getBoolean("optional")) {
             builder.withOptional(propertyName);
           }
           if (property.has("values")) {
-            JSONArray valueArray = property.getJSONArray("values");
-            Collection<String> values = newArrayList();
+            final JSONArray valueArray = property.getJSONArray("values");
+            final Collection<String> values = newArrayList();
             for (int j = 0; j < valueArray.length(); j++) {
               values.add(unescape(valueArray.getString(j)));
             }
@@ -139,36 +139,36 @@ public class RiskValueProperties extends DirectBean {
       } else {
         return ValueProperties.none();
       }
-    } catch (JSONException e) {
+    } catch (final JSONException e) {
       throw new RuntimeException(e);
     }
   }
 
   public ValueProperties toProperties() {
     try {
-      JSONObject jsonObject = new JSONObject(_syntheticForm);
+      final JSONObject jsonObject = new JSONObject(_syntheticForm);
       if (jsonObject.has("infinity") && jsonObject.getBoolean("infinity")) {
         return ValueProperties.all();
       } else if (jsonObject.has("without")) {
-        JSONArray withoutProperties = jsonObject.getJSONArray("without");
+        final JSONArray withoutProperties = jsonObject.getJSONArray("without");
         ValueProperties requirement = ValueProperties.all();
         for (int i = 0; i < withoutProperties.length(); i++) {
-          String without = (String) withoutProperties.get(i);
+          final String without = (String) withoutProperties.get(i);
           requirement = requirement.withoutAny(without);
         }
         return requirement;
       } else if (jsonObject.has("properties") && jsonObject.getJSONArray("properties") != null) {
-        JSONArray withProperties = jsonObject.getJSONArray("properties");
+        final JSONArray withProperties = jsonObject.getJSONArray("properties");
         final ValueProperties.Builder builder = ValueProperties.builder();
         for (int i = 0; i < withProperties.length(); i++) {
-          JSONObject property = (JSONObject) withProperties.get(i);
-          String name = property.getString("name");
+          final JSONObject property = (JSONObject) withProperties.get(i);
+          final String name = property.getString("name");
           if (jsonObject.has("optional") && property.getBoolean("optional")) {
             builder.withOptional(name);
           }
-          JSONArray values = (JSONArray) property.get("values");
+          final JSONArray values = (JSONArray) property.get("values");
           for (int j = 0; j < values.length(); j++) {
-            String value = (String) values.get(j);
+            final String value = (String) values.get(j);
             builder.with(name, value);
           }
         }
@@ -176,7 +176,7 @@ public class RiskValueProperties extends DirectBean {
       } else {
         return null;
       }
-    } catch (JSONException e) {
+    } catch (final JSONException e) {
       throw new RuntimeException(e);
     }
   }

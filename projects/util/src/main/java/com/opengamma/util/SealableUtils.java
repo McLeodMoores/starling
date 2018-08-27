@@ -22,10 +22,10 @@ public final class SealableUtils {
   /**
    * Checks if the class is currently sealed, throwing an exception if it is.
    * This is used by implementations at the start of modification methods.
-   * 
+   *
    * @param sealable  the instance to check, not null
    */
-  public static void checkSealed(Sealable sealable) {
+  public static void checkSealed(final Sealable sealable) {
     if (sealable.isSealed()) {
       throw new IllegalStateException("Unable to modify, instance " + sealable + " has been sealed");
     }

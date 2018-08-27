@@ -75,32 +75,32 @@ public class ExchangeSearchRequest extends AbstractSearchRequest {
 
   /**
    * Creates an instance using a single search identifier.
-   * 
+   *
    * @param exchangeId  the exchange external identifier to search for, not null
    */
-  public ExchangeSearchRequest(ExternalId exchangeId) {
+  public ExchangeSearchRequest(final ExternalId exchangeId) {
     addExternalId(exchangeId);
   }
 
   /**
    * Creates an instance using a bundle of identifiers.
-   * 
+   *
    * @param exchangeBundle  the exchange external identifiers to search for, not null
    */
-  public ExchangeSearchRequest(ExternalIdBundle exchangeBundle) {
+  public ExchangeSearchRequest(final ExternalIdBundle exchangeBundle) {
     addExternalIds(exchangeBundle);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Adds a single exchange object identifier to the set.
-   * 
+   *
    * @param exchangeId  the exchange object identifier to add, not null
    */
-  public void addObjectId(ObjectIdentifiable exchangeId) {
+  public void addObjectId(final ObjectIdentifiable exchangeId) {
     ArgumentChecker.notNull(exchangeId, "exchangeId");
     if (_objectIds == null) {
-      _objectIds = new ArrayList<ObjectId>();
+      _objectIds = new ArrayList<>();
     }
     _objectIds.add(exchangeId.getObjectId());
   }
@@ -108,15 +108,15 @@ public class ExchangeSearchRequest extends AbstractSearchRequest {
   /**
    * Sets the set of exchange object identifiers, null to not limit by exchange object identifiers.
    * Note that an empty set will return no exchanges.
-   * 
+   *
    * @param exchangeIds  the new exchange identifiers, null clears the exchange id search
    */
-  public void setObjectIds(Iterable<? extends ObjectIdentifiable> exchangeIds) {
+  public void setObjectIds(final Iterable<? extends ObjectIdentifiable> exchangeIds) {
     if (exchangeIds == null) {
       _objectIds = null;
     } else {
-      _objectIds = new ArrayList<ObjectId>();
-      for (ObjectIdentifiable exchangeId : exchangeIds) {
+      _objectIds = new ArrayList<>();
+      for (final ObjectIdentifiable exchangeId : exchangeIds) {
         _objectIds.add(exchangeId.getObjectId());
       }
     }
@@ -125,24 +125,24 @@ public class ExchangeSearchRequest extends AbstractSearchRequest {
   //-------------------------------------------------------------------------
   /**
    * Adds a single exchange external identifier to the collection to search for.
-   * Unless customized, the search will match 
+   * Unless customized, the search will match
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
+   *
    * @param exchangeId  the exchange key identifier to add, not null
    */
-  public void addExternalId(ExternalId exchangeId) {
+  public void addExternalId(final ExternalId exchangeId) {
     ArgumentChecker.notNull(exchangeId, "exchangeId");
     addExternalIds(Arrays.asList(exchangeId));
   }
 
   /**
    * Adds a collection of exchange external identifiers to the collection to search for.
-   * Unless customized, the search will match 
+   * Unless customized, the search will match
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
+   *
    * @param exchangeIds  the exchange key identifiers to add, not null
    */
-  public void addExternalIds(ExternalId... exchangeIds) {
+  public void addExternalIds(final ExternalId... exchangeIds) {
     ArgumentChecker.notNull(exchangeIds, "exchangeIds");
     if (getExternalIdSearch() == null) {
       setExternalIdSearch(ExternalIdSearch.of(exchangeIds));
@@ -153,12 +153,12 @@ public class ExchangeSearchRequest extends AbstractSearchRequest {
 
   /**
    * Adds a collection of exchange external identifiers to the collection to search for.
-   * Unless customized, the search will match 
+   * Unless customized, the search will match
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
+   *
    * @param exchangeIds  the exchange key identifiers to add, not null
    */
-  public void addExternalIds(Iterable<ExternalId> exchangeIds) {
+  public void addExternalIds(final Iterable<ExternalId> exchangeIds) {
     ArgumentChecker.notNull(exchangeIds, "exchangeIds");
     if (getExternalIdSearch() == null) {
       setExternalIdSearch(ExternalIdSearch.of(exchangeIds));
@@ -169,10 +169,10 @@ public class ExchangeSearchRequest extends AbstractSearchRequest {
 
   /**
    * Sets the search type to use in {@code ExternalIdSearch}.
-   * 
+   *
    * @param type  the type to set, not null
    */
-  public void setExternalIdSearchType(ExternalIdSearchType type) {
+  public void setExternalIdSearchType(final ExternalIdSearchType type) {
     if (getExternalIdSearch() == null) {
       setExternalIdSearch(ExternalIdSearch.of(type));
     } else {

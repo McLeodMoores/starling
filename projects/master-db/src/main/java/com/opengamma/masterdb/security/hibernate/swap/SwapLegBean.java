@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 
@@ -55,7 +55,7 @@ public class SwapLegBean {
    * Sets the swapLegType.
    * @param swapLegType  the swapLegType
    */
-  public void setSwapLegType(SwapLegType swapLegType) {
+  public void setSwapLegType(final SwapLegType swapLegType) {
     _swapLegType = swapLegType;
   }
   /**
@@ -69,7 +69,7 @@ public class SwapLegBean {
    * Sets the dayCount.
    * @param dayCount  the dayCount
    */
-  public void setDayCount(DayCountBean dayCount) {
+  public void setDayCount(final DayCountBean dayCount) {
     _dayCount = dayCount;
   }
   /**
@@ -83,7 +83,7 @@ public class SwapLegBean {
    * Sets the frequency.
    * @param frequency  the frequency
    */
-  public void setFrequency(FrequencyBean frequency) {
+  public void setFrequency(final FrequencyBean frequency) {
     _frequency = frequency;
   }
   /**
@@ -97,7 +97,7 @@ public class SwapLegBean {
    * Sets the region.
    * @param region  the region
    */
-  public void setRegion(ExternalIdBean region) {
+  public void setRegion(final ExternalIdBean region) {
     _region = region;
   }
   /**
@@ -111,7 +111,7 @@ public class SwapLegBean {
    * Sets the businessDayConvention.
    * @param businessDayConvention  the businessDayConvention
    */
-  public void setBusinessDayConvention(BusinessDayConventionBean businessDayConvention) {
+  public void setBusinessDayConvention(final BusinessDayConventionBean businessDayConvention) {
     _businessDayConvention = businessDayConvention;
   }
   /**
@@ -125,7 +125,7 @@ public class SwapLegBean {
    * Sets the notional.
    * @param notional  the notional
    */
-  public void setNotional(NotionalBean notional) {
+  public void setNotional(final NotionalBean notional) {
     _notional = notional;
   }
   /**
@@ -139,7 +139,7 @@ public class SwapLegBean {
    * Sets the rate.
    * @param rate  the rate
    */
-  public void setRate(Double rate) {
+  public void setRate(final Double rate) {
     _rate = rate;
   }
   /**
@@ -153,7 +153,7 @@ public class SwapLegBean {
    * Sets the spread.
    * @param spread  the spread
    */
-  public void setSpread(Double spread) {
+  public void setSpread(final Double spread) {
     _spread = spread;
   }
   /**
@@ -167,7 +167,7 @@ public class SwapLegBean {
    * Sets the rateIdentifier.
    * @param rateIdentifier  the rateIdentifier
    */
-  public void setRateIdentifier(ExternalIdBean rateIdentifier) {
+  public void setRateIdentifier(final ExternalIdBean rateIdentifier) {
     _rateIdentifier = rateIdentifier;
   }
   /**
@@ -181,7 +181,7 @@ public class SwapLegBean {
    * Sets the eom.
    * @param eom  the eom
    */
-  public void setEom(boolean eom) {
+  public void setEom(final boolean eom) {
     _eom = eom;
   }
   /**
@@ -195,7 +195,7 @@ public class SwapLegBean {
    * Sets the floatingRateType.
    * @param floatingRateType  the floatingRateType
    */
-  public void setFloatingRateType(FloatingRateType floatingRateType) {
+  public void setFloatingRateType(final FloatingRateType floatingRateType) {
     _floatingRateType = floatingRateType;
   }
   /**
@@ -209,7 +209,7 @@ public class SwapLegBean {
    * Sets the settlementDays.
    * @param settlementDays  the settlementDays
    */
-  public void setSettlementDays(Integer settlementDays) {
+  public void setSettlementDays(final Integer settlementDays) {
     _settlementDays = settlementDays;
   }
   /**
@@ -223,7 +223,7 @@ public class SwapLegBean {
    * Sets the offsetFixing.
    * @param offsetFixing  the offsetFixing
    */
-  public void setOffsetFixing(FrequencyBean offsetFixing) {
+  public void setOffsetFixing(final FrequencyBean offsetFixing) {
     _offsetFixing = offsetFixing;
   }
   /**
@@ -237,7 +237,7 @@ public class SwapLegBean {
    * Sets the gearing.
    * @param gearing  the gearing
    */
-  public void setGearing(Double gearing) {
+  public void setGearing(final Double gearing) {
     _gearing = gearing;
   }
 
@@ -253,7 +253,7 @@ public class SwapLegBean {
    * Sets the strike.  For fixed variance swap legs.
    * @param strike The strike
    */
-  public void setStrike(Double strike) {
+  public void setStrike(final Double strike) {
     _strike = strike;
   }
 
@@ -269,7 +269,7 @@ public class SwapLegBean {
    * Sets the variance swap type.  For fixed variance swap legs.
    * @param varianceSwapType The variance swap type
    */
-  public void setVarianceSwapType(VarianceSwapType varianceSwapType) {
+  public void setVarianceSwapType(final VarianceSwapType varianceSwapType) {
     _varianceSwapType = varianceSwapType;
   }
 
@@ -285,7 +285,7 @@ public class SwapLegBean {
    * Sets the underlying ID.  For floating variance swap legs.
    * @param underlyingId The underlying ID
    */
-  public void setUnderlyingId(ExternalIdBean underlyingId) {
+  public void setUnderlyingId(final ExternalIdBean underlyingId) {
     _underlyingId = underlyingId;
   }
 
@@ -301,7 +301,7 @@ public class SwapLegBean {
    * Gets the monitoring frequency.  For floating variance swap legs.
    * @param monitoringFrequency The monitoring frequency
    */
-  public void setMonitoringFrequency(FrequencyBean monitoringFrequency) {
+  public void setMonitoringFrequency(final FrequencyBean monitoringFrequency) {
     _monitoringFrequency = monitoringFrequency;
   }
 
@@ -317,10 +317,10 @@ public class SwapLegBean {
    * Sets the annualization factor.  For floating variance swap legs.
    * @param annualizationFactor The annualization factor
    */
-  public void setAnnualizationFactor(Double annualizationFactor) {
+  public void setAnnualizationFactor(final Double annualizationFactor) {
     _annualizationFactor = annualizationFactor;
   }
-  
+
   /**
    * Gets the inflation leg conventional indexation lag. For inflation swap legs.
    * @return lag The conventional indexation lag.
@@ -328,15 +328,15 @@ public class SwapLegBean {
   public Integer getConventionalIndexationLag() {
     return _conventionalIndexationLag;
   }
-  
+
   /**
    * Gets the conventional indexation lag. For inflation swap legs.
    * @param conventionalIndexationLag The conventional indexation lag.
    */
-  public void setConventionalIndexationLag(Integer conventionalIndexationLag) {
+  public void setConventionalIndexationLag(final Integer conventionalIndexationLag) {
     _conventionalIndexationLag = conventionalIndexationLag;
   }
-  
+
   /**
    * Gets the actual indexation lag. For inflation swap legs.
    * @return lag The actual indexation lag.
@@ -344,12 +344,12 @@ public class SwapLegBean {
   public Integer getActualIndexationLag() {
     return _actualIndexationLag;
   }
-  
+
   /**
    * Gets the actual indexation lag. For inflation swap legs.
    * @param actualIndexationLag The actual indexation lag.
    */
-  public void setActualIndexationLag(Integer actualIndexationLag) {
+  public void setActualIndexationLag(final Integer actualIndexationLag) {
     _actualIndexationLag = actualIndexationLag;
   }
 
@@ -360,12 +360,12 @@ public class SwapLegBean {
   public InterpolationMethod getIndexInterpolationMethod() {
     return _indexInterpolationMethod;
   }
-  
+
   /**
    * Sets the inflation leg interpolation method. For inflation swap legs.
    * @param indexInterpolationMethod The inflation leg interpolation method.
    */
-  public void setIndexInterpolationMethod(InterpolationMethod indexInterpolationMethod) {
+  public void setIndexInterpolationMethod(final InterpolationMethod indexInterpolationMethod) {
     _indexInterpolationMethod = indexInterpolationMethod;
   }
 }

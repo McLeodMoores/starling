@@ -63,7 +63,7 @@ public class DbPositionMasterComponentFactory extends AbstractDocumentDbMasterCo
   protected Class<? extends AbstractRemoteMaster> getRemoteInterface() {
     return RemotePositionMaster.class;
   }
-  
+
   //-------------------------------------------------------------------------
   @Override
   protected DbPositionMaster createDbDocumentMaster() {
@@ -71,24 +71,24 @@ public class DbPositionMasterComponentFactory extends AbstractDocumentDbMasterCo
   }
 
   @Override
-  protected PositionMaster postProcess(DbPositionMaster master) {
+  protected PositionMaster postProcess(final DbPositionMaster master) {
     return PermissionedPositionMaster.wrap(splitQueries(master));
   }
 
   @Override
-  protected PositionMaster wrapMasterWithTrackingInterface(PositionMaster postProcessedMaster) {
+  protected PositionMaster wrapMasterWithTrackingInterface(final PositionMaster postProcessedMaster) {
     return new DataTrackingPositionMaster(postProcessedMaster);
   }
 
   @Override
-  protected AbstractDataResource createPublishedResource(DbPositionMaster dbMaster, PositionMaster postProcessedMaster) {
+  protected AbstractDataResource createPublishedResource(final DbPositionMaster dbMaster, final PositionMaster postProcessedMaster) {
     //note - the db instance is required for this resource
     return new DataDbPositionMasterResource(dbMaster);
   }
 
   /**
    * If query splitting is enabled, wraps the position master with a query splitter.
-   * 
+   *
    * @param master the underlying master, not null
    * @return the original master if splitting is disabled, otherwise the splitting form
    */

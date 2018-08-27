@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.view.worker.trigger;
@@ -12,19 +12,19 @@ public class SuccessiveDeltaLimitTrigger implements ViewCycleTrigger {
 
   private final int _maxSuccessiveDeltas;
   private int _successiveDeltaCount;
-  
-  public SuccessiveDeltaLimitTrigger(int maxSuccessiveDeltas) {
+
+  public SuccessiveDeltaLimitTrigger(final int maxSuccessiveDeltas) {
     _maxSuccessiveDeltas = maxSuccessiveDeltas;
   }
 
   @Override
-  public ViewCycleTriggerResult query(long cycleTimeNanos) {
-    ViewCycleType type = _successiveDeltaCount >= _maxSuccessiveDeltas ? ViewCycleType.FULL : ViewCycleType.DELTA;
+  public ViewCycleTriggerResult query(final long cycleTimeNanos) {
+    final ViewCycleType type = _successiveDeltaCount >= _maxSuccessiveDeltas ? ViewCycleType.FULL : ViewCycleType.DELTA;
     return new ViewCycleTriggerResult(type);
   }
 
   @Override
-  public void cycleTriggered(long cycleTimeNanos, ViewCycleType cycleType) {
+  public void cycleTriggered(final long cycleTimeNanos, final ViewCycleType cycleType) {
     switch (cycleType) {
       case DELTA:
         _successiveDeltaCount++;

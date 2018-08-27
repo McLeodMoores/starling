@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.tool.errorreport;
@@ -50,13 +50,13 @@ public class BundleErrorReportInfo implements Runnable {
 
   /**
    * Reads the contents of a file. Any lines are trimmed of leading/trailing whitespace. Any lines starting with # are skipped and any blank lines ignored.
-   * 
+   *
    * @param pathToFile the file to read, not null
    * @return the contents of the file, not null
    */
   private static String[] readFile(final String pathToFile) {
     try (final BufferedReader reader = new BufferedReader(new FileReader(pathToFile))) {
-      final List<String> lines = new ArrayList<String>();
+      final List<String> lines = new ArrayList<>();
       String line;
       while ((line = reader.readLine()) != null) {
         line = line.trim();
@@ -65,7 +65,7 @@ public class BundleErrorReportInfo implements Runnable {
         }
       }
       return lines.toArray(new String[lines.size()]);
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw new OpenGammaRuntimeException("Couldn't read properties file - " + pathToFile, e);
     }
   }
@@ -82,14 +82,14 @@ public class BundleErrorReportInfo implements Runnable {
   /**
    * Find a preferred sub-directory under the user's home folder. We use the home folder as it is most likely writeable, but most systems have sub-folders called things like "Downloads" or
    * "Downloaded Files" that the user might prefer things end up in.
-   * 
+   *
    * @param path path the check, not null
    * @return the updated path, or the original if no candidate sub-folder is found
    */
   private String preferredSubFolder(final String path) {
     final File file = new File(path);
     if (file.isDirectory()) {
-      for (String subdir : SUBDIRS) {
+      for (final String subdir : SUBDIRS) {
         final File sd = new File(file, subdir);
         if (sd.isDirectory()) {
           return path + File.separator + subdir;
@@ -101,18 +101,18 @@ public class BundleErrorReportInfo implements Runnable {
 
   /**
    * Opens the ZIP output stream ready for each "report" entry to be added.
-   * 
+   *
    * @return the path that will be written to, not null
    */
   protected String openReportOutput() {
-    final String home = preferredSubFolder((s_userHome != null) ? s_userHome : System.getProperty("user.home"));
+    final String home = preferredSubFolder(s_userHome != null ? s_userHome : System.getProperty("user.home"));
     final LocalDateTime ldt = Instant.now().atZone(ZoneOffset.systemDefault()).toLocalDateTime();
     final String path = String.format("%s%c%s-%04d-%02d-%02d-%02d-%02d-%02d.zip", home, File.separatorChar, "OpenGamma-ErrorReport", ldt.getYear(), ldt.getMonthValue(), ldt.getDayOfMonth(),
         ldt.getHour(), ldt.getMinute(), ldt.getSecond()).toString();
     LOGGER.info("Writing {}", path);
     try {
       _zip = new ZipOutputStream(new FileOutputStream(path));
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw new OpenGammaRuntimeException("Couldn't write to " + path, e);
     }
     return path;
@@ -124,7 +124,7 @@ public class BundleErrorReportInfo implements Runnable {
 
   /**
    * Copies a file from the local file system to the ZIP output.
-   * 
+   *
    * @param source the file to copy from, not null
    * @param name the name of the entry, not null
    */
@@ -140,14 +140,14 @@ public class BundleErrorReportInfo implements Runnable {
         }
       }
       _zip.closeEntry();
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw new OpenGammaRuntimeException("Couldn't write " + name + " to ZIP file", e);
     }
   }
 
   /**
    * Creates a regex pattern that corresponds to wild cards written with * and ? notation.
-   * 
+   *
    * @param name the * and ? based pattern
    * @return the regex pattern
    */
@@ -190,7 +190,7 @@ public class BundleErrorReportInfo implements Runnable {
     final String[] files = root.list();
     if (files != null) {
       Arrays.sort(files);
-      for (String file : files) {
+      for (final String file : files) {
         final Matcher m = match.matcher(file);
         if (m.matches()) {
           LOGGER.trace("Entry {} matched by path", file);
@@ -214,7 +214,7 @@ public class BundleErrorReportInfo implements Runnable {
 
   /**
    * Writes an entry of the form "AttachFiles=&lt;path&gt;".
-   * 
+   *
    * @param path the path, including * and ? characters as wildcards
    * @return the number of files written to the ZIP file
    */
@@ -235,11 +235,11 @@ public class BundleErrorReportInfo implements Runnable {
 
   /**
    * Writes an entry of the form "X=Y", dispatching the call based on the value of X.
-   * 
+   *
    * @param report the line from the configuration file, not null
    * @return the number of files written to the ZIP file
    */
-  private int writeReport(String report) {
+  private int writeReport(final String report) {
     LOGGER.debug("Writing {}", report);
     final int i = report.indexOf('=');
     if (i < 0) {
@@ -263,7 +263,7 @@ public class BundleErrorReportInfo implements Runnable {
   protected void closeReportOutput() {
     try {
       _zip.close();
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw new OpenGammaRuntimeException("Couldn't write to ZIP file", e);
     }
   }
@@ -274,7 +274,7 @@ public class BundleErrorReportInfo implements Runnable {
     final String pathToReport = openReportOutput();
     _feedback.workCompleted(1);
     int reportCount = 0;
-    for (String report : _reports) {
+    for (final String report : _reports) {
       reportCount += writeReport(report);
       _feedback.workCompleted(1);
     }
@@ -285,7 +285,7 @@ public class BundleErrorReportInfo implements Runnable {
 
   /**
    * Logical program entry point.
-   * 
+   *
    * @param args the command line arguments, not null
    * @return the exit code
    */
@@ -295,18 +295,18 @@ public class BundleErrorReportInfo implements Runnable {
       if (args.length != 1) {
         throw new IllegalArgumentException("Invalid number of arguments - expected path to property file");
       }
-      (new BundleErrorReportInfo(feedback, args[0])).run();
+      new BundleErrorReportInfo(feedback, args[0]).run();
       return 0;
-    } catch (Throwable t) {
+    } catch (final Throwable t) {
       LOGGER.error("Caught exception", t);
-      feedback.shout((t.getMessage() != null) ? t.getMessage() : "Couldn't package error logs");
+      feedback.shout(t.getMessage() != null ? t.getMessage() : "Couldn't package error logs");
       return 1;
     }
   }
 
   /**
    * Program entry point. The logical program entry point is called and {@link System#exit} called with the exit code.
-   * 
+   *
    * @param args the command line arguments, not null
    */
   public static void main(final String[] args) {

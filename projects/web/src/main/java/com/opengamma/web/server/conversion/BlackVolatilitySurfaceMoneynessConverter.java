@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.web.server.conversion;
@@ -19,39 +19,39 @@ import com.opengamma.analytics.math.surface.InterpolatedDoublesSurface;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * 
+ *
  */
 public class BlackVolatilitySurfaceMoneynessConverter implements ResultConverter<BlackVolatilitySurfaceMoneyness> {
   private static final DecimalFormat LABEL_FORMAT = new DecimalFormat("##.##");
-  
+
   @Override
-  public Object convertForDisplay(ResultConverterCache context, ValueSpecification valueSpec, BlackVolatilitySurfaceMoneyness value, ConversionMode mode) {
-    Map<String, Object> result = new HashMap<String, Object>();
+  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final BlackVolatilitySurfaceMoneyness value, final ConversionMode mode) {
+    final Map<String, Object> result = new HashMap<>();
     if (value.getSurface() instanceof InterpolatedDoublesSurface) {
-      InterpolatedDoublesSurface interpolated = (InterpolatedDoublesSurface) value.getSurface();
+      final InterpolatedDoublesSurface interpolated = (InterpolatedDoublesSurface) value.getSurface();
       result.put("xCount", interpolated.getXData().length);
       result.put("yCount", interpolated.getYData().length);
       if (mode == ConversionMode.FULL) {
-        Double[] xs = interpolated.getXData();
-        Double[] ys = interpolated.getYData();
-        List<Double> uniqueX = new ArrayList<Double>();
-        List<Double> uniqueY = new ArrayList<Double>();
-        for (Double x : xs) {
+        final Double[] xs = interpolated.getXData();
+        final Double[] ys = interpolated.getYData();
+        final List<Double> uniqueX = new ArrayList<>();
+        final List<Double> uniqueY = new ArrayList<>();
+        for (final Double x : xs) {
           if (!uniqueX.contains(x)) {
             uniqueX.add(x);
           }
         }
-        for (Double y : ys) {
+        for (final Double y : ys) {
           if (!uniqueY.contains(y)) {
             uniqueY.add(y);
           }
         }
         Collections.sort(uniqueX);
-        Collections.sort(uniqueY);      
-        Object[] xLabels = new Object[uniqueX.size()];
-        Object[] yLabels = new Object[uniqueY.size()];
-        double[][] surface = new double[xs.length][ys.length];
-        boolean[][] missingValues = new boolean[xs.length][ys.length];
+        Collections.sort(uniqueY);
+        final Object[] xLabels = new Object[uniqueX.size()];
+        final Object[] yLabels = new Object[uniqueY.size()];
+        final double[][] surface = new double[xs.length][ys.length];
+        final boolean[][] missingValues = new boolean[xs.length][ys.length];
         for (int i = 0; i < uniqueX.size(); i++) {
           xLabels[i] = LABEL_FORMAT.format(uniqueX.get(i));
           for (int j = 0; j < uniqueY.size(); j++) {
@@ -60,7 +60,7 @@ public class BlackVolatilitySurfaceMoneynessConverter implements ResultConverter
             }
             try {
               surface[i][j] = interpolated.getZValue(uniqueX.get(i), uniqueY.get(i));
-            } catch (MathException e) {
+            } catch (final MathException e) {
               surface[i][j] = Double.MAX_VALUE;
               missingValues[i][j] = true;
             }
@@ -72,18 +72,18 @@ public class BlackVolatilitySurfaceMoneynessConverter implements ResultConverter
         result.put("missingValues", missingValues);
       }
     } else if (value.getSurface() instanceof FunctionalDoublesSurface) {
-      FunctionalDoublesSurface functional = (FunctionalDoublesSurface) value.getSurface();
+      final FunctionalDoublesSurface functional = (FunctionalDoublesSurface) value.getSurface();
       result.put("xCount", 20);
       result.put("yCount", 20);
       if (mode == ConversionMode.FULL) {
-        String[] xLabels = new String[20];
-        String[] yLabels = new String[20];
-        double[][] surface = new double[20][20];
-        boolean[][] missingValues = new boolean[20][20];
-        
-        double[] expiries = {0.1, 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 2.5, 3., 4., 5., 6., 7., 8., 9., 10., 12., 15., 20., 30.}; 
+        final String[] xLabels = new String[20];
+        final String[] yLabels = new String[20];
+        final double[][] surface = new double[20][20];
+        final boolean[][] missingValues = new boolean[20][20];
+
+        final double[] expiries = {0.1, 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 2.5, 3., 4., 5., 6., 7., 8., 9., 10., 12., 15., 20., 30.};
         for (int i = 0; i < 20; i++) {
-          double t = expiries[i];
+          final double t = expiries[i];
           xLabels[i] = LABEL_FORMAT.format(t);
           double m = .1;
           for (int j = 0; j < 20; j++) {
@@ -93,7 +93,7 @@ public class BlackVolatilitySurfaceMoneynessConverter implements ResultConverter
             surface[j][i] = 100 * functional.getZValue(t, m);
             m += 0.1;
           }
-          
+
         }
         result.put("xs", xLabels);
         result.put("ys", yLabels);
@@ -106,12 +106,12 @@ public class BlackVolatilitySurfaceMoneynessConverter implements ResultConverter
   }
 
   @Override
-  public Object convertForHistory(ResultConverterCache context, ValueSpecification valueSpec, BlackVolatilitySurfaceMoneyness value) {
+  public Object convertForHistory(final ResultConverterCache context, final ValueSpecification valueSpec, final BlackVolatilitySurfaceMoneyness value) {
     return null;
   }
 
   @Override
-  public String convertToText(ResultConverterCache context, ValueSpecification valueSpec, BlackVolatilitySurfaceMoneyness value) {
+  public String convertToText(final ResultConverterCache context, final ValueSpecification valueSpec, final BlackVolatilitySurfaceMoneyness value) {
     return "Black Volatility Surface Moneyness";
   }
 

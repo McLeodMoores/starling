@@ -56,16 +56,16 @@ public abstract class AbstractValueCachingReferenceDataProvider extends Abstract
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param underlying  the underlying provider, not null
    */
-  protected AbstractValueCachingReferenceDataProvider(ReferenceDataProvider underlying) {
+  protected AbstractValueCachingReferenceDataProvider(final ReferenceDataProvider underlying) {
     this(underlying, OpenGammaFudgeContext.getInstance());
   }
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param underlying  the underlying provider, not null
    * @param fudgeContext  the Fudge context, not null
    */
@@ -79,7 +79,7 @@ public abstract class AbstractValueCachingReferenceDataProvider extends Abstract
   //-------------------------------------------------------------------------
   /**
    * Gets the underlying provider.
-   * 
+   *
    * @return the underlying provider, not null
    */
   public ReferenceDataProvider getUnderlying() {
@@ -88,7 +88,7 @@ public abstract class AbstractValueCachingReferenceDataProvider extends Abstract
 
   /**
    * Gets the Fudge context.
-   * 
+   *
    * @return the context, not null
    */
   protected FudgeContext getFudgeContext() {
@@ -97,18 +97,18 @@ public abstract class AbstractValueCachingReferenceDataProvider extends Abstract
 
   //-------------------------------------------------------------------------
   @Override
-  protected ReferenceDataProviderGetResult doBulkGet(ReferenceDataProviderGetRequest request) {
+  protected ReferenceDataProviderGetResult doBulkGet(final ReferenceDataProviderGetRequest request) {
     // if use-cache is false, then do not cache
     if (request.isUseCache() == false) {
       return getUnderlying().getReferenceData(request);
     }
-    
+
     // load from cache
-    Map<String, ReferenceData> cachedResults = loadFieldValues(request.getIdentifiers());
-    
+    final Map<String, ReferenceData> cachedResults = loadFieldValues(request.getIdentifiers());
+
     // filter the request removing known invalid fields
     final Map<Set<String>, Set<String>> identifiersByFields = buildUnderlyingRequestGroups(request, cachedResults);
-    
+
     // process everything that remains
     ReferenceDataProviderGetResult resolvedResults = loadAndPersistUnknownFields(cachedResults, identifiersByFields);
     resolvedResults = stripUnwantedFields(resolvedResults, request.getFields());
@@ -116,17 +116,17 @@ public abstract class AbstractValueCachingReferenceDataProvider extends Abstract
   }
 
   protected ReferenceDataProviderGetResult stripUnwantedFields(final ReferenceDataProviderGetResult resolvedResults, final Set<String> fields) {
-    ReferenceDataProviderGetResult result = new ReferenceDataProviderGetResult();
-    for (ReferenceData unstippedDataResult : resolvedResults.getReferenceData()) {
-      String identifier = unstippedDataResult.getIdentifier();
-      ReferenceData strippedDataResult = new ReferenceData(identifier);
+    final ReferenceDataProviderGetResult result = new ReferenceDataProviderGetResult();
+    for (final ReferenceData unstippedDataResult : resolvedResults.getReferenceData()) {
+      final String identifier = unstippedDataResult.getIdentifier();
+      final ReferenceData strippedDataResult = new ReferenceData(identifier);
       strippedDataResult.getErrors().addAll(unstippedDataResult.getErrors());
-      MutableFudgeMsg strippedFields = getFudgeContext().newMessage();
-      FudgeMsg unstrippedFieldData = unstippedDataResult.getFieldValues();
+      final MutableFudgeMsg strippedFields = getFudgeContext().newMessage();
+      final FudgeMsg unstrippedFieldData = unstippedDataResult.getFieldValues();
       // check requested fields
-      for (String requestField : fields) {
-        List<FudgeField> fudgeFields = unstrippedFieldData.getAllByName(requestField);
-        for (FudgeField fudgeField : fudgeFields) {
+      for (final String requestField : fields) {
+        final List<FudgeField> fudgeFields = unstrippedFieldData.getAllByName(requestField);
+        for (final FudgeField fudgeField : fudgeFields) {
           strippedFields.add(requestField, fudgeField.getValue());
         }
       }
@@ -137,32 +137,32 @@ public abstract class AbstractValueCachingReferenceDataProvider extends Abstract
   }
 
   protected ReferenceDataProviderGetResult loadAndPersistUnknownFields(
-      Map<String, ReferenceData> cachedResults,
-      Map<Set<String>, Set<String>> identifiersByFields) {
-    
+      final Map<String, ReferenceData> cachedResults,
+      final Map<Set<String>, Set<String>> identifiersByFields) {
+
     // TODO kirk 2009-10-23 -- Also need to maintain securities we don't need to put back in the database.
-    ReferenceDataProviderGetResult result = new ReferenceDataProviderGetResult();
+    final ReferenceDataProviderGetResult result = new ReferenceDataProviderGetResult();
     // REVIEW kirk 2009-10-23 -- Candidate for scatter/gather.
-    for (Map.Entry<Set<String>, Set<String>> entry : identifiersByFields.entrySet()) {
-      Set<String> requestedIdentifiers = entry.getValue();
-      Set<String> requestedFields = entry.getKey();
+    for (final Map.Entry<Set<String>, Set<String>> entry : identifiersByFields.entrySet()) {
+      final Set<String> requestedIdentifiers = entry.getValue();
+      final Set<String> requestedFields = entry.getKey();
       assert !requestedIdentifiers.isEmpty();
       if (entry.getKey().isEmpty()) {
         LOGGER.debug("Satisfied entire request for securities {} from cache", requestedIdentifiers);
-        for (String securityKey : requestedIdentifiers) {
+        for (final String securityKey : requestedIdentifiers) {
           result.addReferenceData(cachedResults.get(securityKey));
         }
         continue;
       }
       LOGGER.info("Loading {} fields for {} securities from underlying", entry.getKey().size(), requestedIdentifiers.size());
       final ReferenceDataProviderGetRequest underlyingRequest = ReferenceDataProviderGetRequest.createGet(requestedIdentifiers, requestedFields, false);
-      ReferenceDataProviderGetResult loadedResult = getUnderlying().getReferenceData(underlyingRequest);
-      for (String identifier : requestedIdentifiers) {
-        ReferenceData cachedResult = cachedResults.get(identifier);
+      final ReferenceDataProviderGetResult loadedResult = getUnderlying().getReferenceData(underlyingRequest);
+      for (final String identifier : requestedIdentifiers) {
+        final ReferenceData cachedResult = cachedResults.get(identifier);
         ReferenceData freshResult = loadedResult.getReferenceDataOrNull(identifier);
-        freshResult = (freshResult != null ? freshResult : new ReferenceData(identifier));
-        
-        ReferenceData resolvedResult = getCombinedResult(requestedFields, cachedResult, freshResult);
+        freshResult = freshResult != null ? freshResult : new ReferenceData(identifier);
+
+        final ReferenceData resolvedResult = getCombinedResult(requestedFields, cachedResult, freshResult);
         saveFieldValues(resolvedResult);
         result.addReferenceData(resolvedResult);
       }
@@ -170,33 +170,33 @@ public abstract class AbstractValueCachingReferenceDataProvider extends Abstract
     return result;
   }
 
-  private ReferenceData getCombinedResult(Set<String> requestedFields, ReferenceData cachedResult, ReferenceData freshResult) {
+  private ReferenceData getCombinedResult(final Set<String> requestedFields, final ReferenceData cachedResult, final ReferenceData freshResult) {
     MutableFudgeMsg unionFieldData = null;
     if (cachedResult == null) {
       unionFieldData = getFudgeContext().newMessage();
     } else {
       unionFieldData = getFudgeContext().newMessage(cachedResult.getFieldValues());
     }
-    Set<String> returnedFields = new HashSet<String>();
-    for (FudgeField freshField : freshResult.getFieldValues().getAllFields()) {
+    final Set<String> returnedFields = new HashSet<>();
+    for (final FudgeField freshField : freshResult.getFieldValues().getAllFields()) {
       unionFieldData.add(freshField);
       returnedFields.add(freshField.getName());
     }
-    
+
     // cache not available fields as well
-    Set<String> notAvaliableFields = Sets.newTreeSet(requestedFields);
+    final Set<String> notAvaliableFields = Sets.newTreeSet(requestedFields);
     notAvaliableFields.removeAll(returnedFields);
-    
+
     // add list of not available fields
-    for (String notAvailableField : notAvaliableFields) {
+    for (final String notAvailableField : notAvaliableFields) {
       unionFieldData.add(FIELD_NOT_AVAILABLE_NAME, notAvailableField);
     }
-    
+
     // create combined result
-    ReferenceData resolvedResult = new ReferenceData(freshResult.getIdentifier(), unionFieldData);
-    for (ReferenceDataError error : freshResult.getErrors()) {
+    final ReferenceData resolvedResult = new ReferenceData(freshResult.getIdentifier(), unionFieldData);
+    for (final ReferenceDataError error : freshResult.getErrors()) {
       if (resolvedResult.getErrors().contains(error) == false) {
-        resolvedResult.getErrors().add(error);          
+        resolvedResult.getErrors().add(error);
       }
     }
     return resolvedResult;
@@ -204,17 +204,17 @@ public abstract class AbstractValueCachingReferenceDataProvider extends Abstract
 
   /**
    * Examines and groups the request using the known invalid fields.
-   * 
+   *
    * @param request  the request, not null
    * @param cachedResults  the cached results, keyed by identifier, not null
    * @return the map of field-set to identifier-set, not null
    */
-  protected Map<Set<String>, Set<String>> buildUnderlyingRequestGroups(ReferenceDataProviderGetRequest request, Map<String, ReferenceData> cachedResults) {
-    Map<Set<String>, Set<String>> result = Maps.newHashMap();
-    for (String identifier : request.getIdentifiers()) {
+  protected Map<Set<String>, Set<String>> buildUnderlyingRequestGroups(final ReferenceDataProviderGetRequest request, final Map<String, ReferenceData> cachedResults) {
+    final Map<Set<String>, Set<String>> result = Maps.newHashMap();
+    for (final String identifier : request.getIdentifiers()) {
       // select known invalid fields for the identifier
-      ReferenceData cachedResult = cachedResults.get(identifier);
-      
+      final ReferenceData cachedResult = cachedResults.get(identifier);
+
       // calculate the missing fields that must be queried from the underlying
       Set<String> missingFields = null;
       if (cachedResult == null) {
@@ -222,12 +222,12 @@ public abstract class AbstractValueCachingReferenceDataProvider extends Abstract
       } else {
         missingFields = Sets.newHashSet(Sets.difference(request.getFields(), cachedResult.getFieldValues().getAllFieldNames()));
         // remove known not available fields from missingFields
-        List<String> notAvailableFieldNames = getNotAvailableFields(cachedResult);
-        for (String field : notAvailableFieldNames) {
+        final List<String> notAvailableFieldNames = getNotAvailableFields(cachedResult);
+        for (final String field : notAvailableFieldNames) {
           missingFields.remove(field);
         }
       }
-      
+
       // build the grouped result map, keyed from field-set to identifier-set
       Set<String> resultIdentifiers = result.get(missingFields);
       if (resultIdentifiers == null) {
@@ -239,10 +239,10 @@ public abstract class AbstractValueCachingReferenceDataProvider extends Abstract
     return result;
   }
 
-  private List<String> getNotAvailableFields(ReferenceData cachedResult) {
-    List<FudgeField> notAvailableFields = cachedResult.getFieldValues().getAllByName(FIELD_NOT_AVAILABLE_NAME);
-    List<String> notAvailableFieldNames = new ArrayList<String>(notAvailableFields.size());
-    for (FudgeField field : notAvailableFields) {
+  private List<String> getNotAvailableFields(final ReferenceData cachedResult) {
+    final List<FudgeField> notAvailableFields = cachedResult.getFieldValues().getAllByName(FIELD_NOT_AVAILABLE_NAME);
+    final List<String> notAvailableFieldNames = new ArrayList<>(notAvailableFields.size());
+    for (final FudgeField field : notAvailableFields) {
       notAvailableFieldNames.add((String) field.getValue());
     }
     return notAvailableFieldNames;
@@ -251,7 +251,7 @@ public abstract class AbstractValueCachingReferenceDataProvider extends Abstract
   //-------------------------------------------------------------------------
   /**
    * Loads the field values from the cache.
-   * 
+   *
    * @param identifiers  the identifiers to find errors for, not null
    * @return the map of reference data keyed by identifier, not null
    */
@@ -259,7 +259,7 @@ public abstract class AbstractValueCachingReferenceDataProvider extends Abstract
 
   /**
    * Saves the field value into the cache.
-   * 
+   *
    * @param result  the result to save, not null
    */
   protected abstract void saveFieldValues(ReferenceData result);
@@ -267,41 +267,41 @@ public abstract class AbstractValueCachingReferenceDataProvider extends Abstract
   //-------------------------------------------------------------------------
   /**
    * Refreshes the cache.
-   * 
+   *
    * @param identifiers  the identifiers, not null
    */
-  public void refresh(Set<String> identifiers) {
+  public void refresh(final Set<String> identifiers) {
     // TODO bulk queries
-    Map<String, ReferenceData> cachedResults = loadFieldValues(identifiers);
-    
-    Map<Set<String>, Set<String>> identifiersByFields = Maps.newHashMap();
-    
-    for (String identifier : identifiers) {
-      ReferenceData cachedResult = cachedResults.get(identifier);
+    final Map<String, ReferenceData> cachedResults = loadFieldValues(identifiers);
+
+    final Map<Set<String>, Set<String>> identifiersByFields = Maps.newHashMap();
+
+    for (final String identifier : identifiers) {
+      final ReferenceData cachedResult = cachedResults.get(identifier);
       if (cachedResult == null) {
         continue; // nothing to refresh
       }
-      Set<String> fields = new HashSet<String>();
+      final Set<String> fields = new HashSet<>();
       fields.addAll(cachedResult.getFieldValues().getAllFieldNames());
       fields.addAll(getNotAvailableFields(cachedResult));
       fields.remove(FIELD_NOT_AVAILABLE_NAME);
       Set<String> secsForTheseFields = identifiersByFields.get(fields);
       if (secsForTheseFields == null) {
-        secsForTheseFields = new HashSet<String>();
+        secsForTheseFields = new HashSet<>();
         identifiersByFields.put(fields, secsForTheseFields);
       }
       secsForTheseFields.add(identifier);
     }
-    
-    for (Entry<Set<String>, Set<String>> entry : identifiersByFields.entrySet()) {
-      Set<String> identifiersForTheseFields = entry.getValue();
-      Set<String> fields = entry.getKey();
-      
-      ReferenceDataProviderGetRequest underlyingRequest = ReferenceDataProviderGetRequest.createGet(identifiersForTheseFields, fields, false);
-      ReferenceDataProviderGetResult underlyingResult = _underlying.getReferenceData(underlyingRequest);
-      for (ReferenceData refData : underlyingResult.getReferenceData()) {
-        ReferenceData previousResult = cachedResults.get(refData.getIdentifier());
-        ReferenceData resolvedResult = getCombinedResult(fields, new ReferenceData(refData.getIdentifier()), refData);
+
+    for (final Entry<Set<String>, Set<String>> entry : identifiersByFields.entrySet()) {
+      final Set<String> identifiersForTheseFields = entry.getValue();
+      final Set<String> fields = entry.getKey();
+
+      final ReferenceDataProviderGetRequest underlyingRequest = ReferenceDataProviderGetRequest.createGet(identifiersForTheseFields, fields, false);
+      final ReferenceDataProviderGetResult underlyingResult = _underlying.getReferenceData(underlyingRequest);
+      for (final ReferenceData refData : underlyingResult.getReferenceData()) {
+        final ReferenceData previousResult = cachedResults.get(refData.getIdentifier());
+        final ReferenceData resolvedResult = getCombinedResult(fields, new ReferenceData(refData.getIdentifier()), refData);
         if (differentCachedResult(previousResult, resolvedResult)) {
           saveFieldValues(resolvedResult);
         }
@@ -309,7 +309,7 @@ public abstract class AbstractValueCachingReferenceDataProvider extends Abstract
     }
   }
 
-  private boolean differentCachedResult(ReferenceData previousResult, ReferenceData resolvedResult) {
+  private boolean differentCachedResult(final ReferenceData previousResult, final ReferenceData resolvedResult) {
     if (previousResult.getIdentifier().equals(resolvedResult.getIdentifier()) == false) {
       throw new OpenGammaRuntimeException("Attempting to compare two different securities " + previousResult + " " + resolvedResult);
     }

@@ -32,13 +32,13 @@ public class MetalForwardSecurity extends CommodityForwardSecurity {
     super();
   }
 
-  public MetalForwardSecurity(String unitName, Double unitNumber, Expiry expiry, Currency currency, double unitAmount, String category) {
+  public MetalForwardSecurity(final String unitName, final Double unitNumber, final Expiry expiry, final Currency currency, final double unitAmount, final String category) {
     super(unitName, unitNumber, expiry, currency, unitAmount, category);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitMetalForwardSecurity(this);
   }
 

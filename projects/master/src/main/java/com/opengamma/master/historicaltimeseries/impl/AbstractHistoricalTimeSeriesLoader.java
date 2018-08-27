@@ -34,21 +34,21 @@ public abstract class AbstractHistoricalTimeSeriesLoader implements HistoricalTi
   //-------------------------------------------------------------------------
   @Override
   public Map<ExternalId, UniqueId> loadTimeSeries(
-      Set<ExternalId> identifiers, String dataProvider, String dataField, LocalDate startDate, LocalDate endDate) {
-    HistoricalTimeSeriesLoaderRequest request = HistoricalTimeSeriesLoaderRequest.create(identifiers, dataProvider, dataField, startDate, endDate);
-    HistoricalTimeSeriesLoaderResult result = loadTimeSeries(request);
+      final Set<ExternalId> identifiers, final String dataProvider, final String dataField, final LocalDate startDate, final LocalDate endDate) {
+    final HistoricalTimeSeriesLoaderRequest request = HistoricalTimeSeriesLoaderRequest.create(identifiers, dataProvider, dataField, startDate, endDate);
+    final HistoricalTimeSeriesLoaderResult result = loadTimeSeries(request);
     return result.getResultMap();
   }
 
   @Override
-  public HistoricalTimeSeriesLoaderResult loadTimeSeries(HistoricalTimeSeriesLoaderRequest request) {
+  public HistoricalTimeSeriesLoaderResult loadTimeSeries(final HistoricalTimeSeriesLoaderRequest request) {
     ArgumentChecker.notNull(request, "request");
-    
+
     // short-cut empty case
     if (request.getExternalIds().isEmpty()) {
       return new HistoricalTimeSeriesLoaderResult();
     }
-    
+
     // get securities
     return doBulkLoad(request);
   }
@@ -56,7 +56,7 @@ public abstract class AbstractHistoricalTimeSeriesLoader implements HistoricalTi
   //-------------------------------------------------------------------------
   /**
    * Loads the time-series.
-   * 
+   *
    * @param request  the request, with a non-empty list of IDs, not null
    * @return the result, not null
    */

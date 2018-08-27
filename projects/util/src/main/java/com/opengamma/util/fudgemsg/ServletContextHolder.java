@@ -11,11 +11,11 @@ import javax.servlet.ServletContext;
  */
 public class ServletContextHolder {
   private static ServletContext s_context;
-  
-  public static void setContext(ServletContext context) {
+
+  public static void setContext(final ServletContext context) {
     s_context = context;
   }
-  
+
   public static ServletContext getContext() {
     return s_context;
   }

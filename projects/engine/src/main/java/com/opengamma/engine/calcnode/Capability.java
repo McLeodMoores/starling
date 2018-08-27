@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode;
@@ -90,12 +90,12 @@ public final class Capability implements Comparable<Capability> {
 
   /**
    * Capabilities are ordered by identifier, then by lower bound (with unbounded before bounded), then by upper bound (with bounded before unbounded).
-   * 
+   *
    * @param o capability to compare to
    * @return result of the comparison
    */
   @Override
-  public int compareTo(Capability o) {
+  public int compareTo(final Capability o) {
     int cmp = getIdentifier().compareTo(o.getIdentifier());
     if (cmp != 0) {
       return cmp;

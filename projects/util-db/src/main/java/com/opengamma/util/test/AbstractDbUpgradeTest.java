@@ -48,13 +48,13 @@ public abstract class AbstractDbUpgradeTest implements TableCreationCallback {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param databaseType  the database type, not null
    * @param schemaGroupName  the schema group name, not null
    * @param targetVersion  the target version
    * @param createVersion  the create version
    */
-  protected AbstractDbUpgradeTest(String databaseType, String schemaGroupName, final int targetVersion, final int createVersion) {
+  protected AbstractDbUpgradeTest(final String databaseType, final String schemaGroupName, final int targetVersion, final int createVersion) {
     ArgumentChecker.notNull(schemaGroupName, "schameGroupName");
     ArgumentChecker.notNull(databaseType, "databaseType");
     _schemaGroupName = schemaGroupName;
@@ -66,7 +66,7 @@ public abstract class AbstractDbUpgradeTest implements TableCreationCallback {
   //-------------------------------------------------------------------------
   @BeforeMethod(alwaysRun = true)
   public void setUp() throws Exception {
-    DbTool dbTool = getDbTool();
+    final DbTool dbTool = getDbTool();
     dbTool.setTargetVersion(_targetVersion);
     dbTool.setCreateVersion(_createVersion);
     dbTool.dropTestSchema();
@@ -118,14 +118,14 @@ public abstract class AbstractDbUpgradeTest implements TableCreationCallback {
   //-------------------------------------------------------------------------
   @Test(groups = TestGroup.UNIT_DB)
   public void testDatabaseUpgrade() {
-    for (Triple<String, String, String> comparison : _comparisons) {
+    for (final Triple<String, String, String> comparison : _comparisons) {
       /*
        * System.out.println(comparison.getFirst() + " expected:");
        * System.out.println(comparison.getSecond());
        * System.out.println(comparison.getFirst() + " found:");
        * System.out.println(comparison.getThird());
        */
-      int diff = StringUtils.indexOfDifference(comparison.getSecond(), comparison.getThird());
+      final int diff = StringUtils.indexOfDifference(comparison.getSecond(), comparison.getThird());
       if (diff >= 0) {
         System.err.println("Difference at " + diff + "in " + _databaseType + "/" + comparison.getFirst());
         System.err.println("Upgraded --->..." + StringUtils.substring(comparison.getSecond(), diff - 200, diff) +
@@ -140,7 +140,7 @@ public abstract class AbstractDbUpgradeTest implements TableCreationCallback {
   @Override
   public void tablesCreatedOrUpgraded(final int version, final DbSchemaGroupMetadata schemaGroupMetadata) {
     final Map<String, String> versionSchemas = getVersionSchemas();
-    String key = schemaGroupMetadata.getSchemaGroupName() + "_" + version;
+    final String key = schemaGroupMetadata.getSchemaGroupName() + "_" + version;
     if (versionSchemas.containsKey(key)) {
       // if we've already done the full schema, then we want to test that this upgrade has given us the same (but defer the comparison)
       _comparisons.add(Triple.of(key, versionSchemas.get(key), _dbTool.describeDatabase(schemaGroupMetadata.getSchemaGroupName())));

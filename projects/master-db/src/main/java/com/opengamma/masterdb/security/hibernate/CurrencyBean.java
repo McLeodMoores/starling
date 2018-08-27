@@ -13,7 +13,7 @@ public class CurrencyBean extends EnumBean {
   protected CurrencyBean() {
   }
 
-  public CurrencyBean(String isoCode) {
+  public CurrencyBean(final String isoCode) {
     super(isoCode);
   }
 

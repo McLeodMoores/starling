@@ -31,7 +31,7 @@ public class DbHistoricalTimeSeriesMasterWorkerRemoveTimeSeriesTest extends Abst
   private static final Logger LOGGER = LoggerFactory.getLogger(DbHistoricalTimeSeriesMasterWorkerRemoveTimeSeriesTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public DbHistoricalTimeSeriesMasterWorkerRemoveTimeSeriesTest(String databaseType, String databaseVersion) {
+  public DbHistoricalTimeSeriesMasterWorkerRemoveTimeSeriesTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion);
     LOGGER.info("running testcases for {}", databaseType);
   }
@@ -49,19 +49,19 @@ public class DbHistoricalTimeSeriesMasterWorkerRemoveTimeSeriesTest extends Abst
 
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_remove_versioned_notFoundId() {
-    ObjectId oid = ObjectId.of("DbHts", "DP0");
+    final ObjectId oid = ObjectId.of("DbHts", "DP0");
     _htsMaster.removeTimeSeriesDataPoints(oid, LocalDate.of(2011, 7, 1), LocalDate.of(2011, 7, 1));
   }
 
   //-------------------------------------------------------------------------
   @Test
   public void test_remove_101_removeOne() {
-    ObjectId oid = ObjectId.of("DbHts", "DP101");
-    UniqueId uniqueId = _htsMaster.removeTimeSeriesDataPoints(oid, LocalDate.of(2011, 1, 2), LocalDate.of(2011, 1, 2));
-    
-    ManageableHistoricalTimeSeries testCorrected = _htsMaster.getTimeSeries(uniqueId);
+    final ObjectId oid = ObjectId.of("DbHts", "DP101");
+    final UniqueId uniqueId = _htsMaster.removeTimeSeriesDataPoints(oid, LocalDate.of(2011, 1, 2), LocalDate.of(2011, 1, 2));
+
+    final ManageableHistoricalTimeSeries testCorrected = _htsMaster.getTimeSeries(uniqueId);
     assertEquals(uniqueId, testCorrected.getUniqueId());
-    LocalDateDoubleTimeSeries timeSeries = testCorrected.getTimeSeries();
+    final LocalDateDoubleTimeSeries timeSeries = testCorrected.getTimeSeries();
     assertEquals(2, timeSeries.size());
     assertEquals(LocalDate.of(2011, 1, 1), timeSeries.getTimeAtIndex(0));
     assertEquals(3.1d, timeSeries.getValueAtIndex(0), 0.001d);
@@ -71,12 +71,12 @@ public class DbHistoricalTimeSeriesMasterWorkerRemoveTimeSeriesTest extends Abst
 
   @Test
   public void test_remove_101_removeRange() {
-    ObjectId oid = ObjectId.of("DbHts", "DP101");
-    UniqueId uniqueId = _htsMaster.removeTimeSeriesDataPoints(oid, LocalDate.of(2010, 7, 3), LocalDate.of(2011, 1, 2));
-    
-    ManageableHistoricalTimeSeries testCorrected = _htsMaster.getTimeSeries(uniqueId);
+    final ObjectId oid = ObjectId.of("DbHts", "DP101");
+    final UniqueId uniqueId = _htsMaster.removeTimeSeriesDataPoints(oid, LocalDate.of(2010, 7, 3), LocalDate.of(2011, 1, 2));
+
+    final ManageableHistoricalTimeSeries testCorrected = _htsMaster.getTimeSeries(uniqueId);
     assertEquals(uniqueId, testCorrected.getUniqueId());
-    LocalDateDoubleTimeSeries timeSeries = testCorrected.getTimeSeries();
+    final LocalDateDoubleTimeSeries timeSeries = testCorrected.getTimeSeries();
     assertEquals(1, timeSeries.size());
     assertEquals(LocalDate.of(2011, 1, 3), timeSeries.getTimeAtIndex(0));
     assertEquals(3.33d, timeSeries.getValueAtIndex(0), 0.001d);
@@ -84,12 +84,12 @@ public class DbHistoricalTimeSeriesMasterWorkerRemoveTimeSeriesTest extends Abst
 
   @Test
   public void test_remove_101_removeRangeWithNullEnd() {
-    ObjectId oid = ObjectId.of("DbHts", "DP101");
-    UniqueId uniqueId = _htsMaster.removeTimeSeriesDataPoints(oid, LocalDate.of(2011, 1, 2), null);
-    
-    ManageableHistoricalTimeSeries testCorrected = _htsMaster.getTimeSeries(uniqueId);
+    final ObjectId oid = ObjectId.of("DbHts", "DP101");
+    final UniqueId uniqueId = _htsMaster.removeTimeSeriesDataPoints(oid, LocalDate.of(2011, 1, 2), null);
+
+    final ManageableHistoricalTimeSeries testCorrected = _htsMaster.getTimeSeries(uniqueId);
     assertEquals(uniqueId, testCorrected.getUniqueId());
-    LocalDateDoubleTimeSeries timeSeries = testCorrected.getTimeSeries();
+    final LocalDateDoubleTimeSeries timeSeries = testCorrected.getTimeSeries();
     assertEquals(1, timeSeries.size());
     assertEquals(LocalDate.of(2011, 1, 1), timeSeries.getTimeAtIndex(0));
     assertEquals(3.1d, timeSeries.getValueAtIndex(0), 0.001d);

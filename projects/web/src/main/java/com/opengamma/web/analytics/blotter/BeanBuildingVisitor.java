@@ -41,7 +41,7 @@ import com.opengamma.util.ArgumentChecker;
   /** The builder for the instance being built */
   private BeanBuilder<T> _builder;
 
-  /* package */ BeanBuildingVisitor(BeanDataSource data, MetaBeanFactory metaBeanFactory, Converters converters) {
+  /* package */ BeanBuildingVisitor(final BeanDataSource data, final MetaBeanFactory metaBeanFactory, final Converters converters) {
     ArgumentChecker.notNull(data, "data");
     ArgumentChecker.notNull(metaBeanFactory, "metaBeanFactory");
     ArgumentChecker.notNull(converters, "converters");
@@ -52,55 +52,55 @@ import com.opengamma.util.ArgumentChecker;
 
   @SuppressWarnings("unchecked")
   @Override
-  public void visitMetaBean(MetaBean metaBean) {
+  public void visitMetaBean(final MetaBean metaBean) {
     _builder = (BeanBuilder<T>) metaBean.builder();
   }
 
   @Override
-  public void visitBeanProperty(MetaProperty<?> property, BeanTraverser traverser) {
+  public void visitBeanProperty(final MetaProperty<?> property, final BeanTraverser traverser) {
     visitProperty(property, traverser);
   }
 
   @Override
-  public void visitSetProperty(MetaProperty<?> property, BeanTraverser traverser) {
-    List<?> dataValues = _data.getCollectionValues(property.name());
+  public void visitSetProperty(final MetaProperty<?> property, final BeanTraverser traverser) {
+    final List<?> dataValues = _data.getCollectionValues(property.name());
     if (dataValues == null) {
       return;
     }
-    Set<Object> values = Sets.newHashSetWithExpectedSize(dataValues.size());
-    Class<?> collectionType = JodaBeanUtils.collectionType(property, property.declaringType());
-    for (Object dataValue : dataValues) {
+    final Set<Object> values = Sets.newHashSetWithExpectedSize(dataValues.size());
+    final Class<?> collectionType = JodaBeanUtils.collectionType(property, property.declaringType());
+    for (final Object dataValue : dataValues) {
       values.add(convert(dataValue, property, collectionType, traverser));
     }
     _builder.set(property, values);
   }
 
   @Override
-  public void visitListProperty(MetaProperty<?> property, BeanTraverser traverser) {
-    List<?> dataValues = _data.getCollectionValues(property.name());
+  public void visitListProperty(final MetaProperty<?> property, final BeanTraverser traverser) {
+    final List<?> dataValues = _data.getCollectionValues(property.name());
     if (dataValues == null) {
       return;
     }
-    List<Object> values = Lists.newArrayList();
-    Class<?> collectionType = JodaBeanUtils.collectionType(property, property.declaringType());
-    for (Object dataValue : dataValues) {
+    final List<Object> values = Lists.newArrayList();
+    final Class<?> collectionType = JodaBeanUtils.collectionType(property, property.declaringType());
+    for (final Object dataValue : dataValues) {
       values.add(convert(dataValue, property, collectionType, traverser));
     }
     _builder.set(property, values);
   }
 
   @Override
-  public void visitCollectionProperty(MetaProperty<?> property, BeanTraverser traverser) {
+  public void visitCollectionProperty(final MetaProperty<?> property, final BeanTraverser traverser) {
     visitListProperty(property, traverser);
   }
 
   @Override
-  public void visitMapProperty(MetaProperty<?> property, BeanTraverser traverser) {
+  public void visitMapProperty(final MetaProperty<?> property, final BeanTraverser traverser) {
     _builder.set(property, buildMap(property, traverser));
   }
 
   @Override
-  public void visitProperty(MetaProperty<?> property, BeanTraverser traverser) {
+  public void visitProperty(final MetaProperty<?> property, final BeanTraverser traverser) {
     _builder.set(property, convert(_data.getValue(property.name()), property, property.propertyType(), traverser));
   }
 
@@ -109,29 +109,29 @@ import com.opengamma.util.ArgumentChecker;
     return _builder;
   }
 
-  private Object convert(Object value, MetaProperty<?> property, Class<?> expectedType, BeanTraverser traverser) {
-    Object convertedValue = _converters.convert(value, property, expectedType);
+  private Object convert(final Object value, final MetaProperty<?> property, final Class<?> expectedType, final BeanTraverser traverser) {
+    final Object convertedValue = _converters.convert(value, property, expectedType);
     if (convertedValue != Converters.CONVERSION_FAILED) {
       return convertedValue;
     }
     if (value instanceof BeanDataSource) {
-      BeanDataSource beanData = (BeanDataSource) value;
-      BeanBuildingVisitor<?> visitor = new BeanBuildingVisitor<>(beanData, _metaBeanFactory, _converters);
-      MetaBean metaBean = _metaBeanFactory.beanFor(beanData);
+      final BeanDataSource beanData = (BeanDataSource) value;
+      final BeanBuildingVisitor<?> visitor = new BeanBuildingVisitor<>(beanData, _metaBeanFactory, _converters);
+      final MetaBean metaBean = _metaBeanFactory.beanFor(beanData);
       return ((BeanBuilder<?>) traverser.traverse(metaBean, visitor)).build();
     }
     throw new IllegalArgumentException("Unable to convert " + value + " to " + expectedType.getName());
   }
 
-  private Map<?, ?> buildMap(MetaProperty<?> property, BeanTraverser traverser) {
-    Map<?, ?> sourceData = _data.getMapValues(property.name());
-    Class<? extends Bean> beanType = property.metaBean().beanType();
-    Class<?> keyType = JodaBeanUtils.mapKeyType(property, beanType);
-    Class<?> valueType = JodaBeanUtils.mapValueType(property, beanType);
-    Map<Object, Object> map = Maps.newHashMapWithExpectedSize(sourceData.size());
-    for (Map.Entry<?, ?> entry : sourceData.entrySet()) {
-      Object key = convert(entry.getKey(), property, keyType, traverser);
-      Object value = convert(entry.getValue(), property, valueType, traverser);
+  private Map<?, ?> buildMap(final MetaProperty<?> property, final BeanTraverser traverser) {
+    final Map<?, ?> sourceData = _data.getMapValues(property.name());
+    final Class<? extends Bean> beanType = property.metaBean().beanType();
+    final Class<?> keyType = JodaBeanUtils.mapKeyType(property, beanType);
+    final Class<?> valueType = JodaBeanUtils.mapValueType(property, beanType);
+    final Map<Object, Object> map = Maps.newHashMapWithExpectedSize(sourceData.size());
+    for (final Map.Entry<?, ?> entry : sourceData.entrySet()) {
+      final Object key = convert(entry.getKey(), property, keyType, traverser);
+      final Object value = convert(entry.getValue(), property, valueType, traverser);
       map.put(key, value);
     }
     return map;
@@ -153,7 +153,7 @@ import com.opengamma.util.ArgumentChecker;
    * @return {@code FINANCIAL_REGION~GB}
    */
   @Override
-  public ExternalId convert(Object notUsed) {
+  public ExternalId convert(final Object notUsed) {
     return GB_REGION;
   }
 }

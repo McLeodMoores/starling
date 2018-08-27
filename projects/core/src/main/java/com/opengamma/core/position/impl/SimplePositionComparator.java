@@ -20,25 +20,25 @@ import com.opengamma.util.CompareUtils;
 public class SimplePositionComparator implements Comparator<Position> {
 
   @Override
-  public int compare(Position positionOrTrade1, Position positionOrTrade2) {
-    ExternalIdBundle externalBundle1 = positionOrTrade1.getSecurityLink().getExternalId();
-    ExternalIdBundle externalBundle2 = positionOrTrade2.getSecurityLink().getExternalId();
-    ExternalId bestExId1 = getBestIdentifier(externalBundle1);
-    ExternalId bestExId2 = getBestIdentifier(externalBundle2);
-    int result = CompareUtils.compareWithNullLow(bestExId1, bestExId2);
+  public int compare(final Position positionOrTrade1, final Position positionOrTrade2) {
+    final ExternalIdBundle externalBundle1 = positionOrTrade1.getSecurityLink().getExternalId();
+    final ExternalIdBundle externalBundle2 = positionOrTrade2.getSecurityLink().getExternalId();
+    final ExternalId bestExId1 = getBestIdentifier(externalBundle1);
+    final ExternalId bestExId2 = getBestIdentifier(externalBundle2);
+    final int result = CompareUtils.compareWithNullLow(bestExId1, bestExId2);
     if (result == 0) {
       return positionOrTrade2.getQuantity().compareTo(positionOrTrade1.getQuantity());
     } else {
       return result;
     }
   }
-  
+
   @SuppressWarnings("deprecation")
-  public ExternalId getBestIdentifier(ExternalIdBundle idBundle) {
-    ExternalScheme[] schemes = {ExternalSchemes.BLOOMBERG_TICKER, ExternalSchemes.BLOOMBERG_TICKER_WEAK, ExternalSchemes.BLOOMBERG_TCM, 
+  public ExternalId getBestIdentifier(final ExternalIdBundle idBundle) {
+    final ExternalScheme[] schemes = {ExternalSchemes.BLOOMBERG_TICKER, ExternalSchemes.BLOOMBERG_TICKER_WEAK, ExternalSchemes.BLOOMBERG_TCM,
                                 ExternalSchemes.ACTIVFEED_TICKER, ExternalSchemes.RIC, ExternalSchemes.ISIN, ExternalSchemes.CUSIP};
-    for (ExternalScheme scheme : schemes) {
-      ExternalId externalId = idBundle.getExternalId(scheme);
+    for (final ExternalScheme scheme : schemes) {
+      final ExternalId externalId = idBundle.getExternalId(scheme);
       if (externalId != null) {
         return externalId;
       }

@@ -40,23 +40,23 @@ public class RegionHistoryResult extends AbstractHistoryResult<RegionDocument> {
 
   /**
    * Creates an instance from a collection of documents.
-   * 
+   *
    * @param coll  the collection of documents to add, not null
    */
-  public RegionHistoryResult(Collection<RegionDocument> coll) {
+  public RegionHistoryResult(final Collection<RegionDocument> coll) {
     super(coll);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the returned regions from within the documents.
-   * 
+   *
    * @return the regions, not null
    */
   public List<ManageableRegion> getRegions() {
-    List<ManageableRegion> result = new ArrayList<ManageableRegion>();
+    final List<ManageableRegion> result = new ArrayList<>();
     if (getDocuments() != null) {
-      for (RegionDocument doc : getDocuments()) {
+      for (final RegionDocument doc : getDocuments()) {
         result.add(doc.getRegion());
       }
     }
@@ -65,7 +65,7 @@ public class RegionHistoryResult extends AbstractHistoryResult<RegionDocument> {
 
   /**
    * Gets the first region, or null if no documents.
-   * 
+   *
    * @return the first region, null if none
    */
   public ManageableRegion getFirstRegion() {
@@ -77,7 +77,7 @@ public class RegionHistoryResult extends AbstractHistoryResult<RegionDocument> {
    * <p>
    * This throws an exception if more than 1 result is actually available.
    * Thus, this method implies an assumption about uniqueness of the queried region.
-   * 
+   *
    * @return the matching region, not null
    * @throws IllegalStateException if no region was found
    */

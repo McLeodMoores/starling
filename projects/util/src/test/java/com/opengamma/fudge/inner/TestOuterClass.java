@@ -31,22 +31,32 @@ public class TestOuterClass {
    * @param arg the arguemnt
    * @return the result
    */
-  public double eval(double arg) {
+  public double eval(final double arg) {
     return arg;
   }
 
   // -------------------------------------------------------------------------------------------------------------------
 
   @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (!(o instanceof TestOuterClass)) return false;
+  public boolean equals(final Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof TestOuterClass)) {
+      return false;
+    }
 
-    TestOuterClass that = (TestOuterClass) o;
+    final TestOuterClass that = (TestOuterClass) o;
 
-    if (fieldA != that.fieldA) return false;
-    if (Double.compare(that.fieldB, fieldB) != 0) return false;
-    if (!Arrays.equals(fieldC, that.fieldC)) return false;
+    if (fieldA != that.fieldA) {
+      return false;
+    }
+    if (Double.compare(that.fieldB, fieldB) != 0) {
+      return false;
+    }
+    if (!Arrays.equals(fieldC, that.fieldC)) {
+      return false;
+    }
 
     return true;
   }
@@ -57,7 +67,7 @@ public class TestOuterClass {
     long temp;
     result = fieldA;
     temp = fieldB != +0.0d ? Double.doubleToLongBits(fieldB) : 0L;
-    result = 31 * result + (int) (temp ^ (temp >>> 32));
+    result = 31 * result + (int) (temp ^ temp >>> 32);
     result = 31 * result + (fieldC != null ? Arrays.hashCode(fieldC) : 0);
     return result;
   }

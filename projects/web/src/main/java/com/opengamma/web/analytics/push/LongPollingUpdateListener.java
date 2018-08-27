@@ -44,7 +44,7 @@ import com.opengamma.util.ArgumentChecker;
    * @param userId Login ID of the user
    * @param timeoutTask Connection timeout task that the listener must reset every time the connection is set up
    */
-  /* package */ LongPollingUpdateListener(String clientId, String userId, ConnectionTimeoutTask timeoutTask) {
+  /* package */ LongPollingUpdateListener(final String clientId, final String userId, final ConnectionTimeoutTask timeoutTask) {
     _clientId = clientId;
     ArgumentChecker.notEmpty(clientId, "clientId");
     //ArgumentChecker.notEmpty(userId, "userId");
@@ -60,13 +60,13 @@ import com.opengamma.util.ArgumentChecker;
    * @param callbackId REST URL of the item that has been updated
    */
   @Override
-  public void itemUpdated(Object callbackId) {
+  public void itemUpdated(final Object callbackId) {
     ArgumentChecker.notNull(callbackId, "url");
     synchronized (_lock) {
       if (_continuation != null) {
         try {
           sendUpdate(formatUpdate(callbackId));
-        } catch (JSONException e) {
+        } catch (final JSONException e) {
           // this shouldn't ever happen
           LOGGER.warn("Unable to format callback ID as JSON: " + callbackId, e);
         }
@@ -83,7 +83,7 @@ import com.opengamma.util.ArgumentChecker;
    * @param callbackIds REST URLs of the items that have been updated
    */
   @Override
-  public void itemsUpdated(Collection<?> callbackIds) {
+  public void itemsUpdated(final Collection<?> callbackIds) {
     ArgumentChecker.notNull(callbackIds, "callbackIds");
     if (callbackIds.isEmpty()) {
       return;
@@ -92,7 +92,7 @@ import com.opengamma.util.ArgumentChecker;
       if (_continuation != null) {
         try {
           sendUpdate(formatUpdate(callbackIds));
-        } catch (JSONException e) {
+        } catch (final JSONException e) {
           // this shouldn't ever happen, the updates are all URLs
           LOGGER.warn("Unable to format URLs as JSON. URLs: " + callbackIds, e);
         }
@@ -106,7 +106,7 @@ import com.opengamma.util.ArgumentChecker;
    * Invoked when a client establishes a long-polling HTTP connection.
    * @param continuation The connection's continuation
    */
-  /* package */ void connect(Continuation continuation) {
+  /* package */ void connect(final Continuation continuation) {
     synchronized (_lock) {
       LOGGER.debug("Long polling connection established, resetting timeout task {}", _timeoutTask);
       _timeoutTask.reset();
@@ -116,7 +116,7 @@ import com.opengamma.util.ArgumentChecker;
       if (!_updates.isEmpty()) {
         try {
           sendUpdate(formatUpdate(_updates));
-        } catch (JSONException e) {
+        } catch (final JSONException e) {
           // this shouldn't ever happen, the updates are all URLs
           LOGGER.warn("Unable to format updates as JSON. updates: " + _updates, e);
         }
@@ -129,7 +129,7 @@ import com.opengamma.util.ArgumentChecker;
    * Adds {@code urls} to the connection's continuation and resumes it so the response is sent to the client.
    * @param update URLs of the changed items
    */
-  private void sendUpdate(String update) {
+  private void sendUpdate(final String update) {
     _continuation.setAttribute(LongPollingServlet.RESULTS, update);
     _continuation.resume();
     _continuation = null;
@@ -149,7 +149,7 @@ import com.opengamma.util.ArgumentChecker;
    * @return {@code {updates: [url]}}
    * @throws JSONException Never
    */
-  private String formatUpdate(Object url) throws JSONException {
+  private String formatUpdate(final Object url) throws JSONException {
     return new JSONObject().put(UPDATES, new Object[]{url}).toString();
   }
 
@@ -159,7 +159,7 @@ import com.opengamma.util.ArgumentChecker;
    * @return {@code {updates: [url1, url2, ...]}}
    * @throws JSONException Never
    */
-  private String formatUpdate(Collection<?> urls) throws JSONException {
+  private String formatUpdate(final Collection<?> urls) throws JSONException {
     return new JSONObject().put(UPDATES, urls).toString();
   }
 
@@ -186,7 +186,7 @@ import com.opengamma.util.ArgumentChecker;
    * Invoked when this listener's continuation times out before any data is sent.
    * @param continuation The continuation that timed out - should be this listener's continuation.
    */
-  /* package */ void timeout(Continuation continuation) {
+  /* package */ void timeout(final Continuation continuation) {
     synchronized (_lock) {
       if (continuation == _continuation) {
         _continuation = null;

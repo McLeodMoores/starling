@@ -1,13 +1,9 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.cache;
-
-import it.unimi.dsi.fastutil.longs.AbstractLongList;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import it.unimi.dsi.fastutil.longs.LongList;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,6 +28,10 @@ import com.opengamma.engine.cache.msg.SpecificationLookupRequest;
 import com.opengamma.engine.cache.msg.SpecificationLookupResponse;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.transport.FudgeRequestReceiver;
+
+import it.unimi.dsi.fastutil.longs.AbstractLongList;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.LongList;
 
 /**
  * Server for a {@link RemoteIdentifierMap}.
@@ -58,8 +58,8 @@ public class IdentifierMapServer extends CacheMessageVisitor implements FudgeReq
       identifiers = Collections.singleton(getUnderlying().getIdentifier(spec.get(0)));
     } else {
       final Map<ValueSpecification, Long> identifierMap = getUnderlying().getIdentifiers(spec);
-      identifiers = new ArrayList<Long>(identifierMap.size());
-      for (ValueSpecification specEntry : spec) {
+      identifiers = new ArrayList<>(identifierMap.size());
+      for (final ValueSpecification specEntry : spec) {
         identifiers.add(identifierMap.get(specEntry));
       }
     }
@@ -71,10 +71,10 @@ public class IdentifierMapServer extends CacheMessageVisitor implements FudgeReq
   protected SpecificationLookupResponse visitSpecificationLookupRequest(final SpecificationLookupRequest request) {
     final LongList identifiers = new AbstractLongList() {
 
-      private List<Long> _raw = request.getIdentifier();
+      private final List<Long> _raw = request.getIdentifier();
 
       @Override
-      public long getLong(int index) {
+      public long getLong(final int index) {
         return _raw.get(index);
       }
 
@@ -89,8 +89,8 @@ public class IdentifierMapServer extends CacheMessageVisitor implements FudgeReq
       specifications = Collections.singleton(getUnderlying().getValueSpecification(identifiers.getLong(0)));
     } else {
       final Long2ObjectMap<ValueSpecification> specificationMap = getUnderlying().getValueSpecifications(identifiers);
-      specifications = new ArrayList<ValueSpecification>(specificationMap.size());
-      for (Long identifier : identifiers) {
+      specifications = new ArrayList<>(specificationMap.size());
+      for (final Long identifier : identifiers) {
         specifications.add(specificationMap.get(identifier));
       }
     }

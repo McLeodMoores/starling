@@ -22,13 +22,13 @@ public class SimpleFutureRhoFunction extends SimpleFutureFunction {
     super(ValueRequirementNames.VALUE_RHO);
   }
 
-  protected Object computeValues(SimpleFuture derivative, SimpleFutureDataBundle market) {
+  protected Object computeValues(final SimpleFuture derivative, final SimpleFutureDataBundle market) {
     return derivative.getSettlement() * market.getMarketPrice();
   }
 
   @Override
-  protected Object computeValues(InstrumentDerivative derivative, SimpleFutureDataBundle market) {
-    SimpleFuture simpleFuture = derivative.accept(SimpleFutureConverter.getInstance());
+  protected Object computeValues(final InstrumentDerivative derivative, final SimpleFutureDataBundle market) {
+    final SimpleFuture simpleFuture = derivative.accept(SimpleFutureConverter.getInstance());
     return simpleFuture.getSettlement() * market.getMarketPrice();
   }
 

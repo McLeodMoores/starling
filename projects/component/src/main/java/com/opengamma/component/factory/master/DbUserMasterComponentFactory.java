@@ -27,12 +27,12 @@ import com.opengamma.util.rest.AbstractDataResource;
  */
 @BeanDefinition
 public class DbUserMasterComponentFactory extends AbstractDocumentDbMasterComponentFactory<UserMaster, DbUserMaster> {
-  
-  
+
+
   public DbUserMasterComponentFactory() {
     super("usr", UserMaster.class);
   }
-  
+
   @Override
   protected Class<? extends AbstractRemoteMaster> getRemoteInterface() {
     return RemoteUserMaster.class;
@@ -40,19 +40,19 @@ public class DbUserMasterComponentFactory extends AbstractDocumentDbMasterCompon
 
   @Override
   protected DbUserMaster createDbDocumentMaster() {
-    DbUserMaster master = new DbUserMaster(getDbConnector());
+    final DbUserMaster master = new DbUserMaster(getDbConnector());
     master.registerMetrics(OpenGammaMetricRegistry.getSummaryInstance(), OpenGammaMetricRegistry.getDetailedInstance(), "DbUserMaster-" + getClassifier());
     return master;
   }
-  
-  @Override
-  protected AbstractDataResource createPublishedResource(DbUserMaster dbMaster, UserMaster postProcessedMaster) {
-    return new DataUserMasterResource((UserMaster) postProcessedMaster);
-  }
-  
 
   @Override
-  protected UserMaster wrapMasterWithTrackingInterface(UserMaster postProcessedMaster) {
+  protected AbstractDataResource createPublishedResource(final DbUserMaster dbMaster, final UserMaster postProcessedMaster) {
+    return new DataUserMasterResource(postProcessedMaster);
+  }
+
+
+  @Override
+  protected UserMaster wrapMasterWithTrackingInterface(final UserMaster postProcessedMaster) {
     throw new UnsupportedOperationException("Tracking not supported for user master.");
   }
 

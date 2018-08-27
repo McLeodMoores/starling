@@ -17,7 +17,6 @@ import org.slf4j.LoggerFactory;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.legalentity.LegalEntity;
 import com.opengamma.core.legalentity.LegalEntitySource;
-import com.opengamma.core.obligor.definition.Obligor;
 import com.opengamma.core.position.Position;
 import com.opengamma.core.position.impl.SimplePositionComparator;
 import com.opengamma.core.security.Security;
@@ -47,7 +46,7 @@ public class GICSAggregationFunction implements AggregationFunction<String> {
   private static final Logger LOGGER = LoggerFactory.getLogger(GICSAggregationFunction.class);
 
   private static final String UNKNOWN = "Unknown";
-  private boolean _useAttributes;
+  private final boolean _useAttributes;
   private final Comparator<Position> _comparator = new SimplePositionComparator();
   private final CdsObligorSectorExtractor _obligorSectorExtractor;
   private final CdsOptionObligorSectorExtractor _cdsOptionSectorExtractor;
@@ -80,7 +79,7 @@ public class GICSAggregationFunction implements AggregationFunction<String> {
 
     private final String _displayName;
 
-    private Level(String displayName) {
+    private Level(final String displayName) {
       _displayName = displayName;
     }
 
@@ -94,49 +93,49 @@ public class GICSAggregationFunction implements AggregationFunction<String> {
 
   }
 
-  private Level _level;
-  private SecuritySource _secSource;
-  private boolean _includeEmptyCategories;
+  private final Level _level;
+  private final SecuritySource _secSource;
+  private final boolean _includeEmptyCategories;
 
-  public GICSAggregationFunction(SecuritySource secSource, LegalEntitySource legalEntitySource, String level) {
+  public GICSAggregationFunction(final SecuritySource secSource, final LegalEntitySource legalEntitySource, final String level) {
     this(secSource, legalEntitySource, Enum.valueOf(Level.class, level));
   }
 
-  public GICSAggregationFunction(SecuritySource secSource, LegalEntitySource legalEntitySource, Level level) {
+  public GICSAggregationFunction(final SecuritySource secSource, final LegalEntitySource legalEntitySource, final Level level) {
     this(secSource, legalEntitySource, level, false);
   }
 
-  public GICSAggregationFunction(SecuritySource secSource,
-                                 LegalEntitySource legalEntitySource,
-                                 Level level,
-                                 boolean useAttributes) {
+  public GICSAggregationFunction(final SecuritySource secSource,
+                                 final LegalEntitySource legalEntitySource,
+                                 final Level level,
+                                 final boolean useAttributes) {
     this(secSource, legalEntitySource, level, useAttributes, true);
   }
 
-  public GICSAggregationFunction(SecuritySource secSource, String level) {
+  public GICSAggregationFunction(final SecuritySource secSource, final String level) {
     this(secSource, Enum.valueOf(Level.class, level));
   }
 
-  public GICSAggregationFunction(SecuritySource secSource, Level level) {
+  public GICSAggregationFunction(final SecuritySource secSource, final Level level) {
     this(secSource, level, false);
   }
 
-  public GICSAggregationFunction(SecuritySource secSource,
-                                 Level level,
-                                 boolean useAttributes) {
+  public GICSAggregationFunction(final SecuritySource secSource,
+                                 final Level level,
+                                 final boolean useAttributes) {
     this(secSource, level, useAttributes, true);
   }
 
-  public GICSAggregationFunction(SecuritySource secSource, Level level,
-                                 boolean useAttributes,
-                                 boolean includeEmptyCategories) {
+  public GICSAggregationFunction(final SecuritySource secSource, final Level level,
+                                 final boolean useAttributes,
+                                 final boolean includeEmptyCategories) {
     this(secSource, null, level, useAttributes, includeEmptyCategories);
   }
 
-  public GICSAggregationFunction(SecuritySource secSource,
-                                 LegalEntitySource legalEntitySource, Level level,
-                                 boolean useAttributes,
-                                 boolean includeEmptyCategories) {
+  public GICSAggregationFunction(final SecuritySource secSource,
+                                 final LegalEntitySource legalEntitySource, final Level level,
+                                 final boolean useAttributes,
+                                 final boolean includeEmptyCategories) {
     _secSource = secSource;
     _level = level;
     _useAttributes = useAttributes;
@@ -155,9 +154,9 @@ public class GICSAggregationFunction implements AggregationFunction<String> {
     }
   }
 
-  private FinancialSecurityVisitor<String> _equitySecurityVisitor = new FinancialSecurityVisitorAdapter<String>() {
+  private final FinancialSecurityVisitor<String> _equitySecurityVisitor = new FinancialSecurityVisitorAdapter<String>() {
     @Override
-    public String visitEquitySecurity(EquitySecurity security) {
+    public String visitEquitySecurity(final EquitySecurity security) {
       if (security.getGicsCode() != null) {
         switch (_level) {
           case SECTOR:
@@ -174,10 +173,10 @@ public class GICSAggregationFunction implements AggregationFunction<String> {
     }
   };
 
-  private FinancialSecurityVisitor<String> _equityOptionSecurityVisitor = new FinancialSecurityVisitorAdapter<String>() {
+  private final FinancialSecurityVisitor<String> _equityOptionSecurityVisitor = new FinancialSecurityVisitorAdapter<String>() {
     @Override
-    public String visitEquityOptionSecurity(EquityOptionSecurity security) {
-      EquitySecurity underlying = (EquitySecurity) _secSource.getSingle(ExternalIdBundle.of(security.getUnderlyingId()));
+    public String visitEquityOptionSecurity(final EquityOptionSecurity security) {
+      final EquitySecurity underlying = (EquitySecurity) _secSource.getSingle(ExternalIdBundle.of(security.getUnderlyingId()));
       if (underlying != null) {
         if (underlying.getGicsCode() != null) {
           switch (_level) {
@@ -196,9 +195,9 @@ public class GICSAggregationFunction implements AggregationFunction<String> {
     }
   };
 
-  private FinancialSecurityVisitor<String> _equityIndexOptionSecurityVisitor = new FinancialSecurityVisitorAdapter<String>() {
+  private final FinancialSecurityVisitor<String> _equityIndexOptionSecurityVisitor = new FinancialSecurityVisitorAdapter<String>() {
     @Override
-    public String visitEquityIndexOptionSecurity(EquityIndexOptionSecurity security) {
+    public String visitEquityIndexOptionSecurity(final EquityIndexOptionSecurity security) {
       if (_level == Level.SECTOR) {
         return security.getUnderlyingId().getValue();
       } else {
@@ -207,50 +206,50 @@ public class GICSAggregationFunction implements AggregationFunction<String> {
     }
   };
 
-  private FinancialSecurityVisitor<String> _standardVanillaCdsSecurityVisitor = new FinancialSecurityVisitorAdapter<String>() {
+  private final FinancialSecurityVisitor<String> _standardVanillaCdsSecurityVisitor = new FinancialSecurityVisitorAdapter<String>() {
     @Override
-    public String visitStandardVanillaCDSSecurity(StandardVanillaCDSSecurity cds) {
+    public String visitStandardVanillaCDSSecurity(final StandardVanillaCDSSecurity cds) {
       return sectorExtractionIsValid() ? _obligorSectorExtractor.extractOrElse(cds, UNKNOWN) : UNKNOWN;
     }
   };
 
-  private FinancialSecurityVisitor<String> _legacyVanillaCdsSecurityVisitor = new FinancialSecurityVisitorAdapter<String>() {
+  private final FinancialSecurityVisitor<String> _legacyVanillaCdsSecurityVisitor = new FinancialSecurityVisitorAdapter<String>() {
     @Override
-    public String visitLegacyVanillaCDSSecurity(LegacyVanillaCDSSecurity cds) {
+    public String visitLegacyVanillaCDSSecurity(final LegacyVanillaCDSSecurity cds) {
       return sectorExtractionIsValid() ? _obligorSectorExtractor.extractOrElse(cds, UNKNOWN) : UNKNOWN;
     }
   };
 
-  private FinancialSecurityVisitor<String> _cdsOptionSecurityVisitor = new FinancialSecurityVisitorAdapter<String>() {
+  private final FinancialSecurityVisitor<String> _cdsOptionSecurityVisitor = new FinancialSecurityVisitorAdapter<String>() {
     @Override
-    public String visitCreditDefaultSwapOptionSecurity(CreditDefaultSwapOptionSecurity cdsOption) {
+    public String visitCreditDefaultSwapOptionSecurity(final CreditDefaultSwapOptionSecurity cdsOption) {
       return sectorExtractionIsValid() ? _cdsOptionSectorExtractor.extractOrElse(cdsOption, UNKNOWN) : UNKNOWN;
     }
   };
 
-  private FinancialSecurityVisitor<String> _cdsIndexSecurityVisitor = new FinancialSecurityVisitorAdapter<String>() {
+  private final FinancialSecurityVisitor<String> _cdsIndexSecurityVisitor = new FinancialSecurityVisitorAdapter<String>() {
     @Override
-    public String visitCreditDefaultSwapIndexSecurity(CreditDefaultSwapIndexSecurity cdsIndex) {
+    public String visitCreditDefaultSwapIndexSecurity(final CreditDefaultSwapIndexSecurity cdsIndex) {
       return sectorExtractionIsValid() ? _cdsIndexFamilyExtractor.extractOrElse(cdsIndex, UNKNOWN) : UNKNOWN;
     }
   };
 
 
   private boolean sectorExtractionIsValid() {
-    return (_level == Level.SECTOR && _obligorSectorExtractor != null);
+    return _level == Level.SECTOR && _obligorSectorExtractor != null;
   }
 
   @Override
-  public String classifyPosition(Position position) {
+  public String classifyPosition(final Position position) {
     if (_useAttributes) {
-      Map<String, String> attributes = position.getAttributes();
+      final Map<String, String> attributes = position.getAttributes();
       if (attributes.containsKey(getName())) {
         return attributes.get(getName());
       } else {
         return UNKNOWN;
       }
     } else {
-      FinancialSecurityVisitor<String> visitorAdapter = FinancialSecurityVisitorAdapter.<String>builder()
+      final FinancialSecurityVisitor<String> visitorAdapter = FinancialSecurityVisitorAdapter.<String>builder()
           .equitySecurityVisitor(_equitySecurityVisitor)
           .equityOptionVisitor(_equityOptionSecurityVisitor)
           .equityIndexOptionVisitor(_equityIndexOptionSecurityVisitor)
@@ -259,11 +258,11 @@ public class GICSAggregationFunction implements AggregationFunction<String> {
           .creditDefaultSwapOptionSecurityVisitor(_cdsOptionSecurityVisitor)
           .creditDefaultSwapIndexSecurityVisitor(_cdsIndexSecurityVisitor)
           .create();
-      FinancialSecurity security = (FinancialSecurity) position.getSecurityLink().resolve(_secSource);
+      final FinancialSecurity security = (FinancialSecurity) position.getSecurityLink().resolve(_secSource);
       try {
-        String classification = security.accept(visitorAdapter);
+        final String classification = security.accept(visitorAdapter);
         return classification == null ? UNKNOWN : classification;
-      } catch (UnsupportedOperationException uoe) {
+      } catch (final UnsupportedOperationException uoe) {
         return UNKNOWN;
       }
     }
@@ -277,7 +276,7 @@ public class GICSAggregationFunction implements AggregationFunction<String> {
   @Override
   public Collection<String> getRequiredEntries() {
     if (_includeEmptyCategories) {
-      Collection<String> baseList = new ArrayList<>();
+      final Collection<String> baseList = new ArrayList<>();
       switch (_level) {
         case SECTOR:
           baseList.addAll(GICSCode.getAllSectorDescriptions());
@@ -300,7 +299,7 @@ public class GICSAggregationFunction implements AggregationFunction<String> {
   }
 
   @Override
-  public int compare(String o1, String o2) {
+  public int compare(final String o1, final String o2) {
     if (o1.equals(UNKNOWN)) {
       if (o2.equals(UNKNOWN)) {
         return 0;
@@ -324,13 +323,13 @@ public class GICSAggregationFunction implements AggregationFunction<String> {
 
     private final CdsRedCodeExtractor<LegalEntity> _obligorExtractor;
 
-    public CdsObligorSectorExtractor(LegalEntitySource legalEntitySource) {
+    public CdsObligorSectorExtractor(final LegalEntitySource legalEntitySource) {
       _obligorExtractor = new CdsRedCodeExtractor<>(new CdsObligorExtractor(legalEntitySource));
     }
 
-    public String extractOrElse(CreditDefaultSwapSecurity cds, String alternative) {
+    public String extractOrElse(final CreditDefaultSwapSecurity cds, final String alternative) {
 
-      LegalEntity legalEntity = _obligorExtractor.extract(cds);
+      final LegalEntity legalEntity = _obligorExtractor.extract(cds);
       return legalEntity != null && legalEntity.getAttributes().get("sector") != null ? legalEntity.getAttributes().get("sector") : alternative;
     }
   }
@@ -345,11 +344,11 @@ public class GICSAggregationFunction implements AggregationFunction<String> {
     public CdsOptionObligorSectorExtractor(final SecuritySource securitySource, final LegalEntitySource legalEntitySource) {
       _obligorExtractor = new CdsOptionValueExtractor<LegalEntity>() {
         @Override
-        public LegalEntity extract(CreditDefaultSwapOptionSecurity cdsOption) {
-          ExternalId underlyingId = cdsOption.getUnderlyingId();
-          Security underlying = securitySource.getSingle(underlyingId.toBundle());
+        public LegalEntity extract(final CreditDefaultSwapOptionSecurity cdsOption) {
+          final ExternalId underlyingId = cdsOption.getUnderlyingId();
+          final Security underlying = securitySource.getSingle(underlyingId.toBundle());
           if (underlying instanceof AbstractCreditDefaultSwapSecurity) {
-            String redCode = ((CreditDefaultSwapSecurity) underlying).getReferenceEntity().getValue();
+            final String redCode = ((CreditDefaultSwapSecurity) underlying).getReferenceEntity().getValue();
             return legalEntitySource.getSingle(ExternalId.of(ExternalSchemes.MARKIT_RED_CODE, redCode));
           }
           return null;
@@ -357,9 +356,9 @@ public class GICSAggregationFunction implements AggregationFunction<String> {
       };
     }
 
-    public String extractOrElse(CreditDefaultSwapOptionSecurity cdsOption, String alternative) {
+    public String extractOrElse(final CreditDefaultSwapOptionSecurity cdsOption, final String alternative) {
 
-      LegalEntity legalEntity = _obligorExtractor.extract(cdsOption);
+      final LegalEntity legalEntity = _obligorExtractor.extract(cdsOption);
       return legalEntity != null && legalEntity.getAttributes().get("sector") != null ? legalEntity.getAttributes().get("sector") : alternative;
     }
   }
@@ -375,9 +374,9 @@ public class GICSAggregationFunction implements AggregationFunction<String> {
       _securitySource = securitySource;
     }
 
-    public String extractOrElse(CreditDefaultSwapIndexSecurity cdsIndex, String alternative) {
+    public String extractOrElse(final CreditDefaultSwapIndexSecurity cdsIndex, final String alternative) {
       final CreditDefaultSwapIndexDefinitionSecurity underlyingDefinition = (CreditDefaultSwapIndexDefinitionSecurity) _securitySource.getSingle(ExternalIdBundle.of(cdsIndex.getReferenceEntity()));
-      String family = underlyingDefinition.getFamily();
+      final String family = underlyingDefinition.getFamily();
       return family != null ? family : alternative;
     }
   }

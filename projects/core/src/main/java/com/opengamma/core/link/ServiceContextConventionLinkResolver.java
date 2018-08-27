@@ -32,7 +32,7 @@ import com.opengamma.service.VersionCorrectionProvider;
    *
    * @param serviceContext the service context to use when resolving the link
    */
-  /* package */ ServiceContextConventionLinkResolver(ServiceContext serviceContext) {
+  /* package */ ServiceContextConventionLinkResolver(final ServiceContext serviceContext) {
     super(serviceContext);
   }
 
@@ -42,14 +42,14 @@ import com.opengamma.service.VersionCorrectionProvider;
   }
 
   @Override
-  protected VersionCorrection getVersionCorrection(VersionCorrectionProvider vcProvider) {
+  protected VersionCorrection getVersionCorrection(final VersionCorrectionProvider vcProvider) {
     return vcProvider.getPortfolioVersionCorrection();
   }
 
   @Override
   @SuppressWarnings("unchecked")
-  protected C executeQuery(ConventionSource source, Class<C> type, ExternalIdBundle identifier,
-                           VersionCorrection versionCorrection) {
+  protected C executeQuery(final ConventionSource source, final Class<C> type, final ExternalIdBundle identifier,
+                           final VersionCorrection versionCorrection) {
     // ConventionSource already throws DataNotFoundException when there is no data
     return (C) source.getSingle(identifier, versionCorrection);
   }

@@ -28,7 +28,7 @@ public class DbBatchGetTest extends AbstractDbBatchMasterWorkerTest {
   private static final Logger LOGGER = LoggerFactory.getLogger(DbBatchGetTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public DbBatchGetTest(String databaseType, String databaseVersion) {
+  public DbBatchGetTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion);
     LOGGER.info("running testcases for {}", databaseType);
   }
@@ -40,16 +40,16 @@ public class DbBatchGetTest extends AbstractDbBatchMasterWorkerTest {
   }
 
   @Test
-  public void testGetBatchByUID() {    
+  public void testGetBatchByUID() {
     assertNotNull(_batchMaster.getRiskRun(ObjectId.of(DbBatchMaster.BATCH_IDENTIFIER_SCHEME, "1")));
   }
-  
+
   @Test(expectedExceptions = DataNotFoundException.class)
   public void testDeleteBatchByUID() {
-    ObjectId id = ObjectId.of(DbBatchMaster.BATCH_IDENTIFIER_SCHEME, "1");
+    final ObjectId id = ObjectId.of(DbBatchMaster.BATCH_IDENTIFIER_SCHEME, "1");
     assertNotNull(_batchMaster.getRiskRun(id));
     _batchMaster.deleteRiskRun(id);
     _batchMaster.getRiskRun(id);
     fail("we should not reach this point due to exception");
-  }  
+  }
 }

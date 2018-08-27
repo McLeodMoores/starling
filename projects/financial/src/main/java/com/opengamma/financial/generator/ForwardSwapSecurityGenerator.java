@@ -49,7 +49,7 @@ public class ForwardSwapSecurityGenerator extends SecurityGenerator<ForwardSwapS
 
   /**
    * Return the time series identifier.
-   * 
+   *
    * @param liborConvention the convention bundle, not null
    * @return the time series identifier
    */
@@ -57,7 +57,7 @@ public class ForwardSwapSecurityGenerator extends SecurityGenerator<ForwardSwapS
     return liborConvention.getIdentifiers().getExternalId(getPreferredScheme());
   }
 
-  private ExternalId getSwapRateFor(Currency ccy, LocalDate tradeDate, Tenor maturityTenor, Tenor forwardTenor) {
+  private ExternalId getSwapRateFor(final Currency ccy, final LocalDate tradeDate, final Tenor maturityTenor, final Tenor forwardTenor) {
     final CurveSpecificationBuilderConfiguration curveSpecConfig = getCurrencyCurveConfig(ccy);
     if (curveSpecConfig == null) {
       return null;
@@ -79,7 +79,7 @@ public class ForwardSwapSecurityGenerator extends SecurityGenerator<ForwardSwapS
         // Standard (i.e. matches convention) floating leg tenor for CHF, JPY, GBP, EUR is 6M
         swapSecurity = curveSpecConfig.getSwap6MSecurity(tradeDate, tenor);
       }
-    } catch (OpenGammaRuntimeException e) {
+    } catch (final OpenGammaRuntimeException e) {
       return null;
     }
     return swapSecurity;
@@ -92,14 +92,14 @@ public class ForwardSwapSecurityGenerator extends SecurityGenerator<ForwardSwapS
     final ZonedDateTime tradeDate = previousWorkingDay(now.minusDays(getRandom(getDaysTrading())), ccy);
     final Tenor forward = getRandom(FORWARDS);
     final ZonedDateTime forwardDate = nextWorkingDay(now.plus(forward.getPeriod()), ccy);
-    ConventionBundle swapConvention = getConventionBundleSource().getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, ccy.getCode() + "_SWAP"));
+    final ConventionBundle swapConvention = getConventionBundleSource().getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, ccy.getCode() + "_SWAP"));
     if (swapConvention == null) {
       LOGGER.error("Couldn't get swap convention for {}", ccy.getCode());
       return null;
     }
     final Tenor maturity = getRandom(TENORS);
     // get the convention of the identifier of the initial rate
-    ConventionBundle liborConvention = getConventionBundleSource().getConventionBundle(swapConvention.getSwapFloatingLegInitialRate());
+    final ConventionBundle liborConvention = getConventionBundleSource().getConventionBundle(swapConvention.getSwapFloatingLegInitialRate());
     if (liborConvention == null) {
       LOGGER.error("Couldn't get libor convention for {}", swapConvention.getSwapFloatingLegInitialRate());
       return null;
@@ -113,7 +113,7 @@ public class ForwardSwapSecurityGenerator extends SecurityGenerator<ForwardSwapS
       LOGGER.error("couldn't get series for {} on {}", tsIdentifier, tradeDate);
       return null;
     }
-    Double initialRate = initialRateSeries.getTimeSeries().getEarliestValue();
+    final Double initialRate = initialRateSeries.getTimeSeries().getEarliestValue();
     // get the identifier for the swap rate for the maturity we're interested in (assuming the fixed rate will be =~ swap rate)
     final ExternalId swapRateForMaturityIdentifier = getSwapRateFor(ccy, tradeDate.toLocalDate(), maturity, forward);
     if (swapRateForMaturityIdentifier == null) {
@@ -127,17 +127,17 @@ public class ForwardSwapSecurityGenerator extends SecurityGenerator<ForwardSwapS
       LOGGER.error("can't find time series for {} on {}", swapRateForMaturityIdentifier, tradeDate);
       return null;
     }
-    Double fixedRate = (fixedRateSeries.getTimeSeries().getEarliestValue() + getRandom().nextDouble()) / 100d;
-    Double notional = (double) getRandom(100000) * 1000;
-    ZonedDateTime maturityDate = forwardDate.plus(maturity.getPeriod());
-    String counterparty = "CParty";
-    SwapLeg fixedLeg = new FixedInterestRateLeg(swapConvention.getSwapFixedLegDayCount(),
+    final Double fixedRate = (fixedRateSeries.getTimeSeries().getEarliestValue() + getRandom().nextDouble()) / 100d;
+    final Double notional = (double) getRandom(100000) * 1000;
+    final ZonedDateTime maturityDate = forwardDate.plus(maturity.getPeriod());
+    final String counterparty = "CParty";
+    final SwapLeg fixedLeg = new FixedInterestRateLeg(swapConvention.getSwapFixedLegDayCount(),
         swapConvention.getSwapFixedLegFrequency(),
         swapConvention.getSwapFixedLegRegion(),
         swapConvention.getSwapFixedLegBusinessDayConvention(),
         new InterestRateNotional(ccy, notional),
         false, fixedRate);
-    FloatingInterestRateLeg floatingLeg = new FloatingInterestRateLeg(swapConvention.getSwapFloatingLegDayCount(),
+    final FloatingInterestRateLeg floatingLeg = new FloatingInterestRateLeg(swapConvention.getSwapFloatingLegDayCount(),
         swapConvention.getSwapFloatingLegFrequency(),
         swapConvention.getSwapFloatingLegRegion(),
         swapConvention.getSwapFloatingLegBusinessDayConvention(),
@@ -145,9 +145,9 @@ public class ForwardSwapSecurityGenerator extends SecurityGenerator<ForwardSwapS
         false, tsIdentifier,
         FloatingRateType.IBOR);
     floatingLeg.setInitialFloatingRate(initialRate);
-    String fixedLegDescription = RATE_FORMATTER.format(fixedRate);
-    String floatingLegDescription = swapConvention.getSwapFloatingLegInitialRate().getValue();
-    boolean isPayFixed = getRandom().nextBoolean();
+    final String fixedLegDescription = RATE_FORMATTER.format(fixedRate);
+    final String floatingLegDescription = swapConvention.getSwapFloatingLegInitialRate().getValue();
+    final boolean isPayFixed = getRandom().nextBoolean();
     SwapLeg payLeg;
     String payLegDescription;
     SwapLeg receiveLeg;
@@ -173,7 +173,7 @@ public class ForwardSwapSecurityGenerator extends SecurityGenerator<ForwardSwapS
   public ManageableTrade createSecurityTrade(final QuantityGenerator quantity, final SecurityPersister persister, final NameGenerator counterPartyGenerator) {
     final ForwardSwapSecurity swap = createSecurity();
     if (swap != null) {
-      return new ManageableTrade(quantity.createQuantity(), persister.storeSecurity(swap), swap.getTradeDate().toLocalDate(), swap.getTradeDate().toOffsetDateTime().toOffsetTime(), 
+      return new ManageableTrade(quantity.createQuantity(), persister.storeSecurity(swap), swap.getTradeDate().toLocalDate(), swap.getTradeDate().toOffsetDateTime().toOffsetTime(),
           ExternalId.of(Counterparty.DEFAULT_SCHEME, counterPartyGenerator.createName()));
     } else {
       return null;

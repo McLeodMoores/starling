@@ -45,7 +45,7 @@ public class DataInterpolatedYieldCurveDefinitionResource extends AbstractDocume
   DataInterpolatedYieldCurveDefinitionResource() {
     _parentResource = null;
   }
-  
+
   /**
    * Creates the resource.
    *
@@ -74,6 +74,7 @@ public class DataInterpolatedYieldCurveDefinitionResource extends AbstractDocume
    *
    * @return the unique identifier, not null
    */
+  @Override
   public ObjectId getUrlId() {
     return _urlResourceId;
   }
@@ -84,46 +85,54 @@ public class DataInterpolatedYieldCurveDefinitionResource extends AbstractDocume
    *
    * @return the definition master, not null
    */
+  @Override
   public InterpolatedYieldCurveDefinitionMaster getMaster() {
     return getParentResource().getInterpolatedYieldCurveDefinitionMaster();
   }
 
+  @Override
   @GET
-  public Response get(@QueryParam("versionAsOf") String versionAsOf, @QueryParam("correctedTo") String correctedTo) {
+  public Response get(@QueryParam("versionAsOf") final String versionAsOf, @QueryParam("correctedTo") final String correctedTo) {
     return super.get(versionAsOf, correctedTo);
   }
 
+  @Override
   @POST
-  public Response update(@Context UriInfo uriInfo, YieldCurveDefinitionDocument request) {
+  public Response update(@Context final UriInfo uriInfo, final YieldCurveDefinitionDocument request) {
     return super.update(uriInfo, request);
   }
 
+  @Override
   @DELETE
   public void remove() {
     super.remove();
   }
 
+  @Override
   @GET
   @Path("versions/{versionId}")
-  public Response getVersioned(@PathParam("versionId") String versionId) {
+  public Response getVersioned(@PathParam("versionId") final String versionId) {
     return super.getVersioned(versionId);
   }
 
 
+  @Override
   @PUT
   @Path("versions/{versionId}")
-  public Response replaceVersion(@PathParam("versionId") String versionId, List<YieldCurveDefinitionDocument> replacementDocuments) {
+  public Response replaceVersion(@PathParam("versionId") final String versionId, final List<YieldCurveDefinitionDocument> replacementDocuments) {
     return super.replaceVersion(versionId, replacementDocuments);
   }
 
+  @Override
   @PUT
-  public Response replaceVersions(List<YieldCurveDefinitionDocument> replacementDocuments) {
+  public Response replaceVersions(final List<YieldCurveDefinitionDocument> replacementDocuments) {
     return super.replaceVersions(replacementDocuments);
   }
 
+  @Override
   @PUT
   @Path("all")
-  public Response replaceAllVersions(List<YieldCurveDefinitionDocument> replacementDocuments) {
+  public Response replaceAllVersions(final List<YieldCurveDefinitionDocument> replacementDocuments) {
     return super.replaceAllVersions(replacementDocuments);
   }
 

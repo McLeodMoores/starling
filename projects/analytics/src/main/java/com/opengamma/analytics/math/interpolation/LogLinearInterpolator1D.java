@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.interpolation;
@@ -19,7 +19,7 @@ import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
  * (x<sub>2</sub> - x<sub>1</sub>))</i><br>
  * It is the equivalent of performing a linear interpolation on a data set after
  * taking the logarithm of the y-values.
- * 
+ *
  */
 
 public class LogLinearInterpolator1D extends Interpolator1D {
@@ -66,7 +66,7 @@ public class LogLinearInterpolator1D extends Interpolator1D {
   }
 
   @Override
-  public double[] getNodeSensitivitiesForValue(Interpolator1DDataBundle data, Double value) {
+  public double[] getNodeSensitivitiesForValue(final Interpolator1DDataBundle data, final Double value) {
     return getFiniteDifferenceSensitivities(data, value);
   }
 }

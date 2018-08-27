@@ -10,20 +10,20 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
 import org.joda.beans.JodaBeanUtils;
 import org.joda.beans.MetaProperty;
+import org.joda.beans.Property;
 import org.joda.beans.PropertyDefinition;
 import org.joda.beans.impl.direct.DirectBeanBuilder;
+import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.master.AbstractHistoryResult;
 import com.opengamma.util.PublicSPI;
-import org.joda.beans.Bean;
-import org.joda.beans.Property;
-import org.joda.beans.impl.direct.DirectMetaProperty;
 
 /**
  * Result from searching historical time-series information.
@@ -48,23 +48,23 @@ public class HistoricalTimeSeriesInfoHistoryResult extends AbstractHistoryResult
 
   /**
    * Creates an instance from a collection of documents.
-   * 
+   *
    * @param coll  the collection of documents to add, not null
    */
-  public HistoricalTimeSeriesInfoHistoryResult(Collection<HistoricalTimeSeriesInfoDocument> coll) {
+  public HistoricalTimeSeriesInfoHistoryResult(final Collection<HistoricalTimeSeriesInfoDocument> coll) {
     super(coll);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the returned series information from within the documents.
-   * 
+   *
    * @return the series, not null
    */
   public List<ManageableHistoricalTimeSeriesInfo> getInfoList() {
-    List<ManageableHistoricalTimeSeriesInfo> result = new ArrayList<ManageableHistoricalTimeSeriesInfo>();
+    final List<ManageableHistoricalTimeSeriesInfo> result = new ArrayList<>();
     if (getDocuments() != null) {
-      for (HistoricalTimeSeriesInfoDocument doc : getDocuments()) {
+      for (final HistoricalTimeSeriesInfoDocument doc : getDocuments()) {
         result.add(doc.getInfo());
       }
     }
@@ -73,7 +73,7 @@ public class HistoricalTimeSeriesInfoHistoryResult extends AbstractHistoryResult
 
   /**
    * Gets the first series information, or null if no documents.
-   * 
+   *
    * @return the first series information, null if none
    */
   public ManageableHistoricalTimeSeriesInfo getFirstInfo() {
@@ -85,7 +85,7 @@ public class HistoricalTimeSeriesInfoHistoryResult extends AbstractHistoryResult
    * <p>
    * This throws an exception if more than 1 result is actually available.
    * Thus, this method implies an assumption about uniqueness of the queried series.
-   * 
+   *
    * @return the matching exchange, not null
    * @throws IllegalStateException if no series was found
    */

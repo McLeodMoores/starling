@@ -32,7 +32,7 @@ public abstract class LegacyCDSSecurity extends CreditDefaultSwapSecurity {
   /** Serialization version. */
   private static final long serialVersionUID = 2L;
 
-  LegacyCDSSecurity(String securityType) { // For Fudge builder
+  LegacyCDSSecurity(final String securityType) { // For Fudge builder
     super(securityType);
   }
 

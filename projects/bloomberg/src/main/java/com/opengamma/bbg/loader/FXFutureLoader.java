@@ -64,10 +64,10 @@ public class FXFutureLoader extends SecurityLoader {
       FIELD_ID_BBG_UNIQUE,
       FIELD_ID_CUSIP,
       FIELD_ID_ISIN,
-      FIELD_ID_SEDOL1, 
+      FIELD_ID_SEDOL1,
       FIELD_PARSEKYABLE_DES,
       FIELD_FUT_FIRST_TRADE_DT));
-  
+
   /**
    * Maps from the QUOTE_UNITS field to the unit amount. As more units are encountered, this approach will need to be
    * improved.
@@ -82,29 +82,29 @@ public class FXFutureLoader extends SecurityLoader {
    */
   public static final Set<String> VALID_FUTURE_CATEGORIES = Collections.unmodifiableSet(Sets.newHashSet(
       BloombergConstants.BBG_CURRENCY_TYPE));
-  
+
   /**
    * Creates an instance.
    * @param referenceDataProvider  the provider, not null
    */
-  public FXFutureLoader(ReferenceDataProvider referenceDataProvider) {
+  public FXFutureLoader(final ReferenceDataProvider referenceDataProvider) {
     super(LOGGER, referenceDataProvider, SecurityType.FX_FUTURE);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  protected ManageableSecurity createSecurity(FudgeMsg fieldData) {
-    String bbgUnique = fieldData.getString(FIELD_ID_BBG_UNIQUE);
-    String category = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUTURES_CATEGORY), " ");
-    String name = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUT_LONG_NAME), " ");
-    String expiryDate = fieldData.getString(FIELD_LAST_TRADEABLE_DT);
-    String futureTradingHours = fieldData.getString(FIELD_FUT_TRADING_HRS);
-    String micExchangeCode = fieldData.getString(FIELD_ID_MIC_PRIM_EXCH);
-    String currencyCode = fieldData.getString(FIELD_CRNCY);
-    String quoteUnits = fieldData.getString(FIELD_QUOTE_UNITS);
-    String tradingCurrencyCode = fieldData.getString(FIELD_FUT_TRADING_UNITS);
-    String quotedCurrencyCode = fieldData.getString(FIELD_QUOTED_CRNCY);
-    
+  protected ManageableSecurity createSecurity(final FudgeMsg fieldData) {
+    final String bbgUnique = fieldData.getString(FIELD_ID_BBG_UNIQUE);
+    final String category = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUTURES_CATEGORY), " ");
+    final String name = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUT_LONG_NAME), " ");
+    final String expiryDate = fieldData.getString(FIELD_LAST_TRADEABLE_DT);
+    final String futureTradingHours = fieldData.getString(FIELD_FUT_TRADING_HRS);
+    final String micExchangeCode = fieldData.getString(FIELD_ID_MIC_PRIM_EXCH);
+    final String currencyCode = fieldData.getString(FIELD_CRNCY);
+    final String quoteUnits = fieldData.getString(FIELD_QUOTE_UNITS);
+    final String tradingCurrencyCode = fieldData.getString(FIELD_FUT_TRADING_UNITS);
+    final String quotedCurrencyCode = fieldData.getString(FIELD_QUOTED_CRNCY);
+
     if (!isValidField(bbgUnique)) {
       logMissingData(FIELD_ID_BBG_UNIQUE, name);
       return null;
@@ -139,29 +139,29 @@ public class FXFutureLoader extends SecurityLoader {
     if (!isValidField(category)) {
       logMissingData(FIELD_FUTURES_CATEGORY, name);
     }
-    
-    Double unitAmount = UNIT_AMOUNT_MAP.get(quoteUnits);
+
+    final Double unitAmount = UNIT_AMOUNT_MAP.get(quoteUnits);
     if (unitAmount == null) {
       LOGGER.warn("Unknown quote units: " + quoteUnits);
       return null;
     }
-    
-    Expiry expiry = decodeExpiry(expiryDate, futureTradingHours);
+
+    final Expiry expiry = decodeExpiry(expiryDate, futureTradingHours);
     if (expiry == null) {
       LOGGER.warn("Unable to decode expiry '" + expiryDate + "' against trading hours '" + futureTradingHours + "'");
       return null;
     }
-    Currency currency = Currency.parse(currencyCode);
-    Currency tradingCurrency = Currency.parse(tradingCurrencyCode);
-    Currency quotedCurrency = Currency.parse(quotedCurrencyCode);
-    
-    FXFutureSecurity security = new FXFutureSecurity(expiry, micExchangeCode, micExchangeCode, currency, unitAmount, tradingCurrency, quotedCurrency, category);    
+    final Currency currency = Currency.parse(currencyCode);
+    final Currency tradingCurrency = Currency.parse(tradingCurrencyCode);
+    final Currency quotedCurrency = Currency.parse(quotedCurrencyCode);
+
+    final FXFutureSecurity security = new FXFutureSecurity(expiry, micExchangeCode, micExchangeCode, currency, unitAmount, tradingCurrency, quotedCurrency, category);
     security.setName(name);
     parseIdentifiers(fieldData, security, FIELD_FUT_FIRST_TRADE_DT, FIELD_LAST_TRADEABLE_DT);
     return security;
   }
-  
-  private void logMissingData(String fieldName, String securityName) {
+
+  private void logMissingData(final String fieldName, final String securityName) {
     LOGGER.warn("Cannot construct FX Future security '" + securityName + "' as " + fieldName + " is missing");
   }
 

@@ -53,7 +53,7 @@ import com.opengamma.util.async.ResultCallback;
 
 /**
  * Runs an arbitrary execution sequence on a view definition to produce values for one or more targets. The job is encoded into a {@link ViewEvaluationTarget}.
- * 
+ *
  * @param <TTarget> the computation target type
  * @param <TResultBuilder> the type of the result builder used throughout execution
  */
@@ -69,7 +69,7 @@ public abstract class ViewEvaluationFunction<TTarget extends ViewEvaluationTarge
   private final String _valueRequirementName;
   private final ComputationTargetType _targetType;
 
-  public ViewEvaluationFunction(String valueRequirementName, Class<TTarget> targetType) {
+  public ViewEvaluationFunction(final String valueRequirementName, final Class<TTarget> targetType) {
     _valueRequirementName = valueRequirementName;
     _targetType = ComputationTargetType.of(targetType);
   }
@@ -105,7 +105,7 @@ public abstract class ViewEvaluationFunction<TTarget extends ViewEvaluationTarge
     if (master == null) {
       throw new IllegalStateException("Execution context does not contain a " + OpenGammaExecutionContext.CONFIG_MASTER_NAME);
     }
-    final ConfigSearchRequest<ViewDefinition> request = new ConfigSearchRequest<ViewDefinition>(ViewDefinition.class);
+    final ConfigSearchRequest<ViewDefinition> request = new ConfigSearchRequest<>(ViewDefinition.class);
     request.setName(name);
     final ConfigSearchResult<ViewDefinition> result = master.search(request);
     if (result.getDocuments() != null) {
@@ -147,7 +147,7 @@ public abstract class ViewEvaluationFunction<TTarget extends ViewEvaluationTarge
         ExecutionOptions.of(viewEvaluation.getExecutionSequence().createSequence(executionContext), getDefaultCycleOptions(executionContext), getViewExecutionFlags(desiredValues)), true);
     final TResultBuilder resultBuilder = createResultBuilder(viewEvaluation, desiredValues);
     final AsynchronousOperation<Set<ComputedValue>> async = AsynchronousOperation.createSet();
-    final AtomicReference<ResultCallback<Set<ComputedValue>>> asyncResult = new AtomicReference<ResultCallback<Set<ComputedValue>>>(async.getCallback());
+    final AtomicReference<ResultCallback<Set<ComputedValue>>> asyncResult = new AtomicReference<>(async.getCallback());
     viewClient.setResultListener(new ViewResultListener() {
 
       private void reportException(final RuntimeException e) {
@@ -235,7 +235,7 @@ public abstract class ViewEvaluationFunction<TTarget extends ViewEvaluationTarge
       public void processCompleted() {
         LOGGER.info("View process completed for {}", viewClientId);
         try {
-          Set<ComputedValue> results = buildResults(target, resultBuilder);
+          final Set<ComputedValue> results = buildResults(target, resultBuilder);
           reportResult(results);
         } catch (final RuntimeException e) {
           LOGGER.error("Caught exception during process completed callback", e);
@@ -273,12 +273,12 @@ public abstract class ViewEvaluationFunction<TTarget extends ViewEvaluationTarge
   }
 
   //-------------------------------------------------------------------------
-  protected ValueSpecification getResultSpec(String calcConfigName, ComputationTargetSpecification targetSpec) {
-    ValueProperties.Builder properties = createValueProperties().withoutAny(PROPERTY_CALC_CONFIG).with(PROPERTY_CALC_CONFIG, calcConfigName);
+  protected ValueSpecification getResultSpec(final String calcConfigName, final ComputationTargetSpecification targetSpec) {
+    final ValueProperties.Builder properties = createValueProperties().withoutAny(PROPERTY_CALC_CONFIG).with(PROPERTY_CALC_CONFIG, calcConfigName);
     return new ValueSpecification(_valueRequirementName, targetSpec, properties.get());
   }
 
-  protected EnumSet<ViewExecutionFlags> getViewExecutionFlags(Set<ValueRequirement> desiredValues) {
+  protected EnumSet<ViewExecutionFlags> getViewExecutionFlags(final Set<ValueRequirement> desiredValues) {
     return EnumSet.of(ViewExecutionFlags.WAIT_FOR_INITIAL_TRIGGER, ViewExecutionFlags.RUN_AS_FAST_AS_POSSIBLE, ViewExecutionFlags.SKIP_CYCLE_ON_NO_MARKET_DATA);
   }
 

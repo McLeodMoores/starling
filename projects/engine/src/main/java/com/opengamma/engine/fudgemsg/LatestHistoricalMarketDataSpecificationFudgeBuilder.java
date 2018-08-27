@@ -16,17 +16,17 @@ import com.opengamma.engine.marketdata.spec.LatestHistoricalMarketDataSpecificat
 
 /**
  * Fudge message builder for {@link LatestHistoricalMarketDataSpecification}
- * NOTE: jim 28-Jan-15 -- This class _should_ be auto fudge encoded because it's a JodaBean, but the encoding 
- * doesn't work (it gets encoded as a HistoricalMarketDataSpecification, it's sub-class, so i think it's a JodaBean/Fudge 
+ * NOTE: jim 28-Jan-15 -- This class _should_ be auto fudge encoded because it's a JodaBean, but the encoding
+ * doesn't work (it gets encoded as a HistoricalMarketDataSpecification, it's sub-class, so i think it's a JodaBean/Fudge
  * issue)
  */
 @FudgeBuilderFor(LatestHistoricalMarketDataSpecification.class)
 public class LatestHistoricalMarketDataSpecificationFudgeBuilder implements FudgeBuilder<LatestHistoricalMarketDataSpecification> {
 
   private static final String TIME_SERIES_RESOLVER_KEY_FIELD = "timeSeriesResolverKey";
-  
+
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, LatestHistoricalMarketDataSpecification object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final LatestHistoricalMarketDataSpecification object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     msg.add(0, LatestHistoricalMarketDataSpecification.class.getName());
     if (object.getTimeSeriesResolverKey() != null) {
@@ -36,9 +36,9 @@ public class LatestHistoricalMarketDataSpecificationFudgeBuilder implements Fudg
   }
 
   @Override
-  public LatestHistoricalMarketDataSpecification buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
+  public LatestHistoricalMarketDataSpecification buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     if (msg.hasField(TIME_SERIES_RESOLVER_KEY_FIELD)) {
-      String timeSeriesResolverKey = msg.getString(TIME_SERIES_RESOLVER_KEY_FIELD);
+      final String timeSeriesResolverKey = msg.getString(TIME_SERIES_RESOLVER_KEY_FIELD);
       return new LatestHistoricalMarketDataSpecification(timeSeriesResolverKey);
     } else {
       return new LatestHistoricalMarketDataSpecification();

@@ -61,7 +61,7 @@ public enum SnapshotColumns {
 
   private String _text;
 
-  SnapshotColumns(String text) {
+  SnapshotColumns(final String text) {
     this._text = text;
 
   }
@@ -70,9 +70,9 @@ public enum SnapshotColumns {
     return this._text;
   }
 
-  public static SnapshotColumns from(String text) {
+  public static SnapshotColumns from(final String text) {
     if (text != null) {
-      for (SnapshotColumns column : SnapshotColumns.values()) {
+      for (final SnapshotColumns column : SnapshotColumns.values()) {
         if (text.equalsIgnoreCase(column._text)) {
           return column;
         }
@@ -81,7 +81,7 @@ public enum SnapshotColumns {
     return null;
   }
 
-  private static String[] getColumns(ArrayList<String> list) {
+  private static String[] getColumns(final ArrayList<String> list) {
     String[] columns = new String[list.size()];
     columns = list.toArray(columns);
     return columns;
@@ -94,8 +94,8 @@ public enum SnapshotColumns {
    */
 
   public static String[] columns() {
-    ArrayList<String> list = new ArrayList<>();
-    for (SnapshotColumns column : SnapshotColumns.values()) {
+    final ArrayList<String> list = new ArrayList<>();
+    for (final SnapshotColumns column : SnapshotColumns.values()) {
       list.add(column._text);
     }
     return getColumns(list);

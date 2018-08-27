@@ -39,7 +39,7 @@ public class NormalPriceFunction implements OptionPriceFunction<NormalFunctionDa
         final int sign = option.isCall() ? 1 : -1;
         if (sigmaRootT < 1e-16) {
           final double x = sign * (forward - strike);
-          return (x > 0 ? numeraire * x : 0.0);
+          return x > 0 ? numeraire * x : 0.0;
         }
         final double arg = sign * (forward - strike) / sigmaRootT;
         return numeraire * (sign * (forward - strike) * NORMAL.getCDF(arg) + sigmaRootT * NORMAL.getPDF(arg));
@@ -54,7 +54,7 @@ public class NormalPriceFunction implements OptionPriceFunction<NormalFunctionDa
    * @param priceDerivative Array used to output the derivative of the price with respect to [0] forward, [1] volatility, [2] strike. The length of the array should be 3.
    * @return The price.
    */
-  public double getPriceAdjoint(final EuropeanVanillaOption option, final NormalFunctionData data, double[] priceDerivative) {
+  public double getPriceAdjoint(final EuropeanVanillaOption option, final NormalFunctionData data, final double[] priceDerivative) {
     Validate.notNull(option, "option");
     Validate.notNull(data, "data");
     Validate.notNull(priceDerivative, "derivatives");
@@ -74,7 +74,7 @@ public class NormalPriceFunction implements OptionPriceFunction<NormalFunctionDa
     final double sigmaRootT = sigma * Math.sqrt(t);
     if (sigmaRootT < 1e-16) {
       x = sign * (forward - strike);
-      price = (x > 0 ? numeraire * x : 0.0);
+      price = x > 0 ? numeraire * x : 0.0;
     } else {
       arg = sign * (forward - strike) / sigmaRootT;
       nCDF = NORMAL.getCDF(arg);
@@ -82,19 +82,19 @@ public class NormalPriceFunction implements OptionPriceFunction<NormalFunctionDa
       price = numeraire * (sign * (forward - strike) * nCDF + sigmaRootT * nPDF);
     }
     // Implementation Note: Backward sweep.
-    double priceBar = 1.0;
+    final double priceBar = 1.0;
     if (sigmaRootT < 1e-16) {
-      double xBar = (x > 0 ? numeraire : 0.0);
+      final double xBar = x > 0 ? numeraire : 0.0;
       priceDerivative[0] = sign * xBar;
       priceDerivative[2] = -priceDerivative[0];
       priceDerivative[1] = 0.0;
     } else {
-      double nCDFBar = numeraire * (sign * (forward - strike)) * priceBar;
-      double nPDFBar = numeraire * sigmaRootT * priceBar;
-      double argBar = nPDF * nCDFBar - nPDF * arg * nPDFBar;
+      final double nCDFBar = numeraire * (sign * (forward - strike)) * priceBar;
+      final double nPDFBar = numeraire * sigmaRootT * priceBar;
+      final double argBar = nPDF * nCDFBar - nPDF * arg * nPDFBar;
       priceDerivative[0] = numeraire * sign * nCDF * priceBar + sign / sigmaRootT * argBar;
       priceDerivative[2] = -priceDerivative[0];
-      double sigmaRootTBar = -arg / sigmaRootT * argBar + numeraire * nPDF * priceBar;
+      final double sigmaRootTBar = -arg / sigmaRootT * argBar + numeraire * nPDF * priceBar;
       priceDerivative[1] = Math.sqrt(t) * sigmaRootTBar;
     }
     return price;

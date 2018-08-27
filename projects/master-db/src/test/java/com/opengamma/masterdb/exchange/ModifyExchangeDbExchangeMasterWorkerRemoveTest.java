@@ -34,7 +34,7 @@ public class ModifyExchangeDbExchangeMasterWorkerRemoveTest extends AbstractDbEx
   private static final Logger LOGGER = LoggerFactory.getLogger(ModifyExchangeDbExchangeMasterWorkerRemoveTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public ModifyExchangeDbExchangeMasterWorkerRemoveTest(String databaseType, String databaseVersion) {
+  public ModifyExchangeDbExchangeMasterWorkerRemoveTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion, false);
     LOGGER.info("running testcases for {}", databaseType);
   }
@@ -42,24 +42,24 @@ public class ModifyExchangeDbExchangeMasterWorkerRemoveTest extends AbstractDbEx
   //-------------------------------------------------------------------------
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_removeExchange_versioned_notFound() {
-    UniqueId uniqueId = UniqueId.of("DbExg", "0", "0");
+    final UniqueId uniqueId = UniqueId.of("DbExg", "0", "0");
     _exgMaster.remove(uniqueId);
   }
 
   @Test
   public void test_remove_removed() {
-    Instant now = Instant.now(_exgMaster.getClock());
-    
-    UniqueId uniqueId = UniqueId.of("DbExg", "101", "0");
+    final Instant now = Instant.now(_exgMaster.getClock());
+
+    final UniqueId uniqueId = UniqueId.of("DbExg", "101", "0");
     _exgMaster.remove(uniqueId);
-    ExchangeDocument test = _exgMaster.get(uniqueId);
-    
+    final ExchangeDocument test = _exgMaster.get(uniqueId);
+
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version1Instant, test.getVersionFromInstant());
     assertEquals(now, test.getVersionToInstant());
     assertEquals(_version1Instant, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    ManageableExchange exchange = test.getExchange();
+    final ManageableExchange exchange = test.getExchange();
     assertNotNull(exchange);
     assertEquals(uniqueId, exchange.getUniqueId());
     assertEquals("TestExchange101", test.getName());

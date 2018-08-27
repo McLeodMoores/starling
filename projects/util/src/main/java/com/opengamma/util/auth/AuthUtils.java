@@ -64,7 +64,7 @@ public final class AuthUtils {
    * The shared security manager is used as a fallback when there is no manager
    * in the {@link ThreadContext}.
    * This will return a permissive security manager by default.
-   * 
+   *
    * @return the security manager, not null
    */
   public static SecurityManager getSecurityManager() {
@@ -77,10 +77,10 @@ public final class AuthUtils {
    * The shared security manager is used as a fallback when there is no manager
    * in the {@link ThreadContext}.
    * This method can only be called if the current manager is permissive.
-   * 
+   *
    * @param securityManager  the new security manager, not null
    */
-  public static void initSecurityManager(SecurityManager securityManager) {
+  public static void initSecurityManager(final SecurityManager securityManager) {
     if (isPermissive()) {
       SecurityUtils.setSecurityManager(securityManager);
     } else {
@@ -102,7 +102,7 @@ public final class AuthUtils {
   /**
    * Checks if the authentication and authorization system is in permissive mode.
    * Permissive mode has a logged on user with all permissions granted.
-   * 
+   *
    * @return true if permissive
    */
   public static boolean isPermissive() {
@@ -112,7 +112,7 @@ public final class AuthUtils {
   /**
    * Checks if the authentication and authorization system is still in the
    * default permissive mode.
-   * 
+   *
    * @return true if the security manager has not been set
    */
   public static boolean isDefault() {
@@ -155,25 +155,25 @@ public final class AuthUtils {
   //-------------------------------------------------------------------------
   /**
    * Checks that the user has all the permissions necessary to see the entity.
-   * 
+   *
    * @param permissionable  the entity to be checked, not null
    * @return true if permitted
    */
-  public static boolean isPermitted(Permissionable permissionable) {
+  public static boolean isPermitted(final Permissionable permissionable) {
     ArgumentChecker.notNull(permissionable, "entity");
-    Set<Permission> requiredPermissions = AuthUtils.getPermissionResolver().resolvePermissions(permissionable.getRequiredPermissions());
+    final Set<Permission> requiredPermissions = AuthUtils.getPermissionResolver().resolvePermissions(permissionable.getRequiredPermissions());
     return AuthUtils.getSubject().isPermittedAll(requiredPermissions);
   }
 
   /**
    * Checks that the user has all the permissions necessary to see the entity.
-   * 
+   *
    * @param permissionable  the entity to be checked, not null
    * @throws AuthorizationException if the user does not have permission
    */
-  public static void checkPermissions(Permissionable permissionable) {
+  public static void checkPermissions(final Permissionable permissionable) {
     ArgumentChecker.notNull(permissionable, "entity");
-    Set<Permission> requiredPermissions = AuthUtils.getPermissionResolver().resolvePermissions(permissionable.getRequiredPermissions());
+    final Set<Permission> requiredPermissions = AuthUtils.getPermissionResolver().resolvePermissions(permissionable.getRequiredPermissions());
     AuthUtils.getSubject().checkPermissions(requiredPermissions);
   }
 

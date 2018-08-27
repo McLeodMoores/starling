@@ -19,11 +19,11 @@ import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * An audit log entry describes an operation a user attempted on an object. 
+ * An audit log entry describes an operation a user attempted on an object.
  * The entry is timestamped. Both successful and failed attempts are logged.
  */
 public class AuditLogEntry {
-  
+
   private Long _id;
   private String _user;
   private String _originatingSystem;
@@ -32,20 +32,20 @@ public class AuditLogEntry {
   private String _description;
   private boolean _success;
   private Date _timestamp;
-  
-  public AuditLogEntry(String user,
-      String originatingSystem,
-      String object,
-      String operation,
-      String description,
-      boolean success,
-      Date timestamp) {
-    ArgumentChecker.notNull(user, "User name");    
+
+  public AuditLogEntry(final String user,
+      final String originatingSystem,
+      final String object,
+      final String operation,
+      final String description,
+      final boolean success,
+      final Date timestamp) {
+    ArgumentChecker.notNull(user, "User name");
     ArgumentChecker.notNull(originatingSystem, "Originating system");
     ArgumentChecker.notNull(object, "Object name");
     ArgumentChecker.notNull(operation, "Operation name");
     ArgumentChecker.notNull(timestamp, "timestamp");
-    
+
     _id = null;
     _user = user;
     _originatingSystem = originatingSystem;
@@ -55,15 +55,15 @@ public class AuditLogEntry {
     _success = success;
     _timestamp = timestamp;
   }
-  
+
   protected AuditLogEntry() {
   }
-  
+
   public Long getId() {
     return _id;
   }
 
-  public void setId(Long id) {
+  public void setId(final Long id) {
     _id = id;
   }
 
@@ -71,15 +71,15 @@ public class AuditLogEntry {
     return _user;
   }
 
-  public void setUser(String user) {
+  public void setUser(final String user) {
     _user = user;
   }
-  
+
   public String getOriginatingSystem() {
     return _originatingSystem;
   }
 
-  public void setOriginatingSystem(String originatingSystem) {
+  public void setOriginatingSystem(final String originatingSystem) {
     _originatingSystem = originatingSystem;
   }
 
@@ -87,7 +87,7 @@ public class AuditLogEntry {
     return _object;
   }
 
-  public void setObject(String object) {
+  public void setObject(final String object) {
     _object = object;
   }
 
@@ -95,15 +95,15 @@ public class AuditLogEntry {
     return _operation;
   }
 
-  public void setOperation(String operation) {
+  public void setOperation(final String operation) {
     _operation = operation;
   }
-  
+
   public String getDescription() {
     return _description;
   }
 
-  public void setDescription(String description) {
+  public void setDescription(final String description) {
     _description = description;
   }
 
@@ -111,7 +111,7 @@ public class AuditLogEntry {
     return _success;
   }
 
-  public void setSuccess(boolean success) {
+  public void setSuccess(final boolean success) {
     _success = success;
   }
 
@@ -119,12 +119,12 @@ public class AuditLogEntry {
     return _timestamp;
   }
 
-  public void setTimestamp(Date timestamp) {
+  public void setTimestamp(final Date timestamp) {
     _timestamp = timestamp;
   }
-  
-  public FudgeMsg toFudgeMsg(FudgeMsgFactory fudgeMessageFactory) {
-    MutableFudgeMsg msg = fudgeMessageFactory.newMessage();
+
+  public FudgeMsg toFudgeMsg(final FudgeMsgFactory fudgeMessageFactory) {
+    final MutableFudgeMsg msg = fudgeMessageFactory.newMessage();
     msg.add("user", getUser());
     msg.add("originatingSystem", getOriginatingSystem());
     msg.add("object", getObject());
@@ -133,35 +133,35 @@ public class AuditLogEntry {
       msg.add("description", getDescription());
     }
     msg.add("success", isSuccess());
-    String yyyymmdd = new SimpleDateFormat("yyyyMMddHHmmssZ").format(getTimestamp());
+    final String yyyymmdd = new SimpleDateFormat("yyyyMMddHHmmssZ").format(getTimestamp());
     msg.add("timestamp", yyyymmdd); // change as soon as Fudge supports Date natively
     return msg;
   }
-  
-  public static AuditLogEntry fromFudgeMsg(FudgeMsg msg) {
-    String user = msg.getString("user");
-    String originatingSystem = msg.getString("originatingSystem");
-    String object = msg.getString("object");
-    String operation = msg.getString("operation");
-    String description = msg.getString("description");
-    Boolean success = msg.getBoolean("success");
-    String yyyymmdd = msg.getString("timestamp"); // change as soon as Fudge supports Date natively
+
+  public static AuditLogEntry fromFudgeMsg(final FudgeMsg msg) {
+    final String user = msg.getString("user");
+    final String originatingSystem = msg.getString("originatingSystem");
+    final String object = msg.getString("object");
+    final String operation = msg.getString("operation");
+    final String description = msg.getString("description");
+    final Boolean success = msg.getBoolean("success");
+    final String yyyymmdd = msg.getString("timestamp"); // change as soon as Fudge supports Date natively
     Date timestamp;
     try {
       timestamp = new SimpleDateFormat("yyyyMMddHHmmssZ").parse(yyyymmdd);
-    } catch (ParseException e) {
+    } catch (final ParseException e) {
       throw new OpenGammaRuntimeException("Invalid Fudge message", e);
     }
-    
+
     AuditLogEntry logEntry;
     try {
       logEntry = new AuditLogEntry(user, originatingSystem, object, operation, description, success, timestamp);
-    } catch (NullPointerException e) {
-      throw new OpenGammaRuntimeException("Invalid Fudge message", e);            
+    } catch (final NullPointerException e) {
+      throw new OpenGammaRuntimeException("Invalid Fudge message", e);
     }
     return logEntry;
   }
-  
+
   @Override
   public String toString() {
     return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
@@ -171,12 +171,12 @@ public class AuditLogEntry {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_id == null) ? 0 : _id.hashCode());
+    result = prime * result + (_id == null ? 0 : _id.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -186,7 +186,7 @@ public class AuditLogEntry {
     if (getClass() != obj.getClass()) {
       return false;
     }
-    AuditLogEntry other = (AuditLogEntry) obj;
+    final AuditLogEntry other = (AuditLogEntry) obj;
     if (_id == null) {
       if (other._id != null) {
         return false;

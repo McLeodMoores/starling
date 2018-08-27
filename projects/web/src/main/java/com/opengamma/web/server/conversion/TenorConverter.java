@@ -14,26 +14,26 @@ import com.opengamma.util.time.Tenor;
 public class TenorConverter implements ResultConverter<Tenor> {
 
   @Override
-  public Object convertForDisplay(ResultConverterCache context, ValueSpecification valueSpec, Tenor value, ConversionMode mode) {
+  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final Tenor value, final ConversionMode mode) {
     return getPeriodName(value);
   }
 
   @Override
-  public Object convertForHistory(ResultConverterCache context, ValueSpecification valueSpec, Tenor value) {
+  public Object convertForHistory(final ResultConverterCache context, final ValueSpecification valueSpec, final Tenor value) {
     return null;
   }
 
   @Override
-  public String convertToText(ResultConverterCache context, ValueSpecification valueSpec, Tenor value) {
+  public String convertToText(final ResultConverterCache context, final ValueSpecification valueSpec, final Tenor value) {
     return getPeriodName(value);
   }
-  
+
   @Override
   public String getFormatterName() {
     return "TENOR";
   }
-  
-  private String getPeriodName(Tenor value) {
+
+  private String getPeriodName(final Tenor value) {
     return value.getPeriod().toString();
   }
 

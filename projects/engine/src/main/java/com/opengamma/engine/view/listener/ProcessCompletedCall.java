@@ -13,7 +13,7 @@ import com.google.common.base.Function;
 public class ProcessCompletedCall implements Function<ViewResultListener, Object> {
 
   @Override
-  public Object apply(ViewResultListener viewProcessListener) {
+  public Object apply(final ViewResultListener viewProcessListener) {
     viewProcessListener.processCompleted();
     return null;
   }

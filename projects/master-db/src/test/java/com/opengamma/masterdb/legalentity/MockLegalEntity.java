@@ -55,14 +55,14 @@ public class MockLegalEntity extends ManageableLegalEntity {
    * @param bundle   the bundle, not null
    * @param currency the currency, not null
    */
-  public MockLegalEntity(String name, ExternalIdBundle bundle, Currency currency) {
+  public MockLegalEntity(final String name, final ExternalIdBundle bundle, final Currency currency) {
     super(name, bundle);
     setCurrency(currency);
   }
 
   @Override
   public List<Account> getAccounts() {
-    Account account = new Account();
+    final Account account = new Account();
     return Collections.singletonList(account);
   }
 

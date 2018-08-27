@@ -75,8 +75,8 @@ public class RemoteCompiledViewDefinitionWithGraphs implements CompiledViewDefin
   }
 
   @Override
-  public CompiledViewDefinitionWithGraphs withMarketDataManipulationSelections(Map<String, DependencyGraph> newGraphsByConfig,
-      Map<String, Map<DistinctMarketDataSelector, Set<ValueSpecification>>> selectionsByConfig, Map<String, Map<DistinctMarketDataSelector, FunctionParameters>> paramsByConfig) {
+  public CompiledViewDefinitionWithGraphs withMarketDataManipulationSelections(final Map<String, DependencyGraph> newGraphsByConfig,
+      final Map<String, Map<DistinctMarketDataSelector, Set<ValueSpecification>>> selectionsByConfig, final Map<String, Map<DistinctMarketDataSelector, FunctionParameters>> paramsByConfig) {
     throw new UnsupportedOperationException("TODO: Implement this method over REST");
   }
 
@@ -142,8 +142,8 @@ public class RemoteCompiledViewDefinitionWithGraphs implements CompiledViewDefin
   @Override
   public Collection<DependencyGraphExplorer> getDependencyGraphExplorers() {
     final Collection<CompiledViewCalculationConfiguration> configurations = getCompiledCalculationConfigurations();
-    final List<DependencyGraphExplorer> explorers = new ArrayList<DependencyGraphExplorer>(configurations.size());
-    for (CompiledViewCalculationConfiguration configuration : configurations) {
+    final List<DependencyGraphExplorer> explorers = new ArrayList<>(configurations.size());
+    for (final CompiledViewCalculationConfiguration configuration : configurations) {
       explorers.add(getDependencyGraphExplorer(configuration.getName()));
     }
     return explorers;
@@ -162,7 +162,7 @@ public class RemoteCompiledViewDefinitionWithGraphs implements CompiledViewDefin
 
   @Override
   public Map<ValueSpecification, Set<ValueRequirement>> getTerminalValuesRequirements() {
-    final Map<ValueSpecification, Set<ValueRequirement>> terminalValuesRequirements = new HashMap<ValueSpecification, Set<ValueRequirement>>();
+    final Map<ValueSpecification, Set<ValueRequirement>> terminalValuesRequirements = new HashMap<>();
     final Collection<CompiledViewCalculationConfiguration> compiledCalculationConfigurations = getCompiledCalculationConfigurations();
     for (final CompiledViewCalculationConfiguration compiledCalculationConfiguration : compiledCalculationConfigurations) {
       merge(terminalValuesRequirements, compiledCalculationConfiguration.getTerminalOutputSpecifications());

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.csv;
@@ -19,12 +19,12 @@ import org.fudgemsg.FudgeContext;
 import org.fudgemsg.FudgeMsg;
 import org.fudgemsg.MutableFudgeMsg;
 
-import au.com.bytecode.opencsv.CSVParser;
-import au.com.bytecode.opencsv.CSVReader;
-
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
+
+import au.com.bytecode.opencsv.CSVParser;
+import au.com.bytecode.opencsv.CSVReader;
 
 /**
  * Provides an iterator for reading a CSV file that return each row as a fudge message
@@ -33,43 +33,43 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
  * The FudgeMessage returned by the iterator has the column headers as field names
  */
 public final class CSVDocumentReader implements Iterable<FudgeMsg> {
-    
-  private URL _docUrl;
-  private char _separator;
-  private char _quotechar; 
-  private char _escape;
-  private FudgeContext _fudgeContext;
-  
+
+  private final URL _docUrl;
+  private final char _separator;
+  private final char _quotechar;
+  private final char _escape;
+  private final FudgeContext _fudgeContext;
+
   /**
    * Constructs CSVDocumentReader using a comma for the separator.
-   * 
+   *
    * @param docUrl the URL to the CSV source.
    */
-  public CSVDocumentReader(URL docUrl) {
+  public CSVDocumentReader(final URL docUrl) {
     this(docUrl, CSVParser.DEFAULT_SEPARATOR, CSVParser.DEFAULT_QUOTE_CHARACTER, CSVParser.DEFAULT_ESCAPE_CHARACTER, OpenGammaFudgeContext.getInstance());
   }
-  
+
   /**
    * Constructs CSVDocumentReader with supplied separator.
-   * 
+   *
    * @param docUrl the URL to the CSV source.
    * @param separator the delimiter to use for separating entries.
    */
-  public CSVDocumentReader(URL docUrl, char separator) {
+  public CSVDocumentReader(final URL docUrl, final char separator) {
       this(docUrl, separator, CSVParser.DEFAULT_QUOTE_CHARACTER, CSVParser.DEFAULT_ESCAPE_CHARACTER, OpenGammaFudgeContext.getInstance());
   }
 
   /**
    * Constructs CSVDocumentReader with supplied separator and quote char.
-   * 
+   *
    * @param docUrl the URL to the CSV source.
    * @param separator the delimiter to use for separating entries
    * @param quotechar the character to use for quoted elements
    */
-  public CSVDocumentReader(URL docUrl, char separator, char quotechar) {
+  public CSVDocumentReader(final URL docUrl, final char separator, final char quotechar) {
       this(docUrl, separator, quotechar, CSVParser.DEFAULT_ESCAPE_CHARACTER, OpenGammaFudgeContext.getInstance());
   }
-  
+
   /**
    * Constructs CSVDocumentReader with supplied separator, quote char and escape char.
    *
@@ -79,7 +79,7 @@ public final class CSVDocumentReader implements Iterable<FudgeMsg> {
    * @param escape the character to use for escaping a separator or quote
    * @param fudgeContext the fudgeContext, not null
    */
-  public CSVDocumentReader(URL docUrl, char separator, char quotechar, char escape, FudgeContext fudgeContext) {
+  public CSVDocumentReader(final URL docUrl, final char separator, final char quotechar, final char escape, final FudgeContext fudgeContext) {
     ArgumentChecker.notNull(docUrl, "file");
     ArgumentChecker.notNull(separator, "separator");
     ArgumentChecker.notNull(quotechar, "quotechar");
@@ -91,18 +91,18 @@ public final class CSVDocumentReader implements Iterable<FudgeMsg> {
     _escape = escape;
     _fudgeContext = fudgeContext;
   }
-  
+
   @Override
   public Iterator<FudgeMsg> iterator() {
     return new FudgeMsgCSVIterator();
   }
-    
+
   private class FudgeMsgCSVIterator implements Iterator<FudgeMsg> {
-    
+
     private CSVReader _csvReader;
     private String[] _header;
     private String[] _currentRow;
-    
+
     public FudgeMsgCSVIterator() {
       try {
         InputStream is = _docUrl.openStream();
@@ -116,7 +116,7 @@ public final class CSVDocumentReader implements Iterable<FudgeMsg> {
         } else {
           trimColumnHeaders();
         }
-      } catch (IOException ex) {
+      } catch (final IOException ex) {
         throw new OpenGammaRuntimeException("IO Exception trying to create an Iterator", ex);
       }
     }
@@ -131,7 +131,7 @@ public final class CSVDocumentReader implements Iterable<FudgeMsg> {
     public boolean hasNext() {
       try {
         _currentRow = _csvReader.readNext();
-      } catch (IOException ex) {
+      } catch (final IOException ex) {
         throw new OpenGammaRuntimeException("IO Exception trying to read next row", ex);
       }
       if (_currentRow == null) {
@@ -143,10 +143,10 @@ public final class CSVDocumentReader implements Iterable<FudgeMsg> {
 
     @Override
     public FudgeMsg next() {
-      MutableFudgeMsg currentMsg = _fudgeContext.newMessage();
-      int size = getMessageSize();
+      final MutableFudgeMsg currentMsg = _fudgeContext.newMessage();
+      final int size = getMessageSize();
       for (int i = 0; i < size; i++) {
-        String currentRow = StringUtils.trimToNull(_currentRow[i]);
+        final String currentRow = StringUtils.trimToNull(_currentRow[i]);
         if (currentRow != null) {
           currentMsg.add(_header[i], currentRow);
         }

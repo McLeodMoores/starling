@@ -70,7 +70,7 @@ public class LegalEntityHistoryRequest extends AbstractHistoryRequest {
    * @param versionInstant     the version instant to retrieve, null for all versions
    * @param correctedToInstant the instant that the data should be corrected to, null for all corrections
    */
-  public LegalEntityHistoryRequest(final ObjectIdentifiable objectId, Instant versionInstant, Instant correctedToInstant) {
+  public LegalEntityHistoryRequest(final ObjectIdentifiable objectId, final Instant versionInstant, final Instant correctedToInstant) {
     super(objectId, versionInstant, correctedToInstant);
   }
 

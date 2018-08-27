@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.web.json;
@@ -42,10 +42,10 @@ import com.google.common.collect.Lists;
  * for details on the representation.
  */
 public class FudgeMsgJSONWriter implements Flushable, Closeable {
-  
+
   private static final String BLANK_FIELD_NAME = "";
   /**
-   * The taxonomy identifier to use for any messages that are passed without envelopes. 
+   * The taxonomy identifier to use for any messages that are passed without envelopes.
    */
   private static final short DEFAULT_TAXONOMY_ID = 0;
   /**
@@ -56,12 +56,12 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
    * The processing directive flags to add to the envelope header for any messages that are passed without envelopes.
    */
   private static final int DEFAULT_MESSAGE_PROCESSING_DIRECTIVES = 0;
-  
+
   /**
    * The fudge context
    */
   private final FudgeContext _fudgeContext;
-    
+
   /**
    * The JSON settings.
    */
@@ -74,10 +74,10 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
    * The JSON writer.
    */
   private JSONWriter _writer;
-  
+
   /**
    * Creates a new instance for writing a Fudge stream to a JSON writer.
-   * 
+   *
    * @param fudgeContext  the Fudge context, not null
    * @param writer  the underlying writer, not null
    */
@@ -88,7 +88,7 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
   /**
    * Creates a new stream writer for writing Fudge messages in JSON format to a given
    * {@link Writer}.
-   * 
+   *
    * @param fudgeContext  the Fudge context, not null
    * @param writer  the underlying writer, not null
    * @param settings  the JSON settings, not null
@@ -107,7 +107,7 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
     _underlyingWriter = writer;
     _fudgeContext = fudgeContext;
   }
-    
+
   /**
    * Gets the taxonomy.
    * @return the taxonomy
@@ -126,7 +126,7 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
   //-------------------------------------------------------------------------
   /**
    * Gets the JSON settings.
-   * 
+   *
    * @return the JSON settings, not null
    */
   public FudgeJSONSettings getSettings() {
@@ -135,7 +135,7 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
 
   /**
    * Gets the JSON writer being used, allocating one if necessary.
-   * 
+   *
    * @return the writer, not null
    */
   private JSONWriter getWriter() {
@@ -156,18 +156,18 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
 
   /**
    * Gets the underlying {@link Writer} that is wrapped by {@link JSONWriter} instances for messages.
-   * 
+   *
    * @return the writer, not null
    */
   public Writer getUnderlying() {
     return _underlyingWriter;
   }
-  
+
 
   //-------------------------------------------------------------------------
   /**
    * Writes a message with the given taxonomy, schema version and processing directive flags.
-   * 
+   *
    * @param message  message to write
    * @param taxonomyId  identifier of the taxonomy to use. If the taxonomy is recognized by the {@link FudgeContext} it will be used to reduce field names to ordinals where possible.
    * @param version  schema version
@@ -179,7 +179,7 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
 
   /**
    * Writes a message with the given taxonomy. Default schema version and processing directive flags are used.
-   * 
+   *
    * @param message  message to write
    * @param taxonomyId  the identifier of the taxonomy to use, if the taxonomy is recognized
    *   by the {@link FudgeContext} it will be used to reduce field names to ordinals where possible.
@@ -200,7 +200,7 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
 
   /**
    * Writes a message envelope with the given taxonomy.
-   * 
+   *
    * @param envelope message envelope to write
    * @param taxonomyId  the identifier of the taxonomy to use, if the taxonomy is recognized
    *   by the {@link FudgeContext} it will be used to reduce field names to ordinals where possible.
@@ -209,38 +209,38 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
     if (envelope == null) {
       return;
     }
-    int messageSize = FudgeSize.calculateMessageEnvelopeSize(getTaxonomy(taxonomyId), envelope);
+    final int messageSize = FudgeSize.calculateMessageEnvelopeSize(getTaxonomy(taxonomyId), envelope);
     writeEnvelopeHeader(envelope.getProcessingDirectives(), envelope.getVersion(), messageSize, taxonomyId);
     writeData(envelope.getMessage(), taxonomyId);
     writeMeta(envelope.getMessage(), taxonomyId);
     envelopeComplete();
   }
 
-  private void writeMeta(FudgeMsg message, int taxonomyId) {
+  private void writeMeta(final FudgeMsg message, final int taxonomyId) {
     try {
       getWriter().key("meta");
       getWriter().object();
-    } catch (JSONException e) {
+    } catch (final JSONException e) {
       wrapException("start of data", e);
     }
     writeFields(message, taxonomyId, true);
     try {
       getWriter().endObject();
-    } catch (JSONException e) {
+    } catch (final JSONException e) {
       wrapException("end of data", e);
     }
   }
 
-  private void writeData(FudgeMsg message, int taxonomyId) {
+  private void writeData(final FudgeMsg message, final int taxonomyId) {
     writeDataStart();
     writeFields(message, taxonomyId, false);
     writeDataEnd();
   }
-  
+
   private void writeDataEnd() {
     try {
       getWriter().endObject();
-    } catch (JSONException e) {
+    } catch (final JSONException e) {
       wrapException("end of data", e);
     }
   }
@@ -249,14 +249,14 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
     try {
       getWriter().key("data");
       getWriter().object();
-    } catch (JSONException e) {
+    } catch (final JSONException e) {
       wrapException("start of data", e);
     }
   }
 
-  private void writeFields(Iterable<FudgeField> fudgeMsg, final int taxonomyId, boolean meta) {
-    Map<String, List<FudgeField>> fieldName2Fields = new LinkedHashMap<String, List<FudgeField>>();
-    for (FudgeField fudgeField : fudgeMsg) {
+  private void writeFields(final Iterable<FudgeField> fudgeMsg, final int taxonomyId, final boolean meta) {
+    final Map<String, List<FudgeField>> fieldName2Fields = new LinkedHashMap<>();
+    for (final FudgeField fudgeField : fudgeMsg) {
       if (fudgeField.getName() != null) {
         final List<FudgeField> fields = getFieldList(fieldName2Fields, fudgeField.getName());
         fields.add(fudgeField);
@@ -268,12 +268,12 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
         fields.add(fudgeField);
       }
     }
-    
-    for (Entry<String, List<FudgeField>> entry : fieldName2Fields.entrySet()) {
-      List<FudgeField> fields = entry.getValue();
+
+    for (final Entry<String, List<FudgeField>> entry : fieldName2Fields.entrySet()) {
+      final List<FudgeField> fields = entry.getValue();
       if (!fields.isEmpty()) {
         if (fields.size() == 1) {
-          FudgeField fudgeField = fields.get(0);
+          final FudgeField fudgeField = fields.get(0);
           writeField(fudgeField.getName(), fudgeField.getOrdinal(), fudgeField.getType(), fudgeField.getValue(), taxonomyId, meta);
         } else {
           writeRepeatedFields(fields, taxonomyId, meta);
@@ -281,14 +281,14 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
       }
     }
   }
-  
-  private void writeRepeatedFields(final List<FudgeField> fields, int taxonomyId, boolean meta) {
-    FudgeField firstField = fields.iterator().next();
+
+  private void writeRepeatedFields(final List<FudgeField> fields, final int taxonomyId, final boolean meta) {
+    final FudgeField firstField = fields.iterator().next();
     try {
-      String key = fudgeFieldStart(firstField.getOrdinal(), firstField.getName(), taxonomyId);
+      final String key = fudgeFieldStart(firstField.getOrdinal(), firstField.getName(), taxonomyId);
       if (key != null) {
         getWriter().array();
-        for (FudgeField fudgeField : fields) {
+        for (final FudgeField fudgeField : fields) {
           if (fudgeField.getType().getTypeId() == FudgeWireType.SUB_MESSAGE_TYPE_ID) {
             fudgeSubMessageStart();
             writeFields((FudgeMsg) fudgeField.getValue(), taxonomyId, meta);
@@ -299,16 +299,16 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
         }
         getWriter().endArray();
       }
-    } catch (JSONException e) {
+    } catch (final JSONException e) {
       wrapException("writing repeated fields", e);
     }
   }
-    
-  private void writeField(String name, Integer ordinal, FudgeFieldType type, Object fieldValue, final int taxonomyId, boolean meta) {
+
+  private void writeField(final String name, final Integer ordinal, final FudgeFieldType type, final Object fieldValue, final int taxonomyId, final boolean meta) {
     if (fudgeFieldStart(ordinal, name, taxonomyId) != null) {
       if (type.getTypeId() == FudgeWireType.SUB_MESSAGE_TYPE_ID) {
         fudgeSubMessageStart();
-        FudgeMsg subMsg = (FudgeMsg) fieldValue;
+        final FudgeMsg subMsg = (FudgeMsg) fieldValue;
         writeFields(subMsg, taxonomyId, meta);
         fudgeSubMessageEnd();
       } else {
@@ -316,12 +316,12 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
       }
     }
   }
-  
+
   @SuppressWarnings("unchecked")
-  private void fudgeFieldValue(FudgeFieldType type, Object fieldValue, boolean meta) {
+  private void fudgeFieldValue(final FudgeFieldType type, Object fieldValue, final boolean meta) {
     try {
       if (meta) {
-        String typeIdToString = getSettings().fudgeTypeIdToString(type.getTypeId());
+        final String typeIdToString = getSettings().fudgeTypeIdToString(type.getTypeId());
         getWriter().value(typeIdToString);
       } else {
         if (type instanceof SecondaryFieldTypeBase<?, ?, ?>) {
@@ -363,39 +363,39 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
             break;
         }
       }
-    } catch (JSONException e) {
+    } catch (final JSONException e) {
       wrapException("field value", e);
     }
   }
-  
+
   private void writeArray(final double[] data) throws JSONException {
     getWriter().array();
-    for (int i = 0; i < data.length; i++) {
-      getWriter().value(data[i]);
+    for (final double element : data) {
+      getWriter().value(element);
     }
     getWriter().endArray();
   }
 
   private void writeArray(final float[] data) throws JSONException {
     getWriter().array();
-    for (int i = 0; i < data.length; i++) {
-      getWriter().value(data[i]);
+    for (final float element : data) {
+      getWriter().value(element);
     }
     getWriter().endArray();
   }
 
   private void writeArray(final long[] data) throws JSONException {
     getWriter().array();
-    for (int i = 0; i < data.length; i++) {
-      getWriter().value(data[i]);
+    for (final long element : data) {
+      getWriter().value(element);
     }
     getWriter().endArray();
   }
 
   private void writeArray(final int[] data) throws JSONException {
     getWriter().array();
-    for (int i = 0; i < data.length; i++) {
-      getWriter().value(data[i]);
+    for (final int element : data) {
+      getWriter().value(element);
     }
     getWriter().endArray();
 
@@ -403,44 +403,44 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
 
   private void writeArray(final short[] data) throws JSONException {
     getWriter().array();
-    for (int i = 0; i < data.length; i++) {
-      getWriter().value(data[i]);
+    for (final short element : data) {
+      getWriter().value(element);
     }
     getWriter().endArray();
   }
 
   private void writeArray(final byte[] data) throws JSONException {
     getWriter().array();
-    for (int i = 0; i < data.length; i++) {
-      getWriter().value(data[i]);
+    for (final byte element : data) {
+      getWriter().value(element);
     }
     getWriter().endArray();
   }
-  
+
   /**
    * Ends the JSON sub-object.
    */
   private void fudgeSubMessageEnd() {
     try {
       getWriter().endObject();
-    } catch (JSONException e) {
+    } catch (final JSONException e) {
       wrapException("end of submessage", e);
     }
   }
-  
+
   /**
-   * Starts a sub-object within the JSON object.  
+   * Starts a sub-object within the JSON object.
    */
   private void fudgeSubMessageStart() {
     try {
       getWriter().object();
-    } catch (JSONException e) {
+    } catch (final JSONException e) {
       wrapException("start of submessage", e);
     }
   }
-  
+
   private String fudgeFieldStart(final Integer ordinal, final String name, final int taxonomyId) {
-    String fieldName = null;    
+    String fieldName = null;
     try {
       if (getSettings().getPreserveFieldNames()) {
         if (name != null) {
@@ -465,7 +465,7 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
           fieldName = BLANK_FIELD_NAME;
         }
       }
-    } catch (JSONException e) {
+    } catch (final JSONException e) {
       wrapException("start of field", e);
     }
     return fieldName;
@@ -473,16 +473,16 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
 
   private String getFieldNameByOrdinal(final Integer ordinal, final int taxonomyId) {
     String result = ordinal.toString();
-    FudgeTaxonomy taxonomy = getTaxonomy(taxonomyId);
+    final FudgeTaxonomy taxonomy = getTaxonomy(taxonomyId);
     if (taxonomy != null) {
-      String fieldName = taxonomy.getFieldName(ordinal);
+      final String fieldName = taxonomy.getFieldName(ordinal);
       if (fieldName != null) {
         result = fieldName;
       }
     }
     return result;
   }
-  
+
   private List<FudgeField> getFieldList(final Map<String, List<FudgeField>> fieldName2Fields, final String fieldName) {
     List<FudgeField> fields = fieldName2Fields.get(fieldName);
     if (fields == null) {
@@ -495,7 +495,7 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
   private void envelopeComplete() {
     fudgeEnvelopeEnd();
   }
-  
+
   /**
    * Ends the JSON object.
    */
@@ -503,18 +503,18 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
     try {
       getWriter().endObject();
       clearWriter();
-    } catch (JSONException e) {
+    } catch (final JSONException e) {
       wrapException("end of message", e);
     }
   }
 
-  private void writeEnvelopeHeader(int processingDirectives, int version, int messageSize, int taxonomyId) {
+  private void writeEnvelopeHeader(final int processingDirectives, final int version, final int messageSize, final int taxonomyId) {
     fudgeEnvelopeStart(processingDirectives, version, taxonomyId);
   }
 
   /**
    * Writes a message envelope using the default taxonomy.
-   * 
+   *
    * @param envelope message envelope to write
    * @throws NullPointerException if the default taxonomy has not been specified
    */
@@ -526,7 +526,7 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
   /**
    * Wraps a JSON exception (which may in turn wrap {@link IOException} into
    * either a {@link FudgeRuntimeException} or {@link FudgeRuntimeIOException}.
-   * 
+   *
    * @param message message describing the current operation
    * @param e the originating exception
    */
@@ -547,12 +547,12 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
     if (getUnderlying() != null) {
       try {
         getUnderlying().flush();
-      } catch (IOException e) {
+      } catch (final IOException e) {
         throw new FudgeRuntimeIOException(e);
       }
     }
   }
-  
+
   /**
    * Flushes and closes the underlying {@link Writer}.
    */
@@ -562,31 +562,31 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
     if (getUnderlying() != null) {
       try {
         getUnderlying().close();
-      } catch (IOException ex) {
+      } catch (final IOException ex) {
         throw new FudgeRuntimeIOException(ex);
       }
     }
   }
-  
+
   /**
    * Begins a JSON object with the processing directives, schema and taxonomy.
-   * @param taxonomyId 
+   * @param taxonomyId
    */
-  private void fudgeEnvelopeStart(final int processingDirectives, final int schemaVersion, int taxonomyId) {
+  private void fudgeEnvelopeStart(final int processingDirectives, final int schemaVersion, final int taxonomyId) {
     try {
       getWriter().object();
-      if ((processingDirectives != 0) && (getSettings().getProcessingDirectivesField() != null)) {
+      if (processingDirectives != 0 && getSettings().getProcessingDirectivesField() != null) {
         getWriter().key(getSettings().getProcessingDirectivesField()).value(processingDirectives);
       }
-      if ((schemaVersion != 0) && (getSettings().getSchemaVersionField() != null)) {
+      if (schemaVersion != 0 && getSettings().getSchemaVersionField() != null) {
         getWriter().key(getSettings().getSchemaVersionField()).value(schemaVersion);
       }
-      if ((taxonomyId != DEFAULT_TAXONOMY_ID) && (getSettings().getTaxonomyField() != null)) {
+      if (taxonomyId != DEFAULT_TAXONOMY_ID && getSettings().getTaxonomyField() != null) {
         getWriter().key(getSettings().getTaxonomyField()).value(taxonomyId);
       }
-    } catch (JSONException e) {
+    } catch (final JSONException e) {
       wrapException("start of message", e);
     }
   }
-  
+
 }

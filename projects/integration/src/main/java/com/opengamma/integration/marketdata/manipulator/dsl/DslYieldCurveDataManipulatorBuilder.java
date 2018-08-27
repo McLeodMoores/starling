@@ -12,12 +12,12 @@ import groovy.lang.Closure;
  */
 /* package */ final class DslYieldCurveDataManipulatorBuilder extends YieldCurveDataManipulatorBuilder {
 
-  /* package */ DslYieldCurveDataManipulatorBuilder(YieldCurveDataSelector selector, Scenario scenario) {
+  /* package */ DslYieldCurveDataManipulatorBuilder(final YieldCurveDataSelector selector, final Scenario scenario) {
     super(selector, scenario);
   }
 
-  public void bucketedShifts(ScenarioShiftType shiftType, Closure<?> body) {
-    YieldCurveDataBucketedShiftsManipulatorBuilder builder =
+  public void bucketedShifts(final ScenarioShiftType shiftType, final Closure<?> body) {
+    final YieldCurveDataBucketedShiftsManipulatorBuilder builder =
         new YieldCurveDataBucketedShiftsManipulatorBuilder(getSelector(), getScenario(), shiftType);
     body.setDelegate(builder);
     body.setResolveStrategy(Closure.DELEGATE_FIRST);
@@ -25,8 +25,8 @@ import groovy.lang.Closure;
     builder.build();
   }
 
-  public void pointShifts(ScenarioShiftType shiftType, Closure<?> body) {
-    YieldCurveDataPointShiftsManipulatorBuilder builder =
+  public void pointShifts(final ScenarioShiftType shiftType, final Closure<?> body) {
+    final YieldCurveDataPointShiftsManipulatorBuilder builder =
         new YieldCurveDataPointShiftsManipulatorBuilder(getSelector(), getScenario(), shiftType);
     body.setDelegate(builder);
     body.setResolveStrategy(Closure.DELEGATE_FIRST);

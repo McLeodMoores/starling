@@ -26,7 +26,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 
 /**
- * Maps client LiveData IDs to server LiveData IDs by contacting a remote LiveData server. 
+ * Maps client LiveData IDs to server LiveData IDs by contacting a remote LiveData server.
  *
  */
 public class DistributedSpecificationResolver {
@@ -34,51 +34,51 @@ public class DistributedSpecificationResolver {
   private static final Logger LOGGER = LoggerFactory.getLogger(DistributedSpecificationResolver.class);
   private final FudgeRequestSender _requestSender;
   private final FudgeContext _fudgeContext;
-  
-  public DistributedSpecificationResolver(FudgeRequestSender requestSender) {
+
+  public DistributedSpecificationResolver(final FudgeRequestSender requestSender) {
     this(requestSender, OpenGammaFudgeContext.getInstance());
   }
-  
-  public DistributedSpecificationResolver(FudgeRequestSender requestSender, FudgeContext fudgeContext) {
+
+  public DistributedSpecificationResolver(final FudgeRequestSender requestSender, final FudgeContext fudgeContext) {
     ArgumentChecker.notNull(requestSender, "Request Sender");
     ArgumentChecker.notNull(fudgeContext, "Fudge Context");
     _requestSender = requestSender;
     _fudgeContext = fudgeContext;
   }
-  
+
   public LiveDataSpecification resolve(
-      LiveDataSpecification spec) {
-    
+      final LiveDataSpecification spec) {
+
     LOGGER.info("Sending message to resolve ", spec);
-    ResolveRequest resolveRequest = new ResolveRequest(spec);
-    FudgeMsg requestMessage = resolveRequest.toFudgeMsg(new FudgeSerializer(_fudgeContext));
+    final ResolveRequest resolveRequest = new ResolveRequest(spec);
+    final FudgeMsg requestMessage = resolveRequest.toFudgeMsg(new FudgeSerializer(_fudgeContext));
     final AtomicBoolean responseReceived = new AtomicBoolean(false);
-    final AtomicReference<LiveDataSpecification> resolved = new AtomicReference<LiveDataSpecification>();
+    final AtomicReference<LiveDataSpecification> resolved = new AtomicReference<>();
     _requestSender.sendRequest(requestMessage, new FudgeMessageReceiver() {
-      
+
       @Override
-      public void messageReceived(FudgeContext fudgeContext,
-          FudgeMsgEnvelope msgEnvelope) {
-        
-        FudgeMsg msg = msgEnvelope.getMessage();
-        ResolveResponse response = ResolveResponse.fromFudgeMsg(new FudgeDeserializer(_fudgeContext), msg);
+      public void messageReceived(final FudgeContext fudgeContext,
+          final FudgeMsgEnvelope msgEnvelope) {
+
+        final FudgeMsg msg = msgEnvelope.getMessage();
+        final ResolveResponse response = ResolveResponse.fromFudgeMsg(new FudgeDeserializer(_fudgeContext), msg);
         resolved.set(response.getResolvedSpecification());
         responseReceived.set(true);
-        
+
       }
     });
-    long start = System.currentTimeMillis();
+    final long start = System.currentTimeMillis();
     while (!responseReceived.get()) {
       try {
         Thread.sleep(100L);
-      } catch (InterruptedException e) {
+      } catch (final InterruptedException e) {
         Thread.interrupted();
       }
-      if ((System.currentTimeMillis() - start) >= TIMEOUT_MS) {
+      if (System.currentTimeMillis() - start >= TIMEOUT_MS) {
         throw new OpenGammaRuntimeException("Timeout. Waited for specification resolution response for " + TIMEOUT_MS + " with no response.");
       }
     }
-    
+
     return resolved.get();
   }
 

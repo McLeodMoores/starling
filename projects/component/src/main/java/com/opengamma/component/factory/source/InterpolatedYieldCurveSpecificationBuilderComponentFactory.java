@@ -55,15 +55,15 @@ public class InterpolatedYieldCurveSpecificationBuilderComponentFactory extends 
   /**
    * Initializes the source, setting up component information and REST.
    * Override using {@link #createInterpolatedYieldCurveSpecificationBuilder(ComponentRepository)}.
-   * 
+   *
    * @param repo  the component repository, not null
    * @param configuration  the remaining configuration, not null
    */
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
-    InterpolatedYieldCurveSpecificationBuilder builder = createInterpolatedYieldCurveSpecificationBuilder(repo);
-    
-    ComponentInfo info = new ComponentInfo(InterpolatedYieldCurveSpecificationBuilder.class, getClassifier());
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
+    final InterpolatedYieldCurveSpecificationBuilder builder = createInterpolatedYieldCurveSpecificationBuilder(repo);
+
+    final ComponentInfo info = new ComponentInfo(InterpolatedYieldCurveSpecificationBuilder.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     if (isPublishRest()) {
       info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteInterpolatedYieldCurveSpecificationBuilder.class);
@@ -76,11 +76,11 @@ public class InterpolatedYieldCurveSpecificationBuilderComponentFactory extends 
 
   /**
    * Creates the source without registering it.
-   * 
+   *
    * @param repo  the component repository, only used to register secondary items like lifecycle, not null
    * @return the source, not null
    */
-  protected ConfigDBInterpolatedYieldCurveSpecificationBuilder createInterpolatedYieldCurveSpecificationBuilder(ComponentRepository repo) {
+  protected ConfigDBInterpolatedYieldCurveSpecificationBuilder createInterpolatedYieldCurveSpecificationBuilder(final ComponentRepository repo) {
     return new ConfigDBInterpolatedYieldCurveSpecificationBuilder(getConfigSource());
   }
 

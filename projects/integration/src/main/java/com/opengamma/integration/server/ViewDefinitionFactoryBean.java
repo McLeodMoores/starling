@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.server;
@@ -82,7 +82,7 @@ public class ViewDefinitionFactoryBean extends SingletonFactoryBean<ViewDefiniti
     return _minDeltaCalculationPeriod;
   }
 
-  public void setMinDeltaCalculationPeriod(Long period) {
+  public void setMinDeltaCalculationPeriod(final Long period) {
     _minDeltaCalculationPeriod = period;
   }
 
@@ -90,11 +90,11 @@ public class ViewDefinitionFactoryBean extends SingletonFactoryBean<ViewDefiniti
     return _maxDeltaCalculationPeriod;
   }
 
-  public void setMaxDeltaCalculationPeriod(Long period) {
+  public void setMaxDeltaCalculationPeriod(final Long period) {
     _maxDeltaCalculationPeriod = period;
   }
 
-  public void setDeltaCalculationPeriod(Long deltaCalcPeriod) {
+  public void setDeltaCalculationPeriod(final Long deltaCalcPeriod) {
     setMinDeltaCalculationPeriod(deltaCalcPeriod);
     setMaxDeltaCalculationPeriod(deltaCalcPeriod);
   }
@@ -103,7 +103,7 @@ public class ViewDefinitionFactoryBean extends SingletonFactoryBean<ViewDefiniti
     return _minFullCalculationPeriod;
   }
 
-  public void setMinFullCalculationPeriod(Long period) {
+  public void setMinFullCalculationPeriod(final Long period) {
     _minFullCalculationPeriod = period;
   }
 
@@ -111,11 +111,11 @@ public class ViewDefinitionFactoryBean extends SingletonFactoryBean<ViewDefiniti
     return _maxFullCalculationPeriod;
   }
 
-  public void setMaxFullCalculationPeriod(Long period) {
+  public void setMaxFullCalculationPeriod(final Long period) {
     _maxFullCalculationPeriod = period;
   }
 
-  public void setFullCalculationPeriod(Long fullCalcPeriod) {
+  public void setFullCalculationPeriod(final Long fullCalcPeriod) {
     setMinFullCalculationPeriod(fullCalcPeriod);
     setMaxFullCalculationPeriod(fullCalcPeriod);
   }
@@ -130,7 +130,7 @@ public class ViewDefinitionFactoryBean extends SingletonFactoryBean<ViewDefiniti
 
   /**
    * Sets the value definitions as calcConfig -> (securityType -> requirementName).
-   * 
+   *
    * @param portfolioRequirements value definitions to set
    */
   public void setPortfolioRequirements(final Map<String, Map<String, String[]>> portfolioRequirements) {
@@ -167,19 +167,19 @@ public class ViewDefinitionFactoryBean extends SingletonFactoryBean<ViewDefiniti
 
   /**
    * Parses a requirement written in the form {@code valueName[constraint=value;constraint=value;...]}.
-   * 
+   *
    * @param requirement string to parse
    * @return the value name and constraints
    */
   private Pair<String, ValueProperties> parseValueRequirement(final String requirement) {
     // NOTE -- This is not at all robust as it is just a quick measure to drop constraints into the Spring config XML
-    int i = requirement.indexOf('[');
+    final int i = requirement.indexOf('[');
     if (i < 0) {
       return Pairs.of(requirement, ValueProperties.none());
     }
     final String valueName = requirement.substring(0, i);
     final ValueProperties.Builder builder = ValueProperties.builder();
-    for (String constraint : requirement.substring(i + 1, requirement.length() - 1).split(";")) {
+    for (final String constraint : requirement.substring(i + 1, requirement.length() - 1).split(";")) {
       final String[] pair = constraint.split("=");
       builder.with(pair[0], pair[1]);
     }
@@ -192,10 +192,10 @@ public class ViewDefinitionFactoryBean extends SingletonFactoryBean<ViewDefiniti
     if (getPortfolioScheme() != null && getPortfolioId() != null) {
       viewDefinition = new ViewDefinition(getName(), UniqueId.of(getPortfolioScheme(), getPortfolioId()), getUserName());
       if (getPortfolioRequirements() != null) {
-        for (Map.Entry<String, Map<String, String[]>> config : getPortfolioRequirements().entrySet()) {
-          ViewCalculationConfiguration calcConfig = getOrCreateCalcConfig(viewDefinition, config.getKey());
-          for (Map.Entry<String, String[]> security : config.getValue().entrySet()) {
-            for (String value : security.getValue()) {
+        for (final Map.Entry<String, Map<String, String[]>> config : getPortfolioRequirements().entrySet()) {
+          final ViewCalculationConfiguration calcConfig = getOrCreateCalcConfig(viewDefinition, config.getKey());
+          for (final Map.Entry<String, String[]> security : config.getValue().entrySet()) {
+            for (final String value : security.getValue()) {
               final Pair<String, ValueProperties> requirement = parseValueRequirement(value);
               calcConfig.addPortfolioRequirement(security.getKey(), requirement.getFirst(), requirement.getSecond());
             }
@@ -210,16 +210,16 @@ public class ViewDefinitionFactoryBean extends SingletonFactoryBean<ViewDefiniti
     viewDefinition.setMinFullCalculationPeriod(getMinFullCalculationPeriod());
     viewDefinition.setMaxFullCalculationPeriod(getMaxFullCalculationPeriod());
     if (getSpecificRequirements() != null) {
-      for (Entry<String, Set<String[]>> config : getSpecificRequirements().entrySet()) {
-        ViewCalculationConfiguration calcConfig = getOrCreateCalcConfig(viewDefinition, config.getKey());
-        for (String[] entry : config.getValue()) {
+      for (final Entry<String, Set<String[]>> config : getSpecificRequirements().entrySet()) {
+        final ViewCalculationConfiguration calcConfig = getOrCreateCalcConfig(viewDefinition, config.getKey());
+        for (final String[] entry : config.getValue()) {
           if (entry.length < 4) {
             throw new OpenGammaRuntimeException("Not enough members of array in specific requirements. Need [0]=Name [1]=ComputationTargetType [2]=UniqueIdScheme [3]=UniqueIdValue");
           }
           final Pair<String, ValueProperties> requirement = parseValueRequirement(entry[0]);
-          String type = entry[1];
-          String scheme = entry[2];
-          String value = entry[3];
+          final String type = entry[1];
+          final String scheme = entry[2];
+          final String value = entry[3];
           calcConfig.addSpecificRequirement(new ValueRequirement(requirement.getFirst(), ComputationTargetType.parse(type), UniqueId.of(scheme, value), requirement.getSecond()));
         }
       }
@@ -229,16 +229,16 @@ public class ViewDefinitionFactoryBean extends SingletonFactoryBean<ViewDefiniti
     }
 
     if (getDefaultProperties() != null) {
-      for (Entry<String, Map<String, String>> defaultProperties : getDefaultProperties().entrySet()) {
-        ViewCalculationConfiguration calcConfig = getOrCreateCalcConfig(viewDefinition, defaultProperties.getKey());
+      for (final Entry<String, Map<String, String>> defaultProperties : getDefaultProperties().entrySet()) {
+        final ViewCalculationConfiguration calcConfig = getOrCreateCalcConfig(viewDefinition, defaultProperties.getKey());
         final ValueProperties.Builder properties = ValueProperties.builder();
-        for (Entry<String, String> property : defaultProperties.getValue().entrySet()) {
+        for (final Entry<String, String> property : defaultProperties.getValue().entrySet()) {
           properties.with(property.getKey(), property.getValue());
         }
         calcConfig.setDefaultProperties(properties.get());
       }
     }
-    for (ViewCalculationConfiguration calcConfig : viewDefinition.getAllCalculationConfigurations()) {
+    for (final ViewCalculationConfiguration calcConfig : viewDefinition.getAllCalculationConfigurations()) {
       if (calcConfig.getDefaultProperties().getValues(ValuePropertyNames.CURRENCY) == null) {
         calcConfig.setDefaultProperties(calcConfig.getDefaultProperties().copy().with(ValuePropertyNames.CURRENCY, getDefaultCurrency()).get());
       }
@@ -246,7 +246,7 @@ public class ViewDefinitionFactoryBean extends SingletonFactoryBean<ViewDefiniti
     return viewDefinition;
   }
 
-  private ViewCalculationConfiguration getOrCreateCalcConfig(ViewDefinition viewDefinition, String configName) {
+  private ViewCalculationConfiguration getOrCreateCalcConfig(final ViewDefinition viewDefinition, final String configName) {
     ViewCalculationConfiguration calcConfig = viewDefinition.getCalculationConfiguration(configName);
     if (calcConfig == null) {
       calcConfig = new ViewCalculationConfiguration(viewDefinition, configName);

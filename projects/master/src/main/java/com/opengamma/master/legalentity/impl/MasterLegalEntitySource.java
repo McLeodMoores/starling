@@ -45,38 +45,38 @@ public class MasterLegalEntitySource extends AbstractMasterSource<LegalEntity, L
 
   @SuppressWarnings({"unchecked", "rawtypes" })
   @Override
-  public Collection<LegalEntity> get(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
-    LegalEntitySearchRequest searchRequest = new LegalEntitySearchRequest(bundle);
+  public Collection<LegalEntity> get(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
+    final LegalEntitySearchRequest searchRequest = new LegalEntitySearchRequest(bundle);
     searchRequest.setVersionCorrection(versionCorrection);
     return (List) getMaster().search(searchRequest).getLegalEntities();
   }
 
   @Override
-  public ManageableLegalEntity getSingle(ExternalId identifier) {
+  public ManageableLegalEntity getSingle(final ExternalId identifier) {
     return getSingle(identifier.toBundle());
   }
 
   @Override
-  public ManageableLegalEntity getSingle(ExternalIdBundle identifiers) {
+  public ManageableLegalEntity getSingle(final ExternalIdBundle identifiers) {
     return getSingle(identifiers, VersionCorrection.LATEST);
   }
 
   @Override
-  public Map<ExternalIdBundle, Collection<LegalEntity>> getAll(Collection<ExternalIdBundle> bundles, VersionCorrection versionCorrection) {
+  public Map<ExternalIdBundle, Collection<LegalEntity>> getAll(final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
     return AbstractSourceWithExternalBundle.getAll(this, bundles, versionCorrection);
   }
 
   @Override
-  public Collection<LegalEntity> get(ExternalIdBundle bundle) {
+  public Collection<LegalEntity> get(final ExternalIdBundle bundle) {
     return get(bundle, VersionCorrection.LATEST);
   }
 
   @Override
-  public ManageableLegalEntity getSingle(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
-    LegalEntitySearchRequest searchRequest = new LegalEntitySearchRequest(bundle);
+  public ManageableLegalEntity getSingle(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
+    final LegalEntitySearchRequest searchRequest = new LegalEntitySearchRequest(bundle);
     searchRequest.setPagingRequest(PagingRequest.ONE);
     searchRequest.setVersionCorrection(versionCorrection);
-    ManageableLegalEntity firstLegalEntity = getMaster().search(searchRequest).getFirstLegalEntity();
+    final ManageableLegalEntity firstLegalEntity = getMaster().search(searchRequest).getFirstLegalEntity();
     if (firstLegalEntity == null) {
       throw new DataNotFoundException("No legal entity: " + bundle + " " + versionCorrection);
     }
@@ -84,7 +84,7 @@ public class MasterLegalEntitySource extends AbstractMasterSource<LegalEntity, L
   }
 
   @Override
-  public Map<ExternalIdBundle, LegalEntity> getSingle(Collection<ExternalIdBundle> bundles, VersionCorrection versionCorrection) {
+  public Map<ExternalIdBundle, LegalEntity> getSingle(final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
     return AbstractSourceWithExternalBundle.getSingle(this, bundles, versionCorrection);
   }
 }

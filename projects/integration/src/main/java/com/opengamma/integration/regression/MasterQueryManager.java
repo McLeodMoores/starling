@@ -55,12 +55,12 @@ final class MasterQueryManager {
   private final Function<LegalEntityMaster, ? extends Iterable<LegalEntityDocument>> _legalEntityQuery;
   private final Function<ConventionMaster, ? extends Iterable<ConventionDocument>> _conventionQuery;
 
-  public MasterQueryManager(Function<SecurityMaster, ? extends Iterable<SecurityDocument>> securityQuery, Function<PositionMaster, ? extends Iterable<PositionDocument>> positionQuery,
-      Function<PortfolioMaster, ? extends Iterable<PortfolioDocument>> portfolioQuery, Function<ConfigMaster, ? extends Iterable<ConfigDocument>> configQuery,
-      Function<HistoricalTimeSeriesMaster, ? extends Iterable<HistoricalTimeSeriesInfoDocument>> htsQuery, Function<HolidayMaster, ? extends Iterable<HolidayDocument>> holidayQuery,
-      Function<ExchangeMaster, ? extends Iterable<ExchangeDocument>> exchangeQuery, Function<MarketDataSnapshotMaster, ? extends Iterable<MarketDataSnapshotDocument>> marketDataSnapshotQuery,
-      Function<LegalEntityMaster, ? extends Iterable<LegalEntityDocument>> legalEntityQuery,
-      Function<ConventionMaster, ? extends Iterable<ConventionDocument>> conventionQuery) {
+  public MasterQueryManager(final Function<SecurityMaster, ? extends Iterable<SecurityDocument>> securityQuery, final Function<PositionMaster, ? extends Iterable<PositionDocument>> positionQuery,
+      final Function<PortfolioMaster, ? extends Iterable<PortfolioDocument>> portfolioQuery, final Function<ConfigMaster, ? extends Iterable<ConfigDocument>> configQuery,
+      final Function<HistoricalTimeSeriesMaster, ? extends Iterable<HistoricalTimeSeriesInfoDocument>> htsQuery, final Function<HolidayMaster, ? extends Iterable<HolidayDocument>> holidayQuery,
+      final Function<ExchangeMaster, ? extends Iterable<ExchangeDocument>> exchangeQuery, final Function<MarketDataSnapshotMaster, ? extends Iterable<MarketDataSnapshotDocument>> marketDataSnapshotQuery,
+      final Function<LegalEntityMaster, ? extends Iterable<LegalEntityDocument>> legalEntityQuery,
+      final Function<ConventionMaster, ? extends Iterable<ConventionDocument>> conventionQuery) {
     super();
     _securityQuery = securityQuery;
     _positionQuery = positionQuery;
@@ -115,9 +115,9 @@ final class MasterQueryManager {
   }
 
   public static MasterQueryManager queryAll() {
-    return new MasterQueryManager(new SecurityQueryAll(), 
-                                  new PositionQueryAll(), 
-                                  new PortfolioQueryAll(), 
+    return new MasterQueryManager(new SecurityQueryAll(),
+                                  new PositionQueryAll(),
+                                  new PortfolioQueryAll(),
                                   new ConfigQueryAll(),
                                   new HtsQueryAll(),
                                   new HolidayQueryAll(),
@@ -126,22 +126,22 @@ final class MasterQueryManager {
                                   new OrgQueryAll(),
                                   new ConventionQueryAll());
   }
-  
+
   //no getAll() on AbstractMaster so have to write out for each one:
-  
+
   private static class SecurityQueryAll implements Function<SecurityMaster, List<SecurityDocument>> {
 
     @Override
-    public List<SecurityDocument> apply(SecurityMaster input) {
+    public List<SecurityDocument> apply(final SecurityMaster input) {
       return input.search(new SecuritySearchRequest()).getDocuments();
     }
-    
+
   }
 
   private static class PositionQueryAll implements Function<PositionMaster, List<PositionDocument>> {
 
     @Override
-    public List<PositionDocument> apply(PositionMaster input) {
+    public List<PositionDocument> apply(final PositionMaster input) {
       return input.search(new PositionSearchRequest()).getDocuments();
     }
 
@@ -150,7 +150,7 @@ final class MasterQueryManager {
   private static class PortfolioQueryAll implements Function<PortfolioMaster, List<PortfolioDocument>> {
 
     @Override
-    public List<PortfolioDocument> apply(PortfolioMaster input) {
+    public List<PortfolioDocument> apply(final PortfolioMaster input) {
       return input.search(new PortfolioSearchRequest()).getDocuments();
     }
 
@@ -159,7 +159,7 @@ final class MasterQueryManager {
   private static class ConfigQueryAll implements Function<ConfigMaster, List<ConfigDocument>> {
 
     @Override
-    public List<ConfigDocument> apply(ConfigMaster input) {
+    public List<ConfigDocument> apply(final ConfigMaster input) {
       return input.search(new ConfigSearchRequest<>()).getDocuments();
     }
 
@@ -168,7 +168,7 @@ final class MasterQueryManager {
   private static class HtsQueryAll implements Function<HistoricalTimeSeriesMaster, List<HistoricalTimeSeriesInfoDocument>> {
 
     @Override
-    public List<HistoricalTimeSeriesInfoDocument> apply(HistoricalTimeSeriesMaster input) {
+    public List<HistoricalTimeSeriesInfoDocument> apply(final HistoricalTimeSeriesMaster input) {
       return input.search(new HistoricalTimeSeriesInfoSearchRequest()).getDocuments();
     }
 
@@ -177,7 +177,7 @@ final class MasterQueryManager {
   private static class HolidayQueryAll implements Function<HolidayMaster, List<HolidayDocument>> {
 
     @Override
-    public List<HolidayDocument> apply(HolidayMaster input) {
+    public List<HolidayDocument> apply(final HolidayMaster input) {
       return input.search(new HolidaySearchRequest()).getDocuments();
     }
 
@@ -186,43 +186,43 @@ final class MasterQueryManager {
   private static class ExchangeQueryAll implements Function<ExchangeMaster, List<ExchangeDocument>> {
 
     @Override
-    public List<ExchangeDocument> apply(ExchangeMaster input) {
+    public List<ExchangeDocument> apply(final ExchangeMaster input) {
       return input.search(new ExchangeSearchRequest()).getDocuments();
     }
 
-    
+
   }
 
   private static class MarketDataSnapshotQueryAll implements Function<MarketDataSnapshotMaster, List<MarketDataSnapshotDocument>> {
 
     @Override
-    public List<MarketDataSnapshotDocument> apply(MarketDataSnapshotMaster input) {
+    public List<MarketDataSnapshotDocument> apply(final MarketDataSnapshotMaster input) {
       return input.search(new MarketDataSnapshotSearchRequest()).getDocuments();
     }
 
-    
+
   }
 
   private static class OrgQueryAll implements Function<LegalEntityMaster, List<LegalEntityDocument>> {
 
     @Override
-    public List<LegalEntityDocument> apply(LegalEntityMaster input) {
+    public List<LegalEntityDocument> apply(final LegalEntityMaster input) {
       return input.search(new LegalEntitySearchRequest()).getDocuments();
     }
 
-    
+
   }
-  
+
   private static class ConventionQueryAll implements Function<ConventionMaster, List<ConventionDocument>> {
 
     @Override
-    public List<ConventionDocument> apply(ConventionMaster input) {
+    public List<ConventionDocument> apply(final ConventionMaster input) {
       return input.search(new ConventionSearchRequest()).getDocuments();
     }
 
-    
+
   }
-  
-  
+
+
 
 }

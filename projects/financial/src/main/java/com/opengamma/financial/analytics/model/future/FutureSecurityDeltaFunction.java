@@ -31,7 +31,7 @@ import com.opengamma.util.async.AsynchronousExecution;
 
 /**
  * Provides sensitivity of FutureSecurity price with respect to itself, i.e. always unity. This is essential in order to show aggregate position in this underlying in a derivatives portfolio.
- * 
+ *
  * @author casey
  */
 public class FutureSecurityDeltaFunction extends AbstractFunction.NonCompiledInvoker {
@@ -41,7 +41,7 @@ public class FutureSecurityDeltaFunction extends AbstractFunction.NonCompiledInv
   }
 
   @Override
-  public Set<ComputedValue> execute(FunctionExecutionContext executionContext, FunctionInputs inputs, ComputationTarget target, Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     ValueProperties properties = desiredValue.getConstraints();
     String scaleProperty = Double.toString(1);
@@ -66,16 +66,16 @@ public class FutureSecurityDeltaFunction extends AbstractFunction.NonCompiledInv
   }
 
   @Override
-  public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
 
-    ValueProperties properties = (target.getSecurity() instanceof InterestRateFutureSecurity) ?
+    final ValueProperties properties = target.getSecurity() instanceof InterestRateFutureSecurity ?
         createValueProperties().withAny(ValuePropertyNames.SCALE).get() : createValueProperties().get();
 
     return Collections.singleton(new ValueSpecification(getValueRequirementName(), target.toSpecification(), properties));
   }
 
   @Override
-  public Set<ValueRequirement> getRequirements(FunctionCompilationContext context, ComputationTarget target, ValueRequirement desiredValue) {
+  public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     if (target.getSecurity() instanceof InterestRateFutureSecurity) {
       // Confirm Scale is set, by user or by default
       final ValueProperties constraints = desiredValue.getConstraints();

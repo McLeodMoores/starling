@@ -87,7 +87,7 @@ public class CachedHolidaySource extends AbstractSource<Holiday> implements Holi
         return getOrThrow(result);
       }
       return h;
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       _getHoliday1.putIfAbsent(uniqueId, ex);
       throw ex;
     }
@@ -106,48 +106,48 @@ public class CachedHolidaySource extends AbstractSource<Holiday> implements Holi
         return getOrThrow(result);
       }
       return h;
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       _getHoliday2.putIfAbsent(versionCorrection, objectId, ex);
       throw ex;
     }
   }
 
   @Override
-  public Collection<Holiday> get(Currency currency) {
+  public Collection<Holiday> get(final Currency currency) {
     Object result = _getHoliday3.get(currency);
     if (result != null) {
       return getOrThrow(result);
     }
     try {
-      Collection<Holiday> holidays = getUnderlying().get(currency);
+      final Collection<Holiday> holidays = getUnderlying().get(currency);
       result = _getHoliday3.putIfAbsent(currency, holidays);
       if (result != null) {
         return getOrThrow(result);
       } else {
         return holidays;
       }
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       _getHoliday3.putIfAbsent(currency, ex);
       throw ex;
     }
   }
 
   @Override
-  public Collection<Holiday> get(HolidayType holidayType,
-                                 ExternalIdBundle regionOrExchangeIds) {
+  public Collection<Holiday> get(final HolidayType holidayType,
+                                 final ExternalIdBundle regionOrExchangeIds) {
     Object result = _getHoliday4.get(holidayType, regionOrExchangeIds);
     if (result != null) {
       return getOrThrow(result);
     }
     try {
-      Collection<Holiday> holidays = getUnderlying().get(holidayType, regionOrExchangeIds);
+      final Collection<Holiday> holidays = getUnderlying().get(holidayType, regionOrExchangeIds);
       result = _getHoliday4.putIfAbsent(holidayType, regionOrExchangeIds, safeNull(holidays));
       if (result != null) {
         return getOrThrow(result);
       } else {
         return holidays;
       }
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       _getHoliday4.putIfAbsent(holidayType, regionOrExchangeIds, ex);
       throw ex;
     }
@@ -163,7 +163,7 @@ public class CachedHolidaySource extends AbstractSource<Holiday> implements Holi
         dates = existing;
       }
     }
-    Object result = dates.get(dateToCheck);
+    final Object result = dates.get(dateToCheck);
     if (result != null) {
       return (Boolean) getOrThrow(result);
     }
@@ -171,7 +171,7 @@ public class CachedHolidaySource extends AbstractSource<Holiday> implements Holi
       final boolean isHoliday = getUnderlying().isHoliday(dateToCheck, currency);
       dates.putIfAbsent(dateToCheck, isHoliday);
       return isHoliday;
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       dates.putIfAbsent(dateToCheck, ex);
       throw ex;
     }
@@ -179,7 +179,7 @@ public class CachedHolidaySource extends AbstractSource<Holiday> implements Holi
 
   @Override
   public boolean isHoliday(final LocalDate dateToCheck, final HolidayType holidayType, final ExternalIdBundle regionOrExchangeIds) {
-    Object result = _isHoliday2.get(dateToCheck, holidayType, regionOrExchangeIds);
+    final Object result = _isHoliday2.get(dateToCheck, holidayType, regionOrExchangeIds);
     if (result != null) {
       return (Boolean) getOrThrow(result);
     }
@@ -187,7 +187,7 @@ public class CachedHolidaySource extends AbstractSource<Holiday> implements Holi
       final boolean isHoliday = getUnderlying().isHoliday(dateToCheck, holidayType, regionOrExchangeIds);
       _isHoliday2.putIfAbsent(dateToCheck, holidayType, regionOrExchangeIds, isHoliday);
       return isHoliday;
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       _isHoliday2.putIfAbsent(dateToCheck, holidayType, regionOrExchangeIds, ex);
       throw ex;
     }
@@ -195,7 +195,7 @@ public class CachedHolidaySource extends AbstractSource<Holiday> implements Holi
 
   @Override
   public boolean isHoliday(final LocalDate dateToCheck, final HolidayType holidayType, final ExternalId regionOrExchangeId) {
-    Object result = _isHoliday3.get(dateToCheck, holidayType, regionOrExchangeId);
+    final Object result = _isHoliday3.get(dateToCheck, holidayType, regionOrExchangeId);
     if (result != null) {
       return (Boolean) getOrThrow(result);
     }
@@ -203,7 +203,7 @@ public class CachedHolidaySource extends AbstractSource<Holiday> implements Holi
       final boolean isHoliday = getUnderlying().isHoliday(dateToCheck, holidayType, regionOrExchangeId);
       _isHoliday3.putIfAbsent(dateToCheck, holidayType, regionOrExchangeId, isHoliday);
       return isHoliday;
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       _isHoliday3.putIfAbsent(dateToCheck, holidayType, regionOrExchangeId, ex);
       throw ex;
     }

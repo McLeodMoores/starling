@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph;
@@ -51,7 +51,7 @@ public class DepGraphInputMergingTest extends AbstractDependencyGraphBuilderTest
     }
 
     @Override
-    public Set<ComputedValue> execute(FunctionExecutionContext executionContext, FunctionInputs inputs, ComputationTarget target, Set<ValueRequirement> desiredValues) {
+    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
       return null;
     }
 
@@ -60,7 +60,7 @@ public class DepGraphInputMergingTest extends AbstractDependencyGraphBuilderTest
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(FunctionCompilationContext context, ComputationTarget target, ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
       final String aux = desiredValue.getConstraints().getSingleValue("AUX'");
       if (desiredValue.getValueName() == _spec1.getValueName()) {
         return createRequirements(_req1, aux);
@@ -71,8 +71,8 @@ public class DepGraphInputMergingTest extends AbstractDependencyGraphBuilderTest
 
     @Override
     public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
-      final Set<ValueSpecification> result = new HashSet<ValueSpecification>();
-      for (ValueRequirement input : inputs.values()) {
+      final Set<ValueSpecification> result = new HashSet<>();
+      for (final ValueRequirement input : inputs.values()) {
         if (input.getValueName() == _req1.getValueName()) {
           result.add(_spec1);
         } else {
@@ -83,7 +83,7 @@ public class DepGraphInputMergingTest extends AbstractDependencyGraphBuilderTest
     }
 
     @Override
-    public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target) {
+    public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
       return ImmutableSet.of(_spec1, _spec2);
     }
 

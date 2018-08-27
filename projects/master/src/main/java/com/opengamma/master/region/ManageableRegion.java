@@ -72,7 +72,7 @@ public class ManageableRegion extends DirectBean implements Region, Serializable
    * For example, a country might be a member of the World, UN, European Union and NATO.
    */
   @PropertyDefinition(set = "setClearAddAll")
-  private Set<UniqueId> _parentRegionIds = new HashSet<UniqueId>();
+  private final Set<UniqueId> _parentRegionIds = new HashSet<>();
   /**
    * The short descriptive name for the region.
    * This field must not be null for the object to be valid.
@@ -101,7 +101,7 @@ public class ManageableRegion extends DirectBean implements Region, Serializable
    * Create an instance from another region instance.
    * <p>
    * This copies the specified region creating an independent copy.
-   * 
+   *
    * @param region  the region to copy, not null
    */
   public ManageableRegion(final Region region) {
@@ -118,10 +118,10 @@ public class ManageableRegion extends DirectBean implements Region, Serializable
   //-------------------------------------------------------------------------
   /**
    * Adds an external identifier to the bundle representing this region.
-   * 
+   *
    * @param identifier  the identifier to add, not null
    */
-  public void addExternalId(ExternalId identifier) {
+  public void addExternalId(final ExternalId identifier) {
     setExternalIdBundle(getExternalIdBundle().withExternalId(identifier));
   }
 
@@ -130,17 +130,18 @@ public class ManageableRegion extends DirectBean implements Region, Serializable
    * Gets the country.
    * @return the value of the property
    */
+  @Override
   public Country getCountry() {
-    String code = _externalIdBundle.getValue(ExternalSchemes.ISO_COUNTRY_ALPHA2);
-    return (code != null ? Country.of(code) : null);
+    final String code = _externalIdBundle.getValue(ExternalSchemes.ISO_COUNTRY_ALPHA2);
+    return code != null ? Country.of(code) : null;
   }
 
   /**
    * Sets the country, stored in the identifier set.
-   * 
+   *
    * @param country  the country to set, null to remove any defined country
    */
-  public void setCountry(Country country) {
+  public void setCountry(final Country country) {
     setExternalIdBundle(getExternalIdBundle().withoutScheme(ExternalSchemes.ISO_CURRENCY_ALPHA3));
     if (country != null) {
       addExternalId(ExternalSchemes.countryRegionId(country));
@@ -152,17 +153,18 @@ public class ManageableRegion extends DirectBean implements Region, Serializable
    * Gets the currency.
    * @return the value of the property
    */
+  @Override
   public Currency getCurrency() {
-    String code = _externalIdBundle.getValue(ExternalSchemes.ISO_CURRENCY_ALPHA3);
-    return (code != null ? Currency.of(code) : null);
+    final String code = _externalIdBundle.getValue(ExternalSchemes.ISO_CURRENCY_ALPHA3);
+    return code != null ? Currency.of(code) : null;
   }
 
   /**
    * Sets the currency, stored in the identifier set.
-   * 
+   *
    * @param currency  the currency to set, null to remove any currency
    */
-  public void setCurrency(Currency currency) {
+  public void setCurrency(final Currency currency) {
     setExternalIdBundle(getExternalIdBundle().withoutScheme(ExternalSchemes.ISO_CURRENCY_ALPHA3));
     if (currency != null) {
       addExternalId(ExternalSchemes.currencyRegionId(currency));
@@ -176,17 +178,18 @@ public class ManageableRegion extends DirectBean implements Region, Serializable
    * for municipalities.
    * @return the value of the property
    */
+  @Override
   public ZoneId getTimeZone() {
-    String id = _externalIdBundle.getValue(ExternalSchemes.TZDB_TIME_ZONE);
-    return (id != null ? ZoneId.of(id) : null);
+    final String id = _externalIdBundle.getValue(ExternalSchemes.TZDB_TIME_ZONE);
+    return id != null ? ZoneId.of(id) : null;
   }
 
   /**
    * Sets the time-zone, stored in the identifier set.
-   * 
+   *
    * @param timeZone  the time-zone to set, null to remove any time-zone
    */
-  public void setTimeZone(ZoneId timeZone) {
+  public void setTimeZone(final ZoneId timeZone) {
     setExternalIdBundle(getExternalIdBundle().withoutScheme(ExternalSchemes.TZDB_TIME_ZONE));
     if (timeZone != null) {
       addExternalId(ExternalSchemes.timeZoneRegionId(timeZone));
@@ -303,7 +306,7 @@ public class ManageableRegion extends DirectBean implements Region, Serializable
   /**
    * Gets the unique identifiers of the parent regions.
    * For example, a country might be a member of the World, UN, European Union and NATO.
-   * @return the value of the property
+   * @return the value of the property, not null
    */
   public Set<UniqueId> getParentRegionIds() {
     return _parentRegionIds;
@@ -312,9 +315,10 @@ public class ManageableRegion extends DirectBean implements Region, Serializable
   /**
    * Sets the unique identifiers of the parent regions.
    * For example, a country might be a member of the World, UN, European Union and NATO.
-   * @param parentRegionIds  the new value of the property
+   * @param parentRegionIds  the new value of the property, not null
    */
   public void setParentRegionIds(Set<UniqueId> parentRegionIds) {
+    JodaBeanUtils.notNull(parentRegionIds, "parentRegionIds");
     this._parentRegionIds.clear();
     this._parentRegionIds.addAll(parentRegionIds);
   }
@@ -682,6 +686,7 @@ public class ManageableRegion extends DirectBean implements Region, Serializable
 
     @Override
     protected void validate(Bean bean) {
+      JodaBeanUtils.notNull(((ManageableRegion) bean)._parentRegionIds, "parentRegionIds");
       JodaBeanUtils.notNull(((ManageableRegion) bean)._data, "data");
     }
 

@@ -31,7 +31,7 @@ public class ModifyPortfolioDbPortfolioMasterWorkerRemoveTest extends AbstractDb
   private static final Logger LOGGER = LoggerFactory.getLogger(ModifyPortfolioDbPortfolioMasterWorkerRemoveTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public ModifyPortfolioDbPortfolioMasterWorkerRemoveTest(String databaseType, String databaseVersion) {
+  public ModifyPortfolioDbPortfolioMasterWorkerRemoveTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion, false);
     LOGGER.info("running testcases for {}", databaseType);
   }
@@ -39,24 +39,24 @@ public class ModifyPortfolioDbPortfolioMasterWorkerRemoveTest extends AbstractDb
   //-------------------------------------------------------------------------
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_remove_versioned_notFound() {
-    UniqueId uniqueId = UniqueId.of("DbPrt", "0", "0");
+    final UniqueId uniqueId = UniqueId.of("DbPrt", "0", "0");
     _prtMaster.remove(uniqueId);
   }
 
   @Test
   public void test_remove_removed() {
-    Instant now = Instant.now(_prtMaster.getClock());
-    
-    UniqueId uniqueId = UniqueId.of("DbPrt", "201", "1");
+    final Instant now = Instant.now(_prtMaster.getClock());
+
+    final UniqueId uniqueId = UniqueId.of("DbPrt", "201", "1");
     _prtMaster.remove(uniqueId);
-    PortfolioDocument test = _prtMaster.get(uniqueId);
-    
+    final PortfolioDocument test = _prtMaster.get(uniqueId);
+
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version2Instant, test.getVersionFromInstant());
     assertEquals(now, test.getVersionToInstant());
     assertEquals(_version2Instant, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    ManageablePortfolio portfolio = test.getPortfolio();
+    final ManageablePortfolio portfolio = test.getPortfolio();
     assertNotNull(portfolio);
     assertEquals(uniqueId, portfolio.getUniqueId());
     assertEquals("TestNode212", portfolio.getRootNode().getName());

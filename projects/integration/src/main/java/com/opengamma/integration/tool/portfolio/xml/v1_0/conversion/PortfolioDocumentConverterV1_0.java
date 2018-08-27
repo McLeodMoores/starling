@@ -32,25 +32,25 @@ public class PortfolioDocumentConverterV1_0  // CSIGNORE underscore in class nam
   private static final Logger LOGGER = LoggerFactory.getLogger(PortfolioDocumentConverterV1_0.class);
 
   @Override
-  public Iterable<VersionedPortfolioHandler> convert(PortfolioDocumentV1_0 portfolioDocument) {
+  public Iterable<VersionedPortfolioHandler> convert(final PortfolioDocumentV1_0 portfolioDocument) {
 
-    Iterable<Portfolio> portfolios = extractPortfolios(portfolioDocument);
+    final Iterable<Portfolio> portfolios = extractPortfolios(portfolioDocument);
 
-    Iterable<VersionedPortfolioHandler> transformed =
+    final Iterable<VersionedPortfolioHandler> transformed =
         Iterables.transform(portfolios, new PortfolioExtractor());
 
     // Portfolios with errors will leave nulls in the iterable which we need to remove
     return Iterables.filter(transformed, new Predicate<VersionedPortfolioHandler>() {
       @Override
-      public boolean apply(VersionedPortfolioHandler versionedPortfolioHandler) {
+      public boolean apply(final VersionedPortfolioHandler versionedPortfolioHandler) {
         return versionedPortfolioHandler != null;
       }
     });
   }
 
-  private Iterable<Portfolio> extractPortfolios(PortfolioDocumentV1_0 portfolioDocument) {
+  private Iterable<Portfolio> extractPortfolios(final PortfolioDocumentV1_0 portfolioDocument) {
 
-    Set<Portfolio> portfolios = portfolioDocument.getPortfolios();
+    final Set<Portfolio> portfolios = portfolioDocument.getPortfolios();
 
     return portfolios == null || portfolios.isEmpty() ?
         // File didn't have a portfolio, so create one
@@ -64,14 +64,14 @@ public class PortfolioDocumentConverterV1_0  // CSIGNORE underscore in class nam
    * @param portfolioDocument the portfolio document to create a dummy portfolio for
    * @return the dummy portfolio
    */
-  private Portfolio createDummyPortfolio(PortfolioDocumentV1_0 portfolioDocument) {
+  private Portfolio createDummyPortfolio(final PortfolioDocumentV1_0 portfolioDocument) {
 
-    Portfolio pf = new Portfolio();
+    final Portfolio pf = new Portfolio();
 
     // We leave the portfolio unnamed so a name can be provided from the command line
 
     // If we have trades with no positions, just add them to the dummy portfolio. If we have positions, just use them
-    Set<Position> positions = portfolioDocument.getPositions();
+    final Set<Position> positions = portfolioDocument.getPositions();
 
     if (positions == null || positions.isEmpty()) {
       pf.setTrades(portfolioDocument.getTrades());
@@ -87,7 +87,7 @@ public class PortfolioDocumentConverterV1_0  // CSIGNORE underscore in class nam
    */
   private static class PortfolioExtractor implements Function<Portfolio, VersionedPortfolioHandler> {
 
-    private XmlExternalIdValidator _xmlExternalIdValidator = new XmlExternalIdValidator();
+    private final XmlExternalIdValidator _xmlExternalIdValidator = new XmlExternalIdValidator();
 
     /**
      * Extracts the details from the supplied portfolio.
@@ -98,12 +98,12 @@ public class PortfolioDocumentConverterV1_0  // CSIGNORE underscore in class nam
     @Override
     public VersionedPortfolioHandler apply(final Portfolio portfolio) {
       try {
-        Iterable<PortfolioPosition> positions = new PortfolioConverter(portfolio, _xmlExternalIdValidator).getPositions();
+        final Iterable<PortfolioPosition> positions = new PortfolioConverter(portfolio, _xmlExternalIdValidator).getPositions();
         return new VersionedPortfolioHandler(
             portfolio.getName(),
             positions);
 
-      } catch (PortfolioParsingException e) {
+      } catch (final PortfolioParsingException e) {
         LOGGER.error("Unable to parse portfolio [" + portfolio.getName() + "] - it will be skipped", e);
         return null;
       }

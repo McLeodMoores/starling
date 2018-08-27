@@ -39,11 +39,11 @@ public final class FlexiBeanFudgeBuilder implements FudgeBuilder<FlexiBean> {
 
   //-------------------------------------------------------------------------
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, FlexiBean bean) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final FlexiBean bean) {
     final MutableFudgeMsg msg = serializer.newMessage();
-    Map<String, Object> data = bean.toMap();
-    for (Entry<String, Object> entry : data.entrySet()) {
-      Object value = entry.getValue();
+    final Map<String, Object> data = bean.toMap();
+    for (final Entry<String, Object> entry : data.entrySet()) {
+      final Object value = entry.getValue();
       if (value == null) {
         msg.add(entry.getKey(), null, FudgeWireType.INDICATOR, IndicatorType.INSTANCE);
       } else {
@@ -54,16 +54,16 @@ public final class FlexiBeanFudgeBuilder implements FudgeBuilder<FlexiBean> {
   }
 
   @Override
-  public FlexiBean buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
+  public FlexiBean buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     final FlexiBean bean = new FlexiBean();
-    List<FudgeField> fields = msg.getAllFields();
-    for (FudgeField field : fields) {
+    final List<FudgeField> fields = msg.getAllFields();
+    for (final FudgeField field : fields) {
       if (field.getName() == null) {
         // Ignore fields without a text label
         continue;
       }
       Object value = deserializer.fieldValueToObject(field);
-      value = (value instanceof IndicatorType) ? null : value;
+      value = value instanceof IndicatorType ? null : value;
       bean.set(field.getName(), value);
     }
     return bean;

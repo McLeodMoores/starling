@@ -37,7 +37,7 @@ public class Portfolio {
     return _name;
   }
 
-  public void setName(String name) {
+  public void setName(final String name) {
     _name = name;
   }
 
@@ -45,7 +45,7 @@ public class Portfolio {
     return _positions;
   }
 
-  public void setPositions(Set<Position> positions) {
+  public void setPositions(final Set<Position> positions) {
     _positions = positions;
   }
 
@@ -53,7 +53,7 @@ public class Portfolio {
     return _trades;
   }
 
-  public void setTrades(Set<Trade> trades) {
+  public void setTrades(final Set<Trade> trades) {
     _trades = trades;
   }
 
@@ -61,7 +61,7 @@ public class Portfolio {
     return _portfolios;
   }
 
-  public void setPortfolios(Set<Portfolio> portfolios) {
+  public void setPortfolios(final Set<Portfolio> portfolios) {
     _portfolios = portfolios;
   }
 }

@@ -20,7 +20,7 @@ public class CycleFragmentCompletedCall extends AbstractCompletedResultsCall {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CycleFragmentCompletedCall.class);
 
-  public CycleFragmentCompletedCall(ViewComputationResultModel fullResult, ViewDeltaResultModel deltaResult) {
+  public CycleFragmentCompletedCall(final ViewComputationResultModel fullResult, final ViewDeltaResultModel deltaResult) {
     super(fullResult, deltaResult);
   }
 
@@ -33,7 +33,7 @@ public class CycleFragmentCompletedCall extends AbstractCompletedResultsCall {
   }
 
   @Override
-  public Object apply(ViewResultListener listener) {
+  public Object apply(final ViewResultListener listener) {
     listener.cycleFragmentCompleted(getFullFragment(), getDeltaFragment());
     return null;
   }

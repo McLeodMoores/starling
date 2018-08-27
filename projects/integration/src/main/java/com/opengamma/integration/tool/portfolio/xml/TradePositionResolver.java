@@ -105,7 +105,7 @@ public class TradePositionResolver {
    *
    * @param tradeIds the known set of trade ids
    */
-  public TradePositionResolver(Set<String> tradeIds) {
+  public TradePositionResolver(final Set<String> tradeIds) {
     ArgumentChecker.notNull(tradeIds, "_tradeIds");
     _tradeIds = tradeIds;
   }
@@ -176,18 +176,18 @@ public class TradePositionResolver {
    * @param tradeId the trade to be added to the position
    * @throws IllegalStateException if this method is called after the {@link #resolve()} method
    */
-  public void addToPosition(String positionId, String tradeId) {
+  public void addToPosition(final String positionId, final String tradeId) {
     if (_isResolved) {
       throw new IllegalStateException("Cannot add position data as resolve() method has been called.");
     }
     _positionBuilder.put(positionId, tradeId);
   }
 
-  public void addPositionToPortfolio(String portfolioId, String positionId) {
+  public void addPositionToPortfolio(final String portfolioId, final String positionId) {
 
   }
 
-  public void addTradeToPortfolio(String portfolioId, String tradeId) {
+  public void addTradeToPortfolio(final String portfolioId, final String tradeId) {
 
   }
 
@@ -218,7 +218,7 @@ public class TradePositionResolver {
     return ImmutableSet.copyOf(Iterables.filter(_tradeIds,
         new Predicate<String>() {
           @Override
-          public boolean apply(String tradeId) {
+          public boolean apply(final String tradeId) {
             return !_invertedPositions.containsKey(tradeId);
           }
         }
@@ -229,7 +229,7 @@ public class TradePositionResolver {
     return Multimaps.filterKeys(_invertedPositions,
         new Predicate<String>() {
           @Override
-          public boolean apply(String s) {
+          public boolean apply(final String s) {
             return _invertedPositions.get(s).size() > 1;
           }
         }
@@ -240,7 +240,7 @@ public class TradePositionResolver {
     return Iterables.filter(_invertedPositions.keySet(),
         new Predicate<String>() {
           @Override
-          public boolean apply(String s) {
+          public boolean apply(final String s) {
             return !_tradeIds.contains(s);
           }
         }

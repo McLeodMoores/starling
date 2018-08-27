@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.target.resolver;
@@ -21,7 +21,7 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Partial implementation of {@link Resolver} based on a {@link Source}.
- * 
+ *
  * @param <S> the type of the source
  */
 public abstract class AbstractSourceResolver<T extends UniqueIdentifiable, S extends Source<T> & ChangeProvider> extends AbstractIdentifierResolver implements Resolver<T> { //CSIGNORE
@@ -29,7 +29,7 @@ public abstract class AbstractSourceResolver<T extends UniqueIdentifiable, S ext
   private final ExternalScheme _identifierScheme;
   private final S _underlying;
 
-  public AbstractSourceResolver(final ExternalScheme identifierScheme, S underlying) {
+  public AbstractSourceResolver(final ExternalScheme identifierScheme, final S underlying) {
     ArgumentChecker.notNull(identifierScheme, "identifierScheme");
     ArgumentChecker.notNull(underlying, "underlying");
     _identifierScheme = identifierScheme;
@@ -46,7 +46,7 @@ public abstract class AbstractSourceResolver<T extends UniqueIdentifiable, S ext
 
   /**
    * Queries the underlying using whatever API calls are available to resolve the symbolic name.
-   * 
+   *
    * @param name the symbolic name of the item to retrieve, not null
    * @param versionCorrection the version/correction to resolve at, not null
    * @return the resolved object, or null if none
@@ -56,10 +56,10 @@ public abstract class AbstractSourceResolver<T extends UniqueIdentifiable, S ext
   // Resolver
 
   @Override
-  public T resolveObject(UniqueId uniqueId, VersionCorrection versionCorrection) {
+  public T resolveObject(final UniqueId uniqueId, final VersionCorrection versionCorrection) {
     try {
       return getUnderlying().get(uniqueId);
-    } catch (DataNotFoundException e) {
+    } catch (final DataNotFoundException e) {
       return null;
     }
   }
@@ -72,9 +72,9 @@ public abstract class AbstractSourceResolver<T extends UniqueIdentifiable, S ext
   // IdentifierResolver
 
   @Override
-  public UniqueId resolveExternalId(ExternalIdBundle identifiers, VersionCorrection versionCorrection) {
+  public UniqueId resolveExternalId(final ExternalIdBundle identifiers, final VersionCorrection versionCorrection) {
     final Set<String> names = identifiers.getValues(getIdentifierScheme());
-    for (String name : names) {
+    for (final String name : names) {
       final UniqueIdentifiable value = lookupByName(name, versionCorrection);
       if (value != null) {
         return value.getUniqueId();
@@ -84,10 +84,10 @@ public abstract class AbstractSourceResolver<T extends UniqueIdentifiable, S ext
   }
 
   @Override
-  public UniqueId resolveObjectId(ObjectId identifier, VersionCorrection versionCorrection) {
+  public UniqueId resolveObjectId(final ObjectId identifier, final VersionCorrection versionCorrection) {
     try {
       return getUnderlying().get(identifier, versionCorrection).getUniqueId();
-    } catch (DataNotFoundException e) {
+    } catch (final DataNotFoundException e) {
       return null;
     }
   }

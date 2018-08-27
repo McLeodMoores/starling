@@ -25,33 +25,36 @@ public final class FactorType {
    * A constant representing equity risk factors
    */
   public static final FactorType EQUITY = new FactorType("equityRiskFactor");
-  
-  private String _type;
 
-  private FactorType(String type) {
+  private final String _type;
+
+  private FactorType(final String type) {
     _type = type;
   }
-  
-  public static FactorType of(String factorType) {
+
+  public static FactorType of(final String factorType) {
     return new FactorType(factorType);
   }
-  
+
   public String getFactorType() {
     return _type;
   }
-  
-  public boolean equals(Object o) {
+
+  @Override
+  public boolean equals(final Object o) {
     if (!(o instanceof FactorType)) {
       return false;
     }
-    FactorType other = (FactorType) o;
+    final FactorType other = (FactorType) o;
     return other.getFactorType().equals(getFactorType());
   }
-  
+
+  @Override
   public int hashCode() {
     return getFactorType().hashCode();
   }
-  
+
+  @Override
   public String toString() {
     return getFactorType();
   }

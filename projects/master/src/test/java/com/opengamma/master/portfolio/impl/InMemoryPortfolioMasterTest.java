@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.portfolio.impl;
@@ -35,34 +35,34 @@ import com.opengamma.util.test.TestGroup;
 public class InMemoryPortfolioMasterTest {
 
   private static final ObjectIdSupplier POSITION_ID_SUPPLIER = new ObjectIdSupplier("Pos");
-  
+
   private InMemoryPortfolioMaster _emptyMaster;
   private InMemoryPortfolioMaster _populatedMaster;
   private PortfolioDocument _prt1;
   private PortfolioDocument _prt2;
   private PortfolioDocument _prt3;
-  
+
   @BeforeMethod
   public void setUp() {
     _emptyMaster = new InMemoryPortfolioMaster();
     _populatedMaster = new InMemoryPortfolioMaster();
-    
+
     _prt1 = _populatedMaster.add(new PortfolioDocument(generatePortfolio("Port1")));
     _prt2 = _populatedMaster.add(new PortfolioDocument(generatePortfolio("Port2")));
     _prt3 = _populatedMaster.add(new PortfolioDocument(generatePortfolio("Port3")));
   }
-  
+
   private static ManageablePortfolio generatePortfolio() {
     return generatePortfolio("Test");
   }
-  
-  private static ManageablePortfolio generatePortfolio(String name) {
-    ManageablePortfolioNode rootNode = generatePortfolioNodes(name, 2, 2);
+
+  private static ManageablePortfolio generatePortfolio(final String name) {
+    final ManageablePortfolioNode rootNode = generatePortfolioNodes(name, 2, 2);
     return new ManageablePortfolio(name, rootNode);
   }
-  
-  private static ManageablePortfolioNode generatePortfolioNodes(String namePrefix, int width, int depth) {
-    ManageablePortfolioNode root = new ManageablePortfolioNode(namePrefix);
+
+  private static ManageablePortfolioNode generatePortfolioNodes(final String namePrefix, final int width, final int depth) {
+    final ManageablePortfolioNode root = new ManageablePortfolioNode(namePrefix);
     root.addPosition(POSITION_ID_SUPPLIER.get());
     if (depth > 0) {
       for (int i = 0; i < width; i++) {
@@ -71,191 +71,191 @@ public class InMemoryPortfolioMasterTest {
     }
     return root;
   }
-  
+
   //-------------------------------------------------------------------------
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_constructor_nullSupplier() {
     new InMemoryPortfolioMaster((Supplier<ObjectId>) null);
   }
-  
+
   //-------------------------------------------------------------------------
   @Test
   public void test_defaultSupplier() {
-    InMemoryPortfolioMaster master = new InMemoryPortfolioMaster();
-    PortfolioDocument added = master.add(new PortfolioDocument(generatePortfolio()));
+    final InMemoryPortfolioMaster master = new InMemoryPortfolioMaster();
+    final PortfolioDocument added = master.add(new PortfolioDocument(generatePortfolio()));
     assertEquals("MemPrt", added.getUniqueId().getScheme());
   }
-  
+
   @Test
   public void test_alternateSupplier() {
-    InMemoryPortfolioMaster master = new InMemoryPortfolioMaster(new ObjectIdSupplier("Hello"));
-    PortfolioDocument added = master.add(new PortfolioDocument(generatePortfolio()));
+    final InMemoryPortfolioMaster master = new InMemoryPortfolioMaster(new ObjectIdSupplier("Hello"));
+    final PortfolioDocument added = master.add(new PortfolioDocument(generatePortfolio()));
     assertEquals("Hello", added.getUniqueId().getScheme());
   }
-  
+
   //-------------------------------------------------------------------------
   @Test
   public void test_add_emptyMaster() {
-    ManageablePortfolio origPortfolio = generatePortfolio();
-    PortfolioDocument addedDoc = _emptyMaster.add(new PortfolioDocument(origPortfolio));
-    
+    final ManageablePortfolio origPortfolio = generatePortfolio();
+    final PortfolioDocument addedDoc = _emptyMaster.add(new PortfolioDocument(origPortfolio));
+
     assertNotNull(addedDoc.getVersionFromInstant());
-    
+
     assertEquals("MemPrt", addedDoc.getUniqueId().getScheme());
     assertEquals("1", addedDoc.getUniqueId().getValue());
-    
-    ManageablePortfolio addedPortfolio = addedDoc.getPortfolio();
+
+    final ManageablePortfolio addedPortfolio = addedDoc.getPortfolio();
     assertNotNull(addedPortfolio);
     assertSame(origPortfolio, addedPortfolio);
-    assertEquals(addedDoc.getUniqueId(), addedPortfolio.getUniqueId());    
+    assertEquals(addedDoc.getUniqueId(), addedPortfolio.getUniqueId());
     assertAddedPortfolioNodes(addedPortfolio.getRootNode(), addedPortfolio.getUniqueId(), null);
   }
-  
+
   //-------------------------------------------------------------------------
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_update_emptyMaster() {
-    PortfolioDocument doc = new PortfolioDocument(generatePortfolio());
+    final PortfolioDocument doc = new PortfolioDocument(generatePortfolio());
     doc.setUniqueId(UniqueId.of("MemPos", "1"));
     _emptyMaster.update(doc);
   }
-  
+
   public void test_update_populatedMaster() {
-    PortfolioDocument doc = new PortfolioDocument(generatePortfolio("updated"));
+    final PortfolioDocument doc = new PortfolioDocument(generatePortfolio("updated"));
     doc.setUniqueId(_prt1.getUniqueId());
-    PortfolioDocument updated = _populatedMaster.update(doc);
-    
+    final PortfolioDocument updated = _populatedMaster.update(doc);
+
     assertEquals(_prt1.getUniqueId(), updated.getUniqueId());
     assertNotNull(_prt1.getVersionFromInstant());
     assertNotNull(updated.getVersionFromInstant());
   }
-  
+
   //-------------------------------------------------------------------------
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_get_emptyMaster() {
     _emptyMaster.get(UniqueId.of("MemPrt", "1"));
   }
-  
+
   public void test_get_populatedMaster() {
-    PortfolioDocument storedDoc1 = _populatedMaster.get(_prt1.getUniqueId());
+    final PortfolioDocument storedDoc1 = _populatedMaster.get(_prt1.getUniqueId());
     assertNotSame(_prt1, storedDoc1);
     assertEquals(_prt1, storedDoc1);
     assertStoredPortfolioNodes(storedDoc1.getPortfolio().getRootNode(), _prt1.getPortfolio().getRootNode());
   }
-  
+
   public void test_getIsClone() {
     assertNotSame(_populatedMaster.get(_prt1.getUniqueId()), _populatedMaster.get(_prt1.getUniqueId()));
     assertEquals(_populatedMaster.get(_prt1.getUniqueId()), _populatedMaster.get(_prt1.getUniqueId()));
   }
-  
+
   public void test_getIsNotClone() {
     _populatedMaster.setCloneResults(false);
     assertSame(_populatedMaster.get(_prt1.getUniqueId()), _populatedMaster.get(_prt1.getUniqueId()));
   }
-  
+
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_getNode_emptyMaster() {
     _emptyMaster.getNode(UniqueId.of("MemPrt", "1"));
   }
-  
+
   public void test_getNode() {
-    ManageablePortfolioNode prt1Root = _prt1.getPortfolio().getRootNode();
-    ManageablePortfolioNode storedPrt1Root = _populatedMaster.getNode(prt1Root.getUniqueId());
+    final ManageablePortfolioNode prt1Root = _prt1.getPortfolio().getRootNode();
+    final ManageablePortfolioNode storedPrt1Root = _populatedMaster.getNode(prt1Root.getUniqueId());
     assertNotSame(prt1Root, storedPrt1Root);
     assertEquals(prt1Root, storedPrt1Root);
-    
-    ManageablePortfolioNode prt1RootChild1 = prt1Root.getChildNodes().get(0);
-    ManageablePortfolioNode storedPrt1RootChild1 = _populatedMaster.getNode(prt1RootChild1.getUniqueId());
+
+    final ManageablePortfolioNode prt1RootChild1 = prt1Root.getChildNodes().get(0);
+    final ManageablePortfolioNode storedPrt1RootChild1 = _populatedMaster.getNode(prt1RootChild1.getUniqueId());
     assertNotSame(prt1RootChild1, storedPrt1RootChild1);
     assertEquals(prt1RootChild1, storedPrt1RootChild1);
   }
-  
+
   //-------------------------------------------------------------------------
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_remove_emptyMaster() {
     _emptyMaster.remove(UniqueId.of("MemPrt", "1"));
   }
-  
+
   public void test_remove_populatedMaster() {
     _populatedMaster.remove(_prt1.getUniqueId());
-    PortfolioSearchRequest request = new PortfolioSearchRequest();
-    PortfolioSearchResult result = _populatedMaster.search(request);
+    final PortfolioSearchRequest request = new PortfolioSearchRequest();
+    final PortfolioSearchResult result = _populatedMaster.search(request);
     assertEquals(2, result.getPaging().getTotalItems());
     assertEquals(2, result.getDocuments().size());
     assertTrue(result.getDocuments().contains(_prt2));
     assertTrue(result.getDocuments().contains(_prt3));
   }
-  
+
   //-------------------------------------------------------------------------
   public void test_search_emptyMaster() {
-    PortfolioSearchRequest request = new PortfolioSearchRequest();
-    PortfolioSearchResult result = _emptyMaster.search(request);
+    final PortfolioSearchRequest request = new PortfolioSearchRequest();
+    final PortfolioSearchResult result = _emptyMaster.search(request);
     assertEquals(0, result.getPaging().getTotalItems());
-    assertEquals(0, result.getDocuments().size());    
+    assertEquals(0, result.getDocuments().size());
   }
-  
+
   public void test_search_populatedMaster_all() {
-    PortfolioSearchRequest request = new PortfolioSearchRequest();    
-    PortfolioSearchResult result = _populatedMaster.search(request);
+    final PortfolioSearchRequest request = new PortfolioSearchRequest();
+    final PortfolioSearchResult result = _populatedMaster.search(request);
     assertEquals(3, result.getPaging().getTotalItems());
     assertEquals(3, result.getDocuments().size());
     assertTrue(result.getDocuments().contains(_prt1));
     assertTrue(result.getDocuments().contains(_prt2));
     assertTrue(result.getDocuments().contains(_prt3));
   }
-  
+
   public void test_search_populatedMaster_name() {
-    PortfolioSearchRequest request = new PortfolioSearchRequest();
+    final PortfolioSearchRequest request = new PortfolioSearchRequest();
     request.setName(_prt1.getValue().getName());
-    PortfolioSearchResult result = _populatedMaster.search(request);
+    final PortfolioSearchResult result = _populatedMaster.search(request);
     assertEquals(1, result.getPaging().getTotalItems());
     assertEquals(1, result.getDocuments().size());
     assertTrue(result.getDocuments().contains(_prt1));
     assertFalse(result.getDocuments().contains(_prt2));
     assertFalse(result.getDocuments().contains(_prt3));
   }
-  
+
   public void test_search_populatedMaster_nameWildcardStar() {
-    PortfolioSearchRequest request = new PortfolioSearchRequest();
+    final PortfolioSearchRequest request = new PortfolioSearchRequest();
     request.setName("Port*");
-    PortfolioSearchResult result = _populatedMaster.search(request);
+    final PortfolioSearchResult result = _populatedMaster.search(request);
     assertEquals(3, result.getPaging().getTotalItems());
     assertEquals(3, result.getDocuments().size());
     assertTrue(result.getDocuments().contains(_prt1));
     assertTrue(result.getDocuments().contains(_prt2));
     assertTrue(result.getDocuments().contains(_prt3));
   }
-  
+
   public void test_search_populatedMaster_nameWildcardQuestion() {
-    PortfolioSearchRequest request = new PortfolioSearchRequest();
+    final PortfolioSearchRequest request = new PortfolioSearchRequest();
     request.setName("Port?");
-    PortfolioSearchResult result = _populatedMaster.search(request);
+    final PortfolioSearchResult result = _populatedMaster.search(request);
     assertEquals(3, result.getPaging().getTotalItems());
     assertEquals(3, result.getDocuments().size());
     assertTrue(result.getDocuments().contains(_prt1));
     assertTrue(result.getDocuments().contains(_prt2));
     assertTrue(result.getDocuments().contains(_prt3));
   }
-  
+
   public void test_search_filterByNodeId() {
-    PortfolioSearchRequest request = new PortfolioSearchRequest();
-    ManageablePortfolioNode prt1Root = _prt1.getPortfolio().getRootNode();
-    ManageablePortfolioNode prt1RootChild1 = prt1Root.getChildNodes().get(0);
-    ManageablePortfolioNode prt1RootChild1Child1 = prt1RootChild1.getChildNodes().get(0);
+    final PortfolioSearchRequest request = new PortfolioSearchRequest();
+    final ManageablePortfolioNode prt1Root = _prt1.getPortfolio().getRootNode();
+    final ManageablePortfolioNode prt1RootChild1 = prt1Root.getChildNodes().get(0);
+    final ManageablePortfolioNode prt1RootChild1Child1 = prt1RootChild1.getChildNodes().get(0);
     request.addNodeObjectId(prt1RootChild1Child1.getUniqueId().getObjectId());
-    PortfolioSearchResult result = _populatedMaster.search(request);
+    final PortfolioSearchResult result = _populatedMaster.search(request);
     assertEquals(1, result.getDocuments().size());
     assertEquals(_prt1, result.getFirstDocument());
   }
-  
+
   public void test_search_filterByNodeId_noMatch() {
-    PortfolioSearchRequest request = new PortfolioSearchRequest();
+    final PortfolioSearchRequest request = new PortfolioSearchRequest();
     request.addNodeObjectId(ObjectId.of("MemPrt", "Unknown"));
-    PortfolioSearchResult result = _populatedMaster.search(request);
+    final PortfolioSearchResult result = _populatedMaster.search(request);
     assertEquals(0, result.getDocuments().size());
   }
-  
+
   //-------------------------------------------------------------------------
-  private void assertAddedPortfolioNodes(ManageablePortfolioNode node, UniqueId portfolioId, UniqueId parentNodeId) {
+  private void assertAddedPortfolioNodes(final ManageablePortfolioNode node, final UniqueId portfolioId, final UniqueId parentNodeId) {
     assertNotNull(node.getUniqueId());
     assertNotNull(node.getPortfolioId());
     assertEquals(portfolioId, node.getPortfolioId());
@@ -269,12 +269,12 @@ public class InMemoryPortfolioMasterTest {
       assertAddedPortfolioNodes(node.getChildNodes().get(i), portfolioId, node.getUniqueId());
     }
   }
-  
-  private void assertStoredPortfolioNodes(ManageablePortfolioNode storedNode, ManageablePortfolioNode origNode) {
+
+  private void assertStoredPortfolioNodes(final ManageablePortfolioNode storedNode, final ManageablePortfolioNode origNode) {
     assertNotSame(origNode.toString() + " vs " + storedNode.toString(), origNode, storedNode);
     for (int i = 0; i < origNode.getChildNodes().size(); i++) {
       assertStoredPortfolioNodes(storedNode.getChildNodes().get(i), origNode.getChildNodes().get(i));
     }
   }
-  
+
 }

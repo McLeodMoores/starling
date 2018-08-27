@@ -27,7 +27,7 @@ public class ConventionSearchIterator extends AbstractSearchIterator<ConventionD
    * Creates an instance based on a request.
    * <p>
    * The request will be altered during the iteration.
-   * 
+   *
    * @param master  the underlying master, not null
    * @param request  the request object, not null
    * @return an iterable suitable for use in a for-each loop, not null
@@ -47,17 +47,17 @@ public class ConventionSearchIterator extends AbstractSearchIterator<ConventionD
    * Creates an instance based on a request.
    * <p>
    * The request will be altered during the iteration.
-   * 
+   *
    * @param master  the underlying master, not null
    * @param request  the request object, not null
    */
-  public ConventionSearchIterator(ConventionMaster master, ConventionSearchRequest request) {
+  public ConventionSearchIterator(final ConventionMaster master, final ConventionSearchRequest request) {
     super(master, request);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  protected ConventionSearchResult doSearch(ConventionSearchRequest request) {
+  protected ConventionSearchResult doSearch(final ConventionSearchRequest request) {
     return getMaster().search(request);
   }
 

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.security.function;
@@ -27,15 +27,15 @@ import com.opengamma.financial.security.lookup.SecurityAttributeMapper;
 import com.opengamma.util.async.AsynchronousExecution;
 
 /**
- * Function which uses mappings configured in the {@link SecurityAttributeMapper} to 
+ * Function which uses mappings configured in the {@link SecurityAttributeMapper} to
  * extract its values from securities.
  */
 public class DefaultSecurityAttributeFunction extends AbstractFunction.NonCompiledInvoker {
 
-  private SecurityAttribute _attribute;
-  private String _valueRequirementName;
+  private final SecurityAttribute _attribute;
+  private final String _valueRequirementName;
 
-  public DefaultSecurityAttributeFunction(String attribute, String valueRequirementName) {
+  public DefaultSecurityAttributeFunction(final String attribute, final String valueRequirementName) {
     _attribute = SecurityAttribute.valueOf(attribute);
     _valueRequirementName = valueRequirementName;
   }
@@ -46,30 +46,30 @@ public class DefaultSecurityAttributeFunction extends AbstractFunction.NonCompil
   }
 
   @Override
-  public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
     return Collections.singleton(getSpec(target));
   }
 
   @Override
-  public Set<ValueRequirement> getRequirements(FunctionCompilationContext context, ComputationTarget target, ValueRequirement desiredValue) {
+  public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     return Collections.singleton(new ValueRequirement(
         ValueRequirementNames.CURRENCY_PAIRS,
         ComputationTargetSpecification.NULL));
   }
 
   @Override
-  public Set<ComputedValue> execute(FunctionExecutionContext executionContext, FunctionInputs inputs, ComputationTarget target, Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
-    CurrencyPairs ccyPairs = (CurrencyPairs) inputs.getComputedValue(ValueRequirementNames.CURRENCY_PAIRS).getValue();
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+    final CurrencyPairs ccyPairs = (CurrencyPairs) inputs.getComputedValue(ValueRequirementNames.CURRENCY_PAIRS).getValue();
 
-    SecurityAttributeMapper mapper = DefaultSecurityAttributeMappings.create(ccyPairs);
-    
-    Security security = target.getPositionOrTrade().getSecurity();
-    Object result = mapper.valueFor(_attribute, security);
-    
+    final SecurityAttributeMapper mapper = DefaultSecurityAttributeMappings.create(ccyPairs);
+
+    final Security security = target.getPositionOrTrade().getSecurity();
+    final Object result = mapper.valueFor(_attribute, security);
+
     return Collections.singleton(new ComputedValue(getSpec(target), result));
   }
 
-  private ValueSpecification getSpec(ComputationTarget target) {
+  private ValueSpecification getSpec(final ComputationTarget target) {
     return new ValueSpecification(_valueRequirementName,
         target.toSpecification(),
         createValueProperties().get());

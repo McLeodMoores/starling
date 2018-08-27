@@ -31,18 +31,18 @@ public final class RegexUtils {
    * <p>
    * The returned pattern will be setup to match a whole string using
    * <code>^</code> and <code>$</code>.
-   * 
+   *
    * @param text  the text to match, not null
    * @return the pattern, not null
    */
   public static Pattern wildcardsToPattern(final String text) {
     ArgumentChecker.notNull(text, "text");
-    StringTokenizer tkn = new StringTokenizer(text, "?*", true);
-    StringBuilder buf = new StringBuilder(text.length() + 10);
+    final StringTokenizer tkn = new StringTokenizer(text, "?*", true);
+    final StringBuilder buf = new StringBuilder(text.length() + 10);
     buf.append('^');
     boolean lastStar = false;
     while (tkn.hasMoreTokens()) {
-      String str = tkn.nextToken();
+      final String str = tkn.nextToken();
       if (str.equals("?")) {
         buf.append('.');
         lastStar = false;
@@ -65,7 +65,7 @@ public final class RegexUtils {
    * <p>
    * The asterisk (<code>*</code>) matches zero or more characters.<br />
    * The question mark (<code>?</code>) matches one character.<br />
-   * 
+   *
    * @param searchCriteriaWithWildcard  the search criteria text with wildcards, null returns false
    * @param textToMatchAgainst  the text without wildcards to match against, null returns false
    * @return true if the text
@@ -76,10 +76,10 @@ public final class RegexUtils {
     }
     return wildcardsToPattern(searchCriteriaWithWildcard).matcher(textToMatchAgainst).matches();
   }
-  
+
   /**
    * Determine whether the given string contains a wildcard.
-   * 
+   *
    * @param searchCriteria The string to check
    * @return true if either <code>*</code> or <code>?</code> is present
    */
@@ -94,10 +94,10 @@ public final class RegexUtils {
    * @param regex regex string
    * @return extracted text
    */
-  public static String extract(String string, String regex) {
+  public static String extract(final String string, final String regex) {
     return extract(string, Pattern.compile(regex), 1);
   }
-  
+
   /**
    * Extracts given group from matched regex
    * @param string input string
@@ -105,7 +105,7 @@ public final class RegexUtils {
    * @param group group index
    * @return extracted text
    */
-  public static String extract(String string, String regex, int group) {
+  public static String extract(final String string, final String regex, final int group) {
     return extract(string, Pattern.compile(regex), group);
   }
 
@@ -116,8 +116,8 @@ public final class RegexUtils {
    * @param group group index
    * @return extracted text
    */
-  public static String extract(String string, Pattern pattern, int group) {
-    Matcher m = pattern.matcher(string);
+  public static String extract(final String string, final Pattern pattern, final int group) {
+    final Matcher m = pattern.matcher(string);
     if (m.find()) {
       return m.group(group);
     }
@@ -130,9 +130,9 @@ public final class RegexUtils {
    * @param pattern the pattern
    * @return true if given input string matches given pattern
    */
-  public static boolean matches(String input, Pattern pattern) {    
-    Matcher m = pattern.matcher(input);
-    return m.matches();    
+  public static boolean matches(final String input, final Pattern pattern) {
+    final Matcher m = pattern.matcher(input);
+    return m.matches();
   }
 
 }

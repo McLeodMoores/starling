@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.curve.inflation;
@@ -15,7 +15,7 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 
 /**
- * Function computing the Jacobian of the error of valuation produce by a array representing the curve parameters. 
+ * Function computing the Jacobian of the error of valuation produce by a array representing the curve parameters.
  */
 public class InflationDiscountFinderJacobian extends Function1D<DoubleMatrix1D, DoubleMatrix2D> {
 
@@ -40,15 +40,15 @@ public class InflationDiscountFinderJacobian extends Function1D<DoubleMatrix1D, 
   }
 
   @Override
-  public DoubleMatrix2D evaluate(DoubleMatrix1D x) {
+  public DoubleMatrix2D evaluate(final DoubleMatrix1D x) {
     final InflationProviderDiscount bundle = _data.getKnownData().copy();
-    InflationProviderDiscount newCurves = _data.getGeneratorMarket().evaluate(x);
-    bundle.setAll(newCurves); 
-    Set<String> curvesSet = _data.getGeneratorMarket().getInflationCurvesList();
+    final InflationProviderDiscount newCurves = _data.getGeneratorMarket().evaluate(x);
+    bundle.setAll(newCurves);
+    final Set<String> curvesSet = _data.getGeneratorMarket().getInflationCurvesList();
     final int nbParameters = _data.getNumberOfInstruments();
     final double[][] res = new double[nbParameters][nbParameters];
     for (int loopinstrument = 0; loopinstrument < _data.getNumberOfInstruments(); loopinstrument++) {
-      InstrumentDerivative deriv = _data.getInstrument(loopinstrument);
+      final InstrumentDerivative deriv = _data.getInstrument(loopinstrument);
       res[loopinstrument] = _parameterSensitivityCalculator.calculateSensitivity(deriv, bundle, curvesSet).getData();
     }
     return new DoubleMatrix2D(res);

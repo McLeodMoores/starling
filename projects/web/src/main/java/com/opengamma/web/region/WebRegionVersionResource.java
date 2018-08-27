@@ -44,31 +44,31 @@ public class WebRegionVersionResource extends AbstractWebRegionResource {
   //-------------------------------------------------------------------------
   @GET
   public String getHTML() {
-    FlexiBean out = createRootData();
+    final FlexiBean out = createRootData();
     return getFreemarker().build(HTML_DIR + "regionversion.ftl", out);
   }
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  public Response getJSON(@Context Request request) {
-    EntityTag etag = new EntityTag(data().getVersioned().getUniqueId().toString());
-    ResponseBuilder builder = request.evaluatePreconditions(etag);
+  public Response getJSON(@Context final Request request) {
+    final EntityTag etag = new EntityTag(data().getVersioned().getUniqueId().toString());
+    final ResponseBuilder builder = request.evaluatePreconditions(etag);
     if (builder != null) {
       return builder.build();
     }
-    RegionSearchRequest search = new RegionSearchRequest();
+    final RegionSearchRequest search = new RegionSearchRequest();
     search.setPagingRequest(PagingRequest.ALL);  // may need to add paging
     search.setChildrenOfId(data().getVersioned().getUniqueId());
-    RegionSearchResult children = data().getRegionMaster().search(search);
+    final RegionSearchResult children = data().getRegionMaster().search(search);
     data().setRegionChildren(children.getDocuments());
 
-    for (UniqueId parentId : data().getRegion().getRegion().getParentRegionIds()) {
-      RegionDocument parent = data().getRegionMaster().get(parentId);
+    for (final UniqueId parentId : data().getRegion().getRegion().getParentRegionIds()) {
+      final RegionDocument parent = data().getRegionMaster().get(parentId);
       data().getRegionParents().add(parent);
     }
-    
-    FlexiBean out = createRootData();
-    String json = getFreemarker().build(JSON_DIR + "region.ftl", out);
+
+    final FlexiBean out = createRootData();
+    final String json = getFreemarker().build(JSON_DIR + "region.ftl", out);
     return Response.ok(json).tag(etag).build();
   }
 
@@ -77,10 +77,11 @@ public class WebRegionVersionResource extends AbstractWebRegionResource {
    * Creates the output root data.
    * @return the output root data, not null
    */
+  @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
-    RegionDocument latestDoc = data().getRegion();
-    RegionDocument versionedRegion = data().getVersioned();
+    final FlexiBean out = super.createRootData();
+    final RegionDocument latestDoc = data().getRegion();
+    final RegionDocument versionedRegion = data().getVersioned();
     out.put("latestRegionDoc", latestDoc);
     out.put("latestRegion", latestDoc.getRegion());
     out.put("regionDoc", versionedRegion);
@@ -108,8 +109,8 @@ public class WebRegionVersionResource extends AbstractWebRegionResource {
    * @return the URI, not null
    */
   public static URI uri(final WebRegionData data, final UniqueId overrideVersionId) {
-    String regionId = data.getBestRegionUriId(null);
-    String versionId = StringUtils.defaultString(overrideVersionId != null ? overrideVersionId.getVersion() : data.getUriVersionId());
+    final String regionId = data.getBestRegionUriId(null);
+    final String versionId = StringUtils.defaultString(overrideVersionId != null ? overrideVersionId.getVersion() : data.getUriVersionId());
     return data.getUriInfo().getBaseUriBuilder().path(WebRegionVersionResource.class).build(regionId, versionId);
   }
 

@@ -40,23 +40,23 @@ public class ConventionHistoryResult extends AbstractHistoryResult<ConventionDoc
 
   /**
    * Creates an instance from a collection of documents.
-   * 
+   *
    * @param coll  the collection of documents to add, not null
    */
-  public ConventionHistoryResult(Collection<ConventionDocument> coll) {
+  public ConventionHistoryResult(final Collection<ConventionDocument> coll) {
     super(coll);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the returned conventions from within the documents.
-   * 
+   *
    * @return the conventions, not null
    */
   public List<ManageableConvention> getConventions() {
-    List<ManageableConvention> result = new ArrayList<ManageableConvention>();
+    final List<ManageableConvention> result = new ArrayList<>();
     if (getDocuments() != null) {
-      for (ConventionDocument doc : getDocuments()) {
+      for (final ConventionDocument doc : getDocuments()) {
         result.add(doc.getConvention());
       }
     }
@@ -65,7 +65,7 @@ public class ConventionHistoryResult extends AbstractHistoryResult<ConventionDoc
 
   /**
    * Gets the first convention, or null if no documents.
-   * 
+   *
    * @return the first convention, null if none
    */
   public ManageableConvention getFirstConvention() {
@@ -77,7 +77,7 @@ public class ConventionHistoryResult extends AbstractHistoryResult<ConventionDoc
    * <p>
    * This throws an exception if more than 1 result is actually available.
    * Thus, this method implies an assumption about uniqueness of the queried convention.
-   * 
+   *
    * @return the matching convention, not null
    * @throws IllegalStateException if no convention was found
    */

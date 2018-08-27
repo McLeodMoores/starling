@@ -35,7 +35,7 @@ class WebFunctionQueryDelegate {
 
   private final FunctionConfigurationSource _functionConfigurationSource;
 
-  public WebFunctionQueryDelegate(FunctionConfigurationSource functionConfigurationSource) {
+  public WebFunctionQueryDelegate(final FunctionConfigurationSource functionConfigurationSource) {
     _functionConfigurationSource = functionConfigurationSource;
   }
 
@@ -48,27 +48,27 @@ class WebFunctionQueryDelegate {
 
   /**
    * Returns the types which match the predicate.
-   * 
+   *
    * @param predicate
    * @return
    */
-  public SortedMap<String, WebFunctionTypeDetails> query(Predicate<WebFunctionTypeDetails> predicate) {
-    FunctionConfigurationBundle functionConfiguration = _functionConfigurationSource.getFunctionConfiguration(Instant.now());
+  public SortedMap<String, WebFunctionTypeDetails> query(final Predicate<WebFunctionTypeDetails> predicate) {
+    final FunctionConfigurationBundle functionConfiguration = _functionConfigurationSource.getFunctionConfiguration(Instant.now());
 
-    SortedMap<String, WebFunctionTypeDetails> allFunctions = Maps.newTreeMap();
+    final SortedMap<String, WebFunctionTypeDetails> allFunctions = Maps.newTreeMap();
 
-    for (FunctionConfiguration input : functionConfiguration.getFunctions()) {
-      StaticFunctionConfiguration config = ((StaticFunctionConfiguration) input);
-      String fullName = config.getDefinitionClassName();
+    for (final FunctionConfiguration input : functionConfiguration.getFunctions()) {
+      final StaticFunctionConfiguration config = (StaticFunctionConfiguration) input;
+      final String fullName = config.getDefinitionClassName();
 
-      Matcher matcher = SIMPLE_NAME.matcher(fullName);
-      String simpleName = matcher.find() ? matcher.group(1) : "Unknown";
+      final Matcher matcher = SIMPLE_NAME.matcher(fullName);
+      final String simpleName = matcher.find() ? matcher.group(1) : "Unknown";
 
-      WebFunctionTypeDetails typeDetails = new WebFunctionTypeDetails();
+      final WebFunctionTypeDetails typeDetails = new WebFunctionTypeDetails();
       typeDetails.setFullyQualifiedName(fullName);
       typeDetails.setSimpleName(simpleName);
 
-      boolean isParameterized = config instanceof ParameterizedFunctionConfiguration;
+      final boolean isParameterized = config instanceof ParameterizedFunctionConfiguration;
       typeDetails.setParameterized(isParameterized);
 
       List<String> parameters;
@@ -78,7 +78,7 @@ class WebFunctionQueryDelegate {
         parameters = Lists.newArrayList();
       }
 
-      List<List<String>> parametersList = Lists.newLinkedList();
+      final List<List<String>> parametersList = Lists.newLinkedList();
       parametersList.add(parameters);
       typeDetails.setParameters(parametersList);
 
@@ -93,7 +93,7 @@ class WebFunctionQueryDelegate {
       }
     }
 
-    for (WebFunctionTypeDetails typeDetails : allFunctions.values()) {
+    for (final WebFunctionTypeDetails typeDetails : allFunctions.values()) {
       if (typeDetails.isParameterized()) {
         sortParameters(typeDetails);
       }
@@ -103,19 +103,19 @@ class WebFunctionQueryDelegate {
 
   }
 
-  private void sortParameters(WebFunctionTypeDetails typeDetails) {
+  private void sortParameters(final WebFunctionTypeDetails typeDetails) {
 
-    List<List<String>> parameters = typeDetails.getParameters();
+    final List<List<String>> parameters = typeDetails.getParameters();
 
     final Ordering<Object> stringOrdering = Ordering.usingToString();
 
     Collections.sort(parameters, new Comparator<List<String>>() {
 
       @Override
-      public int compare(List<String> o1, List<String> o2) {
+      public int compare(final List<String> o1, final List<String> o2) {
 
         for (int i = 0; i < Ints.min(o1.size(), o2.size()); i++) {
-          int compare = stringOrdering.compare(o1, o2);
+          final int compare = stringOrdering.compare(o1, o2);
           if (compare != 0) {
             return compare;
           }

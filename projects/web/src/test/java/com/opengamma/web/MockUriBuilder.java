@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.web;
@@ -23,9 +23,9 @@ import com.opengamma.util.ArgumentChecker;
  * MockUriBuilder intended for testing in memory web resources
  */
 public class MockUriBuilder extends UriBuilder {
-  
+
   private static final Pattern PATH_PATTERN = Pattern.compile("\\{\\w+\\}");
-  
+
   private String _pathFormat = "";
 
   @Override
@@ -34,42 +34,42 @@ public class MockUriBuilder extends UriBuilder {
   }
 
   @Override
-  public UriBuilder uri(URI uri) throws IllegalArgumentException {
+  public UriBuilder uri(final URI uri) throws IllegalArgumentException {
     return this;
   }
 
   @Override
-  public UriBuilder scheme(String scheme) throws IllegalArgumentException {
+  public UriBuilder scheme(final String scheme) throws IllegalArgumentException {
     return this;
   }
 
   @Override
-  public UriBuilder schemeSpecificPart(String ssp) throws IllegalArgumentException {
+  public UriBuilder schemeSpecificPart(final String ssp) throws IllegalArgumentException {
     return this;
   }
 
   @Override
-  public UriBuilder userInfo(String ui) {
+  public UriBuilder userInfo(final String ui) {
     return this;
   }
 
   @Override
-  public UriBuilder host(String host) throws IllegalArgumentException {
+  public UriBuilder host(final String host) throws IllegalArgumentException {
     return this;
   }
 
   @Override
-  public UriBuilder port(int port) throws IllegalArgumentException {
+  public UriBuilder port(final int port) throws IllegalArgumentException {
     return this;
   }
 
   @Override
-  public UriBuilder replacePath(String path) {
+  public UriBuilder replacePath(final String path) {
     return this;
   }
 
   @Override
-  public UriBuilder path(String path) throws IllegalArgumentException {
+  public UriBuilder path(final String path) throws IllegalArgumentException {
     ArgumentChecker.notNull(path, "path");
     formathPath(path);
     return this;
@@ -77,9 +77,10 @@ public class MockUriBuilder extends UriBuilder {
 
   @SuppressWarnings("rawtypes")
   @Override
-  public UriBuilder path(Class resource) throws IllegalArgumentException {
+  public UriBuilder path(final Class resource) throws IllegalArgumentException {
     ArgumentChecker.notNull(resource, "class");
     @SuppressWarnings("unchecked")
+    final
     Annotation annotation = resource.getAnnotation(Path.class);
     if (annotation == null) {
       throw new IllegalArgumentException();
@@ -88,16 +89,16 @@ public class MockUriBuilder extends UriBuilder {
     return this;
   }
 
-  private void formatPath(Path annotation) {
-    String path = annotation.value();
+  private void formatPath(final Path annotation) {
+    final String path = annotation.value();
     formathPath(path);
   }
 
-  private void formathPath(String path) {
-    Matcher matcher = PATH_PATTERN.matcher(path);
+  private void formathPath(final String path) {
+    final Matcher matcher = PATH_PATTERN.matcher(path);
     int start = 0;
     int end = 0;
-    StringBuilder buf = new StringBuilder();
+    final StringBuilder buf = new StringBuilder();
     int count = 0;
     while (matcher.find()) {
       end = matcher.start();
@@ -105,7 +106,7 @@ public class MockUriBuilder extends UriBuilder {
       start = matcher.end();
     }
     buf.append(path.substring(start, path.length()));
-    
+
     if (path.startsWith("/")) {
       _pathFormat += buf.toString();
     } else {
@@ -115,11 +116,11 @@ public class MockUriBuilder extends UriBuilder {
 
   @SuppressWarnings("rawtypes")
   @Override
-  public UriBuilder path(Class resource, String methodName) throws IllegalArgumentException {
+  public UriBuilder path(final Class resource, final String methodName) throws IllegalArgumentException {
     ArgumentChecker.notNull(resource, "class");
-    Method[] methods = resource.getMethods();
+    final Method[] methods = resource.getMethods();
     Method method = null;
-    for (Method aMethod : methods) {
+    for (final Method aMethod : methods) {
       if (aMethod.getName().equals(methodName)) {
         method = aMethod;
         break;
@@ -133,9 +134,9 @@ public class MockUriBuilder extends UriBuilder {
   }
 
   @Override
-  public UriBuilder path(Method method) throws IllegalArgumentException {
+  public UriBuilder path(final Method method) throws IllegalArgumentException {
     ArgumentChecker.notNull(method, "method");
-    Path annotation = method.getAnnotation(Path.class);
+    final Path annotation = method.getAnnotation(Path.class);
     if (annotation == null) {
       throw new IllegalArgumentException("Path annotation missing in method " + method.getName());
     }
@@ -144,69 +145,69 @@ public class MockUriBuilder extends UriBuilder {
   }
 
   @Override
-  public UriBuilder segment(String... segments) throws IllegalArgumentException {
+  public UriBuilder segment(final String... segments) throws IllegalArgumentException {
     return this;
   }
 
   @Override
-  public UriBuilder replaceMatrix(String matrix) throws IllegalArgumentException {
+  public UriBuilder replaceMatrix(final String matrix) throws IllegalArgumentException {
     return this;
   }
 
   @Override
-  public UriBuilder matrixParam(String name, Object... values) throws IllegalArgumentException {
+  public UriBuilder matrixParam(final String name, final Object... values) throws IllegalArgumentException {
     return this;
   }
 
   @Override
-  public UriBuilder replaceMatrixParam(String name, Object... values) throws IllegalArgumentException {
+  public UriBuilder replaceMatrixParam(final String name, final Object... values) throws IllegalArgumentException {
     return this;
   }
 
   @Override
-  public UriBuilder replaceQuery(String query) throws IllegalArgumentException {
+  public UriBuilder replaceQuery(final String query) throws IllegalArgumentException {
     return this;
   }
 
   @Override
-  public UriBuilder queryParam(String name, Object... values) throws IllegalArgumentException {
+  public UriBuilder queryParam(final String name, final Object... values) throws IllegalArgumentException {
     return this;
   }
 
   @Override
-  public UriBuilder replaceQueryParam(String name, Object... values) throws IllegalArgumentException {
+  public UriBuilder replaceQueryParam(final String name, final Object... values) throws IllegalArgumentException {
     return this;
   }
 
   @Override
-  public UriBuilder fragment(String fragment) {
+  public UriBuilder fragment(final String fragment) {
     return this;
   }
 
   @Override
-  public URI buildFromMap(Map<String, ? extends Object> values) throws IllegalArgumentException, UriBuilderException {
+  public URI buildFromMap(final Map<String, ? extends Object> values) throws IllegalArgumentException, UriBuilderException {
     return null;
   }
 
   @Override
-  public URI buildFromEncodedMap(Map<String, ? extends Object> values) throws IllegalArgumentException, UriBuilderException {
+  public URI buildFromEncodedMap(final Map<String, ? extends Object> values) throws IllegalArgumentException, UriBuilderException {
     return null;
   }
 
   @Override
-  public URI build(Object... values) throws IllegalArgumentException, UriBuilderException {
+  public URI build(final Object... values) throws IllegalArgumentException, UriBuilderException {
     String url = null;
     try {
       url = new Formatter().format(_pathFormat, values).toString();
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       throw new UriBuilderException("Problem building url from format[" + _pathFormat + "] and values[" + values + "]", ex);
     }
     return URI.create(url);
   }
 
   @Override
-  public URI buildFromEncoded(Object... values) throws IllegalArgumentException, UriBuilderException {
+  public URI buildFromEncoded(final Object... values) throws IllegalArgumentException, UriBuilderException {
     return null;
   }
-  
+
 }

@@ -1,14 +1,12 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.component.factory.source;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import net.sf.ehcache.CacheManager;
 
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
@@ -31,6 +29,8 @@ import com.opengamma.core.legalentity.impl.EHCachingLegalEntitySource;
 import com.opengamma.core.legalentity.impl.RemoteLegalEntitySource;
 import com.opengamma.master.legalentity.LegalEntityMaster;
 import com.opengamma.master.legalentity.impl.MasterLegalEntitySource;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Component factory providing the {@link LegalEntitySource}.
@@ -68,10 +68,10 @@ public class LegalEntitySourceComponentFactory extends AbstractComponentFactory 
    * @param configuration  the remaining configuration, not null
    */
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
-    LegalEntitySource source = createLegalEntitySource(repo);
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
+    final LegalEntitySource source = createLegalEntitySource(repo);
 
-    ComponentInfo info = new ComponentInfo(LegalEntitySource.class, getClassifier());
+    final ComponentInfo info = new ComponentInfo(LegalEntitySource.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     if (isPublishRest()) {
       info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteLegalEntitySource.class);

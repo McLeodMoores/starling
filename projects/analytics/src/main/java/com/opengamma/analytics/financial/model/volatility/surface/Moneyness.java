@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.surface;
@@ -33,7 +33,7 @@ public class Moneyness implements StrikeType {
 
 
   @Override
-  public Moneyness with(double value) {
+  public Moneyness with(final double value) {
     return new Moneyness(value);
   }
 

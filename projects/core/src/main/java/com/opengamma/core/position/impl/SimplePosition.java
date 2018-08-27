@@ -87,11 +87,11 @@ public class SimplePosition extends DirectBean
 
   /**
    * Creates a position from an amount of a security identified by key.
-   * 
+   *
    * @param quantity  the amount of the position, not null
    * @param securityKey  the security identifier, not null
    */
-  public SimplePosition(BigDecimal quantity, ExternalId securityKey) {
+  public SimplePosition(final BigDecimal quantity, final ExternalId securityKey) {
     ArgumentChecker.notNull(quantity, "quantity");
     ArgumentChecker.notNull(securityKey, "security key");
     _quantity = quantity;
@@ -100,11 +100,11 @@ public class SimplePosition extends DirectBean
 
   /**
    * Creates a position from an amount of a security identified by key.
-   * 
+   *
    * @param quantity  the amount of the position, not null
    * @param securityKey  the security identifier, not null
    */
-  public SimplePosition(BigDecimal quantity, ExternalIdBundle securityKey) {
+  public SimplePosition(final BigDecimal quantity, final ExternalIdBundle securityKey) {
     ArgumentChecker.notNull(quantity, "quantity");
     ArgumentChecker.notNull(securityKey, "security key");
     _quantity = quantity;
@@ -113,12 +113,12 @@ public class SimplePosition extends DirectBean
 
   /**
    * Creates a position from an amount of a security identified by key.
-   * 
+   *
    * @param uniqueId  the unique identifier, not null
    * @param quantity  the amount of the position, not null
    * @param securityKey  the security identifier, not null
    */
-  public SimplePosition(UniqueId uniqueId, BigDecimal quantity, ExternalId securityKey) {
+  public SimplePosition(final UniqueId uniqueId, final BigDecimal quantity, final ExternalId securityKey) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     ArgumentChecker.notNull(quantity, "quantity");
     ArgumentChecker.notNull(securityKey, "securityKey");
@@ -129,12 +129,12 @@ public class SimplePosition extends DirectBean
 
   /**
    * Creates a position from an amount of a security identified by key.
-   * 
+   *
    * @param uniqueId  the unique identifier, not null
    * @param quantity  the amount of the position, not null
    * @param securityKey  the security identifier, not null
    */
-  public SimplePosition(UniqueId uniqueId, BigDecimal quantity, ExternalIdBundle securityKey) {
+  public SimplePosition(final UniqueId uniqueId, final BigDecimal quantity, final ExternalIdBundle securityKey) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     ArgumentChecker.notNull(quantity, "quantity");
     ArgumentChecker.notNull(securityKey, "securityKey");
@@ -145,12 +145,12 @@ public class SimplePosition extends DirectBean
 
   /**
    * Creates a position from an amount of a security.
-   * 
+   *
    * @param uniqueId  the unique identifier, not null
    * @param quantity  the amount of the position, not null
    * @param security  the security, not null
    */
-  public SimplePosition(UniqueId uniqueId, BigDecimal quantity, Security security) {
+  public SimplePosition(final UniqueId uniqueId, final BigDecimal quantity, final Security security) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     ArgumentChecker.notNull(quantity, "quantity");
     ArgumentChecker.notNull(security, "security");
@@ -161,7 +161,7 @@ public class SimplePosition extends DirectBean
 
   /**
    * Creates a deep copy of the specified position.
-   * 
+   *
    * @param copyFrom  the instance to copy fields from, not null
    */
   public SimplePosition(final Position copyFrom) {
@@ -169,8 +169,8 @@ public class SimplePosition extends DirectBean
     _uniqueId = copyFrom.getUniqueId();
     _quantity = copyFrom.getQuantity();
     _securityLink = new SimpleSecurityLink(copyFrom.getSecurityLink());
-    for (Trade trade : copyFrom.getTrades()) {
-      SimpleTrade clonedTrade = new SimpleTrade(trade);
+    for (final Trade trade : copyFrom.getTrades()) {
+      final SimpleTrade clonedTrade = new SimpleTrade(trade);
       _trades.add(clonedTrade);
     }
     setAttributes(copyFrom.getAttributes());
@@ -182,7 +182,7 @@ public class SimplePosition extends DirectBean
    * <p>
    * This convenience method gets the target security from the link.
    * This is guaranteed to return a security within an analytic function.
-   * 
+   *
    * @return the security link, null if target not resolved in the link
    */
   @Override
@@ -193,32 +193,32 @@ public class SimplePosition extends DirectBean
   //-------------------------------------------------------------------------
   /**
    * Add a trade to set of trades.
-   * 
+   *
    * @param trade  the trade to add, not null
    */
-  public void addTrade(Trade trade) {
+  public void addTrade(final Trade trade) {
     ArgumentChecker.notNull(trade, "trade");
     _trades.add(trade);
   }
 
   /**
    * Removes a given trade from the set of trades.
-   * 
+   *
    * @param trade  the trade to remove, null ignored
    * @return true if the set of trades contained the specified trade
    */
-  public boolean removeTrade(Trade trade) {
+  public boolean removeTrade(final Trade trade) {
     return _trades.remove(trade);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Add an attribute.
-   * 
+   *
    * @param key  the attribute key, not null
    * @param value  the attribute value, not null
    */
-  public void addAttribute(String key, String value) {
+  public void addAttribute(final String key, final String value) {
     ArgumentChecker.notNull(key, "key");
     ArgumentChecker.notNull(value, "value");
     _attributes.put(key, value);
@@ -226,7 +226,7 @@ public class SimplePosition extends DirectBean
 
   /**
    * Removes the attribute with specified key.
-   * 
+   *
    * @param key  the attribute key to remove, not null
    */
   public void removeAttribute(final String key) {

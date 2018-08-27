@@ -15,24 +15,24 @@ public class ViewDefinitionCompiledCall implements Function<ViewResultListener, 
 
   private final CompiledViewDefinition _compiledViewDefinition;
   private final boolean _hasMarketDataPermissions;
-  
-  public ViewDefinitionCompiledCall(CompiledViewDefinition compiledViewDefinition, boolean hasMarketDataPermissions) {
+
+  public ViewDefinitionCompiledCall(final CompiledViewDefinition compiledViewDefinition, final boolean hasMarketDataPermissions) {
     _compiledViewDefinition = compiledViewDefinition;
     _hasMarketDataPermissions = hasMarketDataPermissions;
   }
-  
+
   public CompiledViewDefinition getCompiledViewDefinition() {
     return _compiledViewDefinition;
   }
-  
+
   public boolean hasMarketDataPermissions() {
     return _hasMarketDataPermissions;
   }
-  
+
   @Override
-  public Object apply(ViewResultListener listener) {
+  public Object apply(final ViewResultListener listener) {
     listener.viewDefinitionCompiled(getCompiledViewDefinition(), hasMarketDataPermissions());
     return null;
   }
-  
+
 }

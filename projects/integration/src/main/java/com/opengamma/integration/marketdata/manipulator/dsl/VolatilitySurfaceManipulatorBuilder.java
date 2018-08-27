@@ -29,19 +29,19 @@ public class VolatilitySurfaceManipulatorBuilder {
   /** The scenario to which manipulations are added. */
   private final Scenario _scenario;
 
-  /* package */ VolatilitySurfaceManipulatorBuilder(Scenario scenario, VolatilitySurfaceSelector selector) {
+  /* package */ VolatilitySurfaceManipulatorBuilder(final Scenario scenario, final VolatilitySurfaceSelector selector) {
     ArgumentChecker.notNull(scenario, "scenario");
     ArgumentChecker.notNull(selector, "selector");
     _scenario = scenario;
     _selector = selector;
   }
 
-  public VolatilitySurfaceManipulatorBuilder shifts(ScenarioShiftType shiftType, VolatilitySurfaceShift... shifts) {
+  public VolatilitySurfaceManipulatorBuilder shifts(final ScenarioShiftType shiftType, final VolatilitySurfaceShift... shifts) {
     _scenario.add(_selector, VolatilitySurfaceShiftManipulator.create(shiftType, Arrays.asList(shifts)));
     return this;
   }
 
-  public VolatilitySurfaceManipulatorBuilder parallelShift(ScenarioShiftType shiftType, Number shift) {
+  public VolatilitySurfaceManipulatorBuilder parallelShift(final ScenarioShiftType shiftType, final Number shift) {
     if (shiftType == ScenarioShiftType.ABSOLUTE) {
       _scenario.add(_selector, new VolatilitySurfaceParallelShift(shift.doubleValue()));
     } else {
@@ -57,9 +57,9 @@ public class VolatilitySurfaceManipulatorBuilder {
    * @param shifts the shift amounts to apply at each point on the surface
    * @return this builder
    */
-  public VolatilitySurfaceManipulatorBuilder indexShifts(ScenarioShiftType shiftType, Number... shifts) {
-    List<Double> shiftList = new ArrayList<>(shifts.length);
-    for (Number shift : shifts) {
+  public VolatilitySurfaceManipulatorBuilder indexShifts(final ScenarioShiftType shiftType, final Number... shifts) {
+    final List<Double> shiftList = new ArrayList<>(shifts.length);
+    for (final Number shift : shifts) {
       shiftList.add(shift.doubleValue());
     }
     _scenario.add(_selector, new VolatilitySurfaceIndexShifts(shiftType, shiftList));
@@ -70,7 +70,7 @@ public class VolatilitySurfaceManipulatorBuilder {
    * @deprecated Use {@link #parallelShift} with {@link ScenarioShiftType#ABSOLUTE}
    */
   @Deprecated
-  public VolatilitySurfaceManipulatorBuilder parallelShift(Number shift) {
+  public VolatilitySurfaceManipulatorBuilder parallelShift(final Number shift) {
     _scenario.add(_selector, new VolatilitySurfaceParallelShift(shift.doubleValue()));
     return this;
   }
@@ -79,7 +79,7 @@ public class VolatilitySurfaceManipulatorBuilder {
    * @deprecated Use {@link #parallelShift} with {@link ScenarioShiftType#RELATIVE}
    */
   @Deprecated
-  public VolatilitySurfaceManipulatorBuilder constantMultiplicativeShift(Number shift) {
+  public VolatilitySurfaceManipulatorBuilder constantMultiplicativeShift(final Number shift) {
     _scenario.add(_selector, new VolatilitySurfaceConstantMultiplicativeShift(shift.doubleValue()));
     return this;
   }
@@ -88,7 +88,7 @@ public class VolatilitySurfaceManipulatorBuilder {
    * @deprecated Use {@link #shifts)} with {@link ScenarioShiftType#ABSOLUTE} and one shift
    */
   @Deprecated
-  public VolatilitySurfaceManipulatorBuilder singleAdditiveShift(Number x, Number y, Number shift) {
+  public VolatilitySurfaceManipulatorBuilder singleAdditiveShift(final Number x, final Number y, final Number shift) {
     _scenario.add(_selector, new VolatilitySurfaceSingleAdditiveShift(x.doubleValue(), y.doubleValue(), shift.doubleValue()));
     return this;
   }
@@ -97,7 +97,7 @@ public class VolatilitySurfaceManipulatorBuilder {
    * @deprecated Use {@link #shifts)} with {@link ScenarioShiftType#ABSOLUTE} and multiple shifts
    */
   @Deprecated
-  public VolatilitySurfaceManipulatorBuilder multipleAdditiveShifts(List<Number> x, List<Number> y, List<Number> shifts) {
+  public VolatilitySurfaceManipulatorBuilder multipleAdditiveShifts(final List<Number> x, final List<Number> y, final List<Number> shifts) {
     _scenario.add(_selector, new VolatilitySurfaceMultipleAdditiveShifts(array(x), array(y), array(shifts)));
     return this;
   }
@@ -106,7 +106,7 @@ public class VolatilitySurfaceManipulatorBuilder {
    * @deprecated Use {@link #shifts)} with {@link ScenarioShiftType#RELATIVE} and one shift
    */
   @Deprecated
-  public VolatilitySurfaceManipulatorBuilder singleMultiplicativeShift(Number x, Number y, Number shift) {
+  public VolatilitySurfaceManipulatorBuilder singleMultiplicativeShift(final Number x, final Number y, final Number shift) {
     _scenario.add(_selector, new VolatilitySurfaceSingleMultiplicativeShift(x.doubleValue(), y.doubleValue(), shift.doubleValue()));
     return this;
   }
@@ -115,15 +115,15 @@ public class VolatilitySurfaceManipulatorBuilder {
    * @deprecated Use {@link #shifts)} with {@link ScenarioShiftType#RELATIVE} and multiple shifts
    */
   @Deprecated
-  public VolatilitySurfaceManipulatorBuilder multipleMultiplicativeShifts(List<Number> x, List<Number> y, List<Number> shifts) {
+  public VolatilitySurfaceManipulatorBuilder multipleMultiplicativeShifts(final List<Number> x, final List<Number> y, final List<Number> shifts) {
     _scenario.add(_selector, new VolatilitySurfaceMultipleMultiplicativeShifts(array(x), array(y), array(shifts)));
     return this;
   }
 
-  private static double[] array(List<Number> list) {
-    double[] array = new double[list.size()];
+  private static double[] array(final List<Number> list) {
+    final double[] array = new double[list.size()];
     int index = 0;
-    for (Number value : list) {
+    for (final Number value : list) {
       array[index++] = value.doubleValue();
     }
     return array;

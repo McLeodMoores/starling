@@ -6,7 +6,6 @@
 package com.opengamma.integration.regression;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -40,7 +39,7 @@ public final class IdMappings implements ImmutableBean {
   private final int _maxId;
 
   @ImmutableConstructor
-  public IdMappings(Map<ObjectId, Integer> ids, int maxId) {
+  public IdMappings(final Map<ObjectId, Integer> ids, final int maxId) {
     JodaBeanUtils.notNull(ids, "ids");
     this._ids = ImmutableMap.copyOf(ids);
     this._maxId = maxId;
@@ -50,7 +49,7 @@ public final class IdMappings implements ImmutableBean {
     this(Collections.<ObjectId, Integer>emptyMap(), -1);
   }
 
-  public Integer getId(ObjectId objectId) {
+  public Integer getId(final ObjectId objectId) {
     return _ids.get(objectId);
   }
 

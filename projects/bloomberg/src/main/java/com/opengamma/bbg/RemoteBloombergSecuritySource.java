@@ -57,20 +57,20 @@ public class RemoteBloombergSecuritySource extends AbstractSecuritySource implem
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param byteArrayRequestSender the sender
    */
-  public RemoteBloombergSecuritySource(ByteArrayRequestSender byteArrayRequestSender) {
+  public RemoteBloombergSecuritySource(final ByteArrayRequestSender byteArrayRequestSender) {
     this(byteArrayRequestSender, new FudgeContext());
   }
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param byteArrayRequestSender the sender
    * @param fudgeContext the context, not null
    */
-  public RemoteBloombergSecuritySource(ByteArrayRequestSender byteArrayRequestSender, FudgeContext fudgeContext) {
+  public RemoteBloombergSecuritySource(final ByteArrayRequestSender byteArrayRequestSender, final FudgeContext fudgeContext) {
     ArgumentChecker.notNull(byteArrayRequestSender, "byteArrayRequestSender");
     ArgumentChecker.notNull(fudgeContext, "fudgeContext");
     _byteArrayRequestSender = byteArrayRequestSender;
@@ -80,7 +80,7 @@ public class RemoteBloombergSecuritySource extends AbstractSecuritySource implem
   //-------------------------------------------------------------------------
   /**
    * Gets the sender.
-   * 
+   *
    * @return the sender
    */
   public ByteArrayRequestSender getByteArrayRequestSender() {
@@ -89,7 +89,7 @@ public class RemoteBloombergSecuritySource extends AbstractSecuritySource implem
 
   /**
    * Gets the Fudge context.
-   * 
+   *
    * @return the Fudge context
    */
   public FudgeContext getFudgeContext() {
@@ -97,83 +97,83 @@ public class RemoteBloombergSecuritySource extends AbstractSecuritySource implem
   }
 
   @Override
-  public Collection<Security> get(ExternalIdBundle secKey) {
+  public Collection<Security> get(final ExternalIdBundle secKey) {
     ArgumentChecker.notNull(secKey, "security key");
-    RemoteSecurityMasterReceiver receiver = new RemoteSecurityMasterReceiver();
+    final RemoteSecurityMasterReceiver receiver = new RemoteSecurityMasterReceiver();
     LOGGER.debug("sending getSecurities for {} to remote securityMaster", secKey);
-    SecurityMasterRequestMessage requestMessage = new SecurityMasterRequestMessage();
+    final SecurityMasterRequestMessage requestMessage = new SecurityMasterRequestMessage();
     requestMessage.setMessageType(MessageType.GET_SECURITIES_BY_KEY);
     requestMessage.setSecKey(secKey);
-    FudgeMsg fudgeMsg = requestMessage.toFudgeMsg(new FudgeSerializer(_fudgeContext));
+    final FudgeMsg fudgeMsg = requestMessage.toFudgeMsg(new FudgeSerializer(_fudgeContext));
     _byteArrayRequestSender.sendRequest(_fudgeContext.toByteArray(fudgeMsg), receiver);
     try {
       receiver.getLatch().await();
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
       Thread.currentThread().interrupt();
       LOGGER.info("InterruptedException, request cannot be serviced right now");
       throw new OpenGammaRuntimeException("Unable to getSecurities because of InterruptedException", e);
     }
-    byte[] data = receiver.getMessage();
-    SecurityMasterResponseMessage response = toSecurityMasterResponseMessage(data);
+    final byte[] data = receiver.getMessage();
+    final SecurityMasterResponseMessage response = toSecurityMasterResponseMessage(data);
     return response.getSecurities();
   }
 
   @Override
-  public Collection<Security> get(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
+  public Collection<Security> get(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     return get(bundle);
   }
 
   @Override
-  public Security getSingle(ExternalIdBundle secKey) {
+  public Security getSingle(final ExternalIdBundle secKey) {
     ArgumentChecker.notNull(secKey, "security key");
-    RemoteSecurityMasterReceiver receiver = new RemoteSecurityMasterReceiver();
+    final RemoteSecurityMasterReceiver receiver = new RemoteSecurityMasterReceiver();
     LOGGER.debug("sending getSecurity for {} to remote securityMaster", secKey);
-    SecurityMasterRequestMessage requestMessage = new SecurityMasterRequestMessage();
+    final SecurityMasterRequestMessage requestMessage = new SecurityMasterRequestMessage();
     requestMessage.setMessageType(MessageType.GET_SECURITY_BY_KEY);
     requestMessage.setSecKey(secKey);
-    FudgeMsg fudgeMsg = requestMessage.toFudgeMsg(new FudgeSerializer(_fudgeContext));
+    final FudgeMsg fudgeMsg = requestMessage.toFudgeMsg(new FudgeSerializer(_fudgeContext));
     _byteArrayRequestSender.sendRequest(_fudgeContext.toByteArray(fudgeMsg), receiver);
     try {
       receiver.getLatch().await();
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
       Thread.currentThread().interrupt();
       LOGGER.info("InterruptedException, request cannot be serviced right now");
       throw new OpenGammaRuntimeException("Unable to getSecurity because of InterruptedException", e);
     }
-    byte[] data = receiver.getMessage();
-    SecurityMasterResponseMessage response = toSecurityMasterResponseMessage(data);
+    final byte[] data = receiver.getMessage();
+    final SecurityMasterResponseMessage response = toSecurityMasterResponseMessage(data);
     return response.getSecurity();
   }
 
   @Override
-  public Security getSingle(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
+  public Security getSingle(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     return getSingle(bundle);
   }
 
   @Override
-  public Security get(UniqueId uid) {
+  public Security get(final UniqueId uid) {
     ArgumentChecker.notNull(uid, "unique identifier");
-    RemoteSecurityMasterReceiver receiver = new RemoteSecurityMasterReceiver();
+    final RemoteSecurityMasterReceiver receiver = new RemoteSecurityMasterReceiver();
     LOGGER.debug("sending getSecurity for {} to remote securityMaster", uid);
-    SecurityMasterRequestMessage requestMessage = new SecurityMasterRequestMessage();
+    final SecurityMasterRequestMessage requestMessage = new SecurityMasterRequestMessage();
     requestMessage.setMessageType(MessageType.GET_SECURITY_BY_IDENTITY);
     requestMessage.setUniqueId(uid);
-    FudgeMsg fudgeMsg = requestMessage.toFudgeMsg(new FudgeSerializer(_fudgeContext));
+    final FudgeMsg fudgeMsg = requestMessage.toFudgeMsg(new FudgeSerializer(_fudgeContext));
     _byteArrayRequestSender.sendRequest(_fudgeContext.toByteArray(fudgeMsg), receiver);
     try {
       receiver.getLatch().await();
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
       Thread.currentThread().interrupt();
       LOGGER.info("InterruptedException, request cannot be serviced right now");
       throw new OpenGammaRuntimeException("Unable to getSecurity because of InterruptedException", e);
     }
-    byte[] data = receiver.getMessage();
-    SecurityMasterResponseMessage response = toSecurityMasterResponseMessage(data);
+    final byte[] data = receiver.getMessage();
+    final SecurityMasterResponseMessage response = toSecurityMasterResponseMessage(data);
     return response.getSecurity();
   }
 
   @Override
-  public Security get(ObjectId objectId, VersionCorrection versionCorrection) {
+  public Security get(final ObjectId objectId, final VersionCorrection versionCorrection) {
     // This is wrong
     return get(objectId.atLatestVersion());
   }
@@ -185,24 +185,24 @@ public class RemoteBloombergSecuritySource extends AbstractSecuritySource implem
   }
 
   //-------------------------------------------------------------------------
-  public Set<String> getOptionChain(ExternalId identifier) {
+  public Set<String> getOptionChain(final ExternalId identifier) {
     ArgumentChecker.notNull(identifier, "identifier");
-    RemoteSecurityMasterReceiver receiver = new RemoteSecurityMasterReceiver();
+    final RemoteSecurityMasterReceiver receiver = new RemoteSecurityMasterReceiver();
     LOGGER.debug("sending getSecurity for {} to remote securityMaster", identifier);
-    SecurityMasterRequestMessage requestMessage = new SecurityMasterRequestMessage();
+    final SecurityMasterRequestMessage requestMessage = new SecurityMasterRequestMessage();
     requestMessage.setMessageType(MessageType.GET_OPTION_CHAIN);
     requestMessage.setSecKey(ExternalIdBundle.of(identifier));
-    FudgeMsg fudgeMsg = requestMessage.toFudgeMsg(new FudgeSerializer(_fudgeContext));
+    final FudgeMsg fudgeMsg = requestMessage.toFudgeMsg(new FudgeSerializer(_fudgeContext));
     _byteArrayRequestSender.sendRequest(_fudgeContext.toByteArray(fudgeMsg), receiver);
     try {
       receiver.getLatch().await();
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
       Thread.currentThread().interrupt();
       LOGGER.info("InterruptedException, request cannot be serviced right now");
       throw new OpenGammaRuntimeException("Unable to getOptionChain because of InterruptedException", e);
     }
-    byte[] data = receiver.getMessage();
-    SecurityMasterResponseMessage response = toSecurityMasterResponseMessage(data);
+    final byte[] data = receiver.getMessage();
+    final SecurityMasterResponseMessage response = toSecurityMasterResponseMessage(data);
     return response.getOptionChain();
   }
 
@@ -215,7 +215,7 @@ public class RemoteBloombergSecuritySource extends AbstractSecuritySource implem
   //    requestMessage.setMessageType(MessageType.GET_SECURITIES_BY_BOND_ISSUER_TYPE);
   //    requestMessage.setBondIssuerType(issuerType);
   //    FudgeFieldContainer fudgeMsg = requestMessage.toFudgeMsg(_fudgeContext);
-  //    _byteArrayRequestSender.sendRequest(_fudgeContext.toByteArray(fudgeMsg), receiver); 
+  //    _byteArrayRequestSender.sendRequest(_fudgeContext.toByteArray(fudgeMsg), receiver);
   //    try {
   //      receiver.getLatch().await();
   //    } catch (InterruptedException e) {
@@ -233,7 +233,7 @@ public class RemoteBloombergSecuritySource extends AbstractSecuritySource implem
    * @param data the input data
    * @return the response
    */
-  protected SecurityMasterResponseMessage toSecurityMasterResponseMessage(byte[] data) {
+  protected SecurityMasterResponseMessage toSecurityMasterResponseMessage(final byte[] data) {
     return _fudgeContext.readObject(SecurityMasterResponseMessage.class, new ByteArrayInputStream(data));
   }
 
@@ -242,7 +242,7 @@ public class RemoteBloombergSecuritySource extends AbstractSecuritySource implem
     private byte[] _message;
 
     @Override
-    public void messageReceived(byte[] message) {
+    public void messageReceived(final byte[] message) {
       _message = message;
       _latch.countDown();
     }
@@ -263,7 +263,7 @@ public class RemoteBloombergSecuritySource extends AbstractSecuritySource implem
   }
 
   @Override
-  public Map<UniqueId, Security> get(Collection<UniqueId> uniqueIds) {
+  public Map<UniqueId, Security> get(final Collection<UniqueId> uniqueIds) {
     throw new UnsupportedOperationException("Bulk loading of security not supported yet!");
   }
 

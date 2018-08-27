@@ -28,13 +28,13 @@ public class UserResource {
 
   @GET
   @Path("logout")
-  public Response get(@Context HttpServletRequest hsr) {
+  public Response get(@Context final HttpServletRequest hsr) {
     try {
       AuthUtils.getSubject().logout();
       hsr.getSession().invalidate();
-    } catch (SessionException ex) {
+    } catch (final SessionException ex) {
       LOGGER.debug("Ignoring session exception during logout", ex);
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       LOGGER.debug("Ignoring unexpected exception during logout", ex);
     }
     return Response.ok().build();

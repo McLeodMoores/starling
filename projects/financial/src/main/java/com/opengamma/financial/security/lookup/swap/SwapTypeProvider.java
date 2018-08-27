@@ -16,12 +16,12 @@ import com.opengamma.util.tuple.Pair;
 public class SwapTypeProvider implements SecurityValueProvider<SwapSecurity> {
 
   @Override
-  public Object getValue(SwapSecurity security) {
-    Pair<Currency, Currency> ccys = new CurrencyVisitor().visit(security);
+  public Object getValue(final SwapSecurity security) {
+    final Pair<Currency, Currency> ccys = new CurrencyVisitor().visit(security);
     if (!ccys.getFirst().equals(ccys.getSecond())) {
       return "Cross Currency Swap";
     }
-    FixedFloatVisitor visitor = new FixedFloatVisitor();
+    final FixedFloatVisitor visitor = new FixedFloatVisitor();
     if (!security.getPayLeg().accept(visitor) && !security.getReceiveLeg().accept(visitor)) {
       return "Basis Swap";
     }

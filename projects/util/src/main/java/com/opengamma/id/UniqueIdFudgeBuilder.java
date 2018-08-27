@@ -29,7 +29,7 @@ public final class UniqueIdFudgeBuilder extends AbstractFudgeBuilder implements 
 
   //-------------------------------------------------------------------------
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, UniqueId object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final UniqueId object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     toFudgeMsg(serializer, object, msg);
     return msg;
@@ -64,9 +64,9 @@ public final class UniqueIdFudgeBuilder extends AbstractFudgeBuilder implements 
   }
 
   public static UniqueId fromFudgeMsg(final FudgeMsg msg) {
-    String scheme = msg.getString(SCHEME_FIELD_NAME);
-    String value = msg.getString(VALUE_FIELD_NAME);
-    String version = msg.getString(VERSION_FIELD_NAME);
+    final String scheme = msg.getString(SCHEME_FIELD_NAME);
+    final String value = msg.getString(VALUE_FIELD_NAME);
+    final String version = msg.getString(VERSION_FIELD_NAME);
     return UniqueId.of(scheme, value, version);
   }
 

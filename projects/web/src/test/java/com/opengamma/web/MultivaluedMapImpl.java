@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.web;
@@ -28,14 +28,15 @@ public class MultivaluedMapImpl extends HashMap<String, List<String>> implements
   public MultivaluedMapImpl() {
   }
 
-  public MultivaluedMapImpl(MultivaluedMap<String, String> that) {
-    for (Map.Entry<String, List<String>> e : that.entrySet()) {
-      this.put(e.getKey(), new ArrayList<String>(e.getValue()));
+  public MultivaluedMapImpl(final MultivaluedMap<String, String> that) {
+    for (final Map.Entry<String, List<String>> e : that.entrySet()) {
+      this.put(e.getKey(), new ArrayList<>(e.getValue()));
     }
   }
 
-  public final void putSingle(String key, String value) {
-    List<String> l = getList(key);
+  @Override
+  public final void putSingle(final String key, final String value) {
+    final List<String> l = getList(key);
     l.clear();
     if (value != null) {
       l.add(value);
@@ -44,8 +45,9 @@ public class MultivaluedMapImpl extends HashMap<String, List<String>> implements
     }
   }
 
-  public final void add(String key, String value) {
-    List<String> l = getList(key);
+  @Override
+  public final void add(final String key, final String value) {
+    final List<String> l = getList(key);
     if (value != null) {
       l.add(value);
     } else {
@@ -53,8 +55,9 @@ public class MultivaluedMapImpl extends HashMap<String, List<String>> implements
     }
   }
 
-  public final String getFirst(String key) {
-    List<String> values = get(key);
+  @Override
+  public final String getFirst(final String key) {
+    final List<String> values = get(key);
     if (values != null && values.size() > 0) {
       return values.get(0);
     } else {
@@ -62,8 +65,8 @@ public class MultivaluedMapImpl extends HashMap<String, List<String>> implements
     }
   }
 
-  public final void addFirst(String key, String value) {
-    List<String> l = getList(key);
+  public final void addFirst(final String key, final String value) {
+    final List<String> l = getList(key);
     if (value != null) {
       l.add(0, value);
     } else {
@@ -71,22 +74,22 @@ public class MultivaluedMapImpl extends HashMap<String, List<String>> implements
     }
   }
 
-  public final <A> List<A> get(String key, Class<A> type) {
+  public final <A> List<A> get(final String key, final Class<A> type) {
     Constructor<A> c = null;
     try {
       c = type.getConstructor(String.class);
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       throw new IllegalArgumentException(type.getName() + " has no String constructor", ex);
     }
 
     ArrayList<A> l = null;
-    List<String> values = get(key);
+    final List<String> values = get(key);
     if (values != null) {
-      l = new ArrayList<A>();
-      for (String value : values) {
+      l = new ArrayList<>();
+      for (final String value : values) {
         try {
           l.add(c.newInstance(value));
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
           l.add(null);
         }
       }
@@ -94,8 +97,8 @@ public class MultivaluedMapImpl extends HashMap<String, List<String>> implements
     return l;
   }
 
-  public final void putSingle(String key, Object value) {
-    List<String> l = getList(key);
+  public final void putSingle(final String key, final Object value) {
+    final List<String> l = getList(key);
     l.clear();
     if (value != null) {
       l.add(value.toString());
@@ -104,8 +107,8 @@ public class MultivaluedMapImpl extends HashMap<String, List<String>> implements
     }
   }
 
-  public final void add(String key, Object value) {
-    List<String> l = getList(key);
+  public final void add(final String key, final Object value) {
+    final List<String> l = getList(key);
     if (value != null) {
       l.add(value.toString());
     } else {
@@ -113,53 +116,53 @@ public class MultivaluedMapImpl extends HashMap<String, List<String>> implements
     }
   }
 
-  private List<String> getList(String key) {
+  private List<String> getList(final String key) {
     List<String> l = get(key);
     if (l == null) {
-      l = new LinkedList<String>();
+      l = new LinkedList<>();
       put(key, l);
     }
     return l;
   }
 
-  public final <A> A getFirst(String key, Class<A> type) {
-    String value = getFirst(key);
+  public final <A> A getFirst(final String key, final Class<A> type) {
+    final String value = getFirst(key);
     if (value == null) {
       return null;
     }
     Constructor<A> c = null;
     try {
       c = type.getConstructor(String.class);
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       throw new IllegalArgumentException(type.getName() + " has no String constructor", ex);
     }
     A retVal = null;
     try {
       retVal = c.newInstance(value);
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
     }
     return retVal;
   }
 
   @SuppressWarnings("unchecked")
-  public final <A> A getFirst(String key, A defaultValue) {
-    String value = getFirst(key);
+  public final <A> A getFirst(final String key, final A defaultValue) {
+    final String value = getFirst(key);
     if (value == null) {
       return defaultValue;
     }
 
-    Class<A> type = (Class<A>) defaultValue.getClass();
+    final Class<A> type = (Class<A>) defaultValue.getClass();
 
     Constructor<A> c = null;
     try {
       c = type.getConstructor(String.class);
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       throw new IllegalArgumentException(type.getName() + " has no String constructor", ex);
     }
     A retVal = defaultValue;
     try {
       retVal = c.newInstance(value);
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
     }
     return retVal;
   }

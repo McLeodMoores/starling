@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.change;
@@ -26,17 +26,17 @@ public final class DummyChangeManager implements ChangeManager {
   }
 
   @Override
-  public void addChangeListener(ChangeListener listener) {
+  public void addChangeListener(final ChangeListener listener) {
     // dummy manager does nothing
   }
 
   @Override
-  public void removeChangeListener(ChangeListener listener) {
+  public void removeChangeListener(final ChangeListener listener) {
     // dummy manager does nothing
   }
 
   @Override
-  public void entityChanged(ChangeType type, ObjectId oid, Instant versionFrom, Instant versionTo, Instant versionInstant) {
+  public void entityChanged(final ChangeType type, final ObjectId oid, final Instant versionFrom, final Instant versionTo, final Instant versionInstant) {
     // dummy manager does nothing
   }
 }

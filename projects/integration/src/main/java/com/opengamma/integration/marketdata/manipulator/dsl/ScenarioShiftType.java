@@ -23,36 +23,38 @@ public enum ScenarioShiftType implements GroovyAliasable {
    * Relative shift.
    */
   RELATIVE("Relative") {
-    
+
+    @Override
     public ShiftType toAnalyticsType() {
       return ShiftType.RELATIVE;
     }
-  }, 
-  
+  },
+
   /**
    * Absolute shift.
    */
   ABSOLUTE("Absolute") {
-    
+
+    @Override
     public ShiftType toAnalyticsType() {
       return ShiftType.ABSOLUTE;
     }
   };
-  
+
   private static final ImmutableList<String> ALIASES;
   static {
-    List<String> result = newArrayList();
-    for (GroovyAliasable value : values()) {
+    final List<String> result = newArrayList();
+    for (final GroovyAliasable value : values()) {
       result.add(value.getGroovyAlias());
     }
     Collections.sort(result);
     ALIASES = ImmutableList.copyOf(result);
-    
+
   }
-  
+
   private final String _groovyAlias;
-  
-  private ScenarioShiftType(String groovyAlias) {
+
+  private ScenarioShiftType(final String groovyAlias) {
     _groovyAlias = groovyAlias;
   }
 
@@ -64,7 +66,7 @@ public enum ScenarioShiftType implements GroovyAliasable {
   public String getGroovyAlias() {
     return _groovyAlias;
   }
-  
+
   /**
    * The list of available groovy aliases, sorted.
    * @return list of aliases.

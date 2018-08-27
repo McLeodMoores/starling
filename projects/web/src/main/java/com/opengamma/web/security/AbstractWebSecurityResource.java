@@ -65,13 +65,13 @@ public abstract class AbstractWebSecurityResource
 
   /**
    * Creates the resource.
-   * 
+   *
    * @param securityMaster  the security master, not null
    * @param securityLoader  the security loader, not null
    * @param htsMaster  the historical time series master, not null
    * @param legalEntityMaster the organization master, not null
    */
-  protected AbstractWebSecurityResource(final SecurityMaster securityMaster, final SecurityLoader securityLoader, final HistoricalTimeSeriesMaster htsMaster, 
+  protected AbstractWebSecurityResource(final SecurityMaster securityMaster, final SecurityLoader securityLoader, final HistoricalTimeSeriesMaster htsMaster,
       final LegalEntityMaster legalEntityMaster) {
     super(new WebSecuritiesData());
     ArgumentChecker.notNull(securityMaster, "securityMaster");
@@ -87,7 +87,7 @@ public abstract class AbstractWebSecurityResource
 
   /**
    * Creates the resource.
-   * 
+   *
    * @param parent  the parent resource, not null
    */
   protected AbstractWebSecurityResource(final AbstractWebSecurityResource parent) {
@@ -101,7 +101,7 @@ public abstract class AbstractWebSecurityResource
    */
   @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
+    final FlexiBean out = super.createRootData();
     out.put("uris", new WebSecuritiesUris(data()));
     return out;
   }
@@ -109,31 +109,31 @@ public abstract class AbstractWebSecurityResource
   //-------------------------------------------------------------------------
   /**
    * Gets the security template provider.
-   * 
+   *
    * @return the template provider, not null
    */
   protected SecurityTemplateNameProvider getTemplateProvider() {
     return _templateNameProvider;
   }
 
-  protected void addSecuritySpecificMetaData(ManageableSecurity security, FlexiBean out) {
+  protected void addSecuritySpecificMetaData(final ManageableSecurity security, final FlexiBean out) {
     if (security instanceof FinancialSecurity) {
-      FinancialSecurity financialSec = (FinancialSecurity) security;
+      final FinancialSecurity financialSec = (FinancialSecurity) security;
       financialSec.accept(new SecurityTemplateModelObjectBuilder(out, data().getSecurityMaster(), data().getLegalEntityMaster()));
     } else {
       if (security.getSecurityType().equals(SecurityEntryData.EXTERNAL_SENSITIVITIES_SECURITY_TYPE)) {
-        RawSecurity rawSecurity = (RawSecurity) security;
-        FudgeMsgEnvelope msg = OpenGammaFudgeContext.getInstance().deserialize(rawSecurity.getRawData());
-        SecurityEntryData securityEntryData = OpenGammaFudgeContext.getInstance().fromFudgeMsg(SecurityEntryData.class, msg.getMessage());
+        final RawSecurity rawSecurity = (RawSecurity) security;
+        final FudgeMsgEnvelope msg = OpenGammaFudgeContext.getInstance().deserialize(rawSecurity.getRawData());
+        final SecurityEntryData securityEntryData = OpenGammaFudgeContext.getInstance().fromFudgeMsg(SecurityEntryData.class, msg.getMessage());
 
         out.put("securityEntryData", securityEntryData);
-        RawSecurity underlyingRawSecurity = (RawSecurity) getSecurity(securityEntryData.getFactorSetId(), data().getSecurityMaster());
+        final RawSecurity underlyingRawSecurity = (RawSecurity) getSecurity(securityEntryData.getFactorSetId(), data().getSecurityMaster());
         if (underlyingRawSecurity != null) {
-          FudgeMsgEnvelope factorIdMsg = OpenGammaFudgeContext.getInstance().deserialize(underlyingRawSecurity.getRawData());
-          @SuppressWarnings("unchecked")
+          final FudgeMsgEnvelope factorIdMsg = OpenGammaFudgeContext.getInstance().deserialize(underlyingRawSecurity.getRawData());
+          final
           List<FactorExposureData> factorExposureDataList = OpenGammaFudgeContext.getInstance().fromFudgeMsg(List.class, factorIdMsg.getMessage());
           LOGGER.error(factorExposureDataList.toString());
-          List<FactorExposure> factorExposuresList = convertToFactorExposure(factorExposureDataList);
+          final List<FactorExposure> factorExposuresList = convertToFactorExposure(factorExposureDataList);
           out.put("factorExposuresList", factorExposuresList);
         } else {
           LOGGER.error("Couldn't find security");
@@ -141,18 +141,19 @@ public abstract class AbstractWebSecurityResource
 
       }
       if (security.getSecurityType().equals(FactorExposureData.EXTERNAL_SENSITIVITIES_RISK_FACTORS_SECURITY_TYPE)) {
-        RawSecurity rawSecurity = (RawSecurity) security;
-        FudgeMsgEnvelope msg = OpenGammaFudgeContext.getInstance().deserialize(rawSecurity.getRawData());
+        final RawSecurity rawSecurity = (RawSecurity) security;
+        final FudgeMsgEnvelope msg = OpenGammaFudgeContext.getInstance().deserialize(rawSecurity.getRawData());
         @SuppressWarnings("unchecked")
+        final
         List<FactorExposureData> factorExposureDataList = OpenGammaFudgeContext.getInstance().fromFudgeMsg(List.class, msg.getMessage());
-        List<FactorExposure> factorExposuresList = convertToFactorExposure(factorExposureDataList);
+        final List<FactorExposure> factorExposuresList = convertToFactorExposure(factorExposureDataList);
         out.put("factorExposuresList", factorExposuresList);
       }
       if (security.getSecurityType().equals(IndexFamily.METADATA_TYPE)) {
-        Map<String, ExternalId> convertedMap = new LinkedHashMap<>();
-        IndexFamily indexFamily = (IndexFamily) security;
+        final Map<String, ExternalId> convertedMap = new LinkedHashMap<>();
+        final IndexFamily indexFamily = (IndexFamily) security;
         if (indexFamily.getMembers() != null) {
-          for (Map.Entry<Tenor, ExternalId> entry : indexFamily.getMembers().entrySet()) {
+          for (final Map.Entry<Tenor, ExternalId> entry : indexFamily.getMembers().entrySet()) {
             convertedMap.put(entry.getKey().toFormattedString(), entry.getValue());
           }
         }
@@ -161,31 +162,31 @@ public abstract class AbstractWebSecurityResource
     }
   }
 
-  private List<FactorExposure> convertToFactorExposure(List<FactorExposureData> factorExposureDataList) {
-    List<FactorExposure> results = new ArrayList<FactorExposure>();
-    for (FactorExposureData exposure : factorExposureDataList) {
-      HistoricalTimeSeriesInfoSearchRequest exposureSearchRequest = new HistoricalTimeSeriesInfoSearchRequest();
+  private List<FactorExposure> convertToFactorExposure(final List<FactorExposureData> factorExposureDataList) {
+    final List<FactorExposure> results = new ArrayList<>();
+    for (final FactorExposureData exposure : factorExposureDataList) {
+      final HistoricalTimeSeriesInfoSearchRequest exposureSearchRequest = new HistoricalTimeSeriesInfoSearchRequest();
       exposureSearchRequest.addExternalId(exposure.getExposureExternalId());
       exposureSearchRequest.setDataField("EXPOSURE");
-      HistoricalTimeSeriesInfoSearchResult exposureSearchResult = data().getHistoricalTimeSeriesMaster().search(exposureSearchRequest);
+      final HistoricalTimeSeriesInfoSearchResult exposureSearchResult = data().getHistoricalTimeSeriesMaster().search(exposureSearchRequest);
       HistoricalTimeSeries exposureHTS = null;
       if (exposureSearchResult.getFirstInfo() != null) {
         exposureHTS = data().getHistoricalTimeSeriesMaster().getTimeSeries(exposureSearchResult.getFirstInfo().getTimeSeriesObjectId(), VersionCorrection.LATEST);
       }
 
-      HistoricalTimeSeriesInfoSearchRequest convexitySearchRequest = new HistoricalTimeSeriesInfoSearchRequest();
+      final HistoricalTimeSeriesInfoSearchRequest convexitySearchRequest = new HistoricalTimeSeriesInfoSearchRequest();
       convexitySearchRequest.addExternalId(exposure.getExposureExternalId());
       convexitySearchRequest.setDataField("CONVEXITY");
-      HistoricalTimeSeriesInfoSearchResult convexitySearchResult = data().getHistoricalTimeSeriesMaster().search(convexitySearchRequest);
+      final HistoricalTimeSeriesInfoSearchResult convexitySearchResult = data().getHistoricalTimeSeriesMaster().search(convexitySearchRequest);
       HistoricalTimeSeries convexityHTS = null;
       if (convexitySearchResult.getFirstInfo() != null) {
         convexityHTS = data().getHistoricalTimeSeriesMaster().getTimeSeries(convexitySearchResult.getFirstInfo().getTimeSeriesObjectId(), VersionCorrection.LATEST);
       }
 
-      HistoricalTimeSeriesInfoSearchRequest priceSearchRequest = new HistoricalTimeSeriesInfoSearchRequest();
+      final HistoricalTimeSeriesInfoSearchRequest priceSearchRequest = new HistoricalTimeSeriesInfoSearchRequest();
       priceSearchRequest.addExternalId(exposure.getExposureExternalId());
       priceSearchRequest.setDataField("PX_LAST");
-      HistoricalTimeSeriesInfoSearchResult priceSearchResult = data().getHistoricalTimeSeriesMaster().search(priceSearchRequest);
+      final HistoricalTimeSeriesInfoSearchResult priceSearchResult = data().getHistoricalTimeSeriesMaster().search(priceSearchRequest);
       HistoricalTimeSeries priceHTS = null;
       if (priceSearchResult.getFirstInfo() != null) {
         priceHTS = data().getHistoricalTimeSeriesMaster().getTimeSeries(priceSearchResult.getFirstInfo().getTimeSeriesObjectId(), VersionCorrection.LATEST);
@@ -218,10 +219,10 @@ public abstract class AbstractWebSecurityResource
     private final UniqueId _convexityTsId;
     private final Double _lastConvexity;
 
-    public FactorExposure(String factorType, String factorName, String node,
-                          UniqueId priceTsId, Double lastPrice,
-                          UniqueId exposureTsId, Double lastExposure,
-                          UniqueId convexityTsId, Double lastConvexity) {
+    public FactorExposure(final String factorType, final String factorName, final String node,
+                          final UniqueId priceTsId, final Double lastPrice,
+                          final UniqueId exposureTsId, final Double lastExposure,
+                          final UniqueId convexityTsId, final Double lastConvexity) {
       _factorType = factorType;
       _factorName = factorName;
       _node = node;
@@ -274,10 +275,10 @@ public abstract class AbstractWebSecurityResource
     if (underlyingIdentifier == null) {
       return null;
     }
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.addExternalId(underlyingIdentifier);
-    SecuritySearchResult search = securityMaster.search(request);
+    final SecuritySearchResult search = securityMaster.search(request);
     return search.getFirstSecurity();
   }
-    
+
 }

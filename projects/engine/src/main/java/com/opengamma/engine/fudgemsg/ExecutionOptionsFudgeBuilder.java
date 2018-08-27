@@ -58,10 +58,10 @@ public class ExecutionOptionsFudgeBuilder implements FudgeBuilder<ExecutionOptio
       Pairs.of(BATCH_FIELD, ViewExecutionFlags.BATCH));
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, ExecutionOptions object) {
-    MutableFudgeMsg msg = serializer.newMessage();
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final ExecutionOptions object) {
+    final MutableFudgeMsg msg = serializer.newMessage();
     serializer.addToMessageWithClassHeaders(msg, EXECUTION_SEQUENCE_FIELD, null, object.getExecutionSequence());
-    for (Pair<String, ViewExecutionFlags> flags : FLAGS) {
+    for (final Pair<String, ViewExecutionFlags> flags : FLAGS) {
       if (object.getFlags().contains(flags.getSecond())) {
         msg.add(flags.getFirst(), Boolean.TRUE);
       }
@@ -77,10 +77,10 @@ public class ExecutionOptionsFudgeBuilder implements FudgeBuilder<ExecutionOptio
   }
 
   @Override
-  public ExecutionOptions buildObject(FudgeDeserializer deserializer, FudgeMsg message) {
-    ViewCycleExecutionSequence executionSequence = deserializer.fudgeMsgToObject(ViewCycleExecutionSequence.class, message.getMessage(EXECUTION_SEQUENCE_FIELD));
-    EnumSet<ViewExecutionFlags> flags = EnumSet.noneOf(ViewExecutionFlags.class);
-    for (Pair<String, ViewExecutionFlags> flagField : FLAGS) {
+  public ExecutionOptions buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
+    final ViewCycleExecutionSequence executionSequence = deserializer.fudgeMsgToObject(ViewCycleExecutionSequence.class, message.getMessage(EXECUTION_SEQUENCE_FIELD));
+    final EnumSet<ViewExecutionFlags> flags = EnumSet.noneOf(ViewExecutionFlags.class);
+    for (final Pair<String, ViewExecutionFlags> flagField : FLAGS) {
       if (BooleanUtils.isTrue(message.getBoolean(flagField.getFirst()))) {
         flags.add(flagField.getSecond());
       }
@@ -93,8 +93,8 @@ public class ExecutionOptionsFudgeBuilder implements FudgeBuilder<ExecutionOptio
     if (message.hasField(MARKET_DATA_TIMEOUT_MILLIS_FIELD)) {
       marketDataTimeoutMillis = message.getLong(MARKET_DATA_TIMEOUT_MILLIS_FIELD);
     }
-    FudgeField defaultExecutionOptionsField = message.getByName(DEFAULT_EXECUTION_OPTIONS_FIELD);
-    ViewCycleExecutionOptions defaultExecutionOptions = defaultExecutionOptionsField != null ?
+    final FudgeField defaultExecutionOptionsField = message.getByName(DEFAULT_EXECUTION_OPTIONS_FIELD);
+    final ViewCycleExecutionOptions defaultExecutionOptions = defaultExecutionOptionsField != null ?
         deserializer.fieldValueToObject(ViewCycleExecutionOptions.class, defaultExecutionOptionsField) : null;
 
     return new ExecutionOptions(executionSequence, flags, maxSuccessiveDeltaCycles, marketDataTimeoutMillis, defaultExecutionOptions);

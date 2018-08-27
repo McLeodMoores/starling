@@ -21,12 +21,12 @@ import com.sun.jersey.api.client.ClientResponse.Status;
 public class AuthorizationExceptionMapperTest extends AbstractExceptionMapperTestHelper {
 
   @Test(dataProvider="mediaTypes")
-  public void test_mapping(MediaType mediaType) throws Exception {
-    AuthorizationException ex = new AuthorizationException("Test message");
-    AuthorizationExceptionMapper mapper = new AuthorizationExceptionMapper();
+  public void test_mapping(final MediaType mediaType) throws Exception {
+    final AuthorizationException ex = new AuthorizationException("Test message");
+    final AuthorizationExceptionMapper mapper = new AuthorizationExceptionMapper();
     init(mapper, mediaType);
-    
-    Response test = mapper.toResponse(ex);
+
+    final Response test = mapper.toResponse(ex);
     testResult(test, Status.FORBIDDEN, ex);
   }
 

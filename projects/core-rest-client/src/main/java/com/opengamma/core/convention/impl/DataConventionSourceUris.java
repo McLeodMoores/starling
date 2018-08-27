@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.convention.impl;
@@ -22,14 +22,14 @@ import com.opengamma.id.VersionCorrection;
 public class DataConventionSourceUris {
   /**
    * Builds a URI.
-   * 
+   *
    * @param baseUri  the base URI, not null
    * @param vc  the version-correction, null means latest
    * @param bundle  the bundle, may be null
    * @return the URI, not null
    */
-  public static URI uriSearch(URI baseUri, VersionCorrection vc, ExternalIdBundle bundle) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("conventions");
+  public static URI uriSearch(final URI baseUri, final VersionCorrection vc, final ExternalIdBundle bundle) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("conventions");
     if (vc != null) {
       bld.queryParam("versionAsof", vc.getVersionAsOfString());
       bld.queryParam("correctedTo", vc.getCorrectedToString());
@@ -40,13 +40,13 @@ public class DataConventionSourceUris {
 
   /**
    * Builds a URI.
-   * 
+   *
    * @param baseUri  the base URI, not null
    * @param uniqueId  the unique identifier, may be null
    * @return the URI, not null
    */
-  public static URI uriGet(URI baseUri, UniqueId uniqueId) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("conventions/{conventionId}");
+  public static URI uriGet(final URI baseUri, final UniqueId uniqueId) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("conventions/{conventionId}");
     if (uniqueId.getVersion() != null) {
       bld.queryParam("version", uniqueId.getVersion());
     }
@@ -55,14 +55,14 @@ public class DataConventionSourceUris {
 
   /**
    * Builds a URI.
-   * 
+   *
    * @param baseUri  the base URI, not null
    * @param objectId  the object identifier, may be null
    * @param vc  the version-correction, null means latest
    * @return the URI, not null
    */
-  public static URI uriGet(URI baseUri, ObjectId objectId, VersionCorrection vc) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("conventions/{conventionId}");
+  public static URI uriGet(final URI baseUri, final ObjectId objectId, final VersionCorrection vc) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("conventions/{conventionId}");
     if (vc != null) {
       bld.queryParam("versionAsOf", vc.getVersionAsOfString());
       bld.queryParam("correctedTo", vc.getCorrectedToString());
@@ -72,13 +72,13 @@ public class DataConventionSourceUris {
 
   /**
    * Builds a URI.
-   * 
+   *
    * @param baseUri  the base URI, not null
    * @param uniqueIds  the unique identifiers, may be null
    * @return the URI, not null
    */
-  public static URI uriBulk(URI baseUri, Iterable<UniqueId> uniqueIds) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("conventionSearches/bulk");
+  public static URI uriBulk(final URI baseUri, final Iterable<UniqueId> uniqueIds) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("conventionSearches/bulk");
     bld.queryParam("id", IdUtils.toStringList(uniqueIds).toArray());
     return bld.build();
   }
@@ -88,27 +88,27 @@ public class DataConventionSourceUris {
 
   /**
    * Builds a URI.
-   * 
+   *
    * @param baseUri  the base URI, not null
    * @param bundle  the bundle, may be null
    * @return the URI, not null
    */
-  public static URI uriSearchList(URI baseUri, ExternalIdBundle bundle) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("conventionSearches/list");
+  public static URI uriSearchList(final URI baseUri, final ExternalIdBundle bundle) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("conventionSearches/list");
     bld.queryParam("id", bundle.toStringList().toArray());
     return bld.build();
   }
 
   /**
    * Builds a URI.
-   * 
+   *
    * @param baseUri  the base URI, not null
    * @param bundle  the bundle, may be null
    * @param vc  the version-correction, may be null
    * @return the URI, not null
    */
-  public static URI uriSearchSingle(URI baseUri, ExternalIdBundle bundle, VersionCorrection vc) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("conventionSearches/single");
+  public static URI uriSearchSingle(final URI baseUri, final ExternalIdBundle bundle, final VersionCorrection vc) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("conventionSearches/single");
     if (vc != null) {
       bld.queryParam("versionAsOf", vc.getVersionAsOfString());
       bld.queryParam("correctedTo", vc.getCorrectedToString());
@@ -119,15 +119,15 @@ public class DataConventionSourceUris {
 
   /**
    * Builds a URI.
-   * 
+   *
    * @param baseUri  the base URI, not null
    * @param bundle  the bundle, may be null
    * @param vc  the version-correction, may be null
    * @param type  the required type, may be null
    * @return the URI, not null
    */
-  public static URI uriSearchSingle(URI baseUri, ExternalIdBundle bundle, VersionCorrection vc, Class<?> type) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("conventionSearches/single");
+  public static URI uriSearchSingle(final URI baseUri, final ExternalIdBundle bundle, final VersionCorrection vc, final Class<?> type) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("conventionSearches/single");
     if (vc != null) {
       bld.queryParam("versionAsOf", vc.getVersionAsOfString());
       bld.queryParam("correctedTo", vc.getCorrectedToString());

@@ -31,7 +31,7 @@ public class Calendar {
     return _calendarType;
   }
 
-  public void setCalendarType(CalendarType type) {
+  public void setCalendarType(final CalendarType type) {
     this._calendarType = type;
   }
 
@@ -39,7 +39,7 @@ public class Calendar {
     return _externalId;
   }
 
-  public void setId(ExtId externalId) {
+  public void setId(final ExtId externalId) {
     _externalId = externalId;
   }
 }

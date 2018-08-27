@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.target;
@@ -40,12 +40,12 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.id.VersionCorrection;
 
 /**
- * 
+ *
  */
 public class MockComputationTargetResolver extends MapComputationTargetResolver {
 
   /**
-   * 
+   *
    */
   public static final LocalDate TODAY = LocalDate.now();
 
@@ -116,7 +116,7 @@ public class MockComputationTargetResolver extends MapComputationTargetResolver 
     return node;
   }
 
-  private SimplePortfolioNode createNode(final UniqueId parentNodeId, int depth) {
+  private SimplePortfolioNode createNode(final UniqueId parentNodeId, final int depth) {
     final int id = _nodeId++;
     final SimplePortfolioNode node = new SimplePortfolioNode(UniqueId.of("Node", Integer.toString(id)), "Node " + id) {
 
@@ -208,6 +208,7 @@ public class MockComputationTargetResolver extends MapComputationTargetResolver 
     return _securitySource;
   }
 
+  @Override
   public PositionSource getPositionSource() {
     return _positionSource;
   }

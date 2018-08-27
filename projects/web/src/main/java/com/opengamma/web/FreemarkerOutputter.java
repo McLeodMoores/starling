@@ -64,17 +64,17 @@ public class FreemarkerOutputter {
    * The configuration uses UTF-8, a default locale of English, localized lookup and
    * always includes the file "common/base.ftl".
    * A model is added that converts nulls to empty strings
-   * 
+   *
    * @return the standard Freemarker configuration, not null
    */
   public static Configuration createConfiguration() {
-    Configuration cfg = new Configuration();
+    final Configuration cfg = new Configuration();
     cfg.setDefaultEncoding("UTF-8");
     cfg.setOutputEncoding("UTF-8");
     cfg.setLocale(Locale.ENGLISH);
     cfg.setLocalizedLookup(true);
     cfg.addAutoInclude("common/base.ftl");
-    FreemarkerObjectWrapper objectWrapper = new FreemarkerObjectWrapper();
+    final FreemarkerObjectWrapper objectWrapper = new FreemarkerObjectWrapper();
     objectWrapper.setNullModel(TemplateScalarModel.EMPTY_STRING);
     cfg.setObjectWrapper(objectWrapper);
     return cfg;
@@ -84,11 +84,11 @@ public class FreemarkerOutputter {
    * Initializes the Freemarker system.
    * <p>
    * This stores the {@link Configuration Freemarker configuration} in the servlet context for later use.
-   * 
+   *
    * @param servletContext  the servlet context, not null
    * @param configuration  the configuration to use, not null
    */
-  public static void init(ServletContext servletContext, Configuration configuration) {
+  public static void init(final ServletContext servletContext, final Configuration configuration) {
     servletContext.setAttribute(FreemarkerOutputter.FREEMARKER_CONFIGURATION, configuration);
   }
 
@@ -101,11 +101,11 @@ public class FreemarkerOutputter {
    * <li>timeFormatter - a formatter that outputs the time as HH:mm:ss
    * <li>offsetFormatter - a formatter that outputs the time-zone offset
    * </ul>
-   * 
+   *
    * @return the root data, not null
    */
   public static FlexiBean createRootData() {
-    FlexiBean data = new FlexiBean();
+    final FlexiBean data = new FlexiBean();
     data.put("now", ZonedDateTime.now(OpenGammaClock.getInstance()));
     data.put("locale", Locale.ENGLISH);
     data.put("timeZone", OpenGammaClock.getInstance().getZone());
@@ -127,22 +127,22 @@ public class FreemarkerOutputter {
    * <li>baseUri - the base URI
    * <li>security - an instance of WebSecurity
    * </ul>
-   * 
+   *
    * @param uriInfo  the URI information, not null
    * @return the root data, not null
    */
-  public static FlexiBean createRootData(UriInfo uriInfo) {
-    FlexiBean out = FreemarkerOutputter.createRootData();
+  public static FlexiBean createRootData(final UriInfo uriInfo) {
+    final FlexiBean out = FreemarkerOutputter.createRootData();
     out.put("homeUris", new WebHomeUris(uriInfo));
     out.put("baseUri", uriInfo.getBaseUri().toString());
-    WebUser user = new WebUser(uriInfo);
-    UserProfile profile = user.getProfile();
+    final WebUser user = new WebUser(uriInfo);
+    final UserProfile profile = user.getProfile();
     if (profile != null) {
-      Locale locale = profile.getLocale();
-      ZoneId zone = profile.getZone();
-      DateTimeFormatter dateFormatter = profile.getDateStyle().formatter(locale);
-      DateTimeFormatter timeFormatter = profile.getTimeStyle().formatter(locale);
-      ZonedDateTime now = ZonedDateTime.now(OpenGammaClock.getInstance().withZone(zone));
+      final Locale locale = profile.getLocale();
+      final ZoneId zone = profile.getZone();
+      final DateTimeFormatter dateFormatter = profile.getDateStyle().formatter(locale);
+      final DateTimeFormatter timeFormatter = profile.getTimeStyle().formatter(locale);
+      final ZonedDateTime now = ZonedDateTime.now(OpenGammaClock.getInstance().withZone(zone));
       out.put("now", now);
       out.put("locale", locale);
       out.put("timeZone", zone);
@@ -158,7 +158,7 @@ public class FreemarkerOutputter {
    * Creates the resource.
    * <p>
    * This constructor extracts the Freemarker configuration from the {@code ServletContext}.
-   * 
+   *
    * @param servletContext  the servlet context, not null
    */
   public FreemarkerOutputter(final ServletContext servletContext) {
@@ -173,7 +173,7 @@ public class FreemarkerOutputter {
    * This constructor allows the Freemarker configuration to be directly passed in.
    * It is recommended to use the {@code ServletContext} constructor to allow the configuration
    * to be managed in the context.
-   * 
+   *
    * @param configuration  the configuration, not null
    */
   public FreemarkerOutputter(final Configuration configuration) {
@@ -184,7 +184,7 @@ public class FreemarkerOutputter {
   //-------------------------------------------------------------------------
   /**
    * Gets the Freemarker configuration, which must not be altered.
-   * 
+   *
    * @return the configuration, not null
    */
   public Configuration getConfiguration() {
@@ -196,7 +196,7 @@ public class FreemarkerOutputter {
    * <p>
    * This converts a template name, which may include a file system path, into a
    * configured {@code Template} object.
-   * 
+   *
    * @param templateName  the template name, not null
    * @return the template, not null
    * @throws RuntimeException if an error occurs
@@ -204,7 +204,7 @@ public class FreemarkerOutputter {
   public Template createTemplate(final String templateName) {
     try {
       return _configuration.getTemplate(templateName);
-    } catch (IOException ex) {
+    } catch (final IOException ex) {
       throw new RuntimeException(ex);
     }
   }
@@ -219,7 +219,7 @@ public class FreemarkerOutputter {
    * <li>freemarkerLocale - the locale of the template
    * <li>freemarkerVersion - the version of the Freemarker configuration
    * </ul>
-   * 
+   *
    * @param templateName  the template name, not null
    * @param data  the root data to merge, not null
    * @return the template, not null
@@ -238,7 +238,7 @@ public class FreemarkerOutputter {
    * <li>freemarkerLocale - the locale of the template
    * <li>freemarkerVersion - the version of the Freemarker configuration
    * </ul>
-   * 
+   *
    * @param template  the template, not null
    * @param data  the root data to merge, not null
    * @return the template, not null
@@ -257,18 +257,18 @@ public class FreemarkerOutputter {
       ((Map<String, Object>) data).put("freemarkerVersion", Configuration.getVersionNumber());
     }
     try {
-      StringWriter out = new StringWriter(1024 * 4);
+      final StringWriter out = new StringWriter(1024 * 4);
       template.process(data, out);
       out.close();
       return out.toString();
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       return handleException(ex);
     }
   }
 
   /**
    * Handles any exception in template output.
-   * 
+   *
    * @param ex  the exception from Freemarker, not null
    * @return a dummy return type for Java compiler reasons
    */

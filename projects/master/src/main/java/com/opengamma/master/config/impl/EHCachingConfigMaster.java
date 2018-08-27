@@ -8,14 +8,11 @@ package com.opengamma.master.config.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.ehcache.CacheManager;
-
 import org.joda.beans.Bean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.opengamma.id.UniqueId;
-import com.opengamma.master.AbstractSearchRequest;
 import com.opengamma.master.cache.AbstractEHCachingMaster;
 import com.opengamma.master.cache.EHCachingSearchCache;
 import com.opengamma.master.config.ConfigDocument;
@@ -31,6 +28,8 @@ import com.opengamma.util.paging.Paging;
 import com.opengamma.util.paging.PagingRequest;
 import com.opengamma.util.tuple.IntObjectPair;
 
+import net.sf.ehcache.CacheManager;
+
 /**
  * A cache decorating a {@code ConfigMaster}, mainly intended to reduce the frequency and repetition of queries
  * from the management UI to a {@code DbConfigMaster}. In particular, prefetching is employed in paged queries,
@@ -45,7 +44,7 @@ public class EHCachingConfigMaster extends AbstractEHCachingMaster<ConfigDocumen
 
   /** The document search cache */
   private EHCachingSearchCache _documentSearchCache;
-  
+
   /** The history search cache */
   private EHCachingSearchCache _historySearchCache;
 
@@ -63,18 +62,18 @@ public class EHCachingConfigMaster extends AbstractEHCachingMaster<ConfigDocumen
         // Create the doc search cache and register a config master searcher
     _documentSearchCache = new EHCachingSearchCache(name + "Config", cacheManager, new EHCachingSearchCache.Searcher() {
       @Override
-      public IntObjectPair<List<UniqueId>> search(Bean request, PagingRequest pagingRequest) {
+      public IntObjectPair<List<UniqueId>> search(final Bean request, final PagingRequest pagingRequest) {
 
         // Fetch search results from underlying master
-        ConfigSearchResult<?> result =
+        final ConfigSearchResult<?> result =
             ((ConfigMaster) getUnderlying()).search((ConfigSearchRequest<?>)
-                EHCachingSearchCache.withPagingRequest((AbstractSearchRequest) request, pagingRequest));
+                EHCachingSearchCache.withPagingRequest(request, pagingRequest));
 
         // Cache the result documents
         EHCachingSearchCache.cacheDocuments(result.getDocuments(), getUidToDocumentCache());
 
         // Return the list of result UniqueIds
-        List<UniqueId> uids = EHCachingSearchCache.extractUniqueIds(result.getDocuments());
+        final List<UniqueId> uids = EHCachingSearchCache.extractUniqueIds(result.getDocuments());
         return IntObjectPair.of(result.getPaging().getTotalItems(), uids);
       }
     });
@@ -83,47 +82,47 @@ public class EHCachingConfigMaster extends AbstractEHCachingMaster<ConfigDocumen
     _historySearchCache = new EHCachingSearchCache(name + "ConfigHistory", cacheManager, new EHCachingSearchCache.Searcher() {
       @SuppressWarnings("unchecked")
       @Override
-      public IntObjectPair<List<UniqueId>> search(Bean request, PagingRequest pagingRequest) {
+      public IntObjectPair<List<UniqueId>> search(final Bean request, final PagingRequest pagingRequest) {
         // Fetch search results from underlying master
-        ConfigHistoryResult result = ((ConfigMaster) getUnderlying()).history((ConfigHistoryRequest)
-            EHCachingSearchCache.withPagingRequest((ConfigHistoryRequest) request, pagingRequest));
+        final ConfigHistoryResult result = ((ConfigMaster) getUnderlying()).history((ConfigHistoryRequest)
+            EHCachingSearchCache.withPagingRequest(request, pagingRequest));
 
         // Cache the result documents
         EHCachingSearchCache.cacheDocuments(result.getDocuments(), getUidToDocumentCache());
 
         // Return the list of result UniqueIds
-        List<UniqueId> uids = EHCachingSearchCache.extractUniqueIds(result.getDocuments());
+        final List<UniqueId> uids = EHCachingSearchCache.extractUniqueIds(result.getDocuments());
         return IntObjectPair.of(result.getPaging().getTotalItems(), uids);
       }
     });
-    
+
     // Prime search cache
-    ConfigSearchRequest defaultSearch = new ConfigSearchRequest();
+    final ConfigSearchRequest defaultSearch = new ConfigSearchRequest();
     defaultSearch.setSortOrder(ConfigSearchSortOrder.NAME_ASC);
     _documentSearchCache.prefetch(defaultSearch, PagingRequest.FIRST_PAGE);
   }
 
   @Override
-  public <T> ConfigSearchResult<T> search(ConfigSearchRequest<T> request) {
+  public <T> ConfigSearchResult<T> search(final ConfigSearchRequest<T> request) {
     // Ensure that the relevant prefetch range is cached, otherwise fetch and cache any missing sub-ranges in background
     _documentSearchCache.prefetch(EHCachingSearchCache.withPagingRequest(request, null), request.getPagingRequest());
 
     // Fetch the paged request range; if not entirely cached then fetch and cache it in foreground
-    IntObjectPair<List<UniqueId>> pair = _documentSearchCache.search(
+    final IntObjectPair<List<UniqueId>> pair = _documentSearchCache.search(
         EHCachingSearchCache.withPagingRequest(request, null),
         request.getPagingRequest(), false); // don't block until cached
 
-    List<ConfigDocument> documents = new ArrayList<>();
-    for (UniqueId uniqueId : pair.getSecond()) {
+    final List<ConfigDocument> documents = new ArrayList<>();
+    for (final UniqueId uniqueId : pair.getSecond()) {
       documents.add(get(uniqueId));
     }
 
-    ConfigSearchResult<T> result = new ConfigSearchResult<>(documents);
+    final ConfigSearchResult<T> result = new ConfigSearchResult<>(documents);
     result.setPaging(Paging.of(request.getPagingRequest(), pair.getFirstInt()));
 
     // Debug: check result against underlying
     if (EHCachingSearchCache.TEST_AGAINST_UNDERLYING) {
-      ConfigSearchResult<T> check = ((ConfigMaster) getUnderlying()).search(request);
+      final ConfigSearchResult<T> check = ((ConfigMaster) getUnderlying()).search(request);
       if (!result.getPaging().equals(check.getPaging())) {
         LOGGER.error("_documentSearchCache.getCache().getName() + \" returned paging:\\n\"" + result.getPaging() +
                            "\nbut the underlying master returned paging:\n" + check.getPaging());
@@ -137,29 +136,29 @@ public class EHCachingConfigMaster extends AbstractEHCachingMaster<ConfigDocumen
   }
 
   @Override
-  public ConfigMetaDataResult metaData(ConfigMetaDataRequest request) {
+  public ConfigMetaDataResult metaData(final ConfigMetaDataRequest request) {
     return ((ConfigMaster) getUnderlying()).metaData(request);
   }
 
   @Override
-  public <R> ConfigHistoryResult<R> history(ConfigHistoryRequest<R> request) {
+  public <R> ConfigHistoryResult<R> history(final ConfigHistoryRequest<R> request) {
 
     // Ensure that the relevant prefetch range is cached, otherwise fetch and cache any missing sub-ranges in background
     _historySearchCache.prefetch(EHCachingSearchCache.withPagingRequest(request, null), request.getPagingRequest());
 
     // Fetch the paged request range; if not entirely cached then fetch and cache it in foreground
-    IntObjectPair<List<UniqueId>> pair = _historySearchCache.search(
+    final IntObjectPair<List<UniqueId>> pair = _historySearchCache.search(
         EHCachingSearchCache.withPagingRequest(request, null),
         request.getPagingRequest(), false); // don't block until cached
 
-    List<ConfigDocument> documents = new ArrayList<>();
-    for (UniqueId uniqueId : pair.getSecond()) {
+    final List<ConfigDocument> documents = new ArrayList<>();
+    for (final UniqueId uniqueId : pair.getSecond()) {
       documents.add(get(uniqueId));
     }
 
-    ConfigHistoryResult<R> result = new ConfigHistoryResult<>(documents);
+    final ConfigHistoryResult<R> result = new ConfigHistoryResult<>(documents);
     result.setPaging(Paging.of(request.getPagingRequest(), pair.getFirstInt()));
-    return result;    
+    return result;
   }
 
 }

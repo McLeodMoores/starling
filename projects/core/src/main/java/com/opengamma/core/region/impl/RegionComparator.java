@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.region.impl;
@@ -35,8 +35,8 @@ public final class RegionComparator implements Comparator<Region> {
 
   //-------------------------------------------------------------------------
   @Override
-  public int compare(Region r1, Region r2) {
-    int type = r1.getClassification().compareTo(r2.getClassification());
+  public int compare(final Region r1, final Region r2) {
+    final int type = r1.getClassification().compareTo(r2.getClassification());
     if (type != 0) {
       return type;
     }

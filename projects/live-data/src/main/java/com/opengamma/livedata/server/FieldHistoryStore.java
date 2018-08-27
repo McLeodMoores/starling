@@ -21,8 +21,8 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
  * A store of historical message field values.
  * <p>
  * At the moment, the field history only stores the last value.
- * This class could be extended in future to store the last N 
- * values, values at a certain interval for the last N minutes, etc. 
+ * This class could be extended in future to store the last N
+ * values, values at a certain interval for the last N minutes, etc.
  */
 public class FieldHistoryStore {
 
@@ -39,26 +39,26 @@ public class FieldHistoryStore {
    * Creates an instance.
    */
   public FieldHistoryStore() {
-    _lastKnownValues = new HashMap<String, UnmodifiableFudgeField>();
+    _lastKnownValues = new HashMap<>();
   }
 
   /**
    * Creates an instance based on a set of fields.
-   * 
+   *
    * @param history  the history to copy, not null
    */
-  public FieldHistoryStore(FudgeMsg history) {
+  public FieldHistoryStore(final FudgeMsg history) {
     this();
     liveDataReceived(history);
   }
 
   /**
    * Creates an instance copying an existing instance.
-   * 
+   *
    * @param originalToCopy  the original to copy, not null
    */
-  public FieldHistoryStore(FieldHistoryStore originalToCopy) {
-    this(originalToCopy.getLastKnownValues());   
+  public FieldHistoryStore(final FieldHistoryStore originalToCopy) {
+    this(originalToCopy.getLastKnownValues());
   }
 
   //-------------------------------------------------------------------------
@@ -67,23 +67,23 @@ public class FieldHistoryStore {
    * <p>
    * The history is stored as a {@code Map} by field name, thus if the message
    * contains multiple fields with the same name, only the last will be stored.
-   * 
+   *
    * @param msg  the received message, not null
    */
-  public synchronized void liveDataReceived(FudgeMsg msg) {
-    for (FudgeField field : msg) {
+  public synchronized void liveDataReceived(final FudgeMsg msg) {
+    for (final FudgeField field : msg) {
       _lastKnownValues.put(field.getName(), UnmodifiableFudgeField.of(field));
     }
   }
 
   /**
    * Gets the state of the history store as a single message.
-   * 
+   *
    * @return the history as a message, not null
    */
   public synchronized FudgeMsg getLastKnownValues() {
-    MutableFudgeMsg newMessage = _context.newMessage();
-    for (Entry<String, UnmodifiableFudgeField> entry : _lastKnownValues.entrySet()) {
+    final MutableFudgeMsg newMessage = _context.newMessage();
+    for (final Entry<String, UnmodifiableFudgeField> entry : _lastKnownValues.entrySet()) {
       newMessage.add(entry.getValue());
     }
     return newMessage;
@@ -91,7 +91,7 @@ public class FieldHistoryStore {
 
   /**
    * Checks if the history store is empty.
-   * 
+   *
    * @return true if empty
    */
   public synchronized boolean isEmpty() {

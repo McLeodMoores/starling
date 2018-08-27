@@ -48,22 +48,22 @@ public class ISINFunction extends BaseNonCompiledInvoker {
   }
 
   @Override
-  public Set<ComputedValue> execute(FunctionExecutionContext executionContext,
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext,
                                     final FunctionInputs inputs,
-                                    ComputationTarget target,
-                                    Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+                                    final ComputationTarget target,
+                                    final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
 
 
-    ValueRequirement desiredValue = functional(desiredValues).first();
-    ValueSpecification valueSpecification = ValueSpecification.of(desiredValue.getValueName(),
+    final ValueRequirement desiredValue = functional(desiredValues).first();
+    final ValueSpecification valueSpecification = ValueSpecification.of(desiredValue.getValueName(),
                                                                   target.toSpecification(),
                                                                   desiredValue.getConstraints());
 
-    Security security = target.getPositionOrTrade().getSecurity();
+    final Security security = target.getPositionOrTrade().getSecurity();
     if (security != null) {
-      ExternalIdBundle externalIdBundle = security.getExternalIdBundle();
+      final ExternalIdBundle externalIdBundle = security.getExternalIdBundle();
       if (externalIdBundle != null) {
-        ExternalId externalId = externalIdBundle.getExternalId(ExternalSchemes.ISIN);
+        final ExternalId externalId = externalIdBundle.getExternalId(ExternalSchemes.ISIN);
         if (externalId != null) {
           return newHashSet(new ComputedValue(valueSpecification, externalId.getValue()));
         }

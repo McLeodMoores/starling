@@ -72,7 +72,7 @@ public class BondSecurityFudgeBuilder extends AbstractFudgeBuilder {
   /** Field name. */
   public static final String REDEMPTION_VALUE_FIELD_NAME = "redemptionValue";
 
-  public static void toFudgeMsg(FudgeSerializer serializer, BondSecurity object, final MutableFudgeMsg msg) {
+  public static void toFudgeMsg(final FudgeSerializer serializer, final BondSecurity object, final MutableFudgeMsg msg) {
     FinancialSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     addToMessage(msg, ISSUER_NAME_FIELD_NAME, object.getIssuerName());
     addToMessage(msg, ISSUER_TYPE_FIELD_NAME, object.getIssuerType());
@@ -99,7 +99,7 @@ public class BondSecurityFudgeBuilder extends AbstractFudgeBuilder {
     addToMessage(msg, REDEMPTION_VALUE_FIELD_NAME, object.getRedemptionValue());
   }
 
-  public static void fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg, BondSecurity object) {
+  public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final BondSecurity object) {
     FinancialSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     object.setIssuerName(msg.getString(ISSUER_NAME_FIELD_NAME));
     object.setIssuerType(msg.getString(ISSUER_TYPE_FIELD_NAME));

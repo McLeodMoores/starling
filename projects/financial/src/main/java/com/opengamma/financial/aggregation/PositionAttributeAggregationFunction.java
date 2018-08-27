@@ -53,11 +53,11 @@ public class PositionAttributeAggregationFunction implements AggregationFunction
    */
   @Override
   public String classifyPosition(final Position position) {
-    String positionAttribute = position.getAttributes().get(getAttribute());
+    final String positionAttribute = position.getAttributes().get(getAttribute());
     if (positionAttribute != null) {
       return positionAttribute;
     }
-    for (Trade trade : position.getTrades()) {
+    for (final Trade trade : position.getTrades()) {
       final String value = trade.getAttributes().get(getAttribute());
       if (value != null) {
         return value;
@@ -66,6 +66,7 @@ public class PositionAttributeAggregationFunction implements AggregationFunction
     return getUnknownClassification();
   }
 
+  @Override
   public String getName() {
     return _attribute;
   }
@@ -76,7 +77,7 @@ public class PositionAttributeAggregationFunction implements AggregationFunction
   }
 
   @Override
-  public int compare(String o1, String o2) {
+  public int compare(final String o1, final String o2) {
     return o1.compareTo(o2);
   }
 

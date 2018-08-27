@@ -48,7 +48,7 @@ import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 
   public Map<String, Object> formatExpanded(final LocalDateDoubleTimeSeries value) {
     final List<Object[]> data = Lists.newArrayListWithCapacity(value.size());
-    for (final LocalDateDoubleEntryIterator it = value.iterator(); it.hasNext(); ) {
+    for (final LocalDateDoubleEntryIterator it = value.iterator(); it.hasNext();) {
       final LocalDate date = it.nextTime();
       final long epochMillis = date.toEpochDay() * MILLIS_PER_DAY;
       data.add(new Object[]{epochMillis, it.currentValue()});

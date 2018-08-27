@@ -29,34 +29,34 @@ public final class WebPushServletContextUtils {
   private WebPushServletContextUtils() {
   }
 
-  public static boolean isConnectionManagerAvailable(ServletContext servletContext) {
+  public static boolean isConnectionManagerAvailable(final ServletContext servletContext) {
     ArgumentChecker.notNull(servletContext, "servletContext");
-    ConnectionManager mgr = (ConnectionManager) servletContext.getAttribute(CONNECTION_MANAGER_KEY);
+    final ConnectionManager mgr = (ConnectionManager) servletContext.getAttribute(CONNECTION_MANAGER_KEY);
     return mgr != null;
   }
 
-  
+
   //-------------------------------------------------------------------------
   /**
    * Gets the manager from the context.
-   * 
+   *
    * @param servletContext  the context, not null
    * @return the manager, not null
    */
-  public static ConnectionManager getConnectionManager(ServletContext servletContext) {
+  public static ConnectionManager getConnectionManager(final ServletContext servletContext) {
     ArgumentChecker.notNull(servletContext, "servletContext");
-    ConnectionManager mgr = (ConnectionManager) servletContext.getAttribute(CONNECTION_MANAGER_KEY);
+    final ConnectionManager mgr = (ConnectionManager) servletContext.getAttribute(CONNECTION_MANAGER_KEY);
     ArgumentChecker.notNull(mgr, "ConnectionManager");
     return mgr;
   }
 
   /**
    * Sets the manager into the context.
-   * 
+   *
    * @param servletContext  the context, not null
    * @param mgr  the manager, not null
    */
-  public static void setConnectionManager(ServletContext servletContext, ConnectionManager mgr) {
+  public static void setConnectionManager(final ServletContext servletContext, final ConnectionManager mgr) {
     ArgumentChecker.notNull(servletContext, "servletContext");
     ArgumentChecker.notNull(mgr, "ConnectionManager");
     servletContext.setAttribute(CONNECTION_MANAGER_KEY, mgr);
@@ -65,24 +65,24 @@ public final class WebPushServletContextUtils {
   //-------------------------------------------------------------------------
   /**
    * Gets the manager from the context.
-   * 
+   *
    * @param servletContext  the context, not null
    * @return the manager, not null
    */
-  public static LongPollingConnectionManager getLongPollingConnectionManager(ServletContext servletContext) {
+  public static LongPollingConnectionManager getLongPollingConnectionManager(final ServletContext servletContext) {
     ArgumentChecker.notNull(servletContext, "servletContext");
-    LongPollingConnectionManager mgr = (LongPollingConnectionManager) servletContext.getAttribute(LONG_POLLING_CONNECTION_MANAGER_KEY);
+    final LongPollingConnectionManager mgr = (LongPollingConnectionManager) servletContext.getAttribute(LONG_POLLING_CONNECTION_MANAGER_KEY);
     ArgumentChecker.notNull(mgr, "LongPollingConnectionManager");
     return mgr;
   }
 
   /**
    * Sets the manager into the context.
-   * 
+   *
    * @param servletContext  the context, not null
    * @param mgr  the manager, not null
    */
-  public static void setLongPollingConnectionManager(ServletContext servletContext, LongPollingConnectionManager mgr) {
+  public static void setLongPollingConnectionManager(final ServletContext servletContext, final LongPollingConnectionManager mgr) {
     ArgumentChecker.notNull(servletContext, "servletContext");
     ArgumentChecker.notNull(mgr, "LongPollingConnectionManager");
     servletContext.setAttribute(LONG_POLLING_CONNECTION_MANAGER_KEY, mgr);

@@ -12,12 +12,12 @@ import com.opengamma.engine.value.ValueRequirement;
  */
 public class RecursiveRequirementNode extends ValueRequirementNode {
 
-  public RecursiveRequirementNode(Object parent, ValueRequirement valueRequirement) {
+  public RecursiveRequirementNode(final Object parent, final ValueRequirement valueRequirement) {
     super(parent, valueRequirement);
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -27,7 +27,7 @@ public class RecursiveRequirementNode extends ValueRequirementNode {
     if (!(obj instanceof RecursiveRequirementNode)) {
       return false;
     }
-    RecursiveRequirementNode other = (RecursiveRequirementNode) obj;
+    final RecursiveRequirementNode other = (RecursiveRequirementNode) obj;
     if (_valueRequirement == null) {
       if (other._valueRequirement != null) {
         return false;

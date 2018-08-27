@@ -43,7 +43,7 @@ public class SchemaVersionParser {
    *
    * @param reader reader to read the XML document from
    */
-  public SchemaVersionParser(Reader reader) {
+  public SchemaVersionParser(final Reader reader) {
     _reader = reader;
   }
 
@@ -58,11 +58,11 @@ public class SchemaVersionParser {
   public SchemaVersion parseSchemaVersion() {
 
     try {
-      StartElement element = findRootElement();
+      final StartElement element = findRootElement();
       checkRootElement(element, EXPECTED_ROOT_ELEMENT);
       return parseVersionFromElement(element);
 
-    } catch (XMLStreamException e) {
+    } catch (final XMLStreamException e) {
 
       throw new OpenGammaRuntimeException("Exception whilst trying to parse XML file", e);
     }
@@ -73,8 +73,8 @@ public class SchemaVersionParser {
     LOGGER.debug("Attempting to find root element for document");
 
     // Work through the elements in the document until we hit a start element
-    for (XMLEventReader eventReader = createXmlEventReader(); eventReader.hasNext(); ) {
-      XMLEvent event = eventReader.nextEvent();
+    for (final XMLEventReader eventReader = createXmlEventReader(); eventReader.hasNext();) {
+      final XMLEvent event = eventReader.nextEvent();
       if (event.isStartElement()) {
 
         // We've found the first proper element in the document, it may be
@@ -87,8 +87,8 @@ public class SchemaVersionParser {
     throw new OpenGammaRuntimeException("No root element was found - unable to parse file");
   }
 
-  private void checkRootElement(StartElement element, String expectedName) {
-    String elementName = element.getName().getLocalPart();
+  private void checkRootElement(final StartElement element, final String expectedName) {
+    final String elementName = element.getName().getLocalPart();
     if (!elementName.equals(expectedName)) {
       throw new OpenGammaRuntimeException("Root element should have name [" + expectedName +
                                               "] but instead found [" + elementName +
@@ -96,9 +96,9 @@ public class SchemaVersionParser {
     }
   }
 
-  private SchemaVersion parseVersionFromElement(StartElement element) {
+  private SchemaVersion parseVersionFromElement(final StartElement element) {
 
-    Attribute schemaVersion = element.getAttributeByName(SCHEMA_VERSION_QNAME);
+    final Attribute schemaVersion = element.getAttributeByName(SCHEMA_VERSION_QNAME);
     if (schemaVersion != null) {
       return new SchemaVersion(schemaVersion.getValue());
     } else {
@@ -107,7 +107,7 @@ public class SchemaVersionParser {
   }
 
   private XMLEventReader createXmlEventReader() throws XMLStreamException {
-    XMLInputFactory factory = XMLInputFactory.newFactory();
+    final XMLInputFactory factory = XMLInputFactory.newFactory();
     factory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
     factory.setProperty(XMLInputFactory.SUPPORT_DTD, false);
     return factory.createXMLEventReader(_reader);

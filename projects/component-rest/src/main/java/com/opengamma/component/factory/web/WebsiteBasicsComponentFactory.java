@@ -346,7 +346,7 @@ public class WebsiteBasicsComponentFactory extends AbstractComponentFactory {
       return null;
     }
     // unbox optional and build
-    for (final ListIterator<Object> it = arguments.listIterator(); it.hasNext(); ) {
+    for (final ListIterator<Object> it = arguments.listIterator(); it.hasNext();) {
       final Object obj = it.next();
       if (obj instanceof Optional) {
         final Object wrappedObj = ((Optional<?>) obj).orNull();

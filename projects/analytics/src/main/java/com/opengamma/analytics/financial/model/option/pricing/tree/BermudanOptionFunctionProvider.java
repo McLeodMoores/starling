@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.tree;
@@ -10,13 +10,13 @@ import java.util.Arrays;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class BermudanOptionFunctionProvider extends OptionFunctionProvider1D {
 
-  private int _nTimes;
-  private double[] _exerciseTimes;
-  private int[] _exerciseSteps;
+  private final int _nTimes;
+  private final double[] _exerciseTimes;
+  private final int[] _exerciseSteps;
 
   /**
    * @param strike Strike price
@@ -187,7 +187,7 @@ public class BermudanOptionFunctionProvider extends OptionFunctionProvider1D {
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -197,7 +197,7 @@ public class BermudanOptionFunctionProvider extends OptionFunctionProvider1D {
     if (!(obj instanceof BermudanOptionFunctionProvider)) {
       return false;
     }
-    BermudanOptionFunctionProvider other = (BermudanOptionFunctionProvider) obj;
+    final BermudanOptionFunctionProvider other = (BermudanOptionFunctionProvider) obj;
     if (!Arrays.equals(_exerciseTimes, other._exerciseTimes)) {
       return false;
     }

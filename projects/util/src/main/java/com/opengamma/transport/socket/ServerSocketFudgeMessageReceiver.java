@@ -48,14 +48,14 @@ public class ServerSocketFudgeMessageReceiver extends AbstractServerSocketProces
   private final FudgeContext _context;
 
   private final TerminatableJobContainer _messageReceiveJobs = new TerminatableJobContainer();
-  
+
   public ServerSocketFudgeMessageReceiver(final FudgeMessageReceiver underlying, final FudgeContext fudgeContext) {
     ArgumentChecker.notNull(underlying, "underlying");
     ArgumentChecker.notNull(fudgeContext, "fudgeContext");
     _underlying = underlying;
     _context = fudgeContext;
   }
-  
+
   public ServerSocketFudgeMessageReceiver(final FudgeMessageReceiver underlying, final FudgeContext fudgeContext, final ExecutorService executorService) {
     super(executorService);
     ArgumentChecker.notNull(underlying, "underlying");
@@ -63,7 +63,7 @@ public class ServerSocketFudgeMessageReceiver extends AbstractServerSocketProces
     _underlying = underlying;
     _context = fudgeContext;
   }
-  
+
   /**
    * @return the underlying
    */
@@ -79,22 +79,22 @@ public class ServerSocketFudgeMessageReceiver extends AbstractServerSocketProces
   }
 
   @Override
-  protected synchronized void socketOpened(Socket socket) {
+  protected synchronized void socketOpened(final Socket socket) {
     ArgumentChecker.notNull(socket, "socket");
     LOGGER.info("Opened socket to remote side {}", socket.getRemoteSocketAddress());
     InputStream is;
     try {
       is = socket.getInputStream();
-    } catch (IOException e) {
+    } catch (final IOException e) {
       LOGGER.warn("Unable to open InputStream for socket {}", new Object[]{socket}, e);
       return;
     }
 
     is = new BufferedInputStream(is);
-    MessageReceiveJob job = new MessageReceiveJob(socket, is);
+    final MessageReceiveJob job = new MessageReceiveJob(socket, is);
     _messageReceiveJobs.addJobAndStartThread(job, "Message Receive " + socket.getRemoteSocketAddress());
   }
-  
+
   @Override
   protected void cleanupPreAccept() {
     _messageReceiveJobs.cleanupTerminatedInstances();
@@ -106,28 +106,28 @@ public class ServerSocketFudgeMessageReceiver extends AbstractServerSocketProces
 
     // NOTE kirk 2010-05-12 -- Have to pass in the InputStream explicitly so that
     // we can force the IOException catch up above.
-    public MessageReceiveJob(Socket socket, InputStream inputStream) {
+    public MessageReceiveJob(final Socket socket, final InputStream inputStream) {
       ArgumentChecker.notNull(socket, "socket");
       ArgumentChecker.notNull(inputStream, "inputStream");
       _socket = socket;
       _reader = _context.createMessageReader(inputStream);
     }
-    
+
     @Override
     protected void runOneCycle() {
       if (_socket.isClosed()) {
         terminate();
         return;
       }
-    
+
       final FudgeMsgEnvelope envelope;
       try {
         envelope = _reader.nextMessageEnvelope();
-      } catch (Exception e) {
+      } catch (final Exception e) {
         LOGGER.warn("Unable to read message from underlying stream", e);
         return;
       }
-      
+
       if (envelope == null) {
         LOGGER.info("Nothing available on the stream. Returning and terminating.");
         terminate();
@@ -151,7 +151,7 @@ public class ServerSocketFudgeMessageReceiver extends AbstractServerSocketProces
       try {
         LOGGER.debug("Received message with {} fields. Dispatching to underlying.", envelope.getMessage().getNumFields());
         getUnderlying().messageReceived(getContext(), envelope);
-      } catch (Exception e) {
+      } catch (final Exception e) {
         LOGGER.warn("Unable to dispatch message to underlying receiver", e);
       }
     }

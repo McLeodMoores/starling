@@ -87,7 +87,7 @@ public class HistoricalTimeSeriesInfoSearchRequest extends AbstractSearchRequest
    * The data provider, wildcards allowed, null to not match on data provider.
    */
   @PropertyDefinition
-  private String _dataProvider; 
+  private String _dataProvider;
   /**
    * The data field, wildcards allowed, null to not match on data field.
    */
@@ -107,32 +107,32 @@ public class HistoricalTimeSeriesInfoSearchRequest extends AbstractSearchRequest
 
   /**
    * Creates an instance using a single search identifier.
-   * 
+   *
    * @param historicalTimeSeriesId  the historical time-series external identifier to search for, not null
    */
-  public HistoricalTimeSeriesInfoSearchRequest(ExternalId historicalTimeSeriesId) {
+  public HistoricalTimeSeriesInfoSearchRequest(final ExternalId historicalTimeSeriesId) {
     addExternalId(historicalTimeSeriesId);
   }
 
   /**
    * Creates an instance using a bundle of identifiers.
-   * 
+   *
    * @param historicalTimeSeriesBundle  the historical time-series external identifiers to search for, not null
    */
-  public HistoricalTimeSeriesInfoSearchRequest(ExternalIdBundle historicalTimeSeriesBundle) {
+  public HistoricalTimeSeriesInfoSearchRequest(final ExternalIdBundle historicalTimeSeriesBundle) {
     addExternalIds(historicalTimeSeriesBundle);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Adds a single historical time-series object identifier to the set.
-   * 
+   *
    * @param infoId  the historical time-series object identifier to add, not null
    */
-  public void addObjectId(ObjectIdentifiable infoId) {
+  public void addObjectId(final ObjectIdentifiable infoId) {
     ArgumentChecker.notNull(infoId, "infoId");
     if (_objectIds == null) {
-      _objectIds = new ArrayList<ObjectId>();
+      _objectIds = new ArrayList<>();
     }
     _objectIds.add(infoId.getObjectId());
   }
@@ -140,15 +140,15 @@ public class HistoricalTimeSeriesInfoSearchRequest extends AbstractSearchRequest
   /**
    * Sets the set of historical time-series object identifiers, null to not limit by historical time-series object identifiers.
    * Note that an empty set will return no historical time-series.
-   * 
+   *
    * @param infoIds  the new historical time-series identifiers, null clears the historical time-series id search
    */
-  public void setObjectIds(Iterable<? extends ObjectIdentifiable> infoIds) {
+  public void setObjectIds(final Iterable<? extends ObjectIdentifiable> infoIds) {
     if (infoIds == null) {
       _objectIds = null;
     } else {
-      _objectIds = new ArrayList<ObjectId>();
-      for (ObjectIdentifiable exchangeId : infoIds) {
+      _objectIds = new ArrayList<>();
+      for (final ObjectIdentifiable exchangeId : infoIds) {
         _objectIds.add(exchangeId.getObjectId());
       }
     }
@@ -157,24 +157,24 @@ public class HistoricalTimeSeriesInfoSearchRequest extends AbstractSearchRequest
   //-------------------------------------------------------------------------
   /**
    * Adds a single historical time-series external identifier to the collection to search for.
-   * Unless customized, the search will match 
+   * Unless customized, the search will match
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
+   *
    * @param externalId  the historical time-series key identifier to add, not null
    */
-  public void addExternalId(ExternalId externalId) {
+  public void addExternalId(final ExternalId externalId) {
     ArgumentChecker.notNull(externalId, "externalId");
     addExternalIds(Arrays.asList(externalId));
   }
 
   /**
    * Adds a collection of historical time-series external identifiers to the collection to search for.
-   * Unless customized, the search will match 
+   * Unless customized, the search will match
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
+   *
    * @param externalIds  the historical time-series key identifiers to add, not null
    */
-  public void addExternalIds(ExternalId... externalIds) {
+  public void addExternalIds(final ExternalId... externalIds) {
     ArgumentChecker.notNull(externalIds, "externalIds");
     if (getExternalIdSearch() == null) {
       setExternalIdSearch(ExternalIdSearch.of(externalIds));
@@ -185,12 +185,12 @@ public class HistoricalTimeSeriesInfoSearchRequest extends AbstractSearchRequest
 
   /**
    * Adds a collection of historical time-series external identifiers to the collection to search for.
-   * Unless customized, the search will match 
+   * Unless customized, the search will match
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
+   *
    * @param externalIds  the historical time-series key identifiers to add, not null
    */
-  public void addExternalIds(Iterable<ExternalId> externalIds) {
+  public void addExternalIds(final Iterable<ExternalId> externalIds) {
     ArgumentChecker.notNull(externalIds, "externalIds");
     if (getExternalIdSearch() == null) {
       setExternalIdSearch(ExternalIdSearch.of(externalIds));
@@ -201,10 +201,10 @@ public class HistoricalTimeSeriesInfoSearchRequest extends AbstractSearchRequest
 
   /**
    * Sets the search type to use in {@code ExternalIdSearch}.
-   * 
+   *
    * @param type  the type to set, not null
    */
-  public void setExternalIdSearchType(ExternalIdSearchType type) {
+  public void setExternalIdSearchType(final ExternalIdSearchType type) {
     if (getExternalIdSearch() == null) {
       setExternalIdSearch(ExternalIdSearch.of(type));
     } else {
@@ -214,12 +214,12 @@ public class HistoricalTimeSeriesInfoSearchRequest extends AbstractSearchRequest
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean matches(AbstractDocument obj) {
+  public boolean matches(final AbstractDocument obj) {
     if (obj instanceof HistoricalTimeSeriesInfoDocument == false) {
       return false;
     }
     final HistoricalTimeSeriesInfoDocument document = (HistoricalTimeSeriesInfoDocument) obj;
-    ManageableHistoricalTimeSeriesInfo info = document.getInfo();
+    final ManageableHistoricalTimeSeriesInfo info = document.getInfo();
     if (getObjectIds() != null && getObjectIds().contains(document.getObjectId()) == false) {
       return false;
     }
@@ -232,20 +232,20 @@ public class HistoricalTimeSeriesInfoSearchRequest extends AbstractSearchRequest
     }
     if (getDataSource() != null && getDataSource().equals(info.getDataSource()) == false) {
       return false;
-    }    
+    }
     if (getDataProvider() != null && getDataProvider().equals(info.getDataProvider()) == false) {
       return false;
-    }    
+    }
     if (getDataField() != null && getDataField().equals(info.getDataField()) == false) {
       return false;
-    }    
+    }
     if (getObservationTime() != null && getObservationTime().equals(info.getObservationTime()) == false) {
       return false;
-    }    
+    }
     if (getExternalIdValue() != null) {
       success: {  // label used with break statement, CSIGNORE
-        ExternalIdBundle docBundle = info.getExternalIdBundle().toBundle();
-        for (ExternalId identifier : docBundle.getExternalIds()) {
+        final ExternalIdBundle docBundle = info.getExternalIdBundle().toBundle();
+        for (final ExternalId identifier : docBundle.getExternalIds()) {
           if (RegexUtils.wildcardMatch(getExternalIdValue(), identifier.getValue())) {
             break success;
           }

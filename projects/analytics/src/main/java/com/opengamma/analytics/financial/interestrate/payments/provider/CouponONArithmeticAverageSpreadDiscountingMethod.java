@@ -15,7 +15,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
 
-public class CouponONArithmeticAverageSpreadDiscountingMethod {
+public final class CouponONArithmeticAverageSpreadDiscountingMethod {
   // FIXME: Class under construction, don't use yet.
 
   /**

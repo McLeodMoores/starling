@@ -27,20 +27,20 @@ import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 
 /**
  * A {@link HistoricalTimeSeriesMaster} which delegates its calls to a list of underlying {@link HistoricalTimeSeriesMaster}s.
- * 
+ *
  * This class extends {@link ChangeProvidingCombinedMaster} to implement methods specific to the {@link HistoricalTimeSeriesMaster}.
  */
 public class CombinedHistoricalTimeSeriesMaster extends ChangeProvidingCombinedMaster<HistoricalTimeSeriesInfoDocument, HistoricalTimeSeriesMaster> implements HistoricalTimeSeriesMaster {
-  
-  public CombinedHistoricalTimeSeriesMaster(List<HistoricalTimeSeriesMaster> masterList) {
+
+  public CombinedHistoricalTimeSeriesMaster(final List<HistoricalTimeSeriesMaster> masterList) {
     super(masterList);
   }
 
   @Override
-  public HistoricalTimeSeriesInfoMetaDataResult metaData(HistoricalTimeSeriesInfoMetaDataRequest request) {
-    HistoricalTimeSeriesInfoMetaDataResult result = new HistoricalTimeSeriesInfoMetaDataResult();
-    for (HistoricalTimeSeriesMaster master : getMasterList()) {
-      HistoricalTimeSeriesInfoMetaDataResult masterResult = master.metaData(request);
+  public HistoricalTimeSeriesInfoMetaDataResult metaData(final HistoricalTimeSeriesInfoMetaDataRequest request) {
+    final HistoricalTimeSeriesInfoMetaDataResult result = new HistoricalTimeSeriesInfoMetaDataResult();
+    for (final HistoricalTimeSeriesMaster master : getMasterList()) {
+      final HistoricalTimeSeriesInfoMetaDataResult masterResult = master.metaData(request);
       result.getDataFields().addAll(masterResult.getDataFields());
       result.getDataProviders().addAll(masterResult.getDataProviders());
       result.getDataSources().addAll(masterResult.getDataSources());
@@ -50,43 +50,43 @@ public class CombinedHistoricalTimeSeriesMaster extends ChangeProvidingCombinedM
   }
 
   @Override
-  public HistoricalTimeSeriesInfoSearchResult search(HistoricalTimeSeriesInfoSearchRequest request) {
-    
+  public HistoricalTimeSeriesInfoSearchResult search(final HistoricalTimeSeriesInfoSearchRequest request) {
+
     final HistoricalTimeSeriesInfoSearchResult result = new HistoricalTimeSeriesInfoSearchResult();
-    
-    SearchStrategy<HistoricalTimeSeriesInfoDocument, HistoricalTimeSeriesMaster, HistoricalTimeSeriesInfoSearchRequest> searchStrategy =
+
+    final SearchStrategy<HistoricalTimeSeriesInfoDocument, HistoricalTimeSeriesMaster, HistoricalTimeSeriesInfoSearchRequest> searchStrategy =
         new SearchStrategy<HistoricalTimeSeriesInfoDocument, HistoricalTimeSeriesMaster, HistoricalTimeSeriesInfoSearchRequest>() {
 
           @Override
-          public HistoricalTimeSeriesInfoSearchResult search(HistoricalTimeSeriesMaster master, HistoricalTimeSeriesInfoSearchRequest searchRequest) {
-            HistoricalTimeSeriesInfoSearchResult searchResult = master.search(searchRequest);
+          public HistoricalTimeSeriesInfoSearchResult search(final HistoricalTimeSeriesMaster master, final HistoricalTimeSeriesInfoSearchRequest searchRequest) {
+            final HistoricalTimeSeriesInfoSearchResult searchResult = master.search(searchRequest);
             result.setVersionCorrection(searchResult.getVersionCorrection());
             return searchResult;
           }
         };
-    
+
     pagedSearch(searchStrategy, result, request);
-    
+
     return result;
   }
 
   @Override
-  public HistoricalTimeSeriesInfoHistoryResult history(HistoricalTimeSeriesInfoHistoryRequest request) {
+  public HistoricalTimeSeriesInfoHistoryResult history(final HistoricalTimeSeriesInfoHistoryRequest request) {
     final HistoricalTimeSeriesInfoHistoryResult result = new HistoricalTimeSeriesInfoHistoryResult();
-    
-    SearchStrategy<HistoricalTimeSeriesInfoDocument, HistoricalTimeSeriesMaster, HistoricalTimeSeriesInfoHistoryRequest> searchStrategy =
+
+    final SearchStrategy<HistoricalTimeSeriesInfoDocument, HistoricalTimeSeriesMaster, HistoricalTimeSeriesInfoHistoryRequest> searchStrategy =
         new SearchStrategy<HistoricalTimeSeriesInfoDocument, HistoricalTimeSeriesMaster, HistoricalTimeSeriesInfoHistoryRequest>() {
 
           @Override
-          public HistoricalTimeSeriesInfoHistoryResult search(HistoricalTimeSeriesMaster master, HistoricalTimeSeriesInfoHistoryRequest searchRequest) {
-            HistoricalTimeSeriesInfoHistoryResult searchResult = master.history(searchRequest);
+          public HistoricalTimeSeriesInfoHistoryResult search(final HistoricalTimeSeriesMaster master, final HistoricalTimeSeriesInfoHistoryRequest searchRequest) {
+            final HistoricalTimeSeriesInfoHistoryResult searchResult = master.history(searchRequest);
             searchResult.getInfoList().addAll(result.getInfoList());
             return searchResult;
           }
         };
-    
+
     pagedSearch(searchStrategy, result, request);
-    
+
     return result;
 
   }
@@ -95,7 +95,7 @@ public class CombinedHistoricalTimeSeriesMaster extends ChangeProvidingCombinedM
   public ManageableHistoricalTimeSeries getTimeSeries(final UniqueId uniqueId) {
     return apply(uniqueId.getScheme(), new Try<ManageableHistoricalTimeSeries>() {
       @Override
-      public ManageableHistoricalTimeSeries tryMaster(HistoricalTimeSeriesMaster master) {
+      public ManageableHistoricalTimeSeries tryMaster(final HistoricalTimeSeriesMaster master) {
         return master.getTimeSeries(uniqueId);
       }
     });
@@ -105,7 +105,7 @@ public class CombinedHistoricalTimeSeriesMaster extends ChangeProvidingCombinedM
   public ManageableHistoricalTimeSeries getTimeSeries(final UniqueId uniqueId, final HistoricalTimeSeriesGetFilter filter) {
     return apply(uniqueId.getScheme(), new Try<ManageableHistoricalTimeSeries>() {
       @Override
-      public ManageableHistoricalTimeSeries tryMaster(HistoricalTimeSeriesMaster master) {
+      public ManageableHistoricalTimeSeries tryMaster(final HistoricalTimeSeriesMaster master) {
         return master.getTimeSeries(uniqueId, filter);
       }
     });
@@ -115,7 +115,7 @@ public class CombinedHistoricalTimeSeriesMaster extends ChangeProvidingCombinedM
   public ManageableHistoricalTimeSeries getTimeSeries(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
     return apply(objectId.getObjectId().getScheme(), new Try<ManageableHistoricalTimeSeries>() {
       @Override
-      public ManageableHistoricalTimeSeries tryMaster(HistoricalTimeSeriesMaster master) {
+      public ManageableHistoricalTimeSeries tryMaster(final HistoricalTimeSeriesMaster master) {
         return master.getTimeSeries(objectId, versionCorrection);
       }
     });
@@ -125,7 +125,7 @@ public class CombinedHistoricalTimeSeriesMaster extends ChangeProvidingCombinedM
   public ManageableHistoricalTimeSeries getTimeSeries(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection, final HistoricalTimeSeriesGetFilter filter) {
     return apply(objectId.getObjectId().getScheme(), new Try<ManageableHistoricalTimeSeries>() {
       @Override
-      public ManageableHistoricalTimeSeries tryMaster(HistoricalTimeSeriesMaster master) {
+      public ManageableHistoricalTimeSeries tryMaster(final HistoricalTimeSeriesMaster master) {
         return master.getTimeSeries(objectId, versionCorrection, filter);
       }
     });
@@ -135,7 +135,7 @@ public class CombinedHistoricalTimeSeriesMaster extends ChangeProvidingCombinedM
   public UniqueId updateTimeSeriesDataPoints(final ObjectIdentifiable objectId, final LocalDateDoubleTimeSeries series) {
     return apply(objectId.getObjectId().getScheme(), new Try<UniqueId>() {
       @Override
-      public UniqueId tryMaster(HistoricalTimeSeriesMaster master) {
+      public UniqueId tryMaster(final HistoricalTimeSeriesMaster master) {
         return master.updateTimeSeriesDataPoints(objectId, series);
       }
     });
@@ -145,7 +145,7 @@ public class CombinedHistoricalTimeSeriesMaster extends ChangeProvidingCombinedM
   public UniqueId correctTimeSeriesDataPoints(final ObjectIdentifiable objectId, final LocalDateDoubleTimeSeries series) {
     return apply(objectId.getObjectId().getScheme(), new Try<UniqueId>() {
       @Override
-      public UniqueId tryMaster(HistoricalTimeSeriesMaster master) {
+      public UniqueId tryMaster(final HistoricalTimeSeriesMaster master) {
         return master.correctTimeSeriesDataPoints(objectId, series);
       }
     });
@@ -155,14 +155,14 @@ public class CombinedHistoricalTimeSeriesMaster extends ChangeProvidingCombinedM
   public UniqueId removeTimeSeriesDataPoints(final ObjectIdentifiable objectId, final LocalDate fromDateInclusive, final LocalDate toDateInclusive) {
     return apply(objectId.getObjectId().getScheme(), new Try<UniqueId>() {
       @Override
-      public UniqueId tryMaster(HistoricalTimeSeriesMaster master) {
+      public UniqueId tryMaster(final HistoricalTimeSeriesMaster master) {
         return master.removeTimeSeriesDataPoints(objectId, fromDateInclusive, toDateInclusive);
       }
     });
   }
-  
-  private <D> D apply(String scheme, Try<D> tryObject) {
-    HistoricalTimeSeriesMaster master = getMasterByScheme(scheme);
+
+  private <D> D apply(final String scheme, final Try<D> tryObject) {
+    final HistoricalTimeSeriesMaster master = getMasterByScheme(scheme);
     if (master != null) {
       return tryObject.tryMaster(master);
     }

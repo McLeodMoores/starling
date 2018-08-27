@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - 2009 by OpenGamma Inc.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.view;
@@ -54,7 +54,7 @@ public class ViewProcessorManagerTest {
   //-------------------------------------------------------------------------
   private static class MockViewProcessor implements ViewProcessorInternal {
     private final CompiledFunctionService _compiledFunctionService;
-    private final LinkedBlockingQueue<Boolean> _suspendState = new LinkedBlockingQueue<Boolean>();
+    private final LinkedBlockingQueue<Boolean> _suspendState = new LinkedBlockingQueue<>();
     private boolean _running;
     private boolean _suspended;
 
@@ -133,7 +133,7 @@ public class ViewProcessorManagerTest {
     }
 
     @Override
-    public ViewProcess getViewProcess(UniqueId viewProcessId) {
+    public ViewProcess getViewProcess(final UniqueId viewProcessId) {
       return null;
     }
 
@@ -143,12 +143,12 @@ public class ViewProcessorManagerTest {
     }
 
     @Override
-    public ViewClient createViewClient(UserPrincipal clientUser) {
+    public ViewClient createViewClient(final UserPrincipal clientUser) {
       return null;
     }
 
     @Override
-    public ViewClient getViewClient(UniqueId clientId) {
+    public ViewClient getViewClient(final UniqueId clientId) {
       return null;
     }
 
@@ -179,13 +179,13 @@ public class ViewProcessorManagerTest {
     private ChangeListener _listener;
 
     @Override
-    public void addChangeListener(ChangeListener listener) {
+    public void addChangeListener(final ChangeListener listener) {
       assertNull(_listener);
       _listener = listener;
     }
 
     @Override
-    public void removeChangeListener(ChangeListener listener) {
+    public void removeChangeListener(final ChangeListener listener) {
       assertEquals(listener, _listener);
       _listener = null;
     }
@@ -195,7 +195,7 @@ public class ViewProcessorManagerTest {
     }
 
     @Override
-    public void entityChanged(ChangeType type, ObjectId oid, Instant versionFrom, Instant versionTo, Instant versionInstant) {
+    public void entityChanged(final ChangeType type, final ObjectId oid, final Instant versionFrom, final Instant versionTo, final Instant versionInstant) {
     }
 
     public void notifyListenerUnwatchedIdentifier() {
@@ -209,7 +209,7 @@ public class ViewProcessorManagerTest {
 
   //-------------------------------------------------------------------------
   private static class MockNotifyingMaster implements ChangeProvider {
-    private ChangeManager _changeManager = new MockChangeManager();
+    private final ChangeManager _changeManager = new MockChangeManager();
 
     @Override
     public ChangeManager changeManager() {
@@ -231,7 +231,7 @@ public class ViewProcessorManagerTest {
     assertTrue(changeManger.hasListener());
     assertTrue(vpm.isRunning());
     assertTrue(vp.isRunning());
-    Long initialId = vp.getFunctionCompilationService().getFunctionCompilationContext().getFunctionInitId();
+    final Long initialId = vp.getFunctionCompilationService().getFunctionCompilationContext().getFunctionInitId();
     assertNotNull(initialId);
     // Notify it of a change to the master
     Thread.sleep(10);

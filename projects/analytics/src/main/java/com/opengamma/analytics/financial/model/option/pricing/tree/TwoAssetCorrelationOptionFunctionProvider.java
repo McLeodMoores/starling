@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.tree;
@@ -9,11 +9,11 @@ import com.google.common.primitives.Doubles;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * The call option pays off max[S2 - X2, 0] if S1 > X1 and 0 otherwise, 
+ * The call option pays off max[S2 - X2, 0] if S1 > X1 and 0 otherwise,
  * whereas the put pays off max[X2 - S2, 0] if S1 < X1 and 0 otherwise
  */
 public class TwoAssetCorrelationOptionFunctionProvider extends OptionFunctionProvider2D {
-  private double _strike2;
+  private final double _strike2;
 
   /**
    * @param strike1 Strike price for asset 1, X1
@@ -94,12 +94,12 @@ public class TwoAssetCorrelationOptionFunctionProvider extends OptionFunctionPro
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_strike2);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -109,7 +109,7 @@ public class TwoAssetCorrelationOptionFunctionProvider extends OptionFunctionPro
     if (!(obj instanceof TwoAssetCorrelationOptionFunctionProvider)) {
       return false;
     }
-    TwoAssetCorrelationOptionFunctionProvider other = (TwoAssetCorrelationOptionFunctionProvider) obj;
+    final TwoAssetCorrelationOptionFunctionProvider other = (TwoAssetCorrelationOptionFunctionProvider) obj;
     if (Double.doubleToLongBits(_strike2) != Double.doubleToLongBits(other._strike2)) {
       return false;
     }

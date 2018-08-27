@@ -51,11 +51,11 @@ public abstract class AbstractDbTest implements TableCreationCallback {
   //-------------------------------------------------------------------------
   /**
    * Creates an instance.
-   * 
+   *
    * @param databaseType  the database type, not null
    * @param targetVersion  the target version
    */
-  protected AbstractDbTest(String databaseType, String targetVersion) {
+  protected AbstractDbTest(final String databaseType, final String targetVersion) {
     ArgumentChecker.notNull(databaseType, "databaseType");
     _databaseType = databaseType;
     _databaseVersion = targetVersion;
@@ -88,13 +88,13 @@ public abstract class AbstractDbTest implements TableCreationCallback {
    */
   @BeforeMethod(alwaysRun = true)
   public final void setUp() throws Exception {
-    DbTool dbTool = getDbTool();
-    String prevVersion = DATABASE_TYPE_VERSION.get(getDatabaseType());
-    if ((prevVersion == null) || !prevVersion.equals(getDatabaseVersion())) {
+    final DbTool dbTool = getDbTool();
+    final String prevVersion = DATABASE_TYPE_VERSION.get(getDatabaseType());
+    if (prevVersion == null || !prevVersion.equals(getDatabaseVersion())) {
       DATABASE_TYPE_VERSION.put(getDatabaseType(), getDatabaseVersion());
 
-      String user = dbTool.getUser();
-      String password = dbTool.getPassword();
+      final String user = dbTool.getUser();
+      final String password = dbTool.getPassword();
       String systemUser = System.getProperty("system.user");
       String systemPassword = System.getProperty("system.password");
       if ("oracle11g".equals(getDatabaseType())) {
@@ -143,7 +143,7 @@ public abstract class AbstractDbTest implements TableCreationCallback {
   @AfterMethod(alwaysRun = true)
   public final void tearDown() throws Exception {
     doTearDown();
-    DbTool dbTool = _dbTool;
+    final DbTool dbTool = _dbTool;
     if (dbTool != null) {
       dbTool.resetTestCatalog(); // avoids locking issues with Derby
     }
@@ -152,7 +152,7 @@ public abstract class AbstractDbTest implements TableCreationCallback {
   /**
    * Subclasses should override this where necessary and NOT declare @AfterMethod.
    * This handles TestNG behavior better.
-   * 
+   *
    * @throws Exception if an error occurs
    */
   protected void doTearDown() throws Exception {
@@ -166,7 +166,7 @@ public abstract class AbstractDbTest implements TableCreationCallback {
   @AfterClass(alwaysRun = true)
   public void tearDownClass() throws Exception {
     doTearDownClass();
-    DbTool dbTool = _dbTool;
+    final DbTool dbTool = _dbTool;
     if (dbTool != null) {
       dbTool.resetTestCatalog(); // avoids locking issues with Derby
     }
@@ -176,7 +176,7 @@ public abstract class AbstractDbTest implements TableCreationCallback {
   /**
    * Subclasses should override this where necessary and NOT declare @AfterClass.
    * This handles TestNG behavior better.
-   * 
+   *
    * @throws Exception if an error occurs
    */
   protected void doTearDownClass() throws Exception {
@@ -189,7 +189,7 @@ public abstract class AbstractDbTest implements TableCreationCallback {
    */
   @AfterSuite(groups = {TestGroup.UNIT_DB, TestGroup.INTEGRATION })
   public static final void tearDownSuite() throws Exception {
-    for (DbConnector connector : CONNECTORS.values()) {
+    for (final DbConnector connector : CONNECTORS.values()) {
       ReflectionUtils.close(connector);
     }
   }
@@ -218,7 +218,7 @@ public abstract class AbstractDbTest implements TableCreationCallback {
 
   /**
    * Override this when enhancing the connector factory.
-   * 
+   *
    * @return a class key to indicate the scope of the enhancement, not null
    */
   protected Class<?> dbConnectorScope() {
@@ -228,10 +228,10 @@ public abstract class AbstractDbTest implements TableCreationCallback {
 
   /**
    * Override this to enhance the connector factory.
-   * 
+   *
    * @param factory  the factory to populate, not null
    */
-  protected void initDbConnectorFactory(DbConnectorFactoryBean factory) {
+  protected void initDbConnectorFactory(final DbConnectorFactoryBean factory) {
     // for subclasses
   }
 
@@ -246,7 +246,7 @@ public abstract class AbstractDbTest implements TableCreationCallback {
       synchronized (this) {
         dbTool = _dbTool;
         if (dbTool == null) {
-          DbConnector connector = CONNECTORS.get(Pairs.of(_databaseType, dbConnectorScope()));
+          final DbConnector connector = CONNECTORS.get(Pairs.of(_databaseType, dbConnectorScope()));
           _dbTool = dbTool = DbTest.createDbTool(_databaseType, connector);  // CSIGNORE
         }
       }
@@ -255,15 +255,15 @@ public abstract class AbstractDbTest implements TableCreationCallback {
   }
 
   private DbConnector initConnector() {
-    Class<?> scope = dbConnectorScope();
-    Pair<String, Class<?>> key = Pairs.<String, Class<?>>of(_databaseType, scope);
+    final Class<?> scope = dbConnectorScope();
+    final Pair<String, Class<?>> key = Pairs.<String, Class<?>>of(_databaseType, scope);
     DbConnector connector = CONNECTORS.get(key);
     if (connector == null) {
       synchronized (this) {
         connector = CONNECTORS.get(key);
         if (connector == null) {
-          DbDialect dbDialect = DbDialectUtils.getSupportedDbDialect(getDatabaseType());
-          DbConnectorFactoryBean factory = new DbConnectorFactoryBean();
+          final DbDialect dbDialect = DbDialectUtils.getSupportedDbDialect(getDatabaseType());
+          final DbConnectorFactoryBean factory = new DbConnectorFactoryBean();
           factory.setName("DbTest-" + dbDialect.getName() + (scope != null ? "-" + scope.getSimpleName() : ""));
           factory.setDialect(dbDialect);
           factory.setDataSource(getDbTool().getDataSource());
@@ -283,12 +283,13 @@ public abstract class AbstractDbTest implements TableCreationCallback {
    * Override this if you wish to do something with the database while it is
    * in its "upgrading" state - e.g. populate with test data at a particular
    * version to test the data transformations on the next version upgrades.
-   * 
+   *
    * @param version  the version
    * @param schemaGroupMetadata  the database schema group metadata, not null
    */
+  @Override
   public void tablesCreatedOrUpgraded(final int version, final DbSchemaGroupMetadata schemaGroupMetadata) {
-    // No action 
+    // No action
   }
 
   //-------------------------------------------------------------------------

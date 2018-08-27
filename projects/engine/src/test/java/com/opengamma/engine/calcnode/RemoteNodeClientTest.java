@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode;
@@ -154,7 +154,7 @@ public class RemoteNodeClientTest {
       final TestCalculationNode failingNode = new TestCalculationNode() {
 
         @Override
-        public CalculationJobResult executeJob(CalculationJob job) {
+        public CalculationJobResult executeJob(final CalculationJob job) {
           throw new OpenGammaRuntimeException("Remote node not working");
         }
 

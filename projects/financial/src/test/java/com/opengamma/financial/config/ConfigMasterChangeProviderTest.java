@@ -84,7 +84,7 @@ public class ConfigMasterChangeProviderTest {
     }
 
     @Override
-    public void entityChanged(ChangeEvent event) {
+    public void entityChanged(final ChangeEvent event) {
       _events.add(event);
     }
 
@@ -93,7 +93,7 @@ public class ConfigMasterChangeProviderTest {
   public void testAddNotification() {
     final ConfigMaster underlying = new InMemoryConfigMaster();
     final ConfigMasterChangeProvider cp = new ConfigMasterChangeProvider(underlying);
-    final List<ChangeEvent> events = new ArrayList<ChangeEvent>();
+    final List<ChangeEvent> events = new ArrayList<>();
     cp.changeManager().addChangeListener(new GatheringChangeListener(events));
     underlying.add(new ConfigDocument(ConfigItem.of("Foo", "Test")));
     assertEquals(events.size(), 1);
@@ -111,7 +111,7 @@ public class ConfigMasterChangeProviderTest {
     Mockito.when(underlying.get(ObjectId.of("Test", "Foo"), VersionCorrection.of(now.minusNanos(1), now))).thenReturn(new ConfigDocument(oldItem));
     Mockito.when(underlying.get(ObjectId.of("Test", "Foo"), VersionCorrection.of(now, now))).thenReturn(new ConfigDocument(newItem));
     final ConfigMasterChangeProvider cp = new ConfigMasterChangeProvider(underlying);
-    final List<ChangeEvent> events = new ArrayList<ChangeEvent>();
+    final List<ChangeEvent> events = new ArrayList<>();
     cp.changeManager().addChangeListener(new GatheringChangeListener(events));
     underlying.changeManager().entityChanged(ChangeType.CHANGED, ObjectId.of("Test", "Foo"), now, null, now);
     return events;
@@ -120,7 +120,7 @@ public class ConfigMasterChangeProviderTest {
   public void testChangeNotification1() {
     final List<ChangeEvent> events = testChangeNotification(Convention.class, Convention.class);
     assertEquals(events.size(), 1);
-    ChangeEvent e = events.get(0);
+    final ChangeEvent e = events.get(0);
     assertEquals(e.getObjectId(), ObjectId.of(AbstractConfigChangeProvider.CONFIG_TYPE_SCHEME, Convention.class.getName()));
     assertEquals(e.getType(), ChangeType.CHANGED);
   }
@@ -140,7 +140,7 @@ public class ConfigMasterChangeProviderTest {
     final ConfigMaster underlying = new InMemoryConfigMaster();
     final ConfigMasterChangeProvider cp = new ConfigMasterChangeProvider(underlying);
     final ConfigDocument added = underlying.add(new ConfigDocument(ConfigItem.of("Foo", "Test")));
-    final List<ChangeEvent> events = new ArrayList<ChangeEvent>();
+    final List<ChangeEvent> events = new ArrayList<>();
     cp.changeManager().addChangeListener(new GatheringChangeListener(events));
     // Note: we can't remove the object because InMemoryConfigMaster doesn't support versioning
     underlying.changeManager().entityChanged(ChangeType.REMOVED, added.getObjectId(), Instant.now(), null, Instant.now());

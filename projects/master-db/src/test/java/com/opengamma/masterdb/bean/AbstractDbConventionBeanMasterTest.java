@@ -50,7 +50,7 @@ public abstract class AbstractDbConventionBeanMasterTest extends AbstractDbTest 
   protected Instant _version2Instant;
   protected int _totalSecurities;
 
-  public AbstractDbConventionBeanMasterTest(String databaseType, String databaseVersion, boolean readOnly) {
+  public AbstractDbConventionBeanMasterTest(final String databaseType, final String databaseVersion, final boolean readOnly) {
     super(databaseType, databaseVersion);
     LOGGER.info("running testcases for {}", databaseType);
   }
@@ -74,7 +74,7 @@ public abstract class AbstractDbConventionBeanMasterTest extends AbstractDbTest 
   //-------------------------------------------------------------------------
   private void init() {
     _cnvMaster = new DbConventionBeanMaster(getDbConnector());
-    
+
 //    id bigint NOT NULL,
 //    oid bigint NOT NULL,
 //    ver_from_instant timestamp without time zone NOT NULL,
@@ -86,7 +86,7 @@ public abstract class AbstractDbConventionBeanMasterTest extends AbstractDbTest 
 //    sub_type varchar(255) NOT NULL,
 //    java_type varchar(255) NOT NULL,
 //    packed_data blob NOT NULL,
-    Instant now = Instant.now();
+    final Instant now = Instant.now();
     _cnvMaster.setClock(Clock.fixed(now, ZoneOffset.UTC));
     _version1Instant = now.minusSeconds(100);
     _version2Instant = now.minusSeconds(50);
@@ -141,24 +141,24 @@ public abstract class AbstractDbConventionBeanMasterTest extends AbstractDbTest 
         202, 3);
   }
 
-  private Object blob(String name, ExternalIdBundle bundle) {
-    MockConvention value = new MockConvention(name, bundle, Currency.GBP);
-    String xml = JodaBeanSerialization.serializer(false).xmlWriter().write(value);
-    byte[] bytes = ZipUtils.deflateString(xml);
-    SqlLobValue lob = new SqlLobValue(bytes, getDbConnector().getDialect().getLobHandler());
+  private Object blob(final String name, final ExternalIdBundle bundle) {
+    final MockConvention value = new MockConvention(name, bundle, Currency.GBP);
+    final String xml = JodaBeanSerialization.serializer(false).xmlWriter().write(value);
+    final byte[] bytes = ZipUtils.deflateString(xml);
+    final SqlLobValue lob = new SqlLobValue(bytes, getDbConnector().getDialect().getLobHandler());
     return new SqlParameterValue(Types.BLOB, lob);
   }
 
   //-------------------------------------------------------------------------
   protected void assert101(final ConventionDocument test) {
-    UniqueId uniqueId = UniqueId.of("DbCnv", "101", "0");
+    final UniqueId uniqueId = UniqueId.of("DbCnv", "101", "0");
     assertNotNull(test);
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version1Instant, test.getVersionFromInstant());
     assertEquals(null, test.getVersionToInstant());
     assertEquals(_version1Instant, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    MockConvention convention = (MockConvention) test.getConvention();
+    final MockConvention convention = (MockConvention) test.getConvention();
     assertNotNull(convention);
     assertEquals(uniqueId, convention.getUniqueId());
     assertEquals("TestConvention101", convention.getName());
@@ -167,14 +167,14 @@ public abstract class AbstractDbConventionBeanMasterTest extends AbstractDbTest 
   }
 
   protected void assert102(final ConventionDocument test) {
-    UniqueId uniqueId = UniqueId.of("DbCnv", "102", "0");
+    final UniqueId uniqueId = UniqueId.of("DbCnv", "102", "0");
     assertNotNull(test);
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version1Instant, test.getVersionFromInstant());
     assertEquals(null, test.getVersionToInstant());
     assertEquals(_version1Instant, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    MockConvention convention = (MockConvention) test.getConvention();
+    final MockConvention convention = (MockConvention) test.getConvention();
     assertNotNull(convention);
     assertEquals(uniqueId, convention.getUniqueId());
     assertEquals("TestConvention102", convention.getName());
@@ -183,14 +183,14 @@ public abstract class AbstractDbConventionBeanMasterTest extends AbstractDbTest 
   }
 
   protected void assert201(final ConventionDocument test) {
-    UniqueId uniqueId = UniqueId.of("DbCnv", "201", "0");
+    final UniqueId uniqueId = UniqueId.of("DbCnv", "201", "0");
     assertNotNull(test);
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version1Instant, test.getVersionFromInstant());
     assertEquals(_version2Instant, test.getVersionToInstant());
     assertEquals(_version1Instant, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    MockConvention convention = (MockConvention) test.getConvention();
+    final MockConvention convention = (MockConvention) test.getConvention();
     assertNotNull(convention);
     assertEquals(uniqueId, convention.getUniqueId());
     assertEquals("TestConvention201", convention.getName());
@@ -199,14 +199,14 @@ public abstract class AbstractDbConventionBeanMasterTest extends AbstractDbTest 
   }
 
   protected void assert202(final ConventionDocument test) {
-    UniqueId uniqueId = UniqueId.of("DbCnv", "201", "1");
+    final UniqueId uniqueId = UniqueId.of("DbCnv", "201", "1");
     assertNotNull(test);
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version2Instant, test.getVersionFromInstant());
     assertEquals(null, test.getVersionToInstant());
     assertEquals(_version2Instant, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    MockConvention convention = (MockConvention) test.getConvention();
+    final MockConvention convention = (MockConvention) test.getConvention();
     assertNotNull(convention);
     assertEquals(uniqueId, convention.getUniqueId());
     assertEquals("TestConvention202", convention.getName());

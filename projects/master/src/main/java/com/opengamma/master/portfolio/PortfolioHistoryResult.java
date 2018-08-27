@@ -40,23 +40,23 @@ public class PortfolioHistoryResult extends AbstractHistoryResult<PortfolioDocum
 
   /**
    * Creates an instance from a collection of documents.
-   * 
+   *
    * @param coll  the collection of documents to add, not null
    */
-  public PortfolioHistoryResult(Collection<PortfolioDocument> coll) {
+  public PortfolioHistoryResult(final Collection<PortfolioDocument> coll) {
     super(coll);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the returned portfolios from within the documents.
-   * 
+   *
    * @return the portfolios, not null
    */
   public List<ManageablePortfolio> getPortfolios() {
-    List<ManageablePortfolio> result = new ArrayList<ManageablePortfolio>();
+    final List<ManageablePortfolio> result = new ArrayList<>();
     if (getDocuments() != null) {
-      for (PortfolioDocument doc : getDocuments()) {
+      for (final PortfolioDocument doc : getDocuments()) {
         result.add(doc.getPortfolio());
       }
     }
@@ -65,7 +65,7 @@ public class PortfolioHistoryResult extends AbstractHistoryResult<PortfolioDocum
 
   /**
    * Gets the first portfolio, or null if no documents.
-   * 
+   *
    * @return the first portfolio, null if none
    */
   public ManageablePortfolio getFirstPortfolio() {
@@ -77,7 +77,7 @@ public class PortfolioHistoryResult extends AbstractHistoryResult<PortfolioDocum
    * <p>
    * This throws an exception if more than 1 result is actually available.
    * Thus, this method implies an assumption about uniqueness of the queried portfolio.
-   * 
+   *
    * @return the matching portfolio, not null
    * @throws IllegalStateException if no portfolio was found
    */

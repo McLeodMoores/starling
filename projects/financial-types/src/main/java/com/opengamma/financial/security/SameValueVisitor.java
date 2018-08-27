@@ -83,7 +83,7 @@ final class SameValueVisitor<T> extends FinancialSecurityVisitorDelegate<T> {
    */
   private final T _value;
 
-  SameValueVisitor(FinancialSecurityVisitor<T> delegate, T value) {
+  SameValueVisitor(final FinancialSecurityVisitor<T> delegate, final T value) {
     super(delegate);
     _value = value;
   }

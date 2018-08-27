@@ -28,7 +28,7 @@ public class ParallelPortfolioNodeTraverser extends PortfolioNodeTraverser {
 
   /**
    * Creates a traverser.
-   * 
+   *
    * @param callback the callback to invoke, not null
    * @param executorService the executor service for parallel resolutions
    */
@@ -47,7 +47,7 @@ public class ParallelPortfolioNodeTraverser extends PortfolioNodeTraverser {
     private final PoolExecutor.Service<?> _executorService;
     private final PortfolioNodeTraversalCallback _callback;
 
-    public Context(PoolExecutor.Service<?> executorService, PortfolioNodeTraversalCallback callback) {
+    public Context(final PoolExecutor.Service<?> executorService, final PortfolioNodeTraversalCallback callback) {
       _executorService = executorService;
       _callback = callback;
     }
@@ -76,7 +76,7 @@ public class ParallelPortfolioNodeTraverser extends PortfolioNodeTraverser {
             public void run() {
               try {
                 _callback.preOrderOperation(_node, position);
-              } catch (Exception e) {
+              } catch (final Exception e) {
                 LOGGER.warn("Failed preOrderOperation", e);
               } finally {
                 childDone();
@@ -94,7 +94,7 @@ public class ParallelPortfolioNodeTraverser extends PortfolioNodeTraverser {
           if (_secondPass) {
             try {
               _callback.postOrderOperation(_node);
-            } catch (Exception e) {
+            } catch (final Exception e) {
               LOGGER.warn("Failed preOrderOperation", e);
             } finally {
               if (_parent != null) {
@@ -107,7 +107,7 @@ public class ParallelPortfolioNodeTraverser extends PortfolioNodeTraverser {
             if (positions.isEmpty()) {
               try {
                 _callback.postOrderOperation(_node);
-              } catch (Exception e) {
+              } catch (final Exception e) {
                 LOGGER.warn("Failed postOrderOperation", e);
               } finally {
                 if (_parent != null) {
@@ -122,7 +122,7 @@ public class ParallelPortfolioNodeTraverser extends PortfolioNodeTraverser {
                   public void run() {
                     try {
                       _callback.postOrderOperation(_node, position);
-                    } catch (Exception e) {
+                    } catch (final Exception e) {
                       LOGGER.warn("Failed postOrderOperation", e);
                     } finally {
                       childDone();
@@ -144,7 +144,7 @@ public class ParallelPortfolioNodeTraverser extends PortfolioNodeTraverser {
     public void waitForCompletion() {
       try {
         _executorService.join();
-      } catch (InterruptedException e) {
+      } catch (final InterruptedException e) {
         LOGGER.info("Interrupted waiting for completion");
         throw new OpenGammaRuntimeException("interrupted", e);
       }
@@ -154,7 +154,7 @@ public class ParallelPortfolioNodeTraverser extends PortfolioNodeTraverser {
 
   /**
    * Traverse the nodes notifying using the callback.
-   * 
+   *
    * @param portfolioNode the node to start from, null does nothing
    */
   @Override

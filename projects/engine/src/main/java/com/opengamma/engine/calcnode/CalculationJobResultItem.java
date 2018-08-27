@@ -1,13 +1,9 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode;
-
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import it.unimi.dsi.fastutil.longs.LongSet;
-import it.unimi.dsi.fastutil.objects.Object2LongMap;
 
 import java.util.Collections;
 import java.util.Set;
@@ -21,6 +17,10 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.engine.view.ExecutionLog;
 import com.opengamma.engine.view.ExecutionLogMode;
 import com.opengamma.util.ArgumentChecker;
+
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.LongSet;
+import it.unimi.dsi.fastutil.objects.Object2LongMap;
 
 /**
  * Contains details about the result of executing a {@link CalculationJobItem}.
@@ -52,7 +52,7 @@ public final class CalculationJobResultItem implements IdentifierEncodedValueSpe
     _executionLog = executionLog;
   }
 
-  public CalculationJobResultItem(long[] missingInputIdentifiers, long[] missingOutputIdentifiers, ExecutionLog executionLog) {
+  public CalculationJobResultItem(final long[] missingInputIdentifiers, final long[] missingOutputIdentifiers, final ExecutionLog executionLog) {
     _missingInputIdentifiers = missingInputIdentifiers;
     _missingOutputIdentifiers = missingOutputIdentifiers;
     _executionLog = executionLog;
@@ -61,7 +61,7 @@ public final class CalculationJobResultItem implements IdentifierEncodedValueSpe
   //-------------------------------------------------------------------------
   /**
    * Returns an immutable result item representing success, containing no additional data.
-   * 
+   *
    * @return a result item representing success, not null
    */
   public static CalculationJobResultItem success() {
@@ -70,12 +70,12 @@ public final class CalculationJobResultItem implements IdentifierEncodedValueSpe
 
   /**
    * Returns an immutable result item representing a simple failure.
-   * 
+   *
    * @param exceptionClass the exception class, not null
    * @param exceptionMessage the exception message
    * @return a result item representing a simple failure, not null
    */
-  public static CalculationJobResultItem failure(String exceptionClass, String exceptionMessage) {
+  public static CalculationJobResultItem failure(final String exceptionClass, final String exceptionMessage) {
     ArgumentChecker.notNull(exceptionClass, "exceptionClass");
     return CalculationJobResultItemBuilder
         .of(new MutableExecutionLog(ExecutionLogMode.INDICATORS))
@@ -133,7 +133,7 @@ public final class CalculationJobResultItem implements IdentifierEncodedValueSpe
         _missingInputs = Collections.emptySet();
       } else {
         _missingInputs = Sets.newHashSetWithExpectedSize(_missingInputIdentifiers.length);
-        for (long identifier : _missingInputIdentifiers) {
+        for (final long identifier : _missingInputIdentifiers) {
           _missingInputs.add(identifiers.get(identifier));
         }
       }
@@ -143,7 +143,7 @@ public final class CalculationJobResultItem implements IdentifierEncodedValueSpe
         _missingOutputs = Collections.emptySet();
       } else {
         _missingOutputs = Sets.newHashSetWithExpectedSize(_missingOutputIdentifiers.length);
-        for (long identifier : _missingOutputIdentifiers) {
+        for (final long identifier : _missingOutputIdentifiers) {
           _missingOutputs.add(identifiers.get(identifier));
         }
       }
@@ -153,12 +153,12 @@ public final class CalculationJobResultItem implements IdentifierEncodedValueSpe
   @Override
   public void collectIdentifiers(final LongSet identifiers) {
     if (_missingInputIdentifiers != null) {
-      for (long identifier : _missingInputIdentifiers) {
+      for (final long identifier : _missingInputIdentifiers) {
         identifiers.add(identifier);
       }
     }
     if (_missingOutputIdentifiers != null) {
-      for (long identifier : _missingOutputIdentifiers) {
+      for (final long identifier : _missingOutputIdentifiers) {
         identifiers.add(identifier);
       }
     }
@@ -166,17 +166,17 @@ public final class CalculationJobResultItem implements IdentifierEncodedValueSpe
 
   @Override
   public void convertValueSpecifications(final Object2LongMap<ValueSpecification> valueSpecifications) {
-    if ((_missingInputIdentifiers == null) && !_missingInputs.isEmpty()) {
+    if (_missingInputIdentifiers == null && !_missingInputs.isEmpty()) {
       _missingInputIdentifiers = new long[_missingInputs.size()];
       int i = 0;
-      for (ValueSpecification input : _missingInputs) {
+      for (final ValueSpecification input : _missingInputs) {
         _missingInputIdentifiers[i++] = valueSpecifications.getLong(input);
       }
     }
-    if ((_missingOutputIdentifiers == null) && !_missingOutputs.isEmpty()) {
+    if (_missingOutputIdentifiers == null && !_missingOutputs.isEmpty()) {
       _missingOutputIdentifiers = new long[_missingOutputs.size()];
       int i = 0;
-      for (ValueSpecification output : _missingOutputs) {
+      for (final ValueSpecification output : _missingOutputs) {
         _missingOutputIdentifiers[i++] = valueSpecifications.getLong(output);
       }
     }

@@ -94,7 +94,7 @@ public class BatchDocument extends DirectBean {
    * The paged list of main batch data, may be empty, not null.
    */
   @PropertyDefinition
-  private final List<ViewResultEntry> _data = new ArrayList<ViewResultEntry>();
+  private final List<ViewResultEntry> _data = new ArrayList<>();
   /**
    * The paging information for the errors, not null if correctly created.
    */
@@ -104,7 +104,7 @@ public class BatchDocument extends DirectBean {
    * The paged list of errors, may be empty, not null.
    */
   @PropertyDefinition
-  private final List<BatchError> _errors = new ArrayList<BatchError>();
+  private final List<BatchError> _errors = new ArrayList<>();
 
   /**
    * Creates an instance.
@@ -114,10 +114,10 @@ public class BatchDocument extends DirectBean {
 
   /**
    * Creates an instance specifying a unique identifier.
-   * 
+   *
    * @param batchId  the batch unique identifier, not null
    */
-  public BatchDocument(ObjectId batchId) {
+  public BatchDocument(final ObjectId batchId) {
     ArgumentChecker.notNull(batchId, "batchId");
     setBatchId(batchId);
   }
@@ -126,16 +126,16 @@ public class BatchDocument extends DirectBean {
   /**
    * Gets the unique entry by {@code ComputationTargetSpecification}.
    * Mainly useful in tests because in general uniqueness cannot be assumed.
-   * 
+   *
    * @param spec  the computation target, not null
    * @return only result in batch master for this computation target, null if not found
    * @throws IllegalArgumentException if there is more than 1 entry in batch master for the
    *  given computation target
    */
-  public ViewResultEntry getData(ComputationTargetSpecification spec) {
+  public ViewResultEntry getData(final ComputationTargetSpecification spec) {
     ViewResultEntry result = null;
-    for (ViewResultEntry item : _data) {
-      ComputationTargetSpecification match = item.getComputedValue().getSpecification().getTargetSpecification();
+    for (final ViewResultEntry item : _data) {
+      final ComputationTargetSpecification match = item.getComputedValue().getSpecification().getTargetSpecification();
       if (spec.equals(match)) {
         if (result != null) {
           throw new IllegalArgumentException("More than 1 entry in batch DB for " + spec);

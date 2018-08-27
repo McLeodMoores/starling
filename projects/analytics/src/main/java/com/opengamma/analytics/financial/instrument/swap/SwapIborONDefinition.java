@@ -124,7 +124,7 @@ public class SwapIborONDefinition extends SwapDefinition {
   }
 
   private static SwapIborONDefinition from(final AnnuityCouponONDefinition oisLeg, final NotionalProvider notional, final IborIndex indexIbor, final double spread,
-                                           final Calendar calendar, boolean isPayer) {
+                                           final Calendar calendar, final boolean isPayer) {
     final double sign = isPayer ? -1 : 1;
     final CouponIborSpreadDefinition[] cpnIbor = new CouponIborSpreadDefinition[oisLeg.getNumberOfPayments()];
     for (int loopcpn = 0; loopcpn < oisLeg.getNumberOfPayments(); loopcpn++) {

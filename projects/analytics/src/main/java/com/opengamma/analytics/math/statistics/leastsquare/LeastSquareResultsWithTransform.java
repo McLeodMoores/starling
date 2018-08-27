@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.statistics.leastsquare;
@@ -57,7 +57,7 @@ public class LeastSquareResultsWithTransform extends LeastSquareResults {
   }
 
   private void setModelParameterSensitivityToData() {
-    DoubleMatrix2D invJac = _transform.inverseJacobian(getFitParameters());
+    final DoubleMatrix2D invJac = _transform.inverseJacobian(getFitParameters());
     _inverseJacobianModelPararms = (DoubleMatrix2D) MA.multiply(invJac, getFittingParameterSensitivityToData());
   }
 
@@ -65,14 +65,14 @@ public class LeastSquareResultsWithTransform extends LeastSquareResults {
   public int hashCode() {
     final int prime = 31;
     int result = super.hashCode();
-    result = prime * result + ((_inverseJacobianModelPararms == null) ? 0 : _inverseJacobianModelPararms.hashCode());
-    result = prime * result + ((_modelParameters == null) ? 0 : _modelParameters.hashCode());
-    result = prime * result + ((_transform == null) ? 0 : _transform.hashCode());
+    result = prime * result + (_inverseJacobianModelPararms == null ? 0 : _inverseJacobianModelPararms.hashCode());
+    result = prime * result + (_modelParameters == null ? 0 : _modelParameters.hashCode());
+    result = prime * result + (_transform == null ? 0 : _transform.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -82,7 +82,7 @@ public class LeastSquareResultsWithTransform extends LeastSquareResults {
     if (getClass() != obj.getClass()) {
       return false;
     }
-    LeastSquareResultsWithTransform other = (LeastSquareResultsWithTransform) obj;
+    final LeastSquareResultsWithTransform other = (LeastSquareResultsWithTransform) obj;
     if (_inverseJacobianModelPararms == null) {
       if (other._inverseJacobianModelPararms != null) {
         return false;

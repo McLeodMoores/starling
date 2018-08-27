@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode.stats;
@@ -23,7 +23,7 @@ public class InMemoryFunctionCostsMaster implements FunctionCostsMaster {
   /**
    * The store of documents.
    */
-  private Map<Pair<String, String>, FunctionCostsDocument> _data = new ConcurrentHashMap<Pair<String, String>, FunctionCostsDocument>();
+  private final Map<Pair<String, String>, FunctionCostsDocument> _data = new ConcurrentHashMap<>();
 
   /**
    * Creates an instance.
@@ -33,15 +33,15 @@ public class InMemoryFunctionCostsMaster implements FunctionCostsMaster {
 
   //-------------------------------------------------------------------------
   @Override
-  public FunctionCostsDocument load(String configuration, String functionId, Instant versionAsOf) {
-    Pair<String, String> pair = Pairs.of(configuration, functionId);
-    FunctionCostsDocument doc = _data.get(pair);
+  public FunctionCostsDocument load(final String configuration, final String functionId, final Instant versionAsOf) {
+    final Pair<String, String> pair = Pairs.of(configuration, functionId);
+    final FunctionCostsDocument doc = _data.get(pair);
     return doc != null ? doc.clone() : null;
   }
 
   @Override
   public FunctionCostsDocument store(final FunctionCostsDocument costs) {
-    Pair<String, String> pair = Pairs.of(costs.getConfigurationName(), costs.getFunctionId());
+    final Pair<String, String> pair = Pairs.of(costs.getConfigurationName(), costs.getFunctionId());
     costs.setVersion(Instant.now());
     _data.put(pair, costs.clone());
     return costs;
@@ -49,7 +49,7 @@ public class InMemoryFunctionCostsMaster implements FunctionCostsMaster {
 
   /**
    * Gets the number of stored documents, used in testing.
-   * 
+   *
    * @return the size of the master
    */
   public int size() {

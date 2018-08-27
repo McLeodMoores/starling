@@ -35,7 +35,7 @@ public final class YieldCurvePointShift implements ImmutableBean {
   private final double _shift;
 
   @ImmutableConstructor
-  /* package */ YieldCurvePointShift(int pointIndex, double shift) {
+  /* package */ YieldCurvePointShift(final int pointIndex, final double shift) {
     _pointIndex = pointIndex;
     _shift = shift;
   }

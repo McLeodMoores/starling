@@ -32,7 +32,7 @@ public final class GUIDGenerator {
   //-------------------------------------------------------------------------
   /**
    * Generate a UUID.
-   * 
+   *
    * @return the UUID, not null
    */
   public static UUID generate() {
@@ -41,13 +41,13 @@ public final class GUIDGenerator {
 
   /**
    * Generates the time part of the GUID.
-   * 
+   *
    * @return the time
    */
   public static synchronized long newTime() {
     long time;
     // UTC time
-    long timeMillis = (System.currentTimeMillis() * 10000) + 0x01B21DD213814000L;
+    long timeMillis = System.currentTimeMillis() * 10000 + 0x01B21DD213814000L;
     if (timeMillis > s_lastTime) {
       s_lastTime = timeMillis;
     } else {
@@ -58,7 +58,7 @@ public final class GUIDGenerator {
     // time mid
     time |= (timeMillis & 0xFFFF00000000L) >> 16;
     // time hi and version
-    time |= 0x1000 | ((timeMillis >> 48) & 0x0FFF); // version 1
+    time |= 0x1000 | timeMillis >> 48 & 0x0FFF; // version 1
     return time;
   }
 
@@ -67,17 +67,17 @@ public final class GUIDGenerator {
    * @param macAddress  the MAC address, null uses the local host address
    * @return the clock sequence and node
    */
-  private static synchronized long generateClockSeqAndNode(String macAddress) {
+  private static synchronized long generateClockSeqAndNode(final String macAddress) {
     if (macAddress != null) {
       s_clockSeqAndNode |= parseLong(macAddress);
     } else {
       try {
-        byte[] local = InetAddress.getLocalHost().getAddress();
-        s_clockSeqAndNode |= (local[0] << 24) & 0xFF000000L;
-        s_clockSeqAndNode |= (local[1] << 16) & 0xFF0000;
-        s_clockSeqAndNode |= (local[2] << 8) & 0xFF00;
+        final byte[] local = InetAddress.getLocalHost().getAddress();
+        s_clockSeqAndNode |= local[0] << 24 & 0xFF000000L;
+        s_clockSeqAndNode |= local[1] << 16 & 0xFF0000;
+        s_clockSeqAndNode |= local[2] << 8 & 0xFF00;
         s_clockSeqAndNode |= local[3] & 0xFF;
-      } catch (UnknownHostException ex) {
+      } catch (final UnknownHostException ex) {
         s_clockSeqAndNode |= (long) (Math.random() * 0x7FFFFFFF);
       }
     }
@@ -92,21 +92,21 @@ public final class GUIDGenerator {
    * @param s  the string, not null
    * @return the long
    */
-  public static long parseLong(CharSequence s) {
+  public static long parseLong(final CharSequence s) {
     long out = 0;
     byte shifts = 0;
     char c;
     for (int i = 0; i < s.length() && shifts < 16; i++) {
       c = s.charAt(i);
-      if ((c > 47) && (c < 58)) {
+      if (c > 47 && c < 58) {
         ++shifts;
         out <<= 4;
         out |= c - 48;
-      } else if ((c > 64) && (c < 71)) {
+      } else if (c > 64 && c < 71) {
         ++shifts;
         out <<= 4;
         out |= c - 55;
-      } else if ((c > 96) && (c < 103)) {
+      } else if (c > 96 && c < 103) {
         ++shifts;
         out <<= 4;
         out |= c - 87;

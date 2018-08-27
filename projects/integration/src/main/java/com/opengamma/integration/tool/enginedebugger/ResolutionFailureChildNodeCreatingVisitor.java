@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.tool.enginedebugger;
@@ -26,16 +26,16 @@ import com.opengamma.integration.tool.enginedebugger.node.SuccessfulFunctionNode
 import com.opengamma.integration.tool.enginedebugger.node.UnsatisfiedNode;
 
 /**
- * 
+ *
  */
 public final class ResolutionFailureChildNodeCreatingVisitor extends ResolutionFailureVisitor<Object> {
-    
-  private ResolutionFailureImpl _parent;
 
-  public ResolutionFailureChildNodeCreatingVisitor(ResolutionFailureImpl parent) {
+  private final ResolutionFailureImpl _parent;
+
+  public ResolutionFailureChildNodeCreatingVisitor(final ResolutionFailureImpl parent) {
     _parent = parent;
   }
-  
+
   @Override
   protected Object visitCouldNotResolve(final ValueRequirement valueRequirement) {
     return new CouldNotResolveNode(_parent, valueRequirement);
@@ -76,7 +76,7 @@ public final class ResolutionFailureChildNodeCreatingVisitor extends ResolutionF
   @Override
   protected Object visitGetAdditionalRequirementsFailed(final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput,
       final Map<ValueSpecification, ValueRequirement> requirements) {
-    return new GetAdditionalRequirementsFailedNode(_parent, valueRequirement, function, desiredOutput, requirements);  
+    return new GetAdditionalRequirementsFailedNode(_parent, valueRequirement, function, desiredOutput, requirements);
   }
 
   @Override

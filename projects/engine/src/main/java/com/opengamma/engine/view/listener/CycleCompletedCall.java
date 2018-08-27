@@ -7,7 +7,6 @@ package com.opengamma.engine.view.listener;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.ObjectUtils;
 
 import com.opengamma.engine.view.ViewComputationResultModel;
 import com.opengamma.engine.view.ViewDeltaResultModel;
@@ -19,7 +18,7 @@ public class CycleCompletedCall extends AbstractCompletedResultsCall {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CycleCompletedCall.class);
 
-  public CycleCompletedCall(ViewComputationResultModel fullResult, ViewDeltaResultModel deltaResult) {
+  public CycleCompletedCall(final ViewComputationResultModel fullResult, final ViewDeltaResultModel deltaResult) {
     super(fullResult, deltaResult);
   }
 
@@ -32,7 +31,7 @@ public class CycleCompletedCall extends AbstractCompletedResultsCall {
   }
 
   @Override
-  public Object apply(ViewResultListener listener) {
+  public Object apply(final ViewResultListener listener) {
     listener.cycleCompleted(getFullResult(), getDeltaResult());
     return null;
   }

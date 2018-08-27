@@ -39,11 +39,11 @@ public class DbConventionMasterComponentFactory extends AbstractDocumentDbMaster
   @PropertyDefinition
   private boolean _populateDefaultConventions;
 
-  
+
   public DbConventionMasterComponentFactory() {
     super("cnv", ConventionMaster.class);
   }
-  
+
   @Override
   protected Class<? extends AbstractRemoteMaster> getRemoteInterface() {
     return RemoteConventionMaster.class;
@@ -51,18 +51,18 @@ public class DbConventionMasterComponentFactory extends AbstractDocumentDbMaster
 
   @Override
   protected DbConventionBeanMaster createDbDocumentMaster() throws Exception {
-    DbConventionBeanMaster master = new DbConventionBeanMaster(getDbConnector());
+    final DbConventionBeanMaster master = new DbConventionBeanMaster(getDbConnector());
     master.registerMetrics(OpenGammaMetricRegistry.getSummaryInstance(), OpenGammaMetricRegistry.getDetailedInstance(), "DbConventionMaster-" + getClassifier());
     return master;
   }
 
   @Override
-  protected AbstractDataResource createPublishedResource(DbConventionBeanMaster dbMaster, ConventionMaster postProcessedMaster) {
+  protected AbstractDataResource createPublishedResource(final DbConventionBeanMaster dbMaster, final ConventionMaster postProcessedMaster) {
     return new DataConventionMasterResource(postProcessedMaster);
   }
-      
+
   @Override
-  protected ConventionMaster wrapMasterWithTrackingInterface(ConventionMaster postProcessedMaster) {
+  protected ConventionMaster wrapMasterWithTrackingInterface(final ConventionMaster postProcessedMaster) {
     return new DataTrackingConventionMaster(postProcessedMaster);
   }
 

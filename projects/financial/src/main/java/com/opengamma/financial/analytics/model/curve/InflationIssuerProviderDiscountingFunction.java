@@ -138,9 +138,9 @@ public class InflationIssuerProviderDiscountingFunction extends
   }
 
   @Override
-  public CompiledFunctionDefinition getCompiledFunction(ZonedDateTime earliestInvokation, ZonedDateTime latestInvokation, String[] curveNames,
-                                                        Set<ValueRequirement> exogenousRequirements, CurveConstructionConfiguration curveConstructionConfiguration,
-                                                        String[] currencies) {
+  public CompiledFunctionDefinition getCompiledFunction(final ZonedDateTime earliestInvokation, final ZonedDateTime latestInvokation, final String[] curveNames,
+                                                        final Set<ValueRequirement> exogenousRequirements, final CurveConstructionConfiguration curveConstructionConfiguration,
+                                                        final String[] currencies) {
     return new MyCompiledFunctionDefinition(earliestInvokation, latestInvokation, curveNames, exogenousRequirements, curveConstructionConfiguration, currencies);
   }
 
@@ -199,12 +199,12 @@ public class InflationIssuerProviderDiscountingFunction extends
      * @param curveConstructionConfiguration The curve construction configuration, not null
      * @param currencies The set of currencies to which the curves produce sensitivities
      */
-    protected MyCompiledFunctionDefinition(ZonedDateTime earliestInvokation,
-                                        ZonedDateTime latestInvokation,
-                                        String[] curveNames,
-                                        Set<ValueRequirement> exogenousRequirements,
-                                        CurveConstructionConfiguration curveConstructionConfiguration,
-                                        String[] currencies) {
+    protected MyCompiledFunctionDefinition(final ZonedDateTime earliestInvokation,
+                                        final ZonedDateTime latestInvokation,
+                                        final String[] curveNames,
+                                        final Set<ValueRequirement> exogenousRequirements,
+                                        final CurveConstructionConfiguration curveConstructionConfiguration,
+                                        final String[] currencies) {
       super(earliestInvokation, latestInvokation, curveNames, ValueRequirementNames.PRICE_INDEX_CURVE, exogenousRequirements, currencies);
       ArgumentChecker.notNull(curveConstructionConfiguration, "curve construction configuration");
       _curveConstructionConfiguration = curveConstructionConfiguration;
@@ -263,9 +263,9 @@ public class InflationIssuerProviderDiscountingFunction extends
             final CouponInflationDefinition couponInflation = (CouponInflationDefinition) swap.getSecondLeg().getNthPayment(swap.getSecondLeg().getNumberOfPayments() - 1);
             final CouponFixedCompoundingDefinition couponFix = (CouponFixedCompoundingDefinition) swap.getFirstLeg().getNthPayment(swap.getFirstLeg().getNumberOfPayments() - 1);
             if (couponInflation instanceof CouponInflationZeroCouponInterpolationDefinition) {
-              parameterGuessForCurves[k] = 100.0 * Math.pow((1 + marketData), couponFix.getPaymentAccrualFactors().length);
+              parameterGuessForCurves[k] = 100.0 * Math.pow(1 + marketData, couponFix.getPaymentAccrualFactors().length);
             } else {
-              parameterGuessForCurves[k] = 100.0 * Math.pow((1 + marketData), couponFix.getPaymentAccrualFactors().length);
+              parameterGuessForCurves[k] = 100.0 * Math.pow(1 + marketData, couponFix.getPaymentAccrualFactors().length);
             }
             derivativesForCurve[k++] = getCurveNodeConverter(conventionSource).getDerivative(node, definitionForNode, now, timeSeries);
           } // Node points - end
@@ -338,7 +338,7 @@ public class InflationIssuerProviderDiscountingFunction extends
     }
 
     @Override
-    public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target, Map<ValueSpecification, ValueRequirement> inputs) {
+    public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
       return getResults(context, target);
     }
 

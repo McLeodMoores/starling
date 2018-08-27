@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.cds;
@@ -22,10 +22,10 @@ import com.opengamma.masterdb.security.hibernate.HibernateSecurityMasterDao;
 import com.opengamma.masterdb.security.hibernate.OperationContext;
 
 /**
- * 
+ *
  */
 public final class LegacyVanillaCDSSecurityBeanOperation extends AbstractSecurityBeanOperation<LegacyVanillaCDSSecurity, LegacyVanillaCDSSecurityBean> {
-  
+
   /**
    * Singleton.
    * */
@@ -36,7 +36,7 @@ public final class LegacyVanillaCDSSecurityBeanOperation extends AbstractSecurit
   }
 
   @Override
-  public LegacyVanillaCDSSecurityBean createBean(OperationContext context, HibernateSecurityMasterDao secMasterSession, LegacyVanillaCDSSecurity security) {
+  public LegacyVanillaCDSSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession, final LegacyVanillaCDSSecurity security) {
     final LegacyVanillaCDSSecurityBean bean = new LegacyVanillaCDSSecurityBean();
     CreditDefaultSwapBeanOperation.createBean(secMasterSession, bean, security);
     bean.setParSpread(security.getParSpread());
@@ -44,28 +44,28 @@ public final class LegacyVanillaCDSSecurityBeanOperation extends AbstractSecurit
   }
 
   @Override
-  public LegacyVanillaCDSSecurity createSecurity(OperationContext context, LegacyVanillaCDSSecurityBean bean) {
-    LegacyVanillaCDSSecurity security = new LegacyVanillaCDSSecurity(
-        bean.getBuy(), 
-        externalIdBeanToExternalId(bean.getProtectionSeller()), 
-        externalIdBeanToExternalId(bean.getProtectionBuyer()), 
-        externalIdBeanToExternalId(bean.getReferenceEntity()), 
-        debtSeniorityBeanToDebtSeniority(bean.getDebtSeniority()), 
-        restructuringClauseBeanToRestructuringClause(bean.getRestructuringClause()), 
-        externalIdBeanToExternalId(bean.getRegionId()), 
-        zonedDateTimeBeanToDateTimeWithZone(bean.getStartDate()), 
-        zonedDateTimeBeanToDateTimeWithZone(bean.getEffectiveDate()), 
-        zonedDateTimeBeanToDateTimeWithZone(bean.getMaturityDate()), 
-        stubTypeBeanToStubType(bean.getStubType()), 
-        frequencyBeanToFrequency(bean.getCouponFrequency()), 
-        dayCountBeanToDayCount(bean.getDayCount()), 
-        businessDayConventionBeanToBusinessDayConvention(bean.getBusinessDayConvention()), 
-        bean.getImmAdjustMaturityDate(), 
-        bean.getAdjustEffectiveDate(), 
-        bean.getAdjustMaturityDate(), 
-        (InterestRateNotional) createNotional(bean.getNotional()), 
+  public LegacyVanillaCDSSecurity createSecurity(final OperationContext context, final LegacyVanillaCDSSecurityBean bean) {
+    final LegacyVanillaCDSSecurity security = new LegacyVanillaCDSSecurity(
+        bean.getBuy(),
+        externalIdBeanToExternalId(bean.getProtectionSeller()),
+        externalIdBeanToExternalId(bean.getProtectionBuyer()),
+        externalIdBeanToExternalId(bean.getReferenceEntity()),
+        debtSeniorityBeanToDebtSeniority(bean.getDebtSeniority()),
+        restructuringClauseBeanToRestructuringClause(bean.getRestructuringClause()),
+        externalIdBeanToExternalId(bean.getRegionId()),
+        zonedDateTimeBeanToDateTimeWithZone(bean.getStartDate()),
+        zonedDateTimeBeanToDateTimeWithZone(bean.getEffectiveDate()),
+        zonedDateTimeBeanToDateTimeWithZone(bean.getMaturityDate()),
+        stubTypeBeanToStubType(bean.getStubType()),
+        frequencyBeanToFrequency(bean.getCouponFrequency()),
+        dayCountBeanToDayCount(bean.getDayCount()),
+        businessDayConventionBeanToBusinessDayConvention(bean.getBusinessDayConvention()),
+        bean.getImmAdjustMaturityDate(),
+        bean.getAdjustEffectiveDate(),
+        bean.getAdjustMaturityDate(),
+        (InterestRateNotional) createNotional(bean.getNotional()),
         bean.getIncludeAccruedPremium(),
-        bean.getProtectionStart(), 
+        bean.getProtectionStart(),
         bean.getParSpread());
     return security;
   }

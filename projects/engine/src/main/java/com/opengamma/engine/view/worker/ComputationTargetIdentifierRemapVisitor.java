@@ -54,7 +54,7 @@ import com.opengamma.id.UniqueIdentifiable;
   }
 
   public ComputationTargetRequirement remap(final ComputationTargetRequirement requirement) {
-    ComputationTargetReference parent = requirement.getParent();
+    final ComputationTargetReference parent = requirement.getParent();
     if (parent != null) {
       final ComputationTargetReference rewriteParent = parent.accept(this);
       if (rewriteParent != null) {
@@ -65,8 +65,8 @@ import com.opengamma.id.UniqueIdentifiable;
   }
 
   public ComputationTargetSpecification remap(final ComputationTargetSpecification specification) {
-    UniqueId rewriteSelf = _map.get(specification.getUniqueId());
-    ComputationTargetReference parent = specification.getParent();
+    final UniqueId rewriteSelf = _map.get(specification.getUniqueId());
+    final ComputationTargetReference parent = specification.getParent();
     if (parent != null) {
       final ComputationTargetReference rewriteParent = parent.accept(this);
       if (rewriteParent != null) {
@@ -86,12 +86,12 @@ import com.opengamma.id.UniqueIdentifiable;
   // ComputationTargetReferenceVisitor
 
   @Override
-  public ComputationTargetReference visitComputationTargetRequirement(ComputationTargetRequirement requirement) {
+  public ComputationTargetReference visitComputationTargetRequirement(final ComputationTargetRequirement requirement) {
     return remap(requirement);
   }
 
   @Override
-  public ComputationTargetReference visitComputationTargetSpecification(ComputationTargetSpecification specification) {
+  public ComputationTargetReference visitComputationTargetSpecification(final ComputationTargetSpecification specification) {
     return remap(specification);
   }
 

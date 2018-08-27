@@ -360,7 +360,7 @@ public class UserMarketDataSnapshot extends AbstractMarketDataSnapshot {
 
     @Override
     protected boolean isValidSnapshot(final StructuredMarketDataSnapshot snapshot) {
-      return (snapshot.getVolatilitySurfaces() != null) && !snapshot.getVolatilitySurfaces().isEmpty();
+      return snapshot.getVolatilitySurfaces() != null && !snapshot.getVolatilitySurfaces().isEmpty();
     }
 
     @Override
@@ -376,16 +376,16 @@ public class UserMarketDataSnapshot extends AbstractMarketDataSnapshot {
         if (!target.equals(surface.getTarget())) {
           continue;
         }
-        if ((names != null) && !names.isEmpty() && !names.contains(surface.getName())) {
+        if (names != null && !names.isEmpty() && !names.contains(surface.getName())) {
           continue;
         }
-        if ((instrumentTypes != null) && !instrumentTypes.isEmpty() && !instrumentTypes.contains(surface.getInstrumentType())) {
+        if (instrumentTypes != null && !instrumentTypes.isEmpty() && !instrumentTypes.contains(surface.getInstrumentType())) {
           continue;
         }
-        if ((quoteTypes != null) && !quoteTypes.isEmpty() && !quoteTypes.contains(surface.getQuoteType())) {
+        if (quoteTypes != null && !quoteTypes.isEmpty() && !quoteTypes.contains(surface.getQuoteType())) {
           continue;
         }
-        if ((quoteUnits != null) && !quoteUnits.isEmpty() && !quoteUnits.contains(surface.getQuoteUnits())) {
+        if (quoteUnits != null && !quoteUnits.isEmpty() && !quoteUnits.contains(surface.getQuoteUnits())) {
           continue;
         }
         return createValueProperties().with(ValuePropertyNames.SURFACE,
@@ -429,7 +429,7 @@ public class UserMarketDataSnapshot extends AbstractMarketDataSnapshot {
 
     @Override
     protected boolean isValidSnapshot(final StructuredMarketDataSnapshot snapshot) {
-      return (snapshot.getVolatilityCubes() != null) && !snapshot.getVolatilityCubes().isEmpty();
+      return snapshot.getVolatilityCubes() != null && !snapshot.getVolatilityCubes().isEmpty();
     }
 
     @Override
@@ -445,16 +445,16 @@ public class UserMarketDataSnapshot extends AbstractMarketDataSnapshot {
         if (!target.equals(ComputationTarget.NULL)) {
           continue;
         }
-        if ((definitionNames != null) && !definitionNames.isEmpty() && !definitionNames.contains(cube.getDefinitionName())) {
+        if (definitionNames != null && !definitionNames.isEmpty() && !definitionNames.contains(cube.getDefinitionName())) {
           continue;
         }
-        if ((specificationNames != null) && !specificationNames.isEmpty() && !specificationNames.contains(cube.getSpecificationName())) {
+        if (specificationNames != null && !specificationNames.isEmpty() && !specificationNames.contains(cube.getSpecificationName())) {
           continue;
         }
-        if ((quoteTypes != null) && !quoteTypes.isEmpty() && !quoteTypes.contains(cube.getQuoteType())) {
+        if (quoteTypes != null && !quoteTypes.isEmpty() && !quoteTypes.contains(cube.getQuoteType())) {
           continue;
         }
-        if ((quoteUnits != null) && !quoteUnits.isEmpty() && !quoteUnits.contains(cube.getQuoteUnits())) {
+        if (quoteUnits != null && !quoteUnits.isEmpty() && !quoteUnits.contains(cube.getQuoteUnits())) {
           continue;
         }
         return createValueProperties()
@@ -498,7 +498,7 @@ public class UserMarketDataSnapshot extends AbstractMarketDataSnapshot {
 
     @Override
     protected boolean isValidSnapshot(final StructuredMarketDataSnapshot snapshot) {
-      return (snapshot.getYieldCurves() != null) && !snapshot.getYieldCurves().isEmpty();
+      return snapshot.getYieldCurves() != null && !snapshot.getYieldCurves().isEmpty();
     }
 
     @Override
@@ -548,7 +548,7 @@ public class UserMarketDataSnapshot extends AbstractMarketDataSnapshot {
 
     @Override
     protected boolean isValidSnapshot(final StructuredMarketDataSnapshot snapshot) {
-      return (snapshot.getCurves() != null) && !snapshot.getCurves().isEmpty();
+      return snapshot.getCurves() != null && !snapshot.getCurves().isEmpty();
     }
 
     @Override

@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.position.impl;
@@ -15,7 +15,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import com.opengamma.id.ObjectId;
@@ -41,7 +40,7 @@ public class DataPositionMasterResource extends AbstractDataResource {
 
   /**
    * Creates the resource, exposing the underlying master over REST.
-   * 
+   *
    * @param positionMaster  the underlying position master, not null
    */
   public DataPositionMasterResource(final PositionMaster positionMaster) {
@@ -52,7 +51,7 @@ public class DataPositionMasterResource extends AbstractDataResource {
   //-------------------------------------------------------------------------
   /**
    * Gets the position master.
-   * 
+   *
    * @return the position master, not null
    */
   public PositionMaster getPositionMaster() {
@@ -61,7 +60,7 @@ public class DataPositionMasterResource extends AbstractDataResource {
 
   //-------------------------------------------------------------------------
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
@@ -74,29 +73,29 @@ public class DataPositionMasterResource extends AbstractDataResource {
 
   @POST
   @Path("positionSearches")
-  public Response search(PositionSearchRequest request) {
-    PositionSearchResult result = getPositionMaster().search(request);
+  public Response search(final PositionSearchRequest request) {
+    final PositionSearchResult result = getPositionMaster().search(request);
     return responseOkObject(result);
   }
 
   @POST
   @Path("positions")
-  public Response add(@Context UriInfo uriInfo, PositionDocument request) {
-    PositionDocument result = getPositionMaster().add(request);
-    URI createdUri = (new DataPositionResource()).uriVersion(uriInfo.getBaseUri(), result.getUniqueId());
+  public Response add(@Context final UriInfo uriInfo, final PositionDocument request) {
+    final PositionDocument result = getPositionMaster().add(request);
+    final URI createdUri = new DataPositionResource().uriVersion(uriInfo.getBaseUri(), result.getUniqueId());
     return responseCreatedObject(createdUri, result);
   }
 
   //-------------------------------------------------------------------------
   @Path("positions/{positionId}")
-  public DataPositionResource findPosition(@PathParam("positionId") String idStr) {
-    ObjectId id = ObjectId.parse(idStr);
+  public DataPositionResource findPosition(@PathParam("positionId") final String idStr) {
+    final ObjectId id = ObjectId.parse(idStr);
     return new DataPositionResource(this, id);
   }
 
   @Path("trades/{tradeId}")
-  public DataTradeResource findTrade(@PathParam("tradeId") String idStr) {
-    ObjectId id = ObjectId.parse(idStr);
+  public DataTradeResource findTrade(@PathParam("tradeId") final String idStr) {
+    final ObjectId id = ObjectId.parse(idStr);
     return new DataTradeResource(this, id);
   }
 

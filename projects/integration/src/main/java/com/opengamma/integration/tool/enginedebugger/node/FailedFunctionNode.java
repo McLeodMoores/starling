@@ -18,16 +18,16 @@ import com.opengamma.engine.value.ValueSpecification;
 public class FailedFunctionNode extends AbstractFailureWithRequirementsNode {
 
   private static final String NAME = "FailedFunction: 1+ unsatisfied ValueReqs";
-  private UnsatisfiedResolutionFailuresNode _unsatisfiedFailures;
+  private final UnsatisfiedResolutionFailuresNode _unsatisfiedFailures;
 
-  public FailedFunctionNode(Object parent, ValueRequirement valueRequirement, String function, ValueSpecification desiredOutput,
-      Map<ValueSpecification, ValueRequirement> satisfied, Set<ResolutionFailure> unsatisfied) {
+  public FailedFunctionNode(final Object parent, final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput,
+      final Map<ValueSpecification, ValueRequirement> satisfied, final Set<ResolutionFailure> unsatisfied) {
     super(parent, valueRequirement, function, desiredOutput, satisfied, "Satisfied");
     _unsatisfiedFailures = new UnsatisfiedResolutionFailuresNode(_parent, unsatisfied);
   }
 
   @Override
-  public Object getChildAt(int index) {
+  public Object getChildAt(final int index) {
     switch (index) {
       case 4:
         return _unsatisfiedFailures;
@@ -37,7 +37,7 @@ public class FailedFunctionNode extends AbstractFailureWithRequirementsNode {
   }
 
   @Override
-  public int getIndexOfChild(Object child) {
+  public int getIndexOfChild(final Object child) {
     if (child.equals(_unsatisfiedFailures)) {
       return 4;
     } else {
@@ -51,7 +51,7 @@ public class FailedFunctionNode extends AbstractFailureWithRequirementsNode {
   }
 
   @Override
-  public Object getColumn(int column) {
+  public Object getColumn(final int column) {
     if (column == 0) {
       return NAME;
     } else if (column == 1) {
@@ -64,12 +64,12 @@ public class FailedFunctionNode extends AbstractFailureWithRequirementsNode {
   public int hashCode() {
     final int prime = 31;
     int result = super.hashCode();
-    result = prime * result + ((_unsatisfiedFailures == null) ? 0 : _unsatisfiedFailures.hashCode());
+    result = prime * result + (_unsatisfiedFailures == null ? 0 : _unsatisfiedFailures.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -79,7 +79,7 @@ public class FailedFunctionNode extends AbstractFailureWithRequirementsNode {
     if (!(obj instanceof FailedFunctionNode)) {
       return false;
     }
-    FailedFunctionNode other = (FailedFunctionNode) obj;
+    final FailedFunctionNode other = (FailedFunctionNode) obj;
     if (_unsatisfiedFailures == null) {
       if (other._unsatisfiedFailures != null) {
         return false;

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.tree;
@@ -12,13 +12,13 @@ import com.opengamma.util.ArgumentChecker;
  * Provides payoff function and option price function for one-dimensional tree model
  */
 public abstract class OptionFunctionProvider1D {
-  private double _strike;
-  private double _timeToExpiry;
-  private int _steps;
-  private double _sign;
+  private final double _strike;
+  private final double _timeToExpiry;
+  private final int _steps;
+  private final double _sign;
 
   /**
-   * Superclass constructor 
+   * Superclass constructor
    * @param strike Strike price
    * @param timeToExpiry Time to expiry
    * @param steps Number of steps
@@ -54,9 +54,9 @@ public abstract class OptionFunctionProvider1D {
    * @param values Option values in the (steps+1)-th layer
    * @param baseAssetPrice Asset price at (0,0), i.e., the starting point
    * @param sumCashDiv Sum of discounted discrete cash dividends payed after (steps+1)-th layer
-   * @param downFactor Down factor 
+   * @param downFactor Down factor
    * @param upOverDown  (up factor)/(down factor)
-   * @param steps  
+   * @param steps
    * @return Option values in the (steps)-th layer
    */
   public double[] getNextOptionValues(final double discount, final double upProbability, final double downProbability, final double[] values, final double baseAssetPrice,
@@ -88,9 +88,9 @@ public abstract class OptionFunctionProvider1D {
    * @param values Option values in the (steps+1)-th layer
    * @param baseAssetPrice Asset price at (0,0), i.e., the starting point
    * @param sumCashDiv Sum of discounted discrete cash dividends payed after (steps+1)-th layer
-   * @param downFactor Down factor 
+   * @param downFactor Down factor
    * @param middleOverDown  (middle factor)/(down factor)
-   * @param steps  
+   * @param steps
    * @return Option values in the (steps)-th layer
    */
   public double[] getNextOptionValues(final double discount, final double upProbability, final double middleProbability, final double downProbability, final double[] values,
@@ -142,24 +142,24 @@ public abstract class OptionFunctionProvider1D {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_sign);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _steps;
     temp = Double.doubleToLongBits(_strike);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_timeToExpiry);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (obj == null) {
       return false;
     }
     if (!(obj instanceof OptionFunctionProvider1D)) {
       return false;
     }
-    OptionFunctionProvider1D other = (OptionFunctionProvider1D) obj;
+    final OptionFunctionProvider1D other = (OptionFunctionProvider1D) obj;
     if (Double.doubleToLongBits(_sign) != Double.doubleToLongBits(other._sign)) {
       return false;
     }

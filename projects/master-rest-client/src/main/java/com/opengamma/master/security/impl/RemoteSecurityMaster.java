@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.security.impl;
@@ -47,16 +47,16 @@ public class RemoteSecurityMaster
    * @param baseUri  the base target URI for all RESTful web services, not null
    * @param changeManager  the change manager, not null
    */
-  public RemoteSecurityMaster(final URI baseUri, ChangeManager changeManager) {
+  public RemoteSecurityMaster(final URI baseUri, final ChangeManager changeManager) {
     super(baseUri, changeManager);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public SecurityMetaDataResult metaData(SecurityMetaDataRequest request) {
+  public SecurityMetaDataResult metaData(final SecurityMetaDataRequest request) {
     ArgumentChecker.notNull(request, "request");
 
-    URI uri = DataSecurityMasterUris.uriMetaData(getBaseUri(), request);
+    final URI uri = DataSecurityMasterUris.uriMetaData(getBaseUri(), request);
     return accessRemote(uri).get(SecurityMetaDataResult.class);
   }
 
@@ -65,7 +65,7 @@ public class RemoteSecurityMaster
   public SecuritySearchResult search(final SecuritySearchRequest request) {
     ArgumentChecker.notNull(request, "request");
 
-    URI uri = DataSecurityMasterUris.uriSearch(getBaseUri());
+    final URI uri = DataSecurityMasterUris.uriSearch(getBaseUri());
     return accessRemote(uri).post(SecuritySearchResult.class, request);
   }
 
@@ -75,7 +75,7 @@ public class RemoteSecurityMaster
     ArgumentChecker.notNull(uniqueId, "uniqueId");
 
     if (uniqueId.isVersioned()) {
-      URI uri = (new DataSecurityUris()).uriVersion(getBaseUri(), uniqueId);
+      final URI uri = new DataSecurityUris().uriVersion(getBaseUri(), uniqueId);
       return accessRemote(uri).get(SecurityDocument.class);
     } else {
       return get(uniqueId, VersionCorrection.LATEST);
@@ -87,7 +87,7 @@ public class RemoteSecurityMaster
   public SecurityDocument get(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(objectId, "objectId");
 
-    URI uri = (new DataSecurityUris()).uri(getBaseUri(), objectId, versionCorrection);
+    final URI uri = new DataSecurityUris().uri(getBaseUri(), objectId, versionCorrection);
     return accessRemote(uri).get(SecurityDocument.class);
   }
 
@@ -97,7 +97,7 @@ public class RemoteSecurityMaster
     ArgumentChecker.notNull(document, "document");
     ArgumentChecker.notNull(document.getSecurity(), "document.security");
 
-    URI uri = DataSecurityMasterUris.uriAdd(getBaseUri());
+    final URI uri = DataSecurityMasterUris.uriAdd(getBaseUri());
     return accessRemote(uri).post(SecurityDocument.class, document);
   }
 
@@ -108,7 +108,7 @@ public class RemoteSecurityMaster
     ArgumentChecker.notNull(document.getSecurity(), "document.security");
     ArgumentChecker.notNull(document.getUniqueId(), "document.uniqueId");
 
-    URI uri = (new DataSecurityUris()).uri(getBaseUri(), document.getUniqueId(), null);
+    final URI uri = new DataSecurityUris().uri(getBaseUri(), document.getUniqueId(), null);
     return accessRemote(uri).post(SecurityDocument.class, document);
   }
 
@@ -117,7 +117,7 @@ public class RemoteSecurityMaster
   public void remove(final ObjectIdentifiable objectIdentifiable) {
     ArgumentChecker.notNull(objectIdentifiable, "objectIdentifiable");
 
-    URI uri = (new DataSecurityUris()).uri(getBaseUri(), objectIdentifiable, null);
+    final URI uri = new DataSecurityUris().uri(getBaseUri(), objectIdentifiable, null);
     accessRemote(uri).delete();
   }
 
@@ -127,7 +127,7 @@ public class RemoteSecurityMaster
     ArgumentChecker.notNull(request, "request");
     ArgumentChecker.notNull(request.getObjectId(), "request.objectId");
 
-    URI uri = (new DataSecurityUris()).uriVersions(getBaseUri(), request.getObjectId(), request);
+    final URI uri = new DataSecurityUris().uriVersions(getBaseUri(), request.getObjectId(), request);
     return accessRemote(uri).get(SecurityHistoryResult.class);
   }
 
@@ -138,46 +138,47 @@ public class RemoteSecurityMaster
     ArgumentChecker.notNull(document.getSecurity(), "document.security");
     ArgumentChecker.notNull(document.getUniqueId(), "document.uniqueId");
 
-    URI uri = (new DataSecurityUris()).uriVersion(getBaseUri(), document.getUniqueId());
+    final URI uri = new DataSecurityUris().uriVersion(getBaseUri(), document.getUniqueId());
     return accessRemote(uri).post(SecurityDocument.class, document);
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   @Override
-  public List<UniqueId> replaceVersion(UniqueId uniqueId, List<SecurityDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersion(final UniqueId uniqueId, final List<SecurityDocument> replacementDocuments) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
-    for (SecurityDocument replacementDocument : replacementDocuments) {
+    for (final SecurityDocument replacementDocument : replacementDocuments) {
       ArgumentChecker.notNull(replacementDocument, "documentToAdd");
       ArgumentChecker.notNull(replacementDocument.getSecurity(), "document.security");
     }
-    URI uri = (new DataSecurityUris()).uriVersion(getBaseUri(), uniqueId);
-    return accessRemote(uri).put(new GenericType<List<UniqueId>>() {
-    }, replacementDocuments);
-  }
-
-  public List<UniqueId> replaceAllVersions(ObjectIdentifiable objectId, List<SecurityDocument> replacementDocuments) {
-    ArgumentChecker.notNull(objectId, "objectId");
-    ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
-    for (SecurityDocument replacementDocument : replacementDocuments) {
-      ArgumentChecker.notNull(replacementDocument, "documentToAdd");
-      ArgumentChecker.notNull(replacementDocument.getSecurity(), "document.security");
-    }
-    URI uri = (new DataSecurityUris()).uriAll(getBaseUri(), objectId, null);
+    final URI uri = new DataSecurityUris().uriVersion(getBaseUri(), uniqueId);
     return accessRemote(uri).put(new GenericType<List<UniqueId>>() {
     }, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceVersions(ObjectIdentifiable objectId, List<SecurityDocument> replacementDocuments) {
+  public List<UniqueId> replaceAllVersions(final ObjectIdentifiable objectId, final List<SecurityDocument> replacementDocuments) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
-    for (SecurityDocument replacementDocument : replacementDocuments) {
+    for (final SecurityDocument replacementDocument : replacementDocuments) {
       ArgumentChecker.notNull(replacementDocument, "documentToAdd");
       ArgumentChecker.notNull(replacementDocument.getSecurity(), "document.security");
     }
-    URI uri = (new DataSecurityUris()).uri(getBaseUri(), objectId, null);
+    final URI uri = new DataSecurityUris().uriAll(getBaseUri(), objectId, null);
+    return accessRemote(uri).put(new GenericType<List<UniqueId>>() {
+    }, replacementDocuments);
+  }
+
+  @Override
+  public List<UniqueId> replaceVersions(final ObjectIdentifiable objectId, final List<SecurityDocument> replacementDocuments) {
+    ArgumentChecker.notNull(objectId, "objectId");
+    ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
+    for (final SecurityDocument replacementDocument : replacementDocuments) {
+      ArgumentChecker.notNull(replacementDocument, "documentToAdd");
+      ArgumentChecker.notNull(replacementDocument.getSecurity(), "document.security");
+    }
+    final URI uri = new DataSecurityUris().uri(getBaseUri(), objectId, null);
     return accessRemote(uri).put(new GenericType<List<UniqueId>>() {
     }, replacementDocuments);
   }

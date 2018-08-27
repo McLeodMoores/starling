@@ -66,7 +66,8 @@ public class DiscountingInflationPVFunction extends DiscountingInflationFunction
         return Collections.singleton(new ComputedValue(spec, mca.getAmount(currency)));
       }
 
-      public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target, Map<ValueSpecification, ValueRequirement> inputs) {
+      @Override
+      public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
         return getResults(context, target);
       }
     };

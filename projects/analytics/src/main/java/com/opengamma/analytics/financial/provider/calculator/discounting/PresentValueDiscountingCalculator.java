@@ -30,8 +30,8 @@ import com.opengamma.analytics.financial.interestrate.payments.derivative.Coupon
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponFixedCompounding;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIbor;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborAverage;
-import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborAverageFixingDatesCompounding;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborAverageFixingDates;
+import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborAverageFixingDatesCompounding;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborAverageFixingDatesCompoundingFlatSpread;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborCompounding;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborCompoundingFlatSpread;
@@ -52,10 +52,10 @@ import com.opengamma.analytics.financial.interestrate.payments.derivative.Paymen
 import com.opengamma.analytics.financial.interestrate.payments.provider.CouponFixedAccruedCompoundingDiscountingMethod;
 import com.opengamma.analytics.financial.interestrate.payments.provider.CouponFixedCompoundingDiscountingMethod;
 import com.opengamma.analytics.financial.interestrate.payments.provider.CouponFixedDiscountingMethod;
-import com.opengamma.analytics.financial.interestrate.payments.provider.CouponIborAverageFixingDatesCompoundingDiscountingMethod;
 import com.opengamma.analytics.financial.interestrate.payments.provider.CouponIborAverageDiscountingMethod;
-import com.opengamma.analytics.financial.interestrate.payments.provider.CouponIborAverageFixingDatesDiscountingMethod;
+import com.opengamma.analytics.financial.interestrate.payments.provider.CouponIborAverageFixingDatesCompoundingDiscountingMethod;
 import com.opengamma.analytics.financial.interestrate.payments.provider.CouponIborAverageFixingDatesCompoundingFlatSpreadDiscountingMethod;
+import com.opengamma.analytics.financial.interestrate.payments.provider.CouponIborAverageFixingDatesDiscountingMethod;
 import com.opengamma.analytics.financial.interestrate.payments.provider.CouponIborCompoundingDiscountingMethod;
 import com.opengamma.analytics.financial.interestrate.payments.provider.CouponIborCompoundingFlatSpreadDiscountingMethod;
 import com.opengamma.analytics.financial.interestrate.payments.provider.CouponIborCompoundingSimpleSpreadDiscountingMethod;
@@ -229,7 +229,7 @@ public final class PresentValueDiscountingCalculator extends InstrumentDerivativ
   }
 
   @Override
-  public MultipleCurrencyAmount visitCouponONArithmeticAverageSpread(CouponONArithmeticAverageSpread coupon, MulticurveProviderInterface multicurve) {
+  public MultipleCurrencyAmount visitCouponONArithmeticAverageSpread(final CouponONArithmeticAverageSpread coupon, final MulticurveProviderInterface multicurve) {
     return METHOD_CPN_AAON_SPREAD.presentValue(coupon, multicurve);
   }
 
@@ -274,8 +274,8 @@ public final class PresentValueDiscountingCalculator extends InstrumentDerivativ
   public MultipleCurrencyAmount visitGenericAnnuity(final Annuity<? extends Payment> annuity, final MulticurveProviderInterface multicurve) {
     ArgumentChecker.notNull(annuity, "Annuity");
     ArgumentChecker.notNull(multicurve, "multicurve");
-    MultipleCurrencyAmount pv = annuity.getNthPayment(0).accept(this, multicurve);
-    Pricer pricer = new Pricer(pv);
+    final MultipleCurrencyAmount pv = annuity.getNthPayment(0).accept(this, multicurve);
+    final Pricer pricer = new Pricer(pv);
     for (int i = 1; i < annuity.getNumberOfPayments(); i++) {
       pricer.plus(annuity.getNthPayment(i).accept(this, multicurve));
     }
@@ -365,11 +365,11 @@ public final class PresentValueDiscountingCalculator extends InstrumentDerivativ
      * Create a pricing object
      * @param amount the initial amount in the series of payments
      */
-    public Pricer(MultipleCurrencyAmount amount) {
+    public Pricer(final MultipleCurrencyAmount amount) {
       ArgumentChecker.notNull(amount, "amount");
       if (amount.size() > 0) {
         // optimise the pricing of this currency by skipping intermediate MCA objects
-        CurrencyAmount currencyAmount = amount.iterator().next();
+        final CurrencyAmount currencyAmount = amount.iterator().next();
         _singleCurrencySubsequentAmounts = 0.0;
         _optimisedCurrency = currencyAmount.getCurrency();
       }
@@ -380,12 +380,12 @@ public final class PresentValueDiscountingCalculator extends InstrumentDerivativ
      * Add the amount to the existing sum
      * @param amountToAdd the amount to add
      */
-    public void plus(MultipleCurrencyAmount amountToAdd) {
+    public void plus(final MultipleCurrencyAmount amountToAdd) {
       ArgumentChecker.notNull(amountToAdd, "amountToAdd");
       if (_optimisedCurrency == null) {
         _currencyAmount = _currencyAmount.plus(amountToAdd);
       } else {
-        CurrencyAmount optimisedAmount = amountToAdd.getCurrencyAmount(_optimisedCurrency);
+        final CurrencyAmount optimisedAmount = amountToAdd.getCurrencyAmount(_optimisedCurrency);
         if (optimisedAmount != null && amountToAdd.size() == 1) {
           // we only have the optimised currency so just update the running total
           _singleCurrencySubsequentAmounts += optimisedAmount.getAmount();

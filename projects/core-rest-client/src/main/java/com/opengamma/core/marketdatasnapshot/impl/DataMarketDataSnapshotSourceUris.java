@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.marketdatasnapshot.impl;
@@ -22,13 +22,13 @@ public class DataMarketDataSnapshotSourceUris {
 
   /**
    * Builds a URI.
-   * 
+   *
    * @param baseUri  the base URI, not null
    * @param uniqueId  the unique identifier, may be null
    * @return the URI, not null
    */
-  public static URI uriGet(URI baseUri, UniqueId uniqueId) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("snapshots/{snapshotId}");
+  public static URI uriGet(final URI baseUri, final UniqueId uniqueId) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("snapshots/{snapshotId}");
     if (uniqueId.getVersion() != null) {
       bld.queryParam("version", uniqueId.getVersion());
     }
@@ -42,8 +42,8 @@ public class DataMarketDataSnapshotSourceUris {
    * @param objectId  the object identifier, may be null
    * @return the URI, not null
    */
-  public static URI uriGet(URI baseUri, ObjectId objectId) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("snapshots/{snapshotId}");
+  public static URI uriGet(final URI baseUri, final ObjectId objectId) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("snapshots/{snapshotId}");
     return bld.build(objectId);
   }
 
@@ -55,8 +55,8 @@ public class DataMarketDataSnapshotSourceUris {
    * @param vc  the version-correction, null means latest
    * @return the URI, not null
    */
-  public static URI uriGet(URI baseUri, ObjectId objectId, VersionCorrection vc) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("snapshots/{snapshotId}");
+  public static URI uriGet(final URI baseUri, final ObjectId objectId, final VersionCorrection vc) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("snapshots/{snapshotId}");
     if (vc != null) {
       bld.queryParam("versionAsOf", vc.getVersionAsOfString());
       bld.queryParam("correctedTo", vc.getCorrectedToString());
@@ -73,12 +73,12 @@ public class DataMarketDataSnapshotSourceUris {
    * @param versionCorrection  the version to fetch, null means latest
    * @return the URI, not null
    */
-  public static URI uriSearchSingle(URI baseUri, Class<?> type, String name, VersionCorrection versionCorrection) {
+  public static URI uriSearchSingle(final URI baseUri, final Class<?> type, final String name, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(baseUri, "baseUri");
     ArgumentChecker.notNull(type, "type");
     ArgumentChecker.notNull(name, "name");
 
-    String vc = versionCorrection != null ?
+    final String vc = versionCorrection != null ?
         versionCorrection.toString() :
         VersionCorrection.LATEST.toString();
 

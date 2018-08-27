@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.livedata.client;
@@ -34,44 +34,44 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class DelegatingLiveDataClient implements LiveDataClient {
   private static final Logger LOGGER = LoggerFactory.getLogger(DelegatingLiveDataClient.class);
-  private final Map<String, LiveDataClient> _underlyingClients = new ConcurrentSkipListMap<String, LiveDataClient>();
+  private final Map<String, LiveDataClient> _underlyingClients = new ConcurrentSkipListMap<>();
   private LiveDataClient _defaultClient;
-  
-  public void addUnderlyingClient(String idScheme, LiveDataClient liveDataClient) {
+
+  public void addUnderlyingClient(final String idScheme, final LiveDataClient liveDataClient) {
     ArgumentChecker.notNull(idScheme, "idScheme");
     ArgumentChecker.notNull(liveDataClient, "liveDataClient");
     _underlyingClients.put(idScheme, liveDataClient);
   }
-  
-  public void setDefaultClient(LiveDataClient defaultClient) {
+
+  public void setDefaultClient(final LiveDataClient defaultClient) {
     _defaultClient = defaultClient;
   }
-  
-  protected LiveDataClient identifyUnderlying(LiveDataSpecification specification) {
-    ExternalIdBundle idBundle = specification.getIdentifiers();
-    
-    for (ExternalId id : idBundle.getExternalIds()) {
-      LiveDataClient underlying = _underlyingClients.get(id.getScheme().getName());
+
+  protected LiveDataClient identifyUnderlying(final LiveDataSpecification specification) {
+    final ExternalIdBundle idBundle = specification.getIdentifiers();
+
+    for (final ExternalId id : idBundle.getExternalIds()) {
+      final LiveDataClient underlying = _underlyingClients.get(id.getScheme().getName());
       if (underlying != null) {
         LOGGER.debug("Delegating {} to {}", specification, underlying);
         return underlying;
       }
     }
-    
+
     if (_defaultClient != null) {
       return _defaultClient;
     }
-    
+
     throw new OpenGammaRuntimeException("No underlying client configured to handle " + specification);
   }
-  
-  protected Map<LiveDataClient, List<LiveDataSpecification>> splitCollection(Collection<LiveDataSpecification> specifications) {
-    Map<LiveDataClient, List<LiveDataSpecification>> result = new HashMap<LiveDataClient, List<LiveDataSpecification>>();
-    for (LiveDataSpecification specification : specifications) {
-      LiveDataClient underlying = identifyUnderlying(specification);
+
+  protected Map<LiveDataClient, List<LiveDataSpecification>> splitCollection(final Collection<LiveDataSpecification> specifications) {
+    final Map<LiveDataClient, List<LiveDataSpecification>> result = new HashMap<>();
+    for (final LiveDataSpecification specification : specifications) {
+      final LiveDataClient underlying = identifyUnderlying(specification);
       List<LiveDataSpecification> perUnderlyingSpecs = result.get(underlying);
       if (perUnderlyingSpecs == null) {
-        perUnderlyingSpecs = new LinkedList<LiveDataSpecification>();
+        perUnderlyingSpecs = new LinkedList<>();
         result.put(underlying, perUnderlyingSpecs);
       }
       perUnderlyingSpecs.add(specification);
@@ -80,66 +80,66 @@ public class DelegatingLiveDataClient implements LiveDataClient {
   }
 
   @Override
-  public boolean isEntitled(UserPrincipal user, LiveDataSpecification requestedSpecification) {
-    LiveDataClient underlying = identifyUnderlying(requestedSpecification);
+  public boolean isEntitled(final UserPrincipal user, final LiveDataSpecification requestedSpecification) {
+    final LiveDataClient underlying = identifyUnderlying(requestedSpecification);
     return underlying.isEntitled(user, requestedSpecification);
   }
 
   @Override
-  public Map<LiveDataSpecification, Boolean> isEntitled(UserPrincipal user, Collection<LiveDataSpecification> requestedSpecifications) {
-    Map<LiveDataClient, List<LiveDataSpecification>> split = splitCollection(requestedSpecifications);
-    
-    Map<LiveDataSpecification, Boolean> result = new HashMap<LiveDataSpecification, Boolean>();
-    
-    for (Map.Entry<LiveDataClient, List<LiveDataSpecification>> entry : split.entrySet()) {
-      Map<LiveDataSpecification, Boolean> perUnderlyingResult = entry.getKey().isEntitled(user, entry.getValue());
+  public Map<LiveDataSpecification, Boolean> isEntitled(final UserPrincipal user, final Collection<LiveDataSpecification> requestedSpecifications) {
+    final Map<LiveDataClient, List<LiveDataSpecification>> split = splitCollection(requestedSpecifications);
+
+    final Map<LiveDataSpecification, Boolean> result = new HashMap<>();
+
+    for (final Map.Entry<LiveDataClient, List<LiveDataSpecification>> entry : split.entrySet()) {
+      final Map<LiveDataSpecification, Boolean> perUnderlyingResult = entry.getKey().isEntitled(user, entry.getValue());
       if (perUnderlyingResult != null) {
         result.putAll(perUnderlyingResult);
       }
     }
-    
+
     return result;
   }
 
   @Override
-  public void subscribe(UserPrincipal user, LiveDataSpecification requestedSpecification, LiveDataListener listener) {
-    LiveDataClient underlying = identifyUnderlying(requestedSpecification);
+  public void subscribe(final UserPrincipal user, final LiveDataSpecification requestedSpecification, final LiveDataListener listener) {
+    final LiveDataClient underlying = identifyUnderlying(requestedSpecification);
     underlying.subscribe(user, requestedSpecification, listener);
   }
 
   @Override
-  public void subscribe(UserPrincipal user, Collection<LiveDataSpecification> requestedSpecifications, LiveDataListener listener) {
-    Map<LiveDataClient, List<LiveDataSpecification>> split = splitCollection(requestedSpecifications);
-    for (Map.Entry<LiveDataClient, List<LiveDataSpecification>> entry : split.entrySet()) {
+  public void subscribe(final UserPrincipal user, final Collection<LiveDataSpecification> requestedSpecifications, final LiveDataListener listener) {
+    final Map<LiveDataClient, List<LiveDataSpecification>> split = splitCollection(requestedSpecifications);
+    for (final Map.Entry<LiveDataClient, List<LiveDataSpecification>> entry : split.entrySet()) {
       entry.getKey().subscribe(user, entry.getValue(), listener);
     }
   }
 
   @Override
-  public void unsubscribe(UserPrincipal user, LiveDataSpecification fullyQualifiedSpecification, LiveDataListener listener) {
-    LiveDataClient underlying = identifyUnderlying(fullyQualifiedSpecification);
+  public void unsubscribe(final UserPrincipal user, final LiveDataSpecification fullyQualifiedSpecification, final LiveDataListener listener) {
+    final LiveDataClient underlying = identifyUnderlying(fullyQualifiedSpecification);
     underlying.unsubscribe(user, fullyQualifiedSpecification, listener);
   }
 
   @Override
-  public void unsubscribe(UserPrincipal user, Collection<LiveDataSpecification> fullyQualifiedSpecifications, LiveDataListener listener) {
-    Map<LiveDataClient, List<LiveDataSpecification>> split = splitCollection(fullyQualifiedSpecifications);
-    for (Map.Entry<LiveDataClient, List<LiveDataSpecification>> entry : split.entrySet()) {
+  public void unsubscribe(final UserPrincipal user, final Collection<LiveDataSpecification> fullyQualifiedSpecifications, final LiveDataListener listener) {
+    final Map<LiveDataClient, List<LiveDataSpecification>> split = splitCollection(fullyQualifiedSpecifications);
+    for (final Map.Entry<LiveDataClient, List<LiveDataSpecification>> entry : split.entrySet()) {
       entry.getKey().unsubscribe(user, entry.getValue(), listener);
     }
   }
 
   @Override
-  public LiveDataSubscriptionResponse snapshot(UserPrincipal user, LiveDataSpecification requestedSpecification, long timeout) {
-    LiveDataClient underlying = identifyUnderlying(requestedSpecification);
+  public LiveDataSubscriptionResponse snapshot(final UserPrincipal user, final LiveDataSpecification requestedSpecification, final long timeout) {
+    final LiveDataClient underlying = identifyUnderlying(requestedSpecification);
     return underlying.snapshot(user, requestedSpecification, timeout);
   }
 
   @Override
-  public Collection<LiveDataSubscriptionResponse> snapshot(UserPrincipal user, Collection<LiveDataSpecification> requestedSpecifications, long timeout) {
-    Map<LiveDataClient, List<LiveDataSpecification>> split = splitCollection(requestedSpecifications);
-    List<LiveDataSubscriptionResponse> snapshots = new ArrayList<LiveDataSubscriptionResponse>(requestedSpecifications.size());
-    for (Map.Entry<LiveDataClient, List<LiveDataSpecification>> entry : split.entrySet()) {
+  public Collection<LiveDataSubscriptionResponse> snapshot(final UserPrincipal user, final Collection<LiveDataSpecification> requestedSpecifications, final long timeout) {
+    final Map<LiveDataClient, List<LiveDataSpecification>> split = splitCollection(requestedSpecifications);
+    final List<LiveDataSubscriptionResponse> snapshots = new ArrayList<>(requestedSpecifications.size());
+    for (final Map.Entry<LiveDataClient, List<LiveDataSpecification>> entry : split.entrySet()) {
       snapshots.addAll(entry.getKey().snapshot(user, entry.getValue(), timeout));
     }
     return snapshots;
@@ -156,7 +156,7 @@ public class DelegatingLiveDataClient implements LiveDataClient {
 
   @Override
   public void close() {
-    for (LiveDataClient underlying : _underlyingClients.values()) {
+    for (final LiveDataClient underlying : _underlyingClients.values()) {
       underlying.close();
     }
   }

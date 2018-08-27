@@ -21,7 +21,7 @@ public class IdWrapper {
     return _externalId;
   }
 
-  public void setExternalId(ExtId externalId) {
+  public void setExternalId(final ExtId externalId) {
     _externalId = externalId;
   }
 

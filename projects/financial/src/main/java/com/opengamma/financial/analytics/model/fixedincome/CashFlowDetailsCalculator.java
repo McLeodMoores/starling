@@ -47,24 +47,24 @@ import com.opengamma.util.tuple.Pair;
 public final class CashFlowDetailsCalculator extends InstrumentDerivativeVisitorAdapter<CashFlowDetailsProvider, SwapLegCashFlows> {
 
   @Override
-  public SwapLegCashFlows visitFixedCouponSwap(SwapFixedCoupon<?> derivative, CashFlowDetailsProvider provider) {
+  public SwapLegCashFlows visitFixedCouponSwap(final SwapFixedCoupon<?> derivative, final CashFlowDetailsProvider provider) {
     return getCashFlows(derivative, provider);
   }
 
   @Override
-  public SwapLegCashFlows visitSwap(Swap<?, ?> derivative, CashFlowDetailsProvider provider) {
+  public SwapLegCashFlows visitSwap(final Swap<?, ?> derivative, final CashFlowDetailsProvider provider) {
     return getCashFlows(derivative, provider);
   }
 
-  private SwapLegCashFlows getCashFlows(Swap<?, ?> swapDerivative, CashFlowDetailsProvider provider) {
+  private SwapLegCashFlows getCashFlows(final Swap<?, ?> swapDerivative, final CashFlowDetailsProvider provider) {
     AnnuityDefinition<? extends PaymentDefinition> legDefinition;
-    SwapDefinition swapDefinition = provider.getDefinition();
+    final SwapDefinition swapDefinition = provider.getDefinition();
     Annuity<? extends Payment> legDerivative;
-    ZonedDateTime valuationTime = provider.getZonedDateTime();
-    MulticurveProviderInterface bundle = provider.getMulticurveProviderInterface();
+    final ZonedDateTime valuationTime = provider.getZonedDateTime();
+    final MulticurveProviderInterface bundle = provider.getMulticurveProviderInterface();
 
-    boolean isDerivativeFirstLegPay = swapDerivative.getFirstLeg().getNthPayment(0).getReferenceAmount() < 0;
-    boolean isDefinitionFirstLegPay = swapDefinition.getFirstLeg().getNthPayment(0).getReferenceAmount() < 0;
+    final boolean isDerivativeFirstLegPay = swapDerivative.getFirstLeg().getNthPayment(0).getReferenceAmount() < 0;
+    final boolean isDefinitionFirstLegPay = swapDefinition.getFirstLeg().getNthPayment(0).getReferenceAmount() < 0;
 
     if (provider.getType() == PayReceiveType.PAY) {
       legDefinition = isDefinitionFirstLegPay ? swapDefinition.getFirstLeg() : swapDefinition.getSecondLeg();
@@ -75,16 +75,16 @@ public final class CashFlowDetailsCalculator extends InstrumentDerivativeVisitor
     }
 
     //sanitize the derivative/definition arrays
-    List<Double> paymentTimes = Doubles.asList(legDerivative.accept(AnnuityPaymentTimesVisitor.getInstance()));
-    List<Double> paymentFractions = Doubles.asList(legDerivative.accept(AnnuityPaymentFractionsVisitor.getInstance()));
-    List<Double> discountFactors = Doubles.asList(legDerivative.accept(AnnuityDiscountFactorsVisitor.getInstance(), bundle));
-    List<CurrencyAmount> notionals = Lists.newArrayList(legDefinition.accept(AnnuityNotionalsVisitor.getInstance(), valuationTime));
-    List<Double> fixedRates = Lists.newArrayList(legDerivative.accept(AnnuityFixedRatesVisitor.getInstance()));
-    List<CurrencyAmount> paymentAmounts = Lists.newArrayList(legDerivative.accept(AnnuityPaymentAmountsVisitor.getInstance()));
+    final List<Double> paymentTimes = Doubles.asList(legDerivative.accept(AnnuityPaymentTimesVisitor.getInstance()));
+    final List<Double> paymentFractions = Doubles.asList(legDerivative.accept(AnnuityPaymentFractionsVisitor.getInstance()));
+    final List<Double> discountFactors = Doubles.asList(legDerivative.accept(AnnuityDiscountFactorsVisitor.getInstance(), bundle));
+    final List<CurrencyAmount> notionals = Lists.newArrayList(legDefinition.accept(AnnuityNotionalsVisitor.getInstance(), valuationTime));
+    final List<Double> fixedRates = Lists.newArrayList(legDerivative.accept(AnnuityFixedRatesVisitor.getInstance()));
+    final List<CurrencyAmount> paymentAmounts = Lists.newArrayList(legDerivative.accept(AnnuityPaymentAmountsVisitor.getInstance()));
 
-    Pair<LocalDate[], LocalDate[]> accrualDates = legDefinition.accept(AnnuityAccrualDatesVisitor.getInstance(), valuationTime);
-    List<LocalDate> accrualStartDates = Lists.newArrayList(accrualDates.getFirst());
-    List<LocalDate> accrualEndDates = Lists.newArrayList(accrualDates.getSecond());
+    final Pair<LocalDate[], LocalDate[]> accrualDates = legDefinition.accept(AnnuityAccrualDatesVisitor.getInstance(), valuationTime);
+    final List<LocalDate> accrualStartDates = Lists.newArrayList(accrualDates.getFirst());
+    final List<LocalDate> accrualEndDates = Lists.newArrayList(accrualDates.getSecond());
 
     if (provider.isFixed()) {
       return new FixedLegCashFlows(accrualStartDates,
@@ -98,17 +98,17 @@ public final class CashFlowDetailsCalculator extends InstrumentDerivativeVisitor
     }
 
     //sanitize the derivative/definition arrays
-    List<Double> fixingYearFractions = Lists.newArrayList(legDefinition.accept(AnnuityFixingYearFractionsVisitor.getInstance(), valuationTime));
-    List<Double> forwardRates = Lists.newArrayList(legDerivative.accept(AnnuityForwardRatesVisitor.getInstance(), bundle));
-    List<Double> spreads = Doubles.asList(legDefinition.accept(AnnuitySpreadsVisitor.getInstance(), valuationTime));
-    List<Double> gearings = Doubles.asList(legDefinition.accept(AnnuityGearingsVisitor.getInstance(), valuationTime));
-    List<LocalDate> paymentDates = Lists.newArrayList(legDefinition.accept(AnnuityPaymentDatesVisitor.getInstance(), valuationTime));
-    List<CurrencyAmount> projectedAmounts = Lists.newArrayList(legDerivative.accept(AnnuityProjectedPaymentsVisitor.getInstance(), bundle));
-    List<Tenor> indexTenors = Lists.newArrayList(legDefinition.accept(AnnuityIndexTenorsVisitor.getInstance(), valuationTime));
+    final List<Double> fixingYearFractions = Lists.newArrayList(legDefinition.accept(AnnuityFixingYearFractionsVisitor.getInstance(), valuationTime));
+    final List<Double> forwardRates = Lists.newArrayList(legDerivative.accept(AnnuityForwardRatesVisitor.getInstance(), bundle));
+    final List<Double> spreads = Doubles.asList(legDefinition.accept(AnnuitySpreadsVisitor.getInstance(), valuationTime));
+    final List<Double> gearings = Doubles.asList(legDefinition.accept(AnnuityGearingsVisitor.getInstance(), valuationTime));
+    final List<LocalDate> paymentDates = Lists.newArrayList(legDefinition.accept(AnnuityPaymentDatesVisitor.getInstance(), valuationTime));
+    final List<CurrencyAmount> projectedAmounts = Lists.newArrayList(legDerivative.accept(AnnuityProjectedPaymentsVisitor.getInstance(), bundle));
+    final List<Tenor> indexTenors = Lists.newArrayList(legDefinition.accept(AnnuityIndexTenorsVisitor.getInstance(), valuationTime));
 
-    Pair<LocalDate[], LocalDate[]> fixingDates = legDefinition.accept(AnnuityFixingDatesVisitor.getInstance(), valuationTime);
-    List<LocalDate> fixingStartDates = Lists.newArrayList(fixingDates.getFirst());
-    List<LocalDate> fixingEndDates = Lists.newArrayList(fixingDates.getSecond());
+    final Pair<LocalDate[], LocalDate[]> fixingDates = legDefinition.accept(AnnuityFixingDatesVisitor.getInstance(), valuationTime);
+    final List<LocalDate> fixingStartDates = Lists.newArrayList(fixingDates.getFirst());
+    final List<LocalDate> fixingEndDates = Lists.newArrayList(fixingDates.getSecond());
 
     return new FloatingLegCashFlows(accrualStartDates,
         accrualEndDates,

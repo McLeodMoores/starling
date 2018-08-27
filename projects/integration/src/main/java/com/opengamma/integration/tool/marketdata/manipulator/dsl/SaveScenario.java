@@ -36,25 +36,25 @@ public class SaveScenario extends AbstractTool<ToolContext> {
   //-------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
+   *
    * @param args  the standard tool arguments, not null
    */
-  public static void main(String[] args) {
+  public static void main(final String[] args) {
     new SaveScenario().invokeAndTerminate(args);
   }
 
   //-------------------------------------------------------------------------
   @Override
   protected void doRun() throws Exception {
-    String scriptLocation = getCommandLine().getOptionValue('s');
-    ConfigSource configSource = getToolContext().getConfigSource();
-    ConfigMaster configMaster = getToolContext().getConfigMaster();
+    final String scriptLocation = getCommandLine().getOptionValue('s');
+    final ConfigSource configSource = getToolContext().getConfigSource();
+    final ConfigMaster configMaster = getToolContext().getConfigMaster();
 
-    Scenario scenario = SimulationUtils.createScenarioFromDsl(scriptLocation, null);
-    ConfigItem<ScenarioDefinition> configItem = ConfigItem.of(scenario.createDefinition(), scenario.getName());
+    final Scenario scenario = SimulationUtils.createScenarioFromDsl(scriptLocation, null);
+    final ConfigItem<ScenarioDefinition> configItem = ConfigItem.of(scenario.createDefinition(), scenario.getName());
     if (getCommandLine().hasOption('i')) {
-      ObjectId scenarioId = ObjectId.parse(getCommandLine().getOptionValue('i'));
-      UniqueId latestScenarioId = configSource.get(scenarioId, VersionCorrection.LATEST).getUniqueId();
+      final ObjectId scenarioId = ObjectId.parse(getCommandLine().getOptionValue('i'));
+      final UniqueId latestScenarioId = configSource.get(scenarioId, VersionCorrection.LATEST).getUniqueId();
       configItem.setUniqueId(latestScenarioId);
       configMaster.update(new ConfigDocument(configItem));
     } else {
@@ -63,14 +63,14 @@ public class SaveScenario extends AbstractTool<ToolContext> {
   }
 
   @Override
-  protected Options createOptions(boolean mandatoryConfigResource) {
-    Options options = super.createOptions(mandatoryConfigResource);
+  protected Options createOptions(final boolean mandatoryConfigResource) {
+    final Options options = super.createOptions(mandatoryConfigResource);
 
-    Option scriptLocation = new Option("s", SCRIPT_LOCATION, true, "Location of the scenario script on the filesystem");
+    final Option scriptLocation = new Option("s", SCRIPT_LOCATION, true, "Location of the scenario script on the filesystem");
     scriptLocation.setRequired(true);
     options.addOption(scriptLocation);
 
-    Option scenarioId = new Option("i", SCENARIO_ID, true, "Object ID of the scenario definition. Omit to save as " +
+    final Option scenarioId = new Option("i", SCENARIO_ID, true, "Object ID of the scenario definition. Omit to save as " +
         "a new definition");
     options.addOption(scenarioId);
 

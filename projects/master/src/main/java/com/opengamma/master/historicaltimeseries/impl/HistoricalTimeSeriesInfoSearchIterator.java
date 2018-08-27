@@ -27,7 +27,7 @@ public class HistoricalTimeSeriesInfoSearchIterator extends AbstractSearchIterat
    * Creates an instance based on a request.
    * <p>
    * The request will be altered during the iteration.
-   * 
+   *
    * @param master  the underlying master, not null
    * @param request  the request object, not null
    * @return an iterable suitable for use in a for-each loop, not null
@@ -47,17 +47,17 @@ public class HistoricalTimeSeriesInfoSearchIterator extends AbstractSearchIterat
    * Creates an instance based on a request.
    * <p>
    * The request will be altered during the iteration.
-   * 
+   *
    * @param master  the underlying master, not null
    * @param request  the request object, not null
    */
-  public HistoricalTimeSeriesInfoSearchIterator(HistoricalTimeSeriesMaster master, HistoricalTimeSeriesInfoSearchRequest request) {
+  public HistoricalTimeSeriesInfoSearchIterator(final HistoricalTimeSeriesMaster master, final HistoricalTimeSeriesInfoSearchRequest request) {
     super(master, request);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  protected HistoricalTimeSeriesInfoSearchResult doSearch(HistoricalTimeSeriesInfoSearchRequest request) {
+  protected HistoricalTimeSeriesInfoSearchResult doSearch(final HistoricalTimeSeriesInfoSearchRequest request) {
     return getMaster().search(request);
   }
 

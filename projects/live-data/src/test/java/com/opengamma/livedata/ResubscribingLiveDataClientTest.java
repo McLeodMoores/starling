@@ -27,9 +27,9 @@ public class ResubscribingLiveDataClientTest {
 
   @Test
   public void subscribe() {
-    LiveDataClient delegate = mock(LiveDataClient.class);
-    ResubscribingLiveDataClient client = new ResubscribingLiveDataClient(delegate);
-    Listener listener = new Listener();
+    final LiveDataClient delegate = mock(LiveDataClient.class);
+    final ResubscribingLiveDataClient client = new ResubscribingLiveDataClient(delegate);
+    final Listener listener = new Listener();
     client.subscribe(UserPrincipal.getTestUser(), SPEC1, listener);
     client.subscribe(UserPrincipal.getTestUser(), SPEC2, listener);
     verify(delegate).subscribe(UserPrincipal.getTestUser(), SPEC1, listener);
@@ -42,9 +42,9 @@ public class ResubscribingLiveDataClientTest {
 
   @Test
   public void unsubscribe() {
-    LiveDataClient delegate = mock(LiveDataClient.class);
-    ResubscribingLiveDataClient client = new ResubscribingLiveDataClient(delegate);
-    Listener listener = new Listener();
+    final LiveDataClient delegate = mock(LiveDataClient.class);
+    final ResubscribingLiveDataClient client = new ResubscribingLiveDataClient(delegate);
+    final Listener listener = new Listener();
     client.subscribe(UserPrincipal.getTestUser(), SPEC1, listener);
     client.subscribe(UserPrincipal.getTestUser(), SPEC2, listener);
     client.unsubscribe(UserPrincipal.getTestUser(), SPEC1, listener);
@@ -59,19 +59,19 @@ public class ResubscribingLiveDataClientTest {
   private static class Listener implements LiveDataListener {
 
     @Override
-    public void subscriptionResultReceived(LiveDataSubscriptionResponse subscriptionResult) {
+    public void subscriptionResultReceived(final LiveDataSubscriptionResponse subscriptionResult) {
     }
 
     @Override
-    public void subscriptionResultsReceived(Collection<LiveDataSubscriptionResponse> subscriptionResults) {
+    public void subscriptionResultsReceived(final Collection<LiveDataSubscriptionResponse> subscriptionResults) {
     }
 
     @Override
-    public void subscriptionStopped(LiveDataSpecification fullyQualifiedSpecification) {
+    public void subscriptionStopped(final LiveDataSpecification fullyQualifiedSpecification) {
     }
 
     @Override
-    public void valueUpdate(LiveDataValueUpdate valueUpdate) {
+    public void valueUpdate(final LiveDataValueUpdate valueUpdate) {
     }
   }
 }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.money;
@@ -18,6 +18,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.joda.beans.Bean;
+import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
 import org.joda.beans.ImmutableBean;
 import org.joda.beans.JodaBeanUtils;
@@ -31,7 +32,6 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.google.common.collect.ImmutableSortedMap;
 import com.opengamma.util.ArgumentChecker;
-import org.joda.beans.BeanBuilder;
 
 /**
  * A map of currency amounts keyed by currency.
@@ -60,7 +60,7 @@ public final class MultipleCurrencyAmount implements ImmutableBean,
 
   /**
    * Obtains a {@code MultipleCurrencyAmount} from a currency and amount.
-   * 
+   *
    * @param currency  the currency, not null
    * @param amount  the amount
    * @return the amount, not null
@@ -71,7 +71,7 @@ public final class MultipleCurrencyAmount implements ImmutableBean,
 
   /**
    * Obtains a {@code MultipleCurrencyAmount} from a paired array of currencies and amounts.
-   * 
+   *
    * @param currencies  the currencies, not null
    * @param amounts  the amounts, not null
    * @return the amount, not null
@@ -81,7 +81,7 @@ public final class MultipleCurrencyAmount implements ImmutableBean,
     ArgumentChecker.notNull(amounts, "amounts");
     final int length = currencies.length;
     ArgumentChecker.isTrue(length == amounts.length, "Currency array and amount array must be the same length");
-    List<CurrencyAmount> list = new ArrayList<CurrencyAmount>(length);
+    final List<CurrencyAmount> list = new ArrayList<>(length);
     for (int i = 0; i < length; i++) {
       list.add(CurrencyAmount.of(currencies[i], amounts[i]));
     }
@@ -90,7 +90,7 @@ public final class MultipleCurrencyAmount implements ImmutableBean,
 
   /**
    * Obtains a {@code MultipleCurrencyAmount} from a paired list of currencies and amounts.
-   * 
+   *
    * @param currencies  the currencies, not null
    * @param amounts  the amounts, not null
    * @return the amount, not null
@@ -100,7 +100,7 @@ public final class MultipleCurrencyAmount implements ImmutableBean,
     ArgumentChecker.noNulls(amounts, "amounts");
     final int length = currencies.size();
     ArgumentChecker.isTrue(length == amounts.size(), "Currency array and amount array must be the same length");
-    List<CurrencyAmount> list = new ArrayList<CurrencyAmount>(length);
+    final List<CurrencyAmount> list = new ArrayList<>(length);
     for (int i = 0; i < length; i++) {
       list.add(CurrencyAmount.of(currencies.get(i), amounts.get(i)));
     }
@@ -109,14 +109,14 @@ public final class MultipleCurrencyAmount implements ImmutableBean,
 
   /**
    * Obtains a {@code MultipleCurrencyAmount} from a map of currency to amount.
-   * 
+   *
    * @param amountMap  the amounts, not null
    * @return the amount, not null
    */
   public static MultipleCurrencyAmount of(final Map<Currency, Double> amountMap) {
     ArgumentChecker.notNull(amountMap, "amountMap");
-    TreeMap<Currency, CurrencyAmount> map = new TreeMap<Currency, CurrencyAmount>();
-    for (Entry<Currency, Double> entry : amountMap.entrySet()) {
+    final TreeMap<Currency, CurrencyAmount> map = new TreeMap<>();
+    for (final Entry<Currency, Double> entry : amountMap.entrySet()) {
       ArgumentChecker.notNull(entry.getValue(), "amount");
       map.put(entry.getKey(), CurrencyAmount.of(entry.getKey(), entry.getValue()));
     }
@@ -125,7 +125,7 @@ public final class MultipleCurrencyAmount implements ImmutableBean,
 
   /**
    * Obtains a {@code MultipleCurrencyAmount} from a list of {@code CurrencyAmount}.
-   * 
+   *
    * @param currencyAmounts  the amounts, not null
    * @return the amount, not null
    */
@@ -136,16 +136,16 @@ public final class MultipleCurrencyAmount implements ImmutableBean,
 
   /**
    * Obtains a {@code MultipleCurrencyAmount} from a list of {@code CurrencyAmount}.
-   * 
+   *
    * @param currencyAmounts  the amounts, not null
    * @return the amount, not null
    */
   public static MultipleCurrencyAmount of(final Iterable<CurrencyAmount> currencyAmounts) {
     ArgumentChecker.notNull(currencyAmounts, "currencyAmounts");
-    TreeMap<Currency, CurrencyAmount> map = new TreeMap<Currency, CurrencyAmount>();
-    for (CurrencyAmount currencyAmount : currencyAmounts) {
+    final TreeMap<Currency, CurrencyAmount> map = new TreeMap<>();
+    for (final CurrencyAmount currencyAmount : currencyAmounts) {
       ArgumentChecker.notNull(currencyAmount, "currencyAmount");
-      CurrencyAmount existing = map.get(currencyAmount.getCurrency());
+      final CurrencyAmount existing = map.get(currencyAmount.getCurrency());
       if (existing != null) {
         map.put(currencyAmount.getCurrency(), existing.plus(currencyAmount));
       } else {
@@ -158,7 +158,7 @@ public final class MultipleCurrencyAmount implements ImmutableBean,
   //-------------------------------------------------------------------------
   /**
    * Gets the number of stored amounts.
-   * 
+   *
    * @return the number of amounts
    */
   public int size() {
@@ -167,7 +167,7 @@ public final class MultipleCurrencyAmount implements ImmutableBean,
 
   /**
    * Iterates though the currency-amounts.
-   * 
+   *
    * @return the iterator, not null
    */
   @Override
@@ -177,7 +177,7 @@ public final class MultipleCurrencyAmount implements ImmutableBean,
 
   /**
    * Gets the currency amounts as an array.
-   * 
+   *
    * @return the independent, modifiable currency amount array, not null
    */
   public CurrencyAmount[] getCurrencyAmounts() {
@@ -186,13 +186,13 @@ public final class MultipleCurrencyAmount implements ImmutableBean,
 
   /**
    * Gets the amount for the specified currency.
-   * 
+   *
    * @param currency  the currency to find an amount for, not null
    * @return the amount
    * @throws IllegalArgumentException if the currency is not present
    */
   public double getAmount(final Currency currency) {
-    CurrencyAmount currencyAmount = getCurrencyAmount(currency);
+    final CurrencyAmount currencyAmount = getCurrencyAmount(currency);
     if (currencyAmount == null) {
       throw new IllegalArgumentException("Do not have an amount with currency " + currency);
     }
@@ -201,7 +201,7 @@ public final class MultipleCurrencyAmount implements ImmutableBean,
 
   /**
    * Gets the {@code CurrencyAmount} for the specified currency.
-   * 
+   *
    * @param currency  the currency to find an amount for, not null
    * @return the amount, null if no amount for the currency
    */
@@ -219,16 +219,16 @@ public final class MultipleCurrencyAmount implements ImmutableBean,
    * If the currency is not yet present, the currency-amount is added to the map.
    * The addition simply uses standard {@code double} arithmetic.
    * <p>
-   * This instance is immutable and unaffected by this method. 
-   * 
+   * This instance is immutable and unaffected by this method.
+   *
    * @param currencyAmountToAdd  the amount to add, in the same currency, not null
    * @return an amount based on this with the specified amount added, not null
    */
   public MultipleCurrencyAmount plus(final CurrencyAmount currencyAmountToAdd) {
     ArgumentChecker.notNull(currencyAmountToAdd, "currencyAmountToAdd");
-    ImmutableSortedMap.Builder<Currency, CurrencyAmount> copy = ImmutableSortedMap.naturalOrder();
-    CurrencyAmount previous = getCurrencyAmount(currencyAmountToAdd.getCurrency());
-    for (CurrencyAmount amount : _currencyAmountMap.values()) {
+    final ImmutableSortedMap.Builder<Currency, CurrencyAmount> copy = ImmutableSortedMap.naturalOrder();
+    final CurrencyAmount previous = getCurrencyAmount(currencyAmountToAdd.getCurrency());
+    for (final CurrencyAmount amount : _currencyAmountMap.values()) {
       if (amount.getCurrency().equals(currencyAmountToAdd.getCurrency())) {
         copy.put(amount.getCurrency(), previous.plus(currencyAmountToAdd));
       } else {
@@ -249,17 +249,17 @@ public final class MultipleCurrencyAmount implements ImmutableBean,
    * If the currency is not yet present, the currency-amount is added to the map.
    * The addition simply uses standard {@code double} arithmetic.
    * <p>
-   * This instance is immutable and unaffected by this method. 
-   * 
+   * This instance is immutable and unaffected by this method.
+   *
    * @param currency  the currency to add to, not null
    * @param amountToAdd  the amount to add
    * @return an amount based on this with the specified amount added, not null
    */
   public MultipleCurrencyAmount plus(final Currency currency, final double amountToAdd) {
     ArgumentChecker.notNull(currency, "currency");
-    ImmutableSortedMap.Builder<Currency, CurrencyAmount> copy = ImmutableSortedMap.naturalOrder();
-    CurrencyAmount previous = getCurrencyAmount(currency);
-    for (CurrencyAmount amount : _currencyAmountMap.values()) {
+    final ImmutableSortedMap.Builder<Currency, CurrencyAmount> copy = ImmutableSortedMap.naturalOrder();
+    final CurrencyAmount previous = getCurrencyAmount(currency);
+    for (final CurrencyAmount amount : _currencyAmountMap.values()) {
       if (amount.getCurrency().equals(currency)) {
         copy.put(amount.getCurrency(), previous.plus(amountToAdd));
       } else {
@@ -280,15 +280,15 @@ public final class MultipleCurrencyAmount implements ImmutableBean,
    * If the currency is not yet present, the currency-amount is added to the map.
    * The addition simply uses standard {@code double} arithmetic.
    * <p>
-   * This instance is immutable and unaffected by this method. 
-   * 
+   * This instance is immutable and unaffected by this method.
+   *
    * @param multipleCurrencyAmountToAdd  the currency to add to, not null
    * @return an amount based on this with the specified amount added, not null
    */
   public MultipleCurrencyAmount plus(final MultipleCurrencyAmount multipleCurrencyAmountToAdd) {
     ArgumentChecker.notNull(multipleCurrencyAmountToAdd, "multipleCurrencyAmountToAdd");
     MultipleCurrencyAmount result = this;
-    for (CurrencyAmount currencyAmount : multipleCurrencyAmountToAdd) {
+    for (final CurrencyAmount currencyAmount : multipleCurrencyAmountToAdd) {
       result = result.plus(currencyAmount);
     }
     return result;
@@ -298,14 +298,14 @@ public final class MultipleCurrencyAmount implements ImmutableBean,
   /**
    * Returns a copy of this {@code MultipleCurrencyAmount} with all the amounts multiplied by the factor.
    * <p>
-   * This instance is immutable and unaffected by this method. 
-   * 
+   * This instance is immutable and unaffected by this method.
+   *
    * @param factor The multiplicative factor.
    * @return An amount based on this with all the amounts multiplied by the factor. Not null
    */
   public MultipleCurrencyAmount multipliedBy(final double factor) {
-    TreeMap<Currency, Double> map = new TreeMap<Currency, Double>();
-    for (CurrencyAmount currencyAmount : this) {
+    final TreeMap<Currency, Double> map = new TreeMap<>();
+    for (final CurrencyAmount currencyAmount : this) {
       map.put(currencyAmount.getCurrency(), currencyAmount.getAmount() * factor);
     }
     return MultipleCurrencyAmount.of(map);
@@ -318,15 +318,15 @@ public final class MultipleCurrencyAmount implements ImmutableBean,
    * This adds the specified amount to this monetary amount, returning a new object.
    * Any previous amount for the specified currency is replaced.
    * <p>
-   * This instance is immutable and unaffected by this method. 
-   * 
+   * This instance is immutable and unaffected by this method.
+   *
    * @param currency  the currency to replace, not null
    * @param amount  the new amount
    * @return an amount based on this with the specified currency replaced, not null
    */
   public MultipleCurrencyAmount with(final Currency currency, final double amount) {
     ArgumentChecker.notNull(currency, "currency");
-    TreeMap<Currency, CurrencyAmount> copy = new TreeMap<Currency, CurrencyAmount>(_currencyAmountMap);
+    final TreeMap<Currency, CurrencyAmount> copy = new TreeMap<>(_currencyAmountMap);
     copy.put(currency, CurrencyAmount.of(currency, amount));
     return new MultipleCurrencyAmount(copy);
   }
@@ -336,14 +336,14 @@ public final class MultipleCurrencyAmount implements ImmutableBean,
    * <p>
    * This removes the specified currency from this monetary amount, returning a new object.
    * <p>
-   * This instance is immutable and unaffected by this method. 
-   * 
+   * This instance is immutable and unaffected by this method.
+   *
    * @param currency  the currency to replace, not null
    * @return an amount based on this with the specified currency removed, not null
    */
   public MultipleCurrencyAmount without(final Currency currency) {
     ArgumentChecker.notNull(currency, "currency");
-    TreeMap<Currency, CurrencyAmount> copy = new TreeMap<Currency, CurrencyAmount>(_currencyAmountMap);
+    final TreeMap<Currency, CurrencyAmount> copy = new TreeMap<>(_currencyAmountMap);
     if (copy.remove(currency) == null) {
       return this;
     }
@@ -355,7 +355,7 @@ public final class MultipleCurrencyAmount implements ImmutableBean,
    * Gets the amount as a string.
    * <p>
    * The format includes each currency-amount.
-   * 
+   *
    * @return the currency amount, not null
    */
   @Override
@@ -363,7 +363,7 @@ public final class MultipleCurrencyAmount implements ImmutableBean,
     return _currencyAmountMap.values().toString();
   }
 
-  private MultipleCurrencyAmount(ImmutableSortedMap<Currency, CurrencyAmount> currencyAmountMap) {
+  private MultipleCurrencyAmount(final ImmutableSortedMap<Currency, CurrencyAmount> currencyAmountMap) {
     JodaBeanUtils.notNull(currencyAmountMap, "currencyAmountMap");
     this._currencyAmountMap = currencyAmountMap;
   }

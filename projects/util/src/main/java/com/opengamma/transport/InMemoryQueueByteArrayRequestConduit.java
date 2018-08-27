@@ -25,8 +25,8 @@ public class InMemoryQueueByteArrayRequestConduit implements Lifecycle, ByteArra
   private class DispatchJob implements Runnable {
     private final byte[] _requestMessage;
     private final ByteArrayMessageReceiver _responseReceiver;
-    
-    public DispatchJob(byte[] requestMessage, ByteArrayMessageReceiver responseReceiver) {
+
+    public DispatchJob(final byte[] requestMessage, final ByteArrayMessageReceiver responseReceiver) {
       _requestMessage = requestMessage;
       _responseReceiver = responseReceiver;
     }
@@ -47,32 +47,32 @@ public class InMemoryQueueByteArrayRequestConduit implements Lifecycle, ByteArra
 
     @Override
     public void run() {
-      byte[] response = getUnderlying().requestReceived(getRequestMessage());
+      final byte[] response = getUnderlying().requestReceived(getRequestMessage());
       getResponseReceiver().messageReceived(response);
     }
 
   }
-  
+
   private final AtomicBoolean _started = new AtomicBoolean(false);
   private final ByteArrayRequestReceiver _underlying;
   private final ExecutorService _executor;
   private final boolean _localExecutor;
-  
-  public InMemoryQueueByteArrayRequestConduit(int nWorkerThreads, ByteArrayRequestReceiver underlying) {
+
+  public InMemoryQueueByteArrayRequestConduit(final int nWorkerThreads, final ByteArrayRequestReceiver underlying) {
     _underlying = underlying;
-    ThreadFactory tf = new NamedThreadPoolFactory("InMemoryQueueByteArrayRequestConduit", true);
-    ThreadPoolExecutor executor = new MdcAwareThreadPoolExecutor(
+    final ThreadFactory tf = new NamedThreadPoolFactory("InMemoryQueueByteArrayRequestConduit", true);
+    final ThreadPoolExecutor executor = new MdcAwareThreadPoolExecutor(
         0, nWorkerThreads, 5L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(), tf);
     _executor = executor;
     _localExecutor = true;
   }
-  
-  public InMemoryQueueByteArrayRequestConduit(ExecutorService executor, ByteArrayRequestReceiver underlying) {
+
+  public InMemoryQueueByteArrayRequestConduit(final ExecutorService executor, final ByteArrayRequestReceiver underlying) {
     _underlying = underlying;
     _executor = executor;
     _localExecutor = false;
   }
-  
+
   /**
    * @return the underlying
    */
@@ -88,8 +88,8 @@ public class InMemoryQueueByteArrayRequestConduit implements Lifecycle, ByteArra
   }
 
   @Override
-  public void sendRequest(byte[] request,
-      ByteArrayMessageReceiver responseReceiver) {
+  public void sendRequest(final byte[] request,
+      final ByteArrayMessageReceiver responseReceiver) {
     getExecutor().execute(new DispatchJob(request, responseReceiver));
   }
 
@@ -112,7 +112,7 @@ public class InMemoryQueueByteArrayRequestConduit implements Lifecycle, ByteArra
       getExecutor().shutdown();
       try {
         getExecutor().awaitTermination(60, TimeUnit.SECONDS);
-      } catch (InterruptedException e) {
+      } catch (final InterruptedException e) {
         Thread.interrupted();
       }
     }

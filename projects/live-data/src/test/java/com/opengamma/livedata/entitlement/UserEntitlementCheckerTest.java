@@ -50,24 +50,24 @@ public class UserEntitlementCheckerTest {
 
   @BeforeMethod
   public void setup() {
-    Set<UserGroup> userGroups = new HashSet<UserGroup>();
+    final Set<UserGroup> userGroups = new HashSet<>();
 
-    UserGroup group1 = new UserGroup(0L, "group1");
+    final UserGroup group1 = new UserGroup(0L, "group1");
     group1.getAuthorities().add(new Authority(0L, "LiveData/Bloomberg/Equity/**")); // ** -> all subpaths OK
     group1.getAuthorities().add(new Authority(1L, "LiveData/Bloomberg/Bond/*")); // * -> only 1 level of subpath OK
     userGroups.add(group1);
-    
-    UserGroup group2 = new UserGroup(1L, "group2");
+
+    final UserGroup group2 = new UserGroup(1L, "group2");
     group2.getAuthorities().add(new Authority(2L, "LiveData/Reuters/Equity/**"));
     userGroups.add(group2);
-    
-    User user = new User(null,
+
+    final User user = new User(null,
         "john",
         "pw",
         userGroups,
         new Date());
-    
-    UserManager userManager = mock(UserManager.class);
+
+    final UserManager userManager = mock(UserManager.class);
     when(userManager.getUser("john")).thenReturn(user);
 
     _aaplOnBloomberg = new DistributionSpecification(
@@ -99,8 +99,8 @@ public class UserEntitlementCheckerTest {
         ExternalId.of("BLOOMBERG_BUID", "FX12345"),
         new NormalizationRuleSet("MyWeirdNormalizationRule"),
         "LiveData.Bloomberg.FX.EURUSD.MyWeirdNormalizationRule");
-    
-    Map<LiveDataSpecification, DistributionSpecification> fixes = new HashMap<LiveDataSpecification, DistributionSpecification>();
+
+    final Map<LiveDataSpecification, DistributionSpecification> fixes = new HashMap<>();
     fixes.put(_aaplOnBloomberg.getFullyQualifiedLiveDataSpecification(), _aaplOnBloomberg);
     fixes.put(_aaplOnBloombergWithNormalization.getFullyQualifiedLiveDataSpecification(),
               _aaplOnBloombergWithNormalization);
@@ -110,8 +110,8 @@ public class UserEntitlementCheckerTest {
     fixes.put(_fxOnBloomberg.getFullyQualifiedLiveDataSpecification(), _fxOnBloomberg);
     fixes.put(_fxOnBloombergWithNormalization.getFullyQualifiedLiveDataSpecification(),
               _fxOnBloombergWithNormalization);
-    
-    FixedDistributionSpecificationResolver resolver = new FixedDistributionSpecificationResolver(fixes);
+
+    final FixedDistributionSpecificationResolver resolver = new FixedDistributionSpecificationResolver(fixes);
 
     _userEntitlementChecker = new UserEntitlementChecker(userManager, resolver);
 
@@ -169,23 +169,23 @@ public class UserEntitlementCheckerTest {
     checkUserIsEntitled(_john, bogusSpec);
   }
 
-  private void checkUserIsEntitled(UserPrincipal user, DistributionSpecification spec) {
+  private void checkUserIsEntitled(final UserPrincipal user, final DistributionSpecification spec) {
     checkEntitlement(user, spec, true);
   }
 
-  private void checkUserIsEntitled(UserPrincipal user, LiveDataSpecification spec) {
+  private void checkUserIsEntitled(final UserPrincipal user, final LiveDataSpecification spec) {
     checkEntitlement(user, spec, true);
   }
 
-  private void checkUserIsNotEntitled(UserPrincipal user, DistributionSpecification spec) {
+  private void checkUserIsNotEntitled(final UserPrincipal user, final DistributionSpecification spec) {
     checkEntitlement(user, spec, false);
   }
 
-  private void checkEntitlement(UserPrincipal user, DistributionSpecification spec, boolean isEntitled) {
+  private void checkEntitlement(final UserPrincipal user, final DistributionSpecification spec, final boolean isEntitled) {
     checkEntitlement(user, spec.getFullyQualifiedLiveDataSpecification(), isEntitled);
   }
 
-  private void checkEntitlement(UserPrincipal user, LiveDataSpecification spec, boolean isEntitled) {
+  private void checkEntitlement(final UserPrincipal user, final LiveDataSpecification spec, final boolean isEntitled) {
     assertThat(_userEntitlementChecker.isEntitled(user, spec), is(isEntitled));
   }
 

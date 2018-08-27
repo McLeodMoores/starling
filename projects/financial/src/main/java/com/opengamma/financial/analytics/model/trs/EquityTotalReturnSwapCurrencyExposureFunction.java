@@ -44,24 +44,24 @@ public class EquityTotalReturnSwapCurrencyExposureFunction extends EquityTotalRe
   }
 
   @Override
-  public CompiledFunctionDefinition compile(FunctionCompilationContext context, Instant atInstant) {
+  public CompiledFunctionDefinition compile(final FunctionCompilationContext context, final Instant atInstant) {
 
     return new EquityTotalReturnSwapCompiledFunction(getTargetToDefinitionConverter(context),
                                                      getDefinitionToDerivativeConverter(context),
                                                      false) {
 
       @Override
-      protected Set<ComputedValue> getValues(FunctionExecutionContext executionContext,
-                                             FunctionInputs inputs,
-                                             ComputationTarget target,
-                                             Set<ValueRequirement> desiredValues,
-                                             InstrumentDerivative derivative,
-                                             FXMatrix fxMatrix) {
-        Set<ComputedValue> results = Sets.newHashSet();
-        for (ValueRequirement desiredValue : desiredValues) {
-          EquityTrsDataBundle data = getDataBundle(inputs, fxMatrix);
-          MultipleCurrencyAmount exposure = derivative.accept(CALCULATOR, data);
-          ComputedValue result = new ComputedValue(ValueSpecification.of(FX_CURRENCY_EXPOSURE,
+      protected Set<ComputedValue> getValues(final FunctionExecutionContext executionContext,
+                                             final FunctionInputs inputs,
+                                             final ComputationTarget target,
+                                             final Set<ValueRequirement> desiredValues,
+                                             final InstrumentDerivative derivative,
+                                             final FXMatrix fxMatrix) {
+        final Set<ComputedValue> results = Sets.newHashSet();
+        for (final ValueRequirement desiredValue : desiredValues) {
+          final EquityTrsDataBundle data = getDataBundle(inputs, fxMatrix);
+          final MultipleCurrencyAmount exposure = derivative.accept(CALCULATOR, data);
+          final ComputedValue result = new ComputedValue(ValueSpecification.of(FX_CURRENCY_EXPOSURE,
                                                                          target.toSpecification(),
                                                                          desiredValue.getConstraints()), exposure);
           results.add(result);

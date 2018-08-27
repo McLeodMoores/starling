@@ -33,7 +33,7 @@ import com.opengamma.util.TerminatableJob;
 import com.opengamma.util.time.DateUtils;
 
 /**
- * 
+ *
  *
  * @author yomi
  */
@@ -43,7 +43,7 @@ public class TicksLoaderJob extends TerminatableJob {
   private static final Logger LOGGER = LoggerFactory.getLogger(TicksLoaderJob.class);
 
   private static final FudgeContext FUDGE_CONTEXT = new FudgeContext();
-  
+
   private final String _rootDir;
   private final Set<String> _securities;
   private final BlockingQueue<FudgeMsg> _ticksQueue;
@@ -52,10 +52,10 @@ public class TicksLoaderJob extends TerminatableJob {
   private final ZonedDateTime _endTime;
   private final long _endTimeInEpochsMillis;
   private final boolean _infiniteLoop;
-  private final List<String> _files = new ArrayList<String>();
-  
-  public TicksLoaderJob(String rootDir, Set<String> securities,
-      BlockingQueue<FudgeMsg> ticksQueue, ZonedDateTime startTime, ZonedDateTime endTime, boolean infiniteLoop) {
+  private final List<String> _files = new ArrayList<>();
+
+  public TicksLoaderJob(final String rootDir, final Set<String> securities,
+      final BlockingQueue<FudgeMsg> ticksQueue, final ZonedDateTime startTime, final ZonedDateTime endTime, final boolean infiniteLoop) {
     ArgumentChecker.notNull(rootDir, "rootDir");
     ArgumentChecker.notNull(securities, "securities");
     ArgumentChecker.notNull(ticksQueue, "ticksQueue");
@@ -70,7 +70,7 @@ public class TicksLoaderJob extends TerminatableJob {
     _endTimeInEpochsMillis = _endTime.toInstant().toEpochMilli();
     _infiniteLoop = infiniteLoop;
   }
-  
+
   @Override
   public void terminate() {
     LOGGER.debug("ticksLoader terminating...");
@@ -78,12 +78,12 @@ public class TicksLoaderJob extends TerminatableJob {
   }
 
   /**
-   * 
+   *
    */
   private void sendTerminateMessage() {
     try {
       _ticksQueue.put(BloombergTickReplayUtils.getTerminateMessage());
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
       Thread.interrupted();
       LOGGER.warn("interrupted while putting terminate message on queue");
     }
@@ -96,7 +96,7 @@ public class TicksLoaderJob extends TerminatableJob {
 
   @Override
   protected void runOneCycle() {
-    for (String fullPath : _files) {
+    for (final String fullPath : _files) {
       if (fullPath == null) {
         continue;
       }
@@ -109,28 +109,28 @@ public class TicksLoaderJob extends TerminatableJob {
       terminate();
     }
   }
-  
+
   /**
    * @param fullPath
    * @return  <code>true</code> if the end has been reached, <code>false</code> otherwise
    */
-  private boolean loadTicks(String fullPath) {
+  private boolean loadTicks(final String fullPath) {
     try {
-      FileInputStream fis = new FileInputStream(fullPath);
-      FudgeMsgReader reader = FUDGE_CONTEXT.createMessageReader(fis);
+      final FileInputStream fis = new FileInputStream(fullPath);
+      final FudgeMsgReader reader = FUDGE_CONTEXT.createMessageReader(fis);
       try {
         while (reader.hasNext()) {
-          FudgeMsg message = reader.nextMessage();
-          String buid = message.getString(BUID_KEY);
+          final FudgeMsg message = reader.nextMessage();
+          final String buid = message.getString(BUID_KEY);
           if (afterEndTime(message)) {
             return false;
           }
-          boolean isRequestedSecurity = _securities.contains(buid) || _securities.isEmpty();
-          boolean isRequestedTime = withinRequestedTime(message);
+          final boolean isRequestedSecurity = _securities.contains(buid) || _securities.isEmpty();
+          final boolean isRequestedTime = withinRequestedTime(message);
           if (isRequestedSecurity && isRequestedTime) {
             try {
               _ticksQueue.put(message);
-            } catch (InterruptedException e) {
+            } catch (final InterruptedException e) {
               Thread.interrupted();
               LOGGER.warn("interrupted waiting to write to ticks queue");
             }
@@ -140,24 +140,24 @@ public class TicksLoaderJob extends TerminatableJob {
       } finally {
         try {
           fis.close();
-        } catch (IOException e) {
+        } catch (final IOException e) {
           LOGGER.warn("cannot close {}", fullPath);
         }
       }
-    } catch (FileNotFoundException e) {
+    } catch (final FileNotFoundException e) {
       LOGGER.warn("{} not found", fullPath);
       throw new OpenGammaRuntimeException(fullPath + " not found", e);
     }
-    
+
   }
 
   /**
    * @param message
    * @return
    */
-  private boolean afterEndTime(FudgeMsg message) {
+  private boolean afterEndTime(final FudgeMsg message) {
     boolean result = false;
-    Long epochMillis = message.getLong(RECEIVED_TS_KEY);
+    final Long epochMillis = message.getLong(RECEIVED_TS_KEY);
     if (epochMillis != null) {
       result = epochMillis > _endTimeInEpochsMillis;
     }
@@ -168,9 +168,9 @@ public class TicksLoaderJob extends TerminatableJob {
    * @param message
    * @return
    */
-  private boolean withinRequestedTime(FudgeMsg message) {
+  private boolean withinRequestedTime(final FudgeMsg message) {
     boolean result = false;
-    Long epochMillis = message.getLong(RECEIVED_TS_KEY);
+    final Long epochMillis = message.getLong(RECEIVED_TS_KEY);
     if (epochMillis != null) {
       result = epochMillis >= _startTimeInEpochsMillis && epochMillis <= _endTimeInEpochsMillis;
     }
@@ -179,14 +179,14 @@ public class TicksLoaderJob extends TerminatableJob {
 
   @Override
   protected void preStart() {
-    LocalDate startDate = _startTime.toLocalDate();
-    LocalDate endDate = _endTime.toLocalDate();
+    final LocalDate startDate = _startTime.toLocalDate();
+    final LocalDate endDate = _endTime.toLocalDate();
 
     LocalDate current = endDate;
-    List<String> reverseOrder = new ArrayList<String>();
+    final List<String> reverseOrder = new ArrayList<>();
     while (current.isAfter(startDate) || current.equals(startDate)) {
-      String fullPath = getFileNameFromDate(current);
-      File file = new File(fullPath);
+      final String fullPath = getFileNameFromDate(current);
+      final File file = new File(fullPath);
       if (file.exists()) {
         reverseOrder.add(fullPath);
       } else {
@@ -194,7 +194,7 @@ public class TicksLoaderJob extends TerminatableJob {
       }
       current = DateUtils.previousWeekDay(current);
     }
-    ListIterator<String> reverseIterator = reverseOrder.listIterator(reverseOrder.size());
+    final ListIterator<String> reverseIterator = reverseOrder.listIterator(reverseOrder.size());
     while (reverseIterator.hasPrevious()) {
       _files.add(reverseIterator.previous());
     }
@@ -204,17 +204,17 @@ public class TicksLoaderJob extends TerminatableJob {
    * @param startDate
    * @return
    */
-  private String getFileNameFromDate(LocalDate date) {
-    StringBuilder buf = new StringBuilder();
+  private String getFileNameFromDate(final LocalDate date) {
+    final StringBuilder buf = new StringBuilder();
     buf.append(_rootDir).append(File.separator).append(date.getYear()).append(File.separator);
-    int month = date.getMonthValue();
+    final int month = date.getMonthValue();
     if (month < 10) {
       buf.append("0").append(month);
     } else {
       buf.append(month);
     }
     buf.append(File.separator);
-    int dayOfMonth = date.getDayOfMonth();
+    final int dayOfMonth = date.getDayOfMonth();
     if (dayOfMonth < 10) {
       buf.append("0").append(dayOfMonth);
     } else {

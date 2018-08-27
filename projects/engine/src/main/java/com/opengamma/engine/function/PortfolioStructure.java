@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function;
@@ -32,7 +32,7 @@ public class PortfolioStructure {
 
   /**
    * Constructs a portfolio structure querying service using the underlying position source for portfolio information.
-   * 
+   *
    * @param positionSource the underlying position source, not null
    */
   public PortfolioStructure(final PositionSource positionSource) {
@@ -42,7 +42,7 @@ public class PortfolioStructure {
 
   /**
    * Returns the position source used by the querying service.
-   * 
+   *
    * @return the position source
    */
   public PositionSource getPositionSource() {
@@ -52,7 +52,7 @@ public class PortfolioStructure {
   //-------------------------------------------------------------------------
   /**
    * Returns the portfolio node that is the immediate parent of the given node. This is equivalent to resolving the unique identifier reported by a portfolio node as its parent.
-   * 
+   *
    * @param node the node to search for, not null
    * @return the parent node, null if the parent cannot be resolved or the node is a root node
    */
@@ -71,7 +71,7 @@ public class PortfolioStructure {
 
   /**
    * Returns the portfolio node that a position is underneath. The position must be in a {@link ComputationTarget} of type {@code PORTFOLIO_NODE/POSITION}.
-   * 
+   *
    * @param position the position to search for, not null
    * @return the portfolio node, null if the node cannot be resolved
    */
@@ -83,7 +83,7 @@ public class PortfolioStructure {
 
   /**
    * Returns the root node for the portfolio containing the given node. This is equivalent to traversing up the tree until the root is found.
-   * 
+   *
    * @param node the node to search for, not null
    * @return the root node, null if parent node hierarchy incomplete
    * @deprecated This is broken as it assumes the "latest" version of the node returned
@@ -97,7 +97,7 @@ public class PortfolioStructure {
   /**
    * Returns the root node for the portfolio containing the given position. The position must be in a {@link ComputationTarget} of type {@code PORTFOLIO_NODE/POSITION}. This is equivalent to
    * traversing up the tree from the position's portfolio node until the root is found.
-   * 
+   *
    * @param position the position to search for, not null
    * @return the root node, null if parent node hierarchy incomplete
    * @deprecated This is broken as it assumes the "latest" version of the node returned

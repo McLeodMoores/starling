@@ -65,18 +65,18 @@ public class ManageableUnstructuredMarketDataSnapshot implements Bean, Unstructu
 
   /**
    * Creates a snapshot initialised from a template.
-   * 
+   *
    * @param copyFrom the template to initialise from
    */
   public ManageableUnstructuredMarketDataSnapshot(final UnstructuredMarketDataSnapshot copyFrom) {
     for (final ExternalIdBundle target : copyFrom.getTargets()) {
       final Map<String, ValueSnapshot> values = copyFrom.getTargetValues(target);
       if (values != null) {
-        _values.put(target, new LinkedHashMap<String, ValueSnapshot>(values));
+        _values.put(target, new LinkedHashMap<>(values));
         for (final ExternalId identifier : target) {
           Map<String, ExternalIdBundle> index = _index.get(identifier);
           if (index == null) {
-            index = new HashMap<String, ExternalIdBundle>();
+            index = new HashMap<>();
             _index.put(identifier, index);
           }
           for (final String value : values.keySet()) {
@@ -147,7 +147,7 @@ public class ManageableUnstructuredMarketDataSnapshot implements Bean, Unstructu
 
   /**
    * Stores a value against the target identifier, replacing any previous association
-   * 
+   *
    * @param identifier the target identifier, not null
    * @param valueName the value name, not null
    * @param value the value to associate, not null
@@ -156,7 +156,7 @@ public class ManageableUnstructuredMarketDataSnapshot implements Bean, Unstructu
     Map<String, ExternalIdBundle> index = _index.get(identifier);
     ExternalIdBundle key;
     if (index == null) {
-      index = new HashMap<String, ExternalIdBundle>();
+      index = new HashMap<>();
       _index.put(identifier, index);
       key = ExternalIdBundle.of(identifier);
       index.put(valueName, key);
@@ -169,7 +169,7 @@ public class ManageableUnstructuredMarketDataSnapshot implements Bean, Unstructu
     }
     Map<String, ValueSnapshot> values = _values.get(key);
     if (values == null) {
-      values = new HashMap<String, ValueSnapshot>();
+      values = new HashMap<>();
       _values.put(key, values);
     }
     values.put(valueName, value);
@@ -177,7 +177,7 @@ public class ManageableUnstructuredMarketDataSnapshot implements Bean, Unstructu
 
   /**
    * Stores a value against the target identifiers. Any values previously stored against any of the identifiers in the bundle will be replaced.
-   * 
+   *
    * @param identifiers the target identifiers, not null
    * @param valueName the value name, not null
    * @param value the value to associate, not null
@@ -190,7 +190,7 @@ public class ManageableUnstructuredMarketDataSnapshot implements Bean, Unstructu
         return;
       }
     } else {
-      values = new HashMap<String, ValueSnapshot>();
+      values = new HashMap<>();
       _values.put(identifiers, values);
       values.put(valueName, value);
     }
@@ -198,7 +198,7 @@ public class ManageableUnstructuredMarketDataSnapshot implements Bean, Unstructu
     for (final ExternalId identifier : identifiers) {
       Map<String, ExternalIdBundle> index = _index.get(identifier);
       if (index == null) {
-        index = new HashMap<String, ExternalIdBundle>();
+        index = new HashMap<>();
         _index.put(identifier, index);
       }
       index.put(valueName, identifiers);
@@ -207,7 +207,7 @@ public class ManageableUnstructuredMarketDataSnapshot implements Bean, Unstructu
 
   /**
    * Removes a value held against a target identifier.
-   * 
+   *
    * @param identifier the target identifier, not null
    * @param valueName the value name, not null
    */
@@ -234,7 +234,7 @@ public class ManageableUnstructuredMarketDataSnapshot implements Bean, Unstructu
 
   /**
    * Removes a value held against a target identifier bundle.
-   * 
+   *
    * @param identifiers the target identifiers, not null
    * @param valueName the value name, not null
    */
@@ -264,10 +264,10 @@ public class ManageableUnstructuredMarketDataSnapshot implements Bean, Unstructu
    * may have meaning to someone manipulating the* snapshot (PLAT-1889).
    * @param values  the new value of the property
    */
-  private void setValues(Map<ExternalIdBundle, Map<String, ValueSnapshot>> values) {
+  private void setValues(final Map<ExternalIdBundle, Map<String, ValueSnapshot>> values) {
     this._values.clear();
-    for (Entry<ExternalIdBundle, Map<String, ValueSnapshot>> entry : values.entrySet()) {
-      for (Entry<String, ValueSnapshot> innerEntry : entry.getValue().entrySet()) {
+    for (final Entry<ExternalIdBundle, Map<String, ValueSnapshot>> entry : values.entrySet()) {
+      for (final Entry<String, ValueSnapshot> innerEntry : entry.getValue().entrySet()) {
         putValue(entry.getKey(), innerEntry.getKey(), innerEntry.getValue());
       }
     }

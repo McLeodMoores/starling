@@ -38,9 +38,9 @@ import com.opengamma.util.jms.JmsTopicContainer;
    * @param topic The topic for {@link MarketDataAvailabilityNotification} messages
    * @param jmsConnector For receiving JMS messages
    */
-  public AvailabilityNotificationListener(String topic, JmsConnector jmsConnector) {
-    ByteArrayFudgeMessageReceiver receiver = new ByteArrayFudgeMessageReceiver(new Receiver());
-    JmsByteArrayMessageDispatcher dispatcher = new JmsByteArrayMessageDispatcher(receiver);
+  public AvailabilityNotificationListener(final String topic, final JmsConnector jmsConnector) {
+    final ByteArrayFudgeMessageReceiver receiver = new ByteArrayFudgeMessageReceiver(new Receiver());
+    final JmsByteArrayMessageDispatcher dispatcher = new JmsByteArrayMessageDispatcher(receiver);
     _jmsTopicContainer = jmsConnector.getTopicContainerFactory().create(topic, dispatcher);
   }
 
@@ -72,13 +72,13 @@ import com.opengamma.util.jms.JmsTopicContainer;
   private final class Receiver implements FudgeMessageReceiver {
 
     @Override
-    public void messageReceived(FudgeContext fudgeContext, FudgeMsgEnvelope msgEnvelope) {
-      FudgeDeserializer deserializer = new FudgeDeserializer(fudgeContext);
-      FudgeMsg msg = msgEnvelope.getMessage();
-      MarketDataAvailabilityNotification notification =
+    public void messageReceived(final FudgeContext fudgeContext, final FudgeMsgEnvelope msgEnvelope) {
+      final FudgeDeserializer deserializer = new FudgeDeserializer(fudgeContext);
+      final FudgeMsg msg = msgEnvelope.getMessage();
+      final MarketDataAvailabilityNotification notification =
           deserializer.fudgeMsgToObject(MarketDataAvailabilityNotification.class, msg);
       LOGGER.info("Received notification of market data availability: {}", notification);
-      Set<ExternalScheme> schemes = notification.getSchemes();
+      final Set<ExternalScheme> schemes = notification.getSchemes();
       notificationReceived(schemes);
     }
   }

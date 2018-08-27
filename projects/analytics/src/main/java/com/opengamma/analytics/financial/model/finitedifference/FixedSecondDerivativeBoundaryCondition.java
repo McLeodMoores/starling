@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.finitedifference;
@@ -26,7 +26,7 @@ public class FixedSecondDerivativeBoundaryCondition implements BoundaryCondition
   }
 
   @Override
-  public double[] getLeftMatrixCondition(final ConvectionDiffusionPDE1DStandardCoefficients data, PDEGrid1D grid, final double t) {
+  public double[] getLeftMatrixCondition(final ConvectionDiffusionPDE1DStandardCoefficients data, final PDEGrid1D grid, final double t) {
     double[] temp;
     if (_isLower) {
       temp = grid.getSecondDerivativeCoefficients(0);
@@ -37,7 +37,7 @@ public class FixedSecondDerivativeBoundaryCondition implements BoundaryCondition
   }
 
   @Override
-  public double[] getRightMatrixCondition(final ConvectionDiffusionPDE1DStandardCoefficients data, PDEGrid1D grid, final double t) {
+  public double[] getRightMatrixCondition(final ConvectionDiffusionPDE1DStandardCoefficients data, final PDEGrid1D grid, final double t) {
     return new double[0];
   }
 

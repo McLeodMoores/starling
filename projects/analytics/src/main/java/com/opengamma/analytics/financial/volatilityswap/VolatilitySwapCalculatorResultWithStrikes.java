@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.volatilityswap;
@@ -8,7 +8,7 @@ package com.opengamma.analytics.financial.volatilityswap;
 import java.util.Arrays;
 
 /**
- * 
+ *
  */
 public class VolatilitySwapCalculatorResultWithStrikes extends VolatilitySwapCalculatorResult {
   private final double[] _putStrikes;
@@ -90,7 +90,7 @@ public class VolatilitySwapCalculatorResultWithStrikes extends VolatilitySwapCal
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -100,7 +100,7 @@ public class VolatilitySwapCalculatorResultWithStrikes extends VolatilitySwapCal
     if (!(obj instanceof VolatilitySwapCalculatorResultWithStrikes)) {
       return false;
     }
-    VolatilitySwapCalculatorResultWithStrikes other = (VolatilitySwapCalculatorResultWithStrikes) obj;
+    final VolatilitySwapCalculatorResultWithStrikes other = (VolatilitySwapCalculatorResultWithStrikes) obj;
     if (!Arrays.equals(_callStrikes, other._callStrikes)) {
       return false;
     }

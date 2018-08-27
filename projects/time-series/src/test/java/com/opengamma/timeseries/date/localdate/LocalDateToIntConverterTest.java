@@ -11,8 +11,6 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import org.threeten.bp.LocalDate;
 
-import com.opengamma.timeseries.date.localdate.LocalDateToIntConverter;
-
 /**
  * Test.
  */
@@ -34,12 +32,12 @@ public class LocalDateToIntConverterTest {
   }
 
   @Test(dataProvider = "conversions")
-  public void test_convertToInt(LocalDate input, int expected) {
+  public void test_convertToInt(final LocalDate input, final int expected) {
     assertEquals(LocalDateToIntConverter.convertToInt(input), expected);
   }
 
   @Test(dataProvider = "conversions")
-  public void test_convertToLocalDate(LocalDate expected, int input) {
+  public void test_convertToLocalDate(final LocalDate expected, final int input) {
     assertEquals(LocalDateToIntConverter.convertToLocalDate(input), expected);
   }
 
@@ -60,7 +58,7 @@ public class LocalDateToIntConverterTest {
         {20120132},
         {20120001},
         {20121301},
-        
+
         {20120230},
         {20120231},
         {20120431},
@@ -71,7 +69,7 @@ public class LocalDateToIntConverterTest {
   }
 
   @Test(dataProvider = "invalid", expectedExceptions = IllegalArgumentException.class)
-  public void test_checkInvalid(int date) {
+  public void test_checkInvalid(final int date) {
     LocalDateToIntConverter.checkValid(date);
   }
 

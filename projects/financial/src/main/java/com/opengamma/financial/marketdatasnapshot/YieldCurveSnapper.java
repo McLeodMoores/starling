@@ -17,7 +17,7 @@ import com.opengamma.engine.view.ViewComputationResultModel;
 import com.opengamma.util.money.Currency;
 
 /**
- * 
+ *
  */
 public class YieldCurveSnapper extends
     StructuredSnapper<YieldCurveKey, SnapshotDataBundle, YieldCurveSnapshot> {
@@ -27,16 +27,16 @@ public class YieldCurveSnapper extends
   }
 
   @Override
-  YieldCurveKey getKey(ValueSpecification spec) {
-    Currency currency = Currency.parse(spec.getTargetSpecification().getUniqueId().getValue());
-    String curve = getSingleProperty(spec, ValuePropertyNames.CURVE);
+  YieldCurveKey getKey(final ValueSpecification spec) {
+    final Currency currency = Currency.parse(spec.getTargetSpecification().getUniqueId().getValue());
+    final String curve = getSingleProperty(spec, ValuePropertyNames.CURVE);
     return YieldCurveKey.of(currency, curve);
   }
 
   @Override
-  ManageableYieldCurveSnapshot buildSnapshot(ViewComputationResultModel resultModel, YieldCurveKey key,
-      SnapshotDataBundle bundle) {
-    ManageableUnstructuredMarketDataSnapshot values = getUnstructured(bundle);
+  ManageableYieldCurveSnapshot buildSnapshot(final ViewComputationResultModel resultModel, final YieldCurveKey key,
+      final SnapshotDataBundle bundle) {
+    final ManageableUnstructuredMarketDataSnapshot values = getUnstructured(bundle);
     return ManageableYieldCurveSnapshot.of(resultModel.getViewCycleExecutionOptions().getValuationTime(), values);
   }
 }

@@ -17,24 +17,24 @@ import com.opengamma.master.exchange.ExchangeSearchResult;
  * Exchange master which tracks accesses using UniqueIds.
  */
 public class DataTrackingExchangeMaster extends AbstractDataTrackingMaster<ExchangeDocument, ExchangeMaster> implements ExchangeMaster {
-  
-  public DataTrackingExchangeMaster(ExchangeMaster delegate) {
+
+  public DataTrackingExchangeMaster(final ExchangeMaster delegate) {
     super(delegate);
   }
 
   @Override
-  public ExchangeSearchResult search(ExchangeSearchRequest request) {
-    ExchangeSearchResult searchResult = delegate().search(request);
+  public ExchangeSearchResult search(final ExchangeSearchRequest request) {
+    final ExchangeSearchResult searchResult = delegate().search(request);
     trackDocs(searchResult.getDocuments());
     return searchResult;
   }
 
   @Override
-  public ExchangeHistoryResult history(ExchangeHistoryRequest request) {
-    ExchangeHistoryResult historyResult = delegate().history(request);
+  public ExchangeHistoryResult history(final ExchangeHistoryRequest request) {
+    final ExchangeHistoryResult historyResult = delegate().history(request);
     trackDocs(historyResult.getDocuments());
     return historyResult;
   }
 
-  
+
 }

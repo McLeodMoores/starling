@@ -26,10 +26,10 @@ public class ConfigDBCurrencyPairsSource extends AbstractSource<CurrencyPairs> i
 
   /**
    * Creates an instance that obtains {@link CurrencyPairs} from {@code configSource}.
-   * 
+   *
    * @param configSource Source of configuration, not null
    */
-  public ConfigDBCurrencyPairsSource(ConfigSource configSource) {
+  public ConfigDBCurrencyPairsSource(final ConfigSource configSource) {
     ArgumentChecker.notNull(configSource, "configSource");
     _configSource = configSource;
   }
@@ -37,12 +37,12 @@ public class ConfigDBCurrencyPairsSource extends AbstractSource<CurrencyPairs> i
   // Source
 
   @Override
-  public CurrencyPairs get(UniqueId uniqueId) {
+  public CurrencyPairs get(final UniqueId uniqueId) {
     return _configSource.getConfig(CurrencyPairs.class, uniqueId);
   }
 
   @Override
-  public CurrencyPairs get(ObjectId objectId, VersionCorrection versionCorrection) {
+  public CurrencyPairs get(final ObjectId objectId, final VersionCorrection versionCorrection) {
     return _configSource.getConfig(CurrencyPairs.class, objectId, versionCorrection);
   }
 
@@ -51,7 +51,7 @@ public class ConfigDBCurrencyPairsSource extends AbstractSource<CurrencyPairs> i
   /**
    * Returns a set of currency pairs with the specified name or null if there are none with a matching name. If {@code name} is null then the default set are looked up using
    * {@link CurrencyPairs#DEFAULT_CURRENCY_PAIRS} as the name.
-   * 
+   *
    * @param name The name of the set of currency pairs, null for the default set.
    * @return The market convention currency pairs with the specified name or null if there are none that match
    */
@@ -64,10 +64,10 @@ public class ConfigDBCurrencyPairsSource extends AbstractSource<CurrencyPairs> i
   }
 
   @Override
-  public CurrencyPair getCurrencyPair(String name, Currency currency1, Currency currency2) {
+  public CurrencyPair getCurrencyPair(final String name, final Currency currency1, final Currency currency2) {
     ArgumentChecker.notNull(currency1, "currency1");
     ArgumentChecker.notNull(currency2, "currency2");
-    CurrencyPairs currencyPairs = getCurrencyPairs(name);
+    final CurrencyPairs currencyPairs = getCurrencyPairs(name);
     if (currencyPairs == null) {
       return null;
     }
@@ -88,7 +88,7 @@ public class ConfigDBCurrencyPairsSource extends AbstractSource<CurrencyPairs> i
   public CurrencyPair getCurrencyPair(final String name, final VersionCorrection versionCorrection, final Currency currency1, final Currency currency2) {
     ArgumentChecker.notNull(currency1, "currency1");
     ArgumentChecker.notNull(currency2, "currency2");
-    CurrencyPairs currencyPairs = getCurrencyPairs(name, versionCorrection);
+    final CurrencyPairs currencyPairs = getCurrencyPairs(name, versionCorrection);
     if (currencyPairs == null) {
       return null;
     }

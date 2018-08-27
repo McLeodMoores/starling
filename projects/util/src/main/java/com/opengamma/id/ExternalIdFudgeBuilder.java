@@ -27,7 +27,7 @@ public final class ExternalIdFudgeBuilder extends AbstractFudgeBuilder implement
 
   //-------------------------------------------------------------------------
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, ExternalId object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final ExternalId object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     toFudgeMsg(serializer, object, msg);
     return msg;
@@ -61,8 +61,8 @@ public final class ExternalIdFudgeBuilder extends AbstractFudgeBuilder implement
   }
 
   public static ExternalId fromFudgeMsg(final FudgeMsg msg) {
-    String scheme = msg.getString(SCHEME_FIELD_NAME);
-    String value = msg.getString(VALUE_FIELD_NAME);
+    final String scheme = msg.getString(SCHEME_FIELD_NAME);
+    final String value = msg.getString(VALUE_FIELD_NAME);
     return ExternalId.of(scheme, value);
   }
 

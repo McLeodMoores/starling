@@ -1,21 +1,16 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.ircurve.rest;
-
-import java.net.URI;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
-
-import org.threeten.bp.Instant;
 
 import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveDefinitionSource;
 import com.opengamma.financial.analytics.ircurve.YieldCurveDefinition;
@@ -39,7 +34,7 @@ public class DataInterpolatedYieldCurveDefinitionSourceResource extends Abstract
 
   /**
    * Creates the resource, exposing the underlying source over REST.
-   * 
+   *
    * @param source  the underlying source, not null
    */
   public DataInterpolatedYieldCurveDefinitionSourceResource(final InterpolatedYieldCurveDefinitionSource source) {
@@ -50,7 +45,7 @@ public class DataInterpolatedYieldCurveDefinitionSourceResource extends Abstract
   //-------------------------------------------------------------------------
   /**
    * Gets the source.
-   * 
+   *
    * @return the source, not null
    */
   public InterpolatedYieldCurveDefinitionSource getInterpolatedYieldCurveDefinitionSource() {
@@ -59,29 +54,29 @@ public class DataInterpolatedYieldCurveDefinitionSourceResource extends Abstract
 
   //-------------------------------------------------------------------------
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
   @GET
   @Path("definitions/searchSingle")
   public Response searchSingle(
-      @QueryParam("currency") String currencyStr,
-      @QueryParam("versionAsOf") String versionAsOfStr,
-      @QueryParam("name") String name) {
+      @QueryParam("currency") final String currencyStr,
+      @QueryParam("versionAsOf") final String versionAsOfStr,
+      @QueryParam("name") final String name) {
     final Currency currency = Currency.parse(currencyStr);
     if (versionAsOfStr != null) {
-      YieldCurveDefinition result = getInterpolatedYieldCurveDefinitionSource().getDefinition(currency, name, VersionCorrection.parse(versionAsOfStr, null));
+      final YieldCurveDefinition result = getInterpolatedYieldCurveDefinitionSource().getDefinition(currency, name, VersionCorrection.parse(versionAsOfStr, null));
       return responseOkObject(result);
     } else {
-      YieldCurveDefinition result = getInterpolatedYieldCurveDefinitionSource().getDefinition(currency, name);
+      final YieldCurveDefinition result = getInterpolatedYieldCurveDefinitionSource().getDefinition(currency, name);
       return responseOkObject(result);
     }
   }
 
 //  /**
 //   * Builds a URI.
-//   * 
+//   *
 //   * @param baseUri  the base URI, not null
 //   * @param currency  the currency, not null
 //   * @param name  the name, not null

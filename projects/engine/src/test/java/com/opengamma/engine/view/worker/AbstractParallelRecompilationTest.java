@@ -18,7 +18,7 @@ import com.opengamma.lambdava.functions.Function2;
   public void testParallel() throws InterruptedException {
     testImpl(new Function2<ParallelRecompilationViewProcessWorker, ViewExecutionOptions, Void>() {
       @Override
-      public Void execute(ParallelRecompilationViewProcessWorker a, ViewExecutionOptions b) {
+      public Void execute(final ParallelRecompilationViewProcessWorker a, final ViewExecutionOptions b) {
         a.startParallel(b);
         return null;
       }
@@ -28,7 +28,7 @@ import com.opengamma.lambdava.functions.Function2;
   public void testImmediate() throws InterruptedException {
     testImpl(new Function2<ParallelRecompilationViewProcessWorker, ViewExecutionOptions, Void>() {
       @Override
-      public Void execute(ParallelRecompilationViewProcessWorker a, ViewExecutionOptions b) {
+      public Void execute(final ParallelRecompilationViewProcessWorker a, final ViewExecutionOptions b) {
         a.startImmediate(b);
         return null;
       }
@@ -38,7 +38,7 @@ import com.opengamma.lambdava.functions.Function2;
   public void testDeferred() throws InterruptedException {
     testImpl(new Function2<ParallelRecompilationViewProcessWorker, ViewExecutionOptions, Void>() {
       @Override
-      public Void execute(ParallelRecompilationViewProcessWorker a, ViewExecutionOptions b) {
+      public Void execute(final ParallelRecompilationViewProcessWorker a, final ViewExecutionOptions b) {
         a.startDeferred(b);
         return null;
       }

@@ -50,7 +50,7 @@ public class DiscountingInterpolatedAllPV01Function extends DiscountingInterpola
   }
 
   @Override
-  public CompiledFunctionDefinition compile(FunctionCompilationContext context, Instant atInstant) {
+  public CompiledFunctionDefinition compile(final FunctionCompilationContext context, final Instant atInstant) {
     return new DiscountingInterpolatedCompiledFunction(getTargetToDefinitionConverter(context), getDefinitionToDerivativeConverter(context), false) {
 
       @SuppressWarnings("synthetic-access")

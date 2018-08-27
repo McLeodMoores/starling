@@ -47,7 +47,7 @@ public class MarketDataPointRandomizingManipulator implements StructureManipulat
    * @param lowerBound the lower bound of the scaling to be applied to the market data value
    * @param upperBound the upper bound of the scaling to be applied to the market data value
    */
-  public MarketDataPointRandomizingManipulator(Double lowerBound, Double upperBound) {
+  public MarketDataPointRandomizingManipulator(final Double lowerBound, final Double upperBound) {
     ArgumentChecker.notNull(lowerBound, "lowerBound");
     ArgumentChecker.notNull(upperBound, "upperBound");
     ArgumentChecker.notNegative(lowerBound, "lowerBound");
@@ -58,9 +58,9 @@ public class MarketDataPointRandomizingManipulator implements StructureManipulat
   }
 
   @Override
-  public Double execute(Double structure,
-                        ValueSpecification valueSpecification,
-                        FunctionExecutionContext executionContext) {
+  public Double execute(final Double structure,
+                        final ValueSpecification valueSpecification,
+                        final FunctionExecutionContext executionContext) {
     return structure * randomFactor();
   }
 

@@ -41,7 +41,7 @@ public class FunctionUniqueId extends DirectBean {
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj);
   }
 

@@ -13,12 +13,12 @@ import com.opengamma.financial.security.option.OptionType;
 public class OptionTypeAdapter extends XmlAdapter<String, OptionType> {
 
   @Override
-  public OptionType unmarshal(String v) throws Exception {
+  public OptionType unmarshal(final String v) throws Exception {
     return OptionType.parse(v);
   }
 
   @Override
-  public String marshal(OptionType v) throws Exception {
+  public String marshal(final OptionType v) throws Exception {
     return CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, v.name());
   }
 }

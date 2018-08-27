@@ -23,7 +23,7 @@ public enum TestStatus {
    * @param other Another status
    * @return The 'worst' of the two statuses
    */
-  public TestStatus combine(TestStatus other) {
+  public TestStatus combine(final TestStatus other) {
     if (other.ordinal() > ordinal()) {
       return other;
     } else {

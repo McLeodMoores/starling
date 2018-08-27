@@ -48,10 +48,10 @@ public final class CommodityFutureOptionSecurityBeanOperation extends AbstractSe
   }
 
   @Override
-  public CommodityFutureOptionSecurity createSecurity(OperationContext context, CommodityFutureOptionSecurityBean bean) {
+  public CommodityFutureOptionSecurity createSecurity(final OperationContext context, final CommodityFutureOptionSecurityBean bean) {
     final ExerciseType exerciseType = bean.getOptionExerciseType().accept(new ExerciseTypeVisitorImpl());
 
-    CommodityFutureOptionSecurity sec = new CommodityFutureOptionSecurity(
+    final CommodityFutureOptionSecurity sec = new CommodityFutureOptionSecurity(
       bean.getTradingExchange().getName(),
       bean.getSettlementExchange().getName(),
       expiryBeanToExpiry(bean.getExpiry()),

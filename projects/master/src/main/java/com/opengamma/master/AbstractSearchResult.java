@@ -26,7 +26,7 @@ import com.opengamma.util.PublicSPI;
  * <p>
  * The returned documents will match the search criteria.
  * See {@link AbstractSearchRequest} for more details.
- * 
+ *
  * @param <D>  the type of the document
  */
 @PublicSPI
@@ -48,10 +48,10 @@ public abstract class AbstractSearchResult<D extends AbstractDocument> extends A
 
   /**
    * Creates an instance from a collection of documents.
-   * 
+   *
    * @param documents  the collection of documents to add, not null
    */
-  public AbstractSearchResult(Collection<D> documents) {
+  public AbstractSearchResult(final Collection<D> documents) {
     super(documents);
   }
 
@@ -60,6 +60,7 @@ public abstract class AbstractSearchResult<D extends AbstractDocument> extends A
    * Gets the first document, or null if no documents.
    * @return the first document, null if none
    */
+  @Override
   public D getFirstDocument() {
     return getDocuments().size() > 0 ? getDocuments().get(0) : null;
   }

@@ -28,15 +28,15 @@ import com.opengamma.util.ArgumentChecker;
  */
 @BeanDefinition
 public class ParameterizedFunctionConfiguration extends StaticFunctionConfiguration implements FunctionConfiguration {
-  
+
   private static final long serialVersionUID = 1L;
-  
+
   @PropertyDefinition(set = "setClearAddAll")
-  private List<String> _parameter = Lists.newArrayList();
-  
+  private final List<String> _parameter = Lists.newArrayList();
+
   /**
    * Creates an instance
-   * 
+   *
    * @param definitionClassName the definition class name, not null.
    * @param parameter the list of parameters, not null.
    */
@@ -45,15 +45,15 @@ public class ParameterizedFunctionConfiguration extends StaticFunctionConfigurat
     ArgumentChecker.notNull(parameter, "parameters");
     _parameter.addAll(parameter);
   }
-  
+
   /**
    * Constructor for builders
    */
   ParameterizedFunctionConfiguration() {
   }
-  
+
   @Override
-  public int compareTo(FunctionConfiguration other) {
+  public int compareTo(final FunctionConfiguration other) {
     if (other instanceof ParameterizedFunctionConfiguration) {
       final ParameterizedFunctionConfiguration rhs = (ParameterizedFunctionConfiguration) other;
       // Order by class name
@@ -79,7 +79,7 @@ public class ParameterizedFunctionConfiguration extends StaticFunctionConfigurat
     } else if (other instanceof StaticFunctionConfiguration) {
       // Static goes first
       return 1;
-    } 
+    }
     throw new UnsupportedOperationException("Can't compare " + ParameterizedFunctionConfiguration.class + " and " + other.getClass());
   }
 
@@ -105,7 +105,7 @@ public class ParameterizedFunctionConfiguration extends StaticFunctionConfigurat
   //-----------------------------------------------------------------------
   /**
    * Gets the parameter.
-   * @return the value of the property
+   * @return the value of the property, not null
    */
   public List<String> getParameter() {
     return _parameter;
@@ -113,9 +113,10 @@ public class ParameterizedFunctionConfiguration extends StaticFunctionConfigurat
 
   /**
    * Sets the parameter.
-   * @param parameter  the new value of the property
+   * @param parameter  the new value of the property, not null
    */
   public void setParameter(List<String> parameter) {
+    JodaBeanUtils.notNull(parameter, "parameter");
     this._parameter.clear();
     this._parameter.addAll(parameter);
   }
@@ -254,6 +255,12 @@ public class ParameterizedFunctionConfiguration extends StaticFunctionConfigurat
           return;
       }
       super.propertySet(bean, propertyName, newValue, quiet);
+    }
+
+    @Override
+    protected void validate(Bean bean) {
+      JodaBeanUtils.notNull(((ParameterizedFunctionConfiguration) bean)._parameter, "parameter");
+      super.validate(bean);
     }
 
   }

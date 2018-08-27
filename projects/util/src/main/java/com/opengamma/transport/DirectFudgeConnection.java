@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.transport;
@@ -33,7 +33,7 @@ public class DirectFudgeConnection {
     }
 
     @Override
-    public void send(FudgeMsg message) {
+    public void send(final FudgeMsg message) {
       _messages1To2.incrementAndGet();
       if (_end2Receiver != null) {
         _end2Receiver.messageReceived(_fudgeContext, new FudgeMsgEnvelope(message));
@@ -54,7 +54,7 @@ public class DirectFudgeConnection {
     }
 
     @Override
-    public void setFudgeMessageReceiver(FudgeMessageReceiver receiver) {
+    public void setFudgeMessageReceiver(final FudgeMessageReceiver receiver) {
       _end1Receiver = receiver;
     }
 
@@ -76,7 +76,7 @@ public class DirectFudgeConnection {
     }
 
     @Override
-    public void send(FudgeMsg message) {
+    public void send(final FudgeMsg message) {
       _messages2To1.incrementAndGet();
       if (_end1Receiver != null) {
         _end1Receiver.messageReceived(_fudgeContext, new FudgeMsgEnvelope(message));
@@ -97,7 +97,7 @@ public class DirectFudgeConnection {
     }
 
     @Override
-    public void setFudgeMessageReceiver(FudgeMessageReceiver receiver) {
+    public void setFudgeMessageReceiver(final FudgeMessageReceiver receiver) {
       _end2Receiver = receiver;
     }
 

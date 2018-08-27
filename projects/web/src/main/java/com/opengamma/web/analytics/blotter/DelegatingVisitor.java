@@ -17,43 +17,43 @@ import com.opengamma.util.ArgumentChecker;
 
   private final BeanVisitor<T> _delegate;
 
-  /* package */ DelegatingVisitor(BeanVisitor<T> delegate) {
+  /* package */ DelegatingVisitor(final BeanVisitor<T> delegate) {
     ArgumentChecker.notNull(delegate, "delegate");
     _delegate = delegate;
   }
 
   @Override
-  public void visitMetaBean(MetaBean metaBean) {
+  public void visitMetaBean(final MetaBean metaBean) {
     _delegate.visitMetaBean(metaBean);
   }
 
   @Override
-  public void visitBeanProperty(MetaProperty<?> property, BeanTraverser traverser) {
+  public void visitBeanProperty(final MetaProperty<?> property, final BeanTraverser traverser) {
     _delegate.visitBeanProperty(property, traverser);
   }
 
   @Override
-  public void visitCollectionProperty(MetaProperty<?> property, BeanTraverser traverser) {
+  public void visitCollectionProperty(final MetaProperty<?> property, final BeanTraverser traverser) {
     _delegate.visitCollectionProperty(property, traverser);
   }
 
   @Override
-  public void visitSetProperty(MetaProperty<?> property, BeanTraverser traverser) {
+  public void visitSetProperty(final MetaProperty<?> property, final BeanTraverser traverser) {
     _delegate.visitSetProperty(property, traverser);
   }
 
   @Override
-  public void visitListProperty(MetaProperty<?> property, BeanTraverser traverser) {
+  public void visitListProperty(final MetaProperty<?> property, final BeanTraverser traverser) {
     _delegate.visitListProperty(property, traverser);
   }
 
   @Override
-  public void visitMapProperty(MetaProperty<?> property, BeanTraverser traverser) {
+  public void visitMapProperty(final MetaProperty<?> property, final BeanTraverser traverser) {
     _delegate.visitMapProperty(property, traverser);
   }
 
   @Override
-  public void visitProperty(MetaProperty<?> property, BeanTraverser traverser) {
+  public void visitProperty(final MetaProperty<?> property, final BeanTraverser traverser) {
     _delegate.visitProperty(property, traverser);
   }
 

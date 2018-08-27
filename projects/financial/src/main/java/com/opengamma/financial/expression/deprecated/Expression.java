@@ -24,7 +24,7 @@ import com.opengamma.financial.expression.UserExpression;
   @SuppressWarnings("unchecked")
   protected <T> T evaluate(final Class<T> expected, final Expression expr, final Evaluator evaluator) {
     Object value = expr.evaluate(evaluator);
-    if ((value == NA) || (value == null)) {
+    if (value == NA || value == null) {
       return null;
     }
     if (!expected.isAssignableFrom(value.getClass())) {
@@ -38,7 +38,7 @@ import com.opengamma.financial.expression.UserExpression;
 
   /**
    * Coerce a source value to a matching type for the target value.
-   * 
+   *
    * @param targetValue value of the type to coerce to
    * @param sourceValue original value
    * @return the coerced value or the original value if no coercion is possible
@@ -49,7 +49,7 @@ import com.opengamma.financial.expression.UserExpression;
 
   /**
    * Coerce a source value to a specific class.
-   * 
+   *
    * @param targetClass class to coerce to
    * @param sourceValue original value
    * @return the coerced value or the original value if no coercion is possible
@@ -61,7 +61,7 @@ import com.opengamma.financial.expression.UserExpression;
       if (sourceValue instanceof String) {
         try {
           return Integer.parseInt((String) sourceValue);
-        } catch (NumberFormatException e) {
+        } catch (final NumberFormatException e) {
           // Ignore
         }
       } else if (sourceValue instanceof Number) {
@@ -71,7 +71,7 @@ import com.opengamma.financial.expression.UserExpression;
       if (sourceValue instanceof String) {
         try {
           return Double.parseDouble((String) sourceValue);
-        } catch (NumberFormatException e) {
+        } catch (final NumberFormatException e) {
           // Ignore
         }
       } else if (sourceValue instanceof Number) {
@@ -132,7 +132,7 @@ import com.opengamma.financial.expression.UserExpression;
   }
 
   /**
-   * 
+   *
    */
   public static final class And extends Binary {
 
@@ -143,7 +143,7 @@ import com.opengamma.financial.expression.UserExpression;
     @Override
     protected Object evaluate(final Evaluator evaluator) {
       final Boolean leftValue = evaluate(Boolean.class, getLeft(), evaluator);
-      if ((leftValue == null) || !leftValue.booleanValue()) {
+      if (leftValue == null || !leftValue.booleanValue()) {
         return false;
       }
       final Boolean rightValue = evaluate(Boolean.class, getRight(), evaluator);
@@ -161,7 +161,7 @@ import com.opengamma.financial.expression.UserExpression;
   }
 
   /**
-   * 
+   *
    */
   public static final class Eq extends Binary {
 
@@ -190,7 +190,7 @@ import com.opengamma.financial.expression.UserExpression;
   }
 
   /**
-   * 
+   *
    */
   public static final class Gt extends Binary {
 
@@ -220,7 +220,7 @@ import com.opengamma.financial.expression.UserExpression;
   }
 
   /**
-   * 
+   *
    */
   public static final class Gte extends Binary {
 
@@ -250,7 +250,7 @@ import com.opengamma.financial.expression.UserExpression;
   }
 
   /**
-   * 
+   *
    */
   public static final class Identifier extends Expression {
 
@@ -286,7 +286,7 @@ import com.opengamma.financial.expression.UserExpression;
     }
 
     private static Object evaluateTradeAttribute(final String attribute, final Position position) {
-      for (Trade trade : position.getTrades()) {
+      for (final Trade trade : position.getTrades()) {
         final String value = trade.getAttributes().get(attribute);
         if (value != null) {
           return value;
@@ -299,35 +299,35 @@ import com.opengamma.financial.expression.UserExpression;
       if (identifier.startsWith("Attribute.")) {
         return evaluateTradeAttribute(identifier.substring(10), position);
       } else if ("Counterparty".equals(identifier)) {
-        for (Trade trade : position.getTrades()) {
+        for (final Trade trade : position.getTrades()) {
           if (trade.getCounterparty() != null) {
             return trade.getCounterparty();
           }
         }
         return null;
       } else if ("Premium".equals(identifier)) {
-        for (Trade trade : position.getTrades()) {
+        for (final Trade trade : position.getTrades()) {
           if (trade.getPremium() != null) {
             return trade.getPremium();
           }
         }
         return null;
       } else if ("PremiumCurrency".equals(identifier)) {
-        for (Trade trade : position.getTrades()) {
+        for (final Trade trade : position.getTrades()) {
           if (trade.getPremiumCurrency() != null) {
             return trade.getPremiumCurrency();
           }
         }
         return null;
       } else if ("PremiumDate".equals(identifier)) {
-        for (Trade trade : position.getTrades()) {
+        for (final Trade trade : position.getTrades()) {
           if (trade.getPremiumDate() != null) {
             return trade.getPremiumDate();
           }
         }
         return null;
       } else if ("PremiumTime".equals(identifier)) {
-        for (Trade trade : position.getTrades()) {
+        for (final Trade trade : position.getTrades()) {
           if (trade.getPremiumTime() != null) {
             return trade.getPremiumTime();
           }
@@ -388,13 +388,13 @@ import com.opengamma.financial.expression.UserExpression;
 
     @Override
     protected Object evaluate(final Evaluator evaluator) {
-      Position position = (Position) nullForNA(evaluator.getVariable("position"));
-      NavigablePortfolioNode node = (NavigablePortfolioNode) nullForNA(evaluator.getVariable("node"));
+      final Position position = (Position) nullForNA(evaluator.getVariable("position"));
+      final NavigablePortfolioNode node = (NavigablePortfolioNode) nullForNA(evaluator.getVariable("node"));
       if ("isNode".equals(_text)) {
-        return (position == null);
+        return position == null;
       } else if ("isPosition".equals(_text)) {
-        return (position != null);
-      } else if ((node != null) && _text.startsWith("Node.")) {
+        return position != null;
+      } else if (node != null && _text.startsWith("Node.")) {
         return evaluateNodeIdentifier(_text.substring(5), node);
       } else if (position != null) {
         return evaluatePositionOrTradeIdentifier(_text, position);
@@ -411,7 +411,7 @@ import com.opengamma.financial.expression.UserExpression;
   }
 
   /**
-   * 
+   *
    */
   public static final class Literal extends Expression {
 
@@ -434,7 +434,7 @@ import com.opengamma.financial.expression.UserExpression;
   }
 
   /**
-   * 
+   *
    */
   public static final class Lt extends Binary {
 
@@ -464,7 +464,7 @@ import com.opengamma.financial.expression.UserExpression;
   }
 
   /**
-   * 
+   *
    */
   public static final class Lte extends Binary {
 
@@ -494,7 +494,7 @@ import com.opengamma.financial.expression.UserExpression;
   }
 
   /**
-   * 
+   *
    */
   public static final class Neq extends Binary {
 
@@ -523,7 +523,7 @@ import com.opengamma.financial.expression.UserExpression;
   }
 
   /**
-   * 
+   *
    */
   public static final class Not extends Unary {
 
@@ -548,7 +548,7 @@ import com.opengamma.financial.expression.UserExpression;
   }
 
   /**
-   * 
+   *
    */
   public static final class Or extends Binary {
 
@@ -557,9 +557,9 @@ import com.opengamma.financial.expression.UserExpression;
     }
 
     @Override
-    protected Object evaluate(Evaluator evaluator) {
+    protected Object evaluate(final Evaluator evaluator) {
       final Boolean leftValue = evaluate(Boolean.class, getLeft(), evaluator);
-      if ((leftValue != null) && leftValue.booleanValue()) {
+      if (leftValue != null && leftValue.booleanValue()) {
         return true;
       }
       final Boolean rightValue = evaluate(Boolean.class, getRight(), evaluator);

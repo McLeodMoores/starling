@@ -34,25 +34,27 @@ public class BondSupportUtils {
     SUPPORTED_COUPON_TYPES.add("FIXED");
   }
 
-  public static boolean isSupported(Security security) {
+  public static boolean isSupported(final Security security) {
     if (security instanceof BondSecurity && !(security instanceof InflationBondSecurity)) {
-      BondSecurity bondSecurity = (BondSecurity) security;
+      final BondSecurity bondSecurity = (BondSecurity) security;
       if (SUPPORTED_YIELD_CONVENTIONS.contains(bondSecurity.getYieldConvention()) && SUPPORTED_COUPON_TYPES.contains(bondSecurity.getCouponType())) {
         return true;
       }
       return false;
     } else if (security instanceof BondFutureSecurity) {
       @SuppressWarnings("unused")
+      final
       BondFutureSecurity bondFutureSecurity = (BondFutureSecurity) security;
       return true;
     } else if (security instanceof BillSecurity) {
-      BillSecurity billSecurity = (BillSecurity) security;
+      final BillSecurity billSecurity = (BillSecurity) security;
       if (SUPPORTED_YIELD_CONVENTIONS.contains(billSecurity.getYieldConvention())) {
         return true;
       }
       return false;
     } else if (security instanceof FloatingRateNoteSecurity) {
       @SuppressWarnings("unused")
+      final
       FloatingRateNoteSecurity floatingRateNoteSecurity = (FloatingRateNoteSecurity) security;
       return true;
     }

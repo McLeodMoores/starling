@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.user.impl;
@@ -25,8 +25,8 @@ public class DataRoleMasterUris {
    * @param baseUri  the base URI, not null
    * @return the URI, not null
    */
-  public static URI uriSearch(URI baseUri) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("roleSearches");
+  public static URI uriSearch(final URI baseUri) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("roleSearches");
     return bld.build();
   }
 
@@ -36,8 +36,8 @@ public class DataRoleMasterUris {
    * @param baseUri  the base URI, not null
    * @return the URI, not null
    */
-  public static URI uriAdd(URI baseUri) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("roles");
+  public static URI uriAdd(final URI baseUri) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("roles");
     return bld.build();
   }
 
@@ -49,8 +49,8 @@ public class DataRoleMasterUris {
    * @param objectId  the object identifier, not null
    * @return the URI, not null
    */
-  public static URI uriRoleById(URI baseUri, ObjectIdentifiable objectId) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("/roles/{objectId}");
+  public static URI uriRoleById(final URI baseUri, final ObjectIdentifiable objectId) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("/roles/{objectId}");
     return bld.build(objectId.getObjectId());
   }
 
@@ -61,8 +61,8 @@ public class DataRoleMasterUris {
    * @param roleName  the role name, not null
    * @return the URI, not null
    */
-  public static URI uriRoleByName(URI baseUri, String roleName) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("/roles/name/{roleName}");
+  public static URI uriRoleByName(final URI baseUri, final String roleName) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("/roles/name/{roleName}");
     return bld.build(roleName);
   }
 
@@ -73,8 +73,8 @@ public class DataRoleMasterUris {
    * @param roleName  the role name, not null
    * @return the URI, not null
    */
-  public static URI uriNameExists(URI baseUri, String roleName) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("/roles/exists/{roleName}");
+  public static URI uriNameExists(final URI baseUri, final String roleName) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("/roles/exists/{roleName}");
     return bld.build(roleName);
   }
 
@@ -86,8 +86,8 @@ public class DataRoleMasterUris {
    * @param request  the request, not null
    * @return the URI, not null
    */
-  public static URI uriEventHistory(URI baseUri, RoleEventHistoryRequest request) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri);
+  public static URI uriEventHistory(final URI baseUri, final RoleEventHistoryRequest request) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri);
     if (request.getObjectId() != null) {
       return bld.path("/roles/{objectId}/eventHistory").build(request.getObjectId());
     } else {
@@ -102,8 +102,8 @@ public class DataRoleMasterUris {
    * @param account  the account, not null
    * @return the URI, not null
    */
-  public static URI uriResolveRole(URI baseUri, UserAccount account) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("/roles/account");
+  public static URI uriResolveRole(final URI baseUri, final UserAccount account) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("/roles/account");
     return bld.build();
   }
 

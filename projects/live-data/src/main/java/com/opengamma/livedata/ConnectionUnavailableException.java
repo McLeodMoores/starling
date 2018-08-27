@@ -18,7 +18,7 @@ public class ConnectionUnavailableException extends OpenGammaRuntimeException {
   /**
    * @param message The error message
    */
-  public ConnectionUnavailableException(String message) {
+  public ConnectionUnavailableException(final String message) {
     super(message);
   }
 
@@ -26,7 +26,7 @@ public class ConnectionUnavailableException extends OpenGammaRuntimeException {
    * @param message The error message
    * @param cause The underlying cause
    */
-  public ConnectionUnavailableException(String message, Throwable cause) {
+  public ConnectionUnavailableException(final String message, final Throwable cause) {
     super(message, cause);
   }
 

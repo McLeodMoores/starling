@@ -99,16 +99,16 @@ public class ResultModelDefinition extends DirectBean implements Serializable {
 
   /**
    * Creates an instance using the specified output mode for every computation target type.
-   * 
+   *
    * @param defaultMode the default result output mode, not null
    */
-  public ResultModelDefinition(ResultOutputMode defaultMode) {
+  public ResultModelDefinition(final ResultOutputMode defaultMode) {
     this(defaultMode, defaultMode, defaultMode, defaultMode, defaultMode);
   }
 
   /**
    * Creates an instance using the specified output modes for each computation target type.
-   * 
+   *
    * @param aggregatePositionOutputMode the result output mode for aggregate position targets, not null
    * @param positionOutputMode the result output mode for individual position targets, not null
    * @param tradeOutputMode the result output mode for trade targets, not null
@@ -116,8 +116,8 @@ public class ResultModelDefinition extends DirectBean implements Serializable {
    * @param primitiveOutputMode the result output mode for primitive targets, not null
    */
   public ResultModelDefinition(
-      ResultOutputMode aggregatePositionOutputMode, ResultOutputMode positionOutputMode, ResultOutputMode tradeOutputMode,
-      ResultOutputMode securityOutputMode, ResultOutputMode primitiveOutputMode) {
+      final ResultOutputMode aggregatePositionOutputMode, final ResultOutputMode positionOutputMode, final ResultOutputMode tradeOutputMode,
+      final ResultOutputMode securityOutputMode, final ResultOutputMode primitiveOutputMode) {
     ArgumentChecker.notNull(aggregatePositionOutputMode, "aggregatePositionOutputMode");
     ArgumentChecker.notNull(positionOutputMode, "positionOutputMode");
     ArgumentChecker.notNull(tradeOutputMode, "tradeOutputMode");
@@ -133,7 +133,7 @@ public class ResultModelDefinition extends DirectBean implements Serializable {
   //-------------------------------------------------------------------------
   //  /**
   //   * Gets the output mode that applies to aggregate position values. This is independent of individual position outputs.
-  //   * 
+  //   *
   //   * @return  the output mode that applies to aggregate position values
   //   */
   //  public ResultOutputMode getAggregatePositionOutputMode() {
@@ -144,7 +144,7 @@ public class ResultModelDefinition extends DirectBean implements Serializable {
   //   * Sets the output mode that applies to aggregate position outputs. For example, the referenced portfolio could have
   //   * a deep structure with many nodes at which aggregate portfolio outputs would be calculated. If these are not
   //   * required then disabling them could speed up the computation cycle significantly.
-  //   * 
+  //   *
   //   * @param aggregatePositionOutputMode  the output mode to apply to aggregate position values
   //   */
   //  public void setAggregatePositionOutputMode(ResultOutputMode aggregatePositionOutputMode) {
@@ -153,14 +153,14 @@ public class ResultModelDefinition extends DirectBean implements Serializable {
   //
   //  /**
   //   * Gets the output mode that applies to individual position values. This is independent of aggregate position
-  //   * outputs. 
-  //   * 
+  //   * outputs.
+  //   *
   //   * @return  the output mode that applies to position values
   //   */
   //  public ResultOutputMode getPositionOutputMode() {
   //    return _positionOutputMode;
   //  }
-  //  
+  //
   //  /**
   //   * Sets the output mode that applies to individual position outputs. If only aggregate position calculations are
   //   * required, with respect to the hierarchy of the reference portfolio, then disabling outputs for individual
@@ -169,13 +169,13 @@ public class ResultModelDefinition extends DirectBean implements Serializable {
   //   * the same calculation on its children. Aggregate calculations where this is not the case will be unaffected,
   //   * although disabling the individual position outputs will still hide them from the user even though they will be
   //   * calculated.
-  //   * 
+  //   *
   //   * @param positionOutputMode  the output mode to apply to position values
   //   */
   //  public void setPositionOutputMode(ResultOutputMode positionOutputMode) {
   //    _positionOutputMode = positionOutputMode;
   //  }
-  //  
+  //
   //  /**
   //   * Sets the output mode that applies to individual trade outputs. If only aggregate position calculations are
   //   * required, with respect to the hierarchy of the reference portfolio, then disabling outputs for individual
@@ -184,7 +184,7 @@ public class ResultModelDefinition extends DirectBean implements Serializable {
   //   * the same calculation on its children. Aggregate calculations where this is not the case will be unaffected,
   //   * although disabling the individual trade outputs will still hide them from the user even though they will be
   //   * calculated.
-  //   * 
+  //   *
   //   * @param tradeOutputMode  the output mode to apply to trade values
   //   */
   //  public void setTradeOutputMode(ResultOutputMode tradeOutputMode) {
@@ -192,8 +192,8 @@ public class ResultModelDefinition extends DirectBean implements Serializable {
   //  }
   //
   //  /**
-  //   * Gets the output mode that applies to individual trade values. 
-  //   * 
+  //   * Gets the output mode that applies to individual trade values.
+  //   *
   //   * @return  the output mode that applies to trade values
   //   */
   //  public ResultOutputMode getTradeOutputMode() {
@@ -202,36 +202,36 @@ public class ResultModelDefinition extends DirectBean implements Serializable {
   //
   //  /**
   //   * Gets the output mode that applies to security values.
-  //   * 
+  //   *
   //   * @return  the output mode that applies to security values
   //   */
   //  public ResultOutputMode getSecurityOutputMode() {
   //    return _securityOutputMode;
   //  }
-  //  
+  //
   //  /**
   //   * Sets the output mode to apply to security values. These are values which relate generally to a security and apply
   //   *  to every position in that security. For example, market data on a security would be a security output.
-  //   * 
+  //   *
   //   * @param securityOutputMode  the output mode to apply to security values
   //   */
   //  public void setSecurityOutputMode(ResultOutputMode securityOutputMode) {
   //    _securityOutputMode = securityOutputMode;
   //  }
-  //  
+  //
   //  /**
   //   * Gets the output mode that applies to primitive outputs.
-  //   * 
+  //   *
   //   * @return  the output mode that applies to primitive values
   //   */
   //  public ResultOutputMode getPrimitiveOutputMode() {
   //    return _primitiveOutputMode;
   //  }
-  //  
+  //
   //  /**
   //   * Sets the output mode that applies to primitive outputs. These are values which may be used in calculations for
   //   * many securities. For example, the USD discount curve would be a primitive.
-  //   * 
+  //   *
   //   * @param primitiveOutputMode  the output mode to apply to primitive values
   //   */
   //  public void setPrimitiveOutputMode(ResultOutputMode primitiveOutputMode) {
@@ -239,7 +239,7 @@ public class ResultModelDefinition extends DirectBean implements Serializable {
   //  }
 
   private static ComputationTargetTypeMap<Function1<ResultModelDefinition, ResultOutputMode>> getOutputMode() {
-    final ComputationTargetTypeMap<Function1<ResultModelDefinition, ResultOutputMode>> map = new ComputationTargetTypeMap<Function1<ResultModelDefinition, ResultOutputMode>>();
+    final ComputationTargetTypeMap<Function1<ResultModelDefinition, ResultOutputMode>> map = new ComputationTargetTypeMap<>();
     map.put(ComputationTargetType.ANYTHING, new Function1<ResultModelDefinition, ResultOutputMode>() {
       @Override
       public ResultOutputMode execute(final ResultModelDefinition definition) {
@@ -281,7 +281,7 @@ public class ResultModelDefinition extends DirectBean implements Serializable {
 
   /**
    * Gets the output mode that applies to values of the given computation target type.
-   * 
+   *
    * @param computationTargetType the target type, not null
    * @return the output mode that applies to values of the give type
    */
@@ -297,15 +297,15 @@ public class ResultModelDefinition extends DirectBean implements Serializable {
 
   /**
    * Indicates whether an output with the given specification should be included in the results.
-   * 
+   *
    * @param outputSpecification the specification of the output value, not null
    * @param dependencyGraph the dependency graph to which the output value belongs, not null
    * @return true if the output value should be included in the results
    */
-  public boolean shouldOutputResult(ValueSpecification outputSpecification, DependencyGraph dependencyGraph) {
+  public boolean shouldOutputResult(final ValueSpecification outputSpecification, final DependencyGraph dependencyGraph) {
     ArgumentChecker.notNull(outputSpecification, "outputSpecification");
     ArgumentChecker.notNull(dependencyGraph, "dependencyGraph");
-    ComputationTargetType targetType = outputSpecification.getTargetSpecification().getType();
+    final ComputationTargetType targetType = outputSpecification.getTargetSpecification().getType();
     return getOutputMode(targetType).shouldOutputResult(outputSpecification, dependencyGraph);
   }
 

@@ -5,10 +5,8 @@
  */
 package com.opengamma.integration.marketdata.manipulator.dsl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 import org.joda.beans.Bean;
 import org.joda.beans.BeanDefinition;
@@ -35,22 +33,22 @@ public final class DoubleDateSurfaceShift extends VolatilitySurfaceShiftManipula
   @PropertyDefinition(validate = "notNull")
   private final List<Period> _yValues;
 
-  /* package */ DoubleDateSurfaceShift(ScenarioShiftType shiftType,
-                                       double[] shiftValues,
-                                       double[] xValues,
-                                       List<Period> yValues) {
+  /* package */ DoubleDateSurfaceShift(final ScenarioShiftType shiftType,
+                                       final double[] shiftValues,
+                                       final double[] xValues,
+                                       final List<Period> yValues) {
     super(shiftType, shiftValues);
     _xValues = ArgumentChecker.notEmpty(xValues, "xValues");
     _yValues = ArgumentChecker.notEmpty(yValues, "yValues");
   }
 
   @Override
-  protected double[] getXValues(ZonedDateTime valuationTime) {
+  protected double[] getXValues(final ZonedDateTime valuationTime) {
     return _xValues;
   }
 
   @Override
-  protected double[] getYValues(ZonedDateTime valuationTime) {
+  protected double[] getYValues(final ZonedDateTime valuationTime) {
     return yearFractions(_yValues, valuationTime);
   }
 

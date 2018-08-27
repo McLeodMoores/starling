@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.volatilityswap;
@@ -33,10 +33,10 @@ public class CarrLeeFXVolatilitySwapThetaCalculator extends InstrumentDerivative
   }
 
   /**
-   * Theta calculator for FX volatility swap based on "bump and reprice" using {@link VolatilitySwapCalculatorResultWithStrikes}, 
+   * Theta calculator for FX volatility swap based on "bump and reprice" using {@link VolatilitySwapCalculatorResultWithStrikes},
    * i.e., assuming the fair value has been already calculated. For theta the bump amount is 1 working day.
    * @param result {@link VolatilitySwapCalculatorResultWithStrikes}
-   * @param swap The FX volatility swap 
+   * @param swap The FX volatility swap
    * @param data The FX data for Carr-Lee
    * @return theta
    */
@@ -84,12 +84,12 @@ public class CarrLeeFXVolatilitySwapThetaCalculator extends InstrumentDerivative
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_cal == null) ? 0 : _cal.hashCode());
+    result = prime * result + (_cal == null ? 0 : _cal.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -99,7 +99,7 @@ public class CarrLeeFXVolatilitySwapThetaCalculator extends InstrumentDerivative
     if (!(obj instanceof CarrLeeFXVolatilitySwapThetaCalculator)) {
       return false;
     }
-    CarrLeeFXVolatilitySwapThetaCalculator other = (CarrLeeFXVolatilitySwapThetaCalculator) obj;
+    final CarrLeeFXVolatilitySwapThetaCalculator other = (CarrLeeFXVolatilitySwapThetaCalculator) obj;
     if (_cal == null) {
       if (other._cal != null) {
         return false;

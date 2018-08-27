@@ -40,32 +40,32 @@ public class ExchangeSearchResult extends AbstractSearchResult<ExchangeDocument>
 
   /**
    * Creates an instance from a collection of documents.
-   * 
+   *
    * @param coll  the collection of documents to add, not null
    */
-  public ExchangeSearchResult(Collection<ExchangeDocument> coll) {
+  public ExchangeSearchResult(final Collection<ExchangeDocument> coll) {
     super(coll);
   }
 
   /**
    * Creates an instance specifying the version-correction searched for.
-   * 
+   *
    * @param versionCorrection  the version-correction of the data, not null
    */
-  public ExchangeSearchResult(VersionCorrection versionCorrection) {
+  public ExchangeSearchResult(final VersionCorrection versionCorrection) {
     setVersionCorrection(versionCorrection);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the returned exchanges from within the documents.
-   * 
+   *
    * @return the exchanges, not null
    */
   public List<ManageableExchange> getExchanges() {
-    List<ManageableExchange> result = new ArrayList<ManageableExchange>();
+    final List<ManageableExchange> result = new ArrayList<>();
     if (getDocuments() != null) {
-      for (ExchangeDocument doc : getDocuments()) {
+      for (final ExchangeDocument doc : getDocuments()) {
         result.add(doc.getExchange());
       }
     }
@@ -74,7 +74,7 @@ public class ExchangeSearchResult extends AbstractSearchResult<ExchangeDocument>
 
   /**
    * Gets the first exchange, or null if no documents.
-   * 
+   *
    * @return the first exchange, null if none
    */
   public ManageableExchange getFirstExchange() {
@@ -86,7 +86,7 @@ public class ExchangeSearchResult extends AbstractSearchResult<ExchangeDocument>
    * <p>
    * This throws an exception if more than 1 result is actually available.
    * Thus, this method implies an assumption about uniqueness of the queried exchange.
-   * 
+   *
    * @return the matching exchange, not null
    * @throws IllegalStateException if no exchange was found
    */

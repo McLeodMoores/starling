@@ -32,16 +32,16 @@ public class VolatilitySurfaceSingleAdditiveShift implements StructureManipulato
   private final double _y;
   private final double _shift;
 
-  public VolatilitySurfaceSingleAdditiveShift(double x, double y, double shift) {
+  public VolatilitySurfaceSingleAdditiveShift(final double x, final double y, final double shift) {
     _x = x;
     _y = y;
     _shift = shift;
   }
 
   @Override
-  public VolatilitySurface execute(VolatilitySurface surface,
-                                   ValueSpecification valueSpecification,
-                                   FunctionExecutionContext executionContext) {
+  public VolatilitySurface execute(final VolatilitySurface surface,
+                                   final ValueSpecification valueSpecification,
+                                   final FunctionExecutionContext executionContext) {
     return surface.withSingleAdditiveShift(_x, _y, _shift);
   }
 
@@ -51,17 +51,17 @@ public class VolatilitySurfaceSingleAdditiveShift implements StructureManipulato
   }
 
   public MutableFudgeMsg toFudgeMsg(final FudgeSerializer serializer) {
-    MutableFudgeMsg msg = serializer.newMessage();
+    final MutableFudgeMsg msg = serializer.newMessage();
     serializer.addToMessage(msg, SHIFT, null, _shift);
     serializer.addToMessage(msg, X, null, _x);
     serializer.addToMessage(msg, Y, null, _y);
     return msg;
   }
 
-  public static VolatilitySurfaceSingleAdditiveShift fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg) {
-    Double shift = deserializer.fieldValueToObject(Double.class, msg.getByName(SHIFT));
-    Double x = deserializer.fieldValueToObject(Double.class, msg.getByName(X));
-    Double y = deserializer.fieldValueToObject(Double.class, msg.getByName(Y));
+  public static VolatilitySurfaceSingleAdditiveShift fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final Double shift = deserializer.fieldValueToObject(Double.class, msg.getByName(SHIFT));
+    final Double x = deserializer.fieldValueToObject(Double.class, msg.getByName(X));
+    final Double y = deserializer.fieldValueToObject(Double.class, msg.getByName(Y));
     return new VolatilitySurfaceSingleAdditiveShift(x, y, shift);
   }
 
@@ -71,7 +71,7 @@ public class VolatilitySurfaceSingleAdditiveShift implements StructureManipulato
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }

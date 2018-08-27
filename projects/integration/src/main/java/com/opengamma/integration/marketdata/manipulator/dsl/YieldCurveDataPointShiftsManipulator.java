@@ -5,14 +5,23 @@
  */
 package com.opengamma.integration.marketdata.manipulator.dsl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
+import org.joda.beans.Bean;
 import org.joda.beans.BeanDefinition;
 import org.joda.beans.ImmutableBean;
 import org.joda.beans.ImmutableConstructor;
+import org.joda.beans.JodaBeanUtils;
+import org.joda.beans.MetaProperty;
+import org.joda.beans.Property;
 import org.joda.beans.PropertyDefinition;
+import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
+import org.joda.beans.impl.direct.DirectMetaBean;
+import org.joda.beans.impl.direct.DirectMetaProperty;
+import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.threeten.bp.Period;
@@ -29,16 +38,6 @@ import com.opengamma.financial.analytics.ircurve.YieldCurveData;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.ArgumentChecker;
-import java.util.NoSuchElementException;
-import java.util.Set;
-import org.joda.beans.JodaBeanUtils;
-import org.joda.beans.MetaProperty;
-import org.joda.beans.Property;
-import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
-import org.joda.beans.impl.direct.DirectMetaBean;
-import org.joda.beans.impl.direct.DirectMetaPropertyMap;
-import org.joda.beans.Bean;
-import org.joda.beans.impl.direct.DirectMetaProperty;
 
 
 /**
@@ -56,29 +55,29 @@ public final class YieldCurveDataPointShiftsManipulator implements StructureMani
   private final List<YieldCurveDataPointShift> _shifts;
 
   @ImmutableConstructor
-  public YieldCurveDataPointShiftsManipulator(ScenarioShiftType shiftType, List<YieldCurveDataPointShift> shifts) {
+  public YieldCurveDataPointShiftsManipulator(final ScenarioShiftType shiftType, final List<YieldCurveDataPointShift> shifts) {
     _shiftType = ArgumentChecker.notNull(shiftType, "shiftType");
     _shifts = ImmutableList.copyOf(ArgumentChecker.notEmpty(shifts, "shiftList"));
   }
 
   @Override
-  public YieldCurveData execute(YieldCurveData curveData,
-                                ValueSpecification valueSpecification,
-                                FunctionExecutionContext executionContext) {
-    ZonedDateTime valuationTime = ZonedDateTime.now(executionContext.getValuationClock());
-    Map<ExternalIdBundle, Double> data = Maps.newHashMap(curveData.getDataPoints());
-    Map<ExternalId, ExternalIdBundle> index = curveData.getIndex();
-    for (YieldCurveDataPointShift shift : _shifts) {
-      for (FixedIncomeStripWithSecurity strip : curveData.getCurveSpecification().getStrips()) {
-        Period stripPeriod = strip.getTenor().getPeriod();
-        Period shiftPeriod = shift.getTenor();
-        ZonedDateTime stripTime = valuationTime.plus(stripPeriod);
-        ZonedDateTime shiftStartTime = valuationTime.plus(shiftPeriod);
+  public YieldCurveData execute(final YieldCurveData curveData,
+                                final ValueSpecification valueSpecification,
+                                final FunctionExecutionContext executionContext) {
+    final ZonedDateTime valuationTime = ZonedDateTime.now(executionContext.getValuationClock());
+    final Map<ExternalIdBundle, Double> data = Maps.newHashMap(curveData.getDataPoints());
+    final Map<ExternalId, ExternalIdBundle> index = curveData.getIndex();
+    for (final YieldCurveDataPointShift shift : _shifts) {
+      for (final FixedIncomeStripWithSecurity strip : curveData.getCurveSpecification().getStrips()) {
+        final Period stripPeriod = strip.getTenor().getPeriod();
+        final Period shiftPeriod = shift.getTenor();
+        final ZonedDateTime stripTime = valuationTime.plus(stripPeriod);
+        final ZonedDateTime shiftStartTime = valuationTime.plus(shiftPeriod);
 
         if (stripTime.compareTo(shiftStartTime) == 0) {
-          ExternalIdBundle bundle = index.get(strip.getSecurityIdentifier());
-          boolean future = (strip.getInstrumentType() == StripInstrumentType.FUTURE);
-          Double originalData = data.get(bundle);
+          final ExternalIdBundle bundle = index.get(strip.getSecurityIdentifier());
+          final boolean future = strip.getInstrumentType() == StripInstrumentType.FUTURE;
+          final Double originalData = data.get(bundle);
           Double stripData;
 
           // futures are quoted the other way round from other instruments

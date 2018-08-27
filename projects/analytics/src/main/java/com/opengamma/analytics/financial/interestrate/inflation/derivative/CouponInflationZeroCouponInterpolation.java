@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.inflation.derivative;
@@ -31,7 +31,7 @@ public class CouponInflationZeroCouponInterpolation extends CouponInflation {
   private final double[] _referenceEndTime;
 
   /**
-   * The time for which the index at the coupon end is paid by the standard corresponding  zero coupon. 
+   * The time for which the index at the coupon end is paid by the standard corresponding  zero coupon.
    * There is usually a difference of two or three month between the reference date and the natural payment date.
    * the natural payment date is equal to the payment date when the lag is the conventional one.
    * The time can be negative (when the price index for the current and last month is not yet published).
@@ -135,18 +135,18 @@ public class CouponInflationZeroCouponInterpolation extends CouponInflation {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_indexStartValue);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_naturalPaymentTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + (_payNotional ? 1231 : 1237);
     result = prime * result + Arrays.hashCode(_referenceEndTime);
     temp = Double.doubleToLongBits(_weight);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -156,7 +156,7 @@ public class CouponInflationZeroCouponInterpolation extends CouponInflation {
     if (getClass() != obj.getClass()) {
       return false;
     }
-    CouponInflationZeroCouponInterpolation other = (CouponInflationZeroCouponInterpolation) obj;
+    final CouponInflationZeroCouponInterpolation other = (CouponInflationZeroCouponInterpolation) obj;
     if (Double.doubleToLongBits(_indexStartValue) != Double.doubleToLongBits(other._indexStartValue)) {
       return false;
     }

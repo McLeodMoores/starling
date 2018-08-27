@@ -16,8 +16,8 @@ import com.opengamma.util.tuple.Pair;
 public class SwapIndexProvider implements SecurityValueProvider<SwapSecurity> {
 
   @Override
-  public String getValue(SwapSecurity security) {
-    Pair<ExternalId, ExternalId> indices = new IndexVisitor().visit(security);
+  public String getValue(final SwapSecurity security) {
+    final Pair<ExternalId, ExternalId> indices = new IndexVisitor().visit(security);
     // float index for fixed/float, receive index for float/float, empty string for fixed/fixed
     if (indices.getSecond() == null) {
       return "";

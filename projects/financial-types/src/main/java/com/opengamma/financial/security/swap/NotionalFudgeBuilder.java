@@ -30,13 +30,13 @@ public class NotionalFudgeBuilder extends AbstractFudgeBuilder {
   public static class CommodityNotionalBuilder extends NotionalFudgeBuilder implements FudgeBuilder<CommodityNotional>  {
 
     @Override
-    public MutableFudgeMsg buildMessage(FudgeSerializer serializer, CommodityNotional object) {
+    public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final CommodityNotional object) {
       final MutableFudgeMsg msg = serializer.newMessage();
       return msg;
     }
 
     @Override
-    public CommodityNotional buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
+    public CommodityNotional buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
       return new CommodityNotional();
     }
   }
@@ -53,7 +53,7 @@ public class NotionalFudgeBuilder extends AbstractFudgeBuilder {
     public static final String AMOUNT_FIELD_NAME = "amount";
 
     @Override
-    public MutableFudgeMsg buildMessage(FudgeSerializer serializer, InterestRateNotional object) {
+    public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final InterestRateNotional object) {
       final MutableFudgeMsg msg = serializer.newMessage();
       addToMessage(msg, CURRENCY_FIELD_NAME, object.getCurrency());
       addToMessage(msg, AMOUNT_FIELD_NAME, object.getAmount());
@@ -61,9 +61,9 @@ public class NotionalFudgeBuilder extends AbstractFudgeBuilder {
     }
 
     @Override
-    public InterestRateNotional buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-      Currency currency = msg.getValue(Currency.class, CURRENCY_FIELD_NAME);
-      double amount = msg.getDouble(AMOUNT_FIELD_NAME);
+    public InterestRateNotional buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+      final Currency currency = msg.getValue(Currency.class, CURRENCY_FIELD_NAME);
+      final double amount = msg.getDouble(AMOUNT_FIELD_NAME);
       return new InterestRateNotional(currency, amount);
     }
   }
@@ -78,15 +78,15 @@ public class NotionalFudgeBuilder extends AbstractFudgeBuilder {
     public static final String NOTIONAL_IDENTIFIER_FIELD_NAME = "notionalIdentifier";
 
     @Override
-    public MutableFudgeMsg buildMessage(FudgeSerializer serializer, SecurityNotional object) {
+    public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final SecurityNotional object) {
       final MutableFudgeMsg msg = serializer.newMessage();
       addToMessage(msg, NOTIONAL_IDENTIFIER_FIELD_NAME, UniqueIdFudgeBuilder.toFudgeMsg(serializer, object.getNotionalId()));
       return msg;
     }
 
     @Override
-    public SecurityNotional buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-      UniqueId id = UniqueIdFudgeBuilder.fromFudgeMsg(deserializer, msg.getMessage(NOTIONAL_IDENTIFIER_FIELD_NAME));
+    public SecurityNotional buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+      final UniqueId id = UniqueIdFudgeBuilder.fromFudgeMsg(deserializer, msg.getMessage(NOTIONAL_IDENTIFIER_FIELD_NAME));
       return new SecurityNotional(id);
     }
   }

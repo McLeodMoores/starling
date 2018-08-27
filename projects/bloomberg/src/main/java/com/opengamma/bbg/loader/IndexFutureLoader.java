@@ -66,13 +66,13 @@ public class IndexFutureLoader extends SecurityLoader {
       FIELD_ID_ISIN,
       FIELD_ID_SEDOL1,
       FIELD_FUT_VAL_PT));
-  
+
   /**
    * The valid Bloomberg future categories for Index Futures
    */
   public static final Set<String> VALID_FUTURE_CATEGORIES = ImmutableSet.of(
-      BLOOMBERG_EQUITY_INDEX_TYPE, 
-      BBG_NON_EQUITY_INDEX_TYPE); 
+      BLOOMBERG_EQUITY_INDEX_TYPE,
+      BBG_NON_EQUITY_INDEX_TYPE);
       // BBG_WEEKLY_INDEX_OPTIONS_TYPE); // THIS IS IFFY - 2EH3 INDEX, FOR EXAMPLE, HAS A FUTURE CATEGORY OF WEEKLY INDEX OPTIONS, THOUGH IT JUST AN ALIAS FOR ESH3 INDEX WHICH IS EQUITY INDEX
       // TODO: Answer this: Are Equity Index Futures EquityFutureSecurity or IndexFutureSecurity? - See EquityFutureLoader, too
 
@@ -80,23 +80,23 @@ public class IndexFutureLoader extends SecurityLoader {
    * Creates an instance.
    * @param referenceDataProvider  the provider, not null
    */
-  public IndexFutureLoader(ReferenceDataProvider referenceDataProvider) {
+  public IndexFutureLoader(final ReferenceDataProvider referenceDataProvider) {
     super(LOGGER, referenceDataProvider, SecurityType.INDEX_FUTURE);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  protected ManageableSecurity createSecurity(FudgeMsg fieldData) {
-    String expiryDate = fieldData.getString(FIELD_FUT_LAST_TRADE_DT);
-    String futureTradingHours = fieldData.getString(FIELD_FUT_TRADING_HRS);
-    String micExchangeCode = fieldData.getString(FIELD_ID_MIC_PRIM_EXCH);
-    String currencyStr = fieldData.getString(FIELD_CRNCY);
-    String underlyingTicker = fieldData.getString(FIELD_UNDL_SPOT_TICKER);
-    String name = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUT_LONG_NAME), " ");
-    String category = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUTURES_CATEGORY), " ");
-    String bbgUnique = fieldData.getString(FIELD_ID_BBG_UNIQUE);
-    String marketSector = fieldData.getString(FIELD_MARKET_SECTOR_DES);
-    String unitAmount = fieldData.getString(FIELD_FUT_VAL_PT);
+  protected ManageableSecurity createSecurity(final FudgeMsg fieldData) {
+    final String expiryDate = fieldData.getString(FIELD_FUT_LAST_TRADE_DT);
+    final String futureTradingHours = fieldData.getString(FIELD_FUT_TRADING_HRS);
+    final String micExchangeCode = fieldData.getString(FIELD_ID_MIC_PRIM_EXCH);
+    final String currencyStr = fieldData.getString(FIELD_CRNCY);
+    final String underlyingTicker = fieldData.getString(FIELD_UNDL_SPOT_TICKER);
+    final String name = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUT_LONG_NAME), " ");
+    final String category = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUTURES_CATEGORY), " ");
+    final String bbgUnique = fieldData.getString(FIELD_ID_BBG_UNIQUE);
+    final String marketSector = fieldData.getString(FIELD_MARKET_SECTOR_DES);
+    final String unitAmount = fieldData.getString(FIELD_FUT_VAL_PT);
 
     if (!isValidField(bbgUnique)) {
       LOGGER.warn("bbgUnique is null, cannot construct index future security");
@@ -122,15 +122,15 @@ public class IndexFutureLoader extends SecurityLoader {
     if (underlyingTicker != null) {
       underlying = ExternalSchemes.bloombergTickerSecurityId(underlyingTicker + " " + marketSector);
     }
-    Expiry expiry = decodeExpiry(expiryDate, futureTradingHours);
+    final Expiry expiry = decodeExpiry(expiryDate, futureTradingHours);
     if (expiry == null) {
       return null;
     }
-    Currency currency = Currency.parse(currencyStr);
+    final Currency currency = Currency.parse(currencyStr);
 
-    IndexFutureSecurity security = new IndexFutureSecurity(expiry, micExchangeCode, micExchangeCode, currency, Double.valueOf(unitAmount), category);
+    final IndexFutureSecurity security = new IndexFutureSecurity(expiry, micExchangeCode, micExchangeCode, currency, Double.valueOf(unitAmount), category);
     security.setName(name);
-    security.setUnderlyingId(underlying);    
+    security.setUnderlyingId(underlying);
     // set identifiers
     parseIdentifiers(fieldData, security);
     return security;

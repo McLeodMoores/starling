@@ -47,18 +47,18 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
  */
 public class SingleConfigLoader {
   private static final Logger LOGGER = LoggerFactory.getLogger(SingleConfigLoader.class);
-  private ConfigMaster _configMaster;
-  private ConventionMaster _conventionMaster;
-  private MarketDataSnapshotMaster _marketDataSnapshotMaster;
-  private boolean _doNotUpdateExisting;
-  private ConfigSource _configSource;
-  private SecurityMaster _securityMaster;
+  private final ConfigMaster _configMaster;
+  private final ConventionMaster _conventionMaster;
+  private final MarketDataSnapshotMaster _marketDataSnapshotMaster;
+  private final boolean _doNotUpdateExisting;
+  private final ConfigSource _configSource;
+  private final SecurityMaster _securityMaster;
 
   private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
   private static final String DEFAULT_HTS_RATING_NAME = "DEFAULT_TSS_CONFIG";
   private static final String DEFAULT_CURRENCY_MATRIX_NAME = "BloombergLiveData";
 
-  public SingleConfigLoader(SecurityMaster securityMaster, ConfigMaster configMaster, ConfigSource configSource, ConventionMaster conventionMaster, MarketDataSnapshotMaster marketDataSnapshotMaster, boolean doNotUpdateExisting) {
+  public SingleConfigLoader(final SecurityMaster securityMaster, final ConfigMaster configMaster, final ConfigSource configSource, final ConventionMaster conventionMaster, final MarketDataSnapshotMaster marketDataSnapshotMaster, final boolean doNotUpdateExisting) {
     _securityMaster = securityMaster;
     _configMaster = configMaster;
     _configSource = configSource;
@@ -66,12 +66,12 @@ public class SingleConfigLoader {
     _marketDataSnapshotMaster = marketDataSnapshotMaster;
     _doNotUpdateExisting = doNotUpdateExisting;
   }
-  
-  private ManageableConvention addOrUpdateConvention(ManageableConvention convention) {
-    ConventionSearchRequest searchReq = new ConventionSearchRequest(convention.getExternalIdBundle());
-    ConventionSearchResult searchResult = _conventionMaster.search(searchReq);
+
+  private ManageableConvention addOrUpdateConvention(final ManageableConvention convention) {
+    final ConventionSearchRequest searchReq = new ConventionSearchRequest(convention.getExternalIdBundle());
+    final ConventionSearchResult searchResult = _conventionMaster.search(searchReq);
     ConventionDocument match = null;
-    for (ConventionDocument doc : searchResult.getDocuments()) {
+    for (final ConventionDocument doc : searchResult.getDocuments()) {
       if (doc.getConvention().getConventionType().equals(convention.getConventionType())) {
         if (match == null) {
           match = doc;
@@ -91,27 +91,27 @@ public class SingleConfigLoader {
       }
     } else {
       LOGGER.info("No existing convention, creating a new one");
-      ConventionDocument doc = new ConventionDocument(convention);
+      final ConventionDocument doc = new ConventionDocument(convention);
       return _conventionMaster.add(doc).getConvention();
     }
   }
-  
-  private ManageableSecurity addOrUpdateSecurity(ManageableSecurity security) {
-    SecuritySearchRequest searchReq = new SecuritySearchRequest(security.getExternalIdBundle());
-    SecuritySearchResult search = _securityMaster.search(searchReq);
-    if ((search.getDocuments().size() > 0) && _doNotUpdateExisting) {
+
+  private ManageableSecurity addOrUpdateSecurity(final ManageableSecurity security) {
+    final SecuritySearchRequest searchReq = new SecuritySearchRequest(security.getExternalIdBundle());
+    final SecuritySearchResult search = _securityMaster.search(searchReq);
+    if (search.getDocuments().size() > 0 && _doNotUpdateExisting) {
       LOGGER.info("Found existing convention, skipping update");
       return search.getFirstSecurity();
     }
     return SecurityMasterUtils.addOrUpdateSecurity(_securityMaster, security);
   }
-  
-  private ManageableMarketDataSnapshot addOrUpdateSnapshot(ManageableMarketDataSnapshot snapshot) {
-    MarketDataSnapshotSearchRequest searchReq = new MarketDataSnapshotSearchRequest();
+
+  private ManageableMarketDataSnapshot addOrUpdateSnapshot(final ManageableMarketDataSnapshot snapshot) {
+    final MarketDataSnapshotSearchRequest searchReq = new MarketDataSnapshotSearchRequest();
     searchReq.setName(snapshot.getName());
-    MarketDataSnapshotSearchResult searchResult = _marketDataSnapshotMaster.search(searchReq);
+    final MarketDataSnapshotSearchResult searchResult = _marketDataSnapshotMaster.search(searchReq);
     MarketDataSnapshotDocument match = null;
-    for (MarketDataSnapshotDocument doc : searchResult.getDocuments()) {
+    for (final MarketDataSnapshotDocument doc : searchResult.getDocuments()) {
       if (doc.getSnapshot().getBasisViewName().equals(snapshot.getBasisViewName())) {
         if (match == null) {
           match = doc;
@@ -123,7 +123,7 @@ public class SingleConfigLoader {
     if (match != null) {
       if (_doNotUpdateExisting) {
         LOGGER.info("Found existing market data snapshot, skipping update");
-        return match.getSnapshot(); 
+        return match.getSnapshot();
       } else {
         LOGGER.info("Found existing market data snapshot, updating it");
         match.setSnapshot(snapshot);
@@ -131,13 +131,13 @@ public class SingleConfigLoader {
       }
     } else {
       LOGGER.info("No existing market data snapshot, creating a new one");
-      MarketDataSnapshotDocument doc = new MarketDataSnapshotDocument(snapshot);
+      final MarketDataSnapshotDocument doc = new MarketDataSnapshotDocument(snapshot);
       return _marketDataSnapshotMaster.add(doc).getSnapshot();
     }
   }
-  
-  public <T> void loadConfig(InputStream is, Class<T> hintType) {
-    T config = JodaBeanSerialization.deserializer().xmlReader().read(is, hintType);
+
+  public <T> void loadConfig(final InputStream is, final Class<T> hintType) {
+    final T config = JodaBeanSerialization.deserializer().xmlReader().read(is, hintType);
     if (config instanceof ManageableConvention) {
       addOrUpdateConvention((ManageableConvention) config);
     } else if (config instanceof ManageableMarketDataSnapshot) {
@@ -145,40 +145,40 @@ public class SingleConfigLoader {
     } else if (config instanceof ManageableSecurity) {
       addOrUpdateSecurity((ManageableSecurity) config);
     } else if (config instanceof CurrencyPairs) {
-      ConfigItem<?> item = ConfigItem.of(config, CurrencyPairs.DEFAULT_CURRENCY_PAIRS);
+      final ConfigItem<?> item = ConfigItem.of(config, CurrencyPairs.DEFAULT_CURRENCY_PAIRS);
       if (_doNotUpdateExisting  && configExists(item)) {
         LOGGER.info("Existing config present, skipping");
       } else {
-        ConfigMasterUtils.storeByName(_configMaster, item);          
+        ConfigMasterUtils.storeByName(_configMaster, item);
       }
     } else if (config instanceof HistoricalTimeSeriesRating) {
-      ConfigItem<?> item = ConfigItem.of(config, DEFAULT_HTS_RATING_NAME);
+      final ConfigItem<?> item = ConfigItem.of(config, DEFAULT_HTS_RATING_NAME);
       if (_doNotUpdateExisting  && configExists(item)) {
         LOGGER.info("Existing config present, skipping");
       } else {
-        ConfigMasterUtils.storeByName(_configMaster, item);          
-      }  
+        ConfigMasterUtils.storeByName(_configMaster, item);
+      }
     } else if (config instanceof CurrencyMatrix) {
-      ConfigItem<?> item = ConfigItem.of(config, DEFAULT_CURRENCY_MATRIX_NAME);
+      final ConfigItem<?> item = ConfigItem.of(config, DEFAULT_CURRENCY_MATRIX_NAME);
       if (_doNotUpdateExisting  && configExists(item)) {
         LOGGER.info("Existing config present, skipping");
       } else {
-        ConfigMasterUtils.storeByName(_configMaster, item);          
+        ConfigMasterUtils.storeByName(_configMaster, item);
       }
     } else if (config instanceof Bean) {
-      ConfigItem<T> item = ConfigItem.of(config);
+      final ConfigItem<T> item = ConfigItem.of(config);
       if (_doNotUpdateExisting  && configExists(item)) {
         LOGGER.info("Existing config present, skipping");
       } else {
-        ConfigMasterUtils.storeByName(_configMaster, item);          
+        ConfigMasterUtils.storeByName(_configMaster, item);
       }
     } else {
       LOGGER.error("Unsupported type {} is not a JodaBean", config.getClass());
     }
   }
-  
-  public void loadConfig(InputStream is) {
-    Object config = JodaBeanSerialization.deserializer().xmlReader().read(is);
+
+  public void loadConfig(final InputStream is) {
+    final Object config = JodaBeanSerialization.deserializer().xmlReader().read(is);
     if (config instanceof ManageableConvention) {
       addOrUpdateConvention((ManageableConvention) config);
     } else if (config instanceof ManageableMarketDataSnapshot) {
@@ -186,44 +186,44 @@ public class SingleConfigLoader {
     } else if (config instanceof ManageableSecurity) {
       addOrUpdateSecurity((ManageableSecurity) config);
     } else if (config instanceof CurrencyPairs) {
-      ConfigItem<?> item = ConfigItem.of(config, CurrencyPairs.DEFAULT_CURRENCY_PAIRS);
+      final ConfigItem<?> item = ConfigItem.of(config, CurrencyPairs.DEFAULT_CURRENCY_PAIRS);
       if (_doNotUpdateExisting  && configExists(item)) {
         LOGGER.info("Existing config present, skipping");
       } else {
-        ConfigMasterUtils.storeByName(_configMaster, item);          
+        ConfigMasterUtils.storeByName(_configMaster, item);
       }
     } else if (config instanceof HistoricalTimeSeriesRating) {
-      ConfigItem<?> item = ConfigItem.of(config, DEFAULT_HTS_RATING_NAME);
+      final ConfigItem<?> item = ConfigItem.of(config, DEFAULT_HTS_RATING_NAME);
       if (_doNotUpdateExisting  && configExists(item)) {
         LOGGER.info("Existing config present, skipping");
       } else {
-        ConfigMasterUtils.storeByName(_configMaster, item);          
-      }  
+        ConfigMasterUtils.storeByName(_configMaster, item);
+      }
     } else if (config instanceof CurrencyMatrix) {
-      ConfigItem<?> item = ConfigItem.of(config, DEFAULT_CURRENCY_MATRIX_NAME, CurrencyMatrix.class);
+      final ConfigItem<?> item = ConfigItem.of(config, DEFAULT_CURRENCY_MATRIX_NAME, CurrencyMatrix.class);
       if (_doNotUpdateExisting  && configExists(item)) {
         LOGGER.info("Existing config present, skipping");
       } else {
-        ConfigMasterUtils.storeByName(_configMaster, item);          
+        ConfigMasterUtils.storeByName(_configMaster, item);
       }
     } else if (config instanceof Bean) {
-      ConfigItem<?> item = ConfigItem.of(config);
+      final ConfigItem<?> item = ConfigItem.of(config);
       if (_doNotUpdateExisting  && configExists(item)) {
         LOGGER.info("Existing config present, skipping");
       } else {
-        ConfigMasterUtils.storeByName(_configMaster, item);          
+        ConfigMasterUtils.storeByName(_configMaster, item);
       }
     } else {
       LOGGER.error("Unsupported type {} is not a JodaBean", config.getClass());
     }
   }
-  
-  public <T> void loadFudgeConfig(InputStream is) {
+
+  public <T> void loadFudgeConfig(final InputStream is) {
     @SuppressWarnings("resource")
     final FudgeMsgReader fmr = new FudgeMsgReader(new FudgeXMLStreamReader(FUDGE_CONTEXT, new InputStreamReader(is)));
     final FudgeMsg message = fmr.nextMessage();
 
-    Object config = FUDGE_CONTEXT.fromFudgeMsg(message);
+    final Object config = FUDGE_CONTEXT.fromFudgeMsg(message);
     ConfigItem<?> item;
     if (config instanceof CurrencyPairs) {
       item = ConfigItem.of(config, CurrencyPairs.DEFAULT_CURRENCY_PAIRS);
@@ -237,11 +237,11 @@ public class SingleConfigLoader {
     if (_doNotUpdateExisting  && configExists(item)) {
       LOGGER.info("Existing config present, skipping");
     } else {
-      ConfigMasterUtils.storeByName(_configMaster, item);          
+      ConfigMasterUtils.storeByName(_configMaster, item);
     }
   }
-  
-  private boolean configExists(ConfigItem<?> configItem) {
+
+  private boolean configExists(final ConfigItem<?> configItem) {
     return _configSource.getLatestByName(configItem.getType(), configItem.getName()) != null;
   }
 }

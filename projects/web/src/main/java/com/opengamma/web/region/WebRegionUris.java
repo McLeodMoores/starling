@@ -27,7 +27,7 @@ public class WebRegionUris {
    * Creates an instance.
    * @param data  the web data, not null
    */
-  public WebRegionUris(WebRegionData data) {
+  public WebRegionUris(final WebRegionData data) {
     _data = data;
   }
 
@@ -74,7 +74,7 @@ public class WebRegionUris {
   public URI regionsByCurrency(final String currencyISO) {
     try {
       return WebRegionsResource.uri(_data, ExternalIdBundle.of(ExternalSchemes.currencyRegionId(Currency.of(currencyISO))));
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       return WebRegionResource.uri(_data);
     }
   }

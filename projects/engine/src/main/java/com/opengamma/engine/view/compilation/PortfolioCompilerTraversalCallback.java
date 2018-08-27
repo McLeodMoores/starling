@@ -95,7 +95,7 @@ import com.opengamma.util.tuple.Pairs;
    * This map persists gathered information for each portfolio node and position across multiple traversal steps, thus allowing child nodes/positions to insert aggregate requirements into their parent
    * node.
    */
-  private final ConcurrentMap<UniqueId, NodeData> _nodeData = new ConcurrentHashMap<UniqueId, NodeData>();
+  private final ConcurrentMap<UniqueId, NodeData> _nodeData = new ConcurrentHashMap<>();
 
   public PortfolioCompilerTraversalCallback(final ViewCalculationConfiguration calculationConfiguration, final DependencyGraphBuilder builder,
       final Set<ValueRequirement> alreadyAdded, final ConcurrentMap<ComputationTargetReference, UniqueId> resolutions, final Set<UniqueId> includeEvents,
@@ -117,7 +117,7 @@ import com.opengamma.util.tuple.Pairs;
     return _portfolioRequirementsBySecurityType;
   }
 
-  public void setPortfolioRequirementsBySecurityType(Map<String, Set<Pair<String, ValueProperties>>> portfolioRequirementsBySecurityType) {
+  public void setPortfolioRequirementsBySecurityType(final Map<String, Set<Pair<String, ValueProperties>>> portfolioRequirementsBySecurityType) {
     _portfolioRequirementsBySecurityType = portfolioRequirementsBySecurityType;
   }
 
@@ -130,11 +130,11 @@ import com.opengamma.util.tuple.Pairs;
    * <p>
    * If supplied, the {@link #_alreadyAdded} set member is used to identify anything that has already been added from the specific requirements of a view or as part of invalidating a previous graph.
    * See the notes in {@link DependencyGraphBuilder} for the hazards of requesting the same value requirement multiple times.
-   * 
+   *
    * @param valueRequirement the value requirement to add
    */
   protected void addValueRequirement(final ValueRequirement valueRequirement) {
-    if ((_alreadyAdded == null) || !_alreadyAdded.contains(valueRequirement)) {
+    if (_alreadyAdded == null || !_alreadyAdded.contains(valueRequirement)) {
       _builder.addTarget(valueRequirement);
     } else {
       LOGGER.debug("Suppressing {} from the incremental requirement set", valueRequirement);
@@ -146,7 +146,7 @@ import com.opengamma.util.tuple.Pairs;
    * reference.
    * <p>
    * Securities are already resolved when the functions see the positions, so the logging target resolver will not capture any uses of the security.
-   * 
+   *
    * @param link the link to store - the identifier is taken from this along with the resolved unique identifier
    */
   private void store(final SecurityLink link) {
@@ -165,13 +165,13 @@ import com.opengamma.util.tuple.Pairs;
         throw new IllegalArgumentException("Provided a SecurityLink " + link + " where the UniqueId could not be identified. Error in underlying Source/Master.");
       }
       final UniqueId existing = _resolutions.putIfAbsent(MemoryUtils.instance(key), uid);
-      assert (existing == null) || existing.equals(uid);
+      assert existing == null || existing.equals(uid);
     }
   }
 
   /**
    * Store details of the position lookup in the resolution cache. Positions are referenced from portfolio nodes by object identifier.
-   * 
+   *
    * @param position the position to store
    */
   private void store(final Position position) {
@@ -180,7 +180,7 @@ import com.opengamma.util.tuple.Pairs;
 
   /**
    * The pre-order operation for a portfolio node, which adds the aggregate value requirements for the current portfolio node to the graph builder's set of value requirements.
-   * 
+   *
    * @param node the portfolio node being traversed
    */
   @Override
@@ -189,7 +189,7 @@ import com.opengamma.util.tuple.Pairs;
     boolean nodeExcluded = false;
     if (_excludeEvents != null) {
       if (_excludeEvents.contains(node.getUniqueId())) {
-        if ((node.getParentNodeId() != null) && (_nodeData.get(node.getParentNodeId()) != null)) {
+        if (node.getParentNodeId() != null && _nodeData.get(node.getParentNodeId()) != null) {
           nodeExcluded = true;
         } else {
           return;
@@ -205,7 +205,7 @@ import com.opengamma.util.tuple.Pairs;
       // Retrieve the required aggregate outputs (by 'aggregate' sec type) for the current calc configuration
       final Set<Pair<String, ValueProperties>> requiredOutputs =
           _portfolioRequirementsBySecurityType.get(ViewCalculationConfiguration.SECURITY_TYPE_AGGREGATE_ONLY);
-      if ((requiredOutputs != null) && !requiredOutputs.isEmpty()) {
+      if (requiredOutputs != null && !requiredOutputs.isEmpty()) {
         // Add the aggregate value requirements for the current portfolio node to the graph builder's set of value requirements,
         // building them using the retrieved required aggregate outputs and the newly created computation target spec
         // for this portfolio node.
@@ -220,7 +220,7 @@ import com.opengamma.util.tuple.Pairs;
   /**
    * The pre-order operation for a position in a portfolio. which adds the value requirements for the current position and/or its trades to the graph builder's set of value requirements (if the result
    * model specifies it), and also adds aggregate value requirements to the parent's requirements (again, if the result model specifies it) to be reaped post-order.
-   * 
+   *
    * @param position the position being traversed
    */
   @Override
@@ -257,7 +257,7 @@ import com.opengamma.util.tuple.Pairs;
       // Get all known required outputs for this security type in the current calculation configuration
       requiredOutputs = _portfolioRequirementsBySecurityType.get(securityType);
       // Check that there's at least one required output to deal with
-      if ((requiredOutputs != null) && !requiredOutputs.isEmpty()) {
+      if (requiredOutputs != null && !requiredOutputs.isEmpty()) {
         if (nodeData == null) {
           nodeData = _nodeData.get(parentNode.getUniqueId());
         }
@@ -276,7 +276,7 @@ import com.opengamma.util.tuple.Pairs;
           }
         }
       }
-      for (MergedOutput mergedOutput : _mergedOutputs) {
+      for (final MergedOutput mergedOutput : _mergedOutputs) {
         if (nodeData == null) {
           nodeData = _nodeData.get(parentNode.getUniqueId());
         }
@@ -295,7 +295,7 @@ import com.opengamma.util.tuple.Pairs;
       if (!trades.isEmpty()) {
         requiredOutputs = _portfolioRequirementsBySecurityType.get(securityType);
         // Check that there's at least one required output to deal with
-        if ((requiredOutputs != null) && !requiredOutputs.isEmpty()) {
+        if (requiredOutputs != null && !requiredOutputs.isEmpty()) {
           // Add value requirements for each trade
           for (final Trade trade : trades) {
             // TODO: [PLAT-2286] Scope the trade underneath it's parent portfolio node and position
@@ -308,7 +308,7 @@ import com.opengamma.util.tuple.Pairs;
             }
           }
         }
-        for (MergedOutput mergedOutput : _mergedOutputs) {
+        for (final MergedOutput mergedOutput : _mergedOutputs) {
           for (final Trade trade : trades) {
             final ValueProperties constraints = ValueProperties.with(ValuePropertyNames.NAME, mergedOutput.getMergedOutputName()).get();
             final ComputationTargetSpecification tradeSpec = ComputationTargetSpecification.of(trade);
@@ -325,7 +325,7 @@ import com.opengamma.util.tuple.Pairs;
   /**
    * The post-order operation for a portfolio node, which adds the value requirements gathered while traversing this portfolio node's children to the graph builder's set of value requirements. This
    * portfolio node's requirements are also passed up into its own parent node's requirments.
-   * 
+   *
    * @param node the portfolio node being traversed
    */
   @Override

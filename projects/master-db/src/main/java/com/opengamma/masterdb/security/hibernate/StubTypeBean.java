@@ -7,7 +7,7 @@ package com.opengamma.masterdb.security.hibernate;
 
 /**
  * Hibernate bean for storing schedule stub type
- * 
+ *
  * @author Martin Traverse, Niels Stchedroff (Riskcare)
  */
 public class StubTypeBean extends EnumBean {
@@ -15,7 +15,7 @@ public class StubTypeBean extends EnumBean {
   protected StubTypeBean() {
   }
 
-  public StubTypeBean(String stubTypeName) {
+  public StubTypeBean(final String stubTypeName) {
     super(stubTypeName);
   }
 }

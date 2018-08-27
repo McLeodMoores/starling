@@ -69,7 +69,7 @@ public class ParallelRecompilationInfiniteLatestTest extends AbstractParallelRec
     final VersionCorrection versionCorrection = VersionCorrection.of(Instant.now(), Instant.now());
     final DependencyGraph graph = new TestDependencyGraphBuilder("Default").buildGraph();
     final Portfolio portfolio = Mockito.mock(Portfolio.class);
-    return new CompiledViewDefinitionWithGraphsImpl(versionCorrection, "view-id", viewDefinition, Collections.singleton(graph), new HashMap<ComputationTargetReference, UniqueId>(resolutions),
+    return new CompiledViewDefinitionWithGraphsImpl(versionCorrection, "view-id", viewDefinition, Collections.singleton(graph), new HashMap<>(resolutions),
         portfolio, 0, Collections.<CompiledViewCalculationConfiguration>singleton(CompiledViewCalculationConfigurationImpl.of(graph)), null, null);
   }
 
@@ -82,7 +82,7 @@ public class ParallelRecompilationInfiniteLatestTest extends AbstractParallelRec
         final AtomicBoolean terminated = new AtomicBoolean();
         Mockito.doAnswer(new Answer<Void>() {
           @Override
-          public Void answer(InvocationOnMock invocation) throws Throwable {
+          public Void answer(final InvocationOnMock invocation) throws Throwable {
             terminated.set(true);
             return null;
           }
@@ -101,9 +101,9 @@ public class ParallelRecompilationInfiniteLatestTest extends AbstractParallelRec
                 context.cycleCompleted(Mockito.mock(ViewCycle.class));
                 Thread.sleep(rand.nextInt(300) + 50);
               }
-            } catch (InterruptedException e) {
+            } catch (final InterruptedException e) {
               LOGGER.debug("Interrupted", e);
-            } catch (RuntimeException e) {
+            } catch (final RuntimeException e) {
               LOGGER.error("Caught exception", e);
             }
           }
@@ -116,7 +116,7 @@ public class ParallelRecompilationInfiniteLatestTest extends AbstractParallelRec
   private static class MockContext implements ViewProcessWorkerContext {
 
     private final ViewProcessContext _context;
-    private final LinkedBlockingQueue<String> _events = new LinkedBlockingQueue<String>();
+    private final LinkedBlockingQueue<String> _events = new LinkedBlockingQueue<>();
 
     public MockContext(final ViewProcessContext context) {
       _context = context;
@@ -132,32 +132,32 @@ public class ParallelRecompilationInfiniteLatestTest extends AbstractParallelRec
     }
 
     @Override
-    public void viewDefinitionCompiled(ViewExecutionDataProvider dataProvider, CompiledViewDefinitionWithGraphs compiled) {
+    public void viewDefinitionCompiled(final ViewExecutionDataProvider dataProvider, final CompiledViewDefinitionWithGraphs compiled) {
       _events.add("view definition compiled");
     }
 
     @Override
-    public void viewDefinitionCompilationFailed(Instant compilationTime, Exception exception) {
+    public void viewDefinitionCompilationFailed(final Instant compilationTime, final Exception exception) {
       _events.add("view definition compilation failed");
     }
 
     @Override
-    public void cycleStarted(ViewCycleMetadata cycleMetadata) {
+    public void cycleStarted(final ViewCycleMetadata cycleMetadata) {
       _events.add("cycle started");
     }
 
     @Override
-    public void cycleFragmentCompleted(ViewComputationResultModel result, ViewDefinition viewDefinition) {
+    public void cycleFragmentCompleted(final ViewComputationResultModel result, final ViewDefinition viewDefinition) {
       _events.add("cycle fragment completed");
     }
 
     @Override
-    public void cycleCompleted(ViewCycle cycle) {
+    public void cycleCompleted(final ViewCycle cycle) {
       _events.add("cycle completed");
     }
 
     @Override
-    public void cycleExecutionFailed(ViewCycleExecutionOptions options, Exception exception) {
+    public void cycleExecutionFailed(final ViewCycleExecutionOptions options, final Exception exception) {
       _events.add("cycle execution failed");
     }
 
@@ -172,7 +172,7 @@ public class ParallelRecompilationInfiniteLatestTest extends AbstractParallelRec
   protected void testImpl(final Function2<ParallelRecompilationViewProcessWorker, ViewExecutionOptions, Void> callback) throws InterruptedException {
     final ExecutorService executor = Executors.newCachedThreadPool();
     try {
-      final Map<ComputationTargetReference, UniqueId> resolutions = new HashMap<ComputationTargetReference, UniqueId>();
+      final Map<ComputationTargetReference, UniqueId> resolutions = new HashMap<>();
       resolutions.put(new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO, UniqueId.of("Test", "0")), UniqueId.of("Test", "0", "0"));
       final ChangeManager changeManager = new BasicChangeManager();
       final ComputationTargetResolver targetResolver = Mockito.mock(ComputationTargetResolver.class);
@@ -206,7 +206,7 @@ public class ParallelRecompilationInfiniteLatestTest extends AbstractParallelRec
         resolutions.put(new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO, UniqueId.of("Test", "0")), UniqueId.of("Test", "0", Integer.toString(j + 1)));
         changeManager.entityChanged(ChangeType.CHANGED, ObjectId.of("Test", "0"), Instant.now(), Instant.now(), Instant.now());
         LOGGER.info("Change signalled");
-        // ... and expect a view definition compiled to interrupt the sequence 
+        // ... and expect a view definition compiled to interrupt the sequence
         String event = context.event();
         for (int i = 0; i < 20; i++) {
           if (event.equals("cycle started")) {

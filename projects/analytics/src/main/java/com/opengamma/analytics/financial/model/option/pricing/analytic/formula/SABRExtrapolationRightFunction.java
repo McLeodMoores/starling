@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.analytic.formula;
@@ -197,7 +197,7 @@ public class SABRExtrapolationRightFunction {
   /**
    * Computes the option price derivative with respect to the SABR parameters. The price is SABR below the cut-off strike and extrapolated beyond.
    * @param option The option.
-   * @param priceDerivativeSABR An array of three doubles in which the derivative with respect to SABR parameters will be stored. 
+   * @param priceDerivativeSABR An array of three doubles in which the derivative with respect to SABR parameters will be stored.
    * The derivatives are w.r.t. [0] alpha, [1] beta, [2] rho, and [3] nu.
    * @return The option derivative.
    */
@@ -312,14 +312,14 @@ public class SABRExtrapolationRightFunction {
     _priceK[0] = BLACK_FUNCTION.getPriceAdjoint2(option, dataBlack, bsD, bsD2);
     _priceK[1] = bsD[2] + bsD[1] * vD[1];
     _priceK[2] = bsD2[2][2] + bsD2[1][2] * vD[1] + (bsD2[2][1] + bsD2[1][1] * vD[1]) * vD[1] + bsD[1] * vD2[1][1];
-    double eps = 1.0E-15;
+    final double eps = 1.0E-15;
     if (Math.abs(_priceK[0]) < eps && Math.abs(_priceK[1]) < eps && Math.abs(_priceK[2]) < eps) {
       // Implementation note: If value and its derivatives is too small, then parameters are such that the extrapolated price is "very small".
       return new double[] {-100.0, 0, 0};
     }
     final CFunction toSolveC = new CFunction(_priceK, _cutOffStrike, _mu);
     final BracketRoot bracketer = new BracketRoot();
-    double accuracy = 1.0E-5;
+    final double accuracy = 1.0E-5;
     final RidderSingleRootFinder rootFinder = new RidderSingleRootFinder(accuracy);
     final double[] range = bracketer.getBracketedPoints(toSolveC, -1.0, 1.0);
     param[2] = rootFinder.getRoot(toSolveC, range[0], range[1]);
@@ -329,13 +329,13 @@ public class SABRExtrapolationRightFunction {
   }
 
   /**
-   * Computes the derivative of the three fitting parameters with respect to the forward. 
+   * Computes the derivative of the three fitting parameters with respect to the forward.
    * The computation requires some third order derivatives; they are computed by finite difference on the second order derivatives.
    * Used to compute the derivative of the price with respect to the forward.
    * @return The derivatives.
    */
   private double[] computesParametersDerivativeForward() {
-    double eps = 1.0E-15;
+    final double eps = 1.0E-15;
     if (Math.abs(_priceK[0]) < eps && Math.abs(_priceK[1]) < eps && Math.abs(_priceK[2]) < eps) {
       // Implementation note: If value and its derivatives is too small, then parameters are such that the extrapolated price is "very small".
       return new double[] {0.0, 0.0, 0.0};
@@ -398,13 +398,13 @@ public class SABRExtrapolationRightFunction {
   }
 
   /**
-   * Computes the derivative of the three fitting parameters with respect to the SABR parameters. 
+   * Computes the derivative of the three fitting parameters with respect to the SABR parameters.
    * The computation requires some third order derivatives; they are computed by finite difference on the second order derivatives.
    * Used to compute the derivative of the price with respect to the SABR parameters.
    * @return The derivatives.
    */
   private double[][] computesParametersDerivativeSABR() {
-    double eps = 1.0E-15;
+    final double eps = 1.0E-15;
     final double[][] result = new double[4][3];
     if (Math.abs(_priceK[0]) < eps && Math.abs(_priceK[1]) < eps && Math.abs(_priceK[2]) < eps) {
       // Implementation note: If value and its derivatives is too small, then parameters are such that the extrapolated price is "very small".
@@ -511,7 +511,7 @@ public class SABRExtrapolationRightFunction {
   }
 
   /**
-   * Inner class to solve the one dimension equation required to obtain c parameters. 
+   * Inner class to solve the one dimension equation required to obtain c parameters.
    */
   private static final class CFunction extends Function1D<Double, Double> {
     /**
@@ -528,7 +528,7 @@ public class SABRExtrapolationRightFunction {
     private final double _cMu;
 
     /**
-     * Constructor of the two dimension function. 
+     * Constructor of the two dimension function.
      * @param price The option price and its derivatives.
      * @param cutOffStrike The cut-off strike.
      * @param mu The tail thickness parameter.
@@ -540,11 +540,14 @@ public class SABRExtrapolationRightFunction {
     }
 
     @Override
-    public Double evaluate(Double c) {
-      double b = -2 * c / _cCutOffStrike - (_cPriceK[1] / _cPriceK[0] * _cCutOffStrike + _cMu) * _cCutOffStrike;
-      double k2 = _cCutOffStrike * _cCutOffStrike;
-      double res = -_cPriceK[2] / _cPriceK[0] * k2 + _cMu * (_cMu + 1) + 2 * b * (_cMu + 1) / _cCutOffStrike + (2 * c * (2 * _cMu + 3) + b * b) / k2 + 4 * b * c / (k2 * _cCutOffStrike) + 4 * c * c
-          / (k2 * k2);
+    public Double evaluate(final Double c) {
+      final double b = -2 * c / _cCutOffStrike - (_cPriceK[1] / _cPriceK[0] * _cCutOffStrike + _cMu) * _cCutOffStrike;
+      final double k2 = _cCutOffStrike * _cCutOffStrike;
+      final double res = -_cPriceK[2] / _cPriceK[0] * k2 + _cMu * (_cMu + 1)
+          + 2 * b * (_cMu + 1) / _cCutOffStrike
+          + (2 * c * (2 * _cMu + 3) + b * b) / k2
+          + 4 * b * c / (k2 * _cCutOffStrike)
+          + 4 * c * c / (k2 * k2);
       return res;
     }
   }

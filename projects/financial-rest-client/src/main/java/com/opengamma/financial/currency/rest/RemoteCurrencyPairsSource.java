@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.currency.rest;
@@ -23,7 +23,7 @@ public class RemoteCurrencyPairsSource extends AbstractRemoteClient implements C
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param baseUri  the base target URI for all RESTful web services, not null
    */
   public RemoteCurrencyPairsSource(final URI baseUri) {
@@ -36,31 +36,31 @@ public class RemoteCurrencyPairsSource extends AbstractRemoteClient implements C
     if (name == null) {
       name = CurrencyPairs.DEFAULT_CURRENCY_PAIRS;  // TODO: push back to callers
     }
-    
+
     try {
-      URI uri = DataCurrencyPairsSourceUris.uriGetPairs(getBaseUri(), name);
+      final URI uri = DataCurrencyPairsSourceUris.uriGetPairs(getBaseUri(), name);
       return accessRemote(uri).get(CurrencyPairs.class);
-    } catch (DataNotFoundException ex) {
+    } catch (final DataNotFoundException ex) {
       return null;
-    } catch (UniformInterfaceException404NotFound ex) {
+    } catch (final UniformInterfaceException404NotFound ex) {
       return null;
     }
   }
 
   @Override
-  public CurrencyPair getCurrencyPair(String name, Currency currency1, Currency currency2) {
+  public CurrencyPair getCurrencyPair(String name, final Currency currency1, final Currency currency2) {
     ArgumentChecker.notNull(currency1, "currency1");
     ArgumentChecker.notNull(currency2, "currency2");
     if (name == null) {
       name = CurrencyPairs.DEFAULT_CURRENCY_PAIRS;  // TODO: push back to callers
     }
-    
+
     try {
-      URI uri = DataCurrencyPairsSourceUris.uriGetPair(getBaseUri(), name, currency1, currency2);
+      final URI uri = DataCurrencyPairsSourceUris.uriGetPair(getBaseUri(), name, currency1, currency2);
       return accessRemote(uri).get(CurrencyPair.class);
-    } catch (DataNotFoundException ex) {
+    } catch (final DataNotFoundException ex) {
       return null;
-    } catch (UniformInterfaceException404NotFound ex) {
+    } catch (final UniformInterfaceException404NotFound ex) {
       return null;
     }
   }

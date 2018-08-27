@@ -13,7 +13,7 @@ import com.opengamma.financial.security.forward.MetalForwardSecurity;
 public class MetalForwardSecurityBean extends CommodityForwardSecurityBean {
 
   @Override
-  public <T> T accept(Visitor<T> visitor) {
+  public <T> T accept(final Visitor<T> visitor) {
     return visitor.visitMetalForwardType(this);
   }
 

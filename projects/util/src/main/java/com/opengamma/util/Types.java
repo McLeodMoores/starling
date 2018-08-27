@@ -25,7 +25,7 @@ public class Types {
    * @param pType  the parameterized type
    * @return true if the parameterized type is of the given class
    */
-  public static boolean isA(Class<?> clazz, ParameterizedType pType) {
+  public static boolean isA(final Class<?> clazz, final ParameterizedType pType) {
     return clazz.isAssignableFrom((Class<?>) pType.getRawType());
   }
 
@@ -35,27 +35,27 @@ public class Types {
    * @param index  the index of the type argument
    * @return the class of the index-th type argument
    */
-  public static Class<?> getArgumentType(ParameterizedType pType, int index) {
+  public static Class<?> getArgumentType(final ParameterizedType pType, final int index) {
     return (Class<?>) pType.getActualTypeArguments()[index];
   }
 
-  public static Class<?> getTemplateParameterOfInterface(Class<?> base, Class<?> desiredInterface) {
-    Object rtn = searchForInterfaceTemplateParameter(base, desiredInterface);
+  public static Class<?> getTemplateParameterOfInterface(final Class<?> base, final Class<?> desiredInterface) {
+    final Object rtn = searchForInterfaceTemplateParameter(base, desiredInterface);
     if (rtn != null && rtn instanceof Class) {
       return (Class<?>) rtn;
     }
     return null;
   }
 
-  private static Object searchForInterfaceTemplateParameter(Class<?> base, Class<?> desiredInterface) {
+  private static Object searchForInterfaceTemplateParameter(final Class<?> base, final Class<?> desiredInterface) {
     for (int i = 0; i < base.getInterfaces().length; i++) {
-      Class<?> intf = base.getInterfaces()[i];
+      final Class<?> intf = base.getInterfaces()[i];
       if (intf.equals(desiredInterface)) {
-        Type generic = base.getGenericInterfaces()[i];
+        final Type generic = base.getGenericInterfaces()[i];
         if (generic instanceof ParameterizedType) {
-          ParameterizedType p = (ParameterizedType) generic;
-          Type type = p.getActualTypeArguments()[0];
-          Class<?> rtn = getRawTypeNoException(type);
+          final ParameterizedType p = (ParameterizedType) generic;
+          final Type type = p.getActualTypeArguments()[0];
+          final Class<?> rtn = getRawTypeNoException(type);
           if (rtn != null) {
             return rtn;
           }
@@ -68,7 +68,7 @@ public class Types {
     if (base.getSuperclass() == null || base.getSuperclass().equals(Object.class)) {
       return null;
     }
-    Object rtn = searchForInterfaceTemplateParameter(base.getSuperclass(), desiredInterface);
+    final Object rtn = searchForInterfaceTemplateParameter(base.getSuperclass(), desiredInterface);
     if (rtn == null || rtn instanceof Class) {
       return rtn;
     }
@@ -76,9 +76,9 @@ public class Types {
       return null;
     }
 
-    String name = ((TypeVariable<?>) rtn).getName();
+    final String name = ((TypeVariable<?>) rtn).getName();
     int index = -1;
-    TypeVariable<?>[] variables = base.getSuperclass().getTypeParameters();
+    final TypeVariable<?>[] variables = base.getSuperclass().getTypeParameters();
     if (variables == null || variables.length < 1) {
       return null;
     }
@@ -92,15 +92,15 @@ public class Types {
       return null;
     }
 
-    Type genericSuperclass = base.getGenericSuperclass();
+    final Type genericSuperclass = base.getGenericSuperclass();
     if (!(genericSuperclass instanceof ParameterizedType)) {
       return null;
     }
 
-    ParameterizedType pt = (ParameterizedType) genericSuperclass;
-    Type type = pt.getActualTypeArguments()[index];
+    final ParameterizedType pt = (ParameterizedType) genericSuperclass;
+    final Type type = pt.getActualTypeArguments()[index];
 
-    Class<?> clazz = getRawTypeNoException(type);
+    final Class<?> clazz = getRawTypeNoException(type);
     if (clazz != null) {
       return clazz;
     }
@@ -114,7 +114,7 @@ public class Types {
    * @param intfMethod  the other method
    * @return true, if methods have same relative signature
    */
-  public static boolean isCompatible(Method method, Method intfMethod) {
+  public static boolean isCompatible(final Method method, final Method intfMethod) {
     if (method == intfMethod) {
       return true;
     }
@@ -127,8 +127,8 @@ public class Types {
     }
 
     for (int i = 0; i < method.getParameterTypes().length; i++) {
-      Class<?> rootParam = method.getParameterTypes()[i];
-      Class<?> intfParam = intfMethod.getParameterTypes()[i];
+      final Class<?> rootParam = method.getParameterTypes()[i];
+      final Class<?> intfParam = intfMethod.getParameterTypes()[i];
       if (!intfParam.isAssignableFrom(rootParam)) {
         return false;
       }
@@ -143,9 +143,9 @@ public class Types {
    * @param intfMethod  the method
    * @return the implementing method
    */
-  public static Method getImplementingMethod(Class<?> clazz, Method intfMethod)
+  public static Method getImplementingMethod(final Class<?> clazz, final Method intfMethod)
   {
-    Class<?> declaringClass = intfMethod.getDeclaringClass();
+    final Class<?> declaringClass = intfMethod.getDeclaringClass();
     if (declaringClass.equals(clazz)) {
       return intfMethod;
     }
@@ -153,9 +153,9 @@ public class Types {
     Class<?>[] paramTypes = intfMethod.getParameterTypes();
 
     if (declaringClass.getTypeParameters().length > 0 && paramTypes.length > 0) {
-      Type[] intfTypes = findParameterizedTypes(clazz, declaringClass);
-      Map<String, Type> typeVarMap = new HashMap<String, Type>();
-      TypeVariable<? extends Class<?>>[] vars = declaringClass.getTypeParameters();
+      final Type[] intfTypes = findParameterizedTypes(clazz, declaringClass);
+      final Map<String, Type> typeVarMap = new HashMap<>();
+      final TypeVariable<? extends Class<?>>[] vars = declaringClass.getTypeParameters();
       for (int i = 0; i < vars.length; i++) {
         if (intfTypes != null && i < intfTypes.length) {
           typeVarMap.put(vars[i].getName(), intfTypes[i]);
@@ -164,13 +164,13 @@ public class Types {
           typeVarMap.put(vars[i].getName(), vars[i].getGenericDeclaration());
         }
       }
-      Type[] paramGenericTypes = intfMethod.getGenericParameterTypes();
+      final Type[] paramGenericTypes = intfMethod.getGenericParameterTypes();
       paramTypes = new Class[paramTypes.length];
 
       for (int i = 0; i < paramTypes.length; i++) {
         if (paramGenericTypes[i] instanceof TypeVariable) {
-          TypeVariable<?> tv = (TypeVariable<?>) paramGenericTypes[i];
-          Type t = typeVarMap.get(tv.getName());
+          final TypeVariable<?> tv = (TypeVariable<?>) paramGenericTypes[i];
+          final Type t = typeVarMap.get(tv.getName());
           if (t == null) {
             throw new RuntimeException("Unable to resolve type variable");
           }
@@ -184,24 +184,24 @@ public class Types {
 
     try {
       return clazz.getMethod(intfMethod.getName(), paramTypes);
-    } catch (NoSuchMethodException e) {
+    } catch (final NoSuchMethodException e) {
     }
 
     try {
-      Method tmp = clazz.getMethod(intfMethod.getName(), intfMethod.getParameterTypes());
+      final Method tmp = clazz.getMethod(intfMethod.getName(), intfMethod.getParameterTypes());
       return tmp;
-    } catch (NoSuchMethodException e) {
+    } catch (final NoSuchMethodException e) {
     }
     return intfMethod;
   }
 
-  public static Class<?> getRawType(Type type) {
+  public static Class<?> getRawType(final Type type) {
     if (type instanceof Class<?>) {
       // type is a normal class.
       return (Class<?>) type;
     } else if (type instanceof ParameterizedType) {
-      ParameterizedType parameterizedType = (ParameterizedType) type;
-      Type rawType = parameterizedType.getRawType();
+      final ParameterizedType parameterizedType = (ParameterizedType) type;
+      final Type rawType = parameterizedType.getRawType();
       return (Class<?>) rawType;
     } else if (type instanceof GenericArrayType) {
       final GenericArrayType genericArrayType = (GenericArrayType) type;
@@ -216,13 +216,13 @@ public class Types {
     throw new RuntimeException("Unable to determine base class from Type");
   }
 
-  public static Class<?> getRawTypeNoException(Type type) {
+  public static Class<?> getRawTypeNoException(final Type type) {
     if (type instanceof Class<?>) {
       // type is a normal class.
       return (Class<?>) type;
     } else if (type instanceof ParameterizedType) {
-      ParameterizedType parameterizedType = (ParameterizedType) type;
-      Type rawType = parameterizedType.getRawType();
+      final ParameterizedType parameterizedType = (ParameterizedType) type;
+      final Type rawType = parameterizedType.getRawType();
       return (Class<?>) rawType;
     } else if (type instanceof GenericArrayType) {
       final GenericArrayType genericArrayType = (GenericArrayType) type;
@@ -238,23 +238,23 @@ public class Types {
    * @param genericType  the type
    * @return null if there is no type parameter
    */
-  public static Class<?> getTypeArgument(Type genericType) {
+  public static Class<?> getTypeArgument(final Type genericType) {
     if (!(genericType instanceof ParameterizedType)) {
       return null;
     }
-    ParameterizedType parameterizedType = (ParameterizedType) genericType;
-    Class<?> typeArg = (Class<?>) parameterizedType.getActualTypeArguments()[0];
+    final ParameterizedType parameterizedType = (ParameterizedType) genericType;
+    final Class<?> typeArg = (Class<?>) parameterizedType.getActualTypeArguments()[0];
     return typeArg;
   }
 
-  public static Class<?> getCollectionBaseType(Class<?> type, Type genericType) {
+  public static Class<?> getCollectionBaseType(final Class<?> type, final Type genericType) {
     if (genericType instanceof ParameterizedType) {
-      ParameterizedType parameterizedType = (ParameterizedType) genericType;
-      Type componentGenericType = parameterizedType.getActualTypeArguments()[0];
+      final ParameterizedType parameterizedType = (ParameterizedType) genericType;
+      final Type componentGenericType = parameterizedType.getActualTypeArguments()[0];
       return getRawType(componentGenericType);
     } else if (genericType instanceof GenericArrayType) {
       final GenericArrayType genericArrayType = (GenericArrayType) genericType;
-      Type componentGenericType = genericArrayType.getGenericComponentType();
+      final Type componentGenericType = genericArrayType.getGenericComponentType();
       return getRawType(componentGenericType);
     } else if (type.isArray()) {
       return type.getComponentType();
@@ -262,33 +262,33 @@ public class Types {
     return null;
   }
 
-  public static Class<?> getMapKeyType(Type genericType) {
+  public static Class<?> getMapKeyType(final Type genericType) {
     if (genericType instanceof ParameterizedType) {
-      ParameterizedType parameterizedType = (ParameterizedType) genericType;
-      Type componentGenericType = parameterizedType.getActualTypeArguments()[0];
+      final ParameterizedType parameterizedType = (ParameterizedType) genericType;
+      final Type componentGenericType = parameterizedType.getActualTypeArguments()[0];
       return getRawType(componentGenericType);
     }
     return null;
   }
 
-  public static Class<?> getMapValueType(Type genericType) {
+  public static Class<?> getMapValueType(final Type genericType) {
     if (genericType instanceof ParameterizedType) {
-      ParameterizedType parameterizedType = (ParameterizedType) genericType;
-      Type componentGenericType = parameterizedType.getActualTypeArguments()[1];
+      final ParameterizedType parameterizedType = (ParameterizedType) genericType;
+      final Type componentGenericType = parameterizedType.getActualTypeArguments()[1];
       return getRawType(componentGenericType);
     }
     return null;
   }
 
-  public static Type resolveTypeVariables(Class<?> root, Type type) {
+  public static Type resolveTypeVariables(final Class<?> root, final Type type) {
     if (type instanceof TypeVariable) {
-      Type newType = resolveTypeVariable(root, (TypeVariable<?>) type);
-      return (newType == null) ? type : newType;
+      final Type newType = resolveTypeVariable(root, (TypeVariable<?>) type);
+      return newType == null ? type : newType;
     } else if (type instanceof ParameterizedType) {
       final ParameterizedType param = (ParameterizedType) type;
       final Type[] actuals = new Type[param.getActualTypeArguments().length];
       for (int i = 0; i < actuals.length; i++) {
-        Type newType = resolveTypeVariables(root, param.getActualTypeArguments()[i]);
+        final Type newType = resolveTypeVariables(root, param.getActualTypeArguments()[i]);
         actuals[i] = newType == null ? param.getActualTypeArguments()[i] : newType;
       }
       return new ParameterizedType() {
@@ -308,7 +308,7 @@ public class Types {
         }
       };
     } else if (type instanceof GenericArrayType) {
-      GenericArrayType arrayType = (GenericArrayType) type;
+      final GenericArrayType arrayType = (GenericArrayType) type;
       final Type componentType = resolveTypeVariables(root, arrayType.getGenericComponentType());
       if (componentType == null) {
         return type;
@@ -332,15 +332,15 @@ public class Types {
    * @param typeVariable  the type variable
    * @return actual type of the type variable
    */
-  public static Type resolveTypeVariable(Class<?> root, TypeVariable<?> typeVariable) {
+  public static Type resolveTypeVariable(final Class<?> root, final TypeVariable<?> typeVariable) {
     if (typeVariable.getGenericDeclaration() instanceof Class<?>) {
-      Class<?> classDeclaringTypeVariable = (Class<?>) typeVariable.getGenericDeclaration();
-      Type[] types = findParameterizedTypes(root, classDeclaringTypeVariable);
+      final Class<?> classDeclaringTypeVariable = (Class<?>) typeVariable.getGenericDeclaration();
+      final Type[] types = findParameterizedTypes(root, classDeclaringTypeVariable);
       if (types == null) {
         return null;
       }
       for (int i = 0; i < types.length; i++) {
-        TypeVariable<?> tv = classDeclaringTypeVariable.getTypeParameters()[i];
+        final TypeVariable<?> tv = classDeclaringTypeVariable.getTypeParameters()[i];
         if (tv.equals(typeVariable)) {
           return types[i];
         }
@@ -356,8 +356,8 @@ public class Types {
    * @param interfaceToFind  interface being looked for
    * @return type arguments of the interface
    */
-  public static Type[] getActualTypeArgumentsOfAnInterface(Class<?> classToSearch, Class<?> interfaceToFind) {
-    Type[] types = findParameterizedTypes(classToSearch, interfaceToFind);
+  public static Type[] getActualTypeArgumentsOfAnInterface(final Class<?> classToSearch, final Class<?> interfaceToFind) {
+    final Type[] types = findParameterizedTypes(classToSearch, interfaceToFind);
     if (types == null) {
       throw new RuntimeException("Unable to find type arguments of " + interfaceToFind);
     }
@@ -374,35 +374,35 @@ public class Types {
    * @param searchedFor  interface or class to search for
    * @return array of real types that fill it out
    */
-  public static Type[] findParameterizedTypes(Class<?> root, Class<?> searchedFor) {
+  public static Type[] findParameterizedTypes(final Class<?> root, final Class<?> searchedFor) {
     if (searchedFor.isInterface()) {
       return findInterfaceParameterizedTypes(root, null, searchedFor);
     }
     return findClassParameterizedTypes(root, null, searchedFor);
   }
 
-  public static Type[] findClassParameterizedTypes(Class<?> root, ParameterizedType rootType, Class<?> searchedForClass) {
+  public static Type[] findClassParameterizedTypes(final Class<?> root, final ParameterizedType rootType, final Class<?> searchedForClass) {
     if (Object.class.equals(root)) {
       return null;
     }
 
-    Map<String, Type> typeVarMap = populateParameterizedMap(root, rootType);
+    final Map<String, Type> typeVarMap = populateParameterizedMap(root, rootType);
 
-    Class<?> superclass = root.getSuperclass();
-    Type genericSuper = root.getGenericSuperclass();
+    final Class<?> superclass = root.getSuperclass();
+    final Type genericSuper = root.getGenericSuperclass();
 
     if (superclass.equals(searchedForClass)) {
       return extractTypes(typeVarMap, genericSuper);
     }
 
     if (genericSuper instanceof ParameterizedType) {
-      ParameterizedType intfParam = (ParameterizedType) genericSuper;
-      Type[] types = findClassParameterizedTypes(superclass, intfParam, searchedForClass);
+      final ParameterizedType intfParam = (ParameterizedType) genericSuper;
+      final Type[] types = findClassParameterizedTypes(superclass, intfParam, searchedForClass);
       if (types != null) {
         return extractTypeVariables(typeVarMap, types);
       }
     } else {
-      Type[] types = findClassParameterizedTypes(superclass, null, searchedForClass);
+      final Type[] types = findClassParameterizedTypes(superclass, null, searchedForClass);
       if (types != null) {
         return types;
       }
@@ -410,10 +410,10 @@ public class Types {
     return null;
   }
 
-  private static Map<String, Type> populateParameterizedMap(Class<?> root, ParameterizedType rootType) {
-    Map<String, Type> typeVarMap = new HashMap<String, Type>();
+  private static Map<String, Type> populateParameterizedMap(final Class<?> root, final ParameterizedType rootType) {
+    final Map<String, Type> typeVarMap = new HashMap<>();
     if (rootType != null) {
-      TypeVariable<? extends Class<?>>[] vars = root.getTypeParameters();
+      final TypeVariable<? extends Class<?>>[] vars = root.getTypeParameters();
       for (int i = 0; i < vars.length; i++) {
         typeVarMap.put(vars[i].getName(), rootType.getActualTypeArguments()[i]);
       }
@@ -421,23 +421,23 @@ public class Types {
     return typeVarMap;
   }
 
-  public static Type[] findInterfaceParameterizedTypes(Class<?> root, ParameterizedType rootType, Class<?> searchedForInterface)
+  public static Type[] findInterfaceParameterizedTypes(final Class<?> root, final ParameterizedType rootType, final Class<?> searchedForInterface)
   {
-    Map<String, Type> typeVarMap = populateParameterizedMap(root, rootType);
+    final Map<String, Type> typeVarMap = populateParameterizedMap(root, rootType);
 
     for (int i = 0; i < root.getInterfaces().length; i++) {
-      Class<?> sub = root.getInterfaces()[i];
-      Type genericSub = root.getGenericInterfaces()[i];
+      final Class<?> sub = root.getInterfaces()[i];
+      final Type genericSub = root.getGenericInterfaces()[i];
       if (sub.equals(searchedForInterface)) {
         return extractTypes(typeVarMap, genericSub);
       }
     }
 
     for (int i = 0; i < root.getInterfaces().length; i++) {
-      Type genericSub = root.getGenericInterfaces()[i];
-      Class<?> sub = root.getInterfaces()[i];
+      final Type genericSub = root.getGenericInterfaces()[i];
+      final Class<?> sub = root.getInterfaces()[i];
 
-      Type[] types = recurseSuperclassForInterface(searchedForInterface, typeVarMap, genericSub, sub);
+      final Type[] types = recurseSuperclassForInterface(searchedForInterface, typeVarMap, genericSub, sub);
       if (types != null) {
         return types;
       }
@@ -446,21 +446,21 @@ public class Types {
       return null;
     }
 
-    Class<?> superclass = root.getSuperclass();
-    Type genericSuper = root.getGenericSuperclass();
+    final Class<?> superclass = root.getSuperclass();
+    final Type genericSuper = root.getGenericSuperclass();
 
     return recurseSuperclassForInterface(searchedForInterface, typeVarMap, genericSuper, superclass);
   }
 
-  private static Type[] recurseSuperclassForInterface(Class<?> searchedForInterface, Map<String, Type> typeVarMap, Type genericSub, Class<?> sub) {
+  private static Type[] recurseSuperclassForInterface(final Class<?> searchedForInterface, final Map<String, Type> typeVarMap, final Type genericSub, final Class<?> sub) {
     if (genericSub instanceof ParameterizedType) {
-      ParameterizedType intfParam = (ParameterizedType) genericSub;
-      Type[] types = findInterfaceParameterizedTypes(sub, intfParam, searchedForInterface);
+      final ParameterizedType intfParam = (ParameterizedType) genericSub;
+      final Type[] types = findInterfaceParameterizedTypes(sub, intfParam, searchedForInterface);
       if (types != null) {
         return extractTypeVariables(typeVarMap, types);
       }
     } else {
-      Type[] types = findInterfaceParameterizedTypes(sub, null, searchedForInterface);
+      final Type[] types = findInterfaceParameterizedTypes(sub, null, searchedForInterface);
       if (types != null) {
         return types;
       }
@@ -468,10 +468,10 @@ public class Types {
     return null;
   }
 
-  private static Type[] extractTypeVariables(Map<String, Type> typeVarMap, Type[] types) {
+  private static Type[] extractTypeVariables(final Map<String, Type> typeVarMap, final Type[] types) {
     for (int j = 0; j < types.length; j++) {
       if (types[j] instanceof TypeVariable) {
-        TypeVariable<?> tv = (TypeVariable<?>) types[j];
+        final TypeVariable<?> tv = (TypeVariable<?>) types[j];
         types[j] = typeVarMap.get(tv.getName());
       } else {
         types[j] = types[j];
@@ -480,11 +480,11 @@ public class Types {
     return types;
   }
 
-  private static Type[] extractTypes(Map<String, Type> typeVarMap, Type genericSub) {
+  private static Type[] extractTypes(final Map<String, Type> typeVarMap, final Type genericSub) {
     if (genericSub instanceof ParameterizedType) {
-      ParameterizedType param = (ParameterizedType) genericSub;
-      Type[] types = param.getActualTypeArguments();
-      Type[] returnTypes = new Type[types.length];
+      final ParameterizedType param = (ParameterizedType) genericSub;
+      final Type[] types = param.getActualTypeArguments();
+      final Type[] returnTypes = new Type[types.length];
       System.arraycopy(types, 0, returnTypes, 0, types.length);
       extractTypeVariables(typeVarMap, returnTypes);
       return returnTypes;

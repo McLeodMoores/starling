@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.bbg.livedata.normalization;
@@ -35,28 +35,28 @@ public class BloombergRateRuleProvider implements SecurityRuleProvider {
   private static final NormalizationRule RULE_1000000 = new UnitChange(FIELDS, 0.000001);
 
   private final BloombergRateClassifier _classifier;
-  
+
   /**
    * A flag to control whether unknown security types cause normalization to fail (the default), or whether the value
    * will be passed through unnormalized. This may be controlled externally at runtime.
    */
   private volatile boolean _failUnknownSecurityType = true;
-  
-  public BloombergRateRuleProvider(BloombergRateClassifier classifier) {
+
+  public BloombergRateRuleProvider(final BloombergRateClassifier classifier) {
     _classifier = classifier;
   }
-  
+
   public boolean isFailUnknownSecurityType() {
     return _failUnknownSecurityType;
   }
-  
-  public void setFailUnknownSecurityType(boolean failUnknownSecurityType) {
+
+  public void setFailUnknownSecurityType(final boolean failUnknownSecurityType) {
     _failUnknownSecurityType = failUnknownSecurityType;
   }
 
   @Override
-  public NormalizationRule getRule(String securityUniqueId) {
-    Integer normalizationFactor = _classifier.getNormalizationFactor(securityUniqueId);
+  public NormalizationRule getRule(final String securityUniqueId) {
+    final Integer normalizationFactor = _classifier.getNormalizationFactor(securityUniqueId);
     if (normalizationFactor == null) {
       if (_failUnknownSecurityType) {
         throw new OpenGammaRuntimeException("Unable to determine security type for " + securityUniqueId);
@@ -84,5 +84,5 @@ public class BloombergRateRuleProvider implements SecurityRuleProvider {
         throw new OpenGammaRuntimeException("Unexpected normalization factor: " + normalizationFactor);
     }
   }
-  
+
 }

@@ -31,7 +31,7 @@ public final class BloombergDomainIdentifierResolver {
   /**
    * Prefixes used by Bloomberg.
    */
-  private static final Map<ExternalScheme, String> SCHEME_MAP = new LinkedHashMap<ExternalScheme, String>();
+  private static final Map<ExternalScheme, String> SCHEME_MAP = new LinkedHashMap<>();
   static {
     SCHEME_MAP.put(ExternalSchemes.BLOOMBERG_BUID, "/buid/");
     SCHEME_MAP.put(ExternalSchemes.BLOOMBERG_BUID_WEAK, "/buid/");
@@ -51,17 +51,17 @@ public final class BloombergDomainIdentifierResolver {
   //-------------------------------------------------------------------------
   /**
    * Converts an external ID to a bloomberg key.
-   * 
+   *
    * @param externalId  the external ID to convert, not null
    * @return the Bloomberg key, not null
    */
-  public static String toBloombergKey(ExternalId externalId) {
+  public static String toBloombergKey(final ExternalId externalId) {
     ArgumentChecker.notNull(externalId, "externalId");
-    
-    ExternalScheme scheme = externalId.getScheme();
+
+    final ExternalScheme scheme = externalId.getScheme();
     if (SCHEME_MAP.containsKey(scheme)) {
-      String prefix = SCHEME_MAP.get(scheme);
-      String id  = externalId.getValue();
+      final String prefix = SCHEME_MAP.get(scheme);
+      final String id  = externalId.getValue();
       return prefix != null ? prefix + id : id;
     }
     LOGGER.warn("Unknown ExternalScheme {}", externalId);
@@ -70,30 +70,30 @@ public final class BloombergDomainIdentifierResolver {
 
   /**
    * Converts an external ID to a bloomberg key.
-   * 
+   *
    * @param externalId  the external ID to convert, not null
    * @param dataProvider  the data provider, null or unknown calls {@link #toBloombergKey(ExternalId)}
    * @return the Bloomberg key, not null
    */
-  public static String toBloombergKeyWithDataProvider(ExternalId externalId, String dataProvider) {
+  public static String toBloombergKeyWithDataProvider(final ExternalId externalId, final String dataProvider) {
     ArgumentChecker.notNull(externalId, "externalId");
     if (dataProvider == null || dataProvider.contains(DATA_PROVIDER_UNKNOWN) || dataProvider.equalsIgnoreCase(DEFAULT_DATA_PROVIDER)) {
       return toBloombergKey(externalId);
     }
-    
-    ExternalScheme scheme = externalId.getScheme();
+
+    final ExternalScheme scheme = externalId.getScheme();
     if (SCHEME_MAP.containsKey(scheme)) {
-      String prefix = SCHEME_MAP.get(scheme);
-      StringBuilder buf = new StringBuilder();
+      final String prefix = SCHEME_MAP.get(scheme);
+      final StringBuilder buf = new StringBuilder();
       if (prefix != null) {
         buf.append(prefix);
       }
       if (scheme.equals(ExternalSchemes.BLOOMBERG_TICKER)) {
-        String id  = externalId.getValue().toUpperCase(Locale.US);
+        final String id  = externalId.getValue().toUpperCase(Locale.US);
         if (id.endsWith("EQUITY")) {
           buf.append(id);
         } else {
-          String[] splits = id.split(" ");
+          final String[] splits = id.split(" ");
           if (id.endsWith("CURNCY") || id.endsWith("INDEX")) {
             buf.append(splits[0]).append(" ").append(dataProvider);
           } else {
@@ -114,16 +114,16 @@ public final class BloombergDomainIdentifierResolver {
 
   /**
    * Selects the preferred external ID from a bundle.
-   * 
+   *
    * @param bundle  the bundle, not null
    * @return the preferred external ID, not null
    */
-  public static ExternalId resolvePreferredIdentifier(ExternalIdBundle bundle) {
+  public static ExternalId resolvePreferredIdentifier(final ExternalIdBundle bundle) {
     ArgumentChecker.notNull(bundle, "bundle");
     ArgumentChecker.isTrue(bundle.size() > 0, "Bundle must not be empty");
-    
-    for (ExternalScheme preferredScheme : SCHEME_MAP.keySet()) {
-      ExternalId preferredIdentifier = bundle.getExternalId(preferredScheme);
+
+    for (final ExternalScheme preferredScheme : SCHEME_MAP.keySet()) {
+      final ExternalId preferredIdentifier = bundle.getExternalId(preferredScheme);
       if (preferredIdentifier != null) {
         return preferredIdentifier;
       }

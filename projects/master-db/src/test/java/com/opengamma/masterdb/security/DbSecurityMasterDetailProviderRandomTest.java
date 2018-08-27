@@ -30,7 +30,7 @@ public class DbSecurityMasterDetailProviderRandomTest extends AbstractDbSecurity
    * @param databaseType
    */
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public DbSecurityMasterDetailProviderRandomTest(String databaseType, String databaseVersion) {
+  public DbSecurityMasterDetailProviderRandomTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion);
     LOGGER.info("running test for database={}", databaseType);
   }
@@ -38,7 +38,7 @@ public class DbSecurityMasterDetailProviderRandomTest extends AbstractDbSecurity
   //-------------------------------------------------------------------------
   @Override
   protected void doSetUp() {
-    DbSecurityMaster secMaster = new DbSecurityMaster(getDbConnector());
+    final DbSecurityMaster secMaster = new DbSecurityMaster(getDbConnector());
     secMaster.setDetailProvider(new HibernateSecurityMasterDetailProvider());
     LOGGER.debug("SecMaster initialization complete {}", secMaster);
     _testCase = new SecurityMasterTestCase(secMaster);
@@ -76,7 +76,7 @@ public class DbSecurityMasterDetailProviderRandomTest extends AbstractDbSecurity
   public void testEquityOptionSecurity() {
     _testCase.testEquityOptionSecurity();
   }
-  
+
 
   @Override
   public void testEquityBarrierOptionSecurity() {
@@ -101,13 +101,13 @@ public class DbSecurityMasterDetailProviderRandomTest extends AbstractDbSecurity
   @Override
   public void testFXOptionSecurity() {
     _testCase.testFXOptionSecurity();
-  } 
+  }
 
   @Override
   public void testNonDeliverableFXOptionSecurity() {
     _testCase.testNonDeliverableFXOptionSecurity();
-  } 
-  
+  }
+
   @Override
   public void testFXBarrierOptionSecurity() {
     _testCase.testFXBarrierOptionSecurity();
@@ -187,7 +187,7 @@ public class DbSecurityMasterDetailProviderRandomTest extends AbstractDbSecurity
   public void testNonDeliverableFXForwardSecurity() {
     _testCase.testNonDeliverableFXOptionSecurity();
   }
-  
+
   @Override
   public void testCapFloorSecurity() {
     _testCase.testCapFloorSecurity();
@@ -197,7 +197,7 @@ public class DbSecurityMasterDetailProviderRandomTest extends AbstractDbSecurity
   public void testCapFloorCMSSpreadSecurity() {
     _testCase.testCapFloorCMSSpreadSecurity();
   }
-  
+
   @Override
   public void testRawSecurity() {
     _testCase.testRawSecurity();
@@ -212,17 +212,17 @@ public class DbSecurityMasterDetailProviderRandomTest extends AbstractDbSecurity
   public void testSimpleZeroDepositSecurity() {
     return;
   }
-  
+
   @Override
   public void testPeriodicZeroDepositSecurity() {
     return;
   }
-  
+
   @Override
   public void testContinuousZeroDepositSecurity() {
     return;
   }
-  
+
   @Override
   public void testCDSSecurity() {
     _testCase.testCDSSecurity();
@@ -302,7 +302,7 @@ public class DbSecurityMasterDetailProviderRandomTest extends AbstractDbSecurity
   public void testIndexFamily() {
     _testCase.testIndexFamily();
   }
-  
 
-  
+
+
 }

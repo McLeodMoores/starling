@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.user.impl;
@@ -24,7 +24,7 @@ public class RemoteUserSource extends AbstractRemoteClient implements UserSource
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param baseUri the base target URI for all RESTful web services, not null
    */
   public RemoteUserSource(final URI baseUri) {
@@ -39,10 +39,10 @@ public class RemoteUserSource extends AbstractRemoteClient implements UserSource
 
   //-------------------------------------------------------------------------
   @Override
-  public UserAccount getAccount(String userName) {
+  public UserAccount getAccount(final String userName) {
     ArgumentChecker.notNull(userName, "userName");
 
-    URI uri = DataUserSourceUris.uriUserByName(getBaseUri(), userName);
+    final URI uri = DataUserSourceUris.uriUserByName(getBaseUri(), userName);
     return accessRemote(uri).get(UserAccount.class);
   }
 

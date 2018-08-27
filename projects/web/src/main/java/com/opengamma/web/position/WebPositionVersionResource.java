@@ -42,21 +42,21 @@ public class WebPositionVersionResource extends AbstractWebPositionResource {
   //-------------------------------------------------------------------------
   @GET
   public String getHTML() {
-    FlexiBean out = createRootData();
+    final FlexiBean out = createRootData();
     return getFreemarker().build(HTML_DIR + "positionversion.ftl", out);
   }
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  public Response getJSON(@Context Request request) {
-    EntityTag etag = new EntityTag(data().getVersioned().getUniqueId().toString());
-    ResponseBuilder builder = request.evaluatePreconditions(etag);
+  public Response getJSON(@Context final Request request) {
+    final EntityTag etag = new EntityTag(data().getVersioned().getUniqueId().toString());
+    final ResponseBuilder builder = request.evaluatePreconditions(etag);
     if (builder != null) {
       return builder.build();
     }
     data().getVersioned().getPosition().getSecurityLink().resolveQuiet(data().getSecuritySource());
-    FlexiBean out = createRootData();
-    String json = getFreemarker().build(JSON_DIR + "position.ftl", out);
+    final FlexiBean out = createRootData();
+    final String json = getFreemarker().build(JSON_DIR + "position.ftl", out);
     return Response.ok(json).tag(etag).build();
   }
 
@@ -65,28 +65,29 @@ public class WebPositionVersionResource extends AbstractWebPositionResource {
    * Creates the output root data.
    * @return the output root data, not null
    */
+  @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
-    PositionDocument latestPositionDoc = data().getPosition();
-    PositionDocument versionedPosition = (PositionDocument) data().getVersioned();
+    final FlexiBean out = super.createRootData();
+    final PositionDocument latestPositionDoc = data().getPosition();
+    final PositionDocument versionedPosition = data().getVersioned();
     out.put("latestPositionDoc", latestPositionDoc);
     out.put("latestPosition", latestPositionDoc.getPosition());
     out.put("positionDoc", versionedPosition);
     out.put("position", versionedPosition.getPosition());
     out.put("security", versionedPosition.getPosition().getSecurity());
     out.put("deleted", !latestPositionDoc.isLatest());
-    
+
     out.put("tradeAttrModel", getTradeAttributesModel());
     out.put(POSITION_XML, StringEscapeUtils.escapeJavaScript(getPositionXml(versionedPosition.getPosition())));
     return out;
   }
 
   private TradeAttributesModel getTradeAttributesModel() {
-    PositionDocument doc = data().getVersioned();
-    TradeAttributesModel getTradeAttributesModel = new TradeAttributesModel(doc.getPosition());
+    final PositionDocument doc = data().getVersioned();
+    final TradeAttributesModel getTradeAttributesModel = new TradeAttributesModel(doc.getPosition());
     return getTradeAttributesModel;
   }
-  
+
   //-------------------------------------------------------------------------
   /**
    * Builds a URI for this resource.
@@ -104,8 +105,8 @@ public class WebPositionVersionResource extends AbstractWebPositionResource {
    * @return the URI, not null
    */
   public static URI uri(final WebPositionsData data, final UniqueId overrideVersionId) {
-    String positionId = data.getBestPositionUriId(null);
-    String versionId = StringUtils.defaultString(overrideVersionId != null ? overrideVersionId.getVersion() : data.getUriVersionId());
+    final String positionId = data.getBestPositionUriId(null);
+    final String versionId = StringUtils.defaultString(overrideVersionId != null ? overrideVersionId.getVersion() : data.getUriVersionId());
     return data.getUriInfo().getBaseUriBuilder().path(WebPositionVersionResource.class).build(positionId, versionId);
   }
 

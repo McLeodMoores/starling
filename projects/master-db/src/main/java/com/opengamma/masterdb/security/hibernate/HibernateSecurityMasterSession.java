@@ -33,7 +33,7 @@ import com.opengamma.util.monitor.OperationTimer;
 
 /**
  * HibernateSecurityMaster session and utility methods implementation.
- * 
+ *
  */
 public class HibernateSecurityMasterSession implements HibernateSecurityMasterDao {
 
@@ -43,13 +43,13 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
   /**
    * The Hibernate session.
    */
-  private Session _session;
+  private final Session _session;
 
   /**
    * Creates an instance with a session.
    * @param session  the session, not null
    */
-  public HibernateSecurityMasterSession(Session session) {
+  public HibernateSecurityMasterSession(final Session session) {
     _session = session;
   }
 
@@ -64,19 +64,19 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
 
   //-------------------------------------------------------------------------
   // UTILITY METHODS
-  private <T extends EnumBean> T persistBean(T bean) {
-    Long id = (Long) getSession().save(bean);
+  private <T extends EnumBean> T persistBean(final T bean) {
+    final Long id = (Long) getSession().save(bean);
     getSession().flush();
     bean.setId(id);
     return bean;
   }
-  
+
   // SESSION LEVEL METHODS
   // Exchanges
   @Override
-  public ExchangeBean getOrCreateExchangeBean(String name,
-      String description) {
-    Query query = getSession().getNamedQuery("ExchangeBean.one");
+  public ExchangeBean getOrCreateExchangeBean(final String name,
+      final String description) {
+    final Query query = getSession().getNamedQuery("ExchangeBean.one");
     query.setString("name", name);
     ExchangeBean exchange = (ExchangeBean) query.uniqueResult();
     if (exchange == null) {
@@ -96,14 +96,14 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
   @SuppressWarnings("unchecked")
   @Override
   public List<ExchangeBean> getExchangeBeans() {
-    Query query = getSession().getNamedQuery("ExchangeBean.all");
+    final Query query = getSession().getNamedQuery("ExchangeBean.all");
     return query.list();
   }
 
   // Currencies
   @Override
-  public CurrencyBean getOrCreateCurrencyBean(String name) {
-    Query query = getSession().getNamedQuery("CurrencyBean.one");
+  public CurrencyBean getOrCreateCurrencyBean(final String name) {
+    final Query query = getSession().getNamedQuery("CurrencyBean.one");
     query.setString("name", name);
     CurrencyBean currency = (CurrencyBean) query.uniqueResult();
     if (currency == null) {
@@ -115,7 +115,7 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
   @SuppressWarnings("unchecked")
   @Override
   public List<CurrencyBean> getCurrencyBeans() {
-    Query query = getSession().getNamedQuery("CurrencyBean.all");
+    final Query query = getSession().getNamedQuery("CurrencyBean.all");
     return query.list();
   }
 
@@ -123,7 +123,7 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
   @Override
   public GICSCodeBean getOrCreateGICSCodeBean(final String name,
       final String description) {
-    Query query = getSession().getNamedQuery("GICSCodeBean.one");
+    final Query query = getSession().getNamedQuery("GICSCodeBean.one");
     query.setString("name", name);
     GICSCodeBean gicsCode = (GICSCodeBean) query.uniqueResult();
     if (gicsCode == null) {
@@ -143,10 +143,10 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
   @SuppressWarnings("unchecked")
   @Override
   public List<GICSCodeBean> getGICSCodeBeans() {
-    Query query = getSession().getNamedQuery("GICSCodeBean.all");
+    final Query query = getSession().getNamedQuery("GICSCodeBean.all");
     return query.list();
   }
-  
+
   // Daycount conventions
   @Override
   public DayCountBean getOrCreateDayCountBean(final String convention) {
@@ -158,14 +158,14 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
     }
     return bean;
   }
-  
+
   @SuppressWarnings ("unchecked")
   @Override
   public List<DayCountBean> getDayCountBeans() {
     final Query query = getSession().getNamedQuery("DayCountBean.all");
     return query.list();
   }
-  
+
   // Business day conventions
   @Override
   public BusinessDayConventionBean getOrCreateBusinessDayConventionBean(final String convention) {
@@ -185,7 +185,7 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
   }
 
   @SuppressWarnings("rawtypes")
-  private List getBeansFromNamedQuery(String namedQuery) {
+  private List getBeansFromNamedQuery(final String namedQuery) {
     final Query query = getSession().getNamedQuery(namedQuery);
     return query.list();
   }
@@ -219,7 +219,7 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
     }
     return bean;
   }
-  
+
   @SuppressWarnings ("unchecked")
   @Override
   public List<UnitBean> getUnitNameBeans() {
@@ -237,13 +237,13 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
     }
     return bean;
   }
-  
+
   @SuppressWarnings ("unchecked")
   @Override
   public List<IssuerTypeBean> getIssuerTypeBeans() {
     return getBeansFromNamedQuery("IssuerTypeBean.all");
   }
-  
+
 
   // MarketBean
   @Override
@@ -256,13 +256,13 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
     }
     return bean;
   }
-  
+
   @SuppressWarnings("unchecked")
   @Override
   public List<MarketBean> getMarketBeans() {
     return getBeansFromNamedQuery("MarketBean.all");
   }
-  
+
   // YieldConventionBean
   @Override
   public YieldConventionBean getOrCreateYieldConventionBean(final String convention) {
@@ -274,13 +274,13 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
     }
     return bean;
   }
-  
+
   @SuppressWarnings("unchecked")
   @Override
   public List<YieldConventionBean> getYieldConventionBeans() {
     return getBeansFromNamedQuery("YieldConventionBean.all");
   }
-  
+
   // GuaranteeTypeBean
   @Override
   public GuaranteeTypeBean getOrCreateGuaranteeTypeBean(final String type) {
@@ -292,14 +292,14 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
     }
     return bean;
   }
-  
+
   @SuppressWarnings("unchecked")
   @Override
   public List<GuaranteeTypeBean> getGuaranteeTypeBeans() {
     return getBeansFromNamedQuery("GuaranteeTypeBean.all");
   }
 
-  
+
   // CouponTypeBean
   @Override
   public CouponTypeBean getOrCreateCouponTypeBean(final String type) {
@@ -311,33 +311,33 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
     }
     return bean;
   }
-  
+
   @SuppressWarnings ("unchecked")
   @Override
   public List<CouponTypeBean> getCouponTypeBeans() {
     return getBeansFromNamedQuery("CouponTypeBean.all");
   }
-  
+
   @Override
-  public IndexWeightingTypeBean getOrCreateIndexWeightingTypeBean(String name) {
-    Query query = getSession().getNamedQuery("IndexWeightingTypeBean.one");
+  public IndexWeightingTypeBean getOrCreateIndexWeightingTypeBean(final String name) {
+    final Query query = getSession().getNamedQuery("IndexWeightingTypeBean.one");
     query.setString("name", name);
     IndexWeightingTypeBean indexWeightingType = (IndexWeightingTypeBean) query.uniqueResult();
     if (indexWeightingType == null) {
       indexWeightingType = persistBean(new IndexWeightingTypeBean(name));
-    } 
+    }
     return indexWeightingType;
   }
 
   @SuppressWarnings("unchecked")
   @Override
   public List<IndexWeightingTypeBean> getIndexWeightingTypeBeans() {
-    Query query = getSession().getNamedQuery("IndexWeightingTypeBean.all");
+    final Query query = getSession().getNamedQuery("IndexWeightingTypeBean.all");
     return query.list();
   }
-  
+
   // Identifiers
-  private IdentifierAssociationBean createIdentifierAssociationBean(Date now, String scheme, String identifier, SecurityBean security) {
+  private IdentifierAssociationBean createIdentifierAssociationBean(final Date now, final String scheme, final String identifier, final SecurityBean security) {
     final IdentifierAssociationBean association = new IdentifierAssociationBean(security, new ExternalIdBean(scheme, identifier));
     Query query = getSession().getNamedQuery("IdentifierAssociationBean.one.previousAssociation");
     query.setString("scheme", scheme);
@@ -355,16 +355,16 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
     if (other != null) {
       association.setValidEndDate(other.getValidEndDate());
     }
-    Long id = (Long) getSession().save(association);
+    final Long id = (Long) getSession().save(association);
     association.setId(id);
     getSession().flush();
     return association;
   }
-  
+
   @Override
   public IdentifierAssociationBean getCreateOrUpdateIdentifierAssociationBean(
-      Date now, String scheme, String identifier, SecurityBean security) {
-    Query query = getSession().getNamedQuery(
+      final Date now, final String scheme, final String identifier, final SecurityBean security) {
+    final Query query = getSession().getNamedQuery(
         "IdentifierAssociationBean.one.byDateIdentifier");
     query.setString("scheme", scheme);
     query.setString("identifier", identifier);
@@ -387,23 +387,23 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
   // only for testing.
   @SuppressWarnings ("unchecked")
   protected List<IdentifierAssociationBean> getAllAssociations() {
-    Query query = getSession().createQuery(
+    final Query query = getSession().createQuery(
         "from IdentifierAssociationBean as d");
     return query.list();
   }
 
   @Override
-  public void associateOrUpdateExternalIdWithSecurity(Date now,
-      ExternalId identifier, SecurityBean security) {
+  public void associateOrUpdateExternalIdWithSecurity(final Date now,
+      final ExternalId identifier, final SecurityBean security) {
     getCreateOrUpdateIdentifierAssociationBean(now, identifier
         .getScheme().getName(), identifier.getValue(), security);  // TODO: was .getFirstVersion()
   }
 
   // Generic Securities
   @Override
-  public SecurityBean getSecurityBean(final ManageableSecurity base, SecurityBeanOperation<?, ?> beanOperation) {
-    String beanType = beanOperation.getBeanClass().getSimpleName();
-    Query query = getSession().getNamedQuery(beanType + ".one.bySecurityId");
+  public SecurityBean getSecurityBean(final ManageableSecurity base, final SecurityBeanOperation<?, ?> beanOperation) {
+    final String beanType = beanOperation.getBeanClass().getSimpleName();
+    final Query query = getSession().getNamedQuery(beanType + ".one.bySecurityId");
     query.setLong("securityId", extractRowId(base.getUniqueId()));
     return (SecurityBean) query.uniqueResult();
   }
@@ -441,15 +441,15 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
   // Internal query methods for equities
   /*
    * @SuppressWarnings("unchecked")
-   * 
+   *
    * @Override
    * public List<EquitySecurityBean> getEquitySecurityBeans() {
    * Query query = getSession().getNamedQuery("EquitySecurityBean.all");
    * return query.list();
    * }
-   * 
+   *
    * @SuppressWarnings("unchecked")
-   * 
+   *
    * @Override
    * public List<EquitySecurityBean> getAllVersionsOfEquitySecurityBean(
    * EquitySecurityBean firstVersion) {
@@ -458,7 +458,7 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
    * query.setParameter("firstVersion", firstVersion);
    * return query.list();
    * }
-   * 
+   *
    * @Override
    * public EquitySecurityBean getCurrentEquitySecurityBean(Date now,
    * ExchangeBean exchange, String companyName, CurrencyBean currency) {
@@ -470,7 +470,7 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
    * query.setParameter("currency", currency);
    * return (EquitySecurityBean) query.uniqueResult();
    * }
-   * 
+   *
    * @Override
    * public EquitySecurityBean getCurrentEquitySecurityBean(Date now,
    * EquitySecurityBean firstVersion) {
@@ -480,7 +480,7 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
    * query.setDate("now", now);
    * return (EquitySecurityBean) query.uniqueResult();
    * }
-   * 
+   *
    * @Override
    * public EquitySecurityBean getCurrentLiveEquitySecurityBean(Date now,
    * ExchangeBean exchange, String companyName, CurrencyBean currency) {
@@ -492,7 +492,7 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
    * query.setDate("now", now);
    * return (EquitySecurityBean) query.uniqueResult();
    * }
-   * 
+   *
    * @Override
    * public EquitySecurityBean getCurrentLiveEquitySecurityBean(Date now,
    * EquitySecurityBean firstVersion) {
@@ -507,38 +507,38 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
   // Equity options
   /*
    * @SuppressWarnings("unchecked")
-   * 
+   *
    * @Override
    * public List<OptionSecurityBean> getEquityOptionSecurityBeans() {
    * Query query = getSession().getNamedQuery("EquityOptionSecurityBean.all");
    * return query.list();
    * }
    */
-  
+
   /*
    * @SuppressWarnings("unchecked")
-   * 
+   *
    * @Override
    * public List<OptionSecurityBean> getOptionSecurityBeans() {
    * Query query = getSession().getNamedQuery("OptionSecurityBean.all");
    * return query.list();
    * }
    */
-  
+
   @SuppressWarnings("unchecked")
   @Override
-  public List<BondIndexComponentBean> getBondIndexComponentBeans(BondIndexBean bondIndex) {
+  public List<BondIndexComponentBean> getBondIndexComponentBeans(final BondIndexBean bondIndex) {
     Query query;
     query = getSession().getNamedQuery("BondIndexComponentBean.many.byBondIndex");
     query.setParameter("bondIndex", bondIndex);
     return query.list();
   }
-  
+
   @Override
   public void persistBondIndexComponentBeans(final BondIndexBean bondIndex) {
-    OperationTimer timer = new OperationTimer(LOGGER, "persistFutureBundleBeans");
+    final OperationTimer timer = new OperationTimer(LOGGER, "persistFutureBundleBeans");
     final List<BondIndexComponentBean> componentBeans = bondIndex.getBondComponents();
-    for (BondIndexComponentBean componentBean : componentBeans) { 
+    for (final BondIndexComponentBean componentBean : componentBeans) {
       // now bond index has an id, we point the components at it
       componentBean.setBondIndex(bondIndex);
     }
@@ -546,7 +546,7 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
     // anything in the database with any timestamp that isn't null/null must be deleted
     // anything in the database, but not in the basket, must be deleted
     boolean beansUpdated = false;
-    for (BondIndexComponentBean dbComponentBean : dbComponentBeans) {
+    for (final BondIndexComponentBean dbComponentBean : dbComponentBeans) {
       if (!componentBeans.contains(dbComponentBean)) {
         getSession().delete(dbComponentBean);
         beansUpdated = true;
@@ -556,12 +556,12 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
       }
     }
     // anything not in the database, but in the basket, must be added (null/null)
-    for (BondIndexComponentBean beanBundle : componentBeans) {
+    for (final BondIndexComponentBean beanBundle : componentBeans) {
       if (!dbComponentBeans.contains(beanBundle)) {
         if (beanBundle.getId() != null) {
           getSession().update(beanBundle);
         } else {
-          Long id = (Long) getSession().save(beanBundle);
+          final Long id = (Long) getSession().save(beanBundle);
           beanBundle.setId(id);
         }
         beansUpdated = true;
@@ -572,21 +572,21 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
     }
     timer.finished();
   }
-  
+
   @SuppressWarnings("unchecked")
   @Override
-  public List<EquityIndexComponentBean> getEquityIndexComponentBeans(EquityIndexBean equityIndex) {
+  public List<EquityIndexComponentBean> getEquityIndexComponentBeans(final EquityIndexBean equityIndex) {
     Query query;
     query = getSession().getNamedQuery("EquityIndexComponentBean.many.byEquityIndex");
     query.setParameter("equityIndex", equityIndex);
     return query.list();
   }
-  
+
   @Override
   public void persistEquityIndexComponentBeans(final EquityIndexBean equityIndex) {
-    OperationTimer timer = new OperationTimer(LOGGER, "persistFutureBundleBeans");
+    final OperationTimer timer = new OperationTimer(LOGGER, "persistFutureBundleBeans");
     final List<EquityIndexComponentBean> componentBeans = equityIndex.getEquityComponents();
-    for (EquityIndexComponentBean componentBean : componentBeans) { 
+    for (final EquityIndexComponentBean componentBean : componentBeans) {
       // now equity index has an id, we point the components at it
       componentBean.setEquityIndex(equityIndex);
     }
@@ -594,7 +594,7 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
     // anything in the database with any timestamp that isn't null/null must be deleted
     // anything in the database, but not in the basket, must be deleted
     boolean beansUpdated = false;
-    for (EquityIndexComponentBean dbComponentBean : dbComponentBeans) {
+    for (final EquityIndexComponentBean dbComponentBean : dbComponentBeans) {
       if (!componentBeans.contains(dbComponentBean)) {
         getSession().delete(dbComponentBean);
       } else {
@@ -603,12 +603,12 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
       beansUpdated = true;
     }
     // anything not in the database, but in the basket, must be added (null/null)
-    for (EquityIndexComponentBean beanBundle : componentBeans) {
+    for (final EquityIndexComponentBean beanBundle : componentBeans) {
       if (!dbComponentBeans.contains(beanBundle)) {
         if (beanBundle.getId() != null) {
           getSession().update(beanBundle);
         } else {
-          Long id = (Long) getSession().save(beanBundle);
+          final Long id = (Long) getSession().save(beanBundle);
           beanBundle.setId(id);
         }
         beansUpdated = true;
@@ -620,10 +620,10 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
     timer.finished();
   }
   // Futures
-  
+
   @SuppressWarnings("unchecked")
   @Override
-  public List<FutureBundleBean> getFutureBundleBeans(Date now, FutureSecurityBean future) {
+  public List<FutureBundleBean> getFutureBundleBeans(final Date now, final FutureSecurityBean future) {
     Query query;
     if (now != null) {
       query = getSession().getNamedQuery("FutureBundleBean.many.byDateFuture");
@@ -634,24 +634,24 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
     query.setParameter("future", future);
     return query.list();
   }
-  
+
   @Override
-  public FutureBundleBean nextFutureBundleBean(Date now, FutureSecurityBean future) {
-    Query query = getSession().getNamedQuery("FutureBundleBean.one.nextBundle");
+  public FutureBundleBean nextFutureBundleBean(final Date now, final FutureSecurityBean future) {
+    final Query query = getSession().getNamedQuery("FutureBundleBean.one.nextBundle");
     query.setTimestamp("now", now);
     query.setParameter("future", future);
     return (FutureBundleBean) query.uniqueResult();
   }
-  
+
   @Override
   public void persistFutureBundleBeans(final Date now, final FutureSecurityBean future) {
-    OperationTimer timer = new OperationTimer(LOGGER, "persistFutureBundleBeans");
+    final OperationTimer timer = new OperationTimer(LOGGER, "persistFutureBundleBeans");
     final Set<FutureBundleBean> beanBasket = future.getBasket();
     final List<FutureBundleBean> dbBasket = getFutureBundleBeans(now, future);
     if (now != null) {
       // anything in the database (at this timestamp), but not in the basket must be "terminated" at this timestamp
       boolean beansUpdated = false;
-      for (FutureBundleBean dbBundle : dbBasket) {
+      for (final FutureBundleBean dbBundle : dbBasket) {
         if (!beanBasket.contains(dbBundle)) {
           dbBundle.setEndDate(now);
           getSession().update(dbBundle);
@@ -663,7 +663,7 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
         beansUpdated = false;
       }
       // anything not in the database (at this timestamp), but in the basket must be added:
-      for (FutureBundleBean beanBundle : beanBasket) {
+      for (final FutureBundleBean beanBundle : beanBasket) {
         if (!dbBasket.contains(beanBundle)) {
           final FutureBundleBean next = nextFutureBundleBean(now, future);
           if (next != null) {
@@ -677,7 +677,7 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
             if (beanBundle.getId() != null) {
               getSession().update(beanBundle);
             } else {
-              Long id = (Long) getSession().save(beanBundle);
+              final Long id = (Long) getSession().save(beanBundle);
               beanBundle.setId(id);
             }
           }
@@ -691,11 +691,11 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
       // anything in the database with any timestamp that isn't null/null must be deleted
       // anything in the database, but not in the basket, must be deleted
       boolean beansUpdated = false;
-      for (FutureBundleBean dbBundle : dbBasket) {
+      for (final FutureBundleBean dbBundle : dbBasket) {
         if (!beanBasket.contains(dbBundle)) {
           getSession().delete(dbBundle);
           beansUpdated = true;
-        } else if ((dbBundle.getStartDate() != null) || (dbBundle.getEndDate() != null)) {
+        } else if (dbBundle.getStartDate() != null || dbBundle.getEndDate() != null) {
           dbBundle.setStartDate(null);
           dbBundle.setEndDate(null);
           getSession().update(dbBundle);
@@ -703,14 +703,14 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
         }
       }
       // anything not in the database, but in the basket, must be added (null/null)
-      for (FutureBundleBean beanBundle : beanBasket) {
+      for (final FutureBundleBean beanBundle : beanBasket) {
         if (!dbBasket.contains(beanBundle)) {
           beanBundle.setStartDate(null);
           beanBundle.setEndDate(null);
           if (beanBundle.getId() != null) {
             getSession().update(beanBundle);
           } else {
-            Long id = (Long) getSession().save(beanBundle);
+            final Long id = (Long) getSession().save(beanBundle);
             beanBundle.setId(id);
           }
           beansUpdated = true;
@@ -724,8 +724,8 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
   }
 
   @Override
-  public ContractCategoryBean getOrCreateContractCategoryBean(String name) {
-    Query query = getSession().getNamedQuery("ContractCategoryBean.one");
+  public ContractCategoryBean getOrCreateContractCategoryBean(final String name) {
+    final Query query = getSession().getNamedQuery("ContractCategoryBean.one");
     query.setString("name", name);
     ContractCategoryBean contractCategory = (ContractCategoryBean) query.uniqueResult();
     if (contractCategory == null) {
@@ -744,13 +744,13 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
   protected long extractRowId(final UniqueId id) {
     try {
       return Long.parseLong(id.getValue()) + Long.parseLong(id.getVersion());
-    } catch (NumberFormatException ex) {
+    } catch (final NumberFormatException ex) {
       throw new IllegalArgumentException("UniqueId is not from this security master: " + id, ex);
     }
   }
-  
+
   @Override
-  public StubTypeBean getOrCreateStubTypeBean(String name) {
+  public StubTypeBean getOrCreateStubTypeBean(final String name) {
     final Query query = getSession().getNamedQuery("StubTypeBean.one");
     query.setString("name", name);
     StubTypeBean bean = (StubTypeBean) query.uniqueResult();
@@ -759,9 +759,9 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
     }
     return bean;
   }
-  
+
   @Override
-  public DebtSeniorityBean getOrCreateDebtSeniorityBean(String name) {
+  public DebtSeniorityBean getOrCreateDebtSeniorityBean(final String name) {
     final Query query = getSession().getNamedQuery("DebtSeniorityBean.one");
     query.setString("name", name);
     DebtSeniorityBean bean = (DebtSeniorityBean) query.uniqueResult();
@@ -772,7 +772,7 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
   }
 
   @Override
-  public RestructuringClauseBean getOrCreateRestructuringCleanBean(String name) {
+  public RestructuringClauseBean getOrCreateRestructuringCleanBean(final String name) {
     final Query query = getSession().getNamedQuery("RestructuringClauseBean.one");
     query.setString("name", name);
     RestructuringClauseBean bean = (RestructuringClauseBean) query.uniqueResult();
@@ -784,8 +784,8 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
 
   //CDSI Family
   @Override
-  public CDSIndexFamilyBean getOrCreateCDSIFamilyBean(String family) {
-    Query query = getSession().getNamedQuery("CDSIndexFamilyBean.one");
+  public CDSIndexFamilyBean getOrCreateCDSIFamilyBean(final String family) {
+    final Query query = getSession().getNamedQuery("CDSIndexFamilyBean.one");
     query.setString("name", family);
     CDSIndexFamilyBean familyBean = (CDSIndexFamilyBean) query.uniqueResult();
     if (familyBean == null) {
@@ -793,13 +793,13 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
     }
     return familyBean;
   }
-  
+
   @SuppressWarnings("unchecked")
   @Override
   public List<CDSIndexFamilyBean> getCDSIFamilyBeans() {
     return getBeansFromNamedQuery("CDSIndexFamilyBean.all");
   }
-  
+
   //Tenors
   @Override
   public TenorBean getOrCreateTenorBean(final String tenor) {
@@ -817,5 +817,5 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
   public List<TenorBean> getTenorBeans() {
     return getBeansFromNamedQuery("TenorBean.all");
   }
-  
+
 }

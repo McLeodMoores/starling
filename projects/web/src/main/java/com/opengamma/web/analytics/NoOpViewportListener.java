@@ -11,17 +11,17 @@ package com.opengamma.web.analytics;
 /* package */ class NoOpViewportListener implements ViewportListener {
 
   @Override
-  public void viewportCreated(ViewportDefinition viewportDef, GridStructure gridStructure) {
+  public void viewportCreated(final ViewportDefinition viewportDef, final GridStructure gridStructure) {
     // do nothing
   }
 
   @Override
-  public void viewportUpdated(ViewportDefinition currentDef, ViewportDefinition newDef, GridStructure gridStructure) {
+  public void viewportUpdated(final ViewportDefinition currentDef, final ViewportDefinition newDef, final GridStructure gridStructure) {
     // do nothing
   }
 
   @Override
-  public void viewportDeleted(ViewportDefinition viewportDef, GridStructure gridStructure) {
+  public void viewportDeleted(final ViewportDefinition viewportDef, final GridStructure gridStructure) {
     // do nothing
   }
 }

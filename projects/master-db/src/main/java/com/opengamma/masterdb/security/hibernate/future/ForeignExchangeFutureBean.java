@@ -33,7 +33,7 @@ public class ForeignExchangeFutureBean extends FutureSecurityBean {
   private CurrencyBean _denominator;
 
   @Override
-  public <T> T accept(Visitor<T> visitor) {
+  public <T> T accept(final Visitor<T> visitor) {
     return visitor.visitFXFutureType(this);
   }
 

@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.historicaltimeseries.impl;
@@ -41,7 +41,7 @@ public class RemoteHistoricalTimeSeriesResolver extends AbstractRemoteClient imp
     _changeManager = new BasicChangeManager();
   }
 
-  public RemoteHistoricalTimeSeriesResolver(final URI baseUri, ChangeManager changeManager) {
+  public RemoteHistoricalTimeSeriesResolver(final URI baseUri, final ChangeManager changeManager) {
     super(baseUri);
     _changeManager = changeManager;
   }
@@ -52,7 +52,7 @@ public class RemoteHistoricalTimeSeriesResolver extends AbstractRemoteClient imp
   }
 
   private class Adjuster implements HistoricalTimeSeriesAdjuster {
-    
+
     private final URI _base;
     private final ExternalIdBundle _bundle;
     private final String _adjustment;
@@ -93,7 +93,7 @@ public class RemoteHistoricalTimeSeriesResolver extends AbstractRemoteClient imp
     try {
       final FudgeDeserializer fdc = new FudgeDeserializer(getFudgeContext());
       final UriBuilder uri = UriBuilder.fromUri(getBaseUri()).path("resolve");
-      for (ExternalId id : identifierBundle) {
+      for (final ExternalId id : identifierBundle) {
         uri.segment("id", id.toString());
       }
       if (identifierValidityDate != null) {
@@ -116,8 +116,8 @@ public class RemoteHistoricalTimeSeriesResolver extends AbstractRemoteClient imp
       final String adjustment = response.getString("adjustment");
       return new HistoricalTimeSeriesResolutionResult(
           fdc.fieldValueToObject(ManageableHistoricalTimeSeriesInfo.class, response.getByName("info")),
-          (adjustment != null) ? new Adjuster(req, identifierBundle, adjustment) : null);
-    } catch (UniformInterfaceException404NotFound e) {
+          adjustment != null ? new Adjuster(req, identifierBundle, adjustment) : null);
+    } catch (final UniformInterfaceException404NotFound e) {
       return null;
     }
   }

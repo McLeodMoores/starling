@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.user.impl;
@@ -71,13 +71,13 @@ public class SimpleUserPrincipals implements Bean, UserPrincipals, Serializable 
   //-------------------------------------------------------------------------
   /**
    * Creates a {@code SimpleUserPrincipals} from another instance.
-   * 
+   *
    * @param principalsToCopy  the principals to copy, not null
    * @return the new principals, not null
    */
-  public static SimpleUserPrincipals from(UserPrincipals principalsToCopy) {
+  public static SimpleUserPrincipals from(final UserPrincipals principalsToCopy) {
     ArgumentChecker.notNull(principalsToCopy, "profileToCopy");
-    SimpleUserPrincipals copy = new SimpleUserPrincipals();
+    final SimpleUserPrincipals copy = new SimpleUserPrincipals();
     copy.setUserName(principalsToCopy.getUserName());
     copy.setAlternateIds(principalsToCopy.getAlternateIds());
     copy.setNetworkAddress(principalsToCopy.getNetworkAddress());
@@ -89,13 +89,13 @@ public class SimpleUserPrincipals implements Bean, UserPrincipals, Serializable 
    * Creates a {@code SimpleUserPrincipals} from an account.
    * <p>
    * The network address will be null.
-   * 
+   *
    * @param account  the account to copy, not null
    * @return the new principals, not null
    */
-  public static SimpleUserPrincipals from(UserAccount account) {
+  public static SimpleUserPrincipals from(final UserAccount account) {
     ArgumentChecker.notNull(account, "account");
-    SimpleUserPrincipals principals = new SimpleUserPrincipals();
+    final SimpleUserPrincipals principals = new SimpleUserPrincipals();
     principals.setUserName(account.getUserName());
     principals.setAlternateIds(account.getAlternateIds());
     principals.setEmailAddress(account.getEmailAddress());

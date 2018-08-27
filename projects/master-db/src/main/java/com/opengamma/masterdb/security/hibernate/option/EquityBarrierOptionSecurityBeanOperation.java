@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.option;
@@ -27,7 +27,7 @@ public final class EquityBarrierOptionSecurityBeanOperation  extends AbstractSec
    * Singleton
    */
   public static final EquityBarrierOptionSecurityBeanOperation INSTANCE = new EquityBarrierOptionSecurityBeanOperation();
-  
+
   private EquityBarrierOptionSecurityBeanOperation() {
     super(EquityBarrierOptionSecurity.SECURITY_TYPE, EquityBarrierOptionSecurity.class, EquityBarrierOptionSecurityBean.class);
   }
@@ -43,31 +43,31 @@ public final class EquityBarrierOptionSecurityBeanOperation  extends AbstractSec
     bean.setCurrency(secMasterSession.getOrCreateCurrencyBean(security.getCurrency().getCode()));
     bean.setExchange(secMasterSession.getOrCreateExchangeBean(security.getExchange(), ""));
     bean.setPointValue(security.getPointValue());
-    
+
     bean.setBarrierType(security.getBarrierType());
     bean.setBarrierDirection(security.getBarrierDirection());
     bean.setMonitoringType(security.getMonitoringType());
     bean.setSamplingFrequency(security.getSamplingFrequency());
     bean.setBarrierLevel(security.getBarrierLevel());
-    
+
     return bean;
   }
 
   @Override
-  public EquityBarrierOptionSecurity createSecurity(OperationContext context, EquityBarrierOptionSecurityBean bean) {
+  public EquityBarrierOptionSecurity createSecurity(final OperationContext context, final EquityBarrierOptionSecurityBean bean) {
     final ExerciseType exerciseType = bean.getOptionExerciseType().accept(new ExerciseTypeVisitorImpl());
 
-    EquityBarrierOptionSecurity sec = new EquityBarrierOptionSecurity(bean.getOptionType(), 
-        bean.getStrike(), 
-        currencyBeanToCurrency(bean.getCurrency()), 
-        externalIdBeanToExternalId(bean.getUnderlying()), 
-        exerciseType, 
-        expiryBeanToExpiry(bean.getExpiry()), 
-        bean.getPointValue(), 
+    final EquityBarrierOptionSecurity sec = new EquityBarrierOptionSecurity(bean.getOptionType(),
+        bean.getStrike(),
+        currencyBeanToCurrency(bean.getCurrency()),
+        externalIdBeanToExternalId(bean.getUnderlying()),
+        exerciseType,
+        expiryBeanToExpiry(bean.getExpiry()),
+        bean.getPointValue(),
         bean.getExchange().getName(),
-        bean.getBarrierType(), 
-        bean.getBarrierDirection(), 
-        bean.getMonitoringType(), 
+        bean.getBarrierType(),
+        bean.getBarrierDirection(),
+        bean.getMonitoringType(),
         bean.getSamplingFrequency(),
         bean.getBarrierLevel());
     return sec;

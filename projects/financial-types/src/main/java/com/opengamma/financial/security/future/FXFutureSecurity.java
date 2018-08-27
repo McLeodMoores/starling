@@ -51,8 +51,8 @@ public class FXFutureSecurity extends FutureSecurity {
     super();
   }
 
-  public FXFutureSecurity(Expiry expiry, String tradingExchange, String settlementExchange, Currency currency, double unitAmount,
-      Currency numerator, Currency denominator, String category) {
+  public FXFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency, final double unitAmount,
+      final Currency numerator, final Currency denominator, final String category) {
     super(expiry, tradingExchange, settlementExchange, currency, unitAmount, category);
     setNumerator(numerator);
     setDenominator(denominator);
@@ -60,7 +60,7 @@ public class FXFutureSecurity extends FutureSecurity {
 
   //-------------------------------------------------------------------------
   @Override
-  public <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitFXFutureSecurity(this);
   }
 

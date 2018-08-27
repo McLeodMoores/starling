@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.user.impl;
@@ -68,7 +68,7 @@ public class DataUserMasterResource extends AbstractDataResource {
 
   //-------------------------------------------------------------------------
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
@@ -81,99 +81,99 @@ public class DataUserMasterResource extends AbstractDataResource {
 
   @POST
   @Path("userSearches")
-  public Response search(UserSearchRequest request) {
-    UserSearchResult result = getUserMaster().search(request);
+  public Response search(final UserSearchRequest request) {
+    final UserSearchResult result = getUserMaster().search(request);
     return responseOkObject(result);
   }
 
   @POST
   @Path("users")
-  public Response add(@Context UriInfo uriInfo, ManageableUser user) {
-    UniqueId result = getUserMaster().add(user);
-    URI createdUri = DataUserMasterUris.uriUserById(uriInfo.getBaseUri(), result);
+  public Response add(@Context final UriInfo uriInfo, final ManageableUser user) {
+    final UniqueId result = getUserMaster().add(user);
+    final URI createdUri = DataUserMasterUris.uriUserById(uriInfo.getBaseUri(), result);
     return responseCreatedObject(createdUri, result);
   }
 
   //-------------------------------------------------------------------------
   @GET
   @Path("users/{objectId}")
-  public Response getById(@PathParam("objectId") String idStr) {
-    ObjectId id = ObjectId.parse(idStr);
-    ManageableUser result = getUserMaster().getById(id);
+  public Response getById(@PathParam("objectId") final String idStr) {
+    final ObjectId id = ObjectId.parse(idStr);
+    final ManageableUser result = getUserMaster().getById(id);
     return responseOkObject(result);
   }
 
   @PUT
   @Path("users/{objectId}")
-  public Response updateById(@Context UriInfo uriInfo, @PathParam("objectId") String idStr, ManageableUser user) {
-    ObjectId id = ObjectId.parse(idStr);
+  public Response updateById(@Context final UriInfo uriInfo, @PathParam("objectId") final String idStr, final ManageableUser user) {
+    final ObjectId id = ObjectId.parse(idStr);
     if (id.equals(user.getObjectId()) == false) {
       throw new IllegalArgumentException("ObjectId of user does not match URI");
     }
-    UniqueId result = getUserMaster().update(user);
+    final UniqueId result = getUserMaster().update(user);
     return responseOkObject(result);
   }
 
   @DELETE
   @Path("users/{objectId}")
-  public void removeById(@PathParam("objectId") String idStr) {
-    ObjectId id = ObjectId.parse(idStr);
+  public void removeById(@PathParam("objectId") final String idStr) {
+    final ObjectId id = ObjectId.parse(idStr);
     getUserMaster().removeById(id);
   }
 
   @GET
   @Path("users/{objectId}/eventHistory")
-  public Response eventHistoryById(@PathParam("objectId") String idStr) {
-    ObjectId id = ObjectId.parse(idStr);
-    UserEventHistoryRequest request = new UserEventHistoryRequest(id);
-    UserEventHistoryResult result = getUserMaster().eventHistory(request);
+  public Response eventHistoryById(@PathParam("objectId") final String idStr) {
+    final ObjectId id = ObjectId.parse(idStr);
+    final UserEventHistoryRequest request = new UserEventHistoryRequest(id);
+    final UserEventHistoryResult result = getUserMaster().eventHistory(request);
     return responseOkObject(result);
   }
 
   //-------------------------------------------------------------------------
   @GET
   @Path("users/exists/{userName}")
-  public Response nameExists(@PathParam("userName") String userName) {
-    boolean exists = getUserMaster().nameExists(userName);
-    return (exists ? responseOk() : Response.status(Status.NOT_FOUND).build());
+  public Response nameExists(@PathParam("userName") final String userName) {
+    final boolean exists = getUserMaster().nameExists(userName);
+    return exists ? responseOk() : Response.status(Status.NOT_FOUND).build();
   }
 
   @GET
   @Path("users/name/{userName}")
-  public Response getByName(@PathParam("userName") String userName) {
-    ManageableUser result = getUserMaster().getByName(userName);
+  public Response getByName(@PathParam("userName") final String userName) {
+    final ManageableUser result = getUserMaster().getByName(userName);
     return responseOkObject(result);
   }
 
   @PUT
   @Path("users/name/{userName}")
-  public Response updateByName(@Context UriInfo uriInfo, @PathParam("userName") String userName, ManageableUser user) {
-    ManageableUser current = getUserMaster().getByName(userName);
+  public Response updateByName(@Context final UriInfo uriInfo, @PathParam("userName") final String userName, final ManageableUser user) {
+    final ManageableUser current = getUserMaster().getByName(userName);
     if (current.getObjectId().equals(user.getObjectId()) == false) {
       throw new IllegalArgumentException("User does not match URI");
     }
-    UniqueId result = getUserMaster().update(user);
+    final UniqueId result = getUserMaster().update(user);
     return responseOkObject(result);
   }
 
   @DELETE
   @Path("users/name/{userName}")
-  public void removeByName(@PathParam("userName") String userName) {
+  public void removeByName(@PathParam("userName") final String userName) {
     getUserMaster().removeByName(userName);
   }
 
   @GET
   @Path("users/name/{userName}/eventHistory")
-  public Response eventHistoryByName(@PathParam("userName") String userName) {
-    UserEventHistoryRequest request = new UserEventHistoryRequest(userName);
-    UserEventHistoryResult result = getUserMaster().eventHistory(request);
+  public Response eventHistoryByName(@PathParam("userName") final String userName) {
+    final UserEventHistoryRequest request = new UserEventHistoryRequest(userName);
+    final UserEventHistoryResult result = getUserMaster().eventHistory(request);
     return responseOkObject(result);
   }
 
   @GET
   @Path("users/name/{userName}/account")
-  public Response accountByName(@PathParam("userName") String userName) {
-    UserAccount account = getUserMaster().getAccount(userName);
+  public Response accountByName(@PathParam("userName") final String userName) {
+    final UserAccount account = getUserMaster().getAccount(userName);
     return responseOkObject(account);
   }
 }

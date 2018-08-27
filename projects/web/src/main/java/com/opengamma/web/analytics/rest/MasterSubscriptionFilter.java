@@ -31,10 +31,10 @@ public class MasterSubscriptionFilter implements ResourceFilter {
   private final ConnectionManager _updateManager;
   private final HttpServletRequest _servletRequest;
 
-  public MasterSubscriptionFilter(ConnectionManager updateManager,
-                                  List<MasterType> masterTypes,
-                                  HttpContext httpContext,
-                                  HttpServletRequest servletRequest) {
+  public MasterSubscriptionFilter(final ConnectionManager updateManager,
+                                  final List<MasterType> masterTypes,
+                                  final HttpContext httpContext,
+                                  final HttpServletRequest servletRequest) {
     _httpContext = httpContext;
     _updateManager = updateManager;
     _masterTypes = masterTypes;
@@ -69,7 +69,7 @@ public class MasterSubscriptionFilter implements ResourceFilter {
     /**
      * @param masterTypes The masters whose data is returned by the REST method
      */
-    public ResponseFilter(List<MasterType> masterTypes) {
+    public ResponseFilter(final List<MasterType> masterTypes) {
       _masterTypes = masterTypes;
     }
 
@@ -81,17 +81,17 @@ public class MasterSubscriptionFilter implements ResourceFilter {
      * @return The unmodified response
      */
     @Override
-    public ContainerResponse filter(ContainerRequest request, ContainerResponse response) {
+    public ContainerResponse filter(final ContainerRequest request, final ContainerResponse response) {
       // TODO check response status
-      String clientId = FilterUtils.getClientId(request, _httpContext);
+      final String clientId = FilterUtils.getClientId(request, _httpContext);
       // don't subscribe if there's no client ID
       if (clientId == null) {
         return response;
       }
-      String userId = (AuthUtils.isPermissive() ? null : FilterUtils.getUserId(_httpContext));
-      String url = _servletRequest.getRequestURI();
+      final String userId = AuthUtils.isPermissive() ? null : FilterUtils.getUserId(_httpContext);
+      final String url = _servletRequest.getRequestURI();
       // TODO should we only subscribe if there were query params, i.e. it was a search request, not just a request for the search page
-      for (MasterType masterType : _masterTypes) {
+      for (final MasterType masterType : _masterTypes) {
         _updateManager.subscribe(userId, clientId, masterType, url);
       }
       return response;

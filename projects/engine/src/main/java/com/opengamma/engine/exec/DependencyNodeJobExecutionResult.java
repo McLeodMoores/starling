@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.exec;
@@ -22,12 +22,12 @@ public class DependencyNodeJobExecutionResult {
 
   /**
    * Constructs an instance.
-   * 
+   *
    * @param computeNodeId the identifier of the compute node on which the dependency node was executed, not null
    * @param jobResultItem the calculation job result item, not null
    * @param aggregatedExecutionLog the aggregated execution log for the job and its inputs, not null
    */
-  public DependencyNodeJobExecutionResult(String computeNodeId, CalculationJobResultItem jobResultItem, AggregatedExecutionLog aggregatedExecutionLog) {
+  public DependencyNodeJobExecutionResult(final String computeNodeId, final CalculationJobResultItem jobResultItem, final AggregatedExecutionLog aggregatedExecutionLog) {
     ArgumentChecker.notNull(computeNodeId, "computeNodeId");
     ArgumentChecker.notNull(jobResultItem, "jobResultItem");
     ArgumentChecker.notNull(aggregatedExecutionLog, "aggregatedExecutionLog");
@@ -38,7 +38,7 @@ public class DependencyNodeJobExecutionResult {
 
   /**
    * Gets the identifier of the compute node on which the dependency node was executed.
-   * 
+   *
    * @return the compute node identifier, not null
    */
   public String getComputeNodeId() {
@@ -47,7 +47,7 @@ public class DependencyNodeJobExecutionResult {
 
   /**
    * Gets the calculation job result item.
-   * 
+   *
    * @return the calculation job result item, not null
    */
   public CalculationJobResultItem getJobResultItem() {
@@ -56,7 +56,7 @@ public class DependencyNodeJobExecutionResult {
 
   /**
    * Gets the aggregated execution log for the job and its inputs.
-   * 
+   *
    * @return the aggregated execution log for the job and its inputs, not null
    */
   public AggregatedExecutionLog getAggregatedExecutionLog() {
@@ -75,7 +75,7 @@ public class DependencyNodeJobExecutionResult {
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -85,7 +85,7 @@ public class DependencyNodeJobExecutionResult {
     if (!(obj instanceof DependencyNodeJobExecutionResult)) {
       return false;
     }
-    DependencyNodeJobExecutionResult other = (DependencyNodeJobExecutionResult) obj;
+    final DependencyNodeJobExecutionResult other = (DependencyNodeJobExecutionResult) obj;
     return _computeNodeId.equals(other._computeNodeId)
         && _jobResultItem.equals(other._jobResultItem)
         && _aggregatedExecutionLog.equals(other._aggregatedExecutionLog);

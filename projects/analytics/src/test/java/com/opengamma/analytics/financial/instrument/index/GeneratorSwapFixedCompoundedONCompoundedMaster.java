@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.instrument.index;
@@ -19,7 +19,7 @@ import com.opengamma.financial.convention.daycount.DayCounts;
 /**
  * A list of generators for swaps Fixed/ON available for tests.
  */
-public class GeneratorSwapFixedCompoundedONCompoundedMaster {
+public final class GeneratorSwapFixedCompoundedONCompoundedMaster {
 
   /**
    * The method unique instance.

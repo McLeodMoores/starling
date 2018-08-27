@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.copier.portfolio;
@@ -27,12 +27,12 @@ public class DeletingPortfolioCopier implements PortfolioCopier {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DeletingPortfolioCopier.class);
 
-  private SecurityMaster _securityMaster;
-  private PositionMaster _positionMaster;
-  private boolean _write;
-  
-  public DeletingPortfolioCopier(SecurityMaster securityMaster, PositionMaster positionMaster, boolean write) {
-    
+  private final SecurityMaster _securityMaster;
+  private final PositionMaster _positionMaster;
+  private final boolean _write;
+
+  public DeletingPortfolioCopier(final SecurityMaster securityMaster, final PositionMaster positionMaster, final boolean write) {
+
     ArgumentChecker.notNull(securityMaster, "securityMaster");
     ArgumentChecker.notNull(positionMaster, "positionMaster");
 
@@ -42,73 +42,74 @@ public class DeletingPortfolioCopier implements PortfolioCopier {
   }
 
   @Override
-  public void copy(PositionReader positionReader, PositionWriter positionWriter) {
+  public void copy(final PositionReader positionReader, final PositionWriter positionWriter) {
     copy(positionReader, positionWriter, null);
   }
 
-  public void copy(PositionReader positionReader, PositionWriter positionWriter,
-      boolean deletePositions, boolean deleteSecurities) {
+  public void copy(final PositionReader positionReader, final PositionWriter positionWriter,
+      final boolean deletePositions, final boolean deleteSecurities) {
     copy(positionReader, positionWriter, null, deletePositions, deleteSecurities);
   }
 
-  public void copy(PositionReader positionReader, PositionWriter positionWriter, PortfolioCopierVisitor visitor) {
+  @Override
+  public void copy(final PositionReader positionReader, final PositionWriter positionWriter, final PortfolioCopierVisitor visitor) {
     copy(positionReader, positionWriter, visitor, true, true);
   }
 
-  public void copy(PositionReader positionReader, PositionWriter positionWriter, PortfolioCopierVisitor visitor,
-      boolean deletePositions, boolean deleteSecurities) {
+  public void copy(final PositionReader positionReader, final PositionWriter positionWriter, final PortfolioCopierVisitor visitor,
+      final boolean deletePositions, final boolean deleteSecurities) {
 
     ArgumentChecker.notNull(positionWriter, "positionWriter");
     ArgumentChecker.notNull(positionReader, "positionReader");
-    
+
     ObjectsPair<ManageablePosition, ManageableSecurity[]> next;
 
     // Read in next row, checking for EOF
     while ((next = positionReader.readNext()) != null) {
-            
+
       // Is position and security data is available for the current row?
       if (next.getFirst() != null && next.getSecond() != null) {
-        
+
         // Delete positions
         if (deletePositions) {
           if (_write) {
             try {
               _positionMaster.remove(next.getFirst().getUniqueId());
               LOGGER.warn("Deleted " + next.getFirst().getUniqueId() + " (" + next.getFirst().getName() + ")");
-            } catch (Throwable e) {
-              throw new OpenGammaRuntimeException("Could not remove position " + 
-                  next.getFirst().getName() + " (" + next.getFirst().getUniqueId().toString() + ")");          
+            } catch (final Throwable e) {
+              throw new OpenGammaRuntimeException("Could not remove position " +
+                  next.getFirst().getName() + " (" + next.getFirst().getUniqueId().toString() + ")");
             }
           } else {
             LOGGER.warn("Matched " + next.getFirst().getUniqueId() + " (" + next.getFirst().getName() + ")");
           }
         }
-        
+
         // Delete securities
         if (deleteSecurities) {
-          for (ManageableSecurity security : next.getSecond()) {
+          for (final ManageableSecurity security : next.getSecond()) {
             if (_write) {
               try {
                 _securityMaster.remove(security.getUniqueId());
                 LOGGER.warn("Deleted " + security.getUniqueId() + " (" + security.getName() + ")");
-              } catch (Throwable e) {
-                throw new OpenGammaRuntimeException("Could not remove security " + 
-                    security.getName() + " (" + security.getUniqueId().toString() + ")");          
+              } catch (final Throwable e) {
+                throw new OpenGammaRuntimeException("Could not remove security " +
+                    security.getName() + " (" + security.getUniqueId().toString() + ")");
               }
             } else {
-              LOGGER.warn("Matched " + security.getUniqueId() + " (" + security.getName() + ")");            
+              LOGGER.warn("Matched " + security.getUniqueId() + " (" + security.getName() + ")");
             }
           }
         }
-        
+
         // Set current path
-        String[] path = positionReader.getCurrentPath();
+        final String[] path = positionReader.getCurrentPath();
         positionWriter.setPath(path);
-        
+
         // Write position and security data
-        ObjectsPair<ManageablePosition, ManageableSecurity[]> written = 
+        final ObjectsPair<ManageablePosition, ManageableSecurity[]> written =
             positionWriter.writePosition(next.getFirst(), next.getSecond());
-        
+
         if (visitor != null) {
           visitor.info(StringUtils.arrayToDelimitedString(path, "/"), written.getFirst(), written.getSecond());
         }
@@ -118,7 +119,7 @@ public class DeletingPortfolioCopier implements PortfolioCopier {
         }
       }
     }
-    
+
     // Flush changes to portfolio master
     positionWriter.flush();
   }

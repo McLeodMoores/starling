@@ -14,8 +14,6 @@ import static org.testng.AssertJUnit.assertTrue;
 
 import java.util.Collections;
 
-import net.sf.ehcache.CacheManager;
-
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -34,6 +32,8 @@ import com.opengamma.livedata.normalization.StandardRules;
 import com.opengamma.livedata.server.distribution.MarketDataDistributor;
 import com.opengamma.util.ehcache.EHCacheUtils;
 import com.opengamma.util.test.TestGroup;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Test.
@@ -71,25 +71,25 @@ public class MockLiveDataServerTest {
     getMethods("nonpersistent", false);
   }
 
-  private LiveDataSpecification getSpec(String uniqueId) {
-    LiveDataSpecification spec = new LiveDataSpecification(
+  private LiveDataSpecification getSpec(final String uniqueId) {
+    final LiveDataSpecification spec = new LiveDataSpecification(
         _server.getDefaultNormalizationRuleSetId(),
         ExternalId.of(_server.getUniqueIdDomain(), uniqueId));
     return spec;
   }
 
-  private void getMethods(String uniqueId, boolean persistent) {
-    LiveDataSpecification spec = getSpec(uniqueId);
+  private void getMethods(final String uniqueId, final boolean persistent) {
+    final LiveDataSpecification spec = getSpec(uniqueId);
 
-    LiveDataSubscriptionResponse result = _server.subscribe(uniqueId, persistent);
+    final LiveDataSubscriptionResponse result = _server.subscribe(uniqueId, persistent);
 
     assertNotNull(result);
     assertTrue(result.getSubscriptionResult() == LiveDataSubscriptionResult.SUCCESS);
 
-    String distributionSpec = result.getTickDistributionSpecification();
+    final String distributionSpec = result.getTickDistributionSpecification();
     assertNotNull(distributionSpec);
 
-    Subscription subscription = _server.getSubscription(uniqueId);
+    final Subscription subscription = _server.getSubscription(uniqueId);
 
     assertNotNull(subscription);
     assertEquals(uniqueId, subscription.getSecurityUniqueId());
@@ -112,7 +112,7 @@ public class MockLiveDataServerTest {
     assertEquals(0, _server.getNumLiveDataUpdatesSentPerSecondOverLastMinute(), 0.0001);
     assertEquals(0, _server.getNumMarketDataUpdatesReceived());
 
-    MarketDataDistributor distributor = subscription.getDistributors().iterator().next();
+    final MarketDataDistributor distributor = subscription.getDistributors().iterator().next();
 
     assertSame(distributor, subscription.getMarketDataDistributor(spec));
 
@@ -140,21 +140,21 @@ public class MockLiveDataServerTest {
     _server.subscribe("nonpersistent", false);
     _server.subscribe("persistent", true);
 
-    Subscription nonpersistent = _server.getSubscription("nonpersistent");
-    Subscription persistent = _server.getSubscription("persistent");
+    final Subscription nonpersistent = _server.getSubscription("nonpersistent");
+    final Subscription persistent = _server.getSubscription("persistent");
 
     assertTrue(_server.unsubscribe(nonpersistent));
     assertTrue(_server.unsubscribe(persistent));
   }
 
   public void subscribeUnsubscribeC() {
-    UserPrincipal user = new UserPrincipal("mark", "1.1.1.1");
+    final UserPrincipal user = new UserPrincipal("mark", "1.1.1.1");
 
-    LiveDataSpecification requestedSpec = new LiveDataSpecification(
+    final LiveDataSpecification requestedSpec = new LiveDataSpecification(
         StandardRules.getNoNormalization().getId(),
         ExternalId.of(_domain, "testsub"));
 
-    LiveDataSubscriptionRequest request = new LiveDataSubscriptionRequest(
+    final LiveDataSubscriptionRequest request = new LiveDataSubscriptionRequest(
         user,
         SubscriptionType.NON_PERSISTENT,
         Collections.singleton(requestedSpec));
@@ -178,11 +178,11 @@ public class MockLiveDataServerTest {
 
     assertEquals(1, _server.getNumActiveSubscriptions());
 
-    Subscription sub = _server.getSubscription("mysub");
+    final Subscription sub = _server.getSubscription("mysub");
     assertEquals(1, sub.getDistributors().size());
 
-    LiveDataSpecification spec = getSpec("mysub");
-    MarketDataDistributor distributor = _server.getMarketDataDistributor(spec);
+    final LiveDataSpecification spec = getSpec("mysub");
+    final MarketDataDistributor distributor = _server.getMarketDataDistributor(spec);
     assertNotNull(distributor);
 
     assertFalse(_server.stopDistributor(distributor));
@@ -198,8 +198,8 @@ public class MockLiveDataServerTest {
     assertFalse(_server.stopDistributor(distributor));
   }
 
-  private void checkResponse(UserPrincipal user, LiveDataSpecification requestedSpec,
-      LiveDataSubscriptionResponseMsg response) {
+  private void checkResponse(final UserPrincipal user, final LiveDataSpecification requestedSpec,
+      final LiveDataSubscriptionResponseMsg response) {
     assertEquals(user, response.getRequestingUser());
     assertEquals(1, response.getResponses().size());
     assertEquals(requestedSpec, response.getResponses().get(0).getRequestedSpecification());
@@ -211,18 +211,18 @@ public class MockLiveDataServerTest {
   }
 
   public void snapshot() {
-    UserPrincipal user = new UserPrincipal("mark", "1.1.1.1");
+    final UserPrincipal user = new UserPrincipal("mark", "1.1.1.1");
 
-    LiveDataSpecification requestedSpec = new LiveDataSpecification(
+    final LiveDataSpecification requestedSpec = new LiveDataSpecification(
         StandardRules.getNoNormalization().getId(),
         ExternalId.of(_domain, "testsub"));
 
-    LiveDataSubscriptionRequest request = new LiveDataSubscriptionRequest(
+    final LiveDataSubscriptionRequest request = new LiveDataSubscriptionRequest(
         user,
         SubscriptionType.SNAPSHOT,
         Collections.singleton(requestedSpec));
 
-    LiveDataSubscriptionResponseMsg response = _server.subscriptionRequestMade(request);
+    final LiveDataSubscriptionResponseMsg response = _server.subscriptionRequestMade(request);
 
     assertEquals(user, response.getRequestingUser());
     assertEquals(1, response.getResponses().size());

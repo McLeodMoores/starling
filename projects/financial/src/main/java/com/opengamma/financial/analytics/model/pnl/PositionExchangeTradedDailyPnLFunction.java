@@ -25,7 +25,7 @@ import com.opengamma.financial.security.option.FXDigitalOptionSecurity;
 import com.opengamma.financial.security.option.FXOptionSecurity;
 
 /**
- * 
+ *
  */
 public class PositionExchangeTradedDailyPnLFunction extends AbstractTradeOrDailyPositionPnLFunction {
 
@@ -36,22 +36,22 @@ public class PositionExchangeTradedDailyPnLFunction extends AbstractTradeOrDaily
    * @param markDataField the mark to market data field name, not-null
    * @param costOfCarryField the cost of carry field name, not-null
    */
-  public PositionExchangeTradedDailyPnLFunction(String resolutionKey, String markDataField, String costOfCarryField) {
+  public PositionExchangeTradedDailyPnLFunction(final String resolutionKey, final String markDataField, final String costOfCarryField) {
     super(resolutionKey, markDataField, costOfCarryField);
   }
 
   @Override
-  public boolean canApplyTo(FunctionCompilationContext context, ComputationTarget target) {
+  public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
     if (!super.canApplyTo(context, target)) {
       return false;
     }
-    Security security = target.getPositionOrTrade().getSecurity();
+    final Security security = target.getPositionOrTrade().getSecurity();
     if (security instanceof FXForwardSecurity || security instanceof FXOptionSecurity || security instanceof FXBarrierOptionSecurity || security instanceof FXDigitalOptionSecurity) {
       return false;
     }
     try {
-      return FinancialSecurityUtils.isExchangeTraded(security) || (security instanceof BondSecurity);
-    } catch (Exception e) {
+      return FinancialSecurityUtils.isExchangeTraded(security) || security instanceof BondSecurity;
+    } catch (final Exception e) {
       return false;
     }
   }
@@ -67,7 +67,7 @@ public class PositionExchangeTradedDailyPnLFunction extends AbstractTradeOrDaily
   }
 
   @Override
-  protected LocalDate getPreferredTradeDate(Clock valuationClock, PositionOrTrade positionOrTrade) {
+  protected LocalDate getPreferredTradeDate(final Clock valuationClock, final PositionOrTrade positionOrTrade) {
     return LocalDate.now(valuationClock).minusDays(1);
   }
 
@@ -82,7 +82,7 @@ public class PositionExchangeTradedDailyPnLFunction extends AbstractTradeOrDaily
   }
 
   @Override
-  protected LocalDate checkAvailableData(LocalDate originalTradeDate, HistoricalTimeSeries markToMarketSeries, Security security, String markDataField, String resolutionKey) {
+  protected LocalDate checkAvailableData(final LocalDate originalTradeDate, final HistoricalTimeSeries markToMarketSeries, final Security security, final String markDataField, final String resolutionKey) {
     if (markToMarketSeries.getTimeSeries().isEmpty() || markToMarketSeries.getTimeSeries().getLatestValue() == null) {
       throw new NullPointerException("Could not get mark to market value for security " +
           security.getExternalIdBundle() + " for " + markDataField + " using " + resolutionKey + " for " + MAX_DAYS_OLD + " back from " + originalTradeDate);

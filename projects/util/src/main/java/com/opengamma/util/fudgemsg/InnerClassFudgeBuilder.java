@@ -42,18 +42,18 @@ public final class InnerClassFudgeBuilder<T extends AutoFudgable<K>, K> implemen
   public InnerClassFudgeBuilder() {}
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, final T auto) {
-    MutableFudgeMsg outerMsg = serializer.newMessage();
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final T auto) {
+    final MutableFudgeMsg outerMsg = serializer.newMessage();
     outerMsg.add(null, FudgeSerializer.TYPES_HEADER_ORDINAL, FudgeWireType.STRING, AutoFudgable.class.getName());
     final K inner = auto.object();
     assertValid(inner.getClass());
     try {
-      MutableFudgeMsg msg = outerMsg.addSubMessage("inner", null);
+      final MutableFudgeMsg msg = outerMsg.addSubMessage("inner", null);
       //save the internal class name
       msg.add(null, FudgeSerializer.TYPES_HEADER_ORDINAL, FudgeWireType.STRING, inner.getClass().getName());
 
       //save the ctor parameters
-      List<Object> parameters = AccessController.doPrivileged(new PrivilegedAction<List<Object>>() {
+      final List<Object> parameters = AccessController.doPrivileged(new PrivilegedAction<List<Object>>() {
         @Override
         public List<Object> run() {
           try {
@@ -62,35 +62,35 @@ public final class InnerClassFudgeBuilder<T extends AutoFudgable<K>, K> implemen
               throw new IllegalArgumentException("Inner class does not have a single constructor: " + inner.getClass());
             }
             // find all declared parameters of the inner class
-            final List<Field> fs = new ArrayList<Field>(Arrays.asList(inner.getClass().getDeclaredFields()));
+            final List<Field> fs = new ArrayList<>(Arrays.asList(inner.getClass().getDeclaredFields()));
             // remove the field representing the parent object from the list
             // only want the compiler synthesized fields which corresponds to ctor parameters
-            for (Iterator<Field> it = fs.iterator(); it.hasNext(); ) {
-              Field field = it.next();
+            for (final Iterator<Field> it = fs.iterator(); it.hasNext();) {
+              final Field field = it.next();
               if (field.getType().isAssignableFrom(inner.getClass().getEnclosingClass()) || "$jacocoData".equals(field.getName())) {
                 it.remove();
               }
             }
             final List<Object> parameters = newArrayList();
-            for (Field paramField : fs) {
+            for (final Field paramField : fs) {
               paramField.setAccessible(true);
               parameters.add(paramField.get(inner));
             }
             return parameters;
-            
-          } catch (IllegalAccessException ex) {
+
+          } catch (final IllegalAccessException ex) {
             throw new OpenGammaRuntimeException(ex.getMessage());
           }
         }
       });
-      
-      for (Object parameter : parameters) {
-        //save the ctor parameter                  
+
+      for (final Object parameter : parameters) {
+        //save the ctor parameter
         serializer.addToMessageWithClassHeaders(msg, null, 1, parameter);
       }
       return outerMsg;
-      
-    } catch (RuntimeException ex) {
+
+    } catch (final RuntimeException ex) {
       throw new FudgeRuntimeException("Unable to serialize: " + inner.getClass().getName(), ex);
     }
   }
@@ -98,19 +98,19 @@ public final class InnerClassFudgeBuilder<T extends AutoFudgable<K>, K> implemen
   //-------------------------------------------------------------------------
   @SuppressWarnings("unchecked")
   @Override
-  public T buildObject(FudgeDeserializer deserializer, FudgeMsg outerMsg) {
-    FudgeField fudgeField = outerMsg.getByName("inner");
-    FudgeMsg msg = (FudgeMsg) fudgeField.getValue();
+  public T buildObject(final FudgeDeserializer deserializer, final FudgeMsg outerMsg) {
+    final FudgeField fudgeField = outerMsg.getByName("inner");
+    final FudgeMsg msg = (FudgeMsg) fudgeField.getValue();
 
     final FudgeField classNameField = msg.getByOrdinal(FudgeSerializer.TYPES_HEADER_ORDINAL);
     final String className = (String) classNameField.getValue();
     try {
       final List<Object> parameters = newArrayList();
       parameters.add(null);  //the omitted enclosing object
-      for (FudgeField parameterField : msg.getAllByOrdinal(1)) {
+      for (final FudgeField parameterField : msg.getAllByOrdinal(1)) {
         parameters.add(deserializer.fieldValueToObject(parameterField));
       }
-      
+
       return (T) AccessController.doPrivileged(new PrivilegedAction<Object>() {
         @Override
         public Object run() {
@@ -125,26 +125,26 @@ public final class InnerClassFudgeBuilder<T extends AutoFudgable<K>, K> implemen
             }
             ctor = ctors[0];
             ctor.setAccessible(true);   // solution
-          } catch (ClassNotFoundException ex) {
+          } catch (final ClassNotFoundException ex) {
             throw new RuntimeException(ex);
           }
-          
+
           // invoke constructor
           try {
-            Object inner = ctor.newInstance(array);
-            return new AutoFudgable<Object>(inner);
-            
-          } catch (IllegalAccessException ex) {
+            final Object inner = ctor.newInstance(array);
+            return new AutoFudgable<>(inner);
+
+          } catch (final IllegalAccessException ex) {
             throw new RuntimeException(ex);
-          } catch (InstantiationException ex) {
+          } catch (final InstantiationException ex) {
             throw new RuntimeException(ex);
-          } catch (InvocationTargetException ex) {
+          } catch (final InvocationTargetException ex) {
             throw new RuntimeException(ex);
           }
         }
       });
 
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       throw new FudgeRuntimeException("Unable to deserialize: " + className, ex);
     }
   }
@@ -165,7 +165,7 @@ public final class InnerClassFudgeBuilder<T extends AutoFudgable<K>, K> implemen
     return AccessController.doPrivileged(new PrivilegedAction<Boolean>() {
       @Override
       public Boolean run() {
-        Constructor<?>[] ctors = clazz.getDeclaredConstructors();
+        final Constructor<?>[] ctors = clazz.getDeclaredConstructors();
         return ctors.length == 1 && ctors[0].getParameterTypes().length == 0;
       }
     });

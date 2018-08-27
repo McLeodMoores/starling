@@ -19,18 +19,18 @@ public class ChangeProvidingCombinedMaster<D extends AbstractDocument, M extends
 
   private final AggregatingChangeManager _changeManager;
 
-  protected ChangeProvidingCombinedMaster(List<M> masterList) {
+  protected ChangeProvidingCombinedMaster(final List<M> masterList) {
     super(masterList);
-    
-    AggregatingChangeManager changeManager = new AggregatingChangeManager();
-    
-    for (M master : masterList) {
+
+    final AggregatingChangeManager changeManager = new AggregatingChangeManager();
+
+    for (final M master : masterList) {
       changeManager.addChangeManager(master.changeManager());
     }
-    
+
     _changeManager = changeManager;
 
-    
+
   }
 
   @Override

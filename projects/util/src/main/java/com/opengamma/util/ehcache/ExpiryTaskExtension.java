@@ -8,12 +8,12 @@ package com.opengamma.util.ehcache;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.opengamma.util.ArgumentChecker;
+
 import net.sf.ehcache.CacheException;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Status;
 import net.sf.ehcache.extension.CacheExtension;
-
-import com.opengamma.util.ArgumentChecker;
 
 /**
  * A simple Ehcache {@link CacheExtension} which forces eviction of expired elements by calling
@@ -28,33 +28,33 @@ public class ExpiryTaskExtension implements CacheExtension {
   private final long _expiryCheckPeriodMillis;
   private ExpiryTask _expiryTask;
   private Status _status;
-  
+
   private class ExpiryTask extends TimerTask {
 
     @Override
     public void run() {
       _cache.evictExpiredElements();
     }
-    
+
   }
-  
+
   /**
    * Constructs a new {@link ExpiryTaskExtension} for the specified cache.
-   * 
+   *
    * @param cache  the cache on which to evict expired elements
    * @param timer  the timer to use internally for scheduling the task
    * @param expiryCheckPeriodMillis  the period of the eviction task
    */
-  public ExpiryTaskExtension(Ehcache cache, Timer timer, long expiryCheckPeriodMillis) {
+  public ExpiryTaskExtension(final Ehcache cache, final Timer timer, final long expiryCheckPeriodMillis) {
     ArgumentChecker.notNull(cache, "cache");
     ArgumentChecker.notNull(timer, "timer");
-    
+
     _cache = cache;
     _timer = timer;
     _expiryCheckPeriodMillis = expiryCheckPeriodMillis;
     _status = Status.STATUS_UNINITIALISED;
   }
-  
+
   @Override
   public void init() {
     if (_expiryTask == null) {
@@ -63,9 +63,9 @@ public class ExpiryTaskExtension implements CacheExtension {
     }
     _status = Status.STATUS_ALIVE;
   }
-  
+
   @Override
-  public CacheExtension clone(Ehcache cache) throws CloneNotSupportedException {
+  public CacheExtension clone(final Ehcache cache) throws CloneNotSupportedException {
     throw new CloneNotSupportedException();
   }
 

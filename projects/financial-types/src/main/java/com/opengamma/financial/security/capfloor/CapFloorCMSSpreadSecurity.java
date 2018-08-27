@@ -102,8 +102,8 @@ public class CapFloorCMSSpreadSecurity extends FinancialSecurity {
     super(SECURITY_TYPE);
   }
 
-  public CapFloorCMSSpreadSecurity(ZonedDateTime startDate, ZonedDateTime maturityDate, double notional, ExternalId longIdentifier,
-      ExternalId shortIdentifier, double strike, Frequency frequency, Currency currency, DayCount dayCount, boolean payer, boolean cap) {
+  public CapFloorCMSSpreadSecurity(final ZonedDateTime startDate, final ZonedDateTime maturityDate, final double notional, final ExternalId longIdentifier,
+      final ExternalId shortIdentifier, final double strike, final Frequency frequency, final Currency currency, final DayCount dayCount, final boolean payer, final boolean cap) {
     super(SECURITY_TYPE);
     setStartDate(startDate);
     setMaturityDate(maturityDate);
@@ -120,7 +120,7 @@ public class CapFloorCMSSpreadSecurity extends FinancialSecurity {
 
   //-------------------------------------------------------------------------
   @Override
-  public final <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public final <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitCapFloorCMSSpreadSecurity(this);
   }
 

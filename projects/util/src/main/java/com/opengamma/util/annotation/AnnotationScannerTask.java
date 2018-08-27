@@ -21,44 +21,44 @@ import org.slf4j.LoggerFactory;
  * Scans for annotations and writes the names of classes using them to a file.
  */
 public class AnnotationScannerTask extends Task {
-  
+
   private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationScannerTask.class);
-  
+
   private String _outputFile;
   private String _annotationClassName;
-  
+
   private String[] _classpath;
-  
+
   private String getOutputFile() {
     return _outputFile;
   }
-  
-  public void setOutputFile(String outputFile) {
+
+  public void setOutputFile(final String outputFile) {
     _outputFile = outputFile;
   }
-  
+
   public String getAnnotationClassName() {
     return _annotationClassName;
   }
-  
-  public void setAnnotationClassName(String annotationClassName) {
+
+  public void setAnnotationClassName(final String annotationClassName) {
     _annotationClassName = annotationClassName;
   }
-    
-  public void setClasspathref(Reference classpathref) {
-    Path classpath = new Path(getProject());
+
+  public void setClasspathref(final Reference classpathref) {
+    final Path classpath = new Path(getProject());
     classpath.setRefid(classpathref);
     _classpath = classpath.list();
   }
-  
+
   //-------------------------------------------------------------------------
-  
+
   @Override
   public void execute() throws BuildException {
     if (getOutputFile() == null) {
       throw new BuildException("outputFile must be set");
     }
-    File outputFile = new File(getOutputFile());
+    final File outputFile = new File(getOutputFile());
     if (outputFile.exists() && !outputFile.canWrite()) {
       throw new BuildException("Cannot write to file '" + outputFile + "'");
     }
@@ -68,20 +68,20 @@ public class AnnotationScannerTask extends Task {
     Set<String> classNames;
     try {
       classNames = ClassNameAnnotationScannerUtils.scan(_classpath, Class.forName(getAnnotationClassName()));
-    } catch (Exception e) {
+    } catch (final Exception e) {
       throw new BuildException("Error scanning for annotated classes", e);
     }
     try {
-      PrintWriter writer = new PrintWriter(outputFile);
-      for (String className : classNames) {
+      final PrintWriter writer = new PrintWriter(outputFile);
+      for (final String className : classNames) {
         writer.println(className);
       }
       writer.close();
-    } catch (IOException e) {
+    } catch (final IOException e) {
       LOGGER.error("Error writing to output file", e);
       throw new BuildException("Error writing to output file", e);
     }
 
   }
-  
+
 }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.payments.derivative;
@@ -13,7 +13,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Class describing an average coupon by weighted mean of index values with difference fixing dates. 
+ * Class describing an average coupon by weighted mean of index values with difference fixing dates.
  * The weighted averages over several sub-periods are compounded over the total period and a spread is added with "flat compounding"..
  */
 public class CouponIborAverageFixingDatesCompoundingFlatSpread extends Coupon {
@@ -197,23 +197,23 @@ public class CouponIborAverageFixingDatesCompoundingFlatSpread extends Coupon {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_amountAccrued);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + Arrays.deepHashCode(_fixingPeriodAccrualFactor);
     result = prime * result + Arrays.deepHashCode(_fixingPeriodEndTime);
     result = prime * result + Arrays.deepHashCode(_fixingPeriodStartTime);
     result = prime * result + Arrays.deepHashCode(_fixingTime);
-    result = prime * result + ((_index == null) ? 0 : _index.hashCode());
+    result = prime * result + (_index == null ? 0 : _index.hashCode());
     result = prime * result + Arrays.hashCode(_paymentAccrualFactors);
     temp = Double.doubleToLongBits(_rateFixed);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_spread);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + Arrays.deepHashCode(_weight);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -223,7 +223,7 @@ public class CouponIborAverageFixingDatesCompoundingFlatSpread extends Coupon {
     if (!(obj instanceof CouponIborAverageFixingDatesCompoundingFlatSpread)) {
       return false;
     }
-    CouponIborAverageFixingDatesCompoundingFlatSpread other = (CouponIborAverageFixingDatesCompoundingFlatSpread) obj;
+    final CouponIborAverageFixingDatesCompoundingFlatSpread other = (CouponIborAverageFixingDatesCompoundingFlatSpread) obj;
     if (Double.doubleToLongBits(_amountAccrued) != Double.doubleToLongBits(other._amountAccrued)) {
       return false;
     }

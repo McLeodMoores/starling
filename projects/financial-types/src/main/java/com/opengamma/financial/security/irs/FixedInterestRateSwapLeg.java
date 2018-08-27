@@ -39,7 +39,7 @@ public final class FixedInterestRateSwapLeg extends InterestRateSwapLeg {
 
   //-------------------------------------------------------------------------
   @Override
-  public <T> T accept(InterestRateSwapLegVisitor<T> visitor) {
+  public <T> T accept(final InterestRateSwapLegVisitor<T> visitor) {
     return visitor.visitFixedInterestRateSwapLeg(this);
   }
 

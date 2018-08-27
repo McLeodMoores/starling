@@ -41,14 +41,14 @@ public class UserPrincipal implements Serializable {
    * <p>
    * This creates a user with the specified name.
    * The IP address is derived from {@code java.net.InetAddress.getLocalHost().toString()}.
-   * 
+   *
    * @param userName  the user name, not null
    * @return the user, not null
    */
-  public static UserPrincipal getLocalUser(String userName) {
+  public static UserPrincipal getLocalUser(final String userName) {
     try {
       return new UserPrincipal(userName, InetAddress.getLocalHost().toString());
-    } catch (UnknownHostException ex) {
+    } catch (final UnknownHostException ex) {
       throw new com.opengamma.OpenGammaRuntimeException("Could not initialize local user", ex);
     }
   }
@@ -58,7 +58,7 @@ public class UserPrincipal implements Serializable {
    * <p>
    * This creates a user based on {@code System.getProperty("user.name")}.
    * The IP address is derived from {@code java.net.InetAddress.getLocalHost().toString()}.
-   * 
+   *
    * @return the user, not null
    */
   public static UserPrincipal getLocalUser() {
@@ -73,7 +73,7 @@ public class UserPrincipal implements Serializable {
    * Gets a test user.
    * <p>
    * The name is "Test user" and the IP address is {@code 127.0.0.1}
-   * 
+   *
    * @return user  the test user, not null
    */
   public static UserPrincipal getTestUser() {
@@ -83,11 +83,11 @@ public class UserPrincipal implements Serializable {
   //-------------------------------------------------------------------------
   /**
    * Constructs a new user.
-   * 
+   *
    * @param userName  the user name, not null
    * @param ipAddress  the IP address, not null
    */
-  public UserPrincipal(String userName, String ipAddress) {
+  public UserPrincipal(final String userName, final String ipAddress) {
     ArgumentChecker.notNull(userName, "userName");
     ArgumentChecker.notNull(ipAddress, "ipAddress");
     _userName = userName;
@@ -97,7 +97,7 @@ public class UserPrincipal implements Serializable {
   //-------------------------------------------------------------------------
   /**
    * Gets the user name of the user.
-   * 
+   *
    * @return the user name, not null
    */
   public String getUserName() {
@@ -107,7 +107,7 @@ public class UserPrincipal implements Serializable {
   /**
    * Gets the location identifier for a user. This may be an IP address
    * or a session id.
-   * 
+   *
    * @return the location identifier, not null
    */
   public String getIpAddress() {
@@ -121,18 +121,20 @@ public class UserPrincipal implements Serializable {
       return true;
     }
     if (obj instanceof UserPrincipal) {
-      UserPrincipal other = (UserPrincipal) obj;
+      final UserPrincipal other = (UserPrincipal) obj;
       return _userName.equals(other._userName) && _ipAddress.equals(other._ipAddress);
     }
     return false;
   }
 
+  @Override
   public int hashCode() {
     return _userName.hashCode() ^ _ipAddress.hashCode();
   }
 
+  @Override
   public String toString() {
-    StringBuilder buf = new StringBuilder();
+    final StringBuilder buf = new StringBuilder();
     buf.append("UserPrincipal[");
     buf.append(_userName);
     buf.append(", ");

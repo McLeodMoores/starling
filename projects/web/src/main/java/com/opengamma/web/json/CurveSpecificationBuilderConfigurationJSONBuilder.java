@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.web.json;
@@ -27,12 +27,12 @@ public final class CurveSpecificationBuilderConfigurationJSONBuilder extends Abs
    * Singleton
    */
   public static final CurveSpecificationBuilderConfigurationJSONBuilder INSTANCE = new CurveSpecificationBuilderConfigurationJSONBuilder();
-  
+
   /**
    * JSON template
    */
   private static final String TEMPLATE = createTemplate();
-  
+
   /**
    * Restricted constructor
    */
@@ -40,28 +40,28 @@ public final class CurveSpecificationBuilderConfigurationJSONBuilder extends Abs
   }
 
   @Override
-  public CurveSpecificationBuilderConfiguration fromJSON(String json) {
+  public CurveSpecificationBuilderConfiguration fromJSON(final String json) {
     ArgumentChecker.notNull(json, "JSON document");
     return fromJSON(CurveSpecificationBuilderConfiguration.class, json);
   }
 
   @Override
-  public String toJSON(CurveSpecificationBuilderConfiguration object) {
+  public String toJSON(final CurveSpecificationBuilderConfiguration object) {
     ArgumentChecker.notNull(object, "curveSpecificationBuilderConfiguration");
     JSONObject message;
     try {
       message = new JSONObject(fudgeToJson(object));
       message.put("tenors", new JSONArray(getTenors(object)));
-    } catch (JSONException ex) {
+    } catch (final JSONException ex) {
       throw new OpenGammaRuntimeException("Error converting cpnverspecification builder configuration to JSON", ex);
     }
     return message.toString();
   }
 
   private String[] getTenors(final CurveSpecificationBuilderConfiguration curveSpec) {
-    SortedSet<Tenor> allTenors = curveSpec.getAllTenors();
-    String[] periods = new String[allTenors.size()];
-    Iterator<Tenor> iterator = allTenors.iterator();
+    final SortedSet<Tenor> allTenors = curveSpec.getAllTenors();
+    final String[] periods = new String[allTenors.size()];
+    final Iterator<Tenor> iterator = allTenors.iterator();
     for (int i = 0; i < allTenors.size(); i++) {
       periods[i] = iterator.next().getPeriod().toString();
     }

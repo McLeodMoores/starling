@@ -54,18 +54,18 @@ public class ResolvableConfigLink<T> extends ConfigLink<T> implements ImmutableB
    * @param type the type of the linked object
    * @param linkResolver the resolver used to resolve the link when requested
    */
-  /* package */ ResolvableConfigLink(String identifier,
-                                     Class<T> type,
-                                     LinkResolver<String, T> linkResolver) {
+  /* package */ ResolvableConfigLink(final String identifier,
+                                     final Class<T> type,
+                                     final LinkResolver<String, T> linkResolver) {
     this(LinkIdentifier.of(identifier, type), linkResolver);
   }
 
   @ImmutableConstructor
-  private ResolvableConfigLink(LinkIdentifier<String, T> identifier) {
+  private ResolvableConfigLink(final LinkIdentifier<String, T> identifier) {
     this(identifier, new ServiceContextConfigLinkResolver<T>());
   }
 
-  private ResolvableConfigLink(LinkIdentifier<String, T> identifier, LinkResolver<String, T> linkResolver) {
+  private ResolvableConfigLink(final LinkIdentifier<String, T> identifier, final LinkResolver<String, T> linkResolver) {
     _identifier = identifier;
     _resolver = ArgumentChecker.notNull(linkResolver, "linkResolver");
   }

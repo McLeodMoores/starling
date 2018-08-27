@@ -15,7 +15,7 @@ public class DepthFirstPortfolioNodeTraverser extends PortfolioNodeTraverser {
 
   /**
    * Creates a traverser.
-   * 
+   *
    * @param callback the callback to invoke, not null
    */
   public DepthFirstPortfolioNodeTraverser(final PortfolioNodeTraversalCallback callback) {
@@ -24,21 +24,22 @@ public class DepthFirstPortfolioNodeTraverser extends PortfolioNodeTraverser {
 
   /**
    * Traverse the nodes notifying using the callback.
-   * 
+   *
    * @param portfolioNode the node to start from, null does nothing
    */
-  public void traverse(PortfolioNode portfolioNode) {
+  @Override
+  public void traverse(final PortfolioNode portfolioNode) {
     if (portfolioNode == null) {
       return;
     }
     getCallback().preOrderOperation(portfolioNode);
-    for (Position position : portfolioNode.getPositions()) {
+    for (final Position position : portfolioNode.getPositions()) {
       getCallback().preOrderOperation(portfolioNode, position);
     }
-    for (PortfolioNode subNode : portfolioNode.getChildNodes()) {
+    for (final PortfolioNode subNode : portfolioNode.getChildNodes()) {
       traverse(subNode);
     }
-    for (Position position : portfolioNode.getPositions()) {
+    for (final Position position : portfolioNode.getPositions()) {
       getCallback().postOrderOperation(portfolioNode, position);
     }
     getCallback().postOrderOperation(portfolioNode);

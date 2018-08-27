@@ -30,7 +30,7 @@ public class DbHistoricalTimeSeriesMasterWorkerRemoveTest extends AbstractDbHist
   private static final Logger LOGGER = LoggerFactory.getLogger(DbHistoricalTimeSeriesMasterWorkerRemoveTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public DbHistoricalTimeSeriesMasterWorkerRemoveTest(String databaseType, String databaseVersion) {
+  public DbHistoricalTimeSeriesMasterWorkerRemoveTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion);
     LOGGER.info("running testcases for {}", databaseType);
   }
@@ -38,24 +38,24 @@ public class DbHistoricalTimeSeriesMasterWorkerRemoveTest extends AbstractDbHist
   //-------------------------------------------------------------------------
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_removeHistoricalTimeSeries_versioned_notFoundId() {
-    UniqueId uniqueId = UniqueId.of("DbHts", "0", "0");
+    final UniqueId uniqueId = UniqueId.of("DbHts", "0", "0");
     _htsMaster.remove(uniqueId);
   }
 
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_removeHistoricalTimeSeries_versioned_notFoundVersion() {
-    ObjectId objectId = ObjectId.of("DbHts", "6666666666");
+    final ObjectId objectId = ObjectId.of("DbHts", "6666666666");
     _htsMaster.remove(objectId);
   }
 
   @Test
   public void test_removeHistoricalTimeSeries_removed() {
-    Instant now = Instant.now(_htsMaster.getClock());
-    
-    UniqueId uniqueId = UniqueId.of("DbHts", "102", "0");
+    final Instant now = Instant.now(_htsMaster.getClock());
+
+    final UniqueId uniqueId = UniqueId.of("DbHts", "102", "0");
     _htsMaster.remove(uniqueId);
-    HistoricalTimeSeriesInfoDocument test = _htsMaster.get(uniqueId);
-    
+    final HistoricalTimeSeriesInfoDocument test = _htsMaster.get(uniqueId);
+
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version1Instant, test.getVersionFromInstant());
     assertEquals(now, test.getVersionToInstant());

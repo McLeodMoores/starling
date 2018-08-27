@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.timeseries.precise.instant;
@@ -43,17 +43,17 @@ final class ImmutableInstantDoubleTimeSeriesBuilder
   //-------------------------------------------------------------------------
   private void ensureCapacity(int newSize) {
     if (newSize > _times.length) {
-      newSize = Math.max(newSize + 8, (_size * 3) / 2);
+      newSize = Math.max(newSize + 8, _size * 3 / 2);
       _times = Arrays.copyOf(_times, newSize);
       _values = Arrays.copyOf(_values, _size * 2);
     }
   }
 
-  private static long convertToLong(Instant instant) {
+  private static long convertToLong(final Instant instant) {
     return InstantToLongConverter.convertToLong(instant);
   }
 
-  private static Instant convertFromLong(long instant) {
+  private static Instant convertFromLong(final long instant) {
     return InstantToLongConverter.convertToInstant(instant);
   }
 
@@ -70,7 +70,7 @@ final class ImmutableInstantDoubleTimeSeriesBuilder
 
       @Override
       public boolean hasNext() {
-        return (_index + 1) < size();
+        return _index + 1 < size();
       }
 
       @Override
@@ -79,12 +79,12 @@ final class ImmutableInstantDoubleTimeSeriesBuilder
           throw new NoSuchElementException("No more elements in the iteration");
         }
         _index++;
-        long instant = _times[_index];
-        double value = _values[_index];
+        final long instant = _times[_index];
+        final double value = _values[_index];
         return makeMapEntry(convertFromLong(instant), value);
       }
 
-      private Entry<Instant, Double> makeMapEntry(Instant key, Double value) {
+      private Entry<Instant, Double> makeMapEntry(final Instant key, final Double value) {
         return new SimpleImmutableEntry<>(key, value);
       }
 
@@ -153,18 +153,18 @@ final class ImmutableInstantDoubleTimeSeriesBuilder
 
   //-------------------------------------------------------------------------
   @Override
-  public InstantDoubleTimeSeriesBuilder put(Instant time, double value) {
+  public InstantDoubleTimeSeriesBuilder put(final Instant time, final double value) {
     return put(convertToLong(time), value);
   }
 
   @Override
-  public InstantDoubleTimeSeriesBuilder put(long time, double value) {
-    int search = Arrays.binarySearch(_times, 0, _size, time);
+  public InstantDoubleTimeSeriesBuilder put(final long time, final double value) {
+    final int search = Arrays.binarySearch(_times, 0, _size, time);
     if (search >= 0) {
       _values[search] = value;
     } else {
       ensureCapacity(_size + 1);
-      int pos = -(search + 1);
+      final int pos = -(search + 1);
       System.arraycopy(_times, pos, _times, pos + 1, _size - pos);
       System.arraycopy(_values, pos, _values, pos + 1, _size - pos);
       _times[pos] = time;
@@ -175,7 +175,7 @@ final class ImmutableInstantDoubleTimeSeriesBuilder
   }
 
   @Override
-  public InstantDoubleTimeSeriesBuilder putAll(Instant[] times, double[] values) {
+  public InstantDoubleTimeSeriesBuilder putAll(final Instant[] times, final double[] values) {
     if (times.length != values.length) {
       throw new IllegalArgumentException("Arrays are of different sizes: " + times.length + ", " + values.length);
     }
@@ -187,7 +187,7 @@ final class ImmutableInstantDoubleTimeSeriesBuilder
   }
 
   @Override
-  public InstantDoubleTimeSeriesBuilder putAll(long[] times, double[] values) {
+  public InstantDoubleTimeSeriesBuilder putAll(final long[] times, final double[] values) {
     if (times.length != values.length) {
       throw new IllegalArgumentException("Arrays are of different sizes: " + times.length + ", " + values.length);
     }
@@ -200,12 +200,12 @@ final class ImmutableInstantDoubleTimeSeriesBuilder
 
   //-------------------------------------------------------------------------
   @Override
-  public InstantDoubleTimeSeriesBuilder putAll(PreciseDoubleTimeSeries<?> timeSeries) {
+  public InstantDoubleTimeSeriesBuilder putAll(final PreciseDoubleTimeSeries<?> timeSeries) {
     return putAll(timeSeries, 0, timeSeries.size());
   }
 
   @Override
-  public InstantDoubleTimeSeriesBuilder putAll(PreciseDoubleTimeSeries<?> timeSeries, int startPos, int endPos) {
+  public InstantDoubleTimeSeriesBuilder putAll(final PreciseDoubleTimeSeries<?> timeSeries, final int startPos, final int endPos) {
     if (startPos < 0 || startPos > timeSeries.size()) {
       throw new IndexOutOfBoundsException("Invalid start index: " + startPos);
     }
@@ -218,7 +218,7 @@ final class ImmutableInstantDoubleTimeSeriesBuilder
     if (startPos == endPos) {
       return this;
     }
-    int sizeToAdd = endPos - startPos;
+    final int sizeToAdd = endPos - startPos;
     ensureCapacity(_size + sizeToAdd);
     if (_size == 0) {
       System.arraycopy(timeSeries.timesArrayFast(), startPos, _times, 0, sizeToAdd);
@@ -233,12 +233,12 @@ final class ImmutableInstantDoubleTimeSeriesBuilder
   }
 
   @Override
-  public InstantDoubleTimeSeriesBuilder putAll(Map<Instant, Double> timeSeriesMap) {
+  public InstantDoubleTimeSeriesBuilder putAll(final Map<Instant, Double> timeSeriesMap) {
     if (timeSeriesMap.size() == 0) {
       return this;
     }
     ensureCapacity(_size + timeSeriesMap.size());
-    for (Entry<Instant, Double> entry : timeSeriesMap.entrySet()) {
+    for (final Entry<Instant, Double> entry : timeSeriesMap.entrySet()) {
       put(entry.getKey(), entry.getValue());
     }
     return this;

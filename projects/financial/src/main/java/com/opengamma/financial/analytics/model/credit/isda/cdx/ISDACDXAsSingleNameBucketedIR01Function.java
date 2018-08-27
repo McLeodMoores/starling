@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.credit.isda.cdx;
@@ -26,7 +26,7 @@ import com.opengamma.financial.analytics.model.credit.isda.cds.StandardVanillaBu
 import com.opengamma.util.time.Tenor;
 
 /**
- * 
+ *
  */
 public class ISDACDXAsSingleNameBucketedIR01Function extends ISDACDXAsSingleNameIR01Function {
 
@@ -43,9 +43,9 @@ public class ISDACDXAsSingleNameBucketedIR01Function extends ISDACDXAsSingleName
                                                 final ComputationTarget target,
                                                 final ValueProperties properties,
                                                 final FunctionInputs inputs,
-                                                ISDACompliantCreditCurve hazardCurve,
-                                                CDSAnalytic analytic,
-                                                Tenor[] tenors) {
+                                                final ISDACompliantCreditCurve hazardCurve,
+                                                final CDSAnalytic analytic,
+                                                final Tenor[] tenors) {
     final LocalDate[] dates = new LocalDate[yieldCurve.getNumberOfKnots()];
 
     final double[] ir01 = StandardVanillaBucketedIR01CDSFunction.getBucketedIR01(definition, yieldCurve, valuationDate, properties, hazardCurve, analytic, dates);

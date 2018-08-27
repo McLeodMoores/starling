@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.cache;
@@ -50,7 +50,7 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
           wait();
         }
         return _value;
-      } catch (InterruptedException e) {
+      } catch (final InterruptedException e) {
         throw new OpenGammaRuntimeException("Interrupted", e);
       }
     }
@@ -102,7 +102,7 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
    * Processor configurations.
    */
   public static void clearAllWriteThroughCaches() {
-    for (WriteThroughViewComputationCache cache : INSTANCES.values()) {
+    for (final WriteThroughViewComputationCache cache : INSTANCES.values()) {
       cache.clear();
     }
     INSTANCES.clear();
@@ -131,7 +131,7 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
       value = NULL;
     }
     _readCache.put(specification, value);
-    Pending pending = _pending.remove(specification);
+    final Pending pending = _pending.remove(specification);
     if (pending != null) {
       pending.post(value);
     }
@@ -185,17 +185,17 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
 
   @Override
   public Collection<Pair<ValueSpecification, Object>> getValues(final Collection<ValueSpecification> specifications) {
-    final Collection<Pair<ValueSpecification, Object>> result = new ArrayList<Pair<ValueSpecification, Object>>(specifications.size());
+    final Collection<Pair<ValueSpecification, Object>> result = new ArrayList<>(specifications.size());
     Collection<Pending> pending = null;
     Collection<ValueSpecification> query = null;
-    for (ValueSpecification specification : specifications) {
+    for (final ValueSpecification specification : specifications) {
       Object value = _readCache.putIfAbsent(specification, PENDING);
       if (value == PENDING) {
         final Pending handle = waitFor(specification);
         value = _readCache.get(specification);
         if (value == PENDING) {
           if (pending == null) {
-            pending = new ArrayList<Pending>(specifications.size());
+            pending = new ArrayList<>(specifications.size());
           }
           pending.add(handle);
           continue;
@@ -217,20 +217,20 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
     }
     if (query != null) {
       final Collection<Pair<ValueSpecification, Object>> values = getUnderlying().getValues(query);
-      for (Pair<ValueSpecification, Object> value : values) {
+      for (final Pair<ValueSpecification, Object> value : values) {
         final ValueSpecification valueSpec = value.getFirst();
         post(valueSpec, value.getSecond());
         query.remove(valueSpec);
       }
       result.addAll(values);
       if (!query.isEmpty()) {
-        for (ValueSpecification value : query) {
+        for (final ValueSpecification value : query) {
           post(value, null);
         }
       }
     }
     if (pending != null) {
-      for (Pending handle : pending) {
+      for (final Pending handle : pending) {
         result.add(handle.waitForPair());
       }
     }
@@ -239,17 +239,17 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
 
   @Override
   public Collection<Pair<ValueSpecification, Object>> getValues(final Collection<ValueSpecification> specifications, final CacheSelectHint filter) {
-    final Collection<Pair<ValueSpecification, Object>> result = new ArrayList<Pair<ValueSpecification, Object>>(specifications.size());
+    final Collection<Pair<ValueSpecification, Object>> result = new ArrayList<>(specifications.size());
     Collection<Pending> pending = null;
     Collection<ValueSpecification> query = null;
-    for (ValueSpecification specification : specifications) {
+    for (final ValueSpecification specification : specifications) {
       Object value = _readCache.putIfAbsent(specification, PENDING);
       if (value == PENDING) {
         final Pending handle = waitFor(specification);
         value = _readCache.get(specification);
         if (value == PENDING) {
           if (pending == null) {
-            pending = new ArrayList<Pending>(specifications.size());
+            pending = new ArrayList<>(specifications.size());
           }
           pending.add(handle);
           continue;
@@ -271,20 +271,20 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
     }
     if (query != null) {
       final Collection<Pair<ValueSpecification, Object>> values = getUnderlying().getValues(query, filter);
-      for (Pair<ValueSpecification, Object> value : values) {
+      for (final Pair<ValueSpecification, Object> value : values) {
         final ValueSpecification valueSpec = value.getFirst();
         post(valueSpec, value.getSecond());
         query.remove(valueSpec);
       }
       result.addAll(values);
       if (!query.isEmpty()) {
-        for (ValueSpecification value : query) {
+        for (final ValueSpecification value : query) {
           post(value, null);
         }
       }
     }
     if (pending != null) {
-      for (Pending handle : pending) {
+      for (final Pending handle : pending) {
         result.add(handle.waitForPair());
       }
     }
@@ -311,7 +311,7 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
 
   @Override
   public void putSharedValues(final Collection<? extends ComputedValue> values) {
-    for (ComputedValue value : values) {
+    for (final ComputedValue value : values) {
       _readCache.putIfAbsent(value.getSpecification(), value.getValue());
     }
     getUnderlying().putSharedValues(values);
@@ -319,7 +319,7 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
 
   @Override
   public void putPrivateValues(final Collection<? extends ComputedValue> values) {
-    for (ComputedValue value : values) {
+    for (final ComputedValue value : values) {
       _readCache.putIfAbsent(value.getSpecification(), value.getValue());
     }
     getUnderlying().putPrivateValues(values);
@@ -327,7 +327,7 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
 
   @Override
   public void putValues(final Collection<? extends ComputedValue> values, final CacheSelectHint filter) {
-    for (ComputedValue value : values) {
+    for (final ComputedValue value : values) {
       _readCache.putIfAbsent(value.getSpecification(), value.getValue());
     }
     getUnderlying().putValues(values, filter);

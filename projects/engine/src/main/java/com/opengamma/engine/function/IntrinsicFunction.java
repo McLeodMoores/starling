@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function;
@@ -23,7 +23,7 @@ public abstract class IntrinsicFunction implements FunctionDefinition, CompiledF
 
   private final String _uid;
 
-  protected IntrinsicFunction(String uid) {
+  protected IntrinsicFunction(final String uid) {
     _uid = uid;
   }
 
@@ -58,7 +58,7 @@ public abstract class IntrinsicFunction implements FunctionDefinition, CompiledF
 
   /**
    * Special case, always returns null.
-   * 
+   *
    * @return null
    */
   @Override

@@ -22,31 +22,31 @@ public final class ComponentKey implements Serializable {
   /**
    * The component type representing the available functionality.
    */
-  private Class<?> _type;
+  private final Class<?> _type;
   /**
    * The classifier of the type.
    * This acts as a key to disambiguate multiple options for the same component type.
    */
-  private String _classifier;
+  private final String _classifier;
 
   /**
    * Obtains an instance.
-   * 
+   *
    * @param type  the type of the component, typically an interface
    * @param classifier  the classifier of the type, used to name instances of the same type
    * @return the component type, not null
    */
-  public static ComponentKey of(Class<?> type, String classifier) {
+  public static ComponentKey of(final Class<?> type, final String classifier) {
     return new ComponentKey(type, classifier);
   }
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param type  the type of the component, typically an interface
    * @param classifier  the classifier of the type, used to name instances of the same type
    */
-  private ComponentKey(Class<?> type, String classifier) {
+  private ComponentKey(final Class<?> type, final String classifier) {
     ArgumentChecker.notNull(type, "type");
     ArgumentChecker.notNull(classifier, "classifier");
     _type = type;
@@ -58,7 +58,7 @@ public final class ComponentKey implements Serializable {
    * Gets the type representing the available functionality.
    * <p>
    * This is normally an interface type.
-   * 
+   *
    * @return the type defining the functionality, not null
    */
   public Class<?> getType() {
@@ -67,7 +67,7 @@ public final class ComponentKey implements Serializable {
 
   /**
    * Gets the classifier of the type, used to name instances of the same type.
-   * 
+   *
    * @return the classifier, not null
    */
   public String getClassifier() {
@@ -76,9 +76,9 @@ public final class ComponentKey implements Serializable {
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (obj instanceof ComponentKey) {
-      ComponentKey other = (ComponentKey) obj;
+      final ComponentKey other = (ComponentKey) obj;
       return _type.equals(other._type) && _classifier.equals(other._classifier);
     }
     return false;

@@ -11,19 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheException;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Ehcache;
-import net.sf.ehcache.Element;
-import net.sf.ehcache.config.CacheConfiguration;
-import net.sf.ehcache.config.CopyStrategyConfiguration;
-import net.sf.ehcache.config.SearchAttribute;
-import net.sf.ehcache.config.Searchable;
-import net.sf.ehcache.constructs.blocking.SelfPopulatingCache;
-import net.sf.ehcache.search.Result;
-import net.sf.ehcache.search.Results;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.threeten.bp.Instant;
@@ -40,6 +27,19 @@ import com.opengamma.id.VersionCorrection;
 import com.opengamma.master.AbstractChangeProvidingMaster;
 import com.opengamma.master.AbstractDocument;
 import com.opengamma.util.ArgumentChecker;
+
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheException;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Ehcache;
+import net.sf.ehcache.Element;
+import net.sf.ehcache.config.CacheConfiguration;
+import net.sf.ehcache.config.CopyStrategyConfiguration;
+import net.sf.ehcache.config.SearchAttribute;
+import net.sf.ehcache.config.Searchable;
+import net.sf.ehcache.constructs.blocking.SelfPopulatingCache;
+import net.sf.ehcache.search.Result;
+import net.sf.ehcache.search.Results;
 
 /**
  * A cache decorating a master, mainly intended to reduce the frequency and repetition of queries to the underlying
@@ -106,7 +106,7 @@ public abstract class AbstractEHCachingMaster<D extends AbstractDocument> implem
     _changeManager = new BasicChangeManager();
     _changeListener = new ChangeListener() {
       @Override
-      public void entityChanged(ChangeEvent event) {
+      public void entityChanged(final ChangeEvent event) {
         final ObjectId oid = event.getObjectId();
         final Instant versionFrom = event.getVersionFrom();
         final Instant versionTo = event.getVersionTo();
@@ -118,10 +118,10 @@ public abstract class AbstractEHCachingMaster<D extends AbstractDocument> implem
     underlying.changeManager().addChangeListener(_changeListener);
   }
 
-  private CacheConfiguration tweakCacheConfiguration(CacheConfiguration cacheConfiguration) {
+  private CacheConfiguration tweakCacheConfiguration(final CacheConfiguration cacheConfiguration) {
 
     // Set searchable index
-    Searchable uidToDocumentCacheSearchable = new Searchable();
+    final Searchable uidToDocumentCacheSearchable = new Searchable();
     uidToDocumentCacheSearchable.addSearchAttribute(new SearchAttribute().name("ObjectId")
                                                         .expression("value.getObjectId().toString()"));
     uidToDocumentCacheSearchable.addSearchAttribute(new SearchAttribute().name("VersionFromInstant")
@@ -135,7 +135,7 @@ public abstract class AbstractEHCachingMaster<D extends AbstractDocument> implem
     cacheConfiguration.addSearchable(uidToDocumentCacheSearchable);
 
     // Make copies of cached objects
-    CopyStrategyConfiguration copyStrategyConfiguration = new CopyStrategyConfiguration();
+    final CopyStrategyConfiguration copyStrategyConfiguration = new CopyStrategyConfiguration();
     copyStrategyConfiguration.setClass("com.opengamma.master.cache.JodaBeanCopyStrategy");
     cacheConfiguration.addCopyStrategy(copyStrategyConfiguration);
     cacheConfiguration.setCopyOnRead(true);
@@ -149,12 +149,12 @@ public abstract class AbstractEHCachingMaster<D extends AbstractDocument> implem
   //-------------------------------------------------------------------------
 
   @Override
-  public D get(ObjectIdentifiable objectId, VersionCorrection versionCorrection) {
+  public D get(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
 
     // Search through attributes for specified oid, versions/corrections
-    Results results = getUidToDocumentCache().createQuery()
+    final Results results = getUidToDocumentCache().createQuery()
         .includeKeys().includeValues()
         .includeAttribute(getUidToDocumentCache().getSearchAttribute("ObjectId"))
         .includeAttribute(getUidToDocumentCache().getSearchAttribute("VersionFromInstant"))
@@ -175,11 +175,12 @@ public abstract class AbstractEHCachingMaster<D extends AbstractDocument> implem
     // Found a matching cached document
     if (results.size() == 1 && results.all().get(0).getValue() != null) {
       @SuppressWarnings("unchecked")
+      final
       D result = (D) results.all().get(0).getValue();
 
       // Debug: check result against underlying
       if (TEST_AGAINST_UNDERLYING) {
-        D check = getUnderlying().get(objectId, versionCorrection);
+        final D check = getUnderlying().get(objectId, versionCorrection);
         if (!result.equals(check)) {
           LOGGER.error(getUidToDocumentCache().getName() + " returned:\n" + result + "\nbut the underlying master returned:\n" + check);
         }
@@ -192,7 +193,7 @@ public abstract class AbstractEHCachingMaster<D extends AbstractDocument> implem
     // Note: no self-populating by oid/vc, and no caching of misses by oid/vc
     } else if (results.size() == 0) {
       // Get from underlying by oid/vc, throwing exception if not there
-      D result = _underlying.get(objectId, versionCorrection);
+      final D result = _underlying.get(objectId, versionCorrection);
 
       // Explicitly insert in cache
       getUidToDocumentCache().put(new Element(result.getUniqueId(), result));
@@ -209,14 +210,14 @@ public abstract class AbstractEHCachingMaster<D extends AbstractDocument> implem
 
   @SuppressWarnings("unchecked")
   @Override
-  public D get(UniqueId uniqueId) {
+  public D get(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
 
     // Get from cache, which in turn self-populates from the underlying master
     Element element;
     try {
       element = getUidToDocumentCache().get(uniqueId);
-    } catch (CacheException e) {
+    } catch (final CacheException e) {
       throw new DataNotFoundException(e.getMessage());
     }
 
@@ -224,9 +225,9 @@ public abstract class AbstractEHCachingMaster<D extends AbstractDocument> implem
 
       // Debug: check result against underlying
       if (TEST_AGAINST_UNDERLYING) {
-        D check = getUnderlying().get(uniqueId);
+        final D check = getUnderlying().get(uniqueId);
         if (!((D) element.getObjectValue()).equals(check)) {
-          LOGGER.error(getUidToDocumentCache().getName() + " returned:\n" + ((D) element.getObjectValue()) + "\nbut the underlying master returned:\n"  + check);
+          LOGGER.error(getUidToDocumentCache().getName() + " returned:\n" + element.getObjectValue() + "\nbut the underlying master returned:\n"  + check);
         }
       }
       return (D) element.getObjectValue();
@@ -236,15 +237,15 @@ public abstract class AbstractEHCachingMaster<D extends AbstractDocument> implem
   }
 
   @Override
-  public Map<UniqueId, D> get(Collection<UniqueId> uniqueIds) {
+  public Map<UniqueId, D> get(final Collection<UniqueId> uniqueIds) {
     ArgumentChecker.notNull(uniqueIds, "uniqueIds");
 
-    Map<UniqueId, D> result = new HashMap<>();
-    for (UniqueId uniqueId : uniqueIds) {
+    final Map<UniqueId, D> result = new HashMap<>();
+    for (final UniqueId uniqueId : uniqueIds) {
       try {
-        D object = get(uniqueId);
+        final D object = get(uniqueId);
         result.put(uniqueId, object);
-      } catch (DataNotFoundException ex) {
+      } catch (final DataNotFoundException ex) {
         // do nothing
       }
     }
@@ -255,11 +256,11 @@ public abstract class AbstractEHCachingMaster<D extends AbstractDocument> implem
   //-------------------------------------------------------------------------
 
   @Override
-  public D add(D document) {
+  public D add(final D document) {
     ArgumentChecker.notNull(document, "document");
 
     // Add document to underlying master
-    D result = getUnderlying().add(document);
+    final D result = getUnderlying().add(document);
 
     // Store document in UniqueId cache
     getUidToDocumentCache().put(new Element(result.getUniqueId(), result));
@@ -268,7 +269,7 @@ public abstract class AbstractEHCachingMaster<D extends AbstractDocument> implem
   }
 
   @Override
-  public D update(D document) {
+  public D update(final D document) {
     ArgumentChecker.notNull(document, "document");
     ArgumentChecker.notNull(document.getObjectId(), "document.objectId");
 
@@ -276,7 +277,7 @@ public abstract class AbstractEHCachingMaster<D extends AbstractDocument> implem
     cleanCaches(document.getObjectId(), Instant.now(), InstantExtractor.MAX_INSTANT);
 
     // Update document in underlying master
-    D result = getUnderlying().update(document);
+    final D result = getUnderlying().update(document);
 
     // Store document in UniqueId cache
     getUidToDocumentCache().put(new Element(result.getUniqueId(), result));
@@ -285,7 +286,7 @@ public abstract class AbstractEHCachingMaster<D extends AbstractDocument> implem
   }
 
   @Override
-  public void remove(ObjectIdentifiable objectId) {
+  public void remove(final ObjectIdentifiable objectId) {
     ArgumentChecker.notNull(objectId, "objectId");
 
     // Remove document from underlying master
@@ -297,7 +298,7 @@ public abstract class AbstractEHCachingMaster<D extends AbstractDocument> implem
   }
 
   @Override
-  public D correct(D document) {
+  public D correct(final D document) {
     ArgumentChecker.notNull(document, "document");
     ArgumentChecker.notNull(document.getUniqueId(), "document.uniqueId");
 
@@ -305,7 +306,7 @@ public abstract class AbstractEHCachingMaster<D extends AbstractDocument> implem
     getUidToDocumentCache().remove(document.getUniqueId());
 
     // Correct document in underlying master
-    D result = getUnderlying().correct(document);
+    final D result = getUnderlying().correct(document);
 
     // Store latest correction in UniqueId cache
     getUidToDocumentCache().put(new Element(result.getUniqueId(), result));
@@ -314,7 +315,7 @@ public abstract class AbstractEHCachingMaster<D extends AbstractDocument> implem
   }
 
   @Override
-  public List<UniqueId> replaceVersion(UniqueId uniqueId, List<D> replacementDocuments) {
+  public List<UniqueId> replaceVersion(final UniqueId uniqueId, final List<D> replacementDocuments) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
 
@@ -322,7 +323,7 @@ public abstract class AbstractEHCachingMaster<D extends AbstractDocument> implem
     getUidToDocumentCache().remove(uniqueId);
 
     // Replace version in underlying master
-    List<UniqueId> results = getUnderlying().replaceVersion(uniqueId, replacementDocuments);
+    final List<UniqueId> results = getUnderlying().replaceVersion(uniqueId, replacementDocuments);
 
     // Don't cache replacementDocuments, whose version, correction instants may have been altered by underlying master
 
@@ -330,7 +331,7 @@ public abstract class AbstractEHCachingMaster<D extends AbstractDocument> implem
   }
 
   @Override
-  public List<UniqueId> replaceAllVersions(ObjectIdentifiable objectId, List<D> replacementDocuments) {
+  public List<UniqueId> replaceAllVersions(final ObjectIdentifiable objectId, final List<D> replacementDocuments) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
 
@@ -338,7 +339,7 @@ public abstract class AbstractEHCachingMaster<D extends AbstractDocument> implem
     cleanCaches(objectId.getObjectId(), null, null);
 
     // Replace all versions in underlying master
-    List<UniqueId> results = getUnderlying().replaceAllVersions(objectId, replacementDocuments);
+    final List<UniqueId> results = getUnderlying().replaceAllVersions(objectId, replacementDocuments);
 
     // Don't cache replacementDocuments, whose version, correction instants may have been altered by underlying master
 
@@ -346,7 +347,7 @@ public abstract class AbstractEHCachingMaster<D extends AbstractDocument> implem
   }
 
   @Override
-  public List<UniqueId> replaceVersions(ObjectIdentifiable objectId, List<D> replacementDocuments) {
+  public List<UniqueId> replaceVersions(final ObjectIdentifiable objectId, final List<D> replacementDocuments) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
 
@@ -354,7 +355,7 @@ public abstract class AbstractEHCachingMaster<D extends AbstractDocument> implem
     cleanCaches(objectId.getObjectId(), null, null);
 
     // Replace versions in underlying master
-    List<UniqueId> results = getUnderlying().replaceVersions(objectId, replacementDocuments);
+    final List<UniqueId> results = getUnderlying().replaceVersions(objectId, replacementDocuments);
 
     // Don't cache replacementDocuments, whose version, correction instants may have been altered by underlying master
 
@@ -362,7 +363,7 @@ public abstract class AbstractEHCachingMaster<D extends AbstractDocument> implem
   }
 
   @Override
-  public UniqueId replaceVersion(D replacementDocument) {
+  public UniqueId replaceVersion(final D replacementDocument) {
     ArgumentChecker.notNull(replacementDocument, "replacementDocument");
 
     final List<UniqueId> result =
@@ -375,12 +376,12 @@ public abstract class AbstractEHCachingMaster<D extends AbstractDocument> implem
   }
 
   @Override
-  public void removeVersion(UniqueId uniqueId) {
+  public void removeVersion(final UniqueId uniqueId) {
     replaceVersion(uniqueId, Collections.<D>emptyList());
   }
 
   @Override
-  public UniqueId addVersion(ObjectIdentifiable objectId, D documentToAdd) {
+  public UniqueId addVersion(final ObjectIdentifiable objectId, final D documentToAdd) {
     final List<UniqueId> result = replaceVersions(objectId, Collections.singletonList(documentToAdd));
     if (result.isEmpty()) {
       return null;
@@ -391,9 +392,9 @@ public abstract class AbstractEHCachingMaster<D extends AbstractDocument> implem
 
   //-------------------------------------------------------------------------
 
-  private void cleanCaches(ObjectId objectId, Instant fromVersion, Instant toVersion) {
+  private void cleanCaches(final ObjectId objectId, final Instant fromVersion, final Instant toVersion) {
 
-    Results results = getUidToDocumentCache().createQuery().includeKeys()
+    final Results results = getUidToDocumentCache().createQuery().includeKeys()
         .includeAttribute(getUidToDocumentCache().getSearchAttribute("ObjectId"))
         .includeAttribute(getUidToDocumentCache().getSearchAttribute("VersionFromInstant"))
         .includeAttribute(getUidToDocumentCache().getSearchAttribute("VersionToInstant"))
@@ -405,7 +406,7 @@ public abstract class AbstractEHCachingMaster<D extends AbstractDocument> implem
                          .ge((toVersion != null ? toVersion : InstantExtractor.MAX_INSTANT).toString()))
         .execute();
 
-    for (Result result : results.all()) {
+    for (final Result result : results.all()) {
       getUidToDocumentCache().remove(result.getKey());
     }
   }

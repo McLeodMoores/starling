@@ -28,11 +28,11 @@ import com.opengamma.util.PublicSPI;
 public class BasicChangeManager implements ChangeManager {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(BasicChangeManager.class);
-  
+
   /**
    * The listeners.
    */
-  private final CopyOnWriteArraySet<ChangeListener> _listeners = new CopyOnWriteArraySet<ChangeListener>();
+  private final CopyOnWriteArraySet<ChangeListener> _listeners = new CopyOnWriteArraySet<>();
 
   /**
    * Creates a manager.
@@ -47,11 +47,11 @@ public class BasicChangeManager implements ChangeManager {
    * The listener will receive all events.
    * <p>
    * This method is not intended to be overridden.
-   * 
+   *
    * @param listener  the listener to add, not null
    */
   @Override
-  public void addChangeListener(ChangeListener listener) {
+  public void addChangeListener(final ChangeListener listener) {
     ArgumentChecker.notNull(listener, "listener");
     _listeners.add(listener);
   }
@@ -62,11 +62,11 @@ public class BasicChangeManager implements ChangeManager {
    * The listener will cease receiving events.
    * <p>
    * This method is not intended to be overridden.
-   * 
+   *
    * @param listener  the listener to remove, not null
    */
   @Override
-  public void removeChangeListener(ChangeListener listener) {
+  public void removeChangeListener(final ChangeListener listener) {
     ArgumentChecker.notNull(listener, "listener");
     _listeners.remove(listener);
   }
@@ -75,7 +75,7 @@ public class BasicChangeManager implements ChangeManager {
    * Gets a copy of the list of listeners.
    * <p>
    * This method is not intended to be overridden.
-   * 
+   *
    * @return the list of listeners, not null
    */
   protected List<ChangeListener> getListeners() {
@@ -85,8 +85,8 @@ public class BasicChangeManager implements ChangeManager {
   //-------------------------------------------------------------------------
 
   @Override
-  public void entityChanged(ChangeType type, ObjectId oid, Instant versionFrom, Instant versionTo, Instant versionInstant) {
-    ChangeEvent event = new ChangeEvent(type, oid, versionFrom, versionTo, versionInstant);
+  public void entityChanged(final ChangeType type, final ObjectId oid, final Instant versionFrom, final Instant versionTo, final Instant versionInstant) {
+    final ChangeEvent event = new ChangeEvent(type, oid, versionFrom, versionTo, versionInstant);
     handleEntityChanged(event);
   }
 
@@ -95,7 +95,7 @@ public class BasicChangeManager implements ChangeManager {
    * <p>
    * This implementation calls {@link #fireEntityChanged(ChangeEvent)} directly.
    * An overriding method may use a more advanced mechanism to handle the event.
-   * 
+   *
    * @param event  the event that occurred, not null
    */
   protected void handleEntityChanged(final ChangeEvent event) {
@@ -107,14 +107,14 @@ public class BasicChangeManager implements ChangeManager {
    * <p>
    * This implementation loops around the stored listeners and calls them in
    * serial on the calling thread.
-   * 
+   *
    * @param event  the event that occurred, not null
    */
   protected void fireEntityChanged(final ChangeEvent event) {
-    for (ChangeListener listener : _listeners) {
+    for (final ChangeListener listener : _listeners) {
       try {
         listener.entityChanged(event);
-      } catch (Exception e) {
+      } catch (final Exception e) {
         LOGGER.error("Error while calling listener " + listener + " on entity changed", e);
       }
     }
@@ -123,7 +123,7 @@ public class BasicChangeManager implements ChangeManager {
   //-------------------------------------------------------------------------
   /**
    * Returns a debugging string for the manager.
-   * 
+   *
    * @return the debugging string, not null
    */
   @Override

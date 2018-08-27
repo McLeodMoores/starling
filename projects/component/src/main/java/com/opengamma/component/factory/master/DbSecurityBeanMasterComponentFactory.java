@@ -46,7 +46,7 @@ public class DbSecurityBeanMasterComponentFactory extends AbstractDocumentDbMast
    */
   private static final SerDeserializer DESERIALIZER = new DefaultDeserializer() {
     @Override
-    public MetaProperty<?> findMetaProperty(Class<?> beanType, MetaBean metaBean, String propertyName) {
+    public MetaProperty<?> findMetaProperty(final Class<?> beanType, final MetaBean metaBean, final String propertyName) {
       if ("permissions".equals(propertyName)) {
         return metaBean.metaProperty("requiredPermissions");
       }
@@ -54,10 +54,10 @@ public class DbSecurityBeanMasterComponentFactory extends AbstractDocumentDbMast
     }
   };
   static {
-    Reflections reflections = AnnotationReflector.getDefaultReflector().getReflector();
-    Set<Class<? extends ManageableSecurity>> subTypes = reflections.getSubTypesOf(ManageableSecurity.class);
+    final Reflections reflections = AnnotationReflector.getDefaultReflector().getReflector();
+    final Set<Class<? extends ManageableSecurity>> subTypes = reflections.getSubTypesOf(ManageableSecurity.class);
     for (final Class<? extends ManageableSecurity> subType : subTypes) {
-      Class<?> cls = ClassUtils.loadClassRuntime(subType.getName(), ManageableSecurity.class);
+      final Class<?> cls = ClassUtils.loadClassRuntime(subType.getName(), ManageableSecurity.class);
       SerDeserializers.INSTANCE.register(cls, DESERIALIZER);
     }
     SerDeserializers.INSTANCE.register(ManageableSecurity.class, DESERIALIZER);
@@ -70,7 +70,7 @@ public class DbSecurityBeanMasterComponentFactory extends AbstractDocumentDbMast
   public DbSecurityBeanMasterComponentFactory() {
     super("secb", SecurityMaster.class);
   }
-  
+
   @Override
   protected Class<? extends AbstractRemoteMaster> getRemoteInterface() {
     return RemoteSecurityMaster.class;
@@ -78,7 +78,7 @@ public class DbSecurityBeanMasterComponentFactory extends AbstractDocumentDbMast
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
     // hack to make this factory compatible with DbSecurityMasterComponentFactory
     configuration.remove("cacheManager");
     configuration.remove("detailProvider");
@@ -87,24 +87,24 @@ public class DbSecurityBeanMasterComponentFactory extends AbstractDocumentDbMast
 
   @Override
   protected DbSecurityBeanMaster createDbDocumentMaster() throws Exception {
-    DbSecurityBeanMaster master = new DbSecurityBeanMaster(getDbConnector());
+    final DbSecurityBeanMaster master = new DbSecurityBeanMaster(getDbConnector());
     master.registerMetrics(OpenGammaMetricRegistry.getSummaryInstance(), OpenGammaMetricRegistry.getDetailedInstance(), "DbSecurityMaster-" + getClassifier());
     return master;
   }
 
   @Override
-  protected AbstractDataResource createPublishedResource(DbSecurityBeanMaster dbMaster, SecurityMaster postProcessedMaster) {
+  protected AbstractDataResource createPublishedResource(final DbSecurityBeanMaster dbMaster, final SecurityMaster postProcessedMaster) {
     //only db instance is allowed by the constructor here:
     return new DataSecurityMasterResource(dbMaster);
   }
 
   @Override
-  protected SecurityMaster wrapMasterWithTrackingInterface(SecurityMaster postProcessedMaster) {
+  protected SecurityMaster wrapMasterWithTrackingInterface(final SecurityMaster postProcessedMaster) {
     return new DataTrackingSecurityMaster(postProcessedMaster);
   }
 
   @Override
-  protected SecurityMaster postProcess(DbSecurityBeanMaster master) {
+  protected SecurityMaster postProcess(final DbSecurityBeanMaster master) {
     return PermissionedSecurityMaster.wrap(master);
   }
 

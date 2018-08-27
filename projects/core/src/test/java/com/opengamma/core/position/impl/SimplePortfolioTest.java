@@ -20,7 +20,7 @@ import com.opengamma.util.test.TestGroup;
 public class SimplePortfolioTest {
 
   public void test_construction_String() {
-    SimplePortfolio test = new SimplePortfolio("Name");
+    final SimplePortfolio test = new SimplePortfolio("Name");
     assertEquals(null, test.getUniqueId());
     assertEquals("Name", test.getName());
     assertEquals(true, SimplePortfolioNode.class.isAssignableFrom(test.getRootNode().getClass()));
@@ -35,7 +35,7 @@ public class SimplePortfolioTest {
 
   //-------------------------------------------------------------------------
   public void test_construction_PortfolioIdString() {
-    SimplePortfolio test = new SimplePortfolio(id("Scheme", "Id"), "Name");
+    final SimplePortfolio test = new SimplePortfolio(id("Scheme", "Id"), "Name");
     assertEquals(id("Scheme", "Id"), test.getUniqueId());
     assertEquals("Name", test.getName());
     assertEquals(true, SimplePortfolioNode.class.isAssignableFrom(test.getRootNode().getClass()));
@@ -55,8 +55,8 @@ public class SimplePortfolioTest {
 
   //-------------------------------------------------------------------------
   public void test_construction_PortfolioIdStringNode() {
-    SimplePortfolioNode root = new SimplePortfolioNode();
-    SimplePortfolio test = new SimplePortfolio(id("Scheme", "Id"), "Name", root);
+    final SimplePortfolioNode root = new SimplePortfolioNode();
+    final SimplePortfolio test = new SimplePortfolio(id("Scheme", "Id"), "Name", root);
     assertEquals(id("Scheme", "Id"), test.getUniqueId());
     assertEquals("Name", test.getName());
     assertEquals(true, test.getRootNode() == root);
@@ -78,47 +78,47 @@ public class SimplePortfolioTest {
     new SimplePortfolio(id("Scheme", "Id"), "Name", null);
   }
 
-  private UniqueId id(String scheme, String value) {
+  private UniqueId id(final String scheme, final String value) {
     return UniqueId.of(scheme, value);
   }
 
   //-------------------------------------------------------------------------
   public void test_setUniqueId() {
-    SimplePortfolio test = new SimplePortfolio(id("Scheme", "Id"), "Name");
+    final SimplePortfolio test = new SimplePortfolio(id("Scheme", "Id"), "Name");
     test.setUniqueId(id("Scheme2", "Id2"));
     assertEquals(id("Scheme2", "Id2"), test.getUniqueId());
   }
 
   @Test(expectedExceptions=IllegalArgumentException.class)
   public void test_setUniqueId_null() {
-    SimplePortfolio test = new SimplePortfolio(id("Scheme", "Id"), "Name");
+    final SimplePortfolio test = new SimplePortfolio(id("Scheme", "Id"), "Name");
     test.setUniqueId(null);
   }
 
   //-------------------------------------------------------------------------
   public void test_setName() {
-    SimplePortfolio test = new SimplePortfolio(id("Scheme", "Id"), "Name");
+    final SimplePortfolio test = new SimplePortfolio(id("Scheme", "Id"), "Name");
     test.setName("Name2");
     assertEquals("Name2", test.getName());
   }
 
   @Test(expectedExceptions=IllegalArgumentException.class)
   public void test_setName_null() {
-    SimplePortfolio test = new SimplePortfolio(id("Scheme", "Id"), "Name");
+    final SimplePortfolio test = new SimplePortfolio(id("Scheme", "Id"), "Name");
     test.setName(null);
   }
 
   //-------------------------------------------------------------------------
   public void test_setRootNode() {
-    SimplePortfolio test = new SimplePortfolio(id("Scheme", "Id"), "Name");
-    SimplePortfolioNode root = new SimplePortfolioNode();
+    final SimplePortfolio test = new SimplePortfolio(id("Scheme", "Id"), "Name");
+    final SimplePortfolioNode root = new SimplePortfolioNode();
     test.setRootNode(root);
     assertSame(root, test.getRootNode());
   }
 
   @Test(expectedExceptions=IllegalArgumentException.class)
   public void test_setRootNode_null() {
-    SimplePortfolio test = new SimplePortfolio(id("Scheme", "Id"), "Name");
+    final SimplePortfolio test = new SimplePortfolio(id("Scheme", "Id"), "Name");
     test.setRootNode(null);
   }
 

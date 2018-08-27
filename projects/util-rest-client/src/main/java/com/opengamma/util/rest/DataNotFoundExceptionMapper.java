@@ -29,8 +29,8 @@ public class DataNotFoundExceptionMapper
 
   //-------------------------------------------------------------------------
   @Override
-  protected String buildHtmlErrorPage(DataNotFoundException exception) {
-    Map<String, String> data = new HashMap<>();
+  protected String buildHtmlErrorPage(final DataNotFoundException exception) {
+    final Map<String, String> data = new HashMap<>();
     return createHtmlErrorPage("error-datanotfound.html", data);
   }
 

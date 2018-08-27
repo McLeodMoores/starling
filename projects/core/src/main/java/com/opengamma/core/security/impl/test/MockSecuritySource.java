@@ -27,32 +27,32 @@ public class MockSecuritySource extends AbstractSecuritySource implements Securi
   }
 
   @Override
-  public Security get(UniqueId uniqueId) {
+  public Security get(final UniqueId uniqueId) {
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public Security get(ObjectId objectId, VersionCorrection versionCorrection) {
+  public Security get(final ObjectId objectId, final VersionCorrection versionCorrection) {
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public Collection<Security> get(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
+  public Collection<Security> get(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public Collection<Security> get(ExternalIdBundle bundle) {
+  public Collection<Security> get(final ExternalIdBundle bundle) {
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public Security getSingle(ExternalIdBundle bundle) {
+  public Security getSingle(final ExternalIdBundle bundle) {
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public Security getSingle(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
+  public Security getSingle(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     throw new UnsupportedOperationException();
   }
 

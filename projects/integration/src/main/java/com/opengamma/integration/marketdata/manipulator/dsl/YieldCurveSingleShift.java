@@ -33,15 +33,15 @@ public class YieldCurveSingleShift implements StructureManipulator<YieldAndDisco
   /** The time */
   private final double _t;
 
-  /* package */ YieldCurveSingleShift(double t, double shift) {
+  /* package */ YieldCurveSingleShift(final double t, final double shift) {
     _t = t;
     _shift = shift;
   }
 
   @Override
-  public YieldAndDiscountCurve execute(YieldAndDiscountCurve structure,
-                                       ValueSpecification valueSpecification,
-                                       FunctionExecutionContext executionContext) {
+  public YieldAndDiscountCurve execute(final YieldAndDiscountCurve structure,
+                                       final ValueSpecification valueSpecification,
+                                       final FunctionExecutionContext executionContext) {
     return structure.withSingleShift(_t, _shift);
   }
 
@@ -51,15 +51,15 @@ public class YieldCurveSingleShift implements StructureManipulator<YieldAndDisco
   }
 
   public MutableFudgeMsg toFudgeMsg(final FudgeSerializer serializer) {
-    MutableFudgeMsg msg = serializer.newMessage();
+    final MutableFudgeMsg msg = serializer.newMessage();
     serializer.addToMessage(msg, TIME, null, _t);
     serializer.addToMessage(msg, SHIFT, null, _shift);
     return msg;
   }
 
   public static YieldCurveSingleShift fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
-    Double t = deserializer.fieldValueToObject(Double.class, msg.getByName(TIME));
-    Double shift = deserializer.fieldValueToObject(Double.class, msg.getByName(SHIFT));
+    final Double t = deserializer.fieldValueToObject(Double.class, msg.getByName(TIME));
+    final Double shift = deserializer.fieldValueToObject(Double.class, msg.getByName(SHIFT));
     return new YieldCurveSingleShift(t, shift);
   }
 
@@ -69,7 +69,7 @@ public class YieldCurveSingleShift implements StructureManipulator<YieldAndDisco
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }

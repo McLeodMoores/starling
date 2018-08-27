@@ -40,26 +40,26 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
    */
   private final Class<?> _underlyingType;
 
-  /* package */ GridColumn(String header, String description, Class<?> type, CellRenderer renderer) {
+  /* package */ GridColumn(final String header, final String description, final Class<?> type, final CellRenderer renderer) {
     this(header, description, type, null, renderer, null, null, null);
   }
 
-  /* package */ GridColumn(String header,
-                           String description,
-                           Class<?> type,
-                           CellRenderer renderer,
-                           ColumnSpecification columnSpec) {
+  /* package */ GridColumn(final String header,
+                           final String description,
+                           final Class<?> type,
+                           final CellRenderer renderer,
+                           final ColumnSpecification columnSpec) {
     this(header, description, type, null, renderer, columnSpec, null, null);
   }
 
-  /* package */ GridColumn(String header,
-                           String description,
-                           Class<?> type,
-                           Class<?> underlyingType,
-                           CellRenderer renderer,
-                           ColumnSpecification columnSpec,
-                           Object inlineKey,
-                           Integer inlineIndex) {
+  /* package */ GridColumn(final String header,
+                           final String description,
+                           final Class<?> type,
+                           final Class<?> underlyingType,
+                           final CellRenderer renderer,
+                           final ColumnSpecification columnSpec,
+                           final Object inlineKey,
+                           final Integer inlineIndex) {
     ArgumentChecker.notNull(header, "header");
     ArgumentChecker.notNull(renderer, "renderer");
     _inlineIndex = inlineIndex;
@@ -82,9 +82,9 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
    * @param columnType Type of data displayed in the column
    * @return A column for displaying data calculated for the requirement and calculation configuration
    */
-  /* package */ static GridColumn forSpec(ColumnSpecification columnSpec,
-                                          Class<?> columnType,
-                                          TargetLookup targetLookup) {
+  /* package */ static GridColumn forSpec(final ColumnSpecification columnSpec,
+                                          final Class<?> columnType,
+                                          final TargetLookup targetLookup) {
     return forSpec(columnSpec.getHeader(), columnSpec, columnType, null, targetLookup, null, null);
   }
 
@@ -102,14 +102,14 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
    * from the value.
    * @return The column
    */
-  /* package */ static GridColumn forSpec(String header,
-                                          ColumnSpecification columnSpec,
-                                          Class<?> columnType,
-                                          Class<?> underlyingType,
-                                          TargetLookup targetLookup,
-                                          Object inlineKey,
-                                          Integer inlineIndex) {
-    CellRenderer renderer = new AnalyticsRenderer(columnSpec, targetLookup);
+  /* package */ static GridColumn forSpec(final String header,
+                                          final ColumnSpecification columnSpec,
+                                          final Class<?> columnType,
+                                          final Class<?> underlyingType,
+                                          final TargetLookup targetLookup,
+                                          final Object inlineKey,
+                                          final Integer inlineIndex) {
+    final CellRenderer renderer = new AnalyticsRenderer(columnSpec, targetLookup);
     return new GridColumn(header,
                           createDescription(columnSpec.getValueProperties()),
                           columnType,
@@ -166,17 +166,17 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
     }
   }
 
-  /* package */ ResultsCell buildResults(int rowIndex, TypeFormatter.Format format, ResultsCache cache) {
+  /* package */ ResultsCell buildResults(final int rowIndex, final TypeFormatter.Format format, final ResultsCache cache) {
     return _renderer.getResults(rowIndex, format, cache, _type, _inlineKey);
   }
 
-  private static String createDescription(ValueProperties constraints) {
+  private static String createDescription(final ValueProperties constraints) {
     if (constraints.isEmpty()) {
       return "No constraints";
     }
-    StringBuilder sb = new StringBuilder();
+    final StringBuilder sb = new StringBuilder();
     boolean firstProperty = true;
-    for (String propertyName : constraints.getProperties()) {
+    for (final String propertyName : constraints.getProperties()) {
       if (ValuePropertyNames.FUNCTION.equals(propertyName)) {
         continue;
       }
@@ -186,8 +186,8 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
         sb.append("; \n");
       }
       sb.append(propertyName).append("=");
-      Set<String> propertyValues = constraints.getValues(propertyName);
-      boolean isOptional = constraints.isOptional(propertyName);
+      final Set<String> propertyValues = constraints.getValues(propertyName);
+      final boolean isOptional = constraints.isOptional(propertyName);
       if (propertyValues.size() == 0) {
         sb.append("[empty]");
       } else if (propertyValues.size() == 1 && !isOptional) {
@@ -195,7 +195,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
       } else {
         sb.append("(");
         boolean firstValue = true;
-        for (String propertyValue : propertyValues) {
+        for (final String propertyValue : propertyValues) {
           if (firstValue) {
             firstValue = false;
           } else {

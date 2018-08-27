@@ -21,24 +21,24 @@ import com.opengamma.util.fudgemsg.AbstractFudgeBuilder;
 public class AgricultureFutureSecurityFudgeBuilder extends AbstractFudgeBuilder implements FudgeBuilder<AgricultureFutureSecurity> {
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, AgricultureFutureSecurity object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final AgricultureFutureSecurity object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     AgricultureFutureSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
-  public static void toFudgeMsg(FudgeSerializer serializer, AgricultureFutureSecurity object, final MutableFudgeMsg msg) {
+  public static void toFudgeMsg(final FudgeSerializer serializer, final AgricultureFutureSecurity object, final MutableFudgeMsg msg) {
     CommodityFutureSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
   }
 
   @Override
-  public AgricultureFutureSecurity buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    AgricultureFutureSecurity object = new AgricultureFutureSecurity();
+  public AgricultureFutureSecurity buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final AgricultureFutureSecurity object = new AgricultureFutureSecurity();
     AgricultureFutureSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     return object;
   }
 
-  public static void fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg, AgricultureFutureSecurity object) {
+  public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final AgricultureFutureSecurity object) {
     CommodityFutureSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
   }
 

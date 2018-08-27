@@ -22,8 +22,8 @@ import com.opengamma.analytics.math.interpolation.LinearInterpolator1D;
 public class CurveExample {
 
   // @export "constantDoublesCurveDemo"
-  public static void constantDoublesCurveDemo(PrintStream out) {
-    Curve<Double, Double> curve = new ConstantDoublesCurve(5.0);
+  public static void constantDoublesCurveDemo(final PrintStream out) {
+    final Curve<Double, Double> curve = new ConstantDoublesCurve(5.0);
 
     out.println(curve.getYValue(0.0));
     out.println(curve.getYValue(10.0));
@@ -49,11 +49,11 @@ public class CurveExample {
   //    }
 
   // @export "interpolatedDoublesCurveDemo"
-  public static void interpolatedDoublesCurveDemo(PrintStream out) {
-    double[] xdata = {1.0, 2.0, 3.0};
-    double[] ydata = {2.0, 4.0, 6.0};
-    LinearInterpolator1D interpolator = new LinearInterpolator1D();
-    Curve<Double, Double> curve = new InterpolatedDoublesCurve(xdata, ydata, interpolator, true);
+  public static void interpolatedDoublesCurveDemo(final PrintStream out) {
+    final double[] xdata = {1.0, 2.0, 3.0};
+    final double[] ydata = {2.0, 4.0, 6.0};
+    final LinearInterpolator1D interpolator = new LinearInterpolator1D();
+    final Curve<Double, Double> curve = new InterpolatedDoublesCurve(xdata, ydata, interpolator, true);
 
     out.println(curve.getYValue(1.0));
     out.println(curve.getYValue(2.0));
@@ -63,22 +63,22 @@ public class CurveExample {
     try {
       out.println("Trying to get y value for too large an x...");
       curve.getYValue(4.0);
-    } catch (java.lang.IllegalArgumentException e) {
+    } catch (final java.lang.IllegalArgumentException e) {
       out.println("IllegalArgumentException called");
     }
   }
 
   // @export "interpolatorExtrapolatorDoublesCurveDemo"
-  public static void interpolatorExtrapolatorDoublesCurveDemo(PrintStream out) {
-    double[] xdata = {1.0, 2.0, 3.0};
-    double[] ydata = {2.0, 4.0, 6.0};
+  public static void interpolatorExtrapolatorDoublesCurveDemo(final PrintStream out) {
+    final double[] xdata = {1.0, 2.0, 3.0};
+    final double[] ydata = {2.0, 4.0, 6.0};
 
-    Interpolator1D interpolator = new LinearInterpolator1D();
-    Interpolator1D leftExtrapolator = new LinearExtrapolator1D(interpolator);
-    Interpolator1D rightExtrapolator = new LinearExtrapolator1D(interpolator);
-    Interpolator1D combined = new CombinedInterpolatorExtrapolator(interpolator, leftExtrapolator, rightExtrapolator);
+    final Interpolator1D interpolator = new LinearInterpolator1D();
+    final Interpolator1D leftExtrapolator = new LinearExtrapolator1D(interpolator);
+    final Interpolator1D rightExtrapolator = new LinearExtrapolator1D(interpolator);
+    final Interpolator1D combined = new CombinedInterpolatorExtrapolator(interpolator, leftExtrapolator, rightExtrapolator);
 
-    Curve<Double, Double> curve = new InterpolatedDoublesCurve(xdata, ydata, combined, true);
+    final Curve<Double, Double> curve = new InterpolatedDoublesCurve(xdata, ydata, combined, true);
 
     out.println(curve.getYValue(1.0));
     out.println(curve.getYValue(2.0));

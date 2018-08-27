@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.option;
@@ -19,7 +19,7 @@ public class BarrierDirectionUserType extends EnumUserType<BarrierDirection> {
   }
 
   @Override
-  protected String enumToStringNoCache(BarrierDirection value) {
+  protected String enumToStringNoCache(final BarrierDirection value) {
     switch (value) {
       case KNOCK_IN:
         return "knock_in";

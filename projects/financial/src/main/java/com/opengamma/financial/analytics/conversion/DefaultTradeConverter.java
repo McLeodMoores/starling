@@ -94,6 +94,7 @@ public class DefaultTradeConverter implements TradeConverter {
    * @return The instrument definition
    * @throws IllegalArgumentException if the underlying security is not a {@link FinancialSecurity}
    */
+  @Override
   public InstrumentDefinition<?> convert(final Trade trade) {
     ArgumentChecker.notNull(trade, "trade");
     final Security security = trade.getSecurity();
@@ -102,60 +103,60 @@ public class DefaultTradeConverter implements TradeConverter {
   }
 
   private final class TradeVisitor extends FinancialSecurityVisitorSameValueAdapter<TradeConverter> {
-    
+
     public TradeVisitor() {
       super(new TradeConverter() {
         @Override
-        public InstrumentDefinition<?> convert(Trade trade) {
+        public InstrumentDefinition<?> convert(final Trade trade) {
           return ((FinancialSecurity) trade.getSecurity()).accept(_securityConverter);
         }
       });
     }
 
     @Override
-    public TradeConverter visitAgricultureFutureSecurity(AgricultureFutureSecurity security) {
+    public TradeConverter visitAgricultureFutureSecurity(final AgricultureFutureSecurity security) {
       return _futureTradeConverter;
     }
-    
+
     @Override
-    public TradeConverter visitDeliverableSwapFutureSecurity(DeliverableSwapFutureSecurity security) {
+    public TradeConverter visitDeliverableSwapFutureSecurity(final DeliverableSwapFutureSecurity security) {
       return _deliverableSwapFutureTradeConverter;
     }
-    
+
     @Override
-    public TradeConverter visitEnergyFutureSecurity(EnergyFutureSecurity security) {
+    public TradeConverter visitEnergyFutureSecurity(final EnergyFutureSecurity security) {
       return _futureTradeConverter;
     }
-    
+
     @Override
-    public TradeConverter visitEquityFutureSecurity(EquityFutureSecurity security) {
+    public TradeConverter visitEquityFutureSecurity(final EquityFutureSecurity security) {
       return _futureTradeConverter;
     }
-    
+
     @Override
-    public TradeConverter visitEquityIndexDividendFutureSecurity(EquityIndexDividendFutureSecurity security) {
+    public TradeConverter visitEquityIndexDividendFutureSecurity(final EquityIndexDividendFutureSecurity security) {
       return _futureTradeConverter;
     }
-    
+
     @Override
-    public TradeConverter visitFederalFundsFutureSecurity(FederalFundsFutureSecurity security) {
+    public TradeConverter visitFederalFundsFutureSecurity(final FederalFundsFutureSecurity security) {
       return _federalFundsFutureTradeConverter;
     }
-    
+
     @Override
-    public TradeConverter visitIndexFutureSecurity(IndexFutureSecurity security) {
+    public TradeConverter visitIndexFutureSecurity(final IndexFutureSecurity security) {
       return _futureTradeConverter;
     }
-    
+
     @Override
-    public TradeConverter visitInterestRateFutureSecurity(InterestRateFutureSecurity security) {
+    public TradeConverter visitInterestRateFutureSecurity(final InterestRateFutureSecurity security) {
       return _interestRateFutureTradeConverter;
     }
-    
+
     @Override
-    public TradeConverter visitMetalFutureSecurity(MetalFutureSecurity security) {
+    public TradeConverter visitMetalFutureSecurity(final MetalFutureSecurity security) {
       return _futureTradeConverter;
     }
   }
-  
+
 }

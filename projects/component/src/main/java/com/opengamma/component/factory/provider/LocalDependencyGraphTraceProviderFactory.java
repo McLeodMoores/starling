@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.component.factory.provider;
@@ -85,17 +85,17 @@ public class LocalDependencyGraphTraceProviderFactory extends AbstractComponentF
   private MarketDataProviderResolver _marketDataProviderResolver;
 
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
 
-    DependencyGraphBuilderResourceContextBean builderContext = new DependencyGraphBuilderResourceContextBean();
+    final DependencyGraphBuilderResourceContextBean builderContext = new DependencyGraphBuilderResourceContextBean();
     builderContext.setCompiledFunctionService(getCompiledFunctionService());
     builderContext.setFunctionResolver(getFunctionResolver());
     builderContext.setFunctionExclusionGroups(getFunctionExclusionGroups());
     builderContext.setMarketDataProviderResolver(getMarketDataProviderResolver());
 
-    DependencyGraphTraceBuilder traceBuilder = new DependencyGraphTraceBuilder(builderContext);
-    LocalDependencyGraphTraceProvider provider = new LocalDependencyGraphTraceProvider(traceBuilder);
-    ComponentInfo info = new ComponentInfo(DependencyGraphTraceProvider.class, getClassifier());
+    final DependencyGraphTraceBuilder traceBuilder = new DependencyGraphTraceBuilder(builderContext);
+    final LocalDependencyGraphTraceProvider provider = new LocalDependencyGraphTraceProvider(traceBuilder);
+    final ComponentInfo info = new ComponentInfo(DependencyGraphTraceProvider.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     if (isPublishRest()) {
       info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteDependencyGraphTraceProvider.class);

@@ -34,7 +34,7 @@ public final class CurrencyFudgeSecondaryType extends SecondaryFieldType<Currenc
 
   //-------------------------------------------------------------------------
   @Override
-  public String secondaryToPrimary(Currency object) {
+  public String secondaryToPrimary(final Currency object) {
     return object.getCode();
   }
 

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.cache;
@@ -35,8 +35,8 @@ public abstract class AbstractViewComputationCache implements ViewComputationCac
   }
 
   public static Collection<Pair<ValueSpecification, Object>> getValues(final ViewComputationCache cache, final Collection<ValueSpecification> specifications) {
-    final Collection<Pair<ValueSpecification, Object>> values = new ArrayList<Pair<ValueSpecification, Object>>(specifications.size());
-    for (ValueSpecification specification : specifications) {
+    final Collection<Pair<ValueSpecification, Object>> values = new ArrayList<>(specifications.size());
+    for (final ValueSpecification specification : specifications) {
       values.add(Pairs.of(specification, cache.getValue(specification)));
     }
     return values;
@@ -56,23 +56,23 @@ public abstract class AbstractViewComputationCache implements ViewComputationCac
   }
 
   @Override
-  public void putSharedValues(Collection<? extends ComputedValue> values) {
+  public void putSharedValues(final Collection<? extends ComputedValue> values) {
     putSharedValues(this, values);
   }
 
   public static void putSharedValues(final ViewComputationCache cache, final Collection<? extends ComputedValue> values) {
-    for (ComputedValue value : values) {
+    for (final ComputedValue value : values) {
       cache.putSharedValue(value);
     }
   }
 
   @Override
-  public void putPrivateValues(Collection<? extends ComputedValue> values) {
+  public void putPrivateValues(final Collection<? extends ComputedValue> values) {
     putPrivateValues(this, values);
   }
 
   public static void putPrivateValues(final ViewComputationCache cache, final Collection<? extends ComputedValue> values) {
-    for (ComputedValue value : values) {
+    for (final ComputedValue value : values) {
       cache.putPrivateValue(value);
     }
   }
@@ -84,7 +84,7 @@ public abstract class AbstractViewComputationCache implements ViewComputationCac
 
   /**
    * Implementation of {@link #putValues} that calls through to {@link #putSharedValues} and {@link #putPrivateValues}.
-   * 
+   *
    * @param cache instance
    * @param values values to put
    * @param filter cache select filter
@@ -92,15 +92,15 @@ public abstract class AbstractViewComputationCache implements ViewComputationCac
   public static void putValuesBatched(final ViewComputationCache cache, final Collection<? extends ComputedValue> values, final CacheSelectHint filter) {
     List<ComputedValue> privateValues = null;
     List<ComputedValue> sharedValues = null;
-    for (ComputedValue value : values) {
+    for (final ComputedValue value : values) {
       if (filter.isPrivateValue(value.getSpecification())) {
         if (privateValues == null) {
-          privateValues = new ArrayList<ComputedValue>(values.size());
+          privateValues = new ArrayList<>(values.size());
         }
         privateValues.add(value);
       } else {
         if (sharedValues == null) {
-          sharedValues = new ArrayList<ComputedValue>(values.size());
+          sharedValues = new ArrayList<>(values.size());
         }
         sharedValues.add(value);
       }
@@ -123,13 +123,13 @@ public abstract class AbstractViewComputationCache implements ViewComputationCac
 
   /**
    * Implementation of {@link #putValues} that calls through to {@link #putValue}.
-   * 
+   *
    * @param cache instance
    * @param values values to put
    * @param filter cache select filter
    */
   public static void putValuesDirect(final ViewComputationCache cache, final Collection<ComputedValue> values, final CacheSelectHint filter) {
-    for (ComputedValue value : values) {
+    for (final ComputedValue value : values) {
       cache.putValue(value, filter);
     }
   }

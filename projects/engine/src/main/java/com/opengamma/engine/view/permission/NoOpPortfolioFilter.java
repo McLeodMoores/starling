@@ -15,7 +15,7 @@ import com.opengamma.engine.view.client.PortfolioFilter;
 public class NoOpPortfolioFilter implements PortfolioFilter {
 
   @Override
-  public Portfolio generateRestrictedPortfolio(Portfolio portfolio) {
+  public Portfolio generateRestrictedPortfolio(final Portfolio portfolio) {
     return portfolio;
   }
 }

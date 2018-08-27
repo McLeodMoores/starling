@@ -74,7 +74,7 @@ public class WebHomeResource extends AbstractSingletonWebResource {
   private static final ImmutableList<ResourceConfig> RESOURCE_CONFIGS;
   private static final List<ResourceConfig> RESOURCE_CONFIG_LIST = new CopyOnWriteArrayList<>();
   static {
-    ImmutableList.Builder<ResourceConfig> builder = ImmutableList.builder();
+    final ImmutableList.Builder<ResourceConfig> builder = ImmutableList.builder();
     builder.add(new ResourceConfig(WebConfigsResource.class, WebConfigData.class, WebConfigUris.class, "configUris"));
     builder.add(new ResourceConfig(WebConventionsResource.class, WebConventionData.class, WebConventionUris.class, "conventionUris"));
     builder.add(new ResourceConfig(WebExchangesResource.class, WebExchangeData.class, WebExchangeUris.class, "exchangeUris"));
@@ -98,67 +98,67 @@ public class WebHomeResource extends AbstractSingletonWebResource {
    * Registers a new home page link.
    * <p>
    * This method is not intended for general use and may disappear without warning in the future.
-   * 
+   *
    * @param resourceType  the resource type
    * @param dataType  the type of the web data class
    * @param urisType  the type of the web uri class
    * @param name  the name exposed to Freemarker
    */
   public static void registerHomePageLink(
-      Class<?> resourceType, Class<? extends Bean> dataType, Class<?> urisType, String name) {
-    
-    ResourceConfig config = new ResourceConfig(resourceType, dataType, urisType, name);
+      final Class<?> resourceType, final Class<? extends Bean> dataType, final Class<?> urisType, final String name) {
+
+    final ResourceConfig config = new ResourceConfig(resourceType, dataType, urisType, name);
     RESOURCE_CONFIG_LIST.add(config);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Creates the resource.
-   * @param publishedTypes 
+   * @param publishedTypes
    */
-  public WebHomeResource(Set<Class<?>> publishedTypes) {
+  public WebHomeResource(final Set<Class<?>> publishedTypes) {
     _publishedTypes = publishedTypes;
   }
 
   //-------------------------------------------------------------------------
   @GET
   @Produces(MediaType.TEXT_HTML)
-  public String get(@Context ServletContext servletContext, @Context UriInfo uriInfo) {
-    FlexiBean out = createRootData(uriInfo);
+  public String get(@Context final ServletContext servletContext, @Context final UriInfo uriInfo) {
+    final FlexiBean out = createRootData(uriInfo);
     return getFreemarker(servletContext).build("home.ftl", out);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Creates the output root data.
-   * 
+   *
    * @param uriInfo  the URI information, not null
    * @return the output root data, not null
    */
   @Override
-  protected FlexiBean createRootData(UriInfo uriInfo) {
-    FlexiBean out = super.createRootData(uriInfo);
+  protected FlexiBean createRootData(final UriInfo uriInfo) {
+    final FlexiBean out = super.createRootData(uriInfo);
     out.put("uris", new WebHomeUris(uriInfo));
-    
-    for (ResourceConfig config : RESOURCE_CONFIGS) {
+
+    for (final ResourceConfig config : RESOURCE_CONFIGS) {
       if (_publishedTypes.contains(config._resourceType)) {
-        Object uriObj = createUriObj(config, uriInfo);
+        final Object uriObj = createUriObj(config, uriInfo);
         out.put(config._name, uriObj);
       }
     }
-    for (ResourceConfig config : RESOURCE_CONFIG_LIST) {
-      Object uriObj = createUriObj(config, uriInfo);
+    for (final ResourceConfig config : RESOURCE_CONFIG_LIST) {
+      final Object uriObj = createUriObj(config, uriInfo);
       out.put(config._name, uriObj);
     }
     return out;
   }
 
-  private Object createUriObj(ResourceConfig resourceConfig, UriInfo uriInfo) {
+  private Object createUriObj(final ResourceConfig resourceConfig, final UriInfo uriInfo) {
     try {
-      Bean dataInstance = resourceConfig._dataClazz.newInstance();
+      final Bean dataInstance = resourceConfig._dataClazz.newInstance();
       dataInstance.property("uriInfo").set(uriInfo);
       return resourceConfig._uris.getConstructor(resourceConfig._dataClazz).newInstance(dataInstance);
-    } catch (Exception e) {
+    } catch (final Exception e) {
       throw new IllegalStateException("Failed to create uri for resource " + resourceConfig._name);
     }
   }
@@ -168,8 +168,8 @@ public class WebHomeResource extends AbstractSingletonWebResource {
     private final Class<? extends Bean> _dataClazz;
     private final Class<?> _uris;
     private final String _name;
-    
-    public ResourceConfig(Class<?> resourceType, Class<? extends Bean> dataClazz, Class<?> uris, String name) {
+
+    public ResourceConfig(final Class<?> resourceType, final Class<? extends Bean> dataClazz, final Class<?> uris, final String name) {
       _resourceType = resourceType;
       _dataClazz = dataClazz;
       _uris = uris;
@@ -183,7 +183,7 @@ public class WebHomeResource extends AbstractSingletonWebResource {
    * @param uriInfo  the uriInfo, not null
    * @return the URI, not null
    */
-  public static URI uri(UriInfo uriInfo) {
+  public static URI uri(final UriInfo uriInfo) {
     return uriInfo.getBaseUriBuilder().path(WebHomeResource.class).build();
   }
 

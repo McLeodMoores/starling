@@ -22,7 +22,7 @@ import com.opengamma.util.ArgumentChecker;
   /** The properties this will be filtered out. */
   private final Set<MetaProperty<?>> _properties;
 
-  /* package */ PropertyFilter(MetaProperty<?>... properties) {
+  /* package */ PropertyFilter(final MetaProperty<?>... properties) {
     ArgumentChecker.notNull(properties, "properties");
     _properties = Sets.newHashSet(Arrays.asList(properties));
   }
@@ -30,46 +30,54 @@ import com.opengamma.util.ArgumentChecker;
   @Override
   public BeanVisitor<?> decorate(final BeanVisitor<?> visitor) {
     return new BeanVisitor<Object>() {
-      public void visitMetaBean(MetaBean metaBean) {
+      @Override
+      public void visitMetaBean(final MetaBean metaBean) {
         visitor.visitMetaBean(metaBean);
       }
 
-      public void visitBeanProperty(MetaProperty<?> property, BeanTraverser traverser) {
+      @Override
+      public void visitBeanProperty(final MetaProperty<?> property, final BeanTraverser traverser) {
         if (!_properties.contains(property)) {
           visitor.visitBeanProperty(property, traverser);
         }
       }
 
-      public void visitCollectionProperty(MetaProperty<?> property, BeanTraverser traverser) {
+      @Override
+      public void visitCollectionProperty(final MetaProperty<?> property, final BeanTraverser traverser) {
         if (!_properties.contains(property)) {
           visitor.visitCollectionProperty(property, traverser);
         }
       }
 
-      public void visitSetProperty(MetaProperty<?> property, BeanTraverser traverser) {
+      @Override
+      public void visitSetProperty(final MetaProperty<?> property, final BeanTraverser traverser) {
         if (!_properties.contains(property)) {
           visitor.visitSetProperty(property, traverser);
         }
       }
 
-      public void visitListProperty(MetaProperty<?> property, BeanTraverser traverser) {
+      @Override
+      public void visitListProperty(final MetaProperty<?> property, final BeanTraverser traverser) {
         if (!_properties.contains(property)) {
           visitor.visitListProperty(property, traverser);
         }
       }
 
-      public void visitMapProperty(MetaProperty<?> property, BeanTraverser traverser) {
+      @Override
+      public void visitMapProperty(final MetaProperty<?> property, final BeanTraverser traverser) {
         if (!_properties.contains(property)) {
           visitor.visitMapProperty(property, traverser);
         }
       }
 
-      public void visitProperty(MetaProperty<?> property, BeanTraverser traverser) {
+      @Override
+      public void visitProperty(final MetaProperty<?> property, final BeanTraverser traverser) {
         if (!_properties.contains(property)) {
           visitor.visitProperty(property, traverser);
         }
       }
 
+      @Override
       public Object finish() {
         return visitor.finish();
       }

@@ -32,28 +32,28 @@ public class SourceLinkResolverTest {
   @Test(expectedExceptions = IllegalStateException.class)
   public void noThreadLocalContextGivesError() {
 
-    SourceLinkResolver<String, Object, ConfigSource> resolver = createSourceLinkResolver();
+    final SourceLinkResolver<String, Object, ConfigSource> resolver = createSourceLinkResolver();
     resolver.resolve(createIdentifier("id"));
   }
 
-  private LinkIdentifier<String, Object> createIdentifier(String id) {
+  private LinkIdentifier<String, Object> createIdentifier(final String id) {
     return LinkIdentifier.of(id, Object.class);
   }
 
   public void threadLocalContextGetsUsed() {
 
-    ServiceContext serviceContext = createContext(ConfigSource.class, VersionCorrectionProvider.class);
+    final ServiceContext serviceContext = createContext(ConfigSource.class, VersionCorrectionProvider.class);
 
     ThreadLocalServiceContext.init(serviceContext);
-    SourceLinkResolver<String, Object, ConfigSource> resolver = createSourceLinkResolver();
+    final SourceLinkResolver<String, Object, ConfigSource> resolver = createSourceLinkResolver();
 
     resolver.resolve(createIdentifier("id"));
   }
 
-  private ServiceContext createContext(Class<?>... services) {
+  private ServiceContext createContext(final Class<?>... services) {
 
-    Map<Class<?>, Object> serviceMap = new HashMap<>();
-    for (Class<?> aClass : services) {
+    final Map<Class<?>, Object> serviceMap = new HashMap<>();
+    for (final Class<?> aClass : services) {
       serviceMap.put(aClass, mock(aClass));
     }
     return ServiceContext.of(serviceMap);
@@ -62,8 +62,8 @@ public class SourceLinkResolverTest {
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void noVersionCorrectionGivesError() {
 
-    ServiceContext serviceContext = createContext(ConfigSource.class);
-    SourceLinkResolver<String, Object, ConfigSource> resolver = createSourceLinkResolver(serviceContext);
+    final ServiceContext serviceContext = createContext(ConfigSource.class);
+    final SourceLinkResolver<String, Object, ConfigSource> resolver = createSourceLinkResolver(serviceContext);
 
     resolver.resolve(createIdentifier("id"));
   }
@@ -71,8 +71,8 @@ public class SourceLinkResolverTest {
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void noSourceGivesError() {
 
-    ServiceContext serviceContext = createContext(VersionCorrectionProvider.class);
-    SourceLinkResolver<String, Object, ConfigSource> resolver = createSourceLinkResolver(serviceContext);
+    final ServiceContext serviceContext = createContext(VersionCorrectionProvider.class);
+    final SourceLinkResolver<String, Object, ConfigSource> resolver = createSourceLinkResolver(serviceContext);
 
     resolver.resolve(createIdentifier("id"));
   }
@@ -85,12 +85,12 @@ public class SourceLinkResolverTest {
         }
 
         @Override
-        protected VersionCorrection getVersionCorrection(VersionCorrectionProvider vcProvider) {
+        protected VersionCorrection getVersionCorrection(final VersionCorrectionProvider vcProvider) {
           return vcProvider.getConfigVersionCorrection();
         }
 
         @Override
-        protected Object executeQuery(ConfigSource source, Class<Object> type, String identifier, VersionCorrection versionCorrection) {
+        protected Object executeQuery(final ConfigSource source, final Class<Object> type, final String identifier, final VersionCorrection versionCorrection) {
           return source.getLatestByName(Object.class, identifier);
         }
     };
@@ -104,12 +104,12 @@ public class SourceLinkResolverTest {
         }
 
         @Override
-        protected VersionCorrection getVersionCorrection(VersionCorrectionProvider vcProvider) {
+        protected VersionCorrection getVersionCorrection(final VersionCorrectionProvider vcProvider) {
           return vcProvider.getConfigVersionCorrection();
         }
 
         @Override
-        protected Object executeQuery(ConfigSource source, Class<Object> type, String identifier, VersionCorrection versionCorrection) {
+        protected Object executeQuery(final ConfigSource source, final Class<Object> type, final String identifier, final VersionCorrection versionCorrection) {
           return source.getLatestByName(Object.class, identifier);
         }
     };

@@ -22,13 +22,13 @@ public final class OvernightIndexInterpolatedStubForwardRateProviderVisitor impl
    * Singleton instance.
    */
   private static final OvernightIndexInterpolatedStubForwardRateProviderVisitor INSTANCE = new OvernightIndexInterpolatedStubForwardRateProviderVisitor();
-  
+
   /**
    * Singleton constructor.
    */
   private OvernightIndexInterpolatedStubForwardRateProviderVisitor() {
   }
-  
+
   /**
    * Returns a singleton.
    * @return a singleton.
@@ -36,19 +36,19 @@ public final class OvernightIndexInterpolatedStubForwardRateProviderVisitor impl
   public static OvernightIndexInterpolatedStubForwardRateProviderVisitor getInstance() {
     return INSTANCE;
   }
-  
+
   @Override
-  public ForwardRateProvider<IndexON> visitIborCompoundingInterpolatedStub(IborInterpolatedStubCompoundingCoupon coupon) {
+  public ForwardRateProvider<IndexON> visitIborCompoundingInterpolatedStub(final IborInterpolatedStubCompoundingCoupon coupon) {
     throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support this operation.");
   }
 
   @Override
-  public ForwardRateProvider<IndexON> visitIborInterpolatedStub(InterpolatedStubCoupon<DepositIndexCoupon<IborIndex>, IborIndex> coupon) {
+  public ForwardRateProvider<IndexON> visitIborInterpolatedStub(final InterpolatedStubCoupon<DepositIndexCoupon<IborIndex>, IborIndex> coupon) {
     throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support this operation.");
   }
 
   @Override
-  public ForwardRateProvider<IndexON> visitOvernightInterpolatedStub(InterpolatedStubCoupon<DepositIndexCoupon<IndexON>, IndexON> coupon) {
+  public ForwardRateProvider<IndexON> visitOvernightInterpolatedStub(final InterpolatedStubCoupon<DepositIndexCoupon<IndexON>, IndexON> coupon) {
     return new OvernightInterpolatedStubForwardRateProvider(coupon);
   }
 }

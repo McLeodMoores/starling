@@ -5,12 +5,12 @@
  */
 package com.opengamma.util.tuple;
 
+import java.util.Map;
+
 import it.unimi.dsi.fastutil.ints.Int2DoubleMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2DoubleMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-
-import java.util.Map;
 
 /**
  * Utilities.
@@ -33,7 +33,7 @@ public class TuplesUtil {
       }
 
       @Override
-      public Object setValue(Object value) {
+      public Object setValue(final Object value) {
         throw new UnsupportedOperationException("This entry is immutable");
       }
     };
@@ -57,7 +57,7 @@ public class TuplesUtil {
       }
 
       @Override
-      public Object setValue(Object value) {
+      public Object setValue(final Object value) {
         throw new UnsupportedOperationException("This entry is immutable");
       }
     };
@@ -71,7 +71,7 @@ public class TuplesUtil {
       }
 
       @Override
-      public double setValue(double value) {
+      public double setValue(final double value) {
         throw new UnsupportedOperationException("This entry is immutable");
       }
 
@@ -91,7 +91,7 @@ public class TuplesUtil {
       }
 
       @Override
-      public Double setValue(Double value) {
+      public Double setValue(final Double value) {
         throw new UnsupportedOperationException("This entry is immutable");
       }
     };
@@ -105,7 +105,7 @@ public class TuplesUtil {
       }
 
       @Override
-      public double setValue(double value) {
+      public double setValue(final double value) {
         throw new UnsupportedOperationException("This entry is immutable");
       }
 
@@ -125,7 +125,7 @@ public class TuplesUtil {
       }
 
       @Override
-      public Double setValue(Double value) {
+      public Double setValue(final Double value) {
         throw new UnsupportedOperationException("This entry is immutable");
       }
     };
@@ -149,7 +149,7 @@ public class TuplesUtil {
       }
 
       @Override
-      public Object setValue(Object value) {
+      public Object setValue(final Object value) {
         throw new UnsupportedOperationException("This entry is immutable");
       }
     };

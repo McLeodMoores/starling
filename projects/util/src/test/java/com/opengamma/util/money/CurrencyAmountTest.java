@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.money;
@@ -36,7 +36,7 @@ public class CurrencyAmountTest {
   // factories
   //-------------------------------------------------------------------------
   public void test_of_Currency() {
-    CurrencyAmount test = CurrencyAmount.of(Currency.USD, A1);
+    final CurrencyAmount test = CurrencyAmount.of(Currency.USD, A1);
     assertEquals(Currency.USD, test.getCurrency());
     assertEquals(A1, test.getAmount(), 0.0001d);
   }
@@ -48,7 +48,7 @@ public class CurrencyAmountTest {
 
   //-------------------------------------------------------------------------
   public void test_of_String() {
-    CurrencyAmount test = CurrencyAmount.of("USD", A1);
+    final CurrencyAmount test = CurrencyAmount.of("USD", A1);
     assertEquals(Currency.USD, test.getCurrency());
     assertEquals(A1, test.getAmount(), 0.0001d);
   }
@@ -78,14 +78,14 @@ public class CurrencyAmountTest {
     };
   }
   @Test(dataProvider = "badParse", expectedExceptions = IllegalArgumentException.class)
-  public void test_parse_String_bad(String input) {
+  public void test_parse_String_bad(final String input) {
     CurrencyAmount.parse(input);
   }
 
   //-------------------------------------------------------------------------
   public void test_plus() {
     final CurrencyAmount ccyAmount = CurrencyAmount.of(CCY1, A2);
-    CurrencyAmount test = CCY_AMOUNT.plus(ccyAmount);
+    final CurrencyAmount test = CCY_AMOUNT.plus(ccyAmount);
     assertEquals(CCY1, test.getCurrency());
     assertEquals(A1 + A2, test.getAmount());
   }
@@ -102,7 +102,7 @@ public class CurrencyAmountTest {
 
   //-------------------------------------------------------------------------
   public void test_multipliedBy() {
-    CurrencyAmount test = CCY_AMOUNT.multipliedBy(3.5);
+    final CurrencyAmount test = CCY_AMOUNT.multipliedBy(3.5);
     assertEquals(CCY1, test.getCurrency());
     assertEquals(A1 * 3.5, test.getAmount());
   }

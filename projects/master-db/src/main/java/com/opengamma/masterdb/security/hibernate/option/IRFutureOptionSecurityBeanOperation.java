@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.option;
@@ -27,7 +27,7 @@ public final class IRFutureOptionSecurityBeanOperation  extends AbstractSecurity
    * Singleton
    */
   public static final IRFutureOptionSecurityBeanOperation INSTANCE = new IRFutureOptionSecurityBeanOperation();
-  
+
   private IRFutureOptionSecurityBeanOperation() {
     super(IRFutureOptionSecurity.SECURITY_TYPE, IRFutureOptionSecurity.class, IRFutureOptionSecurityBean.class);
   }
@@ -48,16 +48,16 @@ public final class IRFutureOptionSecurityBeanOperation  extends AbstractSecurity
   }
 
   @Override
-  public IRFutureOptionSecurity createSecurity(OperationContext context, IRFutureOptionSecurityBean bean) {
+  public IRFutureOptionSecurity createSecurity(final OperationContext context, final IRFutureOptionSecurityBean bean) {
     final ExerciseType exerciseType = bean.getOptionExerciseType().accept(new ExerciseTypeVisitorImpl());
-    
-    IRFutureOptionSecurity sec = new IRFutureOptionSecurity(bean.getExchange().getName(), 
-        expiryBeanToExpiry(bean.getExpiry()), 
-        exerciseType, 
-        externalIdBeanToExternalId(bean.getUnderlying()), 
-        bean.getPointValue(), 
-        bean.getMargined(), 
-        currencyBeanToCurrency(bean.getCurrency()), 
+
+    final IRFutureOptionSecurity sec = new IRFutureOptionSecurity(bean.getExchange().getName(),
+        expiryBeanToExpiry(bean.getExpiry()),
+        exerciseType,
+        externalIdBeanToExternalId(bean.getUnderlying()),
+        bean.getPointValue(),
+        bean.getMargined(),
+        currencyBeanToCurrency(bean.getCurrency()),
         bean.getStrike(), bean.getOptionType());
     return sec;
   }

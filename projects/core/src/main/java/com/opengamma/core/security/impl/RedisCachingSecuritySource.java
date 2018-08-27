@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.security.impl;
@@ -15,9 +15,6 @@ import org.fudgemsg.FudgeContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-
 import com.google.common.base.Charsets;
 import com.opengamma.core.change.ChangeManager;
 import com.opengamma.core.security.AbstractSecuritySource;
@@ -30,6 +27,9 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
+
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 // TODO kirk 2013-04-16 -- Redis allows TTL to be set on values.
 // To match a typical cache, we should give the option to set that.
@@ -80,8 +80,8 @@ public class RedisCachingSecuritySource extends AbstractSecuritySource implement
   private final JedisPool _jedisPool;
   private final String _redisPrefix;
   private final FudgeContext _fudgeContext;
-  private final Set<UniqueId> _knownInRedis = new HashSet<UniqueId>();
-  
+  private final Set<UniqueId> _knownInRedis = new HashSet<>();
+
   // REVIEW kirk 2013-04-17 -- It's really not clear at all that any of the locking
   // is necessary or desirable at all. Since we're not actually holding any state,
   // and the underlying source would synchronize anything else, it's really not clear
@@ -90,16 +90,16 @@ public class RedisCachingSecuritySource extends AbstractSecuritySource implement
   // whether it's desirable.
 
   private final ReadWriteLock _lock = new ReentrantReadWriteLock();
-  
-  public RedisCachingSecuritySource(SecuritySource underlying, JedisPool jedisPool) {
+
+  public RedisCachingSecuritySource(final SecuritySource underlying, final JedisPool jedisPool) {
     this(underlying, jedisPool, "");
   }
-  
-  public RedisCachingSecuritySource(SecuritySource underlying, JedisPool jedisPool, String redisPrefix) {
+
+  public RedisCachingSecuritySource(final SecuritySource underlying, final JedisPool jedisPool, final String redisPrefix) {
     this(underlying, jedisPool, redisPrefix, OpenGammaFudgeContext.getInstance());
   }
-  
-  public RedisCachingSecuritySource(SecuritySource underlying, JedisPool jedisPool, String redisPrefix, FudgeContext fudgeContext) {
+
+  public RedisCachingSecuritySource(final SecuritySource underlying, final JedisPool jedisPool, final String redisPrefix, final FudgeContext fudgeContext) {
     ArgumentChecker.notNull(underlying, "underlying");
     ArgumentChecker.notNull(jedisPool, "jedisPool");
     ArgumentChecker.notNull(redisPrefix, "redisPrefix");
@@ -143,35 +143,35 @@ public class RedisCachingSecuritySource extends AbstractSecuritySource implement
   }
 
   @Override
-  public Collection<Security> get(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
-    Collection<Security> results = getUnderlying().get(bundle, versionCorrection);
+  public Collection<Security> get(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
+    final Collection<Security> results = getUnderlying().get(bundle, versionCorrection);
     processResults(results);
     return results;
   }
 
   @Override
-  public Collection<Security> get(ExternalIdBundle bundle) {
-    Collection<Security> results = getUnderlying().get(bundle);
+  public Collection<Security> get(final ExternalIdBundle bundle) {
+    final Collection<Security> results = getUnderlying().get(bundle);
     processResults(results);
     return results;
   }
 
   @Override
-  public Security getSingle(ExternalIdBundle bundle) {
-    Security result = getUnderlying().getSingle(bundle);
+  public Security getSingle(final ExternalIdBundle bundle) {
+    final Security result = getUnderlying().getSingle(bundle);
     processResult(result);
     return result;
   }
 
   @Override
-  public Security getSingle(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
-    Security result = getUnderlying().getSingle(bundle, versionCorrection);
+  public Security getSingle(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
+    final Security result = getUnderlying().getSingle(bundle, versionCorrection);
     processResult(result);
     return result;
   }
 
   @Override
-  public Security get(UniqueId uniqueId) {
+  public Security get(final UniqueId uniqueId) {
     Security security = getFromRedis(uniqueId);
     if (security == null) {
       LOGGER.warn("Unable to satisfy {} using Redis", uniqueId);
@@ -184,8 +184,8 @@ public class RedisCachingSecuritySource extends AbstractSecuritySource implement
   }
 
   @Override
-  public Security get(ObjectId objectId, VersionCorrection versionCorrection) {
-    Security result = getUnderlying().get(objectId, versionCorrection);
+  public Security get(final ObjectId objectId, final VersionCorrection versionCorrection) {
+    final Security result = getUnderlying().get(objectId, versionCorrection);
     processResult(result);
     return result;
   }
@@ -194,27 +194,27 @@ public class RedisCachingSecuritySource extends AbstractSecuritySource implement
   public ChangeManager changeManager() {
     return getUnderlying().changeManager();
   }
-  
-  protected Security getFromRedis(UniqueId uniqueId) {
+
+  protected Security getFromRedis(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
-    byte[] redisKey = toRedisKey(uniqueId);
-    Jedis jedis = getJedisPool().getResource();
+    final byte[] redisKey = toRedisKey(uniqueId);
+    final Jedis jedis = getJedisPool().getResource();
 
     try {
       try {
         _lock.readLock().lock();
-        
-        byte[] data = jedis.get(redisKey);
+
+        final byte[] data = jedis.get(redisKey);
         if (data == null) {
           return null;
         }
-        
+
         Security security = null;
         try {
           // REVIEW kirk 2013-06-05 -- This will definitely fail, but this class is a work in progress
           // and likely to never work in its current form.
           security = SecurityFudgeUtil.convertFromFudge(getFudgeContext(), null, data);
-        } catch (Exception e) {
+        } catch (final Exception e) {
           LOGGER.error("Unserializable data in Redis for uniqueId " + uniqueId + ". Clearing redis.", e);
           try {
             _lock.writeLock().lock();
@@ -223,7 +223,7 @@ public class RedisCachingSecuritySource extends AbstractSecuritySource implement
             _lock.writeLock().unlock();
           }
         }
-        
+
         return security;
       } finally {
         _lock.readLock().unlock();
@@ -233,42 +233,42 @@ public class RedisCachingSecuritySource extends AbstractSecuritySource implement
     }
   }
 
-  protected void processResults(Collection<Security> securities) {
-    for (Security security : securities) {
+  protected void processResults(final Collection<Security> securities) {
+    for (final Security security : securities) {
       processResult(security);
     }
   }
-  
-  protected void processResult(Security security) {
+
+  protected void processResult(final Security security) {
     if (security == null) {
       // REVIEW kirk 2013-04-16 -- It may be desirable to cache the null result for optimization.
       // If so, this and getFromRedis() should be changed to match.
       return;
     }
-    
-    byte[] redisKey = toRedisKey(security.getUniqueId());
-    
-    Jedis jedis = getJedisPool().getResource();
+
+    final byte[] redisKey = toRedisKey(security.getUniqueId());
+
+    final Jedis jedis = getJedisPool().getResource();
     try {
       try {
         _lock.readLock().lock();
-        
+
         if (_knownInRedis.contains(security.getUniqueId())) {
           // Already in the cache. Nothing to do here.
           // This may happen if it is being processed as a part of a collection getter.
           return;
         }
-        
+
         if (jedis.exists(redisKey)) {
           // Already in the cache. Nothing to do here.
           // This may happen if it is being processed as a part of a collection getter.
           //LOGGER.warn("Not storing {} as already in Redis", security.getUniqueId());
           return;
         }
-        
+
         LOGGER.warn("Storing security type {} id {} bundle {} to Redis",
             new Object[] {security.getSecurityType(), security.getUniqueId(), security.getExternalIdBundle()});
-        byte[] fudgeData = SecurityFudgeUtil.convertToFudge(getFudgeContext(), security);
+        final byte[] fudgeData = SecurityFudgeUtil.convertToFudge(getFudgeContext(), security);
         _lock.writeLock().lock();
         try {
           jedis.set(redisKey, fudgeData);
@@ -283,35 +283,35 @@ public class RedisCachingSecuritySource extends AbstractSecuritySource implement
     } finally {
       getJedisPool().returnResource(jedis);
     }
-    
+
   }
-  
+
   /**
    * This should only be called when the write lock has been locked.
    * @param bundle bundle of the security
    * @param objectId id of the security
    * @param jedis open connection to Redis
    */
-  protected void processBundle(ExternalIdBundle bundle, ObjectId objectId, Jedis jedis) {
-    byte[] valueData = toRedisData(objectId);
-    
-    for (ExternalId externalId: bundle) {
-      byte[] keyData = toRedisKey(externalId);
+  protected void processBundle(final ExternalIdBundle bundle, final ObjectId objectId, final Jedis jedis) {
+    final byte[] valueData = toRedisData(objectId);
+
+    for (final ExternalId externalId: bundle) {
+      final byte[] keyData = toRedisKey(externalId);
       jedis.sadd(keyData, valueData);
     }
   }
-  
-  private byte[] toRedisKey(UniqueId uniqueId) {
+
+  private byte[] toRedisKey(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
-    String key = getRedisPrefix() + "U-" + uniqueId.toString();
-    byte[] bytes = Charsets.UTF_8.encode(key).array();
+    final String key = getRedisPrefix() + "U-" + uniqueId.toString();
+    final byte[] bytes = Charsets.UTF_8.encode(key).array();
     return bytes;
   }
 
-  private byte[] toRedisKey(ExternalId externalId) {
+  private byte[] toRedisKey(final ExternalId externalId) {
     ArgumentChecker.notNull(externalId, "externalId");
-    String key = getRedisPrefix() + "E-" + externalId.toString();
-    byte[] bytes = Charsets.UTF_8.encode(key).array();
+    final String key = getRedisPrefix() + "E-" + externalId.toString();
+    final byte[] bytes = Charsets.UTF_8.encode(key).array();
     return bytes;
   }
 
@@ -322,10 +322,10 @@ public class RedisCachingSecuritySource extends AbstractSecuritySource implement
     return bytes;
   }*/
 
-  private byte[] toRedisData(ObjectId objectId) {
+  private byte[] toRedisData(final ObjectId objectId) {
     ArgumentChecker.notNull(objectId, "objectId");
-    String data = objectId.toString();
-    byte[] bytes = Charsets.UTF_8.encode(data).array();
+    final String data = objectId.toString();
+    final byte[] bytes = Charsets.UTF_8.encode(data).array();
     return bytes;
   }
 

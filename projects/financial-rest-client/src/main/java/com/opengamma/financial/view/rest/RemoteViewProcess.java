@@ -25,11 +25,11 @@ public class RemoteViewProcess implements ViewProcess {
   private final URI _baseUri;
   private final FudgeRestClient _client;
 
-  public RemoteViewProcess(URI baseUri) {
+  public RemoteViewProcess(final URI baseUri) {
     this(baseUri, FudgeRestClient.create());
   }
 
-  public RemoteViewProcess(URI baseUri, FudgeRestClient client) {
+  public RemoteViewProcess(final URI baseUri, final FudgeRestClient client) {
     _baseUri = baseUri;
     _client = client;
   }
@@ -37,31 +37,31 @@ public class RemoteViewProcess implements ViewProcess {
   //-------------------------------------------------------------------------
   @Override
   public UniqueId getUniqueId() {
-    URI uri = UriBuilder.fromUri(_baseUri).path(DataViewProcessUris.PATH_UNIQUE_ID).build();
+    final URI uri = UriBuilder.fromUri(_baseUri).path(DataViewProcessUris.PATH_UNIQUE_ID).build();
     return _client.accessFudge(uri).get(UniqueId.class);
   }
 
   @Override
   public UniqueId getDefinitionId() {
-    URI uri = UriBuilder.fromUri(_baseUri).path(DataViewProcessUris.PATH_DEFINITION_ID).build();
+    final URI uri = UriBuilder.fromUri(_baseUri).path(DataViewProcessUris.PATH_DEFINITION_ID).build();
     return _client.accessFudge(uri).get(UniqueId.class);
   }
 
   @Override
   public ViewDefinition getLatestViewDefinition() {
-    URI uri = UriBuilder.fromUri(_baseUri).path(DataViewProcessUris.PATH_DEFINITION).build();
+    final URI uri = UriBuilder.fromUri(_baseUri).path(DataViewProcessUris.PATH_DEFINITION).build();
     return _client.accessFudge(uri).get(ViewDefinition.class);
   }
 
   @Override
   public ViewProcessState getState() {
-    URI uri = UriBuilder.fromUri(_baseUri).path(DataViewProcessUris.PATH_STATE).build();
+    final URI uri = UriBuilder.fromUri(_baseUri).path(DataViewProcessUris.PATH_STATE).build();
     return _client.accessFudge(uri).get(ViewProcessState.class);
   }
 
   @Override
   public MarketDataInjector getLiveDataOverrideInjector() {
-    URI uri = UriBuilder.fromUri(_baseUri).path(DataViewProcessUris.PATH_LIVE_DATA_OVERRIDE_INJECTOR).build();
+    final URI uri = UriBuilder.fromUri(_baseUri).path(DataViewProcessUris.PATH_LIVE_DATA_OVERRIDE_INJECTOR).build();
     return new RemoteLiveDataInjector(uri, _client);
   }
 

@@ -39,13 +39,13 @@ public class ManageableSecurityFudgeBuilder extends AbstractFudgeBuilder impleme
   public static final String PERMISSIONS_FIELD_NAME = "permissions";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, ManageableSecurity object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final ManageableSecurity object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     ManageableSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
-  public static void toFudgeMsg(FudgeSerializer serializer, ManageableSecurity security, final MutableFudgeMsg msg) {
+  public static void toFudgeMsg(final FudgeSerializer serializer, final ManageableSecurity security, final MutableFudgeMsg msg) {
     addToMessage(msg, UNIQUE_ID_FIELD_NAME, UniqueIdFudgeBuilder.toFudgeMsg(serializer, security.getUniqueId()));
     addToMessage(msg, NAME_FIELD_NAME, security.getName());
     addToMessage(msg, SECURITY_TYPE_FIELD_NAME, security.getSecurityType());
@@ -57,14 +57,14 @@ public class ManageableSecurityFudgeBuilder extends AbstractFudgeBuilder impleme
   }
 
   @Override
-  public ManageableSecurity buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    ManageableSecurity object = new ManageableSecurity(msg.getString(SECURITY_TYPE_FIELD_NAME));
+  public ManageableSecurity buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final ManageableSecurity object = new ManageableSecurity(msg.getString(SECURITY_TYPE_FIELD_NAME));
     ManageableSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     return object;
   }
 
   @SuppressWarnings("unchecked")
-  public static void fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg, ManageableSecurity security) {
+  public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final ManageableSecurity security) {
     security.setUniqueId(UniqueIdFudgeBuilder.fromFudgeMsg(deserializer, msg.getMessage(UNIQUE_ID_FIELD_NAME)));
     security.setName(msg.getString(NAME_FIELD_NAME));
     security.setExternalIdBundle(ExternalIdBundleFudgeBuilder.fromFudgeMsg(deserializer, msg.getMessage(IDENTIFIERS_FIELD_NAME)));

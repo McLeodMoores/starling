@@ -38,12 +38,12 @@ public class OpenGammaComponentService extends OpenGammaComponentServer {
   /**
    * The component repository.
    */
-  private final AtomicReference<ComponentRepository> _repository = new AtomicReference<ComponentRepository>();
+  private final AtomicReference<ComponentRepository> _repository = new AtomicReference<>();
 
   //-------------------------------------------------------------------------
   /**
    * Starts the service, blocking until the stop signal is received.
-   * 
+   *
    * @param args the command line arguments, the last element is the service name
    */
   public static void main(final String[] args) { // CSIGNORE
@@ -57,7 +57,7 @@ public class OpenGammaComponentService extends OpenGammaComponentServer {
         //} else {
         //System.exit(0);
       }
-    } catch (Throwable e) {
+    } catch (final Throwable e) {
       LOGGER.error("Couldn't start service", e);
       System.exit(1);
     }
@@ -74,12 +74,12 @@ public class OpenGammaComponentService extends OpenGammaComponentServer {
     // keep the process alive. Remove this hack when there are no more non-daemon threads that can
     // outlive their components and prevent process termination when running as a service.
     int aliveCount = 0, nonDaemon = 0;
-    for (Map.Entry<Thread, StackTraceElement[]> active : Thread.getAllStackTraces().entrySet()) {
+    for (final Map.Entry<Thread, StackTraceElement[]> active : Thread.getAllStackTraces().entrySet()) {
       final Thread t = active.getKey();
       if (t.isAlive()) {
         if (!t.isDaemon()) {
           LOGGER.debug("Thread {} still active", t);
-          for (StackTraceElement stack : active.getValue()) {
+          for (final StackTraceElement stack : active.getValue()) {
             LOGGER.debug("Stack: {}", stack);
           }
           nonDaemon++;
@@ -107,14 +107,14 @@ public class OpenGammaComponentService extends OpenGammaComponentServer {
       LOGGER.info("Service stopped");
       _stopConfirm.countDown();
       return true;
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
       LOGGER.warn("Service interrupted");
       return false;
     }
   }
 
   @Override
-  protected ComponentLogger createLogger(int verbosity) {
+  protected ComponentLogger createLogger(final int verbosity) {
     return new ComponentLogger.Slf4JLogger(STARTUP_LOGGER);
   }
 
@@ -122,7 +122,7 @@ public class OpenGammaComponentService extends OpenGammaComponentServer {
   protected void serverStarting(final ComponentManager manager) {
     LOGGER.debug("Server starting - got component repository");
     final ComponentRepository previous = _repository.getAndSet(manager.getRepository());
-    assert (previous == null);
+    assert previous == null;
   }
 
   protected void serverStopping() {
@@ -131,7 +131,7 @@ public class OpenGammaComponentService extends OpenGammaComponentServer {
       LOGGER.info("Stopping components");
       try {
         repository.stop();
-      } catch (Throwable e) {
+      } catch (final Throwable e) {
         LOGGER.error("Couldn't stop components", e);
       }
       LOGGER.debug("Releasing main thread");
@@ -139,7 +139,7 @@ public class OpenGammaComponentService extends OpenGammaComponentServer {
       LOGGER.info("Waiting for confirmation signal");
       try {
         _stopConfirm.await();
-      } catch (InterruptedException e) {
+      } catch (final InterruptedException e) {
         LOGGER.warn("Service interrupted");
         System.exit(1);
       }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.copier.portfolio.writer;
@@ -22,7 +22,7 @@ public abstract class SingleSheetPositionWriter implements PositionWriter {
 
   private SheetWriter _sheet;         // The spreadsheet to which to export
 
-  public SingleSheetPositionWriter(SheetWriter sheet) {
+  public SingleSheetPositionWriter(final SheetWriter sheet) {
     ArgumentChecker.notNull(sheet, "sheet");
     _sheet = sheet;
   }
@@ -31,7 +31,7 @@ public abstract class SingleSheetPositionWriter implements PositionWriter {
     return _sheet;
   }
 
-  public void setSheet(SheetWriter sheet) {
+  public void setSheet(final SheetWriter sheet) {
     ArgumentChecker.notNull(sheet, "sheet");
     _sheet = sheet;
   }
@@ -47,16 +47,16 @@ public abstract class SingleSheetPositionWriter implements PositionWriter {
     _sheet.close();
   }
 
-  public static String attributesToString(Map<String, String> attributes) {
+  public static String attributesToString(final Map<String, String> attributes) {
     final StringBuilder sb = new StringBuilder();
-    for (String key : newTreeSet(attributes.keySet())) {
-      String value = attributes.get(key);
+    for (final String key : newTreeSet(attributes.keySet())) {
+      final String value = attributes.get(key);
       sb.append("[").append(key).append(":").append(value).append("]");
     }
     return sb.toString();
   }
 
-  public static Map<String, String> attributesToMap(String attributes) {
+  public static Map<String, String> attributesToMap(final String attributes) {
     final Map<String, String> result = newHashMap();
     if (attributes != null) {
       final Pattern attributesPattern = Pattern.compile("(\\[.*?\\])");

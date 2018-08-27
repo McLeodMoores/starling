@@ -13,12 +13,6 @@ import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.ExecutorService;
 
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Ehcache;
-import net.sf.ehcache.Element;
-import net.sf.ehcache.config.CacheConfiguration;
-
 import org.joda.beans.Bean;
 import org.joda.beans.JodaBeanUtils;
 import org.slf4j.Logger;
@@ -32,6 +26,12 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.ExecutorServiceFactoryBean;
 import com.opengamma.util.paging.PagingRequest;
 import com.opengamma.util.tuple.IntObjectPair;
+
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Ehcache;
+import net.sf.ehcache.Element;
+import net.sf.ehcache.config.CacheConfiguration;
 
 /**
  * A cache for search results, providing common search caching logic across caching masters and across search types.
@@ -77,9 +77,9 @@ public class EHCachingSearchCache {
    * knowing its type and retrieve the result unique Ids without knowing the document type.
    */
   public interface Searcher {
-    /** 
+    /**
      * Searches an underlying master, casting search requests/results as required for a specific master.
-     * 
+     *
      * @param request  the search request, without paging (will be cast to a search request for a specific master)
      * @param pagingRequest  the paging request
      * @return the search result
@@ -94,7 +94,7 @@ public class EHCachingSearchCache {
    * @param cacheManager  the cache manager to use, not null
    * @param searcher  the CacheSearcher to use for passing search requests to an underlying master, not null
    */
-  public EHCachingSearchCache(String name, CacheManager cacheManager, Searcher searcher) {
+  public EHCachingSearchCache(final String name, final CacheManager cacheManager, final Searcher searcher) {
     ArgumentChecker.notNull(cacheManager, "cacheManager");
     ArgumentChecker.notEmpty(name, "name");
     ArgumentChecker.notNull(searcher, "searcher");
@@ -113,13 +113,13 @@ public class EHCachingSearchCache {
     _searchRequestCache = cacheManager.getCache(name + CACHE_NAME_SUFFIX);
 
     // Async prefetch executor service
-    ExecutorServiceFactoryBean execBean = new ExecutorServiceFactoryBean();
+    final ExecutorServiceFactoryBean execBean = new ExecutorServiceFactoryBean();
     execBean.setNumberOfThreads(MAX_PREFETCH_CONCURRENCY);
     execBean.setStyle(ExecutorServiceFactoryBean.Style.CACHED);
     _executorService = execBean.getObjectCreating();
   }
 
-  private static CacheConfiguration tweakCacheConfiguration(CacheConfiguration cacheConfiguration) {
+  private static CacheConfiguration tweakCacheConfiguration(final CacheConfiguration cacheConfiguration) {
     // Make copies of cached objects (use default Serializable copy)
     cacheConfiguration.setCopyOnRead(true);
     cacheConfiguration.setCopyOnWrite(true);
@@ -138,7 +138,7 @@ public class EHCachingSearchCache {
    * @return                  the total number of results (ignoring paging), and the unique IDs of the requested result page
    */
   public IntObjectPair<List<UniqueId>> search(final Bean requestBean, PagingRequest pagingRequest,
-                                                     boolean blockUntilCached) {
+                                                     final boolean blockUntilCached) {
 
     ArgumentChecker.notNull(requestBean, "requestBean");
     ArgumentChecker.notNull(pagingRequest, "pagingRequest");
@@ -157,7 +157,7 @@ public class EHCachingSearchCache {
     }
 
     // Ensure that the required range is cached in its entirety
-    IntObjectPair<List<UniqueId>> pair =
+    final IntObjectPair<List<UniqueId>> pair =
         cacheSuperRange(requestBean, pagingRequest, rangeMap, totalResults, blockUntilCached);
 
     final int superIndex = pair.getFirstInt();
@@ -178,18 +178,18 @@ public class EHCachingSearchCache {
    * @param requestBean   the search request, without paging
    * @param pagingRequest the paging request
    */
-  public void prefetch(final Bean requestBean, PagingRequest pagingRequest) {
+  public void prefetch(final Bean requestBean, final PagingRequest pagingRequest) {
 
     // Build larger range to prefetch
     final int start =
-        (pagingRequest.getFirstItem() / PREFETCH_GRANULARITY >= PREFETCH_RADIUS)
-        ? ((pagingRequest.getFirstItem() / PREFETCH_GRANULARITY) * PREFETCH_GRANULARITY)
-              - (PREFETCH_RADIUS * PREFETCH_GRANULARITY)
+        pagingRequest.getFirstItem() / PREFETCH_GRANULARITY >= PREFETCH_RADIUS
+        ? pagingRequest.getFirstItem() / PREFETCH_GRANULARITY * PREFETCH_GRANULARITY
+              - PREFETCH_RADIUS * PREFETCH_GRANULARITY
         : 0;
     final int end =
-        (pagingRequest.getLastItem() < Integer.MAX_VALUE - (PREFETCH_RADIUS * PREFETCH_GRANULARITY))
-        ? ((pagingRequest.getLastItem() / PREFETCH_GRANULARITY) * PREFETCH_GRANULARITY)
-              + (PREFETCH_RADIUS * PREFETCH_GRANULARITY)
+        pagingRequest.getLastItem() < Integer.MAX_VALUE - PREFETCH_RADIUS * PREFETCH_GRANULARITY
+        ? pagingRequest.getLastItem() / PREFETCH_GRANULARITY * PREFETCH_GRANULARITY
+              + PREFETCH_RADIUS * PREFETCH_GRANULARITY
         : Integer.MAX_VALUE;
 
     final PagingRequest superPagingRequest = PagingRequest.ofIndex(start, end - start);
@@ -217,7 +217,7 @@ public class EHCachingSearchCache {
    */
   @SuppressWarnings("unchecked")
   private IntObjectPair<ConcurrentNavigableMap<Integer, List<UniqueId>>> getCachedRequestInfo(
-      final Bean requestBean, PagingRequest pagingRequest) {
+      final Bean requestBean, final PagingRequest pagingRequest) {
 
     // Get cache entry for current request (or create and get a primed cache entry if not found)
     // TODO investigate atomicity
@@ -250,9 +250,9 @@ public class EHCachingSearchCache {
    * @param totalResults    the total number of results without paging
    * @return                a super-range of cached UniqueIds that contains at least the requested UniqueIds
    */
-  private IntObjectPair<List<UniqueId>> cacheSuperRange(final Bean requestBean, PagingRequest pagingRequest,
-                            final ConcurrentNavigableMap<Integer, List<UniqueId>> rangeMap, int totalResults,
-                            boolean blockUntilCached) {
+  private IntObjectPair<List<UniqueId>> cacheSuperRange(final Bean requestBean, final PagingRequest pagingRequest,
+                            final ConcurrentNavigableMap<Integer, List<UniqueId>> rangeMap, final int totalResults,
+                            final boolean blockUntilCached) {
 
     final int startIndex = pagingRequest.getFirstItem();
     final int endIndex = pagingRequest.getLastItem();
@@ -282,7 +282,7 @@ public class EHCachingSearchCache {
         @SuppressWarnings("unchecked")
         final ConcurrentNavigableMap<Integer, List<UniqueId>> subMap =
             (ConcurrentNavigableMap<Integer, List<UniqueId>>) (
-              ((start != null) && (end != null) && (start <= end))
+              start != null && end != null && start <= end
                   ? rangeMap.subMap(start, true, end, true)
                   : new ConcurrentSkipListMap<>()
             );
@@ -291,10 +291,10 @@ public class EHCachingSearchCache {
         // filling in any gaps from the underlying master
         int currentIndex = superIndex + superRange.size();
         final List<Integer> toRemove = new LinkedList<>();
-        for (Map.Entry<Integer, List<UniqueId>> entry : subMap.entrySet()) {
+        for (final Map.Entry<Integer, List<UniqueId>> entry : subMap.entrySet()) {
           // If required, fill gap from underlying
           if (entry.getKey() > currentIndex) {
-            List<UniqueId> missingResult =
+            final List<UniqueId> missingResult =
                 getSearcher().search(requestBean,
                                      PagingRequest.ofIndex(currentIndex, entry.getKey() - currentIndex)).getSecond();
 
@@ -313,7 +313,7 @@ public class EHCachingSearchCache {
 
 
         // Remove original cached ranges (now part of the super range)
-        for (Integer i : toRemove) {
+        for (final Integer i : toRemove) {
           rangeMap.remove(i);
         }
 
@@ -367,9 +367,9 @@ public class EHCachingSearchCache {
    * @param uniqueIdentifiables The uniquely identifiable objects
    * @return                    a list of unique Ids
    */
-  public static List<UniqueId> extractUniqueIds(List<? extends UniqueIdentifiable> uniqueIdentifiables) {
-    List<UniqueId> result = new LinkedList<>();
-    for (UniqueIdentifiable uniqueIdentifiable : uniqueIdentifiables) {
+  public static List<UniqueId> extractUniqueIds(final List<? extends UniqueIdentifiable> uniqueIdentifiables) {
+    final List<UniqueId> result = new LinkedList<>();
+    for (final UniqueIdentifiable uniqueIdentifiable : uniqueIdentifiables) {
       result.add(uniqueIdentifiable.getUniqueId());
     }
     return result;
@@ -381,8 +381,8 @@ public class EHCachingSearchCache {
    * @param documents       The list of documents to be inserted
    * @param documentCache   The document cache in which to insert the documents
    */
-  public static void cacheDocuments(List<? extends AbstractDocument> documents, Ehcache documentCache) {
-    for (AbstractDocument document : documents) {
+  public static void cacheDocuments(final List<? extends AbstractDocument> documents, final Ehcache documentCache) {
+    for (final AbstractDocument document : documents) {
       documentCache.put(new Element(document.getUniqueId(), document));
     }
   }

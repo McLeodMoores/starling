@@ -161,51 +161,54 @@ public class MinimalWebPositionsResource extends AbstractMinimalWebPositionResou
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
   public Response postHTML(
-      @FormParam("quantity") String quantityStr,
-      @FormParam("idscheme") String idScheme,
-      @FormParam("idvalue") String idValue,
-      @FormParam("type") String type,
-      @FormParam(POSITION_XML) String positionXml,
-      @FormParam("uniqueIdScheme") String uniqueIdScheme) {
-    uniqueIdScheme = StringUtils.trimToNull(uniqueIdScheme);
-    type = StringUtils.trimToEmpty(type);
+      @FormParam("quantity") final String quantityStr,
+      @FormParam("idscheme") final String idScheme,
+      @FormParam("idvalue") final String idValue,
+      @FormParam("type") final String type,
+      @FormParam(POSITION_XML) final String positionXml,
+      @FormParam("uniqueIdScheme") final String uniqueIdScheme) {
+    final String trimmedUniqueIdScheme = StringUtils.trimToNull(uniqueIdScheme);
+    final String trimmedType = StringUtils.trimToEmpty(type);
     URI uri = null;
-    switch (type) {
+    String trimmedPositionXml;
+    String trimmedQuantityStr;
+    String trimmedIdScheme;
+    switch (trimmedType) {
       case "xml":
-        positionXml = StringUtils.trimToNull(positionXml);
-        if (positionXml == null) {
+        trimmedPositionXml = StringUtils.trimToNull(positionXml);
+        if (trimmedPositionXml == null) {
           final FlexiBean out = createRootData();
           out.put("err_xmlMissing", true);
           final String html = getFreemarker().build(HTML_DIR + "positions-add.ftl", out);
           return Response.ok(html).build();
         }
-        uri = addPosition(positionXml, uniqueIdScheme);
+        uri = addPosition(trimmedPositionXml, trimmedUniqueIdScheme);
         break;
       case StringUtils.EMPTY:
-        quantityStr = StringUtils.replace(StringUtils.trimToNull(quantityStr), ",", "");
-        final BigDecimal quantity = quantityStr != null && NumberUtils.isNumber(quantityStr) ? new BigDecimal(quantityStr) : null;
-        idScheme = StringUtils.trimToNull(idScheme);
-        idValue = StringUtils.trimToNull(idValue);
-        if (quantity == null || idScheme == null || idValue == null) {
+        trimmedQuantityStr = StringUtils.replace(StringUtils.trimToNull(quantityStr), ",", "");
+        final BigDecimal quantity = trimmedQuantityStr != null && NumberUtils.isNumber(trimmedQuantityStr) ? new BigDecimal(trimmedQuantityStr) : null;
+        trimmedIdScheme = StringUtils.trimToNull(idScheme);
+        trimmedIdValue = StringUtils.trimToNull(idValue);
+        if (quantity == null || trimmedIdScheme == null || trimmedIdValue == null) {
           final FlexiBean out = createRootData();
-          if (quantityStr == null) {
+          if (trimmedQuantityStr == null) {
             out.put("err_quantityMissing", true);
           }
           if (quantity == null) {
             out.put("err_quantityNotNumeric", true);
           }
-          if (idScheme == null) {
+          if (trimmedIdScheme == null) {
             out.put("err_idschemeMissing", true);
           }
-          if (idValue == null) {
+          if (trimmedIdValue == null) {
             out.put("err_idvalueMissing", true);
           }
-          out.put("quantity", quantityStr);
-          out.put("idvalue", idValue);
+          out.put("quantity", trimmedQuantityStr);
+          out.put("idvalue", trimmedIdValue);
           final String html = getFreemarker().build(HTML_DIR + "positions-add.ftl", out);
           return Response.ok(html).build();
         }
-        final ExternalIdBundle id = ExternalIdBundle.of(ExternalId.of(idScheme, idValue));
+        final ExternalIdBundle id = ExternalIdBundle.of(ExternalId.of(trimmedIdScheme, trimmedIdValue));
         final UniqueId secUid = getSecurityUniqueId(id);
         if (secUid == null) {
           final FlexiBean out = createRootData();
@@ -213,7 +216,7 @@ public class MinimalWebPositionsResource extends AbstractMinimalWebPositionResou
           final String html = getFreemarker().build(HTML_DIR + "positions-add.ftl", out);
           return Response.ok(html).build();
         }
-        uri = addPosition(quantity, secUid, uniqueIdScheme);
+        uri = addPosition(quantity, secUid, trimmedUniqueIdScheme);
         break;
       default:
         throw new IllegalArgumentException("Can only add position by XML or completing provided web form");

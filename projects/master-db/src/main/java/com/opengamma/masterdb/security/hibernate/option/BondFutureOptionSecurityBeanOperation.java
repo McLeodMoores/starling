@@ -49,10 +49,10 @@ public final class BondFutureOptionSecurityBeanOperation extends AbstractSecurit
   }
 
   @Override
-  public BondFutureOptionSecurity createSecurity(OperationContext context, BondFutureOptionSecurityBean bean) {
+  public BondFutureOptionSecurity createSecurity(final OperationContext context, final BondFutureOptionSecurityBean bean) {
     final ExerciseType exerciseType = bean.getOptionExerciseType().accept(new ExerciseTypeVisitorImpl());
 
-    BondFutureOptionSecurity sec = new BondFutureOptionSecurity(
+    final BondFutureOptionSecurity sec = new BondFutureOptionSecurity(
       bean.getTradingExchange().getName(),
       bean.getSettlementExchange().getName(),
       expiryBeanToExpiry(bean.getExpiry()),

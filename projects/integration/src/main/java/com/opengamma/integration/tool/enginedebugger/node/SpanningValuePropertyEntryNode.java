@@ -17,10 +17,10 @@ public class SpanningValuePropertyEntryNode extends AbstractTreeTableLeafNode {
   private final boolean _requirementOptional;
   private final String _specificationConstraing;
   private final boolean _specificationOptional;
-  
-  public SpanningValuePropertyEntryNode(String commonConstraintName,
-                                    String requirementConstraint, boolean requirementOptional,
-                                    String specificationConstraint, boolean specificationOptional) {
+
+  public SpanningValuePropertyEntryNode(final String commonConstraintName,
+                                    final String requirementConstraint, final boolean requirementOptional,
+                                    final String specificationConstraint, final boolean specificationOptional) {
     ArgumentChecker.notNull(commonConstraintName, "commonConstraintName");
     _commonConstraintName = commonConstraintName;
     _requirementConstraint = requirementConstraint;
@@ -28,11 +28,11 @@ public class SpanningValuePropertyEntryNode extends AbstractTreeTableLeafNode {
     _specificationConstraing = specificationConstraint;
     _specificationOptional = specificationOptional;
   }
-  
+
   public String getCommonConstraintName() {
     return _commonConstraintName;
   }
-  
+
   public String getRequirementConstraint() {
     return _requirementConstraint;
   }
@@ -54,15 +54,15 @@ public class SpanningValuePropertyEntryNode extends AbstractTreeTableLeafNode {
     final int prime = 31;
     int result = 1;
     result = prime * result + _commonConstraintName.hashCode();
-    result = prime * result + ((_requirementConstraint == null) ? 0 : _requirementConstraint.hashCode());
+    result = prime * result + (_requirementConstraint == null ? 0 : _requirementConstraint.hashCode());
     result = prime * result + (_requirementOptional ? 1231 : 1237);
-    result = prime * result + ((_specificationConstraing == null) ? 0 : _specificationConstraing.hashCode());
+    result = prime * result + (_specificationConstraing == null ? 0 : _specificationConstraing.hashCode());
     result = prime * result + (_specificationOptional ? 1231 : 1237);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -72,7 +72,7 @@ public class SpanningValuePropertyEntryNode extends AbstractTreeTableLeafNode {
     if (!(obj instanceof SpanningValuePropertyEntryNode)) {
       return false;
     }
-    SpanningValuePropertyEntryNode other = (SpanningValuePropertyEntryNode) obj;
+    final SpanningValuePropertyEntryNode other = (SpanningValuePropertyEntryNode) obj;
     if (_commonConstraintName.equals(other._commonConstraintName)) {
       return true;
     }
@@ -100,7 +100,7 @@ public class SpanningValuePropertyEntryNode extends AbstractTreeTableLeafNode {
   }
 
   @Override
-  public Object getColumn(int column) {
+  public Object getColumn(final int column) {
     switch (column) {
       case 0:
         return getCommonConstraintName();
@@ -111,5 +111,5 @@ public class SpanningValuePropertyEntryNode extends AbstractTreeTableLeafNode {
     }
     return null;
   }
-  
+
 }

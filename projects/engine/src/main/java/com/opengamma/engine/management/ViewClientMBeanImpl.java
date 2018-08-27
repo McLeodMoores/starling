@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.management;
@@ -24,46 +24,46 @@ public class ViewClientMBeanImpl implements ViewClientMBean {
    * Underlying
    */
   private final com.opengamma.engine.view.client.ViewClient _viewClient;
-  
+
   private final ObjectName _objectName;
-  
+
   /**
    * Creates a management view client
    *
    * @param viewClient the underlying view client
    * @param splitByViewProcessor should the MBean name differentiate beans by view processor
    */
-  public ViewClientMBeanImpl(ViewClient viewClient, boolean splitByViewProcessor) {
+  public ViewClientMBeanImpl(final ViewClient viewClient, final boolean splitByViewProcessor) {
     ArgumentChecker.notNull(viewClient, "viewClient");
     _viewClient = viewClient;
     _objectName = createObjectName(viewClient.getViewProcessor().getName(), viewClient.getUniqueId(), splitByViewProcessor);
   }
-  
+
   /**
    * Creates an object name using the scheme "com.opengamma:type=ViewClient,ViewProcessor=<viewProcessorName>,name=<viewClientId>"
    */
-  /*package*/ static ObjectName createObjectName(String viewProcessorName,
-                                                 UniqueId viewClientId,
-                                                 boolean splitByViewProcessor) {
+  /*package*/ static ObjectName createObjectName(final String viewProcessorName,
+                                                 final UniqueId viewClientId,
+                                                 final boolean splitByViewProcessor) {
     try {
-      String beanNamePrefix = splitByViewProcessor ?
+      final String beanNamePrefix = splitByViewProcessor ?
           "com.opengamma:type=ViewProcessors,ViewProcessor=ViewProcessor " + viewProcessorName :
           "com.opengamma:type=ViewProcessor";
       return new ObjectName(beanNamePrefix + ",ViewClients=ViewClients,name=ViewClient " + viewClientId.getValue());
-    } catch (MalformedObjectNameException e) {
+    } catch (final MalformedObjectNameException e) {
       throw new OpenGammaRuntimeException("Error whilst attempting to register JMX Bean", e);
     }
   }
-  
+
   /**
    * Gets the objectName field.
-   * 
+   *
    * @return the object name for this MBean
    */
   public ObjectName getObjectName() {
     return _objectName;
   }
-  
+
   //-------------------------------------------------------------------------
   @Override
   public UniqueId getUniqueId() {
@@ -87,7 +87,7 @@ public class ViewClientMBeanImpl implements ViewClientMBean {
 
   //-------------------------------------------------------------------------
   @Override
-  public void setUpdatePeriod(long periodMillis) {
+  public void setUpdatePeriod(final long periodMillis) {
     _viewClient.setUpdatePeriod(periodMillis);
   }
 
@@ -123,7 +123,7 @@ public class ViewClientMBeanImpl implements ViewClientMBean {
   }
 
   @Override
-  public void setViewCycleAccessSupported(boolean isViewCycleAccessSupported) {
+  public void setViewCycleAccessSupported(final boolean isViewCycleAccessSupported) {
     _viewClient.setViewCycleAccessSupported(isViewCycleAccessSupported);
   }
 

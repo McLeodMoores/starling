@@ -1,15 +1,15 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.security.auditlog;
 
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.Element;
-
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.ehcache.EHCacheUtils;
+
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.Element;
 
 /**
  * A decorator <code>AuditLogger</code> that only sends the message
@@ -23,8 +23,8 @@ public class DuplicateFilteringAuditLogger extends AbstractAuditLogger {
   private final AbstractAuditLogger _delegate;
   private final Cache _cache;
 
-  public DuplicateFilteringAuditLogger(AbstractAuditLogger delegate,
-      int maxElementsInMemory, int secondsToKeepInMemory) {
+  public DuplicateFilteringAuditLogger(final AbstractAuditLogger delegate,
+      final int maxElementsInMemory, final int secondsToKeepInMemory) {
     ArgumentChecker.notNull(delegate, "Delegate logger");
 
     _delegate = delegate;
@@ -35,19 +35,19 @@ public class DuplicateFilteringAuditLogger extends AbstractAuditLogger {
   }
 
   @Override
-  public synchronized void log(String user, String originatingSystem,
-      String object, String operation, String description, boolean success) {
+  public synchronized void log(final String user, final String originatingSystem,
+      final String object, final String operation, final String description, final boolean success) {
 
-    CacheKey key = new CacheKey(user, originatingSystem, object, operation, description, success);
+    final CacheKey key = new CacheKey(user, originatingSystem, object, operation, description, success);
 
     if (_cache.get(key) == null) {
-      Element element = new Element(key, new Object());
+      final Element element = new Element(key, new Object());
       _cache.put(element);
 
       _delegate.log(user, object, operation, description, success);
     }
   }
-  
+
   private static class CacheKey {
     private final String _user;
     private final String _originatingSystem;
@@ -55,9 +55,9 @@ public class DuplicateFilteringAuditLogger extends AbstractAuditLogger {
     private final String _operation;
     private final String _description;
     private final boolean _success;
-    
-    CacheKey(String user, String originatingSystem,
-        String object, String operation, String description, boolean success) {
+
+    CacheKey(final String user, final String originatingSystem,
+        final String object, final String operation, final String description, final boolean success) {
       _user = user;
       _originatingSystem = originatingSystem;
       _object = object;
@@ -71,19 +71,19 @@ public class DuplicateFilteringAuditLogger extends AbstractAuditLogger {
       final int prime = 31;
       int result = 1;
       result = prime * result
-          + ((_description == null) ? 0 : _description.hashCode());
-      result = prime * result + ((_object == null) ? 0 : _object.hashCode());
+          + (_description == null ? 0 : _description.hashCode());
+      result = prime * result + (_object == null ? 0 : _object.hashCode());
       result = prime * result
-          + ((_operation == null) ? 0 : _operation.hashCode());
+          + (_operation == null ? 0 : _operation.hashCode());
       result = prime * result
-          + ((_originatingSystem == null) ? 0 : _originatingSystem.hashCode());
+          + (_originatingSystem == null ? 0 : _originatingSystem.hashCode());
       result = prime * result + (_success ? 1231 : 1237);
-      result = prime * result + ((_user == null) ? 0 : _user.hashCode());
+      result = prime * result + (_user == null ? 0 : _user.hashCode());
       return result;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
       if (this == obj) {
         return true;
       }
@@ -93,7 +93,7 @@ public class DuplicateFilteringAuditLogger extends AbstractAuditLogger {
       if (getClass() != obj.getClass()) {
         return false;
       }
-      CacheKey other = (CacheKey) obj;
+      final CacheKey other = (CacheKey) obj;
       if (_description == null) {
         if (other._description != null) {
           return false;

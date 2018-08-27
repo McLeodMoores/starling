@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.cache;
@@ -21,17 +21,17 @@ public class InMemoryIdentifierMap extends AbstractIdentifierMap implements Iden
 
   private final AtomicLong _nextIdentifier = new AtomicLong(1L);
 
-  private final ConcurrentMap<ValueSpecification, Long> _identifiers = new ConcurrentHashMap<ValueSpecification, Long>();
-  private final ConcurrentMap<Long, ValueSpecification> _specifications = new ConcurrentHashMap<Long, ValueSpecification>();
+  private final ConcurrentMap<ValueSpecification, Long> _identifiers = new ConcurrentHashMap<>();
+  private final ConcurrentMap<Long, ValueSpecification> _specifications = new ConcurrentHashMap<>();
 
   @Override
-  public long getIdentifier(ValueSpecification spec) {
+  public long getIdentifier(final ValueSpecification spec) {
     ArgumentChecker.notNull(spec, "Value specification");
     Long result = _identifiers.get(spec);
     if (result != null) {
       return result;
     }
-    long freshIdentifier = _nextIdentifier.getAndIncrement();
+    final long freshIdentifier = _nextIdentifier.getAndIncrement();
     result = _identifiers.putIfAbsent(spec, freshIdentifier);
     if (result == null) {
       result = freshIdentifier;
@@ -41,10 +41,10 @@ public class InMemoryIdentifierMap extends AbstractIdentifierMap implements Iden
   }
 
   @Override
-  public ValueSpecification getValueSpecification(long identifier) {
+  public ValueSpecification getValueSpecification(final long identifier) {
     return _specifications.get(identifier);
   }
-  
+
   public void clear() {
     _identifiers.clear();
     _specifications.clear();

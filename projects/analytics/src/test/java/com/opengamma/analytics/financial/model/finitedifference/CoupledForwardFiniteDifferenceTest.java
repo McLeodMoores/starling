@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.finitedifference;
@@ -90,14 +90,14 @@ public class CoupledForwardFiniteDifferenceTest {
 
     INITIAL_COND1 = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(Double x) {
+      public Double evaluate(final Double x) {
         return PROB_STATE1 * Math.max(0, SPOT - x);
       }
     };
 
     INITIAL_COND2 = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(Double x) {
+      public Double evaluate(final Double x) {
         return (1.0 - PROB_STATE1) * Math.max(0, SPOT - x);
       }
     };
@@ -200,7 +200,7 @@ public class CoupledForwardFiniteDifferenceTest {
 
   @Test
   public void testDegenerate() {
-    //NOTE vols equal 
+    //NOTE vols equal
     final TwoStateMarkovChainDataBundle mcData = new TwoStateMarkovChainDataBundle(VOL1, VOL1, LAMBDA12, LAMBDA21, PROB_STATE1);
     final CoupledFiniteDifference solver = new CoupledFiniteDifference(0.55, true);
     final ConvectionDiffusionPDE1DCoupledCoefficients[] pdeData = PDE_DATA_PROVIDER.getCoupledForwardPair(new ForwardCurve(SPOT, RATE), mcData);

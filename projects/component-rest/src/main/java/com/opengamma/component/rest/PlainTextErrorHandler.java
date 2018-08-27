@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.component.rest;
@@ -25,15 +25,15 @@ import org.eclipse.jetty.util.ByteArrayISO8859Writer;
 public class PlainTextErrorHandler extends ErrorHandler {
 
   @Override
-  public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException {
+  public void handle(final String target, final Request baseRequest, final HttpServletRequest request, final HttpServletResponse response) throws IOException {
     baseRequest.setHandled(true);
-    String method = request.getMethod();
+    final String method = request.getMethod();
     if (!method.equals(HttpMethods.GET) && !method.equals(HttpMethods.POST) && !method.equals(HttpMethods.HEAD)) {
       return;
     }
     response.setContentType(MimeTypes.TEXT_PLAIN_8859_1);
     response.setHeader(HttpHeaders.CACHE_CONTROL, "must-revalidate,no-cache,no-store");
-    ByteArrayISO8859Writer writer = new ByteArrayISO8859Writer(4096);
+    final ByteArrayISO8859Writer writer = new ByteArrayISO8859Writer(4096);
     handleErrorPage(request, writer, baseRequest.getResponse().getStatus(), baseRequest.getResponse().getReason());
     writer.flush();
     response.setContentLength(writer.size());
@@ -41,7 +41,8 @@ public class PlainTextErrorHandler extends ErrorHandler {
     writer.destroy();
   }
 
-  protected void handleErrorPage(HttpServletRequest request, Writer writer, int code, String message) throws IOException {
+  @Override
+  protected void handleErrorPage(final HttpServletRequest request, final Writer writer, final int code, final String message) throws IOException {
     writer.write("Problem accessing ");
     writer.write(request.getRequestURI());
     writer.write("\nReason: ");

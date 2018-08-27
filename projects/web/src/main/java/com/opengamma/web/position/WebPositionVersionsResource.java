@@ -42,10 +42,10 @@ public class WebPositionVersionsResource extends AbstractWebPositionResource {
   //-------------------------------------------------------------------------
   @GET
   public String getHTML() {
-    PositionHistoryRequest request = new PositionHistoryRequest(data().getPosition().getUniqueId());
-    PositionHistoryResult result = data().getPositionMaster().history(request);
-    
-    FlexiBean out = createRootData();
+    final PositionHistoryRequest request = new PositionHistoryRequest(data().getPosition().getUniqueId());
+    final PositionHistoryResult result = data().getPositionMaster().history(request);
+
+    final FlexiBean out = createRootData();
     out.put("versionsResult", result);
     out.put("versions", result.getPositions());
     return getFreemarker().build(HTML_DIR + "positionversions.ftl", out);
@@ -54,19 +54,19 @@ public class WebPositionVersionsResource extends AbstractWebPositionResource {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public Response getJSON(
-      @QueryParam("pgIdx") Integer pgIdx,
-      @QueryParam("pgNum") Integer pgNum,
-      @QueryParam("pgSze") Integer pgSze) {
-    PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
-    PositionHistoryRequest request = new PositionHistoryRequest(data().getPosition().getUniqueId());
+      @QueryParam("pgIdx") final Integer pgIdx,
+      @QueryParam("pgNum") final Integer pgNum,
+      @QueryParam("pgSze") final Integer pgSze) {
+    final PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
+    final PositionHistoryRequest request = new PositionHistoryRequest(data().getPosition().getUniqueId());
     request.setPagingRequest(pr);
-    PositionHistoryResult result = data().getPositionMaster().history(request);
-    
-    FlexiBean out = createRootData();
+    final PositionHistoryResult result = data().getPositionMaster().history(request);
+
+    final FlexiBean out = createRootData();
     out.put("versionsResult", result);
     out.put("versions", result.getPositions());
     out.put("paging", new WebPaging(result.getPaging(), data().getUriInfo()));
-    String json = getFreemarker().build(JSON_DIR + "positionversions.ftl", out);
+    final String json = getFreemarker().build(JSON_DIR + "positionversions.ftl", out);
     return Response.ok(json).build();
   }
 
@@ -75,9 +75,10 @@ public class WebPositionVersionsResource extends AbstractWebPositionResource {
    * Creates the output root data.
    * @return the output root data, not null
    */
+  @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
-    PositionDocument doc = data().getPosition();
+    final FlexiBean out = super.createRootData();
+    final PositionDocument doc = data().getPosition();
     out.put("positionDoc", doc);
     out.put("position", doc.getPosition());
     out.put("deleted", !doc.isLatest());
@@ -86,12 +87,12 @@ public class WebPositionVersionsResource extends AbstractWebPositionResource {
 
   //-------------------------------------------------------------------------
   @Path("{versionId}")
-  public WebPositionVersionResource findVersion(@PathParam("versionId") String idStr) {
+  public WebPositionVersionResource findVersion(@PathParam("versionId") final String idStr) {
     data().setUriVersionId(idStr);
-    PositionDocument doc = data().getPosition();
-    UniqueId combined = doc.getUniqueId().withVersion(idStr);
+    final PositionDocument doc = data().getPosition();
+    final UniqueId combined = doc.getUniqueId().withVersion(idStr);
     if (doc.getUniqueId().equals(combined) == false) {
-      PositionDocument versioned = data().getPositionMaster().get(combined);
+      final PositionDocument versioned = data().getPositionMaster().get(combined);
       data().setVersioned(versioned);
     } else {
       data().setVersioned(doc);
@@ -106,7 +107,7 @@ public class WebPositionVersionsResource extends AbstractWebPositionResource {
    * @return the URI, not null
    */
   public static URI uri(final WebPositionsData data) {
-    String positionId = data.getBestPositionUriId(null);
+    final String positionId = data.getBestPositionUriId(null);
     return data.getUriInfo().getBaseUriBuilder().path(WebPositionVersionsResource.class).build(positionId);
   }
 

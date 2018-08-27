@@ -5,7 +5,6 @@
  */
 package com.opengamma.integration.marketdata.manipulator.dsl;
 
-import java.util.HashSet;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -50,7 +49,7 @@ public final class SpotRateSelector implements DistinctMarketDataSelector, Immut
   //private final Set<UnorderedCurrencyPair> _unorderedCurrencyPairs = Sets.newHashSet();
 
   @ImmutableConstructor
-  /* package */ SpotRateSelector(Set<String> calcConfigNames, Set<CurrencyPair> currencyPairs) {
+  /* package */ SpotRateSelector(final Set<String> calcConfigNames, final Set<CurrencyPair> currencyPairs) {
     _calcConfigNames = calcConfigNames;
     _currencyPairs = ArgumentChecker.notEmpty(currencyPairs, "currencyPair");
     /*for (CurrencyPair currencyPair : currencyPairs) {
@@ -67,17 +66,17 @@ public final class SpotRateSelector implements DistinctMarketDataSelector, Immut
 
   // TODO this can match the same value twice - once when the pair is ordered, once when unordered
   @Override
-  public DistinctMarketDataSelector findMatchingSelector(ValueSpecification valueSpecification,
-                                                         String calcConfigName,
-                                                         SelectorResolver resolver) {
+  public DistinctMarketDataSelector findMatchingSelector(final ValueSpecification valueSpecification,
+                                                         final String calcConfigName,
+                                                         final SelectorResolver resolver) {
     if (_calcConfigNames != null && !_calcConfigNames.contains(calcConfigName)) {
       return null;
     }
     if (!ValueRequirementNames.SPOT_RATE.equals(valueSpecification.getValueName())) {
       return null;
     }
-    ComputationTargetType targetType = valueSpecification.getTargetSpecification().getType();
-    String idValue = valueSpecification.getTargetSpecification().getUniqueId().getValue();
+    final ComputationTargetType targetType = valueSpecification.getTargetSpecification().getType();
+    final String idValue = valueSpecification.getTargetSpecification().getUniqueId().getValue();
     /*if (targetType.equals(ComputationTargetType.UNORDERED_CURRENCY_PAIR)) {
       UnorderedCurrencyPair unorderedCurrencyPair = UnorderedCurrencyPair.parse(idValue);
       if (!_unorderedCurrencyPairs.contains(unorderedCurrencyPair)) {
@@ -85,7 +84,7 @@ public final class SpotRateSelector implements DistinctMarketDataSelector, Immut
       }
     } else */
     if (targetType.equals(CurrencyPair.TYPE)) {
-      CurrencyPair currencyPair = CurrencyPair.parse(idValue);
+      final CurrencyPair currencyPair = CurrencyPair.parse(idValue);
       if (!_currencyPairs.contains(currencyPair) && !_currencyPairs.contains(currencyPair.inverse())) {
         return null;
       }

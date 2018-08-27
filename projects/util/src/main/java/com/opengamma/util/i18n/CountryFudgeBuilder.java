@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.i18n;
@@ -22,7 +22,7 @@ public final class CountryFudgeBuilder implements FudgeBuilder<Country> {
   public static final String COUNTRY_FIELD_NAME = "country";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, Country object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final Country object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     FudgeSerializer.addClassHeader(msg, Country.class);
     serializer.addToMessage(msg, COUNTRY_FIELD_NAME, null, object.getCode());
@@ -30,7 +30,7 @@ public final class CountryFudgeBuilder implements FudgeBuilder<Country> {
   }
 
   @Override
-  public Country buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
+  public Country buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     final String countryStr = msg.getString(COUNTRY_FIELD_NAME);
     if (countryStr == null) {
       throw new IllegalArgumentException("Fudge message is not a Country - field 'country' is not present");

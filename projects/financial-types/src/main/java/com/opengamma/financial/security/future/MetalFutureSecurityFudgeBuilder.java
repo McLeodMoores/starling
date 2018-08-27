@@ -25,25 +25,25 @@ public class MetalFutureSecurityFudgeBuilder extends AbstractFudgeBuilder implem
   public static final String UNDERLYING_IDENTIFIER_FIELD_NAME = "underlyingIdentifier";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, MetalFutureSecurity object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final MetalFutureSecurity object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     MetalFutureSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
-  public static void toFudgeMsg(FudgeSerializer serializer, MetalFutureSecurity object, final MutableFudgeMsg msg) {
+  public static void toFudgeMsg(final FudgeSerializer serializer, final MetalFutureSecurity object, final MutableFudgeMsg msg) {
     CommodityFutureSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     addToMessage(msg, UNDERLYING_IDENTIFIER_FIELD_NAME, ExternalIdFudgeBuilder.toFudgeMsg(serializer, object.getUnderlyingId()));
   }
 
   @Override
-  public MetalFutureSecurity buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    MetalFutureSecurity object = new MetalFutureSecurity();
+  public MetalFutureSecurity buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final MetalFutureSecurity object = new MetalFutureSecurity();
     MetalFutureSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     return object;
   }
 
-  public static void fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg, MetalFutureSecurity object) {
+  public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final MetalFutureSecurity object) {
     CommodityFutureSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     object.setUnderlyingId(ExternalIdFudgeBuilder.fromFudgeMsg(deserializer, msg.getMessage(UNDERLYING_IDENTIFIER_FIELD_NAME)));
   }

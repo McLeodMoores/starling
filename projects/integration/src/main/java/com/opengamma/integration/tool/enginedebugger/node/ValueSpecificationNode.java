@@ -10,15 +10,15 @@ import com.opengamma.engine.value.ValueSpecification;
 public class ValueSpecificationNode implements TreeTableNode {
 
   private static final String NAME = "ValueSpecification";
-  private Object _parent;
-  private ValueSpecification _valueSpec;
-  
-  public ValueSpecificationNode(Object parent, ValueSpecification valueSpec) {
+  private final Object _parent;
+  private final ValueSpecification _valueSpec;
+
+  public ValueSpecificationNode(final Object parent, final ValueSpecification valueSpec) {
     _parent = parent;
     _valueSpec = valueSpec;
   }
   @Override
-  public Object getChildAt(int index) {
+  public Object getChildAt(final int index) {
     if (_valueSpec != null) {
       switch (index) {
         case 0:
@@ -40,7 +40,7 @@ public class ValueSpecificationNode implements TreeTableNode {
   }
 
   @Override
-  public int getIndexOfChild(Object child) {
+  public int getIndexOfChild(final Object child) {
     if (_valueSpec != null) {
       if (_valueSpec.getTargetSpecification() != null) {
         if (child instanceof ComputationTargetReferenceNode) {
@@ -52,13 +52,13 @@ public class ValueSpecificationNode implements TreeTableNode {
             return 1;
           }
         }
-    
+
       }
     }
     return -1;
   }
   @Override
-  public Object getColumn(int column) {
+  public Object getColumn(final int column) {
     if (column == 0) {
       return NAME;
     } else if (column == 1) {

@@ -52,16 +52,17 @@ public class RestfulJmsResultPublisherExpiryJob<T extends AbstractRestfulJmsResu
    * @param resourceTimeoutMillis how long to wait after the last access time of a resource
    * before expiring it
    */
-  public RestfulJmsResultPublisherExpiryJob(Collection<T> resources,
-                                            long resourceTimeoutMillis) {
+  public RestfulJmsResultPublisherExpiryJob(final Collection<T> resources,
+                                            final long resourceTimeoutMillis) {
     _resourceTimeoutMillis = resourceTimeoutMillis;
     _resources = resources;
   }
 
+  @Override
   public void run() {
-    Instant timeoutBefore = Instant.now().minusMillis(_resourceTimeoutMillis);
-    for (Iterator<T> iterator = _resources.iterator(); iterator.hasNext(); ) {
-      T resource = iterator.next();
+    final Instant timeoutBefore = Instant.now().minusMillis(_resourceTimeoutMillis);
+    for (final Iterator<T> iterator = _resources.iterator(); iterator.hasNext();) {
+      final T resource = iterator.next();
       if (resource.isTerminated()) {
         iterator.remove();
       } else if (resource.getLastAccessed().isBefore(timeoutBefore)) {

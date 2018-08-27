@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.timeseries.precise.zdt;
@@ -49,78 +49,78 @@ abstract class AbstractZonedDateTimeDoubleTimeSeries
   }
 
   //-------------------------------------------------------------------------
-  static long[] convertToLongArray(Collection<ZonedDateTime> instants) {
-    long[] timesArray = new long[instants.size()];
+  static long[] convertToLongArray(final Collection<ZonedDateTime> instants) {
+    final long[] timesArray = new long[instants.size()];
     int i = 0;
-    for (ZonedDateTime time : instants) {
+    for (final ZonedDateTime time : instants) {
       timesArray[i++] = ZonedDateTimeToLongConverter.convertToLong(time);
     }
     return timesArray;
   }
 
-  static long[] convertToLongArray(ZonedDateTime[] instants) {
-    long[] timesArray = new long[instants.length];
+  static long[] convertToLongArray(final ZonedDateTime[] instants) {
+    final long[] timesArray = new long[instants.length];
     for (int i = 0; i < timesArray.length; i++) {
       timesArray[i] = ZonedDateTimeToLongConverter.convertToLong(instants[i]);
     }
     return timesArray;
   }
 
-  static double[] convertToDoubleArray(Collection<Double> values) {
-    double[] valuesArray = new double[values.size()];
+  static double[] convertToDoubleArray(final Collection<Double> values) {
+    final double[] valuesArray = new double[values.size()];
     int i = 0;
-    for (Double value : values) {
+    for (final Double value : values) {
       valuesArray[i++] = value;
     }
     return valuesArray;
   }
 
-  static double[] convertToDoubleArray(Double[] values) {
-    double[] valuesArray = new double[values.length];
+  static double[] convertToDoubleArray(final Double[] values) {
+    final double[] valuesArray = new double[values.length];
     for (int i = 0; i < valuesArray.length; i++) {
       valuesArray[i] = values[i];
     }
     return valuesArray;
   }
 
-  static Entry<ZonedDateTime, Double> makeMapEntry(ZonedDateTime key, Double value) {
-    return new SimpleImmutableEntry<ZonedDateTime, Double>(key, value);
+  static Entry<ZonedDateTime, Double> makeMapEntry(final ZonedDateTime key, final Double value) {
+    return new SimpleImmutableEntry<>(key, value);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  protected long convertToLong(ZonedDateTime instant) {
+  protected long convertToLong(final ZonedDateTime instant) {
     return ZonedDateTimeToLongConverter.convertToLong(instant);
   }
 
   @Override
-  protected ZonedDateTime convertFromLong(long instant) {
+  protected ZonedDateTime convertFromLong(final long instant) {
     return ZonedDateTimeToLongConverter.convertToZonedDateTime(instant, getZone());
   }
 
   @Override
-  protected ZonedDateTime[] createArray(int size) {
+  protected ZonedDateTime[] createArray(final int size) {
     return new ZonedDateTime[size];
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the internal storage array without cloning.
-   * 
+   *
    * @return the array, not null
    */
   abstract long[] timesArrayFast0();
 
   /**
    * Gets the internal storage array without cloning.
-   * 
+   *
    * @return the array, not null
    */
   abstract double[] valuesArrayFast0();
 
   /**
    * Creates a new instance without cloning.
-   * 
+   *
    * @param instant  the times array, not null
    * @param values  the values array, not null
    * @return the new instance, not null
@@ -135,7 +135,7 @@ abstract class AbstractZonedDateTimeDoubleTimeSeries
 
       @Override
       public boolean hasNext() {
-        return (_index + 1) < size();
+        return _index + 1 < size();
       }
 
       @Override
@@ -144,8 +144,8 @@ abstract class AbstractZonedDateTimeDoubleTimeSeries
           throw new NoSuchElementException("No more elements in the iteration");
         }
         _index++;
-        long time = AbstractZonedDateTimeDoubleTimeSeries.this.getTimeAtIndexFast(_index);
-        Double value = AbstractZonedDateTimeDoubleTimeSeries.this.getValueAtIndex(_index);
+        final long time = AbstractZonedDateTimeDoubleTimeSeries.this.getTimeAtIndexFast(_index);
+        final Double value = AbstractZonedDateTimeDoubleTimeSeries.this.getValueAtIndex(_index);
         return makeMapEntry(AbstractZonedDateTimeDoubleTimeSeries.this.convertFromLong(time), value);
       }
 
@@ -206,32 +206,32 @@ abstract class AbstractZonedDateTimeDoubleTimeSeries
 
   //-------------------------------------------------------------------------
   @Override
-  public ZonedDateTimeDoubleTimeSeries subSeries(ZonedDateTime startZonedDateTime, ZonedDateTime endZonedDateTime) {
+  public ZonedDateTimeDoubleTimeSeries subSeries(final ZonedDateTime startZonedDateTime, final ZonedDateTime endZonedDateTime) {
     return subSeriesFast(convertToLong(startZonedDateTime), true, convertToLong(endZonedDateTime), false);
   }
 
   @Override
-  public ZonedDateTimeDoubleTimeSeries subSeries(ZonedDateTime startZonedDateTime, boolean includeStart, ZonedDateTime endZonedDateTime, boolean includeEnd) {
+  public ZonedDateTimeDoubleTimeSeries subSeries(final ZonedDateTime startZonedDateTime, final boolean includeStart, final ZonedDateTime endZonedDateTime, final boolean includeEnd) {
     return subSeriesFast(convertToLong(startZonedDateTime), includeStart, convertToLong(endZonedDateTime), includeEnd);
   }
 
   @Override
-  public ZonedDateTimeDoubleTimeSeries subSeriesFast(long startZonedDateTime, long endZonedDateTime) {
+  public ZonedDateTimeDoubleTimeSeries subSeriesFast(final long startZonedDateTime, final long endZonedDateTime) {
     return subSeriesFast(startZonedDateTime, true, endZonedDateTime, false);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public ZonedDateTimeDoubleTimeSeries lag(int days) {
-    long[] times = timesArrayFast0();
-    double[] values = valuesArrayFast0();
+  public ZonedDateTimeDoubleTimeSeries lag(final int days) {
+    final long[] times = timesArrayFast0();
+    final double[] values = valuesArrayFast0();
     if (days == 0) {
       return newInstanceFast(times, values);
     } else if (days < 0) {
       if (-days < times.length) {
-        long[] resultTimes = new long[times.length + days]; // remember days is -ve
+        final long[] resultTimes = new long[times.length + days]; // remember days is -ve
         System.arraycopy(times, 0, resultTimes, 0, times.length + days);
-        double[] resultValues = new double[times.length + days];
+        final double[] resultValues = new double[times.length + days];
         System.arraycopy(values, -days, resultValues, 0, times.length + days);
         return newInstanceFast(resultTimes, resultValues);
       } else {
@@ -239,9 +239,9 @@ abstract class AbstractZonedDateTimeDoubleTimeSeries
       }
     } else { // if (days > 0) {
       if (days < times.length) {
-        long[] resultTimes = new long[times.length - days]; // remember days is +ve
+        final long[] resultTimes = new long[times.length - days]; // remember days is +ve
         System.arraycopy(times, days, resultTimes, 0, times.length - days);
-        double[] resultValues = new double[times.length - days];
+        final double[] resultValues = new double[times.length - days];
         System.arraycopy(values, 0, resultValues, 0, times.length - days);
         return newInstanceFast(resultTimes, resultValues);
       } else {
@@ -251,22 +251,23 @@ abstract class AbstractZonedDateTimeDoubleTimeSeries
   }
 
   //-------------------------------------------------------------------------
-  private ZonedDateTimeDoubleTimeSeries operate(DoubleTimeSeries<?> other, BinaryOperator operator) {
+  private ZonedDateTimeDoubleTimeSeries operate(final DoubleTimeSeries<?> other, final BinaryOperator operator) {
     if (other instanceof PreciseDoubleTimeSeries) {
       return operate((PreciseDoubleTimeSeries<?>) other, operator);
     }
     throw new UnsupportedOperationException("Can only operate on a PreciseDoubleTimeSeries");
   }
 
-  public ZonedDateTimeDoubleTimeSeries operate(PreciseDoubleTimeSeries<?> other, BinaryOperator operator) {
-    long[] aTimes = timesArrayFast0();
-    double[] aValues = valuesArrayFast0();
+  @Override
+  public ZonedDateTimeDoubleTimeSeries operate(final PreciseDoubleTimeSeries<?> other, final BinaryOperator operator) {
+    final long[] aTimes = timesArrayFast0();
+    final double[] aValues = valuesArrayFast0();
     int aCount = 0;
-    long[] bTimes = other.timesArrayFast();
-    double[] bValues = other.valuesArrayFast();
+    final long[] bTimes = other.timesArrayFast();
+    final double[] bValues = other.valuesArrayFast();
     int bCount = 0;
-    long[] resTimes = new long[Math.max(aTimes.length, bTimes.length)];
-    double[] resValues = new double[resTimes.length];
+    final long[] resTimes = new long[Math.max(aTimes.length, bTimes.length)];
+    final double[] resValues = new double[resTimes.length];
     int resCount = 0;
     while (aCount < aTimes.length && bCount < bTimes.length) {
       if (aTimes[aCount] == bTimes[bCount]) {
@@ -281,39 +282,40 @@ abstract class AbstractZonedDateTimeDoubleTimeSeries
         bCount++;
       }
     }
-    long[] trimmedTimes = new long[resCount];
-    double[] trimmedValues = new double[resCount];
+    final long[] trimmedTimes = new long[resCount];
+    final double[] trimmedValues = new double[resCount];
     System.arraycopy(resTimes, 0, trimmedTimes, 0, resCount);
     System.arraycopy(resValues, 0, trimmedValues, 0, resCount);
     return newInstanceFast(trimmedTimes, trimmedValues);
   }
 
-  private ZonedDateTimeDoubleTimeSeries unionOperate(DoubleTimeSeries<?> other, BinaryOperator operator) {
+  private ZonedDateTimeDoubleTimeSeries unionOperate(final DoubleTimeSeries<?> other, final BinaryOperator operator) {
     if (other instanceof PreciseDoubleTimeSeries) {
       return unionOperate((PreciseDoubleTimeSeries<?>) other, operator);
     }
     throw new UnsupportedOperationException("Can only operate on a PreciseDoubleTimeSeries");
   }
 
-  public ZonedDateTimeDoubleTimeSeries unionOperate(PreciseDoubleTimeSeries<?> other, BinaryOperator operator) {
-    long[] aTimes = timesArrayFast0();
-    double[] aValues = valuesArrayFast0();
+  @Override
+  public ZonedDateTimeDoubleTimeSeries unionOperate(final PreciseDoubleTimeSeries<?> other, final BinaryOperator operator) {
+    final long[] aTimes = timesArrayFast0();
+    final double[] aValues = valuesArrayFast0();
     int aCount = 0;
-    long[] bTimes = other.timesArrayFast();
-    double[] bValues = other.valuesArrayFast();
+    final long[] bTimes = other.timesArrayFast();
+    final double[] bValues = other.valuesArrayFast();
     int bCount = 0;
-    long[] resTimes = new long[aTimes.length + bTimes.length];
-    double[] resValues = new double[resTimes.length];
+    final long[] resTimes = new long[aTimes.length + bTimes.length];
+    final double[] resValues = new double[resTimes.length];
     int resCount = 0;
     while (aCount < aTimes.length || bCount < bTimes.length) {
       if (aCount >= aTimes.length) {
-        int bRemaining = bTimes.length - bCount;
+        final int bRemaining = bTimes.length - bCount;
         System.arraycopy(bTimes, bCount, resTimes, resCount, bRemaining);
         System.arraycopy(bValues, bCount, resValues, resCount, bRemaining);
         resCount += bRemaining;
         break;
       } else if (bCount >= bTimes.length) {
-        int aRemaining = aTimes.length - aCount;
+        final int aRemaining = aTimes.length - aCount;
         System.arraycopy(aTimes, aCount, resTimes, resCount, aRemaining);
         System.arraycopy(aValues, aCount, resValues, resCount, aRemaining);
         resCount += aRemaining;
@@ -336,8 +338,8 @@ abstract class AbstractZonedDateTimeDoubleTimeSeries
         bCount++;
       }
     }
-    long[] trimmedTimes = new long[resCount];
-    double[] trimmedValues = new double[resCount];
+    final long[] trimmedTimes = new long[resCount];
+    final double[] trimmedValues = new double[resCount];
     System.arraycopy(resTimes, 0, trimmedTimes, 0, resCount);
     System.arraycopy(resValues, 0, trimmedValues, 0, resCount);
     return newInstanceFast(trimmedTimes, trimmedValues);
@@ -345,144 +347,144 @@ abstract class AbstractZonedDateTimeDoubleTimeSeries
 
   //-------------------------------------------------------------------------
   @Override
-  public ZonedDateTimeDoubleTimeSeries add(double amountToAdd) {
+  public ZonedDateTimeDoubleTimeSeries add(final double amountToAdd) {
     return operate(amountToAdd, ADD_OPERATOR);
   }
 
   @Override
-  public ZonedDateTimeDoubleTimeSeries add(DoubleTimeSeries<?> other) {
+  public ZonedDateTimeDoubleTimeSeries add(final DoubleTimeSeries<?> other) {
     return operate(other, ADD_OPERATOR);
   }
 
   @Override
-  public ZonedDateTimeDoubleTimeSeries unionAdd(DoubleTimeSeries<?> other) {
+  public ZonedDateTimeDoubleTimeSeries unionAdd(final DoubleTimeSeries<?> other) {
     return unionOperate(other, ADD_OPERATOR);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public ZonedDateTimeDoubleTimeSeries subtract(double amountToSubtract) {
+  public ZonedDateTimeDoubleTimeSeries subtract(final double amountToSubtract) {
     return operate(amountToSubtract, SUBTRACT_OPERATOR);
   }
 
   @Override
-  public ZonedDateTimeDoubleTimeSeries subtract(DoubleTimeSeries<?> other) {
+  public ZonedDateTimeDoubleTimeSeries subtract(final DoubleTimeSeries<?> other) {
     return operate(other, SUBTRACT_OPERATOR);
   }
 
   @Override
-  public ZonedDateTimeDoubleTimeSeries unionSubtract(DoubleTimeSeries<?> other) {
+  public ZonedDateTimeDoubleTimeSeries unionSubtract(final DoubleTimeSeries<?> other) {
     return unionOperate(other, SUBTRACT_OPERATOR);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public ZonedDateTimeDoubleTimeSeries multiply(double amountToMultiplyBy) {
+  public ZonedDateTimeDoubleTimeSeries multiply(final double amountToMultiplyBy) {
     return operate(amountToMultiplyBy, MULTIPLY_OPERATOR);
   }
 
   @Override
-  public ZonedDateTimeDoubleTimeSeries multiply(DoubleTimeSeries<?> other) {
+  public ZonedDateTimeDoubleTimeSeries multiply(final DoubleTimeSeries<?> other) {
     return operate(other, MULTIPLY_OPERATOR);
   }
 
   @Override
-  public ZonedDateTimeDoubleTimeSeries unionMultiply(DoubleTimeSeries<?> other) {
+  public ZonedDateTimeDoubleTimeSeries unionMultiply(final DoubleTimeSeries<?> other) {
     return unionOperate(other, MULTIPLY_OPERATOR);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public ZonedDateTimeDoubleTimeSeries divide(double amountToDivideBy) {
+  public ZonedDateTimeDoubleTimeSeries divide(final double amountToDivideBy) {
     return operate(amountToDivideBy, DIVIDE_OPERATOR);
   }
 
   @Override
-  public ZonedDateTimeDoubleTimeSeries divide(DoubleTimeSeries<?> other) {
+  public ZonedDateTimeDoubleTimeSeries divide(final DoubleTimeSeries<?> other) {
     return operate(other, DIVIDE_OPERATOR);
   }
 
   @Override
-  public ZonedDateTimeDoubleTimeSeries unionDivide(DoubleTimeSeries<?> other) {
+  public ZonedDateTimeDoubleTimeSeries unionDivide(final DoubleTimeSeries<?> other) {
     return unionOperate(other, DIVIDE_OPERATOR);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public ZonedDateTimeDoubleTimeSeries power(double power) {
+  public ZonedDateTimeDoubleTimeSeries power(final double power) {
     return operate(power, POWER_OPERATOR);
   }
 
   @Override
-  public ZonedDateTimeDoubleTimeSeries power(DoubleTimeSeries<?> other) {
+  public ZonedDateTimeDoubleTimeSeries power(final DoubleTimeSeries<?> other) {
     return operate(other, POWER_OPERATOR);
   }
 
   @Override
-  public ZonedDateTimeDoubleTimeSeries unionPower(DoubleTimeSeries<?> other) {
+  public ZonedDateTimeDoubleTimeSeries unionPower(final DoubleTimeSeries<?> other) {
     return unionOperate(other, POWER_OPERATOR);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public ZonedDateTimeDoubleTimeSeries minimum(double minValue) {
+  public ZonedDateTimeDoubleTimeSeries minimum(final double minValue) {
     return operate(minValue, MINIMUM_OPERATOR);
   }
 
   @Override
-  public ZonedDateTimeDoubleTimeSeries minimum(DoubleTimeSeries<?> other) {
+  public ZonedDateTimeDoubleTimeSeries minimum(final DoubleTimeSeries<?> other) {
     return operate(other, MINIMUM_OPERATOR);
   }
 
   @Override
-  public ZonedDateTimeDoubleTimeSeries unionMinimum(DoubleTimeSeries<?> other) {
+  public ZonedDateTimeDoubleTimeSeries unionMinimum(final DoubleTimeSeries<?> other) {
     return unionOperate(other, MINIMUM_OPERATOR);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public ZonedDateTimeDoubleTimeSeries maximum(double maxValue) {
+  public ZonedDateTimeDoubleTimeSeries maximum(final double maxValue) {
     return operate(maxValue, MAXIMUM_OPERATOR);
   }
 
   @Override
-  public ZonedDateTimeDoubleTimeSeries maximum(DoubleTimeSeries<?> other) {
+  public ZonedDateTimeDoubleTimeSeries maximum(final DoubleTimeSeries<?> other) {
     return operate(other, MAXIMUM_OPERATOR);
   }
 
   @Override
-  public ZonedDateTimeDoubleTimeSeries unionMaximum(DoubleTimeSeries<?> other) {
+  public ZonedDateTimeDoubleTimeSeries unionMaximum(final DoubleTimeSeries<?> other) {
     return unionOperate(other, MAXIMUM_OPERATOR);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public ZonedDateTimeDoubleTimeSeries average(double value) {
+  public ZonedDateTimeDoubleTimeSeries average(final double value) {
     return operate(value, AVERAGE_OPERATOR);
   }
 
   @Override
-  public ZonedDateTimeDoubleTimeSeries average(DoubleTimeSeries<?> other) {
+  public ZonedDateTimeDoubleTimeSeries average(final DoubleTimeSeries<?> other) {
     return operate(other, AVERAGE_OPERATOR);
   }
 
   @Override
-  public ZonedDateTimeDoubleTimeSeries unionAverage(DoubleTimeSeries<?> other) {
+  public ZonedDateTimeDoubleTimeSeries unionAverage(final DoubleTimeSeries<?> other) {
     return unionOperate(other, AVERAGE_OPERATOR);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public ZonedDateTimeDoubleTimeSeries intersectionFirstValue(DoubleTimeSeries<?> other) {
+  public ZonedDateTimeDoubleTimeSeries intersectionFirstValue(final DoubleTimeSeries<?> other) {
     // optimize PLAT-1590
     if (other instanceof AbstractZonedDateTimeDoubleTimeSeries) {
-      long[] aTimes = timesArrayFast0();
-      double[] aValues = valuesArrayFast0();
+      final long[] aTimes = timesArrayFast0();
+      final double[] aValues = valuesArrayFast0();
       int aCount = 0;
-      long[] bTimes = ((AbstractZonedDateTimeDoubleTimeSeries) other).timesArrayFast0();
+      final long[] bTimes = ((AbstractZonedDateTimeDoubleTimeSeries) other).timesArrayFast0();
       int bCount = 0;
-      long[] resTimes = new long[Math.min(aTimes.length, bTimes.length)];
-      double[] resValues = new double[resTimes.length];
+      final long[] resTimes = new long[Math.min(aTimes.length, bTimes.length)];
+      final double[] resValues = new double[resTimes.length];
       int resCount = 0;
       while (aCount < aTimes.length && bCount < bTimes.length) {
         if (aTimes[aCount] == bTimes[bCount]) {
@@ -497,8 +499,8 @@ abstract class AbstractZonedDateTimeDoubleTimeSeries
           bCount++;
         }
       }
-      long[] trimmedTimes = new long[resCount];
-      double[] trimmedValues = new double[resCount];
+      final long[] trimmedTimes = new long[resCount];
+      final double[] trimmedValues = new double[resCount];
       System.arraycopy(resTimes, 0, trimmedTimes, 0, resCount);
       System.arraycopy(resValues, 0, trimmedValues, 0, resCount);
       return newInstanceFast(trimmedTimes, trimmedValues);
@@ -507,12 +509,12 @@ abstract class AbstractZonedDateTimeDoubleTimeSeries
   }
 
   @Override
-  public ZonedDateTimeDoubleTimeSeries intersectionSecondValue(DoubleTimeSeries<?> other) {
+  public ZonedDateTimeDoubleTimeSeries intersectionSecondValue(final DoubleTimeSeries<?> other) {
     return operate(other, SECOND_OPERATOR);
   }
 
   @Override
-  public ZonedDateTimeDoubleTimeSeries noIntersectionOperation(DoubleTimeSeries<?> other) {
+  public ZonedDateTimeDoubleTimeSeries noIntersectionOperation(final DoubleTimeSeries<?> other) {
     return unionOperate(other, NO_INTERSECTION_OPERATOR);
   }
 
@@ -549,7 +551,7 @@ abstract class AbstractZonedDateTimeDoubleTimeSeries
       throw new NoSuchElementException("Time-series is empty");
     }
     double max = Double.MIN_VALUE;
-    for (double value : valuesArrayFast0()) {
+    for (final double value : valuesArrayFast0()) {
       max = Math.max(max, value);
     }
     return max;
@@ -561,7 +563,7 @@ abstract class AbstractZonedDateTimeDoubleTimeSeries
       throw new NoSuchElementException("Time-series is empty");
     }
     double min = Double.MAX_VALUE;
-    for (double value : valuesArrayFast0()) {
+    for (final double value : valuesArrayFast0()) {
       min = Math.min(min, value);
     }
     return min;
@@ -569,17 +571,17 @@ abstract class AbstractZonedDateTimeDoubleTimeSeries
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (obj == this) {
       return true;
     }
     if (obj instanceof AbstractZonedDateTimeDoubleTimeSeries) {
-      AbstractZonedDateTimeDoubleTimeSeries other = (AbstractZonedDateTimeDoubleTimeSeries) obj;
+      final AbstractZonedDateTimeDoubleTimeSeries other = (AbstractZonedDateTimeDoubleTimeSeries) obj;
       return Arrays.equals(timesArrayFast0(), other.timesArrayFast0()) &&
               Arrays.equals(valuesArrayFast0(), other.valuesArrayFast0());
     }
     if (obj instanceof PreciseDoubleTimeSeries) {
-      PreciseDoubleTimeSeries<?> other = (PreciseDoubleTimeSeries<?>) obj;
+      final PreciseDoubleTimeSeries<?> other = (PreciseDoubleTimeSeries<?>) obj;
       return Arrays.equals(timesArrayFast0(), other.timesArrayFast()) &&
               Arrays.equals(valuesArrayFast0(), other.valuesArrayFast());
     }

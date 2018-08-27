@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.cds;
@@ -22,10 +22,10 @@ import com.opengamma.masterdb.security.hibernate.HibernateSecurityMasterDao;
 import com.opengamma.masterdb.security.hibernate.OperationContext;
 
 /**
- * 
+ *
  */
 public final class LegacyFixedRecoveryCDSSecurityBeanOperation extends AbstractSecurityBeanOperation<LegacyFixedRecoveryCDSSecurity, LegacyFixedRecoveryCDSSecurityBean> {
-  
+
   /**
    * Singleton.
    * */
@@ -36,7 +36,7 @@ public final class LegacyFixedRecoveryCDSSecurityBeanOperation extends AbstractS
   }
 
   @Override
-  public LegacyFixedRecoveryCDSSecurityBean createBean(OperationContext context, HibernateSecurityMasterDao secMasterSession, LegacyFixedRecoveryCDSSecurity security) {
+  public LegacyFixedRecoveryCDSSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession, final LegacyFixedRecoveryCDSSecurity security) {
     final LegacyFixedRecoveryCDSSecurityBean bean = new LegacyFixedRecoveryCDSSecurityBean();
     CreditDefaultSwapBeanOperation.createBean(secMasterSession, bean, security);
     bean.setParSpread(security.getParSpread());
@@ -45,29 +45,29 @@ public final class LegacyFixedRecoveryCDSSecurityBeanOperation extends AbstractS
   }
 
   @Override
-  public LegacyFixedRecoveryCDSSecurity createSecurity(OperationContext context, LegacyFixedRecoveryCDSSecurityBean bean) {
-    LegacyFixedRecoveryCDSSecurity security = new LegacyFixedRecoveryCDSSecurity(
-        bean.getBuy(), 
-        externalIdBeanToExternalId(bean.getProtectionSeller()), 
-        externalIdBeanToExternalId(bean.getProtectionBuyer()), 
-        externalIdBeanToExternalId(bean.getReferenceEntity()), 
-        debtSeniorityBeanToDebtSeniority(bean.getDebtSeniority()), 
-        restructuringClauseBeanToRestructuringClause(bean.getRestructuringClause()), 
-        externalIdBeanToExternalId(bean.getRegionId()), 
-        zonedDateTimeBeanToDateTimeWithZone(bean.getStartDate()), 
-        zonedDateTimeBeanToDateTimeWithZone(bean.getEffectiveDate()), 
-        zonedDateTimeBeanToDateTimeWithZone(bean.getMaturityDate()), 
-        stubTypeBeanToStubType(bean.getStubType()), 
-        frequencyBeanToFrequency(bean.getCouponFrequency()), 
-        dayCountBeanToDayCount(bean.getDayCount()), 
-        businessDayConventionBeanToBusinessDayConvention(bean.getBusinessDayConvention()), 
-        bean.getImmAdjustMaturityDate(), 
-        bean.getAdjustEffectiveDate(), 
-        bean.getAdjustMaturityDate(), 
-        (InterestRateNotional) createNotional(bean.getNotional()), 
-        bean.getRecoveryRate(), 
-        bean.getIncludeAccruedPremium(), 
-        bean.getProtectionStart(), 
+  public LegacyFixedRecoveryCDSSecurity createSecurity(final OperationContext context, final LegacyFixedRecoveryCDSSecurityBean bean) {
+    final LegacyFixedRecoveryCDSSecurity security = new LegacyFixedRecoveryCDSSecurity(
+        bean.getBuy(),
+        externalIdBeanToExternalId(bean.getProtectionSeller()),
+        externalIdBeanToExternalId(bean.getProtectionBuyer()),
+        externalIdBeanToExternalId(bean.getReferenceEntity()),
+        debtSeniorityBeanToDebtSeniority(bean.getDebtSeniority()),
+        restructuringClauseBeanToRestructuringClause(bean.getRestructuringClause()),
+        externalIdBeanToExternalId(bean.getRegionId()),
+        zonedDateTimeBeanToDateTimeWithZone(bean.getStartDate()),
+        zonedDateTimeBeanToDateTimeWithZone(bean.getEffectiveDate()),
+        zonedDateTimeBeanToDateTimeWithZone(bean.getMaturityDate()),
+        stubTypeBeanToStubType(bean.getStubType()),
+        frequencyBeanToFrequency(bean.getCouponFrequency()),
+        dayCountBeanToDayCount(bean.getDayCount()),
+        businessDayConventionBeanToBusinessDayConvention(bean.getBusinessDayConvention()),
+        bean.getImmAdjustMaturityDate(),
+        bean.getAdjustEffectiveDate(),
+        bean.getAdjustMaturityDate(),
+        (InterestRateNotional) createNotional(bean.getNotional()),
+        bean.getRecoveryRate(),
+        bean.getIncludeAccruedPremium(),
+        bean.getProtectionStart(),
         bean.getParSpread());
     return security;
   }

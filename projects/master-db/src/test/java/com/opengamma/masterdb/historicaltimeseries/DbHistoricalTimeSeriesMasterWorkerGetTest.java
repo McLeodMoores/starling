@@ -30,7 +30,7 @@ public class DbHistoricalTimeSeriesMasterWorkerGetTest extends AbstractDbHistori
   private static final Logger LOGGER = LoggerFactory.getLogger(DbHistoricalTimeSeriesMasterWorkerGetTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public DbHistoricalTimeSeriesMasterWorkerGetTest(String databaseType, String databaseVersion) {
+  public DbHistoricalTimeSeriesMasterWorkerGetTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion);
     LOGGER.info("running testcases for {}", databaseType);
   }
@@ -43,91 +43,91 @@ public class DbHistoricalTimeSeriesMasterWorkerGetTest extends AbstractDbHistori
 
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_get_versioned_notFoundId() {
-    UniqueId uniqueId = UniqueId.of("DbHts", "0", "0");
+    final UniqueId uniqueId = UniqueId.of("DbHts", "0", "0");
     _htsMaster.get(uniqueId);
   }
 
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_get_versioned_notFoundVersion() {
-    UniqueId uniqueId = UniqueId.of("DbHts", "101", "1");
+    final UniqueId uniqueId = UniqueId.of("DbHts", "101", "1");
     _htsMaster.get(uniqueId);
   }
 
   @Test
   public void test_get_versioned101() {
-    UniqueId uniqueId = UniqueId.of("DbHts", "101", "0");
-    HistoricalTimeSeriesInfoDocument test = _htsMaster.get(uniqueId);
+    final UniqueId uniqueId = UniqueId.of("DbHts", "101", "0");
+    final HistoricalTimeSeriesInfoDocument test = _htsMaster.get(uniqueId);
     assert101(test);
   }
 
   @Test
   public void test_get_versioned102() {
-    UniqueId uniqueId = UniqueId.of("DbHts", "102", "0");
-    HistoricalTimeSeriesInfoDocument test = _htsMaster.get(uniqueId);
+    final UniqueId uniqueId = UniqueId.of("DbHts", "102", "0");
+    final HistoricalTimeSeriesInfoDocument test = _htsMaster.get(uniqueId);
     assert102(test);
   }
 
   //-------------------------------------------------------------------------
   @Test
   public void test_get_versioned_notLatest() {
-    UniqueId uniqueId = UniqueId.of("DbHts", "201", "0");
-    HistoricalTimeSeriesInfoDocument test = _htsMaster.get(uniqueId);
+    final UniqueId uniqueId = UniqueId.of("DbHts", "201", "0");
+    final HistoricalTimeSeriesInfoDocument test = _htsMaster.get(uniqueId);
     assert201(test);
   }
 
   @Test
   public void test_get_versioned_latestVersionNotLatestCorrection() {
-    UniqueId uniqueId = UniqueId.of("DbHts", "201", "1");
-    HistoricalTimeSeriesInfoDocument test = _htsMaster.get(uniqueId);
+    final UniqueId uniqueId = UniqueId.of("DbHts", "201", "1");
+    final HistoricalTimeSeriesInfoDocument test = _htsMaster.get(uniqueId);
     assert202(test);
   }
 
   @Test
   public void test_get_versioned_latest() {
-    UniqueId uniqueId = UniqueId.of("DbHts", "201", "2");
-    HistoricalTimeSeriesInfoDocument test = _htsMaster.get(uniqueId);
+    final UniqueId uniqueId = UniqueId.of("DbHts", "201", "2");
+    final HistoricalTimeSeriesInfoDocument test = _htsMaster.get(uniqueId);
     assert203(test);
   }
 
   //-------------------------------------------------------------------------
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_get_unversioned_notFound() {
-    UniqueId uniqueId = UniqueId.of("DbHts", "0");
+    final UniqueId uniqueId = UniqueId.of("DbHts", "0");
     _htsMaster.get(uniqueId);
   }
 
   @Test
   public void test_get_unversioned() {
-    UniqueId uniqueId = UniqueId.of("DbHts", "201");
-    HistoricalTimeSeriesInfoDocument test = _htsMaster.get(uniqueId);
+    final UniqueId uniqueId = UniqueId.of("DbHts", "201");
+    final HistoricalTimeSeriesInfoDocument test = _htsMaster.get(uniqueId);
     assert203(test);
   }
 
   //-------------------------------------------------------------------------
   @Test
   public void test_getObjectId() {
-    ObjectId oid = ObjectId.of("DbHts", "201");
-    HistoricalTimeSeriesInfoDocument test = _htsMaster.get(oid, VersionCorrection.LATEST);
+    final ObjectId oid = ObjectId.of("DbHts", "201");
+    final HistoricalTimeSeriesInfoDocument test = _htsMaster.get(oid, VersionCorrection.LATEST);
     assert203(test);
   }
 
   @Test
   public void test_getObjectId_earlierCorrection() {
-    ObjectId oid = ObjectId.of("DbHts", "201");
-    HistoricalTimeSeriesInfoDocument test = _htsMaster.get(oid, VersionCorrection.ofCorrectedTo(_version2Instant));
+    final ObjectId oid = ObjectId.of("DbHts", "201");
+    final HistoricalTimeSeriesInfoDocument test = _htsMaster.get(oid, VersionCorrection.ofCorrectedTo(_version2Instant));
     assert202(test);
   }
 
   @Test
   public void test_getObjectId_earlierVersion() {
-    ObjectId oid = ObjectId.of("DbHts", "201");
-    HistoricalTimeSeriesInfoDocument test = _htsMaster.get(oid, VersionCorrection.ofVersionAsOf(_version1Instant));
+    final ObjectId oid = ObjectId.of("DbHts", "201");
+    final HistoricalTimeSeriesInfoDocument test = _htsMaster.get(oid, VersionCorrection.ofVersionAsOf(_version1Instant));
     assert201(test);
   }
 
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_getObjectId_tooEarly() {
-    ObjectId oid = ObjectId.of("DbHts", "201");
+    final ObjectId oid = ObjectId.of("DbHts", "201");
     _htsMaster.get(oid, VersionCorrection.ofVersionAsOf(_version1Instant.minusSeconds(1)));
   }
 

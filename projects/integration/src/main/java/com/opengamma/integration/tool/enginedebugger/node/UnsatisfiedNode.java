@@ -12,12 +12,12 @@ import com.opengamma.engine.value.ValueRequirement;
  */
 public class UnsatisfiedNode extends ValueRequirementNode {
 
-  public UnsatisfiedNode(Object parent, ValueRequirement valueRequirement) {
+  public UnsatisfiedNode(final Object parent, final ValueRequirement valueRequirement) {
     super(parent, valueRequirement);
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -27,7 +27,7 @@ public class UnsatisfiedNode extends ValueRequirementNode {
     if (!(obj instanceof UnsatisfiedNode)) {
       return false;
     }
-    UnsatisfiedNode other = (UnsatisfiedNode) obj;
+    final UnsatisfiedNode other = (UnsatisfiedNode) obj;
     if (_valueRequirement == null) {
       if (other._valueRequirement != null) {
         return false;
@@ -37,7 +37,7 @@ public class UnsatisfiedNode extends ValueRequirementNode {
     }
     return true;
   }
-  
+
   // use superclass hashCode
 
 }

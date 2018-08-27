@@ -18,19 +18,19 @@ import com.opengamma.util.TerminatableJob;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 
 /**
- * 
+ *
  */
 public class TicksPlayerJob extends TerminatableJob {
 
   /** Logger/ */
   private static final Logger LOGGER = LoggerFactory.getLogger(TicksPlayerJob.class);
 
-  private BlockingQueue<FudgeMsg> _ticksQueue;
-  private BloombergTickReceiver _tickReceiver;
-  private Mode _mode;
-  private Thread _ticksLoaderThread;
+  private final BlockingQueue<FudgeMsg> _ticksQueue;
+  private final BloombergTickReceiver _tickReceiver;
+  private final Mode _mode;
+  private final Thread _ticksLoaderThread;
 
-  public TicksPlayerJob(BlockingQueue<FudgeMsg> ticksQueue, BloombergTickReceiver tickReceiver, Mode mode, Thread ticksLoaderThread) {
+  public TicksPlayerJob(final BlockingQueue<FudgeMsg> ticksQueue, final BloombergTickReceiver tickReceiver, final Mode mode, final Thread ticksLoaderThread) {
     ArgumentChecker.notNull(ticksQueue, "ticksQueue");
     ArgumentChecker.notNull(tickReceiver, "tickReceiver");
     ArgumentChecker.notNull(mode, "mode");
@@ -58,40 +58,40 @@ public class TicksPlayerJob extends TerminatableJob {
 
   /**
    * @param nextTick
-   * 
+   *
    */
   private void playNextTick() {
-    FudgeDeserializer deserializer = new FudgeDeserializer(OpenGammaFudgeContext.getInstance());
+    final FudgeDeserializer deserializer = new FudgeDeserializer(OpenGammaFudgeContext.getInstance());
     switch (_mode) {
       case ORIGINAL_LATENCY:
         BloombergTick currentTick = null;;
         try {
-          FudgeMsg msg = _ticksQueue.take();
+          final FudgeMsg msg = _ticksQueue.take();
           if (msg != null && BloombergTickReplayUtils.isTerminateMsg(msg)) {
             LOGGER.debug("received terminate message");
             terminate();
             return;
           }
           currentTick = BloombergTick.fromFudgeMsg(deserializer, msg);
-          long ts1 = System.currentTimeMillis();
+          final long ts1 = System.currentTimeMillis();
           _tickReceiver.tickReceived(currentTick);
-          long ts2 = System.currentTimeMillis();
-          FudgeMsg nextMsg = _ticksQueue.peek();
+          final long ts2 = System.currentTimeMillis();
+          final FudgeMsg nextMsg = _ticksQueue.peek();
           if (nextMsg != null && !BloombergTickReplayUtils.isTerminateMsg(nextMsg)) {
-            BloombergTick nextTick = BloombergTick.fromFudgeMsg(deserializer, nextMsg);
-            long tickLatency = nextTick.getReceivedTS() - currentTick.getReceivedTS();
-            long sleepTime = tickLatency - (ts2 - ts1);
+            final BloombergTick nextTick = BloombergTick.fromFudgeMsg(deserializer, nextMsg);
+            final long tickLatency = nextTick.getReceivedTS() - currentTick.getReceivedTS();
+            final long sleepTime = tickLatency - (ts2 - ts1);
             LOGGER.debug("sleeping for {}ms,", sleepTime);
             if (sleepTime > 0) {
               try {
                 Thread.sleep(sleepTime);
-              } catch (InterruptedException e) {
+              } catch (final InterruptedException e) {
                 Thread.interrupted();
                 LOGGER.warn("interrupted from keeping time difference between ticks");
               }
             }
           }
-        } catch (InterruptedException e1) {
+        } catch (final InterruptedException e1) {
           Thread.interrupted();
           LOGGER.warn("interrupted while waiting to read ticks to play");
         }
@@ -99,7 +99,7 @@ public class TicksPlayerJob extends TerminatableJob {
       case AS_FAST_AS_POSSIBLE:
         BloombergTick tick = null;
         try {
-          FudgeMsg msg = _ticksQueue.take();
+          final FudgeMsg msg = _ticksQueue.take();
           if (msg != null && BloombergTickReplayUtils.isTerminateMsg(msg)) {
             LOGGER.debug("received terminate message");
             terminate();
@@ -107,7 +107,7 @@ public class TicksPlayerJob extends TerminatableJob {
           }
           tick = BloombergTick.fromFudgeMsg(deserializer, msg);
           _tickReceiver.tickReceived(tick);
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
           Thread.interrupted();
           LOGGER.warn("interrupted while waiting to read ticks to play");
         }

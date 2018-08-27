@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util;
@@ -26,11 +26,11 @@ final class MacAddressLookUp {
   static {
     String address = null;
     try {
-      Enumeration<NetworkInterface> ifs = NetworkInterface.getNetworkInterfaces();
+      final Enumeration<NetworkInterface> ifs = NetworkInterface.getNetworkInterfaces();
       if (ifs != null) {
         while (ifs.hasMoreElements()) {
-          NetworkInterface iface = ifs.nextElement();
-          byte[] hardware = iface.getHardwareAddress();
+          final NetworkInterface iface = ifs.nextElement();
+          final byte[] hardware = iface.getHardwareAddress();
           if (hardware != null && hardware.length == 6
               && hardware[1] != (byte) 0xff) {
             address = convertToHexString(hardware);
@@ -38,7 +38,7 @@ final class MacAddressLookUp {
           }
         }
       }
-    } catch (SocketException ex) {
+    } catch (final SocketException ex) {
       // Ignore it.
     }
     ADDRESS = address;
@@ -55,9 +55,9 @@ final class MacAddressLookUp {
    * @param bytes  the bytes, not null
    * @return the string, not null
    */
-  private static String convertToHexString(byte[] bytes) {
-    StringBuilder buf = new StringBuilder(36);
-    for (byte b : bytes) {
+  private static String convertToHexString(final byte[] bytes) {
+    final StringBuilder buf = new StringBuilder(36);
+    for (final byte b : bytes) {
       buf.append(HEX_DIGITS[(byte) ((b & 0xF0) >> 4)]);
       buf.append(HEX_DIGITS[(byte) (b & 0x0F)]);
     }

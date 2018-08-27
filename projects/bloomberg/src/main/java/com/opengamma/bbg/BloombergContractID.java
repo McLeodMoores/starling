@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.bbg;
@@ -35,35 +35,35 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 @BeanDefinition
 public class BloombergContractID extends DirectBean {
-  
+
   private static final Logger LOGGER = LoggerFactory.getLogger(BloombergContractID.class);
-  
+
   private static final DateTimeFormatter MONTH_YEAR_FORMATTER = DateTimeFormatter.ofPattern("MM/yyyy");
-  
+
   /**
    * The prefix in classic bloomberg ticker
    */
   @PropertyDefinition
   private String _contractCode;
-  
+
   /**
    * The yellow key also know as market sector;
    */
   @PropertyDefinition
   private String _marketSector;
-  
-  
+
+
   /*
    * Constructor for builder
    */
   private BloombergContractID() {
   }
-  
-  public BloombergContractID(String contractCode, String marketSector) {
+
+  public BloombergContractID(final String contractCode, final String marketSector) {
     ArgumentChecker.notNull(contractCode, "contractCode");
     ArgumentChecker.notNull(marketSector, "marketSector");
     // ticker must be at least 2 characters long - pad with spaces if shorter
@@ -71,63 +71,63 @@ public class BloombergContractID extends DirectBean {
     setContractCode(paddedCode);
     setMarketSector(marketSector);
   }
-  
-  public ExternalId toFutureExternalId(Integer month, Integer year) {
+
+  public ExternalId toFutureExternalId(final Integer month, final Integer year) {
     ArgumentChecker.notNull(month, "month");
     ArgumentChecker.notNull(year, "year");
-    
+
     ExternalId futureId = null;
-    String futureMonthCode = BloombergDataUtils.futureMonthCode(Month.of(month));
+    final String futureMonthCode = BloombergDataUtils.futureMonthCode(Month.of(month));
     if (futureMonthCode != null) {
       String yearStr = String.valueOf(year);
       if (yearStr.length() > 1) {
         yearStr = "" + yearStr.charAt(yearStr.length() - 1);
       }
-      futureId = ExternalSchemes.bloombergTickerSecurityId(String.format("%s%s%s %s", 
+      futureId = ExternalSchemes.bloombergTickerSecurityId(String.format("%s%s%s %s",
           getContractCode(), futureMonthCode, yearStr, getMarketSector()).toUpperCase());
     } else {
       LOGGER.warn("Unable to resolve month {} to its future month's code", Month.of(month));
     }
     return futureId;
   }
-  
-  public ExternalId toFutureOptionExternalId(Integer month, Integer year, Double strike, OptionType optionType) {
+
+  public ExternalId toFutureOptionExternalId(final Integer month, final Integer year, final Double strike, final OptionType optionType) {
     ArgumentChecker.notNull(month, "month");
     ArgumentChecker.notNull(year, "year");
     ArgumentChecker.notNull(strike, "strike");
     ArgumentChecker.notNull(optionType, "optionType");
-    
+
     ExternalId optionId = null;
-    String monthCode = BloombergDataUtils.futureMonthCode(Month.of(month));
+    final String monthCode = BloombergDataUtils.futureMonthCode(Month.of(month));
     if (monthCode != null) {
       String yearStr = String.valueOf(year);
       if (yearStr.length() > 1) {
         yearStr = "" + yearStr.charAt(yearStr.length() - 1);
       }
-      optionId = ExternalSchemes.bloombergTickerSecurityId(String.format("%s%s%s%s %s %s", 
+      optionId = ExternalSchemes.bloombergTickerSecurityId(String.format("%s%s%s%s %s %s",
           getContractCode(), monthCode, yearStr, optionType.name().charAt(0), getRoundedPrice(strike, 3), getMarketSector()).toUpperCase());
     } else {
       LOGGER.warn("Unable to resolve month {} to its future month's code", Month.of(month));
     }
     return optionId;
   }
-  
-  public ExternalId toOptionExternalId(Integer month, Integer year, Double strike, OptionType optionType) {
+
+  public ExternalId toOptionExternalId(final Integer month, final Integer year, final Double strike, final OptionType optionType) {
     ArgumentChecker.notNull(month, "month");
     ArgumentChecker.notNull(year, "year");
     ArgumentChecker.notNull(strike, "strike");
     ArgumentChecker.notNull(optionType, "optionType");
-    
-    LocalDate expiry = LocalDate.of(year, month, 1);
-    return ExternalSchemes.bloombergTickerSecurityId(String.format("%s %s %s%s %s", 
+
+    final LocalDate expiry = LocalDate.of(year, month, 1);
+    return ExternalSchemes.bloombergTickerSecurityId(String.format("%s %s %s%s %s",
         getContractCode(), expiry.format(MONTH_YEAR_FORMATTER), optionType.name().charAt(0), getRoundedPrice(strike, 3), getMarketSector()).toUpperCase());
   }
-  
+
   protected String getRoundedPrice(final Double doubleValue, final int scale) {
-    BigDecimal bigDecimal = BigDecimal.valueOf(doubleValue).setScale(scale, BigDecimal.ROUND_HALF_UP);
+    final BigDecimal bigDecimal = BigDecimal.valueOf(doubleValue).setScale(scale, BigDecimal.ROUND_HALF_UP);
     return bigDecimal.toString();
   }
-  
+
   //------------------------- AUTOGENERATED START -------------------------
   ///CLOVER:OFF
   /**

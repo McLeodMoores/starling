@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.provider.permission.impl;
@@ -15,22 +15,22 @@ import com.opengamma.provider.permission.PermissionCheckProviderResult;
 
 /**
  * Abstract class to make implementation of PermissionCheckProvider easier.
- * 
+ *
  * Subclass should provide implementation for isPermitted(PermissionCheckProviderRequest)
  */
 public abstract class AbstractPermissionCheckProvider implements PermissionCheckProvider {
 
   @Override
-  public boolean isPermitted(ExternalIdBundle userIdBundle, String ipAddress, String requestedPermission) {
-    PermissionCheckProviderRequest request = PermissionCheckProviderRequest.createGet(userIdBundle, ipAddress, requestedPermission);
-    PermissionCheckProviderResult holderResult = isPermitted(request);
+  public boolean isPermitted(final ExternalIdBundle userIdBundle, final String ipAddress, final String requestedPermission) {
+    final PermissionCheckProviderRequest request = PermissionCheckProviderRequest.createGet(userIdBundle, ipAddress, requestedPermission);
+    final PermissionCheckProviderResult holderResult = isPermitted(request);
     return holderResult.isPermitted(requestedPermission);
   }
 
   @Override
-  public Map<String, Boolean> isPermitted(ExternalIdBundle userIdBundle, String ipAddress, Set<String> requestedPermissions) {
-    PermissionCheckProviderRequest request = PermissionCheckProviderRequest.createGet(userIdBundle, ipAddress, requestedPermissions);
-    PermissionCheckProviderResult holderResult = isPermitted(request);
+  public Map<String, Boolean> isPermitted(final ExternalIdBundle userIdBundle, final String ipAddress, final Set<String> requestedPermissions) {
+    final PermissionCheckProviderRequest request = PermissionCheckProviderRequest.createGet(userIdBundle, ipAddress, requestedPermissions);
+    final PermissionCheckProviderResult holderResult = isPermitted(request);
     return holderResult.getCheckedPermissions();
   }
 

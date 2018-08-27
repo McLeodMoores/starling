@@ -59,7 +59,7 @@ public abstract class SampledCovarianceMatrixFunction extends AbstractFunction.N
 
   /**
    * Returns the type of data used to construct the matrix, and distinguish between different sub-class implementations. For example, this might be market data, risk factors or something else.
-   * 
+   *
    * @return the type, not null
    */
   protected abstract String getDataType();
@@ -73,10 +73,10 @@ public abstract class SampledCovarianceMatrixFunction extends AbstractFunction.N
   }
 
   protected void addValueRequirements(final FunctionCompilationContext context, final PortfolioNode node, final ViewCalculationConfiguration calcConfig) {
-    for (PortfolioNode child : node.getChildNodes()) {
+    for (final PortfolioNode child : node.getChildNodes()) {
       addValueRequirements(context, child, calcConfig);
     }
-    for (Position child : node.getPositions()) {
+    for (final Position child : node.getPositions()) {
       addValueRequirements(context, child, calcConfig);
     }
   }
@@ -102,7 +102,7 @@ public abstract class SampledCovarianceMatrixFunction extends AbstractFunction.N
     int len = timeSeries.length;
     // Any nulls or empty time series (missing data) will upset the calculator, so we'll remove them and produce a best efforts matrix with what is left
     for (int i = 0; i < len; i++) {
-      if ((timeSeries[i] == null) || timeSeries[i].isEmpty()) {
+      if (timeSeries[i] == null || timeSeries[i].isEmpty()) {
         len--;
         timeSeries[i] = timeSeries[len];
         labels[i] = labels[len];
@@ -129,7 +129,7 @@ public abstract class SampledCovarianceMatrixFunction extends AbstractFunction.N
       Comparable<? super T> earliest = times[0][timeIndex];
       boolean mismatch = false;
       for (int i = 1; i < len; i++) {
-        int c = earliest.compareTo((T) times[i][timeIndex]);
+        final int c = earliest.compareTo((T) times[i][timeIndex]);
         if (c != 0) {
           mismatch = true;
           if (c > 0) {
@@ -151,7 +151,7 @@ public abstract class SampledCovarianceMatrixFunction extends AbstractFunction.N
       } else {
         timeIndex++;
         for (int i = 0; i < len; i++) {
-          if ((timeIndex >= times[i].length) || (times[i][timeIndex] == null)) {
+          if (timeIndex >= times[i].length || times[i][timeIndex] == null) {
             ended = true;
           }
         }
@@ -214,7 +214,7 @@ public abstract class SampledCovarianceMatrixFunction extends AbstractFunction.N
 
   private String anyConstraintOrNull(final ValueProperties constraints, final String name) {
     final Set<String> values = constraints.getValues(name);
-    if ((values == null) || values.isEmpty()) {
+    if (values == null || values.isEmpty()) {
       return null;
     } else {
       return values.iterator().next();

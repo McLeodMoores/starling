@@ -16,29 +16,29 @@ import com.google.common.collect.Maps;
 public class AttributeMapAdapter extends XmlAdapter<AdditionalAttributes, Map<String, String>> {
 
   @Override
-  public Map<String, String> unmarshal(AdditionalAttributes attrs) throws Exception {
+  public Map<String, String> unmarshal(final AdditionalAttributes attrs) throws Exception {
 
-    Map<String, String> map = Maps.newHashMap();
+    final Map<String, String> map = Maps.newHashMap();
 
-    for (Attribute attribute : attrs.getAttributes()) {
+    for (final Attribute attribute : attrs.getAttributes()) {
       map.put(attribute.getName(), attribute.getValue());
     }
     return map;
   }
 
   @Override
-  public AdditionalAttributes marshal(Map<String, String> map) throws Exception {
+  public AdditionalAttributes marshal(final Map<String, String> map) throws Exception {
 
-    List<Attribute> attrs = Lists.newArrayList();
+    final List<Attribute> attrs = Lists.newArrayList();
 
-    for (Map.Entry<String, String> entry : map.entrySet()) {
-      Attribute attribute = new Attribute();
+    for (final Map.Entry<String, String> entry : map.entrySet()) {
+      final Attribute attribute = new Attribute();
       attribute.setName(entry.getKey());
       attribute.setValue(entry.getValue());
       attrs.add(attribute);
     }
 
-    AdditionalAttributes attributes = new AdditionalAttributes();
+    final AdditionalAttributes attributes = new AdditionalAttributes();
     attributes.setAttributes(attrs);
     return attributes;
   }

@@ -5,12 +5,12 @@
  */
 package com.opengamma.web.bundle;
 
+import com.opengamma.util.ArgumentChecker;
+import com.opengamma.util.ehcache.EHCacheUtils;
+
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
-
-import com.opengamma.util.ArgumentChecker;
-import com.opengamma.util.ehcache.EHCacheUtils;
 
 /**
  * Cache decorating the compressor of bundle source code.
@@ -39,7 +39,7 @@ public class EHCachingBundleCompressor implements BundleCompressor {
 
   /**
    * Creates the cache around an underlying compressed bundle source.
-   * 
+   *
    * @param underlying  the underlying data, not null
    * @param cacheManager  the cache manager, not null
    */
@@ -55,7 +55,7 @@ public class EHCachingBundleCompressor implements BundleCompressor {
   //-------------------------------------------------------------------------
   /**
    * Gets the underlying compressor.
-   * 
+   *
    * @return the underlying compressor, not null
    */
   protected BundleCompressor getUnderlying() {
@@ -64,7 +64,7 @@ public class EHCachingBundleCompressor implements BundleCompressor {
 
   /**
    * Gets the cache manager.
-   * 
+   *
    * @return the cache manager, not null
    */
   protected CacheManager getCacheManager() {
@@ -73,12 +73,12 @@ public class EHCachingBundleCompressor implements BundleCompressor {
 
   //-------------------------------------------------------------------------
   @Override
-  public String compressBundle(Bundle bundle) {
-    Element e = _bundleCache.get(bundle.getId());
+  public String compressBundle(final Bundle bundle) {
+    final Element e = _bundleCache.get(bundle.getId());
     if (e != null) {
       return (String) e.getObjectValue();
     } else {
-      String compressed = getUnderlying().compressBundle(bundle);
+      final String compressed = getUnderlying().compressBundle(bundle);
       if (compressed != null) {
         _bundleCache.put(new Element(bundle.getId(), compressed));
       }

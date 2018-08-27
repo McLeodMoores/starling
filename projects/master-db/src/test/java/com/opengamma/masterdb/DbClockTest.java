@@ -28,7 +28,7 @@ import com.opengamma.util.test.TestGroup;
 public class DbClockTest extends AbstractDbTest {
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public DbClockTest(final String databaseType, String databaseVersion) {
+  public DbClockTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion);
   }
 
@@ -55,13 +55,13 @@ public class DbClockTest extends AbstractDbTest {
 
   //-------------------------------------------------------------------------
   public void test_clock() {
-    DbConnector dbConnector = getDbConnector();
-    List<Instant> instants1 = Lists.newArrayList();
-    int[] times = new int[50000];
-    for (int i = 0; i < times.length; i++) {
+    final DbConnector dbConnector = getDbConnector();
+    final List<Instant> instants1 = Lists.newArrayList();
+    final int[] times = new int[50000];
+    for (final int time : times) {
       instants1.add(dbConnector.now());
     }
-    List<Instant> instants2 = new ArrayList<>(instants1);
+    final List<Instant> instants2 = new ArrayList<>(instants1);
     Collections.sort(instants2);
     assertEquals(instants1, instants2);
   }

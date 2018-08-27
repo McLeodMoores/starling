@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.interpolation;
@@ -12,14 +12,14 @@ import com.opengamma.analytics.math.interpolation.data.ArrayInterpolator1DDataBu
 import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
 
 /**
- * 
+ *
  */
 public class BarycentricRationalFunctionInterpolator1D extends Interpolator1D {
   private static final long serialVersionUID = 1L;
   private final int _degree;
   private final double _eps;
 
-  public BarycentricRationalFunctionInterpolator1D(final int degree, double eps) {
+  public BarycentricRationalFunctionInterpolator1D(final int degree, final double eps) {
     Validate.isTrue(degree > 0, "Cannot perform interpolation with rational functions of degree < 1");
     _degree = degree;
     _eps = eps;
@@ -112,7 +112,7 @@ public class BarycentricRationalFunctionInterpolator1D extends Interpolator1D {
   }
 
   @Override
-  public double[] getNodeSensitivitiesForValue(Interpolator1DDataBundle data, Double value) {
+  public double[] getNodeSensitivitiesForValue(final Interpolator1DDataBundle data, final Double value) {
     return getFiniteDifferenceSensitivities(data, value);
   }
 

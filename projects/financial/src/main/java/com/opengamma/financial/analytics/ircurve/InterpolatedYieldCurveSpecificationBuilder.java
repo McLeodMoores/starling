@@ -15,7 +15,7 @@ import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public interface InterpolatedYieldCurveSpecificationBuilder {
 
@@ -39,7 +39,7 @@ public interface InterpolatedYieldCurveSpecificationBuilder {
       _version = ArgumentChecker.notNull(version, "version");
     }
 
-    public InterpolatedYieldCurveSpecification buildCurve(LocalDate curveDate, YieldCurveDefinition curveDefinition) {
+    public InterpolatedYieldCurveSpecification buildCurve(final LocalDate curveDate, final YieldCurveDefinition curveDefinition) {
       return _instance.buildCurve(curveDate, curveDefinition, _version);
     }
 

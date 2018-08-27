@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.option;
@@ -27,7 +27,7 @@ public final class EquityIndexDividendFutureOptionSecurityBeanOperation  extends
    * Singleton
    */
   public static final EquityIndexDividendFutureOptionSecurityBeanOperation INSTANCE = new EquityIndexDividendFutureOptionSecurityBeanOperation();
-  
+
   private EquityIndexDividendFutureOptionSecurityBeanOperation() {
     super(EquityIndexDividendFutureOptionSecurity.SECURITY_TYPE, EquityIndexDividendFutureOptionSecurity.class, EquityIndexDividendFutureOptionSecurityBean.class);
   }
@@ -49,16 +49,16 @@ public final class EquityIndexDividendFutureOptionSecurityBeanOperation  extends
   }
 
   @Override
-  public EquityIndexDividendFutureOptionSecurity createSecurity(OperationContext context, EquityIndexDividendFutureOptionSecurityBean bean) {
+  public EquityIndexDividendFutureOptionSecurity createSecurity(final OperationContext context, final EquityIndexDividendFutureOptionSecurityBean bean) {
     final ExerciseType exerciseType = bean.getOptionExerciseType().accept(new ExerciseTypeVisitorImpl());
-    
-    EquityIndexDividendFutureOptionSecurity sec = new EquityIndexDividendFutureOptionSecurity(bean.getExchange().getName(), 
-        expiryBeanToExpiry(bean.getExpiry()), 
-        exerciseType, 
-        externalIdBeanToExternalId(bean.getUnderlying()), 
-        bean.getPointValue(), 
-        bean.getMargined(), 
-        currencyBeanToCurrency(bean.getCurrency()), 
+
+    final EquityIndexDividendFutureOptionSecurity sec = new EquityIndexDividendFutureOptionSecurity(bean.getExchange().getName(),
+        expiryBeanToExpiry(bean.getExpiry()),
+        exerciseType,
+        externalIdBeanToExternalId(bean.getUnderlying()),
+        bean.getPointValue(),
+        bean.getMargined(),
+        currencyBeanToCurrency(bean.getCurrency()),
         bean.getStrike(), bean.getOptionType());
     return sec;
   }

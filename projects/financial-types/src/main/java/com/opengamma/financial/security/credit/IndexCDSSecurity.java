@@ -19,7 +19,6 @@ import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import org.threeten.bp.LocalDate;
 
-import com.opengamma.core.link.ResolvableSecurityLink;
 import com.opengamma.core.link.SecurityLink;
 import com.opengamma.financial.security.FinancialSecurity;
 import com.opengamma.financial.security.FinancialSecurityVisitor;
@@ -93,7 +92,7 @@ public class IndexCDSSecurity extends FinancialSecurity {
    * @param tradeDate the trade date, not null
    * @param notional the notional, not null
    */
-  public IndexCDSSecurity(ExternalIdBundle id, final boolean buy, final SecurityLink<IndexCDSDefinitionSecurity> underlyingIndex, final Tenor indexTenor,
+  public IndexCDSSecurity(final ExternalIdBundle id, final boolean buy, final SecurityLink<IndexCDSDefinitionSecurity> underlyingIndex, final Tenor indexTenor,
                           final LocalDate tradeDate, final InterestRateNotional notional) {
     super(SECURITY_TYPE);
     setExternalIdBundle(id);
@@ -114,7 +113,7 @@ public class IndexCDSSecurity extends FinancialSecurity {
    * @param tradeDate the trade date, not null
    * @param notional the notional, not null
    */
-  public IndexCDSSecurity(ExternalIdBundle id, final boolean buy, final ExternalId underlyingIndex, final Tenor indexTenor,
+  public IndexCDSSecurity(final ExternalIdBundle id, final boolean buy, final ExternalId underlyingIndex, final Tenor indexTenor,
                           final LocalDate tradeDate, final InterestRateNotional notional) {
     super(SECURITY_TYPE);
     setExternalIdBundle(id);
@@ -136,7 +135,7 @@ public class IndexCDSSecurity extends FinancialSecurity {
    * @param tradeDate the trade date, not null
    * @param notional the notional, not null
    */
-  public IndexCDSSecurity(ExternalIdBundle id, String name, final boolean buy, final SecurityLink<IndexCDSDefinitionSecurity> underlyingIndex, final Tenor indexTenor,
+  public IndexCDSSecurity(final ExternalIdBundle id, final String name, final boolean buy, final SecurityLink<IndexCDSDefinitionSecurity> underlyingIndex, final Tenor indexTenor,
                           final LocalDate tradeDate, final InterestRateNotional notional) {
     super(SECURITY_TYPE);
     setExternalIdBundle(id);
@@ -159,7 +158,7 @@ public class IndexCDSSecurity extends FinancialSecurity {
    * @param tradeDate the trade date, not null
    * @param notional the notional, not null
    */
-  public IndexCDSSecurity(ExternalIdBundle id, String name, final boolean buy, final ExternalId underlyingIndex, final Tenor indexTenor,
+  public IndexCDSSecurity(final ExternalIdBundle id, final String name, final boolean buy, final ExternalId underlyingIndex, final Tenor indexTenor,
                           final LocalDate tradeDate, final InterestRateNotional notional) {
     super(SECURITY_TYPE);
     setExternalIdBundle(id);
@@ -172,7 +171,7 @@ public class IndexCDSSecurity extends FinancialSecurity {
   }
 
   @Override
-  public <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitIndexCDSSecurity(this);
   }
 

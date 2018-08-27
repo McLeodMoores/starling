@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.bbg.util;
@@ -10,7 +10,7 @@ import java.util.regex.Matcher;
 import com.opengamma.id.ExternalId;
 
 /**
- * 
+ *
  */
 public abstract class BloombergTickerParserFutureOption extends BloombergTickerParser {
 
@@ -25,7 +25,7 @@ public abstract class BloombergTickerParserFutureOption extends BloombergTickerP
 
   /**
    * Parse given ticker
-   * 
+   *
    * @param value ticker as string
    */
   public BloombergTickerParserFutureOption(final String value) {
@@ -34,7 +34,7 @@ public abstract class BloombergTickerParserFutureOption extends BloombergTickerP
 
   /**
    * Parse given id (should be a ticker)
-   * 
+   *
    * @param identifier id to parse
    */
   public BloombergTickerParserFutureOption(final ExternalId identifier) {
@@ -43,7 +43,7 @@ public abstract class BloombergTickerParserFutureOption extends BloombergTickerP
 
   /**
    * The symbol
-   * @return the symbol 
+   * @return the symbol
    */
   public String getSymbol() {
     return _symbol;
@@ -74,7 +74,7 @@ public abstract class BloombergTickerParserFutureOption extends BloombergTickerP
   }
 
   @Override
-  protected void parse(Matcher matcher) {
+  protected void parse(final Matcher matcher) {
     _symbol = matcher.group(1);
     _expiry = matcher.group(2);
     _callOrPut = matcher.group(3);
@@ -88,7 +88,7 @@ public abstract class BloombergTickerParserFutureOption extends BloombergTickerP
 
   /**
    * The type
-   * @return the type 
+   * @return the type
    */
   public String getTypeName() {
     return "Comdty";

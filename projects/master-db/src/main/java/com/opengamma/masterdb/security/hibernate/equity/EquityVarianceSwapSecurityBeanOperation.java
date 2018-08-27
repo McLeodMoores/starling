@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.equity;
@@ -38,10 +38,10 @@ public final class EquityVarianceSwapSecurityBeanOperation extends AbstractSecur
   }
 
   @Override
-  public EquityVarianceSwapSecurityBean createBean(OperationContext context, HibernateSecurityMasterDao secMasterSession, EquityVarianceSwapSecurity security) {
+  public EquityVarianceSwapSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession, final EquityVarianceSwapSecurity security) {
     validateFrequency(security.getObservationFrequency().getName());
-    
-    EquityVarianceSwapSecurityBean securityBean = new EquityVarianceSwapSecurityBean();
+
+    final EquityVarianceSwapSecurityBean securityBean = new EquityVarianceSwapSecurityBean();
     securityBean.setAnnualizationFactor(security.getAnnualizationFactor());
     securityBean.setCurrency(secMasterSession.getOrCreateCurrencyBean(security.getCurrency().getCode()));
     securityBean.setFirstObservationDate(dateTimeWithZoneToZonedDateTimeBean(security.getFirstObservationDate()));
@@ -57,15 +57,15 @@ public final class EquityVarianceSwapSecurityBeanOperation extends AbstractSecur
   }
 
   @Override
-  public EquityVarianceSwapSecurity createSecurity(OperationContext context, EquityVarianceSwapSecurityBean bean) {
+  public EquityVarianceSwapSecurity createSecurity(final OperationContext context, final EquityVarianceSwapSecurityBean bean) {
 
-    Currency currency = currencyBeanToCurrency(bean.getCurrency());
-    ZonedDateTime firstObservationDate = zonedDateTimeBeanToDateTimeWithZone(bean.getFirstObservationDate());
-    ZonedDateTime lastObservationDate = zonedDateTimeBeanToDateTimeWithZone(bean.getLastObservationDate());
-    Frequency observationFrequency = frequencyBeanToFrequency(bean.getObservationFrequency());
-    ExternalId region = externalIdBeanToExternalId(bean.getRegion());
-    ZonedDateTime settlementDate = zonedDateTimeBeanToDateTimeWithZone(bean.getSettlementDate());
-    ExternalId spotUnderlingId = externalIdBeanToExternalId(bean.getSpotUnderlyingIdentifier());
+    final Currency currency = currencyBeanToCurrency(bean.getCurrency());
+    final ZonedDateTime firstObservationDate = zonedDateTimeBeanToDateTimeWithZone(bean.getFirstObservationDate());
+    final ZonedDateTime lastObservationDate = zonedDateTimeBeanToDateTimeWithZone(bean.getLastObservationDate());
+    final Frequency observationFrequency = frequencyBeanToFrequency(bean.getObservationFrequency());
+    final ExternalId region = externalIdBeanToExternalId(bean.getRegion());
+    final ZonedDateTime settlementDate = zonedDateTimeBeanToDateTimeWithZone(bean.getSettlementDate());
+    final ExternalId spotUnderlingId = externalIdBeanToExternalId(bean.getSpotUnderlyingIdentifier());
 
     return new EquityVarianceSwapSecurity(spotUnderlingId, currency, bean.getStrike(), bean.getNotional(),
         bean.isParameterisedAsVariance(), bean.getAnnualizationFactor(), firstObservationDate, lastObservationDate, settlementDate, region, observationFrequency);

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.fudgemsg;
@@ -25,10 +25,10 @@ public class CycleFragmentCompletedCallFudgeBuilder implements FudgeBuilder<Cycl
 
   private static final String FULL_FRAGMENT_FIELD = "fullFragment";
   private static final String DELTA_FRAGMENT_FIELD = "deltaFragment";
-  
+
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, CycleFragmentCompletedCall object) {
-    MutableFudgeMsg msg = serializer.newMessage();
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final CycleFragmentCompletedCall object) {
+    final MutableFudgeMsg msg = serializer.newMessage();
     msg.add(0, CycleFragmentCompletedCall.class.getName());
     serializer.addToMessage(msg, FULL_FRAGMENT_FIELD, null, object.getFullFragment());
     serializer.addToMessage(msg, DELTA_FRAGMENT_FIELD, null, object.getDeltaFragment());
@@ -36,11 +36,11 @@ public class CycleFragmentCompletedCallFudgeBuilder implements FudgeBuilder<Cycl
   }
 
   @Override
-  public CycleFragmentCompletedCall buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    FudgeField fullResultField = msg.getByName(FULL_FRAGMENT_FIELD);
-    ViewComputationResultModel fullResult = fullResultField != null ? deserializer.fieldValueToObject(ViewComputationResultModel.class, fullResultField) : null;
-    FudgeField deltaResultField = msg.getByName(DELTA_FRAGMENT_FIELD);
-    ViewDeltaResultModel deltaResult = deltaResultField != null ? deserializer.fieldValueToObject(ViewDeltaResultModel.class, deltaResultField) : null;
+  public CycleFragmentCompletedCall buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final FudgeField fullResultField = msg.getByName(FULL_FRAGMENT_FIELD);
+    final ViewComputationResultModel fullResult = fullResultField != null ? deserializer.fieldValueToObject(ViewComputationResultModel.class, fullResultField) : null;
+    final FudgeField deltaResultField = msg.getByName(DELTA_FRAGMENT_FIELD);
+    final ViewDeltaResultModel deltaResult = deltaResultField != null ? deserializer.fieldValueToObject(ViewDeltaResultModel.class, deltaResultField) : null;
     return new CycleFragmentCompletedCall(fullResult, deltaResult);
   }
 

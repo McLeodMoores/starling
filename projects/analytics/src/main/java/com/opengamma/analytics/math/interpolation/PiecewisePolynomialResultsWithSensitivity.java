@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.interpolation;
@@ -21,7 +21,7 @@ import com.opengamma.util.ArgumentChecker;
  * nIntervals: Number of intervals, which should be (Number of knots) - 1
  * order: Number of coefficients in polynomial, which is equal to (polynomial degree) + 1
  * dim: Number of splines
- * which are in the super class, and 
+ * which are in the super class, and
  * _coeffSense Node sensitivity of the coefficients _coeffSense[i].getData()[j][k] is \frac{\partial a^i_{n-j}}{\partial y_k}
  */
 public class PiecewisePolynomialResultsWithSensitivity extends PiecewisePolynomialResult {
@@ -29,14 +29,15 @@ public class PiecewisePolynomialResultsWithSensitivity extends PiecewisePolynomi
   private final DoubleMatrix2D[] _coeffSense;
 
   /**
-   * 
-   * @param knots  
-   * @param coefMatrix 
-   * @param order 
-   * @param dim 
+   *
+   * @param knots
+   * @param coefMatrix
+   * @param order
+   * @param dim
    * @param coeffSense the sensitivity of the coefficients to the nodes (y-values)
    */
-  public PiecewisePolynomialResultsWithSensitivity(DoubleMatrix1D knots, DoubleMatrix2D coefMatrix, int order, int dim, final DoubleMatrix2D[] coeffSense) {
+  public PiecewisePolynomialResultsWithSensitivity(final DoubleMatrix1D knots, final DoubleMatrix2D coefMatrix, final int order,
+      final int dim, final DoubleMatrix2D[] coeffSense) {
     super(knots, coefMatrix, order, dim);
     if (dim != 1) {
       throw new NotImplementedException();
@@ -55,7 +56,7 @@ public class PiecewisePolynomialResultsWithSensitivity extends PiecewisePolynomi
 
   /**
    * Access _coeffSense for the i-th interval
-   * @param interval 
+   * @param interval
    * @return _coeffSense for the i-th interval
    */
   public DoubleMatrix2D getCoefficientSensitivity(final int interval) {
@@ -71,7 +72,7 @@ public class PiecewisePolynomialResultsWithSensitivity extends PiecewisePolynomi
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -81,7 +82,7 @@ public class PiecewisePolynomialResultsWithSensitivity extends PiecewisePolynomi
     if (!(obj instanceof PiecewisePolynomialResultsWithSensitivity)) {
       return false;
     }
-    PiecewisePolynomialResultsWithSensitivity other = (PiecewisePolynomialResultsWithSensitivity) obj;
+    final PiecewisePolynomialResultsWithSensitivity other = (PiecewisePolynomialResultsWithSensitivity) obj;
     if (!Arrays.equals(_coeffSense, other._coeffSense)) {
       return false;
     }

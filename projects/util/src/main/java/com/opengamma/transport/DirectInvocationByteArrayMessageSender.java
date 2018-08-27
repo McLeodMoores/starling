@@ -27,7 +27,7 @@ public class DirectInvocationByteArrayMessageSender implements ByteArrayMessageS
   /**
    * The list of receivers. Not synchronized!
    */
-  private final List<ByteArrayMessageReceiver> _receivers = new ArrayList<ByteArrayMessageReceiver>();
+  private final List<ByteArrayMessageReceiver> _receivers = new ArrayList<>();
 
   /**
    * Creates a message sender.
@@ -39,7 +39,7 @@ public class DirectInvocationByteArrayMessageSender implements ByteArrayMessageS
    * Creates a message sender with one receiver.
    * @param receiver  the receiver to use, not null
    */
-  public DirectInvocationByteArrayMessageSender(ByteArrayMessageReceiver receiver) {
+  public DirectInvocationByteArrayMessageSender(final ByteArrayMessageReceiver receiver) {
     addReceiver(receiver);
   }
 
@@ -47,9 +47,9 @@ public class DirectInvocationByteArrayMessageSender implements ByteArrayMessageS
    * Creates a message sender adding receivers.
    * @param receivers  the receivers to use, not null, no nulls
    */
-  public DirectInvocationByteArrayMessageSender(ByteArrayMessageReceiver... receivers) {
+  public DirectInvocationByteArrayMessageSender(final ByteArrayMessageReceiver... receivers) {
     ArgumentChecker.notNull(receivers, "receivers");
-    for (ByteArrayMessageReceiver receiver : receivers) {
+    for (final ByteArrayMessageReceiver receiver : receivers) {
       addReceiver(receiver);
     }
   }
@@ -59,7 +59,7 @@ public class DirectInvocationByteArrayMessageSender implements ByteArrayMessageS
    * Adds a receiver to the list to call.
    * @param receiver  the receiver to add, not null
    */
-  public synchronized void addReceiver(ByteArrayMessageReceiver receiver) {
+  public synchronized void addReceiver(final ByteArrayMessageReceiver receiver) {
     ArgumentChecker.notNull(receiver, "receiver");
     _receivers.add(receiver);
   }
@@ -70,11 +70,11 @@ public class DirectInvocationByteArrayMessageSender implements ByteArrayMessageS
    * @param message  the message to send, not null
    */
   @Override
-  public synchronized void send(byte[] message) {
-    for (ByteArrayMessageReceiver receiver : _receivers) {
+  public synchronized void send(final byte[] message) {
+    for (final ByteArrayMessageReceiver receiver : _receivers) {
       try {
         receiver.messageReceived(message);
-      } catch (Exception e) {
+      } catch (final Exception e) {
         LOGGER.warn("Unable to dispatch message to receiver " + receiver, e);
       }
     }

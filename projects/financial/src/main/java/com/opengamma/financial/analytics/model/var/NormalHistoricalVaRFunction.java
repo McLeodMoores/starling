@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.var;
@@ -33,7 +33,7 @@ import com.opengamma.financial.analytics.timeseries.HistoricalTimeSeriesFunction
 import com.opengamma.timeseries.DoubleTimeSeries;
 
 /**
- * 
+ *
  */
 public class NormalHistoricalVaRFunction extends AbstractFunction.NonCompiledInvoker {
 
@@ -69,7 +69,7 @@ public class NormalHistoricalVaRFunction extends AbstractFunction.NonCompiledInv
     boolean computeVar = false;
     boolean computeStddev = false;
     for (final ValueRequirement desiredValue : desiredValues) {
-      constraints = (constraints == null) ? desiredValue.getConstraints() : constraints;
+      constraints = constraints == null ? desiredValue.getConstraints() : constraints;
       if (ValueRequirementNames.HISTORICAL_VAR.equals(desiredValue.getValueName())) {
         computeVar = true;
       }
@@ -87,7 +87,7 @@ public class NormalHistoricalVaRFunction extends AbstractFunction.NonCompiledInv
     final VaRCalculationResult calcResult = varCalculator.evaluate(parameters, pnlSeries);
     final double var = calcResult.getVaRValue();
     final double stddev = calcResult.getStdDev();
-    final Set<ComputedValue> results = new HashSet<ComputedValue>();
+    final Set<ComputedValue> results = new HashSet<>();
     if (computeVar) {
       results.add(new ComputedValue(new ValueSpecification(ValueRequirementNames.HISTORICAL_VAR, target.toSpecification(), constraints), var));
     }
@@ -147,7 +147,7 @@ public class NormalHistoricalVaRFunction extends AbstractFunction.NonCompiledInv
     if (pnlContributionNames != null && pnlContributionNames.size() != 1) {
       return null;
     }
-    String pnlContributionName = pnlContributionNames != null ? pnlContributionNames.iterator().next() : DEFAULT_PNL_CONTRIBUTIONS;
+    final String pnlContributionName = pnlContributionNames != null ? pnlContributionNames.iterator().next() : DEFAULT_PNL_CONTRIBUTIONS;
     final ValueProperties.Builder properties = ValueProperties.builder()
         .with(ValuePropertyNames.SCHEDULE_CALCULATOR, scheduleCalculatorName.iterator().next())
         .with(ValuePropertyNames.SAMPLING_FUNCTION, samplingFunctionName.iterator().next())
@@ -191,7 +191,7 @@ public class NormalHistoricalVaRFunction extends AbstractFunction.NonCompiledInv
     return Sets.newHashSet(varSpecification, stddevSpecification);
   }
 
-  private ValueProperties getResultProperties(ValueProperties priceTsProperties, final String currency, final String aggregationStyle, final String pnlContribution) {
+  private ValueProperties getResultProperties(final ValueProperties priceTsProperties, final String currency, final String aggregationStyle, final String pnlContribution) {
     final ValueProperties.Builder properties = createValueProperties()
         .with(ValuePropertyNames.CURRENCY, currency)
         .withAny(ValuePropertyNames.SAMPLING_PERIOD)
@@ -236,11 +236,11 @@ public class NormalHistoricalVaRFunction extends AbstractFunction.NonCompiledInv
         new DoubleTimeSeriesStatisticsCalculator(StatisticsCalculatorFactory.getCalculator(meanCalculatorNames.iterator().next()));
     final DoubleTimeSeriesStatisticsCalculator stdDevCalculator =
         new DoubleTimeSeriesStatisticsCalculator(StatisticsCalculatorFactory.getCalculator(stdDevCalculatorNames.iterator().next()));
-    return new NormalLinearVaRCalculator<DoubleTimeSeries<?>>(meanCalculator, stdDevCalculator);
+    return new NormalLinearVaRCalculator<>(meanCalculator, stdDevCalculator);
   }
-  
-  private ValueProperties.Builder copyOptional(ValueProperties origProps, ValueProperties.Builder propBuilder) {
-    for (String prop: origProps.getProperties()) {
+
+  private ValueProperties.Builder copyOptional(final ValueProperties origProps, final ValueProperties.Builder propBuilder) {
+    for (final String prop: origProps.getProperties()) {
       if (origProps.isOptional(prop)) {
         propBuilder.withOptional(prop).with(prop, origProps.getSingleValue(prop));
       }

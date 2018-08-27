@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.marketdata.resolver;
@@ -17,17 +17,17 @@ import com.opengamma.livedata.UserPrincipal;
 public class SingleMarketDataProviderResolver implements MarketDataProviderResolver {
 
   private final MarketDataProviderFactory _providerFactory;
-  
-  public SingleMarketDataProviderResolver(MarketDataProvider provider) {
+
+  public SingleMarketDataProviderResolver(final MarketDataProvider provider) {
     this(new SingletonMarketDataProviderFactory(provider));
   }
-  
-  public SingleMarketDataProviderResolver(MarketDataProviderFactory providerFactory) {
+
+  public SingleMarketDataProviderResolver(final MarketDataProviderFactory providerFactory) {
     _providerFactory = providerFactory;
   }
-  
+
   @Override
-  public MarketDataProvider resolve(UserPrincipal user, MarketDataSpecification marketDataSpec) {
+  public MarketDataProvider resolve(final UserPrincipal user, final MarketDataSpecification marketDataSpec) {
     return _providerFactory.create(user, marketDataSpec);
   }
 

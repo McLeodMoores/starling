@@ -13,7 +13,7 @@ import org.threeten.bp.temporal.TemporalAccessor;
 
 /**
  * Abstract date XML adapter.
- * 
+ *
  * @param <DT>  date-time type
  */
 public abstract class AbstractDateAdapter<DT extends TemporalAccessor> extends XmlAdapter<String, DT> {
@@ -25,10 +25,10 @@ public abstract class AbstractDateAdapter<DT extends TemporalAccessor> extends X
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param datePattern  the date pattern to wrap, not null
    */
-  public AbstractDateAdapter(String datePattern) {
+  public AbstractDateAdapter(final String datePattern) {
     // Use a case insensitive pattern so a string of the
     // form MAR15 can be parsed to March 2015
     _formatter = new DateTimeFormatterBuilder()
@@ -39,7 +39,7 @@ public abstract class AbstractDateAdapter<DT extends TemporalAccessor> extends X
 
   /**
    * Gets the formatter.
-   * 
+   *
    * @return the formatter, not null
    */
   public DateTimeFormatter getFormatter() {
@@ -47,7 +47,7 @@ public abstract class AbstractDateAdapter<DT extends TemporalAccessor> extends X
   }
 
   @Override
-  public String marshal(DT v) throws Exception {
+  public String marshal(final DT v) throws Exception {
     return _formatter.format(v);
   }
 

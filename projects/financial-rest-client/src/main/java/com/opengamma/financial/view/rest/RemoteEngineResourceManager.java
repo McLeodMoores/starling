@@ -17,7 +17,7 @@ import com.sun.jersey.api.client.ClientResponse;
 
 /**
  * Remote implementation of {@link EngineResourceManager}.
- * 
+ *
  * @param <T> the type of resource
  */
 public abstract class RemoteEngineResourceManager<T extends UniqueIdentifiable> implements EngineResourceManager<T> {
@@ -26,11 +26,11 @@ public abstract class RemoteEngineResourceManager<T extends UniqueIdentifiable> 
   private final ScheduledExecutorService _scheduler;
   private final FudgeRestClient _client;
 
-  public RemoteEngineResourceManager(URI baseUri, ScheduledExecutorService scheduler) {
+  public RemoteEngineResourceManager(final URI baseUri, final ScheduledExecutorService scheduler) {
     this(baseUri, scheduler, FudgeRestClient.create());
   }
 
-  public RemoteEngineResourceManager(URI baseUri, ScheduledExecutorService scheduler, FudgeRestClient client) {
+  public RemoteEngineResourceManager(final URI baseUri, final ScheduledExecutorService scheduler, final FudgeRestClient client) {
     _baseUri = baseUri;
     _scheduler = scheduler;
     _client = client;
@@ -41,9 +41,9 @@ public abstract class RemoteEngineResourceManager<T extends UniqueIdentifiable> 
   }
 
   @Override
-  public EngineResourceReference<T> createReference(UniqueId cycleId) {
-    ClientResponse response = getClient().accessFudge(_baseUri).post(ClientResponse.class);
-    URI baseUri = response.getLocation();
+  public EngineResourceReference<T> createReference(final UniqueId cycleId) {
+    final ClientResponse response = getClient().accessFudge(_baseUri).post(ClientResponse.class);
+    final URI baseUri = response.getLocation();
     return getRemoteReference(baseUri, _scheduler);
   }
 

@@ -52,14 +52,14 @@ public class ExternalIdDisplayComparator implements Comparator<ExternalId> {
 
   /**
    * Initialize comparator using configuration object stored in config database.
-   * 
+   *
    * @param orderConfig  sourced from a ConfigSource
    */
-  public ExternalIdDisplayComparator(ExternalIdOrderConfig orderConfig) {
+  public ExternalIdDisplayComparator(final ExternalIdOrderConfig orderConfig) {
     // TODO: code missing!
   }
 
-  private int scoreExternalId(ExternalId id) {
+  private int scoreExternalId(final ExternalId id) {
     if (_scoreMap.containsKey(id.getScheme())) {
       return _scoreMap.get(id.getScheme());
     } else {
@@ -68,10 +68,10 @@ public class ExternalIdDisplayComparator implements Comparator<ExternalId> {
   }
 
   @Override
-  public int compare(ExternalId id0, ExternalId id1) {
-    int score0 = scoreExternalId(id0);
-    int score1 = scoreExternalId(id1);
-    if ((score1 - score0) != 0) {
+  public int compare(final ExternalId id0, final ExternalId id1) {
+    final int score0 = scoreExternalId(id0);
+    final int score1 = scoreExternalId(id1);
+    if (score1 - score0 != 0) {
       return score1 - score0;
     } else {
       return id0.compareTo(id1);

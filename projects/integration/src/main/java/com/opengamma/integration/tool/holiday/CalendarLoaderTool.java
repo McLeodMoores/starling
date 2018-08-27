@@ -19,9 +19,6 @@ import org.slf4j.LoggerFactory;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeParseException;
 
-import au.com.bytecode.opencsv.CSVParser;
-import au.com.bytecode.opencsv.CSVReader;
-
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.component.tool.AbstractTool;
 import com.opengamma.core.holiday.Holiday;
@@ -33,6 +30,9 @@ import com.opengamma.master.holiday.HolidayMaster;
 import com.opengamma.master.holiday.ManageableHoliday;
 import com.opengamma.scripts.Scriptable;
 import com.opengamma.util.ArgumentChecker;
+
+import au.com.bytecode.opencsv.CSVParser;
+import au.com.bytecode.opencsv.CSVReader;
 
 /**
  * Tool to load a calendar from a file.
@@ -48,7 +48,7 @@ public class CalendarLoaderTool extends AbstractTool<ToolContext> {
   //-------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
+   *
    * @param args  the standard tool arguments, not null
    */
   public static void main(final String[] args) {  // CSIGNORE
@@ -62,16 +62,16 @@ public class CalendarLoaderTool extends AbstractTool<ToolContext> {
     final CommandLine commandLine = getCommandLine();
     final boolean persist = !commandLine.hasOption(DO_NOT_PERSIST);
     final ToolContext toolContext = getToolContext();
-    final HolidayMaster holidayMaster = toolContext.getHolidayMaster();  
-    final String[] args = getCommandLine().getArgs();    
+    final HolidayMaster holidayMaster = toolContext.getHolidayMaster();
+    final String[] args = getCommandLine().getArgs();
     final Holiday holiday = createManageableHoliday(args[0], args[1], args[2]);
     if (persist) {
-      final HolidayDocument holidayDocument = new HolidayDocument(holiday);    
+      final HolidayDocument holidayDocument = new HolidayDocument(holiday);
       holidayMaster.add(holidayDocument);
     }
     toolContext.close();
   }
-  
+
   /**
    * Parses a csv file of dates and returns a {@link Holiday}
    * @param filePath The file path
@@ -86,39 +86,39 @@ public class CalendarLoaderTool extends AbstractTool<ToolContext> {
     holiday.setCustomExternalId(ExternalId.of(schemeName, calendarName));
     CSVReader reader = null;
     try {
-      reader = new CSVReader(new BufferedReader(new FileReader(filePath)), CSVParser.DEFAULT_SEPARATOR, CSVParser.DEFAULT_QUOTE_CHARACTER, 
+      reader = new CSVReader(new BufferedReader(new FileReader(filePath)), CSVParser.DEFAULT_SEPARATOR, CSVParser.DEFAULT_QUOTE_CHARACTER,
           CSVParser.DEFAULT_ESCAPE_CHARACTER);
       String[] currentLine;
       while ((currentLine = reader.readNext()) != null) {
-        for (String currentElement : currentLine) {
+        for (final String currentElement : currentLine) {
           if (!currentElement.isEmpty()) {
             //TODO ultimately, want to attempt different formats
             holiday.getHolidayDates().add(LocalDate.parse(currentElement.trim()));
           }
         }
       }
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw new OpenGammaRuntimeException("Unable to read data field " + filePath, e);
     } finally {
       if (reader != null) {
         try {
           reader.close();
-        } catch (IOException e) {
+        } catch (final IOException e) {
           LOGGER.error("Failed to close reader ", e);
         }
       }
     }
     return holiday;
   }
-  
+
   @Override
-  protected Options createOptions(boolean mandatoryConfig) {
-    Options options = super.createOptions(mandatoryConfig);
+  protected Options createOptions(final boolean mandatoryConfig) {
+    final Options options = super.createOptions(mandatoryConfig);
     options.addOption(createDoNotPersistOption());
     options.addOption(createVerboseOption());
     return options;
   }
-  
+
   /**
    * Creates an option to turn persistence on and off.
    * @return The option
@@ -131,7 +131,7 @@ public class CalendarLoaderTool extends AbstractTool<ToolContext> {
         .withLongOpt(DO_NOT_PERSIST)
         .create("d");
   }
-  
+
   /**
    * Creates an option to produce verbose output.
    * @return The option
@@ -144,12 +144,12 @@ public class CalendarLoaderTool extends AbstractTool<ToolContext> {
                         .withLongOpt("verbose")
                         .create("v");
   }
-  
+
   @Override
-  protected void usage(Options options) {
-    HelpFormatter formatter = new HelpFormatter();
+  protected void usage(final Options options) {
+    final HelpFormatter formatter = new HelpFormatter();
     formatter.setWidth(120);
     formatter.printHelp("calendar-loader-tool.sh [file...]", options, true);
   }
-  
+
 }

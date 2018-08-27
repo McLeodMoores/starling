@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph;
@@ -22,9 +22,9 @@ import com.opengamma.engine.value.ValueSpecification;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(FunctionApplicationWorker.class);
 
-  private Map<ValueRequirement, ValueSpecification> _inputs = new HashMap<ValueRequirement, ValueSpecification>();
-  private Map<ValueRequirement, Cancelable> _inputHandles = new HashMap<ValueRequirement, Cancelable>();
-  private Collection<ResolutionPump> _pumps = new ArrayList<ResolutionPump>();
+  private Map<ValueRequirement, ValueSpecification> _inputs = new HashMap<>();
+  private Map<ValueRequirement, Cancelable> _inputHandles = new HashMap<>();
+  private Collection<ResolutionPump> _pumps = new ArrayList<>();
   private int _pendingInputs;
   private int _validInputs;
   private boolean _invokingFunction;
@@ -47,7 +47,7 @@ import com.opengamma.engine.value.ValueSpecification;
         return;
       }
       if (_pendingInputs < 1) {
-        if ((_pumps == null) || _pumps.isEmpty()) {
+        if (_pumps == null || _pumps.isEmpty()) {
           LOGGER.debug("{} finished (state={})", this, _taskState);
           finished = _taskState;
           _taskState = null;
@@ -65,7 +65,7 @@ import com.opengamma.engine.value.ValueSpecification;
       }
     }
     if (pumps != null) {
-      for (ResolutionPump pump : pumps) {
+      for (final ResolutionPump pump : pumps) {
         LOGGER.debug("Pumping {} from {}", pump, this);
         context.pump(pump);
       }
@@ -101,14 +101,14 @@ import com.opengamma.engine.value.ValueSpecification;
       }
     }
     if (unsubscribes != null) {
-      for (Cancelable unsubscribe : unsubscribes) {
+      for (final Cancelable unsubscribe : unsubscribes) {
         if (unsubscribe != null) {
           unsubscribe.cancel(context);
         }
       }
     }
     if (pumps != null) {
-      for (ResolutionPump pump : pumps) {
+      for (final ResolutionPump pump : pumps) {
         context.close(pump);
       }
     }
@@ -117,7 +117,7 @@ import com.opengamma.engine.value.ValueSpecification;
   // Caller must hold the monitor
   private Map<ValueSpecification, ValueRequirement> createResolvedValuesMap() {
     final Map<ValueSpecification, ValueRequirement> resolvedValues = Maps.<ValueSpecification, ValueRequirement>newHashMapWithExpectedSize(_inputs.size());
-    for (Map.Entry<ValueRequirement, ValueSpecification> input : _inputs.entrySet()) {
+    for (final Map.Entry<ValueRequirement, ValueSpecification> input : _inputs.entrySet()) {
       assert input.getValue() != null;
       resolvedValues.put(input.getValue(), input.getKey());
     }
@@ -234,7 +234,7 @@ import com.opengamma.engine.value.ValueSpecification;
         if (LOGGER.isDebugEnabled()) {
           LOGGER.debug("Unsubscribing from {} handles", unsubscribes.size());
         }
-        for (Cancelable handle : unsubscribes) {
+        for (final Cancelable handle : unsubscribes) {
           if (handle != null) {
             handle.cancel(context);
           }
@@ -280,14 +280,14 @@ import com.opengamma.engine.value.ValueSpecification;
       _pumps = null;
     }
     if (unsubscribes != null) {
-      for (Cancelable unsubscribe : unsubscribes) {
+      for (final Cancelable unsubscribe : unsubscribes) {
         if (unsubscribe != null) {
           unsubscribe.cancel(context);
         }
       }
     }
     if (pumps != null) {
-      for (ResolutionPump pump : pumps) {
+      for (final ResolutionPump pump : pumps) {
         context.close(pump);
       }
     }
@@ -347,7 +347,7 @@ import com.opengamma.engine.value.ValueSpecification;
     final ValueRequirement valueRequirement = inputProducer.getValueRequirement();
     LOGGER.debug("Adding input {} to {}", valueRequirement, this);
     synchronized (this) {
-      if ((_inputs == null) || (_inputHandles == null)) {
+      if (_inputs == null || _inputHandles == null) {
         // Already aborted or something has already failed
         _validInputs--;
         return;
@@ -365,7 +365,7 @@ import com.opengamma.engine.value.ValueSpecification;
             _inputHandles.put(valueRequirement, handle);
           }
         } else {
-          // Remove the handle placeholder if the producer didn't give us a handle 
+          // Remove the handle placeholder if the producer didn't give us a handle
           _inputHandles.remove(valueRequirement);
         }
         return;
@@ -393,7 +393,7 @@ import com.opengamma.engine.value.ValueSpecification;
     synchronized (this) {
       _taskState = state;
       _validInputs = validInputs;
-      _pendingInputs = (validInputs > 0) ? 1 : 0;
+      _pendingInputs = validInputs > 0 ? 1 : 0;
       final int rc = getRefCount();
       for (int i = 0; i < rc; i++) {
         state.getTask().addRef();
@@ -485,7 +485,7 @@ import com.opengamma.engine.value.ValueSpecification;
     synchronized (this) {
       state = _taskState;
       if (state != null) {
-        // Hold an open reference 
+        // Hold an open reference
         state.getTask().addRef();
       }
       count = super.release(context);

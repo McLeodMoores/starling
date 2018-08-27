@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security;
@@ -170,7 +170,7 @@ public abstract class SecurityTestCase extends AbstractSecurityTestCaseAdapter i
     void getValues(Collection<T> values);
   }
 
-  private static class DefaultObjectPermute<T> implements TestDataProvider<T> {
+  private static final class DefaultObjectPermute<T> implements TestDataProvider<T> {
     private final Class<T> _clazz;
 
     private DefaultObjectPermute(final Class<T> clazz) {
@@ -178,7 +178,7 @@ public abstract class SecurityTestCase extends AbstractSecurityTestCaseAdapter i
     }
 
     public static <T> DefaultObjectPermute<T> of(final Class<T> clazz) {
-      return new DefaultObjectPermute<T>(clazz);
+      return new DefaultObjectPermute<>(clazz);
     }
 
     @Override
@@ -187,7 +187,7 @@ public abstract class SecurityTestCase extends AbstractSecurityTestCaseAdapter i
     }
   }
 
-  private static class DefaultCollection<T, C extends Collection<T>> implements TestDataProvider<C> {
+  private final static class DefaultCollection<T, C extends Collection<T>> implements TestDataProvider<C> {
     private final Class<C> _collection;
     private final Class<T> _clazz;
 
@@ -197,7 +197,7 @@ public abstract class SecurityTestCase extends AbstractSecurityTestCaseAdapter i
     }
 
     public static <T, C extends Collection<T>> DefaultCollection<T, C> of(final Class<C> collection, final Class<T> clazz) {
-      return new DefaultCollection<T, C>(collection, clazz);
+      return new DefaultCollection<>(collection, clazz);
     }
 
     @Override
@@ -224,7 +224,7 @@ public abstract class SecurityTestCase extends AbstractSecurityTestCaseAdapter i
     }
   }
 
-  private static class DefaultList<T, C extends List<T>> implements TestDataProvider<C> {
+  private static final class DefaultList<T, C extends List<T>> implements TestDataProvider<C> {
     private final Class<C> _collection;
     private final Class<T> _clazz;
 
@@ -234,7 +234,7 @@ public abstract class SecurityTestCase extends AbstractSecurityTestCaseAdapter i
     }
 
     public static <T, C extends List<T>> DefaultList<T, C> of(final Class<C> collection, final Class<T> clazz) {
-      return new DefaultList<T, C>(collection, clazz);
+      return new DefaultList<>(collection, clazz);
     }
 
     @Override
@@ -261,7 +261,7 @@ public abstract class SecurityTestCase extends AbstractSecurityTestCaseAdapter i
     }
   }
 
-  private static Map<Object, TestDataProvider<?>> s_dataProviders = new HashMap<Object, TestDataProvider<?>>();
+  private static Map<Object, TestDataProvider<?>> s_dataProviders = new HashMap<>();
   private static Random s_random = new Random();
 
   private static RegionSource s_regionSource;
@@ -291,7 +291,7 @@ public abstract class SecurityTestCase extends AbstractSecurityTestCaseAdapter i
     });
     s_dataProviders.put(Map.class, new TestDataProvider<Map<?, ?>>() {
       private Map<?, ?> generateRandomMap(int count) {
-        Map<String, String> map = new HashMap<String, String>(count);
+        final Map<String, String> map = new HashMap<>(count);
         while (count > 0) {
           map.put(RandomStringUtils.randomAlphanumeric(16), RandomStringUtils.randomAlphanumeric(16));
           count--;
@@ -306,12 +306,12 @@ public abstract class SecurityTestCase extends AbstractSecurityTestCaseAdapter i
           values.add(generateRandomMap(1 + s_random.nextInt(9)));
           qty--;
         }
-        values.add(new HashMap<Object, Object>());
+        values.add(new HashMap<>());
       }
     });
     s_dataProviders.put(SortedMap.class, new TestDataProvider<SortedMap<Tenor, ExternalId>>() {
       private SortedMap<Tenor, ExternalId> generateRandomMap(int count) {
-        SortedMap<Tenor, ExternalId> map = new TreeMap<Tenor, ExternalId>();
+        final SortedMap<Tenor, ExternalId> map = new TreeMap<>();
         while (count > 0) {
           Tenor tenor;
           switch (s_random.nextInt(3)) {
@@ -346,7 +346,7 @@ public abstract class SecurityTestCase extends AbstractSecurityTestCaseAdapter i
     s_dataProviders.put(Set.class, new TestDataProvider<Set<String>>() {
 
       @Override
-      public void getValues(Collection<Set<String>> values) {
+      public void getValues(final Collection<Set<String>> values) {
         values.add(Sets.newHashSet(getRandomPermissions()));
         values.add(Sets.newHashSet(getRandomPermissions()));
         values.add(Sets.newHashSet(getRandomPermissions()));
@@ -487,7 +487,7 @@ public abstract class SecurityTestCase extends AbstractSecurityTestCaseAdapter i
     s_dataProviders.put(GICSCode.class, new TestDataProvider<GICSCode>() {
       @Override
       public void getValues(final Collection<GICSCode> values) {
-        int code = (((s_random.nextInt(90) + 10) * 100 + (s_random.nextInt(90) + 10)) * 100 + (s_random.nextInt(90) + 10)) * 100 + (s_random.nextInt(90) + 10);
+        final int code = (((s_random.nextInt(90) + 10) * 100 + s_random.nextInt(90) + 10) * 100 + s_random.nextInt(90) + 10) * 100 + s_random.nextInt(90) + 10;
         values.add(GICSCode.of(Integer.toString(code)));
       }
     });
@@ -571,20 +571,20 @@ public abstract class SecurityTestCase extends AbstractSecurityTestCaseAdapter i
     });
     s_dataProviders.put(byte[].class, new TestDataProvider<byte[]>() {
       @Override
-      public void getValues(Collection<byte[]> values) {
+      public void getValues(final Collection<byte[]> values) {
 
         values.add(getRandomBytes());
       }
 
       private byte[] getRandomBytes() {
-        byte[] randomBytes = new byte[s_random.nextInt(100) + 10];
+        final byte[] randomBytes = new byte[s_random.nextInt(100) + 10];
         s_random.nextBytes(randomBytes);
         return randomBytes;
       }
     });
     s_dataProviders.put(int.class, new TestDataProvider<Integer>() {
       @Override
-      public void getValues(Collection<Integer> values) {
+      public void getValues(final Collection<Integer> values) {
         values.add(0);
         int i;
         do {
@@ -596,9 +596,9 @@ public abstract class SecurityTestCase extends AbstractSecurityTestCaseAdapter i
     });
     s_dataProviders.put(CDSIndexTerms.class, new TestDataProvider<CDSIndexTerms>() {
       @Override
-      public void getValues(Collection<CDSIndexTerms> values) {
+      public void getValues(final Collection<CDSIndexTerms> values) {
         values.add(CDSIndexTerms.EMPTY);
-        List<Tenor> tenors = getTestObjects(Tenor.class, null);
+        final List<Tenor> tenors = getTestObjects(Tenor.class, null);
         if (!tenors.isEmpty()) {
           values.add(CDSIndexTerms.of(tenors.iterator().next()));
         }
@@ -607,15 +607,15 @@ public abstract class SecurityTestCase extends AbstractSecurityTestCaseAdapter i
     });
     s_dataProviders.put(CreditDefaultSwapIndexComponent.class, new TestDataProvider<CreditDefaultSwapIndexComponent>() {
       @Override
-      public void getValues(Collection<CreditDefaultSwapIndexComponent> values) {
+      public void getValues(final Collection<CreditDefaultSwapIndexComponent> values) {
         values.add(new CreditDefaultSwapIndexComponent(null, null, null, null));
       }
 
     });
     s_dataProviders.put(CDSIndexComponentBundle.class, new TestDataProvider<CDSIndexComponentBundle>() {
       @Override
-      public void getValues(Collection<CDSIndexComponentBundle> values) {
-        Collection<CreditDefaultSwapIndexComponent> components = permuteTestObjects(CreditDefaultSwapIndexComponent.class);
+      public void getValues(final Collection<CDSIndexComponentBundle> values) {
+        final Collection<CreditDefaultSwapIndexComponent> components = permuteTestObjects(CreditDefaultSwapIndexComponent.class);
         if (!components.isEmpty()) {
           values.add(CDSIndexComponentBundle.of(components.iterator().next()));
         }
@@ -631,7 +631,7 @@ public abstract class SecurityTestCase extends AbstractSecurityTestCaseAdapter i
   }
 
   protected static <T> List<T> getTestObjects(final Class<T> clazz, final Class<?> parent) {
-    final List<T> objects = new ArrayList<T>();
+    final List<T> objects = new ArrayList<>();
     if (clazz.isEnum()) {
       for (final T value : clazz.getEnumConstants()) {
         objects.add(value);
@@ -676,7 +676,7 @@ public abstract class SecurityTestCase extends AbstractSecurityTestCaseAdapter i
   }
 
   private static <T> Collection<T> permuteTestObjects(final Class<T> clazz, final Constructor<T> constructor) {
-    final Collection<T> objects = new LinkedList<T>();
+    final Collection<T> objects = new LinkedList<>();
     final Class<?>[] parameters = constructor.getParameterTypes();
     final List<?>[] parameterValues = new List<?>[parameters.length];
     final int[] parameterIndex = new int[parameters.length];
@@ -688,7 +688,7 @@ public abstract class SecurityTestCase extends AbstractSecurityTestCaseAdapter i
       }
     }
     final Object[] construct = new Object[parameters.length];
-    final List<Throwable> exceptions = new LinkedList<Throwable>();
+    final List<Throwable> exceptions = new LinkedList<>();
     // TODO: what about nulls ?
     for (int i = 0; i < longest; i++) {
       for (int j = 0; j < parameters.length; j++) {
@@ -724,14 +724,14 @@ public abstract class SecurityTestCase extends AbstractSecurityTestCaseAdapter i
 
   private static <T extends ManageableSecurity> Collection<T> permuteTestSecurities(final Class<T> clazz) {
     intializeClass(clazz);
-    MetaBean mb = JodaBeanUtils.metaBean(clazz);
-    List<MetaProperty<?>> mps = new ArrayList<MetaProperty<?>>(mb.metaPropertyMap().values());
+    final MetaBean mb = JodaBeanUtils.metaBean(clazz);
+    final List<MetaProperty<?>> mps = new ArrayList<>(mb.metaPropertyMap().values());
 
     // find the longest set of available data
     final List<?>[] parameterValues = new List<?>[mps.size()];
     int longest = 0;
     for (int i = 0; i < mps.size(); i++) {
-      MetaProperty<?> metaProperty = mps.get(i);
+      final MetaProperty<?> metaProperty = mps.get(i);
       if (metaProperty.style().isSerializable() && "permissions".equals(metaProperty.name())) {
         parameterValues[i] = getTestObjects(metaProperty.propertyType(), null);
       } else {
@@ -743,16 +743,16 @@ public abstract class SecurityTestCase extends AbstractSecurityTestCaseAdapter i
     }
 
     // prepare
-    final List<Throwable> exceptions = new ArrayList<Throwable>();
-    final Collection<T> objects = new ArrayList<T>();
+    final List<Throwable> exceptions = new ArrayList<>();
+    final Collection<T> objects = new ArrayList<>();
     final int[] parameterIndex = new int[mps.size()];
     for (int i = 0; i < longest; i++) {
       try {
-        BeanBuilder<?> builder = mb.builder();
+        final BeanBuilder<?> builder = mb.builder();
         for (int j = 0; j < mps.size(); j++) {
-          Object value = parameterValues[j].get(parameterIndex[j]);
+          final Object value = parameterValues[j].get(parameterIndex[j]);
           parameterIndex[j] = (parameterIndex[j] + 1) % parameterValues[j].size();
-          MetaProperty<?> metaProperty = mps.get(j);
+          final MetaProperty<?> metaProperty = mps.get(j);
           if (metaProperty.style().isSerializable() && metaProperty.name().equals("securityType") == false) {
             builder.set(metaProperty.name(), value);
           }
@@ -778,20 +778,20 @@ public abstract class SecurityTestCase extends AbstractSecurityTestCaseAdapter i
   private static <T> void intializeClass(final Class<T> clazz) {
     // call the default constructor to initialize the class
     try {
-      Constructor<T> defaultConstructor = getDefaultConstructor(clazz);
+      final Constructor<T> defaultConstructor = getDefaultConstructor(clazz);
       if (defaultConstructor != null) {
         defaultConstructor.setAccessible(true);
         defaultConstructor.newInstance();
       }
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
     }
   }
 
   private static <T> Constructor<T> getDefaultConstructor(final Class<T> clazz) {
     Constructor<T> defaultConstructor = null;
-    Constructor<?>[] declaredConstructors = clazz.getDeclaredConstructors();
-    for (Constructor<?> constructor : declaredConstructors) {
-      Class<?>[] parameterTypes = constructor.getParameterTypes();
+    final Constructor<?>[] declaredConstructors = clazz.getDeclaredConstructors();
+    for (final Constructor<?> constructor : declaredConstructors) {
+      final Class<?>[] parameterTypes = constructor.getParameterTypes();
       if (parameterTypes.length == 0) {
         defaultConstructor = (Constructor<T>) constructor;
         break;
@@ -839,7 +839,7 @@ public abstract class SecurityTestCase extends AbstractSecurityTestCaseAdapter i
 
   /**
    * Allow subclasses to block testing.
-   * 
+   *
    * @return true if initialized
    */
   protected boolean isInitialized() {

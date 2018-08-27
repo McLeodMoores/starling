@@ -119,7 +119,7 @@ public class SimpleLegalEntity extends DirectBean
    * @param name the name of the legal entity, not null
    * @param externalIdBundle the bundle of identifiers that define the legal entity, not null
    */
-  public SimpleLegalEntity(String name, ExternalIdBundle externalIdBundle) {
+  public SimpleLegalEntity(final String name, final ExternalIdBundle externalIdBundle) {
     ArgumentChecker.notNull(name, "name");
     ArgumentChecker.notNull(externalIdBundle, "externalIdBundle");
     setName(name);
@@ -133,7 +133,7 @@ public class SimpleLegalEntity extends DirectBean
    * @param name the name of the legal entity, not null
    * @param externalIdBundle the bundle of identifiers that define the legal entity, not null
    */
-  protected SimpleLegalEntity(UniqueId uniqueId, String name, ExternalIdBundle externalIdBundle) {
+  protected SimpleLegalEntity(final UniqueId uniqueId, final String name, final ExternalIdBundle externalIdBundle) {
     ArgumentChecker.notNull(name, "name");
     ArgumentChecker.notNull(externalIdBundle, "externalIdBundle");
     setUniqueId(uniqueId);
@@ -147,19 +147,19 @@ public class SimpleLegalEntity extends DirectBean
    *
    * @param legalEntityId the identifier to add, not null
    */
-  public void addExternalId(ExternalId legalEntityId) {
+  public void addExternalId(final ExternalId legalEntityId) {
     setExternalIdBundle(getExternalIdBundle().withExternalId(legalEntityId));
   }
 
   @Override
-  public void addAttribute(String key, String value) {
+  public void addAttribute(final String key, final String value) {
     ArgumentChecker.notNull(key, "key");
     ArgumentChecker.notNull(value, "value");
     _attributes.put(key, value);
   }
 
   @Override
-  public void addDetail(String key, String value) {
+  public void addDetail(final String key, final String value) {
     ArgumentChecker.notNull(key, "key");
     ArgumentChecker.notNull(value, "value");
     _details.put(key, value);

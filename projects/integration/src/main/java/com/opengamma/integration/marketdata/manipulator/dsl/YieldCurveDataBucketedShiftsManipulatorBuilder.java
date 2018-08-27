@@ -29,9 +29,9 @@ import com.opengamma.util.ArgumentChecker;
 
   private final List<YieldCurveBucketedShift> _shiftList = Lists.newArrayList();
 
-  public YieldCurveDataBucketedShiftsManipulatorBuilder(YieldCurveDataSelector selector,
-                                                        Scenario scenario,
-                                                        ScenarioShiftType shiftType) {
+  public YieldCurveDataBucketedShiftsManipulatorBuilder(final YieldCurveDataSelector selector,
+                                                        final Scenario scenario,
+                                                        final ScenarioShiftType shiftType) {
     _selector = ArgumentChecker.notNull(selector, "selector");
     _scenario = ArgumentChecker.notNull(scenario, "scenario");
     _shiftType = ArgumentChecker.notNull(shiftType, "shiftType");
@@ -44,8 +44,8 @@ import com.opengamma.util.ArgumentChecker;
    * @param shift shift amount
    * @return this
    */
-  public YieldCurveDataBucketedShiftsManipulatorBuilder shift(Period start, Period end, Number shift) {
-    YieldCurveBucketedShift bucketedShift = new YieldCurveBucketedShift(start, end, shift.doubleValue());
+  public YieldCurveDataBucketedShiftsManipulatorBuilder shift(final Period start, final Period end, final Number shift) {
+    final YieldCurveBucketedShift bucketedShift = new YieldCurveBucketedShift(start, end, shift.doubleValue());
     _shiftList.add(bucketedShift);
     return this;
   }
@@ -54,7 +54,7 @@ import com.opengamma.util.ArgumentChecker;
    * Apply shifts to the scenario.
    */
   public void build() {
-    YieldCurveDataBucketedShiftManipulator shifts =
+    final YieldCurveDataBucketedShiftManipulator shifts =
         new YieldCurveDataBucketedShiftManipulator(_shiftType, ImmutableList.copyOf(_shiftList));
     _scenario.add(_selector, shifts);
   }

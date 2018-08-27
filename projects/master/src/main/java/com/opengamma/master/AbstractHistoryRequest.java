@@ -105,7 +105,7 @@ public abstract class AbstractHistoryRequest extends DirectBean implements Paged
   /**
    * Creates an instance with object identifier.
    * This will retrieve all versions and corrections unless the relevant fields are set.
-   * 
+   *
    * @param objectId  the object identifier, not null
    */
   public AbstractHistoryRequest(final ObjectIdentifiable objectId) {
@@ -114,12 +114,12 @@ public abstract class AbstractHistoryRequest extends DirectBean implements Paged
 
   /**
    * Creates an instance with object identifier and optional version and correction.
-   * 
+   *
    * @param objectId  the object identifier, not null
    * @param versionInstant  the version instant to retrieve, null for all versions
    * @param correctedToInstant  the instant that the data should be corrected to, null for all corrections
    */
-  public AbstractHistoryRequest(final ObjectIdentifiable objectId, Instant versionInstant, Instant correctedToInstant) {
+  public AbstractHistoryRequest(final ObjectIdentifiable objectId, final Instant versionInstant, final Instant correctedToInstant) {
     ArgumentChecker.notNull(objectId, "objectId");
     setObjectId(objectId.getObjectId());
     setVersionsFromInstant(versionInstant);

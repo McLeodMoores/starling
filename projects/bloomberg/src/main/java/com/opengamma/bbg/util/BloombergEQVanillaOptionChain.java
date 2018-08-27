@@ -35,9 +35,9 @@ import com.opengamma.util.OpenGammaClock;
  * </p>
  * <p>
  * Each instance of {@code BloombergEQVanillaOptionChain} is immutable. Each of the {@code narrow*} methods returns a new immutable instance
- * of {@code BloombergEQVanillaOptionChain}. The chain is a wrapper around a list of {@link com.opengamma.id.ExternalId Identifiers}, which 
+ * of {@code BloombergEQVanillaOptionChain}. The chain is a wrapper around a list of {@link com.opengamma.id.ExternalId Identifiers}, which
  * are obtainable via a getter method after narrowing is complete. This getter method returns the {@code Identifiers} as a {@code Set}, in order
- * to mimic the behavior of {@code BloombergDataUtil.getOptionChain()}. Different instances of the chain may share instances of the contained 
+ * to mimic the behavior of {@code BloombergDataUtil.getOptionChain()}. Different instances of the chain may share instances of the contained
  * {@code Identifiers}, but these are themselves immutable, so this is completely safe.
  * </p>
  * <p>
@@ -48,7 +48,7 @@ import com.opengamma.util.OpenGammaClock;
    double currentPrice = . . . ;
    Set&lt;Identifier&gt; identifiers = BloombergDataUtil.getOptionChain( . . . .);
    BloombergEQVanillaOptionChain chain = new BloombergEQVanillaOptionChain (identifiers);
-    
+
    LocalDate today = LocalDate.now();
    Identifier desiredOption = chain.narrowByExpiry(today, 2).narrowByStrike(currentPrice, 1).
      narrowByOptionType(OptionType.CALL).getIdentifiers().first();
@@ -60,10 +60,10 @@ import com.opengamma.util.OpenGammaClock;
    double currentPrice = . . . ;
    Set&lt;Identifier&gt; identifiers = BloombergDataUtil.getOptionChain( . . . .);
    BloombergEQVanillaOptionChain chain = new BloombergEQVanillaOptionChain (identifiers);
-    
+
    LocalDate today = LocalDate.now();
    BloombergEQVanillaOptionChain optionPair = chain.narrowByExpiry(today, 2).narrowByStrike(currentPrice, 1);
-   
+
    Identifier desiredCall = optionPair.narrowByOptionType(OptionType.CALL).getIdentifiers().first();
    Identifier desiredPut  = optionPair.narrowByOptionType(OptionType.PUT).getIdentifiers().first();
  * </pre>
@@ -72,88 +72,89 @@ import com.opengamma.util.OpenGammaClock;
  * chain was built around an empty {@code Identifier} set to begin with, in which case the methods will return
  * an empty, non-null chain.
  * </p>
- * Internally, this class uses {@link BloombergTickerParserEQVanillaOption}. 
+ * Internally, this class uses {@link BloombergTickerParserEQVanillaOption}.
  */
 public class BloombergEQVanillaOptionChain {
   // ------------ FIELDS ------------
-  private List<ExternalId> _identifiers;
-  private ActualActualISDA _dayCount = new ActualActualISDA();
+  private final List<ExternalId> _identifiers;
+  private final ActualActualISDA _dayCount = new ActualActualISDA();
 
-  
-  
+
+
   // ------------ METHODS ------------
   // -------- CONSTRUCTORS --------
   /**
    * <p>
-   * Create an option chain around a {@link java.util.Set} of identifiers. Typically, these come from the result of 
+   * Create an option chain around a {@link java.util.Set} of identifiers. Typically, these come from the result of
    * a call to {@link com.opengamma.bbg.util.BloombergDataUtils#getOptionChain BloombergDataUtil.getOptionChain()}.
    * </p>
    * <p>
-   * The identifiers must have an {@link com.opengamma.id.ExternalScheme} of {@link com.opengamma.core.id.ExternalSchemes#BLOOMBERG_TICKER}. 
+   * The identifiers must have an {@link com.opengamma.id.ExternalScheme} of {@link com.opengamma.core.id.ExternalSchemes#BLOOMBERG_TICKER}.
    * </p>
    * @param identifiers the identifiers that comprise the chain
    */
-  public BloombergEQVanillaOptionChain(Set<ExternalId> identifiers) {
-    _identifiers = new ArrayList<ExternalId>(identifiers);
+  public BloombergEQVanillaOptionChain(final Set<ExternalId> identifiers) {
+    _identifiers = new ArrayList<>(identifiers);
   }
-  
+
   /**
    * <p>
-   * Create an option chain around a {@link java.util.List} of identifiers. Typically, these come from the result of 
+   * Create an option chain around a {@link java.util.List} of identifiers. Typically, these come from the result of
    * a call to {@link com.opengamma.bbg.util.BloombergDataUtils#getOptionChain BloombergDataUtil.getOptionChain()}.
    * </p>
    * <p>
-   * The identifiers must have an {@link com.opengamma.id.ExternalScheme} of {@link com.opengamma.core.id.ExternalSchemes#BLOOMBERG_TICKER}. 
+   * The identifiers must have an {@link com.opengamma.id.ExternalScheme} of {@link com.opengamma.core.id.ExternalSchemes#BLOOMBERG_TICKER}.
    * </p>
    * @param identifiers the identifiers that comprise the chain
    */
-  public BloombergEQVanillaOptionChain(List<ExternalId> identifiers) {
+  public BloombergEQVanillaOptionChain(final List<ExternalId> identifiers) {
     _identifiers = identifiers;
   }
-  
+
   /**
    * Creates a copy of a {@code BloombergEQVanillaOptionChain}. Note that this is a shallow
    * copy; since both {@code Identifier} and {@code BloombergEQVanillaOptionChain} are immutable,
    * this is not an issue.
    * @param original the original chain to copy
    */
-  public BloombergEQVanillaOptionChain(BloombergEQVanillaOptionChain original) {
+  public BloombergEQVanillaOptionChain(final BloombergEQVanillaOptionChain original) {
     _identifiers = original._identifiers;
   }
-  
-  
+
+
   // -------- MAIN OPERATIONS --------
   /**
-   * Returns a new chain narrowed by option type (either {@link com.opengamma.financial.security.option.OptionType#CALL CALL} 
+   * Returns a new chain narrowed by option type (either {@link com.opengamma.financial.security.option.OptionType#CALL CALL}
    * or {@link com.opengamma.financial.security.option.OptionType#PUT PUT}).
    * @param optionType the option type to narrow on
    * @return a new chain narrowed by option type
    */
   public BloombergEQVanillaOptionChain narrowByOptionType(final OptionType optionType) {
     // Simple O(n) filtering on optiontype
-    List<ExternalId> result = new ArrayList<ExternalId>(Collections2.filter(_identifiers, new Predicate<ExternalId>() {
-      public boolean apply(ExternalId identifier) {
+    final List<ExternalId> result = new ArrayList<>(Collections2.filter(_identifiers, new Predicate<ExternalId>() {
+      @Override
+      public boolean apply(final ExternalId identifier) {
         return new BloombergTickerParserEQVanillaOption(identifier).getOptionType().equals(optionType);
       }
     }));
     return new BloombergEQVanillaOptionChain(result);
   }
- 
-  
+
+
   /**
    * Returns a new chain narrowed by expiry.  The expiry is specified as being at least {@code monthsFromToday} months from
-   * today. See {@link #narrowByExpiry(LocalDate, int)} for details of the algorithm. 
+   * today. See {@link #narrowByExpiry(LocalDate, int)} for details of the algorithm.
    * @param monthsFromToday number of months from today to start searching for the expiry
    * @return a new chain narrowed by expiry
    */
-  public BloombergEQVanillaOptionChain narrowByExpiry(int monthsFromToday) {
+  public BloombergEQVanillaOptionChain narrowByExpiry(final int monthsFromToday) {
     return narrowByExpiry(LocalDate.now(OpenGammaClock.getInstance()), monthsFromToday);
   }
-  
+
   /**
    * <p>
    * Returns a new chain narrowed by expiry.  The expiry is specified as being at least {@code monthsFromToday} months from
-   * an arbitrary reference date.  Both positive and negative month offsets are supported.  
+   * an arbitrary reference date.  Both positive and negative month offsets are supported.
    * </p>
    * The search algorithm is as follows:
    * <ol>
@@ -163,7 +164,7 @@ public class BloombergEQVanillaOptionChain {
    * <li>If options with the above expiry were found, then the algorithm stops, and the resulting chain is returned.</li>
    * <li>If not, then the algorithm will find the expiry that is nearest to the exact expiry from step 1. It measures the difference using
    * actual days.  The resulting chain is then returned.
-   * </ol> 
+   * </ol>
    * <p>
    * Below, we provide a table showing sample results. We use US date format for Bloomberg compatibility. We cover only &#8805; 0 offsets
    * since that is the more usual case. Assume that:
@@ -197,62 +198,62 @@ public class BloombergEQVanillaOptionChain {
    * </table>
    * <p>
    * Notice how, for the {@code 0} offset, the result was {@code 05/21/2011} and not {@code 04/16/2011}. That is because the reference date
-   * was {@code 04/18/2011}, which is after {@code 04/16/2011}.  If the reference date had been, for example, {@code 04/11/2011}, then the 
+   * was {@code 04/18/2011}, which is after {@code 04/16/2011}.  If the reference date had been, for example, {@code 04/11/2011}, then the
    * result would have been {@code 4/16/2011} for a {@code 0} offset.
    * </p>
    * @param referenceDate the date to which the expiry is in reference
    * @param monthsFromReferenceDate number of months from the reference date to start searching for the expiry
    * @return a new chain narrowed by expiry
    */
-  public BloombergEQVanillaOptionChain narrowByExpiry(LocalDate referenceDate, final int monthsFromReferenceDate) {
+  public BloombergEQVanillaOptionChain narrowByExpiry(final LocalDate referenceDate, final int monthsFromReferenceDate) {
     // Special case - return empty on empty input
     if (_identifiers.isEmpty()) {
       return new BloombergEQVanillaOptionChain(_identifiers);
     }
-    
+
     // Create parser version of chain
     // Collect all unique property values from chain
-    List<BloombergTickerParserEQVanillaOption> parsers = new ArrayList<BloombergTickerParserEQVanillaOption>(_identifiers.size());
-    NavigableSet<LocalDate> expiries = new TreeSet<LocalDate>();
-    for (ExternalId identifier : _identifiers) {
-      BloombergTickerParserEQVanillaOption parser = new BloombergTickerParserEQVanillaOption(identifier);
+    final List<BloombergTickerParserEQVanillaOption> parsers = new ArrayList<>(_identifiers.size());
+    final NavigableSet<LocalDate> expiries = new TreeSet<>();
+    for (final ExternalId identifier : _identifiers) {
+      final BloombergTickerParserEQVanillaOption parser = new BloombergTickerParserEQVanillaOption(identifier);
       parsers.add(parser);
-      LocalDate expiry = parser.getExpiry();
-      expiries.add(expiry);      
+      final LocalDate expiry = parser.getExpiry();
+      expiries.add(expiry);
     }
-    
+
     // Find the desired expiry
-    LocalDate thirdSaturdayOfTargetMonth = determineTargetExpiry(referenceDate, monthsFromReferenceDate);    
-    LocalDate floorValue = Objects.firstNonNull(expiries.floor(thirdSaturdayOfTargetMonth), expiries.first());
+    final LocalDate thirdSaturdayOfTargetMonth = determineTargetExpiry(referenceDate, monthsFromReferenceDate);
+    final LocalDate floorValue = Objects.firstNonNull(expiries.floor(thirdSaturdayOfTargetMonth), expiries.first());
     LocalDate targetValue = floorValue;
     if (!floorValue.equals(thirdSaturdayOfTargetMonth)) {
-      LocalDate ceilingValue = Objects.firstNonNull(expiries.ceiling(thirdSaturdayOfTargetMonth), expiries.last());
-      double diff1 = calcDayDiff(thirdSaturdayOfTargetMonth, floorValue);
-      double diff2 = calcDayDiff(thirdSaturdayOfTargetMonth, ceilingValue);
+      final LocalDate ceilingValue = Objects.firstNonNull(expiries.ceiling(thirdSaturdayOfTargetMonth), expiries.last());
+      final double diff1 = calcDayDiff(thirdSaturdayOfTargetMonth, floorValue);
+      final double diff2 = calcDayDiff(thirdSaturdayOfTargetMonth, ceilingValue);
       if (diff1 < diff2) {
         targetValue = floorValue;
       } else {
         targetValue = ceilingValue;
-      } 
+      }
     }
-    
+
     // Collect all identifiers with this expiry
     // (Note: tried pre-hashing and retrieving, was slower than this O(n) approach)
-    List<ExternalId> identifiers = new ArrayList<ExternalId>();
-    for (BloombergTickerParserEQVanillaOption parser : parsers) {
+    final List<ExternalId> identifiers = new ArrayList<>();
+    for (final BloombergTickerParserEQVanillaOption parser : parsers) {
       if (parser.getExpiry().equals(targetValue)) {
         identifiers.add(parser.getIdentifier());
       }
     }
-    
+
     // Done
     return new BloombergEQVanillaOptionChain(identifiers);
   }
-  
+
   /**
    * <p>
    * Returns a new chain narrowed by strike.  The strike is specified as being at least {@code strikeOffset} strikes from
-   * an arbitrary reference price (usually the current underlyer price.)  Both positive and negative strike offsets are supported.  
+   * an arbitrary reference price (usually the current underlyer price.)  Both positive and negative strike offsets are supported.
    * </p>
    * <p>
    * The search algorithm is as follows:
@@ -307,31 +308,31 @@ public class BloombergEQVanillaOptionChain {
   public BloombergEQVanillaOptionChain narrowByStrike(final double referencePrice, int strikeOffset) {
     // Create parser version of chain
     // Collect all unique property values from chain
-    List<BloombergTickerParserEQVanillaOption> parsers = new ArrayList<BloombergTickerParserEQVanillaOption>(_identifiers.size());
-    NavigableSet<Double> strikes = new TreeSet<Double>();
-    for (ExternalId identifier : _identifiers) {
-      BloombergTickerParserEQVanillaOption parser = new BloombergTickerParserEQVanillaOption(identifier);
+    final List<BloombergTickerParserEQVanillaOption> parsers = new ArrayList<>(_identifiers.size());
+    final NavigableSet<Double> strikes = new TreeSet<>();
+    for (final ExternalId identifier : _identifiers) {
+      final BloombergTickerParserEQVanillaOption parser = new BloombergTickerParserEQVanillaOption(identifier);
       parsers.add(parser);
-      Double strike = parser.getStrike();
-      strikes.add(strike);      
+      final Double strike = parser.getStrike();
+      strikes.add(strike);
     }
-    
+
     // Find the desired strike
     Double targetValue = null;
-    
+
     // Special case:  offset is 0 to begin with, just find the nearest strike
     if (strikeOffset == 0) {
-      double floorValue = Objects.firstNonNull(strikes.floor(referencePrice), strikes.first());
+      final double floorValue = Objects.firstNonNull(strikes.floor(referencePrice), strikes.first());
       targetValue = floorValue;
       if (floorValue != referencePrice) {
-        double ceilingValue = Objects.firstNonNull(strikes.ceiling(referencePrice), strikes.last());
-        double diff1 = Math.abs(referencePrice - floorValue);
-        double diff2 = Math.abs(referencePrice - ceilingValue);
+        final double ceilingValue = Objects.firstNonNull(strikes.ceiling(referencePrice), strikes.last());
+        final double diff1 = Math.abs(referencePrice - floorValue);
+        final double diff2 = Math.abs(referencePrice - ceilingValue);
         if (diff1 < diff2) {
           targetValue = floorValue;
         } else {
           targetValue = ceilingValue;
-        } 
+        }
       }
     } else {
       // Otherwise, move forward or backward the desired number of offsets and take that value
@@ -353,21 +354,21 @@ public class BloombergEQVanillaOptionChain {
         }
       }
     }
-    
+
     // Collect all identifiers with this strike
     // (Note: tried pre-hashing and retrieving, was slower than this O(n) approach)
-    List<ExternalId> identifiers = new ArrayList<ExternalId>();
-    for (BloombergTickerParserEQVanillaOption parser : parsers) {
+    final List<ExternalId> identifiers = new ArrayList<>();
+    for (final BloombergTickerParserEQVanillaOption parser : parsers) {
       if (parser.getStrike() == targetValue) {
         identifiers.add(parser.getIdentifier());
       }
     }
-    
+
     // Done
     return new BloombergEQVanillaOptionChain(identifiers);
   }
- 
-  
+
+
   // -------- PROPERTIES --------
   /**
    * Returns the {@code Identifiers} in the chain. They will be in a set sorted by alphabetical order, in order to mimic the output ordering
@@ -375,19 +376,19 @@ public class BloombergEQVanillaOptionChain {
    * @return the {@code Identifiers} in the chain
    */
   public NavigableSet<ExternalId> getIdentifiers() {
-    return new TreeSet<ExternalId>(_identifiers);
+    return new TreeSet<>(_identifiers);
   }
-  
-  
+
+
   // -------- PRIVATE SUBROUTINES --------
-  private LocalDate determineTargetExpiry(LocalDate referenceDate, int monthsFromReferenceDate) {
+  private LocalDate determineTargetExpiry(final LocalDate referenceDate, final int monthsFromReferenceDate) {
     LocalDate result = referenceDate.plusMonths(monthsFromReferenceDate);
     result = LocalDate.of(result.getYear(), result.getMonth(), 1);
     while (!(result.getDayOfWeek() == FRIDAY)) {
       result = result.plusDays(1);
     }
     result = result.plusDays(15); // Saturday after third Friday
-    
+
     // Fencepost condition: if we are looking 0 months ahead, but the referenceDate is past the
     // the Saturday after third Friday, then move forward 1 month
     if (monthsFromReferenceDate == 0 && result.isBefore(referenceDate)) {
@@ -395,14 +396,14 @@ public class BloombergEQVanillaOptionChain {
     }
     return result;
   }
-  
-  private double calcDayDiff(LocalDate thirdSaturdayOfTargetMonth, LocalDate expiry) {
-    ZonedDateTime dummyNow = ZonedDateTime.now(OpenGammaClock.getInstance()); // "now()" is just to get dummy time of day and zone
-    
-    ZonedDateTime zonedThirdSaturdayOfTargetMonth = thirdSaturdayOfTargetMonth.atTime(dummyNow.toLocalTime()).atZone(dummyNow.getZone());
-    ZonedDateTime zonedExpiry = expiry.atTime(dummyNow.toLocalTime()).atZone(dummyNow.getZone());
+
+  private double calcDayDiff(final LocalDate thirdSaturdayOfTargetMonth, final LocalDate expiry) {
+    final ZonedDateTime dummyNow = ZonedDateTime.now(OpenGammaClock.getInstance()); // "now()" is just to get dummy time of day and zone
+
+    final ZonedDateTime zonedThirdSaturdayOfTargetMonth = thirdSaturdayOfTargetMonth.atTime(dummyNow.toLocalTime()).atZone(dummyNow.getZone());
+    final ZonedDateTime zonedExpiry = expiry.atTime(dummyNow.toLocalTime()).atZone(dummyNow.getZone());
     if (expiry.isAfter(thirdSaturdayOfTargetMonth)) {
-      return _dayCount.getDayCountFraction(zonedThirdSaturdayOfTargetMonth, zonedExpiry);  
+      return _dayCount.getDayCountFraction(zonedThirdSaturdayOfTargetMonth, zonedExpiry);
     } else {
       return _dayCount.getDayCountFraction(zonedExpiry, zonedThirdSaturdayOfTargetMonth);
     }

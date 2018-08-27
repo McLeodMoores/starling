@@ -29,16 +29,16 @@ public class EquityOptionBAWImpliedVolatilityFunction extends EquityOptionBAWFun
 
   /** The Barone-Adesi Whaley present value calculator */
   private static final EqyOptBaroneAdesiWhaleyPresentValueCalculator PV_CALCULATOR = EqyOptBaroneAdesiWhaleyPresentValueCalculator.getInstance();
-  
+
   /** Default constructor */
   public EquityOptionBAWImpliedVolatilityFunction() {
     super(ValueRequirementNames.IMPLIED_VOLATILITY);
   }
-  
+
   @Override
-  protected Set<ComputedValue> computeValues(InstrumentDerivative derivative, StaticReplicationDataBundle market, FunctionInputs inputs, Set<ValueRequirement> desiredValues,
-      ComputationTargetSpecification targetSpec, ValueProperties resultProperties) {
-    
+  protected Set<ComputedValue> computeValues(final InstrumentDerivative derivative, final StaticReplicationDataBundle market, final FunctionInputs inputs, final Set<ValueRequirement> desiredValues,
+      final ComputationTargetSpecification targetSpec, final ValueProperties resultProperties) {
+
     final double optionPrice;
     final double strike;
     final double timeToExpiry;
@@ -67,8 +67,8 @@ public class EquityOptionBAWImpliedVolatilityFunction extends EquityOptionBAWFun
     final double spot = market.getForwardCurve().getSpot();
     final double discountRate = market.getDiscountCurve().getInterestRate(timeToExpiry);
     final double costOfCarry = discountRate - Math.log(market.getForwardCurve().getForward(timeToExpiry) / spot) / timeToExpiry;
-    final double impliedVol = (new BaroneAdesiWhaleyModel()).impliedVolatility(optionPrice, spot, strike, discountRate, costOfCarry, timeToExpiry, isCall);
-    
+    final double impliedVol = new BaroneAdesiWhaleyModel().impliedVolatility(optionPrice, spot, strike, discountRate, costOfCarry, timeToExpiry, isCall);
+
     final ValueSpecification resultSpec = new ValueSpecification(getValueRequirementNames()[0], targetSpec, resultProperties);
     return Collections.singleton(new ComputedValue(resultSpec, impliedVol));
   }

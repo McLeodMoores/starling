@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.cache;
@@ -53,13 +53,13 @@ public class WriteThroughViewComputationCacheSlowTest {
         while (_block) {
           wait();
         }
-      } catch (InterruptedException e) {
+      } catch (final InterruptedException e) {
         throw new OpenGammaRuntimeException("Interrupted", e);
       }
     }
 
     @Override
-    public Object getValue(ValueSpecification specification) {
+    public Object getValue(final ValueSpecification specification) {
       waitIfBlocked();
       if (specification == _value2) {
         return null;
@@ -69,17 +69,17 @@ public class WriteThroughViewComputationCacheSlowTest {
     }
 
     @Override
-    public void putSharedValue(ComputedValue value) {
+    public void putSharedValue(final ComputedValue value) {
       fail();
     }
 
     @Override
-    public void putPrivateValue(ComputedValue value) {
+    public void putPrivateValue(final ComputedValue value) {
       fail();
     }
 
     @Override
-    public Integer estimateValueSize(ComputedValue value) {
+    public Integer estimateValueSize(final ComputedValue value) {
       fail();
       return null;
     }
@@ -109,7 +109,7 @@ public class WriteThroughViewComputationCacheSlowTest {
         while (_block) {
           wait();
         }
-      } catch (InterruptedException e) {
+      } catch (final InterruptedException e) {
         throw new OpenGammaRuntimeException("Interrupted", e);
       }
       return super.waitFor(specification);
@@ -139,7 +139,7 @@ public class WriteThroughViewComputationCacheSlowTest {
       assertSame(cache.getValue(_value2), v);
       // block second reader until first completes
       underlying.block();
-      final BlockingQueue<Object> values = new LinkedBlockingQueue<Object>();
+      final BlockingQueue<Object> values = new LinkedBlockingQueue<>();
       for (int i = 0; i < 2; i++) {
         spawn.submit(new Runnable() {
           @Override
@@ -192,7 +192,7 @@ public class WriteThroughViewComputationCacheSlowTest {
       assertSame(cache.getValue(_value2, CacheSelectHint.allPrivate()), v);
       // block second reader until first completes
       underlying.block();
-      final BlockingQueue<Object> values = new LinkedBlockingQueue<Object>();
+      final BlockingQueue<Object> values = new LinkedBlockingQueue<>();
       for (int i = 0; i < 2; i++) {
         spawn.submit(new Runnable() {
           @Override
@@ -251,7 +251,7 @@ public class WriteThroughViewComputationCacheSlowTest {
       assertSame(cache.getValues(Collections.singleton(_value2)).iterator().next().getSecond(), vo);
       // block second reader until first completes
       underlying.block();
-      final BlockingQueue<Pair<ValueSpecification, Object>> values = new LinkedBlockingQueue<Pair<ValueSpecification, Object>>();
+      final BlockingQueue<Pair<ValueSpecification, Object>> values = new LinkedBlockingQueue<>();
       for (int i = 0; i < 2; i++) {
         spawn.submit(new Runnable() {
           @Override
@@ -310,7 +310,7 @@ public class WriteThroughViewComputationCacheSlowTest {
       assertSame(cache.getValues(Collections.singleton(_value2), CacheSelectHint.allShared()).iterator().next().getSecond(), vo);
       // block second reader until first completes
       underlying.block();
-      final BlockingQueue<Pair<ValueSpecification, Object>> values = new LinkedBlockingQueue<Pair<ValueSpecification, Object>>();
+      final BlockingQueue<Pair<ValueSpecification, Object>> values = new LinkedBlockingQueue<>();
       for (int i = 0; i < 2; i++) {
         spawn.submit(new Runnable() {
           @Override

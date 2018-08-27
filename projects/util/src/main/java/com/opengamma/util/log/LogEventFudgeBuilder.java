@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.log;
@@ -20,19 +20,19 @@ public class LogEventFudgeBuilder implements FudgeBuilder<LogEvent> {
 
   private static final String LEVEL_FIELD = "level";
   private static final String MESSAGE_FIELD = "message";
-  
+
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, LogEvent object) {
-    MutableFudgeMsg msg = serializer.newMessage();
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final LogEvent object) {
+    final MutableFudgeMsg msg = serializer.newMessage();
     msg.add(LEVEL_FIELD, object.getLevel().name());
     msg.add(MESSAGE_FIELD, object.getMessage());
     return msg;
   }
 
   @Override
-  public LogEvent buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    LogLevel level = LogLevel.valueOf(msg.getString(LEVEL_FIELD));
-    String message = msg.getString(MESSAGE_FIELD);
+  public LogEvent buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final LogLevel level = LogLevel.valueOf(msg.getString(LEVEL_FIELD));
+    final String message = msg.getString(MESSAGE_FIELD);
     return new SimpleLogEvent(level, message);
   }
 

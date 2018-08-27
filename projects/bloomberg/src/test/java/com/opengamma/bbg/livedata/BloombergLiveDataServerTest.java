@@ -41,7 +41,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.INTEGRATION)
 public class BloombergLiveDataServerTest {
 
-  private final static UserPrincipal TEST_USER = UserPrincipal.getTestUser(); 
+  private final static UserPrincipal TEST_USER = UserPrincipal.getTestUser();
 
   private BloombergLiveDataServer _server;
   private JmsLiveDataClient _liveDataClient;
@@ -61,8 +61,8 @@ public class BloombergLiveDataServerTest {
   //-------------------------------------------------------------------------
   @Test
   public void testSnapshot() {
-    LiveDataSubscriptionResponse snapshotResponse = snapshot("AAPL US Equity");
-    
+    final LiveDataSubscriptionResponse snapshotResponse = snapshot("AAPL US Equity");
+
     assertNotNull(snapshotResponse);
     assertEquals(LiveDataSubscriptionResult.SUCCESS, snapshotResponse.getSubscriptionResult());
     StandardRulesUtils.validateOpenGammaMsg(snapshotResponse.getSnapshot().getFields());
@@ -70,7 +70,7 @@ public class BloombergLiveDataServerTest {
 
   @Test(groups = {"bbgSubscriptionTests" }, enabled = false)
   public void testSnapshotNotPresent() {
-    LiveDataSubscriptionResponse snapshotResponse = snapshot("AAPL.O");
+    final LiveDataSubscriptionResponse snapshotResponse = snapshot("AAPL.O");
     assertNotNull(snapshotResponse);
     assertEquals(LiveDataSubscriptionResult.NOT_PRESENT, snapshotResponse.getSubscriptionResult());
   }
@@ -78,11 +78,11 @@ public class BloombergLiveDataServerTest {
   @Test(groups = {"bbgSubscriptionTests" }, enabled = false)
   public void testSubscribeLimit() throws Exception {
     _server.setSubscriptionLimit(0);
-    CollectingLiveDataListener listener = new CollectingLiveDataListener(1, 0);
+    final CollectingLiveDataListener listener = new CollectingLiveDataListener(1, 0);
     subscribe(_liveDataClient, listener, "AAPL US Equity");
     assertTrue(listener.waitUntilEnoughUpdatesReceived(1000));
     Thread.sleep(100000);
-    for (LiveDataSubscriptionResponse response : listener.getSubscriptionResponses()) {
+    for (final LiveDataSubscriptionResponse response : listener.getSubscriptionResponses()) {
       assertEquals(response.getSubscriptionResult(), LiveDataSubscriptionResult.INTERNAL_ERROR);
       assertTrue(response.getUserMessage().toLowerCase().contains("limit"));
     }
@@ -90,32 +90,32 @@ public class BloombergLiveDataServerTest {
 
   @Test(groups = {"bbgSubscriptionTests" }, enabled = false)
   public void testSubscribe() throws Exception {
-    CollectingLiveDataListener listener = new CollectingLiveDataListener(5, 5);
+    final CollectingLiveDataListener listener = new CollectingLiveDataListener(5, 5);
 
     subscribe(_liveDataClient, listener, "USSW5 Curncy");
     subscribe(_liveDataClient, listener, "AAPL US Equity");
     subscribe(_liveDataClient, listener, "GBP Curncy");
-    
+
     assertTrue(listener.waitUntilEnoughUpdatesReceived(30000));
-    
-    for (LiveDataValueUpdate update : listener.getValueUpdates()) {
+
+    for (final LiveDataValueUpdate update : listener.getValueUpdates()) {
       assertEquals(1, update.getSpecification().getIdentifiers().size());
       assertNotNull(update.getSpecification().getIdentifier(ExternalSchemes.BLOOMBERG_BUID));
       assertNotNull(StandardRules.getOpenGammaRuleSetId(), update.getSpecification().getNormalizationRuleSetId());
-    
+
       StandardRulesUtils.validateOpenGammaMsg(update.getFields());
     }
   }
 
-  private void subscribe(LiveDataClient liveDataClient, LiveDataListener listener, String ticker) {
-    LiveDataSpecification requestedSpecification = new LiveDataSpecification(
+  private void subscribe(final LiveDataClient liveDataClient, final LiveDataListener listener, final String ticker) {
+    final LiveDataSpecification requestedSpecification = new LiveDataSpecification(
         liveDataClient.getDefaultNormalizationRuleSetId(),
         ExternalSchemes.bloombergTickerSecurityId(ticker));
     liveDataClient.subscribe(TEST_USER, requestedSpecification, listener);
   }
-  
-  private LiveDataSubscriptionResponse snapshot(String ticker) {
-    LiveDataSpecification requestedSpecification = new LiveDataSpecification(
+
+  private LiveDataSubscriptionResponse snapshot(final String ticker) {
+    final LiveDataSpecification requestedSpecification = new LiveDataSpecification(
         _liveDataClient.getDefaultNormalizationRuleSetId(),
         ExternalSchemes.bloombergTickerSecurityId(ticker));
     return _liveDataClient.snapshot(TEST_USER, requestedSpecification, 3000);
@@ -129,37 +129,37 @@ public class BloombergLiveDataServerTest {
 
   @Test(groups = {"bbgSubscriptionTests" }, enabled = false)
   public void swapStripSubscriptions() throws Exception {
-    CollectingLiveDataListener oneWeekListener = new CollectingLiveDataListener();
-    CollectingLiveDataListener twoWeekListener = new CollectingLiveDataListener();
-    CollectingLiveDataListener threeMonthListener = new CollectingLiveDataListener();
-    
+    final CollectingLiveDataListener oneWeekListener = new CollectingLiveDataListener();
+    final CollectingLiveDataListener twoWeekListener = new CollectingLiveDataListener();
+    final CollectingLiveDataListener threeMonthListener = new CollectingLiveDataListener();
+
     subscribe(_liveDataClient, oneWeekListener, "US0001W Index");
     subscribe(_liveDataClient, twoWeekListener, "US0002W Index");
     subscribe(_liveDataClient, threeMonthListener, "US0003M Index");
-    
+
     Thread.sleep(5000l);
-    
+
     assertSwapCollectionValid("US0001W Index", oneWeekListener);
     assertSwapCollectionValid("US0002W Index", twoWeekListener);
     assertSwapCollectionValid("US0003M Index", threeMonthListener);
   }
 
-  protected void assertSwapCollectionValid(String subscription, CollectingLiveDataListener listener) throws Exception {
+  protected void assertSwapCollectionValid(final String subscription, final CollectingLiveDataListener listener) throws Exception {
     try {
       assertEquals(subscription, 1, listener.getSubscriptionResponses().size());
-      LiveDataSubscriptionResponse subscriptionResponse = listener.getSubscriptionResponses().get(0);
+      final LiveDataSubscriptionResponse subscriptionResponse = listener.getSubscriptionResponses().get(0);
       assertNotNull(subscriptionResponse);
       assertEquals(LiveDataSubscriptionResult.SUCCESS, subscriptionResponse.getSubscriptionResult());
-      
+
       assertFalse(listener.getValueUpdates().isEmpty());
-      for(LiveDataValueUpdate valueUpdate : listener.getValueUpdates()) {
+      for(final LiveDataValueUpdate valueUpdate : listener.getValueUpdates()) {
         assertNotNull(valueUpdate);
-        Set<String> fieldNames = valueUpdate.getFields().getAllFieldNames();
-        boolean hasMarketValue = fieldNames.contains(MarketDataRequirementNames.MARKET_VALUE);
+        final Set<String> fieldNames = valueUpdate.getFields().getAllFieldNames();
+        final boolean hasMarketValue = fieldNames.contains(MarketDataRequirementNames.MARKET_VALUE);
         assertTrue("Subscription " + subscription + " had field names " + fieldNames, hasMarketValue);
       }
-      
-    } catch(Exception e) {
+
+    } catch(final Exception e) {
       System.err.println("Didn't get valid response on subscription " + subscription);
       throw e;
     }
@@ -167,13 +167,13 @@ public class BloombergLiveDataServerTest {
 
   @Test(groups = {"bbgSubscriptionTests" }, enabled = false)
   public void optionSnapshot() {
-    String option = BloombergTestUtils.getSampleEquityOptionTicker();
-    LiveDataSubscriptionResponse snapshotResponse = snapshot(option);
-    
+    final String option = BloombergTestUtils.getSampleEquityOptionTicker();
+    final LiveDataSubscriptionResponse snapshotResponse = snapshot(option);
+
     assertNotNull(snapshotResponse);
     assertEquals(LiveDataSubscriptionResult.SUCCESS, snapshotResponse.getSubscriptionResult());
     StandardRulesUtils.validateOpenGammaMsg(snapshotResponse.getSnapshot().getFields());
-    
+
     // especially outside market hours, it seems it's not guaranteed that you'll get implied vol
     // assertNotNull(snapshotResponse.getSnapshot().getFields().getDouble(MarketDataFieldNames.IMPLIED_VOLATILITY_FIELD));
   }

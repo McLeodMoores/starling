@@ -21,12 +21,12 @@ import com.sun.jersey.api.client.ClientResponse.Status;
 public class DataDuplicationExceptionMapperTest extends AbstractExceptionMapperTestHelper {
 
   @Test(dataProvider="mediaTypes")
-  public void test_mapping(MediaType mediaType) throws Exception {
-    DataDuplicationException ex = new DataDuplicationException("Test message");
-    DataDuplicationExceptionMapper mapper = new DataDuplicationExceptionMapper();
+  public void test_mapping(final MediaType mediaType) throws Exception {
+    final DataDuplicationException ex = new DataDuplicationException("Test message");
+    final DataDuplicationExceptionMapper mapper = new DataDuplicationExceptionMapper();
     init(mapper, mediaType);
-    
-    Response test = mapper.toResponse(ex);
+
+    final Response test = mapper.toResponse(ex);
     testResult(test, Status.CONFLICT, ex);
   }
 

@@ -233,7 +233,7 @@ public class MinimalWebPortfolioNodeResource extends AbstractMinimalWebPortfolio
    * @return      a list of &lt;UniqueId, String&gt; pairs denoting all nodes on the path from root to current node
    */
   protected List<ObjectsPair<UniqueId, String>> getPathNodes(final ManageablePortfolioNode node) {
-    final LinkedList<ObjectsPair<UniqueId, String>> result = new LinkedList<ObjectsPair<UniqueId, String>>();
+    final LinkedList<ObjectsPair<UniqueId, String>> result = new LinkedList<>();
 
     ManageablePortfolioNode currentNode = node;
     while (currentNode != null) {

@@ -49,20 +49,20 @@ public class WebExchangeResource extends AbstractWebExchangeResource {
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String getHTML() {
-    FlexiBean out = createRootData();
+    final FlexiBean out = createRootData();
     return getFreemarker().build(HTML_DIR + "exchange.ftl", out);
   }
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  public Response getJSON(@Context Request request) {
-    EntityTag etag = new EntityTag(data().getExchange().getUniqueId().toString());
-    ResponseBuilder builder = request.evaluatePreconditions(etag);
+  public Response getJSON(@Context final Request request) {
+    final EntityTag etag = new EntityTag(data().getExchange().getUniqueId().toString());
+    final ResponseBuilder builder = request.evaluatePreconditions(etag);
     if (builder != null) {
       return builder.build();
     }
-    FlexiBean out = createRootData();
-    String json = getFreemarker().build(JSON_DIR + "exchange.ftl", out);
+    final FlexiBean out = createRootData();
+    final String json = getFreemarker().build(JSON_DIR + "exchange.ftl", out);
     return Response.ok(json).tag(etag).build();
   }
 
@@ -74,17 +74,17 @@ public class WebExchangeResource extends AbstractWebExchangeResource {
       @FormParam("name") String name,
       @FormParam("idscheme") String idScheme,
       @FormParam("idvalue") String idValue,
-      @FormParam("regionscheme") String regionScheme,
-      @FormParam("regionvalue") String regionValue) {
+      @FormParam("regionscheme") final String regionScheme,
+      @FormParam("regionvalue") final String regionValue) {
     if (data().getExchange().isLatest() == false) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
-    
+
     name = StringUtils.trimToNull(name);
     idScheme = StringUtils.trimToNull(idScheme);
     idValue = StringUtils.trimToNull(idValue);
     if (name == null || idScheme == null || idValue == null) {
-      FlexiBean out = createRootData();
+      final FlexiBean out = createRootData();
       if (name == null) {
         out.put("err_nameMissing", true);
       }
@@ -100,10 +100,10 @@ public class WebExchangeResource extends AbstractWebExchangeResource {
       if (regionValue == null) {
         out.put("err_regionvalueMissing", true);
       }
-      String html = getFreemarker().build(HTML_DIR + "exchange-update.ftl", out);
+      final String html = getFreemarker().build(HTML_DIR + "exchange-update.ftl", out);
       return Response.ok(html).build();
     }
-    URI uri = updateExchange(name, idScheme, idValue, regionScheme, regionValue);
+    final URI uri = updateExchange(name, idScheme, idValue, regionScheme, regionValue);
     return Response.seeOther(uri).build();
   }
 
@@ -114,12 +114,12 @@ public class WebExchangeResource extends AbstractWebExchangeResource {
       @FormParam("name") String name,
       @FormParam("idscheme") String idScheme,
       @FormParam("idvalue") String idValue,
-      @FormParam("regionscheme") String regionScheme,
-      @FormParam("regionvalue") String regionValue) {
+      @FormParam("regionscheme") final String regionScheme,
+      @FormParam("regionvalue") final String regionValue) {
     if (data().getExchange().isLatest() == false) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
-    
+
     name = StringUtils.trimToNull(name);
     idScheme = StringUtils.trimToNull(idScheme);
     idValue = StringUtils.trimToNull(idValue);
@@ -130,15 +130,15 @@ public class WebExchangeResource extends AbstractWebExchangeResource {
     return Response.ok().build();
   }
 
-  private URI updateExchange(String name, String idScheme, String idValue, String regionScheme, String regionValue) {
-    ManageableExchange exchange = data().getExchange().getExchange().clone();
+  private URI updateExchange(final String name, final String idScheme, final String idValue, final String regionScheme, final String regionValue) {
+    final ManageableExchange exchange = data().getExchange().getExchange().clone();
     exchange.setName(name);
     exchange.setExternalIdBundle(ExternalIdBundle.of(ExternalId.of(idScheme, idValue)));
     exchange.setRegionIdBundle(ExternalIdBundle.of(ExternalId.of(regionScheme, regionValue)));
     ExchangeDocument doc = new ExchangeDocument(exchange);
     doc = data().getExchangeMaster().update(doc);
     data().setExchange(doc);
-    URI uri = WebExchangeResource.uri(data());
+    final URI uri = WebExchangeResource.uri(data());
     return uri;
   }
 
@@ -146,19 +146,19 @@ public class WebExchangeResource extends AbstractWebExchangeResource {
   @DELETE
   @Produces(MediaType.TEXT_HTML)
   public Response deleteHTML() {
-    ExchangeDocument doc = data().getExchange();
+    final ExchangeDocument doc = data().getExchange();
     if (doc.isLatest() == false) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
     data().getExchangeMaster().remove(doc.getUniqueId());
-    URI uri = WebExchangeResource.uri(data());
+    final URI uri = WebExchangeResource.uri(data());
     return Response.seeOther(uri).build();
   }
 
   @DELETE
   @Produces(MediaType.APPLICATION_JSON)
   public Response deleteJSON() {
-    ExchangeDocument doc = data().getExchange();
+    final ExchangeDocument doc = data().getExchange();
     if (doc.isLatest()) {
       data().getExchangeMaster().remove(doc.getUniqueId());
     }
@@ -170,9 +170,10 @@ public class WebExchangeResource extends AbstractWebExchangeResource {
    * Creates the output root data.
    * @return the output root data, not null
    */
+  @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
-    ExchangeDocument doc = data().getExchange();
+    final FlexiBean out = super.createRootData();
+    final ExchangeDocument doc = data().getExchange();
     out.put("exchangeDoc", doc);
     out.put("exchange", doc.getExchange());
     out.put("deleted", !doc.isLatest());
@@ -202,7 +203,7 @@ public class WebExchangeResource extends AbstractWebExchangeResource {
    * @return the URI, not null
    */
   public static URI uri(final WebExchangeData data, final UniqueId overrideExchangeId) {
-    String exchangeId = data.getBestExchangeUriId(overrideExchangeId);
+    final String exchangeId = data.getBestExchangeUriId(overrideExchangeId);
     return data.getUriInfo().getBaseUriBuilder().path(WebExchangeResource.class).build(exchangeId);
   }
 

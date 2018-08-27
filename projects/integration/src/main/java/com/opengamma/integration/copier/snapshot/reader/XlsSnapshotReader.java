@@ -46,10 +46,10 @@ import com.opengamma.util.tuple.Pair;
 public class XlsSnapshotReader implements SnapshotReader {
 
 
-  private Map<CurveKey, CurveSnapshot> _curves;
+  private final Map<CurveKey, CurveSnapshot> _curves;
   private UnstructuredMarketDataSnapshot _global;
-  private Map<VolatilitySurfaceKey, VolatilitySurfaceSnapshot> _surface;
-  private Map<YieldCurveKey, YieldCurveSnapshot> _yieldCurve;
+  private final Map<VolatilitySurfaceKey, VolatilitySurfaceSnapshot> _surface;
+  private final Map<YieldCurveKey, YieldCurveSnapshot> _yieldCurve;
   private String _name;
   private String _basisName;
   private XlsSheetReader _nameSheet;
@@ -57,11 +57,11 @@ public class XlsSnapshotReader implements SnapshotReader {
   private XlsSheetReader _yieldCurveSheet;
   private XlsSheetReader _curveSheet;
   private XlsSheetReader _surfaceSheet;
-  private Workbook _workbook;
-  private InputStream _fileInputStream;
+  private final Workbook _workbook;
+  private final InputStream _fileInputStream;
   private final String _valueObject = "Market_Value";
 
-  public XlsSnapshotReader(String filename) {
+  public XlsSnapshotReader(final String filename) {
     _fileInputStream = openFile(filename);
     _workbook = getWorkbook(_fileInputStream);
     _curves = new HashMap<>();
@@ -83,28 +83,28 @@ public class XlsSnapshotReader implements SnapshotReader {
 
     //continue reading in each surface object until current row incrementing returns no data
     while (true) {
-      Map<String, String> details = _surfaceSheet.readKeyValueBlock(_surfaceSheet.getCurrentRowIndex(), 0);
+      final Map<String, String> details = _surfaceSheet.readKeyValueBlock(_surfaceSheet.getCurrentRowIndex(), 0);
       if (details.isEmpty() || details == null) {
         break;
       }
 
-      Map<Pair<String, String>, String> marketValues = _surfaceSheet.readMatrix(_surfaceSheet.getCurrentRowIndex(), 0);
-      Map<Pair<String, String>, String> overrideValues = _surfaceSheet.readMatrix(_surfaceSheet.getCurrentRowIndex(), 0);
-      ManageableVolatilitySurfaceSnapshot surface = new ManageableVolatilitySurfaceSnapshot();
-      VolatilitySurfaceKey key = VolatilitySurfaceKey.of(UniqueId.parse(details.get(SnapshotColumns.SURFACE_TARGET.get())),
+      final Map<Pair<String, String>, String> marketValues = _surfaceSheet.readMatrix(_surfaceSheet.getCurrentRowIndex(), 0);
+      final Map<Pair<String, String>, String> overrideValues = _surfaceSheet.readMatrix(_surfaceSheet.getCurrentRowIndex(), 0);
+      final ManageableVolatilitySurfaceSnapshot surface = new ManageableVolatilitySurfaceSnapshot();
+      final VolatilitySurfaceKey key = VolatilitySurfaceKey.of(UniqueId.parse(details.get(SnapshotColumns.SURFACE_TARGET.get())),
                                                          details.get(SnapshotColumns.NAME.get()),
                                                          details.get(SnapshotColumns.SURFACE_INSTRUMENT_TYPE.get()),
                                                          details.get(SnapshotColumns.SURFACE_QUOTE_TYPE.get()),
                                                          details.get(SnapshotColumns.SURFACE_QUOTE_UNITS.get()));
-      HashMap<Pair<Object, Object>, ValueSnapshot> values = new HashMap<>();
+      final HashMap<Pair<Object, Object>, ValueSnapshot> values = new HashMap<>();
 
       // use the market value map to add the value and 'lookup' the corresponding override value
-      for (Map.Entry<Pair<String, String>, String> entry : marketValues.entrySet()) {
-        Pair rawOrdinals = entry.getKey();
-        Pair ordinals = MarketDataSnapshotToolUtils.createOrdinatePair(rawOrdinals.getFirst().toString(),
+      for (final Map.Entry<Pair<String, String>, String> entry : marketValues.entrySet()) {
+        final Pair rawOrdinals = entry.getKey();
+        final Pair ordinals = MarketDataSnapshotToolUtils.createOrdinatePair(rawOrdinals.getFirst().toString(),
                                                                        rawOrdinals.getSecond().toString());
-        String override = overrideValues.get(rawOrdinals);
-        String market = entry.getValue();
+        final String override = overrideValues.get(rawOrdinals);
+        final String market = entry.getValue();
         values.put(ordinals, MarketDataSnapshotToolUtils.createValueSnapshot(market, override));
       }
 
@@ -113,16 +113,16 @@ public class XlsSnapshotReader implements SnapshotReader {
     }
   }
 
-  private Workbook getWorkbook(InputStream inputStream) {
+  private Workbook getWorkbook(final InputStream inputStream) {
     try {
       return new HSSFWorkbook(inputStream);
-    } catch (IOException ex) {
+    } catch (final IOException ex) {
       throw new OpenGammaRuntimeException("Error opening Excel workbook: " + ex.getMessage());
     }
   }
 
-  private ExternalIdBundle createExternalIdBundle(String idBundle) {
-    Iterable<String> iterable = Arrays.asList(idBundle.split("\\|"));
+  private ExternalIdBundle createExternalIdBundle(final String idBundle) {
+    final Iterable<String> iterable = Arrays.asList(idBundle.split("\\|"));
     return ExternalIdBundle.parse(iterable);
   }
 
@@ -133,15 +133,15 @@ public class XlsSnapshotReader implements SnapshotReader {
   private void buildYieldCurveData() {
     _yieldCurveSheet = new XlsSheetReader(_workbook, SnapshotType.YIELD_CURVE.get());
     while (true) {
-      Map<String, String> details = _yieldCurveSheet.readKeyValueBlock(_yieldCurveSheet.getCurrentRowIndex(), 0);
+      final Map<String, String> details = _yieldCurveSheet.readKeyValueBlock(_yieldCurveSheet.getCurrentRowIndex(), 0);
       if (details.isEmpty() || details == null) {
         break;
       }
-      YieldCurveKey key = YieldCurveKey.of(Currency.of(details.get(SnapshotColumns.YIELD_CURVE_CURRENCY.get())),
+      final YieldCurveKey key = YieldCurveKey.of(Currency.of(details.get(SnapshotColumns.YIELD_CURVE_CURRENCY.get())),
                                            details.get(SnapshotColumns.NAME.get()));
-      Instant instant = Instant.parse(details.get(SnapshotColumns.INSTANT.get()));
-      ManageableUnstructuredMarketDataSnapshot snapshot = getManageableUnstructuredMarketDataSnapshot(_yieldCurveSheet);
-      ManageableYieldCurveSnapshot curve = ManageableYieldCurveSnapshot.of(instant, snapshot);
+      final Instant instant = Instant.parse(details.get(SnapshotColumns.INSTANT.get()));
+      final ManageableUnstructuredMarketDataSnapshot snapshot = getManageableUnstructuredMarketDataSnapshot(_yieldCurveSheet);
+      final ManageableYieldCurveSnapshot curve = ManageableYieldCurveSnapshot.of(instant, snapshot);
       _yieldCurve.put(key, curve);
     }
   }
@@ -152,24 +152,24 @@ public class XlsSnapshotReader implements SnapshotReader {
   private void buildCurveData() {
     _curveSheet = new XlsSheetReader(_workbook, SnapshotType.CURVE.get());
     while (true) {
-      Map<String, String> details = _curveSheet.readKeyValueBlock(_curveSheet.getCurrentRowIndex(), 0);
+      final Map<String, String> details = _curveSheet.readKeyValueBlock(_curveSheet.getCurrentRowIndex(), 0);
       if (details.isEmpty() || details == null) {
         break;
       }
-      ManageableCurveSnapshot curve = new ManageableCurveSnapshot();
-      ManageableUnstructuredMarketDataSnapshot snapshot =  getManageableUnstructuredMarketDataSnapshot(_curveSheet);
-      Instant instant = Instant.parse(details.get(SnapshotColumns.INSTANT.get()));
+      final ManageableCurveSnapshot curve = new ManageableCurveSnapshot();
+      final ManageableUnstructuredMarketDataSnapshot snapshot =  getManageableUnstructuredMarketDataSnapshot(_curveSheet);
+      final Instant instant = Instant.parse(details.get(SnapshotColumns.INSTANT.get()));
       curve.setValuationTime(instant);
       curve.setValues(snapshot);
       _curves.put(CurveKey.of(details.get(SnapshotColumns.NAME.get())), curve);
     }
   }
 
-  private ManageableUnstructuredMarketDataSnapshot getManageableUnstructuredMarketDataSnapshot(XlsSheetReader sheet) {
+  private ManageableUnstructuredMarketDataSnapshot getManageableUnstructuredMarketDataSnapshot(final XlsSheetReader sheet) {
     //Skip the header row
-    Map<String, ObjectsPair<String, String>> map = sheet.readKeyPairBlock(sheet.getCurrentRowIndex() + 1, 0);
-    ManageableUnstructuredMarketDataSnapshot builder = new ManageableUnstructuredMarketDataSnapshot();
-    for (Map.Entry<String, ObjectsPair<String, String>> entry : map.entrySet()) {
+    final Map<String, ObjectsPair<String, String>> map = sheet.readKeyPairBlock(sheet.getCurrentRowIndex() + 1, 0);
+    final ManageableUnstructuredMarketDataSnapshot builder = new ManageableUnstructuredMarketDataSnapshot();
+    for (final Map.Entry<String, ObjectsPair<String, String>> entry : map.entrySet()) {
       builder.putValue(createExternalIdBundle(entry.getKey()),
                        _valueObject,
                              MarketDataSnapshotToolUtils.createValueSnapshot(entry.getValue().getFirst(),
@@ -192,17 +192,17 @@ public class XlsSnapshotReader implements SnapshotReader {
    */
   private void buildNameData() {
     _nameSheet = new XlsSheetReader(_workbook, SnapshotType.NAME.get());
-    Map<String, String> nameMap = _nameSheet.readKeyValueBlock(_nameSheet.getCurrentRowIndex(), 0);
+    final Map<String, String> nameMap = _nameSheet.readKeyValueBlock(_nameSheet.getCurrentRowIndex(), 0);
     _name = nameMap.get(SnapshotType.NAME.get());
     _basisName = nameMap.get(SnapshotType.BASIS_NAME.get());
   }
 
-  protected static InputStream openFile(String filename) {
+  protected static InputStream openFile(final String filename) {
     // Open input file for reading
     FileInputStream fileInputStream;
     try {
       fileInputStream = new FileInputStream(filename);
-    } catch (FileNotFoundException ex) {
+    } catch (final FileNotFoundException ex) {
       throw new OpenGammaRuntimeException("Could not open file " + filename + " for reading, exiting immediately.");
     }
     return fileInputStream;

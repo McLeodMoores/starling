@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.annotation;
@@ -18,13 +18,13 @@ import com.opengamma.util.ArgumentChecker;
  * Implementation of {@link AnnotationScanner} that caches and uses Reflections.
  */
 public class AnnotationScannerImpl implements AnnotationScanner {
-  
+
   private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationScannerImpl.class);
-  
+
   @Override
-  public synchronized Set<Class<?>> scan(Class<? extends Annotation> annotationClass) {
+  public synchronized Set<Class<?>> scan(final Class<? extends Annotation> annotationClass) {
     ArgumentChecker.notNull(annotationClass, "annotation class");
-    
+
     AnnotationCache cache = AnnotationCache.load(annotationClass);
     final ClasspathScanner scanner = new ClasspathScanner();
     if (!scanner.getTimestamp().isAfter(cache.getTimestamp())) {
@@ -36,5 +36,5 @@ public class AnnotationScannerImpl implements AnnotationScanner {
     cache.save();
     return ImmutableSet.copyOf(cache.getClasses());
   }
-  
+
 }

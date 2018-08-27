@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate;
@@ -16,7 +16,7 @@ import com.opengamma.util.tuple.DoublesPair;
  */
 public abstract class TestUtils {
 
-  public static void assertSensitivityEquals(List<DoublesPair> expected, List<DoublesPair> actual, double tol) {
+  public static void assertSensitivityEquals(final List<DoublesPair> expected, final List<DoublesPair> actual, final double tol) {
     assertEquals(expected.size(), actual.size(), 0);
     for (int i = 0; i < expected.size(); i++) {
       assertEquals(expected.get(i).first, actual.get(i).first, 0.0);

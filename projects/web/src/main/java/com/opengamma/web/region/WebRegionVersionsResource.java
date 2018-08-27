@@ -42,10 +42,10 @@ public class WebRegionVersionsResource extends AbstractWebRegionResource {
   //-------------------------------------------------------------------------
   @GET
   public String getHTML() {
-    RegionHistoryRequest request = new RegionHistoryRequest(data().getRegion().getUniqueId());
-    RegionHistoryResult result = data().getRegionMaster().history(request);
-    
-    FlexiBean out = createRootData();
+    final RegionHistoryRequest request = new RegionHistoryRequest(data().getRegion().getUniqueId());
+    final RegionHistoryResult result = data().getRegionMaster().history(request);
+
+    final FlexiBean out = createRootData();
     out.put("versionsResult", result);
     out.put("versions", result.getRegions());
     return getFreemarker().build(HTML_DIR + "regionversions.ftl", out);
@@ -54,19 +54,19 @@ public class WebRegionVersionsResource extends AbstractWebRegionResource {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public Response getJSON(
-      @QueryParam("pgIdx") Integer pgIdx,
-      @QueryParam("pgNum") Integer pgNum,
-      @QueryParam("pgSze") Integer pgSze) {
-    PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
-    RegionHistoryRequest request = new RegionHistoryRequest(data().getRegion().getUniqueId());
+      @QueryParam("pgIdx") final Integer pgIdx,
+      @QueryParam("pgNum") final Integer pgNum,
+      @QueryParam("pgSze") final Integer pgSze) {
+    final PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
+    final RegionHistoryRequest request = new RegionHistoryRequest(data().getRegion().getUniqueId());
     request.setPagingRequest(pr);
-    RegionHistoryResult result = data().getRegionMaster().history(request);
-    
-    FlexiBean out = createRootData();
+    final RegionHistoryResult result = data().getRegionMaster().history(request);
+
+    final FlexiBean out = createRootData();
     out.put("versionsResult", result);
     out.put("versions", result.getRegions());
     out.put("paging", new WebPaging(result.getPaging(), data().getUriInfo()));
-    String json = getFreemarker().build(JSON_DIR + "regionversions.ftl", out);
+    final String json = getFreemarker().build(JSON_DIR + "regionversions.ftl", out);
     return Response.ok(json).build();
   }
 
@@ -75,9 +75,10 @@ public class WebRegionVersionsResource extends AbstractWebRegionResource {
    * Creates the output root data.
    * @return the output root data, not null
    */
+  @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
-    RegionDocument doc = data().getRegion();
+    final FlexiBean out = super.createRootData();
+    final RegionDocument doc = data().getRegion();
     out.put("regionDoc", doc);
     out.put("region", doc.getRegion());
     out.put("deleted", !doc.isLatest());
@@ -86,12 +87,12 @@ public class WebRegionVersionsResource extends AbstractWebRegionResource {
 
   //-------------------------------------------------------------------------
   @Path("{versionId}")
-  public WebRegionVersionResource findVersion(@PathParam("versionId") String idStr) {
+  public WebRegionVersionResource findVersion(@PathParam("versionId") final String idStr) {
     data().setUriVersionId(idStr);
-    RegionDocument doc = data().getRegion();
-    UniqueId combined = doc.getUniqueId().withVersion(idStr);
+    final RegionDocument doc = data().getRegion();
+    final UniqueId combined = doc.getUniqueId().withVersion(idStr);
     if (doc.getUniqueId().equals(combined) == false) {
-      RegionDocument versioned = data().getRegionMaster().get(combined);
+      final RegionDocument versioned = data().getRegionMaster().get(combined);
       data().setVersioned(versioned);
     } else {
       data().setVersioned(doc);
@@ -106,7 +107,7 @@ public class WebRegionVersionsResource extends AbstractWebRegionResource {
    * @return the URI, not null
    */
   public static URI uri(final WebRegionData data) {
-    String regionId = data.getBestRegionUriId(null);
+    final String regionId = data.getBestRegionUriId(null);
     return data.getUriInfo().getBaseUriBuilder().path(WebRegionVersionsResource.class).build(regionId);
   }
 

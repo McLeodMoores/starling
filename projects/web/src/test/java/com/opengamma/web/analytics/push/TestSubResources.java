@@ -17,7 +17,7 @@ import com.opengamma.web.analytics.rest.Subscribe;
 public class TestSubResources {
 
   @Path("{uid}")
-  public TestSubResource getSubResource(@Subscribe @PathParam("uid") String uid) {
+  public TestSubResource getSubResource(@Subscribe @PathParam("uid") final String uid) {
     return new TestSubResource(uid);
   }
 }

@@ -22,21 +22,21 @@ public abstract class HibernateTemplateProvider {
   /**
    * The Hibernate template.
    */
-  private HibernateTemplate _hibernateTemplate;
+  private final HibernateTemplate _hibernateTemplate;
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param hibernateTemplate  the hibernateTemplate, not null
    */
-  public HibernateTemplateProvider(HibernateTemplate hibernateTemplate) {
+  public HibernateTemplateProvider(final HibernateTemplate hibernateTemplate) {
     ArgumentChecker.notNull(hibernateTemplate, "hibernateTemplate");
     _hibernateTemplate = hibernateTemplate;
     _hibernateTemplate.setAllowCreate(false);
   }
 
   //-------------------------------------------------------------------------
-  
+
   /**
    * Gets the local Hibernate template.
    *

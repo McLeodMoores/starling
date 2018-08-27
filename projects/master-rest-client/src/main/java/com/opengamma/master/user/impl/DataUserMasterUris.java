@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.user.impl;
@@ -24,8 +24,8 @@ public class DataUserMasterUris {
    * @param baseUri  the base URI, not null
    * @return the URI, not null
    */
-  public static URI uriSearch(URI baseUri) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("userSearches");
+  public static URI uriSearch(final URI baseUri) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("userSearches");
     return bld.build();
   }
 
@@ -35,8 +35,8 @@ public class DataUserMasterUris {
    * @param baseUri  the base URI, not null
    * @return the URI, not null
    */
-  public static URI uriAdd(URI baseUri) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("users");
+  public static URI uriAdd(final URI baseUri) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("users");
     return bld.build();
   }
 
@@ -48,8 +48,8 @@ public class DataUserMasterUris {
    * @param objectId  the object identifier, not null
    * @return the URI, not null
    */
-  public static URI uriUserById(URI baseUri, ObjectIdentifiable objectId) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("/users/{objectId}");
+  public static URI uriUserById(final URI baseUri, final ObjectIdentifiable objectId) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("/users/{objectId}");
     return bld.build(objectId.getObjectId());
   }
 
@@ -60,8 +60,8 @@ public class DataUserMasterUris {
    * @param userName  the user name, not null
    * @return the URI, not null
    */
-  public static URI uriUserByName(URI baseUri, String userName) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("/users/name/{userName}");
+  public static URI uriUserByName(final URI baseUri, final String userName) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("/users/name/{userName}");
     return bld.build(userName);
   }
 
@@ -72,8 +72,8 @@ public class DataUserMasterUris {
    * @param userName  the user name, not null
    * @return the URI, not null
    */
-  public static URI uriNameExists(URI baseUri, String userName) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("/users/exists/{userName}");
+  public static URI uriNameExists(final URI baseUri, final String userName) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("/users/exists/{userName}");
     return bld.build(userName);
   }
 
@@ -85,8 +85,8 @@ public class DataUserMasterUris {
    * @param request  the request, not null
    * @return the URI, not null
    */
-  public static URI uriEventHistory(URI baseUri, UserEventHistoryRequest request) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri);
+  public static URI uriEventHistory(final URI baseUri, final UserEventHistoryRequest request) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri);
     if (request.getObjectId() != null) {
       return bld.path("/users/{objectId}/eventHistory").build(request.getObjectId());
     } else {
@@ -101,8 +101,8 @@ public class DataUserMasterUris {
    * @param userName  the user name, not null
    * @return the URI, not null
    */
-  public static URI uriUserAccountByName(URI baseUri, String userName) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("/users/name/{userName}/account");
+  public static URI uriUserAccountByName(final URI baseUri, final String userName) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("/users/name/{userName}/account");
     return bld.build(userName);
   }
 

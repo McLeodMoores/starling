@@ -93,17 +93,17 @@ public class EmbeddedJettyComponentFactory extends AbstractComponentFactory {
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
     if (isActive() == false) {
       return;
     }
-    
-    Server server = initJettyServer(repo);
-    
+
+    final Server server = initJettyServer(repo);
+
     // JMX
     final MBeanServer jmxServer = repo.findInstance(MBeanServer.class);
     if (jmxServer != null) {
-      MBeanContainer jettyJmx = new MBeanContainer(jmxServer);
+      final MBeanContainer jettyJmx = new MBeanContainer(jmxServer);
       server.getContainer().addEventListener(jettyJmx);
       server.addBean(jettyJmx);
     }
@@ -111,27 +111,27 @@ public class EmbeddedJettyComponentFactory extends AbstractComponentFactory {
     registerJettyRestBasics(repo);
   }
 
-  private Server initJettyServer(ComponentRepository repo) {
-    SelectChannelConnector connector = new SelectChannelConnector();
+  private Server initJettyServer(final ComponentRepository repo) {
+    final SelectChannelConnector connector = new SelectChannelConnector();
     connector.setPort(getPort());
     connector.setConfidentialPort(getSecurePort());
     connector.setRequestHeaderSize(16384);
 
-    Server jettyServer = new Server();
+    final Server jettyServer = new Server();
     jettyServer.setConnectors(new Connector[] {connector});
-    
-    ContextHandlerCollection contexts = new ContextHandlerCollection();
-    HandlerCollection handlers = new HandlerCollection();
+
+    final ContextHandlerCollection contexts = new ContextHandlerCollection();
+    final HandlerCollection handlers = new HandlerCollection();
     handlers.addHandler(contexts);
     addHandlers(repo, jettyServer, contexts);
-    
+
     jettyServer.setHandler(handlers);
     jettyServer.setStopAtShutdown(true);
     jettyServer.setGracefulShutdown(2000);
     jettyServer.setSendDateHeader(true);
     jettyServer.setSendServerVersion(true);
-    
-    ComponentInfo info = new ComponentInfo(Server.class, "jetty");
+
+    final ComponentInfo info = new ComponentInfo(Server.class, "jetty");
     repo.registerComponent(info, jettyServer);
     repo.registerLifecycle(new ServerLifecycle(jettyServer));
     return jettyServer;
@@ -141,25 +141,25 @@ public class EmbeddedJettyComponentFactory extends AbstractComponentFactory {
    * Adds handlers to the set of Jetty handlers.
    * <p>
    * This adds the webapp context using {@link #createWebAppContext}.
-   * 
+   *
    * @param repo  the component repository, not null
    * @param jettyServer  the Jetty server instance, not null
    * @param handlers  the set of handlers to add to, not null
    */
-  protected void addHandlers(ComponentRepository repo, Server jettyServer, ContextHandlerCollection handlers) {
+  protected void addHandlers(final ComponentRepository repo, final Server jettyServer, final ContextHandlerCollection handlers) {
     handlers.addHandler(createWebAppContext(repo, "OpenGamma", "/"));
   }
 
   /**
    * Creates the webapp context, merging base resources if defined.
-   * 
+   *
    * @param repo  the component repository, not null
    * @param name  the webapp name, not null
    * @param contextPath  the context path to use as the base, not null
    * @return the webapp context, not null
    */
-  protected WebAppContext createWebAppContext(ComponentRepository repo, String name, String contextPath) {
-    WebAppContext ogWebAppContext = new WebAppContext(name, contextPath);
+  protected WebAppContext createWebAppContext(final ComponentRepository repo, final String name, final String contextPath) {
+    final WebAppContext ogWebAppContext = new WebAppContext(name, contextPath);
     ogWebAppContext.setParentLoaderPriority(true);
     ogWebAppContext.setBaseResource(createJettyResource());
     ogWebAppContext.setDisplayName(getResourceBase().getDescription());
@@ -172,43 +172,43 @@ public class EmbeddedJettyComponentFactory extends AbstractComponentFactory {
    * Converts the configured Spring resources to a combined Jetty resource, handling exceptions.
    * <p>
    * The result combines the base and any secondary resources.
-   * 
+   *
    * @return the Jetty resource base, not null
    */
   protected org.eclipse.jetty.util.resource.Resource createJettyResource() {
     org.eclipse.jetty.util.resource.Resource baseResource = createJettyResource(getResourceBase());
     if (getSecondaryResourceBases().size() > 0) {
-      List<org.eclipse.jetty.util.resource.Resource> resources = new ArrayList<>();
+      final List<org.eclipse.jetty.util.resource.Resource> resources = new ArrayList<>();
       resources.add(baseResource);
-      for (Resource resource : getSecondaryResourceBases()) {
+      for (final Resource resource : getSecondaryResourceBases()) {
         resources.add(createJettyResource(resource));
       }
-      baseResource = new ResourceCollection((org.eclipse.jetty.util.resource.Resource[]) resources.toArray(new org.eclipse.jetty.util.resource.Resource[resources.size()]));
+      baseResource = new ResourceCollection(resources.toArray(new org.eclipse.jetty.util.resource.Resource[resources.size()]));
     }
     return baseResource;
   }
 
   /**
    * Converts a Spring resource to a Jetty resource, handling exceptions.
-   * 
+   *
    * @param resource  the resource to convert, not null
    * @return the Jetty resource, not null
    */
-  protected org.eclipse.jetty.util.resource.Resource createJettyResource(Resource resource) {
+  protected org.eclipse.jetty.util.resource.Resource createJettyResource(final Resource resource) {
     try {
       return org.eclipse.jetty.util.resource.Resource.newResource(resource.getFile());
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       throw new OpenGammaRuntimeException("Unable to find resource for Jetty: " + resource, ex);
     }
   }
 
   /**
    * Registers the basic RESTful helpers.
-   * 
+   *
    * @param repo  the component repository, not null
    */
-  protected void registerJettyRestBasics(ComponentRepository repo) {
-    RestComponents restComponents = repo.getRestComponents();
+  protected void registerJettyRestBasics(final ComponentRepository repo) {
+    final RestComponents restComponents = repo.getRestComponents();
     restComponents.publishHelper(new FudgeObjectJSONConsumer());
     restComponents.publishHelper(new FudgeObjectJSONProducer());
     restComponents.publishHelper(new FudgeObjectXMLConsumer());
@@ -234,7 +234,7 @@ public class EmbeddedJettyComponentFactory extends AbstractComponentFactory {
   static class ServerLifecycle implements Lifecycle {
     private final Server _server;
 
-    public ServerLifecycle(Server server) {
+    public ServerLifecycle(final Server server) {
       _server = server;
     }
 
@@ -242,7 +242,7 @@ public class EmbeddedJettyComponentFactory extends AbstractComponentFactory {
     public void start() {
       try {
         _server.start();
-      } catch (Exception ex) {
+      } catch (final Exception ex) {
         throw new OpenGammaRuntimeException(ex.getMessage(), ex);
       }
     }
@@ -251,7 +251,7 @@ public class EmbeddedJettyComponentFactory extends AbstractComponentFactory {
     public void stop() {
       try {
         _server.stop();
-      } catch (Exception ex) {
+      } catch (final Exception ex) {
         throw new OpenGammaRuntimeException(ex.getMessage(), ex);
       }
     }

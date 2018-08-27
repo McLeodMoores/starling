@@ -44,7 +44,7 @@ public class ClientConnectionTest {
   @BeforeMethod
   public void setUp() throws Exception {
     _listener = mock(UpdateListener.class);
-    ConnectionTimeoutTask timeoutTask = mock(ConnectionTimeoutTask.class);
+    final ConnectionTimeoutTask timeoutTask = mock(ConnectionTimeoutTask.class);
     _connection = new ClientConnection(USER_ID, CLIENT_ID, _listener, timeoutTask);
   }
 
@@ -53,7 +53,7 @@ public class ClientConnectionTest {
    */
   @Test
   public void subscribeToEntityEvent() {
-    ChangeEvent event = new ChangeEvent(ChangeType.CHANGED, UID_1.getObjectId(), null, null, Instant.now());
+    final ChangeEvent event = new ChangeEvent(ChangeType.CHANGED, UID_1.getObjectId(), null, null, Instant.now());
 
     // send an event and make sure the _listener doesn't receive it before subscription
     _connection.entityChanged(event);
@@ -90,7 +90,7 @@ public class ClientConnectionTest {
    */
   @Test
   public void multipleSubscriptionsToEntity() {
-    ChangeEvent event = new ChangeEvent(ChangeType.CHANGED, UID_1.getObjectId(), null, null, Instant.now());
+    final ChangeEvent event = new ChangeEvent(ChangeType.CHANGED, UID_1.getObjectId(), null, null, Instant.now());
 
     // subscribe and verify the listener receives the event
     _connection.subscribe(UID_1, TEST_URL1);
@@ -125,8 +125,8 @@ public class ClientConnectionTest {
    */
   @Test
   public void multipeEntitySubscriptionsForSameUrl() {
-    ChangeEvent event1 = new ChangeEvent(ChangeType.CHANGED, UID_1.getObjectId(), null, null, Instant.now());
-    ChangeEvent event2 = new ChangeEvent(ChangeType.CHANGED, UID_2.getObjectId(), null, null, Instant.now());
+    final ChangeEvent event1 = new ChangeEvent(ChangeType.CHANGED, UID_1.getObjectId(), null, null, Instant.now());
+    final ChangeEvent event2 = new ChangeEvent(ChangeType.CHANGED, UID_2.getObjectId(), null, null, Instant.now());
 
     // subscribe and verify the listener receives the event
     _connection.subscribe(UID_1, TEST_URL1);
@@ -218,14 +218,14 @@ class CollectionMatcher<T> extends ArgumentMatcher<Collection<T>> {
 
   private final Collection<T> _expected;
 
-  public CollectionMatcher(T... expectedItems) {
+  public CollectionMatcher(final T... expectedItems) {
     _expected = Lists.newArrayList(expectedItems);
   }
 
   @Override
-  public boolean matches(Object o) {
-    Collection<T> result = Lists.newArrayList((Collection<T>) o);
-    for (T expectedItem : _expected) {
+  public boolean matches(final Object o) {
+    final Collection<T> result = Lists.newArrayList((Collection<T>) o);
+    for (final T expectedItem : _expected) {
       // every member of the expected collection must be present in the result
       if (!result.remove(expectedItem)) {
         return false;
@@ -236,7 +236,7 @@ class CollectionMatcher<T> extends ArgumentMatcher<Collection<T>> {
     return result.isEmpty();
   }
 
-  static <T> Collection<T> collectionOf(T... items) {
-    return argThat(new CollectionMatcher<T>(items));
+  static <T> Collection<T> collectionOf(final T... items) {
+    return argThat(new CollectionMatcher<>(items));
   }
 }

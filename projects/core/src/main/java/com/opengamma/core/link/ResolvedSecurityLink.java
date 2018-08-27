@@ -49,7 +49,7 @@ public final class ResolvedSecurityLink<S extends Security>
    * @param value the security object to be embedded
    */
   @ImmutableConstructor
-  /* package */ ResolvedSecurityLink(S value) {
+  /* package */ ResolvedSecurityLink(final S value) {
     _value = ArgumentChecker.notNull(value, "value");
   }
 
@@ -76,7 +76,7 @@ public final class ResolvedSecurityLink<S extends Security>
   @Override
   public ExternalIdBundle getIdentifier() {
 
-    ExternalIdBundle idBundle = _value.getExternalIdBundle();
+    final ExternalIdBundle idBundle = _value.getExternalIdBundle();
     if (idBundle.isEmpty()) {
       throw new UnsupportedOperationException("Fixed security link does not have an identifier for its security");
     }

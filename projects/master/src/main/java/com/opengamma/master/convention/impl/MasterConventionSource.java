@@ -38,7 +38,7 @@ public class MasterConventionSource extends AbstractMasterSource<Convention, Con
 
   /**
    * Creates an instance with an underlying master.
-   * 
+   *
    * @param master the master, not null
    */
   public MasterConventionSource(final ConventionMaster master) {
@@ -47,17 +47,17 @@ public class MasterConventionSource extends AbstractMasterSource<Convention, Con
 
   //-------------------------------------------------------------------------
   @Override
-  public Collection<Convention> get(ExternalIdBundle bundle) {
+  public Collection<Convention> get(final ExternalIdBundle bundle) {
     ArgumentChecker.notNull(bundle, "bundle");
     return get(bundle, VersionCorrection.LATEST);
   }
 
   @Override
-  public Collection<Convention> get(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
+  public Collection<Convention> get(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(bundle, "bundle");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
-    Collection<Convention> conventions = new ArrayList<Convention>();
-    for (ManageableConvention manageableConvention : getSecuritiesInternal(bundle, versionCorrection)) {
+    final Collection<Convention> conventions = new ArrayList<>();
+    for (final ManageableConvention manageableConvention : getSecuritiesInternal(bundle, versionCorrection)) {
       conventions.add(manageableConvention);
     }
     return conventions;
@@ -69,13 +69,13 @@ public class MasterConventionSource extends AbstractMasterSource<Convention, Con
   }
 
   @Override
-  public Convention getSingle(ExternalIdBundle bundle) {
+  public Convention getSingle(final ExternalIdBundle bundle) {
     ArgumentChecker.notNull(bundle, "bundle");
     return getSingle(bundle, VersionCorrection.LATEST);
   }
 
   @Override
-  public ManageableConvention getSingle(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
+  public ManageableConvention getSingle(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(bundle, "bundle");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     final Collection<ManageableConvention> conventions = getSecuritiesInternal(bundle, versionCorrection);
@@ -92,64 +92,64 @@ public class MasterConventionSource extends AbstractMasterSource<Convention, Con
   }
 
   @SuppressWarnings({"rawtypes", "unchecked" })
-  private Collection<ManageableConvention> getSecuritiesInternal(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
+  private Collection<ManageableConvention> getSecuritiesInternal(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     final ConventionSearchRequest request = new ConventionSearchRequest();
     request.addExternalIds(bundle);
     request.setVersionCorrection(versionCorrection);
-    return (Collection) search(request).getConventions(); // cast safe as supplied list will not be altered    
+    return search(request).getConventions(); // cast safe as supplied list will not be altered
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public <T extends Convention> T get(UniqueId uniqueId, Class<T> type) {
+  public <T extends Convention> T get(final UniqueId uniqueId, final Class<T> type) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     ArgumentChecker.notNull(type, "type");
-    Convention convention = get(uniqueId);
+    final Convention convention = get(uniqueId);
     return type.cast(convention);
   }
 
   @Override
-  public <T extends Convention> T get(ObjectId objectId, VersionCorrection versionCorrection, Class<T> type) {
+  public <T extends Convention> T get(final ObjectId objectId, final VersionCorrection versionCorrection, final Class<T> type) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     ArgumentChecker.notNull(type, "type");
-    Convention convention = get(objectId, versionCorrection);
+    final Convention convention = get(objectId, versionCorrection);
     return type.cast(convention);
   }
 
   @Override
-  public Convention getSingle(ExternalId externalId) {
+  public Convention getSingle(final ExternalId externalId) {
     ArgumentChecker.notNull(externalId, "externalId");
     return getSingle(externalId.toBundle());
   }
 
   @Override
-  public <T extends Convention> T getSingle(ExternalId externalId, Class<T> type) {
+  public <T extends Convention> T getSingle(final ExternalId externalId, final Class<T> type) {
     ArgumentChecker.notNull(externalId, "externalId");
     ArgumentChecker.notNull(type, "type");
     return getSingle(externalId.toBundle(), type);
   }
 
   @Override
-  public <T extends Convention> T getSingle(ExternalIdBundle bundle, Class<T> type) {
+  public <T extends Convention> T getSingle(final ExternalIdBundle bundle, final Class<T> type) {
     ArgumentChecker.notNull(bundle, "bundle");
     ArgumentChecker.notNull(type, "type");
     return getSingle(bundle, VersionCorrection.LATEST, type);
   }
 
   @Override
-  public <T extends Convention> T getSingle(ExternalIdBundle bundle, VersionCorrection versionCorrection, Class<T> type) {
+  public <T extends Convention> T getSingle(final ExternalIdBundle bundle, final VersionCorrection versionCorrection, final Class<T> type) {
     ArgumentChecker.notNull(bundle, "bundle");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     ArgumentChecker.notNull(type, "type");
-    Convention convention = getSingle(bundle, versionCorrection);
+    final Convention convention = getSingle(bundle, versionCorrection);
     return type.cast(convention);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Searches for conventions matching the specified search criteria.
-   * 
+   *
    * @param request the search request, not null
    * @return the search result, not null
    * @throws IllegalArgumentException if the request is invalid

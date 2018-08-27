@@ -21,33 +21,33 @@ import com.opengamma.master.legalentity.LegalEntitySearchResult;
  */
 public class DataTrackingLegalEntityMaster extends AbstractDataTrackingMaster<LegalEntityDocument, LegalEntityMaster> implements LegalEntityMaster {
 
-  public DataTrackingLegalEntityMaster(LegalEntityMaster delegate) {
+  public DataTrackingLegalEntityMaster(final LegalEntityMaster delegate) {
     super(delegate);
   }
 
   @Override
-  public LegalEntitySearchResult search(LegalEntitySearchRequest request) {
-    LegalEntitySearchResult searchResult = delegate().search(request);
+  public LegalEntitySearchResult search(final LegalEntitySearchRequest request) {
+    final LegalEntitySearchResult searchResult = delegate().search(request);
     trackDocs(searchResult.getDocuments());
     return searchResult;
   }
 
   @Override
-  public LegalEntityHistoryResult history(LegalEntityHistoryRequest request) {
-    LegalEntityHistoryResult historyResult = delegate().history(request);
+  public LegalEntityHistoryResult history(final LegalEntityHistoryRequest request) {
+    final LegalEntityHistoryResult historyResult = delegate().history(request);
     trackDocs(historyResult.getDocuments());
     return historyResult;
   }
 
   @Override
-  public LegalEntityDocument get(UniqueId uid) {
-    LegalEntityDocument organization = delegate().get(uid);
+  public LegalEntityDocument get(final UniqueId uid) {
+    final LegalEntityDocument organization = delegate().get(uid);
     trackId(organization.getUniqueId());
     return organization;
   }
 
   @Override
-  public LegalEntityMetaDataResult metaData(LegalEntityMetaDataRequest request) {
+  public LegalEntityMetaDataResult metaData(final LegalEntityMetaDataRequest request) {
     return delegate().metaData(request);
   }
 }

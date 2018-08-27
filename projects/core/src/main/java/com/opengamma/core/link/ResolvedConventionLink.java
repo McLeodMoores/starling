@@ -46,7 +46,7 @@ public final class ResolvedConventionLink<C extends Convention> extends Conventi
    * @param convention the convention object to be embedded
    */
   @ImmutableConstructor
-  /* package */ ResolvedConventionLink(C convention) {
+  /* package */ ResolvedConventionLink(final C convention) {
     _convention = ArgumentChecker.notNull(convention, "convention");
   }
 

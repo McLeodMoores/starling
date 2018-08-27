@@ -40,15 +40,15 @@ public class CompiledViewDefinitionFudgeBuilder implements FudgeBuilder<Compiled
   private static final String LATEST_VALIDITY_FIELD = "latestValidity";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, CompiledViewDefinition object) {
-    MutableFudgeMsg msg = serializer.newMessage();
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final CompiledViewDefinition object) {
+    final MutableFudgeMsg msg = serializer.newMessage();
     serializer.addToMessage(msg, VERSION_CORRECTION_FIELD, null, object.getResolverVersionCorrection());
     serializer.addToMessage(msg, COMPILATION_IDENTIFIER_FIELD, null, object.getCompilationIdentifier());
     serializer.addToMessage(msg, VIEW_DEFINITION_FIELD, null, object.getViewDefinition());
     serializer.addToMessage(msg, PORTFOLIO_FIELD, null, object.getPortfolio());
 
-    // Serialise manually for more control on deserialisation 
-    for (CompiledViewCalculationConfiguration compiledCalculationConfiguration : object.getCompiledCalculationConfigurations()) {
+    // Serialise manually for more control on deserialisation
+    for (final CompiledViewCalculationConfiguration compiledCalculationConfiguration : object.getCompiledCalculationConfigurations()) {
       serializer.addToMessage(msg, COMPILED_CALCULATION_CONFIGURATIONS_FIELD, null, compiledCalculationConfiguration);
     }
 
@@ -58,24 +58,24 @@ public class CompiledViewDefinitionFudgeBuilder implements FudgeBuilder<Compiled
   }
 
   @Override
-  public CompiledViewDefinition buildObject(FudgeDeserializer deserializer, FudgeMsg message) {
-    VersionCorrection versionCorrection = deserializer.fieldValueToObject(VersionCorrection.class, message.getByName(VERSION_CORRECTION_FIELD));
-    String compilationId = message.getString(COMPILATION_IDENTIFIER_FIELD);
-    ViewDefinition viewDefinition = deserializer.fieldValueToObject(ViewDefinition.class, message.getByName(VIEW_DEFINITION_FIELD));
-    FudgeField portfolioField = message.getByName(PORTFOLIO_FIELD);
-    Portfolio portfolio = portfolioField != null ? deserializer.fieldValueToObject(Portfolio.class, portfolioField) : null;
+  public CompiledViewDefinition buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
+    final VersionCorrection versionCorrection = deserializer.fieldValueToObject(VersionCorrection.class, message.getByName(VERSION_CORRECTION_FIELD));
+    final String compilationId = message.getString(COMPILATION_IDENTIFIER_FIELD);
+    final ViewDefinition viewDefinition = deserializer.fieldValueToObject(ViewDefinition.class, message.getByName(VIEW_DEFINITION_FIELD));
+    final FudgeField portfolioField = message.getByName(PORTFOLIO_FIELD);
+    final Portfolio portfolio = portfolioField != null ? deserializer.fieldValueToObject(Portfolio.class, portfolioField) : null;
 
     // Deserialise each instance specifically into the required type
-    Collection<CompiledViewCalculationConfiguration> compiledCalculationConfigurations = new ArrayList<CompiledViewCalculationConfiguration>();
-    List<FudgeField> calcConfigFields = message.getAllByName(COMPILED_CALCULATION_CONFIGURATIONS_FIELD);
-    for (FudgeField field : calcConfigFields) {
+    final Collection<CompiledViewCalculationConfiguration> compiledCalculationConfigurations = new ArrayList<>();
+    final List<FudgeField> calcConfigFields = message.getAllByName(COMPILED_CALCULATION_CONFIGURATIONS_FIELD);
+    for (final FudgeField field : calcConfigFields) {
       compiledCalculationConfigurations.add(deserializer.fieldValueToObject(CompiledViewCalculationConfiguration.class, field));
     }
 
-    FudgeField earliestValidityField = message.getByName(EARLIEST_VALIDITY_FIELD);
-    Instant earliestValidity = earliestValidityField != null ? deserializer.fieldValueToObject(Instant.class, earliestValidityField) : null;
-    FudgeField latestValidityField = message.getByName(LATEST_VALIDITY_FIELD);
-    Instant latestValidity = latestValidityField != null ? deserializer.fieldValueToObject(Instant.class, latestValidityField) : null;
+    final FudgeField earliestValidityField = message.getByName(EARLIEST_VALIDITY_FIELD);
+    final Instant earliestValidity = earliestValidityField != null ? deserializer.fieldValueToObject(Instant.class, earliestValidityField) : null;
+    final FudgeField latestValidityField = message.getByName(LATEST_VALIDITY_FIELD);
+    final Instant latestValidity = latestValidityField != null ? deserializer.fieldValueToObject(Instant.class, latestValidityField) : null;
     return new CompiledViewDefinitionImpl(versionCorrection, compilationId, viewDefinition, portfolio, compiledCalculationConfigurations, earliestValidity, latestValidity);
   }
 

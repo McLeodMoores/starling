@@ -29,11 +29,11 @@ import com.opengamma.util.rest.AbstractDataResource;
 @BeanDefinition
 public class DbHolidayMasterComponentFactory extends AbstractDocumentDbMasterComponentFactory<HolidayMaster, DbHolidayMaster> {
 
-  
+
   public DbHolidayMasterComponentFactory() {
     super("exg", HolidayMaster.class);
   }
-  
+
   @Override
   protected Class<? extends AbstractRemoteMaster> getRemoteInterface() {
     return RemoteHolidayMaster.class;
@@ -41,19 +41,19 @@ public class DbHolidayMasterComponentFactory extends AbstractDocumentDbMasterCom
 
   @Override
   protected DbHolidayMaster createDbDocumentMaster() {
-    DbHolidayMaster master = new DbHolidayMaster(getDbConnector());
+    final DbHolidayMaster master = new DbHolidayMaster(getDbConnector());
     master.registerMetrics(OpenGammaMetricRegistry.getSummaryInstance(), OpenGammaMetricRegistry.getDetailedInstance(), "DbHolidayMaster-" + getClassifier());
     return master;
   }
-  
+
   @Override
-  protected AbstractDataResource createPublishedResource(DbHolidayMaster dbMaster, HolidayMaster postProcessedMaster) {
+  protected AbstractDataResource createPublishedResource(final DbHolidayMaster dbMaster, final HolidayMaster postProcessedMaster) {
     return new DataHolidayMasterResource(postProcessedMaster);
   }
 
 
   @Override
-  protected HolidayMaster wrapMasterWithTrackingInterface(HolidayMaster postProcessedMaster) {
+  protected HolidayMaster wrapMasterWithTrackingInterface(final HolidayMaster postProcessedMaster) {
     return new DataTrackingHolidayMaster(postProcessedMaster);
   }
 

@@ -45,18 +45,18 @@ public class BundleTest {
   private static final Fragment FRAG_B = new Fragment(createUri("B"), "/B");
   private static final Fragment FRAG_C = new Fragment(createUri("C"), "/C");
   private static final Fragment FRAG_D = new Fragment(createUri("D"), "/D");
-  
-  private static URI createUri(String resource) {
+
+  private static URI createUri(final String resource) {
     try {
       return new URI(resource);
-    } catch (URISyntaxException e) {
+    } catch (final URISyntaxException e) {
       throw new OpenGammaRuntimeException("Invalid URI for resource " + resource, e);
     }
   }
 
   public void test_fragments_only() throws Exception {
-    Bundle cssBundleCommon = makeCssBundleCommon();    
-    List<Fragment> allFragment = cssBundleCommon.getAllFragments();
+    final Bundle cssBundleCommon = makeCssBundleCommon();
+    final List<Fragment> allFragment = cssBundleCommon.getAllFragments();
     assertNotNull(allFragment);
     assertTrue(allFragment.size() == 3);
     assertEquals(FRAG_A, allFragment.get(0));
@@ -65,10 +65,10 @@ public class BundleTest {
   }
 
   public void test_bundles_only() throws Exception {
-    Bundle test = new Bundle();
+    final Bundle test = new Bundle();
     test.addChildNode(makeCssBundleCommon());
     test.addChildNode(makeCssUtil());
-    List<Fragment> allFragment = test.getAllFragments();
+    final List<Fragment> allFragment = test.getAllFragments();
     assertNotNull(allFragment);
     assertTrue(allFragment.size() == 5);
     assertEquals(FRAG_A, allFragment.get(0));
@@ -79,21 +79,21 @@ public class BundleTest {
   }
 
   public void test_fragments_bundle() throws Exception {
-    Bundle test = new Bundle();
+    final Bundle test = new Bundle();
     //add fragment
     test.addChildNode(FRAG_B);
-    Bundle cssBundleCommon = makeCssBundleCommon();
+    final Bundle cssBundleCommon = makeCssBundleCommon();
     //add fragment to bundle
     cssBundleCommon.addChildNode(FRAG_C);
-    
+
     //add bundle
     test.addChildNode(cssBundleCommon);
     //add bundle
     test.addChildNode(makeCssUtil());
     //add fragment
     test.addChildNode(FRAG_D);
-    
-    List<Fragment> allFragment = test.getAllFragments();
+
+    final List<Fragment> allFragment = test.getAllFragments();
     assertNotNull(allFragment);
     assertTrue(allFragment.size() == 8);
     assertEquals(FRAG_B, allFragment.get(0));
@@ -107,7 +107,7 @@ public class BundleTest {
   }
 
   static Bundle makeCssBundleCommon() {
-    Bundle cssBundleCommon = new Bundle(OG_COMMON_CSS);
+    final Bundle cssBundleCommon = new Bundle(OG_COMMON_CSS);
     cssBundleCommon.addChildNode(FRAG_A);
     cssBundleCommon.addChildNode(BUTTON_CSS);
     cssBundleCommon.addChildNode(CORE_CSS);
@@ -115,14 +115,14 @@ public class BundleTest {
   }
 
   static Bundle makeCssUtil() {
-    Bundle cssUtil = new Bundle(CSS_UTIL_CSS);
+    final Bundle cssUtil = new Bundle(CSS_UTIL_CSS);
     cssUtil.addChildNode(RESET_CSS);
     cssUtil.addChildNode(LINKS_CSS);
     return cssUtil;
   }
 
   static Bundle makejsBundleCommon() {
-    Bundle jsBundleCommon = new Bundle(JS_BUNDLE_COMMON_JS);
+    final Bundle jsBundleCommon = new Bundle(JS_BUNDLE_COMMON_JS);
     jsBundleCommon.addChildNode(CORE_JS);
     jsBundleCommon.addChildNode(INIT_JS);
     jsBundleCommon.addChildNode(JQUERY_JS);

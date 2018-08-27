@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.cache;
@@ -35,11 +35,11 @@ public class FilteredViewComputationCache {
     return _filter;
   }
 
-  public Object getValue(ValueSpecification specification) {
+  public Object getValue(final ValueSpecification specification) {
     return getCache().getValue(specification, getFilter());
   }
 
-  public Collection<Pair<ValueSpecification, Object>> getValues(Collection<ValueSpecification> specifications) {
+  public Collection<Pair<ValueSpecification, Object>> getValues(final Collection<ValueSpecification> specifications) {
     return getCache().getValues(specifications, getFilter());
   }
 

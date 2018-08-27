@@ -13,7 +13,7 @@ public class BusinessDayConventionBean extends EnumBean {
   protected BusinessDayConventionBean() {
   }
 
-  public BusinessDayConventionBean(String conventionName) {
+  public BusinessDayConventionBean(final String conventionName) {
     super(conventionName);
   }
 

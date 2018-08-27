@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.security.cds;
@@ -11,9 +11,9 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.TreeSet;
 
 import org.joda.beans.Bean;
+import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
 import org.joda.beans.ImmutableBean;
 import org.joda.beans.JodaBeanUtils;
@@ -28,7 +28,6 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import com.google.common.collect.ImmutableSortedSet;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.time.Tenor;
-import org.joda.beans.BeanBuilder;
 
 /**
  * Immutable set of tenors that represents the CreditDefaultSwapIndex security terms
@@ -54,33 +53,33 @@ public final class CDSIndexTerms
   //-------------------------------------------------------------------------
   /**
    * Obtains a {@link CDSIndexTerms} from a tenor.
-   * 
+   *
    * @param tenor  the tenor to warp in the terms, not null
    * @return the terms, not null
    */
-  public static CDSIndexTerms of(Tenor tenor) {
+  public static CDSIndexTerms of(final Tenor tenor) {
     ArgumentChecker.notNull(tenor, "tenor");
     return new CDSIndexTerms(ImmutableSortedSet.of(tenor));
   }
 
   /**
    * Obtains an {@link CDSIndexTerms} from an array of tenors.
-   * 
+   *
    * @param tenors  an array of tenors, no nulls, not null
    * @return the terms, not null
    */
-  public static CDSIndexTerms of(Tenor... tenors) {
+  public static CDSIndexTerms of(final Tenor... tenors) {
     ArgumentChecker.noNulls(tenors, "tenors");
     return new CDSIndexTerms(ImmutableSortedSet.copyOf(tenors));
   }
 
   /**
    * Obtains an {@link CDSIndexTerms} from a collection of tenors.
-   * 
+   *
    * @param tenors  the collection of tenors, no nulls, not null
    * @return the terms, not null
    */
-  public static CDSIndexTerms of(Iterable<Tenor> tenors) {
+  public static CDSIndexTerms of(final Iterable<Tenor> tenors) {
     ArgumentChecker.noNulls(tenors, "tenors");
     return new CDSIndexTerms(ImmutableSortedSet.copyOf(tenors));
   }
@@ -88,7 +87,7 @@ public final class CDSIndexTerms
   //-------------------------------------------------------------------------
   /**
    * Returns an iterator over the tenors in the terms.
-   * 
+   *
    * @return the tenors in the terms, not null
    */
   @Override

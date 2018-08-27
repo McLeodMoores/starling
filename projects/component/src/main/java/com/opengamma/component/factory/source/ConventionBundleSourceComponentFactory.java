@@ -51,14 +51,14 @@ public class ConventionBundleSourceComponentFactory extends AbstractComponentFac
   /**
    * Initializes the convention bundle source, setting up component information and REST.
    * Override using {@link #createConventionBundleSource(ComponentRepository)}.
-   * 
+   *
    * @param repo  the component repository, not null
    * @param configuration  the remaining configuration, not null
    */
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
     final ConventionBundleSource source = createConventionBundleSource(repo);
-    
+
     final ComponentInfo info = new ComponentInfo(ConventionBundleSource.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     if (isPublishRest()) {
@@ -72,21 +72,21 @@ public class ConventionBundleSourceComponentFactory extends AbstractComponentFac
 
   /**
    * Creates the convention bundle source without registering it.
-   * 
+   *
    * @param repo  the component repository, only used to register secondary items like lifecycle, not null
    * @return the convention bundle source, not null
    */
-  protected ConventionBundleSource createConventionBundleSource(ComponentRepository repo) {
+  protected ConventionBundleSource createConventionBundleSource(final ComponentRepository repo) {
     return new DefaultConventionBundleSource(createConventionBundleMaster(repo));
   }
 
   /**
    * Creates the convention bundle master without registering it.
-   * 
+   *
    * @param repo  the component repository, only used to register secondary items like lifecycle, not null
    * @return the convention bundle master, not null
    */
-  protected ConventionBundleMaster createConventionBundleMaster(ComponentRepository repo) {
+  protected ConventionBundleMaster createConventionBundleMaster(final ComponentRepository repo) {
     return new InMemoryConventionBundleMaster();
   }
 

@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.historicaltimeseries.impl;
@@ -136,7 +136,7 @@ public class DataHistoricalTimeSeriesResolverResource extends AbstractDataResour
 
     @GET
     @Path("adjustment")
-    public Response adjustment(@QueryParam("id") List<String> idStrs) {
+    public Response adjustment(@QueryParam("id") final List<String> idStrs) {
       final HistoricalTimeSeriesResolutionResult hts = resolve();
       if (hts == null) {
         throw new WebApplicationException(Response.Status.NOT_FOUND);

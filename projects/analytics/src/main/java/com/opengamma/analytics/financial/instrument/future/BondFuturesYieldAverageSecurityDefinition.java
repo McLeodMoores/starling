@@ -21,7 +21,7 @@ import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Description of a bond future security with cash settlement against a price deduced from a yield average. 
+ * Description of a bond future security with cash settlement against a price deduced from a yield average.
  * In particular used for AUD-SFE bond futures.
  * <P>Reference: Add a reference.
  */
@@ -177,18 +177,18 @@ public class BondFuturesYieldAverageSecurityDefinition extends FuturesSecurityDe
     result = prime * result + _calendar.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_couponRate);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + Arrays.hashCode(_deliveryBasket);
     result = prime * result + _deliveryDate.hashCode();
     temp = Double.doubleToLongBits(_notional);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _settlementDays;
     result = prime * result + _tenor;
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -201,7 +201,7 @@ public class BondFuturesYieldAverageSecurityDefinition extends FuturesSecurityDe
     if (getClass() != obj.getClass()) {
       return false;
     }
-    BondFuturesYieldAverageSecurityDefinition other = (BondFuturesYieldAverageSecurityDefinition) obj;
+    final BondFuturesYieldAverageSecurityDefinition other = (BondFuturesYieldAverageSecurityDefinition) obj;
     if (Double.doubleToLongBits(_couponRate) != Double.doubleToLongBits(other._couponRate)) {
       return false;
     }

@@ -11,7 +11,7 @@ import com.google.common.base.Objects;
 /**
  * Helper methods for comparing JSON.
  */
-public class JsonTestUtils {
+public final class JsonTestUtils {
 
   private JsonTestUtils() {
   }
@@ -24,13 +24,13 @@ public class JsonTestUtils {
    * @return {@code true} if the arrays are the same size and every corresponding element is equal
    * @throws JSONException Never
    */
-  public static boolean equal(JSONArray array1, JSONArray array2) throws JSONException {
+  public static boolean equal(final JSONArray array1, final JSONArray array2) throws JSONException {
     if (array1.length() != array2.length()) {
       return false;
     }
     for (int i = 0; i < array1.length(); i++) {
-      Object value1 = array1.get(i);
-      Object value2 = array2.get(i);
+      final Object value1 = array1.get(i);
+      final Object value2 = array2.get(i);
       if (!equal(value1, value2)) {
         return false;
       }
@@ -46,14 +46,14 @@ public class JsonTestUtils {
    * @return {@code true} if the objects contains the same mappings and every corresponding value is equal.
    * @throws JSONException Never
    */
-  public static boolean equal(JSONObject object1, JSONObject object2) throws JSONException {
+  public static boolean equal(final JSONObject object1, final JSONObject object2) throws JSONException {
     if (object1.length() != object2.length()) {
       return false;
     }
-    for (Iterator<?> it = object1.keys(); it.hasNext(); ) {
-      String key = (String) it.next();
-      Object value1 = object1.get(key);
-      Object value2 = object2.get(key);
+    for (final Iterator<?> it = object1.keys(); it.hasNext();) {
+      final String key = (String) it.next();
+      final Object value1 = object1.get(key);
+      final Object value2 = object2.get(key);
       if (!equal(value1, value2)) {
         return false;
       }
@@ -70,7 +70,7 @@ public class JsonTestUtils {
    * @return
    * @throws JSONException
    */
-  public static boolean equal(Object value1, Object value2) throws JSONException {
+  public static boolean equal(final Object value1, final Object value2) throws JSONException {
     if (value1 instanceof JSONArray && value2 instanceof JSONArray) {
       return equal((JSONArray) value1, (JSONArray) value2);
     } else if (value1 instanceof JSONObject && value2 instanceof JSONObject) {

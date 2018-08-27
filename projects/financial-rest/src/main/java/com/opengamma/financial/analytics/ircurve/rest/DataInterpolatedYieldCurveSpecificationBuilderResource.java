@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.ircurve.rest;
@@ -40,7 +40,7 @@ public class DataInterpolatedYieldCurveSpecificationBuilderResource extends Abst
 
   /**
    * Creates the resource, exposing the underlying source over REST.
-   * 
+   *
    * @param builder the underlying source, not null
    */
   public DataInterpolatedYieldCurveSpecificationBuilderResource(final InterpolatedYieldCurveSpecificationBuilder builder) {
@@ -51,7 +51,7 @@ public class DataInterpolatedYieldCurveSpecificationBuilderResource extends Abst
   //-------------------------------------------------------------------------
   /**
    * Gets the builder.
-   * 
+   *
    * @return the builder, not null
    */
   public InterpolatedYieldCurveSpecificationBuilder getInterpolatedYieldCurveSpecificationBuilder() {
@@ -60,29 +60,29 @@ public class DataInterpolatedYieldCurveSpecificationBuilderResource extends Abst
 
   //-------------------------------------------------------------------------
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
   @POST
   @Path("builder/{date}/{version}")
-  public Response buildCurve(@PathParam("date") String curveDateStr, @PathParam("version") String versionStr, YieldCurveDefinition definition) {
+  public Response buildCurve(@PathParam("date") final String curveDateStr, @PathParam("version") final String versionStr, final YieldCurveDefinition definition) {
     final LocalDate curveDate = LocalDate.parse(curveDateStr);
     final VersionCorrection version = VersionCorrection.parse(versionStr);
-    InterpolatedYieldCurveSpecification result = getInterpolatedYieldCurveSpecificationBuilder().buildCurve(curveDate, definition, version);
+    final InterpolatedYieldCurveSpecification result = getInterpolatedYieldCurveSpecificationBuilder().buildCurve(curveDate, definition, version);
     return responseOkObject(result);
   }
 
   /**
    * Builds a URI.
-   * 
+   *
    * @param baseUri the base URI, not null
    * @param curveDate the curve date, not null
    * @param version the configuration version, not null
    * @return the URI, not null
    */
-  public static URI uriBuildCurve(URI baseUri, LocalDate curveDate, VersionCorrection version) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("/builder/{date}/{version}");
+  public static URI uriBuildCurve(final URI baseUri, final LocalDate curveDate, final VersionCorrection version) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("/builder/{date}/{version}");
     return bld.build(curveDate, version);
   }
 

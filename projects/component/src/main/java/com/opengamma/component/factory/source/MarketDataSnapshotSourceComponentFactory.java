@@ -56,15 +56,15 @@ public class MarketDataSnapshotSourceComponentFactory extends AbstractComponentF
   /**
    * Initializes the snapshot source, setting up component information and REST.
    * Override using {@link #createMarketDataSnapshotSource(ComponentRepository)}.
-   * 
+   *
    * @param repo  the component repository, not null
    * @param configuration  the remaining configuration, not null
    */
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
-    MarketDataSnapshotSource source = createMarketDataSnapshotSource(repo);
-    
-    ComponentInfo info = new ComponentInfo(MarketDataSnapshotSource.class, getClassifier());
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
+    final MarketDataSnapshotSource source = createMarketDataSnapshotSource(repo);
+
+    final ComponentInfo info = new ComponentInfo(MarketDataSnapshotSource.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     if (isPublishRest()) {
       info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteMarketDataSnapshotSource.class);
@@ -77,11 +77,11 @@ public class MarketDataSnapshotSourceComponentFactory extends AbstractComponentF
 
   /**
    * Creates the snapshot source without registering it.
-   * 
+   *
    * @param repo  the component repository, only used to register secondary items like lifecycle, not null
    * @return the snapshot source, not null
    */
-  protected MarketDataSnapshotSource createMarketDataSnapshotSource(ComponentRepository repo) {
+  protected MarketDataSnapshotSource createMarketDataSnapshotSource(final ComponentRepository repo) {
     MarketDataSnapshotSource source = new MasterSnapshotSource(getMarketDataSnapshotMaster());
     source = new DelegatingSnapshotSource(source);
     return source;

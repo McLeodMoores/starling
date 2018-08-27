@@ -54,18 +54,18 @@ public final class ResolvableSecurityLink<T extends Security> extends SecurityLi
    * @param type the type of the linked object, not null
    * @param linkResolver the resolver used to resolve the link when requested, not null
    */
-  /* package */ ResolvableSecurityLink(ExternalIdBundle identifier, Class<T> type,
-                                       LinkResolver<ExternalIdBundle, T> linkResolver) {
+  /* package */ ResolvableSecurityLink(final ExternalIdBundle identifier, final Class<T> type,
+                                       final LinkResolver<ExternalIdBundle, T> linkResolver) {
     this(LinkIdentifier.of(identifier, type), linkResolver);
   }
 
   @ImmutableConstructor
-  private ResolvableSecurityLink(LinkIdentifier<ExternalIdBundle, T> linkIdentifier) {
+  private ResolvableSecurityLink(final LinkIdentifier<ExternalIdBundle, T> linkIdentifier) {
     this(linkIdentifier, new ServiceContextSecurityLinkResolver<T>());
   }
 
-  private ResolvableSecurityLink(LinkIdentifier<ExternalIdBundle, T> linkIdentifier,
-                                 LinkResolver<ExternalIdBundle, T> linkResolver) {
+  private ResolvableSecurityLink(final LinkIdentifier<ExternalIdBundle, T> linkIdentifier,
+                                 final LinkResolver<ExternalIdBundle, T> linkResolver) {
     _linkIdentifier = linkIdentifier;
     _resolver = ArgumentChecker.notNull(linkResolver, "linkResolver");
   }

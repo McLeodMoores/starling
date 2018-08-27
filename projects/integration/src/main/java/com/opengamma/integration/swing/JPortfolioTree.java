@@ -26,35 +26,35 @@ import com.opengamma.id.ExternalIdBundle;
 public class JPortfolioTree extends JTree {
 
   private static final long serialVersionUID = 1L;
-  private ExternalIdDisplayComparator _idBundleComparator;
+  private final ExternalIdDisplayComparator _idBundleComparator;
 
-  public JPortfolioTree(DefaultTreeModel defaultTreeModel, ConfigSource configSource) {
+  public JPortfolioTree(final DefaultTreeModel defaultTreeModel, final ConfigSource configSource) {
     super(defaultTreeModel);
     _idBundleComparator = new ExternalIdDisplayComparator();  //.getComparator(configSource, ExternalIdDisplayComparatorUtils.DEFAULT_CONFIG_NAME);
   }
 
   @Override
-  public String convertValueToText(Object value, boolean selected,
-      boolean expanded, boolean leaf, int row, boolean hasFocus) {
+  public String convertValueToText(final Object value, final boolean selected,
+      final boolean expanded, final boolean leaf, final int row, final boolean hasFocus) {
     if (value != null) {
       if (value instanceof PortfolioNode) {
-        PortfolioNode portfolioNode = (PortfolioNode) value;
+        final PortfolioNode portfolioNode = (PortfolioNode) value;
         return portfolioNode.getName();
       } else if (value instanceof Position) {
-        Position position = (Position) value;
-        ExternalIdBundle bundle = position.getSecurityLink().getExternalId();
+        final Position position = (Position) value;
+        final ExternalIdBundle bundle = position.getSecurityLink().getExternalId();
         if (!bundle.isEmpty()) {
-          SortedSet<ExternalId> sorted = new TreeSet<>(_idBundleComparator);
+          final SortedSet<ExternalId> sorted = new TreeSet<>(_idBundleComparator);
           sorted.addAll(bundle.getExternalIds());
           return sorted.iterator().next() + " (" + position.getQuantity() + ")";
         } else {
           return position.getSecurity().getName() + " (" + position.getQuantity() + ")";
         }
       } else if (value instanceof Trade) {
-        Trade trade = (Trade) value;
+        final Trade trade = (Trade) value;
         return trade.getQuantity() + " on " + trade.getTradeDate();
       } else if (value instanceof Security) {
-        Security security = (Security) value;
+        final Security security = (Security) value;
         return security.getName();
       }
     }

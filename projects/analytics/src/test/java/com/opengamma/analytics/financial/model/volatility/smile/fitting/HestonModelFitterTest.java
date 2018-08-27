@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.smile.fitting;
@@ -11,13 +11,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
 
-import cern.jet.random.engine.MersenneTwister;
-import cern.jet.random.engine.RandomEngine;
-
 import com.opengamma.analytics.financial.model.volatility.smile.function.HestonModelData;
 import com.opengamma.analytics.financial.model.volatility.smile.function.HestonVolatilityFunction;
 import com.opengamma.analytics.financial.model.volatility.smile.function.VolatilityFunctionProvider;
 import com.opengamma.util.test.TestGroup;
+
+import cern.jet.random.engine.MersenneTwister;
+import cern.jet.random.engine.RandomEngine;
 
 /**
  * Test.
@@ -53,7 +53,7 @@ public class HestonModelFitterTest extends SmileModelFitterTest<HestonModelData>
   }
 
   @Override
-  SmileModelFitter<HestonModelData> getFitter(double forward, double[] strikes, double timeToExpiry, double[] impliedVols, double[] error, VolatilityFunctionProvider<HestonModelData> model) {
+  SmileModelFitter<HestonModelData> getFitter(final double forward, final double[] strikes, final double timeToExpiry, final double[] impliedVols, final double[] error, final VolatilityFunctionProvider<HestonModelData> model) {
     return new HestonModelFitter(forward, strikes, timeToExpiry, impliedVols, error, model);
   }
 
@@ -64,7 +64,7 @@ public class HestonModelFitterTest extends SmileModelFitterTest<HestonModelData>
 
   @Override
   BitSet[] getFixedValues() {
-    BitSet[] fixed = new BitSet[2];
+    final BitSet[] fixed = new BitSet[2];
     fixed[0] = new BitSet();
     fixed[0].set(2);
     fixed[1] = new BitSet();
@@ -73,11 +73,11 @@ public class HestonModelFitterTest extends SmileModelFitterTest<HestonModelData>
 
   @Override
   double[] getRandomStartValues() {
-    double kappa = RANDOM.nextDouble() * 2.0;
-    double theta =RANDOM.nextDouble();
-    double vol0 = RANDOM.nextDouble();
-    double omega = 1.5 * RANDOM.nextDouble();
-    double rho = 2 * RANDOM.nextDouble() - 1;
+    final double kappa = RANDOM.nextDouble() * 2.0;
+    final double theta =RANDOM.nextDouble();
+    final double vol0 = RANDOM.nextDouble();
+    final double omega = 1.5 * RANDOM.nextDouble();
+    final double rho = 2 * RANDOM.nextDouble() - 1;
     return new double[] {kappa, theta, vol0, omega, rho };
   }
 

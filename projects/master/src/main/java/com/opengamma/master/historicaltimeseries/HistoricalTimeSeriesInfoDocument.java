@@ -50,10 +50,10 @@ public class HistoricalTimeSeriesInfoDocument extends AbstractDocument {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param info  the information about the time-series, not null
    */
-  public HistoricalTimeSeriesInfoDocument(ManageableHistoricalTimeSeriesInfo info) {
+  public HistoricalTimeSeriesInfoDocument(final ManageableHistoricalTimeSeriesInfo info) {
     ArgumentChecker.notNull(info, "info");
     setInfo(info);
   }
@@ -62,9 +62,10 @@ public class HistoricalTimeSeriesInfoDocument extends AbstractDocument {
   /**
    * Gets the historical time-series unique identifier.
    * This gets the unique identifier from the {@code ManageableHistoricalTimeSeries}.
-   * 
+   *
    * @return the unique identifier
    */
+  @Override
   @DerivedProperty
   public UniqueId getUniqueId() {
     return getInfo().getUniqueId();
@@ -73,10 +74,11 @@ public class HistoricalTimeSeriesInfoDocument extends AbstractDocument {
   /**
    * Sets the historical time-series unique identifier.
    * This sets the unique identifier in the {@code ManageableHistoricalTimeSeries}.
-   * 
+   *
    * @param uniqueId  the new unique identifier
    */
-  public void setUniqueId(UniqueId uniqueId) {
+  @Override
+  public void setUniqueId(final UniqueId uniqueId) {
     getInfo().setUniqueId(uniqueId);
   }
 

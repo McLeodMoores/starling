@@ -48,13 +48,13 @@ public class RemoteProviderTestUtils {
       .append(System.getProperty("web.port", props.getProperty("opengamma.provider.port")))
       .append(System.getProperty("web.path", props.getProperty("opengamma.provider.path")))
       .append("jax").toString();
-    URI componentsUri = URI.create(baseUrl);
-    RemoteComponentServer remote = new RemoteComponentServer(componentsUri);
+    final URI componentsUri = URI.create(baseUrl);
+    final RemoteComponentServer remote = new RemoteComponentServer(componentsUri);
     _components = remote.getComponentServer();
-    
-    URI uri = URI.create(props.getProperty("activeMQ.brokerURL"));
-    ActiveMQConnectionFactory cf = new ActiveMQConnectionFactory(uri);
-    JmsConnectorFactoryBean factory = new JmsConnectorFactoryBean();
+
+    final URI uri = URI.create(props.getProperty("activeMQ.brokerURL"));
+    final ActiveMQConnectionFactory cf = new ActiveMQConnectionFactory(uri);
+    final JmsConnectorFactoryBean factory = new JmsConnectorFactoryBean();
     factory.setName(getClass().getSimpleName());
     factory.setConnectionFactory(cf);
     factory.setClientBrokerUri(uri);
@@ -66,17 +66,17 @@ public class RemoteProviderTestUtils {
   }
 
   public SecurityProvider getSecurityProviderBloomberg() {
-    URI uri = _components.getComponentInfo(SecurityProvider.class, "bloomberg").getUri();
+    final URI uri = _components.getComponentInfo(SecurityProvider.class, "bloomberg").getUri();
     return new RemoteSecurityProvider(uri);
   }
 
   public HistoricalTimeSeriesProvider getHistoricalTimeSeriesProviderBloomberg() {
-    URI uri = _components.getComponentInfo(HistoricalTimeSeriesProvider.class, "bloomberg").getUri();
+    final URI uri = _components.getComponentInfo(HistoricalTimeSeriesProvider.class, "bloomberg").getUri();
     return new RemoteHistoricalTimeSeriesProvider(uri);
   }
 
-  public LiveDataMetaDataProvider getLiveDataMetaDataProvider(String classifier) {
-    URI uri = _components.getComponentInfo(LiveDataMetaDataProvider.class, classifier).getUri();
+  public LiveDataMetaDataProvider getLiveDataMetaDataProvider(final String classifier) {
+    final URI uri = _components.getComponentInfo(LiveDataMetaDataProvider.class, classifier).getUri();
     return new RemoteLiveDataMetaDataProvider(uri);
   }
 

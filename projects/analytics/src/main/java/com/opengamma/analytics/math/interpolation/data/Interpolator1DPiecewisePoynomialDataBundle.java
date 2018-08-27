@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.interpolation.data;
@@ -20,7 +20,7 @@ public class Interpolator1DPiecewisePoynomialDataBundle implements Interpolator1
   private final Interpolator1DDataBundle _underlyingData;
 
   /**
-   * Constructor where coefficients for interpolant and its node sensitivity are computed 
+   * Constructor where coefficients for interpolant and its node sensitivity are computed
    * @param underlyingData Contains sorted data (x,y)
    * @param method {@link PiecewisePolynomialInterpolator}
    */
@@ -157,7 +157,7 @@ public class Interpolator1DPiecewisePoynomialDataBundle implements Interpolator1
   }
 
   @Override
-  public void setYValueAtIndex(int index, double y) {
+  public void setYValueAtIndex(final int index, final double y) {
     throw new NotImplementedException();
   }
 
@@ -171,7 +171,7 @@ public class Interpolator1DPiecewisePoynomialDataBundle implements Interpolator1
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -181,7 +181,7 @@ public class Interpolator1DPiecewisePoynomialDataBundle implements Interpolator1
     if (!(obj instanceof Interpolator1DPiecewisePoynomialDataBundle)) {
       return false;
     }
-    Interpolator1DPiecewisePoynomialDataBundle other = (Interpolator1DPiecewisePoynomialDataBundle) obj;
+    final Interpolator1DPiecewisePoynomialDataBundle other = (Interpolator1DPiecewisePoynomialDataBundle) obj;
     if (!_underlyingData.equals(other._underlyingData)) {
       return false;
     }

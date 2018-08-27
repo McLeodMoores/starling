@@ -28,14 +28,14 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Resolves Bloomberg IDs. Accepts IDs of types:
  * <ul>
- * <li>{@link ExternalSchemes#BLOOMBERG_BUID} 
+ * <li>{@link ExternalSchemes#BLOOMBERG_BUID}
  * <li>{@link ExternalSchemes#BLOOMBERG_TICKER}
  * <li>{@link ExternalSchemes#BLOOMBERG_TCM}
  * <li>{@link ExternalSchemes#ISIN}
  * <li>{@link ExternalSchemes#CUSIP}
  * </ul>
  * Returns an ID collection with {@link ExternalSchemes#BLOOMBERG_BUID}.
- * All other IDs are stripped out.  
+ * All other IDs are stripped out.
  *
  */
 public class BloombergIdResolver extends AbstractResolver<ExternalIdBundle, ExternalId> implements IdResolver {
@@ -43,8 +43,8 @@ public class BloombergIdResolver extends AbstractResolver<ExternalIdBundle, Exte
   /** Logger. */
   private static final Logger LOGGER = LoggerFactory.getLogger(BloombergIdResolver.class);
   private final ReferenceDataProvider _referenceDataProvider;
-  
-  public BloombergIdResolver(ReferenceDataProvider referenceDataProvider) {
+
+  public BloombergIdResolver(final ReferenceDataProvider referenceDataProvider) {
     ArgumentChecker.notNull(referenceDataProvider, "Reference Data Provider");
     _referenceDataProvider = referenceDataProvider;
   }
@@ -57,28 +57,28 @@ public class BloombergIdResolver extends AbstractResolver<ExternalIdBundle, Exte
   }
 
   @Override
-  public Map<ExternalIdBundle, ExternalId> resolve(Collection<ExternalIdBundle> bundles) {
-    Map<ExternalIdBundle, ExternalId> result = new HashMap<ExternalIdBundle, ExternalId>();
-    
-    Set<String> bbgKeys = new HashSet<String>();
-    Map<String, Collection<ExternalIdBundle>> bbgKey2Bundle = new HashMap<String, Collection<ExternalIdBundle>>();
-    
-    for (ExternalIdBundle bundle : bundles) {
+  public Map<ExternalIdBundle, ExternalId> resolve(final Collection<ExternalIdBundle> bundles) {
+    final Map<ExternalIdBundle, ExternalId> result = new HashMap<>();
+
+    final Set<String> bbgKeys = new HashSet<>();
+    final Map<String, Collection<ExternalIdBundle>> bbgKey2Bundle = new HashMap<>();
+
+    for (final ExternalIdBundle bundle : bundles) {
       String bbgUniqueId = null;
-      ExternalId preferredIdentifier = BloombergDomainIdentifierResolver.resolvePreferredIdentifier(bundle);
+      final ExternalId preferredIdentifier = BloombergDomainIdentifierResolver.resolvePreferredIdentifier(bundle);
       if (preferredIdentifier != null) {
         if (!preferredIdentifier.getScheme().equals(ExternalSchemes.BLOOMBERG_BUID)) {
-          
-          String bloombergKey = BloombergDomainIdentifierResolver.toBloombergKey(preferredIdentifier);
+
+          final String bloombergKey = BloombergDomainIdentifierResolver.toBloombergKey(preferredIdentifier);
           bbgKeys.add(bloombergKey);
-          
+
           Collection<ExternalIdBundle> bundlesForKey = bbgKey2Bundle.get(bloombergKey);
           if (bundlesForKey == null) {
-            bundlesForKey = new ArrayList<ExternalIdBundle>();
+            bundlesForKey = new ArrayList<>();
             bbgKey2Bundle.put(bloombergKey, bundlesForKey);
           }
           bundlesForKey.add(bundle);
-          
+
         } else {
           bbgUniqueId = preferredIdentifier.getValue();
           result.put(bundle, ExternalSchemes.bloombergBuidSecurityId(bbgUniqueId));
@@ -88,28 +88,28 @@ public class BloombergIdResolver extends AbstractResolver<ExternalIdBundle, Exte
         result.put(bundle, null);
       }
     }
-    
-    Map<String, String> bbgKey2BbgUniqueId = ReferenceDataProviderUtils.getBloombergUniqueIDs(bbgKeys, getReferenceDataProvider());
-    
-    for (String bbgKey : bbgKey2Bundle.keySet()) {
-      String bbgUniqueId = bbgKey2BbgUniqueId.get(bbgKey);
-       
+
+    final Map<String, String> bbgKey2BbgUniqueId = ReferenceDataProviderUtils.getBloombergUniqueIDs(bbgKeys, getReferenceDataProvider());
+
+    for (final String bbgKey : bbgKey2Bundle.keySet()) {
+      final String bbgUniqueId = bbgKey2BbgUniqueId.get(bbgKey);
+
       ExternalId identifier;
       if (bbgUniqueId == null) {
         identifier = null;
       } else {
         identifier = ExternalSchemes.bloombergBuidSecurityId(bbgUniqueId);
       }
-      
-      for (ExternalIdBundle bundle : bbgKey2Bundle.get(bbgKey)) {
+
+      for (final ExternalIdBundle bundle : bbgKey2Bundle.get(bbgKey)) {
         if (identifier == null) {
           LOGGER.warn("Unable to get Bloomberg unique ID for {}", bundle);
         }
-        
-        result.put(bundle, identifier);          
+
+        result.put(bundle, identifier);
       }
     }
-    
+
     return result;
   }
 

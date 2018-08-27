@@ -55,7 +55,7 @@ public class BloombergConnectorFactoryBean extends SpringFactoryBean<BloombergCo
    */
   @PropertyDefinition
   private boolean _autoRestartOnDisconnection;
-  
+
   /**
    * The pre-populated session options.
    * These options can be left null and they will then be created with default options.
@@ -79,34 +79,34 @@ public class BloombergConnectorFactoryBean extends SpringFactoryBean<BloombergCo
 
   /**
    * Creates an instance, specifying the server.
-   * 
+   *
    * @param name  the name of the connector, not null
    */
-  public BloombergConnectorFactoryBean(String name) {
+  public BloombergConnectorFactoryBean(final String name) {
     super(BloombergConnector.class);
     setName(name);
   }
 
   /**
    * Creates an instance, specifying the server.
-   * 
+   *
    * @param name  the name of the connector, not null
    * @param host  the server host name, may be null
    * @param port  the server port, may be null
    */
-  public BloombergConnectorFactoryBean(String name, String host, Integer port) {
+  public BloombergConnectorFactoryBean(final String name, final String host, final Integer port) {
     this(name, host, port, null);
   }
 
   /**
    * Creates an instance, specifying the server.
-   * 
+   *
    * @param name  the name of the connector, not null
    * @param host  the server host name, may be null
    * @param port  the server port, may be null
    * @param applicationName the bpipe application name, may be null
    */
-  public BloombergConnectorFactoryBean(String name, String host, Integer port, String applicationName) {
+  public BloombergConnectorFactoryBean(final String name, final String host, final Integer port, final String applicationName) {
     super(BloombergConnector.class);
     setName(name);
     setHost(host);
@@ -118,7 +118,7 @@ public class BloombergConnectorFactoryBean extends SpringFactoryBean<BloombergCo
   @Override
   public BloombergConnector createObject() {
     SessionOptions sessionOptions = getSessionOptions();
-    sessionOptions = (sessionOptions != null ? sessionOptions : new SessionOptions());
+    sessionOptions = sessionOptions != null ? sessionOptions : new SessionOptions();
     if (getHost() != null) {
       sessionOptions.setServerHost(getHost());
       sessionOptions.setServerPort(getPort());

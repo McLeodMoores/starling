@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.equity;
@@ -54,7 +54,7 @@ public final class EquitySecurityBeanOperation extends AbstractSecurityBeanOpera
 
   public EquitySecurityBean createBean(
       final ExchangeBean exchange, final String companyName, final CurrencyBean currency,
-      final GICSCodeBean gicsCode, boolean preferred) {
+      final GICSCodeBean gicsCode, final boolean preferred) {
     final EquitySecurityBean equity = new EquitySecurityBean();
     equity.setExchange(exchange);
     equity.setCompanyName(companyName);

@@ -42,10 +42,10 @@ public class WebSecurityVersionsResource extends AbstractWebSecurityResource {
   //-------------------------------------------------------------------------
   @GET
   public String getHTML() {
-    SecurityHistoryRequest request = new SecurityHistoryRequest(data().getSecurity().getUniqueId());
-    SecurityHistoryResult result = data().getSecurityMaster().history(request);
-    
-    FlexiBean out = createRootData();
+    final SecurityHistoryRequest request = new SecurityHistoryRequest(data().getSecurity().getUniqueId());
+    final SecurityHistoryResult result = data().getSecurityMaster().history(request);
+
+    final FlexiBean out = createRootData();
     out.put("versionsResult", result);
     out.put("versions", result.getSecurities());
     return getFreemarker().build(HTML_DIR + "securityversions.ftl", out);
@@ -54,19 +54,19 @@ public class WebSecurityVersionsResource extends AbstractWebSecurityResource {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public Response getJSON(
-      @QueryParam("pgIdx") Integer pgIdx,
-      @QueryParam("pgNum") Integer pgNum,
-      @QueryParam("pgSze") Integer pgSze) {
-    PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
-    SecurityHistoryRequest request = new SecurityHistoryRequest(data().getSecurity().getUniqueId());
+      @QueryParam("pgIdx") final Integer pgIdx,
+      @QueryParam("pgNum") final Integer pgNum,
+      @QueryParam("pgSze") final Integer pgSze) {
+    final PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
+    final SecurityHistoryRequest request = new SecurityHistoryRequest(data().getSecurity().getUniqueId());
     request.setPagingRequest(pr);
-    SecurityHistoryResult result = data().getSecurityMaster().history(request);
-    
-    FlexiBean out = createRootData();
+    final SecurityHistoryResult result = data().getSecurityMaster().history(request);
+
+    final FlexiBean out = createRootData();
     out.put("versionsResult", result);
     out.put("versions", result.getSecurities());
     out.put("paging", new WebPaging(result.getPaging(), data().getUriInfo()));
-    String json = getFreemarker().build(JSON_DIR + "securityversions.ftl", out);
+    final String json = getFreemarker().build(JSON_DIR + "securityversions.ftl", out);
     return Response.ok(json).build();
   }
 
@@ -75,9 +75,10 @@ public class WebSecurityVersionsResource extends AbstractWebSecurityResource {
    * Creates the output root data.
    * @return the output root data, not null
    */
+  @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
-    SecurityDocument doc = data().getSecurity();
+    final FlexiBean out = super.createRootData();
+    final SecurityDocument doc = data().getSecurity();
     out.put("securityDoc", doc);
     out.put("security", doc.getSecurity());
     out.put("deleted", !doc.isLatest());
@@ -86,12 +87,12 @@ public class WebSecurityVersionsResource extends AbstractWebSecurityResource {
 
   //-------------------------------------------------------------------------
   @Path("{versionId}")
-  public WebSecurityVersionResource findVersion(@PathParam("versionId") String idStr) {
+  public WebSecurityVersionResource findVersion(@PathParam("versionId") final String idStr) {
     data().setUriVersionId(idStr);
-    SecurityDocument doc = data().getSecurity();
-    UniqueId combined = doc.getUniqueId().withVersion(idStr);
+    final SecurityDocument doc = data().getSecurity();
+    final UniqueId combined = doc.getUniqueId().withVersion(idStr);
     if (doc.getUniqueId().equals(combined) == false) {
-      SecurityDocument versioned = data().getSecurityMaster().get(combined);
+      final SecurityDocument versioned = data().getSecurityMaster().get(combined);
       data().setVersioned(versioned);
     } else {
       data().setVersioned(doc);
@@ -106,7 +107,7 @@ public class WebSecurityVersionsResource extends AbstractWebSecurityResource {
    * @return the URI, not null
    */
   public static URI uri(final WebSecuritiesData data) {
-    String securityId = data.getBestSecurityUriId(null);
+    final String securityId = data.getBestSecurityUriId(null);
     return data.getUriInfo().getBaseUriBuilder().path(WebSecurityVersionsResource.class).build(securityId);
   }
 

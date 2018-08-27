@@ -26,7 +26,7 @@ public class StringListFactoryBean extends SingletonFactoryBean<List<String>> {
 
   /**
    * Gets the file
-   * 
+   *
    * @return the file
    */
   public File getFile() {
@@ -35,10 +35,10 @@ public class StringListFactoryBean extends SingletonFactoryBean<List<String>> {
 
   /**
    * Sets the file.
-   * 
+   *
    * @param file  the file
    */
-  public void setFile(File file) {
+  public void setFile(final File file) {
     _file = file;
   }
 
@@ -51,9 +51,9 @@ public class StringListFactoryBean extends SingletonFactoryBean<List<String>> {
     }
     try {
       return FileUtils.readLines(getFile());
-    } catch (FileNotFoundException e) {
+    } catch (final FileNotFoundException e) {
       throw new IllegalArgumentException("File not found: " + getFile(), e);
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw new OpenGammaRuntimeException("Error while reading file: " + getFile(), e);
     }
   }

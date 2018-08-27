@@ -21,35 +21,35 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Receives <code>ResolveRequests</code>, passes them onto a delegate <code>IdResolver</code>,
- * and returns <code>ResolveResponses</code>. 
+ * and returns <code>ResolveResponses</code>.
  *
  * @author pietari
  */
 public class IdResolverServer implements FudgeRequestReceiver {
-  
+
   private static final Logger LOGGER = LoggerFactory.getLogger(IdResolverServer.class);
   private final IdResolver _delegate;
-  
-  public IdResolverServer(IdResolver delegate) {
+
+  public IdResolverServer(final IdResolver delegate) {
     ArgumentChecker.notNull(delegate, "Delegate specification resolver");
     _delegate = delegate;
   }
-  
+
   @Override
-  public FudgeMsg requestReceived(FudgeDeserializer deserializer, FudgeMsgEnvelope requestEnvelope) {
-    FudgeMsg requestFudgeMsg = requestEnvelope.getMessage();
-    ResolveRequest resolveRequest = ResolveRequest.fromFudgeMsg(deserializer, requestFudgeMsg);
+  public FudgeMsg requestReceived(final FudgeDeserializer deserializer, final FudgeMsgEnvelope requestEnvelope) {
+    final FudgeMsg requestFudgeMsg = requestEnvelope.getMessage();
+    final ResolveRequest resolveRequest = ResolveRequest.fromFudgeMsg(deserializer, requestFudgeMsg);
     LOGGER.debug("Received resolve request for {}", resolveRequest.getRequestedSpecification());
-    
-    LiveDataSpecification requestedSpec = resolveRequest.getRequestedSpecification();
-    ExternalId resolvedId = _delegate.resolve(requestedSpec.getIdentifiers());
-    LiveDataSpecification resolvedSpec = new LiveDataSpecification(
+
+    final LiveDataSpecification requestedSpec = resolveRequest.getRequestedSpecification();
+    final ExternalId resolvedId = _delegate.resolve(requestedSpec.getIdentifiers());
+    final LiveDataSpecification resolvedSpec = new LiveDataSpecification(
         requestedSpec.getNormalizationRuleSetId(),
         resolvedId);
-    
-    ResolveResponse response = new ResolveResponse(resolvedSpec);
-    FudgeMsg responseFudgeMsg = response.toFudgeMsg(new FudgeSerializer(deserializer.getFudgeContext()));
+
+    final ResolveResponse response = new ResolveResponse(resolvedSpec);
+    final FudgeMsg responseFudgeMsg = response.toFudgeMsg(new FudgeSerializer(deserializer.getFudgeContext()));
     return responseFudgeMsg;
   }
-  
+
 }

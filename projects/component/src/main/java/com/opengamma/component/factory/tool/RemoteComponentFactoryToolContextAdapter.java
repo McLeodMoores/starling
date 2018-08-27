@@ -26,20 +26,20 @@ public class RemoteComponentFactoryToolContextAdapter extends ToolContext {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param remoteComponentFactory  the remote factory, not null
    */
-  public RemoteComponentFactoryToolContextAdapter(RemoteComponentFactory remoteComponentFactory) {
+  public RemoteComponentFactoryToolContextAdapter(final RemoteComponentFactory remoteComponentFactory) {
     this(remoteComponentFactory, DEFAULT_CLASSIFIER_CHAIN);
   }
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param remoteComponentFactory  the remote factory, not null
    * @param classifierPreferences  the classifiers to search for, not null
    */
-  public RemoteComponentFactoryToolContextAdapter(RemoteComponentFactory remoteComponentFactory, List<String> classifierPreferences) {
+  public RemoteComponentFactoryToolContextAdapter(final RemoteComponentFactory remoteComponentFactory, final List<String> classifierPreferences) {
     setConfigMaster(remoteComponentFactory.getConfigMaster(classifierPreferences));
     setExchangeMaster(remoteComponentFactory.getExchangeMaster(classifierPreferences));
     setHolidayMaster(remoteComponentFactory.getHolidayMaster(classifierPreferences));
@@ -50,7 +50,7 @@ public class RemoteComponentFactoryToolContextAdapter extends ToolContext {
     setLegalEntityMaster(remoteComponentFactory.getLegalEntityMaster(classifierPreferences));
     setHistoricalTimeSeriesMaster(remoteComponentFactory.getHistoricalTimeSeriesMaster(classifierPreferences));
     setMarketDataSnapshotMaster(remoteComponentFactory.getMarketDataSnapshotMaster(classifierPreferences));
-    
+
     setConfigSource(remoteComponentFactory.getConfigSource(classifierPreferences));
     setExchangeSource(remoteComponentFactory.getExchangeSource(classifierPreferences));
     setHolidaySource(remoteComponentFactory.getHolidaySource(classifierPreferences));
@@ -60,13 +60,13 @@ public class RemoteComponentFactoryToolContextAdapter extends ToolContext {
     setLegalEntitySource(remoteComponentFactory.getLegalEntitySource(classifierPreferences));
     setHistoricalTimeSeriesSource(remoteComponentFactory.getHistoricalTimeSeriesSource(classifierPreferences));
     setMarketDataSnapshotSource(remoteComponentFactory.getMarketDataSnapshotSource(classifierPreferences));
-    
+
     setSecurityLoader(remoteComponentFactory.getSecurityLoader(classifierPreferences));
     setHistoricalTimeSeriesLoader(remoteComponentFactory.getHistoricalTimeSeriesLoader(classifierPreferences));
-    
+
     // this may need customizing per-project
     setConventionBundleSource(new DefaultConventionBundleSource(new InMemoryConventionBundleMaster()));
-    
+
     setFunctionConfigSource(remoteComponentFactory.getFunctionConfigurationSource(classifierPreferences));
   }
 

@@ -31,7 +31,7 @@ public class QueryConfigDbConfigMasterWorkerGetTest extends AbstractDbConfigMast
   private static final Logger LOGGER = LoggerFactory.getLogger(QueryConfigDbConfigMasterWorkerGetTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public QueryConfigDbConfigMasterWorkerGetTest(String databaseType, String databaseVersion) {
+  public QueryConfigDbConfigMasterWorkerGetTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion, true);
     LOGGER.info("running testcases for {}", databaseType);
   }
@@ -44,56 +44,56 @@ public class QueryConfigDbConfigMasterWorkerGetTest extends AbstractDbConfigMast
 
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_getConfig_versioned_notFound() {
-    UniqueId uniqueId = UniqueId.of("DbCfg", "0", "0");
+    final UniqueId uniqueId = UniqueId.of("DbCfg", "0", "0");
     _cfgMaster.get(uniqueId);
   }
 
   @Test
   public void test_getConfig_versioned_oneConfigKey() {
-    UniqueId uniqueId = UniqueId.of("DbCfg", "101", "0");
-    ConfigDocument test = _cfgMaster.get(uniqueId);
+    final UniqueId uniqueId = UniqueId.of("DbCfg", "101", "0");
+    final ConfigDocument test = _cfgMaster.get(uniqueId);
     assert101(test);
   }
 
   @Test
   public void test_getConfig_versioned_twoConfigKeys() {
-    UniqueId uniqueId = UniqueId.of("DbCfg", "102", "0");
-    ConfigDocument test = _cfgMaster.get(uniqueId);
+    final UniqueId uniqueId = UniqueId.of("DbCfg", "102", "0");
+    final ConfigDocument test = _cfgMaster.get(uniqueId);
     assert102(test);
   }
 
   @Test
   public void test_getConfig_versioned_notLatest() {
-    UniqueId uniqueId = UniqueId.of("DbCfg", "201", "0");
-    ConfigDocument test = _cfgMaster.get(uniqueId);
+    final UniqueId uniqueId = UniqueId.of("DbCfg", "201", "0");
+    final ConfigDocument test = _cfgMaster.get(uniqueId);
     assert201(test);
   }
 
   @Test
   public void test_getConfig_versioned_latest() {
-    UniqueId uniqueId = UniqueId.of("DbCfg", "201", "1");
-    ConfigDocument test = _cfgMaster.get(uniqueId);
+    final UniqueId uniqueId = UniqueId.of("DbCfg", "201", "1");
+    final ConfigDocument test = _cfgMaster.get(uniqueId);
     assert202(test);
   }
 
   //-------------------------------------------------------------------------
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_getConfig_unversioned_notFound() {
-    UniqueId uniqueId = UniqueId.of("DbCfg", "0");
+    final UniqueId uniqueId = UniqueId.of("DbCfg", "0");
     _cfgMaster.get(uniqueId);
   }
 
   @Test
   public void test_getConfig_unversioned() {
-    UniqueId uid = UniqueId.of("DbCfg", "201");
-    ConfigDocument test = _cfgMaster.get(uid);
+    final UniqueId uid = UniqueId.of("DbCfg", "201");
+    final ConfigDocument test = _cfgMaster.get(uid);
     assert202(test);
   }
-  
+
   @Test
   public void test_get_noType() {
-    UniqueId uniqueId = UniqueId.of("DbCfg", "101", "0");
-    ConfigDocument test = _cfgMaster.get(uniqueId);
+    final UniqueId uniqueId = UniqueId.of("DbCfg", "101", "0");
+    final ConfigDocument test = _cfgMaster.get(uniqueId);
     assertNotNull(test);
     if (test.getConfig().getValue() instanceof ExternalId) {
       assertEquals(test.getType(), ExternalId.class);

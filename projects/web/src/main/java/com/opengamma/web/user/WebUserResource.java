@@ -78,39 +78,39 @@ public class WebUserResource extends AbstractWebUserResource {
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
   public Response putHTML(
-      @FormParam("username") String userName,
-      @FormParam("email") String email,
-      @FormParam("displayname") String displayName,
-      @FormParam("idBloombergEmrs") String idBloomberg,
-      @FormParam("idWindows") String idWindows) {
-    idBloomberg = StringUtils.trimToNull(idBloomberg);
-    idWindows = StringUtils.trimToNull(idWindows);
-    Set<ExternalId> externalIds = new HashSet<>();
-    if (idBloomberg != null) {
-      externalIds.add(ExternalSchemes.bloombergEmrsUserId(idBloomberg));
+      @FormParam("username") final String userName,
+      @FormParam("email") final String email,
+      @FormParam("displayname") final String displayName,
+      @FormParam("idBloombergEmrs") final String idBloomberg,
+      @FormParam("idWindows") final String idWindows) {
+    final String trimmedIdBloomberg = StringUtils.trimToNull(idBloomberg);
+    final String trimmedIdWindows = StringUtils.trimToNull(idWindows);
+    final Set<ExternalId> externalIds = new HashSet<>();
+    if (trimmedIdBloomberg != null) {
+      externalIds.add(ExternalSchemes.bloombergEmrsUserId(trimmedIdBloomberg));
     }
-    if (idWindows != null) {
-      externalIds.add(ExternalSchemes.windowsUserId(idWindows));
+    if (trimmedIdWindows != null) {
+      externalIds.add(ExternalSchemes.windowsUserId(trimmedIdWindows));
     }
-    ExternalIdBundle bundle = ExternalIdBundle.of(externalIds);
+    final ExternalIdBundle bundle = ExternalIdBundle.of(externalIds);
     try {
-      UserForm form = new UserForm(data().getUser());
+      final UserForm form = new UserForm(data().getUser());
       form.getBaseUser().setAlternateIds(bundle);
       form.setUserName(userName);
       form.setEmailAddress(email);
       form.setDisplayName(displayName);
       form.update(data().getUserMaster(), data().getPasswordService());
       return Response.seeOther(uri(data())).build();
-      
-    } catch (UserFormException ex) {
+
+    } catch (final UserFormException ex) {
       ex.logUnexpected(LOGGER);
-      FlexiBean out = createRootData();
+      final FlexiBean out = createRootData();
       out.put("username", userName);
       out.put("email", email);
       out.put("displayname", displayName);
-      out.put("idBloombergEmrs", idBloomberg);
-      out.put("idWindows", idWindows);
-      for (UserFormError error : ex.getErrors()) {
+      out.put("idBloombergEmrs", trimmedIdBloomberg);
+      out.put("idWindows", trimmedIdWindows);
+      for (final UserFormError error : ex.getErrors()) {
         out.put("err_" + error.toLowerCamel(), true);
       }
       return Response.ok(getFreemarker().build(USER_UPDATE_PAGE, out)).build();
@@ -125,14 +125,14 @@ public class WebUserResource extends AbstractWebUserResource {
       @FormParam("password") String password) {
     password = StringUtils.trimToNull(password);
     try {
-      UserForm form = new UserForm(data().getUser(), password);
+      final UserForm form = new UserForm(data().getUser(), password);
       form.update(data().getUserMaster(), data().getPasswordService());
       return Response.seeOther(uri(data())).build();
-      
-    } catch (UserFormException ex) {
+
+    } catch (final UserFormException ex) {
       ex.logUnexpected(LOGGER);
-      FlexiBean out = createRootData();
-      for (UserFormError error : ex.getErrors()) {
+      final FlexiBean out = createRootData();
+      for (final UserFormError error : ex.getErrors()) {
         out.put("err_" + error.toLowerCamel(), true);
       }
       return Response.ok(getFreemarker().build(USER_PW_RESET_PAGE, out)).build();
@@ -146,7 +146,7 @@ public class WebUserResource extends AbstractWebUserResource {
   public Response postStatusHTML(
       @FormParam("status") String status) {
     status = StringUtils.trimToNull(status);
-    ManageableUser user = data().getUser();
+    final ManageableUser user = data().getUser();
     user.setStatus("ENABLED".equals(status) ? UserAccountStatus.ENABLED : UserAccountStatus.DISABLED);
     data().getUserMaster().update(user);
     return Response.seeOther(uri(data())).build();
@@ -156,9 +156,9 @@ public class WebUserResource extends AbstractWebUserResource {
   @DELETE
   @Produces(MediaType.TEXT_HTML)
   public Response deleteHTML() {
-    ManageableUser user = data().getUser();
+    final ManageableUser user = data().getUser();
     data().getUserMaster().removeById(user.getUniqueId().getObjectId());
-    URI uri = WebUserResource.uri(data());
+    final URI uri = WebUserResource.uri(data());
     return Response.seeOther(uri).build();
   }
 
@@ -167,17 +167,18 @@ public class WebUserResource extends AbstractWebUserResource {
    * Creates the output root data.
    * @return the output root data, not null
    */
+  @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
-    ManageableUser user = data().getUser();
+    final FlexiBean out = super.createRootData();
+    final ManageableUser user = data().getUser();
     out.put("user", user);
     out.put("deleted", user.getObjectId() == null);
-    ExternalId emrsId = user.getAlternateIds().getExternalId(ExternalSchemes.BLOOMBERG_EMRSID);
+    final ExternalId emrsId = user.getAlternateIds().getExternalId(ExternalSchemes.BLOOMBERG_EMRSID);
     out.put("idBloombergEmrs", emrsId != null ? emrsId.getValue() : null);
-    ExternalId windowsId = user.getAlternateIds().getExternalId(ExternalSchemes.WINDOWS_USER_ID);
+    final ExternalId windowsId = user.getAlternateIds().getExternalId(ExternalSchemes.WINDOWS_USER_ID);
     out.put("idWindows", windowsId != null ? windowsId.getValue() : null);
-    UserEventHistoryRequest historyRequest = new UserEventHistoryRequest(data().getUser().getUserName());
-    UserEventHistoryResult history = data().getUserMaster().eventHistory(historyRequest);
+    final UserEventHistoryRequest historyRequest = new UserEventHistoryRequest(data().getUser().getUserName());
+    final UserEventHistoryResult history = data().getUserMaster().eventHistory(historyRequest);
     out.put("eventHistory", history);
     return out;
   }
@@ -189,7 +190,7 @@ public class WebUserResource extends AbstractWebUserResource {
    * @return the URI, not null
    */
   public static URI uriResetPassword(final WebUserData data) {
-    String userName = data.getBestUserUriName(null);
+    final String userName = data.getBestUserUriName(null);
     return data.getUriInfo().getBaseUriBuilder().path(WebUserResource.class).path("resetpassword").build(userName);
   }
 
@@ -199,7 +200,7 @@ public class WebUserResource extends AbstractWebUserResource {
    * @return the URI, not null
    */
   public static URI uriStatus(final WebUserData data) {
-    String userName = data.getBestUserUriName(null);
+    final String userName = data.getBestUserUriName(null);
     return data.getUriInfo().getBaseUriBuilder().path(WebUserResource.class).path("status").build(userName);
   }
 
@@ -219,7 +220,7 @@ public class WebUserResource extends AbstractWebUserResource {
    * @return the URI, not null
    */
   public static URI uri(final WebUserData data, final String overrideUserName) {
-    String userName = data.getBestUserUriName(overrideUserName);
+    final String userName = data.getBestUserUriName(overrideUserName);
     return data.getUriInfo().getBaseUriBuilder().path(WebUserResource.class).build(userName);
   }
 

@@ -41,23 +41,23 @@ public class MarketDataSnapshotHistoryResult extends AbstractHistoryResult<Marke
 
   /**
    * Creates an instance from a collection of documents.
-   * 
+   *
    * @param coll  the collection of documents to add, not null
    */
-  public MarketDataSnapshotHistoryResult(Collection<MarketDataSnapshotDocument> coll) {
+  public MarketDataSnapshotHistoryResult(final Collection<MarketDataSnapshotDocument> coll) {
     super(coll);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the returned snapshots from within the documents.
-   * 
+   *
    * @return the snapshots, not null
    */
   public List<ManageableMarketDataSnapshot> getSnapshots() {
-    List<ManageableMarketDataSnapshot> result = new ArrayList<ManageableMarketDataSnapshot>();
+    final List<ManageableMarketDataSnapshot> result = new ArrayList<>();
     if (getDocuments() != null) {
-      for (MarketDataSnapshotDocument doc : getDocuments()) {
+      for (final MarketDataSnapshotDocument doc : getDocuments()) {
         result.add(doc.getSnapshot());
       }
     }
@@ -66,7 +66,7 @@ public class MarketDataSnapshotHistoryResult extends AbstractHistoryResult<Marke
 
   /**
    * Gets the first snapshot, or null if no documents.
-   * 
+   *
    * @return the first snapshot, null if none
    */
   public ManageableMarketDataSnapshot getFirstSnapshot() {
@@ -78,7 +78,7 @@ public class MarketDataSnapshotHistoryResult extends AbstractHistoryResult<Marke
    * <p>
    * This throws an exception if more than 1 result is actually available.
    * Thus, this method implies an assumption about uniqueness of the queried snapshot.
-   * 
+   *
    * @return the matching snapshot, not null
    * @throws IllegalStateException if no snapshot was found
    */

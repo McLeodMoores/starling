@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.viewer.status;
@@ -21,17 +21,18 @@ public enum ViewStatus {
    * Graph Fail
    */
   GRAPH_FAIL("F");
-  
+
   private final String _value;
-  
-  private ViewStatus(String value) {
+
+  private ViewStatus(final String value) {
     _value = value;
   }
-  
+
   public String getValue() {
     return _value;
   }
-  
+
+  @Override
   public String toString() {
     return getValue();
   }

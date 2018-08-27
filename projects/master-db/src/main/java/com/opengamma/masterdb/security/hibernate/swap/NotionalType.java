@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.swap;
@@ -14,19 +14,19 @@ import com.opengamma.financial.security.swap.SecurityNotional;
 import com.opengamma.financial.security.swap.VarianceSwapNotional;
 
 /**
- * 
+ *
  */
 public enum NotionalType {
   /**
-   * 
+   *
    */
   COMMODITY,
   /**
-   * 
+   *
    */
   INTEREST_RATE,
   /**
-   * 
+   *
    */
   SECURITY,
   /**
@@ -38,22 +38,22 @@ public enum NotionalType {
     return object.accept(new NotionalVisitor<NotionalType>() {
 
       @Override
-      public NotionalType visitCommodityNotional(CommodityNotional notional) {
+      public NotionalType visitCommodityNotional(final CommodityNotional notional) {
         return COMMODITY;
       }
 
       @Override
-      public NotionalType visitInterestRateNotional(InterestRateNotional notional) {
+      public NotionalType visitInterestRateNotional(final InterestRateNotional notional) {
         return INTEREST_RATE;
       }
 
       @Override
-      public NotionalType visitSecurityNotional(SecurityNotional notional) {
+      public NotionalType visitSecurityNotional(final SecurityNotional notional) {
         return SECURITY;
       }
 
       @Override
-      public NotionalType visitVarianceSwapNotional(VarianceSwapNotional notional) {
+      public NotionalType visitVarianceSwapNotional(final VarianceSwapNotional notional) {
         return VARIANCE;
       }
 

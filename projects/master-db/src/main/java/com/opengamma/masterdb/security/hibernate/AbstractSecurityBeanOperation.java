@@ -53,12 +53,12 @@ public abstract class AbstractSecurityBeanOperation<S extends Security, H extend
   }
 
   @Override
-  public H resolve(OperationContext context, HibernateSecurityMasterDao secMasterSession, Date now, H bean) {
+  public H resolve(final OperationContext context, final HibernateSecurityMasterDao secMasterSession, final Date now, final H bean) {
     return bean;
   }
 
   @Override
-  public void postPersistBean(OperationContext context, HibernateSecurityMasterDao secMasterSession, Date effectiveDate, H bean) {
+  public void postPersistBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession, final Date effectiveDate, final H bean) {
     // No op
   }
 

@@ -35,37 +35,37 @@ public class ZipUtilsTest {
   }
 
   @Test(dataProvider = "compressString")
-  public void test_zipString(String input) {
-    byte[] bytes = ZipUtils.zipString(input);
-    byte[] expected = ZipUtils.zipString(input, false);
+  public void test_zipString(final String input) {
+    final byte[] bytes = ZipUtils.zipString(input);
+    final byte[] expected = ZipUtils.zipString(input, false);
     assertEquals(expected, bytes);
   }
 
   @Test(dataProvider = "compressString")
-  public void test_zipString_optimize(String input) {
-    byte[] bytes = ZipUtils.zipString(input, true);
+  public void test_zipString_optimize(final String input) {
+    final byte[] bytes = ZipUtils.zipString(input, true);
     debug(input, bytes);
-    String str = ZipUtils.unzipString(bytes);
+    final String str = ZipUtils.unzipString(bytes);
     assertEquals(str, input);
   }
 
   @Test(dataProvider = "compressString")
-  public void test_zipString_noOptimize(String input) {
-    byte[] bytes = ZipUtils.zipString(input, false);
+  public void test_zipString_noOptimize(final String input) {
+    final byte[] bytes = ZipUtils.zipString(input, false);
     debug(input, bytes);
-    String str = ZipUtils.unzipString(bytes);
+    final String str = ZipUtils.unzipString(bytes);
     assertEquals(str, input);
   }
 
   @Test(dataProvider = "compressString")
-  public void test_deflateString_inflateString(String input) {
-    byte[] bytes = ZipUtils.deflateString(input);
+  public void test_deflateString_inflateString(final String input) {
+    final byte[] bytes = ZipUtils.deflateString(input);
     debug(input, bytes);
-    String str = ZipUtils.inflateString(bytes);
+    final String str = ZipUtils.inflateString(bytes);
     assertEquals(str, input);
   }
 
-  private void debug(String input, byte[] bytes) {
+  private void debug(final String input, final byte[] bytes) {
 //    System.out.println(bytes.length + " " + input.length() + " " + Arrays.toString(bytes) + " " + input);
   }
 

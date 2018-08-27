@@ -9,12 +9,12 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 
+ *
  */
 public class ResultConverterCache {
-  
-  private final Map<Class<?>, ResultConverter<?>> _converterMap = new ConcurrentHashMap<Class<?>, ResultConverter<?>>();
-  
+
+  private final Map<Class<?>, ResultConverter<?>> _converterMap = new ConcurrentHashMap<>();
+
   public ResultConverterCache() {
     // Add standard converters here
     registerConverter(new BigDecimalConverter());
@@ -30,30 +30,30 @@ public class ResultConverterCache {
     registerConverter(new MultipleCurrencyInterestRateCurveSensitivityConverter());
     registerConverter(new VolatilitySurfaceDataConverter());
   }
-  
-  public <T> void registerConverter(ResultConverter<?> converter) {
+
+  public <T> void registerConverter(final ResultConverter<?> converter) {
     _converterMap.put(converter.getConvertedClass(), converter);
   }
-  
+
   /**
-   * Gets, the converter to be used for a given result, in order to transform the result into a 
+   * Gets, the converter to be used for a given result, in order to transform the result into a
    * a String/Double map suitable for writing into a database.
-   * 
+   *
    * @param <T>  the type of the value to be converted
    * @param value  the result to be converted, assumed to be representative of all results for the requirement name
    * @return  the converter to be used
    * @throws IllegalArgumentException If no converter was found
    */
   @SuppressWarnings("unchecked")
-  public <T> ResultConverter<? super T> getConverter(T value) {
-    ResultConverter<?> converter = findConverterForType(value.getClass());
+  public <T> ResultConverter<? super T> getConverter(final T value) {
+    final ResultConverter<?> converter = findConverterForType(value.getClass());
     if (converter == null) {
       throw new IllegalArgumentException("No converter found for " + value.getClass());
     }
-    return (ResultConverter<? super T>) converter; 
+    return (ResultConverter<? super T>) converter;
   }
-  
-  private ResultConverter<?> findConverterForType(Class<?> type) {
+
+  private ResultConverter<?> findConverterForType(final Class<?> type) {
     ResultConverter<?> converter = _converterMap.get(type);
     if (converter != null) {
       return converter;
@@ -65,14 +65,14 @@ public class ResultConverterCache {
         return converter;
       }
     }
-    
-    for (Class<?> intface : type.getInterfaces()) {
+
+    for (final Class<?> intface : type.getInterfaces()) {
       converter = findConverterForType(intface);
       if (converter != null) {
         return converter;
       }
     }
-    
+
     return null;
   }
 

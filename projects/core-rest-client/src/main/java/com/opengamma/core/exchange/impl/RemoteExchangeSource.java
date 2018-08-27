@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.exchange.impl;
@@ -35,7 +35,7 @@ public class RemoteExchangeSource extends AbstractRemoteSource<Exchange> impleme
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param baseUri the base target URI for all RESTful web services, not null
    */
   public RemoteExchangeSource(final URI baseUri) {
@@ -53,7 +53,7 @@ public class RemoteExchangeSource extends AbstractRemoteSource<Exchange> impleme
   public Exchange get(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
 
-    URI uri = DataExchangeSourceUris.uriGet(getBaseUri(), uniqueId);
+    final URI uri = DataExchangeSourceUris.uriGet(getBaseUri(), uniqueId);
     return accessRemote(uri).get(Exchange.class);
   }
 
@@ -62,7 +62,7 @@ public class RemoteExchangeSource extends AbstractRemoteSource<Exchange> impleme
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
 
-    URI uri = DataExchangeSourceUris.uriGet(getBaseUri(), objectId, versionCorrection);
+    final URI uri = DataExchangeSourceUris.uriGet(getBaseUri(), objectId, versionCorrection);
     return accessRemote(uri).get(Exchange.class);
   }
 
@@ -72,7 +72,7 @@ public class RemoteExchangeSource extends AbstractRemoteSource<Exchange> impleme
     ArgumentChecker.notNull(bundle, "bundle");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
 
-    URI uri = DataExchangeSourceUris.uriSearch(getBaseUri(), versionCorrection, bundle);
+    final URI uri = DataExchangeSourceUris.uriSearch(getBaseUri(), versionCorrection, bundle);
     return accessRemote(uri).get(FudgeListWrapper.class).getList();
   }
 
@@ -81,9 +81,9 @@ public class RemoteExchangeSource extends AbstractRemoteSource<Exchange> impleme
   public Exchange getSingle(final ExternalId identifier) {
     try {
       return getSingle(ExternalIdBundle.of(identifier));
-    } catch (DataNotFoundException ex) {
+    } catch (final DataNotFoundException ex) {
       return null;
-    } catch (UniformInterfaceException404NotFound ex) {
+    } catch (final UniformInterfaceException404NotFound ex) {
       return null;
     }
   }
@@ -93,11 +93,11 @@ public class RemoteExchangeSource extends AbstractRemoteSource<Exchange> impleme
     ArgumentChecker.notNull(bundle, "bundle");
 
     try {
-      URI uri = DataExchangeSourceUris.uriSearchSingle(getBaseUri(), bundle);
+      final URI uri = DataExchangeSourceUris.uriSearchSingle(getBaseUri(), bundle);
       return accessRemote(uri).get(Exchange.class);
-    } catch (DataNotFoundException ex) {
+    } catch (final DataNotFoundException ex) {
       return null;
-    } catch (UniformInterfaceException404NotFound ex) {
+    } catch (final UniformInterfaceException404NotFound ex) {
       return null;
     }
   }
@@ -108,22 +108,22 @@ public class RemoteExchangeSource extends AbstractRemoteSource<Exchange> impleme
   }
 
   @Override
-  public Map<ExternalIdBundle, Collection<Exchange>> getAll(Collection<ExternalIdBundle> bundles, VersionCorrection versionCorrection) {
+  public Map<ExternalIdBundle, Collection<Exchange>> getAll(final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
     return AbstractSourceWithExternalBundle.getAll(this, bundles, versionCorrection);
   }
 
   @Override
-  public Collection<Exchange> get(ExternalIdBundle bundle) {
+  public Collection<Exchange> get(final ExternalIdBundle bundle) {
     return AbstractSourceWithExternalBundle.get(this, bundle);
   }
 
   @Override
-  public Exchange getSingle(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
+  public Exchange getSingle(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     return AbstractSourceWithExternalBundle.getSingle(this, bundle, versionCorrection);
   }
 
   @Override
-  public Map<ExternalIdBundle, Exchange> getSingle(Collection<ExternalIdBundle> bundles, VersionCorrection versionCorrection) {
+  public Map<ExternalIdBundle, Exchange> getSingle(final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
     return AbstractSourceWithExternalBundle.getSingle(this, bundles, versionCorrection);
   }
 

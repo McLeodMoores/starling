@@ -13,7 +13,6 @@ import static org.threeten.bp.temporal.ChronoField.SECOND_OF_MINUTE;
 import static org.threeten.bp.temporal.ChronoField.YEAR;
 
 import java.util.List;
-import java.util.Map;
 import java.util.TimeZone;
 
 import org.apache.commons.cli.CommandLine;
@@ -30,7 +29,6 @@ import org.threeten.bp.format.SignStyle;
 
 import com.opengamma.core.marketdatasnapshot.ValueSnapshot;
 import com.opengamma.financial.analytics.volatility.surface.BloombergFXOptionVolatilitySurfaceInstrumentProvider;
-import com.opengamma.integration.copier.snapshot.SnapshotColumns;
 import com.opengamma.integration.tool.marketdata.SnapshotUtils.VersionInfo;
 import com.opengamma.util.time.Tenor;
 import com.opengamma.util.tuple.ObjectsPair;
@@ -54,7 +52,7 @@ public class MarketDataSnapshotToolUtils {
   /** Snapshot version list option flag */
   private static final String SNAPSHOT_VERSION_LIST_OPTION = "v";
   private static final Logger LOGGER = LoggerFactory.getLogger(MarketDataSnapshotToolUtils.class);
-  
+
   public static Option createSnapshotListOption() {
     final Option option = new Option(SNAPSHOT_LIST_OPTION, "snapshot-list", false, "List the snapshots available");
     return option;
@@ -65,44 +63,44 @@ public class MarketDataSnapshotToolUtils {
     option.setArgName("snapshot name glob");
     return option;
   }
-  
+
   public static Option createSnapshotVersionListOption() {
     final Option option = new Option(SNAPSHOT_VERSION_LIST_OPTION, "snapshot-versions", true, "List the versions available for a named snapshot");
     option.setArgName("snapshot name");
     return option;
   }
-  
-  public static boolean handleQueryOptions(SnapshotUtils snapshotUtils, CommandLine commandLine) {
+
+  public static boolean handleQueryOptions(final SnapshotUtils snapshotUtils, final CommandLine commandLine) {
     if (commandLine.hasOption(SNAPSHOT_LIST_OPTION)) {
       printSnapshotList(snapshotUtils);
       return true;
     } else if (commandLine.hasOption(SNAPSHOT_QUERY_OPTION)) {
       printSnapshotQuery(snapshotUtils, commandLine.getOptionValue(SNAPSHOT_QUERY_OPTION));
-      return true;      
+      return true;
     } else if (commandLine.hasOption(SNAPSHOT_VERSION_LIST_OPTION)) {
       printVersionListQuery(snapshotUtils, commandLine.getOptionValue(SNAPSHOT_VERSION_LIST_OPTION));
-      return true;      
+      return true;
     } else {
       return false;
     }
   }
 
-  private static void printSnapshotQuery(SnapshotUtils snapshotUtils, String query) {
-    List<String> snapshotsByGlob = snapshotUtils.snapshotByGlob(query);
-    for (String info : snapshotsByGlob) {
+  private static void printSnapshotQuery(final SnapshotUtils snapshotUtils, final String query) {
+    final List<String> snapshotsByGlob = snapshotUtils.snapshotByGlob(query);
+    for (final String info : snapshotsByGlob) {
       System.out.println(info);
     }
   }
 
-  private static void printSnapshotList(SnapshotUtils snapshotUtils) {
-    List<String> allSnapshots = snapshotUtils.allSnapshots();
-    for (String info : allSnapshots) {
+  private static void printSnapshotList(final SnapshotUtils snapshotUtils) {
+    final List<String> allSnapshots = snapshotUtils.allSnapshots();
+    for (final String info : allSnapshots) {
       System.out.println(info);
     }
   }
-  
-  private static void printVersionListQuery(SnapshotUtils snapshotUtils, String optionValue) {
-    DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder()
+
+  private static void printVersionListQuery(final SnapshotUtils snapshotUtils, final String optionValue) {
+    final DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder()
       .appendValue(YEAR, 4, 10, SignStyle.EXCEEDS_PAD)
       .appendLiteral('-')
       .appendValue(MONTH_OF_YEAR, 2)
@@ -116,20 +114,20 @@ public class MarketDataSnapshotToolUtils {
       .appendValue(SECOND_OF_MINUTE, 2)
       .appendOffsetId()
       .toFormatter();
-      
 
-    List<VersionInfo> snapshotVersions = snapshotUtils.snapshotVersionsByName(optionValue);
+
+    final List<VersionInfo> snapshotVersions = snapshotUtils.snapshotVersionsByName(optionValue);
     System.out.println(OffsetDateTime.now().format(dateTimeFormatter));
 
-    int fieldWidth = OffsetDateTime.now().format(dateTimeFormatter).length(); // Assumes all offset date times have same width
+    final int fieldWidth = OffsetDateTime.now().format(dateTimeFormatter).length(); // Assumes all offset date times have same width
 
     header(fieldWidth);
-    String id = TimeZone.getDefault().getID();
-    for (VersionInfo versionInfo : snapshotVersions) {
-      OffsetDateTime versionFrom = versionInfo.getVersionFrom() != null ? OffsetDateTime.ofInstant(versionInfo.getVersionFrom(), ZoneId.of(id)) : null;
-      OffsetDateTime versionTo = versionInfo.getVersionTo() != null ? OffsetDateTime.ofInstant(versionInfo.getVersionTo(), ZoneId.of(id)) : null;
-      OffsetDateTime correctionFrom = versionInfo.getCorrectionFrom() != null ? OffsetDateTime.ofInstant(versionInfo.getCorrectionFrom(), ZoneId.of(id)) : null;
-      OffsetDateTime correctionTo = versionInfo.getCorrectionTo() != null ? OffsetDateTime.ofInstant(versionInfo.getCorrectionTo(), ZoneId.of(id)) : null;
+    final String id = TimeZone.getDefault().getID();
+    for (final VersionInfo versionInfo : snapshotVersions) {
+      final OffsetDateTime versionFrom = versionInfo.getVersionFrom() != null ? OffsetDateTime.ofInstant(versionInfo.getVersionFrom(), ZoneId.of(id)) : null;
+      final OffsetDateTime versionTo = versionInfo.getVersionTo() != null ? OffsetDateTime.ofInstant(versionInfo.getVersionTo(), ZoneId.of(id)) : null;
+      final OffsetDateTime correctionFrom = versionInfo.getCorrectionFrom() != null ? OffsetDateTime.ofInstant(versionInfo.getCorrectionFrom(), ZoneId.of(id)) : null;
+      final OffsetDateTime correctionTo = versionInfo.getCorrectionTo() != null ? OffsetDateTime.ofInstant(versionInfo.getCorrectionTo(), ZoneId.of(id)) : null;
       if (versionFrom != null) {
         System.out.print(versionFrom.format(dateTimeFormatter));
       } else {
@@ -157,8 +155,8 @@ public class MarketDataSnapshotToolUtils {
       System.out.println(versionInfo.getUniqueId());
     }
   }
-  
-  private static void header(int fieldWidth) {
+
+  private static void header(final int fieldWidth) {
     System.out.print(VERSION_FROM);
     pad(fieldWidth - VERSION_FROM.length());
     spaces();
@@ -173,23 +171,23 @@ public class MarketDataSnapshotToolUtils {
     spaces();
     System.out.println(UNIQUE_ID);
   }
-  
+
   private static void spaces() {
     System.out.print("  ");
   }
-   
-  private static void notSpecified(int fieldWidth) {
+
+  private static void notSpecified(final int fieldWidth) {
     System.out.print(NOT_SPECIFIED);
     pad(fieldWidth - NOT_SPECIFIED.length());
   }
-  
-  private static void pad(int n) {
-    String repeat = org.apache.commons.lang.StringUtils.repeat(" ", n);
+
+  private static void pad(final int n) {
+    final String repeat = org.apache.commons.lang.StringUtils.repeat(" ", n);
     System.out.print(repeat);
   }
 
 
-  public static ValueSnapshot createValueSnapshot(String market, String override) {
+  public static ValueSnapshot createValueSnapshot(final String market, final String override) {
     Object marketValue = null;
     Object overrideValue = null;
 
@@ -200,7 +198,7 @@ public class MarketDataSnapshotToolUtils {
       } else {
         try {
           marketValue = LocalDate.parse(market);
-        } catch (IllegalArgumentException e)  {
+        } catch (final IllegalArgumentException e)  {
           LOGGER.error("Market value {} should be a Double, LocalDate or empty.", market);
         }
       }
@@ -213,7 +211,7 @@ public class MarketDataSnapshotToolUtils {
       } else {
         try {
           overrideValue = LocalDate.parse(override);
-        } catch (IllegalArgumentException e)  {
+        } catch (final IllegalArgumentException e)  {
           LOGGER.error("Override value {} should be a Double, LocalDate or empty.", override);
         }
       }
@@ -222,17 +220,17 @@ public class MarketDataSnapshotToolUtils {
     return ValueSnapshot.of(marketValue, overrideValue);
   }
 
-  private static Boolean isTenor(String tenor) {
+  private static Boolean isTenor(final String tenor) {
     try {
       Tenor.parse(tenor);
       return true;
-    } catch (IllegalArgumentException e)  {
+    } catch (final IllegalArgumentException e)  {
       return false;
     }
   }
 
-  public static Pair<Object, Object> createOrdinatePair(String xValue, String yValue) {
-    String[] yValues = yValue.split("\\|");
+  public static Pair<Object, Object> createOrdinatePair(final String xValue, final String yValue) {
+    final String[] yValues = yValue.split("\\|");
     Object surfaceX = null;
     Object surfaceY = null;
 
@@ -250,7 +248,7 @@ public class MarketDataSnapshotToolUtils {
       if (yValues.length > 1) {
         try {
           surfaceY = createYOrdinatePair(yValues);
-        } catch (IllegalArgumentException e)  {
+        } catch (final IllegalArgumentException e)  {
           LOGGER.error("Volatility surface Y ordinate {} should be a Double, Pair<Number, FXVolQuoteType> or empty.", xValue);
         }
       } else if (yValues.length == 1) {
@@ -266,7 +264,7 @@ public class MarketDataSnapshotToolUtils {
   }
 
   // Bloomberg FX option volatility surface codes given a tenor, quote type (ATM, butterfly, risk reversal) and distance from ATM.
-  private static Pair<Number, BloombergFXOptionVolatilitySurfaceInstrumentProvider.FXVolQuoteType> createYOrdinatePair(String[] yPair) {
+  private static Pair<Number, BloombergFXOptionVolatilitySurfaceInstrumentProvider.FXVolQuoteType> createYOrdinatePair(final String[] yPair) {
     Number firstElement = null;
     BloombergFXOptionVolatilitySurfaceInstrumentProvider.FXVolQuoteType secondElement = null;
     if (NumberUtils.isNumber(yPair[0])) {
@@ -286,7 +284,7 @@ public class MarketDataSnapshotToolUtils {
     return Pairs.of(firstElement, secondElement);
   }
 
-  public static Pair<String, String> ordinalsAsString(Pair<Object, Object> rawOrdinates) {
+  public static Pair<String, String> ordinalsAsString(final Pair<Object, Object> rawOrdinates) {
     String surfaceX;
     if (rawOrdinates.getFirst() instanceof Tenor) {
       surfaceX = ((Tenor) rawOrdinates.getFirst()).toFormattedString();

@@ -36,17 +36,17 @@ public class ViewProcessAvailabilityNotificationListener extends AvailabilityNot
    * @param jmsConnector For receiving JMS messages
    * @param viewProcessor The view processor, used to obtain the running view processes.
    */
-  public ViewProcessAvailabilityNotificationListener(String topic,
-                                                     JmsConnector jmsConnector,
-                                                     ViewProcessorInternal viewProcessor) {
+  public ViewProcessAvailabilityNotificationListener(final String topic,
+                                                     final JmsConnector jmsConnector,
+                                                     final ViewProcessorInternal viewProcessor) {
     super(topic, jmsConnector);
     ArgumentChecker.notNull(viewProcessor, "viewProcessor");
     _viewProcessor = viewProcessor;
   }
 
   @Override
-  protected void notificationReceived(Set<ExternalScheme> schemes) {
-    for (ViewProcess viewProcess : _viewProcessor.getViewProcesses()) {
+  protected void notificationReceived(final Set<ExternalScheme> schemes) {
+    for (final ViewProcess viewProcess : _viewProcessor.getViewProcesses()) {
       if (viewProcess instanceof ViewProcessImpl) {
         LOGGER.info("Forcing graph rebuild for {}", viewProcess);
         ((ViewProcessImpl) viewProcess).forceGraphRebuild();

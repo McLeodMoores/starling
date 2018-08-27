@@ -56,11 +56,11 @@ public final class FlexiDateTime implements Serializable {
    * Obtains a flexi date-time, specifying the local date.
    * <p>
    * This factory is strict and requires the date.
-   * 
+   *
    * @param date  the date, not null
    * @return the date-time, not null
    */
-  public static FlexiDateTime of(LocalDate date) {
+  public static FlexiDateTime of(final LocalDate date) {
     ArgumentChecker.notNull(date, "date");
     return new FlexiDateTime(date, null, null);
   }
@@ -69,12 +69,12 @@ public final class FlexiDateTime implements Serializable {
    * Obtains a flexi date-time, specifying the local date and time.
    * <p>
    * This factory is strict and requires both the date and time.
-   * 
+   *
    * @param date  the date, not null
    * @param time  the time, not null
    * @return the date-time, not null
    */
-  public static FlexiDateTime of(LocalDate date, LocalTime time) {
+  public static FlexiDateTime of(final LocalDate date, final LocalTime time) {
     ArgumentChecker.notNull(date, "date");
     ArgumentChecker.notNull(time, "time");
     return new FlexiDateTime(date, time, null);
@@ -84,11 +84,11 @@ public final class FlexiDateTime implements Serializable {
    * Obtains a flexi date-time, specifying the local date-time.
    * <p>
    * This factory is strict and requires the date-time.
-   * 
+   *
    * @param dateTime  the date-time, not null
    * @return the date-time, not null
    */
-  public static FlexiDateTime of(LocalDateTime dateTime) {
+  public static FlexiDateTime of(final LocalDateTime dateTime) {
     ArgumentChecker.notNull(dateTime, "dateTime");
     return new FlexiDateTime(dateTime.toLocalDate(), dateTime.toLocalTime(), null);
   }
@@ -97,11 +97,11 @@ public final class FlexiDateTime implements Serializable {
    * Obtains a flexi date-time, specifying the offset date-time.
    * <p>
    * This factory is strict and requires the date-time.
-   * 
+   *
    * @param dateTime  the date-time, not null
    * @return the date-time, not null
    */
-  public static FlexiDateTime of(OffsetDateTime dateTime) {
+  public static FlexiDateTime of(final OffsetDateTime dateTime) {
     ArgumentChecker.notNull(dateTime, "dateTime");
     return new FlexiDateTime(dateTime.toLocalDate(), dateTime.toLocalTime(), dateTime.getOffset());
   }
@@ -110,11 +110,11 @@ public final class FlexiDateTime implements Serializable {
    * Obtains a flexi date-time, specifying the zoned date-time.
    * <p>
    * This factory is strict and requires the date-time.
-   * 
+   *
    * @param dateTime  the date-time, not null
    * @return the date-time, not null
    */
-  public static FlexiDateTime of(ZonedDateTime dateTime) {
+  public static FlexiDateTime of(final ZonedDateTime dateTime) {
     ArgumentChecker.notNull(dateTime, "dateTime");
     return new FlexiDateTime(dateTime.toLocalDate(), dateTime.toLocalTime(), dateTime.getZone());
   }
@@ -123,20 +123,20 @@ public final class FlexiDateTime implements Serializable {
    * Obtains a flexi date-time, specifying an arbitrary temporal.
    * <p>
    * This factory examines the temporal, extracting the date, time, offset and zone.
-   * 
+   *
    * @param temporal  the temporal, not null
    * @return the date-time, not null
    */
-  public static FlexiDateTime from(TemporalAccessor temporal) {
+  public static FlexiDateTime from(final TemporalAccessor temporal) {
     ArgumentChecker.notNull(temporal, "calendrical");
-    LocalDate date = LocalDate.from(temporal);
+    final LocalDate date = LocalDate.from(temporal);
     LocalTime time;
     try {
       time = LocalTime.from(temporal);
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       time = null;
     }
-    ZoneId zone = temporal.query(TemporalQueries.zone());
+    final ZoneId zone = temporal.query(TemporalQueries.zone());
     return new FlexiDateTime(date, time, zone);
   }
 
@@ -144,12 +144,12 @@ public final class FlexiDateTime implements Serializable {
    * Obtains a flexi date-time, specifying the date and optionally the time.
    * <p>
    * This factory requires the date.
-   * 
+   *
    * @param date  the date, not null
    * @param time  the time, may be null
    * @return the date-time, not null
    */
-  public static FlexiDateTime ofLenient(LocalDate date, OffsetTime time) {
+  public static FlexiDateTime ofLenient(final LocalDate date, final OffsetTime time) {
     ArgumentChecker.notNull(date, "date");
     if (time != null) {
       return new FlexiDateTime(date, time.toLocalTime(), time.getOffset());
@@ -161,13 +161,13 @@ public final class FlexiDateTime implements Serializable {
    * Obtains a flexi date-time, specifying the date and optionally specifying the time and zone.
    * <p>
    * This factory requires the date. The time is only mandatory if the zone is non-null.
-   * 
+   *
    * @param date  the date, not null
    * @param time  the time, may be null unless the zone is non-null
    * @param zone  the zone, may be null
    * @return the date-time, not null
    */
-  public static FlexiDateTime ofLenient(LocalDate date, LocalTime time, ZoneId zone) {
+  public static FlexiDateTime ofLenient(final LocalDate date, final LocalTime time, final ZoneId zone) {
     ArgumentChecker.notNull(date, "date");
     return new FlexiDateTime(date, time, zone);
   }
@@ -180,7 +180,7 @@ public final class FlexiDateTime implements Serializable {
    * @param time  the time, may be null
    * @return the date-time, may be null
    */
-  public static FlexiDateTime create(LocalDate date, OffsetTime time) {
+  public static FlexiDateTime create(final LocalDate date, final OffsetTime time) {
     if (date != null) {
       return FlexiDateTime.create(date, time);
     } else {
@@ -197,7 +197,7 @@ public final class FlexiDateTime implements Serializable {
    * @param zone  the zone, may be null
    * @return the date-time, may be null
    */
-  public static FlexiDateTime create(LocalDate date, LocalTime time, ZoneId zone) {
+  public static FlexiDateTime create(final LocalDate date, final LocalTime time, final ZoneId zone) {
     if (date != null) {
       return FlexiDateTime.create(date, time, zone);
     } else {
@@ -209,7 +209,7 @@ public final class FlexiDateTime implements Serializable {
   /**
    * Creates a new instance.
    */
-  private FlexiDateTime(final LocalDate date, LocalTime time, ZoneId zone) {
+  private FlexiDateTime(final LocalDate date, final LocalTime time, final ZoneId zone) {
     ArgumentChecker.notNull(date, "date");
     if (zone != null) {
       ArgumentChecker.notNull(time, "time");
@@ -222,7 +222,7 @@ public final class FlexiDateTime implements Serializable {
   //-------------------------------------------------------------------------
   /**
    * Gets the local date.
-   * 
+   *
    * @return the date, not null
    */
   public LocalDate getDate() {
@@ -231,7 +231,7 @@ public final class FlexiDateTime implements Serializable {
 
   /**
    * Gets the optional local time.
-   * 
+   *
    * @return the time, may be null
    */
   public LocalTime getTime() {
@@ -240,7 +240,7 @@ public final class FlexiDateTime implements Serializable {
 
   /**
    * Gets the optional time-zone.
-   * 
+   *
    * @return the time-zone, may be null
    */
   public ZoneId getZone() {
@@ -252,7 +252,7 @@ public final class FlexiDateTime implements Serializable {
    * Converts to a local date-time, only if the time is available.
    * <p>
    * If the time is not available, an exception is thrown.
-   * 
+   *
    * @return the local date-time, not null
    */
   public LocalDateTime toLocalDateTime() {
@@ -261,11 +261,11 @@ public final class FlexiDateTime implements Serializable {
 
   /**
    * Converts to a local date-time, specifying a default time to use if none is stored.
-   * 
+   *
    * @param defaultTime  the default time, not null
    * @return the local date-time, not null
    */
-  public LocalDateTime toLocalDateTime(LocalTime defaultTime) {
+  public LocalDateTime toLocalDateTime(final LocalTime defaultTime) {
     ArgumentChecker.notNull(defaultTime, "defaultTime");
     return LocalDateTime.of(_date, Objects.firstNonNull(_time, defaultTime));
   }
@@ -274,7 +274,7 @@ public final class FlexiDateTime implements Serializable {
    * Converts to an offset time, only if all data is available.
    * <p>
    * If the time or zone is not available, an exception is thrown.
-   * 
+   *
    * @return the offset date-time, not null
    */
   public OffsetTime toOffsetTime() {
@@ -285,7 +285,7 @@ public final class FlexiDateTime implements Serializable {
    * Converts to an offset date-time, only if all data is available.
    * <p>
    * If the time or zone is not available, an exception is thrown.
-   * 
+   *
    * @return the offset date-time, not null
    */
   public OffsetDateTime toOffsetDateTime() {
@@ -296,7 +296,7 @@ public final class FlexiDateTime implements Serializable {
    * Converts to a zoned date-time, only if all data is available.
    * <p>
    * If the time or zone is not available, an exception is thrown.
-   * 
+   *
    * @return the zoned date-time, not null
    */
   public ZonedDateTime toZonedDateTime() {
@@ -307,12 +307,12 @@ public final class FlexiDateTime implements Serializable {
    * Converts to a zoned date-time.
    * <p>
    * Conversion requires defaults for the time and zone.
-   * 
+   *
    * @param defaultTime  the default time, not null
    * @param defaultZone  the default zone, not null
    * @return the zoned date-time, not null
    */
-  public ZonedDateTime toZonedDateTime(LocalTime defaultTime, ZoneId defaultZone) {
+  public ZonedDateTime toZonedDateTime(final LocalTime defaultTime, final ZoneId defaultZone) {
     ArgumentChecker.notNull(defaultTime, "defaultTime");
     ArgumentChecker.notNull(defaultZone, "defaultZone");
     return toLocalDateTime(defaultTime).atZone(Objects.firstNonNull(_zone, defaultZone));
@@ -323,13 +323,13 @@ public final class FlexiDateTime implements Serializable {
    * <p>
    * This will return the best option of {@code LocalDate}, {@code LocalDateTime},
    * {@code OffsetDateTime} or {@code ZonedDateTime} depending on the stored data.
-   * 
+   *
    * @return the best representation, not null
    */
   public Temporal toBest() {
     if (_zone != null) {
-      ZonedDateTime zdt = _date.atTime(_time).atZone(_zone);
-      return (_zone instanceof ZoneOffset ? zdt.toOffsetDateTime() : zdt);
+      final ZonedDateTime zdt = _date.atTime(_time).atZone(_zone);
+      return _zone instanceof ZoneOffset ? zdt.toOffsetDateTime() : zdt;
     } else if (_time != null) {
       return LocalDateTime.of(_date, _time);
     }
@@ -338,7 +338,7 @@ public final class FlexiDateTime implements Serializable {
 
   /**
    * Checks if the date-time is complete.
-   * 
+   *
    * @return true if complete
    */
   public boolean isComplete() {
@@ -350,7 +350,7 @@ public final class FlexiDateTime implements Serializable {
    * Checks if this date-time equals the specified date-time.
    * <p>
    * To be equal, the date, time and zone must be equal.
-   * 
+   *
    * @param obj  the object to compare to, null returns false
    * @return true if equal
    */
@@ -368,7 +368,7 @@ public final class FlexiDateTime implements Serializable {
 
   /**
    * A suitable hash code.
-   * 
+   *
    * @return the hash code
    */
   @Override
@@ -381,7 +381,7 @@ public final class FlexiDateTime implements Serializable {
    * Returns a string describing the state of this date-time.
    * <p>
    * This is the {@code toString()} of the result of {@link #toBest()}.
-   * 
+   *
    * @return the string, not null
    */
   @Override

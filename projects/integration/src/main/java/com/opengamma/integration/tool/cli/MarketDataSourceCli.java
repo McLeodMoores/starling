@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.tool.cli;
@@ -34,7 +34,7 @@ import com.opengamma.master.marketdatasnapshot.MarketDataSnapshotSearchResult;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Market Data Source command line interface 
+ * Market Data Source command line interface
  * <pre>
  * There are 3 supported types, live, historical and snapshot.
  * input formats are
@@ -44,31 +44,31 @@ import com.opengamma.util.ArgumentChecker;
  * </pre>
  * <p>
  * Order is based on order of options from the command line e.g --dataSource live --dataSource snapshot:test --dataSource historical
- * will build a layered data source of 
+ * will build a layered data source of
  * <p>
  * marketdata live then user snapshot with name = test and then latest historical
  */
 public class MarketDataSourceCli {
-  
+
   private static final Logger LOGGER = LoggerFactory.getLogger(MarketDataSourceCli.class);
-  
+
   /** Market data source option */
   private static final String MARKET_DATA_SOURCE_OPTION = "dataSource";
- 
+
   private static final Pattern DS_OPTION_PATTERN = Pattern.compile("(live|historical|snapshot)(:(.*))?");
   private static final Pattern HISTORICAL_PATTERN = Pattern.compile("([^:]+)((:)([0-9]{8}))?");
   /**
    * Market data source command line option definition
    */
   private final Option _option;
-  
+
   public MarketDataSourceCli() {
     final Option option = new Option("ds", MARKET_DATA_SOURCE_OPTION, true, "the market data source name " +
         "format is \nlive:<dataSourceName> or \nhistorical:<resolverkey>~<date> date in yyyymmdd or \nsnapshot:snapshotName");
     option.setArgName("data source");
     _option = option;
   }
-  
+
   /**
    * Gets the option.
    * @return the option
@@ -76,30 +76,30 @@ public class MarketDataSourceCli {
   public Option getOption() {
     return _option;
   }
-  
+
   public List<MarketDataSpecification> getMarketDataSpecs(final CommandLine commandLine, final MarketDataSnapshotMaster mktDataSnapshotMaster) {
     ArgumentChecker.notNull(commandLine, "commandLine");
     ArgumentChecker.notNull(mktDataSnapshotMaster, "mktDataSnapshotMaster");
-    
-    List<MarketDataSpecification> marketDataSpecs = new ArrayList<>();
-    String[] optionValues = commandLine.getOptionValues(MARKET_DATA_SOURCE_OPTION);
+
+    final List<MarketDataSpecification> marketDataSpecs = new ArrayList<>();
+    final String[] optionValues = commandLine.getOptionValues(MARKET_DATA_SOURCE_OPTION);
     if (optionValues == null) {
       LOGGER.info("Missing {} option from command line", MARKET_DATA_SOURCE_OPTION);
       return marketDataSpecs;
     }
-    
+
     for (String optionValue : optionValues) {
       optionValue = StringUtils.trimToNull(optionValue);
       if (optionValue == null) {
         throw new OpenGammaRuntimeException("Empty market data source option not allowed");
       }
-      Matcher optionMatcher = DS_OPTION_PATTERN.matcher(optionValue);
+      final Matcher optionMatcher = DS_OPTION_PATTERN.matcher(optionValue);
       if (!optionMatcher.matches()) {
         throw new OpenGammaRuntimeException(String.format("Invalid data source option value [%s] in command line option", optionValue));
       }
-      String type = optionMatcher.group(1);
-      String dataSourceStr = StringUtils.trimToNull(optionMatcher.group(2));
-            
+      final String type = optionMatcher.group(1);
+      final String dataSourceStr = StringUtils.trimToNull(optionMatcher.group(2));
+
       switch (type) {
         case "live":
           if (dataSourceStr == null) {
@@ -112,33 +112,33 @@ public class MarketDataSourceCli {
           if (dataSourceStr == null) {
             marketDataSpecs.add(new LatestHistoricalMarketDataSpecification());
           } else {
-            Matcher historicalMatcher = HISTORICAL_PATTERN.matcher(optionMatcher.group(3));
+            final Matcher historicalMatcher = HISTORICAL_PATTERN.matcher(optionMatcher.group(3));
             if (!historicalMatcher.matches()) {
               throw new OpenGammaRuntimeException(String.format("Invalid historical data source option value [%s] in command line option", optionValue));
             }
-            String resolverKey = historicalMatcher.group(1);
+            final String resolverKey = historicalMatcher.group(1);
             if (StringUtils.trimToNull(historicalMatcher.group(2)) == null) {
               marketDataSpecs.add(new LatestHistoricalMarketDataSpecification(resolverKey));
             } else {
-              String dateStr = StringUtils.trimToNull(historicalMatcher.group(4));
-              LocalDate snapshotDate = LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("yyyyMMdd"));
+              final String dateStr = StringUtils.trimToNull(historicalMatcher.group(4));
+              final LocalDate snapshotDate = LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("yyyyMMdd"));
               marketDataSpecs.add(new FixedHistoricalMarketDataSpecification(resolverKey, snapshotDate));
             }
           }
           break;
         case "snapshot":
-          
+
           if (dataSourceStr == null || StringUtils.trimToNull(optionMatcher.group(3)) == null) {
             throw new OpenGammaRuntimeException(String.format("Invalid historical data source option value [%s] in command line option", optionValue));
           }
-          String snapshotName = optionMatcher.group(3);
-          UniqueId uniqueId = getSnapshotUniqueId(snapshotName, mktDataSnapshotMaster);
+          final String snapshotName = optionMatcher.group(3);
+          final UniqueId uniqueId = getSnapshotUniqueId(snapshotName, mktDataSnapshotMaster);
           if (uniqueId == null) {
             LOGGER.warn("Snapshot with name {} can not be found", snapshotName);
           } else {
             marketDataSpecs.add(UserMarketDataSpecification.of(uniqueId));
           }
-          
+
           break;
         default:
           throw new OpenGammaRuntimeException(String.format("Unsupported market data source type [%s] in command line option", type));
@@ -147,11 +147,11 @@ public class MarketDataSourceCli {
     return marketDataSpecs;
   }
 
-  private UniqueId getSnapshotUniqueId(String snapshotName, MarketDataSnapshotMaster mktDataSnapshotMaster) {
-    MarketDataSnapshotSearchRequest request = new MarketDataSnapshotSearchRequest();
+  private UniqueId getSnapshotUniqueId(final String snapshotName, final MarketDataSnapshotMaster mktDataSnapshotMaster) {
+    final MarketDataSnapshotSearchRequest request = new MarketDataSnapshotSearchRequest();
     request.setName(snapshotName);
-    MarketDataSnapshotSearchResult snapshotSearchResult = mktDataSnapshotMaster.search(request);
-    MarketDataSnapshotDocument snapshotDoc = Iterables.getFirst(snapshotSearchResult.getDocuments(), null);
+    final MarketDataSnapshotSearchResult snapshotSearchResult = mktDataSnapshotMaster.search(request);
+    final MarketDataSnapshotDocument snapshotDoc = Iterables.getFirst(snapshotSearchResult.getDocuments(), null);
     if (snapshotDoc != null) {
       return snapshotDoc.getUniqueId();
     }

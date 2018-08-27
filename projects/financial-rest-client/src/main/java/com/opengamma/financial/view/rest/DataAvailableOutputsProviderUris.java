@@ -16,12 +16,12 @@ public class DataAvailableOutputsProviderUris {
 
   /**
    * Builds a URI.
-   * 
+   *
    * @param baseUri  the base URI, not null
    * @return the URI, not null
    */
-  public static URI uriPortfolio(URI baseUri) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("portfolio");
+  public static URI uriPortfolio(final URI baseUri) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("portfolio");
     return bld.build();
   }
 

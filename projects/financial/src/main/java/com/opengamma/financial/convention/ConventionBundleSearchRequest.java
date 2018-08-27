@@ -12,16 +12,16 @@ import com.opengamma.id.ExternalIdBundle;
  * A search request to retrieve reference rate information.
  */
 public class ConventionBundleSearchRequest {
-  private ExternalIdBundle _identifiers;
-  
-  public ConventionBundleSearchRequest(ExternalId identifier) {
+  private final ExternalIdBundle _identifiers;
+
+  public ConventionBundleSearchRequest(final ExternalId identifier) {
     _identifiers = ExternalIdBundle.of(identifier);
   }
-  
-  public ConventionBundleSearchRequest(ExternalIdBundle identifiers) {
+
+  public ConventionBundleSearchRequest(final ExternalIdBundle identifiers) {
     _identifiers = identifiers;
   }
-  
+
   public ExternalIdBundle getIdentifiers() {
     return _identifiers;
   }

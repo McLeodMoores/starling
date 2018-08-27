@@ -48,7 +48,7 @@ public final class ResolvedSnapshotLink<S extends NamedSnapshot>
    * @param value the snapshot object to be embedded
    */
   @ImmutableConstructor
-  ResolvedSnapshotLink(S value) {
+  ResolvedSnapshotLink(final S value) {
     _value = ArgumentChecker.notNull(value, "snapshot");
   }
 

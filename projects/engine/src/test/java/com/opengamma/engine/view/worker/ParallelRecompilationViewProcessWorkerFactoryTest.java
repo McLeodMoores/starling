@@ -60,7 +60,7 @@ public class ParallelRecompilationViewProcessWorkerFactoryTest {
     Mockito.when(underlying.createWorker(Mockito.<ViewProcessWorkerContext>anyObject(), Mockito.<ViewExecutionOptions>anyObject(), Mockito.<ViewDefinition>anyObject())).then(
         new Answer<ViewProcessWorker>() {
           @Override
-          public ViewProcessWorker answer(InvocationOnMock invocation) throws Throwable {
+          public ViewProcessWorker answer(final InvocationOnMock invocation) throws Throwable {
             assertTrue(invocation.getArguments()[0] instanceof ParallelRecompilationViewProcessWorker.ParallelExecutionContext);
             final ViewExecutionOptions delegateOptions = (ViewExecutionOptions) invocation.getArguments()[1];
             assertEquals(delegateOptions.getExecutionSequence(), options.getExecutionSequence());
@@ -86,7 +86,7 @@ public class ParallelRecompilationViewProcessWorkerFactoryTest {
     Mockito.when(underlying.createWorker(Mockito.<ViewProcessWorkerContext>anyObject(), Mockito.<ViewExecutionOptions>anyObject(), Mockito.<ViewDefinition>anyObject())).then(
         new Answer<ViewProcessWorker>() {
           @Override
-          public ViewProcessWorker answer(InvocationOnMock invocation) throws Throwable {
+          public ViewProcessWorker answer(final InvocationOnMock invocation) throws Throwable {
             assertTrue(invocation.getArguments()[0] instanceof ParallelRecompilationViewProcessWorker.DeferredExecutionContext);
             final ViewExecutionOptions delegateOptions = (ViewExecutionOptions) invocation.getArguments()[1];
             assertEquals(delegateOptions.getExecutionSequence(), options.getExecutionSequence());
@@ -110,7 +110,7 @@ public class ParallelRecompilationViewProcessWorkerFactoryTest {
     Mockito.when(underlying.createWorker(Mockito.<ViewProcessWorkerContext>anyObject(), Mockito.<ViewExecutionOptions>anyObject(), Mockito.<ViewDefinition>anyObject())).then(
         new Answer<ViewProcessWorker>() {
           @Override
-          public ViewProcessWorker answer(InvocationOnMock invocation) throws Throwable {
+          public ViewProcessWorker answer(final InvocationOnMock invocation) throws Throwable {
             assertTrue(invocation.getArguments()[0] instanceof ParallelRecompilationViewProcessWorker.ImmediateExecutionContext);
             final ViewExecutionOptions delegateOptions = (ViewExecutionOptions) invocation.getArguments()[1];
             assertEquals(delegateOptions.getExecutionSequence(), options.getExecutionSequence());

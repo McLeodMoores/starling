@@ -16,8 +16,8 @@ import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveSpecifica
   }
 
   @Override
-  public Object formatCell(InterpolatedYieldCurveSpecificationWithSecurities value,
-                           ValueSpecification valueSpec, Object inlineKey) {
+  public Object formatCell(final InterpolatedYieldCurveSpecificationWithSecurities value,
+                           final ValueSpecification valueSpec, final Object inlineKey) {
     String name;
     if (value.getName() == null) {
       name = value.getCurrency().getCode();

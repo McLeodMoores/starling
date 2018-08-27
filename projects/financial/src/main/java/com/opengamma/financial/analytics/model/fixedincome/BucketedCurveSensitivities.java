@@ -6,28 +6,26 @@
 
 package com.opengamma.financial.analytics.model.fixedincome;
 
-import org.joda.beans.BeanDefinition;
-import org.joda.beans.ImmutableBean;
-import org.joda.beans.PropertyDefinition;
-
-import com.google.common.collect.ImmutableMap;
-import com.opengamma.financial.analytics.DoubleLabelledMatrix1D;
-import com.opengamma.util.money.Currency;
-import com.opengamma.util.tuple.Pair;
-
-import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
 import org.joda.beans.Bean;
+import org.joda.beans.BeanDefinition;
+import org.joda.beans.ImmutableBean;
 import org.joda.beans.JodaBeanUtils;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
+import org.joda.beans.PropertyDefinition;
 import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
+
+import com.google.common.collect.ImmutableMap;
+import com.opengamma.financial.analytics.DoubleLabelledMatrix1D;
+import com.opengamma.util.money.Currency;
+import com.opengamma.util.tuple.Pair;
 
 /**
  * The sensitivities of an instrument to a set of curves.
@@ -48,7 +46,7 @@ public final class BucketedCurveSensitivities implements ImmutableBean {
    * and holding the curve sensitivities
    * @return the sensitivities object
    */
-  public static BucketedCurveSensitivities of(Map<Pair<String, Currency>, DoubleLabelledMatrix1D> sensitivities) {
+  public static BucketedCurveSensitivities of(final Map<Pair<String, Currency>, DoubleLabelledMatrix1D> sensitivities) {
     return builder().sensitivities(sensitivities).build();
   }
 

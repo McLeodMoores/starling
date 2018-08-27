@@ -79,22 +79,22 @@ public class SimpleSecurity extends DirectBean
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param securityType  the security type, not null
    */
-  public SimpleSecurity(String securityType) {
+  public SimpleSecurity(final String securityType) {
     setSecurityType(securityType);
   }
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param uniqueId  the unique identifier, may be null
    * @param bundle  the external identifier bundle, not null
    * @param securityType  the security type, not null
    * @param name  the display name, not null
    */
-  public SimpleSecurity(UniqueId uniqueId, ExternalIdBundle bundle, String securityType, String name) {
+  public SimpleSecurity(final UniqueId uniqueId, final ExternalIdBundle bundle, final String securityType, final String name) {
     setUniqueId(uniqueId);
     setExternalIdBundle(bundle);
     setSecurityType(securityType);
@@ -104,7 +104,7 @@ public class SimpleSecurity extends DirectBean
   //-------------------------------------------------------------------------
   /**
    * Adds an external identifier to the bundle.
-   * 
+   *
    * @param externalId  the external identifier, not null
    */
   public void addExternalId(final ExternalId externalId) {
@@ -113,7 +113,7 @@ public class SimpleSecurity extends DirectBean
 
   //-------------------------------------------------------------------------
   @Override
-  public void addAttribute(String key, String value) {
+  public void addAttribute(final String key, final String value) {
     ArgumentChecker.notNull(key, "key");
     ArgumentChecker.notNull(value, "value");
     _attributes.put(key, value);

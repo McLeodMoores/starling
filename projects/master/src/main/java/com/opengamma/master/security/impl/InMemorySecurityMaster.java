@@ -54,8 +54,8 @@ public class InMemorySecurityMaster
    * The default scheme used for each {@link ObjectId}.
    */
   public static final String DEFAULT_OID_SCHEME = "MemSec";
-  
-  private final InMemoryExternalIdCache<Security, SecurityDocument> _externalIdCache = new InMemoryExternalIdCache<Security, SecurityDocument>(); 
+
+  private final InMemoryExternalIdCache<Security, SecurityDocument> _externalIdCache = new InMemoryExternalIdCache<>();
 
   /**
    * Creates an instance.
@@ -93,14 +93,14 @@ public class InMemorySecurityMaster
   }
 
   @Override
-  protected void updateCaches(ObjectIdentifiable replacedObject, SecurityDocument updatedDocument) {
+  protected void updateCaches(final ObjectIdentifiable replacedObject, final SecurityDocument updatedDocument) {
     if (replacedObject != null) {
       if (replacedObject instanceof SecurityDocument) {
         _externalIdCache.remove(((SecurityDocument) replacedObject).getSecurity());
       } // not sure what we can/should do otherwise. Jim 13-Aug-2015
     }
     if (updatedDocument != null) {
-      SecurityDocument updatedSecurityDocument = (SecurityDocument) updatedDocument;
+      final SecurityDocument updatedSecurityDocument = updatedDocument;
       _externalIdCache.add(updatedSecurityDocument.getSecurity(), updatedSecurityDocument);
     }
   }
@@ -109,10 +109,10 @@ public class InMemorySecurityMaster
   @Override
   public SecurityMetaDataResult metaData(final SecurityMetaDataRequest request) {
     ArgumentChecker.notNull(request, "request");
-    SecurityMetaDataResult result = new SecurityMetaDataResult();
+    final SecurityMetaDataResult result = new SecurityMetaDataResult();
     if (request.isSecurityTypes()) {
-      Set<String> types = new HashSet<String>();
-      for (SecurityDocument doc : _store.values()) {
+      final Set<String> types = new HashSet<>();
+      for (final SecurityDocument doc : _store.values()) {
         types.add(doc.getSecurity().getSecurityType());
       }
       result.getSecurityTypes().addAll(types);
@@ -124,22 +124,22 @@ public class InMemorySecurityMaster
   @Override
   public SecuritySearchResult search(final SecuritySearchRequest request) {
     ArgumentChecker.notNull(request, "request");
-    
+
     Collection<SecurityDocument> docsToSearch = null;
     if (request.getExternalIdSearch() != null) {
       docsToSearch = _externalIdCache.getMatches(request.getExternalIdSearch());
     } else {
-      docsToSearch = _store.values(); 
+      docsToSearch = _store.values();
     }
-    
-    final List<SecurityDocument> list = new ArrayList<SecurityDocument>();
-    for (SecurityDocument doc : docsToSearch) {
+
+    final List<SecurityDocument> list = new ArrayList<>();
+    for (final SecurityDocument doc : docsToSearch) {
       if (request.matches(doc)) {
         list.add(doc);
       }
     }
     Collections.sort(list, request.getSortOrder());
-    
+
     final SecuritySearchResult result = new SecuritySearchResult();
     result.setPaging(Paging.of(request.getPagingRequest(), list));
     result.getDocuments().addAll(request.getPagingRequest().select(list));
@@ -214,7 +214,7 @@ public class InMemorySecurityMaster
   @Override
   public void remove(final ObjectIdentifiable objectIdentifiable) {
     ArgumentChecker.notNull(objectIdentifiable, "objectIdentifiable");
-    SecurityDocument removedDocument = _store.remove(objectIdentifiable.getObjectId()); 
+    final SecurityDocument removedDocument = _store.remove(objectIdentifiable.getObjectId());
     if (removedDocument == null) {
       throw new DataNotFoundException("Security not found: " + objectIdentifiable);
     }
@@ -244,7 +244,7 @@ public class InMemorySecurityMaster
   }
 
   @Override
-  protected void validateDocument(SecurityDocument document) {
+  protected void validateDocument(final SecurityDocument document) {
     ArgumentChecker.notNull(document, "document");
     ArgumentChecker.notNull(document.getSecurity(), "document.security");
   }

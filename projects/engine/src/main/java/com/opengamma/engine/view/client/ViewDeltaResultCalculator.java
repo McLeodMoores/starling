@@ -28,14 +28,14 @@ public class ViewDeltaResultCalculator {
 
   /**
    * Computes the delta between and old and new results.
-   * 
+   *
    * @param viewDefinition the view definition to which the results apply
    * @param previousResult the previous result
    * @param result the new result
    * @return the delta between the two results, not null
    */
-  public static ViewDeltaResultModel computeDeltaModel(ViewDefinition viewDefinition, ViewResultModel previousResult, ViewResultModel result) {
-    InMemoryViewDeltaResultModel deltaModel = new InMemoryViewDeltaResultModel();
+  public static ViewDeltaResultModel computeDeltaModel(final ViewDefinition viewDefinition, final ViewResultModel previousResult, final ViewResultModel result) {
+    final InMemoryViewDeltaResultModel deltaModel = new InMemoryViewDeltaResultModel();
     deltaModel.setViewCycleExecutionOptions(result.getViewCycleExecutionOptions());
     deltaModel.setCalculationTime(result.getCalculationTime());
     deltaModel.setCalculationDuration(result.getCalculationDuration());
@@ -45,38 +45,38 @@ public class ViewDeltaResultCalculator {
     if (previousResult != null) {
       deltaModel.setPreviousCalculationTime(previousResult.getCalculationTime());
     }
-    for (String calcConfigName : result.getCalculationConfigurationNames()) {
+    for (final String calcConfigName : result.getCalculationConfigurationNames()) {
       final DeltaDefinition deltaDefinition = viewDefinition.getCalculationConfiguration(calcConfigName).getDeltaDefinition();
       final ViewCalculationResultModel resultCalcModel = result.getCalculationResult(calcConfigName);
       final ViewCalculationResultModel previousCalcModel = previousResult != null ? previousResult.getCalculationResult(calcConfigName) : null;
-      for (ComputationTargetSpecification targetSpec : resultCalcModel.getAllTargets()) {
+      for (final ComputationTargetSpecification targetSpec : resultCalcModel.getAllTargets()) {
         computeDeltaModel(deltaDefinition, deltaModel, targetSpec, calcConfigName, previousCalcModel, resultCalcModel);
       }
     }
     return deltaModel;
   }
 
-  private static void computeDeltaModel(DeltaDefinition deltaDefinition, InMemoryViewDeltaResultModel deltaModel, ComputationTargetSpecification targetSpec,
-      String calcConfigName, ViewCalculationResultModel previousCalcModel, ViewCalculationResultModel resultCalcModel) {
+  private static void computeDeltaModel(final DeltaDefinition deltaDefinition, final InMemoryViewDeltaResultModel deltaModel, final ComputationTargetSpecification targetSpec,
+      final String calcConfigName, final ViewCalculationResultModel previousCalcModel, final ViewCalculationResultModel resultCalcModel) {
     final Map<Pair<String, ValueProperties>, ComputedValueResult> resultValues = resultCalcModel.getValues(targetSpec);
     if (resultValues != null) {
       if (previousCalcModel == null) {
         // Everything is new/delta because this is a new calculation context.
-        for (Map.Entry<Pair<String, ValueProperties>, ComputedValueResult> resultEntry : resultValues.entrySet()) {
+        for (final Map.Entry<Pair<String, ValueProperties>, ComputedValueResult> resultEntry : resultValues.entrySet()) {
           deltaModel.addValue(calcConfigName, resultEntry.getValue());
         }
       } else {
         final Map<Pair<String, ValueProperties>, ComputedValueResult> previousValues = previousCalcModel.getValues(targetSpec);
         if (previousValues == null) {
           // Everything is new/delta because this is a new target.
-          for (ComputedValueResult result : resultValues.values()) {
+          for (final ComputedValueResult result : resultValues.values()) {
             deltaModel.addValue(calcConfigName, result);
           }
         } else {
           // Have to individual delta.
-          for (Map.Entry<Pair<String, ValueProperties>, ComputedValueResult> resultEntry : resultValues.entrySet()) {
-            ComputedValueResult resultValue = resultEntry.getValue();
-            ComputedValueResult previousValue = previousValues.get(resultEntry.getKey());
+          for (final Map.Entry<Pair<String, ValueProperties>, ComputedValueResult> resultEntry : resultValues.entrySet()) {
+            final ComputedValueResult resultValue = resultEntry.getValue();
+            final ComputedValueResult previousValue = previousValues.get(resultEntry.getKey());
             // REVIEW jonathan 2010-05-07 -- The previous value that we're comparing with is the value from the last
             // computation cycle, not the value that we last emitted as a delta. It is therefore important that the
             // DeltaComparers take this into account in their implementation of isDelta. E.g. they should compare the

@@ -56,56 +56,56 @@ public class PermissionCheckProviderRequest implements Bean {
   //-------------------------------------------------------------------------
   /**
    * Obtains an instance to get user permissions check request.
-   * 
+   *
    * @param userId  the identifier of user credentials, not null
    * @param networkAddress  the user network address, may be null
    * @param requestedPermissions  the requested permissions, not null
    * @return the request, not null
    */
-  public static PermissionCheckProviderRequest createGet(ExternalId userId, String networkAddress, String... requestedPermissions) {
+  public static PermissionCheckProviderRequest createGet(final ExternalId userId, final String networkAddress, final String... requestedPermissions) {
     return createGet(userId, networkAddress, Arrays.asList(requestedPermissions));
   }
 
   /**
    * Obtains an instance to get user permissions check request.
-   * 
+   *
    * @param userIdBundle  the identifier bundle of user credentials, not null
    * @param networkAddress  the user network address, may be null
    * @param requestedPermissions  the requested permissions, not null
    * @return the request, not null
    */
-  public static PermissionCheckProviderRequest createGet(ExternalIdBundle userIdBundle, String networkAddress, String... requestedPermissions) {
+  public static PermissionCheckProviderRequest createGet(final ExternalIdBundle userIdBundle, final String networkAddress, final String... requestedPermissions) {
     return createGet(userIdBundle, networkAddress, Arrays.asList(requestedPermissions));
   }
 
   /**
    * Obtains an instance to get user permissions check request.
-   * 
+   *
    * @param userId  the identifier of user credentials, not null
    * @param networkAddress  the user network address, may be null
    * @param requestedPermissions  the requested permissions, not null
    * @return the request, not null
    */
-  public static PermissionCheckProviderRequest createGet(ExternalId userId, String networkAddress, Iterable<String> requestedPermissions) {
+  public static PermissionCheckProviderRequest createGet(final ExternalId userId, final String networkAddress, final Iterable<String> requestedPermissions) {
     ArgumentChecker.notNull(userId, "userId");
     return createGet(ExternalIdBundle.of(userId), networkAddress, requestedPermissions);
   }
 
   /**
    * Obtains an instance to get user permissions check request.
-   * 
+   *
    * @param userIdBundle  the external id bundle of user credentials, not null
    * @param networkAddress  the user network address, may be null
    * @param requestedPermissions  the requested permissions, not null
    * @return the request, not null
    */
-  public static PermissionCheckProviderRequest createGet(ExternalIdBundle userIdBundle, String networkAddress, Iterable<String> requestedPermissions) {
+  public static PermissionCheckProviderRequest createGet(final ExternalIdBundle userIdBundle, final String networkAddress, final Iterable<String> requestedPermissions) {
     ArgumentChecker.notNull(userIdBundle, "userIdBundle");
     ArgumentChecker.notNull(requestedPermissions, "requestedPermissions");
-    PermissionCheckProviderRequest request = new PermissionCheckProviderRequest();
+    final PermissionCheckProviderRequest request = new PermissionCheckProviderRequest();
     request.setUserIdBundle(userIdBundle);
     request.setNetworkAddress(networkAddress);
-    for (String permission : requestedPermissions) {
+    for (final String permission : requestedPermissions) {
       request.getRequestedPermissions().add(permission);
     }
     return request;

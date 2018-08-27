@@ -23,9 +23,9 @@ import com.opengamma.util.ArgumentChecker;
 
   private final List<YieldCurveDataPointShift> _shiftList = Lists.newArrayList();
 
-  /* package */ YieldCurveDataPointShiftsManipulatorBuilder(YieldCurveDataSelector selector,
-                                                            Scenario scenario,
-                                                            ScenarioShiftType shiftType) {
+  /* package */ YieldCurveDataPointShiftsManipulatorBuilder(final YieldCurveDataSelector selector,
+                                                            final Scenario scenario,
+                                                            final ScenarioShiftType shiftType) {
     _selector = ArgumentChecker.notNull(selector, "selector");
     _scenario = ArgumentChecker.notNull(scenario, "scenario");
     _shiftType = ArgumentChecker.notNull(shiftType, "shiftType");
@@ -39,14 +39,14 @@ import com.opengamma.util.ArgumentChecker;
    * @param shift the shift to apply
    * @return this builder
    */
-  public YieldCurveDataPointShiftsManipulatorBuilder shift(Period tenor, Number shift) {
-    YieldCurveDataPointShift pointShift = new YieldCurveDataPointShift(tenor, shift.doubleValue());
+  public YieldCurveDataPointShiftsManipulatorBuilder shift(final Period tenor, final Number shift) {
+    final YieldCurveDataPointShift pointShift = new YieldCurveDataPointShift(tenor, shift.doubleValue());
     _shiftList.add(pointShift);
     return this;
   }
 
   /* package */ void build() {
-    YieldCurveDataPointShiftsManipulator pointShifts = new YieldCurveDataPointShiftsManipulator(_shiftType, _shiftList);
+    final YieldCurveDataPointShiftsManipulator pointShifts = new YieldCurveDataPointShiftsManipulator(_shiftType, _shiftList);
     _scenario.add(_selector, pointShifts);
   }
 }

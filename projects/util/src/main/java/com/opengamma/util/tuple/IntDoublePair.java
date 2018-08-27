@@ -5,8 +5,6 @@
  */
 package com.opengamma.util.tuple;
 
-import it.unimi.dsi.fastutil.ints.Int2DoubleMap;
-
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -24,6 +22,8 @@ import org.joda.convert.FromString;
 import org.joda.convert.ToString;
 
 import com.opengamma.util.ArgumentChecker;
+
+import it.unimi.dsi.fastutil.ints.Int2DoubleMap;
 
 /**
  * An immutable pair consisting of an {@code int} and {@code double}.
@@ -49,7 +49,7 @@ public class IntDoublePair
   //-------------------------------------------------------------------------
   /**
    * Obtains an {@code IntDoublePair} from a {@code Pair}.
-   * 
+   *
    * @param pair  the pair to convert, not null
    * @return a pair formed by extracting values from the pair, not null
    */
@@ -65,7 +65,7 @@ public class IntDoublePair
 
   /**
    * Obtains an {@code IntDoublePair} from two values.
-   * 
+   *
    * @param first  the first element
    * @param second  the second element
    * @return a pair formed from the two parameters, not null
@@ -79,7 +79,7 @@ public class IntDoublePair
    * Parses an {@code IntDoublePair} from the standard string format.
    * <p>
    * The standard format is '[$first, $second]'. Spaces around the values are trimmed.
-   * 
+   *
    * @param pairStr  the text to parse, not null
    * @return the parsed pair, not null
    */
@@ -95,19 +95,19 @@ public class IntDoublePair
     if (pairStr.charAt(pairStr.length() - 1) != ']') {
       throw new IllegalArgumentException("Invalid pair format, must end with ]: " + pairStr);
     }
-    String[] split = StringUtils.split(pairStr.substring(1, pairStr.length() - 1), ',');
+    final String[] split = StringUtils.split(pairStr.substring(1, pairStr.length() - 1), ',');
     if (split.length != 2) {
       throw new IllegalArgumentException("Invalid pair format, must have two values: " + pairStr);
     }
-    int first = Integer.parseInt(split[0].trim());
-    double second = Double.parseDouble(split[1].trim());
+    final int first = Integer.parseInt(split[0].trim());
+    final double second = Double.parseDouble(split[1].trim());
     return new IntDoublePair(first, second);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Constructs a pair.
-   * 
+   *
    * @param first  the first element
    * @param second  the second element
    * @deprecated Use public factory of(int,double)
@@ -131,7 +131,7 @@ public class IntDoublePair
 
   /**
    * Gets the first element as a primitive {@code int}.
-   * 
+   *
    * @return the primitive
    */
   public int getFirstInt() {
@@ -140,7 +140,7 @@ public class IntDoublePair
 
   /**
    * Gets the second element as a primitive {@code double}.
-   * 
+   *
    * @return the primitive
    */
   public double getSecondDouble() {
@@ -182,7 +182,7 @@ public class IntDoublePair
   }
 
   @Override
-  public <R> Property<R> property(String propertyName) {
+  public <R> Property<R> property(final String propertyName) {
     return metaBean().<R>metaProperty(propertyName).createProperty(this);
   }
 
@@ -198,7 +198,7 @@ public class IntDoublePair
 
   //-------------------------------------------------------------------------
   @Override
-  public int compareTo(Pair<Integer, Double> other) {
+  public int compareTo(final Pair<Integer, Double> other) {
     if (other instanceof IntDoublePair) {
       return compareTo((IntDoublePair) other);
     }
@@ -209,11 +209,11 @@ public class IntDoublePair
    * Compares this pair to another.
    * <p>
    * This compares the first elements, then the second elements.
-   * 
+   *
    * @param other  the other pair
    * @return negative if this is less, zero if equal, positive if greater
    */
-  public int compareTo(IntDoublePair other) {
+  public int compareTo(final IntDoublePair other) {
     int cmp = Integer.compare(first, other.first);
     if (cmp == 0) {
       cmp = Double.compare(second, other.second);
@@ -223,7 +223,7 @@ public class IntDoublePair
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -238,14 +238,14 @@ public class IntDoublePair
   public int hashCode() {
     // see Map.Entry API specification
     final long d = Double.doubleToLongBits(second);
-    return first ^ ((int) (d ^ (d >>> 32)));
+    return first ^ (int) (d ^ d >>> 32);
   }
 
   /**
    * Gets the pair using a standard string format.
    * <p>
    * The standard format is '[$first, $second]'. Spaces around the values are trimmed.
-   * 
+   *
    * @return the pair as a string, not null
    */
   @Override
@@ -294,7 +294,7 @@ public class IntDoublePair
     }
 
     @Override
-    protected MetaProperty<?> metaPropertyGet(String propertyName) {
+    protected MetaProperty<?> metaPropertyGet(final String propertyName) {
       switch (propertyName) {
         case "first":
           return _first;
@@ -338,7 +338,7 @@ public class IntDoublePair
 
     //-----------------------------------------------------------------------
     @Override
-    protected Object propertyGet(Bean bean, String propertyName, boolean quiet) {
+    protected Object propertyGet(final Bean bean, final String propertyName, final boolean quiet) {
       switch (propertyName) {
         case "first":
           return ((IntDoublePair) bean).getFirst();
@@ -349,7 +349,7 @@ public class IntDoublePair
     }
 
     @Override
-    protected void propertySet(Bean bean, String propertyName, Object newValue, boolean quiet) {
+    protected void propertySet(final Bean bean, final String propertyName, final Object newValue, final boolean quiet) {
       metaProperty(propertyName);
       if (quiet) {
         return;
@@ -379,7 +379,7 @@ public class IntDoublePair
 
     //-----------------------------------------------------------------------
     @Override
-    public Builder set(String propertyName, Object newValue) {
+    public Builder set(final String propertyName, final Object newValue) {
       switch (propertyName) {
         case "first":
           _first = (Integer) newValue;
@@ -394,7 +394,7 @@ public class IntDoublePair
     }
 
     @Override
-    public Builder setString(String propertyName, String value) {
+    public Builder setString(final String propertyName, final String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }

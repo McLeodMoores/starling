@@ -34,10 +34,10 @@ import com.opengamma.financial.convention.daycount.DayCounts;
 
 /**
  * Calculates the (Black Lognormal) {@link ValueRequirementNames#SECURITY_IMPLIED_VOLATILITY} of target Swaption Trade from calibrated SABR model.<p>
- * Uses curves constructed using the discounting method. 
+ * Uses curves constructed using the discounting method.
  */
 public class RightExtrapolationSABRDiscountingImpliedVolFunction extends SABRDiscountingFunction {
-  
+
   /** The Implied Vol calculator */
   private static final InstrumentDerivativeVisitor<SABRSwaptionProviderInterface, Double> CALCULATOR = ImpliedVolatilitySABRSwaptionCalculator.getInstance();
 
@@ -45,9 +45,9 @@ public class RightExtrapolationSABRDiscountingImpliedVolFunction extends SABRDis
   public RightExtrapolationSABRDiscountingImpliedVolFunction() {
     super(SECURITY_IMPLIED_VOLATILITY);
   }
-  
+
   @Override
-  public CompiledFunctionDefinition compile(FunctionCompilationContext context, Instant atInstant) {
+  public CompiledFunctionDefinition compile(final FunctionCompilationContext context, final Instant atInstant) {
     return new SABRDiscountingCompiledFunction(getTargetToDefinitionConverter(context), getDefinitionToDerivativeConverter(context), true) {
 
       @Override

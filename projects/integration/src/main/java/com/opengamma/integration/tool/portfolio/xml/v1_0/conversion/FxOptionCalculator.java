@@ -34,12 +34,12 @@ class FxOptionCalculator {
   private final ZonedDateTime _settlementDate;
   private final boolean _long;
 
-  public FxOptionCalculator(AbstractFxOptionTrade trade, BigDecimal amount, Currency currency) {
+  public FxOptionCalculator(final AbstractFxOptionTrade trade, final BigDecimal amount, final Currency currency) {
 
-    CurrencyPair cp = CurrencyPair.parse(trade.getCurrencyPair());
+    final CurrencyPair cp = CurrencyPair.parse(trade.getCurrencyPair());
 
-    Currency optionCurrency = trade.getOptionCurrency();
-    Currency notionalCurrency = currency;
+    final Currency optionCurrency = trade.getOptionCurrency();
+    final Currency notionalCurrency = currency;
 
     if (!cp.contains(optionCurrency)) {
       throw new PortfolioParsingException("Option currency must appear in the currency pair");
@@ -48,12 +48,12 @@ class FxOptionCalculator {
       throw new PortfolioParsingException("Notional currency must appear in the currency pair");
     }
 
-    boolean isCall = trade.getOptionType() == OptionType.CALL;
-    Currency other = cp.getComplement(optionCurrency);
+    final boolean isCall = trade.getOptionType() == OptionType.CALL;
+    final Currency other = cp.getComplement(optionCurrency);
     _callCurrency = isCall ? optionCurrency : other;
     _putCurrency = isCall ? other : optionCurrency;
 
-    BigDecimal strike = trade.getStrike();
+    final BigDecimal strike = trade.getStrike();
 
     // Depending on the currency, either call amount or put amount equals the supplied amount
     // Then use the fact that Strike = (call amount / put amount) to calculate the other value
@@ -71,11 +71,11 @@ class FxOptionCalculator {
    * @param trade
    * @return
    */
-  private ZonedDateTime extractSettlementDate(AbstractFxOptionTrade trade) {
+  private ZonedDateTime extractSettlementDate(final AbstractFxOptionTrade trade) {
 
     if (trade.getAdditionalCashflows() != null) {
 
-      for (AdditionalCashflow cashflow : trade.getAdditionalCashflows()) {
+      for (final AdditionalCashflow cashflow : trade.getAdditionalCashflows()) {
         if (cashflow.getCashflowType() == AdditionalCashflow.CashflowType.PREMIUM) {
           return cashflow.getCashflowDate().atStartOfDay(ZoneOffset.UTC);
         }

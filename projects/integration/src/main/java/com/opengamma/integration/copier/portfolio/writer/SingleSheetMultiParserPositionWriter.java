@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 
@@ -35,22 +35,22 @@ import com.opengamma.util.tuple.ObjectsPair;
 public class SingleSheetMultiParserPositionWriter extends SingleSheetPositionWriter {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SingleSheetMultiParserPositionWriter.class);
-  
-  private Map<String, RowParser> _parserMap = new HashMap<String, RowParser>();
-  
+
+  private Map<String, RowParser> _parserMap = new HashMap<>();
+
   // current row context
-  private Map<String, String> _currentRow  = new HashMap<String, String>();
+  private Map<String, String> _currentRow  = new HashMap<>();
   private RowParser _currentParser;
-  
-  private ManageablePortfolioNode _currentNode;
-  private ManageablePortfolio _portfolio;
+
+  private final ManageablePortfolioNode _currentNode;
+  private final ManageablePortfolio _portfolio;
 
   /** Generate one row per trade instead of one row per position */
   private boolean _includeTrades;
 
-  public SingleSheetMultiParserPositionWriter(SheetWriter sheet, Map<String, RowParser> rowParsers) {
+  public SingleSheetMultiParserPositionWriter(final SheetWriter sheet, final Map<String, RowParser> rowParsers) {
     super(sheet);
-    
+
     ArgumentChecker.notNull(rowParsers, "rowParsers");
     _parserMap = rowParsers;
 
@@ -62,77 +62,77 @@ public class SingleSheetMultiParserPositionWriter extends SingleSheetPositionWri
     _includeTrades = false;
   }
 
-  public SingleSheetMultiParserPositionWriter(SheetWriter sheet,
-                                              Map<String, RowParser> rowParsers,
-                                              boolean includeTrades) {
+  public SingleSheetMultiParserPositionWriter(final SheetWriter sheet,
+                                              final Map<String, RowParser> rowParsers,
+                                              final boolean includeTrades) {
     this(sheet, rowParsers);
     _includeTrades = includeTrades;
   }
-    
-  public SingleSheetMultiParserPositionWriter(SheetWriter sheet, String[] securityTypes) {
+
+  public SingleSheetMultiParserPositionWriter(final SheetWriter sheet, final String[] securityTypes) {
     this(sheet, getParsers(securityTypes));
     _includeTrades = false;
   }
 
-  public SingleSheetMultiParserPositionWriter(SheetWriter sheet, String[] securityTypes, boolean includeTrades) {
+  public SingleSheetMultiParserPositionWriter(final SheetWriter sheet, final String[] securityTypes, final boolean includeTrades) {
     this(sheet, securityTypes);
     _includeTrades = includeTrades;
   }
 
-  public SingleSheetMultiParserPositionWriter(SheetFormat sheetFormat, OutputStream outputStream,
-                                              Map<String, RowParser> rowParsers) {
+  public SingleSheetMultiParserPositionWriter(final SheetFormat sheetFormat, final OutputStream outputStream,
+                                              final Map<String, RowParser> rowParsers) {
     this(SheetWriter.newSheetWriter(sheetFormat, outputStream, getColumns(rowParsers)), rowParsers);
     _includeTrades = false;
-  }  
+  }
 
-  public SingleSheetMultiParserPositionWriter(SheetFormat sheetFormat, OutputStream outputStream,
-                                              Map<String, RowParser> rowParsers, boolean includeTrades) {
+  public SingleSheetMultiParserPositionWriter(final SheetFormat sheetFormat, final OutputStream outputStream,
+                                              final Map<String, RowParser> rowParsers, final boolean includeTrades) {
     this(sheetFormat, outputStream, rowParsers);
     _includeTrades = includeTrades;
   }
 
-  public SingleSheetMultiParserPositionWriter(SheetFormat sheetFormat,
-                                              OutputStream outputStream,
-                                              String[] securityTypes) {
+  public SingleSheetMultiParserPositionWriter(final SheetFormat sheetFormat,
+                                              final OutputStream outputStream,
+                                              final String[] securityTypes) {
     this(SheetWriter.newSheetWriter(sheetFormat, outputStream, getColumns(getParsers(securityTypes))), getParsers(securityTypes));
     _includeTrades = false;
   }
 
-  public SingleSheetMultiParserPositionWriter(SheetFormat sheetFormat,
-                                              OutputStream outputStream,
-                                              String[] securityTypes,
-                                              boolean includeTrades) {
+  public SingleSheetMultiParserPositionWriter(final SheetFormat sheetFormat,
+                                              final OutputStream outputStream,
+                                              final String[] securityTypes,
+                                              final boolean includeTrades) {
     this(sheetFormat, outputStream, securityTypes);
     _includeTrades = includeTrades;
   }
 
-  public SingleSheetMultiParserPositionWriter(String filename, Map<String, RowParser> rowParsers) {
+  public SingleSheetMultiParserPositionWriter(final String filename, final Map<String, RowParser> rowParsers) {
     this(SheetWriter.newSheetWriter(filename, getColumns(rowParsers)), rowParsers);
     _includeTrades = false;
   }
 
-  public SingleSheetMultiParserPositionWriter(String filename, Map<String, RowParser> rowParsers, boolean includeTrades) {
+  public SingleSheetMultiParserPositionWriter(final String filename, final Map<String, RowParser> rowParsers, final boolean includeTrades) {
     this(filename, rowParsers);
     _includeTrades = includeTrades;
   }
 
-  public SingleSheetMultiParserPositionWriter(String filename, String[] securityTypes) {
+  public SingleSheetMultiParserPositionWriter(final String filename, final String[] securityTypes) {
     this(filename, getParsers(securityTypes));
     _includeTrades = false;
   }
 
-  public SingleSheetMultiParserPositionWriter(String filename, String[] securityTypes, boolean includeTrades) {
+  public SingleSheetMultiParserPositionWriter(final String filename, final String[] securityTypes, final boolean includeTrades) {
     this(filename, securityTypes);
     _includeTrades = includeTrades;
   }
 
   @Override
-  public void addAttribute(String key, String value) {
+  public void addAttribute(final String key, final String value) {
     // Not supported
   }
 
-  private void writeSecurities(ManageableSecurity[] securities) {
-        
+  private void writeSecurities(final ManageableSecurity[] securities) {
+
     String className = securities[0].getClass().toString();
     className = className.substring(className.lastIndexOf('.') + 1).replace("Security", "");
     if ((_currentParser = _parserMap.get(className)) != null) { //CSIGNORE
@@ -141,13 +141,13 @@ public class SingleSheetMultiParserPositionWriter extends SingleSheetPositionWri
   }
 
   @Override
-  public ObjectsPair<ManageablePosition, ManageableSecurity[]> writePosition(ManageablePosition position, ManageableSecurity[] securities) {
+  public ObjectsPair<ManageablePosition, ManageableSecurity[]> writePosition(final ManageablePosition position, final ManageableSecurity[] securities) {
     ArgumentChecker.notNull(position, "position");
     ArgumentChecker.notNull(securities, "securities");
-    
+
     // Write securities
     writeSecurities(securities);
-    
+
     // Write position
     if (_currentParser != null) {
 
@@ -162,9 +162,9 @@ public class SingleSheetMultiParserPositionWriter extends SingleSheetPositionWri
       if (_includeTrades) {
         // Write each trade as a separate row if the current position contains trades
         if (position.getTrades().size() > 0) {
-          ManageablePosition subPosition = JodaBeanUtils.clone(position);
-          for (ManageableTrade trade : position.getTrades()) {
-            Map<String, String> tempRow = new HashMap<>();
+          final ManageablePosition subPosition = JodaBeanUtils.clone(position);
+          for (final ManageableTrade trade : position.getTrades()) {
+            final Map<String, String> tempRow = new HashMap<>();
             tempRow.putAll(_currentRow);
             tempRow.putAll(_currentParser.constructRow(trade));
 
@@ -204,16 +204,16 @@ public class SingleSheetMultiParserPositionWriter extends SingleSheetPositionWri
     }
 
     // Empty the current row buffer
-    _currentRow = new HashMap<String, String>();
+    _currentRow = new HashMap<>();
 
     return ObjectsPair.of(position, securities);
   }
 
-  private static Map<String, RowParser> getParsers(String[] securityTypes) {
-    Map<String, RowParser> rowParsers = new HashMap<String, RowParser>();
+  private static Map<String, RowParser> getParsers(final String[] securityTypes) {
+    final Map<String, RowParser> rowParsers = new HashMap<>();
     if (securityTypes != null) {
-      for (String s : securityTypes) {
-        JodaBeanRowParser parser = JodaBeanRowParser.newJodaBeanRowParser(s);
+      for (final String s : securityTypes) {
+        final JodaBeanRowParser parser = JodaBeanRowParser.newJodaBeanRowParser(s);
         if (parser != null) {
           rowParsers.put(s, parser);
         }
@@ -222,11 +222,11 @@ public class SingleSheetMultiParserPositionWriter extends SingleSheetPositionWri
     return rowParsers;
   }
 
-  private static String[] getColumns(Map<String, RowParser> rowParsers) {
-    Set<String> columns = new HashSet<String>();
-    for (RowParser rowParser : rowParsers.values()) {      
+  private static String[] getColumns(final Map<String, RowParser> rowParsers) {
+    final Set<String> columns = new HashSet<>();
+    for (final RowParser rowParser : rowParsers.values()) {
       // Combine columns from supplied row parsers
-      for (String column : rowParser.getColumns()) {
+      for (final String column : rowParser.getColumns()) {
         columns.add(column);
       }
     }
@@ -234,7 +234,7 @@ public class SingleSheetMultiParserPositionWriter extends SingleSheetPositionWri
   }
 
   @Override
-  public void setPath(String[] newPath) {
+  public void setPath(final String[] newPath) {
     // Nothing to do here (a specialised subclass might add a 'path' column to store the current path for each row)
   }
 

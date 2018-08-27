@@ -23,36 +23,36 @@ import com.opengamma.util.test.TestGroup;
 public class DevBundleBuilderTest {
 
   public void test_builder() throws Exception {
-    BundleManager bundleManager = new BundleManager();
-    
-    Bundle testBundle = new Bundle("A.css");
+    final BundleManager bundleManager = new BundleManager();
+
+    final Bundle testBundle = new Bundle("A.css");
     for (int i = 1; i <= 100; i++) {
-      URI uri = new URI("A" + i + ".css");
+      final URI uri = new URI("A" + i + ".css");
       testBundle.addChildNode(new Fragment(uri, "/" + uri.toString()));
     }
     bundleManager.addBundle(testBundle);
-    
-    DevBundleBuilder devBundleBuilder = new DevBundleBuilder(bundleManager);
-    BundleManager devBundleManager = devBundleBuilder.getDevBundleManager();
-    
+
+    final DevBundleBuilder devBundleBuilder = new DevBundleBuilder(bundleManager);
+    final BundleManager devBundleManager = devBundleBuilder.getDevBundleManager();
+
     assertNotNull(devBundleManager);
-    
-    Bundle bundle = devBundleManager.getBundle("A.css");
+
+    final Bundle bundle = devBundleManager.getBundle("A.css");
     assertEquals("A.css", bundle.getId());
-    List<BundleNode> childNodes = bundle.getChildNodes();
+    final List<BundleNode> childNodes = bundle.getChildNodes();
     assertTrue(childNodes.size() <= DevBundleBuilder.MAX_IMPORTS);
-    for (BundleNode bundleNode : childNodes) {
+    for (final BundleNode bundleNode : childNodes) {
       assertBundleNode(bundleNode);
     }
     assertEquals(testBundle.getAllFragments(), bundle.getAllFragments());
   }
 
-  private void assertBundleNode(BundleNode bundleNode) {
+  private void assertBundleNode(final BundleNode bundleNode) {
     if (bundleNode instanceof Bundle) {
-      Bundle testBundle = (Bundle) bundleNode;
-      List<BundleNode> childNodes = testBundle.getChildNodes();
+      final Bundle testBundle = (Bundle) bundleNode;
+      final List<BundleNode> childNodes = testBundle.getChildNodes();
       assertTrue(childNodes.size() <= DevBundleBuilder.MAX_IMPORTS);
-      for (BundleNode childNode : childNodes) {
+      for (final BundleNode childNode : childNodes) {
         assertBundleNode(childNode);
       }
     }

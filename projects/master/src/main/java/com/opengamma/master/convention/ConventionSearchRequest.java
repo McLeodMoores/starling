@@ -106,32 +106,32 @@ public class ConventionSearchRequest extends AbstractSearchRequest {
 
   /**
    * Creates an instance using a single search identifier.
-   * 
+   *
    * @param conventionId  the convention external identifier to search for, not null
    */
-  public ConventionSearchRequest(ExternalId conventionId) {
+  public ConventionSearchRequest(final ExternalId conventionId) {
     addExternalId(conventionId);
   }
 
   /**
    * Creates an instance using a bundle of identifiers.
-   * 
+   *
    * @param conventionBundle  the convention external identifiers to search for, not null
    */
-  public ConventionSearchRequest(ExternalIdBundle conventionBundle) {
+  public ConventionSearchRequest(final ExternalIdBundle conventionBundle) {
     addExternalIds(conventionBundle);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Adds a single convention object identifier to the set.
-   * 
+   *
    * @param conventionId  the convention object identifier to add, not null
    */
-  public void addObjectId(ObjectIdentifiable conventionId) {
+  public void addObjectId(final ObjectIdentifiable conventionId) {
     ArgumentChecker.notNull(conventionId, "conventionId");
     if (_objectIds == null) {
-      _objectIds = new ArrayList<ObjectId>();
+      _objectIds = new ArrayList<>();
     }
     _objectIds.add(conventionId.getObjectId());
   }
@@ -139,15 +139,15 @@ public class ConventionSearchRequest extends AbstractSearchRequest {
   /**
    * Sets the set of convention object identifiers, null to not limit by convention object identifiers.
    * Note that an empty set will return no conventions.
-   * 
+   *
    * @param conventionIds  the new convention identifiers, null clears the convention id search
    */
-  public void setObjectIds(Iterable<? extends ObjectIdentifiable> conventionIds) {
+  public void setObjectIds(final Iterable<? extends ObjectIdentifiable> conventionIds) {
     if (conventionIds == null) {
       _objectIds = null;
     } else {
-      _objectIds = new ArrayList<ObjectId>();
-      for (ObjectIdentifiable conventionId : conventionIds) {
+      _objectIds = new ArrayList<>();
+      for (final ObjectIdentifiable conventionId : conventionIds) {
         _objectIds.add(conventionId.getObjectId());
       }
     }
@@ -156,24 +156,24 @@ public class ConventionSearchRequest extends AbstractSearchRequest {
   //-------------------------------------------------------------------------
   /**
    * Adds a single convention external identifier to the collection to search for.
-   * Unless customized, the search will match 
+   * Unless customized, the search will match
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
+   *
    * @param conventionId  the convention key identifier to add, not null
    */
-  public void addExternalId(ExternalId conventionId) {
+  public void addExternalId(final ExternalId conventionId) {
     ArgumentChecker.notNull(conventionId, "conventionId");
     addExternalIds(Arrays.asList(conventionId));
   }
 
   /**
    * Adds a collection of convention external identifiers to the collection to search for.
-   * Unless customized, the search will match 
+   * Unless customized, the search will match
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
+   *
    * @param conventionIds  the convention key identifiers to add, not null
    */
-  public void addExternalIds(ExternalId... conventionIds) {
+  public void addExternalIds(final ExternalId... conventionIds) {
     ArgumentChecker.notNull(conventionIds, "conventionIds");
     if (getExternalIdSearch() == null) {
       setExternalIdSearch(ExternalIdSearch.of(conventionIds));
@@ -184,12 +184,12 @@ public class ConventionSearchRequest extends AbstractSearchRequest {
 
   /**
    * Adds a collection of convention external identifiers to the collection to search for.
-   * Unless customized, the search will match 
+   * Unless customized, the search will match
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
+   *
    * @param conventionIds  the convention key identifiers to add, not null
    */
-  public void addExternalIds(Iterable<ExternalId> conventionIds) {
+  public void addExternalIds(final Iterable<ExternalId> conventionIds) {
     ArgumentChecker.notNull(conventionIds, "conventionIds");
     if (getExternalIdSearch() == null) {
       setExternalIdSearch(ExternalIdSearch.of(conventionIds));
@@ -200,10 +200,10 @@ public class ConventionSearchRequest extends AbstractSearchRequest {
 
   /**
    * Sets the search type to use in {@code ExternalIdSearch}.
-   * 
+   *
    * @param type  the type to set, not null
    */
-  public void setExternalIdSearchType(ExternalIdSearchType type) {
+  public void setExternalIdSearchType(final ExternalIdSearchType type) {
     if (getExternalIdSearch() == null) {
       setExternalIdSearch(ExternalIdSearch.of(type));
     } else {
@@ -215,11 +215,11 @@ public class ConventionSearchRequest extends AbstractSearchRequest {
    * Adds a key-value pair to the set of attributes to search for.
    * <p>
    * Attributes are used to tag the object with additional information.
-   * 
+   *
    * @param key  the key to add, not null
    * @param value  the value to add, not null
    */
-  public void addAttribute(String key, String value) {
+  public void addAttribute(final String key, final String value) {
     ArgumentChecker.notNull(key, "key");
     ArgumentChecker.notNull(value, "value");
     _attributes.put(key, value);
@@ -243,25 +243,25 @@ public class ConventionSearchRequest extends AbstractSearchRequest {
       return false;
     }
     if (getExternalIdValue() != null) {
-      for (ExternalId identifier : convention.getExternalIdBundle()) {
+      for (final ExternalId identifier : convention.getExternalIdBundle()) {
         if (RegexUtils.wildcardMatch(getExternalIdValue(), identifier.getValue()) == false) {
           return false;
         }
       }
     }
     if (getExternalIdScheme() != null) {
-      for (ExternalId identifier : convention.getExternalIdBundle()) {
+      for (final ExternalId identifier : convention.getExternalIdBundle()) {
         if (RegexUtils.wildcardMatch(getExternalIdScheme(), identifier.getScheme().getName()) == false) {
           return false;
         }
       }
     }
     if (getAttributes().size() > 0) {
-      for (Entry<String, String> entry : getAttributes().entrySet()) {
+      for (final Entry<String, String> entry : getAttributes().entrySet()) {
         if (convention.getAttributes().containsKey(entry.getKey()) == false) {
           return false;
         }
-        String otherValue = convention.getAttributes().get(entry.getKey());
+        final String otherValue = convention.getAttributes().get(entry.getKey());
         if (RegexUtils.wildcardMatch(entry.getValue(), otherValue) == false) {
           return false;
         }

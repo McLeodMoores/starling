@@ -18,12 +18,12 @@ import com.opengamma.financial.value.ValueRenamingFunction;
  */
 public class MarkToMarketPnlAliasFunction extends ValueRenamingFunction {
 
-  public MarkToMarketPnlAliasFunction(String aliasedValueRequirementName, String tradeTypeConstraint) {
+  public MarkToMarketPnlAliasFunction(final String aliasedValueRequirementName, final String tradeTypeConstraint) {
     super(Collections.singleton(ValueRequirementNames.MTM_PNL), aliasedValueRequirementName, ComputationTargetType.TRADE.or(ComputationTargetType.POSITION).or(ComputationTargetType.PORTFOLIO_NODE),
         ValueProperties.with(PnLFunctionUtils.PNL_TRADE_TYPE_CONSTRAINT, tradeTypeConstraint).get());
-    if ((!tradeTypeConstraint.equalsIgnoreCase(PnLFunctionUtils.PNL_TRADE_TYPE_ALL))
-        && (!tradeTypeConstraint.equalsIgnoreCase(PnLFunctionUtils.PNL_TRADE_TYPE_OPEN))
-        && (!tradeTypeConstraint.equalsIgnoreCase(PnLFunctionUtils.PNL_TRADE_TYPE_NEW))) {
+    if (!tradeTypeConstraint.equalsIgnoreCase(PnLFunctionUtils.PNL_TRADE_TYPE_ALL)
+        && !tradeTypeConstraint.equalsIgnoreCase(PnLFunctionUtils.PNL_TRADE_TYPE_OPEN)
+        && !tradeTypeConstraint.equalsIgnoreCase(PnLFunctionUtils.PNL_TRADE_TYPE_NEW)) {
       throw new OpenGammaRuntimeException(tradeTypeConstraint + "is not allowed. Looking for one of:" +
           PnLFunctionUtils.PNL_TRADE_TYPE_ALL + "," + PnLFunctionUtils.PNL_TRADE_TYPE_OPEN + "," + PnLFunctionUtils.PNL_TRADE_TYPE_NEW);
     }

@@ -67,13 +67,13 @@ public class StandardVanillaAccruedCDSFunction extends AbstractFunction.NonCompi
     final HolidaySource holidaySource = OpenGammaExecutionContext.getHolidaySource(executionContext);
     final SecuritySource securitySource = OpenGammaExecutionContext.getSecuritySource(executionContext);
     final RegionSource regionSource = OpenGammaExecutionContext.getRegionSource(executionContext);
-    LegalEntitySource legalEntitySource = OpenGammaExecutionContext.getLegalEntitySource(executionContext);
+    final LegalEntitySource legalEntitySource = OpenGammaExecutionContext.getLegalEntitySource(executionContext);
     final ZonedDateTime valuationTime = ZonedDateTime.now(executionContext.getValuationClock());
     final CreditDefaultSwapSecurity security = (CreditDefaultSwapSecurity) target.getSecurity();
     final Calendar calendar = new HolidaySourceCalendarAdapter(holidaySource, FinancialSecurityUtils.getCurrency(
         security));
     final CdsRecoveryRateIdentifier recoveryRateIdentifier = security.accept(new CreditSecurityToRecoveryRateVisitor(securitySource));
-    Object recoveryRateObject = inputs.getValue(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, recoveryRateIdentifier.getExternalId()));
+    final Object recoveryRateObject = inputs.getValue(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, recoveryRateIdentifier.getExternalId()));
     if (recoveryRateObject == null) {
       throw new OpenGammaRuntimeException("Could not get recovery rate");
       //LOGGER.warn("Could not get recovery rate, defaulting to 0.4: " + recoveryRateIdentifier);
@@ -81,7 +81,7 @@ public class StandardVanillaAccruedCDSFunction extends AbstractFunction.NonCompi
     }
     final double recoveryRate = (Double) recoveryRateObject;
     final CreditDefaultSwapSecurityConverter converter = new CreditDefaultSwapSecurityConverter(holidaySource, regionSource, legalEntitySource, recoveryRate, valuationTime);
-    LegacyVanillaCreditDefaultSwapDefinition definition = (LegacyVanillaCreditDefaultSwapDefinition) security.accept(converter);
+    final LegacyVanillaCreditDefaultSwapDefinition definition = (LegacyVanillaCreditDefaultSwapDefinition) security.accept(converter);
     //definition = definition.withEffectiveDate(FOLLOWING.adjustDate(calendar, valuationTime.withHour(0).withMinute(0).withSecond(0).withNano(0)));
     //definition = getStartDate(definition, security, valuationTime);
     //definition = definition.withRecoveryRate(recoveryRate);
@@ -91,11 +91,11 @@ public class StandardVanillaAccruedCDSFunction extends AbstractFunction.NonCompi
         .withAccrualDCC(definition.getDayCountFractionConvention());
     final CDSAnalytic pricingCDS = analyticFactory.makeCDS(definition.getEffectiveDate().toLocalDate(), definition.getStartDate().toLocalDate(), definition.getMaturityDate().toLocalDate());
 
-    int buySellPremiumFactor = security.isBuy() ? -1 : 1;
+    final int buySellPremiumFactor = security.isBuy() ? -1 : 1;
     final double coupon = definition.getParSpread() * 1e-4;
 
-    Set<ComputedValue> results = Sets.newHashSetWithExpectedSize(desiredValues.size());
-    for (ValueRequirement desired : desiredValues) {
+    final Set<ComputedValue> results = Sets.newHashSetWithExpectedSize(desiredValues.size());
+    for (final ValueRequirement desired : desiredValues) {
       switch (desired.getValueName()) {
         case ValueRequirementNames.ACCRUED_DAYS:
           final int accruedDays = pricingCDS.getAccruedDays();
@@ -114,14 +114,14 @@ public class StandardVanillaAccruedCDSFunction extends AbstractFunction.NonCompi
     return results;
   }
 
-  public static LegacyVanillaCreditDefaultSwapDefinition getStartDate(final LegacyVanillaCreditDefaultSwapDefinition definition, AbstractCreditDefaultSwapSecurity security, ZonedDateTime now) {
+  public static LegacyVanillaCreditDefaultSwapDefinition getStartDate(final LegacyVanillaCreditDefaultSwapDefinition definition, final AbstractCreditDefaultSwapSecurity security, final ZonedDateTime now) {
     if (security instanceof LegacyVanillaCDSSecurity) {
       return definition.withStartDate(now);
     } else if (security instanceof StandardVanillaCDSSecurity) {
-      LocalDate start = IMMDateGenerator.getPreviousIMMDate(now.toLocalDate());
+      final LocalDate start = IMMDateGenerator.getPreviousIMMDate(now.toLocalDate());
       return definition.withStartDate(ZonedDateTime.of(start, LocalTime.of(0, 0, 0, 0), ZoneId.systemDefault()));
     } else if (security instanceof CreditDefaultSwapIndexSecurity) {
-      LocalDate start = IMMDateGenerator.getPreviousIMMDate(now.toLocalDate());
+      final LocalDate start = IMMDateGenerator.getPreviousIMMDate(now.toLocalDate());
       return definition.withStartDate(ZonedDateTime.of(start, LocalTime.of(0, 0, 0, 0), ZoneId.systemDefault()));
     }
     throw new OpenGammaRuntimeException("Unexpected cds type: " + security);
@@ -134,9 +134,9 @@ public class StandardVanillaAccruedCDSFunction extends AbstractFunction.NonCompi
 
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
-    Currency ccy = FinancialSecurityUtils.getCurrency(target.getSecurity());
-    ValueSpecification daysSpec = new ValueSpecification(ValueRequirementNames.ACCRUED_DAYS, target.toSpecification(), createValueProperties().get());
-    ValueSpecification interestSpec = new ValueSpecification(ValueRequirementNames.ACCRUED_PREMIUM, target.toSpecification(),
+    final Currency ccy = FinancialSecurityUtils.getCurrency(target.getSecurity());
+    final ValueSpecification daysSpec = new ValueSpecification(ValueRequirementNames.ACCRUED_DAYS, target.toSpecification(), createValueProperties().get());
+    final ValueSpecification interestSpec = new ValueSpecification(ValueRequirementNames.ACCRUED_PREMIUM, target.toSpecification(),
                                                              createValueProperties().with(ValuePropertyNames.CURRENCY, ccy.getCode()).get());
     return Sets.newHashSet(daysSpec, interestSpec);
   }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.cache;
@@ -29,7 +29,7 @@ public class CachingFudgeMessageStoreFactory implements FudgeMessageStoreFactory
   }
 
   @Override
-  public FudgeMessageStore createMessageStore(ViewComputationCacheKey cacheKey) {
+  public FudgeMessageStore createMessageStore(final ViewComputationCacheKey cacheKey) {
     return new CachingFudgeMessageStore(getUnderlying().createMessageStore(cacheKey), getCacheManager(), cacheKey);
   }
 

@@ -56,21 +56,21 @@ public final class OpenGammaCompilationContext {
   public static final String CONVENTION_SOURCE_NAME = "conventionSource";
   /**
    * The name under which an instance of {@link InterpolatedYieldCurveDefinitionSource} should be bound.
-   * 
+   *
    * @deprecated use a config source to look up the object
    */
   @Deprecated
   public static final String INTERPOLATED_YIELD_CURVE_DEFINITION_SOURCE_NAME = "interpolatedYieldCurveDefinitionSource";
   /**
    * The name under which an instance of {@link InterpolatedYieldCurveSpecificationBuilder} should be bound.
-   * 
+   *
    * @deprecated use a config source to look up the object
    */
   @Deprecated
   public static final String INTERPOLATED_YIELD_CURVE_SPECIFICATION_BUILDER_NAME = "interpolatedYieldCurveSpecificationBuilder";
   /**
    * The name under which an instance of {@link VolatilityCubeDefinitionSource} should be bound.
-   * 
+   *
    * @deprecated use a config source to look up the object
    */
   @Deprecated
@@ -131,7 +131,7 @@ public final class OpenGammaCompilationContext {
   // -------------------------------------------------------------------------
   /**
    * Gets a {@code ConfigSource} from the context.
-   * 
+   *
    * @param compilationContext the context to examine, not null
    * @return the config source, null if not found
    */
@@ -141,7 +141,7 @@ public final class OpenGammaCompilationContext {
 
   /**
    * Stores a {@code ConfigSource} in the context.
-   * 
+   *
    * @param compilationContext the context to store in, not null
    * @param configSource the config source to store, not null
    */
@@ -152,7 +152,7 @@ public final class OpenGammaCompilationContext {
   // -------------------------------------------------------------------------
   /**
    * Gets a {@code RegionSource} from the context.
-   * 
+   *
    * @param compilationContext the context to examine, not null
    * @return the region source, null if not found
    */
@@ -162,7 +162,7 @@ public final class OpenGammaCompilationContext {
 
   /**
    * Stores a {@code RegionSource} in the context.
-   * 
+   *
    * @param compilationContext the context to store in, not null
    * @param regionSource the region source to store, not null
    */
@@ -173,7 +173,7 @@ public final class OpenGammaCompilationContext {
   // -------------------------------------------------------------------------
   /**
    * Gets a {@code ConventionSource} from the context.
-   * 
+   *
    * @param compilationContext the context to examine, not null
    * @return the convention source, null if not found
    */
@@ -183,7 +183,7 @@ public final class OpenGammaCompilationContext {
 
   /**
    * Stores a {@code ConventionSource} in the context.
-   * 
+   *
    * @param compilationContext the context to store in, not null
    * @param conventionSource the convention source to store, not null
    */
@@ -194,7 +194,7 @@ public final class OpenGammaCompilationContext {
   // -------------------------------------------------------------------------
   /**
    * Gets a {@code ConventionBundleSource} from the context.
-   * 
+   *
    * @param compilationContext the context to examine, not null
    * @return the convention bundle source, null if not found
    */
@@ -204,7 +204,7 @@ public final class OpenGammaCompilationContext {
 
   /**
    * Stores a {@code ConventionBundleSource} in the context.
-   * 
+   *
    * @param compilationContext the context to store in, not null
    * @param conventionBundleSource the convention bundle source to store, not null
    */
@@ -309,7 +309,7 @@ public final class OpenGammaCompilationContext {
    * values rather than abandon the production. This increases the chance of a successful graph build for an inaccurately specified view but the graph may not be as the user intended/expected.
    * <p>
    * This flag is off by default.
-   * 
+   *
    * @param compilationContext the context to test, not null
    * @return true if permissive behavior is enabled, false otherwise.
    */
@@ -322,7 +322,7 @@ public final class OpenGammaCompilationContext {
    * rather than abandon the production. This increases the chance of a successful graph build for an inaccurately specified view but the graph may not be as the user intended/expected.
    * <p>
    * This flag is off by default.
-   * 
+   *
    * @param compilationContext the context to update, not null
    * @param permissive true to enable permissive behavior, false to disable it
    */

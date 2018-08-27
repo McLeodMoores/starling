@@ -21,12 +21,12 @@ import com.opengamma.timeseries.precise.instant.InstantDoubleTimeSeries;
 public class InstantDoubleTimeSeriesFudgeBuilder implements FudgeBuilder<InstantDoubleTimeSeries> {
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, InstantDoubleTimeSeries object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final InstantDoubleTimeSeries object) {
     return DoubleTimeSeriesFudgeBuilder.INSTANCE.buildMessage(serializer, object);
   }
 
   @Override
-  public InstantDoubleTimeSeries buildObject(FudgeDeserializer deserializer, FudgeMsg message) {
+  public InstantDoubleTimeSeries buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
     return (InstantDoubleTimeSeries) DoubleTimeSeriesFudgeBuilder.INSTANCE.buildObject(deserializer, message);
   }
 

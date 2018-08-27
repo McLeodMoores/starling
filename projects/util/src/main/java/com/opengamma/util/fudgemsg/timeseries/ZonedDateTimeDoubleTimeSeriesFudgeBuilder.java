@@ -21,12 +21,12 @@ import com.opengamma.timeseries.precise.zdt.ZonedDateTimeDoubleTimeSeries;
 public class ZonedDateTimeDoubleTimeSeriesFudgeBuilder implements FudgeBuilder<ZonedDateTimeDoubleTimeSeries> {
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, ZonedDateTimeDoubleTimeSeries object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final ZonedDateTimeDoubleTimeSeries object) {
     return DoubleTimeSeriesFudgeBuilder.INSTANCE.buildMessage(serializer, object);
   }
 
   @Override
-  public ZonedDateTimeDoubleTimeSeries buildObject(FudgeDeserializer deserializer, FudgeMsg message) {
+  public ZonedDateTimeDoubleTimeSeries buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
     return (ZonedDateTimeDoubleTimeSeries) DoubleTimeSeriesFudgeBuilder.INSTANCE.buildObject(deserializer, message);
   }
 

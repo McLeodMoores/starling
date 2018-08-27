@@ -26,14 +26,14 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
   private final Object _inlineKey;
   private final TypeFormatter.Format _format;
 
-  private ResultsCell(Object value,
-                      ValueSpecification valueSpecification,
-                      Collection<Object> history,
-                      AggregatedExecutionLog executionLog,
-                      boolean updated,
-                      Class<?> type,
-                      Object inlineKey,
-                      TypeFormatter.Format format) {
+  private ResultsCell(final Object value,
+                      final ValueSpecification valueSpecification,
+                      final Collection<Object> history,
+                      final AggregatedExecutionLog executionLog,
+                      final boolean updated,
+                      final Class<?> type,
+                      final Object inlineKey,
+                      final TypeFormatter.Format format) {
     _value = value;
     _valueSpecification = valueSpecification;
     _history = history;
@@ -51,7 +51,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
    * @param type TODO remove
    * @return A cell for displaying the value
    */
-  /* package */ static ResultsCell forStaticValue(Object value, Class<?> type, TypeFormatter.Format format, boolean updated) {
+  /* package */ static ResultsCell forStaticValue(final Object value, final Class<?> type, final TypeFormatter.Format format, final boolean updated) {
     return new ResultsCell(value, null, null, null, updated, type, null, format);
   }
 
@@ -62,7 +62,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
    * @param type TODO remove
    * @return A cell for displaying the value
    */
-  /* package */ static ResultsCell forStaticValue(Object value, Class<?> type, TypeFormatter.Format format) {
+  /* package */ static ResultsCell forStaticValue(final Object value, final Class<?> type, final TypeFormatter.Format format) {
     return forStaticValue(value, type, format, false);
   }
 
@@ -75,24 +75,24 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
    * @param type TODO remove this parameter
    * @return A cell for displaying the value
    */
-  /* package */ static ResultsCell forCalculatedValue(Object value,
-                                                      ValueSpecification valueSpecification,
-                                                      Collection<Object> history,
-                                                      AggregatedExecutionLog executionLog,
-                                                      boolean updated,
-                                                      Class<?> type,
-                                                      TypeFormatter.Format format) {
+  /* package */ static ResultsCell forCalculatedValue(final Object value,
+                                                      final ValueSpecification valueSpecification,
+                                                      final Collection<Object> history,
+                                                      final AggregatedExecutionLog executionLog,
+                                                      final boolean updated,
+                                                      final Class<?> type,
+                                                      final TypeFormatter.Format format) {
     return new ResultsCell(value, valueSpecification, history, executionLog, updated, type, null, format);
   }
 
-  /* package */ static ResultsCell forCalculatedValue(Object value,
-                                                      ValueSpecification valueSpecification,
-                                                      Collection<Object> history,
-                                                      AggregatedExecutionLog executionLog,
-                                                      boolean updated,
-                                                      Class<?> type,
-                                                      Object inlineKey,
-                                                      TypeFormatter.Format format) {
+  /* package */ static ResultsCell forCalculatedValue(final Object value,
+                                                      final ValueSpecification valueSpecification,
+                                                      final Collection<Object> history,
+                                                      final AggregatedExecutionLog executionLog,
+                                                      final boolean updated,
+                                                      final Class<?> type,
+                                                      final Object inlineKey,
+                                                      final TypeFormatter.Format format) {
     return new ResultsCell(value, valueSpecification, history, executionLog, updated, type, inlineKey, format);
   }
 
@@ -103,7 +103,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
    * be an empty collection, for types that don't it should be null.
    * @param type TODO remove
    */
-  /* package */ static ResultsCell empty(Collection<Object> emptyHistory, Class<?> type) {
+  /* package */ static ResultsCell empty(final Collection<Object> emptyHistory, final Class<?> type) {
     return new ResultsCell(null, null, emptyHistory, null, false, type, null, TypeFormatter.Format.CELL);
   }
 
@@ -156,14 +156,14 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
   }
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(final Object o) {
     if (this == o) {
       return true;
     }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ResultsCell that = (ResultsCell) o;
+    final ResultsCell that = (ResultsCell) o;
 
     if (_updated != that._updated) {
       return false;

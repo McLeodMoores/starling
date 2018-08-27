@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.tree;
@@ -15,7 +15,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class DoubleBarrierOptionFunctionProvider extends BarrierOptionFunctionProvider {
 
-  private double _upperBarrier;
+  private final double _upperBarrier;
   private CrossBarrierChecker _checkerDouble;
 
   /**
@@ -110,6 +110,7 @@ public class DoubleBarrierOptionFunctionProvider extends BarrierOptionFunctionPr
     return this._checkerDouble;
   }
 
+  @Override
   public BarrierTypes getBarrierType() {
     return BarrierTypes.DoubleKnockOut;
   }
@@ -152,7 +153,7 @@ public class DoubleBarrierOptionFunctionProvider extends BarrierOptionFunctionPr
 
     @Override
     public boolean checkStrikeBehindBarrier() {
-      return getSign() == 1. ? (_upperBarrier <= getStrike()) : false || getSuperclassChecker().checkStrikeBehindBarrier();
+      return getSign() == 1. ? _upperBarrier <= getStrike() : false || getSuperclassChecker().checkStrikeBehindBarrier();
     }
   }
 
@@ -162,12 +163,12 @@ public class DoubleBarrierOptionFunctionProvider extends BarrierOptionFunctionPr
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_upperBarrier);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -177,7 +178,7 @@ public class DoubleBarrierOptionFunctionProvider extends BarrierOptionFunctionPr
     if (!(obj instanceof DoubleBarrierOptionFunctionProvider)) {
       return false;
     }
-    DoubleBarrierOptionFunctionProvider other = (DoubleBarrierOptionFunctionProvider) obj;
+    final DoubleBarrierOptionFunctionProvider other = (DoubleBarrierOptionFunctionProvider) obj;
     if (Double.doubleToLongBits(_upperBarrier) != Double.doubleToLongBits(other._upperBarrier)) {
       return false;
     }

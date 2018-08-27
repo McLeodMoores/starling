@@ -40,7 +40,7 @@ public final class Oracle11gDbManagement extends AbstractDbManagement {
 
   /**
    * Gets the singleton instance.
-   * 
+   *
    * @return the instance, not null
    */
   public static Oracle11gDbManagement getInstance() {
@@ -61,7 +61,7 @@ public final class Oracle11gDbManagement extends AbstractDbManagement {
   public Class<?> getJDBCDriverClass() {
     try {
       return Class.forName("oracle.jdbc.driver.OracleDriver");
-    } catch (ClassNotFoundException ex) {
+    } catch (final ClassNotFoundException ex) {
       throw new OpenGammaRuntimeException("Could not load the Oracle JDBC driver: " + ex.getMessage());
     }
     // Use the Oracle driver...
@@ -75,56 +75,56 @@ public final class Oracle11gDbManagement extends AbstractDbManagement {
 
   //-------------------------------------------------------------------------
   @Override
-  public String getCatalogToConnectTo(String catalog) {
+  public String getCatalogToConnectTo(final String catalog) {
     return getDbHost();
   }
 
   @Override
-  public String getAllSchemasSQL(String catalog) {
+  public String getAllSchemasSQL(final String catalog) {
     return "SELECT username as name FROM ALL_USERS";
   }
 
   @Override
-  public String getAllForeignKeyConstraintsSQL(String catalog, String schema) {
-    String sql = "SELECT constraint_name AS name, table_name FROM USER_CONSTRAINTS WHERE constraint_type = 'R' AND owner='" + getUser() + "'";
+  public String getAllForeignKeyConstraintsSQL(final String catalog, final String schema) {
+    final String sql = "SELECT constraint_name AS name, table_name FROM USER_CONSTRAINTS WHERE constraint_type = 'R' AND owner='" + getUser() + "'";
     return sql;
   }
 
   @Override
-  public String getAllSequencesSQL(String catalog, String schema) {
+  public String getAllSequencesSQL(final String catalog, final String schema) {
     return "SELECT object_name as name FROM ALL_OBJECTS where OBJECT_TYPE = 'SEQUENCE' AND owner='" + getUser() + "'";
   }
 
   @Override
-  public String getAllTablesSQL(String catalog, String schema) {
+  public String getAllTablesSQL(final String catalog, final String schema) {
     return "SELECT table_name as name FROM USER_TABLES";
   }
 
   @Override
-  public String getAllViewsSQL(String catalog, String schema) {
+  public String getAllViewsSQL(final String catalog, final String schema) {
     return "SELECT object_name as name FROM ALL_OBJECTS where OBJECT_TYPE = 'VIEW' AND owner='" + getUser() + "'";
   }
 
   @Override
-  public String getAllColumnsSQL(String catalog, String schema, String table) {
-    StringBuilder sql = new StringBuilder("SELECT column_name AS name, data_type AS datatype, " +
+  public String getAllColumnsSQL(final String catalog, final String schema, final String table) {
+    final StringBuilder sql = new StringBuilder("SELECT column_name AS name, data_type AS datatype, " +
         "nullable AS allowsnull, data_default AS defaultvalue FROM ALL_TAB_COLUMNS WHERE owner = '" + getUser() +
         "' AND table_name = '" + table + "'");
     return sql.toString();
   }
 
   @Override
-  public String getCreateSchemaSQL(String catalog, String schema) {
+  public String getCreateSchemaSQL(final String catalog, final String schema) {
     return "";
   }
 
   @Override
-  public String getSchemaVersionTable(String schemaGroupName) {
+  public String getSchemaVersionTable(final String schemaGroupName) {
     return (schemaGroupName + SCHEMA_VERSION_TABLE_SUFFIX).toLowerCase();
   }
 
   @Override
-  public String getSchemaVersionSQL(String catalog, String schemaGroupName) {
+  public String getSchemaVersionSQL(final String catalog, final String schemaGroupName) {
     return "SELECT version_value FROM " + getSchemaVersionTable(schemaGroupName) + " WHERE version_key = 'schema_patch'";
   }
 
@@ -157,7 +157,7 @@ public final class Oracle11gDbManagement extends AbstractDbManagement {
   }
 
   @Override
-  public void dropSchema(String catalog, String schema) {
+  public void dropSchema(final String catalog, final String schema) {
     // Does not handle triggers or stored procedures yet
     Connection conn = null;
     try {
@@ -169,8 +169,8 @@ public final class Oracle11gDbManagement extends AbstractDbManagement {
       conn = DriverManager.getConnection(getCatalogToConnectTo(catalog), getSystemUser(), getSystemPassword());
 
       if (schema != null) {
-        Statement statement = conn.createStatement();
-        Collection<String> schemas = getAllSchemas(catalog, statement);
+        final Statement statement = conn.createStatement();
+        final Collection<String> schemas = getAllSchemas(catalog, statement);
         statement.close();
 
         if (!schemas.contains(schema)) {
@@ -180,20 +180,20 @@ public final class Oracle11gDbManagement extends AbstractDbManagement {
       }
 
       setActiveSchema(conn, schema);
-      Statement statement = conn.createStatement();
+      final Statement statement = conn.createStatement();
 
       statement.addBatch("DROP USER " + getUser() + " CASCADE");
       statement.executeBatch();
       statement.close();
 
-    } catch (SQLException e) {
+    } catch (final SQLException e) {
       throw new OpenGammaRuntimeException("Failed to drop schema", e);
     } finally {
       try {
         if (conn != null) {
           conn.close();
         }
-      } catch (SQLException e) {
+      } catch (final SQLException e) {
       }
     }
   }

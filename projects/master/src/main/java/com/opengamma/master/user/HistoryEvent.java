@@ -5,7 +5,6 @@
  */
 package com.opengamma.master.user;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -68,7 +67,7 @@ public class HistoryEvent implements ImmutableBean, Comparable<HistoryEvent> {
   //-------------------------------------------------------------------------
   /**
    * Creates a history event.
-   * 
+   *
    * @param type  the type, not null
    * @param uniqueId  the unique identifier, not null
    * @param userName  the user name, not null
@@ -76,21 +75,21 @@ public class HistoryEvent implements ImmutableBean, Comparable<HistoryEvent> {
    * @param changes  the changes that occurred, not null
    * @return the event, not null
    */
-  public static HistoryEvent of(HistoryEventType type, UniqueId uniqueId, String userName, Instant instant, List<String> changes) {
+  public static HistoryEvent of(final HistoryEventType type, final UniqueId uniqueId, final String userName, final Instant instant, final List<String> changes) {
     return new HistoryEvent(type, uniqueId, userName, instant, changes);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Creates an instance.
-   * 
+   *
    * @param type  the type, not null
    * @param uniqueId  the unique identifier, not null
    * @param userName  the user name, not null
    * @param instant  the instant, not null
    * @param changes  the changes that occurred, not null
    */
-  private HistoryEvent(HistoryEventType type, UniqueId uniqueId, String userName, Instant instant, List<String> changes) {
+  private HistoryEvent(final HistoryEventType type, final UniqueId uniqueId, final String userName, final Instant instant, final List<String> changes) {
     JodaBeanUtils.notNull(type, "type");
     JodaBeanUtils.notNull(uniqueId, "uniqueId");
     JodaBeanUtils.notNull(userName, "userName");
@@ -106,12 +105,12 @@ public class HistoryEvent implements ImmutableBean, Comparable<HistoryEvent> {
   //-------------------------------------------------------------------------
   /**
    * Compares this event to another sorting in instant order.
-   * 
+   *
    * @param other  the other event, not null
    * @return the comparison result
    */
   @Override
-  public int compareTo(HistoryEvent other) {
+  public int compareTo(final HistoryEvent other) {
     return ComparisonChain.start()
         .compare(getInstant(), other.getInstant())
         .compare(getUniqueId(), other.getUniqueId())

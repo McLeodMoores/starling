@@ -32,7 +32,7 @@ public abstract class AbstractDataResource {
    * Creates the empty RESTful "ok" response object - 200.
    * <p>
    * This is normally used as a response to a ping.
-   * 
+   *
    * @return the response, not null
    */
   protected Response responseOk() {
@@ -43,7 +43,7 @@ public abstract class AbstractDataResource {
    * Creates the empty RESTful "no-content" response object - 204.
    * <p>
    * This is the correct form of response if there is no entity.
-   * 
+   *
    * @return the response, not null
    */
   protected Response responseOkNoContent() {
@@ -52,7 +52,7 @@ public abstract class AbstractDataResource {
 
   /**
    * Creates the RESTful "created" response object.
-   * 
+   *
    * @param uri  the URI that was created, may be null if value is null
    * @return the response, not null
    */
@@ -64,7 +64,7 @@ public abstract class AbstractDataResource {
    * Creates the RESTful "ok" response object, converting null to a 404.
    * <p>
    * The response will only go via Fudge if the value if a Fudge recognized type.
-   * 
+   *
    * @param value  the value to contain in the response, or null to trigger a 404
    * @return the response, not null
    */
@@ -78,7 +78,7 @@ public abstract class AbstractDataResource {
    * Creates the RESTful "ok" response object for an object, converting null to a 404.
    * <p>
    * The response object is suitable for conversion to Fudge or Joda-Beans mime types.
-   * 
+   *
    * @param value  the value to contain in the response, or null to trigger a 404
    * @return the response, not null
    */
@@ -91,7 +91,7 @@ public abstract class AbstractDataResource {
    * Creates the RESTful "created" response object for an object, converting null to a 404.
    * <p>
    * The response object is suitable for conversion to Fudge or Joda-Beans mime types.
-   * 
+   *
    * @param uri  the URI that was created, may be null if value is null
    * @param value  the value to contain in the response, or null to trigger a 404
    * @return the response, not null
@@ -106,7 +106,7 @@ public abstract class AbstractDataResource {
    * Creates the RESTful "ok" response object using Fudge, converting null to a 404.
    * <p>
    * The response will be converted to XML or JSON formatted Fudge on demand.
-   * 
+   *
    * @param value  the value to contain in the response, or null to trigger a 404
    * @return the response, not null
    * @deprecated Use {@code responseOkObject}
@@ -121,7 +121,7 @@ public abstract class AbstractDataResource {
    * Creates the RESTful "created" response object using Fudge, converting null to a 404.
    * <p>
    * The response will be converted to XML or JSON formatted Fudge on demand.
-   * 
+   *
    * @param uri  the URI that was created, may be null if value is null
    * @param value  the value to contain in the response, or null to trigger a 404
    * @return the response, not null
@@ -136,7 +136,7 @@ public abstract class AbstractDataResource {
   //-------------------------------------------------------------------------
   /**
    * Checks if the value is null and throws a 404 exception.
-   * 
+   *
    * @param value  the value to check
    * @throws WebApplicationException if the value is null
    */
@@ -146,7 +146,7 @@ public abstract class AbstractDataResource {
     }
   }
 
-  private Object wrap(Object value) {
+  private Object wrap(final Object value) {
     if (value instanceof FudgeMsgEnvelope || value instanceof FudgeMsg || value instanceof Bean) {
       return value;
     }
@@ -156,13 +156,13 @@ public abstract class AbstractDataResource {
   //-------------------------------------------------------------------------
   /**
    * Creates a HATEOAS response for this object.
-   * 
+   *
    * @param uriInfo the URI info, not null
    * @return the response, not null
    */
   protected Response hateoasResponse(final UriInfo uriInfo) {
-    Class<? extends AbstractDataResource> cls = getClass();
-    StringBuilder buf = new StringBuilder();
+    final Class<? extends AbstractDataResource> cls = getClass();
+    final StringBuilder buf = new StringBuilder();
     buf.append("<p>").append(cls.getName()).append("</p>");
     buildHateoas(uriInfo, cls, buf, "");
     return Response.ok(buf.toString()).build();
@@ -175,8 +175,8 @@ public abstract class AbstractDataResource {
       if (uriPath.endsWith("/")) {
         uriPath = uriPath.substring(0, uriPath.length() - 1);
       }
-      Method[] methods = cls.getMethods();
-      for (Method method : methods) {
+      final Method[] methods = cls.getMethods();
+      for (final Method method : methods) {
         String path = basePath;
         if (method.isAnnotationPresent(Path.class)) {
           path += "/" + method.getAnnotation(Path.class).value();
@@ -200,7 +200,7 @@ public abstract class AbstractDataResource {
           }
         }
       }
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       // ignore
     }
   }

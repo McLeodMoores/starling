@@ -73,7 +73,7 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
   private Meter _inboundTickMeter;
 
   @Override
-  public synchronized void registerMetrics(MetricRegistry summaryRegistry, MetricRegistry detailedRegistry, String namePrefix) {
+  public synchronized void registerMetrics(final MetricRegistry summaryRegistry, final MetricRegistry detailedRegistry, final String namePrefix) {
     _inboundTickMeter = summaryRegistry.meter(namePrefix + ".ticks.count");
     // REVIEW kirk 2013-04-22 -- This might be better as a Counter.
     summaryRegistry.register(namePrefix + ".subscriptions.count", new Gauge<Integer>() {
@@ -84,7 +84,7 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
     });
   }
 
-  public void setHeartbeatMessageSender(ByteArrayMessageSender messageSender) {
+  public void setHeartbeatMessageSender(final ByteArrayMessageSender messageSender) {
     ArgumentChecker.notNull(messageSender, "Message Sender");
     _heartbeater = new Heartbeater(_valueDistributor, new HeartbeatSender(messageSender, getFudgeContext()), getTimer(), getHeartbeatPeriod());
   }
@@ -118,7 +118,7 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
   /**
    * @param heartbeatPeriod the heartbeatPeriod to set
    */
-  public void setHeartbeatPeriod(long heartbeatPeriod) {
+  public void setHeartbeatPeriod(final long heartbeatPeriod) {
     _heartbeatPeriod = heartbeatPeriod;
   }
 
@@ -139,13 +139,13 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
   /**
    * @param fudgeContext the fudgeContext to set
    */
-  public void setFudgeContext(FudgeContext fudgeContext) {
+  public void setFudgeContext(final FudgeContext fudgeContext) {
     _fudgeContext = fudgeContext;
   }
 
   /**
    * Obtain <em>a copy of</em> the active subscription specifications. For concurrency reason this will return a new copy on each call.
-   * 
+   *
    * @return a copy of the Active Fully-Qualified Subscription Specifications
    */
   public Set<LiveDataSpecification> getActiveSubscriptionSpecifications() {
@@ -153,11 +153,11 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
   }
 
   @Override
-  public void subscribe(UserPrincipal user, Collection<LiveDataSpecification> requestedSpecifications, LiveDataListener listener) {
+  public void subscribe(final UserPrincipal user, final Collection<LiveDataSpecification> requestedSpecifications, final LiveDataListener listener) {
 
-    ArrayList<SubscriptionHandle> subscriptionHandles = new ArrayList<SubscriptionHandle>();
-    for (LiveDataSpecification requestedSpecification : requestedSpecifications) {
-      SubscriptionHandle subHandle = new SubscriptionHandle(user, SubscriptionType.NON_PERSISTENT, requestedSpecification, listener);
+    final ArrayList<SubscriptionHandle> subscriptionHandles = new ArrayList<>();
+    for (final LiveDataSpecification requestedSpecification : requestedSpecifications) {
+      final SubscriptionHandle subHandle = new SubscriptionHandle(user, SubscriptionType.NON_PERSISTENT, requestedSpecification, listener);
       subscriptionHandles.add(subHandle);
     }
 
@@ -167,21 +167,21 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
   }
 
   @Override
-  public void subscribe(UserPrincipal user, LiveDataSpecification requestedSpecification, LiveDataListener listener) {
+  public void subscribe(final UserPrincipal user, final LiveDataSpecification requestedSpecification, final LiveDataListener listener) {
     subscribe(user, Collections.singleton(requestedSpecification), listener);
   }
 
   private abstract class SnapshotListener implements LiveDataListener {
 
-    private final Collection<LiveDataSubscriptionResponse> _responses = new ArrayList<LiveDataSubscriptionResponse>();
+    private final Collection<LiveDataSubscriptionResponse> _responses = new ArrayList<>();
     private final AtomicInteger _responsesOutstanding;
 
-    public SnapshotListener(int expectedNumberOfResponses) {
+    public SnapshotListener(final int expectedNumberOfResponses) {
       _responsesOutstanding = new AtomicInteger(expectedNumberOfResponses);
     }
 
     @Override
-    public void subscriptionResultReceived(LiveDataSubscriptionResponse subscriptionResult) {
+    public void subscriptionResultReceived(final LiveDataSubscriptionResponse subscriptionResult) {
       _responses.add(subscriptionResult);
       if (_responsesOutstanding.decrementAndGet() <= 0) {
         notifyResponses();
@@ -189,7 +189,7 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
     }
 
     @Override
-    public void subscriptionResultsReceived(Collection<LiveDataSubscriptionResponse> subscriptionResults) {
+    public void subscriptionResultsReceived(final Collection<LiveDataSubscriptionResponse> subscriptionResults) {
       _responses.addAll(subscriptionResults);
       if (_responsesOutstanding.addAndGet(-subscriptionResults.size()) <= 0) {
         notifyResponses();
@@ -197,13 +197,13 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
     }
 
     @Override
-    public void subscriptionStopped(LiveDataSpecification fullyQualifiedSpecification) {
-      // should never go here      
+    public void subscriptionStopped(final LiveDataSpecification fullyQualifiedSpecification) {
+      // should never go here
       throw new UnsupportedOperationException();
     }
 
     @Override
-    public void valueUpdate(LiveDataValueUpdate valueUpdate) {
+    public void valueUpdate(final LiveDataValueUpdate valueUpdate) {
       // should never go here
       throw new UnsupportedOperationException();
     }
@@ -285,23 +285,23 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
   }
 
   @Override
-  public Collection<LiveDataSubscriptionResponse> snapshot(UserPrincipal user, Collection<LiveDataSpecification> requestedSpecifications, long timeout) {
+  public Collection<LiveDataSubscriptionResponse> snapshot(final UserPrincipal user, final Collection<LiveDataSpecification> requestedSpecifications, final long timeout) {
     ArgumentChecker.notNull(user, "User");
     ArgumentChecker.notNull(requestedSpecifications, "Live Data specifications");
     if (requestedSpecifications.isEmpty()) {
       return Collections.emptySet();
     }
     final SynchronousSnapshotListener listener = new SynchronousSnapshotListener(requestedSpecifications.size());
-    ArrayList<SubscriptionHandle> subscriptionHandles = new ArrayList<SubscriptionHandle>();
-    for (LiveDataSpecification requestedSpecification : requestedSpecifications) {
-      SubscriptionHandle subHandle = new SubscriptionHandle(user, SubscriptionType.SNAPSHOT, requestedSpecification, listener);
+    final ArrayList<SubscriptionHandle> subscriptionHandles = new ArrayList<>();
+    for (final LiveDataSpecification requestedSpecification : requestedSpecifications) {
+      final SubscriptionHandle subHandle = new SubscriptionHandle(user, SubscriptionType.SNAPSHOT, requestedSpecification, listener);
       subscriptionHandles.add(subHandle);
     }
     handleSubscriptionRequest(subscriptionHandles);
     boolean success;
     try {
       success = listener.waitForResponses(timeout);
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
       Thread.interrupted();
       throw new OpenGammaRuntimeException("Thread interrupted when obtaining snapshot");
     }
@@ -314,7 +314,7 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
 
   /**
    * Asynchronous form of {@link #snapshot(UserPrincipal, Collection<LiveDataSpecification>, long)}.
-   * 
+   *
    * @param user see {@link #snapshot(UserPrincipal, Collection<LiveDataSpecification>, long)}
    * @param requestedSpecifications see {@link #snapshot(UserPrincipal, Collection<LiveDataSpecification>, long)}
    * @param timeout see {@link #snapshot(UserPrincipal, Collection<LiveDataSpecification>, long)}
@@ -346,9 +346,9 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
           }
 
         });
-    ArrayList<SubscriptionHandle> subscriptionHandles = new ArrayList<SubscriptionHandle>();
-    for (LiveDataSpecification requestedSpecification : requestedSpecifications) {
-      SubscriptionHandle subHandle = new SubscriptionHandle(user, SubscriptionType.SNAPSHOT, requestedSpecification, listener);
+    final ArrayList<SubscriptionHandle> subscriptionHandles = new ArrayList<>();
+    for (final LiveDataSpecification requestedSpecification : requestedSpecifications) {
+      final SubscriptionHandle subHandle = new SubscriptionHandle(user, SubscriptionType.SNAPSHOT, requestedSpecification, listener);
       subscriptionHandles.add(subHandle);
     }
     handleSubscriptionRequest(subscriptionHandles);
@@ -356,9 +356,9 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
   }
 
   @Override
-  public LiveDataSubscriptionResponse snapshot(UserPrincipal user, LiveDataSpecification requestedSpecification, long timeout) {
+  public LiveDataSubscriptionResponse snapshot(final UserPrincipal user, final LiveDataSpecification requestedSpecification, final long timeout) {
 
-    Collection<LiveDataSubscriptionResponse> snapshots = snapshot(user, Collections.singleton(requestedSpecification), timeout);
+    final Collection<LiveDataSubscriptionResponse> snapshots = snapshot(user, Collections.singleton(requestedSpecification), timeout);
 
     if (snapshots.size() != 1) {
       throw new OpenGammaRuntimeException("One snapshot request should return 1 snapshot, was " + snapshots.size());
@@ -372,7 +372,7 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
    */
   protected abstract void handleSubscriptionRequest(Collection<SubscriptionHandle> subHandle);
 
-  protected void subscriptionStartingToReceiveTicks(SubscriptionHandle subHandle, LiveDataSubscriptionResponse response) {
+  protected void subscriptionStartingToReceiveTicks(final SubscriptionHandle subHandle, final LiveDataSubscriptionResponse response) {
     _pendingSubscriptionWriteLock.lock();
     try {
       _fullyQualifiedSpec2PendingSubscriptions.put(response.getFullyQualifiedSpecification(), subHandle);
@@ -382,7 +382,7 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
     }
   }
 
-  protected void subscriptionRequestSatisfied(SubscriptionHandle subHandle, LiveDataSubscriptionResponse response) {
+  protected void subscriptionRequestSatisfied(final SubscriptionHandle subHandle, final LiveDataSubscriptionResponse response) {
     _pendingSubscriptionWriteLock.lock();
     try {
       // Atomically (to valueUpdate callers) turn the pending subscription into a full subscription.
@@ -401,15 +401,15 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
     }
   }
 
-  protected void subscriptionRequestFailed(SubscriptionHandle subHandle, LiveDataSubscriptionResponse response) {
+  protected void subscriptionRequestFailed(final SubscriptionHandle subHandle, final LiveDataSubscriptionResponse response) {
     removePendingSubscription(subHandle);
   }
 
-  protected void removePendingSubscription(SubscriptionHandle subHandle) {
+  protected void removePendingSubscription(final SubscriptionHandle subHandle) {
     _pendingSubscriptionWriteLock.lock();
     try {
-      Collection<LiveDataSpecification> specs = _specsByHandle.removeAll(subHandle);
-      for (LiveDataSpecification liveDataSpecification : specs) {
+      final Collection<LiveDataSpecification> specs = _specsByHandle.removeAll(subHandle);
+      for (final LiveDataSpecification liveDataSpecification : specs) {
         _fullyQualifiedSpec2PendingSubscriptions.remove(liveDataSpecification, subHandle);
       }
     } finally {
@@ -418,13 +418,13 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
   }
 
   @Override
-  public void unsubscribe(UserPrincipal user, Collection<LiveDataSpecification> fullyQualifiedSpecifications, LiveDataListener listener) {
-    for (LiveDataSpecification fullyQualifiedSpecification : fullyQualifiedSpecifications) {
+  public void unsubscribe(final UserPrincipal user, final Collection<LiveDataSpecification> fullyQualifiedSpecifications, final LiveDataListener listener) {
+    for (final LiveDataSpecification fullyQualifiedSpecification : fullyQualifiedSpecifications) {
       LOGGER.info("Unsubscribing by {} to {} delivered to {}", new Object[] {user, fullyQualifiedSpecification, listener });
       boolean unsubscribeToSpec = false;
       _subscriptionLock.lock();
       try {
-        boolean stillActiveSubs = getValueDistributor().removeListener(fullyQualifiedSpecification, listener);
+        final boolean stillActiveSubs = getValueDistributor().removeListener(fullyQualifiedSpecification, listener);
         if (!stillActiveSubs) {
           unsubscribeToSpec = true;
         }
@@ -442,7 +442,7 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
   }
 
   @Override
-  public void unsubscribe(UserPrincipal user, LiveDataSpecification fullyQualifiedSpecification, LiveDataListener listener) {
+  public void unsubscribe(final UserPrincipal user, final LiveDataSpecification fullyQualifiedSpecification, final LiveDataListener listener) {
     unsubscribe(user, Collections.singleton(fullyQualifiedSpecification), listener);
   }
 
@@ -453,7 +453,7 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
     return StandardRules.getOpenGammaRuleSetId();
   }
 
-  protected void valueUpdate(LiveDataValueUpdateBean update) {
+  protected void valueUpdate(final LiveDataValueUpdateBean update) {
 
     if (_inboundTickMeter != null) {
       _inboundTickMeter.mark();
@@ -462,8 +462,8 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
 
     _pendingSubscriptionReadLock.lock();
     try {
-      Collection<SubscriptionHandle> pendingSubscriptions = _fullyQualifiedSpec2PendingSubscriptions.get(update.getSpecification());
-      for (SubscriptionHandle pendingSubscription : pendingSubscriptions) {
+      final Collection<SubscriptionHandle> pendingSubscriptions = _fullyQualifiedSpec2PendingSubscriptions.get(update.getSpecification());
+      for (final SubscriptionHandle pendingSubscription : pendingSubscriptions) {
         pendingSubscription.addTickOnHold(update);
       }
     } finally {

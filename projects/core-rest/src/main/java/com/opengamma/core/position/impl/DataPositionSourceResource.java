@@ -38,7 +38,7 @@ public class DataPositionSourceResource extends AbstractDataResource {
 
   /**
    * Creates the resource, exposing the underlying source over REST.
-   * 
+   *
    * @param positionSource  the underlying position source, not null
    */
   public DataPositionSourceResource(final PositionSource positionSource) {
@@ -49,7 +49,7 @@ public class DataPositionSourceResource extends AbstractDataResource {
   //-------------------------------------------------------------------------
   /**
    * Gets the position source.
-   * 
+   *
    * @return the position source, not null
    */
   public PositionSource getPositionSource() {
@@ -58,17 +58,17 @@ public class DataPositionSourceResource extends AbstractDataResource {
 
   //-------------------------------------------------------------------------
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
   @GET
   @Path("portfolios/{portfolioId}")
   public Response getPortfolio(
-      @PathParam("portfolioId") String idStr,
-      @QueryParam("version") String version,
-      @QueryParam("versionAsOf") String versionAsOf,
-      @QueryParam("correctedTo") String correctedTo) {
+      @PathParam("portfolioId") final String idStr,
+      @QueryParam("version") final String version,
+      @QueryParam("versionAsOf") final String versionAsOf,
+      @QueryParam("correctedTo") final String correctedTo) {
     final ObjectId objectId = ObjectId.parse(idStr);
     final VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
     if (version != null) {
@@ -83,10 +83,10 @@ public class DataPositionSourceResource extends AbstractDataResource {
   @GET
   @Path("nodes/{nodeId}")
   public Response getNode(
-      @PathParam("nodeId") String idStr,
-      @QueryParam("version") String version,
-      @QueryParam("versionAsOf") String versionAsOf,
-      @QueryParam("correctedTo") String correctedTo) {
+      @PathParam("nodeId") final String idStr,
+      @QueryParam("version") final String version,
+      @QueryParam("versionAsOf") final String versionAsOf,
+      @QueryParam("correctedTo") final String correctedTo) {
     final ObjectId objectId = ObjectId.parse(idStr);
     final VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
     final PortfolioNode result = getPositionSource().getPortfolioNode(objectId.atVersion(version), vc);
@@ -96,10 +96,10 @@ public class DataPositionSourceResource extends AbstractDataResource {
   @GET
   @Path("positions/{positionId}")
   public Response getPosition(
-      @PathParam("positionId") String idStr,
-      @QueryParam("version") String version,
-      @QueryParam("versionAsOf") String versionAsOf,
-      @QueryParam("correctedTo") String correctedTo) {
+      @PathParam("positionId") final String idStr,
+      @QueryParam("version") final String version,
+      @QueryParam("versionAsOf") final String versionAsOf,
+      @QueryParam("correctedTo") final String correctedTo) {
     final ObjectId objectId = ObjectId.parse(idStr);
     final Position result;
     if (version != null) {
@@ -113,8 +113,8 @@ public class DataPositionSourceResource extends AbstractDataResource {
   @GET
   @Path("trades/{tradeId}")
   public Response getTrade(
-      @PathParam("tradeId") String idStr,
-      @QueryParam("version") String version) {
+      @PathParam("tradeId") final String idStr,
+      @QueryParam("version") final String version) {
     final ObjectId objectId = ObjectId.parse(idStr);
     final Trade result = getPositionSource().getTrade(objectId.atVersion(version));
     return responseOkObject(result);

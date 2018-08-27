@@ -14,56 +14,56 @@ import javax.xml.namespace.NamespaceContext;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
+import org.apache.commons.io.output.XmlStreamWriter;
+
+import com.google.common.base.Throwables;
+
 import net.sf.saxon.event.StreamWriterToReceiver;
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.Serializer;
 import net.sf.saxon.s9api.Serializer.Property;
 
-import org.apache.commons.io.output.XmlStreamWriter;
-
-import com.google.common.base.Throwables;
-
 /**
  * Provides utils for when working with XML.
  */
 public final class FormattingXmlStreamWriter implements XMLStreamWriter {
-  
+
   private final StreamWriterToReceiver _delegate;
   private final Flushable _flushable;
-  
-  
-  public FormattingXmlStreamWriter(StreamWriterToReceiver delegate, Flushable flushable) {
+
+
+  public FormattingXmlStreamWriter(final StreamWriterToReceiver delegate, final Flushable flushable) {
     _delegate = delegate;
     _flushable = flushable;
   }
 
   /**
-   * 
+   *
    */
   public static class FormattingXMLStreamWriterBuilder {
-    
+
     private final Serializer _serializer;
     private final Flushable _flushable;
-    
+
     private boolean _indent;
     private Integer _lineLength;
-    
-    FormattingXMLStreamWriterBuilder(Serializer serializer, Flushable flushable) {
+
+    FormattingXMLStreamWriterBuilder(final Serializer serializer, final Flushable flushable) {
       _serializer = serializer;
       _flushable = flushable;
     }
-    
-    public FormattingXMLStreamWriterBuilder indent(boolean indent) {
+
+    public FormattingXMLStreamWriterBuilder indent(final boolean indent) {
       this._indent = indent;
       return this;
     }
-    
-    public FormattingXMLStreamWriterBuilder lineLength(int lineLength) {
+
+    public FormattingXMLStreamWriterBuilder lineLength(final int lineLength) {
       this._lineLength = lineLength;
       return this;
     }
-    
+
     public FormattingXmlStreamWriter build() {
       if (_indent) {
         _serializer.setOutputProperty(Property.INDENT, "yes");
@@ -74,36 +74,36 @@ public final class FormattingXmlStreamWriter implements XMLStreamWriter {
       StreamWriterToReceiver xmlStreamWriter;
       try {
         xmlStreamWriter = _serializer.getXMLStreamWriter();
-      } catch (SaxonApiException ex) {
+      } catch (final SaxonApiException ex) {
         throw Throwables.propagate(ex);
       }
       return new FormattingXmlStreamWriter(xmlStreamWriter, _flushable);
-      
+
     }
-    
+
   }
-  
+
   /**
    * Create a new {@link XmlStreamWriter} builder with a {@link Writer}
    * @param writer the writer to use
    * @return a builder
    */
-  public static FormattingXMLStreamWriterBuilder builder(Writer writer) {
-    Serializer serializer = new Processor(false).newSerializer(writer);
+  public static FormattingXMLStreamWriterBuilder builder(final Writer writer) {
+    final Serializer serializer = new Processor(false).newSerializer(writer);
     return new FormattingXMLStreamWriterBuilder(serializer, writer);
   }
-  
+
   /**
    * Create a new {@link XmlStreamWriter} builder with an {@link OutputStream}
    * @param os the output stream to use
    * @return a builder
    */
-  public static FormattingXMLStreamWriterBuilder formattingStreamWriterBuilder(OutputStream os) {
-    Serializer serializer = new Processor(false).newSerializer(os);
+  public static FormattingXMLStreamWriterBuilder formattingStreamWriterBuilder(final OutputStream os) {
+    final Serializer serializer = new Processor(false).newSerializer(os);
     return new FormattingXMLStreamWriterBuilder(serializer, os);
   }
 
-  
+
   @Override
   public void close() throws XMLStreamException {
     _delegate.close();
@@ -111,12 +111,12 @@ public final class FormattingXmlStreamWriter implements XMLStreamWriter {
 
   @Override
   public void flush() throws XMLStreamException {
-    //saxon XMLStreamWriter doesn't call through to the 
-    //underlying writer/output stream in its flush 
+    //saxon XMLStreamWriter doesn't call through to the
+    //underlying writer/output stream in its flush
     //implementation, so do it here.
     try {
       _flushable.flush();
-    } catch (IOException ex) {
+    } catch (final IOException ex) {
       throw new XMLStreamException(ex);
     }
   }
@@ -127,87 +127,87 @@ public final class FormattingXmlStreamWriter implements XMLStreamWriter {
   }
 
   @Override
-  public String getPrefix(String uri) throws XMLStreamException {
+  public String getPrefix(final String uri) throws XMLStreamException {
     return _delegate.getPrefix(uri);
   }
 
   @Override
-  public Object getProperty(String name) throws IllegalArgumentException {
+  public Object getProperty(final String name) throws IllegalArgumentException {
     return _delegate.getProperty(name);
   }
 
   @Override
-  public void setDefaultNamespace(String uri) throws XMLStreamException {
+  public void setDefaultNamespace(final String uri) throws XMLStreamException {
     _delegate.setDefaultNamespace(uri);
   }
 
   @Override
-  public void setNamespaceContext(NamespaceContext context) throws XMLStreamException {
+  public void setNamespaceContext(final NamespaceContext context) throws XMLStreamException {
     _delegate.setNamespaceContext(context);
   }
 
   @Override
-  public void setPrefix(String prefix, String uri) throws XMLStreamException {
+  public void setPrefix(final String prefix, final String uri) throws XMLStreamException {
     _delegate.setPrefix(prefix, uri);
   }
 
   @Override
-  public void writeAttribute(String localName, String value) throws XMLStreamException {
+  public void writeAttribute(final String localName, final String value) throws XMLStreamException {
     _delegate.writeAttribute(localName, value);
   }
 
   @Override
-  public void writeAttribute(String namespaceURI, String localName, String value) throws XMLStreamException {
+  public void writeAttribute(final String namespaceURI, final String localName, final String value) throws XMLStreamException {
     _delegate.writeAttribute(namespaceURI, localName, value);
   }
 
   @Override
-  public void writeAttribute(String prefix, String namespaceURI, String localName, String value) throws XMLStreamException {
+  public void writeAttribute(final String prefix, final String namespaceURI, final String localName, final String value) throws XMLStreamException {
     _delegate.writeAttribute(prefix, namespaceURI, localName, value);
   }
 
   @Override
-  public void writeCData(String data) throws XMLStreamException {
+  public void writeCData(final String data) throws XMLStreamException {
     _delegate.writeCData(data);
   }
 
   @Override
-  public void writeCharacters(String text) throws XMLStreamException {
+  public void writeCharacters(final String text) throws XMLStreamException {
     _delegate.writeCharacters(text);
   }
 
   @Override
-  public void writeCharacters(char[] text, int start, int len) throws XMLStreamException {
+  public void writeCharacters(final char[] text, final int start, final int len) throws XMLStreamException {
     _delegate.writeCharacters(text, start, len);
   }
 
   @Override
-  public void writeComment(String data) throws XMLStreamException {
+  public void writeComment(final String data) throws XMLStreamException {
     _delegate.writeComment(data);
   }
 
   @Override
-  public void writeDTD(String dtd) throws XMLStreamException {
+  public void writeDTD(final String dtd) throws XMLStreamException {
     _delegate.writeDTD(dtd);
   }
 
   @Override
-  public void writeDefaultNamespace(String namespaceURI) throws XMLStreamException {
+  public void writeDefaultNamespace(final String namespaceURI) throws XMLStreamException {
     _delegate.writeDefaultNamespace(namespaceURI);
   }
 
   @Override
-  public void writeEmptyElement(String localName) throws XMLStreamException {
+  public void writeEmptyElement(final String localName) throws XMLStreamException {
     _delegate.writeEmptyElement(localName);
   }
 
   @Override
-  public void writeEmptyElement(String namespaceURI, String localName) throws XMLStreamException {
+  public void writeEmptyElement(final String namespaceURI, final String localName) throws XMLStreamException {
     _delegate.writeEmptyElement(namespaceURI, localName);
   }
 
   @Override
-  public void writeEmptyElement(String prefix, String localName, String namespaceURI) throws XMLStreamException {
+  public void writeEmptyElement(final String prefix, final String localName, final String namespaceURI) throws XMLStreamException {
     _delegate.writeEmptyElement(prefix, localName, namespaceURI);
   }
 
@@ -222,22 +222,22 @@ public final class FormattingXmlStreamWriter implements XMLStreamWriter {
   }
 
   @Override
-  public void writeEntityRef(String name) throws XMLStreamException {
+  public void writeEntityRef(final String name) throws XMLStreamException {
     _delegate.writeEntityRef(name);
   }
 
   @Override
-  public void writeNamespace(String prefix, String namespaceURI) throws XMLStreamException {
+  public void writeNamespace(final String prefix, final String namespaceURI) throws XMLStreamException {
     _delegate.writeNamespace(prefix, namespaceURI);
   }
 
   @Override
-  public void writeProcessingInstruction(String target) throws XMLStreamException {
+  public void writeProcessingInstruction(final String target) throws XMLStreamException {
     _delegate.writeProcessingInstruction(target);
   }
 
   @Override
-  public void writeProcessingInstruction(String target, String data) throws XMLStreamException {
+  public void writeProcessingInstruction(final String target, final String data) throws XMLStreamException {
     _delegate.writeProcessingInstruction(target, data);
   }
 
@@ -247,29 +247,29 @@ public final class FormattingXmlStreamWriter implements XMLStreamWriter {
   }
 
   @Override
-  public void writeStartDocument(String version) throws XMLStreamException {
+  public void writeStartDocument(final String version) throws XMLStreamException {
     _delegate.writeStartDocument(version);
   }
 
   @Override
-  public void writeStartDocument(String encoding, String version) throws XMLStreamException {
+  public void writeStartDocument(final String encoding, final String version) throws XMLStreamException {
     _delegate.writeStartDocument(encoding, version);
   }
 
   @Override
-  public void writeStartElement(String localName) throws XMLStreamException {
+  public void writeStartElement(final String localName) throws XMLStreamException {
     _delegate.writeStartElement(localName);
   }
 
   @Override
-  public void writeStartElement(String namespaceURI, String localName) throws XMLStreamException {
+  public void writeStartElement(final String namespaceURI, final String localName) throws XMLStreamException {
     _delegate.writeStartElement(namespaceURI, localName);
   }
 
   @Override
-  public void writeStartElement(String prefix, String localName, String namespaceURI) throws XMLStreamException {
+  public void writeStartElement(final String prefix, final String localName, final String namespaceURI) throws XMLStreamException {
     _delegate.writeStartElement(prefix, localName, namespaceURI);
   }
-  
-  
+
+
 }

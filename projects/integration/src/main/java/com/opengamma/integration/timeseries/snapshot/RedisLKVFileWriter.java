@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.timeseries.snapshot;
@@ -36,12 +36,12 @@ import com.opengamma.util.monitor.OperationTimer;
 import com.opengamma.util.redis.RedisConnector;
 
 /**
- * Write last know values in Redis to disk 
+ * Write last know values in Redis to disk
  * <p>
  * output file will be <pre>baseDir/yyyy/mm/dd/observationTime.dump</pre>
  */
 public class RedisLKVFileWriter implements Runnable {
-  
+
   private static final Logger LOGGER = LoggerFactory.getLogger(RedisLKVFileWriter.class);
   private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
   /**
@@ -52,7 +52,7 @@ public class RedisLKVFileWriter implements Runnable {
    * Security field name
    */
   public static final String SECURITY = "2";
-  
+
   private BlackList _dataFieldBlackList;
   private BlackList _schemeBlackList;
   private String _observationTime;
@@ -60,7 +60,7 @@ public class RedisLKVFileWriter implements Runnable {
   private String _globalPrefix = "";
   private RedisConnector _redisConnector;
   private File _baseDir;
-  
+
   /**
    * Gets the dataFieldBlackList.
    * @return the dataFieldBlackList
@@ -73,7 +73,7 @@ public class RedisLKVFileWriter implements Runnable {
    * Sets the dataFieldBlackList.
    * @param dataFieldBlackList  the dataFieldBlackList
    */
-  public void setDataFieldBlackList(BlackList dataFieldBlackList) {
+  public void setDataFieldBlackList(final BlackList dataFieldBlackList) {
     _dataFieldBlackList = dataFieldBlackList;
   }
 
@@ -89,7 +89,7 @@ public class RedisLKVFileWriter implements Runnable {
    * Sets the schemeBlackList.
    * @param schemeBlackList  the schemeBlackList
    */
-  public void setSchemeBlackList(BlackList schemeBlackList) {
+  public void setSchemeBlackList(final BlackList schemeBlackList) {
     _schemeBlackList = schemeBlackList;
   }
 
@@ -105,7 +105,7 @@ public class RedisLKVFileWriter implements Runnable {
    * Sets the observationTime.
    * @param observationTime  the observationTime
    */
-  public void setObservationTime(String observationTime) {
+  public void setObservationTime(final String observationTime) {
     _observationTime = observationTime;
   }
 
@@ -121,7 +121,7 @@ public class RedisLKVFileWriter implements Runnable {
    * Sets the normalizationRuleSetId.
    * @param normalizationRuleSetId  the normalizationRuleSetId
    */
-  public void setNormalizationRuleSetId(String normalizationRuleSetId) {
+  public void setNormalizationRuleSetId(final String normalizationRuleSetId) {
     _normalizationRuleSetId = normalizationRuleSetId;
   }
 
@@ -137,7 +137,7 @@ public class RedisLKVFileWriter implements Runnable {
    * Sets the globalPrefix.
    * @param globalPrefix  the globalPrefix
    */
-  public void setGlobalPrefix(String globalPrefix) {
+  public void setGlobalPrefix(final String globalPrefix) {
     _globalPrefix = globalPrefix;
   }
 
@@ -153,10 +153,10 @@ public class RedisLKVFileWriter implements Runnable {
    * Sets the redisConnector.
    * @param redisConnector  the redisConnector
    */
-  public void setRedisConnector(RedisConnector redisConnector) {
+  public void setRedisConnector(final RedisConnector redisConnector) {
     _redisConnector = redisConnector;
   }
-  
+
   /**
    * Gets the baseDir.
    * @return the baseDir
@@ -169,30 +169,30 @@ public class RedisLKVFileWriter implements Runnable {
    * Sets the baseDir.
    * @param baseDir  the baseDir
    */
-  public void setBaseDir(File baseDir) {
+  public void setBaseDir(final File baseDir) {
     _baseDir = baseDir;
   }
 
   @Override
   public void run() {
     validateState();
-    RedisLKVSnapshotter redisReader = new RedisLKVSnapshotter(getDataFieldBlackList(), getSchemeBlackList(), getNormalizationRuleSetId(), 
+    final RedisLKVSnapshotter redisReader = new RedisLKVSnapshotter(getDataFieldBlackList(), getSchemeBlackList(), getNormalizationRuleSetId(),
         getGlobalPrefix(), getRedisConnector());
-    List<FudgeMsg> messages = toFudgeMsg(redisReader.getLastKnownValues());
-    
+    final List<FudgeMsg> messages = toFudgeMsg(redisReader.getLastKnownValues());
+
     final File outputFile = getOutputFile();
     ensureParentDirectory(outputFile);
-    OperationTimer timer = new OperationTimer(LOGGER, "Writing LKV for {} securities to disk", messages.size());
+    final OperationTimer timer = new OperationTimer(LOGGER, "Writing LKV for {} securities to disk", messages.size());
     FileOutputStream fos = null;
     try {
       fos = new FileOutputStream(outputFile);
-      BufferedOutputStream bos = new BufferedOutputStream(fos, 4096);
-      FudgeMsgWriter fmsw = FUDGE_CONTEXT.createMessageWriter(bos);
-      for (FudgeMsg tick : messages) {
+      final BufferedOutputStream bos = new BufferedOutputStream(fos, 4096);
+      final FudgeMsgWriter fmsw = FUDGE_CONTEXT.createMessageWriter(bos);
+      for (final FudgeMsg tick : messages) {
         fmsw.writeMessage(tick);
       }
       fmsw.flush();
-    } catch (FileNotFoundException ex) {
+    } catch (final FileNotFoundException ex) {
       throw new OpenGammaRuntimeException("Could not open RedisLKVSnaphot file '" + outputFile.getAbsolutePath() + "'", ex);
     } finally {
       IOUtils.closeQuietly(fos);
@@ -205,16 +205,16 @@ public class RedisLKVFileWriter implements Runnable {
       LOGGER.debug("creating directory {}", outputFile.getParent());
       FileUtils.forceMkdir(outputFile.getParentFile());
       LOGGER.debug("directory created");
-    } catch (IOException ex) {
+    } catch (final IOException ex) {
       throw new OpenGammaRuntimeException("Error creating directory " + outputFile.getParent(), ex);
     }
   }
-  
-  private List<FudgeMsg> toFudgeMsg(Map<ExternalId, Map<String, String>> redisLKV) {
-    List<FudgeMsg> result = Lists.newArrayList();
-    for (Entry<ExternalId, Map<String, String>> ticksEntry : redisLKV.entrySet()) {
-      MutableFudgeMsg msg = FUDGE_CONTEXT.newMessage();
-      ExternalId externalId = ticksEntry.getKey();
+
+  private List<FudgeMsg> toFudgeMsg(final Map<ExternalId, Map<String, String>> redisLKV) {
+    final List<FudgeMsg> result = Lists.newArrayList();
+    for (final Entry<ExternalId, Map<String, String>> ticksEntry : redisLKV.entrySet()) {
+      final MutableFudgeMsg msg = FUDGE_CONTEXT.newMessage();
+      final ExternalId externalId = ticksEntry.getKey();
       msg.add(SECURITY, externalId.toString());
       msg.add(TICKS, ticksToFudgeMsg(ticksEntry.getValue()));
       result.add(msg);
@@ -223,24 +223,24 @@ public class RedisLKVFileWriter implements Runnable {
   }
 
   public File getOutputFile() {
-    LocalDate today = LocalDate.now(OpenGammaClock.getInstance());
-    String dateStr = today.format(DateTimeFormatter.ISO_LOCAL_DATE);
-    String[] dateParts = StringUtils.split(dateStr, "-");
-    String year = dateParts[0];
-    String month = dateParts[1];
-    String day = dateParts[2];
-    String filename = getObservationTime() + ".dump";
+    final LocalDate today = LocalDate.now(OpenGammaClock.getInstance());
+    final String dateStr = today.format(DateTimeFormatter.ISO_LOCAL_DATE);
+    final String[] dateParts = StringUtils.split(dateStr, "-");
+    final String year = dateParts[0];
+    final String month = dateParts[1];
+    final String day = dateParts[2];
+    final String filename = getObservationTime() + ".dump";
     return FileUtils.getFile(getBaseDir(), year, month, day, filename);
   }
 
-  private FudgeMsg ticksToFudgeMsg(Map<String, String> ticks) {
-    MutableFudgeMsg ticksMsg = FUDGE_CONTEXT.newMessage();
-    for (Entry<String, String> tickEntry : ticks.entrySet()) {
+  private FudgeMsg ticksToFudgeMsg(final Map<String, String> ticks) {
+    final MutableFudgeMsg ticksMsg = FUDGE_CONTEXT.newMessage();
+    for (final Entry<String, String> tickEntry : ticks.entrySet()) {
       ticksMsg.add(tickEntry.getKey(), Double.valueOf(tickEntry.getValue()));
     }
     return ticksMsg;
   }
-  
+
   private void validateState() {
     ArgumentChecker.notNull(getNormalizationRuleSetId(), "normalization rule set Id");
     ArgumentChecker.notNull(getObservationTime(), "observation time");

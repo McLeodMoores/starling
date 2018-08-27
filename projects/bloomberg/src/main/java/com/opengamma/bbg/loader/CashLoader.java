@@ -48,22 +48,22 @@ public final class CashLoader extends SecurityLoader {
    * Creates an instance.
    * @param referenceDataProvider  the provider, not null
    */
-  public CashLoader(ReferenceDataProvider referenceDataProvider) {
+  public CashLoader(final ReferenceDataProvider referenceDataProvider) {
     super(LOGGER, referenceDataProvider, SecurityType.CASH);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  protected ManageableSecurity createSecurity(FudgeMsg fieldData) {
-    String ticker = fieldData.getString(FIELD_TICKER);
+  protected ManageableSecurity createSecurity(final FudgeMsg fieldData) {
+    final String ticker = fieldData.getString(FIELD_TICKER);
     String currency = fieldData.getString(FIELD_CRNCY);
     if (currency != null) {
       currency = currency.toUpperCase();
     }
-    String marketSector = fieldData.getString(FIELD_MARKET_SECTOR_DES);
-    String countryIso = fieldData.getString(FIELD_COUNTRY_ISO);
-    String bbgUniqueID = fieldData.getString(FIELD_ID_BBG_UNIQUE);
-    String name = fieldData.getString(FIELD_NAME);
+    final String marketSector = fieldData.getString(FIELD_MARKET_SECTOR_DES);
+    final String countryIso = fieldData.getString(FIELD_COUNTRY_ISO);
+    final String bbgUniqueID = fieldData.getString(FIELD_ID_BBG_UNIQUE);
+    final String name = fieldData.getString(FIELD_NAME);
     if (!isValidField(bbgUniqueID)) {
       LOGGER.warn("bbgUniqueID is missing, cannot construct cash security");
       return null;
@@ -92,7 +92,7 @@ public final class CashLoader extends SecurityLoader {
 //      security.addIdentifier(Identifier.of(ExternalScheme.BLOOMBERG_TICKER, bbgTicker.toString()));
 //    }
 //    security.addIdentifier(Identifier.of(ExternalScheme.BLOOMBERG_BUID, bbgUniqueID));
-//  
+//
 //    return security;
     return null;
   }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.payments.provider;
@@ -13,7 +13,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- *  Class used to compute the price and sensitivity of a Ibor coupon in arrears. 
+ *  Class used to compute the price and sensitivity of a Ibor coupon in arrears.
  *  The coupon are supposed to be exactly in arrears. The payment date is ignored and the start fixing period date is used instead.
  */
 //TODO: Add a reference to Libor-with-delay pricing method when available.
@@ -28,7 +28,7 @@ public class CouponIborInArrearsReplicationMethod {
    * Constructor of the in-arrears pricing method.
    * @param baseMethod The base method for the pricing of standard cap/floors.
    */
-  public CouponIborInArrearsReplicationMethod(CapFloorIborSABRCapMethodInterface baseMethod) {
+  public CouponIborInArrearsReplicationMethod(final CapFloorIborSABRCapMethodInterface baseMethod) {
     _capMethod = new CapFloorIborInArrearsSABRCapGenericReplicationMethod(baseMethod);
   }
 
@@ -41,7 +41,7 @@ public class CouponIborInArrearsReplicationMethod {
   public MultipleCurrencyAmount presentValue(final CouponIbor coupon, final SABRCapProviderInterface sabr) {
     ArgumentChecker.notNull(coupon, "The coupon shoud not be null");
     ArgumentChecker.notNull(sabr, "SABR cap provider");
-    CapFloorIbor cap0 = CapFloorIbor.from(coupon, 0.0, true);
+    final CapFloorIbor cap0 = CapFloorIbor.from(coupon, 0.0, true);
     return _capMethod.presentValue(cap0, sabr);
   }
 

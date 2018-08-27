@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.volatility.surface;
@@ -30,12 +30,12 @@ public class DefaultVolatilitySurfaceShiftFunction extends StaticDefaultProperty
   }
 
   @Override
-  protected Set<String> getDefaultValue(FunctionCompilationContext context, ComputationTarget target, ValueRequirement desiredValue) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final ViewCalculationConfiguration config = context.getViewCalculationConfiguration();
     // TODO: should probably check the target type (or other properties) so that shifts can be applied more selectively than to all surfaces
     if (config != null) {
       return config.getDefaultProperties().getValues(VOLATILITY_SURFACE_SHIFT);
-    } 
+    }
     return null;
   }
 

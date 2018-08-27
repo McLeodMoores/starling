@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.copier.portfolio;
@@ -19,7 +19,7 @@ public class PortfolioCopierStats implements PortfolioCopierVisitor {
   private int _securityErrorCount;
 
   @Override
-  public void info(String message, ManageablePosition position, ManageableSecurity[] securities) {
+  public void info(final String message, final ManageablePosition position, final ManageableSecurity[] securities) {
     if (position == null) {
       _positionErrorCount++;
     } else {
@@ -33,11 +33,11 @@ public class PortfolioCopierStats implements PortfolioCopierVisitor {
   }
 
   @Override
-  public void info(String message) {
+  public void info(final String message) {
   }
 
   @Override
-  public void error(String message) {
+  public void error(final String message) {
 
   }
 

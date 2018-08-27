@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.future.derivative;
@@ -97,15 +97,15 @@ public class SwapFuturesPriceDeliverableSecurity extends FuturesSecurity {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_deliveryTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_notional);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _underlyingSwap.hashCode();
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -115,7 +115,7 @@ public class SwapFuturesPriceDeliverableSecurity extends FuturesSecurity {
     if (getClass() != obj.getClass()) {
       return false;
     }
-    SwapFuturesPriceDeliverableSecurity other = (SwapFuturesPriceDeliverableSecurity) obj;
+    final SwapFuturesPriceDeliverableSecurity other = (SwapFuturesPriceDeliverableSecurity) obj;
     if (Double.doubleToLongBits(_deliveryTime) != Double.doubleToLongBits(other._deliveryTime)) {
       return false;
     }

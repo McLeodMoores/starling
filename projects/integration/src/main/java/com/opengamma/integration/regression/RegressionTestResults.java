@@ -5,7 +5,6 @@
  */
 package com.opengamma.integration.regression;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +46,7 @@ public final class RegressionTestResults implements ImmutableBean {
   private final TestStatus _status;
 
   @ImmutableConstructor
-  public RegressionTestResults(String baseVersion, String testVersion, Collection<CalculationDifference> differences) {
+  public RegressionTestResults(final String baseVersion, final String testVersion, final Collection<CalculationDifference> differences) {
     ArgumentChecker.notEmpty(baseVersion, "baseVersion");
     ArgumentChecker.notEmpty(testVersion, "testVersion");
     ArgumentChecker.notEmpty(differences, "results");
@@ -55,7 +54,7 @@ public final class RegressionTestResults implements ImmutableBean {
     _testVersion = testVersion;
     _differences = ImmutableList.copyOf(differences);
     TestStatus status = TestStatus.PASS;
-    for (CalculationDifference result : differences) {
+    for (final CalculationDifference result : differences) {
       status = status.combine(result.getStatus());
       if (!baseVersion.equals(result.getBaseVersion()) || !testVersion.equals(result.getTestVersion())) {
         throw new IllegalArgumentException("All results must have the same base and test versions");

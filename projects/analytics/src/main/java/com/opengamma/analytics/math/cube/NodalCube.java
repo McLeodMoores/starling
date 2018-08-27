@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.cube;
@@ -16,7 +16,7 @@ import com.opengamma.util.tuple.Quadruple;
 import com.opengamma.util.tuple.Triple;
 
 /**
- * A cube that is defined by a set of nodal points (i.e. <i>(x, y, z)</i> data). Any attempt to find a <i>z</i> value 
+ * A cube that is defined by a set of nodal points (i.e. <i>(x, y, z)</i> data). Any attempt to find a <i>z</i> value
  * for which there is no <i>(x, y)</i> nodal point will result in failure.
  * @param <X> type of <i>x</i> data points
  * @param <Y> type of <i>y</i> data points
@@ -33,15 +33,15 @@ public class NodalCube<X, Y, Z, V> extends Cube<X, Y, Z, V> {
 
   /**
    * @param points A collection of data points, not null
-   * @param name A cube name   
+   * @param name A cube name
    */
-  public NodalCube(Collection<Quadruple<X, Y, Z, V>> points, String name) {
-    List<X> xData = newArrayList();
-    List<Y> yData = newArrayList();
-    List<Z> zData = newArrayList();
-    List<V> vData = newArrayList();
+  public NodalCube(final Collection<Quadruple<X, Y, Z, V>> points, final String name) {
+    final List<X> xData = newArrayList();
+    final List<Y> yData = newArrayList();
+    final List<Z> zData = newArrayList();
+    final List<V> vData = newArrayList();
 
-    for (Quadruple<X, Y, Z, V> point : points) {
+    for (final Quadruple<X, Y, Z, V> point : points) {
       xData.add(point.getFirst());
       yData.add(point.getSecond());
       zData.add(point.getThird());
@@ -224,6 +224,7 @@ public class NodalCube<X, Y, Z, V> extends Cube<X, Y, Z, V> {
     return _vData.length;
   }
 
+  @Override
   public String getName() {
     return _name;
   }

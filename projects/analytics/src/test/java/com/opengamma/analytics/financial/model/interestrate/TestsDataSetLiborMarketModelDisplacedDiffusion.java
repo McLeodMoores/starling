@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.interestrate;
@@ -90,13 +90,13 @@ class VolatilityLMM extends Function1D<Double, Double[]> {
     _shift = 0.0;
   }
 
-  public VolatilityLMM(double shift) {
+  public VolatilityLMM(final double shift) {
     _shift = shift;
   }
 
   @Override
-  public Double[] evaluate(Double x) {
-    Double[] result = new Double[2];
+  public Double[] evaluate(final Double x) {
+    final Double[] result = new Double[2];
     result[0] = 0.06 + _shift;
     result[1] = -0.06 + x * 0.006 + _shift;
     return result;
@@ -113,19 +113,19 @@ class VolatilityLMMAngle extends Function1D<Double, Double[]> {
    */
   private final double _angle;
 
-  public VolatilityLMMAngle(double angle) {
+  public VolatilityLMMAngle(final double angle) {
     _shift = 0.0;
     _angle = angle;
   }
 
-  public VolatilityLMMAngle(double angle, double shift) {
+  public VolatilityLMMAngle(final double angle, final double shift) {
     _shift = shift;
     _angle = angle;
   }
 
   @Override
-  public Double[] evaluate(Double x) {
-    Double[] result = new Double[2];
+  public Double[] evaluate(final Double x) {
+    final Double[] result = new Double[2];
     result[0] = 0.06 * Math.cos(x / 20.0 * _angle) + _shift;
     result[1] = 0.06 * Math.sin(x / 20.0 * _angle) + _shift;
     return result;

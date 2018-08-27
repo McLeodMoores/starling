@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.cache;
@@ -21,7 +21,7 @@ import com.opengamma.transport.FudgeConnectionStateListener;
 import com.opengamma.transport.FudgeMessageReceiver;
 
 /**
- * Composite server class for dispatching calls to a {@link IdentifierMapServer} and 
+ * Composite server class for dispatching calls to a {@link IdentifierMapServer} and
  * {@link FudgeMessageStoreServer} within the same JVM.
  */
 public class ViewComputationCacheServer implements FudgeConnectionReceiver, FudgeConnectionStateListener {
@@ -115,7 +115,7 @@ public class ViewComputationCacheServer implements FudgeConnectionReceiver, Fudg
   }
 
   @Override
-  public void connectionFailed(final FudgeConnection connection, Exception cause) {
+  public void connectionFailed(final FudgeConnection connection, final Exception cause) {
     getBinaryDataStore().onDroppedConnection(connection);
   }
 

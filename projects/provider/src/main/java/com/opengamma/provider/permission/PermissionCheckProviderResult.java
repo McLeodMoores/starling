@@ -6,7 +6,6 @@
 package com.opengamma.provider.permission;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -16,6 +15,7 @@ import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.joda.beans.Bean;
+import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
 import org.joda.beans.ImmutableBean;
 import org.joda.beans.JodaBeanUtils;
@@ -29,7 +29,6 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.google.common.collect.ImmutableMap;
 import com.opengamma.util.PublicSPI;
-import org.joda.beans.BeanBuilder;
 
 /**
  * Result of permission checks for a set of permissions for a user.
@@ -67,31 +66,31 @@ public final class PermissionCheckProviderResult implements ImmutableBean {
   //-------------------------------------------------------------------------
   /**
    * Creates a result containing authorization information.
-   * 
+   *
    * @param checkedPermissions  the map of checked permissions, not null
    * @return the result, not null
    */
-  public static PermissionCheckProviderResult of(Map<String, Boolean> checkedPermissions) {
+  public static PermissionCheckProviderResult of(final Map<String, Boolean> checkedPermissions) {
     return new PermissionCheckProviderResult(checkedPermissions, null, null);
   }
 
   /**
    * Creates an authentication error result.
-   * 
+   *
    * @param errorMessage  the message, not null
    * @return the result, not null
    */
-  public static PermissionCheckProviderResult ofAuthenticationError(String errorMessage) {
+  public static PermissionCheckProviderResult ofAuthenticationError(final String errorMessage) {
     return new PermissionCheckProviderResult(ImmutableMap.<String, Boolean>of(), errorMessage, null);
   }
 
   /**
    * Creates an authorization error result.
-   * 
+   *
    * @param errorMessage  the message, not null
    * @return the result, not null
    */
-  public static PermissionCheckProviderResult ofAuthorizationError(String errorMessage) {
+  public static PermissionCheckProviderResult ofAuthorizationError(final String errorMessage) {
     return new PermissionCheckProviderResult(ImmutableMap.<String, Boolean>of(), null, errorMessage);
   }
 
@@ -100,12 +99,12 @@ public final class PermissionCheckProviderResult implements ImmutableBean {
    * Checks if the specified permission is true or false.
    * <p>
    * This method returns false rather than throwing an exception.
-   * 
+   *
    * @param requestedPermissions  the requested permissions, not null
    * @return true if permitted, false if not
    */
-  public boolean isPermittedAll(Collection<String> requestedPermissions) {
-    for (String requestedPermission : requestedPermissions) {
+  public boolean isPermittedAll(final Collection<String> requestedPermissions) {
+    for (final String requestedPermission : requestedPermissions) {
       if (isPermitted(requestedPermission) == false) {
         return false;
       }
@@ -117,11 +116,11 @@ public final class PermissionCheckProviderResult implements ImmutableBean {
    * Checks if the specified permission is true or false.
    * <p>
    * This method returns false rather than throwing an exception.
-   * 
+   *
    * @param requestedPermission  the requested permission, not null
    * @return true if permitted, false if not
    */
-  public boolean isPermitted(String requestedPermission) {
+  public boolean isPermitted(final String requestedPermission) {
     return BooleanUtils.isTrue(getCheckedPermissions().get(requestedPermission));
   }
 
@@ -131,15 +130,15 @@ public final class PermissionCheckProviderResult implements ImmutableBean {
    * <p>
    * This method throws an exception unless the user has the specified permission.
    * Information stored about different kinds of error is used to refine the exception thrown.
-   * 
+   *
    * @param requestedPermission  the requested permission, not null
    * @throws UnauthenticatedException if permission was denied due to invalid user authentication
    * @throws AuthorizationException if permission was denied due to issues checking authorization
    * @throws UnauthorizedException if the user does not have the requested permission
    */
-  public void checkPermitted(String requestedPermission) {
+  public void checkPermitted(final String requestedPermission) {
     checkErrors();
-    Boolean permitted = getCheckedPermissions().get(requestedPermission);
+    final Boolean permitted = getCheckedPermissions().get(requestedPermission);
     if (permitted == null) {
       throw new AuthorizationException("Permission denied: Specified permission was not checked: " + requestedPermission);
     } else if (permitted.booleanValue() == false) {
@@ -152,7 +151,7 @@ public final class PermissionCheckProviderResult implements ImmutableBean {
    * Checks if any errors occurred, throwing an exception if there were errors.
    * <p>
    * Information stored about different kinds of error is used to refine the exception thrown.
-   * 
+   *
    * @throws UnauthenticatedException if permission was denied due to invalid user authentication
    * @throws AuthorizationException if permission was denied due to issues checking authorization
    */

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.interestrate;
@@ -25,7 +25,7 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
    * is called $\gamma$ in the article and is given by
    * $$
    * \begin{equation*}
-   * \gamma(t) = \exp\left(\int_t^{t_0} \nu(s,t_2) (\nu(s,t_2)-\nu(s,t_1)) ds \right). 
+   * \gamma(t) = \exp\left(\int_t^{t_0} \nu(s,t_2) (\nu(s,t_2)-\nu(s,t_1)) ds \right).
    * \end{equation*}
    * $$
    * <p>
@@ -36,14 +36,14 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
    * @param t2 The second reference time.
    * @return The factor.
    */
-  public double futuresConvexityFactor(final HullWhiteOneFactorPiecewiseConstantParameters data, double t0, double t1, double t2) {
-    double factor1 = Math.exp(-data.getMeanReversion() * t1) - Math.exp(-data.getMeanReversion() * t2);
-    double numerator = 2 * data.getMeanReversion() * data.getMeanReversion() * data.getMeanReversion();
+  public double futuresConvexityFactor(final HullWhiteOneFactorPiecewiseConstantParameters data, final double t0, final double t1, final double t2) {
+    final double factor1 = Math.exp(-data.getMeanReversion() * t1) - Math.exp(-data.getMeanReversion() * t2);
+    final double numerator = 2 * data.getMeanReversion() * data.getMeanReversion() * data.getMeanReversion();
     int indexT0 = 1; // Period in which the time t0 is; _volatilityTime[i-1] <= t0 < _volatilityTime[i];
     while (t0 > data.getVolatilityTime()[indexT0]) {
       indexT0++;
     }
-    double[] s = new double[indexT0 + 1];
+    final double[] s = new double[indexT0 + 1];
     System.arraycopy(data.getVolatilityTime(), 0, s, 0, indexT0);
     s[indexT0] = t0;
     double factor2 = 0.0;
@@ -59,7 +59,7 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
    * The factor is called $\gamma$ in the article and is given by
    * $$
    * \begin{equation*}
-   * \gamma(t) = \exp\left(\int_t^{t_0} \nu(s,t_2) (\nu(s,t_2)-\nu(s,t_1)) ds \right). 
+   * \gamma(t) = \exp\left(\int_t^{t_0} \nu(s,t_2) (\nu(s,t_2)-\nu(s,t_1)) ds \right).
    * \end{equation*}
    * $$
    * <p>
@@ -75,26 +75,26 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
   public double futuresConvexityFactor(final HullWhiteOneFactorPiecewiseConstantParameters data, final double t0, final double t1, final double t2, final double[] derivatives) {
     final int nbSigma = data.getVolatility().length;
     ArgumentChecker.isTrue(derivatives.length == nbSigma, "derivatives vector of incorrect size");
-    double factor1 = Math.exp(-data.getMeanReversion() * t1) - Math.exp(-data.getMeanReversion() * t2);
-    double numerator = 2 * data.getMeanReversion() * data.getMeanReversion() * data.getMeanReversion();
+    final double factor1 = Math.exp(-data.getMeanReversion() * t1) - Math.exp(-data.getMeanReversion() * t2);
+    final double numerator = 2 * data.getMeanReversion() * data.getMeanReversion() * data.getMeanReversion();
     int indexT0 = 1; // Period in which the time t0 is; _volatilityTime[i-1] <= t0 < _volatilityTime[i];
     while (t0 > data.getVolatilityTime()[indexT0]) {
       indexT0++;
     }
-    double[] s = new double[indexT0 + 1];
+    final double[] s = new double[indexT0 + 1];
     System.arraycopy(data.getVolatilityTime(), 0, s, 0, indexT0);
     s[indexT0] = t0;
     double factor2 = 0.0;
-    double[] factorExp = new double[indexT0];
+    final double[] factorExp = new double[indexT0];
     for (int loopperiod = 0; loopperiod < indexT0; loopperiod++) {
       factorExp[loopperiod] = (Math.exp(data.getMeanReversion() * s[loopperiod + 1]) - Math.exp(data.getMeanReversion() * s[loopperiod]))
           * (2 - Math.exp(-data.getMeanReversion() * (t2 - s[loopperiod + 1])) - Math.exp(-data.getMeanReversion() * (t2 - s[loopperiod])));
       factor2 += data.getVolatility()[loopperiod] * data.getVolatility()[loopperiod] * factorExp[loopperiod];
     }
-    double factor = Math.exp(factor1 / numerator * factor2);
-    // Backward sweep 
-    double factorBar = 1.0;
-    double factor2Bar = factor1 / numerator * factor * factorBar;
+    final double factor = Math.exp(factor1 / numerator * factor2);
+    // Backward sweep
+    final double factorBar = 1.0;
+    final double factor2Bar = factor1 / numerator * factor * factorBar;
     for (int loopperiod = 0; loopperiod < indexT0; loopperiod++) {
       derivatives[loopperiod] = 2 * data.getVolatility()[loopperiod] * factorExp[loopperiod] * factor2Bar;
     }
@@ -106,7 +106,7 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
    * is called $\zeta$ in the note and is given by
    * $$
    * \begin{equation*}
-   * \zeta = \exp\left(\int_{\theta_0}^{\theta_1} (\nu(s,v)-\nu(s,t_p)) (\nu(s,v)-\nu(s,u)) ds \right). 
+   * \zeta = \exp\left(\int_{\theta_0}^{\theta_1} (\nu(s,v)-\nu(s,t_p)) (\nu(s,v)-\nu(s,u)) ds \right).
    * \end{equation*}
    * $$
    * <p>
@@ -124,17 +124,17 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
     final double a = parameters.getMeanReversion();
     final double factor1 = (Math.exp(-a * v) - Math.exp(-a * tp)) * (Math.exp(-a * v) - Math.exp(-a * u));
     final double numerator = 2 * a * a * a;
-    int indexStart = Math.abs(Arrays.binarySearch(parameters.getVolatilityTime(), startExpiry) + 1);
+    final int indexStart = Math.abs(Arrays.binarySearch(parameters.getVolatilityTime(), startExpiry) + 1);
     // Period in which the time startExpiry is; _volatilityTime[i-1] <= startExpiry < _volatilityTime[i];
-    int indexEnd = Math.abs(Arrays.binarySearch(parameters.getVolatilityTime(), endExpiry) + 1);
+    final int indexEnd = Math.abs(Arrays.binarySearch(parameters.getVolatilityTime(), endExpiry) + 1);
     // Period in which the time endExpiry is; _volatilityTime[i-1] <= endExpiry < _volatilityTime[i];
-    int sLen = indexEnd - indexStart + 1;
-    double[] s = new double[sLen + 1];
+    final int sLen = indexEnd - indexStart + 1;
+    final double[] s = new double[sLen + 1];
     s[0] = startExpiry;
     System.arraycopy(parameters.getVolatilityTime(), indexStart, s, 1, sLen - 1);
     s[sLen] = endExpiry;
     double factor2 = 0.0;
-    double[] exp2as = new double[sLen + 1];
+    final double[] exp2as = new double[sLen + 1];
     for (int loopperiod = 0; loopperiod < sLen + 1; loopperiod++) {
       exp2as[loopperiod] = Math.exp(2 * a * s[loopperiod]);
     }
@@ -145,7 +145,7 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
   }
 
   /**
-   * Computes the (zero-coupon) bond volatility divided by a bond numeraire for a given period. 
+   * Computes the (zero-coupon) bond volatility divided by a bond numeraire for a given period.
    * @param data Hull-White model data.
    * @param startExpiry Start time of the expiry period.
    * @param endExpiry End time of the expiry period.
@@ -154,19 +154,19 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
    * @return The re-based bond volatility.
    */
   public double alpha(final HullWhiteOneFactorPiecewiseConstantParameters data, final double startExpiry, final double endExpiry, final double numeraireTime, final double bondMaturity) {
-    double factor1 = Math.exp(-data.getMeanReversion() * numeraireTime) - Math.exp(-data.getMeanReversion() * bondMaturity);
-    double numerator = 2 * data.getMeanReversion() * data.getMeanReversion() * data.getMeanReversion();
-    int indexStart = Math.abs(Arrays.binarySearch(data.getVolatilityTime(), startExpiry) + 1);
+    final double factor1 = Math.exp(-data.getMeanReversion() * numeraireTime) - Math.exp(-data.getMeanReversion() * bondMaturity);
+    final double numerator = 2 * data.getMeanReversion() * data.getMeanReversion() * data.getMeanReversion();
+    final int indexStart = Math.abs(Arrays.binarySearch(data.getVolatilityTime(), startExpiry) + 1);
     // Period in which the time startExpiry is; _volatilityTime[i-1] <= startExpiry < _volatilityTime[i];
-    int indexEnd = Math.abs(Arrays.binarySearch(data.getVolatilityTime(), endExpiry) + 1);
+    final int indexEnd = Math.abs(Arrays.binarySearch(data.getVolatilityTime(), endExpiry) + 1);
     // Period in which the time endExpiry is; _volatilityTime[i-1] <= endExpiry < _volatilityTime[i];
-    int sLen = indexEnd - indexStart + 1;
-    double[] s = new double[sLen + 1];
+    final int sLen = indexEnd - indexStart + 1;
+    final double[] s = new double[sLen + 1];
     s[0] = startExpiry;
     System.arraycopy(data.getVolatilityTime(), indexStart, s, 1, sLen - 1);
     s[sLen] = endExpiry;
     double factor2 = 0.0;
-    double[] exp2as = new double[sLen + 1];
+    final double[] exp2as = new double[sLen + 1];
     for (int loopperiod = 0; loopperiod < sLen + 1; loopperiod++) {
       exp2as[loopperiod] = Math.exp(2 * data.getMeanReversion() * s[loopperiod]);
     }
@@ -177,7 +177,7 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
   }
 
   /**
-   * The adjoint version of the method. Computes the (zero-coupon) bond volatility divided by a bond numeraire for a given period ant its derivatives. 
+   * The adjoint version of the method. Computes the (zero-coupon) bond volatility divided by a bond numeraire for a given period ant its derivatives.
    * @param data Hull-White model data.
    * @param startExpiry Start time of the expiry period.
    * @param endExpiry End time of the expiry period.
@@ -188,36 +188,36 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
    * @return The re-based bond volatility.
    */
   public double alpha(final HullWhiteOneFactorPiecewiseConstantParameters data, final double startExpiry, final double endExpiry, final double numeraireTime, final double bondMaturity,
-      double[] derivatives) {
-    int nbSigma = data.getVolatility().length;
+      final double[] derivatives) {
+    final int nbSigma = data.getVolatility().length;
     for (int loopperiod = 0; loopperiod < nbSigma; loopperiod++) { // To clean derivatives
       derivatives[loopperiod] = 0.0;
     }
     // Forward sweep
-    double factor1 = Math.exp(-data.getMeanReversion() * numeraireTime) - Math.exp(-data.getMeanReversion() * bondMaturity);
-    double numerator = 2 * data.getMeanReversion() * data.getMeanReversion() * data.getMeanReversion();
-    int indexStart = Math.abs(Arrays.binarySearch(data.getVolatilityTime(), startExpiry) + 1);
+    final double factor1 = Math.exp(-data.getMeanReversion() * numeraireTime) - Math.exp(-data.getMeanReversion() * bondMaturity);
+    final double numerator = 2 * data.getMeanReversion() * data.getMeanReversion() * data.getMeanReversion();
+    final int indexStart = Math.abs(Arrays.binarySearch(data.getVolatilityTime(), startExpiry) + 1);
     // Period in which the time startExpiry is; _volatilityTime[i-1] <= startExpiry < _volatilityTime[i];
-    int indexEnd = Math.abs(Arrays.binarySearch(data.getVolatilityTime(), endExpiry) + 1);
+    final int indexEnd = Math.abs(Arrays.binarySearch(data.getVolatilityTime(), endExpiry) + 1);
     // Period in which the time endExpiry is; _volatilityTime[i-1] <= endExpiry < _volatilityTime[i];
-    int sLen = indexEnd - indexStart + 1;
-    double[] s = new double[sLen + 1];
+    final int sLen = indexEnd - indexStart + 1;
+    final double[] s = new double[sLen + 1];
     s[0] = startExpiry;
     System.arraycopy(data.getVolatilityTime(), indexStart, s, 1, sLen - 1);
     s[sLen] = endExpiry;
     double factor2 = 0.0;
-    double[] exp2as = new double[sLen + 1];
+    final double[] exp2as = new double[sLen + 1];
     for (int loopperiod = 0; loopperiod < sLen + 1; loopperiod++) {
       exp2as[loopperiod] = Math.exp(2 * data.getMeanReversion() * s[loopperiod]);
     }
     for (int loopperiod = 0; loopperiod < sLen; loopperiod++) {
       factor2 += data.getVolatility()[loopperiod + indexStart - 1] * data.getVolatility()[loopperiod + indexStart - 1] * (exp2as[loopperiod + 1] - exp2as[loopperiod]);
     }
-    double sqrtFactor2Num = Math.sqrt(factor2 / numerator);
-    double alpha = factor1 * sqrtFactor2Num;
-    // Backward sweep 
-    double alphaBar = 1.0;
-    double factor2Bar = factor1 / sqrtFactor2Num / 2.0 / numerator * alphaBar;
+    final double sqrtFactor2Num = Math.sqrt(factor2 / numerator);
+    final double alpha = factor1 * sqrtFactor2Num;
+    // Backward sweep
+    final double alphaBar = 1.0;
+    final double factor2Bar = factor1 / sqrtFactor2Num / 2.0 / numerator * alphaBar;
     for (int loopperiod = 0; loopperiod < sLen; loopperiod++) {
       derivatives[loopperiod + indexStart - 1] = 2 * data.getVolatility()[loopperiod + indexStart - 1] * (exp2as[loopperiod + 1] - exp2as[loopperiod]) * factor2Bar;
     }
@@ -243,14 +243,14 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
       }
     };
     final BracketRoot bracketer = new BracketRoot();
-    double accuracy = 1.0E-8;
+    final double accuracy = 1.0E-8;
     final RidderSingleRootFinder rootFinder = new RidderSingleRootFinder(accuracy);
     final double[] range = bracketer.getBracketedPoints(swapValue, -2.0, 2.0);
     return rootFinder.getRoot(swapValue, range[0], range[1]);
   }
 
   public double beta(final HullWhiteOneFactorPiecewiseConstantParameters data, final double startExpiry, final double endExpiry) {
-    double numerator = 2 * data.getMeanReversion();
+    final double numerator = 2 * data.getMeanReversion();
     int indexStart = 1; // Period in which the time startExpiry is; _volatilityTime[i-1] <= startExpiry < _volatilityTime[i];
     while (startExpiry > data.getVolatilityTime()[indexStart]) {
       indexStart++;
@@ -259,8 +259,8 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
     while (endExpiry > data.getVolatilityTime()[indexEnd]) {
       indexEnd++;
     }
-    int sLen = indexEnd - indexStart + 1;
-    double[] s = new double[sLen + 1];
+    final int sLen = indexEnd - indexStart + 1;
+    final double[] s = new double[sLen + 1];
     s[0] = startExpiry;
     System.arraycopy(data.getVolatilityTime(), indexStart, s, 1, sLen - 1);
     s[sLen] = endExpiry;
@@ -297,7 +297,7 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
       }
     };
     final BracketRoot bracketer = new BracketRoot();
-    double accuracy = 1.0E-8;
+    final double accuracy = 1.0E-8;
     final RidderSingleRootFinder rootFinder = new RidderSingleRootFinder(accuracy);
     final double[] range = bracketer.getBracketedPoints(swapValue, -2.0, 2.0);
     return rootFinder.getRoot(swapValue, range[0], range[1]);
@@ -310,10 +310,10 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
    * @param v The end times.
    * @return The volatility. Same dimension as v.
    */
-  public double[][] volatilityMaturityPart(final HullWhiteOneFactorPiecewiseConstantParameters hwParameters, double u, double[][] v) {
-    double a = hwParameters.getMeanReversion();
-    double[][] result = new double[v.length][];
-    double expau = Math.exp(-a * u);
+  public double[][] volatilityMaturityPart(final HullWhiteOneFactorPiecewiseConstantParameters hwParameters, final double u, final double[][] v) {
+    final double a = hwParameters.getMeanReversion();
+    final double[][] result = new double[v.length][];
+    final double expau = Math.exp(-a * u);
     for (int loopcf1 = 0; loopcf1 < v.length; loopcf1++) {
       result[loopcf1] = new double[v[loopcf1].length];
       for (int loopcf2 = 0; loopcf2 < v[loopcf1].length; loopcf2++) {
@@ -330,9 +330,9 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
    * @param theta1 The end expiry time.
    * @return The volatility.
    */
-  public double gamma(final HullWhiteOneFactorPiecewiseConstantParameters hwParameters, double theta0, double theta1) {
-    double a = hwParameters.getMeanReversion();
-    double[] sigma = hwParameters.getVolatility();
+  public double gamma(final HullWhiteOneFactorPiecewiseConstantParameters hwParameters, final double theta0, final double theta1) {
+    final double a = hwParameters.getMeanReversion();
+    final double[] sigma = hwParameters.getVolatility();
     int indexStart = 1; // Period in which the time startExpiry is; _volatilityTime[i-1] <= startExpiry < _volatilityTime[i];
     while (theta0 > hwParameters.getVolatilityTime()[indexStart]) {
       indexStart++;
@@ -341,14 +341,14 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
     while (theta1 > hwParameters.getVolatilityTime()[indexEnd]) {
       indexEnd++;
     }
-    int sLen = indexEnd - indexStart + 2;
-    double[] s = new double[sLen];
+    final int sLen = indexEnd - indexStart + 2;
+    final double[] s = new double[sLen];
     s[0] = theta0;
     System.arraycopy(hwParameters.getVolatilityTime(), indexStart, s, 1, sLen - 2);
     s[sLen - 1] = theta1;
 
     double gamma = 0.0;
-    double[] exp2as = new double[sLen];
+    final double[] exp2as = new double[sLen];
     for (int loopindex = 0; loopindex < sLen; loopindex++) {
       exp2as[loopindex] = Math.exp(2 * a * s[loopindex]);
     }
@@ -437,8 +437,8 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
       dg += -alphaFixed[loopcf] * term;
       dg2 += alphaFixed[loopcf] * alphaFixed[loopcf] * term;
     }
-    double g2 = g * g;
-    double g3 = g * g2;
+    final double g2 = g * g;
+    final double g3 = g * g2;
 
     return -df2 / g + (2 * df * dg + f * dg2) / g2 - 2 * f * dg * dg / g3;
   }
@@ -550,7 +550,7 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
   }
 
   /**
-   * Compute the first order derivative with respect to the discountedCashFlowFixed and to the discountedCashFlowIbor of the of swap rate second derivative with respect 
+   * Compute the first order derivative with respect to the discountedCashFlowFixed and to the discountedCashFlowIbor of the of swap rate second derivative with respect
    * to the random variable x in the $P(.,\theta)$ numeraire.
    * @param x The random variable value.
    * @param discountedCashFlowFixed The discounted cash flows equivalent of the swap fixed leg.
@@ -565,8 +565,8 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
     double f = 0.0;
     double df = 0.0;
     double df2 = 0.0;
-    double[] termIbor = new double[nbDcfi];
-    double[] expIbor = new double[nbDcfi];
+    final double[] termIbor = new double[nbDcfi];
+    final double[] expIbor = new double[nbDcfi];
     for (int loopcf = 0; loopcf < nbDcfi; loopcf++) {
       expIbor[loopcf] = Math.exp(-alphaIbor[loopcf] * x - 0.5 * alphaIbor[loopcf] * alphaIbor[loopcf]);
       termIbor[loopcf] = discountedCashFlowIbor[loopcf] * expIbor[loopcf];
@@ -577,8 +577,8 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
     double g = 0.0;
     double dg = 0.0;
     double dg2 = 0.0;
-    double[] termFixed = new double[nbDcff];
-    double[] expFixed = new double[nbDcff];
+    final double[] termFixed = new double[nbDcff];
+    final double[] expFixed = new double[nbDcff];
     for (int loopcf = 0; loopcf < nbDcff; loopcf++) {
       expFixed[loopcf] = Math.exp(-alphaFixed[loopcf] * x - 0.5 * alphaFixed[loopcf] * alphaFixed[loopcf]);
       termFixed[loopcf] = discountedCashFlowFixed[loopcf] * expFixed[loopcf];
@@ -586,18 +586,18 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
       dg += -alphaFixed[loopcf] * termFixed[loopcf];
       dg2 += alphaFixed[loopcf] * alphaFixed[loopcf] * termFixed[loopcf];
     }
-    double g2 = g * g;
-    double g3 = g * g2;
-    double g4 = g * g3;
+    final double g2 = g * g;
+    final double g3 = g * g2;
+    final double g4 = g * g3;
     //    double dx2 = -((df2 * g - f * dg2) / g2 - (df * g - f * dg) * 2 * dg / g3);
     // Backward sweep
-    double dx2Bar = 1.0;
-    double gBar = (df2 / g2 - 2 * f * dg2 / g3 - 4 * df * dg / g3 + 6 * dg * dg * f / g4) * dx2Bar;
-    double dgBar = (2 * df / g2 - 4 * f * dg / g3) * dx2Bar;
-    double dg2Bar = f / g2 * dx2Bar;
-    double fBar = (dg2 / g2 - 2 * dg * dg / g3) * dx2Bar;
-    double dfBar = 2 * dg / g2 * dx2Bar;
-    double df2Bar = -1.0 / g * dx2Bar;
+    final double dx2Bar = 1.0;
+    final double gBar = (df2 / g2 - 2 * f * dg2 / g3 - 4 * df * dg / g3 + 6 * dg * dg * f / g4) * dx2Bar;
+    final double dgBar = (2 * df / g2 - 4 * f * dg / g3) * dx2Bar;
+    final double dg2Bar = f / g2 * dx2Bar;
+    final double fBar = (dg2 / g2 - 2 * dg * dg / g3) * dx2Bar;
+    final double dfBar = 2 * dg / g2 * dx2Bar;
+    final double df2Bar = -1.0 / g * dx2Bar;
 
     final double[] discountedCashFlowFixedBar = new double[nbDcff];
     final double[] termFixedBar = new double[nbDcff];
@@ -615,7 +615,7 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
   }
 
   /**
-   * Compute the first order derivative with respect to the alphaFixed and to the alphaIbor of the of swap rate second derivative with respect 
+   * Compute the first order derivative with respect to the alphaFixed and to the alphaIbor of the of swap rate second derivative with respect
    * to the random variable x in the $P(.,\theta)$ numeraire.
    * @param x The random variable value.
    * @param discountedCashFlowFixed The discounted cash flows equivalent of the swap fixed leg.
@@ -630,8 +630,8 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
     double f = 0.0;
     double df = 0.0;
     double df2 = 0.0;
-    double[] termIbor = new double[nbDcfi];
-    double[] expIbor = new double[nbDcfi];
+    final double[] termIbor = new double[nbDcfi];
+    final double[] expIbor = new double[nbDcfi];
     for (int loopcf = 0; loopcf < nbDcfi; loopcf++) {
       expIbor[loopcf] = Math.exp(-alphaIbor[loopcf] * x - 0.5 * alphaIbor[loopcf] * alphaIbor[loopcf]);
       termIbor[loopcf] = discountedCashFlowIbor[loopcf] * expIbor[loopcf];
@@ -642,8 +642,8 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
     double g = 0.0;
     double dg = 0.0;
     double dg2 = 0.0;
-    double[] termFixed = new double[nbDcff];
-    double[] expFixed = new double[nbDcff];
+    final double[] termFixed = new double[nbDcff];
+    final double[] expFixed = new double[nbDcff];
     for (int loopcf = 0; loopcf < nbDcff; loopcf++) {
       expFixed[loopcf] = Math.exp(-alphaFixed[loopcf] * x - 0.5 * alphaFixed[loopcf] * alphaFixed[loopcf]);
       termFixed[loopcf] = discountedCashFlowFixed[loopcf] * expFixed[loopcf];
@@ -651,18 +651,18 @@ public class HullWhiteOneFactorPiecewiseConstantInterestRateModel {
       dg += -alphaFixed[loopcf] * termFixed[loopcf];
       dg2 += alphaFixed[loopcf] * alphaFixed[loopcf] * termFixed[loopcf];
     }
-    double g2 = g * g;
-    double g3 = g * g2;
-    double g4 = g * g3;
+    final double g2 = g * g;
+    final double g3 = g * g2;
+    final double g4 = g * g3;
     //    double dx2 = -((df2 * g - f * dg2) / g2 - (df * g - f * dg) * 2 * dg / g3);
     // Backward sweep
-    double dx2Bar = 1.0;
-    double gBar = (df2 / g2 - 2 * f * dg2 / g3 - 4 * df * dg / g3 + 6 * dg * dg * f / g4) * dx2Bar;
-    double dgBar = (2 * df / g2 - 4 * f * dg / g3) * dx2Bar;
-    double dg2Bar = f / g2 * dx2Bar;
-    double fBar = (dg2 / g2 - 2 * dg * dg / g3) * dx2Bar;
-    double dfBar = 2 * dg / g2 * dx2Bar;
-    double df2Bar = -1.0 / g * dx2Bar;
+    final double dx2Bar = 1.0;
+    final double gBar = (df2 / g2 - 2 * f * dg2 / g3 - 4 * df * dg / g3 + 6 * dg * dg * f / g4) * dx2Bar;
+    final double dgBar = (2 * df / g2 - 4 * f * dg / g3) * dx2Bar;
+    final double dg2Bar = f / g2 * dx2Bar;
+    final double fBar = (dg2 / g2 - 2 * dg * dg / g3) * dx2Bar;
+    final double dfBar = 2 * dg / g2 * dx2Bar;
+    final double df2Bar = -1.0 / g * dx2Bar;
 
     final double[] alphaFixedBar = new double[nbDcff];
     final double[] termFixedBar = new double[nbDcff];

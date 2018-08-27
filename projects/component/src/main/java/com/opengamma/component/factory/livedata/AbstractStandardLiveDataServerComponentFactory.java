@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.component.factory.livedata;
@@ -108,7 +108,7 @@ public abstract class AbstractStandardLiveDataServerComponentFactory extends Abs
    */
   @PropertyDefinition
   private int _jmsSubscriptionQueueMaxConcurrentConsumers = 1;
-  
+
   /**
    * The subscription queue name, null if not used.
    */
@@ -116,8 +116,8 @@ public abstract class AbstractStandardLiveDataServerComponentFactory extends Abs
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
-    StandardLiveDataServer server = initServer(repo);
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
+    final StandardLiveDataServer server = initServer(repo);
     final ComponentInfo info = new ComponentInfo(LiveDataServer.class, getClassifier());
     repo.registerComponent(info, server);
 
@@ -133,7 +133,7 @@ public abstract class AbstractStandardLiveDataServerComponentFactory extends Abs
    * Creates the server, without registering it.
    * <p>
    * The calling code will register it and publish via JMS and REST.
-   * 
+   *
    * @param repo the repository, not null
    * @return the server, not null
    */
@@ -141,11 +141,11 @@ public abstract class AbstractStandardLiveDataServerComponentFactory extends Abs
 
   /**
    * Publishes the server by JMS.
-   * 
+   *
    * @param repo the repository, not null
    * @param server the server, not null
    */
-  protected void publishJms(ComponentRepository repo, StandardLiveDataServer server) {
+  protected void publishJms(final ComponentRepository repo, final StandardLiveDataServer server) {
     publishJmsSubscription(repo, server);
     publishJmsEntitlement(repo, server);
     publishJmsHeartbeat(repo, server);
@@ -153,26 +153,26 @@ public abstract class AbstractStandardLiveDataServerComponentFactory extends Abs
 
   /**
    * Publishes the JMS subscription topic.
-   * 
+   *
    * @param repo the repository, not null
    * @param server the server, not null
    */
-  protected void publishJmsSubscription(ComponentRepository repo, StandardLiveDataServer server) {
-    SubscriptionRequestReceiver receiver = new SubscriptionRequestReceiver(server);
-    FudgeRequestDispatcher dispatcher = new FudgeRequestDispatcher(receiver);
+  protected void publishJmsSubscription(final ComponentRepository repo, final StandardLiveDataServer server) {
+    final SubscriptionRequestReceiver receiver = new SubscriptionRequestReceiver(server);
+    final FudgeRequestDispatcher dispatcher = new FudgeRequestDispatcher(receiver);
 
-    String topicName = getJmsSubscriptionTopic();
+    final String topicName = getJmsSubscriptionTopic();
 
     if (topicName != null) {
-      JmsByteArrayRequestDispatcher topicDispatcher = new JmsByteArrayRequestDispatcher(dispatcher);
-      JmsTopicContainer topicContainer = getJmsConnector().getTopicContainerFactory().create(topicName, topicDispatcher);
+      final JmsByteArrayRequestDispatcher topicDispatcher = new JmsByteArrayRequestDispatcher(dispatcher);
+      final JmsTopicContainer topicContainer = getJmsConnector().getTopicContainerFactory().create(topicName, topicDispatcher);
       repo.registerLifecycle(topicContainer);
     }
 
-    String queueName = getJmsSubscriptionQueue();
+    final String queueName = getJmsSubscriptionQueue();
     if (queueName != null) {
-      JmsByteArrayRequestDispatcher queueDispatcher = new JmsByteArrayRequestDispatcher(dispatcher);
-      JmsQueueContainer queueContainer = getJmsConnector().getQueueContainerFactory().create(queueName,
+      final JmsByteArrayRequestDispatcher queueDispatcher = new JmsByteArrayRequestDispatcher(dispatcher);
+      final JmsQueueContainer queueContainer = getJmsConnector().getQueueContainerFactory().create(queueName,
                                                                                              queueDispatcher,
                                                                                              getJmsSubscriptionQueueConcurrentConsumers(),
                                                                                              getJmsSubscriptionQueueMaxConcurrentConsumers());
@@ -182,39 +182,39 @@ public abstract class AbstractStandardLiveDataServerComponentFactory extends Abs
 
   /**
    * Publishes the JMS entitlement topic.
-   * 
+   *
    * @param repo the repository, not null
    * @param server the server, not null
    */
-  protected void publishJmsEntitlement(ComponentRepository repo, StandardLiveDataServer server) {
-    EntitlementServer entitlementServer = new EntitlementServer(server.getEntitlementChecker());
-    FudgeRequestDispatcher dispatcher = new FudgeRequestDispatcher(entitlementServer);
-    JmsByteArrayRequestDispatcher jmsDispatcher = new JmsByteArrayRequestDispatcher(dispatcher);
-    JmsTopicContainer jmsContainer = getJmsConnector().getTopicContainerFactory().create(getJmsEntitlementTopic(), jmsDispatcher);
+  protected void publishJmsEntitlement(final ComponentRepository repo, final StandardLiveDataServer server) {
+    final EntitlementServer entitlementServer = new EntitlementServer(server.getEntitlementChecker());
+    final FudgeRequestDispatcher dispatcher = new FudgeRequestDispatcher(entitlementServer);
+    final JmsByteArrayRequestDispatcher jmsDispatcher = new JmsByteArrayRequestDispatcher(dispatcher);
+    final JmsTopicContainer jmsContainer = getJmsConnector().getTopicContainerFactory().create(getJmsEntitlementTopic(), jmsDispatcher);
     repo.registerLifecycle(jmsContainer);
   }
 
   /**
    * Publishes the JMS heartbeat topic.
-   * 
+   *
    * @param repo the repository, not null
    * @param server the server, not null
    */
-  protected void publishJmsHeartbeat(ComponentRepository repo, StandardLiveDataServer server) {
-    HeartbeatReceiver receiver = new HeartbeatReceiver(server.getExpirationManager());
-    JmsByteArrayMessageDispatcher jmsDispatcher = new JmsByteArrayMessageDispatcher(receiver);
-    JmsTopicContainer jmsContainer = getJmsConnector().getTopicContainerFactory().create(getJmsHeartbeatTopic(), jmsDispatcher);
+  protected void publishJmsHeartbeat(final ComponentRepository repo, final StandardLiveDataServer server) {
+    final HeartbeatReceiver receiver = new HeartbeatReceiver(server.getExpirationManager());
+    final JmsByteArrayMessageDispatcher jmsDispatcher = new JmsByteArrayMessageDispatcher(receiver);
+    final JmsTopicContainer jmsContainer = getJmsConnector().getTopicContainerFactory().create(getJmsHeartbeatTopic(), jmsDispatcher);
     repo.registerLifecycle(jmsContainer);
   }
 
   /**
    * Publishes the component over REST by publishing a meta-data provider.
-   * 
+   *
    * @param repo the repository, not null
    * @param server the server being produced, not null
    */
   @SuppressWarnings("deprecation")
-  protected void publishRest(ComponentRepository repo, StandardLiveDataServer server) {
+  protected void publishRest(final ComponentRepository repo, final StandardLiveDataServer server) {
     final LiveDataMetaData metaData = createMetaData(repo);
     metaData.setJmsBrokerUri(getJmsConnector().getClientBrokerUri());
     metaData.setJmsSubscriptionTopic(getJmsSubscriptionTopic());
@@ -231,30 +231,30 @@ public abstract class AbstractStandardLiveDataServerComponentFactory extends Abs
 
   /**
    * Creates the shell meta-data for REST that will have JMS details attached.
-   * 
+   *
    * @param repo the repository, not null
    * @return the meta-data, not null
    */
   protected abstract LiveDataMetaData createMetaData(ComponentRepository repo);
-  
+
   /**
    * Sets the prefix of the subscription queue name, null if not used.
    * @param jmsSubscriptionQueuePrefix  the new value of the property
    */
-  public void setJmsSubscriptionQueuePrefix(String jmsSubscriptionQueuePrefix) {
+  public void setJmsSubscriptionQueuePrefix(final String jmsSubscriptionQueuePrefix) {
     _jmsSubscriptionQueuePrefix = jmsSubscriptionQueuePrefix;
     if (jmsSubscriptionQueuePrefix != null) {
       try {
-        String hostName = InetAddress.getLocalHost().getHostName();
+        final String hostName = InetAddress.getLocalHost().getHostName();
         _jmsSubscriptionQueue = getJmsSubscriptionQueuePrefix() + "-" + hostName;
-      } catch (UnknownHostException e) {
+      } catch (final UnknownHostException e) {
         throw new OpenGammaRuntimeException("Unable to find host name, which is required for queue name suffix");
       }
     } else {
       _jmsSubscriptionQueue = null;
     }
   }
-  
+
   public String getJmsSubscriptionQueue() {
     return _jmsSubscriptionQueue;
   }

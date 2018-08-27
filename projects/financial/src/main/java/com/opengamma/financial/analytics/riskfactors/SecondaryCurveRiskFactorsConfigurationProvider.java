@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.riskfactors;
@@ -13,12 +13,12 @@ import com.opengamma.util.money.Currency;
 public class SecondaryCurveRiskFactorsConfigurationProvider extends DefaultRiskFactorsConfigurationProvider {
 
   private static final String SECONDARY_CURVE_NAME = "SECONDARY";
-  
+
   public SecondaryCurveRiskFactorsConfigurationProvider() {
     super();
   }
-  
-  public SecondaryCurveRiskFactorsConfigurationProvider(Currency currencyOverride) {
+
+  public SecondaryCurveRiskFactorsConfigurationProvider(final Currency currencyOverride) {
     super(currencyOverride);
   }
 
@@ -28,8 +28,8 @@ public class SecondaryCurveRiskFactorsConfigurationProvider extends DefaultRiskF
   }
 
   @Override
-  public String getForwardCurve(Currency currency) {
+  public String getForwardCurve(final Currency currency) {
     return SECONDARY_CURVE_NAME;
   }
-  
+
 }

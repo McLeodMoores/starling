@@ -247,23 +247,23 @@ public class FloatingLegCashFlows implements ImmutableBean, SwapLegCashFlows {
    * @param indexTenors The index tenors, not null
    */
   @ImmutableConstructor
-  public FloatingLegCashFlows(List<LocalDate> startAccrualDates,
-                              List<LocalDate> endAccrualDates,
-                              List<Double> accrualYearFractions,
-                              List<LocalDate> fixingStart,
-                              List<LocalDate> fixingEnd,
-                              List<Double> fixingYearFractions,
-                              List<Double> forwardRates,
-                              List<Double> fixedRates,
-                              List<LocalDate> paymentDates,
-                              List<Double> paymentTimes,
-                              List<Double> paymentDiscountFactors,
-                              List<CurrencyAmount> paymentAmounts,
-                              List<CurrencyAmount> projectedAmounts,
-                              List<CurrencyAmount> notionals,
-                              List<Double> spreads,
-                              List<Double> gearings,
-                              List<Tenor> indexTenors) {
+  public FloatingLegCashFlows(final List<LocalDate> startAccrualDates,
+                              final List<LocalDate> endAccrualDates,
+                              final List<Double> accrualYearFractions,
+                              final List<LocalDate> fixingStart,
+                              final List<LocalDate> fixingEnd,
+                              final List<Double> fixingYearFractions,
+                              final List<Double> forwardRates,
+                              final List<Double> fixedRates,
+                              final List<LocalDate> paymentDates,
+                              final List<Double> paymentTimes,
+                              final List<Double> paymentDiscountFactors,
+                              final List<CurrencyAmount> paymentAmounts,
+                              final List<CurrencyAmount> projectedAmounts,
+                              final List<CurrencyAmount> notionals,
+                              final List<Double> spreads,
+                              final List<Double> gearings,
+                              final List<Tenor> indexTenors) {
 
     ArgumentChecker.notNull(startAccrualDates, "startAccrualDates");
     ArgumentChecker.notNull(endAccrualDates, "endAccrualDates");
@@ -301,7 +301,7 @@ public class FloatingLegCashFlows implements ImmutableBean, SwapLegCashFlows {
     _gearings = Collections.unmodifiableList(Lists.newArrayList(gearings));
     _indexTenors = Collections.unmodifiableList(Lists.newArrayList(indexTenors));
 
-    int n = notionals.size();
+    final int n = notionals.size();
     ArgumentChecker.isTrue(n == startAccrualDates.size(), "number of accrual start dates must equal number of notionals");
     ArgumentChecker.isTrue(n == endAccrualDates.size(), "number of accrual end dates must equal number of notionals");
     ArgumentChecker.isTrue(n == accrualYearFractions.size(), "number of accrual year fractions must equal number of notionals");
@@ -352,14 +352,14 @@ public class FloatingLegCashFlows implements ImmutableBean, SwapLegCashFlows {
    */
   @DerivedProperty
   public List<CurrencyAmount> getDiscountedPaymentAmounts() {
-    List<CurrencyAmount> cashflows = new ArrayList<>();
+    final List<CurrencyAmount> cashflows = new ArrayList<>();
     for (int i = 0; i < getNumberOfCashFlows(); i++) {
-      CurrencyAmount payment = getPaymentAmounts().get(i);
+      final CurrencyAmount payment = getPaymentAmounts().get(i);
       if (payment == null) {
         cashflows.add(null);
         continue;
       }
-      double df = getPaymentDiscountFactors().get(i);
+      final double df = getPaymentDiscountFactors().get(i);
       cashflows.add(CurrencyAmount.of(payment.getCurrency(), payment.getAmount() * df));
     }
     return cashflows;
@@ -371,14 +371,14 @@ public class FloatingLegCashFlows implements ImmutableBean, SwapLegCashFlows {
    */
   @DerivedProperty
   public List<CurrencyAmount> getDiscountedProjectedAmounts() {
-    List<CurrencyAmount> cashflows = new ArrayList<>();
+    final List<CurrencyAmount> cashflows = new ArrayList<>();
     for (int i = 0; i < getNumberOfCashFlows(); i++) {
-      CurrencyAmount payment = getProjectedAmounts().get(i);
+      final CurrencyAmount payment = getProjectedAmounts().get(i);
       if (payment == null) {
         cashflows.add(null);
         continue;
       }
-      double df = getPaymentDiscountFactors().get(i);
+      final double df = getPaymentDiscountFactors().get(i);
       cashflows.add(CurrencyAmount.of(payment.getCurrency(), payment.getAmount() * df));
     }
     return cashflows;

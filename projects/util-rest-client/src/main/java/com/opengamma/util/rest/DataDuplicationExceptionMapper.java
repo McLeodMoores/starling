@@ -29,8 +29,8 @@ public class DataDuplicationExceptionMapper
 
   //-------------------------------------------------------------------------
   @Override
-  protected String buildHtmlErrorPage(DataDuplicationException exception) {
-    Map<String, String> data = new HashMap<>();
+  protected String buildHtmlErrorPage(final DataDuplicationException exception) {
+    final Map<String, String> data = new HashMap<>();
     return createHtmlErrorPage("error-dataduplication.html", data);
   }
 

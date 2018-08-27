@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.viewer.status.impl;
@@ -21,35 +21,35 @@ import com.opengamma.util.ArgumentChecker;
  * Per view status result for a security type.
  */
 public class PerViewStatusResult {
-  
+
   private final String _securityType;
   private final Map<ViewStatusKey, ViewStatus> _viewStatusResult = Maps.newConcurrentMap();
-  
-  
-  public PerViewStatusResult(String securityType) {
+
+
+  public PerViewStatusResult(final String securityType) {
     ArgumentChecker.notNull(securityType, "securityType");
     _securityType = securityType;
   }
-    
-  public void put(ViewStatusKey key, ViewStatus status) {
+
+  public void put(final ViewStatusKey key, final ViewStatus status) {
     ArgumentChecker.notNull(key, "key");
     ArgumentChecker.notNull(status, "status");
-    
+
     _viewStatusResult.put(ImmutableViewStatusKey.of(key), status);
   }
-  
-  public ViewStatus get(ViewStatusKey key) {
+
+  public ViewStatus get(final ViewStatusKey key) {
     if (key == null) {
       return null;
     } else {
-      return _viewStatusResult.get(ImmutableViewStatusKey.of(key)); 
+      return _viewStatusResult.get(ImmutableViewStatusKey.of(key));
     }
   }
-  
+
   public Set<ViewStatusKey> keySet() {
     return _viewStatusResult.keySet();
   }
-  
+
   /**
    * Gets the securityType.
    * @return the securityType

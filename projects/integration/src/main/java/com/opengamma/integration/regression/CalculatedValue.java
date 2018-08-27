@@ -52,7 +52,7 @@ public final class CalculatedValue implements ImmutableBean {
   @PropertyDefinition
   private final String _targetName;
 
-  public static CalculatedValue of(Object value, ValueProperties specProps, String targetType, String targetName) {
+  public static CalculatedValue of(final Object value, final ValueProperties specProps, final String targetType, final String targetName) {
     return new CalculatedValue(value, removeFunctionIds(removeProperties(specProps)), targetType, targetName);
   }
 
@@ -61,18 +61,18 @@ public final class CalculatedValue implements ImmutableBean {
    * @param properties Properties to clean up
    * @return The properties with the ID removed from the function name property
    */
-  private static ValueProperties removeFunctionIds(ValueProperties properties) {
-    Set<String> functions = properties.getValues(ValuePropertyNames.FUNCTION);
-    Set<String> functionsNoId = Sets.newHashSet();
-    for (String function : functions) {
+  private static ValueProperties removeFunctionIds(final ValueProperties properties) {
+    final Set<String> functions = properties.getValues(ValuePropertyNames.FUNCTION);
+    final Set<String> functionsNoId = Sets.newHashSet();
+    for (final String function : functions) {
       functionsNoId.add(removeFunctionId(function));
     }
     return properties.copy().withoutAny(ValuePropertyNames.FUNCTION).with(ValuePropertyNames.FUNCTION, functionsNoId).get();
   }
 
-  private static ValueProperties removeProperties(ValueProperties properties) {
+  private static ValueProperties removeProperties(final ValueProperties properties) {
     ValueProperties filteredProps = properties;
-    for (String propertyName : REMOVED_PROPERTY_NAMES) {
+    for (final String propertyName : REMOVED_PROPERTY_NAMES) {
       filteredProps = filteredProps.withoutAny(propertyName);
     }
     return filteredProps;
@@ -82,8 +82,8 @@ public final class CalculatedValue implements ImmutableBean {
    * Removes the ID from a function name, e.g. "123 (Function Name)" becomes "Function Name".
    * @return The function name string with the ID removed
    */
-  private static String removeFunctionId(String functionString) {
-    Matcher matcher = FUNCTION_PATTERN.matcher(functionString);
+  private static String removeFunctionId(final String functionString) {
+    final Matcher matcher = FUNCTION_PATTERN.matcher(functionString);
     if (matcher.matches()) {
       return matcher.group(1);
     } else {

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.bbg.component;
@@ -71,7 +71,7 @@ public class BloombergBpipePermissionCheckProviderComponentFactory extends Abstr
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
     ArgumentChecker.isTrue(getIdentityExpiryTime().getSeconds() > 0, "identity expiry time must be positive");
 
     final ComponentInfo info = new ComponentInfo(PermissionCheckProvider.class, getClassifier());
@@ -81,7 +81,7 @@ public class BloombergBpipePermissionCheckProviderComponentFactory extends Abstr
     }
     info.addAttribute(ComponentInfoAttributes.ACCEPTED_TYPES, BloombergPermissions.BLOOMBERG_PREFIX);
 
-    BloombergBpipePermissionCheckProvider provider = new BloombergBpipePermissionCheckProvider(
+    final BloombergBpipePermissionCheckProvider provider = new BloombergBpipePermissionCheckProvider(
         getBloombergConnector(), getIdentityExpiryTime());
     repo.registerComponent(info, provider);
     if (isPublishRest()) {

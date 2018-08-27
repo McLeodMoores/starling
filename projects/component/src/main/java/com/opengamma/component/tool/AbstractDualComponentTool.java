@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.component.tool;
@@ -41,7 +41,7 @@ public abstract class AbstractDualComponentTool {
   private static final String DEST_COMPONENT_SERVER_URI_OPTION = "dest";
   /** Logging command line option. */
   private static final String LOGBACK_RESOURCE_OPTION = "l";
-  
+
   static {
     StartupUtils.init();
   }
@@ -61,11 +61,11 @@ public abstract class AbstractDualComponentTool {
 
   /**
    * Initializes the tool statically.
-   * 
+   *
    * @param logbackResource the logback resource location, not null
    * @return true if successful
    */
-  public static final boolean init(String logbackResource) {
+  public static final boolean init(final String logbackResource) {
     return LogUtils.configureLogger(logbackResource);
   }
 
@@ -83,11 +83,11 @@ public abstract class AbstractDualComponentTool {
    * c/component server URI - the component server URI, mandatory<br />
    * l/logback - the logback configuration, default tool-logback.xml<br />
    * h/help - prints the help tool<br />
-   * 
+   *
    * @param args the command-line arguments, not null
    * @return true if successful, false otherwise
    */
-  public boolean initAndRun(String[] args) {
+  public boolean initAndRun(final String[] args) {
     return initAndRun(args, null);
   }
 
@@ -98,20 +98,20 @@ public abstract class AbstractDualComponentTool {
    * c/component server URI - the component server URI, mandatory<br />
    * l/logback - the logback configuration, default tool-logback.xml<br />
    * h/help - prints the help tool<br />
-   * 
+   *
    * @param args the command-line arguments, not null
    * @param defaultLogbackResource the default logback resource, null to use tool-logback.xml as the default
    * @return true if successful, false otherwise
    */
-  public boolean initAndRun(String[] args, String defaultLogbackResource) {
+  public boolean initAndRun(final String[] args, final String defaultLogbackResource) {
     ArgumentChecker.notNull(args, "args");
 
-    Options options = createOptions();
-    CommandLineParser parser = new PosixParser();
+    final Options options = createOptions();
+    final CommandLineParser parser = new PosixParser();
     CommandLine line;
     try {
       line = parser.parse(options, args);
-    } catch (ParseException e) {
+    } catch (final ParseException e) {
       usage(options);
       return false;
     }
@@ -122,8 +122,8 @@ public abstract class AbstractDualComponentTool {
     }
     String logbackResource = line.getOptionValue(LOGBACK_RESOURCE_OPTION);
     logbackResource = StringUtils.defaultIfEmpty(logbackResource, TOOL_LOGBACK_XML);
-    String srcComponentServerUri = line.getOptionValue(SRC_COMPONENT_SERVER_URI_OPTION);
-    String destComponentServerUri = line.getOptionValue(DEST_COMPONENT_SERVER_URI_OPTION);
+    final String srcComponentServerUri = line.getOptionValue(SRC_COMPONENT_SERVER_URI_OPTION);
+    final String destComponentServerUri = line.getOptionValue(DEST_COMPONENT_SERVER_URI_OPTION);
     return init(logbackResource) && run(srcComponentServerUri, destComponentServerUri);
   }
 
@@ -131,7 +131,7 @@ public abstract class AbstractDualComponentTool {
    * Runs the tool.
    * <p>
    * This starts the tool context and calls {@link #run(ToolContext)}. This will catch exceptions and print a stack trace.
-   * 
+   *
    * @param srcComponentServerUri  the config resource location, not null
    * @param destComponentServerUri  the config resource location, not null
    * @return true if successful
@@ -142,14 +142,14 @@ public abstract class AbstractDualComponentTool {
       ArgumentChecker.notNull(destComponentServerUri, "destComponentServerUri");
       LOGGER.info("Starting " + getClass().getSimpleName());
       srcComponentServerUri = resolveComponentServerUri(srcComponentServerUri);
-      RemoteComponentFactory srcRemoteComponentFactory = new RemoteComponentFactory(srcComponentServerUri);
+      final RemoteComponentFactory srcRemoteComponentFactory = new RemoteComponentFactory(srcComponentServerUri);
       destComponentServerUri = resolveComponentServerUri(destComponentServerUri);
-      RemoteComponentFactory destRemoteComponentFactory = new RemoteComponentFactory(destComponentServerUri);
+      final RemoteComponentFactory destRemoteComponentFactory = new RemoteComponentFactory(destComponentServerUri);
       LOGGER.info("Running " + getClass().getSimpleName());
       run(srcRemoteComponentFactory, destRemoteComponentFactory);
       LOGGER.info("Finished " + getClass().getSimpleName());
       return true;
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       ex.printStackTrace();
       return false;
     }
@@ -159,19 +159,19 @@ public abstract class AbstractDualComponentTool {
    * Runs the tool, calling {@code doRun}.
    * <p>
    * This will catch unhandled exceptions, and will convert checked exceptions to unchecked.
-   * 
+   *
    * @param srcRemoteComponentFactory  the remote component factory, not null
    * @param destRemoteComponentFactory  the remote component factory, not null
    * @throws RuntimeException if an error occurs
    */
-  public final void run(RemoteComponentFactory srcRemoteComponentFactory, RemoteComponentFactory destRemoteComponentFactory) {
+  public final void run(final RemoteComponentFactory srcRemoteComponentFactory, final RemoteComponentFactory destRemoteComponentFactory) {
     _srcRemoteComponentFactory = srcRemoteComponentFactory;
     _destRemoteComponentFactory = destRemoteComponentFactory;
     try {
       doRun();
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       throw ex;
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       throw new RuntimeException(ex);
     }
   }
@@ -179,7 +179,7 @@ public abstract class AbstractDualComponentTool {
   //-------------------------------------------------------------------------
   /**
    * Override in subclasses to implement the tool.
-   * 
+   *
    * @throws Exception if an error occurs
    */
   protected abstract void doRun() throws Exception;
@@ -187,16 +187,16 @@ public abstract class AbstractDualComponentTool {
   //-------------------------------------------------------------------------
   /**
    * Gets the source remote component factory.
-   * 
+   *
    * @return the source remote component factory, not null during {@code doRun}
    */
   protected RemoteComponentFactory getSourceRemoteComponentFactory() {
     return _srcRemoteComponentFactory;
   }
-  
+
   /**
    * Gets the destination remote component factory.
-   * 
+   *
    * @return the destination remote component factory, not null during {@code doRun}
    */
   protected RemoteComponentFactory getDestinationRemoteComponentFactory() {
@@ -205,7 +205,7 @@ public abstract class AbstractDualComponentTool {
 
   /**
    * Gets the parsed command line.
-   * 
+   *
    * @return the parsed command line, not null after parsing
    */
   protected CommandLine getCommandLine() {
@@ -217,11 +217,11 @@ public abstract class AbstractDualComponentTool {
    * Creates the command line options.
    * <p>
    * Subclasses may override this and add their own parameters. The base class defined the options h/help, c/config, l/logback.
-   * 
+   *
    * @return the set of command line options, not null
    */
   protected Options createOptions() {
-    Options options = new Options();
+    final Options options = new Options();
     options.addOption(createHelpOption());
     options.addOption(createSourceComponentServerOption());
     options.addOption(createDestinationComponentServerOption());
@@ -234,21 +234,21 @@ public abstract class AbstractDualComponentTool {
   }
 
   private static Option createSourceComponentServerOption() {
-    Option option = new Option(SRC_COMPONENT_SERVER_URI_OPTION, "source-component-server", true, "the source component server, host[:port]");
+    final Option option = new Option(SRC_COMPONENT_SERVER_URI_OPTION, "source-component-server", true, "the source component server, host[:port]");
     option.setArgName("source component server");
     option.setRequired(true);
     return option;
   }
-  
+
   private static Option createDestinationComponentServerOption() {
-    Option option = new Option(DEST_COMPONENT_SERVER_URI_OPTION, "destination-component-server", true, "the destination component server, host[:port]");
+    final Option option = new Option(DEST_COMPONENT_SERVER_URI_OPTION, "destination-component-server", true, "the destination component server, host[:port]");
     option.setArgName("source component server");
     option.setRequired(true);
     return option;
   }
 
   private static Option createLogbackOption() {
-    Option option = new Option(LOGBACK_RESOURCE_OPTION, "logback", true, "the logback configuration resource");
+    final Option option = new Option(LOGBACK_RESOURCE_OPTION, "logback", true, "the logback configuration resource");
     option.setArgName("resource");
     option.setRequired(false);
     return option;
@@ -258,12 +258,12 @@ public abstract class AbstractDualComponentTool {
     return getClass();
   }
 
-  private void usage(Options options) {
-    HelpFormatter formatter = new HelpFormatter();
+  private void usage(final Options options) {
+    final HelpFormatter formatter = new HelpFormatter();
     formatter.setWidth(120);
     formatter.printHelp("java " + getEntryPointClass().getName(), options, true);
   }
-  
+
   //-------------------------------------------------------------------------
   private String resolveComponentServerUri(String componentServerUri) {
     componentServerUri = componentServerUri.trim();
@@ -275,5 +275,5 @@ public abstract class AbstractDualComponentTool {
       return "http://" + componentServerUri + "/jax";
     }
   }
-  
+
 }

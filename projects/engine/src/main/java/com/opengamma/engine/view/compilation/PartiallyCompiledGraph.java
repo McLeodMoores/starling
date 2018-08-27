@@ -45,22 +45,22 @@ public final class PartiallyCompiledGraph implements DependencyGraph {
 
   /**
    * Creates a new instance, populated with the content of an existing graph compilation.
-   * 
+   *
    * @param original the graph to initialise state from, not null
    */
   public PartiallyCompiledGraph(final DependencyGraph original) {
     final int count = original.getRootCount();
-    _roots = new ArrayList<DependencyNode>(count);
+    _roots = new ArrayList<>(count);
     for (int i = 0; i < count; i++) {
       _roots.add(original.getRootNode(i));
     }
-    _terminals = new HashMap<ValueSpecification, Set<ValueRequirement>>(original.getTerminalOutputs());
-    _requirements = new HashSet<ValueRequirement>();
+    _terminals = new HashMap<>(original.getTerminalOutputs());
+    _requirements = new HashSet<>();
   }
 
   /**
    * Returns the current root nodes. The collection may be modified by the caller.
-   * 
+   *
    * @return the root nodes
    */
   public Collection<DependencyNode> getRoots() {
@@ -69,7 +69,7 @@ public final class PartiallyCompiledGraph implements DependencyGraph {
 
   /**
    * Returns the current missing requirement set for incremental compilation. The caller may modify this to add or remove requirements.
-   * 
+   *
    * @return the current missing requirement set, not null
    */
   public Set<ValueRequirement> getMissingRequirements() {
@@ -105,7 +105,7 @@ public final class PartiallyCompiledGraph implements DependencyGraph {
   }
 
   @Override
-  public DependencyNode getRootNode(int index) {
+  public DependencyNode getRootNode(final int index) {
     return _roots.get(index);
   }
 

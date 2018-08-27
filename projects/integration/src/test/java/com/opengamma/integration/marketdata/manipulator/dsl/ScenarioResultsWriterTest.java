@@ -71,7 +71,7 @@ public class ScenarioResultsWriterTest {
 
   @Test
   public void shortFormat() throws IOException {
-    List<String> expectedList =
+    final List<String> expectedList =
         ImmutableList.of(
             // header -----
             row("ScenarioName", "ValuationTime", "Type", "Description", "PositionId", "ParamName1", "ParamValue1", "ParamName2", "ParamValue2", _res1Name, _res2Name),
@@ -83,16 +83,16 @@ public class ScenarioResultsWriterTest {
             row(_scenario2Name, _valuationTime2, "FXForward", "An FX Forward", _id1, _param1Name, _param1Value2, _param2Name, _param2Value2, 5, 6),
             // scenario 2 trade 2 -----
             row(_scenario2Name, _valuationTime2, "FRA", "A FRA", _id2, _param1Name, _param1Value2, _param2Name, _param2Value2, 7, 8));
-        String expected = StringUtils.join(expectedList, "\n") + "\n";
+        final String expected = StringUtils.join(expectedList, "\n") + "\n";
 
-    StringBuilder builder = new StringBuilder();
+    final StringBuilder builder = new StringBuilder();
     ScenarioResultsWriter.writeShortFormat(scenarioResults(), builder);
     assertEquals(expected, builder.toString());
   }
 
   @Test
   public void longFormat() throws IOException {
-    List<String> expectedList =
+    final List<String> expectedList =
         ImmutableList.of(
             // header -----
             row("ScenarioName", "ValuationTime", "Type", "Description", "PositionId", "ParamName1", "ParamValue1", "ParamName2", "ParamValue2", "ResultName", "ResultValue"),
@@ -112,23 +112,23 @@ public class ScenarioResultsWriterTest {
             row(_scenario2Name, _valuationTime2, "FRA", "A FRA", _id2, _param1Name, _param1Value2, _param2Name, _param2Value2, _res1Name, 7),
             // scenario 2 trade 2 result 2 -----
             row(_scenario2Name, _valuationTime2, "FRA", "A FRA", _id2, _param1Name, _param1Value2, _param2Name, _param2Value2, _res2Name, 8));
-    String expected = StringUtils.join(expectedList, "\n") + "\n";
+    final String expected = StringUtils.join(expectedList, "\n") + "\n";
 
-    StringBuilder builder = new StringBuilder();
+    final StringBuilder builder = new StringBuilder();
     ScenarioResultsWriter.writeLongFormat(scenarioResults(), builder);
     assertEquals(expected, builder.toString());
   }
 
   private List<ScenarioResultModel> scenarioResults() {
-    Position fxFwdPos = createFxForwardPosition();
-    Position fraPos = createFraPosition();
-    Trade fxFwdTrade = fxFwdPos.getTrades().iterator().next();
-    Trade fraTrade = fraPos.getTrades().iterator().next();
-    PortfolioNode node = new SimplePortfolioNode(UniqueId.parse("node~1"), "node");
-    List<UniqueIdentifiable> targets = ImmutableList.of(node, fxFwdPos, fxFwdTrade, fraPos, fraTrade);
-    List<String> columnNames = ImmutableList.of(_res1Name, _res2Name);
+    final Position fxFwdPos = createFxForwardPosition();
+    final Position fraPos = createFraPosition();
+    final Trade fxFwdTrade = fxFwdPos.getTrades().iterator().next();
+    final Trade fraTrade = fraPos.getTrades().iterator().next();
+    final PortfolioNode node = new SimplePortfolioNode(UniqueId.parse("node~1"), "node");
+    final List<UniqueIdentifiable> targets = ImmutableList.of(node, fxFwdPos, fxFwdTrade, fraPos, fraTrade);
+    final List<String> columnNames = ImmutableList.of(_res1Name, _res2Name);
 
-    Table<Integer, Integer, Object> table1 = TreeBasedTable.create();
+    final Table<Integer, Integer, Object> table1 = TreeBasedTable.create();
     table1.put(0, 0, compuatedValue(0));
     table1.put(0, 1, compuatedValue(0));
     table1.put(1, 0, compuatedValue(1));
@@ -139,17 +139,17 @@ public class ScenarioResultsWriterTest {
     table1.put(3, 1, compuatedValue(4));
     table1.put(4, 0, compuatedValue(3));
     table1.put(4, 1, compuatedValue(4));
-    ViewCycleExecutionOptions executionOptions1 =
+    final ViewCycleExecutionOptions executionOptions1 =
         ViewCycleExecutionOptions.builder()
             .setValuationTime(Instant.parse(_valuationTime1))
             .setName(_scenario1Name)
             .create();
-    SimpleResultModel simpleResultModel1 = new SimpleResultModel(targets, columnNames, table1, executionOptions1);
-    Map<String, Object> scenarioParams1 = ImmutableMap.<String, Object>of(_param1Name, _param1Value1,
+    final SimpleResultModel simpleResultModel1 = new SimpleResultModel(targets, columnNames, table1, executionOptions1);
+    final Map<String, Object> scenarioParams1 = ImmutableMap.<String, Object>of(_param1Name, _param1Value1,
                                                                           _param2Name, _param2Value1);
-    ScenarioResultModel scenarioResultModel1 = new ScenarioResultModel(simpleResultModel1, scenarioParams1);
+    final ScenarioResultModel scenarioResultModel1 = new ScenarioResultModel(simpleResultModel1, scenarioParams1);
 
-    Table<Integer, Integer, Object> table2 = TreeBasedTable.create();
+    final Table<Integer, Integer, Object> table2 = TreeBasedTable.create();
     table2.put(0, 0, compuatedValue(0));
     table2.put(0, 1, compuatedValue(0));
     table2.put(1, 0, compuatedValue(5));
@@ -160,32 +160,32 @@ public class ScenarioResultsWriterTest {
     table2.put(3, 1, compuatedValue(8));
     table2.put(4, 0, compuatedValue(7));
     table2.put(4, 1, compuatedValue(8));
-    ViewCycleExecutionOptions executionOptions2 =
+    final ViewCycleExecutionOptions executionOptions2 =
         ViewCycleExecutionOptions.builder()
             .setValuationTime(Instant.parse(_valuationTime2))
             .setName(_scenario2Name)
             .create();
-    SimpleResultModel simpleResultModel2 = new SimpleResultModel(targets, columnNames, table2, executionOptions2);
-    Map<String, Object> scenarioParams2 = ImmutableMap.<String, Object>of(_param1Name, _param1Value2,
+    final SimpleResultModel simpleResultModel2 = new SimpleResultModel(targets, columnNames, table2, executionOptions2);
+    final Map<String, Object> scenarioParams2 = ImmutableMap.<String, Object>of(_param1Name, _param1Value2,
                                                                           _param2Name, _param2Value2);
-    ScenarioResultModel scenarioResultModel2 = new ScenarioResultModel(simpleResultModel2, scenarioParams2);
+    final ScenarioResultModel scenarioResultModel2 = new ScenarioResultModel(simpleResultModel2, scenarioParams2);
 
     return ImmutableList.of(scenarioResultModel1, scenarioResultModel2);
   }
 
-  private static Object compuatedValue(int value) {
+  private static Object compuatedValue(final int value) {
     return new ComputedValueResult(VALUE_SPEC, value, EmptyAggregatedExecutionLog.INSTANCE);
   }
 
   private Position createFxForwardPosition() {
-    ExternalId externalId = ExternalId.parse("a~1");
-    FXForwardSecurity security = new FXForwardSecurity(Currency.EUR, 1, Currency.USD, 1, ZonedDateTime.now(), externalId);
+    final ExternalId externalId = ExternalId.parse("a~1");
+    final FXForwardSecurity security = new FXForwardSecurity(Currency.EUR, 1, Currency.USD, 1, ZonedDateTime.now(), externalId);
     security.setName("An FX Forward");
-    SimplePosition position = new SimplePosition(BigDecimal.ONE, security.getExternalIdBundle());
+    final SimplePosition position = new SimplePosition(BigDecimal.ONE, security.getExternalIdBundle());
     position.setUniqueId(UniqueId.parse(_id1));
-    SimpleCounterparty counterparty = new SimpleCounterparty(ExternalId.parse("a~b"));
-    SimpleTrade trade = new SimpleTrade(security, BigDecimal.ONE, counterparty, LocalDate.now(), OffsetTime.now());
-    SimpleSecurityLink securityLink = new SimpleSecurityLink();
+    final SimpleCounterparty counterparty = new SimpleCounterparty(ExternalId.parse("a~b"));
+    final SimpleTrade trade = new SimpleTrade(security, BigDecimal.ONE, counterparty, LocalDate.now(), OffsetTime.now());
+    final SimpleSecurityLink securityLink = new SimpleSecurityLink();
     securityLink.setTarget(security);
     position.setSecurityLink(securityLink);
     position.addTrade(trade);
@@ -193,21 +193,21 @@ public class ScenarioResultsWriterTest {
   }
 
   private Position createFraPosition() {
-    ZonedDateTime now = ZonedDateTime.now();
-    FRASecurity security = new FRASecurity(Currency.GBP, ExternalId.parse("b~2"), now, now, 1, 1, ExternalId.parse("c~3"), now);
+    final ZonedDateTime now = ZonedDateTime.now();
+    final FRASecurity security = new FRASecurity(Currency.GBP, ExternalId.parse("b~2"), now, now, 1, 1, ExternalId.parse("c~3"), now);
     security.setName("A FRA");
-    SimplePosition position = new SimplePosition(BigDecimal.ONE, security.getExternalIdBundle());
+    final SimplePosition position = new SimplePosition(BigDecimal.ONE, security.getExternalIdBundle());
     position.setUniqueId(UniqueId.parse(_id2));
-    SimpleCounterparty counterparty = new SimpleCounterparty(ExternalId.parse("a~b"));
-    SimpleTrade trade = new SimpleTrade(security, BigDecimal.ONE, counterparty, LocalDate.now(), OffsetTime.now());
-    SimpleSecurityLink securityLink = new SimpleSecurityLink();
+    final SimpleCounterparty counterparty = new SimpleCounterparty(ExternalId.parse("a~b"));
+    final SimpleTrade trade = new SimpleTrade(security, BigDecimal.ONE, counterparty, LocalDate.now(), OffsetTime.now());
+    final SimpleSecurityLink securityLink = new SimpleSecurityLink();
     securityLink.setTarget(security);
     position.setSecurityLink(securityLink);
     position.addTrade(trade);
     return position;
   }
 
-  private static String row(Object... values) {
+  private static String row(final Object... values) {
     return StringUtils.join(values, ScenarioResultsWriter.DELIMITER);
   }
 }

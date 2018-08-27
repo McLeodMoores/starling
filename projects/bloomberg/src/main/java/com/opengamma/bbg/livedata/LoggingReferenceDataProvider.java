@@ -45,7 +45,7 @@ public class LoggingReferenceDataProvider extends AbstractReferenceDataProvider 
   /**
    * The store of data already written to file.
    */
-  private final ConcurrentMap<String, Set<String>> _alreadyLogged = new ConcurrentHashMap<String, Set<String>>();
+  private final ConcurrentMap<String, Set<String>> _alreadyLogged = new ConcurrentHashMap<>();
   /**
    * The Fudge context.
    */
@@ -57,47 +57,47 @@ public class LoggingReferenceDataProvider extends AbstractReferenceDataProvider 
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param underlying  the underlying reference data provider, not null
    * @param fudgeContext  the Fudge context, not null
    * @param outputFile  the file to write to, not null
    */
-  public LoggingReferenceDataProvider(ReferenceDataProvider underlying, FudgeContext fudgeContext, File outputFile) {
+  public LoggingReferenceDataProvider(final ReferenceDataProvider underlying, final FudgeContext fudgeContext, final File outputFile) {
     ArgumentChecker.notNull(underlying, "underlying");
     ArgumentChecker.notNull(fudgeContext, "fudgeContext");
     ArgumentChecker.notNull(outputFile, "outputFile");
     _underlying = underlying;
     _fudgeContext = fudgeContext;
     try {
-      FileOutputStream fos = new FileOutputStream(outputFile);
-      BufferedOutputStream bos = new BufferedOutputStream(fos, 4096);
+      final FileOutputStream fos = new FileOutputStream(outputFile);
+      final BufferedOutputStream bos = new BufferedOutputStream(fos, 4096);
       _fudgeMsgWriter = fudgeContext.createMessageWriter(bos);
-    } catch (FileNotFoundException ex) {
+    } catch (final FileNotFoundException ex) {
       throw new OpenGammaRuntimeException("Cannot open " + outputFile + " for writing");
     }
   }
 
   //-------------------------------------------------------------------------
   @Override
-  protected ReferenceDataProviderGetResult doBulkGet(ReferenceDataProviderGetRequest request) {
-    ReferenceDataProviderGetResult result = _underlying.getReferenceData(request);
+  protected ReferenceDataProviderGetResult doBulkGet(final ReferenceDataProviderGetRequest request) {
+    final ReferenceDataProviderGetResult result = _underlying.getReferenceData(request);
     processResult(result, request.getFields());
     return result;
   }
 
-  private void processResult(ReferenceDataProviderGetResult result, Set<String> fields) {
-    for (ReferenceData refData : result.getReferenceData()) {
-      String identifier = refData.getIdentifier();
-      Set<String> freshFieldsLogged = new HashSet<String>();
+  private void processResult(final ReferenceDataProviderGetResult result, final Set<String> fields) {
+    for (final ReferenceData refData : result.getReferenceData()) {
+      final String identifier = refData.getIdentifier();
+      final Set<String> freshFieldsLogged = new HashSet<>();
       Set<String> fieldsLogged = _alreadyLogged.putIfAbsent(identifier, freshFieldsLogged);
       if (fieldsLogged == null) {
         fieldsLogged = freshFieldsLogged;
       }
-      
+
       synchronized (fieldsLogged) {
-        for (String field : fields) {
+        for (final String field : fields) {
           if (fieldsLogged.contains(field) == false) {
-            Object value = refData.getFieldValues().getValue(field);
+            final Object value = refData.getFieldValues().getValue(field);
             log(identifier, field, value);
           }
         }
@@ -105,8 +105,8 @@ public class LoggingReferenceDataProvider extends AbstractReferenceDataProvider 
     }
   }
 
-  private void log(String securityKey, String field, Object value) {
-    LoggedReferenceData loggedReferenceData = new LoggedReferenceData(securityKey, field, value);
+  private void log(final String securityKey, final String field, final Object value) {
+    final LoggedReferenceData loggedReferenceData = new LoggedReferenceData(securityKey, field, value);
     _fudgeMsgWriter.writeMessage(loggedReferenceData.toFudgeMsg(new FudgeSerializer(_fudgeContext)));
     _fudgeMsgWriter.flush();
   }

@@ -49,15 +49,15 @@ public final class YieldCurveParallelShift implements StructureManipulator<Yield
   private final double _shift;
 
   @ImmutableConstructor
-  /* package */ YieldCurveParallelShift(ScenarioShiftType shiftType, double shift) {
+  /* package */ YieldCurveParallelShift(final ScenarioShiftType shiftType, final double shift) {
     _shiftType = ArgumentChecker.notNull(shiftType, "shiftType");
     _shift = shift;
   }
 
   @Override
-  public YieldCurve execute(YieldCurve structure,
-                            ValueSpecification valueSpecification,
-                            FunctionExecutionContext executionContext) {
+  public YieldCurve execute(final YieldCurve structure,
+                            final ValueSpecification valueSpecification,
+                            final FunctionExecutionContext executionContext) {
     LOGGER.debug("Shifting curve {} by {}, {}", structure.getName(), _shift, _shiftType);
     return YieldCurveUtils.withParallelShift(structure, _shift, _shiftType.toAnalyticsType());
   }

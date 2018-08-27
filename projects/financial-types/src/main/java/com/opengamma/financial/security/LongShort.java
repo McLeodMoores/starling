@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.security;
@@ -25,18 +25,18 @@ public enum LongShort {
   //-------------------------------------------------------------------------
   /**
    * Converts a boolean "is long" flag to the enum value.
-   * 
+   *
    * @param isLong  the long flag, true for long, false for short
    * @return the equivalent enum, not null
    */
-  public static LongShort ofLong(boolean isLong) {
+  public static LongShort ofLong(final boolean isLong) {
     return isLong ? LONG : SHORT;
   }
 
   //-------------------------------------------------------------------------
   /**
    * Checks if the type is "long".
-   * 
+   *
    * @return true if long, false if short
    */
   public boolean isLong() {
@@ -45,7 +45,7 @@ public enum LongShort {
 
   /**
    * Checks if the type is "short".
-   * 
+   *
    * @return true if short, false if long
    */
   public boolean isShort() {

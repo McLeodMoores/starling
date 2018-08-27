@@ -18,13 +18,13 @@ import com.opengamma.OpenGammaRuntimeException;
  */
 public class Oracle11gCatalogCreationStrategy implements CatalogCreationStrategy {
 
-  private AbstractDbManagement _dbManagement;
-  private String _user;
-  private String _password;
-  private String _systemUser;
-  private String _systemPassword;
-  private String _allCatalogsSql;
-  private String _blankCatalog;
+  private final AbstractDbManagement _dbManagement;
+  private final String _user;
+  private final String _password;
+  private final String _systemUser;
+  private final String _systemPassword;
+  private final String _allCatalogsSql;
+  private final String _blankCatalog;
 
   /**
    * Creates an instance.
@@ -37,13 +37,13 @@ public class Oracle11gCatalogCreationStrategy implements CatalogCreationStrategy
    * @param blankCatalog  the catalog name to create, not null
    */
   public Oracle11gCatalogCreationStrategy(
-      AbstractDbManagement dbManagement,
-      String user,
-      String password,
-      String systemUser,
-      String systemPassword,
-      String getAllCatalogsSql,
-      String blankCatalog) {
+      final AbstractDbManagement dbManagement,
+      final String user,
+      final String password,
+      final String systemUser,
+      final String systemPassword,
+      final String getAllCatalogsSql,
+      final String blankCatalog) {
     _dbManagement = dbManagement;
     _user = user;
     _password = password;
@@ -55,7 +55,7 @@ public class Oracle11gCatalogCreationStrategy implements CatalogCreationStrategy
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean catalogExists(String catalog) {
+  public boolean catalogExists(final String catalog) {
     Connection conn = null;
     try {
       if (_systemUser != null && !_systemUser.equals("")) {
@@ -70,12 +70,12 @@ public class Oracle11gCatalogCreationStrategy implements CatalogCreationStrategy
       }
       conn.setAutoCommit(true);
 
-      Statement statement = conn.createStatement();
-      ResultSet rs = statement.executeQuery(_allCatalogsSql);
+      final Statement statement = conn.createStatement();
+      final ResultSet rs = statement.executeQuery(_allCatalogsSql);
 
       boolean catalogAlreadyExists = false;
       while (rs.next()) {
-        String name = rs.getString("name");
+        final String name = rs.getString("name");
         if (name.equalsIgnoreCase(_user)) {
           catalogAlreadyExists = true;
         }
@@ -86,13 +86,13 @@ public class Oracle11gCatalogCreationStrategy implements CatalogCreationStrategy
 
       return catalogAlreadyExists;
 
-    } catch (SQLException e) {
+    } catch (final SQLException e) {
       throw new OpenGammaRuntimeException("Failed to create catalog", e);
     } finally {
       if (conn != null) {
         try {
           conn.close();
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
         }
       }
     }
@@ -107,7 +107,7 @@ public class Oracle11gCatalogCreationStrategy implements CatalogCreationStrategy
   }
 
   @Override
-  public void create(String catalog) {
+  public void create(final String catalog) {
     if (catalogExists(catalog)) {
       return; // nothing to do
     }
@@ -121,7 +121,7 @@ public class Oracle11gCatalogCreationStrategy implements CatalogCreationStrategy
       }
       conn.setAutoCommit(true);
 
-      String createCatalogSql = "CREATE USER " + _user + " IDENTIFIED BY " + _password + "\n" +
+      final String createCatalogSql = "CREATE USER " + _user + " IDENTIFIED BY " + _password + "\n" +
           "DEFAULT TABLESPACE users\n" +
           "TEMPORARY TABLESPACE temp\n" +
           "QUOTA UNLIMITED ON users";
@@ -129,7 +129,7 @@ public class Oracle11gCatalogCreationStrategy implements CatalogCreationStrategy
       //"GRANT CREATE TABLE TO " + _user + ";\n" +
       //"GRANT CREATE SEQUENCE TO " + _user + ";";
 
-      Statement statement = conn.createStatement();
+      final Statement statement = conn.createStatement();
       //statement.addBatch("DROP USER " + _user + " CASCADE");
       statement.addBatch(createCatalogSql);
       statement.addBatch("GRANT CONNECT TO " + _user);
@@ -138,13 +138,13 @@ public class Oracle11gCatalogCreationStrategy implements CatalogCreationStrategy
       statement.executeBatch();
       statement.close();
 
-    } catch (SQLException e) {
+    } catch (final SQLException e) {
       throw new OpenGammaRuntimeException("Failed to create catalog", e);
     } finally {
       if (conn != null) {
         try {
           conn.close();
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
         }
       }
     }

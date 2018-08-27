@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.livedata.cogda.server;
@@ -65,26 +65,26 @@ public class CogdaLiveDataServer implements LiveDataServer, FudgeConnectionRecei
    */
   public static final int DEFAULT_LISTEN_PORT = 11876;
   private int _portNumber = DEFAULT_LISTEN_PORT;
-  
+
   private final ServerSocketFudgeConnectionReceiver _connectionReceiver;
   private final LastKnownValueStoreProvider _lastKnownValueStoreProvider;
   private final ConcurrentMap<LiveDataSpecification, LastKnownValueStore> _lastKnownValueStores =
-      new ConcurrentHashMap<LiveDataSpecification, LastKnownValueStore>();
-  
-  private final Set<CogdaClientConnection> _clients = new CopyOnWriteArraySet<CogdaClientConnection>();
+      new ConcurrentHashMap<>();
+
+  private final Set<CogdaClientConnection> _clients = new CopyOnWriteArraySet<>();
   // TODO kirk 2012-07-23 -- This is absolutely the wrong executor here.
   private final Executor _valueUpdateSendingExecutor = Executors.newFixedThreadPool(5);
   private UserSource _userSource;
   private boolean _checkPassword = true;
-  
+
   // Metrics:
   private Meter _tickMeter = new Meter();
-  
-  public CogdaLiveDataServer(LastKnownValueStoreProvider lkvStoreProvider) {
+
+  public CogdaLiveDataServer(final LastKnownValueStoreProvider lkvStoreProvider) {
     this(lkvStoreProvider, OpenGammaFudgeContext.getInstance());
   }
-  
-  public CogdaLiveDataServer(LastKnownValueStoreProvider lkvStoreProvider, FudgeContext fudgeContext) {
+
+  public CogdaLiveDataServer(final LastKnownValueStoreProvider lkvStoreProvider, final FudgeContext fudgeContext) {
     ArgumentChecker.notNull(lkvStoreProvider, "lkvStoreProvider");
     ArgumentChecker.notNull(fudgeContext, "fudgeContext");
     _lastKnownValueStoreProvider = lkvStoreProvider;
@@ -93,7 +93,7 @@ public class CogdaLiveDataServer implements LiveDataServer, FudgeConnectionRecei
   }
 
   @Override
-  public synchronized void registerMetrics(MetricRegistry summaryRegistry, MetricRegistry detailedRegistry, String namePrefix) {
+  public synchronized void registerMetrics(final MetricRegistry summaryRegistry, final MetricRegistry detailedRegistry, final String namePrefix) {
     _tickMeter = summaryRegistry.meter(namePrefix + ".ticks");
   }
 
@@ -110,7 +110,7 @@ public class CogdaLiveDataServer implements LiveDataServer, FudgeConnectionRecei
    * This <b>must</b> be set <b>before</b> {@link #start()} is called.
    * @param portNumber  the portNumber
    */
-  public void setPortNumber(int portNumber) {
+  public void setPortNumber(final int portNumber) {
     _portNumber = portNumber;
   }
 
@@ -134,7 +134,7 @@ public class CogdaLiveDataServer implements LiveDataServer, FudgeConnectionRecei
    * Sets the userSource.
    * @param userSource  the userSource
    */
-  public void setUserSource(UserSource userSource) {
+  public void setUserSource(final UserSource userSource) {
     _userSource = userSource;
   }
 
@@ -152,13 +152,13 @@ public class CogdaLiveDataServer implements LiveDataServer, FudgeConnectionRecei
    * rather than authentication.
    * @param checkPassword  false to turn off password checking on connections.
    */
-  public void setCheckPassword(boolean checkPassword) {
+  public void setCheckPassword(final boolean checkPassword) {
     _checkPassword = checkPassword;
   }
 
   @Override
-  public void connectionReceived(FudgeContext fudgeContext, FudgeMsgEnvelope message, FudgeConnection connection) {
-    CogdaClientConnection clientConnection = new CogdaClientConnection(fudgeContext, this, connection);
+  public void connectionReceived(final FudgeContext fudgeContext, final FudgeMsgEnvelope message, final FudgeConnection connection) {
+    final CogdaClientConnection clientConnection = new CogdaClientConnection(fudgeContext, this, connection);
     // We're blocked on connection acceptance. Therefore it's entirely fine
     // to do the handshake here as we won't get any more messages until
     // it's done.
@@ -167,7 +167,7 @@ public class CogdaLiveDataServer implements LiveDataServer, FudgeConnectionRecei
   }
 
   @Override
-  
+
   public void start() {
     _connectionReceiver.setPortNumber(getPortNumber());
     _connectionReceiver.start();
@@ -182,18 +182,18 @@ public class CogdaLiveDataServer implements LiveDataServer, FudgeConnectionRecei
   public boolean isRunning() {
     return _connectionReceiver.isRunning();
   }
-  
-  public void liveDataReceived(LiveDataValueUpdate valueUpdate) {
+
+  public void liveDataReceived(final LiveDataValueUpdate valueUpdate) {
     _tickMeter.mark();
-    
+
     // REVIEW kirk 2013-03-27 -- Does this loop need to be done in an executor
     // task or something? If nothing else, connection.liveDataReceived() can
     // block.
-    
+
     // This could probably be much much faster, but we're designed initially for low-frequency
     // updates. Someone smarter should optimize the data structures here.
-    for (CogdaClientConnection connection : _clients) {
-      boolean needsPump = connection.liveDataReceived(valueUpdate);
+    for (final CogdaClientConnection connection : _clients) {
+      final boolean needsPump = connection.liveDataReceived(valueUpdate);
       if (needsPump) {
         final CogdaClientConnection finalConnection = connection;
         _valueUpdateSendingExecutor.execute(new Runnable() {
@@ -205,31 +205,31 @@ public class CogdaLiveDataServer implements LiveDataServer, FudgeConnectionRecei
       }
     }
   }
-  
-  protected UserAccount getUserAccount(String userName) {
+
+  protected UserAccount getUserAccount(final String userName) {
     if (getUserSource() == null) {
       // Nothing will work without a UserAccount. So we return a mock one.
-      SimpleUserAccount simpleUser = new SimpleUserAccount(userName);
+      final SimpleUserAccount simpleUser = new SimpleUserAccount(userName);
       simpleUser.getPermissions().add("*");
       return simpleUser;
     }
     try {
       return getUserSource().getAccount(userName);
-      
-    } catch (RuntimeException ex) {
+
+    } catch (final RuntimeException ex) {
       LOGGER.warn("Authentication could not find user {}", userName);
       return null;
     }
   }
-  
+
   // Callbacks from the client.
-  public UserPrincipal authenticate(String userId, String password) {
+  public UserPrincipal authenticate(final String userId, final String password) {
     if (getUserSource() == null) {
       // No user source. Allow all connections.
       return UserPrincipal.getLocalUser(userId);
     }
-    
-    UserAccount user = getUserAccount(userId);
+
+    final UserAccount user = getUserAccount(userId);
     if (user == null) {
       LOGGER.info("Not allowing login for {} because no user in UserSource", userId);
       return null;
@@ -237,27 +237,27 @@ public class CogdaLiveDataServer implements LiveDataServer, FudgeConnectionRecei
     // password check not supported
     return UserPrincipal.getLocalUser(userId);
   }
-  
+
   public List<String> getAvailableServers() {
     return Collections.emptyList();
   }
-  
+
   public FudgeMsg getCapabilities() {
     return OpenGammaFudgeContext.getInstance().newMessage();
   }
-  
-  public boolean isValidLiveData(ExternalId subscriptionId, String normalizationScheme) {
+
+  public boolean isValidLiveData(final ExternalId subscriptionId, final String normalizationScheme) {
     return getLastKnownValueStoreProvider().isAvailable(subscriptionId, normalizationScheme);
   }
-  
-  public LastKnownValueStore getLastKnownValueStore(ExternalId subscriptionId, String normalizationScheme) {
-    LiveDataSpecification ldspec = new LiveDataSpecification(normalizationScheme, subscriptionId);
+
+  public LastKnownValueStore getLastKnownValueStore(final ExternalId subscriptionId, final String normalizationScheme) {
+    final LiveDataSpecification ldspec = new LiveDataSpecification(normalizationScheme, subscriptionId);
     // TODO kirk 2012-07-23 -- Check to see if valid.
-    
+
     LastKnownValueStore store = _lastKnownValueStores.get(ldspec);
     if (store == null) {
-      LastKnownValueStore fresh = getLastKnownValueStoreProvider().newInstance(subscriptionId, normalizationScheme);
-      LastKnownValueStore fromMap = _lastKnownValueStores.putIfAbsent(ldspec, fresh);
+      final LastKnownValueStore fresh = getLastKnownValueStoreProvider().newInstance(subscriptionId, normalizationScheme);
+      final LastKnownValueStore fromMap = _lastKnownValueStores.putIfAbsent(ldspec, fresh);
       if (fromMap == null) {
         store = fresh;
       } else {
@@ -266,20 +266,20 @@ public class CogdaLiveDataServer implements LiveDataServer, FudgeConnectionRecei
     }
     return store;
   }
-  
-  public void removeClient(CogdaClientConnection connection) {
+
+  public void removeClient(final CogdaClientConnection connection) {
     _clients.remove(connection);
   }
-  
+
 
   public int getNumClients() {
     return _clients.size();
   }
-  
+
   public Set<String> getActiveUsers() {
-    Set<String> result = new TreeSet<String>();
+    final Set<String> result = new TreeSet<>();
     synchronized (_clients) {
-      for (CogdaClientConnection connection : _clients) {
+      for (final CogdaClientConnection connection : _clients) {
         result.add(connection.getUserPrincipal().toString());
       }
     }

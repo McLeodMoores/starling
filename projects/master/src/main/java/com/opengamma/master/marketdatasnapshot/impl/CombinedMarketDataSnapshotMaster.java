@@ -20,7 +20,7 @@ import com.opengamma.master.marketdatasnapshot.MarketDataSnapshotSearchResult;
 
 /**
  * A {@link MarketDataSnapshotMaster} which delegates its calls to a list of underlying {@link MarketDataSnapshotMaster}s.
- * 
+ *
  * This class extends {@link ChangeProvidingCombinedMaster} to implement methods specific to the {@link MarketDataSnapshotMaster}.
  */
 public class CombinedMarketDataSnapshotMaster extends ChangeProvidingCombinedMaster<MarketDataSnapshotDocument, MarketDataSnapshotMaster> implements MarketDataSnapshotMaster {
@@ -30,22 +30,22 @@ public class CombinedMarketDataSnapshotMaster extends ChangeProvidingCombinedMas
   }
 
   @Override
-  public MarketDataSnapshotSearchResult search(MarketDataSnapshotSearchRequest overallRequest) {
+  public MarketDataSnapshotSearchResult search(final MarketDataSnapshotSearchRequest overallRequest) {
     final MarketDataSnapshotSearchResult overallResult = new MarketDataSnapshotSearchResult();
-    
+
     pagedSearch(new SnapshotSearchStrategy() {
 
       @Override
-      public AbstractDocumentsResult<MarketDataSnapshotDocument> search(MarketDataSnapshotMaster master, MarketDataSnapshotSearchRequest searchRequest) {
-        MarketDataSnapshotSearchResult masterResult = master.search(searchRequest);
+      public AbstractDocumentsResult<MarketDataSnapshotDocument> search(final MarketDataSnapshotMaster master, final MarketDataSnapshotSearchRequest searchRequest) {
+        final MarketDataSnapshotSearchResult masterResult = master.search(searchRequest);
         masterResult.setVersionCorrection(overallResult.getVersionCorrection());
         return masterResult;
       }
     }, overallResult, overallRequest);
-    
+
     return overallResult;
   }
-  
+
   /**
    * Callback interface for snapshot searches
    */
@@ -59,8 +59,8 @@ public class CombinedMarketDataSnapshotMaster extends ChangeProvidingCombinedMas
 
   public void search(final MarketDataSnapshotSearchRequest request, final SearchCallback callback) {
     // TODO: parallel operation of any search requests
-    List<MarketDataSnapshotSearchResult> results = Lists.newArrayList();
-    for (MarketDataSnapshotMaster master : getMasterList()) {
+    final List<MarketDataSnapshotSearchResult> results = Lists.newArrayList();
+    for (final MarketDataSnapshotMaster master : getMasterList()) {
       results.add(master.search(request));
     }
     search(results, callback);
@@ -72,12 +72,12 @@ public class CombinedMarketDataSnapshotMaster extends ChangeProvidingCombinedMas
     if (master != null) {
       return master.history(request);
     }
-    return (new Try<MarketDataSnapshotHistoryResult>() {
+    return new Try<MarketDataSnapshotHistoryResult>() {
       @Override
       public MarketDataSnapshotHistoryResult tryMaster(final MarketDataSnapshotMaster master) {
         return master.history(request);
       }
-    }).each(request.getObjectId().getScheme());
-  }  
+    }.each(request.getObjectId().getScheme());
+  }
 
 }

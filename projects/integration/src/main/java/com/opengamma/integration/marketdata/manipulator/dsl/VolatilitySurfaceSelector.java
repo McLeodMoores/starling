@@ -28,11 +28,11 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class VolatilitySurfaceSelector implements DistinctMarketDataSelector {
 
-  private static final ImmutableSet<String> COMPATIBLE_VR_NAMES = ImmutableSet.of(INTERPOLATED_VOLATILITY_SURFACE, 
-                                                                                  VOLATILITY_SURFACE, 
+  private static final ImmutableSet<String> COMPATIBLE_VR_NAMES = ImmutableSet.of(INTERPOLATED_VOLATILITY_SURFACE,
+                                                                                  VOLATILITY_SURFACE,
                                                                                   BLACK_VOLATILITY_SURFACE);
-  
-  
+
+
   private final Set<String> _calcConfigNames;
   private final Set<String> _names;
   private final PatternWrapper _nameMatchPattern;
@@ -41,13 +41,13 @@ public class VolatilitySurfaceSelector implements DistinctMarketDataSelector {
   private final Set<String> _quoteTypes;
   private final Set<String> _quoteUnits;
 
-  /* package */ VolatilitySurfaceSelector(Set<String> calcConfigNames,
-                                          Set<String> names,
-                                          Pattern nameMatchPattern,
-                                          Pattern nameLikePattern,
-                                          Set<String> instrumentTypes,
-                                          Set<String> quoteTypes,
-                                          Set<String> quoteUnits) {
+  /* package */ VolatilitySurfaceSelector(final Set<String> calcConfigNames,
+                                          final Set<String> names,
+                                          final Pattern nameMatchPattern,
+                                          final Pattern nameLikePattern,
+                                          final Set<String> instrumentTypes,
+                                          final Set<String> quoteTypes,
+                                          final Set<String> quoteUnits) {
     _calcConfigNames = calcConfigNames;
     _names = names;
     _nameMatchPattern = PatternWrapper.wrap(nameMatchPattern);
@@ -63,16 +63,16 @@ public class VolatilitySurfaceSelector implements DistinctMarketDataSelector {
   }
 
   @Override
-  public DistinctMarketDataSelector findMatchingSelector(ValueSpecification valueSpecification,
-                                                         String calculationConfigurationName,
-                                                         SelectorResolver resolver) {
+  public DistinctMarketDataSelector findMatchingSelector(final ValueSpecification valueSpecification,
+                                                         final String calculationConfigurationName,
+                                                         final SelectorResolver resolver) {
     if (_calcConfigNames != null && !_calcConfigNames.contains(calculationConfigurationName)) {
       return null;
     }
     if (!COMPATIBLE_VR_NAMES.contains(valueSpecification.getValueName())) {
       return null;
     }
-    VolatilitySurfaceKey key = createKey(valueSpecification);
+    final VolatilitySurfaceKey key = createKey(valueSpecification);
     if (!contains(_names, key.getName())) {
       return null;
     }
@@ -94,16 +94,16 @@ public class VolatilitySurfaceSelector implements DistinctMarketDataSelector {
     return this;
   }
 
-  private static VolatilitySurfaceKey createKey(ValueSpecification valueSpecification) {
-    UniqueId uniqueId = valueSpecification.getTargetSpecification().getUniqueId();
-    String surface = valueSpecification.getProperties().getStrictValue(ValuePropertyNames.SURFACE);
-    String instrumentType = valueSpecification.getProperties().getStrictValue("InstrumentType");
-    String quoteType = valueSpecification.getProperties().getStrictValue(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_QUOTE_TYPE);
-    String quoteUnits = valueSpecification.getProperties().getStrictValue(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_UNITS);
+  private static VolatilitySurfaceKey createKey(final ValueSpecification valueSpecification) {
+    final UniqueId uniqueId = valueSpecification.getTargetSpecification().getUniqueId();
+    final String surface = valueSpecification.getProperties().getStrictValue(ValuePropertyNames.SURFACE);
+    final String instrumentType = valueSpecification.getProperties().getStrictValue("InstrumentType");
+    final String quoteType = valueSpecification.getProperties().getStrictValue(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_QUOTE_TYPE);
+    final String quoteUnits = valueSpecification.getProperties().getStrictValue(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_UNITS);
     return VolatilitySurfaceKey.of(uniqueId, surface, instrumentType, quoteType, quoteUnits);
   }
 
-  private static boolean contains(Set<String> set, String str) {
+  private static boolean contains(final Set<String> set, final String str) {
     if (set == null) {
       return true;
     } else {
@@ -145,7 +145,7 @@ public class VolatilitySurfaceSelector implements DistinctMarketDataSelector {
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -187,13 +187,13 @@ public class VolatilitySurfaceSelector implements DistinctMarketDataSelector {
     private Set<String> _quoteTypes;
     private Set<String> _quoteUnits;
 
-    /* package */ Builder(Scenario scenario) {
+    /* package */ Builder(final Scenario scenario) {
       ArgumentChecker.notNull(scenario, "scenario");
       _scenario = scenario;
     }
 
     public VolatilitySurfaceManipulatorBuilder apply() {
-      VolatilitySurfaceSelector selector = getSelector();
+      final VolatilitySurfaceSelector selector = getSelector();
       return new VolatilitySurfaceManipulatorBuilder(_scenario, selector);
     }
 
@@ -207,7 +207,7 @@ public class VolatilitySurfaceSelector implements DistinctMarketDataSelector {
                                            _quoteUnits);
     }
 
-    public Builder named(String... names) {
+    public Builder named(final String... names) {
       ArgumentChecker.notEmpty(names, "names");
       if (_names != null) {
         throw new IllegalStateException("named() can only be called once");
@@ -222,7 +222,7 @@ public class VolatilitySurfaceSelector implements DistinctMarketDataSelector {
       return this;
     }
 
-    public Builder nameMatches(String regex) {
+    public Builder nameMatches(final String regex) {
       ArgumentChecker.notNull(regex, "regex");
       if (_nameMatchPattern != null) {
         throw new IllegalStateException("nameMatches() can only be called once");
@@ -237,7 +237,7 @@ public class VolatilitySurfaceSelector implements DistinctMarketDataSelector {
       return this;
     }
 
-    public Builder nameLike(String glob) {
+    public Builder nameLike(final String glob) {
       ArgumentChecker.notEmpty(glob, "glob");
       if (_nameLikePattern != null) {
         throw new IllegalStateException("nameLike() can only be called once");
@@ -252,7 +252,7 @@ public class VolatilitySurfaceSelector implements DistinctMarketDataSelector {
       return this;
     }
 
-    public Builder instrumentTypes(String... types) {
+    public Builder instrumentTypes(final String... types) {
       ArgumentChecker.notEmpty(types, "types");
       if (_instrumentTypes != null) {
         throw new IllegalStateException("instrumentTypes() can only be called once");
@@ -261,7 +261,7 @@ public class VolatilitySurfaceSelector implements DistinctMarketDataSelector {
       return this;
     }
 
-    public Builder quoteTypes(String... types) {
+    public Builder quoteTypes(final String... types) {
       ArgumentChecker.notEmpty(types, "types");
       if (_quoteTypes != null) {
         throw new IllegalStateException("quoteTypes() can only be called once");
@@ -270,7 +270,7 @@ public class VolatilitySurfaceSelector implements DistinctMarketDataSelector {
       return this;
     }
 
-    public Builder quoteUnits(String... units) {
+    public Builder quoteUnits(final String... units) {
       ArgumentChecker.notEmpty(units, "units");
       if (_quoteUnits != null) {
         throw new IllegalStateException("quoteUntis() can only be called once");

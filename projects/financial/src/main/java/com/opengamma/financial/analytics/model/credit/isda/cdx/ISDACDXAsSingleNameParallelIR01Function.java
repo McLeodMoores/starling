@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.credit.isda.cdx;
@@ -24,7 +24,7 @@ import com.opengamma.financial.analytics.model.credit.isda.cds.StandardVanillaPa
 import com.opengamma.util.time.Tenor;
 
 /**
- * 
+ *
  */
 public class ISDACDXAsSingleNameParallelIR01Function extends ISDACDXAsSingleNameIR01Function {
 
@@ -41,8 +41,8 @@ public class ISDACDXAsSingleNameParallelIR01Function extends ISDACDXAsSingleName
                                                 final ComputationTarget target,
                                                 final ValueProperties properties,
                                                 final FunctionInputs inputs,
-                                                ISDACompliantCreditCurve hazardCurve,
-                                                CDSAnalytic analytic, Tenor[] tenors) {
+                                                final ISDACompliantCreditCurve hazardCurve,
+                                                final CDSAnalytic analytic, final Tenor[] tenors) {
     final double ir01 = StandardVanillaParallelIR01CDSFunction.getParallelIR01(definition, yieldCurve, properties, hazardCurve, analytic);
     final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.IR01, target.toSpecification(), properties);
     return Collections.singleton(new ComputedValue(spec, ir01));

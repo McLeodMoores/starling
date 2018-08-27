@@ -25,22 +25,22 @@ public class ComponentRepositoryServletContextListener implements ServletContext
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param repo  the repository, not null
    */
-  public ComponentRepositoryServletContextListener(ComponentRepository repo) {
+  public ComponentRepositoryServletContextListener(final ComponentRepository repo) {
     ArgumentChecker.notNull(repo, "repo");
     _repo = repo;
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public void contextInitialized(ServletContextEvent event) {
+  public void contextInitialized(final ServletContextEvent event) {
     _repo.setServletContext(event.getServletContext());
   }
 
   @Override
-  public void contextDestroyed(ServletContextEvent event) {
+  public void contextDestroyed(final ServletContextEvent event) {
     _repo.stop();
   }
 

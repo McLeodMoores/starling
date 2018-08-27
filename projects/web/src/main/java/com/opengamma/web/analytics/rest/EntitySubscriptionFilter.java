@@ -47,10 +47,10 @@ public class EntitySubscriptionFilter implements ResourceFilter {
    * @param httpContext The HTTP context of the request
    * @param servletRequest The HTTP request
    */
-  public EntitySubscriptionFilter(List<String> uidParamNames,
-                                  ConnectionManager connectionManager,
-                                  HttpContext httpContext,
-                                  HttpServletRequest servletRequest) {
+  public EntitySubscriptionFilter(final List<String> uidParamNames,
+                                  final ConnectionManager connectionManager,
+                                  final HttpContext httpContext,
+                                  final HttpServletRequest servletRequest) {
     _httpContext = httpContext;
     _uidParamNames = uidParamNames;
     _restUpdateManager = connectionManager;
@@ -85,7 +85,7 @@ public class EntitySubscriptionFilter implements ResourceFilter {
      * @param uidParamNames Names of the method parameters that contain {@link UniqueId}s.  These are the names
      * specified in the {@link PathParam} annotations and they are also annotated with {@link Subscribe}.
      */
-    public ResponseFilter(List<String> uidParamNames) {
+    public ResponseFilter(final List<String> uidParamNames) {
       this.uidParamNames = uidParamNames;
     }
 
@@ -98,34 +98,34 @@ public class EntitySubscriptionFilter implements ResourceFilter {
      * TODO this is almost identical to MasterSubscriptionFilter, common superclass? helper method / class?
      */
     @Override
-    public ContainerResponse filter(ContainerRequest request, ContainerResponse response) {
+    public ContainerResponse filter(final ContainerRequest request, final ContainerResponse response) {
       // TODO check the response status, only subscribe if successful
       // TODO don't subscribe if specific version was requested - probably need @NoSubscribe annotation on sub-resource methods for versions
-      String clientId = FilterUtils.getClientId(request, _httpContext);
+      final String clientId = FilterUtils.getClientId(request, _httpContext);
       // don't subscribe if there's no client ID
       if (clientId == null) {
         return response;
       }
-      String userId = (AuthUtils.isPermissive() ? null : FilterUtils.getUserId(_httpContext));
+      final String userId = AuthUtils.isPermissive() ? null : FilterUtils.getUserId(_httpContext);
       subscribe(userId, clientId, _servletRequest.getRequestURI(), _httpContext.getUriInfo().getPathParameters());
       return response;
     }
 
-    private void subscribe(String userId, String clientId, String url, MultivaluedMap<String, String> pathParameters) {
-      for (String paramName : uidParamNames) {
-        List<String> uidStrs = pathParameters.get(paramName);
+    private void subscribe(final String userId, final String clientId, final String url, final MultivaluedMap<String, String> pathParameters) {
+      for (final String paramName : uidParamNames) {
+        final List<String> uidStrs = pathParameters.get(paramName);
         LOGGER.debug(paramName + ": " + uidStrs);
-        for (String uidStr : uidStrs) {
+        for (final String uidStr : uidStrs) {
           UniqueId uniqueId = null;
           try {
             uniqueId = UniqueId.parse(uidStr);
-          } catch (IllegalArgumentException e) {
+          } catch (final IllegalArgumentException e) {
             LOGGER.warn("Unable to parse unique ID: " + uidStr, e);
           }
           if (uniqueId != null) {
             try {
               _restUpdateManager.subscribe(userId, clientId, uniqueId, url);
-            } catch (OpenGammaRuntimeException e) {
+            } catch (final OpenGammaRuntimeException e) {
               LOGGER.warn("Failed to subscribe for updates to REST entity, userId: " + userId + ", clientId: "
                                 + clientId + ", url: " + url, e);
             }

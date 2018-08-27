@@ -16,10 +16,10 @@ import com.opengamma.web.analytics.push.WebPushTestUtils;
  */
 public class AnalyticsCsvTest {
 
-  public static void main(String[] args) throws IOException, JSONException, InterruptedException {
-    WebPushTestUtils _webPushTestUtils = new WebPushTestUtils();
-    String clientId = _webPushTestUtils.handshake();
-    String viewDefJson = "{" +
+  public static void main(final String[] args) throws IOException, JSONException, InterruptedException {
+    final WebPushTestUtils _webPushTestUtils = new WebPushTestUtils();
+    final String clientId = _webPushTestUtils.handshake();
+    final String viewDefJson = "{" +
         "\"viewDefinitionName\": \"Single Swap Test View\", " +
         //"\"snapshotId\": \"Tst~123\", " + // use live data
         "\"portfolioViewport\": {" +
@@ -33,10 +33,10 @@ public class AnalyticsCsvTest {
         "\"dependencyGraphCells\": [[0, 0]]" +
         "}" +
         "}";
-    String viewportUrl = _webPushTestUtils.createViewport(clientId, viewDefJson);
+    final String viewportUrl = _webPushTestUtils.createViewport(clientId, viewDefJson);
     //noinspection InfiniteLoopStatement
     while (true) {
-      String csv = _webPushTestUtils.readFromPath(viewportUrl + "/report/csv");
+      final String csv = _webPushTestUtils.readFromPath(viewportUrl + "/report/csv");
       System.out.println(csv);
 
       Thread.sleep(2000);

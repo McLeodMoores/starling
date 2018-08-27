@@ -30,18 +30,18 @@ public class CdsOptionReferenceNameAggregationFunction extends AbstractCdsOption
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param securitySource  the security source, not null
    * @param legalEntitySource  the organization source, not null
    */
   public CdsOptionReferenceNameAggregationFunction(final SecuritySource securitySource, final LegalEntitySource legalEntitySource) {
     super(NAME, securitySource, new CdsOptionValueExtractor<LegalEntity>() {
       @Override
-      public LegalEntity extract(CreditDefaultSwapOptionSecurity cdsOption) {
-        ExternalId underlyingId = cdsOption.getUnderlyingId();
-        Security underlying = securitySource.getSingle(underlyingId.toBundle());
+      public LegalEntity extract(final CreditDefaultSwapOptionSecurity cdsOption) {
+        final ExternalId underlyingId = cdsOption.getUnderlyingId();
+        final Security underlying = securitySource.getSingle(underlyingId.toBundle());
         if (underlying instanceof AbstractCreditDefaultSwapSecurity) {
-          String redCode = ((CreditDefaultSwapSecurity) underlying).getReferenceEntity().getValue();
+          final String redCode = ((CreditDefaultSwapSecurity) underlying).getReferenceEntity().getValue();
           return legalEntitySource.getSingle(ExternalId.of(ExternalSchemes.MARKIT_RED_CODE, redCode));
         } else {
           // CreditDefaultSwapOptionSecurity
@@ -55,7 +55,7 @@ public class CdsOptionReferenceNameAggregationFunction extends AbstractCdsOption
 
   //-------------------------------------------------------------------------
   @Override
-  protected String handleExtractedData(LegalEntity extracted) {
+  protected String handleExtractedData(final LegalEntity extracted) {
     return extracted.getName();
   }
 

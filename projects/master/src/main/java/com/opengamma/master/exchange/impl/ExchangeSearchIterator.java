@@ -27,7 +27,7 @@ public class ExchangeSearchIterator extends AbstractSearchIterator<ExchangeDocum
    * Creates an instance based on a request.
    * <p>
    * The request will be altered during the iteration.
-   * 
+   *
    * @param master  the underlying master, not null
    * @param request  the request object, not null
    * @return an iterable suitable for use in a for-each loop, not null
@@ -47,17 +47,17 @@ public class ExchangeSearchIterator extends AbstractSearchIterator<ExchangeDocum
    * Creates an instance based on a request.
    * <p>
    * The request will be altered during the iteration.
-   * 
+   *
    * @param master  the underlying master, not null
    * @param request  the request object, not null
    */
-  public ExchangeSearchIterator(ExchangeMaster master, ExchangeSearchRequest request) {
+  public ExchangeSearchIterator(final ExchangeMaster master, final ExchangeSearchRequest request) {
     super(master, request);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  protected ExchangeSearchResult doSearch(ExchangeSearchRequest request) {
+  protected ExchangeSearchResult doSearch(final ExchangeSearchRequest request) {
     return getMaster().search(request);
   }
 

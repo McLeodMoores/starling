@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.volatilityswap;
@@ -25,7 +25,7 @@ public class CarrLeeFXVolatilitySwapVegaCalculator extends InstrumentDerivativeV
   private final double _bumpVol;
 
   /**
-   * Constructor using default bump amount. 
+   * Constructor using default bump amount.
    * Note that fractional volatility is bumped
    */
   public CarrLeeFXVolatilitySwapVegaCalculator() {
@@ -53,10 +53,10 @@ public class CarrLeeFXVolatilitySwapVegaCalculator extends InstrumentDerivativeV
   }
 
   /**
-   * Vega calculator for FX volatility swap based on "bump and reprice" using {@link VolatilitySwapCalculatorResultWithStrikes}, 
-   * i.e., assuming the fair value has been already calculated. 
+   * Vega calculator for FX volatility swap based on "bump and reprice" using {@link VolatilitySwapCalculatorResultWithStrikes},
+   * i.e., assuming the fair value has been already calculated.
    * @param result {@link VolatilitySwapCalculatorResultWithStrikes}
-   * @param swap The FX volatility swap 
+   * @param swap The FX volatility swap
    * @param data The FX data for Carr-Lee
    * @return vega
    */
@@ -132,13 +132,13 @@ public class CarrLeeFXVolatilitySwapVegaCalculator extends InstrumentDerivativeV
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_bumpVol);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    result = prime * result + ((_cal == null) ? 0 : _cal.hashCode());
+    result = prime * result + (int) (temp ^ temp >>> 32);
+    result = prime * result + (_cal == null ? 0 : _cal.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -148,7 +148,7 @@ public class CarrLeeFXVolatilitySwapVegaCalculator extends InstrumentDerivativeV
     if (!(obj instanceof CarrLeeFXVolatilitySwapVegaCalculator)) {
       return false;
     }
-    CarrLeeFXVolatilitySwapVegaCalculator other = (CarrLeeFXVolatilitySwapVegaCalculator) obj;
+    final CarrLeeFXVolatilitySwapVegaCalculator other = (CarrLeeFXVolatilitySwapVegaCalculator) obj;
     if (Double.doubleToLongBits(_bumpVol) != Double.doubleToLongBits(other._bumpVol)) {
       return false;
     }

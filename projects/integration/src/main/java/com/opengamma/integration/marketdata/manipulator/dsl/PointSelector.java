@@ -48,13 +48,13 @@ public class PointSelector implements DistinctMarketDataSelector {
   /** Security type names - matches if the ID identifies a security of the specified type. */
   private final Set<String> _securityTypes;
 
-  /* package */ PointSelector(Set<String> calcConfigNames,
-                              Set<ExternalId> ids,
-                              ExternalScheme idMatchScheme,
-                              Pattern idMatchPattern,
-                              ExternalScheme idLikeScheme,
-                              Pattern idLikePattern,
-                              Set<String> securityTypes) {
+  /* package */ PointSelector(final Set<String> calcConfigNames,
+                              final Set<ExternalId> ids,
+                              final ExternalScheme idMatchScheme,
+                              final Pattern idMatchPattern,
+                              final ExternalScheme idLikeScheme,
+                              final Pattern idLikePattern,
+                              final Set<String> securityTypes) {
     if (idMatchScheme == null && idMatchPattern != null || idMatchScheme != null && idMatchPattern == null) {
       throw new IllegalArgumentException("Scheme and pattern must both be specified to pattern match on ID");
     }
@@ -76,8 +76,8 @@ public class PointSelector implements DistinctMarketDataSelector {
   }
 
   @Override
-  public DistinctMarketDataSelector findMatchingSelector(ValueSpecification valueSpecification,
-                                                         String calcConfigName,
+  public DistinctMarketDataSelector findMatchingSelector(final ValueSpecification valueSpecification,
+                                                         final String calcConfigName,
                                                          final SelectorResolver resolver) {
     if (_calcConfigNames != null && !_calcConfigNames.contains(calcConfigName)) {
       return null;
@@ -85,19 +85,19 @@ public class PointSelector implements DistinctMarketDataSelector {
     if (!MarketDataRequirementNames.MARKET_VALUE.equals(valueSpecification.getValueName())) {
       return null;
     }
-    ExternalIdBundle specificationIdBundle = createIds(valueSpecification);
-    Set<ExternalId> specificationIds = new HashSet<>(specificationIdBundle.getExternalIds());
+    final ExternalIdBundle specificationIdBundle = createIds(valueSpecification);
+    final Set<ExternalId> specificationIds = new HashSet<>(specificationIdBundle.getExternalIds());
     if (_ids != null) {
       specificationIds.retainAll(_ids);
       if (specificationIds.isEmpty()) {
         return null;
       }
     }
-    
+
     if (_idMatchScheme != null && _idMatchPattern != null) {
       if (functional(specificationIds).all(new Function1<ExternalId, Boolean>() {
         @Override
-        public Boolean execute(ExternalId externalId) {
+        public Boolean execute(final ExternalId externalId) {
           return !_idMatchScheme.equals(externalId.getScheme());
         }
       })) {
@@ -105,7 +105,7 @@ public class PointSelector implements DistinctMarketDataSelector {
       }
       if (functional(specificationIds).all(new Function1<ExternalId, Boolean>() {
         @Override
-        public Boolean execute(ExternalId externalId) {
+        public Boolean execute(final ExternalId externalId) {
           return !_idMatchPattern.getPattern().matcher(externalId.getValue()).matches();
         }
       })) {
@@ -115,7 +115,7 @@ public class PointSelector implements DistinctMarketDataSelector {
     if (_idLikeScheme != null && _idLikePattern != null) {
       if (functional(specificationIds).all(new Function1<ExternalId, Boolean>() {
         @Override
-        public Boolean execute(ExternalId externalId) {
+        public Boolean execute(final ExternalId externalId) {
           return !_idLikeScheme.equals(externalId.getScheme());
         }
       })) {
@@ -123,7 +123,7 @@ public class PointSelector implements DistinctMarketDataSelector {
       }
       if (functional(specificationIds).all(new Function1<ExternalId, Boolean>() {
         @Override
-        public Boolean execute(ExternalId externalId) {
+        public Boolean execute(final ExternalId externalId) {
           return !_idLikePattern.getPattern().matcher(externalId.getValue()).matches();
         }
       })) {
@@ -133,8 +133,8 @@ public class PointSelector implements DistinctMarketDataSelector {
     if (_securityTypes != null) {
       if (functional(specificationIds).all(new Function1<ExternalId, Boolean>() {
         @Override
-        public Boolean execute(ExternalId externalId) {
-          Security security = resolver.resolveSecurity(externalId);
+        public Boolean execute(final ExternalId externalId) {
+          final Security security = resolver.resolveSecurity(externalId);
           return !_securityTypes.contains(security.getSecurityType().toLowerCase());
         }
       })) {
@@ -144,13 +144,13 @@ public class PointSelector implements DistinctMarketDataSelector {
     return this;
   }
 
-  private static ExternalIdBundle createIds(ValueSpecification valueSpecification) {
+  private static ExternalIdBundle createIds(final ValueSpecification valueSpecification) {
     if (valueSpecification.getProperty("Id") != null) {
       return ExternalIdBundle.of(ExternalId.parse(valueSpecification.getProperty("Id")));
     } else {
       // Id may not always be present - maybe with snapshots? (get External from UniqueId)
-      UniqueId uniqueId = valueSpecification.getTargetSpecification().getUniqueId();
-      String scheme = uniqueId.getScheme();
+      final UniqueId uniqueId = valueSpecification.getTargetSpecification().getUniqueId();
+      final String scheme = uniqueId.getScheme();
       if (scheme.startsWith("ExternalId-")) {
         return PrimitiveResolver.resolveExternalIds(uniqueId, "ExternalId-");
       } else {
@@ -193,7 +193,7 @@ public class PointSelector implements DistinctMarketDataSelector {
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -243,7 +243,7 @@ public class PointSelector implements DistinctMarketDataSelector {
     /** Security type names - matches if the ID identifies a security of the specified type. */
     private Set<String> _securityTypes;
 
-    /* package */ Builder(Scenario scenario) {
+    /* package */ Builder(final Scenario scenario) {
       _scenario = scenario;
     }
 
@@ -270,7 +270,7 @@ public class PointSelector implements DistinctMarketDataSelector {
      * @param value External ID value that must match the market data's ID value
      * @return This builder
      */
-    public Builder id(String scheme, String value) {
+    public Builder id(final String scheme, final String value) {
       ArgumentChecker.notEmpty(scheme, "scheme");
       ArgumentChecker.notEmpty(value, "value");
       if (_ids != null) {
@@ -285,14 +285,14 @@ public class PointSelector implements DistinctMarketDataSelector {
      * @param ids The external IDs to match
      * @return This builder
      */
-    public Builder ids(String... ids) {
+    public Builder ids(final String... ids) {
       ArgumentChecker.notEmpty(ids, "ids");
       ArgumentChecker.notEmpty(ids, "ids");
       if (_ids != null) {
         throw new IllegalStateException("id() or ids() can only be called once");
       }
-      Set<ExternalId> idSet = Sets.newHashSetWithExpectedSize(ids.length);
-      for (String id : ids) {
+      final Set<ExternalId> idSet = Sets.newHashSetWithExpectedSize(ids.length);
+      for (final String id : ids) {
         idSet.add(ExternalId.parse(id));
       }
       _ids = Collections.unmodifiableSet(idSet);
@@ -304,7 +304,7 @@ public class PointSelector implements DistinctMarketDataSelector {
      * @param ids The IDs to match
      * @return This builder
      */
-    public Builder ids(ExternalId... ids) {
+    public Builder ids(final ExternalId... ids) {
       ArgumentChecker.notEmpty(ids, "ids");
       if (_ids != null) {
         throw new IllegalStateException("id() or ids() can only be called once");
@@ -319,7 +319,7 @@ public class PointSelector implements DistinctMarketDataSelector {
      * @param valueRegex Regular expression that must match the market data's ID value
      * @return This builder
      */
-    public Builder idMatches(String scheme, String valueRegex) {
+    public Builder idMatches(final String scheme, final String valueRegex) {
       ArgumentChecker.notEmpty(scheme, "scheme");
       ArgumentChecker.notEmpty(valueRegex, "valueRegex");
       if (_idMatchScheme != null) {
@@ -336,7 +336,7 @@ public class PointSelector implements DistinctMarketDataSelector {
      * @param valueGlob Glob for matching the ID value
      * @return This builder
      */
-    public Builder idLike(String scheme, String valueGlob) {
+    public Builder idLike(final String scheme, final String valueGlob) {
       ArgumentChecker.notEmpty(scheme, "scheme");
       ArgumentChecker.notEmpty(valueGlob, "valueGlob");
       if (_idLikeScheme != null) {
@@ -352,13 +352,13 @@ public class PointSelector implements DistinctMarketDataSelector {
      * @param types The security types to match, case insensitive.
      * @return This builder
      */
-    public Builder securityTypes(String... types) {
+    public Builder securityTypes(final String... types) {
       ArgumentChecker.notEmpty(types, "types");
       if (_securityTypes != null) {
         throw new IllegalStateException("securityTypes can only be called once");
       }
-      Set<String> securityTypes = Sets.newHashSet();
-      for (String type : types) {
+      final Set<String> securityTypes = Sets.newHashSet();
+      for (final String type : types) {
         if (type == null) {
           throw new IllegalArgumentException("Security type names must be non-null");
         }

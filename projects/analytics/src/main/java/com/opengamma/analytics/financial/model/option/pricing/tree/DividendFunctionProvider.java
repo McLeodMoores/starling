@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.tree;
@@ -15,9 +15,9 @@ import com.opengamma.util.ArgumentChecker;
  */
 public abstract class DividendFunctionProvider {
 
-  private double[] _dividendTimes;
-  private double[] _dividends;
-  private int _nDividends;
+  private final double[] _dividendTimes;
+  private final double[] _dividends;
+  private final int _nDividends;
 
   /**
    * Constructor. Dividend data must be sorted in chronological order
@@ -56,9 +56,9 @@ public abstract class DividendFunctionProvider {
   /**
    * Compute correction to asset price due to dividends up to the k-th payment
    * @param assetPrice The asset price just before the k-th payment
-   * @param interestRate The interest rate 
+   * @param interestRate The interest rate
    * @param offset Time in the layer just before the k-th payment
-   * @param k  
+   * @param k
    * @return The correction
    */
   public abstract double dividendCorrections(final double assetPrice, final double interestRate, final double offset, final int k);
@@ -66,7 +66,7 @@ public abstract class DividendFunctionProvider {
   /**
    * Asset prices in the 1st layer, i.e., S_{10} and S_{11}
    * @param spot The spot
-   * @param interestRate The interest rate 
+   * @param interestRate The interest rate
    * @param divSteps The position of layers where dividends are paid
    * @param upFactor Up factor
    * @param downFactor Down factor
@@ -78,7 +78,7 @@ public abstract class DividendFunctionProvider {
   /**
    * Asset prices in the second layer, i.e., S_{20}, S_{21} and S_{22}
    * @param spot The spot
-   * @param interestRate The interest rate 
+   * @param interestRate The interest rate
    * @param divSteps The positions of layers where dividends are paid
    * @param upFactor Up factor
    * @param downFactor Down factor
@@ -90,7 +90,7 @@ public abstract class DividendFunctionProvider {
   /**
    * Asset prices in the 1st layer, i.e., S_{10} and S_{11}
    * @param spot The spot
-   * @param interestRate The interest rate 
+   * @param interestRate The interest rate
    * @param divSteps The position of layers where dividends are paid
    * @param upFactor Up factor
    * @param middleFactor Middle factor
@@ -104,7 +104,7 @@ public abstract class DividendFunctionProvider {
   /**
    * Asset prices in the second layer, i.e., S_{20}, S_{21} and S_{22}
    * @param spot The spot
-   * @param interestRate The interest rate 
+   * @param interestRate The interest rate
    * @param divSteps The positions of layers where dividends are paid
    * @param upFactor Up factor
    * @param middleFactor Middle factor
@@ -193,11 +193,11 @@ public abstract class DividendFunctionProvider {
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     /*
      * This case is always successful because this equals() is necessarily called by a subclass
      */
-    DividendFunctionProvider other = (DividendFunctionProvider) obj;
+    final DividendFunctionProvider other = (DividendFunctionProvider) obj;
     if (!Arrays.equals(_dividendTimes, other._dividendTimes)) {
       return false;
     }

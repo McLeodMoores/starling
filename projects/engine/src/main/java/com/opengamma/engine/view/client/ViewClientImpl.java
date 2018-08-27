@@ -20,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.threeten.bp.Instant;
 
-import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.engine.depgraph.DependencyGraph;
 import com.opengamma.engine.depgraph.DependencyGraphExplorer;
 import com.opengamma.engine.marketdata.MarketDataInjector;
@@ -97,13 +96,13 @@ public class ViewClientImpl implements ViewClient {
 
   /**
    * Constructs an instance.
-   * 
+   *
    * @param id the unique identifier assigned to this view client
    * @param viewProcessor the parent view processor to which this client belongs
    * @param user the user who owns this client
    * @param timer the timer to use for scheduled tasks
    */
-  public ViewClientImpl(UniqueId id, ViewProcessorImpl viewProcessor, UserPrincipal user, ScheduledExecutorService timer) {
+  public ViewClientImpl(final UniqueId id, final ViewProcessorImpl viewProcessor, final UserPrincipal user, final ScheduledExecutorService timer) {
     ArgumentChecker.notNull(id, "id");
     ArgumentChecker.notNull(viewProcessor, "viewProcessor");
     ArgumentChecker.notNull(user, "user");
@@ -114,7 +113,7 @@ public class ViewClientImpl implements ViewClient {
     _user = user;
     _latestCycleRetainer = new EngineResourceRetainer(viewProcessor.getViewCycleManager());
 
-    ViewResultListener mergedViewProcessListener = new ViewResultListener() {
+    final ViewResultListener mergedViewProcessListener = new ViewResultListener() {
 
       @Override
       public UserPrincipal getUser() {
@@ -122,20 +121,20 @@ public class ViewClientImpl implements ViewClient {
       }
 
       @Override
-      public void viewDefinitionCompiled(CompiledViewDefinition compiledViewDefinition, boolean hasMarketDataPermissions) {
+      public void viewDefinitionCompiled(final CompiledViewDefinition compiledViewDefinition, final boolean hasMarketDataPermissions) {
         updateLatestCompiledViewDefinition(compiledViewDefinition);
 
         _canAccessCompiledViewDefinition = _permissionProvider.canAccessCompiledViewDefinition(getUser(), compiledViewDefinition);
         _canAccessComputationResults = _permissionProvider.canAccessComputationResults(getUser(), compiledViewDefinition, hasMarketDataPermissions);
 
-        PortfolioFilter filter = _portfolioPermissionProvider.createPortfolioFilter(getUser());
+        final PortfolioFilter filter = _portfolioPermissionProvider.createPortfolioFilter(getUser());
 
-        ViewResultListener listener = _userResultListener.get();
+        final ViewResultListener listener = _userResultListener.get();
         if (listener != null) {
 
           if (_canAccessComputationResults) {
 
-            CompiledViewDefinition replacementViewDef = createFilteredViewDefinition(compiledViewDefinition, filter);
+            final CompiledViewDefinition replacementViewDef = createFilteredViewDefinition(compiledViewDefinition, filter);
             listener.viewDefinitionCompiled(replacementViewDef, hasMarketDataPermissions);
           } else {
             // TODO [PLAT-1144] -- so we know whether or not the user is permissioned for various things, but what do we
@@ -150,14 +149,14 @@ public class ViewClientImpl implements ViewClient {
         }
       }
 
-      private CompiledViewDefinition createFilteredViewDefinition(CompiledViewDefinition compiledViewDefinition, PortfolioFilter filter) {
+      private CompiledViewDefinition createFilteredViewDefinition(final CompiledViewDefinition compiledViewDefinition, final PortfolioFilter filter) {
 
         // TODO see [PLAT-2478] and DependencyGraphStructureBuilder
         if (compiledViewDefinition instanceof CompiledViewDefinitionWithGraphsImpl) {
-          CompiledViewDefinitionWithGraphsImpl cvdwg = (CompiledViewDefinitionWithGraphsImpl) compiledViewDefinition;
-          Collection<DependencyGraphExplorer> dependencyGraphExplorers = cvdwg.getDependencyGraphExplorers();
-          Collection<DependencyGraph> graphs = new ArrayList<DependencyGraph>(dependencyGraphExplorers.size());
-          for (DependencyGraphExplorer explorer : dependencyGraphExplorers) {
+          final CompiledViewDefinitionWithGraphsImpl cvdwg = (CompiledViewDefinitionWithGraphsImpl) compiledViewDefinition;
+          final Collection<DependencyGraphExplorer> dependencyGraphExplorers = cvdwg.getDependencyGraphExplorers();
+          final Collection<DependencyGraph> graphs = new ArrayList<>(dependencyGraphExplorers.size());
+          for (final DependencyGraphExplorer explorer : dependencyGraphExplorers) {
             graphs.add(explorer.getWholeGraph());
           }
           return new CompiledViewDefinitionWithGraphsImpl(cvdwg.getResolverVersionCorrection(), cvdwg.getCompilationIdentifier(), cvdwg.getViewDefinition(), graphs,
@@ -172,8 +171,8 @@ public class ViewClientImpl implements ViewClient {
       }
 
       @Override
-      public void cycleStarted(ViewCycleMetadata cycleMetadata) {
-        ViewResultListener listener = _userResultListener.get();
+      public void cycleStarted(final ViewCycleMetadata cycleMetadata) {
+        final ViewResultListener listener = _userResultListener.get();
         if (listener != null) {
           // Only send cycle started results in conjunction with fragments
           if (!getFragmentResultMode().equals(ViewResultMode.NONE)) {
@@ -183,14 +182,14 @@ public class ViewClientImpl implements ViewClient {
       }
 
       @Override
-      public void cycleCompleted(ViewComputationResultModel fullResult, ViewDeltaResultModel deltaResult) {
-        boolean isFirstResult = updateLatestResult(fullResult);
-        ViewResultListener listener = _userResultListener.get();
+      public void cycleCompleted(final ViewComputationResultModel fullResult, final ViewDeltaResultModel deltaResult) {
+        final boolean isFirstResult = updateLatestResult(fullResult);
+        final ViewResultListener listener = _userResultListener.get();
         if (listener != null) {
-          ViewResultMode resultMode = getResultMode();
+          final ViewResultMode resultMode = getResultMode();
           if (!resultMode.equals(ViewResultMode.NONE)) {
-            ViewComputationResultModel userFullResult = isFullResultRequired(resultMode, isFirstResult) ? fullResult : null;
-            ViewDeltaResultModel userDeltaResult = isDeltaResultRequired(resultMode, isFirstResult) ? deltaResult : null;
+            final ViewComputationResultModel userFullResult = isFullResultRequired(resultMode, isFirstResult) ? fullResult : null;
+            final ViewDeltaResultModel userDeltaResult = isDeltaResultRequired(resultMode, isFirstResult) ? deltaResult : null;
             if (userFullResult != null || userDeltaResult != null) {
               listener.cycleCompleted(userFullResult, userDeltaResult);
             } else if (!isFirstResult || resultMode != ViewResultMode.DELTA_ONLY) {
@@ -202,18 +201,18 @@ public class ViewClientImpl implements ViewClient {
       }
 
       @Override
-      public void cycleFragmentCompleted(ViewComputationResultModel fullFragment, ViewDeltaResultModel deltaFragment) {
-        ViewComputationResultModel prevResult = _latestResult.get();
-        ViewResultListener listener = _userResultListener.get();
+      public void cycleFragmentCompleted(final ViewComputationResultModel fullFragment, final ViewDeltaResultModel deltaFragment) {
+        final ViewComputationResultModel prevResult = _latestResult.get();
+        final ViewResultListener listener = _userResultListener.get();
         if (listener != null) {
-          ViewResultMode resultMode = getFragmentResultMode();
+          final ViewResultMode resultMode = getFragmentResultMode();
           if (!resultMode.equals(ViewResultMode.NONE)) {
-            ViewComputationResultModel userFullResult = isFullResultRequired(resultMode, prevResult == null) ? fullFragment : null;
-            ViewDeltaResultModel userDeltaResult = isDeltaResultRequired(resultMode, prevResult == null) ? deltaFragment : null;
+            final ViewComputationResultModel userFullResult = isFullResultRequired(resultMode, prevResult == null) ? fullFragment : null;
+            final ViewDeltaResultModel userDeltaResult = isDeltaResultRequired(resultMode, prevResult == null) ? deltaFragment : null;
             if (userFullResult != null || userDeltaResult != null) {
               listener.cycleFragmentCompleted(userFullResult, userDeltaResult);
             } else {
-              if ((prevResult != null) || (resultMode != ViewResultMode.DELTA_ONLY)) {
+              if (prevResult != null || resultMode != ViewResultMode.DELTA_ONLY) {
                 // Would expect this if it's the first result and we're in delta only mode, otherwise log a warning
                 LOGGER.warn("Ignored CycleFragmentCompleted call with no useful results to propagate");
               }
@@ -223,16 +222,16 @@ public class ViewClientImpl implements ViewClient {
       }
 
       @Override
-      public void cycleExecutionFailed(ViewCycleExecutionOptions executionOptions, Exception exception) {
-        ViewResultListener listener = _userResultListener.get();
+      public void cycleExecutionFailed(final ViewCycleExecutionOptions executionOptions, final Exception exception) {
+        final ViewResultListener listener = _userResultListener.get();
         if (listener != null) {
           listener.cycleExecutionFailed(executionOptions, exception);
         }
       }
 
       @Override
-      public void viewDefinitionCompilationFailed(Instant valuationTime, Exception exception) {
-        ViewResultListener listener = _userResultListener.get();
+      public void viewDefinitionCompilationFailed(final Instant valuationTime, final Exception exception) {
+        final ViewResultListener listener = _userResultListener.get();
         if (listener != null) {
           listener.viewDefinitionCompilationFailed(valuationTime, exception);
         }
@@ -241,23 +240,23 @@ public class ViewClientImpl implements ViewClient {
       @Override
       public void processCompleted() {
         ViewClientImpl.this.processCompleted();
-        ViewResultListener listener = _userResultListener.get();
+        final ViewResultListener listener = _userResultListener.get();
         if (listener != null) {
           listener.processCompleted();
         }
       }
 
       @Override
-      public void processTerminated(boolean executionInterrupted) {
+      public void processTerminated(final boolean executionInterrupted) {
         ViewClientImpl.this.detachFromViewProcess();
-        ViewResultListener listener = _userResultListener.get();
+        final ViewResultListener listener = _userResultListener.get();
         if (listener != null) {
           listener.processTerminated(executionInterrupted);
         }
       }
 
       @Override
-      public void clientShutdown(Exception e) {
+      public void clientShutdown(final Exception e) {
         throw new UnsupportedOperationException("Shutdown notification unexpectedly received from merging result listener");
       }
 
@@ -294,12 +293,12 @@ public class ViewClientImpl implements ViewClient {
   }
 
   @Override
-  public void attachToViewProcess(UniqueId viewDefinitionId, ViewExecutionOptions executionOptions) {
+  public void attachToViewProcess(final UniqueId viewDefinitionId, final ViewExecutionOptions executionOptions) {
     attachToViewProcess(viewDefinitionId, executionOptions, false);
   }
 
   @Override
-  public void attachToViewProcess(UniqueId viewDefinitionId, ViewExecutionOptions executionOptions, boolean privateProcess) {
+  public void attachToViewProcess(final UniqueId viewDefinitionId, final ViewExecutionOptions executionOptions, final boolean privateProcess) {
     final boolean isPaused;
     _clientLock.lock();
     try {
@@ -310,8 +309,8 @@ public class ViewClientImpl implements ViewClient {
       // resumed, at which point the new permission provider will be in place. This is important to prevent potential
       // deadlocks as the initial notifications will be passed to the merging listener while the _clientLock is held -
       // they must not be passed on to the underlying listener.
-      ViewProcessorImpl viewProcessor = getViewProcessor();
-      ViewPermissionContext context = privateProcess ? viewProcessor.attachClientToPrivateViewProcess(getUniqueId(), _mergingViewProcessListener, viewDefinitionId, executionOptions,
+      final ViewProcessorImpl viewProcessor = getViewProcessor();
+      final ViewPermissionContext context = privateProcess ? viewProcessor.attachClientToPrivateViewProcess(getUniqueId(), _mergingViewProcessListener, viewDefinitionId, executionOptions,
           _viewProcessContextMap) : viewProcessor.attachClientToSharedViewProcess(getUniqueId(), _mergingViewProcessListener, viewDefinitionId, executionOptions, _viewProcessContextMap);
       isPaused = attachToViewProcessCore(context);
     } finally {
@@ -321,14 +320,14 @@ public class ViewClientImpl implements ViewClient {
   }
 
   @Override
-  public void attachToViewProcess(UniqueId processId) {
+  public void attachToViewProcess(final UniqueId processId) {
     final boolean isPaused;
     _clientLock.lock();
     try {
       checkNotTerminated();
       checkNotAttached();
       // See concurrency notes in {@link #attachToViewProcess(UniqueId,ViewExecutionOptions,boolean)}.
-      ViewPermissionContext context = getViewProcessor().attachClientToViewProcess(getUniqueId(), _mergingViewProcessListener, processId);
+      final ViewPermissionContext context = getViewProcessor().attachClientToViewProcess(getUniqueId(), _mergingViewProcessListener, processId);
       isPaused = attachToViewProcessCore(context);
     } finally {
       _clientLock.unlock();
@@ -375,7 +374,7 @@ public class ViewClientImpl implements ViewClient {
   public ViewDefinition getLatestViewDefinition() {
     return getViewProcessor().getLatestViewDefinition(getUniqueId());
   }
-  
+
   @Override
   public ViewProcess getViewProcess() {
     _clientLock.lock();
@@ -389,12 +388,12 @@ public class ViewClientImpl implements ViewClient {
 
   //-------------------------------------------------------------------------
   @Override
-  public void setResultListener(ViewResultListener resultListener) {
+  public void setResultListener(final ViewResultListener resultListener) {
     _userResultListener.set(resultListener);
   }
 
   @Override
-  public void setUpdatePeriod(long periodMillis) {
+  public void setUpdatePeriod(final long periodMillis) {
     _mergingViewProcessListener.setMinimumUpdatePeriodMillis(periodMillis);
   }
 
@@ -404,7 +403,7 @@ public class ViewClientImpl implements ViewClient {
   }
 
   @Override
-  public void setResultMode(ViewResultMode resultMode) {
+  public void setResultMode(final ViewResultMode resultMode) {
     _resultMode.set(resultMode);
   }
 
@@ -414,7 +413,7 @@ public class ViewClientImpl implements ViewClient {
   }
 
   @Override
-  public void setFragmentResultMode(ViewResultMode fragmentResultMode) {
+  public void setFragmentResultMode(final ViewResultMode fragmentResultMode) {
     _fragmentResultMode.set(fragmentResultMode);
   }
 
@@ -469,7 +468,7 @@ public class ViewClientImpl implements ViewClient {
     checkAttached();
     try {
       _completionLatch.await();
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
       LOGGER.debug("Interrupted while waiting for completion of the view process");
       throw e;
     }
@@ -502,7 +501,7 @@ public class ViewClientImpl implements ViewClient {
   }
 
   @Override
-  public void setViewCycleAccessSupported(boolean isViewCycleAccessSupported) {
+  public void setViewCycleAccessSupported(final boolean isViewCycleAccessSupported) {
     _clientLock.lock();
     try {
       _isViewCycleAccessSupported.set(isViewCycleAccessSupported);
@@ -516,7 +515,7 @@ public class ViewClientImpl implements ViewClient {
   }
 
   @Override
-  public void setViewProcessContextMap(Map<String, String> context) {
+  public void setViewProcessContextMap(final Map<String, String> context) {
 
     if (isAttached()) {
       throw new IllegalStateException("Unable to set process context whilst attached to a view process");
@@ -529,7 +528,7 @@ public class ViewClientImpl implements ViewClient {
     if (!isViewCycleAccessSupported()) {
       throw new UnsupportedOperationException("Access to computation cycles is not supported from this client");
     }
-    ViewComputationResultModel latestResult = getLatestResult();
+    final ViewComputationResultModel latestResult = getLatestResult();
     if (latestResult == null) {
       return null;
     }
@@ -537,7 +536,7 @@ public class ViewClientImpl implements ViewClient {
   }
 
   @Override
-  public EngineResourceReference<? extends ViewCycle> createCycleReference(UniqueId cycleId) {
+  public EngineResourceReference<? extends ViewCycle> createCycleReference(final UniqueId cycleId) {
     if (!isViewCycleAccessSupported()) {
       throw new UnsupportedOperationException("Access to computation cycles is not supported from this client");
     }
@@ -546,11 +545,11 @@ public class ViewClientImpl implements ViewClient {
 
   //-------------------------------------------------------------------------
   @Override
-  public void setMinimumLogMode(ExecutionLogMode minimumLogMode, Set<Pair<String, ValueSpecification>> resultSpecifications) {
+  public void setMinimumLogMode(final ExecutionLogMode minimumLogMode, final Set<Pair<String, ValueSpecification>> resultSpecifications) {
     _clientLock.lock();
     try {
       checkAttached();
-      Set<Pair<String, ValueSpecification>> affected = new HashSet<>(resultSpecifications);
+      final Set<Pair<String, ValueSpecification>> affected = new HashSet<>(resultSpecifications);
       switch (minimumLogMode) {
         case INDICATORS:
           affected.retainAll(_elevatedLogSpecs);
@@ -581,7 +580,7 @@ public class ViewClientImpl implements ViewClient {
       getViewProcessor().removeViewClient(getUniqueId());
       _mergingViewProcessListener.terminate();
       _state = ViewClientState.TERMINATED;
-      ViewResultListener listener = _userResultListener.get();
+      final ViewResultListener listener = _userResultListener.get();
       if (listener != null) {
         listener.clientShutdown(null);
       }
@@ -625,23 +624,23 @@ public class ViewClientImpl implements ViewClient {
 
   /**
    * Updates the latest result.
-   * 
+   *
    * @param result the new result
    * @return true if the new result was the first
    */
-  private boolean updateLatestResult(ViewComputationResultModel result) {
+  private boolean updateLatestResult(final ViewComputationResultModel result) {
     if (isViewCycleAccessSupported()) {
       getLatestCycleRetainer().replaceRetainedCycle(result.getViewCycleId());
     }
-    ViewComputationResultModel oldResult = _latestResult.getAndSet(result);
+    final ViewComputationResultModel oldResult = _latestResult.getAndSet(result);
     return oldResult == null;
   }
 
-  private void updateLatestCompiledViewDefinition(CompiledViewDefinition compiledViewDefinition) {
+  private void updateLatestCompiledViewDefinition(final CompiledViewDefinition compiledViewDefinition) {
     _latestCompiledViewDefinition.set(compiledViewDefinition);
   }
 
-  private boolean isFullResultRequired(ViewResultMode resultMode, boolean isFirstResult) {
+  private boolean isFullResultRequired(final ViewResultMode resultMode, final boolean isFirstResult) {
     switch (resultMode) {
       case BOTH:
       case FULL_ONLY:
@@ -653,7 +652,7 @@ public class ViewClientImpl implements ViewClient {
     }
   }
 
-  private boolean isDeltaResultRequired(ViewResultMode resultMode, boolean isFirstResult) {
+  private boolean isDeltaResultRequired(final ViewResultMode resultMode, final boolean isFirstResult) {
     switch (resultMode) {
       case BOTH:
       case DELTA_ONLY:

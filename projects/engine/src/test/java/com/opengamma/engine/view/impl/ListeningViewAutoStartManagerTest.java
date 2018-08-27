@@ -45,16 +45,16 @@ public class ListeningViewAutoStartManagerTest {
   @Test(expectedExceptions = IllegalStateException.class)
   public void testCannotGetViewsUntilStarted() {
 
-    ViewAutoStartManager manager = new ListeningViewAutoStartManager(createConfigSource(1));
+    final ViewAutoStartManager manager = new ListeningViewAutoStartManager(createConfigSource(1));
     manager.getAutoStartViews();
   }
 
   @Test
   public void testSingleConfigItemLoadsOnStart() {
 
-    ConfigSource configSource = createConfigSource(1);
+    final ConfigSource configSource = createConfigSource(1);
 
-    ViewAutoStartManager manager = new ListeningViewAutoStartManager(configSource);
+    final ViewAutoStartManager manager = new ListeningViewAutoStartManager(configSource);
     manager.initialize();
 
     assertThat(manager.getAutoStartViews().size(), is(1));
@@ -63,9 +63,9 @@ public class ListeningViewAutoStartManagerTest {
   @Test
   public void testMultipleConfigItemsGetLoadedOnStart() {
 
-    ConfigSource configSource = createConfigSource(10);
+    final ConfigSource configSource = createConfigSource(10);
 
-    ViewAutoStartManager manager = new ListeningViewAutoStartManager(configSource);
+    final ViewAutoStartManager manager = new ListeningViewAutoStartManager(configSource);
     manager.initialize();
 
     assertThat(manager.getAutoStartViews().size(), is(10));
@@ -74,9 +74,9 @@ public class ListeningViewAutoStartManagerTest {
   @Test
   public void testDuplicateViewDefinitionsAreIgnored() {
 
-    ConfigSource configSource = createConfigSource(createConfigItems("id1", "id1"));
+    final ConfigSource configSource = createConfigSource(createConfigItems("id1", "id1"));
 
-    ViewAutoStartManager manager = new ListeningViewAutoStartManager(configSource);
+    final ViewAutoStartManager manager = new ListeningViewAutoStartManager(configSource);
     manager.initialize();
 
     checkViewIds(manager.getAutoStartViews(), "id1");
@@ -85,9 +85,9 @@ public class ListeningViewAutoStartManagerTest {
   @Test
   public void testAfterItemsAreRemovedFromDatabaseTheyAreRemovedFromAutoStartList() {
 
-    TestConfigSource configSource = createConfigSource(createConfigItems("id1", "id2"));
+    final TestConfigSource configSource = createConfigSource(createConfigItems("id1", "id2"));
 
-    ViewAutoStartManager manager = new ListeningViewAutoStartManager(configSource);
+    final ViewAutoStartManager manager = new ListeningViewAutoStartManager(configSource);
     manager.initialize();
 
     checkViewIds(manager.getAutoStartViews(), "id1", "id2");
@@ -99,9 +99,9 @@ public class ListeningViewAutoStartManagerTest {
   @Test
   public void testAfterItemsAreAddedToDatabaseTheyAreAddedToAutoStartList() {
 
-    TestConfigSource configSource = createConfigSource(createConfigItems("id1", "id2"));
+    final TestConfigSource configSource = createConfigSource(createConfigItems("id1", "id2"));
 
-    ViewAutoStartManager manager = new ListeningViewAutoStartManager(configSource);
+    final ViewAutoStartManager manager = new ListeningViewAutoStartManager(configSource);
     manager.initialize();
 
     checkViewIds(manager.getAutoStartViews(), "id1", "id2");
@@ -113,9 +113,9 @@ public class ListeningViewAutoStartManagerTest {
   @Test
   public void testModifiedItemsAreAddedToAutoStartList() {
 
-    TestConfigSource configSource = createConfigSource(createConfigItems("id1", "id2"));
+    final TestConfigSource configSource = createConfigSource(createConfigItems("id1", "id2"));
 
-    ViewAutoStartManager manager = new ListeningViewAutoStartManager(configSource);
+    final ViewAutoStartManager manager = new ListeningViewAutoStartManager(configSource);
     manager.initialize();
 
     checkViewIds(manager.getAutoStartViews(), "id1", "id2");
@@ -124,17 +124,17 @@ public class ListeningViewAutoStartManagerTest {
     checkViewIds(manager.getAutoStartViews(), "id1", "differentId");
   }
 
-  private void checkViewIds(Map<String, AutoStartViewDefinition> views, String... ids) {
+  private void checkViewIds(final Map<String, AutoStartViewDefinition> views, final String... ids) {
 
-    Set<UniqueId> expected = new HashSet<>();
-    for (String id : ids) {
+    final Set<UniqueId> expected = new HashSet<>();
+    for (final String id : ids) {
       expected.add(UniqueId.of("VD", id));
     }
 
-    Set<UniqueId> checked = new HashSet<>();
+    final Set<UniqueId> checked = new HashSet<>();
     assertThat(views.size(), is(ids.length));
-    for (AutoStartViewDefinition view : views.values()) {
-      UniqueId uniqueId = view.getViewDefinitionId();
+    for (final AutoStartViewDefinition view : views.values()) {
+      final UniqueId uniqueId = view.getViewDefinitionId();
       assertThat(expected.contains(uniqueId), is(true));
       checked.add(uniqueId);
     }
@@ -142,86 +142,86 @@ public class ListeningViewAutoStartManagerTest {
     assertThat(checked, is(expected));
   }
 
-  private TestConfigSource createConfigSource(int qty) {
+  private TestConfigSource createConfigSource(final int qty) {
     return createConfigSource(createConfigItems(qty));
   }
 
-  private TestConfigSource createConfigSource(List<ConfigItem<AutoStartViewDefinition>> configItems) {
+  private TestConfigSource createConfigSource(final List<ConfigItem<AutoStartViewDefinition>> configItems) {
     return new TestConfigSource(configItems);
   }
 
-  private List<ConfigItem<AutoStartViewDefinition>> createConfigItems(int qty) {
+  private List<ConfigItem<AutoStartViewDefinition>> createConfigItems(final int qty) {
 
-    String[] ids = new String[qty];
+    final String[] ids = new String[qty];
     for (int i = 0; i < qty; i++) {
       ids[i] = "id-" + i;
     }
     return createConfigItems(ids);
   }
 
-  private List<ConfigItem<AutoStartViewDefinition>> createConfigItems(String... ids) {
+  private List<ConfigItem<AutoStartViewDefinition>> createConfigItems(final String... ids) {
 
-    List<ConfigItem<AutoStartViewDefinition>> result = new ArrayList<>();
-    for (String id : ids) {
+    final List<ConfigItem<AutoStartViewDefinition>> result = new ArrayList<>();
+    for (final String id : ids) {
       result.add(createConfigItem(id));
     }
     return result;
   }
 
-  private ConfigItem<AutoStartViewDefinition> createConfigItem(String id) {
+  private ConfigItem<AutoStartViewDefinition> createConfigItem(final String id) {
     return createConfigItem(id, id);
   }
 
-  private ConfigItem<AutoStartViewDefinition> createConfigItem(String id, String viewId) {
-    ConfigItem<AutoStartViewDefinition> configItem = ConfigItem.of(createAutoStartViewDefinition(viewId));
+  private ConfigItem<AutoStartViewDefinition> createConfigItem(final String id, final String viewId) {
+    final ConfigItem<AutoStartViewDefinition> configItem = ConfigItem.of(createAutoStartViewDefinition(viewId));
     configItem.setUniqueId(UniqueId.of("CI", id));
     configItem.setName("Item-" + id);
     return configItem;
   }
 
-  private AutoStartViewDefinition createAutoStartViewDefinition(String id) {
+  private AutoStartViewDefinition createAutoStartViewDefinition(final String id) {
     return new AutoStartViewDefinition(UniqueId.of("VD", id), ExecutionOptions.of(new InfiniteViewCycleExecutionSequence(),
                                        EnumSet.of(ViewExecutionFlags.RUN_AS_FAST_AS_POSSIBLE)));
   }
 
   private static class TestConfigSource implements ConfigSource {
 
-    private BasicChangeManager _changeManager = new BasicChangeManager();
-    private Map<ObjectId, ConfigItem<AutoStartViewDefinition>> views = new HashMap<>();
+    private final BasicChangeManager _changeManager = new BasicChangeManager();
+    private final Map<ObjectId, ConfigItem<AutoStartViewDefinition>> views = new HashMap<>();
 
-    public TestConfigSource(List<ConfigItem<AutoStartViewDefinition>> configItems) {
-      for (ConfigItem<AutoStartViewDefinition> item : configItems) {
+    public TestConfigSource(final List<ConfigItem<AutoStartViewDefinition>> configItems) {
+      for (final ConfigItem<AutoStartViewDefinition> item : configItems) {
        addItem(item);
       }
     }
 
     @Override
-    public ConfigItem<?> get(UniqueId uniqueId) {
+    public ConfigItem<?> get(final UniqueId uniqueId) {
       return null;
     }
 
     @Override
-    public ConfigItem<?> get(ObjectId objectId, VersionCorrection versionCorrection) {
+    public ConfigItem<?> get(final ObjectId objectId, final VersionCorrection versionCorrection) {
       return views.get(objectId);
     }
 
     @Override
-    public Map<UniqueId, ConfigItem<?>> get(Collection<UniqueId> uniqueIds) {
+    public Map<UniqueId, ConfigItem<?>> get(final Collection<UniqueId> uniqueIds) {
       return null;
     }
 
     @Override
-    public Map<ObjectId, ConfigItem<?>> get(Collection<ObjectId> objectIds, VersionCorrection versionCorrection) {
+    public Map<ObjectId, ConfigItem<?>> get(final Collection<ObjectId> objectIds, final VersionCorrection versionCorrection) {
       return null;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <R> Collection<ConfigItem<R>> get(Class<R> clazz, String configName, VersionCorrection versionCorrection) {
+    public <R> Collection<ConfigItem<R>> get(final Class<R> clazz, final String configName, final VersionCorrection versionCorrection) {
 
-      Collection<ConfigItem<R>> result = new HashSet<>();
+      final Collection<ConfigItem<R>> result = new HashSet<>();
       if (clazz == AutoStartViewDefinition.class) {
-        for (ConfigItem<AutoStartViewDefinition> item : views.values()) {
+        for (final ConfigItem<AutoStartViewDefinition> item : views.values()) {
 
           result.add((ConfigItem<R>) item);
         }
@@ -231,11 +231,11 @@ public class ListeningViewAutoStartManagerTest {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <R> Collection<ConfigItem<R>> getAll(Class<R> clazz, VersionCorrection versionCorrection) {
+    public <R> Collection<ConfigItem<R>> getAll(final Class<R> clazz, final VersionCorrection versionCorrection) {
 
-      Collection<ConfigItem<R>> result = new HashSet<>();
+      final Collection<ConfigItem<R>> result = new HashSet<>();
       if (clazz == AutoStartViewDefinition.class) {
-        for (ConfigItem<AutoStartViewDefinition> item : views.values()) {
+        for (final ConfigItem<AutoStartViewDefinition> item : views.values()) {
           result.add((ConfigItem<R>) item);
         }
       }
@@ -243,22 +243,22 @@ public class ListeningViewAutoStartManagerTest {
     }
 
     @Override
-    public <R> R getConfig(Class<R> clazz, UniqueId uniqueId) {
+    public <R> R getConfig(final Class<R> clazz, final UniqueId uniqueId) {
       return null;
     }
 
     @Override
-    public <R> R getConfig(Class<R> clazz, ObjectId objectId, VersionCorrection versionCorrection) {
+    public <R> R getConfig(final Class<R> clazz, final ObjectId objectId, final VersionCorrection versionCorrection) {
       return null;
     }
 
     @Override
-    public <R> R getSingle(Class<R> clazz, String configName, VersionCorrection versionCorrection) {
+    public <R> R getSingle(final Class<R> clazz, final String configName, final VersionCorrection versionCorrection) {
       return null;
     }
 
     @Override
-    public <R> R getLatestByName(Class<R> clazz, String name) {
+    public <R> R getLatestByName(final Class<R> clazz, final String name) {
       return null;
     }
 
@@ -267,22 +267,22 @@ public class ListeningViewAutoStartManagerTest {
       return _changeManager;
     }
 
-    private void addItem(ConfigItem<AutoStartViewDefinition> item) {
+    private void addItem(final ConfigItem<AutoStartViewDefinition> item) {
       views.put(item.getObjectId(), item);
     }
 
-    public void addItemWithTrigger(ConfigItem<AutoStartViewDefinition> item) {
+    public void addItemWithTrigger(final ConfigItem<AutoStartViewDefinition> item) {
       addItem(item);
       _changeManager.entityChanged(ChangeType.ADDED, item.getObjectId(), Instant.now(), null, Instant.now());
     }
 
-    public void removeItemWithTrigger(ConfigItem<AutoStartViewDefinition> item) {
-      ObjectId objectId = item.getObjectId();
+    public void removeItemWithTrigger(final ConfigItem<AutoStartViewDefinition> item) {
+      final ObjectId objectId = item.getObjectId();
       views.remove(objectId);
       _changeManager.entityChanged(ChangeType.REMOVED, objectId, Instant.now(), null, Instant.now());
     }
 
-    public void modifyItemWithTrigger(ConfigItem<AutoStartViewDefinition> item) {
+    public void modifyItemWithTrigger(final ConfigItem<AutoStartViewDefinition> item) {
       addItem(item);
       _changeManager.entityChanged(ChangeType.CHANGED, item.getObjectId(), Instant.now(), null, Instant.now());
     }

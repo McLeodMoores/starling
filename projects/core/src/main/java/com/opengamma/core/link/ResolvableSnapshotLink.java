@@ -57,16 +57,16 @@ public class ResolvableSnapshotLink<S extends NamedSnapshot>
    * @param type the type of the linked object
    * @param linkResolver the resolver used to resolve the link when requested
    */
-  ResolvableSnapshotLink(String identifier, Class<S> type, LinkResolver<String, S> linkResolver) {
+  ResolvableSnapshotLink(final String identifier, final Class<S> type, final LinkResolver<String, S> linkResolver) {
     this(LinkIdentifier.of(identifier, type), linkResolver);
   }
 
   @ImmutableConstructor
-  private ResolvableSnapshotLink(LinkIdentifier<String, S> identifier) {
+  private ResolvableSnapshotLink(final LinkIdentifier<String, S> identifier) {
     this(identifier, new ServiceContextSnapshotLinkResolver<S>());
   }
 
-  private ResolvableSnapshotLink(LinkIdentifier<String, S> identifier, LinkResolver<String, S> linkResolver) {
+  private ResolvableSnapshotLink(final LinkIdentifier<String, S> identifier, final LinkResolver<String, S> linkResolver) {
     _identifier = identifier;
     _resolver = ArgumentChecker.notNull(linkResolver, "linkResolver");
   }

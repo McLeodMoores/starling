@@ -39,7 +39,7 @@ public abstract class AbstractEHCachingMasterTest<M extends AbstractChangeProvid
   protected static final ObjectId A_OID = ObjectId.of(ID_SCHEME, "A");
   protected static final UniqueId A100_UID = UniqueId.of(A_OID, "100");
   protected static final UniqueId A200_UID = UniqueId.of(A_OID, "200");
-  protected static final UniqueId A300_UID = UniqueId.of(A_OID, "300");  
+  protected static final UniqueId A300_UID = UniqueId.of(A_OID, "300");
   protected D docA100_V1999to2010_Cto2011;
   protected D docA200_V2010to;
   protected D docA300_V1999to2010_C2011to;
@@ -70,9 +70,9 @@ public abstract class AbstractEHCachingMasterTest<M extends AbstractChangeProvid
    * Creates a fresh mock master and configures it to respond as though it contains the above documents
    * @return the mock master
    */
-  protected AbstractChangeProvidingMaster<D> populateMockMaster(M mockUnderlyingMaster) {
+  protected AbstractChangeProvidingMaster<D> populateMockMaster(final M mockUnderlyingMaster) {
 
-    ChangeManager changeManager = new BasicChangeManager();
+    final ChangeManager changeManager = new BasicChangeManager();
     when(mockUnderlyingMaster.changeManager()).thenReturn(changeManager);
 
     // Set up VersionFrom, VersionTo, CorrectionFrom, CorrectionTo
@@ -162,18 +162,19 @@ public abstract class AbstractEHCachingMasterTest<M extends AbstractChangeProvid
    * Mockito argument matcher that checks whether a VersionCorrection is within a document's v/c range
    */
   class IsValidFor extends ArgumentMatcher<VersionCorrection> {
-    private Instant _fromVersion, _fromCorrection;
-    private Instant _toVersion, _toCorrection;
+    private final Instant _fromVersion, _fromCorrection;
+    private final Instant _toVersion, _toCorrection;
 
-    public IsValidFor(AbstractDocument document) {
+    public IsValidFor(final AbstractDocument document) {
       _fromVersion = document.getVersionFromInstant();
       _toVersion = document.getVersionToInstant();
       _fromCorrection = document.getCorrectionFromInstant();
       _toCorrection = document.getCorrectionToInstant();
     }
 
-    public boolean matches(Object o) {
-      VersionCorrection vc = (VersionCorrection) o;
+    @Override
+    public boolean matches(final Object o) {
+      final VersionCorrection vc = (VersionCorrection) o;
       return  (_fromVersion == null || vc.getVersionAsOf() == null || vc.getVersionAsOf().isAfter(_fromVersion)) &&
               (_toVersion == null || vc.getVersionAsOf() != null && vc.getVersionAsOf().isBefore(_toVersion)) &&
               (_fromCorrection == null || vc.getCorrectedTo() == null || vc.getCorrectedTo().isAfter(_fromCorrection)) &&

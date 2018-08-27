@@ -48,25 +48,25 @@ public class MongoDBInvalidFieldCachingReferenceDataProvider extends AbstractInv
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param underlying  the underlying provider, not null
    * @param mongoConnector  the Mongo connector, not null
    */
-  public MongoDBInvalidFieldCachingReferenceDataProvider(ReferenceDataProvider underlying, MongoConnector mongoConnector) {
+  public MongoDBInvalidFieldCachingReferenceDataProvider(final ReferenceDataProvider underlying, final MongoConnector mongoConnector) {
     this(underlying, mongoConnector, OpenGammaFudgeContext.getInstance());
   }
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param underlying  the underlying provider, not null
    * @param mongoConnector  the Mongo connector, not null
    * @param fudgeContext  the Fudge context, not null
    */
   public MongoDBInvalidFieldCachingReferenceDataProvider(
-      ReferenceDataProvider underlying,
-      MongoConnector mongoConnector,
-      FudgeContext fudgeContext) {
+      final ReferenceDataProvider underlying,
+      final MongoConnector mongoConnector,
+      final FudgeContext fudgeContext) {
     super(underlying);
     ArgumentChecker.notNull(mongoConnector, "mongoConnector");
     _cache = new MongoDBReferenceDataCache(mongoConnector, PERMANENT_ERRORS);
@@ -75,15 +75,15 @@ public class MongoDBInvalidFieldCachingReferenceDataProvider extends AbstractInv
 
   //-------------------------------------------------------------------------
   @Override
-  protected void saveInvalidFields(String identifier, Set<String> invalidFields) {
+  protected void saveInvalidFields(final String identifier, final Set<String> invalidFields) {
     _cache.save(wrap(identifier, invalidFields));
   }
 
   // wrap/unwrap of data here is rather weird...
-  private ReferenceData wrap(String security, Set<String> permanentFailures) {
-    ReferenceData wrapped = new ReferenceData(security);
-    MutableFudgeMsg fieldData = _fudgeContext.newMessage();
-    for (String fieldNames : permanentFailures) {
+  private ReferenceData wrap(final String security, final Set<String> permanentFailures) {
+    final ReferenceData wrapped = new ReferenceData(security);
+    final MutableFudgeMsg fieldData = _fudgeContext.newMessage();
+    for (final String fieldNames : permanentFailures) {
       fieldData.add(FIELD_PERMANENT_ERROR_NAME, fieldNames);
     }
     wrapped.setFieldValues(fieldData);
@@ -92,18 +92,18 @@ public class MongoDBInvalidFieldCachingReferenceDataProvider extends AbstractInv
 
   //-------------------------------------------------------------------------
   @Override
-  protected Map<String, Set<String>> loadInvalidFields(Set<String> identifiers) {
-    Map<String, ReferenceData> results = _cache.load(identifiers);
-    Map<String, Set<String>> result = Maps.newHashMap();
-    for (Entry<String, ReferenceData> entry : results.entrySet()) {
+  protected Map<String, Set<String>> loadInvalidFields(final Set<String> identifiers) {
+    final Map<String, ReferenceData> results = _cache.load(identifiers);
+    final Map<String, Set<String>> result = Maps.newHashMap();
+    for (final Entry<String, ReferenceData> entry : results.entrySet()) {
       result.put(entry.getKey(), unwrap(entry.getValue()));
     }
     return result;
   }
 
-  private Set<String> unwrap(ReferenceData value) {
-    Set<String> unwrapped = new HashSet<String>();
-    for (FudgeField fieldData : value.getFieldValues().getAllByName(FIELD_PERMANENT_ERROR_NAME)) {
+  private Set<String> unwrap(final ReferenceData value) {
+    final Set<String> unwrapped = new HashSet<>();
+    for (final FudgeField fieldData : value.getFieldValues().getAllByName(FIELD_PERMANENT_ERROR_NAME)) {
       unwrapped.add((String) fieldData.getValue());
     }
     return unwrapped;

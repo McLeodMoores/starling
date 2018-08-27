@@ -36,7 +36,7 @@ public class FXBarrierOptionDistanceFunction extends BarrierOptionDistanceFuncti
   }
 
   @Override
-  protected ValueRequirement getMarketDataRequirement(FinancialSecurity security) {
+  protected ValueRequirement getMarketDataRequirement(final FinancialSecurity security) {
     if (security instanceof FXBarrierOptionSecurity) {
       final FXBarrierOptionSecurity barrierOption = (FXBarrierOptionSecurity) security;
       return ConventionBasedFXRateFunction.getSpotRateRequirement(barrierOption.getCallCurrency(), barrierOption.getPutCurrency());
@@ -59,7 +59,7 @@ public class FXBarrierOptionDistanceFunction extends BarrierOptionDistanceFuncti
   }
 
   @Override
-  public double getBarrierLevel(FinancialSecurity security) {
+  public double getBarrierLevel(final FinancialSecurity security) {
     // yes this should be a visitor
     if (security instanceof FXBarrierOptionSecurity) {
       return ((FXBarrierOptionSecurity) security).getBarrierLevel();

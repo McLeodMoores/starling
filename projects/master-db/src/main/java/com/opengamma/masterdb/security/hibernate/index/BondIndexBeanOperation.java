@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 
@@ -44,42 +44,42 @@ public final class BondIndexBeanOperation extends AbstractSecurityBeanOperation<
   }
 
   @Override
-  public BondIndexBean createBean(final OperationContext context, HibernateSecurityMasterDao secMasterSession, BondIndex index) {
+  public BondIndexBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession, final BondIndex index) {
     final BondIndexBean bean = new BondIndexBean();
     bean.setDescription(index.getDescription());
-    List<BondIndexComponent> bondComponents = index.getBondComponents();
-    List<BondIndexComponentBean> bondComponentBeans = new ArrayList<>();
+    final List<BondIndexComponent> bondComponents = index.getBondComponents();
+    final List<BondIndexComponentBean> bondComponentBeans = new ArrayList<>();
     long i = 0;
-    for (BondIndexComponent bondComponent : bondComponents) {
-      BondIndexComponentBean bondComponentBean = new BondIndexComponentBean();
+    for (final BondIndexComponent bondComponent : bondComponents) {
+      final BondIndexComponentBean bondComponentBean = new BondIndexComponentBean();
       bondComponentBean.setWeight(bondComponent.getWeight());
-      Set<ExternalIdBean> idBundle = new HashSet<>();
-      for (ExternalId id : bondComponent.getBondIdentifier().getExternalIds()) {
+      final Set<ExternalIdBean> idBundle = new HashSet<>();
+      for (final ExternalId id : bondComponent.getBondIdentifier().getExternalIds()) {
         idBundle.add(externalIdToExternalIdBean(id));
       }
-      bondComponentBean.setIdentifiers(idBundle);   
+      bondComponentBean.setIdentifiers(idBundle);
       bondComponentBean.setPosition(i);
       i++;
       bondComponentBeans.add(bondComponentBean);
     }
     bean.setBondComponents(bondComponentBeans);
-    IndexWeightingTypeBean indexWeightingTypeBean = secMasterSession.getOrCreateIndexWeightingTypeBean(index.getWeightingType().name());
+    final IndexWeightingTypeBean indexWeightingTypeBean = secMasterSession.getOrCreateIndexWeightingTypeBean(index.getWeightingType().name());
     bean.setWeightingType(indexWeightingTypeBean);
     if (index.getIndexFamilyId() != null) {
       bean.setIndexFamilyId(externalIdToExternalIdBean(index.getIndexFamilyId()));
     }
     return bean;
   }
-  
+
   @Override
   public BondIndexBean resolve(final OperationContext context,
                                  final HibernateSecurityMasterDao secMasterSession, final Date now,
                                  final BondIndexBean bean) {
     final List<BondIndexComponentBean> indexComponents = secMasterSession.getBondIndexComponentBeans(bean);
-    bean.setBondComponents(new ArrayList<BondIndexComponentBean>(indexComponents));
+    bean.setBondComponents(new ArrayList<>(indexComponents));
     return bean;
   }
-  
+
   @Override
   public void postPersistBean(final OperationContext context,
       final HibernateSecurityMasterDao secMasterSession, final Date now,
@@ -88,27 +88,27 @@ public final class BondIndexBeanOperation extends AbstractSecurityBeanOperation<
   }
 
   @Override
-  public BondIndex createSecurity(final OperationContext context, BondIndexBean bean) {
-    String description = bean.getDescription();
-    IndexWeightingType weightingType = indexWeightingTypeBeanToIndexWeightingType(bean.getWeightingType());
-    List<BondIndexComponentBean> bondComponents = bean.getBondComponents();
+  public BondIndex createSecurity(final OperationContext context, final BondIndexBean bean) {
+    final String description = bean.getDescription();
+    final IndexWeightingType weightingType = indexWeightingTypeBeanToIndexWeightingType(bean.getWeightingType());
+    final List<BondIndexComponentBean> bondComponents = bean.getBondComponents();
     if (bondComponents == null) {
       throw new OpenGammaRuntimeException("null returned by getBondComponents, which breaks contract.");
     }
-    List<BondIndexComponent> components = new ArrayList<>();
-    for (BondIndexComponentBean component : bondComponents) {
-      Set<ExternalIdBean> identifiers = component.getIdentifiers();
-      List<ExternalId> ids = new ArrayList<>();
-      for (ExternalIdBean idBean : identifiers) {
-        ExternalId externalId = externalIdBeanToExternalId(idBean);
+    final List<BondIndexComponent> components = new ArrayList<>();
+    for (final BondIndexComponentBean component : bondComponents) {
+      final Set<ExternalIdBean> identifiers = component.getIdentifiers();
+      final List<ExternalId> ids = new ArrayList<>();
+      for (final ExternalIdBean idBean : identifiers) {
+        final ExternalId externalId = externalIdBeanToExternalId(idBean);
         ids.add(externalId);
       }
-      ExternalIdBundle externalIdBundle = ExternalIdBundle.of(ids);
-      BigDecimal weight = component.getWeight().stripTrailingZeros();
-      BondIndexComponent bondIndexComponent = new BondIndexComponent(externalIdBundle, weight);
+      final ExternalIdBundle externalIdBundle = ExternalIdBundle.of(ids);
+      final BigDecimal weight = component.getWeight().stripTrailingZeros();
+      final BondIndexComponent bondIndexComponent = new BondIndexComponent(externalIdBundle, weight);
       components.add(bondIndexComponent);
     }
-    BondIndex bondIndex = new BondIndex("", description, components, weightingType);
+    final BondIndex bondIndex = new BondIndex("", description, components, weightingType);
     if (bean.getIndexFamilyId() != null) {
       bondIndex.setIndexFamilyId(externalIdBeanToExternalId(bean.getIndexFamilyId()));
     }

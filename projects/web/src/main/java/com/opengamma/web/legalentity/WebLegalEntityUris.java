@@ -20,7 +20,7 @@ public class WebLegalEntityUris {
    *
    * @param data the web data, not null
    */
-  public WebLegalEntityUris(WebLegalEntityData data) {
+  public WebLegalEntityUris(final WebLegalEntityData data) {
     _data = data;
   }
 

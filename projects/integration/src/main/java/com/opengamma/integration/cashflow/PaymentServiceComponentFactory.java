@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.cashflow;
@@ -28,7 +28,7 @@ import com.opengamma.engine.view.ViewProcessor;
 import com.opengamma.master.config.ConfigMaster;
 
 /**
- * 
+ *
  */
 @BeanDefinition
 public class PaymentServiceComponentFactory extends AbstractComponentFactory {
@@ -58,15 +58,15 @@ public class PaymentServiceComponentFactory extends AbstractComponentFactory {
    */
   @PropertyDefinition
   private SecuritySource _securitySource;
-  
+
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
     initPaymentService(repo);
   }
-  
-  protected PaymentService initPaymentService(ComponentRepository repo) {
-    PaymentService paymentService = new PaymentService(getViewProcessor(), getUserConfigMaster(), getPositionSource(), getSecuritySource());
-    ComponentInfo info = new ComponentInfo(PaymentService.class, getClassifier());
+
+  protected PaymentService initPaymentService(final ComponentRepository repo) {
+    final PaymentService paymentService = new PaymentService(getViewProcessor(), getUserConfigMaster(), getPositionSource(), getSecuritySource());
+    final ComponentInfo info = new ComponentInfo(PaymentService.class, getClassifier());
     repo.registerComponent(info, paymentService);
     return paymentService;
   }

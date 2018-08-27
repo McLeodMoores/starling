@@ -31,7 +31,7 @@ public class ViewDefinitionEntriesResource {
 
   private final ConfigSource _configSource;
 
-  public ViewDefinitionEntriesResource(ConfigSource configSource) {
+  public ViewDefinitionEntriesResource(final ConfigSource configSource) {
     _configSource = configSource;
   }
 
@@ -41,9 +41,9 @@ public class ViewDefinitionEntriesResource {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public String getViewDefinitionEntriesJson() {
-    Collection<ConfigItem<ViewDefinition>> viewDefs = _configSource.getAll(ViewDefinition.class, VersionCorrection.LATEST);
-    List<Map<String, Object>> viewDefList = new ArrayList<Map<String, Object>>(viewDefs.size());
-    for (ConfigItem<ViewDefinition> viewDef : viewDefs) {
+    final Collection<ConfigItem<ViewDefinition>> viewDefs = _configSource.getAll(ViewDefinition.class, VersionCorrection.LATEST);
+    final List<Map<String, Object>> viewDefList = new ArrayList<>(viewDefs.size());
+    for (final ConfigItem<ViewDefinition> viewDef : viewDefs) {
       viewDefList.add(ImmutableMap.<String, Object>of("id", viewDef.getObjectId(), "name", viewDef.getName()));
     }
     return new JSONArray(viewDefList).toString();

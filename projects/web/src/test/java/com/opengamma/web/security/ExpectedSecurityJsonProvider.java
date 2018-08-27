@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.joda.beans.Bean;
 import org.json.JSONObject;
 
 import com.google.common.collect.Maps;
@@ -45,12 +44,12 @@ import com.opengamma.util.time.Expiry;
   private static final String TEMPLATE_DATA = "template_data";
 
   @Override
-  public JSONObject visitEquitySecurity(EquitySecurity security) {
-    Map<String, Object> secMap = Maps.newHashMap();
+  public JSONObject visitEquitySecurity(final EquitySecurity security) {
+    final Map<String, Object> secMap = Maps.newHashMap();
 
-    Map<String, Object> templateData = Maps.newHashMap();
+    final Map<String, Object> templateData = Maps.newHashMap();
     addDefaultFields(security, templateData);
-    
+
     if (StringUtils.isNotBlank(security.getShortName())) {
       templateData.put("shortName", security.getShortName());
     }
@@ -76,63 +75,63 @@ import com.opengamma.util.time.Expiry;
   }
 
   @Override
-  public JSONObject visitAgricultureFutureSecurity(AgricultureFutureSecurity security) {
+  public JSONObject visitAgricultureFutureSecurity(final AgricultureFutureSecurity security) {
     return visitFutureSecurity(security);
   }
 
   @Override
-  public JSONObject visitBondFutureSecurity(BondFutureSecurity security) {
+  public JSONObject visitBondFutureSecurity(final BondFutureSecurity security) {
     return visitFutureSecurity(security);
   }
 
   @Override
-  public JSONObject visitEnergyFutureSecurity(EnergyFutureSecurity security) {
+  public JSONObject visitEnergyFutureSecurity(final EnergyFutureSecurity security) {
     return visitFutureSecurity(security);
   }
 
   @Override
-  public JSONObject visitEquityFutureSecurity(EquityFutureSecurity security) {
+  public JSONObject visitEquityFutureSecurity(final EquityFutureSecurity security) {
     return visitFutureSecurity(security);
   }
 
   @Override
-  public JSONObject visitEquityIndexDividendFutureSecurity(EquityIndexDividendFutureSecurity security) {
+  public JSONObject visitEquityIndexDividendFutureSecurity(final EquityIndexDividendFutureSecurity security) {
     return visitFutureSecurity(security);
   }
 
   @Override
-  public JSONObject visitFXFutureSecurity(FXFutureSecurity security) {
+  public JSONObject visitFXFutureSecurity(final FXFutureSecurity security) {
     return visitFutureSecurity(security);
   }
 
   @Override
-  public JSONObject visitIndexFutureSecurity(IndexFutureSecurity security) {
+  public JSONObject visitIndexFutureSecurity(final IndexFutureSecurity security) {
     return visitFutureSecurity(security);
   }
 
   @Override
-  public JSONObject visitInterestRateFutureSecurity(InterestRateFutureSecurity security) {
+  public JSONObject visitInterestRateFutureSecurity(final InterestRateFutureSecurity security) {
     return visitFutureSecurity(security);
   }
 
   @Override
-  public JSONObject visitMetalFutureSecurity(MetalFutureSecurity security) {
+  public JSONObject visitMetalFutureSecurity(final MetalFutureSecurity security) {
     return visitFutureSecurity(security);
   }
 
   @Override
-  public JSONObject visitStockFutureSecurity(StockFutureSecurity security) {
+  public JSONObject visitStockFutureSecurity(final StockFutureSecurity security) {
     return visitFutureSecurity(security);
   }
 
-  private JSONObject visitFutureSecurity(FutureSecurity security) {
-    JSONObject result = security.accept(new FinancialSecurityVisitorSameValueAdapter<JSONObject>(null) {
+  private JSONObject visitFutureSecurity(final FutureSecurity security) {
+    final JSONObject result = security.accept(new FinancialSecurityVisitorSameValueAdapter<JSONObject>(null) {
 
       @Override
-      public JSONObject visitBondFutureSecurity(BondFutureSecurity security) {
-        Map<String, Object> secMap = Maps.newHashMap();
+      public JSONObject visitBondFutureSecurity(final BondFutureSecurity security) {
+        final Map<String, Object> secMap = Maps.newHashMap();
 
-        Map<String, Object> templateData = Maps.newHashMap();
+        final Map<String, Object> templateData = Maps.newHashMap();
         addDefaultFields(security, templateData);
         addExpiry(templateData, security.getExpiry());
         templateData.put("firstDeliveryDate", security.getFirstDeliveryDate().toString());
@@ -146,10 +145,10 @@ import com.opengamma.util.time.Expiry;
         if (security.getCurrency() != null && StringUtils.isNotBlank(security.getCurrency().getCode())) {
           templateData.put("currency", security.getCurrency().getCode());
         }
-        List<BondFutureDeliverable> basket = security.getBasket();
+        final List<BondFutureDeliverable> basket = security.getBasket();
         if (!basket.isEmpty()) {
-          Map<String, String> underlyingBond = Maps.newHashMap();
-          for (BondFutureDeliverable bondFutureDeliverable : basket) {
+          final Map<String, String> underlyingBond = Maps.newHashMap();
+          for (final BondFutureDeliverable bondFutureDeliverable : basket) {
             underlyingBond.put(ExternalSchemes.BLOOMBERG_TICKER.getName() + "-" + bondFutureDeliverable.getIdentifiers().getValue(ExternalSchemes.BLOOMBERG_TICKER),
               String.valueOf(bondFutureDeliverable.getConversionFactor()));
           }
@@ -164,15 +163,15 @@ import com.opengamma.util.time.Expiry;
     });
     return result;
   }
-  
-  private void addSecurityXml(FinancialSecurity security, Map<String, Object> secMap) {
-    String secXml = JodaBeanSerialization.serializer(true).xmlWriter().write((Bean) security, true);
+
+  private void addSecurityXml(final FinancialSecurity security, final Map<String, Object> secMap) {
+    final String secXml = JodaBeanSerialization.serializer(true).xmlWriter().write(security, true);
     secMap.put("securityXml", secXml);
   }
 
-  private void addExternalIds(FinancialSecurity security, Map<String, Object> secMap) {
-    Map<String, String> identifiers = Maps.newHashMap();
-    ExternalIdBundle externalIdBundle = security.getExternalIdBundle();
+  private void addExternalIds(final FinancialSecurity security, final Map<String, Object> secMap) {
+    final Map<String, String> identifiers = Maps.newHashMap();
+    final ExternalIdBundle externalIdBundle = security.getExternalIdBundle();
     if (externalIdBundle.getExternalId(ExternalSchemes.BLOOMBERG_BUID) != null) {
       identifiers.put(ExternalSchemes.BLOOMBERG_BUID.getName(), ExternalSchemes.BLOOMBERG_BUID.getName() + "-" + externalIdBundle.getValue(ExternalSchemes.BLOOMBERG_BUID));
     }
@@ -191,7 +190,7 @@ import com.opengamma.util.time.Expiry;
     secMap.put("identifiers", identifiers);
   }
 
-  private void addDefaultFields(FinancialSecurity security, Map<String, Object> templateData) {
+  private void addDefaultFields(final FinancialSecurity security, final Map<String, Object> templateData) {
     if (StringUtils.isNotBlank(security.getName())) {
       templateData.put("name", security.getName());
     }
@@ -209,8 +208,8 @@ import com.opengamma.util.time.Expiry;
     }
   }
 
-  private void addExpiry(Map<String, Object> templateData, Expiry expiry) {
-    Map<String, Object> expiryDateMap = Maps.newHashMap();
+  private void addExpiry(final Map<String, Object> templateData, final Expiry expiry) {
+    final Map<String, Object> expiryDateMap = Maps.newHashMap();
     expiryDateMap.put("datetime", expiry.getExpiry().toOffsetDateTime().toString());
     expiryDateMap.put("timezone", expiry.getExpiry().getZone().toString());
     templateData.put("expiryAccuracy", expiry.getAccuracy().toString().replace("_", " "));

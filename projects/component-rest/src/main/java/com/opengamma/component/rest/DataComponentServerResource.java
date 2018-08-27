@@ -47,7 +47,7 @@ public class DataComponentServerResource extends AbstractDataResource {
    */
   private static final Comparator<Class<?>> ORDER_CLASS = new Comparator<Class<?>>() {
     @Override
-    public int compare(Class<?> cls1, Class<?> cls2) {
+    public int compare(final Class<?> cls1, final Class<?> cls2) {
       return cls1.getSimpleName().compareTo(cls2.getSimpleName());
     }
   };
@@ -56,7 +56,7 @@ public class DataComponentServerResource extends AbstractDataResource {
    */
   private static final Comparator<ComponentInfo> ORDER_CLASSIFIER = new Comparator<ComponentInfo>() {
     @Override
-    public int compare(ComponentInfo info1, ComponentInfo info2) {
+    public int compare(final ComponentInfo info1, final ComponentInfo info2) {
       int cmp = 0;
       if (info1.getAttributes().containsKey(ComponentInfoAttributes.LEVEL) && info2.getAttributes().containsKey(ComponentInfoAttributes.LEVEL) == false) {
         return -1;
@@ -65,11 +65,11 @@ public class DataComponentServerResource extends AbstractDataResource {
         return 1;
       }
       if (info1.getAttributes().containsKey(ComponentInfoAttributes.LEVEL) && info2.getAttributes().containsKey(ComponentInfoAttributes.LEVEL)) {
-        String str1 = info1.getAttribute(ComponentInfoAttributes.LEVEL);
-        String str2 = info2.getAttribute(ComponentInfoAttributes.LEVEL);
+        final String str1 = info1.getAttribute(ComponentInfoAttributes.LEVEL);
+        final String str2 = info2.getAttribute(ComponentInfoAttributes.LEVEL);
         cmp = NumberUtils.toInt(str2) - NumberUtils.toInt(str1);  // reverse order
       }
-      cmp = (cmp == 0 ? info1.getClassifier().compareTo(info2.getClassifier()) : cmp);
+      cmp = cmp == 0 ? info1.getClassifier().compareTo(info2.getClassifier()) : cmp;
       return cmp;
     }
   };
@@ -85,7 +85,7 @@ public class DataComponentServerResource extends AbstractDataResource {
 
   /**
    * Creates the resource.
-   * 
+   *
    * @param localComponents  the managed components, not null
    * @param remoteComponents  the republished remote components, not null
    */
@@ -98,7 +98,7 @@ public class DataComponentServerResource extends AbstractDataResource {
   //-------------------------------------------------------------------------
   /**
    * Gets the components.
-   * 
+   *
    * @return the components, not null
    */
   public List<RestComponent> getComponents() {
@@ -114,21 +114,21 @@ public class DataComponentServerResource extends AbstractDataResource {
 
   @GET
   public Response getComponentInfos() {
-    ComponentServer server = createServerInfo();
+    final ComponentServer server = createServerInfo();
     return responseOkObject(server);
   }
 
   @GET
   @Produces(value = MediaType.TEXT_HTML)
-  public String getComponentInfosHtml(@Context ServletContext servletContext, @Context UriInfo uriInfo) {
-    ComponentServer server = createServerInfo();
+  public String getComponentInfosHtml(@Context final ServletContext servletContext, @Context final UriInfo uriInfo) {
+    final ComponentServer server = createServerInfo();
     server.setUri(uriInfo.getBaseUri());
-    Multimap<Class<?>, ComponentInfo> byType = TreeMultimap.create(ORDER_CLASS, ORDER_CLASSIFIER);
-    for (ComponentInfo info : server.getComponentInfos()) {
+    final Multimap<Class<?>, ComponentInfo> byType = TreeMultimap.create(ORDER_CLASS, ORDER_CLASSIFIER);
+    for (final ComponentInfo info : server.getComponentInfos()) {
       byType.put(info.getType(), info);
     }
-    FreemarkerOutputter freemarker = new FreemarkerOutputter(servletContext);
-    FlexiBean out = FreemarkerOutputter.createRootData(uriInfo);
+    final FreemarkerOutputter freemarker = new FreemarkerOutputter(servletContext);
+    final FlexiBean out = FreemarkerOutputter.createRootData(uriInfo);
     out.put("componentServer", server);
     out.put("infosByType", byType);
     out.put("uris", new WebHomeUris(uriInfo));
@@ -136,17 +136,17 @@ public class DataComponentServerResource extends AbstractDataResource {
   }
 
   private ComponentServer createServerInfo() {
-    ComponentServer server = new ComponentServer(URI.create("components"));
+    final ComponentServer server = new ComponentServer(URI.create("components"));
     server.getComponentInfos().addAll(_remoteComponents);
-    for (RestComponent component : _localComponents) {
+    for (final RestComponent component : _localComponents) {
       server.getComponentInfos().add(component.getInfo());
     }
     return server;
   }
 
   @Path("{type}/{classifier}")
-  public Object findComponent(@PathParam("type") String type, @PathParam("classifier") String classifier) {
-    for (RestComponent component : _localComponents) {
+  public Object findComponent(@PathParam("type") final String type, @PathParam("classifier") final String classifier) {
+    for (final RestComponent component : _localComponents) {
       if (component.getInfo().getType().getSimpleName().equalsIgnoreCase(type) && component.getInfo().getClassifier().equalsIgnoreCase(classifier)) {
         return component.getInstance();
       }

@@ -42,7 +42,7 @@ public class NamedThreadPoolFactory implements ThreadFactory {
    * @param makeDaemon specifies whether to use daemon threads
    * @return a new executor service
    */
-  public static ExecutorService newCachedThreadPool(String poolName, boolean makeDaemon) {
+  public static ExecutorService newCachedThreadPool(final String poolName, final boolean makeDaemon) {
     return new MdcAwareThreadPoolExecutor(new NamedThreadPoolFactory(poolName, makeDaemon));
   }
 
@@ -52,7 +52,7 @@ public class NamedThreadPoolFactory implements ThreadFactory {
    * @param poolName the name to be given to the threads used by the pool
    * @return a new executor service
    */
-  public static ExecutorService newCachedThreadPool(String poolName) {
+  public static ExecutorService newCachedThreadPool(final String poolName) {
     return newCachedThreadPool(poolName, true);
   }
 
@@ -61,7 +61,7 @@ public class NamedThreadPoolFactory implements ThreadFactory {
    *
    * @param poolName the pool name, not null
    */
-  public NamedThreadPoolFactory(String poolName) {
+  public NamedThreadPoolFactory(final String poolName) {
     this(poolName, true);
   }
 
@@ -71,12 +71,12 @@ public class NamedThreadPoolFactory implements ThreadFactory {
    * @param poolName the pool name, not null
    * @param makeDaemon whether to make the thread a daemon
    */
-  public NamedThreadPoolFactory(String poolName, boolean makeDaemon) {
+  public NamedThreadPoolFactory(final String poolName, final boolean makeDaemon) {
     ArgumentChecker.notNull(poolName, "poolName");
     _poolName = poolName;
     _makeDaemon = makeDaemon;
-    SecurityManager s = System.getSecurityManager();
-    _group = (s != null) ? s.getThreadGroup() : Thread.currentThread().getThreadGroup();
+    final SecurityManager s = System.getSecurityManager();
+    _group = s != null ? s.getThreadGroup() : Thread.currentThread().getThreadGroup();
     _namePrefix = _poolName + "-";
   }
 
@@ -109,9 +109,9 @@ public class NamedThreadPoolFactory implements ThreadFactory {
    * @return the created thread, not null
    */
   @Override
-  public Thread newThread(Runnable runnable) {
-    String threadName = _namePrefix + _nextThreadNumber.incrementAndGet();
-    Thread t = createThread(_group, runnable, threadName, 0);
+  public Thread newThread(final Runnable runnable) {
+    final String threadName = _namePrefix + _nextThreadNumber.incrementAndGet();
+    final Thread t = createThread(_group, runnable, threadName, 0);
     if (t.isDaemon() != _makeDaemon) {
       t.setDaemon(_makeDaemon);
     }

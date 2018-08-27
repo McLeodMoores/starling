@@ -14,7 +14,7 @@ import com.opengamma.engine.target.ComputationTargetType;
  */
 public class SimpleRenamingFunction extends ValueRenamingFunction {
 
-  public SimpleRenamingFunction(String satisfiedByTheValueName, String askForThisName) {
+  public SimpleRenamingFunction(final String satisfiedByTheValueName, final String askForThisName) {
     super(Collections.singleton(satisfiedByTheValueName), askForThisName, ComputationTargetType.SECURITY.or(ComputationTargetType.POSITION).or(ComputationTargetType.TRADE));
   }
 

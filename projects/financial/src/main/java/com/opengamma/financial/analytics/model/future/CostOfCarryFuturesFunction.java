@@ -38,16 +38,16 @@ public abstract class CostOfCarryFuturesFunction<T> extends FuturesFunction<T> {
    * @param costOfCarryField The field name of the historical time series for cost of carry e.g. "COST_OF_CARRY". Set in *FunctionConfiguration
    * @param resolutionKey The key defining how the time series resolution is to occur e.g. "DEFAULT_TSS_CONFIG"
    */
-  public CostOfCarryFuturesFunction(final String valueRequirementName, final InstrumentDerivativeVisitor<SimpleFutureDataBundle, T> calculator, 
-      String closingPriceField, String costOfCarryField, String resolutionKey) {
+  public CostOfCarryFuturesFunction(final String valueRequirementName, final InstrumentDerivativeVisitor<SimpleFutureDataBundle, T> calculator,
+      final String closingPriceField, final String costOfCarryField, final String resolutionKey) {
     super(valueRequirementName, calculator, closingPriceField, costOfCarryField, resolutionKey);
   }
 
-  
+
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final FutureSecurity security = (FutureSecurity)  target.getTrade().getSecurity();
-    final Set<ValueRequirement> requirements = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> requirements = new HashSet<>();
     // Spot
     final ValueRequirement refPriceReq = getReferencePriceRequirement(context, security);
     if (refPriceReq == null) {

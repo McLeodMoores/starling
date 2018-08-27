@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.test;
@@ -49,7 +49,7 @@ public final class Profiler {
       return;
     }
     do {
-      int lock = _lock.get();
+      final int lock = _lock.get();
       if (lock == 0) {
         if (_lock.compareAndSet(0, 1)) {
           break;
@@ -111,7 +111,7 @@ public final class Profiler {
       _snapshotOperations = 0;
       _reset = reset;
     }
-    _snapshotTime += (double) _time.getAndSet(0) / 1e6;
+    _snapshotTime += _time.getAndSet(0) / 1e6;
     _snapshotOperations += _operations.getAndSet(0);
     assert _lock.get() == -1;
     _lock.set(0);
@@ -131,15 +131,16 @@ public final class Profiler {
     return create(clazz.getName() + '%' + name);
   }
 
-  private static void insertNoClash(final Map<String, Object[]> report, final Object[] arg, int dot) {
+  private static void insertNoClash(final Map<String, Object[]> report, final Object[] arg, final int dot) {
     final String key = (String) arg[0];
-    while (dot >= 0) {
-      final String substring = key.substring(dot + 1);
+    int d = dot;
+    while (d >= 0) {
+      final String substring = key.substring(d + 1);
       if (report.containsKey(substring)) {
         final Object[] clash = report.remove(substring);
         final int xdot = key.length() - substring.length() - 2;
         insertNoClash(report, clash, key.lastIndexOf('.', xdot));
-        dot = key.lastIndexOf('.', dot - 1);
+        d = key.lastIndexOf('.', d - 1);
       } else {
         report.put(substring, arg);
         return;
@@ -149,19 +150,19 @@ public final class Profiler {
   }
 
   private static synchronized void printProfilers() {
-    final Map<String, Object[]> report = new HashMap<String, Object[]>();
-    for (Profiler profiler : PROFILERS) {
+    final Map<String, Object[]> report = new HashMap<>();
+    for (final Profiler profiler : PROFILERS) {
       profiler.snapshot();
-      final Object[] arg = new Object[] {profiler._name, profiler._snapshotOperations, profiler._snapshotTime, (double) profiler._snapshotTime / (double) profiler._snapshotOperations };
+      final Object[] arg = new Object[] {profiler._name, profiler._snapshotOperations, profiler._snapshotTime, profiler._snapshotTime / profiler._snapshotOperations };
       insertNoClash(report, arg, profiler._name.lastIndexOf('.'));
     }
-    List<String> keys = new ArrayList<String>(report.keySet());
+    final List<String> keys = new ArrayList<>(report.keySet());
     Collections.sort(keys, new Comparator<String>() {
       @Override
       public int compare(final String a, final String b) {
         final Object[] as = report.get(a);
         final Object[] bs = report.get(b);
-        double d = (Double) bs[2] - (Double) as[2]; // sort by total time consumed 
+        final double d = (Double) bs[2] - (Double) as[2]; // sort by total time consumed
         if (d < 0) {
           return -1;
         } else if (d > 0) {
@@ -171,7 +172,7 @@ public final class Profiler {
         }
       }
     });
-    for (String key : keys) {
+    for (final String key : keys) {
       final Object[] values = report.get(key);
       values[0] = key;
       LOGGER.info("{} - {} in {}ms ({} ms/op)", values);
@@ -195,11 +196,11 @@ public final class Profiler {
         for (int count = 0;; count++) {
           try {
             Thread.sleep(period);
-          } catch (InterruptedException e) {
+          } catch (final InterruptedException e) {
             return;
           }
           if (resetPeriod != 0) {
-            if ((count % resetPeriod) == 0) {
+            if (count % resetPeriod == 0) {
               s_reset++;
             }
           }

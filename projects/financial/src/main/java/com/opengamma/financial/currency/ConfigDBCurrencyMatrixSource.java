@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.currency;
@@ -25,7 +25,7 @@ public class ConfigDBCurrencyMatrixSource extends AbstractSource<CurrencyMatrix>
 
   /**
    * Creates an instance backed by a config source.
-   * 
+   *
    * @param configSource the source, not null
    */
   public ConfigDBCurrencyMatrixSource(final ConfigSource configSource) {
@@ -36,7 +36,7 @@ public class ConfigDBCurrencyMatrixSource extends AbstractSource<CurrencyMatrix>
   //-------------------------------------------------------------------------
   /**
    * Gets the config source.
-   * 
+   *
    * @return the config source, not null
    */
   protected ConfigSource getConfigSource() {
@@ -51,12 +51,12 @@ public class ConfigDBCurrencyMatrixSource extends AbstractSource<CurrencyMatrix>
   }
 
   @Override
-  public CurrencyMatrix get(UniqueId identifier) {
+  public CurrencyMatrix get(final UniqueId identifier) {
     return getConfigSource().getConfig(CurrencyMatrix.class, identifier);
   }
 
   @Override
-  public CurrencyMatrix get(ObjectId identifier, VersionCorrection versionCorrection) {
+  public CurrencyMatrix get(final ObjectId identifier, final VersionCorrection versionCorrection) {
     return getConfigSource().getConfig(CurrencyMatrix.class, identifier, versionCorrection);
   }
 

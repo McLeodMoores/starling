@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.ircurve;
@@ -14,9 +14,9 @@ import org.threeten.bp.temporal.TemporalAdjusters;
 public class LastWeekdayAdjuster implements TemporalAdjuster {
 
   @Override
-  public Temporal adjustInto(Temporal temporal) {
+  public Temporal adjustInto(final Temporal temporal) {
     final Temporal unadjustedLastDayInMonth = temporal.with(TemporalAdjusters.lastDayOfMonth());
-    DayOfWeek lastWeekday = DayOfWeek.from(unadjustedLastDayInMonth);
+    final DayOfWeek lastWeekday = DayOfWeek.from(unadjustedLastDayInMonth);
     if (lastWeekday.equals(DayOfWeek.SATURDAY) || lastWeekday.equals(DayOfWeek.SUNDAY)) {
       return unadjustedLastDayInMonth.with(TemporalAdjusters.previous(DayOfWeek.FRIDAY));
     } else {

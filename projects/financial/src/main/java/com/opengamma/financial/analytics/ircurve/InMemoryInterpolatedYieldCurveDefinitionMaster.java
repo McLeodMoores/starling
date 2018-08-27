@@ -44,7 +44,7 @@ public class InMemoryInterpolatedYieldCurveDefinitionMaster implements Interpola
   /**
    * The in-memory definitions.
    */
-  private final Map<Pair<Currency, String>, TreeMap<Instant, YieldCurveDefinition>> _definitions = new HashMap<Pair<Currency, String>, TreeMap<Instant, YieldCurveDefinition>>();
+  private final Map<Pair<Currency, String>, TreeMap<Instant, YieldCurveDefinition>> _definitions = new HashMap<>();
   /**
    * The change manager.
    */
@@ -65,7 +65,7 @@ public class InMemoryInterpolatedYieldCurveDefinitionMaster implements Interpola
 
   /**
    * Gets the scheme in use for unique identifier.
-   * 
+   *
    * @return the scheme, not null
    */
   public String getUniqueIdScheme() {
@@ -74,7 +74,7 @@ public class InMemoryInterpolatedYieldCurveDefinitionMaster implements Interpola
 
   /**
    * Sets the scheme in use for unique identifier.
-   * 
+   *
    * @param scheme the scheme for unique identifier, not null
    */
   public void setUniqueIdScheme(final String scheme) {
@@ -84,7 +84,7 @@ public class InMemoryInterpolatedYieldCurveDefinitionMaster implements Interpola
 
   //-------------------------------------------------------------------------
   @Override
-  public synchronized YieldCurveDefinition getDefinition(Currency currency, String name) {
+  public synchronized YieldCurveDefinition getDefinition(final Currency currency, final String name) {
     return getDefinition(currency, name, VersionCorrection.LATEST);
   }
 
@@ -96,7 +96,7 @@ public class InMemoryInterpolatedYieldCurveDefinitionMaster implements Interpola
     if (definitions == null) {
       return null;
     }
-    final Map.Entry<Instant, YieldCurveDefinition> entry = (versionCorrection.getVersionAsOf() == null) ? definitions.lastEntry() : definitions
+    final Map.Entry<Instant, YieldCurveDefinition> entry = versionCorrection.getVersionAsOf() == null ? definitions.lastEntry() : definitions
         .floorEntry(versionCorrection.getVersionAsOf());
     if (entry == null) {
       return null;
@@ -106,7 +106,7 @@ public class InMemoryInterpolatedYieldCurveDefinitionMaster implements Interpola
 
   //-------------------------------------------------------------------------
   @Override
-  public synchronized YieldCurveDefinitionDocument add(YieldCurveDefinitionDocument document) {
+  public synchronized YieldCurveDefinitionDocument add(final YieldCurveDefinitionDocument document) {
     ArgumentChecker.notNull(document, "document");
     ArgumentChecker.notNull(document.getYieldCurveDefinition(), "document.yieldCurveDefinition");
     final Currency currency = document.getYieldCurveDefinition().getCurrency();
@@ -115,8 +115,8 @@ public class InMemoryInterpolatedYieldCurveDefinitionMaster implements Interpola
     if (_definitions.containsKey(key)) {
       throw new IllegalArgumentException("Duplicate definition");
     }
-    final TreeMap<Instant, YieldCurveDefinition> value = new TreeMap<Instant, YieldCurveDefinition>();
-    Instant now = Instant.now();
+    final TreeMap<Instant, YieldCurveDefinition> value = new TreeMap<>();
+    final Instant now = Instant.now();
     value.put(now, document.getYieldCurveDefinition());
     _definitions.put(key, value);
     final UniqueId uid = UniqueId.of(getUniqueIdScheme(), name + "_" + currency.getCode());
@@ -126,7 +126,7 @@ public class InMemoryInterpolatedYieldCurveDefinitionMaster implements Interpola
   }
 
   @Override
-  public synchronized YieldCurveDefinitionDocument addOrUpdate(YieldCurveDefinitionDocument document) {
+  public synchronized YieldCurveDefinitionDocument addOrUpdate(final YieldCurveDefinitionDocument document) {
     ArgumentChecker.notNull(document, "document");
     ArgumentChecker.notNull(document.getYieldCurveDefinition(), "document.yieldCurveDefinition");
     final Currency currency = document.getYieldCurveDefinition().getCurrency();
@@ -134,13 +134,13 @@ public class InMemoryInterpolatedYieldCurveDefinitionMaster implements Interpola
     final Pair<Currency, String> key = Pairs.of(currency, name);
     TreeMap<Instant, YieldCurveDefinition> value = _definitions.get(key);
     final UniqueId uid = UniqueId.of(getUniqueIdScheme(), name + "_" + currency.getCode());
-    Instant now = Instant.now();
+    final Instant now = Instant.now();
     if (value != null) {
       // TODO: Need to housekeep the map to release memory from old entries; this was previously done based on the latch version, but we've taken that out
       value.put(now, document.getYieldCurveDefinition());
       changeManager().entityChanged(ChangeType.CHANGED, uid.getObjectId(), null, null, now);
     } else {
-      value = new TreeMap<Instant, YieldCurveDefinition>();
+      value = new TreeMap<>();
       value.put(now, document.getYieldCurveDefinition());
       _definitions.put(key, value);
       changeManager().entityChanged(ChangeType.ADDED, uid.getObjectId(), document.getVersionFromInstant(), document.getVersionToInstant(), now);
@@ -150,12 +150,12 @@ public class InMemoryInterpolatedYieldCurveDefinitionMaster implements Interpola
   }
 
   @Override
-  public YieldCurveDefinitionDocument correct(YieldCurveDefinitionDocument document) {
+  public YieldCurveDefinitionDocument correct(final YieldCurveDefinitionDocument document) {
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public synchronized YieldCurveDefinitionDocument get(UniqueId uid) {
+  public synchronized YieldCurveDefinitionDocument get(final UniqueId uid) {
     ArgumentChecker.notNull(uid, "objectIdentifiable");
     if (!uid.isLatest()) {
       throw new IllegalArgumentException("Only latest version supported by '" + getUniqueIdScheme() + "'");
@@ -172,7 +172,7 @@ public class InMemoryInterpolatedYieldCurveDefinitionMaster implements Interpola
     final Currency currency;
     try {
       currency = Currency.of(iso);
-    } catch (IllegalArgumentException e) {
+    } catch (final IllegalArgumentException e) {
       throw new DataNotFoundException("Identifier '" + uid.getValue() + "' not valid for '" + getUniqueIdScheme() + "'", e);
     }
     final TreeMap<Instant, YieldCurveDefinition> definitions = _definitions.get(Pairs.of(currency, name));
@@ -187,9 +187,9 @@ public class InMemoryInterpolatedYieldCurveDefinitionMaster implements Interpola
   }
 
   @Override
-  public synchronized YieldCurveDefinitionDocument get(ObjectIdentifiable objectIdable, VersionCorrection versionCorrection) {
+  public synchronized YieldCurveDefinitionDocument get(final ObjectIdentifiable objectIdable, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(objectIdable, "objectIdable");
-    ObjectId objectId = objectIdable.getObjectId();
+    final ObjectId objectId = objectIdable.getObjectId();
     if (!getUniqueIdScheme().equals(objectId.getScheme())) {
       throw new DataNotFoundException("Scheme '" + objectId.getScheme() + "' not valid for '" + getUniqueIdScheme() + "'");
     }
@@ -202,7 +202,7 @@ public class InMemoryInterpolatedYieldCurveDefinitionMaster implements Interpola
     final Currency currency;
     try {
       currency = Currency.of(iso);
-    } catch (IllegalArgumentException e) {
+    } catch (final IllegalArgumentException e) {
       throw new DataNotFoundException("Identifier '" + objectId.getValue() + "' not valid for '" + getUniqueIdScheme() + "'", e);
     }
     final TreeMap<Instant, YieldCurveDefinition> definitions = _definitions.get(Pairs.of(currency, name));
@@ -217,7 +217,7 @@ public class InMemoryInterpolatedYieldCurveDefinitionMaster implements Interpola
   }
 
   @Override
-  public synchronized void remove(ObjectIdentifiable objectIdentifiable) {
+  public synchronized void remove(final ObjectIdentifiable objectIdentifiable) {
     ArgumentChecker.notNull(objectIdentifiable, "objectIdentifiable");
     if (!getUniqueIdScheme().equals(objectIdentifiable.getObjectId().getScheme())) {
       throw new DataNotFoundException("Scheme '" + objectIdentifiable.getObjectId().getScheme() + "' not valid for '" + getUniqueIdScheme() + "'");
@@ -231,7 +231,7 @@ public class InMemoryInterpolatedYieldCurveDefinitionMaster implements Interpola
     final Currency currency;
     try {
       currency = Currency.of(iso);
-    } catch (IllegalArgumentException e) {
+    } catch (final IllegalArgumentException e) {
       throw new DataNotFoundException("Identifier '" + objectIdentifiable.getObjectId().getValue() + "' not valid for '" + getUniqueIdScheme() + "'", e);
     }
     final Pair<Currency, String> key = Pairs.of(currency, name);
@@ -247,7 +247,7 @@ public class InMemoryInterpolatedYieldCurveDefinitionMaster implements Interpola
   }
 
   @Override
-  public synchronized YieldCurveDefinitionDocument update(YieldCurveDefinitionDocument document) {
+  public synchronized YieldCurveDefinitionDocument update(final YieldCurveDefinitionDocument document) {
     ArgumentChecker.notNull(document, "document");
     ArgumentChecker.notNull(document.getYieldCurveDefinition(), "document.yieldCurveDefinition");
     final Currency currency = document.getYieldCurveDefinition().getCurrency();
@@ -262,7 +262,7 @@ public class InMemoryInterpolatedYieldCurveDefinitionMaster implements Interpola
       throw new DataNotFoundException("UID '" + uid + "' not found");
     }
     // TODO: Need to housekeep the map to release memory from old entries; this was previously done based on the latch version, but we've taken that out
-    Instant now = Instant.now();
+    final Instant now = Instant.now();
     value.put(now, document.getYieldCurveDefinition());
     document.setUniqueId(uid);
     changeManager().entityChanged(ChangeType.CHANGED, uid.getObjectId(), null, null, now);
@@ -275,13 +275,13 @@ public class InMemoryInterpolatedYieldCurveDefinitionMaster implements Interpola
   }
 
   @Override
-  public List<UniqueId> replaceVersions(ObjectIdentifiable objectIdentifiable, List<YieldCurveDefinitionDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersions(final ObjectIdentifiable objectIdentifiable, final List<YieldCurveDefinitionDocument> replacementDocuments) {
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
     ArgumentChecker.notNull(objectIdentifiable, "objectIdentifiable");
 
     final Instant now = Instant.now();
 
-    for (YieldCurveDefinitionDocument replacementDocument : replacementDocuments) {
+    for (final YieldCurveDefinitionDocument replacementDocument : replacementDocuments) {
       ArgumentChecker.notNull(replacementDocument, "document");
       ArgumentChecker.notNull(replacementDocument.getYieldCurveDefinition(), "document.yieldCurveDefinition");
       final Currency currency = replacementDocument.getYieldCurveDefinition().getCurrency();
@@ -290,13 +290,13 @@ public class InMemoryInterpolatedYieldCurveDefinitionMaster implements Interpola
       ArgumentChecker.isTrue(id.equals(objectIdentifiable), "Invalid object identifier");
     }
 
-    YieldCurveDefinitionDocument storedDocument = get(objectIdentifiable, null);
+    final YieldCurveDefinitionDocument storedDocument = get(objectIdentifiable, null);
     if (storedDocument == null) {
       throw new DataNotFoundException("Document not found: " + objectIdentifiable);
     }
     final Currency currency = storedDocument.getYieldCurveDefinition().getCurrency();
     final String name = storedDocument.getYieldCurveDefinition().getName();
-    Pair<Currency, String> key = Pairs.of(currency, name);
+    final Pair<Currency, String> key = Pairs.of(currency, name);
 
     final TreeMap<Instant, YieldCurveDefinition> value = _definitions.get(key);
     if (value == null) {
@@ -304,9 +304,9 @@ public class InMemoryInterpolatedYieldCurveDefinitionMaster implements Interpola
     }
     // TODO: Need to housekeep the map to release memory from old entries; this was previously done based on the latch version, but we've taken that out
 
-    Instant lowestCurrentVersionFrom = value.firstKey();
+    final Instant lowestCurrentVersionFrom = value.firstKey();
 
-    List<YieldCurveDefinitionDocument> orderedReplacementDocuments = MasterUtils.adjustVersionInstants(now, lowestCurrentVersionFrom, null, replacementDocuments);
+    final List<YieldCurveDefinitionDocument> orderedReplacementDocuments = MasterUtils.adjustVersionInstants(now, lowestCurrentVersionFrom, null, replacementDocuments);
 
     final Instant lowestVersionFrom = orderedReplacementDocuments.get(0).getVersionFromInstant();
     final Instant highestVersionTo = orderedReplacementDocuments.get(orderedReplacementDocuments.size() - 1).getVersionToInstant();
@@ -315,7 +315,7 @@ public class InMemoryInterpolatedYieldCurveDefinitionMaster implements Interpola
       value.subMap(lowestVersionFrom, true, highestVersionTo, false).clear();
     }
 
-    for (YieldCurveDefinitionDocument replacementDocument : orderedReplacementDocuments) {
+    for (final YieldCurveDefinitionDocument replacementDocument : orderedReplacementDocuments) {
       value.put(replacementDocument.getVersionFromInstant(), replacementDocument.getYieldCurveDefinition());
       changeManager().entityChanged(ChangeType.CHANGED, replacementDocument.getObjectId(), null, null, now);
     }
@@ -324,13 +324,13 @@ public class InMemoryInterpolatedYieldCurveDefinitionMaster implements Interpola
   }
 
   @Override
-  public List<UniqueId> replaceAllVersions(ObjectIdentifiable objectIdentifiable, List<YieldCurveDefinitionDocument> replacementDocuments) {
+  public List<UniqueId> replaceAllVersions(final ObjectIdentifiable objectIdentifiable, final List<YieldCurveDefinitionDocument> replacementDocuments) {
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
     ArgumentChecker.notNull(objectIdentifiable, "objectIdentifiable");
 
     final Instant now = Instant.now();
 
-    for (YieldCurveDefinitionDocument replacementDocument : replacementDocuments) {
+    for (final YieldCurveDefinitionDocument replacementDocument : replacementDocuments) {
       ArgumentChecker.notNull(replacementDocument, "document");
       ArgumentChecker.notNull(replacementDocument.getYieldCurveDefinition(), "document.yieldCurveDefinition");
       final Currency currency = replacementDocument.getYieldCurveDefinition().getCurrency();
@@ -339,13 +339,13 @@ public class InMemoryInterpolatedYieldCurveDefinitionMaster implements Interpola
       ArgumentChecker.isTrue(id.equals(objectIdentifiable), "Invalid object identifier");
     }
 
-    YieldCurveDefinitionDocument storedDocument = get(objectIdentifiable, null);
+    final YieldCurveDefinitionDocument storedDocument = get(objectIdentifiable, null);
     if (storedDocument == null) {
       throw new DataNotFoundException("Document not found: " + objectIdentifiable);
     }
     final Currency currency = storedDocument.getYieldCurveDefinition().getCurrency();
     final String name = storedDocument.getYieldCurveDefinition().getName();
-    Pair<Currency, String> key = Pairs.of(currency, name);
+    final Pair<Currency, String> key = Pairs.of(currency, name);
 
     final TreeMap<Instant, YieldCurveDefinition> value = _definitions.get(key);
     if (value == null) {
@@ -353,13 +353,13 @@ public class InMemoryInterpolatedYieldCurveDefinitionMaster implements Interpola
     }
     value.clear();
 
-    List<YieldCurveDefinitionDocument> orderedReplacementDocuments = MasterUtils.adjustVersionInstants(now, null, null, replacementDocuments);
+    final List<YieldCurveDefinitionDocument> orderedReplacementDocuments = MasterUtils.adjustVersionInstants(now, null, null, replacementDocuments);
 
     final Instant lowestVersionFrom = orderedReplacementDocuments.get(0).getVersionFromInstant();
 
     ArgumentChecker.notNull(lowestVersionFrom, "You must define version from of the first document");
 
-    for (YieldCurveDefinitionDocument replacementDocument : orderedReplacementDocuments) {
+    for (final YieldCurveDefinitionDocument replacementDocument : orderedReplacementDocuments) {
       value.put(replacementDocument.getVersionFromInstant(), replacementDocument.getYieldCurveDefinition());
       changeManager().entityChanged(ChangeType.CHANGED, replacementDocument.getObjectId(), null, null, now);
     }
@@ -367,7 +367,7 @@ public class InMemoryInterpolatedYieldCurveDefinitionMaster implements Interpola
   }
 
   @Override
-  public List<UniqueId> replaceVersion(UniqueId uniqueId, List<YieldCurveDefinitionDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersion(final UniqueId uniqueId, final List<YieldCurveDefinitionDocument> replacementDocuments) {
     return replaceVersions(uniqueId.getObjectId(), replacementDocuments);
   }
 
@@ -377,8 +377,8 @@ public class InMemoryInterpolatedYieldCurveDefinitionMaster implements Interpola
   }
 
   @Override
-  public UniqueId replaceVersion(YieldCurveDefinitionDocument replacementDocument) {
-    List<UniqueId> result = replaceVersion(replacementDocument.getUniqueId(), Collections.singletonList(replacementDocument));
+  public UniqueId replaceVersion(final YieldCurveDefinitionDocument replacementDocument) {
+    final List<UniqueId> result = replaceVersion(replacementDocument.getUniqueId(), Collections.singletonList(replacementDocument));
     if (result.isEmpty()) {
       return null;
     } else {
@@ -387,8 +387,8 @@ public class InMemoryInterpolatedYieldCurveDefinitionMaster implements Interpola
   }
 
   @Override
-  public UniqueId addVersion(ObjectIdentifiable objectId, YieldCurveDefinitionDocument documentToAdd) {
-    List<UniqueId> result = replaceVersions(objectId, Collections.singletonList(documentToAdd));
+  public UniqueId addVersion(final ObjectIdentifiable objectId, final YieldCurveDefinitionDocument documentToAdd) {
+    final List<UniqueId> result = replaceVersions(objectId, Collections.singletonList(documentToAdd));
     if (result.isEmpty()) {
       return null;
     } else {
@@ -397,9 +397,9 @@ public class InMemoryInterpolatedYieldCurveDefinitionMaster implements Interpola
   }
 
   @Override
-  public Map<UniqueId, YieldCurveDefinitionDocument> get(Collection<UniqueId> uniqueIds) {
-    Map<UniqueId, YieldCurveDefinitionDocument> map = newHashMap();
-    for (UniqueId uniqueId : uniqueIds) {
+  public Map<UniqueId, YieldCurveDefinitionDocument> get(final Collection<UniqueId> uniqueIds) {
+    final Map<UniqueId, YieldCurveDefinitionDocument> map = newHashMap();
+    for (final UniqueId uniqueId : uniqueIds) {
       map.put(uniqueId, get(uniqueId));
     }
     return map;

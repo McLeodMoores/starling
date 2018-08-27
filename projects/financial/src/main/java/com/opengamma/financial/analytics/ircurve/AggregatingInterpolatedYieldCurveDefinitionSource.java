@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.ircurve;
@@ -25,7 +25,7 @@ public class AggregatingInterpolatedYieldCurveDefinitionSource implements Interp
    * The sources being aggregated.
    */
   private final Collection<InterpolatedYieldCurveDefinitionSource> _sources;
-  
+
   /**
    * The aggregating change manager
    */
@@ -33,13 +33,13 @@ public class AggregatingInterpolatedYieldCurveDefinitionSource implements Interp
 
   /**
    * Creates an instance specifying the sources.
-   * 
+   *
    * @param sources  the sources to aggregate, not null
    */
   public AggregatingInterpolatedYieldCurveDefinitionSource(final Iterable<InterpolatedYieldCurveDefinitionSource> sources) {
     _sources = ImmutableList.copyOf(sources);
-    List<ChangeProvider> underlyingChangeProviders = new ArrayList<>();
-    for (InterpolatedYieldCurveDefinitionSource source : _sources) {
+    final List<ChangeProvider> underlyingChangeProviders = new ArrayList<>();
+    for (final InterpolatedYieldCurveDefinitionSource source : _sources) {
       underlyingChangeProviders.add(source);
     }
     _changeManager = new AggregatingChangeManager(underlyingChangeProviders);;
@@ -48,8 +48,8 @@ public class AggregatingInterpolatedYieldCurveDefinitionSource implements Interp
   //-------------------------------------------------------------------------
   @Override
   public YieldCurveDefinition getDefinition(final Currency currency, final String name) {
-    for (InterpolatedYieldCurveDefinitionSource source : _sources) {
-      YieldCurveDefinition definition = source.getDefinition(currency, name);
+    for (final InterpolatedYieldCurveDefinitionSource source : _sources) {
+      final YieldCurveDefinition definition = source.getDefinition(currency, name);
       if (definition != null) {
         return definition;
       }
@@ -58,9 +58,9 @@ public class AggregatingInterpolatedYieldCurveDefinitionSource implements Interp
   }
 
   @Override
-  public YieldCurveDefinition getDefinition(Currency currency, String name, VersionCorrection versionCorrection) {
-    for (InterpolatedYieldCurveDefinitionSource source : _sources) {
-      YieldCurveDefinition definition = source.getDefinition(currency, name, versionCorrection);
+  public YieldCurveDefinition getDefinition(final Currency currency, final String name, final VersionCorrection versionCorrection) {
+    for (final InterpolatedYieldCurveDefinitionSource source : _sources) {
+      final YieldCurveDefinition definition = source.getDefinition(currency, name, versionCorrection);
       if (definition != null) {
         return definition;
       }

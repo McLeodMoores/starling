@@ -69,16 +69,16 @@ public class MetalFutureLoader extends SecurityLoader {
       FIELD_ID_ISIN,
       FIELD_ID_SEDOL1,
       FIELD_FUT_VAL_PT));
-  
+
   /**
    * The valid Bloomberg future categories for Metal Futures
    */
   public static final Set<String> VALID_FUTURE_CATEGORIES = Collections.unmodifiableSet(Sets.newHashSet(
       BBG_PRECIOUS_METAL_TYPE,
       BBG_BASE_METAL_TYPE));
-  
-  private static final Map<String, ExternalId> SPOT_MAP = new HashMap<String, ExternalId>();
-  
+
+  private static final Map<String, ExternalId> SPOT_MAP = new HashMap<>();
+
   static {
     SPOT_MAP.put("GOLD", ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, "GOLDS Comdty")); // or GOLDS Comdty?
   }
@@ -87,24 +87,24 @@ public class MetalFutureLoader extends SecurityLoader {
    * Creates an instance.
    * @param referenceDataProvider  the provider, not null
    */
-  public MetalFutureLoader(ReferenceDataProvider referenceDataProvider) {
+  public MetalFutureLoader(final ReferenceDataProvider referenceDataProvider) {
     super(LOGGER, referenceDataProvider, SecurityType.METAL_FUTURE);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  protected ManageableSecurity createSecurity(FudgeMsg fieldData) {
-    String expiryDate = fieldData.getString(FIELD_FUT_LAST_TRADE_DT);
-    String futureTradingHours = fieldData.getString(FIELD_FUT_TRADING_HRS);
-    String micExchangeCode = fieldData.getString(FIELD_ID_MIC_PRIM_EXCH);
-    String currencyStr = fieldData.getString(FIELD_CRNCY);    
-    String category = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUTURES_CATEGORY), " ");
-    Double unitNumber = fieldData.getDouble(FIELD_FUT_CONT_SIZE);
-    String unitName = fieldData.getString(FIELD_FUT_TRADING_UNITS);
-    String underlyingTicker = fieldData.getString(FIELD_UNDL_SPOT_TICKER);
-    String name = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUT_LONG_NAME), " ");
-    String bbgUnique = fieldData.getString(FIELD_ID_BBG_UNIQUE);
-    double unitAmount = Double.valueOf(fieldData.getString(FIELD_FUT_VAL_PT));
+  protected ManageableSecurity createSecurity(final FudgeMsg fieldData) {
+    final String expiryDate = fieldData.getString(FIELD_FUT_LAST_TRADE_DT);
+    final String futureTradingHours = fieldData.getString(FIELD_FUT_TRADING_HRS);
+    final String micExchangeCode = fieldData.getString(FIELD_ID_MIC_PRIM_EXCH);
+    final String currencyStr = fieldData.getString(FIELD_CRNCY);
+    final String category = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUTURES_CATEGORY), " ");
+    final Double unitNumber = fieldData.getDouble(FIELD_FUT_CONT_SIZE);
+    final String unitName = fieldData.getString(FIELD_FUT_TRADING_UNITS);
+    final String underlyingTicker = fieldData.getString(FIELD_UNDL_SPOT_TICKER);
+    final String name = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUT_LONG_NAME), " ");
+    final String bbgUnique = fieldData.getString(FIELD_ID_BBG_UNIQUE);
+    final double unitAmount = Double.valueOf(fieldData.getString(FIELD_FUT_VAL_PT));
 
     if (!isValidField(bbgUnique)) {
       LOGGER.warn("bbgUnique is null, cannot construct metal future security");
@@ -142,19 +142,19 @@ public class MetalFutureLoader extends SecurityLoader {
     if (underlyingTicker != null) {
       underlying = ExternalSchemes.bloombergTickerSecurityId(underlyingTicker);
     } else {
-      for (Map.Entry<String, ExternalId> entry : SPOT_MAP.entrySet()) {
+      for (final Map.Entry<String, ExternalId> entry : SPOT_MAP.entrySet()) {
         if (name.contains(entry.getKey())) {
           underlying = entry.getValue();
           break;
         }
       }
     }
-    Expiry expiry = decodeExpiry(expiryDate, futureTradingHours);
+    final Expiry expiry = decodeExpiry(expiryDate, futureTradingHours);
     if (expiry == null) {
       return null;
     }
-    Currency currency = Currency.parse(currencyStr);
-    MetalFutureSecurity security = new MetalFutureSecurity(expiry, micExchangeCode, micExchangeCode, currency, unitAmount, category);
+    final Currency currency = Currency.parse(currencyStr);
+    final MetalFutureSecurity security = new MetalFutureSecurity(expiry, micExchangeCode, micExchangeCode, currency, unitAmount, category);
     security.setUnitNumber(unitNumber);
     security.setUnitName(unitName);
     security.setUnderlyingId(underlying);

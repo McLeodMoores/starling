@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.web.server.conversion;
@@ -13,17 +13,17 @@ import com.opengamma.engine.value.ValueSpecification;
 public class ToStringConverter implements ResultConverter<Object> {
 
   @Override
-  public Object convertForDisplay(ResultConverterCache context, ValueSpecification valueSpec, Object value, ConversionMode mode) {
+  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final Object value, final ConversionMode mode) {
     return value.toString();
   }
 
   @Override
-  public Object convertForHistory(ResultConverterCache context, ValueSpecification valueSpec, Object value) {
+  public Object convertForHistory(final ResultConverterCache context, final ValueSpecification valueSpec, final Object value) {
     return value.toString();
   }
 
   @Override
-  public String convertToText(ResultConverterCache context, ValueSpecification valueSpec, Object value) {
+  public String convertToText(final ResultConverterCache context, final ValueSpecification valueSpec, final Object value) {
     return value.toString();
   }
 

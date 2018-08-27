@@ -64,55 +64,55 @@ public class WebExchangesResource extends AbstractWebExchangeResource {
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String getHTML(
-      @QueryParam("pgIdx") Integer pgIdx,
-      @QueryParam("pgNum") Integer pgNum,
-      @QueryParam("pgSze") Integer pgSze,
-      @QueryParam("sort") String sort,
-      @QueryParam("name") String name,
-      @QueryParam("exchangeId") List<String> exchangeIdStrs,
-      @Context UriInfo uriInfo) {
-    PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
-    ExchangeSearchSortOrder so = buildSortOrder(sort, ExchangeSearchSortOrder.NAME_ASC);
-    FlexiBean out = createSearchResultData(pr, so, name, exchangeIdStrs, uriInfo);
+      @QueryParam("pgIdx") final Integer pgIdx,
+      @QueryParam("pgNum") final Integer pgNum,
+      @QueryParam("pgSze") final Integer pgSze,
+      @QueryParam("sort") final String sort,
+      @QueryParam("name") final String name,
+      @QueryParam("exchangeId") final List<String> exchangeIdStrs,
+      @Context final UriInfo uriInfo) {
+    final PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
+    final ExchangeSearchSortOrder so = buildSortOrder(sort, ExchangeSearchSortOrder.NAME_ASC);
+    final FlexiBean out = createSearchResultData(pr, so, name, exchangeIdStrs, uriInfo);
     return getFreemarker().build(HTML_DIR + "exchanges.ftl", out);
   }
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public String getJSON(
-      @QueryParam("pgIdx") Integer pgIdx,
-      @QueryParam("pgNum") Integer pgNum,
-      @QueryParam("pgSze") Integer pgSze,
-      @QueryParam("sort") String sort,
-      @QueryParam("name") String name,
-      @QueryParam("exchangeId") List<String> exchangeIdStrs,
-      @Context UriInfo uriInfo) {
-    PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
-    ExchangeSearchSortOrder so = buildSortOrder(sort, ExchangeSearchSortOrder.NAME_ASC);
-    FlexiBean out = createSearchResultData(pr, so, name, exchangeIdStrs, uriInfo);
+      @QueryParam("pgIdx") final Integer pgIdx,
+      @QueryParam("pgNum") final Integer pgNum,
+      @QueryParam("pgSze") final Integer pgSze,
+      @QueryParam("sort") final String sort,
+      @QueryParam("name") final String name,
+      @QueryParam("exchangeId") final List<String> exchangeIdStrs,
+      @Context final UriInfo uriInfo) {
+    final PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
+    final ExchangeSearchSortOrder so = buildSortOrder(sort, ExchangeSearchSortOrder.NAME_ASC);
+    final FlexiBean out = createSearchResultData(pr, so, name, exchangeIdStrs, uriInfo);
     return getFreemarker().build(JSON_DIR + "exchanges.ftl", out);
   }
 
-  private FlexiBean createSearchResultData(PagingRequest pr, ExchangeSearchSortOrder so, String name,
-      List<String> exchangeIdStrs, UriInfo uriInfo) {
-    FlexiBean out = createRootData();
-    
-    ExchangeSearchRequest searchRequest = new ExchangeSearchRequest();
+  private FlexiBean createSearchResultData(final PagingRequest pr, final ExchangeSearchSortOrder so, final String name,
+      final List<String> exchangeIdStrs, final UriInfo uriInfo) {
+    final FlexiBean out = createRootData();
+
+    final ExchangeSearchRequest searchRequest = new ExchangeSearchRequest();
     searchRequest.setPagingRequest(pr);
     searchRequest.setSortOrder(so);
     searchRequest.setName(StringUtils.trimToNull(name));
-    MultivaluedMap<String, String> query = uriInfo.getQueryParameters();
+    final MultivaluedMap<String, String> query = uriInfo.getQueryParameters();
     for (int i = 0; query.containsKey("idscheme." + i) && query.containsKey("idvalue." + i); i++) {
-      ExternalId id = ExternalId.of(query.getFirst("idscheme." + i), query.getFirst("idvalue." + i));
+      final ExternalId id = ExternalId.of(query.getFirst("idscheme." + i), query.getFirst("idvalue." + i));
       searchRequest.addExternalId(id);
     }
-    for (String exchangeIdStr : exchangeIdStrs) {
+    for (final String exchangeIdStr : exchangeIdStrs) {
       searchRequest.addObjectId(ObjectId.parse(exchangeIdStr));
     }
     out.put("searchRequest", searchRequest);
-    
+
     if (data().getUriInfo().getQueryParameters().size() > 0) {
-      ExchangeSearchResult searchResult = data().getExchangeMaster().search(searchRequest);
+      final ExchangeSearchResult searchResult = data().getExchangeMaster().search(searchRequest);
       out.put("searchResult", searchResult);
       out.put("paging", new WebPaging(searchResult.getPaging(), uriInfo));
     }
@@ -135,7 +135,7 @@ public class WebExchangesResource extends AbstractWebExchangeResource {
     regionScheme = StringUtils.trimToNull(regionScheme);
     regionValue = StringUtils.trimToNull(regionValue);
     if (name == null || idScheme == null || idValue == null) {
-      FlexiBean out = createRootData();
+      final FlexiBean out = createRootData();
       if (name == null) {
         out.put("err_nameMissing", true);
       }
@@ -151,10 +151,10 @@ public class WebExchangesResource extends AbstractWebExchangeResource {
       if (regionValue == null) {
         out.put("err_regionvalueMissing", true);
       }
-      String html = getFreemarker().build(HTML_DIR + "exchanges-add.ftl", out);
+      final String html = getFreemarker().build(HTML_DIR + "exchanges-add.ftl", out);
       return Response.ok(html).build();
     }
-    URI uri = createExchange(name, idScheme, idValue, regionScheme, regionValue);
+    final URI uri = createExchange(name, idScheme, idValue, regionScheme, regionValue);
     return Response.seeOther(uri).build();
   }
 
@@ -175,32 +175,32 @@ public class WebExchangesResource extends AbstractWebExchangeResource {
     if (name == null || idScheme == null || idValue == null) {
       return Response.status(Status.BAD_REQUEST).build();
     }
-    URI uri = createExchange(name, idScheme, idValue, regionScheme, regionValue);
+    final URI uri = createExchange(name, idScheme, idValue, regionScheme, regionValue);
     return Response.created(uri).build();
   }
 
-  private URI createExchange(String name, String idScheme, String idValue, String regionScheme, String regionValue) {
-    ExternalId id = ExternalId.of(idScheme, idValue);
-    ExternalId region = ExternalId.of(regionScheme, regionValue);
-    ManageableExchange exchange = new ManageableExchange(ExternalIdBundle.of(id), name, ExternalIdBundle.of(region), null);
-    ExchangeDocument doc = new ExchangeDocument(exchange);
-    ExchangeDocument added = data().getExchangeMaster().add(doc);
-    URI uri = data().getUriInfo().getAbsolutePathBuilder().path(added.getUniqueId().toLatest().toString()).build();
+  private URI createExchange(final String name, final String idScheme, final String idValue, final String regionScheme, final String regionValue) {
+    final ExternalId id = ExternalId.of(idScheme, idValue);
+    final ExternalId region = ExternalId.of(regionScheme, regionValue);
+    final ManageableExchange exchange = new ManageableExchange(ExternalIdBundle.of(id), name, ExternalIdBundle.of(region), null);
+    final ExchangeDocument doc = new ExchangeDocument(exchange);
+    final ExchangeDocument added = data().getExchangeMaster().add(doc);
+    final URI uri = data().getUriInfo().getAbsolutePathBuilder().path(added.getUniqueId().toLatest().toString()).build();
     return uri;
   }
 
   //-------------------------------------------------------------------------
   @Path("{exchangeId}")
-  public WebExchangeResource findExchange(@PathParam("exchangeId") String idStr) {
+  public WebExchangeResource findExchange(@PathParam("exchangeId") final String idStr) {
     data().setUriExchangeId(idStr);
-    UniqueId oid = UniqueId.parse(idStr);
+    final UniqueId oid = UniqueId.parse(idStr);
     try {
-      ExchangeDocument doc = data().getExchangeMaster().get(oid);
+      final ExchangeDocument doc = data().getExchangeMaster().get(oid);
       data().setExchange(doc);
-    } catch (DataNotFoundException ex) {
-      ExchangeHistoryRequest historyRequest = new ExchangeHistoryRequest(oid);
+    } catch (final DataNotFoundException ex) {
+      final ExchangeHistoryRequest historyRequest = new ExchangeHistoryRequest(oid);
       historyRequest.setPagingRequest(PagingRequest.ONE);
-      ExchangeHistoryResult historyResult = data().getExchangeMaster().history(historyRequest);
+      final ExchangeHistoryResult historyResult = data().getExchangeMaster().history(historyRequest);
       if (historyResult.getDocuments().size() == 0) {
         throw ex;
       }
@@ -214,9 +214,10 @@ public class WebExchangesResource extends AbstractWebExchangeResource {
    * Creates the output root data.
    * @return the output root data, not null
    */
+  @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
-    ExchangeSearchRequest searchRequest = new ExchangeSearchRequest();
+    final FlexiBean out = super.createRootData();
+    final ExchangeSearchRequest searchRequest = new ExchangeSearchRequest();
     out.put("searchRequest", searchRequest);
     return out;
   }
@@ -227,7 +228,7 @@ public class WebExchangesResource extends AbstractWebExchangeResource {
    * @param data  the data, not null
    * @return the URI, not null
    */
-  public static URI uri(WebExchangeData data) {
+  public static URI uri(final WebExchangeData data) {
     return uri(data, null);
   }
 
@@ -237,12 +238,12 @@ public class WebExchangesResource extends AbstractWebExchangeResource {
    * @param identifiers  the identifiers to search for, may be null
    * @return the URI, not null
    */
-  public static URI uri(WebExchangeData data, ExternalIdBundle identifiers) {
-    UriBuilder builder = data.getUriInfo().getBaseUriBuilder().path(WebExchangesResource.class);
+  public static URI uri(final WebExchangeData data, final ExternalIdBundle identifiers) {
+    final UriBuilder builder = data.getUriInfo().getBaseUriBuilder().path(WebExchangesResource.class);
     if (identifiers != null) {
-      Iterator<ExternalId> it = identifiers.iterator();
+      final Iterator<ExternalId> it = identifiers.iterator();
       for (int i = 0; it.hasNext(); i++) {
-        ExternalId id = it.next();
+        final ExternalId id = it.next();
         builder.queryParam("idscheme." + i, id.getScheme().getName());
         builder.queryParam("idvalue." + i, id.getValue());
       }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.view;
@@ -49,15 +49,15 @@ public class ExecutionLogWithContext extends DirectBean {
   @PropertyDefinition(validate = "notNull")
   private ExecutionLog _executionLog;
 
-  public static ExecutionLogWithContext of(String functionName, ComputationTargetSpecification targetSpec, ExecutionLog executionLog) {
-    ExecutionLogWithContext result = new ExecutionLogWithContext();
+  public static ExecutionLogWithContext of(final String functionName, final ComputationTargetSpecification targetSpec, final ExecutionLog executionLog) {
+    final ExecutionLogWithContext result = new ExecutionLogWithContext();
     result.setFunctionName(functionName);
     result.setTargetSpecification(targetSpec);
     result.setExecutionLog(executionLog);
     return result;
   }
 
-  //-------------------------------------------------------------------------  
+  //-------------------------------------------------------------------------
   @Override
   public String toString() {
     return new StrBuilder()

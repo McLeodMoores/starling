@@ -58,8 +58,8 @@ public class EquityDividendYieldFuturesFunction<T> extends FuturesFunction<T> {
    * @param costOfCarryField The field name of the historical time series for cost of carry e.g. "COST_OF_CARRY". Set in *FunctionConfiguration
    * @param resolutionKey The key defining how the time series resolution is to occur e.g. "DEFAULT_TSS_CONFIG"
    */
-  public EquityDividendYieldFuturesFunction(final String valueRequirementName, final InstrumentDerivativeVisitor<SimpleFutureDataBundle, T> calculator, 
-      String closingPriceField, String costOfCarryField, String resolutionKey) {
+  public EquityDividendYieldFuturesFunction(final String valueRequirementName, final InstrumentDerivativeVisitor<SimpleFutureDataBundle, T> calculator,
+      final String closingPriceField, final String costOfCarryField, final String resolutionKey) {
     super(valueRequirementName, calculator, closingPriceField, costOfCarryField, resolutionKey);
   }
 
@@ -91,7 +91,7 @@ public class EquityDividendYieldFuturesFunction<T> extends FuturesFunction<T> {
   protected SimpleFutureDataBundle getFutureDataBundle(final FutureSecurity security, final FunctionInputs inputs,
         final HistoricalTimeSeriesBundle timeSeriesBundle, final ValueRequirement desiredValue) {
     final Double spotUnderlyer = getSpot(inputs);
-    Double dividendYield = timeSeriesBundle.get(MarketDataRequirementNames.DIVIDEND_YIELD, getSpotAssetId(security)).getTimeSeries().getLatestValue();
+    final Double dividendYield = timeSeriesBundle.get(MarketDataRequirementNames.DIVIDEND_YIELD, getSpotAssetId(security)).getTimeSeries().getLatestValue();
     final String fundingCurveName = desiredValue.getConstraint(ValuePropertyNames.CURVE);
     final String curveConfigName = desiredValue.getConstraint(ValuePropertyNames.CURVE_CALCULATION_CONFIG);
     final YieldAndDiscountCurve fundingCurve = getYieldCurve(security, inputs, fundingCurveName, curveConfigName);
@@ -109,7 +109,7 @@ public class EquityDividendYieldFuturesFunction<T> extends FuturesFunction<T> {
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final FutureSecurity security = (FutureSecurity)  target.getTrade().getSecurity();
-    final Set<ValueRequirement> requirements = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> requirements = new HashSet<>();
     // Spot
     final ValueRequirement refPriceReq = getReferencePriceRequirement(context, security);
     if (refPriceReq == null) {

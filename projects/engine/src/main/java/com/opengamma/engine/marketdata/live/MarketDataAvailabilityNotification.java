@@ -32,7 +32,7 @@ public class MarketDataAvailabilityNotification {
   /**
    * @param schemes Schemes handled by the provider.
    */
-  public MarketDataAvailabilityNotification(Set<ExternalScheme> schemes) {
+  public MarketDataAvailabilityNotification(final Set<ExternalScheme> schemes) {
     ArgumentChecker.notEmpty(schemes, "schemes");
     _schemes = ImmutableSet.copyOf(schemes);
   }
@@ -45,9 +45,9 @@ public class MarketDataAvailabilityNotification {
   }
 
   public MutableFudgeMsg toFudgeMsg(final FudgeSerializer serializer) {
-    MutableFudgeMsg msg = serializer.newMessage();
-    MutableFudgeMsg schemesMsg = serializer.newMessage();
-    for (ExternalScheme scheme : _schemes) {
+    final MutableFudgeMsg msg = serializer.newMessage();
+    final MutableFudgeMsg schemesMsg = serializer.newMessage();
+    for (final ExternalScheme scheme : _schemes) {
       serializer.addToMessage(schemesMsg, null, null, scheme.getName());
     }
     serializer.addToMessage(msg, SCHEMES, null, schemesMsg);
@@ -55,10 +55,10 @@ public class MarketDataAvailabilityNotification {
   }
 
   public static MarketDataAvailabilityNotification fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
-    FudgeMsg schemesMsg = msg.getMessage(SCHEMES);
-    Set<ExternalScheme> schemes = Sets.newHashSet();
-    for (FudgeField field : schemesMsg) {
-      String schemeName = deserializer.fieldValueToObject(String.class, field);
+    final FudgeMsg schemesMsg = msg.getMessage(SCHEMES);
+    final Set<ExternalScheme> schemes = Sets.newHashSet();
+    for (final FudgeField field : schemesMsg) {
+      final String schemeName = deserializer.fieldValueToObject(String.class, field);
       schemes.add(ExternalScheme.of(schemeName));
     }
     return new MarketDataAvailabilityNotification(schemes);

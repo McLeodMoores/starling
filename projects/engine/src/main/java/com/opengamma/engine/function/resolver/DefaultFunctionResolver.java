@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.resolver;
@@ -45,7 +45,7 @@ public class DefaultFunctionResolver implements FunctionResolver {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param functionCompilationService the provider of compiled functions, not null
    */
   public DefaultFunctionResolver(final CompiledFunctionService functionCompilationService) {
@@ -56,7 +56,7 @@ public class DefaultFunctionResolver implements FunctionResolver {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param functionCompilationService the provider of compiled functions, not null
    * @param prioritizer the provider of the priority of a function, not null
    */
@@ -70,21 +70,21 @@ public class DefaultFunctionResolver implements FunctionResolver {
   //-------------------------------------------------------------------------
   /**
    * Adds a single rule to the resolver.
-   * 
+   *
    * @param resolutionRule the rule to add, not null
    */
-  public void addRule(ResolutionRule resolutionRule) {
+  public void addRule(final ResolutionRule resolutionRule) {
     addRules(Collections.singleton(resolutionRule));
   }
 
   /**
    * Adds rules to the resolver.
-   * 
+   *
    * @param resolutionRules the rules to add, no nulls, not null
    */
-  public void addRules(Collection<ResolutionRule> resolutionRules) {
+  public void addRules(final Collection<ResolutionRule> resolutionRules) {
     if (_defaultRules == null) {
-      _defaultRules = new HashSet<ResolutionRule>();
+      _defaultRules = new HashSet<>();
     }
     _defaultRules.addAll(resolutionRules);
   }
@@ -92,17 +92,17 @@ public class DefaultFunctionResolver implements FunctionResolver {
   //-------------------------------------------------------------------------
   /**
    * Extracts all the compiled function definitions from the repository and converts them to resolution rules.
-   * 
+   *
    * @param repository the function repository, not null
    * @return the rules, not null
    */
   protected Collection<ResolutionRule> getRepositoryRules(final CompiledFunctionRepository repository) {
     // REVIEW 2011-07-29 SJC: static method?
     final Collection<CompiledFunctionDefinition> functions = repository.getAllFunctions();
-    final Collection<ResolutionRule> result = new ArrayList<ResolutionRule>(functions.size());
-    for (CompiledFunctionDefinition compiledFnDefn : repository.getAllFunctions()) {
+    final Collection<ResolutionRule> result = new ArrayList<>(functions.size());
+    for (final CompiledFunctionDefinition compiledFnDefn : repository.getAllFunctions()) {
       if (compiledFnDefn.getTargetType() != null) {
-        ParameterizedFunction paramFn = new ParameterizedFunction(compiledFnDefn, compiledFnDefn.getFunctionDefinition().getDefaultParameters());
+        final ParameterizedFunction paramFn = new ParameterizedFunction(compiledFnDefn, compiledFnDefn.getFunctionDefinition().getDefaultParameters());
         result.add(new ResolutionRule(paramFn, ApplyToAllTargets.INSTANCE, getPriority(compiledFnDefn)));
       }
     }
@@ -111,12 +111,12 @@ public class DefaultFunctionResolver implements FunctionResolver {
 
   /**
    * Gets the priority of a compiled function definition. This uses the stored priority provider.
-   * 
+   *
    * @param function the function to examine, not null
    * @return the priority, default zero
    */
   protected int getPriority(final CompiledFunctionDefinition function) {
-    return (_prioritizer != null) ? _prioritizer.getPriority(function) : 0;
+    return _prioritizer != null ? _prioritizer.getPriority(function) : 0;
   }
 
   //-------------------------------------------------------------------------

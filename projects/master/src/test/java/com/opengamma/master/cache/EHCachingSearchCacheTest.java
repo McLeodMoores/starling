@@ -10,8 +10,6 @@ import static org.testng.AssertJUnit.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.ehcache.CacheManager;
-
 import org.joda.beans.Bean;
 import org.testng.annotations.Test;
 
@@ -21,6 +19,8 @@ import com.opengamma.util.ehcache.EHCacheUtils;
 import com.opengamma.util.paging.PagingRequest;
 import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.tuple.IntObjectPair;
+
+import net.sf.ehcache.CacheManager;
 
 @Test(groups = TestGroup.UNIT)
 public class EHCachingSearchCacheTest {
@@ -32,9 +32,9 @@ public class EHCachingSearchCacheTest {
   public void testSearchCache() {
     for (int requestSize = 1; requestSize < TOTAL_SIZE; requestSize = requestSize + 17) {
       for (int requestStartStepSize = 1; requestStartStepSize < TOTAL_SIZE / 2; requestStartStepSize = requestStartStepSize + 71) {
-        EHCachingSearchCache searchCache = getCleanSearchCache();
+        final EHCachingSearchCache searchCache = getCleanSearchCache();
         for (int requestStartPos = 0; requestStartPos * requestStartStepSize < TOTAL_SIZE * 4; requestStartPos++) {
-          PagingRequest pagingRequest = PagingRequest.ofIndex((requestStartPos * requestStartStepSize) % TOTAL_SIZE, requestSize);
+          final PagingRequest pagingRequest = PagingRequest.ofIndex(requestStartPos * requestStartStepSize % TOTAL_SIZE, requestSize);
           assertEquals(searchCache.search(new SecuritySearchRequest(), pagingRequest, false).getSecond(),
                        buildResultIDs(
                          PagingRequest.ofIndex(
@@ -54,9 +54,9 @@ public class EHCachingSearchCacheTest {
   public void testSearchCachePrefetching() {
     for (int requestSize = 1; requestSize < TOTAL_SIZE; requestSize = requestSize + 17) {
       for (int requestStartStepSize = 1; requestStartStepSize < TOTAL_SIZE / 2; requestStartStepSize = requestStartStepSize + 71) {
-        EHCachingSearchCache searchCache = getCleanSearchCache();
+        final EHCachingSearchCache searchCache = getCleanSearchCache();
         for (int requestStartPos = 0; requestStartPos * requestStartStepSize < TOTAL_SIZE * 4; requestStartPos++) {
-          PagingRequest pagingRequest = PagingRequest.ofIndex((requestStartPos * requestStartStepSize) % TOTAL_SIZE, requestSize);
+          final PagingRequest pagingRequest = PagingRequest.ofIndex(requestStartPos * requestStartStepSize % TOTAL_SIZE, requestSize);
           searchCache.prefetch(new SecuritySearchRequest(), pagingRequest);
           assertEquals(searchCache.search(new SecuritySearchRequest(), pagingRequest, false).getSecond(),
                        buildResultIDs(
@@ -78,7 +78,7 @@ public class EHCachingSearchCacheTest {
    * @return the cache manager
    */
   private CacheManager getCleanCacheManager() {
-    CacheManager cacheManager = EHCacheUtils.createTestCacheManager(getClass().getName() + System.currentTimeMillis());
+    final CacheManager cacheManager = EHCacheUtils.createTestCacheManager(getClass().getName() + System.currentTimeMillis());
     cacheManager.clearAll();
     cacheManager.removalAll();
     return cacheManager;
@@ -87,20 +87,20 @@ public class EHCachingSearchCacheTest {
   private EHCachingSearchCache getCleanSearchCache() {
     return new EHCachingSearchCache("Test", getCleanCacheManager(), new EHCachingSearchCache.Searcher() {
       @Override
-      public IntObjectPair<List<UniqueId>> search(Bean request, PagingRequest pagingRequest) {
+      public IntObjectPair<List<UniqueId>> search(final Bean request, final PagingRequest pagingRequest) {
 
-        List<UniqueId> result = buildResultIDs(pagingRequest);
+        final List<UniqueId> result = buildResultIDs(pagingRequest);
 
         return IntObjectPair.of(TOTAL_SIZE, result);
       }
     });
   }
 
-  private List<UniqueId> buildResultIDs(PagingRequest pagingRequest) {
-    List<UniqueId> result = new ArrayList<>();
+  private List<UniqueId> buildResultIDs(final PagingRequest pagingRequest) {
+    final List<UniqueId> result = new ArrayList<>();
 
     for (int i = pagingRequest.getFirstItem(); i < pagingRequest.getLastItem(); i++) {
-      UniqueId uniqueId = UniqueId.of(TEST_SCHEME, Integer.toString(i), "1");
+      final UniqueId uniqueId = UniqueId.of(TEST_SCHEME, Integer.toString(i), "1");
       result.add(uniqueId);
     }
     return result;

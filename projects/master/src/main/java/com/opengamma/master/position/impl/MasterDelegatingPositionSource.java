@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.position.impl;
@@ -33,23 +33,24 @@ import com.opengamma.util.PublicSPI;
  */
 @PublicSPI
 public class MasterDelegatingPositionSource extends AbstractMasterPositionSource implements PositionSource {
-  
+
   private static final Logger LOGGER = LoggerFactory.getLogger(MasterDelegatingPositionSource.class);
- 
+
   private final DelegatingPositionSource _delegatingPositionSource;
-  
-  public MasterDelegatingPositionSource(PortfolioMaster portfolioMaster, DelegatingPositionSource positionSource) {
+
+  public MasterDelegatingPositionSource(final PortfolioMaster portfolioMaster, final DelegatingPositionSource positionSource) {
     super(portfolioMaster);
     ArgumentChecker.notNull(positionSource, "positionSource");
-    
+
     _delegatingPositionSource = positionSource;
   }
-  
-  protected Collection<Position> positions(PositionSearchRequest positionSearch) {
+
+  @Override
+  protected Collection<Position> positions(final PositionSearchRequest positionSearch) {
     LOGGER.debug("findPositions.positionSearchRequest {}", positionSearch);
-    List<Position> positions = Lists.newArrayList();
-    for (ObjectId positionObjectId : positionSearch.getPositionObjectIds()) {
-      Position position = getDelegatingPositionSource().getPosition(positionObjectId, VersionCorrection.LATEST);
+    final List<Position> positions = Lists.newArrayList();
+    for (final ObjectId positionObjectId : positionSearch.getPositionObjectIds()) {
+      final Position position = getDelegatingPositionSource().getPosition(positionObjectId, VersionCorrection.LATEST);
       if (position != null) {
         positions.add(position);
       } else {
@@ -60,20 +61,20 @@ public class MasterDelegatingPositionSource extends AbstractMasterPositionSource
   }
 
   @Override
-  public Position getPosition(UniqueId uniqueId) {
+  public Position getPosition(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     return getDelegatingPositionSource().getPosition(uniqueId);
   }
 
   @Override
-  public Position getPosition(ObjectId objectId, VersionCorrection versionCorrection) {
+  public Position getPosition(final ObjectId objectId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     return getDelegatingPositionSource().getPosition(objectId, versionCorrection);
   }
 
   @Override
-  public Trade getTrade(UniqueId uniqueId) {
+  public Trade getTrade(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     return getDelegatingPositionSource().getTrade(uniqueId);
   }
@@ -90,11 +91,11 @@ public class MasterDelegatingPositionSource extends AbstractMasterPositionSource
   protected ChangeProvider[] changeProviders() {
     return new ChangeProvider[] {getPortfolioMaster()};
   }
-  
+
   //-------------------------------------------------------------------------
   @Override
   public String toString() {
     return getClass().getSimpleName() + "[" + getPortfolioMaster() + "," + getDelegatingPositionSource() + "]";
   }
-  
+
 }

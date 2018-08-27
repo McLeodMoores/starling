@@ -43,7 +43,7 @@ public class LiveDataFactory {
 
   /**
    * Creates a new factory.
-   * 
+   *
    * @param liveDataClient the live data client to use to source data values
    * @param availabilityFilter the filter describing which values to source from this live data client
    */
@@ -55,7 +55,7 @@ public class LiveDataFactory {
   }
 
   /* package */ LiveMarketDataProvider create(final UserPrincipal user) {
-    InMemoryLKVLiveMarketDataProvider provider =
+    final InMemoryLKVLiveMarketDataProvider provider =
         new InMemoryLKVLiveMarketDataProvider(_liveDataClient, _availabilityFilter, user);
     synchronized (_providerListLock) {
       _providers.add(new WeakReference<>(provider));
@@ -68,12 +68,12 @@ public class LiveDataFactory {
    * This gives market data providers the opportunity to reattempt previously failed subscriptions.
    * @param schemes The schemes for which market data subscriptions should be reattempted.
    */
-  /* package */ void resubscribe(Set<ExternalScheme> schemes) {
+  /* package */ void resubscribe(final Set<ExternalScheme> schemes) {
     synchronized (_providerListLock) {
       LOGGER.info("Telling providers to resubscribe to data for schemes: {}", schemes);
-      for (Iterator<WeakReference<InMemoryLKVLiveMarketDataProvider>> it = _providers.iterator(); it.hasNext(); ) {
-        WeakReference<InMemoryLKVLiveMarketDataProvider> ref = it.next();
-        InMemoryLKVLiveMarketDataProvider provider = ref.get();
+      for (final Iterator<WeakReference<InMemoryLKVLiveMarketDataProvider>> it = _providers.iterator(); it.hasNext();) {
+        final WeakReference<InMemoryLKVLiveMarketDataProvider> ref = it.next();
+        final InMemoryLKVLiveMarketDataProvider provider = ref.get();
         if (provider != null) {
           provider.resubscribe(schemes);
         } else {

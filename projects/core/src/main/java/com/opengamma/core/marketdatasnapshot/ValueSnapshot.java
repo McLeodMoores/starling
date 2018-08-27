@@ -52,39 +52,39 @@ public final class ValueSnapshot implements Bean, Serializable {
 
   /**
    * Creates an instance with the real value and optional override.
-   * 
+   *
    * @param marketValue  the real market value
    * @param overrideValue  the override, null if no override
    * @return the snapshot, not null
    */
-  public static ValueSnapshot of(Object marketValue, Object overrideValue) {
+  public static ValueSnapshot of(final Object marketValue, final Object overrideValue) {
     return new ValueSnapshot(marketValue, overrideValue);
   }
 
   /**
    * Creates an instance with the real value and no override.
-   * 
+   *
    * @param marketValue  the real market value
    * @return the snapshot, not null
    */
-  public static ValueSnapshot of(Object marketValue) {
+  public static ValueSnapshot of(final Object marketValue) {
     return new ValueSnapshot(marketValue, null);
   }
 
   /**
    * Creates an instance with the real value and no override.
-   * 
+   *
    * @param marketValue  the real market value
    * @return the snapshot, not null
    */
-  public static ValueSnapshot of(double marketValue) {
+  public static ValueSnapshot of(final double marketValue) {
     return new ValueSnapshot(marketValue, null);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Creates an instance with the real value and optional override.
-   * 
+   *
    * @param marketValue  the real market value
    * @param overrideValue  the override, null if no override
    */
@@ -93,11 +93,11 @@ public final class ValueSnapshot implements Bean, Serializable {
 
   /**
    * Creates an instance with the real value and optional override.
-   * 
+   *
    * @param marketValue  the real market value
    * @param overrideValue  the override, null if no override
    */
-  private ValueSnapshot(Object marketValue, Object overrideValue) {
+  private ValueSnapshot(final Object marketValue, final Object overrideValue) {
     _marketValue = marketValue;
     _overrideValue = overrideValue;
   }
@@ -112,7 +112,7 @@ public final class ValueSnapshot implements Bean, Serializable {
    *     optional double overrideValue;
    *   }
    * </pre>
-   * 
+   *
    * @param serializer the Fudge serialization context, not null
    * @return the message representation
    */
@@ -130,14 +130,14 @@ public final class ValueSnapshot implements Bean, Serializable {
   /**
    * Creates a snapshot value object from a Fudge message representation. See {@link #toFudgeMsg}
    * for the message format.
-   * 
+   *
    * @param deserializer the Fudge deserialization context, not null
    * @param msg message containing the value representation, not null
    * @return a snapshot object
    */
   public static ValueSnapshot fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
-    Object marketValue = msg.getValue("marketValue");
-    Object overrideValue = msg.getValue("overrideValue");
+    final Object marketValue = msg.getValue("marketValue");
+    final Object overrideValue = msg.getValue("overrideValue");
     return new ValueSnapshot(marketValue, overrideValue);
   }
 

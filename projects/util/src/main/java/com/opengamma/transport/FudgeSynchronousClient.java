@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.transport;
@@ -46,7 +46,7 @@ public abstract class FudgeSynchronousClient implements FudgeMessageReceiver {
   /**
    * The map of pending requests keyed by correlation id.
    */
-  private final Map<Long, ClientRequestHolder> _pendingRequests = new ConcurrentHashMap<Long, ClientRequestHolder>();
+  private final Map<Long, ClientRequestHolder> _pendingRequests = new ConcurrentHashMap<>();
   /**
    * The timeout.
    */
@@ -70,7 +70,7 @@ public abstract class FudgeSynchronousClient implements FudgeMessageReceiver {
       }
 
       @Override
-      public void send(FudgeMsg message) {
+      public void send(final FudgeMsg message) {
         requestSender.sendRequest(message, FudgeSynchronousClient.this);
       }
 
@@ -86,7 +86,7 @@ public abstract class FudgeSynchronousClient implements FudgeMessageReceiver {
   //-------------------------------------------------------------------------
   /**
    * Gets the message sender.
-   * 
+   *
    * @return the message sender, not null
    */
   public FudgeMessageSender getMessageSender() {
@@ -95,7 +95,7 @@ public abstract class FudgeSynchronousClient implements FudgeMessageReceiver {
 
   /**
    * Gets the timeout in milliseconds.
-   * 
+   *
    * @return the timeout
    */
   public long getTimeoutInMilliseconds() {
@@ -116,7 +116,7 @@ public abstract class FudgeSynchronousClient implements FudgeMessageReceiver {
 
   /**
    * Gets the next id.
-   * 
+   *
    * @return the next numeric id
    */
   protected long getNextCorrelationId() {
@@ -126,13 +126,13 @@ public abstract class FudgeSynchronousClient implements FudgeMessageReceiver {
   //-------------------------------------------------------------------------
   /**
    * Sends the message.
-   * 
+   *
    * @param requestMsg  the message, not null
    * @param correlationId  the message id
    * @return the result
    */
-  protected FudgeMsg sendRequestAndWaitForResponse(FudgeMsg requestMsg, long correlationId) {
-    ClientRequestHolder requestHolder = new ClientRequestHolder();
+  protected FudgeMsg sendRequestAndWaitForResponse(final FudgeMsg requestMsg, final long correlationId) {
+    final ClientRequestHolder requestHolder = new ClientRequestHolder();
     _pendingRequests.put(correlationId, requestHolder);
     try {
       LOGGER.debug("Sending message {}", correlationId);
@@ -140,7 +140,7 @@ public abstract class FudgeSynchronousClient implements FudgeMessageReceiver {
       try {
         LOGGER.debug("Blocking for message result");
         requestHolder.latch.await(getTimeoutInMilliseconds(), TimeUnit.MILLISECONDS);
-      } catch (InterruptedException e) {
+      } catch (final InterruptedException e) {
         Thread.interrupted();
         LOGGER.error("Interrupted");
       }
@@ -157,18 +157,18 @@ public abstract class FudgeSynchronousClient implements FudgeMessageReceiver {
     }
   }
 
-  protected void sendMessage(FudgeMsg message) {
+  protected void sendMessage(final FudgeMsg message) {
     getMessageSender().send(message);
   }
 
   /**
    * Receives a message from Fudge.
-   * 
+   *
    * @param fudgeContext  the Fudge context, not null
    * @param msgEnvelope  the message, not null
    */
   @Override
-  public void messageReceived(FudgeContext fudgeContext, FudgeMsgEnvelope msgEnvelope) {
+  public void messageReceived(final FudgeContext fudgeContext, final FudgeMsgEnvelope msgEnvelope) {
     final FudgeMsg reply = msgEnvelope.getMessage();
     final Long correlationId = getCorrelationIdFromReply(reply);
     if (correlationId == null) {
@@ -191,7 +191,7 @@ public abstract class FudgeSynchronousClient implements FudgeMessageReceiver {
 
   /**
    * Extracts the correlation id from the reply object.
-   * 
+   *
    * @param reply  the reply
    * @return the id, null if it's an asynchronous message (over {@link FudgeConnection} transport only)
    */

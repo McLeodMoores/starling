@@ -54,15 +54,15 @@ public class UserSourceComponentFactory extends AbstractComponentFactory {
   /**
    * Initializes the user source, setting up component information and REST.
    * Override using {@link #createUserSource(ComponentRepository)}.
-   * 
+   *
    * @param repo  the component repository, not null
    * @param configuration  the remaining configuration, not null
    */
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
-    UserSource source = createUserSource(repo);
-    
-    ComponentInfo info = new ComponentInfo(UserSource.class, getClassifier());
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
+    final UserSource source = createUserSource(repo);
+
+    final ComponentInfo info = new ComponentInfo(UserSource.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     if (isPublishRest()) {
       info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteUserSource.class);
@@ -75,11 +75,11 @@ public class UserSourceComponentFactory extends AbstractComponentFactory {
 
   /**
    * Creates the user source without registering it.
-   * 
+   *
    * @param repo  the component repository, only used to register secondary items like lifecycle, not null
    * @return the user source, not null
    */
-  protected UserSource createUserSource(ComponentRepository repo) {
+  protected UserSource createUserSource(final ComponentRepository repo) {
     return getUserMaster();
   }
 

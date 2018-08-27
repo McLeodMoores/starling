@@ -83,21 +83,21 @@ public class CouponIborGearingDefinition extends CouponFloatingDefinition {
     _spreadAmount = spread * getNotional() * getPaymentYearFraction();
     _factor = factor;
   }
-  
+
   public CouponIborGearingDefinition(
-      Currency currency,
-      ZonedDateTime paymentDate,
-      ZonedDateTime accrualStartDate,
-      ZonedDateTime accrualEndDate,
-      double accrualFactor,
-      double notional,
-      ZonedDateTime fixingDate,
-      IborIndex index,
-      ZonedDateTime fixingPeriodStartDate,
-      ZonedDateTime fixingPeriodEndDate,
-      double fixingPeriodAccrualFactor,
-      double spread,
-      double factor) {
+      final Currency currency,
+      final ZonedDateTime paymentDate,
+      final ZonedDateTime accrualStartDate,
+      final ZonedDateTime accrualEndDate,
+      final double accrualFactor,
+      final double notional,
+      final ZonedDateTime fixingDate,
+      final IborIndex index,
+      final ZonedDateTime fixingPeriodStartDate,
+      final ZonedDateTime fixingPeriodEndDate,
+      final double fixingPeriodAccrualFactor,
+      final double spread,
+      final double factor) {
     super(currency, paymentDate, accrualStartDate, accrualEndDate, accrualFactor, notional, fixingDate);
     ArgumentChecker.notNull(index, "index");
     ArgumentChecker.isTrue(currency.equals(index.getCurrency()), "index currency different from payment currency");
@@ -339,11 +339,11 @@ public class CouponIborGearingDefinition extends CouponFloatingDefinition {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_factor);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_spread);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_spreadAmount);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

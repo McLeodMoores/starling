@@ -5,10 +5,6 @@
  */
 package com.opengamma.financial.analytics.ircurve;
 
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
-
 import com.opengamma.core.change.ChangeManager;
 import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.ArgumentChecker;
@@ -16,6 +12,10 @@ import com.opengamma.util.ehcache.EHCacheUtils;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
+
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
 
 /**
  * A cache to optimize the results of {@code InterpolatedYieldCurveDefinitionSource}.
@@ -42,7 +42,7 @@ public class EHCachingInterpolatedYieldCurveDefinitionSource implements Interpol
 
   /**
    * Creates the cache around an underlying definition source.
-   * 
+   *
    * @param underlying  the underlying data, not null
    * @param cacheManager  the cache manager, not null
    */
@@ -57,7 +57,7 @@ public class EHCachingInterpolatedYieldCurveDefinitionSource implements Interpol
   //-------------------------------------------------------------------------
   /**
    * Gets the cache manager.
-   * 
+   *
    * @return the cache manager, not null
    */
   public CacheManager getCacheManager() {
@@ -66,25 +66,25 @@ public class EHCachingInterpolatedYieldCurveDefinitionSource implements Interpol
 
   //-------------------------------------------------------------------------
   @Override
-  public YieldCurveDefinition getDefinition(Currency currency, String name) {
-    Pair<Currency, String> cacheKey = Pairs.of(currency, name);
-    Element e = _latestDefinitionCache.get(cacheKey);
+  public YieldCurveDefinition getDefinition(final Currency currency, final String name) {
+    final Pair<Currency, String> cacheKey = Pairs.of(currency, name);
+    final Element e = _latestDefinitionCache.get(cacheKey);
     if (e != null) {
-      YieldCurveDefinition doc = (YieldCurveDefinition) e.getObjectValue();
+      final YieldCurveDefinition doc = (YieldCurveDefinition) e.getObjectValue();
       return doc;
     } else {
-      YieldCurveDefinition doc = _underlying.getDefinition(currency, name);
-      Element element = new Element(cacheKey, doc);
+      final YieldCurveDefinition doc = _underlying.getDefinition(currency, name);
+      final Element element = new Element(cacheKey, doc);
       // REVIEW: jim 19-Apr-2013 -- I've increased this from 10s to 5-10m
       element.setTimeToLive((int) (Math.random() * 150d) + 150); // TODO PLAT-1308: I've set TTL short to hide the fact that we return stale data
-      
-      _latestDefinitionCache.put(element);   
+
+      _latestDefinitionCache.put(element);
       return doc;
     }
   }
 
   @Override
-  public YieldCurveDefinition getDefinition(Currency currency, String name, VersionCorrection version) {
+  public YieldCurveDefinition getDefinition(final Currency currency, final String name, final VersionCorrection version) {
     return _underlying.getDefinition(currency, name, version); // TODO PLAT-1308: I'm not caching this because this cache doesn't version things properly
   }
 

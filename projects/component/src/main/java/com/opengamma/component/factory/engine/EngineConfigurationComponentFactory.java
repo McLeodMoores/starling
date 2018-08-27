@@ -97,7 +97,7 @@ public class EngineConfigurationComponentFactory extends AbstractComponentFactor
    * <p>
    * This is a 24 character string using base-64 characters, created using
    * the algorithm from {@link GUIDGenerator} for uniqueness.
-   * 
+   *
    * @return the logical server unique identifier, not null
    */
   protected String createLogicalServerId() {
@@ -130,18 +130,18 @@ public class EngineConfigurationComponentFactory extends AbstractComponentFactor
     }
   }
 
-  protected void buildConfiguration(ComponentRepository repo, Map<String, String> configuration, Map<String, Object> map) {
+  protected void buildConfiguration(final ComponentRepository repo, final Map<String, String> configuration, final Map<String, Object> map) {
     map.put(LOGICAL_SERVER_UNIQUE_IDENTIFIER, getLogicalServerId());
-    for (String key : configuration.keySet()) {
-      String valueStr = configuration.get(key);
+    for (final String key : configuration.keySet()) {
+      final String valueStr = configuration.get(key);
       Object targetValue = valueStr;
       if (valueStr.contains("::")) {
-        ComponentInfo info = repo.findInfo(valueStr);
+        final ComponentInfo info = repo.findInfo(valueStr);
         if (info == null) {
           throw new IllegalArgumentException("Component not found: " + valueStr);
         }
-        Object instance = repo.getInstance(info);
-        if ((instance instanceof CalcNodeSocketConfiguration) || (instance instanceof Supplier)) {
+        final Object instance = repo.getInstance(info);
+        if (instance instanceof CalcNodeSocketConfiguration || instance instanceof Supplier) {
           targetValue = instance;
         } else {
           if (info.getUri() == null) {
@@ -155,13 +155,13 @@ public class EngineConfigurationComponentFactory extends AbstractComponentFactor
   }
 
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
     afterPropertiesSet();
-    Map<String, Object> map = new LinkedHashMap<String, Object>();
+    final Map<String, Object> map = new LinkedHashMap<>();
     buildConfiguration(repo, configuration, map);
-    Map<String, Object> outer = new LinkedHashMap<String, Object>();
+    final Map<String, Object> outer = new LinkedHashMap<>();
     outer.put(DEFAULT_CONFIGURATION_DOCUMENT_ID, map);
-    DataConfigurationResource resource = new DataConfigurationResource(getFudgeContext(), outer);
+    final DataConfigurationResource resource = new DataConfigurationResource(getFudgeContext(), outer);
     repo.getRestComponents().publishResource(resource);
     // indicate that all component configuration was used
     configuration.clear();
@@ -169,19 +169,19 @@ public class EngineConfigurationComponentFactory extends AbstractComponentFactor
 
   /**
    * Builds the map, handling dot separate keys.
-   * 
+   *
    * @param map the map, not null
    * @param key the key, not null
    * @param targetValue the target value,not null
    */
-  protected void buildMap(Map<String, Object> map, String key, Object targetValue) {
+  protected void buildMap(final Map<String, Object> map, final String key, final Object targetValue) {
     if (key.contains(".")) {
-      String key1 = StringUtils.substringBefore(key, ".");
-      String key2 = StringUtils.substringAfter(key, ".");
+      final String key1 = StringUtils.substringBefore(key, ".");
+      final String key2 = StringUtils.substringAfter(key, ".");
       @SuppressWarnings("unchecked")
       Map<String, Object> subMap = (Map<String, Object>) map.get(key1);
       if (subMap == null) {
-        subMap = new LinkedHashMap<String, Object>();
+        subMap = new LinkedHashMap<>();
         map.put(key1, subMap);
       }
       buildMap(subMap, key2, targetValue);

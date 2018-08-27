@@ -19,7 +19,7 @@ import com.opengamma.transport.FudgeRequestReceiver;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Receives market data subscription requests from clients. 
+ * Receives market data subscription requests from clients.
  */
 public class SubscriptionRequestReceiver implements FudgeRequestReceiver {
 
@@ -33,10 +33,10 @@ public class SubscriptionRequestReceiver implements FudgeRequestReceiver {
 
   /**
    * Creates an instance wrapping an underlying server.
-   * 
+   *
    * @param liveDataServer  the server, not null
    */
-  public SubscriptionRequestReceiver(StandardLiveDataServer liveDataServer) {
+  public SubscriptionRequestReceiver(final StandardLiveDataServer liveDataServer) {
     ArgumentChecker.notNull(liveDataServer, "liveDataServer");
     _liveDataServer = liveDataServer;
   }
@@ -44,7 +44,7 @@ public class SubscriptionRequestReceiver implements FudgeRequestReceiver {
   //-------------------------------------------------------------------------
   /**
    * Gets the underlying server.
-   * 
+   *
    * @return the server, not null
    */
   public StandardLiveDataServer getLiveDataServer() {
@@ -54,18 +54,18 @@ public class SubscriptionRequestReceiver implements FudgeRequestReceiver {
   //-------------------------------------------------------------------------
   @Override
   @Transactional
-  public FudgeMsg requestReceived(FudgeDeserializer deserializer, FudgeMsgEnvelope requestEnvelope) {
+  public FudgeMsg requestReceived(final FudgeDeserializer deserializer, final FudgeMsgEnvelope requestEnvelope) {
     try {
-      FudgeMsg requestFudgeMsg = requestEnvelope.getMessage();
-      LiveDataSubscriptionRequest subscriptionRequest = LiveDataSubscriptionRequest.fromFudgeMsg(deserializer, requestFudgeMsg);
+      final FudgeMsg requestFudgeMsg = requestEnvelope.getMessage();
+      final LiveDataSubscriptionRequest subscriptionRequest = LiveDataSubscriptionRequest.fromFudgeMsg(deserializer, requestFudgeMsg);
       LOGGER.debug("Received subscription request {}", subscriptionRequest);
-      LiveDataSubscriptionResponseMsg subscriptionResponse = getLiveDataServer().subscriptionRequestMade(subscriptionRequest);
+      final LiveDataSubscriptionResponseMsg subscriptionResponse = getLiveDataServer().subscriptionRequestMade(subscriptionRequest);
       LOGGER.debug("Sending subscription response {}", subscriptionResponse);
-      FudgeMsg responseFudgeMsg = subscriptionResponse.toFudgeMsg(new FudgeSerializer(deserializer.getFudgeContext()));
+      final FudgeMsg responseFudgeMsg = subscriptionResponse.toFudgeMsg(new FudgeSerializer(deserializer.getFudgeContext()));
       return responseFudgeMsg;
-    } catch (RuntimeException e) {
+    } catch (final RuntimeException e) {
       LOGGER.error("Unexpected exception when processing subscription request", e);
-      throw e;      
+      throw e;
     }
   }
 

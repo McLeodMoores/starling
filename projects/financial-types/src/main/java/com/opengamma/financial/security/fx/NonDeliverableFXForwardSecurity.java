@@ -45,25 +45,25 @@ public class NonDeliverableFXForwardSecurity extends FinancialSecurity {
    */
   @PropertyDefinition(validate = "notNull")
   private Currency _payCurrency;
-  
+
   /**
    * The pay amount
    */
   @PropertyDefinition
   private double _payAmount;
-  
+
   /**
    * The receiver currency
    */
   @PropertyDefinition(validate = "notNull")
   private Currency _receiveCurrency;
-  
+
   /**
    * The receive amount
    */
   @PropertyDefinition
   private double _receiveAmount;
-  
+
   /**
    * The forward date.
    */
@@ -84,8 +84,8 @@ public class NonDeliverableFXForwardSecurity extends FinancialSecurity {
     super(SECURITY_TYPE);
   }
 
-  public NonDeliverableFXForwardSecurity(Currency payCurrency, double payAmount, Currency receiveCurrency, double receiveAmount, 
-                                         ZonedDateTime forwardDate, ExternalId region, boolean deliverInReceiveCurrency) {
+  public NonDeliverableFXForwardSecurity(final Currency payCurrency, final double payAmount, final Currency receiveCurrency, final double receiveAmount,
+                                         final ZonedDateTime forwardDate, final ExternalId region, final boolean deliverInReceiveCurrency) {
     super(SECURITY_TYPE);
     setPayCurrency(payCurrency);
     setPayAmount(payAmount);
@@ -98,7 +98,7 @@ public class NonDeliverableFXForwardSecurity extends FinancialSecurity {
 
   //-------------------------------------------------------------------------
   @Override
-  public final <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public final <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitNonDeliverableFXForwardSecurity(this);
   }
 

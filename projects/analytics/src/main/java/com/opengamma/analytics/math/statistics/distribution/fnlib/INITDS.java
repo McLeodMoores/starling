@@ -21,7 +21,7 @@ public class INITDS {
    * @param eta usually 10% of machine precision, arbitrary!
    * @return the number of terms needed in the series to achieve the desired accuracy
    */
-  public static int getInitds(double[] os, int nos, double eta) {
+  public static int getInitds(final double[] os, final int nos, final double eta) {
     if (os == null) {
       throw new MathException("INITDS: os is null");
     }

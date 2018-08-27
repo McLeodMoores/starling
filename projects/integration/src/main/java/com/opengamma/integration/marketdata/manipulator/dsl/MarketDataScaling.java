@@ -37,7 +37,7 @@ public class MarketDataScaling implements StructureManipulator<Double>, Immutabl
   private final double _scalingFactor;
 
   @ImmutableConstructor
-  /* package */ MarketDataScaling(double scalingFactor) {
+  /* package */ MarketDataScaling(final double scalingFactor) {
     if (Double.isInfinite(scalingFactor) || Double.isNaN(scalingFactor)) {
       throw new IllegalArgumentException("scalingFactor must not be infinite or NaN. value=" + scalingFactor);
     }
@@ -45,7 +45,7 @@ public class MarketDataScaling implements StructureManipulator<Double>, Immutabl
   }
 
   @Override
-  public Double execute(Double structure, ValueSpecification valueSpecification, FunctionExecutionContext executionContext) {
+  public Double execute(final Double structure, final ValueSpecification valueSpecification, final FunctionExecutionContext executionContext) {
     return structure * _scalingFactor;
   }
 

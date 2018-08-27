@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.cache;
@@ -34,7 +34,7 @@ public class AbstractBerkeleyDBWorker implements Runnable {
         while (!_done) {
           wait();
         }
-      } catch (InterruptedException e) {
+      } catch (final InterruptedException e) {
         throw new OpenGammaRuntimeException("Interrupted", e);
       }
     }
@@ -54,7 +54,7 @@ public class AbstractBerkeleyDBWorker implements Runnable {
   public static final class PoisonRequest extends Request {
 
     @Override
-    protected void runInTransaction(AbstractBerkeleyDBWorker worker) {
+    protected void runInTransaction(final AbstractBerkeleyDBWorker worker) {
       worker.poison(this);
     }
 
@@ -91,7 +91,7 @@ public class AbstractBerkeleyDBWorker implements Runnable {
           return;
         }
         boolean rollback = true;
-        _transaction = (_environment != null) ? _environment.beginTransaction(null, null) : null;
+        _transaction = _environment != null ? _environment.beginTransaction(null, null) : null;
         try {
           do {
             req.runInTransaction(this);
@@ -110,7 +110,7 @@ public class AbstractBerkeleyDBWorker implements Runnable {
             _transaction = null;
           }
         }
-      } catch (Throwable t) {
+      } catch (final Throwable t) {
         LOGGER.error("Caught exception", t);
       } finally {
         if (req != null) {

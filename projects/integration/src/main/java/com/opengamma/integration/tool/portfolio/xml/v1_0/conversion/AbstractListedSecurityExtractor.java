@@ -13,7 +13,7 @@ import com.opengamma.master.security.ManageableSecurity;
 
 /**
  * An extractor of listed secuirties.
- * 
+ *
  * @param <T> the type of security
  */
 public abstract class AbstractListedSecurityExtractor<T extends ListedSecurityDefinition>
@@ -26,17 +26,17 @@ public abstract class AbstractListedSecurityExtractor<T extends ListedSecurityDe
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param securityDefinition  the security definition, not null
    */
-  public AbstractListedSecurityExtractor(T securityDefinition) {
+  public AbstractListedSecurityExtractor(final T securityDefinition) {
     _securityDefinition = securityDefinition;
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the security definition.
-   * 
+   *
    * @return the definition, not null
    */
   protected T getSecurityDefinition() {
@@ -46,7 +46,7 @@ public abstract class AbstractListedSecurityExtractor<T extends ListedSecurityDe
   //-------------------------------------------------------------------------
   @Override
   public ManageableSecurity[] extract() {
-    ManageableSecurity security = createSecurity();
+    final ManageableSecurity security = createSecurity();
     security.addExternalId(ExternalId.of("XML_LOADER", Integer.toHexString(
         new HashCodeBuilder()
             .append(security.getClass())
@@ -58,7 +58,7 @@ public abstract class AbstractListedSecurityExtractor<T extends ListedSecurityDe
 
   /**
    * Creates a security from the definition.
-   * 
+   *
    * @return the security, not null
    */
   protected abstract ManageableSecurity createSecurity();

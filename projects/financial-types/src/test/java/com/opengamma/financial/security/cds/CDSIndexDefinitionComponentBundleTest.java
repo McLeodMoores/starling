@@ -26,7 +26,7 @@ public class CDSIndexDefinitionComponentBundleTest {
   private static Comparator<CreditDefaultSwapIndexComponent> WEIGHT_COMPARATOR =
       new Comparator<CreditDefaultSwapIndexComponent>() {
         @Override
-        public int compare(CreditDefaultSwapIndexComponent o1, CreditDefaultSwapIndexComponent o2) {
+        public int compare(final CreditDefaultSwapIndexComponent o1, final CreditDefaultSwapIndexComponent o2) {
           return (int) (100 * (o1.getWeight() - o2.getWeight()));
         }
       };
@@ -67,7 +67,7 @@ public class CDSIndexDefinitionComponentBundleTest {
   @Test
   public void testDefaultElementOrdering() {
 
-    CDSIndexComponentBundle bundle = CDSIndexComponentBundle.of(_c1, _c2, _c3, _c4, _c5);
+    final CDSIndexComponentBundle bundle = CDSIndexComponentBundle.of(_c1, _c2, _c3, _c4, _c5);
 
     assertEquals(ImmutableList.copyOf(bundle.getComponents()),
                  ImmutableList.<CreditDefaultSwapIndexComponent>of(_c3, _c4, _c1, _c5, _c2));
@@ -76,14 +76,14 @@ public class CDSIndexDefinitionComponentBundleTest {
 
   @Test
   public void testElementsAreSortedWhenAdded() {
-    CDSIndexComponentBundle bundle = CDSIndexComponentBundle.of(_c1)
+    final CDSIndexComponentBundle bundle = CDSIndexComponentBundle.of(_c1)
         .withCDSIndexComponents(_c2)
         .withCDSIndexComponents(_c3);
 
     assertEquals(ImmutableList.copyOf(bundle.getComponents()),
                  ImmutableList.<CreditDefaultSwapIndexComponent>of(_c3, _c1, _c2));
 
-    CDSIndexComponentBundle updated = bundle
+    final CDSIndexComponentBundle updated = bundle
         .withCDSIndexComponents(_c4)
         .withCDSIndexComponents(_c5);
 
@@ -95,7 +95,7 @@ public class CDSIndexDefinitionComponentBundleTest {
   @Test
   public void testCustomElementOrdering() {
 
-    CDSIndexComponentBundle bundle = CDSIndexComponentBundle.of(_c1, _c2, _c3, _c4, _c5).withCustomIdOrdering(WEIGHT_COMPARATOR);
+    final CDSIndexComponentBundle bundle = CDSIndexComponentBundle.of(_c1, _c2, _c3, _c4, _c5).withCustomIdOrdering(WEIGHT_COMPARATOR);
 
     assertEquals(ImmutableList.copyOf(bundle.getComponents()),
                  ImmutableList.<CreditDefaultSwapIndexComponent>of(_c3, _c1, _c5, _c4, _c2));
@@ -105,12 +105,12 @@ public class CDSIndexDefinitionComponentBundleTest {
   @Test
   public void testElementsAreSortedWhenAddedToSortedBundle() {
 
-    CDSIndexComponentBundle bundle = CDSIndexComponentBundle.of(_c1, _c2, _c3).withCustomIdOrdering(WEIGHT_COMPARATOR);
+    final CDSIndexComponentBundle bundle = CDSIndexComponentBundle.of(_c1, _c2, _c3).withCustomIdOrdering(WEIGHT_COMPARATOR);
 
     assertEquals(ImmutableList.copyOf(bundle.getComponents()),
                  ImmutableList.<CreditDefaultSwapIndexComponent>of(_c3, _c1, _c2));
 
-    CDSIndexComponentBundle updated = bundle
+    final CDSIndexComponentBundle updated = bundle
         .withCDSIndexComponents(_c4)
         .withCDSIndexComponents(_c5);
 
@@ -122,14 +122,14 @@ public class CDSIndexDefinitionComponentBundleTest {
   @Test
   public void testUpdatingComponentIsPossible() {
 
-    CDSIndexComponentBundle bundle = CDSIndexComponentBundle.of(_c1);
+    final CDSIndexComponentBundle bundle = CDSIndexComponentBundle.of(_c1);
 
     // New component has same red code so should act as an update, not a new insertion
-    CreditDefaultSwapIndexComponent c = createComponent("d", "Purple", 0.15);
+    final CreditDefaultSwapIndexComponent c = createComponent("d", "Purple", 0.15);
 
-    CDSIndexComponentBundle updated = bundle.withCDSIndexComponents(c);
+    final CDSIndexComponentBundle updated = bundle.withCDSIndexComponents(c);
 
-    Iterable<CreditDefaultSwapIndexComponent> components = updated.getComponents();
+    final Iterable<CreditDefaultSwapIndexComponent> components = updated.getComponents();
     assertEquals(ImmutableList.copyOf(components),
                  ImmutableList.<CreditDefaultSwapIndexComponent>of(c));
   }
@@ -137,15 +137,15 @@ public class CDSIndexDefinitionComponentBundleTest {
   @Test
   public void testUpdatingAndInsertingComponentIsPossible() {
 
-    CDSIndexComponentBundle bundle = CDSIndexComponentBundle.of(_c1);
+    final CDSIndexComponentBundle bundle = CDSIndexComponentBundle.of(_c1);
 
     // New component has same red code so should act as an update, not a new insertion
-    CreditDefaultSwapIndexComponent c1 = createComponent("d", "Purple", 0.15);
-    CreditDefaultSwapIndexComponent c2 = createComponent("b", "Brown", 0.25);
+    final CreditDefaultSwapIndexComponent c1 = createComponent("d", "Purple", 0.15);
+    final CreditDefaultSwapIndexComponent c2 = createComponent("b", "Brown", 0.25);
 
-    CDSIndexComponentBundle updated = bundle.withCDSIndexComponents(c1, c2);
+    final CDSIndexComponentBundle updated = bundle.withCDSIndexComponents(c1, c2);
 
-    Iterable<CreditDefaultSwapIndexComponent> components = updated.getComponents();
+    final Iterable<CreditDefaultSwapIndexComponent> components = updated.getComponents();
     assertEquals(ImmutableList.copyOf(components),
                  ImmutableList.<CreditDefaultSwapIndexComponent>of(c2, c1));
   }
@@ -153,16 +153,16 @@ public class CDSIndexDefinitionComponentBundleTest {
   @Test
   public void testUpdatingSameComponentIsPossible() {
 
-    CDSIndexComponentBundle bundle = CDSIndexComponentBundle.of(_c1);
+    final CDSIndexComponentBundle bundle = CDSIndexComponentBundle.of(_c1);
 
     // New component has same red code so should act as an update, not a new insertion
-    CreditDefaultSwapIndexComponent c1 = createComponent("d", "Purple", 0.15);
+    final CreditDefaultSwapIndexComponent c1 = createComponent("d", "Purple", 0.15);
     // But this is also an update to the same
-    CreditDefaultSwapIndexComponent c2 = createComponent("d", "Lilac", 0.25);
+    final CreditDefaultSwapIndexComponent c2 = createComponent("d", "Lilac", 0.25);
 
-    CDSIndexComponentBundle updated = bundle.withCDSIndexComponents(c1, c2);
+    final CDSIndexComponentBundle updated = bundle.withCDSIndexComponents(c1, c2);
 
-    Iterable<CreditDefaultSwapIndexComponent> components = updated.getComponents();
+    final Iterable<CreditDefaultSwapIndexComponent> components = updated.getComponents();
     assertEquals(ImmutableList.copyOf(components),
                  ImmutableList.<CreditDefaultSwapIndexComponent>of(c2));
   }
@@ -171,21 +171,21 @@ public class CDSIndexDefinitionComponentBundleTest {
   public void testCreatingSameComponentIsPossible() {
 
     // New component has same red code so should act as an update, not a new insertion
-    CreditDefaultSwapIndexComponent c1 = createComponent("d", "Purple", 0.15);
+    final CreditDefaultSwapIndexComponent c1 = createComponent("d", "Purple", 0.15);
 
-    CDSIndexComponentBundle bundle = CDSIndexComponentBundle.of(_c1, c1);
+    final CDSIndexComponentBundle bundle = CDSIndexComponentBundle.of(_c1, c1);
 
-    Iterable<CreditDefaultSwapIndexComponent> components = bundle.getComponents();
+    final Iterable<CreditDefaultSwapIndexComponent> components = bundle.getComponents();
     assertEquals(ImmutableList.copyOf(components),
                  ImmutableList.<CreditDefaultSwapIndexComponent>of(c1));
   }
 
 
-  private CreditDefaultSwapIndexComponent createComponent(String red, String name, double weight) {
+  private CreditDefaultSwapIndexComponent createComponent(final String red, final String name, final double weight) {
     return new CreditDefaultSwapIndexComponent(name, redCode(red), weight, null);
   }
 
-  private ExternalId redCode(String red) {
+  private ExternalId redCode(final String red) {
     return ExternalSchemes.markItRedCode(red);
   }
 

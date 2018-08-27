@@ -60,10 +60,10 @@ public class MongoConnectorFactoryBean extends SingletonFactoryBean<MongoConnect
    * Creates an instance based on an existing connector.
    * <p>
    * This copies the name, mongo and database.
-   * 
+   *
    * @param base  the base connector to copy, not null
    */
-  public MongoConnectorFactoryBean(MongoConnector base) {
+  public MongoConnectorFactoryBean(final MongoConnector base) {
     setName(base.getName());
     setMongo(base.getMongo());
     setDB(base.getDB());
@@ -74,7 +74,7 @@ public class MongoConnectorFactoryBean extends SingletonFactoryBean<MongoConnect
     return _name;
   }
 
-  public void setName(String name) {
+  public void setName(final String name) {
     _name = name;
   }
 
@@ -82,7 +82,7 @@ public class MongoConnectorFactoryBean extends SingletonFactoryBean<MongoConnect
     return _mongo;
   }
 
-  public void setMongo(MongoClient mongo) {
+  public void setMongo(final MongoClient mongo) {
     _mongo = mongo;
   }
 
@@ -90,7 +90,7 @@ public class MongoConnectorFactoryBean extends SingletonFactoryBean<MongoConnect
     return _database;
   }
 
-  public void setDB(DB database) {
+  public void setDB(final DB database) {
     _database = database;
   }
 
@@ -98,7 +98,7 @@ public class MongoConnectorFactoryBean extends SingletonFactoryBean<MongoConnect
     return _host;
   }
 
-  public void setHost(String host) {
+  public void setHost(final String host) {
     _host = host;
   }
 
@@ -106,7 +106,7 @@ public class MongoConnectorFactoryBean extends SingletonFactoryBean<MongoConnect
     return _port;
   }
 
-  public void setPort(int port) {
+  public void setPort(final int port) {
     _port = port;
   }
 
@@ -114,7 +114,7 @@ public class MongoConnectorFactoryBean extends SingletonFactoryBean<MongoConnect
     return _databaseName;
   }
 
-  public void setDatabaseName(String databaseName) {
+  public void setDatabaseName(final String databaseName) {
     _databaseName = databaseName;
   }
 
@@ -122,7 +122,7 @@ public class MongoConnectorFactoryBean extends SingletonFactoryBean<MongoConnect
     return _collectionSuffix;
   }
 
-  public void setCollectionSuffix(String collectionSuffix) {
+  public void setCollectionSuffix(final String collectionSuffix) {
     _collectionSuffix = collectionSuffix;
   }
 
@@ -138,7 +138,7 @@ public class MongoConnectorFactoryBean extends SingletonFactoryBean<MongoConnect
 
   /**
    * Creates the Mongo instance, using the host and port.
-   * 
+   *
    * @return the Mongo instance, not null
    */
   protected MongoClient createMongo() {
@@ -151,18 +151,18 @@ public class MongoConnectorFactoryBean extends SingletonFactoryBean<MongoConnect
     ArgumentChecker.notNull(host, "host");
     try {
       return new MongoClient(host, port);
-    } catch (UnknownHostException ex) {
+    } catch (final UnknownHostException ex) {
       throw new MongoException(ex.getMessage(), ex);
     }
   }
 
   /**
    * Creates the database.
-   * 
+   *
    * @param mongo  the Mongo instance, not null
    * @return the database, may be null
    */
-  protected DB createDatabase(MongoClient mongo) {
+  protected DB createDatabase(final MongoClient mongo) {
     final DB db = getDB();
     if (db != null) {
       return db;

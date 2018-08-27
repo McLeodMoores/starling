@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.instrument.payment;
@@ -45,7 +45,7 @@ public class CouponIborAverageFixingDatesDefinition extends CouponDefinition imp
   private final double[] _fixingPeriodAccrualFactor;
 
   /**
-   * Constructor. 
+   * Constructor.
    * The start dates and end dates of fixing period are deduced from the index conventions.
    * @param currency The coupon currency
    * @param paymentDate The coupon payment date.
@@ -89,7 +89,7 @@ public class CouponIborAverageFixingDatesDefinition extends CouponDefinition imp
   }
 
   /**
-   * Constructor with start dates and end dates fixing period 
+   * Constructor with start dates and end dates fixing period
    * @param currency The coupon currency
    * @param paymentDate The coupon payment date.
    * @param accrualStartDate The start date of the accrual period
@@ -155,7 +155,7 @@ public class CouponIborAverageFixingDatesDefinition extends CouponDefinition imp
   }
 
   /**
-   * Construct a coupon with start dates and end dates fixing period 
+   * Construct a coupon with start dates and end dates fixing period
    * @param currency The coupon currency
    * @param paymentDate The coupon payment date.
    * @param accrualStartDate The start date of the accrual period
@@ -210,7 +210,7 @@ public class CouponIborAverageFixingDatesDefinition extends CouponDefinition imp
   }
 
   @Override
-  public Coupon toDerivative(ZonedDateTime dateTime, DoubleTimeSeries<ZonedDateTime> indexFixingTimeSeries) {
+  public Coupon toDerivative(final ZonedDateTime dateTime, final DoubleTimeSeries<ZonedDateTime> indexFixingTimeSeries) {
     ArgumentChecker.notNull(dateTime, "date");
     final LocalDate dayConversion = dateTime.toLocalDate();
     ArgumentChecker.notNull(indexFixingTimeSeries, "Index fixing time series");
@@ -263,7 +263,7 @@ public class CouponIborAverageFixingDatesDefinition extends CouponDefinition imp
    */
   @Override
   @Deprecated
-  public Coupon toDerivative(ZonedDateTime date, DoubleTimeSeries<ZonedDateTime> data, String... yieldCurveNames) {
+  public Coupon toDerivative(final ZonedDateTime date, final DoubleTimeSeries<ZonedDateTime> data, final String... yieldCurveNames) {
     throw new NotImplementedException("toDerivative not implemented with yield curve names.");
   }
 
@@ -345,13 +345,13 @@ public class CouponIborAverageFixingDatesDefinition extends CouponDefinition imp
     result = prime * result + Arrays.hashCode(_fixingPeriodAccrualFactor);
     result = prime * result + Arrays.hashCode(_fixingPeriodEndDate);
     result = prime * result + Arrays.hashCode(_fixingPeriodStartDate);
-    result = prime * result + ((_index == null) ? 0 : _index.hashCode());
+    result = prime * result + (_index == null ? 0 : _index.hashCode());
     result = prime * result + Arrays.hashCode(_weight);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -361,7 +361,7 @@ public class CouponIborAverageFixingDatesDefinition extends CouponDefinition imp
     if (!(obj instanceof CouponIborAverageFixingDatesDefinition)) {
       return false;
     }
-    CouponIborAverageFixingDatesDefinition other = (CouponIborAverageFixingDatesDefinition) obj;
+    final CouponIborAverageFixingDatesDefinition other = (CouponIborAverageFixingDatesDefinition) obj;
     if (!Arrays.equals(_fixingDate, other._fixingDate)) {
       return false;
     }

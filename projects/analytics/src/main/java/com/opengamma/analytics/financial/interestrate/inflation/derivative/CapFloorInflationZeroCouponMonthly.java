@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.inflation.derivative;
@@ -30,7 +30,7 @@ public class CapFloorInflationZeroCouponMonthly extends CouponInflation implemen
   private final double _referenceEndTime;
 
   /**
-   * The time for which the index at the coupon end is paid by the standard corresponding  zero coupon. 
+   * The time for which the index at the coupon end is paid by the standard corresponding  zero coupon.
    * There is usually a difference of two or three month between the reference date and the natural payment date.
    * the natural payment date is equal to the payment date when the lag is the conventional one.
    * The time can be negative (when the price index for the current and last month is not yet published).
@@ -60,7 +60,7 @@ public class CapFloorInflationZeroCouponMonthly extends CouponInflation implemen
    * @param lastKnownFixingTime The fixing time of the last known fixing.
    * @param indexStartValue The index value at the start of the coupon dates for the standard product.
    * @param referenceEndTime The reference time for the index at the coupon end.
-   * @param naturalPaymentTime The time for which the index at the coupon end is paid by the standard corresponding  zero coupon. 
+   * @param naturalPaymentTime The time for which the index at the coupon end is paid by the standard corresponding  zero coupon.
    * @param maturity The cap/floor maturity in years.
    * @param strike The strike
    * @param isCap The cap/floor flag.
@@ -132,13 +132,13 @@ public class CapFloorInflationZeroCouponMonthly extends CouponInflation implemen
   }
 
   @Override
-  public double payOff(double fixing) {
-    double omega = (_isCap) ? 1.0 : -1.0;
+  public double payOff(final double fixing) {
+    final double omega = _isCap ? 1.0 : -1.0;
     return Math.max(omega * (fixing - _strike), 0);
   }
 
   @Override
-  public Coupon withNotional(double notional) {
+  public Coupon withNotional(final double notional) {
     return new CapFloorInflationZeroCouponMonthly(getCurrency(), getPaymentTime(), getPaymentYearFraction(), notional, getPriceIndex(), _lastKnownFixingTime, _indexStartValue,
         _referenceEndTime, _naturalPaymentTime, _maturity, _strike, _isCap);
   }
@@ -159,22 +159,22 @@ public class CapFloorInflationZeroCouponMonthly extends CouponInflation implemen
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_indexStartValue);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + (_isCap ? 1231 : 1237);
     temp = Double.doubleToLongBits(_lastKnownFixingTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _maturity;
     temp = Double.doubleToLongBits(_naturalPaymentTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_referenceEndTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_strike);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -184,7 +184,7 @@ public class CapFloorInflationZeroCouponMonthly extends CouponInflation implemen
     if (getClass() != obj.getClass()) {
       return false;
     }
-    CapFloorInflationZeroCouponMonthly other = (CapFloorInflationZeroCouponMonthly) obj;
+    final CapFloorInflationZeroCouponMonthly other = (CapFloorInflationZeroCouponMonthly) obj;
     if (Double.doubleToLongBits(_indexStartValue) != Double.doubleToLongBits(other._indexStartValue)) {
       return false;
     }

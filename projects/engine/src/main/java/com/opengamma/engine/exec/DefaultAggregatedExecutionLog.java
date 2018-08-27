@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.exec;
@@ -43,26 +43,26 @@ public final class DefaultAggregatedExecutionLog implements AggregatedExecutionL
 
   /**
    * Constructs an instance for a root level with possible logs from its dependencies when the full logging mode is being used.
-   * 
+   *
    * @param functionName the name of the function, not null
    * @param target the computation target specification, not null
    * @param rootLog the root log, not null
    * @param dependentLogs the dependent logs, if any, may be null or empty
    * @return the log instance
    */
-  public static DefaultAggregatedExecutionLog fullLogMode(String functionName, ComputationTargetSpecification target, ExecutionLog rootLog, Collection<AggregatedExecutionLog> dependentLogs) {
+  public static DefaultAggregatedExecutionLog fullLogMode(final String functionName, final ComputationTargetSpecification target, final ExecutionLog rootLog, final Collection<AggregatedExecutionLog> dependentLogs) {
     ArgumentChecker.notNull(functionName, "functionName");
     ArgumentChecker.notNull(target, "target");
     ArgumentChecker.notNull(rootLog, "rootLog");
     EnumSet<LogLevel> logLevels = rootLog.getLogLevels();
     boolean logLevelsCopied = false;
-    final List<ExecutionLogWithContext> logs = new ArrayList<ExecutionLogWithContext>();
-    boolean emptyRoot = rootLog.isEmpty();
+    final List<ExecutionLogWithContext> logs = new ArrayList<>();
+    final boolean emptyRoot = rootLog.isEmpty();
     if (!emptyRoot) {
       logs.add(ExecutionLogWithContext.of(functionName, target, rootLog));
     }
     if (dependentLogs != null) {
-      for (AggregatedExecutionLog dependentLog : dependentLogs) {
+      for (final AggregatedExecutionLog dependentLog : dependentLogs) {
         final EnumSet<LogLevel> dependentLogLevels = dependentLog.getLogLevels();
         if (logLevelsCopied) {
           logLevels.addAll(dependentLogLevels);
@@ -83,18 +83,18 @@ public final class DefaultAggregatedExecutionLog implements AggregatedExecutionL
 
   /**
    * Constructs an instance for a root level with possible logs from its dependencies when the indicator-only logging mode is being used.
-   * 
+   *
    * @param rootLogLevels the root log indicators, not null
    * @return the log instance
    */
-  public static DefaultAggregatedExecutionLog indicatorLogMode(EnumSet<LogLevel> rootLogLevels) {
+  public static DefaultAggregatedExecutionLog indicatorLogMode(final EnumSet<LogLevel> rootLogLevels) {
     Map<EnumSet<LogLevel>, DefaultAggregatedExecutionLog> indicators = s_indicatorInstances;
     final DefaultAggregatedExecutionLog existing = indicators.get(rootLogLevels);
     if (existing != null) {
       return existing;
     }
     final DefaultAggregatedExecutionLog log = new DefaultAggregatedExecutionLog(rootLogLevels, null, false);
-    indicators = new HashMap<EnumSet<LogLevel>, DefaultAggregatedExecutionLog>(indicators);
+    indicators = new HashMap<>(indicators);
     indicators.put(rootLogLevels, log);
     s_indicatorInstances = indicators;
     return log;
@@ -105,12 +105,12 @@ public final class DefaultAggregatedExecutionLog implements AggregatedExecutionL
    * Constructs an instance from the internal fields.
    * <p>
    * Public for deserialization only. Performs no consistency checking of the inputs.
-   * 
+   *
    * @param logLevels an overview of the log levels, not null
    * @param logs the individual logs, null if not available
    * @param emptyRoot true if the root log was empty, false otherwise
    */
-  public DefaultAggregatedExecutionLog(EnumSet<LogLevel> logLevels, List<ExecutionLogWithContext> logs, boolean emptyRoot) {
+  public DefaultAggregatedExecutionLog(final EnumSet<LogLevel> logLevels, final List<ExecutionLogWithContext> logs, final boolean emptyRoot) {
     _logLevels = logLevels;
     _logs = logs;
     _emptyRoot = emptyRoot;
@@ -138,12 +138,12 @@ public final class DefaultAggregatedExecutionLog implements AggregatedExecutionL
     int result = 1;
     result = prime * result + _logLevels.hashCode();
     result = prime * result + (_emptyRoot ? 1231 : 1237);
-    result = prime * result + ((_logs == null) ? 0 : _logs.hashCode());
+    result = prime * result + (_logs == null ? 0 : _logs.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -155,14 +155,14 @@ public final class DefaultAggregatedExecutionLog implements AggregatedExecutionL
     }
     // Optimise for the majority of cases where no logs have been collected.
     // If logs are present then don't perform detailed equality checking, just check instance equality.
-    DefaultAggregatedExecutionLog other = (DefaultAggregatedExecutionLog) obj;
+    final DefaultAggregatedExecutionLog other = (DefaultAggregatedExecutionLog) obj;
     return ObjectUtils.equals(_logLevels, other._logLevels) && ObjectUtils.equals(_logs, other._logs) && _emptyRoot == other._emptyRoot;
   }
 
-  //-------------------------------------------------------------------------  
+  //-------------------------------------------------------------------------
   @Override
   public String toString() {
-    StrBuilder sb = new StrBuilder()
+    final StrBuilder sb = new StrBuilder()
         .append("AggLog[");
     if (!getLogLevels().isEmpty()) {
       sb.append("aggLevels=").append(getLogLevels());

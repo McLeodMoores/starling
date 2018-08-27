@@ -88,7 +88,7 @@ public class InMemoryLegalEntityMaster
 
   //-------------------------------------------------------------------------
   @Override
-  protected void validateDocument(LegalEntityDocument document) {
+  protected void validateDocument(final LegalEntityDocument document) {
     ArgumentChecker.notNull(document, "document");
     ArgumentChecker.notNull(document.getLegalEntity(), "document.legalentity");
   }
@@ -97,7 +97,7 @@ public class InMemoryLegalEntityMaster
   @Override
   public LegalEntityMetaDataResult metaData(final LegalEntityMetaDataRequest request) {
     ArgumentChecker.notNull(request, "request");
-    LegalEntityMetaDataResult result = new LegalEntityMetaDataResult();
+    final LegalEntityMetaDataResult result = new LegalEntityMetaDataResult();
     return result;
   }
 
@@ -105,15 +105,15 @@ public class InMemoryLegalEntityMaster
   @Override
   public LegalEntitySearchResult search(final LegalEntitySearchRequest request) {
     ArgumentChecker.notNull(request, "request");
-    final List<LegalEntityDocument> list = new ArrayList<LegalEntityDocument>();
-    for (LegalEntityDocument doc : _store.values()) {
+    final List<LegalEntityDocument> list = new ArrayList<>();
+    for (final LegalEntityDocument doc : _store.values()) {
       if (request.matches(doc)) {
         list.add(doc);
       }
     }
     Collections.sort(list, request.getSortOrder());
 
-    LegalEntitySearchResult result = new LegalEntitySearchResult();
+    final LegalEntitySearchResult result = new LegalEntitySearchResult();
     result.setPaging(Paging.of(request.getPagingRequest(), list));
     result.getDocuments().addAll(request.getPagingRequest().select(list));
     return result;

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util;
@@ -37,17 +37,17 @@ public final class JodaBeanSerialization {
   //-------------------------------------------------------------------------
   /**
    * Gets a serializer which can write XML.
-   * 
+   *
    * @param pretty  true for pretty output, false for compact
    * @return the serialization settings object, not null
    */
-  public static JodaBeanSer serializer(boolean pretty) {
+  public static JodaBeanSer serializer(final boolean pretty) {
     return pretty ? PRETTY : COMPACT;
   }
 
   /**
    * Gets a deserializer which can read XML.
-   * 
+   *
    * @return the serialization settings object, not null
    */
   public static JodaBeanSer deserializer() {

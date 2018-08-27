@@ -41,27 +41,27 @@ public class DbHistoricalTimeSeriesMasterComponentFactory extends AbstractDocume
   protected Class<? extends AbstractRemoteMaster> getRemoteInterface() {
     return RemoteHistoricalTimeSeriesMaster.class;
   }
-  
+
   //-------------------------------------------------------------------------
   @Override
   protected DbHistoricalTimeSeriesMaster createDbDocumentMaster() {
-    DbHistoricalTimeSeriesMaster master = new DbHistoricalTimeSeriesMaster(getDbConnector());
+    final DbHistoricalTimeSeriesMaster master = new DbHistoricalTimeSeriesMaster(getDbConnector());
     master.registerMetrics(OpenGammaMetricRegistry.getSummaryInstance(), OpenGammaMetricRegistry.getDetailedInstance(), "DbHistoricalTimeSeriesMaster" + getClassifier());
     return master;
   }
 
   @Override
-  protected AbstractDataResource createPublishedResource(DbHistoricalTimeSeriesMaster dbMaster, HistoricalTimeSeriesMaster postProcessedMaster) {
+  protected AbstractDataResource createPublishedResource(final DbHistoricalTimeSeriesMaster dbMaster, final HistoricalTimeSeriesMaster postProcessedMaster) {
     return new DataHistoricalTimeSeriesMasterResource(postProcessedMaster);
   }
 
   @Override
-  protected HistoricalTimeSeriesMaster wrapMasterWithTrackingInterface(HistoricalTimeSeriesMaster postProcessedMaster) {
+  protected HistoricalTimeSeriesMaster wrapMasterWithTrackingInterface(final HistoricalTimeSeriesMaster postProcessedMaster) {
     return new DataTrackingHistoricalTimeSeriesMaster(postProcessedMaster);
   }
 
   @Override
-  protected HistoricalTimeSeriesMaster postProcess(DbHistoricalTimeSeriesMaster master) {
+  protected HistoricalTimeSeriesMaster postProcess(final DbHistoricalTimeSeriesMaster master) {
     return PermissionedHistoricalTimeSeriesMaster.wrap(master);
   }
 

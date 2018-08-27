@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.exec.jmx;
@@ -37,7 +37,7 @@ public final class MultipleNodeExecutor implements MultipleNodeExecutorMBean {
     final MultipleNodeExecutor instance = new MultipleNodeExecutor(executor);
     try {
       server.registerMBean(instance, name);
-    } catch (InstanceAlreadyExistsException e) {
+    } catch (final InstanceAlreadyExistsException e) {
       LOGGER.warn("JMX MBean {} already exists - replacing", name);
       server.unregisterMBean(name);
       server.registerMBean(instance, name);
@@ -70,31 +70,31 @@ public final class MultipleNodeExecutor implements MultipleNodeExecutorMBean {
   }
 
   @Override
-  public void setMaximumConcurrency(int maximumConcurrency) {
+  public void setMaximumConcurrency(final int maximumConcurrency) {
     getUnderlying().setMaximumConcurrency(maximumConcurrency);
     getUnderlying().invalidateCache();
   }
 
   @Override
-  public void setMaximumJobCost(long maximumJobCost) {
+  public void setMaximumJobCost(final long maximumJobCost) {
     getUnderlying().setMaximumJobCost(maximumJobCost);
     getUnderlying().invalidateCache();
   }
 
   @Override
-  public void setMaximumJobItems(int maximumJobItems) {
+  public void setMaximumJobItems(final int maximumJobItems) {
     getUnderlying().setMaximumJobItems(maximumJobItems);
     getUnderlying().invalidateCache();
   }
 
   @Override
-  public void setMinimumJobCost(long minimumJobCost) {
+  public void setMinimumJobCost(final long minimumJobCost) {
     getUnderlying().setMinimumJobCost(minimumJobCost);
     getUnderlying().invalidateCache();
   }
 
   @Override
-  public void setMinimumJobItems(int minimumJobItems) {
+  public void setMinimumJobItems(final int minimumJobItems) {
     getUnderlying().setMinimumJobItems(minimumJobItems);
     getUnderlying().invalidateCache();
   }

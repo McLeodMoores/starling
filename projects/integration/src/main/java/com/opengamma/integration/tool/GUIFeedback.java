@@ -117,9 +117,9 @@ public class GUIFeedback implements AutoCloseable {
       final int width = getWidth();
       final int height = getHeight();
       pack();
-      if ((width != getWidth()) || (height != getHeight())) {
+      if (width != getWidth() || height != getHeight()) {
         final Point pos = getLocation();
-        setLocation(pos.x + ((width - getWidth()) >> 1), pos.y + ((height - getHeight()) >> 1));
+        setLocation(pos.x + (width - getWidth() >> 1), pos.y + (height - getHeight() >> 1));
       }
     }
 
@@ -135,7 +135,7 @@ public class GUIFeedback implements AutoCloseable {
       inner.add(button(), BorderLayout.SOUTH);
       pack();
       final Dimension scr = Toolkit.getDefaultToolkit().getScreenSize();
-      setLocation((scr.width - getWidth()) >> 1, (scr.height - getHeight() >> 1));
+      setLocation(scr.width - getWidth() >> 1, scr.height - getHeight() >> 1);
       setVisible(true);
       addWindowListener(new WindowAdapter() {
         @Override
@@ -156,7 +156,7 @@ public class GUIFeedback implements AutoCloseable {
       _message.setText(message);
       _button.setVisible(true);
       repack();
-      final BlockingQueue<String> buttonActions = new LinkedBlockingQueue<String>();
+      final BlockingQueue<String> buttonActions = new LinkedBlockingQueue<>();
       final ActionListener listener = new ActionListener() {
         @Override
         public void actionPerformed(final ActionEvent e) {
@@ -166,7 +166,7 @@ public class GUIFeedback implements AutoCloseable {
       _button.addActionListener(listener);
       try {
         buttonActions.take();
-      } catch (InterruptedException ex) {
+      } catch (final InterruptedException ex) {
         LOGGER.error("Interrupted", ex);
       }
       _button.removeActionListener(listener);
@@ -230,7 +230,7 @@ public class GUIFeedback implements AutoCloseable {
   /**
    * Reports an informational message to the user about what is going on. Ideally, a new message should appear at least every 15 seconds (unless the progress bar is used) but no more often than every
    * two seconds.
-   * 
+   *
    * @param message the message to write, not null
    */
   public static void say(final String message) {
@@ -246,7 +246,7 @@ public class GUIFeedback implements AutoCloseable {
 
   /**
    * Reports a message to the user which will require acknowledgement. This should only happen as part of task completion (see {@link #done}) or in the case of an error.
-   * 
+   *
    * @param message the message to write, not null
    */
   public static void shout(final String message) {
@@ -262,7 +262,7 @@ public class GUIFeedback implements AutoCloseable {
 
   /**
    * Reports an increase in the amount of work required.
-   * 
+   *
    * @param count an arbitrary number of work units
    */
   public void workRequired(final int count) {
@@ -280,7 +280,7 @@ public class GUIFeedback implements AutoCloseable {
 
   /**
    * Reports completion of an amount of work.
-   * 
+   *
    * @param count the amount of arbitrary work units completed
    */
   public void workCompleted(int count) {
@@ -303,7 +303,7 @@ public class GUIFeedback implements AutoCloseable {
   /**
    * Reports completion of this feedback instance. This is the equivalent of calling {@link #close} but will display a message at the same time. If this is the primary instance the message will
    * require acknowledgement. If this is a nested instance, the message is just displayed and this method returns.
-   * 
+   *
    * @param message the message to display, not null
    */
   public void done(final String message) {

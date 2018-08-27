@@ -23,7 +23,7 @@ import com.opengamma.util.PublicAPI;
  */
 @PublicAPI
 public class RegionUtils {
-  
+
   /**
    * Restricted constructor.
    */
@@ -34,23 +34,23 @@ public class RegionUtils {
   /**
    * Creates a set of regions from a region id.
    * This is useful in the case where the region is compound (e.g. NY+LON).
-   * 
+   *
    * @param regionSource The region source, not null
    * @param regionId The region id, not null
    * @return a set of the region(s)
    */
-  public static Set<Region> getRegions(RegionSource regionSource, final ExternalId regionId) {
+  public static Set<Region> getRegions(final RegionSource regionSource, final ExternalId regionId) {
     Validate.notNull(regionSource, "region source");
     Validate.notNull(regionId, "region id");
     if (regionId.isScheme(ExternalSchemes.FINANCIAL) && regionId.getValue().contains("+")) {
       final String[] regions = regionId.getValue().split("\\+");
-      final Set<Region> resultRegions = new HashSet<Region>();
+      final Set<Region> resultRegions = new HashSet<>();
       for (final String region : regions) {
         resultRegions.add(regionSource.getHighestLevelRegion(ExternalSchemes.financialRegionId(region)));
       }
       return resultRegions;
-    } 
-    return Collections.singleton(regionSource.getHighestLevelRegion(regionId)); 
+    }
+    return Collections.singleton(regionSource.getHighestLevelRegion(regionId));
   }
 
 }

@@ -75,95 +75,95 @@ public class InMemoryRoleMaster
 
   //-------------------------------------------------------------------------
   @Override
-  String extractName(ManageableRole role) {
+  String extractName(final ManageableRole role) {
     return role.getRoleName();
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean nameExists(String roleName) {
+  public boolean nameExists(final String roleName) {
     ArgumentChecker.notNull(roleName, "roleName");
     return super.nameExists(roleName);
   }
 
   @Override
-  public ManageableRole getByName(String roleName) {
+  public ManageableRole getByName(final String roleName) {
     ArgumentChecker.notNull(roleName, "roleName");
     return super.getByName(roleName);
   }
 
   @Override
-  public ManageableRole getById(ObjectId objectId) {
+  public ManageableRole getById(final ObjectId objectId) {
     ArgumentChecker.notNull(objectId, "objectId");
     return super.getById(objectId);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public UniqueId add(ManageableRole role) {
+  public UniqueId add(final ManageableRole role) {
     ArgumentChecker.notNull(role, "role");
     return super.add(role);
   }
 
   @Override
-  public UniqueId update(ManageableRole role) {
+  public UniqueId update(final ManageableRole role) {
     ArgumentChecker.notNull(role, "role");
     return super.update(role);
   }
 
   @Override
-  public UniqueId save(ManageableRole role) {
+  public UniqueId save(final ManageableRole role) {
     ArgumentChecker.notNull(role, "role");
     return super.save(role);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public void removeByName(String roleName) {
+  public void removeByName(final String roleName) {
     ArgumentChecker.notNull(roleName, "roleName");
     super.removeByName(roleName);
   }
 
   @Override
-  public void removeById(ObjectId objectId) {
+  public void removeById(final ObjectId objectId) {
     ArgumentChecker.notNull(objectId, "objectId");
     super.removeById(objectId);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public RoleSearchResult search(RoleSearchRequest request) {
+  public RoleSearchResult search(final RoleSearchRequest request) {
     ArgumentChecker.notNull(request, "request");
-    List<ManageableRole> list = new ArrayList<>();
-    for (ManageableRole role : getStoredValues()) {
+    final List<ManageableRole> list = new ArrayList<>();
+    for (final ManageableRole role : getStoredValues()) {
       if (request.matches(role)) {
         list.add(role);
       }
     }
     Collections.sort(list, request.getSortOrder());
-    Paging paging = Paging.of(request.getPagingRequest(), list);
+    final Paging paging = Paging.of(request.getPagingRequest(), list);
     return new RoleSearchResult(paging, request.getPagingRequest().select(list));
   }
 
   @Override
-  public RoleEventHistoryResult eventHistory(RoleEventHistoryRequest request) {
+  public RoleEventHistoryResult eventHistory(final RoleEventHistoryRequest request) {
     ArgumentChecker.notNull(request, "request");
-    List<HistoryEvent> history = super.eventHistory(request.getObjectId(), request.getRoleName());
+    final List<HistoryEvent> history = super.eventHistory(request.getObjectId(), request.getRoleName());
     return new RoleEventHistoryResult(history);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public UserAccount resolveAccount(UserAccount account) {
+  public UserAccount resolveAccount(final UserAccount account) {
     ArgumentChecker.notNull(account, "account");
-    SimpleUserAccount resolved = SimpleUserAccount.from(account);
+    final SimpleUserAccount resolved = SimpleUserAccount.from(account);
     // find roles containing the user
-    RoleSearchRequest request = new RoleSearchRequest();
+    final RoleSearchRequest request = new RoleSearchRequest();
     request.setAssociatedUser(account.getUserName());
-    RoleSearchResult result = search(request);
+    final RoleSearchResult result = search(request);
     // find linked roles and permissions
-    Set<String> rolesToLoad = new HashSet<>();
-    for (ManageableRole loaded : result.getRoles()) {
+    final Set<String> rolesToLoad = new HashSet<>();
+    for (final ManageableRole loaded : result.getRoles()) {
       resolved.getRoles().add(loaded.getRoleName());
       resolved.getPermissions().addAll(loaded.getAssociatedPermissions());
       rolesToLoad.addAll(loaded.getAssociatedRoles());
@@ -171,8 +171,8 @@ public class InMemoryRoleMaster
     rolesToLoad.removeAll(resolved.getRoles());
     // find implied roles and permissions
     while (rolesToLoad.size() > 0) {
-      String roleToLoad = rolesToLoad.iterator().next();
-      ManageableRole loaded = getByName0(roleToLoad);
+      final String roleToLoad = rolesToLoad.iterator().next();
+      final ManageableRole loaded = getByName0(roleToLoad);
       resolved.getRoles().add(loaded.getRoleName());
       resolved.getPermissions().addAll(loaded.getAssociatedPermissions());
       rolesToLoad.addAll(loaded.getAssociatedRoles());

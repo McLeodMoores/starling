@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.historicaltimeseries.impl;
@@ -32,25 +32,25 @@ public class DefaultHistoricalTimeSeriesSelector implements HistoricalTimeSeries
    */
   private final ConfigSource _configSource;
 
-  public DefaultHistoricalTimeSeriesSelector(ConfigSource configSource) {
+  public DefaultHistoricalTimeSeriesSelector(final ConfigSource configSource) {
     ArgumentChecker.notNull(configSource, "configSource");
     _configSource = configSource;
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public ManageableHistoricalTimeSeriesInfo select(Collection<ManageableHistoricalTimeSeriesInfo> candidates, String selectionKey) {
+  public ManageableHistoricalTimeSeriesInfo select(final Collection<ManageableHistoricalTimeSeriesInfo> candidates, String selectionKey) {
     selectionKey = Objects.firstNonNull(selectionKey, HistoricalTimeSeriesRatingFieldNames.DEFAULT_CONFIG_NAME);
-    
+
     //IGN-139 - avoid rating unless we have to
     switch (candidates.size()) {
       case 0:
         return null;
       case 1:
-        return Iterables.getOnlyElement(candidates);  
+        return Iterables.getOnlyElement(candidates);
       default:
         // Pick best using rules from configuration
-        HistoricalTimeSeriesRating rating = _configSource.getLatestByName(HistoricalTimeSeriesRating.class, selectionKey);
+        final HistoricalTimeSeriesRating rating = _configSource.getLatestByName(HistoricalTimeSeriesRating.class, selectionKey);
         if (rating == null) {
           LOGGER.warn("Resolver failed to find configuration: {}", selectionKey);
           return null;
@@ -58,21 +58,21 @@ public class DefaultHistoricalTimeSeriesSelector implements HistoricalTimeSeries
         return bestMatch(candidates, rating);
     }
   }
-  
+
   //-------------------------------------------------------------------------
   /**
    * Choose the best match using the configured rules.
-   * 
+   *
    * @param matches  the list of matches, not null
    * @param rating  the rules for scoring the matches, not null
    * @return the best match, null if no match
    */
-  private ManageableHistoricalTimeSeriesInfo bestMatch(Collection<ManageableHistoricalTimeSeriesInfo> matches, HistoricalTimeSeriesRating rating) {
+  private ManageableHistoricalTimeSeriesInfo bestMatch(final Collection<ManageableHistoricalTimeSeriesInfo> matches, final HistoricalTimeSeriesRating rating) {
     LOGGER.debug("Find best match using rules: {}", rating);
     int currentScore = Integer.MIN_VALUE;
     ManageableHistoricalTimeSeriesInfo bestMatch = null;
-    for (ManageableHistoricalTimeSeriesInfo match : matches) {
-      int score = rating.rate(match);
+    for (final ManageableHistoricalTimeSeriesInfo match : matches) {
+      final int score = rating.rate(match);
       LOGGER.debug("Score: {} for info: {}", score, match);
       if (score > currentScore) {
         currentScore = score;
@@ -81,5 +81,5 @@ public class DefaultHistoricalTimeSeriesSelector implements HistoricalTimeSeries
     }
     return bestMatch;
   }
-  
+
 }

@@ -86,7 +86,7 @@ public final class DefaultSecurityAttributeMappings {
    * @return the default {@link SecurityAttributeMapper}
    */
   public static SecurityAttributeMapper create(final CurrencyPairs currencyPairs) {
-    SecurityAttributeMapper mapper = new SecurityAttributeMapper();
+    final SecurityAttributeMapper mapper = new SecurityAttributeMapper();
 
     mapBond(mapper);
     mapBondFutureOption(mapper);
@@ -118,7 +118,7 @@ public final class DefaultSecurityAttributeMappings {
     // fallback type name for securities that haven't been explicitly mapped
     mapper.mapColumn(TYPE, ManageableSecurity.class, new SecurityValueProvider<ManageableSecurity>() {
       @Override
-      public Object getValue(ManageableSecurity security) {
+      public Object getValue(final ManageableSecurity security) {
         return security.getClass().getSimpleName();
       }
     });
@@ -131,13 +131,13 @@ public final class DefaultSecurityAttributeMappings {
    * @param mapper the mapper instance to use
    * @param currencyPairs the {@link CurrencyPairs} config to use
    */
-  private static void mapFXDigitalOption(SecurityAttributeMapper mapper, final CurrencyPairs currencyPairs) {
+  private static void mapFXDigitalOption(final SecurityAttributeMapper mapper, final CurrencyPairs currencyPairs) {
     // ------------------- FXDigitalOption
     mapper.mapColumn(TYPE, FXDigitalOptionSecurity.class, "FX Digital Option");
     mapper.mapColumn(MATURITY, FXDigitalOptionSecurity.meta().expiry());
     mapper.mapColumn(QUANTITY, FXDigitalOptionSecurity.class, new SecurityValueProvider<FXDigitalOptionSecurity>() {
       @Override
-      public Object getValue(FXDigitalOptionSecurity security) {
+      public Object getValue(final FXDigitalOptionSecurity security) {
         return FXAmounts.forOption(security.getPutCurrency(),
             security.getCallCurrency(),
             security.getPutAmount(),
@@ -148,13 +148,13 @@ public final class DefaultSecurityAttributeMappings {
     });
     mapper.mapColumn(PRODUCT, FXDigitalOptionSecurity.class, new SecurityValueProvider<FXDigitalOptionSecurity>() {
       @Override
-      public Object getValue(FXDigitalOptionSecurity security) {
+      public Object getValue(final FXDigitalOptionSecurity security) {
         return currencyPairName(security.getPutCurrency(), security.getCallCurrency(), currencyPairs);
       }
     });
     mapper.mapColumn(RATE, FXDigitalOptionSecurity.class, new SecurityValueProvider<FXDigitalOptionSecurity>() {
       @Override
-      public Object getValue(FXDigitalOptionSecurity security) {
+      public Object getValue(final FXDigitalOptionSecurity security) {
         return CurrencyUtils.getRate(security.getPutCurrency(),
             security.getCallCurrency(),
             security.getPutAmount(),
@@ -169,13 +169,13 @@ public final class DefaultSecurityAttributeMappings {
    * @param mapper the mapper instance to use
    * @param currencyPairs the {@link CurrencyPairs} config to use
    */
-  private static void mapNonDeliverableFXOption(SecurityAttributeMapper mapper, final CurrencyPairs currencyPairs) {
+  private static void mapNonDeliverableFXOption(final SecurityAttributeMapper mapper, final CurrencyPairs currencyPairs) {
     // ------------------- NonDeliverableFXOption
     mapper.mapColumn(TYPE, NonDeliverableFXOptionSecurity.class, "Non-deliverable FX Option");
     mapper.mapColumn(MATURITY, NonDeliverableFXOptionSecurity.meta().expiry());
     mapper.mapColumn(QUANTITY, NonDeliverableFXOptionSecurity.class, new SecurityValueProvider<NonDeliverableFXOptionSecurity>() {
       @Override
-      public Object getValue(NonDeliverableFXOptionSecurity security) {
+      public Object getValue(final NonDeliverableFXOptionSecurity security) {
         return FXAmounts.forOption(security.getPutCurrency(),
             security.getCallCurrency(),
             security.getPutAmount(),
@@ -186,13 +186,13 @@ public final class DefaultSecurityAttributeMappings {
     });
     mapper.mapColumn(PRODUCT, NonDeliverableFXOptionSecurity.class, new SecurityValueProvider<NonDeliverableFXOptionSecurity>() {
       @Override
-      public Object getValue(NonDeliverableFXOptionSecurity security) {
+      public Object getValue(final NonDeliverableFXOptionSecurity security) {
         return currencyPairName(security.getPutCurrency(), security.getCallCurrency(), currencyPairs);
       }
     });
     mapper.mapColumn(RATE, NonDeliverableFXOptionSecurity.class, new SecurityValueProvider<NonDeliverableFXOptionSecurity>() {
       @Override
-      public Object getValue(NonDeliverableFXOptionSecurity security) {
+      public Object getValue(final NonDeliverableFXOptionSecurity security) {
         return CurrencyUtils.getRate(security.getPutCurrency(),
             security.getCallCurrency(),
             security.getPutAmount(),
@@ -207,19 +207,19 @@ public final class DefaultSecurityAttributeMappings {
    * @param mapper the mapper instance to use
    * @param currencyPairs the {@link CurrencyPairs} config to use
    */
-  private static void mapNonDeliverableFXForward(SecurityAttributeMapper mapper, final CurrencyPairs currencyPairs) {
+  private static void mapNonDeliverableFXForward(final SecurityAttributeMapper mapper, final CurrencyPairs currencyPairs) {
     // ------------------- NonDeliverableFXForward
     mapper.mapColumn(TYPE, NonDeliverableFXForwardSecurity.class, "Non Deliverable FX Forward");
     mapper.mapColumn(MATURITY, NonDeliverableFXForwardSecurity.meta().forwardDate());
     mapper.mapColumn(PRODUCT, NonDeliverableFXForwardSecurity.class, new SecurityValueProvider<NonDeliverableFXForwardSecurity>() {
       @Override
-      public Object getValue(NonDeliverableFXForwardSecurity security) {
+      public Object getValue(final NonDeliverableFXForwardSecurity security) {
         return currencyPairName(security.getPayCurrency(), security.getReceiveCurrency(), currencyPairs);
       }
     });
     mapper.mapColumn(QUANTITY, NonDeliverableFXForwardSecurity.class, new SecurityValueProvider<NonDeliverableFXForwardSecurity>() {
       @Override
-      public Object getValue(NonDeliverableFXForwardSecurity security) {
+      public Object getValue(final NonDeliverableFXForwardSecurity security) {
         return FXAmounts.forForward(security.getPayCurrency(),
             security.getReceiveCurrency(),
             security.getPayAmount(),
@@ -229,7 +229,7 @@ public final class DefaultSecurityAttributeMappings {
     });
     mapper.mapColumn(RATE, NonDeliverableFXForwardSecurity.class, new SecurityValueProvider<NonDeliverableFXForwardSecurity>() {
       @Override
-      public Object getValue(NonDeliverableFXForwardSecurity security) {
+      public Object getValue(final NonDeliverableFXForwardSecurity security) {
         return CurrencyUtils.getRate(security.getPayCurrency(),
             security.getReceiveCurrency(),
             security.getPayAmount(),
@@ -244,19 +244,19 @@ public final class DefaultSecurityAttributeMappings {
    * @param mapper the mapper instance to use
    * @param currencyPairs the {@link CurrencyPairs} config to use
    */
-  private static void mapNonDeliverableFXDigitalOption(SecurityAttributeMapper mapper, final CurrencyPairs currencyPairs) {
+  private static void mapNonDeliverableFXDigitalOption(final SecurityAttributeMapper mapper, final CurrencyPairs currencyPairs) {
     // ------------------- NonDeliverableFXDigitalOption
     mapper.mapColumn(TYPE, NonDeliverableFXDigitalOptionSecurity.class, "Non Deliverable FX Digital Option");
     mapper.mapColumn(MATURITY, NonDeliverableFXDigitalOptionSecurity.meta().expiry());
     mapper.mapColumn(PRODUCT, NonDeliverableFXDigitalOptionSecurity.class, new SecurityValueProvider<NonDeliverableFXDigitalOptionSecurity>() {
       @Override
-      public Object getValue(NonDeliverableFXDigitalOptionSecurity security) {
+      public Object getValue(final NonDeliverableFXDigitalOptionSecurity security) {
         return currencyPairName(security.getPutCurrency(), security.getCallCurrency(), currencyPairs);
       }
     });
     mapper.mapColumn(QUANTITY, NonDeliverableFXDigitalOptionSecurity.class, new SecurityValueProvider<NonDeliverableFXDigitalOptionSecurity>() {
       @Override
-      public Object getValue(NonDeliverableFXDigitalOptionSecurity security) {
+      public Object getValue(final NonDeliverableFXDigitalOptionSecurity security) {
         return FXAmounts.forOption(security.getPutCurrency(),
             security.getCallCurrency(),
             security.getPutAmount(),
@@ -267,7 +267,7 @@ public final class DefaultSecurityAttributeMappings {
     });
     mapper.mapColumn(RATE, NonDeliverableFXDigitalOptionSecurity.class, new SecurityValueProvider<NonDeliverableFXDigitalOptionSecurity>() {
       @Override
-      public Object getValue(NonDeliverableFXDigitalOptionSecurity security) {
+      public Object getValue(final NonDeliverableFXDigitalOptionSecurity security) {
         return CurrencyUtils.getRate(security.getPutCurrency(),
             security.getCallCurrency(),
             security.getPutAmount(),
@@ -282,13 +282,13 @@ public final class DefaultSecurityAttributeMappings {
    * @param mapper the mapper instance to use
    * @param currencyPairs the {@link CurrencyPairs} config to use
    */
-  private static void mapFXBarrierOption(SecurityAttributeMapper mapper, final CurrencyPairs currencyPairs) {
+  private static void mapFXBarrierOption(final SecurityAttributeMapper mapper, final CurrencyPairs currencyPairs) {
     // ------------------- FXBarrierOption
     mapper.mapColumn(TYPE, FXBarrierOptionSecurity.class, "FX Barrier Option");
     mapper.mapColumn(MATURITY, FXBarrierOptionSecurity.meta().expiry());
     mapper.mapColumn(QUANTITY, FXBarrierOptionSecurity.class, new SecurityValueProvider<FXBarrierOptionSecurity>() {
       @Override
-      public Object getValue(FXBarrierOptionSecurity security) {
+      public Object getValue(final FXBarrierOptionSecurity security) {
         return FXAmounts.forOption(security.getPutCurrency(),
             security.getCallCurrency(),
             security.getPutAmount(),
@@ -299,13 +299,13 @@ public final class DefaultSecurityAttributeMappings {
     });
     mapper.mapColumn(PRODUCT, FXBarrierOptionSecurity.class, new SecurityValueProvider<FXBarrierOptionSecurity>() {
       @Override
-      public Object getValue(FXBarrierOptionSecurity security) {
+      public Object getValue(final FXBarrierOptionSecurity security) {
         return currencyPairName(security.getPutCurrency(), security.getCallCurrency(), currencyPairs);
       }
     });
     mapper.mapColumn(RATE, FXBarrierOptionSecurity.class, new SecurityValueProvider<FXBarrierOptionSecurity>() {
       @Override
-      public Object getValue(FXBarrierOptionSecurity security) {
+      public Object getValue(final FXBarrierOptionSecurity security) {
         return CurrencyUtils.getRate(security.getPutCurrency(),
             security.getCallCurrency(),
             security.getPutAmount(),
@@ -320,20 +320,20 @@ public final class DefaultSecurityAttributeMappings {
    * @param mapper the mapper instance to use
    * @param currencyPairs the {@link CurrencyPairs} config to use
    */
-  private static void mapFXOption(SecurityAttributeMapper mapper, final CurrencyPairs currencyPairs) {
+  private static void mapFXOption(final SecurityAttributeMapper mapper, final CurrencyPairs currencyPairs) {
     // ------------------- FXOption
     mapper.mapColumn(TYPE, FXOptionSecurity.class, "FX Option");
     mapper.mapColumn(MATURITY, FXOptionSecurity.meta().expiry());
     mapper.mapColumn(PRODUCT, FXOptionSecurity.class, new SecurityValueProvider<FXOptionSecurity>() {
       @Override
-      public Object getValue(FXOptionSecurity security) {
-        CurrencyPair pair = currencyPairs.getCurrencyPair(security.getPutCurrency(), security.getCallCurrency());
+      public Object getValue(final FXOptionSecurity security) {
+        final CurrencyPair pair = currencyPairs.getCurrencyPair(security.getPutCurrency(), security.getCallCurrency());
         return pair.getBase() + "/" + pair.getCounter();
       }
     });
     mapper.mapColumn(QUANTITY, FXOptionSecurity.class, new SecurityValueProvider<FXOptionSecurity>() {
       @Override
-      public FXAmounts getValue(FXOptionSecurity security) {
+      public FXAmounts getValue(final FXOptionSecurity security) {
         return FXAmounts.forOption(security.getPutCurrency(),
             security.getCallCurrency(),
             security.getPutAmount(),
@@ -344,7 +344,7 @@ public final class DefaultSecurityAttributeMappings {
     });
     mapper.mapColumn(RATE, FXOptionSecurity.class, new SecurityValueProvider<FXOptionSecurity>() {
       @Override
-      public Object getValue(FXOptionSecurity security) {
+      public Object getValue(final FXOptionSecurity security) {
         return CurrencyUtils.getRate(security.getPutCurrency(),
             security.getCallCurrency(),
             security.getPutAmount(),
@@ -359,19 +359,19 @@ public final class DefaultSecurityAttributeMappings {
    * @param mapper the mapper instance to use
    * @param currencyPairs the {@link CurrencyPairs} config to use
    */
-  private static void mapFXForward(SecurityAttributeMapper mapper, final CurrencyPairs currencyPairs) {
+  private static void mapFXForward(final SecurityAttributeMapper mapper, final CurrencyPairs currencyPairs) {
     // ------------------- FXForward
     mapper.mapColumn(TYPE, FXForwardSecurity.class, "FX Forward");
     mapper.mapColumn(MATURITY, FXForwardSecurity.meta().forwardDate());
     mapper.mapColumn(PRODUCT, FXForwardSecurity.class, new SecurityValueProvider<FXForwardSecurity>() {
       @Override
-      public String getValue(FXForwardSecurity security) {
+      public String getValue(final FXForwardSecurity security) {
         return currencyPairName(security.getPayCurrency(), security.getReceiveCurrency(), currencyPairs);
       }
     });
     mapper.mapColumn(QUANTITY, FXForwardSecurity.class, new SecurityValueProvider<FXForwardSecurity>() {
       @Override
-      public FXAmounts getValue(FXForwardSecurity security) {
+      public FXAmounts getValue(final FXForwardSecurity security) {
         return FXAmounts.forForward(security.getPayCurrency(),
             security.getReceiveCurrency(),
             security.getPayAmount(),
@@ -381,7 +381,7 @@ public final class DefaultSecurityAttributeMappings {
     });
     mapper.mapColumn(RATE, FXForwardSecurity.class, new SecurityValueProvider<FXForwardSecurity>() {
       @Override
-      public Double getValue(FXForwardSecurity security) {
+      public Double getValue(final FXForwardSecurity security) {
         return CurrencyUtils.getRate(security.getPayCurrency(),
             security.getReceiveCurrency(),
             security.getPayAmount(),
@@ -395,7 +395,7 @@ public final class DefaultSecurityAttributeMappings {
    * Creates mappings for {@link EquityVarianceSwapSecurity}
    * @param mapper the mapper instance to use
    */
-  private static void mapEquityVarianceSwap(SecurityAttributeMapper mapper) {
+  private static void mapEquityVarianceSwap(final SecurityAttributeMapper mapper) {
     // ------------------- EquityVarianceSwap
     mapper.mapColumn(TYPE, EquityVarianceSwapSecurity.class, "Equity Variance Swap");
     mapper.mapColumn(QUANTITY, EquityVarianceSwapSecurity.meta().notional());
@@ -405,7 +405,7 @@ public final class DefaultSecurityAttributeMappings {
    * Creates mappings for {@link EquityBarrierOptionSecurity}
    * @param mapper the mapper instance to use
    */
-  private static void mapEquityBarrierOption(SecurityAttributeMapper mapper) {
+  private static void mapEquityBarrierOption(final SecurityAttributeMapper mapper) {
     // ------------------- EquityBarrierOption
     mapper.mapColumn(TYPE, EquityBarrierOptionSecurity.class, "Equity Barrier Option");
     mapper.mapColumn(RATE, EquityBarrierOptionSecurity.meta().strike());
@@ -413,7 +413,7 @@ public final class DefaultSecurityAttributeMappings {
     mapper.mapColumn(DIRECTION, EquityBarrierOptionSecurity.meta().optionType());
     mapper.mapColumn(PRODUCT, EquityBarrierOptionSecurity.class, new SecurityValueProvider<EquityBarrierOptionSecurity>() {
       @Override
-      public Object getValue(EquityBarrierOptionSecurity security) {
+      public Object getValue(final EquityBarrierOptionSecurity security) {
         return security.getUnderlyingId().getValue();
       }
     });
@@ -423,7 +423,7 @@ public final class DefaultSecurityAttributeMappings {
    * Creates mappings for {@link EquityIndexOptionSecurity}
    * @param mapper the mapper instance to use
    */
-  private static void mapEquityIndexOption(SecurityAttributeMapper mapper) {
+  private static void mapEquityIndexOption(final SecurityAttributeMapper mapper) {
     // ------------------- EquityIndexOption
     mapper.mapColumn(TYPE, EquityIndexOptionSecurity.class, "Equity Index Option");
     mapper.mapColumn(RATE, EquityIndexOptionSecurity.meta().strike());
@@ -431,7 +431,7 @@ public final class DefaultSecurityAttributeMappings {
     mapper.mapColumn(DIRECTION, EquityIndexOptionSecurity.meta().optionType());
     mapper.mapColumn(PRODUCT, EquityIndexOptionSecurity.class, new SecurityValueProvider<EquityIndexOptionSecurity>() {
       @Override
-      public Object getValue(EquityIndexOptionSecurity security) {
+      public Object getValue(final EquityIndexOptionSecurity security) {
         return security.getUnderlyingId().getValue();
       }
     });
@@ -441,7 +441,7 @@ public final class DefaultSecurityAttributeMappings {
    * Creates mappings for {@link EquityOptionSecurity}
    * @param mapper the mapper instance to use
    */
-  private static void mapEquityOption(SecurityAttributeMapper mapper) {
+  private static void mapEquityOption(final SecurityAttributeMapper mapper) {
     // ------------------- EquityOption
     mapper.mapColumn(TYPE, EquityOptionSecurity.class, "Equity Option");
     mapper.mapColumn(RATE, EquityOptionSecurity.meta().strike());
@@ -453,7 +453,7 @@ public final class DefaultSecurityAttributeMappings {
    * Creates mappings for {@link EquitySecurity}
    * @param mapper the mapper instance to use
    */
-  private static void mapEquity(SecurityAttributeMapper mapper) {
+  private static void mapEquity(final SecurityAttributeMapper mapper) {
     // ------------------- Equity
     mapper.mapColumn(TYPE, EquitySecurity.class, "Equity");
     mapper.mapColumn(PRODUCT, EquitySecurity.meta().companyName());
@@ -463,7 +463,7 @@ public final class DefaultSecurityAttributeMappings {
    * Creates mappings for {@link SwaptionSecurity}
    * @param mapper the mapper instance to use
    */
-  private static void mapSwaption(SecurityAttributeMapper mapper) {
+  private static void mapSwaption(final SecurityAttributeMapper mapper) {
     // ------------------- Swaption
     mapper.mapColumn(TYPE, SwaptionSecurity.class, "Swaption");
     mapper.mapColumn(MATURITY, SwaptionSecurity.meta().expiry());
@@ -483,7 +483,7 @@ public final class DefaultSecurityAttributeMappings {
    * Creates mappings for {@link SwapSecurity}
    * @param mapper the mapper instance to use
    */
-  private static void mapSwap(SecurityAttributeMapper mapper) {
+  private static void mapSwap(final SecurityAttributeMapper mapper) {
     // ------------------- Swap
     mapper.mapColumn(TYPE, SwapSecurity.class, new SwapTypeProvider());
     mapper.mapColumn(PRODUCT, SwapSecurity.class, new SwapProductProvider());
@@ -501,7 +501,7 @@ public final class DefaultSecurityAttributeMappings {
    * Creates mappings for {@link FRASecurity}
    * @param mapper the mapper instance to use
    */
-  private static void mapFRA(SecurityAttributeMapper mapper) {
+  private static void mapFRA(final SecurityAttributeMapper mapper) {
     // ------------------- FRA
     mapper.mapColumn(TYPE, FRASecurity.class, "FRA");
     mapper.mapColumn(PRODUCT, FRASecurity.meta().currency());
@@ -515,7 +515,7 @@ public final class DefaultSecurityAttributeMappings {
    * Creates mappings for {@link IRFutureOptionSecurity}
    * @param mapper the mapper instance to use
    */
-  private static void mapIRFutureOption(SecurityAttributeMapper mapper) {
+  private static void mapIRFutureOption(final SecurityAttributeMapper mapper) {
     // ------------------- IRFutureOption
     mapper.mapColumn(TYPE, IRFutureOptionSecurity.class, "Interest Rate Future Option");
     mapper.mapColumn(MATURITY, IRFutureOptionSecurity.meta().expiry());
@@ -527,13 +527,13 @@ public final class DefaultSecurityAttributeMappings {
    * Creates mappings for {@link InterestRateFutureSecurity}
    * @param mapper the mapper instance to use
    */
-  private static void mapInterestRateFuture(SecurityAttributeMapper mapper) {
+  private static void mapInterestRateFuture(final SecurityAttributeMapper mapper) {
     // ------------------- InterestRateFuture
     mapper.mapColumn(TYPE, InterestRateFutureSecurity.class, "Interest Rate Future");
     mapper.mapColumn(PRODUCT, InterestRateFutureSecurity.meta().currency());
     mapper.mapColumn(INDEX, InterestRateFutureSecurity.class, new SecurityValueProvider<InterestRateFutureSecurity>() {
       @Override
-      public Object getValue(InterestRateFutureSecurity security) {
+      public Object getValue(final InterestRateFutureSecurity security) {
         return security.getUnderlyingId().getValue();
       }
     });
@@ -543,11 +543,11 @@ public final class DefaultSecurityAttributeMappings {
    * Creates mappings for {@link IndexFutureSecurity}
    * @param mapper the mapper instance to use
    */
-  private static void mapIndexFuture(SecurityAttributeMapper mapper) {
+  private static void mapIndexFuture(final SecurityAttributeMapper mapper) {
     // ------------------- IndexFuture
     mapper.mapColumn(INDEX, IndexFutureSecurity.class, new SecurityValueProvider<IndexFutureSecurity>() {
       @Override
-      public Object getValue(IndexFutureSecurity security) {
+      public Object getValue(final IndexFutureSecurity security) {
         return security.getUnderlyingId().getValue();
       }
     });
@@ -557,7 +557,7 @@ public final class DefaultSecurityAttributeMappings {
    * Creates mappings for {@link FutureSecurity}
    * @param mapper the mapper instance to use
    */
-  private static void mapFuture(SecurityAttributeMapper mapper) {
+  private static void mapFuture(final SecurityAttributeMapper mapper) {
     // ------------------- Futures
     mapper.mapColumn(MATURITY, FutureSecurity.meta().expiry());
     mapper.mapColumn(QUANTITY, FutureSecurity.meta().unitAmount());
@@ -578,7 +578,7 @@ public final class DefaultSecurityAttributeMappings {
    * Creates mappings for {@link CapFloorCMSSpreadSecurity}
    * @param mapper the mapper instance to use
    */
-  private static void mapCapFloorCMSSpread(SecurityAttributeMapper mapper) {
+  private static void mapCapFloorCMSSpread(final SecurityAttributeMapper mapper) {
     // ------------------- CapFloorCMSSpread
     mapper.mapColumn(TYPE, CapFloorCMSSpreadSecurity.class, "Cap/Floor CMS Spread");
     mapper.mapColumn(START, CapFloorCMSSpreadSecurity.meta().startDate());
@@ -588,7 +588,7 @@ public final class DefaultSecurityAttributeMappings {
     mapper.mapColumn(FREQUENCY, CapFloorCMSSpreadSecurity.meta().frequency());
     mapper.mapColumn(PRODUCT, CapFloorCMSSpreadSecurity.class, new SecurityValueProvider<CapFloorCMSSpreadSecurity>() {
       @Override
-      public Object getValue(CapFloorCMSSpreadSecurity security) {
+      public Object getValue(final CapFloorCMSSpreadSecurity security) {
         return security.getLongId().getValue() + "/" + security.getShortId().getValue();
       }
     });
@@ -598,7 +598,7 @@ public final class DefaultSecurityAttributeMappings {
    * Creates mappings for {@link CapFloorSecurity}
    * @param mapper the mapper instance to use
    */
-  private static void mapCapFloor(SecurityAttributeMapper mapper) {
+  private static void mapCapFloor(final SecurityAttributeMapper mapper) {
     // ------------------- CapFloor
     mapper.mapColumn(TYPE, CapFloorSecurity.class, "Cap/Floor");
     mapper.mapColumn(QUANTITY, CapFloorSecurity.meta().notional());
@@ -612,7 +612,7 @@ public final class DefaultSecurityAttributeMappings {
    * Creates mappings for {@link CommodityFutureOptionSecurity}
    * @param mapper the mapper instance to use
    */
-  private static void mapCommodityFutureOption(SecurityAttributeMapper mapper) {
+  private static void mapCommodityFutureOption(final SecurityAttributeMapper mapper) {
     // ------------------- CommodityFutureOption
     mapper.mapColumn(TYPE, CommodityFutureOptionSecurity.class, "Commodity Future Option");
     mapper.mapColumn(MATURITY, CommodityFutureOptionSecurity.meta().expiry());
@@ -624,7 +624,7 @@ public final class DefaultSecurityAttributeMappings {
    * Creates mappings for {@link CommodityForwardSecurity} type securities
    * @param mapper the mapper instance to use
    */
-  private static void mapCommodityForward(SecurityAttributeMapper mapper) {
+  private static void mapCommodityForward(final SecurityAttributeMapper mapper) {
     // ------------------- CommodityForward
     mapper.mapColumn(TYPE, MetalForwardSecurity.class, "Metal Forward");
     mapper.mapColumn(TYPE, EnergyForwardSecurity.class, "Energy Forward");
@@ -638,7 +638,7 @@ public final class DefaultSecurityAttributeMappings {
    * Creates mappings for {@link BondFutureOptionSecurity}
    * @param mapper the mapper instance to use
    */
-  private static void mapBondFutureOption(SecurityAttributeMapper mapper) {
+  private static void mapBondFutureOption(final SecurityAttributeMapper mapper) {
     // ------------------- BondFutureOption
     mapper.mapColumn(TYPE, BondFutureOptionSecurity.class, "Bond Future Option");
     mapper.mapColumn(MATURITY, BondFutureOptionSecurity.meta().expiry());
@@ -650,7 +650,7 @@ public final class DefaultSecurityAttributeMappings {
    * Creates mappings for {@link BondSecurity} type securities
    * @param mapper the mapper instance to use
    */
-  private static void mapBond(SecurityAttributeMapper mapper) {
+  private static void mapBond(final SecurityAttributeMapper mapper) {
     // ------------------- Bond
     mapper.mapColumn(TYPE, GovernmentBondSecurity.class, "Government Bond");
     mapper.mapColumn(TYPE, CorporateBondSecurity.class, "Corporate Bond");
@@ -662,8 +662,8 @@ public final class DefaultSecurityAttributeMappings {
     mapper.mapColumn(MATURITY, BondSecurity.meta().settlementDate());
   }
 
-  private static String currencyPairName(Currency payCurrency, Currency receiveCurrency, CurrencyPairs currencyPairs) {
-    CurrencyPair pair = currencyPairs.getCurrencyPair(payCurrency, receiveCurrency);
+  private static String currencyPairName(final Currency payCurrency, final Currency receiveCurrency, final CurrencyPairs currencyPairs) {
+    final CurrencyPair pair = currencyPairs.getCurrencyPair(payCurrency, receiveCurrency);
     if (pair != null) {
       return pair.getName();
     } else {

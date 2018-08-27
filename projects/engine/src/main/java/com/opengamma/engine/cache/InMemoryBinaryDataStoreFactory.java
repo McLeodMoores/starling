@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.cache;
@@ -11,7 +11,7 @@ package com.opengamma.engine.cache;
 public class InMemoryBinaryDataStoreFactory implements BinaryDataStoreFactory {
 
   @Override
-  public BinaryDataStore createDataStore(ViewComputationCacheKey cacheKey) {
+  public BinaryDataStore createDataStore(final ViewComputationCacheKey cacheKey) {
     return new InMemoryBinaryDataStore();
   }
 

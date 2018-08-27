@@ -17,17 +17,17 @@ public class Variable {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param name  the name
    */
-  public Variable(String name) {
+  public Variable(final String name) {
     _name = name;
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the name.
-   * 
+   *
    * @return the name
    */
   public String getName() {

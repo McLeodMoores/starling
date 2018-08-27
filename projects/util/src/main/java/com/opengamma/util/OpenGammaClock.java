@@ -31,7 +31,7 @@ public final class OpenGammaClock {
   //-------------------------------------------------------------------------
   /**
    * Gets the singleton instance of the clock.
-   * 
+   *
    * @return the singleton instance, not null
    */
   public static Clock getInstance() {
@@ -40,16 +40,16 @@ public final class OpenGammaClock {
 
   /**
    * Sets the Clock.
-   * 
+   *
    * @param clock  the clock, not null
    */
-  public static void setInstance(Clock clock) {
+  public static void setInstance(final Clock clock) {
     s_instance = clock;
   }
 
   /**
    * Gets the time-zone.
-   * 
+   *
    * @return the zone, not null
    */
   public static ZoneId getZone() {
@@ -58,10 +58,10 @@ public final class OpenGammaClock {
 
   /**
    * Sets the time-zone.
-   * 
+   *
    * @param zone  the zone, not null
    */
-  public static void setZone(ZoneId zone) {
+  public static void setZone(final ZoneId zone) {
     s_instance = s_instance.withZone(zone);
   }
 

@@ -53,7 +53,7 @@ import com.opengamma.analytics.math.curve.Curve;
       serializer.addToMessage(message, DRIFT_CURVE_FIELD_NAME, null, substituteObject(driftCurve));
     }
   }
-  
+
   /**
    * Fudge builder for {@code ForwardCurveYieldImplied}
    */
@@ -78,7 +78,7 @@ import com.opengamma.analytics.math.curve.Curve;
       serializer.addToMessage(message, COST_OF_CARRY_FIELD_NAME, null, object.getCostOfCarryCurve());
     }
   }
-  
+
   /**
    * Fudge builder for {@code ForwardCurveAffineDividends}
    */
@@ -87,9 +87,9 @@ import com.opengamma.analytics.math.curve.Curve;
     private static final String SPOT_FIELD_NAME = "spot";
     private static final String RISK_FREE_FIELD_NAME = "riskFreeCurve";
     private static final String DIVIDENDS_FIELD_NAME = "dividends";
-    
+
     @Override
-    public ForwardCurveAffineDividends buildObject(FudgeDeserializer deserializer, FudgeMsg message) {
+    public ForwardCurveAffineDividends buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
       final double spot = message.getDouble(SPOT_FIELD_NAME);
       final YieldAndDiscountCurve riskFreeCurve = deserializer.fieldValueToObject(YieldAndDiscountCurve.class, message.getByName(RISK_FREE_FIELD_NAME));
       final AffineDividends dividends = deserializer.fieldValueToObject(AffineDividends.class, message.getByName(DIVIDENDS_FIELD_NAME));
@@ -97,13 +97,13 @@ import com.opengamma.analytics.math.curve.Curve;
     }
 
     @Override
-    protected void buildMessage(FudgeSerializer serializer, MutableFudgeMsg message, ForwardCurveAffineDividends object) {
+    protected void buildMessage(final FudgeSerializer serializer, final MutableFudgeMsg message, final ForwardCurveAffineDividends object) {
       serializer.addToMessage(message, SPOT_FIELD_NAME, null, object.getSpot());
       serializer.addToMessage(message, RISK_FREE_FIELD_NAME, null, object.getRiskFreeCurve());
       final AffineDividends dividends = object.getDividends();
       serializer.addToMessage(message, DIVIDENDS_FIELD_NAME, null, substituteObject(dividends));
     }
-    
+
   }
 
 }

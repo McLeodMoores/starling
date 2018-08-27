@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.security.cds;
@@ -53,40 +53,40 @@ public class CreditDefaultSwapIndexComponent extends DirectBean implements Compa
    */
   @PropertyDefinition(validate = "notNull")
   private String _name;
-  
+
   /**
    * Creates an instance
-   * 
+   *
    * @param name the entity name, not null
    * @param obligorId the obligor red code, not null
    * @param weight the index weight, not null
    * @param bondId the option bond identifer
    */
-  public CreditDefaultSwapIndexComponent(final String name, final ExternalId obligorId, final Double weight, ExternalId bondId) {
+  public CreditDefaultSwapIndexComponent(final String name, final ExternalId obligorId, final Double weight, final ExternalId bondId) {
     setName(name);
     setObligorRedCode(obligorId);
     setWeight(weight);
     setBondId(bondId);
   }
-  
+
   /**
    * Default constructor for Bean builder
    */
   CreditDefaultSwapIndexComponent() {
   }
-  
+
 
   //-------------------------------------------------------------------------
   /**
    * Compares the cdsIndex component, sorting by weight followed by name alphabetically.
-   * 
+   *
    * @param other  the other cdsIndex component, not null
    * @return negative if this is less, zero if equal, positive if greater
    */
   @Override
-  public int compareTo(CreditDefaultSwapIndexComponent other) {
+  public int compareTo(final CreditDefaultSwapIndexComponent other) {
     ArgumentChecker.notNull(other, "creditswapindex component");
-    int cmp = _weight.compareTo(other._weight);
+    final int cmp = _weight.compareTo(other._weight);
     if (cmp != 0) {
       return cmp;
     }

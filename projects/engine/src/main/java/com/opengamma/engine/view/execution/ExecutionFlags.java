@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.view.execution;
@@ -21,7 +21,7 @@ public final class ExecutionFlags {
     _flags = EnumSet.noneOf(ViewExecutionFlags.class);
   }
 
-  private ExecutionFlags(ViewExecutionFlags flag) {
+  private ExecutionFlags(final ViewExecutionFlags flag) {
     _flags = EnumSet.<ViewExecutionFlags>of(flag);
   }
 
@@ -29,7 +29,7 @@ public final class ExecutionFlags {
 
   /**
    * Adds {@link ViewExecutionFlags#AWAIT_MARKET_DATA}.
-   * 
+   *
    * @return this
    */
   public ExecutionFlags awaitMarketData() {
@@ -39,7 +39,7 @@ public final class ExecutionFlags {
 
   /**
    * Adds {@link ViewExecutionFlags#TRIGGER_CYCLE_ON_MARKET_DATA_CHANGED}.
-   * 
+   *
    * @return this
    */
   public ExecutionFlags triggerOnMarketData() {
@@ -49,7 +49,7 @@ public final class ExecutionFlags {
 
   /**
    * Adds {@link ViewExecutionFlags#TRIGGER_CYCLE_ON_TIME_ELAPSED}.
-   * 
+   *
    * @return this
    */
   public ExecutionFlags triggerOnTimeElapsed() {
@@ -59,7 +59,7 @@ public final class ExecutionFlags {
 
   /**
    * Adds {@link ViewExecutionFlags#RUN_AS_FAST_AS_POSSIBLE}.
-   * 
+   *
    * @return this
    */
   public ExecutionFlags runAsFastAsPossible() {
@@ -69,7 +69,7 @@ public final class ExecutionFlags {
 
   /**
    * Adds {@link ViewExecutionFlags#BATCH}.
-   * 
+   *
    * @return this
    */
   public ExecutionFlags batch() {
@@ -79,7 +79,7 @@ public final class ExecutionFlags {
 
   /**
    * Adds {@link ViewExecutionFlags#COMPILE_ONLY}
-   * 
+   *
    * @return this
    */
   public ExecutionFlags compileOnly() {
@@ -89,17 +89,17 @@ public final class ExecutionFlags {
 
   /**
    * Adds {@link ViewExecutionFlags#FETCH_MARKET_DATA_ONLY}
-   * 
+   *
    * @return this
    */
   public ExecutionFlags fetchMarketDataOnly() {
     _flags.add(ViewExecutionFlags.FETCH_MARKET_DATA_ONLY);
     return this;
   }
-  
+
   /**
    * Adds {@link ViewExecutionFlags#SKIP_CYCLE_ON_NO_MARKET_DATA}
-   * 
+   *
    * @return this
    */
   public ExecutionFlags skipCycleOnNoMarketData() {
@@ -109,7 +109,7 @@ public final class ExecutionFlags {
 
   /**
    * Adds {@link ViewExecutionFlags#WAIT_FOR_INITIAL_TRIGGER}
-   * 
+   *
    * @return this
    */
   public ExecutionFlags waitForInitialTrigger() {
@@ -119,7 +119,7 @@ public final class ExecutionFlags {
 
   /**
    * Adds {@link ViewExecutionFlags#IGNORE_COMPILATION_VALIDITY}
-   * 
+   *
    * @return this
    */
   public ExecutionFlags ignoreCompilationValidity() {
@@ -177,7 +177,7 @@ public final class ExecutionFlags {
 
   /**
    * Gets an {@link EnumSet} corresponding to the flags that have been added.
-   * 
+   *
    * @return the set of flags, not null
    */
   public EnumSet<ViewExecutionFlags> get() {
@@ -186,7 +186,7 @@ public final class ExecutionFlags {
 
   /**
    * Gets a builder starting with the empty set of flags.
-   * 
+   *
    * @return a builder starting with the empty set of flags, not null
    */
   public static ExecutionFlags none() {
@@ -195,7 +195,7 @@ public final class ExecutionFlags {
 
   /**
    * Gets a builder starting with all trigger-related flags.
-   * 
+   *
    * @return a builder starting with all trigger-related flags, not null
    */
   public static ExecutionFlags triggersEnabled() {

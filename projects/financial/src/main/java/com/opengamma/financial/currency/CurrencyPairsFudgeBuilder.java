@@ -35,13 +35,13 @@ public class CurrencyPairsFudgeBuilder implements FudgeBuilder<CurrencyPairs> {
   public static final String CURRENCY_PAIRS_FIELD_NAME = "currencyPairs";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, CurrencyPairs object) {
-    MutableFudgeMsg msg = serializer.newMessage();
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final CurrencyPairs object) {
+    final MutableFudgeMsg msg = serializer.newMessage();
     serializer.addToMessage(msg, UNIQUE_ID_FIELD_NAME, null, object.getUniqueId());
-    Set<CurrencyPair> pairs = object.getPairs();
+    final Set<CurrencyPair> pairs = object.getPairs();
     // sort the names so it's more obvious when messages are equal
-    Set<String> pairNames = new TreeSet<>();
-    for (CurrencyPair pair : pairs) {
+    final Set<String> pairNames = new TreeSet<>();
+    for (final CurrencyPair pair : pairs) {
       pairNames.add(pair.getName());
     }
     serializer.addToMessage(msg, CURRENCY_PAIRS_FIELD_NAME, null, pairNames);
@@ -50,17 +50,17 @@ public class CurrencyPairsFudgeBuilder implements FudgeBuilder<CurrencyPairs> {
 
   @SuppressWarnings("unchecked")
   @Override
-  public CurrencyPairs buildObject(FudgeDeserializer deserializer, FudgeMsg message) {
-    FudgeField pairsField = message.getByName(CURRENCY_PAIRS_FIELD_NAME);
-    Set<String> pairNames = deserializer.fieldValueToObject(Set.class, pairsField);
-    Set<CurrencyPair> pairs = new HashSet<CurrencyPair>(pairNames.size());
-    for (String pairName : pairNames) {
+  public CurrencyPairs buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
+    final FudgeField pairsField = message.getByName(CURRENCY_PAIRS_FIELD_NAME);
+    final Set<String> pairNames = deserializer.fieldValueToObject(Set.class, pairsField);
+    final Set<CurrencyPair> pairs = new HashSet<>(pairNames.size());
+    for (final String pairName : pairNames) {
       pairs.add(CurrencyPair.parse(pairName));
     }
-    CurrencyPairs currencyPairs = CurrencyPairs.of(pairs);
-    FudgeField uniqueIdField = message.getByName(UNIQUE_ID_FIELD_NAME);
+    final CurrencyPairs currencyPairs = CurrencyPairs.of(pairs);
+    final FudgeField uniqueIdField = message.getByName(UNIQUE_ID_FIELD_NAME);
     if (uniqueIdField != null) {
-      currencyPairs.setUniqueId(deserializer.fieldValueToObject(UniqueId.class, uniqueIdField));      
+      currencyPairs.setUniqueId(deserializer.fieldValueToObject(UniqueId.class, uniqueIdField));
     }
     return currencyPairs;
   }

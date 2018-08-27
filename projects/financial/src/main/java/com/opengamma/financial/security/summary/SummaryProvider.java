@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.security.summary;
@@ -16,9 +16,9 @@ import com.opengamma.core.security.SecuritySource;
  */
 public class SummaryProvider {
 
-  private final Map<String, SummaryFactory<?>> _factoriesBySecurityType = new HashMap<String, SummaryFactory<?>>();
-  
-  public SummaryProvider(SecuritySource securitySource) {
+  private final Map<String, SummaryFactory<?>> _factoriesBySecurityType = new HashMap<>();
+
+  public SummaryProvider(final SecuritySource securitySource) {
     register(new BondSummaryFactory());
     register(new CapFloorCMSSpreadSummaryFactory());
     register(new CapFloorSummaryFactory());
@@ -38,18 +38,18 @@ public class SummaryProvider {
     register(new SwaptionSummaryFactory(securitySource));
   }
 
-  private void register(SummaryFactory<?> summaryFactory) {
+  private void register(final SummaryFactory<?> summaryFactory) {
     _factoriesBySecurityType.put(summaryFactory.getSecurityType(), summaryFactory);
   }
-  
+
   //-------------------------------------------------------------------------
   @SuppressWarnings("unchecked")
-  public Summary getSummary(Security security) {
-    SummaryFactory<Security> factory = (SummaryFactory<Security>) _factoriesBySecurityType.get(security.getSecurityType());
+  public Summary getSummary(final Security security) {
+    final SummaryFactory<Security> factory = (SummaryFactory<Security>) _factoriesBySecurityType.get(security.getSecurityType());
     if (factory == null) {
       return null;
     }
     return factory.getSummary(security);
   }
-  
+
 }

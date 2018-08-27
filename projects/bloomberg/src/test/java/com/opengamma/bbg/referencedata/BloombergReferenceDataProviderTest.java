@@ -39,7 +39,7 @@ public class BloombergReferenceDataProviderTest {
 
   @BeforeMethod
   public void setUp() throws Exception {
-    BloombergConnector connector = BloombergTestUtils.getBloombergConnector();
+    final BloombergConnector connector = BloombergTestUtils.getBloombergConnector();
     _refDataProvider = new BloombergReferenceDataProvider(connector);
     _refDataProvider.start();
   }
@@ -56,14 +56,14 @@ public class BloombergReferenceDataProviderTest {
   @Test(timeOut=30000)
   public void singleSecuritySingleField() {
     final String secName = "AAPL US Equity";
-    ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(secName, "SECURITY_TYP", false);
-    ReferenceDataProviderGetResult result = _refDataProvider.getReferenceData(request);
+    final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(secName, "SECURITY_TYP", false);
+    final ReferenceDataProviderGetResult result = _refDataProvider.getReferenceData(request);
     assertNotNull(result);
     assertEquals(1, result.getReferenceData().size());
-    ReferenceData aaplResult = result.getReferenceData(secName);
+    final ReferenceData aaplResult = result.getReferenceData(secName);
     assertEquals(secName, aaplResult.getIdentifier());
     assertTrue(aaplResult.getErrors().isEmpty());
-    FudgeMsg fieldData = aaplResult.getFieldValues();
+    final FudgeMsg fieldData = aaplResult.getFieldValues();
     assertNotNull(fieldData);
     assertEquals(1, fieldData.getNumFields());
     assertEquals("Common Stock", fieldData.getString("SECURITY_TYP"));
@@ -72,14 +72,14 @@ public class BloombergReferenceDataProviderTest {
   @Test(timeOut=30000)
   public void optionExpiryDate() {
     final String secName = "AAPL 02/19/11 C320 Equity";
-    ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(secName, "OPT_EXPIRE_DT", false);
-    ReferenceDataProviderGetResult result = _refDataProvider.getReferenceData(request);
+    final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(secName, "OPT_EXPIRE_DT", false);
+    final ReferenceDataProviderGetResult result = _refDataProvider.getReferenceData(request);
     assertNotNull(result);
     assertEquals(1, result.getReferenceData().size());
-    ReferenceData aaplResult = result.getReferenceData(secName);
+    final ReferenceData aaplResult = result.getReferenceData(secName);
     assertEquals(secName, aaplResult.getIdentifier());
     assertTrue(aaplResult.getErrors().isEmpty());
-    FudgeMsg fieldData = aaplResult.getFieldValues();
+    final FudgeMsg fieldData = aaplResult.getFieldValues();
     assertNotNull(fieldData);
     assertEquals(1, fieldData.getNumFields());
     assertEquals("2011-02-19", fieldData.getString("OPT_EXPIRE_DT"));
@@ -88,14 +88,14 @@ public class BloombergReferenceDataProviderTest {
   @Test(timeOut=30000)
   public void optionStrikePrice() {
     final String secName = "AAPL 02/19/11 C320 Equity";
-    ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(secName, "OPT_STRIKE_PX", false);
-    ReferenceDataProviderGetResult result = _refDataProvider.getReferenceData(request);
+    final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(secName, "OPT_STRIKE_PX", false);
+    final ReferenceDataProviderGetResult result = _refDataProvider.getReferenceData(request);
     assertNotNull(result);
     assertEquals(1, result.getReferenceData().size());
-    ReferenceData aaplResult = result.getReferenceData(secName);
+    final ReferenceData aaplResult = result.getReferenceData(secName);
     assertEquals(secName, aaplResult.getIdentifier());
     assertTrue(aaplResult.getErrors().isEmpty());
-    FudgeMsg fieldData = aaplResult.getFieldValues();
+    final FudgeMsg fieldData = aaplResult.getFieldValues();
     assertNotNull(fieldData);
     assertEquals(1, fieldData.getNumFields());
     assertEquals(new Double(320.0), fieldData.getDouble("OPT_STRIKE_PX"));
@@ -104,22 +104,22 @@ public class BloombergReferenceDataProviderTest {
   @Test(timeOut=30000)
   public void singleSecurityBulkDataField() {
     final String secName = "AAPL US Equity";
-    ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(secName, "OPT_CHAIN", false);
-    ReferenceDataProviderGetResult result = _refDataProvider.getReferenceData(request);
+    final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(secName, "OPT_CHAIN", false);
+    final ReferenceDataProviderGetResult result = _refDataProvider.getReferenceData(request);
     assertNotNull(result);
     assertEquals(1, result.getReferenceData().size());
-    ReferenceData aaplResult = result.getReferenceData(secName);
+    final ReferenceData aaplResult = result.getReferenceData(secName);
     assertEquals(secName, aaplResult.getIdentifier());
     assertTrue(aaplResult.getErrors().isEmpty());
-    FudgeMsg fieldData = aaplResult.getFieldValues();
+    final FudgeMsg fieldData = aaplResult.getFieldValues();
     assertNotNull(fieldData);
     assertTrue("Bloomberg only returning these for AAPL Option Chain: " + fieldData, fieldData.getNumFields() > 10);
     boolean foundOptionChain = false;
-    for(FudgeField field : fieldData.getAllByName("OPT_CHAIN")) {
+    for(final FudgeField field : fieldData.getAllByName("OPT_CHAIN")) {
       foundOptionChain = true;
       assertEquals("OPT_CHAIN", field.getName());
       assertTrue(field.getValue() instanceof FudgeMsg);
-      FudgeMsg chainContainer = (FudgeMsg)field.getValue();
+      final FudgeMsg chainContainer = (FudgeMsg)field.getValue();
       assertEquals(1, chainContainer.getNumFields());
       assertNotNull(chainContainer.getString("Security Description"));
     }
@@ -128,20 +128,20 @@ public class BloombergReferenceDataProviderTest {
 
   @Test(timeOut=3000000)
   public void multipleSecuritySingleField() {
-    Set<String> securities = new TreeSet<String>();
+    final Set<String> securities = new TreeSet<>();
     securities.add("AAPL US Equity");
     securities.add("T US Equity");
     securities.add("GS US Equity");
     securities.add("CSCO US Equity");
-    ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(securities, ImmutableSet.of("SECURITY_TYP"), false);
-    ReferenceDataProviderGetResult result = _refDataProvider.getReferenceData(request);
+    final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(securities, ImmutableSet.of("SECURITY_TYP"), false);
+    final ReferenceDataProviderGetResult result = _refDataProvider.getReferenceData(request);
     assertNotNull(result);
     assertEquals(securities.size(), result.getReferenceData().size());
-    for(String secName : securities) {
-      ReferenceData perSecResult = result.getReferenceData(secName);
+    for(final String secName : securities) {
+      final ReferenceData perSecResult = result.getReferenceData(secName);
       assertEquals(secName, perSecResult.getIdentifier());
       assertTrue(perSecResult.getErrors().isEmpty());
-      FudgeMsg fieldData = perSecResult.getFieldValues();
+      final FudgeMsg fieldData = perSecResult.getFieldValues();
       assertNotNull(fieldData);
       assertEquals(1, fieldData.getNumFields());
       assertEquals("Common Stock", fieldData.getString("SECURITY_TYP"));
@@ -149,7 +149,7 @@ public class BloombergReferenceDataProviderTest {
   }
 
   //-------------------------------------------------------------------------
-  private static final Set<String> VALID_EQUITY_TYPES = new TreeSet<String>();
+  private static final Set<String> VALID_EQUITY_TYPES = new TreeSet<>();
   static {
     VALID_EQUITY_TYPES.add("Common Stock");
     VALID_EQUITY_TYPES.add("ADR");
@@ -162,27 +162,27 @@ public class BloombergReferenceDataProviderTest {
   @Test(enabled = false, description = "a lot of data to request from bloomberg")
   //Bloomberg sends multiple messages per request when you have over 10 securities in the the request
   public void multiMessagePerRequest() throws Exception {
-    String testWatchList = BloombergReferenceDataProviderTest.class.getResource("watchListTest.txt").getPath();
-    Set<ExternalId> identifiers = BloombergDataUtils.identifierLoader(new FileReader(testWatchList));
-    Set<String> bloombergKeys = toBloombergKeys(identifiers);
-    ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(bloombergKeys, ImmutableSet.of("SECURITY_TYP"), false);
-    ReferenceDataProviderGetResult result = _refDataProvider.getReferenceData(request);
+    final String testWatchList = BloombergReferenceDataProviderTest.class.getResource("watchListTest.txt").getPath();
+    final Set<ExternalId> identifiers = BloombergDataUtils.identifierLoader(new FileReader(testWatchList));
+    final Set<String> bloombergKeys = toBloombergKeys(identifiers);
+    final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(bloombergKeys, ImmutableSet.of("SECURITY_TYP"), false);
+    final ReferenceDataProviderGetResult result = _refDataProvider.getReferenceData(request);
     assertNotNull(result);
     assertEquals(bloombergKeys.size(), result.getReferenceData().size());
-    for (String secName : bloombergKeys) {
-      ReferenceData perSecResult = result.getReferenceData(secName);
+    for (final String secName : bloombergKeys) {
+      final ReferenceData perSecResult = result.getReferenceData(secName);
       assertEquals(secName, perSecResult.getIdentifier());
       assertTrue(perSecResult.getErrors().isEmpty());
-      FudgeMsg fieldData = perSecResult.getFieldValues();
+      final FudgeMsg fieldData = perSecResult.getFieldValues();
       assertNotNull(fieldData);
       assertEquals(1, fieldData.getNumFields());
       assertTrue(VALID_EQUITY_TYPES.contains(fieldData.getString("SECURITY_TYP")));
     }
   }
 
-  private Set<String> toBloombergKeys(Set<ExternalId> identifiers) {
-    Set<String> bloombergKeys = Sets.newHashSet();
-    for (ExternalId identifier : identifiers) {
+  private Set<String> toBloombergKeys(final Set<ExternalId> identifiers) {
+    final Set<String> bloombergKeys = Sets.newHashSet();
+    for (final ExternalId identifier : identifiers) {
       bloombergKeys.add(BloombergDomainIdentifierResolver.toBloombergKey(identifier));
     }
     return bloombergKeys;

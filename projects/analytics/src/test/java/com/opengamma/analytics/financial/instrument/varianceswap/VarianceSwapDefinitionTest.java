@@ -30,7 +30,7 @@ import com.opengamma.util.test.TestGroup;
  * Tests the variance swap definition object.
  */
 @Test(groups = TestGroup.UNIT)
-public class VarianceSwapDefinitionTest extends AnalyticsTestBase {
+public final class VarianceSwapDefinitionTest extends AnalyticsTestBase {
   /** The current date */
   private static final ZonedDateTime NOW = ZonedDateTime.of(2014, 02, 27, 12, 0, 0, 0, ZoneId.of("UTC"));
   /** The settlement date */
@@ -191,7 +191,7 @@ public class VarianceSwapDefinitionTest extends AnalyticsTestBase {
   }
 
   /**
-   * Tests expected failure for observation frequencies other than daily 
+   * Tests expected failure for observation frequencies other than daily
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testWeeklyObservations() {

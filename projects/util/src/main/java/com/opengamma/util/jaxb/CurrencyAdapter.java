@@ -15,12 +15,12 @@ import com.opengamma.util.money.Currency;
 public class CurrencyAdapter extends XmlAdapter<String, Currency> {
 
   @Override
-  public Currency unmarshal(String v) throws Exception {
+  public Currency unmarshal(final String v) throws Exception {
     return Currency.of(v);
   }
 
   @Override
-  public String marshal(Currency v) throws Exception {
+  public String marshal(final Currency v) throws Exception {
     return v.getCode();
   }
 

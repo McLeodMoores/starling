@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.convention;
@@ -169,7 +169,7 @@ public enum FloatingIndex implements NamedInstance {
   private final String _isdaName;
   private final ExternalId _externalId;
 
-  private FloatingIndex(Currency currency, String indexName, String isdaName) {
+  private FloatingIndex(final Currency currency, final String indexName, final String isdaName) {
     ArgumentChecker.notNull(currency, "currency");
     ArgumentChecker.notNull(indexName, "indexName");
     ArgumentChecker.notNull(isdaName, "isdaName");
@@ -207,19 +207,19 @@ public enum FloatingIndex implements NamedInstance {
   public String getName() {
     return getIsdaName();
   }
-  
+
   public ExternalId toRawExternalId() {
     return _externalId;
   }
-  
+
   /**
    * Obtain the ID that should be provided as the index on a {@link FloatingInterestRateLeg}
    * for a floating leg with the specified frequency.
-   * 
+   *
    * @param frequency the floating interest rate leg frequency
    * @return the identifier that should be used on the leg
    */
-  public ExternalId toFrequencySpecificExternalId(Frequency frequency) {
+  public ExternalId toFrequencySpecificExternalId(final Frequency frequency) {
     ArgumentChecker.notNull(frequency, "frequency");
     String idValue = getIsdaName() + "-";
     switch (frequency.getName()) {

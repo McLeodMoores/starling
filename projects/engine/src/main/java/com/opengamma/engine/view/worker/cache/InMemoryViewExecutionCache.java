@@ -26,8 +26,8 @@ public class InMemoryViewExecutionCache implements ViewExecutionCache {
   private final Map<ViewExecutionCacheKey, CompiledViewDefinitionWithGraphs> _compiledViewDefinitions = new MapMaker().softValues().makeMap();
 
   @Override
-  public CompiledViewDefinitionWithGraphs getCompiledViewDefinitionWithGraphs(ViewExecutionCacheKey key) {
-    CompiledViewDefinitionWithGraphs viewDefinition = _compiledViewDefinitions.get(key);
+  public CompiledViewDefinitionWithGraphs getCompiledViewDefinitionWithGraphs(final ViewExecutionCacheKey key) {
+    final CompiledViewDefinitionWithGraphs viewDefinition = _compiledViewDefinitions.get(key);
     if (LOGGER.isDebugEnabled()) {
       if (viewDefinition == null) {
         LOGGER.debug("Cache miss CompiledViewDefinitionWithGraphs for {}", key);
@@ -39,7 +39,7 @@ public class InMemoryViewExecutionCache implements ViewExecutionCache {
   }
 
   @Override
-  public void setCompiledViewDefinitionWithGraphs(ViewExecutionCacheKey key, CompiledViewDefinitionWithGraphs viewDefinition) {
+  public void setCompiledViewDefinitionWithGraphs(final ViewExecutionCacheKey key, final CompiledViewDefinitionWithGraphs viewDefinition) {
     LOGGER.info("Storing CompiledViewDefinitionWithGraphs for {}", key);
     _compiledViewDefinitions.put(key, viewDefinition);
   }

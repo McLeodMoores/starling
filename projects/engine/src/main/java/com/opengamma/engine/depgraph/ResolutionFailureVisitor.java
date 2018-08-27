@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph;
@@ -17,16 +17,16 @@ import com.opengamma.engine.value.ValueSpecification;
 
 /**
  * Visitor for processing resolution failure information. The basic implementation writes messages to a logger. Override these methods for more useful error reporting or handling.
- * 
+ *
  * @param <T> return type of the visit methods
  */
 public abstract class ResolutionFailureVisitor<T> implements ResolutionFailureListener {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ResolutionFailureVisitor.class);
-  
-  
+
+
   @Override
-  public final void notifyFailure(ResolutionFailure resolutionFailure) {
+  public final void notifyFailure(final ResolutionFailure resolutionFailure) {
     resolutionFailure.accept(this);
   }
 
@@ -143,7 +143,7 @@ public abstract class ResolutionFailureVisitor<T> implements ResolutionFailureLi
 
   protected T visitFailedFunction(final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput,
       final Map<ValueSpecification, ValueRequirement> satisfied, final Set<ResolutionFailure> unsatisfied) {
-    for (ResolutionFailure requirement : unsatisfied) {
+    for (final ResolutionFailure requirement : unsatisfied) {
       requirement.accept(this);
     }
     return null;
@@ -156,7 +156,7 @@ public abstract class ResolutionFailureVisitor<T> implements ResolutionFailureLi
     } else if (unsatisfiedAdditional.isEmpty()) {
       return visitFailedFunction(valueRequirement, function, desiredOutput, satisfied, unsatisfied);
     } else {
-      final Set<ResolutionFailure> combined = new HashSet<ResolutionFailure>(unsatisfied);
+      final Set<ResolutionFailure> combined = new HashSet<>(unsatisfied);
       combined.addAll(unsatisfiedAdditional);
       return visitFailedFunction(valueRequirement, function, desiredOutput, satisfied, combined);
     }

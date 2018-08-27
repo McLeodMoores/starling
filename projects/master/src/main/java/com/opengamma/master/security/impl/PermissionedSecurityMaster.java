@@ -85,11 +85,11 @@ public class PermissionedSecurityMaster implements SecurityMaster {
    * Wraps an underlying master if appropriate.
    * <p>
    * No wrapping occurs if permissions are not in use.
-   * 
+   *
    * @param underlying  the underlying master, not null
    * @return the master, not null
    */
-  public static SecurityMaster wrap(SecurityMaster underlying) {
+  public static SecurityMaster wrap(final SecurityMaster underlying) {
     if (AuthUtils.isPermissive()) {
       return underlying;
     }
@@ -99,17 +99,17 @@ public class PermissionedSecurityMaster implements SecurityMaster {
   //-------------------------------------------------------------------------
   /**
    * Creates an instance.
-   * 
+   *
    * @param underlying  the underlying security master, not null
    */
-  public PermissionedSecurityMaster(SecurityMaster underlying) {
+  public PermissionedSecurityMaster(final SecurityMaster underlying) {
     _underlying = ArgumentChecker.notNull(underlying, "underlying");
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the underlying security master.
-   * 
+   *
    * @return the underlying master, not null
    */
   protected SecurityMaster getUnderlying() {
@@ -118,27 +118,27 @@ public class PermissionedSecurityMaster implements SecurityMaster {
 
   //-------------------------------------------------------------------------
   @Override
-  public SecurityDocument get(UniqueId uniqueId) {
+  public SecurityDocument get(final UniqueId uniqueId) {
     AuthUtils.getSubject().checkPermission(PERMISSION_VIEW);
-    SecurityDocument doc = getUnderlying().get(uniqueId);
+    final SecurityDocument doc = getUnderlying().get(uniqueId);
     AuthUtils.checkPermissions(doc.getValue());
     return doc;
   }
 
   @Override
-  public SecurityDocument get(ObjectIdentifiable objectId, VersionCorrection versionCorrection) {
+  public SecurityDocument get(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
     AuthUtils.getSubject().checkPermission(PERMISSION_VIEW);
-    SecurityDocument doc = getUnderlying().get(objectId, versionCorrection);
+    final SecurityDocument doc = getUnderlying().get(objectId, versionCorrection);
     AuthUtils.checkPermissions(doc.getValue());
     return doc;
   }
 
   @Override
-  public Map<UniqueId, SecurityDocument> get(Collection<UniqueId> uniqueIds) {
+  public Map<UniqueId, SecurityDocument> get(final Collection<UniqueId> uniqueIds) {
     AuthUtils.getSubject().checkPermission(PERMISSION_VIEW);
-    Map<UniqueId, SecurityDocument> result = new HashMap<>(getUnderlying().get(uniqueIds));
-    for (Iterator<SecurityDocument> it = result.values().iterator(); it.hasNext(); ) {
-      SecurityDocument doc = (SecurityDocument) it.next();
+    final Map<UniqueId, SecurityDocument> result = new HashMap<>(getUnderlying().get(uniqueIds));
+    for (final Iterator<SecurityDocument> it = result.values().iterator(); it.hasNext();) {
+      final SecurityDocument doc = it.next();
       if (AuthUtils.isPermitted(doc.getValue()) == false) {
         it.remove();
       }
@@ -147,12 +147,12 @@ public class PermissionedSecurityMaster implements SecurityMaster {
   }
 
   @Override
-  public SecuritySearchResult search(SecuritySearchRequest request) {
+  public SecuritySearchResult search(final SecuritySearchRequest request) {
     AuthUtils.getSubject().checkPermission(PERMISSION_VIEW);
-    SecuritySearchResult result = getUnderlying().search(request);
+    final SecuritySearchResult result = getUnderlying().search(request);
     int removed = 0;
-    for (Iterator<SecurityDocument> it = result.getDocuments().iterator(); it.hasNext(); ) {
-      SecurityDocument doc = (SecurityDocument) it.next();
+    for (final Iterator<SecurityDocument> it = result.getDocuments().iterator(); it.hasNext();) {
+      final SecurityDocument doc = it.next();
       if (AuthUtils.isPermitted(doc.getValue()) == false) {
         it.remove();
         removed++;
@@ -163,12 +163,12 @@ public class PermissionedSecurityMaster implements SecurityMaster {
   }
 
   @Override
-  public SecurityHistoryResult history(SecurityHistoryRequest request) {
+  public SecurityHistoryResult history(final SecurityHistoryRequest request) {
     AuthUtils.getSubject().checkPermission(PERMISSION_VIEW);
-    SecurityHistoryResult result = getUnderlying().history(request);
+    final SecurityHistoryResult result = getUnderlying().history(request);
     int removed = 0;
-    for (Iterator<SecurityDocument> it = result.getDocuments().iterator(); it.hasNext(); ) {
-      SecurityDocument doc = (SecurityDocument) it.next();
+    for (final Iterator<SecurityDocument> it = result.getDocuments().iterator(); it.hasNext();) {
+      final SecurityDocument doc = it.next();
       if (AuthUtils.isPermitted(doc.getValue()) == false) {
         it.remove();
         removed++;
@@ -185,67 +185,67 @@ public class PermissionedSecurityMaster implements SecurityMaster {
   }
 
   @Override
-  public SecurityMetaDataResult metaData(SecurityMetaDataRequest request) {
+  public SecurityMetaDataResult metaData(final SecurityMetaDataRequest request) {
     AuthUtils.getSubject().checkPermission(PERMISSION_VIEW);
     return getUnderlying().metaData(request);
   }
 
   @Override
-  public SecurityDocument add(SecurityDocument document) {
+  public SecurityDocument add(final SecurityDocument document) {
     AuthUtils.getSubject().checkPermission(PERMISSION_ADD);
     return getUnderlying().add(document);
   }
 
   @Override
-  public SecurityDocument update(SecurityDocument document) {
+  public SecurityDocument update(final SecurityDocument document) {
     AuthUtils.getSubject().checkPermission(PERMISSION_UPDATE);
     return getUnderlying().update(document);
   }
 
   @Override
-  public void remove(ObjectIdentifiable oid) {
+  public void remove(final ObjectIdentifiable oid) {
     AuthUtils.getSubject().checkPermission(PERMISSION_REMOVE);
     getUnderlying().remove(oid);
   }
 
   @Override
-  public SecurityDocument correct(SecurityDocument document) {
+  public SecurityDocument correct(final SecurityDocument document) {
     AuthUtils.getSubject().checkPermission(PERMISSION_CORRECT);
     return getUnderlying().correct(document);
   }
 
   @Override
-  public List<UniqueId> replaceVersion(UniqueId uniqueId, List<SecurityDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersion(final UniqueId uniqueId, final List<SecurityDocument> replacementDocuments) {
     AuthUtils.getSubject().checkPermission(PERMISSION_CORRECT);
     return getUnderlying().replaceVersion(uniqueId, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceAllVersions(ObjectIdentifiable objectId, List<SecurityDocument> replacementDocuments) {
+  public List<UniqueId> replaceAllVersions(final ObjectIdentifiable objectId, final List<SecurityDocument> replacementDocuments) {
     AuthUtils.getSubject().checkPermission(PERMISSION_CORRECT);
     return getUnderlying().replaceAllVersions(objectId, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceVersions(ObjectIdentifiable objectId, List<SecurityDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersions(final ObjectIdentifiable objectId, final List<SecurityDocument> replacementDocuments) {
     AuthUtils.getSubject().checkPermission(PERMISSION_CORRECT);
     return getUnderlying().replaceVersions(objectId, replacementDocuments);
   }
 
   @Override
-  public UniqueId replaceVersion(SecurityDocument replacementDocument) {
+  public UniqueId replaceVersion(final SecurityDocument replacementDocument) {
     AuthUtils.getSubject().checkPermission(PERMISSION_CORRECT);
     return getUnderlying().replaceVersion(replacementDocument);
   }
 
   @Override
-  public void removeVersion(UniqueId uniqueId) {
+  public void removeVersion(final UniqueId uniqueId) {
     AuthUtils.getSubject().checkPermission(PERMISSION_CORRECT);
     getUnderlying().removeVersion(uniqueId);
   }
 
   @Override
-  public UniqueId addVersion(ObjectIdentifiable objectId, SecurityDocument documentToAdd) {
+  public UniqueId addVersion(final ObjectIdentifiable objectId, final SecurityDocument documentToAdd) {
     AuthUtils.getSubject().checkPermission(PERMISSION_CORRECT);
     return getUnderlying().addVersion(objectId, documentToAdd);
   }

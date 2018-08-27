@@ -27,7 +27,7 @@ public class PortfolioSearchIterator extends AbstractSearchIterator<PortfolioDoc
    * Creates an instance based on a request.
    * <p>
    * The request will be altered during the iteration.
-   * 
+   *
    * @param master  the underlying master, not null
    * @param request  the request object, not null
    * @return an iterable suitable for use in a for-each loop, not null
@@ -47,17 +47,17 @@ public class PortfolioSearchIterator extends AbstractSearchIterator<PortfolioDoc
    * Creates an instance based on a request.
    * <p>
    * The request will be altered during the iteration.
-   * 
+   *
    * @param master  the underlying master, not null
    * @param request  the request object, not null
    */
-  public PortfolioSearchIterator(PortfolioMaster master, PortfolioSearchRequest request) {
+  public PortfolioSearchIterator(final PortfolioMaster master, final PortfolioSearchRequest request) {
     super(master, request);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  protected PortfolioSearchResult doSearch(PortfolioSearchRequest request) {
+  protected PortfolioSearchResult doSearch(final PortfolioSearchRequest request) {
     return getMaster().search(request);
   }
 

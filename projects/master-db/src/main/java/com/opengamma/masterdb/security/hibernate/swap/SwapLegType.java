@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.swap;
@@ -18,7 +18,7 @@ import com.opengamma.financial.security.swap.SwapLeg;
 import com.opengamma.financial.security.swap.SwapLegVisitor;
 
 /**
- * 
+ *
  */
 public enum SwapLegType {
   /**
@@ -58,42 +58,42 @@ public enum SwapLegType {
     return object.accept(new SwapLegVisitor<SwapLegType>() {
 
       @Override
-      public SwapLegType visitFixedInterestRateLeg(FixedInterestRateLeg swapLeg) {
+      public SwapLegType visitFixedInterestRateLeg(final FixedInterestRateLeg swapLeg) {
         return FIXED_INTEREST;
       }
 
       @Override
-      public SwapLegType visitFloatingInterestRateLeg(FloatingInterestRateLeg swapLeg) {
+      public SwapLegType visitFloatingInterestRateLeg(final FloatingInterestRateLeg swapLeg) {
         return FLOATING_INTEREST;
       }
 
       @Override
-      public SwapLegType visitFloatingSpreadIRLeg(FloatingSpreadIRLeg swapLeg) {
+      public SwapLegType visitFloatingSpreadIRLeg(final FloatingSpreadIRLeg swapLeg) {
         return FLOATING_SPREAD_INTEREST;
       }
 
       @Override
-      public SwapLegType visitFloatingGearingIRLeg(FloatingGearingIRLeg swapLeg) {
+      public SwapLegType visitFloatingGearingIRLeg(final FloatingGearingIRLeg swapLeg) {
         return FLOATING_GEARING_INTEREST;
       }
 
       @Override
-      public SwapLegType visitFixedVarianceSwapLeg(FixedVarianceSwapLeg swapLeg) {
+      public SwapLegType visitFixedVarianceSwapLeg(final FixedVarianceSwapLeg swapLeg) {
         return FIXED_VARIANCE;
       }
 
       @Override
-      public SwapLegType visitFloatingVarianceSwapLeg(FloatingVarianceSwapLeg swapLeg) {
+      public SwapLegType visitFloatingVarianceSwapLeg(final FloatingVarianceSwapLeg swapLeg) {
         return FLOATING_VARIANCE;
       }
 
       @Override
-      public SwapLegType visitFixedInflationSwapLeg(FixedInflationSwapLeg swapLeg) {
+      public SwapLegType visitFixedInflationSwapLeg(final FixedInflationSwapLeg swapLeg) {
         return FIXED_INFLATION;
       }
 
       @Override
-      public SwapLegType visitInflationIndexSwapLeg(InflationIndexSwapLeg swapLeg) {
+      public SwapLegType visitInflationIndexSwapLeg(final InflationIndexSwapLeg swapLeg) {
         return INFLATION_INDEX;
       }
 

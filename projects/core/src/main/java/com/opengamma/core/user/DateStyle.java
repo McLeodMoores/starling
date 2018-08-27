@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.user;
@@ -53,18 +53,18 @@ public enum DateStyle {
 
   private final DateTimeFormatter _formatter;
 
-  private DateStyle(DateTimeFormatter formatter) {
+  private DateStyle(final DateTimeFormatter formatter) {
     _formatter = formatter;
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the formatter object, ready to use.
-   * 
+   *
    * @param locale  the locale to use, not null
    * @return the formatter, not null
    */
-  public DateTimeFormatter formatter(Locale locale) {
+  public DateTimeFormatter formatter(final Locale locale) {
     return _formatter.withLocale(locale);
   }
 

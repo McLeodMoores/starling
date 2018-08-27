@@ -19,7 +19,7 @@ public class OptionTypeUserType extends EnumUserType<OptionType> {
   }
 
   @Override
-  protected String enumToStringNoCache(OptionType value) {
+  protected String enumToStringNoCache(final OptionType value) {
     switch (value) {
       case CALL:
         return "call";

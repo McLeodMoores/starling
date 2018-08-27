@@ -1,13 +1,11 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.bbg.component;
 
 import java.util.Map;
-
-import net.sf.ehcache.CacheManager;
 
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
@@ -46,6 +44,8 @@ import com.opengamma.transport.ByteArrayFudgeMessageSender;
 import com.opengamma.transport.FudgeMessageSender;
 import com.opengamma.transport.jms.JmsByteArrayMessageSender;
 
+import net.sf.ehcache.CacheManager;
+
 /**
  * Component factory to create a Bloomberg server.
  */
@@ -80,23 +80,23 @@ public abstract class AbstractBloombergLiveDataServerComponentFactory extends Ab
 
   //-------------------------------------------------------------------------
   @Override
-  protected StandardLiveDataServer initServer(ComponentRepository repo) {
+  protected StandardLiveDataServer initServer(final ComponentRepository repo) {
     // real server
-    JmsByteArrayMessageSender jmsSender = new JmsByteArrayMessageSender(getJmsMarketDataAvailabilityTopic(),
+    final JmsByteArrayMessageSender jmsSender = new JmsByteArrayMessageSender(getJmsMarketDataAvailabilityTopic(),
                                                                         getJmsConnector().getJmsTemplateTopic());
-    FudgeMessageSender availabilityNotificationSender = new ByteArrayFudgeMessageSender(jmsSender);
-    BloombergConnector bloombergConnector = getBloombergConnector();
-    ReferenceDataProvider referenceDataProvider = getReferenceDataProvider();
-    CacheManager cacheManager = getCacheManager();
-    BloombergLiveDataServer realServer = createBloombergLiveDataServer(bloombergConnector, referenceDataProvider, cacheManager, availabilityNotificationSender);
+    final FudgeMessageSender availabilityNotificationSender = new ByteArrayFudgeMessageSender(jmsSender);
+    final BloombergConnector bloombergConnector = getBloombergConnector();
+    final ReferenceDataProvider referenceDataProvider = getReferenceDataProvider();
+    final CacheManager cacheManager = getCacheManager();
+    final BloombergLiveDataServer realServer = createBloombergLiveDataServer(bloombergConnector, referenceDataProvider, cacheManager, availabilityNotificationSender);
     if (getSubscriptionTickerLimit() != null) {
       realServer.setSubscriptionLimit(getSubscriptionTickerLimit());
     }
 
     // plugins
-    DistributionSpecificationResolver distSpecResolver = realServer.getDefaultDistributionSpecificationResolver();
-    LiveDataEntitlementChecker entitlementChecker = initEntitlementChecker(distSpecResolver);
-    JmsSenderFactory senderFactory = new JmsSenderFactory(getJmsConnector());
+    final DistributionSpecificationResolver distSpecResolver = realServer.getDefaultDistributionSpecificationResolver();
+    final LiveDataEntitlementChecker entitlementChecker = initEntitlementChecker(distSpecResolver);
+    final JmsSenderFactory senderFactory = new JmsSenderFactory(getJmsConnector());
 
     realServer.setDistributionSpecificationResolver(distSpecResolver);
     realServer.setEntitlementChecker(entitlementChecker);
@@ -105,19 +105,19 @@ public abstract class AbstractBloombergLiveDataServerComponentFactory extends Ab
     repo.registerMBean(new BloombergLiveDataServerMBean(realServer));
 
     // fake server
-    FakeSubscriptionBloombergLiveDataServer fakeServer = createFakeBloombergLiveDataServer(realServer);
+    final FakeSubscriptionBloombergLiveDataServer fakeServer = createFakeBloombergLiveDataServer(realServer);
     repo.registerLifecycle(fakeServer);
     repo.registerMBean(new LiveDataServerMBean(fakeServer));
 
     // combined
     // TODO: stop using this selector, everything should switch to explicit weak, but we have to wait for that change to propagate
-    FakeSubscriptionSelector selectorVolatility = new ByTypeFakeSubscriptionSelector(
+    final FakeSubscriptionSelector selectorVolatility = new ByTypeFakeSubscriptionSelector(
         ImmutableSet.of("SWAPTION VOLATILITY", "OPTION VOLATILITY"));
-    FakeSubscriptionSelector selectorWeak = new BySchemeFakeSubscriptionSelector(
+    final FakeSubscriptionSelector selectorWeak = new BySchemeFakeSubscriptionSelector(
         ImmutableSet.of(ExternalSchemes.BLOOMBERG_BUID_WEAK, ExternalSchemes.BLOOMBERG_TICKER_WEAK));
-    FakeSubscriptionSelector selector = new UnionFakeSubscriptionSelector(selectorVolatility, selectorWeak);
+    final FakeSubscriptionSelector selector = new UnionFakeSubscriptionSelector(selectorVolatility, selectorWeak);
 
-    CombiningBloombergLiveDataServer combinedServer = new CombiningBloombergLiveDataServer(fakeServer,
+    final CombiningBloombergLiveDataServer combinedServer = new CombiningBloombergLiveDataServer(fakeServer,
                                                                                            realServer,
                                                                                            selector,
                                                                                            getCacheManager());
@@ -136,35 +136,35 @@ public abstract class AbstractBloombergLiveDataServerComponentFactory extends Ab
    * @param availabilityNotificationSender the availability notification sender
    * @return the Bloomberg live data server, not null
    */
-  protected BloombergLiveDataServer createBloombergLiveDataServer(BloombergConnector bloombergConnector, ReferenceDataProvider referenceDataProvider, CacheManager cacheManager,
-      FudgeMessageSender availabilityNotificationSender) {
+  protected BloombergLiveDataServer createBloombergLiveDataServer(final BloombergConnector bloombergConnector, final ReferenceDataProvider referenceDataProvider, final CacheManager cacheManager,
+      final FudgeMessageSender availabilityNotificationSender) {
     return new BloombergLiveDataServer(bloombergConnector,
                                        referenceDataProvider,
                                        cacheManager,
                                        availabilityNotificationSender);
   }
-  
+
   /**
    * Creates the {@link FakeSubscriptionBloombergLiveDataServer} instance to use.
-   * 
+   *
    * @param realServer  the {@link BloombergLiveDataServer} instance, not null
    * @return the fake Bloomberg live data server, not null
    */
-  protected FakeSubscriptionBloombergLiveDataServer createFakeBloombergLiveDataServer(BloombergLiveDataServer realServer) {
+  protected FakeSubscriptionBloombergLiveDataServer createFakeBloombergLiveDataServer(final BloombergLiveDataServer realServer) {
     return new FakeSubscriptionBloombergLiveDataServer(realServer, ExternalSchemes.BLOOMBERG_BUID_WEAK, getCacheManager());
   }
 
   /**
    * Creates the entitlement checker.
-   * 
+   *
    * @param distSpecResolver  the resolver, not null
    * @return the entitlemnet checker, not null
    */
   protected abstract LiveDataEntitlementChecker initEntitlementChecker(DistributionSpecificationResolver distSpecResolver);
 
   @Override
-  protected LiveDataMetaData createMetaData(ComponentRepository repo) {
-    ImmutableList<ExternalScheme> schemes = ImmutableList.of(ExternalSchemes.BLOOMBERG_BUID, ExternalSchemes.BLOOMBERG_TICKER,
+  protected LiveDataMetaData createMetaData(final ComponentRepository repo) {
+    final ImmutableList<ExternalScheme> schemes = ImmutableList.of(ExternalSchemes.BLOOMBERG_BUID, ExternalSchemes.BLOOMBERG_TICKER,
         ExternalSchemes.BLOOMBERG_TCM, ExternalSchemes.BLOOMBERG_BUID_WEAK, ExternalSchemes.BLOOMBERG_TICKER_WEAK);
     return new LiveDataMetaData(schemes, LiveDataServerTypes.STANDARD, "Bloomberg");
   }

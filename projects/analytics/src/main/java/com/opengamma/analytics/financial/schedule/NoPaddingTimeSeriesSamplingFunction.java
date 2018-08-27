@@ -21,16 +21,16 @@ import com.opengamma.util.ArgumentChecker;
 public class NoPaddingTimeSeriesSamplingFunction implements TimeSeriesSamplingFunction {
 
   @Override
-  public LocalDateDoubleTimeSeries getSampledTimeSeries(DateDoubleTimeSeries<?> ts, LocalDate[] schedule) {
+  public LocalDateDoubleTimeSeries getSampledTimeSeries(final DateDoubleTimeSeries<?> ts, final LocalDate[] schedule) {
     ArgumentChecker.notNull(ts, "time series");
     ArgumentChecker.notNull(schedule, "schedule");
-    LocalDateDoubleTimeSeries localDateTS = ImmutableLocalDateDoubleTimeSeries.of(ts);
-    Set<LocalDate> timeSeriesSet = Sets.newHashSet(localDateTS.times());
-    Set<LocalDate> scheduleSet = Sets.newHashSet(schedule);
-    List<LocalDate> scheduledDates = Lists.newArrayList(Sets.intersection(scheduleSet, timeSeriesSet));
+    final LocalDateDoubleTimeSeries localDateTS = ImmutableLocalDateDoubleTimeSeries.of(ts);
+    final Set<LocalDate> timeSeriesSet = Sets.newHashSet(localDateTS.times());
+    final Set<LocalDate> scheduleSet = Sets.newHashSet(schedule);
+    final List<LocalDate> scheduledDates = Lists.newArrayList(Sets.intersection(scheduleSet, timeSeriesSet));
     Collections.sort(scheduledDates);
-    List<Double> scheduledData = Lists.newArrayList();
-    for (LocalDate localDate : scheduledDates) {
+    final List<Double> scheduledData = Lists.newArrayList();
+    for (final LocalDate localDate : scheduledDates) {
       scheduledData.add(localDateTS.getValue(localDate));
     }
     return ImmutableLocalDateDoubleTimeSeries.of(scheduledDates, scheduledData);

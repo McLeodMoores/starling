@@ -160,20 +160,20 @@ public class BloombergReferencePortfolioMaker implements Runnable {
     position.addTrade(createTrade(security));
     return position;
   }
-  
+
   private ManageablePortfolioNode createNode(final String nodeName, final Collection<? extends ManageableSecurity> securities) {
     final ManageablePortfolioNode node = new ManageablePortfolioNode(nodeName);
-    for (ManageableSecurity security : securities) {
+    for (final ManageableSecurity security : securities) {
       final ManageablePosition position = createPosition(security);
       node.addPosition(_positions.add(new PositionDocument(position)).getObjectId());
     }
     return node;
   }
-  
+
   private void createPortfolio(final String portfolioName, final Iterable<ManageablePortfolioNode> nodes) {
     final ManageablePortfolioNode rootNode = new ManageablePortfolioNode("ROOT");
     final ManageablePortfolio portfolio = new ManageablePortfolio(portfolioName, rootNode);
-    for (ManageablePortfolioNode node : nodes) {
+    for (final ManageablePortfolioNode node : nodes) {
       rootNode.addChildNode(node);
     }
     _portfolios.add(new PortfolioDocument(portfolio));
@@ -353,7 +353,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode createBondFutureOptionNode() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createBondFutureOptionSecurity());
@@ -389,7 +389,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode createCorporateBondNode() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createCorporateBondSecurity());
@@ -425,7 +425,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode createGovernmentBondNode() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createGovernmentBondSecurity());
@@ -461,7 +461,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode createMunicipalBondNode() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createMunicipalBondSecurity());
@@ -493,7 +493,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode createCapFloorNode() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createCapFloorSecurity());
@@ -519,7 +519,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode createCapFloorCMSSpreadNode() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createCapFloorCMSSpreadSecurity());
@@ -541,7 +541,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode createCashNode() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createCashSecurity());
@@ -562,7 +562,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode loadAgricultureForwardPortfolio() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createAgricultureForwardSecurity());
@@ -583,7 +583,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode loadEnergyForwardPortfolio() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createEnergyForwardSecurity());
@@ -604,7 +604,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode loadMetalForwardPortfolio() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createMetalForwardSecurity());
@@ -635,7 +635,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode createCommodityFutureOptionNode() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createCommodityFutureOptionSecurity());
@@ -699,13 +699,13 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode loadLegacyFixedRecoveryCDSPortfolio() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createLegacyFixedRecoveryCDSSecurity());
     }
     return createNode(LegacyFixedRecoveryCDSSecurity.SECURITY_TYPE, securities);
-    
+
   }
 
   private LegacyRecoveryLockCDSSecurity createLegacyRecoveryLockCDSSecurity() {
@@ -739,7 +739,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode loadLegacyRecoveryLockCDSPortfolio() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createLegacyRecoveryLockCDSSecurity());
@@ -777,7 +777,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode loadLegacyVanillaCDSPortfolio() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createLegacyVanillaCDSSecurity());
@@ -825,7 +825,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode loadStandardFixedRecoveryCDSPortfolio() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createStandardFixedRecoveryCDSSecurity());
@@ -867,7 +867,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode loadStandardRecoveryLockCDSPortfolio() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createStandardRecoveryLockCDSSecurity());
@@ -909,7 +909,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode loadStandardVanillaCDSPortfolio() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createStandardVanillaCDSSecurity());
@@ -940,7 +940,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode createEquityNode() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createEquitySecurity());
@@ -969,7 +969,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode createEquityBarrierOptionNode() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createEquityBarrierOptionSecurity());
@@ -994,7 +994,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode loadEquityIndexDividendFutureOptionPortfolio() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createEquityIndexDividendFutureOptionSecurity());
@@ -1018,7 +1018,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode createEquityIndexOptionNode() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createEquityIndexOptionSecurity());
@@ -1042,7 +1042,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode createEquityOptionNode() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createEquityOptionSecurity());
@@ -1069,7 +1069,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode createEquityVarianceSwapNode() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createEquityVarianceSwapSecurity());
@@ -1092,7 +1092,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode createFRANode() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createFRASecurity());
@@ -1116,7 +1116,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode createBondFutureNode() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createBondFutureSecurity());
@@ -1137,7 +1137,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode createAgricultureFutureNode() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createAgricultureFutureSecurity());
@@ -1158,7 +1158,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode createEnergyFutureNode() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createEnergyFutureSecurity());
@@ -1179,7 +1179,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode createMetalFutureNode() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createMetalFutureSecurity());
@@ -1203,7 +1203,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode createEquityIndexDividendFutureNode() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createEquityIndexDividendFutureSecurity());
@@ -1226,7 +1226,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode createFXFutureNode() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createFXFutureSecurity());
@@ -1247,7 +1247,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode createIndexFutureNode() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createIndexFutureSecurity());
@@ -1270,7 +1270,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode createInterestRateFutureNode() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createInterestRateFutureSecurity());
@@ -1291,7 +1291,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode createStockFutureNode() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createStockFutureSecurity());
@@ -1299,7 +1299,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
     return createNode(StockFutureSecurity.SECURITY_TYPE, securities);
   }
 
-  public void createFutureNodes(List<ManageablePortfolioNode> nodes) {
+  public void createFutureNodes(final List<ManageablePortfolioNode> nodes) {
     nodes.add(createBondFutureNode());
     nodes.add(createAgricultureFutureNode());
     nodes.add(createEnergyFutureNode());
@@ -1331,7 +1331,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode createFXBarrierOptionNode() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createFXBarrierOptionSecurity());
@@ -1354,7 +1354,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode createFXDigitalOptionNode() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createFXDigitalOptionSecurity());
@@ -1375,7 +1375,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode createFXForwardNode() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createFXForwardSecurity());
@@ -1398,7 +1398,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode createFXOptionNode() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createFXOptionSecurity());
@@ -1423,7 +1423,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode createIRFutureOptionNode() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createIRFutureOptionSecurity());
@@ -1448,7 +1448,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode createNonDeliverableFXDigitalOptionNode() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createNonDeliverableFXDigitalOptionSecurity());
@@ -1470,7 +1470,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode createNonDeliverableFXForwardNode() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createNonDeliverableFXForwardSecurity());
@@ -1495,7 +1495,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode createNonDeliverableFXOptionNode() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createNonDeliverableFXOptionSecurity());
@@ -1516,7 +1516,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode loadPeriodicZeroDepositPortfolio() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createPeriodicZeroDepositSecurity());
@@ -1564,7 +1564,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode createForwardSwapNode() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createForwardSwapSecurity());
@@ -1587,7 +1587,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode createSwapNode() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createSwapSecurity());
@@ -1608,7 +1608,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
   }
 
   public ManageablePortfolioNode createSwaptionNode() {
-    final Collection<ManageableSecurity> securities = new ArrayList<ManageableSecurity>(NUM_SECURITIES);
+    final Collection<ManageableSecurity> securities = new ArrayList<>(NUM_SECURITIES);
     for (int i = 0; i < NUM_SECURITIES; i++) {
       resetGenerationState(i);
       securities.add(createSwaptionSecurity());
@@ -1618,10 +1618,10 @@ public class BloombergReferencePortfolioMaker implements Runnable {
 
   @Override
   public void run() {
-    List<ManageablePortfolioNode> nodes = Lists.newArrayList();
+    final List<ManageablePortfolioNode> nodes = Lists.newArrayList();
     nodes.add(createBondFutureOptionNode());
     createBondPortfolioNodes(nodes);
-    
+
     nodes.add(createCapFloorCMSSpreadNode());
     nodes.add(createCapFloorNode());
     nodes.add(createCashNode());
@@ -1652,7 +1652,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
     nodes.add(createSwapNode());
     nodes.add(createForwardSwapNode());
     nodes.add(createSwaptionNode());
-    
+
     createPortfolio(PORTFOLIO_NAME, nodes);
   }
 

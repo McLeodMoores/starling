@@ -29,7 +29,7 @@ public class ComputationCycleQuery {
   //-----------------------------------------------------------------------
   /**
    * Gets the calculation configuration for which the computation caches will be queried.
-   * 
+   *
    * @return the value of the property
    */
   public String getCalculationConfigurationName() {
@@ -38,17 +38,17 @@ public class ComputationCycleQuery {
 
   /**
    * Sets the calculation configuration for which the computation caches will be queried.
-   * 
+   *
    * @param calculationConfigurationName the new value of the property
    */
-  public void setCalculationConfigurationName(String calculationConfigurationName) {
+  public void setCalculationConfigurationName(final String calculationConfigurationName) {
     this._calculationConfigurationName = calculationConfigurationName;
   }
 
   //-----------------------------------------------------------------------
   /**
    * Gets the value specifications defining the desired cache values.
-   * 
+   *
    * @return the value of the property
    */
   public Collection<ValueSpecification> getValueSpecifications() {
@@ -57,10 +57,10 @@ public class ComputationCycleQuery {
 
   /**
    * Sets the value specifications defining the desired cache values.
-   * 
+   *
    * @param valueSpecifications the new value of the property
    */
-  public void setValueSpecifications(Collection<ValueSpecification> valueSpecifications) {
+  public void setValueSpecifications(final Collection<ValueSpecification> valueSpecifications) {
     this._valueSpecifications = valueSpecifications;
   }
 

@@ -18,7 +18,7 @@ import com.opengamma.util.ZipUtils;
  * Provides access to the fields necessary to insert into {@code DbBeanMaster}.
  * <p>
  * Actual masters will normally create an instance as an anonymous inner class.
- * 
+ *
  * @param <D>  the type of the document
  * @param <V>  the type of the value
  */
@@ -97,7 +97,7 @@ public abstract class BeanMasterCallback<D extends AbstractDocument, V extends B
    * @param value  the bean to extract from, not null
    * @return the document, not null
    */
-  protected String getActualType(V value) {
+  protected String getActualType(final V value) {
     return value.getClass().getSimpleName();
   }
 
@@ -107,8 +107,8 @@ public abstract class BeanMasterCallback<D extends AbstractDocument, V extends B
    * @param value  the bean to extract from, not null
    * @return the document, not null
    */
-  protected byte[] getPackedData(V value) {
-    String xml = JodaBeanSerialization.serializer(false).xmlWriter().write(value);
+  protected byte[] getPackedData(final V value) {
+    final String xml = JodaBeanSerialization.serializer(false).xmlWriter().write(value);
     return ZipUtils.deflateString(xml);
   }
 
@@ -118,7 +118,7 @@ public abstract class BeanMasterCallback<D extends AbstractDocument, V extends B
    * @return the value, not null
    */
   protected V parsePackedData(final byte[] data) {
-    String xml = ZipUtils.inflateString(data);
+    final String xml = ZipUtils.inflateString(data);
     return JodaBeanSerialization.deserializer().xmlReader().read(xml, getRootType());
   }
 

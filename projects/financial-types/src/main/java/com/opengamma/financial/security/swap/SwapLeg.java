@@ -73,15 +73,15 @@ public abstract class SwapLeg extends DirectBean implements Serializable {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param dayCount  the day count, not null
    * @param frequency  the frequency, not null
    * @param regionId  the region, not null
    * @param businessDayConvention  the business day convention, not null
    * @param notional  the notional, not null
-   * @param eom  whether this is EOM 
+   * @param eom  whether this is EOM
    */
-  protected SwapLeg(DayCount dayCount, Frequency frequency, ExternalId regionId, BusinessDayConvention businessDayConvention, Notional notional, boolean eom) {
+  protected SwapLeg(final DayCount dayCount, final Frequency frequency, final ExternalId regionId, final BusinessDayConvention businessDayConvention, final Notional notional, final boolean eom) {
     setDayCount(dayCount);
     setFrequency(frequency);
     setRegionId(regionId);
@@ -93,7 +93,7 @@ public abstract class SwapLeg extends DirectBean implements Serializable {
   //-------------------------------------------------------------------------
   /**
    * Accepts a visitor to manage traversal of the hierarchy.
-   * 
+   *
    * @param <T> the result type of the visitor
    * @param visitor  the visitor, not null
    * @return the result

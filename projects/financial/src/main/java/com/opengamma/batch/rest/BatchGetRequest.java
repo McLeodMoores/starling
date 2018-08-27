@@ -65,10 +65,10 @@ public class BatchGetRequest extends DirectBean {
    * <p>
    * With no further customisation this will retrieve all the batch data and
    * the total error count.
-   * 
+   *
    * @param batchId  the batch identifier, not null
    */
-  public BatchGetRequest(ObjectId batchId) {
+  public BatchGetRequest(final ObjectId batchId) {
     ArgumentChecker.notNull(batchId, "batchId");
     setBatchId(batchId);
   }

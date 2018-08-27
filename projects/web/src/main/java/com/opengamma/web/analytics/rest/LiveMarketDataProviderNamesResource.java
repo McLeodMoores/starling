@@ -22,11 +22,11 @@ import com.opengamma.engine.marketdata.live.LiveMarketDataProviderFactory;
 public class LiveMarketDataProviderNamesResource {
 
   private final LiveMarketDataProviderFactory _liveMarketDataProviderFactory;
-  
-  public LiveMarketDataProviderNamesResource(LiveMarketDataProviderFactory liveMarketDataProviderFactory) {
+
+  public LiveMarketDataProviderNamesResource(final LiveMarketDataProviderFactory liveMarketDataProviderFactory) {
     _liveMarketDataProviderFactory = liveMarketDataProviderFactory;
   }
-  
+
   /**
    * @return JSON {@code [dataSourceName1, dataSourceName2, ...]}
    */
@@ -35,5 +35,5 @@ public class LiveMarketDataProviderNamesResource {
   public String getLiveDataSourceNames() {
     return new JSONArray(_liveMarketDataProviderFactory != null ? _liveMarketDataProviderFactory.getProviderNames() : ImmutableList.of()).toString();
   }
-  
+
 }

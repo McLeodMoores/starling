@@ -30,7 +30,7 @@ import com.opengamma.analytics.math.number.ComplexNumber;
  * and characteristic exponent
  * $$
  * \begin{align*}
- * \psi(u, t; \kappa, \theta, \lambda) &= \frac{2\kappa\theta}{\lambda^2}\left[ 
+ * \psi(u, t; \kappa, \theta, \lambda) &= \frac{2\kappa\theta}{\lambda^2}\left[
  * \frac{\kappa t}{2} - \ln\left(\cosh\left(\frac{\gamma t}{2}\right) + \frac{\kappa}{\gamma}\sinh\left(\frac{\gamma t}{2}\right)\right)
  * + \frac{2iu}{\kappa + \gamma \coth\left(\frac{\gamma t}{2}\right)}\right]\\
  * \text{where}\\
@@ -45,9 +45,9 @@ public class IntegratedCIRTimeChangeCharacteristicExponent implements StocasticC
   private final double _alphaMax;
 
   /**
-   * 
+   *
    * @param kappa The mean-reverting speed
-   * @param theta The mean 
+   * @param theta The mean
    * @param lambda The volatility
    */
   public IntegratedCIRTimeChangeCharacteristicExponent(final double kappa, final double theta, final double lambda) {
@@ -66,16 +66,16 @@ public class IntegratedCIRTimeChangeCharacteristicExponent implements StocasticC
       }
     };
   }
-  
+
   @Override
-  public ComplexNumber getValue(ComplexNumber u, double t) {
+  public ComplexNumber getValue(final ComplexNumber u, final double t) {
     if (u.getReal() == 0.0 && u.getImaginary() == 0.0) {
       return new ComplexNumber(0.0);
     }
 
     final ComplexNumber ui = multiply(I, u);
 
-    //handle small lambda properly 
+    //handle small lambda properly
     if (2 * mod(u) * _lambda * _lambda / _kappa / _kappa < 1e-6) {
       final double d = _theta * t + (1 - _theta) * (1 - Math.exp(-_kappa * t)) / _kappa;
       return multiply(d, ui);
@@ -98,7 +98,7 @@ public class IntegratedCIRTimeChangeCharacteristicExponent implements StocasticC
   }
 
   /**
-   * 
+   *
    * @return $\frac{\kappa^2}{2\lambda^2}$
    */
   @Override
@@ -107,7 +107,7 @@ public class IntegratedCIRTimeChangeCharacteristicExponent implements StocasticC
   }
 
   /**
-   * 
+   *
    * @return $-\infty$
    */
   @Override
@@ -145,11 +145,11 @@ public class IntegratedCIRTimeChangeCharacteristicExponent implements StocasticC
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_kappa);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_lambda);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_theta);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
@@ -175,15 +175,15 @@ public class IntegratedCIRTimeChangeCharacteristicExponent implements StocasticC
   }
 
   @Override
-  public ComplexNumber[] getCharacteristicExponentAdjoint(ComplexNumber u, double t) {
+  public ComplexNumber[] getCharacteristicExponentAdjoint(final ComplexNumber u, final double t) {
     throw new NotImplementedException();
   }
 
   @Override
-  public Function1D<ComplexNumber, ComplexNumber[]> getAdjointFunction(double t) {
+  public Function1D<ComplexNumber, ComplexNumber[]> getAdjointFunction(final double t) {
     throw new NotImplementedException();
   }
 
- 
+
 
 }

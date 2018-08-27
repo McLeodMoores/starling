@@ -85,8 +85,8 @@ public class EquityIndexOptionSecurity extends FinancialSecurity {
     super(SECURITY_TYPE);
   }
 
-  public EquityIndexOptionSecurity(OptionType optionType, double strike, Currency currency, ExternalId underlyingId,
-      ExerciseType exerciseType, Expiry expiry, double pointValue, String exchange) {
+  public EquityIndexOptionSecurity(final OptionType optionType, final double strike, final Currency currency, final ExternalId underlyingId,
+      final ExerciseType exerciseType, final Expiry expiry, final double pointValue, final String exchange) {
     super(SECURITY_TYPE);
     setOptionType(optionType);
     setStrike(strike);
@@ -100,7 +100,7 @@ public class EquityIndexOptionSecurity extends FinancialSecurity {
 
   //-------------------------------------------------------------------------
   @Override
-  public final <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public final <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitEquityIndexOptionSecurity(this);
   }
 

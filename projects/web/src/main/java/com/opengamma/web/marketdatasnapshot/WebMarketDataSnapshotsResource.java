@@ -84,18 +84,18 @@ import com.opengamma.web.analytics.rest.SubscribeMaster;
  * RESTful resource for all market data snapshot documents.
  * <p>
  * The market data snapshot documents resource represents the whole of a position master.
- * 
+ *
  */
 @SuppressWarnings("deprecation")
 @Path("/datasnapshots")
 public class WebMarketDataSnapshotsResource extends AbstractWebMarketDataSnapshotResource {
-  
+
   private static final String CUSTOM_DATE_SUFFIX = "_CustomDate";
   private static final Logger LOGGER = LoggerFactory.getLogger(WebMarketDataSnapshotsResource.class);
   /** Time format: HH:mm:ss */
   private static final DateTimeFormatter VALUATION_TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss");
   private static final DateTimeFormatter HISORICAL_SNAPSHOT_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-  
+
   /**
    * Creates the resource.
    * @param marketSnapshotMaster  the market data snapshot master, not null
@@ -108,7 +108,7 @@ public class WebMarketDataSnapshotsResource extends AbstractWebMarketDataSnapsho
    * @param htsSource the historical timeseries source, not null
    * @param volatilityCubeDefinitionSource the volatility cube definition source, not null
    */
-  public WebMarketDataSnapshotsResource(final MarketDataSnapshotMaster marketSnapshotMaster, final ConfigMaster configMaster, 
+  public WebMarketDataSnapshotsResource(final MarketDataSnapshotMaster marketSnapshotMaster, final ConfigMaster configMaster,
       final LiveMarketDataProviderFactory liveMarketDataProviderFactory, final NamedMarketDataSpecificationRepository marketDataSpecificationRepository, final ConfigSource configSource,
       final ComputationTargetResolver targetResolver, final ViewProcessor viewProcessor, final HistoricalTimeSeriesSource htsSource,
       final VolatilityCubeDefinitionSource volatilityCubeDefinitionSource) {
@@ -120,52 +120,52 @@ public class WebMarketDataSnapshotsResource extends AbstractWebMarketDataSnapsho
   @Produces(MediaType.TEXT_HTML)
   @SubscribeMaster(MasterType.MARKET_DATA_SNAPSHOT)
   public String getHTML(
-      @QueryParam("pgIdx") Integer pgIdx,
-      @QueryParam("pgNum") Integer pgNum,
-      @QueryParam("pgSze") Integer pgSze,
-      @QueryParam("sort") String sort,
-      @QueryParam("name") String name,
-      @QueryParam("snapshotId") List<String> snapshotIdStrs,
-      @Context UriInfo uriInfo) {
-    PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
-    MarketDataSnapshotSearchSortOrder so = buildSortOrder(sort, MarketDataSnapshotSearchSortOrder.NAME_ASC);
-    FlexiBean out = search(pr, so, name, snapshotIdStrs, uriInfo);
+      @QueryParam("pgIdx") final Integer pgIdx,
+      @QueryParam("pgNum") final Integer pgNum,
+      @QueryParam("pgSze") final Integer pgSze,
+      @QueryParam("sort") final String sort,
+      @QueryParam("name") final String name,
+      @QueryParam("snapshotId") final List<String> snapshotIdStrs,
+      @Context final UriInfo uriInfo) {
+    final PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
+    final MarketDataSnapshotSearchSortOrder so = buildSortOrder(sort, MarketDataSnapshotSearchSortOrder.NAME_ASC);
+    final FlexiBean out = search(pr, so, name, snapshotIdStrs, uriInfo);
     return getFreemarker().build(HTML_DIR + "snapshots.ftl", out);
   }
 
-  private FlexiBean search(PagingRequest request, MarketDataSnapshotSearchSortOrder so, String name, 
-      List<String> snapshotIdStrs, UriInfo uriInfo) {
-    FlexiBean out = createRootData();
-    
-    MarketDataSnapshotSearchRequest searchRequest = new MarketDataSnapshotSearchRequest();
+  private FlexiBean search(final PagingRequest request, final MarketDataSnapshotSearchSortOrder so, final String name,
+      final List<String> snapshotIdStrs, final UriInfo uriInfo) {
+    final FlexiBean out = createRootData();
+
+    final MarketDataSnapshotSearchRequest searchRequest = new MarketDataSnapshotSearchRequest();
     searchRequest.setPagingRequest(request);
     searchRequest.setSortOrder(so);
     searchRequest.setName(StringUtils.trimToNull(name));
     searchRequest.setIncludeData(false);
     out.put("searchRequest", searchRequest);
-    for (String snapshotIdStr : snapshotIdStrs) {
+    for (final String snapshotIdStr : snapshotIdStrs) {
       searchRequest.addMarketDataSnapshotId(ObjectId.parse(snapshotIdStr));
     }
     if (data().getUriInfo().getQueryParameters().size() > 0) {
-      MarketDataSnapshotSearchResult searchResult = data().getMarketDataSnapshotMaster().search(searchRequest);
+      final MarketDataSnapshotSearchResult searchResult = data().getMarketDataSnapshotMaster().search(searchRequest);
       out.put("searchResult", searchResult);
       out.put("paging", new WebPaging(searchResult.getPaging(), uriInfo));
-    } 
+    }
     return out;
   }
 
   //-------------------------------------------------------------------------
   @Path("{snapshotId}")
-  public WebMarketDataSnapshotResource findSnapshot(@Subscribe @PathParam("snapshotId") String idStr) {
+  public WebMarketDataSnapshotResource findSnapshot(@Subscribe @PathParam("snapshotId") final String idStr) {
     data().setUriSnapshotId(idStr);
-    UniqueId oid = UniqueId.parse(idStr);
+    final UniqueId oid = UniqueId.parse(idStr);
     try {
-      MarketDataSnapshotDocument doc = data().getMarketDataSnapshotMaster().get(oid);
+      final MarketDataSnapshotDocument doc = data().getMarketDataSnapshotMaster().get(oid);
       data().setSnapshot(doc);
-    } catch (DataNotFoundException ex) {
-      MarketDataSnapshotHistoryRequest historyRequest = new MarketDataSnapshotHistoryRequest(oid);
+    } catch (final DataNotFoundException ex) {
+      final MarketDataSnapshotHistoryRequest historyRequest = new MarketDataSnapshotHistoryRequest(oid);
       historyRequest.setPagingRequest(PagingRequest.ONE);
-      MarketDataSnapshotHistoryResult historyResult = data().getMarketDataSnapshotMaster().history(historyRequest);
+      final MarketDataSnapshotHistoryResult historyResult = data().getMarketDataSnapshotMaster().history(historyRequest);
       if (historyResult.getDocuments().size() == 0) {
         throw ex;
       }
@@ -179,9 +179,10 @@ public class WebMarketDataSnapshotsResource extends AbstractWebMarketDataSnapsho
    * Creates the output root data.
    * @return the output root data, not null
    */
+  @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
-    MarketDataSnapshotSearchRequest searchRequest = new MarketDataSnapshotSearchRequest();
+    final FlexiBean out = super.createRootData();
+    final MarketDataSnapshotSearchRequest searchRequest = new MarketDataSnapshotSearchRequest();
     out.put("searchRequest", searchRequest);
     out.put("views", getViewNames());
     out.put("liveDataSources", getLiveDataSources());
@@ -189,23 +190,23 @@ public class WebMarketDataSnapshotsResource extends AbstractWebMarketDataSnapsho
     out.put("snapshots", getSnapshots());
     return out;
   }
-  
+
   private List<ManageableMarketDataSnapshot> getSnapshots() {
-    MarketDataSnapshotSearchRequest snapshotSearchRequest = new MarketDataSnapshotSearchRequest();
+    final MarketDataSnapshotSearchRequest snapshotSearchRequest = new MarketDataSnapshotSearchRequest();
     snapshotSearchRequest.setIncludeData(false);
-    
-    List<ManageableMarketDataSnapshot> snapshots = Lists.newArrayList();
-    for (MarketDataSnapshotDocument doc : MarketDataSnapshotSearchIterator.iterable(data().getMarketDataSnapshotMaster(), snapshotSearchRequest)) {
+
+    final List<ManageableMarketDataSnapshot> snapshots = Lists.newArrayList();
+    for (final MarketDataSnapshotDocument doc : MarketDataSnapshotSearchIterator.iterable(data().getMarketDataSnapshotMaster(), snapshotSearchRequest)) {
       snapshots.add(doc.getSnapshot());
     }
     return snapshots;
   }
 
   private List<String> getTimeSeriesResolverKeys() {
-    ConfigSearchRequest<HistoricalTimeSeriesRating> request =
-        new ConfigSearchRequest<HistoricalTimeSeriesRating>(HistoricalTimeSeriesRating.class);
+    final ConfigSearchRequest<HistoricalTimeSeriesRating> request =
+        new ConfigSearchRequest<>(HistoricalTimeSeriesRating.class);
     final List<String> keyNames = Lists.newArrayList();
-    for (ConfigDocument doc : ConfigSearchIterator.iterable(data().getConfigMaster(), request)) {
+    for (final ConfigDocument doc : ConfigSearchIterator.iterable(data().getConfigMaster(), request)) {
       keyNames.add(doc.getName());
     }
     return keyNames;
@@ -224,13 +225,13 @@ public class WebMarketDataSnapshotsResource extends AbstractWebMarketDataSnapsho
   }
 
   private List<String> getViewNames() {
-    ConfigMaster configMaster = data().getConfigMaster();
-    ConfigSearchRequest<ViewDefinition> request = new ConfigSearchRequest<ViewDefinition>();
+    final ConfigMaster configMaster = data().getConfigMaster();
+    final ConfigSearchRequest<ViewDefinition> request = new ConfigSearchRequest<>();
     request.setType(ViewDefinition.class);
-    
-    List<String> viewNames = Lists.newArrayList();
-    for (ConfigDocument doc : ConfigSearchIterator.iterable(configMaster, request)) {
-      ViewDefinition viewDefintion = (ViewDefinition) doc.getValue().getValue();
+
+    final List<String> viewNames = Lists.newArrayList();
+    for (final ConfigDocument doc : ConfigSearchIterator.iterable(configMaster, request)) {
+      final ViewDefinition viewDefintion = (ViewDefinition) doc.getValue().getValue();
       if (viewDefintion.getName() != null) {
         viewNames.add(viewDefintion.getName());
       }
@@ -238,8 +239,8 @@ public class WebMarketDataSnapshotsResource extends AbstractWebMarketDataSnapsho
     Collections.sort(viewNames);
     return viewNames;
   }
-  
-  
+
+
   //-------------------------------------------------------------------------
   @POST
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -248,33 +249,33 @@ public class WebMarketDataSnapshotsResource extends AbstractWebMarketDataSnapsho
       @FormParam("name") String name,
       @FormParam("view") String view,
       @FormParam("valuationTime") String valuationTime,
-      @FormParam("tsResolverKeys") List<String> tsResolverKeys,
-      @FormParam("userSnapshotIds") List<String> userSnapshotIds,
-      @FormParam("liveDataSources") List<String> liveDataSources,
-      MultivaluedMap<String, String> formParameters) {
+      @FormParam("tsResolverKeys") final List<String> tsResolverKeys,
+      @FormParam("userSnapshotIds") final List<String> userSnapshotIds,
+      @FormParam("liveDataSources") final List<String> liveDataSources,
+      final MultivaluedMap<String, String> formParameters) {
     name = StringUtils.trimToNull(name);
     view = StringUtils.trimToNull(view);
     valuationTime = StringUtils.trimToNull(valuationTime);
-    
+
     Instant valuationInstant = null;
     if (valuationTime != null) {
       try {
         final LocalTime time = LocalTime.parse(valuationTime, VALUATION_TIME_FORMATTER);
         valuationInstant = ZonedDateTime.now().with(time.truncatedTo(SECONDS)).toInstant();
-      } catch (Exception ex) {
+      } catch (final Exception ex) {
         LOGGER.warn("Invalid valuation time {}", valuationTime);
       }
     } else {
       valuationInstant = Instant.now();
     }
-    
+
     final List<MarketDataSpecification> marketDataSpecs = getMarketDataSpecs(tsResolverKeys, userSnapshotIds, liveDataSources, formParameters);
     if (view == null || marketDataSpecs.isEmpty() || valuationInstant == null) {
-      FlexiBean out = createRootData();
+      final FlexiBean out = createRootData();
       if (valuationInstant == null) {
         out.put("err_valutionTimeInvalid", true);
       }
-      if (view == null) { 
+      if (view == null) {
         out.put("err_viewMissing", true);
       } else {
         out.put("selectedView", view);
@@ -286,31 +287,31 @@ public class WebMarketDataSnapshotsResource extends AbstractWebMarketDataSnapsho
         out.put("selectedUserSnapshotIds", userSnapshotIds);
         out.put("selectedLiveDataSources", liveDataSources);
       }
-      
+
       //include other inputs
-      MarketDataSnapshotSearchRequest searchRequest = new MarketDataSnapshotSearchRequest();
+      final MarketDataSnapshotSearchRequest searchRequest = new MarketDataSnapshotSearchRequest();
       searchRequest.setName(name);
       out.put("searchRequest", searchRequest);
       out.put("valuationTime", valuationTime);
-      String html = getFreemarker().build(HTML_DIR + "snapshot-add.ftl", out);
+      final String html = getFreemarker().build(HTML_DIR + "snapshot-add.ftl", out);
       return Response.ok(html).build();
     }
-   
+
     MarketDataSnapshotDocument snapshot = null;
     try {
       snapshot = createSnapshot(name, view, valuationInstant, marketDataSpecs);
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       LOGGER.error("Unable to create market data snapshot");
       throw new OpenGammaRuntimeException("Unable to create market data snapshot");
     }
-    URI uri = data().getUriInfo().getAbsolutePathBuilder().path(snapshot.getUniqueId().toLatest().toString()).build();
+    final URI uri = data().getUriInfo().getAbsolutePathBuilder().path(snapshot.getUniqueId().toLatest().toString()).build();
     return Response.seeOther(uri).build();
   }
 
-  private Map<String, String> getTsResolverKeyInputs(List<String> tsResolverKeys, MultivaluedMap<String, String> formParameters) {
-    Map<String, String> result = Maps.newHashMap();
-    for (String tsResolverKey : tsResolverKeys) {
-      List<String> tsDates = formParameters.get(tsResolverKey + CUSTOM_DATE_SUFFIX);
+  private Map<String, String> getTsResolverKeyInputs(final List<String> tsResolverKeys, final MultivaluedMap<String, String> formParameters) {
+    final Map<String, String> result = Maps.newHashMap();
+    for (final String tsResolverKey : tsResolverKeys) {
+      final List<String> tsDates = formParameters.get(tsResolverKey + CUSTOM_DATE_SUFFIX);
       if (!tsDates.isEmpty()) {
         result.put(tsResolverKey, Iterables.getFirst(tsDates, null));
       }
@@ -318,33 +319,33 @@ public class WebMarketDataSnapshotsResource extends AbstractWebMarketDataSnapsho
     return result;
   }
 
-  private List<MarketDataSpecification> getMarketDataSpecs(List<String> tsResolverKeys, List<String> userSnapshotIds, List<String> liveDataSources, MultivaluedMap<String, String> formParameters) {
-    List<MarketDataSpecification> marketDataSpecs = Lists.newArrayList();
+  private List<MarketDataSpecification> getMarketDataSpecs(final List<String> tsResolverKeys, final List<String> userSnapshotIds, final List<String> liveDataSources, final MultivaluedMap<String, String> formParameters) {
+    final List<MarketDataSpecification> marketDataSpecs = Lists.newArrayList();
     for (String liveDataSource : liveDataSources) {
       liveDataSource = StringUtils.trimToNull(liveDataSource);
       if (liveDataSource != null) {
         marketDataSpecs.add(LiveMarketDataSpecification.of(liveDataSource));
       }
     }
-    for (String tsResolverKey : tsResolverKeys) {
-      List<String> tsDates = formParameters.get(tsResolverKey + CUSTOM_DATE_SUFFIX);
+    for (final String tsResolverKey : tsResolverKeys) {
+      final List<String> tsDates = formParameters.get(tsResolverKey + CUSTOM_DATE_SUFFIX);
       if (tsDates.isEmpty()) {
         marketDataSpecs.add(new LatestHistoricalMarketDataSpecification(tsResolverKey));
       } else {
-        String tsDate = StringUtils.trimToNull(Iterables.getFirst(tsDates, null));
+        final String tsDate = StringUtils.trimToNull(Iterables.getFirst(tsDates, null));
         if (tsDate != null) {
-          LocalDate snapshotDate = LocalDate.parse(tsDate, HISORICAL_SNAPSHOT_DATE_FORMATTER);
+          final LocalDate snapshotDate = LocalDate.parse(tsDate, HISORICAL_SNAPSHOT_DATE_FORMATTER);
           marketDataSpecs.add(new FixedHistoricalMarketDataSpecification(tsResolverKey, snapshotDate));
         }
       }
     }
-    
+
     for (String userSnapshotId : userSnapshotIds) {
       userSnapshotId = StringUtils.trimToNull(userSnapshotId);
       if (userSnapshotId != null) {
         try {
           marketDataSpecs.add(UserMarketDataSpecification.of(UniqueId.parse(userSnapshotId)));
-        } catch (IllegalArgumentException ex) {
+        } catch (final IllegalArgumentException ex) {
           LOGGER.warn("Illegal format in snapshot {}, ignorning... ", userSnapshotId);
         }
       }
@@ -352,9 +353,9 @@ public class WebMarketDataSnapshotsResource extends AbstractWebMarketDataSnapsho
     return marketDataSpecs;
   }
 
-  private MarketDataSnapshotDocument createSnapshot(String name, final String viewDefinitionName, final Instant valuationInstant, 
+  private MarketDataSnapshotDocument createSnapshot(final String name, final String viewDefinitionName, final Instant valuationInstant,
       final List<MarketDataSpecification> marketDataSpecs) throws InterruptedException {
-    MarketDataSnapshotSaver saver = MarketDataSnapshotSaver.of(data().getComputationTargetResolver(), data().getHistoricalTimeSeriesSource(), 
+    final MarketDataSnapshotSaver saver = MarketDataSnapshotSaver.of(data().getComputationTargetResolver(), data().getHistoricalTimeSeriesSource(),
         data().getViewProcessor(), data().getConfigMaster(), data().getMarketDataSnapshotMaster(), data().getVolatilityCubeDefinitionSource(), Mode.STRUCTURED, null);
     return saver.createSnapshot(name, viewDefinitionName, valuationInstant, marketDataSpecs);
   }
@@ -365,9 +366,9 @@ public class WebMarketDataSnapshotsResource extends AbstractWebMarketDataSnapsho
    * @param data  the data, not null
    * @return the URI, not null
    */
-  public static URI uri(WebMarketDataSnapshotData data) {
-    UriBuilder builder = data.getUriInfo().getBaseUriBuilder().path(WebMarketDataSnapshotsResource.class);
+  public static URI uri(final WebMarketDataSnapshotData data) {
+    final UriBuilder builder = data.getUriInfo().getBaseUriBuilder().path(WebMarketDataSnapshotsResource.class);
     return builder.build();
   }
- 
+
 }

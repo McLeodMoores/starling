@@ -109,54 +109,54 @@ public class DynamicDelegatingPositionMaster implements PositionMaster {
   }
 
   @Override
-  public PositionSearchResult search(PositionSearchRequest request) {
+  public PositionSearchResult search(final PositionSearchRequest request) {
     ArgumentChecker.notNull(request, "request");
-    Collection<ObjectId> ids = request.getPositionObjectIds();
+    final Collection<ObjectId> ids = request.getPositionObjectIds();
     return chooseDelegate(ids.iterator().next().getScheme()).search(request);
   }
 
   @Override
-  public PositionHistoryResult history(PositionHistoryRequest request) {
+  public PositionHistoryResult history(final PositionHistoryRequest request) {
     ArgumentChecker.notNull(request, "request");
     return chooseDelegate(request.getObjectId().getScheme()).history(request);
   }
 
   @Override
-  public ManageableTrade getTrade(UniqueId tradeId) {
+  public ManageableTrade getTrade(final UniqueId tradeId) {
     ArgumentChecker.notNull(tradeId, "tradeId");
     return chooseDelegate(tradeId.getScheme()).getTrade(tradeId);
   }
 
   @Override
-  public PositionDocument get(UniqueId uniqueId) {
+  public PositionDocument get(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     return chooseDelegate(uniqueId.getScheme()).get(uniqueId);
   }
 
   @Override
-  public PositionDocument get(ObjectIdentifiable objectId, VersionCorrection versionCorrection) {
+  public PositionDocument get(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     return chooseDelegate(objectId.getObjectId().getScheme()).get(objectId, versionCorrection);
   }
 
   @Override
-  public Map<UniqueId, PositionDocument> get(Collection<UniqueId> uniqueIds) {
-    Map<UniqueId, PositionDocument> resultMap = newHashMap();
-    for (UniqueId uniqueId : uniqueIds) {
-      PositionDocument doc = get(uniqueId);
+  public Map<UniqueId, PositionDocument> get(final Collection<UniqueId> uniqueIds) {
+    final Map<UniqueId, PositionDocument> resultMap = newHashMap();
+    for (final UniqueId uniqueId : uniqueIds) {
+      final PositionDocument doc = get(uniqueId);
       resultMap.put(uniqueId, doc);
     }
     return resultMap;
   }
 
   @Override
-  public PositionDocument add(PositionDocument document) {
+  public PositionDocument add(final PositionDocument document) {
     throw new UnsupportedOperationException("Cannot add document without explicitly specifying the scheme");
   }
 
   @Override
-  public PositionDocument update(PositionDocument document) {
+  public PositionDocument update(final PositionDocument document) {
     ArgumentChecker.notNull(document, "document");
     Validate.notNull(document.getUniqueId(), "document has no unique id");
     Validate.notNull(document.getObjectId(), "document has no object id");
@@ -164,53 +164,53 @@ public class DynamicDelegatingPositionMaster implements PositionMaster {
   }
 
   @Override
-  public void remove(ObjectIdentifiable oid) {
+  public void remove(final ObjectIdentifiable oid) {
     ArgumentChecker.notNull(oid, "objectIdentifiable");
     chooseDelegate(oid.getObjectId().getScheme()).remove(oid);
   }
 
   @Override
-  public PositionDocument correct(PositionDocument document) {
+  public PositionDocument correct(final PositionDocument document) {
     ArgumentChecker.notNull(document, "document");
     return chooseDelegate(document.getObjectId().getScheme()).correct(document);
   }
 
   @Override
-  public List<UniqueId> replaceVersion(UniqueId uniqueId, List<PositionDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersion(final UniqueId uniqueId, final List<PositionDocument> replacementDocuments) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
     return chooseDelegate(uniqueId.getScheme()).replaceVersion(uniqueId, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceAllVersions(ObjectIdentifiable objectId, List<PositionDocument> replacementDocuments) {
+  public List<UniqueId> replaceAllVersions(final ObjectIdentifiable objectId, final List<PositionDocument> replacementDocuments) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
     return chooseDelegate(objectId.getObjectId().getScheme()).replaceAllVersions(objectId, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceVersions(ObjectIdentifiable objectId, List<PositionDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersions(final ObjectIdentifiable objectId, final List<PositionDocument> replacementDocuments) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
     return chooseDelegate(objectId.getObjectId().getScheme()).replaceVersions(objectId, replacementDocuments);
   }
 
   @Override
-  public UniqueId replaceVersion(PositionDocument replacementDocument) {
+  public UniqueId replaceVersion(final PositionDocument replacementDocument) {
     ArgumentChecker.notNull(replacementDocument, "replacementDocument");
     ArgumentChecker.notNull(replacementDocument.getObjectId(), "replacementDocument.getObjectId");
     return chooseDelegate(replacementDocument.getObjectId().getScheme()).replaceVersion(replacementDocument);
   }
 
   @Override
-  public void removeVersion(UniqueId uniqueId) {
+  public void removeVersion(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     chooseDelegate(uniqueId.getScheme()).removeVersion(uniqueId);
   }
 
   @Override
-  public UniqueId addVersion(ObjectIdentifiable objectId, PositionDocument documentToAdd) {
+  public UniqueId addVersion(final ObjectIdentifiable objectId, final PositionDocument documentToAdd) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(documentToAdd, "documentToAdd");
     return chooseDelegate(objectId.getObjectId().getScheme()).addVersion(objectId, documentToAdd);

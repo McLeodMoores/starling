@@ -9,9 +9,9 @@ import com.opengamma.engine.value.ValueProperties;
 
 public abstract class ValuePropertiesModifier {
 
-  private String _propertyName;
+  private final String _propertyName;
 
-  protected ValuePropertiesModifier(String propertyName) {
+  protected ValuePropertiesModifier(final String propertyName) {
     this._propertyName = propertyName;
   }
 

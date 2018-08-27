@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.web.server.conversion;
@@ -14,26 +14,26 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.volatility.surface.FunctionalVolatilitySurfaceData;
 
 /**
- * 
+ *
  */
 public class FunctionalVolatilitySurfaceDataConverter implements ResultConverter<FunctionalVolatilitySurfaceData> {
   private static final DecimalFormat LABEL_FORMAT = new DecimalFormat("##.##");
 
   @Override
-  public Object convertForDisplay(ResultConverterCache context, ValueSpecification valueSpec, FunctionalVolatilitySurfaceData value, ConversionMode mode) {
-    Map<String, Object> result = new HashMap<String, Object>();
-    VolatilitySurface surface = value.getSurface();
-    int nX = value.getNXSamples();
-    int nY = value.getNYSamples();
+  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final FunctionalVolatilitySurfaceData value, final ConversionMode mode) {
+    final Map<String, Object> result = new HashMap<>();
+    final VolatilitySurface surface = value.getSurface();
+    final int nX = value.getNXSamples();
+    final int nY = value.getNYSamples();
     result.put("xCount", nX);
     result.put("yCount", nY);
     if (mode == ConversionMode.FULL) {
-      Object[] xs = new Object[nX];
-      Object[] ys = new Object[nY];
-      double[][] values = new double[nX][nY];
-      boolean[][] missingValues = new boolean[nX][nY];
-      double xStep = (value.getXMaximum() - value.getXMinimum()) / nX;
-      double yStep = (value.getYMaximum() - value.getYMinimum()) / nY;
+      final Object[] xs = new Object[nX];
+      final Object[] ys = new Object[nY];
+      final double[][] values = new double[nX][nY];
+      final boolean[][] missingValues = new boolean[nX][nY];
+      final double xStep = (value.getXMaximum() - value.getXMinimum()) / nX;
+      final double yStep = (value.getYMaximum() - value.getYMinimum()) / nY;
       double x = value.getXMinimum();
       for (int i = 0; i < nX; i++) {
         xs[i] = LABEL_FORMAT.format(x);
@@ -57,12 +57,12 @@ public class FunctionalVolatilitySurfaceDataConverter implements ResultConverter
   }
 
   @Override
-  public Object convertForHistory(ResultConverterCache context, ValueSpecification valueSpec, FunctionalVolatilitySurfaceData value) {
+  public Object convertForHistory(final ResultConverterCache context, final ValueSpecification valueSpec, final FunctionalVolatilitySurfaceData value) {
     return null;
   }
 
   @Override
-  public String convertToText(ResultConverterCache context, ValueSpecification valueSpec, FunctionalVolatilitySurfaceData value) {
+  public String convertToText(final ResultConverterCache context, final ValueSpecification valueSpec, final FunctionalVolatilitySurfaceData value) {
     return "Functional Volatility Surface";
   }
 

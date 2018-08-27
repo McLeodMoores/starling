@@ -18,11 +18,11 @@ import com.sun.jersey.spi.container.ContainerRequestFilter;
 public class HttpMethodFilter implements ContainerRequestFilter {
 
   @Override
-  public ContainerRequest filter(ContainerRequest request) {
+  public ContainerRequest filter(final ContainerRequest request) {
     if (request.getMethod().equalsIgnoreCase("POST") == false) {
       return request;
     }
-    String methodFormParam = request.getFormParameters().getFirst("method");  // getFormParameters() returns empty when not a form
+    final String methodFormParam = request.getFormParameters().getFirst("method");  // getFormParameters() returns empty when not a form
     if ("PUT".equals(methodFormParam)) {
       request.setMethod("PUT");
     } else if ("DELETE".equals(methodFormParam)) {

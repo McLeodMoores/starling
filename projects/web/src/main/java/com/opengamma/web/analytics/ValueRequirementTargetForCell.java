@@ -51,8 +51,8 @@ public final class ValueRequirementTargetForCell implements ImmutableBean {
    */
   @ImmutableConstructor
   public ValueRequirementTargetForCell(
-      String columnSet,
-      ValueRequirement valueRequirement) {
+      final String columnSet,
+      final ValueRequirement valueRequirement) {
 
     ArgumentChecker.notNull(columnSet, "columnSet");
     ArgumentChecker.notNull(valueRequirement, "valuleSpecification");

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.copier.portfolio;
@@ -14,15 +14,15 @@ import com.opengamma.master.security.ManageableSecurity;
 public class QuietPortfolioCopierVisitor implements PortfolioCopierVisitor {
 
   @Override
-  public void info(String message, ManageablePosition position, ManageableSecurity[] securities) {
+  public void info(final String message, final ManageablePosition position, final ManageableSecurity[] securities) {
   }
 
   @Override
-  public void info(String message) {
+  public void info(final String message) {
   }
 
   @Override
-  public void error(String message) {
+  public void error(final String message) {
   }
 
 }

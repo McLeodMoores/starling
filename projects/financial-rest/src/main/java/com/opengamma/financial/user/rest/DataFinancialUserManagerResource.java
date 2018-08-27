@@ -5,14 +5,11 @@
  */
 package com.opengamma.financial.user.rest;
 
-import java.net.URI;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import com.opengamma.financial.user.FinancialUser;
@@ -35,10 +32,10 @@ public class DataFinancialUserManagerResource extends AbstractDataResource {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param manager  the manager, not null
    */
-  public DataFinancialUserManagerResource(FinancialUserManager manager) {
+  public DataFinancialUserManagerResource(final FinancialUserManager manager) {
     ArgumentChecker.notNull(manager, "manager");
     _manager = manager;
   }
@@ -46,7 +43,7 @@ public class DataFinancialUserManagerResource extends AbstractDataResource {
   //-------------------------------------------------------------------------
   /**
    * Gets the manager.
-   * 
+   *
    * @return the manager, not null
    */
   public FinancialUserManager getUserManager() {
@@ -55,15 +52,15 @@ public class DataFinancialUserManagerResource extends AbstractDataResource {
 
   //-------------------------------------------------------------------------
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
   @Path("users/{userName}")
-  public DataFinancialUserResource findUser(@PathParam("userName") String userName) {
+  public DataFinancialUserResource findUser(@PathParam("userName") final String userName) {
     ArgumentChecker.notNull(userName, "userName");
-    
-    FinancialUser user = _manager.getOrCreateUser(userName);
+
+    final FinancialUser user = _manager.getOrCreateUser(userName);
     return new DataFinancialUserResource(user);
   }
 

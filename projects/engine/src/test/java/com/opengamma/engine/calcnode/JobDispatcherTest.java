@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode;
@@ -34,7 +34,7 @@ import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.test.Timeout;
 
 /**
- * 
+ *
  */
 @Test(groups = TestGroup.INTEGRATION)
 public class JobDispatcherTest {
@@ -86,7 +86,7 @@ public class JobDispatcherTest {
     }
 
     @Override
-    public boolean notifyWhenAvailable(JobInvokerRegister callback) {
+    public boolean notifyWhenAvailable(final JobInvokerRegister callback) {
       _callback = callback;
       return false;
     }
@@ -180,7 +180,7 @@ public class JobDispatcherTest {
               public void run() {
                 try {
                   Thread.sleep(rnd.nextInt(50));
-                } catch (InterruptedException e) {
+                } catch (final InterruptedException e) {
                   LOGGER.warn("invoker {} interrupted", getInvokerId());
                 }
                 LOGGER.debug("invoker {} completed job {}", getInvokerId(), job.getSpecification());
@@ -275,7 +275,7 @@ public class JobDispatcherTest {
     jobDispatcher.registerJobInvoker(failingInvoker);
     final CalculationJob job = createTestJob();
     jobDispatcher.dispatchJob(job, result);
-    CalculationJobResult jobResult = result.waitForResult(TIMEOUT);
+    final CalculationJobResult jobResult = result.waitForResult(TIMEOUT);
     assertNotNull(jobResult);
     assertEquals(2, failingInvoker._failureCount); // once failed twice at one node, job is aborted
     assertEquals(JobDispatcher.DEFAULT_JOB_FAILURE_NODE_ID, jobResult.getComputeNodeId());
@@ -292,14 +292,14 @@ public class JobDispatcherTest {
     jobDispatcher.registerJobInvoker(workingInvoker);
     final CalculationJob job = createTestJob();
     jobDispatcher.dispatchJob(job, result);
-    CalculationJobResult jobResult = result.waitForResult(TIMEOUT);
+    final CalculationJobResult jobResult = result.waitForResult(TIMEOUT);
     assertNotNull(jobResult);
     assertEquals(1, failingInvoker._failureCount); // fail once at this node, then retried on another
     assertEquals("Test", jobResult.getComputeNodeId());
     assertEquals(job.getSpecification(), jobResult.getSpecification());
   }
 
-  private class BlockingJobInvoker extends AbstractJobInvoker {
+  private final class BlockingJobInvoker extends AbstractJobInvoker {
 
     private final long _waitFor;
     private AtomicInteger _isAlive;
@@ -322,7 +322,7 @@ public class JobDispatcherTest {
         public void run() {
           try {
             Thread.sleep(_waitFor);
-          } catch (InterruptedException e) {
+          } catch (final InterruptedException e) {
           }
           receiver.jobCompleted(createTestJobResult(job.getSpecification(), 0, getInvokerId()));
         }
@@ -350,7 +350,7 @@ public class JobDispatcherTest {
     }
 
     @Override
-    public boolean notifyWhenAvailable(JobInvokerRegister callback) {
+    public boolean notifyWhenAvailable(final JobInvokerRegister callback) {
       // Shouldn't get called
       Assert.fail();
       return false;
@@ -370,7 +370,7 @@ public class JobDispatcherTest {
       assertNull(result.getResult());
       final BlockingJobInvoker blockingInvoker = new BlockingJobInvoker(2 * TIMEOUT);
       jobDispatcher.registerJobInvoker(blockingInvoker);
-      CalculationJobResult jobResult = result.waitForResult(2 * TIMEOUT);
+      final CalculationJobResult jobResult = result.waitForResult(2 * TIMEOUT);
       assertNotNull(jobResult);
       assertEquals(jobDispatcher.getJobFailureNodeId(), jobResult.getComputeNodeId());
     } finally {
@@ -390,7 +390,7 @@ public class JobDispatcherTest {
       assertNull(result.getResult());
       final BlockingJobInvoker blockingInvoker = new BlockingJobInvoker(TIMEOUT);
       jobDispatcher.registerJobInvoker(blockingInvoker);
-      CalculationJobResult jobResult = result.waitForResult(2 * TIMEOUT);
+      final CalculationJobResult jobResult = result.waitForResult(2 * TIMEOUT);
       assertNotNull(jobResult);
       assertEquals(blockingInvoker.getInvokerId(), jobResult.getComputeNodeId());
     } finally {
@@ -412,7 +412,7 @@ public class JobDispatcherTest {
       final BlockingJobInvoker blockingInvoker = new BlockingJobInvoker(2 * TIMEOUT);
       blockingInvoker._isAlive = new AtomicInteger();
       jobDispatcher.registerJobInvoker(blockingInvoker);
-      CalculationJobResult jobResult = result.waitForResult(3 * TIMEOUT);
+      final CalculationJobResult jobResult = result.waitForResult(3 * TIMEOUT);
       assertNotNull(jobResult);
       assertEquals(blockingInvoker.getInvokerId(), jobResult.getComputeNodeId());
       assertTrue(blockingInvoker._isAlive.get() > 0);
@@ -434,7 +434,7 @@ public class JobDispatcherTest {
       assertNull(result.getResult());
       final BlockingJobInvoker blockingInvoker = new BlockingJobInvoker(2 * TIMEOUT);
       jobDispatcher.registerJobInvoker(blockingInvoker);
-      CalculationJobResult jobResult = result.waitForResult(3 * TIMEOUT);
+      final CalculationJobResult jobResult = result.waitForResult(3 * TIMEOUT);
       assertNotNull(jobResult);
       assertEquals(jobDispatcher.getJobFailureNodeId(), jobResult.getComputeNodeId());
     } finally {
@@ -450,7 +450,7 @@ public class JobDispatcherTest {
       jobDispatcher.setMaxJobExecutionTime(2 * TIMEOUT);
       jobDispatcher.setMaxJobAttempts(1);
       final TestJobResultReceiver result = new TestJobResultReceiver();
-      Cancelable job = jobDispatcher.dispatchJob(createTestJob(), result);
+      final Cancelable job = jobDispatcher.dispatchJob(createTestJob(), result);
       assertNotNull(job);
       assertNull(result.getResult());
       final BlockingJobInvoker blockingInvoker = new BlockingJobInvoker(TIMEOUT);

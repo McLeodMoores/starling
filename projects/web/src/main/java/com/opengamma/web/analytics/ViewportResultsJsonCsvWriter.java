@@ -17,8 +17,6 @@ import java.util.Map;
 
 import org.json.JSONObject;
 
-import au.com.bytecode.opencsv.CSVWriter;
-
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -35,6 +33,8 @@ import com.opengamma.web.analytics.formatting.DataType;
 import com.opengamma.web.analytics.formatting.ResultsFormatter;
 import com.opengamma.web.analytics.formatting.TypeFormatter;
 import com.opengamma.web.server.conversion.DoubleValueOptionalDecimalPlaceFormatter;
+
+import au.com.bytecode.opencsv.CSVWriter;
 
 /**
  * Creates a JSON/CSV object from an instance of {@link ViewportResults}.
@@ -62,47 +62,48 @@ public class ViewportResultsJsonCsvWriter {
   private final ResultsFormatter _formatter;
   private final DoubleValueOptionalDecimalPlaceFormatter _durationFormatter = new DoubleValueOptionalDecimalPlaceFormatter();
 
-  public ViewportResultsJsonCsvWriter(ResultsFormatter formatter) {
+  public ViewportResultsJsonCsvWriter(final ResultsFormatter formatter) {
     _formatter = formatter;
   }
-  
-  public String getCsv(ViewportResults viewportResults) {
-    GridColumnGroups columnGroups = viewportResults.getColumns();
-    String[] header1 = new String[columnGroups.getGroups().size()];
-    String[] header2 = new String[columnGroups.getColumnCount()];
-    
+
+  public String getCsv(final ViewportResults viewportResults) {
+    final GridColumnGroups columnGroups = viewportResults.getColumns();
+    final String[] header1 = new String[columnGroups.getGroups().size()];
+    final String[] header2 = new String[columnGroups.getColumnCount()];
+
     int index = 0;
-    for (GridColumnGroup gridColumnGroup : columnGroups.getGroups()) {
+    for (final GridColumnGroup gridColumnGroup : columnGroups.getGroups()) {
       header1[index++] = gridColumnGroup.getName();
     }
-    
-    List<GridColumn> columns = columnGroups.getColumns();
+
+    final List<GridColumn> columns = columnGroups.getColumns();
     index = 0;
-    for (GridColumn gridColumn : columns) {
+    for (final GridColumn gridColumn : columns) {
       header2[index++] = gridColumn.getHeader();
     }
-    
-    StringWriter stringWriter = new StringWriter();
+
+    final StringWriter stringWriter = new StringWriter();
     @SuppressWarnings("resource")
+    final
     CSVWriter csvWriter = new CSVWriter(stringWriter);
-    
+
     csvWriter.writeNext(header1);
     csvWriter.writeNext(header2);
-    
-    List<ResultsCell> viewportCells = viewportResults.getResults();
-    Iterable<List<ResultsCell>> results = Iterables.partition(viewportCells, columnGroups.getColumnCount());
-    for (List<ResultsCell> row : results) {
-      String[] rowArray = new String[row.size()];
+
+    final List<ResultsCell> viewportCells = viewportResults.getResults();
+    final Iterable<List<ResultsCell>> results = Iterables.partition(viewportCells, columnGroups.getColumnCount());
+    for (final List<ResultsCell> row : results) {
+      final String[] rowArray = new String[row.size()];
       int col = 0;
-      for (ResultsCell cell : row) {
-        Object cellValue = cell.getValue();
+      for (final ResultsCell cell : row) {
+        final Object cellValue = cell.getValue();
         if (cellValue instanceof RowTarget) {
           rowArray[col++] = ((RowTarget) cellValue).getName();
           continue;
         }
-        
-        ValueSpecification cellValueSpec = cell.getValueSpecification();
-        Object formattedValue = _formatter.format(cellValue, cellValueSpec, cell.getFormat(), cell.getInlineKey());
+
+        final ValueSpecification cellValueSpec = cell.getValueSpecification();
+        final Object formattedValue = _formatter.format(cellValue, cellValueSpec, cell.getFormat(), cell.getInlineKey());
         if (formattedValue instanceof String) {
           rowArray[col++] = (String) formattedValue;
         } else {
@@ -115,19 +116,19 @@ public class ViewportResultsJsonCsvWriter {
   }
 
   // TODO use a Freemarker template - will that perform well enough?
-  public String getJson(ViewportResults viewportResults) {
-    List<ResultsCell> viewportCells = viewportResults.getResults();
-    List<Object> results = Lists.newArrayListWithCapacity(viewportCells.size());
-    for (ResultsCell cell : viewportCells) {
-      Object cellValue = cell.getValue();
-      ValueSpecification cellValueSpec = cell.getValueSpecification();
-      Object formattedValue = _formatter.format(cellValue, cellValueSpec, cell.getFormat(), cell.getInlineKey());
-      Collection<Object> history = cell.getHistory();
-      Class<?> columnType = cell.getType();
-      DataType columnFormat = _formatter.getDataType(columnType);
-      Map<String, Object> valueMap = Maps.newHashMap();
-      AggregatedExecutionLog executionLog = cell.getExecutionLog();
-      LogLevel logLevel = maxLogLevel(executionLog);
+  public String getJson(final ViewportResults viewportResults) {
+    final List<ResultsCell> viewportCells = viewportResults.getResults();
+    final List<Object> results = Lists.newArrayListWithCapacity(viewportCells.size());
+    for (final ResultsCell cell : viewportCells) {
+      final Object cellValue = cell.getValue();
+      final ValueSpecification cellValueSpec = cell.getValueSpecification();
+      final Object formattedValue = _formatter.format(cellValue, cellValueSpec, cell.getFormat(), cell.getInlineKey());
+      final Collection<Object> history = cell.getHistory();
+      final Class<?> columnType = cell.getType();
+      final DataType columnFormat = _formatter.getDataType(columnType);
+      final Map<String, Object> valueMap = Maps.newHashMap();
+      final AggregatedExecutionLog executionLog = cell.getExecutionLog();
+      final LogLevel logLevel = maxLogLevel(executionLog);
 
       valueMap.put(VALUE, formattedValue);
       if (columnFormat == UNKNOWN) {
@@ -135,7 +136,7 @@ public class ViewportResultsJsonCsvWriter {
         valueMap.put(TYPE, _formatter.getDataTypeForValue(cellValue, cellValueSpec).name());
       }
       if (history != null) {
-        List<Object> formattedHistoy = formatHistory(cellValueSpec, cell.getInlineKey(), history);
+        final List<Object> formattedHistoy = formatHistory(cellValueSpec, cell.getInlineKey(), history);
         if (formattedHistoy != null) {
           valueMap.put(HISTORY, formattedHistoy);
         }
@@ -151,51 +152,51 @@ public class ViewportResultsJsonCsvWriter {
       }
       results.add(valueMap);
     }
-    String duration = _durationFormatter.format(new BigDecimal(viewportResults.getCalculationDuration().toMillis()));
-    ImmutableMap<String, Object> resultsMap = ImmutableMap.of(VERSION, viewportResults.getVersion(),
+    final String duration = _durationFormatter.format(new BigDecimal(viewportResults.getCalculationDuration().toMillis()));
+    final ImmutableMap<String, Object> resultsMap = ImmutableMap.of(VERSION, viewportResults.getVersion(),
                                                               CALCULATION_DURATION, duration,
                                                               DATA, results);
     return new JSONObject(resultsMap).toString();
   }
 
-  private static boolean isError(Object value) {
+  private static boolean isError(final Object value) {
     return value instanceof MissingValue;
   }
 
-  private static LogLevel maxLogLevel(AggregatedExecutionLog log) {
+  private static LogLevel maxLogLevel(final AggregatedExecutionLog log) {
     if (log == null) {
       return null;
     }
-    EnumSet<LogLevel> logLevels = log.getLogLevels();
+    final EnumSet<LogLevel> logLevels = log.getLogLevels();
     if (logLevels.isEmpty()) {
       return null;
     }
-    List<LogLevel> logLevelList = Lists.newArrayList(logLevels);
+    final List<LogLevel> logLevelList = Lists.newArrayList(logLevels);
     Collections.sort(logLevelList);
     return logLevelList.get(logLevelList.size() - 1);
   }
 
-  private static boolean hasLogOutput(AggregatedExecutionLog aggregatedLog) {
+  private static boolean hasLogOutput(final AggregatedExecutionLog aggregatedLog) {
     return aggregatedLog != null && aggregatedLog.getLogs() != null && !aggregatedLog.getLogs().isEmpty();
   }
 
-  private static List<Map<String, Object>> formatLogOutput(AggregatedExecutionLog aggregatedLog) {
-    List<Map<String, Object>> output = Lists.newArrayList();
-    for (ExecutionLogWithContext logWithContext : aggregatedLog.getLogs()) {
-      Map<String, Object> logMap = Maps.newHashMap();
-      ComputationTargetSpecification target = logWithContext.getTargetSpecification();
+  private static List<Map<String, Object>> formatLogOutput(final AggregatedExecutionLog aggregatedLog) {
+    final List<Map<String, Object>> output = Lists.newArrayList();
+    for (final ExecutionLogWithContext logWithContext : aggregatedLog.getLogs()) {
+      final Map<String, Object> logMap = Maps.newHashMap();
+      final ComputationTargetSpecification target = logWithContext.getTargetSpecification();
       logMap.put(FUNCTION_NAME, logWithContext.getFunctionName());
       logMap.put(TARGET, target.getType() + " " + target.getUniqueId());
-      ExecutionLog log = logWithContext.getExecutionLog();
+      final ExecutionLog log = logWithContext.getExecutionLog();
       if (log.hasException()) {
         logMap.put(EXCEPTION_CLASS, log.getExceptionClass());
         logMap.put(EXCEPTION_MESSAGE, log.getExceptionMessage());
         logMap.put(EXCEPTION_STACK_TRACE, log.getExceptionStackTrace());
       }
-      List<Map<String, Object>> events = Lists.newArrayList();
+      final List<Map<String, Object>> events = Lists.newArrayList();
       logMap.put(EVENTS, events);
       if (log.getEvents() != null) {
-        for (LogEvent logEvent : log.getEvents()) {
+        for (final LogEvent logEvent : log.getEvents()) {
           events.add(ImmutableMap.<String, Object>of(LEVEL, logEvent.getLevel(), MESSAGE, logEvent.getMessage()));
         }
       }
@@ -212,10 +213,10 @@ public class ViewportResultsJsonCsvWriter {
    * to obtain the cell's value from the underlying value.
    *@param history The history values, not null  @return The formatted history
    */
-  private List<Object> formatHistory(ValueSpecification cellValueSpec, Object inlineKey, Collection<Object> history) {
-    List<Object> formattedHistory = Lists.newArrayListWithCapacity(history.size());
-    for (Object historyValue : history) {
-      Object formattedValue = _formatter.format(historyValue, cellValueSpec, TypeFormatter.Format.HISTORY, inlineKey);
+  private List<Object> formatHistory(final ValueSpecification cellValueSpec, final Object inlineKey, final Collection<Object> history) {
+    final List<Object> formattedHistory = Lists.newArrayListWithCapacity(history.size());
+    for (final Object historyValue : history) {
+      final Object formattedValue = _formatter.format(historyValue, cellValueSpec, TypeFormatter.Format.HISTORY, inlineKey);
       if (formattedValue != ResultsFormatter.VALUE_UNAVAILABLE) {
         formattedHistory.add(formattedValue);
       }

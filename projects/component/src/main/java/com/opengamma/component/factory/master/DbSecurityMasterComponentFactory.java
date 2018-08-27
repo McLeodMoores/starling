@@ -7,8 +7,6 @@ package com.opengamma.component.factory.master;
 
 import java.util.Map;
 
-import net.sf.ehcache.CacheManager;
-
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
@@ -32,6 +30,8 @@ import com.opengamma.masterdb.security.SecurityMasterDetailProvider;
 import com.opengamma.masterdb.security.hibernate.HibernateSecurityMasterDetailProvider;
 import com.opengamma.util.metric.OpenGammaMetricRegistry;
 import com.opengamma.util.rest.AbstractDataResource;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Component factory for the database security master.
@@ -61,14 +61,14 @@ public class DbSecurityMasterComponentFactory extends AbstractDocumentDbMasterCo
   protected Class<? extends AbstractRemoteMaster> getRemoteInterface() {
     return RemoteSecurityMaster.class;
   }
-  
+
   //-------------------------------------------------------------------------
   @Override
   protected DbSecurityMaster createDbDocumentMaster() throws Exception {
-    DbSecurityMaster master = new DbSecurityMaster(getDbConnector());
+    final DbSecurityMaster master = new DbSecurityMaster(getDbConnector());
     master.registerMetrics(OpenGammaMetricRegistry.getSummaryInstance(), OpenGammaMetricRegistry.getDetailedInstance(), "DbSecurityMaster-" + getClassifier());
     if (getDetailProvider() != null) {
-      SecurityMasterDetailProvider dp = getDetailProvider().newInstance();
+      final SecurityMasterDetailProvider dp = getDetailProvider().newInstance();
       if (getCacheManager() != null) {
         master.setDetailProvider(new EHCachingSecurityMasterDetailProvider(dp, getCacheManager()));
       } else {
@@ -79,18 +79,18 @@ public class DbSecurityMasterComponentFactory extends AbstractDocumentDbMasterCo
   }
 
   @Override
-  protected AbstractDataResource createPublishedResource(DbSecurityMaster dbMaster, SecurityMaster postProcessedMaster) {
+  protected AbstractDataResource createPublishedResource(final DbSecurityMaster dbMaster, final SecurityMaster postProcessedMaster) {
     //only db instance is allowed by the constructor here:
     return new DataDbSecurityMasterResource(dbMaster);
   }
 
   @Override
-  protected SecurityMaster wrapMasterWithTrackingInterface(SecurityMaster postProcessedMaster) {
+  protected SecurityMaster wrapMasterWithTrackingInterface(final SecurityMaster postProcessedMaster) {
     return new DataTrackingSecurityMaster(postProcessedMaster);
   }
 
   @Override
-  protected SecurityMaster postProcess(DbSecurityMaster master) {
+  protected SecurityMaster postProcess(final DbSecurityMaster master) {
     return PermissionedSecurityMaster.wrap(master);
   }
 

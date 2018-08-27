@@ -41,23 +41,23 @@ public class VolatilitySurfaceShiftManipulator implements StructureManipulator<V
   /** The type of shift to apply to the surface points. */
   @PropertyDefinition(validate = "notNull")
   private final ScenarioShiftType _shiftType;
-  
+
   /** The shift values to apply to each point. */
   @PropertyDefinition(validate = "notNull")
   private final double[] _shiftValues;
 
-  /* package */ VolatilitySurfaceShiftManipulator(ScenarioShiftType shiftType, double[] shiftValues) {
+  /* package */ VolatilitySurfaceShiftManipulator(final ScenarioShiftType shiftType, final double[] shiftValues) {
     _shiftValues = ArgumentChecker.notEmpty(shiftValues, "shiftValues");
     _shiftType = ArgumentChecker.notNull(shiftType, "shiftType");
   }
 
   @Override
-  public VolatilitySurface execute(VolatilitySurface surface,
-                                   ValueSpecification valueSpecification,
-                                   FunctionExecutionContext executionContext) {
-    ZonedDateTime valuationTime = ZonedDateTime.now(executionContext.getValuationClock());
-    double[] xValues = getXValues(valuationTime);
-    double[] yValues = getYValues(valuationTime);
+  public VolatilitySurface execute(final VolatilitySurface surface,
+                                   final ValueSpecification valueSpecification,
+                                   final FunctionExecutionContext executionContext) {
+    final ZonedDateTime valuationTime = ZonedDateTime.now(executionContext.getValuationClock());
+    final double[] xValues = getXValues(valuationTime);
+    final double[] yValues = getYValues(valuationTime);
     if (_shiftValues.length > 1) {
       if (_shiftType == ScenarioShiftType.ABSOLUTE) {
         return surface.withMultipleAdditiveShifts(xValues, yValues, _shiftValues);
@@ -78,25 +78,25 @@ public class VolatilitySurfaceShiftManipulator implements StructureManipulator<V
     return VolatilitySurface.class;
   }
 
-  protected double[] getXValues(ZonedDateTime valuationTime) {
+  protected double[] getXValues(final ZonedDateTime valuationTime) {
     throw new UnsupportedOperationException("This class should be abstract but there's a bug in Joda beans");
   }
 
-  protected double[] getYValues(ZonedDateTime valuationTime) {
+  protected double[] getYValues(final ZonedDateTime valuationTime) {
     throw new UnsupportedOperationException("This class should be abstract but there's a bug in Joda beans");
   }
 
   @SuppressWarnings("unchecked")
-  public static VolatilitySurfaceShiftManipulator create(ScenarioShiftType shiftType,
-                                                         List<VolatilitySurfaceShift> shifts) {
-    Object xValues = xValues(shifts);
-    Object yValues = yValues(shifts);
-    double[] shiftValues = shiftValues(shifts, shiftType);
+  public static VolatilitySurfaceShiftManipulator create(final ScenarioShiftType shiftType,
+                                                         final List<VolatilitySurfaceShift> shifts) {
+    final Object xValues = xValues(shifts);
+    final Object yValues = yValues(shifts);
+    final double[] shiftValues = shiftValues(shifts, shiftType);
 
     if (xValues instanceof List && yValues instanceof double[]) {
-      return new DateDoubleSurfaceShift(shiftType, shiftValues, ((List<Period>) xValues), ((double[]) yValues));
+      return new DateDoubleSurfaceShift(shiftType, shiftValues, (List<Period>) xValues, (double[]) yValues);
     } else if (xValues instanceof double[] && yValues instanceof List) {
-      return new DoubleDateSurfaceShift(shiftType, shiftValues, ((double[]) xValues), ((List<Period>) yValues));
+      return new DoubleDateSurfaceShift(shiftType, shiftValues, (double[]) xValues, (List<Period>) yValues);
     } else if (xValues instanceof double[] && yValues instanceof double[]) {
       return new DoubleDoubleSurfaceShift(shiftType, shiftValues, (double[]) xValues, (double[]) yValues);
     } else {
@@ -109,9 +109,9 @@ public class VolatilitySurfaceShiftManipulator implements StructureManipulator<V
    * @param shifts The shifts
    * @return The x values of the points to be shifted
    */
-  private static Object xValues(List<VolatilitySurfaceShift> shifts) {
-    List<Object> values = Lists.newArrayListWithCapacity(shifts.size());
-    for (VolatilitySurfaceShift shift : shifts) {
+  private static Object xValues(final List<VolatilitySurfaceShift> shifts) {
+    final List<Object> values = Lists.newArrayListWithCapacity(shifts.size());
+    for (final VolatilitySurfaceShift shift : shifts) {
       values.add(shift.getX());
     }
     return axisValues(values);
@@ -122,9 +122,9 @@ public class VolatilitySurfaceShiftManipulator implements StructureManipulator<V
    * @param shifts The shifts
    * @return The y values of the points to be shifted
    */
-  private static Object yValues(List<VolatilitySurfaceShift> shifts) {
-    List<Object> values = Lists.newArrayListWithCapacity(shifts.size());
-    for (VolatilitySurfaceShift shift : shifts) {
+  private static Object yValues(final List<VolatilitySurfaceShift> shifts) {
+    final List<Object> values = Lists.newArrayListWithCapacity(shifts.size());
+    for (final VolatilitySurfaceShift shift : shifts) {
       values.add(shift.getY());
     }
     return axisValues(values);
@@ -135,8 +135,8 @@ public class VolatilitySurfaceShiftManipulator implements StructureManipulator<V
    * @param values The axis values (Periods or Doubles)
    * @return A list of Periods of a double array
    */
-  private static Object axisValues(List<Object> values) {
-    Class<?> type = values.get(0).getClass();
+  private static Object axisValues(final List<Object> values) {
+    final Class<?> type = values.get(0).getClass();
     if (Number.class.isAssignableFrom(type)) {
       return doubleValues(values);
     } else if (type.equals(Period.class)) {
@@ -151,9 +151,9 @@ public class VolatilitySurfaceShiftManipulator implements StructureManipulator<V
    * @param values A list of periods
    * @return IllegalArgumentException If any of the values aren't periods
    */
-  private static List<Period> periodValues(List<Object> values) {
-    List<Period> periods = Lists.newArrayListWithCapacity(values.size());
-    for (Object value : values) {
+  private static List<Period> periodValues(final List<Object> values) {
+    final List<Period> periods = Lists.newArrayListWithCapacity(values.size());
+    for (final Object value : values) {
       if (!(value instanceof Period)) {
         throw new IllegalArgumentException("All values must be of the same type, found Period and " + value.getClass().getName());
       }
@@ -168,10 +168,10 @@ public class VolatilitySurfaceShiftManipulator implements StructureManipulator<V
    * @return The values in a double array
    * @throws IllegalArgumentException If any of the values aren't Doubles
    */
-  private static double[] doubleValues(List<Object> values) {
-    double[] doubleVals = new double[values.size()];
+  private static double[] doubleValues(final List<Object> values) {
+    final double[] doubleVals = new double[values.size()];
     int index = 0;
-    for (Object value : values) {
+    for (final Object value : values) {
       if (value instanceof Number) {
         doubleVals[index++] = ((Number) value).doubleValue();
       }
@@ -188,10 +188,10 @@ public class VolatilitySurfaceShiftManipulator implements StructureManipulator<V
    * @param shiftType Whether the shifts are relative or absolute
    * @return The shift amounts to apply to each point
    */
-  private static double[] shiftValues(List<VolatilitySurfaceShift> shifts, ScenarioShiftType shiftType) {
-    double[] shiftValues = new double[shifts.size()];
+  private static double[] shiftValues(final List<VolatilitySurfaceShift> shifts, final ScenarioShiftType shiftType) {
+    final double[] shiftValues = new double[shifts.size()];
     int index = 0;
-    for (VolatilitySurfaceShift shift : ArgumentChecker.notEmpty(shifts, "shifts")) {
+    for (final VolatilitySurfaceShift shift : ArgumentChecker.notEmpty(shifts, "shifts")) {
       if (shiftType == ScenarioShiftType.ABSOLUTE) {
         shiftValues[index++] = shift.getShift().doubleValue();
       } else {
@@ -211,10 +211,10 @@ public class VolatilitySurfaceShiftManipulator implements StructureManipulator<V
    * @param valuationTime The valuation time
    * @return An array of year fractions for the axis values
    */
-  /* package */ static double[] yearFractions(List<Period> periods, ZonedDateTime valuationTime) {
-    double[] yearFractions = new double[periods.size()];
+  /* package */ static double[] yearFractions(final List<Period> periods, final ZonedDateTime valuationTime) {
+    final double[] yearFractions = new double[periods.size()];
     int index = 0;
-    for (Period period : periods) {
+    for (final Period period : periods) {
       yearFractions[index++] = TimeCalculator.getTimeBetween(valuationTime, valuationTime.plus(period));
     }
     return yearFractions;

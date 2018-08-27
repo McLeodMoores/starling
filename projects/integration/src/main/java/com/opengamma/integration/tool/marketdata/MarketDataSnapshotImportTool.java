@@ -39,7 +39,7 @@ public class MarketDataSnapshotImportTool extends AbstractTool<ToolContext> {
   //-------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
+   *
    * @param args  the standard tool arguments, not null
    */
   public static void main(final String[] args) { // CSIGNORE
@@ -51,9 +51,9 @@ public class MarketDataSnapshotImportTool extends AbstractTool<ToolContext> {
   protected void doRun() throws Exception {
     s_context = getToolContext();
 
-    SnapshotReader snapshotReader = constructSnapshotReader(getCommandLine().getOptionValue(FILE_NAME_OPTION));
-    SnapshotWriter snapshotWriter = constructSnapshotWriter();
-    SnapshotCopier snapshotCopier = new SimpleSnapshotCopier();
+    final SnapshotReader snapshotReader = constructSnapshotReader(getCommandLine().getOptionValue(FILE_NAME_OPTION));
+    final SnapshotWriter snapshotWriter = constructSnapshotWriter();
+    final SnapshotCopier snapshotCopier = new SimpleSnapshotCopier();
 
     snapshotCopier.copy(snapshotReader, snapshotWriter);
 
@@ -63,7 +63,7 @@ public class MarketDataSnapshotImportTool extends AbstractTool<ToolContext> {
 
   }
 
-  private static SnapshotReader constructSnapshotReader(String filename) {
+  private static SnapshotReader constructSnapshotReader(final String filename) {
     if (SheetFormat.of(filename) == SheetFormat.CSV) {
       return new CsvSnapshotReader(filename);
     } else if (SheetFormat.of(filename) == SheetFormat.XLS) {
@@ -74,7 +74,7 @@ public class MarketDataSnapshotImportTool extends AbstractTool<ToolContext> {
   }
 
   private static SnapshotWriter constructSnapshotWriter() {
-    MarketDataSnapshotMaster marketDataSnapshotMaster = s_context.getMarketDataSnapshotMaster();
+    final MarketDataSnapshotMaster marketDataSnapshotMaster = s_context.getMarketDataSnapshotMaster();
     if (marketDataSnapshotMaster == null) {
       LOGGER.warn("No market data snapshot masters found at {}", s_context);
 
@@ -84,7 +84,7 @@ public class MarketDataSnapshotImportTool extends AbstractTool<ToolContext> {
 
   //-------------------------------------------------------------------------
   @Override
-  protected Options createOptions(boolean mandatoryConfig) {
+  protected Options createOptions(final boolean mandatoryConfig) {
     final Options options = super.createOptions(mandatoryConfig);
     options.addOption(createFilenameOption());
     return options;

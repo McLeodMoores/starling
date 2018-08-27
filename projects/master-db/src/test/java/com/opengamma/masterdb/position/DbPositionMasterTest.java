@@ -28,7 +28,7 @@ public class DbPositionMasterTest extends AbstractDbTest {
   private DbPositionMaster _posMaster;
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public DbPositionMasterTest(String databaseType, String databaseVersion) {
+  public DbPositionMasterTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion);
     LOGGER.info("running testcases for {}", databaseType);
   }

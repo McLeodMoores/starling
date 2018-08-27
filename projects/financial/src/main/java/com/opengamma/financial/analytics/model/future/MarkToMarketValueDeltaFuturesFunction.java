@@ -32,7 +32,7 @@ public class MarkToMarketValueDeltaFuturesFunction extends MarkToMarketFuturesFu
   public MarkToMarketValueDeltaFuturesFunction(final String closingPriceField, final String costOfCarryField, final String resolutionKey) {
     super(ValueRequirementNames.VALUE_DELTA, MarkToMarketFuturesCalculator.ValueDeltaCalculator.getInstance(), closingPriceField, costOfCarryField, resolutionKey);
   }
-  
+
   @Override
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
     final Security security = target.getTrade().getSecurity();
@@ -44,9 +44,9 @@ public class MarkToMarketValueDeltaFuturesFunction extends MarkToMarketFuturesFu
     }
     return false;
   }
-  
+
   @Override
-  protected Double applyTradeScaling(final Trade trade, Double value) {
+  protected Double applyTradeScaling(final Trade trade, final Double value) {
     final double quantity = trade.getQuantity().doubleValue();
     return value * quantity;
   }

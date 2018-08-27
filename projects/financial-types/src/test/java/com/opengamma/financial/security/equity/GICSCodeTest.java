@@ -49,9 +49,9 @@ public class GICSCodeTest {
         {-50},
     };
   }
-  
+
   @Test(dataProvider = "invalidInt", expectedExceptions = IllegalArgumentException.class)
-  public void testInvalidInt(int code) {
+  public void testInvalidInt(final int code) {
     GICSCode.of(code);
   }
 
@@ -93,9 +93,9 @@ public class GICSCodeTest {
         {"-50"},
     };
   }
-  
+
   @Test(dataProvider = "invalidString", expectedExceptions = IllegalArgumentException.class)
-  public void testInvalidString(String code) {
+  public void testInvalidString(final String code) {
     GICSCode.of(code);
   }
 
@@ -129,9 +129,9 @@ public class GICSCodeTest {
 
   @Test
   public void testEquals() {
-    GICSCode c1 = GICSCode.of("10");
-    GICSCode c2 = GICSCode.of(new String("10"));
-    GICSCode c3 = GICSCode.of("1010");
+    final GICSCode c1 = GICSCode.of("10");
+    final GICSCode c2 = GICSCode.of(new String("10"));
+    final GICSCode c3 = GICSCode.of("1010");
     assertTrue(c1.equals(c1));
     assertTrue(c1.equals(c2));
     assertFalse(c1.equals(c3));
@@ -140,33 +140,33 @@ public class GICSCodeTest {
 
   @Test
   public void testHashCode() {
-    GICSCode test = GICSCode.of("10");
+    final GICSCode test = GICSCode.of("10");
     assertEquals(test.hashCode(), "10".hashCode());
   }
 
   //-------------------------------------------------------------------------
   @Test
   public void codeDeconstructionSector() {
-    GICSCode test = GICSCode.of("45");
+    final GICSCode test = GICSCode.of("45");
     assertEquals(false, test.isComplete());
     assertEquals(true, test.isPartial());
-    
+
     assertEquals("45", test.getCode());
     assertEquals(45, test.getCodeInt());
     assertDescription("Information Technology", test.getDescription());
-    
+
     assertEquals("45", test.getSectorCode());
     assertEquals(45, test.getSectorCodeInt());
     assertDescription("Information Technology", test.getSectorDescription());
-    
+
     assertEquals("", test.getIndustryGroupCode());
     assertEquals(0, test.getIndustryGroupCodeInt());
     assertEquals("", test.getIndustryGroupDescription());
-    
+
     assertEquals("", test.getIndustryCode());
     assertEquals(0, test.getIndustryCodeInt());
     assertEquals("", test.getIndustryDescription());
-    
+
     assertEquals("", test.getSubIndustryCode());
     assertEquals(0, test.getSubIndustryCodeInt());
     assertEquals("", test.getSubIndustryDescription());
@@ -174,26 +174,26 @@ public class GICSCodeTest {
 
   @Test
   public void codeDeconstructionIndustryGroup() {
-    GICSCode test = GICSCode.of("4510");
+    final GICSCode test = GICSCode.of("4510");
     assertEquals(false, test.isComplete());
     assertEquals(true, test.isPartial());
-    
+
     assertEquals("4510", test.getCode());
     assertEquals(4510, test.getCodeInt());
     assertDescription("Software & Services", test.getDescription());
-    
+
     assertEquals("45", test.getSectorCode());
     assertEquals(45, test.getSectorCodeInt());
     assertDescription("Information Technology", test.getSectorDescription());
-    
+
     assertEquals("4510", test.getIndustryGroupCode());
     assertEquals(4510, test.getIndustryGroupCodeInt());
     assertDescription("Software & Services", test.getIndustryGroupDescription());
-    
+
     assertEquals("", test.getIndustryCode());
     assertEquals(0, test.getIndustryCodeInt());
     assertEquals("", test.getIndustryDescription());
-    
+
     assertEquals("", test.getSubIndustryCode());
     assertEquals(0, test.getSubIndustryCodeInt());
     assertEquals("", test.getSubIndustryDescription());
@@ -201,26 +201,26 @@ public class GICSCodeTest {
 
   @Test
   public void codeDeconstructionIndustry() {
-    GICSCode test = GICSCode.of("451030");
+    final GICSCode test = GICSCode.of("451030");
     assertEquals(false, test.isComplete());
     assertEquals(true, test.isPartial());
-    
+
     assertEquals("451030", test.getCode());
     assertEquals(451030, test.getCodeInt());
     assertDescription("Software", test.getDescription());
-    
+
     assertEquals("45", test.getSectorCode());
     assertEquals(45, test.getSectorCodeInt());
     assertDescription("Information Technology", test.getSectorDescription());
-    
+
     assertEquals("4510", test.getIndustryGroupCode());
     assertEquals(4510, test.getIndustryGroupCodeInt());
     assertDescription("Software & Services", test.getIndustryGroupDescription());
-    
+
     assertEquals("451030", test.getIndustryCode());
     assertEquals(451030, test.getIndustryCodeInt());
     assertDescription("Software", test.getIndustryDescription());
-    
+
     assertEquals("", test.getSubIndustryCode());
     assertEquals(0, test.getSubIndustryCodeInt());
     assertEquals("", test.getSubIndustryDescription());
@@ -228,32 +228,32 @@ public class GICSCodeTest {
 
   @Test
   public void codeDeconstructionSubIndustry() {
-    GICSCode test = GICSCode.of("45103020");
+    final GICSCode test = GICSCode.of("45103020");
     assertEquals(true, test.isComplete());
     assertEquals(false, test.isPartial());
-    
+
     assertEquals("45103020", test.getCode());
     assertEquals(45103020, test.getCodeInt());
     assertDescription("Systems Software", test.getDescription());
-    
+
     assertEquals("45", test.getSectorCode());
     assertEquals(45, test.getSectorCodeInt());
     assertDescription("Information Technology", test.getSectorDescription());
-    
+
     assertEquals("4510", test.getIndustryGroupCode());
     assertEquals(4510, test.getIndustryGroupCodeInt());
     assertDescription("Software & Services", test.getIndustryGroupDescription());
-    
+
     assertEquals("451030", test.getIndustryCode());
     assertEquals(451030, test.getIndustryCodeInt());
     assertDescription("Software", test.getIndustryDescription());
-    
+
     assertEquals("45103020", test.getSubIndustryCode());
     assertEquals(45103020, test.getSubIndustryCodeInt());
     assertDescription("Systems Software", test.getSubIndustryDescription());
   }
 
-  private static void assertDescription(String expected, String actual) {
+  private static void assertDescription(final String expected, final String actual) {
     if ("Unknown".equals(actual)) {
       return;
     }
@@ -262,26 +262,26 @@ public class GICSCodeTest {
 
   @Test
   public void conversion() {
-    GICSCode sector = GICSCode.of("45");
-    GICSCode group = GICSCode.of("4510");
-    GICSCode industry = GICSCode.of("451030");
-    GICSCode sub = GICSCode.of("45103020");
-    
+    final GICSCode sector = GICSCode.of("45");
+    final GICSCode group = GICSCode.of("4510");
+    final GICSCode industry = GICSCode.of("451030");
+    final GICSCode sub = GICSCode.of("45103020");
+
     assertEquals(sector, sector.toSector());
     assertEquals(sector, group.toSector());
     assertEquals(sector, industry.toSector());
     assertEquals(sector, sub.toSector());
-    
+
     assertEquals(null, sector.toIndustryGroup());
     assertEquals(group, group.toIndustryGroup());
     assertEquals(group, industry.toIndustryGroup());
     assertEquals(group, sub.toIndustryGroup());
-    
+
     assertEquals(null, sector.toIndustry());
     assertEquals(null, group.toIndustry());
     assertEquals(industry, industry.toIndustry());
     assertEquals(industry, sub.toIndustry());
-    
+
     assertEquals(null, sector.toSubIndustry());
     assertEquals(null, group.toSubIndustry());
     assertEquals(null, industry.toSubIndustry());

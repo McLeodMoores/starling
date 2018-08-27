@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.component.factory.tool;
@@ -38,32 +38,32 @@ public class ConventionInstrumentTimeSeriesLoaderTool extends AbstractComponentF
 
   @PropertyDefinition(validate = "notNull")
   private HistoricalTimeSeriesSource _historicalTimeSeriesSource;
-  
+
   @PropertyDefinition(validate = "notNull")
   private HistoricalTimeSeriesLoader _historicalTimeSeriesLoader;
-  
+
   @PropertyDefinition(validate = "notNull")
   private String _dataSource;
-  
+
   @PropertyDefinition(validate = "notNull")
   private String _dataProvider;
-  
+
   @PropertyDefinition(validate = "notNull")
   private String _dataField;
-  
+
   @PropertyDefinition(validate = "notNull")
   private String _identifierScheme;
-  
+
   @PropertyDefinition
   private boolean _updateExisting;
-  
+
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
-    ConventionInstrumentTimeSeriesLoader loader = new ConventionInstrumentTimeSeriesLoader(
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
+    final ConventionInstrumentTimeSeriesLoader loader = new ConventionInstrumentTimeSeriesLoader(
         getHistoricalTimeSeriesSource(), getHistoricalTimeSeriesLoader(), getDataSource(), getDataProvider(),
         getDataField(), ExternalScheme.of(getIdentifierScheme()), isUpdateExisting());
     loader.run();
-    
+
     System.out.println("Convention instrument time-series loader completed");
     System.exit(0);
   }

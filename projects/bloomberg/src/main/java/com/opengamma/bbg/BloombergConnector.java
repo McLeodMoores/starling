@@ -60,26 +60,26 @@ public class BloombergConnector implements Connector {
   /**
    * The listeners that wish to be notified whenever Bloomberg is available.
    */
-  private final Collection<AvailabilityListener> _listeners = new CopyOnWriteArrayList<AvailabilityListener>();
+  private final Collection<AvailabilityListener> _listeners = new CopyOnWriteArrayList<>();
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param name the configuration name, not null
    * @param sessionOptions the Bloomberg session options, not null
    */
-  public BloombergConnector(String name, SessionOptions sessionOptions) {
+  public BloombergConnector(final String name, final SessionOptions sessionOptions) {
     this(name, sessionOptions, NullBloombergReferenceDataStatistics.INSTANCE);
   }
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param name the configuration name, not null
    * @param sessionOptions the Bloomberg session options, not null
    * @param statistics the Bloomberg statistics, not null
    */
-  public BloombergConnector(String name, SessionOptions sessionOptions, BloombergReferenceDataStatistics statistics) {
+  public BloombergConnector(final String name, final SessionOptions sessionOptions, final BloombergReferenceDataStatistics statistics) {
     ArgumentChecker.notNull(name, "name");
     ArgumentChecker.notNull(sessionOptions, "sessionOptions");
     ArgumentChecker.notNull(statistics, "statistics");
@@ -92,11 +92,11 @@ public class BloombergConnector implements Connector {
    * Creates an instance.
    * <p>
    * Subclasses must override the session options getter.
-   * 
+   *
    * @param name the configuration name, not null
    * @param statistics the Bloomberg statistics, not null
    */
-  protected BloombergConnector(String name, BloombergReferenceDataStatistics statistics) {
+  protected BloombergConnector(final String name, final BloombergReferenceDataStatistics statistics) {
     ArgumentChecker.notNull(name, "name");
     ArgumentChecker.notNull(statistics, "statistics");
     _name = name;
@@ -120,7 +120,7 @@ public class BloombergConnector implements Connector {
    * Gets the Bloomberg session options.
    * <p>
    * DO NOT MODIFY this object.
-   * 
+   *
    * @return the Bloomberg session options, not null
    */
   public SessionOptions getSessionOptions() {
@@ -131,7 +131,7 @@ public class BloombergConnector implements Connector {
    * Gets the Bloomberg reference data statistics.
    * <p>
    * This is used to capture statistics about Bloomberg use.
-   * 
+   *
    * @return the Bloomberg statistics recorder, not null
    */
   public BloombergReferenceDataStatistics getReferenceDataStatistics() {
@@ -141,7 +141,7 @@ public class BloombergConnector implements Connector {
   /**
    * Creates and starts a new Bloomberg {@code Session} in Synchronous mode.
    * <p>
-   * 
+   *
    * @return the started Bloomberg session, not null
    * @throws RuntimeException if an error occurs
    */
@@ -155,33 +155,33 @@ public class BloombergConnector implements Connector {
    * <p>
    * The connector does not retain the state of the session, thus the caller is responsible for its lifecycle.
    * If the specified eventHandler is not null then this Session will operate in asynchronous mode, otherwise the Session will operate in Synchronous mode.
-   * 
+   *
    * @param eventHandler the event handler if provided
    * @return the started Bloomberg session, not null
    * @throws RuntimeException if an error occurs
    */
   public Session createOpenSession(final EventHandler eventHandler) {
-    Session session = createSession(eventHandler);
+    final Session session = createSession(eventHandler);
     try {
       if (session.start() == false) {
         throw new OpenGammaRuntimeException("Bloomberg session failed to start: " + SessionOptionsUtils.toString(getSessionOptions()));
       }
-    } catch (InterruptedException ex) {
+    } catch (final InterruptedException ex) {
       // Interruption may mean that threads have still been created which must be killed. See PLAT-5309.
       try {
         LOGGER.debug("Attempting to stop session which was created but not started");
         session.stop();
-      } catch (Exception e) {
+      } catch (final Exception e) {
         LOGGER.error("Can't stop session", e);
       }
       Thread.interrupted();
       throw new OpenGammaRuntimeException("Bloomberg session failed to start: " + SessionOptionsUtils.toString(getSessionOptions()), ex);
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       // Failure from "start" to connect may mean that threads have still been created which must be killed. See PLAT-5309.
       try {
         LOGGER.debug("Attempting to stop session which was created but not started");
         session.stop();
-      } catch (Exception e) {
+      } catch (final Exception e) {
         LOGGER.error("Can't stop session", e);
       }
       throw new OpenGammaRuntimeException("Bloomberg session failed to start: " + SessionOptionsUtils.toString(getSessionOptions()), ex);
@@ -193,7 +193,7 @@ public class BloombergConnector implements Connector {
    * Creates a Bloomberg session in Synchronous mode that uses the session options.
    * <p>
    * The session is not opened.
-   * 
+   *
    * @return the Bloomberg session, not null
    */
   public Session createSession() {
@@ -202,12 +202,12 @@ public class BloombergConnector implements Connector {
 
   /**
    * Creates a Bloomberg session that uses the session options.
-   * 
+   *
    * <p>
    * The session is not opened.
    * If the specified eventHandler is not null then this Session will operate in asynchronous mode, otherwise the Session will operate in Synchronous mode.
    * @param eventHandler the event handler if provided
-   * 
+   *
    * @return the Bloomberg session, not null
    */
   public Session createSession(final EventHandler eventHandler) {
@@ -223,7 +223,7 @@ public class BloombergConnector implements Connector {
   //-------------------------------------------------------------------------
   /**
    * Returns a description of this object suitable for debugging.
-   * 
+   *
    * @return the description, not null
    */
   @Override
@@ -233,7 +233,7 @@ public class BloombergConnector implements Connector {
 
   /**
    * Registers a callback to be notified when {@link #notifyAvailabilityListeners} gets called.
-   * 
+   *
    * @param listener the callback to register, not null
    */
   public void addAvailabilityListener(final AvailabilityListener listener) {
@@ -243,7 +243,7 @@ public class BloombergConnector implements Connector {
 
   /**
    * Removes a callback previously registered with {@link #addAvailabilityListener}.
-   * 
+   *
    * @param listener the listener to remove, not null
    */
   public void removeAvailabilityListener(final AvailabilityListener listener) {
@@ -257,7 +257,7 @@ public class BloombergConnector implements Connector {
    * listener.
    */
   public void notifyAvailabilityListeners() {
-    for (AvailabilityListener listener : _listeners) {
+    for (final AvailabilityListener listener : _listeners) {
       LOGGER.debug("Notifying availability to {}", listener);
       listener.bloombergAvailable();
     }
@@ -265,12 +265,12 @@ public class BloombergConnector implements Connector {
 
   /**
    * Checks if the session needs authentication
-   * 
+   *
    * @return true if authentication options is set, otherwise false
    */
   public boolean requiresAuthentication() {
     if (getSessionOptions() != null) {
-      String authenticationOptions = StringUtils.trimToNull(getSessionOptions().authenticationOptions());
+      final String authenticationOptions = StringUtils.trimToNull(getSessionOptions().authenticationOptions());
       return authenticationOptions != null;
     }
     return false;
@@ -278,7 +278,7 @@ public class BloombergConnector implements Connector {
 
   /**
    * Returns the application name if available, otherwise null.
-   * 
+   *
    * @return the application name if available.
    */
   public String getApplicationName() {

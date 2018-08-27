@@ -1,14 +1,12 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.bbg.component;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import net.sf.ehcache.CacheManager;
 
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
@@ -29,6 +27,8 @@ import com.opengamma.core.historicaltimeseries.HistoricalTimeSeriesSource;
 import com.opengamma.core.historicaltimeseries.impl.DataHistoricalTimeSeriesSourceResource;
 import com.opengamma.core.historicaltimeseries.impl.EHCachingHistoricalTimeSeriesSource;
 import com.opengamma.provider.historicaltimeseries.HistoricalTimeSeriesProvider;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Component factory for the Bloomberg time-series source.
@@ -61,16 +61,16 @@ public class BloombergHistoricalTimeSeriesSourceComponentFactory extends Abstrac
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
-    HistoricalTimeSeriesSource source = initHistoricalTimeSeriesSource(repo);
-    ComponentInfo info = new ComponentInfo(BloombergHistoricalTimeSeriesSource.class, getClassifier());
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
+    final HistoricalTimeSeriesSource source = initHistoricalTimeSeriesSource(repo);
+    final ComponentInfo info = new ComponentInfo(BloombergHistoricalTimeSeriesSource.class, getClassifier());
     repo.registerComponent(info, source);
     if (isPublishRest()) {
       repo.getRestComponents().publishResource(new DataHistoricalTimeSeriesSourceResource(source));  // publish in old way
     }
   }
 
-  protected HistoricalTimeSeriesSource initHistoricalTimeSeriesSource(ComponentRepository repo) {
+  protected HistoricalTimeSeriesSource initHistoricalTimeSeriesSource(final ComponentRepository repo) {
     HistoricalTimeSeriesSource source = new BloombergHistoricalTimeSeriesSource(getHistoricalTimeSeriesProvider());
     if (getCacheManager() != null) {
       source = new EHCachingHistoricalTimeSeriesSource(source, getCacheManager());

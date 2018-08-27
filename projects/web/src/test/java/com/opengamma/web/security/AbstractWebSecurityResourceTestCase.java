@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.web.security;
@@ -39,7 +39,7 @@ import com.opengamma.web.WebResourceTestUtils;
 import freemarker.template.Configuration;
 
 /**
- * 
+ *
  */
 public abstract class AbstractWebSecurityResourceTestCase extends AbstractSecurityTestCaseAdapter {
 
@@ -57,29 +57,29 @@ public abstract class AbstractWebSecurityResourceTestCase extends AbstractSecuri
     _secMaster = new InMemorySecurityMaster();
     _secLoader = new AbstractSecurityLoader() {
       @Override
-      protected SecurityLoaderResult doBulkLoad(SecurityLoaderRequest request) {
+      protected SecurityLoaderResult doBulkLoad(final SecurityLoaderRequest request) {
         throw new UnsupportedOperationException("load security not supported");
       }
     };
     _orgMaster = new InMemoryLegalEntityMaster();
-    
-    HistoricalTimeSeriesMaster htsMaster = new InMemoryHistoricalTimeSeriesMaster();
+
+    final HistoricalTimeSeriesMaster htsMaster = new InMemoryHistoricalTimeSeriesMaster();
     addSecurity(WebResourceTestUtils.getEquitySecurity());
     addSecurity(WebResourceTestUtils.getBondFutureSecurity());
-        
+
     _webSecuritiesResource = new WebSecuritiesResource(_secMaster, _secLoader, htsMaster, _orgMaster);
-    MockServletContext sc = new MockServletContext("/web-engine", new FileSystemResourceLoader());
-    Configuration cfg = FreemarkerOutputter.createConfiguration();
+    final MockServletContext sc = new MockServletContext("/web-engine", new FileSystemResourceLoader());
+    final Configuration cfg = FreemarkerOutputter.createConfiguration();
     cfg.setServletContextForTemplateLoading(sc, "WEB-INF/pages");
     FreemarkerOutputter.init(sc, cfg);
     _webSecuritiesResource.setServletContext(sc);
     _webSecuritiesResource.setUriInfo(_uriInfo);
-    
+
   }
 
-  private void addSecurity(FinancialSecurity security) {
-    FinancialSecurity clone = JodaBeanUtils.clone(security);
-    SecurityDocument secDoc = _secMaster.add(new SecurityDocument(security));
+  private void addSecurity(final FinancialSecurity security) {
+    final FinancialSecurity clone = JodaBeanUtils.clone(security);
+    final SecurityDocument secDoc = _secMaster.add(new SecurityDocument(security));
     List<FinancialSecurity> securities = _securities.get(clone.getClass());
     if (securities == null) {
       securities = Lists.newArrayList();

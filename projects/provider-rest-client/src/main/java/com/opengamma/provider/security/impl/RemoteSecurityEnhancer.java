@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.provider.security.impl;
@@ -30,7 +30,7 @@ public class RemoteSecurityEnhancer extends AbstractRemoteClient implements Secu
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param baseUri  the base target URI for all RESTful web services, not null
    */
   public RemoteSecurityEnhancer(final URI baseUri) {
@@ -41,29 +41,29 @@ public class RemoteSecurityEnhancer extends AbstractRemoteClient implements Secu
   // delegate convenience methods to request/result method
   // code copied from AbstractSecurityEnhancer due to lack of multiple inheritance
   @Override
-  public Security enhanceSecurity(Security security) {
-    SecurityEnhancerRequest request = SecurityEnhancerRequest.create(security);
-    SecurityEnhancerResult result = enhanceSecurities(request);
+  public Security enhanceSecurity(final Security security) {
+    final SecurityEnhancerRequest request = SecurityEnhancerRequest.create(security);
+    final SecurityEnhancerResult result = enhanceSecurities(request);
     return Iterables.getOnlyElement(result.getResultList());
   }
 
   @Override
-  public List<Security> enhanceSecurities(List<Security> securities) {
-    SecurityEnhancerRequest request = SecurityEnhancerRequest.create(securities);
-    SecurityEnhancerResult result = enhanceSecurities(request);
+  public List<Security> enhanceSecurities(final List<Security> securities) {
+    final SecurityEnhancerRequest request = SecurityEnhancerRequest.create(securities);
+    final SecurityEnhancerResult result = enhanceSecurities(request);
     return result.getResultList();
   }
 
   @Override
-  public <R> Map<R, Security> enhanceSecurities(Map<R, Security> securities) {
-    List<R> keyList = Lists.newArrayList();
+  public <R> Map<R, Security> enhanceSecurities(final Map<R, Security> securities) {
+    final List<R> keyList = Lists.newArrayList();
     List<Security> securityList = Lists.newArrayList();
-    for (Entry<R, Security> entry : securities.entrySet()) {
+    for (final Entry<R, Security> entry : securities.entrySet()) {
       keyList.add(entry.getKey());
       securityList.add(entry.getValue());
     }
     securityList = enhanceSecurities(securityList);
-    Map<R, Security> result = Maps.newHashMap();
+    final Map<R, Security> result = Maps.newHashMap();
     for (int i = 0; i < keyList.size(); i++) {
       result.put(keyList.get(i), securityList.get(i));
     }
@@ -72,10 +72,10 @@ public class RemoteSecurityEnhancer extends AbstractRemoteClient implements Secu
 
   //-------------------------------------------------------------------------
   @Override
-  public SecurityEnhancerResult enhanceSecurities(SecurityEnhancerRequest request) {
+  public SecurityEnhancerResult enhanceSecurities(final SecurityEnhancerRequest request) {
     ArgumentChecker.notNull(request, "request");
-    
-    URI uri = DataSecurityEnhancerUris.uriGet(getBaseUri());
+
+    final URI uri = DataSecurityEnhancerUris.uriGet(getBaseUri());
     return accessRemote(uri).post(SecurityEnhancerResult.class, request);
   }
 

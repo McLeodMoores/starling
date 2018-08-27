@@ -40,52 +40,52 @@ public final class BloombergPermissions {
   //-------------------------------------------------------------------------
   /**
    * Creates a permission for an EID.
-   * 
+   *
    * @param eid  the Bloomberg EID code
    * @return the permission, not null
    */
-  public static Permission createEidPermission(int eid) {
-    String perm = createEidPermissionString(eid);
+  public static Permission createEidPermission(final int eid) {
+    final String perm = createEidPermissionString(eid);
     return AuthUtils.getPermissionResolver().resolvePermission(perm);
   }
 
   /**
    * Creates a permission string for an EID.
-   * 
+   *
    * @param eid  the Bloomberg EID code
    * @return the permission string, not null
    */
-  public static String createEidPermissionString(int eid) {
+  public static String createEidPermissionString(final int eid) {
     return EID_PREFIX + eid;
   }
 
   //-------------------------------------------------------------------------
   /**
    * Checks if a permission string represents an EID.
-   * 
+   *
    * @param permissionString  the permission string, null returns false
    * @return true if the permission string is a Bloomberg EID permission
    */
-  public static boolean isEid(String permissionString) {
+  public static boolean isEid(final String permissionString) {
     return permissionString != null && permissionString.startsWith(EID_PREFIX);
   }
 
   /**
    * Extracts the EID from the permission string.
-   * 
+   *
    * @param permissionString  the permission string, not null
    * @return the Bloomberg EID code
    * @throws IllegalArgumentException if the permission string is not an EID permission
    */
-  public static int extractEid(String permissionString) {
+  public static int extractEid(final String permissionString) {
     ArgumentChecker.notNull(permissionString, "permissionString");
     if (isEid(permissionString) == false) {
       throw new IllegalArgumentException("Permission string does not represent an EID: " + permissionString);
     }
-    String eidStr = permissionString.substring(EID_PREFIX.length());
+    final String eidStr = permissionString.substring(EID_PREFIX.length());
     try {
       return Integer.parseInt(eidStr);
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       throw new IllegalArgumentException("Permission string does not represent a valid EID: " + permissionString);
     }
   }

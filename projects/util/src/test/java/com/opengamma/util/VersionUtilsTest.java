@@ -23,11 +23,11 @@ public class VersionUtilsTest {
 
   @SuppressWarnings("unchecked")
   public void test_constructor() throws Exception {
-    Constructor<?>[] cons = VersionUtils.class.getDeclaredConstructors();
+    final Constructor<?>[] cons = VersionUtils.class.getDeclaredConstructors();
     assertEquals(1, cons.length);
     assertEquals(0, cons[0].getParameterTypes().length);
     assertEquals(true, Modifier.isPrivate(cons[0].getModifiers()));
-    Constructor<VersionUtils> con = (Constructor<VersionUtils>) cons[0];
+    final Constructor<VersionUtils> con = (Constructor<VersionUtils>) cons[0];
     con.setAccessible(true);
     con.newInstance();
   }
@@ -45,10 +45,10 @@ public class VersionUtilsTest {
     checkLocalVersionOk(VersionUtils.getVersion("VersionUtilTest-3"));
   }
 
-  private void checkLocalVersionOk(String version) {
+  private void checkLocalVersionOk(final String version) {
     assertTrue(version.startsWith("local-"));
 
-    long currentTimeMillis = Long.parseLong(version.substring("local-".length()));
+    final long currentTimeMillis = Long.parseLong(version.substring("local-".length()));
     assertTrue(currentTimeMillis >= 0);
     assertTrue(currentTimeMillis <= System.currentTimeMillis());
   }

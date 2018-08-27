@@ -14,17 +14,17 @@ import com.opengamma.id.ExternalIdBundle;
  * A historic search request to retrieve convention set information.
  */
 public class ConventionBundleSearchHistoricRequest {
-  private Instant _version;
-  private Instant _correction;
-  private ExternalIdBundle _identifiers;
-  
-  public ConventionBundleSearchHistoricRequest(Instant version, Instant correction, ExternalId identifier) {
+  private final Instant _version;
+  private final Instant _correction;
+  private final ExternalIdBundle _identifiers;
+
+  public ConventionBundleSearchHistoricRequest(final Instant version, final Instant correction, final ExternalId identifier) {
     _version = version;
     _correction = correction;
     _identifiers = ExternalIdBundle.of(identifier);
   }
-  
-  public ConventionBundleSearchHistoricRequest(Instant version, Instant correction, ExternalIdBundle identifiers) {
+
+  public ConventionBundleSearchHistoricRequest(final Instant version, final Instant correction, final ExternalIdBundle identifiers) {
     _version = version;
     _correction = correction;
     _identifiers = identifiers;
@@ -33,11 +33,11 @@ public class ConventionBundleSearchHistoricRequest {
   public Instant getVersion() {
     return _version;
   }
-  
+
   public Instant getCorrection() {
     return _correction;
   }
-  
+
   public ExternalIdBundle getIdentifiers() {
     return _identifiers;
   }

@@ -16,19 +16,19 @@ import java.util.List;
  * @author kirk
  */
 public class CollectingByteArrayMessageSender implements ByteArrayMessageSender {
-  private final List<byte[]> _sentMessages = new ArrayList<byte[]>();
+  private final List<byte[]> _sentMessages = new ArrayList<>();
 
   @Override
-  public synchronized void send(byte[] message) {
+  public synchronized void send(final byte[] message) {
     _sentMessages.add(message);
   }
-  
+
   public synchronized void clear() {
     _sentMessages.clear();
   }
-  
+
   public synchronized List<byte[]> getMessages() {
-    return new ArrayList<byte[]>(_sentMessages);
+    return new ArrayList<>(_sentMessages);
   }
 
 }

@@ -67,11 +67,11 @@ public class PermissionedPortfolioMaster implements PortfolioMaster {
    * Wraps an underlying master if appropriate.
    * <p>
    * No wrapping occurs if permissions are not in use.
-   * 
+   *
    * @param underlying  the underlying master, not null
    * @return the master, not null
    */
-  public static PortfolioMaster wrap(PortfolioMaster underlying) {
+  public static PortfolioMaster wrap(final PortfolioMaster underlying) {
     if (AuthUtils.isPermissive()) {
       return underlying;
     }
@@ -81,17 +81,17 @@ public class PermissionedPortfolioMaster implements PortfolioMaster {
   //-------------------------------------------------------------------------
   /**
    * Creates an instance.
-   * 
+   *
    * @param underlying  the underlying portfolio master, not null
    */
-  public PermissionedPortfolioMaster(PortfolioMaster underlying) {
+  public PermissionedPortfolioMaster(final PortfolioMaster underlying) {
     _underlying = ArgumentChecker.notNull(underlying, "underlying");
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the underlying portfolio master.
-   * 
+   *
    * @return the underlying master, not null
    */
   protected PortfolioMaster getUnderlying() {
@@ -100,37 +100,37 @@ public class PermissionedPortfolioMaster implements PortfolioMaster {
 
   //-------------------------------------------------------------------------
   @Override
-  public PortfolioDocument get(UniqueId uniqueId) {
+  public PortfolioDocument get(final UniqueId uniqueId) {
     AuthUtils.getSubject().checkPermission(PERMISSION_VIEW);
     return getUnderlying().get(uniqueId);
   }
 
   @Override
-  public PortfolioDocument get(ObjectIdentifiable objectId, VersionCorrection versionCorrection) {
+  public PortfolioDocument get(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
     AuthUtils.getSubject().checkPermission(PERMISSION_VIEW);
     return getUnderlying().get(objectId, versionCorrection);
   }
 
   @Override
-  public ManageablePortfolioNode getNode(UniqueId nodeId) {
+  public ManageablePortfolioNode getNode(final UniqueId nodeId) {
     AuthUtils.getSubject().checkPermission(PERMISSION_VIEW);
     return getUnderlying().getNode(nodeId);
   }
 
   @Override
-  public Map<UniqueId, PortfolioDocument> get(Collection<UniqueId> uniqueIds) {
+  public Map<UniqueId, PortfolioDocument> get(final Collection<UniqueId> uniqueIds) {
     AuthUtils.getSubject().checkPermission(PERMISSION_VIEW);
     return getUnderlying().get(uniqueIds);
   }
 
   @Override
-  public PortfolioSearchResult search(PortfolioSearchRequest request) {
+  public PortfolioSearchResult search(final PortfolioSearchRequest request) {
     AuthUtils.getSubject().checkPermission(PERMISSION_VIEW);
     return getUnderlying().search(request);
   }
 
   @Override
-  public PortfolioHistoryResult history(PortfolioHistoryRequest request) {
+  public PortfolioHistoryResult history(final PortfolioHistoryRequest request) {
     AuthUtils.getSubject().checkPermission(PERMISSION_VIEW);
     return getUnderlying().history(request);
   }
@@ -142,61 +142,61 @@ public class PermissionedPortfolioMaster implements PortfolioMaster {
   }
 
   @Override
-  public PortfolioDocument add(PortfolioDocument document) {
+  public PortfolioDocument add(final PortfolioDocument document) {
     AuthUtils.getSubject().checkPermission(PERMISSION_ADD);
     return getUnderlying().add(document);
   }
 
   @Override
-  public PortfolioDocument update(PortfolioDocument document) {
+  public PortfolioDocument update(final PortfolioDocument document) {
     AuthUtils.getSubject().checkPermission(PERMISSION_UPDATE);
     return getUnderlying().update(document);
   }
 
   @Override
-  public void remove(ObjectIdentifiable oid) {
+  public void remove(final ObjectIdentifiable oid) {
     AuthUtils.getSubject().checkPermission(PERMISSION_REMOVE);
     getUnderlying().remove(oid);
   }
 
   @Override
-  public PortfolioDocument correct(PortfolioDocument document) {
+  public PortfolioDocument correct(final PortfolioDocument document) {
     AuthUtils.getSubject().checkPermission(PERMISSION_CORRECT);
     return getUnderlying().correct(document);
   }
 
   @Override
-  public List<UniqueId> replaceVersion(UniqueId uniqueId, List<PortfolioDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersion(final UniqueId uniqueId, final List<PortfolioDocument> replacementDocuments) {
     AuthUtils.getSubject().checkPermission(PERMISSION_CORRECT);
     return getUnderlying().replaceVersion(uniqueId, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceAllVersions(ObjectIdentifiable objectId, List<PortfolioDocument> replacementDocuments) {
+  public List<UniqueId> replaceAllVersions(final ObjectIdentifiable objectId, final List<PortfolioDocument> replacementDocuments) {
     AuthUtils.getSubject().checkPermission(PERMISSION_CORRECT);
     return getUnderlying().replaceAllVersions(objectId, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceVersions(ObjectIdentifiable objectId, List<PortfolioDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersions(final ObjectIdentifiable objectId, final List<PortfolioDocument> replacementDocuments) {
     AuthUtils.getSubject().checkPermission(PERMISSION_CORRECT);
     return getUnderlying().replaceVersions(objectId, replacementDocuments);
   }
 
   @Override
-  public UniqueId replaceVersion(PortfolioDocument replacementDocument) {
+  public UniqueId replaceVersion(final PortfolioDocument replacementDocument) {
     AuthUtils.getSubject().checkPermission(PERMISSION_CORRECT);
     return getUnderlying().replaceVersion(replacementDocument);
   }
 
   @Override
-  public void removeVersion(UniqueId uniqueId) {
+  public void removeVersion(final UniqueId uniqueId) {
     AuthUtils.getSubject().checkPermission(PERMISSION_CORRECT);
     getUnderlying().removeVersion(uniqueId);
   }
 
   @Override
-  public UniqueId addVersion(ObjectIdentifiable objectId, PortfolioDocument documentToAdd) {
+  public UniqueId addVersion(final ObjectIdentifiable objectId, final PortfolioDocument documentToAdd) {
     AuthUtils.getSubject().checkPermission(PERMISSION_CORRECT);
     return getUnderlying().addVersion(objectId, documentToAdd);
   }

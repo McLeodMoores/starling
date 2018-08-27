@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.provider.permission.impl;
@@ -26,7 +26,7 @@ public class RemotePermissionCheckProvider extends AbstractRemoteClient implemen
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param baseUri  the base target URI for all RESTful web services, not null
    */
   public RemotePermissionCheckProvider(final URI baseUri) {
@@ -35,23 +35,23 @@ public class RemotePermissionCheckProvider extends AbstractRemoteClient implemen
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean isPermitted(ExternalIdBundle userIdBundle, String ipAddress, String requestedPermission) {
-    PermissionCheckProviderRequest request = PermissionCheckProviderRequest.createGet(userIdBundle, ipAddress, requestedPermission);
-    PermissionCheckProviderResult holderResult = isPermitted(request);
+  public boolean isPermitted(final ExternalIdBundle userIdBundle, final String ipAddress, final String requestedPermission) {
+    final PermissionCheckProviderRequest request = PermissionCheckProviderRequest.createGet(userIdBundle, ipAddress, requestedPermission);
+    final PermissionCheckProviderResult holderResult = isPermitted(request);
     return holderResult.isPermitted(requestedPermission);
   }
 
   @Override
-  public Map<String, Boolean> isPermitted(ExternalIdBundle userIdBundle, String ipAddress, Set<String> requestedPermissions) {
-    PermissionCheckProviderRequest request = PermissionCheckProviderRequest.createGet(userIdBundle, ipAddress, requestedPermissions);
-    PermissionCheckProviderResult permissionResult = isPermitted(request);
+  public Map<String, Boolean> isPermitted(final ExternalIdBundle userIdBundle, final String ipAddress, final Set<String> requestedPermissions) {
+    final PermissionCheckProviderRequest request = PermissionCheckProviderRequest.createGet(userIdBundle, ipAddress, requestedPermissions);
+    final PermissionCheckProviderResult permissionResult = isPermitted(request);
     return permissionResult.getCheckedPermissions();
   }
 
   @Override
-  public PermissionCheckProviderResult isPermitted(PermissionCheckProviderRequest request) {
+  public PermissionCheckProviderResult isPermitted(final PermissionCheckProviderRequest request) {
     ArgumentChecker.notNull(request, "request");
-    URI uri = DataPermissionCheckProviderUris.uriGet(getBaseUri());
+    final URI uri = DataPermissionCheckProviderUris.uriGet(getBaseUri());
     return accessRemote(uri).post(PermissionCheckProviderResult.class, request);
   }
 

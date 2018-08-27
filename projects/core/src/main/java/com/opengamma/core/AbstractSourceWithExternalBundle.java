@@ -22,7 +22,7 @@ import com.opengamma.util.PoolExecutor;
 
 /**
  * A partial implementation of {@link SourceWithExternalBundle}
- * 
+ *
  * @param <V> the type returned by the source
  */
 public abstract class AbstractSourceWithExternalBundle<V extends UniqueIdentifiable & ExternalBundleIdentifiable> extends AbstractSource<V> implements SourceWithExternalBundle<V> {
@@ -53,7 +53,7 @@ public abstract class AbstractSourceWithExternalBundle<V extends UniqueIdentifia
         @Override
         public void run() {
           final Collection<V> result = source.get(bundle, versionCorrection);
-          if ((result != null) && !result.isEmpty()) {
+          if (result != null && !result.isEmpty()) {
             synchronized (results) {
               results.put(bundle, result);
             }
@@ -64,7 +64,7 @@ public abstract class AbstractSourceWithExternalBundle<V extends UniqueIdentifia
     try {
       LOGGER.debug("Joining asynchronous jobs in getAllMultiThread");
       jobs.join();
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
       throw new OpenGammaRuntimeException("Interrupted", e);
     }
     LOGGER.debug("Returning {} results from getAllMultiThread", results.size());
@@ -74,9 +74,9 @@ public abstract class AbstractSourceWithExternalBundle<V extends UniqueIdentifia
   public static <V extends UniqueIdentifiable & ExternalBundleIdentifiable> Map<ExternalIdBundle, Collection<V>> getAllSingleThread(final SourceWithExternalBundle<V> source,
       final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
     final Map<ExternalIdBundle, Collection<V>> results = Maps.newHashMapWithExpectedSize(bundles.size());
-    for (ExternalIdBundle bundle : bundles) {
+    for (final ExternalIdBundle bundle : bundles) {
       final Collection<V> result = source.get(bundle, versionCorrection);
-      if ((result != null) && !result.isEmpty()) {
+      if (result != null && !result.isEmpty()) {
         results.put(bundle, result);
       }
     }
@@ -90,7 +90,7 @@ public abstract class AbstractSourceWithExternalBundle<V extends UniqueIdentifia
     } else if (bundles.size() == 1) {
       final ExternalIdBundle bundle = bundles.iterator().next();
       final Collection<V> result = source.get(bundle, versionCorrection);
-      if ((result != null) && !result.isEmpty()) {
+      if (result != null && !result.isEmpty()) {
         return Collections.<ExternalIdBundle, Collection<V>>singletonMap(bundle, result);
       } else {
         return Collections.emptyMap();
@@ -114,7 +114,7 @@ public abstract class AbstractSourceWithExternalBundle<V extends UniqueIdentifia
   }
 
   @Override
-  public Collection<V> get(ExternalIdBundle bundle) {
+  public Collection<V> get(final ExternalIdBundle bundle) {
     return get(this, bundle);
   }
 
@@ -123,21 +123,21 @@ public abstract class AbstractSourceWithExternalBundle<V extends UniqueIdentifia
   }
 
   @Override
-  public V getSingle(ExternalIdBundle bundle) {
+  public V getSingle(final ExternalIdBundle bundle) {
     return getSingle(this, bundle);
   }
 
   public static <V extends UniqueIdentifiable & ExternalBundleIdentifiable> V getSingle(final SourceWithExternalBundle<V> source, final ExternalIdBundle bundle,
       final VersionCorrection versionCorrection) {
-    Collection<V> results = source.get(bundle, versionCorrection);
-    if ((results == null) || results.isEmpty()) {
+    final Collection<V> results = source.get(bundle, versionCorrection);
+    if (results == null || results.isEmpty()) {
       return null;
     }
     return results.iterator().next();
   }
 
   @Override
-  public V getSingle(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
+  public V getSingle(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     return getSingle(this, bundle, versionCorrection);
   }
 
@@ -161,7 +161,7 @@ public abstract class AbstractSourceWithExternalBundle<V extends UniqueIdentifia
     try {
       LOGGER.debug("Joining asynchronous jobs in getSingleMultiThread");
       jobs.join();
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
       throw new OpenGammaRuntimeException("Interrupted", e);
     }
     LOGGER.debug("Returning {} results from getSingleMultiThread", results.size());
@@ -171,7 +171,7 @@ public abstract class AbstractSourceWithExternalBundle<V extends UniqueIdentifia
   public static <V extends UniqueIdentifiable & ExternalBundleIdentifiable> Map<ExternalIdBundle, V> getSingleSingleThread(final SourceWithExternalBundle<V> source,
       final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
     final Map<ExternalIdBundle, V> results = Maps.newHashMapWithExpectedSize(bundles.size());
-    for (ExternalIdBundle bundle : bundles) {
+    for (final ExternalIdBundle bundle : bundles) {
       final V result = source.getSingle(bundle, versionCorrection);
       if (result != null) {
         results.put(bundle, result);

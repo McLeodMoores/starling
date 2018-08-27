@@ -68,36 +68,36 @@ public class DataLegalEntitySourceResource extends AbstractDataResource {
 
   //-------------------------------------------------------------------------
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
   @GET
   @Path("legal entities")
   public Response search(
-      @QueryParam("versionAsOf") String versionAsOf,
-      @QueryParam("correctedTo") String correctedTo,
-      @QueryParam("id") List<String> externalIdStrs) {
+      @QueryParam("versionAsOf") final String versionAsOf,
+      @QueryParam("correctedTo") final String correctedTo,
+      @QueryParam("id") final List<String> externalIdStrs) {
     final VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
     final ExternalIdBundle bundle = ExternalIdBundle.parse(externalIdStrs);
-    Collection<? extends LegalEntity> result = getLegalEntitySource().get(bundle, vc);
+    final Collection<? extends LegalEntity> result = getLegalEntitySource().get(bundle, vc);
     return responseOkObject(FudgeListWrapper.of(result));
   }
 
   @GET
   @Path("legal entities/{legalentityId}")
   public Response get(
-      @PathParam("legalentityId") String idStr,
-      @QueryParam("version") String version,
-      @QueryParam("versionAsOf") String versionAsOf,
-      @QueryParam("correctedTo") String correctedTo) {
+      @PathParam("legalentityId") final String idStr,
+      @QueryParam("version") final String version,
+      @QueryParam("versionAsOf") final String versionAsOf,
+      @QueryParam("correctedTo") final String correctedTo) {
     final ObjectId objectId = ObjectId.parse(idStr);
     if (version != null) {
       final LegalEntity result = getLegalEntitySource().get(objectId.atVersion(version));
       return responseOkObject(result);
     } else {
       final VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
-      LegalEntity result = getLegalEntitySource().get(objectId, vc);
+      final LegalEntity result = getLegalEntitySource().get(objectId, vc);
       return responseOkObject(result);
     }
   }
@@ -105,20 +105,21 @@ public class DataLegalEntitySourceResource extends AbstractDataResource {
   @GET
   @Path("legalentitySearches/bulk")
   public Response getBulk(
-      @QueryParam("id") List<String> uniqueIdStrs) {
+      @QueryParam("id") final List<String> uniqueIdStrs) {
     final List<UniqueId> uids = IdUtils.parseUniqueIds(uniqueIdStrs);
-    Map<UniqueId, LegalEntity> result = getLegalEntitySource().get(uids);
+    final Map<UniqueId, LegalEntity> result = getLegalEntitySource().get(uids);
     return responseOkObject(FudgeListWrapper.of(result.values()));
   }
 
- 
+
   // deprecated
   //-------------------------------------------------------------------------
   @GET
   @Path("legalentitySearches/list")
-  public Response searchList(@QueryParam("id") List<String> externalIdStrs) {
+  public Response searchList(@QueryParam("id") final List<String> externalIdStrs) {
     final ExternalIdBundle bundle = ExternalIdBundle.parse(externalIdStrs);
     @SuppressWarnings("deprecation")
+    final
     Collection<? extends LegalEntity> result = getLegalEntitySource().get(bundle);
     return responseOkObject(FudgeListWrapper.of(result));
   }
@@ -126,13 +127,13 @@ public class DataLegalEntitySourceResource extends AbstractDataResource {
   @GET
   @Path("legalentitySearches/single")
   public Response searchSingle(
-      @QueryParam("id") List<String> externalIdStrs,
-      @QueryParam("versionAsOf") String versionAsOf,
-      @QueryParam("correctedTo") String correctedTo) {
+      @QueryParam("id") final List<String> externalIdStrs,
+      @QueryParam("versionAsOf") final String versionAsOf,
+      @QueryParam("correctedTo") final String correctedTo) {
 
     final ExternalIdBundle bundle = ExternalIdBundle.parse(externalIdStrs);
     final VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
-    LegalEntity result = getLegalEntitySource().getSingle(bundle, vc);
+    final LegalEntity result = getLegalEntitySource().getSingle(bundle, vc);
     return responseOkObject(result);
   }
 

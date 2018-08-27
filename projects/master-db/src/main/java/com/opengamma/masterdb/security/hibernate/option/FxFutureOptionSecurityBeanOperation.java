@@ -48,7 +48,7 @@ public final class FxFutureOptionSecurityBeanOperation extends AbstractSecurityB
   }
 
   @Override
-  public FxFutureOptionSecurity createSecurity(OperationContext context, FxFutureOptionSecurityBean bean) {
+  public FxFutureOptionSecurity createSecurity(final OperationContext context, final FxFutureOptionSecurityBean bean) {
     final ExerciseType exerciseType = bean.getOptionExerciseType().accept(new ExerciseTypeVisitorImpl());
 
     return new FxFutureOptionSecurity(

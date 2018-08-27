@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.server.copier;
@@ -19,7 +19,7 @@ import com.opengamma.util.ArgumentChecker;
  * Server copier command line options
  */
 public class CommandLineOption {
-  
+
   /**
    * Help command line option.
    */
@@ -32,17 +32,17 @@ public class CommandLineOption {
    * server url option.
    */
   static final String SERVER = "server";
-  
+
   private String _configFile;
-  
+
   private String _serverUrl;
 
-  public CommandLineOption(String[] args, Class<?> entryPointClazz) {
+  public CommandLineOption(final String[] args, final Class<?> entryPointClazz) {
     ArgumentChecker.notNull(args, "args");
     ArgumentChecker.notNull(entryPointClazz, "entryPointClazz");
-    
-    Options options = getCommandLineOption();
-    
+
+    final Options options = getCommandLineOption();
+
     final CommandLineParser parser = new PosixParser();
     CommandLine line = null;
     try {
@@ -59,12 +59,12 @@ public class CommandLineOption {
   }
 
   private Options getCommandLineOption() {
-    Options options = new Options();
-    Option configOption = new Option("c", TOOLCONTEXT_CONFIG, true, "The tool context config file");
+    final Options options = new Options();
+    final Option configOption = new Option("c", TOOLCONTEXT_CONFIG, true, "The tool context config file");
     configOption.setRequired(true);
     options.addOption(configOption);
 
-    Option serverUrlOption = new Option("s", SERVER, true, "The opengamma server url");
+    final Option serverUrlOption = new Option("s", SERVER, true, "The opengamma server url");
     serverUrlOption.setRequired(true);
     options.addOption(serverUrlOption);
     return options;
@@ -77,8 +77,8 @@ public class CommandLineOption {
   public String getServerUrl() {
     return _serverUrl;
   }
-  
-  private void usage(final Options options, Class<?> entryPointClazz) {
+
+  private void usage(final Options options, final Class<?> entryPointClazz) {
     final HelpFormatter formatter = new HelpFormatter();
     formatter.setWidth(120);
     formatter.printHelp("java " + entryPointClazz.getName(), options, true);

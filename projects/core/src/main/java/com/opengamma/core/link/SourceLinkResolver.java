@@ -34,7 +34,7 @@ import com.opengamma.util.ArgumentChecker;
    *
    * @param serviceContext the context to use for service-providers, not null.
    */
-  /* package */ SourceLinkResolver(ServiceContext serviceContext) {
+  /* package */ SourceLinkResolver(final ServiceContext serviceContext) {
     _serviceContext = ArgumentChecker.notNull(serviceContext, "serviceContext");
   }
 
@@ -42,14 +42,14 @@ import com.opengamma.util.ArgumentChecker;
     _serviceContext = null;
   }
 
-  private <R> R lookupService(Class<R> serviceClass) {
+  private <R> R lookupService(final Class<R> serviceClass) {
     return getServiceContext().get(serviceClass);
   }
 
   @Override
-  public T resolve(LinkIdentifier<I, T> identifier) {
-    VersionCorrectionProvider vcProvider = lookupService(VersionCorrectionProvider.class);
-    S source = lookupService(getSourceClass());
+  public T resolve(final LinkIdentifier<I, T> identifier) {
+    final VersionCorrectionProvider vcProvider = lookupService(VersionCorrectionProvider.class);
+    final S source = lookupService(getSourceClass());
     return executeQuery(source, identifier.getType(), identifier.getIdentifier(), getVersionCorrection(vcProvider));
   }
 

@@ -67,11 +67,11 @@ public class DependencyGraphGridStructure implements GridStructure {
   /** The non fixed column structure. */
   private final GridColumnGroups _nonFixedColumnGroups;
 
-  /* package */ DependencyGraphGridStructure(AnalyticsNode root,
-                                             String calcConfigName,
-                                             List<ValueSpecification> valueSpecifications,
-                                             List<String> fnNames,
-                                             ComputationTargetResolver targetResolver) {
+  /* package */ DependencyGraphGridStructure(final AnalyticsNode root,
+                                             final String calcConfigName,
+                                             final List<ValueSpecification> valueSpecifications,
+                                             final List<String> fnNames,
+                                             final ComputationTargetResolver targetResolver) {
     ArgumentChecker.notNull(valueSpecifications, "valueSpecifications");
     ArgumentChecker.notNull(fnNames, "fnNames");
     ArgumentChecker.notNull(targetResolver, "targetResolver");
@@ -83,7 +83,7 @@ public class DependencyGraphGridStructure implements GridStructure {
     // fixed column group with one column for the row label
     _fixedColumnGroup = new GridColumnGroup("", ImmutableList.<GridColumn>of(column("Target", 0)), false);
     // non-fixed columns
-    GridColumnGroup nonFixedColumnGroup = new GridColumnGroup("", ImmutableList.<GridColumn>of(
+    final GridColumnGroup nonFixedColumnGroup = new GridColumnGroup("", ImmutableList.<GridColumn>of(
         column("Type", 1),
         column("Value Name", 2),
         column("Value", null, 3),
@@ -111,15 +111,15 @@ public class DependencyGraphGridStructure implements GridStructure {
    * @param previousResults The results before the latest calculation cycle, possibly null
    * @return The results for the cells in the viewport and the new viewport state
    */
-  /* package */ Pair<ViewportResults, Viewport.State> createResults(ViewportDefinition viewportDefinition,
-                                                                    ResultsCache cache,
-                                                                    ViewportResults previousResults) {
-    List<ResultsCell> results = Lists.newArrayList();
-    for (GridCell cell : viewportDefinition) {
-      GridColumn column = _columnGroups.getColumn(cell.getColumn());
+  /* package */ Pair<ViewportResults, Viewport.State> createResults(final ViewportDefinition viewportDefinition,
+                                                                    final ResultsCache cache,
+                                                                    final ViewportResults previousResults) {
+    final List<ResultsCell> results = Lists.newArrayList();
+    for (final GridCell cell : viewportDefinition) {
+      final GridColumn column = _columnGroups.getColumn(cell.getColumn());
       results.add(column.buildResults(cell.getRow(), cell.getFormat(), cache));
     }
-    ViewportResults newResults = new ViewportResults(results,
+    final ViewportResults newResults = new ViewportResults(results,
                                                      viewportDefinition,
                                                      _columnGroups,
                                                      cache.getLastCalculationDuration(), cache.getValuationTime());
@@ -138,7 +138,7 @@ public class DependencyGraphGridStructure implements GridStructure {
    * @param colIndex The column index
    * @return A column for displaying a string value
    */
-  private GridColumn column(String header, int colIndex) {
+  private GridColumn column(final String header, final int colIndex) {
     return column(header, String.class, colIndex);
   }
 
@@ -149,8 +149,8 @@ public class DependencyGraphGridStructure implements GridStructure {
    * @param colIndex The column index
    * @return A column for displaying values of the specified type
    */
-  private GridColumn column(String header, Class<?> type, int colIndex) {
-    DependencyGraphCellRenderer renderer = new DependencyGraphCellRenderer(colIndex,
+  private GridColumn column(final String header, final Class<?> type, final int colIndex) {
+    final DependencyGraphCellRenderer renderer = new DependencyGraphCellRenderer(colIndex,
                                                                            _valueSpecifications,
                                                                            _fnNames,
                                                                            _computationTargetResolver,
@@ -184,16 +184,17 @@ public class DependencyGraphGridStructure implements GridStructure {
   }
 
   @Override
-  public Pair<String, ValueRequirement> getValueRequirementForCell(int row, int col) {
+  public Pair<String, ValueRequirement> getValueRequirementForCell(final int row, final int col) {
     // there is no value requirement available here
     return null;
   }
 
-  public Pair<String, ValueSpecification> getValueSpecificationForCell(int row, int col) {
+  @Override
+  public Pair<String, ValueSpecification> getValueSpecificationForCell(final int row, final int col) {
     if (_calcConfigName == null || col != VALUE_COL) {
       return null;
     }
-    ValueSpecification valueSpec = _valueSpecifications.get(row);
+    final ValueSpecification valueSpec = _valueSpecifications.get(row);
     return valueSpec != null ? Pairs.of(_calcConfigName, valueSpec) : null;
   }
 
@@ -205,7 +206,7 @@ public class DependencyGraphGridStructure implements GridStructure {
   }
 
   private static ComputationTargetTypeMap<String> createTargetTypeNames() {
-    ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>();
+    final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>();
     map.put(ComputationTargetType.PORTFOLIO_NODE, "Agg");
     map.put(ComputationTargetType.POSITION, "Pos");
     map.put(ComputationTargetType.SECURITY, "Sec");
@@ -239,11 +240,11 @@ public class DependencyGraphGridStructure implements GridStructure {
     private final String _calcConfigName;
 
 
-    private DependencyGraphCellRenderer(int colIndex,
-                                        List<ValueSpecification> valueSpecs,
-                                        List<String> fnNames,
-                                        ComputationTargetResolver computationTargetResolver,
-                                        String calcConfigName) {
+    private DependencyGraphCellRenderer(final int colIndex,
+                                        final List<ValueSpecification> valueSpecs,
+                                        final List<String> fnNames,
+                                        final ComputationTargetResolver computationTargetResolver,
+                                        final String calcConfigName) {
       ArgumentChecker.notNull(valueSpecs, "valueSpecs");
       ArgumentChecker.notNull(fnNames, "fnNames");
       ArgumentChecker.notNull(computationTargetResolver, "computationTargetResolver");
@@ -256,12 +257,12 @@ public class DependencyGraphGridStructure implements GridStructure {
     }
 
     @Override
-    public ResultsCell getResults(int rowIndex,
-                                  TypeFormatter.Format format,
-                                  ResultsCache cache,
-                                  Class<?> columnType,
-                                  Object inlineKey) {
-      ValueSpecification valueSpec = _valueSpecs.get(rowIndex);
+    public ResultsCell getResults(final int rowIndex,
+                                  final TypeFormatter.Format format,
+                                  final ResultsCache cache,
+                                  final Class<?> columnType,
+                                  final Object inlineKey) {
+      final ValueSpecification valueSpec = _valueSpecs.get(rowIndex);
       switch (_colIndex) {
         case TARGET_COL:
           return ResultsCell.forStaticValue(getTargetName(valueSpec), columnType, format);
@@ -270,13 +271,13 @@ public class DependencyGraphGridStructure implements GridStructure {
         case VALUE_NAME_COL:
           return ResultsCell.forStaticValue(valueSpec.getValueName(), columnType, format);
         case VALUE_COL:
-          ResultsCache.Result cacheResult = cache.getResult(_calcConfigName, valueSpec, null);
-          Collection<Object> history = cacheResult.getHistory();
-          Object value = cacheResult.getValue();
-          AggregatedExecutionLog executionLog = cacheResult.getAggregatedExecutionLog();
+          final ResultsCache.Result cacheResult = cache.getResult(_calcConfigName, valueSpec, null);
+          final Collection<Object> history = cacheResult.getHistory();
+          final Object value = cacheResult.getValue();
+          final AggregatedExecutionLog executionLog = cacheResult.getAggregatedExecutionLog();
           return ResultsCell.forCalculatedValue(value, valueSpec, history, executionLog, cacheResult.isUpdated(), columnType, format);
         case FUNCTION_NAME_COL:
-          String fnName = _fnNames.get(rowIndex);
+          final String fnName = _fnNames.get(rowIndex);
           return ResultsCell.forStaticValue(fnName, columnType, format);
         case PROPERTIES_COL:
           return ResultsCell.forStaticValue(valueSpec.getProperties(), columnType, format);
@@ -289,17 +290,17 @@ public class DependencyGraphGridStructure implements GridStructure {
      * @param valueSpec Specification of the target for a grid row
      * @return The name of the target
      */
-    private String getTargetName(ValueSpecification valueSpec) {
+    private String getTargetName(final ValueSpecification valueSpec) {
       final ComputationTargetSpecification targetSpec = valueSpec.getTargetSpecification();
       // TODO I don't think LATEST will do long term. resolution time available on the result model
       if (targetSpec.getType() == ComputationTargetType.NULL) {
         return getNullTargetName(valueSpec);
       } else {
-        ComputationTarget target = _computationTargetResolver.resolve(targetSpec, VersionCorrection.LATEST);
+        final ComputationTarget target = _computationTargetResolver.resolve(targetSpec, VersionCorrection.LATEST);
         if (target != null) { // doubt this branch ever happens - don't think it will be executed for NULL targets.
           return target.getName();
         } else {
-          UniqueId uid = targetSpec.getUniqueId();
+          final UniqueId uid = targetSpec.getUniqueId();
           if (uid != null) {
             return uid.toString();
           } else {
@@ -308,10 +309,10 @@ public class DependencyGraphGridStructure implements GridStructure {
         }
       }
     }
-    
-    private String getNullTargetName(ValueSpecification valueSpec) {
-      String curveName = valueSpec.getProperty(ValuePropertyNames.CURVE);
-      String surfaceName = valueSpec.getProperty(ValuePropertyNames.SURFACE);
+
+    private String getNullTargetName(final ValueSpecification valueSpec) {
+      final String curveName = valueSpec.getProperty(ValuePropertyNames.CURVE);
+      final String surfaceName = valueSpec.getProperty(ValuePropertyNames.SURFACE);
       if (curveName != null) {
         return valueSpec.getValueName() + " [" + curveName + "]";
       } else if (surfaceName != null) {

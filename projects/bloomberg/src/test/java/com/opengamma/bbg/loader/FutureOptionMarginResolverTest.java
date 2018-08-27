@@ -49,7 +49,7 @@ public class FutureOptionMarginResolverTest {
     new FutureOptionMarginResolver().isMargined("NOT_AN_EXCHANGE");
   }
 
-  private void checkResult(String exchangeCode, boolean expected) {
+  private void checkResult(final String exchangeCode, final boolean expected) {
     Assert.assertEquals(new FutureOptionMarginResolver().isMargined(exchangeCode), expected);
   }
 

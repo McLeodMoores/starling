@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.timeseries.date.localdate;
@@ -45,7 +45,7 @@ public final class ImmutableLocalDateDoubleTimeSeries
    * Creates an empty builder, used to create time-series.
    * <p>
    * The builder has methods to create and modify a time-series.
-   * 
+   *
    * @return the time-series builder, not null
    */
   public static LocalDateDoubleTimeSeriesBuilder builder() {
@@ -55,114 +55,114 @@ public final class ImmutableLocalDateDoubleTimeSeries
   //-------------------------------------------------------------------------
   /**
    * Obtains a time-series from a single date and value.
-   * 
+   *
    * @param date  the singleton date, not null
    * @param value  the singleton value
    * @return the time-series, not null
    */
-  public static ImmutableLocalDateDoubleTimeSeries of(LocalDate date, double value) {
+  public static ImmutableLocalDateDoubleTimeSeries of(final LocalDate date, final double value) {
     Objects.requireNonNull(date, "date");
-    int[] timesArray = new int[] {LocalDateToIntConverter.convertToInt(date)};
-    double[] valuesArray = new double[] {value};
+    final int[] timesArray = new int[] {LocalDateToIntConverter.convertToInt(date)};
+    final double[] valuesArray = new double[] {value};
     return new ImmutableLocalDateDoubleTimeSeries(timesArray, valuesArray);
   }
 
   /**
    * Obtains a time-series from matching arrays of dates and values.
-   * 
+   *
    * @param dates  the date array, not null
    * @param values  the value array, not null
    * @return the time-series, not null
    */
-  public static ImmutableLocalDateDoubleTimeSeries of(LocalDate[] dates, Double[] values) {
-    int[] timesArray = convertToIntArray(dates);
-    double[] valuesArray = convertToDoubleArray(values);
+  public static ImmutableLocalDateDoubleTimeSeries of(final LocalDate[] dates, final Double[] values) {
+    final int[] timesArray = convertToIntArray(dates);
+    final double[] valuesArray = convertToDoubleArray(values);
     validate(timesArray, valuesArray);
     return new ImmutableLocalDateDoubleTimeSeries(timesArray, valuesArray);
   }
 
   /**
    * Obtains a time-series from matching arrays of dates and values.
-   * 
+   *
    * @param dates  the date array, not null
    * @param values  the value array, not null
    * @return the time-series, not null
    */
-  public static ImmutableLocalDateDoubleTimeSeries of(LocalDate[] dates, double[] values) {
-    int[] timesArray = convertToIntArray(dates);
+  public static ImmutableLocalDateDoubleTimeSeries of(final LocalDate[] dates, final double[] values) {
+    final int[] timesArray = convertToIntArray(dates);
     validate(timesArray, values);
-    double[] valuesArray = values.clone();
+    final double[] valuesArray = values.clone();
     return new ImmutableLocalDateDoubleTimeSeries(timesArray, valuesArray);
   }
 
   /**
    * Obtains a time-series from matching arrays of dates and values.
-   * 
+   *
    * @param dates  the date array, not null
    * @param values  the value array, not null
    * @return the time-series, not null
    */
-  public static ImmutableLocalDateDoubleTimeSeries of(int[] dates, double[] values) {
+  public static ImmutableLocalDateDoubleTimeSeries of(final int[] dates, final double[] values) {
     validate(dates, values);
-    int[] timesArray = dates.clone();
-    double[] valuesArray = values.clone();
+    final int[] timesArray = dates.clone();
+    final double[] valuesArray = values.clone();
     return new ImmutableLocalDateDoubleTimeSeries(timesArray, valuesArray);
   }
 
   /**
    * Obtains a time-series from matching arrays of dates and values.
-   * 
+   *
    * @param dates  the date list, not null
    * @param values  the value list, not null
    * @return the time-series, not null
    */
-  public static ImmutableLocalDateDoubleTimeSeries of(Collection<LocalDate> dates, Collection<Double> values) {
-    int[] timesArray = convertToIntArray(dates);
-    double[] valuesArray = convertToDoubleArray(values);
+  public static ImmutableLocalDateDoubleTimeSeries of(final Collection<LocalDate> dates, final Collection<Double> values) {
+    final int[] timesArray = convertToIntArray(dates);
+    final double[] valuesArray = convertToDoubleArray(values);
     validate(timesArray, valuesArray);
     return new ImmutableLocalDateDoubleTimeSeries(timesArray, valuesArray);
   }
 
   /**
    * Obtains a time-series from another time-series.
-   * 
+   *
    * @param timeSeries  the time-series, not null
    * @return the time-series, not null
    */
-  public static ImmutableLocalDateDoubleTimeSeries of(DateDoubleTimeSeries<?> timeSeries) {
+  public static ImmutableLocalDateDoubleTimeSeries of(final DateDoubleTimeSeries<?> timeSeries) {
     if (timeSeries instanceof ImmutableLocalDateDoubleTimeSeries) {
       return (ImmutableLocalDateDoubleTimeSeries) timeSeries;
     }
-    DateDoubleTimeSeries<?> other = (DateDoubleTimeSeries<?>) timeSeries;
-    int[] timesArray = other.timesArrayFast();
-    double[] valuesArray = other.valuesArrayFast();
+    final DateDoubleTimeSeries<?> other = timeSeries;
+    final int[] timesArray = other.timesArrayFast();
+    final double[] valuesArray = other.valuesArrayFast();
     return new ImmutableLocalDateDoubleTimeSeries(timesArray, valuesArray);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Obtains a time-series from another time-series.
-   * 
+   *
    * @param timeSeries  the time-series, not null
    * @return the time-series, not null
    */
-  public static ImmutableLocalDateDoubleTimeSeries from(DoubleTimeSeries<LocalDate> timeSeries) {
+  public static ImmutableLocalDateDoubleTimeSeries from(final DoubleTimeSeries<LocalDate> timeSeries) {
     if (timeSeries instanceof DateDoubleTimeSeries) {
       return of((DateDoubleTimeSeries<?>) timeSeries);
     }
-    int[] timesArray = convertToIntArray(timeSeries.timesArray());
-    double[] valuesArray = timeSeries.valuesArrayFast();
+    final int[] timesArray = convertToIntArray(timeSeries.timesArray());
+    final double[] valuesArray = timeSeries.valuesArrayFast();
     return new ImmutableLocalDateDoubleTimeSeries(timesArray, valuesArray);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Validates the data before creation.
-   * 
+   *
    * @param times  the times, not null
    * @param values  the values, not null
    */
-  private static void validate(int[] times, double[] values) {
+  private static void validate(final int[] times, final double[] values) {
     if (times == null || values == null) {
       throw new NullPointerException("Array must not be null");
     }
@@ -172,7 +172,7 @@ public final class ImmutableLocalDateDoubleTimeSeries
     }
     // check dates are ordered
     int maxTime = Integer.MIN_VALUE;
-    for (int time : times) {
+    for (final int time : times) {
       LocalDateToIntConverter.checkValid(time);
       if (time < maxTime) {
         throw new IllegalArgumentException("dates must be ordered");
@@ -183,11 +183,11 @@ public final class ImmutableLocalDateDoubleTimeSeries
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param times  the times, not null
    * @param values  the values, not null
    */
-  ImmutableLocalDateDoubleTimeSeries(int[] times, double[] values) {
+  ImmutableLocalDateDoubleTimeSeries(final int[] times, final double[] values) {
     _times = times;
     _values = values;
   }
@@ -204,7 +204,7 @@ public final class ImmutableLocalDateDoubleTimeSeries
   }
 
   @Override
-  LocalDateDoubleTimeSeries newInstanceFast(int[] times, double[] values) {
+  LocalDateDoubleTimeSeries newInstanceFast(final int[] times, final double[] values) {
     return new ImmutableLocalDateDoubleTimeSeries(times, values);
   }
 
@@ -216,14 +216,14 @@ public final class ImmutableLocalDateDoubleTimeSeries
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean containsTime(int date) {
-    int binarySearch = Arrays.binarySearch(_times, date);
-    return (binarySearch >= 0);
+  public boolean containsTime(final int date) {
+    final int binarySearch = Arrays.binarySearch(_times, date);
+    return binarySearch >= 0;
   }
 
   @Override
-  public Double getValue(int date) {
-    int binarySearch = Arrays.binarySearch(_times, date);
+  public Double getValue(final int date) {
+    final int binarySearch = Arrays.binarySearch(_times, date);
     if (binarySearch >= 0) {
       return _values[binarySearch];
     } else {
@@ -232,12 +232,12 @@ public final class ImmutableLocalDateDoubleTimeSeries
   }
 
   @Override
-  public int getTimeAtIndexFast(int index) {
+  public int getTimeAtIndexFast(final int index) {
     return _times[index];
   }
 
   @Override
-  public double getValueAtIndexFast(int index) {
+  public double getValueAtIndexFast(final int index) {
     return _values[index];
   }
 
@@ -246,7 +246,7 @@ public final class ImmutableLocalDateDoubleTimeSeries
   public int getEarliestTimeFast() {
     try {
       return _times[0];
-    } catch (IndexOutOfBoundsException ex) {
+    } catch (final IndexOutOfBoundsException ex) {
       throw new NoSuchElementException("Series is empty");
     }
   }
@@ -255,7 +255,7 @@ public final class ImmutableLocalDateDoubleTimeSeries
   public double getEarliestValueFast() {
     try {
       return _values[0];
-    } catch (IndexOutOfBoundsException ex) {
+    } catch (final IndexOutOfBoundsException ex) {
       throw new NoSuchElementException("Series is empty");
     }
   }
@@ -264,7 +264,7 @@ public final class ImmutableLocalDateDoubleTimeSeries
   public int getLatestTimeFast() {
     try {
       return _times[_times.length - 1];
-    } catch (IndexOutOfBoundsException ex) {
+    } catch (final IndexOutOfBoundsException ex) {
       throw new NoSuchElementException("Series is empty");
     }
   }
@@ -273,7 +273,7 @@ public final class ImmutableLocalDateDoubleTimeSeries
   public double getLatestValueFast() {
     try {
       return _values[_values.length - 1];
-    } catch (IndexOutOfBoundsException ex) {
+    } catch (final IndexOutOfBoundsException ex) {
       throw new NoSuchElementException("Series is empty");
     }
   }
@@ -291,14 +291,14 @@ public final class ImmutableLocalDateDoubleTimeSeries
 
   //-------------------------------------------------------------------------
   @Override
-  public LocalDateDoubleTimeSeries subSeriesFast(int startTime, boolean includeStart, int endTime, boolean includeEnd) {
+  public LocalDateDoubleTimeSeries subSeriesFast(int startTime, final boolean includeStart, int endTime, final boolean includeEnd) {
     if (endTime < startTime) {
       throw new IllegalArgumentException("Invalid subSeries: endTime < startTime");
     }
     // special case for start equals end
     if (startTime == endTime) {
       if (includeStart && includeEnd) {
-        int pos = Arrays.binarySearch(_times, startTime);
+        final int pos = Arrays.binarySearch(_times, startTime);
         if (pos >= 0) {
           return new ImmutableLocalDateDoubleTimeSeries(new int[] {startTime}, new double[] {_values[pos]});
         }
@@ -326,43 +326,43 @@ public final class ImmutableLocalDateDoubleTimeSeries
     if (includeEnd && endTime == Integer.MAX_VALUE) {
       endPos = _times.length;
     }
-    int[] timesArray = Arrays.copyOfRange(_times, startPos, endPos);
-    double[] valuesArray = Arrays.copyOfRange(_values, startPos, endPos);
+    final int[] timesArray = Arrays.copyOfRange(_times, startPos, endPos);
+    final double[] valuesArray = Arrays.copyOfRange(_values, startPos, endPos);
     return new ImmutableLocalDateDoubleTimeSeries(timesArray, valuesArray);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public LocalDateDoubleTimeSeries head(int numItems) {
+  public LocalDateDoubleTimeSeries head(final int numItems) {
     if (numItems == size()) {
       return this;
     }
-    int[] timesArray = Arrays.copyOfRange(_times, 0, numItems);
-    double[] valuesArray = Arrays.copyOfRange(_values, 0, numItems);
+    final int[] timesArray = Arrays.copyOfRange(_times, 0, numItems);
+    final double[] valuesArray = Arrays.copyOfRange(_values, 0, numItems);
     return new ImmutableLocalDateDoubleTimeSeries(timesArray, valuesArray);
   }
 
   @Override
-  public LocalDateDoubleTimeSeries tail(int numItems) {
-    int size = size();
+  public LocalDateDoubleTimeSeries tail(final int numItems) {
+    final int size = size();
     if (numItems == size) {
       return this;
     }
-    int[] timesArray = Arrays.copyOfRange(_times, size - numItems, size);
-    double[] valuesArray = Arrays.copyOfRange(_values, size - numItems, size);
+    final int[] timesArray = Arrays.copyOfRange(_times, size - numItems, size);
+    final double[] valuesArray = Arrays.copyOfRange(_values, size - numItems, size);
     return new ImmutableLocalDateDoubleTimeSeries(timesArray, valuesArray);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public ImmutableLocalDateDoubleTimeSeries newInstance(LocalDate[] dates, Double[] values) {
+  public ImmutableLocalDateDoubleTimeSeries newInstance(final LocalDate[] dates, final Double[] values) {
     return of(dates, values);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public LocalDateDoubleTimeSeries operate(UnaryOperator operator) {
-    double[] valuesArray = valuesArrayFast();
+  public LocalDateDoubleTimeSeries operate(final UnaryOperator operator) {
+    final double[] valuesArray = valuesArrayFast();
     for (int i = 0; i < valuesArray.length; i++) {
       valuesArray[i] = operator.operate(valuesArray[i]);
     }
@@ -370,8 +370,8 @@ public final class ImmutableLocalDateDoubleTimeSeries
   }
 
   @Override
-  public LocalDateDoubleTimeSeries operate(double other, BinaryOperator operator) {
-    double[] valuesArray = valuesArrayFast();
+  public LocalDateDoubleTimeSeries operate(final double other, final BinaryOperator operator) {
+    final double[] valuesArray = valuesArrayFast();
     for (int i = 0; i < valuesArray.length; i++) {
       valuesArray[i] = operator.operate(valuesArray[i], other);
     }

@@ -66,17 +66,17 @@ public class DataFinancialClientResource extends AbstractDataResource {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param client  the client, not null
    */
-  public DataFinancialClientResource(FinancialClient client) {
+  public DataFinancialClientResource(final FinancialClient client) {
     _client = client;
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the client.
-   * 
+   *
    * @return the client, not null
    */
   public FinancialClient getClient() {

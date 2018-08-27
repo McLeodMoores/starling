@@ -30,7 +30,7 @@ public final class ZonedDateTimeFudgeBuilder extends AbstractFudgeBuilder implem
 
   //-------------------------------------------------------------------------
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, ZonedDateTime object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final ZonedDateTime object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     toFudgeMsg(serializer, object, msg);
     return msg;

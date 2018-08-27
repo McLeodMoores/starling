@@ -35,12 +35,12 @@ public abstract class VarianceSwapLeg extends SwapLeg {
    * @param notional The notional, not null
    * @param eom The end-of-month flag
    */
-  protected VarianceSwapLeg(DayCount dayCount,
-                            Frequency frequency,
-                            ExternalId regionId,
-                            BusinessDayConvention businessDayConvention,
-                            Notional notional,
-                            boolean eom) {
+  protected VarianceSwapLeg(final DayCount dayCount,
+                            final Frequency frequency,
+                            final ExternalId regionId,
+                            final BusinessDayConvention businessDayConvention,
+                            final Notional notional,
+                            final boolean eom) {
     super(dayCount, frequency, regionId, businessDayConvention, notional, eom);
   }
 

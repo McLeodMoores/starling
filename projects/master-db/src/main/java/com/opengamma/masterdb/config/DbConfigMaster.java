@@ -33,7 +33,7 @@ public class DbConfigMaster extends DbConfigWorker implements ConfigMaster {
    *
    * @param dbConnector  the database connector, not null
    */
-  public DbConfigMaster(DbConnector dbConnector) {
+  public DbConfigMaster(final DbConnector dbConnector) {
     super(dbConnector, IDENTIFIER_SCHEME_DEFAULT);
   }
 

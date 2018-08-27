@@ -9,7 +9,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.testng.Assert.assertEquals;
-import net.sf.ehcache.CacheManager;
 
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -23,6 +22,8 @@ import com.opengamma.id.VersionCorrection;
 import com.opengamma.master.AbstractChangeProvidingMaster;
 import com.opengamma.util.ehcache.EHCacheUtils;
 import com.opengamma.util.test.TestGroup;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Test EHCaching master behaviour that is common across all masters, using dummy TestDocument and TestMaster classes
@@ -53,7 +54,8 @@ public class EHCachingMasterTest extends AbstractEHCachingMasterTest<CacheTestMa
   }
 
   class EHCachingTestMaster extends AbstractEHCachingMaster<CacheTestDocument> {
-    public EHCachingTestMaster(String name, AbstractChangeProvidingMaster<CacheTestDocument> underlying, CacheManager cacheManager) {
+    public EHCachingTestMaster(final String name, final AbstractChangeProvidingMaster<CacheTestDocument> underlying,
+        final CacheManager cacheManager) {
       super(name, underlying, cacheManager);
     }
   }
@@ -78,8 +80,8 @@ public class EHCachingMasterTest extends AbstractEHCachingMasterTest<CacheTestMa
 
   @Test
   public void testGetUidVersioned() {
-    CacheTestMaster mockUnderlyingMaster = (CacheTestMaster) populateMockMaster(mock(CacheTestMaster.class));
-    EHCachingTestMaster cachingMaster = new EHCachingTestMaster("test", mockUnderlyingMaster, _cacheManager);
+    final CacheTestMaster mockUnderlyingMaster = (CacheTestMaster) populateMockMaster(mock(CacheTestMaster.class));
+    final EHCachingTestMaster cachingMaster = new EHCachingTestMaster("test", mockUnderlyingMaster, _cacheManager);
 
     // Assert returned documents
     assertEquals(docB200_V2000to2009, cachingMaster.get(docB200_V2000to2009.getUniqueId()));
@@ -108,8 +110,8 @@ public class EHCachingMasterTest extends AbstractEHCachingMasterTest<CacheTestMa
 
   @Test
   public void testGetUidUnversioned() {
-    CacheTestMaster mockUnderlyingMaster = (CacheTestMaster) populateMockMaster(mock(CacheTestMaster.class));
-    EHCachingTestMaster cachingMaster = new EHCachingTestMaster("test", mockUnderlyingMaster, _cacheManager);
+    final CacheTestMaster mockUnderlyingMaster = (CacheTestMaster) populateMockMaster(mock(CacheTestMaster.class));
+    final EHCachingTestMaster cachingMaster = new EHCachingTestMaster("test", mockUnderlyingMaster, _cacheManager);
 
     // Assert returned documents
     assertEquals(docB500_V2011to, cachingMaster.get(docB200_V2000to2009.getUniqueId().toLatest()));
@@ -138,8 +140,8 @@ public class EHCachingMasterTest extends AbstractEHCachingMasterTest<CacheTestMa
 
   @Test
   public void testGetOidLatestVersionCorrection() {
-    CacheTestMaster mockUnderlyingMaster = (CacheTestMaster) populateMockMaster(mock(CacheTestMaster.class));
-    EHCachingTestMaster cachingMaster = new EHCachingTestMaster("test", mockUnderlyingMaster, _cacheManager);
+    final CacheTestMaster mockUnderlyingMaster = (CacheTestMaster) populateMockMaster(mock(CacheTestMaster.class));
+    final EHCachingTestMaster cachingMaster = new EHCachingTestMaster("test", mockUnderlyingMaster, _cacheManager);
 
     // Assert returned documents
     assertEquals(docB500_V2011to, cachingMaster.get(B_OID, VersionCorrection.LATEST));
@@ -168,8 +170,8 @@ public class EHCachingMasterTest extends AbstractEHCachingMasterTest<CacheTestMa
 
   @Test
   public void testGetOidMixedVersionCorrection() {
-    CacheTestMaster mockUnderlyingMaster = (CacheTestMaster) populateMockMaster(mock(CacheTestMaster.class));
-    EHCachingTestMaster cachingMaster = new EHCachingTestMaster("test", mockUnderlyingMaster, _cacheManager);
+    final CacheTestMaster mockUnderlyingMaster = (CacheTestMaster) populateMockMaster(mock(CacheTestMaster.class));
+    final EHCachingTestMaster cachingMaster = new EHCachingTestMaster("test", mockUnderlyingMaster, _cacheManager);
 
     //TODO enhance testing of v/c range border cases
 
@@ -235,8 +237,8 @@ public class EHCachingMasterTest extends AbstractEHCachingMasterTest<CacheTestMa
 
   @Test
   public void testAdd() {
-    CacheTestMaster mockUnderlyingMaster = (CacheTestMaster) populateMockMaster(mock(CacheTestMaster.class));
-    EHCachingTestMaster cachingMaster = new EHCachingTestMaster("test", mockUnderlyingMaster, _cacheManager);
+    final CacheTestMaster mockUnderlyingMaster = (CacheTestMaster) populateMockMaster(mock(CacheTestMaster.class));
+    final EHCachingTestMaster cachingMaster = new EHCachingTestMaster("test", mockUnderlyingMaster, _cacheManager);
 
     // Assert returned documents
     assertEquals(DOC_ADDED, cachingMaster.add(DOC_TO_ADD));

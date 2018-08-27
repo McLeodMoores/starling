@@ -32,9 +32,9 @@ public class ViewCycleExecutionOptions {
    * Helper for constructing {@link ViewCycleExecutionOptions} instances.
    */
   public static class Builder {
-    
+
     private String _name;
-    
+
     private Instant _valuationTime;
 
     private List<MarketDataSpecification> _marketDataSpecifications;
@@ -62,7 +62,7 @@ public class ViewCycleExecutionOptions {
 
     /**
      * Sets the name of the view cycle
-     * 
+     *
      * @param name name of the view cycle
      * @return this instance
      */
@@ -70,10 +70,10 @@ public class ViewCycleExecutionOptions {
       _name = name;
       return this;
     }
-    
+
     /**
      * Sets the valuation time for the view cycle. If set to null then a time implied by the data source will be used - if no time is implied the view process' clock will be used.
-     * 
+     *
      * @param valuationTime the valuation time to set
      * @return this instance
      */
@@ -84,7 +84,7 @@ public class ViewCycleExecutionOptions {
 
     /**
      * Returns the valuation time for the view cycle. If set to null then a time implied by the data source will be used - if no time is implied the view process' clock will be used.
-     * 
+     *
      * @return the valuation time
      */
     public Instant getValuationTime() {
@@ -93,7 +93,7 @@ public class ViewCycleExecutionOptions {
 
     /**
      * Sets the market data specification for the view cycle. This is equivalent to calling {@link #setMarketDataSpecitications} with a list containing a single element.
-     * 
+     *
      * @param marketDataSpecification the market data specification, not null
      * @return this instance
      */
@@ -105,7 +105,7 @@ public class ViewCycleExecutionOptions {
 
     /**
      * Sets the market data specifications for the view cycle.
-     * 
+     *
      * @param marketDataSpecifications the market data specifications, not null and not containing null
      * @return this instance
      */
@@ -124,7 +124,7 @@ public class ViewCycleExecutionOptions {
      * @param marketDataSelector the market data selector, not null
      * @return this instance
      */
-    public Builder setMarketDataSelector(MarketDataSelector marketDataSelector) {
+    public Builder setMarketDataSelector(final MarketDataSelector marketDataSelector) {
       ArgumentChecker.notNull(marketDataSelector, "marketDataSelector");
       _marketDataSelector = marketDataSelector;
       return this;
@@ -137,10 +137,10 @@ public class ViewCycleExecutionOptions {
     public String getName() {
       return _name;
     }
-    
+
     /**
      * Returns the market data specifications for the view cycle.
-     * 
+     *
      * @return the market data specifications, not null
      */
     public List<MarketDataSpecification> getMarketDataSpecifications() {
@@ -159,7 +159,7 @@ public class ViewCycleExecutionOptions {
     /**
      * Sets the version/correction to use when resolving references (for example the portfolio, positions, securities, time-series and so on). If set to null, the version correction from the default
      * cycle options will be used. If these are the default cycle options then a value of null will imply {@link VersionCorrection#LATEST}.
-     * 
+     *
      * @param versionCorrection the version
      * @return this instance
      */
@@ -171,7 +171,7 @@ public class ViewCycleExecutionOptions {
     /**
      * Returns the version/correction to use when resolving references (for example the portfolio, positions, securities, time-series and so on). If not set the default cycle options will be used. If
      * these are the default cycle options then a value of null will imply {@link VersionCorrection#LATEST}.
-     * 
+     *
      * @return the version/correction to use for reference resolution
      */
     public VersionCorrection getResolverVersionCorrection() {
@@ -209,13 +209,13 @@ public class ViewCycleExecutionOptions {
   }
 
   private final String _name;
-  
+
   private final Instant _valuationTime;
 
   private final List<MarketDataSpecification> _marketDataSpecifications;
 
   private final MarketDataSelector _marketDataSelector;
-  
+
   private final VersionCorrection _resolverVersionCorrection;
 
   private final Map<DistinctMarketDataSelector, FunctionParameters> _functionParameters;
@@ -245,7 +245,7 @@ public class ViewCycleExecutionOptions {
 
   /**
    * Creates a builder initialized with the values from this instance. The builder can be modified before {@link Builder#create} called to create a new {@link ViewCycleExecutionOptions} instance.
-   * 
+   *
    * @return a builder instance
    */
   public Builder copy() {
@@ -258,16 +258,16 @@ public class ViewCycleExecutionOptions {
 
   /**
    * Returns the name of the view cycle
-   * 
+   *
    * @return the name of the view cycle, or null if not specified
    */
   public String getName() {
     return _name;
   }
-  
+
   /**
    * Returns the valuation time for the view cycle. If set to null then a time implied by the data source will be used - if no time is implied the view process' clock will be used.
-   * 
+   *
    * @return the valuation time, or null if not specified
    */
   public Instant getValuationTime() {
@@ -276,7 +276,7 @@ public class ViewCycleExecutionOptions {
 
   /**
    * Returns the market data specifications.
-   * 
+   *
    * @return the market data specifications, not null and not containing null but possibly empty
    */
   public List<MarketDataSpecification> getMarketDataSpecifications() {
@@ -295,7 +295,7 @@ public class ViewCycleExecutionOptions {
   /**
    * Returns the version/correction to use when resolving references (for example the portfolio, positions, securities, time-series and so on). If not set the default cycle options will be used. If
    * these are the default cycle options then a value of null will imply {@link VersionCorrection#LATEST}.
-   * 
+   *
    * @return the version/correction to use for reference resolution
    */
   public VersionCorrection getResolverVersionCorrection() {
@@ -314,7 +314,7 @@ public class ViewCycleExecutionOptions {
   @Override
   public String toString() {
     final StringBuilder sb = new StringBuilder("ViewCycleExecutionOptions[");
-    
+
     sb.append("name=").append(getName()).append(", ");
     if (getValuationTime() != null) {
       sb.append("valuationTime=").append(getValuationTime()).append(", ");
@@ -322,7 +322,7 @@ public class ViewCycleExecutionOptions {
     if (getResolverVersionCorrection() != null) {
       sb.append("portfolioVersionCorrection=").append(getResolverVersionCorrection()).append(", ");
     }
-    
+
     sb.append("marketDataSpecifications=")
         .append(getMarketDataSpecifications())
         .append(", marketDataShiftSpecification=")
@@ -346,7 +346,7 @@ public class ViewCycleExecutionOptions {
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }

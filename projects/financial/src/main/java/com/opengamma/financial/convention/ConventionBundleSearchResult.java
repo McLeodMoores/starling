@@ -12,14 +12,14 @@ import java.util.Collections;
  * A collection of result documents from a search
  */
 public class ConventionBundleSearchResult {
-  private Collection<ConventionBundleDocument> _results;
-  public ConventionBundleSearchResult(ConventionBundleDocument singleResult) {
+  private final Collection<ConventionBundleDocument> _results;
+  public ConventionBundleSearchResult(final ConventionBundleDocument singleResult) {
     _results = Collections.singletonList(singleResult);
   }
-  public ConventionBundleSearchResult(Collection<ConventionBundleDocument> results) {
+  public ConventionBundleSearchResult(final Collection<ConventionBundleDocument> results) {
     _results = results;
   }
-  
+
   public Collection<ConventionBundleDocument> getResults() {
     return _results;
   }

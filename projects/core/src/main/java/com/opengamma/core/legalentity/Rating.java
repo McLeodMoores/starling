@@ -40,7 +40,7 @@ public class Rating implements Bean {
   public Rating() {
   }
 
-  public Rating(String rater, CreditRating score, SeniorityLevel seniorityLevel) {
+  public Rating(final String rater, final CreditRating score, final SeniorityLevel seniorityLevel) {
     _rater = rater;
     _score = score;
     _seniorityLevel = seniorityLevel;

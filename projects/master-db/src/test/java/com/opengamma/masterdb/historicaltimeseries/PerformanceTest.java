@@ -33,7 +33,7 @@ public class PerformanceTest extends AbstractDbTest {
   private DbHistoricalTimeSeriesMaster _htsMaster;
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public PerformanceTest(String databaseType, String databaseVersion) {
+  public PerformanceTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion);
     LOGGER.info("running testcases for {}", databaseType);
   }
@@ -51,16 +51,16 @@ public class PerformanceTest extends AbstractDbTest {
 
   //-------------------------------------------------------------------------
   public void createUpdateReadLotsOfTimeSeries() {
-    long start = System.nanoTime();
-    
-    int NUM_SERIES = 100;
-    int NUM_POINTS = 100;
-    
+    final long start = System.nanoTime();
+
+    final int NUM_SERIES = 100;
+    final int NUM_POINTS = 100;
+
     for (int i = 0; i < NUM_SERIES; i++) {
-      ExternalId id1 = ExternalId.of("sa" + i, "ida" + i);
-      ExternalIdBundle identifiers = ExternalIdBundle.of(id1);
-      
-      ManageableHistoricalTimeSeriesInfo info = new ManageableHistoricalTimeSeriesInfo();
+      final ExternalId id1 = ExternalId.of("sa" + i, "ida" + i);
+      final ExternalIdBundle identifiers = ExternalIdBundle.of(id1);
+
+      final ManageableHistoricalTimeSeriesInfo info = new ManageableHistoricalTimeSeriesInfo();
       info.setName("BLOOMBERG CMPL");
       info.setDataField("CLOSE");
       info.setDataProvider("CMPL");
@@ -70,24 +70,24 @@ public class PerformanceTest extends AbstractDbTest {
       HistoricalTimeSeriesInfoDocument doc = new HistoricalTimeSeriesInfoDocument(info);
       LOGGER.debug("adding timeseries {}", doc);
       doc = _htsMaster.add(doc);
-      
+
       LocalDateDoubleTimeSeries randomPoints = RandomTimeSeriesGenerator.makeRandomTimeSeries(1);
       _htsMaster.updateTimeSeriesDataPoints(doc.getInfo().getTimeSeriesObjectId(), randomPoints);
       randomPoints = RandomTimeSeriesGenerator.makeRandomTimeSeries(NUM_POINTS);
-      
+
       for (int j = 1; j < NUM_POINTS; j++) {
-        ImmutableLocalDateDoubleTimeSeries points = ImmutableLocalDateDoubleTimeSeries.of(
+        final ImmutableLocalDateDoubleTimeSeries points = ImmutableLocalDateDoubleTimeSeries.of(
             Lists.newArrayList(randomPoints.getTimeAtIndex(j)),
             Lists.newArrayList(randomPoints.getValueAtIndex(j)));
         LOGGER.debug("adding data points {}", points);
         _htsMaster.updateTimeSeriesDataPoints(doc.getInfo().getTimeSeriesObjectId(), points);
       }
     }
-    
-    long end = System.nanoTime();
-    
+
+    final long end = System.nanoTime();
+
     LOGGER.info("Creating {} series with {} points each took {} ms",
-        new Object[] { NUM_SERIES, NUM_POINTS, (end - start) / 1E6 }); 
+        new Object[] { NUM_SERIES, NUM_POINTS, (end - start) / 1E6 });
   }
 
 }

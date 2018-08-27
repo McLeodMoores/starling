@@ -27,7 +27,7 @@ public class WebProdBundleResource extends AbstractWebBundleResource {
 
   /**
    * Creates the resource.
-   * 
+   *
    * @param parent  the parent resource, not null
    */
   public WebProdBundleResource(final AbstractWebBundleResource parent) {
@@ -36,16 +36,16 @@ public class WebProdBundleResource extends AbstractWebBundleResource {
 
   //-------------------------------------------------------------------------
   @GET
-  public Response get(@PathParam("bundleId") String idStr, @Context Request request) {
-    Bundle bundle = data().getBundleManager().getBundle(idStr);
+  public Response get(@PathParam("bundleId") final String idStr, @Context final Request request) {
+    final Bundle bundle = data().getBundleManager().getBundle(idStr);
     if (bundle == null) {
       return null;
     }
-    String compressedContent = data().getCompressor().compressBundle(bundle);
-    EntityTag etag = new EntityTag(DigestUtils.md5Hex(compressedContent));
+    final String compressedContent = data().getCompressor().compressBundle(bundle);
+    final EntityTag etag = new EntityTag(DigestUtils.md5Hex(compressedContent));
     ResponseBuilder builder = request.evaluatePreconditions(etag);
     if (builder == null) {
-      BundleType type = BundleType.getType(idStr);
+      final BundleType type = BundleType.getType(idStr);
       String mimeType = null;
       switch (type) {
         case JS:
@@ -66,12 +66,12 @@ public class WebProdBundleResource extends AbstractWebBundleResource {
   //-------------------------------------------------------------------------
   /**
    * Builds a URI for this resource.
-   * 
+   *
    * @param data  the data, not null
    * @param bundleId the bundleId, not null
    * @return the URI, not null
    */
-  public static URI uri(final WebBundlesData data, String bundleId) {
+  public static URI uri(final WebBundlesData data, final String bundleId) {
     return data.getUriInfo().getBaseUriBuilder().path(WebProdBundleResource.class).build(bundleId);
   }
 

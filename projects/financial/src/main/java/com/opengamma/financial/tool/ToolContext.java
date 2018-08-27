@@ -221,7 +221,7 @@ public class ToolContext extends DirectBean implements Closeable {
    */
   @PropertyDefinition
   private volatile AvailableOutputsProvider _avaliableOutputsProvider;
-  
+
   /**
    * The function configuration source
    */
@@ -240,7 +240,7 @@ public class ToolContext extends DirectBean implements Closeable {
    */
   @Override
   public void close() {
-    Object manager = getContextManager();
+    final Object manager = getContextManager();
     ReflectionUtils.close(manager);
   }
 
@@ -249,10 +249,10 @@ public class ToolContext extends DirectBean implements Closeable {
    * Sets the tool context, used to free any underlying resources.
    * <p>
    * The method {@link ReflectionUtils#isCloseable(Class)} must return true for the object. Call {@link #close()} to close the manager.
-   * 
+   *
    * @param contextManager the context manager.
    */
-  public void setContextManager(Object contextManager) {
+  public void setContextManager(final Object contextManager) {
     if (ReflectionUtils.isCloseable(contextManager.getClass()) == false) {
       throw new IllegalArgumentException("Object is not closeable: " + contextManager);
     }

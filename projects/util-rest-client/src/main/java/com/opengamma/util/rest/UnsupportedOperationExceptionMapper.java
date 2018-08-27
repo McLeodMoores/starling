@@ -27,19 +27,19 @@ public class UnsupportedOperationExceptionMapper
 
   //-------------------------------------------------------------------------
   @Override
-  protected String buildHtmlErrorPage(UnsupportedOperationException exception) {
-    Map<String, String> data = new HashMap<>();
+  protected String buildHtmlErrorPage(final UnsupportedOperationException exception) {
+    final Map<String, String> data = new HashMap<>();
     buildOutputMessage(exception, data);
     return createHtmlErrorPage("error-unavailable.html", data);
   }
 
   @Override
-  protected void logHtmlException(UnsupportedOperationException exception, String htmlPage) {
+  protected void logHtmlException(final UnsupportedOperationException exception, final String htmlPage) {
     LOGGER.error("RESTful website exception caught", exception);
   }
 
   @Override
-  protected void logRestfulError(UnsupportedOperationException exception) {
+  protected void logRestfulError(final UnsupportedOperationException exception) {
     LOGGER.error("RESTful web-service exception caught and tunnelled to client:", exception);
   }
 

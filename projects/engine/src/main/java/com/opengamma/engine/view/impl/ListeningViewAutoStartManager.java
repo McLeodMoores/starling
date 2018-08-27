@@ -53,21 +53,21 @@ public class ListeningViewAutoStartManager implements ViewAutoStartManager {
    * @param configSource the config source containing the auto start
    * view definitions.
    */
-  public ListeningViewAutoStartManager(ConfigSource configSource) {
+  public ListeningViewAutoStartManager(final ConfigSource configSource) {
     ArgumentChecker.notNull(configSource, "configSource");
     _configSource = configSource;
     _configSource.changeManager().addChangeListener(new ChangeListener() {
       @Override
-      public void entityChanged(ChangeEvent event) {
+      public void entityChanged(final ChangeEvent event) {
 
-        ObjectId configItemId = event.getObjectId();
+        final ObjectId configItemId = event.getObjectId();
 
         switch (event.getType()) {
           case ADDED:
             // Whether item is new or updated, just want to add into the map, so fall through
           case CHANGED:
-            VersionCorrection versionCorrection = VersionCorrection.ofVersionAsOf(event.getVersionFrom());
-            ConfigItem<?> configItem = _configSource.get(configItemId, versionCorrection);
+            final VersionCorrection versionCorrection = VersionCorrection.ofVersionAsOf(event.getVersionFrom());
+            final ConfigItem<?> configItem = _configSource.get(configItemId, versionCorrection);
             if (configItem.getType() == AutoStartViewDefinition.class) {
               _autoStartViews.put(configItemId, Pairs.of(configItem.getName(),
                                                          (AutoStartViewDefinition) configItem.getValue()));
@@ -83,7 +83,7 @@ public class ListeningViewAutoStartManager implements ViewAutoStartManager {
 
   @Override
   public void initialize() {
-    for (ConfigItem<AutoStartViewDefinition> configItem : _configSource.getAll(AutoStartViewDefinition.class, VersionCorrection.LATEST)) {
+    for (final ConfigItem<AutoStartViewDefinition> configItem : _configSource.getAll(AutoStartViewDefinition.class, VersionCorrection.LATEST)) {
       _autoStartViews.put(configItem.getObjectId(), Pairs.of(configItem.getName(), configItem.getValue()));
     }
     _isInitialized = true;
@@ -96,8 +96,8 @@ public class ListeningViewAutoStartManager implements ViewAutoStartManager {
       throw new IllegalStateException("Manager has not been initialized, cannot access data");
     }
 
-    ImmutableMap.Builder<String, AutoStartViewDefinition> builder = ImmutableMap.builder();
-    for (Pair<String, AutoStartViewDefinition> pair : _autoStartViews.values()) {
+    final ImmutableMap.Builder<String, AutoStartViewDefinition> builder = ImmutableMap.builder();
+    for (final Pair<String, AutoStartViewDefinition> pair : _autoStartViews.values()) {
       builder.put(pair.getFirst(), pair.getSecond());
     }
     return builder.build();

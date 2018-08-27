@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.timeseries.precise.instant;
@@ -26,7 +26,7 @@ final class ImmutableInstantObjectTimeSeriesBuilder<V>
   /**
    * The time-series.
    */
-  private SortedMap<Long, V> _series = new ConcurrentSkipListMap<>();  // use this map to block nulls
+  private final SortedMap<Long, V> _series = new ConcurrentSkipListMap<>();  // use this map to block nulls
 
   /**
    * Creates an instance.
@@ -35,11 +35,11 @@ final class ImmutableInstantObjectTimeSeriesBuilder<V>
   }
 
   //-------------------------------------------------------------------------
-  private static long convertToLong(Instant instant) {
+  private static long convertToLong(final Instant instant) {
     return InstantToLongConverter.convertToLong(instant);
   }
 
-  private static Instant convertFromLong(long instant) {
+  private static Instant convertFromLong(final long instant) {
     return InstantToLongConverter.convertToInstant(instant);
   }
 
@@ -52,7 +52,7 @@ final class ImmutableInstantObjectTimeSeriesBuilder<V>
   @Override
   public InstantObjectEntryIterator<V> iterator() {
     return new InstantObjectEntryIterator<V>() {
-      private Iterator<Entry<Long, V>> _iterator = _series.entrySet().iterator();
+      private final Iterator<Entry<Long, V>> _iterator = _series.entrySet().iterator();
       private int _index = -1;
       private Entry<Long, V> _current;
 
@@ -130,18 +130,18 @@ final class ImmutableInstantObjectTimeSeriesBuilder<V>
 
   //-------------------------------------------------------------------------
   @Override
-  public InstantObjectTimeSeriesBuilder<V> put(Instant time, V value) {
+  public InstantObjectTimeSeriesBuilder<V> put(final Instant time, final V value) {
     return put(convertToLong(time), value);
   }
 
   @Override
-  public InstantObjectTimeSeriesBuilder<V> put(long time, V value) {
+  public InstantObjectTimeSeriesBuilder<V> put(final long time, final V value) {
     _series.put(time, value);
     return this;
   }
 
   @Override
-  public InstantObjectTimeSeriesBuilder<V> putAll(Instant[] times, V[] values) {
+  public InstantObjectTimeSeriesBuilder<V> putAll(final Instant[] times, final V[] values) {
     if (times.length != values.length) {
       throw new IllegalArgumentException("Arrays are of different sizes: " + times.length + ", " + values.length);
     }
@@ -152,7 +152,7 @@ final class ImmutableInstantObjectTimeSeriesBuilder<V>
   }
 
   @Override
-  public InstantObjectTimeSeriesBuilder<V> putAll(long[] times, V[] values) {
+  public InstantObjectTimeSeriesBuilder<V> putAll(final long[] times, final V[] values) {
     if (times.length != values.length) {
       throw new IllegalArgumentException("Arrays are of different sizes: " + times.length + ", " + values.length);
     }
@@ -164,12 +164,12 @@ final class ImmutableInstantObjectTimeSeriesBuilder<V>
 
   //-------------------------------------------------------------------------
   @Override
-  public InstantObjectTimeSeriesBuilder<V> putAll(PreciseObjectTimeSeries<?, V> timeSeries) {
+  public InstantObjectTimeSeriesBuilder<V> putAll(final PreciseObjectTimeSeries<?, V> timeSeries) {
     return putAll(timeSeries, 0, timeSeries.size());
   }
 
   @Override
-  public InstantObjectTimeSeriesBuilder<V> putAll(PreciseObjectTimeSeries<?, V> timeSeries, int startPos, int endPos) {
+  public InstantObjectTimeSeriesBuilder<V> putAll(final PreciseObjectTimeSeries<?, V> timeSeries, final int startPos, final int endPos) {
     if (startPos < 0 || startPos > timeSeries.size()) {
       throw new IndexOutOfBoundsException("Invalid start index: " + startPos);
     }
@@ -189,11 +189,11 @@ final class ImmutableInstantObjectTimeSeriesBuilder<V>
   }
 
   @Override
-  public InstantObjectTimeSeriesBuilder<V> putAll(Map<Instant, V> timeSeriesMap) {
+  public InstantObjectTimeSeriesBuilder<V> putAll(final Map<Instant, V> timeSeriesMap) {
     if (timeSeriesMap.size() == 0) {
       return this;
     }
-    for (Entry<Instant, V> entry : timeSeriesMap.entrySet()) {
+    for (final Entry<Instant, V> entry : timeSeriesMap.entrySet()) {
       put(entry.getKey(), entry.getValue());
     }
     return this;
@@ -209,15 +209,16 @@ final class ImmutableInstantObjectTimeSeriesBuilder<V>
   //-------------------------------------------------------------------------
   @Override
   public ImmutableInstantObjectTimeSeries<V> build() {
-    long[] times = new long[_series.size()];
+    final long[] times = new long[_series.size()];
     @SuppressWarnings("unchecked")
+    final
     V[] values = (V[]) new Object[_series.size()];
     int i = 0;
-    for (Entry<Long, V> entry : _series.entrySet()) {
+    for (final Entry<Long, V> entry : _series.entrySet()) {
       times[i] = entry.getKey();
       values[i++] = entry.getValue();
     }
-    return new ImmutableInstantObjectTimeSeries<V>(times, values);
+    return new ImmutableInstantObjectTimeSeries<>(times, values);
   }
 
   //-------------------------------------------------------------------------

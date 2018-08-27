@@ -25,23 +25,23 @@ import com.opengamma.id.ExternalId;
  * @author noah@opengamma
  */
 public class BloombergTickerParserEQIndexOption extends BloombergTickerParserEQOption {
-  
+
   // ------------ METHODS ------------
   // -------- CONSTRUCTORS --------
   /**
    * Create a parser
-   * @param ticker a legal Bloomberg ticker, as string.  
+   * @param ticker a legal Bloomberg ticker, as string.
    */
-  public BloombergTickerParserEQIndexOption(String ticker) {
+  public BloombergTickerParserEQIndexOption(final String ticker) {
     super(ticker);
   }
-  
+
   /**
    * Create a parser
-   * @param identifier a legal Bloomberg ticker, with {@link com.opengamma.id.ExternalScheme} 
-   * of {@link com.opengamma.core.id.ExternalSchemes#BLOOMBERG_TICKER}.  
+   * @param identifier a legal Bloomberg ticker, with {@link com.opengamma.id.ExternalScheme}
+   * of {@link com.opengamma.core.id.ExternalSchemes#BLOOMBERG_TICKER}.
    */
-  public BloombergTickerParserEQIndexOption(ExternalId identifier) {
+  public BloombergTickerParserEQIndexOption(final ExternalId identifier) {
     super(identifier);
   }
 

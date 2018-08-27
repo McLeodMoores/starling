@@ -42,38 +42,39 @@ public class ConfigImportExportTool extends AbstractTool<ToolContext> {
   //-------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
+   *
    * @param args  the standard tool arguments, not null
    */
-  public static void main(String[] args) { // CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     new ConfigImportExportTool().invokeAndTerminate(args);
   }
 
   //-------------------------------------------------------------------------
   @Override
   protected void doRun() {
-    ToolContext toolContext = getToolContext();
-    ConfigMaster configMaster = toolContext.getConfigMaster();
-    PortfolioMaster portfolioMaster = toolContext.getPortfolioMaster();
-    CommandLine commandLine = getCommandLine();
+    final ToolContext toolContext = getToolContext();
+    final ConfigMaster configMaster = toolContext.getConfigMaster();
+    final PortfolioMaster portfolioMaster = toolContext.getPortfolioMaster();
+    final CommandLine commandLine = getCommandLine();
     @SuppressWarnings("unchecked")
+    final
     List<String> fileList = commandLine.getArgList();
-    for (String file : fileList) {
+    for (final String file : fileList) {
       System.err.println(file);
     }
-    boolean portPortfolioRefs = commandLine.hasOption("portable-portfolios");
-    boolean verbose = commandLine.hasOption("verbose");
+    final boolean portPortfolioRefs = commandLine.hasOption("portable-portfolios");
+    final boolean verbose = commandLine.hasOption("verbose");
     if (commandLine.hasOption("load")) {
       checkForInvalidOption("type");
       checkForInvalidOption("name");
       checkForInvalidOption("save");
       checkForInvalidOption("sort-by-name");
-      boolean persist = !commandLine.hasOption("do-not-persist"); // NOTE: inverted logic here
-      ConfigLoader configLoader = new ConfigLoader(configMaster, portfolioMaster, portPortfolioRefs, persist, verbose);
+      final boolean persist = !commandLine.hasOption("do-not-persist"); // NOTE: inverted logic here
+      final ConfigLoader configLoader = new ConfigLoader(configMaster, portfolioMaster, portPortfolioRefs, persist, verbose);
       if (fileList.size() > 0) {
         boolean problems = false;
-        for (String fileName : fileList) {
-          File file = new File(fileName);
+        for (final String fileName : fileList) {
+          final File file = new File(fileName);
           if (!file.exists()) {
             LOGGER.error("Could not find file:" + fileName);
             problems = true;
@@ -88,14 +89,14 @@ public class ConfigImportExportTool extends AbstractTool<ToolContext> {
           System.exit(1);
         }
         try {
-          for (String fileName : fileList) {
+          for (final String fileName : fileList) {
             if (verbose) {
               LOGGER.info("Processing " + fileName);
             }
-            FileInputStream inputStream = new FileInputStream(fileName);
+            final FileInputStream inputStream = new FileInputStream(fileName);
             configLoader.loadConfig(inputStream);
           }
-        } catch (IOException ioe) {
+        } catch (final IOException ioe) {
           if (verbose) {
             LOGGER.error("An I/O error occurred while processing a file (run with -v to see stack trace)");
           } else {
@@ -113,13 +114,13 @@ public class ConfigImportExportTool extends AbstractTool<ToolContext> {
         LOGGER.info("Save option active");
       }
       checkForInvalidOption("do-not-persist");
-      List<String> types = getTypes();
-      List<String> names = getNames();
+      final List<String> types = getTypes();
+      final List<String> names = getNames();
       PrintStream outputStream;
       if (fileList.size() == 1) {
         try {
           outputStream = new PrintStream(new FileOutputStream(fileList.get(0)));
-        } catch (FileNotFoundException ex) {
+        } catch (final FileNotFoundException ex) {
           LOGGER.error("Couldn't find file " + fileList.get(0));
           System.exit(1);
           return;
@@ -131,7 +132,7 @@ public class ConfigImportExportTool extends AbstractTool<ToolContext> {
       if (commandLine.hasOption("sort-by-name")) {
         order = ConfigSearchSortOrder.NAME_ASC;
       }
-      ConfigSaver configSaver = new ConfigSaver(configMaster, portfolioMaster, names, types, portPortfolioRefs, verbose, order);
+      final ConfigSaver configSaver = new ConfigSaver(configMaster, portfolioMaster, names, types, portPortfolioRefs, verbose, order);
       configSaver.saveConfigs(outputStream);
       System.out.println("Warning: file may have been created in installation base directory");
     }
@@ -139,7 +140,7 @@ public class ConfigImportExportTool extends AbstractTool<ToolContext> {
 
   private List<String> getTypes() {
     if (getCommandLine().hasOption("type")) {
-      String[] typeValues = getCommandLine().getOptionValues("type");
+      final String[] typeValues = getCommandLine().getOptionValues("type");
       return Arrays.asList(typeValues);
     } else {
       return Collections.emptyList();
@@ -148,14 +149,14 @@ public class ConfigImportExportTool extends AbstractTool<ToolContext> {
 
   private List<String> getNames() {
     if (getCommandLine().hasOption("name")) {
-      String[] nameValues = getCommandLine().getOptionValues("name");
+      final String[] nameValues = getCommandLine().getOptionValues("name");
       return Arrays.asList(nameValues);
     } else {
       return Collections.emptyList();
     }
   }
 
-  private void checkForInvalidOption(String longOpt) {
+  private void checkForInvalidOption(final String longOpt) {
     if (getCommandLine().hasOption(longOpt)) {
       System.err.println("Option " + longOpt + " is invalid in this context");
       System.exit(1);
@@ -163,8 +164,8 @@ public class ConfigImportExportTool extends AbstractTool<ToolContext> {
   }
 
   @Override
-  protected Options createOptions(boolean mandatoryConfig) {
-    Options options = super.createOptions(mandatoryConfig);
+  protected Options createOptions(final boolean mandatoryConfig) {
+    final Options options = super.createOptions(mandatoryConfig);
     options.addOption(createTypeOption());
     options.addOption(createSearchOption());
     options.addOption(createLoadOption());
@@ -223,8 +224,8 @@ public class ConfigImportExportTool extends AbstractTool<ToolContext> {
   }
 
   @Override
-  protected void usage(Options options) {
-    HelpFormatter formatter = new HelpFormatter();
+  protected void usage(final Options options) {
+    final HelpFormatter formatter = new HelpFormatter();
     formatter.setWidth(120);
     formatter.printHelp("config-import-export-tool.sh [file...]", options, true);
   }

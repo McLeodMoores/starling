@@ -55,7 +55,7 @@ public class MarketDataValue extends DirectBean implements ObjectIdentifiable {
   public MarketDataValue() {
   }
 
-  public MarketDataValue(ComputationTargetSpecification computationTargetSpecification, Double value, String name) {
+  public MarketDataValue(final ComputationTargetSpecification computationTargetSpecification, final Double value, final String name) {
     _computationTargetSpecification = computationTargetSpecification;
     _name = name;
     _value = value;

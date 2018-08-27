@@ -40,23 +40,23 @@ public class PositionHistoryResult extends AbstractHistoryResult<PositionDocumen
 
   /**
    * Creates an instance from a collection of documents.
-   * 
+   *
    * @param coll  the collection of documents to add, not null
    */
-  public PositionHistoryResult(Collection<PositionDocument> coll) {
+  public PositionHistoryResult(final Collection<PositionDocument> coll) {
     super(coll);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the returned positions from within the documents.
-   * 
+   *
    * @return the positions, not null
    */
   public List<ManageablePosition> getPositions() {
-    List<ManageablePosition> result = new ArrayList<ManageablePosition>();
+    final List<ManageablePosition> result = new ArrayList<>();
     if (getDocuments() != null) {
-      for (PositionDocument doc : getDocuments()) {
+      for (final PositionDocument doc : getDocuments()) {
         result.add(doc.getPosition());
       }
     }
@@ -65,7 +65,7 @@ public class PositionHistoryResult extends AbstractHistoryResult<PositionDocumen
 
   /**
    * Gets the first position, or null if no documents.
-   * 
+   *
    * @return the first position, null if none
    */
   public ManageablePosition getFirstPosition() {
@@ -77,7 +77,7 @@ public class PositionHistoryResult extends AbstractHistoryResult<PositionDocumen
    * <p>
    * This throws an exception if more than 1 result is actually available.
    * Thus, this method implies an assumption about uniqueness of the queried position.
-   * 
+   *
    * @return the matching position, not null
    * @throws IllegalStateException if no position was found
    */

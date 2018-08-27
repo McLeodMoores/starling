@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.obligor;
@@ -10,47 +10,47 @@ package com.opengamma.core.obligor;
  */
 public enum Sector {
   /**
-   * 
+   *
    */
   BASICMATERIALS,
   /**
-   * 
+   *
    */
   CONSUMERGOODS,
   /**
-   * 
+   *
    */
   CONSUMERSERVICES,
   /**
-   * 
+   *
    */
   ENERGY,
   /**
-   * 
+   *
    */
   FINANCIALS,
   /**
-   * 
+   *
    */
   GOVERNMENT,
   /**
-   * 
+   *
    */
   HEALTHCARE,
   /**
-   * 
+   *
    */
   INDUSTRIALS,
   /**
-   * 
+   *
    */
   TECHNOLOGY,
   /**
-   * 
+   *
    */
   TELECOMMUNICATIONSSERVICES,
   /**
-   * 
+   *
    */
   UTILITIES,
   /**
@@ -62,7 +62,7 @@ public enum Sector {
    */
   SOVEREIGN,
   /**
-   * 
+   *
    */
   NONE;
 
@@ -75,10 +75,10 @@ public enum Sector {
    * @param alias the alias to find a Sector by
    * @return the matching Sector if found, null otherwise
    */
-  public static Sector from(String alias) {
+  public static Sector from(final String alias) {
     try {
       return valueOf(alias.replace(" ", "").toUpperCase());
-    } catch (IllegalArgumentException e) {
+    } catch (final IllegalArgumentException e) {
       return null;
     }
   }

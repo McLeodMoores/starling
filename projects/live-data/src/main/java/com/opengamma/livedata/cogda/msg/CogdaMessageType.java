@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.livedata.cogda.msg;
@@ -27,8 +27,8 @@ public enum CogdaMessageType {
   UNSUBSCRIBE,
   /** {@see CogdaLiveDataUpdateMessage} */
   LIVE_DATA_UPDATE;
-  
-  public static CogdaMessageType getFromMessage(FudgeMsg msg) {
+
+  public static CogdaMessageType getFromMessage(final FudgeMsg msg) {
     if (msg == null) {
       return null;
     }

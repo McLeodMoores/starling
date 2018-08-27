@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.bbg.livedata;
@@ -32,7 +32,7 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * 
+ *
  */
 @Test(groups = TestGroup.INTEGRATION)
 public class BloombergBpipeLiveDataServerTest {
@@ -45,13 +45,13 @@ public class BloombergBpipeLiveDataServerTest {
 
   @BeforeClass
   public void setUpClass() throws Exception {
-    BloombergReferenceDataProvider referenceDataProvider = new BloombergReferenceDataProvider(BloombergTestUtils.getBloombergBipeConnector());
+    final BloombergReferenceDataProvider referenceDataProvider = new BloombergReferenceDataProvider(BloombergTestUtils.getBloombergBipeConnector());
     referenceDataProvider.start();
     _refernceDataProvider = referenceDataProvider;
 
-    FudgeMessageSender fudgeMessageSender = new FudgeMessageSender() {
+    final FudgeMessageSender fudgeMessageSender = new FudgeMessageSender() {
       @Override
-      public void send(FudgeMsg message) {
+      public void send(final FudgeMsg message) {
         // do nothing
       }
 
@@ -60,11 +60,11 @@ public class BloombergBpipeLiveDataServerTest {
         return OpenGammaFudgeContext.getInstance();
       }
     };
-    BloombergLiveDataServer server = new BloombergLiveDataServer(BloombergTestUtils.getBloombergBipeConnector(),
+    final BloombergLiveDataServer server = new BloombergLiveDataServer(BloombergTestUtils.getBloombergBipeConnector(),
         _refernceDataProvider,
         EHCacheUtils.createCacheManager(),
         fudgeMessageSender);
-    DistributionSpecificationResolver distributionSpecificationResolver = server.getDefaultDistributionSpecificationResolver();
+    final DistributionSpecificationResolver distributionSpecificationResolver = server.getDefaultDistributionSpecificationResolver();
     server.setDistributionSpecificationResolver(distributionSpecificationResolver);
 
     server.start();
@@ -90,15 +90,15 @@ public class BloombergBpipeLiveDataServerTest {
   //-------------------------------------------------------------------------
   @Test
   public void testSnapshot() {
-    LiveDataSubscriptionResponse snapshotResponse = snapshot("IBM US Equity");
+    final LiveDataSubscriptionResponse snapshotResponse = snapshot("IBM US Equity");
 
     assertNotNull(snapshotResponse);
     assertEquals(LiveDataSubscriptionResult.SUCCESS, snapshotResponse.getSubscriptionResult());
     StandardRulesUtils.validateOpenGammaMsg(snapshotResponse.getSnapshot().getFields());
   }
 
-  private LiveDataSubscriptionResponse snapshot(String ticker) {
-    LiveDataSpecification requestedSpecification = new LiveDataSpecification(
+  private LiveDataSubscriptionResponse snapshot(final String ticker) {
+    final LiveDataSpecification requestedSpecification = new LiveDataSpecification(
         _liveDataClient.getDefaultNormalizationRuleSetId(),
         ExternalSchemes.bloombergTickerSecurityId(ticker));
     return _liveDataClient.snapshot(TEST_USER, requestedSpecification, 3000);

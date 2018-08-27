@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.security.cds;
@@ -29,104 +29,104 @@ import com.opengamma.util.money.Currency;
 
 /**
  * CDS Security object
- * 
+ *
  * @author Martin Traverse, Niels Stchedroff (Riskcare)
  */
 @BeanDefinition
 public class CDSSecurity extends FinancialSecurity {
-  
+
   /** Serialization version */
   private static final long serialVersionUID = 1L;
-  
+
   /** Security type for CDS securities */
   public static final String SECURITY_TYPE = "CDS";
-  
+
   /** Notional */
   @PropertyDefinition
   private double _notional;
-  
+
   /** CDS spread (premium rate) */
   @PropertyDefinition
   private double _spread;
-  
+
   /** Recovery rate of underlying asset */
   @PropertyDefinition
   private double _recoveryRate;
-  
+
   /** Currency of the CDS */
   @PropertyDefinition(validate = "notNull")
   private Currency _currency;
-  
+
   /** protection start date */
   @PropertyDefinition(validate = "notNull")
   private ZonedDateTime _startDate;
-  
+
   /** Maturity date */
   @PropertyDefinition(validate = "notNull")
   private ZonedDateTime _maturity;
-  
+
   /** Premium payment frequency */
   @PropertyDefinition(validate = "notNull")
   private Frequency _premiumFrequency;
-  
+
   /**
    * The day count convention. ISDA uses ACT/360.
    */
   @PropertyDefinition(validate = "notNull")
   private DayCount _dayCount;
-  
+
   /**
    * The business day convention.
    */
   @PropertyDefinition(validate = "notNull")
   private BusinessDayConvention _businessDayConvention;
-  
+
   /**
    * Stub type for the premium payments
    */
   @PropertyDefinition(validate = "notNull")
   private StubType _stubType;
-  
+
   /**
    * Number of business days for settlement
    */
   @PropertyDefinition
   private int _settlementDays;
-  
+
   /**
    * The name of the underlying issuer
    */
   @PropertyDefinition(validate = "notNull")
   private String _underlyingIssuer;
-  
+
   /**
    * The currency of the underlying issue
    */
   @PropertyDefinition(validate = "notNull")
   private Currency _underlyingCurrency;
-  
+
   /**
    * The seniority of the underlying issue
    */
   @PropertyDefinition(validate = "notNull")
   private String _underlyingSeniority;
-  
+
   /**
    * The restructuring clause
    */
   @PropertyDefinition(validate = "notNull")
   private String _restructuringClause;
-  
-  
+
+
   CDSSecurity() {
     super(SECURITY_TYPE);
   }
 
-  public CDSSecurity(double notional, double recoveryRate, double spread, Currency currency,
-      ZonedDateTime maturity, ZonedDateTime startDate, Frequency premiumFrequency,
-      DayCount dayCount, BusinessDayConvention businessDayConvention, StubType stubType, int settlementDays,
-      String underlyingIssuer, Currency underlyingCurrency, String underlyingSeniority, String restructuringClause) {
-    
+  public CDSSecurity(final double notional, final double recoveryRate, final double spread, final Currency currency,
+      final ZonedDateTime maturity, final ZonedDateTime startDate, final Frequency premiumFrequency,
+      final DayCount dayCount, final BusinessDayConvention businessDayConvention, final StubType stubType, final int settlementDays,
+      final String underlyingIssuer, final Currency underlyingCurrency, final String underlyingSeniority, final String restructuringClause) {
+
     super(SECURITY_TYPE);
     setNotional(notional);
     setRecoveryRate(recoveryRate);
@@ -146,7 +146,7 @@ public class CDSSecurity extends FinancialSecurity {
   }
 
   @Override
-  public <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitCDSSecurity(this);
   }
 

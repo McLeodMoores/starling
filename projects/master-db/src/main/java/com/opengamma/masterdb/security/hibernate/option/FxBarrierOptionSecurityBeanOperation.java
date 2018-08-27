@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.option;
@@ -23,7 +23,7 @@ import com.opengamma.util.time.Expiry;
  * FXBarrierOptionSecurityBeanOperation
  */
 public final class FxBarrierOptionSecurityBeanOperation extends AbstractSecurityBeanOperation<FXBarrierOptionSecurity, FXBarrierOptionSecurityBean> {
-  
+
   /**
    * Singleton
    */
@@ -52,20 +52,20 @@ public final class FxBarrierOptionSecurityBeanOperation extends AbstractSecurity
   }
 
   @Override
-  public FXBarrierOptionSecurity createSecurity(OperationContext context, FXBarrierOptionSecurityBean bean) {
-    Currency putCurrency = currencyBeanToCurrency(bean.getPutCurrency());
-    Currency callCurrency = currencyBeanToCurrency(bean.getCallCurrency());
-    Expiry expiry = expiryBeanToExpiry(bean.getExpiry());
-    ZonedDateTime settlementDate = Converters.zonedDateTimeBeanToDateTimeWithZone(bean.getSettlementDate());
-    FXBarrierOptionSecurity sec = new FXBarrierOptionSecurity(putCurrency, 
-        callCurrency, 
-        bean.getPutAmount(), 
-        bean.getCallAmount(), 
-        expiry, 
-        settlementDate, 
-        bean.getBarrierType(), 
-        bean.getBarrierDirection(), 
-        bean.getMonitoringType(), 
+  public FXBarrierOptionSecurity createSecurity(final OperationContext context, final FXBarrierOptionSecurityBean bean) {
+    final Currency putCurrency = currencyBeanToCurrency(bean.getPutCurrency());
+    final Currency callCurrency = currencyBeanToCurrency(bean.getCallCurrency());
+    final Expiry expiry = expiryBeanToExpiry(bean.getExpiry());
+    final ZonedDateTime settlementDate = Converters.zonedDateTimeBeanToDateTimeWithZone(bean.getSettlementDate());
+    final FXBarrierOptionSecurity sec = new FXBarrierOptionSecurity(putCurrency,
+        callCurrency,
+        bean.getPutAmount(),
+        bean.getCallAmount(),
+        expiry,
+        settlementDate,
+        bean.getBarrierType(),
+        bean.getBarrierDirection(),
+        bean.getMonitoringType(),
         bean.getSamplingFrequency(),
         bean.getBarrierLevel(),
         bean.isLongShort());

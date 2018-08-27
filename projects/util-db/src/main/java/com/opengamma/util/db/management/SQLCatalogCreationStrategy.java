@@ -18,11 +18,11 @@ import com.opengamma.OpenGammaRuntimeException;
  */
 public class SQLCatalogCreationStrategy implements CatalogCreationStrategy {
 
-  private AbstractDbManagement _dbManagement;
-  private String _user;
-  private String _password;
-  private String _allCatalogsSql;
-  private String _blankCatalog;
+  private final AbstractDbManagement _dbManagement;
+  private final String _user;
+  private final String _password;
+  private final String _allCatalogsSql;
+  private final String _blankCatalog;
 
   /**
    * Creates an instance.
@@ -30,14 +30,14 @@ public class SQLCatalogCreationStrategy implements CatalogCreationStrategy {
    * @param user  the user name
    * @param password  the password
    * @param getAllCatalogsSql  the SQL to get all catalogs, not null
-   * @param blankCatalog  the catalog name to create, not null 
+   * @param blankCatalog  the catalog name to create, not null
    */
   public SQLCatalogCreationStrategy(
-      AbstractDbManagement dbManagement,
-      String user, 
-      String password,
-      String getAllCatalogsSql,
-      String blankCatalog) {
+      final AbstractDbManagement dbManagement,
+      final String user,
+      final String password,
+      final String getAllCatalogsSql,
+      final String blankCatalog) {
     _dbManagement = dbManagement;
     _user = user;
     _password = password;
@@ -47,7 +47,7 @@ public class SQLCatalogCreationStrategy implements CatalogCreationStrategy {
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean catalogExists(String catalog) {
+  public boolean catalogExists(final String catalog) {
     Connection conn = null;
     try {
       if (_user != null && !_user.equals("")) {
@@ -59,33 +59,33 @@ public class SQLCatalogCreationStrategy implements CatalogCreationStrategy {
         conn = DriverManager.getConnection(getCatalogToConnectTo());
       }
       conn.setAutoCommit(true);
-  
-      Statement statement = conn.createStatement();
-      ResultSet rs = statement.executeQuery(_allCatalogsSql);
-      
+
+      final Statement statement = conn.createStatement();
+      final ResultSet rs = statement.executeQuery(_allCatalogsSql);
+
       boolean catalogAlreadyExists = false;
       while (rs.next()) {
-        String name = rs.getString("name");
+        final String name = rs.getString("name");
         if (name.equals(catalog)) {
           catalogAlreadyExists = true;
         }
       }
-      
+
       rs.close();
       statement.close();
-      
+
       return catalogAlreadyExists;
-      
-    } catch (SQLException e) {
-      throw new OpenGammaRuntimeException("Failed to create catalog", e);     
+
+    } catch (final SQLException e) {
+      throw new OpenGammaRuntimeException("Failed to create catalog", e);
     } finally {
       if (conn != null) {
         try {
           conn.close();
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
         }
       }
-    } 
+    }
   }
 
   private String getCatalogToConnectTo() {
@@ -97,11 +97,11 @@ public class SQLCatalogCreationStrategy implements CatalogCreationStrategy {
   }
 
   @Override
-  public void create(String catalog) {
+  public void create(final String catalog) {
     if (catalogExists(catalog)) {
       return; // nothing to do
     }
-    
+
     Connection conn = null;
     try {
       if (_user != null && !_user.equals("")) {
@@ -113,19 +113,19 @@ public class SQLCatalogCreationStrategy implements CatalogCreationStrategy {
         conn = DriverManager.getConnection(getCatalogToConnectTo());
       }
       conn.setAutoCommit(true);
-  
-      String createCatalogSql = "CREATE DATABASE " + catalog;
-      Statement statement = conn.createStatement();
+
+      final String createCatalogSql = "CREATE DATABASE " + catalog;
+      final Statement statement = conn.createStatement();
       statement.executeUpdate(createCatalogSql);
       statement.close();
-  
-    } catch (SQLException e) {
-      throw new OpenGammaRuntimeException("Failed to create catalog", e);      
+
+    } catch (final SQLException e) {
+      throw new OpenGammaRuntimeException("Failed to create catalog", e);
     } finally {
       if (conn != null) {
         try {
           conn.close();
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
         }
       }
     }

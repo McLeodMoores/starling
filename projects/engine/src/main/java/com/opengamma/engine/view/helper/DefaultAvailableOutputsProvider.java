@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.view.helper;
@@ -68,7 +68,7 @@ public class DefaultAvailableOutputsProvider implements AvailableOutputsProvider
   @Override
   public AvailableOutputs getPortfolioOutputs(Portfolio portfolio, final Instant instant, final Integer maxNodes, final Integer maxPositions) {
     portfolio = preparePortfolio(portfolio, maxNodes, maxPositions);
-    final Instant compileInstant = (instant != null ? instant : Instant.now());
+    final Instant compileInstant = instant != null ? instant : Instant.now();
     final CompiledFunctionRepository functionRepository = getCompiledFunctionService().compileFunctionRepository(compileInstant);
     return new AvailablePortfolioOutputs(portfolio, functionRepository, getFunctionExclusionGroups(), getMarketDataAvailability(), getWildcardIndicator());
   }
@@ -82,7 +82,7 @@ public class DefaultAvailableOutputsProvider implements AvailableOutputsProvider
   public AvailableOutputs getPortfolioOutputs(final UniqueId portfolioId, final Instant instant, final Integer maxNodes, final Integer maxPositions) {
     Portfolio portfolio = getPortfolio(portfolioId);
     portfolio = preparePortfolio(portfolio, maxNodes, maxPositions);
-    final Instant compileInstant = (instant != null ? instant : Instant.now());
+    final Instant compileInstant = instant != null ? instant : Instant.now();
     final CompiledFunctionRepository functionRepository = getCompiledFunctionService().compileFunctionRepository(compileInstant);
     return new AvailablePortfolioOutputs(portfolio, functionRepository, getFunctionExclusionGroups(), getMarketDataAvailability(), getWildcardIndicator());
   }
@@ -150,7 +150,7 @@ public class DefaultAvailableOutputsProvider implements AvailableOutputsProvider
 
   /**
    * Fetches a portfolio by its unique identifier.
-   * 
+   *
    * @param portfolioId the unique identifier of the portfolio, not null
    * @return the portfolio, not null
    * @throws DataNotFoundException if the portfolio identifier is invalid or cannot be resolved to a portfolio
@@ -162,7 +162,7 @@ public class DefaultAvailableOutputsProvider implements AvailableOutputsProvider
 
   /**
    * Prepares the portfolio, truncating the number of sub-nodes and positions if required and resolving its securities.
-   * 
+   *
    * @param portfolio the portfolio, not null
    * @param maxNodes the maximum number of child nodes under each node, null for unlimited
    * @param maxPositions the maximum number of positions, null for unlimited
@@ -176,7 +176,7 @@ public class DefaultAvailableOutputsProvider implements AvailableOutputsProvider
     if (maxPositions != null) {
       ArgumentChecker.notNegative(maxPositions, "maxPositions");
     }
-    if ((maxNodes != null) || (maxPositions != null)) {
+    if (maxNodes != null || maxPositions != null) {
       final SimplePortfolio copy = new SimplePortfolio(portfolio.getName());
       copy.setRootNode(copyNode(portfolio.getRootNode(), maxNodes, maxPositions));
       portfolio = copy;

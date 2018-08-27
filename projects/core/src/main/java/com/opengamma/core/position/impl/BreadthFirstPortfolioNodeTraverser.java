@@ -15,7 +15,7 @@ public class BreadthFirstPortfolioNodeTraverser extends PortfolioNodeTraverser {
 
   /**
    * Creates a traverser.
-   * 
+   *
    * @param callback the callback to invoke, not null
    */
   public BreadthFirstPortfolioNodeTraverser(final PortfolioNodeTraversalCallback callback) {
@@ -26,9 +26,10 @@ public class BreadthFirstPortfolioNodeTraverser extends PortfolioNodeTraverser {
 
   /**
    * Traverse the nodes notifying using the callback.
-   * 
+   *
    * @param portfolioNode the node to start from, null does nothing
    */
+  @Override
   public void traverse(final PortfolioNode portfolioNode) {
     if (portfolioNode == null) {
       return;
@@ -38,27 +39,27 @@ public class BreadthFirstPortfolioNodeTraverser extends PortfolioNodeTraverser {
 
   /**
    * Traverse the nodes.
-   * 
+   *
    * @param portfolioNode the node to start from, not null
    * @param firstPass true if first pass
    */
-  protected void traverse(PortfolioNode portfolioNode, boolean firstPass) {
+  protected void traverse(final PortfolioNode portfolioNode, final boolean firstPass) {
     if (firstPass) {
       getCallback().preOrderOperation(portfolioNode);
-      for (Position position : portfolioNode.getPositions()) {
+      for (final Position position : portfolioNode.getPositions()) {
         getCallback().preOrderOperation(portfolioNode, position);
       }
     }
     if (!firstPass) {
-      for (PortfolioNode subNode : portfolioNode.getChildNodes()) {
+      for (final PortfolioNode subNode : portfolioNode.getChildNodes()) {
         traverse(subNode, true);
       }
-      for (PortfolioNode subNode : portfolioNode.getChildNodes()) {
+      for (final PortfolioNode subNode : portfolioNode.getChildNodes()) {
         traverse(subNode, false);
       }
     }
     if (firstPass) {
-      for (Position position : portfolioNode.getPositions()) {
+      for (final Position position : portfolioNode.getPositions()) {
         getCallback().postOrderOperation(portfolioNode, position);
       }
       getCallback().postOrderOperation(portfolioNode);

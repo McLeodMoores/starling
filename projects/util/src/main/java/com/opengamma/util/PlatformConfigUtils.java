@@ -61,36 +61,36 @@ public final class PlatformConfigUtils {
   /**
    * Sets and/or validates the system properties generally necessary for the platform to run.
    * Argument values are only used if the corresponding system properties have not been set directly.
-   * 
+   *
    * @throws OpenGammaRuntimeException  if any property is missing or invalid and cannot be set automatically
    */
   public static void configureSystemProperties() {
     if (System.getProperty(OS_TYPE_PROPERTY_NAME) == null) {
-      String os = System.getProperty("os.name").toLowerCase();
+      final String os = System.getProperty("os.name").toLowerCase();
       System.setProperty(OS_TYPE_PROPERTY_NAME, toPropertyValue(os.startsWith("win") ? OsType.WIN : OsType.POSIX));
     } else {
       validateProperty(OsType.class, OS_TYPE_PROPERTY_NAME);
     }
-    
+
     logPlatformConfiguration();
   }
 
-  private static <T extends Enum<T>> String toPropertyValue(Enum<T> enumValue) {
+  private static <T extends Enum<T>> String toPropertyValue(final Enum<T> enumValue) {
     return enumValue.name().toLowerCase();
   }
 
-  private static <T extends Enum<T>> void validateProperty(Class<T> enumType, String propertyName) {
-    String propertyValue = System.getProperty(propertyName);
+  private static <T extends Enum<T>> void validateProperty(final Class<T> enumType, final String propertyName) {
+    final String propertyValue = System.getProperty(propertyName);
     validatePropertyValue(enumType, propertyName, propertyValue);
   }
 
-  private static <T extends Enum<T>> void validatePropertyValue(Class<T> enumType, String propertyName, String propertyValue) {
+  private static <T extends Enum<T>> void validatePropertyValue(final Class<T> enumType, final String propertyName, final String propertyValue) {
     if (propertyValue == null) {
       throw new OpenGammaRuntimeException("System property '" + propertyName + "' is required, but has not been set");
     }
     try {
       Enum.valueOf(enumType, propertyValue.toUpperCase());
-    } catch (IllegalArgumentException e) {
+    } catch (final IllegalArgumentException e) {
       throw new OpenGammaRuntimeException("The value '" + propertyValue + "' is not valid for system property '" + propertyName + "'");
     }
   }
@@ -99,8 +99,8 @@ public final class PlatformConfigUtils {
     if (!LOGGER.isInfoEnabled()) {
       return;
     }
-    StringBuilder sb = new StringBuilder("\nOpenGamma platform configuration: \n");
-    for (String propertyName : System.getProperties().stringPropertyNames()) {
+    final StringBuilder sb = new StringBuilder("\nOpenGamma platform configuration: \n");
+    for (final String propertyName : System.getProperties().stringPropertyNames()) {
       if (propertyName.startsWith(PROPERTY_PREFIX)) {
         sb.append("\t").append(propertyName).append(" = ").append(System.getProperty(propertyName)).append("\n");
       }

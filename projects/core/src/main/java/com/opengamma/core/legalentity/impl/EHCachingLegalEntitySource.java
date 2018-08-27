@@ -10,10 +10,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentMap;
 
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
-
 import com.google.common.collect.MapMaker;
 import com.opengamma.core.change.ChangeManager;
 import com.opengamma.core.legalentity.LegalEntity;
@@ -27,6 +23,10 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.ehcache.EHCacheUtils;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
+
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
 
 /**
  * A cache decorating a {@code LegalEntitySource}.
@@ -111,7 +111,7 @@ public class EHCachingLegalEntitySource implements LegalEntitySource {
   }
 
   //-------------------------------------------------------------------------
-  protected LegalEntity addToFrontCache(LegalEntity legalentity, VersionCorrection versionCorrection) {
+  protected LegalEntity addToFrontCache(final LegalEntity legalentity, final VersionCorrection versionCorrection) {
     if (legalentity.getUniqueId().isLatest()) {
       return legalentity;
     }
@@ -126,7 +126,7 @@ public class EHCachingLegalEntitySource implements LegalEntitySource {
     return legalentity;
   }
 
-  protected LegalEntity addToCache(LegalEntity legalentity, VersionCorrection versionCorrection) {
+  protected LegalEntity addToCache(final LegalEntity legalentity, final VersionCorrection versionCorrection) {
     final LegalEntity front = addToFrontCache(legalentity, null);
     if (front == legalentity) {
       if (legalentity.getUniqueId().isVersioned()) {
@@ -142,7 +142,7 @@ public class EHCachingLegalEntitySource implements LegalEntitySource {
 
   //-------------------------------------------------------------------------
   @Override
-  public LegalEntity get(UniqueId uniqueId) {
+  public LegalEntity get(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     // check cache, but not if latest
     if (uniqueId.isVersioned()) {
@@ -157,12 +157,12 @@ public class EHCachingLegalEntitySource implements LegalEntitySource {
       }
     }
     // query underlying
-    LegalEntity legalEntity = getUnderlying().get(uniqueId);
+    final LegalEntity legalEntity = getUnderlying().get(uniqueId);
     return addToCache(legalEntity, null);
   }
 
   @Override
-  public LegalEntity get(ObjectId objectId, VersionCorrection versionCorrection) {
+  public LegalEntity get(final ObjectId objectId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     // latest not in cache, can cache only by uniqueId
@@ -181,25 +181,25 @@ public class EHCachingLegalEntitySource implements LegalEntitySource {
       return addToFrontCache(cached, versionCorrection);
     }
     // query underlying
-    LegalEntity legalEntity = getUnderlying().get(objectId, versionCorrection);
+    final LegalEntity legalEntity = getUnderlying().get(objectId, versionCorrection);
     return addToCache(legalEntity, versionCorrection);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public LegalEntity getSingle(ExternalId externalId) {
+  public LegalEntity getSingle(final ExternalId externalId) {
     ArgumentChecker.notNull(externalId, "externalId");
     return getSingle(externalId.toBundle(), VersionCorrection.LATEST);
   }
 
   @Override
-  public LegalEntity getSingle(ExternalIdBundle bundle) {
+  public LegalEntity getSingle(final ExternalIdBundle bundle) {
     ArgumentChecker.notNull(bundle, "bundle");
     return getSingle(bundle, VersionCorrection.LATEST);
   }
 
   @Override
-  public LegalEntity getSingle(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
+  public LegalEntity getSingle(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(bundle, "bundle");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     // latest not in cache, can cache only by uniqueId
@@ -218,50 +218,50 @@ public class EHCachingLegalEntitySource implements LegalEntitySource {
       return addToFrontCache(cached, versionCorrection);
     }
     // query underlying
-    LegalEntity legalEntity = getUnderlying().getSingle(bundle, versionCorrection);
+    final LegalEntity legalEntity = getUnderlying().getSingle(bundle, versionCorrection);
     return addToCache(legalEntity, versionCorrection);
   }
 
   //-------------------------------------------------------------------------
   @Override
   @SuppressWarnings("deprecation")
-  public Collection<LegalEntity> get(ExternalIdBundle bundle) {
+  public Collection<LegalEntity> get(final ExternalIdBundle bundle) {
     return getUnderlying().get(bundle);
   }
 
   @Override
-  public Collection<LegalEntity> get(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
+  public Collection<LegalEntity> get(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     return getUnderlying().get(bundle, versionCorrection);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public Map<UniqueId, LegalEntity> get(Collection<UniqueId> uniqueIds) {
-    Map<UniqueId, LegalEntity> map = getUnderlying().get(uniqueIds);
-    for (Entry<UniqueId, LegalEntity> entry : map.entrySet()) {
+  public Map<UniqueId, LegalEntity> get(final Collection<UniqueId> uniqueIds) {
+    final Map<UniqueId, LegalEntity> map = getUnderlying().get(uniqueIds);
+    for (final Entry<UniqueId, LegalEntity> entry : map.entrySet()) {
       entry.setValue(addToCache(entry.getValue(), null));
     }
     return map;
   }
 
   @Override
-  public Map<ObjectId, LegalEntity> get(Collection<ObjectId> objectIds, VersionCorrection versionCorrection) {
-    Map<ObjectId, LegalEntity> map = getUnderlying().get(objectIds, versionCorrection);
-    for (Entry<ObjectId, LegalEntity> entry : map.entrySet()) {
+  public Map<ObjectId, LegalEntity> get(final Collection<ObjectId> objectIds, final VersionCorrection versionCorrection) {
+    final Map<ObjectId, LegalEntity> map = getUnderlying().get(objectIds, versionCorrection);
+    for (final Entry<ObjectId, LegalEntity> entry : map.entrySet()) {
       entry.setValue(addToCache(entry.getValue(), versionCorrection));
     }
     return map;
   }
 
   @Override
-  public Map<ExternalIdBundle, Collection<LegalEntity>> getAll(Collection<ExternalIdBundle> bundles, VersionCorrection versionCorrection) {
+  public Map<ExternalIdBundle, Collection<LegalEntity>> getAll(final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
     return getUnderlying().getAll(bundles, versionCorrection);
   }
 
   @Override
-  public Map<ExternalIdBundle, LegalEntity> getSingle(Collection<ExternalIdBundle> bundles, VersionCorrection versionCorrection) {
-    Map<ExternalIdBundle, LegalEntity> map = getUnderlying().getSingle(bundles, versionCorrection);
-    for (Entry<ExternalIdBundle, LegalEntity> entry : map.entrySet()) {
+  public Map<ExternalIdBundle, LegalEntity> getSingle(final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
+    final Map<ExternalIdBundle, LegalEntity> map = getUnderlying().getSingle(bundles, versionCorrection);
+    for (final Entry<ExternalIdBundle, LegalEntity> entry : map.entrySet()) {
       entry.setValue(addToCache(entry.getValue(), versionCorrection));
     }
     return map;

@@ -27,7 +27,7 @@ public class DbHistoricalTimeSeriesMasterWorkerMetaDataTest extends AbstractDbHi
   private static final Logger LOGGER = LoggerFactory.getLogger(DbHistoricalTimeSeriesMasterWorkerMetaDataTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public DbHistoricalTimeSeriesMasterWorkerMetaDataTest(String databaseType, String databaseVersion) {
+  public DbHistoricalTimeSeriesMasterWorkerMetaDataTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion);
     LOGGER.info("running testcases for {}", databaseType);
   }
@@ -41,8 +41,8 @@ public class DbHistoricalTimeSeriesMasterWorkerMetaDataTest extends AbstractDbHi
   //-------------------------------------------------------------------------
   @Test
   public void test_metaData() {
-    HistoricalTimeSeriesInfoMetaDataRequest request = new HistoricalTimeSeriesInfoMetaDataRequest();
-    HistoricalTimeSeriesInfoMetaDataResult test = _htsMaster.metaData(request);
+    final HistoricalTimeSeriesInfoMetaDataRequest request = new HistoricalTimeSeriesInfoMetaDataRequest();
+    final HistoricalTimeSeriesInfoMetaDataResult test = _htsMaster.metaData(request);
     assertEquals(2, test.getDataFields().size());
     assertEquals("DF11", test.getDataFields().get(0));
     assertEquals("DF12", test.getDataFields().get(1));
@@ -59,10 +59,10 @@ public class DbHistoricalTimeSeriesMasterWorkerMetaDataTest extends AbstractDbHi
 
   @Test
   public void test_metaData_limited() {
-    HistoricalTimeSeriesInfoMetaDataRequest request = new HistoricalTimeSeriesInfoMetaDataRequest();
+    final HistoricalTimeSeriesInfoMetaDataRequest request = new HistoricalTimeSeriesInfoMetaDataRequest();
     request.setDataProviders(false);
     request.setObservationTimes(false);
-    HistoricalTimeSeriesInfoMetaDataResult test = _htsMaster.metaData(request);
+    final HistoricalTimeSeriesInfoMetaDataResult test = _htsMaster.metaData(request);
     assertEquals(2, test.getDataFields().size());
     assertEquals("DF11", test.getDataFields().get(0));
     assertEquals("DF12", test.getDataFields().get(1));

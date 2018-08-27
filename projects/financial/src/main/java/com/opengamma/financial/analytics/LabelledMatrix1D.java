@@ -294,7 +294,7 @@ public abstract class LabelledMatrix1D<S extends Comparable<? super S>, T> {
   public abstract LabelledMatrix1D<S, T> getMatrix(S[] keys, double[] values);
 
   private void quickSort() {
-    (new ArrayQuickSorter<S>(_keys) {
+    new ArrayQuickSorter<S>(_keys) {
 
       @Override
       protected int compare(final S first, final S second) {
@@ -308,14 +308,14 @@ public abstract class LabelledMatrix1D<S extends Comparable<? super S>, T> {
         swap(_values, first, second);
       }
 
-    }).sort();
+    }.sort();
   }
 
   protected int binarySearchWithTolerance(final S[] keys, final S key, final T tolerance) {
     int low = 0;
     int high = keys.length - 1;
     while (low <= high) {
-      final int mid = (low + high) >>> 1;
+      final int mid = low + high >>> 1;
       final S midVal = keys[mid];
       final int comparison = compare(key, midVal, tolerance);
       if (comparison == 0) {
@@ -337,14 +337,14 @@ public abstract class LabelledMatrix1D<S extends Comparable<? super S>, T> {
     int result = 1;
     result = prime * result + Arrays.hashCode(_keys);
     result = prime * result + Arrays.hashCode(_labels);
-    result = prime * result + ((_labelsTitle == null) ? 0 : _labelsTitle.hashCode());
+    result = prime * result + (_labelsTitle == null ? 0 : _labelsTitle.hashCode());
     result = prime * result + Arrays.hashCode(_values);
-    result = prime * result + ((_valuesTitle == null) ? 0 : _valuesTitle.hashCode());
+    result = prime * result + (_valuesTitle == null ? 0 : _valuesTitle.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -382,21 +382,22 @@ public abstract class LabelledMatrix1D<S extends Comparable<? super S>, T> {
   }
 
 
-  public LabelledMatrix1D<S, T> mapValues(Function3<S, Double, Object, Double> mapper) {
-    double[] values = new double[_values.length];
+  public LabelledMatrix1D<S, T> mapValues(final Function3<S, Double, Object, Double> mapper) {
+    final double[] values = new double[_values.length];
     for (int i = 0; i < _keys.length; i++) {
-      S key = _keys[i];
-      double value = _values[i];
-      Object label = _labels[i];
+      final S key = _keys[i];
+      final double value = _values[i];
+      final Object label = _labels[i];
       values[i] = mapper.execute(key, value, label);
     }
     return getMatrix(_keys, _labels, values);
   }
-  
+
+  @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
-    Object[] labels = getLabels();
-    double[] values = getValues();
+    final StringBuilder sb = new StringBuilder();
+    final Object[] labels = getLabels();
+    final double[] values = getValues();
     sb.append("LabelledMatrix1D[");
     for (int i = 0; i < labels.length; i++) {
       sb.append(labels[i]);

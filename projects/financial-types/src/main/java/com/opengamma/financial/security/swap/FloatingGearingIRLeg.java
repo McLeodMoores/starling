@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.security.swap;
@@ -28,16 +28,16 @@ import com.opengamma.id.ExternalId;
  */
 @BeanDefinition
 public class FloatingGearingIRLeg extends FloatingInterestRateLeg {
-  
+
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
-  
+
   /**
    * The gearing.
    */
   @PropertyDefinition
   private double _gearing;
-  
+
   /**
    * Creates an instance.
    */
@@ -46,7 +46,7 @@ public class FloatingGearingIRLeg extends FloatingInterestRateLeg {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param dayCount  the day count, not null
    * @param frequency  the frequency, not null
    * @param regionIdentifier  the region, not null
@@ -57,15 +57,15 @@ public class FloatingGearingIRLeg extends FloatingInterestRateLeg {
    * @param floatingRateType  the floating rate type, not null
    * @param gearing the gearing
    */
-  public FloatingGearingIRLeg(DayCount dayCount, Frequency frequency, ExternalId regionIdentifier, BusinessDayConvention businessDayConvention,
-      Notional notional, boolean eom, ExternalId floatingReferenceRateId, FloatingRateType floatingRateType, double gearing) {
+  public FloatingGearingIRLeg(final DayCount dayCount, final Frequency frequency, final ExternalId regionIdentifier, final BusinessDayConvention businessDayConvention,
+      final Notional notional, final boolean eom, final ExternalId floatingReferenceRateId, final FloatingRateType floatingRateType, final double gearing) {
     super(dayCount, frequency, regionIdentifier, businessDayConvention, notional, eom, floatingReferenceRateId, floatingRateType);
     setGearing(gearing);
   }
-  
+
   //-------------------------------------------------------------------------
   @Override
-  public <T> T accept(SwapLegVisitor<T> visitor) {
+  public <T> T accept(final SwapLegVisitor<T> visitor) {
     return visitor.visitFloatingGearingIRLeg(this);
   }
 

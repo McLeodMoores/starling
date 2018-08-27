@@ -257,13 +257,13 @@ public abstract class FuturesFunction<T> extends AbstractFunction.NonCompiledInv
   }
   /**
    * FuturesFunction acts upon ComputationTargetType.TRADE, but many of the calculators used in the execute() method really operate
-   * as if they acted upon ComputationTargetType.SECUIRITY. 
+   * as if they acted upon ComputationTargetType.SECUIRITY.
    * For this reason, it is the responsibility of the Function here to scale by trade.getQuantity() if appropriate.
    * @param trade Computation Target
    * @param value Computed Result to be scaled
    * @return Scaled result
    */
-  protected T applyTradeScaling(final Trade trade, T value) {
+  protected T applyTradeScaling(final Trade trade, final T value) {
     return value;
   }
 

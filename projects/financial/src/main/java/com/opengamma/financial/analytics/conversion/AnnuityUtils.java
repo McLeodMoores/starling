@@ -55,7 +55,7 @@ import com.opengamma.util.tuple.Pairs;
  * Class containing utility methods for generating annuities from swap legs.
  */
 public class AnnuityUtils {
-  
+
   /**
    * Builds a floating annuity definition from an {@link InterestRateSwapLeg}.
    * @param conventionSource The convention source, not null
@@ -68,7 +68,7 @@ public class AnnuityUtils {
    * @param leg The interest rate swap leg, not null
    * @return A floating annuity definition. The coupons are not necessarily the same type.
    */
-  public static AnnuityDefinition<?> buildFloatingAnnuityDefinition(final ConventionSource conventionSource, final HolidaySource holidaySource, SecuritySource securitySource,
+  public static AnnuityDefinition<?> buildFloatingAnnuityDefinition(final ConventionSource conventionSource, final HolidaySource holidaySource, final SecuritySource securitySource,
       final boolean payer, final LocalDate startDate, final LocalDate endDate, final NotionalExchange notionalExchange, final InterestRateSwapLeg leg) {
     ArgumentChecker.notNull(conventionSource, "conventionSource");
     ArgumentChecker.notNull(holidaySource, "holidaySource");
@@ -116,15 +116,15 @@ public class AnnuityUtils {
     if (sec == null) {
       throw new OpenGammaRuntimeException("Failed to resolve security for " + floatLeg.getFloatingReferenceRateId().toBundle());
     }
-    
+
     if (FloatingRateType.IBOR == floatLeg.getFloatingRateType()) {
-      com.opengamma.financial.security.index.IborIndex indexSecurity = (com.opengamma.financial.security.index.IborIndex) sec;
-      IborIndexConvention indexConvention = conventionSource.getSingle(indexSecurity.getConventionId(), IborIndexConvention.class);
+      final com.opengamma.financial.security.index.IborIndex indexSecurity = (com.opengamma.financial.security.index.IborIndex) sec;
+      final IborIndexConvention indexConvention = conventionSource.getSingle(indexSecurity.getConventionId(), IborIndexConvention.class);
       index = ConverterUtils.indexIbor(indexSecurity.getName(), indexConvention, indexSecurity.getTenor());
 
     } else if (FloatingRateType.OIS == floatLeg.getFloatingRateType()) {
       final OvernightIndex indexSecurity = (OvernightIndex) sec;
-      OvernightIndexConvention indexConvention = conventionSource.getSingle(indexSecurity.getConventionId(), OvernightIndexConvention.class);
+      final OvernightIndexConvention indexConvention = conventionSource.getSingle(indexSecurity.getConventionId(), OvernightIndexConvention.class);
       index = ConverterUtils.indexON(indexSecurity.getName(), indexConvention);
     } else {
       throw new OpenGammaRuntimeException("Unsupported floating rate type " + floatLeg.getFloatingRateType());
@@ -152,22 +152,22 @@ public class AnnuityUtils {
         break;
       case SPREAD_EXCLUSIVE:
         compoundingMethod = com.opengamma.analytics.financial.instrument.annuity.CompoundingMethod.SPREAD_EXCLUSIVE;
-        break; 
+        break;
       case NONE:
         compoundingMethod = null;
         break;
       default:
         throw new OpenGammaRuntimeException("Unsupported compounding method");
     }
-    
+
     CouponStub startStub = null;
     CouponStub endStub = null;
-    StubCalculationMethod stubCalcMethod = leg.getStubCalculationMethod();
+    final StubCalculationMethod stubCalcMethod = leg.getStubCalculationMethod();
     if (stubCalcMethod != null) {
       stubCalcMethod.validate();
       final Pair<CouponStub, CouponStub> stubs = parseStubs(leg.getStubCalculationMethod(), securitySource, conventionSource);
       startStub = stubs.getFirst();
-      endStub = stubs.getSecond();                   
+      endStub = stubs.getSecond();
     }
 
     final List<Double> notionalList = leg.getNotional().getNotionals();
@@ -208,7 +208,7 @@ public class AnnuityUtils {
         initialRate(floatLeg.getCustomRates() != null ? floatLeg.getCustomRates().getInitialRate() : Double.NaN).
         build();
   }
-  
+
 
 
   /**
@@ -262,17 +262,17 @@ public class AnnuityUtils {
     } else {
       rollDateAdjuster = leg.getRollConvention().getRollDateAdjuster(0);
     }
-        
+
     CouponStub startStub = null;
     CouponStub endStub = null;
-    StubCalculationMethod stubCalcMethod = leg.getStubCalculationMethod();
+    final StubCalculationMethod stubCalcMethod = leg.getStubCalculationMethod();
     if (stubCalcMethod != null) {
       stubCalcMethod.validate();
       final Pair<CouponStub, CouponStub> stubs = parseStubs(leg.getStubCalculationMethod(), securitySource, conventionSource);
       startStub = stubs.getFirst();
-      endStub = stubs.getSecond();                   
+      endStub = stubs.getSecond();
     }
-        
+
    final List<Double> notionalList = leg.getNotional().getNotionals();
     double[] notionalSchedule;
     if (notionalList.isEmpty()) {
@@ -313,48 +313,48 @@ public class AnnuityUtils {
    * @param conventionSource The convention source to perform a lookup of conventions for backwards compatibility, not null
    * @return A pair of front and back stubs
    */
-  public static Pair<CouponStub, CouponStub> parseStubs(final StubCalculationMethod stubCalcMethod, SecuritySource securitySource, ConventionSource conventionSource) {
-    
-  //Walk the stub to determine the details; when done - build a CouponStub with those details    
+  public static Pair<CouponStub, CouponStub> parseStubs(final StubCalculationMethod stubCalcMethod, final SecuritySource securitySource, final ConventionSource conventionSource) {
+
+  //Walk the stub to determine the details; when done - build a CouponStub with those details
     CouponStub startStub = null;
     CouponStub endStub = null;
-    
+
     if (stubCalcMethod != null) {
       stubCalcMethod.validate();
-      StubType stubType = stubCalcMethod.getType();
+      final StubType stubType = stubCalcMethod.getType();
 
       // first stub
-      double firstStubRate = stubCalcMethod.hasFirstStubRate() ? stubCalcMethod.getFirstStubRate() : Double.NaN;
-      LocalDate firstStubDate = stubCalcMethod.getFirstStubEndDate();
-      
-      ExternalId firstStubStartReferenceRateId = stubCalcMethod.getFirstStubStartReferenceRateId();
+      final double firstStubRate = stubCalcMethod.hasFirstStubRate() ? stubCalcMethod.getFirstStubRate() : Double.NaN;
+      final LocalDate firstStubDate = stubCalcMethod.getFirstStubEndDate();
+
+      final ExternalId firstStubStartReferenceRateId = stubCalcMethod.getFirstStubStartReferenceRateId();
       IborIndex firstStubStartIndex = null;
       if (stubCalcMethod.hasFirstStubStartReferenceRateId()) {
         firstStubStartIndex = (IborIndex) getIborIndex(firstStubStartReferenceRateId, securitySource, conventionSource);
       }
-      ExternalId firstStubEndReferenceRateId = stubCalcMethod.getFirstStubEndReferenceRateId();
-      IborIndex firstStubEndIndex = null;      
+      final ExternalId firstStubEndReferenceRateId = stubCalcMethod.getFirstStubEndReferenceRateId();
+      IborIndex firstStubEndIndex = null;
       if (stubCalcMethod.hasFirstStubEndReferenceRateId()) {
         firstStubEndIndex = (IborIndex) getIborIndex(firstStubEndReferenceRateId, securitySource, conventionSource);
       }
 
       // last stub
-      double finalStubRate = stubCalcMethod.hasLastStubRate() ? stubCalcMethod.getLastStubRate() : Double.NaN;
-      LocalDate finalStubDate = stubCalcMethod.getLastStubEndDate();
-      
-      ExternalId lastStubStartReferenceRateId = stubCalcMethod.getLastStubStartReferenceRateId();      
+      final double finalStubRate = stubCalcMethod.hasLastStubRate() ? stubCalcMethod.getLastStubRate() : Double.NaN;
+      final LocalDate finalStubDate = stubCalcMethod.getLastStubEndDate();
+
+      final ExternalId lastStubStartReferenceRateId = stubCalcMethod.getLastStubStartReferenceRateId();
       IborIndex lastStubStartIndex = null;
       if (stubCalcMethod.hasLastStubStartReferenceRateId()) {
-        lastStubStartIndex = (IborIndex) getIborIndex(lastStubStartReferenceRateId, securitySource, conventionSource); 
+        lastStubStartIndex = (IborIndex) getIborIndex(lastStubStartReferenceRateId, securitySource, conventionSource);
       }
-            
-      ExternalId lastStubEndReferenceRateId = stubCalcMethod.getLastStubEndReferenceRateId();
+
+      final ExternalId lastStubEndReferenceRateId = stubCalcMethod.getLastStubEndReferenceRateId();
       IborIndex lastStubEndIndex = null;
       if (stubCalcMethod.hasLastStubEndReferenceRateId()) {
-        lastStubEndIndex = (IborIndex) getIborIndex(lastStubEndReferenceRateId, securitySource, conventionSource); 
+        lastStubEndIndex = (IborIndex) getIborIndex(lastStubEndReferenceRateId, securitySource, conventionSource);
       }
-       
-      //Determine the stub type and build with any subtleties encountered 
+
+      //Determine the stub type and build with any subtleties encountered
       if (StubType.BOTH == stubType) {
         if (!Double.isNaN(firstStubRate)) {
           startStub = new CouponStub(stubType, firstStubDate, stubCalcMethod.getFirstStubRate());
@@ -395,26 +395,26 @@ public class AnnuityUtils {
    }
     return Pairs.of(startStub, endStub);
   }
-  
-  private static IndexDeposit getIborIndex(ExternalId indexId, SecuritySource securitySource, ConventionSource conventionSource) {
+
+  private static IndexDeposit getIborIndex(final ExternalId indexId, final SecuritySource securitySource, final ConventionSource conventionSource) {
     // try security lookup
     final Security sec = securitySource.getSingle(indexId.toBundle());
     if (sec != null) {
       final com.opengamma.financial.security.index.IborIndex indexSecurity = (com.opengamma.financial.security.index.IborIndex) sec;
-      IborIndexConvention indexConvention = conventionSource.getSingle(indexSecurity.getConventionId(), IborIndexConvention.class);
+      final IborIndexConvention indexConvention = conventionSource.getSingle(indexSecurity.getConventionId(), IborIndexConvention.class);
       return ConverterUtils.indexIbor(indexSecurity.getName(), indexConvention, indexSecurity.getTenor());
     }
-    
+
     // Fallback to convention lookup for old behaviour
-    Convention iborLegConvention = conventionSource.getSingle(indexId);
+    final Convention iborLegConvention = conventionSource.getSingle(indexId);
     if (!(iborLegConvention instanceof VanillaIborLegConvention)) {
       throw new OpenGammaRuntimeException("Could not resolve an index convention for rate reference id: " + indexId.getValue());
     }
-    Convention iborConvention = conventionSource.getSingle(((VanillaIborLegConvention) iborLegConvention).getIborIndexConvention());
+    final Convention iborConvention = conventionSource.getSingle(((VanillaIborLegConvention) iborLegConvention).getIborIndexConvention());
     if (iborConvention == null) {
       throw new OpenGammaRuntimeException("Convention not found for " + ((VanillaIborLegConvention) iborLegConvention).getIborIndexConvention());
     }
-    IborIndexConvention iborIndexConvention = (IborIndexConvention) iborConvention;
+    final IborIndexConvention iborIndexConvention = (IborIndexConvention) iborConvention;
 
     return new IborIndex(iborIndexConvention.getCurrency(),
         ((VanillaIborLegConvention) iborLegConvention).getResetTenor().getPeriod(),
@@ -424,9 +424,9 @@ public class AnnuityUtils {
         ((IborIndexConvention) iborConvention).isIsEOM(),
         indexId.getValue());
   }
-  
 
-  
+
+
 
 
   /**

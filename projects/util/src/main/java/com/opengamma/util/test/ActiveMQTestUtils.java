@@ -33,7 +33,7 @@ public class ActiveMQTestUtils {
   //-------------------------------------------------------------------------
   /**
    * Creates an MQ connection factory for testing.
-   * 
+   *
    * @return the connection factory, not null
    */
   public static ActiveMQConnectionFactory createTestConnectionFactory() {
@@ -42,7 +42,7 @@ public class ActiveMQTestUtils {
 
   /**
    * Creates a JMS connector for testing.
-   * 
+   *
    * @return the JMS connector, not null
    */
   public static JmsConnector createTestJmsConnector() {
@@ -51,13 +51,13 @@ public class ActiveMQTestUtils {
 
   /**
    * Creates a JMS connector for testing.
-   * 
+   *
    * @param topicName  the topic name, null if no topic name required
    * @return the JMS connector, not null
    */
-  public static JmsConnector createTestJmsConnector(String topicName) {
-    ActiveMQConnectionFactory cf = createTestConnectionFactory();
-    JmsConnectorFactoryBean factory = new JmsConnectorFactoryBean();
+  public static JmsConnector createTestJmsConnector(final String topicName) {
+    final ActiveMQConnectionFactory cf = createTestConnectionFactory();
+    final JmsConnectorFactoryBean factory = new JmsConnectorFactoryBean();
     factory.setName("ActiveMQTestUtils");
     factory.setConnectionFactory(new PooledConnectionFactory(cf));
     factory.setClientBrokerUri(BROKER_URI);

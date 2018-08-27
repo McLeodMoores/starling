@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode;
@@ -18,7 +18,7 @@ public class CalculationNodeLogEventListener implements LogEventListener {
   private final ThreadLocalLogEventListener _threadLocalListener;
   private MutableExecutionLog _log;
 
-  public CalculationNodeLogEventListener(ThreadLocalLogEventListener threadLocalListener) {
+  public CalculationNodeLogEventListener(final ThreadLocalLogEventListener threadLocalListener) {
     ArgumentChecker.notNull(threadLocalListener, "threadLocalListener");
     _threadLocalListener = threadLocalListener;
   }
@@ -26,10 +26,10 @@ public class CalculationNodeLogEventListener implements LogEventListener {
   //-------------------------------------------------------------------------
   /**
    * Attaches an execution log to the calling thread's log output.
-   * 
+   *
    * @param log the execution log, not null
    */
-  public void attach(MutableExecutionLog log) {
+  public void attach(final MutableExecutionLog log) {
     ArgumentChecker.notNull(log, "log");
     if (_log != null) {
       // Clear the flag to try and recover if the "detach" never happened. Worst case is
@@ -54,7 +54,7 @@ public class CalculationNodeLogEventListener implements LogEventListener {
 
   //-------------------------------------------------------------------------
   @Override
-  public void log(LogEvent event) {
+  public void log(final LogEvent event) {
     _log.add(event);
   }
 

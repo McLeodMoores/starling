@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.config;
@@ -50,7 +50,7 @@ public final class FunctionConfigurationDefinition {
 
   /**
    * Creates an instance
-   * 
+   *
    * @param name the name of the function configuration definition, not null.
    * @param functionConfigurationDefinitions the names of linked function configuration definition documents, not null.
    * @param staticFunctions the list of static function configurations, not null.
@@ -71,7 +71,7 @@ public final class FunctionConfigurationDefinition {
 
   /**
    * Gets the name.
-   * 
+   *
    * @return the name
    */
   public String getName() {
@@ -80,7 +80,7 @@ public final class FunctionConfigurationDefinition {
 
   /**
    * Gets the functionConfigurationDefinitions.
-   * 
+   *
    * @return the functionConfigurationDefinitions
    */
   public List<String> getFunctionConfigurationDefinitions() {
@@ -89,7 +89,7 @@ public final class FunctionConfigurationDefinition {
 
   /**
    * Gets the staticFunctions.
-   * 
+   *
    * @return the staticFunctions
    */
   public List<StaticFunctionConfiguration> getStaticFunctions() {
@@ -98,7 +98,7 @@ public final class FunctionConfigurationDefinition {
 
   /**
    * Gets the parameterizedFunctions.
-   * 
+   *
    * @return the parameterizedFunctions
    */
   public List<ParameterizedFunctionConfiguration> getParameterizedFunctions() {
@@ -111,7 +111,7 @@ public final class FunctionConfigurationDefinition {
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj);
   }
 
@@ -122,7 +122,7 @@ public final class FunctionConfigurationDefinition {
 
   /**
    * Creates a FunctionConfigurationDefinition from a given FunctionConfigurationSource
-   * 
+   *
    * @param name the definition name, not-null.
    * @param configurationSource the function configuration source, not-null.
    * @return the created function configuration definition, not-null.
@@ -133,7 +133,7 @@ public final class FunctionConfigurationDefinition {
 
   /**
    * Creates a static FunctionConfigurationDefinition from a given FunctionConfigurationSource
-   * 
+   *
    * @param name the definition name, not-null.
    * @param linkedConfigs the list of linked configs, not-null.
    * @param configurationSource the function configuration source, not-null.
@@ -146,10 +146,10 @@ public final class FunctionConfigurationDefinition {
 
     final List<FunctionConfiguration> functions = configurationSource.getFunctionConfiguration(Instant.now()).getFunctions();
 
-    List<StaticFunctionConfiguration> staticFunctions = Lists.newArrayList();
-    List<ParameterizedFunctionConfiguration> parameterizedFunctions = Lists.newArrayList();
+    final List<StaticFunctionConfiguration> staticFunctions = Lists.newArrayList();
+    final List<ParameterizedFunctionConfiguration> parameterizedFunctions = Lists.newArrayList();
 
-    for (FunctionConfiguration functionConfiguration : functions) {
+    for (final FunctionConfiguration functionConfiguration : functions) {
       if (functionConfiguration instanceof ParameterizedFunctionConfiguration) {
         parameterizedFunctions.add((ParameterizedFunctionConfiguration) functionConfiguration);
       } else if (functionConfiguration instanceof StaticFunctionConfiguration) {

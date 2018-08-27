@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.smile.fitting.interpolation;
@@ -44,7 +44,7 @@ public class SmileInterpolatorSpline implements GeneralSmileInterpolator {
     _extrapolatorFailureBehaviour = EXCEPTION; // This follows pattern of OG-Financial's BlackVolatilitySurfacePropertyNamesAndValues.EXCEPTION_SPLINE_EXTRAPOLATOR_FAILURE
   }
 
-  public SmileInterpolatorSpline(final Interpolator1D interpolator, String extrapolatorFailureBehaviour) {
+  public SmileInterpolatorSpline(final Interpolator1D interpolator, final String extrapolatorFailureBehaviour) {
     ArgumentChecker.notNull(interpolator, "null interpolator");
     _interpolator = interpolator;
     _extrapolatorFailureBehaviour = extrapolatorFailureBehaviour;
@@ -125,7 +125,7 @@ public class SmileInterpolatorSpline implements GeneralSmileInterpolator {
     }
 
     // Resulting Functional Vol Surface
-    Function1D<Double, Double> volSmileFunction = new Function1D<Double, Double>() {
+    final Function1D<Double, Double> volSmileFunction = new Function1D<Double, Double>() {
       @Override
       public Double evaluate(final Double k) {
         if (k < kL) {

@@ -34,19 +34,19 @@ public final class RandomizingMarketDataSpecification implements ImmutableBean, 
 
   @PropertyDefinition(validate = "notNull")
   private final MarketDataSpecification _underlying;
-  
+
   @PropertyDefinition(validate = "notNull")
   private final Double _updateProbability;
-  
+
   @PropertyDefinition(validate = "notNull")
   private final Integer _maxPercentageChange;
-  
+
   @PropertyDefinition(validate = "notNull")
   private final Long _averageCycleInterval;
 
   /**
    * Creates an instance
-   * 
+   *
    * @param underlying Specification of the underlying source of market data
    * @param updateProbability Probability of a value updating during a cycle
    * @param maxPercentageChange The maximum percentage change of any value in a single cycle
@@ -54,26 +54,26 @@ public final class RandomizingMarketDataSpecification implements ImmutableBean, 
    * is a random value +/- 50% of this value.
    * @return the Randomizing market data specification
    */
-  public static RandomizingMarketDataSpecification of(MarketDataSpecification underlying,
-                                            double updateProbability,
-                                            int maxPercentageChange,
-                                            long averageCycleInterval) {
+  public static RandomizingMarketDataSpecification of(final MarketDataSpecification underlying,
+                                            final double updateProbability,
+                                            final int maxPercentageChange,
+                                            final long averageCycleInterval) {
     ArgumentChecker.notNull(underlying, "underlying");
     ArgumentChecker.isInRangeInclusive(0, 1, updateProbability);
     ArgumentChecker.notNegative(maxPercentageChange, "maxPercentageChange");
     ArgumentChecker.notNegativeOrZero(averageCycleInterval, "averageCycleInterval");
-    
+
     return new RandomizingMarketDataSpecification(underlying, updateProbability, maxPercentageChange, averageCycleInterval);
   }
 
   /**
    * Creates a specification with an update probability of 0.2, maximum change of 5% and average cycle interval
    * of 1000ms.
-   * 
+   *
    * @param underlying Specification of the underlying source of market data
    * @return the Randomizing market data specification
    */
-  public static RandomizingMarketDataSpecification of(MarketDataSpecification underlying) {
+  public static RandomizingMarketDataSpecification of(final MarketDataSpecification underlying) {
     return of(underlying, 0.2, 5, 1000);
   }
 

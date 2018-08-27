@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.provider.permission.impl;
@@ -32,11 +32,11 @@ public final class ProviderBasedPermissionResolver implements PrefixedPermission
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param prefix  the permission prefix, not null
    * @param provider  the underlying permission check provider, not null
    */
-  public ProviderBasedPermissionResolver(String prefix, PermissionCheckProvider provider) {
+  public ProviderBasedPermissionResolver(final String prefix, final PermissionCheckProvider provider) {
     _prefix = ArgumentChecker.notNull(prefix, "prefix");
     _provider = ArgumentChecker.notNull(provider, "provider");
   }
@@ -48,7 +48,7 @@ public final class ProviderBasedPermissionResolver implements PrefixedPermission
   }
 
   @Override
-  public Permission resolvePermission(String permissionString) {
+  public Permission resolvePermission(final String permissionString) {
     return new ProviderBasedPermission(_provider, permissionString);
   }
 

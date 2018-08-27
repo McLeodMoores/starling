@@ -21,12 +21,12 @@ import com.sun.jersey.api.client.ClientResponse.Status;
 public class DataVersionExceptionMapperTest extends AbstractExceptionMapperTestHelper {
 
   @Test(dataProvider="mediaTypes")
-  public void test_mapping(MediaType mediaType) throws Exception {
-    DataVersionException ex = new DataVersionException("Test message");
-    DataVersionExceptionMapper mapper = new DataVersionExceptionMapper();
+  public void test_mapping(final MediaType mediaType) throws Exception {
+    final DataVersionException ex = new DataVersionException("Test message");
+    final DataVersionExceptionMapper mapper = new DataVersionExceptionMapper();
     init(mapper, mediaType);
-    
-    Response test = mapper.toResponse(ex);
+
+    final Response test = mapper.toResponse(ex);
     testResult(test, Status.CONFLICT, ex);
   }
 

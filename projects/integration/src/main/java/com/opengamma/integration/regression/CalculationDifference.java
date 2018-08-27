@@ -5,7 +5,6 @@
  */
 package com.opengamma.integration.regression;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -72,16 +71,16 @@ public final class CalculationDifference implements ImmutableBean {
 
   @ImmutableConstructor
   private CalculationDifference(
-      int equalResultCount,
-      String viewDefinitionName,
-      String snapshotName,
-      Instant valuationTime,
-      String baseVersion,
-      String testVersion,
-      Map<CalculationResultKey, CalculatedValue> onlyBase,
-      Map<CalculationResultKey, CalculatedValue> onlyTest,
-      Map<CalculationResultKey, Pair<CalculatedValue, CalculatedValue>> different,
-      Map<CalculationResultKey, Pair<CalculatedValue, CalculatedValue>> differentProperties) {
+      final int equalResultCount,
+      final String viewDefinitionName,
+      final String snapshotName,
+      final Instant valuationTime,
+      final String baseVersion,
+      final String testVersion,
+      final Map<CalculationResultKey, CalculatedValue> onlyBase,
+      final Map<CalculationResultKey, CalculatedValue> onlyTest,
+      final Map<CalculationResultKey, Pair<CalculatedValue, CalculatedValue>> different,
+      final Map<CalculationResultKey, Pair<CalculatedValue, CalculatedValue>> differentProperties) {
     JodaBeanUtils.notNull(viewDefinitionName, "viewDefinitionName");
     JodaBeanUtils.notNull(snapshotName, "snapshotName");
     JodaBeanUtils.notNull(valuationTime, "valuationTime");
@@ -112,38 +111,38 @@ public final class CalculationDifference implements ImmutableBean {
     }
   }
 
-  
-  
+
+
   /**
    * Generates differences between two {@link CalculationResults} objects.
    */
   public static final class Generator {
     private final double _delta;
     private boolean _compareValueProperties = true;
-    
-    private Generator(double delta) {
+
+    private Generator(final double delta) {
       this._delta = delta;
     }
-    
+
     /**
      * Whether to consider differences between value properties.
      * @param compareValueProperties boolean
      * @return this generator
      */
-    public Generator compareValueProperties(boolean compareValueProperties) {
+    public Generator compareValueProperties(final boolean compareValueProperties) {
       this._compareValueProperties = compareValueProperties; return this;
     }
-    
-    public CalculationDifference between(CalculationResults results1, CalculationResults results2) {
-      Set<CalculationResultKey> only1Keys = Sets.difference(results1.getValues().keySet(), results2.getValues().keySet());
-      Set<CalculationResultKey> only2Keys = Sets.difference(results2.getValues().keySet(), results1.getValues().keySet());
-      Map<CalculationResultKey, Pair<CalculatedValue, CalculatedValue>> diffs = Maps.newHashMap();
-      Map<CalculationResultKey, Pair<CalculatedValue, CalculatedValue>> differentProps = Maps.newHashMap();
-      Set<CalculationResultKey> bothKeys = Sets.intersection(results1.getValues().keySet(), results2.getValues().keySet());
+
+    public CalculationDifference between(final CalculationResults results1, final CalculationResults results2) {
+      final Set<CalculationResultKey> only1Keys = Sets.difference(results1.getValues().keySet(), results2.getValues().keySet());
+      final Set<CalculationResultKey> only2Keys = Sets.difference(results2.getValues().keySet(), results1.getValues().keySet());
+      final Map<CalculationResultKey, Pair<CalculatedValue, CalculatedValue>> diffs = Maps.newHashMap();
+      final Map<CalculationResultKey, Pair<CalculatedValue, CalculatedValue>> differentProps = Maps.newHashMap();
+      final Set<CalculationResultKey> bothKeys = Sets.intersection(results1.getValues().keySet(), results2.getValues().keySet());
       int equalResultCount = 0;
-      for (CalculationResultKey key : bothKeys) {
-        CalculatedValue value1 = results1.getValues().get(key);
-        CalculatedValue value2 = results2.getValues().get(key);
+      for (final CalculationResultKey key : bothKeys) {
+        final CalculatedValue value1 = results1.getValues().get(key);
+        final CalculatedValue value2 = results2.getValues().get(key);
         if (!EqualityChecker.equals(value1.getValue(), value2.getValue(), _delta)) {
           diffs.put(key, Pairs.of(value1, value2));
         } else {
@@ -154,11 +153,11 @@ public final class CalculationDifference implements ImmutableBean {
           }
         }
       }
-      Map<CalculationResultKey, CalculatedValue> only1 = getValues(only1Keys, results1.getValues());
-      Map<CalculationResultKey, CalculatedValue> only2 = getValues(only2Keys, results2.getValues());
-      String viewDefName = results1.getViewDefinitionName();
-      String snapshotName = results1.getSnapshotName();
-      Instant valuationTime = results1.getValuationTime();
+      final Map<CalculationResultKey, CalculatedValue> only1 = getValues(only1Keys, results1.getValues());
+      final Map<CalculationResultKey, CalculatedValue> only2 = getValues(only2Keys, results2.getValues());
+      final String viewDefName = results1.getViewDefinitionName();
+      final String snapshotName = results1.getSnapshotName();
+      final Instant valuationTime = results1.getValuationTime();
       if (!valuationTime.equals(results2.getValuationTime())) {
         throw new IllegalArgumentException("The results must have the same valuation time");
       }
@@ -173,20 +172,20 @@ public final class CalculationDifference implements ImmutableBean {
                                        diffs,
                                        differentProps);
     }
-    
+
   }
-  
-  
+
+
   /**
    * Returns a generator object which can be used to generate a comparison.
    * @param delta the delta to use for comparisons
    * @return a {@link Generator} object
    */
-  public static Generator generatorWithDelta(double delta) {
+  public static Generator generatorWithDelta(final double delta) {
     return new Generator(delta);
   }
-  
-  
+
+
   /**
    * Convenience method for comparing two result sets. Simply calls through to a {@link Generator} using default settings.
    * @param results1 The first set of results
@@ -194,7 +193,7 @@ public final class CalculationDifference implements ImmutableBean {
    * @param delta the delta to use
    * @return the CalculationDifference
    */
-  public static CalculationDifference between(CalculationResults results1, CalculationResults results2, double delta) {
+  public static CalculationDifference between(final CalculationResults results1, final CalculationResults results2, final double delta) {
     return generatorWithDelta(delta).between(results1, results2);
   }
 
@@ -203,7 +202,7 @@ public final class CalculationDifference implements ImmutableBean {
    * @param key  the key
    * @return the value
    */
-  public CalculatedValue getOnlyBaseValue(CalculationResultKey key) {
+  public CalculatedValue getOnlyBaseValue(final CalculationResultKey key) {
     return _onlyBase.get(key);
   }
 
@@ -212,7 +211,7 @@ public final class CalculationDifference implements ImmutableBean {
    * @param key  the key
    * @return the value
    */
-  public CalculatedValue getOnlyTestValue(CalculationResultKey key) {
+  public CalculatedValue getOnlyTestValue(final CalculationResultKey key) {
     return _onlyTest.get(key);
   }
 
@@ -221,7 +220,7 @@ public final class CalculationDifference implements ImmutableBean {
    * @param key  the key
    * @return the value
    */
-  public Pair<CalculatedValue, CalculatedValue> getDifferentValue(CalculationResultKey key) {
+  public Pair<CalculatedValue, CalculatedValue> getDifferentValue(final CalculationResultKey key) {
     return _different.get(key);
   }
 
@@ -230,14 +229,14 @@ public final class CalculationDifference implements ImmutableBean {
    * @param key  the key
    * @return the value
    */
-  public Pair<CalculatedValue, CalculatedValue> getDifferentPropertiesValue(CalculationResultKey key) {
+  public Pair<CalculatedValue, CalculatedValue> getDifferentPropertiesValue(final CalculationResultKey key) {
     return _differentProperties.get(key);
   }
 
-  private static Map<CalculationResultKey, CalculatedValue> getValues(Set<CalculationResultKey> keys,
-                                                                      Map<CalculationResultKey, CalculatedValue> map) {
-    Map<CalculationResultKey, CalculatedValue> retMap = Maps.newTreeMap();
-    for (CalculationResultKey key : keys) {
+  private static Map<CalculationResultKey, CalculatedValue> getValues(final Set<CalculationResultKey> keys,
+                                                                      final Map<CalculationResultKey, CalculatedValue> map) {
+    final Map<CalculationResultKey, CalculatedValue> retMap = Maps.newTreeMap();
+    for (final CalculationResultKey key : keys) {
       if (map.containsKey(key)) {
         retMap.put(key, map.get(key));
       }

@@ -103,7 +103,7 @@ public final class Rate implements ImmutableBean {
      */
     DELTA {
       @Override
-      double getRate(double previous, final double step) {
+      double getRate(final double previous, final double step) {
         return previous * step;
       }
     },
@@ -114,7 +114,7 @@ public final class Rate implements ImmutableBean {
      */
     ADDITIVE {
       @Override
-      double getRate(double previous, final double step) {
+      double getRate(final double previous, final double step) {
         return previous + step;
       }
     },
@@ -124,7 +124,7 @@ public final class Rate implements ImmutableBean {
      */
     OUTRIGHT {
       @Override
-      double getRate(double previous, double thisRate) {
+      double getRate(final double previous, final double thisRate) {
         return thisRate;
       }
     };

@@ -118,7 +118,7 @@ public class HolidaySearchRequest extends AbstractSearchRequest implements Seria
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param type  the type of the holiday, not null
    */
   public HolidaySearchRequest(final HolidayType type) {
@@ -130,10 +130,10 @@ public class HolidaySearchRequest extends AbstractSearchRequest implements Seria
    * Creates an instance to search for the specified currency.
    * <p>
    * The type will be set to be CURRENCY.
-   * 
+   *
    * @param currency  the currency to search for, not null
    */
-  public HolidaySearchRequest(Currency currency) {
+  public HolidaySearchRequest(final Currency currency) {
     ArgumentChecker.notNull(currency, "currency");
     setCurrency(currency);
     setType(HolidayType.CURRENCY);
@@ -143,7 +143,7 @@ public class HolidaySearchRequest extends AbstractSearchRequest implements Seria
    * Creates an instance to search for the specified identifier.
    * <p>
    * The type will be used to determine if the identifiers are regions or exchanges.
-   * 
+   *
    * @param type  the type of the holiday, not null
    * @param exchangeOrRegionOrCustomKeys  the region, exchange or custom identifiers to search for, not null
    */
@@ -171,13 +171,13 @@ public class HolidaySearchRequest extends AbstractSearchRequest implements Seria
   //-------------------------------------------------------------------------
   /**
    * Adds a single holiday id to the set.
-   * 
+   *
    * @param holidayId  the holiday id to add, not null
    */
-  public void addHolidayObjectId(ObjectIdentifiable holidayId) {
+  public void addHolidayObjectId(final ObjectIdentifiable holidayId) {
     ArgumentChecker.notNull(holidayId, "holidayId");
     if (_holidayObjectIds == null) {
-      _holidayObjectIds = new ArrayList<ObjectId>();
+      _holidayObjectIds = new ArrayList<>();
     }
     _holidayObjectIds.add(holidayId.getObjectId());
   }
@@ -185,15 +185,15 @@ public class HolidaySearchRequest extends AbstractSearchRequest implements Seria
   /**
    * Sets the set of holiday object identifiers, null to not limit by holiday object identifiers.
    * Note that an empty set will return no holidays.
-   * 
+   *
    * @param holidayIds  the new holiday identifiers, null clears the holiday id search
    */
-  public void setHolidayObjectIds(Iterable<? extends ObjectIdentifiable> holidayIds) {
+  public void setHolidayObjectIds(final Iterable<? extends ObjectIdentifiable> holidayIds) {
     if (holidayIds == null) {
       _holidayObjectIds = null;
     } else {
-      _holidayObjectIds = new ArrayList<ObjectId>();
-      for (ObjectIdentifiable holidayId : holidayIds) {
+      _holidayObjectIds = new ArrayList<>();
+      for (final ObjectIdentifiable holidayId : holidayIds) {
         _holidayObjectIds.add(holidayId.getObjectId());
       }
     }
@@ -202,24 +202,24 @@ public class HolidaySearchRequest extends AbstractSearchRequest implements Seria
   //-------------------------------------------------------------------------
   /**
    * Adds a single region external identifier to the collection to search for.
-   * Unless customized, the search will match 
+   * Unless customized, the search will match
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
+   *
    * @param regionId  the region key identifier to add, not null
    */
-  public void addRegionExternalId(ExternalId regionId) {
+  public void addRegionExternalId(final ExternalId regionId) {
     ArgumentChecker.notNull(regionId, "regionId");
     addRegionExternalIds(Arrays.asList(regionId));
   }
 
   /**
    * Adds a collection of region external identifiers to the collection to search for.
-   * Unless customized, the search will match 
+   * Unless customized, the search will match
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
+   *
    * @param regionIds  the region key identifiers to add, not null
    */
-  public void addRegionExternalIds(ExternalId... regionIds) {
+  public void addRegionExternalIds(final ExternalId... regionIds) {
     ArgumentChecker.notNull(regionIds, "regionIds");
     if (getRegionExternalIdSearch() == null) {
       setRegionExternalIdSearch(ExternalIdSearch.of(regionIds));
@@ -230,12 +230,12 @@ public class HolidaySearchRequest extends AbstractSearchRequest implements Seria
 
   /**
    * Adds a collection of region external identifiers to the collection to search for.
-   * Unless customized, the search will match 
+   * Unless customized, the search will match
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
+   *
    * @param regionIds  the region key identifiers to add, not null
    */
-  public void addRegionExternalIds(Iterable<ExternalId> regionIds) {
+  public void addRegionExternalIds(final Iterable<ExternalId> regionIds) {
     ArgumentChecker.notNull(regionIds, "regionIds");
     if (getExchangeExternalIdSearch() == null) {
       setRegionExternalIdSearch(ExternalIdSearch.of(regionIds));
@@ -246,10 +246,10 @@ public class HolidaySearchRequest extends AbstractSearchRequest implements Seria
 
   /**
    * Sets the search type to use in {@code ExternalIdSearch} for regions.
-   * 
+   *
    * @param type  the type to set, not null
    */
-  public void setRegionExternalIdSearchType(ExternalIdSearchType type) {
+  public void setRegionExternalIdSearchType(final ExternalIdSearchType type) {
     if (getRegionExternalIdSearch() == null) {
       setRegionExternalIdSearch(ExternalIdSearch.of(type));
     } else {
@@ -260,24 +260,24 @@ public class HolidaySearchRequest extends AbstractSearchRequest implements Seria
   //-------------------------------------------------------------------------
   /**
    * Adds a single exchange external identifier to the collection to search for.
-   * Unless customized, the search will match 
+   * Unless customized, the search will match
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
+   *
    * @param exchangeId  the exchange key identifier to add, not null
    */
-  public void addExchangeExternalId(ExternalId exchangeId) {
+  public void addExchangeExternalId(final ExternalId exchangeId) {
     ArgumentChecker.notNull(exchangeId, "exchangeId");
     addExchangeExternalIds(Arrays.asList(exchangeId));
   }
 
   /**
    * Adds a collection of exchange external identifiers to the collection to search for.
-   * Unless customized, the search will match 
+   * Unless customized, the search will match
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
+   *
    * @param exchangeIds  the exchange key identifiers to add, not null
    */
-  public void addExchangeExternalIds(ExternalId... exchangeIds) {
+  public void addExchangeExternalIds(final ExternalId... exchangeIds) {
     ArgumentChecker.notNull(exchangeIds, "exchangeIds");
     if (getExchangeExternalIdSearch() == null) {
       setExchangeExternalIdSearch(ExternalIdSearch.of(exchangeIds));
@@ -288,12 +288,12 @@ public class HolidaySearchRequest extends AbstractSearchRequest implements Seria
 
   /**
    * Adds a collection of exchange external identifiers to the collection to search for.
-   * Unless customized, the search will match 
+   * Unless customized, the search will match
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
+   *
    * @param exchangeIds  the exchange key identifiers to add, not null
    */
-  public void addExchangeExternalIds(Iterable<ExternalId> exchangeIds) {
+  public void addExchangeExternalIds(final Iterable<ExternalId> exchangeIds) {
     ArgumentChecker.notNull(exchangeIds, "exchangeIds");
     if (getExchangeExternalIdSearch() == null) {
       setExchangeExternalIdSearch(ExternalIdSearch.of(exchangeIds));
@@ -304,38 +304,38 @@ public class HolidaySearchRequest extends AbstractSearchRequest implements Seria
 
   /**
    * Sets the search type to use in {@code ExternalIdSearch} for exchanges.
-   * 
+   *
    * @param type  the type to set, not null
    */
-  public void setExchangeExternalIdSearchType(ExternalIdSearchType type) {
+  public void setExchangeExternalIdSearchType(final ExternalIdSearchType type) {
     if (getExchangeExternalIdSearch() == null) {
       setExchangeExternalIdSearch(ExternalIdSearch.of(type));
     } else {
       setExchangeExternalIdSearch(getExchangeExternalIdSearch().withSearchType(type));
     }
   }
-  
+
   //-------------------------------------------------------------------------
   /**
    * Adds a single custom external identifier to the collection to search for.
-   * Unless customized, the search will match 
+   * Unless customized, the search will match
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
+   *
    * @param customId  the custom key identifier to add, not null
    */
-  public void addCustomExternalId(ExternalId customId) {
+  public void addCustomExternalId(final ExternalId customId) {
     ArgumentChecker.notNull(customId, "customId");
     addCustomExternalIds(Arrays.asList(customId));
   }
 
   /**
    * Adds a collection of custom external identifiers to the collection to search for.
-   * Unless customized, the search will match 
+   * Unless customized, the search will match
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
+   *
    * @param customIds  the custom key identifiers to add, not null
    */
-  public void addCustomExternalIds(ExternalId... customIds) {
+  public void addCustomExternalIds(final ExternalId... customIds) {
     ArgumentChecker.notNull(customIds, "customIds");
     if (getCustomExternalIdSearch() == null) {
       setCustomExternalIdSearch(ExternalIdSearch.of(customIds));
@@ -346,12 +346,12 @@ public class HolidaySearchRequest extends AbstractSearchRequest implements Seria
 
   /**
    * Adds a collection of custom external identifiers to the collection to search for.
-   * Unless customized, the search will match 
+   * Unless customized, the search will match
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
+   *
    * @param customIds  the exchange key identifiers to add, not null
    */
-  public void addCustomExternalIds(Iterable<ExternalId> customIds) {
+  public void addCustomExternalIds(final Iterable<ExternalId> customIds) {
     ArgumentChecker.notNull(customIds, "customIds");
     if (getCustomExternalIdSearch() == null) {
       setCustomExternalIdSearch(ExternalIdSearch.of(customIds));
@@ -362,10 +362,10 @@ public class HolidaySearchRequest extends AbstractSearchRequest implements Seria
 
   /**
    * Sets the search type to use in {@code ExternalIdSearch} for custom ids.
-   * 
+   *
    * @param type  the type to set, not null
    */
-  public void setCustomExternalIdSearchType(ExternalIdSearchType type) {
+  public void setCustomExternalIdSearchType(final ExternalIdSearchType type) {
     if (getCustomExternalIdSearch() == null) {
       setCustomExternalIdSearch(ExternalIdSearch.of(type));
     } else {

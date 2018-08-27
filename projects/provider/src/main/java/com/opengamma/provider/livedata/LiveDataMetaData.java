@@ -63,7 +63,7 @@ public class LiveDataMetaData extends DirectBean {
   private URI _jmsBrokerUri;
   /**
    * The name of the subscription topic, null if not used.
-   * 
+   *
    * @deprecated replaced by jmsSubscriptionQueue, kept in place until clients have been migrated
    */
   @PropertyDefinition
@@ -93,12 +93,12 @@ public class LiveDataMetaData extends DirectBean {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param supportedSchemes  the supported schemes, not null
    * @param serverType  the type of the server, not null
    * @param description  the user description, not null
    */
-  public LiveDataMetaData(List<ExternalScheme> supportedSchemes, LiveDataServerType serverType, String description) {
+  public LiveDataMetaData(final List<ExternalScheme> supportedSchemes, final LiveDataServerType serverType, final String description) {
     setSupportedSchemes(supportedSchemes);
     setServerType(serverType);
     setDescription(description);

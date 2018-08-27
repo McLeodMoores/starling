@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.method;
@@ -20,7 +20,7 @@ public abstract class SuccessiveRootFinderCalibrationObjectivewithInflation exte
    * @param fxMatrix The exchange rate to convert the present values in a unique currency.
    * @param ccy The unique currency in which all present values are converted.
    */
-  public SuccessiveRootFinderCalibrationObjectivewithInflation(FXMatrix fxMatrix, Currency ccy) {
+  public SuccessiveRootFinderCalibrationObjectivewithInflation(final FXMatrix fxMatrix, final Currency ccy) {
     super(fxMatrix, ccy);
   }
 

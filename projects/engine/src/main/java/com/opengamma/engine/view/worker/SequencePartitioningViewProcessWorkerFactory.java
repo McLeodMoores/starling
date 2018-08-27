@@ -32,7 +32,7 @@ public abstract class SequencePartitioningViewProcessWorkerFactory implements Vi
   /**
    * Estimate the saturation level for the execution environment. This is the number of workers that we should run in parallel at any time. If the total number of cycles is known then we should spawn
    * this many workers, each with a fair subset of the total cycles.
-   * 
+   *
    * @param context the context as passed to {@link #createWorker}
    * @param executionOptions the options as passed to {@link #createWorker}
    * @param viewDefinition the view as passed to {@link #createWorker}
@@ -43,7 +43,7 @@ public abstract class SequencePartitioningViewProcessWorkerFactory implements Vi
   /**
    * Estimate the minimum number of cycles to execute in a worker batch. This should be the smallest number such that running two, or more, workers with subsets of the cycles will be slower overall
    * than running one with all of them.
-   * 
+   *
    * @param context the context as passed to {@link #createWorker}
    * @param executionOptions the options as passed to {@link #createWorker}
    * @param viewDefinition the view as passed to {@link #createWorker}
@@ -54,7 +54,7 @@ public abstract class SequencePartitioningViewProcessWorkerFactory implements Vi
   /**
    * Estimate the maximum number of cycles to execute in a worker batch. This should be decided based on a reasonable throughput to have each worker complete within a shortish time so that timeouts
    * may be used to detect crashed/failed remote workers.
-   * 
+   *
    * @param context the context as passed to {@link #createWorker}
    * @param executionOptions the options as passed to {@link #createWorker}
    * @param viewDefinition the view as passed to {@link #createWorker}
@@ -63,7 +63,7 @@ public abstract class SequencePartitioningViewProcessWorkerFactory implements Vi
   protected abstract int estimateMaximumCycles(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions, final ViewDefinition viewDefinition);
 
   @Override
-  public ViewProcessWorker createWorker(ViewProcessWorkerContext context, ViewExecutionOptions executionOptions, ViewDefinition viewDefinition) {
+  public ViewProcessWorker createWorker(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions, final ViewDefinition viewDefinition) {
     if (!executionOptions.getFlags().contains(ViewExecutionFlags.RUN_AS_FAST_AS_POSSIBLE)) {
       return getDelegate().createWorker(context, executionOptions, viewDefinition);
     }

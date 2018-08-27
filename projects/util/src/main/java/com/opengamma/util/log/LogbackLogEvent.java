@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.log;
@@ -8,9 +8,9 @@ package com.opengamma.util.log;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.log4j.Level;
 
-import ch.qos.logback.classic.spi.ILoggingEvent;
-
 import com.opengamma.util.ArgumentChecker;
+
+import ch.qos.logback.classic.spi.ILoggingEvent;
 
 /**
  * Implementation of {@link LogEvent} which handles logs sent through the Logback logging framework.
@@ -18,12 +18,12 @@ import com.opengamma.util.ArgumentChecker;
 public class LogbackLogEvent implements LogEvent {
 
   private final ILoggingEvent _loggingEvent;
-  
-  public LogbackLogEvent(ILoggingEvent loggingEvent) {
+
+  public LogbackLogEvent(final ILoggingEvent loggingEvent) {
     ArgumentChecker.notNull(loggingEvent, "loggingEvent");
     _loggingEvent = loggingEvent;
   }
-  
+
   //-------------------------------------------------------------------------
   @Override
   public LogLevel getLevel() {
@@ -49,7 +49,7 @@ public class LogbackLogEvent implements LogEvent {
   public String getMessage() {
     return getLoggingEvent().getFormattedMessage();
   }
-  
+
   //-------------------------------------------------------------------------
   private ILoggingEvent getLoggingEvent() {
     return _loggingEvent;
@@ -59,11 +59,11 @@ public class LogbackLogEvent implements LogEvent {
   @Override
   public int hashCode() {
     final int prime = 31;
-    return prime * ((_loggingEvent == null) ? 0 : _loggingEvent.hashCode());
+    return prime * (_loggingEvent == null ? 0 : _loggingEvent.hashCode());
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -73,10 +73,10 @@ public class LogbackLogEvent implements LogEvent {
     if (!(obj instanceof LogbackLogEvent)) {
       return false;
     }
-    LogbackLogEvent other = (LogbackLogEvent) obj;
+    final LogbackLogEvent other = (LogbackLogEvent) obj;
     return ObjectUtils.equals(_loggingEvent, other._loggingEvent);
   }
-  
-  
+
+
 
 }

@@ -1,13 +1,9 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.region.impl;
-
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +14,10 @@ import com.opengamma.core.region.RegionSource;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.ehcache.EHCacheUtils;
+
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
 
 /**
  * A cache decorating a {@code RegionSource}.
@@ -39,23 +39,23 @@ public class EHCachingRegionSource extends AbstractEHCachingSourceWithExternalBu
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param underlying the underlying source, not null
    * @param cacheManager the cache manager, not null
    */
-  public EHCachingRegionSource(RegionSource underlying, CacheManager cacheManager) {
+  public EHCachingRegionSource(final RegionSource underlying, final CacheManager cacheManager) {
     super(underlying, cacheManager);
     EHCacheUtils.addCache(cacheManager, CACHE_NAME);
     _cache = EHCacheUtils.getCacheFromManager(cacheManager, CACHE_NAME);
   }
 
   @Override
-  public Region getHighestLevelRegion(ExternalId externalId) {
+  public Region getHighestLevelRegion(final ExternalId externalId) {
     return getHighestLevelRegion(ExternalIdBundle.of(externalId));
   }
 
   @Override
-  public Region getHighestLevelRegion(ExternalIdBundle bundle) {
+  public Region getHighestLevelRegion(final ExternalIdBundle bundle) {
     Region result = null;
     Element element = _cache.get(bundle);
     if (element != null) {

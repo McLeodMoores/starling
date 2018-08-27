@@ -26,25 +26,25 @@ public class NextQuarterAdjuster implements TemporalAdjuster {
   public NextQuarterAdjuster() {
     _futureQuarters = EnumSet.of(Month.MARCH, Month.JUNE, Month.SEPTEMBER, Month.DECEMBER);
   }
-  
+
   /** @param futureQuarters a set of {@link Month}'s, eg EnumSet.of(Month.FEBRUARY, Month.MAY, Month.AUGUST, Month.NOVEMBER) */
   public NextQuarterAdjuster(final Set<Month> futureQuarters) {
     ArgumentChecker.notNull(futureQuarters, "futureQuarters");
     _futureQuarters = futureQuarters;
   }
-  
+
   /** @param month a Month from which a set of 4 will be created, each 3 months apart */
   public NextQuarterAdjuster(final Month month) {
     ArgumentChecker.notNull(month, "month");
     _futureQuarters = EnumSet.of(month, month.plus(3), month.plus(6), month.plus(9));
   }
-  
-  
+
+
   /** The expiry months */
   private final Set<Month> _futureQuarters;
 
   @Override
-  public Temporal adjustInto(Temporal temporal) {
+  public Temporal adjustInto(final Temporal temporal) {
     Temporal result = temporal;
     do {
       result = result.plus(1, MONTHS);
@@ -56,7 +56,7 @@ public class NextQuarterAdjuster implements TemporalAdjuster {
   public Set<Month> getFutureQuarters() {
     return _futureQuarters;
   }
-  
-  
+
+
 
 }

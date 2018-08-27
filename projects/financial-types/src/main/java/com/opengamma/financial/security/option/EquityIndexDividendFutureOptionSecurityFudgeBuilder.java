@@ -44,13 +44,13 @@ public class EquityIndexDividendFutureOptionSecurityFudgeBuilder extends Abstrac
   public static final String OPTION_TYPE_FIELD_NAME = "optionType";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, EquityIndexDividendFutureOptionSecurity object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final EquityIndexDividendFutureOptionSecurity object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     EquityIndexDividendFutureOptionSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
-  public static void toFudgeMsg(FudgeSerializer serializer, EquityIndexDividendFutureOptionSecurity object, final MutableFudgeMsg msg) {
+  public static void toFudgeMsg(final FudgeSerializer serializer, final EquityIndexDividendFutureOptionSecurity object, final MutableFudgeMsg msg) {
     FinancialSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     addToMessage(msg, EXCHANGE_FIELD_NAME, object.getExchange());
     addToMessage(msg, EXPIRY_FIELD_NAME, ExpiryFudgeBuilder.toFudgeMsg(serializer, object.getExpiry()));
@@ -64,13 +64,13 @@ public class EquityIndexDividendFutureOptionSecurityFudgeBuilder extends Abstrac
   }
 
   @Override
-  public EquityIndexDividendFutureOptionSecurity buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    EquityIndexDividendFutureOptionSecurity object = new EquityIndexDividendFutureOptionSecurity();
+  public EquityIndexDividendFutureOptionSecurity buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final EquityIndexDividendFutureOptionSecurity object = new EquityIndexDividendFutureOptionSecurity();
     EquityIndexDividendFutureOptionSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     return object;
   }
 
-  public static void fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg, EquityIndexDividendFutureOptionSecurity object) {
+  public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final EquityIndexDividendFutureOptionSecurity object) {
     FinancialSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     object.setExchange(msg.getString(EXCHANGE_FIELD_NAME));
     object.setExpiry(ExpiryFudgeBuilder.fromFudgeMsg(deserializer, msg.getMessage(EXPIRY_FIELD_NAME)));

@@ -24,7 +24,7 @@ public class TestResource {
   @GET
   @Produces(MediaType.TEXT_PLAIN)
   @Path("{uid}")
-  public String getMessage(@Subscribe @PathParam("uid") String uidStr) {
+  public String getMessage(@Subscribe @PathParam("uid") final String uidStr) {
     return "Hello " + uidStr;
   }
 

@@ -71,20 +71,20 @@ public class ReferenceData extends DirectBean {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param identifier  the identifier, not null
    */
-  public ReferenceData(String identifier) {
+  public ReferenceData(final String identifier) {
     setIdentifier(identifier);
   }
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param identifier  the identifier, not null
    * @param fieldValues  the field-value map, not null
    */
-  public ReferenceData(String identifier, FudgeMsg fieldValues) {
+  public ReferenceData(final String identifier, final FudgeMsg fieldValues) {
     setIdentifier(identifier);
     setFieldValues(fieldValues);
   }
@@ -92,22 +92,22 @@ public class ReferenceData extends DirectBean {
   //-------------------------------------------------------------------------
   /**
    * Adds an error to the list contained.
-   * 
+   *
    * @param error  the reference data error to add, not null
    */
-  public void addError(ReferenceDataError error) {
+  public void addError(final ReferenceDataError error) {
     ArgumentChecker.notNull(error, "error");
     getErrors().add(error);
   }
 
   /**
    * Removes all errors for the specified field.
-   * 
+   *
    * @param field  the field to remove, null means the whole-identifier errors
    */
-  public void removeErrors(String field) {
-    for (Iterator<ReferenceDataError> it = getErrors().iterator(); it.hasNext(); ) {
-      ReferenceDataError error = it.next();
+  public void removeErrors(final String field) {
+    for (final Iterator<ReferenceDataError> it = getErrors().iterator(); it.hasNext();) {
+      final ReferenceDataError error = it.next();
       if (Objects.equal(field, error.getField())) {
         it.remove();
       }
@@ -116,7 +116,7 @@ public class ReferenceData extends DirectBean {
 
   /**
    * Checks if the whole identifier was in error
-   * 
+   *
    * @return true if the whole identifier was in error
    */
   public boolean isIdentifierError() {
@@ -125,12 +125,12 @@ public class ReferenceData extends DirectBean {
 
   /**
    * Checks if a field was in error.
-   * 
+   *
    * @param field  the field to check, null for the whole identifier
    * @return true if the whole identifier was in error
    */
-  public boolean isError(String field) {
-    for (ReferenceDataError error : getErrors()) {
+  public boolean isError(final String field) {
+    for (final ReferenceDataError error : getErrors()) {
       if (Objects.equal(field, error.getField())) {
         return true;
       }

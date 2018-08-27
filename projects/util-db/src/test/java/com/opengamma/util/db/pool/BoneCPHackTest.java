@@ -19,7 +19,6 @@ import org.testng.annotations.Test;
 import com.jolbox.bonecp.BoneCP;
 import com.jolbox.bonecp.BoneCPConfig;
 import com.opengamma.util.async.BlockingOperation;
-import com.opengamma.util.db.pool.BoneCPHack;
 import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.test.Timeout;
 
@@ -43,10 +42,11 @@ public class BoneCPHackTest {
       }
 
       @Override
-      public Connection getConnection(String username, String password) throws SQLException {
+      public Connection getConnection(final String username, final String password) throws SQLException {
         return getConnection();
       }
-      
+
+      @Override
       public Logger getParentLogger() {
         return null;
       }

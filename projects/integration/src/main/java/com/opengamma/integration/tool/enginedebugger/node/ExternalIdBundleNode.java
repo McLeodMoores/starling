@@ -16,19 +16,19 @@ import com.opengamma.id.ExternalIdBundle;
  */
 public class ExternalIdBundleNode implements TreeTableNode {
   private static final String NAME = "ExternalIdBundle";
-  private ExternalIdBundle _externalIdBundle;
-  private List<ExternalId> _externalIds;
+  private final ExternalIdBundle _externalIdBundle;
+  private final List<ExternalId> _externalIds;
   @SuppressWarnings("unused")
-  private Object _parent;
+  private final Object _parent;
 
-  public ExternalIdBundleNode(Object parent, ExternalIdBundle externalIdBundle) {
+  public ExternalIdBundleNode(final Object parent, final ExternalIdBundle externalIdBundle) {
     _parent = parent;
     _externalIdBundle = externalIdBundle;
     _externalIds = new ArrayList<>(externalIdBundle.getExternalIds());
   }
 
   @Override
-  public Object getChildAt(int index) {
+  public Object getChildAt(final int index) {
     return _externalIds.get(index);
   }
 
@@ -38,12 +38,12 @@ public class ExternalIdBundleNode implements TreeTableNode {
   }
 
   @Override
-  public int getIndexOfChild(Object child) {
+  public int getIndexOfChild(final Object child) {
     return 0;
   }
 
   @Override
-  public Object getColumn(int column) {
+  public Object getColumn(final int column) {
     if (column == 0) {
       return NAME;
     }
@@ -54,12 +54,12 @@ public class ExternalIdBundleNode implements TreeTableNode {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_externalIdBundle == null) ? 0 : _externalIdBundle.hashCode());
+    result = prime * result + (_externalIdBundle == null ? 0 : _externalIdBundle.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -69,7 +69,7 @@ public class ExternalIdBundleNode implements TreeTableNode {
     if (!(obj instanceof ExternalIdBundleNode)) {
       return false;
     }
-    ExternalIdBundleNode other = (ExternalIdBundleNode) obj;
+    final ExternalIdBundleNode other = (ExternalIdBundleNode) obj;
     if (_externalIdBundle == null) {
       if (other._externalIdBundle != null) {
         return false;

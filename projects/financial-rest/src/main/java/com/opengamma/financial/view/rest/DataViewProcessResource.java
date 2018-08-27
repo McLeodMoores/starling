@@ -21,7 +21,7 @@ import com.opengamma.util.rest.AbstractDataResource;
 public class DataViewProcessResource extends AbstractDataResource {
 
   private final ViewProcess _viewProcess;
-  
+
   //CSOFF: just constants
   public static final String PATH_UNIQUE_ID = "id";
   public static final String PATH_DEFINITION_ID = "definitionId";
@@ -29,50 +29,50 @@ public class DataViewProcessResource extends AbstractDataResource {
   public static final String PATH_STATE = "state";
   public static final String PATH_LIVE_DATA_OVERRIDE_INJECTOR = "liveDataOverrideInjector";
   //CSON: just constants
-  
+
   /**
    * Creates the resource.
-   * 
+   *
    * @param viewProcess  the underlying view process
    */
-  public DataViewProcessResource(ViewProcess viewProcess) {
+  public DataViewProcessResource(final ViewProcess viewProcess) {
     ArgumentChecker.notNull(viewProcess, "viewProcess");
     _viewProcess = viewProcess;
   }
-  
+
   //-------------------------------------------------------------------------
   @GET
   @Path(PATH_UNIQUE_ID)
   public Response getUniqueId() {
     return responseOkObject(_viewProcess.getUniqueId());
   }
-  
+
   @GET
   @Path(PATH_DEFINITION_ID)
   public Response getDefinitionName() {
     return responseOk(_viewProcess.getDefinitionId());
   }
-  
+
   @GET
   @Path(PATH_DEFINITION)
   public Response getLatestViewDefinition() {
     return responseOkObject(_viewProcess.getLatestViewDefinition());
   }
-  
+
   @GET
   @Path(PATH_STATE)
   public Response getState() {
     return responseOkObject(_viewProcess.getState());
   }
-  
+
   @Path(PATH_LIVE_DATA_OVERRIDE_INJECTOR)
   public DataLiveDataInjectorResource getLiveDataOverrideInjector() {
     return new DataLiveDataInjectorResource(_viewProcess.getLiveDataOverrideInjector());
   }
-  
+
   @DELETE
   public void shutdown() {
     _viewProcess.shutdown();
   }
-  
+
 }

@@ -24,7 +24,7 @@ public final class NoOpMarketDataSelector implements MarketDataSelector {
 
   /**
    * Return the singleton instance.
-   * 
+   *
    * @return the singleton instance
    */
   public static NoOpMarketDataSelector getInstance() {
@@ -32,7 +32,7 @@ public final class NoOpMarketDataSelector implements MarketDataSelector {
   }
 
   @Override
-  public DistinctMarketDataSelector findMatchingSelector(ValueSpecification valueSpecification, String calculationConfigurationName, SelectorResolver resolver) {
+  public DistinctMarketDataSelector findMatchingSelector(final ValueSpecification valueSpecification, final String calculationConfigurationName, final SelectorResolver resolver) {
     return null;
   }
 

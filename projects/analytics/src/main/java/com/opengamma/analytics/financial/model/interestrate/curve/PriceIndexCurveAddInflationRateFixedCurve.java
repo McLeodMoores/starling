@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.interestrate.curve;
@@ -89,18 +89,18 @@ public class PriceIndexCurveAddInflationRateFixedCurve extends PriceIndexCurve {
   public int hashCode() {
     final int prime = 31;
     int result = super.hashCode();
-    result = prime * result + ((_curve == null) ? 0 : _curve.hashCode());
-    result = prime * result + ((_curveFixed == null) ? 0 : _curveFixed.hashCode());
+    result = prime * result + (_curve == null ? 0 : _curve.hashCode());
+    result = prime * result + (_curveFixed == null ? 0 : _curveFixed.hashCode());
     long temp;
     temp = Double.doubleToLongBits(_referencePriceIndex);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_sign);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -110,7 +110,7 @@ public class PriceIndexCurveAddInflationRateFixedCurve extends PriceIndexCurve {
     if (getClass() != obj.getClass()) {
       return false;
     }
-    PriceIndexCurveAddInflationRateFixedCurve other = (PriceIndexCurveAddInflationRateFixedCurve) obj;
+    final PriceIndexCurveAddInflationRateFixedCurve other = (PriceIndexCurveAddInflationRateFixedCurve) obj;
     if (_curve == null) {
       if (other._curve != null) {
         return false;

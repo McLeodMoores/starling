@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.copier.timeseries.reader;
@@ -47,17 +47,17 @@ public class SingleSheetMultiTimeSeriesReader implements TimeSeriesReader {
   // CSON
 
 
-  private SheetReader _sheet;         // The spreadsheet from which to import
+  private final SheetReader _sheet;         // The spreadsheet from which to import
 
-  private String _dataSource, _dataProvider, _dataField, _observationTime, _idScheme;
+  private final String _dataSource, _dataProvider, _dataField, _observationTime, _idScheme;
 
-  public SingleSheetMultiTimeSeriesReader(SheetReader sheet,
-                                          String dataSource,
-                                          String dataProvider,
-                                          String dataField,
-                                          String observationTime,
-                                          String idScheme,
-                                          String dateFormat) {
+  public SingleSheetMultiTimeSeriesReader(final SheetReader sheet,
+                                          final String dataSource,
+                                          final String dataProvider,
+                                          final String dataField,
+                                          final String observationTime,
+                                          final String idScheme,
+                                          final String dateFormat) {
     _sheet = sheet;
 
     _dataSource = dataSource;
@@ -66,19 +66,19 @@ public class SingleSheetMultiTimeSeriesReader implements TimeSeriesReader {
     _observationTime = observationTime;
     _idScheme = idScheme;
 
-    DateTimeFormatterBuilder builder = new DateTimeFormatterBuilder();
+    final DateTimeFormatterBuilder builder = new DateTimeFormatterBuilder();
     builder.appendPattern(dateFormat == null ? "yyyyMMdd" : dateFormat);
     CSV_DATE_FORMATTER = builder.toFormatter();
   }
 
-  public SingleSheetMultiTimeSeriesReader(SheetFormat sheetFormat,
-                                          InputStream portfolioFileStream,
-                                          String dataSource,
-                                          String dataProvider,
-                                          String dataField,
-                                          String observationTime,
-                                          String idScheme,
-                                          String dateFormat) {
+  public SingleSheetMultiTimeSeriesReader(final SheetFormat sheetFormat,
+                                          final InputStream portfolioFileStream,
+                                          final String dataSource,
+                                          final String dataProvider,
+                                          final String dataField,
+                                          final String observationTime,
+                                          final String idScheme,
+                                          final String dateFormat) {
     _sheet = SheetReader.newSheetReader(sheetFormat, portfolioFileStream);
 
     _dataSource = dataSource;
@@ -87,41 +87,41 @@ public class SingleSheetMultiTimeSeriesReader implements TimeSeriesReader {
     _observationTime = observationTime;
     _idScheme = idScheme;
 
-    DateTimeFormatterBuilder builder = new DateTimeFormatterBuilder();
+    final DateTimeFormatterBuilder builder = new DateTimeFormatterBuilder();
     builder.appendPattern(dateFormat == null ? "yyyyMMdd" : dateFormat);
-    CSV_DATE_FORMATTER = builder.toFormatter();    
+    CSV_DATE_FORMATTER = builder.toFormatter();
   }
 
   @Override
-  public void writeTo(TimeSeriesWriter timeSeriesWriter) {
+  public void writeTo(final TimeSeriesWriter timeSeriesWriter) {
 
     Map<String, String> rawRow = null;
     do {
-      Map<String, LocalDateDoubleTimeSeriesBuilder> tsData = new HashMap<String, LocalDateDoubleTimeSeriesBuilder>();
+      final Map<String, LocalDateDoubleTimeSeriesBuilder> tsData = new HashMap<>();
       int count = 0;
 
       // Get the next set of rows from the sheet up to the memory buffer limit
-      while ((count < BUFFER_SIZE) && ((rawRow = _sheet.loadNextRow()) != null)) { // CSIGNORE
+      while (count < BUFFER_SIZE && (rawRow = _sheet.loadNextRow()) != null) { // CSIGNORE
         try {
-          String ric = getWithException(rawRow, ID);
+          final String ric = getWithException(rawRow, ID);
           if (!tsData.containsKey(ric)) {
             tsData.put(ric, ImmutableLocalDateDoubleTimeSeries.builder());
           }
-          LocalDate date = getDateWithException(rawRow, DATE);
-          double value = Double.parseDouble(getWithException(rawRow, VALUE));
+          final LocalDate date = getDateWithException(rawRow, DATE);
+          final double value = Double.parseDouble(getWithException(rawRow, VALUE));
           tsData.get(ric).put(date, value);
-        } catch (Throwable e) {
+        } catch (final Throwable e) {
           LOGGER.warn("Could not parse time series row " + rawRow + "; " + e.toString());
         }
         count++;
       }
 
       // Write out the gathered time series points across all time series keys
-      for (String key : tsData.keySet()) {
+      for (final String key : tsData.keySet()) {
         if (tsData.get(key).size() > 0) {
           LOGGER.info("Writing " + tsData.get(key).size() + " data points to time series " + key);
           timeSeriesWriter.writeDataPoints(
-              ExternalId.of(ExternalScheme.of(_idScheme), key), 
+              ExternalId.of(ExternalScheme.of(_idScheme), key),
               _dataSource,
               _dataProvider,
               _dataField,
@@ -131,11 +131,11 @@ public class SingleSheetMultiTimeSeriesReader implements TimeSeriesReader {
       }
 
     } while (rawRow != null);
-    
+
   }
 
-  protected String getWithException(Map<String, String> fieldValueMap, String fieldName) {
-    String result = fieldValueMap.get(fieldName);
+  protected String getWithException(final Map<String, String> fieldValueMap, final String fieldName) {
+    final String result = fieldValueMap.get(fieldName);
     if (result == null) {
       System.err.println(fieldValueMap);
       throw new IllegalArgumentException("Could not find field '" + fieldName + "'");
@@ -143,7 +143,7 @@ public class SingleSheetMultiTimeSeriesReader implements TimeSeriesReader {
     return result;
   }
 
-  protected LocalDate getDateWithException(Map<String, String> fieldValueMap, String fieldName) {
+  protected LocalDate getDateWithException(final Map<String, String> fieldValueMap, final String fieldName) {
     return LocalDate.parse(getWithException(fieldValueMap, fieldName), CSV_DATE_FORMATTER);
   }
 

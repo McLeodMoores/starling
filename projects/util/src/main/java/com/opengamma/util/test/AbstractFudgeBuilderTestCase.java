@@ -52,7 +52,7 @@ public abstract class AbstractFudgeBuilderTestCase {
     _proxy = new BuilderTestProxyFactory().getProxy();
   }
 
-  protected void setContext(FudgeContext context) {
+  protected void setContext(final FudgeContext context) {
     _context = context;
     _serializer = new FudgeSerializer(context);
     _deserializer = new FudgeDeserializer(context);
@@ -144,16 +144,16 @@ public abstract class AbstractFudgeBuilderTestCase {
   }
 
   private FudgeMsg cycleMessageXml(final FudgeMsg message) {
-    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    OutputStreamWriter outputWriter = new OutputStreamWriter(baos, Charsets.UTF_8);
+    final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    final OutputStreamWriter outputWriter = new OutputStreamWriter(baos, Charsets.UTF_8);
     try (FudgeMsgWriter fudgeWriter = new FudgeMsgWriter(new FudgeXMLStreamWriter(getFudgeContext(), outputWriter))) {
       fudgeWriter.writeMessage(message);
       fudgeWriter.flush();
     }
-    byte[] data = baos.toByteArray();
+    final byte[] data = baos.toByteArray();
     getLogger().info("{} bytes", data.length);
-    ByteArrayInputStream bais = new ByteArrayInputStream(data);
-    InputStreamReader inputReader = new InputStreamReader(new BufferedInputStream(bais), Charsets.UTF_8);
+    final ByteArrayInputStream bais = new ByteArrayInputStream(data);
+    final InputStreamReader inputReader = new InputStreamReader(new BufferedInputStream(bais), Charsets.UTF_8);
     try (FudgeMsgReader fudgeReader = new FudgeMsgReader(new FudgeXMLStreamReader(getFudgeContext(), inputReader))) {
       return fudgeReader.nextMessage();
     }
@@ -176,11 +176,11 @@ public abstract class AbstractFudgeBuilderTestCase {
 
   @SuppressWarnings("unchecked")
   protected <T> T cycleObjectOverBytes(final T object) {
-    ByteArrayOutputStream output = new ByteArrayOutputStream();
+    final ByteArrayOutputStream output = new ByteArrayOutputStream();
     try (FudgeObjectWriter writer = getFudgeContext().createObjectWriter(output)) {
       writer.write(object);
     }
-    ByteArrayInputStream input = new ByteArrayInputStream(output.toByteArray());
+    final ByteArrayInputStream input = new ByteArrayInputStream(output.toByteArray());
     try (FudgeObjectReader reader = getFudgeContext().createObjectReader(input)) {
       return (T) reader.read();
     }

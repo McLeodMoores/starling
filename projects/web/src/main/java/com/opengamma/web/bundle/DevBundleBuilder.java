@@ -35,10 +35,10 @@ public class DevBundleBuilder {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param bundleManager  the bundle manger not null
    */
-  public DevBundleBuilder(BundleManager bundleManager) {
+  public DevBundleBuilder(final BundleManager bundleManager) {
     ArgumentChecker.notNull(bundleManager, "bundleManager");
     _bundleManager = bundleManager;
   }
@@ -46,15 +46,15 @@ public class DevBundleBuilder {
   //-------------------------------------------------------------------------
   /**
    * Decorates the original bundle manager with a version for development.
-   * 
+   *
    * @return a new bundle manager for development, not null
    */
   public BundleManager getDevBundleManager() {
-    BundleManager devBundleManager = new BundleManager();
-    Set<String> bundleNames = _bundleManager.getBundleIds();
-    for (String bundleId : bundleNames) {
-      Bundle bundle = _bundleManager.getBundle(bundleId);
-      List<Fragment> allFragments = bundle.getAllFragments();
+    final BundleManager devBundleManager = new BundleManager();
+    final Set<String> bundleNames = _bundleManager.getBundleIds();
+    for (final String bundleId : bundleNames) {
+      final Bundle bundle = _bundleManager.getBundle(bundleId);
+      final List<Fragment> allFragments = bundle.getAllFragments();
       if (allFragments.size() > LEVEL2_SIZE) {
         throw new IllegalStateException("DevBundleBuilder can only support " + LEVEL2_SIZE + " maximum fragments");
       }
@@ -63,10 +63,10 @@ public class DevBundleBuilder {
     return devBundleManager;
   }
 
-  private void buildVirtualBundles(BundleManager bundleManager, String bundleId, List<Fragment> fragments) {
-    long fragmentSize = fragments.size();
+  private void buildVirtualBundles(final BundleManager bundleManager, final String bundleId, final List<Fragment> fragments) {
+    final long fragmentSize = fragments.size();
     if (fragmentSize <= MAX_IMPORTS) {
-      Bundle rootNode = new Bundle(bundleId);
+      final Bundle rootNode = new Bundle(bundleId);
       rootNode.getChildNodes().addAll(fragments);
       bundleManager.addBundle(rootNode);
     }
@@ -78,18 +78,18 @@ public class DevBundleBuilder {
     }
   }
 
-  private void buildLevelTwoBundles(BundleManager bundleManager, String bundleId, List<Fragment> fragments) {
-    Map<Integer, List<Fragment>> parentFragmentMap = split(fragments);
-    Bundle rootNode = new Bundle(bundleId);
-    for (Entry<Integer, List<Fragment>> parentEntry : parentFragmentMap.entrySet()) {
-      String parentId = String.valueOf(parentEntry.getKey());
-      String parentName = buildBundleName(bundleId, parentId, null);
-      Bundle parentBundle = new Bundle(parentName);
-      Map<Integer, List<Fragment>> childFragmentMap = split(parentEntry.getValue());
-      for (Entry<Integer, List<Fragment>> childEntry : childFragmentMap.entrySet()) {
-        String childName = buildBundleName(bundleId, parentId, String.valueOf(childEntry.getKey()));
-        Bundle childBundle = new Bundle(childName);
-        for (Fragment fragment : childEntry.getValue()) {
+  private void buildLevelTwoBundles(final BundleManager bundleManager, final String bundleId, final List<Fragment> fragments) {
+    final Map<Integer, List<Fragment>> parentFragmentMap = split(fragments);
+    final Bundle rootNode = new Bundle(bundleId);
+    for (final Entry<Integer, List<Fragment>> parentEntry : parentFragmentMap.entrySet()) {
+      final String parentId = String.valueOf(parentEntry.getKey());
+      final String parentName = buildBundleName(bundleId, parentId, null);
+      final Bundle parentBundle = new Bundle(parentName);
+      final Map<Integer, List<Fragment>> childFragmentMap = split(parentEntry.getValue());
+      for (final Entry<Integer, List<Fragment>> childEntry : childFragmentMap.entrySet()) {
+        final String childName = buildBundleName(bundleId, parentId, String.valueOf(childEntry.getKey()));
+        final Bundle childBundle = new Bundle(childName);
+        for (final Fragment fragment : childEntry.getValue()) {
           childBundle.addChildNode(fragment);
         }
         parentBundle.addChildNode(childBundle);
@@ -99,14 +99,14 @@ public class DevBundleBuilder {
     bundleManager.addBundle(rootNode);
   }
 
-  private void buildLevelOneBundles(BundleManager bundleManager, String bundleId, List<Fragment> fragments) {
-    Map<Integer, List<Fragment>> fragmentMap = split(fragments);
-    Bundle rootNode = new Bundle(bundleId);
-    for (Entry<Integer, List<Fragment>> entry : fragmentMap.entrySet()) {
-      String bundleName = buildBundleName(bundleId, String.valueOf(entry.getKey()), null);
-      Bundle bundle = new Bundle(bundleName);
-      List<Fragment> fragmentList = entry.getValue();
-      for (Fragment fragment : fragmentList) {
+  private void buildLevelOneBundles(final BundleManager bundleManager, final String bundleId, final List<Fragment> fragments) {
+    final Map<Integer, List<Fragment>> fragmentMap = split(fragments);
+    final Bundle rootNode = new Bundle(bundleId);
+    for (final Entry<Integer, List<Fragment>> entry : fragmentMap.entrySet()) {
+      final String bundleName = buildBundleName(bundleId, String.valueOf(entry.getKey()), null);
+      final Bundle bundle = new Bundle(bundleName);
+      final List<Fragment> fragmentList = entry.getValue();
+      for (final Fragment fragment : fragmentList) {
         bundle.addChildNode(fragment);
       }
       rootNode.addChildNode(bundle);
@@ -114,9 +114,9 @@ public class DevBundleBuilder {
     bundleManager.addBundle(rootNode);
   }
 
-  private String buildBundleName(String bundleId, String parent, String  child) {
-    BundleType type = BundleType.getType(bundleId);
-    StringBuilder buf = new StringBuilder(bundleId.substring(0, (bundleId.indexOf(type.getSuffix()) - 1)));
+  private String buildBundleName(final String bundleId, final String parent, final String  child) {
+    final BundleType type = BundleType.getType(bundleId);
+    final StringBuilder buf = new StringBuilder(bundleId.substring(0, bundleId.indexOf(type.getSuffix()) - 1));
     if (parent != null) {
       buf.append("-");
       buf.append(parent);
@@ -129,19 +129,19 @@ public class DevBundleBuilder {
     return buf.toString();
   }
 
-  private Map<Integer, List<Fragment>> split(List<Fragment> fragments) {
-    Map<Integer, List<Fragment>> result = new TreeMap<Integer, List<Fragment>>();
-    int bundleSize = (fragments.size() / MAX_IMPORTS);
+  private Map<Integer, List<Fragment>> split(final List<Fragment> fragments) {
+    final Map<Integer, List<Fragment>> result = new TreeMap<>();
+    int bundleSize = fragments.size() / MAX_IMPORTS;
     if (fragments.size() % MAX_IMPORTS != 0) {
-      ++bundleSize; 
+      ++bundleSize;
     }
     int counter = 0;
-    List<Fragment> current = new ArrayList<Fragment>();
+    final List<Fragment> current = new ArrayList<>();
     int next = 1;
-    for (Fragment fragment : fragments) {
+    for (final Fragment fragment : fragments) {
       current.add(fragment);
       if (++counter % bundleSize == 0) {
-        result.put(next++, new ArrayList<Fragment>(current));
+        result.put(next++, new ArrayList<>(current));
         current.clear();
       }
     }

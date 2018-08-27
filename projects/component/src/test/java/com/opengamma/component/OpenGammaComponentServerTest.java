@@ -24,23 +24,23 @@ public class OpenGammaComponentServerTest extends AbstractFudgeBuilderTestCase {
       return new Object[][] {
         {"classpath:/toolcontext/toolcontext-dev.properties", "toolcontext-dev"},
         {"classpath:/foobar/toolcontext-dev.properties", "foobar-toolcontext-dev"},
-        
+
         {"classpath:/foobar/toolcontext-dev.properties", "foobar-toolcontext-dev"},
         {"classpath:/foobar/toolcontext.properties", "foobar-toolcontext"},
         {"classpath:/foobar/toolcontext-dev-bar-foo.properties", "foobar-toolcontext-dev-bar-foo"},
-        
+
         {"classpath:/toolcontext/toolcontext-dev.ini", "toolcontext-dev"},
         {"classpath:/foobar/toolcontext-dev.ini", "foobar-toolcontext-dev"},
-        
+
         {"classpath:/toolcontext-dev.ini", "toolcontext-dev"},
-        
+
         {"file:toolcontext-dev.ini", "toolcontext-dev"},
       };
   }
 
   @Test(dataProvider = "extractName")
-  public void test_dash_properties(String input, String expected) {
-    OpenGammaComponentServer test = new OpenGammaComponentServer();
+  public void test_dash_properties(final String input, final String expected) {
+    final OpenGammaComponentServer test = new OpenGammaComponentServer();
     assertEquals(expected, test.extractServerName(input));
   }
 

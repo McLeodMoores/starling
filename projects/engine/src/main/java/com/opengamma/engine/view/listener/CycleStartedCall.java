@@ -15,7 +15,7 @@ public class CycleStartedCall implements Function<ViewResultListener, Object> {
 
   private final ViewCycleMetadata _cycleMetadata;
 
-  public CycleStartedCall(ViewCycleMetadata cycleMetadata) {
+  public CycleStartedCall(final ViewCycleMetadata cycleMetadata) {
     _cycleMetadata = cycleMetadata;
   }
 
@@ -24,7 +24,7 @@ public class CycleStartedCall implements Function<ViewResultListener, Object> {
   }
 
   @Override
-  public Object apply(ViewResultListener listener) {
+  public Object apply(final ViewResultListener listener) {
     listener.cycleStarted(getCycleMetadata());
     return null;
   }

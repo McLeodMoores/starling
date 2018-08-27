@@ -28,12 +28,12 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * A reference data provider which uses reference data logged by {@link LoggingReferenceDataProvider}
- * as its source of data. Requests for data which is not in the log cannot be satisfied. 
+ * as its source of data. Requests for data which is not in the log cannot be satisfied.
  */
 public class LoggedReferenceDataProvider extends AbstractReferenceDataProvider {
 
   /** Logger. */
-  private static final Logger LOGGER = LoggerFactory.getLogger(LoggedReferenceDataProvider.class); 
+  private static final Logger LOGGER = LoggerFactory.getLogger(LoggedReferenceDataProvider.class);
 
   /**
    * The Fudge contxet.
@@ -46,11 +46,11 @@ public class LoggedReferenceDataProvider extends AbstractReferenceDataProvider {
 
   /**
    * Creates an instance that reads from a file.
-   * 
+   *
    * @param fudgeContext  the Fudge context, not null
    * @param inputFile  the input file, not null
    */
-  public LoggedReferenceDataProvider(FudgeContext fudgeContext, File inputFile) {
+  public LoggedReferenceDataProvider(final FudgeContext fudgeContext, final File inputFile) {
     ArgumentChecker.notNull(fudgeContext, "fudgeContext");
     ArgumentChecker.notNull(inputFile, "inputFile");
     _fudgeContext = fudgeContext;
@@ -60,22 +60,22 @@ public class LoggedReferenceDataProvider extends AbstractReferenceDataProvider {
 
   /**
    * Loads the input file.
-   * 
+   *
    * @param fudgeContext  the Fudge context, not null
    * @param inputFile  the input file, not null
    */
-  private static Map<String, ? extends FudgeMsg> loadFile(FudgeContext fudgeContext, File inputFile) {
-    Map<String, MutableFudgeMsg> dataMap = new ConcurrentHashMap<String, MutableFudgeMsg>();
+  private static Map<String, ? extends FudgeMsg> loadFile(final FudgeContext fudgeContext, final File inputFile) {
+    final Map<String, MutableFudgeMsg> dataMap = new ConcurrentHashMap<>();
     FudgeMsgReader reader = null;
     try {
-      FileInputStream fis = new FileInputStream(inputFile);
+      final FileInputStream fis = new FileInputStream(inputFile);
       reader = fudgeContext.createMessageReader(fis);
       while (reader.hasNext()) {
-        FudgeMsg msg = reader.nextMessage();
-        LoggedReferenceData loggedData = fudgeContext.fromFudgeMsg(LoggedReferenceData.class, msg);
+        final FudgeMsg msg = reader.nextMessage();
+        final LoggedReferenceData loggedData = fudgeContext.fromFudgeMsg(LoggedReferenceData.class, msg);
         addDataToMap(fudgeContext, dataMap, loggedData);
       }
-    } catch (FileNotFoundException ex) {
+    } catch (final FileNotFoundException ex) {
       throw new OpenGammaRuntimeException("Cannot open " + inputFile + " for reading");
     } finally {
       if (reader != null) {
@@ -88,12 +88,12 @@ public class LoggedReferenceDataProvider extends AbstractReferenceDataProvider {
 
   /**
    * Add extra entries for BUIDs.
-   * 
+   *
    * @param dataMap  the data map, not null
    */
   private static void reflectTickersToBUIDs(final Map<String, MutableFudgeMsg> dataMap) {
-    final Map<String, MutableFudgeMsg> extra = new HashMap<String, MutableFudgeMsg>();
-    for (Map.Entry<String, MutableFudgeMsg> entry : dataMap.entrySet()) {
+    final Map<String, MutableFudgeMsg> extra = new HashMap<>();
+    for (final Map.Entry<String, MutableFudgeMsg> entry : dataMap.entrySet()) {
       final String buid = entry.getValue().getString("ID_BB_UNIQUE");
       if (buid != null) {
         extra.put("/buid/" + buid, entry.getValue());
@@ -115,12 +115,12 @@ public class LoggedReferenceDataProvider extends AbstractReferenceDataProvider {
 
   /**
    * Add data to the map.
-   * 
+   *
    * @param fudgeContext  the Fudge context, not null
    * @param dataMap  the data map, not null
    * @param loggedData  the logged data, not null
    */
-  private static void addDataToMap(FudgeContext fudgeContext, Map<String, MutableFudgeMsg> dataMap, LoggedReferenceData loggedData) {
+  private static void addDataToMap(final FudgeContext fudgeContext, final Map<String, MutableFudgeMsg> dataMap, final LoggedReferenceData loggedData) {
     MutableFudgeMsg securityData = dataMap.get(loggedData.getSecurity());
     if (securityData == null) {
       securityData = fudgeContext.newMessage();
@@ -135,19 +135,19 @@ public class LoggedReferenceDataProvider extends AbstractReferenceDataProvider {
 
   //-------------------------------------------------------------------------
   @Override
-  protected ReferenceDataProviderGetResult doBulkGet(ReferenceDataProviderGetRequest request) {
-    ReferenceDataProviderGetResult result = new ReferenceDataProviderGetResult();
-    for (String identifier : request.getIdentifiers()) {
+  protected ReferenceDataProviderGetResult doBulkGet(final ReferenceDataProviderGetRequest request) {
+    final ReferenceDataProviderGetResult result = new ReferenceDataProviderGetResult();
+    for (final String identifier : request.getIdentifiers()) {
       // copy the requested fields across into a new message
-      MutableFudgeMsg fieldData = _fudgeContext.newMessage();
-      FudgeMsg allFieldData = _data.get(identifier);
+      final MutableFudgeMsg fieldData = _fudgeContext.newMessage();
+      final FudgeMsg allFieldData = _data.get(identifier);
       if (allFieldData != null) {
-        for (String fieldName : request.getFields()) {
-          Object fieldValue = allFieldData.getValue(fieldName);
+        for (final String fieldName : request.getFields()) {
+          final Object fieldValue = allFieldData.getValue(fieldName);
           fieldData.add(fieldName, fieldValue);
         }
       }
-      ReferenceData refData = new ReferenceData(identifier, fieldData);
+      final ReferenceData refData = new ReferenceData(identifier, fieldData);
       result.addReferenceData(refData);
     }
     return result;

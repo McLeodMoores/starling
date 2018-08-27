@@ -37,45 +37,45 @@ import com.opengamma.util.CompareUtils;
 public class RegionAggregationFunction implements AggregationFunction<String> {
   private boolean _useAttributes;
   private boolean _includeEmptyCategories;
-  
+
   private static final Logger LOGGER = LoggerFactory.getLogger(RegionAggregationFunction.class);
   private static final String NAME = "Region";
   private static final String OTHER = "Other";
   private static final String NO_REGION = "N/A";
-  
+
   private static final List<String> TOP_LEVEL_REGIONS = Arrays.asList("Africa", "Asia", "South America", "Europe");
   private static final List<String> SPECIAL_COUNTRIES_REGIONS = Arrays.asList("United States", "Canada");
   private static final List<String> REQUIRED_ENTRIES = Lists.newArrayList();
-  
+
   static {
     REQUIRED_ENTRIES.addAll(TOP_LEVEL_REGIONS);
     REQUIRED_ENTRIES.addAll(SPECIAL_COUNTRIES_REGIONS);
     REQUIRED_ENTRIES.add(OTHER);
     REQUIRED_ENTRIES.add(NO_REGION);
   }
-  
+
   private SecuritySource _secSource;
-  private RegionSource _regionSource;
-  private ExchangeSource _exchangeSource;
+  private final RegionSource _regionSource;
+  private final ExchangeSource _exchangeSource;
   private final Comparator<Position> _comparator = new SimplePositionComparator();
-  
-    
-  public RegionAggregationFunction(SecuritySource secSource, RegionSource regionSource, ExchangeSource exchangeSource) {
+
+
+  public RegionAggregationFunction(final SecuritySource secSource, final RegionSource regionSource, final ExchangeSource exchangeSource) {
     this(secSource, regionSource, exchangeSource, false);
   }
-  
-  public RegionAggregationFunction(SecuritySource secSource, RegionSource regionSource, ExchangeSource exchangeSource, boolean useAttributes) {
+
+  public RegionAggregationFunction(final SecuritySource secSource, final RegionSource regionSource, final ExchangeSource exchangeSource, final boolean useAttributes) {
     this(secSource, regionSource, exchangeSource, useAttributes, true);
   }
-  
-  public RegionAggregationFunction(SecuritySource secSource, RegionSource regionSource, ExchangeSource exchangeSource, boolean useAttributes, boolean includeEmptyCategories) {
+
+  public RegionAggregationFunction(final SecuritySource secSource, final RegionSource regionSource, final ExchangeSource exchangeSource, final boolean useAttributes, final boolean includeEmptyCategories) {
     _secSource = secSource;
     _regionSource = regionSource;
     _exchangeSource = exchangeSource;
     _useAttributes = useAttributes;
     _includeEmptyCategories = includeEmptyCategories;
   }
-  
+
   /**
    * Can use this when no RegionSource available and will get the ISO code instead of the pretty string.
    */
@@ -83,11 +83,11 @@ public class RegionAggregationFunction implements AggregationFunction<String> {
     _regionSource = null;
     _exchangeSource = null;
   }
-  
+
   @Override
-  public String classifyPosition(Position position) {
+  public String classifyPosition(final Position position) {
     if (_useAttributes) {
-      Map<String, String> attributes = position.getAttributes();
+      final Map<String, String> attributes = position.getAttributes();
       LOGGER.warn("attributes on " + position + " = " + attributes.entrySet());
       if (attributes.containsKey(getName())) {
         return attributes.get(getName());
@@ -100,19 +100,19 @@ public class RegionAggregationFunction implements AggregationFunction<String> {
         if (security == null) {
           security = position.getSecurityLink().resolve(_secSource);
         }
-        ExternalId id = FinancialSecurityUtils.getRegion(security);
+        final ExternalId id = FinancialSecurityUtils.getRegion(security);
         if (_regionSource != null) {
           if (id != null) {
-            Region highestLevelRegion = _regionSource.getHighestLevelRegion(id);
+            final Region highestLevelRegion = _regionSource.getHighestLevelRegion(id);
             if (highestLevelRegion != null) {
               return highestLevelRegion.getName();
             } else {
               return id.getValue();
             }
           } else if (_exchangeSource != null) {
-            ExternalId exchangeId = FinancialSecurityUtils.getExchange(security);
+            final ExternalId exchangeId = FinancialSecurityUtils.getExchange(security);
             if (exchangeId != null) {
-              Exchange exchange = _exchangeSource.getSingle(exchangeId);
+              final Exchange exchange = _exchangeSource.getSingle(exchangeId);
               if (exchange == null) {
                 LOGGER.info("No exchange could be found with ID {}", exchangeId);
                 return NO_REGION;
@@ -121,18 +121,18 @@ public class RegionAggregationFunction implements AggregationFunction<String> {
                 LOGGER.info("Exchange " + exchange.getName() + " region bundle was null");
                 return NO_REGION;
               }
-              Region highestLevelRegion = _regionSource.getHighestLevelRegion(exchange.getRegionIdBundle());
+              final Region highestLevelRegion = _regionSource.getHighestLevelRegion(exchange.getRegionIdBundle());
               if (SPECIAL_COUNTRIES_REGIONS.contains(highestLevelRegion.getName())) {
                 return highestLevelRegion.getName();
               } else {
-                Set<UniqueId> parentRegionIds = highestLevelRegion.getParentRegionIds();
+                final Set<UniqueId> parentRegionIds = highestLevelRegion.getParentRegionIds();
                 LOGGER.info("got " + highestLevelRegion + ", looking for parent");
-                String parent = findTopLevelRegion(parentRegionIds);
+                final String parent = findTopLevelRegion(parentRegionIds);
                 LOGGER.info("parent was " + parent);
                 return parent;
               }
             }
-          } 
+          }
           return NO_REGION;
         } else {
           if (id != null) {
@@ -140,15 +140,15 @@ public class RegionAggregationFunction implements AggregationFunction<String> {
           } else {
             return NO_REGION;
           }
-        }    
-      } catch (UnsupportedOperationException ex) {
+        }
+      } catch (final UnsupportedOperationException ex) {
         return NO_REGION;
       }
     }
   }
-  
-  private String findTopLevelRegion(Set<?> parentRegions) {
-    for (Object parentRegion : parentRegions) {
+
+  private String findTopLevelRegion(final Set<?> parentRegions) {
+    for (final Object parentRegion : parentRegions) {
       Region region;
       if (parentRegion instanceof String) {
         region = _regionSource.get(UniqueId.parse((String) parentRegion));
@@ -164,10 +164,11 @@ public class RegionAggregationFunction implements AggregationFunction<String> {
     return OTHER;
   }
 
+  @Override
   public String getName() {
     return NAME;
   }
-  
+
 
 
   @Override
@@ -180,7 +181,7 @@ public class RegionAggregationFunction implements AggregationFunction<String> {
   }
 
   @Override
-  public int compare(String o1, String o2) {
+  public int compare(final String o1, final String o2) {
     return CompareUtils.compareByList(REQUIRED_ENTRIES, o1, o2);
   }
 

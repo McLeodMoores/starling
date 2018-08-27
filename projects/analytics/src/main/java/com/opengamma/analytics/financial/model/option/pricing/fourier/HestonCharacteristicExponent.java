@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.fourier;
@@ -56,7 +56,7 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
   private final double _alphaMax;
 
   /**
-   * 
+   *
    * @param kappa mean-reverting speed
    * @param theta mean-reverting level
    * @param vol0 starting value of volatility
@@ -101,7 +101,7 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
   }
 
   @Override
-  public ComplexNumber getValue(ComplexNumber u, double t) {
+  public ComplexNumber getValue(final ComplexNumber u, final double t) {
     // that u = 0 gives zero is true for any characteristic function, that u = -i gives zero is because this is already mean corrected
     if (u.getReal() == 0.0 && (u.getImaginary() == 0.0 || u.getImaginary() == -1.0)) {
       return ZERO;
@@ -133,7 +133,7 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
   }
 
   private ComplexNumber[] forwardSweep(final ComplexNumber u, final double t) {
-    ComplexNumber[] w = new ComplexNumber[19];
+    final ComplexNumber[] w = new ComplexNumber[19];
     w[0] = new ComplexNumber(_kappa * _theta / _omega / _omega);
     w[1] = multiply(u, new ComplexNumber(0, _rho * _omega));
     w[2] = subtract(w[1], _kappa);
@@ -165,9 +165,9 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
     wBar[15] = multiply(oneOverOmega2, w[8], wBar[17]);
     wBar[14] = multiply(-2, w[0], wBar[16]);
     wBar[13] = divide(wBar[14], w[13]);
-    ComplexNumber temp1 = subtract(1.0, w[10]);
-    ComplexNumber temp2 = subtract(w[10], w[12]);
-    ComplexNumber temp3 = square(temp2);
+    final ComplexNumber temp1 = subtract(1.0, w[10]);
+    final ComplexNumber temp2 = subtract(w[10], w[12]);
+    final ComplexNumber temp3 = square(temp2);
     wBar[12] = add(multiply(wBar[15], divide(temp1, temp3)), divide(wBar[13], temp1));
     wBar[11] = multiply(w[0], wBar[16]);
     wBar[10] = add(multiply(divide(subtract(w[12], 1), temp3), wBar[15]), multiply(divide(subtract(w[12], 1), square(temp1)), wBar[13]));
@@ -187,9 +187,9 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
   }
 
   public ComplexNumber[] getCharacteristicExponentAdjointDebug(final ComplexNumber u, final double t) {
-    ComplexNumber[] res = new ComplexNumber[6];
-    ComplexNumber[] w = forwardSweep(u, t);
-    ComplexNumber[] wBar = backwardsSweep(w, t);
+    final ComplexNumber[] res = new ComplexNumber[6];
+    final ComplexNumber[] w = forwardSweep(u, t);
+    final ComplexNumber[] wBar = backwardsSweep(w, t);
 
     res[0] = w[18];
     res[1] = subtract(multiply(_theta / _omega / _omega, wBar[0]), wBar[2]);
@@ -204,7 +204,7 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
 
   @Override
   public ComplexNumber[] getCharacteristicExponentAdjoint(final ComplexNumber u, final double t) {
-    ComplexNumber[] res = new ComplexNumber[6];
+    final ComplexNumber[] res = new ComplexNumber[6];
 
     if (u.getReal() == 0.0 && (u.getImaginary() == 0.0 || u.getImaginary() == -1.0)) {
       for (int i = 0; i < 6; i++) {
@@ -363,7 +363,7 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
    * \alpha_{max} &= \frac{t + r}{\omega(\rho^* - 1)}
    * \end{align*}
    * $$
-   * 
+   *
    * @return $alpha_{max}$
    */
   @Override
@@ -453,15 +453,15 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_kappa);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_omega);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_rho);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_theta);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_vol0);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

@@ -47,7 +47,7 @@ public class BoneCPHack implements ConnectionHook {
 
   /**
    * Creates an instance decorating the underlying hook.
-   * 
+   *
    * @param underlying  the underlying hook
    */
   public BoneCPHack(final ConnectionHook underlying) {
@@ -56,7 +56,7 @@ public class BoneCPHack implements ConnectionHook {
 
   //-------------------------------------------------------------------------
   @Override
-  public void onAcquire(ConnectionHandle connection) {
+  public void onAcquire(final ConnectionHandle connection) {
     if (_underlying != null) {
       _underlying.onAcquire(connection);
     }
@@ -66,7 +66,7 @@ public class BoneCPHack implements ConnectionHook {
   }
 
   @Override
-  public void onCheckIn(ConnectionHandle connection) {
+  public void onCheckIn(final ConnectionHandle connection) {
     if (_underlying != null) {
       _underlying.onCheckIn(connection);
     }
@@ -74,7 +74,7 @@ public class BoneCPHack implements ConnectionHook {
 
   @SuppressWarnings("unchecked")
   @Override
-  public void onCheckOut(ConnectionHandle connection) {
+  public void onCheckOut(final ConnectionHandle connection) {
     if (connection.getDebugHandle() == HACK_PARTITION_FLAG) {
       try {
         final ConnectionPartition partition = connection.getOriginatingPartition();
@@ -87,11 +87,11 @@ public class BoneCPHack implements ConnectionHook {
             if (!(connections instanceof TransferQueueWithBlockingOperationHook)) {
               final Method setFreeConnections = partition.getClass().getDeclaredMethod("setFreeConnections", TransferQueue.class);
               setFreeConnections.setAccessible(true);
-              setFreeConnections.invoke(partition, new TransferQueueWithBlockingOperationHook<ConnectionHandle>(connections));
+              setFreeConnections.invoke(partition, new TransferQueueWithBlockingOperationHook<>(connections));
             }
           }
         }
-      } catch (Exception e) {
+      } catch (final Exception e) {
         LOGGER.error("Couldn't hack BlockingOperation call into BoneCP", e);
       }
       connection.setDebugHandle(null);
@@ -102,7 +102,7 @@ public class BoneCPHack implements ConnectionHook {
   }
 
   @Override
-  public void onDestroy(ConnectionHandle connection) {
+  public void onDestroy(final ConnectionHandle connection) {
     if (connection.getDebugHandle() == HACK_PARTITION_FLAG) {
       connection.setDebugHandle(null);
     }
@@ -112,7 +112,7 @@ public class BoneCPHack implements ConnectionHook {
   }
 
   @Override
-  public boolean onAcquireFail(Throwable t, AcquireFailConfig acquireConfig) {
+  public boolean onAcquireFail(final Throwable t, final AcquireFailConfig acquireConfig) {
     if (_underlying != null) {
       return _underlying.onAcquireFail(t, acquireConfig);
     } else {
@@ -121,7 +121,7 @@ public class BoneCPHack implements ConnectionHook {
   }
 
   @Override
-  public void onQueryExecuteTimeLimitExceeded(ConnectionHandle conn, Statement statement, String sql, Map<Object, Object> logParams, long timeElapsedInNs) {
+  public void onQueryExecuteTimeLimitExceeded(final ConnectionHandle conn, final Statement statement, final String sql, final Map<Object, Object> logParams, final long timeElapsedInNs) {
     if (_underlying != null) {
       _underlying.onQueryExecuteTimeLimitExceeded(conn, statement, sql, logParams, timeElapsedInNs);
     }
@@ -129,7 +129,7 @@ public class BoneCPHack implements ConnectionHook {
 
   @SuppressWarnings("deprecation")
   @Override
-  public void onQueryExecuteTimeLimitExceeded(ConnectionHandle conn, Statement statement, String sql, Map<Object, Object> logParams) {
+  public void onQueryExecuteTimeLimitExceeded(final ConnectionHandle conn, final Statement statement, final String sql, final Map<Object, Object> logParams) {
     if (_underlying != null) {
       _underlying.onQueryExecuteTimeLimitExceeded(conn, statement, sql, logParams);
     }
@@ -137,28 +137,28 @@ public class BoneCPHack implements ConnectionHook {
 
   @SuppressWarnings("deprecation")
   @Override
-  public void onQueryExecuteTimeLimitExceeded(String sql, Map<Object, Object> logParams) {
+  public void onQueryExecuteTimeLimitExceeded(final String sql, final Map<Object, Object> logParams) {
     if (_underlying != null) {
       _underlying.onQueryExecuteTimeLimitExceeded(sql, logParams);
     }
   }
 
   @Override
-  public void onBeforeStatementExecute(ConnectionHandle conn, StatementHandle statement, String sql, Map<Object, Object> params) {
+  public void onBeforeStatementExecute(final ConnectionHandle conn, final StatementHandle statement, final String sql, final Map<Object, Object> params) {
     if (_underlying != null) {
       _underlying.onBeforeStatementExecute(conn, statement, sql, params);
     }
   }
 
   @Override
-  public void onAfterStatementExecute(ConnectionHandle conn, StatementHandle statement, String sql, Map<Object, Object> params) {
+  public void onAfterStatementExecute(final ConnectionHandle conn, final StatementHandle statement, final String sql, final Map<Object, Object> params) {
     if (_underlying != null) {
       _underlying.onAfterStatementExecute(conn, statement, sql, params);
     }
   }
 
   @Override
-  public boolean onConnectionException(ConnectionHandle connection, String state, Throwable t) {
+  public boolean onConnectionException(final ConnectionHandle connection, final String state, final Throwable t) {
     if (_underlying != null) {
       return _underlying.onConnectionException(connection, state, t);
     } else {
@@ -167,7 +167,7 @@ public class BoneCPHack implements ConnectionHook {
   }
 
   @Override
-  public ConnectionState onMarkPossiblyBroken(ConnectionHandle connection, String state, SQLException e) {
+  public ConnectionState onMarkPossiblyBroken(final ConnectionHandle connection, final String state, final SQLException e) {
     if (_underlying != null) {
       return _underlying.onMarkPossiblyBroken(connection, state, e);
     } else {

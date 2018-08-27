@@ -32,9 +32,9 @@ import com.opengamma.id.ExternalId;
  * @author noah@opengamma
  */
 public abstract class BloombergTickerParserEQOption extends BloombergTickerParser {
-  
 
-  public static BloombergTickerParserEQOption getOptionParser(ExternalId optionTicker) {
+
+  public static BloombergTickerParserEQOption getOptionParser(final ExternalId optionTicker) {
     //TODO this is horrid
     if (optionTicker.getValue().endsWith("Equity")) {
       return new BloombergTickerParserEQVanillaOption(optionTicker);
@@ -44,8 +44,8 @@ public abstract class BloombergTickerParserEQOption extends BloombergTickerParse
       throw new OpenGammaRuntimeException("Unknown option type " + optionTicker);
     }
   }
-  
-  
+
+
   // ------------ FIELDS ------------
   private String _symbol;
   private String _exchangeCode;
@@ -57,25 +57,25 @@ public abstract class BloombergTickerParserEQOption extends BloombergTickerParse
   // -------- CONSTRUCTORS --------
   /**
    * Create a parser
-   * @param ticker a legal Bloomberg ticker, as string.  
+   * @param ticker a legal Bloomberg ticker, as string.
    */
-  public BloombergTickerParserEQOption(String ticker) {
+  public BloombergTickerParserEQOption(final String ticker) {
     super(ticker);
   }
-  
+
   /**
-   * Create a parser
-   * @param identifier a legal Bloomberg ticker, with {@link com.opengamma.id.ExternalScheme} 
-   * of {@link com.opengamma.core.id.ExternalSchemes#BLOOMBERG_TICKER}.  
+   * Create a parser.
+   * @param identifier a legal Bloomberg ticker, with {@link com.opengamma.id.ExternalScheme}
+   * of {@link com.opengamma.core.id.ExternalSchemes#BLOOMBERG_TICKER}.
    */
-  public BloombergTickerParserEQOption(ExternalId identifier) {
+  public BloombergTickerParserEQOption(final ExternalId identifier) {
     super(identifier);
   }
 
-  
+
   // -------- ABSTRACT IMPLEMENTATIONS --------
   /**
-   * Do not call
+   * Do not call.
    * @return regex for this implementation
    */
   @Override
@@ -84,7 +84,7 @@ public abstract class BloombergTickerParserEQOption extends BloombergTickerParse
   }
 
   /**
-   * 
+   *
    * @return The type of the underlying for these options, e.g. 'Equity' 'Index'
    */
   protected abstract String getTypeName();
@@ -94,24 +94,24 @@ public abstract class BloombergTickerParserEQOption extends BloombergTickerParse
    * @param matcher  the regex matcher, not null
    */
   @Override
-  protected void parse(Matcher matcher) {  
+  protected void parse(final Matcher matcher) {
     _symbol = matcher.group(1);
     _exchangeCode = matcher.group(2);
     _expiry = LocalDate.parse(matcher.group(3), DateTimeFormatter.ofPattern("MM/dd/yy"));
     _optionType = determineOptionType(matcher.group(4));
     _strike = Double.parseDouble(matcher.group(5));
   }
-  
-  
+
+
   // -------- PROPERTIES --------
   /**
    * Return the underlyer's symbol (e.g. {@code MSFT})
-   * @return the underlyer's symbol 
+   * @return the underlyer's symbol
    */
   public String getSymbol() {
     return _symbol;
   }
-  
+
   /**
    * Return the option's exchange code (e.g. {@code US})
    * @return the option's exchange code
@@ -144,9 +144,9 @@ public abstract class BloombergTickerParserEQOption extends BloombergTickerParse
   public double getStrike() {
     return _strike;
   }
-  
-  
-  
+
+
+
   @Override
   public String toString() {
     return "BloombergTickerParserEQOption [symbol=" + _symbol + ", exchangeCode=" + _exchangeCode + ", expiry="

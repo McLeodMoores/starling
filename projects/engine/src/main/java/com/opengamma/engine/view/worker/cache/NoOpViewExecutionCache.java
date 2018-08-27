@@ -14,12 +14,12 @@ import com.opengamma.engine.view.compilation.CompiledViewDefinitionWithGraphs;
  */
 public class NoOpViewExecutionCache implements ViewExecutionCache {
   @Override
-  public CompiledViewDefinitionWithGraphs getCompiledViewDefinitionWithGraphs(ViewExecutionCacheKey key) {
+  public CompiledViewDefinitionWithGraphs getCompiledViewDefinitionWithGraphs(final ViewExecutionCacheKey key) {
     return null;
   }
 
   @Override
-  public void setCompiledViewDefinitionWithGraphs(ViewExecutionCacheKey key, CompiledViewDefinitionWithGraphs viewDefinition) {
+  public void setCompiledViewDefinitionWithGraphs(final ViewExecutionCacheKey key, final CompiledViewDefinitionWithGraphs viewDefinition) {
     // do nothing
   }
 

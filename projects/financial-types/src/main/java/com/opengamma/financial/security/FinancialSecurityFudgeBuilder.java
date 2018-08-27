@@ -18,11 +18,11 @@ import com.opengamma.util.fudgemsg.AbstractFudgeBuilder;
  */
 public class FinancialSecurityFudgeBuilder extends AbstractFudgeBuilder {
 
-  public static void toFudgeMsg(FudgeSerializer serializer, FinancialSecurity object, final MutableFudgeMsg msg) {
+  public static void toFudgeMsg(final FudgeSerializer serializer, final FinancialSecurity object, final MutableFudgeMsg msg) {
     ManageableSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
   }
 
-  public static void fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg, FinancialSecurity object) {
+  public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final FinancialSecurity object) {
     ManageableSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
   }
 

@@ -29,7 +29,7 @@ public final class PeriodFudgeSecondaryType extends SecondaryFieldType<Period, S
   }
 
   @Override
-  public String secondaryToPrimary(Period object) {
+  public String secondaryToPrimary(final Period object) {
     return object.toString();
   }
 

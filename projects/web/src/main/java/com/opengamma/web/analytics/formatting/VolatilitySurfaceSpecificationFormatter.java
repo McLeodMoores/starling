@@ -18,7 +18,7 @@ public class VolatilitySurfaceSpecificationFormatter extends AbstractFormatter<V
   }
 
   @Override
-  public Object formatCell(VolatilitySurfaceSpecification spec, ValueSpecification valueSpec, Object inlineKey) {
+  public Object formatCell(final VolatilitySurfaceSpecification spec, final ValueSpecification valueSpec, final Object inlineKey) {
     return "Volatility Surface Spec - " + spec.getName() + "/" + spec.getSurfaceQuoteType() + "/" + spec.getQuoteUnits();
   }
 

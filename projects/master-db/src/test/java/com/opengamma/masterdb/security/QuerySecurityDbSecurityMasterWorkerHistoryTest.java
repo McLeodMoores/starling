@@ -30,7 +30,7 @@ public class QuerySecurityDbSecurityMasterWorkerHistoryTest extends AbstractDbSe
   private static final Logger LOGGER = LoggerFactory.getLogger(QuerySecurityDbSecurityMasterWorkerHistoryTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public QuerySecurityDbSecurityMasterWorkerHistoryTest(String databaseType, String databaseVersion) {
+  public QuerySecurityDbSecurityMasterWorkerHistoryTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion, true);
     LOGGER.info("running testcases for {}", databaseType);
   }
@@ -38,10 +38,10 @@ public class QuerySecurityDbSecurityMasterWorkerHistoryTest extends AbstractDbSe
   //-------------------------------------------------------------------------
   @Test
   public void test_history_documents() {
-    ObjectId oid = ObjectId.of("DbSec", "201");
-    SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
-    SecurityHistoryResult test = _secMaster.history(request);
-    
+    final ObjectId oid = ObjectId.of("DbSec", "201");
+    final SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
+    final SecurityHistoryResult test = _secMaster.history(request);
+
     assertEquals(2, test.getDocuments().size());
     assert202(test.getDocuments().get(0));
     assert201(test.getDocuments().get(1));
@@ -49,12 +49,12 @@ public class QuerySecurityDbSecurityMasterWorkerHistoryTest extends AbstractDbSe
 
   @Test
   public void test_history_documentCountWhenMultipleSecuritys() {
-    ObjectId oid = ObjectId.of("DbSec", "102");
-    SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
-    SecurityHistoryResult test = _secMaster.history(request);
-    
+    final ObjectId oid = ObjectId.of("DbSec", "102");
+    final SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
+    final SecurityHistoryResult test = _secMaster.history(request);
+
     assertEquals(1, test.getPaging().getTotalItems());
-    
+
     assertEquals(1, test.getDocuments().size());
     assert102(test.getDocuments().get(0));
   }
@@ -62,13 +62,13 @@ public class QuerySecurityDbSecurityMasterWorkerHistoryTest extends AbstractDbSe
   //-------------------------------------------------------------------------
   @Test
   public void test_history_noInstants() {
-    ObjectId oid = ObjectId.of("DbSec", "201");
-    SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
-    SecurityHistoryResult test = _secMaster.history(request);
-    
+    final ObjectId oid = ObjectId.of("DbSec", "201");
+    final SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
+    final SecurityHistoryResult test = _secMaster.history(request);
+
     assertEquals(PagingRequest.ALL, test.getPaging().getRequest());
     assertEquals(2, test.getPaging().getTotalItems());
-    
+
     assertEquals(2, test.getDocuments().size());
     assert202(test.getDocuments().get(0));
     assert201(test.getDocuments().get(1));
@@ -77,32 +77,32 @@ public class QuerySecurityDbSecurityMasterWorkerHistoryTest extends AbstractDbSe
   //-------------------------------------------------------------------------
   @Test
   public void test_history_noInstants_pageOne() {
-    ObjectId oid = ObjectId.of("DbSec", "201");
-    PagingRequest pr = PagingRequest.ofPage(1, 1);
-    SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
+    final ObjectId oid = ObjectId.of("DbSec", "201");
+    final PagingRequest pr = PagingRequest.ofPage(1, 1);
+    final SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
     request.setPagingRequest(pr);
-    SecurityHistoryResult test = _secMaster.history(request);
-    
+    final SecurityHistoryResult test = _secMaster.history(request);
+
     assertEquals(pr, test.getPaging().getRequest());
     assertEquals(2, test.getPaging().getTotalItems());
-    
+
     assertEquals(1, test.getDocuments().size());
     assert202(test.getDocuments().get(0));
   }
 
   @Test
   public void test_history_noInstants_pageTwo() {
-    ObjectId oid = ObjectId.of("DbSec", "201");
-    PagingRequest pr = PagingRequest.ofPage(2, 1);
-    SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
+    final ObjectId oid = ObjectId.of("DbSec", "201");
+    final PagingRequest pr = PagingRequest.ofPage(2, 1);
+    final SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
     request.setPagingRequest(pr);
-    SecurityHistoryResult test = _secMaster.history(request);
-    
+    final SecurityHistoryResult test = _secMaster.history(request);
+
     assertNotNull(test);
     assertNotNull(test.getPaging());
     assertEquals(pr, test.getPaging().getRequest());
     assertEquals(2, test.getPaging().getTotalItems());
-    
+
     assertNotNull(test.getDocuments());
     assertEquals(1, test.getDocuments().size());
     assert201(test.getDocuments().get(0));
@@ -111,13 +111,13 @@ public class QuerySecurityDbSecurityMasterWorkerHistoryTest extends AbstractDbSe
   //-------------------------------------------------------------------------
   @Test
   public void test_history_versionsFrom_preFirst() {
-    ObjectId oid = ObjectId.of("DbSec", "201");
-    SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
+    final ObjectId oid = ObjectId.of("DbSec", "201");
+    final SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
     request.setVersionsFromInstant(_version1Instant.minusSeconds(5));
-    SecurityHistoryResult test = _secMaster.history(request);
-    
+    final SecurityHistoryResult test = _secMaster.history(request);
+
     assertEquals(2, test.getPaging().getTotalItems());
-    
+
     assertEquals(2, test.getDocuments().size());
     assert202(test.getDocuments().get(0));
     assert201(test.getDocuments().get(1));
@@ -125,13 +125,13 @@ public class QuerySecurityDbSecurityMasterWorkerHistoryTest extends AbstractDbSe
 
   @Test
   public void test_history_versionsFrom_firstToSecond() {
-    ObjectId oid = ObjectId.of("DbSec", "201");
-    SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
+    final ObjectId oid = ObjectId.of("DbSec", "201");
+    final SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
     request.setVersionsFromInstant(_version1Instant.plusSeconds(5));
-    SecurityHistoryResult test = _secMaster.history(request);
-    
+    final SecurityHistoryResult test = _secMaster.history(request);
+
     assertEquals(2, test.getPaging().getTotalItems());
-    
+
     assertEquals(2, test.getDocuments().size());
     assert202(test.getDocuments().get(0));
     assert201(test.getDocuments().get(1));
@@ -139,13 +139,13 @@ public class QuerySecurityDbSecurityMasterWorkerHistoryTest extends AbstractDbSe
 
   @Test
   public void test_history_versionsFrom_postSecond() {
-    ObjectId oid = ObjectId.of("DbSec", "201");
-    SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
+    final ObjectId oid = ObjectId.of("DbSec", "201");
+    final SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
     request.setVersionsFromInstant(_version2Instant.plusSeconds(5));
-    SecurityHistoryResult test = _secMaster.history(request);
-    
+    final SecurityHistoryResult test = _secMaster.history(request);
+
     assertEquals(1, test.getPaging().getTotalItems());
-    
+
     assertEquals(1, test.getDocuments().size());
     assert202(test.getDocuments().get(0));
   }
@@ -153,38 +153,38 @@ public class QuerySecurityDbSecurityMasterWorkerHistoryTest extends AbstractDbSe
   //-------------------------------------------------------------------------
   @Test
   public void test_history_versionsTo_preFirst() {
-    ObjectId oid = ObjectId.of("DbSec", "201");
-    SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
+    final ObjectId oid = ObjectId.of("DbSec", "201");
+    final SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
     request.setVersionsToInstant(_version1Instant.minusSeconds(5));
-    SecurityHistoryResult test = _secMaster.history(request);
-    
+    final SecurityHistoryResult test = _secMaster.history(request);
+
     assertEquals(0, test.getPaging().getTotalItems());
-    
+
     assertEquals(0, test.getDocuments().size());
   }
 
   @Test
   public void test_history_versionsTo_firstToSecond() {
-    ObjectId oid = ObjectId.of("DbSec", "201");
-    SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
+    final ObjectId oid = ObjectId.of("DbSec", "201");
+    final SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
     request.setVersionsToInstant(_version1Instant.plusSeconds(5));
-    SecurityHistoryResult test = _secMaster.history(request);
-    
+    final SecurityHistoryResult test = _secMaster.history(request);
+
     assertEquals(1, test.getPaging().getTotalItems());
-    
+
     assertEquals(1, test.getDocuments().size());
     assert201(test.getDocuments().get(0));
   }
 
   @Test
   public void test_history_versionsTo_postSecond() {
-    ObjectId oid = ObjectId.of("DbSec", "201");
-    SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
+    final ObjectId oid = ObjectId.of("DbSec", "201");
+    final SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
     request.setVersionsToInstant(_version2Instant.plusSeconds(5));
-    SecurityHistoryResult test = _secMaster.history(request);
-    
+    final SecurityHistoryResult test = _secMaster.history(request);
+
     assertEquals(2, test.getPaging().getTotalItems());
-    
+
     assertEquals(2, test.getDocuments().size());
     assert202(test.getDocuments().get(0));
     assert201(test.getDocuments().get(1));

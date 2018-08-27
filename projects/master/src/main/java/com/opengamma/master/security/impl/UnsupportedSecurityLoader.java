@@ -22,7 +22,7 @@ public class UnsupportedSecurityLoader extends AbstractSecurityLoader {
 
   //-------------------------------------------------------------------------
   @Override
-  protected SecurityLoaderResult doBulkLoad(SecurityLoaderRequest request) {
+  protected SecurityLoaderResult doBulkLoad(final SecurityLoaderRequest request) {
     throw new UnsupportedOperationException("Security loading is not supported");
   }
 

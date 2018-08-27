@@ -48,11 +48,11 @@ import com.opengamma.util.ArgumentChecker;
   /** For loading and saving portfolios and nodes */
   private final PortfolioMaster _portfolioMaster;
 
-  /* package */ AbstractTradeBuilder(PositionMaster positionMaster,
-                                     PortfolioMaster portfolioMaster,
-                                     SecurityMaster securityMaster,
-                                     Set<MetaBean> metaBeans,
-                                     StringConvert stringConvert) {
+  /* package */ AbstractTradeBuilder(final PositionMaster positionMaster,
+                                     final PortfolioMaster portfolioMaster,
+                                     final SecurityMaster securityMaster,
+                                     final Set<MetaBean> metaBeans,
+                                     final StringConvert stringConvert) {
     ArgumentChecker.notNull(securityMaster, "securityManager");
     ArgumentChecker.notNull(positionMaster, "positionMaster");
     ArgumentChecker.notEmpty(metaBeans, "metaBeans");
@@ -65,10 +65,10 @@ import com.opengamma.util.ArgumentChecker;
     _stringConvert = stringConvert;
   }
 
-  protected static Map<String, Object> property(String name,
-                                                boolean optional,
-                                                boolean readOnly,
-                                                Map<String, Object> typeInfo) {
+  protected static Map<String, Object> property(final String name,
+                                                final boolean optional,
+                                                final boolean readOnly,
+                                                final Map<String, Object> typeInfo) {
     return ImmutableMap.<String, Object>of("name", name,
                                            "type", "single",
                                            "optional", optional,
@@ -77,7 +77,7 @@ import com.opengamma.util.ArgumentChecker;
   }
 
   protected static Map<String, Object> attributesProperty() {
-    Map<String, Object> map = Maps.newHashMap();
+    final Map<String, Object> map = Maps.newHashMap();
     map.put("name", "attributes");
     map.put("type", "map");
     map.put("optional", true); // can't be null but have a default value so client doesn't need to specify
@@ -87,7 +87,7 @@ import com.opengamma.util.ArgumentChecker;
     return map;
   }
 
-  protected static Map<String, Object> typeInfo(String expectedType, String actualType) {
+  protected static Map<String, Object> typeInfo(final String expectedType, final String actualType) {
     return ImmutableMap.<String, Object>of("beanType", false, "expectedType", expectedType, "actualType", actualType);
   }
 
@@ -98,8 +98,8 @@ import com.opengamma.util.ArgumentChecker;
    * @return The node with specified ID, not null
    * @throws DataNotFoundException If the node can't be found
    */
-  /* package */ static ManageablePortfolioNode findNode(ManageablePortfolio portfolio, UniqueId nodeId) {
-    ManageablePortfolioNode node = findNode(portfolio.getRootNode(), nodeId);
+  /* package */ static ManageablePortfolioNode findNode(final ManageablePortfolio portfolio, final UniqueId nodeId) {
+    final ManageablePortfolioNode node = findNode(portfolio.getRootNode(), nodeId);
     if (node != null) {
       return node;
     } else {
@@ -107,12 +107,12 @@ import com.opengamma.util.ArgumentChecker;
     }
   }
 
-  private static ManageablePortfolioNode findNode(ManageablePortfolioNode node, UniqueId nodeId) {
+  private static ManageablePortfolioNode findNode(final ManageablePortfolioNode node, final UniqueId nodeId) {
     if (node.getUniqueId().equalObjectId(nodeId)) {
       return node;
     }
-    for (ManageablePortfolioNode childNode : node.getChildNodes()) {
-      ManageablePortfolioNode node1 = findNode(childNode, nodeId);
+    for (final ManageablePortfolioNode childNode : node.getChildNodes()) {
+      final ManageablePortfolioNode node1 = findNode(childNode, nodeId);
       if (node1 != null) {
         return node1;
       }

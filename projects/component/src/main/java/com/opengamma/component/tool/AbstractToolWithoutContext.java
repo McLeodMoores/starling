@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.component.tool;
@@ -36,7 +36,7 @@ public abstract class AbstractToolWithoutContext {
   private static final String HELP_OPTION = "h";
   /** Logging command line option. */
   private static final String LOGBACK_RESOURCE_OPTION = "l";
-  
+
   static {
     StartupUtils.init();
   }
@@ -48,7 +48,7 @@ public abstract class AbstractToolWithoutContext {
 
   /**
    * Initializes the tool statically.
-   * 
+   *
    * @param logbackResource the logback resource location, not null
    * @return true if successful
    */
@@ -74,7 +74,7 @@ public abstract class AbstractToolWithoutContext {
   /**
    * Returns the name of the default logback configuration file if none is explicitly specified. This will be {@link #TOOL_LOGBACK_XML} unless the global {@code logback.configurationFile property} has
    * been set.
-   * 
+   *
    * @return the logback configuration file resource address, not null
    */
   protected String getDefaultLogbackConfiguration() {
@@ -92,11 +92,11 @@ public abstract class AbstractToolWithoutContext {
    * The base class defined three options:<br />
    * l/logback - the logback configuration, default tool-logback.xml<br />
    * h/help - prints the help tool<br />
-   * 
+   *
    * @param args the command-line arguments, not null
    * @return true if successful, false otherwise
    */
-  public boolean initAndRun(String[] args) {
+  public boolean initAndRun(final String[] args) {
     return initAndRun(args, null);
   }
 
@@ -106,20 +106,20 @@ public abstract class AbstractToolWithoutContext {
    * The base class defined three options:<br />
    * l/logback - the logback configuration, default tool-logback.xml<br />
    * h/help - prints the help tool<br />
-   * 
+   *
    * @param args the command-line arguments, not null
    * @param defaultLogbackResource the default logback resource, null to use tool-logback.xml as the default
    * @return true if successful, false otherwise
    */
-  public boolean initAndRun(String[] args, String defaultLogbackResource) {
+  public boolean initAndRun(final String[] args, final String defaultLogbackResource) {
     ArgumentChecker.notNull(args, "args");
 
-    Options options = createOptions();
-    CommandLineParser parser = new PosixParser();
+    final Options options = createOptions();
+    final CommandLineParser parser = new PosixParser();
     CommandLine line;
     try {
       line = parser.parse(options, args);
-    } catch (ParseException e) {
+    } catch (final ParseException e) {
       usage(options);
       return false;
     }
@@ -136,7 +136,7 @@ public abstract class AbstractToolWithoutContext {
 
   /**
    * Runs the tool, calling {@code doRun}.
-   * 
+   *
    * @return true if successful
    */
   public final boolean run() {
@@ -145,7 +145,7 @@ public abstract class AbstractToolWithoutContext {
       doRun();
       LOGGER.info("Finished " + getClass().getSimpleName());
       return true;
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       ex.printStackTrace();
       return false;
     }
@@ -154,14 +154,14 @@ public abstract class AbstractToolWithoutContext {
   //-------------------------------------------------------------------------
   /**
    * Override in subclasses to implement the tool.
-   * 
+   *
    * @throws Exception if an error occurs
    */
   protected abstract void doRun() throws Exception;
 
   /**
    * Gets the parsed command line.
-   * 
+   *
    * @return the parsed command line, not null after parsing
    */
   protected CommandLine getCommandLine() {
@@ -173,11 +173,11 @@ public abstract class AbstractToolWithoutContext {
    * Creates the command line options.
    * <p>
    * Subclasses may override this and add their own parameters. The base class defined the options h/help, l/logback.
-   * 
+   *
    * @return the set of command line options, not null
    */
   protected Options createOptions() {
-    Options options = new Options();
+    final Options options = new Options();
     options.addOption(createHelpOption());
     options.addOption(createLogbackOption());
     return options;
@@ -188,7 +188,7 @@ public abstract class AbstractToolWithoutContext {
   }
 
   private static Option createLogbackOption() {
-    Option option = new Option(LOGBACK_RESOURCE_OPTION, "logback", true, "the logback configuration resource");
+    final Option option = new Option(LOGBACK_RESOURCE_OPTION, "logback", true, "the logback configuration resource");
     option.setArgName("resource");
     option.setRequired(false);
     return option;
@@ -198,8 +198,8 @@ public abstract class AbstractToolWithoutContext {
     return getClass();
   }
 
-  protected void usage(Options options) {
-    HelpFormatter formatter = new HelpFormatter();
+  protected void usage(final Options options) {
+    final HelpFormatter formatter = new HelpFormatter();
     formatter.setWidth(120);
     formatter.printHelp("java " + getEntryPointClass().getName(), options, true);
   }

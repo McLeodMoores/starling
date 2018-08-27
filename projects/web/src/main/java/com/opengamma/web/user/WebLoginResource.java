@@ -74,11 +74,11 @@ public class WebLoginResource extends AbstractSingletonWebResource {
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String getGreen(
-      @Context HttpServletRequest request,
-      @Context ServletContext servletContext,
-      @Context UriInfo uriInfo) {
-    
-    SavedRequest savedRequest = WebUtils.getSavedRequest(request);
+      @Context final HttpServletRequest request,
+      @Context final ServletContext servletContext,
+      @Context final UriInfo uriInfo) {
+
+    final SavedRequest savedRequest = WebUtils.getSavedRequest(request);
     if (savedRequest != null && savedRequest.getMethod().equalsIgnoreCase(AccessControlFilter.GET_METHOD)) {
       if (savedRequest.getRequestUrl() != null && savedRequest.getRequestUrl().contains("/bundles/fm/prototype/")) {
         return getStylish(servletContext, uriInfo);
@@ -91,15 +91,15 @@ public class WebLoginResource extends AbstractSingletonWebResource {
   @Path("og")
   @Produces(MediaType.TEXT_HTML)
   public String getStylish(
-      @Context ServletContext servletContext,
-      @Context UriInfo uriInfo) {
+      @Context final ServletContext servletContext,
+      @Context final UriInfo uriInfo) {
     return get(servletContext, uriInfo, LOGIN_STYLISH);
   }
 
-  private String get(ServletContext servletContext, UriInfo uriInfo, String ftlFile) {
-    FlexiBean out = createRootData(uriInfo);
-    Subject subject = AuthUtils.getSubject();
-    Session session = subject.getSession(false);
+  private String get(final ServletContext servletContext, final UriInfo uriInfo, final String ftlFile) {
+    final FlexiBean out = createRootData(uriInfo);
+    final Subject subject = AuthUtils.getSubject();
+    final Session session = subject.getSession(false);
     if (session != null && session.getAttribute(LOGIN_USERNAME) != null) {
       out.put("username", session.getAttribute(LOGIN_USERNAME));
     } else {
@@ -112,11 +112,11 @@ public class WebLoginResource extends AbstractSingletonWebResource {
   @POST
   @Produces(MediaType.TEXT_HTML)
   public Response loginGreen(
-      @Context HttpServletRequest request,
-      @Context ServletContext servletContext,
-      @Context UriInfo uriInfo,
-      @FormParam("username") String username,
-      @FormParam("password") String password) {
+      @Context final HttpServletRequest request,
+      @Context final ServletContext servletContext,
+      @Context final UriInfo uriInfo,
+      @FormParam("username") final String username,
+      @FormParam("password") final String password) {
     return login(request, servletContext, uriInfo, username, password, LOGIN_GREEN);
   }
 
@@ -124,21 +124,21 @@ public class WebLoginResource extends AbstractSingletonWebResource {
   @Path("og")
   @Produces(MediaType.TEXT_HTML)
   public Response loginStylish(
-      @Context HttpServletRequest request,
-      @Context ServletContext servletContext,
-      @Context UriInfo uriInfo,
-      @FormParam("username") String username,
-      @FormParam("password") String password) {
+      @Context final HttpServletRequest request,
+      @Context final ServletContext servletContext,
+      @Context final UriInfo uriInfo,
+      @FormParam("username") final String username,
+      @FormParam("password") final String password) {
     return login(request, servletContext, uriInfo, username, password, LOGIN_STYLISH);
   }
 
   private Response login(
-      HttpServletRequest request,
-      ServletContext servletContext,
-      UriInfo uriInfo,
+      final HttpServletRequest request,
+      final ServletContext servletContext,
+      final UriInfo uriInfo,
       String username,
       String password,
-      String ftlFile) {
+      final String ftlFile) {
     username = StringUtils.trimToNull(username);
     password = StringUtils.trimToNull(password);
     if (username == null) {
@@ -147,15 +147,15 @@ public class WebLoginResource extends AbstractSingletonWebResource {
     if (password == null) {
       return displayError(servletContext, uriInfo, username, ftlFile, "PasswordMissing");
     }
-    String ipAddress = findIpAddress(request);
-    UsernamePasswordToken token = new UsernamePasswordToken(username, password, false, ipAddress);
+    final String ipAddress = findIpAddress(request);
+    final UsernamePasswordToken token = new UsernamePasswordToken(username, password, false, ipAddress);
     try {
-      Subject subject = AuthUtils.getSubject();
+      final Subject subject = AuthUtils.getSubject();
       subject.login(token);
       token.clear();
-      
+
       URI successUrl = null;
-      SavedRequest savedRequest = WebUtils.getAndClearSavedRequest(request);
+      final SavedRequest savedRequest = WebUtils.getAndClearSavedRequest(request);
       if (savedRequest != null && savedRequest.getMethod().equalsIgnoreCase(AccessControlFilter.GET_METHOD)) {
         successUrl = uriInfo.getBaseUri().resolve(savedRequest.getRequestUrl());
       } else {
@@ -166,9 +166,9 @@ public class WebLoginResource extends AbstractSingletonWebResource {
         }
       }
       return Response.seeOther(successUrl).build();
-      
-    } catch (AuthenticationException ex) {
-      String errorCode = StringUtils.substringBeforeLast(ex.getClass().getSimpleName(), "Exception");
+
+    } catch (final AuthenticationException ex) {
+      final String errorCode = StringUtils.substringBeforeLast(ex.getClass().getSimpleName(), "Exception");
       return displayError(servletContext, uriInfo, username, ftlFile, errorCode);
     }
   }
@@ -180,11 +180,11 @@ public class WebLoginResource extends AbstractSingletonWebResource {
    * We prefer a specific 'X_OPENGAMMA_CLIENT_IP' header containing a single IP address.
    * If not found, we rely on the generic 'X-FORWARDED-FOR' header.
    * If not found, we rely on the remote host of the servlet request.
-   * 
+   *
    * @param request  the servlet request, not null
    * @return the IP address, not null
    */
-  private static String findIpAddress(HttpServletRequest request) {
+  private static String findIpAddress(final HttpServletRequest request) {
     String remoteIp = StringUtils.stripToNull(request.getHeader(HEADER_X_OPENGAMMA_CLIENT_IP));
     if (remoteIp == null) {
       remoteIp = StringUtils.stripToNull(request.getHeader(HEADER_X_FORWARDED_FOR));
@@ -203,22 +203,22 @@ public class WebLoginResource extends AbstractSingletonWebResource {
 
   /**
    * Ensures that the IP address is non-local.
-   * 
+   *
    * @param remoteIp  the remote IP address, may be null
    * @return the non-local IP address, not null
    */
-  private static String ensureIpAddressNonLoopback(String remoteIp) {
+  private static String ensureIpAddressNonLoopback(final String remoteIp) {
     try {
-      InetAddress ia = (remoteIp != null ? InetAddress.getByName(remoteIp) : null);
+      final InetAddress ia = remoteIp != null ? InetAddress.getByName(remoteIp) : null;
       if (ia != null && ia.isLoopbackAddress() == false) {
         return remoteIp;
       }
       // search through network interfaces to find reasonable non-loopback IP address
       InetAddress possible = null;
-      for (Enumeration<NetworkInterface> ifaces = NetworkInterface.getNetworkInterfaces(); ifaces.hasMoreElements();) {
-        NetworkInterface iface = ifaces.nextElement();
-        for (Enumeration<InetAddress> inetAddrs = iface.getInetAddresses(); inetAddrs.hasMoreElements();) {
-          InetAddress inetAddr = inetAddrs.nextElement();
+      for (final Enumeration<NetworkInterface> ifaces = NetworkInterface.getNetworkInterfaces(); ifaces.hasMoreElements();) {
+        final NetworkInterface iface = ifaces.nextElement();
+        for (final Enumeration<InetAddress> inetAddrs = iface.getInetAddresses(); inetAddrs.hasMoreElements();) {
+          final InetAddress inetAddr = inetAddrs.nextElement();
           if (inetAddr.isLoopbackAddress() == false) {
             if (inetAddr.isSiteLocalAddress()) {
               return inetAddr.getHostAddress();
@@ -231,19 +231,19 @@ public class WebLoginResource extends AbstractSingletonWebResource {
       if (possible != null) {
         return possible.getHostAddress();
       }
-      InetAddress localHost = InetAddress.getLocalHost();
+      final InetAddress localHost = InetAddress.getLocalHost();
       if (localHost == null) {
         throw new UnknownHostException("Unknown local host");
       }
       return localHost.getHostAddress();
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       LOGGER.warn("Unable to obtain suitable local host address", ex);
-      return (remoteIp != null ? remoteIp : "0:0:0:0:0:0:0:1");
+      return remoteIp != null ? remoteIp : "0:0:0:0:0:0:0:1";
     }
   }
 
-  private Response displayError(ServletContext servletContext, UriInfo uriInfo, String username, String ftlFile, String errorCode) {
-    FlexiBean out = createRootData(uriInfo);
+  private Response displayError(final ServletContext servletContext, final UriInfo uriInfo, final String username, final String ftlFile, final String errorCode) {
+    final FlexiBean out = createRootData(uriInfo);
     out.put("username", username);
     out.put("err_invalidLogin", errorCode);
     return Response.ok(getFreemarker(servletContext).build(ftlFile, out)).build();
@@ -252,11 +252,11 @@ public class WebLoginResource extends AbstractSingletonWebResource {
   //-------------------------------------------------------------------------
   /**
    * Builds a URI for this page.
-   * 
+   *
    * @param uriInfo  the uriInfo, not null
    * @return the URI, not null
    */
-  public static URI uri(UriInfo uriInfo) {
+  public static URI uri(final UriInfo uriInfo) {
     return uriInfo.getBaseUriBuilder().path(WebLoginResource.class).build();
   }
 

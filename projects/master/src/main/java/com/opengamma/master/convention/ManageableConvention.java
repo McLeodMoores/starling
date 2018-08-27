@@ -60,7 +60,7 @@ public abstract class ManageableConvention
    * The map of attributes, which can be used for attaching additional application-level information.
    */
   @PropertyDefinition
-  private final Map<String, String> _attributes = new HashMap<String, String>();
+  private final Map<String, String> _attributes = new HashMap<>();
   /**
    * The name of the convention intended for display purposes.
    * This field must not be null for the object to be valid.
@@ -76,11 +76,11 @@ public abstract class ManageableConvention
 
   /**
    * Creates a convention specifying the values of the main fields.
-   * 
+   *
    * @param name  the name of the convention, for display purposes, not null
    * @param externalIdBundle  the bundle of identifiers that define the convention, not null
    */
-  protected ManageableConvention(String name, ExternalIdBundle externalIdBundle) {
+  protected ManageableConvention(final String name, final ExternalIdBundle externalIdBundle) {
     ArgumentChecker.notNull(name, "name");
     ArgumentChecker.notNull(externalIdBundle, "externalIdBundle");
     setName(name);
@@ -89,12 +89,12 @@ public abstract class ManageableConvention
 
   /**
    * Creates a convention specifying the values of the main fields.
-   * 
+   *
    * @param uniqueId  the unique identifier, not null
    * @param name  the name of the convention, for display purposes, not null
    * @param externalIdBundle  the bundle of identifiers that define the convention, not null
    */
-  protected ManageableConvention(UniqueId uniqueId, String name, ExternalIdBundle externalIdBundle) {
+  protected ManageableConvention(final UniqueId uniqueId, final String name, final ExternalIdBundle externalIdBundle) {
     ArgumentChecker.notNull(name, "name");
     ArgumentChecker.notNull(externalIdBundle, "externalIdBundle");
     setUniqueId(uniqueId);
@@ -105,15 +105,15 @@ public abstract class ManageableConvention
   //-------------------------------------------------------------------------
   /**
    * Adds an external identifier to the bundle representing this convention.
-   * 
+   *
    * @param conventionId  the identifier to add, not null
    */
-  public void addExternalId(ExternalId conventionId) {
+  public void addExternalId(final ExternalId conventionId) {
     setExternalIdBundle(getExternalIdBundle().withExternalId(conventionId));
   }
 
   @Override
-  public void addAttribute(String key, String value) {
+  public void addAttribute(final String key, final String value) {
     ArgumentChecker.notNull(key, "key");
     ArgumentChecker.notNull(value, "value");
     _attributes.put(key, value);

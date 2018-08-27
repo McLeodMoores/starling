@@ -60,7 +60,7 @@ import com.opengamma.util.OpenGammaClock;
   /** Randomized values derived from {@link #_values}, repopulated each time the randomized task executes. */
   private final Map<ValueSpecification, Object> _randomizedValues = Maps.newHashMap();
 
-  public RandomizingMarketDataProvider(RandomizingMarketDataSpecification spec, MarketDataProvider underlying) {
+  public RandomizingMarketDataProvider(final RandomizingMarketDataSpecification spec, final MarketDataProvider underlying) {
     ArgumentChecker.notNull(underlying, "underlying");
     ArgumentChecker.notNull(spec, "spec");
     _marketDataSpec = spec;
@@ -70,37 +70,37 @@ import com.opengamma.util.OpenGammaClock;
   }
 
   @Override
-  public void addListener(MarketDataListener listener) {
+  public void addListener(final MarketDataListener listener) {
     _underlying.addListener(listener);
   }
 
   @Override
-  public void removeListener(MarketDataListener listener) {
+  public void removeListener(final MarketDataListener listener) {
     _underlying.removeListener(listener);
   }
 
   @Override
-  public void subscribe(ValueSpecification valueSpecification) {
+  public void subscribe(final ValueSpecification valueSpecification) {
     _underlying.subscribe(valueSpecification);
   }
 
   @Override
-  public void subscribe(Set<ValueSpecification> valueSpecifications) {
+  public void subscribe(final Set<ValueSpecification> valueSpecifications) {
     _underlying.subscribe(valueSpecifications);
   }
 
   @Override
-  public void unsubscribe(ValueSpecification valueSpecification) {
+  public void unsubscribe(final ValueSpecification valueSpecification) {
     _underlying.unsubscribe(valueSpecification);
   }
 
   @Override
-  public void unsubscribe(Set<ValueSpecification> valueSpecifications) {
+  public void unsubscribe(final Set<ValueSpecification> valueSpecifications) {
     _underlying.unsubscribe(valueSpecifications);
   }
 
   @Override
-  public MarketDataAvailabilityProvider getAvailabilityProvider(MarketDataSpecification marketDataSpec) {
+  public MarketDataAvailabilityProvider getAvailabilityProvider(final MarketDataSpecification marketDataSpec) {
     return _underlying.getAvailabilityProvider(marketDataSpec);
   }
 
@@ -110,23 +110,23 @@ import com.opengamma.util.OpenGammaClock;
   }
 
   @Override
-  public boolean isCompatible(MarketDataSpecification marketDataSpec) {
+  public boolean isCompatible(final MarketDataSpecification marketDataSpec) {
     return _marketDataSpec.equals(marketDataSpec);
   }
 
   // TODO document assumption - this is called once with all market data and the single arg version isn't used
   @Override
-  public RandomizingMarketDataSnapshot snapshot(MarketDataSpecification marketDataSpec) {
+  public RandomizingMarketDataSnapshot snapshot(final MarketDataSpecification marketDataSpec) {
     if (!(marketDataSpec instanceof RandomizingMarketDataSpecification)) {
       throw new IllegalArgumentException("Expected RandomizingMarketDataSpecification, got " + marketDataSpec);
     }
-    RandomizingMarketDataSpecification randomizingSpec = (RandomizingMarketDataSpecification) marketDataSpec;
-    MarketDataSnapshot underlyingSnapshot = _underlying.snapshot(randomizingSpec.getUnderlying());
+    final RandomizingMarketDataSpecification randomizingSpec = (RandomizingMarketDataSpecification) marketDataSpec;
+    final MarketDataSnapshot underlyingSnapshot = _underlying.snapshot(randomizingSpec.getUnderlying());
     return new RandomizingMarketDataSnapshot(underlyingSnapshot);
   }
 
   @Override
-  public Duration getRealTimeDuration(Instant fromInstant, Instant toInstant) {
+  public Duration getRealTimeDuration(final Instant fromInstant, final Instant toInstant) {
     return _underlying.getRealTimeDuration(fromInstant, toInstant);
   }
 
@@ -134,8 +134,9 @@ import com.opengamma.util.OpenGammaClock;
    * @param value The value to randomize
    * @return The randomized object or null if its value wasn't changed
    */
-  private Object randomize(Object value) {
+  private Object randomize(final Object value) {
     @SuppressWarnings("unchecked")
+    final
     Randomizer<Object> randomizer = (Randomizer<Object>) _randomizers.get(value.getClass());
     if (randomizer == null) {
       return null;
@@ -149,7 +150,7 @@ import com.opengamma.util.OpenGammaClock;
    * {@link RandomizingMarketDataSpecification#getAverageCycleInterval()} +/-50%
    */
   private void scheduleRandomizingTask() {
-    TIMER.schedule(new RandomizingTask(), ((long) (_marketDataSpec.getAverageCycleInterval() * (0.5 + Math.random()))));
+    TIMER.schedule(new RandomizingTask(), (long) (_marketDataSpec.getAverageCycleInterval() * (0.5 + Math.random())));
   }
 
   /**
@@ -157,14 +158,14 @@ import com.opengamma.util.OpenGammaClock;
    * a random subset.
    */
   private void randomizeSnapshot() {
-    Set<ValueSpecification> updatedSpecs = Sets.newHashSet();
+    final Set<ValueSpecification> updatedSpecs = Sets.newHashSet();
     synchronized (_valuesLock) {
       LOGGER.debug("Randomizing snapshot");
       _randomizedValues.clear();
-      for (Map.Entry<ValueSpecification, Object> entry : _values.entrySet()) {
-        ValueSpecification spec = entry.getKey();
-        Object value = entry.getValue();
-        Object randomizedValue = randomize(value);
+      for (final Map.Entry<ValueSpecification, Object> entry : _values.entrySet()) {
+        final ValueSpecification spec = entry.getKey();
+        final Object value = entry.getValue();
+        final Object randomizedValue = randomize(value);
         if (randomizedValue != null) {
           _randomizedValues.put(spec, randomizedValue);
           LOGGER.debug("Created random value {} for spec {}", randomizedValue, spec);
@@ -177,8 +178,8 @@ import com.opengamma.util.OpenGammaClock;
     scheduleRandomizingTask();
   }
 
-  private double randomizeDouble(double value) {
-    double signum = (Math.random() < 0.5) ? -1 : 1; // TODO can I get rid of the extra call to Math.random()?
+  private double randomizeDouble(final double value) {
+    final double signum = Math.random() < 0.5 ? -1 : 1; // TODO can I get rid of the extra call to Math.random()?
     return value * (1 + signum * Math.random() * (double) _marketDataSpec.getMaxPercentageChange() / 100d);
   }
 
@@ -188,7 +189,7 @@ import com.opengamma.util.OpenGammaClock;
 
     private volatile Instant _snapshotTime;
 
-    /* package */ RandomizingMarketDataSnapshot(MarketDataSnapshot underlying) {
+    /* package */ RandomizingMarketDataSnapshot(final MarketDataSnapshot underlying) {
       ArgumentChecker.notNull(underlying, "underlying");
       _underlying = underlying;
     }
@@ -211,7 +212,7 @@ import com.opengamma.util.OpenGammaClock;
     }
 
     @Override
-    public void init(Set<ValueSpecification> values, long timeout, TimeUnit unit) {
+    public void init(final Set<ValueSpecification> values, final long timeout, final TimeUnit unit) {
       _underlying.init(values, timeout, unit);
       _snapshotTime = OpenGammaClock.getInstance().instant();
     }
@@ -232,21 +233,21 @@ import com.opengamma.util.OpenGammaClock;
     }
 
     @Override
-    public Object query(ValueSpecification specification) {
+    public Object query(final ValueSpecification specification) {
       throw new UnsupportedOperationException("This method is never used and not supported");
     }
 
     @Override
-    public Map<ValueSpecification, Object> query(Set<ValueSpecification> specifications) {
+    public Map<ValueSpecification, Object> query(final Set<ValueSpecification> specifications) {
       Map<ValueSpecification, Object> values;
       synchronized (_valuesLock) {
-        Map<ValueSpecification, Object> underlyingValues = _underlying.query(specifications);
+        final Map<ValueSpecification, Object> underlyingValues = _underlying.query(specifications);
         values = Maps.newHashMap();
         _values.clear();
-        for (Map.Entry<ValueSpecification, Object> entry : underlyingValues.entrySet()) {
+        for (final Map.Entry<ValueSpecification, Object> entry : underlyingValues.entrySet()) {
           // store the underlying values so the randomizing task can use them in its next cycle
-          ValueSpecification spec = entry.getKey();
-          Object underlyingValue = entry.getValue();
+          final ValueSpecification spec = entry.getKey();
+          final Object underlyingValue = entry.getValue();
           _values.put(spec, underlyingValue);
           Object value;
           // if there is a randomized value for a spec use that instead of the underlying value
@@ -270,22 +271,22 @@ import com.opengamma.util.OpenGammaClock;
   private class Listener implements MarketDataListener {
 
     @Override
-    public void subscriptionsSucceeded(Collection<ValueSpecification> specifications) {
+    public void subscriptionsSucceeded(final Collection<ValueSpecification> specifications) {
       RandomizingMarketDataProvider.this.subscriptionsSucceeded(specifications);
     }
 
     @Override
-    public void subscriptionFailed(ValueSpecification specification, String msg) {
+    public void subscriptionFailed(final ValueSpecification specification, final String msg) {
       RandomizingMarketDataProvider.this.subscriptionFailed(specification, msg);
     }
 
     @Override
-    public void subscriptionStopped(ValueSpecification specification) {
+    public void subscriptionStopped(final ValueSpecification specification) {
       RandomizingMarketDataProvider.this.subscriptionStopped(specification);
     }
 
     @Override
-    public void valuesChanged(Collection<ValueSpecification> specifications) {
+    public void valuesChanged(final Collection<ValueSpecification> specifications) {
       RandomizingMarketDataProvider.this.valuesChanged(specifications);
     }
   }
@@ -317,11 +318,11 @@ import com.opengamma.util.OpenGammaClock;
   private class DoubleRandomizer implements Randomizer<Double> {
 
     @Override
-    public Double randomize(Double value) {
+    public Double randomize(final Double value) {
       if (Math.random() > _marketDataSpec.getUpdateProbability()) {
         return null;
       }
-      double signum = (Math.random() < 0.5) ? -1 : 1;
+      final double signum = Math.random() < 0.5 ? -1 : 1;
       return value * (1 + signum * Math.random() * (double) _marketDataSpec.getMaxPercentageChange() / 100d);
     }
   }
@@ -332,10 +333,10 @@ import com.opengamma.util.OpenGammaClock;
   private class SnapshotDataBundleRandomizer implements Randomizer<SnapshotDataBundle> {
 
     @Override
-    public SnapshotDataBundle randomize(SnapshotDataBundle value) {
-      SnapshotDataBundle randomBundle = new SnapshotDataBundle();
+    public SnapshotDataBundle randomize(final SnapshotDataBundle value) {
+      final SnapshotDataBundle randomBundle = new SnapshotDataBundle();
       boolean randomized = false;
-      for (Map.Entry<ExternalIdBundle, Double> entry : value.getDataPointSet()) {
+      for (final Map.Entry<ExternalIdBundle, Double> entry : value.getDataPointSet()) {
         double newValue;
         if (Math.random() > _marketDataSpec.getUpdateProbability()) {
           newValue = entry.getValue();

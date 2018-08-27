@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.timeseries.precise;
@@ -15,7 +15,7 @@ import com.opengamma.timeseries.TimeSeriesUtils;
 
 /**
  * Abstract implementation of {@code InstantDoubleTimeSeries}.
- * 
+ *
  * @param <T>  the instant type
  */
 public abstract class AbstractPreciseDoubleTimeSeries<T> implements PreciseDoubleTimeSeries<T> {
@@ -29,7 +29,7 @@ public abstract class AbstractPreciseDoubleTimeSeries<T> implements PreciseDoubl
   //-------------------------------------------------------------------------
   /**
    * Converts the specified instant to the {@code long} form.
-   * 
+   *
    * @param instant  the instant to convert, not null
    * @return the {@code long} instant
    */
@@ -37,7 +37,7 @@ public abstract class AbstractPreciseDoubleTimeSeries<T> implements PreciseDoubl
 
   /**
    * Converts the specified instant from the {@code long} form.
-   * 
+   *
    * @param instant  the {@code long} instant to convert
    * @return the instant, not null
    */
@@ -45,7 +45,7 @@ public abstract class AbstractPreciseDoubleTimeSeries<T> implements PreciseDoubl
 
   /**
    * Creates an array of the correct T type.
-   * 
+   *
    * @param size  the size of the array to create
    * @return the array, not null
    */
@@ -59,22 +59,22 @@ public abstract class AbstractPreciseDoubleTimeSeries<T> implements PreciseDoubl
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean containsTime(T instant) {
+  public boolean containsTime(final T instant) {
     return containsTime(convertToLong(instant));
   }
 
   @Override
-  public Double getValue(T instant) {
+  public Double getValue(final T instant) {
     return getValue(convertToLong(instant));
   }
 
   @Override
-  public T getTimeAtIndex(int index) {
+  public T getTimeAtIndex(final int index) {
     return convertFromLong(getTimeAtIndexFast(index));
   }
 
   @Override
-  public Double getValueAtIndex(int index) {
+  public Double getValueAtIndex(final int index) {
     return getValueAtIndexFast(index);
   }
 
@@ -106,7 +106,7 @@ public abstract class AbstractPreciseDoubleTimeSeries<T> implements PreciseDoubl
       private int _index = -1;
       @Override
       public boolean hasNext() {
-        return (_index + 1) < size();
+        return _index + 1 < size();
       }
       @Override
       public T next() {
@@ -127,7 +127,7 @@ public abstract class AbstractPreciseDoubleTimeSeries<T> implements PreciseDoubl
   public List<T> times() {
     return new AbstractList<T>() {
       @Override
-      public T get(int index) {
+      public T get(final int index) {
         return getTimeAtIndex(index);
       }
       @Override
@@ -143,8 +143,8 @@ public abstract class AbstractPreciseDoubleTimeSeries<T> implements PreciseDoubl
 
   @Override
   public T[] timesArray() {
-    long[] times = timesArrayFast();
-    T[] result = createArray(times.length);
+    final long[] times = timesArrayFast();
+    final T[] result = createArray(times.length);
     for (int i = 0; i < times.length; i++) {
       result[i] = convertFromLong(times[i]);
     }
@@ -157,7 +157,7 @@ public abstract class AbstractPreciseDoubleTimeSeries<T> implements PreciseDoubl
       private int _index = -1;
       @Override
       public boolean hasNext() {
-        return (_index + 1) < size();
+        return _index + 1 < size();
       }
       @Override
       public Double next() {
@@ -178,7 +178,7 @@ public abstract class AbstractPreciseDoubleTimeSeries<T> implements PreciseDoubl
   public List<Double> values() {
     return new AbstractList<Double>() {
       @Override
-      public Double get(int index) {
+      public Double get(final int index) {
         return getValueAtIndex(index);
       }
       @Override
@@ -194,8 +194,8 @@ public abstract class AbstractPreciseDoubleTimeSeries<T> implements PreciseDoubl
 
   @Override
   public Double[] valuesArray() {
-    double[] times = valuesArrayFast();
-    Double[] result = new Double[times.length];
+    final double[] times = valuesArrayFast();
+    final Double[] result = new Double[times.length];
     for (int i = 0; i < times.length; i++) {
       result[i] = times[i];
     }
@@ -204,12 +204,12 @@ public abstract class AbstractPreciseDoubleTimeSeries<T> implements PreciseDoubl
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (obj == this) {
       return true;
     }
     if (obj instanceof PreciseDoubleTimeSeries) {
-      PreciseDoubleTimeSeries<?> other = (PreciseDoubleTimeSeries<?>) obj;
+      final PreciseDoubleTimeSeries<?> other = (PreciseDoubleTimeSeries<?>) obj;
       return Arrays.equals(timesArrayFast(), other.timesArrayFast()) &&
               Arrays.equals(valuesArrayFast(), other.valuesArrayFast());
     }

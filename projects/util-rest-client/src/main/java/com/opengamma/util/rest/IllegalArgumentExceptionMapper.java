@@ -27,19 +27,19 @@ public class IllegalArgumentExceptionMapper
 
   //-------------------------------------------------------------------------
   @Override
-  protected String buildHtmlErrorPage(IllegalArgumentException exception) {
-    Map<String, String> data = new HashMap<>();
+  protected String buildHtmlErrorPage(final IllegalArgumentException exception) {
+    final Map<String, String> data = new HashMap<>();
     buildOutputMessage(exception, data);
     return createHtmlErrorPage("error-badrequest.html", data);
   }
 
   @Override
-  protected void logHtmlException(IllegalArgumentException exception, String htmlPage) {
+  protected void logHtmlException(final IllegalArgumentException exception, final String htmlPage) {
     LOGGER.error("RESTful website exception caught", exception);
   }
 
   @Override
-  protected void logRestfulError(IllegalArgumentException exception) {
+  protected void logRestfulError(final IllegalArgumentException exception) {
     LOGGER.error("RESTful web-service exception caught and tunnelled to client:", exception);
   }
 

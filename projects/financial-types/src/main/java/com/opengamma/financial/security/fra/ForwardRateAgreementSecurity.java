@@ -136,18 +136,18 @@ public class ForwardRateAgreementSecurity extends FinancialSecurity {
    * @param calendars  the calendars to be used, not null
    * @param fixingLag  the fixing lag
    */
-  public ForwardRateAgreementSecurity(Currency currency,
-                                      ExternalId underlyingId,
-                                      Frequency indexFrequency,
-                                      LocalDate startDate,
-                                      LocalDate endDate,
-                                      double rate,
-                                      double amount,
-                                      LocalDate fixingDate,
-                                      DayCount dayCount,
-                                      BusinessDayConvention fixingBusinessDayConvention,
-                                      Set<ExternalId> calendars,
-                                      int fixingLag) {
+  public ForwardRateAgreementSecurity(final Currency currency,
+                                      final ExternalId underlyingId,
+                                      final Frequency indexFrequency,
+                                      final LocalDate startDate,
+                                      final LocalDate endDate,
+                                      final double rate,
+                                      final double amount,
+                                      final LocalDate fixingDate,
+                                      final DayCount dayCount,
+                                      final BusinessDayConvention fixingBusinessDayConvention,
+                                      final Set<ExternalId> calendars,
+                                      final int fixingLag) {
     super(SECURITY_TYPE);
     setExternalIdBundle(ExternalIdBundle.EMPTY);
     setCurrency(currency);
@@ -181,18 +181,18 @@ public class ForwardRateAgreementSecurity extends FinancialSecurity {
    * @param paymentCalendars the payment calendars, if null the fixing calendars will be used
    * @param fixingLag  the fixing lag
    */
-  public ForwardRateAgreementSecurity(Currency currency,
-                                      ExternalId underlyingId,
-                                      Frequency indexFrequency,
-                                      LocalDate startDate,
-                                      LocalDate endDate,
-                                      double rate,
-                                      double amount,
-                                      LocalDate fixingDate,
-                                      DayCount dayCount,
-                                      BusinessDayConvention fixingBusinessDayConvention,
-                                      Set<ExternalId> fixingCalendars, Set<ExternalId> paymentCalendars,
-                                      int fixingLag) {
+  public ForwardRateAgreementSecurity(final Currency currency,
+                                      final ExternalId underlyingId,
+                                      final Frequency indexFrequency,
+                                      final LocalDate startDate,
+                                      final LocalDate endDate,
+                                      final double rate,
+                                      final double amount,
+                                      final LocalDate fixingDate,
+                                      final DayCount dayCount,
+                                      final BusinessDayConvention fixingBusinessDayConvention,
+                                      final Set<ExternalId> fixingCalendars, final Set<ExternalId> paymentCalendars,
+                                      final int fixingLag) {
     super(SECURITY_TYPE);
     setExternalIdBundle(ExternalIdBundle.EMPTY);
     setCurrency(currency);
@@ -212,7 +212,7 @@ public class ForwardRateAgreementSecurity extends FinancialSecurity {
 
   //-------------------------------------------------------------------------
   @Override
-  public final <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public final <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitForwardRateAgreementSecurity(this);
   }
 

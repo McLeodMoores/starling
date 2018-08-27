@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.historicaltimeseries.impl;
@@ -11,14 +11,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.threeten.bp.LocalDate;
 
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.UniqueId;
 import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 import com.opengamma.util.ArgumentChecker;
+
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 /**
  * An extremely minimal and lightweight {@code HistoricalTimeSeriesSource} that pulls data
@@ -59,16 +59,17 @@ public class RedisSimulationSeriesSource extends NonVersionedRedisHistoricalTime
   private static final Logger LOGGER = LoggerFactory.getLogger(RedisSimulationSeriesSource.class);
   private LocalDate _currentSimulationExecutionDate = LocalDate.now();
 
-  public RedisSimulationSeriesSource(JedisPool jedisPool) {
+  public RedisSimulationSeriesSource(final JedisPool jedisPool) {
     this(jedisPool, "");
   }
-  
-  public RedisSimulationSeriesSource(JedisPool jedisPool, String redisPrefix) {
+
+  public RedisSimulationSeriesSource(final JedisPool jedisPool, final String redisPrefix) {
     super(jedisPool, redisPrefix, "RedisSimulationSeriesSource");
   }
 
-  public RedisSimulationSeriesSource withSimulationDate(LocalDate date) {
-    RedisSimulationSeriesSource redisSimulationSeriesSource = new RedisSimulationSeriesSource(getJedisPool(), getRedisPrefix());
+  @Override
+  public RedisSimulationSeriesSource withSimulationDate(final LocalDate date) {
+    final RedisSimulationSeriesSource redisSimulationSeriesSource = new RedisSimulationSeriesSource(getJedisPool(), getRedisPrefix());
     redisSimulationSeriesSource.setCurrentSimulationExecutionDate(date);
     return redisSimulationSeriesSource;
   }
@@ -77,6 +78,7 @@ public class RedisSimulationSeriesSource extends NonVersionedRedisHistoricalTime
    * Gets the currentSimulationExecutionDate.
    * @return the currentSimulationExecutionDate
    */
+  @Override
   public LocalDate getCurrentSimulationExecutionDate() {
     return _currentSimulationExecutionDate;
   }
@@ -86,50 +88,54 @@ public class RedisSimulationSeriesSource extends NonVersionedRedisHistoricalTime
    * This will be used in calls to load the simulation series.
    * @param currentSimulationExecutionDate  the currentSimulationExecutionDate
    */
-  public void setCurrentSimulationExecutionDate(LocalDate currentSimulationExecutionDate) {
+  public void setCurrentSimulationExecutionDate(final LocalDate currentSimulationExecutionDate) {
     _currentSimulationExecutionDate = currentSimulationExecutionDate;
   }
 
   // ------------------------------------------------------------------------
   // REDIS MANIPULATION OPERATIONS:
   // ------------------------------------------------------------------------
-  
-  public void updateTimeSeriesPoint(UniqueId uniqueId, LocalDate simulationExecutionDate, LocalDate valueDate, double value) {
+
+  @Override
+  public void updateTimeSeriesPoint(final UniqueId uniqueId, final LocalDate simulationExecutionDate, final LocalDate valueDate, final double value) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     ArgumentChecker.notNull(simulationExecutionDate, "simulationExecutionDate");
     ArgumentChecker.notNull(valueDate, "valueDate");
-    
-    String redisKey = toRedisKey(uniqueId, simulationExecutionDate);
+
+    final String redisKey = toRedisKey(uniqueId, simulationExecutionDate);
     updateTimeSeriesPoint(redisKey, valueDate, value);
   }
-  
-  public void updateTimeSeries(UniqueId uniqueId, LocalDate simulationExecutionDate, LocalDateDoubleTimeSeries timeseries) {
+
+  @Override
+  public void updateTimeSeries(final UniqueId uniqueId, final LocalDate simulationExecutionDate, final LocalDateDoubleTimeSeries timeseries) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     ArgumentChecker.notNull(simulationExecutionDate, "simulationExecutionDate");
     ArgumentChecker.notNull(timeseries, "timeseries");
-    
-    String redisKey = toRedisKey(uniqueId, simulationExecutionDate);
+
+    final String redisKey = toRedisKey(uniqueId, simulationExecutionDate);
     updateTimeSeries(redisKey, timeseries, false);
   }
-  
-  public void replaceTimeSeries(UniqueId uniqueId, LocalDate simulationExecutionDate, LocalDateDoubleTimeSeries timeSeries) {
+
+  @Override
+  public void replaceTimeSeries(final UniqueId uniqueId, final LocalDate simulationExecutionDate, final LocalDateDoubleTimeSeries timeSeries) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     ArgumentChecker.notNull(timeSeries, "timeSeries");
-    
-    String redisKey = toRedisKey(uniqueId, simulationExecutionDate);
+
+    final String redisKey = toRedisKey(uniqueId, simulationExecutionDate);
     updateTimeSeries(redisKey, timeSeries, true);
   }
-  
-  public void clearExecutionDate(LocalDate simulationExecutionDate) {
+
+  @Override
+  public void clearExecutionDate(final LocalDate simulationExecutionDate) {
     final String keysPattern = getRedisPrefix() + "*_" + simulationExecutionDate.toString();
-    Jedis jedis = getJedisPool().getResource();
+    final Jedis jedis = getJedisPool().getResource();
     try {
-      Set<String> keys = jedis.keys(keysPattern);
+      final Set<String> keys = jedis.keys(keysPattern);
       if (!keys.isEmpty()) {
         jedis.del(keys.toArray(new String[0]));
       }
       getJedisPool().returnResource(jedis);
-    } catch (Exception e) {
+    } catch (final Exception e) {
       LOGGER.error("Unable to clear execution date " + simulationExecutionDate, e);
       getJedisPool().returnBrokenResource(jedis);
       throw new OpenGammaRuntimeException("Unable to clear execution date " + simulationExecutionDate, e);
@@ -137,12 +143,12 @@ public class RedisSimulationSeriesSource extends NonVersionedRedisHistoricalTime
   }
 
   @Override
-  protected String toRedisKey(UniqueId uniqueId) {
+  protected String toRedisKey(final UniqueId uniqueId) {
     return toRedisKey(uniqueId, getCurrentSimulationExecutionDate());
   }
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(final Object o) {
     if (this == o) {
       return true;
     }
@@ -152,13 +158,13 @@ public class RedisSimulationSeriesSource extends NonVersionedRedisHistoricalTime
     if (!super.equals(o)) {
       return false;
     }
-    RedisSimulationSeriesSource that = (RedisSimulationSeriesSource) o;
+    final RedisSimulationSeriesSource that = (RedisSimulationSeriesSource) o;
     return _currentSimulationExecutionDate.equals(that._currentSimulationExecutionDate);
   }
 
   @Override
   public int hashCode() {
-    int result = super.hashCode();
+    final int result = super.hashCode();
     return 31 * result + _currentSimulationExecutionDate.hashCode();
   }
 }

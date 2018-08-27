@@ -52,39 +52,39 @@ public class WebValueRequirementNamesResource extends AbstractWebResource {
    * Creates the resource.
    */
   public WebValueRequirementNamesResource() {
-    final List<String> list = new ArrayList<String>();
-    for (Field field : ValueRequirementNames.class.getDeclaredFields()) {
+    final List<String> list = new ArrayList<>();
+    for (final Field field : ValueRequirementNames.class.getDeclaredFields()) {
       try {
         list.add((String) field.get(null));
-      } catch (Exception ex) {
+      } catch (final Exception ex) {
         LOGGER.warn("Could not read in value requirement names: " + ex.getMessage());
       }
     }
     Collections.sort(list, String.CASE_INSENSITIVE_ORDER);
-    _valueRequirementNames = new LinkedHashSet<String>(list);
+    _valueRequirementNames = new LinkedHashSet<>(list);
   }
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param valueRequirementNameClasses  the classes, not null
    */
-  public WebValueRequirementNamesResource(String[] valueRequirementNameClasses) {
+  public WebValueRequirementNamesResource(final String[] valueRequirementNameClasses) {
     ArgumentChecker.notEmpty(valueRequirementNameClasses, "valueRequirementNameClasses");
-    final List<String> list = new ArrayList<String>();
-    for (String className : valueRequirementNameClasses) {
+    final List<String> list = new ArrayList<>();
+    for (final String className : valueRequirementNameClasses) {
       try {
-        for (Field field : Class.forName(className.trim()).getDeclaredFields()) {
+        for (final Field field : Class.forName(className.trim()).getDeclaredFields()) {
           if (Modifier.isPublic(field.getModifiers()) && field.isSynthetic() == false) {
             list.add((String) field.get(null));
           }
         }
-      } catch (Exception ex) {
+      } catch (final Exception ex) {
         LOGGER.info("Could not read in value requirement names: " + ex.getMessage());
       }
     }
     Collections.sort(list, String.CASE_INSENSITIVE_ORDER);
-    _valueRequirementNames = new LinkedHashSet<String>(list);
+    _valueRequirementNames = new LinkedHashSet<>(list);
   }
 
   //-------------------------------------------------------------------------
@@ -99,7 +99,7 @@ public class WebValueRequirementNamesResource extends AbstractWebResource {
           .value(new JSONArray(_valueRequirementNames))
           .endObject()
           .toString();
-    } catch (JSONException ex) {
+    } catch (final JSONException ex) {
       LOGGER.warn("error creating json document for valueRequirementNames");
     }
     return result;

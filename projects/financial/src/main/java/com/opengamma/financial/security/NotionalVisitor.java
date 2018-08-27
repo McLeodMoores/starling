@@ -327,21 +327,21 @@ public class NotionalVisitor extends FinancialSecurityVisitorAdapter<CurrencyAmo
   }
 
   @Override
-  public CurrencyAmount visitIndexCDSSecurity(IndexCDSSecurity security) {
+  public CurrencyAmount visitIndexCDSSecurity(final IndexCDSSecurity security) {
     final InterestRateNotional notional = security.getNotional();
     final int sign = security.isBuyProtection() ? -1 : 1;
     return CurrencyAmount.of(notional.getCurrency(), sign * notional.getAmount());
   }
 
   @Override
-  public CurrencyAmount visitLegacyCDSSecurity(LegacyCDSSecurity security) {
+  public CurrencyAmount visitLegacyCDSSecurity(final LegacyCDSSecurity security) {
     final InterestRateNotional notional = security.getNotional();
     final int sign = security.isBuyProtection() ? -1 : 1;
     return CurrencyAmount.of(notional.getCurrency(), sign * notional.getAmount());
   }
 
   @Override
-  public CurrencyAmount visitStandardCDSSecurity(StandardCDSSecurity security) {
+  public CurrencyAmount visitStandardCDSSecurity(final StandardCDSSecurity security) {
     final InterestRateNotional notional = security.getNotional();
     final int sign = security.isBuyProtection() ? -1 : 1;
     return CurrencyAmount.of(notional.getCurrency(), sign * notional.getAmount());

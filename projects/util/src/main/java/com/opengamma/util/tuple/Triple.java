@@ -55,7 +55,7 @@ public final class Triple<A, B, C>
 
   /**
    * Factory method creating a triple inferring the types.
-   * 
+   *
    * @param <A> the first element type
    * @param <B> the second element type
    * @param <C> the third element type
@@ -64,20 +64,20 @@ public final class Triple<A, B, C>
    * @param third  the third element, may be null
    * @return a triple formed from the three parameters, not null
    */
-  public static <A, B, C> Triple<A, B, C> of(A first, B second, C third) {
-    return new Triple<A, B, C>(first, second, third);
+  public static <A, B, C> Triple<A, B, C> of(final A first, final B second, final C third) {
+    return new Triple<>(first, second, third);
   }
 
   /**
    * Constructs a triple.
-   * 
+   *
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @param third  the third element, may be null
    * @deprecated Use of(first, second, third)
    */
   @Deprecated
-  public Triple(A first, B second, C third) {
+  public Triple(final A first, final B second, final C third) {
     _first = first;
     _second = second;
     _third = third;
@@ -86,7 +86,7 @@ public final class Triple<A, B, C>
   //-------------------------------------------------------------------------
   /**
    * Gets the first element from this pair.
-   * 
+   *
    * @return the first element, may be null
    */
   public A getFirst() {
@@ -95,7 +95,7 @@ public final class Triple<A, B, C>
 
   /**
    * Gets the second element from this pair.
-   * 
+   *
    * @return the second element, may be null
    */
   public B getSecond() {
@@ -104,7 +104,7 @@ public final class Triple<A, B, C>
 
   /**
    * Gets the third element from this pair.
-   * 
+   *
    * @return the third element, may be null
    */
   public C getThird() {
@@ -117,13 +117,13 @@ public final class Triple<A, B, C>
    * <p>
    * This method supports auto-casting as they is no way in generics to provide
    * a more specific type.
-   * 
+   *
    * @param <T> an auto-cast list type
    * @return the elements as a list, not null
    */
   @SuppressWarnings("unchecked")
   public <T> List<T> toList() {
-    ArrayList<Object> list = new ArrayList<>();
+    final ArrayList<Object> list = new ArrayList<>();
     list.add(getFirst());
     list.add(getSecond());
     list.add(getThird());
@@ -132,7 +132,7 @@ public final class Triple<A, B, C>
 
   /**
    * Gets the first and second elements from this triple as a pair.
-   * 
+   *
    * @return the first and second elements, not null
    */
   public Pair<A, B> toFirstPair() {
@@ -141,7 +141,7 @@ public final class Triple<A, B, C>
 
   /**
    * Gets the first and second elements from this triple as a pair.
-   * 
+   *
    * @return the second and third elements, not null
    */
   public Pair<B, C> toSecondPair() {
@@ -154,12 +154,12 @@ public final class Triple<A, B, C>
    * element followed by the third element.
    * <p>
    * The element types must be {@code Comparable}.
-   * 
+   *
    * @param other  the other pair, not null
    * @return negative if this is less, zero if equal, positive if greater
    */
   @Override
-  public int compareTo(Triple<A, B, C> other) {
+  public int compareTo(final Triple<A, B, C> other) {
     return new CompareToBuilder()
         .append(_first, other._first)
         .append(_second, other._second)
@@ -168,12 +168,12 @@ public final class Triple<A, B, C>
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
     if (obj instanceof Triple<?, ?, ?>) {
-      Triple<?, ?, ?> other = (Triple<?, ?, ?>) obj;
+      final Triple<?, ?, ?> other = (Triple<?, ?, ?>) obj;
       return ObjectUtils.equals(getFirst(), other.getFirst()) &&
           ObjectUtils.equals(getSecond(), other.getSecond()) &&
           ObjectUtils.equals(getThird(), other.getThird());
@@ -185,9 +185,9 @@ public final class Triple<A, B, C>
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((getFirst() == null) ? 0 : getFirst().hashCode());
-    result = prime * result + ((getSecond() == null) ? 0 : getSecond().hashCode());
-    result = prime * result + ((getThird() == null) ? 0 : getThird().hashCode());
+    result = prime * result + (getFirst() == null ? 0 : getFirst().hashCode());
+    result = prime * result + (getSecond() == null ? 0 : getSecond().hashCode());
+    result = prime * result + (getThird() == null ? 0 : getThird().hashCode());
     return result;
   }
 
@@ -224,7 +224,7 @@ public final class Triple<A, B, C>
   }
 
   @Override
-  public <R> Property<R> property(String propertyName) {
+  public <R> Property<R> property(final String propertyName) {
     return metaBean().<R>metaProperty(propertyName).createProperty(this);
   }
 
@@ -280,7 +280,7 @@ public final class Triple<A, B, C>
     }
 
     @Override
-    protected MetaProperty<?> metaPropertyGet(String propertyName) {
+    protected MetaProperty<?> metaPropertyGet(final String propertyName) {
       switch (propertyName) {
         case "first":
           return _first;
@@ -336,7 +336,7 @@ public final class Triple<A, B, C>
     //-----------------------------------------------------------------------
     @Override
     @SuppressWarnings("rawtypes")
-    protected Object propertyGet(Bean bean, String propertyName, boolean quiet) {
+    protected Object propertyGet(final Bean bean, final String propertyName, final boolean quiet) {
       switch (propertyName) {
         case "first":
           return ((Triple) bean).getFirst();
@@ -349,7 +349,7 @@ public final class Triple<A, B, C>
     }
 
     @Override
-    protected void propertySet(Bean bean, String propertyName, Object newValue, boolean quiet) {
+    protected void propertySet(final Bean bean, final String propertyName, final Object newValue, final boolean quiet) {
       metaProperty(propertyName);
       if (quiet) {
         return;
@@ -382,7 +382,7 @@ public final class Triple<A, B, C>
 
     //-----------------------------------------------------------------------
     @Override
-    public Builder set(String propertyName, Object newValue) {
+    public Builder set(final String propertyName, final Object newValue) {
       switch (propertyName) {
         case "first":
           _first = newValue;
@@ -400,7 +400,7 @@ public final class Triple<A, B, C>
     }
 
     @Override
-    public Builder setString(String propertyName, String value) {
+    public Builder setString(final String propertyName, final String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }

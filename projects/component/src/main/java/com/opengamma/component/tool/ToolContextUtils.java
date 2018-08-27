@@ -14,8 +14,6 @@ import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
-import net.sf.ehcache.util.NamedThreadFactory;
-
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.commons.lang.StringUtils;
 import org.joda.beans.MetaProperty;
@@ -33,6 +31,8 @@ import com.opengamma.financial.tool.ToolContext;
 import com.opengamma.financial.view.rest.RemoteViewProcessor;
 import com.opengamma.util.jms.JmsConnector;
 import com.opengamma.util.jms.JmsConnectorFactoryBean;
+
+import net.sf.ehcache.util.NamedThreadFactory;
 
 /**
  * Utilities that assist with obtaining a tool context.
@@ -61,13 +61,13 @@ public final class ToolContextUtils {
    * Uses a {@code ComponentManager} or a {@code ComponentServer} to start and load a {@code ToolContext}.
    * <p>
    * The context should be closed after use.
-   * 
+   *
    * @param <T>  the tool context type
    * @param configResourceLocation  the location of the context resource file, not null
    * @param toolContextClazz  the type of tool context to return, not null
    * @return the context, not null
    */
-  public static <T extends ToolContext> T getToolContext(String configResourceLocation, Class<T> toolContextClazz) {
+  public static <T extends ToolContext> T getToolContext(final String configResourceLocation, final Class<T> toolContextClazz) {
     return getToolContext(configResourceLocation, toolContextClazz, DEFAULT_CLASSIFIER_CHAIN);
   }
 
@@ -83,45 +83,45 @@ public final class ToolContextUtils {
    * @param classifierChain  the classifier chain to use when determining which components to select
    * @return the context, not null
    */
-  public static <T extends ToolContext> T getToolContext(String configResourceLocation, Class<T> toolContextClazz, List<String> classifierChain) {
+  public static <T extends ToolContext> T getToolContext(String configResourceLocation, final Class<T> toolContextClazz, final List<String> classifierChain) {
     configResourceLocation = configResourceLocation.trim();
-    
+
     if (configResourceLocation.startsWith("http://")) {
       return createToolContextByHttp(configResourceLocation, toolContextClazz, classifierChain);
-      
+
     } else {  // use local file
-      ComponentManager manager = new ComponentManager("toolcontext");
+      final ComponentManager manager = new ComponentManager("toolcontext");
       manager.start(configResourceLocation);
-      ComponentRepository repo = manager.getRepository();
+      final ComponentRepository repo = manager.getRepository();
       return toolContextClazz.cast(repo.getInstance(ToolContext.class, "tool"));
     }
   }
 
-  private static <T extends ToolContext> T createToolContextByHttp(String configResourceLocation, Class<T> toolContextClazz, List<String> classifierChain) {
+  private static <T extends ToolContext> T createToolContextByHttp(String configResourceLocation, final Class<T> toolContextClazz, final List<String> classifierChain) {
     configResourceLocation = StringUtils.stripEnd(configResourceLocation, "/");
     if (configResourceLocation.endsWith("/jax") == false) {
       configResourceLocation += "/jax";
     }
-    
+
     // Get the remote component server using the supplied URI
-    RemoteComponentServer remoteComponentServer = new RemoteComponentServer(URI.create(configResourceLocation));
-    ComponentServer componentServer = remoteComponentServer.getComponentServer();
-    
+    final RemoteComponentServer remoteComponentServer = new RemoteComponentServer(URI.create(configResourceLocation));
+    final ComponentServer componentServer = remoteComponentServer.getComponentServer();
+
     // Attempt to build a tool context of the specified type
     T toolContext;
     try {
       toolContext = toolContextClazz.newInstance();
-    } catch (Throwable t) {
+    } catch (final Throwable t) {
       return null;
     }
-    
+
     // Populate the tool context from the remote component server
-    for (MetaProperty<?> metaProperty : toolContext.metaBean().metaPropertyIterable()) {
+    for (final MetaProperty<?> metaProperty : toolContext.metaBean().metaPropertyIterable()) {
       if (metaProperty.propertyType().equals(ComponentServer.class)) {
         metaProperty.set(toolContext, componentServer);
       } else if (!metaProperty.name().equals("contextManager")) {
         try {
-          ComponentInfo componentInfo = getComponentInfo(componentServer, classifierChain, metaProperty.propertyType());
+          final ComponentInfo componentInfo = getComponentInfo(componentServer, classifierChain, metaProperty.propertyType());
           if (componentInfo == null) {
             LOGGER.debug("Unable to populate tool context '" + metaProperty.name() +
                 "', no appropriate component found on the server");
@@ -130,7 +130,7 @@ public final class ToolContextUtils {
           if (ViewProcessor.class.equals(componentInfo.getType())) {
             final JmsConnector jmsConnector = createJmsConnector(componentInfo);
             final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor(new NamedThreadFactory("rvp"));
-            ViewProcessor vp = new RemoteViewProcessor(componentInfo.getUri(), jmsConnector, scheduler);
+            final ViewProcessor vp = new RemoteViewProcessor(componentInfo.getUri(), jmsConnector, scheduler);
             toolContext.setViewProcessor(vp);
             toolContext.setContextManager(new Closeable() {
               @Override
@@ -140,17 +140,17 @@ public final class ToolContextUtils {
               }
             });
           } else {
-            String clazzName = componentInfo.getAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA);
+            final String clazzName = componentInfo.getAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA);
             if (clazzName == null) {
               LOGGER.warn("Unable to populate tool context '" + metaProperty.name() +
                   "', no remote access class found");
               continue;
             }
-            Class<?> clazz = Class.forName(clazzName);
+            final Class<?> clazz = Class.forName(clazzName);
             metaProperty.set(toolContext, clazz.getConstructor(URI.class).newInstance(componentInfo.getUri()));
             LOGGER.info("Populated tool context '" + metaProperty.name() + "' with " + metaProperty.get(toolContext));
           }
-        } catch (Throwable ex) {
+        } catch (final Throwable ex) {
           LOGGER.warn("Unable to populate tool context '" + metaProperty.name() + "': " + ex.getMessage());
         }
       }
@@ -158,21 +158,21 @@ public final class ToolContextUtils {
     return toolContext;
   }
 
-  private static JmsConnector createJmsConnector(ComponentInfo info) {
-    JmsConnectorFactoryBean jmsConnectorFactoryBean = new JmsConnectorFactoryBean();
+  private static JmsConnector createJmsConnector(final ComponentInfo info) {
+    final JmsConnectorFactoryBean jmsConnectorFactoryBean = new JmsConnectorFactoryBean();
     jmsConnectorFactoryBean.setName("ToolContext JMS Connector");
-    String jmsBroker = info.getAttribute(ComponentInfoAttributes.JMS_BROKER_URI);
-    URI jmsBrokerUri = URI.create(jmsBroker);
+    final String jmsBroker = info.getAttribute(ComponentInfoAttributes.JMS_BROKER_URI);
+    final URI jmsBrokerUri = URI.create(jmsBroker);
     jmsConnectorFactoryBean.setClientBrokerUri(jmsBrokerUri);
     jmsConnectorFactoryBean.setConnectionFactory(new ActiveMQConnectionFactory(jmsBrokerUri));
     return jmsConnectorFactoryBean.getObjectCreating();
   }
 
-  private static ComponentInfo getComponentInfo(ComponentServer componentServer, List<String> preferenceList, Class<?> type) {
-    Map<String, ComponentInfo> infos = componentServer.getComponentInfoMap(type);
+  private static ComponentInfo getComponentInfo(final ComponentServer componentServer, final List<String> preferenceList, final Class<?> type) {
+    final Map<String, ComponentInfo> infos = componentServer.getComponentInfoMap(type);
     if (preferenceList != null) {
-      for (String preference : preferenceList) {
-        ComponentInfo componentInfo = infos.get(preference);
+      for (final String preference : preferenceList) {
+        final ComponentInfo componentInfo = infos.get(preference);
         if (componentInfo != null) {
           return componentInfo;
         }

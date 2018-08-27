@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.bbg.permission;
@@ -10,6 +10,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 import org.joda.beans.Bean;
+import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
 import org.joda.beans.ImmutableBean;
 import org.joda.beans.JodaBeanUtils;
@@ -20,7 +21,6 @@ import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
-import org.joda.beans.BeanBuilder;
 
 /**
  * A cache key used to hold the user ID and IP address for Bloomberg authentication.
@@ -41,12 +41,12 @@ public final class IdentityCacheKey implements ImmutableBean {
 
   /**
    * Obtains an instance.
-   * 
+   *
    * @param ipAddress  the IP address, not null
    * @param userId  the user identifier, not null
    * @return the cache key, not null
    */
-  public static IdentityCacheKey of(String ipAddress, String userId) {
+  public static IdentityCacheKey of(final String ipAddress, final String userId) {
     return new IdentityCacheKey(ipAddress, userId);
   }
 

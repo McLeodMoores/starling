@@ -316,7 +316,7 @@ public class FederalFundsFutureSecurityDefinition extends FuturesSecurityDefinit
     final double lastTradingTime = TimeCalculator.getTimeBetween(valZdt, getLastTradingDate());
     int fixedPeriod = 0;
     double accruedInterest = 0.0;
-    while ((fixedPeriod < _fixingPeriodDates.length - 1) && valDate.isAfter(_fixingPeriodDates[fixedPeriod + _index.getPublicationLag()].toLocalDate())) {
+    while (fixedPeriod < _fixingPeriodDates.length - 1 && valDate.isAfter(_fixingPeriodDates[fixedPeriod + _index.getPublicationLag()].toLocalDate())) {
       final LocalDate currentDate = _fixingPeriodDates[fixedPeriod].toLocalDate();
       // Fixing should have taken place already
       final Double fixedRate = indexFixingDateSeries.getValue(currentDate);
@@ -370,18 +370,18 @@ public class FederalFundsFutureSecurityDefinition extends FuturesSecurityDefinit
     result = prime * result + Arrays.hashCode(_fixingPeriodDates);
     long temp;
     temp = Double.doubleToLongBits(_fixingTotalAccrualFactor);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _index.hashCode();
     temp = Double.doubleToLongBits(_marginAccrualFactor);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _name.hashCode();
     temp = Double.doubleToLongBits(_notional);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -391,7 +391,7 @@ public class FederalFundsFutureSecurityDefinition extends FuturesSecurityDefinit
     if (getClass() != obj.getClass()) {
       return false;
     }
-    FederalFundsFutureSecurityDefinition other = (FederalFundsFutureSecurityDefinition) obj;
+    final FederalFundsFutureSecurityDefinition other = (FederalFundsFutureSecurityDefinition) obj;
     if (!Arrays.equals(_fixingPeriodAccrualFactor, other._fixingPeriodAccrualFactor)) {
       return false;
     }

@@ -87,7 +87,7 @@ public class ManageablePosition extends DirectBean
    * An empty list usually means that trade data is unavailable.
    */
   @PropertyDefinition
-  private final List<ManageableTrade> _trades = new ArrayList<ManageableTrade>();
+  private final List<ManageableTrade> _trades = new ArrayList<>();
   /**
    * The general purpose position attributes.
    * These can be used to add arbitrary additional information to the object
@@ -112,7 +112,7 @@ public class ManageablePosition extends DirectBean
 
   /**
    * Creates a position from an amount of a security.
-   * 
+   *
    * @param quantity  the amount of the position, not null
    * @param securityId  the security identifier, not null
    */
@@ -125,7 +125,7 @@ public class ManageablePosition extends DirectBean
 
   /**
    * Creates a position from an amount of a security.
-   * 
+   *
    * @param quantity  the amount of the position, not null
    * @param securityId  the security bundle, not null
    */
@@ -135,10 +135,10 @@ public class ManageablePosition extends DirectBean
     _quantity = quantity;
     _securityLink = new ManageableSecurityLink(securityId);
   }
-  
+
   /**
    * Creates a deep copy of the specified position.
-   * 
+   *
    * @param copyFrom  the position to copy from, not null
    */
   public ManageablePosition(final ManageablePosition copyFrom) {
@@ -148,12 +148,12 @@ public class ManageablePosition extends DirectBean
     _providerId = copyFrom.getProviderId();
     _securityLink = JodaBeanUtils.clone(copyFrom.getSecurityLink());
     if (copyFrom.getAttributes() != null) {
-      for (Entry<String, String> entry : copyFrom.getAttributes().entrySet()) {
+      for (final Entry<String, String> entry : copyFrom.getAttributes().entrySet()) {
         addAttribute(entry.getKey(), entry.getValue());
       }
     }
     if (copyFrom.getTrades() != null) {
-      for (ManageableTrade trade : copyFrom.getTrades()) {
+      for (final ManageableTrade trade : copyFrom.getTrades()) {
         addTrade(JodaBeanUtils.clone(trade));
       }
     }
@@ -166,7 +166,7 @@ public class ManageablePosition extends DirectBean
    * @param quantity    the amount of the position, not null
    * @param securityId  the security identifier, not null
    */
-  public ManageablePosition(UniqueId uniqueId, BigDecimal quantity, ExternalIdBundle securityId) {
+  public ManageablePosition(final UniqueId uniqueId, final BigDecimal quantity, final ExternalIdBundle securityId) {
     ArgumentChecker.notNull(quantity, "quantity");
     ArgumentChecker.notNull(securityId, "securityId");
     setUniqueId(uniqueId);
@@ -177,7 +177,7 @@ public class ManageablePosition extends DirectBean
   //-------------------------------------------------------------------------
   /**
    * Adds a trade to the list.
-   * 
+   *
    * @param trade  the trade to add, not null
    */
   public void addTrade(final ManageableTrade trade) {
@@ -197,12 +197,12 @@ public class ManageablePosition extends DirectBean
 
   /**
    * Gets a suitable name for the position.
-   * 
+   *
    * @return the name, not null
    */
   @DerivedProperty
   public String getName() {
-    String bestName = getSecurityLink().getBestName();
+    final String bestName = getSecurityLink().getBestName();
     if (getQuantity() != null && bestName.length() > 0) {
       return JdkUtils.stripTrailingZeros(getQuantity()).toPlainString() + " x " + bestName;
     }
@@ -212,14 +212,14 @@ public class ManageablePosition extends DirectBean
   //-------------------------------------------------------------------------
   /**
    * Gets a trade from the list by object identifier.
-   * 
+   *
    * @param tradeObjectId  the trade object identifier, not null
    * @return the trade with the identifier, null if not found
    */
   public ManageableTrade getTrade(final ObjectIdentifiable tradeObjectId) {
     ArgumentChecker.notNull(tradeObjectId, "tradeObjectId");
-    ObjectId objectId = tradeObjectId.getObjectId();
-    for (ManageableTrade trade : getTrades()) {
+    final ObjectId objectId = tradeObjectId.getObjectId();
+    for (final ManageableTrade trade : getTrades()) {
       if (trade.getUniqueId().equalObjectId(objectId)) {
         return trade;
       }
@@ -228,13 +228,13 @@ public class ManageablePosition extends DirectBean
   }
   /**
    * Checks if any trade object identifier matches one in the specified list.
-   * 
+   *
    * @param objectIds  the object identifiers to match against, not null
    * @return true if at least one identifier matches
    */
-  public boolean matchesAnyTrade(Collection<ObjectId> objectIds) {
+  public boolean matchesAnyTrade(final Collection<ObjectId> objectIds) {
     ArgumentChecker.notNull(objectIds, "objectIds");
-    for (ManageableTrade trade : getTrades()) {
+    for (final ManageableTrade trade : getTrades()) {
       if (objectIds.contains(trade.getUniqueId().getObjectId())) {
         return true;
       }
@@ -244,28 +244,28 @@ public class ManageablePosition extends DirectBean
 
   /**
    * Checks if any trade provider key matches.
-   * 
+   *
    * @param tradeProviderId  the trade provider key to match against, not null
    * @return true if the key matches
    */
-  public boolean matchesAnyTradeProviderId(ExternalId tradeProviderId) {
+  public boolean matchesAnyTradeProviderId(final ExternalId tradeProviderId) {
     ArgumentChecker.notNull(tradeProviderId, "tradeProviderId");
-    for (ManageableTrade trade : getTrades()) {
+    for (final ManageableTrade trade : getTrades()) {
       if (tradeProviderId.equals(trade.getProviderId())) {
         return true;
       }
     }
     return false;
   }
-  
+
   //-------------------------------------------------------------------------
   /**
    * Adds a key value pair to attributes
-   * 
+   *
    * @param key  the key to add, not null
    * @param value  the value to add, not null
    */
-  public void addAttribute(String key, String value) {
+  public void addAttribute(final String key, final String value) {
     ArgumentChecker.notNull(key, "key");
     ArgumentChecker.notNull(value, "value");
     _attributes.put(key, value);
@@ -274,7 +274,7 @@ public class ManageablePosition extends DirectBean
   //-------------------------------------------------------------------------
   /**
    * Gets the resolved security from the link.
-   * 
+   *
    * @return the security from the link, null if not resolve
    */
   public Security getSecurity() {
@@ -286,16 +286,16 @@ public class ManageablePosition extends DirectBean
    * Converts this position to an object implementing the Position interface.
    * <p>
    * The interface contains different data to this class due to database design.
-   * 
+   *
    * @return the security from the link, null if not resolve
    */
   public SimplePosition toPosition() {
-    SimplePosition sp = new SimplePosition();
+    final SimplePosition sp = new SimplePosition();
     sp.setQuantity(this.getQuantity());
     sp.setSecurityLink(this.getSecurityLink());
     sp.getTrades().addAll(getTrades());
     sp.setAttributes(this.getAttributes());
-    
+
     // Workaround for PLAT-2371 until PLAT-2286
     if (this.getProviderId() != null) {
       sp.addAttribute(this.providerId().name(), this.getProviderId().toString());
@@ -307,7 +307,7 @@ public class ManageablePosition extends DirectBean
 
     return sp;
   }
-  
+
   //-----------------------------------------------------------------------
   @Override
   public ManageablePosition clone() {

@@ -12,10 +12,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.threeten.bp.Instant;
@@ -38,6 +34,10 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.ehcache.EHCacheUtils;
+
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
 
 /**
  * An EH-Cache based implementation of {@link ViewExecutionCache}.
@@ -64,7 +64,7 @@ public class EHCacheViewExecutionCache implements ViewExecutionCache {
 
   /**
    * Creates a new instance.
-   * 
+   *
    * @param cacheManager the cache manager, not null
    * @param targetResolver the target resolver for portfolio and view definition objects, not null
    */
@@ -81,7 +81,7 @@ public class EHCacheViewExecutionCache implements ViewExecutionCache {
 
   /**
    * Creates a new instance.
-   * 
+   *
    * @param cacheManager the cache manager, not null
    * @param cfs the compiled function service, holding a computation target resolver, not null
    */
@@ -91,7 +91,7 @@ public class EHCacheViewExecutionCache implements ViewExecutionCache {
 
   /**
    * Creates a new instance
-   * 
+   *
    * @param cacheManager the cache manager, not null
    * @param configSource not used
    * @param cfs the compiled function service, holding a computation target resolver, not null
@@ -137,20 +137,20 @@ public class EHCacheViewExecutionCache implements ViewExecutionCache {
     private final Instant _validFrom;
     private final Instant _validTo;
 
-    public CompiledViewDefinitionWithGraphsReader(EHCacheViewExecutionCache parent, CompiledViewDefinitionWithGraphs viewDef) {
+    public CompiledViewDefinitionWithGraphsReader(final EHCacheViewExecutionCache parent, final CompiledViewDefinitionWithGraphs viewDef) {
       _parent = parent.instance();
       _versionCorrection = viewDef.getResolverVersionCorrection();
       _compilationId = viewDef.getCompilationIdentifier();
       _viewDefinition = viewDef.getViewDefinition().getUniqueId();
       final Collection<DependencyGraphExplorer> graphs = viewDef.getDependencyGraphExplorers();
       _graphs = new ArrayList<>(graphs.size());
-      for (DependencyGraphExplorer explorer : graphs) {
+      for (final DependencyGraphExplorer explorer : graphs) {
         _graphs.add(explorer.getWholeGraph());
       }
       _resolutions = viewDef.getResolvedIdentifiers();
       _portfolio = viewDef.getPortfolio().getUniqueId();
       _functionInitId = ((CompiledViewDefinitionWithGraphsImpl) viewDef).getFunctionInitId();
-      _calcConfigs = new ArrayList<CompiledViewCalculationConfiguration>(viewDef.getCompiledCalculationConfigurations());
+      _calcConfigs = new ArrayList<>(viewDef.getCompiledCalculationConfigurations());
       _validFrom = viewDef.getValidFrom();
       _validTo = viewDef.getValidTo();
     }
@@ -160,7 +160,7 @@ public class EHCacheViewExecutionCache implements ViewExecutionCache {
       final ViewDefinition viewDefinition = (ViewDefinition) parent.getTargetResolver()
           .resolve(new ComputationTargetSpecification(ComputationTargetType.of(ViewDefinition.class), _viewDefinition), VersionCorrection.LATEST).getValue();
       final Portfolio portfolio = (Portfolio) parent.getTargetResolver().resolve(new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO, _portfolio), _versionCorrection).getValue();
-      CompiledViewDefinitionWithGraphsImpl compiledViewDef = new CompiledViewDefinitionWithGraphsImpl(_versionCorrection, _compilationId, viewDefinition, _graphs, _resolutions, portfolio,
+      final CompiledViewDefinitionWithGraphsImpl compiledViewDef = new CompiledViewDefinitionWithGraphsImpl(_versionCorrection, _compilationId, viewDefinition, _graphs, _resolutions, portfolio,
           _functionInitId, _calcConfigs, _validFrom, _validTo);
       return parent.new CompiledViewDefinitionWithGraphsHolder(compiledViewDef);
     }
@@ -171,7 +171,7 @@ public class EHCacheViewExecutionCache implements ViewExecutionCache {
 
     private static final long serialVersionUID = 1L;
 
-    private CompiledViewDefinitionWithGraphs _viewDefinition;
+    private final CompiledViewDefinitionWithGraphs _viewDefinition;
 
     public CompiledViewDefinitionWithGraphsHolder(final CompiledViewDefinitionWithGraphs viewDefinition) {
       _viewDefinition = viewDefinition;
@@ -188,7 +188,7 @@ public class EHCacheViewExecutionCache implements ViewExecutionCache {
   }
 
   @Override
-  public CompiledViewDefinitionWithGraphs getCompiledViewDefinitionWithGraphs(ViewExecutionCacheKey key) {
+  public CompiledViewDefinitionWithGraphs getCompiledViewDefinitionWithGraphs(final ViewExecutionCacheKey key) {
     CompiledViewDefinitionWithGraphs graphs = _compiledViewDefinitionsFrontCache.get(key);
     if (graphs != null) {
       LOGGER.debug("Front cache hit CompiledViewDefinitionWithGraphs for {}", key);
@@ -209,8 +209,8 @@ public class EHCacheViewExecutionCache implements ViewExecutionCache {
   }
 
   @Override
-  public void setCompiledViewDefinitionWithGraphs(ViewExecutionCacheKey key, CompiledViewDefinitionWithGraphs viewDefinition) {
-    CompiledViewDefinitionWithGraphs existing = _compiledViewDefinitionsFrontCache.put(key, viewDefinition);
+  public void setCompiledViewDefinitionWithGraphs(final ViewExecutionCacheKey key, final CompiledViewDefinitionWithGraphs viewDefinition) {
+    final CompiledViewDefinitionWithGraphs existing = _compiledViewDefinitionsFrontCache.put(key, viewDefinition);
     if (existing != null) {
       if (existing == viewDefinition) {
         return;

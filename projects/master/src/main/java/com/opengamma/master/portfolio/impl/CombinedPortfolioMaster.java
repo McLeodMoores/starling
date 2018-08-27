@@ -22,7 +22,7 @@ import com.opengamma.master.portfolio.PortfolioSearchResult;
 
 /**
  * A {@link PortfolioMaster} which delegates its calls to a list of underlying {@link PortfolioMaster}s.
- * 
+ *
  * This class extends {@link ChangeProvidingCombinedMaster} to implement methods specific to the {@link PortfolioMaster}.
  */
 public class CombinedPortfolioMaster extends ChangeProvidingCombinedMaster<PortfolioDocument, PortfolioMaster> implements PortfolioMaster {
@@ -32,29 +32,29 @@ public class CombinedPortfolioMaster extends ChangeProvidingCombinedMaster<Portf
   }
 
   @Override
-  public PortfolioSearchResult search(PortfolioSearchRequest overallRequest) {
+  public PortfolioSearchResult search(final PortfolioSearchRequest overallRequest) {
     final PortfolioSearchResult overallResult = new PortfolioSearchResult();
-    
+
     pagedSearch(new PortfolioSearchStrategy() {
-      
+
       @Override
-      public AbstractDocumentsResult<PortfolioDocument> search(PortfolioMaster master, PortfolioSearchRequest searchRequest) {
-        PortfolioSearchResult masterResult = master.search(searchRequest);
+      public AbstractDocumentsResult<PortfolioDocument> search(final PortfolioMaster master, final PortfolioSearchRequest searchRequest) {
+        final PortfolioSearchResult masterResult = master.search(searchRequest);
         overallResult.setVersionCorrection(masterResult.getVersionCorrection());
         return masterResult;
       }
     }, overallResult, overallRequest);
-    
+
     return overallResult;
 
   }
-  
+
   /**
    * Callback interface for portfolio searches
    */
   private interface PortfolioSearchStrategy extends SearchStrategy<PortfolioDocument, PortfolioMaster, PortfolioSearchRequest> { }
 
-  
+
   /**
    * Callback interface for the search operation to sort, filter and process results.
    */
@@ -63,8 +63,8 @@ public class CombinedPortfolioMaster extends ChangeProvidingCombinedMaster<Portf
 
   public void search(final PortfolioSearchRequest request, final SearchCallback callback) {
     // TODO: parallel operation of any search requests
-    List<PortfolioSearchResult> results = Lists.newArrayList();
-    for (PortfolioMaster master : getMasterList()) {
+    final List<PortfolioSearchResult> results = Lists.newArrayList();
+    for (final PortfolioMaster master : getMasterList()) {
       results.add(master.search(request));
     }
     search(results, callback);
@@ -76,12 +76,12 @@ public class CombinedPortfolioMaster extends ChangeProvidingCombinedMaster<Portf
     if (master != null) {
       return master.history(request);
     }
-    return (new Try<PortfolioHistoryResult>() {
+    return new Try<PortfolioHistoryResult>() {
       @Override
       public PortfolioHistoryResult tryMaster(final PortfolioMaster master) {
         return master.history(request);
       }
-    }).each(request.getObjectId().getScheme());
+    }.each(request.getObjectId().getScheme());
   }
 
   @Override
@@ -90,12 +90,12 @@ public class CombinedPortfolioMaster extends ChangeProvidingCombinedMaster<Portf
     if (master != null) {
       return master.getNode(nodeId);
     }
-    return (new Try<ManageablePortfolioNode>() {
+    return new Try<ManageablePortfolioNode>() {
       @Override
       public ManageablePortfolioNode tryMaster(final PortfolioMaster master) {
         return master.getNode(nodeId);
       }
-    }).each(nodeId.getScheme());
+    }.each(nodeId.getScheme());
   }
 
 }

@@ -15,13 +15,13 @@ import com.opengamma.util.ArgumentChecker;
 public class ValueSpecificationJSONBuilder extends AbstractJSONBuilder<ValueSpecification> {
 
   @Override
-  public ValueSpecification fromJSON(String json) {
+  public ValueSpecification fromJSON(final String json) {
     ArgumentChecker.notEmpty(json, "json");
     return fromJSON(ValueSpecification.class, json);
   }
 
   @Override
-  public String toJSON(ValueSpecification valueSpecification) {
+  public String toJSON(final ValueSpecification valueSpecification) {
     ArgumentChecker.notNull(valueSpecification, "valueRequirement");
     return fudgeToJson(valueSpecification);
   }

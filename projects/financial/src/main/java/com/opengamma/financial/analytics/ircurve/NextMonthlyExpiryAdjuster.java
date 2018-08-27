@@ -16,7 +16,7 @@ import org.threeten.bp.temporal.TemporalAdjuster;
 import org.threeten.bp.temporal.TemporalAdjusters;
 
 /**
- * {@code DatAdjuster} that finds the next Expiry in Interest Rate Futures Options. 
+ * {@code DatAdjuster} that finds the next Expiry in Interest Rate Futures Options.
  * This is the 3rd Wednesday of the next IMM Future Expiry Month.
  */
 public class NextMonthlyExpiryAdjuster implements TemporalAdjuster {
@@ -31,8 +31,8 @@ public class NextMonthlyExpiryAdjuster implements TemporalAdjuster {
   private final Set<Month> _futureQuarters = EnumSet.of(Month.MARCH, Month.JUNE, Month.SEPTEMBER, Month.DECEMBER);
 
   @Override
-  public Temporal adjustInto(Temporal temporal) {
-    LocalDate date = LocalDate.from(temporal);
+  public Temporal adjustInto(final Temporal temporal) {
+    final LocalDate date = LocalDate.from(temporal);
     if (_futureQuarters.contains(date.getMonth()) &&
         date.with(DAY_OF_MONTH).isAfter(date)) { // in a quarter
       return temporal.with(date.with(DAY_OF_MONTH));

@@ -33,7 +33,7 @@ public class MasterExchangeSource extends AbstractMasterSource<Exchange, Exchang
 
   /**
    * Creates an instance with an underlying master.
-   * 
+   *
    * @param master the master, not null
    */
   public MasterExchangeSource(final ExchangeMaster master) {
@@ -43,42 +43,42 @@ public class MasterExchangeSource extends AbstractMasterSource<Exchange, Exchang
   //-------------------------------------------------------------------------
   @SuppressWarnings({"unchecked", "rawtypes" })
   @Override
-  public Collection<Exchange> get(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
-    ExchangeSearchRequest searchRequest = new ExchangeSearchRequest(bundle);
+  public Collection<Exchange> get(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
+    final ExchangeSearchRequest searchRequest = new ExchangeSearchRequest(bundle);
     searchRequest.setVersionCorrection(versionCorrection);
     return (List) getMaster().search(searchRequest).getExchanges();
   }
 
   @Override
-  public ManageableExchange getSingle(ExternalId identifier) {
+  public ManageableExchange getSingle(final ExternalId identifier) {
     return getSingle(identifier.toBundle());
   }
 
   @Override
-  public ManageableExchange getSingle(ExternalIdBundle identifiers) {
+  public ManageableExchange getSingle(final ExternalIdBundle identifiers) {
     return getSingle(identifiers, VersionCorrection.LATEST);
   }
 
   @Override
-  public Map<ExternalIdBundle, Collection<Exchange>> getAll(Collection<ExternalIdBundle> bundles, VersionCorrection versionCorrection) {
+  public Map<ExternalIdBundle, Collection<Exchange>> getAll(final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
     return AbstractSourceWithExternalBundle.getAll(this, bundles, versionCorrection);
   }
 
   @Override
-  public Collection<Exchange> get(ExternalIdBundle bundle) {
+  public Collection<Exchange> get(final ExternalIdBundle bundle) {
     return get(bundle, VersionCorrection.LATEST);
   }
 
   @Override
-  public ManageableExchange getSingle(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
-    ExchangeSearchRequest searchRequest = new ExchangeSearchRequest(bundle);
+  public ManageableExchange getSingle(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
+    final ExchangeSearchRequest searchRequest = new ExchangeSearchRequest(bundle);
     searchRequest.setPagingRequest(PagingRequest.ONE);
     searchRequest.setVersionCorrection(versionCorrection);
     return getMaster().search(searchRequest).getFirstExchange();
   }
 
   @Override
-  public Map<ExternalIdBundle, Exchange> getSingle(Collection<ExternalIdBundle> bundles, VersionCorrection versionCorrection) {
+  public Map<ExternalIdBundle, Exchange> getSingle(final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
     return AbstractSourceWithExternalBundle.getSingle(this, bundles, versionCorrection);
   }
 

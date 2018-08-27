@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.marketdata.spec;
@@ -24,23 +24,23 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import com.opengamma.id.UniqueId;
 
 /**
- * 
+ *
  */
 @BeanDefinition
 public final class UserMarketDataSpecification implements ImmutableBean, MarketDataSpecification {
-  
+
   private static final long serialVersionUID = 1L;
-  
+
   @PropertyDefinition(validate = "notNull")
   private final UniqueId _userSnapshotId;
-  
+
   /**
-   * Creates an instance 
-   * 
+   * Creates an instance
+   *
    * @param userSnapshotId the user snapshot id, not-null
    * @return the user market data specification
    */
-  public static UserMarketDataSpecification of(UniqueId userSnapshotId) {
+  public static UserMarketDataSpecification of(final UniqueId userSnapshotId) {
     return new UserMarketDataSpecification(userSnapshotId);
   }
 

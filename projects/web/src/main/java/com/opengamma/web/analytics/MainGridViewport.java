@@ -28,9 +28,9 @@ import com.opengamma.util.tuple.Pair;
    * @param callbackId ID that's passed to listeners when the grid structure changes
    * @param viewportDefinition The viewport definition
    */
-  /* package */ MainGridViewport(String callbackId,
-                                 String structureCallbackId,
-                                 ViewportDefinition viewportDefinition) {
+  /* package */ MainGridViewport(final String callbackId,
+                                 final String structureCallbackId,
+                                 final ViewportDefinition viewportDefinition) {
     ArgumentChecker.notEmpty(callbackId, "callbackId");
     _callbackId = callbackId;
     _viewportDefinition = viewportDefinition;
@@ -41,12 +41,13 @@ import com.opengamma.util.tuple.Pair;
    * Updates the data in the viewport using the results in the cache.
    * @param cache The latest results
    */
-  /* package */ void updateResults(ResultsCache cache) {
-    Pair<ViewportResults, State> resultsAndState = getGridStructure().createResults(getDefinition() , cache);
+  /* package */ void updateResults(final ResultsCache cache) {
+    final Pair<ViewportResults, State> resultsAndState = getGridStructure().createResults(getDefinition(), cache);
     _latestResults = resultsAndState.getFirst();
     _state = resultsAndState.getSecond();
   }
 
+  @Override
   public abstract MainGridStructure getGridStructure();
 
   @Override
@@ -59,7 +60,7 @@ import com.opengamma.util.tuple.Pair;
     return _structureCallbackId;
   }
 
-  void setViewportDefinition(ViewportDefinition viewportDefinition) {
+  void setViewportDefinition(final ViewportDefinition viewportDefinition) {
     _viewportDefinition = viewportDefinition;
   }
 
@@ -68,6 +69,7 @@ import com.opengamma.util.tuple.Pair;
     return _viewportDefinition;
   }
 
+  @Override
   public String getCallbackId() {
     return _callbackId;
   }

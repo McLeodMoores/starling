@@ -49,16 +49,16 @@ public class CompiledViewCalculationConfigurationImpl implements CompiledViewCal
 
   /**
    * Constructs an instance
-   * 
+   *
    * @param name the name of the view calculation configuration, not null
    * @param computationTargets the computation targets, not null
    * @param terminalOutputSpecs the output specifications, not null
    * @param marketDataSpecs the market data specifications, not null
    */
-  public CompiledViewCalculationConfigurationImpl(String name,
-      Set<ComputationTargetSpecification> computationTargets,
-      Map<ValueSpecification, Set<ValueRequirement>> terminalOutputSpecs,
-      Map<ValueSpecification, Collection<ValueSpecification>> marketDataSpecs) {
+  public CompiledViewCalculationConfigurationImpl(final String name,
+      final Set<ComputationTargetSpecification> computationTargets,
+      final Map<ValueSpecification, Set<ValueRequirement>> terminalOutputSpecs,
+      final Map<ValueSpecification, Collection<ValueSpecification>> marketDataSpecs) {
     this(name, computationTargets, terminalOutputSpecs, marketDataSpecs,
         Collections.<DistinctMarketDataSelector, Set<ValueSpecification>>emptyMap(),
         Collections.<DistinctMarketDataSelector, FunctionParameters>emptyMap());
@@ -66,7 +66,7 @@ public class CompiledViewCalculationConfigurationImpl implements CompiledViewCal
 
   /**
    * Constructs an instance
-   * 
+   *
    * @param name the name of the view calculation configuration, not null
    * @param computationTargets the computation targets, not null
    * @param terminalOutputSpecifications the output specifications, not null
@@ -75,12 +75,12 @@ public class CompiledViewCalculationConfigurationImpl implements CompiledViewCal
    * @param marketDataSelectionFunctionParameters the function parameters to be used for the market data selections, not null
    */
   public CompiledViewCalculationConfigurationImpl(
-      String name,
-      Set<ComputationTargetSpecification> computationTargets,
-      Map<ValueSpecification, Set<ValueRequirement>> terminalOutputSpecifications,
-      Map<ValueSpecification, Collection<ValueSpecification>> marketDataSpecifications,
-      Map<DistinctMarketDataSelector, Set<ValueSpecification>> marketDataSelections,
-      Map<DistinctMarketDataSelector, FunctionParameters> marketDataSelectionFunctionParameters) {
+      final String name,
+      final Set<ComputationTargetSpecification> computationTargets,
+      final Map<ValueSpecification, Set<ValueRequirement>> terminalOutputSpecifications,
+      final Map<ValueSpecification, Collection<ValueSpecification>> marketDataSpecifications,
+      final Map<DistinctMarketDataSelector, Set<ValueSpecification>> marketDataSelections,
+      final Map<DistinctMarketDataSelector, FunctionParameters> marketDataSelectionFunctionParameters) {
     ArgumentChecker.notNull(name, "name");
     ArgumentChecker.notNull(computationTargets, "computationTargets");
     ArgumentChecker.notNull(terminalOutputSpecifications, "terminalOutputSpecifications");
@@ -97,7 +97,7 @@ public class CompiledViewCalculationConfigurationImpl implements CompiledViewCal
 
   /**
    * Constructs an instance from a dependency graph
-   * 
+   *
    * @param dependencyGraph the dependency graph, not null
    * @return the new instance, not null
    */
@@ -107,7 +107,7 @@ public class CompiledViewCalculationConfigurationImpl implements CompiledViewCal
 
   /**
    * Constructs an instance from a dependency graph with market data manipulation selections and function parameters
-   * 
+   *
    * @param graph the dependency graph, not null
    * @param marketDataSelections the market data selections that have been made to support manipulation of the structured market data, not null
    * @param marketDataSelectionFunctionParameters the function params to be used for the market data selections, not null
@@ -118,8 +118,8 @@ public class CompiledViewCalculationConfigurationImpl implements CompiledViewCal
       final Map<DistinctMarketDataSelector, FunctionParameters> marketDataSelectionFunctionParameters) {
     ArgumentChecker.notNull(graph, "graph");
     final Map<ValueSpecification, ?> terminals = graph.getTerminalOutputs();
-    final Set<ComputationTargetSpecification> targets = new HashSet<ComputationTargetSpecification>();
-    final Map<ValueSpecification, Collection<ValueSpecification>> marketData = new HashMap<ValueSpecification, Collection<ValueSpecification>>();
+    final Set<ComputationTargetSpecification> targets = new HashSet<>();
+    final Map<ValueSpecification, Collection<ValueSpecification>> marketData = new HashMap<>();
     final Set<DependencyNode> visited = Sets.newHashSetWithExpectedSize(graph.getSize());
     final int rootCount = graph.getRootCount();
     for (int i = 0; i < rootCount; i++) {
@@ -147,7 +147,7 @@ public class CompiledViewCalculationConfigurationImpl implements CompiledViewCal
         Collection<ValueSpecification> aliases = marketData.get(marketDataSpec);
         final int outputs = node.getOutputCount();
         if (aliases == null) {
-          aliases = new ArrayList<ValueSpecification>(outputs);
+          aliases = new ArrayList<>(outputs);
           marketData.put(marketDataSpec, aliases);
         }
         for (int i = 0; i < outputs; i++) {
@@ -165,7 +165,7 @@ public class CompiledViewCalculationConfigurationImpl implements CompiledViewCal
         final ValueSpecification marketDataSpec = node.getOutputValue(0);
         Collection<ValueSpecification> aliases = marketData.get(marketDataSpec);
         if (aliases == null) {
-          aliases = new ArrayList<ValueSpecification>(1);
+          aliases = new ArrayList<>(1);
           marketData.put(marketDataSpec, aliases);
         }
         aliases.add(node.getOutputValue(0));

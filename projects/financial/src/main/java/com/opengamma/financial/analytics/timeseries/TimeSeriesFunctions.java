@@ -33,7 +33,7 @@ public class TimeSeriesFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Default instance of a repository configuration source exposing the functions from this package.
-   * 
+   *
    * @return the configuration source exposing functions from this package
    */
   public static FunctionConfigurationSource instance() {
@@ -43,7 +43,7 @@ public class TimeSeriesFunctions extends AbstractFunctionConfigurationBean {
   /**
    * Returns a factory that populates the repository with functions that produce {@link ValueRequirementNames#YIELD_CURVE_HISTORICAL_TIME_SERIES} for all curve types <b>except</b>
    * {@link ImpliedDepositCurveFunction#IMPLIED_DEPOSIT}
-   * 
+   *
    * @param configMaster The configuration master
    * @return A function configuration source
    */
@@ -58,7 +58,7 @@ public class TimeSeriesFunctions extends AbstractFunctionConfigurationBean {
       }
 
       @Override
-      protected boolean isPropogateEvent(ChangeEvent event) {
+      protected boolean isPropogateEvent(final ChangeEvent event) {
         return Providers.isMonitoredType(event.getObjectId().getValue());
       }
 
@@ -74,7 +74,7 @@ public class TimeSeriesFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the configuration master.
-     * 
+     *
      * @param configMaster The config master
      */
     public void setConfigMaster(final ConfigMaster configMaster) {
@@ -83,7 +83,7 @@ public class TimeSeriesFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the configuration master.
-     * 
+     *
      * @return The configuration master.
      */
     public ConfigMaster getConfigMaster() {

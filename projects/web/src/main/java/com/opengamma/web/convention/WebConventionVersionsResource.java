@@ -42,10 +42,10 @@ public class WebConventionVersionsResource extends AbstractWebConventionResource
   //-------------------------------------------------------------------------
   @GET
   public String getHTML() {
-    ConventionHistoryRequest request = new ConventionHistoryRequest(data().getConvention().getUniqueId());
-    ConventionHistoryResult result = data().getConventionMaster().history(request);
+    final ConventionHistoryRequest request = new ConventionHistoryRequest(data().getConvention().getUniqueId());
+    final ConventionHistoryResult result = data().getConventionMaster().history(request);
 
-    FlexiBean out = createRootData();
+    final FlexiBean out = createRootData();
     out.put("versionsResult", result);
     out.put("versions", result.getConventions());
     return getFreemarker().build(HTML_DIR + "conventionversions.ftl", out);
@@ -54,19 +54,19 @@ public class WebConventionVersionsResource extends AbstractWebConventionResource
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public Response getJSON(
-      @QueryParam("pgIdx") Integer pgIdx,
-      @QueryParam("pgNum") Integer pgNum,
-      @QueryParam("pgSze") Integer pgSze) {
-    PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
-    ConventionHistoryRequest request = new ConventionHistoryRequest(data().getConvention().getUniqueId());
+      @QueryParam("pgIdx") final Integer pgIdx,
+      @QueryParam("pgNum") final Integer pgNum,
+      @QueryParam("pgSze") final Integer pgSze) {
+    final PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
+    final ConventionHistoryRequest request = new ConventionHistoryRequest(data().getConvention().getUniqueId());
     request.setPagingRequest(pr);
-    ConventionHistoryResult result = data().getConventionMaster().history(request);
+    final ConventionHistoryResult result = data().getConventionMaster().history(request);
 
-    FlexiBean out = createRootData();
+    final FlexiBean out = createRootData();
     out.put("versionsResult", result);
     out.put("versions", result.getConventions());
     out.put("paging", new WebPaging(result.getPaging(), data().getUriInfo()));
-    String json = getFreemarker().build(JSON_DIR + "conventionversions.ftl", out);
+    final String json = getFreemarker().build(JSON_DIR + "conventionversions.ftl", out);
     return Response.ok(json).build();
   }
 
@@ -75,9 +75,10 @@ public class WebConventionVersionsResource extends AbstractWebConventionResource
    * Creates the output root data.
    * @return the output root data, not null
    */
+  @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
-    ConventionDocument doc = data().getConvention();
+    final FlexiBean out = super.createRootData();
+    final ConventionDocument doc = data().getConvention();
     out.put("conventionDoc", doc);
     out.put("convention", doc.getConvention());
     out.put("conventionDescription", getConventionTypesProvider().getDescription(doc.getConvention().getClass()));
@@ -87,12 +88,12 @@ public class WebConventionVersionsResource extends AbstractWebConventionResource
 
   //-------------------------------------------------------------------------
   @Path("{versionId}")
-  public WebConventionVersionResource findVersion(@PathParam("versionId") String idStr) {
+  public WebConventionVersionResource findVersion(@PathParam("versionId") final String idStr) {
     data().setUriVersionId(idStr);
-    ConventionDocument doc = data().getConvention();
-    UniqueId combined = doc.getUniqueId().withVersion(idStr);
+    final ConventionDocument doc = data().getConvention();
+    final UniqueId combined = doc.getUniqueId().withVersion(idStr);
     if (doc.getUniqueId().equals(combined) == false) {
-      ConventionDocument versioned = data().getConventionMaster().get(combined);
+      final ConventionDocument versioned = data().getConventionMaster().get(combined);
       data().setVersioned(versioned);
     } else {
       data().setVersioned(doc);
@@ -107,7 +108,7 @@ public class WebConventionVersionsResource extends AbstractWebConventionResource
    * @return the URI, not null
    */
   public static URI uri(final WebConventionData data) {
-    String conventionId = data.getBestConventionUriId(null);
+    final String conventionId = data.getBestConventionUriId(null);
     return data.getUriInfo().getBaseUriBuilder().path(WebConventionVersionsResource.class).build(conventionId);
   }
 

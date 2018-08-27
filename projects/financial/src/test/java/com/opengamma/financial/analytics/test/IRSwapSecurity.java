@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.test;
@@ -25,18 +25,18 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import com.opengamma.financial.security.swap.SwapSecurity;
 
 /**
- * 
+ *
  */
 @BeanDefinition
 public final class IRSwapSecurity implements ImmutableBean {
-  
+
   @PropertyDefinition(validate = "notNull")
   private final SwapSecurity _swapSecurity;
-  
+
   @PropertyDefinition(validate = "notNull")
   private final FudgeMsg _rawInput;
-  
-  public static IRSwapSecurity of(SwapSecurity swapSecurity, FudgeMsg rawInput) {
+
+  public static IRSwapSecurity of(final SwapSecurity swapSecurity, final FudgeMsg rawInput) {
     return new IRSwapSecurity(swapSecurity, rawInput);
   }
 

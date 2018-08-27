@@ -37,15 +37,15 @@ public class BondNetMarketValueFromCleanPriceFunction extends AbstractFunction.N
   private String getOutputName() {
     return ValueRequirementNames.NET_MARKET_VALUE;
   }
-  
+
   @Override
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
-    Security security = target.getPositionOrTrade().getSecurity();
-    return (security instanceof BondSecurity);
+    final Security security = target.getPositionOrTrade().getSecurity();
+    return security instanceof BondSecurity;
   }
-  
+
   @Override
-  public Set<ComputedValue> execute(FunctionExecutionContext executionContext, FunctionInputs inputs, ComputationTarget target, Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
     // Get Clean Price
     Double cleanPrice = null;
     final ComputedValue inputVal = inputs.getComputedValue(ValueRequirementNames.SECURITY_MARKET_PRICE);
@@ -63,12 +63,13 @@ public class BondNetMarketValueFromCleanPriceFunction extends AbstractFunction.N
     return Sets.newHashSet(new ComputedValue(valueSpecification, bondEquivalentValue));
   }
 
+  @Override
   public ComputationTargetType getTargetType() {
     return ComputationTargetType.POSITION_OR_TRADE;
   }
 
   @Override
-  public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
     return Collections.singleton(new ValueSpecification(getOutputName() , target.toSpecification(), ValueProperties.all()));
   }
 
@@ -89,7 +90,7 @@ public class BondNetMarketValueFromCleanPriceFunction extends AbstractFunction.N
   }
 
   @Override
-  public Set<ValueRequirement> getRequirements(FunctionCompilationContext context, ComputationTarget target, ValueRequirement desiredValue) {
+  public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     if (!desiredValue.getValueName().equals(getOutputName())) {
       return null;
     }

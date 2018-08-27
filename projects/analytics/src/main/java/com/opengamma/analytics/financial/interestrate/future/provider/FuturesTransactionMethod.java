@@ -22,7 +22,7 @@ public abstract class FuturesTransactionMethod {
    * Constructor.
    * @param securityMethod The method used to price the underlying futures security.
    */
-  public FuturesTransactionMethod(FuturesSecurityMethod securityMethod) {
+  public FuturesTransactionMethod(final FuturesSecurityMethod securityMethod) {
     super();
     _securityMethod = securityMethod;
   }
@@ -42,9 +42,9 @@ public abstract class FuturesTransactionMethod {
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValueFromPrice(final FuturesTransaction<?> futures, final double quotedPrice) {
-    double priceIndex = _securityMethod.marginIndex(futures.getUnderlyingSecurity(), quotedPrice);
-    double referenceIndex = _securityMethod.marginIndex(futures.getUnderlyingSecurity(), futures.getReferencePrice());
-    double pv = (priceIndex - referenceIndex) * futures.getQuantity();
+    final double priceIndex = _securityMethod.marginIndex(futures.getUnderlyingSecurity(), quotedPrice);
+    final double referenceIndex = _securityMethod.marginIndex(futures.getUnderlyingSecurity(), futures.getReferencePrice());
+    final double pv = (priceIndex - referenceIndex) * futures.getQuantity();
     return MultipleCurrencyAmount.of(futures.getUnderlyingSecurity().getCurrency(), pv);
   }
 

@@ -183,11 +183,11 @@ public class ExternalSchemes {
   //------------------ METHODS FOR USER IDENTITY -----------------------------
   /**
    * Creates a Windows user id.
-   * 
+   *
    * @param windowsUserId  the Windows user id, not null
    * @return the identifier, not null
    */
-  public static ExternalId windowsUserId(String windowsUserId) {
+  public static ExternalId windowsUserId(final String windowsUserId) {
     ArgumentChecker.notNull(windowsUserId, "windowsUserId");
     return ExternalId.of(ExternalSchemes.WINDOWS_USER_ID, windowsUserId);
   }
@@ -196,7 +196,7 @@ public class ExternalSchemes {
    * Creates a UUID identifier.
    * <p>
    * This is an identifier for BPS bloomberg user.
-   * 
+   *
    * @param uuid the bps bloomberg user identifier, not null
    * @return the user uuid identifier, not null
    */
@@ -207,8 +207,8 @@ public class ExternalSchemes {
   /**
    * Creates an EMRSID identifier.
    * <p>
-   * This is an identifier for NON-BPS bloomberg user 
-   * 
+   * This is an identifier for NON-BPS bloomberg user
+   *
    *  @param emrsid the non-bps bloomberg user identifier, not null
    * @return the user emrsid identifier, not null
    */
@@ -224,7 +224,7 @@ public class ExternalSchemes {
    * The first two characters are the ISO country code, followed by a 9 character
    * alphanumeric national code and a single numeric check-digit.
    * Example might be {@code US0231351067}.
-   * 
+   *
    * @param code  the ISIN code, not null
    * @return the security identifier, not null
    */
@@ -245,7 +245,7 @@ public class ExternalSchemes {
    * This is the national securities identifying number for USA and Canada.
    * The code should be 8 alphanumeric characters followed by a single numeric check-digit.
    * Example might be {@code 023135106}.
-   * 
+   *
    * @param code  the CUSIP code, not null
    * @return the security identifier, not null
    */
@@ -266,7 +266,7 @@ public class ExternalSchemes {
    * This is the national securities identifying number for UK and Ireland.
    * The code should be 6 alphanumeric characters followed by a single numeric check-digit.
    * Example might be {@code 0263494}.
-   * 
+   *
    * @param code  the SEDOL code, not null
    * @return the security identifier, not null
    */
@@ -286,7 +286,7 @@ public class ExternalSchemes {
    * <p>
    * This is the BUID code supplied by Bloomberg.
    * Examples might be {@code EQ0010599500001000} or {@code IX6572023-0}.
-   * 
+   *
    * @param code  the Bloomberg BIUD code, not null
    * @return the security identifier, not null
    */
@@ -303,7 +303,7 @@ public class ExternalSchemes {
    * <p>
    * This is the ticker supplied by Bloomberg.
    * Examples might be {@code MCO US Equity} or {@code CSCO US 01/21/12 C30 Equity}.
-   * 
+   *
    * @param ticker  the Bloomberg ticker, not null
    * @return the security identifier, not null
    */
@@ -319,7 +319,7 @@ public class ExternalSchemes {
    * Creates a Synthetic ticker.
    * <p>
    * This is the ticker used mainly by Examples-Simulated.
-   * 
+   *
    * @param ticker  the OG-Synthetic ticker, not null
    * @return the security identifier, not null
    */
@@ -336,7 +336,7 @@ public class ExternalSchemes {
    * <p>
    * This is the ticker combined with a coupon and a maturity supplied by Bloomberg.
    * Example might be {@code T 4.75 15/08/43 Govt}.
-   * 
+   *
    * @param tickerWithoutSector  the Bloomberg ticker without the sector, not null
    * @param coupon  the coupon, not null
    * @param maturity  the maturity date, not null
@@ -383,7 +383,7 @@ public class ExternalSchemes {
    * <p>
    * This is the RIC code supplied by Reuters.
    * Example might be {@code MSFT.OQ}.
-   * 
+   *
    * @param code  the BIUD code, not null
    * @return the security identifier, not null
    */
@@ -400,7 +400,7 @@ public class ExternalSchemes {
    * <p>
    * This is the ticker used by ActivFeed.
    * Examples might be {@code IBM.N} or {@code C/04H.CB}.
-   * 
+   *
    * @param ticker  the ActivFeed ticker, not null
    * @return the security identifier, not null
    */
@@ -417,7 +417,7 @@ public class ExternalSchemes {
    * <p>
    * This is the ticker used by Tullett-Prebon.
    * An example is {@code ASIRSUSD20Y30S03L}.
-   * 
+   *
    * @param ticker The Tullett-Prebon ticker, not null
    * @return The security identifier, not null
    */
@@ -433,7 +433,7 @@ public class ExternalSchemes {
    * Creates an ICAP ticker.
    * <p>
    * This is the ticker used by ICAP.
-   * 
+   *
    * @param ticker The ICAP ticker, not null
    * @return The security identifier, not null
    */
@@ -449,7 +449,7 @@ public class ExternalSchemes {
    * Creates a GMI ticker.
    * <p>
    * This is the ticker used by GMI.
-   * 
+   *
    * @param ticker The GMI ticker, not null
    * @return The security identifier, not null
    */
@@ -488,7 +488,7 @@ public class ExternalSchemes {
 
   /**
    * Creates an identifier for a financial location.
-   * 
+   *
    * @param code  the code, not null
    * @return the region identifier, not null
    */
@@ -504,7 +504,7 @@ public class ExternalSchemes {
    * Creates a tz database time-zone code.
    * <p>
    * Examples might be {@code Europe/London} or {@code Asia/Hong_Kong}.
-   * 
+   *
    * @param zone  the time-zone, not null
    * @return the region identifier, not null
    */
@@ -518,7 +518,7 @@ public class ExternalSchemes {
    * This is based on UN/LOCODE.
    * <p>
    * Examples might be {@code GBHOH} or {@code AEDXB}.
-   * 
+   *
    * @param locode  the Copp Clark LOCODE, not null
    * @return the region identifier, not null
    */
@@ -534,7 +534,7 @@ public class ExternalSchemes {
    * Creates a UN/LOCODE 2010-2 code, formatted without spaces.
    * <p>
    * Examples might be {@code GBHOH} or {@code AEDXB}.
-   * 
+   *
    * @param locode  the UN/LOCODE, not null
    * @return the region identifier, not null
    */
@@ -550,7 +550,7 @@ public class ExternalSchemes {
    * Creates an ISO alpha 3 currency code.
    * <p>
    * Examples might be {@code GBP} or {@code USD}.
-   * 
+   *
    * @param currency  the currency, not null
    * @return the region identifier, not null
    */
@@ -563,7 +563,7 @@ public class ExternalSchemes {
    * Creates an ISO alpha 2 country code.
    * <p>
    * Examples might be {@code GB} or {@code US}.
-   * 
+   *
    * @param country  the country, not null
    * @return the region identifier, not null
    */
@@ -577,7 +577,7 @@ public class ExternalSchemes {
    * Creates an ISO MIC code.
    * <p>
    * Examples might be {@code XLON} or {@code XNYS}.
-   * 
+   *
    * @param code  the code, not null
    * @return the region identifier, not null
    */
@@ -594,7 +594,7 @@ public class ExternalSchemes {
    * Creates an ISDA holiday code.
    * <p>
    * Examples might be {@code USNY} or {@code EUTA}.
-   * 
+   *
    * @param code  the code, not null
    * @return the holiday identifier, not null
    */

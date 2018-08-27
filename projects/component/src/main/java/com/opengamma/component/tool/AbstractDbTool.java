@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.component.tool;
@@ -29,7 +29,7 @@ import com.opengamma.util.db.tool.DbToolContext;
  * Abstract tool for operating on databases.
  * <p>
  * This type of tool requires a config-based database tool context in order to obtain direct access to a database.
- * 
+ *
  * @param <T>  the type of database tool context
  */
 public abstract class AbstractDbTool<T extends DbToolContext> {
@@ -38,7 +38,7 @@ public abstract class AbstractDbTool<T extends DbToolContext> {
    * The logger.
    */
   private static final Logger LOGGER = LoggerFactory.getLogger(AbstractDbTool.class);
-  
+
   /**
    * Help command line option.
    */
@@ -59,7 +59,7 @@ public abstract class AbstractDbTool<T extends DbToolContext> {
    * Output file command line option.
    */
   private static final String OUTPUT_FILE_OPTION = "o";
-  
+
   static {
     StartupUtils.init();
   }
@@ -72,18 +72,18 @@ public abstract class AbstractDbTool<T extends DbToolContext> {
    * The database tool context.
    */
   private T _dbToolContext;
-  
+
   //-------------------------------------------------------------------------
   /**
    * Initializes the tool statically.
-   * 
+   *
    * @param logbackResource the logback resource location, not null
    * @return true if successful
    */
   public static final boolean init(final String logbackResource) {
     return ToolUtils.initLogback(logbackResource);
   }
-  
+
   //-------------------------------------------------------------------------
   /**
    * Initializes and runs the tool from standard command-line arguments.
@@ -92,20 +92,20 @@ public abstract class AbstractDbTool<T extends DbToolContext> {
    * c/config - the config file, mandatory unless default specified<br />
    * l/logback - the logback configuration, default tool-logback.xml<br />
    * h/help - prints the help tool<br />
-   * 
+   *
    * @param args the command-line arguments, not null
    * @param toolContextClass the type of database tool context to create, should match the generic type argument
    * @return true if successful, false otherwise
    */
-  public boolean initAndRun(String[] args, Class<? extends T> toolContextClass) {
+  public boolean initAndRun(final String[] args, final Class<? extends T> toolContextClass) {
     ArgumentChecker.notNull(args, "args");
 
-    Options options = createOptions();
-    CommandLineParser parser = new PosixParser();
+    final Options options = createOptions();
+    final CommandLineParser parser = new PosixParser();
     CommandLine line;
     try {
       line = parser.parse(options, args);
-    } catch (ParseException e) {
+    } catch (final ParseException e) {
       usage(options);
       return false;
     }
@@ -116,10 +116,10 @@ public abstract class AbstractDbTool<T extends DbToolContext> {
     }
     String logbackResource = line.getOptionValue(LOGBACK_RESOURCE_OPTION);
     logbackResource = StringUtils.defaultIfEmpty(logbackResource, ToolUtils.getDefaultLogbackConfiguration());
-    String configResource = line.getOptionValue(CONFIG_RESOURCE_OPTION);
+    final String configResource = line.getOptionValue(CONFIG_RESOURCE_OPTION);
     return init(logbackResource) && run(configResource, toolContextClass);
   }
-  
+
   /**
    * Runs the tool.
    *
@@ -127,7 +127,7 @@ public abstract class AbstractDbTool<T extends DbToolContext> {
    * @param dbToolContextClass the type of database tool context to create, should match the generic type argument
    * @return true if successful
    */
-  public final boolean run(String configResource, Class<? extends T> dbToolContextClass) {
+  public final boolean run(final String configResource, final Class<? extends T> dbToolContextClass) {
     T dbToolContext = null;
     try {
       ArgumentChecker.notEmpty(configResource, "configResource");
@@ -137,7 +137,7 @@ public abstract class AbstractDbTool<T extends DbToolContext> {
       run(dbToolContext);
       LOGGER.info("Finished " + getClass().getSimpleName());
       return true;
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       ex.printStackTrace();
       return false;
     } finally {
@@ -146,7 +146,7 @@ public abstract class AbstractDbTool<T extends DbToolContext> {
       }
     }
   }
-  
+
   /**
    * Runs the tool, calling {@code doRun}.
    * <p>
@@ -155,25 +155,25 @@ public abstract class AbstractDbTool<T extends DbToolContext> {
    * @param dbToolContext the database tool context, not null
    * @throws RuntimeException if an error occurs
    */
-  public final void run(T dbToolContext) {
+  public final void run(final T dbToolContext) {
     _dbToolContext = dbToolContext;
     try {
-      boolean write = getCommandLine().hasOption(WRITE_OPTION);
-      String outputFilePath = getCommandLine().getOptionValue(OUTPUT_FILE_OPTION);
-      File outputFile = outputFilePath != null ? new File(outputFilePath) : null;
+      final boolean write = getCommandLine().hasOption(WRITE_OPTION);
+      final String outputFilePath = getCommandLine().getOptionValue(OUTPUT_FILE_OPTION);
+      final File outputFile = outputFilePath != null ? new File(outputFilePath) : null;
       doRun(write, outputFile);
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       throw ex;
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       throw new RuntimeException(ex);
     }
   }
-  
-  protected static <T extends DbToolContext> T initDbToolContext(String configResource, Class<T> dbToolContextClass) {
-    ComponentManager manager = new ComponentManager("dbtoolcontext");
+
+  protected static <T extends DbToolContext> T initDbToolContext(final String configResource, final Class<T> dbToolContextClass) {
+    final ComponentManager manager = new ComponentManager("dbtoolcontext");
     manager.start(configResource);
-    ComponentRepository repo = manager.getRepository();
-    T dbToolContext = repo.getInstance(dbToolContextClass, "tool");
+    final ComponentRepository repo = manager.getRepository();
+    final T dbToolContext = repo.getInstance(dbToolContextClass, "tool");
     if (dbToolContext == null) {
       throw new OpenGammaRuntimeException("Unable to find tool context in config resource");
     }
@@ -183,10 +183,10 @@ public abstract class AbstractDbTool<T extends DbToolContext> {
   //-------------------------------------------------------------------------
   /**
    * Override in subclasses to implement the tool.
-   * 
+   *
    * @param write  true to modify the database, false to output the commands that would be run
    * @param outputFile  the file to which the SQL should be written, null not to write to a file
-   * 
+   *
    * @throws Exception if an error occurs
    */
   protected abstract void doRun(boolean write, File outputFile) throws Exception;
@@ -194,32 +194,32 @@ public abstract class AbstractDbTool<T extends DbToolContext> {
   //-------------------------------------------------------------------------
   /**
    * Gets the database tool context.
-   * 
+   *
    * @return the context, not null during {@code doRun}
    */
   protected T getDbToolContext() {
     return _dbToolContext;
   }
-  
+
   /**
    * Gets the parsed command line.
-   * 
+   *
    * @return the parsed command line, not null after parsing
    */
   protected CommandLine getCommandLine() {
     return _commandLine;
   }
-  
+
   //-------------------------------------------------------------------------
   /**
    * Creates the command line options.
    * <p>
    * Subclasses may override this and add their own parameters. The base class defined the options h/help, c/config, l/logback.
-   * 
+   *
    * @return the set of command line options, not null
    */
   protected Options createOptions() {
-    Options options = new Options();
+    final Options options = new Options();
     options.addOption(createHelpOption());
     options.addOption(createConfigOption());
     options.addOption(createLogbackOption());
@@ -233,34 +233,34 @@ public abstract class AbstractDbTool<T extends DbToolContext> {
   }
 
   private static Option createConfigOption() {
-    Option option = new Option(CONFIG_RESOURCE_OPTION, "config", true, "the database tool context configuration resource");
+    final Option option = new Option(CONFIG_RESOURCE_OPTION, "config", true, "the database tool context configuration resource");
     option.setArgName("resource");
     option.setRequired(true);
     return option;
   }
-  
+
   private static Option createLogbackOption() {
-    Option option = new Option(LOGBACK_RESOURCE_OPTION, "logback", true, "the logback configuration resource");
+    final Option option = new Option(LOGBACK_RESOURCE_OPTION, "logback", true, "the logback configuration resource");
     option.setArgName("resource");
     option.setRequired(false);
     return option;
   }
-  
+
   private static Option createWriteOption() {
     return new Option(WRITE_OPTION, "write", false, "whether to modify the database");
   }
-  
+
   private static Option createOutputFileOption() {
-    Option option = new Option(OUTPUT_FILE_OPTION, "output", true, "a file to which the SQL should be output");
+    final Option option = new Option(OUTPUT_FILE_OPTION, "output", true, "a file to which the SQL should be output");
     option.setArgName("file");
     option.setRequired(false);
     return option;
   }
-  
-  protected void usage(Options options) {
-    HelpFormatter formatter = new HelpFormatter();
+
+  protected void usage(final Options options) {
+    final HelpFormatter formatter = new HelpFormatter();
     formatter.setWidth(120);
     formatter.printHelp("java " + getClass().getName(), options, true);
   }
-  
+
 }

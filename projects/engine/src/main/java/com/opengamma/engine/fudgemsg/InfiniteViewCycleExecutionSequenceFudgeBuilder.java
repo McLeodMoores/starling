@@ -21,14 +21,14 @@ import com.opengamma.engine.view.execution.InfiniteViewCycleExecutionSequence;
 public class InfiniteViewCycleExecutionSequenceFudgeBuilder implements FudgeBuilder<InfiniteViewCycleExecutionSequence> {
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, InfiniteViewCycleExecutionSequence object) {
-    MutableFudgeMsg msg = serializer.newMessage();
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final InfiniteViewCycleExecutionSequence object) {
+    final MutableFudgeMsg msg = serializer.newMessage();
     msg.add(0, InfiniteViewCycleExecutionSequence.class.getName());
     return msg;
   }
 
   @Override
-  public InfiniteViewCycleExecutionSequence buildObject(FudgeDeserializer deserializer, FudgeMsg message) {
+  public InfiniteViewCycleExecutionSequence buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
     return new InfiniteViewCycleExecutionSequence();
   }
 

@@ -75,31 +75,31 @@ public class BloombergSecurityTypeDefinitionFudgeEncodingTest {
   private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
 
   public void fudgeEncodingWithoutID() {
-    BloombergSecurityTypeDefinition definition = createDefinition();
+    final BloombergSecurityTypeDefinition definition = createDefinition();
     assertDefinition(definition);
   }
 
   public void fudgeEncodingWithID() {
-    BloombergSecurityTypeDefinition definition = createDefinition();
+    final BloombergSecurityTypeDefinition definition = createDefinition();
     definition.setUniqueId(UniqueId.of("A", "B", "C"));
     assertDefinition(definition);
   }
-  
-  private void assertDefinition(BloombergSecurityTypeDefinition inDefinition) {
-    FudgeSerializer serializationContext = new FudgeSerializer(FUDGE_CONTEXT);
-    MutableFudgeMsg inputMsg = serializationContext.objectToFudgeMsg(inDefinition);
-    FudgeMsg outputMsg = FUDGE_CONTEXT.deserialize(FUDGE_CONTEXT.toByteArray(inputMsg)).getMessage();
+
+  private void assertDefinition(final BloombergSecurityTypeDefinition inDefinition) {
+    final FudgeSerializer serializationContext = new FudgeSerializer(FUDGE_CONTEXT);
+    final MutableFudgeMsg inputMsg = serializationContext.objectToFudgeMsg(inDefinition);
+    final FudgeMsg outputMsg = FUDGE_CONTEXT.deserialize(FUDGE_CONTEXT.toByteArray(inputMsg)).getMessage();
     assertNotNull(outputMsg);
-    
-    FudgeDeserializer deserializationContext = new FudgeDeserializer(FUDGE_CONTEXT);
-    BloombergSecurityTypeDefinition outDefinition = deserializationContext.fudgeMsgToObject(BloombergSecurityTypeDefinition.class, outputMsg);
-    
+
+    final FudgeDeserializer deserializationContext = new FudgeDeserializer(FUDGE_CONTEXT);
+    final BloombergSecurityTypeDefinition outDefinition = deserializationContext.fudgeMsgToObject(BloombergSecurityTypeDefinition.class, outputMsg);
+
     assertEquals(inDefinition, outDefinition);
   }
 
   private BloombergSecurityTypeDefinition createDefinition() {
-    BloombergSecurityTypeDefinition definition = new BloombergSecurityTypeDefinition();
-    
+    final BloombergSecurityTypeDefinition definition = new BloombergSecurityTypeDefinition();
+
     definition.addSecurityType("Common Stock", EQUITY);
     definition.addSecurityType("Preference", EQUITY);
     definition.addSecurityType("ADR", EQUITY);
@@ -114,45 +114,45 @@ public class BloombergSecurityTypeDefinitionFudgeEncodingTest {
     definition.addSecurityType("NY Reg Shrs", EQUITY);
     definition.addSecurityType("PUBLIC", EQUITY);
     definition.addSecurityType("Equity WRT", EQUITY);
-    
+
     definition.addSecurityType(BBG_WHEAT, AGRICULTURE_FUTURE);
     definition.addSecurityType(BBG_SOY, AGRICULTURE_FUTURE);
     definition.addSecurityType(BBG_LIVESTOCK, AGRICULTURE_FUTURE);
     definition.addSecurityType(BBG_FOODSTUFF, AGRICULTURE_FUTURE);
-    
+
     definition.addSecurityType(BLOOMBERG_BOND_FUTURE_TYPE, BOND_FUTURE);
-    
+
     definition.addSecurityType(BBG_REFINED_PRODUCTS, ENERGY_FUTURE);
     definition.addSecurityType(BBG_ELECTRICITY, ENERGY_FUTURE);
     definition.addSecurityType(BBG_COAL, ENERGY_FUTURE);
     definition.addSecurityType(BBG_CRUDE_OIL, ENERGY_FUTURE);
-    
+
     definition.addSecurityType(BBG_STOCK_FUTURE_TYPE, EQUITY_DIVIDEND_FUTURE);
-    
+
     definition.addSecurityType(BBG_CURRENCY_TYPE, FX_FUTURE);
-    
+
     definition.addSecurityType(BLOOMBERG_EQUITY_INDEX_TYPE, INDEX_FUTURE);
-    
+
     definition.addSecurityType(BLOOMBERG_INTEREST_RATE_TYPE, INTEREST_RATE_FUTURE);
-    
+
     definition.addSecurityType(BBG_PRECIOUS_METAL_TYPE, METAL_FUTURE);
     definition.addSecurityType(BBG_BASE_METAL_TYPE, METAL_FUTURE);
-    
+
     definition.addSecurityType(BLOOMBERG_EQUITY_INDEX_TYPE, EQUITY_FUTURE);
     definition.addSecurityType(BLOOMBERG_EQUITY_INDEX_TYPE, EQUITY_FUTURE);
-    
+
     definition.addSecurityType(BLOOMBERG_EQUITY_OPTION_SECURITY_TYPE, EQUITY_OPTION);
-        
+
     definition.addSecurityType("Equity Index Spot Options", EQUITY_INDEX_OPTION);
     definition.addSecurityType("Equity Volatility Index Option", EQUITY_INDEX_OPTION);
-    
+
     definition.addSecurityType("Equity Index", EQUITY_INDEX_FUTURE_OPTION);
-    
+
     definition.addSecurityType(BLOOMBERG_INTEREST_RATE_TYPE, IR_FUTURE_OPTION);
     definition.addSecurityType(BLOOMBERG_FINANCIAL_COMMODITY_OPTION_TYPE, IR_FUTURE_OPTION);
-    
+
     definition.addSecurityType(BLOOMBERG_BOND_FUTURE_TYPE, BOND_FUTURE_OPTION);
-    
+
     definition.addSecurityType(BBG_PRECIOUS_METAL_TYPE, COMMODITY_FUTURE_OPTION);
     definition.addSecurityType(BBG_BASE_METAL_TYPE, COMMODITY_FUTURE_OPTION);
     definition.addSecurityType(BBG_REFINED_PRODUCTS, COMMODITY_FUTURE_OPTION);
@@ -163,17 +163,17 @@ public class BloombergSecurityTypeDefinitionFudgeEncodingTest {
     definition.addSecurityType(BBG_SOY, COMMODITY_FUTURE_OPTION);
     definition.addSecurityType(BBG_FOODSTUFF, COMMODITY_FUTURE_OPTION);
     definition.addSecurityType(BBG_LIVESTOCK, COMMODITY_FUTURE_OPTION);
-    
+
     definition.addSecurityType(BLOOMBERG_CURRENCY_TYPE, FX_FUTURE_OPTION);
-    
+
     definition.addSecurityType("SWAP", SWAP);
     definition.addSecurityType("OVERNIGHT INDEXED SWAP", SWAP);
     definition.addSecurityType("FWD SWAP", SWAP);
     definition.addSecurityType("NDF SWAP", SWAP);
     definition.addSecurityType("ONSHORE SWAP", SWAP);
-    
+
     definition.addSecurityType("BASIS SWAP", BASIS_SWAP);
-    
+
     definition.addSecurityType("Prvt CMO FLT", BOND);
     definition.addSecurityType("EURO MTN", BOND);
     definition.addSecurityType("EURO-ZONE", BOND);
@@ -194,34 +194,34 @@ public class BloombergSecurityTypeDefinitionFudgeEncodingTest {
     definition.addSecurityType("US GOVERNMENT", BOND);
     definition.addSecurityType("UK GILT STOCK", BOND);
     definition.addSecurityType("CANADIAN", BOND);
-    definition.addSecurityType("DOMESTIC", BOND); 
-    
-    definition.addSecurityType("BANK BILL", BILL); 
-    
-    definition.addSecurityType(BLOOMBERG_EQUITY_INDEX_TYPE, EQUITY_INDEX); 
-    
-    definition.addSecurityType("FORWARD CROSS", FORWARD_CROSS); 
-    
-    definition.addSecurityType("FRA", FRA); 
-    
-    definition.addSecurityType("DEPOSIT", RATE); 
-    definition.addSecurityType("Index", RATE); 
-    
-    definition.addSecurityType("Physical commodity spot.", SPOT_RATE); 
+    definition.addSecurityType("DOMESTIC", BOND);
+
+    definition.addSecurityType("BANK BILL", BILL);
+
+    definition.addSecurityType(BLOOMBERG_EQUITY_INDEX_TYPE, EQUITY_INDEX);
+
+    definition.addSecurityType("FORWARD CROSS", FORWARD_CROSS);
+
+    definition.addSecurityType("FRA", FRA);
+
+    definition.addSecurityType("DEPOSIT", RATE);
+    definition.addSecurityType("Index", RATE);
+
+    definition.addSecurityType("Physical commodity spot.", SPOT_RATE);
     definition.addSecurityType("SPOT", SPOT_RATE);
     definition.addSecurityType("CROSS", SPOT_RATE);
     definition.addSecurityType("CD", SPOT_RATE);
-    
-    
-    definition.addSecurityType("OPTION VOLATILITY", VOLATILITY_QUOTE); 
-    definition.addSecurityType("SWAPTION VOLATILITY", VOLATILITY_QUOTE);
-    
-    definition.addSecurityType("FORWARD", FX_FORWARD); 
-    definition.addSecurityType("ONSHORE FORWARD", FX_FORWARD); 
-    definition.addSecurityType("NON-DELIVERABLE FORWARD", FX_FORWARD); 
-    
 
-    definition.addSecurityType("CREDIT DEFAULT SWAP", CREDIT_DEFAULT_SWAP); 
+
+    definition.addSecurityType("OPTION VOLATILITY", VOLATILITY_QUOTE);
+    definition.addSecurityType("SWAPTION VOLATILITY", VOLATILITY_QUOTE);
+
+    definition.addSecurityType("FORWARD", FX_FORWARD);
+    definition.addSecurityType("ONSHORE FORWARD", FX_FORWARD);
+    definition.addSecurityType("NON-DELIVERABLE FORWARD", FX_FORWARD);
+
+
+    definition.addSecurityType("CREDIT DEFAULT SWAP", CREDIT_DEFAULT_SWAP);
     return definition;
   }
 

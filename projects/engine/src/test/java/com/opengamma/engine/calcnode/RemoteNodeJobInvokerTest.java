@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode;
@@ -58,7 +58,7 @@ public class RemoteNodeJobInvokerTest {
       final FudgeConnection remoteNode = conduit.getEnd2();
       remoteNode.setFudgeMessageReceiver(new FudgeMessageReceiver() {
         @Override
-        public void messageReceived(FudgeContext fudgeContext, FudgeMsgEnvelope msgEnvelope) {
+        public void messageReceived(final FudgeContext fudgeContext, final FudgeMsgEnvelope msgEnvelope) {
           final FudgeDeserializer dcontext = new FudgeDeserializer(fudgeContext);
           LOGGER.debug("message = {}", msgEnvelope.getMessage());
           final RemoteCalcNodeMessage message = dcontext.fudgeMsgToObject(RemoteCalcNodeMessage.class, msgEnvelope.getMessage());
@@ -91,7 +91,7 @@ public class RemoteNodeJobInvokerTest {
       final Random rnd = new Random();
       remoteNode.setFudgeMessageReceiver(new FudgeMessageReceiver() {
         @Override
-        public void messageReceived(FudgeContext fudgeContext, FudgeMsgEnvelope msgEnvelope) {
+        public void messageReceived(final FudgeContext fudgeContext, final FudgeMsgEnvelope msgEnvelope) {
           final FudgeDeserializer dcontext = new FudgeDeserializer(fudgeContext);
           final RemoteCalcNodeMessage message = dcontext.fudgeMsgToObject(RemoteCalcNodeMessage.class, msgEnvelope.getMessage());
           assertNotNull(message);
@@ -99,7 +99,7 @@ public class RemoteNodeJobInvokerTest {
           final Execute job = (Execute) message;
           try {
             Thread.sleep(rnd.nextInt(30));
-          } catch (InterruptedException e) {
+          } catch (final InterruptedException e) {
           }
           final Result result = new Result(JobDispatcherTest.createTestJobResult(job.getJob().getSpecification(), 0, "Test"));
           final FudgeSerializer scontext = new FudgeSerializer(fudgeContext);
@@ -111,8 +111,8 @@ public class RemoteNodeJobInvokerTest {
         resultReceivers[i] = new TestJobResultReceiver();
         jobDispatcher.dispatchJob(JobDispatcherTest.createTestJob(), resultReceivers[i]);
       }
-      for (int i = 0; i < resultReceivers.length; i++) {
-        assertNotNull(resultReceivers[i].waitForResult(TIMEOUT));
+      for (final TestJobResultReceiver resultReceiver : resultReceivers) {
+        assertNotNull(resultReceiver.waitForResult(TIMEOUT));
       }
     } finally {
       executor.shutdown();

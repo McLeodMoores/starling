@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.holiday.impl;
@@ -31,7 +31,7 @@ public class RemoteHolidaySource extends AbstractRemoteSource<Holiday> implement
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param baseUri  the base target URI for all RESTful web services, not null
    */
   public RemoteHolidaySource(final URI baseUri) {
@@ -42,8 +42,8 @@ public class RemoteHolidaySource extends AbstractRemoteSource<Holiday> implement
   @Override
   public Holiday get(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
-    
-    URI uri = DataHolidaySourceUris.uriGet(getBaseUri(), uniqueId);
+
+    final URI uri = DataHolidaySourceUris.uriGet(getBaseUri(), uniqueId);
     return accessRemote(uri).get(Holiday.class);
   }
 
@@ -51,53 +51,53 @@ public class RemoteHolidaySource extends AbstractRemoteSource<Holiday> implement
   public Holiday get(final ObjectId objectId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
-    
-    URI uri = DataHolidaySourceUris.uriGet(getBaseUri(), objectId, versionCorrection);
+
+    final URI uri = DataHolidaySourceUris.uriGet(getBaseUri(), objectId, versionCorrection);
     return accessRemote(uri).get(Holiday.class);
   }
 
   @Override
   @SuppressWarnings("unchecked")
-  public Collection<Holiday> get(HolidayType holidayType,
-                                 ExternalIdBundle regionOrExchangeIds) {
+  public Collection<Holiday> get(final HolidayType holidayType,
+                                 final ExternalIdBundle regionOrExchangeIds) {
     ArgumentChecker.notNull(holidayType, "holidayType");
     ArgumentChecker.notNull(regionOrExchangeIds, "regionOrExchangeIds");
 
-    URI uri = DataHolidaySourceUris.uriGet(getBaseUri(), holidayType, regionOrExchangeIds);
+    final URI uri = DataHolidaySourceUris.uriGet(getBaseUri(), holidayType, regionOrExchangeIds);
     return accessRemote(uri).get(Collection.class);
   }
 
   @Override
   @SuppressWarnings("unchecked")
-  public Collection<Holiday> get(Currency currency) {
+  public Collection<Holiday> get(final Currency currency) {
     ArgumentChecker.notNull(currency, "currency");
 
-    URI uri = DataHolidaySourceUris.uriGet(getBaseUri(), currency);
+    final URI uri = DataHolidaySourceUris.uriGet(getBaseUri(), currency);
     return accessRemote(uri).get(Collection.class);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean isHoliday(LocalDate dateToCheck, Currency currency) {
+  public boolean isHoliday(final LocalDate dateToCheck, final Currency currency) {
     ArgumentChecker.notNull(dateToCheck, "dateToCheck");
     ArgumentChecker.notNull(currency, "currency");
-    
-    URI uri = DataHolidaySourceUris.uriSearchCheck(getBaseUri(), dateToCheck, HolidayType.CURRENCY, currency, null);
+
+    final URI uri = DataHolidaySourceUris.uriSearchCheck(getBaseUri(), dateToCheck, HolidayType.CURRENCY, currency, null);
     return accessRemote(uri).get(FudgeBooleanWrapper.class).isValue();
   }
 
   @Override
-  public boolean isHoliday(LocalDate dateToCheck, HolidayType holidayType, ExternalId regionOrExchangeId) {
+  public boolean isHoliday(final LocalDate dateToCheck, final HolidayType holidayType, final ExternalId regionOrExchangeId) {
     return isHoliday(dateToCheck, holidayType, ExternalIdBundle.of(regionOrExchangeId));
   }
 
   @Override
-  public boolean isHoliday(LocalDate dateToCheck, HolidayType holidayType, ExternalIdBundle regionOrExchangeIds) {
+  public boolean isHoliday(final LocalDate dateToCheck, final HolidayType holidayType, final ExternalIdBundle regionOrExchangeIds) {
     ArgumentChecker.notNull(dateToCheck, "dateToCheck");
     ArgumentChecker.notNull(holidayType, "holidayType");
     ArgumentChecker.notNull(regionOrExchangeIds, "regionOrExchangeIds");
-    
-    URI uri = DataHolidaySourceUris.uriSearchCheck(getBaseUri(), dateToCheck, holidayType, null, regionOrExchangeIds);
+
+    final URI uri = DataHolidaySourceUris.uriSearchCheck(getBaseUri(), dateToCheck, holidayType, null, regionOrExchangeIds);
     return accessRemote(uri).get(FudgeBooleanWrapper.class).isValue();
   }
 

@@ -22,7 +22,7 @@ import com.opengamma.util.paging.PagingRequest;
  * Large systems may store a large amount of data in each master.
  * A simple search request that pulls back the entire database is unrealistic.
  * This remote iterator allows the database to be queried in a consistent way remotely.
- * 
+ *
  * @param <D>  the type of the document
  * @param <M>  the type of the master
  * @param <R>  the type of the search request
@@ -33,7 +33,7 @@ public abstract class AbstractSearchIterator<D extends AbstractDocument, M exten
   /**
    * The master that is being used.
    */
-  private M _master;
+  private final M _master;
   /**
    * The request object that is being used.
    */
@@ -59,11 +59,11 @@ public abstract class AbstractSearchIterator<D extends AbstractDocument, M exten
    * Creates an instance based on a request.
    * <p>
    * The request will be altered during the iteration.
-   * 
+   *
    * @param master  the underlying master, not null
    * @param request  the request object, not null
    */
-  protected AbstractSearchIterator(M master, R request) {
+  protected AbstractSearchIterator(final M master, final R request) {
     ArgumentChecker.notNull(master, "master");
     ArgumentChecker.notNull(request, "request");
     _master = master;
@@ -76,7 +76,7 @@ public abstract class AbstractSearchIterator<D extends AbstractDocument, M exten
     if (_currentBatch == null || _currentBatchIndex >= _currentBatch.getDocuments().size()) {
       doFetch();
     }
-    return (_currentBatch != null && _currentBatchIndex < _currentBatch.getDocuments().size());
+    return _currentBatch != null && _currentBatchIndex < _currentBatch.getDocuments().size();
   }
 
   @Override
@@ -101,7 +101,7 @@ public abstract class AbstractSearchIterator<D extends AbstractDocument, M exten
    * Gets the overall index of the next entry.
    * <p>
    * This number may skip if a bad entry is found.
-   * 
+   *
    * @return the overall index of the next entry, 0 if next() not called yet
    */
   public int nextIndex() {
@@ -113,17 +113,17 @@ public abstract class AbstractSearchIterator<D extends AbstractDocument, M exten
       // try to fetch a batch of 20 documents
       _request.setPagingRequest(PagingRequest.ofIndex(_overallIndex, 20));
       _currentBatch = doSearch(_request);
-      
-    } catch (RuntimeException ex) {
+
+    } catch (final RuntimeException ex) {
       doFetchOne(ex);
     }
-    
+
     // ensure same vc for whole iterator
     _request.setVersionCorrection(_currentBatch.getVersionCorrection());
-    
+
     // check results
     if (_currentBatch.getPaging().getFirstItem() < _overallIndex) {
-      _currentBatchIndex = (_overallIndex - _currentBatch.getPaging().getFirstItem());
+      _currentBatchIndex = _overallIndex - _currentBatch.getPaging().getFirstItem();
     } else {
       _currentBatchIndex = 0;
     }
@@ -131,10 +131,10 @@ public abstract class AbstractSearchIterator<D extends AbstractDocument, M exten
 
   /**
    * Fetches the next one document.
-   * 
+   *
    * @param ex  the original exception, not null
    */
-  private void doFetchOne(RuntimeException ex) {
+  private void doFetchOne(final RuntimeException ex) {
     // try to load just the next document
     int maxFailures = 5;
     if (_currentBatch != null) {
@@ -146,8 +146,8 @@ public abstract class AbstractSearchIterator<D extends AbstractDocument, M exten
         _request.setPagingRequest(PagingRequest.ofIndex(_overallIndex, 1));
         _currentBatch = doSearch(_request);
         return;
-        
-      } catch (RuntimeException ex2) {
+
+      } catch (final RuntimeException ex2) {
         _overallIndex++;  // abandon this document
         maxFailures--;
       }
@@ -164,7 +164,7 @@ public abstract class AbstractSearchIterator<D extends AbstractDocument, M exten
 
   /**
    * Performs the search on the master.
-   * 
+   *
    * @param request  the request to send, not null
    * @return the search result, not null
    * @throws RuntimeException if an error occurs
@@ -174,7 +174,7 @@ public abstract class AbstractSearchIterator<D extends AbstractDocument, M exten
   //-----------------------------------------------------------------------
   /**
    * Gets the underlying master.
-   * 
+   *
    * @return the master, not null
    */
   public M getMaster() {
@@ -183,7 +183,7 @@ public abstract class AbstractSearchIterator<D extends AbstractDocument, M exten
 
   /**
    * Gets the request object that is being used.
-   * 
+   *
    * @return the request, not null
    */
   public R getRequest() {

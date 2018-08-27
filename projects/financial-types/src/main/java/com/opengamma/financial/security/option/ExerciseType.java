@@ -46,19 +46,19 @@ public abstract class ExerciseType extends DirectBean implements Serializable {
       }
     }
   }
-  
+
   /**
    * Gets an exercise type by name.
-   * 
+   *
    * @param name  the name to find, not null
    * @return the exercise type, not null
    */
   @FromString
-  public static ExerciseType of(String name) {
+  public static ExerciseType of(final String name) {
     ArgumentChecker.notNull(name, "name");
-   
+
     registerKnownTypes();
-    ExerciseType type = s_cache.get(name);
+    final ExerciseType type = s_cache.get(name);
     if (type == null) {
       throw new IllegalArgumentException("Unknown ExerciseType: " + name);
     }
@@ -67,16 +67,16 @@ public abstract class ExerciseType extends DirectBean implements Serializable {
 
   /**
    * Registers an exercise type.
-   * 
+   *
    * @param type  the exercise type, not null
    */
-  public static void register(ExerciseType type) {
+  public static void register(final ExerciseType type) {
     ArgumentChecker.notNull(type, "type");
-    
+
     registerKnownTypes();
     s_cache.putIfAbsent(type.getName(), type);
   }
-  
+
 
   //-------------------------------------------------------------------------
   /**
@@ -88,7 +88,7 @@ public abstract class ExerciseType extends DirectBean implements Serializable {
   //-------------------------------------------------------------------------
   /**
    * Gets the exercise type.
-   * 
+   *
    * @return the exercise type, not null
    */
   @ToString
@@ -97,7 +97,7 @@ public abstract class ExerciseType extends DirectBean implements Serializable {
   //-------------------------------------------------------------------------
   /**
    * Accepts a visitor to manage traversal of the hierarchy.
-   * 
+   *
    * @param <T> the result type of the visitor
    * @param visitor  the visitor, not null
    * @return the result

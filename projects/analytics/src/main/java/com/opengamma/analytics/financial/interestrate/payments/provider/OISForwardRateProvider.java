@@ -4,19 +4,19 @@ import com.opengamma.analytics.financial.instrument.index.IndexON;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.DepositIndexCoupon;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
 
-public class OISForwardRateProvider implements ForwardRateProvider<IndexON> {
+public final class OISForwardRateProvider implements ForwardRateProvider<IndexON> {
 
   /**
    * Singleton instance.
    */
   private static final OISForwardRateProvider INSTANCE = new OISForwardRateProvider();
-  
+
   /**
    * Singleton constructor.
    */
   private OISForwardRateProvider() {
   }
-  
+
   /**
    * Returns a singleton.
    * @return a singleton.
@@ -24,7 +24,7 @@ public class OISForwardRateProvider implements ForwardRateProvider<IndexON> {
   public static OISForwardRateProvider getInstance() {
     return INSTANCE;
   }
-  
+
   @Override
   public <T extends DepositIndexCoupon<IndexON>> double getRate(
       final MulticurveProviderInterface multicurves,

@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.config;
@@ -29,7 +29,7 @@ import com.opengamma.util.PublicSPI;
  * The returned documents may be a mixture of versions and corrections.
  * The document instant fields are used to identify which are which.
  * See {@link ConfigHistoryRequest} for more details.
- * 
+ *
  * @param <T>  the type of the underlying config
  */
 @PublicSPI
@@ -49,24 +49,24 @@ public class ConfigHistoryResult<T> extends AbstractHistoryResult<ConfigDocument
 
   /**
    * Creates an instance from a collection of documents.
-   * 
+   *
    * @param coll  the collection of documents to add, not null
    */
-  public ConfigHistoryResult(Collection<ConfigDocument> coll) {
+  public ConfigHistoryResult(final Collection<ConfigDocument> coll) {
     super(coll);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the returned configuration values from within the documents.
-   * 
+   *
    * @return the configuration values, not null
    */
   @SuppressWarnings("unchecked")
   public List<ConfigItem<T>> getValues() {
-    List<ConfigItem<T>> result = new ArrayList<ConfigItem<T>>();    
+    final List<ConfigItem<T>> result = new ArrayList<>();
     if (getDocuments() != null) {
-      for (ConfigDocument doc : getDocuments()) {
+      for (final ConfigDocument doc : getDocuments()) {
         if (_gt.getType().isAssignableFrom(doc.getConfig().getType())) {
           result.add((ConfigItem<T>) doc.getConfig());
         }
@@ -77,15 +77,15 @@ public class ConfigHistoryResult<T> extends AbstractHistoryResult<ConfigDocument
 
   /**
    * Gets the first configuration document value, or null if no documents.
-   * 
+   *
    * @return the first configuration value, null if none
    */
   @SuppressWarnings("unchecked")
-  public ConfigItem<T> getFirstValue() {     
+  public ConfigItem<T> getFirstValue() {
     if (getDocuments().size() > 0) {
-      ConfigItem<?> firstItem = getDocuments().get(0).getConfig();
-      if (_gt.getType().isAssignableFrom(firstItem.getType())) {        
-        return (ConfigItem<T>) firstItem; 
+      final ConfigItem<?> firstItem = getDocuments().get(0).getConfig();
+      if (_gt.getType().isAssignableFrom(firstItem.getType())) {
+        return (ConfigItem<T>) firstItem;
       }
     }
     return null;
@@ -96,7 +96,7 @@ public class ConfigHistoryResult<T> extends AbstractHistoryResult<ConfigDocument
    * <p>
    * This throws an exception if more than 1 result is actually available.
    * Thus, this method implies an assumption about uniqueness of the queried config.
-   * 
+   *
    * @return the matching config, not null
    * @throws IllegalStateException if no config was found
    */

@@ -46,7 +46,7 @@ public abstract class AbstractWebPositionResource
 
   /**
    * Creates the resource.
-   * 
+   *
    * @param positionMaster  the position master, not null
    * @param securityLoader  the security loader, not null
    * @param securitySource  the security source, not null
@@ -71,7 +71,7 @@ public abstract class AbstractWebPositionResource
 
   /**
    * Creates the resource.
-   * 
+   *
    * @param parent  the parent resource, not null
    */
   protected AbstractWebPositionResource(final AbstractWebPositionResource parent) {
@@ -85,35 +85,35 @@ public abstract class AbstractWebPositionResource
    */
   @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
+    final FlexiBean out = super.createRootData();
     out.put("uris", new WebPositionsUris(data()));
-    WebSecuritiesData secData = new WebSecuritiesData(data().getUriInfo());
+    final WebSecuritiesData secData = new WebSecuritiesData(data().getUriInfo());
     out.put("securityUris", new WebSecuritiesUris(secData));
     out.put("externalSchemes", getExternalSchemes());
     return out;
   }
 
   private Map<String, String> getExternalSchemes() {
-    Map<String, String> result = new TreeMap<>();
-    for (Entry<ExternalScheme, String> entry : data().getExternalSchemes().entrySet()) {
+    final Map<String, String> result = new TreeMap<>();
+    for (final Entry<ExternalScheme, String> entry : data().getExternalSchemes().entrySet()) {
       result.put(entry.getKey().getName(), entry.getValue());
     }
     return result;
   }
 
   //-------------------------------------------------------------------------
-  protected Set<ManageableTrade> parseTrades(String tradesJson) {
+  protected Set<ManageableTrade> parseTrades(final String tradesJson) {
     return TradeJsonConverter.fromJson(tradesJson);
   }
 
   protected String getPositionXml(final ManageablePosition manageablePosition) {
-    ManageablePosition position = manageablePosition.clone();
-    ManageableSecurityLink securityLink = position.getSecurityLink();
+    final ManageablePosition position = manageablePosition.clone();
+    final ManageableSecurityLink securityLink = position.getSecurityLink();
     if (securityLink != null) {
       securityLink.setTarget(null);
     }
-    for (ManageableTrade manageableTrade : position.getTrades()) {
-      ManageableSecurityLink manageableSecurityLink = manageableTrade.getSecurityLink();
+    for (final ManageableTrade manageableTrade : position.getTrades()) {
+      final ManageableSecurityLink manageableSecurityLink = manageableTrade.getSecurityLink();
       if (manageableSecurityLink != null) {
         manageableSecurityLink.setTarget(null);
       }

@@ -1,13 +1,13 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.tree;
 
 /**
- * Asset-or-nothing call option pays 0 if S <= K and S if S > K, whereas asset-or-nothing put option pays S if S < K and 0 if S >= K, 
- * where S is asset price at expiry, K is strike price. 
+ * Asset-or-nothing call option pays 0 if S <= K and S if S > K, whereas asset-or-nothing put option pays S if S < K and 0 if S >= K,
+ * where S is asset price at expiry, K is strike price.
  */
 public class AssetOrNothingOptionFunctionProvider extends OptionFunctionProvider1D {
 
@@ -59,7 +59,7 @@ public class AssetOrNothingOptionFunctionProvider extends OptionFunctionProvider
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }

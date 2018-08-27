@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security;
@@ -51,7 +51,7 @@ public class SecurityMasterTestCase extends SecurityTestCase {
 
   /**
    * Normal constructor.
-   * 
+   *
    * @param secMaster  the security master
    */
   public SecurityMasterTestCase(final SecurityMaster secMaster) {
@@ -110,18 +110,18 @@ public class SecurityMasterTestCase extends SecurityTestCase {
     assertNotNull(security);
     return security;
   }
-  
+
   private void normalizeBondFutureSecurity(final BondFutureSecurity security) {
-    final List<BondFutureDeliverable> basket = new ArrayList<BondFutureDeliverable>(security.getBasket());
+    final List<BondFutureDeliverable> basket = new ArrayList<>(security.getBasket());
     Collections.sort(basket, new Comparator<BondFutureDeliverable>() {
       @Override
-      public int compare(BondFutureDeliverable o1, BondFutureDeliverable o2) {
+      public int compare(final BondFutureDeliverable o1, final BondFutureDeliverable o2) {
         return o1.getIdentifiers().compareTo(o2.getIdentifiers());
       }
     });
     security.setBasket(basket);
   }
-  
+
   /**
    * Shuffles things around so that the equality comparison is valid. E.g. sorts stuff that might (correctly) be in an
    * arbitrary order.
@@ -150,7 +150,7 @@ public class SecurityMasterTestCase extends SecurityTestCase {
       final Iterator<ExternalId> iterator = security.getExternalIdBundle().iterator();
       bundle = ExternalIdBundle.EMPTY;
       // retrieve with one identifier
-      ExternalId id = iterator.next();
+      final ExternalId id = iterator.next();
       bundle = bundle.withExternalId(id);
       sec = getSecurity(bundle);
       normalizeSecurity(sec);

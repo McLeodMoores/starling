@@ -21,8 +21,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import net.sf.ehcache.CacheManager;
-
 import org.fudgemsg.FudgeMsg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,6 +53,8 @@ import com.opengamma.livedata.server.mxbean.SubscriptionTracer;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.PerformanceCounter;
 import com.opengamma.util.PublicAPI;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * The base class from which most OpenGamma Live Data feed servers should extend. Handles most common cases for distributed contract management.
@@ -104,10 +104,10 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param cacheManager the cache manager, not null
    */
-  protected StandardLiveDataServer(CacheManager cacheManager) {
+  protected StandardLiveDataServer(final CacheManager cacheManager) {
     this(cacheManager, true);
   }
 
@@ -115,11 +115,11 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
    * Creates an instance controlling performance counting.
    * <p>
    * You may wish to disable performance counting if you expect a high rate of messages, or to process messages on several threads.
-   * 
+   *
    * @param cacheManager the cache manager, not null
    * @param isPerformanceCountingEnabled whether to track the message rate here, see {@link #getNumLiveDataUpdatesSentPerSecondOverLastMinute()}
    */
-  protected StandardLiveDataServer(CacheManager cacheManager, boolean isPerformanceCountingEnabled) {
+  protected StandardLiveDataServer(final CacheManager cacheManager, final boolean isPerformanceCountingEnabled) {
     ArgumentChecker.notNull(cacheManager, "cacheManager");
     _cacheManager = cacheManager;
     _performanceCounter = isPerformanceCountingEnabled ? new PerformanceCounter(60) : null;
@@ -128,7 +128,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
   //-------------------------------------------------------------------------
   /**
    * Gets the cache manager.
-   * 
+   *
    * @return the cache manager
    */
   public CacheManager getCacheManager() {
@@ -149,7 +149,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
    *
    * @param distributionSpecificationResolver the distribution resolver, not null
    */
-  public void setDistributionSpecificationResolver(DistributionSpecificationResolver distributionSpecificationResolver) {
+  public void setDistributionSpecificationResolver(final DistributionSpecificationResolver distributionSpecificationResolver) {
     ArgumentChecker.notNull(distributionSpecificationResolver, "distributionSpecificationResolver");
     _distributionSpecificationResolver = distributionSpecificationResolver;
   }
@@ -177,7 +177,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
    *
    * @param marketDataSenderFactory the factory, not null
    */
-  public void setMarketDataSenderFactory(MarketDataSenderFactory marketDataSenderFactory) {
+  public void setMarketDataSenderFactory(final MarketDataSenderFactory marketDataSenderFactory) {
     ArgumentChecker.notNull(marketDataSenderFactory, "marketDataSenderFactory");
     _marketDataSenderFactory = marketDataSenderFactory;
   }
@@ -187,7 +187,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
    *
    * @param subscriptionListener the listener, not null
    */
-  public void addSubscriptionListener(SubscriptionListener subscriptionListener) {
+  public void addSubscriptionListener(final SubscriptionListener subscriptionListener) {
     ArgumentChecker.notNull(subscriptionListener, "subscriptionListener");
     _subscriptionListeners.add(subscriptionListener);
   }
@@ -197,10 +197,10 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
    *
    * @param subscriptionListeners the listeners, not null
    */
-  public void setSubscriptionListeners(Collection<SubscriptionListener> subscriptionListeners) {
+  public void setSubscriptionListeners(final Collection<SubscriptionListener> subscriptionListeners) {
     ArgumentChecker.noNulls(subscriptionListeners, "subscriptionListeners");
     _subscriptionListeners.clear();
-    for (SubscriptionListener subscriptionListener : subscriptionListeners) {
+    for (final SubscriptionListener subscriptionListener : subscriptionListeners) {
       addSubscriptionListener(subscriptionListener);
     }
   }
@@ -219,7 +219,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
    *
    * @param entitlementChecker the entitlement checker, not null
    */
-  public void setEntitlementChecker(LiveDataEntitlementChecker entitlementChecker) {
+  public void setEntitlementChecker(final LiveDataEntitlementChecker entitlementChecker) {
     ArgumentChecker.notNull(entitlementChecker, "entitlementChecker");
     _entitlementChecker = entitlementChecker;
   }
@@ -231,7 +231,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
    *
    * @param subscriptionEntitlementChecker the entitlement checker to be used for subscriptions
    */
-  public void setSubscriptionEntitlementChecker(LiveDataEntitlementChecker subscriptionEntitlementChecker) {
+  public void setSubscriptionEntitlementChecker(final LiveDataEntitlementChecker subscriptionEntitlementChecker) {
     _subscriptionEntitlementChecker = subscriptionEntitlementChecker;
   }
 
@@ -258,7 +258,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
    *
    * @param lkvStoreProvider the provider, not null
    */
-  public void setLkvStoreProvider(LastKnownValueStoreProvider lkvStoreProvider) {
+  public void setLkvStoreProvider(final LastKnownValueStoreProvider lkvStoreProvider) {
     ArgumentChecker.notNull(lkvStoreProvider, "lkvStoreProvider");
     _lkvStoreProvider = lkvStoreProvider;
   }
@@ -330,7 +330,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
    * @param distributior the currently active distributor for the security being snapshotted, not null
    * @return true if an empty subscription indicates that the snapshot result would be empty
    */
-  protected boolean canSatisfySnapshotFromEmptySubscription(MarketDataDistributor distributior) {
+  protected boolean canSatisfySnapshotFromEmptySubscription(final MarketDataDistributor distributior) {
     //NOTE simon 28/11/2011: Only in the case of requiring a snapshot is it safe to use an empty snapshot from a subscription, since in the other case we may still be waiting for values
     return snapshotOnSubscriptionStartRequired(distributior.getSubscription());
   }
@@ -367,12 +367,12 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
    *
    * @param connectionStatus the status, not null
    */
-  public void setConnectionStatus(ConnectionStatus connectionStatus) {
+  public void setConnectionStatus(final ConnectionStatus connectionStatus) {
     _connectionStatus = connectionStatus;
     LOGGER.info("Connection status changed to " + connectionStatus);
 
     if (connectionStatus == ConnectionStatus.NOT_CONNECTED) {
-      for (Subscription subscription : getSubscriptions()) {
+      for (final Subscription subscription : getSubscriptions()) {
         subscription.setHandle(null);
       }
     }
@@ -384,9 +384,9 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
     try {
       LOGGER.warn("Attempting to re-establish subscriptions for {} securities", _securityUniqueId2Subscription.size());
 
-      Set<String> securities = _securityUniqueId2Subscription.keySet();
+      final Set<String> securities = _securityUniqueId2Subscription.keySet();
       try {
-        Map<String, Object> subscriptions = doSubscribe(securities);
+        final Map<String, Object> subscriptions = doSubscribe(securities);
 
         if (securities.size() != subscriptions.size()) {
           LOGGER.warn("Attempting to re-establish security subscriptions - have {} securities " +
@@ -394,7 +394,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
                         securities.size(), subscriptions.size());
         }
 
-        for (Iterator<Map.Entry<String, Subscription>> it = _securityUniqueId2Subscription.entrySet().iterator(); it.hasNext(); ) {
+        for (final Iterator<Map.Entry<String, Subscription>> it = _securityUniqueId2Subscription.entrySet().iterator(); it.hasNext();) {
           final Map.Entry<String, Subscription> entry = it.next();
           final Object handle = subscriptions.get(entry.getKey());
           if (handle != null) {
@@ -405,7 +405,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
             it.remove();
           }
         }
-      } catch (RuntimeException e) {
+      } catch (final RuntimeException e) {
         LOGGER.error("Could not reestablish subscription to {}", new Object[] {securities }, e);
       }
     } finally {
@@ -468,7 +468,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
    * @param securityUniqueId Security unique ID
    * @return A {@code LiveDataSpecification} with default normalization rule used.
    */
-  public LiveDataSpecification getLiveDataSpecification(String securityUniqueId) {
+  public LiveDataSpecification getLiveDataSpecification(final String securityUniqueId) {
     return new LiveDataSpecification(
         getDefaultNormalizationRuleSetId(),
         ExternalId.of(getUniqueIdDomain(), securityUniqueId));
@@ -481,7 +481,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
    * @return Whether the subscription succeeded or failed
    * @see #getDefaultNormalizationRuleSetId()
    */
-  public LiveDataSubscriptionResponse subscribe(String securityUniqueId) {
+  public LiveDataSubscriptionResponse subscribe(final String securityUniqueId) {
     return subscribe(securityUniqueId, false);
   }
 
@@ -493,25 +493,25 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
    * @return Whether the subscription succeeded or failed
    * @see #getDefaultNormalizationRuleSetId()
    */
-  public LiveDataSubscriptionResponse subscribe(String securityUniqueId, boolean persistent) {
-    LiveDataSpecification liveDataSpecification = getLiveDataSpecification(securityUniqueId);
+  public LiveDataSubscriptionResponse subscribe(final String securityUniqueId, final boolean persistent) {
+    final LiveDataSpecification liveDataSpecification = getLiveDataSpecification(securityUniqueId);
     return subscribe(liveDataSpecification, persistent);
   }
 
-  public LiveDataSubscriptionResponse subscribe(LiveDataSpecification liveDataSpecificationFromClient,
-      boolean persistent) {
+  public LiveDataSubscriptionResponse subscribe(final LiveDataSpecification liveDataSpecificationFromClient,
+      final boolean persistent) {
 
-    Collection<LiveDataSubscriptionResponse> results = subscribe(
+    final Collection<LiveDataSubscriptionResponse> results = subscribe(
         Collections.singleton(liveDataSpecificationFromClient),
         persistent);
 
     if (results == null || results.size() != 1) {
-      String errorMsg = "subscribe() did not fulfill its contract to populate map for each live data spec";
+      final String errorMsg = "subscribe() did not fulfill its contract to populate map for each live data spec";
       return buildErrorMessageResponse(liveDataSpecificationFromClient, LiveDataSubscriptionResult.INTERNAL_ERROR, errorMsg);
     }
-    LiveDataSubscriptionResponse result = results.iterator().next();
+    final LiveDataSubscriptionResponse result = results.iterator().next();
     if (!liveDataSpecificationFromClient.equals(result.getRequestedSpecification())) {
-      String errorMsg = "Expected a subscription result for " + liveDataSpecificationFromClient + " but received one for " + result.getRequestedSpecification();
+      final String errorMsg = "Expected a subscription result for " + liveDataSpecificationFromClient + " but received one for " + result.getRequestedSpecification();
       return buildErrorMessageResponse(liveDataSpecificationFromClient, LiveDataSubscriptionResult.INTERNAL_ERROR, errorMsg);
     }
 
@@ -519,22 +519,22 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
   }
 
   public Collection<LiveDataSubscriptionResponse> subscribe(
-      Collection<LiveDataSpecification> liveDataSpecificationsFromClient, boolean persistent) {
+      final Collection<LiveDataSpecification> liveDataSpecificationsFromClient, final boolean persistent) {
     ArgumentChecker.notNull(liveDataSpecificationsFromClient, "Subscriptions to be created");
 
     LOGGER.info("Subscribe requested for {}, persistent = {}", liveDataSpecificationsFromClient, persistent);
 
     verifyConnectionOk();
 
-    Map<ExternalIdBundle, LiveDataSubscriptionResponse> responses = new HashMap<>();
-    Map<String, Subscription> securityUniqueId2NewSubscription = new HashMap<>();
-    Map<String, LiveDataSpecification> securityUniqueId2SpecFromClient = new HashMap<>();
+    final Map<ExternalIdBundle, LiveDataSubscriptionResponse> responses = new HashMap<>();
+    final Map<String, Subscription> securityUniqueId2NewSubscription = new HashMap<>();
+    final Map<String, LiveDataSpecification> securityUniqueId2SpecFromClient = new HashMap<>();
 
     _subscriptionLock.lock();
     try {
       final long distributionExpiryTime = System.currentTimeMillis() + getExpirationManager().getTimeoutExtension();
-      Map<LiveDataSpecification, DistributionSpecification> distrSpecs = getDistributionSpecificationResolver().resolve(liveDataSpecificationsFromClient);
-      for (LiveDataSpecification specFromClient : liveDataSpecificationsFromClient) {
+      final Map<LiveDataSpecification, DistributionSpecification> distrSpecs = getDistributionSpecificationResolver().resolve(liveDataSpecificationsFromClient);
+      for (final LiveDataSpecification specFromClient : liveDataSpecificationsFromClient) {
         // this is the only place where subscribe() can 'partially' fail
         final DistributionSpecification distributionSpec = distrSpecs.get(specFromClient);
         if (distributionSpec == null) {
@@ -548,22 +548,22 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
           LOGGER.info("Already subscribed to {}", fullyQualifiedSpec);
           subscription.createDistributor(distributionSpec, persistent).setExpiry(distributionExpiryTime);
         } else {
-          String securityUniqueId = fullyQualifiedSpec.getIdentifier(getUniqueIdDomain());
+          final String securityUniqueId = fullyQualifiedSpec.getIdentifier(getUniqueIdDomain());
           if (securityUniqueId == null) {
-            String errorMsg = "Qualified spec " + fullyQualifiedSpec + " does not contain ID of domain " + getUniqueIdDomain();
+            final String errorMsg = "Qualified spec " + fullyQualifiedSpec + " does not contain ID of domain " + getUniqueIdDomain();
             responses.put(specFromClient.getIdentifiers(), buildErrorMessageResponse(specFromClient, LiveDataSubscriptionResult.INTERNAL_ERROR, errorMsg));
             continue;
           }
           subscription = new Subscription(securityUniqueId, getMarketDataSenderFactory(), getLkvStoreProvider());
           securityUniqueId2NewSubscription.put(subscription.getSecurityUniqueId(), subscription);
           securityUniqueId2SpecFromClient.put(subscription.getSecurityUniqueId(), specFromClient);
-          MarketDataDistributor distributor = subscription.createDistributor(distributionSpec, persistent);
+          final MarketDataDistributor distributor = subscription.createDistributor(distributionSpec, persistent);
           distributor.setExpiry(distributionExpiryTime);
-          
+
           // PLAT-5958 - make a note of this here so that if another requested live data spec aliases to the same
-          // subscription then we reuse this new subscription rather than creating another  
+          // subscription then we reuse this new subscription rather than creating another
           _fullyQualifiedSpec2Distributor.put(distributor.getFullyQualifiedLiveDataSpecification(), distributor);
-          
+
           LOGGER.info("Created subscription for {}: {}", fullyQualifiedSpec, subscription);
         }
         responses.put(specFromClient.getIdentifiers(), buildSubscriptionResponse(specFromClient, distributionSpec));
@@ -574,21 +574,21 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
 
       // In some cases, the underlying market data API may not, when the subscription is started,
       // return a full image of all fields. If so, we need to get the full image explicitly.
-      Collection<String> newSubscriptionsForWhichSnapshotIsRequired = new ArrayList<>();
-      for (Subscription subscription : securityUniqueId2NewSubscription.values()) {
+      final Collection<String> newSubscriptionsForWhichSnapshotIsRequired = new ArrayList<>();
+      for (final Subscription subscription : securityUniqueId2NewSubscription.values()) {
         if (snapshotOnSubscriptionStartRequired(subscription)) {
           newSubscriptionsForWhichSnapshotIsRequired.add(subscription.getSecurityUniqueId());
         }
       }
 
       LOGGER.info("Subscription snapshot required for {}", newSubscriptionsForWhichSnapshotIsRequired);
-      Map<String, FudgeMsg> snapshots = doSnapshot(newSubscriptionsForWhichSnapshotIsRequired);
-      for (Map.Entry<String, FudgeMsg> snapshot : snapshots.entrySet()) {
-        Subscription subscription = securityUniqueId2NewSubscription.get(snapshot.getKey());
+      final Map<String, FudgeMsg> snapshots = doSnapshot(newSubscriptionsForWhichSnapshotIsRequired);
+      for (final Map.Entry<String, FudgeMsg> snapshot : snapshots.entrySet()) {
+        final Subscription subscription = securityUniqueId2NewSubscription.get(snapshot.getKey());
         if (snapshot.getValue() != null) {
           if (snapshot.getValue().hasField(PermissionUtils.LIVE_DATA_PERMISSION_DENIED_FIELD)) {
-            LiveDataSpecification originalSpec = securityUniqueId2SpecFromClient.get(snapshot.getKey());
-            LiveDataSubscriptionResponse errorRsp = buildErrorMessageResponse(
+            final LiveDataSpecification originalSpec = securityUniqueId2SpecFromClient.get(snapshot.getKey());
+            final LiveDataSubscriptionResponse errorRsp = buildErrorMessageResponse(
               originalSpec, LiveDataSubscriptionResult.NOT_AUTHORIZED,
               snapshot.getValue().getString(PermissionUtils.LIVE_DATA_PERMISSION_DENIED_FIELD));
             responses.put(originalSpec.getIdentifiers(), errorRsp);
@@ -599,21 +599,21 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
       }
 
       // Setup the subscriptions in the underlying data provider.
-      for (Subscription subscription : securityUniqueId2NewSubscription.values()) {
+      for (final Subscription subscription : securityUniqueId2NewSubscription.values()) {
         // this is necessary so we don't lose any updates immediately after doSubscribe(). See AbstractLiveDataServer#liveDataReceived()
         // and how it calls AbstractLiveDataServer#getSubscription()
         _securityUniqueId2Subscription.put(subscription.getSecurityUniqueId(), subscription);
       }
 
       LOGGER.info("Creating underlying market data API subscription to {}", securityUniqueId2NewSubscription.keySet());
-      Map<String, Object> subscriptionHandles = doSubscribe(securityUniqueId2NewSubscription.keySet());
+      final Map<String, Object> subscriptionHandles = doSubscribe(securityUniqueId2NewSubscription.keySet());
 
       // Set up data structures
-      for (Map.Entry<String, Object> subscriptionHandle : subscriptionHandles.entrySet()) {
-        String securityUniqueId = subscriptionHandle.getKey();
-        Object handle = subscriptionHandle.getValue();
-        
-        Subscription subscription = securityUniqueId2NewSubscription.get(securityUniqueId);
+      for (final Map.Entry<String, Object> subscriptionHandle : subscriptionHandles.entrySet()) {
+        final String securityUniqueId = subscriptionHandle.getKey();
+        final Object handle = subscriptionHandle.getValue();
+
+        final Subscription subscription = securityUniqueId2NewSubscription.get(securityUniqueId);
         subscription.setHandle(handle);
 
         _currentlyActiveSubscriptions.add(subscription);
@@ -621,13 +621,13 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
         notifySubscriptionListeners(subscription);
       }
 
-    } catch (RuntimeException e) {
+    } catch (final RuntimeException e) {
       LOGGER.info("Unexpected exception thrown when subscribing. Cleaning up.", e);
 
-      for (Subscription subscription : securityUniqueId2NewSubscription.values()) {
+      for (final Subscription subscription : securityUniqueId2NewSubscription.values()) {
         _securityUniqueId2Subscription.remove(subscription.getSecurityUniqueId());
 
-        for (MarketDataDistributor distributor : subscription.getDistributors()) {
+        for (final MarketDataDistributor distributor : subscription.getDistributors()) {
           _fullyQualifiedSpec2Distributor.remove(distributor.getFullyQualifiedLiveDataSpecification());
         }
       }
@@ -645,11 +645,11 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
     return responses.values();
   }
 
-  private void notifySubscriptionListeners(Subscription subscription) {
-    for (SubscriptionListener listener : _subscriptionListeners) {
+  private void notifySubscriptionListeners(final Subscription subscription) {
+    for (final SubscriptionListener listener : _subscriptionListeners) {
       try {
         listener.subscribed(subscription);
-      } catch (RuntimeException e) {
+      } catch (final RuntimeException e) {
         LOGGER.error("Listener " + listener + " subscribe failed", e);
       }
     }
@@ -660,7 +660,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
    *
    * @param subscriptions the subscriptions, not null
    */
-  protected void subscriptionDone(Set<String> subscriptions) {
+  protected void subscriptionDone(final Set<String> subscriptions) {
     //Do nothing by default
   }
 
@@ -669,7 +669,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
    *
    * @param uniqueIds The unique ids for which a subscribe is being requested
    */
-  protected void checkSubscribe(Set<String> uniqueIds) {
+  protected void checkSubscribe(final Set<String> uniqueIds) {
     //Do nothing by default
   }
 
@@ -681,35 +681,35 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
    * @return Responses to snapshot requests. Some, or even all, of them might be failures.
    * @throws RuntimeException If no snapshot could be obtained due to unexpected error.
    */
-  public Collection<LiveDataSubscriptionResponse> snapshot(Collection<LiveDataSpecification> liveDataSpecificationsFromClient) {
+  public Collection<LiveDataSubscriptionResponse> snapshot(final Collection<LiveDataSpecification> liveDataSpecificationsFromClient) {
     ArgumentChecker.notNull(liveDataSpecificationsFromClient, "Snapshots to be obtained");
 
     LOGGER.info("Snapshot requested for {}", liveDataSpecificationsFromClient);
 
     verifyConnectionOk();
 
-    Collection<LiveDataSubscriptionResponse> responses = new ArrayList<>();
+    final Collection<LiveDataSubscriptionResponse> responses = new ArrayList<>();
 
-    Collection<String> snapshotsToActuallyDo = new ArrayList<>();
-    Map<String, LiveDataSpecification> securityUniqueId2LiveDataSpecificationFromClient = new HashMap<>();
+    final Collection<String> snapshotsToActuallyDo = new ArrayList<>();
+    final Map<String, LiveDataSpecification> securityUniqueId2LiveDataSpecificationFromClient = new HashMap<>();
 
-    Map<LiveDataSpecification, DistributionSpecification> resolved = getDistributionSpecificationResolver().resolve(liveDataSpecificationsFromClient);
-    for (LiveDataSpecification liveDataSpecificationFromClient : liveDataSpecificationsFromClient) {
-      DistributionSpecification distributionSpec = resolved.get(liveDataSpecificationFromClient);
-      LiveDataSpecification fullyQualifiedSpec = distributionSpec.getFullyQualifiedLiveDataSpecification();
+    final Map<LiveDataSpecification, DistributionSpecification> resolved = getDistributionSpecificationResolver().resolve(liveDataSpecificationsFromClient);
+    for (final LiveDataSpecification liveDataSpecificationFromClient : liveDataSpecificationsFromClient) {
+      final DistributionSpecification distributionSpec = resolved.get(liveDataSpecificationFromClient);
+      final LiveDataSpecification fullyQualifiedSpec = distributionSpec.getFullyQualifiedLiveDataSpecification();
 
-      MarketDataDistributor currentlyActiveDistributor = getMarketDataDistributor(distributionSpec);
+      final MarketDataDistributor currentlyActiveDistributor = getMarketDataDistributor(distributionSpec);
       if (currentlyActiveDistributor != null) {
         if (currentlyActiveDistributor.getSnapshot() != null) {
           //NOTE simon 28/11/2011: We presume that all the fields were provided in one go, all or nothing.
           LOGGER.debug("Able to satisfy {} from existing LKV", liveDataSpecificationFromClient);
-          LiveDataValueUpdateBean snapshot = currentlyActiveDistributor.getSnapshot();
+          final LiveDataValueUpdateBean snapshot = currentlyActiveDistributor.getSnapshot();
           responses.add(buildSnapshotResponse(liveDataSpecificationFromClient, snapshot));
           continue;
         } else if (canSatisfySnapshotFromEmptySubscription(currentlyActiveDistributor)) {
           //BBG-91 - don't requery when an existing subscription indicates that the snapshot will fail
           LOGGER.debug("Able to satisfy failed snapshot {} from existing LKV", liveDataSpecificationFromClient);
-          String errorMsg = "Existing subscription for " + currentlyActiveDistributor.getDistributionSpec().getMarketDataId() +
+          final String errorMsg = "Existing subscription for " + currentlyActiveDistributor.getDistributionSpec().getMarketDataId() +
               " failed to retrieve a snapshot.  Perhaps required fields are unavailable.";
           responses.add(buildErrorMessageResponse(liveDataSpecificationFromClient, LiveDataSubscriptionResult.INTERNAL_ERROR, errorMsg));
           continue;
@@ -718,9 +718,9 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
         }
       }
 
-      String securityUniqueId = fullyQualifiedSpec.getIdentifier(getUniqueIdDomain());
+      final String securityUniqueId = fullyQualifiedSpec.getIdentifier(getUniqueIdDomain());
       if (securityUniqueId == null) {
-        String errorMsg = "Qualified spec " + fullyQualifiedSpec + " does not contain ID of domain " + getUniqueIdDomain();
+        final String errorMsg = "Qualified spec " + fullyQualifiedSpec + " does not contain ID of domain " + getUniqueIdDomain();
         responses.add(buildErrorMessageResponse(liveDataSpecificationFromClient, LiveDataSubscriptionResult.INTERNAL_ERROR, errorMsg));
         continue;
       }
@@ -730,24 +730,24 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
     }
 
     LOGGER.debug("Need to actually snapshot {}", snapshotsToActuallyDo);
-    Map<String, FudgeMsg> snapshots = doSnapshot(snapshotsToActuallyDo);
-    for (Map.Entry<String, FudgeMsg> snapshotEntry : snapshots.entrySet()) {
-      String securityUniqueId = snapshotEntry.getKey();
-      FudgeMsg msg = snapshotEntry.getValue();
+    final Map<String, FudgeMsg> snapshots = doSnapshot(snapshotsToActuallyDo);
+    for (final Map.Entry<String, FudgeMsg> snapshotEntry : snapshots.entrySet()) {
+      final String securityUniqueId = snapshotEntry.getKey();
+      final FudgeMsg msg = snapshotEntry.getValue();
 
-      LiveDataSpecification liveDataSpecFromClient = securityUniqueId2LiveDataSpecificationFromClient.get(securityUniqueId);
+      final LiveDataSpecification liveDataSpecFromClient = securityUniqueId2LiveDataSpecificationFromClient.get(securityUniqueId);
 
-      DistributionSpecification distributionSpec = resolved.get(liveDataSpecFromClient);
-      FudgeMsg normalizedMsg = distributionSpec.getNormalizedMessage(msg, securityUniqueId);
+      final DistributionSpecification distributionSpec = resolved.get(liveDataSpecFromClient);
+      final FudgeMsg normalizedMsg = distributionSpec.getNormalizedMessage(msg, securityUniqueId);
       if (normalizedMsg == null) {
-        String errorMsg = "When snapshot for " + securityUniqueId + " was run through normalization, the message disappeared. " +
+        final String errorMsg = "When snapshot for " + securityUniqueId + " was run through normalization, the message disappeared. " +
             " This indicates there are buggy normalization rules in place, or that buggy (or unexpected) data was" +
             " received from the underlying market data API. Check your normalization rules. Raw, unnormalized msg = " + msg;
         responses.add(buildErrorMessageResponse(liveDataSpecFromClient, LiveDataSubscriptionResult.INTERNAL_ERROR, errorMsg));
         continue;
       }
 
-      LiveDataValueUpdateBean snapshot = new LiveDataValueUpdateBean(0, distributionSpec.getFullyQualifiedLiveDataSpecification(), normalizedMsg);
+      final LiveDataValueUpdateBean snapshot = new LiveDataValueUpdateBean(0, distributionSpec.getFullyQualifiedLiveDataSpecification(), normalizedMsg);
       responses.add(buildSnapshotResponse(liveDataSpecFromClient, snapshot));
     }
 
@@ -760,9 +760,9 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
    * @param securityUniqueId Security unique ID
    * @return The snapshot
    */
-  public FudgeMsg doSnapshot(String securityUniqueId) {
-    Map<String, FudgeMsg> snapshots = doSnapshot(Collections.singleton(securityUniqueId));
-    FudgeMsg snapshot = snapshots.get(securityUniqueId);
+  public FudgeMsg doSnapshot(final String securityUniqueId) {
+    final Map<String, FudgeMsg> snapshots = doSnapshot(Collections.singleton(securityUniqueId));
+    final FudgeMsg snapshot = snapshots.get(securityUniqueId);
     if (snapshot == null) {
       throw new OpenGammaRuntimeException("doSnapshot() did not fulfill its contract to populate map for each unique ID");
     }
@@ -777,15 +777,15 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
    * @param subscriptionRequest the request from the client telling what to subscribe to, not null
    * @return the response sent back to the client of this server, not null
    */
-  public LiveDataSubscriptionResponseMsg subscriptionRequestMade(LiveDataSubscriptionRequest subscriptionRequest) {
+  public LiveDataSubscriptionResponseMsg subscriptionRequestMade(final LiveDataSubscriptionRequest subscriptionRequest) {
     try {
       return subscriptionRequestMadeImpl(subscriptionRequest);
 
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       LOGGER.error("Failed to subscribe to " + subscriptionRequest, ex);
 
-      ArrayList<LiveDataSubscriptionResponse> responses = new ArrayList<>();
-      for (LiveDataSpecification requestedSpecification : subscriptionRequest.getSpecifications()) {
+      final ArrayList<LiveDataSubscriptionResponse> responses = new ArrayList<>();
+      for (final LiveDataSpecification requestedSpecification : subscriptionRequest.getSpecifications()) {
         responses.add(buildErrorResponse(requestedSpecification, ex));
       }
       return new LiveDataSubscriptionResponseMsg(subscriptionRequest.getUser(), responses);
@@ -798,20 +798,20 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
    * @param subscriptionRequest the request, not null
    * @return the response, not null
    */
-  protected LiveDataSubscriptionResponseMsg subscriptionRequestMadeImpl(LiveDataSubscriptionRequest subscriptionRequest) {
+  protected LiveDataSubscriptionResponseMsg subscriptionRequestMadeImpl(final LiveDataSubscriptionRequest subscriptionRequest) {
     final boolean persistent = subscriptionRequest.getType().equals(SubscriptionType.PERSISTENT);
     final ArrayList<LiveDataSubscriptionResponse> responses = new ArrayList<>();
 
     // build and check the distribution specifications
-    Map<LiveDataSpecification, DistributionSpecification> distributionSpecifications = getDistributionSpecificationResolver().resolve(
+    final Map<LiveDataSpecification, DistributionSpecification> distributionSpecifications = getDistributionSpecificationResolver().resolve(
         subscriptionRequest.getSpecifications());
-    ArrayList<LiveDataSpecification> distributable = new ArrayList<>();
-    for (LiveDataSpecification requestedSpecification : subscriptionRequest.getSpecifications()) {
+    final ArrayList<LiveDataSpecification> distributable = new ArrayList<>();
+    for (final LiveDataSpecification requestedSpecification : subscriptionRequest.getSpecifications()) {
       try {
         // Check that this spec can be found
-        DistributionSpecification spec = distributionSpecifications.get(requestedSpecification);
+        final DistributionSpecification spec = distributionSpecifications.get(requestedSpecification);
         if (spec == null) {
-          String errorMsg = "Could not build distribution specification for " + requestedSpecification;
+          final String errorMsg = "Could not build distribution specification for " + requestedSpecification;
           LOGGER.debug(errorMsg);
           responses.add(buildErrorMessageResponse(requestedSpecification,
                                                   LiveDataSubscriptionResult.NOT_PRESENT,
@@ -820,23 +820,23 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
           distributable.add(requestedSpecification);
         }
 
-      } catch (Exception ex) {
+      } catch (final Exception ex) {
         LOGGER.error("Failed to subscribe to " + requestedSpecification, ex);
         responses.add(buildErrorResponse(requestedSpecification, ex));
       }
     }
 
     // check entitlement and sort into snapshots/subscriptions
-    ArrayList<LiveDataSpecification> snapshots = new ArrayList<>();
-    ArrayList<LiveDataSpecification> subscriptions = new ArrayList<>();
-    Map<LiveDataSpecification, Boolean> entitled = getSubscriptionEntitlementChecker().isEntitled(subscriptionRequest.getUser(),
+    final ArrayList<LiveDataSpecification> snapshots = new ArrayList<>();
+    final ArrayList<LiveDataSpecification> subscriptions = new ArrayList<>();
+    final Map<LiveDataSpecification, Boolean> entitled = getSubscriptionEntitlementChecker().isEntitled(subscriptionRequest.getUser(),
                                                                                                   distributable);
-    for (Entry<LiveDataSpecification, Boolean> entry : entitled.entrySet()) {
-      LiveDataSpecification requestedSpecification = entry.getKey();
+    for (final Entry<LiveDataSpecification, Boolean> entry : entitled.entrySet()) {
+      final LiveDataSpecification requestedSpecification = entry.getKey();
       try {
-        Boolean entitlement = entry.getValue();
+        final Boolean entitlement = entry.getValue();
         if (!entitlement) {
-          String errorMsg = subscriptionRequest.getUser() + " is not entitled to " + requestedSpecification;
+          final String errorMsg = subscriptionRequest.getUser() + " is not entitled to " + requestedSpecification;
           LOGGER.info(errorMsg);
           responses.add(buildErrorMessageResponse(requestedSpecification,
                                                   LiveDataSubscriptionResult.NOT_AUTHORIZED,
@@ -851,7 +851,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
           subscriptions.add(requestedSpecification);
         }
 
-      } catch (Exception ex) {
+      } catch (final Exception ex) {
         LOGGER.error("Failed to subscribe to " + requestedSpecification, ex);
         responses.add(buildErrorResponse(requestedSpecification, ex));
       }
@@ -862,15 +862,15 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
       try {
         responses.addAll(snapshot(snapshots));
 
-      } catch (Exception ex) {
+      } catch (final Exception ex) {
         LOGGER.error("Error obtaining snapshots for {}: {}", snapshots, ex.getMessage());
         if (LOGGER.isDebugEnabled()) {
           LOGGER.debug("Underlying exception in snapshot error " + snapshots, ex);
         }
         // REVIEW kirk 2012-07-20 -- This doesn't really look like an InternalError,
         // but we have no way to discriminate in the response from doSnapshot at the moment.
-        for (LiveDataSpecification requestedSpecification : snapshots) {
-          String errorMsg = "Problem obtaining snapshot: " + ex.getMessage();
+        for (final LiveDataSpecification requestedSpecification : snapshots) {
+          final String errorMsg = "Problem obtaining snapshot: " + ex.getMessage();
           responses.add(buildErrorMessageResponse(requestedSpecification,
                                                   LiveDataSubscriptionResult.INTERNAL_ERROR,
                                                   errorMsg));
@@ -883,14 +883,14 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
       try {
         responses.addAll(subscribe(subscriptions, persistent));
 
-      } catch (Exception ex) {
+      } catch (final Exception ex) {
         LOGGER.error("Error obtaining subscriptions for {}: {}",
                        subscriptions,
-                       (ex.getMessage() != null ? ex.getMessage() : ex.getClass().getName()));
+                       ex.getMessage() != null ? ex.getMessage() : ex.getClass().getName());
         if (LOGGER.isDebugEnabled()) {
           LOGGER.debug("Underlying exception in subscription error " + subscriptions, ex);
         }
-        for (LiveDataSpecification requestedSpecification : subscriptions) {
+        for (final LiveDataSpecification requestedSpecification : subscriptions) {
           responses.add(buildErrorResponse(requestedSpecification, ex));
         }
       }
@@ -907,8 +907,8 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
    * @param securityUniqueId Security unique ID
    * @return true if a market data subscription was actually removed. false otherwise.
    */
-  public boolean unsubscribe(String securityUniqueId) {
-    Subscription sub = getSubscription(securityUniqueId);
+  public boolean unsubscribe(final String securityUniqueId) {
+    final Subscription sub = getSubscription(securityUniqueId);
     if (sub == null) {
       return false;
     }
@@ -920,7 +920,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
    * @param subscription What to unsubscribe from
    * @return true if a market data subscription was actually removed. false otherwise.
    */
-  public boolean unsubscribe(Subscription subscription) {
+  public boolean unsubscribe(final Subscription subscription) {
     ArgumentChecker.notNull(subscription, "Subscription");
     verifyConnectionOk();
 
@@ -934,7 +934,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
 
         actuallyUnsubscribed = true;
 
-        Object subscriptionHandle = subscription.getHandle();
+        final Object subscriptionHandle = subscription.getHandle();
         if (subscriptionHandle != null) {
           doUnsubscribe(Collections.singleton(subscriptionHandle)); // todo, optimize to use batch
         }
@@ -943,15 +943,15 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
         _securityUniqueId2Subscription.remove(subscription
             .getSecurityUniqueId());
 
-        for (MarketDataDistributor distributor : subscription.getDistributors()) {
+        for (final MarketDataDistributor distributor : subscription.getDistributors()) {
           _fullyQualifiedSpec2Distributor.remove(distributor.getFullyQualifiedLiveDataSpecification());
         }
         subscription.removeAllDistributors();
 
-        for (SubscriptionListener listener : _subscriptionListeners) {
+        for (final SubscriptionListener listener : _subscriptionListeners) {
           try {
             listener.unsubscribed(subscription);
-          } catch (RuntimeException e) {
+          } catch (final RuntimeException e) {
             LOGGER.error("Listener unsubscribe failed", e);
           }
         }
@@ -977,11 +977,11 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
    * @param distributor The distributor to stop
    * @return true if a distributor was actually stopped. false otherwise.
    */
-  public boolean stopDistributor(MarketDataDistributor distributor) {
+  public boolean stopDistributor(final MarketDataDistributor distributor) {
     ArgumentChecker.notNull(distributor, "Distributor");
     _subscriptionLock.lock();
     try {
-      MarketDataDistributor realDistributor = getMarketDataDistributor(distributor.getDistributionSpec());
+      final MarketDataDistributor realDistributor = getMarketDataDistributor(distributor.getDistributionSpec());
       if (realDistributor != distributor) {
         return false;
       }
@@ -1013,7 +1013,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
     int expired = 0;
     _subscriptionLock.lock();
     try {
-      for (MarketDataDistributor distributor : new ArrayList<>(_fullyQualifiedSpec2Distributor.values())) {
+      for (final MarketDataDistributor distributor : new ArrayList<>(_fullyQualifiedSpec2Distributor.values())) {
         if (distributor.hasExpired()) {
           if (stopDistributor(distributor)) {
             expired++;
@@ -1026,11 +1026,11 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
     return expired;
   }
 
-  public boolean isSubscribedTo(String securityUniqueId) {
+  public boolean isSubscribedTo(final String securityUniqueId) {
     return _securityUniqueId2Subscription.containsKey(securityUniqueId);
   }
 
-  public boolean isSubscribedTo(LiveDataSpecification fullyQualifiedSpec) {
+  public boolean isSubscribedTo(final LiveDataSpecification fullyQualifiedSpec) {
     _subscriptionLock.lock();
     try {
       return _fullyQualifiedSpec2Distributor.containsKey(fullyQualifiedSpec);
@@ -1039,11 +1039,11 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
     }
   }
 
-  public boolean isSubscribedTo(Subscription subscription) {
+  public boolean isSubscribedTo(final Subscription subscription) {
     return getSubscriptions().contains(subscription);
   }
 
-  public void liveDataReceived(String securityUniqueId, FudgeMsg liveDataFields) {
+  public void liveDataReceived(final String securityUniqueId, final FudgeMsg liveDataFields) {
     LOGGER.debug("Live data received: {}", liveDataFields);
 
     _numMarketDataUpdatesReceived.incrementAndGet();
@@ -1051,7 +1051,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
       _performanceCounter.hit();
     }
 
-    Subscription subscription = getSubscription(securityUniqueId);
+    final Subscription subscription = getSubscription(securityUniqueId);
     if (subscription == null) {
       // REVIEW kirk 2013-04-26 -- Should this really be a WARN? I believe some gateway systems
       // handle unsubscribes asynchronously so it's totally valid to get a few ticks after
@@ -1065,9 +1065,9 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
   }
 
   public Set<String> getActiveDistributionSpecs() {
-    Set<String> subscriptions = new HashSet<>();
-    for (Subscription subscription : getSubscriptions()) {
-      for (DistributionSpecification distributionSpec : subscription.getDistributionSpecifications()) {
+    final Set<String> subscriptions = new HashSet<>();
+    for (final Subscription subscription : getSubscriptions()) {
+      for (final DistributionSpecification distributionSpec : subscription.getDistributionSpecifications()) {
         subscriptions.add(distributionSpec.toString());
       }
     }
@@ -1075,8 +1075,8 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
   }
 
   public Set<String> getActiveSubscriptionIds() {
-    Set<String> subscriptions = new HashSet<>();
-    for (Subscription subscription : getSubscriptions()) {
+    final Set<String> subscriptions = new HashSet<>();
+    for (final Subscription subscription : getSubscriptions()) {
       subscriptions.add(subscription.getSecurityUniqueId());
     }
     return subscriptions;
@@ -1106,33 +1106,33 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
     }
   }
 
-  public Subscription getSubscription(LiveDataSpecification fullyQualifiedSpec) {
-    MarketDataDistributor distributor = getMarketDataDistributor(fullyQualifiedSpec);
+  public Subscription getSubscription(final LiveDataSpecification fullyQualifiedSpec) {
+    final MarketDataDistributor distributor = getMarketDataDistributor(fullyQualifiedSpec);
     if (distributor == null) {
       return null;
     }
     return distributor.getSubscription();
   }
 
-  public Subscription getSubscription(String securityUniqueId) {
+  public Subscription getSubscription(final String securityUniqueId) {
     //NOTE: don't need lock here, map is safe, and this operation isn't really atomic anyway
     return _securityUniqueId2Subscription.get(securityUniqueId);
   }
 
-  public MarketDataDistributor getMarketDataDistributor(DistributionSpecification distributionSpec) {
-    Subscription subscription = getSubscription(distributionSpec.getFullyQualifiedLiveDataSpecification());
+  public MarketDataDistributor getMarketDataDistributor(final DistributionSpecification distributionSpec) {
+    final Subscription subscription = getSubscription(distributionSpec.getFullyQualifiedLiveDataSpecification());
     if (subscription == null) {
       return null;
     }
     return subscription.getMarketDataDistributor(distributionSpec);
   }
 
-  public Map<LiveDataSpecification, MarketDataDistributor> getMarketDataDistributors(Collection<LiveDataSpecification> fullyQualifiedSpecs) {
+  public Map<LiveDataSpecification, MarketDataDistributor> getMarketDataDistributors(final Collection<LiveDataSpecification> fullyQualifiedSpecs) {
     //NOTE: this is not much (if any) faster here, but for subclasses it can be
     _subscriptionLock.lock();
     try {
-      HashMap<LiveDataSpecification, MarketDataDistributor> hashMap = new HashMap<>();
-      for (LiveDataSpecification liveDataSpecification : fullyQualifiedSpecs) {
+      final HashMap<LiveDataSpecification, MarketDataDistributor> hashMap = new HashMap<>();
+      for (final LiveDataSpecification liveDataSpecification : fullyQualifiedSpecs) {
         hashMap.put(liveDataSpecification, _fullyQualifiedSpec2Distributor.get(liveDataSpecification));
       }
       return hashMap;
@@ -1141,7 +1141,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
     }
   }
 
-  public MarketDataDistributor getMarketDataDistributor(LiveDataSpecification fullyQualifiedSpec) {
+  public MarketDataDistributor getMarketDataDistributor(final LiveDataSpecification fullyQualifiedSpec) {
     _subscriptionLock.lock();
     try {
       return _fullyQualifiedSpec2Distributor.get(fullyQualifiedSpec);
@@ -1157,12 +1157,12 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
    * @return The only market data distributor associated with the security unique ID.
    * @throws OpenGammaRuntimeException If there is no distributor associated with the given {@code securityUniqueId}, or if there is more than 1 such distributor.
    */
-  public MarketDataDistributor getMarketDataDistributor(String securityUniqueId) {
-    Subscription sub = getSubscription(securityUniqueId);
+  public MarketDataDistributor getMarketDataDistributor(final String securityUniqueId) {
+    final Subscription sub = getSubscription(securityUniqueId);
     if (sub == null) {
       throw new OpenGammaRuntimeException("Subscription " + securityUniqueId + " not found");
     }
-    Collection<MarketDataDistributor> distributors = sub.getDistributors();
+    final Collection<MarketDataDistributor> distributors = sub.getDistributors();
     if (distributors.size() != 1) {
       throw new OpenGammaRuntimeException(distributors.size() + " distributors found for subscription " + securityUniqueId);
     }
@@ -1179,7 +1179,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
    * @return the response, not null
    */
   protected LiveDataSubscriptionResponse buildErrorResponse(
-      LiveDataSpecification liveDataSpecificationFromClient, Throwable throwable) {
+      final LiveDataSpecification liveDataSpecificationFromClient, final Throwable throwable) {
     return buildErrorMessageResponse(liveDataSpecificationFromClient, LiveDataSubscriptionResult.INTERNAL_ERROR, throwable.toString());
   }
   /**
@@ -1191,7 +1191,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
    * @return the response, not null
    */
   protected LiveDataSubscriptionResponse buildErrorMessageResponse(
-      LiveDataSpecification liveDataSpecificationFromClient, LiveDataSubscriptionResult result, String message) {
+      final LiveDataSpecification liveDataSpecificationFromClient, final LiveDataSubscriptionResult result, final String message) {
     return new LiveDataSubscriptionResponse(liveDataSpecificationFromClient, result, message, null, null, null);
   }
 
@@ -1203,7 +1203,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
    * @return the response, not null
    */
   protected LiveDataSubscriptionResponse buildSnapshotResponse(
-      LiveDataSpecification liveDataSpecificationFromClient, LiveDataValueUpdateBean snapshot) {
+      final LiveDataSpecification liveDataSpecificationFromClient, final LiveDataValueUpdateBean snapshot) {
     return new LiveDataSubscriptionResponse(
         liveDataSpecificationFromClient, LiveDataSubscriptionResult.SUCCESS,
         null, snapshot.getSpecification(), null, snapshot);
@@ -1217,25 +1217,25 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
    * @return the response, not null
    */
   protected LiveDataSubscriptionResponse buildSubscriptionResponse(
-      LiveDataSpecification liveDataSpecificationFromClient, DistributionSpecification distributionSpec) {
+      final LiveDataSpecification liveDataSpecificationFromClient, final DistributionSpecification distributionSpec) {
     return new LiveDataSubscriptionResponse(
         liveDataSpecificationFromClient, LiveDataSubscriptionResult.SUCCESS,
         null, distributionSpec.getFullyQualifiedLiveDataSpecification(), distributionSpec.getJmsTopic(), null);
   }
 
   @Override
-  public SubscriptionTrace getSubscriptionTrace(String identifier) {
+  public SubscriptionTrace getSubscriptionTrace(final String identifier) {
 
     if (_securityUniqueId2Subscription.containsKey(identifier)) {
 
-      Subscription sub = _securityUniqueId2Subscription.get(identifier);
+      final Subscription sub = _securityUniqueId2Subscription.get(identifier);
 
-      Date creationTime = sub.getCreationTime();
-      Instant instant = Instant.ofEpochMilli(creationTime.getTime());
+      final Date creationTime = sub.getCreationTime();
+      final Instant instant = Instant.ofEpochMilli(creationTime.getTime());
 
-      Set<DistributorTrace> distributors = new HashSet<>();
+      final Set<DistributorTrace> distributors = new HashSet<>();
 
-      for (MarketDataDistributor distributor : sub.getDistributors()) {
+      for (final MarketDataDistributor distributor : sub.getDistributors()) {
         distributors.add(new DistributorTrace(
             distributor.getDistributionSpec().getJmsTopic(),
             Instant.ofEpochMilli(distributor.getExpiry()).toString(),

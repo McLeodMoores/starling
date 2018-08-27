@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.inflation.derivative;
@@ -12,7 +12,7 @@ import com.opengamma.analytics.financial.interestrate.payments.derivative.Coupon
 import com.opengamma.util.money.Currency;
 
 /**
- * 
+ *
  */
 public class CapFloorInflationYearOnYearMonthly extends CouponInflation implements CapFloor {
 
@@ -28,7 +28,7 @@ public class CapFloorInflationYearOnYearMonthly extends CouponInflation implemen
   private final double _referenceStartTime;
 
   /**
-   * The time for which the index at the coupon start is paid by the standard corresponding  zero coupon. 
+   * The time for which the index at the coupon start is paid by the standard corresponding  zero coupon.
    * There is usually a difference of two or three month between the reference date and the natural payment date.
    * The time can be negative (when the price index for the current and last month is not yet published).
    */
@@ -42,7 +42,7 @@ public class CapFloorInflationYearOnYearMonthly extends CouponInflation implemen
   private final double _referenceEndTime;
 
   /**
-   * The time for which the index at the coupon end is paid by the standard corresponding  zero coupon. 
+   * The time for which the index at the coupon end is paid by the standard corresponding  zero coupon.
    * There is usually a difference of two or three month between the reference date and the natural payment date.
    * the natural payment date is equal to the payment date when the lag is the conventional one.
    * The time can be negative (when the price index for the current and last month is not yet published).
@@ -74,8 +74,8 @@ public class CapFloorInflationYearOnYearMonthly extends CouponInflation implemen
    * @param isCap The cap/floor flag.
    */
   public CapFloorInflationYearOnYearMonthly(final Currency currency, final double paymentTime, final double paymentYearFraction, final double notional, final IndexPrice priceIndex,
-      final double lastKnownFixingTime, final double referenceStartTime, final double naturalPaymentStartTime, final double referenceEndTime, final double naturalPaymentEndTime, double strike,
-      boolean isCap) {
+      final double lastKnownFixingTime, final double referenceStartTime, final double naturalPaymentStartTime, final double referenceEndTime, final double naturalPaymentEndTime, final double strike,
+      final boolean isCap) {
     super(currency, paymentTime, paymentYearFraction, notional, priceIndex);
     _lastKnownFixingTime = lastKnownFixingTime;
     _referenceStartTime = referenceStartTime;
@@ -147,14 +147,14 @@ public class CapFloorInflationYearOnYearMonthly extends CouponInflation implemen
   }
 
   @Override
-  public Coupon withNotional(double notional) {
+  public Coupon withNotional(final double notional) {
     return new CapFloorInflationYearOnYearMonthly(getCurrency(), getPaymentTime(), getPaymentYearFraction(), notional, getPriceIndex(), _referenceStartTime,
         _lastKnownFixingTime, _naturalPaymentStartTime, _referenceEndTime, _naturalPaymentEndTime, _strike, _isCap);
   }
 
   @Override
-  public double payOff(double fixing) {
-    double omega = (_isCap) ? 1.0 : -1.0;
+  public double payOff(final double fixing) {
+    final double omega = _isCap ? 1.0 : -1.0;
     return Math.max(omega * (fixing - _strike), 0);
   }
 
@@ -175,22 +175,22 @@ public class CapFloorInflationYearOnYearMonthly extends CouponInflation implemen
     result = prime * result + (_isCap ? 1231 : 1237);
     long temp;
     temp = Double.doubleToLongBits(_lastKnownFixingTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_naturalPaymentEndTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_naturalPaymentStartTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_referenceEndTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_referenceStartTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_strike);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -200,7 +200,7 @@ public class CapFloorInflationYearOnYearMonthly extends CouponInflation implemen
     if (getClass() != obj.getClass()) {
       return false;
     }
-    CapFloorInflationYearOnYearMonthly other = (CapFloorInflationYearOnYearMonthly) obj;
+    final CapFloorInflationYearOnYearMonthly other = (CapFloorInflationYearOnYearMonthly) obj;
     if (_isCap != other._isCap) {
       return false;
     }

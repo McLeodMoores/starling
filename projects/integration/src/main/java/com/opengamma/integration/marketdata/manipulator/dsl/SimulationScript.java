@@ -37,17 +37,17 @@ public abstract class SimulationScript extends Script {
     initialize();
   }
 
-  public SimulationScript(Binding binding) {
+  public SimulationScript(final Binding binding) {
     super(binding);
     initialize();
   }
 
   // TODO is there a nicer way to do this?
   private void initialize() {
-    InputStream scriptStream = SimulationScript.class.getResourceAsStream("InitializeScript.groovy");
+    final InputStream scriptStream = SimulationScript.class.getResourceAsStream("InitializeScript.groovy");
     try {
       evaluate(IOUtils.toString(scriptStream));
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw new OpenGammaRuntimeException("Failed to initialize DSL script", e);
     }
   }
@@ -63,21 +63,21 @@ public abstract class SimulationScript extends Script {
    * </pre>
    * @param body The block that defines the script's parameters
    */
-  public void parameters(Closure<?> body) {
-    ParametersDelegate parametersDelegate = new ParametersDelegate();
+  public void parameters(final Closure<?> body) {
+    final ParametersDelegate parametersDelegate = new ParametersDelegate();
     body.setDelegate(parametersDelegate);
     body.setResolveStrategy(Closure.DELEGATE_FIRST);
     body.call();
     // check the parameters are all in the binding and have the expected types
-    Binding binding = getBinding();
-    Map<String, Class<?>> parameters = parametersDelegate.getParameters();
-    for (Map.Entry<String, Class<?>> entry : parameters.entrySet()) {
-      String varName = entry.getKey();
-      Class<?> varType = entry.getValue();
+    final Binding binding = getBinding();
+    final Map<String, Class<?>> parameters = parametersDelegate.getParameters();
+    for (final Map.Entry<String, Class<?>> entry : parameters.entrySet()) {
+      final String varName = entry.getKey();
+      final Class<?> varType = entry.getValue();
       if (!binding.hasVariable(varName)) {
         throw new DataNotFoundException("Parameter named " + varName + " not found");
       }
-      Object varValue = binding.getVariable(varName);
+      final Object varValue = binding.getVariable(varName);
       if (!varType.isInstance(varValue)) {
         throw new IllegalArgumentException("Parameter " + varName + " has type " + varValue.getClass().getName() + ", " +
                                                 "required type is " + varType.getName());
@@ -94,12 +94,12 @@ public abstract class SimulationScript extends Script {
     private final Map<String, Class<?>> _params = Maps.newHashMap();
 
     @Override
-    public Object invokeMethod(String name, Object args) {
+    public Object invokeMethod(final String name, final Object args) {
       ArgumentChecker.notEmpty(name, "name");
       if (!(args instanceof Object[])) {
         throw new IllegalArgumentException();
       }
-      Object[] argArray = (Object[]) args;
+      final Object[] argArray = (Object[]) args;
       if (argArray.length != 1 || !argArray[0].getClass().equals(Class.class)) {
         throw new IllegalArgumentException("parameter declarations must be of the form 'var Type");
       }
@@ -121,7 +121,7 @@ public abstract class SimulationScript extends Script {
    * @param body The block that defines the simulation
    * @return The simulation
    */
-  public Simulation simulation(String name, Closure<?> body) {
+  public Simulation simulation(final String name, final Closure<?> body) {
     _simulation = new Simulation(name);
     body.setDelegate(_simulation);
     body.setResolveStrategy(Closure.DELEGATE_FIRST);
@@ -135,7 +135,7 @@ public abstract class SimulationScript extends Script {
    * @param body The block that defines the scenario
    * @return The scenario
    */
-  public Scenario scenario(String name, Closure<?> body) {
+  public Scenario scenario(final String name, final Closure<?> body) {
     // scenarios can be defined as part of a simulation or stand-alone
     if (_simulation != null) {
       _scenario = _simulation.scenario(name);
@@ -152,8 +152,8 @@ public abstract class SimulationScript extends Script {
    * Defines a method in the DSL that takes a closure which defines how to select and transform a curve.
    * @param body The block that defines the selection and transformation
    */
-  public void curve(Closure<?> body) {
-    DslYieldCurveSelectorBuilder selector = new DslYieldCurveSelectorBuilder(_scenario);
+  public void curve(final Closure<?> body) {
+    final DslYieldCurveSelectorBuilder selector = new DslYieldCurveSelectorBuilder(_scenario);
     body.setDelegate(selector);
     body.setResolveStrategy(Closure.DELEGATE_FIRST);
     body.call();
@@ -163,8 +163,8 @@ public abstract class SimulationScript extends Script {
    * Defines a method in the DSL that takes a closure which defines how to select and transform a curve.
    * @param body The block that defines the selection and transformation
    */
-  public void curveData(Closure<?> body) {
-    DslYieldCurveDataSelectorBuilder selector = new DslYieldCurveDataSelectorBuilder(_scenario);
+  public void curveData(final Closure<?> body) {
+    final DslYieldCurveDataSelectorBuilder selector = new DslYieldCurveDataSelectorBuilder(_scenario);
     body.setDelegate(selector);
     body.setResolveStrategy(Closure.DELEGATE_FIRST);
     body.call();
@@ -174,8 +174,8 @@ public abstract class SimulationScript extends Script {
    * Defines a method in the DSL that takes a closure which defines how to select and transform a market data point.
    * @param body The block that defines the selection and transformation
    */
-  public void marketData(Closure<?> body) {
-    DslPointSelectorBuilder selector = new DslPointSelectorBuilder(_scenario);
+  public void marketData(final Closure<?> body) {
+    final DslPointSelectorBuilder selector = new DslPointSelectorBuilder(_scenario);
     body.setDelegate(selector);
     body.setResolveStrategy(Closure.DELEGATE_FIRST);
     body.call();
@@ -185,8 +185,8 @@ public abstract class SimulationScript extends Script {
    * Defines a method in the DSL that takes a closure which defines how to select and transform a volatility surface.
    * @param body The block that defines the selection and transformation
    */
-  public void surface(Closure<?> body) {
-    DslVolatilitySurfaceSelectorBuilder selector = new DslVolatilitySurfaceSelectorBuilder(_scenario);
+  public void surface(final Closure<?> body) {
+    final DslVolatilitySurfaceSelectorBuilder selector = new DslVolatilitySurfaceSelectorBuilder(_scenario);
     body.setDelegate(selector);
     body.setResolveStrategy(Closure.DELEGATE_FIRST);
     body.call();
@@ -196,8 +196,8 @@ public abstract class SimulationScript extends Script {
    * Defines a method in the DSL that takes a closure which defines how to select and transform spot rates.
    * @param body The block that defines the selection and transformation
    */
-  public void spotRate(Closure<?> body) {
-    DslSpotRateSelectorBuilder builder = new DslSpotRateSelectorBuilder(_scenario);
+  public void spotRate(final Closure<?> body) {
+    final DslSpotRateSelectorBuilder builder = new DslSpotRateSelectorBuilder(_scenario);
     body.setDelegate(builder);
     body.setResolveStrategy(Closure.DELEGATE_FIRST);
     body.call();

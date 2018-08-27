@@ -15,9 +15,9 @@ public class RejectedDueToSubscriptionLimitEvent {
   private final long _subscriptionLimitInEffect;
   private final int _requestedSubscriptions;
   private final int _afterSubscriptionCount;
-  private Instant _instant;
+  private final Instant _instant;
 
-  public RejectedDueToSubscriptionLimitEvent(long subscriptionLimitInEffect, int requestedSubscriptions, int afterSubscriptionCount) {
+  public RejectedDueToSubscriptionLimitEvent(final long subscriptionLimitInEffect, final int requestedSubscriptions, final int afterSubscriptionCount) {
     _instant = Instant.now();
     _subscriptionLimitInEffect = subscriptionLimitInEffect;
     _requestedSubscriptions = requestedSubscriptions;

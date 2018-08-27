@@ -51,10 +51,10 @@ public class PortfolioSaverTool extends AbstractTool<ToolContext> {
   //-------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
+   *
    * @param args  the standard tool arguments, not null
    */
-  public static void main(String[] args) { //CSIGNORE
+  public static void main(final String[] args) { //CSIGNORE
     new PortfolioSaverTool().invokeAndTerminate(args);
   }
 
@@ -62,34 +62,34 @@ public class PortfolioSaverTool extends AbstractTool<ToolContext> {
   /**
    * Loads the test portfolio into the position master.
    */
-  @Override 
-  protected void doRun() {     
+  @Override
+  protected void doRun() {
     s_context = getToolContext();
 
     // Construct portfolio reader
-    PositionReader positionReader = constructPortfolioReader(
+    final PositionReader positionReader = constructPortfolioReader(
         getCommandLine().getOptionValue(PORTFOLIO_NAME_OPT)
     );
 
     // Create portfolio writer
-    PositionWriter positionWriter = constructPortfolioWriter(
-        getCommandLine().getOptionValue(FILE_NAME_OPT), 
+    final PositionWriter positionWriter = constructPortfolioWriter(
+        getCommandLine().getOptionValue(FILE_NAME_OPT),
         getCommandLine().getOptionValue(SECURITY_TYPE_OPT),
         getCommandLine().hasOption(WRITE_OPT),
         getCommandLine().hasOption(INCLUDE_TRADES_OPT)
     );
-    
+
     // Construct portfolio copier
-    PortfolioCopier portfolioCopier = new SimplePortfolioCopier();
-        
+    final PortfolioCopier portfolioCopier = new SimplePortfolioCopier();
+
     // Create visitor for verbose/quiet mode
-    PortfolioCopierVisitor portfolioCopierVisitor; 
+    PortfolioCopierVisitor portfolioCopierVisitor;
     if (getCommandLine().hasOption(VERBOSE_OPT)) {
       portfolioCopierVisitor = new VerbosePortfolioCopierVisitor();
     } else {
       portfolioCopierVisitor = new QuietPortfolioCopierVisitor();
     }
-    
+
     // Call the portfolio loader with the supplied arguments
     portfolioCopier.copy(positionReader, positionWriter, portfolioCopierVisitor);
 
@@ -97,21 +97,21 @@ public class PortfolioSaverTool extends AbstractTool<ToolContext> {
     positionReader.close();
     positionWriter.close();
   }
-  
-  private static PositionWriter constructPortfolioWriter(String filename, String securityType, boolean write,
-                                                          boolean includeTrades) {
-    if (write) {  
+
+  private static PositionWriter constructPortfolioWriter(final String filename, final String securityType, final boolean write,
+                                                          final boolean includeTrades) {
+    if (write) {
       // Check that the file name was specified on the command line
       if (filename == null) {
         throw new OpenGammaRuntimeException("File name omitted, cannot export to file");
       }
-       
+
       if (SheetFormat.of(filename) == SheetFormat.CSV || SheetFormat.of(filename) == SheetFormat.XLS) {
 //        if (securityType.equalsIgnoreCase("exchangetraded")) {
 //          return new SingleSheetSimplePositionWriter(filename, new ExchangeTradedRowParser(s_context.getBloombergSecuritySource()));
 //        } else {
-        
-        RowParser rowParser = JodaBeanRowParser.newJodaBeanRowParser(securityType);
+
+        final RowParser rowParser = JodaBeanRowParser.newJodaBeanRowParser(securityType);
         if (rowParser != null) {
           return new SingleSheetSimplePositionWriter(filename, rowParser, includeTrades);
         } else {
@@ -124,50 +124,50 @@ public class PortfolioSaverTool extends AbstractTool<ToolContext> {
         throw new OpenGammaRuntimeException("Input filename should end in .CSV, .XLS or .ZIP");
       }
 
-    } else {      
+    } else {
       // Create a dummy portfolio writer to pretty-print instead of persisting
       return new PrettyPrintingPositionWriter(true);
     }
   }
 
-  private static PositionReader constructPortfolioReader(String portfolioName) {
+  private static PositionReader constructPortfolioReader(final String portfolioName) {
     return new MasterPositionReader(
-        portfolioName, s_context.getPortfolioMaster(), 
-        s_context.getPositionMaster(), 
+        portfolioName, s_context.getPortfolioMaster(),
+        s_context.getPositionMaster(),
         s_context.getSecuritySource()
     );
   }
 
   @Override
-  protected Options createOptions(boolean contextProvided) {
-    
-    Options options = super.createOptions(contextProvided);
+  protected Options createOptions(final boolean contextProvided) {
 
-    Option filenameOption = new Option(
+    final Options options = super.createOptions(contextProvided);
+
+    final Option filenameOption = new Option(
         FILE_NAME_OPT, "filename", true, "The path to the file to create and export to (CSV, XLS or ZIP)");
     filenameOption.setRequired(true);
     options.addOption(filenameOption);
-    
-    Option portfolioNameOption = new Option(
+
+    final Option portfolioNameOption = new Option(
         PORTFOLIO_NAME_OPT, "name", true, "The name of the source OpenGamma portfolio");
     options.addOption(portfolioNameOption);
-    
-    Option writeOption = new Option(
-        WRITE_OPT, "write", false, 
+
+    final Option writeOption = new Option(
+        WRITE_OPT, "write", false,
         "Actually persists the portfolio to the file if specified, otherwise pretty-prints without persisting");
     options.addOption(writeOption);
-       
-    Option assetClassOption = new Option(
-        SECURITY_TYPE_OPT, "securitytype", true, 
+
+    final Option assetClassOption = new Option(
+        SECURITY_TYPE_OPT, "securitytype", true,
         "The security type to export (ignored if ZIP output file is specified)");
     options.addOption(assetClassOption);
-    
-    Option verboseOption = new Option(
-        VERBOSE_OPT, "verbose", false, 
+
+    final Option verboseOption = new Option(
+        VERBOSE_OPT, "verbose", false,
         "Displays progress messages on the terminal");
     options.addOption(verboseOption);
 
-    Option includeTradesOption = new Option(
+    final Option includeTradesOption = new Option(
         INCLUDE_TRADES_OPT, "trades", false,
         "Generate a separate row for each trade instead of one row per position");
     options.addOption(includeTradesOption);

@@ -23,9 +23,9 @@ public class YieldCurveExample {
   public static double y = 0.02;
   //CSON
 
-  public static void constantYieldCurveDemo(PrintStream out) {
-    DoublesCurve curve = new ConstantDoublesCurve(y);
-    YieldCurve yieldCurve = YieldCurve.from(curve);
+  public static void constantYieldCurveDemo(final PrintStream out) {
+    final DoublesCurve curve = new ConstantDoublesCurve(y);
+    final YieldCurve yieldCurve = YieldCurve.from(curve);
 
     out.println(yieldCurve.getInterestRate(1.0));
     out.println(yieldCurve.getInterestRate(2.0));
@@ -37,11 +37,11 @@ public class YieldCurveExample {
   }
 
   // @export yieldCurveBundleDemo
-  public static void yieldCurveBundleDemo(PrintStream out) {
-    DoublesCurve curve = new ConstantDoublesCurve(y);
-    YieldCurve yieldCurve = YieldCurve.from(curve);
+  public static void yieldCurveBundleDemo(final PrintStream out) {
+    final DoublesCurve curve = new ConstantDoublesCurve(y);
+    final YieldCurve yieldCurve = YieldCurve.from(curve);
 
-    YieldCurveBundle bundle = new YieldCurveBundle();
+    final YieldCurveBundle bundle = new YieldCurveBundle();
     bundle.setCurve("Constant 2% Yield Curve", yieldCurve);
 
     out.println(bundle.getAllNames());

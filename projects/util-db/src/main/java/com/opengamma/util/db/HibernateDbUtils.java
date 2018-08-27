@@ -22,10 +22,10 @@ public class HibernateDbUtils {
    * @param ex  the exception to fix, not null
    * @return the original exception, not null
    */
-  protected static DataAccessException fixSQLExceptionCause(DataAccessException ex) {
-    Throwable cause = ex.getCause();
+  protected static DataAccessException fixSQLExceptionCause(final DataAccessException ex) {
+    final Throwable cause = ex.getCause();
     if (cause instanceof SQLException && cause.getCause() == null) {
-      SQLException next = ((SQLException) cause).getNextException();
+      final SQLException next = ((SQLException) cause).getNextException();
       if (next != null) {
         cause.initCause(next);
       }
@@ -35,12 +35,12 @@ public class HibernateDbUtils {
 
   /**
    * Builds a Hibernate query.
-   * 
+   *
    * @param propertyName  the property name
    * @param value  the value
    * @return the criterion, not null
    */
-  public static Criterion eqOrIsNull(String propertyName, Object value) {
+  public static Criterion eqOrIsNull(final String propertyName, final Object value) {
     if (value == null) {
       return Restrictions.isNull(propertyName);
     } else {

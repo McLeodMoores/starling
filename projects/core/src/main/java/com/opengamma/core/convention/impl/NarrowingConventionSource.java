@@ -35,23 +35,23 @@ public class NarrowingConventionSource implements ConventionSource {
    *
    * @param delegate the source to delegate to, not null
    */
-  public NarrowingConventionSource(ConventionSource delegate) {
+  public NarrowingConventionSource(final ConventionSource delegate) {
     _delegate = ArgumentChecker.notNull(delegate, "delegate");
   }
 
   @Override
-  public <T extends Convention> T get(UniqueId uniqueId, Class<T> type) {
+  public <T extends Convention> T get(final UniqueId uniqueId, final Class<T> type) {
     return _delegate.get(uniqueId, type);
   }
 
   @Override
-  public <T extends Convention> T get(ObjectId objectId, VersionCorrection versionCorrection, Class<T> type) {
+  public <T extends Convention> T get(final ObjectId objectId, final VersionCorrection versionCorrection, final Class<T> type) {
     return _delegate.get(objectId, versionCorrection, type);
   }
 
   @Override
-  public Convention getSingle(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
-    Collection<Convention> conventions = get(bundle, versionCorrection);
+  public Convention getSingle(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
+    final Collection<Convention> conventions = get(bundle, versionCorrection);
     if (conventions.isEmpty()) {
       throw new DataNotFoundException("No convention found for bundle: " + bundle);
     } else {
@@ -60,16 +60,16 @@ public class NarrowingConventionSource implements ConventionSource {
   }
 
   @Override
-  public Map<ExternalIdBundle, Convention> getSingle(Collection<ExternalIdBundle> bundles,
-                                                     VersionCorrection versionCorrection) {
+  public Map<ExternalIdBundle, Convention> getSingle(final Collection<ExternalIdBundle> bundles,
+                                                     final VersionCorrection versionCorrection) {
 
-    ImmutableMap.Builder<ExternalIdBundle, Convention> builder = ImmutableMap.builder();
+    final ImmutableMap.Builder<ExternalIdBundle, Convention> builder = ImmutableMap.builder();
 
     // Iterating and requesting singly is horrible but is
     // all the underlying source will do anyway so there
     // is no performance downside to doing it
-    for (ExternalIdBundle bundle : bundles) {
-      Collection<Convention> conventions = get(bundle, versionCorrection);
+    for (final ExternalIdBundle bundle : bundles) {
+      final Collection<Convention> conventions = get(bundle, versionCorrection);
       if (!conventions.isEmpty()) {
         builder.put(bundle, conventions.iterator().next());
       }
@@ -78,16 +78,16 @@ public class NarrowingConventionSource implements ConventionSource {
   }
 
   @Override
-  public <T extends Convention> T getSingle(ExternalIdBundle bundle,
-                                            VersionCorrection versionCorrection,
-                                            Class<T> type) {
-    Collection<Convention> conventions = get(bundle, versionCorrection);
+  public <T extends Convention> T getSingle(final ExternalIdBundle bundle,
+                                            final VersionCorrection versionCorrection,
+                                            final Class<T> type) {
+    final Collection<Convention> conventions = get(bundle, versionCorrection);
     if (conventions.isEmpty()) {
       throw new DataNotFoundException("No convention found for bundle: " + bundle);
     } else {
 
       // Return first item matching name and type
-      for (Convention convention : conventions) {
+      for (final Convention convention : conventions) {
         if (type.isAssignableFrom(convention.getClass())) {
           return type.cast(convention);
         }
@@ -97,41 +97,41 @@ public class NarrowingConventionSource implements ConventionSource {
   }
 
   @Override
-  public Convention getSingle(ExternalId externalId) {
+  public Convention getSingle(final ExternalId externalId) {
     return getSingle(externalId.toBundle());
   }
 
   @Override
-  public <T extends Convention> T getSingle(ExternalId externalId, Class<T> type) {
+  public <T extends Convention> T getSingle(final ExternalId externalId, final Class<T> type) {
     return getSingle(externalId.toBundle(), type);
   }
 
   @Override
-  public Convention getSingle(ExternalIdBundle bundle) {
+  public Convention getSingle(final ExternalIdBundle bundle) {
     return getSingle(bundle, VersionCorrection.LATEST);
   }
 
   @Override
-  public <T extends Convention> T getSingle(ExternalIdBundle bundle, Class<T> type) {
+  public <T extends Convention> T getSingle(final ExternalIdBundle bundle, final Class<T> type) {
     return getSingle(bundle, VersionCorrection.LATEST, type);
   }
 
   @Override
-  public Collection<Convention> get(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
+  public Collection<Convention> get(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     return _delegate.get(bundle, versionCorrection);
   }
 
   @Override
-  public Map<ExternalIdBundle, Collection<Convention>> getAll(Collection<ExternalIdBundle> bundles,
-                                                              VersionCorrection versionCorrection) {
+  public Map<ExternalIdBundle, Collection<Convention>> getAll(final Collection<ExternalIdBundle> bundles,
+                                                              final VersionCorrection versionCorrection) {
 
-    ImmutableMap.Builder<ExternalIdBundle, Collection<Convention>> builder = ImmutableMap.builder();
+    final ImmutableMap.Builder<ExternalIdBundle, Collection<Convention>> builder = ImmutableMap.builder();
 
     // Iterating and requesting singly is horrible but is
     // all the underlying source will do anyway so there
     // is no performance downside to doing it
-    for (ExternalIdBundle bundle : bundles) {
-      Collection<Convention> conventions = get(bundle, versionCorrection);
+    for (final ExternalIdBundle bundle : bundles) {
+      final Collection<Convention> conventions = get(bundle, versionCorrection);
       if (!conventions.isEmpty()) {
         builder.put(bundle, conventions);
       }
@@ -140,7 +140,7 @@ public class NarrowingConventionSource implements ConventionSource {
   }
 
   @Override
-  public Collection<Convention> get(ExternalIdBundle bundle) {
+  public Collection<Convention> get(final ExternalIdBundle bundle) {
     return _delegate.get(bundle);
   }
 
@@ -150,22 +150,22 @@ public class NarrowingConventionSource implements ConventionSource {
   }
 
   @Override
-  public Convention get(UniqueId uniqueId) {
+  public Convention get(final UniqueId uniqueId) {
     return _delegate.get(uniqueId);
   }
 
   @Override
-  public Convention get(ObjectId objectId, VersionCorrection versionCorrection) {
+  public Convention get(final ObjectId objectId, final VersionCorrection versionCorrection) {
     return _delegate.get(objectId, versionCorrection);
   }
 
   @Override
-  public Map<UniqueId, Convention> get(Collection<UniqueId> uniqueIds) {
+  public Map<UniqueId, Convention> get(final Collection<UniqueId> uniqueIds) {
     return _delegate.get(uniqueIds);
   }
 
   @Override
-  public Map<ObjectId, Convention> get(Collection<ObjectId> objectIds, VersionCorrection versionCorrection) {
+  public Map<ObjectId, Convention> get(final Collection<ObjectId> objectIds, final VersionCorrection versionCorrection) {
     return _delegate.get(objectIds, versionCorrection);
   }
 }

@@ -19,10 +19,10 @@ public class WebBundlesUris {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param data  the web data, not null
    */
-  public WebBundlesUris(WebBundlesData data) {
+  public WebBundlesUris(final WebBundlesData data) {
     _data = data;
   }
 
@@ -34,15 +34,15 @@ public class WebBundlesUris {
   public URI bundles() {
     return WebBundlesResource.uri(_data);
   }
-  
+
   /**
    * Gets the URI for a bundle.
-   * 
+   *
    * @param mode  the deployment mode, not null
    * @param bundleId  the bundle ID, not null
    * @return the URI, not null
    */
-  public URI bundle(DeployMode mode, String bundleId) {
+  public URI bundle(final DeployMode mode, final String bundleId) {
     switch (mode) {
       case PROD:
         return WebProdBundleResource.uri(_data, bundleId);
@@ -52,5 +52,5 @@ public class WebBundlesUris {
         return bundles();
     }
   }
-  
+
 }

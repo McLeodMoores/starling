@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.web.position;
@@ -101,7 +101,7 @@ public abstract class AbstractWebPositionResourceTestCase {
     _securitySource = new InMemorySecuritySource();
     _secLoader = new AbstractSecurityLoader() {
       @Override
-      protected SecurityLoaderResult doBulkLoad(SecurityLoaderRequest request) {
+      protected SecurityLoaderResult doBulkLoad(final SecurityLoaderRequest request) {
         throw new UnsupportedOperationException("load security not supported");
       }
     };

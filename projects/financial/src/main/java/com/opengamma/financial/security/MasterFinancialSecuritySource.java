@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.security;
@@ -23,7 +23,7 @@ public class MasterFinancialSecuritySource extends MasterSecuritySource implemen
 
   /**
    * Creates an instance with an underlying master.
-   * 
+   *
    * @param master the master, not null
    */
   public MasterFinancialSecuritySource(final SecurityMaster master) {
@@ -33,13 +33,13 @@ public class MasterFinancialSecuritySource extends MasterSecuritySource implemen
   //-------------------------------------------------------------------------
   /**
    * Finds the all the available bonds with an issuer type of the provided string. This would be used, for example, to construct a bond curve.
-   * 
+   *
    * @param issuerName the issuer name, wildcards allowed, may be null
    * @return a collection of bond securities with the issuerType specified, not null
    */
   @SuppressWarnings({"unchecked", "rawtypes" })
   @Override
-  public Collection<Security> getBondsWithIssuerName(String issuerName) {
+  public Collection<Security> getBondsWithIssuerName(final String issuerName) {
     ArgumentChecker.notNull(issuerName, "issuerName");
     final BondSecuritySearchRequest request = new BondSecuritySearchRequest();
     request.setIssuerName(issuerName);

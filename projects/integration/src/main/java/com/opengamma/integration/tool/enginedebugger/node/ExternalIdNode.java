@@ -13,16 +13,16 @@ import com.opengamma.id.ExternalId;
 public class ExternalIdNode extends AbstractTreeTableLeafNode {
 
   private static final String NAME = "ExternalId";
-  private ExternalId _externalId;
-  private Object _parent;
+  private final ExternalId _externalId;
+  private final Object _parent;
 
-  public ExternalIdNode(Object parent, ExternalId externalId) {
+  public ExternalIdNode(final Object parent, final ExternalId externalId) {
     _parent = parent;
     _externalId = externalId;
   }
 
   @Override
-  public Object getColumn(int column) {
+  public Object getColumn(final int column) {
     switch (column) {
       case 0:
         return NAME;
@@ -36,12 +36,12 @@ public class ExternalIdNode extends AbstractTreeTableLeafNode {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_externalId == null) ? 0 : _externalId.hashCode());
+    result = prime * result + (_externalId == null ? 0 : _externalId.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -51,7 +51,7 @@ public class ExternalIdNode extends AbstractTreeTableLeafNode {
     if (!(obj instanceof ExternalIdNode)) {
       return false;
     }
-    ExternalIdNode other = (ExternalIdNode) obj;
+    final ExternalIdNode other = (ExternalIdNode) obj;
     if (_externalId == null) {
       if (other._externalId != null) {
         return false;

@@ -320,7 +320,7 @@ public class MinimalWebSecuritiesResource extends AbstractMinimalWebSecurityReso
   }
 
   private Map<String, String> getLoadedSecuritiesId(final Map<ExternalIdBundle, UniqueId> loadedSecurities, final Collection<ExternalIdBundle> requestBundles, final ExternalScheme scheme) {
-    final Map<String, String> result = new HashMap<String, String>();
+    final Map<String, String> result = new HashMap<>();
     for (final ExternalIdBundle identifierBundle : requestBundles) {
       final UniqueId uniqueIdentifier = loadedSecurities.get(identifierBundle);
       final String objectIdentifier = uniqueIdentifier != null ? uniqueIdentifier.getObjectId().toString() : null;
@@ -330,7 +330,7 @@ public class MinimalWebSecuritiesResource extends AbstractMinimalWebSecurityReso
   }
 
   private ExternalIdBundle buildRequestAsExternalIdBundle(final ExternalScheme scheme, final Collection<ExternalIdBundle> bundles) {
-    final List<ExternalId> identifiers = new ArrayList<ExternalId>();
+    final List<ExternalId> identifiers = new ArrayList<>();
     for (final ExternalIdBundle bundle : bundles) {
       identifiers.add(bundle.getExternalId(scheme));
     }
@@ -342,7 +342,7 @@ public class MinimalWebSecuritiesResource extends AbstractMinimalWebSecurityReso
       return Collections.emptyList();
     }
     final String[] identifiers = StringUtils.split(idValue, "\n");
-    final List<ExternalIdBundle> result = new ArrayList<ExternalIdBundle>(identifiers.length);
+    final List<ExternalIdBundle> result = new ArrayList<>(identifiers.length);
     for (String identifier : identifiers) {
       identifier = StringUtils.trimToNull(identifier);
       if (identifier != null) {

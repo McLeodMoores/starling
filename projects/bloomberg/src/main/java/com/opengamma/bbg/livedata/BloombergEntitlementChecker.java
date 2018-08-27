@@ -15,8 +15,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
-import net.sf.ehcache.Cache;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +38,8 @@ import com.opengamma.livedata.entitlement.LiveDataEntitlementChecker;
 import com.opengamma.livedata.resolver.DistributionSpecificationResolver;
 import com.opengamma.livedata.server.DistributionSpecification;
 import com.opengamma.util.ArgumentChecker;
+
+import net.sf.ehcache.Cache;
 
 /**
  * Checks that the user has entitlement to access Bloomberg.
@@ -74,12 +74,12 @@ public class BloombergEntitlementChecker extends AbstractBloombergStaticDataProv
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param bloombergConnector the Bloomberg connector, not null
    * @param referenceDataProvider the reference data provider, not null
    * @param resolver the resolver, not null
    */
-  public BloombergEntitlementChecker(BloombergConnector bloombergConnector, ReferenceDataProvider referenceDataProvider, DistributionSpecificationResolver resolver) {
+  public BloombergEntitlementChecker(final BloombergConnector bloombergConnector, final ReferenceDataProvider referenceDataProvider, final DistributionSpecificationResolver resolver) {
     super(bloombergConnector, BloombergConstants.AUTH_SVC_NAME);
     ArgumentChecker.notNull(referenceDataProvider, "referenceDataProvider");
     ArgumentChecker.notNull(resolver, "resolver");
@@ -87,7 +87,7 @@ public class BloombergEntitlementChecker extends AbstractBloombergStaticDataProv
     _refDataProvider = referenceDataProvider;
     _resolver = resolver;
 
-    // Cache will contain max 100 entries, each of which will expire in 12 hours  
+    // Cache will contain max 100 entries, each of which will expire in 12 hours
     _userIdentityCache = new Cache("Bloomberg user identity cache", 100, false, false, HALF_A_DAY_IN_SECONDS, HALF_A_DAY_IN_SECONDS);
     _userIdentityCache.initialise();
 
@@ -103,74 +103,74 @@ public class BloombergEntitlementChecker extends AbstractBloombergStaticDataProv
 
   //-------------------------------------------------------------------------
   @Override
-  public Map<LiveDataSpecification, Boolean> isEntitled(UserPrincipal user, Collection<LiveDataSpecification> requestedSpecifications) {
-    Map<LiveDataSpecification, Boolean> returnValue = new HashMap<>();
-    for (LiveDataSpecification spec : requestedSpecifications) {
-      boolean entitled = isEntitled(user, spec);
+  public Map<LiveDataSpecification, Boolean> isEntitled(final UserPrincipal user, final Collection<LiveDataSpecification> requestedSpecifications) {
+    final Map<LiveDataSpecification, Boolean> returnValue = new HashMap<>();
+    for (final LiveDataSpecification spec : requestedSpecifications) {
+      final boolean entitled = isEntitled(user, spec);
       returnValue.put(spec, entitled);
     }
     return returnValue;
   }
 
   @Override
-  public boolean isEntitled(UserPrincipal user, LiveDataSpecification requestedSpecification) {
-    DistributionSpecification distributionSpecification = _resolver.resolve(requestedSpecification);
+  public boolean isEntitled(final UserPrincipal user, final LiveDataSpecification requestedSpecification) {
+    final DistributionSpecification distributionSpecification = _resolver.resolve(requestedSpecification);
     return isEntitled(user, distributionSpecification);
   }
 
   //-------------------------------------------------------------------------
-  public boolean isEntitled(UserPrincipal user, DistributionSpecification distributionSpec) {
-    Identity userIdentity = getUserIdentity(user);
+  public boolean isEntitled(final UserPrincipal user, final DistributionSpecification distributionSpec) {
+    final Identity userIdentity = getUserIdentity(user);
     if (userIdentity == null) {
       return false;
     }
 
-    Set<Integer> neededEntitlements = getEids(distributionSpec);
+    final Set<Integer> neededEntitlements = getEids(distributionSpec);
     if (neededEntitlements == null || neededEntitlements.isEmpty()) {
       return true;
     }
 
-    List<Integer> failedEntitlements = new ArrayList<Integer>();
-    boolean isEntitled = userIdentity.hasEntitlements(Ints.toArray(neededEntitlements), getService(), failedEntitlements);
+    final List<Integer> failedEntitlements = new ArrayList<>();
+    final boolean isEntitled = userIdentity.hasEntitlements(Ints.toArray(neededEntitlements), getService(), failedEntitlements);
     if (!failedEntitlements.isEmpty()) {
       LOGGER.warn("user: {} is missing entitlements: {}", user, failedEntitlements);
     }
     return isEntitled;
   }
 
-  private Identity getUserIdentity(UserPrincipal user) {
+  private Identity getUserIdentity(final UserPrincipal user) {
     net.sf.ehcache.Element cachedUserIdentity = _userIdentityCache.get(user);
     if (cachedUserIdentity == null) {
-      Request authorizationRequest = getService().createAuthorizationRequest();
+      final Request authorizationRequest = getService().createAuthorizationRequest();
 
       Integer uuid;
       try {
         uuid = Integer.parseInt(user.getUserName());
-      } catch (NumberFormatException e) {
+      } catch (final NumberFormatException e) {
         LOGGER.info("Bloomberg user IDs are integers - so " + user.getUserName() + " cannot be entitled to anything");
         return null;
       }
 
       authorizationRequest.set("uuid", uuid);
       authorizationRequest.set("ipAddress", user.getIpAddress());
-      Identity userIdentity = getSession().createIdentity();
+      final Identity userIdentity = getSession().createIdentity();
 
       try {
-        List<Element> resultElements = submitAuthorizationRequest(authorizationRequest, userIdentity).get();
+        final List<Element> resultElements = submitAuthorizationRequest(authorizationRequest, userIdentity).get();
         if (resultElements == null || resultElements.isEmpty()) {
           LOGGER.info("Unable to get authorization info from Bloomberg for {}", user);
           return null;
         }
 
         boolean authorizedSuccessfully = false;
-        for (Element resultElem : resultElements) {
+        for (final Element resultElem : resultElements) {
           if (resultElem.name().equals(BloombergConstants.AUTHORIZATION_SUCCESS)) {
             cachedUserIdentity = new net.sf.ehcache.Element(user, userIdentity);
             _userIdentityCache.put(cachedUserIdentity);
             authorizedSuccessfully = true;
 
           } else if (resultElem.name().equals(BloombergConstants.AUTHORIZATION_FAILURE)) {
-            Element reasonElem = resultElem.getElement(BloombergConstants.REASON);
+            final Element reasonElem = resultElem.getElement(BloombergConstants.REASON);
             LOGGER.info("Bloomberg authorization failed {}", reasonElem);
 
           } else {
@@ -191,16 +191,16 @@ public class BloombergEntitlementChecker extends AbstractBloombergStaticDataProv
 
 
   @SuppressWarnings("unchecked")
-  private Set<Integer> getEids(DistributionSpecification distributionSpec) {
+  private Set<Integer> getEids(final DistributionSpecification distributionSpec) {
     net.sf.ehcache.Element cachedEids = _eidCache.get(distributionSpec);
     if (cachedEids == null) {
-      String lookupKey = BloombergDomainIdentifierResolver.toBloombergKey(distributionSpec.getMarketDataId());
-      Set<String> fields = Sets.newHashSet(BloombergConstants.FIELD_ID_BBG_UNIQUE, // TODO, this is necessary because otherwise the request would not get any real fields
+      final String lookupKey = BloombergDomainIdentifierResolver.toBloombergKey(distributionSpec.getMarketDataId());
+      final Set<String> fields = Sets.newHashSet(BloombergConstants.FIELD_ID_BBG_UNIQUE, // TODO, this is necessary because otherwise the request would not get any real fields
           BloombergConstants.FIELD_EID_DATA);
-      ReferenceDataProviderGetRequest rdRequest = ReferenceDataProviderGetRequest.createGet(Collections.singleton(lookupKey), fields, true);
-      ReferenceDataProviderGetResult refData = _refDataProvider.getReferenceData(rdRequest);
+      final ReferenceDataProviderGetRequest rdRequest = ReferenceDataProviderGetRequest.createGet(Collections.singleton(lookupKey), fields, true);
+      final ReferenceDataProviderGetResult refData = _refDataProvider.getReferenceData(rdRequest);
 
-      ReferenceData result = refData.getReferenceData(lookupKey);
+      final ReferenceData result = refData.getReferenceData(lookupKey);
       if (result.getErrors().size() > 0) {
         throw new OpenGammaRuntimeException("Error while obtaining entitlement information: " + lookupKey);
       }

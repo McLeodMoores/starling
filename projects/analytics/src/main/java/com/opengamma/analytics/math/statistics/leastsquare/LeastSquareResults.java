@@ -27,7 +27,7 @@ public class LeastSquareResults {
   private final DoubleMatrix2D _covariance;
   private final DoubleMatrix2D _inverseJacobian;
 
-  public LeastSquareResults(LeastSquareResults from) {
+  public LeastSquareResults(final LeastSquareResults from) {
     this(from._chiSq, from._parameters, from._covariance, from._inverseJacobian);
   }
 
@@ -93,7 +93,7 @@ public class LeastSquareResults {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_chiSq);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _covariance.hashCode();
     result = prime * result + _parameters.hashCode();
     result = prime * result + (_inverseJacobian == null ? 0 : _inverseJacobian.hashCode());

@@ -52,18 +52,18 @@ public class SubscribingFilterFactory implements ResourceFilterFactory {
   private HttpServletRequest _servletRequest;
 
   @Override
-  public List<ResourceFilter> create(AbstractMethod abstractMethod) {
-    
+  public List<ResourceFilter> create(final AbstractMethod abstractMethod) {
+
     if (!WebPushServletContextUtils.isConnectionManagerAvailable(_servletContext)) {
       return Collections.emptyList();
     }
-    
-    List<ResourceFilter> filters = new ArrayList<ResourceFilter>();
-    ResourceFilter entityFilter = createEntitySubscriptionFilter(abstractMethod);
+
+    final List<ResourceFilter> filters = new ArrayList<>();
+    final ResourceFilter entityFilter = createEntitySubscriptionFilter(abstractMethod);
     if (entityFilter != null) {
       filters.add(entityFilter);
     }
-    ResourceFilter masterFilter = createMasterSubscriptionFilter(abstractMethod);
+    final ResourceFilter masterFilter = createMasterSubscriptionFilter(abstractMethod);
     if (masterFilter != null) {
       filters.add(masterFilter);
     }
@@ -83,15 +83,15 @@ public class SubscribingFilterFactory implements ResourceFilterFactory {
    * @return A filter to set up subscriptions when the method is invoked or null if the method doesn't
    * need entity subscriptions
    */
-  private ResourceFilter createEntitySubscriptionFilter(AbstractMethod abstractMethod) {
-    Method method = abstractMethod.getMethod();
-    Annotation[][] annotations = method.getParameterAnnotations();
-    List<String> uidParamNames = new ArrayList<String>();
+  private ResourceFilter createEntitySubscriptionFilter(final AbstractMethod abstractMethod) {
+    final Method method = abstractMethod.getMethod();
+    final Annotation[][] annotations = method.getParameterAnnotations();
+    final List<String> uidParamNames = new ArrayList<>();
     // find params annotated with @Subscribe.  must also have @PathParam
-    for (Annotation[] paramAnnotations : annotations) {
+    for (final Annotation[] paramAnnotations : annotations) {
       boolean subscribe = false;
       String paramName = null;
-      for (Annotation annotation : paramAnnotations) {
+      for (final Annotation annotation : paramAnnotations) {
         if (annotation instanceof Subscribe) {
           subscribe = true;
         } else if (annotation instanceof PathParam) {
@@ -123,10 +123,10 @@ public class SubscribingFilterFactory implements ResourceFilterFactory {
    * @return A filter to set up subscriptions when the method is invoked or null if the method doesn't
    * need master subscriptions
    */
-  private ResourceFilter createMasterSubscriptionFilter(AbstractMethod abstractMethod) {
-    SubscribeMaster annotation = abstractMethod.getAnnotation(SubscribeMaster.class);
+  private ResourceFilter createMasterSubscriptionFilter(final AbstractMethod abstractMethod) {
+    final SubscribeMaster annotation = abstractMethod.getAnnotation(SubscribeMaster.class);
     if (annotation != null) {
-      MasterType[] masterTypes = annotation.value();
+      final MasterType[] masterTypes = annotation.value();
       if (masterTypes.length > 0) {
         return new MasterSubscriptionFilter(getUpdateManager(), Arrays.asList(masterTypes), _httpContext, _servletRequest);
       } else {

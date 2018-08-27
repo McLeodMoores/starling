@@ -33,9 +33,9 @@ public class InflationBondSupportUtils {
     SUPPORTED_COUPON_TYPES.add("FIXED");
   }
 
-  public static boolean isSupported(Security security) {
+  public static boolean isSupported(final Security security) {
     if (security instanceof InflationBondSecurity) {
-      BondSecurity bondSecurity = (BondSecurity) security;
+      final BondSecurity bondSecurity = (BondSecurity) security;
       if (SUPPORTED_YIELD_CONVENTIONS.contains(bondSecurity.getYieldConvention()) && SUPPORTED_COUPON_TYPES.contains(bondSecurity.getCouponType())) {
         return true;
       }

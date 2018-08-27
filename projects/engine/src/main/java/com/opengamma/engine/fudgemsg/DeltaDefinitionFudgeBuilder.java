@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.fudgemsg;
@@ -27,8 +27,8 @@ public class DeltaDefinitionFudgeBuilder implements FudgeBuilder<DeltaDefinition
   private static final String NUMBER_COMPARER_KEY = "numberComparer";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, DeltaDefinition object) {
-    MutableFudgeMsg msg = serializer.newMessage();
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final DeltaDefinition object) {
+    final MutableFudgeMsg msg = serializer.newMessage();
     if (object.getNumberComparer() != null) {
       serializer.addToMessageWithClassHeaders(msg, NUMBER_COMPARER_KEY, null, object.getNumberComparer(), DeltaComparer.class);
     }
@@ -37,9 +37,9 @@ public class DeltaDefinitionFudgeBuilder implements FudgeBuilder<DeltaDefinition
 
   @SuppressWarnings("unchecked")
   @Override
-  public DeltaDefinition buildObject(FudgeDeserializer deserializer, FudgeMsg message) {
-    FudgeField fudgeField = message.getByName(NUMBER_COMPARER_KEY);
-    DeltaDefinition deltaDefinition = new DeltaDefinition();
+  public DeltaDefinition buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
+    final FudgeField fudgeField = message.getByName(NUMBER_COMPARER_KEY);
+    final DeltaDefinition deltaDefinition = new DeltaDefinition();
     if (fudgeField != null) {
       deltaDefinition.setNumberComparer(deserializer.fieldValueToObject(DeltaComparer.class, fudgeField));
     }

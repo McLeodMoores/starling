@@ -14,23 +14,23 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * This class produces a {@code DistributionSpecification}
- * from a fixed map. 
+ * from a fixed map.
  */
-public class FixedDistributionSpecificationResolver 
-  extends AbstractResolver<LiveDataSpecification, DistributionSpecification> 
+public class FixedDistributionSpecificationResolver
+  extends AbstractResolver<LiveDataSpecification, DistributionSpecification>
   implements DistributionSpecificationResolver {
-  
+
   private final Map<LiveDataSpecification, DistributionSpecification> _liveDataSpec2DistSpec;
-  
-  public FixedDistributionSpecificationResolver(Map<LiveDataSpecification, DistributionSpecification> fixes) {
+
+  public FixedDistributionSpecificationResolver(final Map<LiveDataSpecification, DistributionSpecification> fixes) {
     ArgumentChecker.notNull(fixes, "Fixed distribution specifications");
-    _liveDataSpec2DistSpec = new HashMap<LiveDataSpecification, DistributionSpecification>(fixes);
+    _liveDataSpec2DistSpec = new HashMap<>(fixes);
   }
 
   @Override
-  public DistributionSpecification resolve(LiveDataSpecification liveDataSpecificationFromClient) throws IllegalArgumentException {
-    DistributionSpecification spec = _liveDataSpec2DistSpec.get(liveDataSpecificationFromClient);
+  public DistributionSpecification resolve(final LiveDataSpecification liveDataSpecificationFromClient) throws IllegalArgumentException {
+    final DistributionSpecification spec = _liveDataSpec2DistSpec.get(liveDataSpecificationFromClient);
     return spec;
   }
-  
+
 }

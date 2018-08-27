@@ -50,21 +50,21 @@ public class FinancialClient {
   /**
    * The config source
    */
-  private ConfigMaster _configMaster;
+  private final ConfigMaster _configMaster;
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param manager  the manager, not null
    * @param clientName  the client name, not null
    */
-  public FinancialClient(FinancialClientManager manager, String clientName) {
+  public FinancialClient(final FinancialClientManager manager, final String clientName) {
     ArgumentChecker.notNull(manager, "manager");
     ArgumentChecker.notNull(clientName, "clientName");
     _lastAccessed = Instant.now();
     _manager = manager;
     _clientName = clientName;
-    FinancialUserServices services = manager.getServices();
+    final FinancialUserServices services = manager.getServices();
     _portfolioMaster = new FinancialUserPortfolioMaster(this, services.getPortfolioMaster());
     _positionMaster = new FinancialUserPositionMaster(this, services.getPositionMaster());
     _securityMaster = new FinancialUserSecurityMaster(this, services.getSecurityMaster());
@@ -76,7 +76,7 @@ public class FinancialClient {
   //-------------------------------------------------------------------------
   /**
    * Gets the instant the client was last accessed.
-   * 
+   *
    * @return the access, not null
    */
   public Instant getLastAccessed() {
@@ -93,7 +93,7 @@ public class FinancialClient {
   //-----------------------------------------------------------------------
   /**
    * Gets the user name.
-   * 
+   *
    * @return the user name, not null
    */
   public String getUserName() {
@@ -102,7 +102,7 @@ public class FinancialClient {
 
   /**
    * Gets the client name.
-   * 
+   *
    * @return the client name, not null
    */
   public String getClientName() {
@@ -111,7 +111,7 @@ public class FinancialClient {
 
   /**
    * Gets the tracker.
-   * 
+   *
    * @return the tracker, not null
    */
   public FinancialUserDataTracker getUserDataTracker() {
@@ -121,7 +121,7 @@ public class FinancialClient {
   //-------------------------------------------------------------------------
   /**
    * Gets the portfolio master.
-   * 
+   *
    * @return the value of the property
    */
   public FinancialUserPortfolioMaster getPortfolioMaster() {
@@ -131,7 +131,7 @@ public class FinancialClient {
 
   /**
    * Gets the position master.
-   * 
+   *
    * @return the value of the property
    */
   public FinancialUserPositionMaster getPositionMaster() {
@@ -141,7 +141,7 @@ public class FinancialClient {
 
   /**
    * Gets the security master.
-   * 
+   *
    * @return the value of the property
    */
   public FinancialUserSecurityMaster getSecurityMaster() {
@@ -151,7 +151,7 @@ public class FinancialClient {
 
   /**
    * Gets the view definition master.
-   * 
+   *
    * @return the value of the property
    */
   public ConfigMaster getConfigMaster() {
@@ -161,7 +161,7 @@ public class FinancialClient {
 
   /**
    * Gets the yield curve master.
-   * 
+   *
    * @return the value of the property
    */
   public FinancialUserInterpolatedYieldCurveDefinitionMaster getInterpolatedYieldCurveDefinitionMaster() {
@@ -171,7 +171,7 @@ public class FinancialClient {
 
   /**
    * Gets the snashot master.
-   * 
+   *
    * @return the value of the property
    */
   public FinancialUserSnapshotMaster getSnapshotMaster() {

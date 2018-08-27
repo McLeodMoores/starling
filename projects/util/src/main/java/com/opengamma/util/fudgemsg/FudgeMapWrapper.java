@@ -42,15 +42,15 @@ public class FudgeMapWrapper extends DirectBean {
    * The map pairs.
    */
   @PropertyDefinition(validate = "notNull")
-  private final List<Pair<?, ?>> _pairs = new ArrayList<Pair<?, ?>>();
+  private final List<Pair<?, ?>> _pairs = new ArrayList<>();
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param map  the map, not null
    * @return the wrapped map, not null
    */
-  public static FudgeMapWrapper of(Map<?, ?> map) {
+  public static FudgeMapWrapper of(final Map<?, ?> map) {
     return new FudgeMapWrapper(map);
   }
 
@@ -63,25 +63,25 @@ public class FudgeMapWrapper extends DirectBean {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param map  the map, not null
    */
-  public FudgeMapWrapper(Map<?, ?> map) {
-    for (Entry<?, ?> entry : map.entrySet()) {
+  public FudgeMapWrapper(final Map<?, ?> map) {
+    for (final Entry<?, ?> entry : map.entrySet()) {
       getPairs().add(ObjectsPair.of(entry.getKey(), entry.getValue()));
     }
   }
 
   /**
    * Gets the map.
-   * 
+   *
    * @return the map, not null
    */
   @SuppressWarnings({"unchecked", "rawtypes" })
   public Map getMap() {
-    Map map = new LinkedHashMap();
-    for (Object obj : getPairs()) {
-      Pair pair = (Pair) obj;
+    final Map map = new LinkedHashMap();
+    for (final Object obj : getPairs()) {
+      final Pair pair = (Pair) obj;
       map.put(pair.getFirst(), pair.getSecond());
     }
     return map;

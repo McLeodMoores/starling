@@ -39,9 +39,9 @@ public class BloombergIdentifierProviderTest {
   private ReferenceDataProvider _refDataProvider = null;
 
   @BeforeMethod
-  public void setUp(Method m) throws Exception {
+  public void setUp(final Method m) throws Exception {
     _refDataProvider = BloombergLiveDataServerUtils.getCachingReferenceDataProvider(m);
-    BloombergIdentifierProvider provider = new BloombergIdentifierProvider(_refDataProvider);
+    final BloombergIdentifierProvider provider = new BloombergIdentifierProvider(_refDataProvider);
     _idProvider = provider;
   }
 
@@ -54,27 +54,27 @@ public class BloombergIdentifierProviderTest {
   //-------------------------------------------------------------------------
   @Test
   public void equityOption() {
-    Set<ExternalIdWithDates> ids = new HashSet<ExternalIdWithDates>();
-    ExternalId buid = ExternalSchemes.bloombergBuidSecurityId("EO1005552010070180500001");
+    final Set<ExternalIdWithDates> ids = new HashSet<>();
+    final ExternalId buid = ExternalSchemes.bloombergBuidSecurityId("EO1005552010070180500001");
     ids.add(ExternalIdWithDates.of(buid, null, null));
-    ExternalId tickerId = ExternalSchemes.bloombergTickerSecurityId("FMCC US 07/17/10 C2.5 Equity");
+    final ExternalId tickerId = ExternalSchemes.bloombergTickerSecurityId("FMCC US 07/17/10 C2.5 Equity");
     ids.add(ExternalIdWithDates.of(tickerId, null, LocalDate.of(2010, Month.JULY, 17)));
-    ExternalIdBundleWithDates expected = new ExternalIdBundleWithDates(ids);
-    
-    Collection<ExternalIdBundleWithDates> identifiers = _idProvider.getExternalIds(Collections.singleton(tickerId)).values();
+    final ExternalIdBundleWithDates expected = new ExternalIdBundleWithDates(ids);
+
+    final Collection<ExternalIdBundleWithDates> identifiers = _idProvider.getExternalIds(Collections.singleton(tickerId)).values();
     assertFalse(identifiers.isEmpty());
     assertEquals(expected, identifiers.iterator().next());
   }
 
   @Test
   public void bondFuture() {
-    Set<ExternalIdWithDates> ids = new HashSet<ExternalIdWithDates>();
+    final Set<ExternalIdWithDates> ids = new HashSet<>();
     ids.add(ExternalIdWithDates.of(ExternalSchemes.bloombergBuidSecurityId("IX1562358-0"), null, null));
     ids.add(ExternalIdWithDates.of(ExternalSchemes.bloombergTickerSecurityId("USH02 Comdty"), LocalDate.of(2000, Month.DECEMBER, 20), LocalDate.of(2002, Month.MARCH, 19)));
     ids.add(ExternalIdWithDates.of(ExternalSchemes.cusipSecurityId("USH02"), LocalDate.of(2000, Month.DECEMBER, 20), LocalDate.of(2002, Month.MARCH, 19)));
-    ExternalIdBundleWithDates expectedIds = new ExternalIdBundleWithDates(ids);
-    
-    Collection<ExternalIdBundleWithDates> bbgIds = _idProvider.getExternalIds(Collections.singleton(ExternalSchemes.bloombergTickerSecurityId("USH02 Comdty"))).values();
+    final ExternalIdBundleWithDates expectedIds = new ExternalIdBundleWithDates(ids);
+
+    final Collection<ExternalIdBundleWithDates> bbgIds = _idProvider.getExternalIds(Collections.singleton(ExternalSchemes.bloombergTickerSecurityId("USH02 Comdty"))).values();
     assertFalse(bbgIds.isEmpty());
     assertEquals(expectedIds, bbgIds.iterator().next());
   }

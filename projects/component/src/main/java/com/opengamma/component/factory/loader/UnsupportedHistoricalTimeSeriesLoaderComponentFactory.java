@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.component.factory.loader;
@@ -30,11 +30,12 @@ public class UnsupportedHistoricalTimeSeriesLoaderComponentFactory extends Abstr
    * Creates the loader, without registering it.
    * <p>
    * This implementation uses {@link UnsupportedHistoricalTimeSeriesLoader}.
-   * 
+   *
    * @param repo  the component repository, only used to register secondary items like lifecycle, not null
    * @return the loader, not null
    */
-  protected HistoricalTimeSeriesLoader createHistoricalTimeSeriesLoader(ComponentRepository repo) {
+  @Override
+  protected HistoricalTimeSeriesLoader createHistoricalTimeSeriesLoader(final ComponentRepository repo) {
     return new UnsupportedHistoricalTimeSeriesLoader();
   }
 

@@ -131,7 +131,7 @@ public class CouponIborCompoundingFlatSpread extends Coupon implements DepositIn
   /**
    * Gets the fixing period start times (in years).
    * @return The times.
-   * 
+   *
    * @deprecated use {@link #getFixingPeriodStartTimes()}.
    */
   @Deprecated
@@ -151,7 +151,7 @@ public class CouponIborCompoundingFlatSpread extends Coupon implements DepositIn
   /**
    * Gets the fixing period end times (in years).
    * @return The times.
-   * 
+   *
    * @deprecated use {@link #getFixingPeriodEndTimes()}.
    */
   @Deprecated
@@ -216,20 +216,20 @@ public class CouponIborCompoundingFlatSpread extends Coupon implements DepositIn
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_compoundingPeriodAmountAccumulated);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + Arrays.hashCode(_fixingSubperiodsAccrualFactors);
     result = prime * result + Arrays.hashCode(_fixingSubperiodsEndTimes);
     result = prime * result + Arrays.hashCode(_fixingSubperiodsStartTimes);
     result = prime * result + Arrays.hashCode(_fixingTimes);
-    result = prime * result + ((_index == null) ? 0 : _index.hashCode());
+    result = prime * result + (_index == null ? 0 : _index.hashCode());
     temp = Double.doubleToLongBits(_spread);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + Arrays.hashCode(_subperiodsAccrualFactors);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -239,7 +239,7 @@ public class CouponIborCompoundingFlatSpread extends Coupon implements DepositIn
     if (getClass() != obj.getClass()) {
       return false;
     }
-    CouponIborCompoundingFlatSpread other = (CouponIborCompoundingFlatSpread) obj;
+    final CouponIborCompoundingFlatSpread other = (CouponIborCompoundingFlatSpread) obj;
     if (Double.doubleToLongBits(_compoundingPeriodAmountAccumulated) != Double.doubleToLongBits(other._compoundingPeriodAmountAccumulated)) {
       return false;
     }

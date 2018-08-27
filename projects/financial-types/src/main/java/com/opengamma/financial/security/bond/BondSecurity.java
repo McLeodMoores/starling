@@ -167,10 +167,10 @@ public abstract class BondSecurity extends FinancialSecurity {
     super(SECURITY_TYPE);
   }
 
-  protected BondSecurity(String issuerName, String issuerType, String issuerDomicile, String market, Currency currency,
-      YieldConvention yieldConvention, Expiry lastTradeDate, String couponType, double couponRate, Frequency couponFrequency,
-      DayCount dayCountConvention, ZonedDateTime interestAccrualDate, ZonedDateTime settlementDate, ZonedDateTime firstCouponDate,
-      Double issuancePrice, double totalAmountIssued, double minimumAmount, double minimumIncrement, double parAmount, double redemptionValue) {
+  protected BondSecurity(final String issuerName, final String issuerType, final String issuerDomicile, final String market, final Currency currency,
+      final YieldConvention yieldConvention, final Expiry lastTradeDate, final String couponType, final double couponRate, final Frequency couponFrequency,
+      final DayCount dayCountConvention, final ZonedDateTime interestAccrualDate, final ZonedDateTime settlementDate, final ZonedDateTime firstCouponDate,
+      final Double issuancePrice, final double totalAmountIssued, final double minimumAmount, final double minimumIncrement, final double parAmount, final double redemptionValue) {
     super(SECURITY_TYPE);
     setIssuerName(issuerName);
     setIssuerType(issuerType);

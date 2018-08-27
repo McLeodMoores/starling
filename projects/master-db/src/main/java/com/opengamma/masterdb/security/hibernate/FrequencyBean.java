@@ -13,7 +13,7 @@ public class FrequencyBean extends EnumBean {
   protected FrequencyBean() {
   }
 
-  public FrequencyBean(String frequency) {
+  public FrequencyBean(final String frequency) {
     super(frequency);
   }
 

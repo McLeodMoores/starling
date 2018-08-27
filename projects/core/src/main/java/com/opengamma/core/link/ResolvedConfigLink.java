@@ -47,7 +47,7 @@ public final class ResolvedConfigLink<C>
    * @param value the config object to be embedded
    */
   @ImmutableConstructor
-  /* package */ ResolvedConfigLink(C value) {
+  /* package */ ResolvedConfigLink(final C value) {
     _value = ArgumentChecker.notNull(value, "config");
   }
 

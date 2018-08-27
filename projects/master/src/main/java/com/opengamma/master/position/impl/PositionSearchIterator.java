@@ -27,7 +27,7 @@ public class PositionSearchIterator extends AbstractSearchIterator<PositionDocum
    * Creates an instance based on a request.
    * <p>
    * The request will be altered during the iteration.
-   * 
+   *
    * @param master  the underlying master, not null
    * @param request  the request object, not null
    * @return an iterable suitable for use in a for-each loop, not null
@@ -47,17 +47,17 @@ public class PositionSearchIterator extends AbstractSearchIterator<PositionDocum
    * Creates an instance based on a request.
    * <p>
    * The request will be altered during the iteration.
-   * 
+   *
    * @param master  the underlying master, not null
    * @param request  the request object, not null
    */
-  public PositionSearchIterator(PositionMaster master, PositionSearchRequest request) {
+  public PositionSearchIterator(final PositionMaster master, final PositionSearchRequest request) {
     super(master, request);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  protected PositionSearchResult doSearch(PositionSearchRequest request) {
+  protected PositionSearchResult doSearch(final PositionSearchRequest request) {
     return getMaster().search(request);
   }
 

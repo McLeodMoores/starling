@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.transport.socket;
@@ -68,7 +68,7 @@ public class ServerSocketFudgeRequestDispatcher extends AbstractServerSocketProc
   }
 
   @Override
-  protected synchronized void socketOpened(Socket socket) {
+  protected synchronized void socketOpened(final Socket socket) {
     ArgumentChecker.notNull(socket, "socket");
     LOGGER.info("Opened socket to remote side {}", socket.getRemoteSocketAddress());
     InputStream is;
@@ -76,12 +76,12 @@ public class ServerSocketFudgeRequestDispatcher extends AbstractServerSocketProc
     try {
       is = socket.getInputStream();
       os = socket.getOutputStream();
-    } catch (IOException e) {
+    } catch (final IOException e) {
       LOGGER.warn("Unable to open InputStream and OutputStream for socket {}", new Object[] {socket}, e);
       return;
     }
 
-    RequestDispatchJob job = new RequestDispatchJob(socket, new BufferedInputStream(is), new BufferedOutputStream(os));
+    final RequestDispatchJob job = new RequestDispatchJob(socket, new BufferedInputStream(is), new BufferedOutputStream(os));
     _messageReceiveJobs.addJobAndStartThread(job, "Request Dispatch " + socket.getRemoteSocketAddress());
   }
 
@@ -103,7 +103,7 @@ public class ServerSocketFudgeRequestDispatcher extends AbstractServerSocketProc
 
     // NOTE kirk 2010-05-12 -- Have to pass in the InputStream and OutputStream explicitly so that
     // we can force the IOException catch up above.
-    public RequestDispatchJob(Socket socket, InputStream inputStream, OutputStream outputStream) {
+    public RequestDispatchJob(final Socket socket, final InputStream inputStream, final OutputStream outputStream) {
       ArgumentChecker.notNull(socket, "Socket");
       ArgumentChecker.notNull(inputStream, "inputStream");
       ArgumentChecker.notNull(outputStream, "outputStream");
@@ -122,7 +122,7 @@ public class ServerSocketFudgeRequestDispatcher extends AbstractServerSocketProc
       final FudgeMsgEnvelope envelope;
       try {
         envelope = _reader.nextMessageEnvelope();
-      } catch (Exception e) {
+      } catch (final Exception e) {
         LOGGER.warn("Unable to read message from underlying stream - terminating connection", e);
         terminate();
         return;
@@ -153,7 +153,7 @@ public class ServerSocketFudgeRequestDispatcher extends AbstractServerSocketProc
       try {
         LOGGER.debug("Received message with {} fields. Dispatching to underlying.", envelope.getMessage().getNumFields());
         response = getUnderlying().requestReceived(new FudgeDeserializer(_fudgeContext), envelope);
-      } catch (Exception e) {
+      } catch (final Exception e) {
         LOGGER.warn("Unable to dispatch message to underlying receiver", e);
         return;
       }
@@ -161,7 +161,7 @@ public class ServerSocketFudgeRequestDispatcher extends AbstractServerSocketProc
         try {
           LOGGER.debug("Sending response with {} fields.", response.getNumFields());
           _writer.write(response);
-        } catch (Exception e) {
+        } catch (final Exception e) {
           LOGGER.warn("Unable to dispatch response to client - terminating connection", e);
           terminate();
         }
@@ -174,7 +174,7 @@ public class ServerSocketFudgeRequestDispatcher extends AbstractServerSocketProc
         try {
           LOGGER.debug("Closing socket");
           _socket.close();
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
           LOGGER.warn("Couldn't close socket to release blocked I/O", ex.getMessage());
         }
       }

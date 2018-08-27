@@ -13,7 +13,7 @@ import com.opengamma.financial.security.future.StockFutureSecurity;
 public class StockFutureBean extends FutureSecurityBean {
 
   @Override
-  public <T> T accept(Visitor<T> visitor) {
+  public <T> T accept(final Visitor<T> visitor) {
     return visitor.visitStockFutureType(this);
   }
 

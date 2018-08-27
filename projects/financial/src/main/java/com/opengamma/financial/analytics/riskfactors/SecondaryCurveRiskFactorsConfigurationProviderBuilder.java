@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.riskfactors;
@@ -16,7 +16,7 @@ import org.fudgemsg.mapping.FudgeDeserializer;
 public class SecondaryCurveRiskFactorsConfigurationProviderBuilder extends DefaultRiskFactorsConfigurationProviderBuilder {
 
   @Override
-  public SecondaryCurveRiskFactorsConfigurationProvider buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
+  public SecondaryCurveRiskFactorsConfigurationProvider buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     return new SecondaryCurveRiskFactorsConfigurationProvider(getCurrencyOverride(deserializer, msg));
   }
 

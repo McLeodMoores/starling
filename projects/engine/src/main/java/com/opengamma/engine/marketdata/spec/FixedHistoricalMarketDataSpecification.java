@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.marketdata.spec;
@@ -19,34 +19,34 @@ import org.threeten.bp.LocalDate;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 @BeanDefinition(hierarchy = "immutable")
 public class FixedHistoricalMarketDataSpecification extends HistoricalMarketDataSpecification
     implements MarketDataSpecification {
- 
+
   private static final long serialVersionUID = 1L;
-  
+
   @PropertyDefinition(validate = "notNull")
   private final LocalDate _snapshotDate;
 
   /**
    * Creates an instance with a snapshotDate
-   * 
+   *
    * @param snapshotDate the snapshot date, not null
    */
-  public FixedHistoricalMarketDataSpecification(LocalDate snapshotDate) {
+  public FixedHistoricalMarketDataSpecification(final LocalDate snapshotDate) {
    this(null, snapshotDate);
   }
 
-  
+
   /**
    * Creates an instance with a timeSeriesResolverKey and snapshotDate
-   * 
+   *
    * @param timeSeriesResolverKey the timeseries resolver key, not null
    * @param snapshotDate the snapshot date, not null
    */
-  public FixedHistoricalMarketDataSpecification(String timeSeriesResolverKey, LocalDate snapshotDate) {
+  public FixedHistoricalMarketDataSpecification(final String timeSeriesResolverKey, final LocalDate snapshotDate) {
     super(timeSeriesResolverKey);
     _snapshotDate = ArgumentChecker.notNull(snapshotDate, "snapshotDate");
   }

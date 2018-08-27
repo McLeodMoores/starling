@@ -29,159 +29,159 @@ import com.opengamma.web.analytics.formatting.TypeFormatter.Format;
 
   private final AnalyticsView _delegate;
 
-  /* package */ TimingAnalyticsView(AnalyticsView delegate) {
+  /* package */ TimingAnalyticsView(final AnalyticsView delegate) {
     ArgumentChecker.notNull(delegate, "delegate");
     _delegate = delegate;
   }
 
   @Override
-  public List<String> updateStructure(CompiledViewDefinition compiledViewDefinition, Portfolio portfolio) {
-    long startTime = System.currentTimeMillis();
+  public List<String> updateStructure(final CompiledViewDefinition compiledViewDefinition, final Portfolio portfolio) {
+    final long startTime = System.currentTimeMillis();
     LOGGER.trace("Executing AnalyticsView.updateStructure");
-    List<String> retVal = _delegate.updateStructure(compiledViewDefinition, portfolio);
+    final List<String> retVal = _delegate.updateStructure(compiledViewDefinition, portfolio);
     LOGGER.trace("updateStructure completed in " + (System.currentTimeMillis() - startTime) + "ms");
     return retVal;
   }
 
   @Override
-  public String viewCompilationFailed(Throwable t) {
-    long startTime = System.currentTimeMillis();
+  public String viewCompilationFailed(final Throwable t) {
+    final long startTime = System.currentTimeMillis();
     LOGGER.trace("Executing AnalyticsView.viewCompilationFailed");
-    String retVal = _delegate.viewCompilationFailed(t);
+    final String retVal = _delegate.viewCompilationFailed(t);
     LOGGER.trace("viewCompilationFailed completed in " + (System.currentTimeMillis() - startTime) + "ms");
     return retVal;
   }
 
   @Override
-  public List<String> updateResults(ViewResultModel results,
-                                    ViewCycle viewCycle) {
-    long startTime = System.currentTimeMillis();
+  public List<String> updateResults(final ViewResultModel results,
+                                    final ViewCycle viewCycle) {
+    final long startTime = System.currentTimeMillis();
     LOGGER.trace("Executing AnalyticsView.updateResults");
-    List<String> retVal = _delegate.updateResults(results, viewCycle);
+    final List<String> retVal = _delegate.updateResults(results, viewCycle);
     LOGGER.trace("updateResults completed in " + (System.currentTimeMillis() - startTime) + "ms");
     return retVal;
   }
 
   @Override
-  public GridStructure getGridStructure(GridType gridType, int viewportId) {
-    long startTime = System.currentTimeMillis();
+  public GridStructure getGridStructure(final GridType gridType, final int viewportId) {
+    final long startTime = System.currentTimeMillis();
     LOGGER.trace("Executing AnalyticsView.getGridStructure");
-    GridStructure retVal = _delegate.getGridStructure(gridType, viewportId);
+    final GridStructure retVal = _delegate.getGridStructure(gridType, viewportId);
     LOGGER.trace("getGridStructure completed in " + (System.currentTimeMillis() - startTime) + "ms");
     return retVal;
   }
 
   @Override
-  public GridStructure getInitialGridStructure(GridType gridType) {
-    long startTime = System.currentTimeMillis();
+  public GridStructure getInitialGridStructure(final GridType gridType) {
+    final long startTime = System.currentTimeMillis();
     LOGGER.trace("Executing AnalyticsView.getGridStructure");
-    GridStructure retVal = _delegate.getInitialGridStructure(gridType);
+    final GridStructure retVal = _delegate.getInitialGridStructure(gridType);
     LOGGER.trace("getGridStructure completed in " + (System.currentTimeMillis() - startTime) + "ms");
     return retVal;
   }
 
   @Override
-  public boolean createViewport(int requestId,
-                                GridType gridType,
-                                int viewportId,
-                                String callbackId,
-                                String structureCallbackId,
-                                ViewportDefinition viewportDefinition) {
-    long startTime = System.currentTimeMillis();
+  public boolean createViewport(final int requestId,
+                                final GridType gridType,
+                                final int viewportId,
+                                final String callbackId,
+                                final String structureCallbackId,
+                                final ViewportDefinition viewportDefinition) {
+    final long startTime = System.currentTimeMillis();
     LOGGER.trace("Executing AnalyticsView.createViewport");
-    boolean retVal = _delegate.createViewport(requestId, gridType, viewportId, callbackId, structureCallbackId, viewportDefinition);
+    final boolean retVal = _delegate.createViewport(requestId, gridType, viewportId, callbackId, structureCallbackId, viewportDefinition);
     LOGGER.trace("createViewport completed in " + (System.currentTimeMillis() - startTime) + "ms");
     return retVal;
   }
 
   @Override
-  public String updateViewport(GridType gridType,
-                               int viewportId,
-                               ViewportDefinition viewportDefinition) {
-    long startTime = System.currentTimeMillis();
+  public String updateViewport(final GridType gridType,
+                               final int viewportId,
+                               final ViewportDefinition viewportDefinition) {
+    final long startTime = System.currentTimeMillis();
     LOGGER.trace("Executing AnalyticsView.updateViewport");
-    String retVal = _delegate.updateViewport(gridType, viewportId, viewportDefinition);
+    final String retVal = _delegate.updateViewport(gridType, viewportId, viewportDefinition);
     LOGGER.trace("updateViewport completed in " + (System.currentTimeMillis() - startTime) + "ms");
     return retVal;
   }
 
   @Override
-  public void deleteViewport(GridType gridType, int viewportId) {
-    long startTime = System.currentTimeMillis();
+  public void deleteViewport(final GridType gridType, final int viewportId) {
+    final long startTime = System.currentTimeMillis();
     LOGGER.trace("Executing AnalyticsView.deleteViewport");
     _delegate.deleteViewport(gridType, viewportId);
     LOGGER.trace("deleteViewport completed in " + (System.currentTimeMillis() - startTime) + "ms");
   }
 
   @Override
-  public ViewportResults getData(GridType gridType, int viewportId) {
-    long startTime = System.currentTimeMillis();
+  public ViewportResults getData(final GridType gridType, final int viewportId) {
+    final long startTime = System.currentTimeMillis();
     LOGGER.trace("Executing AnalyticsView.getData");
-    ViewportResults retVal = _delegate.getData(gridType, viewportId);
+    final ViewportResults retVal = _delegate.getData(gridType, viewportId);
     LOGGER.trace("getData completed in " + (System.currentTimeMillis() - startTime) + "ms");
     return retVal;
   }
 
   @Override
-  public void openDependencyGraph(int requestId,
-                                  GridType gridType,
-                                  int graphId, String callbackId, int row, int col) {
-    long startTime = System.currentTimeMillis();
+  public void openDependencyGraph(final int requestId,
+                                  final GridType gridType,
+                                  final int graphId, final String callbackId, final int row, final int col) {
+    final long startTime = System.currentTimeMillis();
     LOGGER.trace("Executing AnalyticsView.openDependencyGraph");
     _delegate.openDependencyGraph(requestId, gridType, graphId, callbackId, row, col);
     LOGGER.trace("openDependencyGraph completed in " + (System.currentTimeMillis() - startTime) + "ms");
   }
 
   @Override
-  public void openDependencyGraph(int requestId,
-                                  GridType gridType,
-                                  int graphId,
-                                  String callbackId,
-                                  String calcConfigName,
-                                  ValueRequirement valueRequirement) {
-    long startTime = System.currentTimeMillis();
+  public void openDependencyGraph(final int requestId,
+                                  final GridType gridType,
+                                  final int graphId,
+                                  final String callbackId,
+                                  final String calcConfigName,
+                                  final ValueRequirement valueRequirement) {
+    final long startTime = System.currentTimeMillis();
     LOGGER.trace("Executing AnalyticsView.openDependencyGraph");
     _delegate.openDependencyGraph(requestId, gridType, graphId, callbackId, calcConfigName, valueRequirement);
     LOGGER.trace("openDependencyGraph completed in " + (System.currentTimeMillis() - startTime) + "ms");
   }
 
   @Override
-  public void closeDependencyGraph(GridType gridType, int graphId) {
-    long startTime = System.currentTimeMillis();
+  public void closeDependencyGraph(final GridType gridType, final int graphId) {
+    final long startTime = System.currentTimeMillis();
     LOGGER.trace("Executing AnalyticsView.closeDependencyGraph");
     _delegate.closeDependencyGraph(gridType, graphId);
     LOGGER.trace("closeDependencyGraph completed in " + (System.currentTimeMillis() - startTime) + "ms");
   }
 
   @Override
-  public GridStructure getGridStructure(GridType gridType, int graphId, int viewportId) {
-    long startTime = System.currentTimeMillis();
+  public GridStructure getGridStructure(final GridType gridType, final int graphId, final int viewportId) {
+    final long startTime = System.currentTimeMillis();
     LOGGER.trace("Executing AnalyticsView.getGridStructure");
-    GridStructure retVal = _delegate.getGridStructure(gridType, graphId, viewportId);
+    final GridStructure retVal = _delegate.getGridStructure(gridType, graphId, viewportId);
     LOGGER.trace("getGridStructure completed in " + (System.currentTimeMillis() - startTime) + "ms");
     return retVal;
   }
 
   @Override
-  public GridStructure getInitialGridStructure(GridType gridType, int graphId) {
-    long startTime = System.currentTimeMillis();
+  public GridStructure getInitialGridStructure(final GridType gridType, final int graphId) {
+    final long startTime = System.currentTimeMillis();
     LOGGER.trace("Executing AnalyticsView.getGridStructure");
-    GridStructure retVal = _delegate.getInitialGridStructure(gridType, graphId);
+    final GridStructure retVal = _delegate.getInitialGridStructure(gridType, graphId);
     LOGGER.trace("getGridStructure completed in " + (System.currentTimeMillis() - startTime) + "ms");
     return retVal;
   }
 
   @Override
-  public boolean createViewport(int requestId,
-                                GridType gridType,
-                                int graphId,
-                                int viewportId,
-                                String callbackId,
-                                String structureCallbackId,
-                                ViewportDefinition viewportDefinition) {
-    long startTime = System.currentTimeMillis();
+  public boolean createViewport(final int requestId,
+                                final GridType gridType,
+                                final int graphId,
+                                final int viewportId,
+                                final String callbackId,
+                                final String structureCallbackId,
+                                final ViewportDefinition viewportDefinition) {
+    final long startTime = System.currentTimeMillis();
     LOGGER.trace("Executing AnalyticsView.createViewport");
-    boolean retVal = _delegate.createViewport(requestId,
+    final boolean retVal = _delegate.createViewport(requestId,
                                               gridType,
                                               graphId,
                                               viewportId,
@@ -193,85 +193,85 @@ import com.opengamma.web.analytics.formatting.TypeFormatter.Format;
   }
 
   @Override
-  public String updateViewport(GridType gridType,
-                               int graphId,
-                               int viewportId, ViewportDefinition viewportDefinition) {
-    long startTime = System.currentTimeMillis();
+  public String updateViewport(final GridType gridType,
+                               final int graphId,
+                               final int viewportId, final ViewportDefinition viewportDefinition) {
+    final long startTime = System.currentTimeMillis();
     LOGGER.trace("Executing AnalyticsView.updateViewport");
-    String retVal = _delegate.updateViewport(gridType, graphId, viewportId, viewportDefinition);
+    final String retVal = _delegate.updateViewport(gridType, graphId, viewportId, viewportDefinition);
     LOGGER.trace("updateViewport completed in " + (System.currentTimeMillis() - startTime) + "ms");
     return retVal;
   }
 
   @Override
-  public void deleteViewport(GridType gridType,
-                             int graphId,
-                             int viewportId) {
-    long startTime = System.currentTimeMillis();
+  public void deleteViewport(final GridType gridType,
+                             final int graphId,
+                             final int viewportId) {
+    final long startTime = System.currentTimeMillis();
     LOGGER.trace("Executing AnalyticsView.deleteViewport");
     _delegate.deleteViewport(gridType, graphId, viewportId);
     LOGGER.trace("deleteViewport completed in " + (System.currentTimeMillis() - startTime) + "ms");
   }
 
   @Override
-  public ViewportResults getData(GridType gridType,
-                                 int graphId,
-                                 int viewportId) {
-    long startTime = System.currentTimeMillis();
+  public ViewportResults getData(final GridType gridType,
+                                 final int graphId,
+                                 final int viewportId) {
+    final long startTime = System.currentTimeMillis();
     LOGGER.trace("Executing AnalyticsView.getData");
-    ViewportResults retVal = _delegate.getData(gridType, graphId, viewportId);
+    final ViewportResults retVal = _delegate.getData(gridType, graphId, viewportId);
     LOGGER.trace("getData completed in " + (System.currentTimeMillis() - startTime) + "ms");
     return retVal;
   }
 
   @Override
-  public List<String> entityChanged(MasterChangeNotification<?> notification) {
-    long startTime = System.currentTimeMillis();
+  public List<String> entityChanged(final MasterChangeNotification<?> notification) {
+    final long startTime = System.currentTimeMillis();
     LOGGER.trace("Executing AnalyticsView.entityChanged");
-    List<String> retVal = _delegate.entityChanged(notification);
+    final List<String> retVal = _delegate.entityChanged(notification);
     LOGGER.trace("entityChanged completed in " + (System.currentTimeMillis() - startTime) + "ms");
     return retVal;
   }
 
   @Override
   public List<String> portfolioChanged() {
-    long startTime = System.currentTimeMillis();
+    final long startTime = System.currentTimeMillis();
     LOGGER.trace("Executing AnalyticsView.entityChanged");
-    List<String> retVal = _delegate.portfolioChanged();
+    final List<String> retVal = _delegate.portfolioChanged();
     LOGGER.trace("portfolioChanged completed in " + (System.currentTimeMillis() - startTime) + "ms");
     return retVal;
   }
 
   @Override
-  public ViewportResults getAllGridData(GridType gridType, Format format) {
-    long startTime = System.currentTimeMillis();
+  public ViewportResults getAllGridData(final GridType gridType, final Format format) {
+    final long startTime = System.currentTimeMillis();
     LOGGER.trace("Executing AnalyticsView.getAllGridData");
-    ViewportResults retVal = _delegate.getAllGridData(gridType, format);
+    final ViewportResults retVal = _delegate.getAllGridData(gridType, format);
     LOGGER.trace("getAllGridData completed in " + (System.currentTimeMillis() - startTime) + "ms");
     return retVal;
   }
 
   @Override
   public UniqueId getViewDefinitionId() {
-    long startTime = System.currentTimeMillis();
+    final long startTime = System.currentTimeMillis();
     LOGGER.trace("Executing AnalyticsView.getViewDefinitionId");
-    UniqueId retVal = _delegate.getViewDefinitionId();
+    final UniqueId retVal = _delegate.getViewDefinitionId();
     LOGGER.trace("getViewDefinitionId completed in " + (System.currentTimeMillis() - startTime) + "ms");
     return retVal;
   }
 
   @Override
   public List<ErrorInfo> getErrors() {
-    long startTime = System.currentTimeMillis();
+    final long startTime = System.currentTimeMillis();
     LOGGER.trace("Executing AnalyticsView.getError");
-    List<ErrorInfo> retVal = _delegate.getErrors();
+    final List<ErrorInfo> retVal = _delegate.getErrors();
     LOGGER.trace("getError completed in " + (System.currentTimeMillis() - startTime) + "ms");
     return retVal;
   }
 
   @Override
-  public void deleteError(long id) {
-    long startTime = System.currentTimeMillis();
+  public void deleteError(final long id) {
+    final long startTime = System.currentTimeMillis();
     LOGGER.trace("Executing AnalyticsView.deleteError");
     _delegate.deleteError(id);
     LOGGER.trace("deleteError completed in " + (System.currentTimeMillis() - startTime) + "ms");

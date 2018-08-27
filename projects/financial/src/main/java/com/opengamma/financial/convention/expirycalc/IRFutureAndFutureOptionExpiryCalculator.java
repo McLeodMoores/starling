@@ -29,7 +29,7 @@ public final class IRFutureAndFutureOptionExpiryCalculator implements ExchangeTr
 
   /**
    * Gets the singleton instance.
-   * 
+   *
    * @return the instance, not null
    */
   public static IRFutureAndFutureOptionExpiryCalculator getInstance() {
@@ -44,12 +44,12 @@ public final class IRFutureAndFutureOptionExpiryCalculator implements ExchangeTr
 
   //-------------------------------------------------------------------------
   @Override
-  public LocalDate getExpiryDate(int n, LocalDate today, Calendar holidayCalendar) {
+  public LocalDate getExpiryDate(final int n, final LocalDate today, final Calendar holidayCalendar) {
     return FutureOptionUtils.getIRFutureOptionWithSerialOptionsExpiry(n, today, holidayCalendar);
   }
 
   @Override
-  public LocalDate getExpiryMonth(int n, LocalDate today) {
+  public LocalDate getExpiryMonth(final int n, final LocalDate today) {
     return FutureOptionUtils.getIRFutureOptionWithSerialOptionsExpiry(n, today, WEEKDAYS);
   }
 

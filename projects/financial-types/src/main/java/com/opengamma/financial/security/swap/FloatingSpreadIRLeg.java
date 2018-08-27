@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.security.swap;
@@ -28,16 +28,16 @@ import com.opengamma.id.ExternalId;
  */
 @BeanDefinition
 public class FloatingSpreadIRLeg extends FloatingInterestRateLeg {
-  
+
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
-  
+
   /**
    * The spread.
    */
   @PropertyDefinition
   private double _spread;
-  
+
   /**
    * Creates an instance.
    */
@@ -46,7 +46,7 @@ public class FloatingSpreadIRLeg extends FloatingInterestRateLeg {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param dayCount  the day count, not null
    * @param frequency  the frequency, not null
    * @param regionIdentifier  the region, not null
@@ -57,15 +57,15 @@ public class FloatingSpreadIRLeg extends FloatingInterestRateLeg {
    * @param floatingRateType  the floating rate type, not null
    * @param spread the spread
    */
-  public FloatingSpreadIRLeg(DayCount dayCount, Frequency frequency, ExternalId regionIdentifier, BusinessDayConvention businessDayConvention,
-      Notional notional, boolean eom, ExternalId floatingReferenceRateId, FloatingRateType floatingRateType, double spread) {
+  public FloatingSpreadIRLeg(final DayCount dayCount, final Frequency frequency, final ExternalId regionIdentifier, final BusinessDayConvention businessDayConvention,
+      final Notional notional, final boolean eom, final ExternalId floatingReferenceRateId, final FloatingRateType floatingRateType, final double spread) {
     super(dayCount, frequency, regionIdentifier, businessDayConvention, notional, eom, floatingReferenceRateId, floatingRateType);
     setSpread(spread);
   }
-  
+
   //-------------------------------------------------------------------------
   @Override
-  public <T> T accept(SwapLegVisitor<T> visitor) {
+  public <T> T accept(final SwapLegVisitor<T> visitor) {
     return visitor.visitFloatingSpreadIRLeg(this);
   }
 

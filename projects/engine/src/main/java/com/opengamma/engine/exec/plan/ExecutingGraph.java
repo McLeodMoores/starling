@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.exec.plan;
@@ -84,7 +84,7 @@ public class ExecutingGraph {
 
   /**
    * Creates a new execution state.
-   * 
+   *
    * @param plan the owning execution plan, not null
    * @param cycleId the cycle identifier for job specifications, not null
    * @param valuationTime the valuation time for job specifications, not null
@@ -99,9 +99,9 @@ public class ExecutingGraph {
     _cycleId = cycleId;
     _valuationTime = valuationTime;
     _resolverVersionCorrection = resolverVersionCorrection;
-    _executable = new ArrayList<PlannedJob>(plan.getLeafJobs());
-    _blocked = new HashMap<PlannedJob, BlockedJobInfo>();
-    _executing = new HashMap<CalculationJobSpecification, BlockedJobInfo[]>();
+    _executable = new ArrayList<>(plan.getLeafJobs());
+    _blocked = new HashMap<>();
+    _executing = new HashMap<>();
   }
 
   protected GraphExecutionPlan getPlan() {
@@ -130,7 +130,7 @@ public class ExecutingGraph {
 
   /**
    * Allocates a job specification.
-   * 
+   *
    * @return the allocated job specification
    */
   protected CalculationJobSpecification createJobSpecification() {
@@ -143,7 +143,7 @@ public class ExecutingGraph {
    * Creates an actual calculation job from a planned job that is destined for "tail" execution.
    * <p>
    * The caller must already hold the synchronisation lock.
-   * 
+   *
    * @param planned the planned job, not null
    * @param jobInfo the map containing information about the tail job set
    * @return the actual job
@@ -158,7 +158,7 @@ public class ExecutingGraph {
 
   /**
    * Updates the state of any dependent fragments of the execution plan so that they may become executable when the job being created here completes.
-   * 
+   *
    * @param actual the job being created, not null
    * @param planned the execution plan information, not null
    */
@@ -167,7 +167,7 @@ public class ExecutingGraph {
     if (dependents != null) {
       final BlockedJobInfo[] dependentsInfo = new BlockedJobInfo[dependents.length];
       for (int i = 0; i < dependents.length; i++) {
-        PlannedJob dependent = dependents[i];
+        final PlannedJob dependent = dependents[i];
         BlockedJobInfo dependentInfo = _blocked.get(dependent);
         if (dependentInfo == null) {
           dependentInfo = new BlockedJobInfo(dependent);
@@ -183,7 +183,7 @@ public class ExecutingGraph {
 
   /**
    * Adds the tail executing jobs to the job being created from the execution plan.
-   * 
+   *
    * @param actual the job being created, not null
    * @param planned the execution plan information, not null
    * @param jobInfo a map to use for temporary storage, not null
@@ -191,7 +191,7 @@ public class ExecutingGraph {
   protected void addTailCalculationJobs(final CalculationJob actual, final PlannedJob planned, final Map<PlannedJob, TailJobInfo> jobInfo) {
     if (planned.getTails() != null) {
       final long jobId = actual.getSpecification().getJobId();
-      for (PlannedJob tail : planned.getTails()) {
+      for (final PlannedJob tail : planned.getTails()) {
         TailJobInfo tailInfo = jobInfo.get(tail);
         if (tailInfo == null) {
           tailInfo = new TailJobInfo(tail.getInputJobCount());
@@ -208,7 +208,7 @@ public class ExecutingGraph {
    * Creates an actual calculation job from a planned job.
    * <p>
    * The caller must already hold the synchronisation lock.
-   * 
+   *
    * @param planned the planned job, not null
    * @return the actual calculation job, not null
    */
@@ -225,7 +225,7 @@ public class ExecutingGraph {
    * Returns the next job that can be executed, or null if there are none available for execution.
    * <p>
    * A null return may happen if either the graph has completed execution, or there are jobs pending.
-   * 
+   *
    * @return an executable job, if one is available
    */
   public synchronized CalculationJob nextExecutableJob() {
@@ -239,7 +239,7 @@ public class ExecutingGraph {
 
   /**
    * Tests whether execution of the graph is complete.
-   * 
+   *
    * @return true if graph execution has finished - there are no more executable jobs and all that were previously returned have been signaled as complete
    */
   public synchronized boolean isFinished() {
@@ -250,13 +250,13 @@ public class ExecutingGraph {
    * Notifies of a job, previously returned by {@link #nextExecutableJob} (either directly or as a job's tail), having completed.
    * <p>
    * Any jobs that were not yet executable because they require one or more results from this job may now become executable.
-   * 
+   *
    * @param jobSpec the job that has completed, not null
    */
-  public synchronized void jobCompleted(CalculationJobSpecification jobSpec) {
+  public synchronized void jobCompleted(final CalculationJobSpecification jobSpec) {
     final BlockedJobInfo[] blockedJobs = _executing.remove(jobSpec);
     if (blockedJobs != null) {
-      for (BlockedJobInfo blockedJob : blockedJobs) {
+      for (final BlockedJobInfo blockedJob : blockedJobs) {
         if (blockedJob.unblock()) {
           final PlannedJob job = blockedJob.getJob();
           _executable.add(job);

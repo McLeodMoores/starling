@@ -29,7 +29,7 @@ import com.opengamma.util.async.AsynchronousExecution;
 /**
  * Calculates the Value (or Dollar) Delta of an EquitySecurity. The value delta is defined as the Delta (dV/dS) multiplied by the spot, S. As dS/dS == 1, ValueDelta = S, the spot value of the
  * security. ValueDelta can be roughly described as the delta hedge of the position expressed in currency value. It indicates how much currency must be used in order to delta hedge a position.
- * 
+ *
  * @author casey
  */
 public class EquitySecurityValueDeltaFunction extends AbstractFunction.NonCompiledInvoker {
@@ -39,9 +39,9 @@ public class EquitySecurityValueDeltaFunction extends AbstractFunction.NonCompil
   }
 
   @Override
-  public Set<ComputedValue> execute(FunctionExecutionContext executionContext, FunctionInputs inputs, ComputationTarget target, Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
     final ValueRequirement desiredValue = desiredValues.iterator().next();
-    ValueProperties properties = desiredValue.getConstraints().copy()
+    final ValueProperties properties = desiredValue.getConstraints().copy()
         .with(ValuePropertyNames.CURRENCY, FinancialSecurityUtils.getCurrency(target.getSecurity()).getCode())
         .get();
     final ValueSpecification valueSpecification = new ValueSpecification(getValueRequirementName(), target.toSpecification(), properties);
@@ -63,8 +63,8 @@ public class EquitySecurityValueDeltaFunction extends AbstractFunction.NonCompil
   }
 
   @Override
-  public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target) {
-    ValueProperties properties = createValueProperties()
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
+    final ValueProperties properties = createValueProperties()
         .with(ValuePropertyNames.CURRENCY, FinancialSecurityUtils.getCurrency(target.getSecurity()).getCode())
         .get();
     return Collections.singleton(new ValueSpecification(getValueRequirementName(), target.toSpecification(), properties));
@@ -74,7 +74,7 @@ public class EquitySecurityValueDeltaFunction extends AbstractFunction.NonCompil
   /**
    * Requires only the Spot value of the equity index or name
    */
-  public Set<ValueRequirement> getRequirements(FunctionCompilationContext context, ComputationTarget target, ValueRequirement desiredValue) {
+  public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     return Collections.singleton(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, getTargetType(), target.getUniqueId()));
   }
 

@@ -27,17 +27,17 @@ public class DataFinancialClientManagerResource extends AbstractDataResource {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param clientManager  the client manager, not null
    */
-  public DataFinancialClientManagerResource(FinancialClientManager clientManager) {
+  public DataFinancialClientManagerResource(final FinancialClientManager clientManager) {
     _clientManager = clientManager;
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the manager.
-   * 
+   *
    * @return the manager, not null
    */
   public FinancialClientManager getClientManager() {
@@ -46,10 +46,10 @@ public class DataFinancialClientManagerResource extends AbstractDataResource {
 
   //-------------------------------------------------------------------------
   @Path("{clientName}")
-  public DataFinancialClientResource findClient(@PathParam("clientName") String clientName) {
+  public DataFinancialClientResource findClient(@PathParam("clientName") final String clientName) {
     ArgumentChecker.notNull(clientName, "clientName");
-    
-    FinancialClient client = getClientManager().getOrCreateClient(clientName);
+
+    final FinancialClient client = getClientManager().getOrCreateClient(clientName);
     return new DataFinancialClientResource(client);
   }
 

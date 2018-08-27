@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.linearalgebra;
@@ -38,7 +38,7 @@ public class CholeskyDecompositionCommonsResult implements CholeskyDecomposition
    * {@inheritDoc}
    */
   @Override
-  public DoubleMatrix1D solve(DoubleMatrix1D b) {
+  public DoubleMatrix1D solve(final DoubleMatrix1D b) {
     Validate.notNull(b);
     return CommonsMathWrapper.unwrap(_solver.solve(CommonsMathWrapper.wrap(b)));
   }
@@ -47,7 +47,7 @@ public class CholeskyDecompositionCommonsResult implements CholeskyDecomposition
    * {@inheritDoc}
    */
   @Override
-  public double[] solve(double[] b) {
+  public double[] solve(final double[] b) {
     Validate.notNull(b);
     return _solver.solve(b);
   }
@@ -56,7 +56,7 @@ public class CholeskyDecompositionCommonsResult implements CholeskyDecomposition
    * {@inheritDoc}
    */
   @Override
-  public DoubleMatrix2D solve(DoubleMatrix2D b) {
+  public DoubleMatrix2D solve(final DoubleMatrix2D b) {
     Validate.notNull(b);
     return CommonsMathWrapper.unwrap(_solver.solve(CommonsMathWrapper.wrap(b)));
   }

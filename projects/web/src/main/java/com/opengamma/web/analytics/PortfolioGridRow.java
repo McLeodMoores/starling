@@ -32,7 +32,7 @@ import com.opengamma.util.ArgumentChecker;
    * @param target The row's target
    * @param name The row name
    */
-  /* package */ PortfolioGridRow(ComputationTargetSpecification target, String name, UniqueId nodeId) {
+  /* package */ PortfolioGridRow(final ComputationTargetSpecification target, final String name, final UniqueId nodeId) {
     super(target, name);
     ArgumentChecker.notNull(nodeId, "nodeId");
     _securityId = null;
@@ -47,12 +47,12 @@ import com.opengamma.util.ArgumentChecker;
    * @param target The row's target
    * @param securityId The position's security ID, not null
    */
-  /* package */ PortfolioGridRow(ComputationTargetSpecification target,
-                                 String name,
-                                 UniqueId securityId,
+  /* package */ PortfolioGridRow(final ComputationTargetSpecification target,
+                                 final String name,
+                                 final UniqueId securityId,
                                  //UniqueId underlyingId,
-                                 UniqueId nodeId,
-                                 UniqueId positionId) {
+                                 final UniqueId nodeId,
+                                 final UniqueId positionId) {
     super(target, name);
     ArgumentChecker.notNull(securityId, "securityId");
     ArgumentChecker.notNull(nodeId, "nodeId");
@@ -70,13 +70,13 @@ import com.opengamma.util.ArgumentChecker;
    * @param target The row's target
    * @param securityId The position's security ID, not null
    */
-  /* package */ PortfolioGridRow(ComputationTargetSpecification target,
-                                 String name,
-                                 UniqueId securityId,
+  /* package */ PortfolioGridRow(final ComputationTargetSpecification target,
+                                 final String name,
+                                 final UniqueId securityId,
                                  //UniqueId underlyingId,
-                                 UniqueId nodeId,
-                                 UniqueId positionId,
-                                 UniqueId tradeId) {
+                                 final UniqueId nodeId,
+                                 final UniqueId positionId,
+                                 final UniqueId tradeId) {
     super(target, name);
     ArgumentChecker.notNull(securityId, "securityId");
     ArgumentChecker.notNull(nodeId, "nodeId");

@@ -42,9 +42,9 @@ public class SequencePartitioningViewProcessWorker implements ViewProcessWorker,
   private final Integer _maxSuccessiveDeltaCycles;
   private final ViewCycleExecutionSequence _sequence;
   private final ViewCycleExecutionOptions _defaultExecutionOptions;
-  private final Queue<ViewProcessWorker> _workers = new LinkedList<ViewProcessWorker>();
+  private final Queue<ViewProcessWorker> _workers = new LinkedList<>();
   private volatile ViewDefinition _viewDefinition;
-  private int _partition;
+  private final int _partition;
   private boolean _terminated;
   private int _spawnedWorkerCount;
   private int _spawnedCycleCount;
@@ -88,7 +88,7 @@ public class SequencePartitioningViewProcessWorker implements ViewProcessWorker,
     return _maxSuccessiveDeltaCycles;
   }
 
-  private ViewExecutionOptions getExecutionOptions(ViewCycleExecutionSequence newSequence) {
+  private ViewExecutionOptions getExecutionOptions(final ViewCycleExecutionSequence newSequence) {
     return new ExecutionOptions(newSequence, getExecutionFlags(), getMaxSuccessiveDeltaCycles(), getDefaultExecutionOptions());
   }
 
@@ -105,9 +105,9 @@ public class SequencePartitioningViewProcessWorker implements ViewProcessWorker,
   }
 
   private synchronized void spawnWorker() {
-    ViewCycleExecutionSequence sequence = getSequence();
+    final ViewCycleExecutionSequence sequence = getSequence();
     final int partitionSize = getPartitionSize();
-    final List<ViewCycleExecutionOptions> partition = new ArrayList<ViewCycleExecutionOptions>(partitionSize);
+    final List<ViewCycleExecutionOptions> partition = new ArrayList<>(partitionSize);
     for (int i = 0; i < partitionSize; i++) {
       final ViewCycleExecutionOptions step = sequence.poll(getDefaultExecutionOptions());
       if (step != null) {
@@ -122,7 +122,7 @@ public class SequencePartitioningViewProcessWorker implements ViewProcessWorker,
       final int firstCycle = _spawnedCycleCount;
       _spawnedCycleCount += partition.size();
       LOGGER.info("Spawning worker {} for {} cycles {} - {}", new Object[] {++_spawnedWorkerCount, getWorkerContext(), firstCycle, _spawnedCycleCount });
-      ViewProcessWorker delegate = getDelegate().createWorker(this, getExecutionOptions(new ArbitraryViewCycleExecutionSequence(partition)), getViewDefinition());
+      final ViewProcessWorker delegate = getDelegate().createWorker(this, getExecutionOptions(new ArbitraryViewCycleExecutionSequence(partition)), getViewDefinition());
       _workers.add(delegate);
       _spawnedWorkers++;
     }
@@ -150,15 +150,15 @@ public class SequencePartitioningViewProcessWorker implements ViewProcessWorker,
   }
 
   @Override
-  public void updateViewDefinition(ViewDefinition viewDefinition) {
+  public void updateViewDefinition(final ViewDefinition viewDefinition) {
     // This is not a good state of affairs as the caller has little or no control or knowledge over the sequence we're working on
     LOGGER.warn("View definition updated on run-as-fast-as-possible sequence");
     _viewDefinition = viewDefinition;
     Collection<ViewProcessWorker> delegates;
     synchronized (this) {
-      delegates = new ArrayList<ViewProcessWorker>(_workers);
+      delegates = new ArrayList<>(_workers);
     }
-    for (ViewProcessWorker delegate : delegates) {
+    for (final ViewProcessWorker delegate : delegates) {
       delegate.updateViewDefinition(_viewDefinition);
     }
   }
@@ -168,9 +168,9 @@ public class SequencePartitioningViewProcessWorker implements ViewProcessWorker,
     Collection<ViewProcessWorker> delegates;
     synchronized (this) {
       _terminated = true;
-      delegates = new ArrayList<ViewProcessWorker>(_workers);
+      delegates = new ArrayList<>(_workers);
     }
-    for (ViewProcessWorker delegate : delegates) {
+    for (final ViewProcessWorker delegate : delegates) {
       delegate.terminate();
     }
   }
@@ -179,23 +179,23 @@ public class SequencePartitioningViewProcessWorker implements ViewProcessWorker,
   public void join() throws InterruptedException {
     Collection<ViewProcessWorker> delegates;
     synchronized (this) {
-      delegates = new ArrayList<ViewProcessWorker>(_workers);
+      delegates = new ArrayList<>(_workers);
     }
-    for (ViewProcessWorker delegate : delegates) {
+    for (final ViewProcessWorker delegate : delegates) {
       delegate.join();
     }
   }
 
   @Override
-  public boolean join(long timeout) throws InterruptedException {
+  public boolean join(final long timeout) throws InterruptedException {
     Collection<ViewProcessWorker> delegates;
-    final long maxTime = System.nanoTime() + (timeout * 1000000);
+    final long maxTime = System.nanoTime() + timeout * 1000000;
     long time;
     do {
       synchronized (this) {
-        delegates = new ArrayList<ViewProcessWorker>(_workers);
+        delegates = new ArrayList<>(_workers);
       }
-      for (ViewProcessWorker delegate : delegates) {
+      for (final ViewProcessWorker delegate : delegates) {
         time = (maxTime - System.nanoTime()) / 1000000;
         if (time <= 0) {
           return false;
@@ -214,7 +214,7 @@ public class SequencePartitioningViewProcessWorker implements ViewProcessWorker,
 
   /**
    * Tests whether at least one of the workers in the buffer is still active. This will also housekeep the buffer of workers, removing any that have terminated.
-   * 
+   *
    * @return true if the worker buffer is empty, or all return true from {@code isTerminated} (which leaves the buffer empty)
    */
   @Override
@@ -228,7 +228,7 @@ public class SequencePartitioningViewProcessWorker implements ViewProcessWorker,
         return false;
       }
       synchronized (this) {
-        ViewProcessWorker worker2 = _workers.poll();
+        final ViewProcessWorker worker2 = _workers.poll();
         if (worker2 == worker) {
           LOGGER.debug("Removing completed worker from head of queue");
           worker = worker2;
@@ -251,7 +251,7 @@ public class SequencePartitioningViewProcessWorker implements ViewProcessWorker,
     synchronized (this) {
       delegates = new ArrayList<>(_workers);
     }
-    for (ViewProcessWorker delegate : delegates) {
+    for (final ViewProcessWorker delegate : delegates) {
       delegate.forceGraphRebuild();
     }
   }
@@ -264,37 +264,37 @@ public class SequencePartitioningViewProcessWorker implements ViewProcessWorker,
   }
 
   @Override
-  public void viewDefinitionCompiled(ViewExecutionDataProvider dataProvider, CompiledViewDefinitionWithGraphs compiled) {
+  public void viewDefinitionCompiled(final ViewExecutionDataProvider dataProvider, final CompiledViewDefinitionWithGraphs compiled) {
     LOGGER.debug("View definition compiled");
     getWorkerContext().viewDefinitionCompiled(dataProvider, compiled);
   }
 
   @Override
-  public void viewDefinitionCompilationFailed(Instant compilationTime, Exception exception) {
+  public void viewDefinitionCompilationFailed(final Instant compilationTime, final Exception exception) {
     LOGGER.debug("View definition compilation failed");
     getWorkerContext().viewDefinitionCompilationFailed(compilationTime, exception);
   }
 
   @Override
-  public void cycleStarted(ViewCycleMetadata cycleMetadata) {
+  public void cycleStarted(final ViewCycleMetadata cycleMetadata) {
     LOGGER.debug("Cycle started");
     getWorkerContext().cycleStarted(cycleMetadata);
   }
 
   @Override
-  public void cycleFragmentCompleted(ViewComputationResultModel result, ViewDefinition viewDefinition) {
+  public void cycleFragmentCompleted(final ViewComputationResultModel result, final ViewDefinition viewDefinition) {
     LOGGER.debug("Cycle fragment completed");
     getWorkerContext().cycleFragmentCompleted(result, viewDefinition);
   }
 
   @Override
-  public void cycleCompleted(ViewCycle cycle) {
+  public void cycleCompleted(final ViewCycle cycle) {
     LOGGER.debug("Cycle completed");
     getWorkerContext().cycleCompleted(cycle);
   }
 
   @Override
-  public void cycleExecutionFailed(ViewCycleExecutionOptions options, Exception exception) {
+  public void cycleExecutionFailed(final ViewCycleExecutionOptions options, final Exception exception) {
     LOGGER.debug("Cycle execution failed");
     getWorkerContext().cycleExecutionFailed(options, exception);
   }
@@ -304,7 +304,7 @@ public class SequencePartitioningViewProcessWorker implements ViewProcessWorker,
     LOGGER.debug("Worker completed");
     final boolean finished;
     synchronized (this) {
-      finished = (--_spawnedWorkers) == 0;
+      finished = --_spawnedWorkers == 0;
       if (!_terminated) {
         spawnWorker();
       }

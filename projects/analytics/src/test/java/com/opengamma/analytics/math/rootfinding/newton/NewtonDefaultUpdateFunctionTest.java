@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.rootfinding.newton;
@@ -29,7 +29,7 @@ public class NewtonDefaultUpdateFunctionTest {
     F.getUpdatedMatrix(new Function1D<DoubleMatrix1D, DoubleMatrix2D>() {
 
       @Override
-      public DoubleMatrix2D evaluate(DoubleMatrix1D x) {
+      public DoubleMatrix2D evaluate(final DoubleMatrix1D x) {
         return null;
       }
     }, null, null, null, null);

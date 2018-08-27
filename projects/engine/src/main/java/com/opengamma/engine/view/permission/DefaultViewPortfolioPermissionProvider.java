@@ -27,7 +27,7 @@ public class DefaultViewPortfolioPermissionProvider implements ViewPortfolioPerm
    * @return the unaltered portfolio
    */
   @Override
-  public PortfolioFilter createPortfolioFilter(UserPrincipal user) {
+  public PortfolioFilter createPortfolioFilter(final UserPrincipal user) {
     return PORTFOLIO_FILTER;
   }
 }

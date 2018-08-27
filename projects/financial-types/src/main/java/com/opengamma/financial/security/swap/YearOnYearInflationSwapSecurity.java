@@ -64,7 +64,7 @@ public class YearOnYearInflationSwapSecurity extends SwapSecurity {
    * @param tenor The tenor, not null
    */
   public YearOnYearInflationSwapSecurity(final ZonedDateTime tradeDate, final ZonedDateTime effectiveDate, final ZonedDateTime maturityDate,
-      final String counterparty, final SwapLeg payLeg, final SwapLeg receiveLeg, boolean exchangeInitialNotional, boolean exchangeFinalNotional, final Tenor tenor) {
+      final String counterparty, final SwapLeg payLeg, final SwapLeg receiveLeg, final boolean exchangeInitialNotional, final boolean exchangeFinalNotional, final Tenor tenor) {
     super(SECURITY_TYPE, tradeDate, effectiveDate, maturityDate, counterparty, payLeg, receiveLeg);
     setExchangeInitialNotional(exchangeInitialNotional);
     setExchangeFinalNotional(exchangeFinalNotional);

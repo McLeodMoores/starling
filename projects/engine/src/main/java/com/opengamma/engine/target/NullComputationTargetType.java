@@ -123,7 +123,7 @@ import com.opengamma.id.VersionCorrection;
   }
 
   @Override
-  public UniqueIdentifiable resolveObject(UniqueId uniqueId, VersionCorrection versionCorrection) {
+  public UniqueIdentifiable resolveObject(final UniqueId uniqueId, final VersionCorrection versionCorrection) {
     return null;
   }
 

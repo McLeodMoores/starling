@@ -609,27 +609,27 @@ public class FinancialSecurityTargetDigests extends SecurityTypeTargetDigests im
   private final Digests _standardCDSSecurity = new Digests("Security");
 
   @Override
-  public Object visitStandardCDSSecurity(StandardCDSSecurity security) {
+  public Object visitStandardCDSSecurity(final StandardCDSSecurity security) {
     return _standardCDSSecurity.get(security.getNotional().accept(this));
   }
   private final Digests _legacyCDSSecurity = new Digests("Security");
 
   @Override
-  public Object visitLegacyCDSSecurity(LegacyCDSSecurity security) {
+  public Object visitLegacyCDSSecurity(final LegacyCDSSecurity security) {
     return _legacyCDSSecurity.get(security.getNotional().accept(this));
   }
 
   private final Digests _indexCDSSecurity = new Digests("Security");
 
   @Override
-  public Object visitIndexCDSSecurity(IndexCDSSecurity security) {
+  public Object visitIndexCDSSecurity(final IndexCDSSecurity security) {
     return _indexCDSSecurity.get(security.getNotional().accept(this));
   }
 
   private final Digests _indexCDSDefSecurity = new Digests("Security");
 
   @Override
-  public Object visitIndexCDSDefinitionSecurity(IndexCDSDefinitionSecurity security) {
+  public Object visitIndexCDSDefinitionSecurity(final IndexCDSDefinitionSecurity security) {
     return _indexCDSDefSecurity.get(security.getCurrency());
   }
 

@@ -44,11 +44,12 @@ public class EquitySecurityBean extends SecurityBean {
   @PropertyDefinition
   private boolean _preferred;
 
-  public boolean equals(Object other) {
+  @Override
+  public boolean equals(final Object other) {
     if (!(other instanceof EquitySecurityBean)) {
       return false;
     }
-    EquitySecurityBean equity = (EquitySecurityBean) other;
+    final EquitySecurityBean equity = (EquitySecurityBean) other;
     if (getId() != -1 && equity.getId() != -1) {
       return getId().longValue() == equity.getId().longValue();
     }
@@ -56,14 +57,16 @@ public class EquitySecurityBean extends SecurityBean {
                               .append(getCompanyName(), equity.getCompanyName())
                               .append(getCurrency(), equity.getCurrency()).isEquals();
   }
-  
+
+  @Override
   public int hashCode() {
     return new HashCodeBuilder().append(getExchange())
                                 .append(getCompanyName())
                                 .append(getCurrency())
-                                .toHashCode(); 
+                                .toHashCode();
   }
-  
+
+  @Override
   public String toString() {
     return ToStringBuilder.reflectionToString(this);
   }

@@ -12,12 +12,12 @@ import groovy.lang.Closure;
  */
 /* package */ final class DslVolatilitySurfaceManipulatorBuilder extends VolatilitySurfaceManipulatorBuilder {
 
-  /* package */ DslVolatilitySurfaceManipulatorBuilder(Scenario scenario, VolatilitySurfaceSelector selector) {
+  /* package */ DslVolatilitySurfaceManipulatorBuilder(final Scenario scenario, final VolatilitySurfaceSelector selector) {
     super(scenario, selector);
   }
 
-  public void shifts(ScenarioShiftType shiftType, Closure<?> body) {
-    VolatilitySurfaceShiftManipulatorBuilder builder =
+  public void shifts(final ScenarioShiftType shiftType, final Closure<?> body) {
+    final VolatilitySurfaceShiftManipulatorBuilder builder =
         new VolatilitySurfaceShiftManipulatorBuilder(getSelector(), getScenario(), shiftType);
     body.setDelegate(builder);
     body.setResolveStrategy(Closure.DELEGATE_FIRST);

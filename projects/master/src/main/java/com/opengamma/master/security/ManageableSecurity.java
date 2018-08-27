@@ -81,7 +81,7 @@ public class ManageableSecurity
    * The general purpose trade attributes, which can be used for aggregating in portfolios.
    */
   @PropertyDefinition
-  private final Map<String, String> _attributes = new HashMap<String, String>();
+  private final Map<String, String> _attributes = new HashMap<>();
   /**
    * The set of required permissions.
    * This is a set of permissions that a user needs to be able to view a security.
@@ -100,23 +100,23 @@ public class ManageableSecurity
 
   /**
    * Creates an instance with a security type.
-   * 
+   *
    * @param securityType  the security type, not null
    */
-  public ManageableSecurity(String securityType) {
+  public ManageableSecurity(final String securityType) {
     ArgumentChecker.notEmpty(securityType, "securityType");
     _securityType = securityType;
   }
 
   /**
    * Creates a fully populated instance.
-   * 
+   *
    * @param uniqueId  the security unique identifier, may be null
    * @param name  the display name, not null
    * @param securityType  the security type, not null
    * @param bundle  the security external identifier bundle, not null
    */
-  public ManageableSecurity(UniqueId uniqueId, String name, String securityType, ExternalIdBundle bundle) {
+  public ManageableSecurity(final UniqueId uniqueId, final String name, final String securityType, final ExternalIdBundle bundle) {
     this(securityType);
     setUniqueId(uniqueId);
     setName(name);
@@ -126,7 +126,7 @@ public class ManageableSecurity
   //-------------------------------------------------------------------------
   /**
    * Adds an external identifier to the bundle representing this security.
-   * 
+   *
    * @param externalId  the identifier to add, not null
    */
   public void addExternalId(final ExternalId externalId) {
@@ -134,7 +134,7 @@ public class ManageableSecurity
   }
 
   @Override
-  public void addAttribute(String key, String value) {
+  public void addAttribute(final String key, final String value) {
     ArgumentChecker.notNull(key, "key");
     ArgumentChecker.notNull(value, "value");
     _attributes.put(key, value);
@@ -152,7 +152,7 @@ public class ManageableSecurity
    * @deprecated  use {@link #setRequiredPermissions}
    */
   @Deprecated
-  public void setPermissions(Set<String> permissions) {
+  public void setPermissions(final Set<String> permissions) {
     setRequiredPermissions(permissions);
   }
 

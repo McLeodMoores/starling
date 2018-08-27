@@ -102,7 +102,7 @@ public class PerCurrencyConventionHelper {
   public static final String IMM = "IMM";
   /** Government (Simplified bond description) **/
   public static final String GOVT = "Govt ";
-  
+
   /** Quarterly IMM roll dates **/
   public static final ExternalId QUARTERLY_IMM_DATES = ExternalId.of(SCHEME_NAME, RollDateAdjusterFactory.QUARTERLY_IMM_ROLL_STRING);
   /** Monthly IMM roll dates **/
@@ -144,7 +144,7 @@ public class PerCurrencyConventionHelper {
     return ExternalId.of(SCHEME_NAME, name);
   }
 
-  public static ConventionLink<Convention> getConventionLink(Currency ccy, String instrumentName) {
+  public static ConventionLink<Convention> getConventionLink(final Currency ccy, final String instrumentName) {
     return ConventionLink.resolvable(getId(ccy, instrumentName));
   }
 }

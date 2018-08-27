@@ -32,7 +32,7 @@ public class DbConfigMasterTest extends AbstractDbTest {
   private DbConfigMaster _cfgMaster;
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public DbConfigMasterTest(String databaseType, String databaseVersion) {
+  public DbConfigMasterTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion);
     LOGGER.info("running testcases for {}", databaseType);
   }
@@ -60,37 +60,37 @@ public class DbConfigMasterTest extends AbstractDbTest {
   //-------------------------------------------------------------------------
   @Test
   public void test_single_type() throws Exception {
-    ConfigItem<ExternalId> item = ConfigItem.of(ExternalId.of("A", "B"));
+    final ConfigItem<ExternalId> item = ConfigItem.of(ExternalId.of("A", "B"));
     item.setName("Config test");
 
-    ConfigDocument added = _cfgMaster.add(new ConfigDocument(item));
-    
-    ConfigDocument loaded = _cfgMaster.get(added.getUniqueId());
+    final ConfigDocument added = _cfgMaster.add(new ConfigDocument(item));
+
+    final ConfigDocument loaded = _cfgMaster.get(added.getUniqueId());
     assertEquals(added, loaded);
-    
-    ConfigDocument loadedType = _cfgMaster.get(added.getUniqueId());
+
+    final ConfigDocument loadedType = _cfgMaster.get(added.getUniqueId());
     assertEquals(added, loadedType);
   }
-  
+
   //-------------------------------------------------------------------------
   @Test
   public void test_multiple_types() throws Exception {
-    ConfigItem<ExternalId> identifierDoc = ConfigItem.of(ExternalId.of("A", "B"));
+    final ConfigItem<ExternalId> identifierDoc = ConfigItem.of(ExternalId.of("A", "B"));
     identifierDoc.setName("ExternalId test");
-    
-    ConfigDocument addedId = _cfgMaster.add(new ConfigDocument(identifierDoc));
-    
-    ConfigItem<ExternalIdBundle> bundleDoc = ConfigItem.of(ExternalIdBundle.of(ExternalId.of("A", "B"), ExternalId.of("C", "D")));
+
+    final ConfigDocument addedId = _cfgMaster.add(new ConfigDocument(identifierDoc));
+
+    final ConfigItem<ExternalIdBundle> bundleDoc = ConfigItem.of(ExternalIdBundle.of(ExternalId.of("A", "B"), ExternalId.of("C", "D")));
     bundleDoc.setName("Bundle test");
-    ConfigDocument addedBundle = _cfgMaster.add(new ConfigDocument(bundleDoc));
-    
-    ConfigDocument loadedId = _cfgMaster.get(addedId.getUniqueId());
+    final ConfigDocument addedBundle = _cfgMaster.add(new ConfigDocument(bundleDoc));
+
+    final ConfigDocument loadedId = _cfgMaster.get(addedId.getUniqueId());
     assertEquals(addedId, loadedId);
-    
-    ConfigDocument loadedBundle = _cfgMaster.get(addedBundle.getUniqueId());
+
+    final ConfigDocument loadedBundle = _cfgMaster.get(addedBundle.getUniqueId());
     assertEquals(addedBundle, loadedBundle);
   }
-  
+
   //-------------------------------------------------------------------------
   @Test
   public void test_toString() {

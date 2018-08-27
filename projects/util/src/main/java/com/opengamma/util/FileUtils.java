@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util;
@@ -23,23 +23,23 @@ public final class FileUtils {
    * A convenience reference to the java.io.tmpdir location.
    */
   public static final File TEMP_DIR = new File(System.getProperty("java.io.tmpdir"));
-  
+
   private FileUtils() {
   }
-  
-  public static File copyResourceToTempFile(InputStream resource) {
+
+  public static File copyResourceToTempFile(final InputStream resource) {
     return copyResourceToTempFile(null, resource);
   }
-  
-  public static File copyResourceToTempFile(InputStream resource, String fileName) {
+
+  public static File copyResourceToTempFile(final InputStream resource, final String fileName) {
     return copyResourceToTempFile((String) null, resource, fileName);
   }
-  
-  public static File copyResourceToTempFile(String subdirName, InputStream resource) {
+
+  public static File copyResourceToTempFile(final String subdirName, final InputStream resource) {
     return copyResourceToTempFile(subdirName, resource, null);
   }
 
-  public static File copyResourceToTempFile(String subdirName, InputStream resource, String fileName) {
+  public static File copyResourceToTempFile(final String subdirName, final InputStream resource, final String fileName) {
     File tempDir = TEMP_DIR;
     if (!(subdirName == null)) {
       tempDir = new File(TEMP_DIR, subdirName);
@@ -54,9 +54,9 @@ public final class FileUtils {
     return copyResourceToTempFile(tempDir, resource, fileName);
   }
 
-  public static File copyResourceToTempFile(File tempDir, InputStream resource, String fileName) {
+  public static File copyResourceToTempFile(final File tempDir, final InputStream resource, final String fileName) {
     ArgumentChecker.notNull(resource, "resource");
-    
+
     File tempFile = null;
     if (fileName == null) {
       tempFile = new File(tempDir, "test-" + System.nanoTime());
@@ -66,15 +66,15 @@ public final class FileUtils {
     if (tempFile.exists()) {
       tempFile.delete();
     }
-    
+
     try {
       org.apache.commons.io.FileUtils.copyInputStreamToFile(resource, tempFile);
-      
+
       IOUtils.closeQuietly(resource);
-    } catch (Exception e) {
+    } catch (final Exception e) {
       throw new OpenGammaRuntimeException("Unable to copy resource to " + tempFile, e);
     }
-    
+
     tempFile.deleteOnExit();
     return tempFile;
   }

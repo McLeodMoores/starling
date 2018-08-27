@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.blacklist;
@@ -17,14 +17,14 @@ public abstract class AbstractManageableFunctionBlacklist extends AbstractFuncti
   private final AtomicInteger _update = new AtomicInteger();
   private int _defaultTTL;
 
-  protected AbstractManageableFunctionBlacklist(final String name, final ExecutorService executorService, int defaultTTL) {
+  protected AbstractManageableFunctionBlacklist(final String name, final ExecutorService executorService, final int defaultTTL) {
     super(name, executorService);
     _defaultTTL = defaultTTL;
   }
 
   /**
    * Sets the default time to live for a new blacklist rule.
-   * 
+   *
    * @param timeToLive the time to live in seconds
    */
   public synchronized void setDefaultTTL(final int timeToLive) {
@@ -33,7 +33,7 @@ public abstract class AbstractManageableFunctionBlacklist extends AbstractFuncti
 
   /**
    * Queries the default time to live for a new blacklist rule.
-   * 
+   *
    * @return the time to live in seconds
    */
   public synchronized int getDefaultTTL() {
@@ -43,7 +43,7 @@ public abstract class AbstractManageableFunctionBlacklist extends AbstractFuncti
   /**
    * Marks the start of an update operation. Re-entry to updates is counted so that bulk operations can be identified. Subclasses could also use this to acquire a lock and release it in
    * {@link #endUpdate}.
-   * 
+   *
    * @return true if this is the first call, false if this is a re-entry
    */
   protected boolean beginUpdate() {
@@ -53,7 +53,7 @@ public abstract class AbstractManageableFunctionBlacklist extends AbstractFuncti
   /**
    * Marks the end of an update operation. Re-entry to updates is counted so that bulk operations can be identifier. Subclasses could also use this to release any locks acquired by
    * {@link #beginUpdate}.
-   * 
+   *
    * @return true if this was the last call, false if there is still re-entry
    */
   protected boolean endUpdate() {
@@ -69,7 +69,7 @@ public abstract class AbstractManageableFunctionBlacklist extends AbstractFuncti
   public void addBlacklistRules(final Collection<FunctionBlacklistRule> rules) {
     beginUpdate();
     try {
-      for (FunctionBlacklistRule rule : rules) {
+      for (final FunctionBlacklistRule rule : rules) {
         addBlacklistRule(rule);
       }
     } finally {
@@ -78,10 +78,10 @@ public abstract class AbstractManageableFunctionBlacklist extends AbstractFuncti
   }
 
   @Override
-  public void addBlacklistRules(final Collection<FunctionBlacklistRule> rules, int timeToLive) {
+  public void addBlacklistRules(final Collection<FunctionBlacklistRule> rules, final int timeToLive) {
     beginUpdate();
     try {
-      for (FunctionBlacklistRule rule : rules) {
+      for (final FunctionBlacklistRule rule : rules) {
         addBlacklistRule(rule, timeToLive);
       }
     } finally {
@@ -93,7 +93,7 @@ public abstract class AbstractManageableFunctionBlacklist extends AbstractFuncti
   public void removeBlacklistRules(final Collection<FunctionBlacklistRule> rules) {
     beginUpdate();
     try {
-      for (FunctionBlacklistRule rule : rules) {
+      for (final FunctionBlacklistRule rule : rules) {
         removeBlacklistRule(rule);
       }
     } finally {

@@ -30,7 +30,7 @@ public class GeneratorSwapIborCompoundingIbor extends GeneratorInstrument<Genera
    */
   private final IborIndex _iborIndex1;
   /**
-   * The period on which the first leg is compounded. 
+   * The period on which the first leg is compounded.
    */
   private final Period _compoundingPeriod1;
   /**
@@ -69,7 +69,7 @@ public class GeneratorSwapIborCompoundingIbor extends GeneratorInstrument<Genera
    * @param calendar1 The holiday calendar for the first ibor leg.
    * @param calendar2 The holiday calendar for the second ibor leg.
    */
-  public GeneratorSwapIborCompoundingIbor(final String name, final IborIndex iborIndex1, Period compoundingPeriod1, final IborIndex iborIndex2, final Calendar calendar1, final Calendar calendar2) {
+  public GeneratorSwapIborCompoundingIbor(final String name, final IborIndex iborIndex1, final Period compoundingPeriod1, final IborIndex iborIndex2, final Calendar calendar1, final Calendar calendar2) {
     super(name);
     ArgumentChecker.notNull(iborIndex1, "ibor index 1");
     ArgumentChecker.notNull(compoundingPeriod1, "compounding period 1");
@@ -99,7 +99,7 @@ public class GeneratorSwapIborCompoundingIbor extends GeneratorInstrument<Genera
    * @param calendar1 The holiday calendar for the first ibor leg.
    * @param calendar2 The holiday calendar for the second ibor leg.
    */
-  public GeneratorSwapIborCompoundingIbor(final String name, final IborIndex iborIndex1, Period compoundingPeriod1, final IborIndex iborIndex2, final BusinessDayConvention businessDayConvention,
+  public GeneratorSwapIborCompoundingIbor(final String name, final IborIndex iborIndex1, final Period compoundingPeriod1, final IborIndex iborIndex2, final BusinessDayConvention businessDayConvention,
       final boolean endOfMonth, final int spotLag, final Calendar calendar1, final Calendar calendar2) {
     super(name);
     ArgumentChecker.notNull(iborIndex1, "ibor index 1");

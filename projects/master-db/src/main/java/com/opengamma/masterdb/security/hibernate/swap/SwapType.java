@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.swap;
@@ -14,7 +14,7 @@ import com.opengamma.financial.security.swap.YearOnYearInflationSwapSecurity;
 import com.opengamma.financial.security.swap.ZeroCouponInflationSwapSecurity;
 
 /**
- * 
+ *
  */
 public enum SwapType {
   /**
@@ -38,22 +38,22 @@ public enum SwapType {
     return object.accept(new FinancialSecurityVisitorAdapter<SwapType>() {
 
       @Override
-      public SwapType visitForwardSwapSecurity(ForwardSwapSecurity security) {
+      public SwapType visitForwardSwapSecurity(final ForwardSwapSecurity security) {
         return FORWARD;
       }
 
       @Override
-      public SwapType visitSwapSecurity(SwapSecurity security) {
+      public SwapType visitSwapSecurity(final SwapSecurity security) {
         return SWAP;
       }
 
       @Override
-      public SwapType visitZeroCouponInflationSwapSecurity(ZeroCouponInflationSwapSecurity security) {
+      public SwapType visitZeroCouponInflationSwapSecurity(final ZeroCouponInflationSwapSecurity security) {
         return ZERO_COUPON_INFLATION;
       }
-      
+
       @Override
-      public SwapType visitYearOnYearInflationSwapSecurity(YearOnYearInflationSwapSecurity security) {
+      public SwapType visitYearOnYearInflationSwapSecurity(final YearOnYearInflationSwapSecurity security) {
         return YEAR_ON_YEAR_INFLATION;
       }
     });

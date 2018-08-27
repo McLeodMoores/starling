@@ -27,32 +27,32 @@ public class BloombergTickerParserEQ extends BloombergTickerParser {
   // ------------ FIELDS ------------
   private String _symbol;
   private String _exchangeCode;
-  
-  
-  
+
+
+
   // ------------ METHODS ------------
   // -------- CONSTRUCTORS --------
   /**
    * Create a parser
-   * @param ticker a legal Bloomberg ticker, as string.  
+   * @param ticker a legal Bloomberg ticker, as string.
    * A legal Bloomberg equity ticker looks like this:  <code>MSFT US Equity</code>.  See the Bloomberg documentation for more details.
    */
-  public BloombergTickerParserEQ(String ticker) {
+  public BloombergTickerParserEQ(final String ticker) {
     super(ticker);
   }
 
   /**
    * Create a parser
-   * @param identifier a legal Bloomberg ticker, with {@link com.opengamma.id.ExternalScheme} 
-   * of {@link com.opengamma.core.id.ExternalSchemes#BLOOMBERG_TICKER}.  A legal Bloomberg equity 
+   * @param identifier a legal Bloomberg ticker, with {@link com.opengamma.id.ExternalScheme}
+   * of {@link com.opengamma.core.id.ExternalSchemes#BLOOMBERG_TICKER}.  A legal Bloomberg equity
    * ticker looks like this:  <code>MSFT US Equity</code>.  See the Bloomberg documentation for more details.
    */
-  public BloombergTickerParserEQ(ExternalId identifier) {
+  public BloombergTickerParserEQ(final ExternalId identifier) {
     super(identifier);
   }
 
-  
-  // -------- ABSTRACT IMPLEMENTATIONS --------  
+
+  // -------- ABSTRACT IMPLEMENTATIONS --------
   /**
    * Do not call
    * @return regex for this implementation
@@ -64,27 +64,27 @@ public class BloombergTickerParserEQ extends BloombergTickerParser {
 
   /**
    * Do not call
-   * @param matcher 
+   * @param matcher
    */
   @Override
-  protected void parse(Matcher matcher) {
+  protected void parse(final Matcher matcher) {
     _symbol = matcher.group(1);
     _exchangeCode = matcher.group(2);
   }
-  
-  
+
+
   // -------- PROPERTIES --------
   /**
    * Return the equity's symbol (e.g. {@code MSFT})
-   * @return the equity's symbol 
+   * @return the equity's symbol
    */
   public String getSymbol() {
     return _symbol;
   }
-  
+
   /**
    * Return the equity's exchange code (e.g. {@code US})
-   * @return the equity's exchange code 
+   * @return the equity's exchange code
    */
   public String getExchangeCode() {
     return _exchangeCode;

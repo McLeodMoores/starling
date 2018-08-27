@@ -35,14 +35,14 @@ public class LongPollingTest {
   private Server _server;
   private TestConnectionManager _updateManager;
   private LongPollingConnectionManager _longPollingConnectionManager;
-  private WebPushTestUtils _webPushTestUtils = new WebPushTestUtils();
+  private final WebPushTestUtils _webPushTestUtils = new WebPushTestUtils();
 
   @BeforeClass
   void createJettyServer() throws Exception {
-    Pair<Server, WebApplicationContext> serverAndContext =
+    final Pair<Server, WebApplicationContext> serverAndContext =
         _webPushTestUtils.createJettyServer("classpath:/com/opengamma/web/analytics/push/long-poll-test.xml");
     _server = serverAndContext.getFirst();
-    WebApplicationContext context = serverAndContext.getSecond();
+    final WebApplicationContext context = serverAndContext.getSecond();
     _updateManager = context.getBean(TestConnectionManager.class);
     _longPollingConnectionManager = context.getBean(LongPollingConnectionManager.class);
   }
@@ -54,7 +54,7 @@ public class LongPollingTest {
 
   @Test
   public void testHandshake() throws IOException {
-    String clientId = _webPushTestUtils.handshake();
+    final String clientId = _webPushTestUtils.handshake();
     assertEquals(CLIENT_ID, clientId);
   }
 
@@ -70,7 +70,7 @@ public class LongPollingTest {
         waitAndSend(clientId, RESULT1);
       }
     }).start();
-    String result = _webPushTestUtils.readFromPath("/updates/" + clientId);
+    final String result = _webPushTestUtils.readFromPath("/updates/" + clientId);
     WebPushTestUtils.checkJsonResults(result, RESULT1);
   }
 
@@ -79,9 +79,9 @@ public class LongPollingTest {
    */
   @Test
   public void longPollNotBlocking() throws IOException, JSONException {
-    String clientId = _webPushTestUtils.handshake();
+    final String clientId = _webPushTestUtils.handshake();
     _updateManager.sendUpdate(RESULT1);
-    String result = _webPushTestUtils.readFromPath("/updates/" + clientId);
+    final String result = _webPushTestUtils.readFromPath("/updates/" + clientId);
     WebPushTestUtils.checkJsonResults(result, RESULT1);
   }
 
@@ -90,11 +90,11 @@ public class LongPollingTest {
    */
   @Test
   public void longPollQueue() throws IOException, JSONException {
-    String clientId = _webPushTestUtils.handshake();
+    final String clientId = _webPushTestUtils.handshake();
     _updateManager.sendUpdate(RESULT1);
     _updateManager.sendUpdate(RESULT2);
     _updateManager.sendUpdate(RESULT3);
-    String result = _webPushTestUtils.readFromPath("/updates/" + clientId);
+    final String result = _webPushTestUtils.readFromPath("/updates/" + clientId);
     WebPushTestUtils.checkJsonResults(result, RESULT1, RESULT2, RESULT3);
   }
 
@@ -103,13 +103,13 @@ public class LongPollingTest {
    */
   @Test
   public void longPollQueueMultipleUpdates() throws IOException, JSONException {
-    String clientId = _webPushTestUtils.handshake();
+    final String clientId = _webPushTestUtils.handshake();
     _updateManager.sendUpdate(RESULT1);
     _updateManager.sendUpdate(RESULT1);
     _updateManager.sendUpdate(RESULT2);
     _updateManager.sendUpdate(RESULT3);
     _updateManager.sendUpdate(RESULT2);
-    String result = _webPushTestUtils.readFromPath("/updates/" + clientId);
+    final String result = _webPushTestUtils.readFromPath("/updates/" + clientId);
     WebPushTestUtils.checkJsonResults(result, RESULT1, RESULT2, RESULT3);
   }
 
@@ -126,7 +126,7 @@ public class LongPollingTest {
         waitAndSend(clientId, RESULT1);
       }
     }).start();
-    String path = "/updates/" + clientId;
+    final String path = "/updates/" + clientId;
     WebPushTestUtils.checkJsonResults(_webPushTestUtils.readFromPath(path), RESULT1);
     WebPushTestUtils.checkJsonResults(_webPushTestUtils.readFromPath(path), RESULT2);
     WebPushTestUtils.checkJsonResults(_webPushTestUtils.readFromPath(path), RESULT3);
@@ -136,9 +136,9 @@ public class LongPollingTest {
 
   @Test
   public void longPollTimeout() throws IOException, JSONException {
-    String clientId = _webPushTestUtils.handshake();
-    String path = "/updates/" + clientId;
-    String timeoutResult = _webPushTestUtils.readFromPath(path);
+    final String clientId = _webPushTestUtils.handshake();
+    final String path = "/updates/" + clientId;
+    final String timeoutResult = _webPushTestUtils.readFromPath(path);
     assertEquals("", timeoutResult);
     _updateManager.sendUpdate(RESULT1);
     WebPushTestUtils.checkJsonResults(_webPushTestUtils.readFromPath(path), RESULT1);
@@ -147,12 +147,12 @@ public class LongPollingTest {
   /**
    * Waits until the client is connected before sending the result to its listener
    */
-  private void waitAndSend(String clientId, String result) {
+  private void waitAndSend(final String clientId, final String result) {
     // wait for the request to block
     while (!_longPollingConnectionManager.isClientConnected(clientId)) {
       try {
         Thread.sleep(200);
-      } catch (InterruptedException e) {
+      } catch (final InterruptedException e) {
         e.printStackTrace();
       }
     }

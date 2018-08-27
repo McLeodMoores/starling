@@ -74,13 +74,13 @@ public class LegalEntityCombiningFilter implements LegalEntityFilter<LegalEntity
 
   private Type applyUsedFilterDataType(Type before, final Type filteredType) {
     if (filteredType instanceof VariantType) {
-      for (Type type : ((VariantType) filteredType).getLogicalTypes()) {
+      for (final Type type : ((VariantType) filteredType).getLogicalTypes()) {
         before = applyUsedFilterDataType(before, type);
       }
     } else if (filteredType instanceof ParameterizedType) {
       final ParameterizedType parameterizedType = (ParameterizedType) filteredType;
       final Type rawType = parameterizedType.getRawType();
-      if ((rawType instanceof Class) && Set.class.isAssignableFrom((Class<?>) rawType)) {
+      if (rawType instanceof Class && Set.class.isAssignableFrom((Class<?>) rawType)) {
         final Type setMember = parameterizedType.getActualTypeArguments()[0];
         if (setMember != Void.class) {
           before = VariantType.either(before, setMember);
@@ -102,7 +102,7 @@ public class LegalEntityCombiningFilter implements LegalEntityFilter<LegalEntity
       return ParameterizedTypeImpl.of(Set.class, Void.class);
     } else {
       Type setMember = null;
-      for (LegalEntityFilter<LegalEntity> filter : _filtersToUse) {
+      for (final LegalEntityFilter<LegalEntity> filter : _filtersToUse) {
         setMember = applyUsedFilterDataType(setMember, filter.getFilteredDataType());
       }
       return ParameterizedTypeImpl.of(Set.class, setMember);

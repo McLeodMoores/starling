@@ -30,8 +30,8 @@ import com.opengamma.util.tuple.Pair;
 public class LiquidityAggregationFunction implements AggregationFunction<String> {
   private static final double LIQUIDATE_FACTOR = 0.1;
 
-  private boolean _useAttributes;
-  
+  private final boolean _useAttributes;
+
   private static final String MORE_THAN_10_0 = "10+";
   private static final String FROM_3_0_TO_10_0 = "3 - 10";
   private static final String FROM_1_0_TO_3_0 = "1 - 3";
@@ -44,27 +44,27 @@ public class LiquidityAggregationFunction implements AggregationFunction<String>
   private static final String NO_LIQUIDITY = "N/A";
 
   private static final List<String> REQUIRED = Arrays.asList(MORE_THAN_10_0, FROM_3_0_TO_10_0, FROM_1_0_TO_3_0, FROM_0_5_TO_1_0, FROM_0_2_TO_0_5, LESS_THAN_0_2, NO_LIQUIDITY);
-  
-  private HistoricalTimeSeriesSource _htsSource;
-  private SecuritySource _secSource;
+
+  private final HistoricalTimeSeriesSource _htsSource;
+  private final SecuritySource _secSource;
   private final boolean _caching = true;
-  private Map<UniqueId, Double> _daysToLiquidateCache = new HashMap<UniqueId, Double>();  
+  private final Map<UniqueId, Double> _daysToLiquidateCache = new HashMap<>();
   private final Comparator<Position> _comparator = new SimplePositionComparator();
-  
-  public LiquidityAggregationFunction(SecuritySource secSource, HistoricalTimeSeriesSource htsSource) {
+
+  public LiquidityAggregationFunction(final SecuritySource secSource, final HistoricalTimeSeriesSource htsSource) {
     this(secSource, htsSource, false);
   }
-  
-  public LiquidityAggregationFunction(SecuritySource secSource, HistoricalTimeSeriesSource htsSource, boolean useAttributes) {
+
+  public LiquidityAggregationFunction(final SecuritySource secSource, final HistoricalTimeSeriesSource htsSource, final boolean useAttributes) {
     _secSource = secSource;
     _htsSource = htsSource;
     _useAttributes = useAttributes;
   }
-  
+
   @Override
-  public String classifyPosition(Position position) {
+  public String classifyPosition(final Position position) {
     if (_useAttributes) {
-      Map<String, String> attributes = position.getAttributes();
+      final Map<String, String> attributes = position.getAttributes();
       if (attributes.containsKey(getName())) {
         return attributes.get(getName());
       } else {
@@ -76,32 +76,32 @@ public class LiquidityAggregationFunction implements AggregationFunction<String>
         if (sec == null) {
           sec = position.getSecurityLink().resolve(_secSource); // side effect is it updates target.
         }
-        Double daysToLiquidate = getDaysToLiquidate(position);
+        final Double daysToLiquidate = getDaysToLiquidate(position);
         if (daysToLiquidate != null) {
           return classifyLiquidity(daysToLiquidate);
         } else {
           return NO_LIQUIDITY;
         }
-      } catch (UnsupportedOperationException ex) {
+      } catch (final UnsupportedOperationException ex) {
         return NO_LIQUIDITY;
       }
     }
   }
-  
-  private Double getDaysToLiquidate(Position position) {
-    Security security = position.getSecurity();
-    UniqueId cacheKey = position.getUniqueId(); 
+
+  private Double getDaysToLiquidate(final Position position) {
+    final Security security = position.getSecurity();
+    final UniqueId cacheKey = position.getUniqueId();
     if (_caching && cacheKey != null) {
       if (_daysToLiquidateCache.containsKey(cacheKey)) {
         return _daysToLiquidateCache.get(cacheKey);
       }
     }
-    
-    Pair<LocalDate, Double> latestDataPoint = _htsSource.getLatestDataPoint(FIELD, security.getExternalIdBundle(), RESOLUTION_KEY);
+
+    final Pair<LocalDate, Double> latestDataPoint = _htsSource.getLatestDataPoint(FIELD, security.getExternalIdBundle(), RESOLUTION_KEY);
     if (latestDataPoint != null) {
-      double volume = latestDataPoint.getSecond();
-      double daysToLiquidate = (volume / position.getQuantity().doubleValue()) * LIQUIDATE_FACTOR;
-      
+      final double volume = latestDataPoint.getSecond();
+      final double daysToLiquidate = volume / position.getQuantity().doubleValue() * LIQUIDATE_FACTOR;
+
       if (_caching && cacheKey != null) {
         _daysToLiquidateCache.put(cacheKey, daysToLiquidate);
       }
@@ -113,8 +113,8 @@ public class LiquidityAggregationFunction implements AggregationFunction<String>
       return null;
     }
   }
-  
-  private String classifyLiquidity(Double daysToLiquidate) {
+
+  private String classifyLiquidity(final Double daysToLiquidate) {
     if (daysToLiquidate != null) {
       if (daysToLiquidate < 0.2) {
         return LESS_THAN_0_2;
@@ -134,6 +134,7 @@ public class LiquidityAggregationFunction implements AggregationFunction<String>
     }
   }
 
+  @Override
   public String getName() {
     return NAME;
   }
@@ -144,7 +145,7 @@ public class LiquidityAggregationFunction implements AggregationFunction<String>
   }
 
   @Override
-  public int compare(String o1, String o2) {
+  public int compare(final String o1, final String o2) {
     return CompareUtils.compareByList(REQUIRED, o1, o2);
   }
 

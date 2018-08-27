@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.option;
@@ -27,7 +27,7 @@ public final class EquityIndexOptionSecurityBeanOperation  extends AbstractSecur
    * Singleton
    */
   public static final EquityIndexOptionSecurityBeanOperation INSTANCE = new EquityIndexOptionSecurityBeanOperation();
-  
+
   private EquityIndexOptionSecurityBeanOperation() {
     super(EquityIndexOptionSecurity.SECURITY_TYPE, EquityIndexOptionSecurity.class, EquityIndexOptionSecurityBean.class);
   }
@@ -47,16 +47,16 @@ public final class EquityIndexOptionSecurityBeanOperation  extends AbstractSecur
   }
 
   @Override
-  public EquityIndexOptionSecurity createSecurity(OperationContext context, EquityIndexOptionSecurityBean bean) {
+  public EquityIndexOptionSecurity createSecurity(final OperationContext context, final EquityIndexOptionSecurityBean bean) {
     final ExerciseType exerciseType = bean.getOptionExerciseType().accept(new ExerciseTypeVisitorImpl());
 
-    EquityIndexOptionSecurity sec = new EquityIndexOptionSecurity(bean.getOptionType(), 
-        bean.getStrike(), 
-        currencyBeanToCurrency(bean.getCurrency()), 
-        externalIdBeanToExternalId(bean.getUnderlying()), 
-        exerciseType, 
-        expiryBeanToExpiry(bean.getExpiry()), 
-        bean.getPointValue(), 
+    final EquityIndexOptionSecurity sec = new EquityIndexOptionSecurity(bean.getOptionType(),
+        bean.getStrike(),
+        currencyBeanToCurrency(bean.getCurrency()),
+        externalIdBeanToExternalId(bean.getUnderlying()),
+        exerciseType,
+        expiryBeanToExpiry(bean.getExpiry()),
+        bean.getPointValue(),
         bean.getExchange().getName());
     return sec;
   }

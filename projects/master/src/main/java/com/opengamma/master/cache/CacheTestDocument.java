@@ -31,7 +31,7 @@ class CacheTestDocument extends AbstractDocument {
   CacheTestDocument() {
   }
 
-  CacheTestDocument(UniqueId uniqueId) {
+  CacheTestDocument(final UniqueId uniqueId) {
     _uniqueId = uniqueId;
   }
 

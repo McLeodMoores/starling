@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.component.factory.source;
@@ -23,19 +23,18 @@ import com.opengamma.core.historicaltimeseries.impl.DataHistoricalTimeSeriesSour
 import com.opengamma.core.historicaltimeseries.impl.NonVersionedRedisHistoricalTimeSeriesSource;
 import com.opengamma.core.historicaltimeseries.impl.RemoteHistoricalTimeSeriesSource;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesResolver;
-import com.opengamma.master.historicaltimeseries.impl.DataHistoricalTimeSeriesResolverResource;
 import com.opengamma.master.historicaltimeseries.impl.RedisSimulationSeriesResolver;
 
 /**
- * 
+ *
  */
 @BeanDefinition
 public class NonVersionedHistoricalTimeSeriesSourceComponentFactory extends AbstractNonVersionedRedisSourceComponentFactory {
 
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
-    NonVersionedRedisHistoricalTimeSeriesSource source = new NonVersionedRedisHistoricalTimeSeriesSource(getRedisConnector().getJedisPool(), getRedisPrefix());
-    
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
+    final NonVersionedRedisHistoricalTimeSeriesSource source = new NonVersionedRedisHistoricalTimeSeriesSource(getRedisConnector().getJedisPool(), getRedisPrefix());
+
     ComponentInfo info = new ComponentInfo(HistoricalTimeSeriesSource.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     if (isPublishRest()) {
@@ -51,7 +50,7 @@ public class NonVersionedHistoricalTimeSeriesSourceComponentFactory extends Abst
     repo.registerComponent(info, source);
 
     if (getResolverClassifier() != null) {
-      HistoricalTimeSeriesResolver resolver = new RedisSimulationSeriesResolver(source);
+      final HistoricalTimeSeriesResolver resolver = new RedisSimulationSeriesResolver(source);
       info = new ComponentInfo(HistoricalTimeSeriesResolver.class, getResolverClassifier());
       info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
       repo.registerComponent(info, resolver);

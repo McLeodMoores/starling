@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.user;
@@ -31,20 +31,20 @@ public class UserFormException extends OpenGammaRuntimeException {
 
   /**
    * Creates an instance of the exception.
-   * 
+   *
    * @param errors  the list of errors, not null
    */
-  public UserFormException(List<UserFormError> errors) {
+  public UserFormException(final List<UserFormError> errors) {
     super("User form is invalid");
     _errors = ImmutableList.copyOf(errors);
   }
 
   /**
    * Creates an instance of the exception.
-   * 
+   *
    * @param ex  the unexpected exception, not null
    */
-  public UserFormException(RuntimeException ex) {
+  public UserFormException(final RuntimeException ex) {
     super("Unexpected error during user mutation", ex);
     _errors = ImmutableList.of(UserFormError.UNEXPECTED);
   }
@@ -52,7 +52,7 @@ public class UserFormException extends OpenGammaRuntimeException {
   //-------------------------------------------------------------------------
   /**
    * Gets the list of errors.
-   * 
+   *
    * @return the list of errors, not null
    */
   public ImmutableList<UserFormError> getErrors() {
@@ -61,10 +61,10 @@ public class UserFormException extends OpenGammaRuntimeException {
 
   /**
    * Logs if the error is unexpected.
-   * 
+   *
    * @param logger  the logger, not null
    */
-  public void logUnexpected(Logger logger) {
+  public void logUnexpected(final Logger logger) {
     if (_errors.contains(UserFormError.UNEXPECTED)) {
       logger.warn(getMessage(), this);
     }

@@ -32,10 +32,10 @@ public class RoleEventHistoryResult extends EventHistoryResult {
 
   /**
    * Creates an instance from a collection of events.
-   * 
+   *
    * @param events  the collection of events to add, not null
    */
-  public RoleEventHistoryResult(Iterable<HistoryEvent> events) {
+  public RoleEventHistoryResult(final Iterable<HistoryEvent> events) {
     super(events);
   }
 

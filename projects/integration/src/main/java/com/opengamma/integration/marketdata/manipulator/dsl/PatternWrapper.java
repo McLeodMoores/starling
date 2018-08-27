@@ -24,20 +24,20 @@ public final class PatternWrapper implements Serializable {
   /**
    * @param pattern The pattern to wrap, not null
    */
-  private PatternWrapper(Pattern pattern) {
+  private PatternWrapper(final Pattern pattern) {
     ArgumentChecker.notNull(pattern, "p");
     _pattern = pattern;
   }
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(final Object o) {
     if (this == o) {
       return true;
     }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    PatternWrapper that = (PatternWrapper) o;
+    final PatternWrapper that = (PatternWrapper) o;
     return Objects.equals(_pattern.pattern(), that._pattern.pattern()) &&
         Objects.equals(_pattern.flags(), that._pattern.flags());
   }
@@ -59,7 +59,7 @@ public final class PatternWrapper implements Serializable {
    * @param pattern The pattern to wrap, may be null
    * @return A wrapped pattern or null if the argument is null
    */
-  public static PatternWrapper wrap(Pattern pattern) {
+  public static PatternWrapper wrap(final Pattern pattern) {
     if (pattern == null) {
       return null;
     }

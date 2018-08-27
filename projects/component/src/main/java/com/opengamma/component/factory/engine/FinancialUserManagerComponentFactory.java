@@ -104,8 +104,8 @@ public class FinancialUserManagerComponentFactory extends AbstractComponentFacto
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
-    FinancialUserServices services = new FinancialUserServices();
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
+    final FinancialUserServices services = new FinancialUserServices();
     services.setFudgeContext(getFudgeContext());
     services.setUserSecurityMaster(getSecurityMaster());
     services.setUserPositionMaster(getPositionMaster());
@@ -113,16 +113,16 @@ public class FinancialUserManagerComponentFactory extends AbstractComponentFacto
     services.setUserSnapshotMaster(getSnapshotMaster());
     services.setUserConfigMaster(getConfigMaster());
     services.setUserInterpolatedYieldCurveDefinitionMaster(getYieldCurveDefinitionMaster());
-    DefaultFinancialUsersTracker tracker = new DefaultFinancialUsersTracker(services);
-    FinancialUserManager manager = new FinancialUserManager(services, tracker, tracker);
+    final DefaultFinancialUsersTracker tracker = new DefaultFinancialUsersTracker(services);
+    final FinancialUserManager manager = new FinancialUserManager(services, tracker, tracker);
     manager.createDeleteTask(getScheduler(), getClientTimeOut());
-    
-    ComponentInfo info = new ComponentInfo(FinancialUserManager.class, getClassifier());
+
+    final ComponentInfo info = new ComponentInfo(FinancialUserManager.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.TIMEOUT, getClientTimeOut().toString());
     repo.registerComponent(info, manager);
-    
+
     if (isPublishRest()) {
-      DataFinancialUserManagerResource resource = new DataFinancialUserManagerResource(manager);
+      final DataFinancialUserManagerResource resource = new DataFinancialUserManagerResource(manager);
       repo.getRestComponents().publish(info, resource);
     }
   }

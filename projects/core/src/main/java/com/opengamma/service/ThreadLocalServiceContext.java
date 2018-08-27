@@ -18,16 +18,16 @@ public final class ThreadLocalServiceContext {
   //-------------------------------------------------------------------------
   /**
    * Sets the service context applicable to this thread.
-   * 
+   *
    * @param serviceContext  the context, may be null
    */
-  public static void init(ServiceContext serviceContext) {
+  public static void init(final ServiceContext serviceContext) {
     s_instance.set(serviceContext);
   }
 
   /**
    * Gets the service context applicable to this thread.
-   * 
+   *
    * @return the context, null if not initialized
    */
   public static ServiceContext getInstance() {

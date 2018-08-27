@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.historicaltimeseries.impl;
@@ -29,7 +29,7 @@ public class RemoteHistoricalTimeSeriesLoader extends AbstractRemoteClient imple
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param baseUri  the base target URI for all RESTful web services, not null
    */
   public RemoteHistoricalTimeSeriesLoader(final URI baseUri) {
@@ -41,26 +41,26 @@ public class RemoteHistoricalTimeSeriesLoader extends AbstractRemoteClient imple
   // code copied from AbstractHistoricalTimeSeriesLoader due to lack of multiple inheritance
   @Override
   public Map<ExternalId, UniqueId> loadTimeSeries(
-      Set<ExternalId> identifiers, String dataProvider, String dataField, LocalDate startDate, LocalDate endDate) {
-    HistoricalTimeSeriesLoaderRequest request = HistoricalTimeSeriesLoaderRequest.create(identifiers, dataProvider, dataField, startDate, endDate);
-    HistoricalTimeSeriesLoaderResult result = loadTimeSeries(request);
+      final Set<ExternalId> identifiers, final String dataProvider, final String dataField, final LocalDate startDate, final LocalDate endDate) {
+    final HistoricalTimeSeriesLoaderRequest request = HistoricalTimeSeriesLoaderRequest.create(identifiers, dataProvider, dataField, startDate, endDate);
+    final HistoricalTimeSeriesLoaderResult result = loadTimeSeries(request);
     return result.getResultMap();
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public HistoricalTimeSeriesLoaderResult loadTimeSeries(HistoricalTimeSeriesLoaderRequest request) {
+  public HistoricalTimeSeriesLoaderResult loadTimeSeries(final HistoricalTimeSeriesLoaderRequest request) {
     ArgumentChecker.notNull(request, "request");
-    
-    URI uri = DataHistoricalTimeSeriesLoaderUris.uriGet(getBaseUri());
+
+    final URI uri = DataHistoricalTimeSeriesLoaderUris.uriGet(getBaseUri());
     return accessRemote(uri).post(HistoricalTimeSeriesLoaderResult.class, request);
   }
 
   @Override
-  public boolean updateTimeSeries(UniqueId uniqueId) {
+  public boolean updateTimeSeries(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
-    
-    URI uri = DataHistoricalTimeSeriesLoaderUris.uriUpdate(getBaseUri(), uniqueId);
+
+    final URI uri = DataHistoricalTimeSeriesLoaderUris.uriUpdate(getBaseUri(), uniqueId);
     return accessRemote(uri).post(Boolean.class);
   }
 

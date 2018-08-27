@@ -60,41 +60,41 @@ public class ReferenceDataProviderGetRequest extends DirectBean {
   //-------------------------------------------------------------------------
   /**
    * Obtains an instance to get reference data.
-   * 
+   *
    * @param identifier  the identifiers to query, not null
    * @param dataField  the data field to query, not null
    * @param useCache  true to use the cache, false to force query of the data source
    * @return the request, not null
    */
   public static ReferenceDataProviderGetRequest createGet(
-      String identifier, String dataField, boolean useCache) {
+      final String identifier, final String dataField, final boolean useCache) {
     return createGet(Collections.singleton(identifier), Collections.singleton(dataField), useCache);
   }
 
   /**
    * Obtains an instance to get reference data.
-   * 
+   *
    * @param identifier  the identifiers to query, not null
    * @param fields  the data fields to query, not null
    * @param useCache  true to use the cache, false to force query of the data source
    * @return the request, not null
    */
   public static ReferenceDataProviderGetRequest createGet(
-      String identifier, Iterable<String> fields, boolean useCache) {
+      final String identifier, final Iterable<String> fields, final boolean useCache) {
     return createGet(Collections.singleton(identifier), fields, useCache);
   }
 
   /**
    * Obtains an instance to get reference data.
-   * 
+   *
    * @param identifiers  the identifiers to query, not null
    * @param fields  the data fields to query, not null
    * @param useCache  true to use the cache, false to force query of the data source
    * @return the request, not null
    */
   public static ReferenceDataProviderGetRequest createGet(
-      Iterable<String> identifiers, Iterable<String> fields, boolean useCache) {
-    ReferenceDataProviderGetRequest request = new ReferenceDataProviderGetRequest();
+      final Iterable<String> identifiers, final Iterable<String> fields, final boolean useCache) {
+    final ReferenceDataProviderGetRequest request = new ReferenceDataProviderGetRequest();
     request.addIdentifiers(identifiers);
     request.addFields(fields);
     request.setUseCache(useCache);
@@ -111,13 +111,13 @@ public class ReferenceDataProviderGetRequest extends DirectBean {
   //-------------------------------------------------------------------------
   /**
    * Adds an array of identifiers to the collection to get.
-   * 
+   *
    * @param identifiers  the identifiers to add, not null
    */
-  public void addIdentifiers(String... identifiers) {
+  public void addIdentifiers(final String... identifiers) {
     ArgumentChecker.notNull(identifiers, "identifiers");
-    List<String> list = new ArrayList<String>();
-    for (String identifier : identifiers) {
+    final List<String> list = new ArrayList<>();
+    for (final String identifier : identifiers) {
       list.add(identifier);
     }
     getIdentifiers().addAll(list);
@@ -125,10 +125,10 @@ public class ReferenceDataProviderGetRequest extends DirectBean {
 
   /**
    * Adds a collection of identifiers to the collection to get.
-   * 
+   *
    * @param identifiers  the identifiers to add, not null
    */
-  public void addIdentifiers(Iterable<String> identifiers) {
+  public void addIdentifiers(final Iterable<String> identifiers) {
     ArgumentChecker.notNull(identifiers, "identifiers");
     Iterables.addAll(getIdentifiers(), identifiers);
   }
@@ -136,13 +136,13 @@ public class ReferenceDataProviderGetRequest extends DirectBean {
   //-------------------------------------------------------------------------
   /**
    * Adds an array of fields to the collection.
-   * 
+   *
    * @param fields  the fields to add, not null
    */
-  public void addFields(String... fields) {
+  public void addFields(final String... fields) {
     ArgumentChecker.notNull(fields, "fields");
-    List<String> list = new ArrayList<String>();
-    for (String field : fields) {
+    final List<String> list = new ArrayList<>();
+    for (final String field : fields) {
       list.add(field);
     }
     getFields().addAll(list);
@@ -150,10 +150,10 @@ public class ReferenceDataProviderGetRequest extends DirectBean {
 
   /**
    * Adds a collection of fields to the collection.
-   * 
+   *
    * @param fields  the fields to add, not null
    */
-  public void addFields(Iterable<String> fields) {
+  public void addFields(final Iterable<String> fields) {
     ArgumentChecker.notNull(fields, "fields");
     Iterables.addAll(getFields(), fields);
   }

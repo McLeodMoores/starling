@@ -50,18 +50,18 @@ public final class CurveKey implements ImmutableBean, StructuredMarketDataKey, C
    * @param name  the name
    */
   @ImmutableConstructor
-  private  CurveKey(String name) {
+  private  CurveKey(final String name) {
     super();
     _name = name;
   }
-  
+
   /**
    * Creates an instance with a name.
    *
    * @param name  the name
    * @return the curve key, not null
    */
-  public static CurveKey of(String name) {
+  public static CurveKey of(final String name) {
     return new CurveKey(name);
   }
 
@@ -73,7 +73,7 @@ public final class CurveKey implements ImmutableBean, StructuredMarketDataKey, C
    * @return the comparison value
    */
   @Override
-  public int compareTo(CurveKey other) {
+  public int compareTo(final CurveKey other) {
     return _name.compareTo(other.getName());
   }
 

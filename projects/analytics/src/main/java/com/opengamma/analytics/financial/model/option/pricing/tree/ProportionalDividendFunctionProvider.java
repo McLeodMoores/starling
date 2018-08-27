@@ -25,7 +25,7 @@ public class ProportionalDividendFunctionProvider extends DividendFunctionProvid
     final double[] dividends = getDividends();
     final int nDiv = dividends.length;
     for (int i = 0; i < nDiv; ++i) {
-      res *= (1. - dividends[i]);
+      res *= 1. - dividends[i];
     }
     return res;
   }
@@ -106,8 +106,8 @@ public class ProportionalDividendFunctionProvider extends DividendFunctionProvid
       up *= (1. - dividends[0]) * (1. - dividends[1]);
     } else {
       if (divSteps[0] == 1) {
-        down *= (1. - dividends[0]);
-        up *= (1. - dividends[0]);
+        down *= 1. - dividends[0];
+        up *= 1. - dividends[0];
       }
     }
     res[0] = down * downFactor;
@@ -124,7 +124,7 @@ public class ProportionalDividendFunctionProvider extends DividendFunctionProvid
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }

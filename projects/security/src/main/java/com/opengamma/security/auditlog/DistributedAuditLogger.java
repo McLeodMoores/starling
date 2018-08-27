@@ -20,20 +20,20 @@ import com.opengamma.util.ArgumentChecker;
  * to a remote destination via Fudge. The messages are consumed by {@link DistributedAuditLoggerServer}.
  */
 public class DistributedAuditLogger extends AbstractAuditLogger {
-  
+
   private static final Logger LOGGER = LoggerFactory.getLogger(DistributedAuditLogger.class);
   private final FudgeMessageSender _msgSender;
   private final FudgeContext _fudgeContext;
-  
-  public DistributedAuditLogger(FudgeMessageSender msgSender) {
-    this(getDefaultOriginatingSystem(), msgSender);    
+
+  public DistributedAuditLogger(final FudgeMessageSender msgSender) {
+    this(getDefaultOriginatingSystem(), msgSender);
   }
-  
-  public DistributedAuditLogger(String originatingSystem, FudgeMessageSender msgSender) {
+
+  public DistributedAuditLogger(final String originatingSystem, final FudgeMessageSender msgSender) {
     this(originatingSystem, msgSender, new FudgeContext());
   }
-  
-  public DistributedAuditLogger(String originatingSystem, FudgeMessageSender msgSender, FudgeContext fudgeContext) {
+
+  public DistributedAuditLogger(final String originatingSystem, final FudgeMessageSender msgSender, final FudgeContext fudgeContext) {
     super(originatingSystem);
     ArgumentChecker.notNull(msgSender, "Message Sender");
     ArgumentChecker.notNull(fudgeContext, "Fudge Context");
@@ -42,11 +42,11 @@ public class DistributedAuditLogger extends AbstractAuditLogger {
   }
 
   @Override
-  public void log(String user, String originatingSystem, String object, String operation, String description, boolean success) {
-    AuditLogEntry auditLogEntry = new AuditLogEntry(user, originatingSystem, object, operation, description, success, new Date());
+  public void log(final String user, final String originatingSystem, final String object, final String operation, final String description, final boolean success) {
+    final AuditLogEntry auditLogEntry = new AuditLogEntry(user, originatingSystem, object, operation, description, success, new Date());
     LOGGER.info("Sending message: " + auditLogEntry.toString());
-    FudgeMsg logMessage = auditLogEntry.toFudgeMsg(_fudgeContext);
+    final FudgeMsg logMessage = auditLogEntry.toFudgeMsg(_fudgeContext);
     _msgSender.send(logMessage);
   }
-  
+
 }

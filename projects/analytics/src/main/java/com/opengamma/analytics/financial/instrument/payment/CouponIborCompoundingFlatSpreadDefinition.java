@@ -180,7 +180,7 @@ public class CouponIborCompoundingFlatSpreadDefinition extends CouponDefinition 
       final double initialRate) {
     return new CouponIborCompoundingFlatSpreadDefinition(
         currency,
-        paymentDate, 
+        paymentDate,
         accrualStartDate,
         accrualEndDate,
         paymentAccrualFactor,
@@ -247,9 +247,9 @@ public class CouponIborCompoundingFlatSpreadDefinition extends CouponDefinition 
   /**
    * Builds an Ibor compounded coupon from a total period and the Ibor index. The Ibor day count is used to compute the accrual factors.
    * If required the stub of the sub-periods will be short and last. The payment date is the adjusted end accrual date.
-   * The payment accrual factors are in the day count of the index. 
+   * The payment accrual factors are in the day count of the index.
    * @param notional The coupon notional.
-   * @param accrualStartDate The first accrual date. 
+   * @param accrualStartDate The first accrual date.
    * @param accrualEndDate The end accrual date.
    * @param index The underlying Ibor index.
    * @param spread The spread paid above the Ibor rate.
@@ -298,7 +298,7 @@ public class CouponIborCompoundingFlatSpreadDefinition extends CouponDefinition 
    * @return The compounded coupon.
    */
   public static CouponIborCompoundingFlatSpreadDefinition from(final double notional, final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate, final IborIndex index,
-                                                               final double spread, final StubType stub, final BusinessDayConvention businessDayConvention, final boolean endOfMonth, final Calendar calendar, RollDateAdjuster adjuster) {
+                                                               final double spread, final StubType stub, final BusinessDayConvention businessDayConvention, final boolean endOfMonth, final Calendar calendar, final RollDateAdjuster adjuster) {
     ArgumentChecker.notNull(accrualStartDate, "Accrual start date");
     ArgumentChecker.notNull(accrualEndDate, "Accrual end date");
     ArgumentChecker.notNull(index, "Index");
@@ -318,25 +318,25 @@ public class CouponIborCompoundingFlatSpreadDefinition extends CouponDefinition 
     }
     return from(accrualEndDates[nbSubPeriod - 1], notional, index, accrualStartDates, accrualEndDates, paymentAccrualFactors, spread, calendar);
   }
-  
+
   public static CouponIborCompoundingFlatSpreadDefinition from(
-      double notional,
-      ZonedDateTime accrualStartDate, ZonedDateTime accrualEndDate,
-      IborIndex index, double spread, StubType stubType,
-      Calendar accrualCalendar,
-      BusinessDayConvention accrualBusinessDayConvention,
-      Calendar fixingCalendar,
-      BusinessDayConvention fixingBusinessDayConvention,
-      Calendar resetCalendar,
-      DateRelativeTo resetRelativeTo,
-      DateRelativeTo paymentRelativeTo,
-      RollDateAdjuster rollDateAdjuster) {
-    boolean isEOM = true;
-    
-    ZonedDateTime paymentDate = DateRelativeTo.START == paymentRelativeTo ? accrualStartDate : accrualEndDate;
-    double paymentAccrualFactor = index.getDayCount().getDayCountFraction(accrualStartDate, paymentDate, accrualCalendar);
-    
-    ZonedDateTime[] accrualEndDates = ScheduleCalculator.getAdjustedDateSchedule(
+      final double notional,
+      final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate,
+      final IborIndex index, final double spread, final StubType stubType,
+      final Calendar accrualCalendar,
+      final BusinessDayConvention accrualBusinessDayConvention,
+      final Calendar fixingCalendar,
+      final BusinessDayConvention fixingBusinessDayConvention,
+      final Calendar resetCalendar,
+      final DateRelativeTo resetRelativeTo,
+      final DateRelativeTo paymentRelativeTo,
+      final RollDateAdjuster rollDateAdjuster) {
+    final boolean isEOM = true;
+
+    final ZonedDateTime paymentDate = DateRelativeTo.START == paymentRelativeTo ? accrualStartDate : accrualEndDate;
+    final double paymentAccrualFactor = index.getDayCount().getDayCountFraction(accrualStartDate, paymentDate, accrualCalendar);
+
+    final ZonedDateTime[] accrualEndDates = ScheduleCalculator.getAdjustedDateSchedule(
           accrualStartDate,
           accrualEndDate,
           index.getTenor(),
@@ -345,17 +345,17 @@ public class CouponIborCompoundingFlatSpreadDefinition extends CouponDefinition 
           accrualCalendar,
           isEOM,
           rollDateAdjuster);
-    ZonedDateTime[] accrualStartDates = new ZonedDateTime[accrualEndDates.length];
+    final ZonedDateTime[] accrualStartDates = new ZonedDateTime[accrualEndDates.length];
     accrualStartDates[0] = accrualStartDate;
     System.arraycopy(accrualEndDates, 0, accrualStartDates, 1, accrualEndDates.length - 1);
-    
-    double[] paymentAccrualFactors = new double[accrualEndDates.length];
+
+    final double[] paymentAccrualFactors = new double[accrualEndDates.length];
     for (int i = 0; i < paymentAccrualFactors.length; i++) {
       paymentAccrualFactors[i] = index.getDayCount().getDayCountFraction(accrualStartDates[i], accrualEndDates[i], accrualCalendar);
     }
 
-    ZonedDateTime[] fixingStartDates = accrualStartDates;
-    ZonedDateTime[] fixingEndDates = ScheduleCalculator.getAdjustedDateSchedule(
+    final ZonedDateTime[] fixingStartDates = accrualStartDates;
+    final ZonedDateTime[] fixingEndDates = ScheduleCalculator.getAdjustedDateSchedule(
         fixingStartDates,
         index.getTenor(),
         fixingBusinessDayConvention,
@@ -373,11 +373,11 @@ public class CouponIborCompoundingFlatSpreadDefinition extends CouponDefinition 
 //    ZonedDateTime[] fixingStartDates = new ZonedDateTime[fixingEndDates.length];
 //    fixingStartDates[0] = accrualStartDate;
 //    System.arraycopy(fixingEndDates, 0, fixingStartDates, 1, fixingEndDates.length - 1);
-    
-    ZonedDateTime[] resetDates = ScheduleCalculator.getAdjustedDate(
+
+    final ZonedDateTime[] resetDates = ScheduleCalculator.getAdjustedDate(
         DateRelativeTo.START == resetRelativeTo ? accrualStartDates : accrualEndDates, -index.getSpotLag(), resetCalendar);
-    
-    double[] fixingAccrualFactors = new double[accrualEndDates.length];
+
+    final double[] fixingAccrualFactors = new double[accrualEndDates.length];
     for (int i = 0; i < fixingAccrualFactors.length; i++) {
       fixingAccrualFactors[i] = index.getDayCount().getDayCountFraction(fixingStartDates[i], fixingEndDates[i], fixingCalendar);
     }
@@ -472,7 +472,7 @@ public class CouponIborCompoundingFlatSpreadDefinition extends CouponDefinition 
   public double getSpread() {
     return _spread;
   }
-  
+
   /**
    * Returns the rate of the first compounded period.
    * @return the rate of the first compounded period.
@@ -524,17 +524,17 @@ public class CouponIborCompoundingFlatSpreadDefinition extends CouponDefinition 
     if (!Double.isNaN(_initialRate)) { // Force the initial rate to be used
       nbFixed++;
     }
-    while ((nbFixed < nbSubPeriods) && (dateConversion.isAfter(_fixingDates[nbFixed].toLocalDate()))) { // If fixing is strictly before today, period has fixed
+    while (nbFixed < nbSubPeriods && dateConversion.isAfter(_fixingDates[nbFixed].toLocalDate())) { // If fixing is strictly before today, period has fixed
       nbFixed++;
     }
-    if ((nbFixed < nbSubPeriods) && (dateConversion.equals(_fixingDates[nbFixed].toLocalDate()))) { // Not all periods already fixed, checking if todays fixing is available
+    if (nbFixed < nbSubPeriods && dateConversion.equals(_fixingDates[nbFixed].toLocalDate())) { // Not all periods already fixed, checking if todays fixing is available
       final ZonedDateTime rezonedFixingDateNext = ZonedDateTime.of(LocalDateTime.of(_fixingDates[nbFixed].toLocalDate(), LocalTime.of(0, 0)), ZoneOffset.UTC);
       final Double fixedRate = indexFixingTimeSeries.getValue(rezonedFixingDateNext);
       if (fixedRate != null) {
         nbFixed++;
       }
     }
-    double[] rateFixed = new double[nbFixed];
+    final double[] rateFixed = new double[nbFixed];
     double cpaAccumulated = 0;
     for (int loopsub = 0; loopsub < nbFixed; loopsub++) {
       // Finding the fixing
@@ -594,10 +594,10 @@ public class CouponIborCompoundingFlatSpreadDefinition extends CouponDefinition 
     result = prime * result + Arrays.hashCode(_fixingSubperiodAccrualFactors);
     result = prime * result + Arrays.hashCode(_fixingSuberiodEndDates);
     result = prime * result + Arrays.hashCode(_fixingSubperiodStartDates);
-    result = prime * result + ((_index == null) ? 0 : _index.hashCode());
+    result = prime * result + (_index == null ? 0 : _index.hashCode());
     long temp;
     temp = Double.doubleToLongBits(_spread);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + Arrays.hashCode(_subperiodAccrualEndDates);
     result = prime * result + Arrays.hashCode(_subperiodAccrualFactors);
     result = prime * result + Arrays.hashCode(_subperiodAccrualStartDates);
@@ -605,7 +605,7 @@ public class CouponIborCompoundingFlatSpreadDefinition extends CouponDefinition 
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -615,7 +615,7 @@ public class CouponIborCompoundingFlatSpreadDefinition extends CouponDefinition 
     if (getClass() != obj.getClass()) {
       return false;
     }
-    CouponIborCompoundingFlatSpreadDefinition other = (CouponIborCompoundingFlatSpreadDefinition) obj;
+    final CouponIborCompoundingFlatSpreadDefinition other = (CouponIborCompoundingFlatSpreadDefinition) obj;
     if (!Arrays.equals(_fixingDates, other._fixingDates)) {
       return false;
     }

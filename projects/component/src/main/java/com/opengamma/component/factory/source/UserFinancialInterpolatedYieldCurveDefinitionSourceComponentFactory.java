@@ -10,8 +10,6 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import net.sf.ehcache.CacheManager;
-
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
@@ -38,6 +36,8 @@ import com.opengamma.financial.analytics.ircurve.rest.DataInterpolatedYieldCurve
 import com.opengamma.financial.analytics.ircurve.rest.DataInterpolatedYieldCurveDefinitionSourceResource;
 import com.opengamma.financial.analytics.ircurve.rest.RemoteInterpolatedYieldCurveDefinitionMaster;
 import com.opengamma.financial.analytics.ircurve.rest.RemoteInterpolatedYieldCurveDefinitionSource;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Component factory for the yield curve definition source.
@@ -81,44 +81,44 @@ public class UserFinancialInterpolatedYieldCurveDefinitionSourceComponentFactory
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
     InterpolatedYieldCurveDefinitionSource source = initUnderlying(repo, configuration);
-    
+
     // add user level if requested
-    InterpolatedYieldCurveDefinitionSource userSource = initUser(repo, configuration);
+    final InterpolatedYieldCurveDefinitionSource userSource = initUser(repo, configuration);
     if (userSource != null) {
-      Collection<InterpolatedYieldCurveDefinitionSource> coll = new ArrayList<InterpolatedYieldCurveDefinitionSource>();
+      final Collection<InterpolatedYieldCurveDefinitionSource> coll = new ArrayList<>();
       coll.add(source);
       coll.add(userSource);
       source = new AggregatingInterpolatedYieldCurveDefinitionSource(coll);
     }
-    
+
     // register
-    ComponentInfo info = new ComponentInfo(InterpolatedYieldCurveDefinitionSource.class, getClassifier());
+    final ComponentInfo info = new ComponentInfo(InterpolatedYieldCurveDefinitionSource.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 2);
     if (isPublishRest()) {
       info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteInterpolatedYieldCurveDefinitionSource.class);
     }
     repo.registerComponent(info, source);
-    
+
     if (isPublishRest()) {
       repo.getRestComponents().publish(info, new DataInterpolatedYieldCurveDefinitionSourceResource(source));
     }
   }
 
-  protected InterpolatedYieldCurveDefinitionSource initUnderlying(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
+  protected InterpolatedYieldCurveDefinitionSource initUnderlying(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
     InterpolatedYieldCurveDefinitionSource source = new ConfigDBInterpolatedYieldCurveDefinitionSource(getUnderlyingConfigSource());
     if (getCacheManager() != null) {
       source = new EHCachingInterpolatedYieldCurveDefinitionSource(source, getCacheManager());
     }
     if (getUnderlyingClassifier() != null) {
-      ComponentInfo info = new ComponentInfo(InterpolatedYieldCurveDefinitionSource.class, getUnderlyingClassifier());
+      final ComponentInfo info = new ComponentInfo(InterpolatedYieldCurveDefinitionSource.class, getUnderlyingClassifier());
       info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
       if (isPublishRest()) {
         info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteInterpolatedYieldCurveDefinitionSource.class);
       }
       repo.registerComponent(info, source);
-      
+
       if (isPublishRest()) {
         repo.getRestComponents().publish(info, new DataInterpolatedYieldCurveDefinitionSourceResource(source));
       }
@@ -126,24 +126,24 @@ public class UserFinancialInterpolatedYieldCurveDefinitionSourceComponentFactory
     return source;
   }
 
-  protected InterpolatedYieldCurveDefinitionSource initUser(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
+  protected InterpolatedYieldCurveDefinitionSource initUser(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
     if (getUserClassifier() == null) {
       return null;
     }
-    InMemoryInterpolatedYieldCurveDefinitionMaster masterAndSource = new InMemoryInterpolatedYieldCurveDefinitionMaster();
-    ComponentInfo infoMaster = new ComponentInfo(InterpolatedYieldCurveDefinitionMaster.class, getUserClassifier());
+    final InMemoryInterpolatedYieldCurveDefinitionMaster masterAndSource = new InMemoryInterpolatedYieldCurveDefinitionMaster();
+    final ComponentInfo infoMaster = new ComponentInfo(InterpolatedYieldCurveDefinitionMaster.class, getUserClassifier());
     infoMaster.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     if (isPublishRest()) {
       infoMaster.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteInterpolatedYieldCurveDefinitionMaster.class);
     }
     repo.registerComponent(infoMaster, masterAndSource);
-    ComponentInfo infoSource = new ComponentInfo(InterpolatedYieldCurveDefinitionSource.class, getUserClassifier());
+    final ComponentInfo infoSource = new ComponentInfo(InterpolatedYieldCurveDefinitionSource.class, getUserClassifier());
     infoSource.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     if (isPublishRest()) {
       infoSource.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteInterpolatedYieldCurveDefinitionSource.class);
     }
     repo.registerComponent(infoSource, masterAndSource);
-    
+
     if (isPublishRest()) {
       repo.getRestComponents().publish(infoMaster, new DataInterpolatedYieldCurveDefinitionMasterResource(masterAndSource));
       repo.getRestComponents().publish(infoSource, new DataInterpolatedYieldCurveDefinitionSourceResource(masterAndSource));

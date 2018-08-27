@@ -38,7 +38,7 @@ public class RemoteInterpolatedYieldCurveDefinitionMaster extends AbstractRemote
    * @param baseUri  the base target URI for all RESTful web services, not null
    * @param changeManager  the change manager, not null
    */
-  public RemoteInterpolatedYieldCurveDefinitionMaster(final URI baseUri, ChangeManager changeManager) {
+  public RemoteInterpolatedYieldCurveDefinitionMaster(final URI baseUri, final ChangeManager changeManager) {
     super(baseUri, changeManager);
   }
 
@@ -48,7 +48,7 @@ public class RemoteInterpolatedYieldCurveDefinitionMaster extends AbstractRemote
     ArgumentChecker.notNull(uniqueId, "uniqueId");
 
     if (uniqueId.isVersioned()) {
-      URI uri = (new DataInterpolatedYieldCurveDefinitionUris()).uriVersion(getBaseUri(), uniqueId);
+      final URI uri = new DataInterpolatedYieldCurveDefinitionUris().uriVersion(getBaseUri(), uniqueId);
       return accessRemote(uri).get(YieldCurveDefinitionDocument.class);
     } else {
       return get(uniqueId, VersionCorrection.LATEST);
@@ -60,7 +60,7 @@ public class RemoteInterpolatedYieldCurveDefinitionMaster extends AbstractRemote
   public YieldCurveDefinitionDocument get(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(objectId, "objectId");
 
-    URI uri = (new DataInterpolatedYieldCurveDefinitionUris()).uri(getBaseUri(), objectId, versionCorrection);
+    final URI uri = new DataInterpolatedYieldCurveDefinitionUris().uri(getBaseUri(), objectId, versionCorrection);
     return accessRemote(uri).get(YieldCurveDefinitionDocument.class);
   }
 
@@ -70,7 +70,7 @@ public class RemoteInterpolatedYieldCurveDefinitionMaster extends AbstractRemote
     ArgumentChecker.notNull(document, "document");
     ArgumentChecker.notNull(document.getYieldCurveDefinition(), "document.definition");
 
-    URI uri = DataInterpolatedYieldCurveDefinitionMasterUris.uri(getBaseUri());
+    final URI uri = DataInterpolatedYieldCurveDefinitionMasterUris.uri(getBaseUri());
     return accessRemote(uri).post(YieldCurveDefinitionDocument.class, document);
   }
 
@@ -80,7 +80,7 @@ public class RemoteInterpolatedYieldCurveDefinitionMaster extends AbstractRemote
     ArgumentChecker.notNull(document, "document");
     ArgumentChecker.notNull(document.getYieldCurveDefinition(), "document.definition");
 
-    URI uri = DataInterpolatedYieldCurveDefinitionMasterUris.uri(getBaseUri());
+    final URI uri = DataInterpolatedYieldCurveDefinitionMasterUris.uri(getBaseUri());
     return accessRemote(uri).post(YieldCurveDefinitionDocument.class, document);
   }
 
@@ -91,7 +91,7 @@ public class RemoteInterpolatedYieldCurveDefinitionMaster extends AbstractRemote
     ArgumentChecker.notNull(document.getYieldCurveDefinition(), "document.definition");
     ArgumentChecker.notNull(document.getUniqueId(), "document.uniqueId");
 
-    URI uri = (new DataInterpolatedYieldCurveDefinitionMasterUris()).uri(getBaseUri(), document.getUniqueId(), null);
+    final URI uri = new DataInterpolatedYieldCurveDefinitionMasterUris().uri(getBaseUri(), document.getUniqueId(), null);
     return accessRemote(uri).post(YieldCurveDefinitionDocument.class, document);
   }
 
@@ -100,7 +100,7 @@ public class RemoteInterpolatedYieldCurveDefinitionMaster extends AbstractRemote
   public void remove(final ObjectIdentifiable objectIdentifiable) {
     ArgumentChecker.notNull(objectIdentifiable, "objectIdentifiable");
 
-    URI uri = (new DataInterpolatedYieldCurveDefinitionMasterUris()).uri(getBaseUri(), objectIdentifiable, null);
+    final URI uri = new DataInterpolatedYieldCurveDefinitionMasterUris().uri(getBaseUri(), objectIdentifiable, null);
     accessRemote(uri).delete();
   }
 
@@ -111,45 +111,45 @@ public class RemoteInterpolatedYieldCurveDefinitionMaster extends AbstractRemote
     ArgumentChecker.notNull(document.getYieldCurveDefinition(), "document.definition");
     ArgumentChecker.notNull(document.getUniqueId(), "document.uniqueId");
 
-    URI uri = (new DataInterpolatedYieldCurveDefinitionMasterUris()).uriVersion(getBaseUri(), document.getUniqueId());
+    final URI uri = new DataInterpolatedYieldCurveDefinitionMasterUris().uriVersion(getBaseUri(), document.getUniqueId());
     return accessRemote(uri).post(YieldCurveDefinitionDocument.class, document);
   }
 
   @Override
-  public List<UniqueId> replaceVersion(UniqueId uniqueId, List<YieldCurveDefinitionDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersion(final UniqueId uniqueId, final List<YieldCurveDefinitionDocument> replacementDocuments) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
-    for (YieldCurveDefinitionDocument replacementDocument : replacementDocuments) {
+    for (final YieldCurveDefinitionDocument replacementDocument : replacementDocuments) {
       ArgumentChecker.notNull(replacementDocument, "documentToAdd");
       ArgumentChecker.notNull(replacementDocument.getYieldCurveDefinition(), "document.definition");
     }
-    URI uri = (new DataInterpolatedYieldCurveDefinitionMasterUris()).uriVersion(getBaseUri(), uniqueId);
+    final URI uri = new DataInterpolatedYieldCurveDefinitionMasterUris().uriVersion(getBaseUri(), uniqueId);
     return accessRemote(uri).put(new GenericType<List<UniqueId>>() {
     }, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceAllVersions(ObjectIdentifiable objectId, List<YieldCurveDefinitionDocument> replacementDocuments) {
+  public List<UniqueId> replaceAllVersions(final ObjectIdentifiable objectId, final List<YieldCurveDefinitionDocument> replacementDocuments) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
-    for (YieldCurveDefinitionDocument replacementDocument : replacementDocuments) {
+    for (final YieldCurveDefinitionDocument replacementDocument : replacementDocuments) {
       ArgumentChecker.notNull(replacementDocument, "documentToAdd");
       ArgumentChecker.notNull(replacementDocument.getYieldCurveDefinition(), "document.definition");
     }
-    URI uri = (new DataInterpolatedYieldCurveDefinitionMasterUris()).uriAll(getBaseUri(), objectId, null);
+    final URI uri = new DataInterpolatedYieldCurveDefinitionMasterUris().uriAll(getBaseUri(), objectId, null);
     return accessRemote(uri).put(new GenericType<List<UniqueId>>() {
     }, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceVersions(ObjectIdentifiable objectId, List<YieldCurveDefinitionDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersions(final ObjectIdentifiable objectId, final List<YieldCurveDefinitionDocument> replacementDocuments) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
-    for (YieldCurveDefinitionDocument replacementDocument : replacementDocuments) {
+    for (final YieldCurveDefinitionDocument replacementDocument : replacementDocuments) {
       ArgumentChecker.notNull(replacementDocument, "documentToAdd");
       ArgumentChecker.notNull(replacementDocument.getYieldCurveDefinition(), "document.definition");
     }
-    URI uri = (new DataInterpolatedYieldCurveDefinitionMasterUris()).uri(getBaseUri(), objectId, null);
+    final URI uri = new DataInterpolatedYieldCurveDefinitionMasterUris().uri(getBaseUri(), objectId, null);
     return accessRemote(uri).put(new GenericType<List<UniqueId>>() {
     }, replacementDocuments);
   }

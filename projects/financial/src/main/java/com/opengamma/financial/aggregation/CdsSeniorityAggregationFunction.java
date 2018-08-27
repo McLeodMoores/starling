@@ -25,13 +25,13 @@ public class CdsSeniorityAggregationFunction extends AbstractCdsAggregationFunct
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param securitySource  the security source, not null
    */
-  public CdsSeniorityAggregationFunction(SecuritySource securitySource) {
+  public CdsSeniorityAggregationFunction(final SecuritySource securitySource) {
     super(NAME, securitySource, new CdsValueExtractor<DebtSeniority>() {
       @Override
-      public DebtSeniority extract(AbstractCreditDefaultSwapSecurity cds) {
+      public DebtSeniority extract(final AbstractCreditDefaultSwapSecurity cds) {
         if (cds instanceof CreditDefaultSwapSecurity) {
           return ((CreditDefaultSwapSecurity) cds).getDebtSeniority();
         } else {
@@ -46,7 +46,7 @@ public class CdsSeniorityAggregationFunction extends AbstractCdsAggregationFunct
 
   //-------------------------------------------------------------------------
   @Override
-  protected String handleExtractedData(DebtSeniority extracted) {
+  protected String handleExtractedData(final DebtSeniority extracted) {
     return extracted.toString();
   }
 

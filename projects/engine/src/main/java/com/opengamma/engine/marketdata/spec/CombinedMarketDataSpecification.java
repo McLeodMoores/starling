@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.marketdata.spec;
@@ -22,20 +22,20 @@ import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
- * 
+ *
  */
 @BeanDefinition
 public final class CombinedMarketDataSpecification implements ImmutableBean, MarketDataSpecification {
-  
+
   private static final long serialVersionUID = 1L;
 
   @PropertyDefinition(validate = "notNull")
   private final MarketDataSpecification _preferredSpecification;
-  
+
   @PropertyDefinition(validate = "notNull")
   private final MarketDataSpecification _fallbackSpecification;
-  
-  public static CombinedMarketDataSpecification of(MarketDataSpecification preferredSpecification, MarketDataSpecification fallbackSpecification) {
+
+  public static CombinedMarketDataSpecification of(final MarketDataSpecification preferredSpecification, final MarketDataSpecification fallbackSpecification) {
     return new CombinedMarketDataSpecification(preferredSpecification, fallbackSpecification);
   }
 

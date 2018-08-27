@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.ircurve.rest;
@@ -23,7 +23,7 @@ public class RemoteInterpolatedYieldCurveSpecificationBuilder extends AbstractRe
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param baseUri the base target URI for all RESTful web services, not null
    */
   public RemoteInterpolatedYieldCurveSpecificationBuilder(final URI baseUri) {
@@ -32,11 +32,11 @@ public class RemoteInterpolatedYieldCurveSpecificationBuilder extends AbstractRe
 
   //-------------------------------------------------------------------------
   @Override
-  public InterpolatedYieldCurveSpecification buildCurve(LocalDate curveDate, YieldCurveDefinition curveDefinition, VersionCorrection version) {
+  public InterpolatedYieldCurveSpecification buildCurve(final LocalDate curveDate, final YieldCurveDefinition curveDefinition, final VersionCorrection version) {
     ArgumentChecker.notNull(curveDate, "curveDate");
     ArgumentChecker.notNull(curveDefinition, "curveDefinition");
     ArgumentChecker.notNull(version, "version");
-    URI uri = DataInterpolatedYieldCurveSpecificationBuilderUris.uriBuildCurve(getBaseUri(), curveDate, version);
+    final URI uri = DataInterpolatedYieldCurveSpecificationBuilderUris.uriBuildCurve(getBaseUri(), curveDate, version);
     return accessRemote(uri).post(InterpolatedYieldCurveSpecification.class, curveDefinition);
   }
 

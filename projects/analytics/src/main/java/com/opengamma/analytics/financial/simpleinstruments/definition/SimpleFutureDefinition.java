@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.simpleinstruments.definition;
@@ -14,7 +14,7 @@ import com.opengamma.analytics.util.time.TimeCalculator;
 import com.opengamma.util.money.Currency;
 
 /**
- * 
+ *
  */
 public class SimpleFutureDefinition implements SimpleInstrumentDefinition<SimpleFuture> {
   private final ZonedDateTime _expiryDate;
@@ -58,16 +58,16 @@ public class SimpleFutureDefinition implements SimpleInstrumentDefinition<Simple
   public SimpleFuture toDerivative(final ZonedDateTime date) {
     Validate.notNull(date, "date");
     Validate.isTrue(date.isBefore(_expiryDate));
-    double timeToFixing = TimeCalculator.getTimeBetween(date, _expiryDate);
-    double timeToDelivery = TimeCalculator.getTimeBetween(date, _settlementDate);
+    final double timeToFixing = TimeCalculator.getTimeBetween(date, _expiryDate);
+    final double timeToDelivery = TimeCalculator.getTimeBetween(date, _settlementDate);
     return new SimpleFuture(timeToFixing, timeToDelivery, _referencePrice, _unitAmount, _currency);
   }
 
   public SimpleFuture toDerivative(final ZonedDateTime date, final double referencePrice) {
     Validate.notNull(date, "date");
     Validate.isTrue(date.isBefore(_expiryDate));
-    double timeToFixing = TimeCalculator.getTimeBetween(date, _expiryDate);
-    double timeToDelivery = TimeCalculator.getTimeBetween(date, _settlementDate);
+    final double timeToFixing = TimeCalculator.getTimeBetween(date, _expiryDate);
+    final double timeToDelivery = TimeCalculator.getTimeBetween(date, _settlementDate);
     return new SimpleFuture(timeToFixing, timeToDelivery, referencePrice, _unitAmount, _currency);
   }
 
@@ -80,14 +80,14 @@ public class SimpleFutureDefinition implements SimpleInstrumentDefinition<Simple
     result = prime * result + _settlementDate.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_referencePrice);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_unitAmount);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }

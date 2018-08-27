@@ -65,7 +65,7 @@ public enum SecurityAttribute {
 
   private final String _name;
 
-  private SecurityAttribute(String name) {
+  private SecurityAttribute(final String name) {
     ArgumentChecker.notNull(name, "name");
     _name = name;
   }

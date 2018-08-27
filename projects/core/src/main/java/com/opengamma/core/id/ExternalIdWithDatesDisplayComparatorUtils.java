@@ -16,13 +16,13 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class ExternalIdWithDatesDisplayComparatorUtils {
   private static final Logger LOGGER = LoggerFactory.getLogger(ExternalIdWithDatesDisplayComparatorUtils.class);
-  
+
   /**
    * Default name for config object defining behavior of ExternalIdDisplayComparator
    */
   public static final String DEFAULT_CONFIG_NAME = "DEFAULT";
-  
-  public static ExternalIdWithDatesDisplayComparator getComparator(ConfigSource configSource, String name) {
+
+  public static ExternalIdWithDatesDisplayComparator getComparator(final ConfigSource configSource, final String name) {
     ArgumentChecker.notNull(name, "name");
     ExternalIdOrderConfig config = null;
     if (configSource == null) {
@@ -32,7 +32,7 @@ public class ExternalIdWithDatesDisplayComparatorUtils {
       config = configSource.getLatestByName(ExternalIdOrderConfig.class, name);
       if (config == null) {
         LOGGER.error("No ExternalIdOrderConfig object called " + name + " in config database, defaulting");
-        return new ExternalIdWithDatesDisplayComparator(ExternalIdOrderConfig.DEFAULT_CONFIG); 
+        return new ExternalIdWithDatesDisplayComparator(ExternalIdOrderConfig.DEFAULT_CONFIG);
       } else {
         return new ExternalIdWithDatesDisplayComparator(config);
       }

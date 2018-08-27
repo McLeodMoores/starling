@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.config;
@@ -45,7 +45,7 @@ import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.test.TestLifecycle;
 
 /**
- * 
+ *
  */
 @Test(groups = TestGroup.UNIT)
 public class RepositoryFactoryTest {
@@ -207,8 +207,8 @@ public class RepositoryFactoryTest {
     }
   }
 
-  private boolean isIntrinsicFunctionDefinition(FunctionDefinition definition) {
-    return (definition instanceof NoOpFunction) || (definition instanceof MarketDataAliasingFunction) || (definition instanceof StructureManipulationFunction);
+  private boolean isIntrinsicFunctionDefinition(final FunctionDefinition definition) {
+    return definition instanceof NoOpFunction || definition instanceof MarketDataAliasingFunction || definition instanceof StructureManipulationFunction;
   }
 
   public void testStaticRepository() {

@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.impl;
@@ -25,7 +25,7 @@ import com.opengamma.master.AbstractMaster;
  * Abstract base class for remote masters.
  * <p>
  * A remote master provides a client-side view of a remote master over REST.
- * 
+ *
  * @param <D>  the type of the document
  */
 public abstract class AbstractRemoteDocumentMaster<D extends AbstractDocument>
@@ -47,14 +47,14 @@ public abstract class AbstractRemoteDocumentMaster<D extends AbstractDocument>
    * @param baseUri  the base target URI for all RESTful web services, not null
    * @param changeManager  the change manager, not null
    */
-  public AbstractRemoteDocumentMaster(final URI baseUri, ChangeManager changeManager) {
+  public AbstractRemoteDocumentMaster(final URI baseUri, final ChangeManager changeManager) {
     super(baseUri, changeManager);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public final UniqueId addVersion(ObjectIdentifiable objectId, D documentToAdd) {
-    List<UniqueId> result = replaceVersions(objectId, Collections.singletonList(documentToAdd));
+  public final UniqueId addVersion(final ObjectIdentifiable objectId, final D documentToAdd) {
+    final List<UniqueId> result = replaceVersions(objectId, Collections.singletonList(documentToAdd));
     if (result.isEmpty()) {
       return null;
     } else {
@@ -68,8 +68,8 @@ public abstract class AbstractRemoteDocumentMaster<D extends AbstractDocument>
   }
 
   @Override
-  public final UniqueId replaceVersion(D replacementDocument) {
-    List<UniqueId> result = replaceVersion(replacementDocument.getUniqueId(), Collections.singletonList(replacementDocument));
+  public final UniqueId replaceVersion(final D replacementDocument) {
+    final List<UniqueId> result = replaceVersion(replacementDocument.getUniqueId(), Collections.singletonList(replacementDocument));
     if (result.isEmpty()) {
       return null;
     } else {
@@ -78,10 +78,10 @@ public abstract class AbstractRemoteDocumentMaster<D extends AbstractDocument>
   }
 
   @Override
-  public Map<UniqueId, D> get(Collection<UniqueId> uniqueIds) {
-    Map<UniqueId, D> resultMap = newHashMap();
-    for (UniqueId uniqueId : uniqueIds) {
-      D doc = get(uniqueId);
+  public Map<UniqueId, D> get(final Collection<UniqueId> uniqueIds) {
+    final Map<UniqueId, D> resultMap = newHashMap();
+    for (final UniqueId uniqueId : uniqueIds) {
+      final D doc = get(uniqueId);
       resultMap.put(uniqueId, doc);
     }
     return resultMap;

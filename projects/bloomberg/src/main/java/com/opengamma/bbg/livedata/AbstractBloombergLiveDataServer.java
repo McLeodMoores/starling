@@ -10,8 +10,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-import net.sf.ehcache.CacheManager;
-
 import org.fudgemsg.FudgeMsg;
 import org.fudgemsg.MutableFudgeMsg;
 import org.slf4j.Logger;
@@ -40,31 +38,33 @@ import com.opengamma.livedata.server.Subscription;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 
+import net.sf.ehcache.CacheManager;
+
 
 /**
- * Allows common functionality to be shared between the live and recorded Bloomberg data servers
+ * Allows common functionality to be shared between the live and recorded Bloomberg data servers.
  */
 public abstract class AbstractBloombergLiveDataServer extends StandardLiveDataServer {
   private static final Logger LOGGER = LoggerFactory.getLogger(AbstractBloombergLiveDataServer.class);
   private static final String DEFAULT_BBG_SUB_PREFIX = "/buid/";
-  
-  private NormalizationRuleResolver _normalizationRules;  
+
+  private NormalizationRuleResolver _normalizationRules;
   private IdResolver _idResolver;
   private DistributionSpecificationResolver _defaultDistributionSpecificationResolver;
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param cacheManager  the cache manager, not null
    */
-  public AbstractBloombergLiveDataServer(CacheManager cacheManager) {
+  public AbstractBloombergLiveDataServer(final CacheManager cacheManager) {
     super(cacheManager);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the reference data provider.
-   * 
+   *
    * @return the reference data provider
    */
   protected abstract ReferenceDataProvider getReferenceDataProvider();
@@ -73,48 +73,48 @@ public abstract class AbstractBloombergLiveDataServer extends StandardLiveDataSe
   protected ExternalScheme getUniqueIdDomain() {
     return ExternalSchemes.BLOOMBERG_BUID;
   }
-  
+
   @Override
-  protected boolean snapshotOnSubscriptionStartRequired(Subscription subscription) {
+  protected boolean snapshotOnSubscriptionStartRequired(final Subscription subscription) {
     // As per Kirk, it is possible that you don't get all fields initially.
     // Should we optimize this by asset type?
     return true;
   }
-  
+
   /**
-   * 
+   *
    * @return the prefix to use when making the subscription, including slashes.
    * e.g. "/buid/"
    */
   protected String getBloombergSubscriptionPathPrefix() {
     return DEFAULT_BBG_SUB_PREFIX;
   }
-  
-  
+
+
   @Override
-  public Map<String, FudgeMsg> doSnapshot(Collection<String> uniqueIds) {
+  public Map<String, FudgeMsg> doSnapshot(final Collection<String> uniqueIds) {
     ArgumentChecker.notNull(uniqueIds, "Unique IDs");
     if (uniqueIds.isEmpty()) {
       return Collections.emptyMap();
     }
-    
-    Set<String> buids = Sets.newHashSetWithExpectedSize(uniqueIds.size());
-    for (String uniqueId : uniqueIds) {
-      String buid = getBloombergSubscriptionPathPrefix() + uniqueId;
+
+    final Set<String> buids = Sets.newHashSetWithExpectedSize(uniqueIds.size());
+    for (final String uniqueId : uniqueIds) {
+      final String buid = getBloombergSubscriptionPathPrefix() + uniqueId;
       buids.add(buid);
     }
-    
+
     // caching ref data provider must not be used here
-    ReferenceDataProviderGetRequest refDataRequest = ReferenceDataProviderGetRequest.createGet(
+    final ReferenceDataProviderGetRequest refDataRequest = ReferenceDataProviderGetRequest.createGet(
         buids, BloombergDataUtils.STANDARD_FIELDS_SET, false);
-    Map<String, FudgeMsg> snapshotValues = queryRefData(refDataRequest);
-    Map<String, FudgeMsg> returnValue = Maps.newHashMap();
-    for (String buid : buids) {
-      FudgeMsg fieldData = snapshotValues.get(buid);
+    final Map<String, FudgeMsg> snapshotValues = queryRefData(refDataRequest);
+    final Map<String, FudgeMsg> returnValue = Maps.newHashMap();
+    for (final String buid : buids) {
+      final FudgeMsg fieldData = snapshotValues.get(buid);
       if (fieldData == null) {
         LOGGER.error("Could not find result for {} in data snapshot, skipping", buid);
       } else {
-        String securityUniqueId = buid.substring(getBloombergSubscriptionPathPrefix().length());
+        final String securityUniqueId = buid.substring(getBloombergSubscriptionPathPrefix().length());
         returnValue.put(securityUniqueId, fieldData);
       }
     }
@@ -122,20 +122,20 @@ public abstract class AbstractBloombergLiveDataServer extends StandardLiveDataSe
   }
 
   // broken out from AbstractReferenceDataProvider to handle errors differently
-  private Map<String, FudgeMsg> queryRefData(ReferenceDataProviderGetRequest request) {
-    Set<String> identifiers = ImmutableSet.copyOf(request.getIdentifiers()); // copy to avoid implementation bugs
-    Set<String> fields = ImmutableSet.copyOf(request.getFields()); // copy to avoid implementation bugs
-    ReferenceDataProviderGetResult result = getReferenceDataProvider().getReferenceData(request);
+  private Map<String, FudgeMsg> queryRefData(final ReferenceDataProviderGetRequest request) {
+    final Set<String> identifiers = ImmutableSet.copyOf(request.getIdentifiers()); // copy to avoid implementation bugs
+    final Set<String> fields = ImmutableSet.copyOf(request.getFields()); // copy to avoid implementation bugs
+    final ReferenceDataProviderGetResult result = getReferenceDataProvider().getReferenceData(request);
     // extract identifier to field-values
-    Map<String, FudgeMsg> map = Maps.newHashMap();
-    for (String identifier : identifiers) {
-      ReferenceData data = result.getReferenceDataOrNull(identifier);
+    final Map<String, FudgeMsg> map = Maps.newHashMap();
+    for (final String identifier : identifiers) {
+      final ReferenceData data = result.getReferenceDataOrNull(identifier);
       if (data != null) {
         // filter results by error list
         if (data.getErrors().isEmpty()) {
           map.put(identifier, data.getFieldValues());
         } else {
-          FudgeMsg fieldValues = handleRefDataError(data, fields);
+          final FudgeMsg fieldValues = handleRefDataError(data, fields);
           if (fieldValues != null) {
             map.put(identifier, fieldValues);
           }
@@ -146,11 +146,11 @@ public abstract class AbstractBloombergLiveDataServer extends StandardLiveDataSe
   }
 
   // handle errors in reference data, notably permission denied
-  protected FudgeMsg handleRefDataError(ReferenceData data, Set<String> fields) {
+  protected FudgeMsg handleRefDataError(final ReferenceData data, final Set<String> fields) {
     if (data.isIdentifierError()) {
       // whole response is in error
       // entitlement errors are handled, other errors will look like missing data
-      for (ReferenceDataError error : data.getErrors()) {
+      for (final ReferenceDataError error : data.getErrors()) {
         if (error.isEntitlementError()) {
           String message = error.getMessage();
           if (message.startsWith("Security Entitlement Check Failed! ")) {
@@ -159,7 +159,7 @@ public abstract class AbstractBloombergLiveDataServer extends StandardLiveDataSe
           // need to communicate error message via the API available
           // using LIVE_DATA_PERMISSION_DENIED_FIELD is not ideal but best avaiable option
           // solution is a much larger rewrite
-          MutableFudgeMsg values = OpenGammaFudgeContext.getInstance().newMessage();
+          final MutableFudgeMsg values = OpenGammaFudgeContext.getInstance().newMessage();
           values.add(PermissionUtils.LIVE_DATA_PERMISSION_DENIED_FIELD, "Permission denied (Bloomberg): " + message);
           // only return first entitlement error
           return values;
@@ -169,8 +169,8 @@ public abstract class AbstractBloombergLiveDataServer extends StandardLiveDataSe
       return null;
     }
     // some fields are in error, so ensure they are not present
-    MutableFudgeMsg values = OpenGammaFudgeContext.getInstance().newMessage(data.getFieldValues());
-    for (String field : fields) {
+    final MutableFudgeMsg values = OpenGammaFudgeContext.getInstance().newMessage(data.getFieldValues());
+    for (final String field : fields) {
       if (data.isError(field)) {
         values.remove(field);
       }
@@ -194,8 +194,8 @@ public abstract class AbstractBloombergLiveDataServer extends StandardLiveDataSe
 
   public synchronized DistributionSpecificationResolver getDefaultDistributionSpecificationResolver() {
     if (_defaultDistributionSpecificationResolver == null) {
-      BloombergJmsTopicNameResolver topicResolver = new BloombergJmsTopicNameResolver(getReferenceDataProvider());
-      DefaultDistributionSpecificationResolver distributionSpecResolver = new DefaultDistributionSpecificationResolver(getIdResolver(), getNormalizationRules(), topicResolver);
+      final BloombergJmsTopicNameResolver topicResolver = new BloombergJmsTopicNameResolver(getReferenceDataProvider());
+      final DefaultDistributionSpecificationResolver distributionSpecResolver = new DefaultDistributionSpecificationResolver(getIdResolver(), getNormalizationRules(), topicResolver);
       return new EHCachingDistributionSpecificationResolver(distributionSpecResolver, getCacheManager(), "BBG");
     }
     return _defaultDistributionSpecificationResolver;

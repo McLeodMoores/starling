@@ -55,15 +55,15 @@ public class CurveSpecificationBuilderComponentFactory extends AbstractComponent
   //-------------------------------------------------------------------------
   /**
    * Initializes the source, setting up component information and REST. Override using {@link #createCurveSpecificationBuilder(ComponentRepository)}.
-   * 
+   *
    * @param repo the component repository, not null
    * @param configuration the remaining configuration, not null
    */
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
-    CurveSpecificationBuilder builder = createCurveSpecificationBuilder(repo);
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
+    final CurveSpecificationBuilder builder = createCurveSpecificationBuilder(repo);
 
-    ComponentInfo info = new ComponentInfo(CurveSpecificationBuilder.class, getClassifier());
+    final ComponentInfo info = new ComponentInfo(CurveSpecificationBuilder.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     if (isPublishRest()) {
       info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteCurveSpecificationBuilder.class);
@@ -76,11 +76,11 @@ public class CurveSpecificationBuilderComponentFactory extends AbstractComponent
 
   /**
    * Creates the source without registering it.
-   * 
+   *
    * @param repo the component repository, only used to register secondary items like lifecycle, not null
    * @return the source, not null
    */
-  protected ConfigDBCurveSpecificationBuilder createCurveSpecificationBuilder(ComponentRepository repo) {
+  protected ConfigDBCurveSpecificationBuilder createCurveSpecificationBuilder(final ComponentRepository repo) {
     return new ConfigDBCurveSpecificationBuilder(getConfigSource(), VersionCorrection.LATEST);
   }
 

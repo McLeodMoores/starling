@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util;
@@ -51,13 +51,13 @@ public class ClasspathUtils {
 
   //-------------------------------------------------------------------------
   private static Set<URI> forJavaClassPath() {
-    Set<URI> uris = Sets.newLinkedHashSet();
-    String javaClassPath = System.getProperty("java.class.path");
+    final Set<URI> uris = Sets.newLinkedHashSet();
+    final String javaClassPath = System.getProperty("java.class.path");
     if (javaClassPath != null) {
-      for (String path : javaClassPath.split(File.pathSeparator)) {
+      for (final String path : javaClassPath.split(File.pathSeparator)) {
         try {
           uris.add(new File(path).toURI());
-        } catch (Exception e) {
+        } catch (final Exception e) {
           e.printStackTrace();
         }
       }
@@ -66,19 +66,19 @@ public class ClasspathUtils {
   }
 
   private static Set<URI> forManifest(final Iterable<URI> uris) {
-    Set<URI> result = Sets.newLinkedHashSet();
-    for (URI uri : uris) {
+    final Set<URI> result = Sets.newLinkedHashSet();
+    for (final URI uri : uris) {
       result.addAll(forManifest(uri));
     }
     return result;
   }
 
   private static Set<URI> forManifest(final URI uri) {
-    Set<URI> result = Sets.newLinkedHashSet();
+    final Set<URI> result = Sets.newLinkedHashSet();
     result.add(uri);
     try {
       final String part = ClasspathHelper.cleanPath(uri.toURL());
-      File jarFile = new File(part);
+      final File jarFile = new File(part);
       try (JarFile myJar = new JarFile(part)) {
         URI validUri = tryToGetValidUri(jarFile.getPath(), new File(part).getParent(), part);
         if (validUri != null) {
@@ -88,7 +88,7 @@ public class ClasspathUtils {
         if (manifest != null) {
           final String classPath = manifest.getMainAttributes().getValue(new Attributes.Name("Class-Path"));
           if (classPath != null) {
-            for (String jar : classPath.split(" ")) {
+            for (final String jar : classPath.split(" ")) {
               validUri = tryToGetValidUri(jarFile.getPath(), new File(part).getParent(), jar);
               if (validUri != null) {
                 result.add(validUri);
@@ -97,13 +97,13 @@ public class ClasspathUtils {
           }
         }
       }
-    } catch (IOException e) {
+    } catch (final IOException e) {
       // don't do anything, we're going on the assumption it is a jar, which could be wrong
     }
     return result;
   }
 
-  private static URI tryToGetValidUri(String workingDir, String path, String filename) {
+  private static URI tryToGetValidUri(final String workingDir, final String path, final String filename) {
     try {
       if (new File(filename).exists()) {
         return new File(filename).toURI();
@@ -117,7 +117,7 @@ public class ClasspathUtils {
       if (new File(new URL(filename).getFile()).exists()) {
         return new File(new URL(filename).getFile()).toURI();
       }
-    } catch (MalformedURLException e) {
+    } catch (final MalformedURLException e) {
       // don't do anything, we're going on the assumption it is a jar, which could be wrong
     }
     return null;
@@ -126,32 +126,32 @@ public class ClasspathUtils {
   //-------------------------------------------------------------------------
   /**
    * Obtains an array of URLs from an array of file names.
-   * 
+   *
    * @param classpath  the classpath, may be null
    * @return an array of URLs, not null
    */
-  public static URL[] getClasspathURLs(String[] classpath) {
+  public static URL[] getClasspathURLs(final String[] classpath) {
     if (classpath == null) {
       return new URL[0];
     }
-    Set<URL> classpathUrls = new HashSet<URL>();
-    for (String classpathEntry : classpath) {
-      File f = new File(classpathEntry);
+    final Set<URL> classpathUrls = new HashSet<>();
+    for (final String classpathEntry : classpath) {
+      final File f = new File(classpathEntry);
       if (!f.exists()) {
         LOGGER.debug("Skipping non-existent classpath entry '{}'", classpathEntry);
         continue;
       }
       try {
         classpathUrls.add(f.toURI().toURL());
-      } catch (MalformedURLException e) {
+      } catch (final MalformedURLException e) {
         throw new OpenGammaRuntimeException("Error interpreting classpath entry '" + classpathEntry + "' as URL", e);
       }
     }
-    URL[] classpathUrlArray = classpathUrls.toArray(new URL[0]);
+    final URL[] classpathUrlArray = classpathUrls.toArray(new URL[0]);
     return classpathUrlArray;
   }
-  
-  public static URL[] getClasspathURLs(Collection<String> classpath) {
+
+  public static URL[] getClasspathURLs(final Collection<String> classpath) {
     String[] classpathArray = new String[classpath.size()];
     classpathArray = classpath.toArray(classpathArray);
     return getClasspathURLs(classpathArray);
@@ -160,7 +160,7 @@ public class ClasspathUtils {
   //-------------------------------------------------------------------------
   /**
    * Obtains the class path as URIs.
-   * 
+   *
    * @return the classpath, not null
    */
   public static ImmutableList<URI> getURIs() {
@@ -169,7 +169,7 @@ public class ClasspathUtils {
 
   /**
    * Obtains the class path as dependencies.
-   * 
+   *
    * @return the dependencies, not null
    */
   public static ImmutableList<DependencyInfo> getDependencies() {
@@ -188,36 +188,36 @@ public class ClasspathUtils {
     private final String _artifactId;
 
     static {
-      Builder<DependencyInfo> builder = ImmutableList.builder();
-      for (URI uri : CLASSPATH) {
+      final Builder<DependencyInfo> builder = ImmutableList.builder();
+      for (final URI uri : CLASSPATH) {
         try {
           builder.add(new DependencyInfo(uri));
-        } catch (MalformedURLException ex) {
+        } catch (final MalformedURLException ex) {
           // ignore and continue
         }
       }
       DEPENDENCIES = builder.build();
     }
 
-    public DependencyInfo(URI uri) throws MalformedURLException {
+    public DependencyInfo(final URI uri) throws MalformedURLException {
       _url = uri.toURL();
-      
-      FilterBuilder filter = new FilterBuilder().include(".*pom[.]properties");
-      Reflections ref = new Reflections(new ResourcesScanner(), _url, filter);
-      Set<String> resources = ref.getResources(filter);
-      Properties properties = new Properties();
+
+      final FilterBuilder filter = new FilterBuilder().include(".*pom[.]properties");
+      final Reflections ref = new Reflections(new ResourcesScanner(), _url, filter);
+      final Set<String> resources = ref.getResources(filter);
+      final Properties properties = new Properties();
       if (resources.size() == 1) {
-        String relativePath = resources.iterator().next();
+        final String relativePath = resources.iterator().next();
         try (URLClassLoader cl = new URLClassLoader(new URL[] {_url}, null)) {
-          URL resource = cl.getResource(relativePath);
+          final URL resource = cl.getResource(relativePath);
           if (resource != null) {
             try (InputStream in = resource.openStream()) {
               properties.load(in);
-            } catch (IOException ex) {
+            } catch (final IOException ex) {
               LOGGER.debug(ex.getMessage(), ex);
             }
           }
-        } catch (IOException ex2) {
+        } catch (final IOException ex2) {
           LOGGER.debug(ex2.getMessage(), ex2);
         }
       } else if (_url.toString().endsWith(".jar")) {

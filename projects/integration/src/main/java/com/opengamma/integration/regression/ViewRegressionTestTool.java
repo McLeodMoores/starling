@@ -71,24 +71,24 @@ public class ViewRegressionTestTool {
    *
    * @param args the arguments, unused
    */
-  public static void main(String[] args) throws Exception { // CSIGNORE
+  public static void main(final String[] args) throws Exception { // CSIGNORE
     try {
-      TestStatus status = ViewRegressionTestTool.run(args);
+      final TestStatus status = ViewRegressionTestTool.run(args);
       System.exit(status.ordinal());
-    } catch (Exception e) {
+    } catch (final Exception e) {
       e.printStackTrace();
       System.exit(TestStatus.ERROR.ordinal());
     }
   }
 
   private static void printUsage() {
-    HelpFormatter formatter = new HelpFormatter();
+    final HelpFormatter formatter = new HelpFormatter();
     formatter.setWidth(120);
     formatter.printHelp("java " + ViewRegressionTestTool.class.getName(), OPTIONS, true);
   }
 
-  private static TestStatus run(String[] args) throws Exception {
-    CommandLineParser parser = new PosixParser();
+  private static TestStatus run(final String[] args) throws Exception {
+    final CommandLineParser parser = new PosixParser();
     CommandLine cl;
     try {
       cl = parser.parse(OPTIONS, args);
@@ -143,38 +143,38 @@ public class ViewRegressionTestTool {
       }
 
 
-      Map<Pair<String, String>, CalculationResults> results = test.run();
+      final Map<Pair<String, String>, CalculationResults> results = test.run();
 
       if (cl.hasOption(RESULT_OUT)) {
-        String resultFileName = cl.getOptionValue(RESULT_OUT);
+        final String resultFileName = cl.getOptionValue(RESULT_OUT);
 
-        FudgeSerializer serializer = new FudgeSerializer(OpenGammaFudgeContext.getInstance());
+        final FudgeSerializer serializer = new FudgeSerializer(OpenGammaFudgeContext.getInstance());
         try (FileWriter writer = new FileWriter(new File(resultFileName))) {
-          FudgeXMLStreamWriter streamWriter = new FudgeXMLStreamWriter(OpenGammaFudgeContext.getInstance(), writer);
-          FudgeMsgWriter fudgeMsgWriter = new FudgeMsgWriter(streamWriter);
-          MutableFudgeMsg msg = serializer.objectToFudgeMsg(results);
+          final FudgeXMLStreamWriter streamWriter = new FudgeXMLStreamWriter(OpenGammaFudgeContext.getInstance(), writer);
+          final FudgeMsgWriter fudgeMsgWriter = new FudgeMsgWriter(streamWriter);
+          final MutableFudgeMsg msg = serializer.objectToFudgeMsg(results);
           fudgeMsgWriter.writeMessage(msg);
           writer.append("\n");
           fudgeMsgWriter.flush();
         }
       }
       if (cl.hasOption(RESULT_IN)) {
-        String inputFileName = cl.getOptionValue(RESULT_IN);
+        final String inputFileName = cl.getOptionValue(RESULT_IN);
 
-        FudgeDeserializer deserializer = new FudgeDeserializer(OpenGammaFudgeContext.getInstance());
+        final FudgeDeserializer deserializer = new FudgeDeserializer(OpenGammaFudgeContext.getInstance());
 
         try (FileReader reader = new FileReader(new File(inputFileName))) {
-          FudgeXMLStreamReader streamReader = new FudgeXMLStreamReader(OpenGammaFudgeContext.getInstance(), reader);
-          FudgeMsgReader fudgeMsgReader = new FudgeMsgReader(streamReader);
+          final FudgeXMLStreamReader streamReader = new FudgeXMLStreamReader(OpenGammaFudgeContext.getInstance(), reader);
+          final FudgeMsgReader fudgeMsgReader = new FudgeMsgReader(streamReader);
           final RegressionTestResults regressionTestResults;
           if (fudgeMsgReader.hasNext()) {
-            FudgeMsg fudgeMsg = fudgeMsgReader.nextMessage();
-            Map<Pair<String, String>, CalculationResults> exemplarResults = (Map<Pair<String, String>, CalculationResults>) deserializer.fudgeMsgToObject(
+            final FudgeMsg fudgeMsg = fudgeMsgReader.nextMessage();
+            final Map<Pair<String, String>, CalculationResults> exemplarResults = (Map<Pair<String, String>, CalculationResults>) deserializer.fudgeMsgToObject(
                 fudgeMsg);
-            List<CalculationDifference> calculationDifferences = Lists.newArrayList();
-            for (Map.Entry<Pair<String, String>, CalculationResults> entry : results.entrySet()) {
-              CalculationResults testViewResult = entry.getValue();
-              CalculationResults exemplarResult = exemplarResults.get(entry.getKey());
+            final List<CalculationDifference> calculationDifferences = Lists.newArrayList();
+            for (final Map.Entry<Pair<String, String>, CalculationResults> entry : results.entrySet()) {
+              final CalculationResults testViewResult = entry.getValue();
+              final CalculationResults exemplarResult = exemplarResults.get(entry.getKey());
               if (exemplarResult == null) {
                 LOGGER.warn("No exemplar result for {}", entry.getKey());
                 continue;
@@ -202,7 +202,7 @@ public class ViewRegressionTestTool {
         return TestStatus.PASS;
       }
     } else {
-      ViewRegressionTest test = new ViewRegressionTest(cl.getOptionValue(PROJECT_NAME),
+      final ViewRegressionTest test = new ViewRegressionTest(cl.getOptionValue(PROJECT_NAME),
                                                        cl.getOptionValue(SERVER_CONFIG),
                                                        cl.getOptionValue(DB_DUMP_DIR),
                                                        cl.getOptionValue(LOGBACK_CONFIG),
@@ -213,7 +213,7 @@ public class ViewRegressionTestTool {
                                                        cl.getOptionValue(TEST_DIR),
                                                        cl.getOptionValue(TEST_VERSION),
                                                        cl.getOptionValue(TEST_PROPS));
-      RegressionTestResults results = test.run();
+      final RegressionTestResults results = test.run();
       try (Writer writer = new BufferedWriter(new FileWriter(cl.getOptionValue(REPORT_FILE, DEFAULT_REPORT_FILE)))) {
         ReportGenerator.generateReport(results, ReportGenerator.Format.TEXT, writer);
       }
@@ -232,17 +232,17 @@ public class ViewRegressionTestTool {
   }
 
   private static Options createOptions() {
-    Options options = new Options();
+    final Options options = new Options();
 
     // TODO extra options - java executable, arbitrary additional jvm args (for memory, GC config etc)
-    Option resultout = new Option(RESULT_OUT,
+    final Option resultout = new Option(RESULT_OUT,
                                          "resultout",
                                          true,
                                          "Flag indicationg whether and into what file, store the results of running singe server tests as opposed to run regression test comparing two servers.");
     resultout.setRequired(false);
     options.addOption(resultout);
 
-    Option resultin = new Option(RESULT_IN,
+    final Option resultin = new Option(RESULT_IN,
                                          "resultin",
                                          true,
                                          "Flag indicationg whether and into what file, store the results of running singe server tests as opposed to run regression test comparing two servers.");
@@ -251,67 +251,67 @@ public class ViewRegressionTestTool {
 
 
 
-    Option projectNameOption = new Option(PROJECT_NAME,
+    final Option projectNameOption = new Option(PROJECT_NAME,
                                           "projectname",
                                           true,
                                           "Project name (as used in the build artifacts)");
     projectNameOption.setRequired(true);
     options.addOption(projectNameOption);
 
-    Option serverConfigOption = new Option(SERVER_CONFIG,
+    final Option serverConfigOption = new Option(SERVER_CONFIG,
                                            "serverconfig",
                                            true,
                                            "Configuration file used to run the server");
     serverConfigOption.setRequired(true);
     options.addOption(serverConfigOption);
 
-    Option dbDumpDirOption = new Option(DB_DUMP_DIR,
+    final Option dbDumpDirOption = new Option(DB_DUMP_DIR,
                                         "dbdumpdir",
                                         true,
                                         "Directory containing the database dump files." +
                                             " If this is omitted the database won't be created or populated, the existing database will be used");
     options.addOption(dbDumpDirOption);
 
-    Option logbackConfigOption = new Option(LOGBACK_CONFIG, "logbackconfig", true, "Logback config for the servers");
+    final Option logbackConfigOption = new Option(LOGBACK_CONFIG, "logbackconfig", true, "Logback config for the servers");
     options.addOption(logbackConfigOption);
 
-    Option valuationTimeOption = new Option(VALUATION_TIME, "valuationtime", true, "Valuation time for the views");
+    final Option valuationTimeOption = new Option(VALUATION_TIME, "valuationtime", true, "Valuation time for the views");
     options.addOption(valuationTimeOption);
 
-    Option baseDirOption = new Option(BASE_DIR,
+    final Option baseDirOption = new Option(BASE_DIR,
                                       "basedir",
                                       true,
                                       "Installation directory for the base version of the server");
     //baseDirOption.setRequired(true);
     options.addOption(baseDirOption);
 
-    Option newDirOption = new Option(TEST_DIR,
+    final Option newDirOption = new Option(TEST_DIR,
                                      "testdir",
                                      true,
                                      "Installation directory for the test version of the server");
     //newDirOption.setRequired(true);
     options.addOption(newDirOption);
 
-    Option baseVersionOption = new Option(BASE_VERSION, "baseversion", true, "Version of the base server");
+    final Option baseVersionOption = new Option(BASE_VERSION, "baseversion", true, "Version of the base server");
     //baseVersionOption.setRequired(true);
     options.addOption(baseVersionOption);
 
-    Option newVersionOption = new Option(TEST_VERSION, "testversion", true, "Version of the test server");
+    final Option newVersionOption = new Option(TEST_VERSION, "testversion", true, "Version of the test server");
     //newVersionOption.setRequired(true);
     options.addOption(newVersionOption);
 
-    Option basePropsOption = new Option(BASE_PROPS, "baseprops", true, "The DB properties file for the base server");
+    final Option basePropsOption = new Option(BASE_PROPS, "baseprops", true, "The DB properties file for the base server");
     //basePropsOption.setRequired(true);
     options.addOption(basePropsOption);
 
-    Option newPropsOption = new Option(TEST_PROPS, "testprops", true, "The DB properties file for the test server");
+    final Option newPropsOption = new Option(TEST_PROPS, "testprops", true, "The DB properties file for the test server");
     //newPropsOption.setRequired(true);
     options.addOption(newPropsOption);
 
-    Option helpOption = new Option(HELP, "help", true, "Print usage");
+    final Option helpOption = new Option(HELP, "help", true, "Print usage");
     options.addOption(helpOption);
 
-    Option reportFileOption = new Option(REPORT_FILE, "reportfile", true, "File name of the test results report");
+    final Option reportFileOption = new Option(REPORT_FILE, "reportfile", true, "File name of the test results report");
     options.addOption(reportFileOption);
 
     return options;

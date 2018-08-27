@@ -57,40 +57,40 @@ public class RemoteMastersComponentFactory extends AbstractComponentFactory {
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
-    RemoteComponentServer remote = new RemoteComponentServer(_baseUri);
-    ComponentServer server = remote.getComponentServer();
-    for (ComponentInfo info : server.getComponentInfos()) {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
+    final RemoteComponentServer remote = new RemoteComponentServer(_baseUri);
+    final ComponentServer server = remote.getComponentServer();
+    for (final ComponentInfo info : server.getComponentInfos()) {
       initComponent(repo, info);
     }
   }
 
   /**
    * Initialize the remote component.
-   * 
+   *
    * @param repo  the local repository, not null
    * @param info  the remote information, not null
    */
-  protected void initComponent(ComponentRepository repo, ComponentInfo info) {
-    URI componentUri = info.getUri();
-    
-    if (info.getAttributes().containsKey(ComponentInfoAttributes.REMOTE_CLIENT_JAVA) && 
+  protected void initComponent(final ComponentRepository repo, final ComponentInfo info) {
+    final URI componentUri = info.getUri();
+
+    if (info.getAttributes().containsKey(ComponentInfoAttributes.REMOTE_CLIENT_JAVA) &&
         info.getAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA).endsWith("Master")) {
-      String remoteTypeStr = info.getAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA);
-      Class<?> remoteType = ReflectionUtils.loadClass(remoteTypeStr);
-      String jmsBrokerUri = info.getAttributes().get(ComponentInfoAttributes.JMS_BROKER_URI);
-      String jmsTopic = info.getAttributes().get(ComponentInfoAttributes.JMS_CHANGE_MANAGER_TOPIC);
+      final String remoteTypeStr = info.getAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA);
+      final Class<?> remoteType = ReflectionUtils.loadClass(remoteTypeStr);
+      final String jmsBrokerUri = info.getAttributes().get(ComponentInfoAttributes.JMS_BROKER_URI);
+      final String jmsTopic = info.getAttributes().get(ComponentInfoAttributes.JMS_CHANGE_MANAGER_TOPIC);
       Object target;
       if (_jmsConnector != null && jmsTopic != null && ObjectUtils.equals(jmsBrokerUri, _jmsConnector.getClientBrokerUri().toString())) {
         // only sets up JMS if supplied connector matches that needed
         // this approach could be enhanced...
-        JmsChangeManager changeManager = new JmsChangeManager(_jmsConnector, jmsTopic);
+        final JmsChangeManager changeManager = new JmsChangeManager(_jmsConnector, jmsTopic);
         repo.registerLifecycle(changeManager);
-        Constructor<?> con = ReflectionUtils.findConstructor(remoteType, URI.class, ChangeManager.class);
+        final Constructor<?> con = ReflectionUtils.findConstructor(remoteType, URI.class, ChangeManager.class);
         target = ReflectionUtils.newInstance(con, componentUri, changeManager);
       } else {
         // do not use JMS
-        Constructor<?> con = ReflectionUtils.findConstructor(remoteType, URI.class);
+        final Constructor<?> con = ReflectionUtils.findConstructor(remoteType, URI.class);
         target = ReflectionUtils.newInstance(con, componentUri);
       }
       repo.registerComponent(info, target);

@@ -30,12 +30,12 @@ public class DefaultFinancialUsersTracker implements FinancialUserDataTracker, F
   /** Logger. */
   private static final Logger LOGGER = LoggerFactory.getLogger(DefaultFinancialUsersTracker.class);
 
-  private final ConcurrentMap<String, Set<String>> _username2clients = new ConcurrentHashMap<String, Set<String>>();
-  private final ConcurrentMap<ExternalId, Set<ObjectId>> _viewDefinitionIds = new ConcurrentHashMap<ExternalId, Set<ObjectId>>();
-  private final ConcurrentMap<ExternalId, Set<ObjectId>> _marketDataSnapShots = new ConcurrentHashMap<ExternalId, Set<ObjectId>>();
+  private final ConcurrentMap<String, Set<String>> _username2clients = new ConcurrentHashMap<>();
+  private final ConcurrentMap<ExternalId, Set<ObjectId>> _viewDefinitionIds = new ConcurrentHashMap<>();
+  private final ConcurrentMap<ExternalId, Set<ObjectId>> _marketDataSnapShots = new ConcurrentHashMap<>();
   private final FinancialUserServices _services;
 
-  public DefaultFinancialUsersTracker(FinancialUserServices services) {
+  public DefaultFinancialUsersTracker(final FinancialUserServices services) {
     ArgumentChecker.notNull(services, "services");
     _services = services;
   }
@@ -53,7 +53,7 @@ public class DefaultFinancialUsersTracker implements FinancialUserDataTracker, F
 
   //-------------------------------------------------------------------------
   @Override
-  public void created(String userName, String clientName, FinancialUserDataType type, ObjectId identifier) {
+  public void created(final String userName, final String clientName, final FinancialUserDataType type, final ObjectId identifier) {
     switch (type) {
       case VIEW_DEFINITION:
         trackCreatedViewDefinition(userName, clientName, identifier);
@@ -62,7 +62,7 @@ public class DefaultFinancialUsersTracker implements FinancialUserDataTracker, F
         trackCreatedMarketDataSnapshot(userName, clientName, identifier);
         break;
     }
-    Set<String> clients = _username2clients.get(userName);
+    final Set<String> clients = _username2clients.get(userName);
     if (clients != null) {
       if (clients.contains(clientName)) {
         LOGGER.debug("{} created by {}", identifier, userName);
@@ -72,8 +72,8 @@ public class DefaultFinancialUsersTracker implements FinancialUserDataTracker, F
     }
   }
 
-  private void trackCreatedMarketDataSnapshot(String userName, String clientName, ObjectId identifier) {
-    ConcurrentSkipListSet<ObjectId> freshIds = new ConcurrentSkipListSet<ObjectId>();
+  private void trackCreatedMarketDataSnapshot(final String userName, final String clientName, final ObjectId identifier) {
+    final ConcurrentSkipListSet<ObjectId> freshIds = new ConcurrentSkipListSet<>();
     Set<ObjectId> marketDataSnapshotIds = _marketDataSnapShots.putIfAbsent(ExternalId.of(userName, clientName), freshIds);
     if (marketDataSnapshotIds == null) {
       marketDataSnapshotIds = freshIds;
@@ -82,8 +82,8 @@ public class DefaultFinancialUsersTracker implements FinancialUserDataTracker, F
     LOGGER.debug("{} marketdatasnapshot created by {}", identifier, userName);
   }
 
-  private void trackCreatedViewDefinition(String userName, String clientName, ObjectId identifier) {
-    ConcurrentSkipListSet<ObjectId> freshDefinitions = new ConcurrentSkipListSet<ObjectId>();
+  private void trackCreatedViewDefinition(final String userName, final String clientName, final ObjectId identifier) {
+    final ConcurrentSkipListSet<ObjectId> freshDefinitions = new ConcurrentSkipListSet<>();
     Set<ObjectId> viewDefinitions = _viewDefinitionIds.putIfAbsent(ExternalId.of(userName, clientName), freshDefinitions);
     if (viewDefinitions == null) {
       viewDefinitions = freshDefinitions;
@@ -93,8 +93,8 @@ public class DefaultFinancialUsersTracker implements FinancialUserDataTracker, F
   }
 
   @Override
-  public void deleted(String userName, String clientName, FinancialUserDataType type, ObjectId identifier) {
-    Set<String> clients = _username2clients.get(userName);
+  public void deleted(final String userName, final String clientName, final FinancialUserDataType type, final ObjectId identifier) {
+    final Set<String> clients = _username2clients.get(userName);
     if (clients != null) {
       if (clients.contains(clientName)) {
         LOGGER.debug("{} deleted by {}", identifier, userName);
@@ -105,8 +105,8 @@ public class DefaultFinancialUsersTracker implements FinancialUserDataTracker, F
   }
 
   @Override
-  public void clientCreated(String userName, String clientName) {
-    Set<String> clients = _username2clients.get(userName);
+  public void clientCreated(final String userName, final String clientName) {
+    final Set<String> clients = _username2clients.get(userName);
     if (clients == null) {
       LOGGER.debug("Late client construction for discarded user {}", userName);
       return;
@@ -116,8 +116,8 @@ public class DefaultFinancialUsersTracker implements FinancialUserDataTracker, F
   }
 
   @Override
-  public void clientDiscarded(String userName, String clientName) {
-    Set<String> clients = _username2clients.get(userName);
+  public void clientDiscarded(final String userName, final String clientName) {
+    final Set<String> clients = _username2clients.get(userName);
     if (clients == null) {
       LOGGER.debug("Late client discard for discarded user {}", userName);
     } else {
@@ -128,27 +128,27 @@ public class DefaultFinancialUsersTracker implements FinancialUserDataTracker, F
     removeUserMarketDataSnapshot(userName, clientName);
   }
 
-  private void removeUserMarketDataSnapshot(String userName, String clientName) {
-    MarketDataSnapshotMaster marketDataSnapshotMaster = getServices().getSnapshotMaster();
+  private void removeUserMarketDataSnapshot(final String userName, final String clientName) {
+    final MarketDataSnapshotMaster marketDataSnapshotMaster = getServices().getSnapshotMaster();
     if (marketDataSnapshotMaster != null) {
-      Set<ObjectId> snapshotIds = _marketDataSnapShots.remove(ExternalId.of(userName, clientName));
-      for (ObjectId oid : snapshotIds) {
+      final Set<ObjectId> snapshotIds = _marketDataSnapShots.remove(ExternalId.of(userName, clientName));
+      for (final ObjectId oid : snapshotIds) {
         marketDataSnapshotMaster.remove(oid);
         LOGGER.debug("market data snapshot {} discarded for {}/{}", new Object[]{oid, userName, clientName});
       }
     }
   }
 
-  private void removeAllUserMarketDataSnapshot(String userName) {
-    MarketDataSnapshotMaster marketDataSnapshotMaster = getServices().getSnapshotMaster();
+  private void removeAllUserMarketDataSnapshot(final String userName) {
+    final MarketDataSnapshotMaster marketDataSnapshotMaster = getServices().getSnapshotMaster();
     if (marketDataSnapshotMaster != null) {
-      Iterator<Entry<ExternalId, Set<ObjectId>>> iterator = _marketDataSnapShots.entrySet().iterator();
+      final Iterator<Entry<ExternalId, Set<ObjectId>>> iterator = _marketDataSnapShots.entrySet().iterator();
       while (iterator.hasNext()) {
-        Entry<ExternalId, Set<ObjectId>> entry = iterator.next();
-        ExternalId identifier = entry.getKey();
+        final Entry<ExternalId, Set<ObjectId>> entry = iterator.next();
+        final ExternalId identifier = entry.getKey();
         if (identifier.getScheme().getName().equals(userName)) {
-          Set<ObjectId> oids = entry.getValue();
-          for (ObjectId oid : oids) {
+          final Set<ObjectId> oids = entry.getValue();
+          for (final ObjectId oid : oids) {
             marketDataSnapshotMaster.remove(oid);
             LOGGER.debug("market data snapshot {} discarded for {}/{}", new Object[]{oid, userName, identifier.getValue()});
           }
@@ -159,18 +159,18 @@ public class DefaultFinancialUsersTracker implements FinancialUserDataTracker, F
   }
 
   @Override
-  public void userCreated(String userName) {
-    Set<String> clients = Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
+  public void userCreated(final String userName) {
+    final Set<String> clients = Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
     _username2clients.putIfAbsent(userName, clients);
     LOGGER.debug("User {} created", userName);
   }
 
   @Override
-  public void userDiscarded(String userName) {
-    Set<String> removedClients = _username2clients.remove(userName);
+  public void userDiscarded(final String userName) {
+    final Set<String> removedClients = _username2clients.remove(userName);
     LOGGER.debug("User {} discarded", userName);
     if (removedClients != null) {
-      for (String clientName : removedClients) {
+      for (final String clientName : removedClients) {
         removeUserViewDefinitions(userName, clientName);
         removeUserMarketDataSnapshot(userName, clientName);
       }
@@ -180,16 +180,16 @@ public class DefaultFinancialUsersTracker implements FinancialUserDataTracker, F
     }
   }
 
-  private void removeAllUserViewDefinitions(String userName) {
-    ConfigMaster configMaster = getServices().getConfigMaster();
+  private void removeAllUserViewDefinitions(final String userName) {
+    final ConfigMaster configMaster = getServices().getConfigMaster();
     if (configMaster != null) {
-      Iterator<Entry<ExternalId, Set<ObjectId>>> iterator = _viewDefinitionIds.entrySet().iterator();
+      final Iterator<Entry<ExternalId, Set<ObjectId>>> iterator = _viewDefinitionIds.entrySet().iterator();
       while (iterator.hasNext()) {
-        Entry<ExternalId, Set<ObjectId>> entry = iterator.next();
-        ExternalId identifier = entry.getKey();
+        final Entry<ExternalId, Set<ObjectId>> entry = iterator.next();
+        final ExternalId identifier = entry.getKey();
         if (identifier.getScheme().getName().equals(userName)) {
-          Set<ObjectId> viewDefinitions = entry.getValue();
-          for (ObjectId viewDefinitionId : viewDefinitions) {
+          final Set<ObjectId> viewDefinitions = entry.getValue();
+          for (final ObjectId viewDefinitionId : viewDefinitions) {
             configMaster.remove(viewDefinitionId);
             LOGGER.debug("View definition {} discarded for {}/{}", new Object[]{viewDefinitionId, userName, identifier.getValue()});
           }
@@ -200,10 +200,10 @@ public class DefaultFinancialUsersTracker implements FinancialUserDataTracker, F
   }
 
   private void removeUserViewDefinitions(final String userName, final String clientName) {
-    ConfigMaster configMaster = getServices().getConfigMaster();
+    final ConfigMaster configMaster = getServices().getConfigMaster();
     if (configMaster != null) {
-      Set<ObjectId> viewDefinitions = _viewDefinitionIds.remove(ExternalId.of(userName, clientName));
-      for (ObjectId viewDefinitionId : viewDefinitions) {
+      final Set<ObjectId> viewDefinitions = _viewDefinitionIds.remove(ExternalId.of(userName, clientName));
+      for (final ObjectId viewDefinitionId : viewDefinitions) {
         configMaster.remove(viewDefinitionId);
         LOGGER.debug("View definition {} discarded for {}/{}", new Object[]{viewDefinitionId, userName, clientName});
       }

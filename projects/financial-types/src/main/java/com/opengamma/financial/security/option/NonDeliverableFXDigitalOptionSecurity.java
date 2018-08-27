@@ -55,7 +55,7 @@ public class NonDeliverableFXDigitalOptionSecurity extends FinancialSecurity {
    * The payment currency.
    */
   @PropertyDefinition(validate = "notNull")
-  private Currency _paymentCurrency;  
+  private Currency _paymentCurrency;
   /**
    * The put amount.
    */
@@ -91,8 +91,8 @@ public class NonDeliverableFXDigitalOptionSecurity extends FinancialSecurity {
     super(SECURITY_TYPE);
   }
 
-  public NonDeliverableFXDigitalOptionSecurity(Currency putCurrency, Currency callCurrency, double putAmount, double callAmount, Currency paymentCurrency, Expiry expiry,
-      ZonedDateTime settlementDate, boolean isLong, boolean deliverInCallCurrency) {
+  public NonDeliverableFXDigitalOptionSecurity(final Currency putCurrency, final Currency callCurrency, final double putAmount, final double callAmount, final Currency paymentCurrency, final Expiry expiry,
+      final ZonedDateTime settlementDate, final boolean isLong, final boolean deliverInCallCurrency) {
     super(SECURITY_TYPE);
     setPutCurrency(putCurrency);
     setCallCurrency(callCurrency);
@@ -107,14 +107,14 @@ public class NonDeliverableFXDigitalOptionSecurity extends FinancialSecurity {
 
   //-------------------------------------------------------------------------
   @Override
-  public final <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public final <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitNonDeliverableFXDigitalOptionSecurity(this);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Checks if the long/short type is long.
-   * 
+   *
    * @return true if long, false if short
    */
   public boolean isLong() {
@@ -123,7 +123,7 @@ public class NonDeliverableFXDigitalOptionSecurity extends FinancialSecurity {
 
   /**
    * Checks if the long/short type is short.
-   * 
+   *
    * @return true if short, false if long
    */
   public boolean isShort() {

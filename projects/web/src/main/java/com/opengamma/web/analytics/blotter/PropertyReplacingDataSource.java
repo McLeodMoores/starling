@@ -21,7 +21,7 @@ import com.opengamma.util.ArgumentChecker;
   private final String _propertyName;
   private final String _value;
 
-  /* package */ PropertyReplacingDataSource(BeanDataSource delegate, String propertyName, String value) {
+  /* package */ PropertyReplacingDataSource(final BeanDataSource delegate, final String propertyName, final String value) {
     ArgumentChecker.notNull(delegate, "delegate");
     ArgumentChecker.notNull(propertyName, "propertyName");
     ArgumentChecker.notNull(value, "value");
@@ -31,7 +31,7 @@ import com.opengamma.util.ArgumentChecker;
   }
 
   @Override
-  public Object getValue(String propertyName) {
+  public Object getValue(final String propertyName) {
     if (_propertyName.equals(propertyName)) {
       return _value;
     } else {
@@ -40,12 +40,12 @@ import com.opengamma.util.ArgumentChecker;
   }
 
   @Override
-  public List<?> getCollectionValues(String propertyName) {
+  public List<?> getCollectionValues(final String propertyName) {
     return _delegate.getCollectionValues(propertyName);
   }
 
   @Override
-  public Map<?, ?> getMapValues(String propertyName) {
+  public Map<?, ?> getMapValues(final String propertyName) {
     return _delegate.getMapValues(propertyName);
   }
 

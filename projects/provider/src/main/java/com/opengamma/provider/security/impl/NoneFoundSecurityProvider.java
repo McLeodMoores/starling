@@ -23,9 +23,9 @@ public class NoneFoundSecurityProvider extends AbstractSecurityProvider {
 
   //-------------------------------------------------------------------------
   @Override
-  protected SecurityProviderResult doBulkGet(SecurityProviderRequest request) {
-    SecurityProviderResult result = new SecurityProviderResult();
-    for (ExternalIdBundle bundle : request.getExternalIdBundles()) {
+  protected SecurityProviderResult doBulkGet(final SecurityProviderRequest request) {
+    final SecurityProviderResult result = new SecurityProviderResult();
+    for (final ExternalIdBundle bundle : request.getExternalIdBundles()) {
       result.getResultMap().put(bundle, null);
     }
     return result;

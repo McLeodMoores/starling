@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.web.server.conversion;
@@ -14,17 +14,17 @@ import com.opengamma.engine.value.ValueSpecification;
 public class HistoricalTimeSeriesConverter implements ResultConverter<HistoricalTimeSeries> {
 
   @Override
-  public Object convertForDisplay(ResultConverterCache context, ValueSpecification valueSpec, HistoricalTimeSeries value, ConversionMode mode) {
+  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final HistoricalTimeSeries value, final ConversionMode mode) {
     return LocalDateDoubleTimeSeriesConverter.convertForDisplayImpl(context, valueSpec, value.getTimeSeries(), mode);
   }
 
   @Override
-  public Object convertForHistory(ResultConverterCache context, ValueSpecification valueSpec, HistoricalTimeSeries value) {
+  public Object convertForHistory(final ResultConverterCache context, final ValueSpecification valueSpec, final HistoricalTimeSeries value) {
     return null;
   }
 
   @Override
-  public String convertToText(ResultConverterCache context, ValueSpecification valueSpec, HistoricalTimeSeries value) {
+  public String convertToText(final ResultConverterCache context, final ValueSpecification valueSpec, final HistoricalTimeSeries value) {
     return value.toString();
   }
 

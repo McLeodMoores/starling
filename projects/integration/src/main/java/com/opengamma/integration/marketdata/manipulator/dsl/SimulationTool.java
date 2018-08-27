@@ -61,7 +61,7 @@ public class SimulationTool extends AbstractTool<ToolContext> {
   //-------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
+   *
    * @param args  the standard tool arguments, not null
    */
   public static void main(final String[] args) {
@@ -71,56 +71,56 @@ public class SimulationTool extends AbstractTool<ToolContext> {
   //-------------------------------------------------------------------------
   @Override
   protected void doRun() throws Exception {
-    ViewProcessor viewProcessor = getToolContext().getViewProcessor();
-    ConfigSource configSource = getToolContext().getConfigSource();
-    String viewDefName = getCommandLine().getOptionValue(VIEW_DEF_NAME_OPTION);
-    boolean batchMode = getCommandLine().hasOption(BATCH_MODE_OPTION);
+    final ViewProcessor viewProcessor = getToolContext().getViewProcessor();
+    final ConfigSource configSource = getToolContext().getConfigSource();
+    final String viewDefName = getCommandLine().getOptionValue(VIEW_DEF_NAME_OPTION);
+    final boolean batchMode = getCommandLine().hasOption(BATCH_MODE_OPTION);
     ViewResultListener listener;
     if (getCommandLine().hasOption(RESULT_LISTENER_CLASS_OPTION)) {
-      String listenerClass = getCommandLine().getOptionValue(RESULT_LISTENER_CLASS_OPTION);
+      final String listenerClass = getCommandLine().getOptionValue(RESULT_LISTENER_CLASS_OPTION);
       listener = instantiate(listenerClass, ViewResultListener.class);
     } else {
       listener = null;
     }
-    String[] marketDataSpecStrs = getCommandLine().getOptionValues(MARKET_DATA_OPTION);
-    List<MarketDataSpecification> marketDataSpecs = Lists.newArrayListWithCapacity(marketDataSpecStrs.length);
-    for (String marketDataSpecStr : marketDataSpecStrs) {
+    final String[] marketDataSpecStrs = getCommandLine().getOptionValues(MARKET_DATA_OPTION);
+    final List<MarketDataSpecification> marketDataSpecs = Lists.newArrayListWithCapacity(marketDataSpecStrs.length);
+    for (final String marketDataSpecStr : marketDataSpecStrs) {
       try {
         marketDataSpecs.add(MarketDataSpecificationParser.parse(marketDataSpecStr));
-      } catch (IllegalArgumentException e) {
+      } catch (final IllegalArgumentException e) {
         LOGGER.warn(MarketDataSpecificationParser.getUsageMessage());
         throw e;
       }
     }
     Map<String, Object> paramValues;
     if (getCommandLine().hasOption(PARAMETER_SCRIPT_OPTION)) {
-      String paramScript = getCommandLine().getOptionValue(PARAMETER_SCRIPT_OPTION);
-      ScenarioDslParameters params = ScenarioDslParameters.of(FileUtils.readFileToString(new File(paramScript)));
+      final String paramScript = getCommandLine().getOptionValue(PARAMETER_SCRIPT_OPTION);
+      final ScenarioDslParameters params = ScenarioDslParameters.of(FileUtils.readFileToString(new File(paramScript)));
       paramValues = params.getParameters();
     } else {
       paramValues = null;
     }
-    String simulationScript = getCommandLine().getOptionValue(SIMULATION_SCRIPT_OPTION);
-    Simulation simulation = SimulationUtils.createSimulationFromDsl(simulationScript, paramValues);
-    VersionCorrection viewDefVersionCorrection = VersionCorrection.LATEST;
-    Collection<ConfigItem<ViewDefinition>> viewDefs =
+    final String simulationScript = getCommandLine().getOptionValue(SIMULATION_SCRIPT_OPTION);
+    final Simulation simulation = SimulationUtils.createSimulationFromDsl(simulationScript, paramValues);
+    final VersionCorrection viewDefVersionCorrection = VersionCorrection.LATEST;
+    final Collection<ConfigItem<ViewDefinition>> viewDefs =
         configSource.get(ViewDefinition.class, viewDefName, viewDefVersionCorrection);
     if (viewDefs.isEmpty()) {
       throw new IllegalStateException("View definition " + viewDefName + " not found");
     }
-    ConfigItem<ViewDefinition> viewDef = viewDefs.iterator().next();
-    UniqueId viewDefId = viewDef.getUniqueId();
+    final ConfigItem<ViewDefinition> viewDef = viewDefs.iterator().next();
+    final UniqueId viewDefId = viewDef.getUniqueId();
     LOGGER.info("Running simulation using script {}, view '{}', market data {}, batch mode {}",
                   simulationScript, viewDefName, marketDataSpecs, batchMode);
     simulation.run(viewDefId, marketDataSpecs, batchMode, listener, viewProcessor);
   }
 
   @SuppressWarnings("unchecked")
-  private <T> T instantiate(String className, Class<T> expectedType) {
+  private <T> T instantiate(final String className, final Class<T> expectedType) {
     Class<?> supplierClass;
     try {
       supplierClass = Class.forName(className);
-    } catch (ClassNotFoundException e) {
+    } catch (final ClassNotFoundException e) {
       throw new OpenGammaRuntimeException("Failed to create instance of class " + className, e);
     }
     if (!expectedType.isAssignableFrom(supplierClass)) {
@@ -134,33 +134,33 @@ public class SimulationTool extends AbstractTool<ToolContext> {
   }
 
   @Override
-  protected Options createOptions(boolean mandatoryConfigResource) {
-    Options options = super.createOptions(mandatoryConfigResource);
+  protected Options createOptions(final boolean mandatoryConfigResource) {
+    final Options options = super.createOptions(mandatoryConfigResource);
 
-    Option viewDefNameOption = new Option(VIEW_DEF_NAME_OPTION, true, "View definition name");
+    final Option viewDefNameOption = new Option(VIEW_DEF_NAME_OPTION, true, "View definition name");
     viewDefNameOption.setRequired(true);
     viewDefNameOption.setArgName("viewdefname");
     options.addOption(viewDefNameOption);
 
-    Option marketDataOption = new Option(MARKET_DATA_OPTION, true, "Market data source names");
+    final Option marketDataOption = new Option(MARKET_DATA_OPTION, true, "Market data source names");
     marketDataOption.setRequired(true);
     marketDataOption.setArgName("marketdata");
     options.addOption(marketDataOption);
 
-    Option simulationScriptOption = new Option(SIMULATION_SCRIPT_OPTION, true, "Simulation script location");
+    final Option simulationScriptOption = new Option(SIMULATION_SCRIPT_OPTION, true, "Simulation script location");
     simulationScriptOption.setRequired(true);
     simulationScriptOption.setArgName("simulationscript");
     options.addOption(simulationScriptOption);
 
-    Option paramScriptOption = new Option(PARAMETER_SCRIPT_OPTION, true, "Simulation parameters script location");
+    final Option paramScriptOption = new Option(PARAMETER_SCRIPT_OPTION, true, "Simulation parameters script location");
     paramScriptOption.setArgName("simulationparameters");
     options.addOption(paramScriptOption);
 
-    Option batchModeOption = new Option(BATCH_MODE_OPTION, false, "Run in batch mode");
+    final Option batchModeOption = new Option(BATCH_MODE_OPTION, false, "Run in batch mode");
     batchModeOption.setArgName("batchmode");
     options.addOption(batchModeOption);
 
-    Option resultListenerClassOption = new Option(RESULT_LISTENER_CLASS_OPTION, true, "Result listener class " +
+    final Option resultListenerClassOption = new Option(RESULT_LISTENER_CLASS_OPTION, true, "Result listener class " +
         "implementing ViewResultListener");
     resultListenerClassOption.setArgName("resultlistenerclass");
     options.addOption(resultListenerClassOption);
@@ -183,7 +183,7 @@ public class SimulationTool extends AbstractTool<ToolContext> {
    * @return A {@link MarketDataSpecification} instance built from the string
    * @throws IllegalArgumentException If the string can't be parsed
    */
-  /* package */ static MarketDataSpecification parse(String specStr) {
+  /* package */ static MarketDataSpecification parse(final String specStr) {
     if (specStr.startsWith(LIVE)) {
       return createLiveSpec(removePrefix(specStr, LIVE));
     } else {
@@ -200,33 +200,33 @@ public class SimulationTool extends AbstractTool<ToolContext> {
     }
   }
 
-  private static MarketDataSpecification createLatestHistoricalSpec(String specStr) {
+  private static MarketDataSpecification createLatestHistoricalSpec(final String specStr) {
     if (specStr.isEmpty()) {
       return new LatestHistoricalMarketDataSpecification();
     }
     if (!specStr.startsWith(":")) {
       throw new IllegalArgumentException(specStr + " doesn't match 'latesthistorical[:time series rating]'");
     }
-    String timeSeriesRating = specStr.substring(1).trim();
+    final String timeSeriesRating = specStr.substring(1).trim();
     if (timeSeriesRating.isEmpty()) {
       throw new IllegalArgumentException(specStr + " doesn't match 'latesthistorical[:time series rating]'");
     }
     return new LatestHistoricalMarketDataSpecification(timeSeriesRating);
   }
 
-  private static MarketDataSpecification createFixedHistoricalSpec(String specStr) {
+  private static MarketDataSpecification createFixedHistoricalSpec(final String specStr) {
     if (!specStr.startsWith(":")) {
       throw new IllegalArgumentException(specStr + " doesn't match 'fixedhistorical:timestamp[,time series rating]'");
     }
-    String[] strings = specStr.split(",");
+    final String[] strings = specStr.split(",");
     LocalDate date;
     try {
       date = LocalDate.parse(strings[0].substring(1).trim());
-    } catch (DateTimeParseException e) {
+    } catch (final DateTimeParseException e) {
       throw new IllegalArgumentException("Unknown date format", e);
     }
     if (strings.length > 1) {
-      String timeSeriesRating = strings[1].trim();
+      final String timeSeriesRating = strings[1].trim();
       if (timeSeriesRating.isEmpty()) {
         throw new IllegalArgumentException(specStr + " doesn't match 'fixedhistorical:timestamp[,time series rating]'");
       }
@@ -237,26 +237,26 @@ public class SimulationTool extends AbstractTool<ToolContext> {
   }
 
   // TODO accept 'snapshot name/timestamp'? friendlier but requires looking up data from the server
-  private static MarketDataSpecification createSnapshotSpec(String specStr) {
+  private static MarketDataSpecification createSnapshotSpec(final String specStr) {
     if (!specStr.startsWith(":")) {
       throw new IllegalArgumentException(specStr + " doesn't match 'snapshot:snapshot ID'");
     }
-    String id = specStr.substring(1).trim();
+    final String id = specStr.substring(1).trim();
     return UserMarketDataSpecification.of(UniqueId.parse(id));
   }
 
-  private static MarketDataSpecification createLiveSpec(String specStr) {
+  private static MarketDataSpecification createLiveSpec(final String specStr) {
     if (!specStr.startsWith(":")) {
       throw new IllegalArgumentException(specStr + " doesn't match 'live:source name'");
     }
-    String sourceName = specStr.substring(1).trim();
+    final String sourceName = specStr.substring(1).trim();
     if (sourceName.isEmpty()) {
       throw new IllegalArgumentException(specStr + " doesn't match 'live:source name'");
     }
     return LiveMarketDataSpecification.of(sourceName);
   }
 
-  private static String removePrefix(String specStr, String prefix) {
+  private static String removePrefix(final String specStr, final String prefix) {
     return specStr.substring(prefix.length(), specStr.length());
   }
 

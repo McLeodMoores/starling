@@ -8,10 +8,6 @@ package com.opengamma.financial.security;
 import java.util.Collection;
 import java.util.HashSet;
 
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +15,10 @@ import com.opengamma.core.AbstractEHCachingSourceWithExternalBundle;
 import com.opengamma.core.security.Security;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.ehcache.EHCacheUtils;
+
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
 
 /**
  * A cache decorating a {@code FinancialSecuritySource}.
@@ -56,10 +56,10 @@ public class EHCachingFinancialSecuritySource
   //-------------------------------------------------------------------------
   @SuppressWarnings("unchecked")
   @Override
-  public Collection<Security> getBondsWithIssuerName(String issuerType) {
+  public Collection<Security> getBondsWithIssuerName(final String issuerType) {
     ArgumentChecker.notNull(issuerType, "issuerType");
-    Element e = _bondCache.get(issuerType);
-    Collection<Security> result = new HashSet<Security>();
+    final Element e = _bondCache.get(issuerType);
+    Collection<Security> result = new HashSet<>();
     if (e != null) {
       if (e.getObjectValue() instanceof Collection<?>) {
         result.addAll((Collection<Security>) e.getObjectValue());

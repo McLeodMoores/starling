@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.marketdatasnapshot;
@@ -52,12 +52,12 @@ public class VolatilityPoint extends DirectBean {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param swapTenor  the swap tenor
    * @param optionExpiry  the option expiry
    * @param relativeStrike  the relative strike
    */
-  public VolatilityPoint(Tenor swapTenor, Tenor optionExpiry, double relativeStrike) {
+  public VolatilityPoint(final Tenor swapTenor, final Tenor optionExpiry, final double relativeStrike) {
     super();
     _swapTenor = swapTenor;
     _optionExpiry = optionExpiry;

@@ -46,13 +46,13 @@ public class ViewRequest {
    * @param blotter Whether to show blotter columns containing security and trade data in the portfolio grid
    * @param portfolioVersionCorrection Version and correction time for the portfolio used when calculating the analytics
    */
-  public ViewRequest(UniqueId viewDefinitionId,
-                     UniqueId viewProcessId,
-                     List<String> aggregators,
-                     List<MarketDataSpecification> marketDataSpecs,
-                     Instant valuationTime,
-                     VersionCorrection portfolioVersionCorrection,
-                     boolean blotter) {
+  public ViewRequest(final UniqueId viewDefinitionId,
+                     final UniqueId viewProcessId,
+                     final List<String> aggregators,
+                     final List<MarketDataSpecification> marketDataSpecs,
+                     final Instant valuationTime,
+                     final VersionCorrection portfolioVersionCorrection,
+                     final boolean blotter) {
     ArgumentChecker.notNull(viewDefinitionId, "viewDefinitionId");
     ArgumentChecker.notNull(aggregators, "aggregators");
     ArgumentChecker.notEmpty(marketDataSpecs, "marketDataSpecs");
@@ -72,7 +72,7 @@ public class ViewRequest {
   public UniqueId getViewDefinitionId() {
     return _viewDefinitionId;
   }
-  
+
   /**
    * @return the unique identifier of an existing view process to attach to, null to use the default
    */

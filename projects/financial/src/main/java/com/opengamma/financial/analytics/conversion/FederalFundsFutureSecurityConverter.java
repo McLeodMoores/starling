@@ -80,7 +80,7 @@ public class FederalFundsFutureSecurityConverter extends FinancialSecurityVisito
   }
 
   @Override
-  public FederalFundsFutureSecurityDefinition visitFederalFundsFutureSecurity(FederalFundsFutureSecurity security) {
+  public FederalFundsFutureSecurityDefinition visitFederalFundsFutureSecurity(final FederalFundsFutureSecurity security) {
     ArgumentChecker.notNull(security, "security");
     final ZonedDateTime lastTradeDate = security.getExpiry().getExpiry().withHour(0);
     final FederalFundsFutureConvention convention = _conventionSource.getSingle(ExternalId.of(SCHEME_NAME, FED_FUNDS_FUTURE), FederalFundsFutureConvention.class);

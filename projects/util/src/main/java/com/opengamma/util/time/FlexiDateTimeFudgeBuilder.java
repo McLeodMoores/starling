@@ -36,7 +36,7 @@ public final class FlexiDateTimeFudgeBuilder extends AbstractFudgeBuilder implem
 
   //-------------------------------------------------------------------------
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, FlexiDateTime object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final FlexiDateTime object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     toFudgeMsg(serializer, object, msg);
     return msg;
@@ -53,9 +53,9 @@ public final class FlexiDateTimeFudgeBuilder extends AbstractFudgeBuilder implem
 
   public static void toFudgeMsg(final FudgeSerializer serializer, final FlexiDateTime object, final MutableFudgeMsg msg) {
     Temporal best = object.toBest();
-    best = (best instanceof ZonedDateTime ? ((ZonedDateTime) best).toOffsetDateTime() : best);
+    best = best instanceof ZonedDateTime ? ((ZonedDateTime) best).toOffsetDateTime() : best;
     addToMessage(msg, DATETIME_FIELD_NAME, best);
-    ZoneId zone = object.getZone();
+    final ZoneId zone = object.getZone();
     if (zone != null && zone instanceof ZoneOffset == false) {
       addToMessage(msg, ZONE_FIELD_NAME, zone);
     }
@@ -74,9 +74,9 @@ public final class FlexiDateTimeFudgeBuilder extends AbstractFudgeBuilder implem
     final ZoneId zone = msg.getValue(ZoneId.class, ZONE_FIELD_NAME);
     final Object obj = msg.getValue(DATETIME_FIELD_NAME);
     if (obj instanceof FudgeDateTime) {
-      FudgeDateTime fudge = (FudgeDateTime) obj;
+      final FudgeDateTime fudge = (FudgeDateTime) obj;
       if (fudge.getTime().hasTimezoneOffset()) {
-        OffsetDateTime odt = fudge.toOffsetDateTime();
+        final OffsetDateTime odt = fudge.toOffsetDateTime();
         if (zone != null) {
           return FlexiDateTime.of(odt.atZoneSameInstant(zone));
         }
@@ -85,10 +85,10 @@ public final class FlexiDateTimeFudgeBuilder extends AbstractFudgeBuilder implem
         return FlexiDateTime.of(fudge.toLocalDateTime());
       }
     } else if (obj instanceof FudgeDate) {
-      FudgeDate fudge = (FudgeDate) obj;
+      final FudgeDate fudge = (FudgeDate) obj;
       return FlexiDateTime.of(fudge.toLocalDate());
     } else if (obj instanceof OffsetDateTime) {
-      OffsetDateTime odt = (OffsetDateTime) obj;
+      final OffsetDateTime odt = (OffsetDateTime) obj;
       if (zone != null) {
         return FlexiDateTime.of(odt.atZoneSameInstant(zone));
       }

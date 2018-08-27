@@ -45,10 +45,10 @@ public class LiveDataMetaDataProviderResult extends DirectBean {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param metaData  the meta data, not null
    */
-  public LiveDataMetaDataProviderResult(LiveDataMetaData metaData) {
+  public LiveDataMetaDataProviderResult(final LiveDataMetaData metaData) {
     setMetaData(metaData);
   }
 

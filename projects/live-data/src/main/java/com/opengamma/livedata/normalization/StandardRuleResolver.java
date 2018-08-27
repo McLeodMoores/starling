@@ -11,29 +11,29 @@ import com.opengamma.livedata.resolver.NormalizationRuleResolver;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * A {@code NormalizationRuleResolver} that gets the normalization rule set 
+ * A {@code NormalizationRuleResolver} that gets the normalization rule set
  * from a fixed collection.
  */
 public class StandardRuleResolver implements NormalizationRuleResolver {
-  
+
   private final Collection<NormalizationRuleSet> _rules;
-  
-  public StandardRuleResolver(Collection<NormalizationRuleSet> rules) {
+
+  public StandardRuleResolver(final Collection<NormalizationRuleSet> rules) {
     ArgumentChecker.notNull(rules, "Supported rules");
     _rules = rules;
   }
 
   @Override
-  public NormalizationRuleSet resolve(String ruleSetId) {
+  public NormalizationRuleSet resolve(final String ruleSetId) {
     ArgumentChecker.notNull(ruleSetId, "Rule set ID");
-    
-    for (NormalizationRuleSet normalizationRuleSet : _rules) {
+
+    for (final NormalizationRuleSet normalizationRuleSet : _rules) {
       if (ruleSetId.equals(normalizationRuleSet.getId())) {
-        return normalizationRuleSet;        
-      } 
+        return normalizationRuleSet;
+      }
     }
-    
+
     return null;
   }
-  
+
 }

@@ -18,8 +18,6 @@ import java.util.Set;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
-import au.com.bytecode.opencsv.CSVReader;
-
 import com.google.common.base.Charsets;
 import com.google.common.base.Objects;
 import com.opengamma.OpenGammaRuntimeException;
@@ -32,6 +30,8 @@ import com.opengamma.master.region.RegionSearchRequest;
 import com.opengamma.master.region.RegionSearchResult;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.i18n.Country;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 /**
  * Loads a CSV formatted UN/LOCODE file based on the regions in the holiday database.
@@ -52,17 +52,17 @@ class UnLocodeRegionFileReader {
   /**
    * The region master to populate.
    */
-  private RegionMaster _regionMaster;
+  private final RegionMaster _regionMaster;
 
   /**
    * Populates a region master.
-   * 
+   *
    * @param regionMaster  the region master to populate, not null
    * @return the master, not null
    */
-  static RegionMaster populate(RegionMaster regionMaster) {
-    InputStream stream = regionMaster.getClass().getResourceAsStream(REGIONS_RESOURCE);
-    UnLocodeRegionFileReader reader = new UnLocodeRegionFileReader(regionMaster);
+  static RegionMaster populate(final RegionMaster regionMaster) {
+    final InputStream stream = regionMaster.getClass().getResourceAsStream(REGIONS_RESOURCE);
+    final UnLocodeRegionFileReader reader = new UnLocodeRegionFileReader(regionMaster);
     reader.parse(stream);
     return regionMaster;
   }
@@ -70,17 +70,17 @@ class UnLocodeRegionFileReader {
   //-------------------------------------------------------------------------
   /**
    * Creates an instance with a master to populate.
-   * 
+   *
    * @param regionMaster  the region master, not null
    */
-  UnLocodeRegionFileReader(RegionMaster regionMaster) {
+  UnLocodeRegionFileReader(final RegionMaster regionMaster) {
     ArgumentChecker.notNull(regionMaster, "regionMaster");
     _regionMaster = regionMaster;
   }
 
   //-------------------------------------------------------------------------
-  private void parse(InputStream in) {
-    InputStreamReader reader = new InputStreamReader(new BufferedInputStream(in), Charsets.UTF_8);
+  private void parse(final InputStream in) {
+    final InputStreamReader reader = new InputStreamReader(new BufferedInputStream(in), Charsets.UTF_8);
     try {
       parse(reader);
     } finally {
@@ -88,21 +88,21 @@ class UnLocodeRegionFileReader {
     }
   }
 
-  private void parse(InputStreamReader reader) {
-    Set<String> required = parseRequired();
-    Set<ManageableRegion> regions = parseLocodes(reader, required);
+  private void parse(final InputStreamReader reader) {
+    final Set<String> required = parseRequired();
+    final Set<ManageableRegion> regions = parseLocodes(reader, required);
     coppClark(regions);
     store(regions);
   }
 
   private Set<String> parseRequired() {
-    InputStream stream = getClass().getResourceAsStream(LOAD_RESOURCE);
+    final InputStream stream = getClass().getResourceAsStream(LOAD_RESOURCE);
     if (stream == null) {
       throw new OpenGammaRuntimeException("Unable to find UnLocode.txt defining the UN/LOCODEs");
     }
     try {
-      Set<String> lines = new HashSet<String>(IOUtils.readLines(stream, "UTF-8"));
-      Set<String> required = new HashSet<String>();
+      final Set<String> lines = new HashSet<>(IOUtils.readLines(stream, "UTF-8"));
+      final Set<String> required = new HashSet<>();
       for (String line : lines) {
         line = StringUtils.trimToNull(line);
         if (line != null) {
@@ -110,49 +110,50 @@ class UnLocodeRegionFileReader {
         }
       }
       return required;
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       throw new OpenGammaRuntimeException("Unable to read UnLocode.txt defining the UN/LOCODEs");
     } finally {
       IOUtils.closeQuietly(stream);
     }
   }
 
-  private Set<ManageableRegion> parseLocodes(Reader in, Set<String> required) {
-    Set<ManageableRegion> regions = new HashSet<ManageableRegion>(1024, 0.75f);
+  private Set<ManageableRegion> parseLocodes(final Reader in, final Set<String> required) {
+    final Set<ManageableRegion> regions = new HashSet<>(1024, 0.75f);
     String name = null;
     try {
       @SuppressWarnings("resource")
+      final
       CSVReader reader = new CSVReader(in);
       final int typeIdx = 0;
       final int countryIsoIdx = 1;
       final int unlocodePartIdx = 2;
       final int nameColumnIdx = 4;
       final int fullNameColumnIdx = 3;
-      
+
       String[] row = null;
       while ((row = reader.readNext()) != null) {
         if (row.length < 9) {
           continue;
         }
         name = StringUtils.trimToNull(row[nameColumnIdx]);
-        String type = StringUtils.trimToNull(row[typeIdx]);
+        final String type = StringUtils.trimToNull(row[typeIdx]);
         String fullName = StringUtils.trimToNull(row[fullNameColumnIdx]);
         fullName = Objects.firstNonNull(fullName, name);
-        String countryISO = StringUtils.trimToNull(row[countryIsoIdx]);
-        String unlocodePart = StringUtils.trimToNull(row[unlocodePartIdx]);
-        String unlocode = countryISO + unlocodePart;
+        final String countryISO = StringUtils.trimToNull(row[countryIsoIdx]);
+        final String unlocodePart = StringUtils.trimToNull(row[unlocodePartIdx]);
+        final String unlocode = countryISO + unlocodePart;
         if (StringUtils.isEmpty(name) || StringUtils.isEmpty(fullName) || StringUtils.isEmpty(countryISO) ||
             StringUtils.isEmpty(unlocodePart) || unlocode.length() != 5 ||
             countryISO.equals("XZ") || "=".equals(type) || required.remove(unlocode) == false) {
           continue;
         }
-        
-        ManageableRegion region = createRegion(name, fullName, countryISO);
+
+        final ManageableRegion region = createRegion(name, fullName, countryISO);
         region.addExternalId(ExternalSchemes.unLocode20102RegionId(unlocode));
         regions.add(region);
       }
-    } catch (Exception ex) {
-      String detail = (name != null ? " while processing " + name : "");
+    } catch (final Exception ex) {
+      final String detail = name != null ? " while processing " + name : "";
       throw new OpenGammaRuntimeException("Unable to read UN/LOCODEs" + detail, ex);
     }
     if (required.size() > 0) {
@@ -161,8 +162,8 @@ class UnLocodeRegionFileReader {
     return regions;
   }
 
-  private ManageableRegion createRegion(String name, String fullName, String countryISO) {
-    ManageableRegion region = new ManageableRegion();
+  private ManageableRegion createRegion(final String name, final String fullName, final String countryISO) {
+    final ManageableRegion region = new ManageableRegion();
     region.setClassification(RegionClassification.MUNICIPALITY);
     region.setName(name);
     region.setFullName(fullName);
@@ -170,20 +171,20 @@ class UnLocodeRegionFileReader {
     return region;
   }
 
-  private void addParent(ManageableRegion region, String countryISO) {
-    RegionSearchRequest request = new RegionSearchRequest();
+  private void addParent(final ManageableRegion region, final String countryISO) {
+    final RegionSearchRequest request = new RegionSearchRequest();
     request.addCountry(Country.of(countryISO));
-    ManageableRegion parent = _regionMaster.search(request).getFirstRegion();
+    final ManageableRegion parent = _regionMaster.search(request).getFirstRegion();
     if (parent == null) {
       throw new OpenGammaRuntimeException("Cannot find parent '" + countryISO + "'  for '" + region.getName() + "'");
     }
     region.getParentRegionIds().add(parent.getUniqueId());
   }
 
-  private void coppClark(Set<ManageableRegion> regions) {
-    for (ManageableRegion region : regions) {
-      String unLocode = region.getExternalIdBundle().getValue(ExternalSchemes.UN_LOCODE_2010_2);
-      String coppClarkLocode = COPP_CLARK_ALTERATIONS.get(unLocode);
+  private void coppClark(final Set<ManageableRegion> regions) {
+    for (final ManageableRegion region : regions) {
+      final String unLocode = region.getExternalIdBundle().getValue(ExternalSchemes.UN_LOCODE_2010_2);
+      final String coppClarkLocode = COPP_CLARK_ALTERATIONS.get(unLocode);
       if (coppClarkLocode != null) {
         region.addExternalId(ExternalSchemes.coppClarkRegionId(coppClarkLocode));
         if (coppClarkLocode.substring(0, 2).equals(unLocode.substring(0, 2)) == false) {
@@ -193,24 +194,24 @@ class UnLocodeRegionFileReader {
         region.addExternalId(ExternalSchemes.coppClarkRegionId(unLocode));
       }
     }
-    for (Entry<String, String> entry : COPP_CLARK_ADDITIONS.entrySet()) {
-      ManageableRegion region = createRegion(entry.getValue(), entry.getValue(), entry.getKey().substring(0, 2));
+    for (final Entry<String, String> entry : COPP_CLARK_ADDITIONS.entrySet()) {
+      final ManageableRegion region = createRegion(entry.getValue(), entry.getValue(), entry.getKey().substring(0, 2));
       region.addExternalId(ExternalSchemes.coppClarkRegionId(entry.getKey()));
       regions.add(region);
     }
   }
 
-  private void store(Set<ManageableRegion> regions) {
-    for (ManageableRegion region : regions) {
-      RegionDocument doc = new RegionDocument();
+  private void store(final Set<ManageableRegion> regions) {
+    for (final ManageableRegion region : regions) {
+      final RegionDocument doc = new RegionDocument();
       doc.setRegion(region);
-      RegionSearchRequest request = new RegionSearchRequest();
+      final RegionSearchRequest request = new RegionSearchRequest();
       request.addExternalIds(region.getExternalIdBundle());
-      RegionSearchResult result = _regionMaster.search(request);
+      final RegionSearchResult result = _regionMaster.search(request);
       if (result.getDocuments().size() == 0) {
         _regionMaster.add(doc);
       } else {
-        RegionDocument existing = result.getFirstDocument();
+        final RegionDocument existing = result.getFirstDocument();
         if (existing.getRegion().getName().equals(doc.getRegion().getName()) == false ||
             existing.getRegion().getFullName().equals(doc.getRegion().getFullName()) == false) {
           existing.getRegion().setName(doc.getRegion().getName());
@@ -222,7 +223,7 @@ class UnLocodeRegionFileReader {
   }
 
   //-------------------------------------------------------------------------
-  private static final Map<String, String> COPP_CLARK_ALTERATIONS = new HashMap<String, String>();
+  private static final Map<String, String> COPP_CLARK_ALTERATIONS = new HashMap<>();
   static {
     COPP_CLARK_ALTERATIONS.put("CNCAN", "CNXSA");  // Guangzhou (China)
     COPP_CLARK_ALTERATIONS.put("GPMSB", "MFMGT");  // Marigot (Guadaloupe/St.Martin-MF)
@@ -231,7 +232,7 @@ class UnLocodeRegionFileReader {
     COPP_CLARK_ALTERATIONS.put("FMPNI", "FMFSM");  // Pohnpei (Micronesia)
     COPP_CLARK_ALTERATIONS.put("MSMNI", "MSMSR");  // Montserrat
   };
-  private static final Map<String, String> COPP_CLARK_ADDITIONS = new HashMap<String, String>();
+  private static final Map<String, String> COPP_CLARK_ADDITIONS = new HashMap<>();
   static {
     COPP_CLARK_ADDITIONS.put("PSPSE", "West Bank");
     COPP_CLARK_ADDITIONS.put("LKMAT", "Matara");

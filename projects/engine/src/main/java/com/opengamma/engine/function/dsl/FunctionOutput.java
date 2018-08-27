@@ -12,10 +12,10 @@ public class FunctionOutput extends FunctionGate<FunctionOutput> {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param name  the name
    */
-  public FunctionOutput(String name) {
+  public FunctionOutput(final String name) {
     super(name);
   }
 

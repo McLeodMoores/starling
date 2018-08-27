@@ -47,36 +47,36 @@ public class DependencyGraphGridStructureMessageBodyWriter implements MessageBod
 
   private final GridColumnsJsonWriter _writer;
 
-  public DependencyGraphGridStructureMessageBodyWriter(GridColumnsJsonWriter writer) {
+  public DependencyGraphGridStructureMessageBodyWriter(final GridColumnsJsonWriter writer) {
     ArgumentChecker.notNull(writer, "writer");
     _writer = writer;
   }
 
   @Override
-  public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+  public boolean isWriteable(final Class<?> type, final Type genericType, final Annotation[] annotations, final MediaType mediaType) {
     return type.equals(DependencyGraphGridStructure.class);
   }
 
   @Override
-  public long getSize(DependencyGraphGridStructure gridStructure,
-                      Class<?> type,
-                      Type genericType,
-                      Annotation[] annotations,
-                      MediaType mediaType) {
+  public long getSize(final DependencyGraphGridStructure gridStructure,
+                      final Class<?> type,
+                      final Type genericType,
+                      final Annotation[] annotations,
+                      final MediaType mediaType) {
     // TODO this means unknown size. is it worth encoding it twice to find out the size?
     return -1;
   }
 
   @Override
-  public void writeTo(DependencyGraphGridStructure gridStructure,
-                      Class<?> type,
-                      Type genericType,
-                      Annotation[] annotations,
-                      MediaType mediaType,
-                      MultivaluedMap<String, Object> httpHeaders,
-                      OutputStream entityStream) throws IOException, WebApplicationException {
-    Object[] rootNode = AnalyticsNodeJsonWriter.getJsonStructure(gridStructure.getRootNode());
-    List<Map<String, Object>> columns = _writer.getJsonStructure(gridStructure.getColumnStructure().getGroups());
+  public void writeTo(final DependencyGraphGridStructure gridStructure,
+                      final Class<?> type,
+                      final Type genericType,
+                      final Annotation[] annotations,
+                      final MediaType mediaType,
+                      final MultivaluedMap<String, Object> httpHeaders,
+                      final OutputStream entityStream) throws IOException, WebApplicationException {
+    final Object[] rootNode = AnalyticsNodeJsonWriter.getJsonStructure(gridStructure.getRootNode());
+    final List<Map<String, Object>> columns = _writer.getJsonStructure(gridStructure.getColumnStructure().getGroups());
     //ValueRequirementJSONBuilder jsonBuilder = new ValueRequirementJSONBuilder();
     //String valueReqStr = jsonBuilder.toJSON(gridStructure.getRootRequirement());
     //JSONObject valueReqJson;
@@ -87,8 +87,8 @@ public class DependencyGraphGridStructureMessageBodyWriter implements MessageBod
     //} catch (JSONException e) {
     //  throw new OpenGammaRuntimeException("Failed to convert ValueRequirement to JSON", e);
     //}
-    String calcConfigName = gridStructure.getCalculationConfigurationName();
-    ImmutableMap<String, Object> jsonMap = ImmutableMap.of(COLUMN_SETS, columns,
+    final String calcConfigName = gridStructure.getCalculationConfigurationName();
+    final ImmutableMap<String, Object> jsonMap = ImmutableMap.of(COLUMN_SETS, columns,
                                                            ROOT_NODE, rootNode,
                                                            CALC_CONFIG_NAME, calcConfigName/*,
                                                            VALUE_REQUIREMENT, valueReqJson*/);

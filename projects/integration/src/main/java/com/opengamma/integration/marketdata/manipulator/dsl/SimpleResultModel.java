@@ -25,20 +25,20 @@ public class SimpleResultModel {
 
   /** Execution options used when calculating the results. */
   private final ViewCycleExecutionOptions _executionOptions;
-  
+
   /** The column names in the order they are defined in the view definition and appear in the results. */
   private final List<String> _columnNames;
-  
+
   /** The trades, positions and portfolio nodes in the order they appear in the portfolio and the results. */
   private final List<UniqueIdentifiable> _targets;
 
   /** The results. */
   private final Table<Integer, Integer, Object> _results;
 
-  /* package */ SimpleResultModel(List<UniqueIdentifiable> targets,
-                                  List<String> columnNames,
-                                  Table<Integer, Integer, Object> results,
-                                  ViewCycleExecutionOptions executionOptions) {
+  /* package */ SimpleResultModel(final List<UniqueIdentifiable> targets,
+                                  final List<String> columnNames,
+                                  final Table<Integer, Integer, Object> results,
+                                  final ViewCycleExecutionOptions executionOptions) {
     _executionOptions = ArgumentChecker.notNull(executionOptions, "executionOptions");
     _targets = ImmutableList.copyOf(ArgumentChecker.notNull(targets, "targets"));
     _columnNames = ImmutableList.copyOf(ArgumentChecker.notNull(columnNames, "columnNames"));

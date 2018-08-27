@@ -30,7 +30,7 @@ public class ModifyConfigDbConfigMasterWorkerRemoveTest extends AbstractDbConfig
   private static final Logger LOGGER = LoggerFactory.getLogger(ModifyConfigDbConfigMasterWorkerRemoveTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public ModifyConfigDbConfigMasterWorkerRemoveTest(String databaseType, String databaseVersion) {
+  public ModifyConfigDbConfigMasterWorkerRemoveTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion, false);
     LOGGER.info("running testcases for {}", databaseType);
   }
@@ -38,18 +38,18 @@ public class ModifyConfigDbConfigMasterWorkerRemoveTest extends AbstractDbConfig
   //-------------------------------------------------------------------------
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_removeConfig_versioned_notFound() {
-    UniqueId uniqueId = UniqueId.of("DbCfg", "0", "0");
+    final UniqueId uniqueId = UniqueId.of("DbCfg", "0", "0");
     _cfgMaster.remove(uniqueId);
   }
 
   @Test
   public void test_remove_removed() {
-    Instant now = Instant.now(_cfgMaster.getClock());
-    
-    UniqueId uniqueId = UniqueId.of("DbCfg", "101", "0");
+    final Instant now = Instant.now(_cfgMaster.getClock());
+
+    final UniqueId uniqueId = UniqueId.of("DbCfg", "101", "0");
     _cfgMaster.remove(uniqueId);
-    ConfigDocument test = _cfgMaster.get(uniqueId);
-    
+    final ConfigDocument test = _cfgMaster.get(uniqueId);
+
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version1aInstant, test.getVersionFromInstant());
     assertEquals(now, test.getVersionToInstant());

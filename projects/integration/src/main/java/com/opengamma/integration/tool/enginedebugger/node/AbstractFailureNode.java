@@ -32,7 +32,7 @@ public abstract class AbstractFailureNode implements TreeTableNode {
    */
   protected ValueSpecificationNode _desiredOutputNode;
 
-  public AbstractFailureNode(Object parent, ValueRequirement valueRequirement, String function, ValueSpecification desiredOutput) {
+  public AbstractFailureNode(final Object parent, final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput) {
     _parent = parent;
     _valueRequirementNode = new ValueRequirementNode(this, valueRequirement);
     _functionEntry = new FunctionEntryNode(this, function);
@@ -40,7 +40,7 @@ public abstract class AbstractFailureNode implements TreeTableNode {
   }
 
   @Override
-  public Object getChildAt(int index) {
+  public Object getChildAt(final int index) {
     switch (index) {
       case 0:
         return _valueRequirementNode;
@@ -53,7 +53,7 @@ public abstract class AbstractFailureNode implements TreeTableNode {
   }
 
   @Override
-  public int getIndexOfChild(Object child) {
+  public int getIndexOfChild(final Object child) {
     if (child.equals(_valueRequirementNode)) {
       return 0;
     } else if (child.equals(_functionEntry)) {
@@ -73,14 +73,14 @@ public abstract class AbstractFailureNode implements TreeTableNode {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_desiredOutputNode == null) ? 0 : _desiredOutputNode.hashCode());
-    result = prime * result + ((_functionEntry == null) ? 0 : _functionEntry.hashCode());
-    result = prime * result + ((_valueRequirementNode == null) ? 0 : _valueRequirementNode.hashCode());
+    result = prime * result + (_desiredOutputNode == null ? 0 : _desiredOutputNode.hashCode());
+    result = prime * result + (_functionEntry == null ? 0 : _functionEntry.hashCode());
+    result = prime * result + (_valueRequirementNode == null ? 0 : _valueRequirementNode.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -90,7 +90,7 @@ public abstract class AbstractFailureNode implements TreeTableNode {
     if (!(obj instanceof AbstractFailureNode)) {
       return false;
     }
-    AbstractFailureNode other = (AbstractFailureNode) obj;
+    final AbstractFailureNode other = (AbstractFailureNode) obj;
     if (_desiredOutputNode == null) {
       if (other._desiredOutputNode != null) {
         return false;

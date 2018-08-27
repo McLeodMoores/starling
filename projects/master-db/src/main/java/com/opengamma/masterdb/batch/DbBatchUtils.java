@@ -24,8 +24,8 @@ import com.opengamma.batch.domain.StatusEntry;
  */
 public class DbBatchUtils {
 
-  public static SqlParameterSource toSqlParameterSource(ComputeFailureKey computeFailureKey) {
-    MapSqlParameterSource source = new MapSqlParameterSource();
+  public static SqlParameterSource toSqlParameterSource(final ComputeFailureKey computeFailureKey) {
+    final MapSqlParameterSource source = new MapSqlParameterSource();
     source.addValue("function_id", computeFailureKey.getFunctionId());
     source.addValue("exception_class", computeFailureKey.getExceptionClass());
     source.addValue("exception_msg", computeFailureKey.getExceptionMsg());
@@ -33,8 +33,8 @@ public class DbBatchUtils {
     return source;
   }
 
-  public static SqlParameterSource toSqlParameterSource(ComputeFailure computeFailure) {
-    MapSqlParameterSource source = new MapSqlParameterSource();
+  public static SqlParameterSource toSqlParameterSource(final ComputeFailure computeFailure) {
+    final MapSqlParameterSource source = new MapSqlParameterSource();
     source.addValue("id", computeFailure.getId());
     source.addValue("function_id", computeFailure.getFunctionId());
     source.addValue("exception_class", computeFailure.getExceptionClass());
@@ -43,16 +43,16 @@ public class DbBatchUtils {
     return source;
   }
 
-  public SqlParameterSource toSqlParameterSource(FailureReason failureReason) {
-    MapSqlParameterSource source = new MapSqlParameterSource();
+  public SqlParameterSource toSqlParameterSource(final FailureReason failureReason) {
+    final MapSqlParameterSource source = new MapSqlParameterSource();
     source.addValue("id", failureReason.getId());
     source.addValue("rsk_failure_id", failureReason.getRiskFailure().getId());
     source.addValue("compute_failure_id", failureReason.getComputeFailureId());
     return source;
   }
 
-  public SqlParameterSource toSqlParameterSource(RiskFailure riskFailure) {
-    MapSqlParameterSource source = new MapSqlParameterSource();
+  public SqlParameterSource toSqlParameterSource(final RiskFailure riskFailure) {
+    final MapSqlParameterSource source = new MapSqlParameterSource();
     source.addValue("id", riskFailure.getId());
     source.addValue("calculation_configuration_id", riskFailure.getCalculationConfigurationId());
     source.addValue("name", riskFailure.getName());
@@ -66,8 +66,8 @@ public class DbBatchUtils {
     return source;
   }
 
-  public SqlParameterSource toSqlParameterSource(RiskValue riskValue) {
-    MapSqlParameterSource source = new MapSqlParameterSource();
+  public SqlParameterSource toSqlParameterSource(final RiskValue riskValue) {
+    final MapSqlParameterSource source = new MapSqlParameterSource();
     source.addValue("id", riskValue.getId());
     source.addValue("calculation_configuration_id", riskValue.getCalculationConfigurationId());
     source.addValue("name", riskValue.getName());
@@ -83,12 +83,12 @@ public class DbBatchUtils {
 
   //-------------------------------------------------------------------------
   /**
-   * Spring ParameterizedRowMapper 
+   * Spring ParameterizedRowMapper
    */
   public static final RowMapper<StatusEntry> ROW_MAPPER = new RowMapper<StatusEntry>() {
     @Override
-    public StatusEntry mapRow(ResultSet rs, int rowNum) throws SQLException {
-      StatusEntry statusEntry = new StatusEntry();
+    public StatusEntry mapRow(final ResultSet rs, final int rowNum) throws SQLException {
+      final StatusEntry statusEntry = new StatusEntry();
       statusEntry.setId(rs.getLong("id"));
       statusEntry.setCalculationConfigurationId(rs.getInt("calculation_configuration_id"));
       statusEntry.setComputationTargetId(rs.getInt("computation_target_id"));

@@ -16,7 +16,7 @@ public final class ErrorInfo {
   private final Throwable _throwable;
   private final long _id;
 
-  public ErrorInfo(long id, Throwable throwable) {
+  public ErrorInfo(final long id, final Throwable throwable) {
     _id = id;
     ArgumentChecker.notNull(throwable, "throwable");
     _message = throwable.getMessage();

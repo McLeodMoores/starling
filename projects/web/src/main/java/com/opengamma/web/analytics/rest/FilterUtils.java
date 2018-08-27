@@ -33,11 +33,11 @@ import com.sun.jersey.spi.container.ContainerRequest;
    * query parameter and for POST requests it's a form parameter.
    * @see HttpMethodFilter
    */
-  /* package */ static String getClientId(ContainerRequest request, HttpContext httpContext) {
+  /* package */ static String getClientId(final ContainerRequest request, final HttpContext httpContext) {
     List<String> clientIds = null;
-    ExtendedUriInfo uriInfo = httpContext.getUriInfo();
+    final ExtendedUriInfo uriInfo = httpContext.getUriInfo();
     // try to get the client ID from the query params (for a GET request)
-    MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
+    final MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
     clientIds = queryParameters.get(LongPollingServlet.CLIENT_ID);
     if (clientIds == null || clientIds.size() != 1) {
       // try to get the client ID from the form params (in case it's a POST request disguised as a GET)
@@ -56,8 +56,8 @@ import com.sun.jersey.spi.container.ContainerRequest;
    * @param httpContext The HTTP context
    * @return The user ID from the request
    */
-  /* package */ static String getUserId(HttpContext httpContext) {
-    Principal userPrincipal = httpContext.getRequest().getUserPrincipal();
+  /* package */ static String getUserId(final HttpContext httpContext) {
+    final Principal userPrincipal = httpContext.getRequest().getUserPrincipal();
     if (userPrincipal == null) {
       // TODO reinstate this if / when we have user logins
       /*LOGGER.debug("No user principal, not subscribing, url: {}", url);

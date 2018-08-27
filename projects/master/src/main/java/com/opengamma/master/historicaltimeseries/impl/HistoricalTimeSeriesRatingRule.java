@@ -51,26 +51,26 @@ public final class HistoricalTimeSeriesRatingRule implements ImmutableBean {
   //-------------------------------------------------------------------------
   /**
    * Obtains an instance of {@code HistoricalTimeSeriesRatingRule}.
-   * 
+   *
    * @param fieldName  the field name, not null
    * @param fieldValue  the field value, not null
    * @param rating  the rating, zero or greater
    * @return the rule, not null
    */
-  public static HistoricalTimeSeriesRatingRule of(String fieldName, String fieldValue, int rating) {
+  public static HistoricalTimeSeriesRatingRule of(final String fieldName, final String fieldValue, final int rating) {
     return new HistoricalTimeSeriesRatingRule(fieldName, fieldValue, rating);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Creates an instance.
-   * 
+   *
    * @param fieldName  the field name, not null
    * @param fieldValue  the field value, not null
    * @param rating  the rating, zero or greater
    */
   @ImmutableConstructor
-  private HistoricalTimeSeriesRatingRule(String fieldName, String fieldValue, int rating) {
+  private HistoricalTimeSeriesRatingRule(final String fieldName, final String fieldValue, final int rating) {
     ArgumentChecker.notNull(fieldName, "fieldName");
     ArgumentChecker.isTrue(HistoricalTimeSeriesRatingFieldNames.VALID_FIELD_NAMES.contains(fieldName), "invalid field name");
     ArgumentChecker.notNull(fieldValue, "fieldValue");

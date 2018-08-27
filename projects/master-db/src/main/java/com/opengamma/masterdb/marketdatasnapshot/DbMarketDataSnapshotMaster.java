@@ -71,7 +71,7 @@ public class DbMarketDataSnapshotMaster
 
   static {
     //Registered here because I can't guarantee that the classes themselves are loaded
-    FudgeTypeDictionary typeDictionary = OpenGammaFudgeContext.getInstance().getTypeDictionary();
+    final FudgeTypeDictionary typeDictionary = OpenGammaFudgeContext.getInstance().getTypeDictionary();
     typeDictionary.registerClassRename("com.opengamma.master.marketdatasnapshot.ManageableUnstructuredMarketDataSnapshot", ManageableUnstructuredMarketDataSnapshot.class);
     typeDictionary.registerClassRename("com.opengamma.master.marketdatasnapshot.ManageableMarketDataSnapshot", ManageableMarketDataSnapshot.class);
     typeDictionary.registerClassRename("com.opengamma.master.marketdatasnapshot.ManageableYieldCurveSnapshot", ManageableYieldCurveSnapshot.class);
@@ -91,11 +91,11 @@ public class DbMarketDataSnapshotMaster
    * The Fudge context.
    */
   protected static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
-  
+
   /**
    * SQL order by.
    */
-  protected static final EnumMap<MarketDataSnapshotSearchSortOrder, String> ORDER_BY_MAP = new EnumMap<MarketDataSnapshotSearchSortOrder, String>(MarketDataSnapshotSearchSortOrder.class);
+  protected static final EnumMap<MarketDataSnapshotSearchSortOrder, String> ORDER_BY_MAP = new EnumMap<>(MarketDataSnapshotSearchSortOrder.class);
   static {
     ORDER_BY_MAP.put(MarketDataSnapshotSearchSortOrder.OBJECT_ID_ASC, "oid ASC");
     ORDER_BY_MAP.put(MarketDataSnapshotSearchSortOrder.OBJECT_ID_DESC, "oid DESC");
@@ -107,30 +107,31 @@ public class DbMarketDataSnapshotMaster
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param dbConnector  the database connector, not null
    */
-  public DbMarketDataSnapshotMaster(DbConnector dbConnector) {
+  public DbMarketDataSnapshotMaster(final DbConnector dbConnector) {
     super(dbConnector, IDENTIFIER_SCHEME_DEFAULT);
     setElSqlBundle(ElSqlBundle.of(dbConnector.getDialect().getElSqlConfig(), DbMarketDataSnapshotMaster.class));
   }
 
   //-------------------------------------------------------------------------
+  @Override
   public MarketDataSnapshotSearchResult search(final MarketDataSnapshotSearchRequest request) {
     ArgumentChecker.notNull(request, "request");
     ArgumentChecker.notNull(request.getPagingRequest(), "request.pagingRequest");
     ArgumentChecker.notNull(request.getVersionCorrection(), "request.versionCorrection");
     LOGGER.debug("search {}", request);
-    
+
     final VersionCorrection vc = request.getVersionCorrection().withLatestFixed(now());
     final MarketDataSnapshotSearchResult result = new MarketDataSnapshotSearchResult(vc);
-    
+
     final List<ObjectId> snapshotIds = request.getSnapshotIds();
     if (snapshotIds != null && snapshotIds.size() == 0) {
       result.setPaging(Paging.of(request.getPagingRequest(), 0));
       return result;
     }
-    
+
     final DbMapSqlParameterSource args = createParameterSource();
     args.addTimestamp("version_as_of_instant", vc.getVersionAsOf());
     args.addTimestamp("corrected_to_instant", vc.getCorrectedTo());
@@ -138,8 +139,8 @@ public class DbMarketDataSnapshotMaster
     args.addValueNullIgnored("snapshot_type", request.getType() == null ? null : request.getType().getName());
     args.addValue("details", request.isIncludeData());
     if (snapshotIds != null) {
-      StringBuilder buf = new StringBuilder(snapshotIds.size() * 10);
-      for (ObjectId snapshotId : snapshotIds) {
+      final StringBuilder buf = new StringBuilder(snapshotIds.size() * 10);
+      for (final ObjectId snapshotId : snapshotIds) {
         checkScheme(snapshotId);
         buf.append(extractOid(snapshotId)).append(", ");
       }
@@ -149,8 +150,8 @@ public class DbMarketDataSnapshotMaster
     args.addValue("sort_order", ORDER_BY_MAP.get(request.getSortOrder()));
     args.addValue("paging_offset", request.getPagingRequest().getFirstItem());
     args.addValue("paging_fetch", request.getPagingRequest().getPagingSize());
-    
-    String[] sql = {getElSqlBundle().getSql("Search", args), getElSqlBundle().getSql("SearchCount", args)};
+
+    final String[] sql = {getElSqlBundle().getSql("Search", args), getElSqlBundle().getSql("SearchCount", args)};
     doSearch(request.getPagingRequest(), sql, args, new MarketDataSnapshotDocumentExtractor(request.isIncludeData()), result);
     return result;
   }
@@ -168,13 +169,14 @@ public class DbMarketDataSnapshotMaster
   }
 
   //-------------------------------------------------------------------------
+  @Override
   public MarketDataSnapshotHistoryResult history(final MarketDataSnapshotHistoryRequest request) {
     return doHistory(request, new MarketDataSnapshotHistoryResult(), new MarketDataSnapshotDocumentExtractor(request.isIncludeData()));
   }
 
   @Override
-  protected DbMapSqlParameterSource argsHistory(AbstractHistoryRequest request) {
-    DbMapSqlParameterSource args = super.argsHistory(request);
+  protected DbMapSqlParameterSource argsHistory(final AbstractHistoryRequest request) {
+    final DbMapSqlParameterSource args = super.argsHistory(request);
     args.addValue("details", ((MarketDataSnapshotHistoryRequest) request).isIncludeData());
     return args;
   }
@@ -182,27 +184,27 @@ public class DbMarketDataSnapshotMaster
   //-------------------------------------------------------------------------
   /**
    * Inserts a new document.
-   * 
+   *
    * @param document  the document, not null
    * @return the new document, not null
    */
   @Override
   protected MarketDataSnapshotDocument insert(final MarketDataSnapshotDocument document) {
 
-    long docId = nextId("snp_snapshot_seq");
-    long docOid = (document.getUniqueId() != null ? extractOid(document.getUniqueId()) : docId);
+    final long docId = nextId("snp_snapshot_seq");
+    final long docOid = document.getUniqueId() != null ? extractOid(document.getUniqueId()) : docId;
     // set the uniqueId (needs to go in Fudge message)
-    UniqueId uniqueId = createUniqueId(docOid, docId);
+    final UniqueId uniqueId = createUniqueId(docOid, docId);
     document.setUniqueId(uniqueId);
     // Copy the snapshot adding in the unique id
-    NamedSnapshot snapshot = document.getNamedSnapshot().withUniqueId(uniqueId);
+    final NamedSnapshot snapshot = document.getNamedSnapshot().withUniqueId(uniqueId);
     // Replace the snapshot in the document so it is available to the caller
     document.setNamedSnapshot(snapshot);
 
     // the arguments for inserting into the marketDataSnapshot table
-    FudgeMsgEnvelope env = FUDGE_CONTEXT.toFudgeMsg(snapshot);
-    byte[] bytes = FUDGE_CONTEXT.toByteArray(env.getMessage());
-    DbMapSqlParameterSource snapshotArgs = createParameterSource()
+    final FudgeMsgEnvelope env = FUDGE_CONTEXT.toFudgeMsg(snapshot);
+    final byte[] bytes = FUDGE_CONTEXT.toByteArray(env.getMessage());
+    final DbMapSqlParameterSource snapshotArgs = createParameterSource()
         .addValue("doc_id", docId)
         .addValue("doc_oid", docOid).addTimestamp("ver_from_instant", document.getVersionFromInstant())
         .addTimestampNullFuture("ver_to_instant", document.getVersionToInstant())
@@ -211,8 +213,8 @@ public class DbMarketDataSnapshotMaster
         .addValue("name", document.getName())
         .addValue("snapshot_type", document.getNamedSnapshot().getClass().getName())
         .addValue("detail", new SqlLobValue(bytes, getDialect().getLobHandler()), Types.BLOB);
-    
-    String sql = getElSqlBundle().getSql("Insert", snapshotArgs);
+
+    final String sql = getElSqlBundle().getSql("Insert", snapshotArgs);
     getJdbcTemplate().update(sql, snapshotArgs);
     return document;
   }
@@ -223,7 +225,7 @@ public class DbMarketDataSnapshotMaster
    */
   protected final class MarketDataSnapshotDocumentExtractor implements ResultSetExtractor<List<MarketDataSnapshotDocument>> {
     private final boolean _includeData;
-    private final List<MarketDataSnapshotDocument> _documents = new ArrayList<MarketDataSnapshotDocument>();
+    private final List<MarketDataSnapshotDocument> _documents = new ArrayList<>();
 
     public MarketDataSnapshotDocumentExtractor(final boolean includeData) {
       _includeData = includeData;
@@ -244,13 +246,13 @@ public class DbMarketDataSnapshotMaster
       final Timestamp versionTo = rs.getTimestamp("VER_TO_INSTANT");
       final Timestamp correctionFrom = rs.getTimestamp("CORR_FROM_INSTANT");
       final Timestamp correctionTo = rs.getTimestamp("CORR_TO_INSTANT");
-      UniqueId uniqueId = createUniqueId(docOid, docId);
+      final UniqueId uniqueId = createUniqueId(docOid, docId);
 
-      NamedSnapshot marketDataSnapshot = _includeData ?
+      final NamedSnapshot marketDataSnapshot = _includeData ?
           createPopulatedSnapshot(rs) :
           createEmptyMarketDataSnapshot(rs, uniqueId);
 
-      MarketDataSnapshotDocument doc = new MarketDataSnapshotDocument();
+      final MarketDataSnapshotDocument doc = new MarketDataSnapshotDocument();
       doc.setUniqueId(uniqueId);
       doc.setVersionFromInstant(DbDateUtils.fromSqlTimestamp(versionFrom));
       doc.setVersionToInstant(DbDateUtils.fromSqlTimestampNullFarFuture(versionTo));
@@ -260,15 +262,15 @@ public class DbMarketDataSnapshotMaster
       _documents.add(doc);
     }
 
-    private NamedSnapshot createPopulatedSnapshot(ResultSet rs) throws SQLException {
-      LobHandler lob = getDialect().getLobHandler();
-      byte[] bytes = lob.getBlobAsBytes(rs, "DETAIL");
+    private NamedSnapshot createPopulatedSnapshot(final ResultSet rs) throws SQLException {
+      final LobHandler lob = getDialect().getLobHandler();
+      final byte[] bytes = lob.getBlobAsBytes(rs, "DETAIL");
       return FUDGE_CONTEXT.readObject(NamedSnapshot.class, new ByteArrayInputStream(bytes));
     }
 
-    private ManageableMarketDataSnapshot createEmptyMarketDataSnapshot(ResultSet rs,
-                                                                       UniqueId uniqueId) throws SQLException {
-      ManageableMarketDataSnapshot snapshot = new ManageableMarketDataSnapshot();
+    private ManageableMarketDataSnapshot createEmptyMarketDataSnapshot(final ResultSet rs,
+                                                                       final UniqueId uniqueId) throws SQLException {
+      final ManageableMarketDataSnapshot snapshot = new ManageableMarketDataSnapshot();
       snapshot.setName(rs.getString("NAME"));
       snapshot.setUniqueId(uniqueId);
       return snapshot;
@@ -276,8 +278,8 @@ public class DbMarketDataSnapshotMaster
   }
 
   @Override
-  protected AbstractHistoryResult<MarketDataSnapshotDocument> historyByVersionsCorrections(AbstractHistoryRequest request) {
-    MarketDataSnapshotHistoryRequest historyRequest = new MarketDataSnapshotHistoryRequest();
+  protected AbstractHistoryResult<MarketDataSnapshotDocument> historyByVersionsCorrections(final AbstractHistoryRequest request) {
+    final MarketDataSnapshotHistoryRequest historyRequest = new MarketDataSnapshotHistoryRequest();
     historyRequest.setCorrectionsFromInstant(request.getCorrectionsFromInstant());
     historyRequest.setCorrectionsToInstant(request.getCorrectionsToInstant());
     historyRequest.setVersionsFromInstant(request.getVersionsFromInstant());

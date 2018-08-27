@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master;
@@ -17,7 +17,7 @@ import com.opengamma.util.rest.RestUtils;
 
 public abstract class AbstractDataDocumentUris {
   protected abstract String getResourceName();
-  
+
   //====================================================================================================================
 
   /**
@@ -28,8 +28,8 @@ public abstract class AbstractDataDocumentUris {
    * @param vc  the version-correction locator, null for latest
    * @return the URI, not null
    */
-  public URI uri(URI baseUri, ObjectIdentifiable objectIdentifiable, VersionCorrection vc) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("/" + getResourceName() + "/{id}");
+  public URI uri(final URI baseUri, final ObjectIdentifiable objectIdentifiable, final VersionCorrection vc) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("/" + getResourceName() + "/{id}");
     if (vc != null) {
       bld.queryParam("versionAsOf", vc.getVersionAsOfString());
       bld.queryParam("correctedTo", vc.getCorrectedToString());
@@ -46,8 +46,8 @@ public abstract class AbstractDataDocumentUris {
    * @return the URI, not null
    */
   // TODO replace URI with something better
-  public URI uriAll(URI baseUri, ObjectIdentifiable objectId, VersionCorrection vc) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("/" + getResourceName() + "/{id}/all");
+  public URI uriAll(final URI baseUri, final ObjectIdentifiable objectId, final VersionCorrection vc) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("/" + getResourceName() + "/{id}/all");
     if (vc != null) {
       bld.queryParam("versionAsOf", vc.getVersionAsOfString());
       bld.queryParam("correctedTo", vc.getCorrectedToString());
@@ -64,8 +64,8 @@ public abstract class AbstractDataDocumentUris {
    * @param request  the request, may be null
    * @return the URI, not null
    */
-  public URI uriVersions(URI baseUri, ObjectIdentifiable objectId, Object request) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("/" + getResourceName() + "/{id}/versions");
+  public URI uriVersions(final URI baseUri, final ObjectIdentifiable objectId, final Object request) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("/" + getResourceName() + "/{id}/versions");
     if (request != null) {
       RestUtils.encodeQueryParams(bld, request);
     }
@@ -79,7 +79,7 @@ public abstract class AbstractDataDocumentUris {
    * @param uniqueId  the unique identifier, not null
    * @return the URI, not null
    */
-  public URI uriVersion(URI baseUri, UniqueId uniqueId) {
+  public URI uriVersion(final URI baseUri, final UniqueId uniqueId) {
     if (uniqueId.isLatest()) {
       return uri(baseUri, uniqueId, null);
     }

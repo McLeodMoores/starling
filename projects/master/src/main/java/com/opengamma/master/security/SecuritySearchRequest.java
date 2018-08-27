@@ -113,32 +113,32 @@ public class SecuritySearchRequest extends AbstractSearchRequest {
 
   /**
    * Creates an instance using a single search identifier.
-   * 
+   *
    * @param securityId  the security external identifier to search for, not null
    */
-  public SecuritySearchRequest(ExternalId securityId) {
+  public SecuritySearchRequest(final ExternalId securityId) {
     addExternalId(securityId);
   }
 
   /**
    * Creates an instance using a bundle of identifiers.
-   * 
+   *
    * @param securityBundle  the security bundle to search for, not null
    */
-  public SecuritySearchRequest(ExternalIdBundle securityBundle) {
+  public SecuritySearchRequest(final ExternalIdBundle securityBundle) {
     addExternalIds(securityBundle);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Adds a single security object identifier to the set.
-   * 
+   *
    * @param securityId  the security object identifier to add, not null
    */
-  public void addObjectId(ObjectIdentifiable securityId) {
+  public void addObjectId(final ObjectIdentifiable securityId) {
     ArgumentChecker.notNull(securityId, "securityId");
     if (_objectIds == null) {
-      _objectIds = new ArrayList<ObjectId>();
+      _objectIds = new ArrayList<>();
     }
     _objectIds.add(securityId.getObjectId());
   }
@@ -146,15 +146,15 @@ public class SecuritySearchRequest extends AbstractSearchRequest {
   /**
    * Sets the set of security object identifiers, null to not limit by security object identifiers.
    * Note that an empty set will return no securities.
-   * 
+   *
    * @param securityIds  the new security identifiers, null clears the security id search
    */
-  public void setObjectIds(Iterable<? extends ObjectIdentifiable> securityIds) {
+  public void setObjectIds(final Iterable<? extends ObjectIdentifiable> securityIds) {
     if (securityIds == null) {
       _objectIds = null;
     } else {
-      _objectIds = new ArrayList<ObjectId>();
-      for (ObjectIdentifiable securityId : securityIds) {
+      _objectIds = new ArrayList<>();
+      for (final ObjectIdentifiable securityId : securityIds) {
         _objectIds.add(securityId.getObjectId());
       }
     }
@@ -165,10 +165,10 @@ public class SecuritySearchRequest extends AbstractSearchRequest {
    * Adds a single security external identifier to the collection to search for.
    * Unless customized, the search will match.
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
+   *
    * @param securityId  the security key identifier to add, not null
    */
-  public void addExternalId(ExternalId securityId) {
+  public void addExternalId(final ExternalId securityId) {
     ArgumentChecker.notNull(securityId, "securityId");
     addExternalIds(Arrays.asList(securityId));
   }
@@ -177,10 +177,10 @@ public class SecuritySearchRequest extends AbstractSearchRequest {
    * Adds a collection of security external identifiers to the collection to search for.
    * Unless customized, the search will match.
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
+   *
    * @param securityIds  the security key identifiers to add, not null
    */
-  public void addExternalIds(ExternalId... securityIds) {
+  public void addExternalIds(final ExternalId... securityIds) {
     ArgumentChecker.notNull(securityIds, "securityIds");
     if (getExternalIdSearch() == null) {
       setExternalIdSearch(ExternalIdSearch.of(securityIds));
@@ -193,10 +193,10 @@ public class SecuritySearchRequest extends AbstractSearchRequest {
    * Adds a collection of security external identifiers to the collection to search for.
    * Unless customized, the search will match.
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
+   *
    * @param securityIds  the security key identifiers to add, not null
    */
-  public void addExternalIds(Iterable<ExternalId> securityIds) {
+  public void addExternalIds(final Iterable<ExternalId> securityIds) {
     ArgumentChecker.notNull(securityIds, "securityIds");
     if (getExternalIdSearch() == null) {
       setExternalIdSearch(ExternalIdSearch.of(securityIds));
@@ -207,10 +207,10 @@ public class SecuritySearchRequest extends AbstractSearchRequest {
 
   /**
    * Sets the search type to use in {@code ExternalIdSearch}.
-   * 
+   *
    * @param type  the type to set, not null
    */
-  public void setExternalIdSearchType(ExternalIdSearchType type) {
+  public void setExternalIdSearchType(final ExternalIdSearchType type) {
     if (getExternalIdSearch() == null) {
       setExternalIdSearch(ExternalIdSearch.of(type));
     } else {
@@ -222,11 +222,11 @@ public class SecuritySearchRequest extends AbstractSearchRequest {
    * Adds a key-value pair to the set of attributes to search for.
    * <p>
    * Attributes are used to tag the object with additional information.
-   * 
+   *
    * @param key  the key to add, not null
    * @param value  the value to add, not null
    */
-  public void addAttribute(String key, String value) {
+  public void addAttribute(final String key, final String value) {
     ArgumentChecker.notNull(key, "key");
     ArgumentChecker.notNull(value, "value");
     _attributes.put(key, value);
@@ -234,12 +234,12 @@ public class SecuritySearchRequest extends AbstractSearchRequest {
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean matches(AbstractDocument obj) {
+  public boolean matches(final AbstractDocument obj) {
     if (obj instanceof SecurityDocument == false) {
       return false;
     }
-    SecurityDocument document = (SecurityDocument) obj;
-    ManageableSecurity security = document.getSecurity();
+    final SecurityDocument document = (SecurityDocument) obj;
+    final ManageableSecurity security = document.getSecurity();
     if (getObjectIds() != null && getObjectIds().contains(document.getObjectId()) == false) {
       return false;
     }
@@ -253,25 +253,25 @@ public class SecuritySearchRequest extends AbstractSearchRequest {
       return false;
     }
     if (getExternalIdValue() != null) {
-      for (ExternalId identifier : security.getExternalIdBundle()) {
+      for (final ExternalId identifier : security.getExternalIdBundle()) {
         if (RegexUtils.wildcardMatch(getExternalIdValue(), identifier.getValue()) == false) {
           return false;
         }
       }
     }
     if (getExternalIdScheme() != null) {
-      for (ExternalId identifier : security.getExternalIdBundle()) {
+      for (final ExternalId identifier : security.getExternalIdBundle()) {
         if (RegexUtils.wildcardMatch(getExternalIdScheme(), identifier.getScheme().getName()) == false) {
           return false;
         }
       }
     }
     if (getAttributes().size() > 0) {
-      for (Entry<String, String> entry : getAttributes().entrySet()) {
+      for (final Entry<String, String> entry : getAttributes().entrySet()) {
         if (security.getAttributes().containsKey(entry.getKey()) == false) {
           return false;
         }
-        String otherValue = security.getAttributes().get(entry.getKey());
+        final String otherValue = security.getAttributes().get(entry.getKey());
         if (RegexUtils.wildcardMatch(entry.getValue(), otherValue) == false) {
           return false;
         }

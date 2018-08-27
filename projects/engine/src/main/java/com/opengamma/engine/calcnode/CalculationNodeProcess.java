@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode;
@@ -58,10 +58,10 @@ public final class CalculationNodeProcess {
   private CalculationNodeProcess() {
   }
 
-  private static void sleep(int period) {
+  private static void sleep(final int period) {
     try {
       Thread.sleep(1000 * period);
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
     }
   }
 
@@ -73,7 +73,7 @@ public final class CalculationNodeProcess {
     final HttpResponse resp;
     try {
       resp = s_httpClient.execute(new HttpGet(url));
-    } catch (Exception e) {
+    } catch (final Exception e) {
       LOGGER.warn("Error fetching {} - {}", url, e.getMessage());
       return null;
     }
@@ -93,7 +93,7 @@ public final class CalculationNodeProcess {
       }
       LOGGER.debug("Configuration document received - {} characters", sb.length());
       return sb.toString();
-    } catch (IOException e) {
+    } catch (final IOException e) {
       LOGGER.warn("Error retrieving response from {} - {}", url, e.getMessage());
       return null;
     }
@@ -111,7 +111,7 @@ public final class CalculationNodeProcess {
       LOGGER.debug("Starting node");
       context.start();
       return true;
-    } catch (RuntimeException e) {
+    } catch (final RuntimeException e) {
       LOGGER.warn("Spring initialisation error", e);
       return false;
     }
@@ -131,19 +131,19 @@ public final class CalculationNodeProcess {
       if (uri.getPort() != -1) {
         System.setProperty("opengamma.engine.calcnode.port", Integer.toString(uri.getPort()));
       }
-    } catch (URISyntaxException e) {
+    } catch (final URISyntaxException e) {
       LOGGER.warn("Couldn't set connection defaults", e);
     }
   }
 
   private static void startGracefulShutdown() {
     LOGGER.error("TODO: [PLAT-2351] start graceful shutdown");
-    // TODO: [PLAT-2351] stop accepting jobs and allow current ones to run to completion 
+    // TODO: [PLAT-2351] stop accepting jobs and allow current ones to run to completion
   }
 
   /**
    * Starts a calculation node, retrieving configuration from the given URL
-   * 
+   *
    * @param url The URL to use
    */
   public static void main(final String url) {
@@ -202,16 +202,16 @@ public final class CalculationNodeProcess {
             break;
         }
       }
-      LOGGER.info("Free memory = {}Mb, total memory = {}Mb", (double) Runtime.getRuntime().freeMemory() / (1024d * 1024d), (double) Runtime.getRuntime().totalMemory() / (1024d * 1024d));
+      LOGGER.info("Free memory = {}Mb, total memory = {}Mb", Runtime.getRuntime().freeMemory() / (1024d * 1024d), Runtime.getRuntime().totalMemory() / (1024d * 1024d));
     } while (true);
   }
 
   /**
    * Starts a calculation node
-   * 
+   *
    * @param args the arguments, should contain one parameter - the configuration URL to use
    */
-  public static void main(String[] args) { // CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     if (args.length != 1) {
       LOGGER.error("Configuration URL not specified");
       System.exit(1);

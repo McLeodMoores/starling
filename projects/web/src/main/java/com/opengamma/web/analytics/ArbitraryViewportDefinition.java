@@ -27,7 +27,7 @@ public class ArbitraryViewportDefinition extends ViewportDefinition {
    * @param format
    * @param enableLogging Whether full logging info should be collected for the viewport's cells
    */
-  /* package */ ArbitraryViewportDefinition(int version, List<GridCell> cells, boolean enableLogging) {
+  /* package */ ArbitraryViewportDefinition(final int version, final List<GridCell> cells, final boolean enableLogging) {
     super(version, enableLogging);
     ArgumentChecker.notEmpty(cells, "cells");
     _cells = Lists.newArrayList(cells);
@@ -40,8 +40,8 @@ public class ArbitraryViewportDefinition extends ViewportDefinition {
   }
 
   @Override
-  public boolean isValidFor(GridStructure gridStructure) {
-    for (GridCell cell : _cells) {
+  public boolean isValidFor(final GridStructure gridStructure) {
+    for (final GridCell cell : _cells) {
       if (cell.getRow() >= gridStructure.getRowCount() ||
           cell.getColumn() >= gridStructure.getColumnCount()) {
         return false;
@@ -51,7 +51,7 @@ public class ArbitraryViewportDefinition extends ViewportDefinition {
   }
 
   @Override
-  Pair<Integer, Boolean> getChangedNode(ViewportDefinition viewportDefinition) {
+  Pair<Integer, Boolean> getChangedNode(final ViewportDefinition viewportDefinition) {
     return null;
   }
 

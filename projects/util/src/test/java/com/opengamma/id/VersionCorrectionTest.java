@@ -15,7 +15,7 @@ import org.threeten.bp.Instant;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Test {@link VersionCorrection}. 
+ * Test {@link VersionCorrection}.
  */
 @Test(groups = TestGroup.UNIT)
 public class VersionCorrectionTest {
@@ -25,7 +25,7 @@ public class VersionCorrectionTest {
   private static final Instant INSTANT3 = Instant.ofEpochSecond(3);
 
   public void test_LATEST() {
-    VersionCorrection test = VersionCorrection.LATEST;
+    final VersionCorrection test = VersionCorrection.LATEST;
     assertEquals(null, test.getVersionAsOf());
     assertEquals(null, test.getCorrectedTo());
     assertEquals("VLATEST.CLATEST", test.toString());
@@ -33,64 +33,64 @@ public class VersionCorrectionTest {
 
   //-------------------------------------------------------------------------
   public void test_of_VersionCorrection() {
-    VersionCorrection base = VersionCorrection.of(INSTANT1, INSTANT2);
-    VersionCorrection test = VersionCorrection.of(base);
+    final VersionCorrection base = VersionCorrection.of(INSTANT1, INSTANT2);
+    final VersionCorrection test = VersionCorrection.of(base);
     assertSame(base, test);
   }
 
   public void test_of_VersionCorrection_null() {
-    VersionCorrection test = VersionCorrection.of((VersionCorrection) null);
+    final VersionCorrection test = VersionCorrection.of((VersionCorrection) null);
     assertSame(VersionCorrection.LATEST, test);
   }
 
   //-------------------------------------------------------------------------
   public void test_of_InstantInstant() {
-    VersionCorrection test = VersionCorrection.of(INSTANT1, INSTANT2);
+    final VersionCorrection test = VersionCorrection.of(INSTANT1, INSTANT2);
     assertEquals(INSTANT1, test.getVersionAsOf());
     assertEquals(INSTANT2, test.getCorrectedTo());
     assertEquals("V1970-01-01T00:00:01Z.C1970-01-01T00:00:02Z", test.toString());
   }
 
   public void test_of_InstantInstant_nullVersion() {
-    VersionCorrection test = VersionCorrection.of((Instant) null, INSTANT2);
+    final VersionCorrection test = VersionCorrection.of((Instant) null, INSTANT2);
     assertEquals(null, test.getVersionAsOf());
     assertEquals(INSTANT2, test.getCorrectedTo());
     assertEquals("VLATEST.C1970-01-01T00:00:02Z", test.toString());
   }
 
   public void test_of_InstantInstant_nullCorrection() {
-    VersionCorrection test = VersionCorrection.of(INSTANT1, (Instant) null);
+    final VersionCorrection test = VersionCorrection.of(INSTANT1, (Instant) null);
     assertEquals(INSTANT1, test.getVersionAsOf());
     assertEquals(null, test.getCorrectedTo());
     assertEquals("V1970-01-01T00:00:01Z.CLATEST", test.toString());
   }
 
   public void test_of_InstantInstant_nulls() {
-    VersionCorrection test = VersionCorrection.of((Instant) null, (Instant) null);
+    final VersionCorrection test = VersionCorrection.of((Instant) null, (Instant) null);
     assertSame(VersionCorrection.LATEST, test);
   }
 
   //-------------------------------------------------------------------------
   public void test_ofVersionAsOf_Instant() {
-    VersionCorrection test = VersionCorrection.ofVersionAsOf(INSTANT1);
+    final VersionCorrection test = VersionCorrection.ofVersionAsOf(INSTANT1);
     assertEquals(INSTANT1, test.getVersionAsOf());
     assertEquals(null, test.getCorrectedTo());
   }
 
   public void test_ofVersionAsOf_Instant_null() {
-    VersionCorrection test = VersionCorrection.ofVersionAsOf((Instant) null);
+    final VersionCorrection test = VersionCorrection.ofVersionAsOf((Instant) null);
     assertSame(VersionCorrection.LATEST, test);
   }
 
   //-------------------------------------------------------------------------
   public void test_ofCorrectedTo_Instant() {
-    VersionCorrection test = VersionCorrection.ofCorrectedTo(INSTANT2);
+    final VersionCorrection test = VersionCorrection.ofCorrectedTo(INSTANT2);
     assertEquals(null, test.getVersionAsOf());
     assertEquals(INSTANT2, test.getCorrectedTo());
   }
 
   public void test_ofCorrectedTo_Instant_null() {
-    VersionCorrection test = VersionCorrection.ofCorrectedTo((Instant) null);
+    final VersionCorrection test = VersionCorrection.ofCorrectedTo((Instant) null);
     assertSame(VersionCorrection.LATEST, test);
   }
 
@@ -106,22 +106,22 @@ public class VersionCorrectionTest {
   }
 
   @Test(dataProvider = "parseValid")
-  public void test_parse_String(String first, String second, VersionCorrection expected) {
-    VersionCorrection test = VersionCorrection.parse("V" + first + ".C" + second);
+  public void test_parse_String(final String first, final String second, final VersionCorrection expected) {
+    final VersionCorrection test = VersionCorrection.parse("V" + first + ".C" + second);
     assertEquals(expected, test);
   }
 
   @Test(dataProvider = "parseValid")
-  public void test_parse_StringString(String first, String second, VersionCorrection expected) {
-    VersionCorrection test = VersionCorrection.parse(first, second);
+  public void test_parse_StringString(final String first, final String second, final VersionCorrection expected) {
+    final VersionCorrection test = VersionCorrection.parse(first, second);
     assertEquals(expected, test);
   }
 
   @Test(dataProvider = "parseValid")
-  public void test_parse_StringString_nullsAllowed(String first, String second, VersionCorrection expected) {
-    first = (first.equals("LATEST") ? null : first);
-    second = (second.equals("LATEST") ? null : second);
-    VersionCorrection test = VersionCorrection.parse(first, second);
+  public void test_parse_StringString_nullsAllowed(final String first, final String second, final VersionCorrection expected) {
+    final String firstString = first.equals("LATEST") ? null : first;
+    final String secondString = second.equals("LATEST") ? null : second;
+    final VersionCorrection test = VersionCorrection.parse(firstString, secondString);
     assertEquals(expected, test);
   }
 
@@ -139,7 +139,7 @@ public class VersionCorrectionTest {
   }
 
   @Test(dataProvider = "parseInvalid", expectedExceptions = IllegalArgumentException.class)
-  public void test_parse_String_invalid(String input) {
+  public void test_parse_String_invalid(final String input) {
     VersionCorrection.parse(input);
   }
 
@@ -150,43 +150,43 @@ public class VersionCorrectionTest {
 
   //-------------------------------------------------------------------------
   public void test_withVersionAsOf_instantToInstant() {
-    VersionCorrection test = VersionCorrection.of(INSTANT1, INSTANT2);
+    final VersionCorrection test = VersionCorrection.of(INSTANT1, INSTANT2);
     assertEquals(VersionCorrection.of(INSTANT3, INSTANT2), test.withVersionAsOf(INSTANT3));
   }
 
   public void test_withVersionAsOf_instantToNull() {
-    VersionCorrection test = VersionCorrection.of(INSTANT1, INSTANT2);
+    final VersionCorrection test = VersionCorrection.of(INSTANT1, INSTANT2);
     assertEquals(VersionCorrection.of(null, INSTANT2), test.withVersionAsOf(null));
   }
 
   public void test_withVersionAsOf_nullToInstant() {
-    VersionCorrection test = VersionCorrection.of(null, INSTANT2);
+    final VersionCorrection test = VersionCorrection.of(null, INSTANT2);
     assertEquals(VersionCorrection.of(INSTANT3, INSTANT2), test.withVersionAsOf(INSTANT3));
   }
 
   public void test_withVersionAsOf_nullToNull() {
-    VersionCorrection test = VersionCorrection.of(null, INSTANT2);
+    final VersionCorrection test = VersionCorrection.of(null, INSTANT2);
     assertEquals(VersionCorrection.of(null, INSTANT2), test.withVersionAsOf(null));
   }
 
   //-------------------------------------------------------------------------
   public void test_withCorrectedTo_instantToInstant() {
-    VersionCorrection test = VersionCorrection.of(INSTANT1, INSTANT2);
+    final VersionCorrection test = VersionCorrection.of(INSTANT1, INSTANT2);
     assertEquals(VersionCorrection.of(INSTANT1, INSTANT3), test.withCorrectedTo(INSTANT3));
   }
 
   public void test_withCorrectedTo_instantToNull() {
-    VersionCorrection test = VersionCorrection.of(INSTANT1, INSTANT2);
+    final VersionCorrection test = VersionCorrection.of(INSTANT1, INSTANT2);
     assertEquals(VersionCorrection.of(INSTANT1, null), test.withCorrectedTo(null));
   }
 
   public void test_withCorrectedTo_nullToInstant() {
-    VersionCorrection test = VersionCorrection.of(INSTANT1, null);
+    final VersionCorrection test = VersionCorrection.of(INSTANT1, null);
     assertEquals(VersionCorrection.of(INSTANT1, INSTANT3), test.withCorrectedTo(INSTANT3));
   }
 
   public void test_withCorrectedTo_nullToNull() {
-    VersionCorrection test = VersionCorrection.of(INSTANT1, null);
+    final VersionCorrection test = VersionCorrection.of(INSTANT1, null);
     assertEquals(VersionCorrection.of(INSTANT1, null), test.withCorrectedTo(null));
   }
 
@@ -200,98 +200,98 @@ public class VersionCorrectionTest {
 
   //-------------------------------------------------------------------------
   public void test_withLatestFixed_noNulls() {
-    VersionCorrection test = VersionCorrection.of(INSTANT1, INSTANT2);
+    final VersionCorrection test = VersionCorrection.of(INSTANT1, INSTANT2);
     assertSame(test, test.withLatestFixed(INSTANT3));
   }
 
   public void test_withLatestFixed_nullVersion() {
-    VersionCorrection test = VersionCorrection.of(null, INSTANT2);
+    final VersionCorrection test = VersionCorrection.of(null, INSTANT2);
     assertEquals(VersionCorrection.of(INSTANT3, INSTANT2), test.withLatestFixed(INSTANT3));
   }
 
   public void test_withLatestFixed_nullCorrection() {
-    VersionCorrection test = VersionCorrection.of(INSTANT1, null);
+    final VersionCorrection test = VersionCorrection.of(INSTANT1, null);
     assertEquals(VersionCorrection.of(INSTANT1, INSTANT3), test.withLatestFixed(INSTANT3));
   }
 
   public void test_withLatestFixed_nulls() {
-    VersionCorrection test = VersionCorrection.of(null, null);
+    final VersionCorrection test = VersionCorrection.of(null, null);
     assertEquals(VersionCorrection.of(INSTANT3, INSTANT3), test.withLatestFixed(INSTANT3));
   }
 
   //-------------------------------------------------------------------------
   public void test_compareTo_nonNull() {
-    VersionCorrection a = VersionCorrection.of(INSTANT1, INSTANT2);
-    VersionCorrection b = VersionCorrection.of(INSTANT1, INSTANT3);
-    VersionCorrection c = VersionCorrection.of(INSTANT2, INSTANT3);
-    
+    final VersionCorrection a = VersionCorrection.of(INSTANT1, INSTANT2);
+    final VersionCorrection b = VersionCorrection.of(INSTANT1, INSTANT3);
+    final VersionCorrection c = VersionCorrection.of(INSTANT2, INSTANT3);
+
     assertEquals(true, a.compareTo(a) == 0);
     assertEquals(true, a.compareTo(b) < 0);
     assertEquals(true, a.compareTo(c) < 0);
-    
+
     assertEquals(true, b.compareTo(a) > 0);
     assertEquals(true, b.compareTo(b) == 0);
     assertEquals(true, b.compareTo(c) < 0);
-    
+
     assertEquals(true, c.compareTo(a) > 0);
     assertEquals(true, c.compareTo(b) > 0);
     assertEquals(true, c.compareTo(c) == 0);
   }
 
   public void test_compareTo_nullVersion() {
-    VersionCorrection a = VersionCorrection.of(INSTANT1, INSTANT2);
-    VersionCorrection b = VersionCorrection.of(null, INSTANT2);
-    
+    final VersionCorrection a = VersionCorrection.of(INSTANT1, INSTANT2);
+    final VersionCorrection b = VersionCorrection.of(null, INSTANT2);
+
     assertEquals(true, a.compareTo(a) == 0);
     assertEquals(true, a.compareTo(b) < 0);
-    
+
     assertEquals(true, b.compareTo(a) > 0);
     assertEquals(true, b.compareTo(b) == 0);
   }
 
   public void test_compareTo_nullCorrection() {
-    VersionCorrection a = VersionCorrection.of(INSTANT1, INSTANT2);
-    VersionCorrection b = VersionCorrection.of(INSTANT1, null);
-    
+    final VersionCorrection a = VersionCorrection.of(INSTANT1, INSTANT2);
+    final VersionCorrection b = VersionCorrection.of(INSTANT1, null);
+
     assertEquals(true, a.compareTo(a) == 0);
     assertEquals(true, a.compareTo(b) < 0);
-    
+
     assertEquals(true, b.compareTo(a) > 0);
     assertEquals(true, b.compareTo(b) == 0);
   }
 
   @Test(expectedExceptions = NullPointerException.class)
   public void test_compareTo_null() {
-    VersionCorrection test = VersionCorrection.of(INSTANT1, INSTANT2);
+    final VersionCorrection test = VersionCorrection.of(INSTANT1, INSTANT2);
     test.compareTo(null);
   }
 
   //-------------------------------------------------------------------------
   public void test_equals() {
-    VersionCorrection d1a = VersionCorrection.of(INSTANT1, INSTANT2);
-    VersionCorrection d1b = VersionCorrection.of(INSTANT1, INSTANT2);
-    VersionCorrection d2 = VersionCorrection.of(INSTANT1, INSTANT3);
-    
+    final VersionCorrection d1a = VersionCorrection.of(INSTANT1, INSTANT2);
+    final VersionCorrection d1b = VersionCorrection.of(INSTANT1, INSTANT2);
+    final VersionCorrection d2 = VersionCorrection.of(INSTANT1, INSTANT3);
+
     assertEquals(true, d1a.equals(d1a));
     assertEquals(true, d1a.equals(d1b));
     assertEquals(false, d1a.equals(d2));
-    
+
     assertEquals(true, d1b.equals(d1a));
     assertEquals(true, d1b.equals(d1b));
     assertEquals(false, d1b.equals(d2));
-    
+
     assertEquals(false, d2.equals(d1a));
     assertEquals(false, d2.equals(d1b));
     assertEquals(true, d2.equals(d2));
-    
+
     assertEquals(false, d1b.equals("d1"));
     assertEquals(false, d1b.equals(null));
   }
 
   public void test_hashCode() {
-    VersionCorrection d1a = VersionCorrection.of(INSTANT1, INSTANT2);
-    VersionCorrection d1b = VersionCorrection.of(INSTANT1, INSTANT2);
-    
+    final VersionCorrection d1a = VersionCorrection.of(INSTANT1, INSTANT2);
+    final VersionCorrection d1b = VersionCorrection.of(INSTANT1, INSTANT2);
+
     assertEquals(d1a.hashCode(), d1b.hashCode());
   }
 

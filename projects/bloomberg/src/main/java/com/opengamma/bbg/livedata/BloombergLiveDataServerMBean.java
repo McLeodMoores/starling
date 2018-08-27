@@ -22,73 +22,73 @@ public class BloombergLiveDataServerMBean extends LiveDataServerMBean {
 
   private final BloombergLiveDataServer _server;
 
-  public BloombergLiveDataServerMBean(BloombergLiveDataServer server) {
+  public BloombergLiveDataServerMBean(final BloombergLiveDataServer server) {
     super(server);
     _server = server;
   }
-  
+
   @ManagedAttribute(description = "Get the limit on concurrent subscriptions")
   public long getSubscriptionLimit() {
     try {
       return _server.getSubscriptionLimit();
-    } catch (RuntimeException e) {
+    } catch (final RuntimeException e) {
       LOGGER.error("getConnectionStatus() failed", e);
       throw new RuntimeException(e.getMessage());
     }
   }
   @ManagedAttribute(description = "Set the limit on concurrent subscriptions")
-  public void setSubscriptionLimit(long subscriptionLimit) {
+  public void setSubscriptionLimit(final long subscriptionLimit) {
     try {
       _server.setSubscriptionLimit(subscriptionLimit);
-    } catch (RuntimeException e) {
+    } catch (final RuntimeException e) {
       LOGGER.error("getConnectionStatus() failed", e);
       throw new RuntimeException(e.getMessage());
     }
   }
-  
+
   @ManagedAttribute()
   public long getLastLimitRejectionEpochSeconds() {
-    RejectedDueToSubscriptionLimitEvent rejection = _server.getLastLimitRejection();
+    final RejectedDueToSubscriptionLimitEvent rejection = _server.getLastLimitRejection();
     if (rejection == null) {
       return 0;
     } else {
       return rejection.getInstant().getEpochSecond();
     }
   }
-  
+
   @ManagedAttribute()
   public long getLastLimitSecondsSince() {
-    RejectedDueToSubscriptionLimitEvent rejection = _server.getLastLimitRejection();
+    final RejectedDueToSubscriptionLimitEvent rejection = _server.getLastLimitRejection();
     if (rejection == null) {
       return Long.MAX_VALUE;
     } else {
       return Instant.now().getEpochSecond() - rejection.getInstant().getEpochSecond();
     }
   }
-  
+
   @ManagedAttribute()
   public String getLastLimitRejectionTime() {
-    RejectedDueToSubscriptionLimitEvent rejection = _server.getLastLimitRejection();
+    final RejectedDueToSubscriptionLimitEvent rejection = _server.getLastLimitRejection();
     if (rejection == null) {
       return null;
     } else {
       return rejection.getInstant().toString();
     }
   }
-  
+
   @ManagedAttribute()
   public int getLastLimitRequestSize() {
-    RejectedDueToSubscriptionLimitEvent rejection = _server.getLastLimitRejection();
+    final RejectedDueToSubscriptionLimitEvent rejection = _server.getLastLimitRejection();
     if (rejection == null) {
       return -1;
     } else {
       return rejection.getRequestedSubscriptions();
     }
   }
-  
+
   @ManagedAttribute()
   public int getLastLimitRequiredEntitlement() {
-    RejectedDueToSubscriptionLimitEvent rejection = _server.getLastLimitRejection();
+    final RejectedDueToSubscriptionLimitEvent rejection = _server.getLastLimitRejection();
     if (rejection == null) {
       return -1;
     } else {

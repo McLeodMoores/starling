@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.copier.snapshot.writer;
@@ -30,7 +30,7 @@ public class MasterSnapshotWriter implements SnapshotWriter {
   private static final Logger LOGGER = LoggerFactory.getLogger(MasterSnapshotWriter.class);
 
   private final MarketDataSnapshotMaster _snapshotMaster;
-  private ManageableMarketDataSnapshot _snapshot;
+  private final ManageableMarketDataSnapshot _snapshot;
 
 
   /**
@@ -38,7 +38,7 @@ public class MasterSnapshotWriter implements SnapshotWriter {
    * @param snapshotMaster The snapshot master to which to write the snapshot
    */
 
-  public MasterSnapshotWriter(MarketDataSnapshotMaster snapshotMaster) {
+  public MasterSnapshotWriter(final MarketDataSnapshotMaster snapshotMaster) {
     _snapshotMaster = snapshotMaster;
     _snapshot = new ManageableMarketDataSnapshot();
   }
@@ -49,42 +49,42 @@ public class MasterSnapshotWriter implements SnapshotWriter {
   }
 
   @Override
-  public void writeCurves(Map<CurveKey, CurveSnapshot> curves) {
+  public void writeCurves(final Map<CurveKey, CurveSnapshot> curves) {
     if (curves != null) {
       _snapshot.setCurves(curves);
     }
   }
 
   @Override
-  public void writeGlobalValues(UnstructuredMarketDataSnapshot globalValues) {
+  public void writeGlobalValues(final UnstructuredMarketDataSnapshot globalValues) {
     if (globalValues != null) {
       _snapshot.setGlobalValues((ManageableUnstructuredMarketDataSnapshot) globalValues);
     }
   }
 
   @Override
-  public void writeVolatilitySurface(Map<VolatilitySurfaceKey, VolatilitySurfaceSnapshot> volatilitySurface) {
+  public void writeVolatilitySurface(final Map<VolatilitySurfaceKey, VolatilitySurfaceSnapshot> volatilitySurface) {
     if (volatilitySurface != null) {
       _snapshot.setVolatilitySurfaces(volatilitySurface);
     }
   }
 
   @Override
-  public void writeYieldCurves(Map<YieldCurveKey, YieldCurveSnapshot> yieldCurves) {
+  public void writeYieldCurves(final Map<YieldCurveKey, YieldCurveSnapshot> yieldCurves) {
     if (yieldCurves != null) {
       _snapshot.setYieldCurves(yieldCurves);
     }
   }
 
   @Override
-  public void writeName(String name) {
+  public void writeName(final String name) {
     if (name != null) {
       _snapshot.setName(name);
     }
   }
 
   @Override
-  public void writeBasisViewName(String basisName) {
+  public void writeBasisViewName(final String basisName) {
     if (basisName != null) {
       _snapshot.setBasisViewName(basisName);
     }

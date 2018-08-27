@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.livedata.firehose;
@@ -19,7 +19,7 @@ import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * An implementation of {@link InputStreamFactory} that connects to a remote socket. 
+ * An implementation of {@link InputStreamFactory} that connects to a remote socket.
  */
 public class SocketInputStreamFactory implements InputStreamFactory {
   private static final Logger LOGGER = LoggerFactory.getLogger(SocketInputStreamFactory.class);
@@ -28,21 +28,21 @@ public class SocketInputStreamFactory implements InputStreamFactory {
    * Set to 5sec to allow the outer loop to work correctly.
    */
   private static final int CONNECT_TIMEOUT = 5000;
-  
+
   private final InetAddress _host;
   private final int _port;
   private final String _description;
-  
-  public SocketInputStreamFactory(String hostName, int port) throws UnknownHostException {
+
+  public SocketInputStreamFactory(final String hostName, final int port) throws UnknownHostException {
     this(InetAddress.getByName(hostName), port);
   }
-  
-  public SocketInputStreamFactory(InetAddress host, int port) {
+
+  public SocketInputStreamFactory(final InetAddress host, final int port) {
     ArgumentChecker.notNull(host, "host");
     ArgumentChecker.notNegative(port, "port");
     _host = host;
     _port = port;
-    
+
     _description = "Socket[" + _host + ":" + port + "]";
   }
 
@@ -64,16 +64,16 @@ public class SocketInputStreamFactory implements InputStreamFactory {
 
   @Override
   public InputStream openConnection() {
-    Socket socket = new Socket();
+    final Socket socket = new Socket();
     try {
       socket.connect(new InetSocketAddress(_host, _port), CONNECT_TIMEOUT);
-      InputStream is = socket.getInputStream();
+      final InputStream is = socket.getInputStream();
       LOGGER.info("Connected to {}:{}", _host, _port);
       return is;
-    } catch (IOException ioe) {
+    } catch (final IOException ioe) {
       try {
         socket.close();
-      } catch (IOException ioe2) {
+      } catch (final IOException ioe2) {
         LOGGER.debug("Unable to close socket in case of error. This is almost certainly fine because the socket isn't bound", ioe2);
       }
       LOGGER.warn("Unable to open a connection to " + _host + ":" + _port, ioe);

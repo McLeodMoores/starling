@@ -23,12 +23,12 @@ import com.sun.jersey.api.client.ClientResponse.Status;
 public class WebApplicationExceptionTest extends AbstractExceptionMapperTestHelper {
 
   @Test(dataProvider="mediaTypes")
-  public void test_mapping(MediaType mediaType) throws Exception {
-    WebApplicationException ex = new WebApplicationException(Status.CONFLICT.getStatusCode());
-    WebApplicationExceptionMapper mapper = new WebApplicationExceptionMapper();
+  public void test_mapping(final MediaType mediaType) throws Exception {
+    final WebApplicationException ex = new WebApplicationException(Status.CONFLICT.getStatusCode());
+    final WebApplicationExceptionMapper mapper = new WebApplicationExceptionMapper();
     init(mapper, mediaType);
-    
-    Response test = mapper.toResponse(ex);
+
+    final Response test = mapper.toResponse(ex);
     assertEquals(null, test.getEntity());
     assertEquals(Status.CONFLICT.getStatusCode(), test.getStatus());
   }

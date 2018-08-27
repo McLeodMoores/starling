@@ -33,7 +33,7 @@ public class BasicChangeManagerTest {
     _changeManager = new BasicChangeManager();
     _testListener = new ChangeListener() {
       @Override
-      public void entityChanged(ChangeEvent event) {
+      public void entityChanged(final ChangeEvent event) {
       }
     };
   }
@@ -62,7 +62,7 @@ public class BasicChangeManagerTest {
   public void test_fire_add() {
     _changeManager.addChangeListener(new ChangeListener() {
       @Override
-      public void entityChanged(ChangeEvent event) {
+      public void entityChanged(final ChangeEvent event) {
         assertEquals(ChangeType.ADDED, event.getType());
         assertEquals(UID_A_B_1.getObjectId(), event.getObjectId());
         assertEquals(NOW, event.getVersionInstant());
@@ -74,7 +74,7 @@ public class BasicChangeManagerTest {
   public void test_fire_remove() {
     _changeManager.addChangeListener(new ChangeListener() {
       @Override
-      public void entityChanged(ChangeEvent event) {
+      public void entityChanged(final ChangeEvent event) {
         assertEquals(ChangeType.REMOVED, event.getType());
         assertEquals(UID_A_B_1.getObjectId(), event.getObjectId());
         assertEquals(NOW, event.getVersionInstant());
@@ -86,7 +86,7 @@ public class BasicChangeManagerTest {
   public void test_fire_update() {
     _changeManager.addChangeListener(new ChangeListener() {
       @Override
-      public void entityChanged(ChangeEvent event) {
+      public void entityChanged(final ChangeEvent event) {
         assertEquals(ChangeType.CHANGED, event.getType());
         assertEquals(UID_A_B_1.getObjectId(), event.getObjectId());
         assertEquals(UID_A_B_2.getObjectId(), event.getObjectId());
@@ -99,7 +99,7 @@ public class BasicChangeManagerTest {
   public void test_fire_correct() {
     _changeManager.addChangeListener(new ChangeListener() {
       @Override
-      public void entityChanged(ChangeEvent event) {
+      public void entityChanged(final ChangeEvent event) {
         assertEquals(ChangeType.CHANGED, event.getType());
         assertEquals(UID_A_B_1.getObjectId(), event.getObjectId());
         assertEquals(UID_A_B_2.getObjectId(), event.getObjectId());

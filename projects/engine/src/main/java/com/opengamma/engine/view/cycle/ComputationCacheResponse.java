@@ -40,7 +40,7 @@ public class ComputationCacheResponse extends DirectBean {
   @PropertyDefinition
   private List<Pair<ValueSpecification, Object>> _results;
 
-  public void setResults(Collection<Pair<ValueSpecification, Object>> result) {
+  public void setResults(final Collection<Pair<ValueSpecification, Object>> result) {
     setResults(Lists.newArrayList(result));
   }
 

@@ -32,11 +32,11 @@ public class AuthorizationExceptionMapper
 
   //-------------------------------------------------------------------------
   @Override
-  protected String buildHtmlErrorPage(AuthorizationException exception) {
-    Map<String, String> data = new HashMap<>();
+  protected String buildHtmlErrorPage(final AuthorizationException exception) {
+    final Map<String, String> data = new HashMap<>();
     data.put("user", AuthUtils.getSubject().isAuthenticated() ? AuthUtils.getUserName() : "Not Logged in");
-    String msg = exception.getMessage();
-    String permission = StringUtils.substringBetween(msg, "[", "]");
+    final String msg = exception.getMessage();
+    final String permission = StringUtils.substringBetween(msg, "[", "]");
     data.put("locator", "");
     if (StringUtils.isNotEmpty(permission)) {
       data.put("message", "Required permission: " + permission);

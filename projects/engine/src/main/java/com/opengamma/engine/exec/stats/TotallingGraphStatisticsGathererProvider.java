@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 
@@ -23,12 +23,12 @@ import com.opengamma.id.UniqueId;
 public class TotallingGraphStatisticsGathererProvider extends PerViewStatisticsGathererProvider<TotallingGraphStatisticsGathererProvider.Statistics> {
 
   /**
-   * 
+   *
    */
   public static final class Statistics implements GraphExecutorStatisticsGatherer {
 
     private final UniqueId _viewProcessId;
-    private final ConcurrentMap<String, GraphExecutionStatistics> _statistics = new ConcurrentHashMap<String, GraphExecutionStatistics>();
+    private final ConcurrentMap<String, GraphExecutionStatistics> _statistics = new ConcurrentHashMap<>();
 
     private Statistics(final UniqueId viewProcessId) {
       _viewProcessId = viewProcessId;
@@ -47,17 +47,17 @@ public class TotallingGraphStatisticsGathererProvider extends PerViewStatisticsG
     }
 
     @Override
-    public void graphExecuted(String calcConfig, int nodeCount, long executionTime, long duration) {
+    public void graphExecuted(final String calcConfig, final int nodeCount, final long executionTime, final long duration) {
       getOrCreateConfiguration(calcConfig).recordExecution(nodeCount, executionTime, duration);
     }
 
     @Override
-    public void graphProcessed(String calcConfig, int totalJobs, double meanJobSize, double meanJobCycleCost, double meanJobIOCost) {
+    public void graphProcessed(final String calcConfig, final int totalJobs, final double meanJobSize, final double meanJobCycleCost, final double meanJobIOCost) {
       getOrCreateConfiguration(calcConfig).recordProcessing(totalJobs, meanJobSize, meanJobCycleCost, meanJobIOCost);
     }
 
     public List<GraphExecutionStatistics> getExecutionStatistics() {
-      return new ArrayList<GraphExecutionStatistics>(_statistics.values());
+      return new ArrayList<>(_statistics.values());
     }
 
     public boolean dropStatisticsBefore(final Instant dropBefore) {
@@ -70,7 +70,7 @@ public class TotallingGraphStatisticsGathererProvider extends PerViewStatisticsG
       }
       return _statistics.isEmpty();
     }
-    
+
     public UniqueId getViewProcessId() {
       return _viewProcessId;
     }
@@ -83,7 +83,7 @@ public class TotallingGraphStatisticsGathererProvider extends PerViewStatisticsG
   }
 
   @Override
-  protected boolean dropStatisticsBefore(Statistics gatherer, Instant dropBefore) {
+  protected boolean dropStatisticsBefore(final Statistics gatherer, final Instant dropBefore) {
     return gatherer.dropStatisticsBefore(dropBefore);
   }
 

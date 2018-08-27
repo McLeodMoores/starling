@@ -13,7 +13,7 @@ import com.opengamma.financial.security.future.EquityIndexDividendFutureSecurity
 public class EquityIndexDividendFutureBean extends FutureSecurityBean {
 
   @Override
-  public <T> T accept(Visitor<T> visitor) {
+  public <T> T accept(final Visitor<T> visitor) {
     return visitor.visitEquityIndexDividendFutureType(this);
   }
 

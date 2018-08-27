@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.depgraph.rest;
@@ -44,7 +44,7 @@ public class DependencyGraphTraceBuilderProperties {
    * Copy constructor
    * @param other instance to copy
    */
-  private DependencyGraphTraceBuilderProperties(DependencyGraphTraceBuilderProperties other) {
+  private DependencyGraphTraceBuilderProperties(final DependencyGraphTraceBuilderProperties other) {
     _calculationConfigurationName = other.getCalculationConfigurationName();
     _valuationTime = other.getValuationTime();
     _resolutionTime = other.getResolutionTime();
@@ -101,6 +101,7 @@ public class DependencyGraphTraceBuilderProperties {
    */
   public DependencyGraphTraceBuilderProperties calculationConfigurationName(final String calculationConfigurationName) {
     return new DependencyGraphTraceBuilderProperties(this) {
+      @Override
       public String getCalculationConfigurationName() {
         return calculationConfigurationName;
       }
@@ -139,6 +140,7 @@ public class DependencyGraphTraceBuilderProperties {
    */
   public DependencyGraphTraceBuilderProperties defaultProperties(final ValueProperties defaultProperties) {
     return new DependencyGraphTraceBuilderProperties(this) {
+      @Override
       public ValueProperties getDefaultProperties() {
         return defaultProperties;
       };
@@ -149,7 +151,7 @@ public class DependencyGraphTraceBuilderProperties {
    * @param requirement requirement to add
    * @return a newly configured instance
    */
-  public DependencyGraphTraceBuilderProperties addRequirement(ValueRequirement requirement) {
+  public DependencyGraphTraceBuilderProperties addRequirement(final ValueRequirement requirement) {
     final Collection<ValueRequirement> currentRequirements = new ArrayList<>(getRequirements());
     currentRequirements.add(requirement);
     return requirements(currentRequirements);
@@ -180,14 +182,14 @@ public class DependencyGraphTraceBuilderProperties {
       }
     };
   }
-  
+
   /**
    * Add a market data spec
    * @param marketData a market data spec
    * @return a newly configured instance
    */
-  public DependencyGraphTraceBuilderProperties addMarketData(MarketDataSpecification marketData) {
-    List<MarketDataSpecification> newMarketData = new ArrayList<>(getMarketData());
+  public DependencyGraphTraceBuilderProperties addMarketData(final MarketDataSpecification marketData) {
+    final List<MarketDataSpecification> newMarketData = new ArrayList<>(getMarketData());
     newMarketData.add(marketData);
     return marketData(newMarketData);
   }

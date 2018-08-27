@@ -65,10 +65,10 @@ public class RiskRun extends DirectBean implements ObjectIdentifiable {
   private int _numRestarts;
 
   @PropertyDefinition
-  private Set<CalculationConfiguration> _calculationConfigurations = new HashSet<CalculationConfiguration>();
+  private Set<CalculationConfiguration> _calculationConfigurations = new HashSet<>();
 
   @PropertyDefinition
-  private Set<RiskRunProperty> _properties = new HashSet<RiskRunProperty>();
+  private Set<RiskRunProperty> _properties = new HashSet<>();
 
   @PropertyDefinition
   private boolean _complete;
@@ -90,7 +90,7 @@ public class RiskRun extends DirectBean implements ObjectIdentifiable {
 
   @PropertyDefinition
   private ComputationTargetResolver _computationTargetResolver;
-  
+
   @PropertyDefinition
   private String _name;
 
@@ -106,7 +106,7 @@ public class RiskRun extends DirectBean implements ObjectIdentifiable {
    * Sets the viewDefinitionUid.
    * @param viewDefinitionUid  the new value of the property
    */
-  public void setViewDefinitionUid(UniqueId viewDefinitionUid) {
+  public void setViewDefinitionUid(final UniqueId viewDefinitionUid) {
     setViewDefinitionUidScheme(viewDefinitionUid.getScheme());
     setViewDefinitionUidValue(viewDefinitionUid.getValue());
     setViewDefinitionUidVersion(viewDefinitionUid.getVersion());
@@ -120,9 +120,9 @@ public class RiskRun extends DirectBean implements ObjectIdentifiable {
   public RiskRun() {
   }
 
-  public RiskRun(MarketData marketData, Instant createInstant, Instant valuationTime, int numRestarts,
-      Set<CalculationConfiguration> calculationConfigurations, Set<RiskRunProperty> properties, boolean complete,
-      VersionCorrection versionCorrection, UniqueId viewDefinitionUid, String name) {
+  public RiskRun(final MarketData marketData, final Instant createInstant, final Instant valuationTime, final int numRestarts,
+      final Set<CalculationConfiguration> calculationConfigurations, final Set<RiskRunProperty> properties, final boolean complete,
+      final VersionCorrection versionCorrection, final UniqueId viewDefinitionUid, final String name) {
     this._marketData = marketData;
     this._createInstant = createInstant;
     this._valuationTime = valuationTime;
@@ -134,7 +134,7 @@ public class RiskRun extends DirectBean implements ObjectIdentifiable {
     this._name = name;
     setViewDefinitionUid(viewDefinitionUid);
     //
-    for (RiskRunProperty property : properties) {
+    for (final RiskRunProperty property : properties) {
       property.setRiskRun(this);
     }
   }
@@ -146,7 +146,7 @@ public class RiskRun extends DirectBean implements ObjectIdentifiable {
         0,
         functional(cycleMetadata.getAllCalculationConfigurationNames()).map(new Function1<String, CalculationConfiguration>() {
           @Override
-          public CalculationConfiguration execute(String configName) {
+          public CalculationConfiguration execute(final String configName) {
             return new CalculationConfiguration(configName);
           }
         }).asSet(),
@@ -158,21 +158,21 @@ public class RiskRun extends DirectBean implements ObjectIdentifiable {
   }
 
   public Map<String, String> getPropertiesMap() {
-    Map<String, String> returnValue = new HashMap<String, String>();
+    final Map<String, String> returnValue = new HashMap<>();
 
-    for (RiskRunProperty property : getProperties()) {
+    for (final RiskRunProperty property : getProperties()) {
       returnValue.put(property.getPropertyKey(), property.getPropertyValue());
     }
 
     return returnValue;
   }
 
-  public void addProperty(RiskRunProperty property) {
+  public void addProperty(final RiskRunProperty property) {
     _properties.add(property);
   }
 
-  public void addProperty(String key, String value) {
-    RiskRunProperty property = new RiskRunProperty();
+  public void addProperty(final String key, final String value) {
+    final RiskRunProperty property = new RiskRunProperty();
     property.setRiskRun(this);
     property.setPropertyKey(key);
     property.setPropertyValue(value);

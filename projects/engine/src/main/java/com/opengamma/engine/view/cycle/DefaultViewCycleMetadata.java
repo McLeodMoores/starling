@@ -58,17 +58,17 @@ public class DefaultViewCycleMetadata extends DirectBean implements ViewCycleMet
 
   @PropertyDefinition
   private Map<String, Map<ValueSpecification, Set<ValueRequirement>>> _terminalOutputsByCalcConfig;
-  
+
   @PropertyDefinition
   private String _name;
 
   public DefaultViewCycleMetadata() {
   }
 
-  public DefaultViewCycleMetadata(UniqueId viewCycleId, UniqueId marketDataSnapshotUniqueId, UniqueId viewDefinitionId,
-      VersionCorrection versionCorrection, Instant valuationTime, Collection<String> allCalculationConfigurationNames,
-      Map<String, Collection<ComputationTargetSpecification>> computationTargetsByConfigName,
-      Map<String, Map<ValueSpecification, Set<ValueRequirement>>> terminalOutputsByConfigName, String name) {
+  public DefaultViewCycleMetadata(final UniqueId viewCycleId, final UniqueId marketDataSnapshotUniqueId, final UniqueId viewDefinitionId,
+      final VersionCorrection versionCorrection, final Instant valuationTime, final Collection<String> allCalculationConfigurationNames,
+      final Map<String, Collection<ComputationTargetSpecification>> computationTargetsByConfigName,
+      final Map<String, Map<ValueSpecification, Set<ValueRequirement>>> terminalOutputsByConfigName, final String name) {
     _viewCycleId = viewCycleId;
     _marketDataSnapshotId = marketDataSnapshotUniqueId;
     _viewDefinitionId = viewDefinitionId;
@@ -81,12 +81,12 @@ public class DefaultViewCycleMetadata extends DirectBean implements ViewCycleMet
   }
 
   @Override
-  public Collection<ComputationTargetSpecification> getComputationTargets(String configurationName) {
+  public Collection<ComputationTargetSpecification> getComputationTargets(final String configurationName) {
     return getComputationTargetsByCalcConfig().get(configurationName);
   }
 
   @Override
-  public Map<ValueSpecification, Set<ValueRequirement>> getTerminalOutputs(String configurationName) {
+  public Map<ValueSpecification, Set<ValueRequirement>> getTerminalOutputs(final String configurationName) {
     return getTerminalOutputsByCalcConfig().get(configurationName);
   }
 

@@ -25,20 +25,20 @@ public class ValueDistributor {
    * The map of specification to listeners.
    */
   private final ConcurrentMap<LiveDataSpecification, Set<LiveDataListener>> _listenersBySpec =
-      new ConcurrentHashMap<LiveDataSpecification, Set<LiveDataListener>>();
+      new ConcurrentHashMap<>();
 
   /**
    * Gets the current specifications.
-   * 
+   *
    * @return the specifications, not null
    */
   public Set<LiveDataSpecification> getActiveSpecifications() {
-    return new HashSet<LiveDataSpecification>(_listenersBySpec.keySet());
+    return new HashSet<>(_listenersBySpec.keySet());
   }
 
   /**
    * Gets the number of current specifications.
-   * 
+   *
    * @return the number of current specifications.
    */
   public int getActiveSpecificationCount() {
@@ -47,12 +47,12 @@ public class ValueDistributor {
 
   /**
    * Adds a listener.
-   * 
+   *
    * @param fullyQualifiedSpecification the fully qualified specification, not null
    * @param listener the listener
    */
-  public void addListener(LiveDataSpecification fullyQualifiedSpecification, LiveDataListener listener) {
-    Set<LiveDataListener> freshListeners = new HashSet<LiveDataListener>();
+  public void addListener(final LiveDataSpecification fullyQualifiedSpecification, final LiveDataListener listener) {
+    final Set<LiveDataListener> freshListeners = new HashSet<>();
     Set<LiveDataListener> actualListeners = _listenersBySpec.putIfAbsent(fullyQualifiedSpecification, freshListeners);
     if (actualListeners == null) {
       actualListeners = freshListeners;
@@ -64,20 +64,20 @@ public class ValueDistributor {
 
   /**
    * Removes a listener.
-   * 
+   *
    * @param fullyQualifiedSpecification the fully qualified specification, not null
    * @param listener the listener
    * @return true iff there are still active listeners
    */
-  public boolean removeListener(LiveDataSpecification fullyQualifiedSpecification, LiveDataListener listener) {
-    Set<LiveDataListener> actualListeners = _listenersBySpec.get(fullyQualifiedSpecification);
+  public boolean removeListener(final LiveDataSpecification fullyQualifiedSpecification, final LiveDataListener listener) {
+    final Set<LiveDataListener> actualListeners = _listenersBySpec.get(fullyQualifiedSpecification);
     if (actualListeners == null) {
       return false;
     }
     synchronized (actualListeners) {
       actualListeners.remove(listener);
       if (actualListeners.isEmpty()) {
-        boolean removed = _listenersBySpec.remove(fullyQualifiedSpecification, actualListeners);
+        final boolean removed = _listenersBySpec.remove(fullyQualifiedSpecification, actualListeners);
         if (removed) {
           return false;
         } else {
@@ -92,12 +92,12 @@ public class ValueDistributor {
 
   // TODO kirk 2009-09-29 -- This should be handed an executor service to
   // invoke the updates asynchronously.
-  public void notifyListeners(LiveDataValueUpdateBean updateBean) {
-    Set<LiveDataListener> listeners = _listenersBySpec.get(updateBean.getSpecification());
+  public void notifyListeners(final LiveDataValueUpdateBean updateBean) {
+    final Set<LiveDataListener> listeners = _listenersBySpec.get(updateBean.getSpecification());
     if (listeners == null) {
       return;
     }
-    for (LiveDataListener listener : listeners) {
+    for (final LiveDataListener listener : listeners) {
       listener.valueUpdate(updateBean);
     }
   }

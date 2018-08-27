@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 
@@ -42,10 +42,10 @@ public final class CapFloorSecurityBeanOperation extends AbstractSecurityBeanOpe
   }
 
   @Override
-  public CapFloorSecurityBean createBean(final OperationContext context, HibernateSecurityMasterDao secMasterSession, CapFloorSecurity security) {
+  public CapFloorSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession, final CapFloorSecurity security) {
     validateDayCount(security.getDayCount().getName());
     validateFrequency(security.getFrequency().getName());
-    
+
     final CapFloorSecurityBean bean = new CapFloorSecurityBean();
     bean.setCap(security.isCap());
     bean.setCurrency(secMasterSession.getOrCreateCurrencyBean(security.getCurrency().getCode()));
@@ -62,24 +62,24 @@ public final class CapFloorSecurityBeanOperation extends AbstractSecurityBeanOpe
   }
 
   @Override
-  public CapFloorSecurity createSecurity(final OperationContext context, CapFloorSecurityBean bean) {
-    
-    ZonedDateTime startDate = zonedDateTimeBeanToDateTimeWithZone(bean.getStartDate());
-    ZonedDateTime maturityDate = zonedDateTimeBeanToDateTimeWithZone(bean.getMaturityDate());
-    ExternalId underlyingIdentifier = externalIdBeanToExternalId(bean.getUnderlyingIdentifier());
-    Frequency frequency = frequencyBeanToFrequency(bean.getFrequency());
-    Currency currency = currencyBeanToCurrency(bean.getCurrency());
-    DayCount dayCount = dayCountBeanToDayCount(bean.getDayCount());
-    return new CapFloorSecurity(startDate, 
-        maturityDate, 
-        bean.getNotional(), 
-        underlyingIdentifier, 
-        bean.getStrike(), 
-        frequency, 
-        currency, 
-        dayCount, 
-        bean.isPayer(), 
-        bean.isCap(), 
+  public CapFloorSecurity createSecurity(final OperationContext context, final CapFloorSecurityBean bean) {
+
+    final ZonedDateTime startDate = zonedDateTimeBeanToDateTimeWithZone(bean.getStartDate());
+    final ZonedDateTime maturityDate = zonedDateTimeBeanToDateTimeWithZone(bean.getMaturityDate());
+    final ExternalId underlyingIdentifier = externalIdBeanToExternalId(bean.getUnderlyingIdentifier());
+    final Frequency frequency = frequencyBeanToFrequency(bean.getFrequency());
+    final Currency currency = currencyBeanToCurrency(bean.getCurrency());
+    final DayCount dayCount = dayCountBeanToDayCount(bean.getDayCount());
+    return new CapFloorSecurity(startDate,
+        maturityDate,
+        bean.getNotional(),
+        underlyingIdentifier,
+        bean.getStrike(),
+        frequency,
+        currency,
+        dayCount,
+        bean.isPayer(),
+        bean.isCap(),
         bean.isIbor());
   }
 

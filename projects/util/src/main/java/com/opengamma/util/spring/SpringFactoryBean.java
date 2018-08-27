@@ -21,7 +21,7 @@ import org.springframework.beans.factory.InitializingBean;
  * Spring factory bean that builds on Joda-Beans.
  * <p>
  * This provides a singleton factory bean, where the configuration can be set using Joda-Beans.
- * 
+ *
  * @param <T> the type
  */
 @BeanDefinition
@@ -38,10 +38,10 @@ public abstract class SpringFactoryBean<T> extends DirectBean implements Factory
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param type  the type of the factory, not null
    */
-  public SpringFactoryBean(Class<T> type) {
+  public SpringFactoryBean(final Class<T> type) {
     _type = type;
   }
 
@@ -58,7 +58,7 @@ public abstract class SpringFactoryBean<T> extends DirectBean implements Factory
 
   /**
    * Gets the object, creating if necessary.
-   * 
+   *
    * @return the object
    */
   public final T getObjectCreating() {
@@ -81,7 +81,7 @@ public abstract class SpringFactoryBean<T> extends DirectBean implements Factory
 
   /**
    * Override to create the singleton.
-   * 
+   *
    * @return the singleton, not null
    */
   protected abstract T createObject();

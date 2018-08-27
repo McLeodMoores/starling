@@ -45,11 +45,11 @@ public class DataBatchRunResource extends AbstractDataResource {
 
   /**
    * Creates the resource, exposing the underlying master over REST.
-   * 
+   *
    * @param batchRunId  the run ID, not null
    * @param batchMaster  the underlying batch master, not null
    */
-  public DataBatchRunResource(final ObjectId batchRunId, final BatchMaster batchMaster) {    
+  public DataBatchRunResource(final ObjectId batchRunId, final BatchMaster batchMaster) {
     ArgumentChecker.notNull(batchRunId, "batchRunId");
     ArgumentChecker.notNull(batchMaster, "batchMaster");
     _batchMaster = batchMaster;
@@ -74,15 +74,15 @@ public class DataBatchRunResource extends AbstractDataResource {
 
   @GET
   public Response get() {
-    RiskRun result = getMaster().getRiskRun(_batchRunId);
+    final RiskRun result = getMaster().getRiskRun(_batchRunId);
     return responseOkObject(result);
   }
 
   @POST
   @Path("values")
   @Consumes(FudgeRest.MEDIA)
-  public Response getBatchValues(PagingRequest pagingRequest) {
-    Pair<List<ViewResultEntry>, Paging> result = getMaster().getBatchValues(_batchRunId, pagingRequest);
+  public Response getBatchValues(final PagingRequest pagingRequest) {
+    final Pair<List<ViewResultEntry>, Paging> result = getMaster().getBatchValues(_batchRunId, pagingRequest);
     return responseOkObject(result);
   }
 
@@ -93,8 +93,8 @@ public class DataBatchRunResource extends AbstractDataResource {
    * @param baseUri  the base URI, not null
    * @return the URI, not null
    */
-  public static URI uriSearch(URI baseUri) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("run/search");
+  public static URI uriSearch(final URI baseUri) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("run/search");
     return bld.build();
   }
 
@@ -105,18 +105,18 @@ public class DataBatchRunResource extends AbstractDataResource {
    * @param batchRunId  the resource identifier, not null
    * @return the URI, not null
    */
-  public static URI uri(URI baseUri, ObjectId batchRunId) {
+  public static URI uri(final URI baseUri, final ObjectId batchRunId) {
     return UriBuilder.fromUri(baseUri).path("/run/{uid}").build(batchRunId);
   }
 
   /**
    * Builds a URI for getBatchValues.
-   * 
+   *
    * @param baseUri  the base URI, not null
-   * @param batchRunId the batch id which values we want to build the uri for                          
+   * @param batchRunId the batch id which values we want to build the uri for
    * @return the URI, not null
    */
-  public static URI uriBatchValues(URI baseUri, ObjectId batchRunId) {
+  public static URI uriBatchValues(final URI baseUri, final ObjectId batchRunId) {
     return UriBuilder.fromUri(baseUri).path("/run/{uid}/values").build(batchRunId);
   }
 

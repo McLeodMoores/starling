@@ -24,7 +24,7 @@ public class FilesystemPortfolioSchemaLocator implements SchemaLocator {
 
   private final File _schemaLocation;
 
-  public FilesystemPortfolioSchemaLocator(File schemaLocation) {
+  public FilesystemPortfolioSchemaLocator(final File schemaLocation) {
 
     ArgumentChecker.notNull(schemaLocation, "schemaLocation");
     ArgumentChecker.isTrue(schemaLocation.exists(), "File {} could not be found", schemaLocation);
@@ -41,14 +41,14 @@ public class FilesystemPortfolioSchemaLocator implements SchemaLocator {
    * @return a schema with the required version if it exists, null otherwise
    */
   @Override
-  public Schema lookupSchema(SchemaVersion version) {
+  public Schema lookupSchema(final SchemaVersion version) {
 
-    SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-    File requiredFile = new File(_schemaLocation, "portfolio-schema-" + version.toString() + ".xsd");
+    final SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+    final File requiredFile = new File(_schemaLocation, "portfolio-schema-" + version.toString() + ".xsd");
 
     try {
       return requiredFile.exists() ? factory.newSchema(requiredFile) : null;
-    } catch (SAXException e) {
+    } catch (final SAXException e) {
       throw new OpenGammaRuntimeException("Unable to parse schema file", e);
     }
   }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.smile.fitting;
@@ -11,13 +11,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
 
-import cern.jet.random.engine.MersenneTwister;
-import cern.jet.random.engine.RandomEngine;
-
 import com.opengamma.analytics.financial.model.volatility.smile.function.SVIFormulaData;
 import com.opengamma.analytics.financial.model.volatility.smile.function.SVIVolatilityFunction;
 import com.opengamma.analytics.financial.model.volatility.smile.function.VolatilityFunctionProvider;
 import com.opengamma.util.test.TestGroup;
+
+import cern.jet.random.engine.MersenneTwister;
+import cern.jet.random.engine.RandomEngine;
 
 /**
  * Test.
@@ -49,7 +49,8 @@ public class SVIModelFitterTest extends SmileModelFitterTest<SVIFormulaData> {
   }
 
   @Override
-  SmileModelFitter<SVIFormulaData> getFitter(double forward, double[] strikes, double timeToExpiry, double[] impliedVols, double[] error, VolatilityFunctionProvider<SVIFormulaData> model) {
+  SmileModelFitter<SVIFormulaData> getFitter(final double forward, final double[] strikes, final double timeToExpiry, final double[] impliedVols,
+      final double[] error, final VolatilityFunctionProvider<SVIFormulaData> model) {
     return new SVIModelFitter(forward, strikes, timeToExpiry, impliedVols, error, model);
   }
 

@@ -31,25 +31,25 @@ public class DbMarketDataSnapshotMasterComponentFactory extends AbstractDocument
   public DbMarketDataSnapshotMasterComponentFactory() {
     super("snp", MarketDataSnapshotMaster.class);
   }
-  
+
   @Override
   protected Class<? extends AbstractRemoteMaster> getRemoteInterface() {
     return RemoteMarketDataSnapshotMaster.class;
   }
-      
+
   @Override
   protected DbMarketDataSnapshotMaster createDbDocumentMaster() {
     return new DbMarketDataSnapshotMaster(getDbConnector());
   }
 
   @Override
-  protected AbstractDataResource createPublishedResource(DbMarketDataSnapshotMaster dbMaster, MarketDataSnapshotMaster postProcessedMaster) {
+  protected AbstractDataResource createPublishedResource(final DbMarketDataSnapshotMaster dbMaster, final MarketDataSnapshotMaster postProcessedMaster) {
     return new DataMarketDataSnapshotMasterResource(postProcessedMaster);
   }
-  
+
 
   @Override
-  protected MarketDataSnapshotMaster wrapMasterWithTrackingInterface(MarketDataSnapshotMaster postProcessedMaster) {
+  protected MarketDataSnapshotMaster wrapMasterWithTrackingInterface(final MarketDataSnapshotMaster postProcessedMaster) {
     return new DataTrackingMarketDataSnapshotMaster(postProcessedMaster);
   }
 

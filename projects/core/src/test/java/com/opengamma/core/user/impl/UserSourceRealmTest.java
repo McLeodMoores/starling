@@ -32,7 +32,7 @@ public class UserSourceRealmTest {
   private static final PrincipalCollection PRINCIPALS = new SimplePrincipalCollection();
   private static final Permission PERMISSION_OTHER_TYPE = new Permission() {
     @Override
-    public boolean implies(Permission p) {
+    public boolean implies(final Permission p) {
       return false;
     }
   };
@@ -49,9 +49,10 @@ public class UserSourceRealmTest {
   @Test
   public void testIsPermitted_true() {
     final ShiroPermissionResolver resolver = new ShiroPermissionResolver();
-    UserSourceRealm realm = new UserSourceRealm(_userSource) {
-      protected AuthorizationInfo getAuthorizationInfo(PrincipalCollection principals) {
-        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+    final UserSourceRealm realm = new UserSourceRealm(_userSource) {
+      @Override
+      protected AuthorizationInfo getAuthorizationInfo(final PrincipalCollection principals) {
+        final SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         info.addObjectPermission(resolver.resolvePermission("Master:view"));
         return info;
       }
@@ -63,9 +64,10 @@ public class UserSourceRealmTest {
   @Test
   public void testIsPermitted_false() {
     final ShiroPermissionResolver resolver = new ShiroPermissionResolver();
-    UserSourceRealm realm = new UserSourceRealm(_userSource) {
-      protected AuthorizationInfo getAuthorizationInfo(PrincipalCollection principals) {
-        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+    final UserSourceRealm realm = new UserSourceRealm(_userSource) {
+      @Override
+      protected AuthorizationInfo getAuthorizationInfo(final PrincipalCollection principals) {
+        final SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         info.addObjectPermission(resolver.resolvePermission("Master:view"));
         return info;
       }
@@ -77,9 +79,10 @@ public class UserSourceRealmTest {
   @Test
   public void testIsPermitted_otherType() {
     final ShiroPermissionResolver resolver = new ShiroPermissionResolver();
-    UserSourceRealm realm = new UserSourceRealm(_userSource) {
-      protected AuthorizationInfo getAuthorizationInfo(PrincipalCollection principals) {
-        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+    final UserSourceRealm realm = new UserSourceRealm(_userSource) {
+      @Override
+      protected AuthorizationInfo getAuthorizationInfo(final PrincipalCollection principals) {
+        final SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         info.addObjectPermission(resolver.resolvePermission("Master:view"));
         return info;
       }
@@ -92,9 +95,10 @@ public class UserSourceRealmTest {
   @Test
   public void testIsPermittedAll_none() {
     final ShiroPermissionResolver resolver = new ShiroPermissionResolver();
-    UserSourceRealm realm = new UserSourceRealm(_userSource) {
-      protected AuthorizationInfo getAuthorizationInfo(PrincipalCollection principals) {
-        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+    final UserSourceRealm realm = new UserSourceRealm(_userSource) {
+      @Override
+      protected AuthorizationInfo getAuthorizationInfo(final PrincipalCollection principals) {
+        final SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         info.addObjectPermission(resolver.resolvePermission("Master:view"));
         info.addObjectPermission(resolver.resolvePermission("Source:view"));
         return info;
@@ -107,9 +111,10 @@ public class UserSourceRealmTest {
   @Test
   public void testIsPermittedAll_true() {
     final ShiroPermissionResolver resolver = new ShiroPermissionResolver();
-    UserSourceRealm realm = new UserSourceRealm(_userSource) {
-      protected AuthorizationInfo getAuthorizationInfo(PrincipalCollection principals) {
-        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+    final UserSourceRealm realm = new UserSourceRealm(_userSource) {
+      @Override
+      protected AuthorizationInfo getAuthorizationInfo(final PrincipalCollection principals) {
+        final SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         info.addObjectPermission(resolver.resolvePermission("Master:view"));
         info.addObjectPermission(resolver.resolvePermission("Source:view"));
         return info;
@@ -122,9 +127,10 @@ public class UserSourceRealmTest {
   @Test
   public void testIsPermittedAll_false() {
     final ShiroPermissionResolver resolver = new ShiroPermissionResolver();
-    UserSourceRealm realm = new UserSourceRealm(_userSource) {
-      protected AuthorizationInfo getAuthorizationInfo(PrincipalCollection principals) {
-        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+    final UserSourceRealm realm = new UserSourceRealm(_userSource) {
+      @Override
+      protected AuthorizationInfo getAuthorizationInfo(final PrincipalCollection principals) {
+        final SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         info.addObjectPermission(resolver.resolvePermission("Master:view"));
         info.addObjectPermission(resolver.resolvePermission("Source:view"));
         return info;
@@ -138,9 +144,10 @@ public class UserSourceRealmTest {
   @Test
   public void testCheckPermission_true() {
     final ShiroPermissionResolver resolver = new ShiroPermissionResolver();
-    UserSourceRealm realm = new UserSourceRealm(_userSource) {
-      protected AuthorizationInfo getAuthorizationInfo(PrincipalCollection principals) {
-        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+    final UserSourceRealm realm = new UserSourceRealm(_userSource) {
+      @Override
+      protected AuthorizationInfo getAuthorizationInfo(final PrincipalCollection principals) {
+        final SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         info.addObjectPermission(resolver.resolvePermission("Master:view"));
         return info;
       }
@@ -152,9 +159,10 @@ public class UserSourceRealmTest {
   @Test(expectedExceptions = UnauthorizedException.class)
   public void testCheckPermission_false() {
     final ShiroPermissionResolver resolver = new ShiroPermissionResolver();
-    UserSourceRealm realm = new UserSourceRealm(_userSource) {
-      protected AuthorizationInfo getAuthorizationInfo(PrincipalCollection principals) {
-        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+    final UserSourceRealm realm = new UserSourceRealm(_userSource) {
+      @Override
+      protected AuthorizationInfo getAuthorizationInfo(final PrincipalCollection principals) {
+        final SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         info.addObjectPermission(resolver.resolvePermission("Master:view"));
         return info;
       }
@@ -166,9 +174,10 @@ public class UserSourceRealmTest {
   @Test(expectedExceptions = UnauthorizedException.class)
   public void testCheckPermission_otherType() {
     final ShiroPermissionResolver resolver = new ShiroPermissionResolver();
-    UserSourceRealm realm = new UserSourceRealm(_userSource) {
-      protected AuthorizationInfo getAuthorizationInfo(PrincipalCollection principals) {
-        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+    final UserSourceRealm realm = new UserSourceRealm(_userSource) {
+      @Override
+      protected AuthorizationInfo getAuthorizationInfo(final PrincipalCollection principals) {
+        final SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         info.addObjectPermission(resolver.resolvePermission("Master:view"));
         return info;
       }
@@ -181,9 +190,10 @@ public class UserSourceRealmTest {
   @Test
   public void testCheckPermissions_true() {
     final ShiroPermissionResolver resolver = new ShiroPermissionResolver();
-    UserSourceRealm realm = new UserSourceRealm(_userSource) {
-      protected AuthorizationInfo getAuthorizationInfo(PrincipalCollection principals) {
-        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+    final UserSourceRealm realm = new UserSourceRealm(_userSource) {
+      @Override
+      protected AuthorizationInfo getAuthorizationInfo(final PrincipalCollection principals) {
+        final SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         info.addObjectPermission(resolver.resolvePermission("Master:view"));
         info.addObjectPermission(resolver.resolvePermission("Source:view"));
         return info;
@@ -196,9 +206,10 @@ public class UserSourceRealmTest {
   @Test(expectedExceptions = UnauthorizedException.class)
   public void testCheckPermissions_false() {
     final ShiroPermissionResolver resolver = new ShiroPermissionResolver();
-    UserSourceRealm realm = new UserSourceRealm(_userSource) {
-      protected AuthorizationInfo getAuthorizationInfo(PrincipalCollection principals) {
-        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+    final UserSourceRealm realm = new UserSourceRealm(_userSource) {
+      @Override
+      protected AuthorizationInfo getAuthorizationInfo(final PrincipalCollection principals) {
+        final SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         info.addObjectPermission(resolver.resolvePermission("Master:view"));
         info.addObjectPermission(resolver.resolvePermission("Source:view"));
         return info;

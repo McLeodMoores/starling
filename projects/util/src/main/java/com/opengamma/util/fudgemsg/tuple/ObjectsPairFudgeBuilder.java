@@ -29,7 +29,7 @@ public final class ObjectsPairFudgeBuilder implements FudgeBuilder<ObjectsPair<?
   public static final String SECOND_FIELD_NAME = "second";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, ObjectsPair<?, ?> object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final ObjectsPair<?, ?> object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     if (object.getFirst() != null) {
       if (object.getFirst() instanceof String) {
@@ -60,7 +60,7 @@ public final class ObjectsPairFudgeBuilder implements FudgeBuilder<ObjectsPair<?
   }
 
   @Override
-  public ObjectsPair<?, ?> buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
+  public ObjectsPair<?, ?> buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     Object first;
     if (msg.hasField(FIRST_FIELD_NAME)) {
       first = deserializer.fieldValueToObject(msg.getByName(FIRST_FIELD_NAME));
@@ -78,9 +78,9 @@ public final class ObjectsPairFudgeBuilder implements FudgeBuilder<ObjectsPair<?
 
   public static <K, V> ObjectsPair<K, V> buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg, final Class<K> baseK, final Class<V> baseV) {
     FudgeField field = msg.getByName(FIRST_FIELD_NAME);
-    final K first = (field != null) ? deserializer.fieldValueToObject(baseK, field) : null;
+    final K first = field != null ? deserializer.fieldValueToObject(baseK, field) : null;
     field = msg.getByName(SECOND_FIELD_NAME);
-    final V second = (field != null) ? deserializer.fieldValueToObject(baseV, field) : null;
+    final V second = field != null ? deserializer.fieldValueToObject(baseV, field) : null;
     return ObjectsPair.of(first, second);
   }
 

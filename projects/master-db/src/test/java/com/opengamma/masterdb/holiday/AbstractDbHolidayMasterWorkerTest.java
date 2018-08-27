@@ -43,7 +43,7 @@ public abstract class AbstractDbHolidayMasterWorkerTest extends AbstractDbTest {
   protected Instant _version2Instant;
   protected int _totalHolidays;
 
-  public AbstractDbHolidayMasterWorkerTest(String databaseType, String databaseVersion, boolean readOnly) {
+  public AbstractDbHolidayMasterWorkerTest(final String databaseType, final String databaseVersion, final boolean readOnly) {
     super(databaseType, databaseVersion);
     LOGGER.info("running testcases for {}", databaseType);
   }
@@ -67,7 +67,7 @@ public abstract class AbstractDbHolidayMasterWorkerTest extends AbstractDbTest {
   //-------------------------------------------------------------------------
   private void init() {
     _holMaster = new DbHolidayMaster(getDbConnector());
-    
+
 //    id bigint NOT NULL,
 //    oid bigint NOT NULL,
 //    ver_from_instant timestamp without time zone NOT NULL,
@@ -85,7 +85,7 @@ public abstract class AbstractDbHolidayMasterWorkerTest extends AbstractDbTest {
 //    custom_scheme varchar(255),
 //    custom_value varchar(255),
 //    currency_iso varchar(255),
-    Instant now = Instant.now();
+    final Instant now = Instant.now();
     _holMaster.setClock(Clock.fixed(now, ZoneOffset.UTC));
     _version1Instant = now.minusSeconds(100);
     _version2Instant = now.minusSeconds(50);
@@ -121,14 +121,14 @@ public abstract class AbstractDbHolidayMasterWorkerTest extends AbstractDbTest {
 
   //-------------------------------------------------------------------------
   protected void assert101(final HolidayDocument test) {
-    UniqueId uniqueId = UniqueId.of("DbHol", "101", "0");
+    final UniqueId uniqueId = UniqueId.of("DbHol", "101", "0");
     assertNotNull(test);
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version1Instant, test.getVersionFromInstant());
     assertEquals(null, test.getVersionToInstant());
     assertEquals(_version1Instant, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    ManageableHoliday holiday = test.getHoliday();
+    final ManageableHoliday holiday = test.getHoliday();
     assertNotNull(holiday);
     assertEquals(uniqueId, holiday.getUniqueId());
     assertEquals(ExternalId.of("COPP_CLARK", "1"), test.getProviderId());
@@ -141,14 +141,14 @@ public abstract class AbstractDbHolidayMasterWorkerTest extends AbstractDbTest {
   }
 
   protected void assert102(final HolidayDocument test) {
-    UniqueId uniqueId = UniqueId.of("DbHol", "102", "0");
+    final UniqueId uniqueId = UniqueId.of("DbHol", "102", "0");
     assertNotNull(test);
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version1Instant, test.getVersionFromInstant());
     assertEquals(null, test.getVersionToInstant());
     assertEquals(_version1Instant, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    ManageableHoliday holiday = test.getHoliday();
+    final ManageableHoliday holiday = test.getHoliday();
     assertNotNull(holiday);
     assertEquals(uniqueId, holiday.getUniqueId());
     assertEquals("TestHoliday102", test.getName());
@@ -161,14 +161,14 @@ public abstract class AbstractDbHolidayMasterWorkerTest extends AbstractDbTest {
   }
 
   protected void assert201(final HolidayDocument test) {
-    UniqueId uniqueId = UniqueId.of("DbHol", "201", "0");
+    final UniqueId uniqueId = UniqueId.of("DbHol", "201", "0");
     assertNotNull(test);
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version1Instant, test.getVersionFromInstant());
     assertEquals(_version2Instant, test.getVersionToInstant());
     assertEquals(_version1Instant, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    ManageableHoliday holiday = test.getHoliday();
+    final ManageableHoliday holiday = test.getHoliday();
     assertNotNull(holiday);
     assertEquals(uniqueId, holiday.getUniqueId());
     assertEquals("TestHoliday201", test.getName());
@@ -181,14 +181,14 @@ public abstract class AbstractDbHolidayMasterWorkerTest extends AbstractDbTest {
   }
 
   protected void assert202(final HolidayDocument test) {
-    UniqueId uniqueId = UniqueId.of("DbHol", "201", "1");
+    final UniqueId uniqueId = UniqueId.of("DbHol", "201", "1");
     assertNotNull(test);
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version2Instant, test.getVersionFromInstant());
     assertEquals(null, test.getVersionToInstant());
     assertEquals(_version2Instant, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    ManageableHoliday holiday = test.getHoliday();
+    final ManageableHoliday holiday = test.getHoliday();
     assertNotNull(holiday);
     assertEquals(uniqueId, holiday.getUniqueId());
     assertEquals("TestHoliday202", test.getName());

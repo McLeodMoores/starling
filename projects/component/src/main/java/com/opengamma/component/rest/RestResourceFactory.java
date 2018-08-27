@@ -31,11 +31,11 @@ public abstract class RestResourceFactory {
    * <p>
    * The factory will find and use a public constructor on the class.
    * The class should be annotated with {@code @Path}.
-   * 
+   *
    * @param type  the type to create, not null
    * @param arguments  the arguments, not null, may contain nulls
    */
-  public RestResourceFactory(Class<?> type, Object... arguments) {
+  public RestResourceFactory(final Class<?> type, final Object... arguments) {
     super();
     _constructor = ReflectionUtils.findConstructorByArguments(type, arguments);
     _arguments = arguments;
@@ -44,7 +44,7 @@ public abstract class RestResourceFactory {
   //-------------------------------------------------------------------------
   /**
    * Gets the type of the resource being created.
-   * 
+   *
    * @return the resource type, not null
    */
   public Class<?> getType() {
@@ -53,7 +53,7 @@ public abstract class RestResourceFactory {
 
   /**
    * Creates the new instance using the constructor.
-   * 
+   *
    * @return the new instance, not null
    */
   public Object createInstance() {

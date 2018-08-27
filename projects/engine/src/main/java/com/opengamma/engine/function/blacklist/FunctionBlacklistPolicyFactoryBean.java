@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.blacklist;
@@ -176,21 +176,22 @@ public class FunctionBlacklistPolicyFactoryBean extends SingletonFactoryBean<Fun
   }
 
   public void setEntries(final Collection<Entry> entries) {
-    _entries = new ArrayList<Entry>(entries);
+    _entries = new ArrayList<>(entries);
   }
 
-  private void create(final Collection<Entry> target, Entry entry, final int flag) {
+  private void create(final Collection<Entry> target, final Entry entry, final int flag) {
+    Entry e = entry;
     if (flag == 0) {
       return;
     }
     if (flag > 0) {
-      entry = entry.activationPeriod(flag);
+      e = e.activationPeriod(flag);
     }
-    target.add(entry);
+    target.add(e);
   }
 
   private Collection<Entry> createEntries() {
-    final Collection<Entry> entries = new LinkedList<Entry>();
+    final Collection<Entry> entries = new LinkedList<>();
     if (getEntries() != null) {
       entries.addAll(getEntries());
     }

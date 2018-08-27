@@ -43,10 +43,10 @@ public class WebConfigVersionsResource extends AbstractWebConfigResource {
   @GET
   @SuppressWarnings({"unchecked", "rawtypes" })
   public String getHTML() {
-    ConfigHistoryRequest request = new ConfigHistoryRequest(data().getConfig().getUniqueId(), Object.class);
-    ConfigHistoryResult<?> result = data().getConfigMaster().history(request);
-    
-    FlexiBean out = createRootData();
+    final ConfigHistoryRequest request = new ConfigHistoryRequest(data().getConfig().getUniqueId(), Object.class);
+    final ConfigHistoryResult<?> result = data().getConfigMaster().history(request);
+
+    final FlexiBean out = createRootData();
     out.put("versionsResult", result);
     out.put("versions", result.getValues());
     return getFreemarker().build(HTML_DIR + "configversions.ftl", out);
@@ -56,19 +56,19 @@ public class WebConfigVersionsResource extends AbstractWebConfigResource {
   @Produces(MediaType.APPLICATION_JSON)
   @SuppressWarnings({"unchecked", "rawtypes" })
   public Response getJSON(
-      @QueryParam("pgIdx") Integer pgIdx,
-      @QueryParam("pgNum") Integer pgNum,
-      @QueryParam("pgSze") Integer pgSze) {
-    PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
-    ConfigHistoryRequest request = new ConfigHistoryRequest(data().getConfig().getUniqueId(), Object.class);
+      @QueryParam("pgIdx") final Integer pgIdx,
+      @QueryParam("pgNum") final Integer pgNum,
+      @QueryParam("pgSze") final Integer pgSze) {
+    final PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
+    final ConfigHistoryRequest request = new ConfigHistoryRequest(data().getConfig().getUniqueId(), Object.class);
     request.setPagingRequest(pr);
-    ConfigHistoryResult<?> result = data().getConfigMaster().history(request);
-    
-    FlexiBean out = createRootData();
+    final ConfigHistoryResult<?> result = data().getConfigMaster().history(request);
+
+    final FlexiBean out = createRootData();
     out.put("versionsResult", result);
     out.put("versions", result.getValues());
     out.put("paging", new WebPaging(result.getPaging(), data().getUriInfo()));
-    String json = getFreemarker().build(JSON_DIR + "configversions.ftl", out);
+    final String json = getFreemarker().build(JSON_DIR + "configversions.ftl", out);
     return Response.ok(json).build();
   }
 
@@ -77,9 +77,10 @@ public class WebConfigVersionsResource extends AbstractWebConfigResource {
    * Creates the output root data.
    * @return the output root data, not null
    */
+  @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
-    ConfigDocument doc = data().getConfig();
+    final FlexiBean out = super.createRootData();
+    final ConfigDocument doc = data().getConfig();
     out.put("configDoc", doc);
     out.put("config", doc.getConfig().getValue());
     out.put("configDescription", getConfigTypesProvider().getDescription(doc.getConfig().getType()));
@@ -89,12 +90,12 @@ public class WebConfigVersionsResource extends AbstractWebConfigResource {
 
   //-------------------------------------------------------------------------
   @Path("{versionId}")
-  public WebConfigVersionResource findVersion(@PathParam("versionId") String idStr) {
+  public WebConfigVersionResource findVersion(@PathParam("versionId") final String idStr) {
     data().setUriVersionId(idStr);
-    ConfigDocument doc = data().getConfig();
-    UniqueId combined = doc.getUniqueId().withVersion(idStr);
+    final ConfigDocument doc = data().getConfig();
+    final UniqueId combined = doc.getUniqueId().withVersion(idStr);
     if (doc.getUniqueId().equals(combined) == false) {
-      ConfigDocument versioned = data().getConfigMaster().get(combined);
+      final ConfigDocument versioned = data().getConfigMaster().get(combined);
       data().setVersioned(versioned);
     } else {
       data().setVersioned(doc);
@@ -109,7 +110,7 @@ public class WebConfigVersionsResource extends AbstractWebConfigResource {
    * @return the URI, not null
    */
   public static URI uri(final WebConfigData data) {
-    String configId = data.getBestConfigUriId(null);
+    final String configId = data.getBestConfigUriId(null);
     return data.getUriInfo().getBaseUriBuilder().path(WebConfigVersionsResource.class).build(configId);
   }
 

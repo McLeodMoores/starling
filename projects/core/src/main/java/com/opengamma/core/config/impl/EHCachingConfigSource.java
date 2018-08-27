@@ -9,10 +9,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
-
 import com.opengamma.core.AbstractEHCachingSource;
 import com.opengamma.core.change.ChangeEvent;
 import com.opengamma.core.change.ChangeListener;
@@ -24,6 +20,10 @@ import com.opengamma.util.ehcache.EHCacheUtils;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 import com.opengamma.util.tuple.Triple;
+
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
 
 /**
  * EHCache backed {@link ConfigSource}.
@@ -48,7 +48,7 @@ public class EHCachingConfigSource extends AbstractEHCachingSource<ConfigItem<?>
     // this is not nice, but it's better than a stale cache.
     getUnderlying().changeManager().addChangeListener(new ChangeListener() {
       @Override
-      public void entityChanged(ChangeEvent event) {
+      public void entityChanged(final ChangeEvent event) {
         switch (event.getType()) {
           case ADDED:
             break;
@@ -70,7 +70,7 @@ public class EHCachingConfigSource extends AbstractEHCachingSource<ConfigItem<?>
   }
 
   private synchronized <R> void cacheNameHit(final Triple<Class<R>, String, VersionCorrection> key, final R value) {
-    Element element = _nameCache.get(key);
+    final Element element = _nameCache.get(key);
     if (element == null) {
       // Don't cache the single form if a collection (or another single) has already been written
       _nameCache.put(new Element(key, ConfigItem.of(value, key.getSecond(), key.getFirst())));
@@ -83,7 +83,7 @@ public class EHCachingConfigSource extends AbstractEHCachingSource<ConfigItem<?>
   }
 
   private synchronized <R> void cacheNameMiss(final Triple<Class<R>, String, VersionCorrection> key) {
-    Element element = _nameCache.get(key);
+    final Element element = _nameCache.get(key);
     if (element == null) {
       _nameCache.put(new Element(key, Collections.<ConfigItem<?>>emptySet()));
     }
@@ -107,8 +107,8 @@ public class EHCachingConfigSource extends AbstractEHCachingSource<ConfigItem<?>
     final Pair<Class<R>, VersionCorrection> classKey = Pairs.of(clazz, versionCorrection);
     element = _classCache.get(classKey);
     if (element != null) {
-      result = new ArrayList<ConfigItem<R>>();
-      for (ConfigItem<?> item : (Collection<ConfigItem<?>>) element.getObjectValue()) {
+      result = new ArrayList<>();
+      for (final ConfigItem<?> item : (Collection<ConfigItem<?>>) element.getObjectValue()) {
         if (configName.equals(item.getName()) && clazz.isAssignableFrom(item.getValue().getClass())) {
           result.add((ConfigItem<R>) item);
         }
@@ -123,7 +123,7 @@ public class EHCachingConfigSource extends AbstractEHCachingSource<ConfigItem<?>
   @SuppressWarnings("unchecked")
   @Override
   public <R> Collection<ConfigItem<R>> getAll(final Class<R> clazz, final VersionCorrection versionCorrection) {
-    if ((versionCorrection == null) || versionCorrection.containsLatest()) {
+    if (versionCorrection == null || versionCorrection.containsLatest()) {
       // Not cacheable
       return getUnderlying().getAll(clazz, versionCorrection);
     }
@@ -172,7 +172,7 @@ public class EHCachingConfigSource extends AbstractEHCachingSource<ConfigItem<?>
       final Pair<Class<R>, VersionCorrection> classKey = Pairs.of(clazz, versionCorrection);
       element = _classCache.get(classKey);
       if (element != null) {
-        for (ConfigItem<?> item : (Collection<ConfigItem<?>>) element.getObjectValue()) {
+        for (final ConfigItem<?> item : (Collection<ConfigItem<?>>) element.getObjectValue()) {
           if (configName.equals(item.getName()) && clazz.isAssignableFrom(item.getValue().getClass())) {
             final R result = (R) item.getValue();
             cacheNameHit(nameKey, result);

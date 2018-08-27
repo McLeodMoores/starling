@@ -53,7 +53,7 @@ public abstract class BarrierOptionFunctionProvider extends OptionFunctionProvid
     DoubleKnockIn
   }
 
-  private double _barrier;
+  private final double _barrier;
   private CrossBarrierChecker _checker;
 
   /**
@@ -132,12 +132,12 @@ public abstract class BarrierOptionFunctionProvider extends OptionFunctionProvid
   protected class CrossLowerBarrier extends CrossBarrierChecker {
     @Override
     public boolean checkOut(final double priceTmp) {
-      return (priceTmp <= _barrier);
+      return priceTmp <= _barrier;
     }
 
     @Override
     public boolean checkStrikeBehindBarrier() {
-      return getSign() == 1. ? false : (_barrier >= getStrike());
+      return getSign() == 1. ? false : _barrier >= getStrike();
     }
 
     @Override
@@ -146,7 +146,7 @@ public abstract class BarrierOptionFunctionProvider extends OptionFunctionProvid
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
       if (!(obj instanceof CrossLowerBarrier)) {
         return false;
       }
@@ -166,7 +166,7 @@ public abstract class BarrierOptionFunctionProvider extends OptionFunctionProvid
 
     @Override
     public boolean checkStrikeBehindBarrier() {
-      return getSign() == 1. ? (_barrier <= getStrike()) : false;
+      return getSign() == 1. ? _barrier <= getStrike() : false;
     }
 
     @Override
@@ -175,7 +175,7 @@ public abstract class BarrierOptionFunctionProvider extends OptionFunctionProvid
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
       if (!(obj instanceof CrossUpperBarrier)) {
         return false;
       }
@@ -189,13 +189,13 @@ public abstract class BarrierOptionFunctionProvider extends OptionFunctionProvid
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_barrier);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    result = prime * result + ((_checker == null) ? 0 : _checker.hashCode());
+    result = prime * result + (int) (temp ^ temp >>> 32);
+    result = prime * result + (_checker == null ? 0 : _checker.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
 
     if (!super.equals(obj)) {
       return false;
@@ -203,7 +203,7 @@ public abstract class BarrierOptionFunctionProvider extends OptionFunctionProvid
     if (!(obj instanceof BarrierOptionFunctionProvider)) {
       return false;
     }
-    BarrierOptionFunctionProvider other = (BarrierOptionFunctionProvider) obj;
+    final BarrierOptionFunctionProvider other = (BarrierOptionFunctionProvider) obj;
     if (Double.doubleToLongBits(_barrier) != Double.doubleToLongBits(other._barrier)) {
       return false;
     }

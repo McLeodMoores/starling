@@ -58,7 +58,7 @@ public final class ReferenceDataProviderUtils {
     ArgumentChecker.notNull(securityID, "securityID");
     ArgumentChecker.notNull(fieldID, "fieldID");
     ArgumentChecker.notNull(refDataProvider, "Reference Data Provider");
-    FudgeMsg fieldData = getFields(securityID, Collections.singleton(fieldID), refDataProvider);
+    final FudgeMsg fieldData = getFields(securityID, Collections.singleton(fieldID), refDataProvider);
     if (fieldData == null) {
       LOGGER.info("Reference data for security {} field {} returned null", securityID, fieldID);
       return null;
@@ -66,13 +66,13 @@ public final class ReferenceDataProviderUtils {
     return fieldData.getString(fieldID);
   }
 
-  public static String singleFieldSearchIgnoreCache(String securityID, String fieldID, ReferenceDataProvider refDataProvider) {
+  public static String singleFieldSearchIgnoreCache(final String securityID, final String fieldID, final ReferenceDataProvider refDataProvider) {
     ArgumentChecker.notNull(securityID, "securityID");
     ArgumentChecker.notNull(fieldID, "fieldID");
     ArgumentChecker.notNull(refDataProvider, "Reference Data Provider");
-    
-    Map<String, FudgeMsg> map = refDataProvider.getReferenceDataIgnoreCache(Collections.singleton(securityID), Collections.singleton(fieldID));
-    FudgeMsg fieldData = map.get(securityID);
+
+    final Map<String, FudgeMsg> map = refDataProvider.getReferenceDataIgnoreCache(Collections.singleton(securityID), Collections.singleton(fieldID));
+    final FudgeMsg fieldData = map.get(securityID);
     if (fieldData == null) {
       LOGGER.info("Reference data for security {} field {} returned null", securityID, fieldID);
       return null;
@@ -81,20 +81,20 @@ public final class ReferenceDataProviderUtils {
   }
 
   public static Map<String, String> singleFieldMultiSecuritiesSearch(final Set<String> secIds, final String fieldID,
-      ReferenceDataProvider refDataProvider) {
+      final ReferenceDataProvider refDataProvider) {
     ArgumentChecker.notNull(secIds, "secIds");
     ArgumentChecker.notNull(fieldID, "fieldID");
     ArgumentChecker.notNull(refDataProvider, "refDataProvider");
-    
+
     return refDataProvider.getReferenceDataValues(secIds, fieldID);
   }
 
-  public static FudgeMsg getFields(String securityDes, Set<String> fields, ReferenceDataProvider refDataProvider) {
-    Map<String, FudgeMsg> map = refDataProvider.getReferenceData(Collections.singleton(securityDes), fields);
+  public static FudgeMsg getFields(final String securityDes, final Set<String> fields, final ReferenceDataProvider refDataProvider) {
+    final Map<String, FudgeMsg> map = refDataProvider.getReferenceData(Collections.singleton(securityDes), fields);
     return map.get(securityDes);
   }
 
-  public static Map<String, FudgeMsg> getFields(Set<String> bloombergKeys, Set<String> fields, ReferenceDataProvider refDataProvider) {
+  public static Map<String, FudgeMsg> getFields(final Set<String> bloombergKeys, final Set<String> fields, final ReferenceDataProvider refDataProvider) {
     ArgumentChecker.notEmpty(bloombergKeys, "bloombergKeys");
     ArgumentChecker.notEmpty(fields, "fields");
     ArgumentChecker.notNull(refDataProvider, "refDataProvider");

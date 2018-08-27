@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.user.impl;
@@ -95,13 +95,13 @@ public class SimpleUserAccount implements Bean, UserAccount, Serializable {
   //-------------------------------------------------------------------------
   /**
    * Creates a {@code SimpleUserAccount} from another account.
-   * 
+   *
    * @param accountToCopy  the account to copy, not null
    * @return the new account, not null
    */
-  public static SimpleUserAccount from(UserAccount accountToCopy) {
+  public static SimpleUserAccount from(final UserAccount accountToCopy) {
     ArgumentChecker.notNull(accountToCopy, "profileToCopy");
-    SimpleUserAccount copy = new SimpleUserAccount(accountToCopy.getUserName());
+    final SimpleUserAccount copy = new SimpleUserAccount(accountToCopy.getUserName());
     copy.setPasswordHash(accountToCopy.getPasswordHash());
     copy.setStatus(accountToCopy.getStatus());
     copy.setAlternateIds(accountToCopy.getAlternateIds());
@@ -121,20 +121,20 @@ public class SimpleUserAccount implements Bean, UserAccount, Serializable {
 
   /**
    * Creates a user.
-   * 
+   *
    * @param userName  the user name, not null
    */
-  public SimpleUserAccount(String userName) {
+  public SimpleUserAccount(final String userName) {
     setUserName(userName);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Adds an alternate user identifier to the bundle representing this user.
-   * 
+   *
    * @param alternateId  the identifier to add, not null
    */
-  public void addAlternateId(ExternalId alternateId) {
+  public void addAlternateId(final ExternalId alternateId) {
     setAlternateIds(getAlternateIds().withExternalId(alternateId));
   }
 

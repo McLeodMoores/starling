@@ -58,7 +58,7 @@ public abstract class FutureSecurity extends FinancialSecurity {
   @PropertyDefinition(validate = "notNull")
   private Currency _currency;
   /**
-   * The unit amount. This represents the PNL of a single long contract if its price increases by 1.0. Also known as the 'Point Value'. 
+   * The unit amount. This represents the PNL of a single long contract if its price increases by 1.0. Also known as the 'Point Value'.
    */
   @PropertyDefinition
   private double _unitAmount;
@@ -79,7 +79,7 @@ public abstract class FutureSecurity extends FinancialSecurity {
     super(SECURITY_TYPE);
   }
 
-  protected FutureSecurity(Expiry expiry, String tradingExchange, String settlementExchange, Currency currency, double unitAmount, String category) {
+  protected FutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency, final double unitAmount, final String category) {
     super(SECURITY_TYPE);
     setExpiry(expiry);
     setTradingExchange(tradingExchange);

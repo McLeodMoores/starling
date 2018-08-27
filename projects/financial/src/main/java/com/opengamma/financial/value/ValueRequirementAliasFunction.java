@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.value;
@@ -40,15 +40,15 @@ public class ValueRequirementAliasFunction extends AbstractFunction.NonCompiledI
 
   /**
    * Constructs an instance.
-   * 
+   *
    * @param aliasedValueRequirementName the value requirement name under which to expose the input value, not null
    * @param inputRequirementName the input value requirement name, not null
    * @param inputConstraints the static input value requirement constraints, not null
    * @param preservedProperties the properties preserved on the output which may be constrained, not null
    * @param targetType the function target type, not null
    */
-  public ValueRequirementAliasFunction(String aliasedValueRequirementName, String inputRequirementName,
-      ValueProperties inputConstraints, Set<String> preservedProperties, ComputationTargetType targetType) {
+  public ValueRequirementAliasFunction(final String aliasedValueRequirementName, final String inputRequirementName,
+      final ValueProperties inputConstraints, final Set<String> preservedProperties, final ComputationTargetType targetType) {
     ArgumentChecker.notNull(aliasedValueRequirementName, "aliasedValueRequirementName");
     ArgumentChecker.notNull(inputRequirementName, "inputRequirementName");
     ArgumentChecker.notNull(inputConstraints, "inputConstraints");
@@ -67,21 +67,21 @@ public class ValueRequirementAliasFunction extends AbstractFunction.NonCompiledI
   }
 
   @Override
-  public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
     final Builder builder = createValueProperties();
-    for (String preservedProperty : _preservedProperties) {
+    for (final String preservedProperty : _preservedProperties) {
       builder.withAny(preservedProperty);
     }
     return ImmutableSet.of(new ValueSpecification(_aliasedValueRequirementName, target.toSpecification(), builder.get()));
   }
 
   @Override
-  public Set<ValueRequirement> getRequirements(FunctionCompilationContext context, ComputationTarget target, ValueRequirement desiredValue) {
+  public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     return ImmutableSet.of(createValueRequirement(target, desiredValue));
   }
 
   @Override
-  public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target, Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
     final ValueSpecification inputSpec = Iterables.getOnlyElement(inputs.keySet());
     final Builder builder = createValueProperties();
     appendPreservedProperties(inputSpec.getProperties(), builder);
@@ -89,28 +89,28 @@ public class ValueRequirementAliasFunction extends AbstractFunction.NonCompiledI
   }
 
   @Override
-  public Set<ComputedValue> execute(FunctionExecutionContext executionContext, FunctionInputs inputs, ComputationTarget target, Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
     final Object result = inputs.getValue(_inputRequirementName);
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     return ImmutableSet.of(new ComputedValue(new ValueSpecification(desiredValue.getValueName(), target.toSpecification(), desiredValue.getConstraints()), result));
   }
 
-  private ValueRequirement createValueRequirement(ComputationTarget target, ValueRequirement desiredValue) {
+  private ValueRequirement createValueRequirement(final ComputationTarget target, final ValueRequirement desiredValue) {
     final Builder constraints = _inputConstraints.copy();
     appendPreservedProperties(desiredValue.getConstraints(), constraints);
     return new ValueRequirement(_inputRequirementName, target.toSpecification(), constraints.get());
   }
 
-  private void appendPreservedProperties(ValueProperties from, final Builder to) {
-    Set<String> sourceProperties = from.getProperties();
+  private void appendPreservedProperties(final ValueProperties from, final Builder to) {
+    final Set<String> sourceProperties = from.getProperties();
     if (sourceProperties == null) {
       return;
     }
-    for (String constraintName : sourceProperties) {
+    for (final String constraintName : sourceProperties) {
       if (!_preservedProperties.contains(constraintName)) {
         continue;
       }
-      Set<String> constraintValues = from.getValues(constraintName);
+      final Set<String> constraintValues = from.getValues(constraintName);
       if (constraintValues.isEmpty()) {
         to.withAny(constraintName);
       } else {

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.tree;
@@ -13,7 +13,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class AsymmetricPowerOptionFunctionProvider extends OptionFunctionProvider1D {
 
-  private double _power;
+  private final double _power;
 
   /**
    * @param strike Strike price, K
@@ -75,12 +75,12 @@ public class AsymmetricPowerOptionFunctionProvider extends OptionFunctionProvide
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_power);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -90,7 +90,7 @@ public class AsymmetricPowerOptionFunctionProvider extends OptionFunctionProvide
     if (!(obj instanceof AsymmetricPowerOptionFunctionProvider)) {
       return false;
     }
-    AsymmetricPowerOptionFunctionProvider other = (AsymmetricPowerOptionFunctionProvider) obj;
+    final AsymmetricPowerOptionFunctionProvider other = (AsymmetricPowerOptionFunctionProvider) obj;
     if (Double.doubleToLongBits(_power) != Double.doubleToLongBits(other._power)) {
       return false;
     }

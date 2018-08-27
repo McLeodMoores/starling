@@ -21,24 +21,24 @@ import com.opengamma.util.fudgemsg.AbstractFudgeBuilder;
 public class EquityIndexDividendFutureSecurityFudgeBuilder extends AbstractFudgeBuilder implements FudgeBuilder<EquityIndexDividendFutureSecurity> {
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, EquityIndexDividendFutureSecurity object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final EquityIndexDividendFutureSecurity object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     EquityIndexDividendFutureSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
-  public static void toFudgeMsg(FudgeSerializer serializer, EquityIndexDividendFutureSecurity object, final MutableFudgeMsg msg) {
+  public static void toFudgeMsg(final FudgeSerializer serializer, final EquityIndexDividendFutureSecurity object, final MutableFudgeMsg msg) {
     EquityFutureSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
   }
 
   @Override
-  public EquityIndexDividendFutureSecurity buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    EquityIndexDividendFutureSecurity object = new EquityIndexDividendFutureSecurity();
+  public EquityIndexDividendFutureSecurity buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final EquityIndexDividendFutureSecurity object = new EquityIndexDividendFutureSecurity();
     EquityIndexDividendFutureSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     return object;
   }
 
-  public static void fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg, EquityIndexDividendFutureSecurity object) {
+  public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final EquityIndexDividendFutureSecurity object) {
     EquityFutureSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
   }
 

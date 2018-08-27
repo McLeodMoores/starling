@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.fudgemsg;
@@ -33,12 +33,12 @@ public class DefaultAggregatedExecutionLogFudgeBuilder implements FudgeBuilder<D
   private static final String EXECUTION_LOGS_COLLECTED_FIELD_NAME = "executionLogsCollected";
   private static final String EXECUTION_LOG_FIELD_NAME = "executionLog";
   private static final String EMPTY_ROOT_FIELD_NAME = "emptyRoot";
-  
+
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, DefaultAggregatedExecutionLog object) {
-    MutableFudgeMsg msg = serializer.newMessage();
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final DefaultAggregatedExecutionLog object) {
+    final MutableFudgeMsg msg = serializer.newMessage();
     if (!object.getLogLevels().isEmpty()) {
-      for (LogLevel logLevel : object.getLogLevels()) {
+      for (final LogLevel logLevel : object.getLogLevels()) {
         serializer.addToMessage(msg, LOG_LEVEL_FIELD_NAME, null, logLevel.name());
       }
     }
@@ -47,7 +47,7 @@ public class DefaultAggregatedExecutionLogFudgeBuilder implements FudgeBuilder<D
       if (object.getRootLog() == null) {
         msg.add(EMPTY_ROOT_FIELD_NAME, null, FudgeWireType.INDICATOR, IndicatorType.INSTANCE);
       }
-      for (ExecutionLogWithContext log : object.getLogs()) {
+      for (final ExecutionLogWithContext log : object.getLogs()) {
         serializer.addToMessage(msg, EXECUTION_LOG_FIELD_NAME, null, log);
       }
     }
@@ -55,17 +55,17 @@ public class DefaultAggregatedExecutionLogFudgeBuilder implements FudgeBuilder<D
   }
 
   @Override
-  public DefaultAggregatedExecutionLog buildObject(FudgeDeserializer deserializer, FudgeMsg message) {
+  public DefaultAggregatedExecutionLog buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
     final EnumSet<LogLevel> logLevels = EnumSet.noneOf(LogLevel.class);
-    for (FudgeField levelField : message.getAllByName(LOG_LEVEL_FIELD_NAME)) {
+    for (final FudgeField levelField : message.getAllByName(LOG_LEVEL_FIELD_NAME)) {
       logLevels.add(LogLevel.valueOf((String) levelField.getValue()));
     }
     final boolean executionLogsCollected = message.hasField(EXECUTION_LOGS_COLLECTED_FIELD_NAME);
     final boolean emptyRoot = message.hasField(EMPTY_ROOT_FIELD_NAME);
     final List<ExecutionLogWithContext> logs;
     if (executionLogsCollected) {
-      logs = new ArrayList<ExecutionLogWithContext>();
-      for (FudgeField logField : message.getAllByName(EXECUTION_LOG_FIELD_NAME)) {
+      logs = new ArrayList<>();
+      for (final FudgeField logField : message.getAllByName(EXECUTION_LOG_FIELD_NAME)) {
         logs.add(deserializer.fieldValueToObject(ExecutionLogWithContext.class, logField));
       }
     } else {

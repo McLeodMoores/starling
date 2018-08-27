@@ -179,7 +179,7 @@ public class UnderlyingVisitor extends FinancialSecurityVisitorSameValueAdapter<
   }
 
   @Override
-  public ExternalId visitIndexCDSSecurity(IndexCDSSecurity security) {
+  public ExternalId visitIndexCDSSecurity(final IndexCDSSecurity security) {
     return security.getUnderlyingIndex().resolve().getExternalIdBundle().iterator().next();
   }
 }

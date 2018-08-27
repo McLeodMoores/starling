@@ -184,11 +184,11 @@ public class ViewProcessorFactoryBean extends SingletonFactoryBean<ViewProcessor
     _viewExecutionCache = viewExecutionCache;
   }
 
-  public void setUseAutoStartViews(boolean useAutoStartViews) {
+  public void setUseAutoStartViews(final boolean useAutoStartViews) {
     _useAutoStartViews = useAutoStartViews;
   }
 
-  public void setPermissionCheckInterval(int permissionCheckInterval) {
+  public void setPermissionCheckInterval(final int permissionCheckInterval) {
     _permissionCheckInterval = permissionCheckInterval;
   }
 
@@ -245,7 +245,7 @@ public class ViewProcessorFactoryBean extends SingletonFactoryBean<ViewProcessor
     return _viewClientPortfolioPermissionProvider;
   }
 
-  public void setViewPortfolioPermissionProvider(ViewPortfolioPermissionProvider permissionProvider) {
+  public void setViewPortfolioPermissionProvider(final ViewPortfolioPermissionProvider permissionProvider) {
     _viewClientPortfolioPermissionProvider = permissionProvider;
   }
 }

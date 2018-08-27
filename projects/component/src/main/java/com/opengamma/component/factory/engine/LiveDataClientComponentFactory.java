@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.component.factory.engine;
@@ -60,15 +60,15 @@ public class LiveDataClientComponentFactory extends AbstractComponentFactory {
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
-    RemoteLiveDataClientFactoryBean ldcFb = new RemoteLiveDataClientFactoryBean();
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
+    final RemoteLiveDataClientFactoryBean ldcFb = new RemoteLiveDataClientFactoryBean();
     ldcFb.setJmsConnector(getJmsConnector());
     ldcFb.setSubscriptionTopic(getSubscriptionTopic());
     ldcFb.setEntitlementTopic(getEntitlementTopic());
     ldcFb.setHeartbeatTopic(getHeartbeatTopic());
-    
-    LiveDataClient ldc = ldcFb.getObjectCreating();
-    ComponentInfo info = new ComponentInfo(LiveDataClient.class, getClassifier());
+
+    final LiveDataClient ldc = ldcFb.getObjectCreating();
+    final ComponentInfo info = new ComponentInfo(LiveDataClient.class, getClassifier());
     repo.registerComponent(info, ldc);
   }
 

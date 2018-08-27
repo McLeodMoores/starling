@@ -18,7 +18,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT_DB)
 public abstract class AbstractDbBatchTest extends AbstractDbTest {
 
-  public AbstractDbBatchTest(String databaseType, String databaseVersion) {
+  public AbstractDbBatchTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion);
   }
 
@@ -29,7 +29,7 @@ public abstract class AbstractDbBatchTest extends AbstractDbTest {
   }
 
   @Override
-  protected void initDbConnectorFactory(DbConnectorFactoryBean factory) {
+  protected void initDbConnectorFactory(final DbConnectorFactoryBean factory) {
     factory.setHibernateMappingFiles(new HibernateMappingFiles[] {new HibernateBatchDbFiles() });
   }
 

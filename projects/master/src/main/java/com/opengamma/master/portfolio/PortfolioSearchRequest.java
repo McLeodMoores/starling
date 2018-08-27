@@ -80,7 +80,7 @@ public class PortfolioSearchRequest extends AbstractSearchRequest {
   @PropertyDefinition
   private boolean _includePositions = true;
   /**
-   * The lowest visibility level to return.  
+   * The lowest visibility level to return.
    */
   @PropertyDefinition(validate = "notNull")
   private DocumentVisibility _visibility = DocumentVisibility.VISIBLE;
@@ -94,13 +94,13 @@ public class PortfolioSearchRequest extends AbstractSearchRequest {
   //-------------------------------------------------------------------------
   /**
    * Adds a single portfolio object identifier to the set.
-   * 
+   *
    * @param portfolioId  the portfolio object identifier to add, not null
    */
-  public void addPortfolioObjectId(ObjectIdentifiable portfolioId) {
+  public void addPortfolioObjectId(final ObjectIdentifiable portfolioId) {
     ArgumentChecker.notNull(portfolioId, "portfolioId");
     if (_portfolioObjectIds == null) {
-      _portfolioObjectIds = new ArrayList<ObjectId>();
+      _portfolioObjectIds = new ArrayList<>();
     }
     _portfolioObjectIds.add(portfolioId.getObjectId());
   }
@@ -108,15 +108,15 @@ public class PortfolioSearchRequest extends AbstractSearchRequest {
   /**
    * Sets the set of portfolio object identifiers, null to not limit by portfolio object identifiers.
    * Note that an empty set will return no portfolios.
-   * 
+   *
    * @param portfolioIds  the new portfolio identifiers, null clears the position id search
    */
-  public void setPortfolioObjectIds(Iterable<? extends ObjectIdentifiable> portfolioIds) {
+  public void setPortfolioObjectIds(final Iterable<? extends ObjectIdentifiable> portfolioIds) {
     if (portfolioIds == null) {
       _portfolioObjectIds = null;
     } else {
-      _portfolioObjectIds = new ArrayList<ObjectId>();
-      for (ObjectIdentifiable portfolioId : portfolioIds) {
+      _portfolioObjectIds = new ArrayList<>();
+      for (final ObjectIdentifiable portfolioId : portfolioIds) {
         _portfolioObjectIds.add(portfolioId.getObjectId());
       }
     }
@@ -124,13 +124,13 @@ public class PortfolioSearchRequest extends AbstractSearchRequest {
 
   /**
    * Adds a single node object identifier to the set.
-   * 
+   *
    * @param nodeId  the node object identifier to add, not null
    */
-  public void addNodeObjectId(ObjectIdentifiable nodeId) {
+  public void addNodeObjectId(final ObjectIdentifiable nodeId) {
     ArgumentChecker.notNull(nodeId, "nodeId");
     if (_nodeObjectIds == null) {
-      _nodeObjectIds = new ArrayList<ObjectId>();
+      _nodeObjectIds = new ArrayList<>();
     }
     _nodeObjectIds.add(nodeId.getObjectId());
   }
@@ -139,15 +139,15 @@ public class PortfolioSearchRequest extends AbstractSearchRequest {
    * Sets the set of node object identifiers, null to not limit by node object identifiers.
    * Each returned portfolio will contain at least one of these nodes.
    * Note that an empty set will return no portfolios.
-   * 
+   *
    * @param nodeIds  the new node identifiers, null clears the position id search
    */
-  public void setNodeObjectIds(Iterable<? extends ObjectIdentifiable> nodeIds) {
+  public void setNodeObjectIds(final Iterable<? extends ObjectIdentifiable> nodeIds) {
     if (nodeIds == null) {
       _nodeObjectIds = null;
     } else {
-      _nodeObjectIds = new ArrayList<ObjectId>();
-      for (ObjectIdentifiable nodeId : nodeIds) {
+      _nodeObjectIds = new ArrayList<>();
+      for (final ObjectIdentifiable nodeId : nodeIds) {
         _nodeObjectIds.add(nodeId.getObjectId());
       }
     }

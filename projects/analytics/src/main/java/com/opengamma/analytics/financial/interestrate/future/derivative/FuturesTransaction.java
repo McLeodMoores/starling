@@ -36,7 +36,7 @@ public abstract class FuturesTransaction<F extends FuturesSecurity> implements I
    * @param quantity The transaction quantity.
    * @param referencePrice The reference price.
    */
-  public FuturesTransaction(F underlyingSecurity, long quantity, double referencePrice) {
+  public FuturesTransaction(final F underlyingSecurity, final long quantity, final double referencePrice) {
     super();
     ArgumentChecker.notNull(underlyingSecurity, "underlying futures security");
     _underlyingSecurity = underlyingSecurity;
@@ -80,16 +80,16 @@ public abstract class FuturesTransaction<F extends FuturesSecurity> implements I
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + (int) (_quantity ^ (_quantity >>> 32));
+    result = prime * result + (int) (_quantity ^ _quantity >>> 32);
     long temp;
     temp = Double.doubleToLongBits(_referencePrice);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _underlyingSecurity.hashCode();
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -99,7 +99,7 @@ public abstract class FuturesTransaction<F extends FuturesSecurity> implements I
     if (getClass() != obj.getClass()) {
       return false;
     }
-    FuturesTransaction<?> other = (FuturesTransaction<?>) obj;
+    final FuturesTransaction<?> other = (FuturesTransaction<?>) obj;
     if (_quantity != other._quantity) {
       return false;
     }

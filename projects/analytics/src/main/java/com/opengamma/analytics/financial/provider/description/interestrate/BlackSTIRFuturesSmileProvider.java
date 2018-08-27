@@ -57,7 +57,7 @@ public class BlackSTIRFuturesSmileProvider implements BlackSTIRFuturesProviderIn
   }
 
   @Override
-  public double getVolatility(final double expiry, final double delay, final double strike, double futuresPrice) {
+  public double getVolatility(final double expiry, final double delay, final double strike, final double futuresPrice) {
     return _parameters.getZValue(expiry, strike);
   }
 

@@ -25,19 +25,19 @@ import com.opengamma.util.ArgumentChecker;
  * VIX Index Options, traded on CBOE, are specified here:  <p>
  * <p>
  * Contract Months = The Exchange may list for trading up to nine near-term serial months and five months on the February quarterly cycle for the VIX futures contract.<p>
- * Expiry = The Wednesday that is thirty days prior to the third Friday of the calendar month immediately following the month in which the contract expires ("Final Settlement Date"). 
+ * Expiry = The Wednesday that is thirty days prior to the third Friday of the calendar month immediately following the month in which the contract expires ("Final Settlement Date").
  * If the third Friday of the month subsequent to expiration of the applicable VIX futures contract is a CBOE holiday, expiry shall be thirty days prior to the CBOE business day preceding that Friday.
- * 
+ *
  */
 public final class VixFutureAndOptionExpiryCalculator implements ExchangeTradedInstrumentExpiryCalculator {
 
   private static final int N_SERIAL_EXPIRIES = 9;
-  private static final Set<Month> QUARTERLY_CYCLE_MONTHS = EnumSet.of(Month.FEBRUARY, Month.MAY, Month.AUGUST, Month.NOVEMBER); 
+  private static final Set<Month> QUARTERLY_CYCLE_MONTHS = EnumSet.of(Month.FEBRUARY, Month.MAY, Month.AUGUST, Month.NOVEMBER);
   private static final NextQuarterAdjuster NEXT_QUARTER_ADJUSTER = new NextQuarterAdjuster(QUARTERLY_CYCLE_MONTHS);
   private static final TemporalAdjuster DAY_OF_MONTH_ADJUSTER = TemporalAdjusters.dayOfWeekInMonth(3, DayOfWeek.FRIDAY);
 
   private static final VixFutureAndOptionExpiryCalculator INSTANCE = new VixFutureAndOptionExpiryCalculator();
-  
+
   /** @return the singleton instance of the calculator, not null */
   public static VixFutureAndOptionExpiryCalculator getInstance() {
     return INSTANCE;
@@ -48,8 +48,8 @@ public final class VixFutureAndOptionExpiryCalculator implements ExchangeTradedI
    */
   private VixFutureAndOptionExpiryCalculator() {
   }
-  
-  
+
+
   @Override
   /**
    * Gets monthly expiries for the first N_SERIAL_MONTHS, then switches to quarterly along the FEBRUARY cycle
@@ -57,7 +57,7 @@ public final class VixFutureAndOptionExpiryCalculator implements ExchangeTradedI
    * @param valDate The date from which to start
    * @return the expiry date of the nth option
    */
-  public LocalDate getExpiryDate(int n, LocalDate today, Calendar holidayCalendar) {
+  public LocalDate getExpiryDate(final int n, final LocalDate today, final Calendar holidayCalendar) {
     ArgumentChecker.isTrue(n > 0, "n must be greater than 0.");
     if (n <= N_SERIAL_EXPIRIES) { // We look for monthly expiries
       return getMonthlyExpiry(n, today, holidayCalendar);
@@ -69,10 +69,10 @@ public final class VixFutureAndOptionExpiryCalculator implements ExchangeTradedI
   }
 
   @Override
-  public LocalDate getExpiryMonth(int n, LocalDate today) {
+  public LocalDate getExpiryMonth(final int n, final LocalDate today) {
     return getExpiryDate(n, today, FutureOptionUtils.WEEKDAYS);
   }
-  
+
   /**
    * Given the expiry rule, returns the expiry date of the nth month.
    * @param nthExpiry The nth expiry, greater than zero
@@ -94,7 +94,7 @@ public final class VixFutureAndOptionExpiryCalculator implements ExchangeTradedI
     }
     return getNextSerialExpiry(nextExpiry.plusMonths(nthExpiry - 1), holidayCalendar);
   }
-  
+
   // Return expiryDate that is 30 days before the 3rd Friday (or previous good day if holiday) of month following date
   private LocalDate getNextSerialExpiry(final LocalDate date, final Calendar holidayCalendar) {
     // Compute the expiry of valuationDate's month
@@ -104,7 +104,7 @@ public final class VixFutureAndOptionExpiryCalculator implements ExchangeTradedI
     }
     return following3rdFriday.minusDays(30); // expiry is 30 days before
   }
-  private LocalDate getQuarterlyExpiry(int nthExpiryAfterSerialContracts, LocalDate lastSerialExpiry, Calendar holidayCalendar) {
+  private LocalDate getQuarterlyExpiry(final int nthExpiryAfterSerialContracts, final LocalDate lastSerialExpiry, final Calendar holidayCalendar) {
     // First find the nth quarter after the lastSerialExpiry
     LocalDate nthExpiryMonth = lastSerialExpiry;
     for (int n = nthExpiryAfterSerialContracts; n > 0; n--) {
@@ -113,7 +113,7 @@ public final class VixFutureAndOptionExpiryCalculator implements ExchangeTradedI
     // Then find the expiry date in that month
     return getNextSerialExpiry(nthExpiryMonth, holidayCalendar);
   }
-  
+
   @Override
   public String getName() {
     return this.getClass().getName();

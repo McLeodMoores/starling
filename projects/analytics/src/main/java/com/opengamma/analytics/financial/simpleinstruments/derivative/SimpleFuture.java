@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.simpleinstruments.derivative;
@@ -11,7 +11,7 @@ import org.apache.commons.lang.Validate;
 import com.opengamma.util.money.Currency;
 
 /**
- * 
+ *
  */
 public class SimpleFuture implements SimpleInstrument {
   private final double _expiry;
@@ -19,7 +19,7 @@ public class SimpleFuture implements SimpleInstrument {
   private final double _referencePrice;
   private final double _unitAmount;
   private final Currency _currency;
-  
+
   public SimpleFuture(final double expiry, final double settlement, final double referencePrice, final double unitAmount, final Currency currency) {
     Validate.notNull(currency, "currency");
     Validate.isTrue(expiry >= 0, "time to expiry must be positive");
@@ -30,23 +30,23 @@ public class SimpleFuture implements SimpleInstrument {
     _unitAmount = unitAmount;
     _currency = currency;
   }
-  
+
   public double getExpiry() {
     return _expiry;
   }
-  
+
   public double getSettlement() {
     return _settlement;
   }
-  
+
   public double getReferencePrice() {
     return _referencePrice;
   }
-  
+
   public double getUnitAmount() {
     return _unitAmount;
   }
-  
+
   public Currency getCurrency() {
     return _currency;
   }
@@ -58,13 +58,13 @@ public class SimpleFuture implements SimpleInstrument {
     result = prime * result + _currency.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_expiry);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_referencePrice);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_settlement);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_unitAmount);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
@@ -75,11 +75,11 @@ public class SimpleFuture implements SimpleInstrument {
     }
     if (obj == null) {
       return false;
-    } 
+    }
     if (getClass() != obj.getClass()) {
       return false;
     }
-    SimpleFuture other = (SimpleFuture) obj;
+    final SimpleFuture other = (SimpleFuture) obj;
     if (Double.doubleToLongBits(_expiry) != Double.doubleToLongBits(other._expiry)) {
       return false;
     }
@@ -104,10 +104,10 @@ public class SimpleFuture implements SimpleInstrument {
   }
 
   @Override
-  public <S, T> T accept(SimpleInstrumentVisitor<S, T> visitor) {
+  public <S, T> T accept(final SimpleInstrumentVisitor<S, T> visitor) {
     return visitor.visitSimpleFuture(this);
   }
-  
-  
+
+
 }
 

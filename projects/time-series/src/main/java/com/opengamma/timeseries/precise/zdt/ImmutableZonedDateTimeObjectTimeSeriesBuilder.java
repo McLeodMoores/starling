@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.timeseries.precise.zdt;
@@ -32,23 +32,23 @@ final class ImmutableZonedDateTimeObjectTimeSeriesBuilder<V>
   /**
    * The time-series.
    */
-  private SortedMap<Long, V> _series = new ConcurrentSkipListMap<>();  // use this map to block nulls
+  private final SortedMap<Long, V> _series = new ConcurrentSkipListMap<>();  // use this map to block nulls
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param zone  the time-zone, not null
    */
-  protected ImmutableZonedDateTimeObjectTimeSeriesBuilder(ZoneId zone) {
+  protected ImmutableZonedDateTimeObjectTimeSeriesBuilder(final ZoneId zone) {
     _zone = Objects.requireNonNull(zone, "zone");
   }
 
   //-------------------------------------------------------------------------
-  private static long convertToLong(ZonedDateTime instant) {
+  private static long convertToLong(final ZonedDateTime instant) {
     return ZonedDateTimeToLongConverter.convertToLong(instant);
   }
 
-  private static ZonedDateTime convertFromLong(long instant, ZoneId zone) {
+  private static ZonedDateTime convertFromLong(final long instant, final ZoneId zone) {
     return ZonedDateTimeToLongConverter.convertToZonedDateTime(instant, zone);
   }
 
@@ -61,7 +61,7 @@ final class ImmutableZonedDateTimeObjectTimeSeriesBuilder<V>
   @Override
   public ZonedDateTimeObjectEntryIterator<V> iterator() {
     return new ZonedDateTimeObjectEntryIterator<V>() {
-      private Iterator<Entry<Long, V>> _iterator = _series.entrySet().iterator();
+      private final Iterator<Entry<Long, V>> _iterator = _series.entrySet().iterator();
       private int _index = -1;
       private Entry<Long, V> _current;
 
@@ -139,18 +139,18 @@ final class ImmutableZonedDateTimeObjectTimeSeriesBuilder<V>
 
   //-------------------------------------------------------------------------
   @Override
-  public ZonedDateTimeObjectTimeSeriesBuilder<V> put(ZonedDateTime time, V value) {
+  public ZonedDateTimeObjectTimeSeriesBuilder<V> put(final ZonedDateTime time, final V value) {
     return put(convertToLong(time), value);
   }
 
   @Override
-  public ZonedDateTimeObjectTimeSeriesBuilder<V> put(long time, V value) {
+  public ZonedDateTimeObjectTimeSeriesBuilder<V> put(final long time, final V value) {
     _series.put(time, value);
     return this;
   }
 
   @Override
-  public ZonedDateTimeObjectTimeSeriesBuilder<V> putAll(ZonedDateTime[] times, V[] values) {
+  public ZonedDateTimeObjectTimeSeriesBuilder<V> putAll(final ZonedDateTime[] times, final V[] values) {
     if (times.length != values.length) {
       throw new IllegalArgumentException("Arrays are of different sizes: " + times.length + ", " + values.length);
     }
@@ -161,7 +161,7 @@ final class ImmutableZonedDateTimeObjectTimeSeriesBuilder<V>
   }
 
   @Override
-  public ZonedDateTimeObjectTimeSeriesBuilder<V> putAll(long[] times, V[] values) {
+  public ZonedDateTimeObjectTimeSeriesBuilder<V> putAll(final long[] times, final V[] values) {
     if (times.length != values.length) {
       throw new IllegalArgumentException("Arrays are of different sizes: " + times.length + ", " + values.length);
     }
@@ -173,12 +173,12 @@ final class ImmutableZonedDateTimeObjectTimeSeriesBuilder<V>
 
   //-------------------------------------------------------------------------
   @Override
-  public ZonedDateTimeObjectTimeSeriesBuilder<V> putAll(PreciseObjectTimeSeries<?, V> timeSeries) {
+  public ZonedDateTimeObjectTimeSeriesBuilder<V> putAll(final PreciseObjectTimeSeries<?, V> timeSeries) {
     return putAll(timeSeries, 0, timeSeries.size());
   }
 
   @Override
-  public ZonedDateTimeObjectTimeSeriesBuilder<V> putAll(PreciseObjectTimeSeries<?, V> timeSeries, int startPos, int endPos) {
+  public ZonedDateTimeObjectTimeSeriesBuilder<V> putAll(final PreciseObjectTimeSeries<?, V> timeSeries, final int startPos, final int endPos) {
     if (startPos < 0 || startPos > timeSeries.size()) {
       throw new IndexOutOfBoundsException("Invalid start index: " + startPos);
     }
@@ -198,11 +198,11 @@ final class ImmutableZonedDateTimeObjectTimeSeriesBuilder<V>
   }
 
   @Override
-  public ZonedDateTimeObjectTimeSeriesBuilder<V> putAll(Map<ZonedDateTime, V> timeSeriesMap) {
+  public ZonedDateTimeObjectTimeSeriesBuilder<V> putAll(final Map<ZonedDateTime, V> timeSeriesMap) {
     if (timeSeriesMap.size() == 0) {
       return this;
     }
-    for (Entry<ZonedDateTime, V> entry : timeSeriesMap.entrySet()) {
+    for (final Entry<ZonedDateTime, V> entry : timeSeriesMap.entrySet()) {
       put(entry.getKey(), entry.getValue());
     }
     return this;
@@ -218,15 +218,16 @@ final class ImmutableZonedDateTimeObjectTimeSeriesBuilder<V>
   //-------------------------------------------------------------------------
   @Override
   public ImmutableZonedDateTimeObjectTimeSeries<V> build() {
-    long[] times = new long[_series.size()];
+    final long[] times = new long[_series.size()];
     @SuppressWarnings("unchecked")
+    final
     V[] values = (V[]) new Object[_series.size()];
     int i = 0;
-    for (Entry<Long, V> entry : _series.entrySet()) {
+    for (final Entry<Long, V> entry : _series.entrySet()) {
       times[i] = entry.getKey();
       values[i++] = entry.getValue();
     }
-    return new ImmutableZonedDateTimeObjectTimeSeries<V>(times, values, _zone);
+    return new ImmutableZonedDateTimeObjectTimeSeries<>(times, values, _zone);
   }
 
   //-------------------------------------------------------------------------

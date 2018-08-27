@@ -44,7 +44,7 @@ public abstract class AbstractDbSecurityMasterWorkerTest extends AbstractDbSecur
   protected Instant _version2Instant;
   protected int _totalSecurities;
 
-  public AbstractDbSecurityMasterWorkerTest(String databaseType, String databaseVersion, boolean readOnly) {
+  public AbstractDbSecurityMasterWorkerTest(final String databaseType, final String databaseVersion, final boolean readOnly) {
     super(databaseType, databaseVersion);
     LOGGER.info("running testcases for {}", databaseType);
   }
@@ -75,7 +75,7 @@ public abstract class AbstractDbSecurityMasterWorkerTest extends AbstractDbSecur
     }
     _secMaster = new DbSecurityMaster(dbConnector);
     _secMaster.setDetailProvider(new HibernateSecurityMasterDetailProvider());
-    
+
 //    id bigint not null,
 //    oid bigint not null,
 //    ver_from_instant timestamp not null,
@@ -84,7 +84,7 @@ public abstract class AbstractDbSecurityMasterWorkerTest extends AbstractDbSecur
 //    corr_to_instant timestamp not null,
 //    name varchar(255) not null,
 //    sec_type varchar(255) not null,
-    Instant now = Instant.now();
+    final Instant now = Instant.now();
     _secMaster.setClock(Clock.fixed(now, ZoneOffset.UTC));
     _version1Instant = now.minusSeconds(100);
     _version2Instant = now.minusSeconds(50);
@@ -137,14 +137,14 @@ public abstract class AbstractDbSecurityMasterWorkerTest extends AbstractDbSecur
 
   //-------------------------------------------------------------------------
   protected void assert101(final SecurityDocument test) {
-    UniqueId uniqueId = UniqueId.of("DbSec", "101", "0");
+    final UniqueId uniqueId = UniqueId.of("DbSec", "101", "0");
     assertNotNull(test);
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version1Instant, test.getVersionFromInstant());
     assertEquals(null, test.getVersionToInstant());
     assertEquals(_version1Instant, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    ManageableSecurity security = test.getSecurity();
+    final ManageableSecurity security = test.getSecurity();
     assertNotNull(security);
     assertEquals(uniqueId, security.getUniqueId());
     assertEquals("TestSecurity101", security.getName());
@@ -153,14 +153,14 @@ public abstract class AbstractDbSecurityMasterWorkerTest extends AbstractDbSecur
   }
 
   protected void assert102(final SecurityDocument test) {
-    UniqueId uniqueId = UniqueId.of("DbSec", "102", "0");
+    final UniqueId uniqueId = UniqueId.of("DbSec", "102", "0");
     assertNotNull(test);
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version1Instant, test.getVersionFromInstant());
     assertEquals(null, test.getVersionToInstant());
     assertEquals(_version1Instant, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    ManageableSecurity security = test.getSecurity();
+    final ManageableSecurity security = test.getSecurity();
     assertNotNull(security);
     assertEquals(uniqueId, security.getUniqueId());
     assertEquals("TestSecurity102", security.getName());
@@ -169,14 +169,14 @@ public abstract class AbstractDbSecurityMasterWorkerTest extends AbstractDbSecur
   }
 
   protected void assert201(final SecurityDocument test) {
-    UniqueId uniqueId = UniqueId.of("DbSec", "201", "0");
+    final UniqueId uniqueId = UniqueId.of("DbSec", "201", "0");
     assertNotNull(test);
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version1Instant, test.getVersionFromInstant());
     assertEquals(_version2Instant, test.getVersionToInstant());
     assertEquals(_version1Instant, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    ManageableSecurity security = test.getSecurity();
+    final ManageableSecurity security = test.getSecurity();
     assertNotNull(security);
     assertEquals(uniqueId, security.getUniqueId());
     assertEquals("TestSecurity201", security.getName());
@@ -185,14 +185,14 @@ public abstract class AbstractDbSecurityMasterWorkerTest extends AbstractDbSecur
   }
 
   protected void assert202(final SecurityDocument test) {
-    UniqueId uniqueId = UniqueId.of("DbSec", "201", "1");
+    final UniqueId uniqueId = UniqueId.of("DbSec", "201", "1");
     assertNotNull(test);
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version2Instant, test.getVersionFromInstant());
     assertEquals(null, test.getVersionToInstant());
     assertEquals(_version2Instant, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    ManageableSecurity security = test.getSecurity();
+    final ManageableSecurity security = test.getSecurity();
     assertNotNull(security);
     assertEquals(uniqueId, security.getUniqueId());
     assertEquals("TestSecurity202", security.getName());

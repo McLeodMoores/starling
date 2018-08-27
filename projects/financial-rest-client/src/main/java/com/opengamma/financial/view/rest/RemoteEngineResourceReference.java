@@ -22,7 +22,7 @@ import com.opengamma.util.rest.FudgeRestClient;
 
 /**
  * Remote implementation of {@link EngineResourceReference}.
- * 
+ *
  * @param <T> the type of resource
  */
 public abstract class RemoteEngineResourceReference<T extends UniqueIdentifiable> implements EngineResourceReference<T> {
@@ -35,11 +35,11 @@ public abstract class RemoteEngineResourceReference<T extends UniqueIdentifiable
 
   private final AtomicBoolean _isReleased = new AtomicBoolean(false);
 
-  public RemoteEngineResourceReference(URI baseUri, ScheduledExecutorService scheduler) {
+  public RemoteEngineResourceReference(final URI baseUri, final ScheduledExecutorService scheduler) {
     this(baseUri, scheduler, FudgeRestClient.create());
   }
 
-  public RemoteEngineResourceReference(URI baseUri, ScheduledExecutorService scheduler, FudgeRestClient client) {
+  public RemoteEngineResourceReference(final URI baseUri, final ScheduledExecutorService scheduler, final FudgeRestClient client) {
     _baseUri = baseUri;
     _client = client;
     _scheduledHeartbeat = scheduler.scheduleAtFixedRate(new HeartbeaterTask(client, _baseUri), DataEngineResourceManagerUris.REFERENCE_LEASE_MILLIS / 2,
@@ -74,7 +74,7 @@ public abstract class RemoteEngineResourceReference<T extends UniqueIdentifiable
     if (_isReleased.get()) {
       throw new IllegalStateException("The view cycle reference has been released");
     }
-    URI uri = UriBuilder.fromUri(_baseUri).path(DataEngineResourceReferenceUris.PATH_RESOURCE).build();
+    final URI uri = UriBuilder.fromUri(_baseUri).path(DataEngineResourceReferenceUris.PATH_RESOURCE).build();
     return getRemoteResource(uri);
   }
 
@@ -111,7 +111,7 @@ public abstract class RemoteEngineResourceReference<T extends UniqueIdentifiable
     public void run() {
       try {
         _client.accessFudge(_baseUri).post();
-      } catch (Exception e) {
+      } catch (final Exception e) {
         LOGGER.warn("Failed to heartbeat view cycle reference", e);
       }
     }

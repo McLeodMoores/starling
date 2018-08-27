@@ -114,7 +114,7 @@ public class MarketDataSelectionGraphManipulatorTest {
 
   }
 
-  private ImmutableMap<DistinctMarketDataSelector, FunctionParameters> createYieldCurveSelectorAndParams(Currency currency, String curveType) {
+  private ImmutableMap<DistinctMarketDataSelector, FunctionParameters> createYieldCurveSelectorAndParams(final Currency currency, final String curveType) {
     return ImmutableMap.<DistinctMarketDataSelector, FunctionParameters>of(createYieldCurveSelector(currency, curveType), EmptyFunctionParameters.INSTANCE);
   }
 
@@ -134,32 +134,32 @@ public class MarketDataSelectionGraphManipulatorTest {
 
   @Test
   public void noSelectors() {
-    Set<MarketDataSelector> noSelectors = Collections.emptySet();
-    MarketDataSelectionGraphManipulator manipulator =
+    final Set<MarketDataSelector> noSelectors = Collections.emptySet();
+    final MarketDataSelectionGraphManipulator manipulator =
         new MarketDataSelectionGraphManipulator(CompositeMarketDataSelector.of(noSelectors),
                                                 createEmptyViewCalcManipulations());
-    DependencyGraph graph = createSimpleGraphWithMarketDataNodes();
-    Map<DistinctMarketDataSelector, Set<ValueSpecification>> result = new HashMap<>();
+    final DependencyGraph graph = createSimpleGraphWithMarketDataNodes();
+    final Map<DistinctMarketDataSelector, Set<ValueSpecification>> result = new HashMap<>();
     manipulator.modifyDependencyGraph(graph, _resolver, result);
     assertTrue(result.isEmpty());
   }
 
-  private DistinctMarketDataSelector createYieldCurveSelector(Currency currency, String curveType) {
+  private DistinctMarketDataSelector createYieldCurveSelector(final Currency currency, final String curveType) {
     return YieldCurveSelector.of(YieldCurveKey.of(currency, curveType));
   }
 
-  private void checkNodeHasBeenAddedToGraph(DependencyGraph graph,
-                                            Set<ValueSpecification> originalOutputSpecifications,
-                                            Map<DistinctMarketDataSelector, Set<ValueSpecification>> result) {
+  private void checkNodeHasBeenAddedToGraph(final DependencyGraph graph,
+                                            final Set<ValueSpecification> originalOutputSpecifications,
+                                            final Map<DistinctMarketDataSelector, Set<ValueSpecification>> result) {
     assertFalse(result.isEmpty());
-    ValueSpecification originalValueSpec = Iterables.getOnlyElement(originalOutputSpecifications);
-    Set<ValueSpecification> outputSpecifications = new HashSet<>(DependencyGraphImpl.getAllOutputSpecifications(graph));
+    final ValueSpecification originalValueSpec = Iterables.getOnlyElement(originalOutputSpecifications);
+    final Set<ValueSpecification> outputSpecifications = new HashSet<>(DependencyGraphImpl.getAllOutputSpecifications(graph));
     assertEquals(outputSpecifications.size(), 2);
     outputSpecifications.removeAll(originalOutputSpecifications);
-    ValueSpecification additionalSpec = Iterables.getOnlyElement(outputSpecifications);
+    final ValueSpecification additionalSpec = Iterables.getOnlyElement(outputSpecifications);
     assertEquals(additionalSpec.getValueName(), originalValueSpec.getValueName());
     assertEquals(additionalSpec.getTargetSpecification(), originalValueSpec.getTargetSpecification());
-    ValueProperties expectedProps = originalValueSpec.getProperties().copy().withoutAny(ValuePropertyNames.FUNCTION).with(ValuePropertyNames.FUNCTION, "someFunctionStructureManipulator").get();
+    final ValueProperties expectedProps = originalValueSpec.getProperties().copy().withoutAny(ValuePropertyNames.FUNCTION).with(ValuePropertyNames.FUNCTION, "someFunctionStructureManipulator").get();
     assertEquals(additionalSpec.getProperties(), expectedProps);
   }
 
@@ -167,7 +167,7 @@ public class MarketDataSelectionGraphManipulatorTest {
     return createNamedDependencyGraph("testGraph");
   }
 
-  private DependencyGraph createNamedDependencyGraph(String name) {
+  private DependencyGraph createNamedDependencyGraph(final String name) {
     final TestDependencyGraphBuilder gb = new TestDependencyGraphBuilder(name);
     final ComputationTargetSpecification targetSpecification = new ComputationTargetSpecification(ComputationTargetType.CURRENCY, Currency.USD.getUniqueId());
     final ComputationTarget target = new ComputationTarget(targetSpecification, Currency.USD);

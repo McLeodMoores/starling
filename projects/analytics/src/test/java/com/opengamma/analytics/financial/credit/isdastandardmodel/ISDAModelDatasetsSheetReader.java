@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 
@@ -20,7 +20,6 @@ import org.threeten.bp.format.DateTimeFormatter;
 import org.threeten.bp.format.DateTimeFormatterBuilder;
 
 import com.opengamma.OpenGammaRuntimeException;
-import com.opengamma.analytics.financial.credit.isdastandardmodel.ISDACompliantDateCreditCurve;
 import com.opengamma.util.ArgumentChecker;
 
 import au.com.bytecode.opencsv.CSVReader;
@@ -34,8 +33,8 @@ public class ISDAModelDatasetsSheetReader extends ISDAModelDatasets {
 
   private static final String SHEET_LOCATION = "isda_comparison_sheets/";
   private final List<ISDA_Results> _results = new ArrayList<>(100); // ~100 rows nominally
-  private CSVReader _csvReader;
-  private String[] _headers;
+  private final CSVReader _csvReader;
+  private final String[] _headers;
 
   // header fields we expect in the file (lowercased when loaded)
   private static final String TODAY_HEADER = "today".toLowerCase();
@@ -66,7 +65,7 @@ public class ISDAModelDatasetsSheetReader extends ISDAModelDatasets {
    * Load specified sheet.
    *
    * @param sheetName the sheet name
-   *  @param recoveryRate the recovery rate 
+   *  @param recoveryRate the recovery rate
    * @return at set of ISDA results
    */
   public static ISDA_Results[] loadSheet(final String sheetName, final double recoveryRate) {
@@ -77,7 +76,7 @@ public class ISDAModelDatasetsSheetReader extends ISDAModelDatasets {
    * Load specified sheet.
    *
    * @param sheetName the sheet name
-   * @param recoveryRate the recovery rate 
+   * @param recoveryRate the recovery rate
    */
   public ISDAModelDatasetsSheetReader(final String sheetName, final double recoveryRate) {
     ArgumentChecker.notEmpty(sheetName, "filename");
@@ -97,7 +96,7 @@ public class ISDAModelDatasetsSheetReader extends ISDAModelDatasets {
 
     Map<String, String> row;
     while ((row = loadNextRow()) != null) {
-      ISDA_Results temp = getResult(row);
+      final ISDA_Results temp = getResult(row);
       temp.recoveryRate = recoveryRate;
       _results.add(temp);
 
@@ -105,7 +104,7 @@ public class ISDAModelDatasetsSheetReader extends ISDAModelDatasets {
 
   }
 
-  private ISDA_Results getResult(Map<String, String> fields) {
+  private ISDA_Results getResult(final Map<String, String> fields) {
     final ISDA_Results result = new ISDA_Results();
 
     result.today = getLocalDate(TODAY_HEADER, fields);
@@ -164,14 +163,14 @@ public class ISDAModelDatasetsSheetReader extends ISDAModelDatasets {
     String[] rawRow;
     try {
       rawRow = _csvReader.readNext();
-    } catch (IOException ex) {
+    } catch (final IOException ex) {
       throw new OpenGammaRuntimeException("Error reading CSV file header row: " + ex.getMessage());
     }
 
     final List<LocalDate> parSpreadDates = new ArrayList<>();
 
     // Normalise read-in headers (to lower case) and set as columns
-    String[] columns = new String[rawRow.length];
+    final String[] columns = new String[rawRow.length];
     for (int i = 0; i < rawRow.length; i++) {
       columns[i] = rawRow[i].trim();
 
@@ -180,7 +179,7 @@ public class ISDAModelDatasetsSheetReader extends ISDAModelDatasets {
         final LocalDate date = LocalDate.parse(columns[i], DATE_TIME_PARSER);
         parSpreadDates.add(date);
         continue;
-      } catch (Exception ex) {
+      } catch (final Exception ex) {
         columns[i] = columns[i].toLowerCase(); // lowercase non dates
       }
     }
@@ -200,7 +199,7 @@ public class ISDAModelDatasetsSheetReader extends ISDAModelDatasets {
     String[] rawRow;
     try {
       rawRow = _csvReader.readNext();
-    } catch (IOException ex) {
+    } catch (final IOException ex) {
       throw new OpenGammaRuntimeException("Error reading CSV file data row: " + ex.getMessage());
     }
 
@@ -210,7 +209,7 @@ public class ISDAModelDatasetsSheetReader extends ISDAModelDatasets {
     }
 
     // Map read-in row onto expected columns
-    Map<String, String> result = new HashMap<>();
+    final Map<String, String> result = new HashMap<>();
     for (int i = 0; i < _headers.length; i++) {
       if (i >= rawRow.length) {
         break;

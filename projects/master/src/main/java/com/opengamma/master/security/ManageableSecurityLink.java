@@ -54,13 +54,13 @@ public class ManageableSecurityLink extends AbstractLink<Security> implements Se
    * Obtains an instance from a security, locking by strong object identifier
    * if possible and the external identifier bundle if not.
    * The result will contain the resolved target and one type of reference.
-   * 
+   *
    * @param security  the security to store, not null
    * @return the link with target and object identifier set, not null
    */
-  public static ManageableSecurityLink of(Security security) {
+  public static ManageableSecurityLink of(final Security security) {
     ArgumentChecker.notNull(security, "security");
-    ManageableSecurityLink link = new ManageableSecurityLink();
+    final ManageableSecurityLink link = new ManageableSecurityLink();
     link.setAndLockTarget(security);
     if (link.getObjectId() == null) {
       link.setExternalId(security.getExternalIdBundle());
@@ -71,13 +71,13 @@ public class ManageableSecurityLink extends AbstractLink<Security> implements Se
   /**
    * Obtains an instance from a security, locking by external identifier bundle.
    * The result will contain the external identifier bundle and the resolved target.
-   * 
+   *
    * @param security  the security to store, not null
    * @return the link with target and identifier bundle set, not null
    */
-  public static ManageableSecurityLink ofBundleId(Security security) {
+  public static ManageableSecurityLink ofBundleId(final Security security) {
     ArgumentChecker.notNull(security, "security");
-    ManageableSecurityLink link = new ManageableSecurityLink(security.getExternalIdBundle());
+    final ManageableSecurityLink link = new ManageableSecurityLink(security.getExternalIdBundle());
     link.setTarget(security);
     return link;
   }
@@ -92,7 +92,7 @@ public class ManageableSecurityLink extends AbstractLink<Security> implements Se
 
   /**
    * Creates a link from an object identifier.
-   * 
+   *
    * @param objectId  the object identifier, not null
    * @deprecated using object ids will limit ability to export links, use ExternalIds or ExternalIdBundles, even if they need to be generated GUIDs
    */
@@ -103,7 +103,7 @@ public class ManageableSecurityLink extends AbstractLink<Security> implements Se
 
   /**
    * Creates a link from a unique identifier, only storing the object identifier.
-   * 
+   *
    * @param uniqueId  the unique identifier, not null
    * @deprecated using object ids will limit ability to export links, use ExternalIds or ExternalIdBundles, even if they need to be generated GUIDs
    */
@@ -114,7 +114,7 @@ public class ManageableSecurityLink extends AbstractLink<Security> implements Se
 
   /**
    * Creates a link from an external identifier.
-   * 
+   *
    * @param identifier  the identifier, not null
    */
   public ManageableSecurityLink(final ExternalId identifier) {
@@ -123,7 +123,7 @@ public class ManageableSecurityLink extends AbstractLink<Security> implements Se
 
   /**
    * Creates a link from an external identifier bundle.
-   * 
+   *
    * @param bundle  the identifier bundle, not null
    */
   public ManageableSecurityLink(final ExternalIdBundle bundle) {
@@ -132,10 +132,10 @@ public class ManageableSecurityLink extends AbstractLink<Security> implements Se
 
   /**
    * Clones the specified link, sharing the target security.
-   * 
+   *
    * @param linkToClone  the link to clone, not null
    */
-  public ManageableSecurityLink(SecurityLink linkToClone) {
+  public ManageableSecurityLink(final SecurityLink linkToClone) {
     setObjectId(linkToClone.getObjectId());
     setExternalId(linkToClone.getExternalId());
     setTarget(linkToClone.getTarget());
@@ -144,19 +144,19 @@ public class ManageableSecurityLink extends AbstractLink<Security> implements Se
   //-------------------------------------------------------------------------
   /**
    * Gets the best descriptive name.
-   * 
+   *
    * @return the best descriptive name, not null
    */
   public String getBestName() {
-    Security security = getTarget();
-    ObjectId objectId = getObjectId();
+    final Security security = getTarget();
+    final ObjectId objectId = getObjectId();
     ExternalIdBundle bundle = getExternalId();
     if (security != null) {
       // Try to retrieve the security's assigned name
-      String name = security.getName();
+      final String name = security.getName();
       if (StringUtils.isNotBlank(name)) {
         return name;
-      }      
+      }
       bundle = security.getExternalIdBundle();
     }
     if (bundle != null && bundle.size() > 0) {
@@ -179,47 +179,50 @@ public class ManageableSecurityLink extends AbstractLink<Security> implements Se
   //-------------------------------------------------------------------------
   /**
    * Resolves the link to the target security.
-   * 
+   *
    * @param resolver  the resolver capable of finding the target, not null
    * @return the resolved target, null if unable to resolve
    * @throws DataNotFoundException if the target could not be resolved
    * @throws RuntimeException if an error occurs
    */
-  public Security resolve(LinkResolver<Security> resolver) {
+  @Override
+  public Security resolve(final LinkResolver<Security> resolver) {
     return resolver.resolve(this);
   }
 
   /**
    * Resolves the security for the latest version-correction using a security source.
-   * 
+   *
    * @param source  the source to use to resolve, not null
    * @return the resolved security, not null
    * @throws DataNotFoundException if the security could not be resolved
    * @throws RuntimeException if an error occurs while resolving
    */
-  public Security resolve(SecuritySource source) {
+  @Override
+  public Security resolve(final SecuritySource source) {
     return resolve(source, VersionCorrection.LATEST);
   }
 
   /**
    * Resolves the security using a security source.
-   * 
+   *
    * @param source  the source to use to resolve, not null
    * @param versionCorrection  the version-correction, not null
    * @return the resolved security, not null
    * @throws DataNotFoundException if the security could not be resolved
    * @throws RuntimeException if an error occurs while resolving
    */
-  public Security resolve(SecuritySource source, VersionCorrection versionCorrection) {
-    ObjectId objectId = getObjectId();
+  @Override
+  public Security resolve(final SecuritySource source, final VersionCorrection versionCorrection) {
+    final ObjectId objectId = getObjectId();
     if (objectId != null) {
-      Security target = source.get(objectId, versionCorrection);
+      final Security target = source.get(objectId, versionCorrection);
       setTarget(target);
       return target;
     }
-    ExternalIdBundle bundle = getExternalId();
+    final ExternalIdBundle bundle = getExternalId();
     if (bundle.size() > 0) {
-      Security target = source.getSingle(bundle, versionCorrection);
+      final Security target = source.getSingle(bundle, versionCorrection);
       if (target != null) {
         setTarget(target);
         return target;
@@ -231,17 +234,18 @@ public class ManageableSecurityLink extends AbstractLink<Security> implements Se
   /**
    * Resolves the security using a security source,
    * logging any exception and returning null.
-   * 
+   *
    * @param source  the source to use to resolve, not null
    * @return the resolved security, null if unable to resolve
    */
-  public Security resolveQuiet(SecuritySource source) {
+  @Override
+  public Security resolveQuiet(final SecuritySource source) {
     try {
       return resolve(source);
-    } catch (DataNotFoundException ex) {
+    } catch (final DataNotFoundException ex) {
       LOGGER.warn("Unable to resolve security {}", this);
       return null;
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       LOGGER.warn("Unable to resolve security {}: {}", this, ex);
       return null;
     }
@@ -250,7 +254,7 @@ public class ManageableSecurityLink extends AbstractLink<Security> implements Se
   //-------------------------------------------------------------------------
   /**
    * Clones this link, sharing the target security.
-   * 
+   *
    * @return the clone, not null
    */
   @Override

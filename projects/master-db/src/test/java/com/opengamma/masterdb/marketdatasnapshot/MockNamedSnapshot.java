@@ -5,8 +5,10 @@
  */
 package com.opengamma.masterdb.marketdatasnapshot;
 
-import com.opengamma.core.marketdatasnapshot.NamedSnapshot;
-import com.opengamma.id.UniqueId;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
+
 import org.joda.beans.Bean;
 import org.joda.beans.BeanDefinition;
 import org.joda.beans.ImmutableBean;
@@ -20,9 +22,8 @@ import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import com.opengamma.core.marketdatasnapshot.NamedSnapshot;
+import com.opengamma.id.UniqueId;
 
 /**
  * Named snapshot used to test database insertion/retrieval.
@@ -38,14 +39,14 @@ final class MockNamedSnapshot implements NamedSnapshot, ImmutableBean {
   private final int _answer;
 
   @ImmutableConstructor
-  MockNamedSnapshot(UniqueId uniqueId, String name, int answer) {
+  MockNamedSnapshot(final UniqueId uniqueId, final String name, final int answer) {
     _uniqueId = uniqueId;
     _name = name;
     _answer = answer;
   }
 
   @Override
-  public NamedSnapshot withUniqueId(UniqueId uniqueId) {
+  public NamedSnapshot withUniqueId(final UniqueId uniqueId) {
     return new MockNamedSnapshot(uniqueId, _name, _answer);
   }
 

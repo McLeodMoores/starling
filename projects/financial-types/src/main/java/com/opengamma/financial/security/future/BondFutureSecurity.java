@@ -40,7 +40,7 @@ public class BondFutureSecurity extends FutureSecurity {
    * The deliverables.
    */
   @PropertyDefinition(validate = "notNull")
-  private final List<BondFutureDeliverable> _basket = new ArrayList<BondFutureDeliverable>();  
+  private final List<BondFutureDeliverable> _basket = new ArrayList<>();
   /**
    * The first delivery date.
    */
@@ -56,17 +56,17 @@ public class BondFutureSecurity extends FutureSecurity {
     super();
   }
 
-  public BondFutureSecurity(Expiry expiry, String tradingExchange, String settlementExchange, Currency currency, double unitAmount,
-      Collection<? extends BondFutureDeliverable> basket, ZonedDateTime firstDeliveryDate, ZonedDateTime lastDeliveryDate, String category) {
+  public BondFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency, final double unitAmount,
+      final Collection<? extends BondFutureDeliverable> basket, final ZonedDateTime firstDeliveryDate, final ZonedDateTime lastDeliveryDate, final String category) {
     super(expiry, tradingExchange, settlementExchange, currency, unitAmount, category);
-    setBasket(ImmutableList.copyOf(basket));    
+    setBasket(ImmutableList.copyOf(basket));
     setFirstDeliveryDate(firstDeliveryDate);
     setLastDeliveryDate(lastDeliveryDate);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitBondFutureSecurity(this);
   }
 

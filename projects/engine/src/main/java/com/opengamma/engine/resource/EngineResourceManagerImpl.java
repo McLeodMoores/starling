@@ -13,44 +13,44 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Default implementation of {@link EngineResourceManager}
- * 
+ *
  * @param <T>  the type of resource
  */
 public class EngineResourceManagerImpl<T extends EngineResource> implements EngineResourceManagerInternal<T> {
-  
-  private final ConcurrentMap<UniqueId, ReferenceCountedResource<T>> _resourceMap = new ConcurrentHashMap<UniqueId, ReferenceCountedResource<T>>();
-  
+
+  private final ConcurrentMap<UniqueId, ReferenceCountedResource<T>> _resourceMap = new ConcurrentHashMap<>();
+
   @Override
-  public EngineResourceReferenceImpl<T> manage(T resource) {
+  public EngineResourceReferenceImpl<T> manage(final T resource) {
     ArgumentChecker.notNull(resource, "resource");
-    ReferenceCountedResource<T> refCountedResource = new ReferenceCountedResource<T>(resource);
+    final ReferenceCountedResource<T> refCountedResource = new ReferenceCountedResource<>(resource);
     if (_resourceMap.put(resource.getUniqueId(), refCountedResource) != null) {
       throw new IllegalArgumentException("A resource with ID " + resource.getUniqueId() + " is already being managed");
     }
-    return new EngineResourceReferenceImpl<T>(this, resource);
+    return new EngineResourceReferenceImpl<>(this, resource);
   }
 
   @Override
-  public EngineResourceReference<T> createReference(UniqueId uniqueId) {
+  public EngineResourceReference<T> createReference(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
-    T resource = incrementCycleReferenceCountCore(uniqueId);
-    return resource == null ? null : new EngineResourceReferenceImpl<T>(this, resource);
+    final T resource = incrementCycleReferenceCountCore(uniqueId);
+    return resource == null ? null : new EngineResourceReferenceImpl<>(this, resource);
   }
 
   @Override
-  public boolean incrementCycleReferenceCount(UniqueId uniqueId) {
+  public boolean incrementCycleReferenceCount(final UniqueId uniqueId) {
     return incrementCycleReferenceCountCore(uniqueId) != null;
   }
-  
+
   @Override
-  public boolean decrementCycleReferenceCount(UniqueId uniqueId) {
+  public boolean decrementCycleReferenceCount(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
-    ReferenceCountedResource<T> refCountedResource = _resourceMap.get(uniqueId);
-    
+    final ReferenceCountedResource<T> refCountedResource = _resourceMap.get(uniqueId);
+
     if (refCountedResource == null) {
       return false;
     }
-    
+
     synchronized (refCountedResource) {
       if (refCountedResource.decrementReferenceCount() == 0) {
         _resourceMap.remove(uniqueId);
@@ -59,21 +59,21 @@ public class EngineResourceManagerImpl<T extends EngineResource> implements Engi
     }
     return true;
   }
-  
+
   @Override
   public int getResourceCount() {
     return _resourceMap.size();
   }
-  
+
   //-------------------------------------------------------------------------
-  private T incrementCycleReferenceCountCore(UniqueId uniqueId) {
+  private T incrementCycleReferenceCountCore(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
-    ReferenceCountedResource<T> refCountedResource = _resourceMap.get(uniqueId);
-     
+    final ReferenceCountedResource<T> refCountedResource = _resourceMap.get(uniqueId);
+
     if (refCountedResource == null) {
       return null;
     }
-    
+
     synchronized (refCountedResource) {
       if (refCountedResource.getReferenceCount() > 0) {
         refCountedResource.incrementReferenceCount();
@@ -82,40 +82,40 @@ public class EngineResourceManagerImpl<T extends EngineResource> implements Engi
         throw new IllegalArgumentException("No resource with ID " + uniqueId + " could be found");
       }
     }
-    
+
     return refCountedResource.get();
   }
-  
+
   //-------------------------------------------------------------------------
   /**
    * Holds reference counting state for a resource. Intentionally not thread-safe, so requires external
    * synchronisation.
    */
   private static class ReferenceCountedResource<T> {
-    
+
     private final T _resource;
     private long _refCount = 1;
-    
-    public ReferenceCountedResource(T resource) {
+
+    public ReferenceCountedResource(final T resource) {
       _resource = resource;
     }
-    
+
     public T get() {
       return _resource;
     }
-    
+
     public long getReferenceCount() {
       return _refCount;
     }
-    
+
     public long incrementReferenceCount() {
       return ++_refCount;
     }
-    
+
     public long decrementReferenceCount() {
       return --_refCount;
     }
-    
+
   }
-  
+
 }

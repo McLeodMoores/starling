@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.cache;
@@ -26,17 +26,17 @@ public class WriteThroughViewComputationCacheSource implements ViewComputationCa
   // ViewComputationCacheSource
 
   @Override
-  public ViewComputationCache getCache(UniqueId viewCycleId, String calculationConfigurationName) {
+  public ViewComputationCache getCache(final UniqueId viewCycleId, final String calculationConfigurationName) {
     return WriteThroughViewComputationCache.of(getUnderlying().getCache(viewCycleId, calculationConfigurationName));
   }
 
   @Override
-  public ViewComputationCache cloneCache(UniqueId viewCycleId, String calculationConfigurationName) {
+  public ViewComputationCache cloneCache(final UniqueId viewCycleId, final String calculationConfigurationName) {
     return WriteThroughViewComputationCache.of(getUnderlying().cloneCache(viewCycleId, calculationConfigurationName));
   }
 
   @Override
-  public void releaseCaches(UniqueId viewCycleId) {
+  public void releaseCaches(final UniqueId viewCycleId) {
     getUnderlying().releaseCaches(viewCycleId);
   }
 

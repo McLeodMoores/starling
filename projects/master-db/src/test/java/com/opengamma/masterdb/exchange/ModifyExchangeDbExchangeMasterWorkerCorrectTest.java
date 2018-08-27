@@ -35,7 +35,7 @@ public class ModifyExchangeDbExchangeMasterWorkerCorrectTest extends AbstractDbE
   private static final ExternalIdBundle REGION = ExternalIdBundle.of("C", "D");
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public ModifyExchangeDbExchangeMasterWorkerCorrectTest(String databaseType, String databaseVersion) {
+  public ModifyExchangeDbExchangeMasterWorkerCorrectTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion, false);
     LOGGER.info("running testcases for {}", databaseType);
   }
@@ -48,27 +48,27 @@ public class ModifyExchangeDbExchangeMasterWorkerCorrectTest extends AbstractDbE
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_correct_noExchangeId() {
-    UniqueId uniqueId = UniqueId.of("DbExg", "101");
-    ManageableExchange exchange = new ManageableExchange(BUNDLE, "Test", REGION, null);
+    final UniqueId uniqueId = UniqueId.of("DbExg", "101");
+    final ManageableExchange exchange = new ManageableExchange(BUNDLE, "Test", REGION, null);
     exchange.setUniqueId(uniqueId);
-    ExchangeDocument doc = new ExchangeDocument(exchange);
+    final ExchangeDocument doc = new ExchangeDocument(exchange);
     doc.setUniqueId(null);
     _exgMaster.correct(doc);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_correct_noExchange() {
-    ExchangeDocument doc = new ExchangeDocument();
+    final ExchangeDocument doc = new ExchangeDocument();
     doc.setUniqueId(UniqueId.of("DbExg", "101", "0"));
     _exgMaster.correct(doc);
   }
 
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_correct_notFound() {
-    UniqueId uniqueId = UniqueId.of("DbExg", "0", "0");
-    ManageableExchange exchange = new ManageableExchange(BUNDLE, "Test", REGION, null);
+    final UniqueId uniqueId = UniqueId.of("DbExg", "0", "0");
+    final ManageableExchange exchange = new ManageableExchange(BUNDLE, "Test", REGION, null);
     exchange.setUniqueId(uniqueId);
-    ExchangeDocument doc = new ExchangeDocument(exchange);
+    final ExchangeDocument doc = new ExchangeDocument(exchange);
     _exgMaster.correct(doc);
   }
 
@@ -82,32 +82,32 @@ public class ModifyExchangeDbExchangeMasterWorkerCorrectTest extends AbstractDbE
 
   @Test
   public void test_correct_getUpdateGet() {
-    Instant now = Instant.now(_exgMaster.getClock());
-    
-    UniqueId uniqueId = UniqueId.of("DbExg", "101", "0");
-    ExchangeDocument base = _exgMaster.get(uniqueId);
-    ManageableExchange exchange = new ManageableExchange(BUNDLE, "Test", REGION, null);
+    final Instant now = Instant.now(_exgMaster.getClock());
+
+    final UniqueId uniqueId = UniqueId.of("DbExg", "101", "0");
+    final ExchangeDocument base = _exgMaster.get(uniqueId);
+    final ManageableExchange exchange = new ManageableExchange(BUNDLE, "Test", REGION, null);
     exchange.setUniqueId(uniqueId);
-    ExchangeDocument input = new ExchangeDocument(exchange);
-    
-    ExchangeDocument corrected = _exgMaster.correct(input);
+    final ExchangeDocument input = new ExchangeDocument(exchange);
+
+    final ExchangeDocument corrected = _exgMaster.correct(input);
     assertEquals(false, base.getUniqueId().equals(corrected.getUniqueId()));
     assertEquals(base.getVersionFromInstant(), corrected.getVersionFromInstant());
     assertEquals(base.getVersionToInstant(), corrected.getVersionToInstant());
     assertEquals(now, corrected.getCorrectionFromInstant());
     assertEquals(null, corrected.getCorrectionToInstant());
     assertEquals(input.getExchange(), corrected.getExchange());
-    
-    ExchangeDocument old = _exgMaster.get(UniqueId.of("DbExg", "101", "0"));
+
+    final ExchangeDocument old = _exgMaster.get(UniqueId.of("DbExg", "101", "0"));
     assertEquals(base.getUniqueId(), old.getUniqueId());
     assertEquals(base.getVersionFromInstant(), old.getVersionFromInstant());
     assertEquals(base.getVersionToInstant(), old.getVersionToInstant());
     assertEquals(base.getCorrectionFromInstant(), old.getCorrectionFromInstant());
     assertEquals(now, old.getCorrectionToInstant());  // old version ended
     assertEquals(base.getExchange(), old.getExchange());
-    
-    ExchangeHistoryRequest search = new ExchangeHistoryRequest(base.getUniqueId(), now, null);
-    ExchangeHistoryResult searchResult = _exgMaster.history(search);
+
+    final ExchangeHistoryRequest search = new ExchangeHistoryRequest(base.getUniqueId(), now, null);
+    final ExchangeHistoryResult searchResult = _exgMaster.history(search);
     assertEquals(2, searchResult.getDocuments().size());
   }
 

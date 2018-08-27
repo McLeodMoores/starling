@@ -55,7 +55,7 @@ public final class CdsRecoveryRateIdentifier {
                                                         final String seniority,
                                                         final String restructuringClause) {
 
-    String idValue = generateCdsId(redCode, currency, seniority, restructuringClause);
+    final String idValue = generateCdsId(redCode, currency, seniority, restructuringClause);
     return new CdsRecoveryRateIdentifier(SAMEDAY_CDS_SCHEME, idValue);
   }
 
@@ -73,23 +73,23 @@ public final class CdsRecoveryRateIdentifier {
                                                           final String seniority,
                                                           final String restructuringClause) {
 
-    String idValue = generateCdsId(redCode, currency, seniority, restructuringClause);
+    final String idValue = generateCdsId(redCode, currency, seniority, restructuringClause);
     return new CdsRecoveryRateIdentifier(COMPOSITE_CDS_SCHEME, idValue);
   }
 
-  private static String generateCdsId(String redCode,
-                                      Currency currency,
-                                      String seniority,
-                                      String restructuringClause) {
+  private static String generateCdsId(final String redCode,
+                                      final Currency currency,
+                                      final String seniority,
+                                      final String restructuringClause) {
     return convertRed(redCode) + SEPARATOR + currency.getCode() + SEPARATOR +
         seniority + SEPARATOR + restructuringClause;
   }
 
-  private static String convertRed(String redCode) {
+  private static String convertRed(final String redCode) {
     return redCode.replace("_", "-");
   }
 
-  private CdsRecoveryRateIdentifier(ExternalScheme recoveryRateScheme, String idValue) {
+  private CdsRecoveryRateIdentifier(final ExternalScheme recoveryRateScheme, final String idValue) {
 
     ArgumentChecker.notNull(recoveryRateScheme, "creditCurveScheme");
     ArgumentChecker.notNull(idValue, "idValue");

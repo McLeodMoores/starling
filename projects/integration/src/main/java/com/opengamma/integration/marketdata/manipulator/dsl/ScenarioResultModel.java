@@ -18,7 +18,7 @@ public class ScenarioResultModel {
 
   private final Map<String, Object> _parameters;
 
-  /* package */ ScenarioResultModel(SimpleResultModel results, Map<String, Object> parameters) {
+  /* package */ ScenarioResultModel(final SimpleResultModel results, final Map<String, Object> parameters) {
     _results = ArgumentChecker.notNull(results, "results");
     _parameters = ArgumentChecker.notNull(parameters, "parameters");
   }

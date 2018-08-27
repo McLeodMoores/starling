@@ -63,7 +63,7 @@ public class ManagementServiceTest {
   @AfterMethod
   public void tearDown() throws Exception {
     try {
-      ViewProcessorImpl viewProcessor = _env.getViewProcessor();
+      final ViewProcessorImpl viewProcessor = _env.getViewProcessor();
       viewProcessor.stop();
       //Ensure the ViewProcessor stop clears all mbeans from the MBeanServer
       assertMBeanCount(0);
@@ -77,14 +77,14 @@ public class ManagementServiceTest {
   }
 
   public void testRegistrationService() throws Exception {
-    ViewProcessorImpl vp = _env.getViewProcessor();
+    final ViewProcessorImpl vp = _env.getViewProcessor();
     vp.start();
     ManagementService.registerMBeans(vp, _statisticsProvider, _mBeanServer);
     assertMBeanCount(MBEANS_IN_TEST_VIEWPROCESSOR);
   }
 
   public void testRegistrationServiceListensForViewProcessAdded() throws Exception {
-    ViewProcessorImpl viewProcessor = _env.getViewProcessor();
+    final ViewProcessorImpl viewProcessor = _env.getViewProcessor();
     viewProcessor.start();
     ManagementService.registerMBeans(viewProcessor, _statisticsProvider, _mBeanServer);
     assertMBeanCount(MBEANS_IN_TEST_VIEWPROCESSOR);
@@ -94,13 +94,13 @@ public class ManagementServiceTest {
   }
 
   public void testRegistrationServiceListenersForViewClientAdded() throws Exception {
-    ViewProcessorImpl viewProcessor = _env.getViewProcessor();
+    final ViewProcessorImpl viewProcessor = _env.getViewProcessor();
     viewProcessor.start();
     ManagementService.registerMBeans(viewProcessor, _statisticsProvider, _mBeanServer);
     assertMBeanCount(MBEANS_IN_TEST_VIEWPROCESSOR);
-    ViewClient client1 = viewProcessor.createViewClient(UserPrincipal.getTestUser());
+    final ViewClient client1 = viewProcessor.createViewClient(UserPrincipal.getTestUser());
     assertMBeanCount(MBEANS_IN_TEST_VIEWPROCESSOR + 1);
-    ViewClient client2 = viewProcessor.createViewClient(UserPrincipal.getTestUser());
+    final ViewClient client2 = viewProcessor.createViewClient(UserPrincipal.getTestUser());
     assertMBeanCount(MBEANS_IN_TEST_VIEWPROCESSOR + 2);
     client1.shutdown();
     assertMBeanCount(MBEANS_IN_TEST_VIEWPROCESSOR + 1);
@@ -108,15 +108,15 @@ public class ManagementServiceTest {
     assertMBeanCount(MBEANS_IN_TEST_VIEWPROCESSOR);
   }
 
-  private void assertMBeanCount(int count) throws MalformedObjectNameException {
+  private void assertMBeanCount(final int count) throws MalformedObjectNameException {
     assertEquals(count, _mBeanServer.queryNames(new ObjectName("com.opengamma:*"), null).size());
   }
 
-  private void addAnotherView(ViewProcessorImpl viewprocessor) {
-    ViewDefinition anotherDefinition = new ViewDefinition(UniqueId.of("boo", "far"), ANOTHER_TEST_VIEW, ViewProcessorTestEnvironment.TEST_USER);
+  private void addAnotherView(final ViewProcessorImpl viewprocessor) {
+    final ViewDefinition anotherDefinition = new ViewDefinition(UniqueId.of("boo", "far"), ANOTHER_TEST_VIEW, ViewProcessorTestEnvironment.TEST_USER);
     anotherDefinition.addViewCalculationConfiguration(_env.getViewDefinition().getCalculationConfiguration(ViewProcessorTestEnvironment.TEST_CALC_CONFIG_NAME));
     _env.getMockViewDefinitionRepository().put(anotherDefinition);
-    ViewClient client = viewprocessor.createViewClient(ViewProcessorTestEnvironment.TEST_USER);
+    final ViewClient client = viewprocessor.createViewClient(ViewProcessorTestEnvironment.TEST_USER);
     client.attachToViewProcess(anotherDefinition.getUniqueId(), ExecutionOptions.infinite(MarketData.live()), false);
   }
 
@@ -128,12 +128,12 @@ public class ManagementServiceTest {
       registeredObjectNames = _mBeanServer.queryNames(ViewProcessorMBeanImpl.createObjectName(_env.getViewProcessor(), true), null);
       // Other MBeans for this ViewProcessor
       registeredObjectNames.addAll(_mBeanServer.queryNames(new ObjectName("com.opengamma:*,ViewProcessor=" + _env.getViewProcessor().toString()), null));
-    } catch (MalformedObjectNameException e) {
+    } catch (final MalformedObjectNameException e) {
       // this should not happen
       LOGGER.warn("Error querying MBeanServer. Error was " + e.getMessage(), e);
     }
 
-    for (ObjectName objectName : registeredObjectNames) {
+    for (final ObjectName objectName : registeredObjectNames) {
       LOGGER.debug(objectName.toString());
     }
   }

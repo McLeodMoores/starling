@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.trs;
@@ -60,31 +60,31 @@ public class EquityTotalReturnSwapBCSFunction extends EquityTotalReturnSwapFunct
   public EquityTotalReturnSwapBCSFunction() {
     super(BLOCK_CURVE_SENSITIVITIES);
   }
-  
+
   @Override
-  public CompiledFunctionDefinition compile(FunctionCompilationContext context, Instant atInstant) {
+  public CompiledFunctionDefinition compile(final FunctionCompilationContext context, final Instant atInstant) {
     return new EquityTotalReturnSwapCompiledFunction(getTargetToDefinitionConverter(context),
                                                      getDefinitionToDerivativeConverter(context),
                                                      true) {
 
       @Override
-      protected Set<ComputedValue> getValues(FunctionExecutionContext executionContext,
-                                             FunctionInputs inputs,
-                                             ComputationTarget target,
-                                             Set<ValueRequirement> desiredValues,
-                                             InstrumentDerivative derivative,
-                                             FXMatrix fxMatrix) {
-        EquityTrsDataBundle data = getDataBundle(inputs, fxMatrix);
-        CurveBuildingBlockBundle blocks = new CurveBuildingBlockBundle();
-        for (ComputedValue cv : inputs.getAllValues()) {
+      protected Set<ComputedValue> getValues(final FunctionExecutionContext executionContext,
+                                             final FunctionInputs inputs,
+                                             final ComputationTarget target,
+                                             final Set<ValueRequirement> desiredValues,
+                                             final InstrumentDerivative derivative,
+                                             final FXMatrix fxMatrix) {
+        final EquityTrsDataBundle data = getDataBundle(inputs, fxMatrix);
+        final CurveBuildingBlockBundle blocks = new CurveBuildingBlockBundle();
+        for (final ComputedValue cv : inputs.getAllValues()) {
           if (JACOBIAN_BUNDLE.equals(cv.getSpecification().getValueName())) {
-            blocks.addAll((CurveBuildingBlockBundle) cv.getValue()); 
+            blocks.addAll((CurveBuildingBlockBundle) cv.getValue());
           }
         }
-        
-        Set<ComputedValue> result = new HashSet<>();
-        MultipleCurrencyParameterSensitivity sensitivities = CALCULATOR.fromInstrument(derivative, data, blocks);
-        for (ValueRequirement desiredValue : desiredValues) {
+
+        final Set<ComputedValue> result = new HashSet<>();
+        final MultipleCurrencyParameterSensitivity sensitivities = CALCULATOR.fromInstrument(derivative, data, blocks);
+        for (final ValueRequirement desiredValue : desiredValues) {
           final ValueSpecification spec = new ValueSpecification(BLOCK_CURVE_SENSITIVITIES,
                                                                  target.toSpecification(),
                                                                  desiredValue.getConstraints().copy().get());
@@ -94,9 +94,9 @@ public class EquityTotalReturnSwapBCSFunction extends EquityTotalReturnSwapFunct
       }
 
       @Override
-      protected Collection<ValueProperties.Builder> getResultProperties(FunctionCompilationContext compilationContext,
-                                                                        ComputationTarget target) {
-        ValueProperties.Builder properties = createValueProperties()
+      protected Collection<ValueProperties.Builder> getResultProperties(final FunctionCompilationContext compilationContext,
+                                                                        final ComputationTarget target) {
+        final ValueProperties.Builder properties = createValueProperties()
             .with(PROPERTY_CURVE_TYPE, DISCOUNTING)
             .withAny(CURVE_EXPOSURES)
             .withAny(PROPERTY_CURVE_TYPE);

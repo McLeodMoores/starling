@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.payments.provider;
@@ -14,12 +14,12 @@ package com.opengamma.analytics.financial.interestrate.payments.provider;
  */
 public class CouponCMSSABRExtrapolationRightReplicationMethod extends CouponCMSSABRReplicationGenericMethod {
 
-  /** 
+  /**
    * Default constructor. The default integration interval is 1.00 (100%).
    * @param cutOffStrike The cut-off strike.
    * @param mu The tail thickness parameter.
    */
-  public CouponCMSSABRExtrapolationRightReplicationMethod(double cutOffStrike, double mu) {
+  public CouponCMSSABRExtrapolationRightReplicationMethod(final double cutOffStrike, final double mu) {
     super(new CapFloorCMSSABRExtrapolationRightReplicationMethod(cutOffStrike, mu));
   }
 

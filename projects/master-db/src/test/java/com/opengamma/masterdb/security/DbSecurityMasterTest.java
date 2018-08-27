@@ -49,7 +49,7 @@ public class DbSecurityMasterTest extends AbstractDbSecurityTest {
   private DbSecurityMaster _secMaster;
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public DbSecurityMasterTest(String databaseType, String databaseVersion) {
+  public DbSecurityMasterTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion);
     LOGGER.info("running testcases for {}", databaseType);
   }
@@ -78,36 +78,36 @@ public class DbSecurityMasterTest extends AbstractDbSecurityTest {
   //-------------------------------------------------------------------------
   @Test
   public void test_equity() throws Exception {
-    EquitySecurity sec = new EquitySecurity("London", "LON", "OpenGamma Ltd", Currency.GBP);
+    final EquitySecurity sec = new EquitySecurity("London", "LON", "OpenGamma Ltd", Currency.GBP);
     sec.setName("OpenGamma");
     sec.setGicsCode(GICSCode.of("20102010"));
     sec.setShortName("OG");
     sec.setExternalIdBundle(ExternalIdBundle.of("Test", "OG"));
-    SecurityDocument addDoc = new SecurityDocument(sec);
-    SecurityDocument added = _secMaster.add(addDoc);
-    
-    SecurityDocument loaded = _secMaster.get(added.getUniqueId());
+    final SecurityDocument addDoc = new SecurityDocument(sec);
+    final SecurityDocument added = _secMaster.add(addDoc);
+
+    final SecurityDocument loaded = _secMaster.get(added.getUniqueId());
     assertEquals(added, loaded);
   }
 
   @Test
   public void test_equity_withAttribute() throws Exception {
-    EquitySecurity sec = new EquitySecurity("London", "LON", "OpenGamma Ltd", Currency.GBP);
+    final EquitySecurity sec = new EquitySecurity("London", "LON", "OpenGamma Ltd", Currency.GBP);
     sec.setName("OpenGamma");
     sec.setGicsCode(GICSCode.of("20102010"));
     sec.setShortName("OG");
     sec.setExternalIdBundle(ExternalIdBundle.of("Test", "OG"));
     sec.addAttribute("ATTR_KEY", "ATTR_VALUE");
-    SecurityDocument addDoc = new SecurityDocument(sec);
-    SecurityDocument added = _secMaster.add(addDoc);
-    
-    SecurityDocument loaded = _secMaster.get(added.getUniqueId());
+    final SecurityDocument addDoc = new SecurityDocument(sec);
+    final SecurityDocument added = _secMaster.add(addDoc);
+
+    final SecurityDocument loaded = _secMaster.get(added.getUniqueId());
     assertEquals(added, loaded);
   }
 
   @Test
   public void test_equity_with_attribute_permission() throws Exception {
-    EquitySecurity sec = new EquitySecurity("London", "LON", "OpenGamma Ltd", Currency.GBP);
+    final EquitySecurity sec = new EquitySecurity("London", "LON", "OpenGamma Ltd", Currency.GBP);
     sec.setName("OpenGamma");
     sec.setGicsCode(GICSCode.of("20102010"));
     sec.setShortName("OG");
@@ -116,9 +116,9 @@ public class DbSecurityMasterTest extends AbstractDbSecurityTest {
     sec.addAttribute("2", "Two");
     sec.getRequiredPermissions().add("A");
     sec.getRequiredPermissions().add("B");
-    SecurityDocument addDoc = new SecurityDocument(sec);
+    final SecurityDocument addDoc = new SecurityDocument(sec);
 
-    SecurityDocument added = _secMaster.add(addDoc);
+    final SecurityDocument added = _secMaster.add(addDoc);
     assertNotNull(added);
     assertNotNull(added.getSecurity());
 
@@ -129,7 +129,7 @@ public class DbSecurityMasterTest extends AbstractDbSecurityTest {
     added.getSecurity().setUniqueId(null);
     assertEquals(sec, added.getSecurity());
 
-    SecurityDocument loaded = _secMaster.get(addedUniqueId);
+    final SecurityDocument loaded = _secMaster.get(addedUniqueId);
     assertEquals(addedUniqueId, loaded.getUniqueId());
     added.getSecurity().setUniqueId(addedUniqueId);
     assertEquals(added, loaded);
@@ -138,66 +138,66 @@ public class DbSecurityMasterTest extends AbstractDbSecurityTest {
   //-------------------------------------------------------------------------
   @Test
   public void test_bond_withSearchByIssuer() throws Exception {
-    ZonedDateTime zdt = ZonedDateTime.parse("2011-01-31T12:00Z[Europe/London]");
-    GovernmentBondSecurity sec1 = new GovernmentBondSecurity("US TREASURY N/B", "issuerType", "issuerDomicile", "market",
+    final ZonedDateTime zdt = ZonedDateTime.parse("2011-01-31T12:00Z[Europe/London]");
+    final GovernmentBondSecurity sec1 = new GovernmentBondSecurity("US TREASURY N/B", "issuerType", "issuerDomicile", "market",
         Currency.GBP, SimpleYieldConvention.US_TREASURY_EQUIVALANT, new Expiry(zdt),
         "couponType", 23.5d, SimpleFrequency.ANNUAL, DayCounts.ACT_ACT_ISDA,
         zdt, zdt, zdt, 129d, 1324d, 12d, 1d, 2d, 3d);
     sec1.addExternalId(ExternalId.of("abc", "def"));
-    SecurityDocument added1 = _secMaster.add(new SecurityDocument(sec1));
-    GovernmentBondSecurity sec2 = new GovernmentBondSecurity("UK GOVT", "issuerType", "issuerDomicile", "market",
+    final SecurityDocument added1 = _secMaster.add(new SecurityDocument(sec1));
+    final GovernmentBondSecurity sec2 = new GovernmentBondSecurity("UK GOVT", "issuerType", "issuerDomicile", "market",
         Currency.GBP, SimpleYieldConvention.US_TREASURY_EQUIVALANT, new Expiry(zdt),
         "couponType", 23.5d, SimpleFrequency.ANNUAL, DayCounts.ACT_ACT_ISDA,
         zdt, zdt, zdt, 129d, 1324d, 12d, 1d, 2d, 3d);
     sec2.addExternalId(ExternalId.of("abc", "def"));
-    SecurityDocument added2 = _secMaster.add(new SecurityDocument(sec2));
-    
-    SecurityDocument loaded1 = _secMaster.get(added1.getUniqueId());
+    final SecurityDocument added2 = _secMaster.add(new SecurityDocument(sec2));
+
+    final SecurityDocument loaded1 = _secMaster.get(added1.getUniqueId());
     assertEquals(added1, loaded1);
-    
-    SecurityDocument loaded2 = _secMaster.get(added2.getUniqueId());
+
+    final SecurityDocument loaded2 = _secMaster.get(added2.getUniqueId());
     assertEquals(added2, loaded2);
-    
-    BondSecuritySearchRequest request = new BondSecuritySearchRequest();
+
+    final BondSecuritySearchRequest request = new BondSecuritySearchRequest();
     request.setIssuerName("*TREASURY*");
-    SecuritySearchResult result = _secMaster.search(request);
+    final SecuritySearchResult result = _secMaster.search(request);
     assertEquals(1, result.getDocuments().size());
     assertEquals(loaded1, result.getFirstDocument());
   }
 
   //-------------------------------------------------------------------------
   @Test(enabled = false)
-  public void test_concurrentModification() {    
-    final AtomicReference<Throwable> exceptionOccurred = new AtomicReference<Throwable>();
-    Runnable task = new Runnable() {
+  public void test_concurrentModification() {
+    final AtomicReference<Throwable> exceptionOccurred = new AtomicReference<>();
+    final Runnable task = new Runnable() {
       @Override
       public void run() {
         try {
           test_equity();
-        } catch (Throwable th) {
+        } catch (final Throwable th) {
           exceptionOccurred.compareAndSet(null, th);
         }
       }
     };
-    
+
     // 5 threads for plenty of concurrent activity
-    ExecutorService executor = Executors.newFixedThreadPool(5);
-    
+    final ExecutorService executor = Executors.newFixedThreadPool(5);
+
     // 10 security inserts is always enough to produce a duplicate key exception
-    LinkedList<Future<?>> futures = new LinkedList<Future<?>>();
+    final LinkedList<Future<?>> futures = new LinkedList<>();
     for (int i = 0; i < 10; i++) {
       futures.add(executor.submit(task));
     }
-    
+
     while (!futures.isEmpty()) {
-      Future<?> future = futures.poll();
+      final Future<?> future = futures.poll();
       try {
         future.get();
-      } catch (Throwable t) {
+      } catch (final Throwable t) {
         LOGGER.error("Exception waiting for task to complete", t);
       }
     }
-    
+
     assertEquals(null, exceptionOccurred.get());
   }
 

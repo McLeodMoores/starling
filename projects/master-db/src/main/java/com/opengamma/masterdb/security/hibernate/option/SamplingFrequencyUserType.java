@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.option;
@@ -19,7 +19,7 @@ public class SamplingFrequencyUserType extends EnumUserType<SamplingFrequency> {
   }
 
   @Override
-  protected String enumToStringNoCache(SamplingFrequency value) {
+  protected String enumToStringNoCache(final SamplingFrequency value) {
     switch (value) {
       case DAILY_CLOSE:
         return "daily_close";

@@ -30,15 +30,15 @@ public class QueryConfigDbConfigMasterWorkerMetaDataTest extends AbstractDbConfi
   private static final Logger LOGGER = LoggerFactory.getLogger(QueryConfigDbConfigMasterWorkerMetaDataTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public QueryConfigDbConfigMasterWorkerMetaDataTest(String databaseType, String databaseVersion) {
+  public QueryConfigDbConfigMasterWorkerMetaDataTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion, true);
     LOGGER.info("running testcases for {}", databaseType);
   }
 
   @Test
   public void test_metaData() {
-    ConfigMetaDataRequest request = new ConfigMetaDataRequest();
-    ConfigMetaDataResult result = _cfgMaster.metaData(request);
+    final ConfigMetaDataRequest request = new ConfigMetaDataRequest();
+    final ConfigMetaDataResult result = _cfgMaster.metaData(request);
     assertNotNull(result);
     assertEquals(2, result.getConfigTypes().size());
     assertTrue(result.getConfigTypes().contains(ExternalId.class));
@@ -46,9 +46,9 @@ public class QueryConfigDbConfigMasterWorkerMetaDataTest extends AbstractDbConfi
   }
 
   public void test_metaData_noTypes() {
-    ConfigMetaDataRequest request = new ConfigMetaDataRequest();
+    final ConfigMetaDataRequest request = new ConfigMetaDataRequest();
     request.setConfigTypes(false);
-    ConfigMetaDataResult result = _cfgMaster.metaData(request);
+    final ConfigMetaDataResult result = _cfgMaster.metaData(request);
     assertNotNull(result);
     assertEquals(0, result.getConfigTypes().size());
   }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.instrument.payment;
@@ -27,7 +27,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Class describing an average coupon by weighted mean of index values with difference fixing dates. 
+ * Class describing an average coupon by weighted mean of index values with difference fixing dates.
  * The weighted averages over several sub-periods are compounded over the total period.
  */
 public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDefinition
@@ -298,7 +298,7 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
   }
 
   @Override
-  public Coupon toDerivative(ZonedDateTime dateTime, DoubleTimeSeries<ZonedDateTime> indexFixingTimeSeries) {
+  public Coupon toDerivative(final ZonedDateTime dateTime, final DoubleTimeSeries<ZonedDateTime> indexFixingTimeSeries) {
     final LocalDate dateConversion = dateTime.toLocalDate();
     ArgumentChecker.notNull(indexFixingTimeSeries, "Index fixing time series");
     ArgumentChecker.isTrue(!dateConversion.isAfter(getPaymentDate().toLocalDate()), "date is after payment date");
@@ -317,7 +317,7 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
     int posDate = 0;
     double amountAccrued = 1.;
     double sumRateFixed = 0.0;
-    while (posPeriod < nPeriods && !(dayConversion.isBefore(getFixingDates()[posPeriod][0].toLocalDate()))) {
+    while (posPeriod < nPeriods && !dayConversion.isBefore(getFixingDates()[posPeriod][0].toLocalDate())) {
       sumRateFixed = 0.0;
       posDate = 0;
       nDates[posPeriod] = getFixingDates()[posPeriod].length;
@@ -337,7 +337,7 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
         }
       }
       if (posDate == nDates[posPeriod]) {
-        amountAccrued *= (1.0 + sumRateFixed * getPaymentAccrualFactors()[posPeriod]);
+        amountAccrued *= 1.0 + sumRateFixed * getPaymentAccrualFactors()[posPeriod];
         sumRateFixed = 0.0;
       }
       ++posPeriod;
@@ -407,7 +407,7 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
    */
   @Override
   @Deprecated
-  public Coupon toDerivative(ZonedDateTime date, DoubleTimeSeries<ZonedDateTime> data, String... yieldCurveNames) {
+  public Coupon toDerivative(final ZonedDateTime date, final DoubleTimeSeries<ZonedDateTime> data, final String... yieldCurveNames) {
     throw new NotImplementedException("toDerivative not implemented with yield curve names.");
   }
 
@@ -429,14 +429,14 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
     result = prime * result + Arrays.deepHashCode(_fixingPeriodAccrualFactors);
     result = prime * result + Arrays.deepHashCode(_fixingPeriodEndDates);
     result = prime * result + Arrays.deepHashCode(_fixingPeriodStartDates);
-    result = prime * result + ((_index == null) ? 0 : _index.hashCode());
+    result = prime * result + (_index == null ? 0 : _index.hashCode());
     result = prime * result + Arrays.hashCode(_paymentAccrualFactors);
     result = prime * result + Arrays.deepHashCode(_weights);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -446,7 +446,7 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
     if (!(obj instanceof CouponIborAverageFixingDatesCompoundingDefinition)) {
       return false;
     }
-    CouponIborAverageFixingDatesCompoundingDefinition other = (CouponIborAverageFixingDatesCompoundingDefinition) obj;
+    final CouponIborAverageFixingDatesCompoundingDefinition other = (CouponIborAverageFixingDatesCompoundingDefinition) obj;
     if (!Arrays.deepEquals(_fixingDates, other._fixingDates)) {
       return false;
     }

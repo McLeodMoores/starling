@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph;
@@ -48,7 +48,7 @@ import com.opengamma.engine.value.ValueRequirement;
   }
 
   @Override
-  public synchronized int release(GraphBuildingContext context) {
+  public synchronized int release(final GraphBuildingContext context) {
     assert _refCount > 0;
     return --_refCount;
   }

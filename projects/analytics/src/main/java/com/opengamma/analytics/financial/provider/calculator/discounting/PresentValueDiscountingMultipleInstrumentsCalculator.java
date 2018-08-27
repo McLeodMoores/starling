@@ -43,7 +43,7 @@ public final class PresentValueDiscountingMultipleInstrumentsCalculator extends 
   }
 
   @Override
-  public MultipleCurrencyAmount visit(InstrumentDerivative derivative) {
+  public MultipleCurrencyAmount visit(final InstrumentDerivative derivative) {
     throw new UnsupportedOperationException(this.getClass().getSimpleName() + " requires data passed in");
   }
 
@@ -55,7 +55,7 @@ public final class PresentValueDiscountingMultipleInstrumentsCalculator extends 
    * @return the multiple currency amount discounted pv.
    */
   @Override
-  public MultipleCurrencyAmount visit(InstrumentDerivative derivative, Pair<InstrumentDerivative[], MulticurveProviderInterface> data) {
+  public MultipleCurrencyAmount visit(final InstrumentDerivative derivative, final Pair<InstrumentDerivative[], MulticurveProviderInterface> data) {
     ArgumentChecker.notNull(data, "data");
     final MulticurveProviderInterface curves = data.getSecond();
     ArgumentChecker.notNull(curves, "multicurveprovider");

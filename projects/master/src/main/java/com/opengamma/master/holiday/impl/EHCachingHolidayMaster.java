@@ -8,8 +8,6 @@ package com.opengamma.master.holiday.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.ehcache.CacheManager;
-
 import org.joda.beans.Bean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +28,8 @@ import com.opengamma.util.paging.Paging;
 import com.opengamma.util.paging.PagingRequest;
 import com.opengamma.util.tuple.IntObjectPair;
 
+import net.sf.ehcache.CacheManager;
+
 /**
  * A cache decorating a {@code HolidayMaster}, mainly intended to reduce the frequency and repetition of queries
  * from the management UI to a {@code DbHolidayMaster}. In particular, prefetching is employed in paged queries,
@@ -44,10 +44,10 @@ public class EHCachingHolidayMaster extends AbstractEHCachingMaster<HolidayDocum
 
   /** The document search cache */
   private EHCachingSearchCache _documentSearchCache;
-  
+
   /** The history search cache */
   private EHCachingSearchCache _historySearchCache;
-  
+
   /**
    * Creates an instance over an underlying master specifying the cache manager.
    *
@@ -61,9 +61,9 @@ public class EHCachingHolidayMaster extends AbstractEHCachingMaster<HolidayDocum
     // Create the doc search cache and register a holiday master searcher
     _documentSearchCache = new EHCachingSearchCache(name + "Holiday", cacheManager, new EHCachingSearchCache.Searcher() {
       @Override
-      public IntObjectPair<List<UniqueId>> search(Bean request, PagingRequest pagingRequest) {
+      public IntObjectPair<List<UniqueId>> search(final Bean request, final PagingRequest pagingRequest) {
         // Fetch search results from underlying master
-        HolidaySearchResult result = ((HolidayMaster) getUnderlying()).search((HolidaySearchRequest)
+        final HolidaySearchResult result = ((HolidayMaster) getUnderlying()).search((HolidaySearchRequest)
             EHCachingSearchCache.withPagingRequest(request, pagingRequest));
 
         // Cache the result documents
@@ -78,9 +78,9 @@ public class EHCachingHolidayMaster extends AbstractEHCachingMaster<HolidayDocum
     // Create the history search cache and register a security master searcher
     _historySearchCache = new EHCachingSearchCache(name + "HolidayHistory", cacheManager, new EHCachingSearchCache.Searcher() {
       @Override
-      public IntObjectPair<List<UniqueId>> search(Bean request, PagingRequest pagingRequest) {
+      public IntObjectPair<List<UniqueId>> search(final Bean request, final PagingRequest pagingRequest) {
         // Fetch search results from underlying master
-        HolidayHistoryResult result = ((HolidayMaster) getUnderlying()).history((HolidayHistoryRequest)
+        final HolidayHistoryResult result = ((HolidayMaster) getUnderlying()).history((HolidayHistoryRequest)
             EHCachingSearchCache.withPagingRequest(request, pagingRequest));
 
         // Cache the result documents
@@ -91,39 +91,39 @@ public class EHCachingHolidayMaster extends AbstractEHCachingMaster<HolidayDocum
                                  EHCachingSearchCache.extractUniqueIds(result.getDocuments()));
       }
     });
-    
+
     // Prime search cache
-    HolidaySearchRequest defaultSearch = new HolidaySearchRequest();
+    final HolidaySearchRequest defaultSearch = new HolidaySearchRequest();
     defaultSearch.setSortOrder(HolidaySearchSortOrder.NAME_ASC);
     _documentSearchCache.prefetch(defaultSearch, PagingRequest.FIRST_PAGE);
   }
 
   @Override
-  public HolidayMetaDataResult metaData(HolidayMetaDataRequest request) {
+  public HolidayMetaDataResult metaData(final HolidayMetaDataRequest request) {
     return ((HolidayMaster) getUnderlying()).metaData(request);
   }
 
   @Override
-  public HolidaySearchResult search(HolidaySearchRequest request) {
+  public HolidaySearchResult search(final HolidaySearchRequest request) {
     // Ensure that the relevant prefetch range is cached, otherwise fetch and cache any missing sub-ranges in background
     _documentSearchCache.prefetch(EHCachingSearchCache.withPagingRequest(request, null), request.getPagingRequest());
 
     // Fetch the paged request range; if not entirely cached then fetch and cache it in foreground
-    IntObjectPair<List<UniqueId>> pair = _documentSearchCache.search(
+    final IntObjectPair<List<UniqueId>> pair = _documentSearchCache.search(
         EHCachingSearchCache.withPagingRequest(request, null),
         request.getPagingRequest(), false); // don't block until cached
 
-    List<HolidayDocument> documents = new ArrayList<>();
-    for (UniqueId uniqueId : pair.getSecond()) {
+    final List<HolidayDocument> documents = new ArrayList<>();
+    for (final UniqueId uniqueId : pair.getSecond()) {
       documents.add(get(uniqueId));
     }
 
-    HolidaySearchResult result = new HolidaySearchResult(documents);
+    final HolidaySearchResult result = new HolidaySearchResult(documents);
     result.setPaging(Paging.of(request.getPagingRequest(), pair.getFirstInt()));
 
     // Debug: check result against underlying
     if (EHCachingSearchCache.TEST_AGAINST_UNDERLYING) {
-      HolidaySearchResult check = ((HolidayMaster) getUnderlying()).search(request);
+      final HolidaySearchResult check = ((HolidayMaster) getUnderlying()).search(request);
       if (!result.getPaging().equals(check.getPaging())) {
         LOGGER.error("_documentSearchCache.getCache().getName() + \" returned paging:\\n\"" + result.getPaging() +
                            "\nbut the underlying master returned paging:\n" + check.getPaging());
@@ -138,24 +138,24 @@ public class EHCachingHolidayMaster extends AbstractEHCachingMaster<HolidayDocum
   }
 
   @Override
-  public HolidayHistoryResult history(HolidayHistoryRequest request) {
+  public HolidayHistoryResult history(final HolidayHistoryRequest request) {
 
     // Ensure that the relevant prefetch range is cached, otherwise fetch and cache any missing sub-ranges in background
     _historySearchCache.prefetch(EHCachingSearchCache.withPagingRequest(request, null), request.getPagingRequest());
 
     // Fetch the paged request range; if not entirely cached then fetch and cache it in foreground
-    IntObjectPair<List<UniqueId>> pair = _historySearchCache.search(
+    final IntObjectPair<List<UniqueId>> pair = _historySearchCache.search(
         EHCachingSearchCache.withPagingRequest(request, null),
         request.getPagingRequest(), false); // don't block until cached
 
-    List<HolidayDocument> documents = new ArrayList<>();
-    for (UniqueId uniqueId : pair.getSecond()) {
+    final List<HolidayDocument> documents = new ArrayList<>();
+    for (final UniqueId uniqueId : pair.getSecond()) {
       documents.add(get(uniqueId));
     }
 
-    HolidayHistoryResult result = new HolidayHistoryResult(documents);
+    final HolidayHistoryResult result = new HolidayHistoryResult(documents);
     result.setPaging(Paging.of(request.getPagingRequest(), pair.getFirstInt()));
-    return result;    
+    return result;
   }
 
 }

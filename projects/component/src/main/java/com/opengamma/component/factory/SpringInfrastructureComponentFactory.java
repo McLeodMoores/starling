@@ -15,10 +15,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import javax.management.InstanceAlreadyExistsException;
 import javax.management.MBeanServer;
 
-import net.sf.ehcache.CacheException;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.management.ManagementService;
-
 import org.fudgemsg.FudgeContext;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
@@ -34,6 +30,10 @@ import com.opengamma.component.ComponentFactory;
 import com.opengamma.component.ComponentRepository;
 import com.opengamma.util.Connector;
 
+import net.sf.ehcache.CacheException;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.management.ManagementService;
+
 /**
  * Component definition for the infrastructure defined in Spring.
  */
@@ -41,46 +41,46 @@ import com.opengamma.util.Connector;
 public class SpringInfrastructureComponentFactory extends AbstractSpringComponentFactory implements ComponentFactory {
 
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
-    GenericApplicationContext appContext = createApplicationContext(repo);
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
+    final GenericApplicationContext appContext = createApplicationContext(repo);
     register(repo, appContext);
   }
 
   /**
    * Registers the infrastructure components.
-   * 
+   *
    * @param repo  the repository to register with, not null
    * @param appContext  the Spring application context, not null
    */
-  protected void register(ComponentRepository repo, GenericApplicationContext appContext) {
+  protected void register(final ComponentRepository repo, final GenericApplicationContext appContext) {
     registerConnectors(repo, appContext);
     registerInfrastructureByType(repo, FudgeContext.class, appContext);
     registerInfrastructureByType(repo, CacheManager.class, appContext);
     registerInfrastructureByType(repo, ScheduledExecutorService.class, appContext);
     registerInfrastructureByType(repo, MBeanServer.class, appContext);
-    
+
     registerJmxCacheManager(repo);
   }
 
-  protected void registerConnectors(ComponentRepository repo, GenericApplicationContext appContext) {
-    Set<Class<? extends Connector>> types = Sets.newHashSet();
-    String[] beanNames = appContext.getBeanNamesForType(Connector.class);
-    for (String beanName : beanNames) {
-      Connector bean = appContext.getBean(beanName, Connector.class);
+  protected void registerConnectors(final ComponentRepository repo, final GenericApplicationContext appContext) {
+    final Set<Class<? extends Connector>> types = Sets.newHashSet();
+    final String[] beanNames = appContext.getBeanNamesForType(Connector.class);
+    for (final String beanName : beanNames) {
+      final Connector bean = appContext.getBean(beanName, Connector.class);
       types.add(bean.getType());
     }
-    for (Class<? extends Connector> type : types) {
+    for (final Class<? extends Connector> type : types) {
       registerInfrastructureByType(repo, type, appContext);
     }
   }
 
-  protected void registerJmxCacheManager(ComponentRepository repo) {
-    MBeanServer jmx = repo.findInstance(MBeanServer.class);
+  protected void registerJmxCacheManager(final ComponentRepository repo) {
+    final MBeanServer jmx = repo.findInstance(MBeanServer.class);
     if (jmx != null) {
-      Set<CacheManager> set = Collections.newSetFromMap(new IdentityHashMap<CacheManager, Boolean>());
+      final Set<CacheManager> set = Collections.newSetFromMap(new IdentityHashMap<CacheManager, Boolean>());
       set.addAll(repo.getInstances(CacheManager.class));
-      for (CacheManager mgr : set) {
-        ManagementService jmxService = new ManagementService(mgr, jmx, true, true, true, true);
+      for (final CacheManager mgr : set) {
+        final ManagementService jmxService = new ManagementService(mgr, jmx, true, true, true, true);
         repo.registerLifecycle(new CacheManagerLifecycle(jmxService));
       }
     }
@@ -92,14 +92,14 @@ public class SpringInfrastructureComponentFactory extends AbstractSpringComponen
    */
   static final class CacheManagerLifecycle implements Lifecycle {
     private ManagementService _jmxService;
-    CacheManagerLifecycle(ManagementService jmxService) {
+    CacheManagerLifecycle(final ManagementService jmxService) {
       _jmxService = jmxService;
     }
     @Override
     public void start() {
       try {
         _jmxService.init();
-      } catch (CacheException ex) {
+      } catch (final CacheException ex) {
         if (ex.getCause() instanceof InstanceAlreadyExistsException == false) {
           throw ex;
         }

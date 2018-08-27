@@ -67,33 +67,33 @@ public class DataViewClientResource extends AbstractRestfulJmsResultPublisher {
   public static final String PATH_SET_MINIMUM_LOG_MODE = "logMode";
 
   public static final String PATH_UPDATE_PERIOD = "updatePeriod";
-  
+
   public static final String UPDATE_PERIOD_FIELD = "updatePeriod";
   public static final String VIEW_CYCLE_ACCESS_SUPPORTED_FIELD = "isViewCycleAccessSupported";
   public static final String PATH_VIEW_PROCESS_CONTEXT_MAP = "viewProcessContextMap";
   //CSON: just constants
-  
+
   private final ViewClient _viewClient;
   private final DataEngineResourceManagerResource<ViewCycle> _viewCycleManagerResource;
 
-  public DataViewClientResource(ViewClient viewClient, DataEngineResourceManagerResource<ViewCycle> viewCycleManagerResource, JmsConnector jmsConnector, ExecutorService executor) {
+  public DataViewClientResource(final ViewClient viewClient, final DataEngineResourceManagerResource<ViewCycle> viewCycleManagerResource, final JmsConnector jmsConnector, final ExecutorService executor) {
     super(createJmsResultPublisher(viewClient, jmsConnector), executor);
     _viewClient = viewClient;
     _viewCycleManagerResource = viewCycleManagerResource;
   }
 
-  private static ViewClientJmsResultPublisher createJmsResultPublisher(ViewClient viewClient, JmsConnector jmsConnector) {
+  private static ViewClientJmsResultPublisher createJmsResultPublisher(final ViewClient viewClient, final JmsConnector jmsConnector) {
     if (jmsConnector == null) {
       return null;
     } else {
       return new ViewClientJmsResultPublisher(viewClient, OpenGammaFudgeContext.getInstance(), jmsConnector);
     }
   }
-  
+
   /*package*/ ViewClient getViewClient() {
     return _viewClient;
   }
-  
+
   //-------------------------------------------------------------------------
   @Override
   protected boolean isTerminated() {
@@ -104,7 +104,7 @@ public class DataViewClientResource extends AbstractRestfulJmsResultPublisher {
   protected void expire() {
     shutdown();
   }
-  
+
   //-------------------------------------------------------------------------
   @GET
   @Path(PATH_UNIQUE_ID)
@@ -112,21 +112,21 @@ public class DataViewClientResource extends AbstractRestfulJmsResultPublisher {
     updateLastAccessed();
     return responseOkObject(getViewClient().getUniqueId());
   }
-  
+
   @GET
   @Path(PATH_USER)
   public Response getUser() {
     updateLastAccessed();
     return responseOkObject(getViewClient().getUser());
   }
-  
+
   @GET
   @Path(PATH_STATE)
   public Response getState() {
     updateLastAccessed();
     return responseOkObject(getViewClient().getState());
   }
-  
+
   //-------------------------------------------------------------------------
   @GET
   @Path(PATH_IS_ATTACHED)
@@ -134,11 +134,11 @@ public class DataViewClientResource extends AbstractRestfulJmsResultPublisher {
     updateLastAccessed();
     return responseOk(getViewClient().isAttached());
   }
-  
+
   @POST
   @Consumes(FudgeRest.MEDIA)
   @Path(PATH_ATTACH_SEARCH)
-  public Response attachToViewProcess(AttachToViewProcessRequest request) {
+  public Response attachToViewProcess(final AttachToViewProcessRequest request) {
     updateLastAccessed();
     ArgumentChecker.notNull(request.getViewDefinitionId(), "viewDefinitionId");
     ArgumentChecker.notNull(request.getExecutionOptions(), "executionOptions");
@@ -146,17 +146,17 @@ public class DataViewClientResource extends AbstractRestfulJmsResultPublisher {
     getViewClient().attachToViewProcess(request.getViewDefinitionId(), request.getExecutionOptions(), request.isNewBatchProcess());
     return responseOk();
   }
-  
+
   @POST
   @Consumes(FudgeRest.MEDIA)
   @Path(PATH_ATTACH_DIRECT)
-  public Response attachToViewProcess(UniqueId viewProcessId) {
+  public Response attachToViewProcess(final UniqueId viewProcessId) {
     updateLastAccessed();
     ArgumentChecker.notNull(viewProcessId, "viewProcessId");
     getViewClient().attachToViewProcess(viewProcessId);
     return responseOk();
   }
-  
+
   @POST
   @Path(PATH_DETACH)
   public Response detachFromViewProcess() {
@@ -164,33 +164,33 @@ public class DataViewClientResource extends AbstractRestfulJmsResultPublisher {
     getViewClient().detachFromViewProcess();
     return responseOk();
   }
-  
+
   @Path(PATH_LIVE_DATA_OVERRIDE_INJECTOR)
   public DataLiveDataInjectorResource getLiveDataOverrideInjector() {
     updateLastAccessed();
     return new DataLiveDataInjectorResource(getViewClient().getLiveDataOverrideInjector());
   }
-  
+
   @GET
   @Path(PATH_VIEW_DEFINITION)
   public Response getLatestViewDefinition() {
-    ViewDefinition result = getViewClient().getLatestViewDefinition();
+    final ViewDefinition result = getViewClient().getLatestViewDefinition();
     return responseOkObject(result);
   }
-  
+
   @Path(PATH_VIEW_PROCESS)
   public DataViewProcessResource getViewProcess() {
     updateLastAccessed();
     return new DataViewProcessResource(getViewClient().getViewProcess());
   }
-  
+
   //-------------------------------------------------------------------------
   @PUT
   @Path(PATH_UPDATE_PERIOD)
   @Consumes(FudgeRest.MEDIA)
-  public Response setUpdatePeriod(FudgeMsg msg) {
+  public Response setUpdatePeriod(final FudgeMsg msg) {
     updateLastAccessed();
-    long periodMillis = msg.getLong(UPDATE_PERIOD_FIELD);
+    final long periodMillis = msg.getLong(UPDATE_PERIOD_FIELD);
     getViewClient().setUpdatePeriod(periodMillis);
     return responseOk();
   }
@@ -202,10 +202,10 @@ public class DataViewClientResource extends AbstractRestfulJmsResultPublisher {
     updateLastAccessed();
     return responseOkObject(getViewClient().getResultMode());
   }
-  
+
   @PUT
   @Path(PATH_RESULT_MODE)
-  public Response setResultMode(ViewResultMode viewResultMode) {
+  public Response setResultMode(final ViewResultMode viewResultMode) {
     updateLastAccessed();
     getViewClient().setResultMode(viewResultMode);
     return responseOk();
@@ -214,7 +214,7 @@ public class DataViewClientResource extends AbstractRestfulJmsResultPublisher {
   //-------------------------------------------------------------------------
   @PUT
   @Path(PATH_VIEW_PROCESS_CONTEXT_MAP)
-  public Response setViewProcessContextMap(Map<String, String> viewProcessContextMap) {
+  public Response setViewProcessContextMap(final Map<String, String> viewProcessContextMap) {
     updateLastAccessed();
     getViewClient().setViewProcessContextMap(viewProcessContextMap);
     return responseOk();
@@ -230,7 +230,7 @@ public class DataViewClientResource extends AbstractRestfulJmsResultPublisher {
 
   @PUT
   @Path(PATH_FRAGMENT_RESULT_MODE)
-  public Response setFragmentResultMode(ViewResultMode viewResultMode) {
+  public Response setFragmentResultMode(final ViewResultMode viewResultMode) {
     updateLastAccessed();
     getViewClient().setFragmentResultMode(viewResultMode);
     return responseOk();
@@ -244,7 +244,7 @@ public class DataViewClientResource extends AbstractRestfulJmsResultPublisher {
     getViewClient().pause();
     return responseOk();
   }
-  
+
   @POST
   @Path(PATH_RESUME)
   public Response resume() {
@@ -252,7 +252,7 @@ public class DataViewClientResource extends AbstractRestfulJmsResultPublisher {
     getViewClient().resume();
     return responseOk();
   }
-  
+
   @POST
   @Path(PATH_TRIGGER_CYCLE)
   public Response triggerCycle() {
@@ -260,94 +260,94 @@ public class DataViewClientResource extends AbstractRestfulJmsResultPublisher {
     getViewClient().triggerCycle();
     return responseOk();
   }
-  
+
   @GET
   @Path(PATH_COMPLETED)
   public Response isCompleted() {
     updateLastAccessed();
     return responseOk(getViewClient().isCompleted());
   }
-  
+
   @GET
   @Path(PATH_RESULT_AVAILABLE)
   public Response isResultAvailable() {
     updateLastAccessed();
     return responseOk(getViewClient().isResultAvailable());
   }
-  
+
   @GET
   @Path(PATH_LATEST_RESULT)
   public Response getLatestResult() {
     updateLastAccessed();
     return responseOkObject(getViewClient().getLatestResult());
   }
-  
+
   @GET
   @Path(PATH_LATEST_COMPILED_VIEW_DEFINITION)
   public Response getLatestCompiledViewDefinition() {
     updateLastAccessed();
     return responseOkObject(getViewClient().getLatestCompiledViewDefinition());
   }
-  
+
   @GET
   @Path(PATH_VIEW_CYCLE_ACCESS_SUPPORTED)
   public Response isViewCycleAccessSupported() {
     updateLastAccessed();
     return responseOk(getViewClient().isViewCycleAccessSupported());
   }
-  
+
   @POST
   @Path(PATH_VIEW_CYCLE_ACCESS_SUPPORTED)
-  public Response setViewCycleAccessSupported(FudgeMsg msg) {
+  public Response setViewCycleAccessSupported(final FudgeMsg msg) {
     updateLastAccessed();
-    boolean isViewCycleAccessSupported = msg.getBoolean(VIEW_CYCLE_ACCESS_SUPPORTED_FIELD);
+    final boolean isViewCycleAccessSupported = msg.getBoolean(VIEW_CYCLE_ACCESS_SUPPORTED_FIELD);
     getViewClient().setViewCycleAccessSupported(isViewCycleAccessSupported);
     return responseOk();
   }
-  
+
   @POST
   @Path(PATH_CREATE_LATEST_CYCLE_REFERENCE)
   public Response createLatestCycleReference() {
     updateLastAccessed();
-    EngineResourceReference<? extends ViewCycle> reference = getViewClient().createLatestCycleReference();
-    return getReferenceResponse(reference);
-  }
-  
-  @POST
-  @Path(PATH_CREATE_CYCLE_REFERENCE)
-  @Consumes(FudgeRest.MEDIA)
-  public Response createCycleReference(UniqueId cycleId) {
-    updateLastAccessed();
-    EngineResourceReference<? extends ViewCycle> reference = getViewClient().createCycleReference(cycleId);
+    final EngineResourceReference<? extends ViewCycle> reference = getViewClient().createLatestCycleReference();
     return getReferenceResponse(reference);
   }
 
-  private Response getReferenceResponse(EngineResourceReference<? extends ViewCycle> reference) {
+  @POST
+  @Path(PATH_CREATE_CYCLE_REFERENCE)
+  @Consumes(FudgeRest.MEDIA)
+  public Response createCycleReference(final UniqueId cycleId) {
+    updateLastAccessed();
+    final EngineResourceReference<? extends ViewCycle> reference = getViewClient().createCycleReference(cycleId);
+    return getReferenceResponse(reference);
+  }
+
+  private Response getReferenceResponse(final EngineResourceReference<? extends ViewCycle> reference) {
     updateLastAccessed();
     if (reference == null) {
       return responseOkNoContent();
     }
-    URI referenceUri = _viewCycleManagerResource.manageReference(reference);
+    final URI referenceUri = _viewCycleManagerResource.manageReference(reference);
     return responseCreated(referenceUri);
   }
-  
+
   //-------------------------------------------------------------------------
   @POST
   @Path(PATH_SET_MINIMUM_LOG_MODE)
   @Consumes(FudgeRest.MEDIA)
-  public Response setMinimumLogMode(SetMinimumLogModeRequest request) {
+  public Response setMinimumLogMode(final SetMinimumLogModeRequest request) {
     updateLastAccessed();
     ArgumentChecker.notNull(request.getMinimumLogMode(), "minimumLogMode");
     ArgumentChecker.notNull(request.getTargets(), "targets");
     getViewClient().setMinimumLogMode(request.getMinimumLogMode(), request.getTargets());
     return responseOk();
   }
-  
+
   //-------------------------------------------------------------------------
   @DELETE
   public void shutdown() {
     getViewClient().shutdown();
     stopResultStream();
   }
-  
+
 }

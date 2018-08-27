@@ -36,17 +36,17 @@ public interface SelectorResolver {
   /** Performs the resolution. */
   private final ComputationTargetResolver.AtVersionCorrection _resolver;
 
-  /* package */ DefaultSelectorResolver(ComputationTargetResolver.AtVersionCorrection resolver) {
+  /* package */ DefaultSelectorResolver(final ComputationTargetResolver.AtVersionCorrection resolver) {
     ArgumentChecker.notNull(resolver, "resolver");
     _resolver = resolver;
   }
 
   @Override
-  public Security resolveSecurity(ExternalId id) {
-    ComputationTargetRequirement securityReq = new ComputationTargetRequirement(ComputationTargetType.SECURITY, id);
-    ComputationTargetSpecification securitySpec =
+  public Security resolveSecurity(final ExternalId id) {
+    final ComputationTargetRequirement securityReq = new ComputationTargetRequirement(ComputationTargetType.SECURITY, id);
+    final ComputationTargetSpecification securitySpec =
         _resolver.getSpecificationResolver().getTargetSpecification(securityReq);
-    ComputationTarget target = _resolver.resolve(securitySpec);
+    final ComputationTarget target = _resolver.resolve(securitySpec);
     if (target == null) {
       return null;
     }

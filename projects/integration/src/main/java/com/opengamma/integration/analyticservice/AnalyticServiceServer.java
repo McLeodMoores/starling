@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.analyticservice;
@@ -47,10 +47,10 @@ import com.opengamma.util.ArgumentChecker;
  * Analytic service server
  */
 public class AnalyticServiceServer implements TradeListener, Lifecycle {
-    
+
   /** Logger. */
   private static final Logger LOGGER = LoggerFactory.getLogger(AnalyticServiceServer.class);
-  
+
   private final ViewProcessor _viewProcessor;
   private final PositionMaster _positionMaster;
   private final PortfolioMaster _portfolioMaster;
@@ -61,27 +61,27 @@ public class AnalyticServiceServer implements TradeListener, Lifecycle {
   private UserPrincipal _user;
   private ViewClient _viewClient;
   private AnalyticResultReceiver _analyticResultReceiver;
-  
+
   private final ReentrantLock _updateLock = new ReentrantLock();
   private final ViewExecutionOptions _viewExecutionOptions = ExecutionOptions.infinite(MarketData.live());
-  private final boolean _usePrivateProcess = true; 
+  private final boolean _usePrivateProcess = true;
   private String _providerIdName;
   private TradeProducer _tradeProducer;
   private final ExecutorService _tradeUpdaterExecutor = Executors.newSingleThreadExecutor();
   private final AtomicBoolean _isRunning = new AtomicBoolean(false);
-  
+
   public AnalyticServiceServer(final ViewProcessor viewProcessor, final PositionMaster positionMaster, final PortfolioMaster portfolioMaster, final ConfigSource configSource) {
     ArgumentChecker.notNull(viewProcessor, "view processor");
     ArgumentChecker.notNull(portfolioMaster, "portfolioMaster");
     ArgumentChecker.notNull(positionMaster, "positionMaster");
     ArgumentChecker.notNull(configSource, "configSource");
-    
+
     _viewProcessor = viewProcessor;
     _positionMaster = positionMaster;
     _portfolioMaster = portfolioMaster;
     _configSource = configSource;
   }
-  
+
   /**
    * Gets the user.
    * @return the user
@@ -94,7 +94,7 @@ public class AnalyticServiceServer implements TradeListener, Lifecycle {
    * Sets the user.
    * @param user  the user
    */
-  public void setUser(UserPrincipal user) {
+  public void setUser(final UserPrincipal user) {
     _user = user;
   }
 
@@ -121,7 +121,7 @@ public class AnalyticServiceServer implements TradeListener, Lifecycle {
   public PortfolioMaster getPortfolioMaster() {
     return _portfolioMaster;
   }
-  
+
   /**
    * Gets the configSource.
    * @return the configSource
@@ -129,23 +129,23 @@ public class AnalyticServiceServer implements TradeListener, Lifecycle {
   public ConfigSource getConfigSource() {
     return _configSource;
   }
-  
+
   public String getProviderIdName() {
     return _providerIdName;
   }
 
-  public void setProviderIdName(String providerIdName) {
+  public void setProviderIdName(final String providerIdName) {
     this._providerIdName = providerIdName;
   }
 
   @Override
-  public void tradeReceived(Trade trade) {
+  public void tradeReceived(final Trade trade) {
     LOGGER.debug("Trade {} received", trade);
     if (trade != null) {
       _tradeUpdaterExecutor.submit(new TradeUpdaterTask(trade));
     }
   }
- 
+
   /**
    * Gets the tradeProducer.
    * @return the tradeProducer
@@ -158,7 +158,7 @@ public class AnalyticServiceServer implements TradeListener, Lifecycle {
    * Sets the tradeProducer.
    * @param tradeProducer  the tradeProducer
    */
-  public void setTradeProducer(TradeProducer tradeProducer) {
+  public void setTradeProducer(final TradeProducer tradeProducer) {
     _tradeProducer = tradeProducer;
   }
 
@@ -170,10 +170,10 @@ public class AnalyticServiceServer implements TradeListener, Lifecycle {
     if (getTradeProducer() == null) {
       throw new OpenGammaRuntimeException("Can not start analytic server because TradeProducer is missing");
     }
-    ViewDefinition viewDefinition = getConfigSource().getLatestByName(ViewDefinition.class, getViewName());
+    final ViewDefinition viewDefinition = getConfigSource().getLatestByName(ViewDefinition.class, getViewName());
     if (viewDefinition == null) {
       throw new OpenGammaRuntimeException("Can not start analytic server because view [" + getViewName() + "] can not be loaded");
-    } 
+    }
     _portfolioId = viewDefinition.getPortfolioId().getObjectId();
     _viewId = viewDefinition.getUniqueId();
     setUpViewClient();
@@ -195,12 +195,12 @@ public class AnalyticServiceServer implements TradeListener, Lifecycle {
         }
 
         @Override
-        public void cycleCompleted(ViewComputationResultModel fullResult, ViewDeltaResultModel deltaResult) {
+        public void cycleCompleted(final ViewComputationResultModel fullResult, final ViewDeltaResultModel deltaResult) {
           if (_analyticResultReceiver != null) {
             _analyticResultReceiver.analyticReceived(fullResult.getAllResults());
           }
         }
-        
+
       });
       _viewClient.attachToViewProcess(_viewId, _viewExecutionOptions, _usePrivateProcess);
       LOGGER.debug("view client attached ready to serve results");
@@ -212,7 +212,7 @@ public class AnalyticServiceServer implements TradeListener, Lifecycle {
   @Override
   public synchronized void stop() {
     _tradeUpdaterExecutor.shutdownNow();
-    
+
     if (_tradeProducer != null) {
       _tradeProducer.removeTradeListener(this);
       _tradeProducer = null;
@@ -222,16 +222,16 @@ public class AnalyticServiceServer implements TradeListener, Lifecycle {
       _viewClient.shutdown();
       _viewClient = null;
     }
-    
+
     _isRunning.set(false);
-    
+
   }
 
   @Override
   public synchronized boolean isRunning() {
     return _isRunning.get();
   }
-  
+
   /**
    * Gets the analyticResultReceiver.
    * @return the analyticResultReceiver
@@ -244,7 +244,7 @@ public class AnalyticServiceServer implements TradeListener, Lifecycle {
    * Sets the analyticResultReceiver.
    * @param analyticResultReceiver  the analyticResultReceiver
    */
-  public void setAnalyticResultReceiver(AnalyticResultReceiver analyticResultReceiver) {
+  public void setAnalyticResultReceiver(final AnalyticResultReceiver analyticResultReceiver) {
     _analyticResultReceiver = analyticResultReceiver;
   }
 
@@ -260,42 +260,42 @@ public class AnalyticServiceServer implements TradeListener, Lifecycle {
    * Sets the viewName.
    * @param viewName  the viewName
    */
-  public void setViewName(String viewName) {
+  public void setViewName(final String viewName) {
     _viewName = viewName;
   }
 
-  
+
   private class TradeUpdaterTask implements Runnable {
-    
+
     private final Trade _trade;
-    
-    public TradeUpdaterTask(Trade trade) {
+
+    public TradeUpdaterTask(final Trade trade) {
       _trade = trade;
     }
-        
-    @Override
-    public void run() {   
-      
-      PortfolioDocument portfolioDocument = getPortfolioMaster().get(_portfolioId, VersionCorrection.LATEST);
-      LOGGER.debug("Updating portfolio {} with {}", portfolioDocument.getUniqueId(), _trade);
-      ManageablePortfolio portfolio = portfolioDocument.getPortfolio();
-      ManageablePortfolioNode root = portfolio.getRootNode();
 
-      ManageablePosition position = new ManageablePosition();
+    @Override
+    public void run() {
+
+      final PortfolioDocument portfolioDocument = getPortfolioMaster().get(_portfolioId, VersionCorrection.LATEST);
+      LOGGER.debug("Updating portfolio {} with {}", portfolioDocument.getUniqueId(), _trade);
+      final ManageablePortfolio portfolio = portfolioDocument.getPortfolio();
+      final ManageablePortfolioNode root = portfolio.getRootNode();
+
+      final ManageablePosition position = new ManageablePosition();
       position.getSecurityLink().setExternalId(_trade.getSecurityLink().getExternalId());
       position.setQuantity(_trade.getQuantity());
-      String providerIdStr = _trade.getAttributes().get(getProviderIdName());
-      ManageableTrade manageableTrade = new ManageableTrade(_trade);
+      final String providerIdStr = _trade.getAttributes().get(getProviderIdName());
+      final ManageableTrade manageableTrade = new ManageableTrade(_trade);
       if (providerIdStr != null) {
-        ExternalId providerId = ExternalId.parse(providerIdStr);
+        final ExternalId providerId = ExternalId.parse(providerIdStr);
         position.setProviderId(providerId);
         manageableTrade.setProviderId(providerId);
       }
       position.addTrade(manageableTrade);
-      PositionDocument addedPosition = getPositionMaster().add(new PositionDocument(position));
+      final PositionDocument addedPosition = getPositionMaster().add(new PositionDocument(position));
       root.addPosition(addedPosition.getUniqueId());
 
-      PortfolioDocument currentPortfolio = getPortfolioMaster().update(new PortfolioDocument(portfolio));
+      final PortfolioDocument currentPortfolio = getPortfolioMaster().update(new PortfolioDocument(portfolio));
       LOGGER.info("Portfolio ID {} updated", currentPortfolio.getUniqueId());
 
       restartViewCalculation();
@@ -315,5 +315,5 @@ public class AnalyticServiceServer implements TradeListener, Lifecycle {
       _updateLock.unlock();
     }
   }
- 
+
 }

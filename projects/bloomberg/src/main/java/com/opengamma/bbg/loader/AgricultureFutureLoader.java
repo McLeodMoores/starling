@@ -65,7 +65,7 @@ public final class AgricultureFutureLoader extends SecurityLoader {
       FIELD_ID_ISIN,
       FIELD_ID_SEDOL1,
       FIELD_FUT_VAL_PT);
-  
+
   /**
    * The valid Bloomberg future categories for Agriculture Futures
    */
@@ -75,23 +75,23 @@ public final class AgricultureFutureLoader extends SecurityLoader {
    * Creates an instance.
    * @param referenceDataProvider  the provider, not null
    */
-  public  AgricultureFutureLoader(ReferenceDataProvider referenceDataProvider) {
+  public  AgricultureFutureLoader(final ReferenceDataProvider referenceDataProvider) {
     super(LOGGER, referenceDataProvider, SecurityType.AGRICULTURE_FUTURE);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  protected ManageableSecurity createSecurity(FudgeMsg fieldData) {
-    String name = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUT_LONG_NAME), " ");
-    String expiryDate = fieldData.getString(FIELD_FUT_LAST_TRADE_DT);
-    String futureTradingHours = fieldData.getString(FIELD_FUT_TRADING_HRS);
-    String micExchangeCode = fieldData.getString(FIELD_ID_MIC_PRIM_EXCH);
-    Double unitNumber = fieldData.getDouble(FIELD_FUT_CONT_SIZE);
-    String currencyStr = fieldData.getString(FIELD_CRNCY);
-    String futureCategory = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUTURES_CATEGORY), " ");    
-    String unitName = fieldData.getString(FIELD_FUT_TRADING_UNITS);
-    String bbgUnique = fieldData.getString(FIELD_ID_BBG_UNIQUE);
-    double unitAmount = Double.valueOf(fieldData.getString(FIELD_FUT_VAL_PT));
+  protected ManageableSecurity createSecurity(final FudgeMsg fieldData) {
+    final String name = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUT_LONG_NAME), " ");
+    final String expiryDate = fieldData.getString(FIELD_FUT_LAST_TRADE_DT);
+    final String futureTradingHours = fieldData.getString(FIELD_FUT_TRADING_HRS);
+    final String micExchangeCode = fieldData.getString(FIELD_ID_MIC_PRIM_EXCH);
+    final Double unitNumber = fieldData.getDouble(FIELD_FUT_CONT_SIZE);
+    final String currencyStr = fieldData.getString(FIELD_CRNCY);
+    final String futureCategory = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUTURES_CATEGORY), " ");
+    final String unitName = fieldData.getString(FIELD_FUT_TRADING_UNITS);
+    final String bbgUnique = fieldData.getString(FIELD_ID_BBG_UNIQUE);
+    final double unitAmount = Double.valueOf(fieldData.getString(FIELD_FUT_VAL_PT));
 
     // validate params
     if (!isValidField(bbgUnique)) {
@@ -140,7 +140,7 @@ public final class AgricultureFutureLoader extends SecurityLoader {
     final AgricultureFutureSecurity security = new AgricultureFutureSecurity(expiry, micExchangeCode, micExchangeCode,
         currency, unitAmount, futureCategory);
     security.setUnitNumber(unitNumber);
-    security.setUnitName(unitName);    
+    security.setUnitName(unitName);
     security.setName(name);
     // set identifiers
     parseIdentifiers(fieldData, security);

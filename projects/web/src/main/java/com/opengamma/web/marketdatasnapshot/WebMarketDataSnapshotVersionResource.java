@@ -42,20 +42,20 @@ public class WebMarketDataSnapshotVersionResource extends AbstractWebMarketDataS
   //-------------------------------------------------------------------------
   @GET
   public String getHTML() {
-    FlexiBean out = createRootData();
+    final FlexiBean out = createRootData();
     return getFreemarker().build(HTML_DIR + "snapshotversion.ftl", out);
   }
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  public Response getJSON(@Context Request request) {
-    EntityTag etag = new EntityTag(data().getVersioned().getUniqueId().toString());
-    ResponseBuilder builder = request.evaluatePreconditions(etag);
+  public Response getJSON(@Context final Request request) {
+    final EntityTag etag = new EntityTag(data().getVersioned().getUniqueId().toString());
+    final ResponseBuilder builder = request.evaluatePreconditions(etag);
     if (builder != null) {
       return builder.build();
     }
-    FlexiBean out = createRootData();
-    String json = getFreemarker().build(JSON_DIR + "snapshot.ftl", out);
+    final FlexiBean out = createRootData();
+    final String json = getFreemarker().build(JSON_DIR + "snapshot.ftl", out);
     return Response.ok(json).tag(etag).build();
   }
 
@@ -64,10 +64,11 @@ public class WebMarketDataSnapshotVersionResource extends AbstractWebMarketDataS
    * Creates the output root data.
    * @return the output root data, not null
    */
+  @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
-    MarketDataSnapshotDocument latestDoc = data().getSnapshot();
-    MarketDataSnapshotDocument versionedSnapshot = data().getVersioned();
+    final FlexiBean out = super.createRootData();
+    final MarketDataSnapshotDocument latestDoc = data().getSnapshot();
+    final MarketDataSnapshotDocument versionedSnapshot = data().getVersioned();
     out.put("latestSnapshotDoc", latestDoc);
     out.put("latestSnapshot", latestDoc.getSnapshot());
     out.put("snapshotDoc", versionedSnapshot);
@@ -94,8 +95,8 @@ public class WebMarketDataSnapshotVersionResource extends AbstractWebMarketDataS
    * @return the URI, not null
    */
   public static URI uri(final WebMarketDataSnapshotData data, final UniqueId overrideVersionId) {
-    String snapshotId = data.getBestSnapshotUriId(null);
-    String versionId = StringUtils.defaultString(overrideVersionId != null ? overrideVersionId.getVersion() : data.getUriVersionId());
+    final String snapshotId = data.getBestSnapshotUriId(null);
+    final String versionId = StringUtils.defaultString(overrideVersionId != null ? overrideVersionId.getVersion() : data.getUriVersionId());
     return data.getUriInfo().getBaseUriBuilder().path(WebMarketDataSnapshotVersionResource.class).build(snapshotId, versionId);
   }
 

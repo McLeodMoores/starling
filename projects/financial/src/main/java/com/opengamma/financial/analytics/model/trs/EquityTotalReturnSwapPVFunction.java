@@ -54,21 +54,21 @@ public class EquityTotalReturnSwapPVFunction extends EquityTotalReturnSwapFuncti
 
       @SuppressWarnings("synthetic-access")
       @Override
-      protected Set<ComputedValue> getValues(FunctionExecutionContext executionContext,
-                                             FunctionInputs inputs,
-                                             ComputationTarget target,
-                                             Set<ValueRequirement> desiredValues,
-                                             InstrumentDerivative derivative,
-                                             FXMatrix fxMatrix) {
-        ValueProperties properties = Iterables.getOnlyElement(desiredValues).getConstraints().copy().get();
-        ValueSpecification spec = new ValueSpecification(PRESENT_VALUE, target.toSpecification(), properties);
-        EquityTrsDataBundle data = getDataBundle(inputs, fxMatrix);
-        MultipleCurrencyAmount pv = derivative.accept(CALCULATOR, data);
-        String expectedCurrency = spec.getProperty(CURRENCY);
+      protected Set<ComputedValue> getValues(final FunctionExecutionContext executionContext,
+                                             final FunctionInputs inputs,
+                                             final ComputationTarget target,
+                                             final Set<ValueRequirement> desiredValues,
+                                             final InstrumentDerivative derivative,
+                                             final FXMatrix fxMatrix) {
+        final ValueProperties properties = Iterables.getOnlyElement(desiredValues).getConstraints().copy().get();
+        final ValueSpecification spec = new ValueSpecification(PRESENT_VALUE, target.toSpecification(), properties);
+        final EquityTrsDataBundle data = getDataBundle(inputs, fxMatrix);
+        final MultipleCurrencyAmount pv = derivative.accept(CALCULATOR, data);
+        final String expectedCurrency = spec.getProperty(CURRENCY);
         if (expectedCurrency == null) {
           throw new OpenGammaRuntimeException("Expected currency is null");
         }
-        double pvConverted = fxMatrix.convert(pv, Currency.of(expectedCurrency)).getAmount();
+        final double pvConverted = fxMatrix.convert(pv, Currency.of(expectedCurrency)).getAmount();
         return Collections.singleton(new ComputedValue(spec, pvConverted));
       }
     };

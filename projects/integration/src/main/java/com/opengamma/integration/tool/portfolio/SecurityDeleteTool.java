@@ -47,10 +47,10 @@ public class SecurityDeleteTool extends AbstractTool<ToolContext> {
   //-------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
+   *
    * @param args  the standard tool arguments, not null
    */
-  public static void main(String[] args) { //CSIGNORE
+  public static void main(final String[] args) { //CSIGNORE
     new SecurityDeleteTool().invokeAndTerminate(args);
   }
 
@@ -59,16 +59,16 @@ public class SecurityDeleteTool extends AbstractTool<ToolContext> {
    * Deletes securities from the specified sec master.
    */
   @Override
-  protected void doRun() {    
-    SecuritySearchRequest securitySearchRequest = new SecuritySearchRequest();
+  protected void doRun() {
+    final SecuritySearchRequest securitySearchRequest = new SecuritySearchRequest();
 
     if (getCommandLine().hasOption(SECURITY_NAMES_OPT)) {
       securitySearchRequest.setName(
           getCommandLine().getOptionValue(SECURITY_NAMES_OPT));
     }
     if (getCommandLine().hasOption(SECURITY_IDS_OPT)) {
-      List<ObjectId> ids = new ArrayList<ObjectId>();
-      for (String s : getCommandLine().getOptionValues(SECURITY_IDS_OPT)) {
+      final List<ObjectId> ids = new ArrayList<>();
+      for (final String s : getCommandLine().getOptionValues(SECURITY_IDS_OPT)) {
         ids.add(ObjectId.parse(s));
       }
       securitySearchRequest.setObjectIds(ids);
@@ -81,15 +81,15 @@ public class SecurityDeleteTool extends AbstractTool<ToolContext> {
       securitySearchRequest.setExternalIdValue(
           getCommandLine().getOptionValue(EXTERNAL_ID_VALUES_OPT));
     }
-    
-    SecurityMaster securityMaster = getToolContext().getSecurityMaster();
-    for (SecurityDocument securityDocument : SecuritySearchIterator.iterable(securityMaster, securitySearchRequest)) {
+
+    final SecurityMaster securityMaster = getToolContext().getSecurityMaster();
+    for (final SecurityDocument securityDocument : SecuritySearchIterator.iterable(securityMaster, securitySearchRequest)) {
       if (getCommandLine().hasOption(WRITE_OPT)) {
         securityMaster.remove(securityDocument.getUniqueId());
-        LOGGER.warn("Deleted " + securityDocument.getSecurity().getUniqueId() + 
+        LOGGER.warn("Deleted " + securityDocument.getSecurity().getUniqueId() +
             " (" + securityDocument.getSecurity().getName() + ")");
       } else {
-        LOGGER.warn("Matched " + securityDocument.getSecurity().getUniqueId() + 
+        LOGGER.warn("Matched " + securityDocument.getSecurity().getUniqueId() +
             " (" + securityDocument.getSecurity().getName() + ")");
       }
 
@@ -97,41 +97,41 @@ public class SecurityDeleteTool extends AbstractTool<ToolContext> {
   }
 
   @Override
-  protected Options createOptions(boolean contextProvided) {
-    
-    Options options = super.createOptions(contextProvided);
-    
-    Option securityNamesOption = new Option(
+  protected Options createOptions(final boolean contextProvided) {
+
+    final Options options = super.createOptions(contextProvided);
+
+    final Option securityNamesOption = new Option(
         SECURITY_NAMES_OPT, "name", true, "Regular expression to match security names");
     options.addOption(securityNamesOption);
 
-    Option securityIdsOption = new Option(
-        SECURITY_IDS_OPT, "securityid", true, "Security IDs to match");    
+    final Option securityIdsOption = new Option(
+        SECURITY_IDS_OPT, "securityid", true, "Security IDs to match");
     options.addOption(securityIdsOption);
 
 //    OptionGroup group = new OptionGroup();
 //    group.addOption(securityIdsOption);
 //    group.addOption(securityNamesOption);
-//    group.setRequired(true);    
+//    group.setRequired(true);
 //    options.addOptionGroup(group);
 
-    Option externalIdSchemesOption = new Option(
-        EXTERNAL_ID_SCHEMES_OPT, "extscheme", true, 
+    final Option externalIdSchemesOption = new Option(
+        EXTERNAL_ID_SCHEMES_OPT, "extscheme", true,
         "Regular expression to match external ID schemes");
     options.addOption(externalIdSchemesOption);
 
-    Option externalIdValuesOption = new Option(
-        EXTERNAL_ID_VALUES_OPT, "extvalue", true, 
+    final Option externalIdValuesOption = new Option(
+        EXTERNAL_ID_VALUES_OPT, "extvalue", true,
         "Regular expression to match external ID values");
     options.addOption(externalIdValuesOption);
 
-    Option writeOption = new Option(
-        WRITE_OPT, "write", false, 
+    final Option writeOption = new Option(
+        WRITE_OPT, "write", false,
         "Actually persist the deletions");
     options.addOption(writeOption);
 
-    Option verboseOption = new Option(
-        VERBOSE_OPT, "verbose", false, 
+    final Option verboseOption = new Option(
+        VERBOSE_OPT, "verbose", false,
         "Displays progress messages on the terminal");
     options.addOption(verboseOption);
 

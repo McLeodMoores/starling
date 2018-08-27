@@ -24,7 +24,7 @@ import com.opengamma.util.async.AsynchronousExecution;
 
 /**
  * Provides sensitivity of EquitySecurity price with respect to itself, i.e. always unity. This is essential in order to show aggregate position in this underlying in a derivatives portfolio.
- * 
+ *
  * @author casey
  */
 public class EquitySecurityDeltaFunction extends AbstractFunction.NonCompiledInvoker {
@@ -34,7 +34,7 @@ public class EquitySecurityDeltaFunction extends AbstractFunction.NonCompiledInv
   }
 
   @Override
-  public Set<ComputedValue> execute(FunctionExecutionContext executionContext, FunctionInputs inputs, ComputationTarget target, Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final ValueSpecification valueSpecification = new ValueSpecification(getValueRequirementName(), target.toSpecification(), desiredValue.getConstraints());
     final ComputedValue result = new ComputedValue(valueSpecification, 1.0);
@@ -47,12 +47,12 @@ public class EquitySecurityDeltaFunction extends AbstractFunction.NonCompiledInv
   }
 
   @Override
-  public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
     return Collections.singleton(new ValueSpecification(getValueRequirementName(), target.toSpecification(), createValueProperties().get()));
   }
 
   @Override
-  public Set<ValueRequirement> getRequirements(FunctionCompilationContext context, ComputationTarget target, ValueRequirement desiredValue) {
+  public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     return Collections.emptySet();
   }
 

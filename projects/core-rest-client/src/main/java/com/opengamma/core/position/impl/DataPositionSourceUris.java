@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.position.impl;
@@ -21,13 +21,13 @@ public class DataPositionSourceUris {
 
   /**
    * Builds a URI.
-   * 
+   *
    * @param baseUri  the base URI, not null
    * @param uniqueId  the unique identifier, may be null
    * @return the URI, not null
    */
-  public static URI uriGetPortfolio(URI baseUri, UniqueId uniqueId) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("portfolios/{portfolioId}");
+  public static URI uriGetPortfolio(final URI baseUri, final UniqueId uniqueId) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("portfolios/{portfolioId}");
     if (uniqueId.getVersion() != null) {
       bld.queryParam("version", uniqueId.getVersion());
     }
@@ -36,14 +36,14 @@ public class DataPositionSourceUris {
 
   /**
    * Builds a URI.
-   * 
+   *
    * @param baseUri  the base URI, not null
    * @param objectId  the object identifier, may be null
    * @param vc  the version-correction, null means latest
    * @return the URI, not null
    */
-  public static URI uriGetPortfolio(URI baseUri, ObjectId objectId, VersionCorrection vc) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("portfolios/{portfolioId}");
+  public static URI uriGetPortfolio(final URI baseUri, final ObjectId objectId, final VersionCorrection vc) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("portfolios/{portfolioId}");
     if (vc != null) {
       bld.queryParam("versionAsOf", vc.getVersionAsOfString());
       bld.queryParam("correctedTo", vc.getCorrectedToString());
@@ -53,13 +53,13 @@ public class DataPositionSourceUris {
 
   /**
    * Builds a URI.
-   * 
+   *
    * @param baseUri  the base URI, not null
    * @param uniqueId  the unique identifier, may be null
    * @return the URI, not null
    */
-  public static URI uriGetNode(URI baseUri, UniqueId uniqueId) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("nodes/{nodeId}");
+  public static URI uriGetNode(final URI baseUri, final UniqueId uniqueId) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("nodes/{nodeId}");
     if (uniqueId.getVersion() != null) {
       bld.queryParam("version", uniqueId.getVersion());
     }
@@ -68,13 +68,13 @@ public class DataPositionSourceUris {
 
   /**
    * Builds a URI.
-   * 
+   *
    * @param baseUri  the base URI, not null
    * @param uniqueId  the unique identifier, may be null
    * @return the URI, not null
    */
-  public static URI uriGetPosition(URI baseUri, UniqueId uniqueId) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("positions/{positionId}");
+  public static URI uriGetPosition(final URI baseUri, final UniqueId uniqueId) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("positions/{positionId}");
     if (uniqueId.getVersion() != null) {
       bld.queryParam("version", uniqueId.getVersion());
     }
@@ -82,7 +82,7 @@ public class DataPositionSourceUris {
   }
 
   public static URI uriGetPosition(final URI baseUri, final ObjectId objectId, final VersionCorrection versionCorrection) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("positions/{positionId}");
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("positions/{positionId}");
     if (versionCorrection != null) {
       bld.queryParam("versionAsOf", versionCorrection.getVersionAsOfString());
       bld.queryParam("correctedTo", versionCorrection.getCorrectedToString());
@@ -92,13 +92,13 @@ public class DataPositionSourceUris {
 
   /**
    * Builds a URI.
-   * 
+   *
    * @param baseUri  the base URI, not null
    * @param uniqueId  the unique identifier, may be null
    * @return the URI, not null
    */
-  public static URI uriGetTrade(URI baseUri, UniqueId uniqueId) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("trades/{tradeId}");
+  public static URI uriGetTrade(final URI baseUri, final UniqueId uniqueId) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("trades/{tradeId}");
     if (uniqueId.getVersion() != null) {
       bld.queryParam("version", uniqueId.getVersion());
     }

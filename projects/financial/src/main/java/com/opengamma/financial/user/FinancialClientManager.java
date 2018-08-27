@@ -25,21 +25,21 @@ public class FinancialClientManager {
   /**
    * The map of clients.
    */
-  private final ConcurrentHashMap<String, FinancialClient> _clientMap = new ConcurrentHashMap<String, FinancialClient>();
+  private final ConcurrentHashMap<String, FinancialClient> _clientMap = new ConcurrentHashMap<>();
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param user  the user, not null
    */
-  public FinancialClientManager(FinancialUser user) {
+  public FinancialClientManager(final FinancialUser user) {
     _user = user;
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the user.
-   * 
+   *
    * @return the user, not null
    */
   public FinancialUser getUser() {
@@ -48,7 +48,7 @@ public class FinancialClientManager {
 
   /**
    * Gets the tracker.
-   * 
+   *
    * @return the tracker, not null
    */
   public FinancialClientTracker getClientTracker() {
@@ -57,7 +57,7 @@ public class FinancialClientManager {
 
   /**
    * Gets the tracker.
-   * 
+   *
    * @return the tracker, not null
    */
   public FinancialUserDataTracker getUserDataTracker() {
@@ -66,7 +66,7 @@ public class FinancialClientManager {
 
   /**
    * Gets the user name.
-   * 
+   *
    * @return the user name, not null
    */
   public String getUserName() {
@@ -75,7 +75,7 @@ public class FinancialClientManager {
 
   /**
    * Gets the services.
-   * 
+   *
    * @return the services, not null
    */
   public FinancialUserServices getServices() {
@@ -85,25 +85,25 @@ public class FinancialClientManager {
   //-------------------------------------------------------------------------
   /**
    * Gets a client.
-   * 
+   *
    * @param clientName  the client name, not null
    * @return the client, null if not found
    */
-  public FinancialClient getClient(String clientName) {
+  public FinancialClient getClient(final String clientName) {
     return _clientMap.get(clientName);
   }
 
   /**
    * Gets a client, creating if it does not exist.
-   * 
+   *
    * @param clientName  the client name, not null
    * @return the client, not null
    */
-  public FinancialClient getOrCreateClient(String clientName) {
+  public FinancialClient getOrCreateClient(final String clientName) {
     FinancialClient client = _clientMap.get(clientName);
     if (client == null) {
       getClientTracker().clientCreated(getUserName(), clientName);
-      FinancialClient freshClient = new FinancialClient(this, clientName);
+      final FinancialClient freshClient = new FinancialClient(this, clientName);
       client = _clientMap.putIfAbsent(clientName, freshClient);
       if (client == null) {
         client = freshClient;
@@ -116,7 +116,7 @@ public class FinancialClientManager {
   /**
    * Discards any clients that haven't been accessed since the given timestamp. The local
    * last accessed time is set to the timestamp of the most recently accessed client.
-   * 
+   *
    * @param timestamp  any client resources with a last accessed time before this will be removed, not null
    * @return the number of active clients
    */

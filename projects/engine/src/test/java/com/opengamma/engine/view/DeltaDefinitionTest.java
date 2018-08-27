@@ -19,46 +19,46 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Test DeltaDefinition. 
+ * Test DeltaDefinition.
  */
 @Test(groups = TestGroup.UNIT)
 public class DeltaDefinitionTest {
-  
+
   public void testEmptyDefinition() {
-    DeltaDefinition dd = new DeltaDefinition();
+    final DeltaDefinition dd = new DeltaDefinition();
     doBasicTests(dd);
   }
-  
+
   public void testWithCustomNumberComparer() {
-    DeltaDefinition dd = new DeltaDefinition();
+    final DeltaDefinition dd = new DeltaDefinition();
     dd.setNumberComparer(new NumberDeltaComparer(3));
-    
+
     doBasicTests(dd);
-    
-    // Just check that the comparer is being used - its own tests check that it actually works 
+
+    // Just check that the comparer is being used - its own tests check that it actually works
     assertFalse(dd.isDelta(createComputedValue(123.1234567), createComputedValue(123.1239999)));
     assertTrue(dd.isDelta(createComputedValue(123.1234567), createComputedValue(123.12555555)));
   }
-  
-  private void doBasicTests(DeltaDefinition dd) {
+
+  private void doBasicTests(final DeltaDefinition dd) {
     assertFalse(dd.isDelta(null, null));
     assertFalse(dd.isDelta(createComputedValue("abc"), createComputedValue("abc")));
     assertFalse(dd.isDelta(createComputedValue(123.0), createComputedValue(123.0)));
     assertTrue(dd.isDelta(createComputedValue(123.0), createComputedValue(123.1)));
-    
+
     // Different specifications only should indicate a delta
     assertTrue(dd.isDelta(createComputedValue("test1", 123), createComputedValue("test2", 123)));
   }
-  
-  private ComputedValue createComputedValue(Object value) {
+
+  private ComputedValue createComputedValue(final Object value) {
     return createComputedValue("test", value);
   }
-  
-  private ComputedValue createComputedValue(String valueName, Object value) {
+
+  private ComputedValue createComputedValue(final String valueName, final Object value) {
     return new ComputedValue(createValueSpecification(valueName), value);
   }
-  
-  private ValueSpecification createValueSpecification(String valueName) {
+
+  private ValueSpecification createValueSpecification(final String valueName) {
     return new ValueSpecification(valueName, ComputationTargetSpecification.of(UniqueId.of("foo", "bar")), ValueProperties.with(ValuePropertyNames.FUNCTION, "mockFunctionId").get());
   }
 }

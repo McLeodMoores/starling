@@ -20,9 +20,9 @@ import com.opengamma.engine.value.ValueSpecification;
   }
 
   @Override
-  public Object formatCell(PresentValueForexBlackVolatilitySensitivity value,
-                           ValueSpecification valueSpec,
-                           Object inlineKey) {
+  public Object formatCell(final PresentValueForexBlackVolatilitySensitivity value,
+                           final ValueSpecification valueSpec,
+                           final Object inlineKey) {
     return "Vector (" + value.getVega().getMap().size() + ")";
   }
 

@@ -28,12 +28,12 @@ import com.opengamma.util.ArgumentChecker;
  */
 public final class RussellFutureExpiryCalculator implements ExchangeTradedInstrumentExpiryCalculator {
 
-  private static final Set<Month> QUARTERLY_CYCLE_MONTHS = EnumSet.of(Month.MARCH, Month.JUNE, Month.SEPTEMBER, Month.DECEMBER); 
+  private static final Set<Month> QUARTERLY_CYCLE_MONTHS = EnumSet.of(Month.MARCH, Month.JUNE, Month.SEPTEMBER, Month.DECEMBER);
   private static final NextQuarterAdjuster NEXT_QUARTER_ADJUSTER = new NextQuarterAdjuster(QUARTERLY_CYCLE_MONTHS);
   private static final TemporalAdjuster DAY_OF_MONTH_ADJUSTER = TemporalAdjusters.dayOfWeekInMonth(3, DayOfWeek.FRIDAY);
 
   private static final RussellFutureExpiryCalculator INSTANCE = new RussellFutureExpiryCalculator();
-  
+
   /** @return the singleton instance of the calculator, not null */
   public static RussellFutureExpiryCalculator getInstance() {
     return INSTANCE;
@@ -44,8 +44,8 @@ public final class RussellFutureExpiryCalculator implements ExchangeTradedInstru
    */
   private RussellFutureExpiryCalculator() {
   }
-  
-  
+
+
   @Override
   /**
    * Quarterly expiries along March cycle
@@ -53,7 +53,7 @@ public final class RussellFutureExpiryCalculator implements ExchangeTradedInstru
    * @param valDate The date from which to start
    * @return the expiry date of the nth option
    */
-  public LocalDate getExpiryDate(int n, LocalDate today, Calendar holidayCalendar) {
+  public LocalDate getExpiryDate(final int n, final LocalDate today, final Calendar holidayCalendar) {
     ArgumentChecker.notNegativeOrZero(n, "nth expiry");
     ArgumentChecker.notNull(today, "date");
     ArgumentChecker.notNull(holidayCalendar, "holidayCalendar");
@@ -62,19 +62,19 @@ public final class RussellFutureExpiryCalculator implements ExchangeTradedInstru
     if (today.isAfter(thirdFriday)) { // If it is not on or after valuationDate...
       thirdFriday = getThirdFriday(today.plusMonths(1), holidayCalendar);
     }
-    int nQuartersRemaining = QUARTERLY_CYCLE_MONTHS.contains(Month.from(thirdFriday)) ? n - 1 : n;
+    final int nQuartersRemaining = QUARTERLY_CYCLE_MONTHS.contains(Month.from(thirdFriday)) ? n - 1 : n;
     if (nQuartersRemaining == 0) {
       return thirdFriday;
     }
     return getQuarterlyExpiry(nQuartersRemaining, thirdFriday, holidayCalendar);
-    
+
   }
 
   @Override
-  public LocalDate getExpiryMonth(int n, LocalDate today) {
+  public LocalDate getExpiryMonth(final int n, final LocalDate today) {
     throw new OpenGammaRuntimeException("Russell 2000 Index Mini Futures do not have monthly expiries");
   }
-  
+
   // Return expiryDate that is the 3rd Friday (or previous good day if holiday) of month in which date falls
   private LocalDate getThirdFriday(final LocalDate date, final Calendar holidayCalendar) {
     // Compute the expiry of valuationDate's month
@@ -84,8 +84,8 @@ public final class RussellFutureExpiryCalculator implements ExchangeTradedInstru
     }
     return following3rdFriday; // expiry is 30 days before
   }
-  
-  private LocalDate getQuarterlyExpiry(int nthExpiryAfterSerialContracts, LocalDate lastSerialExpiry, Calendar holidayCalendar) {
+
+  private LocalDate getQuarterlyExpiry(final int nthExpiryAfterSerialContracts, final LocalDate lastSerialExpiry, final Calendar holidayCalendar) {
     // First find the nth quarter after the lastSerialExpiry
     LocalDate nthExpiryMonth = lastSerialExpiry;
     for (int n = nthExpiryAfterSerialContracts; n > 0; n--) {
@@ -94,7 +94,7 @@ public final class RussellFutureExpiryCalculator implements ExchangeTradedInstru
     // Then find the expiry date in that month
     return getThirdFriday(nthExpiryMonth, holidayCalendar);
   }
-  
+
   @Override
   public String getName() {
     return this.getClass().getName();

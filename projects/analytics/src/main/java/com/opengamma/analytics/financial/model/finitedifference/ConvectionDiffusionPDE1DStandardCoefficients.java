@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.finitedifference;
@@ -51,14 +51,14 @@ public class ConvectionDiffusionPDE1DStandardCoefficients implements ConvectionD
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_a == null) ? 0 : _a.hashCode());
-    result = prime * result + ((_b == null) ? 0 : _b.hashCode());
-    result = prime * result + ((_c == null) ? 0 : _c.hashCode());
+    result = prime * result + (_a == null ? 0 : _a.hashCode());
+    result = prime * result + (_b == null ? 0 : _b.hashCode());
+    result = prime * result + (_c == null ? 0 : _c.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -68,7 +68,7 @@ public class ConvectionDiffusionPDE1DStandardCoefficients implements ConvectionD
     if (getClass() != obj.getClass()) {
       return false;
     }
-    ConvectionDiffusionPDE1DStandardCoefficients other = (ConvectionDiffusionPDE1DStandardCoefficients) obj;
+    final ConvectionDiffusionPDE1DStandardCoefficients other = (ConvectionDiffusionPDE1DStandardCoefficients) obj;
     if (_a == null) {
       if (other._a != null) {
         return false;

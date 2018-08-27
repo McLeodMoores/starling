@@ -101,7 +101,7 @@ public class ManageableLegalEntity
    * @param name the name of the legal entity, not null
    * @param externalIdBundle the bundle of identifiers that define the legal entity, not null
    */
-  public ManageableLegalEntity(String name, ExternalIdBundle externalIdBundle) {
+  public ManageableLegalEntity(final String name, final ExternalIdBundle externalIdBundle) {
     ArgumentChecker.notNull(name, "name");
     ArgumentChecker.notNull(externalIdBundle, "externalIdBundle");
     setName(name);
@@ -115,7 +115,7 @@ public class ManageableLegalEntity
    * @param name the name of the legal entity, not null
    * @param externalIdBundle the bundle of identifiers that define the legal entity, not null
    */
-  protected ManageableLegalEntity(UniqueId uniqueId, String name, ExternalIdBundle externalIdBundle) {
+  protected ManageableLegalEntity(final UniqueId uniqueId, final String name, final ExternalIdBundle externalIdBundle) {
     ArgumentChecker.notNull(name, "name");
     ArgumentChecker.notNull(externalIdBundle, "externalIdBundle");
     setUniqueId(uniqueId);
@@ -130,19 +130,19 @@ public class ManageableLegalEntity
    *
    * @param legalEntityId the identifier to add, not null
    */
-  public void addExternalId(ExternalId legalEntityId) {
+  public void addExternalId(final ExternalId legalEntityId) {
     setExternalIdBundle(getExternalIdBundle().withExternalId(legalEntityId));
   }
 
   @Override
-  public void addAttribute(String key, String value) {
+  public void addAttribute(final String key, final String value) {
     ArgumentChecker.notNull(key, "key");
     ArgumentChecker.notNull(value, "value");
     _attributes.put(key, value);
   }
 
   @Override
-  public void addDetail(String key, String value) {
+  public void addDetail(final String key, final String value) {
     ArgumentChecker.notNull(key, "key");
     ArgumentChecker.notNull(value, "value");
     _details.put(key, value);

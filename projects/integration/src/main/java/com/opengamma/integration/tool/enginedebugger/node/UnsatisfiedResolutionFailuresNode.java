@@ -21,21 +21,21 @@ public class UnsatisfiedResolutionFailuresNode implements TreeTableNode {
 
   private static final String NAME = "UnsatisfiedResolutionFailures";
   @SuppressWarnings("unused")
-  private Object _parent;
-  private List<ResolutionFailure> _failures;
-  private List<Collection<Object>> _expandedFailures;
+  private final Object _parent;
+  private final List<ResolutionFailure> _failures;
+  private final List<Collection<Object>> _expandedFailures;
 
-  public UnsatisfiedResolutionFailuresNode(Object parent, Set<ResolutionFailure> failures) {
+  public UnsatisfiedResolutionFailuresNode(final Object parent, final Set<ResolutionFailure> failures) {
     _parent = parent;
-    _failures = new ArrayList<ResolutionFailure>(failures);
-    _expandedFailures = new ArrayList<Collection<Object>>();
-    for (ResolutionFailure failure : _failures) {
+    _failures = new ArrayList<>(failures);
+    _expandedFailures = new ArrayList<>();
+    for (final ResolutionFailure failure : _failures) {
       _expandedFailures.add(failure.accept(new ResolutionFailureChildNodeCreatingVisitor((ResolutionFailureImpl) failure)));
     }
   }
 
   @Override
-  public Object getChildAt(int index) {
+  public Object getChildAt(final int index) {
     return _expandedFailures.get(index);
   }
 
@@ -45,12 +45,12 @@ public class UnsatisfiedResolutionFailuresNode implements TreeTableNode {
   }
 
   @Override
-  public int getIndexOfChild(Object child) {
+  public int getIndexOfChild(final Object child) {
     return _expandedFailures.indexOf(child);
   }
 
   @Override
-  public Object getColumn(int column) {
+  public Object getColumn(final int column) {
     if (column == 0) {
       return NAME;
     }
@@ -61,12 +61,12 @@ public class UnsatisfiedResolutionFailuresNode implements TreeTableNode {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_failures == null) ? 0 : _failures.hashCode());
+    result = prime * result + (_failures == null ? 0 : _failures.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -76,7 +76,7 @@ public class UnsatisfiedResolutionFailuresNode implements TreeTableNode {
     if (!(obj instanceof UnsatisfiedResolutionFailuresNode)) {
       return false;
     }
-    UnsatisfiedResolutionFailuresNode other = (UnsatisfiedResolutionFailuresNode) obj;
+    final UnsatisfiedResolutionFailuresNode other = (UnsatisfiedResolutionFailuresNode) obj;
     if (_failures == null) {
       if (other._failures != null) {
         return false;

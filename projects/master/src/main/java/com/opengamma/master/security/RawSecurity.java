@@ -57,34 +57,34 @@ public class RawSecurity extends ManageableSecurity {
 
   /**
    * Creates an instance with a security type.
-   * 
+   *
    * @param securityType  the security type, not null
    */
-  public RawSecurity(String securityType) {
+  public RawSecurity(final String securityType) {
     super(securityType);
   }
 
   /**
    * Creates an instance with a security type.
-   * 
+   *
    * @param securityType  the security type, not null
    * @param rawData  the raw data, assigned, not null
    */
-  public RawSecurity(String securityType, byte[] rawData) {
+  public RawSecurity(final String securityType, final byte[] rawData) {
     super(securityType);
     setRawData(rawData);
   }
 
   /**
    * Creates a fully populated instance.
-   * 
+   *
    * @param uniqueId  the security unique identifier, may be null
    * @param name  the display name, not null
    * @param securityType  the security type, not null
    * @param bundle  the security external identifier bundle, not null
    * @param rawData  the raw data, assigned, not null
    */
-  public RawSecurity(UniqueId uniqueId, String name, String securityType, ExternalIdBundle bundle, byte[] rawData) {
+  public RawSecurity(final UniqueId uniqueId, final String name, final String securityType, final ExternalIdBundle bundle, final byte[] rawData) {
     super(uniqueId, name, securityType, bundle);
     setRawData(rawData);
   }

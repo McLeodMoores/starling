@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.curve;
@@ -25,7 +25,7 @@ import com.opengamma.util.ParallelArrayBinarySort;
 
 /**
  * A curve that is defined by a set of nodal points (i.e. <i>x-y</i> data) and an interpolator
- * to return values of <i>y</i> for values of <i>x</i> that do not lie on nodal <i>x</i> values. 
+ * to return values of <i>y</i> for values of <i>x</i> that do not lie on nodal <i>x</i> values.
  * One extra node point with a set value is added (called anchor point).
  * The value is often 0.0 (rate anchor) or 1.0 (discount factor anchor).
  * This is used in particular for spread curves; without anchor points, each curve in the
@@ -45,21 +45,21 @@ public final class DoublesCurveInterpolatedAnchor extends InterpolatedDoublesCur
   //-------------------------------------------------------------------------
   /**
    * Private constructor.
-   * 
+   *
    * @param xData The sorted xData, including the anchor.
    * @param yData The yData, including the anchor.
    * @param anchorIndex The index in the xData at which the anchor is located.
    * @param interpolator The interpolator.
    * @param name The curve name.
    */
-  private DoublesCurveInterpolatedAnchor(double[] xData, double[] yData, int anchorIndex, Interpolator1D interpolator, String name) {
+  private DoublesCurveInterpolatedAnchor(final double[] xData, final double[] yData, final int anchorIndex, final Interpolator1D interpolator, final String name) {
     super(xData, yData, interpolator, true, name);
     _anchorIndex = anchorIndex;
   }
 
   /**
    * Constructor.
-   * 
+   *
    * @param xData The x data without the anchor.
    * @param yData The y data.
    * @param anchor The anchor point. Should not be in xData.
@@ -67,24 +67,24 @@ public final class DoublesCurveInterpolatedAnchor extends InterpolatedDoublesCur
    * @param name The curve name.
    * @return The curve.
    */
-  public static DoublesCurveInterpolatedAnchor from(double[] xData, double[] yData, double anchor, Interpolator1D interpolator, String name) {
+  public static DoublesCurveInterpolatedAnchor from(final double[] xData, final double[] yData, final double anchor, final Interpolator1D interpolator, final String name) {
     ArgumentChecker.notNull(xData, "X data");
-    int xLength = xData.length;
+    final int xLength = xData.length;
     ArgumentChecker.notNull(yData, "Y data");
     ArgumentChecker.isTrue(xLength == yData.length, "Data of incorrect length.");
-    double[] xExtended = new double[xLength + 1];
-    double[] yExtended = new double[xLength + 1];
+    final double[] xExtended = new double[xLength + 1];
+    final double[] yExtended = new double[xLength + 1];
     System.arraycopy(xData, 0, xExtended, 0, xLength);
     xExtended[xLength] = anchor;
     System.arraycopy(yData, 0, yExtended, 0, xLength);
     ParallelArrayBinarySort.parallelBinarySort(xExtended, yExtended);
-    int anchorIndex = ArrayUtils.indexOf(xExtended, anchor);
+    final int anchorIndex = ArrayUtils.indexOf(xExtended, anchor);
     return new DoublesCurveInterpolatedAnchor(xExtended, yExtended, anchorIndex, interpolator, name);
   }
 
   /**
    * Constructor.
-   * 
+   *
    * @param xData The x data without the anchor.
    * @param yData The y data.
    * @param anchor The anchor point. Should not be in xData.
@@ -93,19 +93,19 @@ public final class DoublesCurveInterpolatedAnchor extends InterpolatedDoublesCur
    * @param name The curve name.
    * @return The curve.
    */
-  public static DoublesCurveInterpolatedAnchor from(double[] xData, double[] yData, double anchor, double anchorValue, Interpolator1D interpolator, String name) {
+  public static DoublesCurveInterpolatedAnchor from(final double[] xData, final double[] yData, final double anchor, final double anchorValue, final Interpolator1D interpolator, final String name) {
     ArgumentChecker.notNull(xData, "X data");
-    int xLength = xData.length;
+    final int xLength = xData.length;
     ArgumentChecker.notNull(yData, "Y data");
     ArgumentChecker.isTrue(xLength == yData.length, "Data of incorrect length.");
-    double[] xExtended = new double[xLength + 1];
-    double[] yExtended = new double[xLength + 1];
+    final double[] xExtended = new double[xLength + 1];
+    final double[] yExtended = new double[xLength + 1];
     System.arraycopy(xData, 0, xExtended, 0, xLength);
     xExtended[xLength] = anchor;
     System.arraycopy(yData, 0, yExtended, 0, xLength);
     yExtended[xLength] = anchorValue;
     ParallelArrayBinarySort.parallelBinarySort(xExtended, yExtended);
-    int anchorIndex = ArrayUtils.indexOf(xExtended, anchor);
+    final int anchorIndex = ArrayUtils.indexOf(xExtended, anchor);
     return new DoublesCurveInterpolatedAnchor(xExtended, yExtended, anchorIndex, interpolator, name);
   }
 
@@ -119,7 +119,7 @@ public final class DoublesCurveInterpolatedAnchor extends InterpolatedDoublesCur
   //-------------------------------------------------------------------------
   /**
    * Gets the anchor index.
-   * 
+   *
    * @return the index
    */
   public int getAnchorIndex() {
@@ -133,15 +133,15 @@ public final class DoublesCurveInterpolatedAnchor extends InterpolatedDoublesCur
 
   /**
    * The sensitivity is the sensitivity of the underlying interpolated .
-   * 
+   *
    * @param x  the value for which the sensitivity is computed, not null
    * @return the sensitivity, not null
    */
   @Override
-  public Double[] getYValueParameterSensitivity(Double x) {
+  public Double[] getYValueParameterSensitivity(final Double x) {
     ArgumentChecker.notNull(x, "x");
-    Double[] sensitivityWithAnchor = super.getYValueParameterSensitivity(x);
-    Double[] sensitivity = new Double[sensitivityWithAnchor.length - 1];
+    final Double[] sensitivityWithAnchor = super.getYValueParameterSensitivity(x);
+    final Double[] sensitivity = new Double[sensitivityWithAnchor.length - 1];
     System.arraycopy(sensitivityWithAnchor, 0, sensitivity, 0, _anchorIndex);
     System.arraycopy(sensitivityWithAnchor, _anchorIndex + 1, sensitivity, _anchorIndex, sensitivityWithAnchor.length - _anchorIndex - 1);
     return sensitivity;
@@ -149,7 +149,7 @@ public final class DoublesCurveInterpolatedAnchor extends InterpolatedDoublesCur
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -159,7 +159,7 @@ public final class DoublesCurveInterpolatedAnchor extends InterpolatedDoublesCur
     if (getClass() != obj.getClass()) {
       return false;
     }
-    DoublesCurveInterpolatedAnchor other = (DoublesCurveInterpolatedAnchor) obj;
+    final DoublesCurveInterpolatedAnchor other = (DoublesCurveInterpolatedAnchor) obj;
     if (_anchorIndex != other._anchorIndex) {
       return false;
     }

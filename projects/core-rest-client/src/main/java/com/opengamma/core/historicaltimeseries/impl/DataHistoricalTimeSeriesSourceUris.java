@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.historicaltimeseries.impl;
@@ -28,24 +28,24 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
  * RESTful URIs for time-series.
  */
 public class DataHistoricalTimeSeriesSourceUris {
-  public static URI uriGet(URI baseUri, UniqueId uniqueId) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("hts/{htsId}");
-    if (uniqueId.getVersion() != null) {
-      bld.queryParam("version", uniqueId.getVersion());
-    }
-    return bld.build(uniqueId.getObjectId());
-  }
-  
-  public static URI uriExternalIdBundleGet(URI baseUri, UniqueId uniqueId) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("htsMeta/externalIdBundle/{htsId}");
+  public static URI uriGet(final URI baseUri, final UniqueId uniqueId) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("hts/{htsId}");
     if (uniqueId.getVersion() != null) {
       bld.queryParam("version", uniqueId.getVersion());
     }
     return bld.build(uniqueId.getObjectId());
   }
 
-  public static URI uriGet(URI baseUri, UniqueId uniqueId, LocalDate start, boolean includeStart, LocalDate end, boolean includeEnd, Integer maxPoints) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("hts/{htsId}");
+  public static URI uriExternalIdBundleGet(final URI baseUri, final UniqueId uniqueId) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("htsMeta/externalIdBundle/{htsId}");
+    if (uniqueId.getVersion() != null) {
+      bld.queryParam("version", uniqueId.getVersion());
+    }
+    return bld.build(uniqueId.getObjectId());
+  }
+
+  public static URI uriGet(final URI baseUri, final UniqueId uniqueId, final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd, final Integer maxPoints) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("hts/{htsId}");
     if (uniqueId.getVersion() != null) {
       bld.queryParam("version", uniqueId.getVersion());
     }
@@ -66,7 +66,7 @@ public class DataHistoricalTimeSeriesSourceUris {
   /**
    * Workaround for {@link UriBuilder#queryParam} that will not escape strings that contain valid escaped sequences. For example, "%3FFoo" will be left as-is since "%3F" is a valid escape whereas
    * "%3GFoo" will be escaped to "%253GFoo". If the string contains a "%" then we will escape it in advance and the builder will leave it alone. Otherwise we'll let the builder deal with the string.
-   * 
+   *
    * @param bundle the identifiers to convert
    * @return the array of, possibly encoded, identifier strings
    */
@@ -80,16 +80,16 @@ public class DataHistoricalTimeSeriesSourceUris {
           array[i] = URLEncoder.encode(array[i], "UTF-8").replace('+', ' ');
         }
       }
-    } catch (UnsupportedEncodingException e) {  // CSIGNORE
+    } catch (final UnsupportedEncodingException e) {  // CSIGNORE
       throw new OpenGammaRuntimeException("Caught", e);
     }
     return array;
   }
 
   public static URI uriSearchSingle(
-      URI baseUri, ExternalIdBundle identifierBundle, String dataSource, String dataProvider, String dataField,
-      LocalDate start, boolean includeStart, LocalDate end, boolean includeEnd, Integer maxPoints) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("htsSearches/single");
+      final URI baseUri, final ExternalIdBundle identifierBundle, final String dataSource, final String dataProvider, final String dataField,
+      final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd, final Integer maxPoints) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("htsSearches/single");
     bld.queryParam("id", identifiers(identifierBundle));
     if (dataSource != null) {
       bld.queryParam("dataSource", dataSource);
@@ -115,11 +115,11 @@ public class DataHistoricalTimeSeriesSourceUris {
   }
 
   public static URI uriSearchSingle(
-      URI baseUri, ExternalIdBundle identifierBundle, LocalDate identifierValidityDate, String dataSource, String dataProvider, String dataField,
-      LocalDate start, boolean includeStart, LocalDate end, boolean includeEnd, Integer maxPoints) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("htsSearches/single");
+      final URI baseUri, final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource, final String dataProvider, final String dataField,
+      final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd, final Integer maxPoints) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("htsSearches/single");
     bld.queryParam("id", identifiers(identifierBundle));
-    bld.queryParam("idValidityDate", (identifierValidityDate != null ? identifierValidityDate : "ALL"));
+    bld.queryParam("idValidityDate", identifierValidityDate != null ? identifierValidityDate : "ALL");
     if (dataSource != null) {
       bld.queryParam("dataSource", dataSource);
     }
@@ -144,9 +144,9 @@ public class DataHistoricalTimeSeriesSourceUris {
   }
 
   public static URI uriSearchResolve(
-      URI baseUri, ExternalIdBundle identifierBundle, String dataField, String resolutionKey,
-      LocalDate start, boolean includeStart, LocalDate end, boolean includeEnd, Integer maxPoints) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("htsSearches/resolve");
+      final URI baseUri, final ExternalIdBundle identifierBundle, final String dataField, final String resolutionKey,
+      final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd, final Integer maxPoints) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("htsSearches/resolve");
     bld.queryParam("id", identifiers(identifierBundle));
     if (dataField != null) {
       bld.queryParam("dataField", dataField);
@@ -169,11 +169,11 @@ public class DataHistoricalTimeSeriesSourceUris {
   }
 
   public static URI uriSearchResolve(
-      URI baseUri, ExternalIdBundle identifierBundle, LocalDate identifierValidityDate, String dataField, String resolutionKey,
-      LocalDate start, boolean includeStart, LocalDate end, boolean includeEnd, Integer maxPoints) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("htsSearches/resolve");
+      final URI baseUri, final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataField, final String resolutionKey,
+      final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd, final Integer maxPoints) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("htsSearches/resolve");
     bld.queryParam("id", identifiers(identifierBundle));
-    bld.queryParam("idValidityDate", (identifierValidityDate != null ? identifierValidityDate : "ALL"));
+    bld.queryParam("idValidityDate", identifierValidityDate != null ? identifierValidityDate : "ALL");
     if (dataField != null) {
       bld.queryParam("dataField", dataField);
     }
@@ -194,16 +194,16 @@ public class DataHistoricalTimeSeriesSourceUris {
     return bld.build();
   }
 
-  public static URI uriSearchBulk(URI baseUri) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("htsSearches/bulk");
+  public static URI uriSearchBulk(final URI baseUri) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("htsSearches/bulk");
     return bld.build();
   }
 
   public static FudgeMsg uriSearchBulkData(
-      Set<ExternalIdBundle> identifierSet, String dataSource, String dataProvider, String dataField,
-      LocalDate start, boolean includeStart, LocalDate end, boolean includeEnd) {
-    FudgeSerializer serializationContext = new FudgeSerializer(OpenGammaFudgeContext.getInstance());
-    MutableFudgeMsg msg = serializationContext.newMessage();
+      final Set<ExternalIdBundle> identifierSet, final String dataSource, final String dataProvider, final String dataField,
+      final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {
+    final FudgeSerializer serializationContext = new FudgeSerializer(OpenGammaFudgeContext.getInstance());
+    final MutableFudgeMsg msg = serializationContext.newMessage();
     serializationContext.addToMessage(msg, "id", null, identifierSet);
     serializationContext.addToMessage(msg, "dataSource", null, dataSource);
     serializationContext.addToMessage(msg, "dataProvider", null, dataProvider);

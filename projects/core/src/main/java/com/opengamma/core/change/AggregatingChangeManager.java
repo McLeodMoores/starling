@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.change;
@@ -26,12 +26,12 @@ public class AggregatingChangeManager extends BasicChangeManager implements Chan
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param changeProviders  the change providers to aggregate, not null
    */
-  public AggregatingChangeManager(List<ChangeProvider> changeProviders) {
+  public AggregatingChangeManager(final List<ChangeProvider> changeProviders) {
     ArgumentChecker.notNull(changeProviders, "changeProviders");
-    for (ChangeProvider changeProvider : changeProviders) {
+    for (final ChangeProvider changeProvider : changeProviders) {
       addChangeManager(changeProvider.changeManager());
     }
   }
@@ -41,27 +41,27 @@ public class AggregatingChangeManager extends BasicChangeManager implements Chan
    * Adds the manager to those aggregated.
    * <p>
    * This simply adds this instance as a listener to the specified manager.
-   * 
+   *
    * @param changeManager  the change manager to add, not null
    */
-  public void addChangeManager(ChangeManager changeManager) {
+  public void addChangeManager(final ChangeManager changeManager) {
     changeManager.addChangeListener(this);
   }
-      
+
   /**
    * Removes the manager from those aggregated.
    * <p>
    * This simply removes this instance as a listener from the specified manager.
-   * 
+   *
    * @param changeManager  the change manager to add, not null
    */
-  public void removeChangeManager(ChangeManager changeManager) {
+  public void removeChangeManager(final ChangeManager changeManager) {
     changeManager.removeChangeListener(this);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public void entityChanged(ChangeEvent event) {
+  public void entityChanged(final ChangeEvent event) {
     // Forward on the event to the local listeners
     handleEntityChanged(event);
   }

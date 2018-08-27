@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.exclusion;
@@ -24,21 +24,21 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class FunctionExclusionGroupTest {
 
-  private static class Function implements FunctionDefinition {
+  private static final class Function implements FunctionDefinition {
 
     private final String _shortName;
 
-    private Function(String shortName) {
+    private Function(final String shortName) {
       _shortName = shortName;
     }
 
     @Override
-    public void init(FunctionCompilationContext context) {
+    public void init(final FunctionCompilationContext context) {
       throw new UnsupportedOperationException();
     }
 
     @Override
-    public CompiledFunctionDefinition compile(FunctionCompilationContext context, Instant atInstant) {
+    public CompiledFunctionDefinition compile(final FunctionCompilationContext context, final Instant atInstant) {
       throw new UnsupportedOperationException();
     }
 

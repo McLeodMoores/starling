@@ -45,25 +45,25 @@ public class StandardVanillaParSpreadCDSFunction extends StandardVanillaCDSFunct
   }
 
   @Override
-  protected Set<ComputedValue> getComputedValue(CreditDefaultSwapDefinition definition,
-                                                ISDACompliantYieldCurve yieldCurve,
-                                                ZonedDateTime[] times,
-                                                double[] marketSpreads,
-                                                ZonedDateTime valuationTime,
-                                                ComputationTarget target,
-                                                ValueProperties properties,
-                                                FunctionInputs inputs,
-                                                ISDACompliantCreditCurve hazardCurve,
-                                                CDSAnalytic analytic,
-                                                Tenor[] tenors) {
+  protected Set<ComputedValue> getComputedValue(final CreditDefaultSwapDefinition definition,
+                                                final ISDACompliantYieldCurve yieldCurve,
+                                                final ZonedDateTime[] times,
+                                                final double[] marketSpreads,
+                                                final ZonedDateTime valuationTime,
+                                                final ComputationTarget target,
+                                                final ValueProperties properties,
+                                                final FunctionInputs inputs,
+                                                final ISDACompliantCreditCurve hazardCurve,
+                                                final CDSAnalytic analytic,
+                                                final Tenor[] tenors) {
     final double parSpread = getParSpread(yieldCurve, hazardCurve, analytic);
     final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.PAR_SPREAD, target.toSpecification(), properties);
     return Collections.singleton(new ComputedValue(spec, parSpread));
   }
 
-  public static double getParSpread(ISDACompliantYieldCurve yieldCurve,
-                                    ISDACompliantCreditCurve hazardCurve,
-                                    CDSAnalytic analytic) {
+  public static double getParSpread(final ISDACompliantYieldCurve yieldCurve,
+                                    final ISDACompliantCreditCurve hazardCurve,
+                                    final CDSAnalytic analytic) {
     final double par = new MarketQuoteConverter().parSpreads(new CDSAnalytic[]{analytic}, yieldCurve, hazardCurve)[0];
     return par * 10000; // BPS
   }

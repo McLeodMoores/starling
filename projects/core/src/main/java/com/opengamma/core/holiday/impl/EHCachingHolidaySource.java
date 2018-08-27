@@ -53,7 +53,7 @@ public class EHCachingHolidaySource extends AbstractEHCachingSource<Holiday, Hol
     }
     try {
       return putValue(key, getUnderlying().isHoliday(dateToCheck, currency), getCache());
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       return (Boolean) putException(key, ex, getCache());
     }
   }
@@ -67,37 +67,37 @@ public class EHCachingHolidaySource extends AbstractEHCachingSource<Holiday, Hol
     }
     try {
       return putValue(key, getUnderlying().isHoliday(dateToCheck, holidayType, regionOrExchangeIds), getCache());
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       return (Boolean) putException(key, ex, getCache());
     }
   }
 
   @Override
   @SuppressWarnings("unchecked")
-  public Collection<Holiday> get(HolidayType holidayType,
-                                 ExternalIdBundle regionOrExchangeIds) {
-    Object key = Arrays.asList(holidayType, regionOrExchangeIds);
-    Element e = getCache().get(key);
+  public Collection<Holiday> get(final HolidayType holidayType,
+                                 final ExternalIdBundle regionOrExchangeIds) {
+    final Object key = Arrays.asList(holidayType, regionOrExchangeIds);
+    final Element e = getCache().get(key);
     if (e != null) {
       return (Collection<Holiday>) EHCacheUtils.get(e);
     }
     try {
       return putValue(key, getUnderlying().get(holidayType, regionOrExchangeIds), getCache());
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       return (Collection<Holiday>) putException(key, ex, getCache());
     }
   }
 
   @Override
   @SuppressWarnings("unchecked")
-  public Collection<Holiday> get(Currency currency) {
-    Element e = getCache().get(currency);
+  public Collection<Holiday> get(final Currency currency) {
+    final Element e = getCache().get(currency);
     if (e != null) {
       return (Collection<Holiday>) EHCacheUtils.get(e);
     }
     try {
       return putValue(currency, getUnderlying().get(currency), getCache());
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       return (Collection<Holiday>) putException(currency, ex, getCache());
     }
   }
@@ -111,7 +111,7 @@ public class EHCachingHolidaySource extends AbstractEHCachingSource<Holiday, Hol
     }
     try {
       return putValue(key, getUnderlying().isHoliday(dateToCheck, holidayType, regionOrExchangeId), getCache());
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       return (Boolean) putException(key, ex, getCache());
     }
   }

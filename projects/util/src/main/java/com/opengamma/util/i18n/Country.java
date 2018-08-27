@@ -194,7 +194,7 @@ public final class Country implements ObjectIdentifiable, UniqueIdentifiable, Co
   //-----------------------------------------------------------------------
   /**
    * Lists the available countries.
-   * 
+   *
    * @return an immutable set containing all registered countries, not null
    */
   public static Set<Country> getAvailableCountries() {
@@ -214,7 +214,7 @@ public final class Country implements ObjectIdentifiable, UniqueIdentifiable, Co
    * @throws IllegalArgumentException if the country code is not two letters
    */
   @FromString
-  public static Country of(String countryCode) {
+  public static Country of(final String countryCode) {
     ArgumentChecker.notNull(countryCode, "countryCode");
     if (countryCode.matches("[A-Z][A-Z]") == false) {
       throw new IllegalArgumentException("Invalid country code: " + countryCode);
@@ -233,7 +233,7 @@ public final class Country implements ObjectIdentifiable, UniqueIdentifiable, Co
    * @return the singleton instance, not null
    * @throws IllegalArgumentException if the country code is not three letters
    */
-  public static Country parse(String countryCode) {
+  public static Country parse(final String countryCode) {
     ArgumentChecker.notNull(countryCode, "countryCode");
     return of(countryCode.toUpperCase(Locale.ENGLISH));
   }
@@ -241,16 +241,16 @@ public final class Country implements ObjectIdentifiable, UniqueIdentifiable, Co
   //-------------------------------------------------------------------------
   /**
    * Restricted constructor.
-   * 
+   *
    * @param countryCode  the two letter country code, not null
    */
-  private Country(String countryCode) {
+  private Country(final String countryCode) {
     _code = countryCode;
   }
 
   /**
    * Ensure singleton on deserialization.
-   * 
+   *
    * @return the singleton, not null
    */
   private Object readResolve() {
@@ -260,7 +260,7 @@ public final class Country implements ObjectIdentifiable, UniqueIdentifiable, Co
   //-------------------------------------------------------------------------
   /**
    * Gets the two letter ISO code.
-   * 
+   *
    * @return the two letter ISO code, not null
    */
   @ToString
@@ -273,7 +273,7 @@ public final class Country implements ObjectIdentifiable, UniqueIdentifiable, Co
    * Gets the object identifier for the country.
    * <p>
    * This uses the scheme {@link #OBJECT_SCHEME CountryISO}.
-   * 
+   *
    * @return the object identifier, not null
    */
   @Override
@@ -285,7 +285,7 @@ public final class Country implements ObjectIdentifiable, UniqueIdentifiable, Co
    * Gets the unique identifier for the country.
    * <p>
    * This uses the scheme {@link #OBJECT_SCHEME CountryISO}.
-   * 
+   *
    * @return the unique identifier, not null
    */
   @Override
@@ -296,12 +296,12 @@ public final class Country implements ObjectIdentifiable, UniqueIdentifiable, Co
   //-----------------------------------------------------------------------
   /**
    * Compares this country to another by alphabetical comparison of the code.
-   * 
+   *
    * @param other  the other country, not null
    * @return negative if earlier alphabetically, 0 if equal, positive if greater alphabetically
    */
   @Override
-  public int compareTo(Country other) {
+  public int compareTo(final Country other) {
     return _code.compareTo(other._code);
   }
 
@@ -309,12 +309,12 @@ public final class Country implements ObjectIdentifiable, UniqueIdentifiable, Co
    * Checks if this country equals another country.
    * <p>
    * The comparison checks the two letter country code.
-   * 
+   *
    * @param obj  the other country, null returns false
    * @return true if equal
    */
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (obj == this) {
       return true;
     }
@@ -326,7 +326,7 @@ public final class Country implements ObjectIdentifiable, UniqueIdentifiable, Co
 
   /**
    * Returns a suitable hash code for the country.
-   * 
+   *
    * @return the hash code
    */
   @Override
@@ -337,7 +337,7 @@ public final class Country implements ObjectIdentifiable, UniqueIdentifiable, Co
   //-----------------------------------------------------------------------
   /**
    * Gets the two letter country code as a string.
-   * 
+   *
    * @return the two letter country code, not null
    */
   @Override

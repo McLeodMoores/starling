@@ -21,19 +21,19 @@ public class UniformInterfaceException204NoContent extends UniformInterfaceExcep
   /** Serialization version. */
   private static final long serialVersionUID = -8266318713789190845L;
 
-  public UniformInterfaceException204NoContent(ClientResponse response, boolean bufferResponseEntity) {
+  public UniformInterfaceException204NoContent(final ClientResponse response, final boolean bufferResponseEntity) {
     super(response, bufferResponseEntity);
   }
 
-  public UniformInterfaceException204NoContent(ClientResponse response) {
+  public UniformInterfaceException204NoContent(final ClientResponse response) {
     super(response);
   }
 
-  public UniformInterfaceException204NoContent(String message, ClientResponse response, boolean bufferResponseEntity) {
+  public UniformInterfaceException204NoContent(final String message, final ClientResponse response, final boolean bufferResponseEntity) {
     super(message, response, bufferResponseEntity);
   }
 
-  public UniformInterfaceException204NoContent(String message, ClientResponse response) {
+  public UniformInterfaceException204NoContent(final String message, final ClientResponse response) {
     super(message, response);
   }
 

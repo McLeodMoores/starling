@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.option;
@@ -18,7 +18,7 @@ public class OptionExerciseTypeUserType extends EnumUserType<OptionExerciseType>
   }
 
   @Override
-  protected String enumToStringNoCache(OptionExerciseType value) {
+  protected String enumToStringNoCache(final OptionExerciseType value) {
     return value.accept(new ExerciseTypeNameVisitor());
   }
 

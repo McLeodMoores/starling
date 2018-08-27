@@ -27,16 +27,16 @@ public class TradeAttributeExposureFunction implements ExposureFunction {
    * Trade attribute identifier.
    */
   public static final String TRADE_ATTRIBUTE_IDENTIFIER = "TradeAttribute";
-  
+
   @Override
   public String getName() {
     return NAME;
   }
-  
+
   @Override
-  public List<ExternalId> getIds(Trade trade) {
-    ImmutableList.Builder<ExternalId> builder = ImmutableList.builder();
-    for (Map.Entry<String, String> entry: trade.getAttributes().entrySet()) {
+  public List<ExternalId> getIds(final Trade trade) {
+    final ImmutableList.Builder<ExternalId> builder = ImmutableList.builder();
+    for (final Map.Entry<String, String> entry: trade.getAttributes().entrySet()) {
       builder.add(ExternalId.of(TRADE_ATTRIBUTE_IDENTIFIER, entry.getKey() + "=" + entry.getValue()));
     }
     return builder.build();

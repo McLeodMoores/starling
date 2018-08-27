@@ -34,7 +34,7 @@ public class FudgeSecurityEncodingTest extends SecurityTestCase {
   private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
 
   @Override
-  protected <T extends ManageableSecurity> void assertSecurity(Class<T> securityClass, T security) {
+  protected <T extends ManageableSecurity> void assertSecurity(final Class<T> securityClass, final T security) {
     final FudgeSerializer serializer = new FudgeSerializer(FUDGE_CONTEXT);
     FudgeMsg msg = serializer.objectToFudgeMsg(security);
     LOGGER.debug("Security {}", security);

@@ -84,7 +84,7 @@ public class BloombergSecurityFileLoader {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param securityMaster  the security master, not null
    * @param securityProvider  bloomberg security loader, not null
    */
@@ -107,10 +107,10 @@ public class BloombergSecurityFileLoader {
    * Sets the reference data provider.
    * @param refDataProvider  the reference data provider
    */
-  public void setRefDataProvider(ReferenceDataProvider refDataProvider) {
+  public void setRefDataProvider(final ReferenceDataProvider refDataProvider) {
     _refDataProvider = refDataProvider;
   }
-  
+
   /**
    * Gets the scheme field.
    * @return the scheme
@@ -123,39 +123,39 @@ public class BloombergSecurityFileLoader {
    * Sets the scheme field.
    * @param scheme  the scheme
    */
-  public void setScheme(ExternalScheme scheme) {
+  public void setScheme(final ExternalScheme scheme) {
     _scheme = scheme;
   }
 
   //-------------------------------------------------------------------------
   public void run() {
-    
-    Set<ExternalIdBundle> identifiers = readInputFiles();
-    
-    Map<ExternalIdBundle, UniqueId> loadedSecurities = _securityLoader.loadSecurities(identifiers);
-    List<ExternalIdBundle> errors = findErrors(loadedSecurities);
+
+    final Set<ExternalIdBundle> identifiers = readInputFiles();
+
+    final Map<ExternalIdBundle, UniqueId> loadedSecurities = _securityLoader.loadSecurities(identifiers);
+    final List<ExternalIdBundle> errors = findErrors(loadedSecurities);
     if (_optionSize > 0) {
-      Set<ExternalIdBundle> optionIdentifiers = loadOptionIdentifiers(identifiers);
-      Map<ExternalIdBundle, UniqueId> loadedOptionSecurities = _securityLoader.loadSecurities(optionIdentifiers);
+      final Set<ExternalIdBundle> optionIdentifiers = loadOptionIdentifiers(identifiers);
+      final Map<ExternalIdBundle, UniqueId> loadedOptionSecurities = _securityLoader.loadSecurities(optionIdentifiers);
       errors.addAll(findErrors(loadedOptionSecurities));
     }
-   
+
     //print securities with errors
     if (!errors.isEmpty()) {
       LOGGER.warn("Unable to load the following securities");
-      for (ExternalIdBundle identifierBundle : errors) {
+      for (final ExternalIdBundle identifierBundle : errors) {
         LOGGER.warn("{}", identifierBundle);
       }
     }
-    
+
 //    for (ExternalIdBundle bundle : findSucesses(loadedSecurities)) {
 //      System.err.println(bundle.getIdentifier(SecurityUtils.ISIN));
 //    }
   }
 
   private List<ExternalIdBundle> findErrors(final Map<ExternalIdBundle, UniqueId> loadedSecurities) {
-    List<ExternalIdBundle> result = Lists.newArrayList();
-    for (Entry<ExternalIdBundle, UniqueId> entry : loadedSecurities.entrySet()) {
+    final List<ExternalIdBundle> result = Lists.newArrayList();
+    for (final Entry<ExternalIdBundle, UniqueId> entry : loadedSecurities.entrySet()) {
       if (entry.getValue() == null) {
         result.add(entry.getKey());
       }
@@ -164,39 +164,39 @@ public class BloombergSecurityFileLoader {
   }
 
   private Set<ExternalIdBundle> loadOptionIdentifiers(final Set<ExternalIdBundle> identifiers) {
-    Set<String> bloombergKeys = new HashSet<String>();
-    for (ExternalIdBundle dsids : identifiers) {
-      ExternalId preferredIdentifier = BloombergDomainIdentifierResolver.resolvePreferredIdentifier(dsids);
+    final Set<String> bloombergKeys = new HashSet<>();
+    for (final ExternalIdBundle dsids : identifiers) {
+      final ExternalId preferredIdentifier = BloombergDomainIdentifierResolver.resolvePreferredIdentifier(dsids);
       bloombergKeys.add(BloombergDomainIdentifierResolver.toBloombergKey(preferredIdentifier));
     }
 
-    Set<ExternalIdBundle> optionsIdentifiers = new HashSet<ExternalIdBundle>();
-    Map<String, FudgeMsg> refDataResultMap = _refDataProvider.getReferenceDataIgnoreCache(bloombergKeys, Collections.singleton(FIELD_OPT_CHAIN));
-    for (Entry<String, FudgeMsg> entry : refDataResultMap.entrySet()) {
-      FudgeMsg fieldContainer = entry.getValue();
+    final Set<ExternalIdBundle> optionsIdentifiers = new HashSet<>();
+    final Map<String, FudgeMsg> refDataResultMap = _refDataProvider.getReferenceDataIgnoreCache(bloombergKeys, Collections.singleton(FIELD_OPT_CHAIN));
+    for (final Entry<String, FudgeMsg> entry : refDataResultMap.entrySet()) {
+      final FudgeMsg fieldContainer = entry.getValue();
       //process the options
       int nAdded = 0;
-      for (FudgeField field : fieldContainer.getAllByName(BloombergConstants.FIELD_OPT_CHAIN)) {
-        FudgeMsg optionContainer = (FudgeMsg) field.getValue();
-        String optionTickerStr = optionContainer.getString("Security Description");
-        String expiryStr = ReferenceDataProviderUtils.singleFieldSearchIgnoreCache(optionTickerStr, FIELD_OPT_EXPIRE_DT, _refDataProvider);
+      for (final FudgeField field : fieldContainer.getAllByName(BloombergConstants.FIELD_OPT_CHAIN)) {
+        final FudgeMsg optionContainer = (FudgeMsg) field.getValue();
+        final String optionTickerStr = optionContainer.getString("Security Description");
+        final String expiryStr = ReferenceDataProviderUtils.singleFieldSearchIgnoreCache(optionTickerStr, FIELD_OPT_EXPIRE_DT, _refDataProvider);
         LocalDate expiryLocalDate = null;
         try {
           expiryLocalDate = LocalDate.parse(expiryStr);
-        } catch (Exception e) {
+        } catch (final Exception e) {
           throw new OpenGammaRuntimeException(expiryStr + " returned from bloomberg not in format yyyy-mm-dd", e);
         }
-        int year = expiryLocalDate.getYear();
-        int month = expiryLocalDate.getMonthValue();
-        int day = expiryLocalDate.getDayOfMonth();
-        Expiry expiry = new Expiry(DateUtils.getUTCDate(year, month, day));
+        final int year = expiryLocalDate.getYear();
+        final int month = expiryLocalDate.getMonthValue();
+        final int day = expiryLocalDate.getDayOfMonth();
+        final Expiry expiry = new Expiry(DateUtils.getUTCDate(year, month, day));
 
-        if (expiry.getExpiry().toInstant().toEpochMilli() < (System.currentTimeMillis() + (25L * 60L * 60L * 1000L))) {
+        if (expiry.getExpiry().toInstant().toEpochMilli() < System.currentTimeMillis() + 25L * 60L * 60L * 1000L) {
           LOGGER.info("Option {} in future, so passing on it.", optionTickerStr);
           continue;
         }
 
-        ExternalId optionTicker = ExternalSchemes.bloombergTickerSecurityId(optionTickerStr);
+        final ExternalId optionTicker = ExternalSchemes.bloombergTickerSecurityId(optionTickerStr);
         optionsIdentifiers.add(ExternalIdBundle.of(optionTicker));
 
         nAdded++;
@@ -212,7 +212,7 @@ public class BloombergSecurityFileLoader {
    * Sets the files field.
    * @param files  the files
    */
-  public void setFiles(String[] files) {
+  public void setFiles(final String[] files) {
     _files = files;
   }
 
@@ -220,15 +220,15 @@ public class BloombergSecurityFileLoader {
    * Sets the optionSize field.
    * @param optionSize  the optionSize
    */
-  public void setOptionSize(int optionSize) {
+  public void setOptionSize(final int optionSize) {
     _optionSize = optionSize;
   }
 
   /**
    * @param args
    */
-  public static void main(String[] args) {  // CSIGNORE
-    Options options = createOptions();
+  public static void main(final String[] args) {  // CSIGNORE
+    final Options options = createOptions();
     processCommandLineOptions(args, options);
   }
 
@@ -236,12 +236,12 @@ public class BloombergSecurityFileLoader {
    * @param args
    * @param options
    */
-  private static void processCommandLineOptions(String[] args, Options options) {
-    CommandLineParser parser = new PosixParser();
+  private static void processCommandLineOptions(final String[] args, final Options options) {
+    final CommandLineParser parser = new PosixParser();
     CommandLine line = null;
     try {
       line = parser.parse(options, args);
-    } catch (ParseException e) {
+    } catch (final ParseException e) {
       usage(options);
       return;
     }
@@ -250,29 +250,29 @@ public class BloombergSecurityFileLoader {
       return;
     }
 
-    String[] files = line.getArgs();
-    BloombergSecurityFileLoader securityLoader = getBloombergSecurityFileLoader();
+    final String[] files = line.getArgs();
+    final BloombergSecurityFileLoader securityLoader = getBloombergSecurityFileLoader();
     securityLoader.setFiles(files);
-    
+
     if (line.hasOption(OPTION)) {
       try {
         securityLoader.setOptionSize(Integer.parseInt(line.getOptionValue(OPTION)));
-      } catch (NumberFormatException ex) {
+      } catch (final NumberFormatException ex) {
         LOGGER.warn("{} option size is not an integer", line.getOptionValue(OPTION));
       }
     }
-    
+
     if (line.hasOption(IDENTIFICATION_SCHEME)) {
-      String schemeValue = line.getOptionValue(IDENTIFICATION_SCHEME);
+      final String schemeValue = line.getOptionValue(IDENTIFICATION_SCHEME);
       securityLoader.setScheme(ExternalScheme.of(schemeValue));
     } else {
       securityLoader.setScheme(ExternalSchemes.BLOOMBERG_TICKER);
     }
     securityLoader.run();
   }
-  
+
   private static Options createOptions() {
-    Options options = new Options();
+    final Options options = new Options();
     options.addOption(createHelpOption());
     options.addOption(createOptionSize());
     options.addOption(createSchemeOption());
@@ -299,26 +299,26 @@ public class BloombergSecurityFileLoader {
     return OptionBuilder.create("o");
   }
 
-  private static void usage(Options options) {
-    HelpFormatter formatter = new HelpFormatter();
+  private static void usage(final Options options) {
+    final HelpFormatter formatter = new HelpFormatter();
     formatter.setWidth(120);
     formatter.printHelp("java " + BloombergSecurityFileLoader.class.getName() + " [options]... [files]...", options);
   }
 
   private Set<ExternalIdBundle> readInputFiles() {
-    Set<String> securities = new HashSet<String>();
+    final Set<String> securities = new HashSet<>();
     if (_files != null) {
-      for (String file : _files) {
+      for (final String file : _files) {
         try {
           securities.addAll(FileUtils.readLines(new File(file)));
-        } catch (IOException e) {
+        } catch (final IOException e) {
           LOGGER.warn("Problem reading from input file={}", file);
           throw new OpenGammaRuntimeException("Problem reading from " + file, e);
         }
       }
     }
-    Set<ExternalIdBundle> result = new HashSet<ExternalIdBundle>();
-    for (String secDes : securities) {
+    final Set<ExternalIdBundle> result = new HashSet<>();
+    for (final String secDes : securities) {
       if (!StringUtils.isBlank(secDes)) {
         result.add(ExternalIdBundle.of(ExternalId.of(getScheme(), secDes.trim())));
       }
@@ -327,9 +327,9 @@ public class BloombergSecurityFileLoader {
   }
 
   private static BloombergSecurityFileLoader getBloombergSecurityFileLoader() {
-    ConfigurableApplicationContext context = new ClassPathXmlApplicationContext(CONTEXT_CONFIGURATION_PATH);
+    final ConfigurableApplicationContext context = new ClassPathXmlApplicationContext(CONTEXT_CONFIGURATION_PATH);
     context.start();
-    BloombergSecurityFileLoader loader = (BloombergSecurityFileLoader) context.getBean("securityLoader");
+    final BloombergSecurityFileLoader loader = (BloombergSecurityFileLoader) context.getBean("securityLoader");
     return loader;
   }
 

@@ -36,20 +36,20 @@ public class HeartbeatReceiver implements ByteArrayMessageReceiver {
 
   /**
    * Creates an instance with an expiration manager.
-   * 
+   *
    * @param activeSecurityPublicationManager  the manager, not null
    */
-  public HeartbeatReceiver(ExpirationManager activeSecurityPublicationManager) {
+  public HeartbeatReceiver(final ExpirationManager activeSecurityPublicationManager) {
     this(activeSecurityPublicationManager, OpenGammaFudgeContext.getInstance());
   }
 
   /**
    * Creates an instance with an expiration manager.
-   * 
+   *
    * @param activeSecurityPublicationManager  the manager, not null
    * @param fudgeContext  the Fudge context, not null
    */
-  public HeartbeatReceiver(ExpirationManager activeSecurityPublicationManager, FudgeContext fudgeContext) {
+  public HeartbeatReceiver(final ExpirationManager activeSecurityPublicationManager, final FudgeContext fudgeContext) {
     ArgumentChecker.notNull(activeSecurityPublicationManager, "activeSecurityPublicationManager");
     ArgumentChecker.notNull(fudgeContext, "fudgeContext");
     _activeSecurityPublicationManager = activeSecurityPublicationManager;
@@ -59,7 +59,7 @@ public class HeartbeatReceiver implements ByteArrayMessageReceiver {
   //-------------------------------------------------------------------------
   /**
    * Gets the Fudge context.
-   * 
+   *
    * @return the Fudge context, not null
    */
   public FudgeContext getFudgeContext() {
@@ -68,7 +68,7 @@ public class HeartbeatReceiver implements ByteArrayMessageReceiver {
 
   /**
    * Gets the manager.
-   * 
+   *
    * @return the active security publication manager, not null
    */
   public ExpirationManager getActiveSecurityPublicationManager() {
@@ -77,14 +77,14 @@ public class HeartbeatReceiver implements ByteArrayMessageReceiver {
 
   //-------------------------------------------------------------------------
   @Override
-  public void messageReceived(byte[] message) {
-    FudgeMsgEnvelope heartbeatEnvelope = getFudgeContext().deserialize(message);
-    FudgeMsg heartbeatMsg = heartbeatEnvelope.getMessage();
+  public void messageReceived(final byte[] message) {
+    final FudgeMsgEnvelope heartbeatEnvelope = getFudgeContext().deserialize(message);
+    final FudgeMsg heartbeatMsg = heartbeatEnvelope.getMessage();
     messageReceived(heartbeatMsg);
   }
 
-  public void messageReceived(FudgeMsg msg) {
-    Heartbeat heartbeat = Heartbeat.fromFudgeMsg(new FudgeDeserializer(_fudgeContext), msg);
+  public void messageReceived(final FudgeMsg msg) {
+    final Heartbeat heartbeat = Heartbeat.fromFudgeMsg(new FudgeDeserializer(_fudgeContext), msg);
     LOGGER.debug("Heartbeat received for: {}", heartbeat.getLiveDataSpecifications());
     getActiveSecurityPublicationManager().extendPublicationTimeout(heartbeat.getLiveDataSpecifications());
   }

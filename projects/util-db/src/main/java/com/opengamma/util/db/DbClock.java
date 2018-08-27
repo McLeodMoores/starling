@@ -51,7 +51,7 @@ class DbClock extends Clock {
   /**
    * The last "now" instant returned. Any "now"s subsequently returned must not be before this.
    */
-  private final AtomicReference<Instant> _previousNow = new AtomicReference<Instant>();
+  private final AtomicReference<Instant> _previousNow = new AtomicReference<>();
   /**
    * The {@link System#nanoTime} of the now instant.
    */
@@ -59,23 +59,23 @@ class DbClock extends Clock {
 
   /**
    * Creates the clock.
-   * 
+   *
    * @param connector the connector, not null
    */
-  DbClock(DbConnector connector) {
+  DbClock(final DbConnector connector) {
     this(connector, OpenGammaClock.getZone());
   }
 
   /**
    * Creates the clock.
-   * 
+   *
    * @param connector the connector, not null
    */
-  DbClock(DbConnector connector, ZoneId zone) {
+  DbClock(final DbConnector connector, final ZoneId zone) {
     _connector = Objects.requireNonNull(connector, "connector");
     _precision = _connector.getDialect().getTimestampPrecision();
     _zone = zone;
-    long now = System.nanoTime();
+    final long now = System.nanoTime();
     long base = now - 2_000_000_000L;
     if (base > now) { // overflow
       base = Long.MIN_VALUE;
@@ -108,8 +108,8 @@ class DbClock extends Clock {
     try {
       nowNanos = System.nanoTime();
       long interpolate = Math.max(nowNanos - _nowNanoTime, 0);
-      int precisionNano = _precision.getDuration().getNano();
-      interpolate = (interpolate / precisionNano) * precisionNano;
+      final int precisionNano = _precision.getDuration().getNano();
+      interpolate = interpolate / precisionNano * precisionNano;
       result = _nowInstant.plusNanos(interpolate);
     } finally {
       _lock.readLock().unlock();

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.interpolation;
@@ -17,12 +17,12 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.ParallelArrayBinarySort;
 
 /**
- * C1 cubic interpolation preserving monotonicity based on 
- * Fritsch, F. N.; Carlson, R. E. (1980) 
- * "Monotone Piecewise Cubic Interpolation", SIAM Journal on Numerical Analysis 17 (2): 238–246. 
+ * C1 cubic interpolation preserving monotonicity based on
+ * Fritsch, F. N.; Carlson, R. E. (1980)
+ * "Monotone Piecewise Cubic Interpolation", SIAM Journal on Numerical Analysis 17 (2): 238–246.
  * Fritsch, F. N. and Butland, J. (1984)
  * "A method for constructing local monotone piecewise cubic interpolants", SIAM Journal on Scientific and Statistical Computing 5 (2): 300-304.
- * 
+ *
  * For interpolation without node sensitivity, use {@link PiecewiseCubicHermiteSplineInterpolator}
  */
 public class PiecewiseCubicHermiteSplineInterpolatorWithSensitivity extends PiecewisePolynomialInterpolator {
@@ -45,8 +45,8 @@ public class PiecewiseCubicHermiteSplineInterpolatorWithSensitivity extends Piec
       ArgumentChecker.isFalse(Double.isInfinite(yValues[i]), "yData containing Infinity");
     }
 
-    double[] xValuesSrt = Arrays.copyOf(xValues, nDataPts);
-    double[] yValuesSrt = Arrays.copyOf(yValues, nDataPts);
+    final double[] xValuesSrt = Arrays.copyOf(xValues, nDataPts);
+    final double[] yValuesSrt = Arrays.copyOf(yValues, nDataPts);
     ParallelArrayBinarySort.parallelBinarySort(xValuesSrt, yValuesSrt);
 
     for (int i = 1; i < nDataPts; ++i) {
@@ -58,10 +58,10 @@ public class PiecewiseCubicHermiteSplineInterpolatorWithSensitivity extends Piec
     // check the matrices
     // TODO remove some of these tests
     ArgumentChecker.noNulls(temp, "error in solve - some matrices are null");
-    int n = temp.length;
+    final int n = temp.length;
     ArgumentChecker.isTrue(n == nDataPts, "wrong number of matricies");
     for (int k = 0; k < n; k++) {
-      DoubleMatrix2D m = temp[k];
+      final DoubleMatrix2D m = temp[k];
       final int rows = m.getNumberOfRows();
       final int cols = m.getNumberOfColumns();
       for (int i = 0; i < rows; ++i) {
@@ -71,8 +71,8 @@ public class PiecewiseCubicHermiteSplineInterpolatorWithSensitivity extends Piec
       }
     }
 
-    DoubleMatrix2D coefMatrix = temp[0];
-    DoubleMatrix2D[] coefMatrixSense = new DoubleMatrix2D[n - 1];
+    final DoubleMatrix2D coefMatrix = temp[0];
+    final DoubleMatrix2D[] coefMatrixSense = new DoubleMatrix2D[n - 1];
     System.arraycopy(temp, 1, coefMatrixSense, 0, n - 1);
 
     return new PiecewisePolynomialResultsWithSensitivity(new DoubleMatrix1D(xValuesSrt), coefMatrix, 4, 1, coefMatrixSense);
@@ -87,10 +87,10 @@ public class PiecewiseCubicHermiteSplineInterpolatorWithSensitivity extends Piec
 
     final int n = xValues.length;
 
-    double[][] coeff = new double[n - 1][4];
-    double[] h = new double[n - 1];
-    double[] delta = new double[n - 1];
-    DoubleMatrix2D[] res = new DoubleMatrix2D[n];
+    final double[][] coeff = new double[n - 1][4];
+    final double[] h = new double[n - 1];
+    final double[] delta = new double[n - 1];
+    final DoubleMatrix2D[] res = new DoubleMatrix2D[n];
 
     for (int i = 0; i < n - 1; ++i) {
       h[i] = xValues[i + 1] - xValues[i];
@@ -102,7 +102,7 @@ public class PiecewiseCubicHermiteSplineInterpolatorWithSensitivity extends Piec
       coeff[0][2] = delta[0];
       coeff[0][3] = xValues[0];
     } else {
-      SlopeFinderResults temp = slopeFinder(h, delta, yValues);
+      final SlopeFinderResults temp = slopeFinder(h, delta, yValues);
       final double[] d = temp.getSlopes().getData();
       final double[][] dDy = temp.getSlopeJacobian().getData();
 
@@ -126,8 +126,8 @@ public class PiecewiseCubicHermiteSplineInterpolatorWithSensitivity extends Piec
       // dDy[i] = vec;
       // }
 
-      double[][] bDy = new double[n - 1][n];
-      double[][] cDy = new double[n - 1][n];
+      final double[][] bDy = new double[n - 1][n];
+      final double[][] cDy = new double[n - 1][n];
 
       for (int i = 0; i < n - 1; i++) {
         final double invH = 1 / h[i];
@@ -146,7 +146,7 @@ public class PiecewiseCubicHermiteSplineInterpolatorWithSensitivity extends Piec
       // Now we have to pack this into an array of DoubleMatrix2D - my kingdom for a tensor class
       res[0] = new DoubleMatrix2D(coeff);
       for (int k = 0; k < n - 1; k++) {
-        double[][] coeffSense = new double[4][];
+        final double[][] coeffSense = new double[4][];
         coeffSense[0] = bDy[k];
         coeffSense[1] = cDy[k];
         coeffSense[2] = dDy[k];
@@ -181,9 +181,9 @@ public class PiecewiseCubicHermiteSplineInterpolatorWithSensitivity extends Piec
 
   /**
    * Finds the the first derivatives at knots and their sensitivity to delta
-   * @param h 
-   * @param delta 
-   * @return slope finder results 
+   * @param h
+   * @param delta
+   * @return slope finder results
    */
   private SlopeFinderResults slopeFinder(final double[] h, final double[] delta, final double[] y) {
     final int n = y.length;
@@ -191,7 +191,7 @@ public class PiecewiseCubicHermiteSplineInterpolatorWithSensitivity extends Piec
     final double[] invDelta = new double[n - 1];
     final double[] invDelta2 = new double[n - 1];
     final double[] invH = new double[n - 1];
-    for (int i = 0; i < (n - 1); i++) {
+    for (int i = 0; i < n - 1; i++) {
       invDelta[i] = 1 / delta[i];
       invDelta2[i] = invDelta[i] * invDelta[i];
       invH[i] = 1 / h[i];
@@ -248,7 +248,7 @@ public class PiecewiseCubicHermiteSplineInterpolatorWithSensitivity extends Piec
    * @param y1
    * @param y2
    * @param y3
-   * @return array of length 4 - the first element contains d, while the other three are sensitivities to the ys 
+   * @return array of length 4 - the first element contains d, while the other three are sensitivities to the ys
    */
   private double[] endpointSlope(final double h1, final double h2, final double del1, final double del2, final boolean rightSide) {
 
@@ -309,7 +309,7 @@ public class PiecewiseCubicHermiteSplineInterpolatorWithSensitivity extends Piec
   }
 
   @Override
-  public PiecewisePolynomialResult interpolate(double[] xValues, double[][] yValuesMatrix) {
+  public PiecewisePolynomialResult interpolate(final double[] xValues, final double[][] yValuesMatrix) {
     throw new NotImplementedException();
   }
 

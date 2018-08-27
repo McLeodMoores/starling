@@ -35,25 +35,25 @@ public class DataCompiledViewDefinitionResource extends AbstractDataResource {
   public static final String PATH_COMPILED_CALCULATION_CONFIGURATIONS_MAP = "compiledCalculationConfigurationsMap";
   public static final String PATH_GRAPHS = "graphs";
   //CSON: just constants
-  
+
   private final CompiledViewDefinitionWithGraphs _compiledViewDefinition;
-  
-  public DataCompiledViewDefinitionResource(CompiledViewDefinitionWithGraphs compiledViewDefinitionWithGraphs) {
+
+  public DataCompiledViewDefinitionResource(final CompiledViewDefinitionWithGraphs compiledViewDefinitionWithGraphs) {
     _compiledViewDefinition = compiledViewDefinitionWithGraphs;
   }
-  
+
   @GET
   @Path(PATH_VIEW_DEFINITION)
   public Response getViewDefinition() {
     return responseOkObject(_compiledViewDefinition.getViewDefinition());
   }
-  
+
   @GET
   @Path(PATH_PORTFOLIO)
   public Response getPortfolio() {
     return responseOkObject(_compiledViewDefinition.getPortfolio());
   }
-  
+
   @GET
   @Path(PATH_COMPILED_CALCULATION_CONFIGURATIONS)
   public Response getCompiledCalculationConfigurations() {
@@ -65,13 +65,13 @@ public class DataCompiledViewDefinitionResource extends AbstractDataResource {
   public Response getCompiledCalculationConfigurationsMap() {
     return responseOkObject(new HashMap<>(_compiledViewDefinition.getCompiledCalculationConfigurationsMap()));
   }
-  
+
   @GET
   @Path(PATH_COMPILED_CALCULATION_CONFIGURATIONS + "/{calcConfigName}")
-  public Response getCompiledViewCalculationConfiguration(@PathParam("calcConfigName") String calcConfigName) {
+  public Response getCompiledViewCalculationConfiguration(@PathParam("calcConfigName") final String calcConfigName) {
     return responseOkObject(_compiledViewDefinition.getCompiledCalculationConfiguration(calcConfigName));
   }
-  
+
   @GET
   @Path(PATH_COMPUTATION_TARGETS)
   public Response getComputationTargets() {
@@ -83,23 +83,23 @@ public class DataCompiledViewDefinitionResource extends AbstractDataResource {
   public Response getMarketDataRequirements() {
     return responseOkObject(_compiledViewDefinition.getMarketDataRequirements());
   }
-  
+
   @GET
   @Path(PATH_VALID_FROM)
   public Response getValidFrom() {
-    Instant validFrom = _compiledViewDefinition.getValidFrom();
+    final Instant validFrom = _compiledViewDefinition.getValidFrom();
     return validFrom != null ? responseOkObject(validFrom) : responseOkNoContent();
   }
-  
+
   @GET
   @Path(PATH_VALID_TO)
   public Response getValidTo() {
-    Instant validTo = _compiledViewDefinition.getValidTo();
+    final Instant validTo = _compiledViewDefinition.getValidTo();
     return validTo != null ? responseOkObject(validTo) : responseOkNoContent();
   }
-  
+
   @Path(PATH_GRAPHS + "/{calcConfigName}")
-  public DataDependencyGraphExplorerResource getDependencyGraphExplorer(@PathParam("calcConfigName") String calcConfigName) {
+  public DataDependencyGraphExplorerResource getDependencyGraphExplorer(@PathParam("calcConfigName") final String calcConfigName) {
     return new DataDependencyGraphExplorerResource(_compiledViewDefinition.getDependencyGraphExplorer(calcConfigName));
   }
 }

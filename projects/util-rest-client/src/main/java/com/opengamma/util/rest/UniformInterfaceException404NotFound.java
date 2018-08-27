@@ -21,19 +21,19 @@ public class UniformInterfaceException404NotFound extends UniformInterfaceExcept
   /** Serialization version. */
   private static final long serialVersionUID = -8266318713789190845L;
 
-  public UniformInterfaceException404NotFound(ClientResponse response, boolean bufferResponseEntity) {
+  public UniformInterfaceException404NotFound(final ClientResponse response, final boolean bufferResponseEntity) {
     super(response, bufferResponseEntity);
   }
 
-  public UniformInterfaceException404NotFound(ClientResponse response) {
+  public UniformInterfaceException404NotFound(final ClientResponse response) {
     super(response);
   }
 
-  public UniformInterfaceException404NotFound(String message, ClientResponse response, boolean bufferResponseEntity) {
+  public UniformInterfaceException404NotFound(final String message, final ClientResponse response, final boolean bufferResponseEntity) {
     super(message, response, bufferResponseEntity);
   }
 
-  public UniformInterfaceException404NotFound(String message, ClientResponse response) {
+  public UniformInterfaceException404NotFound(final String message, final ClientResponse response) {
     super(message, response);
   }
 

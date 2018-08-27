@@ -75,7 +75,7 @@ public abstract class DynamicFunctionConfigurationSource implements FunctionConf
   protected abstract FunctionConfigurationBundle getFunctionConfiguration(VersionCorrection version);
 
   @Override
-  public FunctionConfigurationBundle getFunctionConfiguration(Instant version) {
+  public FunctionConfigurationBundle getFunctionConfiguration(final Instant version) {
     return getFunctionConfiguration(VersionCorrection.of(version, version));
   }
 

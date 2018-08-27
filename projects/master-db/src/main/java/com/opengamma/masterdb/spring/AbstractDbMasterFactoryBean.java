@@ -23,7 +23,7 @@ import com.opengamma.util.spring.SpringFactoryBean;
 
 /**
  * Spring factory bean to create the database master.
- * 
+ *
  * @param <T> the type of the master
  */
 @BeanDefinition
@@ -57,10 +57,10 @@ public abstract class AbstractDbMasterFactoryBean<T> extends SpringFactoryBean<T
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param type  the type, not null
    */
-  public AbstractDbMasterFactoryBean(Class<T> type) {
+  public AbstractDbMasterFactoryBean(final Class<T> type) {
     super(type);
   }
 

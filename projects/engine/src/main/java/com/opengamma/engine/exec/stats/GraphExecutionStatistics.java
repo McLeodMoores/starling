@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 
@@ -178,7 +178,7 @@ public class GraphExecutionStatistics {
   }
 
   private static void decay(final AtomicLong value, final double factor) {
-    value.addAndGet(-(long) ((double) value.get() * factor));
+    value.addAndGet(-(long) (value.get() * factor));
   }
 
   public void decay(final double factor) {

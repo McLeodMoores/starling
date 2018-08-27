@@ -34,7 +34,7 @@ public class MasterSecuritySource extends AbstractMasterSource<Security, Securit
 
   /**
    * Creates an instance with an underlying master.
-   * 
+   *
    * @param master the master, not null
    */
   public MasterSecuritySource(final SecurityMaster master) {
@@ -48,11 +48,11 @@ public class MasterSecuritySource extends AbstractMasterSource<Security, Securit
   }
 
   @Override
-  public Collection<Security> get(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
+  public Collection<Security> get(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(bundle, "bundle");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
-    Collection<Security> securities = new ArrayList<Security>();
-    for (ManageableSecurity manageableSecurity : getSecuritiesInternal(bundle, versionCorrection)) {
+    final Collection<Security> securities = new ArrayList<>();
+    for (final ManageableSecurity manageableSecurity : getSecuritiesInternal(bundle, versionCorrection)) {
       securities.add(manageableSecurity);
     }
     return securities;
@@ -69,7 +69,7 @@ public class MasterSecuritySource extends AbstractMasterSource<Security, Securit
   }
 
   @Override
-  public ManageableSecurity getSingle(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
+  public ManageableSecurity getSingle(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(bundle, "bundle");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     final Collection<ManageableSecurity> securities = getSecuritiesInternal(bundle, versionCorrection);
@@ -83,17 +83,17 @@ public class MasterSecuritySource extends AbstractMasterSource<Security, Securit
   }
 
   @SuppressWarnings({"rawtypes", "unchecked" })
-  private Collection<ManageableSecurity> getSecuritiesInternal(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
+  private Collection<ManageableSecurity> getSecuritiesInternal(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     final SecuritySearchRequest request = new SecuritySearchRequest();
     request.addExternalIds(bundle);
     request.setVersionCorrection(versionCorrection);
-    return (Collection) search(request).getSecurities(); // cast safe as supplied list will not be altered    
+    return search(request).getSecurities(); // cast safe as supplied list will not be altered
   }
 
   //-------------------------------------------------------------------------
   /**
    * Searches for securities matching the specified search criteria.
-   * 
+   *
    * @param request the search request, not null
    * @return the search result, not null
    * @throws IllegalArgumentException if the request is invalid

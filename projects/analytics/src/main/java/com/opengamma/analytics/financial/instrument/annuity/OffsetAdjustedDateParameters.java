@@ -16,27 +16,27 @@ public class OffsetAdjustedDateParameters extends AdjustedDateParameters {
   /**
    * The number of days to offset the adjusted dates by.
    */
-  private int _offset;
-  
+  private final int _offset;
+
   /**
    * The type of offset days, which could be business or calendar days.
    */
-  private OffsetType _offsetType;
-  
+  private final OffsetType _offsetType;
+
   public OffsetAdjustedDateParameters(
-      int offset,
-      OffsetType offsetType,
-      Calendar calendar,
-      BusinessDayConvention businessDayConvention) {
+      final int offset,
+      final OffsetType offsetType,
+      final Calendar calendar,
+      final BusinessDayConvention businessDayConvention) {
     super(calendar, businessDayConvention);
     _offset = offset;
     _offsetType = offsetType;
   }
-  
+
   public int getOffset() {
     return _offset;
   }
-  
+
   public OffsetType getOffsetType() {
     return _offsetType;
   }

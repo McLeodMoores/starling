@@ -21,9 +21,9 @@ import com.opengamma.util.money.Currency;
  */
 public class InMemoryRegionMasterPopulator {
 
-  public static void populate(final RegionMaster master, Collection<ManageableRegion> regions) {
-    for (ManageableRegion region : regions) {
-      RegionDocument doc = new RegionDocument();
+  public static void populate(final RegionMaster master, final Collection<ManageableRegion> regions) {
+    for (final ManageableRegion region : regions) {
+      final RegionDocument doc = new RegionDocument();
       doc.setRegion(region);
       master.add(doc);
     }
@@ -31,10 +31,10 @@ public class InMemoryRegionMasterPopulator {
 
   public static List<ManageableRegion> load(final String resourceLocation, final String regionScheme) {
     final ResourceBundle properties = ResourceBundle.getBundle(resourceLocation);
-    List<ManageableRegion> regions = Lists.newArrayListWithExpectedSize(properties.keySet().size());
-    for (String regionName : properties.keySet()) {
-      Currency ccy = Currency.of(properties.getString(regionName));
-      ManageableRegion region = new ManageableRegion();
+    final List<ManageableRegion> regions = Lists.newArrayListWithExpectedSize(properties.keySet().size());
+    for (final String regionName : properties.keySet()) {
+      final Currency ccy = Currency.of(properties.getString(regionName));
+      final ManageableRegion region = new ManageableRegion();
       region.setName(regionName);
       region.setFullName(regionName);
       region.setExternalIdBundle(ExternalIdBundle.of(regionScheme, regionName));

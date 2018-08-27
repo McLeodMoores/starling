@@ -41,19 +41,19 @@ public class FudgeContextComponentFactory extends AbstractComponentFactory {
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
-    FudgeContext component = createFudgeContext(repo);
-    ComponentInfo info = new ComponentInfo(FudgeContext.class, getClassifier());
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
+    final FudgeContext component = createFudgeContext(repo);
+    final ComponentInfo info = new ComponentInfo(FudgeContext.class, getClassifier());
     repo.registerComponent(info, component);
   }
 
   /**
    * Creates the Fudge context without registering it.
-   * 
+   *
    * @param repo  the component repository, only used to register secondary items like lifecycle, not null
    * @return the Fudge context, not null
    */
-  protected FudgeContext createFudgeContext(ComponentRepository repo) {
+  protected FudgeContext createFudgeContext(final ComponentRepository repo) {
     return OpenGammaFudgeContext.getInstance();
   }
 

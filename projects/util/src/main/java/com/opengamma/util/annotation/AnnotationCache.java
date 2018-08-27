@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.annotation;
@@ -37,15 +37,15 @@ public final class AnnotationCache {
   public static final String CACHE_PATH_PROPERTY = "opengamma.annotationCachePath";
 
   private final Instant _timestamp;
-  private final Collection<String> _classNames = new LinkedList<String>();
-  private final Class<? extends Annotation> _annotationClass; 
+  private final Collection<String> _classNames = new LinkedList<>();
+  private final Class<? extends Annotation> _annotationClass;
   private final String _cacheFileName;
 
-  private AnnotationCache(final Instant timestamp, Class<? extends Annotation> annotationClass) {
+  private AnnotationCache(final Instant timestamp, final Class<? extends Annotation> annotationClass) {
     _timestamp = timestamp;
     _annotationClass = annotationClass;
     _cacheFileName = "." + annotationClass.getSimpleName();
-    
+
   }
 
   private void add(final String className) {
@@ -58,13 +58,13 @@ public final class AnnotationCache {
 
   /**
    * Returns the last modification timestamp.
-   * 
+   *
    * @return the timestamp, not null
    */
   public Instant getTimestamp() {
     return _timestamp;
   }
- 
+
   /**
    * Gets the classNames.
    * @return the classNames
@@ -91,35 +91,35 @@ public final class AnnotationCache {
 
   /**
    * Returns the classes from the cache that contain function annotations.
-   * 
+   *
    * @return the classes
    */
   public Collection<Class<?>> getClasses() {
     if (getClassNames().isEmpty()) {
       return Collections.emptyList();
     }
-    final Collection<Class<?>> classes = new ArrayList<Class<?>>(getClassNames().size());
-    for (String className : getClassNames()) {
+    final Collection<Class<?>> classes = new ArrayList<>(getClassNames().size());
+    for (final String className : getClassNames()) {
       try {
         classes.add(Class.forName(className));
-      } catch (ClassNotFoundException e) {
+      } catch (final ClassNotFoundException e) {
         LOGGER.info("Class not found", e);
       }
     }
     return classes;
   }
-  
-  protected static String getCacheFileName(Class<? extends Annotation> annotationClass) {
+
+  protected static String getCacheFileName(final Class<? extends Annotation> annotationClass) {
     return "." + annotationClass.getSimpleName();
   }
 
   /**
    * Loads the function cache from disk (if available).
-   * 
+   *
    * @param annotationClass the annotation class, not null
    * @return the cache object, not null
    */
-  public static AnnotationCache load(Class<? extends Annotation> annotationClass) {
+  public static AnnotationCache load(final Class<? extends Annotation> annotationClass) {
     ArgumentChecker.notNull(annotationClass, "annotation class");
     final String path = System.getProperty(CACHE_PATH_PROPERTY);
     if (path == null) {
@@ -139,7 +139,7 @@ public final class AnnotationCache {
       }
       br.close();
       return cache;
-    } catch (Throwable t) {
+    } catch (final Throwable t) {
       LOGGER.warn("Couldn't read cache file", t);
       return new AnnotationCache(Instant.EPOCH, annotationClass);
     }
@@ -158,19 +158,19 @@ public final class AnnotationCache {
     try {
       final PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(cacheFile)));
       pw.println(getTimestamp().toEpochMilli());
-      for (String className : getClassNames()) {
+      for (final String className : getClassNames()) {
         pw.println(className);
       }
       pw.flush();
       pw.close();
-    } catch (Throwable t) {
+    } catch (final Throwable t) {
       LOGGER.warn("Couldn't write cache file", t);
     }
   }
 
   /**
    * Creates a function cache from a set of class names
-   * 
+   *
    * @param timestamp  the cache timestamp, not null
    * @param annotationClass  the annotation class, not null
    * @param classNames  the class names, not null

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.timeseries.precise.zdt;
@@ -8,9 +8,9 @@ package com.opengamma.timeseries.precise.zdt;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Map.Entry;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 import org.threeten.bp.ZoneId;
 import org.threeten.bp.ZonedDateTime;
@@ -42,27 +42,27 @@ final class ImmutableZonedDateTimeDoubleTimeSeriesBuilder
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param zone  the time-zone, not null
    */
-  ImmutableZonedDateTimeDoubleTimeSeriesBuilder(ZoneId zone) {
+  ImmutableZonedDateTimeDoubleTimeSeriesBuilder(final ZoneId zone) {
     _zone = Objects.requireNonNull(zone, "zone");
   }
 
   //-------------------------------------------------------------------------
   private void ensureCapacity(int newSize) {
     if (newSize > _times.length) {
-      newSize = Math.max(newSize + 8, (_size * 3) / 2);
+      newSize = Math.max(newSize + 8, _size * 3 / 2);
       _times = Arrays.copyOf(_times, newSize);
       _values = Arrays.copyOf(_values, _size * 2);
     }
   }
 
-  private static long convertToLong(ZonedDateTime instant) {
+  private static long convertToLong(final ZonedDateTime instant) {
     return ZonedDateTimeToLongConverter.convertToLong(instant);
   }
 
-  private static ZonedDateTime convertFromLong(long instant, ZoneId zone) {
+  private static ZonedDateTime convertFromLong(final long instant, final ZoneId zone) {
     return ZonedDateTimeToLongConverter.convertToZonedDateTime(instant, zone);
   }
 
@@ -79,7 +79,7 @@ final class ImmutableZonedDateTimeDoubleTimeSeriesBuilder
 
       @Override
       public boolean hasNext() {
-        return (_index + 1) < size();
+        return _index + 1 < size();
       }
 
       @Override
@@ -88,12 +88,12 @@ final class ImmutableZonedDateTimeDoubleTimeSeriesBuilder
           throw new NoSuchElementException("No more elements in the iteration");
         }
         _index++;
-        long instant = _times[_index];
-        double value = _values[_index];
+        final long instant = _times[_index];
+        final double value = _values[_index];
         return makeMapEntry(convertFromLong(instant, _zone), value);
       }
 
-      private Entry<ZonedDateTime, Double> makeMapEntry(ZonedDateTime key, Double value) {
+      private Entry<ZonedDateTime, Double> makeMapEntry(final ZonedDateTime key, final Double value) {
         return new SimpleImmutableEntry<>(key, value);
       }
 
@@ -162,18 +162,18 @@ final class ImmutableZonedDateTimeDoubleTimeSeriesBuilder
 
   //-------------------------------------------------------------------------
   @Override
-  public ZonedDateTimeDoubleTimeSeriesBuilder put(ZonedDateTime time, double value) {
+  public ZonedDateTimeDoubleTimeSeriesBuilder put(final ZonedDateTime time, final double value) {
     return put(convertToLong(time), value);
   }
 
   @Override
-  public ZonedDateTimeDoubleTimeSeriesBuilder put(long time, double value) {
-    int search = Arrays.binarySearch(_times, 0, _size, time);
+  public ZonedDateTimeDoubleTimeSeriesBuilder put(final long time, final double value) {
+    final int search = Arrays.binarySearch(_times, 0, _size, time);
     if (search >= 0) {
       _values[search] = value;
     } else {
       ensureCapacity(_size + 1);
-      int pos = -(search + 1);
+      final int pos = -(search + 1);
       System.arraycopy(_times, pos, _times, pos + 1, _size - pos);
       System.arraycopy(_values, pos, _values, pos + 1, _size - pos);
       _times[pos] = time;
@@ -184,7 +184,7 @@ final class ImmutableZonedDateTimeDoubleTimeSeriesBuilder
   }
 
   @Override
-  public ZonedDateTimeDoubleTimeSeriesBuilder putAll(ZonedDateTime[] times, double[] values) {
+  public ZonedDateTimeDoubleTimeSeriesBuilder putAll(final ZonedDateTime[] times, final double[] values) {
     if (times.length != values.length) {
       throw new IllegalArgumentException("Arrays are of different sizes: " + times.length + ", " + values.length);
     }
@@ -196,7 +196,7 @@ final class ImmutableZonedDateTimeDoubleTimeSeriesBuilder
   }
 
   @Override
-  public ZonedDateTimeDoubleTimeSeriesBuilder putAll(long[] times, double[] values) {
+  public ZonedDateTimeDoubleTimeSeriesBuilder putAll(final long[] times, final double[] values) {
     if (times.length != values.length) {
       throw new IllegalArgumentException("Arrays are of different sizes: " + times.length + ", " + values.length);
     }
@@ -209,12 +209,12 @@ final class ImmutableZonedDateTimeDoubleTimeSeriesBuilder
 
   //-------------------------------------------------------------------------
   @Override
-  public ZonedDateTimeDoubleTimeSeriesBuilder putAll(PreciseDoubleTimeSeries<?> timeSeries) {
+  public ZonedDateTimeDoubleTimeSeriesBuilder putAll(final PreciseDoubleTimeSeries<?> timeSeries) {
     return putAll(timeSeries, 0, timeSeries.size());
   }
 
   @Override
-  public ZonedDateTimeDoubleTimeSeriesBuilder putAll(PreciseDoubleTimeSeries<?> timeSeries, int startPos, int endPos) {
+  public ZonedDateTimeDoubleTimeSeriesBuilder putAll(final PreciseDoubleTimeSeries<?> timeSeries, final int startPos, final int endPos) {
     if (startPos < 0 || startPos > timeSeries.size()) {
       throw new IndexOutOfBoundsException("Invalid start index: " + startPos);
     }
@@ -227,7 +227,7 @@ final class ImmutableZonedDateTimeDoubleTimeSeriesBuilder
     if (startPos == endPos) {
       return this;
     }
-    int sizeToAdd = endPos - startPos;
+    final int sizeToAdd = endPos - startPos;
     ensureCapacity(_size + sizeToAdd);
     if (_size == 0) {
       System.arraycopy(timeSeries.timesArrayFast(), startPos, _times, 0, sizeToAdd);
@@ -242,12 +242,12 @@ final class ImmutableZonedDateTimeDoubleTimeSeriesBuilder
   }
 
   @Override
-  public ZonedDateTimeDoubleTimeSeriesBuilder putAll(Map<ZonedDateTime, Double> timeSeriesMap) {
+  public ZonedDateTimeDoubleTimeSeriesBuilder putAll(final Map<ZonedDateTime, Double> timeSeriesMap) {
     if (timeSeriesMap.size() == 0) {
       return this;
     }
     ensureCapacity(_size + timeSeriesMap.size());
-    for (Entry<ZonedDateTime, Double> entry : timeSeriesMap.entrySet()) {
+    for (final Entry<ZonedDateTime, Double> entry : timeSeriesMap.entrySet()) {
       put(entry.getKey(), entry.getValue());
     }
     return this;

@@ -36,7 +36,7 @@ public class ModifyHolidayDbHolidayMasterWorkerCorrectTest extends AbstractDbHol
   private static final Logger LOGGER = LoggerFactory.getLogger(ModifyHolidayDbHolidayMasterWorkerCorrectTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public ModifyHolidayDbHolidayMasterWorkerCorrectTest(String databaseType, String databaseVersion) {
+  public ModifyHolidayDbHolidayMasterWorkerCorrectTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion, false);
     LOGGER.info("running testcases for {}", databaseType);
   }
@@ -49,27 +49,27 @@ public class ModifyHolidayDbHolidayMasterWorkerCorrectTest extends AbstractDbHol
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_correct_noHolidayId() {
-    UniqueId uniqueId = UniqueId.of("DbHol", "101");
-    ManageableHoliday holiday = new ManageableHoliday(Currency.USD, Arrays.asList(LocalDate.of(2010, 6, 9)));
+    final UniqueId uniqueId = UniqueId.of("DbHol", "101");
+    final ManageableHoliday holiday = new ManageableHoliday(Currency.USD, Arrays.asList(LocalDate.of(2010, 6, 9)));
     holiday.setUniqueId(uniqueId);
-    HolidayDocument doc = new HolidayDocument(holiday);
+    final HolidayDocument doc = new HolidayDocument(holiday);
     doc.setUniqueId(null);
     _holMaster.correct(doc);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_correct_noHoliday() {
-    HolidayDocument doc = new HolidayDocument();
+    final HolidayDocument doc = new HolidayDocument();
     doc.setUniqueId(UniqueId.of("DbHol", "101", "0"));
     _holMaster.correct(doc);
   }
 
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_correct_notFound() {
-    UniqueId uniqueId = UniqueId.of("DbHol", "0", "0");
-    ManageableHoliday holiday = new ManageableHoliday(Currency.USD, Arrays.asList(LocalDate.of(2010, 6, 9)));
+    final UniqueId uniqueId = UniqueId.of("DbHol", "0", "0");
+    final ManageableHoliday holiday = new ManageableHoliday(Currency.USD, Arrays.asList(LocalDate.of(2010, 6, 9)));
     holiday.setUniqueId(uniqueId);
-    HolidayDocument doc = new HolidayDocument(holiday);
+    final HolidayDocument doc = new HolidayDocument(holiday);
     _holMaster.correct(doc);
   }
 
@@ -83,32 +83,32 @@ public class ModifyHolidayDbHolidayMasterWorkerCorrectTest extends AbstractDbHol
 
   @Test
   public void test_correct_getUpdateGet() {
-    Instant now = Instant.now(_holMaster.getClock());
-    
-    UniqueId uniqueId = UniqueId.of("DbHol", "101", "0");
-    HolidayDocument base = _holMaster.get(uniqueId);
-    ManageableHoliday holiday = new ManageableHoliday(Currency.USD, Arrays.asList(LocalDate.of(2010, 6, 9)));
+    final Instant now = Instant.now(_holMaster.getClock());
+
+    final UniqueId uniqueId = UniqueId.of("DbHol", "101", "0");
+    final HolidayDocument base = _holMaster.get(uniqueId);
+    final ManageableHoliday holiday = new ManageableHoliday(Currency.USD, Arrays.asList(LocalDate.of(2010, 6, 9)));
     holiday.setUniqueId(uniqueId);
-    HolidayDocument input = new HolidayDocument(holiday);
-    
-    HolidayDocument corrected = _holMaster.correct(input);
+    final HolidayDocument input = new HolidayDocument(holiday);
+
+    final HolidayDocument corrected = _holMaster.correct(input);
     assertEquals(false, base.getUniqueId().equals(corrected.getUniqueId()));
     assertEquals(base.getVersionFromInstant(), corrected.getVersionFromInstant());
     assertEquals(base.getVersionToInstant(), corrected.getVersionToInstant());
     assertEquals(now, corrected.getCorrectionFromInstant());
     assertEquals(null, corrected.getCorrectionToInstant());
     assertEquals(input.getHoliday(), corrected.getHoliday());
-    
-    HolidayDocument old = _holMaster.get(UniqueId.of("DbHol", "101", "0"));
+
+    final HolidayDocument old = _holMaster.get(UniqueId.of("DbHol", "101", "0"));
     assertEquals(base.getUniqueId(), old.getUniqueId());
     assertEquals(base.getVersionFromInstant(), old.getVersionFromInstant());
     assertEquals(base.getVersionToInstant(), old.getVersionToInstant());
     assertEquals(base.getCorrectionFromInstant(), old.getCorrectionFromInstant());
     assertEquals(now, old.getCorrectionToInstant());  // old version ended
     assertEquals(base.getHoliday(), old.getHoliday());
-    
-    HolidayHistoryRequest search = new HolidayHistoryRequest(base.getUniqueId(), now, null);
-    HolidayHistoryResult searchResult = _holMaster.history(search);
+
+    final HolidayHistoryRequest search = new HolidayHistoryRequest(base.getUniqueId(), now, null);
+    final HolidayHistoryResult searchResult = _holMaster.history(search);
     assertEquals(2, searchResult.getDocuments().size());
   }
 

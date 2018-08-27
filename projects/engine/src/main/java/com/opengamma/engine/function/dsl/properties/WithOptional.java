@@ -9,12 +9,12 @@ import com.opengamma.engine.value.ValueProperties;
 
 public class WithOptional extends ValuePropertiesModifier {
 
-  public WithOptional(String propertyName) {
+  public WithOptional(final String propertyName) {
     super(propertyName);
   }
 
   @Override
-  public ValueProperties.Builder modify(ValueProperties.Builder builder) {
+  public ValueProperties.Builder modify(final ValueProperties.Builder builder) {
     return builder.withOptional(getPropertyName());
   }
 }

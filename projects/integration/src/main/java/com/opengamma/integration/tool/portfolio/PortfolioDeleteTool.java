@@ -35,7 +35,7 @@ public class PortfolioDeleteTool extends AbstractTool<ToolContext> {
   /** Delete portfolio names option flag */
   private static final String PORTFOLIO_NAMES_OPT = "n";
   /** Delete portfolio ids option flag */
-  private static final String PORTFOLIO_IDS_OPT = "i";  
+  private static final String PORTFOLIO_IDS_OPT = "i";
   /** Delete positions option flag */
   private static final String DELETE_POSITIONS_OPT = "dp";
   /** Delete securities option flag */
@@ -50,104 +50,104 @@ public class PortfolioDeleteTool extends AbstractTool<ToolContext> {
   //-------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
+   *
    * @param args  the standard tool arguments, not null
    */
-  public static void main(String[] args) { //CSIGNORE
+  public static void main(final String[] args) { //CSIGNORE
     new PortfolioDeleteTool().invokeAndTerminate(args);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  protected void doRun() {    
-    PortfolioSearchRequest portfolioSearchRequest = new PortfolioSearchRequest();
-    
+  protected void doRun() {
+    final PortfolioSearchRequest portfolioSearchRequest = new PortfolioSearchRequest();
+
     if (getCommandLine().hasOption(PORTFOLIO_NAMES_OPT)) {
       portfolioSearchRequest.setName(
           getCommandLine().getOptionValue(PORTFOLIO_NAMES_OPT));
-    } 
-    
+    }
+
     if (getCommandLine().hasOption(PORTFOLIO_IDS_OPT)) {
-      List<ObjectId> ids = new ArrayList<ObjectId>();
-      for (String s : getCommandLine().getOptionValues(PORTFOLIO_IDS_OPT)) {
+      final List<ObjectId> ids = new ArrayList<>();
+      for (final String s : getCommandLine().getOptionValues(PORTFOLIO_IDS_OPT)) {
         ids.add(ObjectId.parse(s));
       }
       portfolioSearchRequest.setPortfolioObjectIds(ids);
     }
 
-    PortfolioSearchResult portSearchResult = getToolContext().getPortfolioMaster().search(portfolioSearchRequest);
-      
-    for (PortfolioDocument portfolioDocument : portSearchResult.getDocuments()) {
+    final PortfolioSearchResult portSearchResult = getToolContext().getPortfolioMaster().search(portfolioSearchRequest);
 
-      DeletingPortfolioCopier deletingPortfolioCopier = 
+    for (final PortfolioDocument portfolioDocument : portSearchResult.getDocuments()) {
+
+      final DeletingPortfolioCopier deletingPortfolioCopier =
           new DeletingPortfolioCopier(
-              getToolContext().getSecurityMaster(), 
+              getToolContext().getSecurityMaster(),
               getToolContext().getPositionMaster(),
               getCommandLine().hasOption(WRITE_OPT));
-      
+
       deletingPortfolioCopier.copy(
           new MasterPositionReader(
-              portfolioDocument.getPortfolio().getName(), 
-              getToolContext().getPortfolioMaster(), 
-              getToolContext().getPositionMaster(), 
-              getToolContext().getSecuritySource()), 
+              portfolioDocument.getPortfolio().getName(),
+              getToolContext().getPortfolioMaster(),
+              getToolContext().getPositionMaster(),
+              getToolContext().getSecuritySource()),
           new PrettyPrintingPositionWriter(false),
           getCommandLine().hasOption(DELETE_POSITIONS_OPT),
           getCommandLine().hasOption(DELETE_SECURITIES_OPT));
-      
+
       if (getCommandLine().hasOption(DELETE_PORTFOLIOS_OPT)) {
         if (getCommandLine().hasOption(WRITE_OPT)) {
           getToolContext().getPortfolioMaster().remove(portfolioDocument.getUniqueId());
-          LOGGER.warn("Deleted " + portfolioDocument.getPortfolio().getUniqueId() + 
+          LOGGER.warn("Deleted " + portfolioDocument.getPortfolio().getUniqueId() +
               " (" + portfolioDocument.getPortfolio().getName() + ")");
         } else {
-          LOGGER.warn("Matched " + portfolioDocument.getPortfolio().getUniqueId() + 
+          LOGGER.warn("Matched " + portfolioDocument.getPortfolio().getUniqueId() +
               " (" + portfolioDocument.getPortfolio().getName() + ")");
         }
       }
     }
   }
-  
+
   @Override
-  protected Options createOptions(boolean contextProvided) {
-    
-    Options options = super.createOptions(contextProvided);
-    
-    Option portfolioNamesOption = new Option(
-        PORTFOLIO_NAMES_OPT, "name", true, "Regular expression to match portfolio names");    
+  protected Options createOptions(final boolean contextProvided) {
+
+    final Options options = super.createOptions(contextProvided);
+
+    final Option portfolioNamesOption = new Option(
+        PORTFOLIO_NAMES_OPT, "name", true, "Regular expression to match portfolio names");
 //    options.addOption(portfolioNamesOption);
-    
-    Option deletePortfolioIdsOption = new Option(
+
+    final Option deletePortfolioIdsOption = new Option(
         PORTFOLIO_IDS_OPT, "portfolioid", true, "Portfolio IDs to match");
 //    options.addOption(deletePortfolioIdsOption);
 
-    OptionGroup group = new OptionGroup();
+    final OptionGroup group = new OptionGroup();
     group.addOption(deletePortfolioIdsOption);
     group.addOption(portfolioNamesOption);
     group.setRequired(true);
-    
+
     options.addOptionGroup(group);
-    
-    Option deletePositionsOption = new Option(
+
+    final Option deletePositionsOption = new Option(
         DELETE_POSITIONS_OPT, "delpositions", false, "Match/delete positions referenced in matching portfolios");
     options.addOption(deletePositionsOption);
-    
-    Option deleteSecuritiesOption = new Option(
+
+    final Option deleteSecuritiesOption = new Option(
         DELETE_SECURITIES_OPT, "delsecurities", false, "Match/delete securities referenced in matching portfolios");
     options.addOption(deleteSecuritiesOption);
-    
-    Option deletePortfoliosOption = new Option(
-        DELETE_PORTFOLIOS_OPT, "delportfolios", false, 
+
+    final Option deletePortfoliosOption = new Option(
+        DELETE_PORTFOLIOS_OPT, "delportfolios", false,
         "Actually delete matching portfolios");
     options.addOption(deletePortfoliosOption);
 
-    Option writeOption = new Option(
-        WRITE_OPT, "write", false, 
+    final Option writeOption = new Option(
+        WRITE_OPT, "write", false,
         "Actually persist the deletions");
     options.addOption(writeOption);
 
-    Option verboseOption = new Option(
-        VERBOSE_OPT, "verbose", false, 
+    final Option verboseOption = new Option(
+        VERBOSE_OPT, "verbose", false,
         "Displays progress messages on the terminal");
     options.addOption(verboseOption);
 

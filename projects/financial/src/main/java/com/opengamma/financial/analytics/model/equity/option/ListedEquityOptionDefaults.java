@@ -29,7 +29,7 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Populates {@link ListedEquityOptionFunction} with defaults. Basic configuration for clients that use one forward curve/config pair and one discounting curve/curve pair.
  * <p>
- * This mimics {@link EquityOptionInterpolatedBlackLognormalDefaults}, which populates fields for the EquityOptionFunction family, 
+ * This mimics {@link EquityOptionInterpolatedBlackLognormalDefaults}, which populates fields for the EquityOptionFunction family,
  * but this doesn't set volatility surface properties.
  */
 public abstract class ListedEquityOptionDefaults extends DefaultPropertyFunction {
@@ -67,7 +67,7 @@ public abstract class ListedEquityOptionDefaults extends DefaultPropertyFunction
 
   /**
    * Basic constructor for configurations with just a single
-   * 
+   *
    * @param priority PriorityClass name (e.g. PriorityClass.NORMAL.name())
    * @param perIdConfig Map of strings consisting of groups of 5 inputs: <p>
    * 0) id the unique string used to define a set of inputs<p>
@@ -100,14 +100,14 @@ public abstract class ListedEquityOptionDefaults extends DefaultPropertyFunction
       _idToForwardCurveCalculationMethodName.put(id, Collections.singleton(perIdConfig[i + 4]));
     }
   }
-  
+
   @Override
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
     final Security eqSec = target.getSecurity();
     final String id = getId(eqSec);
     return _idToDiscountingCurveName.containsKey(id);
   }
-  
+
   /**
    * @return All ids for which a default is available
    */
@@ -119,9 +119,9 @@ public abstract class ListedEquityOptionDefaults extends DefaultPropertyFunction
    * @param security The security
    * @return The id for the security
    */
-  protected abstract String getId(Security security);  
+  protected abstract String getId(Security security);
   @Override
-  protected void getDefaults(PropertyDefaults defaults) {
+  protected void getDefaults(final PropertyDefaults defaults) {
     for (final String valueName : VALUE_NAMES) {
       defaults.addValuePropertyName(valueName, EquityOptionFunction.PROPERTY_DISCOUNTING_CURVE_CONFIG);
       defaults.addValuePropertyName(valueName, EquityOptionFunction.PROPERTY_DISCOUNTING_CURVE_NAME);

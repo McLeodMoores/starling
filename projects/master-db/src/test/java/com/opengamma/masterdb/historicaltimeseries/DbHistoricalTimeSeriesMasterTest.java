@@ -28,7 +28,7 @@ public class DbHistoricalTimeSeriesMasterTest extends AbstractDbTest {
   private DbHistoricalTimeSeriesMaster _htsMaster;
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public DbHistoricalTimeSeriesMasterTest(String databaseType, String databaseVersion) {
+  public DbHistoricalTimeSeriesMasterTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion);
     LOGGER.info("running testcases for {}", databaseType);
   }

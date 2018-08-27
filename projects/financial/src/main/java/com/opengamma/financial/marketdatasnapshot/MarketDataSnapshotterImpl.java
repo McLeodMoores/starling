@@ -108,7 +108,7 @@ public class MarketDataSnapshotterImpl implements MarketDataSnapshotter {
   }
 
   private Map<String, DependencyGraph> getGraphs(final CompiledViewDefinitionWithGraphs defn) {
-    final HashMap<String, DependencyGraph> ret = new HashMap<String, DependencyGraph>();
+    final HashMap<String, DependencyGraph> ret = new HashMap<>();
     for (final CompiledViewCalculationConfiguration config : defn.getCompiledCalculationConfigurations()) {
       final String configName = config.getName();
       final DependencyGraph graph = defn.getDependencyGraphExplorer(configName).getWholeGraph();
@@ -233,7 +233,7 @@ public class MarketDataSnapshotterImpl implements MarketDataSnapshotter {
   public Map<YieldCurveKey, Map<String, ValueRequirement>> getYieldCurveSpecifications(final ViewClient client, final ViewCycle cycle) {
     final CompiledViewDefinitionWithGraphs defn = cycle.getCompiledViewDefinition();
     final Map<String, DependencyGraph> graphs = getGraphs(defn);
-    final Map<YieldCurveKey, Map<String, ValueRequirement>> ret = new HashMap<YieldCurveKey, Map<String, ValueRequirement>>();
+    final Map<YieldCurveKey, Map<String, ValueRequirement>> ret = new HashMap<>();
     for (final Entry<String, DependencyGraph> entry : graphs.entrySet()) {
       final DependencyGraph graph = entry.getValue();
       final Iterator<DependencyNode> nodes = graph.nodeIterator();
@@ -269,7 +269,7 @@ public class MarketDataSnapshotterImpl implements MarketDataSnapshotter {
   private void add(final Map<YieldCurveKey, Map<String, ValueRequirement>> ret, final YieldCurveKey key, final ValueRequirement outputValue) {
     Map<String, ValueRequirement> ycMap = ret.get(key);
     if (ycMap == null) {
-      ycMap = new HashMap<String, ValueRequirement>();
+      ycMap = new HashMap<>();
       ret.put(key, ycMap);
     }
     ycMap.put(outputValue.getValueName(), outputValue);

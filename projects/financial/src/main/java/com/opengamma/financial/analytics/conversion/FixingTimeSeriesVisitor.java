@@ -78,7 +78,7 @@ public class FixingTimeSeriesVisitor extends FinancialSecurityVisitorAdapter<Val
     final LocalDateDoubleTimeSeries localDateTS = ts.getTimeSeries();
     // FIXME CASE Converting a daily historical time series to an arbitrary time. Bad idea
     final ZonedDateTime[] instants = new ZonedDateTime[localDateTS.size()];
-    for (final LocalDateDoubleEntryIterator it = localDateTS.iterator(); it.hasNext(); ) {
+    for (final LocalDateDoubleEntryIterator it = localDateTS.iterator(); it.hasNext();) {
       final LocalDate date = it.nextTime();
       instants[it.currentIndex()] = date.atStartOfDay(ZoneOffset.UTC);
     }

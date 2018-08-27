@@ -49,7 +49,7 @@ public abstract class AbstractCdsAggregationFunction<T> implements AggregationFu
    * @param securitySource  the security source used for resolution of the CDS security, not null
    * @param extractor  the extractor which will process the cds and return the required type, not null
    */
-  public AbstractCdsAggregationFunction(String name, SecuritySource securitySource, CdsValueExtractor<T> extractor) {
+  public AbstractCdsAggregationFunction(final String name, final SecuritySource securitySource, final CdsValueExtractor<T> extractor) {
     ArgumentChecker.notNull(name, "name");
     ArgumentChecker.notNull(securitySource, "securitySource");
     _name = name;
@@ -64,11 +64,11 @@ public abstract class AbstractCdsAggregationFunction<T> implements AggregationFu
   }
 
   @Override
-  public String classifyPosition(Position position) {
-    Security security = resolveSecurity(position);
+  public String classifyPosition(final Position position) {
+    final Security security = resolveSecurity(position);
     if (security instanceof AbstractCreditDefaultSwapSecurity) {
-      AbstractCreditDefaultSwapSecurity cds = (AbstractCreditDefaultSwapSecurity) security;
-      T extracted = _extractor.extract(cds);
+      final AbstractCreditDefaultSwapSecurity cds = (AbstractCreditDefaultSwapSecurity) security;
+      final T extracted = _extractor.extract(cds);
       if (extracted != null) {
         return handleExtractedData(extracted);
       } else {
@@ -90,8 +90,8 @@ public abstract class AbstractCdsAggregationFunction<T> implements AggregationFu
     return _securitySource;
   }
 
-  private Security resolveSecurity(Position position) {
-    Security security = position.getSecurityLink().getTarget();
+  private Security resolveSecurity(final Position position) {
+    final Security security = position.getSecurityLink().getTarget();
     return security != null ? security : position.getSecurityLink().resolveQuiet(_securitySource);
   }
 
@@ -106,7 +106,7 @@ public abstract class AbstractCdsAggregationFunction<T> implements AggregationFu
   }
 
   @Override
-  public int compare(String sector1, String sector2) {
+  public int compare(final String sector1, final String sector2) {
     return sector1.compareTo(sector2);
   }
 

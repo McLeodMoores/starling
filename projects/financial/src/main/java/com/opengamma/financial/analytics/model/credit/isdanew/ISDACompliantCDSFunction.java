@@ -114,7 +114,7 @@ public class ISDACompliantCDSFunction extends NonCompiledInvoker {
 
     final CdsRecoveryRateIdentifier recoveryRateIdentifier = security.accept(new CreditSecurityToRecoveryRateVisitor(
         executionContext.getSecuritySource()));
-    Object recoveryRateObject = inputs.getValue(new ValueRequirement("PX_LAST",
+    final Object recoveryRateObject = inputs.getValue(new ValueRequirement("PX_LAST",
                                                                      ComputationTargetType.PRIMITIVE,
                                                                      recoveryRateIdentifier.getExternalId()));
     if (recoveryRateObject == null) {
@@ -132,7 +132,7 @@ public class ISDACompliantCDSFunction extends NonCompiledInvoker {
     final ISDACompliantYieldCurve yieldCurve = (ISDACompliantYieldCurve) isdaObject;
 
     // spreads
-    NodalTenorDoubleCurve spreadObject = (NodalTenorDoubleCurve) inputs.getValue(ValueRequirementNames.BUCKETED_SPREADS);
+    final NodalTenorDoubleCurve spreadObject = (NodalTenorDoubleCurve) inputs.getValue(ValueRequirementNames.BUCKETED_SPREADS);
     if (spreadObject == null) {
       throw new OpenGammaRuntimeException("Unable to get spreads");
     }
@@ -142,7 +142,7 @@ public class ISDACompliantCDSFunction extends NonCompiledInvoker {
     final CDSQuoteConvention[] quotes = SpreadCurveFunctions.getQuotes(security.getMaturityDate(), spreads, security.getParSpread(), quoteConvention, false);
 
     // spreads
-    NodalTenorDoubleCurve pillarObject = (NodalTenorDoubleCurve) inputs.getValue(ValueRequirementNames.PILLAR_SPREADS);
+    final NodalTenorDoubleCurve pillarObject = (NodalTenorDoubleCurve) inputs.getValue(ValueRequirementNames.PILLAR_SPREADS);
     if (pillarObject == null) {
       throw new OpenGammaRuntimeException("Unable to get pillars");
     }
@@ -183,10 +183,10 @@ public class ISDACompliantCDSFunction extends NonCompiledInvoker {
     }
     final CDSQuoteConvention quote = SpreadCurveFunctions.getQuotes(security.getMaturityDate(), new double[] {cdsQuoteDouble}, security.getParSpread(), quoteConvention, true)[0];
 
-    boolean isNonIMMFAndFromPUF = !IMMDateLogic.isIMMDate(security.getMaturityDate().toLocalDate()) && quote instanceof PointsUpFront;
-    boolean isNonIMMAndFromSpread = !IMMDateLogic.isIMMDate(security.getMaturityDate().toLocalDate()) && (quote instanceof QuotedSpread || quote instanceof ParSpread);
-    int buySellPremiumFactor = security.isBuy() ? -1 : 1;
-    
+    final boolean isNonIMMFAndFromPUF = !IMMDateLogic.isIMMDate(security.getMaturityDate().toLocalDate()) && quote instanceof PointsUpFront;
+    final boolean isNonIMMAndFromSpread = !IMMDateLogic.isIMMDate(security.getMaturityDate().toLocalDate()) && (quote instanceof QuotedSpread || quote instanceof ParSpread);
+    final int buySellPremiumFactor = security.isBuy() ? -1 : 1;
+
     final double notional = security.getNotional().getAmount();
     final double coupon = security.getParSpread() * ONE_BPS;
     final PointsUpFront puf = getPointsUpfront(quote, buySellProtection, yieldCurve, analytic, creditCurve);
@@ -333,7 +333,7 @@ public class ISDACompliantCDSFunction extends NonCompiledInvoker {
     return curveIdentifier;
   }
 
-  public PointsUpFront getPointsUpfront(CDSQuoteConvention quote, BuySellProtection buySellProtection, ISDACompliantYieldCurve yieldCurve, CDSAnalytic analytic, ISDACompliantCreditCurve creditCurve) {
+  public PointsUpFront getPointsUpfront(final CDSQuoteConvention quote, final BuySellProtection buySellProtection, final ISDACompliantYieldCurve yieldCurve, final CDSAnalytic analytic, final ISDACompliantCreditCurve creditCurve) {
     double puf = 0.0;
     if (quote instanceof PointsUpFront) {
       return (PointsUpFront) quote;
@@ -348,11 +348,11 @@ public class ISDACompliantCDSFunction extends NonCompiledInvoker {
       throw new OpenGammaRuntimeException("Unknown quote type " + quote);
     }
     // SELL protection reverses directions of legs
-    puf = (buySellProtection == BuySellProtection.SELL) ? -puf : puf;
+    puf = buySellProtection == BuySellProtection.SELL ? -puf : puf;
     return new PointsUpFront(quote.getCoupon(), puf);
   }
 
-  public static  QuotedSpread getQuotedSpread(CDSQuoteConvention quote, PointsUpFront puf, BuySellProtection buySellProtection, ISDACompliantYieldCurve yieldCurve, CDSAnalytic analytic) {
+  public static  QuotedSpread getQuotedSpread(final CDSQuoteConvention quote, final PointsUpFront puf, final BuySellProtection buySellProtection, final ISDACompliantYieldCurve yieldCurve, final CDSAnalytic analytic) {
     double quotedSpread;
     if (quote instanceof QuotedSpread) {
       return (QuotedSpread) quote;
@@ -360,22 +360,22 @@ public class ISDACompliantCDSFunction extends NonCompiledInvoker {
       quotedSpread = POINTS_UP_FRONT_CONVERTER.pufToQuotedSpread(analytic, puf.getCoupon(), yieldCurve, puf.getPointsUpFront());
     }
     // SELL protection reverses directions of legs
-    quotedSpread = (buySellProtection == BuySellProtection.SELL) ? -quotedSpread : quotedSpread;
+    quotedSpread = buySellProtection == BuySellProtection.SELL ? -quotedSpread : quotedSpread;
     return new QuotedSpread(quote.getCoupon(), quotedSpread);
   }
 
   public double getUpfrontAmount(final CDSAnalytic analytic, final PointsUpFront puf, final double notional, final double accPremiumPrim, final BuySellProtection buySellProtection) {
     // upfront amount is defined as dirty PV
-    double cash = (puf.getPointsUpFront() - accPremiumPrim) * notional;
+    final double cash = (puf.getPointsUpFront() - accPremiumPrim) * notional;
     // SELL protection reverses directions of legs
-    return (buySellProtection == BuySellProtection.SELL) ? -cash : cash;
+    return buySellProtection == BuySellProtection.SELL ? -cash : cash;
   }
 
   public double getCleanPrice(final PointsUpFront puf) {
     return 100.0 * (1 - puf.getPointsUpFront());
   }
 
-  public TenorLabelledMatrix1D getBucketedCS01(CDSAnalytic analytic, CDSAnalytic[] buckets, Tenor[] tenors, CDSQuoteConvention quote, double notional, ISDACompliantYieldCurve yieldCurve, ISDACompliantCreditCurve creditCurve) {
+  public TenorLabelledMatrix1D getBucketedCS01(final CDSAnalytic analytic, final CDSAnalytic[] buckets, final Tenor[] tenors, final CDSQuoteConvention quote, final double notional, final ISDACompliantYieldCurve yieldCurve, final ISDACompliantCreditCurve creditCurve) {
     //TODO: Check quote.getCoupon() is spread value for IMM & 0.01 (or 0.05) for non IMM
     double[] cs01Values;
     if (quote instanceof ParSpread) {
@@ -391,7 +391,7 @@ public class ISDACompliantCDSFunction extends NonCompiledInvoker {
     return new TenorLabelledMatrix1D(tenors, cs01Values);
   }
 
-  public double getParallelCS01(CDSQuoteConvention quote, CDSAnalytic analytic, ISDACompliantYieldCurve yieldCurve, double notional, CDSAnalytic[] pillars, double[] pillarSpreads) {
+  public double getParallelCS01(final CDSQuoteConvention quote, final CDSAnalytic analytic, final ISDACompliantYieldCurve yieldCurve, final double notional, final CDSAnalytic[] pillars, final double[] pillarSpreads) {
     double cs01;
     if (quote instanceof ParSpread) {
       cs01 = CALCULATOR.parallelCS01FromParSpreads(analytic,

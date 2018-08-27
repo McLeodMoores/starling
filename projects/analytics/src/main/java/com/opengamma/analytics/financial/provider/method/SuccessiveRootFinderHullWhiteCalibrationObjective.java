@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.method;
@@ -36,7 +36,7 @@ public class SuccessiveRootFinderHullWhiteCalibrationObjective extends Successiv
   private HullWhiteOneFactorProvider _hwProvider;
 
   /**
-   * Constructor of the objective function with the Hull-White parameters. The parameters range and accuracy are set at some default value 
+   * Constructor of the objective function with the Hull-White parameters. The parameters range and accuracy are set at some default value
    * (minimum: 1.0E-6; maximum: 1.0, function value accuracy: 1.0E-4; parameter absolute accuracy: 1.0E-9).
    * @param parameters The Hull-White parameters.
    * @param ccy The currency for which the Hull-White parameters are valid (Hull-White on the discounting curve).
@@ -56,7 +56,7 @@ public class SuccessiveRootFinderHullWhiteCalibrationObjective extends Successiv
    * @param multicurves The multi-curves provider.
    */
   @Override
-  public void setMulticurves(MulticurveProviderInterface multicurves) {
+  public void setMulticurves(final MulticurveProviderInterface multicurves) {
     _hwProvider = new HullWhiteOneFactorProvider(multicurves, _hwParameters, _ccyHW);
   }
 
@@ -80,17 +80,17 @@ public class SuccessiveRootFinderHullWhiteCalibrationObjective extends Successiv
    * Sets the calibration time for the next calibration.
    * @param calibrationTime The calibration time.
    */
-  public void setNextCalibrationTime(double calibrationTime) {
+  public void setNextCalibrationTime(final double calibrationTime) {
     _hwParameters.addVolatility(_hwParameters.getLastVolatility(), calibrationTime);
   }
 
   @Override
-  public void setInstrument(InstrumentDerivative instrument) {
+  public void setInstrument(final InstrumentDerivative instrument) {
     super.setInstrument(instrument);
   }
 
   @Override
-  public Double evaluate(Double x) {
+  public Double evaluate(final Double x) {
     _hwProvider.getHullWhiteParameters().setLastVolatility(x);
     return _hwProvider.getMulticurveProvider().getFxRates().convert(getInstrument().accept(PVHWC, _hwProvider), _ccyHW).getAmount() - getPrice();
   }

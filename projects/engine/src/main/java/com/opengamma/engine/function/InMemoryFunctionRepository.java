@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function;
@@ -26,7 +26,7 @@ public class InMemoryFunctionRepository implements FunctionRepository {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(InMemoryFunctionRepository.class);
 
-  private final Map<String, FunctionDefinition> _functions = new HashMap<String, FunctionDefinition>();
+  private final Map<String, FunctionDefinition> _functions = new HashMap<>();
   private final AtomicInteger _nextIdentifier = new AtomicInteger();
 
   public InMemoryFunctionRepository() {
@@ -91,7 +91,7 @@ public class InMemoryFunctionRepository implements FunctionRepository {
     _functions.put(function.getUniqueId(), function);
   }
 
-  public synchronized void replaceFunction(String functionIdentifier, FunctionDefinition function) {
+  public synchronized void replaceFunction(final String functionIdentifier, final FunctionDefinition function) {
     ArgumentChecker.notNull(functionIdentifier, "functionIdentifier");
     ArgumentChecker.notNull(function, "function");
     _functions.remove(functionIdentifier);
@@ -110,15 +110,15 @@ public class InMemoryFunctionRepository implements FunctionRepository {
 
   /**
    * This method is primarily useful for testing, as otherwise it will be done explicitly by the {@link ViewProcessor} on startup.
-   * 
+   *
    * @param compilationContext The context to provide to each function.
    */
-  public void initFunctions(FunctionCompilationContext compilationContext) {
+  public void initFunctions(final FunctionCompilationContext compilationContext) {
     compilationContext.setFunctionReinitializer(new DummyFunctionReinitializer());
-    for (FunctionDefinition function : _functions.values()) {
+    for (final FunctionDefinition function : _functions.values()) {
       try {
         function.init(compilationContext);
-      } catch (Throwable t) {
+      } catch (final Throwable t) {
         LOGGER.warn("Couldn't initialise function {}", function);
         LOGGER.debug("Caught exception", t);
       }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.livedata.firehose;
@@ -19,7 +19,7 @@ import com.opengamma.util.ArgumentChecker;
  * Unlike other classes in this hierarchy, a chunker is defined as a process that
  * continuously runs to process records in a thread compliant fashion, rather than
  * a pull-through fashion (which might be useful in a testing context).
- * 
+ *
  * @param <TRecord> The type of the actual record that will be processed.
  */
 public class FireHoseRecordProcessor<TRecord> implements Lifecycle {
@@ -42,32 +42,32 @@ public class FireHoseRecordProcessor<TRecord> implements Lifecycle {
   private final InputStreamFactory _inputStreamFactory;
   private final RecordStream.Factory<TRecord> _recordStreamFactory;
   private final RecordProcessor<TRecord> _recordProcessor;
-  
+
   // --------------------------------------------------------------------------
   // RUNNING STATE
   // --------------------------------------------------------------------------
-  private final BlockingQueue<Object> _queue = new LinkedBlockingQueue<Object>(QUEUE_CAPACITY);
+  private final BlockingQueue<Object> _queue = new LinkedBlockingQueue<>(QUEUE_CAPACITY);
 
   private final RecordConsumptionJob _recordConsumptionJob;
   private final RecordProcessingJob _recordProcessingJob;
   private Thread _recordConsumptionThread;
   private Thread _recordDispatchThread;
-  
+
   public FireHoseRecordProcessor(
-      InputStreamFactory inputStreamFactory,
-      RecordStream.Factory<TRecord> recordStreamFactory,
-      RecordProcessor<TRecord> recordProcessor) {
+      final InputStreamFactory inputStreamFactory,
+      final RecordStream.Factory<TRecord> recordStreamFactory,
+      final RecordProcessor<TRecord> recordProcessor) {
     ArgumentChecker.notNull(inputStreamFactory, "inputStreamFactory");
     ArgumentChecker.notNull(recordStreamFactory, "recordStreamFactory");
     ArgumentChecker.notNull(recordProcessor, "recordProcessor");
     _inputStreamFactory = inputStreamFactory;
     _recordStreamFactory = recordStreamFactory;
     _recordProcessor = recordProcessor;
-    
+
     _recordConsumptionJob = new RecordConsumptionJob(_inputStreamFactory, _recordStreamFactory, _queue);
     _recordProcessingJob = new RecordProcessingJob(_queue, _recordProcessor);
   }
-  
+
   protected RecordStream.Factory<TRecord> getRecordStreamFactory() {
     return _recordStreamFactory;
   }
@@ -80,12 +80,12 @@ public class FireHoseRecordProcessor<TRecord> implements Lifecycle {
     if (isRunning()) {
       return;
     }
-    
+
     _recordConsumptionThread = new Thread(_recordConsumptionJob, "FireHoseRecordProcessor Consumption");
     // Is this the right value?
     _recordConsumptionThread.setDaemon(false);
     _recordConsumptionThread.start();
-    
+
     _recordDispatchThread = new Thread(_recordProcessingJob, "FireHoseRecordProcessor Dispatch");
     // Is this the right value?
     _recordDispatchThread.setDaemon(false);
@@ -97,7 +97,7 @@ public class FireHoseRecordProcessor<TRecord> implements Lifecycle {
     try {
       _recordConsumptionJob.terminate();
       _recordConsumptionThread.join(10000L);
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
       Thread.interrupted();
       LOGGER.warn("Interrupted while killing record consumption thread", e);
     }
@@ -105,7 +105,7 @@ public class FireHoseRecordProcessor<TRecord> implements Lifecycle {
     try {
       _recordProcessingJob.terminate();
       _recordDispatchThread.join(10000L);
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
       Thread.interrupted();
       LOGGER.warn("Interrupted while killing record processing/dispatch thread", e);
     }
@@ -114,9 +114,9 @@ public class FireHoseRecordProcessor<TRecord> implements Lifecycle {
 
   @Override
   public synchronized boolean isRunning() {
-    if ((_recordConsumptionThread != null)
+    if (_recordConsumptionThread != null
         && _recordConsumptionThread.isAlive()
-        && (_recordDispatchThread != null)
+        && _recordDispatchThread != null
         && _recordDispatchThread.isAlive()) {
       return true;
     }

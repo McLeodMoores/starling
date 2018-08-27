@@ -45,7 +45,7 @@ public class SwaptionSecurity extends FinancialSecurity {
   public static final String SECURITY_TYPE = "SWAPTION";
 
   /**
-   * The payer flag. 
+   * The payer flag.
    * Note - this field isn't used by the analytics since it duplicates information
    * on the underlying. (See PLAT-1924).
    */
@@ -111,12 +111,12 @@ public class SwaptionSecurity extends FinancialSecurity {
     super(SECURITY_TYPE);
   }
 
-  public SwaptionSecurity(boolean payer, ExternalId underlyingIdentifier, boolean isLong, Expiry expiry, boolean cashSettled, Currency currency) {
+  public SwaptionSecurity(final boolean payer, final ExternalId underlyingIdentifier, final boolean isLong, final Expiry expiry, final boolean cashSettled, final Currency currency) {
     this(payer, underlyingIdentifier, isLong, expiry, cashSettled, currency, null, new EuropeanExerciseType(), null);
   }
 
-  public SwaptionSecurity(boolean payer, ExternalId underlyingIdentifier, boolean isLong,
-                          Expiry expiry, boolean cashSettled, Currency currency, Double notional, ExerciseType exerciseType, ZonedDateTime settlementDate) {
+  public SwaptionSecurity(final boolean payer, final ExternalId underlyingIdentifier, final boolean isLong,
+                          final Expiry expiry, final boolean cashSettled, final Currency currency, final Double notional, final ExerciseType exerciseType, final ZonedDateTime settlementDate) {
     super(SECURITY_TYPE);
     setPayer(payer);
     setUnderlyingId(underlyingIdentifier);
@@ -129,8 +129,8 @@ public class SwaptionSecurity extends FinancialSecurity {
     setSettlementDate(settlementDate);
   }
 
-  public SwaptionSecurity(boolean payer, SecurityLink<FinancialSecurity> underlyingLink, boolean isLong,
-      Expiry expiry, boolean cashSettled, Currency currency, Double notional, ExerciseType exerciseType, ZonedDateTime settlementDate) {
+  public SwaptionSecurity(final boolean payer, final SecurityLink<FinancialSecurity> underlyingLink, final boolean isLong,
+      final Expiry expiry, final boolean cashSettled, final Currency currency, final Double notional, final ExerciseType exerciseType, final ZonedDateTime settlementDate) {
     super(SECURITY_TYPE);
     setPayer(payer);
     setUnderlyingLink(underlyingLink);
@@ -148,7 +148,7 @@ public class SwaptionSecurity extends FinancialSecurity {
    *
    * @param underlyingLink  the new value of the property, not null
    */
-  public void setUnderlyingLink(SecurityLink<FinancialSecurity> underlyingLink) {
+  public void setUnderlyingLink(final SecurityLink<FinancialSecurity> underlyingLink) {
     this._underlyingLink = ArgumentChecker.notNull(underlyingLink, "underlyingLink");
     this._underlyingId = _underlyingLink.getIdentifier().iterator().next();
   }
@@ -166,14 +166,14 @@ public class SwaptionSecurity extends FinancialSecurity {
    * Sets the underlying identifier.
    * @param underlyingId  the new value of the property, not null
    */
-  public void setUnderlyingId(ExternalId underlyingId) {
+  public void setUnderlyingId(final ExternalId underlyingId) {
     this._underlyingId = ArgumentChecker.notNull(underlyingId, "underlyingId");
     this._underlyingLink = SecurityLink.resolvable(underlyingId, FinancialSecurity.class);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public final <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public final <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitSwaptionSecurity(this);
   }
   //-------------------------------------------------------------------------

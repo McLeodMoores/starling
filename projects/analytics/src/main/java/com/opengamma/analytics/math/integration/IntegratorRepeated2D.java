@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.integration;
@@ -27,7 +27,7 @@ public class IntegratorRepeated2D extends Integrator2D<Double, Double> {
   }
 
   @Override
-  public Double integrate(Function2D<Double, Double> f, Double[] lower, Double[] upper) {
+  public Double integrate(final Function2D<Double, Double> f, final Double[] lower, final Double[] upper) {
     return _integrator1D.integrate(innerIntegral(f, lower[0], upper[0]), lower[1], upper[1]);
   }
 
@@ -47,9 +47,9 @@ public class IntegratorRepeated2D extends Integrator2D<Double, Double> {
       @Override
       public Double evaluate(final Double y) {
 
-        Function1D<Double, Double> fy = new Function1D<Double, Double>() {
+        final Function1D<Double, Double> fy = new Function1D<Double, Double>() {
           @Override
-          public Double evaluate(Double x) {
+          public Double evaluate(final Double x) {
             return f.evaluate(x, y);
           }
         };

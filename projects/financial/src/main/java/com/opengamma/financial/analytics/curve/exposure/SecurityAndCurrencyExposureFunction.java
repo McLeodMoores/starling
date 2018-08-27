@@ -32,11 +32,11 @@ public class SecurityAndCurrencyExposureFunction implements ExposureFunction {
    * The name of the exposure function.
    */
   public static final String NAME = "Security / Currency";
-  
+
   private final SecurityAndCurrencyVisitor _visitor;
-  
+
   /**
-   * Constructor that uses a security source to look up the underlying contract for the security type and currency, if 
+   * Constructor that uses a security source to look up the underlying contract for the security type and currency, if
    * necessary.
    * @param securitySource the security source containing the security definitions.
    */
@@ -48,26 +48,26 @@ public class SecurityAndCurrencyExposureFunction implements ExposureFunction {
   public String getName() {
     return NAME;
   }
-  
+
   @Override
-  public List<ExternalId> getIds(Trade trade) {
-    Security security = trade.getSecurity();
+  public List<ExternalId> getIds(final Trade trade) {
+    final Security security = trade.getSecurity();
     if (security instanceof FinancialSecurity) {
       return ((FinancialSecurity) security).accept(_visitor);
     }
     return null;
   }
-  
+
   private static final class DefaultSecurityAndCurrencyVisitor implements FinancialSecurityVisitorSameMethodAdapter.Visitor<List<ExternalId>> {
-    
+
     private final SecuritySource _securitySource;
-    
-    public DefaultSecurityAndCurrencyVisitor(SecuritySource securitySource) {
+
+    public DefaultSecurityAndCurrencyVisitor(final SecuritySource securitySource) {
       _securitySource = ArgumentChecker.notNull(securitySource, "securitySource");
     }
-    
+
     @Override
-    public List<ExternalId> visit(FinancialSecurity security) {
+    public List<ExternalId> visit(final FinancialSecurity security) {
       final Collection<Currency> currencies = FinancialSecurityUtils.getCurrencies(security, _securitySource);
       if (currencies == null || currencies.isEmpty()) {
         return null;
@@ -79,14 +79,14 @@ public class SecurityAndCurrencyExposureFunction implements ExposureFunction {
       }
       return result;
     }
-    
+
   }
-  
+
   private static final class SecurityAndCurrencyVisitor extends FinancialSecurityVisitorSameMethodAdapter<List<ExternalId>> {
-    
+
     private final SecuritySource _securitySource;
-    
-    public SecurityAndCurrencyVisitor(SecuritySource securitySource) {
+
+    public SecurityAndCurrencyVisitor(final SecuritySource securitySource) {
       super(new DefaultSecurityAndCurrencyVisitor(ArgumentChecker.notNull(securitySource, "securitySource")));
       _securitySource = securitySource;
     }

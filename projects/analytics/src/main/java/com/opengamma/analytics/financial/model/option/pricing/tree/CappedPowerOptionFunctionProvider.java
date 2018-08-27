@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.tree;
@@ -13,8 +13,8 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class CappedPowerOptionFunctionProvider extends OptionFunctionProvider1D {
 
-  private double _power;
-  private double _cap;
+  private final double _power;
+  private final double _cap;
 
   /**
    * @param strike Strike price, K
@@ -91,14 +91,14 @@ public class CappedPowerOptionFunctionProvider extends OptionFunctionProvider1D 
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_cap);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_power);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -108,7 +108,7 @@ public class CappedPowerOptionFunctionProvider extends OptionFunctionProvider1D 
     if (!(obj instanceof CappedPowerOptionFunctionProvider)) {
       return false;
     }
-    CappedPowerOptionFunctionProvider other = (CappedPowerOptionFunctionProvider) obj;
+    final CappedPowerOptionFunctionProvider other = (CappedPowerOptionFunctionProvider) obj;
     if (Double.doubleToLongBits(_cap) != Double.doubleToLongBits(other._cap)) {
       return false;
     }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.fudgemsg;
@@ -29,7 +29,7 @@ public class ComputationCacheQueryBuilderTest extends AbstractFudgeBuilderTestCa
 
   @Test
   public void testEmptyQuery() {
-    ComputationCycleQuery query = new ComputationCycleQuery();
+    final ComputationCycleQuery query = new ComputationCycleQuery();
     query.setCalculationConfigurationName("DEFAULT");
     query.setValueSpecifications(new ArrayList<ValueSpecification>());
     checkCycle(query);
@@ -37,9 +37,9 @@ public class ComputationCacheQueryBuilderTest extends AbstractFudgeBuilderTestCa
 
   @Test
   public void testSingleQuery() {
-    ComputationCycleQuery query = new ComputationCycleQuery();
+    final ComputationCycleQuery query = new ComputationCycleQuery();
     query.setCalculationConfigurationName("DEFAULT");
-    ValueSpecification spec = ValueSpecification.of("SomeValue", ComputationTargetType.PRIMITIVE, UniqueId.of("SomeScheme", "SomeValue"), ValueProperties
+    final ValueSpecification spec = ValueSpecification.of("SomeValue", ComputationTargetType.PRIMITIVE, UniqueId.of("SomeScheme", "SomeValue"), ValueProperties
         .with(ValuePropertyNames.FUNCTION, "SomeFunc").with(ValuePropertyNames.CURRENCY, "USD").get());
     query.setValueSpecifications(Lists.newArrayList(spec));
     checkCycle(query);
@@ -47,19 +47,19 @@ public class ComputationCacheQueryBuilderTest extends AbstractFudgeBuilderTestCa
 
   @Test
   public void testMultipleQuery() {
-    ComputationCycleQuery query = new ComputationCycleQuery();
+    final ComputationCycleQuery query = new ComputationCycleQuery();
     query.setCalculationConfigurationName("DEFAULT");
-    ValueSpecification spec = ValueSpecification.of("SomeValue", ComputationTargetType.PRIMITIVE, UniqueId.of("SomeScheme", "SomeValue"),
+    final ValueSpecification spec = ValueSpecification.of("SomeValue", ComputationTargetType.PRIMITIVE, UniqueId.of("SomeScheme", "SomeValue"),
         ValueProperties.with(ValuePropertyNames.FUNCTION, "SomeFunc").with(ValuePropertyNames.CURRENCY, "USD").get());
-    ValueSpecification spec2 = ValueSpecification.of("SomeOtherValue", ComputationTargetType.PRIMITIVE, UniqueId.of("SomeScheme", "SomeOtherValue"),
+    final ValueSpecification spec2 = ValueSpecification.of("SomeOtherValue", ComputationTargetType.PRIMITIVE, UniqueId.of("SomeScheme", "SomeOtherValue"),
         ValueProperties.with(ValuePropertyNames.FUNCTION, "SomeOtherFunc").with(ValuePropertyNames.CURRENCY, "USD").get());
     query.setValueSpecifications(Lists.newArrayList(spec, spec2));
 
     checkCycle(query);
   }
 
-  private void checkCycle(ComputationCycleQuery query) {
-    ComputationCycleQuery cycled = cycleObject(ComputationCycleQuery.class, query);
+  private void checkCycle(final ComputationCycleQuery query) {
+    final ComputationCycleQuery cycled = cycleObject(ComputationCycleQuery.class, query);
 
     assertEquals(query.getCalculationConfigurationName(), cycled.getCalculationConfigurationName());
     assertEquals(query.getValueSpecifications(), cycled.getValueSpecifications());

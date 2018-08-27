@@ -31,45 +31,45 @@ public class DelegatingSnapshotSource extends UniqueIdSchemeDelegator<MarketData
 
   /**
    * Creates an instance specifying the default delegate.
-   * 
+   *
    * @param defaultSource the source to use when no scheme matches, not null
    */
-  public DelegatingSnapshotSource(MarketDataSnapshotSource defaultSource) {
+  public DelegatingSnapshotSource(final MarketDataSnapshotSource defaultSource) {
     super(defaultSource);
   }
 
   /**
    * Creates an instance specifying the default delegate.
-   * 
+   *
    * @param defaultSource the source to use when no scheme matches, not null
    * @param schemePrefixToSourceMap the map of sources by scheme to switch on, not null
    */
-  public DelegatingSnapshotSource(MarketDataSnapshotSource defaultSource, Map<String, MarketDataSnapshotSource> schemePrefixToSourceMap) {
+  public DelegatingSnapshotSource(final MarketDataSnapshotSource defaultSource, final Map<String, MarketDataSnapshotSource> schemePrefixToSourceMap) {
     super(defaultSource, schemePrefixToSourceMap);
   }
 
   @Override
-  public StructuredMarketDataSnapshot get(ObjectId objectId, VersionCorrection versionCorrection) {
+  public StructuredMarketDataSnapshot get(final ObjectId objectId, final VersionCorrection versionCorrection) {
     return chooseDelegate(objectId.getScheme()).get(objectId, versionCorrection);
   }
 
   @Override
-  public StructuredMarketDataSnapshot get(UniqueId uniqueId) {
+  public StructuredMarketDataSnapshot get(final UniqueId uniqueId) {
     return chooseDelegate(uniqueId.getScheme()).get(uniqueId);
   }
 
   @Override
-  public Map<UniqueId, StructuredMarketDataSnapshot> get(Collection<UniqueId> uniqueIds) {
-    Map<String, Functional<UniqueId>> groups = functional(uniqueIds).groupBy(new Function1<UniqueId, String>() {
+  public Map<UniqueId, StructuredMarketDataSnapshot> get(final Collection<UniqueId> uniqueIds) {
+    final Map<String, Functional<UniqueId>> groups = functional(uniqueIds).groupBy(new Function1<UniqueId, String>() {
       @Override
-      public String execute(UniqueId uniqueId) {
+      public String execute(final UniqueId uniqueId) {
         return uniqueId.getScheme();
       }
     });
 
-    Map<UniqueId, StructuredMarketDataSnapshot> snapshots = newHashMap();
+    final Map<UniqueId, StructuredMarketDataSnapshot> snapshots = newHashMap();
 
-    for (Map.Entry<String, Functional<UniqueId>> entries : groups.entrySet()) {
+    for (final Map.Entry<String, Functional<UniqueId>> entries : groups.entrySet()) {
       snapshots.putAll(chooseDelegate(entries.getKey()).get(entries.getValue().asList()));
     }
 
@@ -80,31 +80,31 @@ public class DelegatingSnapshotSource extends UniqueIdSchemeDelegator<MarketData
   public Map<ObjectId, StructuredMarketDataSnapshot> get(final Collection<ObjectId> objectIds, final VersionCorrection versionCorrection) {
     final Map<String, Functional<ObjectId>> groups = functional(objectIds).groupBy(new Function1<ObjectId, String>() {
       @Override
-      public String execute(ObjectId objectId) {
+      public String execute(final ObjectId objectId) {
         return objectId.getScheme();
       }
     });
     final Map<ObjectId, StructuredMarketDataSnapshot> snapshots = newHashMap();
-    for (Map.Entry<String, Functional<ObjectId>> entries : groups.entrySet()) {
+    for (final Map.Entry<String, Functional<ObjectId>> entries : groups.entrySet()) {
       snapshots.putAll(chooseDelegate(entries.getKey()).get(entries.getValue().asList(), versionCorrection));
     }
     return snapshots;
   }
 
   @Override
-  public void addChangeListener(UniqueId uniqueId, MarketDataSnapshotChangeListener listener) {
+  public void addChangeListener(final UniqueId uniqueId, final MarketDataSnapshotChangeListener listener) {
     chooseDelegate(uniqueId.getScheme()).addChangeListener(uniqueId, listener);
   }
 
   @Override
-  public void removeChangeListener(UniqueId uniqueId, MarketDataSnapshotChangeListener listener) {
+  public void removeChangeListener(final UniqueId uniqueId, final MarketDataSnapshotChangeListener listener) {
     chooseDelegate(uniqueId.getScheme()).removeChangeListener(uniqueId, listener);
   }
 
   @Override
-  public <S extends NamedSnapshot> S getSingle(Class<S> type,
-                                               String snapshotName,
-                                               VersionCorrection versionCorrection) {
+  public <S extends NamedSnapshot> S getSingle(final Class<S> type,
+                                               final String snapshotName,
+                                               final VersionCorrection versionCorrection) {
     // As we have noi information about the scheme we can't do anything but use the default
     return getDefaultDelegate().getSingle(type, snapshotName, versionCorrection);
   }

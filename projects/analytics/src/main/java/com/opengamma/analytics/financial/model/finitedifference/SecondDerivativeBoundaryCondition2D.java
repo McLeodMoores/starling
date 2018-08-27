@@ -18,24 +18,24 @@ public class SecondDerivativeBoundaryCondition2D implements BoundaryCondition2D 
   private final Surface<Double, Double, Double> _f;
   private final double _level;
 
-  public SecondDerivativeBoundaryCondition2D(final Surface<Double, Double, Double> boundarySecondDeriviative, double boundaryLevel) {
+  public SecondDerivativeBoundaryCondition2D(final Surface<Double, Double, Double> boundarySecondDeriviative, final double boundaryLevel) {
     Validate.notNull(boundarySecondDeriviative, "boundaryValue ");
     _f = boundarySecondDeriviative;
     _level = boundaryLevel;
   }
 
-  public SecondDerivativeBoundaryCondition2D(final double boundarySecondDeriviative, double boundaryLevel) {
+  public SecondDerivativeBoundaryCondition2D(final double boundarySecondDeriviative, final double boundaryLevel) {
     _f = ConstantDoublesSurface.from(boundarySecondDeriviative);
     _level = boundaryLevel;
   }
 
   @Override
-  public double getConstant(double t, double boundaryPosition, double gridSpacing) {
+  public double getConstant(final double t, final double boundaryPosition, final double gridSpacing) {
     return _f.getZValue(t, boundaryPosition) * gridSpacing * gridSpacing;
   }
 
   @Override
-  public double[] getLeftMatrixCondition(double t, double boundaryPosition) {
+  public double[] getLeftMatrixCondition(final double t, final double boundaryPosition) {
     return new double[] {1, -2, 1 };
   }
 
@@ -45,7 +45,7 @@ public class SecondDerivativeBoundaryCondition2D implements BoundaryCondition2D 
   }
 
   @Override
-  public double[] getRightMatrixCondition(double t, double boundaryPosition) {
+  public double[] getRightMatrixCondition(final double t, final double boundaryPosition) {
     return new double[0];
   }
 

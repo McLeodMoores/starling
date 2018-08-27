@@ -20,43 +20,43 @@ public class ViewProcessorEventListenerRegistry implements ViewProcessorEventLis
   /**
    * The set of listeners.
    */
-  private final CopyOnWriteArraySet<ViewProcessorEventListener> _listeners = new CopyOnWriteArraySet<ViewProcessorEventListener>();
+  private final CopyOnWriteArraySet<ViewProcessorEventListener> _listeners = new CopyOnWriteArraySet<>();
 
   @Override
-  public void notifyViewProcessAdded(UniqueId viewProcessId) {
-    for (ViewProcessorEventListener listener : _listeners) {
+  public void notifyViewProcessAdded(final UniqueId viewProcessId) {
+    for (final ViewProcessorEventListener listener : _listeners) {
       listener.notifyViewProcessAdded(viewProcessId);
     }
   }
 
   @Override
-  public void notifyViewAutomaticallyStarted(UniqueId viewProcessId, String autoStartName) {
-    for (ViewProcessorEventListener listener : _listeners) {
+  public void notifyViewAutomaticallyStarted(final UniqueId viewProcessId, final String autoStartName) {
+    for (final ViewProcessorEventListener listener : _listeners) {
       listener.notifyViewAutomaticallyStarted(viewProcessId, autoStartName);
     }
   }
 
   @Override
-  public void notifyViewProcessRemoved(UniqueId viewProcessId) {
-    for (ViewProcessorEventListener listener : _listeners) {
+  public void notifyViewProcessRemoved(final UniqueId viewProcessId) {
+    for (final ViewProcessorEventListener listener : _listeners) {
       listener.notifyViewProcessRemoved(viewProcessId);
     }
   }
-  
+
   @Override
-  public void notifyViewClientAdded(UniqueId viewClientId) {
-    for (ViewProcessorEventListener listener : _listeners) {
+  public void notifyViewClientAdded(final UniqueId viewClientId) {
+    for (final ViewProcessorEventListener listener : _listeners) {
       listener.notifyViewClientAdded(viewClientId);
     }
   }
 
   @Override
-  public void notifyViewClientRemoved(UniqueId viewClientId) {
-    for (ViewProcessorEventListener listener : _listeners) {
+  public void notifyViewClientRemoved(final UniqueId viewClientId) {
+    for (final ViewProcessorEventListener listener : _listeners) {
       listener.notifyViewClientRemoved(viewClientId);
     }
   }
-  
+
   /**
    * Adds a listener to the notification service. No guarantee is made that listeners will be
    * notified in the order they were added.
@@ -64,7 +64,7 @@ public class ViewProcessorEventListenerRegistry implements ViewProcessorEventLis
    * @param viewProcessorEventListener the listener to add. Can be null, in which case nothing happens
    * @return true if the listener is being added and was not already added
    */
-  public final boolean registerListener(ViewProcessorEventListener viewProcessorEventListener) {
+  public final boolean registerListener(final ViewProcessorEventListener viewProcessorEventListener) {
     if (viewProcessorEventListener == null) {
       return false;
     }
@@ -77,20 +77,20 @@ public class ViewProcessorEventListenerRegistry implements ViewProcessorEventLis
    * @param viewProcessorEventListener the listener to remove
    * @return true if the listener was present
    */
-  public final boolean unregisterListener(ViewProcessorEventListener viewProcessorEventListener) {
+  public final boolean unregisterListener(final ViewProcessorEventListener viewProcessorEventListener) {
     return _listeners.remove(viewProcessorEventListener);
   }
 
   @Override
   public void notifyViewProcessorStarted() {
-    for (ViewProcessorEventListener listener : _listeners) {
+    for (final ViewProcessorEventListener listener : _listeners) {
       listener.notifyViewProcessorStarted();
     }
   }
 
   @Override
   public void notifyViewProcessorStopped() {
-    for (ViewProcessorEventListener listener : _listeners) {
+    for (final ViewProcessorEventListener listener : _listeners) {
       listener.notifyViewProcessorStopped();
     }
   }

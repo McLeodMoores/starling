@@ -10,8 +10,6 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 
-import net.sf.ehcache.CacheManager;
-
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
@@ -34,6 +32,8 @@ import com.opengamma.web.bundle.EHCachingBundleCompressor;
 import com.opengamma.web.bundle.WebBundlesResource;
 import com.opengamma.web.bundle.YUIBundleCompressor;
 import com.opengamma.web.bundle.YUICompressorOptions;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Component factory for the main website.
@@ -89,31 +89,31 @@ public class WebsiteBundleComponentFactory extends AbstractComponentFactory {
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
-    final WebResourceBundleInitializer webResourceInitializer = new WebResourceBundleInitializer(buildCompressorOptions(), 
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
+    final WebResourceBundleInitializer webResourceInitializer = new WebResourceBundleInitializer(buildCompressorOptions(),
         buildBundleManager(), getCacheManager(), getDeployMode(), repo);
     repo.registerServletContextAware(webResourceInitializer);
   }
-  
+
   //-------------------------------------------------------------------------
   static final class WebResourceBundleInitializer implements ServletContextAware {
-    private YUICompressorOptions _compressorOptions;
-    private BundleManagerFactory _bundleManagerFactory;
-    private CacheManager _cacheManager;
-    private DeployMode _deployMode;
-    private ComponentRepository _repo;
-    
-    public WebResourceBundleInitializer(YUICompressorOptions compressorOptions, BundleManagerFactory bundleManagerFactory, 
-        CacheManager cacheManager, DeployMode deployMode, ComponentRepository repo) {
+    private final YUICompressorOptions _compressorOptions;
+    private final BundleManagerFactory _bundleManagerFactory;
+    private final CacheManager _cacheManager;
+    private final DeployMode _deployMode;
+    private final ComponentRepository _repo;
+
+    public WebResourceBundleInitializer(final YUICompressorOptions compressorOptions, final BundleManagerFactory bundleManagerFactory,
+        final CacheManager cacheManager, final DeployMode deployMode, final ComponentRepository repo) {
       _compressorOptions = compressorOptions;
       _bundleManagerFactory = bundleManagerFactory;
       _cacheManager = cacheManager;
       _deployMode = deployMode;
       _repo = repo;
     }
-    
+
     @Override
-    public void setServletContext(ServletContext servletContext) {
+    public void setServletContext(final ServletContext servletContext) {
       BundleCompressor compressor = new YUIBundleCompressor(_compressorOptions);
       if (_cacheManager != null) {
         compressor = new EHCachingBundleCompressor(compressor, _cacheManager);
@@ -122,22 +122,22 @@ public class WebsiteBundleComponentFactory extends AbstractComponentFactory {
           throw new IllegalArgumentException("CacheManager required for production deployment");
         }
       }
-      
-      JerseyRestResourceFactory resource = new JerseyRestResourceFactory(WebBundlesResource.class, _bundleManagerFactory, compressor, _deployMode);
+
+      final JerseyRestResourceFactory resource = new JerseyRestResourceFactory(WebBundlesResource.class, _bundleManagerFactory, compressor, _deployMode);
       _repo.getRestComponents().publishResource(resource);
     }
- 
+
   }
 
   protected BundleManagerFactory buildBundleManager() {
-    BundleManagerFactory managerFactory = new BundleManagerFactory();
+    final BundleManagerFactory managerFactory = new BundleManagerFactory();
     managerFactory.setBaseDir(getBaseDir());
     managerFactory.setConfigXmlPath(getConfigXmlPath());
     return managerFactory;
   }
 
   protected YUICompressorOptions buildCompressorOptions() {
-    YUICompressorOptions compressorOptions = new YUICompressorOptions();
+    final YUICompressorOptions compressorOptions = new YUICompressorOptions();
     compressorOptions.setLineBreakPosition(getCompressorLineBreakPosition());
     compressorOptions.setMunge(isCompressorMunge());
     compressorOptions.setPreserveAllSemiColons(isCompressorPreserveAllSemiColons());

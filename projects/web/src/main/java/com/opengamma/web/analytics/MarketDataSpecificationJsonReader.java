@@ -64,28 +64,28 @@ public class MarketDataSpecificationJsonReader {
       RANDOMIZED_SNAPSHOT, new RandomSnapshotSpecificationBuilder()
   );
 
-  public static MarketDataSpecification buildSpecification(String json) throws JSONException {
+  public static MarketDataSpecification buildSpecification(final String json) throws JSONException {
     return buildSpecification(new JSONObject(json));
   }
 
-  private static MarketDataSpecification buildSpecification(JSONObject json) throws JSONException {
-    String marketDataType = json.getString(MARKET_DATA_TYPE);
-    SpecificationBuilder builder = BUILDERS.get(marketDataType);
+  private static MarketDataSpecification buildSpecification(final JSONObject json) throws JSONException {
+    final String marketDataType = json.getString(MARKET_DATA_TYPE);
+    final SpecificationBuilder builder = BUILDERS.get(marketDataType);
     if (builder == null) {
       throw new IllegalArgumentException("No builder found for market data type " + marketDataType);
     }
     return builder.build(json);
   }
 
-  public static List<MarketDataSpecification> buildSpecifications(String json) {
+  public static List<MarketDataSpecification> buildSpecifications(final String json) {
     try {
-      JSONArray array = new JSONArray(json);
-      List<MarketDataSpecification> specs = Lists.newArrayListWithCapacity(array.length());
+      final JSONArray array = new JSONArray(json);
+      final List<MarketDataSpecification> specs = Lists.newArrayListWithCapacity(array.length());
       for (int i = 0; i < array.length(); i++) {
         specs.add(buildSpecification(array.getJSONObject(i)));
       }
       return specs;
-    } catch (JSONException e) {
+    } catch (final JSONException e) {
       throw new IllegalArgumentException("Failed to parse MarketDataSpecification JSON", e);
     }
   }
@@ -100,7 +100,7 @@ public class MarketDataSpecificationJsonReader {
   private static class LiveSpecificationBuilder implements SpecificationBuilder {
 
     @Override
-    public MarketDataSpecification build(JSONObject json) throws JSONException {
+    public MarketDataSpecification build(final JSONObject json) throws JSONException {
       return LiveMarketDataSpecification.of(json.getString(MarketDataSpecificationJsonReader.SOURCE));
     }
   }
@@ -109,7 +109,7 @@ public class MarketDataSpecificationJsonReader {
   private static class LatestHistoricalSpecificationBuilder implements SpecificationBuilder {
 
     @Override
-    public MarketDataSpecification build(JSONObject json) throws JSONException {
+    public MarketDataSpecification build(final JSONObject json) throws JSONException {
       return new LatestHistoricalMarketDataSpecification(
           json.getString(MarketDataSpecificationJsonReader.RESOLVER_KEY));
     }
@@ -119,7 +119,7 @@ public class MarketDataSpecificationJsonReader {
   private static class FixedHistoricalSpecificationBuilder implements SpecificationBuilder {
 
     @Override
-    public MarketDataSpecification build(JSONObject json) throws JSONException {
+    public MarketDataSpecification build(final JSONObject json) throws JSONException {
       return new FixedHistoricalMarketDataSpecification(
           json.getString(MarketDataSpecificationJsonReader.RESOLVER_KEY),
           LocalDate.parse(json.getString(DATE)));
@@ -130,7 +130,7 @@ public class MarketDataSpecificationJsonReader {
   private static class SnapshotSpecificationBuilder implements SpecificationBuilder {
 
     @Override
-    public MarketDataSpecification build(JSONObject json) throws JSONException {
+    public MarketDataSpecification build(final JSONObject json) throws JSONException {
       return UserMarketDataSpecification.of(UniqueId.parse(json.getString(MarketDataSpecificationJsonReader.SNAPSHOT_ID)));
     }
   }
@@ -139,7 +139,7 @@ public class MarketDataSpecificationJsonReader {
   private static class RandomSnapshotSpecificationBuilder implements SpecificationBuilder {
 
     @Override
-    public MarketDataSpecification build(JSONObject json) throws JSONException {
+    public MarketDataSpecification build(final JSONObject json) throws JSONException {
       return RandomizingMarketDataSpecification.of(
         UserMarketDataSpecification.of(UniqueId.parse(json.getString(MarketDataSpecificationJsonReader.SNAPSHOT_ID))),
         json.getDouble(MarketDataSpecificationJsonReader.UPDATE_PROBABILITY),

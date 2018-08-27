@@ -44,7 +44,7 @@ public class DataHolidaySourceResource extends AbstractDataResource {
 
   /**
    * Creates the resource, exposing the underlying source over REST.
-   * 
+   *
    * @param holidaySource  the underlying holiday source, not null
    */
   public DataHolidaySourceResource(final HolidaySource holidaySource) {
@@ -55,7 +55,7 @@ public class DataHolidaySourceResource extends AbstractDataResource {
   //-------------------------------------------------------------------------
   /**
    * Gets the holiday source.
-   * 
+   *
    * @return the holiday source, not null
    */
   public HolidaySource getHolidaySource() {
@@ -64,25 +64,25 @@ public class DataHolidaySourceResource extends AbstractDataResource {
 
   //-------------------------------------------------------------------------
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
   @GET
   @Path("holidays/{holidayId}")
   public Response get(
-      @PathParam("holidayId") String idStr,
-      @QueryParam("version") String version,
-      @QueryParam("versionAsOf") String versionAsOf,
-      @QueryParam("correctedTo") String correctedTo) {
-    
+      @PathParam("holidayId") final String idStr,
+      @QueryParam("version") final String version,
+      @QueryParam("versionAsOf") final String versionAsOf,
+      @QueryParam("correctedTo") final String correctedTo) {
+
     final ObjectId objectId = ObjectId.parse(idStr);
     if (version != null) {
       final Holiday result = getHolidaySource().get(objectId.atVersion(version));
       return responseOkObject(result);
     } else {
       final VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
-      Holiday result = getHolidaySource().get(objectId, vc);
+      final Holiday result = getHolidaySource().get(objectId, vc);
       return responseOkObject(result);
     }
   }
@@ -90,11 +90,11 @@ public class DataHolidaySourceResource extends AbstractDataResource {
   @GET
   @Path("holidaySearches/retrieve")
   public Response get(
-      @QueryParam("holidayType") HolidayType holidayType,
-      @QueryParam("currency") String currencyCode,
-      @QueryParam("id") List<String> externalIdStrs) {
+      @QueryParam("holidayType") final HolidayType holidayType,
+      @QueryParam("currency") final String currencyCode,
+      @QueryParam("id") final List<String> externalIdStrs) {
 
-    Collection<Holiday> result = holidayType == HolidayType.CURRENCY ?
+    final Collection<Holiday> result = holidayType == HolidayType.CURRENCY ?
         getHolidaySource().get(Currency.of(currencyCode)) :
         getHolidaySource().get(holidayType, ExternalIdBundle.parse(externalIdStrs));
     return responseOkObject(result);
@@ -106,18 +106,18 @@ public class DataHolidaySourceResource extends AbstractDataResource {
   @GET
   @Path("holidaySearches/check")
   public Response check(
-      @QueryParam("date") String localDateStr,
-      @QueryParam("holidayType") HolidayType holidayType,
-      @QueryParam("currency") String currencyCode,
-      @QueryParam("id") List<String> externalIdStrs) {
+      @QueryParam("date") final String localDateStr,
+      @QueryParam("holidayType") final HolidayType holidayType,
+      @QueryParam("currency") final String currencyCode,
+      @QueryParam("id") final List<String> externalIdStrs) {
 
-    LocalDate date = LocalDate.parse(localDateStr);
+    final LocalDate date = LocalDate.parse(localDateStr);
     if (holidayType == HolidayType.CURRENCY) {
-      boolean result = getHolidaySource().isHoliday(date, Currency.of(currencyCode));
+      final boolean result = getHolidaySource().isHoliday(date, Currency.of(currencyCode));
       return responseOkObject(FudgeBooleanWrapper.of(result));
     } else {
       final ExternalIdBundle bundle = ExternalIdBundle.parse(externalIdStrs);
-      boolean result = getHolidaySource().isHoliday(date, holidayType, bundle);
+      final boolean result = getHolidaySource().isHoliday(date, holidayType, bundle);
       return responseOkObject(FudgeBooleanWrapper.of(result));
     }
   }

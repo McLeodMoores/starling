@@ -19,26 +19,26 @@ import com.opengamma.util.time.Tenor;
 public class LabelledMatrix3DConverter implements ResultConverter<LabelledMatrix3D> {
 
   @Override
-  public Object convertForDisplay(ResultConverterCache context, ValueSpecification valueSpec, LabelledMatrix3D value, ConversionMode mode) {
-    Map<String, Object> result = new HashMap<String, Object>();
-    int tablesCount = value.getZKeys().length;
-    int rowCount = value.getYKeys().length;
-    int columnCount = value.getXKeys().length;
-    final Map<String, Object> summary = new HashMap<String, Object>();
+  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final LabelledMatrix3D value, final ConversionMode mode) {
+    final Map<String, Object> result = new HashMap<>();
+    final int tablesCount = value.getZKeys().length;
+    final int rowCount = value.getYKeys().length;
+    final int columnCount = value.getXKeys().length;
+    final Map<String, Object> summary = new HashMap<>();
     summary.put("zCount", tablesCount);
     summary.put("rowCount", rowCount);
     summary.put("colCount", columnCount);
     result.put("summary", summary);
 
     if (mode == ConversionMode.FULL) {
-      String[] xLabels = new String[columnCount];
-      String[] yLabels = new String[rowCount * tablesCount];
+      final String[] xLabels = new String[columnCount];
+      final String[] yLabels = new String[rowCount * tablesCount];
       for (int i = 0; i < xLabels.length; i++) {
         xLabels[i] = value.getXLabels()[i].toString();
       }
       result.put("x", xLabels);
-      double[][][] values = value.getValues();
-      double[][] formattedValues = new double[yLabels.length][xLabels.length];
+      final double[][][] values = value.getValues();
+      final double[][] formattedValues = new double[yLabels.length][xLabels.length];
       int rowNumber = 0;
       for (int i = 0; i < tablesCount; i++) {
         for (int j = 0; j < rowCount; j++) {
@@ -53,12 +53,12 @@ public class LabelledMatrix3DConverter implements ResultConverter<LabelledMatrix
   }
 
   @Override
-  public Object convertForHistory(ResultConverterCache context, ValueSpecification valueSpec, LabelledMatrix3D value) {
+  public Object convertForHistory(final ResultConverterCache context, final ValueSpecification valueSpec, final LabelledMatrix3D value) {
     return null;
   }
 
   @Override
-  public String convertToText(ResultConverterCache context, ValueSpecification valueSpec, LabelledMatrix3D value) {
+  public String convertToText(final ResultConverterCache context, final ValueSpecification valueSpec, final LabelledMatrix3D value) {
     return "Labelled Matrix 3D (" + value.getZKeys().length + " x " + value.getYKeys().length + " x " + value.getXKeys().length + ")";
   }
 

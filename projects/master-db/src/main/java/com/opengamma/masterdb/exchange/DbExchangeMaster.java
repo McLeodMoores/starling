@@ -77,7 +77,7 @@ public class DbExchangeMaster extends AbstractDocumentDbMaster<ExchangeDocument>
   /**
    * SQL order by.
    */
-  protected static final EnumMap<ExchangeSearchSortOrder, String> ORDER_BY_MAP = new EnumMap<ExchangeSearchSortOrder, String>(ExchangeSearchSortOrder.class);
+  protected static final EnumMap<ExchangeSearchSortOrder, String> ORDER_BY_MAP = new EnumMap<>(ExchangeSearchSortOrder.class);
   static {
     ORDER_BY_MAP.put(ExchangeSearchSortOrder.OBJECT_ID_ASC, "oid ASC");
     ORDER_BY_MAP.put(ExchangeSearchSortOrder.OBJECT_ID_DESC, "oid DESC");
@@ -89,7 +89,7 @@ public class DbExchangeMaster extends AbstractDocumentDbMaster<ExchangeDocument>
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param dbConnector  the database connector, not null
    */
   public DbExchangeMaster(final DbConnector dbConnector) {
@@ -104,25 +104,25 @@ public class DbExchangeMaster extends AbstractDocumentDbMaster<ExchangeDocument>
     ArgumentChecker.notNull(request.getPagingRequest(), "request.pagingRequest");
     ArgumentChecker.notNull(request.getVersionCorrection(), "request.versionCorrection");
     LOGGER.debug("search {}", request);
-    
+
     final VersionCorrection vc = request.getVersionCorrection().withLatestFixed(now());
     final ExchangeSearchResult result = new ExchangeSearchResult(vc);
-    
+
     final ExternalIdSearch externalIdSearch = request.getExternalIdSearch();
     final List<ObjectId> objectIds = request.getObjectIds();
-    if ((objectIds != null && objectIds.size() == 0) ||
-        (ExternalIdSearch.canMatch(externalIdSearch) == false)) {
+    if (objectIds != null && objectIds.size() == 0 ||
+        ExternalIdSearch.canMatch(externalIdSearch) == false) {
       result.setPaging(Paging.of(request.getPagingRequest(), 0));
       return result;
     }
-    
+
     final DbMapSqlParameterSource args = createParameterSource()
       .addTimestamp("version_as_of_instant", vc.getVersionAsOf())
       .addTimestamp("corrected_to_instant", vc.getCorrectedTo())
       .addValueNullIgnored("name", getDialect().sqlWildcardAdjustValue(request.getName()));
     if (externalIdSearch != null && externalIdSearch.alwaysMatches() == false) {
       int i = 0;
-      for (ExternalId id : externalIdSearch) {
+      for (final ExternalId id : externalIdSearch) {
         args.addValue("key_scheme" + i, id.getScheme().getName());
         args.addValue("key_value" + i, id.getValue());
         i++;
@@ -132,8 +132,8 @@ public class DbExchangeMaster extends AbstractDocumentDbMaster<ExchangeDocument>
       args.addValue("id_search_size", externalIdSearch.getExternalIds().size());
     }
     if (objectIds != null) {
-      StringBuilder buf = new StringBuilder(objectIds.size() * 10);
-      for (ObjectId objectId : objectIds) {
+      final StringBuilder buf = new StringBuilder(objectIds.size() * 10);
+      for (final ObjectId objectId : objectIds) {
         checkScheme(objectId);
         buf.append(extractOid(objectId)).append(", ");
       }
@@ -143,8 +143,8 @@ public class DbExchangeMaster extends AbstractDocumentDbMaster<ExchangeDocument>
     args.addValue("sort_order", ORDER_BY_MAP.get(request.getSortOrder()));
     args.addValue("paging_offset", request.getPagingRequest().getFirstItem());
     args.addValue("paging_fetch", request.getPagingRequest().getPagingSize());
-    
-    String[] sql = {getElSqlBundle().getSql("Search", args), getElSqlBundle().getSql("SearchCount", args)};
+
+    final String[] sql = {getElSqlBundle().getSql("Search", args), getElSqlBundle().getSql("SearchCount", args)};
     doSearch(request.getPagingRequest(), sql, args, new ExchangeDocumentExtractor(), result);
     return result;
   }
@@ -153,12 +153,12 @@ public class DbExchangeMaster extends AbstractDocumentDbMaster<ExchangeDocument>
    * Gets the SQL to find all the ids for a single bundle.
    * <p>
    * This is too complex for the elsql mechanism.
-   * 
+   *
    * @param idSearch  the identifier search, not null
    * @return the SQL, not null
    */
   protected String sqlSelectIdKeys(final ExternalIdSearch idSearch) {
-    List<String> list = new ArrayList<String>();
+    final List<String> list = new ArrayList<>();
     for (int i = 0; i < idSearch.size(); i++) {
       list.add("(key_scheme = :key_scheme" + i + " AND key_value = :key_value" + i + ") ");
     }
@@ -186,7 +186,7 @@ public class DbExchangeMaster extends AbstractDocumentDbMaster<ExchangeDocument>
   //-------------------------------------------------------------------------
   /**
    * Inserts a new document.
-   * 
+   *
    * @param document  the document, not null
    * @return the new document, not null
    */
@@ -194,17 +194,17 @@ public class DbExchangeMaster extends AbstractDocumentDbMaster<ExchangeDocument>
   protected ExchangeDocument insert(final ExchangeDocument document) {
     ArgumentChecker.notNull(document.getExchange(), "document.exchange");
     ArgumentChecker.notNull(document.getName(), "document.name");
-    
+
     final ManageableExchange exchange = document.getExchange();
     final long docId = nextId("exg_exchange_seq");
-    final long docOid = (document.getUniqueId() != null ? extractOid(document.getUniqueId()) : docId);
+    final long docOid = document.getUniqueId() != null ? extractOid(document.getUniqueId()) : docId;
     // set the uniqueId (needs to go in Fudge message)
     final UniqueId uniqueId = createUniqueId(docOid, docId);
     exchange.setUniqueId(uniqueId);
     document.setUniqueId(uniqueId);
     // the arguments for inserting into the exchange table
-    FudgeMsgEnvelope env = FUDGE_CONTEXT.toFudgeMsg(exchange);
-    byte[] bytes = FUDGE_CONTEXT.toByteArray(env.getMessage());
+    final FudgeMsgEnvelope env = FUDGE_CONTEXT.toFudgeMsg(exchange);
+    final byte[] bytes = FUDGE_CONTEXT.toByteArray(env.getMessage());
     final DbMapSqlParameterSource docArgs = createParameterSource()
       .addValue("doc_id", docId)
       .addValue("doc_oid", docOid)
@@ -216,10 +216,10 @@ public class DbExchangeMaster extends AbstractDocumentDbMaster<ExchangeDocument>
       .addValue("time_zone", exchange.getTimeZone() != null ? exchange.getTimeZone().getId() : null, Types.VARCHAR)
       .addValue("detail", new SqlLobValue(bytes, getDialect().getLobHandler()), Types.BLOB);
     // the arguments for inserting into the idkey tables
-    final List<DbMapSqlParameterSource> assocList = new ArrayList<DbMapSqlParameterSource>();
-    final List<DbMapSqlParameterSource> idKeyList = new ArrayList<DbMapSqlParameterSource>();
+    final List<DbMapSqlParameterSource> assocList = new ArrayList<>();
+    final List<DbMapSqlParameterSource> idKeyList = new ArrayList<>();
     final String sqlSelectIdKey = getElSqlBundle().getSql("SelectIdKey");
-    for (ExternalId id : exchange.getExternalIdBundle()) {
+    for (final ExternalId id : exchange.getExternalIdBundle()) {
       final DbMapSqlParameterSource assocArgs = createParameterSource()
         .addValue("doc_id", docId)
         .addValue("key_scheme", id.getScheme().getName())
@@ -249,7 +249,7 @@ public class DbExchangeMaster extends AbstractDocumentDbMaster<ExchangeDocument>
    * Mapper from SQL rows to a ExchangeDocument.
    */
   protected final class ExchangeDocumentExtractor implements ResultSetExtractor<List<ExchangeDocument>> {
-    private List<ExchangeDocument> _documents = new ArrayList<ExchangeDocument>();
+    private final List<ExchangeDocument> _documents = new ArrayList<>();
 
     @Override
     public List<ExchangeDocument> extractData(final ResultSet rs) throws SQLException, DataAccessException {
@@ -266,11 +266,11 @@ public class DbExchangeMaster extends AbstractDocumentDbMaster<ExchangeDocument>
       final Timestamp versionTo = rs.getTimestamp("VER_TO_INSTANT");
       final Timestamp correctionFrom = rs.getTimestamp("CORR_FROM_INSTANT");
       final Timestamp correctionTo = rs.getTimestamp("CORR_TO_INSTANT");
-      LobHandler lob = getDialect().getLobHandler();
-      byte[] bytes = lob.getBlobAsBytes(rs, "DETAIL");
-      ManageableExchange exchange = FUDGE_CONTEXT.readObject(ManageableExchange.class, new ByteArrayInputStream(bytes));
-      
-      ExchangeDocument doc = new ExchangeDocument();
+      final LobHandler lob = getDialect().getLobHandler();
+      final byte[] bytes = lob.getBlobAsBytes(rs, "DETAIL");
+      final ManageableExchange exchange = FUDGE_CONTEXT.readObject(ManageableExchange.class, new ByteArrayInputStream(bytes));
+
+      final ExchangeDocument doc = new ExchangeDocument();
       doc.setUniqueId(createUniqueId(docOid, docId));
       doc.setVersionFromInstant(DbDateUtils.fromSqlTimestamp(versionFrom));
       doc.setVersionToInstant(DbDateUtils.fromSqlTimestampNullFarFuture(versionTo));
@@ -280,9 +280,10 @@ public class DbExchangeMaster extends AbstractDocumentDbMaster<ExchangeDocument>
       _documents.add(doc);
     }
   }
-  
-  public ExchangeHistoryResult historyByVersionsCorrections(AbstractHistoryRequest request) {
-    ExchangeHistoryRequest exchangeHistoryRequest = new ExchangeHistoryRequest();
+
+  @Override
+  public ExchangeHistoryResult historyByVersionsCorrections(final AbstractHistoryRequest request) {
+    final ExchangeHistoryRequest exchangeHistoryRequest = new ExchangeHistoryRequest();
     exchangeHistoryRequest.setCorrectionsFromInstant(request.getCorrectionsFromInstant());
     exchangeHistoryRequest.setCorrectionsToInstant(request.getCorrectionsToInstant());
     exchangeHistoryRequest.setVersionsFromInstant(request.getVersionsFromInstant());

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.historicaltimeseries;
@@ -21,18 +21,18 @@ public class HistoricalTimeSeriesResolutionResult extends com.opengamma.core.his
 
   private final ManageableHistoricalTimeSeriesInfo _historicalTimeSeriesInfo;
 
-  public HistoricalTimeSeriesResolutionResult(ManageableHistoricalTimeSeriesInfo historicalTimeSeriesInfo) {
+  public HistoricalTimeSeriesResolutionResult(final ManageableHistoricalTimeSeriesInfo historicalTimeSeriesInfo) {
     this(historicalTimeSeriesInfo, null);
   }
 
-  public HistoricalTimeSeriesResolutionResult(ManageableHistoricalTimeSeriesInfo historicalTimeSeriesInfo, HistoricalTimeSeriesAdjuster adjuster) {
+  public HistoricalTimeSeriesResolutionResult(final ManageableHistoricalTimeSeriesInfo historicalTimeSeriesInfo, final HistoricalTimeSeriesAdjuster adjuster) {
     super(historicalTimeSeriesInfo, adjuster);
     _historicalTimeSeriesInfo = historicalTimeSeriesInfo;
   }
 
   /**
    * Gets the historical time-series information from which the full time-series may be queried.
-   * 
+   *
    * @return the historical time-series information, not null
    */
   @Override

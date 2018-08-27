@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.test;
@@ -27,7 +27,7 @@ import com.opengamma.OpenGammaRuntimeException;
  */
 public abstract class AbstractJUnitResults implements Runnable {
 
-  private final Map<String, Collection<UnitTest>> _testsByClass = new HashMap<String, Collection<UnitTest>>();
+  private final Map<String, Collection<UnitTest>> _testsByClass = new HashMap<>();
   private String _inputFile;
   private String _outputDir;
 
@@ -132,7 +132,7 @@ public abstract class AbstractJUnitResults implements Runnable {
   protected void storeTest(final String className, final UnitTest test) {
     Collection<UnitTest> tests = _testsByClass.get(className);
     if (tests == null) {
-      tests = new LinkedList<UnitTest>();
+      tests = new LinkedList<>();
       _testsByClass.put(className, tests);
     }
     tests.add(test);
@@ -142,7 +142,7 @@ public abstract class AbstractJUnitResults implements Runnable {
 
   protected int getErrors(final Collection<UnitTest> tests) {
     int count = 0;
-    for (UnitTest test : tests) {
+    for (final UnitTest test : tests) {
       if (!test.isPassed()) {
         count++;
       }
@@ -152,14 +152,14 @@ public abstract class AbstractJUnitResults implements Runnable {
 
   protected double getDuration(final Collection<UnitTest> tests) {
     double time = 0;
-    for (UnitTest test : tests) {
-      time += (double) test.getDuration();
+    for (final UnitTest test : tests) {
+      time += test.getDuration();
     }
     return time / 1000;
   }
 
   private static String getHostName(final Collection<UnitTest> tests) {
-    for (UnitTest test : tests) {
+    for (final UnitTest test : tests) {
       if (test.getComputerName() != null) {
         return test.getComputerName();
       }
@@ -172,7 +172,7 @@ public abstract class AbstractJUnitResults implements Runnable {
     String earliest;
     do {
       earliest = test.next().getStartTime();
-    } while ((earliest == null) && test.hasNext());
+    } while (earliest == null && test.hasNext());
     if (earliest == null) {
       return LocalDateTime.now().toString();
     }
@@ -193,7 +193,7 @@ public abstract class AbstractJUnitResults implements Runnable {
       readTests();
       final String baseSuite = createBaseSuiteName();
       final XMLOutputFactory writerFactory = XMLOutputFactory.newInstance();
-      for (Map.Entry<String, Collection<UnitTest>> testSuite : _testsByClass.entrySet()) {
+      for (final Map.Entry<String, Collection<UnitTest>> testSuite : _testsByClass.entrySet()) {
         final String suite = baseSuite + '.' + testSuite.getKey();
         final String path = getOutputDir() + File.separatorChar + "TEST-" + suite + ".xml";
         final XMLStreamWriter out = writerFactory.createXMLStreamWriter(new FileOutputStream(path));
@@ -207,10 +207,10 @@ public abstract class AbstractJUnitResults implements Runnable {
         out.writeAttribute("timestamp", getTimestamp(testSuite.getValue()));
         out.writeAttribute("time", Double.toString(getDuration(testSuite.getValue())));
         out.writeAttribute("failures", "0");
-        for (UnitTest test : testSuite.getValue()) {
+        for (final UnitTest test : testSuite.getValue()) {
           out.writeStartElement("testcase");
           out.writeAttribute("name", test.getName());
-          out.writeAttribute("time", Double.toString((double) test.getDuration() / 1000));
+          out.writeAttribute("time", Double.toString(test.getDuration() / 1000));
           out.writeAttribute("classname", testSuite.getKey());
           if (!test.isPassed()) {
             out.writeStartElement("error");
@@ -223,9 +223,9 @@ public abstract class AbstractJUnitResults implements Runnable {
         out.writeEndDocument();
         out.close();
       }
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw new OpenGammaRuntimeException("Error writing to file", e);
-    } catch (XMLStreamException e) {
+    } catch (final XMLStreamException e) {
       throw new OpenGammaRuntimeException("XML error", e);
     }
   }

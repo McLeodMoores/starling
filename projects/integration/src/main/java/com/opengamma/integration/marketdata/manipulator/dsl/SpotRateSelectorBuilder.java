@@ -15,7 +15,7 @@ import com.opengamma.financial.currency.CurrencyPair;
  */
 public class SpotRateSelectorBuilder {
 
-  /* package */ SpotRateSelectorBuilder(Scenario scenario) {
+  /* package */ SpotRateSelectorBuilder(final Scenario scenario) {
     _scenario = scenario;
   }
 
@@ -24,7 +24,7 @@ public class SpotRateSelectorBuilder {
 
   private Set<CurrencyPair> _currencyPairs;
 
-  public SpotRateSelectorBuilder currencyPair(String currencyPair) {
+  public SpotRateSelectorBuilder currencyPair(final String currencyPair) {
     if (_currencyPairs != null) {
       throw new IllegalStateException("currencyPair can only be called once");
     }
@@ -32,12 +32,12 @@ public class SpotRateSelectorBuilder {
     return this;
   }
 
-  public SpotRateSelectorBuilder currencyPairs(String... currencyPairs) {
+  public SpotRateSelectorBuilder currencyPairs(final String... currencyPairs) {
     if (_currencyPairs != null) {
       throw new IllegalStateException("currencyPair can only be called once");
     }
     _currencyPairs = Sets.newHashSetWithExpectedSize(currencyPairs.length);
-    for (String currencyPair : currencyPairs) {
+    for (final String currencyPair : currencyPairs) {
       _currencyPairs.add(parse(currencyPair));
     }
     return this;
@@ -53,7 +53,7 @@ public class SpotRateSelectorBuilder {
    * @return The currency pair
    * @throws IllegalArgumentException If the argument can't be parsed as a currency pair
    */
-  /* package */ static CurrencyPair parse(String currencyPair) {
+  /* package */ static CurrencyPair parse(final String currencyPair) {
     if (currencyPair.length() == 7) {
       return CurrencyPair.parse(currencyPair);
     } else {

@@ -48,31 +48,31 @@ public class RestComponentsImpl extends DirectBean implements RestComponents {
    * These will be controlled by {@link DataComponentServerResource}.
    */
   @PropertyDefinition(validate = "notNull")
-  private final List<RestComponent> _localComponents = new ArrayList<RestComponent>();
+  private final List<RestComponent> _localComponents = new ArrayList<>();
   /**
    * The remote components.
    * These have been imported from another server and are being re-exposed.
    */
   @PropertyDefinition(validate = "notNull")
-  private final List<ComponentInfo> _remoteComponents = new ArrayList<ComponentInfo>();
+  private final List<ComponentInfo> _remoteComponents = new ArrayList<>();
   /**
    * The set of root resources.
    * These are not managed by {@link DataComponentServerResource}.
    */
   @PropertyDefinition(validate = "notNull")
-  private final Set<Object> _rootResourceSingletons = new LinkedHashSet<Object>();
+  private final Set<Object> _rootResourceSingletons = new LinkedHashSet<>();
   /**
    * The set of root resource factories.
    * These are not managed by {@link DataComponentServerResource}.
    */
   @PropertyDefinition(validate = "notNull")
-  private final Set<RestResourceFactory> _rootResourceFactories = new LinkedHashSet<RestResourceFactory>();
+  private final Set<RestResourceFactory> _rootResourceFactories = new LinkedHashSet<>();
   /**
    * The set of additional singleton JAX-RS helper objects that are used by JAX-RS.
    * This may include filters, providers and consumers that should be used directly by JAX-RS.
    */
   @PropertyDefinition(validate = "notNull")
-  private final Set<Object> _helpers = new LinkedHashSet<Object>();
+  private final Set<Object> _helpers = new LinkedHashSet<>();
 
   /**
    * Creates an instance.
@@ -87,18 +87,18 @@ public class RestComponentsImpl extends DirectBean implements RestComponents {
    * The instance is a JAX_RS class annotated with {@code Path} on the methods.
    * Any {@code Path} at the class level is ignored.
    * See {@link DataComponentServerResource}.
-   * 
+   *
    * @param info  the managed component info, not null
    * @param instance  the JAX-RS singleton instance, not null
    */
   @Override
-  public void publish(ComponentInfo info, Object instance) {
+  public void publish(final ComponentInfo info, final Object instance) {
     ArgumentChecker.notNull(info, "info");
     ArgumentChecker.notNull(instance, "instance");
     if (info.getUri() != null) {
       throw new IllegalArgumentException("A managed component cannot set its own URI: " + info);
     }
-    
+
     info.setUri(DataComponentServerUris.uri(getBaseUri(), info));
     getLocalComponents().add(new RestComponent(info, instance));
   }
@@ -108,13 +108,13 @@ public class RestComponentsImpl extends DirectBean implements RestComponents {
    * <p>
    * This is used for JAX-RS consumers, producers and filters and unmanaged singleton resources.
    * These classes are not managed by {@code DataComponentsResource}.
-   * 
+   *
    * @param instance  the JAX-RS singleton instance, not null
    */
   @Override
-  public void publishHelper(Object instance) {
+  public void publishHelper(final Object instance) {
     ArgumentChecker.notNull(instance, "instance");
-    
+
     getHelpers().add(instance);
   }
 
@@ -123,13 +123,13 @@ public class RestComponentsImpl extends DirectBean implements RestComponents {
    * <p>
    * This is used for JAX-RS unmanaged resources.
    * The class is not managed by {@code DataComponentsResource}.
-   * 
+   *
    * @param singletonInstance  the unmanaged singleton instance, not null
    */
   @Override
-  public void publishResource(Object singletonInstance) {
+  public void publishResource(final Object singletonInstance) {
     ArgumentChecker.notNull(singletonInstance, "singletonInstance");
-    
+
     getRootResourceSingletons().add(singletonInstance);
   }
 
@@ -138,13 +138,13 @@ public class RestComponentsImpl extends DirectBean implements RestComponents {
    * <p>
    * This is used for JAX-RS unmanaged resources.
    * These classes are not managed by {@code DataComponentsResource}.
-   * 
+   *
    * @param factory  the factory for creating the resource per request, not null
    */
   @Override
-  public void publishResource(RestResourceFactory factory) {
+  public void publishResource(final RestResourceFactory factory) {
     ArgumentChecker.notNull(factory, "factory");
-    
+
     getRootResourceFactories().add(factory);
   }
 
@@ -152,13 +152,13 @@ public class RestComponentsImpl extends DirectBean implements RestComponents {
    * Re-publishes the component.
    * <p>
    * This is used when a component is read in from a remote location and is then re-published.
-   * 
+   *
    * @param info  the component information, not null
    */
   @Override
-  public void republish(ComponentInfo info) {
+  public void republish(final ComponentInfo info) {
     ArgumentChecker.notNull(info, "info");
-    
+
     getRemoteComponents().add(info);
   }
 
@@ -167,13 +167,13 @@ public class RestComponentsImpl extends DirectBean implements RestComponents {
    * Gets the complete set of singletons, handling managed components.
    * <p>
    * This method wraps the managed components in an instance of {@link DataComponentServerResource}.
-   * 
+   *
    * @return the complete set of singletons, not null
    */
   @Override
   public Set<Object> buildJaxRsSingletons() {
-    AbstractDataResource dcr = new DataComponentServerResource(getLocalComponents(), getRemoteComponents());
-    Set<Object> set = new LinkedHashSet<Object>();
+    final AbstractDataResource dcr = new DataComponentServerResource(getLocalComponents(), getRemoteComponents());
+    final Set<Object> set = new LinkedHashSet<>();
     set.add(dcr);
     set.addAll(getHelpers());
     set.addAll(getRootResourceSingletons());
@@ -183,13 +183,13 @@ public class RestComponentsImpl extends DirectBean implements RestComponents {
 
   /**
    * Gets the complete set of JaxRs classes.
-   * 
+   *
    * @return the complete set of classes, not null
    */
   @Override
   public Set<Class<?>> buildJaxRsClasses() {
-    Set<Class<?>> set = new LinkedHashSet<Class<?>>();
-    for (RestResourceFactory factory : getRootResourceFactories()) {
+    final Set<Class<?>> set = new LinkedHashSet<>();
+    for (final RestResourceFactory factory : getRootResourceFactories()) {
       set.add(factory.getType());
     }
     return set;

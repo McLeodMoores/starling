@@ -22,7 +22,7 @@ public class MockViewDefinition {
   public MockViewDefinition() {
   }
 
-  public MockViewDefinition(String name, UniqueId portfolioId) {
+  public MockViewDefinition(final String name, final UniqueId portfolioId) {
     ArgumentChecker.notNull(name, "View name");
 
     _name = name;
@@ -33,7 +33,7 @@ public class MockViewDefinition {
     return _name;
   }
 
-  public void setName(String name) {
+  public void setName(final String name) {
     _name = name;
   }
 
@@ -41,7 +41,7 @@ public class MockViewDefinition {
     return _portfolioId;
   }
 
-  public void setPortfolioId(UniqueId portfolioId) {
+  public void setPortfolioId(final UniqueId portfolioId) {
     _portfolioId = portfolioId;
   }
 
@@ -49,7 +49,7 @@ public class MockViewDefinition {
     return _minDeltaCalculationPeriod;
   }
 
-  public void setMinDeltaCalculationPeriod(Long minDeltaCalculationPeriod) {
+  public void setMinDeltaCalculationPeriod(final Long minDeltaCalculationPeriod) {
     _minDeltaCalculationPeriod = minDeltaCalculationPeriod;
   }
 
@@ -57,7 +57,7 @@ public class MockViewDefinition {
     return _maxDeltaCalculationPeriod;
   }
 
-  public void setMaxDeltaCalculationPeriod(Long maxDeltaCalculationPeriod) {
+  public void setMaxDeltaCalculationPeriod(final Long maxDeltaCalculationPeriod) {
     _maxDeltaCalculationPeriod = maxDeltaCalculationPeriod;
   }
 
@@ -71,7 +71,7 @@ public class MockViewDefinition {
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -80,8 +80,8 @@ public class MockViewDefinition {
       return false;
     }
 
-    MockViewDefinition other = (MockViewDefinition) obj;
-    boolean basicPropertiesEqual = ObjectUtils.equals(getName(), other.getName()) && ObjectUtils.equals(getPortfolioId(), other.getPortfolioId());
+    final MockViewDefinition other = (MockViewDefinition) obj;
+    final boolean basicPropertiesEqual = ObjectUtils.equals(getName(), other.getName()) && ObjectUtils.equals(getPortfolioId(), other.getPortfolioId());
     if (!basicPropertiesEqual) {
       return false;
     }

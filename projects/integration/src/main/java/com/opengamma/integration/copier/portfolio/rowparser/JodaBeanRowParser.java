@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.copier.portfolio.rowparser;
@@ -102,7 +102,7 @@ public class JodaBeanRowParser extends RowParser {
   /**
    *  Map from column name to the field's Java type
    */
-  private SortedMap<String, Class<?>> _columns = new TreeMap<String, Class<?>>();
+  private SortedMap<String, Class<?>> _columns = new TreeMap<>();
 
   static {
     //Make refections available by calling AnnotationReflector.getDefaultReflector()
@@ -159,7 +159,7 @@ public class JodaBeanRowParser extends RowParser {
 
   private List<Class<?>> getUnderlyingSecurityClasses(final Class<? extends Bean> securityClass) {
 
-    final List<Class<?>> result = new ArrayList<Class<?>>();
+    final List<Class<?>> result = new ArrayList<>();
 
     // Futures
     if (EquityFutureSecurity.class.isAssignableFrom(securityClass)) {
@@ -207,7 +207,7 @@ public class JodaBeanRowParser extends RowParser {
 
     final ManageableSecurity security = (ManageableSecurity) recursiveConstructBean(row, _securityClass, "");
     if (security != null) {
-      final ArrayList<ManageableSecurity> securities = new ArrayList<ManageableSecurity>();
+      final ArrayList<ManageableSecurity> securities = new ArrayList<>();
       securities.add(security);
       for (final Class<?> underlyingClass : _underlyingSecurityClasses) {
         final ManageableSecurity underlying = (ManageableSecurity) recursiveConstructBean(row, underlyingClass, UNDERLYING_PREFIX + underlyingClass.getSimpleName().toLowerCase() + ":");
@@ -244,7 +244,7 @@ public class JodaBeanRowParser extends RowParser {
     ArgumentChecker.notNull(position, "position");
     if (functional(row.keySet()).any(new Function1<String, Boolean>() {
       @Override
-      public Boolean execute(String columnName) {
+      public Boolean execute(final String columnName) {
         return columnName.startsWith("trade:");
       }
     })) {
@@ -322,7 +322,7 @@ public class JodaBeanRowParser extends RowParser {
   private SortedMap<String, Class<?>> recursiveGetColumnMap(final Class<?> clazz, final String prefix) {
 
     // Scan through and capture the list of relevant properties and their types
-    final SortedMap<String, Class<?>> columns = new TreeMap<String, Class<?>>();
+    final SortedMap<String, Class<?>> columns = new TreeMap<>();
 
     for (final MetaProperty<?> metaProperty : JodaBeanUtils.metaBean(clazz).metaPropertyIterable()) {
 
@@ -429,7 +429,7 @@ public class JodaBeanRowParser extends RowParser {
    * @return        A map of extracted column names and values
    */
   private Map<String, String> recursiveConstructRow(final Bean bean, final String prefix) {
-    final Map<String, String> result = new HashMap<String, String>();
+    final Map<String, String> result = new HashMap<>();
 
     // Populate the row from the bean's properties
     for (final MetaProperty<?> metaProperty : bean.metaBean().metaPropertyIterable()) {
@@ -458,6 +458,7 @@ public class JodaBeanRowParser extends RowParser {
               result.put(prefix + metaProperty.name(), listToString((List<?>) metaProperty.get(bean)));
             } else if (Map.class.isAssignableFrom(metaProperty.propertyType()) && metaProperty.name().equalsIgnoreCase("attributes")) {
               @SuppressWarnings("unchecked")
+              final
               Map<String, String> map = (Map<String, String>) metaProperty.get(bean);
               result.put(prefix + metaProperty.name(), SingleSheetPositionWriter.attributesToString(map));
             } else {
@@ -474,7 +475,7 @@ public class JodaBeanRowParser extends RowParser {
 
   /**
    * Converts a list of objects to a |-separated string of their JodaConverted string representations.
-   * 
+   *
    * @param list  the list to be converted, not null
    * @return the |-separated string string, not null
    */
@@ -492,13 +493,13 @@ public class JodaBeanRowParser extends RowParser {
 
   /**
    * Converts a |-separated string to a list of objects using JodaConvert.
-   * 
+   *
    * @param rawStr  the string to parse, not null
    * @param cls  the class to convert to, not null
    * @return the list of objects of the specified class, not null
    */
   private List<?> stringToList(final String rawStr, final Class<?> cls) {
-    final List<Object> result = new ArrayList<Object>();
+    final List<Object> result = new ArrayList<>();
     for (final String s : rawStr.split("\\|")) {
       result.add(JodaBeanUtils.stringConverter().convertFromString(cls, s.trim()));
     }
@@ -508,7 +509,7 @@ public class JodaBeanRowParser extends RowParser {
   /**
    * Given a class name, look for the class in the list of packages specified by CLASS_PACKAGES and return it
    * or throw exception if not found.
-   * 
+   *
    * @param className  the class name to seek, not null
    * @return the corresponding class, not null
    */
@@ -562,12 +563,12 @@ public class JodaBeanRowParser extends RowParser {
 
   /**
    * Given a bean class, find its subclasses.
-   * 
+   *
    * @param beanClass  the bean class
    * @return the collection of subclasses
    */
   private Collection<Class<?>> getSubClasses(final Class<? extends Bean> beanClass) {
-    final Collection<Class<?>> subClasses = new ArrayList<Class<?>>();
+    final Collection<Class<?>> subClasses = new ArrayList<>();
 
     final Reflections reflections = AnnotationReflector.getDefaultReflector().getReflector();
     final Set<?> subTypes = reflections.getSubTypesOf(beanClass);
@@ -596,7 +597,7 @@ public class JodaBeanRowParser extends RowParser {
 
   /**
    * Determines whether the supplied class is a direct bean.
-   * 
+   *
    * @param clazz  the class to check, not null
    * @return true if it is a bean
    */
@@ -606,7 +607,7 @@ public class JodaBeanRowParser extends RowParser {
 
   /**
    * Checks whether the specified meta-property is to be ignored when extracting fields.
-   * 
+   *
    * @param mp  the meta-property to check, not null
    * @return true if it is to be ignored
    */

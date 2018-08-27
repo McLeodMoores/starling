@@ -40,12 +40,12 @@ public final class PrimitivesGridStructure extends MainGridStructure {
   private static final ComputationTargetReferenceVisitor<String> NAME_VISITOR = new ComputationTargetReferenceVisitor<String>() {
 
     @Override
-    public String visitComputationTargetRequirement(ComputationTargetRequirement requirement) {
+    public String visitComputationTargetRequirement(final ComputationTargetRequirement requirement) {
       return StringUtils.join(requirement.getIdentifiers().iterator(), ", ");
     }
 
     @Override
-    public String visitComputationTargetSpecification(ComputationTargetSpecification specification) {
+    public String visitComputationTargetSpecification(final ComputationTargetSpecification specification) {
       if (specification.getUniqueId() != null) {
         return specification.getUniqueId().toString();
       } else {
@@ -57,34 +57,34 @@ public final class PrimitivesGridStructure extends MainGridStructure {
   private PrimitivesGridStructure() {
   }
 
-  private PrimitivesGridStructure(GridColumnGroup fixedColumns,
-                                  GridColumnGroups nonFixedColumns,
-                                  TargetLookup targetLookup,
-                                  UnversionedValueMappings valueMappings) {
+  private PrimitivesGridStructure(final GridColumnGroup fixedColumns,
+                                  final GridColumnGroups nonFixedColumns,
+                                  final TargetLookup targetLookup,
+                                  final UnversionedValueMappings valueMappings) {
     super(fixedColumns, nonFixedColumns, targetLookup, valueMappings);
   }
 
-  /* package */ static PrimitivesGridStructure create(CompiledViewDefinition compiledViewDef) {
-    List<MainGridStructure.Row> rows = rows(compiledViewDef);
-    GridColumn labelColumn = new GridColumn("Name", "", String.class, new PrimitivesLabelRenderer(rows));
-    GridColumnGroup fixedColumns = new GridColumnGroup("fixed", ImmutableList.of(labelColumn), false);
-    UnversionedValueMappings valueMappings = new UnversionedValueMappings(compiledViewDef);
-    TargetLookup targetLookup = new TargetLookup(valueMappings, rows);
-    List<GridColumnGroup> analyticsColumns = buildAnalyticsColumns(compiledViewDef.getViewDefinition(), targetLookup);
+  /* package */ static PrimitivesGridStructure create(final CompiledViewDefinition compiledViewDef) {
+    final List<MainGridStructure.Row> rows = rows(compiledViewDef);
+    final GridColumn labelColumn = new GridColumn("Name", "", String.class, new PrimitivesLabelRenderer(rows));
+    final GridColumnGroup fixedColumns = new GridColumnGroup("fixed", ImmutableList.of(labelColumn), false);
+    final UnversionedValueMappings valueMappings = new UnversionedValueMappings(compiledViewDef);
+    final TargetLookup targetLookup = new TargetLookup(valueMappings, rows);
+    final List<GridColumnGroup> analyticsColumns = buildAnalyticsColumns(compiledViewDef.getViewDefinition(), targetLookup);
     return new PrimitivesGridStructure(fixedColumns, new GridColumnGroups(analyticsColumns), targetLookup, valueMappings);
   }
 
-  private static List<GridColumnGroup> buildAnalyticsColumns(ViewDefinition viewDef, TargetLookup targetLookup) {
-    List<GridColumnGroup> columnGroups = Lists.newArrayList();
-    Set<ColumnSpecification> columnSpecs = Sets.newHashSet();
-    for (ViewCalculationConfiguration calcConfig : viewDef.getAllCalculationConfigurations()) {
-      List<GridColumn> columns = Lists.newArrayList();
-      for (ValueRequirement specificRequirement : calcConfig.getSpecificRequirements()) {
+  private static List<GridColumnGroup> buildAnalyticsColumns(final ViewDefinition viewDef, final TargetLookup targetLookup) {
+    final List<GridColumnGroup> columnGroups = Lists.newArrayList();
+    final Set<ColumnSpecification> columnSpecs = Sets.newHashSet();
+    for (final ViewCalculationConfiguration calcConfig : viewDef.getAllCalculationConfigurations()) {
+      final List<GridColumn> columns = Lists.newArrayList();
+      for (final ValueRequirement specificRequirement : calcConfig.getSpecificRequirements()) {
         if (!specificRequirement.getTargetReference().getType().isTargetType(NON_PRIMITIVE)) {
-          String valueName = specificRequirement.getValueName();
-          Class<?> columnType = ValueTypes.getTypeForValueName(valueName);
-          ValueProperties constraints = specificRequirement.getConstraints();
-          ColumnSpecification columnSpec = new ColumnSpecification(calcConfig.getName(), valueName, constraints);
+          final String valueName = specificRequirement.getValueName();
+          final Class<?> columnType = ValueTypes.getTypeForValueName(valueName);
+          final ValueProperties constraints = specificRequirement.getConstraints();
+          final ColumnSpecification columnSpec = new ColumnSpecification(calcConfig.getName(), valueName, constraints);
           // ensure columnSpec isn't a duplicate
           if (columnSpecs.add(columnSpec)) {
             columns.add(GridColumn.forSpec(columnSpec, columnType, targetLookup));
@@ -98,15 +98,15 @@ public final class PrimitivesGridStructure extends MainGridStructure {
     return columnGroups;
   }
 
-  private static List<MainGridStructure.Row> rows(CompiledViewDefinition compiledViewDef) {
-    Set<ComputationTargetReference> targetRefs = Sets.newLinkedHashSet();
-    for (ViewCalculationConfiguration calcConfig : compiledViewDef.getViewDefinition().getAllCalculationConfigurations()) {
-      for (ValueRequirement specificRequirement : calcConfig.getSpecificRequirements()) {
+  private static List<MainGridStructure.Row> rows(final CompiledViewDefinition compiledViewDef) {
+    final Set<ComputationTargetReference> targetRefs = Sets.newLinkedHashSet();
+    for (final ViewCalculationConfiguration calcConfig : compiledViewDef.getViewDefinition().getAllCalculationConfigurations()) {
+      for (final ValueRequirement specificRequirement : calcConfig.getSpecificRequirements()) {
         targetRefs.add(specificRequirement.getTargetReference());
       }
     }
-    List<MainGridStructure.Row> rows = Lists.newArrayList();
-    for (ComputationTargetReference targetRef : targetRefs) {
+    final List<MainGridStructure.Row> rows = Lists.newArrayList();
+    for (final ComputationTargetReference targetRef : targetRefs) {
       rows.add(new Row(targetRef, targetRef.accept(NAME_VISITOR)));
     }
     return rows;

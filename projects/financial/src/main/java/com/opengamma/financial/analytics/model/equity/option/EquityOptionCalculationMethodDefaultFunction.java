@@ -120,7 +120,7 @@ public class EquityOptionCalculationMethodDefaultFunction extends StaticDefaultP
 
   /**
    * All Equity Option types to be priced with the same CalculationMethod
-   * 
+   *
    * @param priority Default priority
    * @param calculationMethod The single calculation method to be used for all Equity Options. e.g. BjerksundStenslandMethod. See CalculationPropertyNamesAndValues for more.
    */
@@ -138,7 +138,7 @@ public class EquityOptionCalculationMethodDefaultFunction extends StaticDefaultP
   }
 
   @Override
-  protected Set<String> getDefaultValue(FunctionCompilationContext context, ComputationTarget target, ValueRequirement desiredValue) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final Security security = target.getSecurity();
     if (security instanceof EquityOptionSecurity) {
       return _equityOptionMethod;

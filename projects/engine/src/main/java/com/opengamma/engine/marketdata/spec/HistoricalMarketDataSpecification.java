@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.marketdata.spec;
@@ -24,7 +24,7 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeriesResolver;
 
 /**
- * 
+ *
  */
 @BeanDefinition
 public class HistoricalMarketDataSpecification implements ImmutableBean, MarketDataSpecification {
@@ -46,10 +46,10 @@ public class HistoricalMarketDataSpecification implements ImmutableBean, MarketD
 
   /**
    * Creates an instance, specifying the resolver key to be used.
-   * 
+   *
    * @param timeSeriesResolverKey the timeseries resolver key, may be null
    */
-  public HistoricalMarketDataSpecification(String timeSeriesResolverKey) {
+  public HistoricalMarketDataSpecification(final String timeSeriesResolverKey) {
     this(builder().timeSeriesResolverKey(timeSeriesResolverKey));
   }
 

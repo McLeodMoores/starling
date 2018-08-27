@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.provider.historicaltimeseries.impl;
@@ -32,7 +32,7 @@ public class RemoteHistoricalTimeSeriesProvider extends AbstractRemoteClient imp
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param baseUri  the base target URI for all RESTful web services, not null
    */
   public RemoteHistoricalTimeSeriesProvider(final URI baseUri) {
@@ -44,29 +44,29 @@ public class RemoteHistoricalTimeSeriesProvider extends AbstractRemoteClient imp
   // code copied from AbstractHistoricalTimeSeriesProvider due to lack of multiple inheritance
   @Override
   public LocalDateDoubleTimeSeries getHistoricalTimeSeries(
-      ExternalIdBundle externalIdBundle, String dataSource, String dataProvider, String dataField) {
-    
-    HistoricalTimeSeriesProviderGetRequest request = HistoricalTimeSeriesProviderGetRequest.createGet(externalIdBundle, dataSource, dataProvider, dataField);
-    HistoricalTimeSeriesProviderGetResult result = getHistoricalTimeSeries(request);
+      final ExternalIdBundle externalIdBundle, final String dataSource, final String dataProvider, final String dataField) {
+
+    final HistoricalTimeSeriesProviderGetRequest request = HistoricalTimeSeriesProviderGetRequest.createGet(externalIdBundle, dataSource, dataProvider, dataField);
+    final HistoricalTimeSeriesProviderGetResult result = getHistoricalTimeSeries(request);
     return result.getResultMap().get(externalIdBundle);
   }
 
   @Override
   public LocalDateDoubleTimeSeries getHistoricalTimeSeries(
-      ExternalIdBundle externalIdBundle, String dataSource, String dataProvider, String dataField, LocalDateRange dateRange) {
-    
-    HistoricalTimeSeriesProviderGetRequest request = HistoricalTimeSeriesProviderGetRequest.createGet(externalIdBundle, dataSource, dataProvider, dataField, dateRange);
-    HistoricalTimeSeriesProviderGetResult result = getHistoricalTimeSeries(request);
+      final ExternalIdBundle externalIdBundle, final String dataSource, final String dataProvider, final String dataField, final LocalDateRange dateRange) {
+
+    final HistoricalTimeSeriesProviderGetRequest request = HistoricalTimeSeriesProviderGetRequest.createGet(externalIdBundle, dataSource, dataProvider, dataField, dateRange);
+    final HistoricalTimeSeriesProviderGetResult result = getHistoricalTimeSeries(request);
     return result.getResultMap().get(externalIdBundle);
   }
 
   @Override
   public Pair<LocalDate, Double> getLatestDataPoint(
-      ExternalIdBundle externalIdBundle, String dataSource, String dataProvider, String dataField) {
-    
-    HistoricalTimeSeriesProviderGetRequest request = HistoricalTimeSeriesProviderGetRequest.createGetLatest(externalIdBundle, dataSource, dataProvider, dataField);
-    HistoricalTimeSeriesProviderGetResult result = getHistoricalTimeSeries(request);
-    LocalDateDoubleTimeSeries series = result.getResultMap().get(externalIdBundle);
+      final ExternalIdBundle externalIdBundle, final String dataSource, final String dataProvider, final String dataField) {
+
+    final HistoricalTimeSeriesProviderGetRequest request = HistoricalTimeSeriesProviderGetRequest.createGetLatest(externalIdBundle, dataSource, dataProvider, dataField);
+    final HistoricalTimeSeriesProviderGetResult result = getHistoricalTimeSeries(request);
+    final LocalDateDoubleTimeSeries series = result.getResultMap().get(externalIdBundle);
     if (series == null || series.isEmpty()) {
       return null;
     }
@@ -75,19 +75,19 @@ public class RemoteHistoricalTimeSeriesProvider extends AbstractRemoteClient imp
 
   @Override
   public Map<ExternalIdBundle, LocalDateDoubleTimeSeries> getHistoricalTimeSeries(
-      Set<ExternalIdBundle> externalIdBundleSet, String dataSource, String dataProvider, String dataField, LocalDateRange dateRange) {
-    
-    HistoricalTimeSeriesProviderGetRequest request = HistoricalTimeSeriesProviderGetRequest.createGetBulk(externalIdBundleSet, dataSource, dataProvider, dataField, dateRange);
-    HistoricalTimeSeriesProviderGetResult result = getHistoricalTimeSeries(request);
+      final Set<ExternalIdBundle> externalIdBundleSet, final String dataSource, final String dataProvider, final String dataField, final LocalDateRange dateRange) {
+
+    final HistoricalTimeSeriesProviderGetRequest request = HistoricalTimeSeriesProviderGetRequest.createGetBulk(externalIdBundleSet, dataSource, dataProvider, dataField, dateRange);
+    final HistoricalTimeSeriesProviderGetResult result = getHistoricalTimeSeries(request);
     return result.getResultMap();
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public HistoricalTimeSeriesProviderGetResult getHistoricalTimeSeries(HistoricalTimeSeriesProviderGetRequest request) {
+  public HistoricalTimeSeriesProviderGetResult getHistoricalTimeSeries(final HistoricalTimeSeriesProviderGetRequest request) {
     ArgumentChecker.notNull(request, "request");
-    
-    URI uri = DataHistoricalTimeSeriesProviderUris.uriGet(getBaseUri());
+
+    final URI uri = DataHistoricalTimeSeriesProviderUris.uriGet(getBaseUri());
     return accessRemote(uri).post(HistoricalTimeSeriesProviderGetResult.class, request);
   }
 

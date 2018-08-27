@@ -5,26 +5,27 @@
  */
 package com.opengamma.integration.marketdata.manipulator.dsl;
 
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
+
+import org.joda.beans.Bean;
 import org.joda.beans.BeanDefinition;
 import org.joda.beans.ImmutableBean;
 import org.joda.beans.ImmutableConstructor;
+import org.joda.beans.JodaBeanUtils;
+import org.joda.beans.MetaProperty;
+import org.joda.beans.Property;
 import org.joda.beans.PropertyDefinition;
+import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
+import org.joda.beans.impl.direct.DirectMetaBean;
+import org.joda.beans.impl.direct.DirectMetaProperty;
+import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.opengamma.engine.function.FunctionExecutionContext;
 import com.opengamma.engine.marketdata.manipulator.function.StructureManipulator;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.util.ArgumentChecker;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Set;
-import org.joda.beans.Bean;
-import org.joda.beans.JodaBeanUtils;
-import org.joda.beans.MetaProperty;
-import org.joda.beans.Property;
-import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
-import org.joda.beans.impl.direct.DirectMetaBean;
-import org.joda.beans.impl.direct.DirectMetaProperty;
-import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
  *
@@ -36,14 +37,14 @@ public final class SpotRateReplace implements StructureManipulator<Double>, Immu
   private final Double _value;
 
   @ImmutableConstructor
-  /* package */ SpotRateReplace(Number value) {
+  /* package */ SpotRateReplace(final Number value) {
     _value = ArgumentChecker.notNull(value, "value").doubleValue();
   }
 
   @Override
-  public Double execute(Double spotRate,
-                        ValueSpecification valueSpecification,
-                        FunctionExecutionContext executionContext) {
+  public Double execute(final Double spotRate,
+                        final ValueSpecification valueSpecification,
+                        final FunctionExecutionContext executionContext) {
     return _value;
   }
 

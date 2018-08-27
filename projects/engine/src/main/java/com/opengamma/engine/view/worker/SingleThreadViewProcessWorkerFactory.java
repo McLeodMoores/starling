@@ -18,7 +18,7 @@ import com.opengamma.engine.view.execution.ViewExecutionOptions;
 public class SingleThreadViewProcessWorkerFactory implements ViewProcessWorkerFactory {
 
   @Override
-  public ViewProcessWorker createWorker(ViewProcessWorkerContext context, ViewExecutionOptions executionOptions, ViewDefinition viewDefinition) {
+  public ViewProcessWorker createWorker(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions, final ViewDefinition viewDefinition) {
     return new SingleThreadViewProcessWorker(context, executionOptions, viewDefinition);
   }
 }

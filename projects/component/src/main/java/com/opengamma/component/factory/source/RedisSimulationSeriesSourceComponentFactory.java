@@ -20,8 +20,6 @@ import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import org.threeten.bp.LocalDate;
 
-import redis.clients.jedis.JedisPool;
-
 import com.opengamma.component.ComponentInfo;
 import com.opengamma.component.ComponentRepository;
 import com.opengamma.component.factory.AbstractComponentFactory;
@@ -36,6 +34,8 @@ import com.opengamma.master.historicaltimeseries.impl.RedisSimulationSeriesResol
 import com.opengamma.master.historicaltimeseries.impl.RemoteHistoricalTimeSeriesResolver;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 import com.opengamma.util.redis.RedisConnector;
+
+import redis.clients.jedis.JedisPool;
 
 /**
  * A component factory to build {@code RedisSimulationSeriesSource} instances.
@@ -76,27 +76,27 @@ public class RedisSimulationSeriesSourceComponentFactory extends AbstractCompone
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
     final JedisPool jedisPool = getRedisConnector().getJedisPool();
     final RedisSimulationSeriesSource  instance = new RedisSimulationSeriesSource(jedisPool, getRedisPrefix());
     if (_simulationDate != null) {
       instance.setCurrentSimulationExecutionDate(_simulationDate);
     }
-    HistoricalTimeSeriesResolver resolver = new RedisSimulationSeriesResolver(instance);
+    final HistoricalTimeSeriesResolver resolver = new RedisSimulationSeriesResolver(instance);
 
-    ComponentInfo infoResolver = new ComponentInfo(HistoricalTimeSeriesResolver.class, getClassifier());
+    final ComponentInfo infoResolver = new ComponentInfo(HistoricalTimeSeriesResolver.class, getClassifier());
     infoResolver.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     if (isPublishRest()) {
       infoResolver.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteHistoricalTimeSeriesResolver.class);
     }
     repo.registerComponent(infoResolver, resolver);
-    ComponentInfo infoSource = new ComponentInfo(HistoricalTimeSeriesSource.class, getClassifier());
+    final ComponentInfo infoSource = new ComponentInfo(HistoricalTimeSeriesSource.class, getClassifier());
     infoSource.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     if (isPublishRest()) {
       infoSource.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteHistoricalTimeSeriesSource.class);
     }
     repo.registerComponent(infoSource, instance);
-    ComponentInfo infoRedis = new ComponentInfo(RedisSimulationSeriesSource.class, getClassifier());
+    final ComponentInfo infoRedis = new ComponentInfo(RedisSimulationSeriesSource.class, getClassifier());
     infoRedis.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     repo.registerComponent(infoRedis, instance);
 

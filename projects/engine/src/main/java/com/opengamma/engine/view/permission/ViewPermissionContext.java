@@ -15,8 +15,8 @@ public class ViewPermissionContext {
   private final ViewPermissionProvider _viewPermissionProvider;
   private final ViewPortfolioPermissionProvider _viewPortfolioPermissionProvider;
 
-  public ViewPermissionContext(ViewPermissionProvider viewPermissionProvider,
-                               ViewPortfolioPermissionProvider viewPortfolioPermissionProvider) {
+  public ViewPermissionContext(final ViewPermissionProvider viewPermissionProvider,
+                               final ViewPortfolioPermissionProvider viewPortfolioPermissionProvider) {
 
     ArgumentChecker.notNull(viewPermissionProvider, "viewPermissionProvider");
     ArgumentChecker.notNull(viewPortfolioPermissionProvider, "viewPortfolioPermissionProvider");

@@ -48,7 +48,7 @@ public abstract class StandardCDSSecurity extends CreditDefaultSwapSecurity {
   @PropertyDefinition(validate = "notNull")
   private InterestRateNotional _upfrontAmount;
 
-  StandardCDSSecurity(String securityType) { // For Fudge builder
+  StandardCDSSecurity(final String securityType) { // For Fudge builder
     super(securityType);
   }
 
@@ -84,29 +84,29 @@ public abstract class StandardCDSSecurity extends CreditDefaultSwapSecurity {
     setUpfrontAmount(upfrontAmount);
   }
 
-  protected StandardCDSSecurity(boolean isBuy,  // CSIGNORE: number of parameters is appropriate here
-                                ExternalId protectionSeller,
-                                ExternalId protectionBuyer,
-                                ExternalId referenceEntity,
-                                DebtSeniority debtSeniority,
-                                RestructuringClause restructuringClause,
-                                ExternalId regionId,
-                                ZonedDateTime startDate,
-                                ZonedDateTime effectiveDate,
-                                ZonedDateTime maturityDate,
-                                StubType stubType,
-                                Frequency couponFrequency,
-                                DayCount dayCount,
-                                BusinessDayConvention businessDayConvention,
-                                boolean immAdjustMaturityDate,
-                                boolean adjustEffectiveDate,
-                                boolean adjustMaturityDate,
-                                InterestRateNotional notional,
-                                boolean includeAccruedPremium,
-                                boolean protectionStart,
-                                String securityType,
-                                double quotedSpread,
-                                InterestRateNotional upfrontAmount) {
+  protected StandardCDSSecurity(final boolean isBuy,  // CSIGNORE: number of parameters is appropriate here
+                                final ExternalId protectionSeller,
+                                final ExternalId protectionBuyer,
+                                final ExternalId referenceEntity,
+                                final DebtSeniority debtSeniority,
+                                final RestructuringClause restructuringClause,
+                                final ExternalId regionId,
+                                final ZonedDateTime startDate,
+                                final ZonedDateTime effectiveDate,
+                                final ZonedDateTime maturityDate,
+                                final StubType stubType,
+                                final Frequency couponFrequency,
+                                final DayCount dayCount,
+                                final BusinessDayConvention businessDayConvention,
+                                final boolean immAdjustMaturityDate,
+                                final boolean adjustEffectiveDate,
+                                final boolean adjustMaturityDate,
+                                final InterestRateNotional notional,
+                                final boolean includeAccruedPremium,
+                                final boolean protectionStart,
+                                final String securityType,
+                                final double quotedSpread,
+                                final InterestRateNotional upfrontAmount) {
     super(isBuy,
           protectionSeller,
           protectionBuyer,

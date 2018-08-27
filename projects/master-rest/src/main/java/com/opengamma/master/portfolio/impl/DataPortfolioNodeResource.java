@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.portfolio.impl;
@@ -30,11 +30,11 @@ public class DataPortfolioNodeResource extends AbstractDataResource {
   /**
    * The identifier specified in the URI.
    */
-  private UniqueId _urlResourceId;
+  private final UniqueId _urlResourceId;
 
   /**
    * Creates the resource.
-   * 
+   *
    * @param portfoliosResource  the parent resource, not null
    * @param nodeId  the node unique identifier, not null
    */
@@ -48,7 +48,7 @@ public class DataPortfolioNodeResource extends AbstractDataResource {
   //-------------------------------------------------------------------------
   /**
    * Gets the portfolios resource.
-   * 
+   *
    * @return the portfolios resource, not null
    */
   public DataPortfolioMasterResource getPortfoliosResource() {
@@ -57,7 +57,7 @@ public class DataPortfolioNodeResource extends AbstractDataResource {
 
   /**
    * Gets the node identifier from the URL.
-   * 
+   *
    * @return the unique identifier, not null
    */
   public UniqueId getUrlNodeId() {
@@ -67,7 +67,7 @@ public class DataPortfolioNodeResource extends AbstractDataResource {
   //-------------------------------------------------------------------------
   /**
    * Gets the portfolio master.
-   * 
+   *
    * @return the portfolio master, not null
    */
   public PortfolioMaster getPortfolioMaster() {
@@ -77,19 +77,19 @@ public class DataPortfolioNodeResource extends AbstractDataResource {
   //-------------------------------------------------------------------------
   @GET
   public Response get() {
-    ManageablePortfolioNode result = getPortfolioMaster().getNode(_urlResourceId);
+    final ManageablePortfolioNode result = getPortfolioMaster().getNode(_urlResourceId);
     return responseOkObject(result);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Builds a URI for the resource.
-   * 
+   *
    * @param baseUri  the base URI, not null
    * @param nodeId  the resource identifier, not null
    * @return the URI, not null
    */
-  public static URI uri(URI baseUri, UniqueId nodeId) {
+  public static URI uri(final URI baseUri, final UniqueId nodeId) {
     return UriBuilder.fromUri(baseUri).path("/nodes/{nodeId}")
       .build(nodeId);
   }

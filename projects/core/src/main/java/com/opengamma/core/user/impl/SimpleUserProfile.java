@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.user.impl;
@@ -81,13 +81,13 @@ public class SimpleUserProfile implements Bean, UserProfile, Serializable {
    * Creates a {@code SimpleUserProfile} from another account.
    * <p>
    * Roles and permissions are not copied.
-   * 
+   *
    * @param profileToCopy  the profile to copy, not null
    * @return the new profile, not null
    */
-  public static SimpleUserProfile from(UserProfile profileToCopy) {
+  public static SimpleUserProfile from(final UserProfile profileToCopy) {
     ArgumentChecker.notNull(profileToCopy, "profileToCopy");
-    SimpleUserProfile copy = new SimpleUserProfile();
+    final SimpleUserProfile copy = new SimpleUserProfile();
     copy.setDisplayName(profileToCopy.getDisplayName());
     copy.setLocale(profileToCopy.getLocale());
     copy.setZone(profileToCopy.getZone());

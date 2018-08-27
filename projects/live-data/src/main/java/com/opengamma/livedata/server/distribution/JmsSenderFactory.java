@@ -60,10 +60,10 @@ public class JmsSenderFactory implements MarketDataSenderFactory {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param jmsConnector  the JMS connector
    */
-  public JmsSenderFactory(JmsConnector jmsConnector) {
+  public JmsSenderFactory(final JmsConnector jmsConnector) {
     this();
     setJmsConnector(jmsConnector);
   }
@@ -71,7 +71,7 @@ public class JmsSenderFactory implements MarketDataSenderFactory {
   //-------------------------------------------------------------------------
   /**
    * Gets the JMS connector.
-   * 
+   *
    * @return the JMS connector
    */
   public JmsConnector getJmsConnector() {
@@ -80,16 +80,16 @@ public class JmsSenderFactory implements MarketDataSenderFactory {
 
   /**
    * Sets the JMS connector.
-   * 
+   *
    * @param jmsConnector  the connector
    */
-  public void setJmsConnector(JmsConnector jmsConnector) {
+  public void setJmsConnector(final JmsConnector jmsConnector) {
     _jmsConnector = jmsConnector;
   }
 
   /**
    * Gets the Fudge context.
-   * 
+   *
    * @return the Fudge context
    */
   public FudgeContext getFudgeContext() {
@@ -98,10 +98,10 @@ public class JmsSenderFactory implements MarketDataSenderFactory {
 
   /**
    * Sets the Fudge context.
-   * 
+   *
    * @param fudgeContext  the Fudge context
    */
-  public void setFudgeContext(FudgeContext fudgeContext) {
+  public void setFudgeContext(final FudgeContext fudgeContext) {
     _fudgeContext = fudgeContext;
   }
 
@@ -131,9 +131,9 @@ public class JmsSenderFactory implements MarketDataSenderFactory {
   }
 
   @Override
-  public synchronized Collection<MarketDataSender> create(MarketDataDistributor distributor) {
+  public synchronized Collection<MarketDataSender> create(final MarketDataDistributor distributor) {
     LOGGER.debug("Created JmsSender for {}", distributor);
-    JmsSender sender = new JmsSender(_jmsConnector, distributor, getFudgeContext());
+    final JmsSender sender = new JmsSender(_jmsConnector, distributor, getFudgeContext());
     _allActiveSenders.add(sender);
     return Collections.<MarketDataSender>singleton(sender);
   }

@@ -46,7 +46,7 @@ import com.opengamma.util.TerminatableJob;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 
 /**
- * 
+ *
  */
 public class BloombergTickWriter extends TerminatableJob {
 
@@ -58,42 +58,42 @@ public class BloombergTickWriter extends TerminatableJob {
    * The default name for the file that contains all ticks.
    */
   public static final String ALL_TICKS_FILENAME = "allTicks.dat";
-  
+
   private final FudgeContext _fudgeContext;
-  private ConcurrentMap<String, BlockingQueue<FudgeMsg>> _securityMapQueue = new ConcurrentHashMap<String, BlockingQueue<FudgeMsg>>();
+  private final ConcurrentMap<String, BlockingQueue<FudgeMsg>> _securityMapQueue = new ConcurrentHashMap<>();
   private final BlockingQueue<FudgeMsg> _allTicksQueue;
   private final Map<String, String> _ticker2Buid;
-  private String _rootDir;
+  private final String _rootDir;
   private int _nTicks;
   private int _nWrites;
   private int _nBlocks;
   private final StopWatch _stopWatch = new StopWatch();
-  private long _reportInterval;
+  private final long _reportInterval;
   private final StorageMode _storageMode;
-  
-  public BloombergTickWriter(BlockingQueue<FudgeMsg> allTicksQueue, Map<String, String> ticker2Buid, 
-      String rootDir, StorageMode storageMode, BloombergTicksCollector ticksGenerator) {
+
+  public BloombergTickWriter(final BlockingQueue<FudgeMsg> allTicksQueue, final Map<String, String> ticker2Buid,
+      final String rootDir, final StorageMode storageMode, final BloombergTicksCollector ticksGenerator) {
     this(OpenGammaFudgeContext.getInstance(), allTicksQueue, ticker2Buid, rootDir, storageMode);
   }
-  
-  public BloombergTickWriter(FudgeContext fudgeContext, BlockingQueue<FudgeMsg> allTicksQueue, Map<String, String> ticker2Buid, 
-      String rootDir, StorageMode storageMode) {
+
+  public BloombergTickWriter(final FudgeContext fudgeContext, final BlockingQueue<FudgeMsg> allTicksQueue, final Map<String, String> ticker2Buid,
+      final String rootDir, final StorageMode storageMode) {
     this(fudgeContext, allTicksQueue, ticker2Buid, rootDir, storageMode, DEFAULT_REPORT_INTERVAL);
   }
-  
+
   public BloombergTickWriter(
-      FudgeContext fudgeContext,
-      BlockingQueue<FudgeMsg> allTicksQueue,
-      Map<String, String> ticker2Buid,
-      String rootDir,
-      StorageMode storageMode,
-      long reportInterval) {
+      final FudgeContext fudgeContext,
+      final BlockingQueue<FudgeMsg> allTicksQueue,
+      final Map<String, String> ticker2Buid,
+      final String rootDir,
+      final StorageMode storageMode,
+      final long reportInterval) {
     ArgumentChecker.notNull(fudgeContext, "fudgeContext");
     ArgumentChecker.notNull(allTicksQueue, "allTicksQueue");
     ArgumentChecker.notNull(ticker2Buid, "ticker2Buid");
     ArgumentChecker.notNull(rootDir, "rootDir");
     ArgumentChecker.notNull(storageMode, "storageMode");
-    
+
     _fudgeContext = fudgeContext;
     _allTicksQueue = allTicksQueue;
     _rootDir = rootDir;
@@ -103,7 +103,7 @@ public class BloombergTickWriter extends TerminatableJob {
     _ticker2Buid = ImmutableMap.<String, String>builder().putAll(ticker2Buid).build();
     LOGGER.info("BloombergTickWriter started in {} mode writing to {}", _storageMode, _rootDir);
   }
-  
+
   private FudgeContext getFudgeContext() {
     return _fudgeContext;
   }
@@ -113,9 +113,9 @@ public class BloombergTickWriter extends TerminatableJob {
     // Andrew 2010-01-27 -- If the queue is empty, this will loop round in a big no-op.
     // Checking for this and including a blocking 'take' on the queue seemed to result in lower throughput.
     // This might not be the case outside of the high load test case where data arrives at high speed and the blocking is a rarity.
-    List<FudgeMsg> ticks = new ArrayList<FudgeMsg>(_allTicksQueue.size());
+    List<FudgeMsg> ticks = new ArrayList<>(_allTicksQueue.size());
     _allTicksQueue.drainTo(ticks);
-    FudgeMsg msg = writeAllTicksToSingleFile(ticks);
+    final FudgeMsg msg = writeAllTicksToSingleFile(ticks);
     if (_storageMode == StorageMode.MULTI) {
       if (msg != null && BloombergTickReplayUtils.isTerminateMsg(msg)) {
         ticks.remove(msg);
@@ -137,22 +137,22 @@ public class BloombergTickWriter extends TerminatableJob {
   /**
    * @param ticks
    */
-  private void buildSecurityMapQueue(List<FudgeMsg> ticks) {
-    for (FudgeMsg fudgeMsg : ticks) {
-      String securityDes = fudgeMsg.getString(SECURITY_KEY);
+  private void buildSecurityMapQueue(final List<FudgeMsg> ticks) {
+    for (final FudgeMsg fudgeMsg : ticks) {
+      final String securityDes = fudgeMsg.getString(SECURITY_KEY);
       if (_securityMapQueue.containsKey(securityDes)) {
-        BlockingQueue<FudgeMsg> queue = _securityMapQueue.get(securityDes);
+        final BlockingQueue<FudgeMsg> queue = _securityMapQueue.get(securityDes);
         try {
           queue.put(fudgeMsg);
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
           Thread.interrupted();
           LOGGER.warn("interrupted from putting message on queue");
         }
       } else {
-        LinkedBlockingQueue<FudgeMsg> queue = new LinkedBlockingQueue<FudgeMsg>();
+        final LinkedBlockingQueue<FudgeMsg> queue = new LinkedBlockingQueue<>();
         try {
           queue.put(fudgeMsg);
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
           Thread.interrupted();
           LOGGER.warn("interrupted from putting message on queue");
         }
@@ -167,94 +167,94 @@ public class BloombergTickWriter extends TerminatableJob {
     }
     LOGGER.debug("writing {} messages for {}:{}", new Object[]{tickMsgList.size(), securityDes, buid});
     //sort ticks per time
-    Map<String, List<FudgeMsg>> fileTicksMap = new HashMap<String, List<FudgeMsg>>();
-    for (FudgeMsg tickMsg : tickMsgList) {
-      String filename = makeFileName(tickMsg);
+    final Map<String, List<FudgeMsg>> fileTicksMap = new HashMap<>();
+    for (final FudgeMsg tickMsg : tickMsgList) {
+      final String filename = makeFileName(tickMsg);
       List<FudgeMsg> fileTicks = fileTicksMap.get(filename);
       if (fileTicks == null) {
-        fileTicks = new ArrayList<FudgeMsg>();
+        fileTicks = new ArrayList<>();
         fileTicks.add(tickMsg);
         fileTicksMap.put(filename, fileTicks);
       } else {
         fileTicks.add(tickMsg);
       }
     }
-    for (Entry<String, List<FudgeMsg>> entry : fileTicksMap.entrySet()) {
-      String filename = entry.getKey();
-      List<FudgeMsg> ticks = entry.getValue();
-      String fullPath = new StringBuilder(dir.getAbsolutePath()).append(File.separator).append(filename).toString();
+    for (final Entry<String, List<FudgeMsg>> entry : fileTicksMap.entrySet()) {
+      final String filename = entry.getKey();
+      final List<FudgeMsg> ticks = entry.getValue();
+      final String fullPath = new StringBuilder(dir.getAbsolutePath()).append(File.separator).append(filename).toString();
       FileOutputStream fos = null;
-      
+
       try {
         fos = new FileOutputStream(fullPath, true);
-        BufferedOutputStream bos = new BufferedOutputStream(fos, 4096);
-        FudgeMsgWriter fmsw = getFudgeContext().createMessageWriter(bos);
-        for (FudgeMsg tick : ticks) {
+        final BufferedOutputStream bos = new BufferedOutputStream(fos, 4096);
+        final FudgeMsgWriter fmsw = getFudgeContext().createMessageWriter(bos);
+        for (final FudgeMsg tick : ticks) {
           _nBlocks += FudgeSize.calculateMessageSize(tick);
           fmsw.writeMessage(tick, 0);
           fmsw.flush();
         }
         _nWrites++;
-      } catch (FileNotFoundException e) {
+      } catch (final FileNotFoundException e) {
         LOGGER.warn("cannot open file {} for writing", fullPath);
         throw new OpenGammaRuntimeException("Cannot open " + fullPath + " for writing", e);
       } finally {
         if (fos != null) {
           try {
             fos.close();
-          } catch (IOException e) {
+          } catch (final IOException e) {
             LOGGER.warn("cannot close file {}", fullPath);
           }
         }
       }
-    }  
+    }
     _nTicks += tickMsgList.size();
   }
-  
-  private FudgeMsg writeAllTicksToSingleFile(List<FudgeMsg> ticks) {
+
+  private FudgeMsg writeAllTicksToSingleFile(final List<FudgeMsg> ticks) {
     if (ticks.isEmpty()) {
       return null;
     }
     FudgeMsg terminateMsg = null;
-    File fullPath = getTicksFile();
+    final File fullPath = getTicksFile();
     FileOutputStream fos = null;
     try {
       fos = new FileOutputStream(fullPath, true);
-      BufferedOutputStream bos = new BufferedOutputStream(fos, 4096);
-      FudgeMsgWriter fmsw = getFudgeContext().createMessageWriter(bos);
-      for (FudgeMsg tick : ticks) {
+      final BufferedOutputStream bos = new BufferedOutputStream(fos, 4096);
+      final FudgeMsgWriter fmsw = getFudgeContext().createMessageWriter(bos);
+      for (final FudgeMsg tick : ticks) {
         if (BloombergTickReplayUtils.isTerminateMsg(tick)) {
           terminateMsg = tick;
           continue;
         }
         _nBlocks += FudgeSize.calculateMessageSize(tick);
-        String securityDes = tick.getString(SECURITY_KEY);
-        String buid = getBloombergBUID(securityDes);
+        final String securityDes = tick.getString(SECURITY_KEY);
+        final String buid = getBloombergBUID(securityDes);
         ((MutableFudgeMsg) tick).add(BUID_KEY, buid);
         fmsw.writeMessage(tick, 0);
         fmsw.flush();
       }
       _nWrites++;
-    } catch (FileNotFoundException e) {
+    } catch (final FileNotFoundException e) {
       LOGGER.warn("cannot open file {} for writing", fullPath);
       throw new OpenGammaRuntimeException("Cannot open file " + fullPath + " for writing", e);
     } finally {
       if (fos != null) {
         try {
           fos.close();
-        } catch (IOException e) {
+        } catch (final IOException e) {
           LOGGER.warn("cannot close {}", fullPath);
         }
       }
-      
+
     }
     _nTicks += ticks.size();
     return terminateMsg;
   }
 
   private File getTicksFile() {
-    String baseDirectory = makeBaseDirectoryName();
-    File dir = new File(baseDirectory);
+    final String baseDirectory = makeBaseDirectoryName();
+    final File dir = new File(baseDirectory);
     if (!dir.exists()) {
       createDirectory(dir);
     }
@@ -265,25 +265,25 @@ public class BloombergTickWriter extends TerminatableJob {
    * @return
    */
   private String makeBaseDirectoryName() {
-    Clock clock = Clock.systemUTC();
-    LocalDate today = LocalDate.now(clock);
-    StringBuilder buf = new StringBuilder();
+    final Clock clock = Clock.systemUTC();
+    final LocalDate today = LocalDate.now(clock);
+    final StringBuilder buf = new StringBuilder();
     buf.append(_rootDir).append(File.separator);
-    int year = today.getYear();
+    final int year = today.getYear();
     if (year < 10) {
       buf.append("0").append(year);
     } else {
       buf.append(year);
     }
     buf.append(File.separator);
-    int month = today.getMonthValue();
+    final int month = today.getMonthValue();
     if (month < 10) {
       buf.append("0").append(month);
     } else {
       buf.append(month);
     }
     buf.append(File.separator);
-    int dayOfMonth = today.getDayOfMonth();
+    final int dayOfMonth = today.getDayOfMonth();
     if (dayOfMonth < 10) {
       buf.append("0").append(dayOfMonth);
     } else {
@@ -293,24 +293,24 @@ public class BloombergTickWriter extends TerminatableJob {
   }
 
   /**
-   * 
+   *
    */
   private void writeOutSecurityMapQueue() {
-    for (Entry<String, BlockingQueue<FudgeMsg>> entry : _securityMapQueue.entrySet()) {
-      String security = entry.getKey();
-      BlockingQueue<FudgeMsg> queue = entry.getValue();
+    for (final Entry<String, BlockingQueue<FudgeMsg>> entry : _securityMapQueue.entrySet()) {
+      final String security = entry.getKey();
+      final BlockingQueue<FudgeMsg> queue = entry.getValue();
       if (queue.isEmpty()) {
         continue;
       }
-      List<FudgeMsg> tickMsgList = new ArrayList<FudgeMsg>(queue.size());
+      List<FudgeMsg> tickMsgList = new ArrayList<>(queue.size());
       queue.drainTo(tickMsgList);
-      String buid = getBloombergBUID(security);
-      
+      final String buid = getBloombergBUID(security);
+
       //get first message
-      FudgeMsg tickMsg = tickMsgList.get(0);
-      Long epochMillis = tickMsg.getLong(RECEIVED_TS_KEY);
-      
-      File dir = buildSecurityDirectory(buid, epochMillis);
+      final FudgeMsg tickMsg = tickMsgList.get(0);
+      final Long epochMillis = tickMsg.getLong(RECEIVED_TS_KEY);
+
+      final File dir = buildSecurityDirectory(buid, epochMillis);
       if (!dir.exists()) {
         createDirectory(dir);
       }
@@ -319,18 +319,18 @@ public class BloombergTickWriter extends TerminatableJob {
       tickMsgList = null;
     }
   }
-  
+
   /**
-   * 
+   *
    */
   private void writeReport() {
     LOGGER.debug("writing reports");
     _stopWatch.suspend();
-    long time = _stopWatch.getTime();
+    final long time = _stopWatch.getTime();
     if (time >= _reportInterval) {
-      double result = ((double) _nTicks / (double) time) * 1000.;
+      double result = (double) _nTicks / (double) time * 1000.;
       LOGGER.debug("ticks {}/s", result);
-      result = ((double) _nWrites / (double) time) * 1000.;
+      result = (double) _nWrites / (double) time * 1000.;
       LOGGER.debug("fileOperations {}/s", result);
       result = (double) _nBlocks / (double) _nWrites;
       LOGGER.debug("average blocks {}bytes", result);
@@ -345,25 +345,25 @@ public class BloombergTickWriter extends TerminatableJob {
   }
 
   /**
-   * @param buid 
-   * @param tickMsgList 
+   * @param buid
+   * @param tickMsgList
    * @return
    */
-  private File buildSecurityDirectory(String buid, long receivedTS) {
-    Instant instant = Instant.ofEpochMilli(receivedTS);
-    ZonedDateTime dateTime = ZonedDateTime.ofInstant(instant, ZoneOffset.UTC);
-    LocalDate today = dateTime.toLocalDate();
-    StringBuilder buf = new StringBuilder();
+  private File buildSecurityDirectory(final String buid, final long receivedTS) {
+    final Instant instant = Instant.ofEpochMilli(receivedTS);
+    final ZonedDateTime dateTime = ZonedDateTime.ofInstant(instant, ZoneOffset.UTC);
+    final LocalDate today = dateTime.toLocalDate();
+    final StringBuilder buf = new StringBuilder();
     buf.append(_rootDir).append(File.separator);
     buf.append(buid).append(File.separator).append(today.getYear()).append(File.separator);
-    int month = today.getMonthValue();
+    final int month = today.getMonthValue();
     if (month < 10) {
       buf.append("0").append(month);
     } else {
       buf.append(month);
     }
     buf.append(File.separator);
-    int dayOfMonth = today.getDayOfMonth();
+    final int dayOfMonth = today.getDayOfMonth();
     if (dayOfMonth < 10) {
       buf.append("0").append(dayOfMonth);
     } else {
@@ -373,7 +373,7 @@ public class BloombergTickWriter extends TerminatableJob {
     return new File(buf.toString());
   }
 
-  private String getBloombergBUID(String securityDes) {
+  private String getBloombergBUID(final String securityDes) {
     String buid = _ticker2Buid.get(securityDes);
     if (buid == null) {
       buid = securityDes;
@@ -385,9 +385,9 @@ public class BloombergTickWriter extends TerminatableJob {
    * @param tickMsg
    * @return
    */
-  private String makeFileName(FudgeMsg tickMsg) {
-    String result = null;    
-    FudgeMsg bbgTickAsMsg = tickMsg.getMessage(FIELDS_KEY);
+  private String makeFileName(final FudgeMsg tickMsg) {
+    String result = null;
+    final FudgeMsg bbgTickAsMsg = tickMsg.getMessage(FIELDS_KEY);
     String eventTime = bbgTickAsMsg.getString("EVENT_TIME");
     if (eventTime == null) {
       eventTime = bbgTickAsMsg.getString("TIME");
@@ -409,13 +409,13 @@ public class BloombergTickWriter extends TerminatableJob {
    * @param tickMsg
    * @return
    */
-  private String makeFileNameFromReceivedTimeStamp(FudgeMsg tickMsg) {
+  private String makeFileNameFromReceivedTimeStamp(final FudgeMsg tickMsg) {
     String result = null;
     //LOGGER.warn("cannot determine event time in msg {}, using received timestamp", tickMsg); // Andrew - uncomment before checking back in
-    Long epochMillis = tickMsg.getLong(RECEIVED_TS_KEY);
-    Instant instant = Instant.ofEpochMilli(epochMillis);
-    ZonedDateTime dateTime = ZonedDateTime.ofInstant(instant, ZoneOffset.UTC);
-    int hourOfDay = dateTime.getHour();
+    final Long epochMillis = tickMsg.getLong(RECEIVED_TS_KEY);
+    final Instant instant = Instant.ofEpochMilli(epochMillis);
+    final ZonedDateTime dateTime = ZonedDateTime.ofInstant(instant, ZoneOffset.UTC);
+    final int hourOfDay = dateTime.getHour();
     if (hourOfDay < 10) {
       result = new StringBuilder("0").append(hourOfDay).toString();
     } else {
@@ -425,13 +425,13 @@ public class BloombergTickWriter extends TerminatableJob {
   }
 
   /**
-   * 
+   *
    * @param eventTime expected time like 11:44:18.000+00:00
    * @return
    */
-  private String makeFileNameFromEventTime(String eventTime) {
+  private String makeFileNameFromEventTime(final String eventTime) {
     String result = null;
-    String[] split = eventTime.split(":");
+    final String[] split = eventTime.split(":");
     if (split.length == 4) {
       result = split[0];
     } else {
@@ -439,11 +439,11 @@ public class BloombergTickWriter extends TerminatableJob {
     }
     return result;
   }
-  
+
   /**
    * @param dir
    */
-  private void createDirectory(File dir) {
+  private void createDirectory(final File dir) {
     if (!dir.mkdirs()) {
       LOGGER.warn("cannot create {}", dir);
       throw new OpenGammaRuntimeException("cannot create directory " + dir);
@@ -470,5 +470,5 @@ public class BloombergTickWriter extends TerminatableJob {
   public int getNBlocks() {
     return _nBlocks;
   }
-  
+
 }

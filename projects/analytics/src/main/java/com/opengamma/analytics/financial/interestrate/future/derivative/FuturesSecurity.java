@@ -22,7 +22,7 @@ public abstract class FuturesSecurity implements InstrumentDerivative {
    * Constructor.
    * @param tradingLastTime The last trading time.
    */
-  public FuturesSecurity(double tradingLastTime) {
+  public FuturesSecurity(final double tradingLastTime) {
     super();
     _tradingLastTime = tradingLastTime;
   }
@@ -47,12 +47,12 @@ public abstract class FuturesSecurity implements InstrumentDerivative {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_tradingLastTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -62,7 +62,7 @@ public abstract class FuturesSecurity implements InstrumentDerivative {
     if (getClass() != obj.getClass()) {
       return false;
     }
-    FuturesSecurity other = (FuturesSecurity) obj;
+    final FuturesSecurity other = (FuturesSecurity) obj;
     if (Double.doubleToLongBits(_tradingLastTime) != Double.doubleToLongBits(other._tradingLastTime)) {
       return false;
     }

@@ -23,7 +23,7 @@ import com.opengamma.util.tuple.Triple;
 
 /**
  * Base class for steps that are based on iterating through a collection of candidate functions.
- * 
+ *
  * @param <T> the root iteration type
  */
 /* package */abstract class FunctionIterationStep extends ResolveTask.State {
@@ -32,7 +32,7 @@ import com.opengamma.util.tuple.Triple;
 
   public abstract static class IterationBaseStep extends ResolveTask.State {
 
-    public IterationBaseStep(ResolveTask task) {
+    public IterationBaseStep(final ResolveTask task) {
       super(task);
     }
 
@@ -40,7 +40,7 @@ import com.opengamma.util.tuple.Triple;
      * Attempts a function application.
      * <p>
      * The {@code resolvedOutput} value must be normalized.
-     * 
+     *
      * @param context the graph building context, not null
      * @param resolvedOutput the provisional resolved value specification, not null
      * @param resolvedFunction the function to apply, containing the definition, satisfying maximal specification, and all maximal output specifications
@@ -113,7 +113,7 @@ import com.opengamma.util.tuple.Triple;
 
     /**
      * Returns the desired value for the production. This might be a more constrained form than the value requirement being satisfied for graph construction.
-     * 
+     *
      * @return the desired value, not null
      */
     protected abstract ValueRequirement getDesiredValue();
@@ -123,7 +123,7 @@ import com.opengamma.util.tuple.Triple;
      * other output specifications are added to the output set unchanged.
      * <p>
      * The returned specification must be normalized.
-     * 
+     *
      * @param context the graph building context, not null
      * @param newOutputValues the output values returned by the function, not null
      * @param resolvedOutputValues the composed output values, not null

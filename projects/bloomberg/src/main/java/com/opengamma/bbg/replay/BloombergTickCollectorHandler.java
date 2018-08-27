@@ -37,30 +37,31 @@ import com.opengamma.bbg.util.BloombergDataUtils;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class BloombergTickCollectorHandler implements EventHandler {
 
   /** Logger. */
   private static final Logger LOGGER = LoggerFactory.getLogger(BloombergTickCollectorHandler.class);
   private static final FudgeContext FUDGE_CONTEXT = new FudgeContext();
-  
-  private SimpleDateFormat _dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
-  private BlockingQueue<FudgeMsg> _allTicksQueue;
+
+  private final SimpleDateFormat _dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
+  private final BlockingQueue<FudgeMsg> _allTicksQueue;
   private final BloombergTicksCollector _ticksCollector;
-  
+
   /**
    * @param allTicksQueue  the queue of ticks, not null
    * @param ticksCollector the ticks collector, not null
    */
-  public BloombergTickCollectorHandler(BlockingQueue<FudgeMsg> allTicksQueue, BloombergTicksCollector ticksCollector) {
+  public BloombergTickCollectorHandler(final BlockingQueue<FudgeMsg> allTicksQueue, final BloombergTicksCollector ticksCollector) {
     ArgumentChecker.notNull(allTicksQueue, "allTicksQueue");
     ArgumentChecker.notNull(allTicksQueue, "ticksCollector");
     _allTicksQueue = allTicksQueue;
     _ticksCollector = ticksCollector;
   }
 
-  public void processEvent(Event event, Session session) {
+  @Override
+  public void processEvent(final Event event, final Session session) {
     try {
       switch (event.eventType().intValue()) {
         case Event.EventType.Constants.SUBSCRIPTION_DATA:
@@ -73,17 +74,17 @@ public class BloombergTickCollectorHandler implements EventHandler {
           processMiscEvents(event, session);
           break;
       }
-    } catch (Exception e) {
+    } catch (final Exception e) {
       throw new OpenGammaRuntimeException("Unable to process subscription event", e);
     }
   }
 
-  private void processSubscriptionStatus(Event event, Session session) throws Exception {
+  private void processSubscriptionStatus(final Event event, final Session session) throws Exception {
     LOGGER.debug("Processing SUBSCRIPTION_STATUS");
-    MessageIterator msgIter = event.messageIterator();
+    final MessageIterator msgIter = event.messageIterator();
     while (msgIter.hasNext()) {
-      Message msg = msgIter.next();
-      String topic = (String) msg.correlationID().object();
+      final Message msg = msgIter.next();
+      final String topic = (String) msg.correlationID().object();
       LOGGER.debug("{}: {} - {}", new Object[]{_dateFormat
           .format(Calendar.getInstance().getTime()), topic, msg.messageType()});
       if (msg.messageType().equals("SubscriptionTerminated")) {
@@ -93,20 +94,20 @@ public class BloombergTickCollectorHandler implements EventHandler {
 
       if (msg.hasElement(REASON)) {
         // This can occur on SubscriptionFailure.
-        Element reason = msg.getElement(REASON);
-        LOGGER.warn("{}: security={} category={} description={}", 
+        final Element reason = msg.getElement(REASON);
+        LOGGER.warn("{}: security={} category={} description={}",
             new Object[]{_dateFormat.format(Calendar.getInstance().getTime()), topic, reason.getElement(CATEGORY).getValueAsString(), reason.getElement(DESCRIPTION).getValueAsString()});
       }
 
       if (msg.hasElement(EXCEPTIONS)) {
         // This can occur on SubscriptionStarted if at least
         // one field is good while the rest are bad.
-        Element exceptions = msg.getElement(EXCEPTIONS);
+        final Element exceptions = msg.getElement(EXCEPTIONS);
         for (int i = 0; i < exceptions.numValues(); ++i) {
-          Element exInfo = exceptions.getValueAsElement(i);
-          Element fieldId = exInfo.getElement(FIELD_ID);
-          Element reason = exInfo.getElement(REASON);
-          LOGGER.warn("{}: security={} field={} category={}", 
+          final Element exInfo = exceptions.getValueAsElement(i);
+          final Element fieldId = exInfo.getElement(FIELD_ID);
+          final Element reason = exInfo.getElement(REASON);
+          LOGGER.warn("{}: security={} field={} category={}",
               new Object[]{_dateFormat.format(Calendar.getInstance().getTime()), topic, fieldId.getValueAsString(), reason.getElement(CATEGORY).getValueAsString()});
         }
       }
@@ -114,17 +115,17 @@ public class BloombergTickCollectorHandler implements EventHandler {
     }
   }
 
-  private void processSubscriptionDataEvent(Event event, Session session) throws Exception {
+  private void processSubscriptionDataEvent(final Event event, final Session session) throws Exception {
     LOGGER.debug("Processing SUBSCRIPTION_DATA");
     if (tickWriterIsAlive()) {
-      MessageIterator msgIter = event.messageIterator();
+      final MessageIterator msgIter = event.messageIterator();
       while (msgIter.hasNext()) {
-        Message msg = msgIter.next();
+        final Message msg = msgIter.next();
         if (isValidMessage(msg)) {
-          String securityDes = (String) msg.correlationID().object();
-          MutableFudgeMsg tickMsg = FUDGE_CONTEXT.newMessage();
-          Instant instant = Clock.systemUTC().instant();
-          long epochMillis = instant.toEpochMilli();
+          final String securityDes = (String) msg.correlationID().object();
+          final MutableFudgeMsg tickMsg = FUDGE_CONTEXT.newMessage();
+          final Instant instant = Clock.systemUTC().instant();
+          final long epochMillis = instant.toEpochMilli();
           tickMsg.add(RECEIVED_TS_KEY, epochMillis);
           tickMsg.add(SECURITY_KEY, securityDes);
           tickMsg.add(FIELDS_KEY, BloombergDataUtils.parseElement(msg.asElement()));
@@ -140,7 +141,7 @@ public class BloombergTickCollectorHandler implements EventHandler {
     }
   }
 
-  private boolean isValidMessage(Message msg) {
+  private boolean isValidMessage(final Message msg) {
     return msg != null && msg.correlationID() != null;
   }
 
@@ -152,13 +153,13 @@ public class BloombergTickCollectorHandler implements EventHandler {
     return _ticksCollector.isTickWriterAlive();
   }
 
-  private void processMiscEvents(Event event, Session session) throws Exception {
+  private void processMiscEvents(final Event event, final Session session) throws Exception {
     LOGGER.info("Processing {}", event.eventType());
-    MessageIterator msgIter = event.messageIterator();
+    final MessageIterator msgIter = event.messageIterator();
     while (msgIter.hasNext()) {
-      Message msg = msgIter.next();
+      final Message msg = msgIter.next();
       LOGGER.debug("{}: {}\n", _dateFormat
           .format(Calendar.getInstance().getTime()), msg.messageType());
     }
-  } 
+  }
 }

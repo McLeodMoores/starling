@@ -14,8 +14,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import net.sf.ehcache.CacheManager;
-
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -31,6 +29,8 @@ import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesResolverWit
 import com.opengamma.master.historicaltimeseries.ManageableHistoricalTimeSeriesInfo;
 import com.opengamma.util.ehcache.EHCacheUtils;
 import com.opengamma.util.test.TestGroup;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Test.
@@ -88,10 +88,10 @@ public class EHCachingHistoricalTimeSeriesResolverTest {
       public HistoricalTimeSeriesResolutionResult resolve(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource, final String dataProvider,
           final String dataField, final String resolutionKey) {
         hits.incrementAndGet();
-        if ((dataSource != null) && !_source1.equals(dataSource)) {
+        if (dataSource != null && !_source1.equals(dataSource)) {
           return null;
         }
-        if ((dataProvider != null) && !_provider1.equals(dataProvider)) {
+        if (dataProvider != null && !_provider1.equals(dataProvider)) {
           return null;
         }
         if (!_field1.equals(dataField)) {
@@ -101,8 +101,8 @@ public class EHCachingHistoricalTimeSeriesResolverTest {
           if (_key2.equals(resolutionKey)) {
             return null;
           }
-          for (ExternalIdWithDates id : _dateBundle.getExternalIds()) {
-            if ((identifierValidityDate == null) || id.isValidOn(identifierValidityDate)) {
+          for (final ExternalIdWithDates id : _dateBundle.getExternalIds()) {
+            if (identifierValidityDate == null || id.isValidOn(identifierValidityDate)) {
               if (identifierBundle.contains(id.getExternalId())) {
                 final ManageableHistoricalTimeSeriesInfo info = new ManageableHistoricalTimeSeriesInfo();
                 info.setDataField(_field1);
@@ -157,22 +157,22 @@ public class EHCachingHistoricalTimeSeriesResolverTest {
   }
 
   public void testResolve_null_opt() {
-    List<EHCachingHistoricalTimeSeriesResolver> resolvers = new LinkedList<EHCachingHistoricalTimeSeriesResolver>();
+    final List<EHCachingHistoricalTimeSeriesResolver> resolvers = new LinkedList<>();
     try {
       testResolve_null(true, resolvers);
     } finally {
-      for (EHCachingHistoricalTimeSeriesResolver resolver : resolvers) {
+      for (final EHCachingHistoricalTimeSeriesResolver resolver : resolvers) {
         resolver.shutdown();
       }
     }
   }
 
   public void testResolve_null_pess() {
-    List<EHCachingHistoricalTimeSeriesResolver> resolvers = new LinkedList<EHCachingHistoricalTimeSeriesResolver>();
+    final List<EHCachingHistoricalTimeSeriesResolver> resolvers = new LinkedList<>();
     try {
       testResolve_null(false, resolvers);
     } finally {
-      for (EHCachingHistoricalTimeSeriesResolver resolver : resolvers) {
+      for (final EHCachingHistoricalTimeSeriesResolver resolver : resolvers) {
         resolver.shutdown();
       }
     }
@@ -185,42 +185,42 @@ public class EHCachingHistoricalTimeSeriesResolverTest {
     resolvers.add(resolver);
     for (int i = 0; i < 3; i++) {
       assertEquals(resolver.resolve(_bundleAll, _date1, dataSource, dataProvider, _field1, resolutionKey) != null, expectTS);
-      assertEquals(hits.getAndSet(0), (i == 0) ? ((hitMask & 0x1) != 0 ? 1 : ((hitMask & 0x2) != 0 ? 2 : 0)) : 0);
+      assertEquals(hits.getAndSet(0), i == 0 ? (hitMask & 0x1) != 0 ? 1 : (hitMask & 0x2) != 0 ? 2 : 0 : 0);
       assertNull(resolver.resolve(_bundleAll, _date1, dataSource, dataProvider, _field2, resolutionKey));
-      assertEquals(hits.getAndSet(0), (i == 0) && ((hitMask & 0x4) != 0) ? 1 : 0);
+      assertEquals(hits.getAndSet(0), i == 0 && (hitMask & 0x4) != 0 ? 1 : 0);
       assertEquals(resolver.resolve(_bundleAll, _date2, dataSource, dataProvider, _field1, resolutionKey) != null, expectTS);
-      assertEquals(hits.getAndSet(0), (i == 0) && ((hitMask & 0x8) != 0) ? 1 : 0);
+      assertEquals(hits.getAndSet(0), i == 0 && (hitMask & 0x8) != 0 ? 1 : 0);
       assertNull(resolver.resolve(_bundleAll, _date2, dataSource, dataProvider, _field2, resolutionKey));
-      assertEquals(hits.getAndSet(0), (i == 0) && ((hitMask & 0x10) != 0) ? 1 : 0);
+      assertEquals(hits.getAndSet(0), i == 0 && (hitMask & 0x10) != 0 ? 1 : 0);
       assertEquals(resolver.resolve(_bundle1, _date1, dataSource, dataProvider, _field1, resolutionKey) != null, expectTS);
-      assertEquals(hits.getAndSet(0), (i == 0) && ((hitMask & 0x20) != 0) ? 1 : 0);
+      assertEquals(hits.getAndSet(0), i == 0 && (hitMask & 0x20) != 0 ? 1 : 0);
       assertNull(resolver.resolve(_bundle1, _date1, dataSource, dataProvider, _field2, resolutionKey));
-      assertEquals(hits.getAndSet(0), (i == 0) && ((hitMask & 0x40) != 0) ? 1 : 0);
+      assertEquals(hits.getAndSet(0), i == 0 && (hitMask & 0x40) != 0 ? 1 : 0);
       assertEquals(resolver.resolve(_bundle1, _date2, dataSource, dataProvider, _field1, resolutionKey) != null, expectTS);
-      assertEquals(hits.getAndSet(0), (i == 0) && ((hitMask & 0x80) != 0) ? 1 : 0);
+      assertEquals(hits.getAndSet(0), i == 0 && (hitMask & 0x80) != 0 ? 1 : 0);
       assertNull(resolver.resolve(_bundle1, _date2, dataSource, dataProvider, _field2, resolutionKey));
-      assertEquals(hits.getAndSet(0), (i == 0) && ((hitMask & 0x100) != 0) ? 1 : 0);
+      assertEquals(hits.getAndSet(0), i == 0 && (hitMask & 0x100) != 0 ? 1 : 0);
       assertNull(resolver.resolve(_bundle2, _date1, dataSource, dataProvider, _field1, resolutionKey));
-      assertEquals(hits.getAndSet(0), (i == 0) ? ((hitMask & 0x200) != 0 ? 1 : ((hitMask & 0x400) != 0 ? 2 : 0)) : 0);
+      assertEquals(hits.getAndSet(0), i == 0 ? (hitMask & 0x200) != 0 ? 1 : (hitMask & 0x400) != 0 ? 2 : 0 : 0);
       assertNull(resolver.resolve(_bundle2, _date1, dataSource, dataProvider, _field2, resolutionKey));
-      assertEquals(hits.getAndSet(0), (i == 0) && ((hitMask & 0x800) != 0) ? 1 : 0);
+      assertEquals(hits.getAndSet(0), i == 0 && (hitMask & 0x800) != 0 ? 1 : 0);
       assertEquals(resolver.resolve(_bundle2, _date2, dataSource, dataProvider, _field1, resolutionKey) != null, expectTS);
-      assertEquals(hits.getAndSet(0), (i == 0) && ((hitMask & 0x1000) != 0) ? 1 : 0);
+      assertEquals(hits.getAndSet(0), i == 0 && (hitMask & 0x1000) != 0 ? 1 : 0);
       assertNull(resolver.resolve(_bundle2, _date2, dataSource, dataProvider, _field2, resolutionKey));
-      assertEquals(hits.getAndSet(0), (i == 0) && ((hitMask & 0x2000) != 0) ? 1 : 0);
+      assertEquals(hits.getAndSet(0), i == 0 && (hitMask & 0x2000) != 0 ? 1 : 0);
       assertNull(resolver.resolve(_bundle3, _date1, dataSource, dataProvider, _field1, resolutionKey));
-      assertEquals(hits.getAndSet(0), (i == 0) && ((hitMask & 0x4000) != 0) ? 1 : 0);
+      assertEquals(hits.getAndSet(0), i == 0 && (hitMask & 0x4000) != 0 ? 1 : 0);
       assertNull(resolver.resolve(_bundle3, _date1, dataSource, dataProvider, _field2, resolutionKey));
-      assertEquals(hits.getAndSet(0), (i == 0) && ((hitMask & 0x8000) != 0) ? 1 : 0);
+      assertEquals(hits.getAndSet(0), i == 0 && (hitMask & 0x8000) != 0 ? 1 : 0);
       assertNull(resolver.resolve(_bundle3, _date2, dataSource, dataProvider, _field1, resolutionKey));
-      assertEquals(hits.getAndSet(0), (i == 0) && ((hitMask & 0x10000) != 0) ? 1 : 0);
+      assertEquals(hits.getAndSet(0), i == 0 && (hitMask & 0x10000) != 0 ? 1 : 0);
       assertNull(resolver.resolve(_bundle3, _date2, dataSource, dataProvider, _field2, resolutionKey));
-      assertEquals(hits.getAndSet(0), (i == 0) && ((hitMask & 0x20000) != 0) ? 1 : 0);
+      assertEquals(hits.getAndSet(0), i == 0 && (hitMask & 0x20000) != 0 ? 1 : 0);
     }
   }
 
   public void testResolve_dates_opt() {
-    List<EHCachingHistoricalTimeSeriesResolver> resolvers = new LinkedList<EHCachingHistoricalTimeSeriesResolver>();
+    final List<EHCachingHistoricalTimeSeriesResolver> resolvers = new LinkedList<>();
     try {
       testResolve_dates(true, null, null, null, true, 0x3D215, resolvers);
       testResolve_dates(true, null, null, _key1, true, 0x3D215, resolvers);
@@ -250,14 +250,14 @@ public class EHCachingHistoricalTimeSeriesResolverTest {
       testResolve_dates(true, _source2, _provider2, _key1, false, 0x3C01D, resolvers);
       testResolve_dates(true, _source2, _provider2, _key2, false, 0x3C01D, resolvers);
     } finally {
-      for (EHCachingHistoricalTimeSeriesResolver resolver : resolvers) {
+      for (final EHCachingHistoricalTimeSeriesResolver resolver : resolvers) {
         resolver.shutdown();
       }
     }
   }
 
   public void testResolve_dates_pess() {
-    List<EHCachingHistoricalTimeSeriesResolver> resolvers = new LinkedList<EHCachingHistoricalTimeSeriesResolver>();
+    final List<EHCachingHistoricalTimeSeriesResolver> resolvers = new LinkedList<>();
     try {
       testResolve_dates(false, null, null, null, true, 0x15206, resolvers);
       testResolve_dates(false, null, null, _key1, true, 0x15201, resolvers);
@@ -287,35 +287,35 @@ public class EHCachingHistoricalTimeSeriesResolverTest {
       testResolve_dates(false, _source2, _provider2, _key1, false, 0, resolvers);
       testResolve_dates(false, _source2, _provider2, _key2, false, 0, resolvers);
     } finally {
-      for (EHCachingHistoricalTimeSeriesResolver resolver : resolvers) {
+      for (final EHCachingHistoricalTimeSeriesResolver resolver : resolvers) {
         resolver.shutdown();
       }
     }
   }
 
   private void testResolve_nodates(final boolean optimistic, final String dataSource, final String dataProvider, final String resolutionKey, final boolean expectTS, final int hitMask,
-      Collection<EHCachingHistoricalTimeSeriesResolver> resolvers) {
+      final Collection<EHCachingHistoricalTimeSeriesResolver> resolvers) {
     final AtomicInteger hits = new AtomicInteger();
     final EHCachingHistoricalTimeSeriesResolver resolver = createResolver(optimistic, hits);
     resolvers.add(resolver);
     for (int i = 0; i < 3; i++) {
       assertEquals(resolver.resolve(_bundleAll, null, dataSource, dataProvider, _field1, resolutionKey) != null, expectTS);
-      assertEquals(hits.getAndSet(0), (i == 0) ? ((hitMask & 0x1) != 0 ? 1 : ((hitMask & 0x2) != 0 ? 2 : 0)) : 0);
+      assertEquals(hits.getAndSet(0), i == 0 ? (hitMask & 0x1) != 0 ? 1 : (hitMask & 0x2) != 0 ? 2 : 0 : 0);
       assertNull(resolver.resolve(_bundleAll, null, dataSource, dataProvider, _field2, resolutionKey));
-      assertEquals(hits.getAndSet(0), (i == 0) && ((hitMask & 0x4) != 0) ? 1 : 0);
+      assertEquals(hits.getAndSet(0), i == 0 && (hitMask & 0x4) != 0 ? 1 : 0);
       assertEquals(resolver.resolve(_bundle1, null, dataSource, dataProvider, _field1, resolutionKey) != null, expectTS);
-      assertEquals(hits.getAndSet(0), (i == 0) && ((hitMask & 0x8) != 0) ? 1 : 0);
+      assertEquals(hits.getAndSet(0), i == 0 && (hitMask & 0x8) != 0 ? 1 : 0);
       assertNull(resolver.resolve(_bundle1, null, dataSource, dataProvider, _field2, resolutionKey));
-      assertEquals(hits.getAndSet(0), (i == 0) && ((hitMask & 0x10) != 0) ? 1 : 0);
+      assertEquals(hits.getAndSet(0), i == 0 && (hitMask & 0x10) != 0 ? 1 : 0);
       assertEquals(resolver.resolve(_bundle2, null, dataSource, dataProvider, _field1, resolutionKey) != null, expectTS);
-      assertEquals(hits.getAndSet(0), (i == 0) ? ((hitMask & 0x20) != 0 ? 1 : ((hitMask & 0x40) != 0 ? 2 : 0)) : 0);
+      assertEquals(hits.getAndSet(0), i == 0 ? (hitMask & 0x20) != 0 ? 1 : (hitMask & 0x40) != 0 ? 2 : 0 : 0);
       assertNull(resolver.resolve(_bundle2, null, dataSource, dataProvider, _field2, resolutionKey));
-      assertEquals(hits.getAndSet(0), (i == 0) && ((hitMask & 0x80) != 0) ? 1 : 0);
+      assertEquals(hits.getAndSet(0), i == 0 && (hitMask & 0x80) != 0 ? 1 : 0);
     }
   }
 
   public void testResolve_nodates_opt() {
-    List<EHCachingHistoricalTimeSeriesResolver> resolvers = new LinkedList<EHCachingHistoricalTimeSeriesResolver>();
+    final List<EHCachingHistoricalTimeSeriesResolver> resolvers = new LinkedList<>();
     try {
       testResolve_nodates(true, null, null, null, true, 0x5, resolvers);
       testResolve_nodates(true, null, null, _key1, true, 0x5, resolvers);
@@ -345,14 +345,14 @@ public class EHCachingHistoricalTimeSeriesResolverTest {
       testResolve_nodates(true, _source2, _provider2, _key1, false, 0x5, resolvers);
       testResolve_nodates(true, _source2, _provider2, _key2, false, 0x5, resolvers);
     } finally {
-      for (EHCachingHistoricalTimeSeriesResolver resolver : resolvers) {
+      for (final EHCachingHistoricalTimeSeriesResolver resolver : resolvers) {
         resolver.shutdown();
       }
     }
   }
 
   public void testResolve_nodates_pess() {
-    List<EHCachingHistoricalTimeSeriesResolver> resolvers = new LinkedList<EHCachingHistoricalTimeSeriesResolver>();
+    final List<EHCachingHistoricalTimeSeriesResolver> resolvers = new LinkedList<>();
     try {
       testResolve_nodates(false, null, null, null, true, 0x6, resolvers);
       testResolve_nodates(false, null, null, _key1, true, 0x1, resolvers);
@@ -382,7 +382,7 @@ public class EHCachingHistoricalTimeSeriesResolverTest {
       testResolve_nodates(false, _source2, _provider2, _key1, false, 0, resolvers);
       testResolve_nodates(false, _source2, _provider2, _key2, false, 0, resolvers);
     } finally {
-      for (EHCachingHistoricalTimeSeriesResolver resolver : resolvers) {
+      for (final EHCachingHistoricalTimeSeriesResolver resolver : resolvers) {
         resolver.shutdown();
       }
     }

@@ -29,10 +29,10 @@ public class FXOneLookBarrierOptionBlackVommaFunction extends FXOneLookBarrierOp
   private static final ForexOptionVanillaBlackSmileMethod METHOD = ForexOptionVanillaBlackSmileMethod.getInstance();
 
   @Override
-  protected Object computeValues(Set<ForexOptionVanilla> vanillaOptions, ForexOptionDataBundle<?> market) {
+  protected Object computeValues(final Set<ForexOptionVanilla> vanillaOptions, final ForexOptionDataBundle<?> market) {
     Validate.isTrue(market instanceof SmileDeltaTermStructureDataBundle, "FXOneLookBarrierOptionBlackVommaFunction requires a Vol surface with a smile.");
     double sum = 0.0;
-    for (ForexOptionVanilla derivative : vanillaOptions) {
+    for (final ForexOptionVanilla derivative : vanillaOptions) {
       final CurrencyAmount vommaCcy = METHOD.vomma(derivative, market);
       sum += vommaCcy.getAmount();
     }

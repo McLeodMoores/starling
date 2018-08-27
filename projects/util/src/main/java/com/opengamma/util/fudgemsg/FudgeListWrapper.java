@@ -29,7 +29,7 @@ import com.google.common.collect.Iterables;
  * <p>
  * Fudge does not handle transfer of lists on their own very well,
  * but does handle them when wrapped in this class.
- * 
+ *
  * @param <T> the list type
  */
 @BeanDefinition
@@ -39,17 +39,17 @@ public class FudgeListWrapper<T> extends DirectBean {
    * The list.
    */
   @PropertyDefinition(validate = "notNull")
-  private List<T> _list = new ArrayList<T>();
+  private List<T> _list = new ArrayList<>();
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param <T> the list type
    * @param list  the list, not null
    * @return the list, not null
    */
-  public static <T> FudgeListWrapper<T> of(Iterable<T> list) {
-    return new FudgeListWrapper<T>(list);
+  public static <T> FudgeListWrapper<T> of(final Iterable<T> list) {
+    return new FudgeListWrapper<>(list);
   }
 
   //-------------------------------------------------------------------------
@@ -61,10 +61,10 @@ public class FudgeListWrapper<T> extends DirectBean {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param list  the list, not null
    */
-  public FudgeListWrapper(Iterable<T> list) {
+  public FudgeListWrapper(final Iterable<T> list) {
     Iterables.addAll(getList(), list);
   }
 

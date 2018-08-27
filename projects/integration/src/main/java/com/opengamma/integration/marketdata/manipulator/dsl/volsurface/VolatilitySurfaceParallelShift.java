@@ -26,14 +26,14 @@ public class VolatilitySurfaceParallelShift implements StructureManipulator<Vola
 
   private final double _shift;
 
-  public VolatilitySurfaceParallelShift(double shift) {
+  public VolatilitySurfaceParallelShift(final double shift) {
     _shift = shift;
   }
 
   @Override
-  public VolatilitySurface execute(VolatilitySurface surface,
-                                   ValueSpecification valueSpecification,
-                                   FunctionExecutionContext executionContext) {
+  public VolatilitySurface execute(final VolatilitySurface surface,
+                                   final ValueSpecification valueSpecification,
+                                   final FunctionExecutionContext executionContext) {
     return surface.withParallelShift(_shift);
   }
 
@@ -43,13 +43,13 @@ public class VolatilitySurfaceParallelShift implements StructureManipulator<Vola
   }
 
   public MutableFudgeMsg toFudgeMsg(final FudgeSerializer serializer) {
-    MutableFudgeMsg msg = serializer.newMessage();
+    final MutableFudgeMsg msg = serializer.newMessage();
     serializer.addToMessage(msg, SHIFT, null, _shift);
     return msg;
   }
 
-  public static VolatilitySurfaceParallelShift fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg) {
-    Double shift = deserializer.fieldValueToObject(Double.class, msg.getByName(SHIFT));
+  public static VolatilitySurfaceParallelShift fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final Double shift = deserializer.fieldValueToObject(Double.class, msg.getByName(SHIFT));
     return new VolatilitySurfaceParallelShift(shift);
   }
 
@@ -59,7 +59,7 @@ public class VolatilitySurfaceParallelShift implements StructureManipulator<Vola
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }

@@ -43,7 +43,7 @@ public class LegalEntitySearchResult extends AbstractSearchResult<LegalEntityDoc
    *
    * @param coll the collection of documents to add, not null
    */
-  public LegalEntitySearchResult(Collection<LegalEntityDocument> coll) {
+  public LegalEntitySearchResult(final Collection<LegalEntityDocument> coll) {
     super(coll);
   }
 
@@ -52,7 +52,7 @@ public class LegalEntitySearchResult extends AbstractSearchResult<LegalEntityDoc
    *
    * @param versionCorrection the version-correction of the data, not null
    */
-  public LegalEntitySearchResult(VersionCorrection versionCorrection) {
+  public LegalEntitySearchResult(final VersionCorrection versionCorrection) {
     setVersionCorrection(versionCorrection);
   }
 
@@ -64,9 +64,9 @@ public class LegalEntitySearchResult extends AbstractSearchResult<LegalEntityDoc
    * @return the legal entities, not null
    */
   public List<ManageableLegalEntity> getLegalEntities() {
-    List<ManageableLegalEntity> result = new ArrayList<ManageableLegalEntity>();
+    final List<ManageableLegalEntity> result = new ArrayList<>();
     if (getDocuments() != null) {
-      for (LegalEntityDocument doc : getDocuments()) {
+      for (final LegalEntityDocument doc : getDocuments()) {
         result.add(doc.getLegalEntity());
       }
     }

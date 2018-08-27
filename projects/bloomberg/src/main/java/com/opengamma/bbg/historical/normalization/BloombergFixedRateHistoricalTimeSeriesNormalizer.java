@@ -29,7 +29,7 @@ public class BloombergFixedRateHistoricalTimeSeriesNormalizer implements Histori
   }
 
   @Override
-  public HistoricalTimeSeries adjust(ExternalIdBundle securityIdBundle, HistoricalTimeSeries timeSeries) {
+  public HistoricalTimeSeries adjust(final ExternalIdBundle securityIdBundle, final HistoricalTimeSeries timeSeries) {
     return _normalization.adjust(timeSeries);
   }
 

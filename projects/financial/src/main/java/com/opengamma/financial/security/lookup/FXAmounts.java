@@ -31,7 +31,7 @@ public final class FXAmounts {
    * @param baseAmount The amount in the base currency
    * @param counterAmount The amount in the counter currency
    */
-  private FXAmounts(Currency baseCurrency, Currency counterCurrency, double baseAmount, double counterAmount) {
+  private FXAmounts(final Currency baseCurrency, final Currency counterCurrency, final double baseAmount, final double counterAmount) {
     ArgumentChecker.notNull(baseCurrency, "baseCurrency");
     ArgumentChecker.notNull(counterCurrency, "counterCurrency");
     _baseCurrency = baseCurrency;
@@ -68,20 +68,20 @@ public final class FXAmounts {
     return _counterAmount;
   }
 
-  /* package */ static FXAmounts forForward(Currency payCurrency,
-                                            Currency receiveCurrency,
-                                            double payAmount,
-                                            double receiveAmount,
-                                            CurrencyPairs currencyPairs) {
+  /* package */ static FXAmounts forForward(final Currency payCurrency,
+                                            final Currency receiveCurrency,
+                                            final double payAmount,
+                                            final double receiveAmount,
+                                            final CurrencyPairs currencyPairs) {
     return forAmounts(payCurrency, receiveCurrency, payAmount, receiveAmount, currencyPairs);
   }
 
-  /* package */ static FXAmounts forOption(Currency putCurrency,
-                                           Currency callCurrency,
-                                           double putAmount,
-                                           double callAmount,
-                                           boolean isLong,
-                                           CurrencyPairs currencyPairs) {
+  /* package */ static FXAmounts forOption(final Currency putCurrency,
+                                           final Currency callCurrency,
+                                           final double putAmount,
+                                           final double callAmount,
+                                           final boolean isLong,
+                                           final CurrencyPairs currencyPairs) {
     if (isLong) {
       return forAmounts(putCurrency, callCurrency, putAmount, callAmount, currencyPairs);
     } else {
@@ -89,14 +89,14 @@ public final class FXAmounts {
     }
   }
 
-  private static FXAmounts forAmounts(Currency payCurrency,
-                                      Currency receiveCurrency,
-                                      double payAmount,
-                                      double receiveAmount,
-                                      CurrencyPairs currencyPairs) {
+  private static FXAmounts forAmounts(final Currency payCurrency,
+                                      final Currency receiveCurrency,
+                                      final double payAmount,
+                                      final double receiveAmount,
+                                      final CurrencyPairs currencyPairs) {
     Double baseAmount = CurrencyUtils.getBaseAmount(payCurrency, receiveCurrency, payAmount, receiveAmount, currencyPairs);
     Double counterAmount = CurrencyUtils.getCounterAmount(payCurrency, receiveCurrency, payAmount, receiveAmount, currencyPairs);
-    CurrencyPair currencyPair = currencyPairs.getCurrencyPair(payCurrency, receiveCurrency);
+    final CurrencyPair currencyPair = currencyPairs.getCurrencyPair(payCurrency, receiveCurrency);
     if (currencyPair == null || baseAmount == null || counterAmount == null) {
       return null;
     }
@@ -109,14 +109,14 @@ public final class FXAmounts {
   }
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(final Object o) {
     if (this == o) {
       return true;
     }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    FXAmounts fxAmounts = (FXAmounts) o;
+    final FXAmounts fxAmounts = (FXAmounts) o;
 
     if (Double.compare(fxAmounts._baseAmount, _baseAmount) != 0) {
       return false;
@@ -140,9 +140,9 @@ public final class FXAmounts {
     result = _baseCurrency.hashCode();
     result = 31 * result + _counterCurrency.hashCode();
     temp = _counterAmount != +0.0d ? Double.doubleToLongBits(_counterAmount) : 0L;
-    result = 31 * result + (int) (temp ^ (temp >>> 32));
+    result = 31 * result + (int) (temp ^ temp >>> 32);
     temp = _baseAmount != +0.0d ? Double.doubleToLongBits(_baseAmount) : 0L;
-    result = 31 * result + (int) (temp ^ (temp >>> 32));
+    result = 31 * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

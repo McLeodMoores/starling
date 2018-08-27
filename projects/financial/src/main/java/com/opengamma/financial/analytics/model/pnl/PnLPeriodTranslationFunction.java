@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.pnl;
@@ -35,7 +35,7 @@ public class PnLPeriodTranslationFunction extends AbstractFunction.NonCompiledIn
 
   private final String _valueRequirementName;
 
-  public PnLPeriodTranslationFunction(String valueRequirementName) {
+  public PnLPeriodTranslationFunction(final String valueRequirementName) {
     _valueRequirementName = valueRequirementName;
   }
 
@@ -45,19 +45,19 @@ public class PnLPeriodTranslationFunction extends AbstractFunction.NonCompiledIn
   }
 
   @Override
-  public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
     return ImmutableSet.of(new ValueSpecification(_valueRequirementName, target.toSpecification(), ValueProperties.all()));
   }
 
   @Override
-  public Set<ValueRequirement> getRequirements(FunctionCompilationContext context, ComputationTarget target, ValueRequirement desiredValue) {
-    Set<String> samplingPeriods = desiredValue.getConstraints().getValues(ValuePropertyNames.SAMPLING_PERIOD);
+  public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+    final Set<String> samplingPeriods = desiredValue.getConstraints().getValues(ValuePropertyNames.SAMPLING_PERIOD);
     if (samplingPeriods == null || samplingPeriods.size() != 1) {
       return null;
     }
-    String samplingPeriod = Iterables.getOnlyElement(samplingPeriods);
-    DateConstraint start = DateConstraint.VALUATION_TIME.minus(samplingPeriod);
-    ValueProperties inputConstraints = desiredValue.getConstraints().copy()
+    final String samplingPeriod = Iterables.getOnlyElement(samplingPeriods);
+    final DateConstraint start = DateConstraint.VALUATION_TIME.minus(samplingPeriod);
+    final ValueProperties inputConstraints = desiredValue.getConstraints().copy()
         .withOptional(ValuePropertyNames.SAMPLING_PERIOD)
         .with(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY, start.toString())
         .with(HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY, DateConstraint.VALUATION_TIME.toString())
@@ -66,10 +66,10 @@ public class PnLPeriodTranslationFunction extends AbstractFunction.NonCompiledIn
   }
 
   @Override
-  public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target, Map<ValueSpecification, ValueRequirement> inputs) {
-    Map.Entry<ValueSpecification, ValueRequirement> input = Iterables.getOnlyElement(inputs.entrySet());
-    String samplingPeriod = input.getValue().getConstraint(ValuePropertyNames.SAMPLING_PERIOD);
-    ValueProperties outputProperties = input.getKey().getProperties().copy()
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+    final Map.Entry<ValueSpecification, ValueRequirement> input = Iterables.getOnlyElement(inputs.entrySet());
+    final String samplingPeriod = input.getValue().getConstraint(ValuePropertyNames.SAMPLING_PERIOD);
+    final ValueProperties outputProperties = input.getKey().getProperties().copy()
         .with(ValuePropertyNames.SAMPLING_PERIOD, samplingPeriod)
         .withoutAny(ValuePropertyNames.FUNCTION)
         .with(ValuePropertyNames.FUNCTION, getUniqueId())
@@ -78,9 +78,9 @@ public class PnLPeriodTranslationFunction extends AbstractFunction.NonCompiledIn
   }
 
   @Override
-  public Set<ComputedValue> execute(FunctionExecutionContext executionContext, FunctionInputs inputs, ComputationTarget target, Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
-    ValueRequirement desiredValue = desiredValues.iterator().next();
-    Object result = inputs.getValue(_valueRequirementName);
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+    final ValueRequirement desiredValue = desiredValues.iterator().next();
+    final Object result = inputs.getValue(_valueRequirementName);
     return ImmutableSet.of(new ComputedValue(new ValueSpecification(_valueRequirementName, target.toSpecification(), desiredValue.getConstraints()), result));
   }
 

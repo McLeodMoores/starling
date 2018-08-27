@@ -81,7 +81,7 @@ public class MarketDataSnapshotDocument extends AbstractDocument implements Seri
    * @deprecated use {@link #setNamedSnapshot(NamedSnapshot)} instead
    */
   @Deprecated
-  public void setSnapshot(ManageableMarketDataSnapshot snapshot) {
+  public void setSnapshot(final ManageableMarketDataSnapshot snapshot) {
     setNamedSnapshot(snapshot);
   }
 
@@ -89,7 +89,7 @@ public class MarketDataSnapshotDocument extends AbstractDocument implements Seri
    * Sets the snapshot object held by the document.
    * @param namedSnapshot  the new value of the property, not null
    */
-  public void setNamedSnapshot(NamedSnapshot namedSnapshot) {
+  public void setNamedSnapshot(final NamedSnapshot namedSnapshot) {
     _namedSnapshot = ArgumentChecker.notNull(namedSnapshot, "namedSnapshot");
     _snapshotType = namedSnapshot.getClass();
   }
@@ -101,7 +101,7 @@ public class MarketDataSnapshotDocument extends AbstractDocument implements Seri
    * @param type  the required type for the snapshot
    * @return the value of the property, not null
    */
-  public <T extends NamedSnapshot> T getNamedSnapshot(Class<T> type) {
+  public <T extends NamedSnapshot> T getNamedSnapshot(final Class<T> type) {
 
     if (type.isAssignableFrom(_namedSnapshot.getClass())) {
       return type.cast(_namedSnapshot);
@@ -146,7 +146,7 @@ public class MarketDataSnapshotDocument extends AbstractDocument implements Seri
    * @return the name, null if no name has been set yet
    */
   public String getName() {
-    return (getNamedSnapshot() != null ? getNamedSnapshot().getName() : null);
+    return getNamedSnapshot() != null ? getNamedSnapshot().getName() : null;
   }
 
   @Override

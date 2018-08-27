@@ -37,11 +37,11 @@ public class SchemaVersion implements Comparable<SchemaVersion> {
    */
   private final int _minorVersion;
 
-  public SchemaVersion(String version) {
+  public SchemaVersion(final String version) {
 
     ArgumentChecker.notNull(version, "version");
 
-    Matcher matcher = PATTERN.matcher(version);
+    final Matcher matcher = PATTERN.matcher(version);
     ArgumentChecker.isTrue(matcher.matches(), "Version number must be of the form M.n");
 
     _majorVersion = Integer.parseInt(matcher.group(1));
@@ -49,7 +49,7 @@ public class SchemaVersion implements Comparable<SchemaVersion> {
   }
 
   @Override
-  public int compareTo(SchemaVersion other) {
+  public int compareTo(final SchemaVersion other) {
     return _majorVersion == other._majorVersion ?
         _minorVersion - other._minorVersion :
         _majorVersion - other._majorVersion;
@@ -61,7 +61,7 @@ public class SchemaVersion implements Comparable<SchemaVersion> {
   }
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(final Object o) {
 
     if (this == o) {
       return true;
@@ -70,7 +70,7 @@ public class SchemaVersion implements Comparable<SchemaVersion> {
       return false;
     }
 
-    SchemaVersion that = (SchemaVersion) o;
+    final SchemaVersion that = (SchemaVersion) o;
 
     // Minor version is more likely to differ than major so compare it first
     return _minorVersion == that._minorVersion && _majorVersion == that._majorVersion;

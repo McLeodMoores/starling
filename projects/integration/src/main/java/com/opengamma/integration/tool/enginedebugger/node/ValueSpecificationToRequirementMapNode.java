@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.tool.enginedebugger.node;
@@ -16,44 +16,44 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * A wrapper for a map of value specification to value requirement that makes it easier to write 
- * a tree table model 
+ * A wrapper for a map of value specification to value requirement that makes it easier to write
+ * a tree table model
  */
 public class ValueSpecificationToRequirementMapNode implements TreeTableNode {
   private static final Logger LOGGER = LoggerFactory.getLogger(ValueSpecificationToRequirementMapNode.class);
   private static final Object NAME = "Map of ValueSpec->ValueReq";
-  private Map<ValueSpecification, ValueRequirement> _map;
-  private String _description;
-  private List<ValueSpecification> _keySet;
-  private Object _parent;
+  private final Map<ValueSpecification, ValueRequirement> _map;
+  private final String _description;
+  private final List<ValueSpecification> _keySet;
+  private final Object _parent;
 
-  public ValueSpecificationToRequirementMapNode(Object parent, Map<ValueSpecification, ValueRequirement> map, String description) {
+  public ValueSpecificationToRequirementMapNode(final Object parent, final Map<ValueSpecification, ValueRequirement> map, final String description) {
     _parent = parent;
     _map = map;
     _description = description;
-    _keySet = new ArrayList<ValueSpecification>(map.keySet());
+    _keySet = new ArrayList<>(map.keySet());
   }
-  
+
   public String getDescription() {
     return _description;
   }
-  
+
   private int getSize() {
     return _keySet.size();
   }
-  
-  private SpecToRequirementEntryNode getEntry(int index) {
-    ValueSpecification valueSpecification = _keySet.get(index);
-    ValueRequirement valueRequirement = _map.get(valueSpecification);
+
+  private SpecToRequirementEntryNode getEntry(final int index) {
+    final ValueSpecification valueSpecification = _keySet.get(index);
+    final ValueRequirement valueRequirement = _map.get(valueSpecification);
     return new SpecToRequirementEntryNode(valueSpecification, valueRequirement);
   }
-  
-  private int indexOf(SpecToRequirementEntryNode entry) {
+
+  private int indexOf(final SpecToRequirementEntryNode entry) {
     return _keySet.indexOf(entry.getValueSpecification());
   }
-  
+
   @Override
-  public Object getChildAt(int index) {
+  public Object getChildAt(final int index) {
     return getEntry(index);
   }
 
@@ -63,7 +63,7 @@ public class ValueSpecificationToRequirementMapNode implements TreeTableNode {
   }
 
   @Override
-  public int getIndexOfChild(Object child) {
+  public int getIndexOfChild(final Object child) {
     if (child instanceof SpecToRequirementEntryNode) {
       return indexOf((SpecToRequirementEntryNode) child);
     }
@@ -71,10 +71,10 @@ public class ValueSpecificationToRequirementMapNode implements TreeTableNode {
   }
 
   @Override
-  public Object getColumn(int column) {
+  public Object getColumn(final int column) {
     switch (column) {
       case 0:
-        return NAME + ((getChildCount() == 0) ? " (Empty)" : "");
+        return NAME + (getChildCount() == 0 ? " (Empty)" : "");
       case 1:
         return _description;
     }

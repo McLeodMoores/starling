@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.security.summary;
@@ -16,9 +16,9 @@ public class CapFloorCMSSpreadSummaryFactory implements SummaryFactory<CapFloorC
   public String getSecurityType() {
     return CapFloorCMSSpreadSecurity.SECURITY_TYPE;
   }
-  
+
   @Override
-  public Summary getSummary(CapFloorCMSSpreadSecurity security) {
+  public Summary getSummary(final CapFloorCMSSpreadSecurity security) {
     return SummaryBuilder.create(security)
         .with(SummaryField.DESCRIPTION, security.getLongId() + "/" + security.getShortId())
         .with(SummaryField.START, security.getStartDate())

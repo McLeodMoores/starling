@@ -40,12 +40,12 @@ public class RemoteViewProcessor implements ViewProcessor {
 
   /**
    * Constructs an instance.
-   * 
+   *
    * @param baseUri the base URI of the remote view processor
    * @param jmsConnector the JMS connector
    * @param heartbeatScheduler the scheduler to be used to send heartbeats to the remote view processor
    */
-  public RemoteViewProcessor(URI baseUri, JmsConnector jmsConnector, ScheduledExecutorService heartbeatScheduler) {
+  public RemoteViewProcessor(final URI baseUri, final JmsConnector jmsConnector, final ScheduledExecutorService heartbeatScheduler) {
     _baseUri = baseUri;
     _heartbeatScheduler = heartbeatScheduler;
     _client = FudgeRestClient.create();
@@ -54,58 +54,58 @@ public class RemoteViewProcessor implements ViewProcessor {
 
   @Override
   public String getName() {
-    URI uri = UriBuilder.fromUri(_baseUri).path(DataViewProcessorUris.PATH_NAME).build();
+    final URI uri = UriBuilder.fromUri(_baseUri).path(DataViewProcessorUris.PATH_NAME).build();
     return _client.accessFudge(uri).get(String.class);
   }
 
   @Override
   public ConfigSource getConfigSource() {
-    URI uri = UriBuilder.fromUri(_baseUri).path(DataViewProcessorUris.PATH_CONFIG_SOURCE).build();
+    final URI uri = UriBuilder.fromUri(_baseUri).path(DataViewProcessorUris.PATH_CONFIG_SOURCE).build();
     return new RemoteConfigSource(uri);
   }
 
   @Override
   public NamedMarketDataSpecificationRepository getNamedMarketDataSpecificationRepository() {
-    URI uri = UriBuilder.fromUri(_baseUri).path(DataViewProcessorUris.PATH_NAMED_MARKET_DATA_SPEC_REPOSITORY).build();
+    final URI uri = UriBuilder.fromUri(_baseUri).path(DataViewProcessorUris.PATH_NAMED_MARKET_DATA_SPEC_REPOSITORY).build();
     return new RemoteNamedMarketDataSpecificationRepository(uri);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public ViewProcess getViewProcess(UniqueId viewProcessId) {
-    URI uri = DataViewProcessorUris.uriViewProcess(_baseUri, viewProcessId);
+  public ViewProcess getViewProcess(final UniqueId viewProcessId) {
+    final URI uri = DataViewProcessorUris.uriViewProcess(_baseUri, viewProcessId);
     return new RemoteViewProcess(uri, _client);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public RemoteViewClient createViewClient(UserPrincipal clientUser) {
-    URI uri = UriBuilder.fromUri(_baseUri).path(DataViewProcessorUris.PATH_CLIENTS).build();
-    ClientResponse response = _client.accessFudge(uri).post(ClientResponse.class, clientUser);
+  public RemoteViewClient createViewClient(final UserPrincipal clientUser) {
+    final URI uri = UriBuilder.fromUri(_baseUri).path(DataViewProcessorUris.PATH_CLIENTS).build();
+    final ClientResponse response = _client.accessFudge(uri).post(ClientResponse.class, clientUser);
     if (response.getStatus() != Status.CREATED.getStatusCode()) {
       throw new OpenGammaRuntimeException("Could not create view client: " + response);
     }
-    URI clientLocation = response.getLocation();
+    final URI clientLocation = response.getLocation();
     return new RemoteViewClient(this, clientLocation, OpenGammaFudgeContext.getInstance(), _jmsConnector, _heartbeatScheduler);
   }
 
   @Override
-  public ViewClient getViewClient(UniqueId clientId) {
-    URI clientsBaseUri = UriBuilder.fromUri(_baseUri).path(DataViewProcessorUris.PATH_CLIENTS).build();
-    URI clientUri = DataViewProcessorUris.uriClient(clientsBaseUri, clientId);
+  public ViewClient getViewClient(final UniqueId clientId) {
+    final URI clientsBaseUri = UriBuilder.fromUri(_baseUri).path(DataViewProcessorUris.PATH_CLIENTS).build();
+    final URI clientUri = DataViewProcessorUris.uriClient(clientsBaseUri, clientId);
     return new RemoteViewClient(this, clientUri, OpenGammaFudgeContext.getInstance(), _jmsConnector, _heartbeatScheduler);
   }
 
   //-------------------------------------------------------------------------
   @Override
   public EngineResourceManager<ViewCycle> getViewCycleManager() {
-    URI uri = UriBuilder.fromUri(_baseUri).path(DataViewProcessorUris.PATH_CYCLES).build();
+    final URI uri = UriBuilder.fromUri(_baseUri).path(DataViewProcessorUris.PATH_CYCLES).build();
     return new RemoteViewCycleManager(uri, _heartbeatScheduler, _client);
   }
 
   //-------------------------------------------------------------------------
-  public MarketDataSnapshotter getMarketDataSnapshotter(MarketDataSnapshotter.Mode mode) {
-    URI uri = DataViewProcessorUris.uriSnapshotter(_baseUri, mode);
+  public MarketDataSnapshotter getMarketDataSnapshotter(final MarketDataSnapshotter.Mode mode) {
+    final URI uri = DataViewProcessorUris.uriSnapshotter(_baseUri, mode);
     return new RemoteMarketDataSnapshotter(uri, _client);
   }
 }

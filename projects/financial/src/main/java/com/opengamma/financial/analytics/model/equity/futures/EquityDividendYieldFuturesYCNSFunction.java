@@ -59,8 +59,9 @@ public class EquityDividendYieldFuturesYCNSFunction extends EquityDividendYieldF
    * @param costOfCarryField The field name of the historical time series for cost of carry e.g. "COST_OF_CARRY". Set in *FunctionConfiguration
    * @param resolutionKey The key defining how the time series resolution is to occur e.g. "DEFAULT_TSS_CONFIG"
    */
-  public EquityDividendYieldFuturesYCNSFunction(String closingPriceField, String costOfCarryField, String resolutionKey) {
-    super(ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES, FuturesRatesSensitivityCalculator.getInstance(DividendYieldFuturesCalculator.PresentValueCalculator.getInstance()),
+  public EquityDividendYieldFuturesYCNSFunction(final String closingPriceField, final String costOfCarryField, final String resolutionKey) {
+    super(ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,
+        FuturesRatesSensitivityCalculator.getInstance(DividendYieldFuturesCalculator.PresentValueCalculator.getInstance()),
         closingPriceField, costOfCarryField, resolutionKey);
   }
 

@@ -31,41 +31,41 @@ public class RedisSimulationSeriesResolver extends HistoricalTimeSeriesResolverW
   private static final Logger LOGGER = LoggerFactory.getLogger(RedisSimulationSeriesResolver.class);
   private final NonVersionedRedisHistoricalTimeSeriesSource[] _redisSources;
 
-  public RedisSimulationSeriesResolver(NonVersionedRedisHistoricalTimeSeriesSource... redisSources) {
+  public RedisSimulationSeriesResolver(final NonVersionedRedisHistoricalTimeSeriesSource... redisSources) {
     ArgumentChecker.notNull(redisSources, "sources");
     ArgumentChecker.notNegativeOrZero(redisSources.length, "redisSources must not be empty");
     _redisSources = redisSources;
   }
-  
+
   @Override
-  public HistoricalTimeSeriesResolutionResult resolve(final ExternalIdBundle identifierBundle, LocalDate identifierValidityDate, final String dataSource, final String dataProvider, final String dataField,
-                                                      String resolutionKey) {
+  public HistoricalTimeSeriesResolutionResult resolve(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource, final String dataProvider, final String dataField,
+                                                      final String resolutionKey) {
     if (identifierBundle.isEmpty()) {
       return null; // is this the correct action?
     } else if (identifierBundle.size() > 1) {
       LOGGER.warn("Attempted to call RedisSimulationSeriesSource with bundle {}. Calls with more than 1 entry in ID bundle are probably misuse of this class.", identifierBundle);
     }
-    ExternalId externalId = identifierBundle.getExternalIds().iterator().next();
+    final ExternalId externalId = identifierBundle.getExternalIds().iterator().next();
     if (!MarketDataRequirementNames.MARKET_VALUE.equals(dataField)) {
       //TODO: Should store field name with the series so fields other than Market_Value can be used.
       //LOGGER.warn("Redis simulation asked for {} for {}, can only handle market value.", dataField, externalId);
       return null;
     }
     final UniqueId uniqueId = UniqueId.of(externalId.getScheme().getName(), externalId.getValue());
-    
+
     boolean oneMatches = false;
-    for (NonVersionedRedisHistoricalTimeSeriesSource source : _redisSources) {
+    for (final NonVersionedRedisHistoricalTimeSeriesSource source : _redisSources) {
       if (source.exists(uniqueId)) {
         oneMatches = true;
         break;
       }
     }
-    
+
     if (!oneMatches) {
       return null;
     }
-    
-    ManageableHistoricalTimeSeriesInfo htsInfo = new ManageableHistoricalTimeSeriesInfo() {
+
+    final ManageableHistoricalTimeSeriesInfo htsInfo = new ManageableHistoricalTimeSeriesInfo() {
       private static final long serialVersionUID = 1L;
 
       @Override
@@ -109,7 +109,7 @@ public class RedisSimulationSeriesResolver extends HistoricalTimeSeriesResolverW
       }
 
     };
-    HistoricalTimeSeriesResolutionResult result = new HistoricalTimeSeriesResolutionResult(htsInfo);
+    final HistoricalTimeSeriesResolutionResult result = new HistoricalTimeSeriesResolutionResult(htsInfo);
     return result;
   }
 }

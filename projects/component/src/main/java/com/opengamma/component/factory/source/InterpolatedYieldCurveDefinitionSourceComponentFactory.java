@@ -8,8 +8,6 @@ package com.opengamma.component.factory.source;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import net.sf.ehcache.CacheManager;
-
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
@@ -31,6 +29,8 @@ import com.opengamma.financial.analytics.ircurve.EHCachingInterpolatedYieldCurve
 import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveDefinitionSource;
 import com.opengamma.financial.analytics.ircurve.rest.DataInterpolatedYieldCurveDefinitionSourceResource;
 import com.opengamma.financial.analytics.ircurve.rest.RemoteInterpolatedYieldCurveDefinitionSource;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Component factory providing the {@code InterpolatedYieldCurveDefinitionSource}.
@@ -63,15 +63,15 @@ public class InterpolatedYieldCurveDefinitionSourceComponentFactory extends Abst
   /**
    * Initializes the source, setting up component information and REST.
    * Override using {@link #createInterpolatedYieldCurveDefinitionSource(ComponentRepository)}.
-   * 
+   *
    * @param repo  the component repository, not null
    * @param configuration  the remaining configuration, not null
    */
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
-    InterpolatedYieldCurveDefinitionSource source = createInterpolatedYieldCurveDefinitionSource(repo);
-    
-    ComponentInfo info = new ComponentInfo(InterpolatedYieldCurveDefinitionSource.class, getClassifier());
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
+    final InterpolatedYieldCurveDefinitionSource source = createInterpolatedYieldCurveDefinitionSource(repo);
+
+    final ComponentInfo info = new ComponentInfo(InterpolatedYieldCurveDefinitionSource.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     if (isPublishRest()) {
       info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteInterpolatedYieldCurveDefinitionSource.class);
@@ -84,11 +84,11 @@ public class InterpolatedYieldCurveDefinitionSourceComponentFactory extends Abst
 
   /**
    * Creates the source without registering it.
-   * 
+   *
    * @param repo  the component repository, only used to register secondary items like lifecycle, not null
    * @return the source, not null
    */
-  protected InterpolatedYieldCurveDefinitionSource createInterpolatedYieldCurveDefinitionSource(ComponentRepository repo) {
+  protected InterpolatedYieldCurveDefinitionSource createInterpolatedYieldCurveDefinitionSource(final ComponentRepository repo) {
     InterpolatedYieldCurveDefinitionSource source = new ConfigDBInterpolatedYieldCurveDefinitionSource(getConfigSource());
     if (getCacheManager() != null) {
       source = new EHCachingInterpolatedYieldCurveDefinitionSource(source, getCacheManager());

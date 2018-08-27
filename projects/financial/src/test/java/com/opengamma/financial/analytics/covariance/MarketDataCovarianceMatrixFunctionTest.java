@@ -46,18 +46,21 @@ public class MarketDataCovarianceMatrixFunctionTest {
   private final ValueRequirement DESIRED_VALUE = new ValueRequirement(ValueRequirementNames.COVARIANCE_MATRIX, ComputationTargetSpecification.NULL, PROPERTIES);
 
   private ValueSpecification timeSeriesSpecification(final int index) {
-    return new ValueSpecification(ValueRequirementNames.VALUE, new ComputationTargetSpecification(ComputationTargetType.PRIMITIVE, UniqueId.of("Test", Integer.toString(index))), PROPERTIES);
+    return new ValueSpecification(ValueRequirementNames.VALUE, new ComputationTargetSpecification(ComputationTargetType.PRIMITIVE,
+        UniqueId.of("Test", Integer.toString(index))), PROPERTIES);
   }
 
-  private LocalDateDoubleTimeSeries localDateDoubleTimeSeries(LocalDate date, final int length, int skip, final int skipB) {
+  private LocalDateDoubleTimeSeries localDateDoubleTimeSeries(final LocalDate date, final int length, final int skip, final int skipB) {
+    LocalDate current = date;
+    int s = skip;
     final LocalDate[] d = new LocalDate[length];
     final double[] v = new double[length];
     for (int i = 0; i < length; i++) {
       d[i] = date;
-      v[i] = (double) i;
-      date = date.plusDays(1);
-      if (((skip++) % skipB) == 0) {
-        date = date.plusDays(1);
+      v[i] = i;
+      current = current.plusDays(1);
+      if (s++ % skipB == 0) {
+        current = current.plusDays(1);
       }
     }
     return ImmutableLocalDateDoubleTimeSeries.of(d, v);

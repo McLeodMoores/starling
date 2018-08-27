@@ -55,7 +55,7 @@ public class BloombergCommodityFuturePriceCurveInstrumentProvider implements Fut
    * @param dataFieldName Expecting MarketDataRequirementNames.MARKET_VALUE
    * @param tickerScheme Expecting BLOOMBERG_TICKER_WEAK or BLOOMBERG_TICKER
    */
-  public BloombergCommodityFuturePriceCurveInstrumentProvider(final String futurePrefix, final String postfix, final String dataFieldName, String tickerScheme) {
+  public BloombergCommodityFuturePriceCurveInstrumentProvider(final String futurePrefix, final String postfix, final String dataFieldName, final String tickerScheme) {
     Validate.notNull(futurePrefix, "future option prefix");
     Validate.notNull(postfix, "postfix");
     Validate.notNull(dataFieldName, "data field name");

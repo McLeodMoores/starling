@@ -41,16 +41,16 @@ import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Exposure function that returns the underlying security of the given trade. If there is no underlying, then null is 
+ * Exposure function that returns the underlying security of the given trade. If there is no underlying, then null is
  * returned.
  */
 public class UnderlyingExposureFunction implements ExposureFunction {
-  
+
   /**
    * The name of the exposure function.
    */
   public static final String NAME = "Underlying";
-  
+
   private final UnderlyingVisitor _visitor;
 
   public UnderlyingExposureFunction(final SecuritySource securitySource) {
@@ -61,35 +61,35 @@ public class UnderlyingExposureFunction implements ExposureFunction {
   public String getName() {
     return NAME;
   }
-  
+
   @Override
-  public List<ExternalId> getIds(Trade trade) {
-    Security security = trade.getSecurity();
+  public List<ExternalId> getIds(final Trade trade) {
+    final Security security = trade.getSecurity();
     if (security instanceof FinancialSecurity) {
       return ((FinancialSecurity) security).accept(_visitor);
     }
     return null;
   }
-  
+
   private static final class UnderlyingVisitor extends FinancialSecurityVisitorSameValueAdapter<List<ExternalId>> {
-    
+
     private final SecuritySource _securitySource;
-    
-    public UnderlyingVisitor(SecuritySource securitySource) {
+
+    public UnderlyingVisitor(final SecuritySource securitySource) {
       super(null);
       _securitySource = ArgumentChecker.notNull(securitySource, "securitySource");
     }
-  
+
     @Override
     public List<ExternalId> visitInterestRateFutureSecurity(final InterestRateFutureSecurity security) {
       return Arrays.asList(security.getUnderlyingId());
     }
-  
+
     @Override
     public List<ExternalId> visitFederalFundsFutureSecurity(final FederalFundsFutureSecurity security) {
       return Arrays.asList(security.getUnderlyingId());
     }
-  
+
     @Override
     public List<ExternalId> visitCapFloorCMSSpreadSecurity(final CapFloorCMSSpreadSecurity security) {
       final List<ExternalId> result = new ArrayList<>();
@@ -97,22 +97,22 @@ public class UnderlyingExposureFunction implements ExposureFunction {
       result.add(security.getShortId());
       return result;
     }
-  
+
     @Override
     public List<ExternalId> visitCapFloorSecurity(final CapFloorSecurity security) {
       return Arrays.asList(security.getUnderlyingId());
     }
-  
+
     @Override
     public List<ExternalId> visitFRASecurity(final FRASecurity security) {
       return Arrays.asList(security.getUnderlyingId());
     }
-  
+
     @Override
     public List<ExternalId> visitForwardRateAgreementSecurity(final ForwardRateAgreementSecurity security) {
       return Arrays.asList(security.getUnderlyingId());
     }
-  
+
     @Override
     public List<ExternalId> visitForwardSwapSecurity(final ForwardSwapSecurity security) {
       final List<ExternalId> result = new ArrayList<>();
@@ -129,7 +129,7 @@ public class UnderlyingExposureFunction implements ExposureFunction {
       }
       return result;
     }
-  
+
     @Override
     public List<ExternalId> visitSwapSecurity(final SwapSecurity security) {
       final List<ExternalId> result = new ArrayList<>();
@@ -146,7 +146,7 @@ public class UnderlyingExposureFunction implements ExposureFunction {
       }
       return result;
     }
-  
+
     @Override
     public List<ExternalId> visitSwaptionSecurity(final SwaptionSecurity security) {
       final List<ExternalId> result = new ArrayList<>();
@@ -164,7 +164,7 @@ public class UnderlyingExposureFunction implements ExposureFunction {
       }
       return result;
     }
-  
+
     @Override
     public List<ExternalId> visitZeroCouponInflationSwapSecurity(final ZeroCouponInflationSwapSecurity security) {
       final List<ExternalId> result = new ArrayList<>();
@@ -181,7 +181,7 @@ public class UnderlyingExposureFunction implements ExposureFunction {
       }
       return result;
     }
-  
+
     @Override
     public List<ExternalId> visitYearOnYearInflationSwapSecurity(final YearOnYearInflationSwapSecurity security) {
       final List<ExternalId> result = new ArrayList<>();
@@ -198,7 +198,7 @@ public class UnderlyingExposureFunction implements ExposureFunction {
       }
       return result;
     }
-  
+
     @Override
     public List<ExternalId> visitInterestRateSwapSecurity(final InterestRateSwapSecurity security) {
       final List<ExternalId> result = new ArrayList<>();
@@ -218,24 +218,24 @@ public class UnderlyingExposureFunction implements ExposureFunction {
       }
       return result;
     }
-  
+
     @Override
     public List<ExternalId> visitFloatingRateNoteSecurity(final FloatingRateNoteSecurity security) {
       return Collections.singletonList(security.getBenchmarkRateId());
     }
-  
+
     @Override
     public List<ExternalId> visitEquityTotalReturnSwapSecurity(final EquityTotalReturnSwapSecurity security) {
       return Collections.singletonList(security.getFundingLeg().getFloatingReferenceRateId());
     }
-  
+
     @Override
     public List<ExternalId> visitBondTotalReturnSwapSecurity(final BondTotalReturnSwapSecurity security) {
       return Collections.singletonList(security.getFundingLeg().getFloatingReferenceRateId());
     }
-  
+
     @Override
-    public List<ExternalId> visitIndexCDSSecurity(IndexCDSSecurity security) {
+    public List<ExternalId> visitIndexCDSSecurity(final IndexCDSSecurity security) {
       return security.getUnderlyingIndex().resolve().getExternalIdBundle().getExternalIds().asList();
     }
   }

@@ -30,15 +30,15 @@ import com.opengamma.util.ArgumentChecker;
     _io = ArgumentChecker.notNull(io, "io");
   }
 
-  public static void main(String[] args) throws IOException {
+  public static void main(final String[] args) throws IOException {
     if (args.length < 1) {
       System.err.println("arguments: dataDirectory (containing Fudge XML files)");
       System.exit(1);
     }
     try {
       final RegressionIO io = new SubdirsRegressionIO(new File(args[0]), new FudgeXMLFormat(), false);
-      (new DeleteTimeSeriesData(io)).run();
-    } catch (Throwable t) {
+      new DeleteTimeSeriesData(io).run();
+    } catch (final Throwable t) {
       t.printStackTrace();
       System.exit(1);
     }
@@ -51,7 +51,7 @@ import com.opengamma.util.ArgumentChecker;
     // Update the map entries in-situ, setting the time series data to blank
     int deleted = 0;
     int skipped = 0;
-    for (Map.Entry<String, Object> timeSeriesEntry : timeSeriesMap.entrySet()) {
+    for (final Map.Entry<String, Object> timeSeriesEntry : timeSeriesMap.entrySet()) {
       final TimeSeriesWithInfo tswi = (TimeSeriesWithInfo) timeSeriesEntry.getValue();
       final ManageableHistoricalTimeSeries hts = tswi.getTimeSeries();
       final LocalDateDoubleTimeSeries ts = hts.getTimeSeries();

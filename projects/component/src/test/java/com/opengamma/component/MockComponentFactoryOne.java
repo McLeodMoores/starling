@@ -36,8 +36,8 @@ public class MockComponentFactoryOne implements Bean, ComponentFactory {
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
-    ComponentInfo info = new ComponentInfo(MockComponent.class, "one");
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
+    final ComponentInfo info = new ComponentInfo(MockComponent.class, "one");
     repo.registerComponent(info, new MockComponent());
   }
 

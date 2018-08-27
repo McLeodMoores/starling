@@ -8,8 +8,6 @@ package com.opengamma.component.factory.master;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import net.sf.ehcache.CacheManager;
-
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
@@ -29,6 +27,8 @@ import com.opengamma.master.config.ConfigMaster;
 import com.opengamma.master.config.impl.DataConfigMasterResource;
 import com.opengamma.master.config.impl.EHCachingConfigMaster;
 import com.opengamma.master.config.impl.RemoteConfigMaster;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Component factory for the combined config master.
@@ -62,14 +62,14 @@ public class EHCachingConfigMasterComponentFactory extends AbstractComponentFact
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
 
-    ConfigMaster master = new EHCachingConfigMaster(getClassifier(),
+    final ConfigMaster master = new EHCachingConfigMaster(getClassifier(),
                                                     getUnderlying(),
                                                     getCacheManager());
 
     // register
-    ComponentInfo info = new ComponentInfo(ConfigMaster.class, getClassifier());
+    final ComponentInfo info = new ComponentInfo(ConfigMaster.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 2);
     if (isPublishRest()) {
       info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteConfigMaster.class);

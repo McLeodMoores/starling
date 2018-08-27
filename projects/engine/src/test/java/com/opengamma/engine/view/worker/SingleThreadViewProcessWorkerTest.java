@@ -158,7 +158,7 @@ public class SingleThreadViewProcessWorkerTest {
       recalcThread.join();
       resultListener.assertCycleCompleted(TIMEOUT);
 
-      final Map<String, Object> resultValues = new HashMap<String, Object>();
+      final Map<String, Object> resultValues = new HashMap<>();
       final ViewComputationResultModel result = client.getLatestResult();
       final ViewTargetResultModel targetResult = result.getTargetResult(ViewProcessorTestEnvironment.getPrimitiveTarget());
       for (final ComputedValue computedValue : targetResult.getAllValues(ViewProcessorTestEnvironment.TEST_CALC_CONFIG_NAME)) {
@@ -278,7 +278,7 @@ public class SingleThreadViewProcessWorkerTest {
       resultListener.assertCycleCompleted(TIMEOUT);
       resultListener.assertProcessCompleted(TIMEOUT);
 
-      final Map<String, Object> resultValues = new HashMap<String, Object>();
+      final Map<String, Object> resultValues = new HashMap<>();
       final ViewComputationResultModel result = client.getLatestResult();
       final ViewTargetResultModel targetResult = result.getTargetResult(ViewProcessorTestEnvironment.getPrimitiveTarget());
       for (final ComputedValue computedValue : targetResult.getAllValues(ViewProcessorTestEnvironment.TEST_CALC_CONFIG_NAME)) {
@@ -403,9 +403,9 @@ public class SingleThreadViewProcessWorkerTest {
     }
   }
 
-  private Map<String, Object> extractResults(ViewComputationResultModel result) {
-    Map<String, Object> resultValues = new HashMap<String, Object>();
-    ViewTargetResultModel targetResult = result.getTargetResult(ViewProcessorTestEnvironment.getPrimitiveTarget());
+  private Map<String, Object> extractResults(final ViewComputationResultModel result) {
+    final Map<String, Object> resultValues = new HashMap<>();
+    final ViewTargetResultModel targetResult = result.getTargetResult(ViewProcessorTestEnvironment.getPrimitiveTarget());
     for (final ComputedValue computedValue : targetResult.getAllValues(ViewProcessorTestEnvironment.TEST_CALC_CONFIG_NAME)) {
       resultValues.put(computedValue.getSpecification().getValueName(), computedValue.getValue());
     }
@@ -496,7 +496,7 @@ public class SingleThreadViewProcessWorkerTest {
     }
 
     @Override
-    public boolean isActive(ValueSpecification specification) {
+    public boolean isActive(final ValueSpecification specification) {
       return false;
     }
 

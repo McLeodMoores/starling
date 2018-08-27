@@ -56,7 +56,7 @@ public class MarketDataSnapshotListResource {
 
   private final MarketDataSnapshotMaster _snapshotMaster;
 
-  public MarketDataSnapshotListResource(MarketDataSnapshotMaster snapshotMaster) {
+  public MarketDataSnapshotListResource(final MarketDataSnapshotMaster snapshotMaster) {
     ArgumentChecker.notNull(snapshotMaster, "snapshotMaster");
     _snapshotMaster = snapshotMaster;
   }
@@ -67,12 +67,12 @@ public class MarketDataSnapshotListResource {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public String getMarketDataSnapshotList() {
-    MarketDataSnapshotSearchRequest snapshotSearchRequest = new MarketDataSnapshotSearchRequest();
+    final MarketDataSnapshotSearchRequest snapshotSearchRequest = new MarketDataSnapshotSearchRequest();
     snapshotSearchRequest.setIncludeData(false);
-    
-    Multimap<String, ManageableMarketDataSnapshot> snapshotsByBasisView = LinkedListMultimap.create();
-    for (MarketDataSnapshotDocument doc : MarketDataSnapshotSearchIterator.iterable(_snapshotMaster, snapshotSearchRequest)) {
-      ManageableMarketDataSnapshot snapshot = doc.getSnapshot();
+
+    final Multimap<String, ManageableMarketDataSnapshot> snapshotsByBasisView = LinkedListMultimap.create();
+    for (final MarketDataSnapshotDocument doc : MarketDataSnapshotSearchIterator.iterable(_snapshotMaster, snapshotSearchRequest)) {
+      final ManageableMarketDataSnapshot snapshot = doc.getSnapshot();
       if (snapshot.getUniqueId() == null) {
         LOGGER.warn("Ignoring snapshot with null unique identifier {}", snapshot.getName());
         continue;
@@ -85,18 +85,18 @@ public class MarketDataSnapshotListResource {
         LOGGER.debug("Ignoring snapshot which appears to have an auto-generated name: {}", snapshot.getName());
         continue;
       }
-      String basisViewName = snapshot.getBasisViewName() != null ? snapshot.getBasisViewName() : "unknown";
+      final String basisViewName = snapshot.getBasisViewName() != null ? snapshot.getBasisViewName() : "unknown";
       snapshotsByBasisView.put(basisViewName, snapshot);
     }
     // list of maps for each basis view: {"basisViewName": basisViewName, "snapshots", [...]}
-    List<Map<String, Object>> basisViewSnapshotList = new ArrayList<Map<String, Object>>();
-    for (String basisViewName : snapshotsByBasisView.keySet()) {
-      Collection<ManageableMarketDataSnapshot> viewSnapshots = snapshotsByBasisView.get(basisViewName);
+    final List<Map<String, Object>> basisViewSnapshotList = new ArrayList<>();
+    for (final String basisViewName : snapshotsByBasisView.keySet()) {
+      final Collection<ManageableMarketDataSnapshot> viewSnapshots = snapshotsByBasisView.get(basisViewName);
       // list of maps containing snapshot IDs and names: {"id", snapshotId, "name", snapshotName}
-      List<Map<String, Object>> snapshotsList = new ArrayList<Map<String, Object>>(viewSnapshots.size());
-      for (ManageableMarketDataSnapshot viewSnapshot : viewSnapshots) {
+      final List<Map<String, Object>> snapshotsList = new ArrayList<>(viewSnapshots.size());
+      for (final ManageableMarketDataSnapshot viewSnapshot : viewSnapshots) {
         // map for a single snapshot: {"id", snapshotId, "name", snapshotName}
-        Map<String, Object> snapshotMap =
+        final Map<String, Object> snapshotMap =
             ImmutableMap.<String, Object>of(ID, viewSnapshot.getUniqueId(), NAME, viewSnapshot.getName());
         snapshotsList.add(snapshotMap);
       }
@@ -120,13 +120,13 @@ public class MarketDataSnapshotListResource {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @Path("{snapshotId}")
-  public String getMarketDataSnapshotHistory(@PathParam("snapshotId") String snapshotId) {
-    ObjectId id = ObjectId.parse(snapshotId);
-    MarketDataSnapshotHistoryResult result = _snapshotMaster.history(new MarketDataSnapshotHistoryRequest(id));
-    List<MarketDataSnapshotDocument> documents = result.getDocuments();
-    List<Map<String, Object>> json = Lists.newArrayListWithCapacity(documents.size());
-    for (MarketDataSnapshotDocument document : documents) {
-      Map<String, Object> map = Maps.newHashMapWithExpectedSize(5);
+  public String getMarketDataSnapshotHistory(@PathParam("snapshotId") final String snapshotId) {
+    final ObjectId id = ObjectId.parse(snapshotId);
+    final MarketDataSnapshotHistoryResult result = _snapshotMaster.history(new MarketDataSnapshotHistoryRequest(id));
+    final List<MarketDataSnapshotDocument> documents = result.getDocuments();
+    final List<Map<String, Object>> json = Lists.newArrayListWithCapacity(documents.size());
+    for (final MarketDataSnapshotDocument document : documents) {
+      final Map<String, Object> map = Maps.newHashMapWithExpectedSize(5);
       map.put("uniqueId", document.getUniqueId());
       map.put("versionFrom", document.getVersionFromInstant());
       map.put("versionTo", document.getVersionToInstant());

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.ircurve.rest;
@@ -23,20 +23,20 @@ import com.opengamma.util.rest.UniformInterfaceException404NotFound;
  */
 public class RemoteInterpolatedYieldCurveDefinitionSource extends AbstractRemoteClient implements InterpolatedYieldCurveDefinitionSource {
 
-  private ChangeManager _changeManager;
+  private final ChangeManager _changeManager;
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param baseUri  the base target URI for all RESTful web services, not null
    */
   public RemoteInterpolatedYieldCurveDefinitionSource(final URI baseUri) {
     this(baseUri, DummyChangeManager.INSTANCE);
   }
-  
+
   /**
    * Creates an instance.
-   * 
+   *
    * @param baseUri  the base target URI for all RESTful web services, not null
    * @param changeManager  the change manager to use for this source, not null
    */
@@ -44,35 +44,35 @@ public class RemoteInterpolatedYieldCurveDefinitionSource extends AbstractRemote
     super(baseUri);
     ArgumentChecker.notNull(changeManager, "changeManager");
     _changeManager = changeManager;
-  }  
+  }
 
   //-------------------------------------------------------------------------
   @Override
-  public YieldCurveDefinition getDefinition(Currency currency, String name) {
+  public YieldCurveDefinition getDefinition(final Currency currency, final String name) {
     ArgumentChecker.notNull(currency, "currency");
     ArgumentChecker.notNull(name, "name");
-    
+
     try {
-      URI uri = DataInterpolatedYieldCurveDefinitionSourceUris.uriSearchSingle(getBaseUri(), currency, name, null);
+      final URI uri = DataInterpolatedYieldCurveDefinitionSourceUris.uriSearchSingle(getBaseUri(), currency, name, null);
       return accessRemote(uri).get(YieldCurveDefinition.class);
-    } catch (DataNotFoundException ex) {
+    } catch (final DataNotFoundException ex) {
       return null;
-    } catch (UniformInterfaceException404NotFound ex) {
+    } catch (final UniformInterfaceException404NotFound ex) {
       return null;
     }
   }
 
   @Override
-  public YieldCurveDefinition getDefinition(Currency currency, String name, VersionCorrection versionCorrection) {
+  public YieldCurveDefinition getDefinition(final Currency currency, final String name, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(currency, "currency");
     ArgumentChecker.notNull(name, "name");
-    
+
     try {
-      URI uri = DataInterpolatedYieldCurveDefinitionSourceUris.uriSearchSingle(getBaseUri(), currency, name, versionCorrection.getVersionAsOf());
+      final URI uri = DataInterpolatedYieldCurveDefinitionSourceUris.uriSearchSingle(getBaseUri(), currency, name, versionCorrection.getVersionAsOf());
       return accessRemote(uri).get(YieldCurveDefinition.class);
-    } catch (DataNotFoundException ex) {
+    } catch (final DataNotFoundException ex) {
       return null;
-    } catch (UniformInterfaceException404NotFound ex) {
+    } catch (final UniformInterfaceException404NotFound ex) {
       return null;
     }
   }

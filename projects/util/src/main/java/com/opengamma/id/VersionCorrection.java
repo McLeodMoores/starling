@@ -80,22 +80,22 @@ public final class VersionCorrection implements ImmutableBean, Comparable<Versio
 
   /**
    * Obtains a {@code VersionCorrection} from another version-correction, defaulting the LATEST constant for null.
-   * 
+   *
    * @param versionCorrection the version-correction to check, null for latest
    * @return the version-correction combination, not null
    */
-  public static VersionCorrection of(VersionCorrection versionCorrection) {
+  public static VersionCorrection of(final VersionCorrection versionCorrection) {
     return Objects.firstNonNull(versionCorrection, VersionCorrection.LATEST);
   }
 
   /**
    * Obtains a {@code VersionCorrection} from a version and correction instant.
-   * 
+   *
    * @param versionAsOf the version as of instant, null for latest
    * @param correctedTo the corrected to instant, null for latest
    * @return the version-correction combination, not null
    */
-  public static VersionCorrection of(Instant versionAsOf, Instant correctedTo) {
+  public static VersionCorrection of(final Instant versionAsOf, final Instant correctedTo) {
     if (versionAsOf == null && correctedTo == null) {
       return LATEST;
     }
@@ -104,21 +104,21 @@ public final class VersionCorrection implements ImmutableBean, Comparable<Versio
 
   /**
    * Obtains a {@code VersionCorrection} from a version instant and the latest correction.
-   * 
+   *
    * @param versionAsOf the version as of instant, null for latest
    * @return the version-correction combination, not null
    */
-  public static VersionCorrection ofVersionAsOf(Instant versionAsOf) {
+  public static VersionCorrection ofVersionAsOf(final Instant versionAsOf) {
     return of(versionAsOf, null);
   }
 
   /**
    * Obtains a {@code VersionCorrection} from a correction instant and the latest version.
-   * 
+   *
    * @param correctedTo the corrected to instant, null for latest
    * @return the version-correction combination, not null
    */
-  public static VersionCorrection ofCorrectedTo(Instant correctedTo) {
+  public static VersionCorrection ofCorrectedTo(final Instant correctedTo) {
     return of(null, correctedTo);
   }
 
@@ -129,22 +129,22 @@ public final class VersionCorrection implements ImmutableBean, Comparable<Versio
    * It consists of 'V' followed by the version, a dot, then 'C' followed by the correction,
    * such as {@code V2011-02-01T12:30:40Z.C2011-02-01T12:30:40Z}.
    * The text 'LATEST' is used in place of the instant for a latest version or correction.
-   * 
+   *
    * @param str the identifier to parse, not null
    * @return the version-correction combination, not null
    * @throws IllegalArgumentException if the version-correction cannot be parsed
    */
   @FromString
-  public static VersionCorrection parse(String str) {
+  public static VersionCorrection parse(final String str) {
     ArgumentChecker.notEmpty(str, "str");
-    int posC = str.indexOf(".C");
+    final int posC = str.indexOf(".C");
     if (str.charAt(0) != 'V' || posC < 0) {
       throw new IllegalArgumentException("Invalid identifier format: " + str);
     }
-    String verStr = str.substring(1, posC);
-    String corrStr = str.substring(posC + 2);
-    Instant versionAsOf = parseInstantString(verStr);
-    Instant correctedTo = parseInstantString(corrStr);
+    final String verStr = str.substring(1, posC);
+    final String corrStr = str.substring(posC + 2);
+    final Instant versionAsOf = parseInstantString(verStr);
+    final Instant correctedTo = parseInstantString(corrStr);
     return of(versionAsOf, correctedTo);
   }
 
@@ -154,15 +154,15 @@ public final class VersionCorrection implements ImmutableBean, Comparable<Versio
    * <p>
    * This parses the version-correction from the forms produced by
    * {@link #getVersionAsOfString()} and {@link #getCorrectedToString()}.
-   * 
+   *
    * @param versionAsOfString the version as of string, null treated as latest
    * @param correctedToString the corrected to string, null treated as latest
    * @return the version-correction combination, not null
    * @throws IllegalArgumentException if the version-correction cannot be parsed
    */
-  public static VersionCorrection parse(String versionAsOfString, String correctedToString) {
-    Instant versionAsOf = parseInstantString(versionAsOfString);
-    Instant correctedTo = parseInstantString(correctedToString);
+  public static VersionCorrection parse(final String versionAsOfString, final String correctedToString) {
+    final Instant versionAsOf = parseInstantString(versionAsOfString);
+    final Instant correctedTo = parseInstantString(correctedToString);
     return of(versionAsOf, correctedTo);
   }
 
@@ -171,17 +171,17 @@ public final class VersionCorrection implements ImmutableBean, Comparable<Versio
    * <p>
    * The string representation must be either {@code LATEST} for null,
    * or the ISO-8601 representation of the desired {@code Instant}.
-   * 
+   *
    * @param instantStr the instant string, null treated as latest
    * @return the instant, not null
    */
-  private static Instant parseInstantString(String instantStr) {
+  private static Instant parseInstantString(final String instantStr) {
     if (instantStr == null || instantStr.equals("LATEST")) {
       return null;
     } else {
       try {
         return Instant.parse(instantStr);
-      } catch (DateTimeException ex) {
+      } catch (final DateTimeException ex) {
         throw new IllegalArgumentException(ex);
       }
     }
@@ -189,12 +189,12 @@ public final class VersionCorrection implements ImmutableBean, Comparable<Versio
 
   /**
    * Creates a version-correction combination.
-   * 
+   *
    * @param versionAsOf the version as of instant, null for latest
    * @param correctedTo the corrected to instant, null for latest
    */
   @ImmutableConstructor
-  private VersionCorrection(Instant versionAsOf, Instant correctedTo) {
+  private VersionCorrection(final Instant versionAsOf, final Instant correctedTo) {
     _versionAsOf = versionAsOf;
     _correctedTo = correctedTo;
   }
@@ -204,11 +204,11 @@ public final class VersionCorrection implements ImmutableBean, Comparable<Versio
    * Returns a copy of this object with the specified version as of instant.
    * <p>
    * This instance is immutable and unaffected by this method call.
-   * 
+   *
    * @param versionAsOf the version instant, null for latest
    * @return a version-correction based on this one with the version as of instant altered, not null
    */
-  public VersionCorrection withVersionAsOf(Instant versionAsOf) {
+  public VersionCorrection withVersionAsOf(final Instant versionAsOf) {
     if (ObjectUtils.equals(_versionAsOf, versionAsOf)) {
       return this;
     }
@@ -219,11 +219,11 @@ public final class VersionCorrection implements ImmutableBean, Comparable<Versio
    * Returns a copy of this object with the specified corrected to instant.
    * <p>
    * This instance is immutable and unaffected by this method call.
-   * 
+   *
    * @param correctedTo the corrected to instant, null for latest
    * @return a version-correction based on this one with the corrected to instant altered, not null
    */
-  public VersionCorrection withCorrectedTo(Instant correctedTo) {
+  public VersionCorrection withCorrectedTo(final Instant correctedTo) {
     if (ObjectUtils.equals(_correctedTo, correctedTo)) {
       return this;
     }
@@ -233,26 +233,26 @@ public final class VersionCorrection implements ImmutableBean, Comparable<Versio
   //-------------------------------------------------------------------------
   /**
    * Checks whether this object has either the version or correction instant set to 'latest'.
-   * 
+   *
    * @return true if either instant is 'latest'
    */
   public boolean containsLatest() {
-    return (_versionAsOf == null || _correctedTo == null);
+    return _versionAsOf == null || _correctedTo == null;
   }
 
   /**
    * Returns a copy of this object with any latest instant fixed to the specified instant.
    * <p>
    * This instance is immutable and unaffected by this method call.
-   * 
+   *
    * @param now the current instant, not null
    * @return a version-correction based on this one with the correction altered, not null
    */
-  public VersionCorrection withLatestFixed(Instant now) {
+  public VersionCorrection withLatestFixed(final Instant now) {
     ArgumentChecker.notNull(now, "Now must not be null");
     if (containsLatest()) {
       return new VersionCorrection(
-          (_versionAsOf != null) ? _versionAsOf : now, (_correctedTo != null) ? _correctedTo : now);
+          _versionAsOf != null ? _versionAsOf : now, _correctedTo != null ? _correctedTo : now);
     }
     return this;
   }
@@ -263,7 +263,7 @@ public final class VersionCorrection implements ImmutableBean, Comparable<Versio
    * <p>
    * This is either the ISO-8601 representation of the version as of instant,
    * such as {@code 2011-02-01T12:30:40Z}, or {@code LATEST} for null.
-   * 
+   *
    * @return the string version as of, not null
    */
   public String getVersionAsOfString() {
@@ -275,7 +275,7 @@ public final class VersionCorrection implements ImmutableBean, Comparable<Versio
    * <p>
    * This is either the ISO-8601 representation of the corrected to instant,
    * such as {@code 2011-02-01T12:30:40Z}, or {@code LATEST} for null.
-   * 
+   *
    * @return the string corrected to, not null
    */
   public String getCorrectedToString() {
@@ -285,13 +285,13 @@ public final class VersionCorrection implements ImmutableBean, Comparable<Versio
   //-------------------------------------------------------------------------
   /**
    * Compares the version-corrections, sorting by version followed by correction.
-   * 
+   *
    * @param other the other identifier, not null
    * @return negative if this is less, zero if equal, positive if greater
    */
   @Override
-  public int compareTo(VersionCorrection other) {
-    int cmp = Ordering.natural().nullsLast().compare(_versionAsOf, other._versionAsOf);
+  public int compareTo(final VersionCorrection other) {
+    final int cmp = Ordering.natural().nullsLast().compare(_versionAsOf, other._versionAsOf);
     if (cmp != 0) {
       return cmp;
     }
@@ -305,7 +305,7 @@ public final class VersionCorrection implements ImmutableBean, Comparable<Versio
    * It consists of 'V' followed by the version, a dot, then 'C' followed by the correction,
    * such as {@code V2011-02-01T12:30:40Z.C2011-02-01T12:30:40Z}.
    * The text 'LATEST' is used in place of the instant for a latest version or correction.
-   * 
+   *
    * @return the string version-correction, not null
    */
   @Override

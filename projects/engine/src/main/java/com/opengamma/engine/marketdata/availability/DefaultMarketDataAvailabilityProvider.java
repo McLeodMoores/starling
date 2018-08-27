@@ -36,7 +36,7 @@ public class DefaultMarketDataAvailabilityProvider implements MarketDataAvailabi
    * <p>
    * This is suitable for cases where the market data provider can recognize the target object identifiers, but the system could not resolve it to a strict specification (for example it is for a
    * ticker describing a security that is not present in the security master).
-   * 
+   *
    * @param target the object to create a specification for, not null
    * @return a specification, not null
    * @throws IllegalArgumentException if the target is not a suitable type

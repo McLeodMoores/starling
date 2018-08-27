@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.surface;
@@ -30,27 +30,27 @@ public class BlackVolatilitySurfaceConverterTest {
 
   static {
     FORWARD_CURVE = new ForwardCurve(SPOT, DRIFT);
-    Function<Double, Double> func = new Function<Double, Double>() {
+    final Function<Double, Double> func = new Function<Double, Double>() {
       @Override
-      public Double evaluate(Double... td) {
-        double delta = td[1];
+      public Double evaluate(final Double... td) {
+        final double delta = td[1];
         return 0.2 + 2.0 * FunctionUtils.square(delta - 0.4);
       }
     };
     DELTA_SURFACE = new BlackVolatilitySurfaceDelta(FunctionalDoublesSurface.from(func), FORWARD_CURVE);
 
-    Function<Double, Double> func2 = new Function<Double, Double>() {
+    final Function<Double, Double> func2 = new Function<Double, Double>() {
       final SABRHaganVolatilityFunction sabr = new SABRHaganVolatilityFunction();
 
       @Override
-      public Double evaluate(Double... tk) {
-        double t = tk[0];
-        double k = tk[1];
+      public Double evaluate(final Double... tk) {
+        final double t = tk[0];
+        final double k = tk[1];
 
-        double alpha = 0.3 * Math.exp(-0.3 * t) + 0.2;
-        double beta = 1.0;
-        double rho = -0.4;
-        double nu = 0.6;
+        final double alpha = 0.3 * Math.exp(-0.3 * t) + 0.2;
+        final double beta = 1.0;
+        final double rho = -0.4;
+        final double nu = 0.6;
         return sabr.getVolatility(FORWARD_CURVE.getForward(t), k, t, alpha, beta, rho, nu);
       }
     };
@@ -73,13 +73,13 @@ public class BlackVolatilitySurfaceConverterTest {
 
   private void deltaToStrikeToDelta(final BlackVolatilitySurfaceDelta originalDeltaSurface) {
     final BlackVolatilitySurfaceStrike strikeSurface = BlackVolatilitySurfaceConverter.toStrikeSurface(originalDeltaSurface);
-    BlackVolatilitySurfaceDelta newDeltaSurface = BlackVolatilitySurfaceConverter.toDeltaSurface(strikeSurface, originalDeltaSurface.getForwardCurve());
+    final BlackVolatilitySurfaceDelta newDeltaSurface = BlackVolatilitySurfaceConverter.toDeltaSurface(strikeSurface, originalDeltaSurface.getForwardCurve());
     for (int i = 0; i < 10; i++) {
-      double t = Math.exp(i / 4.0) - 0.95;
+      final double t = Math.exp(i / 4.0) - 0.95;
       for (int j = 0; j < 21; j++) {
-        double delta = 0.01 + 0.98 * j / 20.;
-        double vol1 = originalDeltaSurface.getVolatilityForDelta(t, delta);
-        double vol2 = newDeltaSurface.getVolatilityForDelta(t, delta);
+        final double delta = 0.01 + 0.98 * j / 20.;
+        final double vol1 = originalDeltaSurface.getVolatilityForDelta(t, delta);
+        final double vol2 = newDeltaSurface.getVolatilityForDelta(t, delta);
         //System.out.println(t+"\t"+delta+"\t"+originalDeltaSurface.getVolatilityForDelta(t, delta));
         assertEquals(vol1, vol2, 1e-9);
       }
@@ -94,8 +94,8 @@ public class BlackVolatilitySurfaceConverterTest {
   @Test
   public void roundTripTest2() {
 
-    BlackVolatilitySurfaceDelta deltaSurface = BlackVolatilitySurfaceConverter.toDeltaSurface(STRIKE_SURFACE, FORWARD_CURVE);
-    BlackVolatilitySurfaceStrike strikeSurface = BlackVolatilitySurfaceConverter.toStrikeSurface(deltaSurface);
+    final BlackVolatilitySurfaceDelta deltaSurface = BlackVolatilitySurfaceConverter.toDeltaSurface(STRIKE_SURFACE, FORWARD_CURVE);
+    final BlackVolatilitySurfaceStrike strikeSurface = BlackVolatilitySurfaceConverter.toStrikeSurface(deltaSurface);
 
     //    double k = 1000;
     //    double vol = STRIKE_SURFACE.getVolatility(t, k);
@@ -141,13 +141,13 @@ public class BlackVolatilitySurfaceConverterTest {
     // double debug = strikeSurface.getVolatility(6.44, 3.7);
 
     for (int i = 0; i < 10; i++) {
-      double t = Math.exp(i / 4.0) - 0.95;
-      double rootT = Math.sqrt(t);
+      final double t = Math.exp(i / 4.0) - 0.95;
+      final double rootT = Math.sqrt(t);
       // double fwd = FORWARD_CURVE.getForward(t);
       for (int j = 0; j < 10; j++) {
-        double k = SPOT * Math.exp(0.3 * rootT * (-4.5 + 6.0 * j / 9.));
-        double vol1 = STRIKE_SURFACE.getVolatility(t, k);
-        double vol2 = strikeSurface.getVolatility(t, k);
+        final double k = SPOT * Math.exp(0.3 * rootT * (-4.5 + 6.0 * j / 9.));
+        final double vol1 = STRIKE_SURFACE.getVolatility(t, k);
+        final double vol2 = strikeSurface.getVolatility(t, k);
 
         //   System.out.println(t + "\t" + k + "\t" + vol1 + "\t" + vol2);
 

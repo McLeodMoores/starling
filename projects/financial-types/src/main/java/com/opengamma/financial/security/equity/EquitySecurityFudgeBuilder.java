@@ -39,13 +39,13 @@ public class EquitySecurityFudgeBuilder extends AbstractFudgeBuilder implements 
   public static final String PREFERRED_FIELD_NAME = "preferred";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, EquitySecurity object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final EquitySecurity object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     EquitySecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
-  public static void toFudgeMsg(FudgeSerializer serializer, EquitySecurity object, final MutableFudgeMsg msg) {
+  public static void toFudgeMsg(final FudgeSerializer serializer, final EquitySecurity object, final MutableFudgeMsg msg) {
     FinancialSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     addToMessage(msg, SHORT_NAME_FIELD_NAME, object.getShortName());
     addToMessage(msg, EXCHANGE_FIELD_NAME, object.getExchange());
@@ -57,13 +57,13 @@ public class EquitySecurityFudgeBuilder extends AbstractFudgeBuilder implements 
   }
 
   @Override
-  public EquitySecurity buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    EquitySecurity object = new EquitySecurity();
+  public EquitySecurity buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final EquitySecurity object = new EquitySecurity();
     EquitySecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     return object;
   }
 
-  public static void fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg, EquitySecurity object) {
+  public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final EquitySecurity object) {
     FinancialSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     object.setShortName(msg.getString(SHORT_NAME_FIELD_NAME));
     object.setExchange(msg.getString(EXCHANGE_FIELD_NAME));

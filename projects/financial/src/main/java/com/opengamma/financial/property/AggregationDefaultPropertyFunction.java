@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.property;
@@ -30,11 +30,11 @@ public class AggregationDefaultPropertyFunction extends StaticDefaultPropertyFun
 
   public AggregationDefaultPropertyFunction(final String valueName, final String... styles) {
     super(ComputationTargetType.PORTFOLIO_NODE, ValuePropertyNames.AGGREGATION, false, valueName);
-    _styles = new HashSet<String>(Arrays.asList(styles));
+    _styles = new HashSet<>(Arrays.asList(styles));
   }
 
   @Override
-  protected Set<String> getDefaultValue(FunctionCompilationContext context, ComputationTarget target, ValueRequirement desiredValue) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     return _styles;
   }
 

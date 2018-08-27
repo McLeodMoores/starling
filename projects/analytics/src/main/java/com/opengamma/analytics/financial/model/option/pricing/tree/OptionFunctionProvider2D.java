@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.tree;
@@ -12,10 +12,10 @@ import com.opengamma.util.ArgumentChecker;
  * Provides payoff function and option price function for two-dimensional tree model
  */
 public abstract class OptionFunctionProvider2D {
-  private double _strike;
-  private double _timeToExpiry;
-  private int _steps;
-  private double _sign;
+  private final double _strike;
+  private final double _timeToExpiry;
+  private final int _steps;
+  private final double _sign;
 
   /**
    * @param strike Strike price
@@ -42,7 +42,7 @@ public abstract class OptionFunctionProvider2D {
    * @param assetPrice2 Asset price 2 at (nSteps,0), i.e., the price at the lowest node
    * @param upOverDown1 (up factor)/(down factor) for asset1
    * @param upOverDown2 (up factor)/(down factor) for asset2
-   * @return Payoff at expiry 
+   * @return Payoff at expiry
    */
   public abstract double[][] getPayoffAtExpiry(final double assetPrice1, final double assetPrice2, final double upOverDown1, final double upOverDown2);
 
@@ -50,7 +50,7 @@ public abstract class OptionFunctionProvider2D {
    * Given a set of option values in the (steps+1)-th layer, derive option values in the (steps)-th layer
    * This method should be overridden if an option has early exercise feature
    * @param discount Discount factor
-   * @param uuProbability Up-up probability 
+   * @param uuProbability Up-up probability
    * @param udProbability Up-down probability
    * @param duProbability Down-up probability
    * @param ddProbability Down-down probability
@@ -61,7 +61,7 @@ public abstract class OptionFunctionProvider2D {
    * @param downFactor2 Down factor for asset2
    * @param upOverDown1 (up factor)/(down factor) for asset1
    * @param upOverDown2 (up factor)/(down factor) for asset2
-   * @param steps  
+   * @param steps
    * @return The option values in the (steps)-th layer
    */
   public double[][] getNextOptionValues(final double discount, final double uuProbability, final double udProbability, final double duProbability, final double ddProbability,
@@ -83,7 +83,7 @@ public abstract class OptionFunctionProvider2D {
    * @param assetPrice2 Asset price 2 at (nSteps,0), i.e., the price at the lowest node
    * @param middleOverDown1 (middle factor)/(down factor) for asset1
    * @param middleOverDown2 (middle factor)/(down factor) for asset2
-   * @return Payoff at expiry 
+   * @return Payoff at expiry
    */
   public abstract double[][] getPayoffAtExpiryTrinomial(final double assetPrice1, final double assetPrice2, final double middleOverDown1, final double middleOverDown2);
 
@@ -91,9 +91,9 @@ public abstract class OptionFunctionProvider2D {
    * Given a set of option values in the (steps+1)-th layer, derive option values in the (steps)-th layer
    * This method should be overridden if an option has early exercise feature
    * @param discount Discount factor
-   * @param uuProbability Up-up probability 
-   * @param umProbability Up-middle probability 
-   * @param udProbability Up-down probability 
+   * @param uuProbability Up-up probability
+   * @param umProbability Up-middle probability
+   * @param udProbability Up-down probability
    * @param muProbability Middle-up probability
    * @param mmProbability Middle-middle probability
    * @param mdProbability Middle-down probability
@@ -107,7 +107,7 @@ public abstract class OptionFunctionProvider2D {
    * @param downFactor2 Down factor for asset2
    * @param middleOverDown1 (middle factor)/(down factor) for asset1
    * @param middleOverDown2 (middle factor)/(down factor) for asset2
-   * @param steps 
+   * @param steps
    * @return The option values in the (steps)-th layer
    */
   public double[][] getNextOptionValues(final double discount, final double uuProbability, final double umProbability, final double udProbability, final double muProbability,
@@ -163,17 +163,17 @@ public abstract class OptionFunctionProvider2D {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_sign);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _steps;
     temp = Double.doubleToLongBits(_strike);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_timeToExpiry);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
 
     if (obj == null) {
       return false;
@@ -181,7 +181,7 @@ public abstract class OptionFunctionProvider2D {
     if (!(obj instanceof OptionFunctionProvider2D)) {
       return false;
     }
-    OptionFunctionProvider2D other = (OptionFunctionProvider2D) obj;
+    final OptionFunctionProvider2D other = (OptionFunctionProvider2D) obj;
     if (Double.doubleToLongBits(_sign) != Double.doubleToLongBits(other._sign)) {
       return false;
     }

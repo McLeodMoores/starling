@@ -27,14 +27,15 @@ public class BermudanExerciseType extends ExerciseType {
    */
   public BermudanExerciseType() {
   }
-  
+
+  @Override
   public String getName() {
     return "Bermudan";
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public <T> T accept(ExerciseTypeVisitor<T> visitor) {
+  public <T> T accept(final ExerciseTypeVisitor<T> visitor) {
     return visitor.visitBermudanExerciseType(this);
   }
 

@@ -113,8 +113,8 @@ import com.opengamma.analytics.financial.interestrate.payments.derivative.Coupon
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponFixedCompounding;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIbor;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborAverage;
-import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborAverageFixingDatesCompounding;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborAverageFixingDates;
+import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborAverageFixingDatesCompounding;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborAverageFixingDatesCompoundingFlatSpread;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborCompounding;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborCompoundingFlatSpread;
@@ -1488,62 +1488,62 @@ public class ForexDerivativeVisitorTest {
     }
 
     @Override
-    public String visitBondFuturesOptionMarginSecurity(BondFuturesOptionMarginSecurity option, T data) {
+    public String visitBondFuturesOptionMarginSecurity(final BondFuturesOptionMarginSecurity option, final T data) {
       return null;
     }
 
     @Override
-    public String visitBondFuturesOptionMarginSecurity(BondFuturesOptionMarginSecurity option) {
+    public String visitBondFuturesOptionMarginSecurity(final BondFuturesOptionMarginSecurity option) {
       return null;
     }
 
     @Override
-    public String visitBondFuturesOptionMarginTransaction(BondFuturesOptionMarginTransaction option, T data) {
+    public String visitBondFuturesOptionMarginTransaction(final BondFuturesOptionMarginTransaction option, final T data) {
       return null;
     }
 
     @Override
-    public String visitBondFuturesOptionMarginTransaction(BondFuturesOptionMarginTransaction option) {
+    public String visitBondFuturesOptionMarginTransaction(final BondFuturesOptionMarginTransaction option) {
       return null;
     }
 
     @Override
-    public String visitCouponIborCompoundingSimpleSpread(CouponIborCompoundingSimpleSpread payment) {
+    public String visitCouponIborCompoundingSimpleSpread(final CouponIborCompoundingSimpleSpread payment) {
       return null;
     }
 
     @Override
-    public String visitCouponIborCompoundingSimpleSpread(CouponIborCompoundingSimpleSpread payment, T data) {
+    public String visitCouponIborCompoundingSimpleSpread(final CouponIborCompoundingSimpleSpread payment, final T data) {
       return null;
     }
 
     @Override
-    public String visitCouponIborAverageFixingDates(CouponIborAverageFixingDates payment, T data) {
+    public String visitCouponIborAverageFixingDates(final CouponIborAverageFixingDates payment, final T data) {
       return null;
     }
 
     @Override
-    public String visitCouponIborAverageFixingDates(CouponIborAverageFixingDates payment) {
+    public String visitCouponIborAverageFixingDates(final CouponIborAverageFixingDates payment) {
       return null;
     }
 
     @Override
-    public String visitCouponIborAverageCompounding(CouponIborAverageFixingDatesCompounding payment, T data) {
+    public String visitCouponIborAverageCompounding(final CouponIborAverageFixingDatesCompounding payment, final T data) {
       return null;
     }
 
     @Override
-    public String visitCouponIborAverageCompounding(CouponIborAverageFixingDatesCompounding payment) {
+    public String visitCouponIborAverageCompounding(final CouponIborAverageFixingDatesCompounding payment) {
       return null;
     }
 
     @Override
-    public String visitCouponIborAverageFlatCompoundingSpread(CouponIborAverageFixingDatesCompoundingFlatSpread payment, T data) {
+    public String visitCouponIborAverageFlatCompoundingSpread(final CouponIborAverageFixingDatesCompoundingFlatSpread payment, final T data) {
       return null;
     }
 
     @Override
-    public String visitCouponIborAverageFlatCompoundingSpread(CouponIborAverageFixingDatesCompoundingFlatSpread payment) {
+    public String visitCouponIborAverageFlatCompoundingSpread(final CouponIborAverageFixingDatesCompoundingFlatSpread payment) {
       return null;
     }
   }

@@ -16,8 +16,8 @@ import com.opengamma.util.tuple.Pair;
 public class SwapProductProvider implements SecurityValueProvider<SwapSecurity> {
 
   @Override
-  public String getValue(SwapSecurity security) {
-    Pair<Currency, Currency> currencies = new CurrencyVisitor().visit(security);
+  public String getValue(final SwapSecurity security) {
+    final Pair<Currency, Currency> currencies = new CurrencyVisitor().visit(security);
     // if the leg currencies are the same just use the code, if they're different use both codes with the
     // fixed currency first or the pay currency first for float/float swaps
     if (currencies.getFirst().equals(currencies.getSecond())) {

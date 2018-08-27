@@ -1,11 +1,9 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.fudgemsg;
-
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,6 +37,8 @@ import com.opengamma.engine.target.ComputationTargetReference;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
+
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
 
 /**
  * Fudge message builder for {@link DependencyGraph}
@@ -100,9 +100,9 @@ public class DependencyGraphFudgeBuilder implements FudgeBuilder<DependencyGraph
     private final FudgeSerializer _serializer;
     private final Map<DependencyNode, Integer> _nodeIdentifiers;
     private final Map<ComputationTargetSpecification, Integer> _commonTargets;
-    private final Map<DependencyNodeFunction, Integer> _commonFunctions = new Object2ObjectOpenCustomHashMap<DependencyNodeFunction, Integer>(DependencyNodeFunctionImpl.HASHING_STRATEGY);
-    private final Set<ValueSpecification> _unconsumedOutputs = new HashSet<ValueSpecification>();
-    private final Map<ValueProperties, Object> _properties = new HashMap<ValueProperties, Object>();
+    private final Map<DependencyNodeFunction, Integer> _commonFunctions = new Object2ObjectOpenCustomHashMap<>(DependencyNodeFunctionImpl.HASHING_STRATEGY);
+    private final Set<ValueSpecification> _unconsumedOutputs = new HashSet<>();
+    private final Map<ValueProperties, Object> _properties = new HashMap<>();
     private int _nextPropertyId;
 
     public MessageEncoder(final FudgeSerializer serializer, final int graphSize) {
@@ -112,7 +112,7 @@ public class DependencyGraphFudgeBuilder implements FudgeBuilder<DependencyGraph
     }
 
     public MutableFudgeMsg encode(final DependencyGraph depGraph) {
-      MutableFudgeMsg msg = _serializer.newMessage();
+      final MutableFudgeMsg msg = _serializer.newMessage();
       msg.add(CALCULATION_CONFIGURATION_NAME_FIELD, null, depGraph.getCalculationConfigurationName());
       final int count = depGraph.getRootCount();
       for (int i = 0; i < count; i++) {
@@ -126,12 +126,12 @@ public class DependencyGraphFudgeBuilder implements FudgeBuilder<DependencyGraph
       }
       final int size = _nodeIdentifiers.size();
       msg.add(SIZE_FIELD, null, size);
-      for (Map.Entry<ValueSpecification, Set<ValueRequirement>> terminal : depGraph.getTerminalOutputs().entrySet()) {
+      for (final Map.Entry<ValueSpecification, Set<ValueRequirement>> terminal : depGraph.getTerminalOutputs().entrySet()) {
         final MutableFudgeMsg subMsg = msg.addSubMessage(TERMINAL_OUTPUT_FIELD, null);
         subMsg.add(VALUE_NAME_FIELD, null, terminal.getKey().getValueName());
         subMsg.add(TARGET_FIELD, null, _commonTargets.get(terminal.getKey().getTargetSpecification()));
         _serializer.addToMessage(subMsg, PROPERTIES_FIELD, null, terminal.getKey().getProperties());
-        for (ValueRequirement requirement : terminal.getValue()) {
+        for (final ValueRequirement requirement : terminal.getValue()) {
           // TODO: Use some form of dictionary lookup to get the size of the value requirements down; at least avoid writing the value name
           _serializer.addToMessage(subMsg, VALUE_REQUIREMENT_FIELD, null, requirement);
         }
@@ -155,7 +155,7 @@ public class DependencyGraphFudgeBuilder implements FudgeBuilder<DependencyGraph
     }
 
     private void addValuePropertiesToMessage(final MutableFudgeMsg msg, final ValueProperties properties) {
-      Object v = _properties.get(properties);
+      final Object v = _properties.get(properties);
       if (v == null) {
         // This is the first use, write in full and store for later
         final MutableFudgeMsg propertiesMsg = _serializer.objectToFudgeMsg(properties);
@@ -255,7 +255,7 @@ public class DependencyGraphFudgeBuilder implements FudgeBuilder<DependencyGraph
     }
 
     public void addOutputValue(final ValueSpecification output) {
-      for (ValueSpecification existing : _outputValues) {
+      for (final ValueSpecification existing : _outputValues) {
         if (output.equals(existing)) {
           return;
         }
@@ -285,7 +285,7 @@ public class DependencyGraphFudgeBuilder implements FudgeBuilder<DependencyGraph
   private static class MessageDecoder {
 
     private final FudgeDeserializer _deserializer;
-    private final Map<Integer, ValueProperties> _properties = new HashMap<Integer, ValueProperties>();
+    private final Map<Integer, ValueProperties> _properties = new HashMap<>();
     private TempDependencyNode[] _nodes;
 
     public MessageDecoder(final FudgeDeserializer deserializer) {
@@ -294,7 +294,7 @@ public class DependencyGraphFudgeBuilder implements FudgeBuilder<DependencyGraph
 
     private DependencyNodeFunction getFunctionFromMessage(final FudgeMsg msg) {
       FudgeField field = msg.getByName(FUNCTION_IDENTIFIER_FIELD);
-      Object value = field.getValue();
+      final Object value = field.getValue();
       if (value instanceof Number) {
         final int identifier = ((Number) value).intValue();
         assert _nodes[identifier] != null;
@@ -352,7 +352,7 @@ public class DependencyGraphFudgeBuilder implements FudgeBuilder<DependencyGraph
       final ValueSpecification[] inputValues = new ValueSpecification[inputFields.size()];
       final TempDependencyNode[] inputNodes = new TempDependencyNode[inputFields.size()];
       int i = 0;
-      for (FudgeField inputField : inputFields) {
+      for (final FudgeField inputField : inputFields) {
         final FudgeMsg inputMsg = (FudgeMsg) inputField.getValue();
         final TempDependencyNode inputNode = getNodeFromField(inputMsg.getByName(NODE_FIELD));
         final String valueName = inputMsg.getString(VALUE_NAME_FIELD);
@@ -371,7 +371,7 @@ public class DependencyGraphFudgeBuilder implements FudgeBuilder<DependencyGraph
       } else {
         outputs = new ValueSpecification[outputFields.size()];
         i = 0;
-        for (FudgeField outputField : outputFields) {
+        for (final FudgeField outputField : outputFields) {
           final FudgeMsg outputMsg = (FudgeMsg) outputField.getValue();
           final String valueName = outputMsg.getString(VALUE_NAME_FIELD);
           final ValueProperties properties = getValuePropertiesFromField(outputMsg.getByName(PROPERTIES_FIELD));
@@ -390,12 +390,12 @@ public class DependencyGraphFudgeBuilder implements FudgeBuilder<DependencyGraph
       Collection<FudgeField> fields = msg.getAllByName(NODE_FIELD);
       final TempDependencyNode[] roots = new TempDependencyNode[fields.size()];
       int i = 0;
-      for (FudgeField field : fields) {
+      for (final FudgeField field : fields) {
         roots[i++] = getNodeFromField(field);
       }
       fields = msg.getAllByName(TERMINAL_OUTPUT_FIELD);
       final Map<ValueSpecification, Set<ValueRequirement>> terminals = Maps.newHashMapWithExpectedSize(fields.size());
-      for (FudgeField field : fields) {
+      for (final FudgeField field : fields) {
         final FudgeMsg fieldMsg = (FudgeMsg) field.getValue();
         final String valueName = fieldMsg.getString(VALUE_NAME_FIELD);
         final ComputationTargetSpecification target = getTargetFromField(fieldMsg.getByName(TARGET_FIELD));
@@ -407,7 +407,7 @@ public class DependencyGraphFudgeBuilder implements FudgeBuilder<DependencyGraph
           terminals.put(valueSpec, Collections.singleton(valueReq));
         } else {
           final Set<ValueRequirement> requirements = Sets.newHashSetWithExpectedSize(requirementFields.size());
-          for (FudgeField requirementField : requirementFields) {
+          for (final FudgeField requirementField : requirementFields) {
             requirements.add(MemoryUtils.instance(_deserializer.fieldValueToObject(ValueRequirement.class, requirementField)));
           }
           terminals.put(valueSpec, requirements);
@@ -415,7 +415,7 @@ public class DependencyGraphFudgeBuilder implements FudgeBuilder<DependencyGraph
       }
       // Allow the GC to get rid of the temporary data as soon as possible
       _nodes = null;
-      final Collection<DependencyNode> rootNodes = new ArrayList<DependencyNode>(roots.length);
+      final Collection<DependencyNode> rootNodes = new ArrayList<>(roots.length);
       for (i = 0; i < roots.length; i++) {
         final TempDependencyNode node = roots[i];
         // Allow the GC to get rid of the temporary data as soon as possible
@@ -428,7 +428,7 @@ public class DependencyGraphFudgeBuilder implements FudgeBuilder<DependencyGraph
   }
 
   @Override
-  public DependencyGraph buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
+  public DependencyGraph buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     final MessageDecoder decoder = new MessageDecoder(deserializer);
     return decoder.decode(msg);
   }

@@ -27,14 +27,15 @@ public class EuropeanExerciseType extends ExerciseType {
    */
   public EuropeanExerciseType() {
   }
-  
+
+  @Override
   public String getName() {
     return "European";
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public <T> T accept(ExerciseTypeVisitor<T> visitor) {
+  public <T> T accept(final ExerciseTypeVisitor<T> visitor) {
     return visitor.visitEuropeanExerciseType(this);
   }
 

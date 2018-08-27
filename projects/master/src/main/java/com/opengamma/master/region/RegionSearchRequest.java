@@ -97,32 +97,32 @@ public class RegionSearchRequest extends AbstractSearchRequest implements Serial
 
   /**
    * Creates an instance using a single search identifier.
-   * 
+   *
    * @param regionId  the region external identifier to search for, not null
    */
-  public RegionSearchRequest(ExternalId regionId) {
+  public RegionSearchRequest(final ExternalId regionId) {
     addExternalId(regionId);
   }
 
   /**
    * Creates an instance using a bundle of identifiers.
-   * 
+   *
    * @param regionBundle  the region bundle to search for, not null
    */
-  public RegionSearchRequest(ExternalIdBundle regionBundle) {
+  public RegionSearchRequest(final ExternalIdBundle regionBundle) {
     addExternalIds(regionBundle);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Adds a single region object identifier to the set.
-   * 
+   *
    * @param regionId  the region object identifier to add, not null
    */
-  public void addObjectId(ObjectIdentifiable regionId) {
+  public void addObjectId(final ObjectIdentifiable regionId) {
     ArgumentChecker.notNull(regionId, "regionId");
     if (_objectIds == null) {
-      _objectIds = new ArrayList<ObjectId>();
+      _objectIds = new ArrayList<>();
     }
     _objectIds.add(regionId.getObjectId());
   }
@@ -130,15 +130,15 @@ public class RegionSearchRequest extends AbstractSearchRequest implements Serial
   /**
    * Sets the set of region object identifiers, null to not limit by region object identifiers.
    * Note that an empty set will return no regions.
-   * 
+   *
    * @param regionIds  the new region identifiers, null clears the region id search
    */
-  public void setObjectIds(Iterable<? extends ObjectIdentifiable> regionIds) {
+  public void setObjectIds(final Iterable<? extends ObjectIdentifiable> regionIds) {
     if (regionIds == null) {
       _objectIds = null;
     } else {
-      _objectIds = new ArrayList<ObjectId>();
-      for (ObjectIdentifiable regionId : regionIds) {
+      _objectIds = new ArrayList<>();
+      for (final ObjectIdentifiable regionId : regionIds) {
         _objectIds.add(regionId.getObjectId());
       }
     }
@@ -147,24 +147,24 @@ public class RegionSearchRequest extends AbstractSearchRequest implements Serial
   //-------------------------------------------------------------------------
   /**
    * Adds a single region external identifier to the collection to search for.
-   * Unless customized, the search will match 
+   * Unless customized, the search will match
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
+   *
    * @param regionId  the region key identifier to add, not null
    */
-  public void addExternalId(ExternalId regionId) {
+  public void addExternalId(final ExternalId regionId) {
     ArgumentChecker.notNull(regionId, "regionId");
     addExternalIds(Arrays.asList(regionId));
   }
 
   /**
    * Adds a collection of region external identifiers to the collection to search for.
-   * Unless customized, the search will match 
+   * Unless customized, the search will match
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
+   *
    * @param regionIds  the region key identifiers to add, not null
    */
-  public void addExternalIds(ExternalId... regionIds) {
+  public void addExternalIds(final ExternalId... regionIds) {
     ArgumentChecker.notNull(regionIds, "regionIds");
     if (getExternalIdSearch() == null) {
       setExternalIdSearch(ExternalIdSearch.of(regionIds));
@@ -175,12 +175,12 @@ public class RegionSearchRequest extends AbstractSearchRequest implements Serial
 
   /**
    * Adds a collection of region external identifiers to the collection to search for.
-   * Unless customized, the search will match 
+   * Unless customized, the search will match
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
+   *
    * @param regionIds  the region key identifiers to add, not null
    */
-  public void addExternalIds(Iterable<ExternalId> regionIds) {
+  public void addExternalIds(final Iterable<ExternalId> regionIds) {
     ArgumentChecker.notNull(regionIds, "regionIds");
     if (getExternalIdSearch() == null) {
       setExternalIdSearch(ExternalIdSearch.of(regionIds));
@@ -191,10 +191,10 @@ public class RegionSearchRequest extends AbstractSearchRequest implements Serial
 
   /**
    * Sets the search type to use in {@code ExternalIdSearch}.
-   * 
+   *
    * @param type  the type to set, not null
    */
-  public void setExternalIdSearchType(ExternalIdSearchType type) {
+  public void setExternalIdSearchType(final ExternalIdSearchType type) {
     if (getExternalIdSearch() == null) {
       setExternalIdSearch(ExternalIdSearch.of(type));
     } else {
@@ -205,30 +205,30 @@ public class RegionSearchRequest extends AbstractSearchRequest implements Serial
   //-------------------------------------------------------------------------
   /**
    * Adds a search for a currency by adding the matching bundle.
-   * 
+   *
    * @param country  the country to search for, not null
    */
-  public void addCountry(Country country) {
+  public void addCountry(final Country country) {
     ArgumentChecker.notNull(country, "country");
     addExternalId(ExternalSchemes.countryRegionId(country));
   }
 
   /**
    * Adds a search for a currency by adding the matching bundle.
-   * 
+   *
    * @param currency  the currency to search for, not null
    */
-  public void addCurrency(Currency currency) {
+  public void addCurrency(final Currency currency) {
     ArgumentChecker.notNull(currency, "currency");
     addExternalId(ExternalSchemes.currencyRegionId(currency));
   }
 
   /**
    * Adds a search for a time-zone by adding the matching bundle.
-   * 
+   *
    * @param timeZone  the time-zone to search for, not null
    */
-  public void addTimeZone(ZoneId timeZone) {
+  public void addTimeZone(final ZoneId timeZone) {
     ArgumentChecker.notNull(timeZone, "timeZone");
     addExternalId(ExternalSchemes.timeZoneRegionId(timeZone));
   }

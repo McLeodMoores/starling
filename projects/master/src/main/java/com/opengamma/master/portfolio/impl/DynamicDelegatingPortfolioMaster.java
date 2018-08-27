@@ -109,54 +109,54 @@ public class DynamicDelegatingPortfolioMaster implements PortfolioMaster {
   }
 
   @Override
-  public PortfolioSearchResult search(PortfolioSearchRequest request) {
+  public PortfolioSearchResult search(final PortfolioSearchRequest request) {
     ArgumentChecker.notNull(request, "request");
-    Collection<ObjectId> ids = request.getPortfolioObjectIds();
+    final Collection<ObjectId> ids = request.getPortfolioObjectIds();
     return chooseDelegate(ids.iterator().next().getScheme()).search(request);
   }
 
   @Override
-  public PortfolioHistoryResult history(PortfolioHistoryRequest request) {
+  public PortfolioHistoryResult history(final PortfolioHistoryRequest request) {
     ArgumentChecker.notNull(request, "request");
     return chooseDelegate(request.getObjectId().getScheme()).history(request);
   }
 
   @Override
-  public ManageablePortfolioNode getNode(UniqueId nodeId) {
+  public ManageablePortfolioNode getNode(final UniqueId nodeId) {
     ArgumentChecker.notNull(nodeId, "nodeId");
     return chooseDelegate(nodeId.getScheme()).getNode(nodeId);
   }
 
   @Override
-  public PortfolioDocument get(UniqueId uniqueId) {
+  public PortfolioDocument get(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     return chooseDelegate(uniqueId.getScheme()).get(uniqueId);
   }
 
   @Override
-  public PortfolioDocument get(ObjectIdentifiable objectId, VersionCorrection versionCorrection) {
+  public PortfolioDocument get(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     return chooseDelegate(objectId.getObjectId().getScheme()).get(objectId, versionCorrection);
   }
 
   @Override
-  public Map<UniqueId, PortfolioDocument> get(Collection<UniqueId> uniqueIds) {
-    Map<UniqueId, PortfolioDocument> resultMap = newHashMap();
-    for (UniqueId uniqueId : uniqueIds) {
-      PortfolioDocument doc = get(uniqueId);
+  public Map<UniqueId, PortfolioDocument> get(final Collection<UniqueId> uniqueIds) {
+    final Map<UniqueId, PortfolioDocument> resultMap = newHashMap();
+    for (final UniqueId uniqueId : uniqueIds) {
+      final PortfolioDocument doc = get(uniqueId);
       resultMap.put(uniqueId, doc);
     }
     return resultMap;
   }
 
   @Override
-  public PortfolioDocument add(PortfolioDocument document) {
+  public PortfolioDocument add(final PortfolioDocument document) {
     throw new UnsupportedOperationException("Cannot add document without explicitly specifying the scheme");
   }
 
   @Override
-  public PortfolioDocument update(PortfolioDocument document) {
+  public PortfolioDocument update(final PortfolioDocument document) {
     ArgumentChecker.notNull(document, "document");
     Validate.notNull(document.getUniqueId(), "document has no unique id");
     Validate.notNull(document.getObjectId(), "document has no object id");
@@ -164,53 +164,53 @@ public class DynamicDelegatingPortfolioMaster implements PortfolioMaster {
   }
 
   @Override
-  public void remove(ObjectIdentifiable oid) {
+  public void remove(final ObjectIdentifiable oid) {
     ArgumentChecker.notNull(oid, "objectIdentifiable");
     chooseDelegate(oid.getObjectId().getScheme()).remove(oid);
   }
 
   @Override
-  public PortfolioDocument correct(PortfolioDocument document) {
+  public PortfolioDocument correct(final PortfolioDocument document) {
     ArgumentChecker.notNull(document, "document");
     return chooseDelegate(document.getObjectId().getScheme()).correct(document);
   }
 
   @Override
-  public List<UniqueId> replaceVersion(UniqueId uniqueId, List<PortfolioDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersion(final UniqueId uniqueId, final List<PortfolioDocument> replacementDocuments) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
     return chooseDelegate(uniqueId.getScheme()).replaceVersion(uniqueId, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceAllVersions(ObjectIdentifiable objectId, List<PortfolioDocument> replacementDocuments) {
+  public List<UniqueId> replaceAllVersions(final ObjectIdentifiable objectId, final List<PortfolioDocument> replacementDocuments) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
     return chooseDelegate(objectId.getObjectId().getScheme()).replaceAllVersions(objectId, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceVersions(ObjectIdentifiable objectId, List<PortfolioDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersions(final ObjectIdentifiable objectId, final List<PortfolioDocument> replacementDocuments) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
     return chooseDelegate(objectId.getObjectId().getScheme()).replaceVersions(objectId, replacementDocuments);
   }
 
   @Override
-  public UniqueId replaceVersion(PortfolioDocument replacementDocument) {
+  public UniqueId replaceVersion(final PortfolioDocument replacementDocument) {
     ArgumentChecker.notNull(replacementDocument, "replacementDocument");
     ArgumentChecker.notNull(replacementDocument.getObjectId(), "replacementDocument.getObjectId");
     return chooseDelegate(replacementDocument.getObjectId().getScheme()).replaceVersion(replacementDocument);
   }
 
   @Override
-  public void removeVersion(UniqueId uniqueId) {
+  public void removeVersion(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     chooseDelegate(uniqueId.getScheme()).removeVersion(uniqueId);
   }
 
   @Override
-  public UniqueId addVersion(ObjectIdentifiable objectId, PortfolioDocument documentToAdd) {
+  public UniqueId addVersion(final ObjectIdentifiable objectId, final PortfolioDocument documentToAdd) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(documentToAdd, "documentToAdd");
     return chooseDelegate(objectId.getObjectId().getScheme()).addVersion(objectId, documentToAdd);

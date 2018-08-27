@@ -6,15 +6,15 @@
 package com.opengamma.transport;
 
 /**
- * 
+ *
  *
  * @author jim
  */
 public class InMemoryRequestConduit {
-  public static FudgeRequestSender create(FudgeRequestReceiver receiver) {
-    FudgeRequestDispatcher requestDispatcher = new FudgeRequestDispatcher(receiver);
-    InMemoryByteArrayRequestConduit requestConduit = new InMemoryByteArrayRequestConduit(requestDispatcher);
-    ByteArrayFudgeRequestSender requestSender = new ByteArrayFudgeRequestSender(requestConduit);
+  public static FudgeRequestSender create(final FudgeRequestReceiver receiver) {
+    final FudgeRequestDispatcher requestDispatcher = new FudgeRequestDispatcher(receiver);
+    final InMemoryByteArrayRequestConduit requestConduit = new InMemoryByteArrayRequestConduit(requestDispatcher);
+    final ByteArrayFudgeRequestSender requestSender = new ByteArrayFudgeRequestSender(requestConduit);
     return requestSender;
   }
 }

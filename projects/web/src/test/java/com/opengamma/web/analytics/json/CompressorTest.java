@@ -39,22 +39,22 @@ public class CompressorTest {
 
   @Test(groups = TestGroup.UNIT)
   public void roundTrip() throws IOException {
-    InputStream source1 = new ByteArrayInputStream(JSON.getBytes());
-    ByteArrayOutputStream sink1 = new ByteArrayOutputStream();
+    final InputStream source1 = new ByteArrayInputStream(JSON.getBytes());
+    final ByteArrayOutputStream sink1 = new ByteArrayOutputStream();
     Compressor.compressStream(source1, sink1);
 
-    InputStream source2 = new ByteArrayInputStream(sink1.toByteArray());
-    ByteArrayOutputStream sink2 = new ByteArrayOutputStream();
+    final InputStream source2 = new ByteArrayInputStream(sink1.toByteArray());
+    final ByteArrayOutputStream sink2 = new ByteArrayOutputStream();
     Compressor.decompressStream(source2, sink2);
     assertEquals(JSON, sink2.toString());
   }
 
   private static List<Object> randomObjects() {
-    Random random = new Random();
-    List<Object> list = Lists.newArrayList();
-    int size = random.nextInt(5) + 3;
+    final Random random = new Random();
+    final List<Object> list = Lists.newArrayList();
+    final int size = random.nextInt(5) + 3;
     for (int i = 0; i < size; i++) {
-      Map<String, Object> map = Maps.newHashMap();
+      final Map<String, Object> map = Maps.newHashMap();
       map.put("foo", randomNumber());
       map.put("bar", randomArray());
       map.put("baz", randomNumber());
@@ -68,22 +68,22 @@ public class CompressorTest {
   }
 
   private static BigDecimal[] randomArray() {
-    Random random = new Random();
-    int size = random.nextInt(3) + 3;
-    BigDecimal[] array = new BigDecimal[size];
+    final Random random = new Random();
+    final int size = random.nextInt(3) + 3;
+    final BigDecimal[] array = new BigDecimal[size];
     for (int i = 0; i < size; i++) {
       array[i] = randomNumber();
     }
     return array;
   }
 
-  public static void main(String[] args) throws IOException {
-    InputStream source1 = new ByteArrayInputStream(new JSONArray(randomObjects()).toString().getBytes());
-    ByteArrayOutputStream sink1 = new ByteArrayOutputStream();
+  public static void main(final String[] args) throws IOException {
+    final InputStream source1 = new ByteArrayInputStream(new JSONArray(randomObjects()).toString().getBytes());
+    final ByteArrayOutputStream sink1 = new ByteArrayOutputStream();
     System.out.println(JSON);
     Compressor.compressStream(source1, sink1);
     System.out.println("JSON size: " + JSON.length());
     System.out.println("compressed size: " + sink1.size());
-    System.out.println("ratio: " + ((double) sink1.size() / (double) JSON.length()));
+    System.out.println("ratio: " + (double) sink1.size() / (double) JSON.length());
   }
 }

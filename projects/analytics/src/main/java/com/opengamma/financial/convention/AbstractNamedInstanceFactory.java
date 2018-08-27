@@ -17,14 +17,14 @@ import com.opengamma.util.ClassUtils;
  * <p>
  * Implementations should typically be singletons with a public static factory instance
  * named 'INSTANCE' accessible using {@link ClassUtils#singletonInstance(Class)}.
- * 
+ *
  * @param <T> type of objects returned
  * @deprecated use com.opengamma.util.AbstractNamedInstanceFactory
  */
 @Deprecated
 public abstract class AbstractNamedInstanceFactory<T extends NamedInstance> extends com.opengamma.util.AbstractNamedInstanceFactory<T> {
 
-  protected AbstractNamedInstanceFactory(Class<T> type) {
+  protected AbstractNamedInstanceFactory(final Class<T> type) {
     super(type);
   }
 

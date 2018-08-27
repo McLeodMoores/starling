@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.finitedifference.applications;
@@ -21,7 +21,7 @@ import com.opengamma.analytics.financial.model.volatility.local.AbsoluteLocalVol
 import com.opengamma.analytics.math.function.Function1D;
 
 /**
- * Solves a coupled forward PDE for the price of a call option when the process is CEV with vol levels determined by a two state Markov chain.  
+ * Solves a coupled forward PDE for the price of a call option when the process is CEV with vol levels determined by a two state Markov chain.
  */
 public class TwoStateMarkovChainPricer {
   private static final CoupledPDEDataBundleProvider BUNDLE_PROVIDER = new CoupledPDEDataBundleProvider();
@@ -50,7 +50,7 @@ public class TwoStateMarkovChainPricer {
 
   /**
    * Solves a coupled forward PDE for the price of a call option when the process is CEV with vol levels determined by a two state Markov chain
-   * @param forward The forward curve of the underlying asset 
+   * @param forward The forward curve of the underlying asset
    * @param chainDB The chain data bundle
    * @param localVolOverlay The local volatility overlay
    */
@@ -121,7 +121,7 @@ public class TwoStateMarkovChainPricer {
   private Function1D<Double, Double> getInitialCond(final double s0, final double p0) {
     return new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(Double k) {
+      public Double evaluate(final Double k) {
         return p0 * Math.max(0.0, s0 - k);
       }
     };

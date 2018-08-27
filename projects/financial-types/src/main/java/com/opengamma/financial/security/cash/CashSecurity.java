@@ -81,7 +81,7 @@ public class CashSecurity extends FinancialSecurity {
     super(SECURITY_TYPE);
   }
 
-  public CashSecurity(Currency currency, ExternalId region, ZonedDateTime start, ZonedDateTime maturity, DayCount dayCount, double rate, double amount) {
+  public CashSecurity(final Currency currency, final ExternalId region, final ZonedDateTime start, final ZonedDateTime maturity, final DayCount dayCount, final double rate, final double amount) {
     super(SECURITY_TYPE);
     setCurrency(currency);
     setRegionId(region);
@@ -94,7 +94,7 @@ public class CashSecurity extends FinancialSecurity {
 
   //-------------------------------------------------------------------------
   @Override
-  public final <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public final <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitCashSecurity(this);
   }
 

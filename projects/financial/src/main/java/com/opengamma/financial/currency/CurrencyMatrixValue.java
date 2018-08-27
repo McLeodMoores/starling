@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.currency;
@@ -88,7 +88,7 @@ public abstract class CurrencyMatrixValue {
     private final ValueRequirement _valueRequirement;
     private final boolean _reciprocal;
 
-    private CurrencyMatrixValueRequirement(final ValueRequirement valueRequirement, boolean reciprocal) {
+    private CurrencyMatrixValueRequirement(final ValueRequirement valueRequirement, final boolean reciprocal) {
       _valueRequirement = valueRequirement;
       _reciprocal = reciprocal;
     }
@@ -120,7 +120,7 @@ public abstract class CurrencyMatrixValue {
         return false;
       }
       final CurrencyMatrixValueRequirement oc = (CurrencyMatrixValueRequirement) o;
-      return getValueRequirement().equals(oc.getValueRequirement()) && (isReciprocal() == oc.isReciprocal());
+      return getValueRequirement().equals(oc.getValueRequirement()) && isReciprocal() == oc.isReciprocal();
     }
 
     @Override
@@ -136,7 +136,7 @@ public abstract class CurrencyMatrixValue {
 
     /**
      * Support translation from pre-3044 type specifications, such as CTSpec[PRIMITIVE, BLOOMBERG_TICKER~USD Curncy], to the correct CTReq[PRIMITIVE, BLOOMBERGTICKER~USD Curncy].
-     * 
+     *
      * @param valueRequirement the possibly legacy specification, not null
      * @return the updated specification, not null
      * @deprecated shouldn't be relying on this, a configuration database upgrade script to apply the transformation would be better
@@ -157,7 +157,7 @@ public abstract class CurrencyMatrixValue {
     }
 
     public static CurrencyMatrixValueRequirement fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
-      ValueRequirement requirement = deserializer.fudgeMsgToObject(ValueRequirement.class, msg);
+      final ValueRequirement requirement = deserializer.fudgeMsgToObject(ValueRequirement.class, msg);
       return new CurrencyMatrixValueRequirement(plat3044Translate(requirement), msg.getBoolean("reciprocal"));
     }
 
@@ -223,7 +223,7 @@ public abstract class CurrencyMatrixValue {
 
   /**
    * Creates a matrix value that is a given constant value.
-   * 
+   *
    * @param fixedValue the value
    * @return the matrix value
    */
@@ -235,7 +235,7 @@ public abstract class CurrencyMatrixValue {
   /**
    * Creates a matrix value that is obtained from an arbitrary value produced by the dependency graph. This may be a requirement satisfied by a live data provider or a value calculated by other
    * functions.
-   * 
+   *
    * @param valueRequirement identifies the value to use
    * @return the matrix value
    */
@@ -245,7 +245,7 @@ public abstract class CurrencyMatrixValue {
 
   /**
    * Creates a matrix value that indicates a conversion between currencies should be performed using the rates of each to/from an intermediate currency.
-   * 
+   *
    * @param currency the intermediate currency
    * @return the matrix value
    */

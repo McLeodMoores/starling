@@ -11,18 +11,18 @@ import java.util.Map;
 import com.opengamma.financial.analytics.LabelledMatrix1D;
 
 /**
- * 
+ *
  */
 public class LabelledMatrix1DConverter implements ResultConverter<LabelledMatrix1D<?, ?>> {
 
   @Override
-  public Map<String, Double> convert(String valueName, LabelledMatrix1D<?, ?> value) {
-    Map<String, Double> returnValue = new HashMap<String, Double>();
-    Object[] keys = value.getKeys();
-    double[] values = value.getValues();
+  public Map<String, Double> convert(final String valueName, final LabelledMatrix1D<?, ?> value) {
+    final Map<String, Double> returnValue = new HashMap<>();
+    final Object[] keys = value.getKeys();
+    final double[] values = value.getValues();
     for (int i = 0; i < values.length; i++) {
-      Object k = keys[i];
-      double v = values[i];
+      final Object k = keys[i];
+      final double v = values[i];
       returnValue.put(valueName + "[" + k.toString() + "]", v);
     }
     return returnValue;
@@ -32,5 +32,5 @@ public class LabelledMatrix1DConverter implements ResultConverter<LabelledMatrix
   public Class<?> getConvertedClass() {
     return LabelledMatrix1D.class;
   }
-  
+
 }

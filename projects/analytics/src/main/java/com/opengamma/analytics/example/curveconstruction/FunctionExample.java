@@ -21,44 +21,44 @@ public class FunctionExample {
 
   // @export "polyDerivativeDemo"
   public static RealPolynomialFunction1D getFunction() {
-    double[] coefficients = {-125, 75, -15, 1 };
+    final double[] coefficients = {-125, 75, -15, 1 };
     return new RealPolynomialFunction1D(coefficients);
   }
 
-  public static void polyDerivativeDemo(PrintStream out) {
-    RealPolynomialFunction1D f = getFunction();
+  public static void polyDerivativeDemo(final PrintStream out) {
+    final RealPolynomialFunction1D f = getFunction();
 
     assert f.evaluate(5.0) == 0.0;
 
-    RealPolynomialFunction1D d = f.derivative();
-    double[] coefficients = d.getCoefficients();
+    final RealPolynomialFunction1D d = f.derivative();
+    final double[] coefficients = d.getCoefficients();
     out.println(Arrays.toString(coefficients));
   }
 
   // @export "cubicRealRootFindingDemo"
-  public static void cubicRealRootFindingDemo(PrintStream out) {
-    RealPolynomialFunction1D f = getFunction();
-    CubicRealRootFinder cubic = new CubicRealRootFinder();
-    java.lang.Double[] roots = cubic.getRoots(f);
+  public static void cubicRealRootFindingDemo(final PrintStream out) {
+    final RealPolynomialFunction1D f = getFunction();
+    final CubicRealRootFinder cubic = new CubicRealRootFinder();
+    final java.lang.Double[] roots = cubic.getRoots(f);
     out.println(Arrays.toString(roots));
   }
 
   // @export "brentSingleRootFinderDemo"
-  public static void brentSingleRootFinderDemo(PrintStream out) {
-    RealPolynomialFunction1D f = getFunction();
-    BrentSingleRootFinder brent = new BrentSingleRootFinder();
-    java.lang.Double root = brent.getRoot(f, -10.0, 10.0);
+  public static void brentSingleRootFinderDemo(final PrintStream out) {
+    final RealPolynomialFunction1D f = getFunction();
+    final BrentSingleRootFinder brent = new BrentSingleRootFinder();
+    final java.lang.Double root = brent.getRoot(f, -10.0, 10.0);
     out.println(root);
   }
 
   // @export "brentSingleRootFinderNotBracketingDemo"
-  public static void brentSingleRootFinderNotBracketingDemo(PrintStream out) {
-    RealPolynomialFunction1D f = getFunction();
-    BrentSingleRootFinder brent = new BrentSingleRootFinder();
+  public static void brentSingleRootFinderNotBracketingDemo(final PrintStream out) {
+    final RealPolynomialFunction1D f = getFunction();
+    final BrentSingleRootFinder brent = new BrentSingleRootFinder();
     try {
       out.println("Trying to call getRoot with arguments that don't bracket the root...");
       brent.getRoot(f, -1.0, 1.0);
-    } catch (java.lang.IllegalArgumentException e) {
+    } catch (final java.lang.IllegalArgumentException e) {
       out.println("IllegalArgumentException called");
     }
   }

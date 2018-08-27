@@ -28,7 +28,7 @@ public final class YieldCurveSelector implements DistinctMarketDataSelector {
 
   private final YieldCurveKey _key;
 
-  private YieldCurveSelector(YieldCurveKey key) {
+  private YieldCurveSelector(final YieldCurveKey key) {
     _key = ArgumentChecker.notNull(key, "key");
   }
 
@@ -38,7 +38,7 @@ public final class YieldCurveSelector implements DistinctMarketDataSelector {
    * @param yieldCurveKey the key of the yield curve to be shifted, not null
    * @return a new MarketDataSelector for the yield curve
    */
-  public static DistinctMarketDataSelector of(YieldCurveKey yieldCurveKey) {
+  public static DistinctMarketDataSelector of(final YieldCurveKey yieldCurveKey) {
     return new YieldCurveSelector(yieldCurveKey);
   }
 
@@ -48,11 +48,11 @@ public final class YieldCurveSelector implements DistinctMarketDataSelector {
   }
 
   @Override
-  public DistinctMarketDataSelector findMatchingSelector(ValueSpecification valueSpecification,
-                                                         String calculationConfigurationName,
-                                                         SelectorResolver resolver) {
-    Currency currency = Currency.of(valueSpecification.getTargetSpecification().getUniqueId().getValue());
-    String curve = valueSpecification.getProperties().getStrictValue(ValuePropertyNames.CURVE);
+  public DistinctMarketDataSelector findMatchingSelector(final ValueSpecification valueSpecification,
+                                                         final String calculationConfigurationName,
+                                                         final SelectorResolver resolver) {
+    final Currency currency = Currency.of(valueSpecification.getTargetSpecification().getUniqueId().getValue());
+    final String curve = valueSpecification.getProperties().getStrictValue(ValuePropertyNames.CURVE);
     if (_key.getName().equals(curve) && _key.getCurrency().equals(currency)) {
       return this;
     } else {
@@ -67,8 +67,8 @@ public final class YieldCurveSelector implements DistinctMarketDataSelector {
   }
 
   @SuppressWarnings("unchecked")
-  public static MarketDataSelector fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg) {
-    YieldCurveKey key = deserializer.fieldValueToObject(YieldCurveKey.class, msg.getByName(KEY));
+  public static MarketDataSelector fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final YieldCurveKey key = deserializer.fieldValueToObject(YieldCurveKey.class, msg.getByName(KEY));
     return new YieldCurveSelector(key);
   }
 
@@ -78,7 +78,7 @@ public final class YieldCurveSelector implements DistinctMarketDataSelector {
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }

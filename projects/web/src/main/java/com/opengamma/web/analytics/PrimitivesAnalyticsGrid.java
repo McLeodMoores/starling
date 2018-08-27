@@ -36,7 +36,7 @@ import com.opengamma.engine.view.compilation.CompiledViewDefinition;
    * @return The viewport
    */
   @Override
-  protected MainGridViewport createViewport(ViewportDefinition viewportDefinition, String callbackId, String structureCallbackId, ResultsCache cache) {
+  protected MainGridViewport createViewport(final ViewportDefinition viewportDefinition, final String callbackId, final String structureCallbackId, final ResultsCache cache) {
     return new PrimitivesGridViewport(getGridStructure(), callbackId, structureCallbackId, viewportDefinition, getViewCycle(), cache);
   }
 
@@ -47,10 +47,10 @@ import com.opengamma.engine.view.compilation.CompiledViewDefinition;
 
   /**
    * Factory method for creating a primitives grid that doesn't contain any data.
-   * 
+   *
    * @return An empty primitives grid
    */
-  /* package */static PrimitivesAnalyticsGrid empty(String gridId) {
+  /* package */static PrimitivesAnalyticsGrid empty(final String gridId) {
     return new PrimitivesAnalyticsGrid(PrimitivesGridStructure.empty(), gridId, new DummyTargetResolver(),
         FunctionRepositoryFactory.constructRepositoryFactory(new InMemoryFunctionRepository()), new NoOpViewportListener());
   }

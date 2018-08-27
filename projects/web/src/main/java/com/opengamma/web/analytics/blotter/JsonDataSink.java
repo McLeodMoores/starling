@@ -26,40 +26,40 @@ import com.opengamma.util.ArgumentChecker;
   /** For converting object values to strings to populate the JSON. */
   private final Converters _converters;
 
-  /* package */ JsonDataSink(Converters converters) {
+  /* package */ JsonDataSink(final Converters converters) {
     ArgumentChecker.notNull(converters, "converters");
     _converters = converters;
   }
 
   @Override
-  public void setBeanData(MetaBean metaBean, Bean bean) {
+  public void setBeanData(final MetaBean metaBean, final Bean bean) {
     _json.put("type", metaBean.beanType().getSimpleName());
   }
 
   @Override
-  public void setValue(String propertyName, Object value) {
+  public void setValue(final String propertyName, final Object value) {
     _json.put(propertyName, value);
   }
 
   @Override
-  public void setCollection(String propertyName, Collection<?> values) {
+  public void setCollection(final String propertyName, final Collection<?> values) {
     _json.put(propertyName, values);
   }
 
   @Override
-  public void setMap(String propertyName, Map<?, ?> values) {
+  public void setMap(final String propertyName, final Map<?, ?> values) {
     _json.put(propertyName, values);
   }
 
   @Override
-  public Object convert(Object value, MetaProperty<?> property, Class<?> type, BeanTraverser traverser) {
-    Object convertedValue = _converters.convert(value, property, type);
+  public Object convert(final Object value, final MetaProperty<?> property, final Class<?> type, final BeanTraverser traverser) {
+    final Object convertedValue = _converters.convert(value, property, type);
     if (convertedValue != Converters.CONVERSION_FAILED) {
       return convertedValue;
     }
     if (Bean.class.isAssignableFrom(value.getClass())) {
-      Bean bean = (Bean) value;
-      BuildingBeanVisitor<JSONObject> visitor = new BuildingBeanVisitor<>(bean, new JsonDataSink(_converters));
+      final Bean bean = (Bean) value;
+      final BuildingBeanVisitor<JSONObject> visitor = new BuildingBeanVisitor<>(bean, new JsonDataSink(_converters));
       return traverser.traverse(bean.metaBean(), visitor);
     } else {
       throw new IllegalArgumentException("Unable to convert " + value.getClass().getName());

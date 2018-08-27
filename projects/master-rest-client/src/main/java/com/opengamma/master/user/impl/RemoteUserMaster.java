@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.user.impl;
@@ -53,7 +53,7 @@ public class RemoteUserMaster
    * @param baseUri  the base target URI for all RESTful web services, not null
    * @param changeManager  the change manager, not null
    */
-  public RemoteUserMaster(final URI baseUri, ChangeManager changeManager) {
+  public RemoteUserMaster(final URI baseUri, final ChangeManager changeManager) {
     this(baseUri, changeManager, changeManager);
   }
 
@@ -64,17 +64,17 @@ public class RemoteUserMaster
    * @param userChangeManager  the change manager, not null
    * @param roleChangeManager  the change manager, not null
    */
-  public RemoteUserMaster(final URI baseUri, ChangeManager userChangeManager, ChangeManager roleChangeManager) {
+  public RemoteUserMaster(final URI baseUri, final ChangeManager userChangeManager, final ChangeManager roleChangeManager) {
     super(baseUri, userChangeManager);
     _roleMaster = new RemoteRoleMaster(baseUri.resolve("users"), roleChangeManager);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean nameExists(String userName) {
+  public boolean nameExists(final String userName) {
     ArgumentChecker.notNull(userName, "userName");
-    URI uri = DataUserMasterUris.uriNameExists(getBaseUri(), userName);
-    ClientResponse response = accessRemote(uri).get(ClientResponse.class);
+    final URI uri = DataUserMasterUris.uriNameExists(getBaseUri(), userName);
+    final ClientResponse response = accessRemote(uri).get(ClientResponse.class);
     if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
       return false;
     }
@@ -85,36 +85,36 @@ public class RemoteUserMaster
   }
 
   @Override
-  public ManageableUser getByName(String userName) {
+  public ManageableUser getByName(final String userName) {
     ArgumentChecker.notNull(userName, "userName");
-    URI uri = DataUserMasterUris.uriUserByName(getBaseUri(), userName);
+    final URI uri = DataUserMasterUris.uriUserByName(getBaseUri(), userName);
     return accessRemote(uri).get(ManageableUser.class);
   }
 
   @Override
-  public ManageableUser getById(ObjectId objectId) {
+  public ManageableUser getById(final ObjectId objectId) {
     ArgumentChecker.notNull(objectId, "objectId");
-    URI uri = DataUserMasterUris.uriUserById(getBaseUri(), objectId);
+    final URI uri = DataUserMasterUris.uriUserById(getBaseUri(), objectId);
     return accessRemote(uri).get(ManageableUser.class);
   }
 
   @Override
-  public UniqueId add(ManageableUser user) {
+  public UniqueId add(final ManageableUser user) {
     ArgumentChecker.notNull(user, "user");
-    URI uri = DataUserMasterUris.uriAdd(getBaseUri());
+    final URI uri = DataUserMasterUris.uriAdd(getBaseUri());
     return accessRemote(uri).post(UniqueId.class, user);
   }
 
   @Override
-  public UniqueId update(ManageableUser user) {
+  public UniqueId update(final ManageableUser user) {
     ArgumentChecker.notNull(user, "user");
     ArgumentChecker.notNull(user.getUniqueId(), "user.uniqueId");
-    URI uri = DataUserMasterUris.uriUserById(getBaseUri(), user.getUniqueId());
+    final URI uri = DataUserMasterUris.uriUserById(getBaseUri(), user.getUniqueId());
     return accessRemote(uri).put(UniqueId.class, user);
   }
 
   @Override
-  public UniqueId save(ManageableUser user) {
+  public UniqueId save(final ManageableUser user) {
     ArgumentChecker.notNull(user, "user");
     if (user.getUniqueId() != null) {
       return update(user);
@@ -124,37 +124,37 @@ public class RemoteUserMaster
   }
 
   @Override
-  public void removeByName(String userName) {
+  public void removeByName(final String userName) {
     ArgumentChecker.notNull(userName, "userName");
-    URI uri = DataUserMasterUris.uriUserByName(getBaseUri(), userName);
+    final URI uri = DataUserMasterUris.uriUserByName(getBaseUri(), userName);
     accessRemote(uri).delete();
   }
 
   @Override
-  public void removeById(ObjectId objectId) {
+  public void removeById(final ObjectId objectId) {
     ArgumentChecker.notNull(objectId, "objectId");
-    URI uri = DataUserMasterUris.uriUserById(getBaseUri(), objectId);
+    final URI uri = DataUserMasterUris.uriUserById(getBaseUri(), objectId);
     accessRemote(uri).delete();
   }
 
   @Override
-  public UserSearchResult search(UserSearchRequest request) {
+  public UserSearchResult search(final UserSearchRequest request) {
     ArgumentChecker.notNull(request, "request");
-    URI uri = DataUserMasterUris.uriSearch(getBaseUri());
+    final URI uri = DataUserMasterUris.uriSearch(getBaseUri());
     return accessRemote(uri).post(UserSearchResult.class, request);
   }
 
   @Override
-  public UserEventHistoryResult eventHistory(UserEventHistoryRequest request) {
+  public UserEventHistoryResult eventHistory(final UserEventHistoryRequest request) {
     ArgumentChecker.notNull(request, "request");
-    URI uri = DataUserMasterUris.uriEventHistory(getBaseUri(), request);
+    final URI uri = DataUserMasterUris.uriEventHistory(getBaseUri(), request);
     return accessRemote(uri).get(UserEventHistoryResult.class);
   }
 
   @Override
-  public UserAccount getAccount(String userName) {
+  public UserAccount getAccount(final String userName) {
     ArgumentChecker.notNull(userName, "userName");
-    URI uri = DataUserMasterUris.uriUserByName(getBaseUri(), userName);
+    final URI uri = DataUserMasterUris.uriUserByName(getBaseUri(), userName);
     return accessRemote(uri).get(UserAccount.class);
   }
 

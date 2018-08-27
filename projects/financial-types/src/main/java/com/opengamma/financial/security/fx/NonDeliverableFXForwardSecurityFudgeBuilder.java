@@ -46,13 +46,13 @@ public class NonDeliverableFXForwardSecurityFudgeBuilder extends AbstractFudgeBu
   public static final String DELIVER_IN_RECEIVE_CURRENCY_FIELD_NAME = "deliverInRecieveCurrency";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, NonDeliverableFXForwardSecurity object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final NonDeliverableFXForwardSecurity object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     NonDeliverableFXForwardSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
-  public static void toFudgeMsg(FudgeSerializer serializer, NonDeliverableFXForwardSecurity object, final MutableFudgeMsg msg) {
+  public static void toFudgeMsg(final FudgeSerializer serializer, final NonDeliverableFXForwardSecurity object, final MutableFudgeMsg msg) {
     FinancialSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     addToMessage(msg, VERSION_FIELD_NAME, VERSION);
     addToMessage(msg, PAY_CURRENCY_FIELD_NAME, object.getPayCurrency());
@@ -65,13 +65,13 @@ public class NonDeliverableFXForwardSecurityFudgeBuilder extends AbstractFudgeBu
   }
 
   @Override
-  public NonDeliverableFXForwardSecurity buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    NonDeliverableFXForwardSecurity object = new NonDeliverableFXForwardSecurity();
+  public NonDeliverableFXForwardSecurity buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final NonDeliverableFXForwardSecurity object = new NonDeliverableFXForwardSecurity();
     NonDeliverableFXForwardSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     return object;
   }
 
-  public static void fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg, NonDeliverableFXForwardSecurity object) {
+  public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final NonDeliverableFXForwardSecurity object) {
     FinancialSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     if (msg.getInt(VERSION_FIELD_NAME) != VERSION) {
       throw new OpenGammaRuntimeException("Incorrect version of FXForwardSecurity persisted.  Object model has changed to not include underlying");

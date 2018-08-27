@@ -19,7 +19,7 @@ public class TradeRef {
   public TradeRef() {
   }
 
-  public TradeRef(Trade trade) {
+  public TradeRef(final Trade trade) {
     _trade = trade;
   }
 
@@ -27,7 +27,7 @@ public class TradeRef {
     return _trade;
   }
 
-  public void setTrade(Trade trade) {
+  public void setTrade(final Trade trade) {
     _trade = trade;
   }
 }

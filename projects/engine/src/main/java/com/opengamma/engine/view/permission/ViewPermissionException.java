@@ -13,15 +13,15 @@ import com.opengamma.util.PublicAPI;
  */
 @PublicAPI
 public class ViewPermissionException extends OpenGammaRuntimeException {
-  
+
   private static final long serialVersionUID = 1L;
 
-  public ViewPermissionException(String message) {
+  public ViewPermissionException(final String message) {
     super(message);
   }
-  
-  public ViewPermissionException(String message, Throwable cause) {
+
+  public ViewPermissionException(final String message, final Throwable cause) {
     super(message, cause);
   }
-  
+
 }

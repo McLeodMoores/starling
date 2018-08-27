@@ -25,7 +25,7 @@ public class MarketDataReplace implements StructureManipulator<Double> {
   /** The new value for the market data point. */
   private final double _value;
 
-  /* package */ MarketDataReplace(double value) {
+  /* package */ MarketDataReplace(final double value) {
     if (Double.isInfinite(value) || Double.isNaN(value)) {
       throw new IllegalArgumentException("value must not be infinite or NaN. value=" + value);
     }
@@ -33,9 +33,9 @@ public class MarketDataReplace implements StructureManipulator<Double> {
   }
 
   @Override
-  public Double execute(Double structure,
-                        ValueSpecification valueSpecification,
-                        FunctionExecutionContext executionContext) {
+  public Double execute(final Double structure,
+                        final ValueSpecification valueSpecification,
+                        final FunctionExecutionContext executionContext) {
     return _value;
   }
 
@@ -45,25 +45,25 @@ public class MarketDataReplace implements StructureManipulator<Double> {
   }
 
   public MutableFudgeMsg toFudgeMsg(final FudgeSerializer serializer) {
-    MutableFudgeMsg msg = serializer.newMessage();
+    final MutableFudgeMsg msg = serializer.newMessage();
     serializer.addToMessage(msg, VALUE, null, _value);
     return msg;
   }
 
   public static MarketDataReplace fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
-    Double scalingFactor = deserializer.fieldValueToObject(Double.class, msg.getByName(VALUE));
+    final Double scalingFactor = deserializer.fieldValueToObject(Double.class, msg.getByName(VALUE));
     return new MarketDataReplace(scalingFactor);
   }
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(final Object o) {
     if (this == o) {
       return true;
     }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    MarketDataReplace replace = (MarketDataReplace) o;
+    final MarketDataReplace replace = (MarketDataReplace) o;
 
     if (Double.compare(replace._value, _value) != 0) {
       return false;
@@ -73,8 +73,8 @@ public class MarketDataReplace implements StructureManipulator<Double> {
 
   @Override
   public int hashCode() {
-    long temp = Double.doubleToLongBits(_value);
-    return (int) (temp ^ (temp >>> 32));
+    final long temp = Double.doubleToLongBits(_value);
+    return (int) (temp ^ temp >>> 32);
   }
 
   @Override

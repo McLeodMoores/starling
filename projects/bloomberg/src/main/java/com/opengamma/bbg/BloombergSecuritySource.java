@@ -58,21 +58,21 @@ public final class BloombergSecuritySource extends AbstractSecuritySource implem
 
   /**
    * Creates a unique identifier.
-   * 
+   *
    * @param value the value, not null
    * @return a Bloomberg unique identifier, not null
    */
-  public static UniqueId createUniqueId(String value) {
+  public static UniqueId createUniqueId(final String value) {
     return UniqueId.of(BLOOMBERG_SCHEME, value);
   }
 
   /**
    * Creates the security master.
-   * 
+   *
    * @param refDataProvider the reference data provider, not null
    * @param exchangeDataProvider the data provider, not null
    */
-  public BloombergSecuritySource(ReferenceDataProvider refDataProvider, ExchangeDataProvider exchangeDataProvider) {
+  public BloombergSecuritySource(final ReferenceDataProvider refDataProvider, final ExchangeDataProvider exchangeDataProvider) {
     ArgumentChecker.notNull(refDataProvider, "Reference Data Provider");
     ArgumentChecker.notNull(exchangeDataProvider, "Exchange Data Provider");
     _refDataProvider = refDataProvider;
@@ -81,7 +81,7 @@ public final class BloombergSecuritySource extends AbstractSecuritySource implem
 
   //-------------------------------------------------------------------------
   @Override
-  public Security get(UniqueId uniqueId) {
+  public Security get(final UniqueId uniqueId) {
     if (BLOOMBERG_SCHEME.equals(uniqueId.getScheme()) == false) {
       throw new IllegalArgumentException("Identifier must be a Bloomberg unique identifier: " + uniqueId);
     }
@@ -89,7 +89,7 @@ public final class BloombergSecuritySource extends AbstractSecuritySource implem
   }
 
   @Override
-  public Security get(ObjectId objectId, VersionCorrection versionCorrection) {
+  public Security get(final ObjectId objectId, final VersionCorrection versionCorrection) {
     if (BLOOMBERG_SCHEME.equals(objectId.getScheme()) == false) {
       throw new IllegalArgumentException("Identifier must be a Bloomberg object identifier: " + objectId);
     }
@@ -97,8 +97,8 @@ public final class BloombergSecuritySource extends AbstractSecuritySource implem
   }
 
   @Override
-  public Collection<Security> get(ExternalIdBundle bundle) {
-    Security sec = getSingle(bundle);
+  public Collection<Security> get(final ExternalIdBundle bundle) {
+    final Security sec = getSingle(bundle);
     if (sec != null) {
       return Collections.<Security>singleton(getSingle(bundle));
     } else {
@@ -107,16 +107,16 @@ public final class BloombergSecuritySource extends AbstractSecuritySource implem
   }
 
   @Override
-  public Collection<Security> get(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
+  public Collection<Security> get(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     return get(bundle);
   }
 
   @Override
-  public ManageableSecurity getSingle(ExternalIdBundle bundle) {
+  public ManageableSecurity getSingle(final ExternalIdBundle bundle) {
     ArgumentChecker.notNull(bundle, "bundle");
     Validate.isTrue(bundle.size() > 0, "Cannot load security for empty identifiers");
 
-    Map<ExternalIdBundle, ManageableSecurity> securities = _bloombergBulkSecurityLoader.loadSecurity(Collections.singleton(bundle));
+    final Map<ExternalIdBundle, ManageableSecurity> securities = _bloombergBulkSecurityLoader.loadSecurity(Collections.singleton(bundle));
     if (securities.size() == 1) {
       return securities.get(bundle);
     } else {
@@ -126,7 +126,7 @@ public final class BloombergSecuritySource extends AbstractSecuritySource implem
   }
 
   @Override
-  public Security getSingle(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
+  public Security getSingle(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     return getSingle(bundle);
   }
 
@@ -139,7 +139,7 @@ public final class BloombergSecuritySource extends AbstractSecuritySource implem
   //-------------------------------------------------------------------------
   /**
    * Gets the security type by id.
-   * 
+   *
    * @param securityID the security id, null returns null
    * @return the security type, null if not found
    */
@@ -147,32 +147,32 @@ public final class BloombergSecuritySource extends AbstractSecuritySource implem
     return ReferenceDataProviderUtils.singleFieldSearch(securityID, FIELD_SECURITY_TYPE, _refDataProvider);
   }
 
-  private Security getSecurity(String bbgIdValue) {
-    ExternalId bbgId = ExternalSchemes.bloombergBuidSecurityId(bbgIdValue);
-    ExternalIdBundle bundle = ExternalIdBundle.of(bbgId);
+  private Security getSecurity(final String bbgIdValue) {
+    final ExternalId bbgId = ExternalSchemes.bloombergBuidSecurityId(bbgIdValue);
+    final ExternalIdBundle bundle = ExternalIdBundle.of(bbgId);
     return getSingle(bundle);
   }
 
   @Override
-  public Map<UniqueId, Security> get(Collection<UniqueId> uniqueIds) {
+  public Map<UniqueId, Security> get(final Collection<UniqueId> uniqueIds) {
     final Map<UniqueId, Security> result = Maps.newHashMap();
-    Map<ExternalIdBundle, UniqueId> uniqueIdMap = createBundle2UniqueIdMap(uniqueIds);
-    Map<ExternalIdBundle, ManageableSecurity> securities = _bloombergBulkSecurityLoader.loadSecurity(uniqueIdMap.keySet());
-    for (Entry<ExternalIdBundle, ManageableSecurity> entry : securities.entrySet()) {
+    final Map<ExternalIdBundle, UniqueId> uniqueIdMap = createBundle2UniqueIdMap(uniqueIds);
+    final Map<ExternalIdBundle, ManageableSecurity> securities = _bloombergBulkSecurityLoader.loadSecurity(uniqueIdMap.keySet());
+    for (final Entry<ExternalIdBundle, ManageableSecurity> entry : securities.entrySet()) {
       result.put(uniqueIdMap.get(entry.getKey()), entry.getValue());
     }
     return result;
   }
 
-  private Map<ExternalIdBundle, UniqueId> createBundle2UniqueIdMap(Collection<UniqueId> uniqueIds) {
-    Map<ExternalIdBundle, UniqueId> result = Maps.newHashMap();
-    for (UniqueId uniqueId : uniqueIds) {
+  private Map<ExternalIdBundle, UniqueId> createBundle2UniqueIdMap(final Collection<UniqueId> uniqueIds) {
+    final Map<ExternalIdBundle, UniqueId> result = Maps.newHashMap();
+    for (final UniqueId uniqueId : uniqueIds) {
       if (BLOOMBERG_SCHEME.equals(uniqueId.getScheme()) == false) {
         throw new IllegalArgumentException("Identifier must be a Bloomberg unique identifier: " + uniqueId);
       }
-      String bbgIdValue = uniqueId.getValue();
-      ExternalId bbgId = ExternalSchemes.bloombergBuidSecurityId(bbgIdValue);
-      ExternalIdBundle bundle = ExternalIdBundle.of(bbgId);
+      final String bbgIdValue = uniqueId.getValue();
+      final ExternalId bbgId = ExternalSchemes.bloombergBuidSecurityId(bbgIdValue);
+      final ExternalIdBundle bundle = ExternalIdBundle.of(bbgId);
       result.put(bundle, uniqueId);
     }
     return result;

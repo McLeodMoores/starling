@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.instrument.payment;
@@ -27,7 +27,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Class describing an average coupon by weighted mean of index values with difference fixing dates. 
+ * Class describing an average coupon by weighted mean of index values with difference fixing dates.
  * The weighted averages over several sub-periods are compounded over the total period with "falt compounding" for the spread.
  */
 public class CouponIborAverageFixingDatesCompoundingFlatSpreadDefinition extends CouponDefinition
@@ -310,7 +310,7 @@ public class CouponIborAverageFixingDatesCompoundingFlatSpreadDefinition extends
   }
 
   @Override
-  public Coupon toDerivative(ZonedDateTime dateTime, DoubleTimeSeries<ZonedDateTime> indexFixingTimeSeries) {
+  public Coupon toDerivative(final ZonedDateTime dateTime, final DoubleTimeSeries<ZonedDateTime> indexFixingTimeSeries) {
     final LocalDate dateConversion = dateTime.toLocalDate();
     ArgumentChecker.notNull(indexFixingTimeSeries, "Index fixing time series");
     ArgumentChecker.isTrue(!dateConversion.isAfter(getPaymentDate().toLocalDate()), "date is after payment date");
@@ -329,7 +329,7 @@ public class CouponIborAverageFixingDatesCompoundingFlatSpreadDefinition extends
     int posDate = 0;
     double sumCpa = 0.0;
     double amountAccruedSubPeriod = 0.0;
-    while (posPeriod < nPeriods && !(dayConversion.isBefore(getFixingDates()[posPeriod][0].toLocalDate()))) {
+    while (posPeriod < nPeriods && !dayConversion.isBefore(getFixingDates()[posPeriod][0].toLocalDate())) {
       amountAccruedSubPeriod = 0.0;
       posDate = 0;
       nDates[posPeriod] = getFixingDates()[posPeriod].length;
@@ -422,7 +422,7 @@ public class CouponIborAverageFixingDatesCompoundingFlatSpreadDefinition extends
    */
   @Override
   @Deprecated
-  public Coupon toDerivative(ZonedDateTime date, DoubleTimeSeries<ZonedDateTime> data, String... yieldCurveNames) {
+  public Coupon toDerivative(final ZonedDateTime date, final DoubleTimeSeries<ZonedDateTime> data, final String... yieldCurveNames) {
     throw new NotImplementedException("toDerivative not implemented with yield curve names.");
   }
 
@@ -444,17 +444,17 @@ public class CouponIborAverageFixingDatesCompoundingFlatSpreadDefinition extends
     result = prime * result + Arrays.deepHashCode(_fixingPeriodAccrualFactors);
     result = prime * result + Arrays.deepHashCode(_fixingPeriodEndDates);
     result = prime * result + Arrays.deepHashCode(_fixingPeriodStartDates);
-    result = prime * result + ((_index == null) ? 0 : _index.hashCode());
+    result = prime * result + (_index == null ? 0 : _index.hashCode());
     result = prime * result + Arrays.hashCode(_paymentAccrualFactors);
     long temp;
     temp = Double.doubleToLongBits(_spread);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + Arrays.deepHashCode(_weights);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -464,7 +464,7 @@ public class CouponIborAverageFixingDatesCompoundingFlatSpreadDefinition extends
     if (!(obj instanceof CouponIborAverageFixingDatesCompoundingFlatSpreadDefinition)) {
       return false;
     }
-    CouponIborAverageFixingDatesCompoundingFlatSpreadDefinition other = (CouponIborAverageFixingDatesCompoundingFlatSpreadDefinition) obj;
+    final CouponIborAverageFixingDatesCompoundingFlatSpreadDefinition other = (CouponIborAverageFixingDatesCompoundingFlatSpreadDefinition) obj;
     if (!Arrays.deepEquals(_fixingDates, other._fixingDates)) {
       return false;
     }

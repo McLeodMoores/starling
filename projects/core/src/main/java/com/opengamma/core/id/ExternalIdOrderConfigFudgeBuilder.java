@@ -26,9 +26,9 @@ import com.opengamma.util.fudgemsg.AbstractFudgeBuilder;
 public class ExternalIdOrderConfigFudgeBuilder extends AbstractFudgeBuilder implements FudgeBuilder<ExternalIdOrderConfig> {
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, ExternalIdOrderConfig object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final ExternalIdOrderConfig object) {
     final MutableFudgeMsg msg = serializer.newMessage();
-    for (Map.Entry<ExternalScheme, Integer> entry : object.getRateMap().entrySet()) {
+    for (final Map.Entry<ExternalScheme, Integer> entry : object.getRateMap().entrySet()) {
       final MutableFudgeMsg entryMsg = serializer.newMessage();
       serializer.addToMessage(entryMsg, "scheme", null, entry.getKey().getName());
       serializer.addToMessage(entryMsg, "rating", null, entry.getValue());
@@ -38,15 +38,15 @@ public class ExternalIdOrderConfigFudgeBuilder extends AbstractFudgeBuilder impl
   }
 
   @Override
-  public ExternalIdOrderConfig buildObject(FudgeDeserializer deserializer, FudgeMsg message) {
-    Map<ExternalScheme, Integer> properMap = Maps.newHashMap();
-    for (FudgeField field : message.getAllByName("entry")) {
-      FudgeMsg entryMsg = deserializer.fieldValueToObject(FudgeMsg.class, field);
-      ExternalScheme scheme = ExternalScheme.of(entryMsg.getString("scheme"));
-      int rating = entryMsg.getInt("rating");
+  public ExternalIdOrderConfig buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
+    final Map<ExternalScheme, Integer> properMap = Maps.newHashMap();
+    for (final FudgeField field : message.getAllByName("entry")) {
+      final FudgeMsg entryMsg = deserializer.fieldValueToObject(FudgeMsg.class, field);
+      final ExternalScheme scheme = ExternalScheme.of(entryMsg.getString("scheme"));
+      final int rating = entryMsg.getInt("rating");
       properMap.put(scheme, rating);
     }
-    ExternalIdOrderConfig config = new ExternalIdOrderConfig();
+    final ExternalIdOrderConfig config = new ExternalIdOrderConfig();
     config.setRateMap(properMap);
     return config;
   }

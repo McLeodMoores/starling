@@ -71,7 +71,7 @@ public class SequencePartitioningViewProcessWorkerTest {
     }
 
     @Override
-    public void updateViewDefinition(ViewDefinition viewDefinition) {
+    public void updateViewDefinition(final ViewDefinition viewDefinition) {
       _viewDefinition = viewDefinition;
     }
 
@@ -87,7 +87,7 @@ public class SequencePartitioningViewProcessWorkerTest {
     }
 
     @Override
-    public boolean join(long timeout) throws InterruptedException {
+    public boolean join(final long timeout) throws InterruptedException {
       _thread.join(timeout);
       return !_thread.isAlive();
     }
@@ -108,7 +108,7 @@ public class SequencePartitioningViewProcessWorkerTest {
     public void run() {
       boolean compiled = false;
       do {
-        ViewCycleExecutionOptions options = _options.getExecutionSequence().poll(_options.getDefaultExecutionOptions());
+        final ViewCycleExecutionOptions options = _options.getExecutionSequence().poll(_options.getDefaultExecutionOptions());
         if (options == null) {
           _context.workerCompleted();
           return;
@@ -122,7 +122,7 @@ public class SequencePartitioningViewProcessWorkerTest {
         if (_delay > 0) {
           try {
             Thread.sleep(_delay);
-          } catch (InterruptedException e) {
+          } catch (final InterruptedException e) {
             break;
           }
         }
@@ -143,7 +143,7 @@ public class SequencePartitioningViewProcessWorkerTest {
     }
 
     @Override
-    public ViewProcessWorker createWorker(ViewProcessWorkerContext context, ViewExecutionOptions executionOptions, ViewDefinition viewDefinition) {
+    public ViewProcessWorker createWorker(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions, final ViewDefinition viewDefinition) {
       return new ViewProcessWorkerMock(context, executionOptions, viewDefinition, _delay);
     }
 
@@ -152,7 +152,7 @@ public class SequencePartitioningViewProcessWorkerTest {
   public void testFiniteSequence() throws InterruptedException {
     final ViewProcessWorkerFactoryMock underlying = new ViewProcessWorkerFactoryMock(0);
     final Instant t = Instant.now();
-    final List<ViewCycleExecutionOptions> cycles = new ArrayList<ViewCycleExecutionOptions>(20);
+    final List<ViewCycleExecutionOptions> cycles = new ArrayList<>(20);
     for (int i = 0; i < 37; i++) {
       cycles.add(ViewCycleExecutionOptions.builder().setValuationTime(t.plusSeconds(i)).create());
     }

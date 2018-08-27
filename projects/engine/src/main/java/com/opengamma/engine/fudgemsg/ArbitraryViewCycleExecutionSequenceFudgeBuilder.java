@@ -24,10 +24,10 @@ import com.opengamma.engine.view.execution.ViewCycleExecutionOptions;
 public class ArbitraryViewCycleExecutionSequenceFudgeBuilder implements FudgeBuilder<ArbitraryViewCycleExecutionSequence> {
 
   private static final String SEQUENCE_FIELD = "sequence";
-  
+
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, ArbitraryViewCycleExecutionSequence object) {
-    MutableFudgeMsg msg = serializer.newMessage();
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final ArbitraryViewCycleExecutionSequence object) {
+    final MutableFudgeMsg msg = serializer.newMessage();
     msg.add(0, ArbitraryViewCycleExecutionSequence.class.getName());
     serializer.addToMessage(msg, SEQUENCE_FIELD, null, object.getRemainingSequence());
     return msg;
@@ -35,8 +35,8 @@ public class ArbitraryViewCycleExecutionSequenceFudgeBuilder implements FudgeBui
 
   @SuppressWarnings("unchecked")
   @Override
-  public ArbitraryViewCycleExecutionSequence buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    List<ViewCycleExecutionOptions> sequence = deserializer.fieldValueToObject(List.class, msg.getByName(SEQUENCE_FIELD));
+  public ArbitraryViewCycleExecutionSequence buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final List<ViewCycleExecutionOptions> sequence = deserializer.fieldValueToObject(List.class, msg.getByName(SEQUENCE_FIELD));
     return new ArbitraryViewCycleExecutionSequence(sequence);
   }
 

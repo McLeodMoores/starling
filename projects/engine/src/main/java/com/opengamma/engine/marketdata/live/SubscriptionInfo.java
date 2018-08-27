@@ -32,7 +32,7 @@ public class SubscriptionInfo {
    * @param state the current state of the market data, not null
    * @param currentValue the value(s) held for this subscription, may be null
    */
-  public SubscriptionInfo(int subscriberCount, String state, Object currentValue) {
+  public SubscriptionInfo(final int subscriberCount, final String state, final Object currentValue) {
     ArgumentChecker.notNull(state, "state");
     _subscriberCount = subscriberCount;
     _state = state;

@@ -20,12 +20,12 @@ import com.sun.jersey.api.client.ClientResponse.Status;
 public class IllegalArgumentExceptionMapperTest extends AbstractExceptionMapperTestHelper {
 
   @Test(dataProvider="mediaTypes")
-  public void test_mapping(MediaType mediaType) throws Exception {
-    IllegalArgumentException ex = new IllegalArgumentException("Test message");
-    IllegalArgumentExceptionMapper mapper = new IllegalArgumentExceptionMapper();
+  public void test_mapping(final MediaType mediaType) throws Exception {
+    final IllegalArgumentException ex = new IllegalArgumentException("Test message");
+    final IllegalArgumentExceptionMapper mapper = new IllegalArgumentExceptionMapper();
     init(mapper, mediaType);
-    
-    Response test = mapper.toResponse(ex);
+
+    final Response test = mapper.toResponse(ex);
     testResult(test, Status.BAD_REQUEST, ex);
   }
 

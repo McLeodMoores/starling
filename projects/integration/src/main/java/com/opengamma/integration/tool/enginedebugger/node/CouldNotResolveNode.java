@@ -12,12 +12,12 @@ import com.opengamma.engine.value.ValueRequirement;
  */
 public class CouldNotResolveNode extends ValueRequirementNode {
 
-  public CouldNotResolveNode(Object parent, ValueRequirement valueRequirement) {
+  public CouldNotResolveNode(final Object parent, final ValueRequirement valueRequirement) {
     super(parent, valueRequirement);
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -27,7 +27,7 @@ public class CouldNotResolveNode extends ValueRequirementNode {
     if (!(obj instanceof CouldNotResolveNode)) {
       return false;
     }
-    CouldNotResolveNode other = (CouldNotResolveNode) obj;
+    final CouldNotResolveNode other = (CouldNotResolveNode) obj;
     if (_valueRequirement == null) {
       if (other._valueRequirement != null) {
         return false;
@@ -37,6 +37,6 @@ public class CouldNotResolveNode extends ValueRequirementNode {
     }
     return true;
   }
-  
+
   // hashCode from superclass deliberately
 }

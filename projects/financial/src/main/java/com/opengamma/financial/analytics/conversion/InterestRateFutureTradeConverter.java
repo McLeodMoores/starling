@@ -29,20 +29,21 @@ import com.opengamma.util.ArgumentChecker;
 public class InterestRateFutureTradeConverter implements TradeConverter {
 
   private final InterestRateFutureSecurityConverter _securityConverter;
-  
-  public InterestRateFutureTradeConverter(SecuritySource securitySource,
-                                          HolidaySource holidaySource,
-                                          ConventionSource conventionSource,
-                                          RegionSource regionSource) {
+
+  public InterestRateFutureTradeConverter(final SecuritySource securitySource,
+                                          final HolidaySource holidaySource,
+                                          final ConventionSource conventionSource,
+                                          final RegionSource regionSource) {
     _securityConverter = new InterestRateFutureSecurityConverter(securitySource, holidaySource, conventionSource, regionSource);
   }
-  
-  public InstrumentDefinitionWithData<?, Double> convert(Trade trade) {
+
+  @Override
+  public InstrumentDefinitionWithData<?, Double> convert(final Trade trade) {
     ArgumentChecker.notNull(trade, "trade");
     final Security security = trade.getSecurity();
     if (security instanceof InterestRateFutureSecurity) {
       final InterestRateFutureSecurityDefinition securityDefinition = (InterestRateFutureSecurityDefinition) ((InterestRateFutureSecurity) security).accept(_securityConverter);
-      Double tradePrice = trade.getPremium(); // TODO: [PLAT-1958] The trade price is stored in the trade premium. 
+      final Double tradePrice = trade.getPremium(); // TODO: [PLAT-1958] The trade price is stored in the trade premium.
       if (tradePrice == null) {
         throw new OpenGammaRuntimeException("Trade premium should not be null.");
       }

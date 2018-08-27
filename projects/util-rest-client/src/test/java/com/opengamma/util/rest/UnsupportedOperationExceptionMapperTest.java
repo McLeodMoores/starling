@@ -20,12 +20,12 @@ import com.sun.jersey.api.client.ClientResponse.Status;
 public class UnsupportedOperationExceptionMapperTest extends AbstractExceptionMapperTestHelper {
 
   @Test(dataProvider="mediaTypes")
-  public void test_mapping(MediaType mediaType) throws Exception {
-    UnsupportedOperationException ex = new UnsupportedOperationException("Test message");
-    UnsupportedOperationExceptionMapper mapper = new UnsupportedOperationExceptionMapper();
+  public void test_mapping(final MediaType mediaType) throws Exception {
+    final UnsupportedOperationException ex = new UnsupportedOperationException("Test message");
+    final UnsupportedOperationExceptionMapper mapper = new UnsupportedOperationExceptionMapper();
     init(mapper, mediaType);
-    
-    Response test = mapper.toResponse(ex);
+
+    final Response test = mapper.toResponse(ex);
     testResult(test, Status.SERVICE_UNAVAILABLE, ex);
   }
 

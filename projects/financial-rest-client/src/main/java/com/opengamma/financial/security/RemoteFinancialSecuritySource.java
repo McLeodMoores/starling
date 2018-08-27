@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.security;
@@ -21,7 +21,7 @@ public class RemoteFinancialSecuritySource extends RemoteSecuritySource implemen
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param baseUri  the base target URI for all RESTful web services, not null
    */
   public RemoteFinancialSecuritySource(final URI baseUri) {
@@ -30,7 +30,7 @@ public class RemoteFinancialSecuritySource extends RemoteSecuritySource implemen
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param baseUri  the base target URI for all RESTful web services, not null
    * @param changeManager  the change manager, not null
    */
@@ -41,10 +41,10 @@ public class RemoteFinancialSecuritySource extends RemoteSecuritySource implemen
   //-------------------------------------------------------------------------
   @SuppressWarnings("unchecked")
   @Override
-  public Collection<Security> getBondsWithIssuerName(String issuerName) {
+  public Collection<Security> getBondsWithIssuerName(final String issuerName) {
     ArgumentChecker.notNull(issuerName, "issuerName");
-    
-    URI uri = DataFinancialSecuritySourceUris.uriSearchBonds(getBaseUri(), issuerName);
+
+    final URI uri = DataFinancialSecuritySourceUris.uriSearchBonds(getBaseUri(), issuerName);
     return accessRemote(uri).get(FudgeListWrapper.class).getList();
   }
 

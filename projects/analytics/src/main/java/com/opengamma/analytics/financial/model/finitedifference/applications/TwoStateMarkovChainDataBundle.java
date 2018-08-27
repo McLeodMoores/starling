@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.finitedifference.applications;
@@ -8,7 +8,7 @@ package com.opengamma.analytics.financial.model.finitedifference.applications;
 import org.apache.commons.lang.Validate;
 
 /**
- * 
+ *
  */
 public class TwoStateMarkovChainDataBundle {
   private final double _vol1;
@@ -21,12 +21,12 @@ public class TwoStateMarkovChainDataBundle {
   private final double _p0;
 
   /**
-   * 
-  * @param vol1 Volatility of state 1 
-   * @param vol2  Volatility of state 1 
-   * @param lambda12 Transition rate from state 1 to 2 
-   * @param lambda21 Transition rate from state 2 to 1 
-   * @param probS1 Probability of starting in state 1 
+   *
+  * @param vol1 Volatility of state 1
+   * @param vol2  Volatility of state 1
+   * @param lambda12 Transition rate from state 1 to 2
+   * @param lambda21 Transition rate from state 2 to 1
+   * @param probS1 Probability of starting in state 1
    */
   public TwoStateMarkovChainDataBundle(final double vol1, final double vol2,
       final double lambda12, final double lambda21, final double probS1) {
@@ -34,12 +34,12 @@ public class TwoStateMarkovChainDataBundle {
   }
 
   /**
-   * 
-   * @param vol1 Volatility of state 1 
-   * @param vol2  Volatility of state 1 
-   * @param lambda12 Transition rate from state 1 to 2 
-   * @param lambda21 Transition rate from state 2 to 1 
-   * @param probS1 Probability of starting in state 1 
+   *
+   * @param vol1 Volatility of state 1
+   * @param vol2  Volatility of state 1
+   * @param lambda12 Transition rate from state 1 to 2
+   * @param lambda21 Transition rate from state 2 to 1
+   * @param probS1 Probability of starting in state 1
    * @param beta1 CEV parameter in state 1
    * @param beta2 CEV parameter in state 2
    */
@@ -62,7 +62,7 @@ public class TwoStateMarkovChainDataBundle {
     _lambda21 = lambda21;
     _p0 = probS1;
 
-    double sum = lambda12 + lambda21;
+    final double sum = lambda12 + lambda21;
     if (sum == 0) {
       _pi1 = probS1;
     } else {
@@ -136,24 +136,24 @@ public class TwoStateMarkovChainDataBundle {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_beta1);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_beta2);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_lambda12);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_lambda21);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_p0);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_vol1);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_vol2);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -163,7 +163,7 @@ public class TwoStateMarkovChainDataBundle {
     if (getClass() != obj.getClass()) {
       return false;
     }
-    TwoStateMarkovChainDataBundle other = (TwoStateMarkovChainDataBundle) obj;
+    final TwoStateMarkovChainDataBundle other = (TwoStateMarkovChainDataBundle) obj;
     if (Double.doubleToLongBits(_beta1) != Double.doubleToLongBits(other._beta1)) {
       return false;
     }

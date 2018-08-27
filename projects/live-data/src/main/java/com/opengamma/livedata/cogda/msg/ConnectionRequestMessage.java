@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.livedata.cogda.msg;
@@ -48,8 +48,8 @@ public class ConnectionRequestMessage extends DirectBean {
   @PropertyDefinition(validate = "notNull")
   private MutableFudgeMsg _capabilities = OpenGammaFudgeContext.getInstance().newMessage();
 
-  public void applyCapabilities(FudgeMsg capabilities) {
-    for (FudgeField field : capabilities.getAllFields()) {
+  public void applyCapabilities(final FudgeMsg capabilities) {
+    for (final FudgeField field : capabilities.getAllFields()) {
       getCapabilities().add(field);
     }
   }

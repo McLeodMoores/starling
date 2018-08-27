@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics;
@@ -24,20 +24,20 @@ public abstract class LabelledObjectMatrix1D<TKey extends Comparable<? super TKe
   private final Object[] _labels;
   private final TValue[] _values;
   private final TTolerance _defaultTolerance;
-  
+
   public LabelledObjectMatrix1D(final TKey[] keys, final TValue[] values, final TTolerance defaultTolerance) {
     this(keys, LabelledMatrixUtils.toString(keys), values, defaultTolerance);
   }
-  
+
   public LabelledObjectMatrix1D(final TKey[] keys, final Object[] labels, final TValue[] values, final TTolerance defaultTolerance) {
     this(keys, labels, null, values, null, defaultTolerance);
   }
-  
+
   public LabelledObjectMatrix1D(final TKey[] keys, final String labelsTitle, final TValue[] values, final String valuesTitle, final TTolerance defaultTolerance) {
     this(keys, LabelledMatrixUtils.toString(keys), labelsTitle, values, valuesTitle, defaultTolerance);
   }
-  
-  public LabelledObjectMatrix1D(TKey[] keys, Object[] labels, String labelsTitle, TValue[] values, String valuesTitle, TTolerance defaultTolerance) {
+
+  public LabelledObjectMatrix1D(final TKey[] keys, final Object[] labels, final String labelsTitle, final TValue[] values, final String valuesTitle, final TTolerance defaultTolerance) {
     Validate.notNull(keys, "labels");
     Validate.notNull(labels, "label names");
     Validate.notNull(values, "values");
@@ -52,7 +52,7 @@ public abstract class LabelledObjectMatrix1D<TKey extends Comparable<? super TKe
     _defaultTolerance = defaultTolerance;
     quickSort();
   }
-  
+
   public TKey[] getKeys() {
     return _keys;
   }
@@ -60,7 +60,7 @@ public abstract class LabelledObjectMatrix1D<TKey extends Comparable<? super TKe
   public Object[] getLabels() {
     return _labels;
   }
-  
+
   public String getLabelsTitle() {
     return _labelsTitle;
   }
@@ -68,7 +68,7 @@ public abstract class LabelledObjectMatrix1D<TKey extends Comparable<? super TKe
   public TValue[] getValues() {
     return _values;
   }
-  
+
   public String getValuesTitle() {
     return _valuesTitle;
   }
@@ -84,7 +84,7 @@ public abstract class LabelledObjectMatrix1D<TKey extends Comparable<? super TKe
   /**
    * Compares two keys and indicates whether the first would be considered less than, equal to or greater than the
    * second.
-   * 
+   *
    * @param key1  the first key to compare, not null
    * @param key2  the second key to compare, not null
    * @param tolerance  the tolerance for equality of the keys
@@ -96,7 +96,7 @@ public abstract class LabelledObjectMatrix1D<TKey extends Comparable<? super TKe
   /**
    * Compares two keys using the default equality tolerance, and indicates whether the first would be considered less
    * than, equal to or greater than the second.
-   * 
+   *
    * @param key1  the first key to compare, not null
    * @param key2  the second key to compare, not null
    * @return the value 0 if {@code key1} is equal to {@code key2}; a value less than 0 if {@code key1} is less than
@@ -105,9 +105,9 @@ public abstract class LabelledObjectMatrix1D<TKey extends Comparable<? super TKe
   public int compare(final TKey key1, final TKey key2) {
     return compare(key1, key2, getDefaultTolerance());
   }
-  
+
   private void quickSort() {
-    (new ArrayQuickSorter<TKey>(_keys) {
+    new ArrayQuickSorter<TKey>(_keys) {
 
       @Override
       protected int compare(final TKey first, final TKey second) {
@@ -121,23 +121,23 @@ public abstract class LabelledObjectMatrix1D<TKey extends Comparable<? super TKe
         swap(_values, first, second);
       }
 
-    }).sort();
+    }.sort();
   }
-  
+
   @Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;
     result = prime * result + Arrays.hashCode(_keys);
     result = prime * result + Arrays.hashCode(_labels);
-    result = prime * result + ((_labelsTitle == null) ? 0 : _labelsTitle.hashCode());
+    result = prime * result + (_labelsTitle == null ? 0 : _labelsTitle.hashCode());
     result = prime * result + Arrays.hashCode(_values);
-    result = prime * result + ((_valuesTitle == null) ? 0 : _valuesTitle.hashCode());
+    result = prime * result + (_valuesTitle == null ? 0 : _valuesTitle.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -173,5 +173,5 @@ public abstract class LabelledObjectMatrix1D<TKey extends Comparable<? super TKe
     }
     return true;
   }
-  
+
 }

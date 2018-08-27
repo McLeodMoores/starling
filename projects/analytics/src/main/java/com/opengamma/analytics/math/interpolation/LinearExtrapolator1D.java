@@ -10,7 +10,7 @@ import org.apache.commons.lang.Validate;
 import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
 
 /**
- * 
+ *
  */
 public class LinearExtrapolator1D extends Interpolator1D {
   private static final long serialVersionUID = 1L;
@@ -21,7 +21,7 @@ public class LinearExtrapolator1D extends Interpolator1D {
     this(interpolator, 1e-8);
   }
 
-  public LinearExtrapolator1D(final Interpolator1D interpolator, double eps) {
+  public LinearExtrapolator1D(final Interpolator1D interpolator, final double eps) {
     Validate.notNull(interpolator, "interpolator");
     _interpolator = interpolator;
     _eps = eps;

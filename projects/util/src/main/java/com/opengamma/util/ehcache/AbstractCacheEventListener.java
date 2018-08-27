@@ -20,29 +20,29 @@ public abstract class AbstractCacheEventListener implements CacheEventListener {
   }
 
   @Override
-  public void notifyElementEvicted(Ehcache cache, Element element) {
+  public void notifyElementEvicted(final Ehcache cache, final Element element) {
   }
 
   @Override
-  public void notifyElementExpired(Ehcache cache, Element element) {
+  public void notifyElementExpired(final Ehcache cache, final Element element) {
   }
 
   @Override
-  public void notifyElementPut(Ehcache cache, Element element) throws CacheException {
+  public void notifyElementPut(final Ehcache cache, final Element element) throws CacheException {
   }
 
   @Override
-  public void notifyElementRemoved(Ehcache cache, Element element) throws CacheException {
+  public void notifyElementRemoved(final Ehcache cache, final Element element) throws CacheException {
   }
 
   @Override
-  public void notifyElementUpdated(Ehcache cache, Element element) throws CacheException {
+  public void notifyElementUpdated(final Ehcache cache, final Element element) throws CacheException {
   }
 
   @Override
-  public void notifyRemoveAll(Ehcache cache) {
+  public void notifyRemoveAll(final Ehcache cache) {
   }
-  
+
   @Override
   public Object clone() throws CloneNotSupportedException {
     throw new CloneNotSupportedException();

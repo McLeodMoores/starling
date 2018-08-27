@@ -35,7 +35,7 @@ public class DbBatchSearchTest extends AbstractDbBatchMasterWorkerTest {
   private static final Logger LOGGER = LoggerFactory.getLogger(DbBatchSearchTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public DbBatchSearchTest(String databaseType, String databaseVersion) {
+  public DbBatchSearchTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion);
     LOGGER.info("running testcases for {}", databaseType);
   }
@@ -44,67 +44,67 @@ public class DbBatchSearchTest extends AbstractDbBatchMasterWorkerTest {
 
   @Test
   public void testSearchBatchByMarketSnapshotUid() {
-    BatchRunSearchRequest batchRunSearchRequest = new BatchRunSearchRequest();    
+    final BatchRunSearchRequest batchRunSearchRequest = new BatchRunSearchRequest();
     batchRunSearchRequest.setMarketDataUid(_marketDataSnapshotUid);
-    Pair<List<RiskRun>, Paging> searchResult = _batchMaster.searchRiskRun(batchRunSearchRequest);
+    final Pair<List<RiskRun>, Paging> searchResult = _batchMaster.searchRiskRun(batchRunSearchRequest);
     assertTrue(searchResult.getFirst().size() > 0);
   }
 
   @Test
   public void testSearchBatchByMarketSnapshotUidNoResults() {
-    UniqueId nonExistentUid = UniqueId.of("MrkDta", "non_existent_market_data_snapshot_uid");
-    BatchRunSearchRequest batchRunSearchRequest = new BatchRunSearchRequest();
+    final UniqueId nonExistentUid = UniqueId.of("MrkDta", "non_existent_market_data_snapshot_uid");
+    final BatchRunSearchRequest batchRunSearchRequest = new BatchRunSearchRequest();
     batchRunSearchRequest.setMarketDataUid(nonExistentUid);
-    Pair<List<RiskRun>, Paging> searchResult = _batchMaster.searchRiskRun(batchRunSearchRequest);
+    final Pair<List<RiskRun>, Paging> searchResult = _batchMaster.searchRiskRun(batchRunSearchRequest);
     assertTrue(searchResult.getFirst().size() == 0);
   }
 
   @Test
   public void testSearchBatchByVersionCorrection() {
-    BatchRunSearchRequest batchRunSearchRequest = new BatchRunSearchRequest();
+    final BatchRunSearchRequest batchRunSearchRequest = new BatchRunSearchRequest();
     batchRunSearchRequest.setVersionCorrection(_versionCorrection);
-    Pair<List<RiskRun>, Paging> searchResult = _batchMaster.searchRiskRun(batchRunSearchRequest);
+    final Pair<List<RiskRun>, Paging> searchResult = _batchMaster.searchRiskRun(batchRunSearchRequest);
     assertTrue(searchResult.getFirst().size() > 0);
   }
 
   @Test
   public void testSearchBatchByVersionCorrectionNoResults() {
-    BatchRunSearchRequest batchRunSearchRequest = new BatchRunSearchRequest();
+    final BatchRunSearchRequest batchRunSearchRequest = new BatchRunSearchRequest();
     batchRunSearchRequest.setVersionCorrection(VersionCorrection.of(Instant.now().minus(Duration.ofHours(3)), Instant.now()));
-    Pair<List<RiskRun>, Paging> searchResult = _batchMaster.searchRiskRun(batchRunSearchRequest);
+    final Pair<List<RiskRun>, Paging> searchResult = _batchMaster.searchRiskRun(batchRunSearchRequest);
     assertTrue(searchResult.getFirst().size() == 0);
   }
 
   @Test
   public void testSearchBatchByValuationTime() {
-    BatchRunSearchRequest batchRunSearchRequest = new BatchRunSearchRequest();
+    final BatchRunSearchRequest batchRunSearchRequest = new BatchRunSearchRequest();
     batchRunSearchRequest.setValuationTime(_valuationTime);
-    Pair<List<RiskRun>, Paging> searchResult = _batchMaster.searchRiskRun(batchRunSearchRequest);
+    final Pair<List<RiskRun>, Paging> searchResult = _batchMaster.searchRiskRun(batchRunSearchRequest);
     assertTrue(searchResult.getFirst().size() > 0);
   }
 
   @Test
   public void testSearchBatchByValuationTimeNoResults() {
-    BatchRunSearchRequest batchRunSearchRequest = new BatchRunSearchRequest();
+    final BatchRunSearchRequest batchRunSearchRequest = new BatchRunSearchRequest();
     batchRunSearchRequest.setValuationTime(Instant.now());
-    Pair<List<RiskRun>, Paging> searchResult = _batchMaster.searchRiskRun(batchRunSearchRequest);
+    final Pair<List<RiskRun>, Paging> searchResult = _batchMaster.searchRiskRun(batchRunSearchRequest);
     assertTrue(searchResult.getFirst().size() == 0);
   }
 
   @Test
   public void testSearchBatchByViewDefinition() {
-    BatchRunSearchRequest batchRunSearchRequest = new BatchRunSearchRequest();
+    final BatchRunSearchRequest batchRunSearchRequest = new BatchRunSearchRequest();
     batchRunSearchRequest.setViewDefinitionUid(_viewDefinitionUid);
-    Pair<List<RiskRun>, Paging> searchResult = _batchMaster.searchRiskRun(batchRunSearchRequest);
+    final Pair<List<RiskRun>, Paging> searchResult = _batchMaster.searchRiskRun(batchRunSearchRequest);
     assertTrue(searchResult.getFirst().size() > 0);
   }
 
   @Test
   public void testSearchBatchByViewDefinitionNoResults() {
-    UniqueId nonExistentUid = UniqueId.of("ViewDef", "non_existent_view_definition_uid");
-    BatchRunSearchRequest batchRunSearchRequest = new BatchRunSearchRequest();
+    final UniqueId nonExistentUid = UniqueId.of("ViewDef", "non_existent_view_definition_uid");
+    final BatchRunSearchRequest batchRunSearchRequest = new BatchRunSearchRequest();
     batchRunSearchRequest.setViewDefinitionUid(nonExistentUid);
-    Pair<List<RiskRun>, Paging> searchResult = _batchMaster.searchRiskRun(batchRunSearchRequest);
+    final Pair<List<RiskRun>, Paging> searchResult = _batchMaster.searchRiskRun(batchRunSearchRequest);
     assertTrue(searchResult.getFirst().size() == 0);
   }
 }

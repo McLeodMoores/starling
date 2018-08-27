@@ -31,7 +31,7 @@ import com.opengamma.service.VersionCorrectionProvider;
   /**
    * Creates the resolver using the supplied service context.
    */
-   /* package */ ServiceContextSecurityLinkResolver(ServiceContext serviceContext) {
+   /* package */ ServiceContextSecurityLinkResolver(final ServiceContext serviceContext) {
     super(serviceContext);
   }
 
@@ -41,16 +41,16 @@ import com.opengamma.service.VersionCorrectionProvider;
   }
 
   @Override
-  protected VersionCorrection getVersionCorrection(VersionCorrectionProvider vcProvider) {
+  protected VersionCorrection getVersionCorrection(final VersionCorrectionProvider vcProvider) {
     return vcProvider.getPortfolioVersionCorrection();
   }
 
   @Override
   @SuppressWarnings("unchecked")
-  protected S executeQuery(SecuritySource source,
-                           Class<S> type,
-                           ExternalIdBundle identifier,
-                           VersionCorrection versionCorrection) {
+  protected S executeQuery(final SecuritySource source,
+                           final Class<S> type,
+                           final ExternalIdBundle identifier,
+                           final VersionCorrection versionCorrection) {
     final S result = (S) source.getSingle(identifier, versionCorrection);
     if (result != null) {
       return result;

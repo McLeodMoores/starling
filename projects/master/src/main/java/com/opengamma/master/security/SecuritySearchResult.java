@@ -10,21 +10,21 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
 import org.joda.beans.JodaBeanUtils;
 import org.joda.beans.MetaProperty;
+import org.joda.beans.Property;
 import org.joda.beans.PropertyDefinition;
 import org.joda.beans.impl.direct.DirectBeanBuilder;
+import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.id.VersionCorrection;
 import com.opengamma.master.AbstractSearchResult;
 import com.opengamma.util.PublicSPI;
-import org.joda.beans.Bean;
-import org.joda.beans.Property;
-import org.joda.beans.impl.direct.DirectMetaProperty;
 
 /**
  * Result from searching for securities.
@@ -50,32 +50,32 @@ public class SecuritySearchResult extends AbstractSearchResult<SecurityDocument>
 
   /**
    * Creates an instance from a collection of documents.
-   * 
+   *
    * @param coll  the collection of documents to add, not null
    */
-  public SecuritySearchResult(Collection<SecurityDocument> coll) {
+  public SecuritySearchResult(final Collection<SecurityDocument> coll) {
     super(coll);
   }
 
   /**
    * Creates an instance specifying the version-correction searched for.
-   * 
+   *
    * @param versionCorrection  the version-correction of the data, not null
    */
-  public SecuritySearchResult(VersionCorrection versionCorrection) {
+  public SecuritySearchResult(final VersionCorrection versionCorrection) {
     setVersionCorrection(versionCorrection);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the returned securities from within the documents.
-   * 
+   *
    * @return the securities, not null
    */
   public List<ManageableSecurity> getSecurities() {
-    List<ManageableSecurity> result = new ArrayList<ManageableSecurity>();
+    final List<ManageableSecurity> result = new ArrayList<>();
     if (getDocuments() != null) {
-      for (SecurityDocument doc : getDocuments()) {
+      for (final SecurityDocument doc : getDocuments()) {
         result.add(doc.getSecurity());
       }
     }
@@ -84,7 +84,7 @@ public class SecuritySearchResult extends AbstractSearchResult<SecurityDocument>
 
   /**
    * Gets the first security, or null if no documents.
-   * 
+   *
    * @return the first security, null if none
    */
   public ManageableSecurity getFirstSecurity() {
@@ -96,7 +96,7 @@ public class SecuritySearchResult extends AbstractSearchResult<SecurityDocument>
    * <p>
    * This throws an exception if more than 1 result is actually available.
    * Thus, this method implies an assumption about uniqueness of the queried security.
-   * 
+   *
    * @return the matching security, not null
    * @throws IllegalStateException if no security was found
    */

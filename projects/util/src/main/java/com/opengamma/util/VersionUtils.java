@@ -51,29 +51,29 @@ public final class VersionUtils {
    * The version is read from a property file in the classpath with name
    * <code>"/" + projectName + ".properties"</code>.
    * This file is created by Ant during a Bamboo build. If no such file is found,
-   * the method assumes you are running a local build, and it will 
-   * return <code>"local-" + System.currentTimeMillis()</code> 
+   * the method assumes you are running a local build, and it will
+   * return <code>"local-" + System.currentTimeMillis()</code>
    * where <code>System.currentTimeMillis()</code> becomes fixed on the first
    * call within this VM.
-   * 
+   *
    * @param projectName  the name of the OpenGamma project, for example og-financial, not null
    * @return the current version of the specified project, not null
    */
-  public static String getVersion(String projectName) {
-    String fileName = "/" + projectName + ".properties";
-    
-    Properties properties = new Properties();
+  public static String getVersion(final String projectName) {
+    final String fileName = "/" + projectName + ".properties";
+
+    final Properties properties = new Properties();
     try (InputStream stream = VersionUtils.class.getResourceAsStream(fileName)) {
       if (stream == null) {
         return getLocalBuildVersion();
       }
       properties.load(stream);
-    } catch (IOException e) {
+    } catch (final IOException e) {
       LOGGER.error("Failed to read properties", e);
       return getLocalBuildVersion();
     }
-    
-    String version = properties.getProperty("version");
+
+    final String version = properties.getProperty("version");
     if (version == null) {
       return getLocalBuildVersion();
     }
@@ -91,18 +91,18 @@ public final class VersionUtils {
   //-------------------------------------------------------------------------
   /**
    * Derives the OpenGamma version from the classpath and dependencies.
-   * 
+   *
    * @return the version, null if not known
    */
   public static String deriveVersion() {
-    URL url = ClasspathHelper.forClass(VersionUtils.class, VersionUtils.class.getClassLoader());
+    final URL url = ClasspathHelper.forClass(VersionUtils.class, VersionUtils.class.getClassLoader());
     if (url != null && url.toString().contains(".jar")) {
       try {
         final String part = ClasspathHelper.cleanPath(url);
         try (JarFile myJar = new JarFile(part)) {
           final Manifest manifest = myJar.getManifest();
           if (manifest != null) {
-            Attributes attributes = manifest.getMainAttributes();
+            final Attributes attributes = manifest.getMainAttributes();
             if (attributes != null) {
               if (attributes.getValue(Attributes.Name.IMPLEMENTATION_VERSION) != null) {
                 return attributes.getValue(Attributes.Name.IMPLEMENTATION_VERSION);
@@ -113,12 +113,12 @@ public final class VersionUtils {
             }
           }
         }
-      } catch (Exception ex) {
+      } catch (final Exception ex) {
         LOGGER.warn(ex.getMessage(), ex);
       }
     } else {
-      List<DependencyInfo> dependencies = ClasspathUtils.getDependencies();
-      for (DependencyInfo dependency : dependencies) {
+      final List<DependencyInfo> dependencies = ClasspathUtils.getDependencies();
+      for (final DependencyInfo dependency : dependencies) {
         if ("og-util".equals(dependency.getArtifactId())) {
           return dependency.getVersion();
         }
@@ -129,18 +129,18 @@ public final class VersionUtils {
 
   /**
    * Derives the OpenGamma build from the classpath and dependencies.
-   * 
+   *
    * @return the build, null if not known
    */
   public static String deriveBuild() {
-    URL url = ClasspathHelper.forClass(VersionUtils.class, VersionUtils.class.getClassLoader());
+    final URL url = ClasspathHelper.forClass(VersionUtils.class, VersionUtils.class.getClassLoader());
     if (url != null && url.toString().contains(".jar")) {
       try {
         final String part = ClasspathHelper.cleanPath(url);
         try (JarFile myJar = new JarFile(part)) {
           final Manifest manifest = myJar.getManifest();
           if (manifest != null) {
-            Attributes attributes = manifest.getMainAttributes();
+            final Attributes attributes = manifest.getMainAttributes();
             if (attributes != null) {
               if (attributes.getValue(IMPLEMENTATION_BUILD) != null) {
                 return attributes.getValue(IMPLEMENTATION_BUILD);
@@ -148,7 +148,7 @@ public final class VersionUtils {
             }
           }
         }
-      } catch (Exception ex) {
+      } catch (final Exception ex) {
         LOGGER.warn(ex.getMessage(), ex);
       }
     }
@@ -159,18 +159,18 @@ public final class VersionUtils {
    * Derives the OpenGamma build ID from the classpath and dependencies.
    * <p>
    * This ID is derived from the CI server.
-   * 
+   *
    * @return the build ID, null if not known
    */
   public static String deriveBuildId() {
-    URL url = ClasspathHelper.forClass(VersionUtils.class, VersionUtils.class.getClassLoader());
+    final URL url = ClasspathHelper.forClass(VersionUtils.class, VersionUtils.class.getClassLoader());
     if (url != null && url.toString().contains(".jar")) {
       try {
         final String part = ClasspathHelper.cleanPath(url);
         try (JarFile myJar = new JarFile(part)) {
           final Manifest manifest = myJar.getManifest();
           if (manifest != null) {
-            Attributes attributes = manifest.getMainAttributes();
+            final Attributes attributes = manifest.getMainAttributes();
             if (attributes != null) {
               if (attributes.getValue(IMPLEMENTATION_BUILD_ID) != null) {
                 return attributes.getValue(IMPLEMENTATION_BUILD_ID);
@@ -178,7 +178,7 @@ public final class VersionUtils {
             }
           }
         }
-      } catch (Exception ex) {
+      } catch (final Exception ex) {
         LOGGER.warn(ex.getMessage(), ex);
       }
     }

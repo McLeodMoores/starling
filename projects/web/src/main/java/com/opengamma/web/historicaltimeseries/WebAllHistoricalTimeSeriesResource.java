@@ -82,7 +82,7 @@ public class WebAllHistoricalTimeSeriesResource extends AbstractWebHistoricalTim
    * @param loader  the historical time-series loader, not null
    * @param configSource  the configuration source, not null
    */
-  public WebAllHistoricalTimeSeriesResource(final HistoricalTimeSeriesMaster master, final HistoricalTimeSeriesLoader loader, ConfigSource configSource) {
+  public WebAllHistoricalTimeSeriesResource(final HistoricalTimeSeriesMaster master, final HistoricalTimeSeriesLoader loader, final ConfigSource configSource) {
     super(master, loader, configSource);
   }
 
@@ -91,18 +91,18 @@ public class WebAllHistoricalTimeSeriesResource extends AbstractWebHistoricalTim
   @Produces(MediaType.TEXT_HTML)
   @SubscribeMaster(MasterType.TIME_SERIES)
   public String getHTML(
-      @QueryParam("pgIdx") Integer pgIdx,
-      @QueryParam("pgNum") Integer pgNum,
-      @QueryParam("pgSze") Integer pgSze,
-      @QueryParam("identifier") String identifier,
-      @QueryParam("dataSource") String dataSource,
-      @QueryParam("dataProvider") String dataProvider,
-      @QueryParam("dataField") String dataField,
-      @QueryParam("observationTime") String observationTime,
-      @QueryParam("name") String name,
-      @Context UriInfo uriInfo) {
-    PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
-    FlexiBean out = createSearchResultData(pr, identifier, dataSource, dataProvider, dataField, observationTime, name, uriInfo);
+      @QueryParam("pgIdx") final Integer pgIdx,
+      @QueryParam("pgNum") final Integer pgNum,
+      @QueryParam("pgSze") final Integer pgSze,
+      @QueryParam("identifier") final String identifier,
+      @QueryParam("dataSource") final String dataSource,
+      @QueryParam("dataProvider") final String dataProvider,
+      @QueryParam("dataField") final String dataField,
+      @QueryParam("observationTime") final String observationTime,
+      @QueryParam("name") final String name,
+      @Context final UriInfo uriInfo) {
+    final PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
+    final FlexiBean out = createSearchResultData(pr, identifier, dataSource, dataProvider, dataField, observationTime, name, uriInfo);
     return getFreemarker().build(HTML_DIR + "alltimeseries.ftl", out);
   }
 
@@ -110,25 +110,25 @@ public class WebAllHistoricalTimeSeriesResource extends AbstractWebHistoricalTim
   @Produces(MediaType.APPLICATION_JSON)
   @SubscribeMaster(MasterType.TIME_SERIES)
   public String getJSON(
-      @QueryParam("pgIdx") Integer pgIdx,
-      @QueryParam("pgNum") Integer pgNum,
-      @QueryParam("pgSze") Integer pgSze,
-      @QueryParam("identifier") String identifier,
-      @QueryParam("dataSource") String dataSource,
-      @QueryParam("dataProvider") String dataProvider,
-      @QueryParam("dataField") String dataField,
-      @QueryParam("observationTime") String observationTime,
-      @QueryParam("name") String name,
-      @Context UriInfo uriInfo) {
-    PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
-    FlexiBean out = createSearchResultData(pr, identifier, dataSource, dataProvider, dataField, observationTime, name, uriInfo);
+      @QueryParam("pgIdx") final Integer pgIdx,
+      @QueryParam("pgNum") final Integer pgNum,
+      @QueryParam("pgSze") final Integer pgSze,
+      @QueryParam("identifier") final String identifier,
+      @QueryParam("dataSource") final String dataSource,
+      @QueryParam("dataProvider") final String dataProvider,
+      @QueryParam("dataField") final String dataField,
+      @QueryParam("observationTime") final String observationTime,
+      @QueryParam("name") final String name,
+      @Context final UriInfo uriInfo) {
+    final PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
+    final FlexiBean out = createSearchResultData(pr, identifier, dataSource, dataProvider, dataField, observationTime, name, uriInfo);
     return getFreemarker().build(JSON_DIR + "alltimeseries.ftl", out);
   }
 
-  private FlexiBean createSearchResultData(PagingRequest pr, String identifier, String dataSource, String dataProvider, String dataField, String observationTime, String name, UriInfo uriInfo) {
-    FlexiBean out = createRootData();
-    
-    HistoricalTimeSeriesInfoSearchRequest searchRequest = new HistoricalTimeSeriesInfoSearchRequest();
+  private FlexiBean createSearchResultData(final PagingRequest pr, final String identifier, final String dataSource, final String dataProvider, final String dataField, final String observationTime, final String name, final UriInfo uriInfo) {
+    final FlexiBean out = createRootData();
+
+    final HistoricalTimeSeriesInfoSearchRequest searchRequest = new HistoricalTimeSeriesInfoSearchRequest();
     searchRequest.setPagingRequest(pr);
     searchRequest.setExternalIdValue(StringUtils.trimToNull(identifier));
     searchRequest.setDataSource(StringUtils.trimToNull(dataSource));
@@ -136,19 +136,19 @@ public class WebAllHistoricalTimeSeriesResource extends AbstractWebHistoricalTim
     searchRequest.setDataField(StringUtils.trimToNull(dataField));
     searchRequest.setObservationTime(StringUtils.trimToNull(observationTime));
     searchRequest.setName(StringUtils.trimToNull(name));
-    MultivaluedMap<String, String> query = uriInfo.getQueryParameters();
+    final MultivaluedMap<String, String> query = uriInfo.getQueryParameters();
     for (int i = 0; query.containsKey("idscheme." + i) && query.containsKey("idvalue." + i); i++) {
-      ExternalId id = ExternalId.of(query.getFirst("idscheme." + i), query.getFirst("idvalue." + i));
+      final ExternalId id = ExternalId.of(query.getFirst("idscheme." + i), query.getFirst("idvalue." + i));
       searchRequest.addExternalId(id);
     }
     out.put("searchRequest", searchRequest);
-    
+
     if (data().getUriInfo().getQueryParameters().size() > 0) {
-      ExternalIdWithDatesDisplayComparator comparator = ExternalIdWithDatesDisplayComparatorUtils.getComparator(data().getConfigSource(), ExternalIdDisplayComparatorUtils.DEFAULT_CONFIG_NAME);
-      HistoricalTimeSeriesInfoSearchResult searchResult = data().getHistoricalTimeSeriesMaster().search(searchRequest);
-      Map<String, List<ExternalIdWithDates>> sorted = new HashMap<>();
-      for (HistoricalTimeSeriesInfoDocument doc : searchResult.getDocuments()) {
-        List<ExternalIdWithDates> list = new ArrayList<>(doc.getInfo().getExternalIdBundle().getExternalIds());
+      final ExternalIdWithDatesDisplayComparator comparator = ExternalIdWithDatesDisplayComparatorUtils.getComparator(data().getConfigSource(), ExternalIdDisplayComparatorUtils.DEFAULT_CONFIG_NAME);
+      final HistoricalTimeSeriesInfoSearchResult searchResult = data().getHistoricalTimeSeriesMaster().search(searchRequest);
+      final Map<String, List<ExternalIdWithDates>> sorted = new HashMap<>();
+      for (final HistoricalTimeSeriesInfoDocument doc : searchResult.getDocuments()) {
+        final List<ExternalIdWithDates> list = new ArrayList<>(doc.getInfo().getExternalIdBundle().getExternalIds());
         Collections.sort(list, comparator);
         sorted.put(doc.getUniqueId().toString(), list);
       }
@@ -164,69 +164,69 @@ public class WebAllHistoricalTimeSeriesResource extends AbstractWebHistoricalTim
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
   public Response postHTML(
-      @FormParam("dataProvider") String dataProvider,
-      @FormParam("dataField") String dataField,
-      @FormParam("start") String start,
-      @FormParam("end") String end,
-      @FormParam("idscheme") String idScheme,
-      @FormParam("idvalue") String idValue) {
-    idScheme = StringUtils.trimToNull(idScheme);
-    idValue = StringUtils.trimToNull(idValue);
-    dataField = StringUtils.trimToNull(dataField);
-    start = StringUtils.trimToNull(start);
-    end = StringUtils.trimToNull(end);
-    dataProvider = StringUtils.trimToNull(dataProvider);
-    
-    FlexiBean out = createRootData();
+      @FormParam("dataProvider") final String dataProvider,
+      @FormParam("dataField") final String dataField,
+      @FormParam("start") final String start,
+      @FormParam("end") final String end,
+      @FormParam("idscheme") final String idScheme,
+      @FormParam("idvalue") final String idValue) {
+    final String trimmedIdScheme = StringUtils.trimToNull(idScheme);
+    final String trimmedIdValue = StringUtils.trimToNull(idValue);
+    final String trimmedDataField = StringUtils.trimToNull(dataField);
+    final String trimmedStart = StringUtils.trimToNull(start);
+    final String trimmedEnd = StringUtils.trimToNull(end);
+    final String trimmedDataProvider = StringUtils.trimToNull(dataProvider);
+
+    final FlexiBean out = createRootData();
     LocalDate startDate = null;
     boolean validStartDate = true;
-    if (start != null) {
+    if (trimmedStart != null) {
       try {
-        startDate = LocalDate.parse(start);
-      } catch (DateTimeException e) {
+        startDate = LocalDate.parse(trimmedStart);
+      } catch (final DateTimeException e) {
         out.put("err_startInvalid", true);
         validStartDate = false;
       }
     }
     LocalDate endDate = null;
     boolean validEndDate = true;
-    if (end != null) {
+    if (trimmedEnd != null) {
       try {
-        endDate = LocalDate.parse(end);
-      } catch (DateTimeException e) {
+        endDate = LocalDate.parse(trimmedEnd);
+      } catch (final DateTimeException e) {
         out.put("err_endInvalid", true);
         validEndDate = false;
       }
     }
-    
-    if (dataField == null || idValue == null || !validStartDate || !validEndDate) {
+
+    if (trimmedDataField == null || trimmedIdValue == null || !validStartDate || !validEndDate) {
       //data for repopulating the form
-      out.put("scheme", idScheme);
-      out.put("dataField", dataField);
-      out.put("idValue", idValue);
-      out.put("dataProvider", dataProvider);
-      out.put("start", start);
-      out.put("end", end);
-      
-      if (dataField == null) {
+      out.put("scheme", trimmedIdScheme);
+      out.put("dataField", trimmedDataField);
+      out.put("idValue", trimmedIdValue);
+      out.put("dataProvider", trimmedDataProvider);
+      out.put("start", trimmedStart);
+      out.put("end", trimmedEnd);
+
+      if (trimmedDataField == null) {
         out.put("err_iddatafieldMissing", true);
       }
-      if (idValue == null) {
+      if (trimmedIdValue == null) {
         out.put("err_idvalueMissing", true);
-      } 
-      String html = getFreemarker().build(HTML_DIR + "timeseries-add.ftl", out);
+      }
+      final String html = getFreemarker().build(HTML_DIR + "timeseries-add.ftl", out);
       return Response.ok(html).build();
     }
-    
-    ExternalScheme scheme = ExternalScheme.of(idScheme);
-    Set<ExternalId> identifiers = buildSecurityRequest(scheme, idValue);
-    Map<ExternalId, UniqueId> added = addTimeSeries(dataProvider, dataField, identifiers, startDate, endDate);
-    
+
+    final ExternalScheme scheme = ExternalScheme.of(trimmedIdScheme);
+    final Set<ExternalId> identifiers = buildSecurityRequest(scheme, trimmedIdValue);
+    final Map<ExternalId, UniqueId> added = addTimeSeries(trimmedDataProvider, trimmedDataField, identifiers, startDate, endDate);
+
     URI uri = null;
     if (!identifiers.isEmpty()) {
       if (identifiers.size() == 1) {
-        ExternalId requestIdentifier = identifiers.iterator().next();
-        UniqueId uniqueId = added.get(requestIdentifier);
+        final ExternalId requestIdentifier = identifiers.iterator().next();
+        final UniqueId uniqueId = added.get(requestIdentifier);
         if (uniqueId != null) {
           uri = data().getUriInfo().getAbsolutePathBuilder().path(uniqueId.toString()).build();
         } else {
@@ -236,7 +236,7 @@ public class WebAllHistoricalTimeSeriesResource extends AbstractWebHistoricalTim
       } else {
         uri = uri(data(), identifiers);
       }
-    } 
+    }
     return Response.seeOther(uri).build();
   }
 
@@ -244,64 +244,64 @@ public class WebAllHistoricalTimeSeriesResource extends AbstractWebHistoricalTim
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.APPLICATION_JSON)
   public Response postJSON(
-      @FormParam("dataProvider") String dataProvider,
-      @FormParam("dataField") String dataField,
-      @FormParam("start") String start,
-      @FormParam("end") String end,
-      @FormParam("idscheme") String idScheme,
-      @FormParam("idvalue") String idValue) {
-    
-    idScheme = StringUtils.trimToNull(idScheme);
-    idValue = StringUtils.trimToNull(idValue);
-    dataField = StringUtils.trimToNull(dataField);
-    start = StringUtils.trimToNull(start);
-    end = StringUtils.trimToNull(end);
-    dataProvider = StringUtils.trimToNull(dataProvider);
-    
+      @FormParam("dataProvider") final String dataProvider,
+      @FormParam("dataField") final String dataField,
+      @FormParam("start") final String start,
+      @FormParam("end") final String end,
+      @FormParam("idscheme") final String idScheme,
+      @FormParam("idvalue") final String idValue) {
+
+    final String trimmedIdScheme = StringUtils.trimToNull(idScheme);
+    final String trimmedIdValue = StringUtils.trimToNull(idValue);
+    final String trimmedDataField = StringUtils.trimToNull(dataField);
+    final String trimmedStart = StringUtils.trimToNull(start);
+    final String trimmedEnd = StringUtils.trimToNull(end);
+    final String trimmedDataProvider = StringUtils.trimToNull(dataProvider);
+
     LocalDate startDate = null;
     boolean validStartDate = true;
-    if (start != null) {
+    if (trimmedStart != null) {
       try {
-        startDate = LocalDate.parse(start);
+        startDate = LocalDate.parse(trimmedStart);
         validStartDate = true;
-      } catch (DateTimeException e) {
+      } catch (final DateTimeException e) {
         validStartDate = false;
       }
     }
     LocalDate endDate = null;
     boolean validEndDate = true;
-    if (end != null) {
+    if (trimmedEnd != null) {
       try {
-        endDate = LocalDate.parse(end);
+        endDate = LocalDate.parse(trimmedEnd);
         validEndDate = true;
-      } catch (DateTimeException e) {
+      } catch (final DateTimeException e) {
         validEndDate = false;
       }
     }
-    
-    if (dataField == null || idValue == null || !validStartDate || !validEndDate) {
+
+    if (trimmedDataField == null || trimmedIdValue == null || !validStartDate || !validEndDate) {
       return Response.status(Status.BAD_REQUEST).build();
     }
-    
-    ExternalScheme scheme = ExternalScheme.of(idScheme);
-    Set<ExternalId> identifiers = buildSecurityRequest(scheme, idValue);
-    Map<ExternalId, UniqueId> added = addTimeSeries(dataProvider, dataField, identifiers, startDate, endDate);
 
-    FlexiBean out = createPostJSONOutput(added, identifiers, scheme, dataProvider, dataField, startDate, endDate);    
-    Response response = Response.ok(getFreemarker().build(JSON_DIR + "timeseries-added.ftl", out)).build();
+    final ExternalScheme scheme = ExternalScheme.of(trimmedIdScheme);
+    final Set<ExternalId> identifiers = buildSecurityRequest(scheme, trimmedIdValue);
+    final Map<ExternalId, UniqueId> added = addTimeSeries(trimmedDataProvider, trimmedDataField, identifiers, startDate, endDate);
+
+    final FlexiBean out = createPostJSONOutput(added, identifiers, scheme, trimmedDataProvider, trimmedDataField, startDate, endDate);
+    final Response response = Response.ok(getFreemarker().build(JSON_DIR + "timeseries-added.ftl", out)).build();
     return response;
   }
 
   private FlexiBean createPostJSONOutput(
-      Map<ExternalId, UniqueId> added, Collection<ExternalId> requests, ExternalScheme scheme,
-      String dataProvider, String dataField, LocalDate startDate, LocalDate endDate) {
-    Map<String, String> result = new HashMap<String, String>();
-    for (ExternalId identifier : requests) {
-      UniqueId uniqueIdentifier = added.get(identifier);
-      String objectIdentifier = uniqueIdentifier != null ? uniqueIdentifier.getObjectId().toString() : null;
+      final Map<ExternalId, UniqueId> added, final Collection<ExternalId> requests, final ExternalScheme scheme,
+      final String dataProvider, final String dataField, final LocalDate startDate, final LocalDate endDate) {
+    final Map<String, String> result = new HashMap<>();
+    for (final ExternalId identifier : requests) {
+      final UniqueId uniqueIdentifier = added.get(identifier);
+      final String objectIdentifier = uniqueIdentifier != null ? uniqueIdentifier.getObjectId().toString() : null;
       result.put(identifier.getValue(), objectIdentifier);
     }
-    FlexiBean out = createRootData();
+    final FlexiBean out = createRootData();
     out.put("requestScheme", scheme);
     out.put("requestDataField", dataField);
     if (dataProvider != null) {
@@ -311,14 +311,14 @@ public class WebAllHistoricalTimeSeriesResource extends AbstractWebHistoricalTim
       out.put("requestStartDate", startDate.toString());
     }
     if (endDate != null) {
-      out.put("requestEndDate", endDate.toString());      
+      out.put("requestEndDate", endDate.toString());
     }
     out.put("addedTimeSeries", result);
     return out;
   }
 
-  private Map<ExternalId, UniqueId> addTimeSeries(String dataProvider, String dataField, Set<ExternalId> identifiers, LocalDate startDate, LocalDate endDate) {
-    HistoricalTimeSeriesLoader loader = data().getHistoricalTimeSeriesLoader();
+  private Map<ExternalId, UniqueId> addTimeSeries(final String dataProvider, final String dataField, final Set<ExternalId> identifiers, final LocalDate startDate, final LocalDate endDate) {
+    final HistoricalTimeSeriesLoader loader = data().getHistoricalTimeSeriesLoader();
     Map<ExternalId, UniqueId> added = Maps.newHashMap();
     if (!identifiers.isEmpty()) {
       added = loader.loadTimeSeries(identifiers, dataProvider, dataField, startDate, endDate);
@@ -331,7 +331,7 @@ public class WebAllHistoricalTimeSeriesResource extends AbstractWebHistoricalTim
       return Collections.emptySet();
     }
     final String[] identifiers = StringUtils.split(idValue, "\n");
-    final Set<ExternalId> result = new HashSet<ExternalId>(identifiers.length);
+    final Set<ExternalId> result = new HashSet<>(identifiers.length);
     for (String identifier : identifiers) {
       identifier = StringUtils.trimToNull(identifier);
       if (identifier != null) {
@@ -343,39 +343,39 @@ public class WebAllHistoricalTimeSeriesResource extends AbstractWebHistoricalTim
 
   //-------------------------------------------------------------------------
   @Path("{timeseriesId}")
-  public WebHistoricalTimeSeriesResource findSeries(@Subscribe @PathParam("timeseriesId") String idStr) {
-    
+  public WebHistoricalTimeSeriesResource findSeries(@Subscribe @PathParam("timeseriesId") final String idStr) {
+
     data().setUriHistoricalTimeSeriesId(idStr);
-    UniqueId oid = UniqueId.parse(idStr);
+    final UniqueId oid = UniqueId.parse(idStr);
     HistoricalTimeSeriesInfoDocument info;
     ManageableHistoricalTimeSeries series;
-    
+
     try {
       // Try to fetch HTS info
       info = data().getHistoricalTimeSeriesMaster().get(UniqueId.parse(idStr));
-    } catch (DataNotFoundException ex) {
+    } catch (final DataNotFoundException ex) {
       // If not there, try fetching a deleted one from history
-      HistoricalTimeSeriesInfoHistoryRequest historyRequest = new HistoricalTimeSeriesInfoHistoryRequest(oid);
+      final HistoricalTimeSeriesInfoHistoryRequest historyRequest = new HistoricalTimeSeriesInfoHistoryRequest(oid);
       historyRequest.setPagingRequest(PagingRequest.ONE);
-      HistoricalTimeSeriesInfoHistoryResult historyResult = data().getHistoricalTimeSeriesMaster().history(historyRequest);
+      final HistoricalTimeSeriesInfoHistoryResult historyResult = data().getHistoricalTimeSeriesMaster().history(historyRequest);
       if (historyResult.getDocuments().size() == 0) {
         throw ex;
       }
       info = historyResult.getFirstDocument();
     }
     data().setInfo(info);
-    
+
     try {
       // Try to fetch the data-points
       series = data().getHistoricalTimeSeriesMaster().getTimeSeries(
           info.getInfo().getTimeSeriesObjectId(), VersionCorrection.LATEST);
-    } catch (DataNotFoundException ex) {
+    } catch (final DataNotFoundException ex) {
       // If not there, return an empty collection of data-points
       series = new ManageableHistoricalTimeSeries();
       series.setTimeSeries(ImmutableLocalDateDoubleTimeSeries.EMPTY_SERIES);
     }
     data().setTimeSeries(series);
-    
+
     return new WebHistoricalTimeSeriesResource(this);
   }
 
@@ -384,9 +384,10 @@ public class WebAllHistoricalTimeSeriesResource extends AbstractWebHistoricalTim
    * Creates the output root data.
    * @return the output root data, not null
    */
+  @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
-    HistoricalTimeSeriesInfoSearchRequest searchRequest = new HistoricalTimeSeriesInfoSearchRequest();
+    final FlexiBean out = super.createRootData();
+    final HistoricalTimeSeriesInfoSearchRequest searchRequest = new HistoricalTimeSeriesInfoSearchRequest();
     out.put("searchRequest", searchRequest);
     return out;
   }
@@ -397,7 +398,7 @@ public class WebAllHistoricalTimeSeriesResource extends AbstractWebHistoricalTim
    * @param data  the data, not null
    * @return the URI, not null
    */
-  public static URI uri(WebHistoricalTimeSeriesData data) {
+  public static URI uri(final WebHistoricalTimeSeriesData data) {
     return data.getUriInfo().getBaseUriBuilder().path(WebAllHistoricalTimeSeriesResource.class).build();
   }
 
@@ -407,12 +408,12 @@ public class WebAllHistoricalTimeSeriesResource extends AbstractWebHistoricalTim
    * @param identifiers  the identifiers to search for, may be null
    * @return the URI, not null
    */
-  public static URI uri(WebHistoricalTimeSeriesData data, Collection<ExternalId> identifiers) {
-    UriBuilder builder = data.getUriInfo().getBaseUriBuilder().path(WebAllHistoricalTimeSeriesResource.class);
+  public static URI uri(final WebHistoricalTimeSeriesData data, final Collection<ExternalId> identifiers) {
+    final UriBuilder builder = data.getUriInfo().getBaseUriBuilder().path(WebAllHistoricalTimeSeriesResource.class);
     if (identifiers != null) {
-      Iterator<ExternalId> it = identifiers.iterator();
+      final Iterator<ExternalId> it = identifiers.iterator();
       for (int i = 0; it.hasNext(); i++) {
-        ExternalId id = it.next();
+        final ExternalId id = it.next();
         builder.queryParam("idscheme." + i, id.getScheme().getName());
         builder.queryParam("idvalue." + i, id.getValue());
       }

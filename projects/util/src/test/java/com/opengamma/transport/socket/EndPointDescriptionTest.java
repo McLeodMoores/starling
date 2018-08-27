@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.transport.socket;
@@ -30,11 +30,11 @@ public class EndPointDescriptionTest {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(EndPointDescriptionTest.class);
 
-  private void testEndPoints(boolean bind) throws IOException {
+  private void testEndPoints(final boolean bind) throws IOException {
     final AbstractServerSocketProcess server = new AbstractServerSocketProcess() {
 
       @Override
-      protected void socketOpened(Socket socket) {
+      protected void socketOpened(final Socket socket) {
       }
 
     };
@@ -48,7 +48,7 @@ public class EndPointDescriptionTest {
     final AbstractSocketProcess client = new AbstractSocketProcess() {
 
       @Override
-      protected void socketOpened(Socket socket, BufferedOutputStream os, BufferedInputStream is) {
+      protected void socketOpened(final Socket socket, final BufferedOutputStream os, final BufferedInputStream is) {
       }
 
     };
@@ -76,7 +76,7 @@ public class EndPointDescriptionTest {
     final AbstractServerSocketProcess server = new AbstractServerSocketProcess() {
 
       @Override
-      protected void socketOpened(Socket socket) {
+      protected void socketOpened(final Socket socket) {
       }
 
     };
@@ -87,7 +87,7 @@ public class EndPointDescriptionTest {
     final AbstractSocketProcess client = new AbstractSocketProcess() {
 
       @Override
-      protected void socketOpened(Socket socket, BufferedOutputStream os, BufferedInputStream is) {
+      protected void socketOpened(final Socket socket, final BufferedOutputStream os, final BufferedInputStream is) {
       }
 
     };
@@ -104,7 +104,7 @@ public class EndPointDescriptionTest {
     final AbstractServerSocketProcess server = new AbstractServerSocketProcess() {
 
       @Override
-      protected void socketOpened(Socket socket) {
+      protected void socketOpened(final Socket socket) {
       }
 
     };
@@ -118,7 +118,7 @@ public class EndPointDescriptionTest {
     final AbstractSocketProcess client = new AbstractSocketProcess() {
 
       @Override
-      protected void socketOpened(Socket socket, BufferedOutputStream os, BufferedInputStream is) {
+      protected void socketOpened(final Socket socket, final BufferedOutputStream os, final BufferedInputStream is) {
       }
 
     };

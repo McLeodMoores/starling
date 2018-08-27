@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.bbg.permission;
@@ -90,44 +90,44 @@ public final class BloombergBpipePermissionCheckProvider
 
   /**
    * Creates a bloomberg permission check provider with default identity expiry
-   * 
+   *
    * @param bloombergConnector the Bloomberg connector, not null
    */
-  public BloombergBpipePermissionCheckProvider(BloombergConnector bloombergConnector) {
+  public BloombergBpipePermissionCheckProvider(final BloombergConnector bloombergConnector) {
     this(bloombergConnector, DEFAULT_IDENTITY_EXPIRY);
   }
 
   /**
    * Creates a bloomberg permission check provider
-   * 
+   *
    * @param bloombergConnector the Bloomberg connector, not null
    * @param identityExpiry the identity expiry in hours, not null
    */
-  public BloombergBpipePermissionCheckProvider(BloombergConnector bloombergConnector, Duration identityExpiry) {
+  public BloombergBpipePermissionCheckProvider(final BloombergConnector bloombergConnector, final Duration identityExpiry) {
     ArgumentChecker.notNull(bloombergConnector, "bloombergConnector");
     ArgumentChecker.notNull(bloombergConnector.getSessionOptions(), "bloombergConnector.sessionOptions");
     ArgumentChecker.isTrue(identityExpiry.getSeconds() > 0, "identityExpiry must be positive");
     ArgumentChecker.isTrue(bloombergConnector.requiresAuthentication(), "authentication options must be set");
-    
+
     _userIdentityCache = createUserIdentityCache(identityExpiry);
     _bloombergConnector = bloombergConnector;
 
-    List<String> serviceNames = Lists.newArrayList(
+    final List<String> serviceNames = Lists.newArrayList(
         BloombergConstants.AUTH_SVC_NAME, BloombergConstants.REF_DATA_SVC_NAME);
-    SessionEventHandler eventHandler = new SessionEventHandler();
+    final SessionEventHandler eventHandler = new SessionEventHandler();
     _sessionProvider = new SessionProvider(_bloombergConnector, serviceNames, eventHandler);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public PermissionCheckProviderResult isPermitted(PermissionCheckProviderRequest request) {
+  public PermissionCheckProviderResult isPermitted(final PermissionCheckProviderRequest request) {
     ArgumentChecker.notNull(request, "request");
     // validate
     if (isRunning() == false) {
       return PermissionCheckProviderResult.ofAuthenticationError(
           "Bloomberg permission check found connection not running");
     }
-    String emrsId = StringUtils.trimToNull(request.getUserIdBundle().getValue(ExternalSchemes.BLOOMBERG_EMRSID));
+    final String emrsId = StringUtils.trimToNull(request.getUserIdBundle().getValue(ExternalSchemes.BLOOMBERG_EMRSID));
     if (emrsId == null) {
       return PermissionCheckProviderResult.ofAuthenticationError(
           "Bloomberg permission check request did not contain an EMRS user ID");
@@ -149,15 +149,15 @@ public final class BloombergBpipePermissionCheckProvider
 
   // checks the requested permissions against the identity object
   private PermissionCheckProviderResult checkPermissions(
-      PermissionCheckProviderRequest request, Identity userIdentity) {
-    
+      final PermissionCheckProviderRequest request, final Identity userIdentity) {
+
     try {
       // evaluate permissions one by one to meet our API
-      Map<String, Boolean> result = new HashMap<>();
-      for (String permission : request.getRequestedPermissions()) {
+      final Map<String, Boolean> result = new HashMap<>();
+      for (final String permission : request.getRequestedPermissions()) {
         if (BloombergPermissions.isEid(permission)) {
-          int eid = BloombergPermissions.extractEid(permission);
-          boolean permitted = userIdentity.hasEntitlements(new int[] {eid}, _apiRefDataSvc);
+          final int eid = BloombergPermissions.extractEid(permission);
+          final boolean permitted = userIdentity.hasEntitlements(new int[] {eid}, _apiRefDataSvc);
           result.put(permission, permitted);
         } else {
           // permissions other than EID permissions are returned as false without error
@@ -165,9 +165,9 @@ public final class BloombergBpipePermissionCheckProvider
         }
       }
       return PermissionCheckProviderResult.of(result);
-      
-    } catch (RuntimeException ex) {
-      String msg = String.format("Bloomberg authorization failure for user: %s IpAddress: %s",
+
+    } catch (final RuntimeException ex) {
+      final String msg = String.format("Bloomberg authorization failure for user: %s IpAddress: %s",
           request.getUserIdBundle(), request.getNetworkAddress());
       LOGGER.warn(msg, ex);
       return PermissionCheckProviderResult.ofAuthorizationError(
@@ -177,9 +177,9 @@ public final class BloombergBpipePermissionCheckProvider
 
   // handles any errors during authentication
   private PermissionCheckProviderResult processAuthenticationError(
-      PermissionCheckProviderRequest request, Exception ex) {
-    
-    String msg = String.format("Bloomberg authentication failure for user: %s IpAddress: %s",
+      final PermissionCheckProviderRequest request, final Exception ex) {
+
+    final String msg = String.format("Bloomberg authentication failure for user: %s IpAddress: %s",
         request.getUserIdBundle(), request.getNetworkAddress());
     if (ex.getCause() == null) {
       LOGGER.warn(msg, ex);
@@ -202,47 +202,47 @@ public final class BloombergBpipePermissionCheckProvider
    * <p>
    * The user identities are loaded by the cache when an entry is found to be missing.
    * See {@link #loadUserIdentity(IdentityCacheKey)}.
-   * 
+   *
    * @param identityExpiry  the duration before the identity expires
    * @return the cache
    */
-  private LoadingCache<IdentityCacheKey, Identity> createUserIdentityCache(Duration identityExpiry) {
+  private LoadingCache<IdentityCacheKey, Identity> createUserIdentityCache(final Duration identityExpiry) {
     // called from constructor - must not use instance variables in this method
     return CacheBuilder.newBuilder()
       .expireAfterWrite(identityExpiry.getSeconds(), TimeUnit.SECONDS)
       .build(new CacheLoader<IdentityCacheKey, Identity>() {
         @Override
-        public Identity load(IdentityCacheKey userCredential) throws Exception {
+        public Identity load(final IdentityCacheKey userCredential) throws Exception {
           return loadUserIdentity(userCredential);
         }
       });
   }
 
   // called from the cache to load user identities
-  private Identity loadUserIdentity(IdentityCacheKey userInfo) throws IOException, InterruptedException {
-    Request authRequest = _apiAuthSvc.createAuthorizationRequest();
+  private Identity loadUserIdentity(final IdentityCacheKey userInfo) throws IOException, InterruptedException {
+    final Request authRequest = _apiAuthSvc.createAuthorizationRequest();
     authRequest.set("emrsId", userInfo.getUserId());
     authRequest.set("ipAddress", userInfo.getIpAddress());
-    Identity userIdentity = _session.createIdentity();
+    final Identity userIdentity = _session.createIdentity();
 
     LOGGER.debug("Sending {}", authRequest);
-    EventQueue eventQueue = new EventQueue();
+    final EventQueue eventQueue = new EventQueue();
     _session.sendAuthorizationRequest(authRequest, userIdentity, eventQueue, new CorrelationID(userInfo));
-    Event event = eventQueue.nextEvent(WAIT_TIME_MS);
+    final Event event = eventQueue.nextEvent(WAIT_TIME_MS);
     // handle known responses to loading an identity ignoring other events
     switch (event.eventType().intValue()) {
       case EventType.Constants.RESPONSE:
       case EventType.Constants.REQUEST_STATUS: {
-        for (Message message : event) {
+        for (final Message message : event) {
           if (AUTHORIZATION_SUCCESS.equals(message.messageType())) {
             return userIdentity;
-          } 
+          }
           if (AUTHORIZATION_FAILURE.equals(message.messageType())) {
             String failureMsg = "Unknown";
-            Element reasonElem = message.getElement("reason");
+            final Element reasonElem = message.getElement("reason");
             if (reasonElem != null) {
               failureMsg = reasonElem.getElementAsString("message");
-              String failureCode = StringUtils.stripToNull(reasonElem.getElementAsString("code"));
+              final String failureCode = StringUtils.stripToNull(reasonElem.getElementAsString("code"));
               if (failureCode != null) {
                 failureMsg = failureMsg + " (code " + failureCode + ")";
               }
@@ -266,7 +266,8 @@ public final class BloombergBpipePermissionCheckProvider
    * Handler for events sent about users.
    */
   private class SessionEventHandler implements EventHandler {
-    public void processEvent(Event event, Session session) {
+    @Override
+    public void processEvent(final Event event, final Session session) {
       switch (event.eventType().intValue()) {
         case EventType.Constants.AUTHORIZATION_STATUS:
           processAuthorizationEvent(event);
@@ -279,23 +280,23 @@ public final class BloombergBpipePermissionCheckProvider
 
   /**
    * Processes events indicating changes in authorization.
-   * 
+   *
    * @param event  the event, not null
    */
-  private void processAuthorizationEvent(Event event) {
-    for (Message msg : event) {
-      CorrelationID correlationId = msg.correlationID();
-      IdentityCacheKey userCredential = (IdentityCacheKey) correlationId.object();
+  private void processAuthorizationEvent(final Event event) {
+    for (final Message msg : event) {
+      final CorrelationID correlationId = msg.correlationID();
+      final IdentityCacheKey userCredential = (IdentityCacheKey) correlationId.object();
       if (AUTHORIZATION_REVOKED.equals(msg.messageType())) {
         // the current Identity object has been revoked
         // documentation says that this is the only reason to destroy the current cached Identity object
-        Element errorinfo = msg.getElement("reason");
-        int code = errorinfo.getElementAsInt32("code");
-        String reason = errorinfo.getElementAsString("message");
+        final Element errorinfo = msg.getElement("reason");
+        final int code = errorinfo.getElementAsInt32("code");
+        final String reason = errorinfo.getElementAsString("message");
         LOGGER.debug("Authorization revoked for emrsid: {} with code: {} and reason {}",
             userCredential.getUserId(), code, reason);
         _userIdentityCache.invalidate(userCredential);
-        
+
       } else if (ENTITITLEMENT_CHANGED.equals(msg.messageType())) {
         // the current Identity object will have been updated with new entitlements
         // no need to replace the identity as any caching is internal to Identity
@@ -322,7 +323,7 @@ public final class BloombergBpipePermissionCheckProvider
     if (isRunning()) {
       try {
         _session.stop();
-      } catch (InterruptedException ex) {
+      } catch (final InterruptedException ex) {
         Thread.interrupted();
         LOGGER.warn("Thread interrupted while trying to shut down bloomberg session");
       }

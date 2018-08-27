@@ -55,11 +55,11 @@ public class Fragment extends DirectBean implements BundleNode {
 
   /**
    * Creates a populated instance.
-   * 
+   *
    * @param uri  the internal URI of the fragment, not null
    * @param path  the path to the fragment, not null
    */
-  public Fragment(URI uri, String path) {
+  public Fragment(final URI uri, final String path) {
     ArgumentChecker.notNull(uri, "uri");
     ArgumentChecker.notNull(path, "path");
     _uri = uri;

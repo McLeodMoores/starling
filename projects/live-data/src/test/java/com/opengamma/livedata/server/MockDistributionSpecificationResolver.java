@@ -24,22 +24,22 @@ public class MockDistributionSpecificationResolver implements DistributionSpecif
   private final ExternalScheme _domain;
   private final DistributionSpecificationResolver _distributionSpecificationResolver;
 
-  public MockDistributionSpecificationResolver(ExternalScheme domain) {
+  public MockDistributionSpecificationResolver(final ExternalScheme domain) {
     this(domain, new NaiveDistributionSpecificationResolver());
   }
-  public MockDistributionSpecificationResolver(ExternalScheme domain,
-      DistributionSpecificationResolver distributionSpecificationResolver) {
+  public MockDistributionSpecificationResolver(final ExternalScheme domain,
+      final DistributionSpecificationResolver distributionSpecificationResolver) {
     _domain = domain;
     _distributionSpecificationResolver = distributionSpecificationResolver;
   }
 
   @Override
-  public DistributionSpecification resolve(LiveDataSpecification liveDataSpecificationFromClient) {
-    String id = liveDataSpecificationFromClient.getIdentifier(_domain);
+  public DistributionSpecification resolve(final LiveDataSpecification liveDataSpecificationFromClient) {
+    final String id = liveDataSpecificationFromClient.getIdentifier(_domain);
     if (id == null) {
       return null;
     } else {
-      LiveDataSpecification inner = new LiveDataSpecification(
+      final LiveDataSpecification inner = new LiveDataSpecification(
           liveDataSpecificationFromClient.getNormalizationRuleSetId(), Collections.singleton(ExternalId.of(_domain,
               id)));
       return _distributionSpecificationResolver.resolve(inner);
@@ -48,12 +48,12 @@ public class MockDistributionSpecificationResolver implements DistributionSpecif
 
   @Override
   public Map<LiveDataSpecification, DistributionSpecification> resolve(
-      Collection<LiveDataSpecification> liveDataSpecifications) {
-    HashMap<LiveDataSpecification, DistributionSpecification> ret = new HashMap<LiveDataSpecification, DistributionSpecification>();
-    for (LiveDataSpecification liveDataSpecification : liveDataSpecifications) {
+      final Collection<LiveDataSpecification> liveDataSpecifications) {
+    final HashMap<LiveDataSpecification, DistributionSpecification> ret = new HashMap<>();
+    for (final LiveDataSpecification liveDataSpecification : liveDataSpecifications) {
       ret.put(liveDataSpecification, resolve(liveDataSpecification));
     }
     return ret;
   }
-  
+
 }

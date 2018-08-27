@@ -86,10 +86,10 @@ public class MarketDataSnapshotSearchRequest extends AbstractSearchRequest imple
   //-------------------------------------------------------------------------
   /**
    * Adds a single marketDataSnapshot object identifier to the set.
-   * 
+   *
    * @param marketDataSnapshotId  the marketDataSnapshot object identifier to add, not null
    */
-  public void addMarketDataSnapshotId(ObjectIdentifiable marketDataSnapshotId) {
+  public void addMarketDataSnapshotId(final ObjectIdentifiable marketDataSnapshotId) {
     ArgumentChecker.notNull(marketDataSnapshotId, "marketDataSnapshotId");
     if (_snapshotIds == null) {
       _snapshotIds = new ArrayList<>();
@@ -100,15 +100,15 @@ public class MarketDataSnapshotSearchRequest extends AbstractSearchRequest imple
   /**
    * Sets the set of marketDataSnapshot object identifiers, null to not limit by marketDataSnapshot object identifiers.
    * Note that an empty set will return no marketDataSnapshots.
-   * 
+   *
    * @param marketDataSnapshotIds  the new marketDataSnapshot identifiers, null clears the marketDataSnapshot id search
    */
-  public void setSnapshotIds(Iterable<? extends ObjectIdentifiable> marketDataSnapshotIds) {
+  public void setSnapshotIds(final Iterable<? extends ObjectIdentifiable> marketDataSnapshotIds) {
     if (marketDataSnapshotIds == null) {
       _snapshotIds = null;
     } else {
       _snapshotIds = new ArrayList<>();
-      for (ObjectIdentifiable marketDataSnapshotId : marketDataSnapshotIds) {
+      for (final ObjectIdentifiable marketDataSnapshotId : marketDataSnapshotIds) {
         _snapshotIds.add(marketDataSnapshotId.getObjectId());
       }
     }

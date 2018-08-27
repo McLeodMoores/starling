@@ -60,7 +60,7 @@ public class BondDataSets {
    * @param notional The bond notional.
    * @return The bond.
    */
-  public static BondFixedSecurityDefinition bondUKT5_20140907(double notional) {
+  public static BondFixedSecurityDefinition bondUKT5_20140907(final double notional) {
     return BondFixedSecurityDefinition.from(GBP, MATURITY_DATE_UK14, START_ACCRUAL_DATE_UK14, PAYMENT_TENOR_GILT, RATE_UK14, SETTLEMENT_DAYS_GILT,
         notional, EX_DIVIDEND_DAYS_GILT, CALENDAR_GILT, DAY_COUNT_GILT, BUSINESS_DAY_GILT, YIELD_CONVENTION_GILT, IS_EOM_GILT, UK_GOVT_NAME, REPO_TYPE);
   }

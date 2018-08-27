@@ -70,25 +70,25 @@ public class BloombergConnectorComponentFactory extends AbstractComponentFactory
   private BloombergReferenceDataStatistics _referenceDataStatistics;
 
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
     if (getName() == null) {
       setName(getClassifier());
     }
     final ComponentInfo info = new ComponentInfo(BloombergConnector.class, getClassifier());
-    
-    SessionOptions sessionOptions = new SessionOptions();
+
+    final SessionOptions sessionOptions = new SessionOptions();
     if (getHost() != null) {
       sessionOptions.setServerHost(getHost());
     }
     if (getPort() != null) {
       sessionOptions.setServerPort(getPort());
     }
-    String applicationName = StringUtils.trimToNull(getApplicationName());
+    final String applicationName = StringUtils.trimToNull(getApplicationName());
     if (applicationName != null) {
       sessionOptions.setAuthenticationOptions(BloombergConstants.AUTH_APP_PREFIX + applicationName);
     }
     sessionOptions.setAutoRestartOnDisconnection(isAutoRestartOnDisconnection());
-  
+
     final BloombergConnector component = new BloombergConnector(getName(), sessionOptions, getReferenceDataStatistics());
     repo.registerComponent(info, component);
   }

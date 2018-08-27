@@ -60,40 +60,40 @@ public final class ScenarioDslParameters implements ImmutableBean, ScenarioParam
   //-------------------------------------------------------------------------
   /**
    * Obtains an instance of {@code ScenarioDslParameters}.
-   * 
+   *
    * @param script  the script, not null
    * @return the parameters script, not null
    */
-  public static ScenarioDslParameters of(String script) {
+  public static ScenarioDslParameters of(final String script) {
     return new ScenarioDslParameters(script);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the parameters.
-   * 
+   *
    * @return the parameters, keyed by name
    */
   @Override
   @SuppressWarnings("unchecked")
   public Map<String, Object> getParameters() {
-    CompilerConfiguration config = new CompilerConfiguration();
+    final CompilerConfiguration config = new CompilerConfiguration();
     config.setScriptBaseClass(SimulationScript.class.getName());
-    GroovyShell shell = new GroovyShell(config);
-    Script script = shell.parse(new StringReader(_script));
+    final GroovyShell shell = new GroovyShell(config);
+    final Script script = shell.parse(new StringReader(_script));
     script.run();
     return script.getBinding().getVariables();
   }
 
   //-------------------------------------------------------------------------
   public MutableFudgeMsg toFudgeMsg(final FudgeSerializer serializer) {
-    MutableFudgeMsg msg = serializer.newMessage();
+    final MutableFudgeMsg msg = serializer.newMessage();
     serializer.addToMessage(msg, SCRIPT, null, _script);
     return msg;
   }
 
   public static ScenarioDslParameters fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
-    String script = deserializer.fieldValueToObject(String.class, msg.getByName(SCRIPT));
+    final String script = deserializer.fieldValueToObject(String.class, msg.getByName(SCRIPT));
     return new ScenarioDslParameters(script);
   }
 

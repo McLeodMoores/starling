@@ -85,12 +85,12 @@ public final class FuturesMarginIndexFromPriceCalculator extends InstrumentDeriv
   //-----     Futures options     -----
 
   @Override
-  public Double visitInterestRateFutureOptionMarginSecurity(final InterestRateFutureOptionMarginSecurity option, Double quotedPrice) {
+  public Double visitInterestRateFutureOptionMarginSecurity(final InterestRateFutureOptionMarginSecurity option, final Double quotedPrice) {
     return quotedPrice * option.getUnderlyingFuture().getNotional() * option.getUnderlyingFuture().getPaymentAccrualFactor();
   }
 
   @Override
-  public Double visitBondFuturesOptionMarginSecurity(final BondFuturesOptionMarginSecurity option, Double quotedPrice) {
+  public Double visitBondFuturesOptionMarginSecurity(final BondFuturesOptionMarginSecurity option, final Double quotedPrice) {
     return quotedPrice * option.getUnderlyingFuture().getNotional();
   }
 

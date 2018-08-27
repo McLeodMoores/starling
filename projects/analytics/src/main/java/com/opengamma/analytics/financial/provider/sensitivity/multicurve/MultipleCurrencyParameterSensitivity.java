@@ -167,9 +167,9 @@ public class MultipleCurrencyParameterSensitivity {
    * @param name the name of the curve to get sensitivities for
    * @return map of sensitivities by currency
    */
-  public Map<Currency, DoubleMatrix1D> getSensitivityByName(String name) {
-    Map<Currency, DoubleMatrix1D> matches = new HashMap<>();
-    for (Entry<Pair<String, Currency>, DoubleMatrix1D> entry : _sensitivity.entrySet()) {
+  public Map<Currency, DoubleMatrix1D> getSensitivityByName(final String name) {
+    final Map<Currency, DoubleMatrix1D> matches = new HashMap<>();
+    for (final Entry<Pair<String, Currency>, DoubleMatrix1D> entry : _sensitivity.entrySet()) {
       final Pair<String, Currency> curveName = entry.getKey();
       if (curveName.getFirst().equals(name)) {
         matches.put(curveName.getSecond(), entry.getValue());

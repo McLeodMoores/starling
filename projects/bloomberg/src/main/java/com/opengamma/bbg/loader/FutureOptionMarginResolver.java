@@ -49,7 +49,7 @@ public class FutureOptionMarginResolver {
    * @return true if the security should be margined, false if not, and an exception
    * if the code is not recognied.
    */
-  public boolean isMargined(String exchangeCode) {
+  public boolean isMargined(final String exchangeCode) {
     if (EXCHANGE_CODE_MARGIN_MAPPING.containsKey(exchangeCode)) {
       return EXCHANGE_CODE_MARGIN_MAPPING.get(exchangeCode);
     } else {

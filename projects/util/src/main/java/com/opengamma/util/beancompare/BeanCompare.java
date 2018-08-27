@@ -30,7 +30,7 @@ public class BeanCompare {
   //-------------------------------------------------------------------------
   /**
    * Checks if two beans are equal ignoring one or more properties.
-   * 
+   *
    * @param bean1  the first bean, not null
    * @param bean2  the second bean, not null
    * @param properties  the properties to ignore, not null
@@ -38,7 +38,7 @@ public class BeanCompare {
    * @deprecated Use JodaBeanUtils.equalIgnoring
    */
   @Deprecated
-  public static boolean equalIgnoring(Bean bean1, Bean bean2, MetaProperty<?>... properties) {
+  public static boolean equalIgnoring(final Bean bean1, final Bean bean2, final MetaProperty<?>... properties) {
     return JodaBeanUtils.equalIgnoring(bean1, bean2, properties);
   }
 
@@ -55,13 +55,13 @@ public class BeanCompare {
    * Creates a new instance which uses the {@link java.util.Comparator} instances in {@code propertyComparators}
    * and {@code typeComparators} when comparing bean property values.  If there is no comparator for the property or
    * type being compared the default comparison logic is used.
-   * 
+   *
    * @param propertyComparators  comparators used for comparing properties keyed by the property they apply to
    * @param typeComparators  comparators used for comparing properties keyed by the type they apply to
    */
   public BeanCompare(
-      Map<MetaProperty<?>, Comparator<Object>> propertyComparators,
-      Map<Class<?>, Comparator<Object>> typeComparators) {
+      final Map<MetaProperty<?>, Comparator<Object>> propertyComparators,
+      final Map<Class<?>, Comparator<Object>> typeComparators) {
     ArgumentChecker.notNull(propertyComparators, "propertyComparators");
     ArgumentChecker.notNull(typeComparators, "typeComparators");
     _propertyComparators = propertyComparators;
@@ -71,13 +71,13 @@ public class BeanCompare {
   /**
    * Compares two beans of the same class and returns details of any differences.
    * If any of the bean properties* are beans themselves they are compared recursively.
-   * 
+   *
    * @param bean1  the first bean, not null
    * @param bean2  the second bbean of the same type, not null
    * @return the differences between the beans or an empty list if they are identical
    * @throws IllegalArgumentException if the beans' classes are different
    */
-  public List<BeanDifference<?>> compare(Bean bean1, Bean bean2) {
+  public List<BeanDifference<?>> compare(final Bean bean1, final Bean bean2) {
     ArgumentChecker.notNull(bean1, "bean1");
     ArgumentChecker.notNull(bean2, "bean2");
     if (!sameClass(bean1, bean2)) {
@@ -87,29 +87,29 @@ public class BeanCompare {
     return compare(bean1, bean2, Collections.<MetaProperty<?>>emptyList());
   }
 
-  
+
   /**
    * Compares two beans.
-   * 
+   *
    * @param path  the properties required to get from the root beans to the current beans, an
    *  empty list if the current beans are the root beans
    */
-  private List<BeanDifference<?>> compare(Bean bean1, Bean bean2, List<MetaProperty<?>> path) {
-    Iterable<MetaProperty<?>> properties = bean1.metaBean().metaPropertyIterable();
-    List<BeanDifference<?>> differences = new ArrayList<BeanDifference<?>>();
+  private List<BeanDifference<?>> compare(final Bean bean1, final Bean bean2, final List<MetaProperty<?>> path) {
+    final Iterable<MetaProperty<?>> properties = bean1.metaBean().metaPropertyIterable();
+    final List<BeanDifference<?>> differences = new ArrayList<>();
 
-    for (MetaProperty<?> property : properties) {
-      Object value1 = property.get(bean1);
-      Object value2 = property.get(bean2);
+    for (final MetaProperty<?> property : properties) {
+      final Object value1 = property.get(bean1);
+      final Object value2 = property.get(bean2);
       if (value1 instanceof Bean && value2 instanceof Bean && sameClass(value1, value2)) {
-        Comparator<Object> comparator = _propertyComparators.get(property);
+        final Comparator<Object> comparator = _propertyComparators.get(property);
         if (comparator == null || comparator.compare(value1, value2) != 0) {
-          List<MetaProperty<?>> newPath = ImmutableList.<MetaProperty<?>>builder().addAll(path).add(property).build();
-          differences.addAll(compare(((Bean) value1), ((Bean) value2), newPath));
+          final List<MetaProperty<?>> newPath = ImmutableList.<MetaProperty<?>>builder().addAll(path).add(property).build();
+          differences.addAll(compare((Bean) value1, (Bean) value2, newPath));
         }
       } else {
         if (!equal(property, value1, value2)) {
-          differences.add(new BeanDifference<Object>(property, value1, value2, path));
+          differences.add(new BeanDifference<>(property, value1, value2, path));
         }
       }
     }
@@ -120,14 +120,14 @@ public class BeanCompare {
    * Checks if two values of a property are equal. If there is a custom comparator for {@code property} it
    * is used for the comparison, otherwise the default comparison logic is used to compare the
    * values ({@link org.joda.beans.JodaBeanUtils#equal(Object, Object)}.
-   * 
+   *
    * @param property  the property whose values are being tested for equality
    * @param value1  the first property value
    * @param value2  the second property value
    * @return true if the values are equal according to the comparator for {@code property} or
    *  {@link org.joda.beans.JodaBeanUtils#equal(Object, Object)} if there is no comparator for the property
    */
-  private boolean equal(MetaProperty<?> property, Object value1, Object value2) {
+  private boolean equal(final MetaProperty<?> property, final Object value1, final Object value2) {
     Comparator<Object> comparator = _propertyComparators.get(property);
     if (comparator == null) {
       comparator = _typeComparators.get(property.propertyType());
@@ -139,7 +139,7 @@ public class BeanCompare {
     }
   }
 
-  private static boolean sameClass(Object value1, Object value2) {
+  private static boolean sameClass(final Object value1, final Object value2) {
     return value1.getClass().equals(value2.getClass());
   }
 

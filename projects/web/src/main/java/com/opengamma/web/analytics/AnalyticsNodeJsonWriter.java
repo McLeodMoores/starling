@@ -18,11 +18,11 @@ public class AnalyticsNodeJsonWriter {
 
   /**
    * Gets the JSON structure.
-   * 
+   *
    * @param node  the node
    * @return the nested JSON array of the node structure
    */
-  public static Object[] getJsonStructure(AnalyticsNode node) {
+  public static Object[] getJsonStructure(final AnalyticsNode node) {
     return createNodeArray(node);
   }
 
@@ -33,11 +33,11 @@ public class AnalyticsNodeJsonWriter {
    * <pre>
    *   [startRow,endRow,[childNode1,childNode2,...],isFungiblePosition]
    * </pre>
-   * 
+   *
    * @param node  the grid node, null returns an empty array
    * @return <pre>[startRow,endRow,[childNode1,childNode2,...],isFungiblePosition]</pre>
    */
-  private static Object[] createNodeArray(AnalyticsNode node) {
+  private static Object[] createNodeArray(final AnalyticsNode node) {
     if (node == null) {
       return new Object[0];
     }
@@ -51,8 +51,8 @@ public class AnalyticsNodeJsonWriter {
     nodeArray[0] = node.getStartRow();
     nodeArray[1] = node.getEndRow();
 
-    List<AnalyticsNode> children = node.getChildren();
-    Object[] childArray = new Object[children.size()];
+    final List<AnalyticsNode> children = node.getChildren();
+    final Object[] childArray = new Object[children.size()];
     for (int i = 0; i < childArray.length; i++) {
       childArray[i] = createNodeArray(children.get(i));
     }

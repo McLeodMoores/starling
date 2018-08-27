@@ -13,7 +13,7 @@ import com.opengamma.financial.security.future.InterestRateFutureSecurity;
 public class InterestRateFutureBean extends FutureSecurityBean {
 
   @Override
-  public <T> T accept(Visitor<T> visitor) {
+  public <T> T accept(final Visitor<T> visitor) {
     return visitor.visitInterestRateFutureType(this);
   }
 

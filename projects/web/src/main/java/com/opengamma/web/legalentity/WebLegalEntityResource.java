@@ -112,12 +112,12 @@ public class WebLegalEntityResource extends AbstractWebLegalEntityResource {
     final FlexiBean out = createRootData();
     final ManageableLegalEntity legalEntity = data().getLegalEntity().getLegalEntity();
 
-    List<FlexiBean> issuedSecuritiesOids = functional(legalEntity.getIssuedSecurities()).map(new Function1<ExternalIdBundle, FlexiBean>() {
+    final List<FlexiBean> issuedSecuritiesOids = functional(legalEntity.getIssuedSecurities()).map(new Function1<ExternalIdBundle, FlexiBean>() {
       @Override
-      public FlexiBean execute(ExternalIdBundle externalIds) {
-        ManageableSecurity security = data().getSecurityMaster().search(new SecuritySearchRequest(externalIds)).getFirstSecurity();
+      public FlexiBean execute(final ExternalIdBundle externalIds) {
+        final ManageableSecurity security = data().getSecurityMaster().search(new SecuritySearchRequest(externalIds)).getFirstSecurity();
         if (security != null) {
-          FlexiBean out = new FlexiBean();
+          final FlexiBean out = new FlexiBean();
           out.put("name", security.getName());
           out.put("oid", security.getUniqueId().getObjectId());
           return out;
@@ -127,12 +127,12 @@ public class WebLegalEntityResource extends AbstractWebLegalEntityResource {
       }
     }).asList();
 
-    List<FlexiBean> obligationsOids = functional(legalEntity.getObligations()).map(new Function1<Obligation, FlexiBean>() {
+    final List<FlexiBean> obligationsOids = functional(legalEntity.getObligations()).map(new Function1<Obligation, FlexiBean>() {
       @Override
-      public FlexiBean execute(Obligation obligation) {
-        ManageableSecurity security = data().getSecurityMaster().search(new SecuritySearchRequest(obligation.getSecurity())).getFirstSecurity();
+      public FlexiBean execute(final Obligation obligation) {
+        final ManageableSecurity security = data().getSecurityMaster().search(new SecuritySearchRequest(obligation.getSecurity())).getFirstSecurity();
         if (security != null) {
-          FlexiBean out = new FlexiBean();
+          final FlexiBean out = new FlexiBean();
           out.put("obligation", obligation.getName());
           out.put("name", security.getName());
           out.put("oid", security.getUniqueId().getObjectId());
@@ -176,7 +176,7 @@ public class WebLegalEntityResource extends AbstractWebLegalEntityResource {
       return Response.ok(html).build();
     }
 
-    ManageableLegalEntity legalEntity = parseXML(xml, data().getLegalEntity().getLegalEntity().getClass());
+    final ManageableLegalEntity legalEntity = parseXML(xml, data().getLegalEntity().getLegalEntity().getClass());
     final URI uri = updateLegalEntity(name, legalEntity);
     return Response.seeOther(uri).build();
   }

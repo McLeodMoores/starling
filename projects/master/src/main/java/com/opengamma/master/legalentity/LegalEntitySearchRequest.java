@@ -103,7 +103,7 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
    *
    * @param legalentityId the legalentity external identifier to search for, not null
    */
-  public LegalEntitySearchRequest(ExternalId legalentityId) {
+  public LegalEntitySearchRequest(final ExternalId legalentityId) {
     addExternalId(legalentityId);
   }
 
@@ -112,7 +112,7 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
    *
    * @param legalentityBundle the legalentity external identifiers to search for, not null
    */
-  public LegalEntitySearchRequest(ExternalIdBundle legalentityBundle) {
+  public LegalEntitySearchRequest(final ExternalIdBundle legalentityBundle) {
     addExternalIds(legalentityBundle);
   }
 
@@ -123,10 +123,10 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
    *
    * @param legalentityId the legalentity object identifier to add, not null
    */
-  public void addObjectId(ObjectIdentifiable legalentityId) {
+  public void addObjectId(final ObjectIdentifiable legalentityId) {
     ArgumentChecker.notNull(legalentityId, "legalentityId");
     if (_objectIds == null) {
-      _objectIds = new ArrayList<ObjectId>();
+      _objectIds = new ArrayList<>();
     }
     _objectIds.add(legalentityId.getObjectId());
   }
@@ -137,12 +137,12 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
    *
    * @param legalentityIds the new legalentity identifiers, null clears the legalentity id search
    */
-  public void setObjectIds(Iterable<? extends ObjectIdentifiable> legalentityIds) {
+  public void setObjectIds(final Iterable<? extends ObjectIdentifiable> legalentityIds) {
     if (legalentityIds == null) {
       _objectIds = null;
     } else {
-      _objectIds = new ArrayList<ObjectId>();
-      for (ObjectIdentifiable legalentityId : legalentityIds) {
+      _objectIds = new ArrayList<>();
+      for (final ObjectIdentifiable legalentityId : legalentityIds) {
         _objectIds.add(legalentityId.getObjectId());
       }
     }
@@ -157,7 +157,7 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
    *
    * @param legalentityId the legalentity key identifier to add, not null
    */
-  public void addExternalId(ExternalId legalentityId) {
+  public void addExternalId(final ExternalId legalentityId) {
     ArgumentChecker.notNull(legalentityId, "legalentityId");
     addExternalIds(Arrays.asList(legalentityId));
   }
@@ -169,7 +169,7 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
    *
    * @param legalentityIds the legalentity key identifiers to add, not null
    */
-  public void addExternalIds(ExternalId... legalentityIds) {
+  public void addExternalIds(final ExternalId... legalentityIds) {
     ArgumentChecker.notNull(legalentityIds, "legalentityIds");
     if (getExternalIdSearch() == null) {
       setExternalIdSearch(ExternalIdSearch.of(legalentityIds));
@@ -185,7 +185,7 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
    *
    * @param legalentityIds the legalentity key identifiers to add, not null
    */
-  public void addExternalIds(Iterable<ExternalId> legalentityIds) {
+  public void addExternalIds(final Iterable<ExternalId> legalentityIds) {
     ArgumentChecker.notNull(legalentityIds, "legalentityIds");
     if (getExternalIdSearch() == null) {
       setExternalIdSearch(ExternalIdSearch.of(legalentityIds));
@@ -199,7 +199,7 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
    *
    * @param type the type to set, not null
    */
-  public void setExternalIdSearchType(ExternalIdSearchType type) {
+  public void setExternalIdSearchType(final ExternalIdSearchType type) {
     if (getExternalIdSearch() == null) {
       setExternalIdSearch(ExternalIdSearch.of(type));
     } else {
@@ -215,7 +215,7 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
    * @param key   the key to add, not null
    * @param value the value to add, not null
    */
-  public void addAttribute(String key, String value) {
+  public void addAttribute(final String key, final String value) {
     ArgumentChecker.notNull(key, "key");
     ArgumentChecker.notNull(value, "value");
     _attributes.put(key, value);
@@ -239,25 +239,25 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
       return false;
     }
     if (getExternalIdValue() != null) {
-      for (ExternalId identifier : legalentity.getExternalIdBundle()) {
+      for (final ExternalId identifier : legalentity.getExternalIdBundle()) {
         if (RegexUtils.wildcardMatch(getExternalIdValue(), identifier.getValue()) == false) {
           return false;
         }
       }
     }
     if (getExternalIdScheme() != null) {
-      for (ExternalId identifier : legalentity.getExternalIdBundle()) {
+      for (final ExternalId identifier : legalentity.getExternalIdBundle()) {
         if (RegexUtils.wildcardMatch(getExternalIdScheme(), identifier.getScheme().getName()) == false) {
           return false;
         }
       }
     }
     if (getAttributes().size() > 0) {
-      for (Entry<String, String> entry : getAttributes().entrySet()) {
+      for (final Entry<String, String> entry : getAttributes().entrySet()) {
         if (legalentity.getAttributes().containsKey(entry.getKey()) == false) {
           return false;
         }
-        String otherValue = legalentity.getAttributes().get(entry.getKey());
+        final String otherValue = legalentity.getAttributes().get(entry.getKey());
         if (RegexUtils.wildcardMatch(entry.getValue(), otherValue) == false) {
           return false;
         }

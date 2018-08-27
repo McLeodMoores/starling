@@ -17,19 +17,19 @@ import com.opengamma.util.ResourceUtils;
 
 class PropertiesUtils {
 
-  static Properties createProperties(String configFile) {
-    Resource res = ResourceUtils.createResource(configFile);
-    Properties props = new Properties();
+  static Properties createProperties(final String configFile) {
+    final Resource res = ResourceUtils.createResource(configFile);
+    final Properties props = new Properties();
     try (InputStream in = res.getInputStream()) {
       if (in == null) {
         throw new FileNotFoundException(configFile);
       }
       props.load(in);
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw new OpenGammaRuntimeException("Failed to load config", e);
     }
     return props;
   }
 
-  
+
 }

@@ -1,11 +1,9 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.curve.rest;
-
-import java.net.URI;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -13,7 +11,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import org.threeten.bp.Instant;
@@ -51,7 +48,7 @@ public class DataCurveSpecificationBuilderResource extends AbstractDataResource 
   //-------------------------------------------------------------------------
   /**
    * Gets the builder.
-   * 
+   *
    * @return the builder, not null
    */
   public CurveSpecificationBuilder getCurveSpecificationBuilder() {
@@ -60,19 +57,19 @@ public class DataCurveSpecificationBuilderResource extends AbstractDataResource 
 
   //-------------------------------------------------------------------------
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
   @POST
   @Path("builder/{valuationTime}/{date}")
   public Response buildCurve(
-      @PathParam("valuationTime") String valuationTimeStr,
-      @PathParam("date") String curveDateStr,
-      CurveDefinition definition) {
+      @PathParam("valuationTime") final String valuationTimeStr,
+      @PathParam("date") final String curveDateStr,
+      final CurveDefinition definition) {
     final Instant valuationTime = Instant.parse(valuationTimeStr);
     final LocalDate curveDate = LocalDate.parse(curveDateStr);
-    CurveSpecification result = getCurveSpecificationBuilder().buildCurve(valuationTime, curveDate, definition);
+    final CurveSpecification result = getCurveSpecificationBuilder().buildCurve(valuationTime, curveDate, definition);
     return responseOkObject(result);
   }
 }

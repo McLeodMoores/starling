@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.option;
@@ -19,7 +19,7 @@ public class MonitoringTypeUserType extends EnumUserType<MonitoringType> {
   }
 
   @Override
-  protected String enumToStringNoCache(MonitoringType value) {
+  protected String enumToStringNoCache(final MonitoringType value) {
     switch (value) {
       case CONTINUOUS:
         return "continuous";

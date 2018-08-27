@@ -57,10 +57,10 @@ public class SimpleCounterparty extends DirectBean
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param counterpartyId  the identifier, not null
    */
-  public SimpleCounterparty(ExternalId counterpartyId) {
+  public SimpleCounterparty(final ExternalId counterpartyId) {
     ArgumentChecker.notNull(counterpartyId, "counterpartyId");
     setExternalId(counterpartyId);
   }

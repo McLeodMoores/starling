@@ -55,15 +55,15 @@ public class BondSecuritySearchRequest extends SecuritySearchRequest {
   //-------------------------------------------------------------------------
   /**
    * Checks if this search matches the specified document.
-   * 
+   *
    * @param document  the document to match, null returns false
    * @return true if matches
    */
-  public boolean matches(SecurityDocument document) {
+  public boolean matches(final SecurityDocument document) {
     if (super.matches(document) == false || document.getSecurity() instanceof BondSecurity == false) {
       return false;
     }
-    BondSecurity security = (BondSecurity) document.getSecurity();
+    final BondSecurity security = (BondSecurity) document.getSecurity();
     if (getIssuerName() != null && RegexUtils.wildcardMatch(getIssuerName(), security.getIssuerName()) == false) {
       return false;
     }

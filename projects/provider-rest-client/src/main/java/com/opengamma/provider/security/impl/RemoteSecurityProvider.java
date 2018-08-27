@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.provider.security.impl;
@@ -27,7 +27,7 @@ public class RemoteSecurityProvider extends AbstractRemoteClient implements Secu
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param baseUri  the base target URI for all RESTful web services, not null
    */
   public RemoteSecurityProvider(final URI baseUri) {
@@ -38,25 +38,25 @@ public class RemoteSecurityProvider extends AbstractRemoteClient implements Secu
   // delegate convenience methods to request/result method
   // code copied from AbstractSecurityProvider due to lack of multiple inheritance
   @Override
-  public Security getSecurity(ExternalIdBundle externalIdBundle) {
-    SecurityProviderRequest request = SecurityProviderRequest.createGet(externalIdBundle, null);
-    SecurityProviderResult result = getSecurities(request);
+  public Security getSecurity(final ExternalIdBundle externalIdBundle) {
+    final SecurityProviderRequest request = SecurityProviderRequest.createGet(externalIdBundle, null);
+    final SecurityProviderResult result = getSecurities(request);
     return result.getResultMap().get(externalIdBundle);
   }
 
   @Override
-  public Map<ExternalIdBundle, Security> getSecurities(Collection<ExternalIdBundle> externalIdBundles) {
-    SecurityProviderRequest request = SecurityProviderRequest.createGet(externalIdBundles, null);
-    SecurityProviderResult result = getSecurities(request);
+  public Map<ExternalIdBundle, Security> getSecurities(final Collection<ExternalIdBundle> externalIdBundles) {
+    final SecurityProviderRequest request = SecurityProviderRequest.createGet(externalIdBundles, null);
+    final SecurityProviderResult result = getSecurities(request);
     return result.getResultMap();
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public SecurityProviderResult getSecurities(SecurityProviderRequest request) {
+  public SecurityProviderResult getSecurities(final SecurityProviderRequest request) {
     ArgumentChecker.notNull(request, "request");
-    
-    URI uri = DataSecurityProviderUris.uriGet(getBaseUri());
+
+    final URI uri = DataSecurityProviderUris.uriGet(getBaseUri());
     return accessRemote(uri).post(SecurityProviderResult.class, request);
   }
 

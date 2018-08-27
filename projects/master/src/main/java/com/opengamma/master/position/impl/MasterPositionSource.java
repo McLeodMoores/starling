@@ -93,7 +93,7 @@ public class MasterPositionSource extends AbstractMasterPositionSource implement
     }
     return manTrade;
   }
-  
+
   //-------------------------------------------------------------------------
   @Override
   public String toString() {
@@ -106,8 +106,8 @@ public class MasterPositionSource extends AbstractMasterPositionSource implement
   }
 
   @Override
-  protected Collection<Position> positions(PositionSearchRequest positionSearch) {
-    List<Position> result = Lists.newArrayList();
+  protected Collection<Position> positions(final PositionSearchRequest positionSearch) {
+    final List<Position> result = Lists.newArrayList();
     final PositionSearchResult positions = getPositionMaster().search(positionSearch);
     for (final PositionDocument position : positions.getDocuments()) {
       result.add(position.getPosition().toPosition());

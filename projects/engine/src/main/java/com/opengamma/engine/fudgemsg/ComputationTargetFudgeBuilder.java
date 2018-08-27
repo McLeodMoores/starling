@@ -23,7 +23,7 @@ import com.opengamma.id.UniqueIdentifiable;
 
 /**
  * Fudge message builder for {@link ComputationTarget}.
- * 
+ *
  * <pre>
  *   message ComputationTarget extends ComputationTargetSpecification {
  *     required Object value;              // the target value
@@ -36,8 +36,8 @@ public class ComputationTargetFudgeBuilder implements FudgeBuilder<ComputationTa
   private static final String VALUE_FIELD = "value";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, ComputationTarget object) {
-    MutableFudgeMsg msg = serializer.newMessage();
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final ComputationTarget object) {
+    final MutableFudgeMsg msg = serializer.newMessage();
     ComputationTargetReferenceFudgeBuilder.buildMessageImpl(serializer, msg, object.toSpecification());
     serializer.addToMessageWithClassHeaders(msg, VALUE_FIELD, null, object.getValue());
     return msg;
@@ -68,7 +68,7 @@ public class ComputationTargetFudgeBuilder implements FudgeBuilder<ComputationTa
   };
 
   @Override
-  public ComputationTarget buildObject(FudgeDeserializer deserializer, FudgeMsg message) {
+  public ComputationTarget buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
     final ComputationTargetSpecification specification = ComputationTargetReferenceFudgeBuilder.buildObjectImpl(deserializer, message).getSpecification();
     final Class<? extends UniqueIdentifiable> valueType = specification.getType().accept(GET_LEAF_TYPE, null);
     if (valueType != null) {

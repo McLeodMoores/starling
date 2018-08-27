@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.marketdatasnapshot.impl;
@@ -25,7 +25,7 @@ public class RemoteMarketDataSnapshotSource extends AbstractRemoteSource<Structu
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param baseUri  the base target URI for all RESTful web services, not null
    */
   public RemoteMarketDataSnapshotSource(final URI baseUri) {
@@ -36,40 +36,40 @@ public class RemoteMarketDataSnapshotSource extends AbstractRemoteSource<Structu
   @Override
   public StructuredMarketDataSnapshot get(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
-    
-    URI uri = DataMarketDataSnapshotSourceUris.uriGet(getBaseUri(), uniqueId);
+
+    final URI uri = DataMarketDataSnapshotSourceUris.uriGet(getBaseUri(), uniqueId);
     return accessRemote(uri).get(StructuredMarketDataSnapshot.class);
   }
 
   @Override
-  public StructuredMarketDataSnapshot get(ObjectId objectId, VersionCorrection versionCorrection) {
+  public StructuredMarketDataSnapshot get(final ObjectId objectId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
-        
-    URI uri = DataMarketDataSnapshotSourceUris.uriGet(getBaseUri(), objectId, versionCorrection);
-    return accessRemote(uri).get(StructuredMarketDataSnapshot.class);        
+
+    final URI uri = DataMarketDataSnapshotSourceUris.uriGet(getBaseUri(), objectId, versionCorrection);
+    return accessRemote(uri).get(StructuredMarketDataSnapshot.class);
   }
-  
+
   @Override
-  public void addChangeListener(UniqueId uniqueId, MarketDataSnapshotChangeListener listener) {
+  public void addChangeListener(final UniqueId uniqueId, final MarketDataSnapshotChangeListener listener) {
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public void removeChangeListener(UniqueId uniqueId, MarketDataSnapshotChangeListener listener) {
+  public void removeChangeListener(final UniqueId uniqueId, final MarketDataSnapshotChangeListener listener) {
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public <S extends NamedSnapshot> S getSingle(Class<S> type,
-                                               String snapshotName,
-                                               VersionCorrection versionCorrection) {
+  public <S extends NamedSnapshot> S getSingle(final Class<S> type,
+                                               final String snapshotName,
+                                               final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(type, "type");
     ArgumentChecker.notNull(snapshotName, "snapshotName");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
 
-    URI uri = DataMarketDataSnapshotSourceUris.uriSearchSingle(getBaseUri(), type, snapshotName, versionCorrection);
-    NamedSnapshot snapshot = accessRemote(uri).get(NamedSnapshot.class);
+    final URI uri = DataMarketDataSnapshotSourceUris.uriSearchSingle(getBaseUri(), type, snapshotName, versionCorrection);
+    final NamedSnapshot snapshot = accessRemote(uri).get(NamedSnapshot.class);
 
     if (type.isAssignableFrom(snapshot.getClass())) {
       return type.cast(snapshot);

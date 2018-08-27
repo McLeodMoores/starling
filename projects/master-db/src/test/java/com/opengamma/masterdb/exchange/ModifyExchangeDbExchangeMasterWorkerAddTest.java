@@ -34,7 +34,7 @@ public class ModifyExchangeDbExchangeMasterWorkerAddTest extends AbstractDbExcha
   private static final ExternalIdBundle REGION = ExternalIdBundle.of("C", "D");
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public ModifyExchangeDbExchangeMasterWorkerAddTest(String databaseType, String databaseVersion) {
+  public ModifyExchangeDbExchangeMasterWorkerAddTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion, false);
     LOGGER.info("running testcases for {}", databaseType);
   }
@@ -47,19 +47,19 @@ public class ModifyExchangeDbExchangeMasterWorkerAddTest extends AbstractDbExcha
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_add_noExchange() {
-    ExchangeDocument doc = new ExchangeDocument();
+    final ExchangeDocument doc = new ExchangeDocument();
     _exgMaster.add(doc);
   }
 
   @Test
   public void test_add() {
-    Instant now = Instant.now(_exgMaster.getClock());
-    
-    ManageableExchange exchange = new ManageableExchange(BUNDLE, "Test", REGION, null);
-    ExchangeDocument doc = new ExchangeDocument(exchange);
-    ExchangeDocument test = _exgMaster.add(doc);
-    
-    UniqueId uniqueId = test.getUniqueId();
+    final Instant now = Instant.now(_exgMaster.getClock());
+
+    final ManageableExchange exchange = new ManageableExchange(BUNDLE, "Test", REGION, null);
+    final ExchangeDocument doc = new ExchangeDocument(exchange);
+    final ExchangeDocument test = _exgMaster.add(doc);
+
+    final UniqueId uniqueId = test.getUniqueId();
     assertNotNull(uniqueId);
     assertEquals("DbExg", uniqueId.getScheme());
     assertTrue(uniqueId.isVersioned());
@@ -69,7 +69,7 @@ public class ModifyExchangeDbExchangeMasterWorkerAddTest extends AbstractDbExcha
     assertEquals(null, test.getVersionToInstant());
     assertEquals(now, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    ManageableExchange testExchange = test.getExchange();
+    final ManageableExchange testExchange = test.getExchange();
     assertNotNull(testExchange);
     assertEquals(uniqueId, testExchange.getUniqueId());
     assertEquals("Test", test.getName());
@@ -80,27 +80,27 @@ public class ModifyExchangeDbExchangeMasterWorkerAddTest extends AbstractDbExcha
 
   @Test
   public void test_add_addThenGet() {
-    ManageableExchange exchange = new ManageableExchange(BUNDLE, "Test", REGION, null);
-    ExchangeDocument doc = new ExchangeDocument(exchange);
-    ExchangeDocument added = _exgMaster.add(doc);
-    
-    ExchangeDocument test = _exgMaster.get(added.getUniqueId());
+    final ManageableExchange exchange = new ManageableExchange(BUNDLE, "Test", REGION, null);
+    final ExchangeDocument doc = new ExchangeDocument(exchange);
+    final ExchangeDocument added = _exgMaster.add(doc);
+
+    final ExchangeDocument test = _exgMaster.get(added.getUniqueId());
     assertEquals(added, test);
   }
 
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_add_addWithMissingNameProperty() {
-    ManageableExchange exchange = new ManageableExchange();
-    ExchangeDocument doc = new ExchangeDocument(exchange);
+    final ManageableExchange exchange = new ManageableExchange();
+    final ExchangeDocument doc = new ExchangeDocument(exchange);
     _exgMaster.add(doc);
   }
 
   @Test
   public void test_add_addWithMinimalProperties() {
-    ManageableExchange exchange = new ManageableExchange();
+    final ManageableExchange exchange = new ManageableExchange();
     exchange.setName("Test");
-    ExchangeDocument doc = new ExchangeDocument(exchange);
+    final ExchangeDocument doc = new ExchangeDocument(exchange);
     _exgMaster.add(doc);
   }
 

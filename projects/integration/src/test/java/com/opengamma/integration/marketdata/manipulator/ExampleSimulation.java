@@ -46,25 +46,25 @@ import com.opengamma.livedata.UserPrincipal;
   private static final Set<String> CURRENCY_PAIRS = ImmutableSet.of("GBPUSD", "EURUSD", "USDJPY", "CHFUSD");
   private static final List<Double> SCALING_FACTORS = ImmutableList.of(0.95, 1.0, 1.05);
 
-  public static void main(String[] args) {
+  public static void main(final String[] args) {
 
     // set up the connection to the server that will run the simulation ------------------------------------------------
 
     try (RemoteServer server = RemoteServer.create("http://localhost:8080")) {
-      ViewProcessor viewProcessor = server.getViewProcessor();
-      ConfigSource configSource = server.getConfigSource();
-      String viewDefinitionName = "AUD Swaps (3m / 6m basis) (1)";
-      UniqueId viewDefId = SimulationUtils.latestViewDefinitionId(viewDefinitionName, configSource);
-      List<MarketDataSpecification> marketDataSpecs =
+      final ViewProcessor viewProcessor = server.getViewProcessor();
+      final ConfigSource configSource = server.getConfigSource();
+      final String viewDefinitionName = "AUD Swaps (3m / 6m basis) (1)";
+      final UniqueId viewDefId = SimulationUtils.latestViewDefinitionId(viewDefinitionName, configSource);
+      final List<MarketDataSpecification> marketDataSpecs =
           ImmutableList.<MarketDataSpecification>of(LiveMarketDataSpecification.of("Simulated live market data"));
 
       // define the simulation -----------------------------------------------------------------------------------------
 
-      Simulation simulation = new Simulation("Example simulation");
-      for (Double scalingFactor : SCALING_FACTORS) {
+      final Simulation simulation = new Simulation("Example simulation");
+      for (final Double scalingFactor : SCALING_FACTORS) {
         // add a scenario (a single calculation cycle and set of results) for each scale factor
-        Scenario scenario = simulation.scenario(Double.toString(scalingFactor));
-        for (String currencyPair : CURRENCY_PAIRS) {
+        final Scenario scenario = simulation.scenario(Double.toString(scalingFactor));
+        for (final String currencyPair : CURRENCY_PAIRS) {
           // bump each spot rate in the scenario by the scale factor
           scenario.marketDataPoint().id("OG_SYNTHETIC_TICKER", currencyPair).apply().scaling(scalingFactor);
         }
@@ -97,17 +97,17 @@ import com.opengamma.livedata.UserPrincipal;
       }
 
       @Override
-      public void viewDefinitionCompiled(CompiledViewDefinition compiledViewDefinition, boolean hasMarketDataPermissions) {
+      public void viewDefinitionCompiled(final CompiledViewDefinition compiledViewDefinition, final boolean hasMarketDataPermissions) {
         LOGGER.info("view definition compiled");
       }
 
       @Override
-      public void viewDefinitionCompilationFailed(Instant valuationTime, Exception exception) {
+      public void viewDefinitionCompilationFailed(final Instant valuationTime, final Exception exception) {
         LOGGER.warn("view definition compilation failed", exception);
       }
 
       @Override
-      public void cycleCompleted(ViewComputationResultModel fullResult, ViewDeltaResultModel deltaResult) {
+      public void cycleCompleted(final ViewComputationResultModel fullResult, final ViewDeltaResultModel deltaResult) {
         LOGGER.info("cycle completed");
       }
     }

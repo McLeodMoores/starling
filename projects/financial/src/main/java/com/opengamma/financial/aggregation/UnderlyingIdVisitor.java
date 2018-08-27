@@ -57,11 +57,11 @@ public class UnderlyingIdVisitor extends FinancialSecurityVisitorAdapter<String>
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param preferredScheme  the preferred scheme, not null
    * @param securitySource  the security source, not null
    */
-  public UnderlyingIdVisitor(ExternalScheme preferredScheme, SecuritySource securitySource) {
+  public UnderlyingIdVisitor(final ExternalScheme preferredScheme, final SecuritySource securitySource) {
     ArgumentChecker.notNull(securitySource, "secSource");
     ArgumentChecker.notNull(preferredScheme, "preferredScheme");
     _preferredScheme = preferredScheme;
@@ -70,226 +70,226 @@ public class UnderlyingIdVisitor extends FinancialSecurityVisitorAdapter<String>
 
   //-------------------------------------------------------------------------
   @Override
-  public String visitCommodityFutureOptionSecurity(CommodityFutureOptionSecurity security) {
+  public String visitCommodityFutureOptionSecurity(final CommodityFutureOptionSecurity security) {
     if (security.getUnderlyingId().isScheme(_preferredScheme)) {
-      String identifier = security.getUnderlyingId().getValue();
+      final String identifier = security.getUnderlyingId().getValue();
       return identifier != null ? identifier : NOT_APPLICABLE;
     } else {
-      Security underlying = _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId()));
+      final Security underlying = _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId()));
       if (underlying != null) {
-        String identifier = underlying.getExternalIdBundle().getValue(_preferredScheme);
+        final String identifier = underlying.getExternalIdBundle().getValue(_preferredScheme);
         return identifier != null ? identifier : NOT_APPLICABLE;
       } else {
-        String identifier = security.getUnderlyingId() != null ? security.getUnderlyingId().getValue() : null;
+        final String identifier = security.getUnderlyingId() != null ? security.getUnderlyingId().getValue() : null;
         return identifier != null ? identifier : NOT_APPLICABLE;
       }
     }
   }
 
   @Override
-  public String visitEquityIndexOptionSecurity(EquityIndexOptionSecurity security) {
-    String identifier = security.getUnderlyingId().getValue();
+  public String visitEquityIndexOptionSecurity(final EquityIndexOptionSecurity security) {
+    final String identifier = security.getUnderlyingId().getValue();
     return identifier != null ? identifier : NOT_APPLICABLE;
   }
 
   @Override
-  public String visitEquityIndexFutureOptionSecurity(EquityIndexFutureOptionSecurity security) {
-    String identifier = security.getUnderlyingId().getValue();
+  public String visitEquityIndexFutureOptionSecurity(final EquityIndexFutureOptionSecurity security) {
+    final String identifier = security.getUnderlyingId().getValue();
     return identifier != null ? identifier : NOT_APPLICABLE;
   }
 
   @Override
-  public String visitEquityOptionSecurity(EquityOptionSecurity security) {
+  public String visitEquityOptionSecurity(final EquityOptionSecurity security) {
     if (security.getUnderlyingId().isScheme(_preferredScheme)) {
-      String identifier = security.getUnderlyingId().getValue();
+      final String identifier = security.getUnderlyingId().getValue();
       return identifier != null ? identifier : NOT_APPLICABLE;
     } else {
-      Security underlying = _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId()));
+      final Security underlying = _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId()));
       if (underlying != null) {
-        String identifier = underlying.getExternalIdBundle().getValue(_preferredScheme);
+        final String identifier = underlying.getExternalIdBundle().getValue(_preferredScheme);
         return identifier != null ? identifier : NOT_APPLICABLE;
       } else {
-        String identifier = security.getUnderlyingId() != null ? security.getUnderlyingId().getValue() : null;
+        final String identifier = security.getUnderlyingId() != null ? security.getUnderlyingId().getValue() : null;
         return identifier != null ? identifier : NOT_APPLICABLE;
       }
     }
   }
 
   @Override
-  public String visitEquityBarrierOptionSecurity(EquityBarrierOptionSecurity security) {
+  public String visitEquityBarrierOptionSecurity(final EquityBarrierOptionSecurity security) {
     if (security.getUnderlyingId().isScheme(_preferredScheme)) {
-      String identifier = security.getUnderlyingId().getValue();
+      final String identifier = security.getUnderlyingId().getValue();
       return identifier != null ? identifier : NOT_APPLICABLE;
     } else {
-      Security underlying = _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId()));
+      final Security underlying = _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId()));
       if (underlying != null) {
-        String identifier = underlying.getExternalIdBundle().getValue(_preferredScheme);
+        final String identifier = underlying.getExternalIdBundle().getValue(_preferredScheme);
         return identifier != null ? identifier : NOT_APPLICABLE;
       } else {
-        String identifier = security.getUnderlyingId() != null ? security.getUnderlyingId().getValue() : null;
+        final String identifier = security.getUnderlyingId() != null ? security.getUnderlyingId().getValue() : null;
         return identifier != null ? identifier : NOT_APPLICABLE;
       }
     }
   }
 
   @Override
-  public String visitFXOptionSecurity(FXOptionSecurity fxOptionSecurity) {
-    UnorderedCurrencyPair unorderedPair = UnorderedCurrencyPair.of(fxOptionSecurity.getCallCurrency(),
+  public String visitFXOptionSecurity(final FXOptionSecurity fxOptionSecurity) {
+    final UnorderedCurrencyPair unorderedPair = UnorderedCurrencyPair.of(fxOptionSecurity.getCallCurrency(),
                                                                    fxOptionSecurity.getPutCurrency());
     return unorderedPair.getFirstCurrency() + "/" + unorderedPair.getSecondCurrency();
   }
 
   @Override
-  public String visitEquitySecurity(EquitySecurity equitySecurity) {
-    String ticker = equitySecurity.getExternalIdBundle().getValue(_preferredScheme);
+  public String visitEquitySecurity(final EquitySecurity equitySecurity) {
+    final String ticker = equitySecurity.getExternalIdBundle().getValue(_preferredScheme);
     return ticker != null ? ticker : NOT_APPLICABLE;
   }
 
   @Override
-  public String visitAgricultureFutureSecurity(AgricultureFutureSecurity security) {
-    String ticker = security.getExternalIdBundle().getValue(_preferredScheme);
+  public String visitAgricultureFutureSecurity(final AgricultureFutureSecurity security) {
+    final String ticker = security.getExternalIdBundle().getValue(_preferredScheme);
     return ticker != null ? ticker : NOT_APPLICABLE;
   }
 
   @Override
-  public String visitMetalFutureSecurity(MetalFutureSecurity security) {
-    String ticker = security.getExternalIdBundle().getValue(_preferredScheme);
+  public String visitMetalFutureSecurity(final MetalFutureSecurity security) {
+    final String ticker = security.getExternalIdBundle().getValue(_preferredScheme);
     return ticker != null ? ticker : NOT_APPLICABLE;
   }
 
   @Override
-  public String visitBondFutureSecurity(BondFutureSecurity security) {
-    String ticker = security.getExternalIdBundle().getValue(_preferredScheme);
+  public String visitBondFutureSecurity(final BondFutureSecurity security) {
+    final String ticker = security.getExternalIdBundle().getValue(_preferredScheme);
     return ticker != null ? ticker : NOT_APPLICABLE;
   }
 
   @Override
-  public String visitEnergyFutureSecurity(EnergyFutureSecurity security) {
-    String ticker = security.getExternalIdBundle().getValue(_preferredScheme);
+  public String visitEnergyFutureSecurity(final EnergyFutureSecurity security) {
+    final String ticker = security.getExternalIdBundle().getValue(_preferredScheme);
     return ticker != null ? ticker : NOT_APPLICABLE;
   }
 
   @Override
-  public String visitDeliverableSwapFutureSecurity(DeliverableSwapFutureSecurity security) {
-    String ticker = security.getExternalIdBundle().getValue(_preferredScheme);
+  public String visitDeliverableSwapFutureSecurity(final DeliverableSwapFutureSecurity security) {
+    final String ticker = security.getExternalIdBundle().getValue(_preferredScheme);
     return ticker != null ? ticker : NOT_APPLICABLE;
   }
 
   @Override
-  public String visitEquityFutureSecurity(EquityFutureSecurity security) {
-    String ticker = security.getExternalIdBundle().getValue(_preferredScheme);
+  public String visitEquityFutureSecurity(final EquityFutureSecurity security) {
+    final String ticker = security.getExternalIdBundle().getValue(_preferredScheme);
     return ticker != null ? ticker : NOT_APPLICABLE;
   }
 
   @Override
-  public String visitEquityIndexDividendFutureSecurity(EquityIndexDividendFutureSecurity security) {
-    String ticker = security.getExternalIdBundle().getValue(_preferredScheme);
+  public String visitEquityIndexDividendFutureSecurity(final EquityIndexDividendFutureSecurity security) {
+    final String ticker = security.getExternalIdBundle().getValue(_preferredScheme);
     return ticker != null ? ticker : NOT_APPLICABLE;
   }
 
   @Override
-  public String visitFXFutureSecurity(FXFutureSecurity security) {
-    String ticker = security.getExternalIdBundle().getValue(_preferredScheme);
+  public String visitFXFutureSecurity(final FXFutureSecurity security) {
+    final String ticker = security.getExternalIdBundle().getValue(_preferredScheme);
     return ticker != null ? ticker : NOT_APPLICABLE;
   }
 
   @Override
-  public String visitIndexFutureSecurity(IndexFutureSecurity security) {
-    String ticker = security.getExternalIdBundle().getValue(_preferredScheme);
+  public String visitIndexFutureSecurity(final IndexFutureSecurity security) {
+    final String ticker = security.getExternalIdBundle().getValue(_preferredScheme);
     return ticker != null ? ticker : NOT_APPLICABLE;
   }
 
   @Override
-  public String visitInterestRateFutureSecurity(InterestRateFutureSecurity security) {
-    String ticker = security.getExternalIdBundle().getValue(_preferredScheme);
+  public String visitInterestRateFutureSecurity(final InterestRateFutureSecurity security) {
+    final String ticker = security.getExternalIdBundle().getValue(_preferredScheme);
     return ticker != null ? ticker : NOT_APPLICABLE;
   }
 
   @Override
-  public String visitStockFutureSecurity(StockFutureSecurity security) {
-    String ticker = security.getExternalIdBundle().getValue(_preferredScheme);
+  public String visitStockFutureSecurity(final StockFutureSecurity security) {
+    final String ticker = security.getExternalIdBundle().getValue(_preferredScheme);
     return ticker != null ? ticker : NOT_APPLICABLE;
   }
 
   @Override
-  public String visitNonDeliverableFXOptionSecurity(NonDeliverableFXOptionSecurity fxOptionSecurity) {
-    UnorderedCurrencyPair unorderedPair = UnorderedCurrencyPair.of(fxOptionSecurity.getCallCurrency(),
+  public String visitNonDeliverableFXOptionSecurity(final NonDeliverableFXOptionSecurity fxOptionSecurity) {
+    final UnorderedCurrencyPair unorderedPair = UnorderedCurrencyPair.of(fxOptionSecurity.getCallCurrency(),
                                                                    fxOptionSecurity.getPutCurrency());
     return unorderedPair.getFirstCurrency() + "/" + unorderedPair.getSecondCurrency();
   }
 
   @Override
-  public String visitFXDigitalOptionSecurity(FXDigitalOptionSecurity fxOptionSecurity) {
-    UnorderedCurrencyPair unorderedPair = UnorderedCurrencyPair.of(fxOptionSecurity.getCallCurrency(),
+  public String visitFXDigitalOptionSecurity(final FXDigitalOptionSecurity fxOptionSecurity) {
+    final UnorderedCurrencyPair unorderedPair = UnorderedCurrencyPair.of(fxOptionSecurity.getCallCurrency(),
                                                                    fxOptionSecurity.getPutCurrency());
     return unorderedPair.getFirstCurrency() + "/" + unorderedPair.getSecondCurrency();
   }
 
   @Override
-  public String visitNonDeliverableFXDigitalOptionSecurity(NonDeliverableFXDigitalOptionSecurity fxOptionSecurity) {
-    UnorderedCurrencyPair unorderedPair = UnorderedCurrencyPair.of(fxOptionSecurity.getCallCurrency(),
+  public String visitNonDeliverableFXDigitalOptionSecurity(final NonDeliverableFXDigitalOptionSecurity fxOptionSecurity) {
+    final UnorderedCurrencyPair unorderedPair = UnorderedCurrencyPair.of(fxOptionSecurity.getCallCurrency(),
                                                                    fxOptionSecurity.getPutCurrency());
     return unorderedPair.getFirstCurrency() + "/" + unorderedPair.getSecondCurrency();
   }
 
   @Override
-  public String visitFXBarrierOptionSecurity(FXBarrierOptionSecurity fxBarrierOptionSecurity) {
-    UnorderedCurrencyPair unorderedPair = UnorderedCurrencyPair.of(fxBarrierOptionSecurity.getCallCurrency(),
+  public String visitFXBarrierOptionSecurity(final FXBarrierOptionSecurity fxBarrierOptionSecurity) {
+    final UnorderedCurrencyPair unorderedPair = UnorderedCurrencyPair.of(fxBarrierOptionSecurity.getCallCurrency(),
                                                                    fxBarrierOptionSecurity.getPutCurrency());
     return unorderedPair.getFirstCurrency() + "/" + unorderedPair.getSecondCurrency();
   }
 
   @Override
-  public String visitFXForwardSecurity(FXForwardSecurity fxForwardSecurity) {
-    UnorderedCurrencyPair unorderedPair = UnorderedCurrencyPair.of(fxForwardSecurity.getPayCurrency(),
+  public String visitFXForwardSecurity(final FXForwardSecurity fxForwardSecurity) {
+    final UnorderedCurrencyPair unorderedPair = UnorderedCurrencyPair.of(fxForwardSecurity.getPayCurrency(),
                                                                    fxForwardSecurity.getReceiveCurrency());
     return unorderedPair.getFirstCurrency() + "/" + unorderedPair.getSecondCurrency();
   }
 
   @Override
-  public String visitNonDeliverableFXForwardSecurity(NonDeliverableFXForwardSecurity ndfFxForwardSecurity) {
-    UnorderedCurrencyPair unorderedPair = UnorderedCurrencyPair.of(ndfFxForwardSecurity.getPayCurrency(),
+  public String visitNonDeliverableFXForwardSecurity(final NonDeliverableFXForwardSecurity ndfFxForwardSecurity) {
+    final UnorderedCurrencyPair unorderedPair = UnorderedCurrencyPair.of(ndfFxForwardSecurity.getPayCurrency(),
                                                                    ndfFxForwardSecurity.getReceiveCurrency());
     return unorderedPair.getFirstCurrency() + "/" + unorderedPair.getSecondCurrency();
   }
 
   @Override
-  public String visitIRFutureOptionSecurity(IRFutureOptionSecurity security) {
+  public String visitIRFutureOptionSecurity(final IRFutureOptionSecurity security) {
     if (security.getUnderlyingId().isScheme(_preferredScheme)) {
-      String identifier = security.getUnderlyingId().getValue();
+      final String identifier = security.getUnderlyingId().getValue();
       return identifier != null ? identifier : NOT_APPLICABLE;
     }
-    Security underlying = _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId()));
-    String identifier = underlying.getExternalIdBundle().getValue(_preferredScheme);
+    final Security underlying = _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId()));
+    final String identifier = underlying.getExternalIdBundle().getValue(_preferredScheme);
     return identifier != null ? identifier : NOT_APPLICABLE;
   }
 
   @Override
-  public String visitSwaptionSecurity(SwaptionSecurity security) {
-    SwapSecurity underlying = (SwapSecurity) _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId()));
-    String name = underlying.getName();
-    return (name != null && name.length() > 0) ? name : NOT_APPLICABLE;
+  public String visitSwaptionSecurity(final SwaptionSecurity security) {
+    final SwapSecurity underlying = (SwapSecurity) _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId()));
+    final String name = underlying.getName();
+    return name != null && name.length() > 0 ? name : NOT_APPLICABLE;
   }
 
   @Override
-  public String visitCreditDefaultSwapIndexSecurity(CreditDefaultSwapIndexSecurity security) {
+  public String visitCreditDefaultSwapIndexSecurity(final CreditDefaultSwapIndexSecurity security) {
     if (security.getReferenceEntity().isScheme(_preferredScheme)) {
-      String identifier = security.getReferenceEntity().getValue();
+      final String identifier = security.getReferenceEntity().getValue();
       return identifier != null ? identifier : NOT_APPLICABLE;
     }
-    Security underlying = _securitySource.getSingle(ExternalIdBundle.of(security.getReferenceEntity()));
-    String identifier = underlying.getExternalIdBundle().getValue(_preferredScheme);
+    final Security underlying = _securitySource.getSingle(ExternalIdBundle.of(security.getReferenceEntity()));
+    final String identifier = underlying.getExternalIdBundle().getValue(_preferredScheme);
     return identifier != null ? identifier : NOT_APPLICABLE;
   }
 
   @Override
-  public String visitCreditDefaultSwapOptionSecurity(CreditDefaultSwapOptionSecurity security) {
+  public String visitCreditDefaultSwapOptionSecurity(final CreditDefaultSwapOptionSecurity security) {
     if (security.getUnderlyingId().isScheme(_preferredScheme)) {
-      String identifier = security.getUnderlyingId().getValue();
+      final String identifier = security.getUnderlyingId().getValue();
       return identifier != null ? identifier : NOT_APPLICABLE;
     }
-    Security underlying = _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId()));
-    String identifier = underlying.getExternalIdBundle().getValue(_preferredScheme);
+    final Security underlying = _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId()));
+    final String identifier = underlying.getExternalIdBundle().getValue(_preferredScheme);
     return identifier != null ? identifier : NOT_APPLICABLE;
   }
 

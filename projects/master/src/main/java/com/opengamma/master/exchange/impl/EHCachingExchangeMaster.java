@@ -8,8 +8,6 @@ package com.opengamma.master.exchange.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.ehcache.CacheManager;
-
 import org.joda.beans.Bean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +26,8 @@ import com.opengamma.util.paging.Paging;
 import com.opengamma.util.paging.PagingRequest;
 import com.opengamma.util.tuple.IntObjectPair;
 
+import net.sf.ehcache.CacheManager;
+
 /**
  * A cache decorating a {@code ExchangeMaster}, mainly intended to reduce the frequency and repetition of queries
  * from the management UI to a {@code DbExchangeMaster}. In particular, prefetching is employed in paged queries,
@@ -42,10 +42,10 @@ public class EHCachingExchangeMaster extends AbstractEHCachingMaster<ExchangeDoc
 
   /** The document search cache */
   private EHCachingSearchCache _documentSearchCache;
-  
+
   /** The history search cache */
   private EHCachingSearchCache _historySearchCache;
-  
+
   /**
    * Creates an instance over an underlying master specifying the cache manager.
    *
@@ -55,13 +55,13 @@ public class EHCachingExchangeMaster extends AbstractEHCachingMaster<ExchangeDoc
    */
   public EHCachingExchangeMaster(final String name, final ExchangeMaster underlying, final CacheManager cacheManager) {
     super(name + "Exchange", underlying, cacheManager);
-    
+
     // Create the doc search cache and register a exchange master searcher
     _documentSearchCache = new EHCachingSearchCache(name + "Exchange", cacheManager, new EHCachingSearchCache.Searcher() {
       @Override
-      public IntObjectPair<List<UniqueId>> search(Bean request, PagingRequest pagingRequest) {
+      public IntObjectPair<List<UniqueId>> search(final Bean request, final PagingRequest pagingRequest) {
         // Fetch search results from underlying master
-        ExchangeSearchResult result = ((ExchangeMaster) getUnderlying()).search((ExchangeSearchRequest)
+        final ExchangeSearchResult result = ((ExchangeMaster) getUnderlying()).search((ExchangeSearchRequest)
             EHCachingSearchCache.withPagingRequest(request, pagingRequest));
 
         // Cache the result documents
@@ -76,9 +76,9 @@ public class EHCachingExchangeMaster extends AbstractEHCachingMaster<ExchangeDoc
     // Create the history search cache and register a security master searcher
     _historySearchCache = new EHCachingSearchCache(name + "ExchangeHistory", cacheManager, new EHCachingSearchCache.Searcher() {
       @Override
-      public IntObjectPair<List<UniqueId>> search(Bean request, PagingRequest pagingRequest) {
+      public IntObjectPair<List<UniqueId>> search(final Bean request, final PagingRequest pagingRequest) {
         // Fetch search results from underlying master
-        ExchangeHistoryResult result = ((ExchangeMaster) getUnderlying()).history((ExchangeHistoryRequest)
+        final ExchangeHistoryResult result = ((ExchangeMaster) getUnderlying()).history((ExchangeHistoryRequest)
             EHCachingSearchCache.withPagingRequest(request, pagingRequest));
 
         // Cache the result documents
@@ -89,35 +89,35 @@ public class EHCachingExchangeMaster extends AbstractEHCachingMaster<ExchangeDoc
                                  EHCachingSearchCache.extractUniqueIds(result.getDocuments()));
       }
     });
-    
+
     // Prime search cache
-    ExchangeSearchRequest defaultSearch = new ExchangeSearchRequest();
+    final ExchangeSearchRequest defaultSearch = new ExchangeSearchRequest();
     defaultSearch.setSortOrder(ExchangeSearchSortOrder.NAME_ASC);
     _documentSearchCache.prefetch(defaultSearch, PagingRequest.FIRST_PAGE);
-    
+
   }
 
   @Override
-  public ExchangeSearchResult search(ExchangeSearchRequest request) {
+  public ExchangeSearchResult search(final ExchangeSearchRequest request) {
     // Ensure that the relevant prefetch range is cached, otherwise fetch and cache any missing sub-ranges in background
     _documentSearchCache.prefetch(EHCachingSearchCache.withPagingRequest(request, null), request.getPagingRequest());
 
     // Fetch the paged request range; if not entirely cached then fetch and cache it in foreground
-    IntObjectPair<List<UniqueId>> pair = _documentSearchCache.search(
+    final IntObjectPair<List<UniqueId>> pair = _documentSearchCache.search(
         EHCachingSearchCache.withPagingRequest(request, null),
         request.getPagingRequest(), false); // don't block until cached
 
-    List<ExchangeDocument> documents = new ArrayList<>();
-    for (UniqueId uniqueId : pair.getSecond()) {
+    final List<ExchangeDocument> documents = new ArrayList<>();
+    for (final UniqueId uniqueId : pair.getSecond()) {
       documents.add(get(uniqueId));
     }
 
-    ExchangeSearchResult result = new ExchangeSearchResult(documents);
+    final ExchangeSearchResult result = new ExchangeSearchResult(documents);
     result.setPaging(Paging.of(request.getPagingRequest(), pair.getFirstInt()));
 
     // Debug: check result against underlying
     if (EHCachingSearchCache.TEST_AGAINST_UNDERLYING) {
-      ExchangeSearchResult check = ((ExchangeMaster) getUnderlying()).search(request);
+      final ExchangeSearchResult check = ((ExchangeMaster) getUnderlying()).search(request);
       if (!result.getPaging().equals(check.getPaging())) {
         LOGGER.error("_documentSearchCache.getCache().getName() + \" returned paging:\\n\"" + result.getPaging() +
                            "\nbut the underlying master returned paging:\n" + check.getPaging());
@@ -132,24 +132,24 @@ public class EHCachingExchangeMaster extends AbstractEHCachingMaster<ExchangeDoc
   }
 
   @Override
-  public ExchangeHistoryResult history(ExchangeHistoryRequest request) {
+  public ExchangeHistoryResult history(final ExchangeHistoryRequest request) {
 
     // Ensure that the relevant prefetch range is cached, otherwise fetch and cache any missing sub-ranges in background
     _historySearchCache.prefetch(EHCachingSearchCache.withPagingRequest(request, null), request.getPagingRequest());
 
     // Fetch the paged request range; if not entirely cached then fetch and cache it in foreground
-    IntObjectPair<List<UniqueId>> pair = _historySearchCache.search(
+    final IntObjectPair<List<UniqueId>> pair = _historySearchCache.search(
         EHCachingSearchCache.withPagingRequest(request, null),
         request.getPagingRequest(), false); // don't block until cached
 
-    List<ExchangeDocument> documents = new ArrayList<>();
-    for (UniqueId uniqueId : pair.getSecond()) {
+    final List<ExchangeDocument> documents = new ArrayList<>();
+    for (final UniqueId uniqueId : pair.getSecond()) {
       documents.add(get(uniqueId));
     }
 
-    ExchangeHistoryResult result = new ExchangeHistoryResult(documents);
+    final ExchangeHistoryResult result = new ExchangeHistoryResult(documents);
     result.setPaging(Paging.of(request.getPagingRequest(), pair.getFirstInt()));
-    return result;    
+    return result;
   }
 
 }

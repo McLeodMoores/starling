@@ -51,7 +51,7 @@ public class InMemoryPositionMaster extends SimpleAbstractInMemoryMaster<Positio
   /**
    * A cache of trades by identifier.
    */
-  private final ConcurrentMap<ObjectId, ManageableTrade> _storeTrades = new ConcurrentHashMap<ObjectId, ManageableTrade>();
+  private final ConcurrentMap<ObjectId, ManageableTrade> _storeTrades = new ConcurrentHashMap<>();
 
   /**
    * Creates an instance.
@@ -250,7 +250,7 @@ public class InMemoryPositionMaster extends SimpleAbstractInMemoryMaster<Positio
   @Override
   public PositionSearchResult search(final PositionSearchRequest request) {
     ArgumentChecker.notNull(request, "request");
-    final List<PositionDocument> list = new ArrayList<PositionDocument>();
+    final List<PositionDocument> list = new ArrayList<>();
     for (final PositionDocument doc : _store.values()) {
       if (request.matches(doc)) {
         list.add(clonePositionDocument(doc));
@@ -258,7 +258,7 @@ public class InMemoryPositionMaster extends SimpleAbstractInMemoryMaster<Positio
     }
     Collections.sort(list, new Comparator<PositionDocument>() {
       @Override
-      public int compare(PositionDocument obj1, PositionDocument obj2) {
+      public int compare(final PositionDocument obj1, final PositionDocument obj2) {
         return obj1.getObjectId().compareTo(obj2.getObjectId());
       }
     });

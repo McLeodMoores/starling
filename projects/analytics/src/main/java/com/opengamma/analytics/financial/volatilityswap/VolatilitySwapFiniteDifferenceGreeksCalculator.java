@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.volatilityswap;
@@ -61,10 +61,10 @@ public class VolatilitySwapFiniteDifferenceGreeksCalculator {
   }
 
   /**
-   * Greeks calculator for FX volatility swap based on "bump and reprice" using {@link VolatilitySwapCalculatorResultWithStrikes}, 
+   * Greeks calculator for FX volatility swap based on "bump and reprice" using {@link VolatilitySwapCalculatorResultWithStrikes},
    * i.e., assuming the fair value has been already calculated. For theta the bump amount is 1 working day.
    * @param result {@link VolatilitySwapCalculatorResultWithStrikes}
-   * @param swap The FX volatility swap 
+   * @param swap The FX volatility swap
    * @param data The FX data for Carr-Lee
    * @return Array of {delta, vega, theta}
    */
@@ -143,9 +143,9 @@ public class VolatilitySwapFiniteDifferenceGreeksCalculator {
   }
 
   /**
-   * Greeks calculator for FX volatility swap based on "bump and reprice." 
+   * Greeks calculator for FX volatility swap based on "bump and reprice."
    * For theta the bump amount is 1 working day.
-   * @param swap The FX volatility swap 
+   * @param swap The FX volatility swap
    * @param data The FX data for Carr-Lee
    * @return Array of {delta, vega, theta}
    */
@@ -183,15 +183,15 @@ public class VolatilitySwapFiniteDifferenceGreeksCalculator {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_bumpSpot);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_bumpVol);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    result = prime * result + ((_combinedCal == null) ? 0 : _combinedCal.hashCode());
+    result = prime * result + (int) (temp ^ temp >>> 32);
+    result = prime * result + (_combinedCal == null ? 0 : _combinedCal.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -201,7 +201,7 @@ public class VolatilitySwapFiniteDifferenceGreeksCalculator {
     if (!(obj instanceof VolatilitySwapFiniteDifferenceGreeksCalculator)) {
       return false;
     }
-    VolatilitySwapFiniteDifferenceGreeksCalculator other = (VolatilitySwapFiniteDifferenceGreeksCalculator) obj;
+    final VolatilitySwapFiniteDifferenceGreeksCalculator other = (VolatilitySwapFiniteDifferenceGreeksCalculator) obj;
     if (Double.doubleToLongBits(_bumpSpot) != Double.doubleToLongBits(other._bumpSpot)) {
       return false;
     }

@@ -55,7 +55,7 @@ public class MarketData extends DirectBean implements ObjectIdentifiable {
    * Sets the unique id of the base market data
    * @param baseUid  the new base market data.
    */
-  public void setBaseUid(UniqueId baseUid) {
+  public void setBaseUid(final UniqueId baseUid) {
     setBaseUidScheme(baseUid.getScheme());
     setBaseUidValue(baseUid.getValue());
     setBaseUidVersion(baseUid.getVersion());
@@ -69,7 +69,7 @@ public class MarketData extends DirectBean implements ObjectIdentifiable {
   public MarketData() {
   }
 
-  public MarketData(UniqueId baseUid) {
+  public MarketData(final UniqueId baseUid) {
     setBaseUid(baseUid);
   }
 

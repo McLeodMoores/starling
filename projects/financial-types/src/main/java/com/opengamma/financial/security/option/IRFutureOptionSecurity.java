@@ -90,8 +90,8 @@ public class IRFutureOptionSecurity extends FinancialSecurity {
     super(SECURITY_TYPE);
   }
 
-  public IRFutureOptionSecurity(String exchange, Expiry expiry, ExerciseType exerciseType, ExternalId underlyingIdentifier,
-      double pointValue, boolean margined, Currency currency, double strike, OptionType optionType) {
+  public IRFutureOptionSecurity(final String exchange, final Expiry expiry, final ExerciseType exerciseType, final ExternalId underlyingIdentifier,
+      final double pointValue, final boolean margined, final Currency currency, final double strike, final OptionType optionType) {
     super(SECURITY_TYPE);
     setExchange(exchange);
     setExpiry(expiry);
@@ -106,7 +106,7 @@ public class IRFutureOptionSecurity extends FinancialSecurity {
 
   //-------------------------------------------------------------------------
   @Override
-  public final <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public final <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitIRFutureOptionSecurity(this);
   }
 

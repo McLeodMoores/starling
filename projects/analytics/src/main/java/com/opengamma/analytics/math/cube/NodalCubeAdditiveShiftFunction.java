@@ -82,7 +82,7 @@ public class NodalCubeAdditiveShiftFunction implements CubeShiftFunction<NodalDo
    * @throws IllegalArgumentException If the points to shift are not nodal points of the cube
    */
   @Override
-  public NodalDoublesCube evaluate(final NodalDoublesCube cube, final double[] xShift, final double[] yShift, final double[] zShift, double[] shift) {
+  public NodalDoublesCube evaluate(final NodalDoublesCube cube, final double[] xShift, final double[] yShift, final double[] zShift, final double[] shift) {
     ArgumentChecker.notNull(cube, "cube");
     return evaluate(cube, xShift, yShift, zShift, shift, "MULTIPLE_SHIFT_" + cube.getName());
   }

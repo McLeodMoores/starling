@@ -69,7 +69,7 @@ public class CommodityFutureOptionSecurity extends FinancialSecurity {
    * The point value.
    */
   @PropertyDefinition
-  private double _pointValue;  
+  private double _pointValue;
   /**
    * The currency.
    */
@@ -90,8 +90,8 @@ public class CommodityFutureOptionSecurity extends FinancialSecurity {
     super(SECURITY_TYPE);
   }
 
-  public CommodityFutureOptionSecurity(String tradingExchange, String settlementExchange, Expiry expiry, ExerciseType exerciseType, ExternalId underlyingIdentifier,
-                                       double pointValue, Currency currency, double strike, OptionType optionType) {
+  public CommodityFutureOptionSecurity(final String tradingExchange, final String settlementExchange, final Expiry expiry, final ExerciseType exerciseType, final ExternalId underlyingIdentifier,
+                                       final double pointValue, final Currency currency, final double strike, final OptionType optionType) {
     super(SECURITY_TYPE);
     setTradingExchange(tradingExchange);
     setSettlementExchange(settlementExchange);
@@ -106,7 +106,7 @@ public class CommodityFutureOptionSecurity extends FinancialSecurity {
 
   //-------------------------------------------------------------------------
   @Override
-  public final <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public final <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitCommodityFutureOptionSecurity(this);
   }
 

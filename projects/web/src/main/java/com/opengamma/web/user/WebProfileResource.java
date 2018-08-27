@@ -58,11 +58,11 @@ public class WebProfileResource extends AbstractSingletonWebResource {
 
   /**
    * Creates the resource.
-   * 
+   *
    * @param userMaster  the user master, not null
    * @param pwService  the password service, not null
    */
-  public WebProfileResource(UserMaster userMaster, PasswordService pwService) {
+  public WebProfileResource(final UserMaster userMaster, final PasswordService pwService) {
     _userMaster = ArgumentChecker.notNull(userMaster, "userMaster");
     _pwService = ArgumentChecker.notNull(pwService, "pwService");
   }
@@ -71,11 +71,11 @@ public class WebProfileResource extends AbstractSingletonWebResource {
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String getGreen(
-      @Context HttpServletRequest request,
-      @Context ServletContext servletContext,
-      @Context UriInfo uriInfo) {
-    
-    FlexiBean out = createStandardRootData(uriInfo);
+      @Context final HttpServletRequest request,
+      @Context final ServletContext servletContext,
+      @Context final UriInfo uriInfo) {
+
+    final FlexiBean out = createStandardRootData(uriInfo);
     return getFreemarker(servletContext).build(PROFILE_GREEN, out);
   }
 
@@ -83,24 +83,24 @@ public class WebProfileResource extends AbstractSingletonWebResource {
   @POST
   @Produces(MediaType.TEXT_HTML)
   public Response updateProfile(
-      @Context ServletContext servletContext,
-      @Context UriInfo uriInfo,
-      @FormParam("email") String email,
-      @FormParam("displayname") String displayName,
-      @FormParam("locale") String locale,
-      @FormParam("timezone") String zone,
-      @FormParam("datestyle") String dateStyle,
-      @FormParam("timestyle") String timeStyle) {
+      @Context final ServletContext servletContext,
+      @Context final UriInfo uriInfo,
+      @FormParam("email") final String email,
+      @FormParam("displayname") final String displayName,
+      @FormParam("locale") final String locale,
+      @FormParam("timezone") final String zone,
+      @FormParam("datestyle") final String dateStyle,
+      @FormParam("timestyle") final String timeStyle) {
     try {
-      String userName = AuthUtils.getUserName();
-      ManageableUser user = _userMaster.getByName(userName);
-      UserForm form = new UserForm(user, email, displayName, locale, zone, dateStyle, timeStyle);
+      final String userName = AuthUtils.getUserName();
+      final ManageableUser user = _userMaster.getByName(userName);
+      final UserForm form = new UserForm(user, email, displayName, locale, zone, dateStyle, timeStyle);
       form.update(_userMaster, _pwService);
       return Response.seeOther(new WebHomeUris(uriInfo).home()).build();
-      
-    } catch (UserFormException ex) {
+
+    } catch (final UserFormException ex) {
       ex.logUnexpected(LOGGER);
-      FlexiBean out = createRootData(uriInfo);
+      final FlexiBean out = createRootData(uriInfo);
       out.put("email", email);
       out.put("displayname", displayName);
       out.put("locale", locale);
@@ -108,7 +108,7 @@ public class WebProfileResource extends AbstractSingletonWebResource {
       out.put("datestyle", dateStyle);
       out.put("timestyle", timeStyle);
       out.put("err", ex.getErrors().size() > 0);
-      for (UserFormError error : ex.getErrors()) {
+      for (final UserFormError error : ex.getErrors()) {
         out.put("err_" + error.toLowerCamel(), true);
       }
       return Response.ok(getFreemarker(servletContext).build(PROFILE_GREEN, out)).build();
@@ -119,31 +119,31 @@ public class WebProfileResource extends AbstractSingletonWebResource {
   @Path("password")
   @Produces(MediaType.TEXT_HTML)
   public Response changePassword(
-      @Context ServletContext servletContext,
-      @Context UriInfo uriInfo,
-      @FormParam("password") String password) {
+      @Context final ServletContext servletContext,
+      @Context final UriInfo uriInfo,
+      @FormParam("password") final String password) {
     try {
-      String userName = AuthUtils.getUserName();
-      ManageableUser user = _userMaster.getByName(userName);
-      UserForm form = new UserForm(user, password);
+      final String userName = AuthUtils.getUserName();
+      final ManageableUser user = _userMaster.getByName(userName);
+      final UserForm form = new UserForm(user, password);
       form.update(_userMaster, _pwService);
       return Response.seeOther(new WebHomeUris(uriInfo).home()).build();
-      
-    } catch (UserFormException ex) {
+
+    } catch (final UserFormException ex) {
       ex.logUnexpected(LOGGER);
-      FlexiBean out = createStandardRootData(uriInfo);
+      final FlexiBean out = createStandardRootData(uriInfo);
       out.put("err", ex.getErrors().size() > 0);
-      for (UserFormError error : ex.getErrors()) {
+      for (final UserFormError error : ex.getErrors()) {
         out.put("err_" + error.toLowerCamel(), true);
       }
       return Response.ok(getFreemarker(servletContext).build(PROFILE_GREEN, out)).build();
     }
   }
 
-  private FlexiBean createStandardRootData(UriInfo uriInfo) {
-    String userName = AuthUtils.getUserName();
-    ManageableUser user = _userMaster.getByName(userName);
-    FlexiBean out = createRootData(uriInfo);
+  private FlexiBean createStandardRootData(final UriInfo uriInfo) {
+    final String userName = AuthUtils.getUserName();
+    final ManageableUser user = _userMaster.getByName(userName);
+    final FlexiBean out = createRootData(uriInfo);
     out.put("username", user.getUserName());
     out.put("email", user.getEmailAddress());
     out.put("displayname", user.getProfile().getDisplayName());
@@ -157,11 +157,11 @@ public class WebProfileResource extends AbstractSingletonWebResource {
   //-------------------------------------------------------------------------
   /**
    * Builds a URI for this page.
-   * 
+   *
    * @param uriInfo  the uriInfo, not null
    * @return the URI, not null
    */
-  public static URI uri(UriInfo uriInfo) {
+  public static URI uri(final UriInfo uriInfo) {
     return uriInfo.getBaseUriBuilder().path(WebProfileResource.class).build();
   }
 

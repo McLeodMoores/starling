@@ -63,15 +63,15 @@ public class HolidaySourceComponentFactory extends AbstractComponentFactory {
   /**
    * Initializes the holiday source, setting up component information and REST.
    * Override using {@link #createHolidaySource(ComponentRepository)}.
-   * 
+   *
    * @param repo  the component repository, not null
    * @param configuration  the remaining configuration, not null
    */
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
-    HolidaySource source = createHolidaySource(repo);
-    
-    ComponentInfo info = new ComponentInfo(HolidaySource.class, getClassifier());
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
+    final HolidaySource source = createHolidaySource(repo);
+
+    final ComponentInfo info = new ComponentInfo(HolidaySource.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     if (isPublishRest()) {
       info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteHolidaySource.class);
@@ -84,11 +84,11 @@ public class HolidaySourceComponentFactory extends AbstractComponentFactory {
 
   /**
    * Creates the holiday source without registering it.
-   * 
+   *
    * @param repo  the component repository, only used to register secondary items like lifecycle, not null
    * @return the holiday source, not null
    */
-  protected HolidaySource createHolidaySource(ComponentRepository repo) {
+  protected HolidaySource createHolidaySource(final ComponentRepository repo) {
     return new MasterHolidaySource(getHolidayMaster(), isCacheHolidays());
   }
 

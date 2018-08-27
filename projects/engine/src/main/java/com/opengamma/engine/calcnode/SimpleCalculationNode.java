@@ -110,7 +110,7 @@ public class SimpleCalculationNode extends SimpleCalculationNodeState implements
    * original method type. Instances of {@code Deferred} are not bound (tightly) to their original calculation node instance allowing them to run on another (for example if the original node is now
    * being reused for another job). Thus the caller must supply the node that will now host the deferred operation. The state from the original node must be preserved and then restored into the new
    * host node.
-   * 
+   *
    * @param <T> the original return type of the asynchronous method
    */
   public interface Deferred<T> {
@@ -192,7 +192,7 @@ public class SimpleCalculationNode extends SimpleCalculationNodeState implements
   /**
    * Sets whether to use a write-behind strategy when writing to the shared value cache. Write-behind can work well if the cost of writing is high (e.g. network overhead). If the write is cheap (e.g.
    * to an in-process, in-memory store) then the overheads of the write-behind become a burden. An executor service must be available if this is selected.
-   * 
+   *
    * @param writeBehind true to use write-behind on the shared value cache, false not to
    */
   public void setUseWriteBehindSharedCache(final boolean writeBehind) {
@@ -207,7 +207,7 @@ public class SimpleCalculationNode extends SimpleCalculationNodeState implements
   /**
    * Sets whether to use a write-behind strategy when writing to the private value cache. Write-behind can work well if the cost of writing is high (e.g. disk overhead). If the write is cheap (e.g. to
    * an in-process, in-memory store) then the overheads of the write-behind become a burden. An executor service must be available if this is selected.
-   * 
+   *
    * @param writeBehind true to use write-behind on the private value cache, false not to
    */
   public void setUseWriteBehindPrivateCache(final boolean writeBehind) {
@@ -242,7 +242,7 @@ public class SimpleCalculationNode extends SimpleCalculationNodeState implements
 
   /**
    * Sets a function blacklist to use for checking each job invocation. The blacklist(s) used may suppress particular functions on this node, the logical group of nodes or at all nodes.
-   * 
+   *
    * @param query the blacklist to query against, not null
    */
   public void setFunctionBlacklistQuery(final FunctionBlacklistQuery query) {
@@ -252,7 +252,7 @@ public class SimpleCalculationNode extends SimpleCalculationNodeState implements
 
   /**
    * Returns the function blacklist used for checking each job invocation.
-   * 
+   *
    * @return the blacklist queried, not null
    */
   public FunctionBlacklistQuery getFunctionBlacklistQuery() {
@@ -262,7 +262,7 @@ public class SimpleCalculationNode extends SimpleCalculationNodeState implements
   /**
    * Sets a maintenance policy for updating one or more blacklist(s) when a job item throws an exception. The application of a policy at this point will depend on the nature of the function library.
    * Issuing updates from the function's {@link FunctionInvoker} can allow more specific control over how a function failure should be reported.
-   * 
+   *
    * @param update the maintainer to notify of a job item that threw an exception
    */
   public void setFunctionBlacklistUpdate(final FunctionBlacklistMaintainer update) {
@@ -340,7 +340,7 @@ public class SimpleCalculationNode extends SimpleCalculationNodeState implements
    * central dispatcher until the cache has been flushed.
    * <p>
    * If a deferred result is returned, and this node will be used for other work, its state must be saved and then later restored into a node that will be used to complete the deferred action.
-   * 
+   *
    * @param job the job to execute
    * @return the job result
    * @throws AsynchronousExecution if the job is completing asynchronously
@@ -414,7 +414,7 @@ public class SimpleCalculationNode extends SimpleCalculationNodeState implements
   }
 
   private void postEvaluationErrors(final ValueSpecification[] outputs, final MissingOutput type) {
-    final Collection<ComputedValue> results = new ArrayList<ComputedValue>(outputs.length);
+    final Collection<ComputedValue> results = new ArrayList<>(outputs.length);
     for (final ValueSpecification output : outputs) {
       results.add(new ComputedValue(output, type));
     }
@@ -445,7 +445,7 @@ public class SimpleCalculationNode extends SimpleCalculationNodeState implements
   /**
    * Executes one or more items from the supplied iterator, populating the supplied list. If a job item starts running asynchronously, an exception will be thrown. At resumption of the operation,
    * another call to this method will occur with the same parameters allowing it to continue with the remaining items the iterator has.
-   * 
+   *
    * @param jobItemItr the job items to execute, not null
    * @param resultItems the list to populate with results, not null
    */
@@ -574,7 +574,7 @@ public class SimpleCalculationNode extends SimpleCalculationNodeState implements
 
   private List<CalculationJobResultItem> executeJobItems() throws AsynchronousExecution {
     final List<CalculationJobItem> jobItems = getJob().getJobItems();
-    final List<CalculationJobResultItem> resultItems = new ArrayList<CalculationJobResultItem>(jobItems.size());
+    final List<CalculationJobResultItem> resultItems = new ArrayList<>(jobItems.size());
     try {
       executeJobItems(jobItems.iterator(), resultItems);
       return resultItems;
@@ -675,10 +675,10 @@ public class SimpleCalculationNode extends SimpleCalculationNodeState implements
     removeInvocationLoggingInfo();
     // store results
     missing.clear();
-    for (ValueSpecification output : outputs) {
+    for (final ValueSpecification output : outputs) {
       missing.add(output);
     }
-    final Collection<ComputedValue> newResults = new ArrayList<ComputedValue>(outputs.length);
+    final Collection<ComputedValue> newResults = new ArrayList<>(outputs.length);
     for (ComputedValue result : results) {
       ValueSpecification resultSpec = result.getSpecification();
       final ComputationTargetSpecification targetSpec = ComputationTargetResolverUtils.simplifyType(resultSpec.getTargetSpecification(), getRawTargetResolver());
@@ -735,7 +735,7 @@ public class SimpleCalculationNode extends SimpleCalculationNodeState implements
     // assemble inputs
     final ValueSpecification[] inputValueSpecs = jobItem.getInputs();
     final Set<ValueSpecification> missing = Sets.newHashSetWithExpectedSize(inputValueSpecs.length);
-    if (!isUseAsynchronousTargetResolve() && (target == null)) {
+    if (!isUseAsynchronousTargetResolve() && target == null) {
       if (invoker.canHandleMissingInputs()) {
         // A missing target is just a special case of missing input
         missing.add(TargetSourcingFunction.createSpecification(jobItem.getComputationTargetSpecification()));
@@ -745,13 +745,13 @@ public class SimpleCalculationNode extends SimpleCalculationNodeState implements
         return;
       }
     }
-    final Collection<ComputedValue> inputs = new ArrayList<ComputedValue>(inputValueSpecs.length);
+    final Collection<ComputedValue> inputs = new ArrayList<>(inputValueSpecs.length);
     int inputBytes = 0;
     int inputSamples = 0;
     final DeferredViewComputationCache cache = getCache();
     _inputs._inputs = inputValueSpecs;
     for (final Pair<ValueSpecification, Object> input : cache.getValues(_inputs, getJob().getCacheSelectHint())) {
-      if ((input.getSecond() == null) || (input.getSecond() instanceof MissingValue)) {
+      if (input.getSecond() == null || input.getSecond() instanceof MissingValue) {
         missing.add(input.getFirst());
       } else {
         final ComputedValue value = new ComputedValue(input.getFirst(), input.getSecond());
@@ -853,11 +853,11 @@ public class SimpleCalculationNode extends SimpleCalculationNodeState implements
     invokeResult(invoker, statistics, missing, outputs, result, resultItemBuilder);
   }
 
-  private void recordInvocationLoggingInfo(ComputationTarget target) {
+  private void recordInvocationLoggingInfo(final ComputationTarget target) {
     if (target != null && target.getUniqueId() != null) {
       try {      // make target available to logging
         MDC.put("target", target.getUniqueId().toString());
-      } catch (Throwable ex) {
+      } catch (final Throwable ex) {
         // pass
       }
     }
@@ -866,7 +866,7 @@ public class SimpleCalculationNode extends SimpleCalculationNodeState implements
   private void removeInvocationLoggingInfo() {
     try {
       MDC.remove("target");
-    } catch (Throwable ex) {
+    } catch (final Throwable ex) {
       // pass
     }
   }

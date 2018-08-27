@@ -30,18 +30,18 @@ import com.opengamma.master.marketdatasnapshot.MarketDataSnapshotSearchResult;
  */
 public final class SnapshotUtils {
   private static final Logger LOGGER = LoggerFactory.getLogger(SnapshotUtils.class);
-  
-  private MarketDataSnapshotMaster _snapshotMaster;
 
-  private SnapshotUtils(MarketDataSnapshotMaster snapshotMaster) {
+  private final MarketDataSnapshotMaster _snapshotMaster;
+
+  private SnapshotUtils(final MarketDataSnapshotMaster snapshotMaster) {
     _snapshotMaster = snapshotMaster;
   }
-  
-  public static SnapshotUtils of(MarketDataSnapshotMaster snapshotMaster) {
+
+  public static SnapshotUtils of(final MarketDataSnapshotMaster snapshotMaster) {
     return new SnapshotUtils(snapshotMaster);
   }
 
-  private static String getSnapshotNameId(MarketDataSnapshotDocument doc) {
+  private static String getSnapshotNameId(final MarketDataSnapshotDocument doc) {
     return doc.getUniqueId() + " - " + doc.getName();
   }
 
@@ -50,65 +50,65 @@ public final class SnapshotUtils {
    * @return the list of all available snapshot ids and names or an empty list if no snapshots found
    */
   public List<String> allSnapshots() {
-    MarketDataSnapshotSearchRequest searchRequest = new MarketDataSnapshotSearchRequest();
+    final MarketDataSnapshotSearchRequest searchRequest = new MarketDataSnapshotSearchRequest();
     searchRequest.setIncludeData(false);
-    MarketDataSnapshotSearchResult searchResult = _snapshotMaster.search(searchRequest);
-    List<String> results = new ArrayList<>();
-    for (MarketDataSnapshotDocument doc : searchResult.getDocuments()) {
+    final MarketDataSnapshotSearchResult searchResult = _snapshotMaster.search(searchRequest);
+    final List<String> results = new ArrayList<>();
+    for (final MarketDataSnapshotDocument doc : searchResult.getDocuments()) {
       results.add(getSnapshotNameId(doc));
     }
     return results;
   }
-  
+
   /**
    * Get a list of snapshot according to a glob query string
    * @param query the query string, which can contain wildcards
    * @return the list of resulting snapshot ids and names or an empty list if no matches
    */
-  public List<String> snapshotByGlob(String query) {
-    MarketDataSnapshotSearchRequest searchRequest = new MarketDataSnapshotSearchRequest();
+  public List<String> snapshotByGlob(final String query) {
+    final MarketDataSnapshotSearchRequest searchRequest = new MarketDataSnapshotSearchRequest();
     searchRequest.setName(query);
     searchRequest.setIncludeData(false);
-    MarketDataSnapshotSearchResult searchResult = _snapshotMaster.search(searchRequest);
-    List<String> results = new ArrayList<>();
-    for (MarketDataSnapshotDocument doc : searchResult.getDocuments()) {
+    final MarketDataSnapshotSearchResult searchResult = _snapshotMaster.search(searchRequest);
+    final List<String> results = new ArrayList<>();
+    for (final MarketDataSnapshotDocument doc : searchResult.getDocuments()) {
       results.add(getSnapshotNameId(doc));
     }
     return results;
   }
-  
+
   /**
    * Get the latest snapshot by name
    * @param name exact name of the snapshot, not null
    * @return the UniqueId of the matched snapshot, or null if no match found
    * @throws OpenGammaRuntimeException if multiple matches are found
    */
-  public UniqueId latestSnapshotByName(String name) {
-    MarketDataSnapshotSearchRequest searchRequest = new MarketDataSnapshotSearchRequest();
+  public UniqueId latestSnapshotByName(final String name) {
+    final MarketDataSnapshotSearchRequest searchRequest = new MarketDataSnapshotSearchRequest();
     searchRequest.setName(name);
     searchRequest.setIncludeData(false);
-    MarketDataSnapshotSearchResult searchResult = _snapshotMaster.search(searchRequest);
+    final MarketDataSnapshotSearchResult searchResult = _snapshotMaster.search(searchRequest);
     if (searchResult.getDocuments().size() > 1) {
       throw new OpenGammaRuntimeException("More than one snapshot matches supplied name");
     }
     if (searchResult.getDocuments().size() == 0) {
       return null;
     }
-    return searchResult.getFirstDocument().getUniqueId();   
+    return searchResult.getFirstDocument().getUniqueId();
   }
-  
+
   /**
    * Get the latest snapshot by name
    * @param name exact name of the snapshot, not null
-   * @param dateTime the date/time of the version of the snapshot to fetch 
+   * @param dateTime the date/time of the version of the snapshot to fetch
    * @return the UniqueId of the matched snapshot, or null if no match found
    * @throws OpenGammaRuntimeException if multiple matches are found
    */
-  public UniqueId latestSnapshotByNameAndDate(String name, ZonedDateTime dateTime) {
-    MarketDataSnapshotSearchRequest searchRequest = new MarketDataSnapshotSearchRequest();
+  public UniqueId latestSnapshotByNameAndDate(final String name, final ZonedDateTime dateTime) {
+    final MarketDataSnapshotSearchRequest searchRequest = new MarketDataSnapshotSearchRequest();
     searchRequest.setName(name);
     searchRequest.setIncludeData(false);
-    MarketDataSnapshotSearchResult searchResult = _snapshotMaster.search(searchRequest);
+    final MarketDataSnapshotSearchResult searchResult = _snapshotMaster.search(searchRequest);
     searchRequest.setVersionCorrection(VersionCorrection.ofVersionAsOf(dateTime.toInstant()));
     if (searchResult.getDocuments().size() > 1) {
       throw new OpenGammaRuntimeException("More than one snapshot matches supplied name");
@@ -116,7 +116,7 @@ public final class SnapshotUtils {
     if (searchResult.getDocuments().size() == 0) {
       return null;
     }
-    return searchResult.getFirstDocument().getUniqueId();   
+    return searchResult.getFirstDocument().getUniqueId();
   }
 
   /**
@@ -125,37 +125,37 @@ public final class SnapshotUtils {
    * @return a list of VersionInfo meta data objects containing version correction ranges and unique ids
    * @throws OpenGammaRuntimeException if multiple name matches are found
    */
-  public List<VersionInfo> snapshotVersionsByName(String name) {
-    MarketDataSnapshotSearchRequest searchRequest = new MarketDataSnapshotSearchRequest();
+  public List<VersionInfo> snapshotVersionsByName(final String name) {
+    final MarketDataSnapshotSearchRequest searchRequest = new MarketDataSnapshotSearchRequest();
     searchRequest.setName(name);
     searchRequest.setIncludeData(false);
-    MarketDataSnapshotSearchResult searchResult = _snapshotMaster.search(searchRequest);
+    final MarketDataSnapshotSearchResult searchResult = _snapshotMaster.search(searchRequest);
     if (searchResult.getDocuments().size() > 1) {
       LOGGER.warn("More than one snapshot matches supplied name, using first");
     }
     if (searchResult.getDocuments().size() == 0) {
       return Collections.emptyList();
     }
-    ObjectId objectId = searchResult.getFirstDocument().getObjectId();
-    MarketDataSnapshotHistoryResult historyResult = _snapshotMaster.history(new MarketDataSnapshotHistoryRequest(objectId));
-    List<VersionInfo> results = new ArrayList<>();
-    for (MarketDataSnapshotDocument doc : historyResult.getDocuments()) {
+    final ObjectId objectId = searchResult.getFirstDocument().getObjectId();
+    final MarketDataSnapshotHistoryResult historyResult = _snapshotMaster.history(new MarketDataSnapshotHistoryRequest(objectId));
+    final List<VersionInfo> results = new ArrayList<>();
+    for (final MarketDataSnapshotDocument doc : historyResult.getDocuments()) {
       results.add(new VersionInfo(doc.getVersionFromInstant(), doc.getCorrectionFromInstant(), doc.getVersionToInstant(), doc.getCorrectionToInstant(), doc.getUniqueId()));
     }
     return results;
   }
-  
+
   /**
    * Class representing the version range information for a snapshot, including the UniqueId.
    */
   public class VersionInfo {
-    private Instant _versionFrom;
-    private Instant _versionTo;
-    private Instant _correctionFrom;
-    private Instant _correctionTo;
-    private UniqueId _uniqueId;
+    private final Instant _versionFrom;
+    private final Instant _versionTo;
+    private final Instant _correctionFrom;
+    private final Instant _correctionTo;
+    private final UniqueId _uniqueId;
 
-    public VersionInfo(Instant versionFrom, Instant versionTo, Instant correctionFrom, Instant correctionTo, UniqueId uniqueId) {
+    public VersionInfo(final Instant versionFrom, final Instant versionTo, final Instant correctionFrom, final Instant correctionTo, final UniqueId uniqueId) {
       _versionFrom = versionFrom;
       _versionTo = versionTo;
       _correctionFrom = correctionFrom;
@@ -178,11 +178,11 @@ public final class SnapshotUtils {
     public Instant getCorrectionTo() {
       return _correctionTo;
     }
-    
+
     public UniqueId getUniqueId() {
       return _uniqueId;
     }
-    
+
   }
-  
+
 }

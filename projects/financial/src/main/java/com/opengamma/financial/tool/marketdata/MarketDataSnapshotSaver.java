@@ -146,7 +146,7 @@ public final class MarketDataSnapshotSaver implements ImmutableBean {
     final ViewExecutionOptions viewExecutionOptions = new ExecutionOptions(executionSequence, EnumSet.of(ViewExecutionFlags.AWAIT_MARKET_DATA), null, getMarketDataTimeoutMillis(), null);
 
     final Set<ConfigDocument> viewDefinitions = Sets.newHashSet();
-    final ConfigSearchRequest<ViewDefinition> request = new ConfigSearchRequest<ViewDefinition>(ViewDefinition.class);
+    final ConfigSearchRequest<ViewDefinition> request = new ConfigSearchRequest<>(ViewDefinition.class);
     request.setName(viewDefinitionName);
     Iterables.addAll(viewDefinitions, ConfigSearchIterator.iterable(getConfigMaster(), request));
     if (viewDefinitions.isEmpty()) {

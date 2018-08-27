@@ -31,13 +31,13 @@ public class EnergyForwardSecurity extends CommodityForwardSecurity {
     super();
   }
 
-  public EnergyForwardSecurity(String unitName, Double unitNumber, Expiry expiry, Currency currency, double unitAmount, String category) {
+  public EnergyForwardSecurity(final String unitName, final Double unitNumber, final Expiry expiry, final Currency currency, final double unitAmount, final String category) {
     super(unitName, unitNumber, expiry, currency, unitAmount, category);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitEnergyForwardSecurity(this);
   }
 

@@ -1,19 +1,19 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.bbg.referencedata.cache;
 
 import java.io.Serializable;
 
-import net.sf.ehcache.CacheManager;
-
 import org.fudgemsg.FudgeContext;
 import org.fudgemsg.FudgeMsg;
 
 import com.opengamma.bbg.referencedata.ReferenceData;
 import com.opengamma.bbg.referencedata.ReferenceDataProvider;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Decorates a reference data provider, adding caching.
@@ -24,7 +24,7 @@ public class DiskStoreEHValueCachingReferenceDataProvider extends EHValueCaching
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param underlying  the underlying reference data provider, not null
    * @param cacheManager  the cache manager, not null
    */
@@ -34,7 +34,7 @@ public class DiskStoreEHValueCachingReferenceDataProvider extends EHValueCaching
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param underlying  the underlying reference data provider, not null
    * @param cacheManager  the cache manager, not null
    * @param fudgeContext  the Fudge context, not null
@@ -45,15 +45,15 @@ public class DiskStoreEHValueCachingReferenceDataProvider extends EHValueCaching
 
   //-------------------------------------------------------------------------
   @Override
-  protected ReferenceData parseCachedObject(Object fromCache) {
-    CachedReferenceDataForDisk rd = (CachedReferenceDataForDisk) fromCache;
-    FudgeMsg fieldValues = getFudgeContext().deserialize(rd._fieldData).getMessage();
+  protected ReferenceData parseCachedObject(final Object fromCache) {
+    final CachedReferenceDataForDisk rd = (CachedReferenceDataForDisk) fromCache;
+    final FudgeMsg fieldValues = getFudgeContext().deserialize(rd._fieldData).getMessage();
     return new ReferenceData(rd._identifier, fieldValues);
   }
 
   @Override
-  protected Object createCachedObject(ReferenceData refDataResult) {
-    CachedReferenceDataForDisk result = new CachedReferenceDataForDisk();
+  protected Object createCachedObject(final ReferenceData refDataResult) {
+    final CachedReferenceDataForDisk result = new CachedReferenceDataForDisk();
     result._identifier = refDataResult.getIdentifier();
     result._fieldData = getFudgeContext().toByteArray(refDataResult.getFieldValues());
     return result;

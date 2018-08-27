@@ -51,10 +51,10 @@ public class SecurityEnhancerResult extends DirectBean {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param result  the map of results, not null
    */
-  public SecurityEnhancerResult(List<? extends Security> result) {
+  public SecurityEnhancerResult(final List<? extends Security> result) {
     getResultList().addAll(result);
   }
 
@@ -68,15 +68,15 @@ public class SecurityEnhancerResult extends DirectBean {
    * There are three steps. Firstly, the values from the map are passed to the
    * {@link SecurityEnhancerRequest}. Secondly, the securities are enhanced.
    * Thirdly, this method is used to re-populate the map.
-   * 
+   *
    * @param map  the map to push the results into, not null
    */
-  public void insertIntoMapValues(Map<?, Security> map) {
+  public void insertIntoMapValues(final Map<?, Security> map) {
     if (map.size() != getResultList().size()) {
       throw new IllegalArgumentException("Map specified cannot be matched");
     }
     int i = 0;
-    for (Entry<?, Security> entry : map.entrySet()) {
+    for (final Entry<?, Security> entry : map.entrySet()) {
       entry.setValue(getResultList().get(i++));
     }
   }

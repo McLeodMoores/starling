@@ -19,7 +19,7 @@ public class ContextPOJO {
     return _value;
   }
 
-  public void setValue(double value) {
+  public void setValue(final double value) {
     this._value = value;
   }
 

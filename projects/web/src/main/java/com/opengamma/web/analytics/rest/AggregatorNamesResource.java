@@ -24,7 +24,7 @@ public class AggregatorNamesResource {
 
   private final Set<String> _aggregatorNames;
 
-  public AggregatorNamesResource(Set<String> aggregatorNames) {
+  public AggregatorNamesResource(final Set<String> aggregatorNames) {
     ArgumentChecker.notNull(aggregatorNames, "aggregatorNames");
     _aggregatorNames = aggregatorNames;
   }

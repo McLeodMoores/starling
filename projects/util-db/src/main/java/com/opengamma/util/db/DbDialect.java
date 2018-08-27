@@ -43,18 +43,18 @@ public abstract class DbDialect {
   //-------------------------------------------------------------------------
   /**
    * Gets the name of the database.
-   * 
+   *
    * @return the name of the database
    */
   public String getName() {
-    String name = getClass().getSimpleName();
-    int endPos = name.lastIndexOf("DbDialect");
-    return (endPos < 0 ? name : name.substring(0, endPos));
+    final String name = getClass().getSimpleName();
+    final int endPos = name.lastIndexOf("DbDialect");
+    return endPos < 0 ? name : name.substring(0, endPos);
   }
 
   /**
    * Gets the JDBC driver class.
-   * 
+   *
    * @return the driver, not null
    */
   public abstract Class<? extends Driver> getJDBCDriverClass();
@@ -62,7 +62,7 @@ public abstract class DbDialect {
   //-------------------------------------------------------------------------
   /**
    * Gets the Hibernate dialect object for the database.
-   * 
+   *
    * @return the dialect, not null
    */
   public final Dialect getHibernateDialect() {
@@ -76,7 +76,7 @@ public abstract class DbDialect {
   /**
    * Creates the Hibernate dialect object for the database.
    * This will be cached by the base class.
-   * 
+   *
    * @return the dialect, not null
    */
   protected abstract Dialect createHibernateDialect();
@@ -84,7 +84,7 @@ public abstract class DbDialect {
   //-------------------------------------------------------------------------
   /**
    * Gets the ElSql config.
-   * 
+   *
    * @return the config, not null
    */
   public final ElSqlConfig getElSqlConfig() {
@@ -97,7 +97,7 @@ public abstract class DbDialect {
   /**
    * Creates the ElSql config object for the database.
    * This will be cached by the base class.
-   * 
+   *
    * @return the config, not null
    */
   protected abstract ElSqlConfig createElSqlConfig();
@@ -105,7 +105,7 @@ public abstract class DbDialect {
   //-------------------------------------------------------------------------
   /**
    * Checks if the string contains wildcard characters.
-   * 
+   *
    * @param str  the string to check, null returns false
    * @return true if the string contains wildcards
    */
@@ -115,7 +115,7 @@ public abstract class DbDialect {
 
   /**
    * Returns 'LIKE' if there are wildcards, or '=' otherwise.
-   * 
+   *
    * @param str  the string to check, null returns '='
    * @return the wildcard operator, not surrounded with spaces
    */
@@ -128,7 +128,7 @@ public abstract class DbDialect {
    * Returns 'prefix LIKE paramName ' if there are wildcards,
    * 'prefix = paramName ' if no wildcards and '' if null.
    * The prefix is normally 'AND columnName ' or 'OR columnName '.
-   * 
+   *
    * @param prefix  the prefix such as 'AND columnName ', not null
    * @param paramName  the parameter name normally prefixed by colon, not null
    * @param value  the string value, may be null
@@ -147,7 +147,7 @@ public abstract class DbDialect {
   /**
    * Adjusts wildcards from the public values of * and ? to the database
    * values of % and _.
-   * 
+   *
    * @param value  the string value, may be null
    * @return the SQL fragment, not null
    */
@@ -165,7 +165,7 @@ public abstract class DbDialect {
   //-------------------------------------------------------------------------
   /**
    * Builds SQL to apply paging.
-   * 
+   *
    * @param sqlSelectFromWhere  the SQL select from where ending in space, not null
    * @param sqlOrderBy  the SQL order by ending in space, not null
    * @param paging  the paging request, may be null
@@ -192,7 +192,7 @@ public abstract class DbDialect {
   //-------------------------------------------------------------------------
   /**
    * Builds SQL to query a sequence (typically created with CREATE SEQUENCE).
-   * 
+   *
    * @param sequenceName  the sequence name, not null
    * @return the SQL, not space terminated, not null
    */
@@ -207,7 +207,7 @@ public abstract class DbDialect {
 
   /**
    * Builds SQL to query a sequence (typically created with CREATE SEQUENCE).
-   * 
+   *
    * @param sequenceName  the sequence name, not null
    * @return the SQL, space terminated, not null
    */
@@ -225,7 +225,7 @@ public abstract class DbDialect {
    * Builds SQL to query the current timestamp.
    * This is typically the start of the transaction.
    * The column name to read is "NOW_TIMESTAMP".
-   * 
+   *
    * @return the entire SQL select clause, not space terminated, not null
    */
   public String sqlSelectNow() {
@@ -240,12 +240,12 @@ public abstract class DbDialect {
    * Builds the SQL of the coalesce function.
    * This is typically 'COALESCE(a, b, c)' where a, b and c are the input arguments.
    * The input is inserted directly into the function.
-   * 
+   *
    * @param fragment1  the input SQL fragment, not null
    * @param fragment2  the input SQL fragment, not null
    * @return the SQL, not space terminated, not null
    */
-  public String sqlNullDefault(String fragment1, String fragment2) {
+  public String sqlNullDefault(final String fragment1, final String fragment2) {
     // use SQL standard
     // works on Postgres, Oracle, HSQL and MySQL
     return "COALESCE(" + fragment1 + ", " + fragment2 + ")";
@@ -255,7 +255,7 @@ public abstract class DbDialect {
   /**
    * Gets the LOB handler used for BLOBs and CLOBs.
    * Subclasses will return different handlers for different dialects.
-   * 
+   *
    * @return the LOB handler, not null
    */
   public LobHandler getLobHandler() {
@@ -265,7 +265,7 @@ public abstract class DbDialect {
   //-------------------------------------------------------------------------
   /**
    * Gets the precision of a timestamp, the default is microseconds.
-   * 
+   *
    * @return the precision of a timestamp, default is Microseconds, not null
    */
   public TemporalUnit getTimestampPrecision() {

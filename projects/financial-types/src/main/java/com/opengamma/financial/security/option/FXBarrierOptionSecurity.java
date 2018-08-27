@@ -106,9 +106,9 @@ public class FXBarrierOptionSecurity extends FinancialSecurity {
     super(SECURITY_TYPE);
   }
 
-  public FXBarrierOptionSecurity(Currency putCurrency, Currency callCurrency, double putAmount, double callAmount, Expiry expiry,
-      ZonedDateTime settlementDate, BarrierType barrierType, BarrierDirection barrierDirection, MonitoringType monitoringType,
-      SamplingFrequency samplingFrequency, double barrierLevel, boolean isLong) {
+  public FXBarrierOptionSecurity(final Currency putCurrency, final Currency callCurrency, final double putAmount, final double callAmount, final Expiry expiry,
+      final ZonedDateTime settlementDate, final BarrierType barrierType, final BarrierDirection barrierDirection, final MonitoringType monitoringType,
+      final SamplingFrequency samplingFrequency, final double barrierLevel, final boolean isLong) {
     super(SECURITY_TYPE);
     setPutCurrency(putCurrency);
     setCallCurrency(callCurrency);
@@ -120,20 +120,20 @@ public class FXBarrierOptionSecurity extends FinancialSecurity {
     setBarrierDirection(barrierDirection);
     setMonitoringType(monitoringType);
     setSamplingFrequency(samplingFrequency);
-    setBarrierLevel(barrierLevel); 
+    setBarrierLevel(barrierLevel);
     setLongShort(LongShort.ofLong(isLong));
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public final <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public final <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitFXBarrierOptionSecurity(this);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Checks if the long/short type is long.
-   * 
+   *
    * @return true if long, false if short
    */
   public boolean isLong() {
@@ -142,7 +142,7 @@ public class FXBarrierOptionSecurity extends FinancialSecurity {
 
   /**
    * Checks if the long/short type is short.
-   * 
+   *
    * @return true if short, false if long
    */
   public boolean isShort() {

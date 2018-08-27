@@ -24,24 +24,24 @@ public class FxForwardTradeSecurityExtractor extends TradeSecurityExtractor<FxFo
    *
    * @param trade the trade to perform extraction on
    */
-  public FxForwardTradeSecurityExtractor(FxForwardTrade trade) {
+  public FxForwardTradeSecurityExtractor(final FxForwardTrade trade) {
     super(trade);
   }
 
   //-------------------------------------------------------------------------
   @Override
   public ManageableSecurity[] extractSecurities() {
-    FxForwardTrade trade = getTrade();
-    ExternalId region = extractRegion(trade.getPaymentCalendars());
-    boolean nonDeliverable = checkNonDeliverable(trade);
+    final FxForwardTrade trade = getTrade();
+    final ExternalId region = extractRegion(trade.getPaymentCalendars());
+    final boolean nonDeliverable = checkNonDeliverable(trade);
 
-    Currency payCurrency = trade.getPayCurrency();
-    double payAmount = trade.getPayAmount().doubleValue();
-    Currency receiveCurrency = trade.getReceiveCurrency();
-    double receiveAmount = trade.getReceiveAmount().doubleValue();
-    ZonedDateTime forwardDate = convertLocalDate(trade.getMaturityDate());
+    final Currency payCurrency = trade.getPayCurrency();
+    final double payAmount = trade.getPayAmount().doubleValue();
+    final Currency receiveCurrency = trade.getReceiveCurrency();
+    final double receiveAmount = trade.getReceiveAmount().doubleValue();
+    final ZonedDateTime forwardDate = convertLocalDate(trade.getMaturityDate());
 
-    ManageableSecurity security = nonDeliverable ?
+    final ManageableSecurity security = nonDeliverable ?
         // todo - expiry should be used in construction of NonDeliverableFXForwardSecurity
         new NonDeliverableFXForwardSecurity(payCurrency, payAmount, receiveCurrency, receiveAmount, forwardDate,
                                             region, trade.getSettlementCurrency().equals(trade.getReceiveCurrency())) :
@@ -50,7 +50,7 @@ public class FxForwardTradeSecurityExtractor extends TradeSecurityExtractor<FxFo
     return securityArray(addIdentifier(security));
   }
 
-  private boolean checkNonDeliverable(FxForwardTrade trade) {
+  private boolean checkNonDeliverable(final FxForwardTrade trade) {
 
     if (trade.getSettlementCurrency() != null && trade.getFxExpiry() != null) {
       return true;

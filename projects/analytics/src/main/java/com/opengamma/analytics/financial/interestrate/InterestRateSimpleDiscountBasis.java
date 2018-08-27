@@ -8,7 +8,7 @@ package com.opengamma.analytics.financial.interestrate;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Class describing interest rate quoted as simple interest a discounting basis: discount factor = 1-r*t. 
+ * Class describing interest rate quoted as simple interest a discounting basis: discount factor = 1-r*t.
  */
 public class InterestRateSimpleDiscountBasis extends InterestRate {
 
@@ -16,29 +16,29 @@ public class InterestRateSimpleDiscountBasis extends InterestRate {
    * Constructor.
    * @param rate The rate in the simple interest money market basis: discount factor = 1-r*t.
    */
-  public InterestRateSimpleDiscountBasis(double rate) {
+  public InterestRateSimpleDiscountBasis(final double rate) {
     super(rate);
   }
 
   @Override
-  public double getDiscountFactor(double t) {
-    double df = 1.0 - getRate() * t;
+  public double getDiscountFactor(final double t) {
+    final double df = 1.0 - getRate() * t;
     ArgumentChecker.isTrue(df > 0, "Time not compatible with simple interest on a discount basis (1-r*t<0)");
     return df;
   }
 
   @Override
-  public InterestRate fromContinuous(ContinuousInterestRate continuous) {
+  public InterestRate fromContinuous(final ContinuousInterestRate continuous) {
     throw new UnsupportedOperationException("Can not convert from continuous compounding to simple interest rate");
   }
 
   @Override
-  public double fromContinuousDerivative(ContinuousInterestRate continuous) {
+  public double fromContinuousDerivative(final ContinuousInterestRate continuous) {
     throw new UnsupportedOperationException("Can not convert from continuous compounding to simple interest rate");
   }
 
   @Override
-  public InterestRate fromPeriodic(PeriodicInterestRate periodic) {
+  public InterestRate fromPeriodic(final PeriodicInterestRate periodic) {
     throw new UnsupportedOperationException("Can not convert from periodic compounding to simple interest rate");
   }
 
@@ -48,7 +48,7 @@ public class InterestRateSimpleDiscountBasis extends InterestRate {
   }
 
   @Override
-  public PeriodicInterestRate toPeriodic(int periodsPerYear) {
+  public PeriodicInterestRate toPeriodic(final int periodsPerYear) {
     throw new UnsupportedOperationException("Can not convert from simple interest rate to periodic compounding");
   }
 

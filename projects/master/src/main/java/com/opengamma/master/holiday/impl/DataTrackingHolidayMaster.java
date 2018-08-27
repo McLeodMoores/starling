@@ -19,29 +19,29 @@ import com.opengamma.master.holiday.HolidaySearchResult;
  * Holiday master which tracks accesses using UniqueIds.
  */
 public class DataTrackingHolidayMaster extends AbstractDataTrackingMaster<HolidayDocument, HolidayMaster> implements HolidayMaster {
-  
-  public DataTrackingHolidayMaster(HolidayMaster delegate) {
+
+  public DataTrackingHolidayMaster(final HolidayMaster delegate) {
     super(delegate);
   }
 
   @Override
-  public HolidaySearchResult search(HolidaySearchRequest request) {
-    HolidaySearchResult searchResult = delegate().search(request);
+  public HolidaySearchResult search(final HolidaySearchRequest request) {
+    final HolidaySearchResult searchResult = delegate().search(request);
     trackDocs(searchResult.getDocuments());
     return searchResult;
   }
 
   @Override
-  public HolidayHistoryResult history(HolidayHistoryRequest request) {
-    HolidayHistoryResult historyResult = delegate().history(request);
+  public HolidayHistoryResult history(final HolidayHistoryRequest request) {
+    final HolidayHistoryResult historyResult = delegate().history(request);
     trackDocs(historyResult.getDocuments());
     return historyResult;
   }
 
   @Override
-  public HolidayMetaDataResult metaData(HolidayMetaDataRequest request) {
+  public HolidayMetaDataResult metaData(final HolidayMetaDataRequest request) {
     return delegate().metaData(request);
   }
-  
-  
+
+
 }

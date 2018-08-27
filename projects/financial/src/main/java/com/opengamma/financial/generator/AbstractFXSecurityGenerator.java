@@ -37,7 +37,7 @@ import com.opengamma.util.tuple.Pairs;
 
 /**
  * Source of random, but reasonable, FX security instances.
- * 
+ *
  * @param <T> the sub-type of the security
  */
 public abstract class AbstractFXSecurityGenerator<T extends ManageableSecurity> extends SecurityGenerator<T> {
@@ -47,7 +47,7 @@ public abstract class AbstractFXSecurityGenerator<T extends ManageableSecurity> 
   private static final DecimalFormat RATE_FORMATTER = new DecimalFormat("###.######");
   private static final DecimalFormat NOTIONAL_FORMATTER = new DecimalFormat("########.###");
   private static final Boolean[] BOOLEAN_VALUES = {Boolean.TRUE, Boolean.FALSE};
-  private CurrencyPairs _currencyPairs = CurrencyPairsConfigPopulator.createCurrencyPairs();
+  private final CurrencyPairs _currencyPairs = CurrencyPairsConfigPopulator.createCurrencyPairs();
 
   /**
    * Structured random information for creating the security.
@@ -152,7 +152,7 @@ public abstract class AbstractFXSecurityGenerator<T extends ManageableSecurity> 
     fxForwardSecurity.setName("Pay " + payCurrency + " " + callAmountString + ", receive " + receiveCurrency + " " + putAmountString + " on " + dateString);
     return fxForwardSecurity;
   }
-  
+
   protected NonDeliverableFXForwardSecurity createNDFXForwardSecurity(final Bundle bundle) {
     final double putAmount = bundle._firstCurrency.equals(Currency.JPY) ? NOTIONAL * 100 : NOTIONAL;
     final ZonedDateTime forwardDate = nextWorkingDay(bundle._tradeDate.plusDays(bundle._daysOffset), bundle._firstCurrency, bundle._secondCurrency);
@@ -164,9 +164,9 @@ public abstract class AbstractFXSecurityGenerator<T extends ManageableSecurity> 
     final Currency payCurrency = bundle._long ? bundle._secondCurrency : bundle._firstCurrency;
     final Currency receiveCurrency = bundle._long ? bundle._firstCurrency : bundle._secondCurrency;
     final String dateString = forwardDate.format(DATE_FORMATTER);
-    final NonDeliverableFXForwardSecurity security = new NonDeliverableFXForwardSecurity(payCurrency, callAmount, receiveCurrency, putAmount, forwardDate, 
+    final NonDeliverableFXForwardSecurity security = new NonDeliverableFXForwardSecurity(payCurrency, callAmount, receiveCurrency, putAmount, forwardDate,
         REGION, getRandom(BOOLEAN_VALUES));
-    
+
     final String callAmountString = NOTIONAL_FORMATTER.format(callAmount);
     final String putAmountString = NOTIONAL_FORMATTER.format(putAmount);
     security.setName("Pay " + payCurrency + " " + callAmountString + ", receive " + receiveCurrency + " " + putAmountString + " on " + dateString);
@@ -191,7 +191,7 @@ public abstract class AbstractFXSecurityGenerator<T extends ManageableSecurity> 
     fxOptionSecurity.setName((bundle._long ? "Long " : "Short ") + "put " + putCurrency + " " + putAmountString + ", call " + callCurrency + " " + callAmountString + " on " + dateString);
     return fxOptionSecurity;
   }
-  
+
   protected NonDeliverableFXOptionSecurity createNDFXOptionSecurity(final Bundle bundle) {
     final Currency putCurrency = bundle._firstCurrency;
     final Currency callCurrency = bundle._secondCurrency;
@@ -204,10 +204,10 @@ public abstract class AbstractFXSecurityGenerator<T extends ManageableSecurity> 
     final double callAmount = NOTIONAL * fxRate;
     final Expiry expiry = new Expiry(settlementDate, ExpiryAccuracy.DAY_MONTH_YEAR);
     final String dateString = settlementDate.format(DATE_FORMATTER);
-    
-    final NonDeliverableFXOptionSecurity optionSecurity = new NonDeliverableFXOptionSecurity(putCurrency, callCurrency, putAmount, callAmount, expiry, settlementDate, 
+
+    final NonDeliverableFXOptionSecurity optionSecurity = new NonDeliverableFXOptionSecurity(putCurrency, callCurrency, putAmount, callAmount, expiry, settlementDate,
         getRandom(BOOLEAN_VALUES), new EuropeanExerciseType(), getRandom(BOOLEAN_VALUES));
-    
+
     final String callAmountString = NOTIONAL_FORMATTER.format(callAmount);
     final String putAmountString = NOTIONAL_FORMATTER.format(putAmount);
     optionSecurity.setName((bundle._long ? "Long " : "Short ") + "put " + putCurrency + " " + putAmountString + ", call " + callCurrency + " " + callAmountString + " on " + dateString);
@@ -219,7 +219,7 @@ public abstract class AbstractFXSecurityGenerator<T extends ManageableSecurity> 
     if (security == null) {
       return null;
     }
-    ManageableTrade trade = new ManageableTrade(quantity, persister.storeSecurity(security), bundle._tradeDate.toLocalDate(), bundle._tradeDate.toOffsetDateTime().toOffsetTime(), 
+    final ManageableTrade trade = new ManageableTrade(quantity, persister.storeSecurity(security), bundle._tradeDate.toLocalDate(), bundle._tradeDate.toOffsetDateTime().toOffsetTime(),
         ExternalId.of(Counterparty.DEFAULT_SCHEME, counterPartyGenerator.createName()));
     trade.setPremium(security.getCallAmount());
     trade.setPremiumCurrency(security.getCallCurrency());
@@ -231,7 +231,7 @@ public abstract class AbstractFXSecurityGenerator<T extends ManageableSecurity> 
     if (security == null) {
       return null;
     }
-    ManageableTrade trade = new ManageableTrade(quantity, persister.storeSecurity(security), bundle._tradeDate.toLocalDate(), bundle._tradeDate.toOffsetDateTime().toOffsetTime(), 
+    final ManageableTrade trade = new ManageableTrade(quantity, persister.storeSecurity(security), bundle._tradeDate.toLocalDate(), bundle._tradeDate.toOffsetDateTime().toOffsetTime(),
         ExternalId.of(Counterparty.DEFAULT_SCHEME, counterPartyGenerator.createName()));
     trade.setPremium(security.getCallAmount());
     trade.setPremiumCurrency(security.getCallCurrency());
@@ -243,20 +243,20 @@ public abstract class AbstractFXSecurityGenerator<T extends ManageableSecurity> 
     if (security == null) {
       return null;
     }
-    ManageableTrade trade = new ManageableTrade(quantity, persister.storeSecurity(security), bundle._tradeDate.toLocalDate(), bundle._tradeDate.toOffsetDateTime().toOffsetTime(), 
+    final ManageableTrade trade = new ManageableTrade(quantity, persister.storeSecurity(security), bundle._tradeDate.toLocalDate(), bundle._tradeDate.toOffsetDateTime().toOffsetTime(),
         ExternalId.of(Counterparty.DEFAULT_SCHEME, counterPartyGenerator.createName()));
     trade.setPremium(security.getPayAmount());
     trade.setPremiumCurrency(security.getPayCurrency());
     return trade;
-    
+
   }
-  
+
   protected ManageableTrade createNDFXForwardSecurityTrade(final Bundle bundle, final BigDecimal quantity, final SecurityPersister persister, final NameGenerator counterPartyGenerator) {
     final NonDeliverableFXForwardSecurity security = createNDFXForwardSecurity(bundle);
     if (security == null) {
       return null;
     }
-    ManageableTrade trade = new ManageableTrade(quantity, persister.storeSecurity(security), bundle._tradeDate.toLocalDate(), bundle._tradeDate.toOffsetDateTime().toOffsetTime(), 
+    final ManageableTrade trade = new ManageableTrade(quantity, persister.storeSecurity(security), bundle._tradeDate.toLocalDate(), bundle._tradeDate.toOffsetDateTime().toOffsetTime(),
         ExternalId.of(Counterparty.DEFAULT_SCHEME, counterPartyGenerator.createName()));
     trade.setPremium(security.getPayAmount());
     trade.setPremiumCurrency(security.getPayCurrency());
@@ -268,27 +268,27 @@ public abstract class AbstractFXSecurityGenerator<T extends ManageableSecurity> 
     if (security == null) {
       return null;
     }
-    ManageableTrade trade = new ManageableTrade(quantity, persister.storeSecurity(security), bundle._tradeDate.toLocalDate(), bundle._tradeDate.toOffsetDateTime().toOffsetTime(), 
+    final ManageableTrade trade = new ManageableTrade(quantity, persister.storeSecurity(security), bundle._tradeDate.toLocalDate(), bundle._tradeDate.toOffsetDateTime().toOffsetTime(),
         ExternalId.of(Counterparty.DEFAULT_SCHEME, counterPartyGenerator.createName()));
     trade.setPremium(security.getCallAmount());
     trade.setPremiumCurrency(security.getCallCurrency());
     return trade;
   }
-  
+
   protected ManageableTrade createNDFXOptionSecurityTrade(final Bundle bundle, final BigDecimal quantity, final SecurityPersister persister, final NameGenerator counterPartyGenerator) {
     final NonDeliverableFXOptionSecurity security = createNDFXOptionSecurity(bundle);
     if (security == null) {
       return null;
     }
-    ManageableTrade trade = new ManageableTrade(quantity, persister.storeSecurity(security), bundle._tradeDate.toLocalDate(), bundle._tradeDate.toOffsetDateTime().toOffsetTime(), 
+    final ManageableTrade trade = new ManageableTrade(quantity, persister.storeSecurity(security), bundle._tradeDate.toLocalDate(), bundle._tradeDate.toOffsetDateTime().toOffsetTime(),
         ExternalId.of(Counterparty.DEFAULT_SCHEME, counterPartyGenerator.createName()));
     trade.setPremium(security.getCallAmount());
     trade.setPremiumCurrency(security.getCallCurrency());
     return trade;
   }
-  
-  protected CurrencyPair getCurrencyPair(Currency ccy1, Currency ccy2) {
+
+  protected CurrencyPair getCurrencyPair(final Currency ccy1, final Currency ccy2) {
     return _currencyPairs.getCurrencyPair(ccy1, ccy2);
   }
-  
+
 }

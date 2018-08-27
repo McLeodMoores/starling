@@ -77,27 +77,27 @@ public class CreditDefaultSwapIndexSecurity extends AbstractCreditDefaultSwapSec
   }
 
 
-  public CreditDefaultSwapIndexSecurity(boolean buy,  // CSIGNORE: number of parameters is appropriate here
-                                        ExternalId protectionBuyer,
-                                        ExternalId protectionSeller,
-                                        ExternalId underlyingIndex,
-                                        ZonedDateTime startDate,
-                                        ZonedDateTime effectiveDate,
-                                        ZonedDateTime maturityDate,
-                                        StubType stubType,
-                                        Frequency couponFrequency,
-                                        DayCount dayCount,
-                                        BusinessDayConvention businessDayConvention,
-                                        boolean immAdjustMaturityDate,
-                                        boolean adjustEffectiveDate,
-                                        boolean adjustMaturityDate,
-                                        InterestRateNotional notional,
-                                        boolean includeAccruedPremium,
-                                        boolean protectionStart,
-                                        ZonedDateTime settlementDate,
-                                        boolean adjustSettlementDate,
-                                        InterestRateNotional upfrontPayment,
-                                        double indexCoupon) {
+  public CreditDefaultSwapIndexSecurity(final boolean buy,  // CSIGNORE: number of parameters is appropriate here
+                                        final ExternalId protectionBuyer,
+                                        final ExternalId protectionSeller,
+                                        final ExternalId underlyingIndex,
+                                        final ZonedDateTime startDate,
+                                        final ZonedDateTime effectiveDate,
+                                        final ZonedDateTime maturityDate,
+                                        final StubType stubType,
+                                        final Frequency couponFrequency,
+                                        final DayCount dayCount,
+                                        final BusinessDayConvention businessDayConvention,
+                                        final boolean immAdjustMaturityDate,
+                                        final boolean adjustEffectiveDate,
+                                        final boolean adjustMaturityDate,
+                                        final InterestRateNotional notional,
+                                        final boolean includeAccruedPremium,
+                                        final boolean protectionStart,
+                                        final ZonedDateTime settlementDate,
+                                        final boolean adjustSettlementDate,
+                                        final InterestRateNotional upfrontPayment,
+                                        final double indexCoupon) {
     super(SECURITY_TYPE,
           buy,
           protectionBuyer,
@@ -123,7 +123,7 @@ public class CreditDefaultSwapIndexSecurity extends AbstractCreditDefaultSwapSec
   }
 
   @Override
-  public <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitCreditDefaultSwapIndexSecurity(this);
   }
 

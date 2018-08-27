@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility;
@@ -17,7 +17,7 @@ import com.opengamma.analytics.math.curve.Curve;
 import com.opengamma.analytics.math.function.Function1D;
 
 /**
- * 
+ *
  */
 public class SABRTermStructureParameters implements VolatilityModel1D {
 
@@ -36,10 +36,10 @@ public class SABRTermStructureParameters implements VolatilityModel1D {
 
   public SABRTermStructureParameters(final LinkedHashMap<String, Curve<Double, Double>> curveBundle) {
     Validate.notNull(curveBundle, "null curve bundle");
-    Curve<Double, Double> alpha = curveBundle.get(ALPHA);
-    Curve<Double, Double> beta = curveBundle.get(BETA);
-    Curve<Double, Double> nu = curveBundle.get(NU);
-    Curve<Double, Double> rho = curveBundle.get(RHO);
+    final Curve<Double, Double> alpha = curveBundle.get(ALPHA);
+    final Curve<Double, Double> beta = curveBundle.get(BETA);
+    final Curve<Double, Double> nu = curveBundle.get(NU);
+    final Curve<Double, Double> rho = curveBundle.get(RHO);
     validate(alpha, beta, rho, nu);
     _alpha = alpha;
     _beta = beta;
@@ -54,7 +54,7 @@ public class SABRTermStructureParameters implements VolatilityModel1D {
   }
 
   public SABRTermStructureParameters(final Curve<Double, Double> alpha, final Curve<Double, Double> beta, final Curve<Double, Double> rho,
-      final Curve<Double, Double> nu, VolatilityFunctionProvider<SABRFormulaData> sabrFunction) {
+      final Curve<Double, Double> nu, final VolatilityFunctionProvider<SABRFormulaData> sabrFunction) {
     validate(alpha, beta, rho, nu);
     Validate.notNull(sabrFunction, "null sabrFunction");
     _alpha = alpha;
@@ -94,7 +94,7 @@ public class SABRTermStructureParameters implements VolatilityModel1D {
    * @return The (Black) volatility
    */
   @Override
-  public Double getVolatility(double[] fwdKT) {
+  public Double getVolatility(final double[] fwdKT) {
     Validate.notNull(fwdKT, "null fwdKT");
     Validate.isTrue(fwdKT.length == 3, "length must be 3");
     return getVolatility(fwdKT[0], fwdKT[1], fwdKT[2]);
@@ -112,13 +112,13 @@ public class SABRTermStructureParameters implements VolatilityModel1D {
     final SABRFormulaData data = new SABRFormulaData(getAlpha(timeToExpiry), getBeta(timeToExpiry), getRho(timeToExpiry), getNu(timeToExpiry));
     final EuropeanVanillaOption option = new EuropeanVanillaOption(strike, timeToExpiry, true);
     final Function1D<SABRFormulaData, Double> func = _sabrFunction.getVolatilityFunction(option, fwd);
-    double vol = func.evaluate(data);
+    final double vol = func.evaluate(data);
     //The SABR Hagan formula can produce negative vols
     return Math.max(0, vol);
   }
 
   @Override
-  public double getVolatility(SimpleOptionData option) {
+  public double getVolatility(final SimpleOptionData option) {
     return getVolatility(option.getForward(), option.getStrike(), option.getTimeToExpiry());
   }
 

@@ -65,7 +65,7 @@ public class HistoricalTimeSeriesGetFilter extends DirectBean implements Seriali
   //-------------------------------------------------------------------------
   /**
    * Creates an instance that retrieves all points in the series.
-   * 
+   *
    * @return the mutable request, not null
    */
   public static HistoricalTimeSeriesGetFilter ofAll() {
@@ -74,24 +74,24 @@ public class HistoricalTimeSeriesGetFilter extends DirectBean implements Seriali
 
   /**
    * Creates an instance that retrieves the latest value for the series.
-   * 
+   *
    * @return the mutable request, not null
    */
   public static HistoricalTimeSeriesGetFilter ofLatestPoint() {
-    HistoricalTimeSeriesGetFilter request = new HistoricalTimeSeriesGetFilter();
+    final HistoricalTimeSeriesGetFilter request = new HistoricalTimeSeriesGetFilter();
     request.setMaxPoints(-1);
     return request;
   }
 
   /**
    * Creates and instance that retrieves the latest point within a specified period ending now.
-   * 
+   *
    * @param period  the period, counting backwards from the current time, within which the point must fall
    * @return the mutable request, not null
    */
-  public static HistoricalTimeSeriesGetFilter ofLatestPoint(Period period) {
-    HistoricalTimeSeriesGetFilter request = new HistoricalTimeSeriesGetFilter();
-    LocalDate now = LocalDate.now();
+  public static HistoricalTimeSeriesGetFilter ofLatestPoint(final Period period) {
+    final HistoricalTimeSeriesGetFilter request = new HistoricalTimeSeriesGetFilter();
+    final LocalDate now = LocalDate.now();
     request.setEarliestDate(now.minus(period));
     request.setLatestDate(now);
     request.setMaxPoints(-1);
@@ -100,53 +100,53 @@ public class HistoricalTimeSeriesGetFilter extends DirectBean implements Seriali
 
   /**
    * Creates and instance that retrieves the latest point within a specified time interval.
-   * 
+   *
    * @param earliestDate  the earliest date to retrieve, inclusive, null means far past
    * @param latestDate  the latest date to retrieve, inclusive, null means far future
    * @return the mutable request, not null
    */
-  public static HistoricalTimeSeriesGetFilter ofLatestPoint(LocalDate earliestDate, LocalDate latestDate) {
-    HistoricalTimeSeriesGetFilter request = HistoricalTimeSeriesGetFilter.ofRange(earliestDate, latestDate);
+  public static HistoricalTimeSeriesGetFilter ofLatestPoint(final LocalDate earliestDate, final LocalDate latestDate) {
+    final HistoricalTimeSeriesGetFilter request = HistoricalTimeSeriesGetFilter.ofRange(earliestDate, latestDate);
     request.setMaxPoints(-1);
     return request;
   }
 
   /**
    * Creates an instance that retrieves the earliest value for the series.
-   * 
+   *
    * @return the mutable request, not null
    */
   public static HistoricalTimeSeriesGetFilter ofEarliestPoint() {
-    HistoricalTimeSeriesGetFilter request = new HistoricalTimeSeriesGetFilter();
+    final HistoricalTimeSeriesGetFilter request = new HistoricalTimeSeriesGetFilter();
     request.setMaxPoints(1);
     return request;
   }
 
   /**
    * Creates an instance specifying a date range.
-   * 
+   *
    * @param earliestDate  the earliest date to retrieve, inclusive, null means far past
    * @param latestDate  the latest date to retrieve, inclusive, null means far future
    * @return the mutable request, not null
    */
-  public static HistoricalTimeSeriesGetFilter ofRange(LocalDate earliestDate, LocalDate latestDate) {
-    HistoricalTimeSeriesGetFilter request = new HistoricalTimeSeriesGetFilter();
+  public static HistoricalTimeSeriesGetFilter ofRange(final LocalDate earliestDate, final LocalDate latestDate) {
+    final HistoricalTimeSeriesGetFilter request = new HistoricalTimeSeriesGetFilter();
     request.setEarliestDate(earliestDate);
     request.setLatestDate(latestDate);
     return request;
   }
-  
+
   /**
    * Creates an instance specifying a date range and an upperbound for the number of points returned.
-   * 
+   *
    * @param earliestDate  the earliest date to retrieve, inclusive, null means far past
    * @param latestDate  the latest date to retrieve, inclusive, null means far future
    * @param maxPoints  the max number of points to retrieve, null means fetch max possible
    *  -ve fetches backwards commencing from the latest date, +ve fetches forward from the earliest date
    * @return the mutable request, not null
    */
-  public static HistoricalTimeSeriesGetFilter ofRange(LocalDate earliestDate, LocalDate latestDate, Integer maxPoints) {
-    HistoricalTimeSeriesGetFilter request = new HistoricalTimeSeriesGetFilter();
+  public static HistoricalTimeSeriesGetFilter ofRange(final LocalDate earliestDate, final LocalDate latestDate, final Integer maxPoints) {
+    final HistoricalTimeSeriesGetFilter request = new HistoricalTimeSeriesGetFilter();
     request.setEarliestDate(earliestDate);
     request.setLatestDate(latestDate);
     request.setMaxPoints(maxPoints);

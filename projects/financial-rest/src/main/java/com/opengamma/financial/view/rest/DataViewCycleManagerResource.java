@@ -16,12 +16,12 @@ import com.opengamma.engine.view.cycle.ViewCycle;
  */
 public class DataViewCycleManagerResource extends DataEngineResourceManagerResource<ViewCycle> {
 
-  protected DataViewCycleManagerResource(URI baseUri, EngineResourceManager<? extends ViewCycle> manager) {
+  protected DataViewCycleManagerResource(final URI baseUri, final EngineResourceManager<? extends ViewCycle> manager) {
     super(baseUri, manager);
   }
-  
+
   @Override
-  protected DataEngineResourceReferenceResource<ViewCycle> createReferenceResource(long referenceId, EngineResourceReference<? extends ViewCycle> reference) {
+  protected DataEngineResourceReferenceResource<ViewCycle> createReferenceResource(final long referenceId, final EngineResourceReference<? extends ViewCycle> reference) {
     return new DataViewCycleReferenceResource(this, referenceId, reference);
   }
 

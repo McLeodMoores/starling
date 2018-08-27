@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.component.factory.source;
@@ -49,25 +49,25 @@ public class CurveCalculationConfigSourceComponentFactory extends AbstractCompon
   //-------------------------------------------------------------------------
   /**
    * Initializes the curve calculation config source, setting up component information and REST. Override using {@link #createCurveCalculationConfigSource(ComponentRepository)}.
-   * 
+   *
    * @param repo the component repository, not null
    * @param configuration the remaining configuration, not null
    */
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
-    CurveCalculationConfigSource source = createCurveCalculationConfigSource(repo);
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
+    final CurveCalculationConfigSource source = createCurveCalculationConfigSource(repo);
 
-    ComponentInfo info = new ComponentInfo(CurveCalculationConfigSource.class, getClassifier());
+    final ComponentInfo info = new ComponentInfo(CurveCalculationConfigSource.class, getClassifier());
     repo.registerComponent(info, source);
   }
 
   /**
    * Creates the curve calculation config source without registering it.
-   * 
+   *
    * @param repo the component repository, only used to register secondary items like lifecycle, not null
    * @return the curve calculation config source, not null
    */
-  protected ConfigDBCurveCalculationConfigSource createCurveCalculationConfigSource(ComponentRepository repo) {
+  protected ConfigDBCurveCalculationConfigSource createCurveCalculationConfigSource(final ComponentRepository repo) {
     return new ConfigDBCurveCalculationConfigSource(getConfigSource(), VersionCorrection.LATEST);
   }
 

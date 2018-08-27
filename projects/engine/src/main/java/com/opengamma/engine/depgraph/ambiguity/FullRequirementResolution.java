@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph.ambiguity;
@@ -20,7 +20,7 @@ import com.opengamma.util.ArgumentChecker;
 public final class FullRequirementResolution {
 
   private final ValueRequirement _requirement;
-  private final List<Collection<RequirementResolution>> _resolutions = new ArrayList<Collection<RequirementResolution>>();
+  private final List<Collection<RequirementResolution>> _resolutions = new ArrayList<>();
   private int _hashCode;
 
   public FullRequirementResolution(final ValueRequirement requirement) {
@@ -30,7 +30,7 @@ public final class FullRequirementResolution {
 
   /**
    * Returns the requirement this resolution result describes.
-   * 
+   *
    * @return the requirement, not null
    */
   public ValueRequirement getRequirement() {
@@ -42,7 +42,7 @@ public final class FullRequirementResolution {
    * <p>
    * Each entry in the list will, under non-ambiguous circumstances, be a singleton collection. When an ambiguity exists elements will be sets containing all of the possible resolutions with null
    * included if non-resolution is a possible outcome.
-   * 
+   *
    * @return the resolutions, not null
    */
   public List<Collection<RequirementResolution>> getResolutions() {
@@ -55,12 +55,12 @@ public final class FullRequirementResolution {
   /**
    * Stores a resolution result set into the overall result. If this is a non-ambiguous result, the collection must contain only a single value. If this is an ambiguous result, the collection may
    * contain all possible values and null if one of the outcomes was non-resolution.
-   * 
+   *
    * @param resolutions the possible resolutions for this value requirement, not null, and non-empty
    * @throws IllegalArgumentException if the parameters are invalid or attempt to create a recursive structure
    */
   public void addResolutions(Collection<RequirementResolution> resolutions) {
-    resolutions = Collections.unmodifiableSet(new HashSet<RequirementResolution>(resolutions));
+    resolutions = Collections.unmodifiableSet(new HashSet<>(resolutions));
     final int size = resolutions.size();
     if (size == 0) {
       // Empty is not allowed
@@ -72,22 +72,22 @@ public final class FullRequirementResolution {
       }
       resolutions = Collections.singleton(resolutions.iterator().next());
     }
-    for (RequirementResolution resolution : resolutions) {
-      if ((resolution != null) && resolution.contains(this)) {
+    for (final RequirementResolution resolution : resolutions) {
+      if (resolution != null && resolution.contains(this)) {
         throw new IllegalArgumentException("Circular reference from " + resolution + " to " + this);
       }
     }
     _resolutions.add(resolutions);
-    _hashCode = (_hashCode * 31) + resolutions.hashCode();
+    _hashCode = _hashCode * 31 + resolutions.hashCode();
   }
 
   /**
    * Tests whether the given resolution is present in any of the inputs to this resolution. This prevents recursive structures from being constructed.
    */
   /* package */boolean contains(final FullRequirementResolution parent) {
-    for (Collection<RequirementResolution> resolutions : _resolutions) {
-      for (RequirementResolution resolution : resolutions) {
-        if ((resolution != null) && resolution.contains(parent)) {
+    for (final Collection<RequirementResolution> resolutions : _resolutions) {
+      for (final RequirementResolution resolution : resolutions) {
+        if (resolution != null && resolution.contains(parent)) {
           return true;
         }
       }
@@ -98,11 +98,11 @@ public final class FullRequirementResolution {
   /**
    * Tests if there is any ambiguity in this resolution. This only applies to the exact value requirement; there may be ambiguities in resolving items deeper in the graph but which have no effect on
    * this requirement.
-   * 
+   *
    * @return true if there is an ambiguity, false otherwise
    */
   public boolean isAmbiguous() {
-    for (Collection<RequirementResolution> resolutions : _resolutions) {
+    for (final Collection<RequirementResolution> resolutions : _resolutions) {
       if (resolutions.size() > 1) {
         return true;
       }
@@ -112,11 +112,11 @@ public final class FullRequirementResolution {
 
   /**
    * Tests if there is any ambiguity in this resolution or any of its inputs.
-   * 
+   *
    * @return true if there is an ambiguity, false otherwise
    */
   public boolean isDeeplyAmbiguous() {
-    for (Collection<RequirementResolution> resolutions : _resolutions) {
+    for (final Collection<RequirementResolution> resolutions : _resolutions) {
       if (resolutions.size() > 1) {
         return true;
       }
@@ -129,7 +129,7 @@ public final class FullRequirementResolution {
 
   /**
    * Tests if there is a successful resolution of this requirement.
-   * 
+   *
    * @return true if there is a resolution, false otherwise
    */
   public boolean isResolved() {
@@ -147,7 +147,7 @@ public final class FullRequirementResolution {
       return false;
     }
     final FullRequirementResolution other = (FullRequirementResolution) o;
-    return (_hashCode == other._hashCode) && _requirement.equals(other._requirement) && _resolutions.equals(other._resolutions);
+    return _hashCode == other._hashCode && _requirement.equals(other._requirement) && _resolutions.equals(other._resolutions);
   }
 
   @Override

@@ -44,7 +44,7 @@ public class JmsByteArrayRequestSender extends AbstractJmsByteArraySender implem
 
   /**
    * Creates an instance associated with a destination and template.
-   * 
+   *
    * @param destinationName the destination name, not null
    * @param jmsTemplate the template, not null
    */
@@ -54,7 +54,7 @@ public class JmsByteArrayRequestSender extends AbstractJmsByteArraySender implem
 
   /**
    * Creates an instance associated with a destination and template, specifying the executor to use.
-   * 
+   *
    * @param destinationName the destination name, not null
    * @param jmsTemplate the template, not null
    * @param executor the executor, not null
@@ -74,7 +74,7 @@ public class JmsByteArrayRequestSender extends AbstractJmsByteArraySender implem
       public void run() {
         getJmsTemplate().execute(new SessionCallback<Object>() {
           @Override
-          public Object doInJms(Session session) throws JMSException {
+          public Object doInJms(final Session session) throws JMSException {
             try {
               final TemporaryTopic tempTopic = session.createTemporaryTopic();
               LOGGER.debug("Requesting response to temp topic {}", tempTopic);
@@ -105,7 +105,7 @@ public class JmsByteArrayRequestSender extends AbstractJmsByteArraySender implem
               LOGGER.debug("Dispatching response of length {}", bytes.length);
               responseReceiver.messageReceived(bytes);
 
-            } catch (Exception ex) {
+            } catch (final Exception ex) {
               // TODO UTL-37.
               LOGGER.error("Unexpected exception while waiting for a response to send to " + responseReceiver, ex);
             }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.db.management;
@@ -23,7 +23,7 @@ public final class DerbyDbManagement extends AbstractDbManagement {
   /**
    * Singleton instance.
    */
-  private static final DerbyDbManagement INSTANCE = new DerbyDbManagement(); 
+  private static final DerbyDbManagement INSTANCE = new DerbyDbManagement();
   /**
    * The underlying Hibernate dialect.
    */
@@ -37,7 +37,7 @@ public final class DerbyDbManagement extends AbstractDbManagement {
 
   /**
    * Gets the singleton instance.
-   * 
+   *
    * @return the instance, not null
    */
   public static DerbyDbManagement getInstance() {
@@ -66,42 +66,42 @@ public final class DerbyDbManagement extends AbstractDbManagement {
 
   //-------------------------------------------------------------------------
   @Override
-  public void reset(String catalog) {
+  public void reset(final String catalog) {
     super.reset(catalog);
-    
+
     // for Derby, we shutdown the database to avoid locking issues
     System.out.println("Closing connection to " + catalog + "...");
     try {
       DriverManager.getConnection("jdbc:derby:;shutdown=true");
-    } catch (SQLException e) {
+    } catch (final SQLException e) {
       if (e.getErrorCode() != 50000 || !"XJ015".equals(e.getSQLState())) {
-        throw new OpenGammaRuntimeException("Could not shutdown Derby " + e.getErrorCode() + " - " + e.getSQLState() + " - " + e.getMessage(), e);        
+        throw new OpenGammaRuntimeException("Could not shutdown Derby " + e.getErrorCode() + " - " + e.getSQLState() + " - " + e.getMessage(), e);
       }
     }
   }
 
   @Override
-  public void shutdown(String catalog) {
+  public void shutdown(final String catalog) {
     super.shutdown(catalog);
-    
+
     System.out.println("Closing connection to " + catalog + "...");
     try {
       DriverManager.getConnection("jdbc:derby:;shutdown=true");
-    } catch (SQLException e) {
+    } catch (final SQLException e) {
       if (e.getErrorCode() != 50000 || !"XJ015".equals(e.getSQLState())) {
-        throw new OpenGammaRuntimeException("Could not shutdown Derby " + e.getErrorCode() + " - " + e.getSQLState() + " - " + e.getMessage(), e);        
+        throw new OpenGammaRuntimeException("Could not shutdown Derby " + e.getErrorCode() + " - " + e.getSQLState() + " - " + e.getMessage(), e);
       }
     }
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public String getAllSchemasSQL(String catalog) {
+  public String getAllSchemasSQL(final String catalog) {
     return "SELECT schemaname AS name FROM SYS.SYSSCHEMAS";
   }
 
   @Override
-  public String getAllForeignKeyConstraintsSQL(String catalog, String schema) {
+  public String getAllForeignKeyConstraintsSQL(final String catalog, final String schema) {
     String sql = "SELECT constraintname AS name, " +
       "tablename AS table_name " +
       "FROM SYS.SYSCONSTRAINTS, SYS.SYSTABLES " +
@@ -113,7 +113,7 @@ public final class DerbyDbManagement extends AbstractDbManagement {
   }
 
   @Override
-  public String getAllSequencesSQL(String catalog, String schema) {
+  public String getAllSequencesSQL(final String catalog, final String schema) {
     String sql = "SELECT sequencename AS name FROM SYS.SYSSEQUENCES ";
     if (schema != null) {
       sql += " WHERE schemaid = (SELECT schemaid FROM SYS.SYSSCHEMAS WHERE schemaname = '" + schema + "')";
@@ -122,7 +122,7 @@ public final class DerbyDbManagement extends AbstractDbManagement {
   }
 
   @Override
-  public String getAllTablesSQL(String catalog, String schema) {
+  public String getAllTablesSQL(final String catalog, final String schema) {
     String sql = "SELECT tablename AS name FROM SYS.SYSTABLES WHERE tabletype = 'T'";
     if (schema != null) {
       sql += " AND schemaid = (SELECT schemaid FROM SYS.SYSSCHEMAS WHERE schemaname = '" + schema + "')";
@@ -131,7 +131,7 @@ public final class DerbyDbManagement extends AbstractDbManagement {
   }
 
   @Override
-  public String getAllViewsSQL(String catalog, String schema) {
+  public String getAllViewsSQL(final String catalog, final String schema) {
     String sql = "SELECT tablename AS name FROM SYS.SYSTABLES WHERE tabletype = 'V'";
     if (schema != null) {
       sql += " AND schemaid = (SELECT schemaid FROM SYS.SYSSCHEMAS WHERE schemaname = '" + schema + "')";
@@ -140,8 +140,8 @@ public final class DerbyDbManagement extends AbstractDbManagement {
   }
 
   @Override
-  public String getAllColumnsSQL(String catalog, String schema, String table) {
-    StringBuilder sql = new StringBuilder("SELECT c.columnname AS name,c.columndatatype AS datatype,'' AS allowsnull,c.columndefault AS defaultvalue " +
+  public String getAllColumnsSQL(final String catalog, final String schema, final String table) {
+    final StringBuilder sql = new StringBuilder("SELECT c.columnname AS name,c.columndatatype AS datatype,'' AS allowsnull,c.columndefault AS defaultvalue " +
         "FROM SYS.SYSCOLUMNS AS c INNER JOIN SYS.SYSTABLES AS t ON c.referenceid=t.tableid WHERE t.tablename='");
     sql.append(table).append("'");
     if (schema != null) {
@@ -151,20 +151,20 @@ public final class DerbyDbManagement extends AbstractDbManagement {
   }
 
   @Override
-  public String getCreateSchemaSQL(String catalog, String schema) {
+  public String getCreateSchemaSQL(final String catalog, final String schema) {
     return "CREATE SCHEMA " + schema;
   }
 
   @Override
-  public String getSchemaVersionTable(String schemaGroupName) {
+  public String getSchemaVersionTable(final String schemaGroupName) {
     return (schemaGroupName + SCHEMA_VERSION_TABLE_SUFFIX).toUpperCase();
   }
 
   @Override
-  public String getSchemaVersionSQL(String catalog, String schemaGroupName) {
+  public String getSchemaVersionSQL(final String catalog, final String schemaGroupName) {
     return "SELECT version_value FROM " + getSchemaVersionTable(schemaGroupName) + " WHERE version_key = 'schema_patch'";
   }
-  
+
   @Override
   public CatalogCreationStrategy getCatalogCreationStrategy() {
     return new DerbyCatalogCreationStrategy();
@@ -177,24 +177,24 @@ public final class DerbyDbManagement extends AbstractDbManagement {
   private class DerbyCatalogCreationStrategy implements CatalogCreationStrategy {
 
     private File getFile() {
-      String dbHost = getDbHost().trim();
-      String filePart = dbHost.substring("jdbc:derby:".length());
+      final String dbHost = getDbHost().trim();
+      final String filePart = dbHost.substring("jdbc:derby:".length());
       return new File(filePart);
     }
 
     @Override
-    public boolean catalogExists(String catalog) {
-      File catalogDir = new File(getFile(), catalog);
+    public boolean catalogExists(final String catalog) {
+      final File catalogDir = new File(getFile(), catalog);
       return catalogDir.exists();
     }
 
     @Override
-    public void create(String catalog) {
+    public void create(final String catalog) {
       if (!catalogExists(catalog)) {
         try {
-          Connection conn = connect(catalog + ";create=true");
+          final Connection conn = connect(catalog + ";create=true");
           conn.close();
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
           throw new OpenGammaRuntimeException("Cannot create Derby DB", e);
         }
       }

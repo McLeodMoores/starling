@@ -42,11 +42,11 @@ public final class SuccessResult<T> extends Result<T> implements ImmutableBean {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param value  the value
    */
   @ImmutableConstructor
-  SuccessResult(T value) {
+  SuccessResult(final T value) {
     _value = ArgumentChecker.notNull(value, "value");
   }
 
@@ -57,12 +57,12 @@ public final class SuccessResult<T> extends Result<T> implements ImmutableBean {
   }
 
   @Override
-  public <U> Result<U> ifSuccess(Function<T, Result<U>> function) {
+  public <U> Result<U> ifSuccess(final Function<T, Result<U>> function) {
     return function.apply(_value);
   }
 
   @Override
-  public <U, V> Result<V> combineWith(Result<U> other, Function2<T, U, Result<V>> function) {
+  public <U, V> Result<V> combineWith(final Result<U> other, final Function2<T, U, Result<V>> function) {
     ArgumentChecker.notNull(other, "other");
 
     if (!other.isSuccess()) {

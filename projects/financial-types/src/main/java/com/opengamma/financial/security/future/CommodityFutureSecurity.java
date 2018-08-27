@@ -49,7 +49,7 @@ public abstract class CommodityFutureSecurity extends FutureSecurity {
     super();
   }
 
-  public CommodityFutureSecurity(Expiry expiry, String tradingExchange, String settlementExchange, Currency currency, double unitAmount, String category) {
+  public CommodityFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency, final double unitAmount, final String category) {
     super(expiry, tradingExchange, settlementExchange, currency, unitAmount, category);
   }
 

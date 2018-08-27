@@ -71,7 +71,7 @@ public class EquityIndexOptionLoader extends SecurityLoader {
       FIELD_OPT_TICK_VAL,
       FIELD_OPT_VAL_PT,
       FIELD_UNDL_ID_BB_UNIQUE));
-  
+
   /**
    * The valid Bloomberg security types for Equity Index Option
    * NOTE: THESE ARE ACTUALLY FUTURES_CATEGORY TYPES NOT SECURITY_TYP TYPES.
@@ -82,27 +82,27 @@ public class EquityIndexOptionLoader extends SecurityLoader {
    * Creates an instance.
    * @param referenceDataProvider  the provider, not null
    */
-  public EquityIndexOptionLoader(ReferenceDataProvider referenceDataProvider) {
+  public EquityIndexOptionLoader(final ReferenceDataProvider referenceDataProvider) {
     super(LOGGER, referenceDataProvider, SecurityType.EQUITY_INDEX_OPTION);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  protected ManageableSecurity createSecurity(FudgeMsg fieldData) {
-    String rootTicker = fieldData.getString(FIELD_OPTION_ROOT_TICKER);
-    String exchange = fieldData.getString(FIELD_EXCH_CODE);
-    String optionExerciseType = fieldData.getString(FIELD_OPT_EXERCISE_TYP);
-    double optionStrikePrice = fieldData.getDouble(FIELD_OPT_STRIKE_PX);
-    double pointValue = fieldData.getDouble(FIELD_OPT_VAL_PT);
-    String putOrCall = fieldData.getString(FIELD_OPT_PUT_CALL);
-    String underlingTicker = fieldData.getString(FIELD_OPT_UNDERLYING_SECURITY_DES);
-    String currency = fieldData.getString(FIELD_OPT_UNDL_CRNCY);
-    String expiryDate = fieldData.getString(FIELD_OPT_EXPIRE_DT);
-    String bbgUniqueID = fieldData.getString(FIELD_ID_BBG_UNIQUE);
-    String underlyingUniqueID = fieldData.getString(FIELD_UNDL_ID_BB_UNIQUE);
-    String secDes = fieldData.getString(FIELD_SECURITY_DES);
-    String marketSector = fieldData.getString(FIELD_MARKET_SECTOR_DES);
-    
+  protected ManageableSecurity createSecurity(final FudgeMsg fieldData) {
+    final String rootTicker = fieldData.getString(FIELD_OPTION_ROOT_TICKER);
+    final String exchange = fieldData.getString(FIELD_EXCH_CODE);
+    final String optionExerciseType = fieldData.getString(FIELD_OPT_EXERCISE_TYP);
+    final double optionStrikePrice = fieldData.getDouble(FIELD_OPT_STRIKE_PX);
+    final double pointValue = fieldData.getDouble(FIELD_OPT_VAL_PT);
+    final String putOrCall = fieldData.getString(FIELD_OPT_PUT_CALL);
+    final String underlingTicker = fieldData.getString(FIELD_OPT_UNDERLYING_SECURITY_DES);
+    final String currency = fieldData.getString(FIELD_OPT_UNDL_CRNCY);
+    final String expiryDate = fieldData.getString(FIELD_OPT_EXPIRE_DT);
+    final String bbgUniqueID = fieldData.getString(FIELD_ID_BBG_UNIQUE);
+    final String underlyingUniqueID = fieldData.getString(FIELD_UNDL_ID_BB_UNIQUE);
+    final String secDes = fieldData.getString(FIELD_SECURITY_DES);
+    final String marketSector = fieldData.getString(FIELD_MARKET_SECTOR_DES);
+
     if (!BloombergDataUtils.isValidField(bbgUniqueID)) {
       LOGGER.warn("bloomberg UniqueID is missing, cannot construct equityIndexOption security");
       return null;
@@ -139,18 +139,18 @@ public class EquityIndexOptionLoader extends SecurityLoader {
       LOGGER.warn("option exercise type is missing, cannot construct equityOption security");
       return null;
     }
-    OptionType optionType = getOptionType(putOrCall);
+    final OptionType optionType = getOptionType(putOrCall);
     //get year month day from expiryDate in the yyyy-mm-dd format
     LocalDate expiryLocalDate = null;
     try {
       expiryLocalDate = LocalDate.parse(expiryDate);
-    } catch (Exception e) {
+    } catch (final Exception e) {
       throw new OpenGammaRuntimeException(expiryDate + " returned from bloomberg not in format yyyy-mm-dd", e);
     }
-    int year = expiryLocalDate.getYear();
-    int month = expiryLocalDate.getMonthValue();
-    int day = expiryLocalDate.getDayOfMonth();
-    Expiry expiry = new Expiry(DateUtils.getUTCDate(year, month, day));
+    final int year = expiryLocalDate.getYear();
+    final int month = expiryLocalDate.getMonthValue();
+    final int day = expiryLocalDate.getDayOfMonth();
+    final Expiry expiry = new Expiry(DateUtils.getUTCDate(year, month, day));
     // TODO kirk 2009-11-03 -- Do something better with the underlying ticker, since we have it.
     /*
     String underlyingTicker = null;
@@ -165,29 +165,29 @@ public class EquityIndexOptionLoader extends SecurityLoader {
     underlyingIdentifiers.add(new DomainSpecificIdentifier(IdentificationDomain.BLOOMBERG_BUID, underlyingUniqueID));
     SecurityKey underlingKey = new SecurityKeyImpl(Collections.unmodifiableSet(underlyingIdentifiers));
     */
-    Currency ogCurrency = Currency.parse(currency);
-    
-    Set<ExternalId> identifiers = new HashSet<ExternalId>();
+    final Currency ogCurrency = Currency.parse(currency);
+
+    final Set<ExternalId> identifiers = new HashSet<>();
     identifiers.add(ExternalSchemes.bloombergBuidSecurityId(bbgUniqueID));
     if (BloombergDataUtils.isValidField(secDes) && BloombergDataUtils.isValidField(marketSector)) {
       identifiers.add(ExternalSchemes.bloombergTickerSecurityId(secDes + " " + marketSector));
     }
-    
+
     final ExerciseType exerciseType = getExerciseType(optionExerciseType);
 
     final EquityIndexOptionSecurity security = new EquityIndexOptionSecurity(
-        optionType, 
-        optionStrikePrice, 
-        ogCurrency, 
-        ExternalSchemes.bloombergBuidSecurityId(underlyingUniqueID), 
-        exerciseType, 
-        expiry, 
-        pointValue, 
+        optionType,
+        optionStrikePrice,
+        ogCurrency,
+        ExternalSchemes.bloombergBuidSecurityId(underlyingUniqueID),
+        exerciseType,
+        expiry,
+        pointValue,
         exchange);
     security.setExternalIdBundle(ExternalIdBundle.of(identifiers));
     security.setUniqueId(BloombergSecurityProvider.createUniqueId(bbgUniqueID));
     //build option display name
-    StringBuilder buf = new StringBuilder(rootTicker);
+    final StringBuilder buf = new StringBuilder(rootTicker);
     buf.append(" ");
     buf.append(expiryDate);
     if (optionType == OptionType.CALL) {

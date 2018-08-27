@@ -49,10 +49,10 @@ public class HistoricalTimeSeriesLoaderResult extends DirectBean {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param result  the map of results, not null
    */
-  public HistoricalTimeSeriesLoaderResult(Map<ExternalId, UniqueId> result) {
+  public HistoricalTimeSeriesLoaderResult(final Map<ExternalId, UniqueId> result) {
     getResultMap().putAll(result);
   }
 

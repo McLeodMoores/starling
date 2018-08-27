@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.cache;
@@ -11,15 +11,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
-
 import org.fudgemsg.FudgeMsg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.opengamma.util.ehcache.EHCacheUtils;
+
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
 
 /**
  * Caches Fudge message objects on top of another Fudge message store. This is an in-memory cache.
@@ -61,7 +61,7 @@ public class CachingFudgeMessageStore implements FudgeMessageStore {
   }
 
   @Override
-  public FudgeMsg get(long identifier) {
+  public FudgeMsg get(final long identifier) {
     final Element cacheElement = getCache().get(identifier);
     if (cacheElement != null) {
       return (FudgeMsg) cacheElement.getObjectValue();
@@ -83,10 +83,10 @@ public class CachingFudgeMessageStore implements FudgeMessageStore {
   }
 
   @Override
-  public Map<Long, FudgeMsg> get(Collection<Long> identifiers) {
-    final Map<Long, FudgeMsg> result = new HashMap<Long, FudgeMsg>();
-    final List<Long> missing = new ArrayList<Long>(identifiers.size());
-    for (Long identifier : identifiers) {
+  public Map<Long, FudgeMsg> get(final Collection<Long> identifiers) {
+    final Map<Long, FudgeMsg> result = new HashMap<>();
+    final List<Long> missing = new ArrayList<>(identifiers.size());
+    for (final Long identifier : identifiers) {
       final Element cacheElement = getCache().get(identifier);
       if (cacheElement != null) {
         result.put(identifier, (FudgeMsg) cacheElement.getObjectValue());
@@ -104,7 +104,7 @@ public class CachingFudgeMessageStore implements FudgeMessageStore {
       getCache().put(new Element(missingIdentifier, data));
     } else {
       final Map<Long, FudgeMsg> missingData = getUnderlying().get(missing);
-      for (Map.Entry<Long, FudgeMsg> data : missingData.entrySet()) {
+      for (final Map.Entry<Long, FudgeMsg> data : missingData.entrySet()) {
         result.put(data.getKey(), data.getValue());
         getCache().put(new Element(data.getKey(), data.getValue()));
       }
@@ -115,7 +115,7 @@ public class CachingFudgeMessageStore implements FudgeMessageStore {
   @Override
   public void put(final Map<Long, FudgeMsg> data) {
     getUnderlying().put(data);
-    for (Map.Entry<Long, FudgeMsg> element : data.entrySet()) {
+    for (final Map.Entry<Long, FudgeMsg> element : data.entrySet()) {
       getCache().put(new Element(element.getKey(), element.getValue()));
     }
   }

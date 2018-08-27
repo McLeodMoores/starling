@@ -32,7 +32,7 @@ public class Capability implements Bean {
   public Capability() {
   }
 
-  public Capability(String name) {
+  public Capability(final String name) {
     _name = name;
   }
 

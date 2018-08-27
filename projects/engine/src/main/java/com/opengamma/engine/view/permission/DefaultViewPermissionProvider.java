@@ -12,17 +12,17 @@ import com.opengamma.livedata.UserPrincipal;
  * Default implementation of {@code ViewPermissionProvider}.
  */
 public class DefaultViewPermissionProvider implements ViewPermissionProvider {
-  
+
   @Override
-  public boolean canAccessCompiledViewDefinition(UserPrincipal user, CompiledViewDefinition compiledViewDefinition) {
+  public boolean canAccessCompiledViewDefinition(final UserPrincipal user, final CompiledViewDefinition compiledViewDefinition) {
     // REVIEW jonathan 2011-03-28 -- if/when we have fine-grained per-user permissions on view definitions or view
     // processes, then this would need to check against those.
     return true;
   }
 
   @Override
-  public boolean canAccessComputationResults(UserPrincipal user, CompiledViewDefinition compiledViewDefinition, boolean hasMarketDataPermissions) {
+  public boolean canAccessComputationResults(final UserPrincipal user, final CompiledViewDefinition compiledViewDefinition, final boolean hasMarketDataPermissions) {
     return hasMarketDataPermissions;
   }
-  
+
 }

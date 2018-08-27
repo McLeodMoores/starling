@@ -27,21 +27,21 @@ public class PermissivePermissionCheckProviderTest {
 
   @Test
   public void allTrueWithRequest() {
-    PermissivePermissionCheckProvider test = new PermissivePermissionCheckProvider();
-    PermissionCheckProviderRequest request = PermissionCheckProviderRequest.createGet(ExternalIdBundle.of("A", "B"), "127.0.0.1", "A", "B", "C");
-    PermissionCheckProviderResult resultHolder = test.isPermitted(request);
+    final PermissivePermissionCheckProvider test = new PermissivePermissionCheckProvider();
+    final PermissionCheckProviderRequest request = PermissionCheckProviderRequest.createGet(ExternalIdBundle.of("A", "B"), "127.0.0.1", "A", "B", "C");
+    final PermissionCheckProviderResult resultHolder = test.isPermitted(request);
     assertNotNull(resultHolder);
     assertNotNull(resultHolder.getCheckedPermissions());
-    
-    Map<String, Boolean> permissionCheckResult = resultHolder.getCheckedPermissions();
+
+    final Map<String, Boolean> permissionCheckResult = resultHolder.getCheckedPermissions();
     assertPermissionResult(permissionCheckResult);
-    
+
     resultHolder.checkErrors();
     resultHolder.checkPermitted("A");
     assertEquals(true, resultHolder.isPermitted("A"));
   }
 
-  private void assertPermissionResult(Map<String, Boolean> permissionCheckResult) {
+  private void assertPermissionResult(final Map<String, Boolean> permissionCheckResult) {
     assertEquals(3, permissionCheckResult.size());
     assertTrue(permissionCheckResult.get("A"));
     assertTrue(permissionCheckResult.get("B"));
@@ -49,8 +49,8 @@ public class PermissivePermissionCheckProviderTest {
   }
 
   public void allTrueWithId_IpAddress_Permissions() {
-    PermissivePermissionCheckProvider test = new PermissivePermissionCheckProvider();
-    Map<String, Boolean> result = test.isPermitted(ExternalIdBundle.of("A", "B"), "127.0.0.1", Sets.newHashSet("A", "B", "C"));
+    final PermissivePermissionCheckProvider test = new PermissivePermissionCheckProvider();
+    final Map<String, Boolean> result = test.isPermitted(ExternalIdBundle.of("A", "B"), "127.0.0.1", Sets.newHashSet("A", "B", "C"));
     assertNotNull(result);
     assertPermissionResult(result);
   }

@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.marketdatasnapshot.impl;
@@ -62,7 +62,7 @@ public class DataMarketDataSnapshotMasterResource extends AbstractDataResource {
 
   //-------------------------------------------------------------------------
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
@@ -75,23 +75,23 @@ public class DataMarketDataSnapshotMasterResource extends AbstractDataResource {
 
   @POST
   @Path("snapshotSearches")
-  public Response search(MarketDataSnapshotSearchRequest request) {
-    MarketDataSnapshotSearchResult result = getMarketDataSnapshotMaster().search(request);
+  public Response search(final MarketDataSnapshotSearchRequest request) {
+    final MarketDataSnapshotSearchResult result = getMarketDataSnapshotMaster().search(request);
     return responseOkObject(result);
   }
 
   @POST
   @Path("snapshots")
-  public Response add(@Context UriInfo uriInfo, MarketDataSnapshotDocument request) {
-    MarketDataSnapshotDocument result = getMarketDataSnapshotMaster().add(request);
-    URI createdUri = (new DataMarketDataSnapshotResource()).uriVersion(uriInfo.getBaseUri(), result.getUniqueId());
+  public Response add(@Context final UriInfo uriInfo, final MarketDataSnapshotDocument request) {
+    final MarketDataSnapshotDocument result = getMarketDataSnapshotMaster().add(request);
+    final URI createdUri = new DataMarketDataSnapshotResource().uriVersion(uriInfo.getBaseUri(), result.getUniqueId());
     return responseCreatedObject(createdUri, result);
   }
 
   //-------------------------------------------------------------------------
   @Path("snapshots/{snapshotId}")
-  public DataMarketDataSnapshotResource findMarketDataSnapshot(@PathParam("snapshotId") String idStr) {
-    ObjectId id = ObjectId.parse(idStr);
+  public DataMarketDataSnapshotResource findMarketDataSnapshot(@PathParam("snapshotId") final String idStr) {
+    final ObjectId id = ObjectId.parse(idStr);
     return new DataMarketDataSnapshotResource(this, id);
   }
 

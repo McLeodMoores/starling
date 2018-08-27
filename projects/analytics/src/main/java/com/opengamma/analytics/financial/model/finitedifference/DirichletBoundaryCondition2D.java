@@ -11,8 +11,8 @@ import com.opengamma.analytics.math.surface.ConstantDoublesSurface;
 import com.opengamma.analytics.math.surface.Surface;
 
 /**
- * Dirichlet boundary condition, i.e. u(A, x, t) = f(x, t), where A is the boundary level of one of the spatial dimensions, and f(x, t) is some specified 
- * function of time and the other spatial dimension 
+ * Dirichlet boundary condition, i.e. u(A, x, t) = f(x, t), where A is the boundary level of one of the spatial dimensions, and f(x, t) is some specified
+ * function of time and the other spatial dimension
  */
 public class DirichletBoundaryCondition2D implements BoundaryCondition2D {
 
@@ -20,12 +20,12 @@ public class DirichletBoundaryCondition2D implements BoundaryCondition2D {
   private final double _level;
 
   /**
-   * Dirichlet boundary condition, i.e. u(A, x, t) = f(x, t), where A is the boundary level of one of the spatial dimensions, and f(x, t) is some specified function of time 
-   * and the other spatial dimension 
-   * @param boundaryValue The value of u at the boundary, i.e. u(A, x, t) = f(x, t) 
+   * Dirichlet boundary condition, i.e. u(A, x, t) = f(x, t), where A is the boundary level of one of the spatial dimensions, and f(x, t) is some specified function of time
+   * and the other spatial dimension
+   * @param boundaryValue The value of u at the boundary, i.e. u(A, x, t) = f(x, t)
    * @param boundaryLevel The boundary level (A)
    */
-  public DirichletBoundaryCondition2D(final Surface<Double, Double, Double> boundaryValue, double boundaryLevel) {
+  public DirichletBoundaryCondition2D(final Surface<Double, Double, Double> boundaryValue, final double boundaryLevel) {
     Validate.notNull(boundaryValue, "boundaryValue ");
     _f = boundaryValue;
     _level = boundaryLevel;
@@ -37,7 +37,7 @@ public class DirichletBoundaryCondition2D implements BoundaryCondition2D {
   }
 
   @Override
-  public double[] getLeftMatrixCondition(double t, double x) {
+  public double[] getLeftMatrixCondition(final double t, final double x) {
     return new double[] {1.0 };
   }
 
@@ -47,12 +47,12 @@ public class DirichletBoundaryCondition2D implements BoundaryCondition2D {
   }
 
   @Override
-  public double[] getRightMatrixCondition(double t, double x) {
+  public double[] getRightMatrixCondition(final double t, final double x) {
     return new double[0];
   }
 
   @Override
-  public double getConstant(double t, double boundaryPosition, double gridSpacing) {
+  public double getConstant(final double t, final double boundaryPosition, final double gridSpacing) {
     return _f.getZValue(t, boundaryPosition);
   }
 

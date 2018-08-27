@@ -53,11 +53,11 @@ public class DataAvailablePortfolioOutputsResource extends AbstractDataResource 
     private final Integer _maxNodes;
     private final Integer _maxPositions;
 
-    private Instance(AvailableOutputsProvider provider, FudgeContext fudgeContext, Instant instant) {
+    private Instance(final AvailableOutputsProvider provider, final FudgeContext fudgeContext, final Instant instant) {
       this(provider, fudgeContext, instant, null, null);
     }
-    
-    private Instance(AvailableOutputsProvider provider, FudgeContext fudgeContext, Instant instant, Integer maxNodes, Integer maxPositions) {
+
+    private Instance(final AvailableOutputsProvider provider, final FudgeContext fudgeContext, final Instant instant, final Integer maxNodes, final Integer maxPositions) {
       _provider = provider;
       _fudgeContext = fudgeContext;
       _instant = instant;
@@ -66,22 +66,22 @@ public class DataAvailablePortfolioOutputsResource extends AbstractDataResource 
     }
 
     @Path("nodes/{count}")
-    public Instance nodes(@PathParam("count") int maxNodes) {
+    public Instance nodes(@PathParam("count") final int maxNodes) {
       return new Instance(_provider, _fudgeContext, _instant, maxNodes, _maxPositions);
     }
 
     @Path("positions/{count}")
-    public Instance positions(@PathParam("count") int maxPositions) {
+    public Instance positions(@PathParam("count") final int maxPositions) {
       return new Instance(_provider, _fudgeContext, _instant, _maxNodes, maxPositions);
     }
 
     @Path("{portfolioId}")
-    public FudgeFieldContainerBrowser portfolioOutputsByPortfolioId(@PathParam("portfolioId") String portfolioUid) {
+    public FudgeFieldContainerBrowser portfolioOutputsByPortfolioId(@PathParam("portfolioId") final String portfolioUid) {
       try {
         final AvailableOutputs outputs = _provider.getPortfolioOutputs(UniqueId.parse(portfolioUid), _instant, _maxNodes, _maxPositions);
         final FudgeSerializer serializer = new FudgeSerializer(_fudgeContext);
         return new FudgeFieldContainerBrowser(serializer.objectToFudgeMsg(outputs));
-      } catch (DataNotFoundException e) {
+      } catch (final DataNotFoundException e) {
         throw new WebApplicationException(Response.Status.NOT_FOUND);
       }
     }
@@ -89,12 +89,12 @@ public class DataAvailablePortfolioOutputsResource extends AbstractDataResource 
     @POST
     @Consumes(FudgeRest.MEDIA)
     @Produces(FudgeRest.MEDIA)
-    public FudgeMsg portfolioOutputsByPortfolio(Portfolio portfolio) {
+    public FudgeMsg portfolioOutputsByPortfolio(final Portfolio portfolio) {
       try {
-        FudgeSerializer serializer = new FudgeSerializer(_fudgeContext);
-        AvailableOutputs availableOutputs = _provider.getPortfolioOutputs(portfolio, _instant, _maxNodes, _maxPositions);
+        final FudgeSerializer serializer = new FudgeSerializer(_fudgeContext);
+        final AvailableOutputs availableOutputs = _provider.getPortfolioOutputs(portfolio, _instant, _maxNodes, _maxPositions);
         return serializer.objectToFudgeMsg(availableOutputs);
-      } catch (DataNotFoundException e) {
+      } catch (final DataNotFoundException e) {
         throw new WebApplicationException(Response.Status.NOT_FOUND);
       }
     }
@@ -103,7 +103,7 @@ public class DataAvailablePortfolioOutputsResource extends AbstractDataResource 
   //-------------------------------------------------------------------------
   /**
    * Creates an instance.
-   * 
+   *
    * @param provider  the provider, not null
    * @param fudgeContext  the Fudge context, not null
    */
@@ -128,8 +128,8 @@ public class DataAvailablePortfolioOutputsResource extends AbstractDataResource 
   }
 
   @Path("{timestamp}")
-  public Instance timestamp(@PathParam("timestamp") String timestamp) {
-    Instant instant = Instant.parse(timestamp);
+  public Instance timestamp(@PathParam("timestamp") final String timestamp) {
+    final Instant instant = Instant.parse(timestamp);
     return new Instance(getProvider(), getFudgeContext(), instant);
   }
 

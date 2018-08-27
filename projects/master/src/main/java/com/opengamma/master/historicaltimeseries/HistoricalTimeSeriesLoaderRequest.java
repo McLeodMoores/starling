@@ -66,7 +66,7 @@ public class HistoricalTimeSeriesLoaderRequest extends DirectBean {
   //-------------------------------------------------------------------------
   /**
    * Obtains an instance to load a multiple time-series.
-   * 
+   *
    * @param externalIds  the identifiers, not null
    * @param dataProvider  the data provider, null should default to a sensible value
    * @param dataField  the data field, not null
@@ -75,8 +75,8 @@ public class HistoricalTimeSeriesLoaderRequest extends DirectBean {
    * @return the map of external to unique identifier of loaded time-series, not null
    */
   public static HistoricalTimeSeriesLoaderRequest create(
-      Set<ExternalId> externalIds, String dataProvider, String dataField, LocalDate startDate, LocalDate endDate) {
-    HistoricalTimeSeriesLoaderRequest request = new HistoricalTimeSeriesLoaderRequest();
+      final Set<ExternalId> externalIds, final String dataProvider, final String dataField, final LocalDate startDate, final LocalDate endDate) {
+    final HistoricalTimeSeriesLoaderRequest request = new HistoricalTimeSeriesLoaderRequest();
     request.addExternalIds(externalIds);
     request.setDataProvider(dataProvider);
     request.setDataField(dataField);
@@ -95,22 +95,22 @@ public class HistoricalTimeSeriesLoaderRequest extends DirectBean {
   //-------------------------------------------------------------------------
   /**
    * Adds an array of historical time-series external identifiers to the collection to load.
-   * 
+   *
    * @param externalIds  the historical time-series identifiers to load, not null
    */
-  public void addExternalIds(ExternalId... externalIds) {
+  public void addExternalIds(final ExternalId... externalIds) {
     ArgumentChecker.notNull(externalIds, "externalIds");
-    for (ExternalId externalId : externalIds) {
+    for (final ExternalId externalId : externalIds) {
       getExternalIds().add(externalId);
     }
   }
 
   /**
    * Adds a collection of historical time-series external identifiers to the collection to load.
-   * 
+   *
    * @param externalIds  the historical time-series identifiers to load, not null
    */
-  public void addExternalIds(Iterable<ExternalId> externalIds) {
+  public void addExternalIds(final Iterable<ExternalId> externalIds) {
     ArgumentChecker.notNull(externalIds, "externalIds");
     Iterables.addAll(getExternalIds(), externalIds);
   }

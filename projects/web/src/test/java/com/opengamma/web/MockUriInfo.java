@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.web;
@@ -19,7 +19,7 @@ import javax.ws.rs.core.UriInfo;
  * MockUriInfo for testing purposed
  */
 public class MockUriInfo implements UriInfo {
-  
+
   public static final URI SAMPLE_URI = URI.create("http://localhost:8080/");
 
   private final MultivaluedMap<String, String> _pathParameters = new MultivaluedMapImpl();
@@ -31,33 +31,33 @@ public class MockUriInfo implements UriInfo {
     this(false);
   }
 
-  public MockUriInfo(boolean withData) {
+  public MockUriInfo(final boolean withData) {
     _withData = withData;
   }
 
   @Override
   public String getPath() {
-    return (_withData ? "" : null);
+    return _withData ? "" : null;
   }
 
   @Override
-  public String getPath(boolean decode) {
-    return (_withData ? "" : null);
+  public String getPath(final boolean decode) {
+    return _withData ? "" : null;
   }
 
   @Override
   public List<PathSegment> getPathSegments() {
-    return (_withData ? Collections.<PathSegment>emptyList() : null);
+    return _withData ? Collections.<PathSegment>emptyList() : null;
   }
 
   @Override
-  public List<PathSegment> getPathSegments(boolean decode) {
-    return (_withData ? Collections.<PathSegment> emptyList() : null);
+  public List<PathSegment> getPathSegments(final boolean decode) {
+    return _withData ? Collections.<PathSegment> emptyList() : null;
   }
 
   @Override
   public URI getRequestUri() {
-    return (_withData ? SAMPLE_URI : null);
+    return _withData ? SAMPLE_URI : null;
   }
 
   @Override
@@ -67,7 +67,7 @@ public class MockUriInfo implements UriInfo {
 
   @Override
   public URI getAbsolutePath() {
-    return (_withData ? SAMPLE_URI : null);
+    return _withData ? SAMPLE_URI : null;
   }
 
   @Override
@@ -77,7 +77,7 @@ public class MockUriInfo implements UriInfo {
 
   @Override
   public URI getBaseUri() {
-    return (_withData ? SAMPLE_URI : null);
+    return _withData ? SAMPLE_URI : null;
   }
 
   @Override
@@ -91,7 +91,7 @@ public class MockUriInfo implements UriInfo {
   }
 
   @Override
-  public MultivaluedMap<String, String> getPathParameters(boolean decode) {
+  public MultivaluedMap<String, String> getPathParameters(final boolean decode) {
     return _pathParameters;
   }
 
@@ -101,23 +101,23 @@ public class MockUriInfo implements UriInfo {
   }
 
   @Override
-  public MultivaluedMap<String, String> getQueryParameters(boolean decode) {
+  public MultivaluedMap<String, String> getQueryParameters(final boolean decode) {
     return _queryParameters;
   }
 
   @Override
   public List<String> getMatchedURIs() {
-    return (_withData ? Collections.<String> emptyList() : null);
+    return _withData ? Collections.<String> emptyList() : null;
   }
 
   @Override
-  public List<String> getMatchedURIs(boolean decode) {
-    return (_withData ? Collections.<String> emptyList() : null);
+  public List<String> getMatchedURIs(final boolean decode) {
+    return _withData ? Collections.<String> emptyList() : null;
   }
 
   @Override
   public List<Object> getMatchedResources() {
-    return (_withData ? Collections.<Object> emptyList() : null);
+    return _withData ? Collections.<Object> emptyList() : null;
   }
 
 }

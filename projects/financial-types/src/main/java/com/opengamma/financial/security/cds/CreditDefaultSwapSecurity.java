@@ -54,7 +54,7 @@ public abstract class CreditDefaultSwapSecurity extends AbstractCreditDefaultSwa
   @PropertyDefinition(validate = "notNull")
   private ExternalId _regionId;
 
-  CreditDefaultSwapSecurity(String securityType) { // For Fudge builder
+  CreditDefaultSwapSecurity(final String securityType) { // For Fudge builder
     super(securityType);
   }
 

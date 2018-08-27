@@ -33,15 +33,15 @@ public class LogResource {
    */
   @POST
   @Consumes(MediaType.TEXT_PLAIN)
-  public void logClientError(@FormParam("logger") String loggerNameSuffix,
-                             @FormParam("message") String message) {
+  public void logClientError(@FormParam("logger") final String loggerNameSuffix,
+                             @FormParam("message") final String message) {
     String loggerName;
     if (loggerNameSuffix == null) {
       loggerName = LOGGER_NAME;
     } else {
       loggerName = LOGGER_NAME + "." + loggerNameSuffix;
     }
-    Logger logger = LoggerFactory.getLogger(loggerName);
+    final Logger logger = LoggerFactory.getLogger(loggerName);
     logger.error(message);
   }
 }

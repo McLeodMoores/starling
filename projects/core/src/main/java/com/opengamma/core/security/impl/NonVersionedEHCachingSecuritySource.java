@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.security.impl;
@@ -8,9 +8,6 @@ package com.opengamma.core.security.impl;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.Element;
 
 import com.opengamma.core.change.ChangeManager;
 import com.opengamma.core.security.Security;
@@ -20,6 +17,9 @@ import com.opengamma.id.ObjectId;
 import com.opengamma.id.UniqueId;
 import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.ArgumentChecker;
+
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.Element;
 
 /**
  * An implementation of {@link SecuritySource} designed to work with any non-versioned
@@ -31,8 +31,8 @@ import com.opengamma.util.ArgumentChecker;
 public class NonVersionedEHCachingSecuritySource implements SecuritySource {
   private final SecuritySource _underlying;
   private final Cache _cache;
-  
-  public NonVersionedEHCachingSecuritySource(SecuritySource underlying, Cache cache) {
+
+  public NonVersionedEHCachingSecuritySource(final SecuritySource underlying, final Cache cache) {
     ArgumentChecker.notNull(underlying, "underlying");
     ArgumentChecker.notNull(cache, "cache");
     _underlying = underlying;
@@ -54,14 +54,14 @@ public class NonVersionedEHCachingSecuritySource implements SecuritySource {
   protected Cache getCache() {
     return _cache;
   }
-  
+
   private enum CacheEntryType {
     SINGLE,
     COLLECTION
   }
-  
+
   private static class SecurityCacheEntry {
-    public SecurityCacheEntry(CacheEntryType entryType, ExternalIdBundle bundle, UniqueId uniqueId) {
+    public SecurityCacheEntry(final CacheEntryType entryType, final ExternalIdBundle bundle, final UniqueId uniqueId) {
       _entryType = entryType;
       _bundle = bundle;
       _uniqueId = uniqueId;
@@ -71,23 +71,23 @@ public class NonVersionedEHCachingSecuritySource implements SecuritySource {
     private final ExternalIdBundle _bundle;
     private final UniqueId _uniqueId;
     private final int _hashCode;
-    
+
     private int generateHashCode() {
       final int prime = 31;
       int result = 1;
-      result = prime * result + ((_bundle == null) ? 0 : _bundle.hashCode());
-      result = prime * result + ((_entryType == null) ? 0 : _entryType.hashCode());
-      result = prime * result + ((_uniqueId == null) ? 0 : _uniqueId.hashCode());
+      result = prime * result + (_bundle == null ? 0 : _bundle.hashCode());
+      result = prime * result + (_entryType == null ? 0 : _entryType.hashCode());
+      result = prime * result + (_uniqueId == null ? 0 : _uniqueId.hashCode());
       return result;
     }
-    
+
     @Override
     public int hashCode() {
       return _hashCode;
     }
-    
+
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
       if (this == obj) {
         return true;
       }
@@ -97,7 +97,7 @@ public class NonVersionedEHCachingSecuritySource implements SecuritySource {
       if (getClass() != obj.getClass()) {
         return false;
       }
-      SecurityCacheEntry other = (SecurityCacheEntry) obj;
+      final SecurityCacheEntry other = (SecurityCacheEntry) obj;
       if (_bundle == null) {
         if (other._bundle != null) {
           return false;
@@ -121,14 +121,14 @@ public class NonVersionedEHCachingSecuritySource implements SecuritySource {
   }
 
   @Override
-  public Collection<Security> get(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
+  public Collection<Security> get(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     return get(bundle);
   }
 
   @Override
-  public Map<ExternalIdBundle, Collection<Security>> getAll(Collection<ExternalIdBundle> bundles, VersionCorrection versionCorrection) {
-    Map<ExternalIdBundle, Collection<Security>> result = new HashMap<ExternalIdBundle, Collection<Security>>();
-    for (ExternalIdBundle bundle : bundles) {
+  public Map<ExternalIdBundle, Collection<Security>> getAll(final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
+    final Map<ExternalIdBundle, Collection<Security>> result = new HashMap<>();
+    for (final ExternalIdBundle bundle : bundles) {
       result.put(bundle, get(bundle));
     }
     return result;
@@ -136,10 +136,10 @@ public class NonVersionedEHCachingSecuritySource implements SecuritySource {
 
   @SuppressWarnings("unchecked")
   @Override
-  public Collection<Security> get(ExternalIdBundle bundle) {
-    SecurityCacheEntry cacheEntry = new SecurityCacheEntry(CacheEntryType.COLLECTION, bundle, null);
+  public Collection<Security> get(final ExternalIdBundle bundle) {
+    final SecurityCacheEntry cacheEntry = new SecurityCacheEntry(CacheEntryType.COLLECTION, bundle, null);
     Element element = getCache().get(cacheEntry);
-    Collection<Security> result = null; 
+    Collection<Security> result = null;
     if (element == null) {
       result = getUnderlying().get(bundle);
       if (result != null) {
@@ -153,10 +153,10 @@ public class NonVersionedEHCachingSecuritySource implements SecuritySource {
   }
 
   @Override
-  public Security getSingle(ExternalIdBundle bundle) {
-    SecurityCacheEntry cacheEntry = new SecurityCacheEntry(CacheEntryType.SINGLE, bundle, null);
+  public Security getSingle(final ExternalIdBundle bundle) {
+    final SecurityCacheEntry cacheEntry = new SecurityCacheEntry(CacheEntryType.SINGLE, bundle, null);
     Element element = getCache().get(cacheEntry);
-    Security result = null; 
+    Security result = null;
     if (element == null) {
       result = getUnderlying().getSingle(bundle);
       if (result != null) {
@@ -170,24 +170,24 @@ public class NonVersionedEHCachingSecuritySource implements SecuritySource {
   }
 
   @Override
-  public Security getSingle(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
+  public Security getSingle(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     return getSingle(bundle);
   }
 
   @Override
-  public Map<ExternalIdBundle, Security> getSingle(Collection<ExternalIdBundle> bundles, VersionCorrection versionCorrection) {
-    Map<ExternalIdBundle, Security> result = new HashMap<ExternalIdBundle, Security>();
-    for (ExternalIdBundle bundle : bundles) {
+  public Map<ExternalIdBundle, Security> getSingle(final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
+    final Map<ExternalIdBundle, Security> result = new HashMap<>();
+    for (final ExternalIdBundle bundle : bundles) {
       result.put(bundle, getSingle(bundle));
     }
     return result;
   }
 
   @Override
-  public Security get(UniqueId uniqueId) {
-    SecurityCacheEntry cacheEntry = new SecurityCacheEntry(CacheEntryType.SINGLE, null, uniqueId);
+  public Security get(final UniqueId uniqueId) {
+    final SecurityCacheEntry cacheEntry = new SecurityCacheEntry(CacheEntryType.SINGLE, null, uniqueId);
     Element element = getCache().get(cacheEntry);
-    Security result = null; 
+    Security result = null;
     if (element == null) {
       result = getUnderlying().get(uniqueId);
       if (result != null) {
@@ -201,23 +201,23 @@ public class NonVersionedEHCachingSecuritySource implements SecuritySource {
   }
 
   @Override
-  public Security get(ObjectId objectId, VersionCorrection versionCorrection) {
+  public Security get(final ObjectId objectId, final VersionCorrection versionCorrection) {
     return get(UniqueId.of(objectId, null));
   }
 
   @Override
-  public Map<UniqueId, Security> get(Collection<UniqueId> uniqueIds) {
-    Map<UniqueId, Security> result = new HashMap<UniqueId, Security>();
-    for (UniqueId uniqueId : uniqueIds) {
+  public Map<UniqueId, Security> get(final Collection<UniqueId> uniqueIds) {
+    final Map<UniqueId, Security> result = new HashMap<>();
+    for (final UniqueId uniqueId : uniqueIds) {
       result.put(uniqueId, get(uniqueId));
     }
     return result;
   }
 
   @Override
-  public Map<ObjectId, Security> get(Collection<ObjectId> objectIds, VersionCorrection versionCorrection) {
-    Map<ObjectId, Security> result = new HashMap<ObjectId, Security>();
-    for (ObjectId objectId : objectIds) {
+  public Map<ObjectId, Security> get(final Collection<ObjectId> objectIds, final VersionCorrection versionCorrection) {
+    final Map<ObjectId, Security> result = new HashMap<>();
+    for (final ObjectId objectId : objectIds) {
       result.put(objectId, get(UniqueId.of(objectId, null)));
     }
     return result;

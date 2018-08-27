@@ -5,13 +5,13 @@
  */
 package com.opengamma.master.cache;
 
-import net.sf.ehcache.Element;
-import net.sf.ehcache.search.attribute.AttributeExtractor;
-import net.sf.ehcache.search.attribute.AttributeExtractorException;
-
 import org.threeten.bp.Instant;
 
 import com.opengamma.master.AbstractDocument;
+
+import net.sf.ehcache.Element;
+import net.sf.ehcache.search.attribute.AttributeExtractor;
+import net.sf.ehcache.search.attribute.AttributeExtractorException;
 
 /**
  * EHCache search attribute extractor.
@@ -30,7 +30,7 @@ public class InstantExtractor implements AttributeExtractor {
   public static final Instant MAX_INSTANT = Instant.parse("9999-12-31T00:00:00.000Z");
 
   @Override
-  public Object attributeFor(Element element, String attributeName) throws AttributeExtractorException {
+  public Object attributeFor(final Element element, final String attributeName) throws AttributeExtractorException {
     if (element != null && AbstractDocument.class.isAssignableFrom(element.getObjectValue().getClass())) {
       switch (attributeName) {
         case "VersionFromInstant":

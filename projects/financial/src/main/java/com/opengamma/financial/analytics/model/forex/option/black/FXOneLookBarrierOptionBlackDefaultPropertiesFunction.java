@@ -46,7 +46,7 @@ public class FXOneLookBarrierOptionBlackDefaultPropertiesFunction extends Defaul
 
 
   @Override
-  protected void getDefaults(PropertyDefaults defaults) {
+  protected void getDefaults(final PropertyDefaults defaults) {
     for (final String valueName : VALUE_NAMES) {
       defaults.addValuePropertyName(valueName, ValuePropertyNames.BINARY_OVERHEDGE);
       defaults.addValuePropertyName(valueName, ValuePropertyNames.BINARY_SMOOTHING_FULLWIDTH);
@@ -54,7 +54,7 @@ public class FXOneLookBarrierOptionBlackDefaultPropertiesFunction extends Defaul
   }
 
   @Override
-  protected Set<String> getDefaultValue(FunctionCompilationContext context, ComputationTarget target, ValueRequirement desiredValue, String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
     if (ValuePropertyNames.BINARY_OVERHEDGE.equals(propertyName)) {
       return Collections.singleton(_barrierOverhedge);
     } else if (ValuePropertyNames.BINARY_SMOOTHING_FULLWIDTH.equals(propertyName)) {

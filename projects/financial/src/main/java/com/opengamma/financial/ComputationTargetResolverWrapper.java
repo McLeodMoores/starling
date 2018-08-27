@@ -14,7 +14,7 @@ import com.opengamma.id.ExternalId;
 
 /**
  * Wrapper around a {@link ComputationTargetResolver} that can be used to provide source interfaces.
- * 
+ *
  * @deprecated This is an interim solution until [PLAT-2782] is resolved
  */
 @Deprecated
@@ -30,7 +30,7 @@ public class ComputationTargetResolverWrapper {
     return _resolver;
   }
 
-  public Object get(ComputationTargetType type, ExternalId identifier) {
+  public Object get(final ComputationTargetType type, final ExternalId identifier) {
     final ComputationTargetSpecification specification = getResolver().getSpecificationResolver().getTargetSpecification(new ComputationTargetRequirement(type, identifier));
     if (specification == null) {
       return null;

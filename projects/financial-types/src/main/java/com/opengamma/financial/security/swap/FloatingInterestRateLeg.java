@@ -66,7 +66,7 @@ public class FloatingInterestRateLeg extends InterestRateLeg {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param dayCount  the day count, not null
    * @param frequency  the frequency, not null
    * @param regionIdentifier  the region, not null
@@ -76,8 +76,8 @@ public class FloatingInterestRateLeg extends InterestRateLeg {
    * @param floatingReferenceRateId  the reference rate, not null
    * @param floatingRateType  the floating rate type, not null
    */
-  public FloatingInterestRateLeg(DayCount dayCount, Frequency frequency, ExternalId regionIdentifier, BusinessDayConvention businessDayConvention,
-      Notional notional, boolean eom, ExternalId floatingReferenceRateId, FloatingRateType floatingRateType) {
+  public FloatingInterestRateLeg(final DayCount dayCount, final Frequency frequency, final ExternalId regionIdentifier, final BusinessDayConvention businessDayConvention,
+      final Notional notional, final boolean eom, final ExternalId floatingReferenceRateId, final FloatingRateType floatingRateType) {
     super(dayCount, frequency, regionIdentifier, businessDayConvention, notional);
     setFloatingReferenceRateId(floatingReferenceRateId);
     setFloatingRateType(floatingRateType);
@@ -86,7 +86,7 @@ public class FloatingInterestRateLeg extends InterestRateLeg {
 
   //-------------------------------------------------------------------------
   @Override
-  public <T> T accept(SwapLegVisitor<T> visitor) {
+  public <T> T accept(final SwapLegVisitor<T> visitor) {
     return visitor.visitFloatingInterestRateLeg(this);
   }
 

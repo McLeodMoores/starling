@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.value.properties;
@@ -50,7 +50,7 @@ public class AdditivePropertiesBuilder extends ValueProperties.Builder {
    * <p>
    * A full copy is performed rather than taking an unowned reference. The latter approach works when referencing the immutable content of an existing value property set, but not when the owner is a
    * builder as that may continue to modify the structure.
-   * 
+   *
    * @param copyFrom the builder to copy from
    */
   private AdditivePropertiesBuilder(final AdditivePropertiesBuilder copyFrom) {
@@ -73,7 +73,7 @@ public class AdditivePropertiesBuilder extends ValueProperties.Builder {
 
   /**
    * Creates an instance with default properties owned by something else.
-   * 
+   *
    * @param properties the properties to populate with, not null. The array (and its contents) will not be modified - a copy will be taken when needed
    */
   public AdditivePropertiesBuilder(final AbstractValueProperty[] properties) {
@@ -131,7 +131,7 @@ public class AdditivePropertiesBuilder extends ValueProperties.Builder {
 
   /**
    * Adds a value to the builder, taking the union with any existing values.
-   * 
+   *
    * @param value the value to add or take the union with.
    */
   public void union(final AbstractValueProperty value) {
@@ -183,7 +183,7 @@ public class AdditivePropertiesBuilder extends ValueProperties.Builder {
 
   /**
    * Finds a matching entry and takes the value intersection. If there is no intersection the entry is removed.
-   * 
+   *
    * @param value the value to compose against if matched
    */
   public void compose(final AbstractValueProperty value) {
@@ -191,7 +191,7 @@ public class AdditivePropertiesBuilder extends ValueProperties.Builder {
       return;
     }
     final int hc = value.getKey().hashCode() & 0x7FFFFFFF;
-    int index = hc % _properties.length;
+    final int index = hc % _properties.length;
     AbstractValueProperty e = _properties[index];
     if (e == null) {
       return;
@@ -228,7 +228,7 @@ public class AdditivePropertiesBuilder extends ValueProperties.Builder {
       return new ArrayValueProperty(propertyName, false, propertyValues, next);
     } else {
       final Set<String> values = Sets.newHashSetWithExpectedSize(size);
-      for (String value : propertyValues) {
+      for (final String value : propertyValues) {
         values.add(value);
       }
       return createValuePropertyFromSet(propertyName, values, next);
@@ -242,7 +242,7 @@ public class AdditivePropertiesBuilder extends ValueProperties.Builder {
     } else if (size <= ArrayValueProperty.MAX_ARRAY_LENGTH) {
       return new ArrayValueProperty(propertyName, false, propertyValues.toArray(new String[size]), next);
     } else {
-      final Set<String> values = new HashSet<String>(propertyValues);
+      final Set<String> values = new HashSet<>(propertyValues);
       return createValuePropertyFromSet(propertyName, values, next);
     }
   }
@@ -488,7 +488,7 @@ public class AdditivePropertiesBuilder extends ValueProperties.Builder {
     } else {
       localCopy();
       final int hc = propertyName.hashCode() & 0x7FFFFFFF;
-      int i = hc % _properties.length;
+      final int i = hc % _properties.length;
       AbstractValueProperty e = _properties[i];
       if (e != null) {
         if (!_copies[i]) {
@@ -512,7 +512,7 @@ public class AdditivePropertiesBuilder extends ValueProperties.Builder {
       return this;
     }
     final int hc = propertyName.hashCode() & 0x7FFFFFFF;
-    int index = hc % _properties.length;
+    final int index = hc % _properties.length;
     AbstractValueProperty e = _properties[index];
     if (e == null) {
       // Nothing in the bucket to remove

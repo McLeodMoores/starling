@@ -15,7 +15,7 @@ public class GuaranteeTypeBean extends EnumBean {
   protected GuaranteeTypeBean() {
   }
 
-  public GuaranteeTypeBean(String guaranteeType) {
+  public GuaranteeTypeBean(final String guaranteeType) {
     super(guaranteeType);
   }
 

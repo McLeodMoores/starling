@@ -37,7 +37,7 @@ import com.opengamma.util.ArgumentChecker;
  * <p>
  * This class makes no guarantees about the thread-safety of implementations.
  * However, it is strongly recommended that the methods in this interface are individually thread-safe.
- * 
+ *
  * @param <T> the target type of the link
  */
 @BeanDefinition
@@ -68,7 +68,7 @@ public abstract class AbstractLink<T extends UniqueIdentifiable> extends DirectB
 
   /**
    * Creates a link from an object identifier.
-   * 
+   *
    * @param objectId  the object identifier, not null
    */
   protected AbstractLink(final ObjectId objectId) {
@@ -78,7 +78,7 @@ public abstract class AbstractLink<T extends UniqueIdentifiable> extends DirectB
 
   /**
    * Creates a link from a unique identifier, only storing the object identifier.
-   * 
+   *
    * @param uniqueId  the unique identifier, not null
    */
   protected AbstractLink(final UniqueId uniqueId) {
@@ -88,7 +88,7 @@ public abstract class AbstractLink<T extends UniqueIdentifiable> extends DirectB
 
   /**
    * Creates a link from an external identifier.
-   * 
+   *
    * @param externalId  the external identifier, not null
    */
   protected AbstractLink(final ExternalId externalId) {
@@ -98,7 +98,7 @@ public abstract class AbstractLink<T extends UniqueIdentifiable> extends DirectB
 
   /**
    * Creates a link from an external identifier bundle.
-   * 
+   *
    * @param bundle  the identifier bundle, not null
    */
   protected AbstractLink(final ExternalIdBundle bundle) {
@@ -109,7 +109,7 @@ public abstract class AbstractLink<T extends UniqueIdentifiable> extends DirectB
   //-------------------------------------------------------------------------
   /**
    * Adds an external identifier to the bundle.
-   * 
+   *
    * @param externalId  the identifier to add, not null
    */
   public void addExternalId(final ExternalId externalId) {
@@ -119,7 +119,7 @@ public abstract class AbstractLink<T extends UniqueIdentifiable> extends DirectB
 
   /**
    * Adds external identifiers to the bundle.
-   * 
+   *
    * @param externalIds  the identifiers to add, not null
    */
   public void addExternalIds(final Iterable<ExternalId> externalIds) {
@@ -130,7 +130,7 @@ public abstract class AbstractLink<T extends UniqueIdentifiable> extends DirectB
   //-------------------------------------------------------------------------
   /**
    * Gets the best available representation.
-   * 
+   *
    * @return the best available representation, not null
    */
   public Object getBest() {
@@ -139,7 +139,7 @@ public abstract class AbstractLink<T extends UniqueIdentifiable> extends DirectB
 
   /**
    * Gets the best descriptive name.
-   * 
+   *
    * @return the best descriptive name, not null
    */
   public String getBestName() {
@@ -151,13 +151,14 @@ public abstract class AbstractLink<T extends UniqueIdentifiable> extends DirectB
    * Resolves the link to the target.
    * <p>
    * This simply calls {@link LinkResolver#resolve(Link)}.
-   * 
+   *
    * @param resolver  the resolver capable of finding the target, not null
    * @return the resolved target, null if unable to resolve
    * @throws DataNotFoundException if the target could not be resolved
    * @throws RuntimeException if an error occurs
    */
-  public T resolve(LinkResolver<T> resolver) {
+  @Override
+  public T resolve(final LinkResolver<T> resolver) {
     return resolver.resolve(this);
   }
 

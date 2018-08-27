@@ -68,21 +68,21 @@ public class ISDAApproxCDSPriceFlatSpreadFunctionTest {
   @Test
   public void getRequirements() {
 
-    ValueRequirement requirement = new ValueRequirement(ValueRequirementNames.CLEAN_PRICE, ComputationTargetType.SECURITY, CDS_SECURITY.getUniqueId(),
+    final ValueRequirement requirement = new ValueRequirement(ValueRequirementNames.CLEAN_PRICE, ComputationTargetType.SECURITY, CDS_SECURITY.getUniqueId(),
         ValueProperties
           .with(ValuePropertyNames.CURRENCY, Currency.USD.getCode())
           .with(ValuePropertyNames.CALCULATION_METHOD, ISDAFunctionConstants.ISDA_METHOD_NAME)
           .with(ISDAFunctionConstants.ISDA_IMPLEMENTATION, ISDAFunctionConstants.ISDA_IMPLEMENTATION_APPROX)
           .with(ISDAFunctionConstants.ISDA_HAZARD_RATE_STRUCTURE, ISDAFunctionConstants.ISDA_HAZARD_RATE_FLAT)
           .get());
-    
-    Set<ValueRequirement> result = testItem.getRequirements(functionCompilationContext, new ComputationTarget(ComputationTargetType.SECURITY, CDS_SECURITY), requirement);
+
+    final Set<ValueRequirement> result = testItem.getRequirements(functionCompilationContext, new ComputationTarget(ComputationTargetType.SECURITY, CDS_SECURITY), requirement);
 
     Assert.assertNotNull(result);
     Assert.assertEquals(result.size(), 2);
 
-    TreeSet<String> r = new TreeSet<String>();
-    for (ValueRequirement valueRequirement : result) {
+    final TreeSet<String> r = new TreeSet<>();
+    for (final ValueRequirement valueRequirement : result) {
       r.add(valueRequirement.toString());
     }
 
@@ -108,7 +108,7 @@ public class ISDAApproxCDSPriceFlatSpreadFunctionTest {
   }
 
   //-------------------------------------------------------------------------
-  private static ZonedDateTime zdt(int y, int m, int d, int hr, int min, int sec, int nanos, ZoneId zone) {
+  private static ZonedDateTime zdt(final int y, final int m, final int d, final int hr, final int min, final int sec, final int nanos, final ZoneId zone) {
     return LocalDateTime.of(y, m, d, hr, min, sec, nanos).atZone(zone);
   }
 

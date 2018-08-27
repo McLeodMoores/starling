@@ -50,12 +50,12 @@ public class HistoricalTimeSeriesProviderGetRequest extends DirectBean {
    * The data source to use.
    */
   @PropertyDefinition(validate = "notNull")
-  private String _dataSource; 
+  private String _dataSource;
   /**
    * The data provider to use.
    */
   @PropertyDefinition(validate = "notNull")
-  private String _dataProvider; 
+  private String _dataProvider;
   /**
    * The data field to use.
    */
@@ -80,7 +80,7 @@ public class HistoricalTimeSeriesProviderGetRequest extends DirectBean {
   //-------------------------------------------------------------------------
   /**
    * Obtains an instance to get the whole of a single time-series.
-   * 
+   *
    * @param externalIdBundle  the identifier bundle, not null
    * @param dataSource  the data source, not null
    * @param dataProvider  the data provider, not null
@@ -88,14 +88,14 @@ public class HistoricalTimeSeriesProviderGetRequest extends DirectBean {
    * @return the request, not null
    */
   public static HistoricalTimeSeriesProviderGetRequest createGet(
-      ExternalIdBundle externalIdBundle,
-      String dataSource, String dataProvider, String dataField) {
+      final ExternalIdBundle externalIdBundle,
+      final String dataSource, final String dataProvider, final String dataField) {
     return createGet(externalIdBundle, dataSource, dataProvider, dataField, LocalDateRange.ALL);
   }
 
   /**
    * Obtains an instance to get a single time-series.
-   * 
+   *
    * @param externalIdBundle  the identifier bundle, not null
    * @param dataSource  the data source, not null
    * @param dataProvider  the data provider, not null
@@ -104,9 +104,9 @@ public class HistoricalTimeSeriesProviderGetRequest extends DirectBean {
    * @return the request, not null
    */
   public static HistoricalTimeSeriesProviderGetRequest createGet(
-      ExternalIdBundle externalIdBundle,
-      String dataSource, String dataProvider, String dataField, LocalDateRange dateRange) {
-    HistoricalTimeSeriesProviderGetRequest request = new HistoricalTimeSeriesProviderGetRequest();
+      final ExternalIdBundle externalIdBundle,
+      final String dataSource, final String dataProvider, final String dataField, final LocalDateRange dateRange) {
+    final HistoricalTimeSeriesProviderGetRequest request = new HistoricalTimeSeriesProviderGetRequest();
     request.addExternalIds(externalIdBundle);
     request.setDataSource(dataSource);
     request.setDataProvider(dataProvider);
@@ -117,7 +117,7 @@ public class HistoricalTimeSeriesProviderGetRequest extends DirectBean {
 
   /**
    * Obtains an instance to get the latest point of a single time-series.
-   * 
+   *
    * @param externalIdBundle  the identifier bundle, not null
    * @param dataSource  the data source, not null
    * @param dataProvider  the data provider, not null
@@ -125,9 +125,9 @@ public class HistoricalTimeSeriesProviderGetRequest extends DirectBean {
    * @return the request, not null
    */
   public static HistoricalTimeSeriesProviderGetRequest createGetLatest(
-      ExternalIdBundle externalIdBundle,
-      String dataSource, String dataProvider, String dataField) {
-    HistoricalTimeSeriesProviderGetRequest request = new HistoricalTimeSeriesProviderGetRequest();
+      final ExternalIdBundle externalIdBundle,
+      final String dataSource, final String dataProvider, final String dataField) {
+    final HistoricalTimeSeriesProviderGetRequest request = new HistoricalTimeSeriesProviderGetRequest();
     request.addExternalIds(externalIdBundle);
     request.setDataSource(dataSource);
     request.setDataProvider(dataProvider);
@@ -138,7 +138,7 @@ public class HistoricalTimeSeriesProviderGetRequest extends DirectBean {
 
   /**
    * Obtains an instance to get multiple time-series.
-   * 
+   *
    * @param externalIdBundleSet  the identifier bundle set, not null
    * @param dataSource  the data source, not null
    * @param dataProvider  the data provider, not null
@@ -147,9 +147,9 @@ public class HistoricalTimeSeriesProviderGetRequest extends DirectBean {
    * @return the request, not null
    */
   public static HistoricalTimeSeriesProviderGetRequest createGetBulk(
-      Iterable<ExternalIdBundle> externalIdBundleSet,
-      String dataSource, String dataProvider, String dataField, LocalDateRange dateRange) {
-    HistoricalTimeSeriesProviderGetRequest request = new HistoricalTimeSeriesProviderGetRequest();
+      final Iterable<ExternalIdBundle> externalIdBundleSet,
+      final String dataSource, final String dataProvider, final String dataField, final LocalDateRange dateRange) {
+    final HistoricalTimeSeriesProviderGetRequest request = new HistoricalTimeSeriesProviderGetRequest();
     request.addExternalIds(externalIdBundleSet);
     request.setDataSource(dataSource);
     request.setDataProvider(dataProvider);
@@ -168,13 +168,13 @@ public class HistoricalTimeSeriesProviderGetRequest extends DirectBean {
   //-------------------------------------------------------------------------
   /**
    * Adds an array of historical time-series external identifiers to the collection to load.
-   * 
+   *
    * @param externalIds  the historical time-series identifiers to load, not null
    */
-  public void addExternalIds(ExternalId... externalIds) {
+  public void addExternalIds(final ExternalId... externalIds) {
     ArgumentChecker.notNull(externalIds, "externalIds");
-    List<ExternalIdBundle> list = new ArrayList<ExternalIdBundle>();
-    for (ExternalId externalId : externalIds) {
+    final List<ExternalIdBundle> list = new ArrayList<>();
+    for (final ExternalId externalId : externalIds) {
       list.add(ExternalIdBundle.of(externalId));
     }
     getExternalIdBundles().addAll(list);
@@ -182,20 +182,20 @@ public class HistoricalTimeSeriesProviderGetRequest extends DirectBean {
 
   /**
    * Adds an array of historical time-series external identifiers to the collection to load.
-   * 
+   *
    * @param externalIdBundles  the historical time-series identifiers to load, not null
    */
-  public void addExternalIds(ExternalIdBundle... externalIdBundles) {
+  public void addExternalIds(final ExternalIdBundle... externalIdBundles) {
     ArgumentChecker.notNull(externalIdBundles, "externalIdBundles");
     getExternalIdBundles().addAll(Arrays.asList(externalIdBundles));
   }
 
   /**
    * Adds a collection of historical time-series external identifiers to the collection to load.
-   * 
+   *
    * @param externalIdBundles  the historical time-series identifiers to load, not null
    */
-  public void addExternalIds(Iterable<ExternalIdBundle> externalIdBundles) {
+  public void addExternalIds(final Iterable<ExternalIdBundle> externalIdBundles) {
     ArgumentChecker.notNull(externalIdBundles, "externalIdBundles");
     Iterables.addAll(getExternalIdBundles(), externalIdBundles);
   }

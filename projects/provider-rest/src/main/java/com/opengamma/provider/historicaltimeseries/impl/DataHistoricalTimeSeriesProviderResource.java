@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.provider.historicaltimeseries.impl;
@@ -35,7 +35,7 @@ public class DataHistoricalTimeSeriesProviderResource extends AbstractDataResour
 
   /**
    * Creates the resource, exposing the underlying provider over REST.
-   * 
+   *
    * @param htsProvider  the underlying provider, not null
    */
   public DataHistoricalTimeSeriesProviderResource(final HistoricalTimeSeriesProvider htsProvider) {
@@ -46,7 +46,7 @@ public class DataHistoricalTimeSeriesProviderResource extends AbstractDataResour
   //-------------------------------------------------------------------------
   /**
    * Gets the time-series provider.
-   * 
+   *
    * @return the time-series provider, not null
    */
   public HistoricalTimeSeriesProvider getHistoricalTimeSeriesProvider() {
@@ -55,7 +55,7 @@ public class DataHistoricalTimeSeriesProviderResource extends AbstractDataResour
 
   //-------------------------------------------------------------------------
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
@@ -68,8 +68,8 @@ public class DataHistoricalTimeSeriesProviderResource extends AbstractDataResour
 
   @POST  // should be a get, but query is too large
   @Path("htsGet")
-  public Response getHistoricalTimeSeries(HistoricalTimeSeriesProviderGetRequest request) {
-    HistoricalTimeSeriesProviderGetResult result = getHistoricalTimeSeriesProvider().getHistoricalTimeSeries(request);
+  public Response getHistoricalTimeSeries(final HistoricalTimeSeriesProviderGetRequest request) {
+    final HistoricalTimeSeriesProviderGetResult result = getHistoricalTimeSeriesProvider().getHistoricalTimeSeries(request);
     return responseOkObject(result);
   }
 }

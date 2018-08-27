@@ -34,14 +34,14 @@ public class LinkUtils {
    * Gets the best representative object from the specified link.
    * <p>
    * This will return either the object identifier or the external bundle, which may be empty.
-   * 
+   *
    * @param link  the link, not null
    * @return the best representative object, not null
    */
-  public static Object best(Link<?> link) {
+  public static Object best(final Link<?> link) {
     ArgumentChecker.notNull(link, "link");
-    ObjectId objectId = link.getObjectId();
-    ExternalIdBundle bundle = link.getExternalId();
+    final ObjectId objectId = link.getObjectId();
+    final ExternalIdBundle bundle = link.getExternalId();
     return Objects.firstNonNull(objectId, bundle);
   }
 
@@ -49,14 +49,14 @@ public class LinkUtils {
    * Gets the best name for the object from the specified link.
    * <p>
    * This will return a name extracted from the external bundle or object identifier.
-   * 
+   *
    * @param link  the link, not null
    * @return the best representative name, not null
    */
-  public static String bestName(Link<?> link) {
+  public static String bestName(final Link<?> link) {
     ArgumentChecker.notNull(link, "link");
-    ObjectId objectId = link.getObjectId();
-    ExternalIdBundle bundle = link.getExternalId();
+    final ObjectId objectId = link.getObjectId();
+    final ExternalIdBundle bundle = link.getExternalId();
     if (bundle != null && bundle.size() > 0) {
       if (bundle.getValue(ExternalSchemes.BLOOMBERG_TICKER) != null) {
         return bundle.getValue(ExternalSchemes.BLOOMBERG_TICKER);
@@ -76,7 +76,7 @@ public class LinkUtils {
    * <p>
    * To be valid it must contain either an object identifier, a non-empty external
    * identifier bundle, or both.
-   * 
+   *
    * @param link  the link to check, null returns false
    * @return true if valid, false if not
    */

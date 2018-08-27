@@ -37,7 +37,7 @@ public class DataReferenceDataProviderResource extends AbstractDataResource {
 
   /**
    * Creates the resource, exposing the underlying provider over REST.
-   * 
+   *
    * @param referenceDataProvider  the underlying provider, not null
    */
   public DataReferenceDataProviderResource(final ReferenceDataProvider referenceDataProvider) {
@@ -48,7 +48,7 @@ public class DataReferenceDataProviderResource extends AbstractDataResource {
   //-------------------------------------------------------------------------
   /**
    * Gets the reference-data provider.
-   * 
+   *
    * @return the reference-data provider, not null
    */
   public ReferenceDataProvider getReferenceDataProvider() {
@@ -57,7 +57,7 @@ public class DataReferenceDataProviderResource extends AbstractDataResource {
 
   //-------------------------------------------------------------------------
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
@@ -70,20 +70,20 @@ public class DataReferenceDataProviderResource extends AbstractDataResource {
 
   @POST  // should be a get, but query is too large
   @Path("referenceDataGet")
-  public Response getHistoricalTimeSeries(ReferenceDataProviderGetRequest request) {
-    ReferenceDataProviderGetResult result = getReferenceDataProvider().getReferenceData(request);
+  public Response getHistoricalTimeSeries(final ReferenceDataProviderGetRequest request) {
+    final ReferenceDataProviderGetResult result = getReferenceDataProvider().getReferenceData(request);
     return responseOkObject(result);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Builds a URI.
-   * 
+   *
    * @param baseUri  the base URI, not null
    * @return the URI, not null
    */
-  public static URI uriGet(URI baseUri) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("referenceDataGet");
+  public static URI uriGet(final URI baseUri) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("referenceDataGet");
     return bld.build();
   }
 

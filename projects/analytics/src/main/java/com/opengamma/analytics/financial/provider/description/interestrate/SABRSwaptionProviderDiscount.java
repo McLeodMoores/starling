@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.description.interestrate;
@@ -18,13 +18,13 @@ public class SABRSwaptionProviderDiscount extends SABRSwaptionProvider {
    * @param parameters The SABR parameters.
    * @param generator The underlying swaps generators.
    */
-  public SABRSwaptionProviderDiscount(MulticurveProviderDiscount multicurveProvider, SABRInterestRateParameters parameters, GeneratorSwapFixedIbor generator) {
+  public SABRSwaptionProviderDiscount(final MulticurveProviderDiscount multicurveProvider, final SABRInterestRateParameters parameters, final GeneratorSwapFixedIbor generator) {
     super(multicurveProvider, parameters, generator);
   }
 
   @Override
   public SABRSwaptionProviderDiscount copy() {
-    MulticurveProviderDiscount multicurveProvider = getMulticurveProvider().copy();
+    final MulticurveProviderDiscount multicurveProvider = getMulticurveProvider().copy();
     return new SABRSwaptionProviderDiscount(multicurveProvider, getSABRParameter(), getSABRGenerator());
   }
 

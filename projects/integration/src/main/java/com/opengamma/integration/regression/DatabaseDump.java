@@ -81,17 +81,17 @@ import com.opengamma.util.ArgumentChecker;
   private final IdMappings _idMappings;
   private final Map<String, AtomicInteger> _nextIdByType = new HashMap<>();
 
-  /* package */ DatabaseDump(String outputDir,
-                            SecurityMaster securityMaster,
-                            PositionMaster positionMaster,
-                            PortfolioMaster portfolioMaster,
-                            ConfigMaster configMaster,
-                            HistoricalTimeSeriesMaster timeSeriesMaster,
-                            HolidayMaster holidayMaster,
-                            ExchangeMaster exchangeMaster,
-                            MarketDataSnapshotMaster snapshotMaster,
-                            LegalEntityMaster legalEntityMaster,
-                            ConventionMaster conventionMaster) {
+  /* package */ DatabaseDump(final String outputDir,
+                            final SecurityMaster securityMaster,
+                            final PositionMaster positionMaster,
+                            final PortfolioMaster portfolioMaster,
+                            final ConfigMaster configMaster,
+                            final HistoricalTimeSeriesMaster timeSeriesMaster,
+                            final HolidayMaster holidayMaster,
+                            final ExchangeMaster exchangeMaster,
+                            final MarketDataSnapshotMaster snapshotMaster,
+                            final LegalEntityMaster legalEntityMaster,
+                            final ConventionMaster conventionMaster) {
     this(outputDir,
          securityMaster,
          positionMaster,
@@ -106,18 +106,18 @@ import com.opengamma.util.ArgumentChecker;
          MasterQueryManager.queryAll());
   }
 
-  /* package */ DatabaseDump(String outputDir,
-                            SecurityMaster securityMaster,
-                            PositionMaster positionMaster,
-                            PortfolioMaster portfolioMaster,
-                            ConfigMaster configMaster,
-                            HistoricalTimeSeriesMaster timeSeriesMaster,
-                            HolidayMaster holidayMaster,
-                            ExchangeMaster exchangeMaster,
-                            MarketDataSnapshotMaster snapshotMaster,
-                            LegalEntityMaster legalEntityMaster,
-                            ConventionMaster conventionMaster,
-                            MasterQueryManager masterFilterManager) {
+  /* package */ DatabaseDump(final String outputDir,
+                            final SecurityMaster securityMaster,
+                            final PositionMaster positionMaster,
+                            final PortfolioMaster portfolioMaster,
+                            final ConfigMaster configMaster,
+                            final HistoricalTimeSeriesMaster timeSeriesMaster,
+                            final HolidayMaster holidayMaster,
+                            final ExchangeMaster exchangeMaster,
+                            final MarketDataSnapshotMaster snapshotMaster,
+                            final LegalEntityMaster legalEntityMaster,
+                            final ConventionMaster conventionMaster,
+                            final MasterQueryManager masterFilterManager) {
     this(new SubdirsRegressionIO(new File(outputDir), new FudgeXMLFormat(), true),
          securityMaster,
          positionMaster,
@@ -132,18 +132,18 @@ import com.opengamma.util.ArgumentChecker;
          masterFilterManager);
   }
 
-  /* package */ DatabaseDump(RegressionIO io,
-                            SecurityMaster securityMaster,
-                            PositionMaster positionMaster,
-                            PortfolioMaster portfolioMaster,
-                            ConfigMaster configMaster,
-                            HistoricalTimeSeriesMaster timeSeriesMaster,
-                            HolidayMaster holidayMaster,
-                            ExchangeMaster exchangeMaster,
-                            MarketDataSnapshotMaster snapshotMaster,
-                            LegalEntityMaster legalEntityMaster,
-                            ConventionMaster conventionMaster,
-                            MasterQueryManager masterQueryManager) {
+  /* package */ DatabaseDump(final RegressionIO io,
+                            final SecurityMaster securityMaster,
+                            final PositionMaster positionMaster,
+                            final PortfolioMaster portfolioMaster,
+                            final ConfigMaster configMaster,
+                            final HistoricalTimeSeriesMaster timeSeriesMaster,
+                            final HolidayMaster holidayMaster,
+                            final ExchangeMaster exchangeMaster,
+                            final MarketDataSnapshotMaster snapshotMaster,
+                            final LegalEntityMaster legalEntityMaster,
+                            final ConventionMaster conventionMaster,
+                            final MasterQueryManager masterQueryManager) {
     _io = ArgumentChecker.notNull(io, "io");
     _legalEntityMaster = ArgumentChecker.notNull(legalEntityMaster, "legalEntityMaster");
     _snapshotMaster = ArgumentChecker.notNull(snapshotMaster, "snapshotMaster");
@@ -157,7 +157,7 @@ import com.opengamma.util.ArgumentChecker;
     _masterQueryManager = ArgumentChecker.notNull(masterQueryManager, "masterQueryManager");
     _conventionMaster = ArgumentChecker.notNull(conventionMaster, "conventionMaster");
 
-    ConfigItem<IdMappings> mappingsConfigItem = RegressionUtils.loadIdMappings(_configMaster);
+    final ConfigItem<IdMappings> mappingsConfigItem = RegressionUtils.loadIdMappings(_configMaster);
     if (mappingsConfigItem != null) {
       _idMappings = mappingsConfigItem.getValue();
     } else {
@@ -166,17 +166,17 @@ import com.opengamma.util.ArgumentChecker;
     LOGGER.info("Dumping database to {}", _io.getBaseFile().getAbsolutePath());
   }
 
-  public static void main(String[] args) throws IOException {
+  public static void main(final String[] args) throws IOException {
     if (args.length < 2) {
       System.err.println("arguments: dataDirectory serverUrl");
       System.exit(1);
     }
-    String dataDir = args[0];
-    SubdirsRegressionIO io = new SubdirsRegressionIO(new File(dataDir), new FudgeXMLFormat(), true);
-    String serverUrl = args[1];
+    final String dataDir = args[0];
+    final SubdirsRegressionIO io = new SubdirsRegressionIO(new File(dataDir), new FudgeXMLFormat(), true);
+    final String serverUrl = args[1];
     int exitCode = 0;
     try (RemoteServer server = RemoteServer.create(serverUrl)) {
-      DatabaseDump databaseDump = new DatabaseDump(io, server.getSecurityMaster(), server.getPositionMaster(), server.getPortfolioMaster(), server.getConfigMaster(),
+      final DatabaseDump databaseDump = new DatabaseDump(io, server.getSecurityMaster(), server.getPositionMaster(), server.getPortfolioMaster(), server.getConfigMaster(),
           server.getHistoricalTimeSeriesMaster(), server.getHolidayMaster(), server.getExchangeMaster(), server.getMarketDataSnapshotMaster(), server.getLegalEntityMaster(),
           server.getConventionMaster(), MasterQueryManager.queryAll());
       io.beginWrite();
@@ -185,7 +185,7 @@ import com.opengamma.util.ArgumentChecker;
       } finally {
         io.endWrite();
       }
-    } catch (Exception e) {
+    } catch (final Exception e) {
       LOGGER.warn("Failed to write data", e);
       exitCode = 1;
     }
@@ -199,7 +199,7 @@ import com.opengamma.util.ArgumentChecker;
    * @throws IOException if an IO exception is thrown
    */
   public void dumpDatabase() throws IOException {
-    Map<ObjectId, Integer> ids = Maps.newHashMap(_idMappings.getIds());
+    final Map<ObjectId, Integer> ids = Maps.newHashMap(_idMappings.getIds());
     ids.putAll(writeSecurities());
     ids.putAll(writePositions());
     ids.putAll(writePortfolios());
@@ -211,76 +211,76 @@ import com.opengamma.util.ArgumentChecker;
     ids.putAll(writeLegalEntities());
     ids.putAll(writeConventions());
     int maxId = _idMappings.getMaxId();
-    for (Integer id : ids.values()) {
+    for (final Integer id : ids.values()) {
       if (id > maxId) {
         maxId = id;
       }
     }
-    IdMappings idMappings = new IdMappings(ids, maxId);
+    final IdMappings idMappings = new IdMappings(ids, maxId);
     _io.write(null, idMappings, RegressionUtils.ID_MAPPINGS_IDENTIFIER);
   }
 
   private Map<ObjectId, Integer> writeSecurities() throws IOException {
-    Iterable<SecurityDocument> result = _masterQueryManager.getSecurityQuery().apply(_securityMaster);
+    final Iterable<SecurityDocument> result = _masterQueryManager.getSecurityQuery().apply(_securityMaster);
     return write(transform(result, new SecurityTransformer()), "securities", "sec");
   }
 
   private Map<ObjectId, Integer> writePositions() throws IOException {
-    Iterable<PositionDocument> result = _masterQueryManager.getPositionQuery().apply(_positionMaster);
+    final Iterable<PositionDocument> result = _masterQueryManager.getPositionQuery().apply(_positionMaster);
     return write(transform(result, new PositionTransformer()), "positions", "pos");
   }
 
   private Map<ObjectId, Integer> writeConfig() throws IOException {
-    Iterable<ConfigDocument> result = _masterQueryManager.getConfigQuery().apply(_configMaster);
+    final Iterable<ConfigDocument> result = _masterQueryManager.getConfigQuery().apply(_configMaster);
     return write(transform(result, new ConfigTransformer()), "configs", "cfg");
   }
 
   private Map<ObjectId, Integer> writePortfolios() throws IOException {
-    Iterable<PortfolioDocument> result = _masterQueryManager.getPortfolioQuery().apply(_portfolioMaster);
+    final Iterable<PortfolioDocument> result = _masterQueryManager.getPortfolioQuery().apply(_portfolioMaster);
     return write(transform(result, new PortfolioTransformer()), "portfolios", "prt");
   }
 
   private Map<ObjectId, Integer> writeTimeSeries() throws IOException {
-    Iterable<HistoricalTimeSeriesInfoDocument> result = _masterQueryManager.getHtsQuery().apply(_timeSeriesMaster);
+    final Iterable<HistoricalTimeSeriesInfoDocument> result = _masterQueryManager.getHtsQuery().apply(_timeSeriesMaster);
     return write(transform(result, new TimeSeriesTransformer()), "timeseries", "hts");
   }
 
   private Map<ObjectId, Integer> writeHolidays() throws IOException {
-    Iterable<HolidayDocument> result = _masterQueryManager.getHolidayQuery().apply(_holidayMaster);
+    final Iterable<HolidayDocument> result = _masterQueryManager.getHolidayQuery().apply(_holidayMaster);
     return write(transform(result, new HolidayTransformer()), "holidays", "hol");
   }
 
   private Map<ObjectId, Integer> writeExchanges() throws IOException {
-    Iterable<ExchangeDocument> result = _masterQueryManager.getExchangeQuery().apply(_exchangeMaster);
+    final Iterable<ExchangeDocument> result = _masterQueryManager.getExchangeQuery().apply(_exchangeMaster);
     return write(transform(result, new ExchangeTransformer()), "exchanges", "exg");
   }
 
   private Map<ObjectId, Integer> writeSnapshots() throws IOException {
-    Iterable<MarketDataSnapshotDocument> result = _masterQueryManager.getMarketDataSnapshotQuery().apply(_snapshotMaster);
+    final Iterable<MarketDataSnapshotDocument> result = _masterQueryManager.getMarketDataSnapshotQuery().apply(_snapshotMaster);
     return write(transform(result, new SnapshotTransformer()), "snapshots", "snp");
   }
 
   private Map<ObjectId, Integer> writeLegalEntities() throws IOException {
-    Iterable<LegalEntityDocument> result = _masterQueryManager.getLegalEntityQuery().apply(_legalEntityMaster);
+    final Iterable<LegalEntityDocument> result = _masterQueryManager.getLegalEntityQuery().apply(_legalEntityMaster);
     return write(transform(result, new LegalEntityTransformer()), "legalentities", "len");
   }
 
   private Map<ObjectId, Integer> writeConventions() throws IOException {
-    Iterable<ConventionDocument> result = _masterQueryManager.getConventionQuery().apply(_conventionMaster);
+    final Iterable<ConventionDocument> result = _masterQueryManager.getConventionQuery().apply(_conventionMaster);
     return write(transform(result, new ConventionTransformer()), "conventions", "con");
   }
 
-  private Map<ObjectId, Integer> write(Iterable<? extends UniqueIdentifiable> objects, String type, String prefix) throws IOException {
-    List<UniqueIdentifiable> sortedObjects = Lists.newArrayList(objects);
+  private Map<ObjectId, Integer> write(final Iterable<? extends UniqueIdentifiable> objects, final String type, final String prefix) throws IOException {
+    final List<UniqueIdentifiable> sortedObjects = Lists.newArrayList(objects);
     // sort the objects so two dumps of the same database put the same objects in the same files
     Collections.sort(sortedObjects, new UniqueIdentifiableComparator());
     LOGGER.info("Writing {} to {}", type, _io.getBaseFile().getAbsolutePath());
     final Map<ObjectId, Integer> ids = Maps.newHashMap();
     final Map<String, Object> toWrite = Maps.newHashMap();
     int count = 0;
-    for (UniqueIdentifiable object : sortedObjects) {
-      ObjectId objectId = object.getUniqueId().getObjectId();
-      Integer previousId = _idMappings.getId(objectId);
+    for (final UniqueIdentifiable object : sortedObjects) {
+      final ObjectId objectId = object.getUniqueId().getObjectId();
+      final Integer previousId = _idMappings.getId(objectId);
       int id;
       if (previousId == null) {
         id = getNextId(type);
@@ -298,21 +298,21 @@ import com.opengamma.util.ArgumentChecker;
 
   private class SecurityTransformer implements Function<SecurityDocument, ManageableSecurity> {
     @Override
-    public ManageableSecurity apply(SecurityDocument input) {
+    public ManageableSecurity apply(final SecurityDocument input) {
       return input.getSecurity();
     }
   }
 
   private class PositionTransformer implements Function<PositionDocument, ManageablePosition> {
     @Override
-    public ManageablePosition apply(PositionDocument input) {
+    public ManageablePosition apply(final PositionDocument input) {
       return input.getPosition();
     }
   }
 
   private class PortfolioTransformer implements Function<PortfolioDocument, ManageablePortfolio> {
     @Override
-    public ManageablePortfolio apply(PortfolioDocument input) {
+    public ManageablePortfolio apply(final PortfolioDocument input) {
       return input.getPortfolio();
     }
   }
@@ -320,7 +320,7 @@ import com.opengamma.util.ArgumentChecker;
   private class ConfigTransformer implements Function<ConfigDocument, ConfigItem<?>> {
 
     @Override
-    public ConfigItem<?> apply(ConfigDocument input) {
+    public ConfigItem<?> apply(final ConfigDocument input) {
       return input.getConfig();
     }
   }
@@ -328,9 +328,9 @@ import com.opengamma.util.ArgumentChecker;
   private class TimeSeriesTransformer implements Function<HistoricalTimeSeriesInfoDocument, TimeSeriesWithInfo> {
 
     @Override
-    public TimeSeriesWithInfo apply(HistoricalTimeSeriesInfoDocument infoDoc) {
-      ManageableHistoricalTimeSeriesInfo info = infoDoc.getInfo();
-      ManageableHistoricalTimeSeries timeSeries =
+    public TimeSeriesWithInfo apply(final HistoricalTimeSeriesInfoDocument infoDoc) {
+      final ManageableHistoricalTimeSeriesInfo info = infoDoc.getInfo();
+      final ManageableHistoricalTimeSeries timeSeries =
           _timeSeriesMaster.getTimeSeries(info.getTimeSeriesObjectId(), VersionCorrection.LATEST);
       return new TimeSeriesWithInfo(info, timeSeries);
     }
@@ -338,35 +338,35 @@ import com.opengamma.util.ArgumentChecker;
 
   private class HolidayTransformer implements Function<HolidayDocument, ManageableHoliday> {
     @Override
-    public ManageableHoliday apply(HolidayDocument input) {
+    public ManageableHoliday apply(final HolidayDocument input) {
       return input.getHoliday();
     }
   }
 
   private class ExchangeTransformer implements Function<ExchangeDocument, ManageableExchange> {
     @Override
-    public ManageableExchange apply(ExchangeDocument input) {
+    public ManageableExchange apply(final ExchangeDocument input) {
       return input.getExchange();
     }
   }
 
   private class SnapshotTransformer implements Function<MarketDataSnapshotDocument, ManageableMarketDataSnapshot> {
     @Override
-    public ManageableMarketDataSnapshot apply(MarketDataSnapshotDocument input) {
+    public ManageableMarketDataSnapshot apply(final MarketDataSnapshotDocument input) {
       return input.getSnapshot();
     }
   }
 
   private class LegalEntityTransformer implements Function<LegalEntityDocument, ManageableLegalEntity> {
     @Override
-    public ManageableLegalEntity apply(LegalEntityDocument input) {
+    public ManageableLegalEntity apply(final LegalEntityDocument input) {
       return input.getLegalEntity();
     }
   }
 
   private class ConventionTransformer implements Function<ConventionDocument, ManageableConvention> {
     @Override
-    public ManageableConvention apply(ConventionDocument input) {
+    public ManageableConvention apply(final ConventionDocument input) {
       return input.getConvention();
     }
   }
@@ -374,12 +374,12 @@ import com.opengamma.util.ArgumentChecker;
   private class UniqueIdentifiableComparator implements Comparator<UniqueIdentifiable> {
 
     @Override
-    public int compare(UniqueIdentifiable o1, UniqueIdentifiable o2) {
+    public int compare(final UniqueIdentifiable o1, final UniqueIdentifiable o2) {
       return o1.getUniqueId().compareTo(o2.getUniqueId());
     }
   }
 
-  private int getNextId(String type) {
+  private int getNextId(final String type) {
     AtomicInteger nextId = _nextIdByType.get(type);
 
     if (nextId == null) {

@@ -17,20 +17,20 @@ public class LateResolutionFailureNode extends AbstractFailureWithRequirementsNo
 
   private static final String NAME = "LateResolutionFailure";
 
-  public LateResolutionFailureNode(Object parent, ValueRequirement valueRequirement, String function, ValueSpecification desiredOutput, Map<ValueSpecification, ValueRequirement> satisfied) {
+  public LateResolutionFailureNode(final Object parent, final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput, final Map<ValueSpecification, ValueRequirement> satisfied) {
     super(parent, valueRequirement, function, desiredOutput, satisfied, "Satisfied");
   }
-  
+
   @Override
-  public boolean equals(Object o) {
-    boolean result = super.equals(o);
+  public boolean equals(final Object o) {
+    final boolean result = super.equals(o);
     return result && o instanceof LateResolutionFailureNode;
   }
-  
+
   // hashCode from super class
 
   @Override
-  public Object getColumn(int column) {
+  public Object getColumn(final int column) {
     if (column == 0) {
       return NAME;
     }

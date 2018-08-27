@@ -40,23 +40,23 @@ public class HolidayHistoryResult extends AbstractHistoryResult<HolidayDocument>
 
   /**
    * Creates an instance from a collection of documents.
-   * 
+   *
    * @param coll  the collection of documents to add, not null
    */
-  public HolidayHistoryResult(Collection<HolidayDocument> coll) {
+  public HolidayHistoryResult(final Collection<HolidayDocument> coll) {
     super(coll);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the returned holidays from within the documents.
-   * 
+   *
    * @return the holidays, not null
    */
   public List<ManageableHoliday> getHolidays() {
-    List<ManageableHoliday> result = new ArrayList<ManageableHoliday>();
+    final List<ManageableHoliday> result = new ArrayList<>();
     if (getDocuments() != null) {
-      for (HolidayDocument doc : getDocuments()) {
+      for (final HolidayDocument doc : getDocuments()) {
         result.add(doc.getHoliday());
       }
     }
@@ -65,7 +65,7 @@ public class HolidayHistoryResult extends AbstractHistoryResult<HolidayDocument>
 
   /**
    * Gets the first holiday, or null if no documents.
-   * 
+   *
    * @return the first holiday, null if none
    */
   public ManageableHoliday getFirstHoliday() {
@@ -77,7 +77,7 @@ public class HolidayHistoryResult extends AbstractHistoryResult<HolidayDocument>
    * <p>
    * This throws an exception if more than 1 result is actually available.
    * Thus, this method implies an assumption about uniqueness of the queried holiday.
-   * 
+   *
    * @return the matching holiday, not null
    * @throws IllegalStateException if no holiday was found
    */

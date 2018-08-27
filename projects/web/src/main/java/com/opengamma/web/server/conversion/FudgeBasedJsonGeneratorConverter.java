@@ -18,33 +18,33 @@ import com.opengamma.engine.value.ValueSpecification;
 public class FudgeBasedJsonGeneratorConverter implements ResultConverter<Object> {
 
   private final FudgeContext _fudgeContext;
-  
-  public FudgeBasedJsonGeneratorConverter(FudgeContext fudgeContext) {
+
+  public FudgeBasedJsonGeneratorConverter(final FudgeContext fudgeContext) {
     _fudgeContext = fudgeContext;
   }
-  
+
   @Override
-  public Object convertForDisplay(ResultConverterCache context, ValueSpecification valueSpec, Object value, ConversionMode mode) {
-    Map<String, Object> result = new HashMap<String, Object>();
+  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final Object value, final ConversionMode mode) {
+    final Map<String, Object> result = new HashMap<>();
     result.put("name", value.getClass().getSimpleName());
-    
+
     if (mode == ConversionMode.FULL) {
       result.put("detail", new FudgeBasedJsonGenerator(_fudgeContext, value));
     }
-    
+
     return result;
   }
 
   @Override
-  public Object convertForHistory(ResultConverterCache context, ValueSpecification valueSpec, Object value) {
+  public Object convertForHistory(final ResultConverterCache context, final ValueSpecification valueSpec, final Object value) {
     return null;
   }
 
   @Override
-  public String convertToText(ResultConverterCache context, ValueSpecification valueSpec, Object value) {
+  public String convertToText(final ResultConverterCache context, final ValueSpecification valueSpec, final Object value) {
     return value.getClass().getSimpleName();
   }
-  
+
   @Override
   public String getFormatterName() {
     return "GENERIC";

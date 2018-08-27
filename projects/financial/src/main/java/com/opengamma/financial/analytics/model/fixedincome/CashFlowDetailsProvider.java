@@ -70,11 +70,11 @@ public class CashFlowDetailsProvider implements ImmutableBean {
    * @param security the InterestRateSwapSecurity
    * @param type the PayReceiveType, either pay or receive
    */
-  public CashFlowDetailsProvider(MulticurveProviderInterface multicurveProviderInterface,
-                                 ZonedDateTime zonedDateTime,
-                                 SwapDefinition definition,
-                                 InterestRateSwapSecurity security,
-                                 PayReceiveType type) {
+  public CashFlowDetailsProvider(final MulticurveProviderInterface multicurveProviderInterface,
+                                 final ZonedDateTime zonedDateTime,
+                                 final SwapDefinition definition,
+                                 final InterestRateSwapSecurity security,
+                                 final PayReceiveType type) {
     ArgumentChecker.notNull(multicurveProviderInterface, "multicurveProviderInterface");
     ArgumentChecker.notNull(zonedDateTime, "zonedDateTime");
     ArgumentChecker.notNull(definition, "definition");

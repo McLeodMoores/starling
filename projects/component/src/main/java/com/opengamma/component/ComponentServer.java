@@ -70,7 +70,7 @@ public class ComponentServer implements Bean {
    * The complete set of available components.
    */
   @PropertyDefinition(validate = "notNull")
-  private List<ComponentInfo> _componentInfos = new ArrayList<ComponentInfo>();
+  private List<ComponentInfo> _componentInfos = new ArrayList<>();
 
   /**
    * Creates an instance.
@@ -80,10 +80,10 @@ public class ComponentServer implements Bean {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param uri  the URI of the server, not null
    */
-  public ComponentServer(URI uri) {
+  public ComponentServer(final URI uri) {
     setUri(uri);
     setVersion(VersionUtils.deriveVersion());
     setBuild(VersionUtils.deriveBuild());
@@ -96,14 +96,14 @@ public class ComponentServer implements Bean {
    * Finds a component by type and classifier.
    * <p>
    * The returned information will contain the URI of the component for access.
-   * 
+   *
    * @param type  the type of the component, typically an interface
    * @param classifier  the classifier of the type, used to name instances of the same type
    * @return the info for the component, not null
    * @throws IllegalArgumentException if the component cannot be found
    */
-  public ComponentInfo getComponentInfo(Class<?> type, String classifier) {
-    for (ComponentInfo info : getComponentInfos()) {
+  public ComponentInfo getComponentInfo(final Class<?> type, final String classifier) {
+    for (final ComponentInfo info : getComponentInfos()) {
       if (info.matches(type, classifier)) {
         return info;
       }
@@ -115,13 +115,13 @@ public class ComponentServer implements Bean {
    * Finds a component by type.
    * <p>
    * The returned information will contain the URI of the component for access.
-   * 
+   *
    * @param type  the type of the component, typically an interface
    * @return all the matching components, not null
    */
-  public List<ComponentInfo> getComponentInfos(Class<?> type) {
-    List<ComponentInfo> result = new ArrayList<ComponentInfo>();
-    for (ComponentInfo info : getComponentInfos()) {
+  public List<ComponentInfo> getComponentInfos(final Class<?> type) {
+    final List<ComponentInfo> result = new ArrayList<>();
+    for (final ComponentInfo info : getComponentInfos()) {
       if (info.getType().equals(type)) {
         result.add(info);
       }
@@ -133,13 +133,13 @@ public class ComponentServer implements Bean {
    * Gets a map of component information for a given type, keyed by classifier.
    * <p>
    * The returned information will contain the URI of the component for access.
-   * 
+   *
    * @param type  the type of the component, typically an interface
    * @return all the matching components, keyed by classifier, not null
    */
-  public Map<String, ComponentInfo> getComponentInfoMap(Class<?> type) {
-    Map<String, ComponentInfo> result = new LinkedHashMap<String, ComponentInfo>();
-    for (ComponentInfo info : getComponentInfos()) {
+  public Map<String, ComponentInfo> getComponentInfoMap(final Class<?> type) {
+    final Map<String, ComponentInfo> result = new LinkedHashMap<>();
+    for (final ComponentInfo info : getComponentInfos()) {
       if (info.getType().equals(type)) {
         result.put(info.getClassifier(), info);
       }
@@ -156,10 +156,10 @@ public class ComponentServer implements Bean {
    *
    * @param baseUri  the base URI of the server, not null
    */
-  public void applyBaseUri(URI baseUri) {
+  public void applyBaseUri(final URI baseUri) {
     ArgumentChecker.notNull(baseUri, "baseUri");
     setUri(baseUri);
-    for (ComponentInfo info : getComponentInfos()) {
+    for (final ComponentInfo info : getComponentInfos()) {
       info.setUri(baseUri.resolve(info.getUri()));
     }
   }

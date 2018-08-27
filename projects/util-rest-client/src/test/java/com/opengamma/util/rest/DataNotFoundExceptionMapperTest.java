@@ -21,12 +21,12 @@ import com.sun.jersey.api.client.ClientResponse.Status;
 public class DataNotFoundExceptionMapperTest extends AbstractExceptionMapperTestHelper {
 
   @Test(dataProvider="mediaTypes")
-  public void test_mapping(MediaType mediaType) throws Exception {
-    DataNotFoundException ex = new DataNotFoundException("Test message");
-    DataNotFoundExceptionMapper mapper = new DataNotFoundExceptionMapper();
+  public void test_mapping(final MediaType mediaType) throws Exception {
+    final DataNotFoundException ex = new DataNotFoundException("Test message");
+    final DataNotFoundExceptionMapper mapper = new DataNotFoundExceptionMapper();
     init(mapper, mediaType);
-    
-    Response test = mapper.toResponse(ex);
+
+    final Response test = mapper.toResponse(ex);
     testResult(test, Status.NOT_FOUND, ex);
   }
 

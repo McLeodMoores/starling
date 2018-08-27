@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.function.rest;
@@ -16,23 +16,23 @@ public class DataFunctionRepositoryUris {
 
   /**
    * Builds a URI.
-   * 
+   *
    * @param baseUri the base URI, not null
    * @return the URI, not null
    */
-  public static URI uriGetFunctionsByUniqueId(URI baseUri) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("/functionsByUniqueId");
+  public static URI uriGetFunctionsByUniqueId(final URI baseUri) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("/functionsByUniqueId");
     return bld.build();
   }
 
   /**
    * Builds a URI.
-   * 
+   *
    * @param baseUri the base URI, not null
    * @return the URI, not null
    */
-  public static URI uriGetFunctionsByShortName(URI baseUri) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("/functionsByShortName");
+  public static URI uriGetFunctionsByShortName(final URI baseUri) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("/functionsByShortName");
     return bld.build();
   }
 

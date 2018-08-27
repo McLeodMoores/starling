@@ -109,7 +109,7 @@ public final class OpenGammaExecutionContext {
   //-------------------------------------------------------------------------
   /**
    * Gets a {@code HistoricalTimeSeriesSource} from the context.
-   * 
+   *
    * @param context the context to examine, not null
    * @return the value, null if not found
    */
@@ -119,7 +119,7 @@ public final class OpenGammaExecutionContext {
 
   /**
    * Stores a {@code HistoricalTimeSeriesSource} in the context.
-   * 
+   *
    * @param context the context to store in, not null
    * @param source the value to store, not null
    */
@@ -129,7 +129,7 @@ public final class OpenGammaExecutionContext {
 
   /**
    * Gets a {@code SecuritySource} from the context.
-   * 
+   *
    * @param context the context to examine, not null
    * @return the value, null if not found
    */
@@ -139,7 +139,7 @@ public final class OpenGammaExecutionContext {
 
   /**
    * Stores a {@code SecuritySource} in the context.
-   * 
+   *
    * @param context the context to store in, not null
    * @param securitySource the value to store, not null
    */
@@ -149,7 +149,7 @@ public final class OpenGammaExecutionContext {
 
   /**
    * Gets a {@code ConventionBundleSource} from the context.
-   * 
+   *
    * @param context the context to examine, not null
    * @return the value, null if not found
    */
@@ -159,7 +159,7 @@ public final class OpenGammaExecutionContext {
 
   /**
    * Stores a {@code ConventionBundleSource} in the context.
-   * 
+   *
    * @param context the context to store in, not null
    * @param conventionBundleSource the value to store, not null
    */
@@ -169,7 +169,7 @@ public final class OpenGammaExecutionContext {
 
   /**
    * Gets a {@link ConventionSource} from the context.
-   * 
+   *
    * @param context the context to examine, not null
    * @return the value, null if not found
    */
@@ -179,7 +179,7 @@ public final class OpenGammaExecutionContext {
 
   /**
    * Stores a {@code ConventionSource} in the context.
-   * 
+   *
    * @param context the context to store in, not null
    * @param conventionSource the value to store, not null
    */
@@ -190,7 +190,7 @@ public final class OpenGammaExecutionContext {
   //-------------------------------------------------------------------------
   /**
    * Gets a {@code RegionSource} from the context.
-   * 
+   *
    * @param context the context to examine, not null
    * @return the value, null if not found
    */
@@ -200,7 +200,7 @@ public final class OpenGammaExecutionContext {
 
   /**
    * Stores a {@code RegionSource} in the context.
-   * 
+   *
    * @param context the context to store in, not null
    * @param regionSource the value to store, not null
    */
@@ -211,7 +211,7 @@ public final class OpenGammaExecutionContext {
   //-------------------------------------------------------------------------
   /**
    * Gets a {@code HolidaySource} from the context.
-   * 
+   *
    * @param context the context to examine, not null
    * @return the value, null if not found
    */
@@ -221,7 +221,7 @@ public final class OpenGammaExecutionContext {
 
   /**
    * Stores a {@code HolidaySource} in the context.
-   * 
+   *
    * @param context the context to store in, not null
    * @param holidaySource the value to store, not null
    */
@@ -253,7 +253,7 @@ public final class OpenGammaExecutionContext {
   //-------------------------------------------------------------------------
   /**
    * Gets a {@code ExchangeSource} from the context.
-   * 
+   *
    * @param context the context to examine, not null
    * @return the value, null if not found
    */
@@ -263,7 +263,7 @@ public final class OpenGammaExecutionContext {
 
   /**
    * Stores a {@code ExchangeSource} in the context.
-   * 
+   *
    * @param context the context to store in, not null
    * @param exchangeSource the value to store, not null
    */
@@ -273,7 +273,7 @@ public final class OpenGammaExecutionContext {
 
   /**
    * Gets a {@code CurveCalculationConfigSource} from the context.
-   * 
+   *
    * @param context the context to examine, not null
    * @return the curve config source, null if not found
    */
@@ -283,7 +283,7 @@ public final class OpenGammaExecutionContext {
 
   /**
    * Stores a {@code CurveCalculationConfigSource} in the context.
-   * 
+   *
    * @param context the context to store in, not null
    * @param curveConfigSource the curve config source to store, not null
    */
@@ -293,7 +293,7 @@ public final class OpenGammaExecutionContext {
 
   /**
    * Gets a {@code ConfigMaster} from the context.
-   * 
+   *
    * @param context the context to examine, not null
    * @return the value, null if not found
    */
@@ -303,7 +303,7 @@ public final class OpenGammaExecutionContext {
 
   /**
    * Stores a {@code ConfigMaster} in the context.
-   * 
+   *
    * @param context the context to store in, not null
    * @param configMaster the config master instance to store, not null
    */
@@ -313,7 +313,7 @@ public final class OpenGammaExecutionContext {
 
   /**
    * Gets a {@code ConfigSource} from the context.
-   * 
+   *
    * @param context the context to examine, not null
    * @return the value, null if not found
    */
@@ -323,7 +323,7 @@ public final class OpenGammaExecutionContext {
 
   /**
    * Stores a {@code ConfigSource} in the context.
-   * 
+   *
    * @param context the context to store in, not null
    * @param configSource the value to store, not null
    */

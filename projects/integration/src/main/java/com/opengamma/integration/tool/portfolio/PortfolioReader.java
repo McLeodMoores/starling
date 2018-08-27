@@ -51,7 +51,7 @@ public class PortfolioReader {
    * @param name the name for the portfolio, if the portfolio
    * itself does not supply one
    */
-  public PortfolioReader(PositionReader positionReader, String name) {
+  public PortfolioReader(final PositionReader positionReader, final String name) {
     _positionReader = ArgumentChecker.notNull(positionReader, "positionReader");
     _portfolioName = ArgumentChecker.notNull(name, "name");
   }
@@ -65,26 +65,26 @@ public class PortfolioReader {
 
     // Can't create a ManageablePortfolio as that does not hold positions
     // just object ids which we clearly don't have at this point
-    SimplePortfolioNode rootNode = new SimplePortfolioNode(_portfolioName);
-    Portfolio portfolio = new SimplePortfolio(_portfolioName, rootNode);
+    final SimplePortfolioNode rootNode = new SimplePortfolioNode(_portfolioName);
+    final Portfolio portfolio = new SimplePortfolio(_portfolioName, rootNode);
 
     // We don't particularly care which securities are from which node as
     // the positions contain the id bundles so we can easily reconstruct
-    Set<ManageableSecurity> securities = new HashSet<>();
+    final Set<ManageableSecurity> securities = new HashSet<>();
 
     ObjectsPair<ManageablePosition, ManageableSecurity[]> positionData;
     while ((positionData = _positionReader.readNext()) != null) {
 
-      ManageablePosition manageablePosition = positionData.getFirst();
+      final ManageablePosition manageablePosition = positionData.getFirst();
 
-      ManageableSecurity security = positionData.getSecond()[0];
+      final ManageableSecurity security = positionData.getSecond()[0];
       if (security.getExternalIdBundle().isEmpty()) {
         security.setExternalIdBundle(generateNewId());
       }
 
-      Position position = convertPosition(manageablePosition, security);
+      final Position position = convertPosition(manageablePosition, security);
 
-      for (ManageableSecurity sec : positionData.getSecond()) {
+      for (final ManageableSecurity sec : positionData.getSecond()) {
         securities.add(sec);
       }
 
@@ -98,18 +98,18 @@ public class PortfolioReader {
 
   private ExternalIdBundle generateNewId() {
 
-    String id = UUID.randomUUID().toString();
+    final String id = UUID.randomUUID().toString();
     return ExternalIdBundle.of("OG_GENERATED_ID", id);
   }
 
-  private Position convertPosition(ManageablePosition position, ManageableSecurity security) {
+  private Position convertPosition(final ManageablePosition position, final ManageableSecurity security) {
 
-    SimplePosition posn = new SimplePosition();
+    final SimplePosition posn = new SimplePosition();
     posn.setQuantity(position.getQuantity());
-    ManageableSecurityLink securityLink = ManageableSecurityLink.of(security);
+    final ManageableSecurityLink securityLink = ManageableSecurityLink.of(security);
     posn.setSecurityLink(securityLink);
 
-    for (ManageableTrade trade : position.getTrades()) {
+    for (final ManageableTrade trade : position.getTrades()) {
       trade.setSecurityLink(securityLink);
       posn.addTrade(trade);
     }

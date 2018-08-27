@@ -36,15 +36,16 @@ public abstract class MarkToMarketFuturesFunction<T> extends FuturesFunction<T> 
   /**
    * @param valueRequirementName String describes the value requested
    * @param calculator The calculator
-   * @param closingPriceField The field name of the historical time series for price, e.g. MarketDataRequirementNames.MARKET_VALUE, "PX_LAST", "Close". Set in *FunctionConfiguration
+   * @param closingPriceField The field name of the historical time series for price, e.g.
+   * MarketDataRequirementNames.MARKET_VALUE, "PX_LAST", "Close". Set in *FunctionConfiguration
    * @param costOfCarryField The field name of the historical time series for cost of carry e.g. "COST_OF_CARRY". Set in *FunctionConfiguration
    * @param resolutionKey The key defining how the time series resolution is to occur e.g. "DEFAULT_TSS_CONFIG"
    */
   public MarkToMarketFuturesFunction(final String valueRequirementName, final InstrumentDerivativeVisitor<SimpleFutureDataBundle, T> calculator,
-      String closingPriceField, String costOfCarryField, String resolutionKey) {
+      final String closingPriceField, final String costOfCarryField, final String resolutionKey) {
     super(valueRequirementName, calculator, closingPriceField, costOfCarryField, resolutionKey);
   }
-  
+
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final FutureSecurity security = (FutureSecurity)  target.getTrade().getSecurity();

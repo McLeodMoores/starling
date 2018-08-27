@@ -26,15 +26,15 @@ public class Snapshot {
   private final List<LongObjectPair<String>> _lookupsBySecurity;
   private final List<LongObjectPair<String>> _lookupsByField;
 
-  public Snapshot(Map<String, Long> lookupsBySecurity,
-      Map<String, Long> lookupsByField) {
+  public Snapshot(final Map<String, Long> lookupsBySecurity,
+      final Map<String, Long> lookupsByField) {
     super();
     _lookupsByField = reverseOrder(lookupsByField);
     _lookupsBySecurity = reverseOrder(lookupsBySecurity);
-    
+
     //Assume that fields is smaller than security
     long lookups = 0;
-    for (LongObjectPair<String> point : _lookupsByField) {
+    for (final LongObjectPair<String> point : _lookupsByField) {
       lookups += point.getFirstLong();
     }
     _totalLookups = lookups;
@@ -43,34 +43,34 @@ public class Snapshot {
   private static final Supplier<ArrayList<String>> ARRAY_LIST_SUPPLIER = new Supplier<ArrayList<String>>() {
     @Override
     public ArrayList<String> get() {
-      return new ArrayList<String>();
+      return new ArrayList<>();
     }
   };
   private static final Comparator<Long> DESCENDING_COMPARATOR = new Comparator<Long>() {
-    
+
     @Override
-    public int compare(Long o1, Long o2) {
+    public int compare(final Long o1, final Long o2) {
       return o2.compareTo(o1);
     }
   };
-  
-  private List<LongObjectPair<String>> reverseOrder(Map<String, Long> forward) {
-    ListMultimap<Long, String> index = index(forward);
-    int size = forward.size();
+
+  private List<LongObjectPair<String>> reverseOrder(final Map<String, Long> forward) {
+    final ListMultimap<Long, String> index = index(forward);
+    final int size = forward.size();
     return flatten(index, size);
   }
 
-  private List<LongObjectPair<String>> flatten(ListMultimap<Long, String> index, int size) {
-    List<LongObjectPair<String>> reverse = new ArrayList<LongObjectPair<String>>(size);
-    for (Entry<Long, String> entry : index.entries()) {
+  private List<LongObjectPair<String>> flatten(final ListMultimap<Long, String> index, final int size) {
+    final List<LongObjectPair<String>> reverse = new ArrayList<>(size);
+    for (final Entry<Long, String> entry : index.entries()) {
       reverse.add(LongObjectPair.of((long) entry.getKey(), entry.getValue()));
     }
     return reverse;
   }
 
-  private ListMultimap<Long, String> index(Map<String, Long> forward) {
-    ListMultimap<Long, String> index = Multimaps.newListMultimap(new TreeMap<Long, Collection<String>>(DESCENDING_COMPARATOR), ARRAY_LIST_SUPPLIER);
-    for (Entry<String, Long> e : forward.entrySet()) {
+  private ListMultimap<Long, String> index(final Map<String, Long> forward) {
+    final ListMultimap<Long, String> index = Multimaps.newListMultimap(new TreeMap<Long, Collection<String>>(DESCENDING_COMPARATOR), ARRAY_LIST_SUPPLIER);
+    for (final Entry<String, Long> e : forward.entrySet()) {
       index.put(e.getValue(), e.getKey());
     }
     return index;

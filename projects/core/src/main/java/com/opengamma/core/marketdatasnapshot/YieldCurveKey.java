@@ -53,25 +53,25 @@ public final class YieldCurveKey implements ImmutableBean, StructuredMarketDataK
   //-------------------------------------------------------------------------
   /**
    * Creates an instance with a currency and name.
-   * 
+   *
    * @param currency  the currency
    * @param name  the name
    * @return the yield curve key, not null
    */
-  public static YieldCurveKey of(Currency currency, String name) {
+  public static YieldCurveKey of(final Currency currency, final String name) {
     return new YieldCurveKey(currency, name);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Compares this key to another, by currency then name.
-   * 
+   *
    * @param other  the other key, not null
    * @return the comparison value
    */
   @Override
-  public int compareTo(YieldCurveKey other) {
-    int currCompare = _currency.compareTo(other.getCurrency());
+  public int compareTo(final YieldCurveKey other) {
+    final int currCompare = _currency.compareTo(other.getCurrency());
     if (currCompare != 0) {
       return currCompare;
     }

@@ -57,11 +57,11 @@ public class DistributedLiveDataClient extends AbstractLiveDataClient implements
    */
   private static final long TIMEOUT = 1800000;
 
-  public DistributedLiveDataClient(FudgeRequestSender subscriptionRequestSender, FudgeRequestSender entitlementRequestSender) {
+  public DistributedLiveDataClient(final FudgeRequestSender subscriptionRequestSender, final FudgeRequestSender entitlementRequestSender) {
     this(subscriptionRequestSender, entitlementRequestSender, OpenGammaFudgeContext.getInstance());
   }
 
-  public DistributedLiveDataClient(FudgeRequestSender subscriptionRequestSender, FudgeRequestSender entitlementRequestSender, FudgeContext fudgeContext) {
+  public DistributedLiveDataClient(final FudgeRequestSender subscriptionRequestSender, final FudgeRequestSender entitlementRequestSender, final FudgeContext fudgeContext) {
     ArgumentChecker.notNull(subscriptionRequestSender, "Subscription request sender");
     ArgumentChecker.notNull(entitlementRequestSender, "Entitlement request sender");
     ArgumentChecker.notNull(fudgeContext, "Fudge Context");
@@ -88,22 +88,22 @@ public class DistributedLiveDataClient extends AbstractLiveDataClient implements
   }
 
   @Override
-  protected void cancelPublication(LiveDataSpecification fullyQualifiedSpecification) {
+  protected void cancelPublication(final LiveDataSpecification fullyQualifiedSpecification) {
     LOGGER.info("Request made to cancel publication of {}", fullyQualifiedSpecification);
     // TODO kirk 2009-10-28 -- This should handle an unsubscription request. For now,
     // however, we can just make do with allowing the heartbeat to time out.
   }
 
   @Override
-  protected void handleSubscriptionRequest(Collection<SubscriptionHandle> subHandles) {
+  protected void handleSubscriptionRequest(final Collection<SubscriptionHandle> subHandles) {
     ArgumentChecker.notEmpty(subHandles, "Subscription handle collection");
 
     // Determine common user and subscription type
     UserPrincipal user = null;
     SubscriptionType type = null;
 
-    List<LiveDataSpecification> specs = Lists.newArrayListWithCapacity(subHandles.size());
-    for (SubscriptionHandle subHandle : subHandles) {
+    final List<LiveDataSpecification> specs = Lists.newArrayListWithCapacity(subHandles.size());
+    for (final SubscriptionHandle subHandle : subHandles) {
 
       specs.add(subHandle.getRequestedSpecification());
 
@@ -121,8 +121,8 @@ public class DistributedLiveDataClient extends AbstractLiveDataClient implements
     }
 
     // Build request message
-    LiveDataSubscriptionRequest subReqMessage = new LiveDataSubscriptionRequest(user, type, specs);
-    FudgeMsg requestMessage = subReqMessage.toFudgeMsg(new FudgeSerializer(getFudgeContext()));
+    final LiveDataSubscriptionRequest subReqMessage = new LiveDataSubscriptionRequest(user, type, specs);
+    final FudgeMsg requestMessage = subReqMessage.toFudgeMsg(new FudgeSerializer(getFudgeContext()));
 
     // Build response receiver
     FudgeMessageReceiver responseReceiver;
@@ -147,9 +147,9 @@ public class DistributedLiveDataClient extends AbstractLiveDataClient implements
 
     private UserPrincipal _user;
 
-    public AbstractSubscriptionResponseReceiver(Collection<SubscriptionHandle> subHandles) {
+    public AbstractSubscriptionResponseReceiver(final Collection<SubscriptionHandle> subHandles) {
       _spec2SubHandle = new HashMap<>();
-      for (SubscriptionHandle subHandle : subHandles) {
+      for (final SubscriptionHandle subHandle : subHandles) {
         _spec2SubHandle.put(subHandle.getRequestedSpecification(), subHandle);
       }
     }
@@ -158,7 +158,7 @@ public class DistributedLiveDataClient extends AbstractLiveDataClient implements
       return _user;
     }
 
-    public void setUser(UserPrincipal user) {
+    public void setUser(final UserPrincipal user) {
       _user = user;
     }
 
@@ -175,7 +175,7 @@ public class DistributedLiveDataClient extends AbstractLiveDataClient implements
     }
 
     @Override
-    public void messageReceived(FudgeContext fudgeContext, FudgeMsgEnvelope envelope) {
+    public void messageReceived(final FudgeContext fudgeContext, final FudgeMsgEnvelope envelope) {
       final PoolExecutor.CompletionListener<Void> callback = new PoolExecutor.CompletionListener<Void>() {
 
         @Override
@@ -186,7 +186,7 @@ public class DistributedLiveDataClient extends AbstractLiveDataClient implements
         @Override
         public void failure(final Throwable error) {
           LOGGER.error("Failed to process response message", error);
-          for (SubscriptionHandle handle : getSpec2SubHandle().values()) {
+          for (final SubscriptionHandle handle : getSpec2SubHandle().values()) {
             if (handle.getSubscriptionType() != SubscriptionType.SNAPSHOT) {
               subscriptionRequestFailed(handle, new LiveDataSubscriptionResponse(handle.getRequestedSpecification(), LiveDataSubscriptionResult.INTERNAL_ERROR, error.toString(), null, null,
                   null));
@@ -196,21 +196,21 @@ public class DistributedLiveDataClient extends AbstractLiveDataClient implements
 
       };
       try {
-        if ((envelope == null) || (envelope.getMessage() == null)) {
+        if (envelope == null || envelope.getMessage() == null) {
           throw new OpenGammaRuntimeException("Got a message that can't be deserialized from a Fudge message.");
         }
-        FudgeMsg msg = envelope.getMessage();
-        LiveDataSubscriptionResponseMsg responseMessage = LiveDataSubscriptionResponseMsg.fromFudgeMsg(new FudgeDeserializer(getFudgeContext()), msg);
+        final FudgeMsg msg = envelope.getMessage();
+        final LiveDataSubscriptionResponseMsg responseMessage = LiveDataSubscriptionResponseMsg.fromFudgeMsg(new FudgeDeserializer(getFudgeContext()), msg);
         if (responseMessage.getResponses().isEmpty()) {
           throw new OpenGammaRuntimeException("Got empty subscription response " + responseMessage);
         }
         messageReceived(responseMessage, callback);
-      } catch (Exception e) {
+      } catch (final Exception e) {
         callback.failure(e);
       }
     }
 
-    private void messageReceived(LiveDataSubscriptionResponseMsg responseMessage, final PoolExecutor.CompletionListener<Void> callback) {
+    private void messageReceived(final LiveDataSubscriptionResponseMsg responseMessage, final PoolExecutor.CompletionListener<Void> callback) {
       parseResponse(responseMessage);
       processResponse(new PoolExecutor.CompletionListener<Void>() {
 
@@ -218,7 +218,7 @@ public class DistributedLiveDataClient extends AbstractLiveDataClient implements
         public void success(final Void result) {
           try {
             sendResponse();
-          } catch (Throwable t) {
+          } catch (final Throwable t) {
             callback.failure(t);
             return;
           }
@@ -233,10 +233,10 @@ public class DistributedLiveDataClient extends AbstractLiveDataClient implements
       });
     }
 
-    private void parseResponse(LiveDataSubscriptionResponseMsg responseMessage) {
-      for (LiveDataSubscriptionResponse response : responseMessage.getResponses()) {
+    private void parseResponse(final LiveDataSubscriptionResponseMsg responseMessage) {
+      for (final LiveDataSubscriptionResponse response : responseMessage.getResponses()) {
 
-        SubscriptionHandle handle = getSpec2SubHandle().get(response.getRequestedSpecification());
+        final SubscriptionHandle handle = getSpec2SubHandle().get(response.getRequestedSpecification());
         if (handle == null) {
           throw new OpenGammaRuntimeException("Could not find handle corresponding to request " + response.getRequestedSpecification());
         }
@@ -260,16 +260,16 @@ public class DistributedLiveDataClient extends AbstractLiveDataClient implements
 
     protected void sendResponse() {
 
-      Map<SubscriptionHandle, LiveDataSubscriptionResponse> responses = new HashMap<>();
+      final Map<SubscriptionHandle, LiveDataSubscriptionResponse> responses = new HashMap<>();
       responses.putAll(getSuccessResponses());
       responses.putAll(getFailedResponses());
 
-      int total = responses.size();
+      final int total = responses.size();
       LOGGER.info("{} subscription responses received", total);
-      Map<LiveDataListener, Collection<LiveDataSubscriptionResponse>> batch = new HashMap<>();
-      for (Map.Entry<SubscriptionHandle, LiveDataSubscriptionResponse> successEntry : responses.entrySet()) {
-        SubscriptionHandle handle = successEntry.getKey();
-        LiveDataSubscriptionResponse response = successEntry.getValue();
+      final Map<LiveDataListener, Collection<LiveDataSubscriptionResponse>> batch = new HashMap<>();
+      for (final Map.Entry<SubscriptionHandle, LiveDataSubscriptionResponse> successEntry : responses.entrySet()) {
+        final SubscriptionHandle handle = successEntry.getKey();
+        final LiveDataSubscriptionResponse response = successEntry.getValue();
         Collection<LiveDataSubscriptionResponse> responseBatch = batch.get(handle.getListener());
         if (responseBatch == null) {
           responseBatch = new LinkedList<>();
@@ -277,7 +277,7 @@ public class DistributedLiveDataClient extends AbstractLiveDataClient implements
         }
         responseBatch.add(response);
       }
-      for (Map.Entry<LiveDataListener, Collection<LiveDataSubscriptionResponse>> batchEntry : batch.entrySet()) {
+      for (final Map.Entry<LiveDataListener, Collection<LiveDataSubscriptionResponse>> batchEntry : batch.entrySet()) {
         batchEntry.getKey().subscriptionResultsReceived(batchEntry.getValue());
       }
 
@@ -289,7 +289,7 @@ public class DistributedLiveDataClient extends AbstractLiveDataClient implements
    */
   private class SnapshotResponseReceiver extends AbstractSubscriptionResponseReceiver {
 
-    public SnapshotResponseReceiver(Collection<SubscriptionHandle> subHandles) {
+    public SnapshotResponseReceiver(final Collection<SubscriptionHandle> subHandles) {
       super(subHandles);
     }
 
@@ -303,7 +303,7 @@ public class DistributedLiveDataClient extends AbstractLiveDataClient implements
    */
   private class TopicBasedSubscriptionResponseReceiver extends AbstractSubscriptionResponseReceiver {
 
-    public TopicBasedSubscriptionResponseReceiver(Collection<SubscriptionHandle> subHandles) {
+    public TopicBasedSubscriptionResponseReceiver(final Collection<SubscriptionHandle> subHandles) {
       super(subHandles);
     }
 
@@ -322,13 +322,13 @@ public class DistributedLiveDataClient extends AbstractLiveDataClient implements
             try {
               LOGGER.error("Failed to process subscription response", error);
               // This is unexpected. Fail everything.
-              for (LiveDataSubscriptionResponse response : getSuccessResponses().values()) {
+              for (final LiveDataSubscriptionResponse response : getSuccessResponses().values()) {
                 response.setSubscriptionResult(LiveDataSubscriptionResult.INTERNAL_ERROR);
                 response.setUserMessage(error.toString());
               }
               getFailedResponses().putAll(getSuccessResponses());
               getSuccessResponses().clear();
-            } catch (Throwable e) {
+            } catch (final Throwable e) {
               result.failure(e);
               return;
             }
@@ -341,19 +341,19 @@ public class DistributedLiveDataClient extends AbstractLiveDataClient implements
           startReceivingTicks();
           // Phase 2. After we've subscribed to the market data (and started getting deltas), snapshot it
           snapshot(callback);
-        } catch (Throwable e) {
+        } catch (final Throwable e) {
           callback.failure(e);
         }
-      } catch (Throwable e) {
+      } catch (final Throwable e) {
         result.failure(e);
       }
     }
 
     private void startReceivingTicks() {
-      Map<SubscriptionHandle, LiveDataSubscriptionResponse> resps = getSuccessResponses();
+      final Map<SubscriptionHandle, LiveDataSubscriptionResponse> resps = getSuccessResponses();
       // tick distribution specifications can be duplicated, only pass each down once to startReceivingTicks()
-      Collection<String> distributionSpecs = new HashSet<>(resps.size());
-      for (Map.Entry<SubscriptionHandle, LiveDataSubscriptionResponse> entry : resps.entrySet()) {
+      final Collection<String> distributionSpecs = new HashSet<>(resps.size());
+      for (final Map.Entry<SubscriptionHandle, LiveDataSubscriptionResponse> entry : resps.entrySet()) {
         DistributedLiveDataClient.this.subscriptionStartingToReceiveTicks(entry.getKey(), entry.getValue());
         distributionSpecs.add(entry.getValue().getTickDistributionSpecification());
       }
@@ -361,8 +361,8 @@ public class DistributedLiveDataClient extends AbstractLiveDataClient implements
     }
 
     private void snapshot(final PoolExecutor.CompletionListener<Void> callback) {
-      ArrayList<LiveDataSpecification> successLiveDataSpecs = new ArrayList<>();
-      for (LiveDataSubscriptionResponse response : getSuccessResponses().values()) {
+      final ArrayList<LiveDataSpecification> successLiveDataSpecs = new ArrayList<>();
+      for (final LiveDataSubscriptionResponse response : getSuccessResponses().values()) {
         successLiveDataSpecs.add(response.getRequestedSpecification());
       }
       DistributedLiveDataClient.this.snapshot(getUser(), successLiveDataSpecs, TIMEOUT, new PoolExecutor.CompletionListener<Collection<LiveDataSubscriptionResponse>>() {
@@ -370,14 +370,14 @@ public class DistributedLiveDataClient extends AbstractLiveDataClient implements
         @Override
         public void success(final Collection<LiveDataSubscriptionResponse> snapshots) {
           try {
-            for (LiveDataSubscriptionResponse response : snapshots) {
+            for (final LiveDataSubscriptionResponse response : snapshots) {
               final SubscriptionHandle handle = getSpec2SubHandle().get(response.getRequestedSpecification());
               if (handle == null) {
                 throw new OpenGammaRuntimeException("Could not find handle corresponding to request " + response.getRequestedSpecification());
               }
 
               // could be that even though subscription to the JMS topic (phase 1) succeeded, snapshot (phase 2) for some reason failed.
-              // since phase 1 already validated everything, this should mainly happen when user permissions are modified 
+              // since phase 1 already validated everything, this should mainly happen when user permissions are modified
               // in the sub-second interval between phases 1 and 2!
 
               // Not so. In fact for a system like Bloomberg, because of the lag in subscription, the LiveDataServer
@@ -394,7 +394,7 @@ public class DistributedLiveDataClient extends AbstractLiveDataClient implements
                 getFailedResponses().put(handle, response);
               }
             }
-          } catch (Throwable t) {
+          } catch (final Throwable t) {
             callback.failure(t);
             return;
           }
@@ -413,15 +413,15 @@ public class DistributedLiveDataClient extends AbstractLiveDataClient implements
     protected void sendResponse() {
       super.sendResponse();
 
-      for (Map.Entry<SubscriptionHandle, LiveDataSubscriptionResponse> successEntry : getSuccessResponses().entrySet()) {
-        SubscriptionHandle handle = successEntry.getKey();
-        LiveDataSubscriptionResponse response = successEntry.getValue();
+      for (final Map.Entry<SubscriptionHandle, LiveDataSubscriptionResponse> successEntry : getSuccessResponses().entrySet()) {
+        final SubscriptionHandle handle = successEntry.getKey();
+        final LiveDataSubscriptionResponse response = successEntry.getValue();
         subscriptionRequestSatisfied(handle, response);
       }
 
-      for (Map.Entry<SubscriptionHandle, LiveDataSubscriptionResponse> failedEntry : getFailedResponses().entrySet()) {
-        SubscriptionHandle handle = failedEntry.getKey();
-        LiveDataSubscriptionResponse response = failedEntry.getValue();
+      for (final Map.Entry<SubscriptionHandle, LiveDataSubscriptionResponse> failedEntry : getFailedResponses().entrySet()) {
+        final SubscriptionHandle handle = failedEntry.getKey();
+        final LiveDataSubscriptionResponse response = failedEntry.getValue();
         subscriptionRequestFailed(handle, response);
 
         // this is here just to clean up. It's safe to call stopReceivingTicks()
@@ -435,30 +435,30 @@ public class DistributedLiveDataClient extends AbstractLiveDataClient implements
   /**
    * @param tickDistributionSpecification JMS topic name
    */
-  public void startReceivingTicks(Collection<String> tickDistributionSpecification) {
+  public void startReceivingTicks(final Collection<String> tickDistributionSpecification) {
     // Default no-op.
   }
 
-  public void stopReceivingTicks(String tickDistributionSpecification) {
+  public void stopReceivingTicks(final String tickDistributionSpecification) {
     // Default no-op.
   }
 
   // REVIEW kirk 2009-10-28 -- This is just a braindead way of getting ticks to come in
   // until we can get a handle on the construction of receivers based on responses.
   @Override
-  public void messageReceived(FudgeContext fudgeContext, FudgeMsgEnvelope msgEnvelope) {
-    FudgeMsg fudgeMsg = msgEnvelope.getMessage();
-    LiveDataValueUpdateBean update = LiveDataValueUpdateBeanFudgeBuilder.fromFudgeMsg(new FudgeDeserializer(fudgeContext), fudgeMsg);
+  public void messageReceived(final FudgeContext fudgeContext, final FudgeMsgEnvelope msgEnvelope) {
+    final FudgeMsg fudgeMsg = msgEnvelope.getMessage();
+    final LiveDataValueUpdateBean update = LiveDataValueUpdateBeanFudgeBuilder.fromFudgeMsg(new FudgeDeserializer(fudgeContext), fudgeMsg);
     valueUpdate(update);
   }
 
   @Override
-  public Map<LiveDataSpecification, Boolean> isEntitled(UserPrincipal user, Collection<LiveDataSpecification> requestedSpecifications) {
+  public Map<LiveDataSpecification, Boolean> isEntitled(final UserPrincipal user, final Collection<LiveDataSpecification> requestedSpecifications) {
     return _entitlementChecker.isEntitled(user, requestedSpecifications);
   }
 
   @Override
-  public boolean isEntitled(UserPrincipal user, LiveDataSpecification requestedSpecification) {
+  public boolean isEntitled(final UserPrincipal user, final LiveDataSpecification requestedSpecification) {
     return _entitlementChecker.isEntitled(user, requestedSpecification);
   }
 

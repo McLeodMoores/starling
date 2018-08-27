@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.curve.multicurve;
@@ -83,28 +83,28 @@ public class GeneratorMulticurveProviderDiscount extends Function1D<DoubleMatrix
   }
 
   @Override
-  public MulticurveProviderDiscount evaluate(DoubleMatrix1D x) {
-    MulticurveProviderDiscount provider = _knownData.copy();
-    Set<String> nameSet = _generatorsMap.keySet();
+  public MulticurveProviderDiscount evaluate(final DoubleMatrix1D x) {
+    final MulticurveProviderDiscount provider = _knownData.copy();
+    final Set<String> nameSet = _generatorsMap.keySet();
     int indexParam = 0;
-    for (String name : nameSet) {
-      GeneratorYDCurve gen = _generatorsMap.get(name);
-      double[] paramCurve = Arrays.copyOfRange(x.getData(), indexParam, indexParam + gen.getNumberOfParameter());
+    for (final String name : nameSet) {
+      final GeneratorYDCurve gen = _generatorsMap.get(name);
+      final double[] paramCurve = Arrays.copyOfRange(x.getData(), indexParam, indexParam + gen.getNumberOfParameter());
       indexParam += gen.getNumberOfParameter();
-      YieldAndDiscountCurve curve = gen.generateCurve(name, provider, paramCurve);
+      final YieldAndDiscountCurve curve = gen.generateCurve(name, provider, paramCurve);
       if (_discountingMap.containsKey(name)) {
         provider.setOrReplaceCurve(_discountingMap.get(name), curve);
       }
       if (_forwardIborMap.containsKey(name)) {
-        IborIndex[] indexes = _forwardIborMap.get(name);
-        for (int loopindex = 0; loopindex < indexes.length; loopindex++) {
-          provider.setOrReplaceCurve(indexes[loopindex], curve);
+        final IborIndex[] indexes = _forwardIborMap.get(name);
+        for (final IborIndex indexe : indexes) {
+          provider.setOrReplaceCurve(indexe, curve);
         }
       }
       if (_forwardONMap.containsKey(name)) {
-        IndexON[] indexes = _forwardONMap.get(name);
-        for (int loopindex = 0; loopindex < indexes.length; loopindex++) {
-          provider.setOrReplaceCurve(indexes[loopindex], curve);
+        final IndexON[] indexes = _forwardONMap.get(name);
+        for (final IndexON indexe : indexes) {
+          provider.setOrReplaceCurve(indexe, curve);
         }
       }
       // TODO: Do we need to check that the curve is used at least once?

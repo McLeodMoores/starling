@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.tree;
@@ -14,7 +14,7 @@ import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribut
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class AmericanVanillaOptionFunctionProvider extends OptionFunctionProvider1D {
   private final Calculator _calc;
@@ -93,7 +93,7 @@ public class AmericanVanillaOptionFunctionProvider extends OptionFunctionProvide
   }
 
   @Override
-  public double[] getPayoffAtExpiryTrinomial(double assetPrice, final double downFactor, double middleOverDown) {
+  public double[] getPayoffAtExpiryTrinomial(final double assetPrice, final double downFactor, final double middleOverDown) {
     final double strike = getStrike();
     final int nSteps = getNumberOfSteps();
     final int nNodes = 2 * getNumberOfSteps() + 1;
@@ -125,13 +125,13 @@ public class AmericanVanillaOptionFunctionProvider extends OptionFunctionProvide
   }
 
   /**
-   * 
-   * 
-   * 
+   *
+   *
+   *
    * Private class defines calculation method
-   * 
-   * 
-   * 
+   *
+   *
+   *
    */
   private abstract class Calculator {
     abstract double[] payoffsAtExpiry(final double assetPrice, final double downFactor, final double upOverDown);
@@ -243,7 +243,7 @@ public class AmericanVanillaOptionFunctionProvider extends OptionFunctionProvide
       final double strike = getStrike();
       final double sign = getSign();
 
-      double assetPriceLowest = assetPrice * Math.pow(downFactor, nSteps);
+      final double assetPriceLowest = assetPrice * Math.pow(downFactor, nSteps);
       final int ref = (int) (Math.log(strike / assetPriceLowest) / Math.log(upOverDown));
       final double[] values = new double[nStepsP];
 
@@ -362,8 +362,8 @@ public class AmericanVanillaOptionFunctionProvider extends OptionFunctionProvide
       }
 
       Arrays.fill(res, 0.);
-      jmax = jmax < steps - 1 ? jmax + 2 : (jmax < steps ? jmax - 1 : jmax);
-      jmin = jmin > 1 ? jmin - 2 : (jmin > 0 ? jmin - 1 : jmin);
+      jmax = jmax < steps - 1 ? jmax + 2 : jmax < steps ? jmax - 1 : jmax;
+      jmin = jmin > 1 ? jmin - 2 : jmin > 0 ? jmin - 1 : jmin;
       double tmpValue = assetPriceLowest * Math.pow(upOverDown, jmin);
       for (int j = jmin; j < jmax + 1; ++j) {
         if (getNumberOfSteps() - 1 == steps) {
@@ -395,7 +395,7 @@ public class AmericanVanillaOptionFunctionProvider extends OptionFunctionProvide
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }

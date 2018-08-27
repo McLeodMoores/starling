@@ -17,10 +17,10 @@ import com.opengamma.util.jms.JmsConnector;
 public final class DBMasterComponentUtils {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DBMasterComponentUtils.class);
-  
+
   private DBMasterComponentUtils() {}
-  
-  
+
+
   /**
    * Tests whether a given jms config is valid, logging an error if not
    * @param classifier the classifier of the master
@@ -29,20 +29,20 @@ public final class DBMasterComponentUtils {
    * @param jmsChangeManagerTopic the jmsChangeManagerTopic
    * @return whether this configuration is valid
    */
-  public static boolean isValidJmsConfiguration(String classifier, Class<? extends AbstractComponentFactory> cfClazz, JmsConnector jmsConnector, String jmsChangeManagerTopic) {
-    
-    boolean valid = jmsConnector != null && jmsChangeManagerTopic != null;
+  public static boolean isValidJmsConfiguration(final String classifier, final Class<? extends AbstractComponentFactory> cfClazz, final JmsConnector jmsConnector, final String jmsChangeManagerTopic) {
+
+    final boolean valid = jmsConnector != null && jmsChangeManagerTopic != null;
     if (!valid) {
-      LOGGER.warn("Change management for master enabled in {} (classifier '{}') " + 
-             "but not all jms settings present: jmsChangeManagerTopic={}, jmsConnector={}. " + 
-             "Will be disabled. Set enableChangeManagement=false to suppress this warning.", 
+      LOGGER.warn("Change management for master enabled in {} (classifier '{}') " +
+             "but not all jms settings present: jmsChangeManagerTopic={}, jmsConnector={}. " +
+             "Will be disabled. Set enableChangeManagement=false to suppress this warning.",
              cfClazz,
              classifier,
-             jmsChangeManagerTopic, 
+             jmsChangeManagerTopic,
              jmsConnector);
     }
     return valid;
 
   }
-  
+
 }

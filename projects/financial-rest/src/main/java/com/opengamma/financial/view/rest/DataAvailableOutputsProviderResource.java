@@ -37,7 +37,7 @@ public class DataAvailableOutputsProviderResource extends AbstractDataResource {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param provider  the provider, not null
    */
   public DataAvailableOutputsProviderResource(final AvailableOutputsProvider provider) {
@@ -46,7 +46,7 @@ public class DataAvailableOutputsProviderResource extends AbstractDataResource {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param provider  the provider, not null
    * @param fudgeContext  the Fudge context, not null
    */
@@ -60,7 +60,7 @@ public class DataAvailableOutputsProviderResource extends AbstractDataResource {
   //-------------------------------------------------------------------------
   /**
    * Gets the available outputs provider.
-   * 
+   *
    * @return the available outputs provider, not null
    */
   public AvailableOutputsProvider getAvailableOutputsProvider() {
@@ -69,7 +69,7 @@ public class DataAvailableOutputsProviderResource extends AbstractDataResource {
 
   //-------------------------------------------------------------------------
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 

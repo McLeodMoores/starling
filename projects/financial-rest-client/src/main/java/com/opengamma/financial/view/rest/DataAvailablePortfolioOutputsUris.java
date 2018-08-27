@@ -20,7 +20,7 @@ public class DataAvailablePortfolioOutputsUris {
 
   /**
    * Builds a URI.
-   * 
+   *
    * @param baseUri  the base URI, not null
    * @param instant  the instant, may be null
    * @param maxNodes  the maximum nodes, may be null
@@ -28,8 +28,8 @@ public class DataAvailablePortfolioOutputsUris {
    * @param portfolioId  the portfolio identifier, may be null
    * @return the URI, not null
    */
-  public static URI uri(URI baseUri, Instant instant, Integer maxNodes, Integer maxPositions, UniqueId portfolioId) {
-    UriBuilder bld = UriBuilder.fromUri(DataAvailableOutputsProviderUris.uriPortfolio(baseUri));
+  public static URI uri(final URI baseUri, final Instant instant, final Integer maxNodes, final Integer maxPositions, final UniqueId portfolioId) {
+    final UriBuilder bld = UriBuilder.fromUri(DataAvailableOutputsProviderUris.uriPortfolio(baseUri));
     bld.path(instant != null ? instant.toString() : "now");
     if (maxNodes != null && maxNodes > 0) {
       bld.path("nodes").path(Integer.toString(maxNodes));

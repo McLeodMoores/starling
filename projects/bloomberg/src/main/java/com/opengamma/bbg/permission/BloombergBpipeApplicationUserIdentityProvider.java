@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.bbg.permission;
@@ -28,7 +28,7 @@ import com.opengamma.bbg.SessionProvider;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class BloombergBpipeApplicationUserIdentityProvider {
 
@@ -43,42 +43,42 @@ public class BloombergBpipeApplicationUserIdentityProvider {
 
   private final SessionProvider _sessionProvider;
 
-  public BloombergBpipeApplicationUserIdentityProvider(SessionProvider sessionProvider) {
+  public BloombergBpipeApplicationUserIdentityProvider(final SessionProvider sessionProvider) {
     ArgumentChecker.notNull(sessionProvider, "sessionProvider");
     _sessionProvider = sessionProvider;
   }
 
   /**
    * Return an authorized identity for a bpipe application
-   * 
+   *
    * @return the bloomberg identity for an application
    * @throws UnauthenticatedException if an authorized identity cannot be created from bloomberg
    */
   public Identity getIdentity() {
 
-    Session session = _sessionProvider.getSession();
-    BloombergConnector bloombergConnector = _sessionProvider.getConnector();
+    final Session session = _sessionProvider.getSession();
+    final BloombergConnector bloombergConnector = _sessionProvider.getConnector();
 
     LOGGER.debug("Attempting to authorize application using authentication option: {}", bloombergConnector.getSessionOptions().authenticationOptions());
     try {
-      EventQueue tokenEventQueue = new EventQueue();
+      final EventQueue tokenEventQueue = new EventQueue();
       session.generateToken(new CorrelationID(), tokenEventQueue);
       String token = null;
       //Generate token responses will come on this dedicated queue. There would be no other messages on that queue.
       Event event = tokenEventQueue.nextEvent(WAIT_TIME_MS);
       if (Event.EventType.TOKEN_STATUS.equals(event.eventType()) || Event.EventType.REQUEST_STATUS.equals(event.eventType())) {
-        for (Message msg : event) {
+        for (final Message msg : event) {
           if (TOKEN_SUCCESS.equals(msg.messageType())) {
             token = msg.getElementAsString(TOKEN_ELEMENT);
           }
           if (TOKEN_FAILURE.equals(msg.messageType())) {
             String description = "";
-            Element reasonElem = msg.getElement("reason");
+            final Element reasonElem = msg.getElement("reason");
             if (reasonElem != null) {
               description = reasonElem.getElementAsString("description");
             }
-            SessionOptions sessionOptions = bloombergConnector.getSessionOptions();
-            String message = String.format("Failure to get application token from Host:%s port:%s authentication option:%s reason:%s", 
+            final SessionOptions sessionOptions = bloombergConnector.getSessionOptions();
+            final String message = String.format("Failure to get application token from Host:%s port:%s authentication option:%s reason:%s",
                 sessionOptions.getServerHost(), sessionOptions.getServerPort(), sessionOptions.authenticationOptions(), description);
             throw new UnauthenticatedException(message);
           }
@@ -86,17 +86,17 @@ public class BloombergBpipeApplicationUserIdentityProvider {
       }
       LOGGER.debug("Token: {} generated for application: {}", token, bloombergConnector.getSessionOptions().authenticationOptions());
 
-      Service apiAuthSvc = _sessionProvider.getService(BloombergConstants.AUTH_SVC_NAME);
-      Request authRequest = apiAuthSvc.createAuthorizationRequest();
+      final Service apiAuthSvc = _sessionProvider.getService(BloombergConstants.AUTH_SVC_NAME);
+      final Request authRequest = apiAuthSvc.createAuthorizationRequest();
       authRequest.set(TOKEN_ELEMENT, token);
 
       final Identity appIdentity = session.createIdentity();
-      EventQueue authEventQueue = new EventQueue();
+      final EventQueue authEventQueue = new EventQueue();
       session.sendAuthorizationRequest(authRequest, appIdentity, authEventQueue, new CorrelationID());
 
       event = authEventQueue.nextEvent(WAIT_TIME_MS);
       if (event.eventType().equals(Event.EventType.RESPONSE) || event.eventType().equals(Event.EventType.REQUEST_STATUS)) {
-        for (Message msg : event) {
+        for (final Message msg : event) {
           if (msg.messageType().equals(AUTHORIZATION_SUCCESS)) {
             LOGGER.debug("Application authorization SUCCESS");
             return appIdentity;

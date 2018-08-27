@@ -1,11 +1,9 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.exec;
-
-import net.sf.ehcache.CacheManager;
 
 import org.springframework.beans.factory.InitializingBean;
 
@@ -13,8 +11,10 @@ import com.opengamma.engine.calcnode.stats.FunctionCosts;
 import com.opengamma.engine.exec.plan.CachingExecutionPlanner;
 import com.opengamma.engine.exec.plan.MultipleNodeExecutionPlanner;
 
+import net.sf.ehcache.CacheManager;
+
 /**
- * 
+ *
  */
 public class MultipleNodeExecutorFactory extends PlanBasedGraphExecutorFactory implements InitializingBean {
 
@@ -31,7 +31,7 @@ public class MultipleNodeExecutorFactory extends PlanBasedGraphExecutorFactory i
     this(new MultipleNodeExecutionPlanner());
   }
 
-  public void setCacheManager(CacheManager cacheManager) {
+  public void setCacheManager(final CacheManager cacheManager) {
     _cacheManager = cacheManager;
   }
 
@@ -41,7 +41,7 @@ public class MultipleNodeExecutorFactory extends PlanBasedGraphExecutorFactory i
 
   /**
    * Sets the minimum number of items that the planner will attempt to put into each job.
-   * 
+   *
    * @param minimumJobItems the number of items
    * @see MultipleNodeExecutionPlanner#setMinimumJobItems
    */
@@ -51,7 +51,7 @@ public class MultipleNodeExecutorFactory extends PlanBasedGraphExecutorFactory i
 
   /**
    * Returns the minimum number of items that the planner will attempt to put into each job.
-   * 
+   *
    * @return the number of items
    * @see MultipleNodeExecutionPlanner#getMinimumJobItems
    */
@@ -61,7 +61,7 @@ public class MultipleNodeExecutorFactory extends PlanBasedGraphExecutorFactory i
 
   /**
    * Sets the maximum number of items that the planner will attempt to put into each job.
-   * 
+   *
    * @param maximumJobItems the number of items
    * @see MultipleNodeExecutionPlanner#setMaximumJobItems
    */
@@ -71,7 +71,7 @@ public class MultipleNodeExecutorFactory extends PlanBasedGraphExecutorFactory i
 
   /**
    * Returns the maximum number of items that the planner will attempt to put into each job.
-   * 
+   *
    * @return the number of items
    * @see MultipleNodeExecutionPlanner#getMaximumJobItems
    */
@@ -81,7 +81,7 @@ public class MultipleNodeExecutorFactory extends PlanBasedGraphExecutorFactory i
 
   /**
    * Sets the minimum estimated cost of jobs that the planner will attempt to produce.
-   * 
+   *
    * @param minimumJobCost the estimated cost
    * @see MultipleNodeExecutionPlanner#setMinimumJobCost
    */
@@ -91,7 +91,7 @@ public class MultipleNodeExecutorFactory extends PlanBasedGraphExecutorFactory i
 
   /**
    * Returns the minimum estimated cost of jobs that the planner will attempt to produce.
-   * 
+   *
    * @return the estimated cost
    * @see MultipleNodeExecutionPlanner#getMinimumJobCost
    */
@@ -101,7 +101,7 @@ public class MultipleNodeExecutorFactory extends PlanBasedGraphExecutorFactory i
 
   /**
    * Sets the maximum estimated cost of jobs that the planner will attempt to produce.
-   * 
+   *
    * @param maximumJobCost the estimated cost
    * @see MultipleNodeExecutionPlanner#setMaximumJobCost
    */
@@ -111,7 +111,7 @@ public class MultipleNodeExecutorFactory extends PlanBasedGraphExecutorFactory i
 
   /**
    * Returns the maximum estimated cost of jobs that the planner will attempt to produce.
-   * 
+   *
    * @return the estimated cost
    * @see MultipleNodeExecutionPlanner#getMaximumJobCost
    */
@@ -121,7 +121,7 @@ public class MultipleNodeExecutorFactory extends PlanBasedGraphExecutorFactory i
 
   /**
    * Sets the concurrency limit for job tails that are streamed to a single node host.
-   * 
+   *
    * @param maximumConcurrency the number of job tails that are expected to be executing in parallel
    */
   public void setMaximumConcurrency(final int maximumConcurrency) {
@@ -130,7 +130,7 @@ public class MultipleNodeExecutorFactory extends PlanBasedGraphExecutorFactory i
 
   /**
    * Returns the concurrency limit for job tails that are streamed to a single node host.
-   * 
+   *
    * @return the number of job tails that are expected to be executing in parallel
    */
   public int getMaximumConcurrency() {

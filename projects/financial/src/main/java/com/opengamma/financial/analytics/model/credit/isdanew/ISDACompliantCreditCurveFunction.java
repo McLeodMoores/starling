@@ -104,11 +104,11 @@ public class ISDACompliantCreditCurveFunction extends AbstractFunction.NonCompil
     return curveIdentifier;
   }
 
-  public static QuotedSpread getQuotedSpread(CDSQuoteConvention quote,
-                                             BuySellProtection buySellProtection,
-                                             ISDACompliantYieldCurve yieldCurve,
-                                             CDSAnalytic analytic,
-                                             double premium) {
+  public static QuotedSpread getQuotedSpread(final CDSQuoteConvention quote,
+                                             final BuySellProtection buySellProtection,
+                                             final ISDACompliantYieldCurve yieldCurve,
+                                             final CDSAnalytic analytic,
+                                             final double premium) {
     double quotedSpread;
     if (quote instanceof PointsUpFront) {
       quotedSpread = POINTS_UP_FRONT_CONVERTER.pufToQuotedSpread(analytic,
@@ -164,14 +164,14 @@ public class ISDACompliantCreditCurveFunction extends AbstractFunction.NonCompil
                                     final FunctionInputs inputs,
                                     final ComputationTarget target,
                                     final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
-    ValueRequirement requirement = desiredValues.iterator().next();
+    final ValueRequirement requirement = desiredValues.iterator().next();
     final Clock snapshotClock = executionContext.getValuationClock();
     final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
     final LegacyVanillaCDSSecurity security = (LegacyVanillaCDSSecurity) target.getSecurity();
 
     final CdsRecoveryRateIdentifier recoveryRateIdentifier = security.accept(new CreditSecurityToRecoveryRateVisitor(
         executionContext.getSecuritySource()));
-    Object recoveryRateObject = inputs.getValue(new ValueRequirement("PX_LAST",
+    final Object recoveryRateObject = inputs.getValue(new ValueRequirement("PX_LAST",
                                                                      ComputationTargetType.PRIMITIVE,
                                                                      recoveryRateIdentifier.getExternalId()));
     if (recoveryRateObject == null) {
@@ -181,11 +181,11 @@ public class ISDACompliantCreditCurveFunction extends AbstractFunction.NonCompil
     }
     final double recoveryRate = (Double) recoveryRateObject;
 
-    CreditDefaultSwapSecurityConverterDeprecated converter = new CreditDefaultSwapSecurityConverterDeprecated(
+    final CreditDefaultSwapSecurityConverterDeprecated converter = new CreditDefaultSwapSecurityConverterDeprecated(
         _holidaySource,
         _regionSource,
         recoveryRate);
-    LegacyVanillaCreditDefaultSwapDefinition cds = converter.visitLegacyVanillaCDSSecurity(security);
+    final LegacyVanillaCreditDefaultSwapDefinition cds = converter.visitLegacyVanillaCDSSecurity(security);
     final StandardCDSQuotingConvention quoteConvention = StandardCDSQuotingConvention.parse(requirement.getConstraint(
         ISDAFunctionConstants.CDS_QUOTE_CONVENTION));
     final NodalTenorDoubleCurve spreadCurve = (NodalTenorDoubleCurve) inputs.getValue(ValueRequirementNames.BUCKETED_SPREADS);
@@ -227,11 +227,11 @@ public class ISDACompliantCreditCurveFunction extends AbstractFunction.NonCompil
       final String pillarString = requirement.getConstraint(ISDAFunctionConstants.ISDA_BUCKET_TENORS);
       final ZonedDateTime[] bucketDates = SpreadCurveFunctions.getPillarDates(now, pillarString);
       final ZonedDateTime[] pillarDates = bucketDates;
-      double[] spreads = SpreadCurveFunctions.getSpreadCurveNew(spreadCurve,
+      final double[] spreads = SpreadCurveFunctions.getSpreadCurveNew(spreadCurve,
                                                                 bucketDates,
                                                                 security.getStartDate(),
                                                                 quoteConvention);
-      Tenor[] tenors = SpreadCurveFunctions.getBuckets(pillarString);
+      final Tenor[] tenors = SpreadCurveFunctions.getBuckets(pillarString);
       modifiedSpreadCurve = new NodalTenorDoubleCurve(tenors, ArrayUtils.toObject(spreads), true);
       modifiedPillarCurve = modifiedSpreadCurve; // for IMM buckets and spreads are the same
       //final CDSQuoteConvention[] quotes = SpreadCurveFunctions.getQuotes(security.getMaturityDate(), spreads, security.getParSpread(), quoteConvention, false);
@@ -255,16 +255,16 @@ public class ISDACompliantCreditCurveFunction extends AbstractFunction.NonCompil
       final String bucketString = requirement.getConstraint(ISDAFunctionConstants.ISDA_BUCKET_TENORS);
       final ZonedDateTime[] bucketDates = SpreadCurveFunctions.getPillarDates(now, bucketString);
       final ZonedDateTime[] pillarDates = SpreadCurveFunctions.getPillarDates(now, pillarString);
-      double[] bucketSpreads = SpreadCurveFunctions.getSpreadCurveNew(spreadCurve,
+      final double[] bucketSpreads = SpreadCurveFunctions.getSpreadCurveNew(spreadCurve,
                                                                       bucketDates,
                                                                       security.getStartDate(),
                                                                       quoteConvention);
-      double[] pillarSpreads = SpreadCurveFunctions.getSpreadCurveNew(spreadCurve,
+      final double[] pillarSpreads = SpreadCurveFunctions.getSpreadCurveNew(spreadCurve,
                                                                       pillarDates,
                                                                       security.getStartDate(),
                                                                       quoteConvention);
-      Tenor[] bucketTenors = SpreadCurveFunctions.getBuckets(bucketString);
-      Tenor[] pillarTenors = SpreadCurveFunctions.getBuckets(pillarString);
+      final Tenor[] bucketTenors = SpreadCurveFunctions.getBuckets(bucketString);
+      final Tenor[] pillarTenors = SpreadCurveFunctions.getBuckets(pillarString);
       modifiedSpreadCurve = new NodalTenorDoubleCurve(bucketTenors, ArrayUtils.toObject(bucketSpreads), true);
       modifiedPillarCurve = new NodalTenorDoubleCurve(pillarTenors, ArrayUtils.toObject(pillarSpreads), true);
       final CDSQuoteConvention[] quotes = SpreadCurveFunctions.getQuotes(security.getMaturityDate(),
@@ -415,7 +415,7 @@ public class ISDACompliantCreditCurveFunction extends AbstractFunction.NonCompil
     return Sets.newHashSet(spreadRequirment, isdaRequirment, cdsSpreadRequirement, recoveryRateRequirement);
   }
 
-  public class TestRegionSource extends AbstractSourceWithExternalBundle<Region> implements RegionSource {
+  public final class TestRegionSource extends AbstractSourceWithExternalBundle<Region> implements RegionSource {
 
     private final AtomicLong _count = new AtomicLong(0);
     private final Region _testRegion;

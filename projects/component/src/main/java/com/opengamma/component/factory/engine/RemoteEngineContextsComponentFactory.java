@@ -10,8 +10,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
 
-import net.sf.ehcache.CacheManager;
-
 import org.apache.commons.lang.StringUtils;
 import org.fudgemsg.FudgeMsg;
 import org.joda.beans.Bean;
@@ -84,6 +82,8 @@ import com.opengamma.util.jms.JmsConnector;
 import com.opengamma.util.rest.FudgeRestClient;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Component factory for {@link FunctionCompilationContext} and {@link FunctionExecutionContext} instances that are based on a remote configuration document and local factory which determines the
@@ -320,7 +320,7 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
 
   protected InterpolatedYieldCurveSpecificationBuilder createInterpolatedYieldCurveSpecificationBuilder(final URI uri) {
     if (uri != null) {
-      return /*TODO: cache*/(new RemoteInterpolatedYieldCurveSpecificationBuilder(uri));
+      return /*TODO: cache*/new RemoteInterpolatedYieldCurveSpecificationBuilder(uri);
     } else {
       return null;
     }
@@ -359,7 +359,7 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
   }
 
   protected ViewProcessor createViewProcessor(final URI uri) {
-    if ((getJmsConnector() != null) && (uri != null)) {
+    if (getJmsConnector() != null && uri != null) {
       return new RemoteViewProcessor(uri, getJmsConnector(), Executors.newSingleThreadScheduledExecutor());
     } else {
       return null;
@@ -368,7 +368,7 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
 
   protected VolatilityCubeDefinitionSource createVolatilityCubeDefinitionSource(final URI uri) {
     if (uri != null) {
-      return /*TODO: cache*/(new RemoteVolatilityCubeDefinitionSource(uri/*, TODO: change manager */));
+      return /*TODO: cache*/new RemoteVolatilityCubeDefinitionSource(uri/*, TODO: change manager */);
     } else {
       return null;
     }
@@ -378,7 +378,7 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
 
   /**
    * Fetches the remote configuration document and supplies a suitable validation service.
-   * 
+   *
    * @return the URI validation service and configuration document, not null
    */
   protected Pair<UriEndPointDescriptionProvider.Validater, FudgeMsg> fetchConfiguration() {
@@ -391,7 +391,7 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
 
   /**
    * Fetches a URI from the remote configuration.
-   * 
+   *
    * @param remoteConfiguration the remote configuration, as created by {@link #fetchConfiguration}
    * @param label the element from the remote configuration document, not null
    * @return the URI or null if none is available/defined
@@ -407,7 +407,7 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
 
   /**
    * Gets the classifier used to refer to remote components.
-   * 
+   *
    * @return the classifier, not null
    */
   protected String getRemoteClassifier() {
@@ -416,14 +416,14 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
 
   /**
    * Sets the component in the template and registers it in the local repository. The local repository is used as a cache when local forms, such as the target resolver, are constructed.
-   * 
+   *
    * @param repo the component repository, not null
    * @param property the template property, not null
    * @param template the template component factory, not null
    * @param component the remote component, null if none is available
    */
   @SuppressWarnings("unchecked")
-  protected void remoteComponent(final ComponentRepository repo, final MetaProperty<?> property, final AbstractComponentFactory template, Object component) {
+  protected void remoteComponent(final ComponentRepository repo, final MetaProperty<?> property, final AbstractComponentFactory template, final Object component) {
     // Always set the template so that it's null validation can take place
     property.set(template, component);
     if (component != null) {
@@ -434,7 +434,7 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
 
   /**
    * Processes a field from the template component factory, either passing a value from the local configuration or using a value from the remote configuration document to set it accordingly.
-   * 
+   *
    * @param repo the component repository, not null
    * @param property the template property, not null
    * @param localConfiguration the local configuration, not null
@@ -454,7 +454,7 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
         property.set(template, getCacheManager());
         break;
       case "classifier":
-        property.set(template, (localConfiguration != null) ? getClassifier() : getRemoteClassifier());
+        property.set(template, localConfiguration != null ? getClassifier() : getRemoteClassifier());
         break;
       case "compilationBlacklist":
         // TODO:
@@ -519,7 +519,7 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
         break;
       default:
         LOGGER.warn("Can't handle {} on {}", property.name(), template);
-        if ((localConfiguration != null) && !"true".equals(localConfiguration.remove("ignore" + StringUtils.capitalize(property.name())))) {
+        if (localConfiguration != null && !"true".equals(localConfiguration.remove("ignore" + StringUtils.capitalize(property.name())))) {
           if (isStrict()) {
             throw new UnsupportedOperationException("Strict mode set and can't handle template field " + property + " on " + template);
           }
@@ -530,7 +530,7 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
 
   /**
    * Processes the fields from a template component factory, either passing a value from local configuration, if any, or using a value from the remote configuration document to set it accordingly.
-   * 
+   *
    * @param repo the component repository, not null
    * @param localConfiguration the local configuration, null if none
    * @param remoteConfiguration the remote configuration, as created by {@link #fetchConfiguration}
@@ -539,7 +539,7 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
   protected void initTemplate(final ComponentRepository repo, final LinkedHashMap<String, String> localConfiguration,
       final Pair<UriEndPointDescriptionProvider.Validater, FudgeMsg> remoteConfiguration, final AbstractComponentFactory template) throws Exception {
     for (final MetaProperty<?> templateProperty : template.metaBean().metaPropertyIterable()) {
-      final String localValue = (localConfiguration != null) ? localConfiguration.remove(templateProperty.name()) : null;
+      final String localValue = localConfiguration != null ? localConfiguration.remove(templateProperty.name()) : null;
       if (localValue != null) {
         // Literal or local reference
         if (Boolean.class.equals(templateProperty.propertyType()) || Boolean.TYPE.equals(templateProperty.propertyType())) {
@@ -558,7 +558,7 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
 
   /**
    * Fetches the original configuration message, if the context was created by this factory.
-   * 
+   *
    * @param context the context to check, not null
    * @return the original configuration message or null if none
    */
@@ -568,7 +568,7 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
 
   /**
    * Fetches the original configuration URI, if the context was created by this factory.
-   * 
+   *
    * @param context the context to check, not null
    * @return the original configuration URI or null if none
    */
@@ -578,7 +578,7 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
 
   /**
    * Fetches the original configuration message, if the context was created by this factory.
-   * 
+   *
    * @param context the context to check, not null
    * @return the original configuration message or null if none
    */
@@ -588,7 +588,7 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
 
   /**
    * Fetches the original configuration URI, if the context was created by this factory.
-   * 
+   *
    * @param context the context to check, not null
    * @return the original configuration URI or null if none
    */

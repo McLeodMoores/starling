@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility;
@@ -8,7 +8,7 @@ package com.opengamma.analytics.financial.model.volatility;
 import com.opengamma.lang.annotation.ExternalFunction;
 
 /**
- * 
+ *
  */
 public class SimpleOptionData {
 
@@ -81,19 +81,19 @@ public class SimpleOptionData {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_df);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_f);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + (_isCall ? 1231 : 1237);
     temp = Double.doubleToLongBits(_k);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_t);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -103,7 +103,7 @@ public class SimpleOptionData {
     if (getClass() != obj.getClass()) {
       return false;
     }
-    SimpleOptionData other = (SimpleOptionData) obj;
+    final SimpleOptionData other = (SimpleOptionData) obj;
     if (Double.doubleToLongBits(_df) != Double.doubleToLongBits(other._df)) {
       return false;
     }

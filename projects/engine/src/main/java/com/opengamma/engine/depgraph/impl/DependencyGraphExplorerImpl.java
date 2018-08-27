@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph.impl;
@@ -29,7 +29,7 @@ public class DependencyGraphExplorerImpl implements DependencyGraphExplorer {
   private volatile Map<ValueSpecification, DependencyNode> _nodesBySpecification;
   private volatile Set<ComputationTargetSpecification> _allTargets;
 
-  public DependencyGraphExplorerImpl(DependencyGraph graph) {
+  public DependencyGraphExplorerImpl(final DependencyGraph graph) {
     ArgumentChecker.notNull(graph, "graph");
     _graph = graph;
   }
@@ -78,8 +78,8 @@ public class DependencyGraphExplorerImpl implements DependencyGraphExplorer {
     if (terminalNode == null) {
       return null;
     }
-    final Set<DependencyNode> visited = new HashSet<DependencyNode>();
-    final Map<ValueSpecification, Set<ValueRequirement>> terminals = new HashMap<ValueSpecification, Set<ValueRequirement>>();
+    final Set<DependencyNode> visited = new HashSet<>();
+    final Map<ValueSpecification, Set<ValueRequirement>> terminals = new HashMap<>();
     final int nodes = terminalOutputSubset(_graph.getTerminalOutputs(), terminalNode, visited, terminals);
     return new DependencyGraphExplorerImpl(new DependencyGraphImpl(_graph.getCalculationConfigurationName(), Collections.singleton(terminalNode), nodes, terminals));
   }
@@ -98,7 +98,7 @@ public class DependencyGraphExplorerImpl implements DependencyGraphExplorer {
   public Set<ComputationTargetSpecification> getComputationTargets() {
     Set<ComputationTargetSpecification> targets = _allTargets;
     if (targets == null) {
-      targets = new HashSet<ComputationTargetSpecification>();
+      targets = new HashSet<>();
       final Iterator<DependencyNode> itr = _graph.nodeIterator();
       while (itr.hasNext()) {
         targets.add(itr.next().getTarget());

@@ -46,13 +46,13 @@ public class FXDigitalOptionSecurityFudgeBuilder extends AbstractFudgeBuilder im
   public static final String IS_LONG_FIELD_NAME = "isLong";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, FXDigitalOptionSecurity object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final FXDigitalOptionSecurity object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     FXDigitalOptionSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
-  public static void toFudgeMsg(FudgeSerializer serializer, FXDigitalOptionSecurity object, final MutableFudgeMsg msg) {
+  public static void toFudgeMsg(final FudgeSerializer serializer, final FXDigitalOptionSecurity object, final MutableFudgeMsg msg) {
     FinancialSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     addToMessage(msg, PUT_CURRENCY_FIELD_NAME, object.getPutCurrency());
     addToMessage(msg, CALL_CURRENCY_FIELD_NAME, object.getCallCurrency());
@@ -65,13 +65,13 @@ public class FXDigitalOptionSecurityFudgeBuilder extends AbstractFudgeBuilder im
   }
 
   @Override
-  public FXDigitalOptionSecurity buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    FXDigitalOptionSecurity object = new FXDigitalOptionSecurity();
+  public FXDigitalOptionSecurity buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final FXDigitalOptionSecurity object = new FXDigitalOptionSecurity();
     FXDigitalOptionSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     return object;
   }
 
-  public static void fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg, FXDigitalOptionSecurity object) {
+  public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final FXDigitalOptionSecurity object) {
     FinancialSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     object.setPutCurrency(msg.getValue(Currency.class, PUT_CURRENCY_FIELD_NAME));
     object.setCallCurrency(msg.getValue(Currency.class, CALL_CURRENCY_FIELD_NAME));

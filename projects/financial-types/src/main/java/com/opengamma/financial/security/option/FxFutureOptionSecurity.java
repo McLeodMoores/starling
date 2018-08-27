@@ -90,15 +90,15 @@ public class FxFutureOptionSecurity extends FinancialSecurity {
     super(SECURITY_TYPE);
   }
 
-  public FxFutureOptionSecurity(String tradingExchange,
-                                String settlementExchange,
-                                Expiry expiry,
-                                ExerciseType exerciseType,
-                                ExternalId underlyingIdentifier,
-                                double pointValue,
-                                Currency currency,
-                                double strike,
-                                OptionType optionType) {
+  public FxFutureOptionSecurity(final String tradingExchange,
+                                final String settlementExchange,
+                                final Expiry expiry,
+                                final ExerciseType exerciseType,
+                                final ExternalId underlyingIdentifier,
+                                final double pointValue,
+                                final Currency currency,
+                                final double strike,
+                                final OptionType optionType) {
     super(SECURITY_TYPE);
     setTradingExchange(tradingExchange);
     setSettlementExchange(settlementExchange);
@@ -113,7 +113,7 @@ public class FxFutureOptionSecurity extends FinancialSecurity {
 
   //-------------------------------------------------------------------------
   @Override
-  public final <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public final <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitFxFutureOptionSecurity(this);
   }
 

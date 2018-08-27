@@ -11,7 +11,7 @@ package com.opengamma.engine.view.execution;
 public class InfiniteViewCycleExecutionSequence extends MergingViewCycleExecutionSequence {
 
   @Override
-  public ViewCycleExecutionOptions poll(ViewCycleExecutionOptions defaultExecutionOptions) {
+  public ViewCycleExecutionOptions poll(final ViewCycleExecutionOptions defaultExecutionOptions) {
     return merge(new ViewCycleExecutionOptions(), defaultExecutionOptions);
   }
 
@@ -21,11 +21,11 @@ public class InfiniteViewCycleExecutionSequence extends MergingViewCycleExecutio
   }
 
   @Override
-  public boolean equals(Object other) {
+  public boolean equals(final Object other) {
     if (other == null) {
       return false;
     }
-    return (other instanceof InfiniteViewCycleExecutionSequence);
+    return other instanceof InfiniteViewCycleExecutionSequence;
   }
 
   @Override

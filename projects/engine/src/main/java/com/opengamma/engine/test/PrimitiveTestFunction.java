@@ -34,32 +34,32 @@ public class PrimitiveTestFunction extends AbstractFunction.NonCompiled {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param requirementName  the name, not null
    */
-  public PrimitiveTestFunction(String requirementName) {
+  public PrimitiveTestFunction(final String requirementName) {
     ArgumentChecker.notNull(requirementName, "Requirement name");
     _requirementName = requirementName;
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean canApplyTo(FunctionCompilationContext context, ComputationTarget target) {
+  public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
     assert ComputationTargetType.PRIMITIVE.isCompatible(target.getType());
     return true;
   }
 
   @Override
-  public Set<ValueRequirement> getRequirements(FunctionCompilationContext context, ComputationTarget target, final ValueRequirement desiredValue) {
-    ValueRequirement requirement = new ValueRequirement(_requirementName,
+  public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+    final ValueRequirement requirement = new ValueRequirement(_requirementName,
         ComputationTargetType.PRIMITIVE,
         UniqueId.of("foo", "bar"));
     return Collections.singleton(requirement);
   }
 
   @Override
-  public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target) {
-    ValueSpecification specification = new ValueSpecification(_requirementName, target.toSpecification(), createValueProperties().get());
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
+    final ValueSpecification specification = new ValueSpecification(_requirementName, target.toSpecification(), createValueProperties().get());
     return Collections.singleton(specification);
   }
 

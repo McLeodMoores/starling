@@ -18,37 +18,37 @@ public class MongoCachedReferenceData {
 
   /**
    * Wraps a Bloomberg reference data provider with Mongo for caching.
-   * 
+   *
    * @param underlying  the underlying provider
    * @param testClass  the test class, not null
    * @return the wrapped provider, not null
    */
-  public static MongoDBValueCachingReferenceDataProvider makeMongoProvider(ReferenceDataProvider underlying, Class<?> testClass) {
+  public static MongoDBValueCachingReferenceDataProvider makeMongoProvider(final ReferenceDataProvider underlying, final Class<?> testClass) {
     return makeMongoProvider(underlying, testClass, false);
   }
 
   /**
    * Wraps a Bloomberg reference data provider with Mongo for caching.
-   * 
+   *
    * @param underlying  the underlying provider
    * @param testClass  the test class, not null
    * @param makeUnique  whether to make the database totally unique
    * @return the wrapped provider, not null
    */
-  public static MongoDBValueCachingReferenceDataProvider makeMongoProvider(ReferenceDataProvider underlying, Class<?> testClass, boolean makeUnique) {
-    MongoConnector mongoConnector = getMongoConnector(testClass, makeUnique);
-    MongoDBValueCachingReferenceDataProvider mongoProvider = new MongoDBValueCachingReferenceDataProvider(underlying, mongoConnector);
+  public static MongoDBValueCachingReferenceDataProvider makeMongoProvider(final ReferenceDataProvider underlying, final Class<?> testClass, final boolean makeUnique) {
+    final MongoConnector mongoConnector = getMongoConnector(testClass, makeUnique);
+    final MongoDBValueCachingReferenceDataProvider mongoProvider = new MongoDBValueCachingReferenceDataProvider(underlying, mongoConnector);
     return mongoProvider;
   }
 
   /**
    * Creates a Mongo connector specific to the specified class.
-   * 
+   *
    * @param testClass  the test class, not null
    * @param makeUnique  whether to make the database totally unique
    * @return the connector, not null
    */
-  private static MongoConnector getMongoConnector(Class<?> testClass, boolean makeUnique) {
+  private static MongoConnector getMongoConnector(final Class<?> testClass, final boolean makeUnique) {
     return MongoTestUtils.makeTestConnector(testClass.getSimpleName(), makeUnique);
   }
 

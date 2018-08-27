@@ -75,7 +75,7 @@ public class CreditDefaultSwapSecurityConverter extends FinancialSecurityVisitor
     _valuationTime = valuationTime;
   }
 
-  public CreditDefaultSwapSecurityConverter(final HolidaySource holidaySource, final RegionSource regionSource, final LegalEntitySource legalEntitySource, ZonedDateTime valuationTime) {
+  public CreditDefaultSwapSecurityConverter(final HolidaySource holidaySource, final RegionSource regionSource, final LegalEntitySource legalEntitySource, final ZonedDateTime valuationTime) {
     ArgumentChecker.notNull(holidaySource, "holiday source");
     ArgumentChecker.notNull(regionSource, "region source");
     ArgumentChecker.notNull(valuationTime, "valuation time");
@@ -86,19 +86,19 @@ public class CreditDefaultSwapSecurityConverter extends FinancialSecurityVisitor
     _valuationTime = valuationTime;
   }
 
-  public static com.opengamma.analytics.financial.legalentity.LegalEntity convert(LegalEntity legalEntity) {
-    String ticker = legalEntity.getExternalIdBundle().getValue(ExternalScheme.of("TICKER"));
-    String name = legalEntity.getName();
+  public static com.opengamma.analytics.financial.legalentity.LegalEntity convert(final LegalEntity legalEntity) {
+    final String ticker = legalEntity.getExternalIdBundle().getValue(ExternalScheme.of("TICKER"));
+    final String name = legalEntity.getName();
     final Set<com.opengamma.analytics.financial.legalentity.CreditRating> creditRatings = functional(legalEntity.getRatings()).map(
         new Function1<Rating, com.opengamma.analytics.financial.legalentity.CreditRating>() {
           @Override
-          public com.opengamma.analytics.financial.legalentity.CreditRating execute(Rating rating) {
+          public com.opengamma.analytics.financial.legalentity.CreditRating execute(final Rating rating) {
             return com.opengamma.analytics.financial.legalentity.CreditRating.of(rating.getScore().name(), rating.getRater(), true); //TODO check the long term flag
           }
         }).asSet();
-    com.opengamma.analytics.financial.legalentity.Region region = legalEntity.getAttributes().get("region") != null ? com.opengamma.analytics.financial.legalentity.Region.of(legalEntity
+    final com.opengamma.analytics.financial.legalentity.Region region = legalEntity.getAttributes().get("region") != null ? com.opengamma.analytics.financial.legalentity.Region.of(legalEntity
         .getAttributes().get("region")) : null;
-    com.opengamma.analytics.financial.legalentity.Sector sector = legalEntity.getAttributes().get("sector") != null ? com.opengamma.analytics.financial.legalentity.Sector.of(legalEntity
+    final com.opengamma.analytics.financial.legalentity.Sector sector = legalEntity.getAttributes().get("sector") != null ? com.opengamma.analytics.financial.legalentity.Sector.of(legalEntity
         .getAttributes().get("sector")) : null;
     return new com.opengamma.analytics.financial.legalentity.LegalEntity(ticker, name, creditRatings, sector, region);
   }

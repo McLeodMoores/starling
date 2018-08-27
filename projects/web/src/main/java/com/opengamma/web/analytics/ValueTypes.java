@@ -37,24 +37,24 @@ public class ValueTypes {
     try {
       reader = new BufferedReader(new InputStreamReader(ValueTypes.class.getResourceAsStream("ValueTypes.txt")));
       String line;
-      Pattern pattern = Pattern.compile("'(.*)' (.*)");
+      final Pattern pattern = Pattern.compile("'(.*)' (.*)");
       while ((line = reader.readLine()) != null) {
-        Matcher matcher = pattern.matcher(line);
+        final Matcher matcher = pattern.matcher(line);
         if (!matcher.matches()) {
           throw new RuntimeException(line);
         }
-        String valueName = matcher.group(1);
-        String className = matcher.group(2);
+        final String valueName = matcher.group(1);
+        final String className = matcher.group(2);
         Class<?> valueType;
         try {
           valueType = Class.forName(className);
-        } catch (ClassNotFoundException e) {
+        } catch (final ClassNotFoundException e) {
           LOGGER.warn("Failed to load class " + className, e);
           continue;
         }
         VALUE_NAME_TO_TYPE.put(valueName, valueType);
       }
-    } catch (IOException e) {
+    } catch (final IOException e) {
       LOGGER.warn("Failed to load type mappings for value names", e);
     } finally {
       IOUtils.closeQuietly(reader);
@@ -94,7 +94,7 @@ public class ValueTypes {
     }
   }*/
 
-  public static Class<?> getTypeForValueName(String valueName) {
+  public static Class<?> getTypeForValueName(final String valueName) {
     return VALUE_NAME_TO_TYPE.get(valueName);
   }
 }

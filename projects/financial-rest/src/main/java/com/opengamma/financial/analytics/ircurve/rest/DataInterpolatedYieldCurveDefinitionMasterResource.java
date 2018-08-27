@@ -14,7 +14,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveDefinitionMaster;
@@ -59,7 +58,7 @@ public class DataInterpolatedYieldCurveDefinitionMasterResource extends Abstract
 
   //-------------------------------------------------------------------------
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
@@ -72,24 +71,24 @@ public class DataInterpolatedYieldCurveDefinitionMasterResource extends Abstract
 
   @POST
   @Path("definitions")
-  public Response add(@Context UriInfo uriInfo, YieldCurveDefinitionDocument document) {
-    YieldCurveDefinitionDocument result = getInterpolatedYieldCurveDefinitionMaster().add(document);
-    URI createdUri = (new DataInterpolatedYieldCurveDefinitionUris()).uriVersion(uriInfo.getBaseUri(), result.getUniqueId());
+  public Response add(@Context final UriInfo uriInfo, final YieldCurveDefinitionDocument document) {
+    final YieldCurveDefinitionDocument result = getInterpolatedYieldCurveDefinitionMaster().add(document);
+    final URI createdUri = new DataInterpolatedYieldCurveDefinitionUris().uriVersion(uriInfo.getBaseUri(), result.getUniqueId());
     return responseCreatedObject(createdUri, result);
   }
 
   @POST
   @Path("definitions/save")  // not the best URI
-  public Response addOrUpdate(@Context UriInfo uriInfo, YieldCurveDefinitionDocument document) {
-    YieldCurveDefinitionDocument result = getInterpolatedYieldCurveDefinitionMaster().addOrUpdate(document);
-    URI createdUri = (new DataInterpolatedYieldCurveDefinitionUris()).uriVersion(uriInfo.getBaseUri(), result.getUniqueId());
+  public Response addOrUpdate(@Context final UriInfo uriInfo, final YieldCurveDefinitionDocument document) {
+    final YieldCurveDefinitionDocument result = getInterpolatedYieldCurveDefinitionMaster().addOrUpdate(document);
+    final URI createdUri = new DataInterpolatedYieldCurveDefinitionUris().uriVersion(uriInfo.getBaseUri(), result.getUniqueId());
     return responseCreatedObject(createdUri, result);
   }
 
   //-------------------------------------------------------------------------
   @Path("definitions/{definitionId}")
-  public DataInterpolatedYieldCurveDefinitionResource findByObjectId(@PathParam("definitionId") String idStr) {
-    ObjectId id = ObjectId.parse(idStr);
+  public DataInterpolatedYieldCurveDefinitionResource findByObjectId(@PathParam("definitionId") final String idStr) {
+    final ObjectId id = ObjectId.parse(idStr);
     return new DataInterpolatedYieldCurveDefinitionResource(this, id);
   }
 

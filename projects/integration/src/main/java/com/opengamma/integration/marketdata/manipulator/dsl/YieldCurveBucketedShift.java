@@ -30,7 +30,7 @@ import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscou
  */
 @BeanDefinition
 public final class YieldCurveBucketedShift implements ImmutableBean {
-  
+
   /**
    * Period between the valuation date and the start of the shift
    */
@@ -48,7 +48,7 @@ public final class YieldCurveBucketedShift implements ImmutableBean {
   private final double _shift;
 
   @ImmutableConstructor
-  public YieldCurveBucketedShift(Period start, Period end, double shift) {
+  public YieldCurveBucketedShift(final Period start, final Period end, final double shift) {
     JodaBeanUtils.notNull(start, "start");
     JodaBeanUtils.notNull(end, "end");
     _start = start;

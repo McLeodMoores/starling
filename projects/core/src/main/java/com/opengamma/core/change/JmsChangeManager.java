@@ -61,26 +61,26 @@ public class JmsChangeManager extends BasicChangeManager implements MessageListe
    * Creates a change manager.
    * <p>
    * The topic name will be defaulted to the name of this class if not set.
-   * 
+   *
    * @param connector  the JMS connector, not null
    */
-  public JmsChangeManager(JmsConnector connector) {
+  public JmsChangeManager(final JmsConnector connector) {
     ArgumentChecker.notNull(connector, "connector");
     _jmsConnector = connector.ensureTopicName();
-    ByteArrayFudgeMessageReceiver bafmr = new ByteArrayFudgeMessageReceiver(this, OpenGammaFudgeContext.getInstance());
+    final ByteArrayFudgeMessageReceiver bafmr = new ByteArrayFudgeMessageReceiver(this, OpenGammaFudgeContext.getInstance());
     _messageDispatcher = new JmsByteArrayMessageDispatcher(bafmr);
   }
 
   /**
    * Creates a change manager.
-   * 
+   *
    * @param connector  the JMS connector, not null
    * @param topicName  the topic name to use, not null
    */
-  public JmsChangeManager(JmsConnector connector, String topicName) {
+  public JmsChangeManager(final JmsConnector connector, final String topicName) {
     ArgumentChecker.notNull(connector, "connector");
     _jmsConnector = connector.withTopicName(topicName);
-    ByteArrayFudgeMessageReceiver bafmr = new ByteArrayFudgeMessageReceiver(this, OpenGammaFudgeContext.getInstance());
+    final ByteArrayFudgeMessageReceiver bafmr = new ByteArrayFudgeMessageReceiver(this, OpenGammaFudgeContext.getInstance());
     _messageDispatcher = new JmsByteArrayMessageDispatcher(bafmr);
   }
 
@@ -95,9 +95,9 @@ public class JmsChangeManager extends BasicChangeManager implements MessageListe
       final Topic topic = session.createTopic(topicName);
       final MessageConsumer messageConsumer = session.createConsumer(topic);
       messageConsumer.setMessageListener(this);
-      
-    } catch (JMSException ex) {
-      throw new OpenGammaRuntimeException("Failed to create change manager on topic: " + topicName, ex);      
+
+    } catch (final JMSException ex) {
+      throw new OpenGammaRuntimeException("Failed to create change manager on topic: " + topicName, ex);
     }
   }
 
@@ -107,8 +107,8 @@ public class JmsChangeManager extends BasicChangeManager implements MessageListe
     try {
       _connection.close();
       _connection = null;
-      
-    } catch (JMSException ex) {
+
+    } catch (final JMSException ex) {
       throw new OpenGammaRuntimeException("Failed to stop change manager on topic: " + topicName, ex);
     }
   }
@@ -121,7 +121,7 @@ public class JmsChangeManager extends BasicChangeManager implements MessageListe
   //-------------------------------------------------------------------------
   /**
    * Gets the JMS connector.
-   * 
+   *
    * @return the JMS connector, not null
    */
   public JmsConnector getJmsConnector() {
@@ -134,7 +134,7 @@ public class JmsChangeManager extends BasicChangeManager implements MessageListe
    * <p>
    * This implementation sends the event by JMS to be received by all change
    * managers, including this one.
-   * 
+   *
    * @param event  the event that occurred, not null
    */
   @Override
@@ -147,10 +147,10 @@ public class JmsChangeManager extends BasicChangeManager implements MessageListe
   }
 
   @Override
-  public void onMessage(Message message) {
+  public void onMessage(final Message message) {
     try {
       _messageDispatcher.onMessage(message);
-    } catch (Exception e) {
+    } catch (final Exception e) {
       // NOTE jonathan 2013-06-05 -- it's an error to throw an exception in onMessage and may cause messages to back up
       // in the JMS broker which could affect its stability. Drop the message.
       LOGGER.error("Error processing JMS message", e);
@@ -158,7 +158,7 @@ public class JmsChangeManager extends BasicChangeManager implements MessageListe
   }
 
   @Override
-  public void messageReceived(FudgeContext fudgeContext, FudgeMsgEnvelope msgEnvelope) {
+  public void messageReceived(final FudgeContext fudgeContext, final FudgeMsgEnvelope msgEnvelope) {
     final FudgeMsg msg = msgEnvelope.getMessage();
     LOGGER.debug("Received change message {}", msg);
     final FudgeDeserializer deserializer = new FudgeDeserializer(fudgeContext);
@@ -169,7 +169,7 @@ public class JmsChangeManager extends BasicChangeManager implements MessageListe
   //-------------------------------------------------------------------------
   /**
    * Returns a debugging string for the manager.
-   * 
+   *
    * @return the debugging string, not null
    */
   @Override

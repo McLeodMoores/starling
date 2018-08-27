@@ -48,30 +48,30 @@ public class WebConfigVersionResource extends AbstractWebConfigResource {
   //-------------------------------------------------------------------------
   @GET
   public String getHTML() {
-    FlexiBean out = createRootData();
-    ConfigDocument doc = data().getVersioned();
+    final FlexiBean out = createRootData();
+    final ConfigDocument doc = data().getVersioned();
     out.put(CONFIG_XML, StringEscapeUtils.escapeJavaScript(createBeanXML(doc.getConfig().getValue())));
     return getFreemarker().build(HTML_DIR + "configversion.ftl", out);
   }
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  public Response getJSON(@Context Request request) {
-    EntityTag etag = new EntityTag(data().getVersioned().getUniqueId().toString());
-    ResponseBuilder builder = request.evaluatePreconditions(etag);
+  public Response getJSON(@Context final Request request) {
+    final EntityTag etag = new EntityTag(data().getVersioned().getUniqueId().toString());
+    final ResponseBuilder builder = request.evaluatePreconditions(etag);
     if (builder != null) {
       return builder.build();
     }
-    FlexiBean out = createRootData();
-    ConfigDocument doc = data().getVersioned();
-    String jsonConfig = toJSON(doc.getConfig().getValue());
+    final FlexiBean out = createRootData();
+    final ConfigDocument doc = data().getVersioned();
+    final String jsonConfig = toJSON(doc.getConfig().getValue());
     if (jsonConfig != null) {
       out.put("configJSON", jsonConfig);
     } else {
       out.put(CONFIG_XML, StringEscapeUtils.escapeJavaScript(createBeanXML(doc.getConfig().getValue())));
     }
     out.put("type", data().getTypeMap().inverse().get(doc.getType()));
-    String json = getFreemarker().build(JSON_DIR + "config.ftl", out);
+    final String json = getFreemarker().build(JSON_DIR + "config.ftl", out);
     return Response.ok(json).tag(etag).build();
   }
 
@@ -93,10 +93,11 @@ public class WebConfigVersionResource extends AbstractWebConfigResource {
    * Creates the output root data.
    * @return the output root data, not null
    */
+  @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
-    ConfigDocument latestDoc = data().getConfig();
-    ConfigDocument versionedConfig = data().getVersioned();
+    final FlexiBean out = super.createRootData();
+    final ConfigDocument latestDoc = data().getConfig();
+    final ConfigDocument versionedConfig = data().getVersioned();
     out.put("latestConfigDoc", latestDoc);
     out.put("latestConfig", latestDoc.getConfig().getValue());
     out.put("configDoc", versionedConfig);
@@ -124,8 +125,8 @@ public class WebConfigVersionResource extends AbstractWebConfigResource {
    * @return the URI, not null
    */
   public static URI uri(final WebConfigData data, final UniqueId overrideVersionId) {
-    String configId = data.getBestConfigUriId(null);
-    String versionId = StringUtils.defaultString(overrideVersionId != null ? overrideVersionId.getVersion() : data.getUriVersionId());
+    final String configId = data.getBestConfigUriId(null);
+    final String versionId = StringUtils.defaultString(overrideVersionId != null ? overrideVersionId.getVersion() : data.getUriVersionId());
     return data.getUriInfo().getBaseUriBuilder().path(WebConfigVersionResource.class).build(configId, versionId);
   }
 

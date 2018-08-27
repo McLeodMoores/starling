@@ -9,7 +9,7 @@ import com.opengamma.analytics.financial.instrument.index.IborIndex;
 import com.opengamma.analytics.financial.provider.calculator.discounting.InterpolatedStubCouponVisitor;
 
 /**
- * 
+ *
  */
 public final class IborInterpolatedStubCompoundingCoupon extends InterpolatedStubCoupon<DepositIndexCompoundingCoupon<IborIndex>, IborIndex> implements DepositIndexCoupon<IborIndex> {
 
@@ -21,7 +21,7 @@ public final class IborInterpolatedStubCompoundingCoupon extends InterpolatedStu
       final double secondInterpolatedYearFraction) {
     super(fullCoupon, firstInterpolatedTime, firstInterpolatedYearFraction, secondInterpolatedTime, secondInterpolatedYearFraction);
   }
-  
+
   public static IborInterpolatedStubCompoundingCoupon from(
       final DepositIndexCompoundingCoupon<IborIndex> fullCoupon,
       final double firstInterpolatedTime,
@@ -32,13 +32,13 @@ public final class IborInterpolatedStubCompoundingCoupon extends InterpolatedStu
   }
 
   @Override
-  public Coupon withNotional(double notional) {
+  public Coupon withNotional(final double notional) {
     // TODO Auto-generated method stub
     return null;
   }
 
   @Override
-  public <S> S accept(InterpolatedStubCouponVisitor<S> visitor) {
+  public <S> S accept(final InterpolatedStubCouponVisitor<S> visitor) {
     return visitor.visitIborCompoundingInterpolatedStub(this);
   }
 }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.provider.permission.impl;
@@ -21,10 +21,10 @@ public final class PermissivePermissionCheckProvider
     implements PermissionCheckProvider {
 
   @Override
-  public PermissionCheckProviderResult isPermitted(PermissionCheckProviderRequest request) {
+  public PermissionCheckProviderResult isPermitted(final PermissionCheckProviderRequest request) {
     ArgumentChecker.notNull(request, "request");
-    Map<String, Boolean> result = new HashMap<>(request.getRequestedPermissions().size());
-    for (String permission : request.getRequestedPermissions()) {
+    final Map<String, Boolean> result = new HashMap<>(request.getRequestedPermissions().size());
+    for (final String permission : request.getRequestedPermissions()) {
       result.put(permission, true);
     }
     return PermissionCheckProviderResult.of(result);

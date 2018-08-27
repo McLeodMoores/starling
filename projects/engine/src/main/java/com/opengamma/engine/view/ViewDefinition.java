@@ -44,13 +44,13 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
   private static final Logger LOGGER = LoggerFactory.getLogger(ViewDefinition.class);
 
   private static final long serialVersionUID = 1L;
-  
+
   /**
    * Default Calculation Configuration name (shows as unlabeled in UI for clarity).
    * You should use this when you don't care about having multiple calculation configurations.
    */
   public static final String DEFAULT_CALCULATION_CONFIGURATION_NAME = "Default";
-  
+
   private UniqueId _uniqueIdentifier;
   private final String _name;
   private final UniqueId _portfolioId;
@@ -63,10 +63,10 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
   private Long _minFullCalculationPeriod;
   private Long _maxFullCalculationPeriod;
   private boolean _persistent;
-  
+
   private Currency _defaultCurrency;
 
-  private final Map<String, ViewCalculationConfiguration> _calculationConfigurationsByName = new TreeMap<String, ViewCalculationConfiguration>();
+  private final Map<String, ViewCalculationConfiguration> _calculationConfigurationsByName = new TreeMap<>();
 
   /**
    * If true, when a single computation cycle completes, the outputs are written
@@ -77,7 +77,7 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
 
   /**
    * Constructs an instance, including a reference portfolio.
-   * 
+   *
    * @param name  the name of the view definition, not null
    * @param portfolioId the unique identifier of the portfolio referenced by this view definition, null if
    *                    no portfolio reference is required
@@ -89,7 +89,7 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
 
   /**
    * Constructs an instance, without a reference portfolio.
-   * 
+   *
    * @param name  the name of the view definition, not null
    * @param marketDataUser  the name of the user who owns the view definition, not null
    */
@@ -99,7 +99,7 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
 
   /**
    * Constructs an instance, without a reference portfolio.
-   * 
+   *
    * @param name  the name of the view definition, not null
    * @param marketDataUser  the user who owns the view definition, not null
    */
@@ -109,7 +109,7 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
 
   /**
    * Constructs an instance, without a reference portfolio.
-   * 
+   *
    * @param name  the name of the view definition, not null
    * @param marketDataUser  the user who owns the view definition, not null
    * @param resultModelDefinition  configuration of the results from the view
@@ -120,7 +120,7 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
 
   /**
    * Constructs an instance
-   * 
+   *
    * @param name  the name of the view definition, not null
    * @param portfolioId the unique identifier of the portfolio referenced by this view definition, null if
    *                    no portfolio reference is required
@@ -262,7 +262,7 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
    * @return  a set of every required portfolio output across all calculation configurations, not null
    */
   public Set<Pair<String, ValueProperties>> getAllPortfolioRequirementNames() {
-    final Set<Pair<String, ValueProperties>> requirements = new TreeSet<Pair<String, ValueProperties>>();
+    final Set<Pair<String, ValueProperties>> requirements = new TreeSet<>();
     for (final ViewCalculationConfiguration calcConfig : _calculationConfigurationsByName.values()) {
       requirements.addAll(calcConfig.getAllPortfolioRequirements());
     }
@@ -322,7 +322,7 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
    * @return the configurations
    */
   public Collection<ViewCalculationConfiguration> getAllCalculationConfigurations() {
-    return new ArrayList<ViewCalculationConfiguration>(_calculationConfigurationsByName.values());
+    return new ArrayList<>(_calculationConfigurationsByName.values());
   }
 
   /**
@@ -518,7 +518,7 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
    * <p>
    * A shared view process for a persistent view definition remains alive with its dependency graphs compiled even when
    * no clients are connected. This can be useful if compilation is slow.
-   * 
+   *
    * @return true if this is a persistent view definition, false otherwise
    */
   public boolean isPersistent() {
@@ -530,13 +530,13 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
    * <p>
    * A shared view process for a persistent view definition remains alive with its dependency graphs compiled even when
    * no clients are connected. This can be useful if compilation is slow.
-   *  
+   *
    * @param persistent  true to make this a persistent view definition, false otherwise
    */
-  public void setPersistent(boolean persistent) {
+  public void setPersistent(final boolean persistent) {
     _persistent = persistent;
-  }  
-  
+  }
+
   //-------------------------------------------------------------------------
   /**
    * Tests whether to dump the computation cache to disk after execution of the view. This is intended for debugging and
@@ -593,8 +593,8 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
     if (!basicPropertiesEqual) {
       return false;
     }
-    final Set<ViewCalculationConfiguration> localConfigs = new HashSet<ViewCalculationConfiguration>(_calculationConfigurationsByName.values());
-    final Set<ViewCalculationConfiguration> otherConfigs = new HashSet<ViewCalculationConfiguration>(other.getAllCalculationConfigurations());
+    final Set<ViewCalculationConfiguration> localConfigs = new HashSet<>(_calculationConfigurationsByName.values());
+    final Set<ViewCalculationConfiguration> otherConfigs = new HashSet<>(other.getAllCalculationConfigurations());
     return localConfigs.equals(otherConfigs);
   }
 

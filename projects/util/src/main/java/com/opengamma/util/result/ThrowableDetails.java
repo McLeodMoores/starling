@@ -54,11 +54,11 @@ public final class ThrowableDetails implements ImmutableBean {
   //-------------------------------------------------------------------------
   /**
    * Obtains an instance of {@code ThrowableDetails}.
-   * 
+   *
    * @param throwable  the throwable to create an instance for
    * @return the throwable details instance
    */
-  public static ThrowableDetails of(Throwable throwable) {
+  public static ThrowableDetails of(final Throwable throwable) {
     ArgumentChecker.notNull(throwable, "throwable");
     String message;
     if (throwable.getMessage() != null) {
@@ -66,7 +66,7 @@ public final class ThrowableDetails implements ImmutableBean {
     } else {
       message = throwable.getClass().getSimpleName();
     }
-    String stackTrace = Throwables.getStackTraceAsString(throwable);
+    final String stackTrace = Throwables.getStackTraceAsString(throwable);
     return new ThrowableDetails(throwable.getClass(), message, stackTrace);
   }
 

@@ -90,34 +90,34 @@ public class ComponentManager {
   /**
    * The component INI, updated as configuration is discovered.
    */
-  private ComponentConfig _configIni = new ComponentConfig();
+  private final ComponentConfig _configIni = new ComponentConfig();
 
   /**
    * Creates an instance that does not log.
-   * 
+   *
    * @param serverName  the server name, not null
    */
-  public ComponentManager(String serverName) {
+  public ComponentManager(final String serverName) {
     this(serverName, ComponentLogger.Sink.INSTANCE);
   }
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param serverName  the server name, not null
    * @param logger  the logger, not null
    */
-  public ComponentManager(String serverName, ComponentLogger logger) {
+  public ComponentManager(final String serverName, final ComponentLogger logger) {
     this(serverName, new ComponentRepository(logger));
   }
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param serverName  the server name, not null
    * @param repo  the repository to use, not null
    */
-  protected ComponentManager(String serverName, ComponentRepository repo) {
+  protected ComponentManager(final String serverName, final ComponentRepository repo) {
     ArgumentChecker.notNull(serverName, "serverName");
     ArgumentChecker.notNull(repo, "repo");
     _repo = repo;
@@ -128,7 +128,7 @@ public class ComponentManager {
   //-------------------------------------------------------------------------
   /**
    * Gets the repository of components.
-   * 
+   *
    * @return the repository, not null
    */
   public ComponentRepository getRepository() {
@@ -140,7 +140,7 @@ public class ComponentManager {
    * <p>
    * This may be populated before calling {@link #start()} if desired.
    * This is an alternative to using a separate properties file.
-   * 
+   *
    * @return the key-value properties, which may be directly edited, not null
    */
   public ConfigProperties getProperties() {
@@ -149,7 +149,7 @@ public class ComponentManager {
 
   /**
    * Gets the component INI.
-   * 
+   *
    * @return the component INI, not null
    */
   public ComponentConfig getConfigIni() {
@@ -161,7 +161,7 @@ public class ComponentManager {
    * Sets the server name property.
    * <p>
    * This can be used as a general purpose name for the server.
-   * 
+   *
    * @return the server name, null if name not set
    */
   public String getServerName() {
@@ -172,10 +172,10 @@ public class ComponentManager {
    * Sets the server name property.
    * <p>
    * This can be used as a general purpose name for the server.
-   * 
+   *
    * @param serverName  the server name, not null
    */
-  public void setServerName(String serverName) {
+  public void setServerName(final String serverName) {
     getProperties().put(OPENGAMMA_SERVER_NAME, serverName);
     System.setProperty(OPENGAMMA_SERVER_NAME, serverName);
   }
@@ -187,12 +187,12 @@ public class ComponentManager {
    * See {@link #createResource(String)} for the valid resource location formats.
    * <p>
    * Calls {@link #start(Resource)}.
-   * 
+   *
    * @param resourceLocation  the configuration resource location, not null
    * @return the created repository, not null
    */
-  public ComponentRepository start(String resourceLocation) {
-    Resource resource = ResourceUtils.createResource(resourceLocation);
+  public ComponentRepository start(final String resourceLocation) {
+    final Resource resource = ResourceUtils.createResource(resourceLocation);
     return start(resource);
   }
 
@@ -200,11 +200,11 @@ public class ComponentManager {
    * Loads, initializes and starts the components based on the specified resource.
    * <p>
    * Calls {@link #load(Resource)}, {@link #init()} and {@link #start()}.
-   * 
+   *
    * @param resource  the configuration resource to load, not null
    * @return the created repository, not null
    */
-  public ComponentRepository start(Resource resource) {
+  public ComponentRepository start(final Resource resource) {
     load(resource);
     init();
     start();
@@ -218,26 +218,26 @@ public class ComponentManager {
    * See {@link #createResource(String)} for the valid resource location formats.
    * <p>
    * Calls {@link #load(Resource)}.
-   * 
+   *
    * @param resourceLocation  the configuration resource location, not null
    * @return this manager, for chaining, not null
    */
-  public ComponentManager load(String resourceLocation) {
-    Resource resource = ResourceUtils.createResource(resourceLocation);
+  public ComponentManager load(final String resourceLocation) {
+    final Resource resource = ResourceUtils.createResource(resourceLocation);
     return load(resource);
   }
 
   /**
    * Loads the component configuration based on the specified resource.
-   * 
+   *
    * @param resource  the configuration resource to load, not null
    * @return this manager, for chaining, not null
    * @throws ComponentConfigException if the resource cannot be loaded
    */
-  public ComponentManager load(Resource resource) {
+  public ComponentManager load(final Resource resource) {
     _logger.logInfo("  Using item: " + ResourceUtils.getLocation(resource));
     if (resource.getFilename().endsWith(".properties")) {
-      String nextConfig = loadProperties(resource);
+      final String nextConfig = loadProperties(resource);
       if (nextConfig == null) {
         throw new ComponentConfigException("The properties file must contain the key '" + MANAGER_NEXT_FILE + "' to specify the next file to load: " + resource);
       }
@@ -256,22 +256,22 @@ public class ComponentManager {
    * <p>
    * The properties file must be in the standard format defined by {@link Properties}.
    * The file must contain a key "component.ini"
-   * 
+   *
    * @param resource  the properties resource location, not null
    * @return the next configuration file to load, null if not specified
    */
-  protected String loadProperties(Resource resource) {
-    ComponentConfigPropertiesLoader loader = new ComponentConfigPropertiesLoader(_logger, getProperties());
+  protected String loadProperties(final Resource resource) {
+    final ComponentConfigPropertiesLoader loader = new ComponentConfigPropertiesLoader(_logger, getProperties());
     return loader.load(resource, 0);
   }
 
   /**
    * Loads the INI file and initializes the components based on the contents.
-   * 
+   *
    * @param resource  the INI resource location, not null
    */
-  protected void loadIni(Resource resource) {
-    ComponentConfigIniLoader loader = new ComponentConfigIniLoader(_logger, getProperties());
+  protected void loadIni(final Resource resource) {
+    final ComponentConfigIniLoader loader = new ComponentConfigIniLoader(_logger, getProperties());
     loader.load(resource, 0, _configIni);
     logProperties();
   }
@@ -281,7 +281,7 @@ public class ComponentManager {
    */
   protected void logProperties() {
     _logger.logDebug("--- Using merged properties ---");
-    for (Entry<String, String> entry : getProperties().loggableMap().entrySet()) {
+    for (final Entry<String, String> entry : getProperties().loggableMap().entrySet()) {
       _logger.logDebug(" " + entry.getKey() + " = " + entry.getValue());
     }
   }
@@ -291,7 +291,7 @@ public class ComponentManager {
    * Initializes the repository from the configuration that has been loaded.
    * <p>
    * Call {@code load(...)} before this method.
-   * 
+   *
    * @return this manager, for chaining, not null
    */
   public ComponentManager init() {
@@ -306,9 +306,9 @@ public class ComponentManager {
    */
   protected void initGlobal() {
     if (_configIni.getGroups().contains("global")) {
-      ConfigProperties global = _configIni.getGroup("global");
+      final ConfigProperties global = _configIni.getGroup("global");
       PlatformConfigUtils.configureSystemProperties();
-      String zoneId = global.getValue("time.zone");
+      final String zoneId = global.getValue("time.zone");
       if (zoneId != null) {
         OpenGammaClock.setZone(ZoneId.of(zoneId));
       }
@@ -319,8 +319,8 @@ public class ComponentManager {
    * Initializes the component definitions from the config.
    */
   protected void initComponents() {
-    for (String groupName : _configIni.getGroups()) {
-      ConfigProperties groupData = _configIni.getGroup(groupName);
+    for (final String groupName : _configIni.getGroups()) {
+      final ConfigProperties groupData = _configIni.getGroup(groupName);
       if (groupData.containsKey("factory")) {
         initComponent(groupName, groupData);
       }
@@ -330,76 +330,76 @@ public class ComponentManager {
   //-------------------------------------------------------------------------
   /**
    * Initialize the component.
-   * 
+   *
    * @param groupName  the group name, not null
    * @param groupConfig  the config data, not null
    * @throws ComponentConfigException if the resource cannot be initialized
    */
-  protected void initComponent(String groupName, ConfigProperties groupConfig) {
+  protected void initComponent(final String groupName, final ConfigProperties groupConfig) {
     _logger.logInfo("--- Initializing " + groupName + " ---");
-    long startInstant = System.nanoTime();
-    
-    LinkedHashMap<String, String> remainingConfig = new LinkedHashMap<String, String>(groupConfig.toMap());
-    LinkedHashMap<String, String> loggableConfig = new LinkedHashMap<String, String>(groupConfig.loggableMap());
-    String typeStr = remainingConfig.remove("factory");
+    final long startInstant = System.nanoTime();
+
+    final LinkedHashMap<String, String> remainingConfig = new LinkedHashMap<>(groupConfig.toMap());
+    final LinkedHashMap<String, String> loggableConfig = new LinkedHashMap<>(groupConfig.loggableMap());
+    final String typeStr = remainingConfig.remove("factory");
     loggableConfig.remove("factory");
     _logger.logDebug(" Initializing factory '" + typeStr);
     _logger.logDebug(" Using properties " + loggableConfig);
-    
+
     // load factory
-    ComponentFactory factory = loadFactory(typeStr);
-    
+    final ComponentFactory factory = loadFactory(typeStr);
+
     // set properties
     try {
       setFactoryProperties(factory, remainingConfig);
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       throw new ComponentConfigException("Failed to set component factory properties: '" + groupName + "' with " + groupConfig, ex);
     }
-    
+
     // init
     try {
       initFactory(factory, remainingConfig);
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       throw new ComponentConfigException("Failed to init component factory: '" + groupName + "' with " + groupConfig, ex);
     }
-    
-    long endInstant = System.nanoTime();
-    _logger.logInfo("--- Initialized " + groupName + " in " + ((endInstant - startInstant) / 1000000L) + "ms ---");
+
+    final long endInstant = System.nanoTime();
+    _logger.logInfo("--- Initialized " + groupName + " in " + (endInstant - startInstant) / 1000000L + "ms ---");
   }
 
   //-------------------------------------------------------------------------
   /**
    * Loads the factory.
    * A factory should perform minimal work in the constructor.
-   * 
+   *
    * @param typeStr  the factory type class name, not null
    * @return the factory, not null
    * @throws ComponentConfigException if the factory cannot be initialized
    */
-  protected ComponentFactory loadFactory(String typeStr) {
+  protected ComponentFactory loadFactory(final String typeStr) {
     ComponentFactory factory;
     try {
       try {
-        Class<? extends ComponentFactory> cls = getClass().getClassLoader().loadClass(typeStr).asSubclass(ComponentFactory.class);
+        final Class<? extends ComponentFactory> cls = getClass().getClassLoader().loadClass(typeStr).asSubclass(ComponentFactory.class);
         factory = cls.newInstance();
-      } catch (ClassNotFoundException ex) {
-        ServletContext servletContext = ServletContextHolder.getContext();
+      } catch (final ClassNotFoundException ex) {
+        final ServletContext servletContext = ServletContextHolder.getContext();
         if (servletContext != null) {
-          Class<? extends ComponentFactory> cls = servletContext.getClassLoader().loadClass(typeStr).asSubclass(ComponentFactory.class);
+          final Class<? extends ComponentFactory> cls = servletContext.getClassLoader().loadClass(typeStr).asSubclass(ComponentFactory.class);
           factory = cls.newInstance();
         } else {
-          throw new ComponentConfigException("Unknown component factory: " + typeStr, ex);         
+          throw new ComponentConfigException("Unknown component factory: " + typeStr, ex);
         }
       }
-    } catch (ExceptionInInitializerError ex) {
+    } catch (final ExceptionInInitializerError ex) {
       throw new ComponentConfigException("Error starting component factory: " + typeStr, ex);
-    } catch (ClassNotFoundException ex) {
+    } catch (final ClassNotFoundException ex) {
       throw new ComponentConfigException("Unknown component factory: " + typeStr, ex);
-    } catch (InstantiationException ex) {
+    } catch (final InstantiationException ex) {
       throw new ComponentConfigException("Unable to create component factory: " + typeStr, ex);
-    } catch (IllegalAccessException ex) {
+    } catch (final IllegalAccessException ex) {
       throw new ComponentConfigException("Unable to access component factory: " + typeStr, ex);
-    } catch (NoClassDefFoundError ex) {
+    } catch (final NoClassDefFoundError ex) {
       throw new ComponentConfigException("Unable to access component factory: " + typeStr, ex);
     }
     return factory;
@@ -408,16 +408,16 @@ public class ComponentManager {
   //-------------------------------------------------------------------------
   /**
    * Sets the properties on the factory.
-   * 
+   *
    * @param factory  the factory, not null
    * @param remainingConfig  the config data, not null
    * @throws Exception allowing throwing of a checked exception
    */
-  protected void setFactoryProperties(ComponentFactory factory, LinkedHashMap<String, String> remainingConfig) throws Exception {
+  protected void setFactoryProperties(final ComponentFactory factory, final LinkedHashMap<String, String> remainingConfig) throws Exception {
     if (factory instanceof Bean) {
-      Bean bean = (Bean) factory;
-      for (MetaProperty<?> mp : bean.metaBean().metaPropertyIterable()) {
-        String value = remainingConfig.remove(mp.name());
+      final Bean bean = (Bean) factory;
+      for (final MetaProperty<?> mp : bean.metaBean().metaPropertyIterable()) {
+        final String value = remainingConfig.remove(mp.name());
         setProperty(bean, mp, value);
       }
     }
@@ -427,33 +427,33 @@ public class ComponentManager {
    * Sets an individual property.
    * <p>
    * This method handles the main special case formats of the value.
-   * 
+   *
    * @param bean  the bean, not null
    * @param mp  the property, not null
    * @param value  the configured value, not null
    * @throws Exception allowing throwing of a checked exception
    */
-  protected void setProperty(Bean bean, MetaProperty<?> mp, String value) throws Exception {
+  protected void setProperty(final Bean bean, final MetaProperty<?> mp, final String value) throws Exception {
     if (ComponentRepository.class.equals(mp.propertyType())) {
       // set the repo
       mp.set(bean, getRepository());
-      
+
     } else if (value == null) {
       // set to ensure validated by factory
       mp.set(bean, mp.get(bean));
-      
+
     } else if ("null".equals(value)) {
       // forcibly set to null
       mp.set(bean, null);
-      
+
     } else if (value.contains("::")) {
       // double colon used for component references
       setPropertyComponentRef(bean, mp, value);
-      
+
     } else if (MANAGER_PROPERTIES.equals(value) && Resource.class.equals(mp.propertyType())) {
       // set to the combined set of properties
       setPropertyMergedProperties(bean, mp);
-      
+
     } else {
       // set value
       setPropertyInferType(bean, mp, value);
@@ -466,19 +466,19 @@ public class ComponentManager {
    * The key "MANAGER.PROPERTIES" can be used in a properties file to refer to
    * the entire set of merged properties. This is normally what you want to pass
    * into other systems (such as Spring) that need a set of properties.
-   * 
+   *
    * @param bean  the bean, not null
    * @param mp  the property, not null
    * @throws Exception allowing throwing of a checked exception
    */
-  protected void setPropertyMergedProperties(Bean bean, MetaProperty<?> mp) throws Exception {
+  protected void setPropertyMergedProperties(final Bean bean, final MetaProperty<?> mp) throws Exception {
     final String desc = MANAGER_PROPERTIES + " for " + mp;
     final ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
-    Properties props = new Properties();
+    final Properties props = new Properties();
     props.putAll(getProperties().toMap());
     props.store(out, desc);
     out.close();
-    Resource resource = new AbstractResource() {
+    final Resource resource = new AbstractResource() {
       @Override
       public String getDescription() {
         return MANAGER_PROPERTIES;
@@ -505,14 +505,14 @@ public class ComponentManager {
    * The double colon is used in the format {@code Type::Classifier}.
    * If the type is omitted, this method will try to infer it.
    * If the value ends in '?' then it is treated as optional.
-   * 
+   *
    * @param bean  the bean, not null
    * @param mp  the property, not null
    * @param value  the configured value containing double colon, not null
    * @throws ComponentConfigException if the property cannot be initialized
    */
-  protected void setPropertyComponentRef(Bean bean, MetaProperty<?> mp, String value) {
-    Class<?> propertyType = mp.propertyType();
+  protected void setPropertyComponentRef(final Bean bean, final MetaProperty<?> mp, final String value) {
+    final Class<?> propertyType = mp.propertyType();
     String type = StringUtils.substringBefore(value, "::");
     String classifier = StringUtils.substringAfter(value, "::");
     boolean optional = false;
@@ -525,7 +525,7 @@ public class ComponentManager {
       type = propertyType.getName();
     }
     // find info
-    ComponentInfo info = getRepository().findInfo(type, classifier);
+    final ComponentInfo info = getRepository().findInfo(type, classifier);
     if (info == null) {
       if (optional) {
         return;
@@ -544,32 +544,32 @@ public class ComponentManager {
    * Intelligently sets the property.
    * <p>
    * This uses the repository to link properties declared with classifiers to the instance.
-   * 
+   *
    * @param bean  the bean, not null
    * @param mp  the property, not null
    * @param value  the configured value, not null
    * @throws ComponentConfigException if the property cannot be initialized
    */
-  protected void setPropertyInferType(Bean bean, MetaProperty<?> mp, String value) {
-    Class<?> propertyType = mp.propertyType();
+  protected void setPropertyInferType(final Bean bean, final MetaProperty<?> mp, final String value) {
+    final Class<?> propertyType = mp.propertyType();
     if (isConvertibleFromString(mp.propertyType())) {
       // set property by value type conversion from String
       mp.set(bean, convert(propertyType, value));
-      
+
     } else if (Collection.class.isAssignableFrom(propertyType)) {
       // set property by value type conversion from comma separated String
-      Class<?> collType = JodaBeanUtils.collectionType(mp, bean.getClass());
+      final Class<?> collType = JodaBeanUtils.collectionType(mp, bean.getClass());
       if (isConvertibleFromString(collType)) {
-        Iterable<String> split = Splitter.on(',').trimResults().split(value);
-        Builder<Object> builder = ImmutableList.builder();
-        for (String singleValue : split) {
+        final Iterable<String> split = Splitter.on(',').trimResults().split(value);
+        final Builder<Object> builder = ImmutableList.builder();
+        for (final String singleValue : split) {
           builder.add(convert(collType, singleValue));
         }
         mp.set(bean, builder.build());
       } else {
         throw new ComponentConfigException(String.format("No mechanism found to set collection property %s from value: %s", mp, value));
       }
-      
+
     } else {
       throw new ComponentConfigException(String.format("No mechanism found to set property %s from value: %s", mp, value));
     }
@@ -577,30 +577,30 @@ public class ComponentManager {
 
   /**
    * Can the specified type be converted from a string.
-   * 
+   *
    * @param type  the type to convert, not null
    * @return true if it can be converted
    */
-  private static boolean isConvertibleFromString(Class<?> type) {
+  private static boolean isConvertibleFromString(final Class<?> type) {
     return JodaBeanUtils.stringConverter().isConvertible(type) || type == Resource.class;
   }
 
   /**
    * Converts a string to an object.
-   * 
+   *
    * @param type  the type to convert to, not null
    * @param value  the value to convert, not null
    * @return the converted object
    * @throws ComponentConfigException if conversion fails
    */
-  private static Object convert(Class<?> type, String value) {
+  private static Object convert(final Class<?> type, final String value) {
     try {
       if (type == Resource.class) {
         return ResourceUtils.createResource(value);
       } else {
         return JodaBeanUtils.stringConverter().convertFromString(type, value);
       }
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       throw new ComponentConfigException(String.format("Unable to convert String to %s from value: %s", type.getSimpleName(), value), ex);
     }
   }
@@ -611,13 +611,13 @@ public class ComponentManager {
    * <p>
    * The real work of creating the component and registering it should be done here.
    * The factory may also publish a RESTful view and/or a life-cycle method.
-   * 
+   *
    * @param factory  the factory to initialize, not null
    * @param remainingConfig  the remaining configuration data, not null
    * @throws Exception to allow components to throw checked exceptions
    * @throws ComponentConfigException if configuration is specified but not used
    */
-  protected void initFactory(ComponentFactory factory, LinkedHashMap<String, String> remainingConfig) throws Exception {
+  protected void initFactory(final ComponentFactory factory, final LinkedHashMap<String, String> remainingConfig) throws Exception {
     factory.init(getRepository(), remainingConfig);
     if (remainingConfig.size() > 0) {
       throw new ComponentConfigException("Configuration was specified but not used: " + remainingConfig);
@@ -632,12 +632,12 @@ public class ComponentManager {
    */
   public void start() {
     _logger.logInfo("--- Starting Lifecycle ---");
-    long startInstant = System.nanoTime();
-    
+    final long startInstant = System.nanoTime();
+
     getRepository().start();
-    
-    long endInstant = System.nanoTime();
-    _logger.logInfo("--- Started Lifecycle in " + ((endInstant - startInstant) / 1000000L) + "ms ---");
+
+    final long endInstant = System.nanoTime();
+    _logger.logInfo("--- Started Lifecycle in " + (endInstant - startInstant) / 1000000L + "ms ---");
   }
 
 }

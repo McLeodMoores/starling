@@ -30,7 +30,6 @@ import com.opengamma.core.marketdatasnapshot.impl.ManageableCurveSnapshot;
 import com.opengamma.core.marketdatasnapshot.impl.ManageableUnstructuredMarketDataSnapshot;
 import com.opengamma.core.marketdatasnapshot.impl.ManageableVolatilitySurfaceSnapshot;
 import com.opengamma.core.marketdatasnapshot.impl.ManageableYieldCurveSnapshot;
-import com.opengamma.financial.analytics.volatility.surface.BloombergFXOptionVolatilitySurfaceInstrumentProvider;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.UniqueId;
 import com.opengamma.integration.copier.sheet.reader.CsvSheetReader;
@@ -39,7 +38,6 @@ import com.opengamma.integration.copier.snapshot.SnapshotType;
 import com.opengamma.integration.tool.marketdata.MarketDataSnapshotToolUtils;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 import com.opengamma.util.money.Currency;
-import com.opengamma.util.time.Tenor;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
@@ -50,7 +48,7 @@ public class CsvSnapshotReader implements SnapshotReader {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CsvSnapshotReader.class);
 
-  private CsvSheetReader _sheetReader;
+  private final CsvSheetReader _sheetReader;
   private Map<CurveKey, CurveSnapshot> _curves;
   private UnstructuredMarketDataSnapshot _global;
   private Map<VolatilitySurfaceKey, VolatilitySurfaceSnapshot> _surface;
@@ -60,7 +58,7 @@ public class CsvSnapshotReader implements SnapshotReader {
   private static final String MARKET_ALL = "market_all";
   private final FudgeContext _fudgeContext = OpenGammaFudgeContext.getInstance();
 
-  public CsvSnapshotReader(String filename) {
+  public CsvSnapshotReader(final String filename) {
     _sheetReader = new CsvSheetReader(filename);
     iterateSheetRows();
   }
@@ -72,31 +70,31 @@ public class CsvSnapshotReader implements SnapshotReader {
     _yieldCurve = new HashMap<>();
 
     //Temporary maps for data structures
-    HashMap<String, ManageableCurveSnapshot> curveBuilder = new HashMap<>();
-    HashMap<String, Pair<YieldCurveKey, ManageableYieldCurveSnapshot>> yieldCurveBuilder = new HashMap<>();
-    HashMap<String, Pair<VolatilitySurfaceKey, ManageableVolatilitySurfaceSnapshot>> surfaceBuilder = new HashMap<>();
-    ManageableUnstructuredMarketDataSnapshot globalBuilder = new ManageableUnstructuredMarketDataSnapshot();
+    final HashMap<String, ManageableCurveSnapshot> curveBuilder = new HashMap<>();
+    final HashMap<String, Pair<YieldCurveKey, ManageableYieldCurveSnapshot>> yieldCurveBuilder = new HashMap<>();
+    final HashMap<String, Pair<VolatilitySurfaceKey, ManageableVolatilitySurfaceSnapshot>> surfaceBuilder = new HashMap<>();
+    final ManageableUnstructuredMarketDataSnapshot globalBuilder = new ManageableUnstructuredMarketDataSnapshot();
 
     while (true) {
-      Map<String, String> currentRow = _sheetReader.loadNextRow();
+      final Map<String, String> currentRow = _sheetReader.loadNextRow();
 
       // When rows are complete create snapshot elements from temporary structures
       if (currentRow == null) {
-        for (Map.Entry<String, ManageableCurveSnapshot> entry : curveBuilder.entrySet()) {
+        for (final Map.Entry<String, ManageableCurveSnapshot> entry : curveBuilder.entrySet()) {
           _curves.put(CurveKey.of(entry.getKey()), entry.getValue());
         }
-        for (Map.Entry<String, Pair<YieldCurveKey, ManageableYieldCurveSnapshot>> entry : yieldCurveBuilder.entrySet()) {
+        for (final Map.Entry<String, Pair<YieldCurveKey, ManageableYieldCurveSnapshot>> entry : yieldCurveBuilder.entrySet()) {
           _yieldCurve.put(entry.getValue().getFirst(), entry.getValue().getSecond());
         }
-        for (Map.Entry<String, Pair<VolatilitySurfaceKey, ManageableVolatilitySurfaceSnapshot>> entry : surfaceBuilder.entrySet()) {
+        for (final Map.Entry<String, Pair<VolatilitySurfaceKey, ManageableVolatilitySurfaceSnapshot>> entry : surfaceBuilder.entrySet()) {
           _surface.put(entry.getValue().getFirst(), entry.getValue().getSecond());
         }
         _global = globalBuilder;
         return;
       }
 
-      String type = currentRow.get(SnapshotColumns.TYPE.get());
-      SnapshotType snapshotType = SnapshotType.from(type);
+      final String type = currentRow.get(SnapshotColumns.TYPE.get());
+      final SnapshotType snapshotType = SnapshotType.from(type);
 
       if (snapshotType != null) {
         switch (snapshotType) {
@@ -129,10 +127,10 @@ public class CsvSnapshotReader implements SnapshotReader {
    * Utility method to collect Market_All data, stored as the MarketValue of the
    * ManageableUnstructuredMarketDataSnapshot, either by creating a FudgeMsg or adding to current FudgeMsg
    */
-  private void buildMarketAll(ManageableUnstructuredMarketDataSnapshot snapshot, Map<String, String> currentRow) {
-    ValueSnapshot valueSnapshot =  snapshot.getValue(createExternalIdBundle(currentRow),
+  private void buildMarketAll(final ManageableUnstructuredMarketDataSnapshot snapshot, final Map<String, String> currentRow) {
+    final ValueSnapshot valueSnapshot =  snapshot.getValue(createExternalIdBundle(currentRow),
                                                           currentRow.get(SnapshotColumns.VALUE_NAME.get()));
-    String valueObject = currentRow.get(SnapshotColumns.VALUE_OBJECT.get());
+    final String valueObject = currentRow.get(SnapshotColumns.VALUE_OBJECT.get());
 
     if (valueSnapshot == null) {
       if (valueObject.equalsIgnoreCase("null")) {
@@ -140,7 +138,7 @@ public class CsvSnapshotReader implements SnapshotReader {
                           currentRow.get(SnapshotColumns.VALUE_NAME.get()),
                           null);
       } else {
-        MutableFudgeMsg msg = _fudgeContext.newMessage();
+        final MutableFudgeMsg msg = _fudgeContext.newMessage();
         msg.add(valueObject, marketAllTypeForFudgeMessage(currentRow));
         snapshot.putValue(createExternalIdBundle(currentRow),
                           currentRow.get(SnapshotColumns.VALUE_NAME.get()),
@@ -148,14 +146,14 @@ public class CsvSnapshotReader implements SnapshotReader {
       }
 
     } else {
-      MutableFudgeMsg msg = (MutableFudgeMsg) valueSnapshot.getMarketValue();
+      final MutableFudgeMsg msg = (MutableFudgeMsg) valueSnapshot.getMarketValue();
       msg.add(valueObject, marketAllTypeForFudgeMessage(currentRow));
     }
   }
 
-  private Object marketAllTypeForFudgeMessage(Map<String, String> currentRow) {
+  private Object marketAllTypeForFudgeMessage(final Map<String, String> currentRow) {
     Object output = null;
-    String input = currentRow.get(SnapshotColumns.MARKET_VALUE.get());
+    final String input = currentRow.get(SnapshotColumns.MARKET_VALUE.get());
 
     if (input != null) {
       if (NumberUtils.isNumber(input)) {
@@ -171,19 +169,19 @@ public class CsvSnapshotReader implements SnapshotReader {
     return output;
   }
 
-  private Boolean isValidInstant(String input) {
+  private Boolean isValidInstant(final String input) {
     try {
       Instant.parse(input);
-    } catch (DateTimeParseException e) {
+    } catch (final DateTimeParseException e) {
       return false;
     }
     return true;
   }
 
-  private Boolean isValidLocalDate(String input) {
+  private Boolean isValidLocalDate(final String input) {
     try {
       LocalDate.parse(input);
-    } catch (DateTimeParseException e) {
+    } catch (final DateTimeParseException e) {
       return false;
     }
     return true;
@@ -194,8 +192,8 @@ public class CsvSnapshotReader implements SnapshotReader {
    * Utility method to collect ManageableUnstructuredMarketDataSnapshot data, used by
    * GLOBAL_VALUES, YIELD_CURVE and CURVE
    */
-  private void buildMarketDataSnapshot(ManageableUnstructuredMarketDataSnapshot snapshot,
-                                       Map<String, String> currentRow) {
+  private void buildMarketDataSnapshot(final ManageableUnstructuredMarketDataSnapshot snapshot,
+                                       final Map<String, String> currentRow) {
 
     // Special case for Market_All
     if (currentRow.get(SnapshotColumns.VALUE_NAME.get()).equalsIgnoreCase(MARKET_ALL)) {
@@ -207,18 +205,18 @@ public class CsvSnapshotReader implements SnapshotReader {
     }
   }
 
-  private void buildSurface(HashMap<String, Pair<VolatilitySurfaceKey, ManageableVolatilitySurfaceSnapshot>> surfaceBuilder,
-                            Map<String, String> currentRow) {
-    String target = currentRow.get(SnapshotColumns.SURFACE_TARGET.get());
+  private void buildSurface(final HashMap<String, Pair<VolatilitySurfaceKey, ManageableVolatilitySurfaceSnapshot>> surfaceBuilder,
+                            final Map<String, String> currentRow) {
+    final String target = currentRow.get(SnapshotColumns.SURFACE_TARGET.get());
 
     if (!surfaceBuilder.containsKey(target)) {
-      ManageableVolatilitySurfaceSnapshot surface = new ManageableVolatilitySurfaceSnapshot();
-      VolatilitySurfaceKey key = VolatilitySurfaceKey.of(UniqueId.parse(currentRow.get(SnapshotColumns.SURFACE_TARGET.get())),
+      final ManageableVolatilitySurfaceSnapshot surface = new ManageableVolatilitySurfaceSnapshot();
+      final VolatilitySurfaceKey key = VolatilitySurfaceKey.of(UniqueId.parse(currentRow.get(SnapshotColumns.SURFACE_TARGET.get())),
                                                           currentRow.get(SnapshotColumns.NAME.get()),
                                                           currentRow.get(SnapshotColumns.SURFACE_INSTRUMENT_TYPE.get()),
                                                           currentRow.get(SnapshotColumns.SURFACE_QUOTE_TYPE.get()),
                                                           currentRow.get(SnapshotColumns.SURFACE_QUOTE_UNITS.get()));
-      HashMap<Pair<Object, Object>, ValueSnapshot> values = new HashMap<>();
+      final HashMap<Pair<Object, Object>, ValueSnapshot> values = new HashMap<>();
 
       values.put(createOrdinatePair(currentRow), createValueSnapshot(currentRow));
       surface.setValues(values);
@@ -230,52 +228,52 @@ public class CsvSnapshotReader implements SnapshotReader {
 
   }
 
-  private void buildYieldCurves(HashMap<String, Pair<YieldCurveKey, ManageableYieldCurveSnapshot>> yieldCurveBuilder,
-                                Map<String, String> currentRow) {
-    String name = currentRow.get(SnapshotColumns.NAME.get());
+  private void buildYieldCurves(final HashMap<String, Pair<YieldCurveKey, ManageableYieldCurveSnapshot>> yieldCurveBuilder,
+                                final Map<String, String> currentRow) {
+    final String name = currentRow.get(SnapshotColumns.NAME.get());
 
     if (!yieldCurveBuilder.containsKey(name)) {
-      
-      ManageableUnstructuredMarketDataSnapshot snapshot = new ManageableUnstructuredMarketDataSnapshot();
-      YieldCurveKey key = YieldCurveKey.of(Currency.of(currentRow.get(SnapshotColumns.YIELD_CURVE_CURRENCY.get())),
+
+      final ManageableUnstructuredMarketDataSnapshot snapshot = new ManageableUnstructuredMarketDataSnapshot();
+      final YieldCurveKey key = YieldCurveKey.of(Currency.of(currentRow.get(SnapshotColumns.YIELD_CURVE_CURRENCY.get())),
                                             currentRow.get(SnapshotColumns.NAME.get()));
 
       buildMarketDataSnapshot(snapshot, currentRow);
-      ManageableYieldCurveSnapshot curve = ManageableYieldCurveSnapshot.of(Instant.parse(currentRow.get(SnapshotColumns.INSTANT.get())), snapshot);
+      final ManageableYieldCurveSnapshot curve = ManageableYieldCurveSnapshot.of(Instant.parse(currentRow.get(SnapshotColumns.INSTANT.get())), snapshot);
       yieldCurveBuilder.put(name, Pairs.of(key, curve));
     } else {
-      ManageableUnstructuredMarketDataSnapshot existingSnapshot = yieldCurveBuilder.get(name).getSecond().getValues();
+      final ManageableUnstructuredMarketDataSnapshot existingSnapshot = yieldCurveBuilder.get(name).getSecond().getValues();
       buildMarketDataSnapshot(existingSnapshot, currentRow);
     }
   }
 
-  private void buildCurves(HashMap<String, ManageableCurveSnapshot> curvesBuilder, Map<String, String> currentRow) {
-    String name = currentRow.get(SnapshotColumns.NAME.get());
+  private void buildCurves(final HashMap<String, ManageableCurveSnapshot> curvesBuilder, final Map<String, String> currentRow) {
+    final String name = currentRow.get(SnapshotColumns.NAME.get());
 
     if (!curvesBuilder.containsKey(name)) {
-      ManageableCurveSnapshot curve = new ManageableCurveSnapshot();
-      ManageableUnstructuredMarketDataSnapshot snapshot = new ManageableUnstructuredMarketDataSnapshot();
+      final ManageableCurveSnapshot curve = new ManageableCurveSnapshot();
+      final ManageableUnstructuredMarketDataSnapshot snapshot = new ManageableUnstructuredMarketDataSnapshot();
 
       curve.setValuationTime(Instant.parse(currentRow.get(SnapshotColumns.INSTANT.get())));
       buildMarketDataSnapshot(snapshot, currentRow);
       curve.setValues(snapshot);
       curvesBuilder.put(name, curve);
     } else {
-      ManageableUnstructuredMarketDataSnapshot existingSnapshot = curvesBuilder.get(name).getValues();
+      final ManageableUnstructuredMarketDataSnapshot existingSnapshot = curvesBuilder.get(name).getValues();
       buildMarketDataSnapshot(existingSnapshot, currentRow);
     }
 
   }
 
-  private Pair<Object, Object> createOrdinatePair(Map<String, String> currentRow) {
+  private Pair<Object, Object> createOrdinatePair(final Map<String, String> currentRow) {
     return MarketDataSnapshotToolUtils.createOrdinatePair(currentRow.get(SnapshotColumns.SURFACE_X.get()),
                                                           currentRow.get(SnapshotColumns.SURFACE_Y.get()));
   }
 
-  private ValueSnapshot createValueSnapshot(Map<String, String> currentRow) {
-    String market = currentRow.get(SnapshotColumns.MARKET_VALUE.get());
-    String override = currentRow.get(SnapshotColumns.OVERRIDE_VALUE.get());
-    String valueObject = currentRow.get(SnapshotColumns.VALUE_OBJECT.get());
+  private ValueSnapshot createValueSnapshot(final Map<String, String> currentRow) {
+    final String market = currentRow.get(SnapshotColumns.MARKET_VALUE.get());
+    final String override = currentRow.get(SnapshotColumns.OVERRIDE_VALUE.get());
+    final String valueObject = currentRow.get(SnapshotColumns.VALUE_OBJECT.get());
 
     //preserve null valueSnapshots
     if (valueObject != null && valueObject.equalsIgnoreCase("null")) {
@@ -285,8 +283,8 @@ public class CsvSnapshotReader implements SnapshotReader {
     return MarketDataSnapshotToolUtils.createValueSnapshot(market, override);
   }
 
-  private ExternalIdBundle createExternalIdBundle(Map<String, String> currentRow) {
-    Iterable<String> iterable = Arrays.asList(currentRow.get(SnapshotColumns.ID_BUNDLE.get()).split("\\|"));
+  private ExternalIdBundle createExternalIdBundle(final Map<String, String> currentRow) {
+    final Iterable<String> iterable = Arrays.asList(currentRow.get(SnapshotColumns.ID_BUNDLE.get()).split("\\|"));
     return ExternalIdBundle.parse(iterable);
   }
 

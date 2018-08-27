@@ -36,7 +36,7 @@ public class EquityVanillaBarrierOptionDistanceFunction extends BarrierOptionDis
   }
 
   @Override
-  protected ValueRequirement getMarketDataRequirement(FinancialSecurity security) {
+  protected ValueRequirement getMarketDataRequirement(final FinancialSecurity security) {
     return new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, FinancialSecurityUtils.getUnderlyingId(security));
   }
 
@@ -50,7 +50,7 @@ public class EquityVanillaBarrierOptionDistanceFunction extends BarrierOptionDis
   }
 
   @Override
-  protected double getBarrierLevel(FinancialSecurity security) {
+  protected double getBarrierLevel(final FinancialSecurity security) {
     return ((EquityBarrierOptionSecurity) security).getBarrierLevel();
   }
 

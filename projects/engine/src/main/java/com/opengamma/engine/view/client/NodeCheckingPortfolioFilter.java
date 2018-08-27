@@ -66,20 +66,20 @@ public class NodeCheckingPortfolioFilter implements PortfolioFilter {
    *
    * @param nodeChecker the node checker
    */
-  public NodeCheckingPortfolioFilter(NodeChecker nodeChecker) {
+  public NodeCheckingPortfolioFilter(final NodeChecker nodeChecker) {
     _nodeChecker = nodeChecker;
   }
 
   @Override
-  public Portfolio generateRestrictedPortfolio(Portfolio portfolio) {
+  public Portfolio generateRestrictedPortfolio(final Portfolio portfolio) {
 
-    PortfolioPermissionChecker checker = new PortfolioPermissionChecker(portfolio, _nodeChecker);
-    PortfolioNode rootNode = portfolio.getRootNode();
+    final PortfolioPermissionChecker checker = new PortfolioPermissionChecker(portfolio, _nodeChecker);
+    final PortfolioNode rootNode = portfolio.getRootNode();
 
-    Optional<? extends PortfolioNode> newRoot = buildRestrictedRootNode(checker, rootNode);
+    final Optional<? extends PortfolioNode> newRoot = buildRestrictedRootNode(checker, rootNode);
 
     if (newRoot.isPresent()) {
-      PortfolioNode node = newRoot.get();
+      final PortfolioNode node = newRoot.get();
       return node.equals(rootNode) ? portfolio : createPortfolioForNode(trimParents(node));
     } else {
       return new SimplePortfolio("Access Denied");
@@ -92,13 +92,13 @@ public class NodeCheckingPortfolioFilter implements PortfolioFilter {
    * @param node the node to be trimmed
    * @return the trimmed node
    */
-  private PortfolioNode trimParents(PortfolioNode node) {
+  private PortfolioNode trimParents(final PortfolioNode node) {
     return node.getChildNodes().size() == 1 ?
         trimParents(node.getChildNodes().get(0)) :
         node;
   }
 
-  private Portfolio createPortfolioForNode(PortfolioNode node) {
+  private Portfolio createPortfolioForNode(final PortfolioNode node) {
 
     return new SimplePortfolio(
         UniqueId.of("RESTRICTED_PORTFOLIO", "PF_" + s_portfolioId++),
@@ -115,8 +115,8 @@ public class NodeCheckingPortfolioFilter implements PortfolioFilter {
    * @return an optional node tree, empty if there are no permissions, else
    * populated with the copied node tree
    */
-  private Optional<? extends PortfolioNode> buildRestrictedRootNode(PortfolioPermissionChecker checker,
-                                                                    PortfolioNode node) {
+  private Optional<? extends PortfolioNode> buildRestrictedRootNode(final PortfolioPermissionChecker checker,
+                                                                    final PortfolioNode node) {
 
     switch(checker.permissionCheck(node)) {
       case ALLOW:
@@ -125,13 +125,13 @@ public class NodeCheckingPortfolioFilter implements PortfolioFilter {
         return Optional.absent();
       default:
 
-        SimplePortfolioNode newRoot =
+        final SimplePortfolioNode newRoot =
             new SimplePortfolioNode(UniqueId.of("RESTRICTED_NODE", "PN_" + s_portfolioNodeId++),
                                     node.getName() + " [restricted]");
         newRoot.addPositions(node.getPositions());
 
-        for (Map.Entry<PortfolioNode, PortfolioPermission> entry : getAccessibleChildNodes(node, checker).entrySet()) {
-          PortfolioNode childNode = entry.getValue() == ALLOW ?
+        for (final Map.Entry<PortfolioNode, PortfolioPermission> entry : getAccessibleChildNodes(node, checker).entrySet()) {
+          final PortfolioNode childNode = entry.getValue() == ALLOW ?
               entry.getKey() :
               buildRestrictedRootNode(checker, entry.getKey()).get();
           newRoot.addChildNode(childNode);
@@ -141,11 +141,11 @@ public class NodeCheckingPortfolioFilter implements PortfolioFilter {
     }
   }
 
-  private Map<PortfolioNode, PortfolioPermission> getAccessibleChildNodes(PortfolioNode rootNode, PortfolioPermissionChecker checker) {
+  private Map<PortfolioNode, PortfolioPermission> getAccessibleChildNodes(final PortfolioNode rootNode, final PortfolioPermissionChecker checker) {
 
-    Map<PortfolioNode, PortfolioPermission> eligible = new LinkedHashMap<>();
-    for (PortfolioNode node : rootNode.getChildNodes()) {
-      PortfolioPermission permission = checker.permissionCheck(node);
+    final Map<PortfolioNode, PortfolioPermission> eligible = new LinkedHashMap<>();
+    for (final PortfolioNode node : rootNode.getChildNodes()) {
+      final PortfolioPermission permission = checker.permissionCheck(node);
       if (permission != PortfolioPermission.DENY) {
         eligible.put(node, permission);
       }

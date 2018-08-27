@@ -29,7 +29,7 @@ public abstract class AbstractRemoteClient {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param baseUri the base target URI for all RESTful web services, not null
    */
   public AbstractRemoteClient(final URI baseUri) {
@@ -46,7 +46,7 @@ public abstract class AbstractRemoteClient {
   //-------------------------------------------------------------------------
   /**
    * Gets the base URI.
-   * 
+   *
    * @return the base URI, not null
    */
   public URI getBaseUri() {
@@ -55,7 +55,7 @@ public abstract class AbstractRemoteClient {
 
   /**
    * Gets the RESTful client.
-   * 
+   *
    * @return the client, not null
    */
   public FudgeRestClient getRestClient() {
@@ -64,7 +64,7 @@ public abstract class AbstractRemoteClient {
 
   /**
    * Gets the Fudge context.
-   * 
+   *
    * @return the Fudge context, not null
    */
   public FudgeContext getFudgeContext() {
@@ -74,18 +74,18 @@ public abstract class AbstractRemoteClient {
   //-------------------------------------------------------------------------
   /**
    * Accesses the remote master.
-   * 
+   *
    * @param uri the URI to call, not null
    * @return the resource, suitable for calling get/post/put/delete on, not null
    */
-  protected UniformInterface accessRemote(URI uri) {
+  protected UniformInterface accessRemote(final URI uri) {
     return getRestClient().accessFudge(uri);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Returns a string summary of this client.
-   * 
+   *
    * @return the string summary, not null
    */
   @Override

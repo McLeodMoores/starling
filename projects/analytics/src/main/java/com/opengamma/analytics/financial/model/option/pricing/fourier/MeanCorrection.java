@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.fourier;
@@ -15,12 +15,12 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.number.ComplexNumber;
 
 /**
- * 
+ *
  */
 public abstract class MeanCorrection implements MartingaleCharacteristicExponent {
-  private CharacteristicExponent _base;
+  private final CharacteristicExponent _base;
 
-  public MeanCorrection(CharacteristicExponent base) {
+  public MeanCorrection(final CharacteristicExponent base) {
     Validate.notNull(base, "null base ce");
     _base = base;
   }
@@ -47,7 +47,7 @@ public abstract class MeanCorrection implements MartingaleCharacteristicExponent
   }
 
   @Override
-  public ComplexNumber getValue(ComplexNumber u, double t) {
+  public ComplexNumber getValue(final ComplexNumber u, final double t) {
     final ComplexNumber temp = _base.getValue(MINUS_I, t);
     Validate.isTrue(Math.abs(temp.getImaginary()) < 1e-12, "problem with CharacteristicExponent");
     final ComplexNumber w = new ComplexNumber(0, -temp.getReal());
@@ -55,16 +55,16 @@ public abstract class MeanCorrection implements MartingaleCharacteristicExponent
   }
 
   @Override
-  public Function1D<ComplexNumber, ComplexNumber[]> getAdjointFunction(double t) {
+  public Function1D<ComplexNumber, ComplexNumber[]> getAdjointFunction(final double t) {
     final Function1D<ComplexNumber, ComplexNumber[]> func = _base.getAdjointFunction(t);
     final ComplexNumber[] temp = func.evaluate(MINUS_I);
     return new Function1D<ComplexNumber, ComplexNumber[]>() {
 
       @Override
-      public ComplexNumber[] evaluate(ComplexNumber u) {
-        ComplexNumber[] uncorrected = func.evaluate(u);
-        ComplexNumber minusUi = multiply(MINUS_I, u);
-        ComplexNumber[] res = new ComplexNumber[temp.length];
+      public ComplexNumber[] evaluate(final ComplexNumber u) {
+        final ComplexNumber[] uncorrected = func.evaluate(u);
+        final ComplexNumber minusUi = multiply(MINUS_I, u);
+        final ComplexNumber[] res = new ComplexNumber[temp.length];
         for (int i = 0; i < temp.length; i++) {
           res[i] = add(uncorrected[i], multiply(minusUi, temp[i]));
         }
@@ -74,11 +74,11 @@ public abstract class MeanCorrection implements MartingaleCharacteristicExponent
   }
 
   @Override
-  public ComplexNumber[] getCharacteristicExponentAdjoint(ComplexNumber u, double t) {
-    ComplexNumber[] temp = _base.getCharacteristicExponentAdjoint(MINUS_I, t);
-    ComplexNumber[] uncorrected = _base.getCharacteristicExponentAdjoint(u, t);
-    ComplexNumber minusUi = multiply(MINUS_I, u);
-    ComplexNumber[] res = new ComplexNumber[temp.length];
+  public ComplexNumber[] getCharacteristicExponentAdjoint(final ComplexNumber u, final double t) {
+    final ComplexNumber[] temp = _base.getCharacteristicExponentAdjoint(MINUS_I, t);
+    final ComplexNumber[] uncorrected = _base.getCharacteristicExponentAdjoint(u, t);
+    final ComplexNumber minusUi = multiply(MINUS_I, u);
+    final ComplexNumber[] res = new ComplexNumber[temp.length];
     for (int i = 0; i < temp.length; i++) {
       res[i] = add(uncorrected[i], multiply(minusUi, temp[i]));
     }

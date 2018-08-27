@@ -29,12 +29,12 @@ public class DividendYieldCalculator implements NormalizationRule {
    * with the value calculated as described above
    */
   @Override
-  public MutableFudgeMsg apply(MutableFudgeMsg msg, String securityUniqueId, FieldHistoryStore fieldHistory) {
+  public MutableFudgeMsg apply(final MutableFudgeMsg msg, final String securityUniqueId, final FieldHistoryStore fieldHistory) {
 
     // Implementation note: this requires MARKET_VALUE & ANNUAL_DIVIDEND, these values may appear in separate messages
     // from the underlying data provider - thus the use of the lkv store to obtain values if this message happens to be
     // missing them - this may or may not be the correct thing to do
-    FudgeMsg lkv = fieldHistory.getLastKnownValues();
+    final FudgeMsg lkv = fieldHistory.getLastKnownValues();
 
     Double annualdividend = msg.getDouble(MarketDataRequirementNames.ANNUAL_DIVIDEND);
     if (annualdividend == null) {
@@ -64,12 +64,12 @@ public class DividendYieldCalculator implements NormalizationRule {
    * Tries to populate DIVIDEND_YIELD from the history.
    */
   private MutableFudgeMsg lastKnownMarketValue(
-      MutableFudgeMsg msg,
-      FieldHistoryStore fieldHistory) {
+      final MutableFudgeMsg msg,
+      final FieldHistoryStore fieldHistory) {
 
-    FudgeMsg lkv = fieldHistory.getLastKnownValues();
+    final FudgeMsg lkv = fieldHistory.getLastKnownValues();
 
-    Double lastKnownMarketValue = lkv.getDouble(MarketDataRequirementNames.DIVIDEND_YIELD);
+    final Double lastKnownMarketValue = lkv.getDouble(MarketDataRequirementNames.DIVIDEND_YIELD);
     if (lastKnownMarketValue == null) {
       return msg;
     }

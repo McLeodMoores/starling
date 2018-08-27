@@ -41,7 +41,7 @@ public class ModifySecurityDbSecurityMasterWorkerUpdateTest extends AbstractDbSe
   private static final Logger LOGGER = LoggerFactory.getLogger(ModifySecurityDbSecurityMasterWorkerUpdateTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public ModifySecurityDbSecurityMasterWorkerUpdateTest(String databaseType, String databaseVersion) {
+  public ModifySecurityDbSecurityMasterWorkerUpdateTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion, false);
     LOGGER.info("running testcases for {}", databaseType);
   }
@@ -54,64 +54,64 @@ public class ModifySecurityDbSecurityMasterWorkerUpdateTest extends AbstractDbSe
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_update_noSecurityId() {
-    UniqueId uniqueId = UniqueId.of("DbSec", "101");
-    ManageableSecurity security = new ManageableSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
-    SecurityDocument doc = new SecurityDocument();
+    final UniqueId uniqueId = UniqueId.of("DbSec", "101");
+    final ManageableSecurity security = new ManageableSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
+    final SecurityDocument doc = new SecurityDocument();
     doc.setSecurity(security);
     _secMaster.update(doc);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_update_noSecurity() {
-    SecurityDocument doc = new SecurityDocument();
+    final SecurityDocument doc = new SecurityDocument();
     doc.setUniqueId(UniqueId.of("DbSec", "101", "0"));
     _secMaster.update(doc);
   }
 
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_update_notFound() {
-    UniqueId uniqueId = UniqueId.of("DbSec", "0", "0");
-    ManageableSecurity security = new ManageableSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
-    SecurityDocument doc = new SecurityDocument(security);
+    final UniqueId uniqueId = UniqueId.of("DbSec", "0", "0");
+    final ManageableSecurity security = new ManageableSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
+    final SecurityDocument doc = new SecurityDocument(security);
     _secMaster.update(doc);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_update_notLatestVersion() {
-    UniqueId uniqueId = UniqueId.of("DbSec", "201", "0");
-    ManageableSecurity security = new ManageableSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
-    SecurityDocument doc = new SecurityDocument(security);
+    final UniqueId uniqueId = UniqueId.of("DbSec", "201", "0");
+    final ManageableSecurity security = new ManageableSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
+    final SecurityDocument doc = new SecurityDocument(security);
     _secMaster.update(doc);
   }
 
   @Test
   public void test_update_getUpdateGet() {
-    Instant now = Instant.now(_secMaster.getClock());
-    
-    UniqueId uniqueId = UniqueId.of("DbSec", "101", "0");
-    SecurityDocument base = _secMaster.get(uniqueId);
-    ManageableSecurity security = new ManageableSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
-    SecurityDocument input = new SecurityDocument(security);
-    
-    SecurityDocument updated = _secMaster.update(input);
+    final Instant now = Instant.now(_secMaster.getClock());
+
+    final UniqueId uniqueId = UniqueId.of("DbSec", "101", "0");
+    final SecurityDocument base = _secMaster.get(uniqueId);
+    final ManageableSecurity security = new ManageableSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
+    final SecurityDocument input = new SecurityDocument(security);
+
+    final SecurityDocument updated = _secMaster.update(input);
     assertEquals(false, base.getUniqueId().equals(updated.getUniqueId()));
     assertEquals(now, updated.getVersionFromInstant());
     assertEquals(null, updated.getVersionToInstant());
     assertEquals(now, updated.getCorrectionFromInstant());
     assertEquals(null, updated.getCorrectionToInstant());
     assertEquals(input.getSecurity(), updated.getSecurity());
-    
-    SecurityDocument old = _secMaster.get(uniqueId);
+
+    final SecurityDocument old = _secMaster.get(uniqueId);
     assertEquals(base.getUniqueId(), old.getUniqueId());
     assertEquals(base.getVersionFromInstant(), old.getVersionFromInstant());
     assertEquals(now, old.getVersionToInstant());  // old version ended
     assertEquals(base.getCorrectionFromInstant(), old.getCorrectionFromInstant());
     assertEquals(base.getCorrectionToInstant(), old.getCorrectionToInstant());
     assertEquals(base.getSecurity(), old.getSecurity());
-    
-    SecurityHistoryRequest search = new SecurityHistoryRequest(base.getUniqueId(), null, now);
+
+    final SecurityHistoryRequest search = new SecurityHistoryRequest(base.getUniqueId(), null, now);
     search.setFullDetail(false);
-    SecurityHistoryResult searchResult = _secMaster.history(search);
+    final SecurityHistoryResult searchResult = _secMaster.history(search);
     assertEquals(2, searchResult.getDocuments().size());
   }
 
@@ -119,15 +119,15 @@ public class ModifySecurityDbSecurityMasterWorkerUpdateTest extends AbstractDbSe
   public void test_updatePermissions() throws Exception {
     _secMaster.setClock(OpenGammaClock.getInstance());
 
-    UniqueId uniqueId = UniqueId.of("DbSec", "101", "0");
-    SecurityDocument baseDoc = _secMaster.get(uniqueId);
+    final UniqueId uniqueId = UniqueId.of("DbSec", "101", "0");
+    final SecurityDocument baseDoc = _secMaster.get(uniqueId);
     assertNotNull(baseDoc);
-    ManageableSecurity baseSecurity = baseDoc.getSecurity();
+    final ManageableSecurity baseSecurity = baseDoc.getSecurity();
     assertNotNull(baseSecurity);
     assertNotNull(baseSecurity.getRequiredPermissions());
     assertTrue(baseSecurity.getRequiredPermissions().isEmpty());
 
-    SecurityDocument input = new SecurityDocument(baseSecurity.clone());
+    final SecurityDocument input = new SecurityDocument(baseSecurity.clone());
     input.getSecurity().getRequiredPermissions().add("A");
     input.getSecurity().getRequiredPermissions().add("B");
     baseDoc.getSecurity().setRequiredPermissions(Sets.newHashSet("A", "B"));
@@ -164,28 +164,28 @@ public class ModifySecurityDbSecurityMasterWorkerUpdateTest extends AbstractDbSe
 
     assertEquals(updatedSecurity, _secMaster.get(updated.getUniqueId()).getSecurity());
 
-    SecurityHistoryRequest search = new SecurityHistoryRequest(baseSecurity.getUniqueId(), null, Instant.now(_secMaster.getClock()));
+    final SecurityHistoryRequest search = new SecurityHistoryRequest(baseSecurity.getUniqueId(), null, Instant.now(_secMaster.getClock()));
     search.setFullDetail(false);
-    SecurityHistoryResult searchResult = _secMaster.history(search);
+    final SecurityHistoryResult searchResult = _secMaster.history(search);
     assertEquals(3, searchResult.getDocuments().size());
   }
 
   @Test
   public void test_update_rollback() {
-    DbSecurityMaster w = new DbSecurityMaster(_secMaster.getDbConnector());
+    final DbSecurityMaster w = new DbSecurityMaster(_secMaster.getDbConnector());
     w.setElSqlBundle(ElSqlBundle.of(new ElSqlConfig("TestRollback"), DbSecurityMaster.class));
     final SecurityDocument base = _secMaster.get(UniqueId.of("DbSec", "101", "0"));
-    UniqueId uniqueId = UniqueId.of("DbSec", "101", "0");
-    ManageableSecurity security = new ManageableSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
-    SecurityDocument input = new SecurityDocument(security);
+    final UniqueId uniqueId = UniqueId.of("DbSec", "101", "0");
+    final ManageableSecurity security = new ManageableSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
+    final SecurityDocument input = new SecurityDocument(security);
     try {
       w.update(input);
       Assert.fail();
-    } catch (BadSqlGrammarException ex) {
+    } catch (final BadSqlGrammarException ex) {
       // expected
     }
     final SecurityDocument test = _secMaster.get(UniqueId.of("DbSec", "101", "0"));
-    
+
     assertEquals(base, test);
   }
 

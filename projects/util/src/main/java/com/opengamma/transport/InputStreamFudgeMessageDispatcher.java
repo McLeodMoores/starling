@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.transport;
@@ -25,12 +25,12 @@ public class InputStreamFudgeMessageDispatcher implements Runnable {
   private final FudgeMessageReceiver _messageReceiver;
   private final FudgeContext _fudgeContext;
   private final FudgeMsgReader _fudgeMsgReader;
-  
-  public InputStreamFudgeMessageDispatcher(InputStream inputStream, FudgeMessageReceiver messageReceiver) {
+
+  public InputStreamFudgeMessageDispatcher(final InputStream inputStream, final FudgeMessageReceiver messageReceiver) {
     this(inputStream, messageReceiver, OpenGammaFudgeContext.getInstance());
   }
 
-  public InputStreamFudgeMessageDispatcher(InputStream inputStream, FudgeMessageReceiver messageReceiver, FudgeContext fudgeContext) {
+  public InputStreamFudgeMessageDispatcher(final InputStream inputStream, final FudgeMessageReceiver messageReceiver, final FudgeContext fudgeContext) {
     ArgumentChecker.notNull(inputStream, "inputStream");
     ArgumentChecker.notNull(messageReceiver, "messageReceiver");
     ArgumentChecker.notNull(fudgeContext, "fudgeContext");
@@ -75,7 +75,7 @@ public class InputStreamFudgeMessageDispatcher implements Runnable {
   @Override
   public void run() {
     while (true) {
-      FudgeMsgEnvelope msgEnvelope = getFudgeMsgReader().nextMessageEnvelope();
+      final FudgeMsgEnvelope msgEnvelope = getFudgeMsgReader().nextMessageEnvelope();
       if (msgEnvelope == null) {
         // End of stream reached.
         break;

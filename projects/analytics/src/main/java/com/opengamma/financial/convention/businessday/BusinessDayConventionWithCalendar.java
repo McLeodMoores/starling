@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.convention.businessday;
@@ -27,7 +27,7 @@ import com.opengamma.financial.convention.calendar.Calendar;
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param businessDayConvention  the convention, not null
    * @param workingDayCalendar  the working days, not null
    */
@@ -38,8 +38,8 @@ import com.opengamma.financial.convention.calendar.Calendar;
 
   //-------------------------------------------------------------------------
   @Override
-  public Temporal adjustInto(Temporal temporal) {
-    TemporalAdjuster result = _businessDayConvention.adjustDate(_workingDayCalendar, LocalDate.from(temporal));
+  public Temporal adjustInto(final Temporal temporal) {
+    final TemporalAdjuster result = _businessDayConvention.adjustDate(_workingDayCalendar, LocalDate.from(temporal));
     return temporal.with(result);
   }
 

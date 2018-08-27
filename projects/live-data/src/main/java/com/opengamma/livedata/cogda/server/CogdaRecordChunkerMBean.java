@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.livedata.cogda.server;
@@ -23,8 +23,8 @@ import com.opengamma.util.ArgumentChecker;
 public class CogdaRecordChunkerMBean {
   private static final Logger LOGGER = LoggerFactory.getLogger(CogdaRecordChunkerMBean.class);
   private final CogdaRecordChunker _chunker;
-  
-  public CogdaRecordChunkerMBean(CogdaRecordChunker chunker) {
+
+  public CogdaRecordChunkerMBean(final CogdaRecordChunker chunker) {
     ArgumentChecker.notNull(chunker, "chunker");
     _chunker = chunker;
   }
@@ -41,7 +41,7 @@ public class CogdaRecordChunkerMBean {
   public int getNumActiveSymbols() {
     try {
       return getChunker().getNumActiveSymbols();
-    } catch (RuntimeException e) {
+    } catch (final RuntimeException e) {
       LOGGER.error("getNumActiveSymbols() failed", e);
       throw new RuntimeException(e.getMessage());
     }
@@ -51,7 +51,7 @@ public class CogdaRecordChunkerMBean {
   public Set<String> getAllSymbols() {
     try {
       return getChunker().getAllSymbols();
-    } catch (RuntimeException e) {
+    } catch (final RuntimeException e) {
       LOGGER.error("getAllSymbols() failed", e);
       throw new RuntimeException(e.getMessage());
     }
@@ -61,7 +61,7 @@ public class CogdaRecordChunkerMBean {
   public String getRemoteServerConnectionName() {
     try {
       return getChunker().getRemoteServerConnectionName();
-    } catch (RuntimeException e) {
+    } catch (final RuntimeException e) {
       LOGGER.error("getRemoteServerConnectionName() failed", e);
       throw new RuntimeException(e.getMessage());
     }

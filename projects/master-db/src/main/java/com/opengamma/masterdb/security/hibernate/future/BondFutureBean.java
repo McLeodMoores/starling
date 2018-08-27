@@ -20,10 +20,10 @@ import com.opengamma.financial.security.future.BondFutureSecurity;
  * A Hibernate bean representation of {@link BondFutureSecurity}.
  */
 @BeanDefinition
-public class BondFutureBean extends FutureSecurityBean {  
+public class BondFutureBean extends FutureSecurityBean {
 
   @Override
-  public <T> T accept(Visitor<T> visitor) {
+  public <T> T accept(final Visitor<T> visitor) {
     return visitor.visitBondFutureType(this);
   }
 

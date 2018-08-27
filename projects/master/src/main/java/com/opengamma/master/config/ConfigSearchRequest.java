@@ -35,7 +35,7 @@ import com.opengamma.util.RegexUtils;
  * This class provides the ability to page the results and to search
  * as at a specific version and correction instant.
  * See {@link ConfigHistoryRequest} for more details on how history works.
- * 
+ *
  * @param <T> the configuration element type
  */
 @PublicSPI
@@ -72,10 +72,10 @@ public class ConfigSearchRequest<T> extends AbstractSearchRequest {
 
   /**
    * Creates an instance with a configuration type.
-   * 
+   *
    * @param type the configuration type, not null
    */
-  public ConfigSearchRequest(Class<T> type) {
+  public ConfigSearchRequest(final Class<T> type) {
     ArgumentChecker.notNull(type, "type");
     _type = type;
   }
@@ -83,28 +83,28 @@ public class ConfigSearchRequest<T> extends AbstractSearchRequest {
   //-------------------------------------------------------------------------
   /**
    * Adds a single configuration object identifier to the set.
-   * 
+   *
    * @param configId the configuration object identifier to add, not null
    */
-  public void addConfigId(ObjectIdentifiable configId) {
+  public void addConfigId(final ObjectIdentifiable configId) {
     ArgumentChecker.notNull(configId, "configId");
     if (_configIds == null) {
-      _configIds = new ArrayList<ObjectId>();
+      _configIds = new ArrayList<>();
     }
     _configIds.add(configId.getObjectId());
   }
 
   /**
    * Sets the set of configuration object identifiers, null to not limit by configuration object identifiers. Note that an empty set will return no configurations.
-   * 
+   *
    * @param configIds the new configuration identifiers, null clears the configuration id search
    */
-  public void setConfigIds(Iterable<? extends ObjectIdentifiable> configIds) {
+  public void setConfigIds(final Iterable<? extends ObjectIdentifiable> configIds) {
     if (configIds == null) {
       _configIds = null;
     } else {
-      _configIds = new ArrayList<ObjectId>();
-      for (ObjectIdentifiable configId : configIds) {
+      _configIds = new ArrayList<>();
+      for (final ObjectIdentifiable configId : configIds) {
         _configIds.add(configId.getObjectId());
       }
     }

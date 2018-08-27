@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.transport.socket;
@@ -50,7 +50,7 @@ public class SocketFudgeConnection extends AbstractSocketProcess implements Fudg
         _isSending = true;
         try {
           startIfNecessary();
-        } catch (OpenGammaRuntimeException e) {
+        } catch (final OpenGammaRuntimeException e) {
           if (e.getCause() instanceof IOException) {
             notifyConnectionFailed((IOException) e.getCause());
             // Should we still carry on and throw the exception if the user's been given it as a callback? Maybe allow the connectionFailed callback specify which to rethrow?
@@ -76,10 +76,10 @@ public class SocketFudgeConnection extends AbstractSocketProcess implements Fudg
     }
 
     @Override
-    public void send(FudgeMsg message) {
+    public void send(final FudgeMsg message) {
       try {
         _writer.write(message);
-      } catch (FudgeRuntimeIOException e) {
+      } catch (final FudgeRuntimeIOException e) {
         if (exceptionForcedByClose(e.getCause())) {
           LOGGER.info("Connection terminated - message not sent");
         } else {
@@ -95,7 +95,7 @@ public class SocketFudgeConnection extends AbstractSocketProcess implements Fudg
 
   /**
    * Creates a connection where received messages are processed inline with socket read operations.
-   * 
+   *
    * @param fudgeContext the Fudge context, not null
    */
   public SocketFudgeConnection(final FudgeContext fudgeContext) {
@@ -106,8 +106,8 @@ public class SocketFudgeConnection extends AbstractSocketProcess implements Fudg
 
   /**
    * Creates a connection where received messages run out of thread to the socket reader using the given
-   * {@link ExecutorService}. 
-   * 
+   * {@link ExecutorService}.
+   *
    * @param fudgeContext the Fudge context, not null
    * @param executorService an executor service to run received messages via, not null
    */
@@ -121,7 +121,7 @@ public class SocketFudgeConnection extends AbstractSocketProcess implements Fudg
   /**
    * Sets a delay before flushing data messages to allow adjacent messages to be coalesced. Only useful if the
    * message sender is being used concurrently.
-   * 
+   *
    * @param microseconds the time to wait before flushing, or {@code 0} to flush immediately after a message (or coalesced group)
    */
   public void setFlushDelay(final int microseconds) {
@@ -132,7 +132,7 @@ public class SocketFudgeConnection extends AbstractSocketProcess implements Fudg
    * Note that the message sender may be called concurrently. All messages will be sent from a single thread
    * with others returning immediately. Thus successful completion of a {@link FudgeMessageSender#send} does
    * not guarantee message arrival or that it has even been (or will be) passed to the transport.
-   * 
+   *
    * @return the Fudge message sender component of the connection
    */
   @Override
@@ -146,7 +146,7 @@ public class SocketFudgeConnection extends AbstractSocketProcess implements Fudg
   }
 
   @Override
-  protected void socketOpened(Socket socket, BufferedOutputStream os, BufferedInputStream is) {
+  protected void socketOpened(final Socket socket, final BufferedOutputStream os, final BufferedInputStream is) {
     final FudgeMsgReader reader = _fudgeContext.createMessageReader(is);
     _writer.setFudgeMsgWriter(_fudgeContext, os);
     _receiverJob = new TerminatableJob() {
@@ -156,7 +156,7 @@ public class SocketFudgeConnection extends AbstractSocketProcess implements Fudg
         final FudgeMsgEnvelope envelope;
         try {
           envelope = reader.nextMessageEnvelope();
-        } catch (FudgeRuntimeIOException e) {
+        } catch (final FudgeRuntimeIOException e) {
           if (exceptionForcedByClose(e.getCause())) {
             LOGGER.info("Connection terminated");
           } else {
@@ -189,7 +189,7 @@ public class SocketFudgeConnection extends AbstractSocketProcess implements Fudg
       private void dispatch(final FudgeMessageReceiver receiver, final FudgeMsgEnvelope envelope) {
         try {
           receiver.messageReceived(_fudgeContext, envelope);
-        } catch (Exception e) {
+        } catch (final Exception e) {
           LOGGER.warn("Unable to dispatch message to receiver", e);
         }
       }
@@ -225,16 +225,16 @@ public class SocketFudgeConnection extends AbstractSocketProcess implements Fudg
   }
 
   @Override
-  public void setConnectionStateListener(FudgeConnectionStateListener listener) {
+  public void setConnectionStateListener(final FudgeConnectionStateListener listener) {
     _stateListener = listener;
   }
-  
-  protected void notifyConnectionFailed(Exception e) {
+
+  protected void notifyConnectionFailed(final Exception e) {
     final FudgeConnectionStateListener stateListener = _stateListener;
     if (stateListener != null) {
       try {
         stateListener.connectionFailed(SocketFudgeConnection.this, e);
-      } catch (Exception e2) {
+      } catch (final Exception e2) {
         LOGGER.warn("Error notifying state listener of connection failure", e2);
       }
     }

@@ -22,17 +22,17 @@ public class FxOptionTradeSecurityExtractor extends TradeSecurityExtractor<FxOpt
    *
    * @param trade the trade to perform extraction on
    */
-  public FxOptionTradeSecurityExtractor(FxOptionTrade trade) {
+  public FxOptionTradeSecurityExtractor(final FxOptionTrade trade) {
     super(trade);
   }
 
   //-------------------------------------------------------------------------
   @Override
   public ManageableSecurity[] extractSecurities() {
-    FxOptionTrade trade = getTrade();
-    FxOptionCalculator calculator = new FxOptionCalculator(trade, trade.getNotional(), trade.getNotionalCurrency());
-    ExerciseType exerciseType = trade.getExerciseType().convert();
-    ManageableSecurity security = trade.getSettlementType() == SettlementType.PHYSICAL ?
+    final FxOptionTrade trade = getTrade();
+    final FxOptionCalculator calculator = new FxOptionCalculator(trade, trade.getNotional(), trade.getNotionalCurrency());
+    final ExerciseType exerciseType = trade.getExerciseType().convert();
+    final ManageableSecurity security = trade.getSettlementType() == SettlementType.PHYSICAL ?
         new FXOptionSecurity(
             calculator.getPutCurrency(),
             calculator.getCallCurrency(),

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.web;
@@ -25,9 +25,9 @@ public final class FreemarkerCustomRenderer {
    */
   public static final Object INSTANCE = new FreemarkerCustomRenderer();
 
-  public String printExerciseType(ExerciseType exerciseType) {
+  public String printExerciseType(final ExerciseType exerciseType) {
     ArgumentChecker.notNull(exerciseType, "exerciseType");
-    String result = exerciseType.accept(new ExerciseTypeNameVisitor());
+    final String result = exerciseType.accept(new ExerciseTypeNameVisitor());
     return result;
   }
 }

@@ -61,13 +61,13 @@ public final class ExternalIdWithDates implements ImmutableBean,
 
   /**
    * Obtains an {@code ExternalIdWithDates} from an identifier and dates.
-   * 
+   *
    * @param identifier  the identifier, not empty, not null
    * @param validFrom  the valid from date, inclusive, may be null
    * @param validTo  the valid to date, inclusive, may be null
    * @return the identifier, not null
    */
-  public static ExternalIdWithDates of(ExternalId identifier, LocalDate validFrom, LocalDate validTo) {
+  public static ExternalIdWithDates of(final ExternalId identifier, final LocalDate validFrom, final LocalDate validTo) {
     return new ExternalIdWithDates(identifier, validFrom, validTo);
   }
 
@@ -76,7 +76,7 @@ public final class ExternalIdWithDates implements ImmutableBean,
    * @param identifier the identifier, not empty, not null
    * @return the identifier, not null
    */
-  public static ExternalIdWithDates of(ExternalId identifier) {
+  public static ExternalIdWithDates of(final ExternalId identifier) {
     return ExternalIdWithDates.of(identifier, null, null);
   }
 
@@ -85,18 +85,18 @@ public final class ExternalIdWithDates implements ImmutableBean,
    * <p>
    * This parses the identifier from the form produced by {@code toString()}
    * which is {@code <SCHEME>~<VALUE>~S~<VALID_FROM>~E~<VALID_TO>}.
-   * 
+   *
    * @param str  the identifier to parse, not null
    * @return the identifier, not null
    * @throws IllegalArgumentException if the identifier cannot be parsed
    */
-  public static ExternalIdWithDates parse(String str) {
+  public static ExternalIdWithDates parse(final String str) {
     ArgumentChecker.notNull(str, "parse string");
     ExternalId identifier = null;
     LocalDate validFrom = null;
     LocalDate validTo = null;
-    int startPos = str.indexOf("~S~");
-    int endPos = str.indexOf("~E~");
+    final int startPos = str.indexOf("~S~");
+    final int endPos = str.indexOf("~E~");
     if (startPos > 0) {
       identifier = ExternalId.parse(str.substring(0, startPos));
       if (endPos > 0) {
@@ -116,13 +116,13 @@ public final class ExternalIdWithDates implements ImmutableBean,
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param externalId  the identifier, not null
    * @param validFrom  the valid from date, may be null
    * @param validTo  the valid to date, may be null
    */
   @ImmutableConstructor
-  private ExternalIdWithDates(ExternalId externalId, LocalDate validFrom, LocalDate validTo) {
+  private ExternalIdWithDates(final ExternalId externalId, final LocalDate validFrom, final LocalDate validTo) {
     ArgumentChecker.notNull(externalId, "externalId");
     if (validFrom != null && validTo != null) {
       ArgumentChecker.isTrue(validTo.isAfter(validFrom) || validTo.equals(validFrom), "validTo (" + validTo + ") is before validFrom (" + validFrom + ")");
@@ -135,23 +135,23 @@ public final class ExternalIdWithDates implements ImmutableBean,
   //-------------------------------------------------------------------------
   /**
    * Checks if the identifier is valid on the specified date.
-   * 
+   *
    * @param date  the date to check for validity on, null returns true
    * @return true if valid on the specified date
    */
-  public boolean isValidOn(LocalDate date) {
+  public boolean isValidOn(final LocalDate date) {
     if (date == null) {
       return true;
     }
-    LocalDate from = Objects.firstNonNull(getValidFrom(), LocalDate.MIN);
-    LocalDate to = Objects.firstNonNull(getValidTo(), LocalDate.MAX);
+    final LocalDate from = Objects.firstNonNull(getValidFrom(), LocalDate.MIN);
+    final LocalDate to = Objects.firstNonNull(getValidTo(), LocalDate.MAX);
     return date.isBefore(from) == false && date.isAfter(to) == false;
   }
 
   //-------------------------------------------------------------------------
   /**
    * Returns the identifier without dates.
-   * 
+   *
    * @return the identifier without dates, not null
    */
   public ExternalId toExternalId() {
@@ -162,22 +162,22 @@ public final class ExternalIdWithDates implements ImmutableBean,
   /**
    * Compares the external identifiers ignoring the dates.
    * This ordering is inconsistent with equals.
-   * 
+   *
    * @param other  the other external identifier, not null
    * @return negative if this is less, zero if equal, positive if greater
    */
   @Override
-  public int compareTo(ExternalIdWithDates other) {
+  public int compareTo(final ExternalIdWithDates other) {
     return _externalId.compareTo(other._externalId);
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
     if (obj instanceof ExternalIdWithDates) {
-      ExternalIdWithDates other = (ExternalIdWithDates) obj;
+      final ExternalIdWithDates other = (ExternalIdWithDates) obj;
       return ObjectUtils.equals(_externalId, other._externalId) &&
           ObjectUtils.equals(_validFrom, other._validFrom) &&
           ObjectUtils.equals(_validTo, other._validTo);
@@ -192,12 +192,12 @@ public final class ExternalIdWithDates implements ImmutableBean,
 
   /**
    * Returns the identifier in the form {@code <SCHEME>~<VALUE>~S~<VALID_FROM>~E~<VALID_TO>}.
-   * 
+   *
    * @return the identifier, not null
    */
   @Override
   public String toString() {
-    StringBuilder buf = new StringBuilder(_externalId.toString());
+    final StringBuilder buf = new StringBuilder(_externalId.toString());
     if (_validFrom != null) {
       buf.append("~S~").append(_validFrom.toString());
     }

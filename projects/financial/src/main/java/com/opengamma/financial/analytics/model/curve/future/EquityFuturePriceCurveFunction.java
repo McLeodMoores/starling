@@ -5,8 +5,6 @@
  */
 package com.opengamma.financial.analytics.model.curve.future;
 
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
-
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -48,6 +46,8 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdentifiable;
 import com.opengamma.id.VersionCorrection;
 
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+
 /**
  * Function providing an equity future curve.
  */
@@ -67,7 +67,7 @@ public class EquityFuturePriceCurveFunction extends FuturePriceCurveFunction {
     if (!(target.getValue() instanceof ExternalIdentifiable)) {
       return null;
     }
-    ExternalId id = ((ExternalIdentifiable) target.getValue()).getExternalId();
+    final ExternalId id = ((ExternalIdentifiable) target.getValue()).getExternalId();
     final String ticker = EquitySecurityUtils.getIndexOrEquityName(id);
     final String fullDefinitionName = definitionName + "_" + ticker;
     return (FuturePriceCurveDefinition<Object>) getFuturePriceCurveDefinitionSource().getDefinition(fullDefinitionName, getInstrumentType(), versionCorrection);
@@ -77,7 +77,7 @@ public class EquityFuturePriceCurveFunction extends FuturePriceCurveFunction {
     if (!(target.getValue() instanceof ExternalIdentifiable)) {
       return null;
     }
-    ExternalId id = ((ExternalIdentifiable) target.getValue()).getExternalId();
+    final ExternalId id = ((ExternalIdentifiable) target.getValue()).getExternalId();
     final String ticker = EquitySecurityUtils.getIndexOrEquityName(id);
     final String fullSpecificationName = specificationName + "_" + ticker;
     return getFuturePriceCurveSpecificationSource().getSpecification(fullSpecificationName, getInstrumentType(), versionCorrection);
@@ -96,7 +96,7 @@ public class EquityFuturePriceCurveFunction extends FuturePriceCurveFunction {
     return result;
   }
 
-  private static String getDataFieldName(FuturePriceCurveInstrumentProvider<Number> futurePriceCurveProvider, ValueRequirement desiredValue) {
+  private static String getDataFieldName(final FuturePriceCurveInstrumentProvider<Number> futurePriceCurveProvider, final ValueRequirement desiredValue) {
     return futurePriceCurveProvider.getDataFieldName();
   }
 
@@ -153,7 +153,7 @@ public class EquityFuturePriceCurveFunction extends FuturePriceCurveFunction {
         final FuturePriceCurveInstrumentProvider<Number> futurePriceCurveProvider = (FuturePriceCurveInstrumentProvider<Number>) priceCurveSpecification.getCurveInstrumentProvider();
         final String dataFieldName = getDataFieldName(futurePriceCurveProvider, desiredValue);
 
-        Set<ValueRequirement> requirements = Sets.newHashSet();
+        final Set<ValueRequirement> requirements = Sets.newHashSet();
         requirements.add(getSpotRequirement(target, dataFieldName));
         requirements.addAll(buildRequirements(priceCurveSpecification, priceCurveDefinition, desiredValue, atZDT));
         return requirements;
@@ -206,7 +206,7 @@ public class EquityFuturePriceCurveFunction extends FuturePriceCurveFunction {
           if (inputs.getValue(requirement) != null) {
             futurePrice = (Double) inputs.getValue(requirement);
             if (futurePrice != null) {
-              LocalDate expiry = expiryCalc.getExpiryDate(xNum.intValue(), valDate, WEEKDAYS); // TODO Add true holiday calendar
+              final LocalDate expiry = expiryCalc.getExpiryDate(xNum.intValue(), valDate, WEEKDAYS); // TODO Add true holiday calendar
               final Double ttm = TimeCalculator.getTimeBetween(valDate, expiry);
               xList.add(ttm);
               prices.add(futurePrice);

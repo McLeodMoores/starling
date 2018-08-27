@@ -102,9 +102,9 @@ public class EquityVarianceSwapSecurity extends FinancialSecurity {
     super(SECURITY_TYPE);
   }
 
-  public EquityVarianceSwapSecurity(ExternalId spotUnderlyingId, Currency currency, double strike, double notional,
-      boolean parameterizedAsVariance, double annualizationFactor, ZonedDateTime firstObservationDate, ZonedDateTime lastObservationDate,
-      ZonedDateTime settlementDate, ExternalId regionId, Frequency observationFrequency) {
+  public EquityVarianceSwapSecurity(final ExternalId spotUnderlyingId, final Currency currency, final double strike, final double notional,
+      final boolean parameterizedAsVariance, final double annualizationFactor, final ZonedDateTime firstObservationDate, final ZonedDateTime lastObservationDate,
+      final ZonedDateTime settlementDate, final ExternalId regionId, final Frequency observationFrequency) {
     super(SECURITY_TYPE);
     setSpotUnderlyingId(spotUnderlyingId);
     setCurrency(currency);
@@ -121,7 +121,7 @@ public class EquityVarianceSwapSecurity extends FinancialSecurity {
 
   //-------------------------------------------------------------------------
   @Override
-  public final <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public final <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitEquityVarianceSwapSecurity(this);
   }
 

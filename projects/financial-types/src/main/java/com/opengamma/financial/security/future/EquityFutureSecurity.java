@@ -54,8 +54,8 @@ public class EquityFutureSecurity extends FutureSecurity {
     super();
   }
 
-  public EquityFutureSecurity(Expiry expiry, String tradingExchange, String settlementExchange, Currency currency, double unitAmount,
-      ZonedDateTime settlementDate, ExternalId underlyingIdentifier, String category) {
+  public EquityFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency, final double unitAmount,
+      final ZonedDateTime settlementDate, final ExternalId underlyingIdentifier, final String category) {
     super(expiry, tradingExchange, settlementExchange, currency, unitAmount, category);
     setSettlementDate(settlementDate);
     setUnderlyingId(underlyingIdentifier);
@@ -63,7 +63,7 @@ public class EquityFutureSecurity extends FutureSecurity {
 
   //-------------------------------------------------------------------------
   @Override
-  public <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitEquityFutureSecurity(this);
   }
 

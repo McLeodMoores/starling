@@ -43,28 +43,28 @@ public class ViewEvaluationTarget extends TempTarget {
 
   /**
    * Creates a new target with an empty/default view definition.
-   * 
+   *
    * @param user the market data user, for example taken from the parent/containing view definition, not null
    * @param executionSequence the execution sequence to evaluate, not null
    */
-  public ViewEvaluationTarget(UserPrincipal user, ViewCycleExecutionSequenceDescriptor executionSequence) {
+  public ViewEvaluationTarget(final UserPrincipal user, final ViewCycleExecutionSequenceDescriptor executionSequence) {
     _viewDefinition = new ViewDefinition("Temp", user);
     _executionSequence = executionSequence;
   }
 
-  protected ViewEvaluationTarget(FudgeDeserializer deserializer, FudgeMsg message) {
+  protected ViewEvaluationTarget(final FudgeDeserializer deserializer, final FudgeMsg message) {
     super(deserializer, message);
     _viewDefinition = deserializer.fieldValueToObject(ViewDefinition.class, message.getByName(VIEW_DEFINITION_FIELD));
     _executionSequence = deserializer.fieldValueToObject(ViewCycleExecutionSequenceDescriptor.class, message.getByName(EXECUTION_SEQUENCE_FIELD));
   }
 
-  protected ViewEvaluationTarget(FudgeDeserializer deserializer, FudgeMsg message, ViewCycleExecutionSequenceDescriptor executionSequence) {
+  protected ViewEvaluationTarget(final FudgeDeserializer deserializer, final FudgeMsg message, final ViewCycleExecutionSequenceDescriptor executionSequence) {
     super(deserializer, message);
     _viewDefinition = deserializer.fieldValueToObject(ViewDefinition.class, message.getByName(VIEW_DEFINITION_FIELD));
     _executionSequence = executionSequence;
   }
 
-  protected ViewEvaluationTarget(ViewDefinition viewDefinition, ViewCycleExecutionSequenceDescriptor executionSequence) {
+  protected ViewEvaluationTarget(final ViewDefinition viewDefinition, final ViewCycleExecutionSequenceDescriptor executionSequence) {
     _viewDefinition = viewDefinition;
     _executionSequence = executionSequence;
   }
@@ -85,11 +85,11 @@ public class ViewEvaluationTarget extends TempTarget {
 
   /**
    * Creates a target which is the union of this and another. The other target must have compatible valuation parameters.
-   * 
+   *
    * @param other the other target, not null
    * @return null if the other target is not compatible, otherwise a new instance containing a view definition that is the union of the two participant view definitions
    */
-  public ViewEvaluationTarget union(ViewEvaluationTarget other) {
+  public ViewEvaluationTarget union(final ViewEvaluationTarget other) {
     // Check the valuation parameters are compatible
     if (!getExecutionSequence().equals(other.getExecutionSequence())) {
       return null;
@@ -143,7 +143,7 @@ public class ViewEvaluationTarget extends TempTarget {
   }
 
   @Override
-  protected boolean equalsImpl(Object o) {
+  protected boolean equalsImpl(final Object o) {
     final ViewEvaluationTarget other = (ViewEvaluationTarget) o;
     return getExecutionSequence().equals(other.getExecutionSequence())
         && getViewDefinition().equals(other.getViewDefinition());
@@ -158,17 +158,17 @@ public class ViewEvaluationTarget extends TempTarget {
   }
 
   @Override
-  protected void toFudgeMsgImpl(FudgeSerializer serializer, MutableFudgeMsg message) {
+  protected void toFudgeMsgImpl(final FudgeSerializer serializer, final MutableFudgeMsg message) {
     super.toFudgeMsgImpl(serializer, message);
     serializer.addToMessageWithClassHeaders(message, VIEW_DEFINITION_FIELD, null, getViewDefinition(), ViewDefinition.class);
     serializeExecutionSequence(serializer, message);
   }
 
-  protected void serializeExecutionSequence(FudgeSerializer serializer, MutableFudgeMsg message) {
+  protected void serializeExecutionSequence(final FudgeSerializer serializer, final MutableFudgeMsg message) {
     serializer.addToMessageWithClassHeaders(message, EXECUTION_SEQUENCE_FIELD, null, getExecutionSequence());
   }
 
-  public static ViewEvaluationTarget fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg message) {
+  public static ViewEvaluationTarget fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg message) {
     return new ViewEvaluationTarget(deserializer, message);
   }
 

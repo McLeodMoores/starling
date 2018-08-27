@@ -23,9 +23,9 @@ import com.opengamma.util.ArgumentChecker;
 
   private final List<VolatilitySurfaceShift> _shifts = Lists.newArrayList();
 
-  public VolatilitySurfaceShiftManipulatorBuilder(VolatilitySurfaceSelector selector,
-                                                  Scenario scenario,
-                                                  ScenarioShiftType shiftType) {
+  public VolatilitySurfaceShiftManipulatorBuilder(final VolatilitySurfaceSelector selector,
+                                                  final Scenario scenario,
+                                                  final ScenarioShiftType shiftType) {
     _selector = ArgumentChecker.notNull(selector, "selector");
     _scenario = ArgumentChecker.notNull(scenario, "scenario");
     _shiftType = ArgumentChecker.notNull(shiftType, "shiftType");
@@ -37,12 +37,12 @@ import com.opengamma.util.ArgumentChecker;
    * @param y The x co-ordinate of the point to shift, must be a {@link Period} or {@link Number}.
    * @param shift The amount to shift
    */
-  public void shift(Object x, Object y, Number shift) {
+  public void shift(final Object x, final Object y, final Number shift) {
     _shifts.add(new VolatilitySurfaceShift(x, y, shift));
   }
 
   public void build() {
-    VolatilitySurfaceShiftManipulator manipulator = VolatilitySurfaceShiftManipulator.create(_shiftType, _shifts);
+    final VolatilitySurfaceShiftManipulator manipulator = VolatilitySurfaceShiftManipulator.create(_shiftType, _shifts);
     _scenario.add(_selector, manipulator);
   }
 }

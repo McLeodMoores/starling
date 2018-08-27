@@ -49,17 +49,17 @@ public class ViewRegressionTest {
   private final String _baseClasspath;
   private final String _testClasspath;
 
-  public ViewRegressionTest(String projectName,
-                            String serverConfigFile,
-                            String dbDumpDir,
-                            String logbackConfigFile,
-                            Instant valuationTime,
-                            String baseWorkingDir,
-                            String baseVersion,
-                            String baseDbConfigFile,
-                            String testWorkingDir,
-                            String testVersion,
-                            String testDbConfigFile) {
+  public ViewRegressionTest(final String projectName,
+                            final String serverConfigFile,
+                            final String dbDumpDir,
+                            final String logbackConfigFile,
+                            final Instant valuationTime,
+                            final String baseWorkingDir,
+                            final String baseVersion,
+                            final String baseDbConfigFile,
+                            final String testWorkingDir,
+                            final String testVersion,
+                            final String testDbConfigFile) {
     _dbDumpDir = dbDumpDir;
     _baseWorkingDir = baseWorkingDir;
     _baseVersion = baseVersion;
@@ -77,14 +77,14 @@ public class ViewRegressionTest {
   public RegressionTestResults run() {
     // TODO store the results in memory for now, serialize to disk/cache when it's an actual problem
     // TODO fail if there are any view defs or snapshots with duplicate names
-    Map<Pair<String, String>, CalculationResults> testResults =
+    final Map<Pair<String, String>, CalculationResults> testResults =
         runTest(_testWorkingDir, _testClasspath, _testVersion, _testDbConfigFile);
-    Map<Pair<String, String>, CalculationResults> baseResults =
+    final Map<Pair<String, String>, CalculationResults> baseResults =
         runTest(_baseWorkingDir, _baseClasspath, _baseVersion, _baseDbConfigFile);
-    List<CalculationDifference> results = Lists.newArrayList();
-    for (Map.Entry<Pair<String, String>, CalculationResults> entry : testResults.entrySet()) {
-      CalculationResults testViewResult = entry.getValue();
-      CalculationResults baseViewResult = baseResults.get(entry.getKey());
+    final List<CalculationDifference> results = Lists.newArrayList();
+    for (final Map.Entry<Pair<String, String>, CalculationResults> entry : testResults.entrySet()) {
+      final CalculationResults testViewResult = entry.getValue();
+      final CalculationResults baseViewResult = baseResults.get(entry.getKey());
       if (baseViewResult == null) {
         LOGGER.warn("No base result for {}", entry.getKey());
         continue;
@@ -94,12 +94,12 @@ public class ViewRegressionTest {
     return new RegressionTestResults(_baseVersion, _testVersion, results);
   }
 
-  private Map<Pair<String, String>, CalculationResults> runTest(String workingDir,
-                                                                String classpath,
-                                                                String version,
-                                                                String dbPropsFile) {
+  private Map<Pair<String, String>, CalculationResults> runTest(final String workingDir,
+                                                                final String classpath,
+                                                                final String version,
+                                                                final String dbPropsFile) {
     // don't use the config file to be sure we don't accidentally clobber a real database
-    Properties dbProps = RegressionUtils.loadProperties(dbPropsFile);
+    final Properties dbProps = RegressionUtils.loadProperties(dbPropsFile);
     if (_dbDumpDir != null) {
       RegressionUtils.createEmptyDatabase(dbPropsFile, workingDir, classpath, _logbackConfig);
       RegressionUtils.restoreDatabase(workingDir, classpath, dbProps, _serverConfigFile, _logbackConfig, _dbDumpDir);
@@ -107,54 +107,54 @@ public class ViewRegressionTest {
     return runViews(workingDir, classpath, version, _valuationTime, dbProps);
   }
 
-  private Map<Pair<String, String>, CalculationResults> runViews(String workingDir,
-                                                                 String classpath,
-                                                                 String version,
-                                                                 Instant valuationTime,
-                                                                 Properties dbProps) {
+  private Map<Pair<String, String>, CalculationResults> runViews(final String workingDir,
+                                                                 final String classpath,
+                                                                 final String version,
+                                                                 final Instant valuationTime,
+                                                                 final Properties dbProps) {
     // TODO don't hard-code the port
-    int port = 8080;
-    String serverUrl = "http://localhost:" + port;
+    final int port = 8080;
+    final String serverUrl = "http://localhost:" + port;
 
     // start the server again to run the tests
     try (ServerProcess ignored = ServerProcess.start(workingDir, classpath, _serverConfigFile, dbProps, _logbackConfig);
          RemoteServer server = RemoteServer.create(serverUrl)) {
-      Map<Pair<String, String>, CalculationResults> allResults = Maps.newHashMap();
-      Collection<Pair<String, String>> viewAndSnapshotNames = getViewAndSnapshotNames(server.getConfigMaster(),
+      final Map<Pair<String, String>, CalculationResults> allResults = Maps.newHashMap();
+      final Collection<Pair<String, String>> viewAndSnapshotNames = getViewAndSnapshotNames(server.getConfigMaster(),
                                                                                       server.getMarketDataSnapshotMaster());
-      ViewRunner viewRunner = new ViewRunner(server.getConfigMaster(),
+      final ViewRunner viewRunner = new ViewRunner(server.getConfigMaster(),
                                              server.getViewProcessor(),
                                              server.getPositionSource(),
                                              server.getSecuritySource(),
                                              server.getMarketDataSnapshotMaster());
-      for (Pair<String, String> names : viewAndSnapshotNames) {
-        String viewName = names.getFirst();
-        String snapshotName = names.getSecond();
-        CalculationResults results = viewRunner.run(version, viewName, snapshotName, valuationTime);
+      for (final Pair<String, String> names : viewAndSnapshotNames) {
+        final String viewName = names.getFirst();
+        final String snapshotName = names.getSecond();
+        final CalculationResults results = viewRunner.run(version, viewName, snapshotName, valuationTime);
         allResults.put(names, results);
       }
       return allResults;
     }
   }
 
-  private static Collection<Pair<String, String>> getViewAndSnapshotNames(ConfigMaster configMaster,
-                                                                          MarketDataSnapshotMaster snapshotMaster) {
-    List<Pair<String, String>> viewAndSnapshotNames = Lists.newArrayList();
-    MarketDataSnapshotSearchRequest snapshotRequest = new MarketDataSnapshotSearchRequest();
+  private static Collection<Pair<String, String>> getViewAndSnapshotNames(final ConfigMaster configMaster,
+                                                                          final MarketDataSnapshotMaster snapshotMaster) {
+    final List<Pair<String, String>> viewAndSnapshotNames = Lists.newArrayList();
+    final MarketDataSnapshotSearchRequest snapshotRequest = new MarketDataSnapshotSearchRequest();
     // TODO this isn't great but is necessary because of PLAT-4793
     snapshotRequest.setIncludeData(true);
-    MarketDataSnapshotSearchResult snapshotResult = snapshotMaster.search(snapshotRequest);
-    for (ManageableMarketDataSnapshot snapshot : snapshotResult.getSnapshots()) {
-      String basisViewName = snapshot.getBasisViewName();
+    final MarketDataSnapshotSearchResult snapshotResult = snapshotMaster.search(snapshotRequest);
+    for (final ManageableMarketDataSnapshot snapshot : snapshotResult.getSnapshots()) {
+      final String basisViewName = snapshot.getBasisViewName();
       if (basisViewName != null) {
-        ConfigSearchRequest<ViewDefinition> configRequest = new ConfigSearchRequest<>(ViewDefinition.class);
+        final ConfigSearchRequest<ViewDefinition> configRequest = new ConfigSearchRequest<>(ViewDefinition.class);
         configRequest.setName(basisViewName);
-        ConfigSearchResult<ViewDefinition> configResult = configMaster.search(configRequest);
+        final ConfigSearchResult<ViewDefinition> configResult = configMaster.search(configRequest);
         if (configResult.getValues().size() > 1) {
           LOGGER.warn("Multiple view definitions found with the same name '{}'", basisViewName);
           continue;
         }
-        String viewDefName = configResult.getSingleValue().getName();
+        final String viewDefName = configResult.getSingleValue().getName();
         viewAndSnapshotNames.add(Pairs.of(viewDefName, snapshot.getName()));
       }
     }

@@ -53,7 +53,7 @@ public final class LinkIdentifier<I, T> implements ImmutableBean {
    * @param type the type of the object being linked to
    * @return a new instance
    */
-  public static <I, T> LinkIdentifier<I, T> of(I identifier, Class<T> type) {
+  public static <I, T> LinkIdentifier<I, T> of(final I identifier, final Class<T> type) {
     return new LinkIdentifier<>(identifier, type);
   }
 
@@ -64,7 +64,7 @@ public final class LinkIdentifier<I, T> implements ImmutableBean {
    * @param type the type of the object being linked to
    */
   @ImmutableConstructor
-  private LinkIdentifier(I identifier, Class<T> type) {
+  private LinkIdentifier(final I identifier, final Class<T> type) {
     _type = type;
     _identifier = identifier;
   }

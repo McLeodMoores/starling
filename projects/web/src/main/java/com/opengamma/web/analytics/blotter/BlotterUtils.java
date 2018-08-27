@@ -120,7 +120,7 @@ import com.opengamma.util.time.Expiry;
   private static final ThreadLocal<DecimalFormat> DECIMAL_FORMAT = new ThreadLocal<DecimalFormat>() {
     @Override
     protected DecimalFormat initialValue() {
-      DecimalFormat decimalFormat = new DecimalFormat("#,###.#####");
+      final DecimalFormat decimalFormat = new DecimalFormat("#,###.#####");
       decimalFormat.setParseBigDecimal(true);
       return decimalFormat;
     }
@@ -144,9 +144,9 @@ import com.opengamma.util.time.Expiry;
   private static final Converters JSON_BUILDING_CONVERTERS;
 
   static {
-    StringToRegionIdConverter stringToRegionIdConverter = new StringToRegionIdConverter();
+    final StringToRegionIdConverter stringToRegionIdConverter = new StringToRegionIdConverter();
     // for building beans from JSON
-    Map<MetaProperty<?>, Converter<?, ?>> beanRegionConverters = Maps.newHashMap();
+    final Map<MetaProperty<?>, Converter<?, ?>> beanRegionConverters = Maps.newHashMap();
     beanRegionConverters.putAll(
         ImmutableMap.<MetaProperty<?>, Converter<?, ?>>of(
             CashSecurity.meta().regionId(), stringToRegionIdConverter,
@@ -160,8 +160,8 @@ import com.opengamma.util.time.Expiry;
             NonDeliverableFXForwardSecurity.meta().regionId(), new FXRegionConverter()));
 
     // for building JSON from beans
-    RegionIdToStringConverter regionIdToStringConverter = new RegionIdToStringConverter();
-    Map<MetaProperty<?>, Converter<?, ?>> jsonRegionConverters =
+    final RegionIdToStringConverter regionIdToStringConverter = new RegionIdToStringConverter();
+    final Map<MetaProperty<?>, Converter<?, ?>> jsonRegionConverters =
         ImmutableMap.<MetaProperty<?>, Converter<?, ?>>of(
             CashSecurity.meta().regionId(), regionIdToStringConverter,
             CreditDefaultSwapSecurity.meta().regionId(), regionIdToStringConverter,
@@ -232,20 +232,20 @@ import com.opengamma.util.time.Expiry;
     return DECIMAL_FORMAT.get();
   }
 
-  /* package */ static FinancialSecurity buildSecurity(BeanDataSource data) {
+  /* package */ static FinancialSecurity buildSecurity(final BeanDataSource data) {
     return buildSecurity(data, ExternalIdBundle.EMPTY);
   }
 
   @SuppressWarnings("unchecked")
-  /* package */ static FinancialSecurity buildSecurity(BeanDataSource data, ExternalIdBundle idBundle) {
-    BeanVisitor<BeanBuilder<FinancialSecurity>> visitor = new BeanBuildingVisitor<>(data, META_BEAN_FACTORY,
+  /* package */ static FinancialSecurity buildSecurity(final BeanDataSource data, final ExternalIdBundle idBundle) {
+    final BeanVisitor<BeanBuilder<FinancialSecurity>> visitor = new BeanBuildingVisitor<>(data, META_BEAN_FACTORY,
                                                                                     BEAN_BUILDING_CONVERTERS);
-    MetaBean metaBean = META_BEAN_FACTORY.beanFor(data);
+    final MetaBean metaBean = META_BEAN_FACTORY.beanFor(data);
     // TODO check it's a FinancialSecurity metaBean
     if (!(metaBean instanceof FinancialSecurity.Meta)) {
       throw new IllegalArgumentException("MetaBean " + metaBean + " isn't for a FinancialSecurity");
     }
-    BeanBuilder<FinancialSecurity> builder = (BeanBuilder<FinancialSecurity>) BEAN_BUILDING_TRAVERSER.traverse(metaBean, visitor);
+    final BeanBuilder<FinancialSecurity> builder = (BeanBuilder<FinancialSecurity>) BEAN_BUILDING_TRAVERSER.traverse(metaBean, visitor);
     // externalIdBundle needs to be specified or building fails because it's not nullable
     builder.set(FinancialSecurity.meta().externalIdBundle(), idBundle);
     return builder.build();
@@ -290,14 +290,14 @@ import com.opengamma.util.time.Expiry;
 /* package */ class EnumConverter<T extends Enum> implements StringConverter<T> {
 
   @Override
-  public T convertFromString(Class<? extends T> type, String str) {
+  public T convertFromString(final Class<? extends T> type, final String str) {
     // IntelliJ says this cast is redundant but javac disagrees
     //noinspection RedundantCast
     return (T) Enum.valueOf(type, str.toUpperCase().replace(' ', '_'));
   }
 
   @Override
-  public String convertToString(T e) {
+  public String convertToString(final T e) {
     return WordUtils.capitalize(e.name().toLowerCase().replace('_', ' '));
   }
 }
@@ -309,13 +309,13 @@ import com.opengamma.util.time.Expiry;
 /* package */ class ZonedDateTimeConverter implements StringConverter<ZonedDateTime> {
 
   @Override
-  public ZonedDateTime convertFromString(Class<? extends ZonedDateTime> cls, String localDateString) {
-    LocalDate localDate = LocalDate.parse(localDateString);
+  public ZonedDateTime convertFromString(final Class<? extends ZonedDateTime> cls, final String localDateString) {
+    final LocalDate localDate = LocalDate.parse(localDateString);
     return localDate.atTime(11, 0).atZone(ZoneOffset.UTC);
   }
 
   @Override
-  public String convertToString(ZonedDateTime dateTime) {
+  public String convertToString(final ZonedDateTime dateTime) {
     return dateTime.toLocalDate().toString();
   }
 }
@@ -327,7 +327,7 @@ import com.opengamma.util.time.Expiry;
 /* package */ class OffsetTimeConverter implements StringConverter<OffsetTime> {
 
   @Override
-  public OffsetTime convertFromString(Class<? extends OffsetTime> cls, String timeString) {
+  public OffsetTime convertFromString(final Class<? extends OffsetTime> cls, final String timeString) {
     if (!StringUtils.isEmpty(timeString)) {
       return OffsetTime.of(LocalTime.parse(timeString.trim()), ZoneOffset.UTC);
     } else {
@@ -336,7 +336,7 @@ import com.opengamma.util.time.Expiry;
   }
 
   @Override
-  public String convertToString(OffsetTime time) {
+  public String convertToString(final OffsetTime time) {
     return time.toLocalTime().toString();
   }
 }
@@ -347,13 +347,13 @@ import com.opengamma.util.time.Expiry;
 /* package */ class ExpiryConverter implements StringConverter<Expiry> {
 
   @Override
-  public Expiry convertFromString(Class<? extends Expiry> cls, String localDateString) {
-    LocalDate localDate = LocalDate.parse(localDateString);
+  public Expiry convertFromString(final Class<? extends Expiry> cls, final String localDateString) {
+    final LocalDate localDate = LocalDate.parse(localDateString);
     return new Expiry(localDate.atTime(11, 0).atZone(ZoneOffset.UTC));
   }
 
   @Override
-  public String convertToString(Expiry expiry) {
+  public String convertToString(final Expiry expiry) {
     return expiry.getExpiry().toLocalDate().toString();
   }
 }
@@ -364,16 +364,16 @@ import com.opengamma.util.time.Expiry;
 /* package */ class DoubleConverter implements StringConverter<Double> {
 
   @Override
-  public Double convertFromString(Class<? extends Double> cls, String str) {
+  public Double convertFromString(final Class<? extends Double> cls, final String str) {
     try {
       return BlotterUtils.getDecimalFormat().parse(str).doubleValue();
-    } catch (ParseException e) {
+    } catch (final ParseException e) {
       throw new IllegalArgumentException("Failed to parse number", e);
     }
   }
 
   @Override
-  public String convertToString(Double value) {
+  public String convertToString(final Double value) {
     return BlotterUtils.getDecimalFormat().format(value);
   }
 }
@@ -384,9 +384,9 @@ import com.opengamma.util.time.Expiry;
 /* package */ class BigDecimalConverter implements StringConverter<BigDecimal> {
 
   @Override
-  public BigDecimal convertFromString(Class<? extends BigDecimal> cls, String str) {
+  public BigDecimal convertFromString(final Class<? extends BigDecimal> cls, final String str) {
     try {
-      Number number = BlotterUtils.getDecimalFormat().parse(str);
+      final Number number = BlotterUtils.getDecimalFormat().parse(str);
       // bizarrely if you call setParseBigDecimal(true) on a DecimalFormat it returns a BigDecimal unless the number
       // is NaN or +/- infinity in which case it returns a Double
       if (number instanceof BigDecimal) {
@@ -394,13 +394,13 @@ import com.opengamma.util.time.Expiry;
       } else {
         throw new IllegalArgumentException("Failed to parse number as BigDecimal: " + number);
       }
-    } catch (ParseException e) {
+    } catch (final ParseException e) {
       throw new IllegalArgumentException("Failed to parse number", e);
     }
   }
 
   @Override
-  public String convertToString(BigDecimal value) {
+  public String convertToString(final BigDecimal value) {
     return BlotterUtils.getDecimalFormat().format(value);
   }
 }
@@ -416,7 +416,7 @@ import com.opengamma.util.time.Expiry;
    * @return An {@link ExternalId} with a scheme of {@link ExternalSchemes#FINANCIAL} and a value of {@code region}.
    */
   @Override
-  public ExternalId convert(String region) {
+  public ExternalId convert(final String region) {
     if (StringUtils.isEmpty(region)) {
       throw new IllegalArgumentException("Region must not be empty");
     }
@@ -435,7 +435,7 @@ import com.opengamma.util.time.Expiry;
    * @return {@code regionId}'s value
    */
   @Override
-  public String convert(ExternalId regionId) {
+  public String convert(final ExternalId regionId) {
     ArgumentChecker.notNull(regionId, "regionId");
     return regionId.getValue();
   }

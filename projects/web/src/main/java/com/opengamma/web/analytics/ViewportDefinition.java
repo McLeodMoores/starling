@@ -18,11 +18,11 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
  * Definition of a viewport on an grid displaying analytics data. A viewport represents the visible part of a grid.
  */
 public abstract class ViewportDefinition implements Iterable<GridCell> {
-  
+
   private final int _version;
   private final boolean _enableLogging;
 
-  protected ViewportDefinition(int version, boolean enableLogging) {
+  protected ViewportDefinition(final int version, final boolean enableLogging) {
     _version = version;
     _enableLogging = enableLogging;
   }
@@ -44,7 +44,7 @@ public abstract class ViewportDefinition implements Iterable<GridCell> {
    * Creates a viewport definition from row and column indices <em>or</em> a list of cells. If row and column indices
    * are specified they must both be non-empty and cells must be empty. If specifying cells the row and column indices
    * must be empty.
-   * 
+   *
    * @param version  the version
    * @param rows Indices of rows in the viewport. Must be non-empty if columns is non-empty. Must be empty if cells
    * is non-empty
@@ -56,16 +56,16 @@ public abstract class ViewportDefinition implements Iterable<GridCell> {
    * @param enableLogging Whether full logging info should be collected for the viewport's cells
    * @return A new viewport definition
    */
-  public static ViewportDefinition create(int version,
-                                          List<Integer> rows,
-                                          List<Integer> columns,
-                                          List<GridCell> cells,
-                                          TypeFormatter.Format format,
-                                          Boolean enableLogging) {
+  public static ViewportDefinition create(final int version,
+                                          final List<Integer> rows,
+                                          final List<Integer> columns,
+                                          final List<GridCell> cells,
+                                          final TypeFormatter.Format format,
+                                          final Boolean enableLogging) {
     ArgumentChecker.notNull(cells, "cells");
     ArgumentChecker.notNull(rows, "rows");
     ArgumentChecker.notNull(columns, "columns");
-    boolean logging = enableLogging == null ? false : enableLogging;
+    final boolean logging = enableLogging == null ? false : enableLogging;
     if (cells.size() != 0) {
       if (rows.size() != 0 || columns.size() != 0) {
         throw new IllegalArgumentException("rows and columns must be empty if cells are specified");
@@ -79,8 +79,8 @@ public abstract class ViewportDefinition implements Iterable<GridCell> {
     }
   }
 
-  public static ViewportDefinition createEmpty(int version) {
-    List<Integer> emptyList = Collections.emptyList();
+  public static ViewportDefinition createEmpty(final int version) {
+    final List<Integer> emptyList = Collections.emptyList();
     return new RectangularViewportDefinition(version, emptyList, emptyList, TypeFormatter.Format.CELL, false);
   }
 

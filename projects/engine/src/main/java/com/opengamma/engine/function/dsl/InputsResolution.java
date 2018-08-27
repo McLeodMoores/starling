@@ -32,14 +32,14 @@ public class InputsResolution extends DirectBean {
    * The resolved inputs.
    */
   @PropertyDefinition(validate = "notNull")
-  private Collection<ResolvedInput> _inputs = new ArrayList<ResolvedInput>();
+  private Collection<ResolvedInput> _inputs = new ArrayList<>();
 
   /**
    * Adds a resolved input object.
-   * 
+   *
    * @param input  the resolved input
    */
-  public void addInput(ResolvedInput input) {
+  public void addInput(final ResolvedInput input) {
     _inputs.add(input);
   }
 

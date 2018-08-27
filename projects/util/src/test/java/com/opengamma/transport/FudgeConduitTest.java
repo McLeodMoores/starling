@@ -27,76 +27,76 @@ import com.opengamma.util.test.TestGroup;
 public class FudgeConduitTest {
 
   public void oneWayTest() {
-    FudgeContext context = new FudgeContext();
-    CollectingFudgeMessageReceiver collectingReceiver = new CollectingFudgeMessageReceiver();
-    ByteArrayFudgeMessageReceiver fudgeReceiver = new ByteArrayFudgeMessageReceiver(collectingReceiver);
-    DirectInvocationByteArrayMessageSender byteArraySender = new DirectInvocationByteArrayMessageSender(fudgeReceiver);
-    ByteArrayFudgeMessageSender fudgeSender = new ByteArrayFudgeMessageSender(byteArraySender, context);
-    
-    MutableFudgeMsg msg = context.newMessage();
+    final FudgeContext context = new FudgeContext();
+    final CollectingFudgeMessageReceiver collectingReceiver = new CollectingFudgeMessageReceiver();
+    final ByteArrayFudgeMessageReceiver fudgeReceiver = new ByteArrayFudgeMessageReceiver(collectingReceiver);
+    final DirectInvocationByteArrayMessageSender byteArraySender = new DirectInvocationByteArrayMessageSender(fudgeReceiver);
+    final ByteArrayFudgeMessageSender fudgeSender = new ByteArrayFudgeMessageSender(byteArraySender, context);
+
+    final MutableFudgeMsg msg = context.newMessage();
     msg.add("Foo", "Bar");
     msg.add("Number Problems", 99);
-    
+
     fudgeSender.send(msg);
-    
-    List<FudgeMsgEnvelope> receivedMessages = collectingReceiver.getMessages();
+
+    final List<FudgeMsgEnvelope> receivedMessages = collectingReceiver.getMessages();
     assertEquals(1, receivedMessages.size());
-    FudgeMsgEnvelope receivedEnvelope = receivedMessages.get(0);
+    final FudgeMsgEnvelope receivedEnvelope = receivedMessages.get(0);
     assertNotNull(receivedEnvelope.getMessage());
-    FudgeMsg receivedMsg = receivedEnvelope.getMessage();
+    final FudgeMsg receivedMsg = receivedEnvelope.getMessage();
     assertEquals(2, receivedMsg.getNumFields());
     assertEquals("Bar", receivedMsg.getString("Foo"));
     assertEquals(new Integer(99), receivedMsg.getInt("Number Problems"));
   }
-  
+
   public void oneWayTestWithEncryption() {
-    FudgeContext context = new FudgeContext();
-    CollectingFudgeMessageReceiver collectingReceiver = new CollectingFudgeMessageReceiver();
-    ByteArrayFudgeMessageReceiver fudgeReceiver = new ByteArrayFudgeMessageReceiver(collectingReceiver, OpenGammaFudgeContext.getInstance(), true);
-    DirectInvocationByteArrayMessageSender byteArraySender = new DirectInvocationByteArrayMessageSender(fudgeReceiver);
-    ByteArrayFudgeMessageSender fudgeSender = new ByteArrayFudgeMessageSender(byteArraySender, context, true);
-    
-    MutableFudgeMsg msg = context.newMessage();
+    final FudgeContext context = new FudgeContext();
+    final CollectingFudgeMessageReceiver collectingReceiver = new CollectingFudgeMessageReceiver();
+    final ByteArrayFudgeMessageReceiver fudgeReceiver = new ByteArrayFudgeMessageReceiver(collectingReceiver, OpenGammaFudgeContext.getInstance(), true);
+    final DirectInvocationByteArrayMessageSender byteArraySender = new DirectInvocationByteArrayMessageSender(fudgeReceiver);
+    final ByteArrayFudgeMessageSender fudgeSender = new ByteArrayFudgeMessageSender(byteArraySender, context, true);
+
+    final MutableFudgeMsg msg = context.newMessage();
     msg.add("Foo", "Bar");
     msg.add("Number Problems", 99);
-    
+
     fudgeSender.send(msg);
-    
-    List<FudgeMsgEnvelope> receivedMessages = collectingReceiver.getMessages();
+
+    final List<FudgeMsgEnvelope> receivedMessages = collectingReceiver.getMessages();
     assertEquals(1, receivedMessages.size());
-    FudgeMsgEnvelope receivedEnvelope = receivedMessages.get(0);
+    final FudgeMsgEnvelope receivedEnvelope = receivedMessages.get(0);
     assertNotNull(receivedEnvelope.getMessage());
-    FudgeMsg receivedMsg = receivedEnvelope.getMessage();
+    final FudgeMsg receivedMsg = receivedEnvelope.getMessage();
     assertEquals(2, receivedMsg.getNumFields());
     assertEquals("Bar", receivedMsg.getString("Foo"));
     assertEquals(new Integer(99), receivedMsg.getInt("Number Problems"));
   }
-  
+
   public void requestResponseTest() {
-    FudgeContext context = new FudgeContext();
-    FudgeRequestReceiver requestReceiver = new FudgeRequestReceiver() {
+    final FudgeContext context = new FudgeContext();
+    final FudgeRequestReceiver requestReceiver = new FudgeRequestReceiver() {
       @Override
       public FudgeMsg requestReceived(
-          FudgeDeserializer deserializer, FudgeMsgEnvelope requestEnvelope) {
-        MutableFudgeMsg response = deserializer.getFudgeContext().newMessage();
+          final FudgeDeserializer deserializer, final FudgeMsgEnvelope requestEnvelope) {
+        final MutableFudgeMsg response = deserializer.getFudgeContext().newMessage();
         response.add("Killing", "In The Name Of");
         return response;
       }
     };
-    
-    FudgeRequestSender sender = InMemoryRequestConduit.create(requestReceiver);
-    
-    MutableFudgeMsg request = context.newMessage();
+
+    final FudgeRequestSender sender = InMemoryRequestConduit.create(requestReceiver);
+
+    final MutableFudgeMsg request = context.newMessage();
     request.add("Rage", "Against The Machine");
-    
-    CollectingFudgeMessageReceiver responseReceiver = new CollectingFudgeMessageReceiver();
+
+    final CollectingFudgeMessageReceiver responseReceiver = new CollectingFudgeMessageReceiver();
     sender.sendRequest(request, responseReceiver);
-    List<FudgeMsgEnvelope> receivedMessages = responseReceiver.getMessages();
+    final List<FudgeMsgEnvelope> receivedMessages = responseReceiver.getMessages();
     assertEquals(1, receivedMessages.size());
-    
-    FudgeMsgEnvelope receivedEnvelope = receivedMessages.get(0);
+
+    final FudgeMsgEnvelope receivedEnvelope = receivedMessages.get(0);
     assertNotNull(receivedEnvelope.getMessage());
-    FudgeMsg receivedMsg = receivedEnvelope.getMessage();
+    final FudgeMsg receivedMsg = receivedEnvelope.getMessage();
     assertEquals(1, receivedMsg.getNumFields());
     assertEquals("In The Name Of", receivedMsg.getString("Killing"));
   }

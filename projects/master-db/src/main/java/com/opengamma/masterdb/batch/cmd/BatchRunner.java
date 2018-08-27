@@ -34,13 +34,13 @@ import com.opengamma.livedata.UserPrincipal;
 import com.opengamma.util.StartupUtils;
 
 /**
- * The entry point for running OpenGamma batches. 
+ * The entry point for running OpenGamma batches.
  */
 public class BatchRunner {
 
   /** The spring configuration. */
   public static final String CONTEXT_CONFIGURATION_PATH = "/com/opengamma/masterdb/batch/cmd/batch-context.xml";
-  
+
   static {
     StartupUtils.init();
   }
@@ -76,7 +76,7 @@ public class BatchRunner {
    */
   private static Instant s_correctedTo;
 
-  public static void main(String[] args) throws Exception {  // CSIGNORE
+  public static void main(final String[] args) throws Exception {  // CSIGNORE
     if (args.length == 0) {
       usage();
       System.exit(-1);
@@ -84,10 +84,10 @@ public class BatchRunner {
 
     CommandLine line = null;
     try {
-      CommandLineParser parser = new PosixParser();
+      final CommandLineParser parser = new PosixParser();
       line = parser.parse(getOptions(), args);
       initialize(line);
-    } catch (ParseException e) {
+    } catch (final ParseException e) {
       usage();
       System.exit(-1);
     }
@@ -99,15 +99,15 @@ public class BatchRunner {
       appContext = getApplicationContext();
       appContext.start();
 
-      ViewProcessor viewProcessor = appContext.getBean("viewProcessor", ViewProcessor.class);
+      final ViewProcessor viewProcessor = appContext.getBean("viewProcessor", ViewProcessor.class);
 
-      ViewClient viewClient = viewProcessor.createViewClient(UserPrincipal.getLocalUser());
-      MarketDataSpecification marketDataSpec = new FixedHistoricalMarketDataSpecification(s_observationDateTime.toLocalDate());
-      ViewCycleExecutionOptions cycleOptions = ViewCycleExecutionOptions.builder().setValuationTime(s_valuationInstant).setMarketDataSpecification(marketDataSpec)
+      final ViewClient viewClient = viewProcessor.createViewClient(UserPrincipal.getLocalUser());
+      final MarketDataSpecification marketDataSpec = new FixedHistoricalMarketDataSpecification(s_observationDateTime.toLocalDate());
+      final ViewCycleExecutionOptions cycleOptions = ViewCycleExecutionOptions.builder().setValuationTime(s_valuationInstant).setMarketDataSpecification(marketDataSpec)
           .setResolverVersionCorrection(VersionCorrection.of(s_versionAsOf, s_correctedTo)).create();
-      ViewCycleExecutionSequence executionSequence = ArbitraryViewCycleExecutionSequence.of(cycleOptions);
+      final ViewCycleExecutionSequence executionSequence = ArbitraryViewCycleExecutionSequence.of(cycleOptions);
 
-      ExecutionOptions executionOptions = new ExecutionOptions(executionSequence, ExecutionFlags.none().awaitMarketData().get(), null, null);
+      final ExecutionOptions executionOptions = new ExecutionOptions(executionSequence, ExecutionFlags.none().awaitMarketData().get(), null, null);
 
       viewClient.attachToViewProcess(UniqueId.parse(s_viewDefinitionUid), executionOptions);
     } finally {
@@ -125,10 +125,10 @@ public class BatchRunner {
     }*/
   }
 
-  private static void initialize(CommandLine line) throws OpenGammaRuntimeException {
+  private static void initialize(final CommandLine line) throws OpenGammaRuntimeException {
 
     if (line.hasOption("runCreationMode")) {
-      String creationMode = line.getOptionValue("runCreationMode");
+      final String creationMode = line.getOptionValue("runCreationMode");
       if (creationMode.equalsIgnoreCase("auto")) {
         s_runCreationMode = RunCreationMode.AUTO;
       } else if (creationMode.equalsIgnoreCase("create_new")) {
@@ -145,7 +145,7 @@ public class BatchRunner {
     }
 
     if (line.hasOption("snapshotMode")) {
-      String snapshotMode = line.getOptionValue("snapshotMode");
+      final String snapshotMode = line.getOptionValue("snapshotMode");
       if (snapshotMode.equalsIgnoreCase("PREPARED")) {
         s_snapshotMode = SnapshotMode.PREPARED;
       } else if (snapshotMode.equalsIgnoreCase("WRITE_THROUGH")) {
@@ -177,7 +177,7 @@ public class BatchRunner {
   }
 
   public static void usage() {
-    HelpFormatter formatter = new HelpFormatter();
+    final HelpFormatter formatter = new HelpFormatter();
     formatter.printHelp("java com.opengamma.masterdb.batch.cmd.BatchRunner [options]", getOptions());
   }
 
@@ -186,7 +186,7 @@ public class BatchRunner {
   }
 
   public static Options getOptions() {
-    Options options = new Options();
+    final Options options = new Options();
 
     options.addOption("reason", true, "Run reason. Default - Manual run started on {yyyy-MM-ddTHH:mm:ssZZ} by {user.name}.");
 

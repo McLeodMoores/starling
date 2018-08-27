@@ -42,43 +42,43 @@ public class ModifyConfigDbConfigMasterWorkerReplaceVersionsTest extends Abstrac
   private static final Logger LOGGER = LoggerFactory.getLogger(ModifyConfigDbConfigMasterWorkerReplaceVersionsTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public ModifyConfigDbConfigMasterWorkerReplaceVersionsTest(String databaseType, String databaseVersion) {
+  public ModifyConfigDbConfigMasterWorkerReplaceVersionsTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion, false);
     LOGGER.info("running testcases for {}", databaseType);
   }
 
-  //-------------------------------------------------------------------------  
+  //-------------------------------------------------------------------------
 
   @Test
   public void test_ReplaceVersion_of_some_middle_version() {
-    Clock origClock = _cfgMaster.getClock();
+    final Clock origClock = _cfgMaster.getClock();
     try {
-      Instant now = Instant.now();
+      final Instant now = Instant.now();
 
-      ObjectId baseOid = setupTestData(now);
+      final ObjectId baseOid = setupTestData(now);
       _cfgMaster.setClock(Clock.fixed(now.plus(2, HOURS), ZoneOffset.UTC));
-      ConfigDocument latestDoc = _cfgMaster.get(baseOid, VersionCorrection.LATEST);
-      Instant latestFrom = latestDoc.getVersionFromInstant();
+      final ConfigDocument latestDoc = _cfgMaster.get(baseOid, VersionCorrection.LATEST);
+      final Instant latestFrom = latestDoc.getVersionFromInstant();
 
-      List<ConfigDocument> replacement = newArrayList();
+      final List<ConfigDocument> replacement = newArrayList();
       for (int i = 0; i <= 10; i++) {
-        String val = "test" + i;
-        ConfigDocument doc = new ConfigDocument(ConfigItem.of(val, "some_name_"+i));
+        final String val = "test" + i;
+        final ConfigDocument doc = new ConfigDocument(ConfigItem.of(val, "some_name_"+i));
         doc.setVersionFromInstant(latestFrom.plus(i, MINUTES));
         replacement.add(doc);
       }
 
       _cfgMaster.replaceVersion(latestDoc.getUniqueId(), replacement);
 
-      ConfigSearchRequest<String> searchRequest = new ConfigSearchRequest<String>();
+      final ConfigSearchRequest<String> searchRequest = new ConfigSearchRequest<>();
       searchRequest.addConfigId(baseOid);
       searchRequest.setVersionCorrection(VersionCorrection.LATEST);
       searchRequest.setType(String.class);
-      ConfigSearchResult<String> result = _cfgMaster.search(searchRequest);      
-      List<ConfigItem<String>> values = result.getValues();
+      final ConfigSearchResult<String> result = _cfgMaster.search(searchRequest);
+      final List<ConfigItem<String>> values = result.getValues();
 
       assertEquals(1, values.size());
-      String val = values.get(0).getValue();
+      final String val = values.get(0).getValue();
       assertEquals("test10", val);
 
     } finally {
@@ -88,32 +88,32 @@ public class ModifyConfigDbConfigMasterWorkerReplaceVersionsTest extends Abstrac
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_ReplaceVersion_of_some_middle_version_timeBoundsNotExact() {
-    Clock origClock = _cfgMaster.getClock();
+    final Clock origClock = _cfgMaster.getClock();
     try {
-      Instant now = Instant.now();
+      final Instant now = Instant.now();
 
-      ObjectId baseOid = setupTestData(now);
+      final ObjectId baseOid = setupTestData(now);
       _cfgMaster.setClock(Clock.fixed(now.plus(2, HOURS), ZoneOffset.UTC));
-      ConfigDocument latestDoc = _cfgMaster.get(baseOid, VersionCorrection.LATEST);
-      Instant latestFrom = latestDoc.getVersionFromInstant();
+      final ConfigDocument latestDoc = _cfgMaster.get(baseOid, VersionCorrection.LATEST);
+      final Instant latestFrom = latestDoc.getVersionFromInstant();
 
-      List<ConfigDocument> replacement = newArrayList();
+      final List<ConfigDocument> replacement = newArrayList();
       for (int i = 1; i <= 10; i++) {
-        String val = "test" + i;
-        ConfigDocument doc = new ConfigDocument(ConfigItem.of(val));
+        final String val = "test" + i;
+        final ConfigDocument doc = new ConfigDocument(ConfigItem.of(val));
         doc.setVersionFromInstant(latestFrom.plus(i, MINUTES));
         replacement.add(doc);
       }
 
       _cfgMaster.replaceVersion(latestDoc.getUniqueId(), replacement);
 
-      ConfigSearchRequest<String> searchRequest = new ConfigSearchRequest<String>();
+      final ConfigSearchRequest<String> searchRequest = new ConfigSearchRequest<>();
       searchRequest.addConfigId(baseOid);
       searchRequest.setVersionCorrection(VersionCorrection.LATEST);
-      ConfigSearchResult<String> result = _cfgMaster.search(searchRequest);
-      List<ConfigItem<String>> values = result.getValues();
+      final ConfigSearchResult<String> result = _cfgMaster.search(searchRequest);
+      final List<ConfigItem<String>> values = result.getValues();
       assertEquals(1, values.size());
-      String val = values.get(0).getValue();
+      final String val = values.get(0).getValue();
       assertEquals("test10", val);
 
     } finally {
@@ -123,27 +123,27 @@ public class ModifyConfigDbConfigMasterWorkerReplaceVersionsTest extends Abstrac
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_ReplaceVersion_which_is_not_current() {
-    Clock origClock = _cfgMaster.getClock();
+    final Clock origClock = _cfgMaster.getClock();
     try {
-      Instant now = Instant.now();
+      final Instant now = Instant.now();
 
-      ObjectId baseOid = setupTestData(now);
+      final ObjectId baseOid = setupTestData(now);
       _cfgMaster.setClock(Clock.fixed(now.plus(2, HOURS), ZoneOffset.UTC));
 
 
-      ConfigHistoryRequest<String> historyRequest = new ConfigHistoryRequest<String>();
+      final ConfigHistoryRequest<String> historyRequest = new ConfigHistoryRequest<>();
       historyRequest.setObjectId(baseOid);
       historyRequest.setCorrectionsToInstant(null);
-      ConfigHistoryResult<String> result = _cfgMaster.history(historyRequest);
-      List<ConfigDocument> values = result.getDocuments();
+      final ConfigHistoryResult<String> result = _cfgMaster.history(historyRequest);
+      final List<ConfigDocument> values = result.getDocuments();
 
-      ConfigDocument lastButOneDoc = values.get(values.size() - 1);
-      Instant lastButOneDocVersionFrom = lastButOneDoc.getVersionFromInstant();
+      final ConfigDocument lastButOneDoc = values.get(values.size() - 1);
+      final Instant lastButOneDocVersionFrom = lastButOneDoc.getVersionFromInstant();
 
-      List<ConfigDocument> replacement = newArrayList();
+      final List<ConfigDocument> replacement = newArrayList();
       for (int i = 1; i <= 10; i++) {
-        String val = "test" + i;
-        ConfigDocument doc = new ConfigDocument(ConfigItem.of(val));
+        final String val = "test" + i;
+        final ConfigDocument doc = new ConfigDocument(ConfigItem.of(val));
         doc.setVersionFromInstant(lastButOneDocVersionFrom.plus(i, MINUTES));
         replacement.add(doc);
       }
@@ -157,27 +157,27 @@ public class ModifyConfigDbConfigMasterWorkerReplaceVersionsTest extends Abstrac
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_ReplaceVersion_which_is_not_in_the_time_bounds_of_the_replaced_doc() {
-    Clock origClock = _cfgMaster.getClock();
+    final Clock origClock = _cfgMaster.getClock();
     try {
-      Instant now = Instant.now();
+      final Instant now = Instant.now();
 
-      ObjectId baseOid = setupTestData(now);
+      final ObjectId baseOid = setupTestData(now);
       _cfgMaster.setClock(Clock.fixed(now.plus(2, HOURS), ZoneOffset.UTC));
 
 
-      ConfigHistoryRequest<String> historyRequest = new ConfigHistoryRequest<String>();
+      final ConfigHistoryRequest<String> historyRequest = new ConfigHistoryRequest<>();
       historyRequest.setObjectId(baseOid);
       historyRequest.setCorrectionsToInstant(null);
-      ConfigHistoryResult<String> result = _cfgMaster.history(historyRequest);
-      List<ConfigDocument> values = result.getDocuments();
+      final ConfigHistoryResult<String> result = _cfgMaster.history(historyRequest);
+      final List<ConfigDocument> values = result.getDocuments();
 
-      ConfigDocument lastButOneDoc = values.get(values.size() - 3);
-      Instant lastButOneDocVersionFrom = lastButOneDoc.getVersionFromInstant();
+      final ConfigDocument lastButOneDoc = values.get(values.size() - 3);
+      final Instant lastButOneDocVersionFrom = lastButOneDoc.getVersionFromInstant();
 
-      List<ConfigDocument> replacement = newArrayList();
+      final List<ConfigDocument> replacement = newArrayList();
       for (int i = 1; i <= 10; i++) {
-        String val = "test" + i;
-        ConfigDocument doc = new ConfigDocument(ConfigItem.of(val));
+        final String val = "test" + i;
+        final ConfigDocument doc = new ConfigDocument(ConfigItem.of(val));
         doc.setVersionFromInstant(lastButOneDocVersionFrom.plus(i, MINUTES));
         replacement.add(doc);
       }
@@ -191,30 +191,30 @@ public class ModifyConfigDbConfigMasterWorkerReplaceVersionsTest extends Abstrac
 
   @Test
   public void test_ReplaceVersions() {
-    Clock origClock = _cfgMaster.getClock();
+    final Clock origClock = _cfgMaster.getClock();
     try {
-      Instant now = Instant.now();
+      final Instant now = Instant.now();
 
-      ObjectId baseOid = setupTestData(now);
+      final ObjectId baseOid = setupTestData(now);
       _cfgMaster.setClock(Clock.fixed(now.plus(2, HOURS), ZoneOffset.UTC));
-      ConfigDocument latestDoc = _cfgMaster.get(baseOid, VersionCorrection.LATEST);
-      Instant latestFrom = latestDoc.getVersionFromInstant();
+      final ConfigDocument latestDoc = _cfgMaster.get(baseOid, VersionCorrection.LATEST);
+      final Instant latestFrom = latestDoc.getVersionFromInstant();
 
-      List<ConfigDocument> replacement = newArrayList();
+      final List<ConfigDocument> replacement = newArrayList();
       for (int i = 0; i <= 10; i++) {
-        String val = "test" + i;
-        ConfigDocument doc = new ConfigDocument(ConfigItem.of(val, "some_name_"+i));
+        final String val = "test" + i;
+        final ConfigDocument doc = new ConfigDocument(ConfigItem.of(val, "some_name_"+i));
         doc.setVersionFromInstant(latestFrom.plus(i, SECONDS));
         replacement.add(doc);
       }
 
       _cfgMaster.replaceVersions(latestDoc, replacement);
 
-      ConfigHistoryRequest<String> historyRequest = new ConfigHistoryRequest<String>();
+      final ConfigHistoryRequest<String> historyRequest = new ConfigHistoryRequest<>();
       historyRequest.setObjectId(baseOid);
       historyRequest.setCorrectionsFromInstant(now.plus(2, HOURS));
-      ConfigHistoryResult<String> result = _cfgMaster.history(historyRequest);
-      List<ConfigDocument> values = result.getDocuments();
+      final ConfigHistoryResult<String> result = _cfgMaster.history(historyRequest);
+      final List<ConfigDocument> values = result.getDocuments();
 
       assertEquals(15, values.size());
 
@@ -225,30 +225,30 @@ public class ModifyConfigDbConfigMasterWorkerReplaceVersionsTest extends Abstrac
 
   @Test
   public void test_ReplaceVersions2() {
-    Clock origClock = _cfgMaster.getClock();
+    final Clock origClock = _cfgMaster.getClock();
     try {
-      Instant now = Instant.now();
+      final Instant now = Instant.now();
 
-      ObjectId baseOid = setupTestData(now);
+      final ObjectId baseOid = setupTestData(now);
       _cfgMaster.setClock(Clock.fixed(now.plus(2, HOURS), ZoneOffset.UTC));
-      ConfigDocument latestDoc = _cfgMaster.get(baseOid, VersionCorrection.LATEST);
-      Instant latestFrom = latestDoc.getVersionFromInstant();
+      final ConfigDocument latestDoc = _cfgMaster.get(baseOid, VersionCorrection.LATEST);
+      final Instant latestFrom = latestDoc.getVersionFromInstant();
 
-      List<ConfigDocument> replacement = newArrayList();
+      final List<ConfigDocument> replacement = newArrayList();
       for (int i = 0; i <= 10; i++) {
-        String val = "test" + i;
-        ConfigDocument doc = new ConfigDocument(ConfigItem.of(val, "some_name_"+i));
+        final String val = "test" + i;
+        final ConfigDocument doc = new ConfigDocument(ConfigItem.of(val, "some_name_"+i));
         doc.setVersionFromInstant(latestFrom.plus(i - 3, MINUTES));
         replacement.add(doc);
       }
 
       _cfgMaster.replaceVersions(latestDoc, replacement);
 
-      ConfigHistoryRequest<String> historyRequest = new ConfigHistoryRequest<String>();
+      final ConfigHistoryRequest<String> historyRequest = new ConfigHistoryRequest<>();
       historyRequest.setObjectId(baseOid);
       historyRequest.setCorrectionsFromInstant(now.plus(2, HOURS));
-      ConfigHistoryResult<String> result = _cfgMaster.history(historyRequest);
-      List<ConfigDocument> values = result.getDocuments();
+      final ConfigHistoryResult<String> result = _cfgMaster.history(historyRequest);
+      final List<ConfigDocument> values = result.getDocuments();
 
       assertEquals(12, values.size());
 
@@ -262,71 +262,71 @@ public class ModifyConfigDbConfigMasterWorkerReplaceVersionsTest extends Abstrac
    *
    *       |                        |             |
    *       |                        |             |
-   *       |                        |             |                           
-   *       |                        |             |                           
-   *       |                        |             |                           
-   *       |                        |             |                           
-   *       |                        |             |                           
-   *       |                        |             |                           
-   *       |                        |             |                           
-   *       |                        |             |                           
-   *       |                        |             |                           
-   *       |                        |             |                           
-   *       |                        |             |                           
-   *       |                        |             |                           
-   *       |                        |             |                           
-   *       |     setup_4            |             |                           
-   *       |                        |             |                           
-   *   +5m |------------------------|             |                           
-   *       |                        |             |                           
-   *       |     setup_3            |             |                           
-   *       |                        |             |                           
-   *   +4m |------------------------|             |                           
-   *       |                        |             |      replace_4            
-   *       |     setup_2            |  <-- +3m20s |----------------------------------->>>   
-   *       |                        |             |      replace_3            
-   *   +3m |------------------------|  <-- +3m00s |----------------------------------->>>   
-   *       |                        |             |      replace_2            
-   *       |                        |  <-- +2m40s |----------------------------------->>>   
-   *       |     setup_1            |             |      replace_1            
-   *       |                        |  <-- +2m20s |----------------------------------->>>   
+   *       |                        |             |
+   *       |                        |             |
+   *       |                        |             |
+   *       |                        |             |
+   *       |                        |             |
+   *       |                        |             |
+   *       |                        |             |
+   *       |                        |             |
+   *       |                        |             |
+   *       |                        |             |
+   *       |                        |             |
+   *       |                        |             |
+   *       |                        |             |
+   *       |     setup_4            |             |
+   *       |                        |             |
+   *   +5m |------------------------|             |
+   *       |                        |             |
+   *       |     setup_3            |             |
+   *       |                        |             |
+   *   +4m |------------------------|             |
+   *       |                        |             |      replace_4
+   *       |     setup_2            |  <-- +3m20s |----------------------------------->>>
+   *       |                        |             |      replace_3
+   *   +3m |------------------------|  <-- +3m00s |----------------------------------->>>
+   *       |                        |             |      replace_2
+   *       |                        |  <-- +2m40s |----------------------------------->>>
+   *       |     setup_1            |             |      replace_1
+   *       |                        |  <-- +2m20s |----------------------------------->>>
    *       |                        |
    *       |                        |                       setup_1 (copy)
-   *   +2m |------------------------ ... --------------------------------------------->>>                                                                              
-   *       |                                                               
+   *   +2m |------------------------ ... --------------------------------------------->>>
+   *       |
    *       |     setup_0                                   setup_0 (continuation)
-   *       |                         
-   *   +1m |------------------------ ... --------------------------------------------->>>                                       
+   *       |
+   *   +1m |------------------------ ... --------------------------------------------->>>
    *
    *
    *   NOW =================================================================================
    *
    */
   public void test_ReplaceVersions3() {
-    Clock origClock = _cfgMaster.getClock();
+    final Clock origClock = _cfgMaster.getClock();
     try {
-      Instant now = Instant.now();
+      final Instant now = Instant.now();
 
-      ObjectId baseOid = setupTestData(now);
+      final ObjectId baseOid = setupTestData(now);
       _cfgMaster.setClock(Clock.fixed(now.plus(2, HOURS), ZoneOffset.UTC));
       ConfigDocument latestDoc = _cfgMaster.get(baseOid, VersionCorrection.LATEST);
       Instant latestFrom = latestDoc.getVersionFromInstant();
 
-      List<ConfigDocument> replacement = newArrayList();
+      final List<ConfigDocument> replacement = newArrayList();
       for (int i = 1; i <= 4; i++) {
-        String val = "replace_" + i;
-        ConfigDocument doc = new ConfigDocument(ConfigItem.of(val, "some_name_"+i));
+        final String val = "replace_" + i;
+        final ConfigDocument doc = new ConfigDocument(ConfigItem.of(val, "some_name_"+i));
         doc.setVersionFromInstant(now.plus(1, MINUTES).plus(i * 20, SECONDS));
         replacement.add(doc);
       }
 
       _cfgMaster.replaceVersions(latestDoc, replacement);
 
-      ConfigHistoryRequest<String> historyRequest = new ConfigHistoryRequest<String>();
+      final ConfigHistoryRequest<String> historyRequest = new ConfigHistoryRequest<>();
       historyRequest.setObjectId(baseOid);
       historyRequest.setCorrectionsFromInstant(now.plus(2, HOURS));
-      ConfigHistoryResult<String> result = _cfgMaster.history(historyRequest);
-      List<ConfigDocument> values = result.getDocuments();
+      final ConfigHistoryResult<String> result = _cfgMaster.history(historyRequest);
+      final List<ConfigDocument> values = result.getDocuments();
 
       assertEquals(6, values.size());
 
@@ -359,64 +359,64 @@ public class ModifyConfigDbConfigMasterWorkerReplaceVersionsTest extends Abstrac
   @Test
   /**
    *
-   *       |                                      
-   *       |                                      
-   *       |                                                                 
-   *       |                                                                 
-   *       |                                                                 
-   *       |                                                                 
-   *       |                                                                 
-   *       |                                                                 
-   *       |                                                                 
-   *       |                                                                 
-   *       |                                                                 
-   *       |                                                                 
-   *       |                                                                 
-   *       |                                                                 
-   *       |                                                                 
-   *       |     setup_4                                                     
-   *       |                                                                 
-   *   +5m |------------------------ ... --------------------------------------------->>>                                        
-   *       |                                                                 
-   *       |     setup_3                                                     
-   *       |                                                                 
-   *   +4m |------------------------ ... --------------------------------------------->>>        
+   *       |
+   *       |
+   *       |
+   *       |
+   *       |
+   *       |
+   *       |
+   *       |
+   *       |
+   *       |
+   *       |
+   *       |
+   *       |
+   *       |
+   *       |
+   *       |     setup_4
+   *       |
+   *   +5m |------------------------ ... --------------------------------------------->>>
+   *       |
+   *       |     setup_3
+   *       |
+   *   +4m |------------------------ ... --------------------------------------------->>>
    *       |                        |                      setup_2 (copy)
    *       |                        |
    *       |                        |  <-- +3m40s |----------------------------------->>>
-   *       |                        |             |      replace_4            
-   *       |     setup_2            |  <-- +3m20s |----------------------------------->>>   
-   *       |                        |             |      replace_3            
-   *   +3m |------------------------|  <-- +3m00s |----------------------------------->>>   
-   *       |                        |             |      replace_2            
-   *       |                        |  <-- +2m40s |----------------------------------->>>   
-   *       |     setup_1            |             |      replace_1            
-   *       |                        |  <-- +2m20s |----------------------------------->>>   
+   *       |                        |             |      replace_4
+   *       |     setup_2            |  <-- +3m20s |----------------------------------->>>
+   *       |                        |             |      replace_3
+   *   +3m |------------------------|  <-- +3m00s |----------------------------------->>>
+   *       |                        |             |      replace_2
+   *       |                        |  <-- +2m40s |----------------------------------->>>
+   *       |     setup_1            |             |      replace_1
+   *       |                        |  <-- +2m20s |----------------------------------->>>
    *       |                        |
    *       |                        |                      setup_1 (copy)
-   *   +2m |------------------------ ... --------------------------------------------->>>                                                                              
-   *       |                                                               
+   *   +2m |------------------------ ... --------------------------------------------->>>
+   *       |
    *       |     setup_0                                   setup_0 (continuation)
-   *       |                         
-   *   +1m |------------------------ ... --------------------------------------------->>>                                       
+   *       |
+   *   +1m |------------------------ ... --------------------------------------------->>>
    *
    *
    *   NOW =================================================================================
    *
    */
   public void test_ReplaceVersions4() {
-    Clock origClock = _cfgMaster.getClock();
+    final Clock origClock = _cfgMaster.getClock();
     try {
-      Instant now = Instant.now();
+      final Instant now = Instant.now();
 
-      ObjectId baseOid = setupTestData(now);
+      final ObjectId baseOid = setupTestData(now);
       _cfgMaster.setClock(Clock.fixed(now.plus(2, HOURS), ZoneOffset.UTC));
-      ConfigDocument latestDoc = _cfgMaster.get(baseOid, VersionCorrection.LATEST);
+      final ConfigDocument latestDoc = _cfgMaster.get(baseOid, VersionCorrection.LATEST);
 
-      List<ConfigDocument> replacement = newArrayList();
+      final List<ConfigDocument> replacement = newArrayList();
       for (int i = 1; i <= 4; i++) {
-        String val = "replace_" + i;
-        ConfigDocument doc = new ConfigDocument(ConfigItem.of(val, "some_name_"+i));
+        final String val = "replace_" + i;
+        final ConfigDocument doc = new ConfigDocument(ConfigItem.of(val, "some_name_"+i));
         doc.setVersionFromInstant(now.plus(1, MINUTES).plus(i * 20, SECONDS));
         replacement.add(doc);
       }
@@ -424,11 +424,11 @@ public class ModifyConfigDbConfigMasterWorkerReplaceVersionsTest extends Abstrac
 
       _cfgMaster.replaceVersions(latestDoc, replacement);
 
-      ConfigHistoryRequest<String> historyRequest = new ConfigHistoryRequest<String>();
+      final ConfigHistoryRequest<String> historyRequest = new ConfigHistoryRequest<>();
       historyRequest.setObjectId(baseOid);
       historyRequest.setCorrectionsFromInstant(now.plus(2, HOURS));
-      ConfigHistoryResult<String> result = _cfgMaster.history(historyRequest);
-      List<ConfigDocument> values = result.getDocuments();
+      final ConfigHistoryResult<String> result = _cfgMaster.history(historyRequest);
+      final List<ConfigDocument> values = result.getDocuments();
 
       assertEquals(9, values.size());
 
@@ -468,51 +468,51 @@ public class ModifyConfigDbConfigMasterWorkerReplaceVersionsTest extends Abstrac
   @Test
   /**
    *
-   *       |                                                                 
-   *       |                                                                 
-   *       |                                                                                                         
-   *       |                          
-   *       |     setup_4              
-   *       |                          
-   *   +4m |------------------------ ... ------------------------------------------------>>>        
-   *       |                          
-   *       |     setup_3                  
-   *       |                            
-   *   +3m |------------------------ ... ------------------------------------------------>>>      
-   *       |                                             
-   *       |     setup_2               
-   *       |                          
-   *       |                           
-   *       |                           
-   *   +2m |------------------------ ... ------------------------------------------------>>>                                                                   
+   *       |
+   *       |
+   *       |
+   *       |
+   *       |     setup_4
+   *       |
+   *   +4m |------------------------ ... ------------------------------------------------>>>
+   *       |
+   *       |     setup_3
+   *       |
+   *   +3m |------------------------ ... ------------------------------------------------>>>
+   *       |
+   *       |     setup_2
+   *       |
+   *       |
+   *       |
+   *   +2m |------------------------ ... ------------------------------------------------>>>
    *       |                        |             setup_1 (copy)
-   *       |     setup_1            |    
-   *       |                        |     <-- +2m30s |----------------------------------->>> 
-   *   +1m |------------------------|                |      replace_4                                                
-   *       |                        |     <-- +2m00s |----------------------------------->>> 
-   *       |                        |                |      replace_3                        
-   *       |     setup_0            |     <-- +1m30s |----------------------------------->>>       
-   *       |                        |                |      replace_2                        
-   *   NOW |========================|     <-- +1m00s |----------------------------------->>> 
-   *                                                 |      replace_1                        
-   *                                      <-- +0m30s |----------------------------------->>> 
+   *       |     setup_1            |
+   *       |                        |     <-- +2m30s |----------------------------------->>>
+   *   +1m |------------------------|                |      replace_4
+   *       |                        |     <-- +2m00s |----------------------------------->>>
+   *       |                        |                |      replace_3
+   *       |     setup_0            |     <-- +1m30s |----------------------------------->>>
+   *       |                        |                |      replace_2
+   *   NOW |========================|     <-- +1m00s |----------------------------------->>>
+   *                                                 |      replace_1
+   *                                      <-- +0m30s |----------------------------------->>>
    *
    *
    *
    */
   public void test_ReplaceVersions5() {
-    Clock origClock = _cfgMaster.getClock();
+    final Clock origClock = _cfgMaster.getClock();
     try {
-      Instant now = Instant.now();
+      final Instant now = Instant.now();
 
-      ObjectId baseOid = setupTestData(now);
+      final ObjectId baseOid = setupTestData(now);
       _cfgMaster.setClock(Clock.fixed(now.plus(2, HOURS), ZoneOffset.UTC));
-      ConfigDocument latestDoc = _cfgMaster.get(baseOid, VersionCorrection.LATEST);
+      final ConfigDocument latestDoc = _cfgMaster.get(baseOid, VersionCorrection.LATEST);
 
-      List<ConfigDocument> replacement = newArrayList();
+      final List<ConfigDocument> replacement = newArrayList();
       for (int i = 1; i <= 4; i++) {
-        String val = "replace_" + i;
-        ConfigDocument doc = new ConfigDocument(ConfigItem.of(val, "some_name_"+i));
+        final String val = "replace_" + i;
+        final ConfigDocument doc = new ConfigDocument(ConfigItem.of(val, "some_name_"+i));
         doc.setVersionFromInstant(now.minus(60, SECONDS).plus(i * 30, SECONDS));
         replacement.add(doc);
       }
@@ -520,11 +520,11 @@ public class ModifyConfigDbConfigMasterWorkerReplaceVersionsTest extends Abstrac
 
       _cfgMaster.replaceVersions(latestDoc, replacement);
 
-      ConfigHistoryRequest<String> historyRequest = new ConfigHistoryRequest<String>();
+      final ConfigHistoryRequest<String> historyRequest = new ConfigHistoryRequest<>();
       historyRequest.setObjectId(baseOid);
       historyRequest.setCorrectionsFromInstant(now.plus(2, HOURS));
-      ConfigHistoryResult<String> result = _cfgMaster.history(historyRequest);
-      List<ConfigDocument> values = result.getDocuments();
+      final ConfigHistoryResult<String> result = _cfgMaster.history(historyRequest);
+      final List<ConfigDocument> values = result.getDocuments();
 
       assertEquals(8, values.size());
 

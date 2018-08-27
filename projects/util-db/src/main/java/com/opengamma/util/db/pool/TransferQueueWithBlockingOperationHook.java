@@ -14,7 +14,7 @@ import com.opengamma.util.async.BlockingOperation;
 
 /**
  * Wrapper around a {@link TransferQueue} instance that will make calls to {@link BlockingOperation#wouldBlock} before any potentially blocking operations.
- * 
+ *
  * @param <T> the type of elements in the queue
  */
 public final class TransferQueueWithBlockingOperationHook<T> implements TransferQueue<T> {
@@ -100,7 +100,7 @@ public final class TransferQueueWithBlockingOperationHook<T> implements Transfer
   }
 
   @Override
-  public int drainTo(final Collection<? super T> c, int maxElements) {
+  public int drainTo(final Collection<? super T> c, final int maxElements) {
     return getUnderlying().drainTo(c, maxElements);
   }
 

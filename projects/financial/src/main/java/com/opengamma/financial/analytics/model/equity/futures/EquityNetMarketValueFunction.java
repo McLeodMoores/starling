@@ -31,7 +31,7 @@ import com.opengamma.financial.security.option.EquityOptionSecurity;
 import com.opengamma.util.async.AsynchronousExecution;
 
 /**
- * Prototype - Takes {@link ValueRequirementNames#NET_MARKET_VALUE} as input requirement, 
+ * Prototype - Takes {@link ValueRequirementNames#NET_MARKET_VALUE} as input requirement,
  * and filters out all but those Security Types that are Equity based. <p>
  * <p>
  * Applies only to Equity Security Types
@@ -41,20 +41,20 @@ public class EquityNetMarketValueFunction extends AbstractFunction.NonCompiledIn
   private String getOutputName() {
     return ValueRequirementNames.EQUITY_NET_MARKET_VALUE;
   }
-  
+
   @Override
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
-    Security security = target.getPositionOrTrade().getSecurity();
-    if ((security instanceof EquitySecurity) || 
-        (security instanceof EquityOptionSecurity) || 
-        (security instanceof EquityIndexOptionSecurity)) {
+    final Security security = target.getPositionOrTrade().getSecurity();
+    if (security instanceof EquitySecurity ||
+        security instanceof EquityOptionSecurity ||
+        security instanceof EquityIndexOptionSecurity) {
       return true;
     }
     return false;
   }
 
   @Override
-  public Set<ComputedValue> execute(FunctionExecutionContext executionContext, FunctionInputs inputs, ComputationTarget target, Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
     // Get Net Market Value requirement
     Double netMarketValue = null;
     final ComputedValue inputVal = inputs.getComputedValue(ValueRequirementNames.NET_MARKET_VALUE);
@@ -75,7 +75,7 @@ public class EquityNetMarketValueFunction extends AbstractFunction.NonCompiledIn
   }
 
   @Override
-  public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
     return Collections.singleton(new ValueSpecification(getOutputName() , target.toSpecification(), ValueProperties.all()));
   }
 
@@ -96,7 +96,7 @@ public class EquityNetMarketValueFunction extends AbstractFunction.NonCompiledIn
   }
 
   @Override
-  public Set<ValueRequirement> getRequirements(FunctionCompilationContext context, ComputationTarget target, ValueRequirement desiredValue) {
+  public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     if (!desiredValue.getValueName().equals(getOutputName())) {
       return null;
     }

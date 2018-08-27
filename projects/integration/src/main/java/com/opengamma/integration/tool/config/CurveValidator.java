@@ -59,7 +59,7 @@ public class CurveValidator {
   private static final Logger LOGGER = LoggerFactory.getLogger(CurveValidator.class);
   private final ConfigMaster _configMaster;
   private final ConfigSource _configSource;
-  private ConfigValidationUtils _configValidationUtils;
+  private final ConfigValidationUtils _configValidationUtils;
   private List<ValidationNode> _curveConstructionConfigNodes = new ArrayList<>();
   private List<ValidationNode> _exposureConfigNodes = new ArrayList<>();
   private final RegionSource _regionSource;
@@ -75,7 +75,7 @@ public class CurveValidator {
    * @param secSource the security source
    * @param holidayMaster the holiday master
    */
-  public CurveValidator(final ConfigMaster configMaster, final ConfigSource configSource, final ConventionSource conventionSource, 
+  public CurveValidator(final ConfigMaster configMaster, final ConfigSource configSource, final ConventionSource conventionSource,
                         final RegionSource regionSource, final SecuritySource secSource, final HolidayMaster holidayMaster) {
     _configMaster = configMaster;
     _configSource = configSource;
@@ -264,10 +264,10 @@ public class CurveValidator {
       curveTypeConfigNode.getSubNodes().add(validationNode);
     }
   }
-  
-  private void validateIborCurveTypeConfiguration(String name, IborCurveTypeConfiguration curveTypeConfiguration, ValidationNode curveTypeConfigNode) {
+
+  private void validateIborCurveTypeConfiguration(final String name, final IborCurveTypeConfiguration curveTypeConfiguration, final ValidationNode curveTypeConfigNode) {
     if (!_configValidationUtils.conventionExists(curveTypeConfiguration.getConvention())) {
-      ValidationNode validationNode = new ValidationNode();
+      final ValidationNode validationNode = new ValidationNode();
       validationNode.setName(curveTypeConfiguration.getConvention().getValue());
       validationNode.setType(Convention.class);
       validationNode.getErrors().add("Could not find convention " + curveTypeConfiguration.getConvention());
@@ -396,7 +396,7 @@ public class CurveValidator {
       curveTypeConfigNode.getSubNodes().add(validationNode);
     }
   }
-  
+
   private void validateIssuerCurveTypeConfiguration(final String name, final IssuerCurveTypeConfiguration curveTypeConfiguration, final ValidationNode curveTypeConfigNode) {
     // currency a no-op
     final AbstractCurveDefinition abstractCurveDefinition = getCurveDefinitionOrSubclass(name);
@@ -431,7 +431,7 @@ public class CurveValidator {
     final ValidationNode onValidationNode = new ValidationNode();
     onValidationNode.setName(curveTypeConfiguration.getConvention().getValue());
     if (_configValidationUtils.conventionExists(curveTypeConfiguration.getConvention())) {
-      ManageableConvention convention = _configValidationUtils.getConvention(curveTypeConfiguration.getConvention());
+      final ManageableConvention convention = _configValidationUtils.getConvention(curveTypeConfiguration.getConvention());
       onValidationNode.setType(convention.getClass());
     } else {
       onValidationNode.setType(Convention.class);
@@ -475,7 +475,7 @@ public class CurveValidator {
       curveDefinitionNode.setError(true);
     }
     // otherwise process the nodes
-    for (CurveNode node : curveDefinition.getNodes()) {
+    for (final CurveNode node : curveDefinition.getNodes()) {
       validateCurveNode(node, curveDefinitionNode);
     }
   }
@@ -492,10 +492,11 @@ public class CurveValidator {
     return validationNode;
   }
 
-  private void validateCurveNode(CurveNode curveNode, final ValidationNode validationNode) {
+  private void validateCurveNode(final CurveNode curveNode, final ValidationNode validationNode) {
     final CurveNodeIdMapper curveNodeIdMapper = getCurveNodeIdMapper(curveNode.getCurveNodeIdMapperName());
     if (curveNodeIdMapper == null) {
-      createInvalidCurveNodeValidationNode(curveNode.getResolvedMaturity(), curveNode.getClass(), validationNode, "CurveNodeIdMapper " + curveNode.getCurveNodeIdMapperName() + " is missing");
+      createInvalidCurveNodeValidationNode(curveNode.getResolvedMaturity(), curveNode.getClass(), validationNode,
+          "CurveNodeIdMapper " + curveNode.getCurveNodeIdMapperName() + " is missing");
     } else {
       curveNode.accept(new CurveNodeValidator(_curveDate, _configValidationUtils, _securitySource, validationNode, curveNodeIdMapper, _configSource));
     }
