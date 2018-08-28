@@ -55,7 +55,7 @@ import com.opengamma.util.tuple.Pairs;
  */
 //TODO this class needs to be re-written, as each instrument type needs a different set of inputs
 public class ExampleEquityOptionVolatilitySurfaceDataFunction extends AbstractFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(ExampleEquityOptionVolatilitySurfaceDataFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExampleEquityOptionVolatilitySurfaceDataFunction.class);
   private VolatilitySurfaceDefinition<?, ?> _definition;
   private ValueSpecification _result;
   private Set<ValueSpecification> _results;
@@ -178,7 +178,7 @@ public class ExampleEquityOptionVolatilitySurfaceDataFunction extends AbstractFu
         final ValueRequirement underlyingSpotValueRequirement = new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, temp);
         final Double underlyingSpot = (Double) inputs.getValue(underlyingSpotValueRequirement);
         if (underlyingSpot == null) {
-          s_logger.error("Could not get underlying spot value for " + _definition.getTarget().getUniqueId());
+          LOGGER.error("Could not get underlying spot value for " + _definition.getTarget().getUniqueId());
           return Collections.emptySet();
         }
         final ZonedDateTime now = ZonedDateTime.now(snapshotClock);

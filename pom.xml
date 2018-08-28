@@ -89,10 +89,10 @@
 	           <pluginExecution>
 	             <pluginExecutionFilter>
 	               <groupId>org.apache.maven.plugins</groupId>
-	               <artifactId>maven-checkstyle-pl</artifactId>
+	               <artifactId>maven-checkstyle-plugin</artifactId>
 	               <versionRange>[1.0.0,)</versionRange>
 	               <goals>
-	                 <goal>some-goal</goal>
+	                 <goal>run-checkstyle</goal>
 	               </goals>
 	             </pluginExecutionFilter>
 	             <action>

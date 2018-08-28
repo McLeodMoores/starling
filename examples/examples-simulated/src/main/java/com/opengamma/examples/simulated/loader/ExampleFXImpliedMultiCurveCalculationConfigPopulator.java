@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.examples.simulated.loader;
@@ -20,7 +20,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.UnorderedCurrencyPair;
 
 /**
- * Populates the examples database with multi-curve calculation configurations that 
+ * Populates the examples database with multi-curve calculation configurations that
  * produce FX-implied curves.
  */
 
@@ -29,11 +29,11 @@ public class ExampleFXImpliedMultiCurveCalculationConfigPopulator {
   private static final String[] CURVE_NAMES = new String[] {"DEFAULT"};
   /** Exogenous configurations */
   private static final LinkedHashMap<String, String[]> EXOGENOUS_CURVE_CONFIGS = new LinkedHashMap<>();
-  
+
   static {
     EXOGENOUS_CURVE_CONFIGS.put("DefaultTwoCurveUSDConfig", new String[] {"Discounting"});
   }
-  
+
   /**
    * @param configMaster The configuration master, not null
    */
@@ -41,24 +41,24 @@ public class ExampleFXImpliedMultiCurveCalculationConfigPopulator {
     ArgumentChecker.notNull(configMaster, "configuration master");
     populateConfigMaster(configMaster);
   }
-  
-  private static void populateConfigMaster(ConfigMaster configMaster) {
-    UnorderedCurrencyPair[] pairs = ExampleViewsPopulator.CURRENCY_PAIRS;
-    Set<Currency> uniqueCurrencies = new HashSet<>();
-    for (UnorderedCurrencyPair pair : pairs) {
+
+  private static void populateConfigMaster(final ConfigMaster configMaster) {
+    final UnorderedCurrencyPair[] pairs = ExampleViewsPopulator.CURRENCY_PAIRS;
+    final Set<Currency> uniqueCurrencies = new HashSet<>();
+    for (final UnorderedCurrencyPair pair : pairs) {
       uniqueCurrencies.add(pair.getFirstCurrency());
       uniqueCurrencies.add(pair.getSecondCurrency());
     }
-    for (Currency currency : uniqueCurrencies) {
+    for (final Currency currency : uniqueCurrencies) {
       final String name = currency.getCode() + "FX";
       final ComputationTargetSpecification target = ComputationTargetSpecification.of(currency);
-      final MultiCurveCalculationConfig config = new MultiCurveCalculationConfig(name, CURVE_NAMES, target, FXImpliedYieldCurveFunction.FX_IMPLIED, 
+      final MultiCurveCalculationConfig config = new MultiCurveCalculationConfig(name, CURVE_NAMES, target, FXImpliedYieldCurveFunction.FX_IMPLIED,
           null, EXOGENOUS_CURVE_CONFIGS);
       ConfigMasterUtils.storeByName(configMaster, makeConfig(config));
     }
   }
-  
-  private static ConfigItem<MultiCurveCalculationConfig> makeConfig(MultiCurveCalculationConfig curveConfig) {
+
+  private static ConfigItem<MultiCurveCalculationConfig> makeConfig(final MultiCurveCalculationConfig curveConfig) {
     final ConfigItem<MultiCurveCalculationConfig> config = ConfigItem.of(curveConfig);
     config.setName(curveConfig.getCalculationConfigName());
     return config;

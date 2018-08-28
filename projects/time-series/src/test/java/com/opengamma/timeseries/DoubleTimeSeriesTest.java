@@ -26,25 +26,68 @@ import org.testng.annotations.Test;
 @Test(groups = "unit")
 public abstract class DoubleTimeSeriesTest<T> {
 
+  /**
+   * Creates an empty time series.
+   *
+   * @return  an empty series
+   */
   protected abstract DoubleTimeSeries<T> createEmptyTimeSeries();
 
+  /**
+   * Creates a time series.
+   *
+   * @param times  the times
+   * @param values  the values
+   * @return  a series
+   */
   protected abstract DoubleTimeSeries<T> createTimeSeries(T[] times, double[] values);
 
+  /**
+   * Creates a time series.
+   *
+   * @param times  the times
+   * @param values  the values
+   * @return  a series
+   */
   protected abstract DoubleTimeSeries<T> createTimeSeries(List<T> times, List<Double> values);
 
+  /**
+   * Creates a time series.
+   *
+   * @param dts a time series
+   * @return  a series
+   */
   protected abstract DoubleTimeSeries<T> createTimeSeries(DoubleTimeSeries<T> dts);
 
-  protected abstract T[] emptyTimes();
+  /**
+   * Creates an empty array.
+   *
+   * @return  an array
+   */
+  protected abstract T[] createEmptyTimes();
 
-  protected abstract T[] testTimes();
+  /**
+   * Creates an array of times.
+   *
+   * @return  an array
+   */
+  protected abstract T[] createTestTimes();
 
-  protected abstract T[] testTimes2();
+  /**
+   * Creates an array of times.
+   *
+   * @return  an array
+   */
+  protected abstract T[] createTestTimes2();
 
+  /**
+   * Tests construction from arrays.
+   */
   @Test
-  public void test_arrayConstructor() {
-    DoubleTimeSeries<T> dts = createTimeSeries(emptyTimes(), new double[0]);
+  public void testArrayConstructor() {
+    DoubleTimeSeries<T> dts = createTimeSeries(createEmptyTimes(), new double[0]);
     assertEquals(0, dts.size());
-    final T[] times = testTimes();
+    final T[] times = createTestTimes();
     final double[] values = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0 };
     dts = createTimeSeries(times, values);
     assertEquals(6, dts.size());
@@ -54,11 +97,14 @@ public abstract class DoubleTimeSeriesTest<T> {
     }
   }
 
+  /**
+   * Tests construction from lists.
+   */
   @Test
-  public void test_listConstructor() {
+  public void testListConstructor() {
     DoubleTimeSeries<T> dts = createTimeSeries(new ArrayList<T>(), new ArrayList<Double>());
     assertEquals(0, dts.size());
-    final T[] times = testTimes();
+    final T[] times = createTestTimes();
     final double[] values = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0 };
     final List<T> timesList = new ArrayList<>();
     final List<Double> valuesList = new ArrayList<>();
@@ -74,12 +120,15 @@ public abstract class DoubleTimeSeriesTest<T> {
     }
   }
 
+  /**
+   * Tests construction from a time series.
+   */
   @Test
-  public void test_timeSeriesConstructor() {
+  public void testTimeSeriesConstructor() {
     DoubleTimeSeries<T> dts = createEmptyTimeSeries();
     DoubleTimeSeries<T> dts2 = createTimeSeries(dts);
     assertEquals(0, dts2.size());
-    final T[] times = testTimes();
+    final T[] times = createTestTimes();
     final double[] values = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0 };
     dts = createTimeSeries(times, values);
     dts2 = createTimeSeries(dts);
@@ -90,41 +139,57 @@ public abstract class DoubleTimeSeriesTest<T> {
     }
   }
 
+  /**
+   * Creates a time series.
+   *
+   * @return  a time series
+   */
   protected DoubleTimeSeries<T> createStandardTimeSeries() {
-    final T[] times = testTimes();
+    final T[] times = createTestTimes();
     final double[] values = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0 };
     return createTimeSeries(times, values);
   }
 
+  /**
+   * Creates a time series.
+   *
+   * @return  a time series
+   */
   protected DoubleTimeSeries<T> createStandardTimeSeries2() {
-    final T[] times = testTimes2();
+    final T[] times = createTestTimes2();
     final double[] values = {4.0, 5.0, 6.0, 7.0, 8.0, 9.0 };
     return createTimeSeries(times, values);
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests the head() method.
+   */
   @Test
-  public void test_head() {
+  public void testHead() {
     final DoubleTimeSeries<T> dts = createStandardTimeSeries();
     final DoubleTimeSeries<T> head5 = dts.head(5);
     final Iterator<Entry<T, Double>> iterator = head5.iterator();
     for (int i = 0; i < 5; i++) {
       final Entry<T, Double> entry = iterator.next();
-      assertEquals(testTimes()[i], entry.getKey());
+      assertEquals(createTestTimes()[i], entry.getKey());
       assertEquals(Double.valueOf(i + 1), entry.getValue());
     }
     assertEquals(dts.head(0), createEmptyTimeSeries());
     assertEquals(createEmptyTimeSeries().head(0), createEmptyTimeSeries());
   }
 
+  /**
+   * Tests the tail() method.
+   */
   @Test
-  public void test_tail() {
+  public void testTail() {
     final DoubleTimeSeries<T> dts = createStandardTimeSeries();
     final DoubleTimeSeries<T> tail5 = dts.tail(5);
     final Iterator<Entry<T, Double>> iterator = tail5.iterator();
     for (int i = 1; i < 6; i++) {
       final Entry<T, Double> entry = iterator.next();
-      assertEquals(testTimes()[i], entry.getKey());
+      assertEquals(createTestTimes()[i], entry.getKey());
       assertEquals(Double.valueOf(i + 1), entry.getValue());
     }
     assertEquals(dts.tail(0), createEmptyTimeSeries());
@@ -132,16 +197,22 @@ public abstract class DoubleTimeSeriesTest<T> {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests the size() method.
+   */
   @Test
-  public void test_size() {
+  public void testSize() {
     final DoubleTimeSeries<T> dts = createStandardTimeSeries();
     assertEquals(6, dts.size());
     final DoubleTimeSeries<T> emptyTS = createEmptyTimeSeries();
     assertEquals(0, emptyTS.size());
   }
 
+  /**
+   * Tests the isEmpty() method.
+   */
   @Test
-  public void test_isEmpty() {
+  public void testIsEmpty() {
     final DoubleTimeSeries<T> empty = createEmptyTimeSeries();
     final DoubleTimeSeries<T> dts = createStandardTimeSeries();
     assertTrue(empty.isEmpty());
@@ -149,22 +220,28 @@ public abstract class DoubleTimeSeriesTest<T> {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests the containsTime() method.
+   */
   @Test
-  public void test_containsTime() {
+  public void testContainsTime() {
     final DoubleTimeSeries<T> emptyTS = createEmptyTimeSeries();
     final DoubleTimeSeries<T> dts = createStandardTimeSeries();
-    final T[] testDates = testTimes();
+    final T[] testDates = createTestTimes();
     for (int i = 0; i < 6; i++) {
       assertEquals(true, dts.containsTime(testDates[i]));
       assertEquals(false, emptyTS.containsTime(testDates[i]));
     }
   }
 
+  /**
+   * Tests the getValue() method.
+   */
   @Test
-  public void test_getValue() {
+  public void testGetValue() {
     final DoubleTimeSeries<T> emptyTS = createEmptyTimeSeries();
     final DoubleTimeSeries<T> dts = createStandardTimeSeries();
-    final T[] testDates = testTimes();
+    final T[] testDates = createTestTimes();
     for (int i = 0; i < 6; i++) {
       final Double val = dts.getValue(testDates[i]);
       TimeSeriesUtils.closeEquals(val, i + 1);
@@ -172,10 +249,13 @@ public abstract class DoubleTimeSeriesTest<T> {
     }
   }
 
+  /**
+   * Tests the getTimeAtIndex() method.
+   */
   @Test
-  public void test_getTimeAtIndex() {
+  public void testGetTimeAtIndex() {
     final DoubleTimeSeries<T> dts = createStandardTimeSeries();
-    final T[] testDates = testTimes();
+    final T[] testDates = createTestTimes();
     for (int i = 0; i < 6; i++) {
       final T val = dts.getTimeAtIndex(i);
       assertEquals(testDates[i], val);
@@ -194,8 +274,11 @@ public abstract class DoubleTimeSeriesTest<T> {
     }
   }
 
+  /**
+   * Tests the getValueAtIndex() method.
+   */
   @Test
-  public void test_getValueAtIndex() {
+  public void testGetValueAtIndex() {
     final DoubleTimeSeries<T> dts = createStandardTimeSeries();
     for (int i = 0; i < 6; i++) {
       final Double val = dts.getValueAtIndex(i);
@@ -216,11 +299,14 @@ public abstract class DoubleTimeSeriesTest<T> {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests the getLatestTime() method.
+   */
   @Test
-  public void test_getLatestTime() {
+  public void testGetLatestTime() {
     final DoubleTimeSeries<T> empty = createEmptyTimeSeries();
     final DoubleTimeSeries<T> dts = createStandardTimeSeries();
-    final T[] testDates = testTimes();
+    final T[] testDates = createTestTimes();
     assertEquals(testDates[5], dts.getLatestTime());
     try {
       empty.getLatestTime();
@@ -230,8 +316,11 @@ public abstract class DoubleTimeSeriesTest<T> {
     }
   }
 
+  /**
+   * Tests the getLatestValue() method.
+   */
   @Test
-  public void test_getLatestValue() {
+  public void testGetLatestValue() {
     final DoubleTimeSeries<T> empty = createEmptyTimeSeries();
     final DoubleTimeSeries<T> dts = createStandardTimeSeries();
     assertTrue(TimeSeriesUtils.closeEquals(6.0d, dts.getLatestValue()));
@@ -243,11 +332,14 @@ public abstract class DoubleTimeSeriesTest<T> {
     }
   }
 
+  /**
+   * Tests the getEarliestTime() method.
+   */
   @Test
-  public void test_getEarliestTime() {
+  public void testGetEarliestTime() {
     final DoubleTimeSeries<T> empty = createEmptyTimeSeries();
     final DoubleTimeSeries<T> dts = createStandardTimeSeries();
-    final T[] testDates = testTimes();
+    final T[] testDates = createTestTimes();
     assertEquals(testDates[0], dts.getEarliestTime());
     try {
       empty.getEarliestTime();
@@ -257,8 +349,11 @@ public abstract class DoubleTimeSeriesTest<T> {
     }
   }
 
+  /**
+   * Tests the getEarliestValue() method.
+   */
   @Test
-  public void test_getEarliestValue() {
+  public void testGetEarliestValue() {
     final DoubleTimeSeries<T> empty = createEmptyTimeSeries();
     final DoubleTimeSeries<T> dts = createStandardTimeSeries();
     assertTrue(TimeSeriesUtils.closeEquals(1d, dts.getEarliestValue()));
@@ -271,11 +366,14 @@ public abstract class DoubleTimeSeriesTest<T> {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests the time iterator.
+   */
   @Test
-  public void test_timesIterator() {
+  public void testTimesIterator() {
     final Iterator<T> emptyTimesIter = createEmptyTimeSeries().timesIterator();
     final Iterator<T> dtsTimesIter = createStandardTimeSeries().timesIterator();
-    final T[] testDates = testTimes();
+    final T[] testDates = createTestTimes();
     for (int i = 0; i < 6; i++) {
       assertTrue(dtsTimesIter.hasNext());
       final T time = dtsTimesIter.next();
@@ -294,8 +392,11 @@ public abstract class DoubleTimeSeriesTest<T> {
     }
   }
 
+  /**
+   * Tests the values iterator.
+   */
   @Test
-  public void test_valuesIterator() {
+  public void testValuesIterator() {
     final Iterator<Double> emptyValuesIter = createEmptyTimeSeries().valuesIterator();
     final Iterator<Double> dtsValuesIter = createStandardTimeSeries().valuesIterator();
     for (double i = 1; i <= 6.0; i += 1.0d) {
@@ -316,11 +417,14 @@ public abstract class DoubleTimeSeriesTest<T> {
     }
   }
 
+  /**
+   * Tests the iterator.
+   */
   @Test
   public void testIterator() {
     final Iterator<Entry<T, Double>> emptyIter = createEmptyTimeSeries().iterator();
     final Iterator<Entry<T, Double>> dtsIter = createStandardTimeSeries().iterator();
-    final T[] testDates = testTimes();
+    final T[] testDates = createTestTimes();
     for (int i = 0; i < 6; i++) {
       assertTrue(dtsIter.hasNext());
       final Entry<T, Double> entry = dtsIter.next();
@@ -342,20 +446,26 @@ public abstract class DoubleTimeSeriesTest<T> {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests the times() method.
+   */
   @Test
-  public void test_times() {
+  public void testTimes() {
     final DoubleTimeSeries<T> dts = createStandardTimeSeries();
-    final T[] testDates = testTimes();
+    final T[] testDates = createTestTimes();
     assertEquals(6, dts.times().size());
     for (int i = 0; i < 6; i++) {
       assertEquals(testDates[i], dts.times().get(i));
     }
   }
 
+  /**
+   * Tests the timesArray() method.
+   */
   @Test
-  public void test_timesArray() {
+  public void testTimesArray() {
     final DoubleTimeSeries<T> dts = createStandardTimeSeries();
-    final T[] testDates = testTimes();
+    final T[] testDates = createTestTimes();
     assertEquals(6, dts.timesArray().length);
     for (int i = 0; i < 6; i++) {
       assertEquals(testDates[i], dts.timesArray()[i]);
@@ -363,8 +473,11 @@ public abstract class DoubleTimeSeriesTest<T> {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests the values() method.
+   */
   @Test
-  public void test_values() {
+  public void testValues() {
     final DoubleTimeSeries<T> dts = createStandardTimeSeries();
     assertEquals(6, dts.values().size());
     for (int i = 0; i < 6; i++) {
@@ -372,8 +485,11 @@ public abstract class DoubleTimeSeriesTest<T> {
     }
   }
 
+  /**
+   * Tests the valuesArray() method.
+   */
   @Test
-  public void test_valuesArray() {
+  public void testValuesArray() {
     final DoubleTimeSeries<T> dts = createStandardTimeSeries();
     assertEquals(6, dts.valuesArray().length);
     for (int i = 0; i < 6; i++) {
@@ -382,12 +498,14 @@ public abstract class DoubleTimeSeriesTest<T> {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests the creation of a sub-series.
+   */
   @Test
-  @SuppressWarnings("cast")
-  public void test_subSeries() {
+  public void testSubSeries() {
     final DoubleTimeSeries<T> emptyTS = createEmptyTimeSeries();
     final DoubleTimeSeries<T> dts = createStandardTimeSeries();
-    final T[] testDates = testTimes();
+    final T[] testDates = createTestTimes();
     final DoubleTimeSeries<T> threeToFive = dts.subSeries(testDates[3], testDates[5]);
     assertEquals(2, threeToFive.size());
     final Iterator<Entry<T, Double>> iterator = threeToFive.iterator();
@@ -407,23 +525,32 @@ public abstract class DoubleTimeSeriesTest<T> {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests the equals() method.
+   */
   @Test
-  public void test_equals() {
+  public void testEquals() {
     assertEquals(createStandardTimeSeries(), createStandardTimeSeries());
     assertFalse(createStandardTimeSeries().equals(createEmptyTimeSeries()));
     assertFalse(createEmptyTimeSeries().equals(createStandardTimeSeries()));
     assertEquals(createEmptyTimeSeries(), createEmptyTimeSeries());
   }
 
+  /**
+   * Tests the hashCode() method.
+   */
   @Test
-  public void test_hashCode() {
+  public void testHashCode() {
     assertEquals(createStandardTimeSeries().hashCode(), createStandardTimeSeries().hashCode());
     assertEquals(createEmptyTimeSeries().hashCode(), createEmptyTimeSeries().hashCode());
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests the addition of the union of time series.
+   */
   @Test
-  public void test_add_unionAdd() {
+  public void testAddUnionAdd() {
     final DoubleTimeSeries<T> dts = createStandardTimeSeries();
     final DoubleTimeSeries<T> dts2 = createStandardTimeSeries2();
     final DoubleTimeSeries<T> ets = createEmptyTimeSeries();
@@ -463,8 +590,11 @@ public abstract class DoubleTimeSeriesTest<T> {
     assertEquals(dts2.getTimeAtIndex(5), unionResult.getTimeAtIndex(8));
   }
 
+  /**
+   * Tests the subtraction of the union of time series.
+   */
   @Test
-  public void test_subtract_unionSubtract() {
+  public void testSubtractUnionSubtract() {
     final DoubleTimeSeries<T> dts = createStandardTimeSeries();
     final DoubleTimeSeries<T> dts2 = createStandardTimeSeries2();
     final DoubleTimeSeries<T> ets = createEmptyTimeSeries();
@@ -504,8 +634,11 @@ public abstract class DoubleTimeSeriesTest<T> {
     assertEquals(dts2.getTimeAtIndex(5), unionResult.getTimeAtIndex(8));
   }
 
+  /**
+   * Tests the multiplication of the union of time series.
+   */
   @Test
-  public void test_multiply_unionMultiply() {
+  public void testMultiplyUnionMultiply() {
     final DoubleTimeSeries<T> dts = createStandardTimeSeries();
     final DoubleTimeSeries<T> dts2 = createStandardTimeSeries2();
     final DoubleTimeSeries<T> ets = createEmptyTimeSeries();
@@ -545,8 +678,11 @@ public abstract class DoubleTimeSeriesTest<T> {
     assertEquals(dts2.getTimeAtIndex(5), unionResult.getTimeAtIndex(8));
   }
 
+  /**
+   * Tests the division of the union of time series.
+   */
   @Test
-  public void test_divide_unionDivide() {
+  public void testDivideUnionDivide() {
     final DoubleTimeSeries<T> dts = createStandardTimeSeries();
     final DoubleTimeSeries<T> dts2 = createStandardTimeSeries2();
     final DoubleTimeSeries<T> ets = createEmptyTimeSeries();
@@ -587,8 +723,11 @@ public abstract class DoubleTimeSeriesTest<T> {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests the minValue() and maxValue() methods.
+   */
   @Test
-  public void test_minValue() {
+  public void testMinMaxValue() {
     final DoubleTimeSeries<T> dts = createStandardTimeSeries();
     final DoubleTimeSeries<T> ets = createEmptyTimeSeries();
     assertEquals(1.0, dts.minValue(), 0.01d);
@@ -608,8 +747,11 @@ public abstract class DoubleTimeSeriesTest<T> {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests the noIntersectionOperation() method.
+   */
   @Test
-  public void test_noIntersectionOperation() {
+  public void testNoIntersectionOperation() {
     final DoubleTimeSeries<T> dts = createStandardTimeSeries();
     final DoubleTimeSeries<T> dts2 = createStandardTimeSeries2();
     final DoubleTimeSeries<T> ets = createEmptyTimeSeries();
@@ -633,8 +775,11 @@ public abstract class DoubleTimeSeriesTest<T> {
     assertEquals(dts3.getValueAtIndex(1), noIntersecOp.getValueAtIndex(7));
   }
 
+  /**
+   * Tests the intersection of time series using the first value.
+   */
   @Test
-  public void test_intersectionFirstValue() {
+  public void testIntersectionFirstValue() {
     final DoubleTimeSeries<T> dts = createStandardTimeSeries();
     final DoubleTimeSeries<T> dts2 = createStandardTimeSeries2();
     final DoubleTimeSeries<T> ets = createEmptyTimeSeries();
@@ -652,8 +797,11 @@ public abstract class DoubleTimeSeriesTest<T> {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests scalar operators.
+   */
   @Test
-  public void test_scalarOperators() {
+  public void testScalarOperators() {
     assertOperationSuccessful(createStandardTimeSeries().add(10.0), new double[] {11.0, 12.0, 13.0, 14.0, 15.0, 16.0 });
     assertOperationSuccessful(createStandardTimeSeries().subtract(1.0), new double[] {0.0, 1.0, 2.0, 3.0, 4.0, 5.0 });
     assertOperationSuccessful(createStandardTimeSeries().multiply(2.0), new double[] {2.0, 4.0, 6.0, 8.0, 10.0, 12.0 });
@@ -665,26 +813,31 @@ public abstract class DoubleTimeSeriesTest<T> {
     assertOperationSuccessful(createStandardTimeSeries().negate(), new double[] {-1.0, -2.0, -3.0, -4.0, -5.0, -6.0 });
     assertOperationSuccessful(createStandardTimeSeries().abs(), new double[] {1.0, 2.0, 3.0, 4.0, 5.0, 6.0 });
     assertOperationSuccessful(createStandardTimeSeries().reciprocal(), new double[] {1.0 / 1.0, 1.0 / 2.0, 1.0 / 3.0, 1.0 / 4.0, 1.0 / 5.0, 1.0 / 6.0 });
-    assertOperationSuccessful(createStandardTimeSeries().log(), new double[] {Math.log(1.0), Math.log(2.0), Math.log(3.0), Math.log(4.0), Math.log(5.0), Math.log(6.0) });
-    assertOperationSuccessful(createStandardTimeSeries().log10(), new double[] {Math.log10(1.0), Math.log10(2.0), Math.log10(3.0), Math.log10(4.0), Math.log10(5.0), Math.log10(6.0) });
+    assertOperationSuccessful(createStandardTimeSeries().log(),
+        new double[] {Math.log(1.0), Math.log(2.0), Math.log(3.0), Math.log(4.0), Math.log(5.0), Math.log(6.0) });
+    assertOperationSuccessful(createStandardTimeSeries().log10(),
+        new double[] {Math.log10(1.0), Math.log10(2.0), Math.log10(3.0), Math.log10(4.0), Math.log10(5.0), Math.log10(6.0) });
   }
 
+  /**
+   * Tests the lag operator.
+   */
   @Test
-  public void test_lag() {
+  public void testLag() {
     final DoubleTimeSeries<T> dts = createStandardTimeSeries();
     DoubleTimeSeries<T> lagged = dts.lag(0);
     assertOperationSuccessful(lagged, new double[] {1d, 2d, 3d, 4d, 5d, 6d });
-    assertEquals(lagged.getEarliestTime(), testTimes()[0]);
-    assertEquals(lagged.getLatestTime(), testTimes()[5]);
+    assertEquals(lagged.getEarliestTime(), createTestTimes()[0]);
+    assertEquals(lagged.getLatestTime(), createTestTimes()[5]);
     assertEquals(dts, lagged);
     lagged = dts.lag(1);
     assertOperationSuccessful(lagged, new double[] {1d, 2d, 3d, 4d, 5d });
-    assertEquals(lagged.getEarliestTime(), testTimes()[1]);
-    assertEquals(lagged.getLatestTime(), testTimes()[5]);
+    assertEquals(lagged.getEarliestTime(), createTestTimes()[1]);
+    assertEquals(lagged.getLatestTime(), createTestTimes()[5]);
     lagged = dts.lag(-1);
     assertOperationSuccessful(lagged, new double[] {2d, 3d, 4d, 5d, 6d });
-    assertEquals(lagged.getEarliestTime(), testTimes()[0]);
-    assertEquals(lagged.getLatestTime(), testTimes()[4]);
+    assertEquals(lagged.getEarliestTime(), createTestTimes()[0]);
+    assertEquals(lagged.getLatestTime(), createTestTimes()[4]);
     lagged = dts.lag(5);
     assertOperationSuccessful(lagged, new double[] {1d });
     lagged = dts.lag(-5);
@@ -699,10 +852,16 @@ public abstract class DoubleTimeSeriesTest<T> {
     assertOperationSuccessful(lagged, new double[0]);
   }
 
+  /**
+   * Fails of the values of the time series do not match those in the array.
+   *
+   * @param result  the time series
+   * @param expected  the expected values
+   */
   protected static void assertOperationSuccessful(final DoubleTimeSeries<?> result, final double[] expected) {
     assertEquals(expected.length, result.size());
     for (int i = 0; i < expected.length; i++) {
-      assertEquals(expected[i], result.getValueAtIndex(i), 0.001);
+      assertEquals(result.getValueAtIndex(i), expected[i], 0.001);
     }
   }
 

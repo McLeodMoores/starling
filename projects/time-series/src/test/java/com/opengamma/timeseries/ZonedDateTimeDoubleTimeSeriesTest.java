@@ -10,17 +10,25 @@ import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.ZonedDateTime;
 
 /**
- * Test.
+ * Abstract base class for time series tests.
  */
 public abstract class ZonedDateTimeDoubleTimeSeriesTest extends DoubleTimeSeriesTest<ZonedDateTime> {
 
+  /**
+   * Creates a UTC date at midnight.
+   *
+   * @param year  the year
+   * @param month  the month
+   * @param day  the day
+   * @return  the date
+   */
   protected ZonedDateTime makeDate(final int year, final int month, final int day) {
-    final ZonedDateTime one = ZonedDateTime.of(LocalDateTime.of(year, month, day, 0, 0), ZoneOffset.UTC); //ZoneId.of(java.util.TimeZone.getDefault().getID()));
+    final ZonedDateTime one = ZonedDateTime.of(LocalDateTime.of(year, month, day, 0, 0), ZoneOffset.UTC);
     return one;
   }
 
   @Override
-  protected ZonedDateTime[] testTimes() {
+  protected ZonedDateTime[] createTestTimes() {
     final ZonedDateTime one = makeDate(2010, 2, 8);
     final ZonedDateTime two = makeDate(2010, 2, 9);
     final ZonedDateTime three = makeDate(2010, 2, 10);
@@ -31,7 +39,7 @@ public abstract class ZonedDateTimeDoubleTimeSeriesTest extends DoubleTimeSeries
   }
 
   @Override
-  protected ZonedDateTime[] testTimes2() {
+  protected ZonedDateTime[] createTestTimes2() {
     final ZonedDateTime one = makeDate(2010, 2, 11);
     final ZonedDateTime two = makeDate(2010, 2, 12);
     final ZonedDateTime three = makeDate(2010, 2, 13);
@@ -42,7 +50,7 @@ public abstract class ZonedDateTimeDoubleTimeSeriesTest extends DoubleTimeSeries
   }
 
   @Override
-  protected ZonedDateTime[] emptyTimes() {
+  protected ZonedDateTime[] createEmptyTimes() {
     return new ZonedDateTime[] {};
   }
 

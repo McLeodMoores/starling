@@ -214,8 +214,10 @@ public class EURFixedIncomePortfolioGeneratorTool extends AbstractPortfolioGener
         receiveFrequency = QUARTERLY;
         payRate = EURIBOR_6M;
         receiveRate = EURIBOR_3M;
-        payLeg = new FloatingInterestRateLeg(ACT_360, payFrequency, REGION, MODIFIED_FOLLOWING, notional, false, payRate, FloatingRateType.IBOR);
-        receiveLeg = new FloatingSpreadIRLeg(ACT_360, receiveFrequency, REGION, MODIFIED_FOLLOWING, notional, false, receiveRate, FloatingRateType.IBOR, spread);
+        payLeg =
+            new FloatingInterestRateLeg(ACT_360, payFrequency, REGION, MODIFIED_FOLLOWING, notional, false, payRate, FloatingRateType.IBOR);
+        receiveLeg =
+            new FloatingSpreadIRLeg(ACT_360, receiveFrequency, REGION, MODIFIED_FOLLOWING, notional, false, receiveRate, FloatingRateType.IBOR, spread);
         frequencyLabel = "receive 3M Euribor + " + FORMATTER.format((int) (spread * 1000)) + "bp, pay 6M Euribor";
       }
       final SwapSecurity swap = new SwapSecurity(tradeDate, effectiveDate, maturityDate, COUNTERPARTY, payLeg, receiveLeg);
@@ -226,7 +228,7 @@ public class EURFixedIncomePortfolioGeneratorTool extends AbstractPortfolioGener
     return new MySecurityGenerator<>(securities, tradeDate, "Basis swaps");
   }
 
-  private FutureSecurityGenerator<ManageableSecurity> getIRFutureSecurityGenerator() {    
+  private FutureSecurityGenerator<ManageableSecurity> getIRFutureSecurityGenerator() {
     final ZonedDateTime tradeDate = DateUtils.getUTCDate(2014, 9, 1);
     final FutureSecurity[] securities = new FutureSecurity[N_FUTURES];
     final int[] amounts = new int[N_FUTURES];

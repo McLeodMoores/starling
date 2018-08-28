@@ -50,7 +50,7 @@ public class CurveNodeHistoricalDataLoader {
   /**
    * Logger.
    */
-  private static Logger s_logger = LoggerFactory.getLogger(CurveNodeHistoricalDataLoader.class);
+  private static Logger LOGGER = LoggerFactory.getLogger(CurveNodeHistoricalDataLoader.class);
 
   private Set<ExternalId> _curveNodesExternalIds;
 
@@ -110,7 +110,7 @@ public class CurveNodeHistoricalDataLoader {
           final ConventionBundle realIdConvention = cbs.getConventionBundle(initialRate);
           externalInitialRateId.add(realIdConvention.getIdentifiers().getExternalId(ExternalSchemes.BLOOMBERG_TICKER));
         } else {
-          s_logger.info("No convention for {} product", product);
+          LOGGER.info("No convention for {} product", product);
         }
       }
     }
@@ -176,20 +176,20 @@ public class CurveNodeHistoricalDataLoader {
   private Set<ExternalId> getCurves(final ConfigSource configSource, final Collection<String> names, final List<LocalDate> dates) {
     final Set<ExternalId> externalIds = newHashSet();
     for (final String name : names) {
-      s_logger.info("Processing curve " + name);
+      LOGGER.info("Processing curve " + name);
       final YieldCurveDefinition curveDefinition = configSource.getSingle(YieldCurveDefinition.class, name, VersionCorrection.LATEST);
       if (curveDefinition != null) {
         final InterpolatedYieldCurveSpecificationBuilder builder = new ConfigDBInterpolatedYieldCurveSpecificationBuilder(configSource);
         for (final LocalDate date : dates) {
-          s_logger.info("Processing curve date " + date);
+          LOGGER.info("Processing curve date " + date);
           final InterpolatedYieldCurveSpecification curveSpec = builder.buildCurve(date, curveDefinition, VersionCorrection.LATEST);
           for (final FixedIncomeStripWithIdentifier strip : curveSpec.getStrips()) {
-            s_logger.info("Processing strip " + strip.getSecurity());
+            LOGGER.info("Processing strip " + strip.getSecurity());
             externalIds.add(strip.getSecurity());
           }
         }
       } else {
-        s_logger.warn("No curve definition with '{}' name", name);
+        LOGGER.warn("No curve definition with '{}' name", name);
       }
     }
     return externalIds;
@@ -206,22 +206,22 @@ public class CurveNodeHistoricalDataLoader {
   private Set<ExternalIdBundle> getFutures(final ConfigSource configSource, final Collection<String> names, final List<LocalDate> dates) {
     final Set<ExternalIdBundle> externalIds = newHashSet();
     for (final String name : names) {
-      s_logger.info("Processing curve " + name);
+      LOGGER.info("Processing curve " + name);
       final YieldCurveDefinition curveDefinition = configSource.getSingle(YieldCurveDefinition.class, name, VersionCorrection.LATEST);
       if (curveDefinition != null) {
         final InterpolatedYieldCurveSpecificationBuilder builder = new ConfigDBInterpolatedYieldCurveSpecificationBuilder(configSource);
         for (final LocalDate date : dates) {
-          s_logger.info("Processing curve date " + date);
+          LOGGER.info("Processing curve date " + date);
           final InterpolatedYieldCurveSpecification curveSpec = builder.buildCurve(date, curveDefinition, VersionCorrection.LATEST);
           for (final FixedIncomeStripWithIdentifier strip : curveSpec.getStrips()) {
-            s_logger.info("Processing strip " + strip.getSecurity());
+            LOGGER.info("Processing strip " + strip.getSecurity());
             if (strip.getStrip().getInstrumentType().equals(StripInstrumentType.FUTURE)) {
               externalIds.add(ExternalIdBundle.of(strip.getSecurity()));
             }
           }
         }
       } else {
-        s_logger.warn("No curve definition with '{}' name", name);
+        LOGGER.warn("No curve definition with '{}' name", name);
       }
     }
     return externalIds;

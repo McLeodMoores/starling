@@ -187,6 +187,7 @@ public class ImmutableLocalDateDoubleTimeSeriesTest extends LocalDateDoubleTimeS
   /**
    * Tests creation from ints and values.
    */
+  @Test
   public void testOfIntArrayDoubleArray() {
     final int[] inDates = new int[] {20120630, 20120701};
     final double[] inValues = new double[] {2.0, 3.0};
@@ -598,6 +599,28 @@ public class ImmutableLocalDateDoubleTimeSeriesTest extends LocalDateDoubleTimeS
   //-------------------------------------------------------------------------
   @Override
   public void testIterator() {
+    final LocalDateDoubleTimeSeries ts = ImmutableLocalDateDoubleTimeSeries.builder()
+        .put(LocalDate.of(2012, 6, 30), 2.0)
+        .put(LocalDate.of(2012, 7, 1), 3.0)
+        .put(LocalDate.of(2012, 6, 1), 1.0)
+        .build();
+    final LocalDateDoubleEntryIterator it = ts.iterator();
+    assertEquals(true, it.hasNext());
+    assertEquals(new AbstractMap.SimpleImmutableEntry<>(LocalDate.of(2012, 6, 1), 1.0d), it.next());
+    assertEquals(LocalDate.of(2012, 6, 1), it.currentTime());
+    assertEquals(20120601, it.currentTimeFast());
+    assertEquals(1.0d, it.currentValue());
+    assertEquals(1.0d, it.currentValueFast());
+    assertEquals(LocalDate.of(2012, 6, 30), it.nextTime());
+    assertEquals(LocalDate.of(2012, 7, 1), it.nextTime());
+    assertEquals(false, it.hasNext());
+  }
+
+  /**
+   * Tests the builder iterator.
+   */
+  @Test
+  public void testBuilderIterator() {
     final LocalDateDoubleTimeSeriesBuilder bld = ImmutableLocalDateDoubleTimeSeries.builder();
     bld.put(LocalDate.of(2012, 6, 30), 2.0).put(LocalDate.of(2012, 7, 1), 3.0).put(LocalDate.of(2012, 6, 1), 1.0);
     final LocalDateDoubleEntryIterator it = bld.iterator();
@@ -613,10 +636,23 @@ public class ImmutableLocalDateDoubleTimeSeriesTest extends LocalDateDoubleTimeS
   }
 
   /**
-   * Tests the exception when the iterator runs over the end of the builder.
+   * Tests the exception when the iterator runs over the end of the time series.
    */
   @Test(expectedExceptions = NoSuchElementException.class)
   public void testHasNext() {
+    final LocalDateDoubleTimeSeries ts = ImmutableLocalDateDoubleTimeSeries.builder()
+        .put(LocalDate.of(2012, 6, 30), 2.0).put(LocalDate.of(2012, 7, 1), 3.0).put(LocalDate.of(2012, 6, 1), 1.0).build();
+    final LocalDateDoubleEntryIterator iterator = ts.iterator();
+    for (int i = 0; i < ts.size() + 1; i++) {
+      iterator.next();
+    }
+  }
+
+  /**
+   * Tests the exception when the iterator runs over the end of the builder.
+   */
+  @Test(expectedExceptions = NoSuchElementException.class)
+  public void testBuilderHasNext() {
     final LocalDateDoubleTimeSeriesBuilder bld = ImmutableLocalDateDoubleTimeSeries.builder();
     bld.put(LocalDate.of(2012, 6, 30), 2.0).put(LocalDate.of(2012, 7, 1), 3.0).put(LocalDate.of(2012, 6, 1), 1.0);
     final LocalDateDoubleEntryIterator iterator = bld.iterator();
@@ -626,10 +662,23 @@ public class ImmutableLocalDateDoubleTimeSeriesTest extends LocalDateDoubleTimeS
   }
 
   /**
-   * Tests the exception when the iterator runs over the end of the builder.
+   * Tests the exception when the iterator runs over the end of the time series.
    */
   @Test(expectedExceptions = NoSuchElementException.class)
   public void testHasNextTimeFast() {
+    final LocalDateDoubleTimeSeries ts = ImmutableLocalDateDoubleTimeSeries.builder()
+        .put(LocalDate.of(2012, 6, 30), 2.0).put(LocalDate.of(2012, 7, 1), 3.0).put(LocalDate.of(2012, 6, 1), 1.0).build();
+    final LocalDateDoubleEntryIterator iterator = ts.iterator();
+    for (int i = 0; i < ts.size() + 1; i++) {
+      iterator.nextTimeFast();
+    }
+  }
+
+  /**
+   * Tests the exception when the iterator runs over the end of the builder.
+   */
+  @Test(expectedExceptions = NoSuchElementException.class)
+  public void testBuilderHasNextTimeFast() {
     final LocalDateDoubleTimeSeriesBuilder bld = ImmutableLocalDateDoubleTimeSeries.builder();
     bld.put(LocalDate.of(2012, 6, 30), 2.0).put(LocalDate.of(2012, 7, 1), 3.0).put(LocalDate.of(2012, 6, 1), 1.0);
     final LocalDateDoubleEntryIterator iterator = bld.iterator();
@@ -643,6 +692,16 @@ public class ImmutableLocalDateDoubleTimeSeriesTest extends LocalDateDoubleTimeS
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testCurrentTime() {
+    final LocalDateDoubleTimeSeries ts = ImmutableLocalDateDoubleTimeSeries.builder()
+        .put(LocalDate.of(2012, 6, 30), 2.0).put(LocalDate.of(2012, 7, 1), 3.0).put(LocalDate.of(2012, 6, 1), 1.0).build();
+    ts.iterator().currentTime();
+  }
+
+  /**
+   * Tests the exception when the iterator has not been started.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
+  public void testBuilderCurrentTime() {
     final LocalDateDoubleTimeSeriesBuilder bld = ImmutableLocalDateDoubleTimeSeries.builder();
     bld.put(LocalDate.of(2012, 6, 30), 2.0).put(LocalDate.of(2012, 7, 1), 3.0).put(LocalDate.of(2012, 6, 1), 1.0);
     bld.iterator().currentTime();
@@ -662,6 +721,16 @@ public class ImmutableLocalDateDoubleTimeSeriesTest extends LocalDateDoubleTimeS
    * Tests the exception when the iterator has not been started.
    */
   @Test(expectedExceptions = IllegalStateException.class)
+  public void testBuilderCurrentTimeFast() {
+    final LocalDateDoubleTimeSeries ts = ImmutableLocalDateDoubleTimeSeries.builder()
+        .put(LocalDate.of(2012, 6, 30), 2.0).put(LocalDate.of(2012, 7, 1), 3.0).put(LocalDate.of(2012, 6, 1), 1.0).build();
+    ts.iterator().currentTimeFast();
+  }
+
+  /**
+   * Tests the exception when the iterator has not been started.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
   public void testCurrentValue() {
     final LocalDateDoubleTimeSeriesBuilder bld = ImmutableLocalDateDoubleTimeSeries.builder();
     bld.put(LocalDate.of(2012, 6, 30), 2.0).put(LocalDate.of(2012, 7, 1), 3.0).put(LocalDate.of(2012, 6, 1), 1.0);
@@ -672,7 +741,27 @@ public class ImmutableLocalDateDoubleTimeSeriesTest extends LocalDateDoubleTimeS
    * Tests the exception when the iterator has not been started.
    */
   @Test(expectedExceptions = IllegalStateException.class)
+  public void testBuilderCurrentValue() {
+    final LocalDateDoubleTimeSeries ts = ImmutableLocalDateDoubleTimeSeries.builder()
+        .put(LocalDate.of(2012, 6, 30), 2.0).put(LocalDate.of(2012, 7, 1), 3.0).put(LocalDate.of(2012, 6, 1), 1.0).build();
+    ts.iterator().currentValue();
+  }
+
+  /**
+   * Tests the exception when the iterator has not been started.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
   public void testCurrentValueFast() {
+    final LocalDateDoubleTimeSeries ts = ImmutableLocalDateDoubleTimeSeries.builder()
+        .put(LocalDate.of(2012, 6, 30), 2.0).put(LocalDate.of(2012, 7, 1), 3.0).put(LocalDate.of(2012, 6, 1), 1.0).build();
+    ts.iterator().currentValueFast();
+  }
+
+  /**
+   * Tests the exception when the iterator has not been started.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
+  public void testBuilderCurrentValueFast() {
     final LocalDateDoubleTimeSeriesBuilder bld = ImmutableLocalDateDoubleTimeSeries.builder();
     bld.put(LocalDate.of(2012, 6, 30), 2.0).put(LocalDate.of(2012, 7, 1), 3.0).put(LocalDate.of(2012, 6, 1), 1.0);
     bld.iterator().currentValueFast();
@@ -683,6 +772,20 @@ public class ImmutableLocalDateDoubleTimeSeriesTest extends LocalDateDoubleTimeS
    */
   @Test
   public void testCurrentIndex() {
+    final LocalDateDoubleTimeSeries ts = ImmutableLocalDateDoubleTimeSeries.builder()
+        .put(LocalDate.of(2012, 6, 30), 2.0).put(LocalDate.of(2012, 7, 1), 3.0).put(LocalDate.of(2012, 6, 1), 1.0).build();
+    final LocalDateDoubleEntryIterator iterator = ts.iterator();
+    for (int i = 0; i < ts.size(); i++) {
+      iterator.next();
+      assertEquals(iterator.currentIndex(), i);
+    }
+  }
+
+  /**
+   * Tests the current index.
+   */
+  @Test
+  public void testBuilderCurrentIndex() {
     final LocalDateDoubleTimeSeriesBuilder bld = ImmutableLocalDateDoubleTimeSeries.builder();
     bld.put(LocalDate.of(2012, 6, 30), 2.0).put(LocalDate.of(2012, 7, 1), 3.0).put(LocalDate.of(2012, 6, 1), 1.0);
     final LocalDateDoubleEntryIterator iterator = bld.iterator();
@@ -693,10 +796,20 @@ public class ImmutableLocalDateDoubleTimeSeriesTest extends LocalDateDoubleTimeS
   }
 
   /**
-   * Tests the exception the iterator has not been started.
+   * Tests the exception when trying to remove from an immutable time series.
+   */
+  @Test(expectedExceptions = UnsupportedOperationException.class)
+  public void testIteratorRemove() {
+    final LocalDateDoubleTimeSeries ts = ImmutableLocalDateDoubleTimeSeries.builder()
+        .put(LocalDate.of(2012, 6, 30), 2.0).put(LocalDate.of(2012, 7, 1), 3.0).put(LocalDate.of(2012, 6, 1), 1.0).build();
+    ts.iterator().remove();
+  }
+
+  /**
+   * Tests the exception when the iterator has not been started.
    */
   @Test(expectedExceptions = IllegalStateException.class)
-  public void testRemove() {
+  public void testBuilderRemove() {
     final LocalDateDoubleTimeSeriesBuilder bld = ImmutableLocalDateDoubleTimeSeries.builder();
     bld.put(LocalDate.of(2012, 6, 30), 2.0).put(LocalDate.of(2012, 7, 1), 3.0).put(LocalDate.of(2012, 6, 1), 1.0);
     bld.iterator().remove();
@@ -706,7 +819,7 @@ public class ImmutableLocalDateDoubleTimeSeriesTest extends LocalDateDoubleTimeS
    * Tests the exception when too many elements are removed.
    */
   @Test(expectedExceptions = NoSuchElementException.class)
-  public void testRemoveTooMany() {
+  public void testBuilderRemoveTooMany() {
     final LocalDateDoubleTimeSeriesBuilder bld = ImmutableLocalDateDoubleTimeSeries.builder();
     bld.put(LocalDate.of(2012, 6, 30), 2.0).put(LocalDate.of(2012, 7, 1), 3.0).put(LocalDate.of(2012, 6, 1), 1.0);
     final int n = bld.size();
@@ -722,6 +835,15 @@ public class ImmutableLocalDateDoubleTimeSeriesTest extends LocalDateDoubleTimeS
    */
   @Test
   public void testIteratorEmpty() {
+    final LocalDateDoubleTimeSeries ts = ImmutableLocalDateDoubleTimeSeries.builder().build();
+    assertEquals(false, ts.iterator().hasNext());
+  }
+
+  /**
+   * Tests iteration on an empty series.
+   */
+  @Test
+  public void testBuilderIteratorEmpty() {
     final LocalDateDoubleTimeSeriesBuilder bld = ImmutableLocalDateDoubleTimeSeries.builder();
     assertEquals(false, bld.iterator().hasNext());
   }
@@ -730,7 +852,7 @@ public class ImmutableLocalDateDoubleTimeSeriesTest extends LocalDateDoubleTimeS
    * Tests the remove method of the iterator.
    */
   @Test
-  public void testIteratorRemoveFirst() {
+  public void testBuilderIteratorRemoveFirst() {
     final LocalDateDoubleTimeSeriesBuilder bld = ImmutableLocalDateDoubleTimeSeries.builder();
     bld.put(LocalDate.of(2012, 6, 30), 2.0).put(LocalDate.of(2012, 7, 1), 3.0).put(LocalDate.of(2012, 6, 1), 1.0);
     final LocalDateDoubleEntryIterator it = bld.iterator();
@@ -746,7 +868,7 @@ public class ImmutableLocalDateDoubleTimeSeriesTest extends LocalDateDoubleTimeS
    * Tests the remove method of the iterator.
    */
   @Test
-  public void testIteratorRemoveMid() {
+  public void testBuilderIteratorRemoveMid() {
     final LocalDateDoubleTimeSeriesBuilder bld = ImmutableLocalDateDoubleTimeSeries.builder();
     bld.put(LocalDate.of(2012, 6, 30), 2.0).put(LocalDate.of(2012, 7, 1), 3.0).put(LocalDate.of(2012, 6, 1), 1.0);
     final LocalDateDoubleEntryIterator it = bld.iterator();
@@ -763,7 +885,7 @@ public class ImmutableLocalDateDoubleTimeSeriesTest extends LocalDateDoubleTimeS
    * Tests the remove method of the iterator.
    */
   @Test
-  public void testIteratorRemoveLast() {
+  public void testBuilderIteratorRemoveLast() {
     final LocalDateDoubleTimeSeriesBuilder bld = ImmutableLocalDateDoubleTimeSeries.builder();
     bld.put(LocalDate.of(2012, 6, 30), 2.0).put(LocalDate.of(2012, 7, 1), 3.0).put(LocalDate.of(2012, 6, 1), 1.0);
     final LocalDateDoubleEntryIterator it = bld.iterator();

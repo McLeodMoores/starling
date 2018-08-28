@@ -30,7 +30,7 @@ public abstract class AbstractSecuritiesGenerator {
    */
   public static final String GENERATOR_OPT = "generator";
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractSecuritiesGenerator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractSecuritiesGenerator.class);
   /** The tool context */
   private ToolContext _toolContext;
   /** The class context */
@@ -92,23 +92,23 @@ public abstract class AbstractSecuritiesGenerator {
     final AbstractSecuritiesGenerator instance = getInstance(getClassContext(), generatorName);
     instance.setToolContext(context);
     if (write) {
-      s_logger.info("Creating database security writer");
+      LOGGER.info("Creating database security writer");
       instance.setSecurityPersister(new MasterSecurityPersister(context.getSecurityMaster()));
     } else {
-      s_logger.info("Using dummy security writer");
+      LOGGER.info("Using dummy security writer");
       final InMemorySecurityPersister securityPersister = new InMemorySecurityPersister();
       instance.setSecurityPersister(securityPersister);
     }
     final List<ManageableSecurity> securities = instance.createSecurities();
     if (write) {
-      s_logger.info("Writing securities to the database");
+      LOGGER.info("Writing securities to the database");
       for (final ManageableSecurity security : securities) {
         final SecuritySearchRequest request = new SecuritySearchRequest();
         request.setName(security.getName());
         final SecuritySearchResult result = context.getSecurityMaster().search(request);
         SecurityDocument document = result.getFirstDocument();
         if (document != null) {
-          s_logger.warn("Overwriting security {}", document.getUniqueId());
+          LOGGER.warn("Overwriting security {}", document.getUniqueId());
           document.setSecurity(security);
           context.getSecurityMaster().update(document);
         } else {
@@ -131,23 +131,23 @@ public abstract class AbstractSecuritiesGenerator {
     ArgumentChecker.notNull(instance, "generator");
     instance.setToolContext(context);
     if (write) {
-      s_logger.info("Creating database security writer");
+      LOGGER.info("Creating database security writer");
       instance.setSecurityPersister(new MasterSecurityPersister(context.getSecurityMaster()));
     } else {
-      s_logger.info("Using dummy security writer");
+      LOGGER.info("Using dummy security writer");
       final InMemorySecurityPersister securityPersister = new InMemorySecurityPersister();
       instance.setSecurityPersister(securityPersister);
     }
     final List<ManageableSecurity> securities = instance.createSecurities();
     if (write) {
-      s_logger.info("Writing securities to the database");
+      LOGGER.info("Writing securities to the database");
       for (final ManageableSecurity security : securities) {
         final SecuritySearchRequest request = new SecuritySearchRequest();
         request.setName(security.getName());
         final SecuritySearchResult result = context.getSecurityMaster().search(request);
         SecurityDocument document = result.getFirstDocument();
         if (document != null) {
-          s_logger.warn("Overwriting security {}", document.getUniqueId());
+          LOGGER.warn("Overwriting security {}", document.getUniqueId());
           document.setSecurity(security);
           context.getSecurityMaster().update(document);
         } else {
@@ -302,17 +302,17 @@ public abstract class AbstractSecuritiesGenerator {
       }
       Class<?> instanceClass;
       try {
-        s_logger.debug("Trying class {}", className);
+        LOGGER.debug("Trying class {}", className);
         instanceClass = Class.forName(className);
       } catch (final ClassNotFoundException e) {
         try {
-          s_logger.debug("Trying class {}", alternativeClassName);
+          LOGGER.debug("Trying class {}", alternativeClassName);
           instanceClass = Class.forName(alternativeClassName);
         } catch (final ClassNotFoundException e1) {
           return getInstance(clazz.getSuperclass(), generatorName);
         }
       }
-      s_logger.info("Loading {}", className);
+      LOGGER.info("Loading {}", className);
       final AbstractSecuritiesGenerator tool = (AbstractSecuritiesGenerator) instanceClass.newInstance();
       tool.setContext(getClassContext(), this);
       return tool;

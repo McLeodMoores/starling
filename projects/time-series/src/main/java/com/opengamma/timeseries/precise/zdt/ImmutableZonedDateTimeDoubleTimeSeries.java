@@ -401,6 +401,10 @@ public final class ImmutableZonedDateTimeDoubleTimeSeries
     if (endTime < startTime) {
       throw new IllegalArgumentException("Invalid subSeries: endTime < startTime");
     }
+    // special case when this is empty
+    if (isEmpty()) {
+      return ofEmpty(_zone);
+    }
     // special case for start equals end
     if (startTime == endTime) {
       if (includeStart && includeEnd) {
@@ -409,10 +413,6 @@ public final class ImmutableZonedDateTimeDoubleTimeSeries
           return new ImmutableZonedDateTimeDoubleTimeSeries(new long[] {startTime}, new double[] {_values[pos]}, _zone);
         }
       }
-      return ofEmpty(_zone);
-    }
-    // special case when this is empty
-    if (isEmpty()) {
       return ofEmpty(_zone);
     }
     // normalize to include start and exclude end

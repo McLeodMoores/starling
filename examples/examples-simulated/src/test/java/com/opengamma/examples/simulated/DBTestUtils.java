@@ -25,7 +25,7 @@ public final class DBTestUtils {
   private static final String DB_USERNAME_KEY = "db.standard.username";
   private static final String JDBC_URL_KEY = "db.standard.url";
   private static final String JDBC_URL_KEY_USER = "db.userfinancial.url";
-  private static final Logger s_logger = LoggerFactory.getLogger(DBTestUtils.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DBTestUtils.class);
 
   private DBTestUtils() {
   }
@@ -73,7 +73,7 @@ public final class DBTestUtils {
     }
 
     for (final String key : props.stringPropertyNames()) {
-      s_logger.debug("\t{}={}", key, props.getProperty(key));
+      LOGGER.debug("\t{}={}", key, props.getProperty(key));
     }
 
     return props;

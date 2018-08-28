@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.examples.simulated.component;
@@ -18,8 +18,8 @@ import com.opengamma.component.factory.AbstractSpringComponentFactory;
 public class ExampleSpringDataServerComponentFactory extends AbstractSpringComponentFactory {
 
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
-    GenericApplicationContext appContext = createApplicationContext(repo);
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
+    final GenericApplicationContext appContext = createApplicationContext(repo);
     repo.registerLifecycle(appContext);
   }
 

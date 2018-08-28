@@ -21,12 +21,12 @@ import com.opengamma.id.ExternalScheme;
  * Generates equity option Synthetic ticker codes from ATM strike (set via init()), tenor, double and date).
  */
 public class ExampleEquityOptionVolatilitySurfaceInstrumentProvider implements SurfaceInstrumentProvider<LocalDate, Double> {
-  private static final Logger s_logger = LoggerFactory.getLogger(ExampleEquityOptionVolatilitySurfaceInstrumentProvider.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExampleEquityOptionVolatilitySurfaceInstrumentProvider.class);
   private static final ExternalScheme SCHEME = ExternalSchemes.OG_SYNTHETIC_TICKER;
   private final String _underlyingPrefix; //expecting something like DJX
   private final String _postfix; //expecting Index or Equity
   private final String _dataFieldName; //expecting MarketDataRequirementNames.MARKET_VALUE
-  private static final DateTimeFormatter s_dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yy");
+  private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yy");
 
   private Boolean _generatePuts;
 
@@ -68,11 +68,11 @@ public class ExampleEquityOptionVolatilitySurfaceInstrumentProvider implements S
 
   private ExternalId createEquityOptionVolatilityCode(final LocalDate expiry, final Double strike) {
     if (_generatePuts == null) {
-      s_logger.error("Cannot create option volatility code until atm strike is set (use init method)");
+      LOGGER.error("Cannot create option volatility code until atm strike is set (use init method)");
     }
     final StringBuffer ticker = new StringBuffer();
     ticker.append(_underlyingPrefix);
-    final String formattedDate = s_dateFormatter.format(expiry);
+    final String formattedDate = DATE_FORMATTER.format(expiry);
     ticker.append(formattedDate);
     // TODO: check this logic
     if (_generatePuts) {

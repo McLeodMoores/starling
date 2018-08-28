@@ -57,7 +57,7 @@ import com.opengamma.scripts.Scriptable;
 public class ExampleEquityPortfolioLoader extends AbstractTool<IntegrationToolContext> {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(ExampleEquityPortfolioLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExampleEquityPortfolioLoader.class);
 
   private static final Map<String, String> SECTORS = new HashMap<>();
 
@@ -115,25 +115,25 @@ public class ExampleEquityPortfolioLoader extends AbstractTool<IntegrationToolCo
       // create portfolio structure
       ManageablePortfolioNode sectorNode = rootNode.findNodeByName(sector);
       if (sectorNode == null) {
-        s_logger.debug("Creating node for sector {}", sector);
+        LOGGER.debug("Creating node for sector {}", sector);
         sectorNode = new ManageablePortfolioNode(sector);
         rootNode.addChildNode(sectorNode);
       }
       ManageablePortfolioNode groupNode = sectorNode.findNodeByName("Group " + industryGroup);
       if (groupNode == null) {
-        s_logger.debug("Creating node for industry group {}", industryGroup);
+        LOGGER.debug("Creating node for industry group {}", industryGroup);
         groupNode = new ManageablePortfolioNode("Group " + industryGroup);
         sectorNode.addChildNode(groupNode);
       }
       ManageablePortfolioNode industryNode = groupNode.findNodeByName("Industry " + industry);
       if (industryNode == null) {
-        s_logger.debug("Creating node for industry {}", industry);
+        LOGGER.debug("Creating node for industry {}", industry);
         industryNode = new ManageablePortfolioNode("Industry " + industry);
         groupNode.addChildNode(industryNode);
       }
       ManageablePortfolioNode subIndustryNode = industryNode.findNodeByName("Sub industry " + subIndustry);
       if (subIndustryNode == null) {
-        s_logger.debug("Creating node for sub industry {}", subIndustry);
+        LOGGER.debug("Creating node for sub industry {}", subIndustry);
         subIndustryNode = new ManageablePortfolioNode("Sub industry " + subIndustry);
         industryNode.addChildNode(subIndustryNode);
       }
@@ -196,7 +196,7 @@ public class ExampleEquityPortfolioLoader extends AbstractTool<IntegrationToolCo
    * @return the position, not null
    */
   protected ManageablePosition createPositionAndTrade(final EquitySecurity security) {
-    s_logger.debug("Creating position {}", security);
+    LOGGER.debug("Creating position {}", security);
     final int shares = (RandomUtils.nextInt(490) + 10) * 10;
 
     final ExternalIdBundle bundle = security.getExternalIdBundle(); // we could add an identifier pointing back to the original source database if we're doing an ETL.
@@ -262,7 +262,7 @@ public class ExampleEquityPortfolioLoader extends AbstractTool<IntegrationToolCo
     for (final ExternalId equityId : result) {
       sb.append("\t").append(equityId.getValue()).append("\n");
     }
-    s_logger.info(sb.toString());
+    LOGGER.info(sb.toString());
     return result;
   }
 

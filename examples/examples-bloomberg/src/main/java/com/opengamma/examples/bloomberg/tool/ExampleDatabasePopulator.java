@@ -79,7 +79,7 @@ public class ExampleDatabasePopulator extends AbstractTool<IntegrationToolContex
   public static final String MULTI_CURRENCY_SWAP_PORTFOLIO_NAME = "Multi-currency Swap Portfolio";
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(ExampleDatabasePopulator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExampleDatabasePopulator.class);
 
   private final Set<ExternalIdBundle> _futuresToLoad = new HashSet<>();
   private final Set<ExternalId> _historicalDataToLoad = new HashSet<>();
@@ -91,7 +91,7 @@ public class ExampleDatabasePopulator extends AbstractTool<IntegrationToolContex
    * @param args  the standard tool arguments, not null
    */
   public static void main(final String[] args) { // CSIGNORE
-    s_logger.info("Populating example database");
+    LOGGER.info("Populating example database");
     new ExampleDatabasePopulator().invokeAndTerminate(args, TOOLCONTEXT_EXAMPLE_PROPERTIES, null);
   }
 
@@ -143,16 +143,16 @@ public class ExampleDatabasePopulator extends AbstractTool<IntegrationToolContex
     private final String _str;
 
     private Log(final String str) {
-      s_logger.info("{}", str);
+      LOGGER.info("{}", str);
       _str = str;
     }
 
     private void done() {
-      s_logger.debug("{} - finished", _str);
+      LOGGER.debug("{} - finished", _str);
     }
 
     private void fail(final RuntimeException e) {
-      s_logger.error("{} - failed - {}", _str, e.getMessage());
+      LOGGER.error("{} - failed - {}", _str, e.getMessage());
       throw e;
     }
 

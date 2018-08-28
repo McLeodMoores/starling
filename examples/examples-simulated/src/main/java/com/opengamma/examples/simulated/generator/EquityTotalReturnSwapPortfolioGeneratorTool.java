@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.examples.simulated.generator;
@@ -113,8 +113,10 @@ public class EquityTotalReturnSwapPortfolioGeneratorTool extends AbstractPortfol
   public final PortfolioGenerator createPortfolioGenerator(final NameGenerator portfolioNameGenerator) {
     final SecurityGenerator<ManageableSecurity> securities = createEquityTRSSecurityGenerator(FUNDING_LEGS.size());
     configure(securities);
-    final PositionGenerator positions = new SimplePositionGenerator<>(securities, getSecurityPersister(), getCounterPartyGenerator());
-    final PortfolioNodeGenerator rootNode = new LeafPortfolioNodeGenerator(new StaticNameGenerator("Equity Total Return Swaps"), positions, FUNDING_LEGS.size());
+    final PositionGenerator positions =
+        new SimplePositionGenerator<>(securities, getSecurityPersister(), getCounterPartyGenerator());
+    final PortfolioNodeGenerator rootNode =
+        new LeafPortfolioNodeGenerator(new StaticNameGenerator("Equity Total Return Swaps"), positions, FUNDING_LEGS.size());
     return new PortfolioGenerator(rootNode, portfolioNameGenerator);
   }
 

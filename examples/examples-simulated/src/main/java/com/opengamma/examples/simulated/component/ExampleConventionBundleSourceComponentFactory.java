@@ -16,7 +16,7 @@ import com.opengamma.financial.convention.ConventionBundleMaster;
 public class ExampleConventionBundleSourceComponentFactory extends ConventionBundleSourceComponentFactory {
 
   @Override
-  protected ConventionBundleMaster createConventionBundleMaster(ComponentRepository repo) {
+  protected ConventionBundleMaster createConventionBundleMaster(final ComponentRepository repo) {
     return new SyntheticInMemoryConventionBundleMaster();
   }
 

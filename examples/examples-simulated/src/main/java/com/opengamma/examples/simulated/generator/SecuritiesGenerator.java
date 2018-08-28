@@ -31,7 +31,7 @@ public class SecuritiesGenerator {
   }
 
   /**
-   * Generates a list of securities. This method attempts to generate the number of {{@link #_numberOfSecurities}
+   * Generates a list of securities. This method attempts to generate the number of securities
    * without checking that this is possible. It is the responsibility of the underlying security generator to
    * perform this check.
    * @return A list of manageable securities

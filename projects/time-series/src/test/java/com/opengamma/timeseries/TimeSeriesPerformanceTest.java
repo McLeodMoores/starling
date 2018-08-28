@@ -20,18 +20,30 @@ public class TimeSeriesPerformanceTest {
   private static final int SMALL = 10;
   private static final int BIG = 10_000;
 
-  public void test_addSimple_small() {
+  /**
+   * Tests adding small series with the same dates.
+   */
+  public void testAddSimpleSmall() {
     for (int i = 0; i < 5; i++) {
       addSimple(SMALL, "addSimple-small");
     }
   }
 
-  public void test_addSimple_big() {
+  /**
+   * Tests adding large series with the same dates.
+   */
+  public void testAddSimpleBig() {
     for (int i = 0; i < 5; i++) {
       addSimple(BIG, "addSimple-big");
     }
   }
 
+  /**
+   * Creates two series of a given size with the same dates and adds them.
+   *
+   * @param size  the series size
+   * @param name  the name of the test
+   */
   void addSimple(final int size, final String name) {
     final int loop = 10_000_000 / size;
     final LocalDate base = LocalDate.now().minusYears(2);
@@ -52,18 +64,30 @@ public class TimeSeriesPerformanceTest {
   }
 
   //-------------------------------------------------------------------------
-  public void test_addSeries_small() {
+  /**
+   * Tests adding small series with different dates.
+   */
+  public void testAddSeriesSmall() {
     for (int i = 0; i < 5; i++) {
       addSeries(SMALL, "addSeries-small");
     }
   }
 
-  public void test_addSeries_big() {
+  /**
+   * Tests adding large series with different dates.
+   */
+  public void testAddSeriesBig() {
     for (int i = 0; i < 5; i++) {
       addSeries(BIG, "addSeries-big");
     }
   }
 
+  /**
+   * Creates two series of a given size with different dates and adds them.
+   *
+   * @param size  the series size
+   * @param name  the name of the test
+   */
   void addSeries(final int size, final String name) {
     final int loop = 10_000_000 / size;
     final LocalDate base = LocalDate.now().minusYears(2);
@@ -89,18 +113,30 @@ public class TimeSeriesPerformanceTest {
   }
 
   //-------------------------------------------------------------------------
-  public void test_multiplySeries_small() {
+  /**
+   * Tests multiplying small series.
+   */
+  public void testMultiplySeriesSmall() {
     for (int i = 0; i < 5; i++) {
       multiplySeries(SMALL, "multiplySeries-small");
     }
   }
 
-  public void test_multiplySeries_big() {
+  /**
+   * Tests multiplying large series.
+   */
+  public void testMultiplySeriesBig() {
     for (int i = 0; i < 5; i++) {
       multiplySeries(BIG, "multiplySeries-big");
     }
   }
 
+  /**
+   * Creates two series of a given size and multiplies them.
+   *
+   * @param size  the series size
+   * @param name  the name of the test
+   */
   void multiplySeries(final int size, final String name) {
     final int loop = 10_000_000 / size;
     final LocalDate base = LocalDate.now().minusYears(2);
@@ -126,18 +162,30 @@ public class TimeSeriesPerformanceTest {
   }
 
   //-------------------------------------------------------------------------
-  public void test_reciprocal_small() {
+  /**
+   * Calculates the reciprocal of a small series.
+   */
+  public void testReciprocalSmall() {
     for (int i = 0; i < 5; i++) {
       multiplySeries(SMALL, "reciprocal-small");
     }
   }
 
-  public void test_reciprocal_big() {
+  /**
+   * Calculates the reciprocal of a large series.
+   */
+  public void testReciprocalBig() {
     for (int i = 0; i < 5; i++) {
       multiplySeries(BIG, "reciprocal-big");
     }
   }
 
+  /**
+   * Creates two series of a given size and calculates the reciprocal.
+   *
+   * @param size  the series size
+   * @param name  the name of the test
+   */
   void reciprocal(final int size, final String name) {
     final int loop = 10_000_000 / size;
     final LocalDate base = LocalDate.now().minusYears(2);

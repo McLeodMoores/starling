@@ -69,7 +69,7 @@ import com.opengamma.util.time.Tenor;
 public class ExampleMixedCMCapFloorPortfolioLoader extends AbstractTool<IntegrationToolContext> {
 
   /** Logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(ExampleMixedCMCapFloorPortfolioLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExampleMixedCMCapFloorPortfolioLoader.class);
   /** The trade date */
   private static final LocalDate TRADE_DATE = DateUtils.previousWeekDay().minusDays(30);
   /** Following business day convention */
@@ -157,7 +157,7 @@ public class ExampleMixedCMCapFloorPortfolioLoader extends AbstractTool<Integrat
     for (final FinancialSecurity security : securities) {
       sb.append("\t").append(security.getName()).append("\n");
     }
-    s_logger.info(sb.toString());
+    LOGGER.info(sb.toString());
     return securities;
   }
 
@@ -180,7 +180,7 @@ public class ExampleMixedCMCapFloorPortfolioLoader extends AbstractTool<Integrat
     for (final FinancialSecurity security : securities) {
       sb.append("\t").append(security.getName()).append("\n");
     }
-    s_logger.info(sb.toString());
+    LOGGER.info(sb.toString());
     return securities;
   }
 
@@ -205,7 +205,7 @@ public class ExampleMixedCMCapFloorPortfolioLoader extends AbstractTool<Integrat
     for (final FinancialSecurity security : securities) {
       sb.append("\t").append(security.getName()).append("\n");
     }
-    s_logger.info(sb.toString());
+    LOGGER.info(sb.toString());
     return securities;
   }
 

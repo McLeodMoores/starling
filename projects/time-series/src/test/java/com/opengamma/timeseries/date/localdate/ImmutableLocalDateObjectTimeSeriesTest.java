@@ -80,6 +80,7 @@ public class ImmutableLocalDateObjectTimeSeriesTest extends LocalDateObjectTimeS
   /**
    * Tests creation from arrays of dates and values.
    */
+  @Test
   public void testOfLDArrayValueArray() {
     final LocalDate[] inDates = new LocalDate[] {LocalDate.of(2012, 6, 30), LocalDate.of(2012, 7, 1)};
     final Float[] inValues = new Float[] {2.0f, 3.0f};
@@ -485,6 +486,23 @@ public class ImmutableLocalDateObjectTimeSeriesTest extends LocalDateObjectTimeS
   //-------------------------------------------------------------------------
   @Override
   public void testIterator() {
+    final LocalDateObjectTimeSeries<Float> ts = ImmutableLocalDateObjectTimeSeries.<Float>builder()
+        .put(LocalDate.of(2012, 6, 30), 2.0f).put(LocalDate.of(2012, 7, 1), 3.0f).put(LocalDate.of(2012, 6, 1), 1.0f).build();
+    final LocalDateObjectEntryIterator<Float> it = ts.iterator();
+    assertEquals(true, it.hasNext());
+    assertEquals(new AbstractMap.SimpleImmutableEntry<>(LocalDate.of(2012, 6, 1), 1.0f), it.next());
+    assertEquals(LocalDate.of(2012, 6, 1), it.currentTime());
+    assertEquals(20120601, it.currentTimeFast());
+    assertEquals(1.0f, it.currentValue());
+    assertEquals(LocalDate.of(2012, 6, 30), it.nextTime());
+    assertEquals(LocalDate.of(2012, 7, 1), it.nextTime());
+    assertEquals(false, it.hasNext());
+  }
+
+  /**
+   * Tests the iterator on the builder.
+   */
+  public void testBuilderIterator() {
     final LocalDateObjectTimeSeriesBuilder<Float> bld = ImmutableLocalDateObjectTimeSeries.builder();
     bld.put(LocalDate.of(2012, 6, 30), 2.0f).put(LocalDate.of(2012, 7, 1), 3.0f).put(LocalDate.of(2012, 6, 1), 1.0f);
     final LocalDateObjectEntryIterator<Float> it = bld.iterator();
@@ -499,10 +517,23 @@ public class ImmutableLocalDateObjectTimeSeriesTest extends LocalDateObjectTimeS
   }
 
   /**
-   * Tests the exception when the iterator runs over the end of the builder.
+   * Tests the exception when the iterator runs over the end of the time series.
    */
   @Test(expectedExceptions = NoSuchElementException.class)
   public void testHasNext() {
+    final LocalDateObjectTimeSeries<Float> ts = ImmutableLocalDateObjectTimeSeries.<Float>builder()
+        .put(LocalDate.of(2012, 6, 30), 2.0f).put(LocalDate.of(2012, 7, 1), 3.0f).put(LocalDate.of(2012, 6, 1), 1.0f).build();
+    final LocalDateObjectEntryIterator<Float> iterator = ts.iterator();
+    for (int i = 0; i < ts.size() + 1; i++) {
+      iterator.next();
+    }
+  }
+
+  /**
+   * Tests the exception when the iterator runs over the end of the builder.
+   */
+  @Test(expectedExceptions = NoSuchElementException.class)
+  public void testBuilderHasNext() {
     final LocalDateObjectTimeSeriesBuilder<Float> bld = ImmutableLocalDateObjectTimeSeries.builder();
     bld.put(LocalDate.of(2012, 6, 30), 2.0f).put(LocalDate.of(2012, 7, 1), 3.0f).put(LocalDate.of(2012, 6, 1), 1.0f);
     final LocalDateObjectEntryIterator<Float> iterator = bld.iterator();
@@ -512,10 +543,23 @@ public class ImmutableLocalDateObjectTimeSeriesTest extends LocalDateObjectTimeS
   }
 
   /**
-   * Tests the exception when the iterator runs over the end of the builder.
+   * Tests the exception when the iterator runs over the end of the time series.
    */
   @Test(expectedExceptions = NoSuchElementException.class)
   public void testHasNextTimeFast() {
+    final LocalDateObjectTimeSeries<Float> ts = ImmutableLocalDateObjectTimeSeries.<Float>builder()
+        .put(LocalDate.of(2012, 6, 30), 2.0f).put(LocalDate.of(2012, 7, 1), 3.0f).put(LocalDate.of(2012, 6, 1), 1.0f).build();
+    final LocalDateObjectEntryIterator<Float> iterator = ts.iterator();
+    for (int i = 0; i < ts.size() + 1; i++) {
+      iterator.nextTimeFast();
+    }
+  }
+
+  /**
+   * Tests the exception when the iterator runs over the end of the builder.
+   */
+  @Test(expectedExceptions = NoSuchElementException.class)
+  public void testBuilderHasNextTimeFast() {
     final LocalDateObjectTimeSeriesBuilder<Float> bld = ImmutableLocalDateObjectTimeSeries.builder();
     bld.put(LocalDate.of(2012, 6, 30), 2.0f).put(LocalDate.of(2012, 7, 1), 3.0f).put(LocalDate.of(2012, 6, 1), 1.0f);
     final LocalDateObjectEntryIterator<Float> iterator = bld.iterator();
@@ -529,6 +573,16 @@ public class ImmutableLocalDateObjectTimeSeriesTest extends LocalDateObjectTimeS
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testCurrentTime() {
+    final LocalDateObjectTimeSeries<Float> ts = ImmutableLocalDateObjectTimeSeries.<Float>builder()
+        .put(LocalDate.of(2012, 6, 30), 2.0f).put(LocalDate.of(2012, 7, 1), 3.0f).put(LocalDate.of(2012, 6, 1), 1.0f).build();
+    ts.iterator().currentTime();
+  }
+
+  /**
+   * Tests the exception when the iterator has not been started.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
+  public void testBuilderCurrentTime() {
     final LocalDateObjectTimeSeriesBuilder<Float> bld = ImmutableLocalDateObjectTimeSeries.builder();
     bld.put(LocalDate.of(2012, 6, 30), 2.0f).put(LocalDate.of(2012, 7, 1), 3.0f).put(LocalDate.of(2012, 6, 1), 1.0f);
     bld.iterator().currentTime();
@@ -539,6 +593,16 @@ public class ImmutableLocalDateObjectTimeSeriesTest extends LocalDateObjectTimeS
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testCurrentTimeFast() {
+    final LocalDateObjectTimeSeries<Float> ts = ImmutableLocalDateObjectTimeSeries.<Float>builder()
+        .put(LocalDate.of(2012, 6, 30), 2.0f).put(LocalDate.of(2012, 7, 1), 3.0f).put(LocalDate.of(2012, 6, 1), 1.0f).build();
+    ts.iterator().currentTimeFast();
+  }
+
+  /**
+   * Tests the exception when the iterator has not been started.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
+  public void testBuilderCurrentTimeFast() {
     final LocalDateObjectTimeSeriesBuilder<Float> bld = ImmutableLocalDateObjectTimeSeries.builder();
     bld.put(LocalDate.of(2012, 6, 30), 2.0f).put(LocalDate.of(2012, 7, 1), 3.0f).put(LocalDate.of(2012, 6, 1), 1.0f);
     bld.iterator().currentTimeFast();
@@ -549,6 +613,16 @@ public class ImmutableLocalDateObjectTimeSeriesTest extends LocalDateObjectTimeS
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testCurrentValue() {
+    final LocalDateObjectTimeSeries<Float> ts = ImmutableLocalDateObjectTimeSeries.<Float>builder()
+        .put(LocalDate.of(2012, 6, 30), 2.0f).put(LocalDate.of(2012, 7, 1), 3.0f).put(LocalDate.of(2012, 6, 1), 1.0f).build();
+    ts.iterator().currentValue();
+  }
+
+  /**
+   * Tests the exception when the iterator has not been started.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
+  public void testBuilderCurrentValue() {
     final LocalDateObjectTimeSeriesBuilder<Float> bld = ImmutableLocalDateObjectTimeSeries.builder();
     bld.put(LocalDate.of(2012, 6, 30), 2.0f).put(LocalDate.of(2012, 7, 1), 3.0f).put(LocalDate.of(2012, 6, 1), 1.0f);
     bld.iterator().currentValue();
@@ -559,6 +633,20 @@ public class ImmutableLocalDateObjectTimeSeriesTest extends LocalDateObjectTimeS
    */
   @Test
   public void testCurrentIndex() {
+    final LocalDateObjectTimeSeries<Float> ts = ImmutableLocalDateObjectTimeSeries.<Float>builder()
+        .put(LocalDate.of(2012, 6, 30), 2.0f).put(LocalDate.of(2012, 7, 1), 3.0f).put(LocalDate.of(2012, 6, 1), 1.0f).build();
+    final LocalDateObjectEntryIterator<Float> iterator = ts.iterator();
+    for (int i = 0; i < ts.size(); i++) {
+      iterator.next();
+      assertEquals(iterator.currentIndex(), i);
+    }
+  }
+
+  /**
+   * Tests the current index.
+   */
+  @Test
+  public void testBuilderCurrentIndex() {
     final LocalDateObjectTimeSeriesBuilder<Float> bld = ImmutableLocalDateObjectTimeSeries.builder();
     bld.put(LocalDate.of(2012, 6, 30), 2.0f).put(LocalDate.of(2012, 7, 1), 3.0f).put(LocalDate.of(2012, 6, 1), 1.0f);
     final LocalDateObjectEntryIterator<Float> iterator = bld.iterator();
@@ -571,11 +659,21 @@ public class ImmutableLocalDateObjectTimeSeriesTest extends LocalDateObjectTimeS
   /**
    * Tests the exception the iterator has not been started.
    */
-  @Test(expectedExceptions = IllegalStateException.class)
+  @Test(expectedExceptions = UnsupportedOperationException.class)
   public void testRemove() {
+    final LocalDateObjectTimeSeries<Float> ts = ImmutableLocalDateObjectTimeSeries.<Float>builder()
+        .put(LocalDate.of(2012, 6, 30), 2.0f).put(LocalDate.of(2012, 7, 1), 3.0f).put(LocalDate.of(2012, 6, 1), 1.0f).build();
+    ts.iterator().remove();;
+  }
+
+  /**
+   * Tests the exception the iterator has not been started.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
+  public void testBuilderRemove() {
     final LocalDateObjectTimeSeriesBuilder<Float> bld = ImmutableLocalDateObjectTimeSeries.builder();
     bld.put(LocalDate.of(2012, 6, 30), 2.0f).put(LocalDate.of(2012, 7, 1), 3.0f).put(LocalDate.of(2012, 6, 1), 1.0f);
-    bld.iterator().remove();;
+    bld.iterator().remove();
   }
 
   /**
@@ -988,4 +1086,61 @@ public class ImmutableLocalDateObjectTimeSeriesTest extends LocalDateObjectTimeS
     assertEquals(dts.toBuilder().put(LocalDate.of(2010, 5, 8), 6F).build(), expected);
   }
 
+  /**
+   * Tests a union operation.
+   */
+  @Test
+  public void testUnionOperate() {
+    final LocalDateObjectTimeSeries<Float> ts1 = ImmutableLocalDateObjectTimeSeries.<Float>builder()
+        .put(LocalDate.of(2018, 1, 1), 1F).put(LocalDate.of(2018, 2, 1), 2F).build();
+    final LocalDateObjectTimeSeries<Float> ts2 = ImmutableLocalDateObjectTimeSeries.<Float>builder()
+        .put(LocalDate.of(2018, 1, 1), 10F).put(LocalDate.of(2018, 3, 1), 20F).build();
+    final LocalDateObjectTimeSeries<Float> ets = ImmutableLocalDateObjectTimeSeries.<Float>builder()
+        .put(LocalDate.of(2018, 1, 1), 11F).put(LocalDate.of(2018, 2, 1), 2F).put(LocalDate.of(2018, 3, 1), 20F).build();
+    assertEquals(ts1.unionOperate(ts2, BIN), ets);
+    assertEquals(ts2.unionOperate(ts1, BIN), ets);
+    assertEquals(ts1.unionOperate(ImmutableLocalDateObjectTimeSeries.<Float>ofEmpty(), BIN), ts1);
+  }
+
+  /**
+   * Tests an intersection operation.
+   */
+  @Test
+  public void testIntersectionOperate() {
+    final LocalDateObjectTimeSeries<Float> ts1 = ImmutableLocalDateObjectTimeSeries.<Float>builder()
+        .put(LocalDate.of(2018, 1, 1), 1F).put(LocalDate.of(2018, 2, 1), 2F).build();
+    final LocalDateObjectTimeSeries<Float> ts2 = ImmutableLocalDateObjectTimeSeries.<Float>builder()
+        .put(LocalDate.of(2018, 1, 1), 10F).put(LocalDate.of(2018, 3, 1), 20F).build();
+    final LocalDateObjectTimeSeries<Float> ets = ImmutableLocalDateObjectTimeSeries.<Float>builder()
+        .put(LocalDate.of(2018, 1, 1), 11F).build();
+    assertEquals(ts1.operate(ts2, BIN), ets);
+    assertEquals(ts2.operate(ts1, BIN), ets);
+    assertEquals(ts1.operate(ImmutableLocalDateObjectTimeSeries.<Float>ofEmpty(), BIN),
+        ImmutableLocalDateObjectTimeSeries.<Float>ofEmpty());
+  }
+
+  /**
+   * Tests a unary operation.
+   */
+  @Test
+  public void testUnaryOperate() {
+    final LocalDateObjectTimeSeries<Float> ts = ImmutableLocalDateObjectTimeSeries.<Float>builder()
+        .put(LocalDate.of(2018, 1, 1), 1F).put(LocalDate.of(2018, 2, 1), 2F).build();
+    final LocalDateObjectTimeSeries<Float> ets = ImmutableLocalDateObjectTimeSeries.<Float>builder()
+        .put(LocalDate.of(2018, 1, 1), 2F).put(LocalDate.of(2018, 2, 1), 4F).build();
+    assertEquals(ts.operate(UN), ets);
+    assertEquals(ImmutableLocalDateObjectTimeSeries.<Float>ofEmpty().operate(UN), ImmutableLocalDateObjectTimeSeries.<Float>ofEmpty());
+  }
+
+  /**
+   * Tests an operation.
+   */
+  @Test
+  public void testOperate() {
+    final LocalDateObjectTimeSeries<Float> ts = ImmutableLocalDateObjectTimeSeries.<Float>builder()
+        .put(LocalDate.of(2018, 1, 1), 1F).put(LocalDate.of(2018, 2, 1), 2F).build();
+    final LocalDateObjectTimeSeries<Float> ets = ImmutableLocalDateObjectTimeSeries.<Float>builder()
+        .put(LocalDate.of(2018, 1, 1), 6F).put(LocalDate.of(2018, 2, 1), 7F).build();
+    assertEquals(ts.operate(5F, BIN), ets);
+  }
 }

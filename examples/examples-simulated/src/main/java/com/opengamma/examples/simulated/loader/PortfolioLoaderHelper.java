@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 
@@ -31,13 +31,13 @@ import com.opengamma.master.security.SecurityMaster;
 import com.opengamma.util.money.Currency;
 
 /**
- * 
+ *
  */
 public class PortfolioLoaderHelper {
   /**
    * Logger
    */
-  private static final Logger s_logger = LoggerFactory.getLogger(PortfolioLoaderHelper.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PortfolioLoaderHelper.class);
 
   /**
    * Raw security type for libor rates
@@ -74,22 +74,22 @@ public class PortfolioLoaderHelper {
   }
 
   public static Options getOptions() {
-    Options options = new Options();
+    final Options options = new Options();
     buildOptions(options);
     return options;
   }
 
   /**
    * Builds the set of options.
-   * 
+   *
    * @param options  the options to add to, not null
    */
-  public static void buildOptions(Options options) {
-    Option filenameOption = new Option(FILE_NAME_OPT, "filename", true, "The path to the CSV file of cash details");
+  public static void buildOptions(final Options options) {
+    final Option filenameOption = new Option(FILE_NAME_OPT, "filename", true, "The path to the CSV file of cash details");
     filenameOption.setRequired(true);
     options.addOption(filenameOption);
 
-    Option portfolioNameOption = new Option(PORTFOLIO_NAME_OPT, "name", true, "The name of the portfolio");
+    final Option portfolioNameOption = new Option(PORTFOLIO_NAME_OPT, "name", true, "The name of the portfolio");
     portfolioNameOption.setRequired(true);
     options.addOption(portfolioNameOption);
 
@@ -97,24 +97,24 @@ public class PortfolioLoaderHelper {
     //    runModeOption.setRequired(true);
     //    options.addOption(runModeOption);
 
-    Option writeOption = new Option(WRITE_OPT, "write", false, "Actually persists the portfolio to the database");
+    final Option writeOption = new Option(WRITE_OPT, "write", false, "Actually persists the portfolio to the database");
     options.addOption(writeOption);
   }
 
-  public static void usage(String loaderName) {
-    HelpFormatter helpFormatter = new HelpFormatter();
+  public static void usage(final String loaderName) {
+    final HelpFormatter helpFormatter = new HelpFormatter();
     helpFormatter.setWidth(100);
     helpFormatter.printHelp(loaderName, OPTIONS);
   }
 
-  public static void normaliseHeaders(String[] headers) {
+  public static void normaliseHeaders(final String[] headers) {
     for (int i = 0; i < headers.length; i++) {
       headers[i] = headers[i].toLowerCase();
     }
   }
 
-  public static String getWithException(Map<String, String> fieldValueMap, String fieldName) {
-    String result = fieldValueMap.get(fieldName);
+  public static String getWithException(final Map<String, String> fieldValueMap, final String fieldName) {
+    final String result = fieldValueMap.get(fieldName);
     if (result == null) {
       System.err.println(fieldValueMap);
       throw new IllegalArgumentException("Could not find field '" + fieldName + "'");
@@ -122,38 +122,38 @@ public class PortfolioLoaderHelper {
     return result;
   }
 
-  public static LocalDate getDateWithException(Map<String, String> fieldValueMap, String fieldName) {
+  public static LocalDate getDateWithException(final Map<String, String> fieldValueMap, final String fieldName) {
     return LocalDate.parse(getWithException(fieldValueMap, fieldName), CSV_DATE_FORMATTER);
   }
 
-  public static void persistLiborRawSecurities(Set<Currency> currencies, ToolContext toolContext) {
-    SecurityMaster securityMaster = toolContext.getSecurityMaster();
-    byte[] rawData = new byte[] {0};
-    StringBuilder sb = new StringBuilder();
+  public static void persistLiborRawSecurities(final Set<Currency> currencies, final ToolContext toolContext) {
+    final SecurityMaster securityMaster = toolContext.getSecurityMaster();
+    final byte[] rawData = new byte[] {0};
+    final StringBuilder sb = new StringBuilder();
     sb.append("Created ").append(currencies.size()).append(" libor securities:\n");
-    for (Currency ccy : currencies) {
-      ConventionBundle swapConvention = getSwapConventionBundle(ccy, toolContext.getConventionBundleSource());
-      ConventionBundle liborConvention = getLiborConventionBundle(swapConvention, toolContext.getConventionBundleSource());
+    for (final Currency ccy : currencies) {
+      final ConventionBundle swapConvention = getSwapConventionBundle(ccy, toolContext.getConventionBundleSource());
+      final ConventionBundle liborConvention = getLiborConventionBundle(swapConvention, toolContext.getConventionBundleSource());
       sb.append("\t").append(liborConvention.getIdentifiers()).append("\n");
-      RawSecurity rawSecurity = new RawSecurity(LIBOR_RATE_SECURITY_TYPE, rawData);
+      final RawSecurity rawSecurity = new RawSecurity(LIBOR_RATE_SECURITY_TYPE, rawData);
       rawSecurity.setExternalIdBundle(liborConvention.getIdentifiers());
-      SecurityDocument secDoc = new SecurityDocument();
+      final SecurityDocument secDoc = new SecurityDocument();
       secDoc.setSecurity(rawSecurity);
       securityMaster.add(secDoc);
     }
-    s_logger.info(sb.toString());
+    LOGGER.info(sb.toString());
   }
 
-  private static ConventionBundle getSwapConventionBundle(Currency ccy, ConventionBundleSource conventionSource) {
-    ConventionBundle swapConvention = conventionSource.getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, ccy.getCode() + "_SWAP"));
+  private static ConventionBundle getSwapConventionBundle(final Currency ccy, final ConventionBundleSource conventionSource) {
+    final ConventionBundle swapConvention = conventionSource.getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, ccy.getCode() + "_SWAP"));
     if (swapConvention == null) {
       throw new OpenGammaRuntimeException("Couldn't get swap convention for " + ccy.getCode());
     }
     return swapConvention;
   }
 
-  private static ConventionBundle getLiborConventionBundle(ConventionBundle swapConvention, ConventionBundleSource conventionSource) {
-    ConventionBundle liborConvention = conventionSource.getConventionBundle(swapConvention.getSwapFloatingLegInitialRate());
+  private static ConventionBundle getLiborConventionBundle(final ConventionBundle swapConvention, final ConventionBundleSource conventionSource) {
+    final ConventionBundle liborConvention = conventionSource.getConventionBundle(swapConvention.getSwapFloatingLegInitialRate());
     if (liborConvention == null) {
       throw new OpenGammaRuntimeException("Couldn't get libor convention for " + swapConvention.getSwapFloatingLegInitialRate());
     }

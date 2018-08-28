@@ -63,7 +63,7 @@ import com.opengamma.util.time.Tenor;
 public class ExampleFxForwardPortfolioLoader extends AbstractTool<IntegrationToolContext> {
 
   /** Logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(ExampleFxForwardPortfolioLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExampleFxForwardPortfolioLoader.class);
   /** The number of securities in this portfolio */
   private static final int SIZE = 200;
   /** The name of the portfolio */
@@ -129,7 +129,7 @@ public class ExampleFxForwardPortfolioLoader extends AbstractTool<IntegrationToo
     for (final FXForwardSecurity fxForward : fxForwards) {
       sb.append("\t").append(fxForward.getName()).append("\n");
     }
-    s_logger.info(sb.toString());
+    LOGGER.info(sb.toString());
     return fxForwards;
   }
 

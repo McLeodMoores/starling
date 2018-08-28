@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.examples.bloomberg.component;
@@ -26,7 +26,7 @@ import com.opengamma.livedata.resolver.DistributionSpecificationResolver;
 public class ExampleLiveDataServerComponentFactory extends AbstractBloombergLiveDataServerComponentFactory {
 
   @Override
-  protected LiveDataEntitlementChecker initEntitlementChecker(DistributionSpecificationResolver distSpecResolver) {
+  protected LiveDataEntitlementChecker initEntitlementChecker(final DistributionSpecificationResolver distSpecResolver) {
     return new PermissiveLiveDataEntitlementChecker();
   }
 

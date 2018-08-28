@@ -20,6 +20,9 @@ import java.util.Objects;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import com.opengamma.timeseries.ObjectTimeSeriesOperators.BinaryOperator;
+import com.opengamma.timeseries.ObjectTimeSeriesOperators.UnaryOperator;
+
 /**
  * Abstract test class for {@code ObjectTimeSeries}.
  *
@@ -547,4 +550,84 @@ public abstract class ObjectTimeSeriesTest<T, V> {
     assertEquals(createEmptyTimeSeries(), createEmptyTimeSeries());
   }
 
+  /**
+   * Tests the lag operator.
+   */
+  @Test
+  public void testLag() {
+    final ObjectTimeSeries<T, V> dts = createStandardTimeSeries();
+    ObjectTimeSeries<T, V> lagged = dts.lag(0);
+    assertOperationSuccessful(lagged, new Float[] {1F, 2F, 3F, 4F, 5F, 6F });
+    assertEquals(lagged.getEarliestTime(), testTimes()[0]);
+    assertEquals(lagged.getLatestTime(), testTimes()[5]);
+    assertEquals(dts, lagged);
+    lagged = dts.lag(1);
+    assertOperationSuccessful(lagged, new Float[] { 1F, 2F, 3F, 4F, 5F });
+    assertEquals(lagged.getEarliestTime(), testTimes()[1]);
+    assertEquals(lagged.getLatestTime(), testTimes()[5]);
+    lagged = dts.lag(-1);
+    assertOperationSuccessful(lagged, new Float[] { 2F, 3F, 4F, 5F, 6F });
+    assertEquals(lagged.getEarliestTime(), testTimes()[0]);
+    assertEquals(lagged.getLatestTime(), testTimes()[4]);
+    lagged = dts.lag(5);
+    assertOperationSuccessful(lagged, new Float[] { 1F });
+    lagged = dts.lag(-5);
+    assertOperationSuccessful(lagged, new Float[] { 6F });
+    lagged = dts.lag(6);
+    assertOperationSuccessful(lagged, new Float[0]);
+    lagged = dts.lag(-6);
+    assertOperationSuccessful(lagged, new Float[0]);
+    lagged = dts.lag(1000);
+    assertOperationSuccessful(lagged, new Float[0]);
+    lagged = dts.lag(-1000);
+    assertOperationSuccessful(lagged, new Float[0]);
+  }
+
+  /**
+   * Checks that the values of a time series are the same as those expected. If the values are Numbers,
+   * they are converted to doubles before testing. Otherwise, the objects are compared.
+   *
+   * @param result  the result time series
+   * @param expected  the expected values
+   */
+  protected static void assertOperationSuccessful(final ObjectTimeSeries<?, ?> result, final Object[] expected) {
+    assertEquals(expected.length, result.size());
+    for (int i = 0; i < expected.length; i++) {
+      final Object e = expected[i];
+      final Object actual = result.getValueAtIndex(i);
+      if (Number.class.isInstance(e) && Number.class.isInstance(actual)) {
+        assertEquals(((Number) e).doubleValue(), ((Number) result.getValueAtIndex(i)).doubleValue(), 0.001);
+      } else {
+        assertEquals(e, result.getValueAtIndex(i));
+      }
+    }
+  }
+
+  /** Test binary operator instance. */
+  protected static final BinaryOperator<Float> BIN = new TestBinaryOperator();
+  /** Test unary operator instance. */
+  protected static final UnaryOperator<Float> UN = new TestUnaryOperator();
+
+  /**
+   * Test binary operator.
+   */
+  protected static class TestBinaryOperator implements BinaryOperator<Float> {
+
+    @Override
+    public Float operate(final Float a, final Float b) {
+      return a + b;
+    }
+  }
+
+  /**
+   * Test unary operator.
+   */
+  protected static class TestUnaryOperator implements UnaryOperator<Float> {
+
+    @Override
+    public Float operate(final Float a) {
+      return a * 2;
+    }
+
+  }
 }

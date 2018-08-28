@@ -14,7 +14,7 @@ import java.util.Calendar;
 public abstract class SQLDateDoubleTimeSeriesTest extends DoubleTimeSeriesTest<Date> {
 
   @Override
-  protected Date[] testTimes() {
+  protected Date[] createTestTimes() {
     Calendar cal = Calendar.getInstance();
     cal.clear();
     cal.set(2010, 1, 8); // feb
@@ -33,7 +33,7 @@ public abstract class SQLDateDoubleTimeSeriesTest extends DoubleTimeSeriesTest<D
   }
 
   @Override
-  protected Date[] testTimes2() {
+  protected Date[] createTestTimes2() {
     Calendar cal = Calendar.getInstance();
     cal.clear();
     cal.set(2010, 1, 11); // feb
@@ -52,7 +52,7 @@ public abstract class SQLDateDoubleTimeSeriesTest extends DoubleTimeSeriesTest<D
   }
 
   @Override
-  protected Date[] emptyTimes() {
+  protected Date[] createEmptyTimes() {
     return new Date[] {};
   }
 

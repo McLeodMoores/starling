@@ -119,16 +119,16 @@ public class ExampleEURFixedIncomePortfolioLoader extends AbstractTool<Integrati
   //-------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
+   *
    * @param args  the standard tool arguments, not null
    */
   public static void main(final String[] args) {  // CSIGNORE
     try {
-      boolean success =
+      final boolean success =
           new ExampleTimeSeriesRatingLoader().initAndRun(args, IntegrationToolContext.class) &&
           new ExampleEURFixedIncomePortfolioLoader().initAndRun(args, IntegrationToolContext.class);
       ShutdownUtils.exit(success ? 0 : -1);
-    } catch (Throwable ex) {
+    } catch (final Throwable ex) {
       ex.printStackTrace();
       ShutdownUtils.exit(-2);
     }
@@ -154,7 +154,7 @@ public class ExampleEURFixedIncomePortfolioLoader extends AbstractTool<Integrati
     if (futures.isEmpty()) {
       throw new OpenGammaRuntimeException("No valid futures were generated");
     }
-//    persistToPortfolio(Arrays.asList(vanillaSwaps, oisSwaps, basisSwaps, futures), Arrays.asList("EUR Vanilla Swaps", "EUR OIS Swaps", "EUR 3m/6m Basis Swaps", "STIR Futures"), PORTFOLIO_NAME);    
+//    persistToPortfolio(Arrays.asList(vanillaSwaps, oisSwaps, basisSwaps, futures), Arrays.asList("EUR Vanilla Swaps", "EUR OIS Swaps", "EUR 3m/6m Basis Swaps", "STIR Futures"), PORTFOLIO_NAME);
     persistToPortfolio(Arrays.asList(vanillaSwaps, oisSwaps, basisSwaps), Arrays.asList("EUR Vanilla Swaps", "EUR OIS Swaps", "EUR 3m/6m Basis Swaps"), PORTFOLIO_NAME);
   }
 
@@ -256,8 +256,10 @@ public class ExampleEURFixedIncomePortfolioLoader extends AbstractTool<Integrati
         receiveFrequency = QUARTERLY;
         payRate = EURIBOR_6M;
         receiveRate = EURIBOR_3M;
-        payLeg = new FloatingInterestRateLeg(ACT_360, payFrequency, REGION, MODIFIED_FOLLOWING, notional, false, payRate, FloatingRateType.IBOR);
-        receiveLeg = new FloatingSpreadIRLeg(ACT_360, receiveFrequency, REGION, MODIFIED_FOLLOWING, notional, false, receiveRate, FloatingRateType.IBOR, spread);
+        payLeg =
+            new FloatingInterestRateLeg(ACT_360, payFrequency, REGION, MODIFIED_FOLLOWING, notional, false, payRate, FloatingRateType.IBOR);
+        receiveLeg =
+            new FloatingSpreadIRLeg(ACT_360, receiveFrequency, REGION, MODIFIED_FOLLOWING, notional, false, receiveRate, FloatingRateType.IBOR, spread);
         frequencyLabel = "receive 3M Euribor + " + FORMATTER.format((int) (spread * 1000)) + "bp, pay 6M Euribor";
       }
       final SwapSecurity swap = new SwapSecurity(tradeDate, effectiveDate, maturityDate, COUNTERPARTY, payLeg, receiveLeg);
@@ -317,7 +319,7 @@ public class ExampleEURFixedIncomePortfolioLoader extends AbstractTool<Integrati
         securityMaster.add(securityToAddDoc);
         BigDecimal trades;
         if (security instanceof FutureSecurity) {
-          trades = new BigDecimal(1 + (random.nextInt(150) - 75));
+          trades = new BigDecimal(1 + random.nextInt(150) - 75);
         } else {
           trades = BigDecimal.ONE;
         }

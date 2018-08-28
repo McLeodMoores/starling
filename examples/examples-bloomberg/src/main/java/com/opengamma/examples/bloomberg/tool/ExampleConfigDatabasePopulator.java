@@ -56,7 +56,7 @@ public class ExampleConfigDatabasePopulator extends AbstractTool<IntegrationTool
   public static final String TOOLCONTEXT_EXAMPLE_PROPERTIES = "classpath:/toolcontext/toolcontext-examplesbloomberg.properties";
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(ExampleConfigDatabasePopulator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExampleConfigDatabasePopulator.class);
 
   private final Set<ExternalIdBundle> _futuresToLoad = new HashSet<>();
   private final Set<ExternalId> _historicalDataToLoad = new HashSet<>();
@@ -68,7 +68,7 @@ public class ExampleConfigDatabasePopulator extends AbstractTool<IntegrationTool
    * @param args  the standard tool arguments, not null
    */
   public static void main(final String[] args) { // CSIGNORE
-    s_logger.info("Populating example database");
+    LOGGER.info("Populating example database");
     new ExampleConfigDatabasePopulator().invokeAndTerminate(args, TOOLCONTEXT_EXAMPLE_PROPERTIES, null);
   }
 
@@ -110,16 +110,16 @@ public class ExampleConfigDatabasePopulator extends AbstractTool<IntegrationTool
     private final String _str;
 
     private Log(final String str) {
-      s_logger.info("{}", str);
+      LOGGER.info("{}", str);
       _str = str;
     }
 
     private void done() {
-      s_logger.debug("{} - finished", _str);
+      LOGGER.debug("{} - finished", _str);
     }
 
     private void fail(final RuntimeException e) {
-      s_logger.error("{} - failed - {}", _str, e.getMessage());
+      LOGGER.error("{} - failed - {}", _str, e.getMessage());
       throw e;
     }
 

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.examples.simulated.loader;
@@ -70,7 +70,8 @@ public class ExampleMultiAssetPortfolioLoader extends AbstractTool<ToolContext> 
   /**
    * Portfolio currencies
    */
-  public static final Currency[] s_currencies = new Currency[] {Currency.USD, Currency.GBP, Currency.EUR, Currency.JPY, Currency.CHF, Currency.NZD, Currency.DKK };
+  public static final Currency[] CURRENCIES = new Currency[] {Currency.USD, Currency.GBP, Currency.EUR, Currency.JPY,
+      Currency.CHF, Currency.NZD, Currency.DKK };
 
   private static final String ID_SCHEME = "MULTI_ASSET_PORFOLIO_LOADER";
   private static final DayCount DAY_COUNT = DayCounts.ACT_360;
@@ -81,19 +82,19 @@ public class ExampleMultiAssetPortfolioLoader extends AbstractTool<ToolContext> 
   //-------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
+   *
    * @param args  the standard tool arguments, not null
    */
-  public static void main(String[] args) { //CSIGNORE
+  public static void main(final String[] args) { //CSIGNORE
     new ExampleMultiAssetPortfolioLoader().invokeAndTerminate(args);
   }
 
   //-------------------------------------------------------------------------
   private void persistToPortfolio() {
-    PortfolioMaster portfolioMaster = getToolContext().getPortfolioMaster();
-    ManageablePortfolioNode rootNode = new ManageablePortfolioNode(PORTFOLIO_NAME);
-    ManageablePortfolio portfolio = new ManageablePortfolio(PORTFOLIO_NAME, rootNode);
-    PortfolioDocument portfolioDoc = new PortfolioDocument();
+    final PortfolioMaster portfolioMaster = getToolContext().getPortfolioMaster();
+    final ManageablePortfolioNode rootNode = new ManageablePortfolioNode(PORTFOLIO_NAME);
+    final ManageablePortfolio portfolio = new ManageablePortfolio(PORTFOLIO_NAME, rootNode);
+    final PortfolioDocument portfolioDoc = new PortfolioDocument();
     portfolioDoc.setPortfolio(portfolio);
     addPortfolioNode(rootNode, getIborSwaps(), "Ibor swaps", BigDecimal.ONE);
     addPortfolioNode(rootNode, getCMSwaps(), "CM swaps", BigDecimal.ONE);
@@ -106,26 +107,26 @@ public class ExampleMultiAssetPortfolioLoader extends AbstractTool<ToolContext> 
   }
 
   private void storeFinancialSecurity(final FinancialSecurity security) {
-    SecurityMaster securityMaster = getToolContext().getSecurityMaster();
-    SecurityDocument toAddDoc = new SecurityDocument();
+    final SecurityMaster securityMaster = getToolContext().getSecurityMaster();
+    final SecurityDocument toAddDoc = new SecurityDocument();
     toAddDoc.setSecurity(security);
     securityMaster.add(toAddDoc);
   }
 
-  private void addPortfolioNode(final ManageablePortfolioNode rootNode, final Collection<FinancialSecurity> finSecurities, final String portfolioNodeName, BigDecimal quantity) {
-    PositionMaster positionMaster = getToolContext().getPositionMaster();
+  private void addPortfolioNode(final ManageablePortfolioNode rootNode, final Collection<FinancialSecurity> finSecurities, final String portfolioNodeName, final BigDecimal quantity) {
+    final PositionMaster positionMaster = getToolContext().getPositionMaster();
     final ManageablePortfolioNode portfolioNode = new ManageablePortfolioNode(portfolioNodeName);
     for (final FinancialSecurity security : finSecurities) {
       storeFinancialSecurity(security);
-      ManageablePosition position = new ManageablePosition(quantity, security.getExternalIdBundle());
-      PositionDocument addedDoc = positionMaster.add(new PositionDocument(position));
+      final ManageablePosition position = new ManageablePosition(quantity, security.getExternalIdBundle());
+      final PositionDocument addedDoc = positionMaster.add(new PositionDocument(position));
       portfolioNode.addPosition(addedDoc.getUniqueId());
     }
     rootNode.addChildNode(portfolioNode);
   }
 
   private List<FinancialSecurity> getCMCapFloor() {
-    final List<FinancialSecurity> securities = new ArrayList<FinancialSecurity>();
+    final List<FinancialSecurity> securities = new ArrayList<>();
 
     final CapFloorSecurity cmsCap = new CapFloorSecurity(ZonedDateTime.of(LocalDateTime.of(2011, 4, 1, 1, 0), ZoneOffset.UTC),
         ZonedDateTime.of(LocalDateTime.of(2016, 4, 1, 1, 0), ZoneOffset.UTC), 1.5E7,
@@ -153,7 +154,7 @@ public class ExampleMultiAssetPortfolioLoader extends AbstractTool<ToolContext> 
   }
 
   private List<FinancialSecurity> getIborSwaps() {
-    final List<FinancialSecurity> securities = new ArrayList<FinancialSecurity>();
+    final List<FinancialSecurity> securities = new ArrayList<>();
     final SwapSecurity swap1 = new SwapSecurity(
         ZonedDateTime.of(LocalDateTime.of(TODAY.getYear() + 1, 5, 1, 11, 0), ZoneOffset.UTC),
         ZonedDateTime.of(LocalDateTime.of(TODAY.getYear() + 1, 5, 1, 11, 0), ZoneOffset.UTC),
@@ -297,7 +298,7 @@ public class ExampleMultiAssetPortfolioLoader extends AbstractTool<ToolContext> 
   }
 
   private Collection<FinancialSecurity> getCMSwaps() {
-    final List<FinancialSecurity> securities = new ArrayList<FinancialSecurity>();
+    final List<FinancialSecurity> securities = new ArrayList<>();
     final int year = TODAY.getYear();
     final SwapSecurity swap1 = new SwapSecurity(
         ZonedDateTime.of(LocalDateTime.of(year + 1, 12, 20, 11, 0), ZoneOffset.UTC),
@@ -350,7 +351,7 @@ public class ExampleMultiAssetPortfolioLoader extends AbstractTool<ToolContext> 
   }
 
   private Collection<FinancialSecurity> getSwaptions() {
-    final List<FinancialSecurity> securities = new ArrayList<FinancialSecurity>();
+    final List<FinancialSecurity> securities = new ArrayList<>();
     final int year = TODAY.getYear();
     final EuropeanExerciseType europeanExerciseType = new EuropeanExerciseType();
     final SwapSecurity swap1 = new SwapSecurity(
@@ -443,8 +444,8 @@ public class ExampleMultiAssetPortfolioLoader extends AbstractTool<ToolContext> 
   }
 
   private Collection<FinancialSecurity> getIborCapFloor() {
-    final List<FinancialSecurity> securities = new ArrayList<FinancialSecurity>();
-    int year = TODAY.getYear();
+    final List<FinancialSecurity> securities = new ArrayList<>();
+    final int year = TODAY.getYear();
     final CapFloorSecurity sec1 = new CapFloorSecurity(ZonedDateTime.of(LocalDateTime.of(year + 1, 1, 1, 1, 0), ZoneOffset.UTC),
         ZonedDateTime.of(LocalDateTime.of(year + 3, 1, 1, 1, 0), ZoneOffset.UTC), 1.5E7,
         USDLIBOR3M, 0.01, SimpleFrequency.QUARTERLY, Currency.USD,
@@ -464,8 +465,8 @@ public class ExampleMultiAssetPortfolioLoader extends AbstractTool<ToolContext> 
   }
 
   private static Collection<FinancialSecurity> getSimpleFX() {
-    final List<FinancialSecurity> securities = new ArrayList<FinancialSecurity>();
-    int year = TODAY.getYear();
+    final List<FinancialSecurity> securities = new ArrayList<>();
+    final int year = TODAY.getYear();
     final FXForwardSecurity fxForward1 = new FXForwardSecurity(Currency.USD, 1000000, Currency.EUR, 1000000,
         ZonedDateTime.of(LocalDateTime.of(year + 1, 2, 1, 11, 0), ZoneOffset.UTC),
         ExternalSchemes.countryRegionId(Country.of("US")));
@@ -482,19 +483,19 @@ public class ExampleMultiAssetPortfolioLoader extends AbstractTool<ToolContext> 
   }
 
   private static Collection<FinancialSecurity> getFXOptions() {
-    final List<FinancialSecurity> securities = new ArrayList<FinancialSecurity>();
-    final FXOptionSecurity vanilla1 = new FXOptionSecurity(Currency.USD, 
-        Currency.EUR, 
-        1000000, 
+    final List<FinancialSecurity> securities = new ArrayList<>();
+    final FXOptionSecurity vanilla1 = new FXOptionSecurity(Currency.USD,
+        Currency.EUR,
+        1000000,
         1000000,
         new Expiry(ZonedDateTime.of(LocalDateTime.of(TODAY.getYear() + 1, 1, 6, 11, 0), ZoneOffset.UTC)),
         ZonedDateTime.of(LocalDateTime.of(TODAY.getYear() + 1, 1, 6, 11, 0), ZoneOffset.UTC),
-        true, 
+        true,
         new EuropeanExerciseType());
     vanilla1.addExternalId(ExternalId.of(ID_SCHEME, GUIDGenerator.generate().toString()));
     vanilla1.setName("FX vanilla option, put USD 1000000, receive EUR 1000000, maturity=" + vanilla1.getSettlementDate().toLocalDate());
-    final FXOptionSecurity vanilla2 = new FXOptionSecurity(Currency.EUR, 
-        Currency.USD, 
+    final FXOptionSecurity vanilla2 = new FXOptionSecurity(Currency.EUR,
+        Currency.USD,
         1500000,
         1000000,
         new Expiry(ZonedDateTime.of(LocalDateTime.of(TODAY.getYear() + 2, 1, 6, 11, 0), ZoneOffset.UTC)),

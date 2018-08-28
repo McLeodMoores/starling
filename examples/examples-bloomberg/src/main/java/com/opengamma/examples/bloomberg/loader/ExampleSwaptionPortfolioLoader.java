@@ -76,7 +76,7 @@ import com.opengamma.util.tuple.Pairs;
 public class ExampleSwaptionPortfolioLoader extends AbstractTool<IntegrationToolContext> {
 
   /** Logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(ExampleSwaptionPortfolioLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExampleSwaptionPortfolioLoader.class);
   /** The currencies */
   public static final Currency[] CCYS = new Currency[] {Currency.USD};
   /** The swaption expiries */
@@ -158,7 +158,7 @@ public class ExampleSwaptionPortfolioLoader extends AbstractTool<IntegrationTool
     for (final Map.Entry<SwaptionSecurity, SwapSecurity> entry : securities.entrySet()) {
       sb.append("\t").append(entry.getKey().getName()).append("\n");
     }
-    s_logger.info(sb.toString());
+    LOGGER.info(sb.toString());
     return securities;
   }
 

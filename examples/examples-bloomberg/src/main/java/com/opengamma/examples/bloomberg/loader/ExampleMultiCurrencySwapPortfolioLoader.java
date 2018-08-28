@@ -74,7 +74,7 @@ import com.opengamma.util.tuple.Triple;
 public class ExampleMultiCurrencySwapPortfolioLoader extends AbstractTool<IntegrationToolContext> {
 
   /** Logger. */
-  private static Logger s_logger = LoggerFactory.getLogger(ExampleMultiCurrencySwapPortfolioLoader.class);
+  private static Logger LOGGER = LoggerFactory.getLogger(ExampleMultiCurrencySwapPortfolioLoader.class);
 
   /**
    * Size of securities in portfolio
@@ -92,33 +92,33 @@ public class ExampleMultiCurrencySwapPortfolioLoader extends AbstractTool<Integr
   private static final String ID_SCHEME = "SWAP_GENERATOR";
 
   /**
-   * Portfolio currencies
+   * Portfolio currencies.
    */
-  public static final Currency[] s_currencies;
+  public static final Currency[] CURRENCIES;
 
-  private static final Tenor[] s_tenors;
+  private static final Tenor[] TENORS;
 
   private static final int DAYS_TRADING = 60;
 
   static {
-    s_currencies = new Currency[]{Currency.USD, Currency.GBP, Currency.EUR, Currency.JPY, Currency.CHF};
-    s_tenors = new Tenor[]{Tenor.ONE_YEAR, Tenor.TWO_YEARS, Tenor.THREE_YEARS, Tenor.FIVE_YEARS,
+    CURRENCIES = new Currency[]{Currency.USD, Currency.GBP, Currency.EUR, Currency.JPY, Currency.CHF};
+    TENORS = new Tenor[]{Tenor.ONE_YEAR, Tenor.TWO_YEARS, Tenor.THREE_YEARS, Tenor.FIVE_YEARS,
       Tenor.ofYears(7), Tenor.ofYears(10), Tenor.ofYears(12), Tenor.ofYears(15), Tenor.ofYears(20)};
   }
 
   //-------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
+   *
    * @param args  the standard tool arguments, not null
    */
   public static void main(final String[] args) {  // CSIGNORE
     try {
-      boolean success =
+      final boolean success =
           new ExampleTimeSeriesRatingLoader().initAndRun(args, IntegrationToolContext.class) &&
           new ExampleMultiCurrencySwapPortfolioLoader().initAndRun(args, IntegrationToolContext.class);
       ShutdownUtils.exit(success ? 0 : -1);
-    } catch (Throwable ex) {
+    } catch (final Throwable ex) {
       ex.printStackTrace();
       ShutdownUtils.exit(-2);
     }
@@ -145,7 +145,7 @@ public class ExampleMultiCurrencySwapPortfolioLoader extends AbstractTool<Integr
     for (int i = 0; i < SECURITIES_SIZE; i++) {
       final Currency ccy = getCurrency(random);
       final LocalDate tradeDate = getTradeDate(random, ccy);
-      final Tenor maturity = s_tenors[random.nextInt(s_tenors.length)];
+      final Tenor maturity = TENORS[random.nextInt(TENORS.length)];
       swapsArgs.add(Triple.of(ccy, tradeDate, maturity));
     }
 
@@ -168,7 +168,7 @@ public class ExampleMultiCurrencySwapPortfolioLoader extends AbstractTool<Integr
     for (final SwapSecurity swap : swaps) {
       sb.append("\t").append(swap.getName()).append("\n");
     }
-    s_logger.info(sb.toString());
+    LOGGER.info(sb.toString());
     return swaps;
   }
 
@@ -306,8 +306,8 @@ public class ExampleMultiCurrencySwapPortfolioLoader extends AbstractTool<Integr
   }
 
   private Currency getCurrency(final SecureRandom random) {
-    final int offset = random.nextInt(s_currencies.length);
-    final Currency ccy = s_currencies[offset];
+    final int offset = random.nextInt(CURRENCIES.length);
+    final Currency ccy = CURRENCIES[offset];
     return ccy;
   }
 

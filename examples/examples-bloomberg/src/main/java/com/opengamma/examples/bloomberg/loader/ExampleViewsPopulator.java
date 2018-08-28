@@ -135,7 +135,7 @@ import com.opengamma.util.tuple.Pairs;
 public class ExampleViewsPopulator extends AbstractTool<IntegrationToolContext> {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(ExampleViewsPopulator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExampleViewsPopulator.class);
   private static final String DEFAULT_CALC_CONFIG = "Default";
   private static final String MISSING_INPUTS = MissingInputsFunction.AGGREGATION_STYLE_MISSING;
   /** Map of currencies to curves */
@@ -281,7 +281,7 @@ public class ExampleViewsPopulator extends AbstractTool<IntegrationToolContext> 
     searchRequest.setName(portfolioName);
     final PortfolioSearchResult searchResult = getToolContext().getPortfolioMaster().search(searchRequest);
     if (searchResult.getFirstPortfolio() == null) {
-      s_logger.error("Couldn't find portfolio {}", portfolioName);
+      LOGGER.error("Couldn't find portfolio {}", portfolioName);
       throw new OpenGammaRuntimeException("Couldn't find portfolio" + portfolioName);
     }
     return searchResult.getFirstPortfolio().getUniqueId();

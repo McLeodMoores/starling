@@ -28,7 +28,7 @@ import com.opengamma.master.security.SecurityLoader;
 public class ExampleSecurityLoaderComponentFactory extends AbstractSecurityLoaderComponentFactory {
 
   @Override
-  protected SecurityLoader createSecurityLoader(ComponentRepository repo) {
+  protected SecurityLoader createSecurityLoader(final ComponentRepository repo) {
     return new MockSecurityLoader();
   }
 

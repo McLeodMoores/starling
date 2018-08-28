@@ -30,7 +30,7 @@ public class FuturesViewTest extends AbstractRegressionTest {
     super(new File("src/test/resources/FuturesView_example"), "classpath:regression/regression-testdb.properties");
   }
 
-  @Test(enabled=false) //PLAT-6127
+  @Test(enabled = false) //PLAT-6127
   public void testFuturesView() {
     runTestForView("Futures View", "Futures Snapshot");
   }
