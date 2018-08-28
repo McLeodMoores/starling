@@ -62,7 +62,8 @@ public class DepGraphTargetMergingTest extends AbstractDependencyGraphBuilderTes
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       if (target.getUniqueId().getValue().startsWith("0")) {
         return Collections.emptySet();
       } else if (target.getUniqueId().getValue().startsWith("1")) {
@@ -102,7 +103,8 @@ public class DepGraphTargetMergingTest extends AbstractDependencyGraphBuilderTes
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       return Collections.singleton(new ValueRequirement("Foo", target.toSpecification()));
     }
 
@@ -142,11 +144,11 @@ public class DepGraphTargetMergingTest extends AbstractDependencyGraphBuilderTes
       @Override
       public ComputationTargetSpecification collapse(final CompiledFunctionDefinition function, final ComputationTargetSpecification a, final ComputationTargetSpecification b) {
         LOGGER.debug("Collapse {} on {} + {}", new Object[] {function, a, b });
-        if ((function instanceof MergeableFunction) && (a.getUniqueId().getValue().charAt(0) == b.getUniqueId().getValue().charAt(0))) {
-          final Set<String> idSet = new HashSet<String>();
+        if (function instanceof MergeableFunction && a.getUniqueId().getValue().charAt(0) == b.getUniqueId().getValue().charAt(0)) {
+          final Set<String> idSet = new HashSet<>();
           add(idSet, a);
           add(idSet, b);
-          final List<String> idList = new ArrayList<String>(idSet);
+          final List<String> idList = new ArrayList<>(idSet);
           Collections.sort(idList);
           final StringBuilder sb = new StringBuilder();
           for (final String id : idList) {
@@ -163,7 +165,7 @@ public class DepGraphTargetMergingTest extends AbstractDependencyGraphBuilderTes
   }
 
   private Set<String> getTargets(final DependencyGraph graph) {
-    final Set<String> identifiers = new HashSet<String>();
+    final Set<String> identifiers = new HashSet<>();
     final Iterator<DependencyNode> itr = graph.nodeIterator();
     while (itr.hasNext()) {
       final DependencyNode node = itr.next();

@@ -72,7 +72,7 @@ public class SummingFunction extends MissingInputsFunction {
     @Override
     public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
       // Applies to any portfolio node, except the root if "Don't aggregate root node" is set
-      Portfolio portfolio = context.getPortfolio();
+      final Portfolio portfolio = context.getPortfolio();
       if (portfolio == null || portfolio.getAttributes().get(IGNORE_ROOT_NODE) == null) {
         return true;
       } else {
@@ -86,16 +86,17 @@ public class SummingFunction extends MissingInputsFunction {
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       final PortfolioNode node = target.getPortfolioNode();
-      final Set<ValueRequirement> requirements = new HashSet<ValueRequirement>();
+      final Set<ValueRequirement> requirements = new HashSet<>();
       // Requirement has all constraints asked of us
       final ValueProperties.Builder resultConstraintsBuilder = desiredValue.getConstraints().copy();
       for (final String homogenousProperty : _homogenousProperties) {
         // TODO: this should probably only be optional if absent from the desired constraints
         resultConstraintsBuilder.withOptional(homogenousProperty);
       }
-      ValueProperties resultConstraints = resultConstraintsBuilder.get();
+      final ValueProperties resultConstraints = resultConstraintsBuilder.get();
       for (final Position position : node.getPositions()) {
         requirements.add(new ValueRequirement(getRequirementName(), ComputationTargetType.POSITION, position.getUniqueId().toLatest(), resultConstraints));
       }

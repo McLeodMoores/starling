@@ -149,7 +149,8 @@ public class BloombergHistoricalTimeSeriesSourceTest {
   public void getHistoricalTimeSeriesWithDates() throws Exception {
     final LocalDate startDate = LocalDate.of(2009, 10, 29);
     final LocalDate endDate = LocalDate.of(2009, 11, 04);
-    final HistoricalTimeSeries hts = _source.getHistoricalTimeSeries(_secDes,  DEFAULT_DATA_SOURCE, DEFAULT_DATA_PROVIDER, PX_LAST, startDate, true, endDate, true);
+    final HistoricalTimeSeries hts =
+        _source.getHistoricalTimeSeries(_secDes,  DEFAULT_DATA_SOURCE, DEFAULT_DATA_PROVIDER, PX_LAST, startDate, true, endDate, true);
     assertNotNull(hts);
     final LocalDateDoubleTimeSeries timeSeriesExpected = hts.getTimeSeries();
     assertNotNull(timeSeriesExpected);
@@ -157,7 +158,8 @@ public class BloombergHistoricalTimeSeriesSourceTest {
     final ExecutorService threadPool = Executors.newFixedThreadPool(4);
     final List<Future<LocalDateDoubleTimeSeries>> results = new ArrayList<>();
     for (int i = 0; i < 20; i++) {
-      results.add(threadPool.submit(new BHDPgetHistoricalTimeSeriesWithDates(_secDes, DEFAULT_DATA_SOURCE, DEFAULT_DATA_PROVIDER, PX_LAST, startDate, endDate)));
+      results.add(
+          threadPool.submit(new BHDPgetHistoricalTimeSeriesWithDates(_secDes, DEFAULT_DATA_SOURCE, DEFAULT_DATA_PROVIDER, PX_LAST, startDate, endDate)));
     }
 
     for (final Future<LocalDateDoubleTimeSeries> future : results) {

@@ -489,10 +489,12 @@ public class DbBatchWriter extends AbstractDbMaster {
       map.put("run_id", riskRunId);
       data.put(map, configName);
     }
-    _calculationConfigurations.putAll(populate(data, getElSqlBundle().getSql("SelectConfigName"), getElSqlBundle().getSql("InsertConfigName"), RSK_SEQUENCE_NAME));
+    _calculationConfigurations.putAll(populate(data, getElSqlBundle().getSql("SelectConfigName"),
+        getElSqlBundle().getSql("InsertConfigName"), RSK_SEQUENCE_NAME));
   }
 
-  protected <T> Map<T, Long> populate(final Multimap<Map<String, Object>, T> data, final String selectSql, final String insertSql, final String pkSequenceName) {
+  protected <T> Map<T, Long> populate(final Multimap<Map<String, Object>, T> data, final String selectSql, final String insertSql,
+      final String pkSequenceName) {
     final List<DbMapSqlParameterSource> insertArgsList = new ArrayList<>();
 
     final Map<T, Long> cache = newHashMap();

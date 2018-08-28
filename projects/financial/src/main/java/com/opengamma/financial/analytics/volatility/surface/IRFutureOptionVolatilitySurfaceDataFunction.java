@@ -5,8 +5,6 @@
  */
 package com.opengamma.financial.analytics.volatility.surface;
 
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -57,6 +55,8 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+
 /**
  *
  */
@@ -72,13 +72,15 @@ public class IRFutureOptionVolatilitySurfaceDataFunction extends AbstractFunctio
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final Currency currency = target.getValue(PrimitiveComputationTargetType.CURRENCY);
     final Calendar calendar = new HolidaySourceCalendarAdapter(OpenGammaExecutionContext.getHolidaySource(executionContext), currency);
     final String surfaceName = desiredValue.getConstraint(ValuePropertyNames.SURFACE);
     final String fullSpecificationName = surfaceName + "_" + target.getUniqueId().getValue();
-    final VolatilitySurfaceSpecification specification = _volatilitySurfaceSpecificationSource.getSpecification(fullSpecificationName, InstrumentTypeProperties.IR_FUTURE_OPTION);
+    final VolatilitySurfaceSpecification specification =
+        _volatilitySurfaceSpecificationSource.getSpecification(fullSpecificationName, InstrumentTypeProperties.IR_FUTURE_OPTION);
     if (specification == null) {
       throw new OpenGammaRuntimeException("Could not get volatility surface specification named " + fullSpecificationName);
     }
@@ -106,8 +108,10 @@ public class IRFutureOptionVolatilitySurfaceDataFunction extends AbstractFunctio
     final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
     final ValueProperties surfaceProperties = ValueProperties.builder().with(ValuePropertyNames.SURFACE, surfaceName)
         .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.IR_FUTURE_OPTION)
-        .with(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_QUOTE_TYPE, surfaceQuoteType).with(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_UNITS, surfaceQuoteUnits).get();
-    final Object volatilityDataObject = inputs.getValue(new ValueRequirement(ValueRequirementNames.VOLATILITY_SURFACE_DATA, target.toSpecification(), surfaceProperties));
+        .with(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_QUOTE_TYPE, surfaceQuoteType)
+        .with(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_UNITS, surfaceQuoteUnits).get();
+    final Object volatilityDataObject =
+        inputs.getValue(new ValueRequirement(ValueRequirementNames.VOLATILITY_SURFACE_DATA, target.toSpecification(), surfaceProperties));
     if (volatilityDataObject == null) {
       throw new OpenGammaRuntimeException("Could not get volatility surface data");
     }
@@ -138,8 +142,9 @@ public class IRFutureOptionVolatilitySurfaceDataFunction extends AbstractFunctio
 
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
-    return Collections.singleton(new ValueSpecification(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, target.toSpecification(), createValueProperties()
-        .withAny(ValuePropertyNames.SURFACE).with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.IR_FUTURE_OPTION).get()));
+    return Collections.singleton(new ValueSpecification(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, target.toSpecification(),
+        createValueProperties().withAny(ValuePropertyNames.SURFACE)
+                               .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.IR_FUTURE_OPTION).get()));
   }
 
   @Override
@@ -149,8 +154,9 @@ public class IRFutureOptionVolatilitySurfaceDataFunction extends AbstractFunctio
       return null;
     }
     final String fullSpecificationName = surfaceName + "_" + target.getUniqueId().getValue();
-    final VolatilitySurfaceSpecification specification = _volatilitySurfaceSpecificationSource.getSpecification(fullSpecificationName, InstrumentTypeProperties.IR_FUTURE_OPTION, context
-        .getComputationTargetResolver().getVersionCorrection());
+    final VolatilitySurfaceSpecification specification =
+        _volatilitySurfaceSpecificationSource.getSpecification(fullSpecificationName, InstrumentTypeProperties.IR_FUTURE_OPTION,
+            context.getComputationTargetResolver().getVersionCorrection());
     if (specification == null) {
       LOGGER.error("Could not get volatility surface specification named {}", fullSpecificationName);
       return null;
@@ -178,13 +184,12 @@ public class IRFutureOptionVolatilitySurfaceDataFunction extends AbstractFunctio
   }
 
   /** Build a volatility surface based on Expiry, T, and Strike, K. T is in measured in our standard OG-Analytic years */
-  private static VolatilitySurfaceData<Double, Double> getSurfaceFromVolatilityQuote(final VolatilitySurfaceData<Object, Object> optionVolatilities, final ZonedDateTime now,
-      final Calendar calendar) {
+  private static VolatilitySurfaceData<Double, Double> getSurfaceFromVolatilityQuote(final VolatilitySurfaceData<Object, Object> optionVolatilities,
+      final ZonedDateTime now, final Calendar calendar) {
     final Map<Pair<Double, Double>, Double> volatilityValues = new HashMap<>();
     final DoubleArrayList tList = new DoubleArrayList();
     final DoubleArrayList kList = new DoubleArrayList();
     final LocalDate today = now.toLocalDate();
-    final Object[] xs = optionVolatilities.getXs();
     for (final Object xObj : optionVolatilities.getXs()) {
       final Number x = (Number) xObj;
       final Double t = FutureOptionUtils.getIRFutureOptionTtm(x.intValue(), today, calendar);
@@ -199,15 +204,17 @@ public class IRFutureOptionVolatilitySurfaceDataFunction extends AbstractFunctio
         }
       }
     }
-    return new VolatilitySurfaceData<>(optionVolatilities.getDefinitionName(), optionVolatilities.getSpecificationName(), optionVolatilities.getTarget(), tList.toArray(new Double[0]),
-        kList.toArray(new Double[0]), volatilityValues);
+    return new VolatilitySurfaceData<>(optionVolatilities.getDefinitionName(), optionVolatilities.getSpecificationName(), optionVolatilities.getTarget(),
+        tList.toArray(new Double[0]), kList.toArray(new Double[0]), volatilityValues);
   }
 
   /** Build a volatility surface based on Expiry, T, and Strike, K. T is in measured in our standard OG-Analytic years */
-  private static VolatilitySurfaceData<Double, Double> getSurfaceFromPriceQuote(final VolatilitySurfaceSpecification specification, final VolatilitySurfaceData<Object, Object> optionPrices,
-      final NodalDoublesCurve futurePrices, final ZonedDateTime now, final String surfaceQuoteType, final Calendar calendar, final SecuritySource securitySource) {
+  private static VolatilitySurfaceData<Double, Double> getSurfaceFromPriceQuote(final VolatilitySurfaceSpecification specification,
+      final VolatilitySurfaceData<Object, Object> optionPrices, final NodalDoublesCurve futurePrices, final ZonedDateTime now,
+      final String surfaceQuoteType, final Calendar calendar, final SecuritySource securitySource) {
     double callAboveStrike = 0;
-    final SurfaceInstrumentProvider<Number, Double> instrumentProvider = (SurfaceInstrumentProvider<Number, Double>) specification.getSurfaceInstrumentProvider();
+    final SurfaceInstrumentProvider<Number, Double> instrumentProvider =
+        (SurfaceInstrumentProvider<Number, Double>) specification.getSurfaceInstrumentProvider();
     ExchangeTradedInstrumentExpiryCalculator expiryRule;
     if (instrumentProvider instanceof CallPutSurfaceInstrumentProvider) {
       expiryRule = ((CallPutSurfaceInstrumentProvider<?, ?>) instrumentProvider).getExpiryRuleCalculator();
@@ -236,7 +243,8 @@ public class IRFutureOptionVolatilitySurfaceDataFunction extends AbstractFunctio
       for (final Object yObj : optionPrices.getYs()) {
         final Double y = (Double) yObj;
         try {
-          final Double forward = specification.isUseUnderlyingSecurityForExpiry() ? getForwardFromSecurity(securitySource, today, futurePrices, instrumentProvider, x, y)
+          final Double forward = specification.isUseUnderlyingSecurityForExpiry()
+              ? getForwardFromSecurity(securitySource, today, futurePrices, instrumentProvider, x, y)
               : getForwardFromFuturesCurve(futurePrices, futureExpiries, optionTtm);
           final Double price = optionPrices.getVolatility(x, y);
           if (price != null) {
@@ -261,8 +269,8 @@ public class IRFutureOptionVolatilitySurfaceDataFunction extends AbstractFunctio
         }
       }
     }
-    return new VolatilitySurfaceData<>(optionPrices.getDefinitionName(), optionPrices.getSpecificationName(), optionPrices.getTarget(), txList.toArray(new Double[0]),
-        kList.toArray(new Double[0]), volatilityValues);
+    return new VolatilitySurfaceData<>(optionPrices.getDefinitionName(), optionPrices.getSpecificationName(), optionPrices.getTarget(),
+        txList.toArray(new Double[0]), kList.toArray(new Double[0]), volatilityValues);
   }
 
   private static double getForwardFromSecurity(final SecuritySource securitySource, final LocalDate today, final NodalDoublesCurve futurePrices,
@@ -284,8 +292,9 @@ public class IRFutureOptionVolatilitySurfaceDataFunction extends AbstractFunctio
       throw new OpenGammaRuntimeException("Could not get security with id " + irFutureOption.getUnderlyingId() + " from the security source");
     }
     final LocalDate futureMaturity = underlyingFuture.getExpiry().getExpiry().toLocalDate();
-    final double underlyingExpiry1 = futureMaturity.isBefore(today) ? TimeCalculator.getTimeBetween(today, futureMaturity.plusYears(10)) : TimeCalculator.getTimeBetween(today,
-        futureMaturity);
+    final double underlyingExpiry1 = futureMaturity.isBefore(today)
+        ? TimeCalculator.getTimeBetween(today, futureMaturity.plusYears(10))
+            : TimeCalculator.getTimeBetween(today, futureMaturity);
     return futurePrices.getYValue(underlyingExpiry1);
   }
 
@@ -311,8 +320,10 @@ public class IRFutureOptionVolatilitySurfaceDataFunction extends AbstractFunctio
       throw new OpenGammaRuntimeException("Could not get curve name");
     }
 
-    final ValueRequirement futuresRequirement = new ValueRequirement(ValueRequirementNames.FUTURE_PRICE_CURVE_DATA, target.toSpecification(), ValueProperties.builder()
-        .with(ValuePropertyNames.CURVE, curveName).with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.IR_FUTURE_PRICE).get());
+    final ValueRequirement futuresRequirement =
+        new ValueRequirement(ValueRequirementNames.FUTURE_PRICE_CURVE_DATA, target.toSpecification(),
+            ValueProperties.builder().with(ValuePropertyNames.CURVE, curveName)
+                                     .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.IR_FUTURE_PRICE).get());
     final Object futurePricesObject = inputs.getValue(futuresRequirement);
     if (futurePricesObject == null) {
       throw new OpenGammaRuntimeException("Could not get futures price data");
@@ -322,7 +333,8 @@ public class IRFutureOptionVolatilitySurfaceDataFunction extends AbstractFunctio
   }
 
   /** FIXME This function relies on callAboveStrike. Needs a rework */
-  private static double getVolatility(final String surfaceQuoteType, final double strike, final double price, final double forward, final double t, final Double callAboveStrike) {
+  private static double getVolatility(final String surfaceQuoteType, final double strike, final double price, final double forward,
+      final double t, final Double callAboveStrike) {
     if (surfaceQuoteType.equals(SurfaceAndCubeQuoteType.CALL_STRIKE)) {
       return BlackFormulaRepository.impliedVolatility(price, forward, strike, t, true);
     }

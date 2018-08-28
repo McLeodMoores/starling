@@ -19,7 +19,6 @@ import static com.opengamma.engine.value.ValueRequirementNames.FX_MATRIX;
 import static com.opengamma.engine.value.ValueRequirementNames.JACOBIAN_BUNDLE;
 import static com.opengamma.financial.analytics.model.CalculationPropertyNamesAndValues.FORWARD_POINTS;
 import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE;
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -65,11 +64,11 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.OpenGammaCompilationContext;
+import com.opengamma.financial.analytics.conversion.DefaultTradeConverter;
 import com.opengamma.financial.analytics.conversion.FXForwardSecurityConverter;
 import com.opengamma.financial.analytics.conversion.FixedIncomeConverterDataProvider;
 import com.opengamma.financial.analytics.conversion.FutureTradeConverter;
 import com.opengamma.financial.analytics.conversion.NonDeliverableFXForwardSecurityConverter;
-import com.opengamma.financial.analytics.conversion.DefaultTradeConverter;
 import com.opengamma.financial.analytics.curve.ConfigDBCurveConstructionConfigurationSource;
 import com.opengamma.financial.analytics.curve.CurveConstructionConfiguration;
 import com.opengamma.financial.analytics.curve.CurveConstructionConfigurationSource;
@@ -101,6 +100,8 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.time.Tenor;
 
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+
 /**
  *
  */
@@ -129,7 +130,7 @@ public abstract class FXForwardPointsFunction extends AbstractFunction {
 
   /**
    * Constructs an object capable of converting from {@link ComputationTarget} to {@link InstrumentDefinition}.
-   * 
+   *
    * @param context The compilation context, not null
    * @return The converter
    */
@@ -149,7 +150,7 @@ public abstract class FXForwardPointsFunction extends AbstractFunction {
 
   /**
    * Constructs an object capable of converting from {@link InstrumentDefinition} to {@link InstrumentDerivative}.
-   * 
+   *
    * @param context The compilation context, not null
    * @return The converter
    */
@@ -229,7 +230,8 @@ public abstract class FXForwardPointsFunction extends AbstractFunction {
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       final ValueProperties constraints = desiredValue.getConstraints();
       final Set<String> curveExposureConfigs = constraints.getValues(CURVE_EXPOSURES);
       if (curveExposureConfigs == null) {
@@ -299,7 +301,7 @@ public abstract class FXForwardPointsFunction extends AbstractFunction {
 
     /**
      * Gets an {@link InstrumentDefinition} given a target.
-     * 
+     *
      * @param target The target, not null
      * @return An instrument definition
      */
@@ -309,7 +311,7 @@ public abstract class FXForwardPointsFunction extends AbstractFunction {
 
     /**
      * Gets a conversion time-series for an instrument definition. If no time-series are required, returns an empty set.
-     * 
+     *
      * @param context The compilation context, not null
      * @param target The target, not null
      * @param definition The definition, not null
@@ -321,7 +323,7 @@ public abstract class FXForwardPointsFunction extends AbstractFunction {
 
     /**
      * Gets an {@link InstrumentDerivative}.
-     * 
+     *
      * @param target The target, not null
      * @param now The valuation time, not null
      * @param timeSeries The conversion time series bundle, not null but may be empty
@@ -334,7 +336,7 @@ public abstract class FXForwardPointsFunction extends AbstractFunction {
 
     /**
      * Calculates the result.
-     * 
+     *
      * @param inputs The inputs, not null
      * @param target The target, not null
      * @param desiredValues The desired values for this function, not null
@@ -408,7 +410,8 @@ public abstract class FXForwardPointsFunction extends AbstractFunction {
         tList.add(DateUtils.getDifferenceInYears(now, now.plus(tenor.getPeriod())));
         fxList.add(fxForward);
       }
-      final Interpolator1D interpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
+      final Interpolator1D interpolator =
+          CombinedInterpolatorExtrapolatorFactory.getInterpolator(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
       return InterpolatedDoublesCurve.from(tList.toDoubleArray(), fxList.toDoubleArray(), interpolator);
     }
   }

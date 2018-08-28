@@ -274,8 +274,8 @@ public final class NodeConverterUtils {
             if (spread == null) {
               throw new OpenGammaRuntimeException("Could not get market data for " + dataId);
             }
-            return AnnuityDefinitionBuilder.couponONArithmeticAverageSpreadSimplified(startDate, maturityDate, paymentPeriod, notional, spread, indexON, isPayer,
-                businessDayConvention, eomLeg, calendar, stub);
+            return AnnuityDefinitionBuilder.couponONArithmeticAverageSpreadSimplified(startDate, maturityDate, paymentPeriod,
+                notional, spread, indexON, isPayer, businessDayConvention, eomLeg, calendar, stub);
           }
           return AnnuityDefinitionBuilder.couponONArithmeticAverageSpreadSimplified(startDate, maturityDate, paymentPeriod, notional, 0.0d, indexON, isPayer,
               businessDayConvention, eomLeg, calendar, stub);

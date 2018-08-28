@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.ircurve;
@@ -59,7 +59,7 @@ public class YieldCurveDataFunction extends AbstractFunction {
   @Override
   public void init(final FunctionCompilationContext context) {
     _helper.init(context, this);
-    ValueProperties properties = createValueProperties().with(ValuePropertyNames.CURVE, _curveDefinitionName).get();
+    final ValueProperties properties = createValueProperties().with(ValuePropertyNames.CURVE, _curveDefinitionName).get();
     _curveSpec = new ValueSpecification(ValueRequirementNames.YIELD_CURVE_SPEC, _targetSpec, properties);
     _curveDataSpec = new ValueSpecification(ValueRequirementNames.YIELD_CURVE_DATA, _targetSpec, properties);
   }
@@ -89,12 +89,14 @@ public class YieldCurveDataFunction extends AbstractFunction {
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       return Collections.singleton(_helper.getMarketDataValueRequirement());
     }
 
     @Override
-    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+        final Set<ValueRequirement> desiredValues) {
       try {
         final FixedIncomeStripIdentifierAndMaturityBuilder builder =
             new FixedIncomeStripIdentifierAndMaturityBuilder(OpenGammaExecutionContext.getRegionSource(executionContext),
@@ -103,7 +105,7 @@ public class YieldCurveDataFunction extends AbstractFunction {
                                                              OpenGammaExecutionContext.getHolidaySource(executionContext));
         final SnapshotDataBundle marketData = _helper.getMarketDataMap(inputs);
         final InterpolatedYieldCurveSpecificationWithSecurities curveSpecificationWithSecurities = builder.resolveToSecurity(_curveSpecification, marketData);
-        YieldCurveData curveData = new YieldCurveData(curveSpecificationWithSecurities, marketData.getDataPoints());
+        final YieldCurveData curveData = new YieldCurveData(curveSpecificationWithSecurities, marketData.getDataPoints());
         return ImmutableSet.of(new ComputedValue(_curveSpec, curveSpecificationWithSecurities),
                                new ComputedValue(_curveDataSpec, curveData));
       } catch (final OpenGammaRuntimeException e) {
@@ -117,7 +119,7 @@ public class YieldCurveDataFunction extends AbstractFunction {
   @Override
   public CompiledFunctionDefinition compile(final FunctionCompilationContext context, final Instant atInstant) {
     _helper.init(context, this);
-    Triple<Instant, Instant, InterpolatedYieldCurveSpecification> compile = _helper.compile(context, atInstant, this);
+    final Triple<Instant, Instant, InterpolatedYieldCurveSpecification> compile = _helper.compile(context, atInstant, this);
     return new CompiledImpl(compile.getFirst(), compile.getSecond(), compile.getThird());
   }
 

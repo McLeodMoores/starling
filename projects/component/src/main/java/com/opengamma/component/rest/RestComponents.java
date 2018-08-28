@@ -14,8 +14,8 @@ public interface RestComponents {
    * <p>
    * The instance is a JAX_RS class annotated with {@code Path} on the methods.
    * Any {@code Path} at the class level is ignored.
-   * See {@link DataComponentServerResource}.
-   * 
+   * See DataComponentServerResource
+   *
    * @param info  the managed component info, not null
    * @param instance  the JAX-RS singleton instance, not null
    */
@@ -26,7 +26,7 @@ public interface RestComponents {
    * <p>
    * This is used for JAX-RS consumers, producers and filters and unmanaged singleton resources.
    * These classes are not managed by {@code DataComponentsResource}.
-   * 
+   *
    * @param instance  the JAX-RS singleton instance, not null
    */
   void publishHelper(Object instance);
@@ -36,7 +36,7 @@ public interface RestComponents {
    * <p>
    * This is used for JAX-RS unmanaged resources.
    * The class is not managed by {@code DataComponentsResource}.
-   * 
+   *
    * @param singletonInstance  the unmanaged singleton instance, not null
    */
   void publishResource(Object singletonInstance);
@@ -46,7 +46,7 @@ public interface RestComponents {
    * <p>
    * This is used for JAX-RS unmanaged resources.
    * These classes are not managed by {@code DataComponentsResource}.
-   * 
+   *
    * @param factory  the factory for creating the resource per request, not null
    */
   void publishResource(RestResourceFactory factory);
@@ -55,7 +55,7 @@ public interface RestComponents {
    * Re-publishes the component.
    * <p>
    * This is used when a component is read in from a remote location and is then re-published.
-   * 
+   *
    * @param info  the component information, not null
    */
   void republish(ComponentInfo info);
@@ -65,14 +65,14 @@ public interface RestComponents {
    * Gets the complete set of singletons, handling managed components.
    * <p>
    * This method wraps the managed components in an instance of {@link DataComponentServerResource}.
-   * 
+   *
    * @return the complete set of singletons, not null
    */
   Set<Object> buildJaxRsSingletons();
 
   /**
    * Gets the complete set of JaxRs classes.
-   * 
+   *
    * @return the complete set of classes, not null
    */
   Set<Class<?>> buildJaxRsClasses();

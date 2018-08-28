@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.smile.fitting.interpolation;
@@ -147,7 +147,8 @@ public class ShiftedLogNormalTailExtrapolationFitter {
   }
 
   /**
-   * Fit a shifted log-normal model to an option's implied volatility and implied volatility sensitivity to strike (i.e. the gradient of the smile)  at a single strike
+   * Fit a shifted log-normal model to an option's implied volatility and implied volatility sensitivity to strike (i.e. the gradient of the smile)
+   * at a single strike.
    * @param forward The forward value of the underlying at expiry
    * @param strike The strike
    * @param vol The option's implied volatility
@@ -166,8 +167,8 @@ public class ShiftedLogNormalTailExtrapolationFitter {
     final double maxGrad = (isCall ? -blackDD : 1 - blackDD) / blackVega;
 
     if (volGrad >= maxGrad || volGrad <= minGrad) {
-      LOG.info("Extrapolation - Expiry = " + timeToExpiry + "- failed to fit tail to strike, " + strike + ". volGrad, " + volGrad + ", out of bounds. minGrad = "
-          + minGrad + ", maxGrad = " + maxGrad);
+      LOG.info("Extrapolation - Expiry = " + timeToExpiry + "- failed to fit tail to strike, " + strike + ". volGrad, " + volGrad
+          + ", out of bounds. minGrad = " + minGrad + ", maxGrad = " + maxGrad);
       throw new IllegalArgumentException("Volatility smile gradient must be in range " + minGrad + " to " + maxGrad + ", but value is " + volGrad);
     }
 
@@ -215,11 +216,14 @@ public class ShiftedLogNormalTailExtrapolationFitter {
     } catch (final Exception e) {
       LOG.info("Extrapolation - Expiry = " + expiry + "- failed to fit tail to " + strikes[endIdx] + ". Trying next strike. Caught " + e);
       if (lowTail) {
-        return fitVolatilityAndGradRecursivelyByTossingPoints(forward, Arrays.copyOfRange(strikes, 1, n), Arrays.copyOfRange(vols, 1, n), dSigmaDx, expiry, lowTail);
+        return fitVolatilityAndGradRecursivelyByTossingPoints(forward, Arrays.copyOfRange(strikes, 1, n),
+            Arrays.copyOfRange(vols, 1, n), dSigmaDx, expiry, lowTail);
       }
-      return fitVolatilityAndGradRecursivelyByTossingPoints(forward, Arrays.copyOfRange(strikes, 0, n - 1), Arrays.copyOfRange(vols, 0, n - 1), dSigmaDx, expiry, lowTail);
+      return fitVolatilityAndGradRecursivelyByTossingPoints(forward, Arrays.copyOfRange(strikes, 0, n - 1),
+          Arrays.copyOfRange(vols, 0, n - 1), dSigmaDx, expiry, lowTail);
     }
-    LOG.info("Extrapolating from strike, " + strikes[endIdx] + ", with shifted forward, " + forward * Math.exp(shiftAndVol[0]) + ", and vol, " + shiftAndVol[1]);
+    LOG.info("Extrapolating from strike, " + strikes[endIdx] + ", with shifted forward, " + forward * Math.exp(shiftAndVol[0])
+      + ", and vol, " + shiftAndVol[1]);
     final ArrayList<Double> listShiftVolStrike = new ArrayList<>();
     listShiftVolStrike.add(0, shiftAndVol[0]); // mu = ln(shiftedForward / originalForward)
     listShiftVolStrike.add(1, shiftAndVol[1]); // theta = new ln volatility to use
@@ -256,7 +260,8 @@ public class ShiftedLogNormalTailExtrapolationFitter {
       return fitVolatilityAndGradRecursivelyByTossingPoints(forward, Arrays.copyOfRange(strikes, 0, n - 1), Arrays.copyOfRange(vols, 0, n - 1),
           Arrays.copyOfRange(dSigmaDx, 0, n - 1), expiry, lowTail);
     }
-    LOG.info("Extrapolating from strike, " + strikes[endIdx] + ", with shifted forward, " + forward * Math.exp(shiftAndVol[0]) + ", and vol, " + shiftAndVol[1]);
+    LOG.info("Extrapolating from strike, " + strikes[endIdx] + ", with shifted forward, " + forward * Math.exp(shiftAndVol[0])
+        + ", and vol, " + shiftAndVol[1]);
     final ArrayList<Double> listShiftVolStrike = new ArrayList<>();
     listShiftVolStrike.add(0, shiftAndVol[0]); // mu = ln(shiftedForward / originalForward)
     listShiftVolStrike.add(1, shiftAndVol[1]); // theta = new ln volatility to use
@@ -351,7 +356,7 @@ public class ShiftedLogNormalTailExtrapolationFitter {
 
         final double v1 = ShiftedLogNormalTailExtrapolation.impliedVolatility(forward, strike[0], timeToExpiry, mu, theta);
         final double v2 = ShiftedLogNormalTailExtrapolation.impliedVolatility(forward, strike[1], timeToExpiry, mu, theta);
-        return new DoubleMatrix1D((v1 - vols[0]), (v2 - vols[1]));
+        return new DoubleMatrix1D(v1 - vols[0], v2 - vols[1]);
       }
     };
   }

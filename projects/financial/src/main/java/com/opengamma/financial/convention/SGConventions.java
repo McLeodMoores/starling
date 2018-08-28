@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.convention;
@@ -20,7 +20,7 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 
 /**
- * 
+ *
  */
 public class SGConventions {
 
@@ -63,9 +63,11 @@ public class SGConventions {
         following, Period.ofMonths(8), 2, false, sg);
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("SDDRI Curncy"), simpleNameSecurityId("SGD DEPOSIT 9m")), "SGD DEPOSIT 9m", act360,
         following, Period.ofMonths(9), 2, false, sg);
-    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("SDDRJ Curncy"), simpleNameSecurityId("SGD DEPOSIT 10m")), "SGD DEPOSIT 10m", act360,
+    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("SDDRJ Curncy"),
+        simpleNameSecurityId("SGD DEPOSIT 10m")), "SGD DEPOSIT 10m", act360,
         following, Period.ofMonths(10), 2, false, sg);
-    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("SDDRK Curncy"), simpleNameSecurityId("SGD DEPOSIT 11m")), "SGD DEPOSIT 11m", act360,
+    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("SDDRK Curncy"),
+        simpleNameSecurityId("SGD DEPOSIT 11m")), "SGD DEPOSIT 11m", act360,
         following, Period.ofMonths(11), 2, false, sg);
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("SDDR1 Curncy"), simpleNameSecurityId("SGD DEPOSIT 1y")), "SGD DEPOSIT 1y", act360,
         following, Period.ofYears(1), 2, false, sg);

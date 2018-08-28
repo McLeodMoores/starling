@@ -50,7 +50,7 @@ public class MasterSubscriptionFilter implements ResourceFilter {
   }
 
   /**
-   * @return A {@link ResponseFilter}
+   * @return A {@link ContainerResponseFilter}
    */
   @Override
   public ContainerResponseFilter getResponseFilter() {

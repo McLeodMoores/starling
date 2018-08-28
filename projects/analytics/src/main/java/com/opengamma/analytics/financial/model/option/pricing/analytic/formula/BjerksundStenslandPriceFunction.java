@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.analytic.formula;
@@ -12,7 +12,7 @@ import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribut
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class BjerksundStenslandPriceFunction implements OptionPriceFunction<BlackFunctionData> {
   private static final ProbabilityDistribution<double[]> BIVARIATE_NORMAL = new BivariateNormalDistribution();
@@ -91,7 +91,8 @@ public class BjerksundStenslandPriceFunction implements OptionPriceFunction<Blac
     return Math.pow(i, -beta) * (i - k);
   }
 
-  private double getPhi(final double s, final double t, final double gamma, final double h, final double x, final double r, final double b, final double sigma) {
+  private double getPhi(final double s, final double t, final double gamma, final double h, final double x, final double r,
+      final double b, final double sigma) {
     final double sigmaSq = sigma * sigma;
     final double denom = getDenom(t, sigma);
     final double lambda = getLambda(r, gamma, b, sigmaSq);

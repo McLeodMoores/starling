@@ -114,7 +114,8 @@ public class CommoditySensitivity {
    */
   public static CommoditySensitivity ofCommodityForwardValue(final Map<String, List<DoublesPair>> sensitivityCommodityForwardCurve) {
     ArgumentChecker.notNull(sensitivityCommodityForwardCurve, "Sensitivity commodity forward index");
-    return new CommoditySensitivity(new HashMap<String, List<DoublesPair>>(), new HashMap<String, List<ForwardSensitivity>>(), sensitivityCommodityForwardCurve);
+    return new CommoditySensitivity(new HashMap<String, List<DoublesPair>>(), new HashMap<String, List<ForwardSensitivity>>(),
+        sensitivityCommodityForwardCurve);
   }
 
   /**

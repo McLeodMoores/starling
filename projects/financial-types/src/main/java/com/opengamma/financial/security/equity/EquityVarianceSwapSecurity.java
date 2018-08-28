@@ -103,8 +103,9 @@ public class EquityVarianceSwapSecurity extends FinancialSecurity {
   }
 
   public EquityVarianceSwapSecurity(final ExternalId spotUnderlyingId, final Currency currency, final double strike, final double notional,
-      final boolean parameterizedAsVariance, final double annualizationFactor, final ZonedDateTime firstObservationDate, final ZonedDateTime lastObservationDate,
-      final ZonedDateTime settlementDate, final ExternalId regionId, final Frequency observationFrequency) {
+      final boolean parameterizedAsVariance, final double annualizationFactor, final ZonedDateTime firstObservationDate,
+      final ZonedDateTime lastObservationDate, final ZonedDateTime settlementDate, final ExternalId regionId,
+      final Frequency observationFrequency) {
     super(SECURITY_TYPE);
     setSpotUnderlyingId(spotUnderlyingId);
     setCurrency(currency);

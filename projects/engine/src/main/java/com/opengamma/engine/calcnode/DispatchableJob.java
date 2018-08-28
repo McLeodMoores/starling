@@ -240,10 +240,12 @@ import com.opengamma.util.async.Cancelable;
         return;
       } else {
         LOGGER.warn("Invoker {} reports job {} failure", jobInvoker.getInvokerId(), this);
-        jobFailed(jobInvoker, "node on " + jobInvoker.getInvokerId(), new OpenGammaRuntimeException("Node reported failure at " + timeAccrued + "ms keepalive"));
+        jobFailed(jobInvoker, "node on " + jobInvoker.getInvokerId(), new OpenGammaRuntimeException("Node reported failure at "
+        + timeAccrued + "ms keepalive"));
       }
     } else {
-      jobFailed(jobInvoker, "node on " + jobInvoker.getInvokerId(), new OpenGammaRuntimeException("Invocation limit of " + getDispatcher().getMaxJobExecutionTime() + "ms exceeded"));
+      jobFailed(jobInvoker, "node on " + jobInvoker.getInvokerId(),
+          new OpenGammaRuntimeException("Invocation limit of " + getDispatcher().getMaxJobExecutionTime() + "ms exceeded"));
     }
   }
 

@@ -9,7 +9,8 @@ import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Factory bean template for creating a simple {@link FunctionConfigurationSource} which returns a static configuration for a given version/correction timestamp.
+ * Factory bean template for creating a simple {@link FunctionConfigurationSource} which returns a static configuration for a
+ * given version/correction timestamp.
  */
 public abstract class VersionedFunctionConfigurationBean extends AbstractFunctionConfigurationBean {
 

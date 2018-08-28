@@ -204,7 +204,8 @@ public class ModifyPositionDbPositionMasterWorkerUpdatePositionTest extends Abst
     //reload version1
     version1 = _posMaster.get(version1.getUniqueId());
 
-    final PositionHistoryResult historyResult = _posMaster.history(new PositionHistoryRequest(version1.getUniqueId(), null, Instant.now(_posMaster.getClock())));
+    final PositionHistoryResult historyResult = _posMaster.history(new PositionHistoryRequest(version1.getUniqueId(), null,
+        Instant.now(_posMaster.getClock())));
     assertEquals(2, historyResult.getDocuments().size());
     assertTrue(historyResult.getDocuments().contains(version1));
     assertTrue(historyResult.getDocuments().contains(version2));
@@ -256,7 +257,8 @@ public class ModifyPositionDbPositionMasterWorkerUpdatePositionTest extends Abst
     //reload version1
     version1 = _posMaster.get(version1.getUniqueId());
 
-    final PositionHistoryResult historyResult = _posMaster.history(new PositionHistoryRequest(version1.getUniqueId(), null, Instant.now(_posMaster.getClock())));
+    final PositionHistoryResult historyResult = _posMaster.history(new PositionHistoryRequest(version1.getUniqueId(), null,
+        Instant.now(_posMaster.getClock())));
     assertEquals(2, historyResult.getDocuments().size());
     assertTrue(historyResult.getDocuments().contains(version1));
     assertTrue(historyResult.getDocuments().contains(version2));

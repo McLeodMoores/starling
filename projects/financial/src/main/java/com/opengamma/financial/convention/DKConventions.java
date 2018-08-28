@@ -121,9 +121,11 @@ public class DKConventions {
         following, Period.ofMonths(8), 2, false, dk);
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("DKDRI Curncy"), simpleNameSecurityId("DKK DEPOSIT 9m")), "DKK DEPOSIT 9m", act360,
         following, Period.ofMonths(9), 2, false, dk);
-    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("DKDRJ Curncy"), simpleNameSecurityId("DKK DEPOSIT 10m")), "DKK DEPOSIT 10m", act360,
+    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("DKDRJ Curncy"),
+        simpleNameSecurityId("DKK DEPOSIT 10m")), "DKK DEPOSIT 10m", act360,
         following, Period.ofMonths(10), 2, false, dk);
-    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("DKDRK Curncy"), simpleNameSecurityId("DKK DEPOSIT 11m")), "DKK DEPOSIT 11m", act360,
+    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("DKDRK Curncy"),
+        simpleNameSecurityId("DKK DEPOSIT 11m")), "DKK DEPOSIT 11m", act360,
         following, Period.ofMonths(11), 2, false, dk);
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("DKDR1 Curncy"), simpleNameSecurityId("DKK DEPOSIT 1y")), "DKK DEPOSIT 1y", act360,
         following, Period.ofYears(1), 2, false, dk);

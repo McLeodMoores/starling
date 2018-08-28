@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 
@@ -24,7 +24,7 @@ import com.opengamma.analytics.util.serialization.InvokedSerializedForm;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class DupireLocalVolatilityCalculator {
   private static final Logger LOGGER = LoggerFactory.getLogger(DupireLocalVolatilityCalculator.class);
@@ -40,7 +40,7 @@ public class DupireLocalVolatilityCalculator {
 
   /**
    * Classic Dupire local volatility formula
-   * 
+   *
    * @param priceSurface present value (i.e. discounted) value of options on underlying at various expiries and strikes
    * @param spot The current value of the underlying
    * @param r The risk free rate (or domestic rate in FX)
@@ -85,7 +85,7 @@ public class DupireLocalVolatilityCalculator {
 
   /**
    * REVIEW if we need this Get the absolute (i.e. normal instantaneous) local vol surface
-   * 
+   *
    * @param impliedVolatilitySurface BlackVolatilitySurface
    * @param spot value of underlying
    * @param rate interest rate
@@ -138,7 +138,7 @@ public class DupireLocalVolatilityCalculator {
 
   /**
    * Classic Dupire local volatility formula in terms of the Black Volatility surface (parameterised by strike)
-   * 
+   *
    * @param impliedVolatilitySurface Black Volatility surface (parameterised by strike)
    * @param spot Level of underlying
    * @param drift The risk free rate minus The dividend yield (r-q), or the difference between the domestic and foreign risk free rates in FX
@@ -161,7 +161,7 @@ public class DupireLocalVolatilityCalculator {
         final double divT = getFirstTimeDev(impliedVolatilitySurface.getSurface(), t, s, vol);
         double var;
         if (s == 0) {
-          var = vol * vol + 2 * vol * t * (divT);
+          var = vol * vol + 2 * vol * t * divT;
         } else {
           final double divK = getFirstStrikeDev(impliedVolatilitySurface.getSurface(), t, s, vol, spot);
           final double divK2 = getSecondStrikeDev(impliedVolatilitySurface.getSurface(), t, s, vol, spot);
@@ -203,7 +203,7 @@ public class DupireLocalVolatilityCalculator {
 
   /**
    * Get the local volatility in the case where the option price is a function of the forward price
-   * 
+   *
    * @param impliedVolatilitySurface The Black implied volatility surface
    * @param forwardCurve Curve of forward prices
    * @return The local volatility
@@ -224,11 +224,11 @@ public class DupireLocalVolatilityCalculator {
         final double divT = getFirstTimeDev(impliedVolatilitySurface.getSurface(), t, k, vol);
         double var;
         if (k == 0) {
-          var = vol * vol + 2 * vol * t * (divT);
+          var = vol * vol + 2 * vol * t * divT;
         } else {
           final double divK = getFirstStrikeDev(impliedVolatilitySurface.getSurface(), t, k, vol, forward);
           final double divK2 = getSecondStrikeDev(impliedVolatilitySurface.getSurface(), t, k, vol, forward);
-          final double h1 = (Math.log(forward / k) + (vol * vol / 2) * t) / vol;
+          final double h1 = (Math.log(forward / k) + vol * vol / 2 * t) / vol;
           final double h2 = h1 - vol * t;
           var = (vol * vol + 2 * vol * t * (divT + k * drift * divK)) / (1 + 2 * h1 * k * divK + k * k * (h1 * h2 * divK * divK + t * vol * divK2));
           if (var < 0.0) {
@@ -257,7 +257,7 @@ public class DupireLocalVolatilityCalculator {
    * Get the <b>pure</b> local volatility surface (i.e. if the pure stock $x$ follows the SDE $\frac{dx}{x} = \sigma(t,x) dW$ then $\sigma(t,x)$ is the pure local volatility
    * <p>
    * See White, R (2012) Equity Variance Swap with Dividends
-   * 
+   *
    * @param pureImpliedVolatilitySurface The pure implied volatility surface - i.e. the volatility that put into the Black formula will give the price of an option on the pure stock
    * @return pure local volatility surface
    */
@@ -270,7 +270,7 @@ public class DupireLocalVolatilityCalculator {
    * Get the local volatility surface (parameterised by expiry and moneyness = strike/forward) from a Black volatility surface (also parameterised by expiry and moneyness). <b>Note</b> this is the
    * cleanest method as is does not require any knowledge of instantaneous rates (i.e. r & q). If the Black volatility surface is parameterised by strike and/or the local volatility surface is
    * required to be parameterised by strike use can use the converters BlackVolatilitySurfaceConverter and/or LocalVolatilitySurfaceConverter
-   * 
+   *
    * @param impliedVolatilitySurface Black volatility surface (parameterised by expiry and moneyness)
    * @return local volatility surface (parameterised by expiry and moneyness)
    */
@@ -325,7 +325,7 @@ public class DupireLocalVolatilityCalculator {
   /**
    * Get the theta surface - the rate of change of an option with respect to the time-to-expiry (<b>Note</b> this is the negative of the normal definition as change of an option with respect to
    * (calendar) time)
-   * 
+   *
    * @param impliedVolatilitySurface Black volatility surface (parameterised by expiry and moneyness)
    * @return Theta surface (parameterised by moneyness)
    */
@@ -367,7 +367,7 @@ public class DupireLocalVolatilityCalculator {
   /**
    * Get the transition density surface - each time slice through this surface is the Probably Density Function (PDF), in the risk neutral measure, for the underlying at that time (parameterised by
    * moneyness)
-   * 
+   *
    * @param impliedVolatilitySurface Black volatility surface (parameterised by expiry and moneyness)
    * @return The transition density surface
    */
@@ -398,7 +398,8 @@ public class DupireLocalVolatilityCalculator {
       }
 
       public Object writeReplace() {
-        return new InvokedSerializedForm(new InvokedSerializedForm(DupireLocalVolatilityCalculator.this, "getDensity", impliedVolatilitySurface), "getFunction");
+        return new InvokedSerializedForm(new InvokedSerializedForm(DupireLocalVolatilityCalculator.this, "getDensity", impliedVolatilitySurface),
+            "getFunction");
       }
 
     };
@@ -427,11 +428,11 @@ public class DupireLocalVolatilityCalculator {
         final double divT = getFirstTimeDev(surf, t, m, vol);
         double var;
         if (m == 0) {
-          var = vol * vol + 2 * vol * t * (divT);
+          var = vol * vol + 2 * vol * t * divT;
         } else {
           final double divM = getFirstStrikeDev(surf, t, m, vol, 1.0);
           final double divM2 = getSecondStrikeDev(surf, t, m, vol, 1.0);
-          final double h1 = (-Math.log(m) + (vol * vol / 2) * t) / vol;
+          final double h1 = (-Math.log(m) + vol * vol / 2 * t) / vol;
           final double h2 = h1 - vol * t;
           var = (vol * vol + 2 * vol * t * divT) / (1 + 2 * h1 * m * divM + m * m * (h1 * h2 * divM * divM + t * vol * divM2));
           if (var < 0.0) {

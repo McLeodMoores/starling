@@ -354,7 +354,8 @@ public class DbHistoricalTimeSeriesMaster extends AbstractDocumentDbMaster<Histo
       request.setExternalIdSearch(ExternalIdSearch.of(ExternalIdSearchType.EXACT, document.getInfo().getExternalIdBundle().toBundle()));
       final HistoricalTimeSeriesInfoSearchResult result = search(request);
       if (result.getDocuments().size() > 0) {
-        throw new DataDuplicationException("Unable to add as similar row exists already: " + result.getDocuments().get(0).getObjectId() + " matched " + request);
+        throw new DataDuplicationException("Unable to add as similar row exists already: "
+            + result.getDocuments().get(0).getObjectId() + " matched " + request);
       }
       return super.add(document);
     }

@@ -59,7 +59,7 @@ import com.opengamma.util.tuple.DoublesPair;
 
 /**
  * Calculates yield curve node sensitivities for FX options.
- * 
+ *
  * @deprecated Use {@link BlackDiscountingYCNSFXOptionFunction}
  */
 @Deprecated
@@ -262,19 +262,27 @@ public class FXOptionBlackYCNSFunction extends FXOptionBlackSingleValuedFunction
     return new ValueRequirement(ValueRequirementNames.YIELD_CURVE_SPEC, ComputationTargetType.CURRENCY.specification(Currency.of(currency)), properties);
   }
 
-  private static ValueRequirement getCurveSensitivitiesRequirement(final String putCurveName, final String putCurveCalculationConfig, final String callCurveName,
-      final String callCurveCalculationConfig, final String surfaceName, final String interpolatorName, final String leftExtrapolatorName, final String rightExtrapolatorName,
+  private static ValueRequirement getCurveSensitivitiesRequirement(final String putCurveName, final String putCurveCalculationConfig,
+      final String callCurveName, final String callCurveCalculationConfig, final String surfaceName, final String interpolatorName,
+      final String leftExtrapolatorName, final String rightExtrapolatorName,
       final String curveCurrency, final ComputationTarget target) {
-    final ValueProperties properties = ValueProperties.builder().with(PUT_CURVE, putCurveName).with(CALL_CURVE, callCurveName).with(PUT_CURVE_CALC_CONFIG, putCurveCalculationConfig)
-        .with(CALL_CURVE_CALC_CONFIG, callCurveCalculationConfig).with(ValuePropertyNames.SURFACE, surfaceName)
-        .with(ValuePropertyNames.CALCULATION_METHOD, CalculationPropertyNamesAndValues.BLACK_METHOD).with(InterpolatedDataProperties.X_INTERPOLATOR_NAME, interpolatorName)
-        .with(InterpolatedDataProperties.LEFT_X_EXTRAPOLATOR_NAME, leftExtrapolatorName).with(InterpolatedDataProperties.RIGHT_X_EXTRAPOLATOR_NAME, rightExtrapolatorName)
+    final ValueProperties properties = ValueProperties.builder()
+        .with(PUT_CURVE, putCurveName)
+        .with(CALL_CURVE, callCurveName).with(PUT_CURVE_CALC_CONFIG, putCurveCalculationConfig)
+        .with(CALL_CURVE_CALC_CONFIG, callCurveCalculationConfig)
+        .with(ValuePropertyNames.SURFACE, surfaceName)
+        .with(ValuePropertyNames.CALCULATION_METHOD, CalculationPropertyNamesAndValues.BLACK_METHOD)
+        .with(InterpolatedDataProperties.X_INTERPOLATOR_NAME, interpolatorName)
+        .with(InterpolatedDataProperties.LEFT_X_EXTRAPOLATOR_NAME, leftExtrapolatorName)
+        .with(InterpolatedDataProperties.RIGHT_X_EXTRAPOLATOR_NAME, rightExtrapolatorName)
         .with(ValuePropertyNames.CURVE_CURRENCY, curveCurrency).withOptional(ValuePropertyNames.CURVE_CURRENCY).get();
     return new ValueRequirement(ValueRequirementNames.FX_CURVE_SENSITIVITIES, target.toSpecification(), properties);
   }
 
-  private static ValueRequirement getJacobianRequirement(final Currency currency, final String curveCalculationConfigName, final String curveCalculationMethod) {
-    final ValueProperties properties = ValueProperties.builder().with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfigName)
+  private static ValueRequirement getJacobianRequirement(final Currency currency, final String curveCalculationConfigName,
+      final String curveCalculationMethod) {
+    final ValueProperties properties = ValueProperties.builder()
+        .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfigName)
         .with(ValuePropertyNames.CURVE_CALCULATION_METHOD, curveCalculationMethod).get();
     return new ValueRequirement(ValueRequirementNames.YIELD_CURVE_JACOBIAN, ComputationTargetType.CURRENCY.specification(currency), properties);
   }

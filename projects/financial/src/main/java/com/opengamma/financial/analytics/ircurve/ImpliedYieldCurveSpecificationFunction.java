@@ -37,7 +37,6 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.OpenGammaCompilationContext;
-import com.opengamma.financial.OpenGammaExecutionContext;
 import com.opengamma.financial.config.ConfigSourceQuery;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.daycount.DayCounts;
@@ -105,19 +104,20 @@ public class ImpliedYieldCurveSpecificationFunction extends AbstractFunction {
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       return Collections.emptySet();
     }
 
     @Override
-    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
-      final FixedIncomeStripIdentifierAndMaturityBuilder builder = new FixedIncomeStripIdentifierAndMaturityBuilder(OpenGammaExecutionContext.getRegionSource(executionContext),
-          OpenGammaExecutionContext.getConventionBundleSource(executionContext), executionContext.getSecuritySource(), OpenGammaExecutionContext.getHolidaySource(executionContext));
+    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+        final Set<ValueRequirement> desiredValues) {
       final SnapshotDataBundle marketData = new SnapshotDataBundle();
       for (final FixedIncomeStripWithIdentifier strip : getCurveSpecification().getStrips()) {
         marketData.setDataPoint(strip.getSecurity(), 0);
       }
-      final InterpolatedYieldCurveSpecificationWithSecurities curveSpecificationWithSecurities = resolveToDummySecurity(getCurveSpecification(), marketData, _currency);
+      final InterpolatedYieldCurveSpecificationWithSecurities curveSpecificationWithSecurities =
+          resolveToDummySecurity(getCurveSpecification(), marketData, _currency);
       return Collections.singleton(new ComputedValue(_resultSpec, curveSpecificationWithSecurities));
     }
 

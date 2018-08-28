@@ -117,7 +117,8 @@ public class BloombergReferenceDataProviderComponentFactory extends AbstractComp
     final MongoConnector mongoConnector = getMongoConnector();
     final CacheManager cacheManager = getCacheManager();
     if (mongoConnector != null) {
-      final MongoDBInvalidFieldCachingReferenceDataProvider fieldCached = new MongoDBInvalidFieldCachingReferenceDataProvider(effectiveProvider, mongoConnector);
+      final MongoDBInvalidFieldCachingReferenceDataProvider fieldCached =
+          new MongoDBInvalidFieldCachingReferenceDataProvider(effectiveProvider, mongoConnector);
       return new MongoDBValueCachingReferenceDataProvider(fieldCached, mongoConnector);
 
     } else if (cacheManager != null) {

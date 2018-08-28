@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.statistics.leastsquare;
@@ -25,7 +25,7 @@ import com.opengamma.analytics.math.matrix.MatrixAlgebra;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class GeneralizedLeastSquare {
 
@@ -39,7 +39,7 @@ public class GeneralizedLeastSquare {
   }
 
   /**
-   * 
+   *
    * @param <T> The type of the independent variables (e.g. Double, double[], DoubleMatrix1D etc)
    * @param x independent variables
    * @param y dependent (scalar) variables
@@ -89,7 +89,7 @@ public class GeneralizedLeastSquare {
   }
 
   /**
-   * 
+   *
    * @param <T> The type of the independent variables (e.g. Double, double[], DoubleMatrix1D etc)
    * @param x independent variables
    * @param y dependent (scalar) variables
@@ -155,7 +155,8 @@ public class GeneralizedLeastSquare {
 
     final int dim = sizes.length;
     ArgumentChecker.isTrue(dim == lambda.length, "number of penalty functions {} must be equal to number of directions {}", lambda.length, dim);
-    ArgumentChecker.isTrue(dim == differenceOrder.length, "number of difference order {} must be equal to number of directions {}", differenceOrder.length, dim);
+    ArgumentChecker.isTrue(dim == differenceOrder.length,
+        "number of difference order {} must be equal to number of directions {}", differenceOrder.length, dim);
 
     for (int i = 0; i < dim; i++) {
       ArgumentChecker.isTrue(sizes[i] > 0, "sizes must be >= 1");
@@ -165,8 +166,8 @@ public class GeneralizedLeastSquare {
     return solveImp(x, y, sigma, basisFunctions, sizes, lambda, differenceOrder);
   }
 
-  private <T> GeneralizedLeastSquareResults<T> solveImp(final List<T> x, final List<Double> y, final List<Double> sigma, final List<Function1D<T, Double>> basisFunctions, final double lambda,
-      final int differenceOrder) {
+  private <T> GeneralizedLeastSquareResults<T> solveImp(final List<T> x, final List<Double> y, final List<Double> sigma,
+      final List<Function1D<T, Double>> basisFunctions, final double lambda, final int differenceOrder) {
 
     final int n = x.size();
 

@@ -213,9 +213,9 @@ public class DateUtilsTest {
   }
 
   public void testToLocalDate() {
-    LocalDate D20100328 = LocalDate.of(2010, MARCH, 28);
+    LocalDate d20100328 = LocalDate.of(2010, MARCH, 28);
     LocalDate localDate = DateUtils.toLocalDate(20100328);
-    assertEquals(D20100328, localDate);
+    assertEquals(d20100328, localDate);
   }
 
 }

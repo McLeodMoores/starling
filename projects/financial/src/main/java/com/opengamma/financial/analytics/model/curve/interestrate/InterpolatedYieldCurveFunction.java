@@ -129,7 +129,8 @@ public class InterpolatedYieldCurveFunction extends AbstractFunction {
             .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfig)
             .with(ValuePropertyNames.CURVE_CALCULATION_METHOD, InterpolatedDataProperties.CALCULATION_METHOD_NAME).get();
         final ValueSpecification curveSpec = new ValueSpecification(ValueRequirementNames.YIELD_CURVE, target.toSpecification(), curveProperties);
-        final ValueSpecification jacobianSpec = new ValueSpecification(ValueRequirementNames.YIELD_CURVE_JACOBIAN, target.toSpecification(), jacobianProperties);
+        final ValueSpecification jacobianSpec =
+            new ValueSpecification(ValueRequirementNames.YIELD_CURVE_JACOBIAN, target.toSpecification(), jacobianProperties);
         final YieldAndDiscountCurve yieldCurve = isYield ? YieldCurve.from(curve) : DiscountCurve.from(curve);
         return Sets.newHashSet(new ComputedValue(curveSpec, yieldCurve), new ComputedValue(jacobianSpec, jacobian));
       }
@@ -152,12 +153,14 @@ public class InterpolatedYieldCurveFunction extends AbstractFunction {
             .with(ValuePropertyNames.CURVE_CALCULATION_METHOD, InterpolatedDataProperties.CALCULATION_METHOD_NAME)
             .get();
         final ValueSpecification curveSpec = new ValueSpecification(ValueRequirementNames.YIELD_CURVE, target.toSpecification(), curveProperties);
-        final ValueSpecification jacobianSpec = new ValueSpecification(ValueRequirementNames.YIELD_CURVE_JACOBIAN, target.toSpecification(), jacobianProperties);
+        final ValueSpecification jacobianSpec =
+            new ValueSpecification(ValueRequirementNames.YIELD_CURVE_JACOBIAN, target.toSpecification(), jacobianProperties);
         return Sets.newHashSet(curveSpec, jacobianSpec);
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         final ValueProperties constraints = desiredValue.getConstraints();
         final String curveName = constraints.getStrictValue(ValuePropertyNames.CURVE);
         if (curveName == null) {

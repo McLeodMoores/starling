@@ -27,8 +27,10 @@ public class BlackVolatilitySurfaceSplineDefaults extends BlackVolatilitySurface
 
   public BlackVolatilitySurfaceSplineDefaults(final String timeAxis, final String yAxis, final String volatilityTransform,
       final String timeInterpolator, final String timeLeftExtrapolator, final String timeRightExtrapolator,
-      final String splineInterpolator, final String splineLeftExtrapolator, final String splineRightExtrapolator, final String splineExtrapolatorFailBehaviour) {
-    super(timeAxis, yAxis, volatilityTransform, timeInterpolator, timeLeftExtrapolator, timeRightExtrapolator, BlackVolatilitySurfacePropertyNamesAndValues.SPLINE);
+      final String splineInterpolator, final String splineLeftExtrapolator, final String splineRightExtrapolator,
+      final String splineExtrapolatorFailBehaviour) {
+    super(timeAxis, yAxis, volatilityTransform, timeInterpolator, timeLeftExtrapolator, timeRightExtrapolator,
+        BlackVolatilitySurfacePropertyNamesAndValues.SPLINE);
     ArgumentChecker.notNull(splineInterpolator, "spline interpolator");
     ArgumentChecker.notNull(splineLeftExtrapolator, "spline left extrapolator");
     ArgumentChecker.notNull(splineRightExtrapolator, "spline right extrapolator");

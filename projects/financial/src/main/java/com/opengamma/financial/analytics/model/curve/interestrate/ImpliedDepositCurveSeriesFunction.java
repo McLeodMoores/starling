@@ -104,7 +104,6 @@ import com.opengamma.financial.convention.businessday.BusinessDayConventions;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.daycount.DayCountFactory;
-import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.UniqueId;
@@ -163,7 +162,8 @@ public class ImpliedDepositCurveSeriesFunction extends AbstractFunction {
     }
     final Currency impliedCurrency = (Currency) target.getValue();
     if (!IMPLIED_DEPOSIT.equals(impliedConfiguration.getCalculationMethod())) {
-      throw new OpenGammaRuntimeException("Curve calculation method was not " + IMPLIED_DEPOSIT + " for configuration called " + _impliedCurveCalculationConfig);
+      throw new OpenGammaRuntimeException("Curve calculation method was not " + IMPLIED_DEPOSIT
+          + " for configuration called " + _impliedCurveCalculationConfig);
     }
     final String[] impliedCurveNames = impliedConfiguration.getYieldCurveNames();
     if (impliedCurveNames.length != 1) {
@@ -188,7 +188,8 @@ public class ImpliedDepositCurveSeriesFunction extends AbstractFunction {
     }
     final Currency originalCurrency = (Currency) target.getValue();
     if (!originalCurrency.equals(impliedCurrency)) {
-      throw new OpenGammaRuntimeException("Currency targets for configurations " + _impliedCurveCalculationConfig + " and " + entry.getKey() + " did not match");
+      throw new OpenGammaRuntimeException("Currency targets for configurations " + _impliedCurveCalculationConfig
+          + " and " + entry.getKey() + " did not match");
     }
     final YieldCurveDefinition impliedDefinition = _yieldCurveDefinition.get(impliedCurveNames[0] + "_" + impliedCurrency.getCode());
     if (impliedDefinition == null) {
@@ -201,8 +202,8 @@ public class ImpliedDepositCurveSeriesFunction extends AbstractFunction {
       }
     }
     final ZonedDateTime atZDT = ZonedDateTime.ofInstant(atInstant, ZoneOffset.UTC);
-    return new MyCompiledFunction(atZDT.with(LocalTime.MIDNIGHT), atZDT.plusDays(1).with(LocalTime.MIDNIGHT).minusNanos(1000000), impliedDefinition, originalConfiguration,
-        originalCurveNames[0]);
+    return new MyCompiledFunction(atZDT.with(LocalTime.MIDNIGHT), atZDT.plusDays(1).with(LocalTime.MIDNIGHT).minusNanos(1000000),
+        impliedDefinition, originalConfiguration, originalCurveNames[0]);
   };
 
   private class MyCompiledFunction extends AbstractInvokingCompiledFunction {
@@ -289,7 +290,7 @@ public class ImpliedDepositCurveSeriesFunction extends AbstractFunction {
 
         final FXSpotConvention fxSpotConvention = conventionSource.getSingle(ExternalId.of("CONVENTION", "FX Spot"), FXSpotConvention.class);
         final int spotLag = fxSpotConvention.getSettlementDays();
-        
+
         for (final Map.Entry<LocalDate, YieldAndDiscountCurve> entry : originalCurveSeries.entrySet()) {
           final LocalDate valuationDate = entry.getKey();
           final ZonedDateTime valuationDateTime = ZonedDateTime.of(valuationDate, LocalTime.MIDNIGHT, executionContext.getValuationClock().getZone());
@@ -313,7 +314,7 @@ public class ImpliedDepositCurveSeriesFunction extends AbstractFunction {
             final Tenor tenor = strip.getCurveNodePointTime();
             final ZonedDateTime paymentDate;
             if (spotLag == 0 && conventionSettlementRegion == null) {
-              paymentDate = spotDate.plus(tenor.getPeriod()); 
+              paymentDate = spotDate.plus(tenor.getPeriod());
             } else {
               paymentDate = ScheduleCalculator.getAdjustedDate(spotDate, tenor.getPeriod(), MOD_FOL, calendar, true);
             }
@@ -397,13 +398,13 @@ public class ImpliedDepositCurveSeriesFunction extends AbstractFunction {
       final ValueProperties constraints = desiredValue.getConstraints();
       ValueProperties.Builder seriesConstraints = null;
       Set<String> values = desiredValue.getConstraints().getValues(DATA_FIELD_PROPERTY);
-      if ((values == null) || values.isEmpty()) {
+      if (values == null || values.isEmpty()) {
         seriesConstraints = desiredValue.getConstraints().copy().with(DATA_FIELD_PROPERTY, MarketDataRequirementNames.MARKET_VALUE);
       } else if (values.size() > 1) {
         seriesConstraints = desiredValue.getConstraints().copy().withoutAny(DATA_FIELD_PROPERTY).with(DATA_FIELD_PROPERTY, values.iterator().next());
       }
       values = desiredValue.getConstraints().getValues(RESOLUTION_KEY_PROPERTY);
-      if ((values == null) || values.isEmpty()) {
+      if (values == null || values.isEmpty()) {
         if (seriesConstraints == null) {
           seriesConstraints = desiredValue.getConstraints().copy();
         }
@@ -415,28 +416,28 @@ public class ImpliedDepositCurveSeriesFunction extends AbstractFunction {
         seriesConstraints.withoutAny(RESOLUTION_KEY_PROPERTY).with(RESOLUTION_KEY_PROPERTY, values.iterator().next());
       }
       values = desiredValue.getConstraints().getValues(START_DATE_PROPERTY);
-      if ((values == null) || values.isEmpty()) {
+      if (values == null || values.isEmpty()) {
         if (seriesConstraints == null) {
           seriesConstraints = desiredValue.getConstraints().copy();
         }
         seriesConstraints.with(START_DATE_PROPERTY, "Null");
       }
       values = desiredValue.getConstraints().getValues(INCLUDE_START_PROPERTY);
-      if ((values == null) || (values.size() != 1)) {
+      if (values == null || values.size() != 1) {
         if (seriesConstraints == null) {
           seriesConstraints = desiredValue.getConstraints().copy();
         }
         seriesConstraints.with(INCLUDE_START_PROPERTY, YES_VALUE);
       }
       values = desiredValue.getConstraints().getValues(END_DATE_PROPERTY);
-      if ((values == null) || values.isEmpty()) {
+      if (values == null || values.isEmpty()) {
         if (seriesConstraints == null) {
           seriesConstraints = desiredValue.getConstraints().copy();
         }
         seriesConstraints.with(HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY, "Now");
       }
       values = desiredValue.getConstraints().getValues(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY);
-      if ((values == null) || (values.size() != 1)) {
+      if (values == null || values.size() != 1) {
         if (seriesConstraints == null) {
           seriesConstraints = desiredValue.getConstraints().copy();
         }
@@ -520,7 +521,7 @@ public class ImpliedDepositCurveSeriesFunction extends AbstractFunction {
 
     /**
      * Gets the properties of the implied yield curve.
-     * 
+     *
      * @param curveName The implied curve name
      * @return The properties
      */

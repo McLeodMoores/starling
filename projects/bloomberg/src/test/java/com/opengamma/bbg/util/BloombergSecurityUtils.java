@@ -357,7 +357,8 @@ public final class BloombergSecurityUtils {
     final double strike = 190.0;
     final Expiry expiry = new Expiry(DateUtils.getUTCDate(2010, 01, 16));
     final ExternalId underlyingIdentifier = ExternalSchemes.bloombergTickerSecurityId(AAPL_EQUITY_TICKER);
-    final EquityOptionSecurity security = new EquityOptionSecurity(optionType, strike, USD, underlyingIdentifier, new AmericanExerciseType(), expiry, 100, "US");
+    final EquityOptionSecurity security =
+        new EquityOptionSecurity(optionType, strike, USD, underlyingIdentifier, new AmericanExerciseType(), expiry, 100, "US");
 
     final Set<ExternalId> identifiers = new HashSet<>();
     identifiers.add(ExternalSchemes.bloombergTickerSecurityId(APV_EQUITY_OPTION_TICKER));

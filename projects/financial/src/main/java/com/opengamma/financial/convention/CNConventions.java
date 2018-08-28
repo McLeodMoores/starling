@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.convention;
@@ -20,7 +20,7 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 
 /**
- * 
+ *
  */
 public class CNConventions {
 
@@ -62,9 +62,11 @@ public class CNConventions {
         following, Period.ofMonths(8), 2, false, cn);
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("CCDRI Curncy"), simpleNameSecurityId("CNY DEPOSIT 9m")), "CNY DEPOSIT 9m", act360,
         following, Period.ofMonths(9), 2, false, cn);
-    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("CCDRJ Curncy"), simpleNameSecurityId("CNY DEPOSIT 10m")), "CNY DEPOSIT 10m", act360,
+    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("CCDRJ Curncy"),
+        simpleNameSecurityId("CNY DEPOSIT 10m")), "CNY DEPOSIT 10m", act360,
         following, Period.ofMonths(10), 2, false, cn);
-    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("CCDRK Curncy"), simpleNameSecurityId("CNY DEPOSIT 11m")), "CNY DEPOSIT 11m", act360,
+    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("CCDRK Curncy"),
+        simpleNameSecurityId("CNY DEPOSIT 11m")), "CNY DEPOSIT 11m", act360,
         following, Period.ofMonths(11), 2, false, cn);
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("CCDR1 Curncy"), simpleNameSecurityId("CNY DEPOSIT 1y")), "CNY DEPOSIT 1y", act360,
         following, Period.ofYears(1), 2, false, cn);

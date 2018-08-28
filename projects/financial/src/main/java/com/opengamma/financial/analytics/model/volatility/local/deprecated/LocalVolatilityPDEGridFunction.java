@@ -102,7 +102,7 @@ public abstract class LocalVolatilityPDEGridFunction extends AbstractFunction.No
     final String spaceGridBunchingName = desiredValue.getConstraint(PROPERTY_SPACE_GRID_BUNCHING);
     final double spaceGridBunching = Double.parseDouble(spaceGridBunchingName);
     final String pdeDirection = desiredValue.getConstraint(PROPERTY_PDE_DIRECTION);
-    if (!(pdeDirection.equals(LocalVolatilityPDEValuePropertyNames.FORWARD_PDE))) {
+    if (!pdeDirection.equals(LocalVolatilityPDEValuePropertyNames.FORWARD_PDE)) {
       throw new OpenGammaRuntimeException("Can only use forward PDE; should never ask for this direction: " + pdeDirection);
     }
     final DupireLocalVolatilityCalculator localVolatilityCalculator = new DupireLocalVolatilityCalculator(h);
@@ -212,7 +212,8 @@ public abstract class LocalVolatilityPDEGridFunction extends AbstractFunction.No
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     String surfaceName = null;
     String surfaceType = null;
     String xAxis = null;
@@ -225,7 +226,8 @@ public abstract class LocalVolatilityPDEGridFunction extends AbstractFunction.No
       final ValueProperties constraints = input.getValue().getConstraints();
       if (input.getValue().getValueName().equals(ValueRequirementNames.FORWARD_CURVE)) {
         if (constraints.getValues(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD) != null) {
-          final Set<String> forwardCurveCalculationMethodNames = constraints.getValues(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD);
+          final Set<String> forwardCurveCalculationMethodNames =
+              constraints.getValues(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD);
           if (forwardCurveCalculationMethodNames == null || forwardCurveCalculationMethodNames.size() != 1) {
             throw new OpenGammaRuntimeException("Missing or non-unique forward curve calculation method name");
           }
@@ -330,8 +332,8 @@ public abstract class LocalVolatilityPDEGridFunction extends AbstractFunction.No
     return new ValueRequirement(ValueRequirementNames.FORWARD_CURVE, target, properties);
   }
 
-  private ValueProperties getResultProperties(final String surfaceName, final String surfaceType, final String xAxis, final String yAxis, final String yAxisType,
-      final String forwardCurveCalculationMethod, final String h, final String forwardCurveName) {
+  private ValueProperties getResultProperties(final String surfaceName, final String surfaceType, final String xAxis, final String yAxis,
+      final String yAxisType, final String forwardCurveCalculationMethod, final String h, final String forwardCurveName) {
     return createValueProperties()
         .with(ValuePropertyNames.CALCULATION_METHOD, LocalVolatilityPDEValuePropertyNames.LOCAL_VOLATILITY_METHOD)
         .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, _instrumentType)

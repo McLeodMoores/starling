@@ -17,7 +17,8 @@ public final class StaticSequencePartitioningViewProcessWorkerFactory implements
 
   private final com.opengamma.engine.view.worker.StaticSequencePartitioningViewProcessWorkerFactory _factory;
 
-  private StaticSequencePartitioningViewProcessWorkerFactory(final com.opengamma.engine.view.worker.StaticSequencePartitioningViewProcessWorkerFactory factory) {
+  private StaticSequencePartitioningViewProcessWorkerFactory(
+      final com.opengamma.engine.view.worker.StaticSequencePartitioningViewProcessWorkerFactory factory) {
     _factory = factory;
   }
 

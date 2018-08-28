@@ -530,8 +530,9 @@ public class MixedBivariateLogNormalFitter {
       final double impVolY = getVolatility(option, fwdY, dataY);
       for (int i = nNorms; i < 2 * nNorms; ++i) {
         for (int l = i; l < 2 * nNorms; ++l) {
-          res[j][i] += -fwdY * weightsY[l - nNorms] * BlackFormulaRepository.vega(relativeForwardsY[l - nNorms], dataStrs[j] / fwdY, time, sigmasY[l - nNorms]) /
-              BlackFormulaRepository.vega(fwdY, dataStrs[j], time, impVolY);
+          res[j][i] += -fwdY * weightsY[l - nNorms]
+              * BlackFormulaRepository.vega(relativeForwardsY[l - nNorms], dataStrs[j] / fwdY, time, sigmasY[l - nNorms])
+              / BlackFormulaRepository.vega(fwdY, dataStrs[j], time, impVolY);
         }
       }
       for (int i = 2 * nNorms; i < 3 * nNorms - 1; ++i) {
@@ -677,7 +678,7 @@ public class MixedBivariateLogNormalFitter {
     double res = 0.;
 
     for (int i = 0; i < nVec; ++i) {
-      res += (vec[i] * vec[i]);
+      res += vec[i] * vec[i];
     }
 
     return res;

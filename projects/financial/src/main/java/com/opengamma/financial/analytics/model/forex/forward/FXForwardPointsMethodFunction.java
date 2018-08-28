@@ -5,8 +5,6 @@
  */
 package com.opengamma.financial.analytics.model.forex.forward;
 
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -61,9 +59,11 @@ import com.opengamma.util.money.UnorderedCurrencyPair;
 import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.time.Tenor;
 
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+
 /**
  * Base class for functions that calculate risk for FX forwards that use the FX forward rates directly.
- * 
+ *
  * @deprecated Use {@link FXForwardPointsFunction}
  */
 @Deprecated
@@ -92,7 +92,8 @@ public abstract class FXForwardPointsMethodFunction extends AbstractFunction.Non
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final Clock snapshotClock = executionContext.getValuationClock();
     final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
@@ -114,7 +115,8 @@ public abstract class FXForwardPointsMethodFunction extends AbstractFunction.Non
     if (forwardCurveDefinition == null) {
       throw new OpenGammaRuntimeException("Couldn't find FX forward curve definition called " + forwardCurveName + " for target " + currencyPair);
     }
-    final FXForwardCurveSpecification forwardCurveSpecification = _fxForwardCurveSpecificationSource.getSpecification(forwardCurveName, currencyPair.toString());
+    final FXForwardCurveSpecification forwardCurveSpecification =
+        _fxForwardCurveSpecificationSource.getSpecification(forwardCurveName, currencyPair.toString());
     if (forwardCurveSpecification == null) {
       throw new OpenGammaRuntimeException("Couldn't find FX forward curve specification called " + forwardCurveName + " for target " + currencyPair);
     }
@@ -153,7 +155,7 @@ public abstract class FXForwardPointsMethodFunction extends AbstractFunction.Non
 
   /**
    * Performs the calculation.
-   * 
+   *
    * @param fxForward The FX forward
    * @param data The yield curve data
    * @param fxForwardPoints A curve containing FX forward rates
@@ -267,7 +269,7 @@ public abstract class FXForwardPointsMethodFunction extends AbstractFunction.Non
 
   /**
    * Gets the value requirement name.
-   * 
+   *
    * @return The value requirement name
    */
   protected String getValueRequirementName() {
@@ -276,7 +278,7 @@ public abstract class FXForwardPointsMethodFunction extends AbstractFunction.Non
 
   /**
    * Gets the requirement for the pay curve.
-   * 
+   *
    * @param curveName The pay curve name
    * @param currency The pay currency
    * @param curveCalculationConfigName The pay curve calculation configuration name
@@ -290,7 +292,7 @@ public abstract class FXForwardPointsMethodFunction extends AbstractFunction.Non
 
   /**
    * Gets the pay curve.
-   * 
+   *
    * @param inputs The function inputs
    * @param currency The pay currency
    * @param curveName The pay curve name
@@ -308,7 +310,7 @@ public abstract class FXForwardPointsMethodFunction extends AbstractFunction.Non
 
   /**
    * Gets the requirement for the receive curve.
-   * 
+   *
    * @param curveName The receive curve name
    * @param currency The receive currency
    * @param curveCalculationConfigName The receive curve calculation configuration name
@@ -322,7 +324,7 @@ public abstract class FXForwardPointsMethodFunction extends AbstractFunction.Non
 
   /**
    * Gets the receive curve.
-   * 
+   *
    * @param inputs The function inputs
    * @param currency The receive currency
    * @param curveName The receive curve name

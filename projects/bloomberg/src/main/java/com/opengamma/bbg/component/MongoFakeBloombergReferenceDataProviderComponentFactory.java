@@ -109,15 +109,20 @@ public class MongoFakeBloombergReferenceDataProviderComponentFactory extends Abs
    * @param repo  the repository, not null
    * @return the provider, not null
    */
-  @SuppressWarnings("unchecked")
   protected ReferenceDataProvider initReferenceDataProvider(final ComponentRepository repo) {
     final ReferenceDataProvider underlying = mock(ReferenceDataProvider.class);
-    when(underlying.getReferenceData(any(ReferenceDataProviderGetRequest.class))).thenReturn(new ReferenceDataProviderGetResult(Collections.<ReferenceData>emptyList()));
-    when(underlying.getReferenceData(any(Iterable.class), any(Iterable.class))).thenReturn(new HashMap<String, FudgeMsg>());
-    when(underlying.getReferenceDataIgnoreCache(any(Iterable.class), any(Iterable.class))).thenReturn(new HashMap<String, FudgeMsg>());
-    when(underlying.getReferenceDataValue(anyString(), anyString())).thenReturn(null);
-    when(underlying.getReferenceDataValues(any(Iterable.class), anyString())).thenReturn(new HashMap<String, String>());
-    when(underlying.getReferenceDataValues(anyString(), any(Iterable.class))).thenReturn(new HashMap<String, String>());
+    when(underlying.getReferenceData(any(ReferenceDataProviderGetRequest.class)))
+        .thenReturn(new ReferenceDataProviderGetResult(Collections.<ReferenceData>emptyList()));
+    when(underlying.getReferenceData(any(Iterable.class), any(Iterable.class)))
+        .thenReturn(new HashMap<String, FudgeMsg>());
+    when(underlying.getReferenceDataIgnoreCache(any(Iterable.class), any(Iterable.class)))
+        .thenReturn(new HashMap<String, FudgeMsg>());
+    when(underlying.getReferenceDataValue(anyString(), anyString()))
+        .thenReturn(null);
+    when(underlying.getReferenceDataValues(any(Iterable.class), anyString()))
+        .thenReturn(new HashMap<String, String>());
+    when(underlying.getReferenceDataValues(anyString(), any(Iterable.class)))
+        .thenReturn(new HashMap<String, String>());
 
     ReferenceDataProvider effectiveProvider = underlying;
     if (getConfigSource() != null) {
@@ -127,7 +132,8 @@ public class MongoFakeBloombergReferenceDataProviderComponentFactory extends Abs
     final MongoConnector mongoConnector = getMongoConnector();
     final CacheManager cacheManager = getCacheManager();
     if (mongoConnector != null) {
-      final MongoDBInvalidFieldCachingReferenceDataProvider fieldCached = new MongoDBInvalidFieldCachingReferenceDataProvider(effectiveProvider, mongoConnector);
+      final MongoDBInvalidFieldCachingReferenceDataProvider fieldCached =
+          new MongoDBInvalidFieldCachingReferenceDataProvider(effectiveProvider, mongoConnector);
       return new MongoDBValueCachingReferenceDataProvider(fieldCached, mongoConnector);
 
     } else if (cacheManager != null) {

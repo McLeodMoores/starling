@@ -67,7 +67,8 @@ public class TimeSeriesDataProviderReplaceTool extends AbstractTool<IntegrationT
     final BloombergHistoricalTimeSeriesLoader loader = new BloombergHistoricalTimeSeriesLoader(htsMaster, htsProvider,
         new BloombergIdentifierProvider(getToolContext().getBloombergReferenceDataProvider()));
 
-    for (final HistoricalTimeSeriesInfoDocument infoDoc : HistoricalTimeSeriesInfoSearchIterator.iterable(htsMaster, getHistoricalSearchRequest(findProvider))) {
+    for (final HistoricalTimeSeriesInfoDocument infoDoc : HistoricalTimeSeriesInfoSearchIterator.iterable(htsMaster,
+        getHistoricalSearchRequest(findProvider))) {
       final ExternalIdBundle bundle = infoDoc.getInfo().getExternalIdBundle().toBundle();
       final ExternalId buid = bundle.getExternalId(ExternalSchemes.BLOOMBERG_BUID);
       final ExternalId ticker = bundle.getExternalId(ExternalSchemes.BLOOMBERG_TICKER);

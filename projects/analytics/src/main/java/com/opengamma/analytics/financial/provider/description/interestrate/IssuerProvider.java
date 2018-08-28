@@ -109,11 +109,13 @@ public class IssuerProvider implements IssuerProviderInterface {
   }
 
   /**
-   * Constructor from existing multicurve provider and issuer map. The given provider and map are used for the new provider (the same maps are used, not copied).
+   * Constructor from existing multicurve provider and issuer map. The given provider and map are used for the new provider
+   * (the same maps are used, not copied).
    * @param multicurve The multi-curves provider, not null
    * @param issuerCurves The issuer specific curves, not null
    */
-  public IssuerProvider(final MulticurveProviderInterface multicurve, final Map<Pair<Object, LegalEntityFilter<LegalEntity>>, YieldAndDiscountCurve> issuerCurves) {
+  public IssuerProvider(final MulticurveProviderInterface multicurve,
+      final Map<Pair<Object, LegalEntityFilter<LegalEntity>>, YieldAndDiscountCurve> issuerCurves) {
     ArgumentChecker.notNull(multicurve, "multicurve");
     ArgumentChecker.notNull(issuerCurves, "issuer curves");
     _multicurveProvider = multicurve;

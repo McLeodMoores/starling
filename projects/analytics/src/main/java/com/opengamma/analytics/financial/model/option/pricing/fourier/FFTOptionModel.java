@@ -23,7 +23,7 @@ import com.opengamma.analytics.financial.model.option.pricing.analytic.formula.E
 import com.opengamma.analytics.math.interpolation.DoubleQuadraticInterpolator1D;
 
 /**
- * 
+ *
  */
 public class FFTOptionModel implements OptionModel<EuropeanVanillaOptionDefinition, BlackOptionDataBundle> {
   private static final Logger LOGGER = LoggerFactory.getLogger(FFTOptionModel.class);
@@ -58,7 +58,8 @@ public class FFTOptionModel implements OptionModel<EuropeanVanillaOptionDefiniti
   }
 
   @Override
-  public GreekResultCollection getGreeks(final EuropeanVanillaOptionDefinition definition, final BlackOptionDataBundle dataBundle, final Set<Greek> requiredGreeks) {
+  public GreekResultCollection getGreeks(final EuropeanVanillaOptionDefinition definition, final BlackOptionDataBundle dataBundle,
+      final Set<Greek> requiredGreeks) {
     Validate.notNull(definition, "definition");
     Validate.notNull(dataBundle, "data bundle");
     Validate.notNull(requiredGreeks, "required greeks");
@@ -72,11 +73,12 @@ public class FFTOptionModel implements OptionModel<EuropeanVanillaOptionDefiniti
     final EuropeanVanillaOption option = EuropeanVanillaOption.fromDefinition(definition, date);
     final BlackFunctionData data = BlackFunctionData.fromDataBundle(dataBundle, definition);
 
-    double fwd = data.getForward();
-    double df = data.getDiscountFactor();
-    double t = option.getTimeToExpiry();
-    boolean isCall = option.isCall();
-    double limitSigma = data.getBlackVolatility(); //TODO This is a tuning parameter of the algorithm and has no business being passed in a BlackOptionDataBundle
+    final double fwd = data.getForward();
+    final double df = data.getDiscountFactor();
+    final double t = option.getTimeToExpiry();
+    final boolean isCall = option.isCall();
+    //TODO This is a tuning parameter of the algorithm and has no business being passed in a BlackOptionDataBundle
+    final double limitSigma = data.getBlackVolatility();
 
     final double[][] prices = PRICER.price(fwd, df, t, isCall, _characteristicExponent, _nStrikes, _maxDeltaMoneyness, limitSigma, _alpha, _tolerance);
     final int n = prices.length;

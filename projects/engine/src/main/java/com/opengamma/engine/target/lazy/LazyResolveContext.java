@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.target.lazy;
@@ -35,13 +35,13 @@ public class LazyResolveContext {
     public AtVersionCorrection(final LazyResolveContext context, final VersionCorrection versionCorrection) {
       super(context.getSecuritySource(), context.getRawTargetResolver());
       _versionCorrection = versionCorrection;
-      _targetResolver = (getRawTargetResolver() != null) ? getRawTargetResolver().atVersionCorrection(versionCorrection) : null;
+      _targetResolver = getRawTargetResolver() != null ? getRawTargetResolver().atVersionCorrection(versionCorrection) : null;
     }
 
     protected Security resolveLinkImpl(final SecurityLink link) {
       try {
         return link.resolve(getSecuritySource(), _versionCorrection);
-      } catch (DataNotFoundException e) {
+      } catch (final DataNotFoundException e) {
         return null;
       }
     }
@@ -108,7 +108,7 @@ public class LazyResolveContext {
 
   private final SecuritySource _securities;
   private final CachingComputationTargetResolver _targetResolver;
-  private static final ThreadLocal<AtomicInteger> WRITE_COUNT = new ThreadLocal<AtomicInteger>();
+  private static final ThreadLocal<AtomicInteger> WRITE_COUNT = new ThreadLocal<>();
 
   public LazyResolveContext(final SecuritySource securities, final CachingComputationTargetResolver targetResolver) {
     _securities = securities;
@@ -128,8 +128,9 @@ public class LazyResolveContext {
   }
 
   /**
-   * Called by a thread at the start of any serialization operations which might result in further call backs to the cache. This is to allow a cache to detect such scenarios and work around an
-   * re-entrance problems that its underlying implementation might otherwise experience. Each call from a thread must be balanced by a call to {@link #endWrite}.
+   * Called by a thread at the start of any serialization operations which might result in further call backs to the cache.
+   * This is to allow a cache to detect such scenarios and work around an re-entrance problems that its underlying
+   * implementation might otherwise experience. Each call from a thread must be balanced by a call to {@link #endWrite}.
    */
   public static void beginWrite() {
     AtomicInteger c = WRITE_COUNT.get();
@@ -142,14 +143,14 @@ public class LazyResolveContext {
   }
 
   /**
-   * Tests if the calling thread is between calls to {@link #beginWrite} and {@link #endWrite}. The call will be potentially re-entrant to the underlying cache and should be deferred if the cache
-   * can't support this.
-   * 
+   * Tests if the calling thread is between calls to {@link #beginWrite} and {@link #endWrite}. The call will be potentially
+   * re-entrant to the underlying cache and should be deferred if the cache can't support this.
+   *
    * @return true if the thread is engaged in serialization behavior, false otherwise
    */
   public static boolean isWriting() {
     final AtomicInteger c = WRITE_COUNT.get();
-    return (c != null) && (c.get() > 0);
+    return c != null && c.get() > 0;
   }
 
   /**

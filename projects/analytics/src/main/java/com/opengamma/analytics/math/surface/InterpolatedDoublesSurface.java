@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.surface;
@@ -14,11 +14,11 @@ import org.apache.commons.lang.ObjectUtils;
 import com.opengamma.analytics.math.interpolation.GridInterpolator2D;
 import com.opengamma.analytics.math.interpolation.Interpolator2D;
 import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
+import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.DoublesPair;
 import com.opengamma.util.tuple.FirstThenSecondDoublesPairComparator;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Triple;
-import com.opengamma.util.ArgumentChecker;
 
 /**
  * A surface that is defined by a set of nodal points (i.e. <i>x-y-z</i> data) and an interpolator to return values of <i>z</i> for values
@@ -175,7 +175,8 @@ public class InterpolatedDoublesSurface extends DoublesSurface {
    * @param name The name of the surface
    * @return An interpolated surface with automatically-generated name
    */
-  public static InterpolatedDoublesSurface from(final List<DoublesPair> xyData, final List<Double> zData, final Interpolator2D interpolator, final String name) {
+  public static InterpolatedDoublesSurface from(final List<DoublesPair> xyData, final List<Double> zData, final Interpolator2D interpolator,
+      final String name) {
     return new InterpolatedDoublesSurface(xyData, zData, interpolator, name);
   }
 

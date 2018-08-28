@@ -38,7 +38,8 @@ public class AmqpByteArrayMessageSender extends AbstractAmqpByteArraySender impl
    * @param routingKey  the routing key, not null
    * @param messageProperties  the properties, not null
    */
-  public AmqpByteArrayMessageSender(final AmqpTemplate amqpTemplate, final String exchange, final String routingKey, final MessageProperties messageProperties) {
+  public AmqpByteArrayMessageSender(final AmqpTemplate amqpTemplate, final String exchange, final String routingKey,
+      final MessageProperties messageProperties) {
     super(amqpTemplate, exchange, routingKey);
     ArgumentChecker.notNull(messageProperties, "messageProperties");
     _messageProperties = messageProperties;

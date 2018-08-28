@@ -103,13 +103,16 @@ public class ConventionBasedFXRateFunction extends AbstractFunction {
       return new ValueSpecification(ValueRequirementNames.SPOT_RATE, targetSpec, properties);
     }
 
-    private ValueSpecification createHistoricalTimeSeriesResult(final ComputationTargetSpecification targetSpec, ValueProperties properties) {
-      properties = properties.copy()
+    private ValueSpecification createHistoricalTimeSeriesResult(final ComputationTargetSpecification targetSpec,
+        final ValueProperties properties) {
+      final ValueProperties tsProperties = properties.copy()
           .withAny(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY)
-          .with(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY, HistoricalTimeSeriesFunctionUtils.NO_VALUE, HistoricalTimeSeriesFunctionUtils.YES_VALUE)
+          .with(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY, HistoricalTimeSeriesFunctionUtils.NO_VALUE,
+              HistoricalTimeSeriesFunctionUtils.YES_VALUE)
           .withAny(HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY)
-          .with(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY, HistoricalTimeSeriesFunctionUtils.NO_VALUE, HistoricalTimeSeriesFunctionUtils.YES_VALUE).get();
-      return new ValueSpecification(ValueRequirementNames.HISTORICAL_FX_TIME_SERIES, targetSpec, properties);
+          .with(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY, HistoricalTimeSeriesFunctionUtils.NO_VALUE,
+              HistoricalTimeSeriesFunctionUtils.YES_VALUE).get();
+      return new ValueSpecification(ValueRequirementNames.HISTORICAL_FX_TIME_SERIES, targetSpec, tsProperties);
     }
 
     private ValueSpecification createTimeSeriesLatestResult(final ComputationTargetSpecification targetSpec, final ValueProperties properties) {
@@ -135,12 +138,15 @@ public class ConventionBasedFXRateFunction extends AbstractFunction {
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       final ValueProperties constraints;
       if (desiredValue.getConstraints().getProperties() != null) {
         final ValueProperties.Builder constraintsBuilder = ValueProperties.builder();
         for (final String constraintName : desiredValue.getConstraints().getProperties()) {
-          if (ValuePropertyNames.FUNCTION.equals(constraintName) || constraintName.startsWith(ValuePropertyNames.OUTPUT_RESERVED_PREFIX) || QUOTING_CONVENTION_PROPERTY.equals(constraintName)) {
+          if (ValuePropertyNames.FUNCTION.equals(constraintName)
+              || constraintName.startsWith(ValuePropertyNames.OUTPUT_RESERVED_PREFIX)
+              || QUOTING_CONVENTION_PROPERTY.equals(constraintName)) {
             continue;
           }
           final Set<String> values = desiredValue.getConstraints().getValues(constraintName);

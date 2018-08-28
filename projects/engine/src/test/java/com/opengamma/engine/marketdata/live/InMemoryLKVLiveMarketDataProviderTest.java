@@ -434,12 +434,17 @@ public class InMemoryLKVLiveMarketDataProviderTest {
   private ValueSpecification createPrimitiveValueSpec(final String ticker) {
 
     // Create spec of the form
-    // VSpec[Market_All, CTSpec[PRIMITIVE, ExternalId-ACTIVFEED_TICKER~AAPL.], {Normalization=[OpenGamma],Function=[LiveMarketData],Id=[ACTIVFEED_TICKER~AAPL.]}]
+    // VSpec[Market_All, CTSpec[PRIMITIVE, ExternalId-ACTIVFEED_TICKER~AAPL.],
+    //      {Normalization=[OpenGamma],Function=[LiveMarketData],Id=[ACTIVFEED_TICKER~AAPL.]}]
     final ExternalId externalId = ExternalSchemes.activFeedTickerSecurityId(ticker);
 
-    final ValueProperties properties = ValueProperties.builder().with(ValuePropertyNames.FUNCTION, "LiveMarketData").with("Normalization", "OpenGamma").with("Id", externalId.toString()).get();
+    final ValueProperties properties = ValueProperties.builder()
+        .with(ValuePropertyNames.FUNCTION, "LiveMarketData")
+        .with("Normalization", "OpenGamma")
+        .with("Id", externalId.toString()).get();
 
-    final ComputationTargetSpecification targetSpecification = new ComputationTargetSpecification(ComputationTargetType.PRIMITIVE, UniqueId.of("ExternalId", externalId.toString()));
+    final ComputationTargetSpecification targetSpecification =
+        new ComputationTargetSpecification(ComputationTargetType.PRIMITIVE, UniqueId.of("ExternalId", externalId.toString()));
 
     return new ValueSpecification("Market_All", targetSpecification, properties);
   }

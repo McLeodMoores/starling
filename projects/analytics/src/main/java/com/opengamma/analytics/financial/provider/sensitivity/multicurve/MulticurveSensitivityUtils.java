@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.sensitivity.multicurve;
@@ -105,7 +105,8 @@ public class MulticurveSensitivityUtils {
         double sensi = 0;
         for (int looplist = 0; looplist < list.size(); looplist++) {
           final ForwardSensitivity fwdSensitivity = list.get(looplist);
-          final Triple<Double, Double, Double> triple = Triple.of(fwdSensitivity.getStartTime(), fwdSensitivity.getEndTime(), fwdSensitivity.getAccrualFactor());
+          final Triple<Double, Double, Double> triple =
+              Triple.of(fwdSensitivity.getStartTime(), fwdSensitivity.getEndTime(), fwdSensitivity.getAccrualFactor());
           if (triple.equals(time)) {
             sensi += list.get(looplist).getValue();
           }
@@ -131,7 +132,8 @@ public class MulticurveSensitivityUtils {
         double sensi = 0;
         for (int looplist = 0; looplist < list.size(); looplist++) {
           final ForwardSensitivity fwdSensitivity = list.get(looplist);
-          final Triple<Double, Double, Double> triple = Triple.of(fwdSensitivity.getStartTime(), fwdSensitivity.getEndTime(), fwdSensitivity.getAccrualFactor());
+          final Triple<Double, Double, Double> triple =
+              Triple.of(fwdSensitivity.getStartTime(), fwdSensitivity.getEndTime(), fwdSensitivity.getAccrualFactor());
           if (triple.equals(time)) {
             sensi += list.get(looplist).getValue();
           }
@@ -161,7 +163,7 @@ public class MulticurveSensitivityUtils {
   //-------------------------------------------------------------------------
   /**
    * Add two maps representing sensitivities into one.
-   * 
+   *
    * @param sensi1  the first sensitivity, not null
    * @param sensi2  the second sensitivity, not null
    * @return the total sensitivity, not null
@@ -248,7 +250,7 @@ public class MulticurveSensitivityUtils {
 
   /**
    * Multiply a sensitivity map by a common factor.
-   * 
+   *
    * @param sensitivity  the original sensitivity, not null
    * @param factor  the multiplicative factor, not null
    * @return the multiplied sensitivity, not null
@@ -273,7 +275,7 @@ public class MulticurveSensitivityUtils {
 
   /**
    * Product of two sensitivities
-   * 
+   *
    * @param sensi1  the original sensitivity, not null
    * @param sensi2  the other sensitivity, not null
    * @return the product sensitivity, not null

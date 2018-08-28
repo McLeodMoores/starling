@@ -243,7 +243,7 @@ public class SwaptionBlackYieldCurveNodePnLFunction extends AbstractFunction.Non
     final double[] values = curveSensitivities.getValues();
     final SortedSet<FixedIncomeStripWithSecurity> strips = (SortedSet<FixedIncomeStripWithSecurity>) spec.getStrips();
     final FixedIncomeStripWithSecurity[] stripsArray = strips.toArray(new FixedIncomeStripWithSecurity[] {});
-    final List<StripInstrumentType> stripList = new ArrayList<StripInstrumentType>(n);
+    final List<StripInstrumentType> stripList = new ArrayList<>(n);
     int stripCount = 0;
     for (final FixedIncomeStripWithSecurity strip : strips) {
       final int index = stripCount++; //labelsList.indexOf(strip.getSecurityIdentifier());
@@ -294,10 +294,13 @@ public class SwaptionBlackYieldCurveNodePnLFunction extends AbstractFunction.Non
     return new ValueRequirement(ValueRequirementNames.YIELD_CURVE_SPEC, ComputationTargetSpecification.of(currency), properties);
   }
 
-  private ValueRequirement getYCNSRequirement(final String currencyString, final String curveCalculationConfig, final String curveName, final String surfaceName,
-      final ComputationTarget target) {
-    final ValueProperties properties = ValueProperties.builder().with(ValuePropertyNames.CALCULATION_METHOD, CalculationPropertyNamesAndValues.BLACK_METHOD)
-        .with(ValuePropertyNames.CURRENCY, currencyString).with(ValuePropertyNames.CURVE_CURRENCY, currencyString).with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfig)
+  private ValueRequirement getYCNSRequirement(final String currencyString, final String curveCalculationConfig, final String curveName,
+      final String surfaceName, final ComputationTarget target) {
+    final ValueProperties properties = ValueProperties.builder()
+        .with(ValuePropertyNames.CALCULATION_METHOD, CalculationPropertyNamesAndValues.BLACK_METHOD)
+        .with(ValuePropertyNames.CURRENCY, currencyString)
+        .with(ValuePropertyNames.CURVE_CURRENCY, currencyString)
+        .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfig)
         .with(ValuePropertyNames.CURVE, curveName).with(ValuePropertyNames.SURFACE, surfaceName).get();
     return new ValueRequirement(ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES, target.toSpecification(), properties);
   }

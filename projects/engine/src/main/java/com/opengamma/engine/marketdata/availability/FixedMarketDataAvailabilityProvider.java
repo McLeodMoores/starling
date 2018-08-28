@@ -34,11 +34,11 @@ public class FixedMarketDataAvailabilityProvider extends AbstractMarketDataAvail
   private static final AtomicInteger NEXT_IDENTIFIER = new AtomicInteger();
 
   private static class TargetData extends ConcurrentHashMap<String, Set<ValueSpecification>> {
-    
+
     private static final long serialVersionUID = 1L;
 
     public TargetData(final ValueSpecification initialValue) {
-      final Set<ValueSpecification> values = new CopyOnWriteArraySet<ValueSpecification>();
+      final Set<ValueSpecification> values = new CopyOnWriteArraySet<>();
       values.add(initialValue);
       put(initialValue.getValueName(), values);
     }
@@ -62,7 +62,7 @@ public class FixedMarketDataAvailabilityProvider extends AbstractMarketDataAvail
     public void addValue(final ValueSpecification specification) {
       Set<ValueSpecification> values = get(specification.getValueName());
       if (values == null) {
-        values = new CopyOnWriteArraySet<ValueSpecification>();
+        values = new CopyOnWriteArraySet<>();
         values.add(specification);
         final Set<ValueSpecification> existing = putIfAbsent(specification.getValueName(), values);
         if (existing != null) {
@@ -181,7 +181,8 @@ public class FixedMarketDataAvailabilityProvider extends AbstractMarketDataAvail
   }
 
   @Override
-  protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final UniqueId identifier, final ValueRequirement desiredValue) {
+  protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final UniqueId identifier,
+      final ValueRequirement desiredValue) {
     return getAvailabilityImpl(targetSpec, desiredValue);
   }
 
@@ -191,9 +192,9 @@ public class FixedMarketDataAvailabilityProvider extends AbstractMarketDataAvail
   }
 
   /**
-   * Returns the {@link ValueSpecification} that is a possible resolution of the value requirement. This will be the specification used by {@link #addValue(ValueRequirement,Object)} or
-   * {@link #removeValue(ValueRequirement)}.
-   * 
+   * Returns the {@link ValueSpecification} that is a possible resolution of the value requirement. This will be the specification
+   * used by {@link #addValue(ValueRequirement,Object)} or {@link #removeValue(ValueRequirement)}.
+   *
    * @param requirement the requirement to resolve, not null
    * @return the resolved {@code ValueSpecification}, not null
    */
@@ -250,11 +251,11 @@ public class FixedMarketDataAvailabilityProvider extends AbstractMarketDataAvail
     ArgumentChecker.notNull(valueSpecification, "valueSpecification");
     removeAvailableData(valueSpecification.getTargetSpecification(), valueSpecification);
   }
-  
-  
+
+
   @Override
   public Serializable getAvailabilityHintKey() {
-    final ArrayList<Serializable> key = new ArrayList<Serializable>(2);
+    final ArrayList<Serializable> key = new ArrayList<>(2);
     key.add(getClass().getName());
     key.add(_syntheticScheme);
     return key;

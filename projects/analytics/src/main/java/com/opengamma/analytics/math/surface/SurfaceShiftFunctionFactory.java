@@ -66,7 +66,8 @@ public class SurfaceShiftFunctionFactory {
    * @return A shifted surface with automatically-generated name
    * @throws IllegalArgumentException If the surface type is not constant, functional, interpolated, nodal or spread
    */
-  public static Surface<Double, Double, Double> getShiftedSurface(final Surface<Double, Double, Double> surface, final double shift, final boolean useAdditive) {
+  public static Surface<Double, Double, Double> getShiftedSurface(final Surface<Double, Double, Double> surface, final double shift,
+      final boolean useAdditive) {
     if (surface instanceof ConstantDoublesSurface) {
       return useAdditive ? CONSTANT_ADDITIVE.evaluate((ConstantDoublesSurface) surface, shift) : CONSTANT_MULTIPLICATIVE
           .evaluate((ConstantDoublesSurface) surface, shift);

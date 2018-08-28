@@ -15,7 +15,8 @@ public class ReflectionInstrumentProviderPopulatorTest {
   //  @Test(expectedExceptions = RuntimeException.class)
   //  public void testWrongSourceMethodNameForConverter() {
   //    final Map<StripInstrumentType, InstrumentProviderPopulator> converters = new EnumMap<>(StripInstrumentType.class);
-  //    converters.put(StripInstrumentType.CASH, new ReflectionInstrumentProviderPopulator(StripInstrumentType.CASH, "getDepositInstrumentIds", "getCashNodeIds",
+  //    converters.put(StripInstrumentType.CASH, new ReflectionInstrumentProviderPopulator(StripInstrumentType.CASH,
+  //        "getDepositInstrumentIds", "getCashNodeIds",
   //        "cashNodeIds", new DefaultCsbcRenamingFunction()));
   //    final String name = "DEFAULT";
   //    final Map<Tenor, CurveInstrumentProvider> map = new HashMap<>();

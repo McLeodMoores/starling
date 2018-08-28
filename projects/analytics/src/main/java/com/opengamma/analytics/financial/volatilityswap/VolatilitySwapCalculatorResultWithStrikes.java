@@ -25,8 +25,9 @@ public class VolatilitySwapCalculatorResultWithStrikes extends VolatilitySwapCal
    * @param callPrices The call option prices
    * @param cash The cash amount
    */
-  public VolatilitySwapCalculatorResultWithStrikes(final double[] putStrikes, final double[] callStrikes, final double[] putWeights, final double straddleWeight,
-      final double[] callWeights, final double[] putPrices, final double straddlePrice, final double[] callPrices, final double cash) {
+  public VolatilitySwapCalculatorResultWithStrikes(final double[] putStrikes, final double[] callStrikes, final double[] putWeights,
+      final double straddleWeight, final double[] callWeights, final double[] putPrices, final double straddlePrice,
+      final double[] callPrices, final double cash) {
     super(putWeights, straddleWeight, callWeights, putPrices, straddlePrice, callPrices, cash);
 
     final int nPuts = putStrikes.length;
@@ -51,8 +52,9 @@ public class VolatilitySwapCalculatorResultWithStrikes extends VolatilitySwapCal
    * @param optionTotal The total option value
    * @param fairValue The fair value
    */
-  public VolatilitySwapCalculatorResultWithStrikes(final double[] putStrikes, final double[] callStrikes, final double[] putWeights, final double straddleWeight,
-      final double[] callWeights, final double[] putPrices, final double straddlePrice, final double[] callPrices, final double cash, final double optionTotal, final double fairValue) {
+  public VolatilitySwapCalculatorResultWithStrikes(final double[] putStrikes, final double[] callStrikes, final double[] putWeights,
+      final double straddleWeight, final double[] callWeights, final double[] putPrices, final double straddlePrice,
+      final double[] callPrices, final double cash, final double optionTotal, final double fairValue) {
     super(putWeights, straddleWeight, callWeights, putPrices, straddlePrice, callPrices, cash, optionTotal, fairValue);
 
     final int nPuts = putStrikes.length;

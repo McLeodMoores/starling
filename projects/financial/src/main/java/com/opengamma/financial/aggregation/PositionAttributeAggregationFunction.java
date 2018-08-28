@@ -46,9 +46,9 @@ public class PositionAttributeAggregationFunction implements AggregationFunction
   /**
    * Returns the position's value for this function's attribute if it has one.  If not its trades are searched and
    * the value is returned from the first one with a matching attribute.  If neither the position nor any of its
-   * trades have a matching attribute then {@link #UNKNOWN} is returned.
+   * trades have a matching attribute then "Unknown" is returned.
    * @param position The position to classify
-   * @return The attribute value from the position or one of its trades or {@link #UNKNOWN} if there are no
+   * @return The attribute value from the position or one of its trades or "Unknown" if there are no
    * matching attributes
    */
   @Override

@@ -32,7 +32,8 @@ public class RemoteInterpolatedYieldCurveSpecificationBuilder extends AbstractRe
 
   //-------------------------------------------------------------------------
   @Override
-  public InterpolatedYieldCurveSpecification buildCurve(final LocalDate curveDate, final YieldCurveDefinition curveDefinition, final VersionCorrection version) {
+  public InterpolatedYieldCurveSpecification buildCurve(final LocalDate curveDate, final YieldCurveDefinition curveDefinition,
+      final VersionCorrection version) {
     ArgumentChecker.notNull(curveDate, "curveDate");
     ArgumentChecker.notNull(curveDefinition, "curveDefinition");
     ArgumentChecker.notNull(version, "version");

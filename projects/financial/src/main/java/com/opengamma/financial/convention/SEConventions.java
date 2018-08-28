@@ -75,9 +75,11 @@ public class SEConventions {
         following, Period.ofMonths(8), 2, false, se);
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("SKDRI Curncy"), simpleNameSecurityId("SEK DEPOSIT 9m")), "SEK DEPOSIT 9m", act360,
         following, Period.ofMonths(9), 2, false, se);
-    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("SKDRJ Curncy"), simpleNameSecurityId("SEK DEPOSIT 10m")), "SEK DEPOSIT 10m", act360,
+    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("SKDRJ Curncy"),
+        simpleNameSecurityId("SEK DEPOSIT 10m")), "SEK DEPOSIT 10m", act360,
         following, Period.ofMonths(10), 2, false, se);
-    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("SKDRK Curncy"), simpleNameSecurityId("SEK DEPOSIT 11m")), "SEK DEPOSIT 11m", act360,
+    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("SKDRK Curncy"),
+        simpleNameSecurityId("SEK DEPOSIT 11m")), "SEK DEPOSIT 11m", act360,
         following, Period.ofMonths(11), 2, false, se);
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("SKDR1 Curncy"), simpleNameSecurityId("SEK DEPOSIT 1y")), "SEK DEPOSIT 1y", act360,
         following, Period.ofYears(1), 2, false, se);

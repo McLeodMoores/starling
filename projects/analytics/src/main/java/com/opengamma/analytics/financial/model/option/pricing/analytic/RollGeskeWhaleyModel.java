@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.analytic;
@@ -18,7 +18,7 @@ import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribut
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Roll-Geske-Whaley Model prices an American call option whose underlying pays one cash dividend at a certain time before the option expiry. 
+ * Roll-Geske-Whaley Model prices an American call option whose underlying pays one cash dividend at a certain time before the option expiry.
  */
 public class RollGeskeWhaleyModel {
 
@@ -36,8 +36,8 @@ public class RollGeskeWhaleyModel {
    * @param spot The spot price of underlying
    * @param strike The strike price
    * @param interestRate The interest rate
-   * @param timeToExpiry The time to expiry 
-   * @param volatility The volatility 
+   * @param timeToExpiry The time to expiry
+   * @param volatility The volatility
    * @param dividends The cash dividend amount
    * @param dividendTimes The time when the dividend is paid
    * @return The call option price
@@ -64,7 +64,7 @@ public class RollGeskeWhaleyModel {
     final int position = FunctionUtils.getLowerBoundIndex(dividendTimes, timeToExpiry);
     double modSpot = spot;
     for (int i = 0; i < position; ++i) {
-      modSpot -= (dividends[i] * Math.exp(-interestRate * dividendTimes[i]));
+      modSpot -= dividends[i] * Math.exp(-interestRate * dividendTimes[i]);
     }
 
     return price(modSpot, strike, interestRate, timeToExpiry, volatility, dividends[position], dividendTimes[position]);
@@ -74,8 +74,8 @@ public class RollGeskeWhaleyModel {
    * @param spot The spot price of underlying
    * @param strike The strike price
    * @param interestRate The interest rate
-   * @param timeToExpiry The time to expiry 
-   * @param volatility The volatility 
+   * @param timeToExpiry The time to expiry
+   * @param volatility The volatility
    * @param dividends The cash dividend amount
    * @param dividendTimes The time when the dividend is paid
    * @return The call option price and Greeks as an array {price, delta, dual delta, rho, theta(timeToExpiry), theta(divTime), vega, gamma}
@@ -117,14 +117,14 @@ public class RollGeskeWhaleyModel {
     double diffDivSum = 0.;
     for (int i = 0; i < position; ++i) {
       final double df = Math.exp(-interestRate * dividendTimes[i]);
-      modSpot -= (dividends[i] * df);
-      diffRateSum += (dividends[i] * dividendTimes[i] * df);
-      diffDivSum += (dividends[i] * df);
+      modSpot -= dividends[i] * df;
+      diffRateSum += dividends[i] * dividendTimes[i] * df;
+      diffDivSum += dividends[i] * df;
     }
 
     res = getPriceAdjoint(modSpot, strike, interestRate, timeToExpiry, volatility, dividends[position], dividendTimes[position]);
-    res[3] += (res[1] * diffRateSum);
-    res[5] += (res[1] * interestRate * diffDivSum);
+    res[3] += res[1] * diffRateSum;
+    res[5] += res[1] * interestRate * diffDivSum;
 
     return res;
   }
@@ -172,8 +172,8 @@ public class RollGeskeWhaleyModel {
    * @param spot The spot price of underlying
    * @param strike The strike price
    * @param interestRate The interest rate
-   * @param timeToExpiry The time to expiry 
-   * @param volatility The volatility 
+   * @param timeToExpiry The time to expiry
+   * @param volatility The volatility
    * @param dividendAmount The cash dividend amount
    * @param dividendTime The time when the dividend is paid
    * @return The call option price
@@ -220,8 +220,8 @@ public class RollGeskeWhaleyModel {
    * @param spot The spot price of underlying
    * @param strike The strike price
    * @param interestRate The interest rate
-   * @param timeToExpiry The time to expiry 
-   * @param volatility The volatility 
+   * @param timeToExpiry The time to expiry
+   * @param volatility The volatility
    * @param dividendAmount The cash dividend amount
    * @param dividendTime The time when the dividend is paid
    * @return The call option price and Greeks as an array {price, delta, dual delta, rho,theta(timeToExpiry), theta(divTime), vega, gamma}
@@ -269,21 +269,51 @@ public class RollGeskeWhaleyModel {
     final double[][] d1Adjoint = getD1Adjoint(interestRate, volatility, dividendTime, pVal, modSpot, sStarAdjoint);
     final double[][] d2Adjoint = getD2Adjoint(strike, interestRate, timeToExpiry, volatility, dividendTime, pVal, modSpot);
 
-    final double[] factorAdjoint = new double[] {factor, 0., 0., factor * (timeToExpiry - dividendTime), factor * interestRate, -factor * interestRate, 0., 0. };
-    final double[] corrAdjoint = new double[] {corr, 0., 0., 0., -0.5 * corr / timeToExpiry, 0.5 * corr / dividendTime, 0., 0. };
-    final double[] cdf1Adjoint = getCdfAdjoint(d1Adjoint[0], d2Adjoint[0], corrAdjoint, new double[] {1., 0., 0., 0., 0., 0., 0., 0. });
-    final double[] cdf2Adjoint = getCdfAdjoint(d1Adjoint[1], d2Adjoint[1], corrAdjoint, factorAdjoint);
-    final double[] cdfFracAdjoint = getNormalCdfAdjoint(d1Adjoint[1][0]);
+    final double[] factorAdjoint =
+        new double[] {factor, 0., 0., factor * (timeToExpiry - dividendTime), factor * interestRate, -factor * interestRate, 0., 0. };
+    final double[] corrAdjoint =
+        new double[] {corr, 0., 0., 0., -0.5 * corr / timeToExpiry, 0.5 * corr / dividendTime, 0., 0. };
+    final double[] cdf1Adjoint =
+        getCdfAdjoint(d1Adjoint[0], d2Adjoint[0], corrAdjoint, new double[] {1., 0., 0., 0., 0., 0., 0., 0. });
+    final double[] cdf2Adjoint =
+        getCdfAdjoint(d1Adjoint[1], d2Adjoint[1], corrAdjoint, factorAdjoint);
+    final double[] cdfFracAdjoint =
+        getNormalCdfAdjoint(d1Adjoint[1][0]);
 
-    res[0] = modSpot * cdf1Adjoint[0] - dscStrike * cdf2Adjoint[0] + pVal * cdfFracAdjoint[0];
-    res[1] = cdf1Adjoint[0] + modSpot * cdf1Adjoint[1] - dscStrike * cdf2Adjoint[1] + pVal * cdfFracAdjoint[1] * d1Adjoint[1][1];
-    res[2] = modSpot * cdf1Adjoint[2] - discountFactor * cdf2Adjoint[0] - dscStrike * cdf2Adjoint[2] + pVal * cdfFracAdjoint[1] * d1Adjoint[1][2];
-    res[3] = dividendTime * pVal * cdf1Adjoint[0] + modSpot * cdf1Adjoint[3] + timeToExpiry * dscStrike * cdf2Adjoint[0] - dscStrike * cdf2Adjoint[3] - dividendTime * pVal * cdfFracAdjoint[0] + pVal *
-        cdfFracAdjoint[1] * d1Adjoint[1][3];
-    res[4] = modSpot * cdf1Adjoint[4] + interestRate * dscStrike * cdf2Adjoint[0] - dscStrike * cdf2Adjoint[4] + pVal * cdfFracAdjoint[1] * d1Adjoint[1][4];
-    res[5] = modSpot * cdf1Adjoint[5] + interestRate * pVal * cdf1Adjoint[0] - dscStrike * cdf2Adjoint[5] - interestRate * pVal * cdfFracAdjoint[0] + pVal * cdfFracAdjoint[1] * d1Adjoint[1][5];
-    res[6] = modSpot * cdf1Adjoint[6] - dscStrike * cdf2Adjoint[6] + pVal * cdfFracAdjoint[1] * d1Adjoint[1][6];
-    res[7] = 2. * cdf1Adjoint[1] + modSpot * cdf1Adjoint[7] - dscStrike * cdf2Adjoint[7] + pVal * cdfFracAdjoint[1] * d1Adjoint[1][7] + pVal * cdfFracAdjoint[2] * d1Adjoint[1][1] * d1Adjoint[1][1];
+    res[0] = modSpot * cdf1Adjoint[0]
+            - dscStrike * cdf2Adjoint[0]
+            + pVal * cdfFracAdjoint[0];
+    res[1] = cdf1Adjoint[0]
+            + modSpot * cdf1Adjoint[1]
+            - dscStrike * cdf2Adjoint[1]
+            + pVal * cdfFracAdjoint[1] * d1Adjoint[1][1];
+    res[2] = modSpot * cdf1Adjoint[2]
+            - discountFactor * cdf2Adjoint[0]
+            - dscStrike * cdf2Adjoint[2]
+                + pVal * cdfFracAdjoint[1] * d1Adjoint[1][2];
+    res[3] = dividendTime * pVal * cdf1Adjoint[0]
+            + modSpot * cdf1Adjoint[3]
+            + timeToExpiry * dscStrike * cdf2Adjoint[0]
+            - dscStrike * cdf2Adjoint[3]
+            - dividendTime * pVal * cdfFracAdjoint[0]
+            + pVal * cdfFracAdjoint[1] * d1Adjoint[1][3];
+    res[4] = modSpot * cdf1Adjoint[4]
+            + interestRate * dscStrike * cdf2Adjoint[0]
+            - dscStrike * cdf2Adjoint[4]
+            + pVal * cdfFracAdjoint[1] * d1Adjoint[1][4];
+    res[5] = modSpot * cdf1Adjoint[5]
+            + interestRate * pVal * cdf1Adjoint[0]
+            - dscStrike * cdf2Adjoint[5]
+            - interestRate * pVal * cdfFracAdjoint[0]
+            + pVal * cdfFracAdjoint[1] * d1Adjoint[1][5];
+    res[6] = modSpot * cdf1Adjoint[6]
+            - dscStrike * cdf2Adjoint[6]
+            + pVal * cdfFracAdjoint[1] * d1Adjoint[1][6];
+    res[7] = 2. * cdf1Adjoint[1]
+            + modSpot * cdf1Adjoint[7]
+            - dscStrike * cdf2Adjoint[7]
+            + pVal * cdfFracAdjoint[1] * d1Adjoint[1][7]
+            + pVal * cdfFracAdjoint[2] * d1Adjoint[1][1] * d1Adjoint[1][1];
 
     return res;
   }

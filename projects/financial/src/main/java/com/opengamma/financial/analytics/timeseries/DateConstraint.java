@@ -21,7 +21,7 @@ import com.opengamma.util.tuple.Pairs;
  * <p>
  * Date constraint strings are crude expressions that are evaluated at execution time. This allows the valuation time to be referred to symbolically.
  * <dl>
- * <dt><em>YYYY</em>-</em>MM</em>-<em>DD</em></dt>
+ * <dt><em>YYYY</em>-<em>MM</em>-<em>DD</em></dt>
  * <dd>The date literal</dd>
  * <dt>Now</dt>
  * <dd>The valuation date</dd>
@@ -36,7 +36,8 @@ import com.opengamma.util.tuple.Pairs;
  * <dt><em>expr</em>[+|-]<em>period</em></dt>
  * <dd>The evaluated date constraint expression plus or minus the given period, for example <code>PreviousWeekDay-P7D</code></dd>
  * <dt>-<em>period</em></dt>
- * <dd>The valuation date minus the given period, for example <code>-P1D</code> for the previous day. This is equivalent to <code>NOW-<em>period</em></code></dd>
+ * <dd>The valuation date minus the given period, for example <code>-P1D</code> for the previous day.
+ *     This is equivalent to <code>NOW-<em>period</em></code></dd>
  * </dl>
  */
 public abstract class DateConstraint {
@@ -115,7 +116,8 @@ public abstract class DateConstraint {
   }
 
   /**
-   * Approximates the period difference between two constraints, that is the period that must be added to this contraint to get the same value as the other one.
+   * Approximates the period difference between two constraints, that is the period that must be added to this constraint to get the
+   * same value as the other one.
    *
    * @param other the other constraint, not null
    * @return the difference as a period, not null

@@ -193,7 +193,8 @@ public class InMemoryLKVLiveMarketDataProvider extends AbstractMarketDataProvide
 
   private ObjectName createObjectName() {
     try {
-      return new ObjectName("com.opengamma:type=InMemoryLKVLiveMarketDataProvider,name=InMemoryLKVLiveMarketDataProvider " + NEXT_OBJECT_NAME.getAndIncrement());
+      return new ObjectName("com.opengamma:type=InMemoryLKVLiveMarketDataProvider,name=InMemoryLKVLiveMarketDataProvider "
+          + NEXT_OBJECT_NAME.getAndIncrement());
     } catch (final MalformedObjectNameException e) {
       LOGGER.warn("Invalid object name - unable to setup JMX bean", e);
       return null;

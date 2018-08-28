@@ -59,12 +59,14 @@ public class StaticSequencePartitioningViewProcessWorkerFactory extends Sequence
   }
 
   @Override
-  protected int estimateMinimumCycles(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions, final ViewDefinition viewDefinition) {
+  protected int estimateMinimumCycles(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions,
+      final ViewDefinition viewDefinition) {
     return getMinimumCycles();
   }
 
   @Override
-  protected int estimateMaximumCycles(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions, final ViewDefinition viewDefinition) {
+  protected int estimateMaximumCycles(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions,
+      final ViewDefinition viewDefinition) {
     return getMaximumCycles();
   }
 

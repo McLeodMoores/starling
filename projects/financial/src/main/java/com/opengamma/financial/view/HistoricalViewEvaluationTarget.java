@@ -199,7 +199,8 @@ public class HistoricalViewEvaluationTarget extends ViewEvaluationTarget {
       return new ArbitraryViewCycleExecutionSequence(executionSequence);
     }
 
-    private MarketDataSpecification createMarketDataSpec(final LocalDate previousHistoricalDate, final LocalDate historicalDate, final LocalDate valuationDate) {
+    private MarketDataSpecification createMarketDataSpec(final LocalDate previousHistoricalDate, final LocalDate historicalDate,
+        final LocalDate valuationDate) {
       final FixedHistoricalMarketDataSpecification historicalDateSpec = new FixedHistoricalMarketDataSpecification(historicalDate);
       switch (_marketDataMode) {
         case HISTORICAL:

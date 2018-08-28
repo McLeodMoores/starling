@@ -93,24 +93,25 @@ public abstract class EquityFutureOptionFunction extends FutureOptionFunction {
     }
     final ExternalIdBundle underlyingFutureId = ExternalIdBundle.of(security.getUnderlyingId());
     final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
-    
+
     final ExternalId underlyingIndexId;
-    Security underlyingFuture = securitySource.getSingle(underlyingFutureId);
+    final Security underlyingFuture = securitySource.getSingle(underlyingFutureId);
     if (underlyingFuture == null) {
-      throw new OpenGammaRuntimeException("The underlying (" + underlyingFutureId.toString() + ") of EquityIndexFutureOption (" + security.getName() + 
+      throw new OpenGammaRuntimeException("The underlying (" + underlyingFutureId.toString() + ") of EquityIndexFutureOption (" + security.getName() +
           ") was not found in security source. Please try to reload.");
     } else if (underlyingFuture instanceof EquityFutureSecurity) {
       underlyingIndexId = ((EquityFutureSecurity) underlyingFuture).getUnderlyingId();
     } else if (underlyingFuture instanceof IndexFutureSecurity) {
       underlyingIndexId = ((IndexFutureSecurity) underlyingFuture).getUnderlyingId();
     } else {
-      throw new OpenGammaRuntimeException("The Security type of the future underlying the Index Future Option must be added to this function: " 
+      throw new OpenGammaRuntimeException("The Security type of the future underlying the Index Future Option must be added to this function: "
               + underlyingFuture.getClass());
     }
-    
+
     final String forwardCurveCalculationMethod = Iterables.getOnlyElement(forwardCurveCalculationMethods);
     final String forwardCurveName = Iterables.getOnlyElement(forwardCurveNames);
-    final ValueRequirement volReq = getVolatilitySurfaceRequirement(desiredValue, volSurfaceName, forwardCurveName, surfaceCalculationMethod, underlyingIndexId);
+    final ValueRequirement volReq =
+        getVolatilitySurfaceRequirement(desiredValue, volSurfaceName, forwardCurveName, surfaceCalculationMethod, underlyingIndexId);
     final ValueRequirement forwardCurveReq = getForwardCurveRequirement(forwardCurveName, forwardCurveCalculationMethod, underlyingIndexId);
     return Sets.newHashSet(discountingReq, forwardCurveReq, volReq);
   }
@@ -123,7 +124,8 @@ public abstract class EquityFutureOptionFunction extends FutureOptionFunction {
 
   private ValueRequirement getVolatilitySurfaceRequirement(final ValueRequirement desiredValue, final String surfaceName, final String forwardCurveName,
       final String surfaceCalculationMethod, final ExternalId underlyingBuid) {
-    // REVIEW Andrew 2012-01-17 -- Could we pass a CTRef to the getSurfaceRequirement and use the underlyingBuid external identifier directly with a target type of SECURITY
+    // REVIEW Andrew 2012-01-17 -- Could we pass a CTRef to the getSurfaceRequirement and use the underlyingBuid external identifier
+    // directly with a target type of SECURITY
     // TODO Casey - Replace desiredValue with smileInterpolatorName in BlackVolatilitySurfacePropertyUtils.getSurfaceRequirement
     return BlackVolatilitySurfacePropertyUtils.getSurfaceRequirement(desiredValue, ValueProperties.none(), surfaceName, forwardCurveName,
         InstrumentTypeProperties.EQUITY_FUTURE_OPTION, ComputationTargetType.PRIMITIVE, underlyingBuid);

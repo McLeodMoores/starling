@@ -57,7 +57,8 @@ public final class CashSecurityBeanOperation extends AbstractSecurityBeanOperati
   @Override
   public CashSecurity createSecurity(final OperationContext context, final CashSecurityBean bean) {
     final CashSecurity security = new CashSecurity(currencyBeanToCurrency(bean.getCurrency()), externalIdBeanToExternalId(bean.getRegion()),
-                                                   zonedDateTimeBeanToDateTimeWithZone(bean.getStart()), zonedDateTimeBeanToDateTimeWithZone(bean.getMaturity()),
+                                                   zonedDateTimeBeanToDateTimeWithZone(bean.getStart()),
+                                                   zonedDateTimeBeanToDateTimeWithZone(bean.getMaturity()),
                                                    dayCountBeanToDayCount(bean.getDayCount()), bean.getRate(), bean.getAmount());
     return security;
   }

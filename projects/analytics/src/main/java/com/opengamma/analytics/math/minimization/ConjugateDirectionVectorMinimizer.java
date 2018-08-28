@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.minimization;
@@ -17,7 +17,7 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 /**
  * Standard version of Powell's method. It is intended to be used when an analytic function for the gradient is not available.
  * This implementation is taken from <i>"An Introduction to the Conjugate Gradient Method Without the Agonizing Pain", Shewchuk</i>.
- * 
+ *
  */
 public class ConjugateDirectionVectorMinimizer implements Minimizer<Function1D<DoubleMatrix1D, Double>, DoubleMatrix1D> {
 
@@ -73,7 +73,7 @@ public class ConjugateDirectionVectorMinimizer implements Minimizer<Function1D<D
         lambda = _lineSearch.minimise(function, direction, x);
         x = (DoubleMatrix1D) OG_ALGEBRA.add(x, OG_ALGEBRA.scale(direction, lambda));
         f2 = function.evaluate(x);
-        final double temp = (f1 - f2); //TODO LineSearch should return this
+        final double temp = f1 - f2; //TODO LineSearch should return this
         if (temp > delta) {
           delta = temp;
           indexDelta = i;
@@ -81,7 +81,7 @@ public class ConjugateDirectionVectorMinimizer implements Minimizer<Function1D<D
         f1 = f2;
       }
 
-      if ((startValue - f2) < _eps * (Math.abs(startValue) + Math.abs(f2)) / 2.0 + SMALL) {
+      if (startValue - f2 < _eps * (Math.abs(startValue) + Math.abs(f2)) / 2.0 + SMALL) {
         return x;
       }
 
@@ -90,7 +90,8 @@ public class ConjugateDirectionVectorMinimizer implements Minimizer<Function1D<D
 
       final double extrapValue = function.evaluate(extrapolatedPoint);
       // Powell's condition for updating the direction set
-      if (extrapValue < startValue && (2 * (startValue - 2 * f2 * extrapValue) * square(startValue - f2 - delta)) < (square(startValue - extrapValue) * delta)) {
+      if (extrapValue < startValue
+          && 2 * (startValue - 2 * f2 * extrapValue) * square(startValue - f2 - delta) < square(startValue - extrapValue) * delta) {
         lambda = _lineSearch.minimise(function, deltaX, x);
         x = (DoubleMatrix1D) OG_ALGEBRA.add(x, OG_ALGEBRA.scale(deltaX, lambda));
         directionSet[indexDelta] = directionSet[n - 1];
@@ -99,7 +100,8 @@ public class ConjugateDirectionVectorMinimizer implements Minimizer<Function1D<D
 
       x0 = x;
     }
-    throw new MathException("ConjugateDirection failed to converge after " + _maxIterations + " iterations, with a tolerance of " + _eps + ". Final position reached was " + x0.toString());
+    throw new MathException("ConjugateDirection failed to converge after " + _maxIterations + " iterations, with a tolerance of "
+        + _eps + ". Final position reached was " + x0.toString());
   }
 
   DoubleMatrix1D[] getDefaultDirectionSet(final int dim) {

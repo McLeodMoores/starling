@@ -72,7 +72,8 @@ public class Subscription {
    * @param marketDataSenderFactory  the factory that will create market data distributors for this subscription, not null
    * @param lkvStoreProvider  the factory for last known value stores, not null
    */
-  public Subscription(final String securityUniqueId, final MarketDataSenderFactory marketDataSenderFactory, final LastKnownValueStoreProvider lkvStoreProvider) {
+  public Subscription(final String securityUniqueId, final MarketDataSenderFactory marketDataSenderFactory,
+      final LastKnownValueStoreProvider lkvStoreProvider) {
     ArgumentChecker.notNull(securityUniqueId, "securityUniqueId");
     ArgumentChecker.notNull(marketDataSenderFactory, "marketDataSenderFactory");
     ArgumentChecker.notNull(lkvStoreProvider, "lkvStoreProvider");

@@ -46,7 +46,8 @@ import com.opengamma.util.money.Currency;
 public class IRFutureOptionSABRYCNSFunction extends IRFutureOptionSABRFunction {
   private static final Logger LOGGER = LoggerFactory.getLogger(IRFutureOptionSABRYCNSFunction.class);
   private static final InstrumentSensitivityCalculator CALCULATOR = InstrumentSensitivityCalculator.getInstance();
-  private static final PresentValueNodeSensitivityCalculator NSC = PresentValueNodeSensitivityCalculator.using(PresentValueCurveSensitivitySABRCalculator.getInstance());
+  private static final PresentValueNodeSensitivityCalculator NSC =
+      PresentValueNodeSensitivityCalculator.using(PresentValueCurveSensitivitySABRCalculator.getInstance());
 
   /**
    * Default constructor
@@ -56,8 +57,8 @@ public class IRFutureOptionSABRYCNSFunction extends IRFutureOptionSABRFunction {
   }
 
   @Override
-  protected Set<ComputedValue> getResult(final FunctionExecutionContext context, final Set<ValueRequirement> desiredValues, final FunctionInputs inputs, final ComputationTarget target,
-      final InstrumentDerivative irFutureOption, final SABRInterestRateDataBundle data) {
+  protected Set<ComputedValue> getResult(final FunctionExecutionContext context, final Set<ValueRequirement> desiredValues, final FunctionInputs inputs,
+      final ComputationTarget target, final InstrumentDerivative irFutureOption, final SABRInterestRateDataBundle data) {
     final ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);
     final String curveName = desiredValue.getConstraint(ValuePropertyNames.CURVE);
     final String curveCalculationConfigName = desiredValue.getConstraint(ValuePropertyNames.CURVE_CALCULATION_CONFIG);
@@ -88,15 +89,20 @@ public class IRFutureOptionSABRYCNSFunction extends IRFutureOptionSABRFunction {
     } else {
       sensitivities = CALCULATOR.calculateFromParRate(irFutureOption, null, data, jacobian, NSC);
     }
-    final ValueProperties properties = desiredValue.getConstraints().copy().withoutAny(ValuePropertyNames.FUNCTION).with(ValuePropertyNames.FUNCTION, getUniqueId()).get();
+    final ValueProperties properties = desiredValue.getConstraints().copy()
+        .withoutAny(ValuePropertyNames.FUNCTION)
+        .with(ValuePropertyNames.FUNCTION, getUniqueId()).get();
     final ValueSpecification spec = new ValueSpecification(getValueRequirementNames()[0], target.toSpecification(), properties);
     return YieldCurveNodeSensitivitiesHelper.getInstrumentLabelledSensitivitiesForCurve(curveName, data, sensitivities, curveSpec, spec);
   }
 
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
-    final ValueProperties properties = createValueProperties().withAny(ValuePropertyNames.CURVE_CALCULATION_CONFIG).withAny(ValuePropertyNames.SURFACE)
-        .withAny(SmileFittingPropertyNamesAndValues.PROPERTY_FITTING_METHOD).with(ValuePropertyNames.CALCULATION_METHOD, SmileFittingPropertyNamesAndValues.SABR)
+    final ValueProperties properties = createValueProperties()
+        .withAny(ValuePropertyNames.CURVE_CALCULATION_CONFIG)
+        .withAny(ValuePropertyNames.SURFACE)
+        .withAny(SmileFittingPropertyNamesAndValues.PROPERTY_FITTING_METHOD)
+        .with(ValuePropertyNames.CALCULATION_METHOD, SmileFittingPropertyNamesAndValues.SABR)
         .withAny(ValuePropertyNames.CURVE).get();
     return Collections.singleton(new ValueSpecification(getValueRequirementNames()[0], target.toSpecification(), properties));
   }

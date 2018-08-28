@@ -79,13 +79,15 @@ public abstract class CombiningLiveDataServer extends StandardLiveDataServer {
   }
 
   @Override
-  public Collection<LiveDataSubscriptionResponse> subscribe(final Collection<LiveDataSpecification> liveDataSpecificationsFromClient, final boolean persistent) {
+  public Collection<LiveDataSubscriptionResponse> subscribe(final Collection<LiveDataSpecification> liveDataSpecificationsFromClient,
+      final boolean persistent) {
     return subscribeByServer(
         liveDataSpecificationsFromClient,
         new SubscribeAction() {
 
           @Override
-          public Collection<LiveDataSubscriptionResponse> subscribe(final StandardLiveDataServer server, final Collection<LiveDataSpecification> specifications) {
+          public Collection<LiveDataSubscriptionResponse> subscribe(final StandardLiveDataServer server,
+              final Collection<LiveDataSpecification> specifications) {
             return server.subscribe(specifications, persistent);
           }
 

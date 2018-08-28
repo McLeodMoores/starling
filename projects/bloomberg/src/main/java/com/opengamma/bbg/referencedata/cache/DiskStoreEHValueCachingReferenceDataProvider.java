@@ -39,7 +39,8 @@ public class DiskStoreEHValueCachingReferenceDataProvider extends EHValueCaching
    * @param cacheManager  the cache manager, not null
    * @param fudgeContext  the Fudge context, not null
    */
-  public DiskStoreEHValueCachingReferenceDataProvider(final ReferenceDataProvider underlying, final CacheManager cacheManager, final FudgeContext fudgeContext) {
+  public DiskStoreEHValueCachingReferenceDataProvider(final ReferenceDataProvider underlying, final CacheManager cacheManager,
+      final FudgeContext fudgeContext) {
     super(underlying, cacheManager, fudgeContext);
   }
 

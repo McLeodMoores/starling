@@ -65,7 +65,8 @@ public class ParameterSensitivityHullWhiteIssuerDiscountInterpolatedFDCalculator
    * @param hwIssuerCurves The provider: all discounting, forward and issuer curves should be of the type YieldCurve with InterpolatedDoublesCurve.
    * @return The parameter sensitivity.
    */
-  public MultipleCurrencyParameterSensitivity calculateSensitivity(final InstrumentDerivative instrument, final HullWhiteIssuerProviderDiscount hwIssuerCurves) {
+  public MultipleCurrencyParameterSensitivity calculateSensitivity(final InstrumentDerivative instrument,
+      final HullWhiteIssuerProviderDiscount hwIssuerCurves) {
     MultipleCurrencyParameterSensitivity result = new MultipleCurrencyParameterSensitivity();
     final MultipleCurrencyAmount pvInit = instrument.accept(_valueCalculator, hwIssuerCurves);
     final MultipleCurrencyAmount pvInitMinus = pvInit.multipliedBy(-1.0);

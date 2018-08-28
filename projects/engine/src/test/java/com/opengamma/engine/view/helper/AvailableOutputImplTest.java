@@ -103,18 +103,25 @@ public class AvailableOutputImplTest {
     final AvailableOutputImpl output = new AvailableOutputImpl(VALUE_NAME, null);
     output.setPortfolioNodeProperties(ValueProperties.with(ValuePropertyNames.FUNCTION, FUNCTION_ID_1).with(PROPERTY_1, VALUE_A).get());
     output.setPortfolioNodeProperties(ValueProperties.with(ValuePropertyNames.FUNCTION, FUNCTION_ID_2).with(PROPERTY_1, VALUE_B).get());
-    assertEquals(output.getProperties(), ValueProperties.with(ValuePropertyNames.FUNCTION, FUNCTION_ID_1, FUNCTION_ID_2).with(PROPERTY_1, VALUE_A, VALUE_B).get());
+    assertEquals(output.getProperties(),
+        ValueProperties.with(ValuePropertyNames.FUNCTION, FUNCTION_ID_1, FUNCTION_ID_2).with(PROPERTY_1, VALUE_A, VALUE_B).get());
   }
 
   public void testPropertiesMergeOptional() {
     AvailableOutputImpl output = new AvailableOutputImpl(VALUE_NAME, null);
-    output.setPortfolioNodeProperties(ValueProperties.with(ValuePropertyNames.FUNCTION, FUNCTION_ID_1).with(PROPERTY_1, VALUE_A).get());
-    output.setPortfolioNodeProperties(ValueProperties.with(ValuePropertyNames.FUNCTION, FUNCTION_ID_2).withOptional(PROPERTY_1).with(PROPERTY_1, VALUE_B).get());
-    assertEquals(output.getProperties(), ValueProperties.with(ValuePropertyNames.FUNCTION, FUNCTION_ID_1, FUNCTION_ID_2).withOptional(PROPERTY_1).with(PROPERTY_1, VALUE_A, VALUE_B).get());
+    output.setPortfolioNodeProperties(
+        ValueProperties.with(ValuePropertyNames.FUNCTION, FUNCTION_ID_1).with(PROPERTY_1, VALUE_A).get());
+    output.setPortfolioNodeProperties(
+        ValueProperties.with(ValuePropertyNames.FUNCTION, FUNCTION_ID_2).withOptional(PROPERTY_1).with(PROPERTY_1, VALUE_B).get());
+    assertEquals(output.getProperties(),
+        ValueProperties.with(ValuePropertyNames.FUNCTION, FUNCTION_ID_1, FUNCTION_ID_2).withOptional(PROPERTY_1).with(PROPERTY_1, VALUE_A, VALUE_B).get());
     output = new AvailableOutputImpl(VALUE_NAME, null);
-    output.setPortfolioNodeProperties(ValueProperties.with(ValuePropertyNames.FUNCTION, FUNCTION_ID_1).withOptional(PROPERTY_1).with(PROPERTY_1, VALUE_A).get());
-    output.setPortfolioNodeProperties(ValueProperties.with(ValuePropertyNames.FUNCTION, FUNCTION_ID_2).with(PROPERTY_1, VALUE_B).get());
-    assertEquals(output.getProperties(), ValueProperties.with(ValuePropertyNames.FUNCTION, FUNCTION_ID_1, FUNCTION_ID_2).withOptional(PROPERTY_1).with(PROPERTY_1, VALUE_A, VALUE_B).get());
+    output.setPortfolioNodeProperties(
+        ValueProperties.with(ValuePropertyNames.FUNCTION, FUNCTION_ID_1).withOptional(PROPERTY_1).with(PROPERTY_1, VALUE_A).get());
+    output.setPortfolioNodeProperties(
+        ValueProperties.with(ValuePropertyNames.FUNCTION, FUNCTION_ID_2).with(PROPERTY_1, VALUE_B).get());
+    assertEquals(output.getProperties(),
+        ValueProperties.with(ValuePropertyNames.FUNCTION, FUNCTION_ID_1, FUNCTION_ID_2).withOptional(PROPERTY_1).with(PROPERTY_1, VALUE_A, VALUE_B).get());
   }
 
   public void testPropertiesMergeMissing() {

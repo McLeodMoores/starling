@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.convention;
@@ -22,7 +22,7 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 
 /**
- * 
+ *
  */
 public class NOConventions {
 
@@ -70,9 +70,11 @@ public class NOConventions {
         following, Period.ofMonths(8), 2, false, dk);
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("NKDRI Curncy"), simpleNameSecurityId("NOK DEPOSIT 9m")), "NOK DEPOSIT 9m", act360,
         following, Period.ofMonths(9), 2, false, dk);
-    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("NKDRJ Curncy"), simpleNameSecurityId("NOK DEPOSIT 10m")), "NOK DEPOSIT 10m", act360,
+    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("NKDRJ Curncy"),
+        simpleNameSecurityId("NOK DEPOSIT 10m")), "NOK DEPOSIT 10m", act360,
         following, Period.ofMonths(10), 2, false, dk);
-    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("NKDRK Curncy"), simpleNameSecurityId("NOK DEPOSIT 11m")), "NOK DEPOSIT 11m", act360,
+    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("NKDRK Curncy"),
+        simpleNameSecurityId("NOK DEPOSIT 11m")), "NOK DEPOSIT 11m", act360,
         following, Period.ofMonths(11), 2, false, dk);
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("NKDR1 Curncy"), simpleNameSecurityId("NOK DEPOSIT 1y")), "NOK DEPOSIT 1y", act360,
         following, Period.ofYears(1), 2, false, dk);

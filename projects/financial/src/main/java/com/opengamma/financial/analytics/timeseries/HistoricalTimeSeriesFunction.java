@@ -6,7 +6,6 @@
 package com.opengamma.financial.analytics.timeseries;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -50,13 +49,13 @@ public class HistoricalTimeSeriesFunction extends AbstractFunction {
       final ComputationTargetSpecification targetSpec, final ValueRequirement desiredValue) {
     final LocalDate startDate = DateConstraint.evaluate(executionContext, desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY));
     final boolean includeStart = HistoricalTimeSeriesFunctionUtils.parseBoolean(desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY));
-    
-    LocalDate valuationDate = executionContext.getValuationTime().atZone(ZoneId.systemDefault()).toLocalDate();
-    if (startDate != null && (includeStart && valuationDate.isBefore(startDate) || !(valuationDate.isAfter(startDate)))) {
+
+    final LocalDate valuationDate = executionContext.getValuationTime().atZone(ZoneId.systemDefault()).toLocalDate();
+    if (startDate != null && (includeStart && valuationDate.isBefore(startDate) || !valuationDate.isAfter(startDate))) {
       return new SimpleHistoricalTimeSeries(targetSpec.getUniqueId(), ImmutableLocalDateDoubleTimeSeries.builder().build());
     }
-    
-    LocalDate endDate = DateConstraint.evaluate(executionContext, desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY));
+
+    final LocalDate endDate = DateConstraint.evaluate(executionContext, desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY));
     final boolean includeEnd = HistoricalTimeSeriesFunctionUtils.parseBoolean(desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY));
     HistoricalTimeSeries hts = timeSeriesSource.getHistoricalTimeSeries(targetSpec.getUniqueId(), startDate, includeStart, endDate, includeEnd);
     final String adjusterString = desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.ADJUST_PROPERTY);
@@ -90,38 +89,41 @@ public class HistoricalTimeSeriesFunction extends AbstractFunction {
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       ValueProperties.Builder constraints = null;
       Set<String> values = desiredValue.getConstraints().getValues(HistoricalTimeSeriesFunctionUtils.ADJUST_PROPERTY);
-      if ((values == null) || values.isEmpty()) {
-        constraints = desiredValue.getConstraints().copy().withoutAny(HistoricalTimeSeriesFunctionUtils.ADJUST_PROPERTY).with(HistoricalTimeSeriesFunctionUtils.ADJUST_PROPERTY, "");
+      if (values == null || values.isEmpty()) {
+        constraints = desiredValue.getConstraints().copy()
+                                  .withoutAny(HistoricalTimeSeriesFunctionUtils.ADJUST_PROPERTY)
+                                  .with(HistoricalTimeSeriesFunctionUtils.ADJUST_PROPERTY, "");
       } else if (values.size() > 1) {
         constraints = desiredValue.getConstraints().copy().withoutAny(HistoricalTimeSeriesFunctionUtils.ADJUST_PROPERTY)
             .with(HistoricalTimeSeriesFunctionUtils.ADJUST_PROPERTY, values.iterator().next());
       }
       values = desiredValue.getConstraints().getValues(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY);
-      if ((values == null) || values.isEmpty()) {
+      if (values == null || values.isEmpty()) {
         if (constraints == null) {
           constraints = desiredValue.getConstraints().copy();
         }
         constraints.with(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY, "");
       }
       values = desiredValue.getConstraints().getValues(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY);
-      if ((values == null) || (values.size() != 1)) {
+      if (values == null || values.size() != 1) {
         if (constraints == null) {
           constraints = desiredValue.getConstraints().copy();
         }
         constraints.with(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY, HistoricalTimeSeriesFunctionUtils.YES_VALUE);
       }
       values = desiredValue.getConstraints().getValues(HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY);
-      if ((values == null) || values.isEmpty()) {
+      if (values == null || values.isEmpty()) {
         if (constraints == null) {
           constraints = desiredValue.getConstraints().copy();
         }
         constraints.with(HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY, "");
       }
       values = desiredValue.getConstraints().getValues(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY);
-      if ((values == null) || (values.size() != 1)) {
+      if (values == null || values.size() != 1) {
         if (constraints == null) {
           constraints = desiredValue.getConstraints().copy();
         }
@@ -130,17 +132,18 @@ public class HistoricalTimeSeriesFunction extends AbstractFunction {
       if (constraints == null) {
         // We can satisfy the desired value as-is
         return Collections.emptySet();
-      } 
+      }
       // We need to substitute ourselves with the adjusted constraints
       return Collections.singleton(new ValueRequirement(ValueRequirementNames.HISTORICAL_TIME_SERIES, target.toSpecification(), constraints.get()));
     }
 
     @Override
-    public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+    public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+        final Map<ValueSpecification, ValueRequirement> inputs) {
       if (inputs.isEmpty()) {
         // Use full results - graph builder will compose correctly against the desired value
         return getResults(context, target);
-      } 
+      }
       // Use the substituted result
       return inputs.keySet();
     }
@@ -148,7 +151,8 @@ public class HistoricalTimeSeriesFunction extends AbstractFunction {
     // FunctionInvoker
 
     @Override
-    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+        final Set<ValueRequirement> desiredValues) {
       final HistoricalTimeSeriesSource timeSeriesSource = OpenGammaExecutionContext.getHistoricalTimeSeriesSource(executionContext);
       final ValueRequirement desiredValue = desiredValues.iterator().next();
       final ComputationTargetSpecification targetSpec = target.toSpecification();

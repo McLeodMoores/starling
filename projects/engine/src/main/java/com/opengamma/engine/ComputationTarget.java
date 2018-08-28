@@ -61,7 +61,7 @@ public class ComputationTarget implements Serializable {
   /**
    * Creates a target for computation. The type is a primitive type that is capable of converting the unique identifier form of the value to its {@link UniqueIdentifiable} form without any resolution
    * services. This is intended for creating test cases only. Code requiring resolution of a type/unique identifier pair to a target should use a {@link ComputationTargetResolver} instance.
-   * 
+   *
    * @param type the type of the target, not null
    * @param value the target itself, not null
    * @throws IllegalArgumentException if the value is invalid for the type
@@ -72,32 +72,32 @@ public class ComputationTarget implements Serializable {
 
   /**
    * Creates a target for computation. This is intended for creating test cases only. Code which is resolving a target specification should use the constructor which takes that specification.
-   * 
+   *
    * @param type the type of the target, not null
    * @param value the target itself, not null
    * @throws IllegalArgumentException if the value is invalid for the type
    */
   public ComputationTarget(final ComputationTargetType type, final UniqueIdentifiable value) {
-    this(new ComputationTargetSpecification(type, (value != null) ? value.getUniqueId() : null), value);
+    this(new ComputationTargetSpecification(type, value != null ? value.getUniqueId() : null), value);
   }
 
   /**
    * Creates a target for computation.
-   * 
+   *
    * @param specification the target specification, not null
    * @param value the target itself, may be null if the specification of {@link ComputationTargetSpecification#NULL}
    */
   public ComputationTarget(final ComputationTargetSpecification specification, final UniqueIdentifiable value) {
     assert specification != null;
     assert specification.getType().isCompatible(value);
-    assert (value != null) ? specification.getUniqueId().equals(value.getUniqueId()) : (specification.getUniqueId() == null);
+    assert value != null ? specification.getUniqueId().equals(value.getUniqueId()) : specification.getUniqueId() == null;
     _specification = specification;
     _value = value;
   }
 
   /**
    * Gets the type of the target.
-   * 
+   *
    * @return the type, not null
    */
   public ComputationTargetType getType() {
@@ -106,7 +106,7 @@ public class ComputationTarget implements Serializable {
 
   /**
    * Gets the actual target.
-   * 
+   *
    * @return the target, may be null
    */
   public UniqueIdentifiable getValue() {
@@ -115,7 +115,7 @@ public class ComputationTarget implements Serializable {
 
   /**
    * Gets the unique identifier of the target object
-   * 
+   *
    * @return the unique identifier, may be null
    */
   public UniqueId getUniqueId() {
@@ -149,7 +149,7 @@ public class ComputationTarget implements Serializable {
 
   /**
    * Returns the target specification of the context this target is part of. If the actual target object is required a {@link ComputationTargetResolver} can be used to obtain it.
-   * 
+   *
    * @return the reference of the containing object, or null if there is none
    */
   public ComputationTargetReference getContextSpecification() {
@@ -157,9 +157,9 @@ public class ComputationTarget implements Serializable {
   }
 
   /**
-   * Returns the target specification of the leaf target object. The specification of the whole target (as returned by {@link #toSpecification}) is equivalent to
-   * {@code getContextSpecification().containing(getLeafSpecification())}.
-   * 
+   * Returns the target specification of the leaf target object. The specification of the whole target (as returned by
+   * {@link #toSpecification}) is equivalent to {@code getContextSpecification().containing(getLeafSpecification())}.
+   *
    * @return the specification of the leaf object, never null
    */
   public ComputationTargetSpecification getLeafSpecification() {
@@ -168,7 +168,7 @@ public class ComputationTarget implements Serializable {
 
   /**
    * Safely converts the target to a {@code PortfolioNode}.
-   * 
+   *
    * @return the portfolio node, not null
    * @throws IllegalStateException if the type is not PORTFOLIO_NODE
    */
@@ -182,7 +182,7 @@ public class ComputationTarget implements Serializable {
 
   /**
    * Safely converts the target to a {@code Position}.
-   * 
+   *
    * @return the position, not null
    * @throws IllegalStateException if the type is not POSITION
    */
@@ -196,7 +196,7 @@ public class ComputationTarget implements Serializable {
 
   /**
    * Safely converts the target to a {@code Trade}.
-   * 
+   *
    * @return the trade, not null
    * @throws IllegalStateException if the type is not TRADE
    */
@@ -210,7 +210,7 @@ public class ComputationTarget implements Serializable {
 
   /**
    * Safely converts the target to a {@code Position} or {@code Trade}.
-   * 
+   *
    * @return the position or trade, not null
    * @throws IllegalStateException if the type is not a POSITION or TRADE
    */
@@ -224,7 +224,7 @@ public class ComputationTarget implements Serializable {
 
   /**
    * Safely converts the target to a {@code Security}.
-   * 
+   *
    * @return the security, not null
    * @throws IllegalStateException if the type is not SECURITY
    */
@@ -261,7 +261,7 @@ public class ComputationTarget implements Serializable {
   private static final ComputationTargetTypeMap<Function1<ComputationTarget, String>> GET_NAME = createGetName();
 
   private static ComputationTargetTypeMap<Function1<ComputationTarget, String>> createGetName() {
-    final ComputationTargetTypeMap<Function1<ComputationTarget, String>> getName = new ComputationTargetTypeMap<Function1<ComputationTarget, String>>();
+    final ComputationTargetTypeMap<Function1<ComputationTarget, String>> getName = new ComputationTargetTypeMap<>();
     getName.put(ComputationTargetType.PORTFOLIO_NODE, new Function1<ComputationTarget, String>() {
       @Override
       public String execute(final ComputationTarget target) {
@@ -309,7 +309,7 @@ public class ComputationTarget implements Serializable {
    * Gets the name of the computation target.
    * <p>
    * This can the portfolio name, the security name, the name of the security underlying a position, or - for primitives - the unique identifier if available.
-   * 
+   *
    * @return the name of the computation target, null if a primitive and no identifier is available
    */
   public String getName() {
@@ -323,7 +323,7 @@ public class ComputationTarget implements Serializable {
 
   /**
    * Returns a specification that is equivalent to this target.
-   * 
+   *
    * @return the specification equivalent to this target, not null
    */
   public ComputationTargetSpecification toSpecification() {
@@ -347,7 +347,7 @@ public class ComputationTarget implements Serializable {
   public int hashCode() {
     // racy single check idiom allows non-volatile variable
     // requires only one read and one write of non-volatile
-    int hashCode = _hashCode;
+    final int hashCode = _hashCode;
     if (hashCode == 0) {
       int result = 1;
       result += (result << 4) + _specification.hashCode();

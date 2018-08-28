@@ -83,8 +83,8 @@ public abstract class AbstractSourceWithExternalBundle<V extends UniqueIdentifia
     return results;
   }
 
-  public static <V extends UniqueIdentifiable & ExternalBundleIdentifiable> Map<ExternalIdBundle, Collection<V>> getAll(final SourceWithExternalBundle<V> source,
-      final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
+  public static <V extends UniqueIdentifiable & ExternalBundleIdentifiable> Map<ExternalIdBundle, Collection<V>> getAll(
+      final SourceWithExternalBundle<V> source, final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
     if (bundles.isEmpty()) {
       return Collections.emptyMap();
     } else if (bundles.size() == 1) {

@@ -459,7 +459,8 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
 
   // TODO: Multiple nodes for a single collapse applicable target should be collapsed, probably with a "collapse(function, a, a)" sanity check first
 
-  // Note: we're not adjusting the target digests during collapses; for the collapse to have made sense, the digests for each target should probably be the same.
+  // Note: we're not adjusting the target digests during collapses; for the collapse to have made sense, the digests for
+  // each target should probably be the same.
   // TODO: This might be a bad assumption
 
   private void scheduleCollapsers(final DependencyNodeFunction function, final PerFunctionNodeInfo nodeInfo) {
@@ -947,12 +948,15 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
   }
 
   /**
-   * Reports a successful resolution of a top level requirement. The production of linked {@link DependencyNode} instances to form the final graph is single threaded. The resolution is added to a
-   * queue of successful resolutions. If this is the only (or first) thread to report resolutions then this will work to drain the queue and produce nodes for the graph based on the resolved value
-   * cache in the building context. If other threads report resolutions while this is happening they are added to the queue and those threads return immediately.
+   * Reports a successful resolution of a top level requirement. The production of linked {@link DependencyNode} instances to form
+   * the final graph is single threaded. The resolution is added to a queue of successful resolutions. If this is the only (or first)
+   * thread to report resolutions then this will work to drain the queue and produce nodes for the graph based on the resolved value
+   * cache in the building context. If other threads report resolutions while this is happening they are added to the queue and those
+   * threads return immediately.
    */
   @Override
-  public void resolved(final GraphBuildingContext context, final ValueRequirement valueRequirement, final ResolvedValue resolvedValue, final ResolutionPump pump) {
+  public void resolved(final GraphBuildingContext context, final ValueRequirement valueRequirement, final ResolvedValue resolvedValue,
+      final ResolutionPump pump) {
     LOGGER.info("Resolved {} to {}", valueRequirement, resolvedValue.getValueSpecification());
     if (pump != null) {
       context.close(pump);
@@ -978,7 +982,8 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
             }
             requirements.add(resolved.getFirst());
           } else {
-            LOGGER.error("Resolved {} to {} but couldn't create one or more dependency node", resolved.getFirst(), resolved.getSecond().getValueSpecification());
+            LOGGER.error("Resolved {} to {} but couldn't create one or more dependency node", resolved.getFirst(),
+                resolved.getSecond().getValueSpecification());
           }
           resolved = _resolvedQueue.poll();
         }

@@ -42,11 +42,11 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
   }
 
   public void test_inner_with_primitive_context() {
-    final double some_context = generator.nextDouble();
+    final double someContext = generator.nextDouble();
     final TestOuterClass inner = new TestOuterClass() {
       @Override
       public double eval(final double arg) {
-        return arg * some_context;
+        return arg * someContext;
       }
     };
 
@@ -60,12 +60,12 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
   }
 
   public void test_inner_with_two_primitive_contexts() {
-    final double some_context_a = 1.0;
-    final double some_context_b = 2.0;
+    final double someContextA = 1.0;
+    final double someContextB = 2.0;
     final TestOuterClass inner = new TestOuterClass() {
       @Override
       public double eval(final double arg) {
-        return arg * some_context_a + some_context_b;
+        return arg * someContextA + someContextB;
       }
     };
 
@@ -79,17 +79,17 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
   public void test_inner_with_array_of_primitives_context() {
 
     final int count = generator.nextInt(100);
-    final double[] some_context = new double[count];
+    final double[] someContext = new double[count];
 
     for (int j = 0; j < count; j++) {
-      some_context[j] = generator.nextDouble();
+      someContext[j] = generator.nextDouble();
     }
 
     final TestOuterClass inner = new TestOuterClass() {
       @Override
       public double eval(final double arg) {
         double sum = arg;
-        for (final double d : some_context) {
+        for (final double d : someContext) {
           sum += d;
         }
         return sum;
@@ -105,13 +105,13 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
   }
 
   public void test_inner_with_pojo_context() {
-    final ContextPOJO some_context = new ContextPOJO();
-    some_context.setValue(generator.nextDouble());
+    final ContextPOJO someContext = new ContextPOJO();
+    someContext.setValue(generator.nextDouble());
 
     final TestOuterClass inner = new TestOuterClass() {
       @Override
       public double eval(final double arg) {
-        return arg * some_context.getValue();
+        return arg * someContext.getValue();
       }
     };
 
@@ -128,18 +128,18 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
   @Test(enabled = false)
   public void test_inner_with_array_of_pojos_context() {
     final int count = generator.nextInt(100);
-    final ContextPOJO[] some_context = new ContextPOJO[count];
+    final ContextPOJO[] someContext = new ContextPOJO[count];
 
     for (int j = 0; j < count; j++) {
-      some_context[j] = new ContextPOJO();
-      some_context[j].setValue(generator.nextDouble());
+      someContext[j] = new ContextPOJO();
+      someContext[j].setValue(generator.nextDouble());
     }
 
     final TestOuterClass inner = new TestOuterClass() {
       @Override
       public double eval(final double arg) {
         double sum = arg;
-        for (final ContextPOJO pojo : some_context) {
+        for (final ContextPOJO pojo : someContext) {
           sum += pojo.getValue();
         }
         return sum;
@@ -158,19 +158,19 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
 
   public void test_inner_with_list_of_pojos_context() {
     final int count = generator.nextInt(100);
-    final List<ContextPOJO> some_context = newArrayList();
+    final List<ContextPOJO> someContext = newArrayList();
 
     for (int j = 0; j < count; j++) {
       final ContextPOJO pojo = new ContextPOJO();
       pojo.setValue(generator.nextDouble());
-      some_context.add(pojo);
+      someContext.add(pojo);
     }
 
     final TestOuterClass inner = new TestOuterClass() {
       @Override
       public double eval(final double arg) {
         double sum = arg;
-        for (final ContextPOJO pojo : some_context) {
+        for (final ContextPOJO pojo : someContext) {
           sum += pojo.getValue();
         }
         return sum;
@@ -188,11 +188,11 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
   }
 
   public void test_inner_with_context_copied_from_enclosing_class() {
-    final double some_context = some_outer_context;
+    final double someContext = some_outer_context;
     final TestOuterClass inner = new TestOuterClass() {
       @Override
       public double eval(final double arg) {
-        return arg * some_context;
+        return arg * someContext;
       }
     };
 
@@ -223,11 +223,11 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
   }
 
   public void test_inner_implementing_iface_with_primitive_context() {
-    final double some_context = generator.nextDouble();
+    final double someContext = generator.nextDouble();
     final TestOuterInterface inner = new TestOuterInterface() {
       @Override
       public double eval(final double arg) {
-        return arg * some_context;
+        return arg * someContext;
       }
     };
 
@@ -242,17 +242,17 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
   public void test_inner_implementing_iface_with_array_of_primitives_context() {
 
     final int count = generator.nextInt(100);
-    final double[] some_context = new double[count];
+    final double[] someContext = new double[count];
 
     for (int j = 0; j < count; j++) {
-      some_context[j] = generator.nextDouble();
+      someContext[j] = generator.nextDouble();
     }
 
     final TestOuterInterface inner = new TestOuterInterface() {
       @Override
       public double eval(final double arg) {
         double sum = arg;
-        for (final double d : some_context) {
+        for (final double d : someContext) {
           sum += d;
         }
         return sum;
@@ -268,13 +268,13 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
   }
 
   public void test_inner_implementing_iface_with_pojo_context() {
-    final ContextPOJO some_context = new ContextPOJO();
-    some_context.setValue(generator.nextDouble());
+    final ContextPOJO someContext = new ContextPOJO();
+    someContext.setValue(generator.nextDouble());
 
     final TestOuterInterface inner = new TestOuterInterface() {
       @Override
       public double eval(final double arg) {
-        return arg * some_context.getValue();
+        return arg * someContext.getValue();
       }
     };
 
@@ -291,18 +291,18 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
   @Test(enabled = false)
   public void test_inner_implementing_iface_with_array_of_pojos_context() {
     final int count = generator.nextInt(100);
-    final ContextPOJO[] some_context = new ContextPOJO[count];
+    final ContextPOJO[] someContext = new ContextPOJO[count];
 
     for (int j = 0; j < count; j++) {
-      some_context[j] = new ContextPOJO();
-      some_context[j].setValue(generator.nextDouble());
+      someContext[j] = new ContextPOJO();
+      someContext[j].setValue(generator.nextDouble());
     }
 
     final TestOuterInterface inner = new TestOuterInterface() {
       @Override
       public double eval(final double arg) {
         double sum = arg;
-        for (final ContextPOJO pojo : some_context) {
+        for (final ContextPOJO pojo : someContext) {
           sum += pojo.getValue();
         }
         return sum;
@@ -319,19 +319,19 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
 
   public void test_inner_implementing_iface_with_list_of_pojos_context() {
     final int count = generator.nextInt(100);
-    final List<ContextPOJO> some_context = newArrayList();
+    final List<ContextPOJO> someContext = newArrayList();
 
     for (int j = 0; j < count; j++) {
       final ContextPOJO pojo = new ContextPOJO();
       pojo.setValue(generator.nextDouble());
-      some_context.add(pojo);
+      someContext.add(pojo);
     }
 
     final TestOuterInterface inner = new TestOuterInterface() {
       @Override
       public double eval(final double arg) {
         double sum = arg;
-        for (final ContextPOJO pojo : some_context) {
+        for (final ContextPOJO pojo : someContext) {
           sum += pojo.getValue();
         }
         return sum;
@@ -349,11 +349,11 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
   double some_outer_context = generator.nextDouble();
 
   public void test_inner_implementing_iface_with_context_copied_from_enclosing_class() {
-    final double some_context = some_outer_context;
+    final double someContext = some_outer_context;
     final TestOuterInterface inner = new TestOuterInterface() {
       @Override
       public double eval(final double arg) {
-        return arg * some_context;
+        return arg * someContext;
       }
     };
 

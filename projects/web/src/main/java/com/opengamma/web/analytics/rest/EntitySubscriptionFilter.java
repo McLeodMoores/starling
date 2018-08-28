@@ -66,7 +66,7 @@ public class EntitySubscriptionFilter implements ResourceFilter {
   }
 
   /**
-   * @return A {@link ResponseFilter} for setting up the subscription
+   * @return A {@link ContainerResponseFilter} for setting up the subscription
    */
   @Override
   public ContainerResponseFilter getResponseFilter() {

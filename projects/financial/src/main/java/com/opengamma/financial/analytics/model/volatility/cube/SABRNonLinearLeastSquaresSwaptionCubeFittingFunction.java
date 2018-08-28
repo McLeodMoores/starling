@@ -14,7 +14,6 @@ import static com.opengamma.engine.value.ValueRequirementNames.SABR_SURFACES;
 import static com.opengamma.engine.value.ValueRequirementNames.STANDARD_VOLATILITY_CUBE_DATA;
 import static com.opengamma.engine.value.ValueRequirementNames.SURFACE_DATA;
 import static com.opengamma.engine.value.ValueRequirementNames.VOLATILITY_CUBE_FITTED_POINTS;
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 import java.util.BitSet;
 import java.util.HashMap;
@@ -63,6 +62,8 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 import com.opengamma.util.tuple.Triple;
 
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+
 /**
  *
  */
@@ -92,8 +93,10 @@ public class SABRNonLinearLeastSquaresSwaptionCubeFittingFunction extends Abstra
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
       final Set<ValueRequirement> desiredValues) {
     final ValueProperties properties = desiredValues.iterator().next().getConstraints().copy().get();
-    final VolatilityCubeData<Tenor, Tenor, Double> volatilityCubeData = (VolatilityCubeData<Tenor, Tenor, Double>) inputs.getValue(STANDARD_VOLATILITY_CUBE_DATA);
-    final SurfaceData<Tenor, Tenor> forwardSwapSurface = (SurfaceData<Tenor, Tenor>) inputs.getValue(SURFACE_DATA);
+    final VolatilityCubeData<Tenor, Tenor, Double> volatilityCubeData =
+        (VolatilityCubeData<Tenor, Tenor, Double>) inputs.getValue(STANDARD_VOLATILITY_CUBE_DATA);
+    final SurfaceData<Tenor, Tenor> forwardSwapSurface =
+        (SurfaceData<Tenor, Tenor>) inputs.getValue(SURFACE_DATA);
     final DoubleArrayList swapMaturitiesList = new DoubleArrayList();
     final DoubleArrayList swaptionExpiriesList = new DoubleArrayList();
     final DoubleArrayList alphaList = new DoubleArrayList();
@@ -126,7 +129,8 @@ public class SABRNonLinearLeastSquaresSwaptionCubeFittingFunction extends Abstra
             blackVols[i] = sv.getSecond();
             errors[i++] = ERROR;
           }
-          final LeastSquareResultsWithTransform fittedResult = new SABRModelFitter(forward, strikes, swaptionExpiry, blackVols, errors, SABR_FUNCTION).solve(SABR_INITIAL_VALUES, FIXED);
+          final LeastSquareResultsWithTransform fittedResult =
+              new SABRModelFitter(forward, strikes, swaptionExpiry, blackVols, errors, SABR_FUNCTION).solve(SABR_INITIAL_VALUES, FIXED);
           final DoubleMatrix1D parameters = fittedResult.getModelParameters();
           swapMaturitiesList.add(swapMaturity);
           swaptionExpiriesList.add(swaptionExpiry);
@@ -150,14 +154,19 @@ public class SABRNonLinearLeastSquaresSwaptionCubeFittingFunction extends Abstra
     final double[] beta = betaList.toDoubleArray();
     final double[] nu = nuList.toDoubleArray();
     final double[] rho = rhoList.toDoubleArray();
-    final InterpolatedDoublesSurface alphaSurface = InterpolatedDoublesSurface.from(swaptionExpiries, swapMaturities, alpha, INTERPOLATOR, "SABR alpha surface");
-    final InterpolatedDoublesSurface betaSurface = InterpolatedDoublesSurface.from(swaptionExpiries, swapMaturities, beta, INTERPOLATOR, "SABR beta surface");
-    final InterpolatedDoublesSurface nuSurface = InterpolatedDoublesSurface.from(swaptionExpiries, swapMaturities, nu, INTERPOLATOR, "SABR nu surface");
-    final InterpolatedDoublesSurface rhoSurface = InterpolatedDoublesSurface.from(swaptionExpiries, swapMaturities, rho, INTERPOLATOR, "SABR rho surface");
+    final InterpolatedDoublesSurface alphaSurface =
+        InterpolatedDoublesSurface.from(swaptionExpiries, swapMaturities, alpha, INTERPOLATOR, "SABR alpha surface");
+    final InterpolatedDoublesSurface betaSurface =
+        InterpolatedDoublesSurface.from(swaptionExpiries, swapMaturities, beta, INTERPOLATOR, "SABR beta surface");
+    final InterpolatedDoublesSurface nuSurface =
+        InterpolatedDoublesSurface.from(swaptionExpiries, swapMaturities, nu, INTERPOLATOR, "SABR nu surface");
+    final InterpolatedDoublesSurface rhoSurface =
+        InterpolatedDoublesSurface.from(swaptionExpiries, swapMaturities, rho, INTERPOLATOR, "SABR rho surface");
     final SABRFittedSurfaces fittedSurfaces = new SABRFittedSurfaces(alphaSurface, betaSurface, nuSurface, rhoSurface, inverseJacobians);
     final ValueSpecification sabrSurfacesSpecification = new ValueSpecification(SABR_SURFACES, target.toSpecification(), properties);
     final ValueSpecification smileIdsSpecification = new ValueSpecification(VOLATILITY_CUBE_FITTED_POINTS, target.toSpecification(), properties);
-    return Sets.newHashSet(new ComputedValue(sabrSurfacesSpecification, fittedSurfaces), new ComputedValue(smileIdsSpecification, new FittedSmileDataPoints(fittedRelativeStrikes)));
+    return Sets.newHashSet(new ComputedValue(sabrSurfacesSpecification, fittedSurfaces), new ComputedValue(smileIdsSpecification,
+        new FittedSmileDataPoints(fittedRelativeStrikes)));
   }
 
   @Override

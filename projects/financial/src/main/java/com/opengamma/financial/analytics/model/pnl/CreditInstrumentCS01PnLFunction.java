@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.pnl;
@@ -77,7 +77,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.UnorderedCurrencyPair;
 
 /**
- * 
+ *
  */
 public class CreditInstrumentCS01PnLFunction extends AbstractFunction.NonCompiledInvoker {
   private static final HolidayDateRemovalFunction HOLIDAY_REMOVER = HolidayDateRemovalFunction.getInstance();
@@ -174,7 +174,11 @@ public class CreditInstrumentCS01PnLFunction extends AbstractFunction.NonCompile
 
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
-    final ValueProperties properties = createValueProperties().withAny(CURRENCY).withAny(SAMPLING_PERIOD).withAny(SAMPLING_FUNCTION).withAny(SCHEDULE_CALCULATOR)
+    final ValueProperties properties = createValueProperties()
+        .withAny(CURRENCY)
+        .withAny(SAMPLING_PERIOD)
+        .withAny(SAMPLING_FUNCTION)
+        .withAny(SCHEDULE_CALCULATOR)
         .with(ValuePropertyNames.PROPERTY_PNL_CONTRIBUTIONS, ValueRequirementNames.BUCKETED_CS01).get();
     return Collections.singleton(new ValueSpecification(ValueRequirementNames.PNL_SERIES, target.toSpecification(), properties));
   }

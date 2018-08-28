@@ -67,9 +67,11 @@ public class RUConventions {
         following, Period.ofMonths(8), 2, false, ru);
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("RRDRI Curncy"), simpleNameSecurityId("RUB DEPOSIT 9m")), "RUB DEPOSIT 9m", act360,
         following, Period.ofMonths(9), 2, false, ru);
-    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("RRDRJ Curncy"), simpleNameSecurityId("RUB DEPOSIT 10m")), "RUB DEPOSIT 10m", act360,
+    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("RRDRJ Curncy"),
+        simpleNameSecurityId("RUB DEPOSIT 10m")), "RUB DEPOSIT 10m", act360,
         following, Period.ofMonths(10), 2, false, ru);
-    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("RRDRK Curncy"), simpleNameSecurityId("RUB DEPOSIT 11m")), "RUB DEPOSIT 11m", act360,
+    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("RRDRK Curncy"),
+        simpleNameSecurityId("RUB DEPOSIT 11m")), "RUB DEPOSIT 11m", act360,
         following, Period.ofMonths(11), 2, false, ru);
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("RRDR1 Curncy"), simpleNameSecurityId("RUB DEPOSIT 1y")), "RUB DEPOSIT 1y", act360,
         following, Period.ofYears(1), 2, false, ru);
@@ -99,10 +101,10 @@ public class RUConventions {
       final ExternalId simple = simpleNameSecurityId(name);
       utils.addConventionBundle(ExternalIdBundle.of(tullett, simple), name, act360, following, Period.ofYears(i), 2, false, ru);
     }
-    
+
     final String ruTreasuryName = "RU_TREASURY_BOND_CONVENTION";
     utils.addConventionBundle(ExternalIdBundle.of(simpleNameSecurityId(ruTreasuryName)), ruTreasuryName, true, true, 0, 1, true);
-    
+
   }
 
 }

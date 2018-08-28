@@ -122,8 +122,10 @@ public class ZeroCouponInflationNodeConverter extends CurveNodeVisitorAdapter<In
     final Calendar calendar = CalendarUtils.getCalendar(_regionSource, _holidaySource, priceIndexConvention.getRegion());
     final ZoneId zone = _valuationTime.getZone(); //TODO time zone set to midnight UTC
     final ZonedDateTime settlementDate = ScheduleCalculator.getAdjustedDate(_valuationTime, settlementDays, calendar).toLocalDate().atStartOfDay(zone);
-    final ZonedDateTime paymentDate = ScheduleCalculator.getAdjustedDate(settlementDate, tenor, businessDayConvention, calendar, endOfMonth).toLocalDate().atStartOfDay(zone);
-    final CouponFixedCompoundingDefinition fixedCoupon = CouponFixedCompoundingDefinition.from(currency, settlementDate, paymentDate, notional, tenor.getYears(),
+    final ZonedDateTime paymentDate =
+        ScheduleCalculator.getAdjustedDate(settlementDate, tenor, businessDayConvention, calendar, endOfMonth).toLocalDate().atStartOfDay(zone);
+    final CouponFixedCompoundingDefinition fixedCoupon =
+        CouponFixedCompoundingDefinition.from(currency, settlementDate, paymentDate, notional, tenor.getYears(),
         rate);
     final HistoricalTimeSeries ts = _timeSeries.get(MarketDataRequirementNames.MARKET_VALUE, priceIndexConvention.getExternalIdBundle());
     if (ts == null) {
@@ -135,8 +137,8 @@ public class ZeroCouponInflationNodeConverter extends CurveNodeVisitorAdapter<In
     final IndexPrice indexPrice = new IndexPrice(indexSecurity.getName(), currency);
     switch (inflationNode.getInflationNodeType()) {
       case INTERPOLATED: {
-        final CouponInflationZeroCouponInterpolationDefinition inflationCoupon = CouponInflationZeroCouponInterpolationDefinition.from(settlementDate, paymentDate,
-            -notional, indexPrice, conventionalMonthLag, monthLag, false);
+        final CouponInflationZeroCouponInterpolationDefinition inflationCoupon =
+            CouponInflationZeroCouponInterpolationDefinition.from(settlementDate, paymentDate, -notional, indexPrice, conventionalMonthLag, monthLag, false);
         return new SwapFixedInflationZeroCouponDefinition(fixedCoupon, inflationCoupon, calendar);
       }
       case MONTHLY: {

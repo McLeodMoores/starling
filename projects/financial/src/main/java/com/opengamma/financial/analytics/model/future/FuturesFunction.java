@@ -238,7 +238,8 @@ public abstract class FuturesFunction<T> extends AbstractFunction.NonCompiledInv
   }
 
   /**
-   * Gets the historical time series of the future price
+   * Gets the historical time series of the future price.
+   *
    * @param context The compilation context
    * @param security The security
    * @return The value requirement for the time series of future price
@@ -246,8 +247,10 @@ public abstract class FuturesFunction<T> extends AbstractFunction.NonCompiledInv
   protected ValueRequirement getReferencePriceRequirement(final FunctionCompilationContext context, final FutureSecurity security) {
     final HistoricalTimeSeriesResolver resolver = OpenGammaCompilationContext.getHistoricalTimeSeriesResolver(context);
     final ExternalIdBundle idBundle = security.getExternalIdBundle();
-    // TODO CASE: Test that you can change field to MARKET_VALUE because of the FieldAdjustment in ActivHistoricalTimeSeriesSourceComponentFactory.createResolver
-    final HistoricalTimeSeriesResolutionResult timeSeries = resolver.resolve(security.getExternalIdBundle(), null, null, null, MarketDataRequirementNames.MARKET_VALUE, getResolutionKey());
+    // TODO CASE: Test that you can change field to MARKET_VALUE because of the FieldAdjustment in
+    // ActivHistoricalTimeSeriesSourceComponentFactory.createResolver
+    final HistoricalTimeSeriesResolutionResult timeSeries =
+        resolver.resolve(security.getExternalIdBundle(), null, null, null, MarketDataRequirementNames.MARKET_VALUE, getResolutionKey());
     if (timeSeries == null) {
       LOGGER.warn("Failed to find time series for: " + idBundle.toString());
       return null;

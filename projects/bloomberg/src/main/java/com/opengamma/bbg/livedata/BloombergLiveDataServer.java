@@ -89,8 +89,8 @@ public class BloombergLiveDataServer extends AbstractBloombergLiveDataServer {
    * @param cacheManager the cache manager, not null
    * @param availabilityNotificationSender For sending notifications when Bloomberg data becomes available
    */
-  public BloombergLiveDataServer(final BloombergConnector bloombergConnector, final ReferenceDataProvider referenceDataProvider, final CacheManager cacheManager,
-      final FudgeMessageSender availabilityNotificationSender) {
+  public BloombergLiveDataServer(final BloombergConnector bloombergConnector, final ReferenceDataProvider referenceDataProvider,
+      final CacheManager cacheManager, final FudgeMessageSender availabilityNotificationSender) {
     super(cacheManager);
     ArgumentChecker.notNull(bloombergConnector, "bloombergConnector");
     ArgumentChecker.notNull(bloombergConnector.getSessionOptions(), "bloombergConnector.sessionOptions");

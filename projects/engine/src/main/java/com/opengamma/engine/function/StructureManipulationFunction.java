@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function;
@@ -56,7 +56,7 @@ public final class StructureManipulationFunction extends IntrinsicFunction {
    * Execute the function, performing a manipulation of the structured data which will come in via the inputs parameter. The manipulation to actually undertake will be defined by a
    * {@link StructureManipulator} instance passed in through the executionContext. If no manipulator is available the inputs are passed through unaffected (apart from a change to the value
    * specification to ensure they are still valid).
-   * 
+   *
    * @param executionContext execution context for the function, via which the parameters can be obtained
    * @param inputs the inputs to the function
    * @param target the target
@@ -76,10 +76,11 @@ public final class StructureManipulationFunction extends IntrinsicFunction {
     final Collection<ComputedValue> inputValues = inputs.getAllValues();
     // Only one requirement is expected, but cope with multiple ones just in case
     final Set<ComputedValue> result = Sets.newHashSetWithExpectedSize(inputValues.size());
-    for (ComputedValue inputValue : inputValues) {
+    for (final ComputedValue inputValue : inputValues) {
       final Object inputValueObject = inputValue.getValue();
       final Object outputValueObject;
-      if ((inputValueObject != null) && (structureManipulator != null) && structureManipulator.getExpectedType().isAssignableFrom(inputValueObject.getClass())) {
+      if (inputValueObject != null && structureManipulator != null
+          && structureManipulator.getExpectedType().isAssignableFrom(inputValueObject.getClass())) {
         outputValueObject = structureManipulator.execute(inputValueObject, inputValue.getSpecification(), executionContext);
         LOGGER.debug("changed value for target {} from {} to {}", target, inputValueObject, outputValueObject);
       } else {
@@ -88,8 +89,11 @@ public final class StructureManipulationFunction extends IntrinsicFunction {
       final ValueSpecification inputValueSpec = inputValue.getSpecification();
       final ValueProperties inputProperties = inputValueSpec.getProperties();
       final String inputFunction = inputProperties.getStrictValue(ValuePropertyNames.FUNCTION);
-      final ValueProperties outputProperties = inputProperties.copy().withoutAny(ValuePropertyNames.FUNCTION).with(ValuePropertyNames.FUNCTION, inputFunction + UNIQUE_ID).get();
-      final ValueSpecification outputValueSpec = new ValueSpecification(inputValueSpec.getValueName(), inputValueSpec.getTargetSpecification(), outputProperties);
+      final ValueProperties outputProperties = inputProperties.copy()
+          .withoutAny(ValuePropertyNames.FUNCTION)
+          .with(ValuePropertyNames.FUNCTION, inputFunction + UNIQUE_ID).get();
+      final ValueSpecification outputValueSpec =
+          new ValueSpecification(inputValueSpec.getValueName(), inputValueSpec.getTargetSpecification(), outputProperties);
       result.add(new ComputedValue(outputValueSpec, outputValueObject));
     }
     return result;

@@ -282,9 +282,11 @@ public class InflationDiscountBuildingRepositoryWithDiscount {
     * @param discountingMap The discount curves names map.
     * @param forwardONMap The ON curves names map.
     * @param inflationMap The inflation curves names map.
-    * @param calculator The calculator of the value on which the calibration is done (usually ParSpreadInflationMarketQuoteDiscountingCalculator (recommended) or converted present value).
+    * @param calculator The calculator of the value on which the calibration is done (usually ParSpreadInflationMarketQuoteDiscountingCalculator
+    * (recommended) or converted present value).
     * @param sensitivityCalculator The parameter sensitivity calculator.
-    * @return A pair with the calibrated yield curve bundle (including the known data) and the CurveBuildingBlckBundle with the relevant inverse Jacobian Matrix.
+    * @return A pair with the calibrated yield curve bundle (including the known data) and the CurveBuildingBlckBundle with the relevant inverse
+    * Jacobian Matrix.
     */
 
   public Pair<InflationProviderDiscount, CurveBuildingBlockBundle> makeCurvesFromDerivatives(final MultiCurveBundle<GeneratorCurve>[] curveBundles,

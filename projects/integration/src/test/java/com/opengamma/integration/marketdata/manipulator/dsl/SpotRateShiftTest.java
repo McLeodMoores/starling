@@ -126,8 +126,8 @@ public class SpotRateShiftTest {
     final FunctionParameters eurUsdParams = map.get(new SpotRateSelector(null, ImmutableSet.of(CurrencyPair.parse("EUR/USD"))));
     assertNotNull(eurUsdParams);
     final Object eurUsdValue = ((SimpleFunctionParameters) eurUsdParams).getValue(StructureManipulationFunction.EXPECTED_PARAMETER_NAME);
-    final CompositeStructureManipulator eurUsdManipulator = (CompositeStructureManipulator) eurUsdValue;
-    final List eurUsdManipulators = eurUsdManipulator.getManipulators();
+    final CompositeStructureManipulator<?> eurUsdManipulator = (CompositeStructureManipulator<?>) eurUsdValue;
+    final List<?> eurUsdManipulators = eurUsdManipulator.getManipulators();
     assertEquals(1, eurUsdManipulators.size());
     final SpotRateShift eurUsdShift = new SpotRateShift(ScenarioShiftType.ABSOLUTE, 0.1, ImmutableSet.of(CurrencyPair.parse("EUR/USD")));
     assertEquals(eurUsdShift, eurUsdManipulators.get(0));
@@ -135,8 +135,8 @@ public class SpotRateShiftTest {
     final FunctionParameters gbpAudParams = map.get(new SpotRateSelector(null, ImmutableSet.of(CurrencyPair.parse("GBP/AUD"))));
     assertNotNull(gbpAudParams);
     final Object gbpAudValue = ((SimpleFunctionParameters) gbpAudParams).getValue(StructureManipulationFunction.EXPECTED_PARAMETER_NAME);
-    final CompositeStructureManipulator gbpAudManipulator = (CompositeStructureManipulator) gbpAudValue;
-    final List gbpAudManipulators = gbpAudManipulator.getManipulators();
+    final CompositeStructureManipulator<?> gbpAudManipulator = (CompositeStructureManipulator<?>) gbpAudValue;
+    final List<?> gbpAudManipulators = gbpAudManipulator.getManipulators();
     assertEquals(1, gbpAudManipulators.size());
     final SpotRateScaling gbpAudScaling = new SpotRateScaling(1.2, ImmutableSet.of(CurrencyPair.parse("GBP/AUD")));
     assertEquals(gbpAudScaling, gbpAudManipulators.get(0));
@@ -144,8 +144,8 @@ public class SpotRateShiftTest {
     final FunctionParameters eurCadParams = map.get(new SpotRateSelector(null, ImmutableSet.of(CurrencyPair.parse("EUR/CAD"))));
     assertNotNull(eurCadParams);
     final Object eurCadValue = ((SimpleFunctionParameters) eurCadParams).getValue(StructureManipulationFunction.EXPECTED_PARAMETER_NAME);
-    final CompositeStructureManipulator eurCadManipulator = (CompositeStructureManipulator) eurCadValue;
-    final List eurCadManipulators = eurCadManipulator.getManipulators();
+    final CompositeStructureManipulator<?> eurCadManipulator = (CompositeStructureManipulator<?>) eurCadValue;
+    final List<?> eurCadManipulators = eurCadManipulator.getManipulators();
     assertEquals(1, eurCadManipulators.size());
     final SpotRateReplace eurCadReplace = new SpotRateReplace(1.5);
     assertEquals(eurCadReplace, eurCadManipulators.get(0));
@@ -165,8 +165,8 @@ public class SpotRateShiftTest {
     final FunctionParameters eurUsdParams = map.get(new SpotRateSelector(null, ImmutableSet.of(CurrencyPair.parse("EUR/USD"))));
     assertNotNull(eurUsdParams);
     final Object eurUsdValue = ((SimpleFunctionParameters) eurUsdParams).getValue(StructureManipulationFunction.EXPECTED_PARAMETER_NAME);
-    final CompositeStructureManipulator eurUsdManipulator = (CompositeStructureManipulator) eurUsdValue;
-    final List eurUsdManipulators = eurUsdManipulator.getManipulators();
+    final CompositeStructureManipulator<?> eurUsdManipulator = (CompositeStructureManipulator<?>) eurUsdValue;
+    final List<?> eurUsdManipulators = eurUsdManipulator.getManipulators();
     assertEquals(1, eurUsdManipulators.size());
     final SpotRateShift eurUsdShift = new SpotRateShift(ScenarioShiftType.ABSOLUTE, 0.1, ImmutableSet.of(CurrencyPair.parse("EUR/USD")));
     assertEquals(eurUsdShift, eurUsdManipulators.get(0));
@@ -174,8 +174,8 @@ public class SpotRateShiftTest {
     final FunctionParameters gbpAudParams = map.get(new SpotRateSelector(null, ImmutableSet.of(CurrencyPair.parse("GBP/AUD"))));
     assertNotNull(gbpAudParams);
     final Object gbpAudValue = ((SimpleFunctionParameters) gbpAudParams).getValue(StructureManipulationFunction.EXPECTED_PARAMETER_NAME);
-    final CompositeStructureManipulator gbpAudManipulator = (CompositeStructureManipulator) gbpAudValue;
-    final List gbpAudManipulators = gbpAudManipulator.getManipulators();
+    final CompositeStructureManipulator<?> gbpAudManipulator = (CompositeStructureManipulator<?>) gbpAudValue;
+    final List<?> gbpAudManipulators = gbpAudManipulator.getManipulators();
     assertEquals(1, gbpAudManipulators.size());
     final SpotRateScaling gbpAudScaling = new SpotRateScaling(1.2, ImmutableSet.of(CurrencyPair.parse("GBP/AUD")));
     assertEquals(gbpAudScaling, gbpAudManipulators.get(0));
@@ -183,8 +183,8 @@ public class SpotRateShiftTest {
     final FunctionParameters eurCadParams = map.get(new SpotRateSelector(null, ImmutableSet.of(CurrencyPair.parse("EUR/CAD"))));
     assertNotNull(eurCadParams);
     final Object eurCadValue = ((SimpleFunctionParameters) eurCadParams).getValue(StructureManipulationFunction.EXPECTED_PARAMETER_NAME);
-    final CompositeStructureManipulator eurCadManipulator = (CompositeStructureManipulator) eurCadValue;
-    final List eurCadManipulators = eurCadManipulator.getManipulators();
+    final CompositeStructureManipulator<?> eurCadManipulator = (CompositeStructureManipulator<?>) eurCadValue;
+    final List<?> eurCadManipulators = eurCadManipulator.getManipulators();
     assertEquals(1, eurCadManipulators.size());
     final SpotRateReplace eurCadReplace = new SpotRateReplace(1.5);
     assertEquals(eurCadReplace, eurCadManipulators.get(0));

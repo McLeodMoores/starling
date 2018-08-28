@@ -7,6 +7,7 @@ import java.util.Collection;
 
 import org.threeten.bp.LocalDate;
 
+import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.financial.convention.calendar.MondayToFridayCalendar;
 
 /**

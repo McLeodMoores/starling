@@ -585,10 +585,14 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
 
     final ViewDefinition other = (ViewDefinition) obj;
     final boolean basicPropertiesEqual = ObjectUtils.equals(getName(), other.getName()) && ObjectUtils.equals(getPortfolioId(), other.getPortfolioId())
-        && ObjectUtils.equals(getResultModelDefinition(), other.getResultModelDefinition()) && ObjectUtils.equals(getMarketDataUser(), other.getMarketDataUser())
-        && ObjectUtils.equals(_minDeltaCalculationPeriod, other._minDeltaCalculationPeriod) && ObjectUtils.equals(_maxDeltaCalculationPeriod, other._maxDeltaCalculationPeriod)
-        && ObjectUtils.equals(_minFullCalculationPeriod, other._minFullCalculationPeriod) && ObjectUtils.equals(_maxFullCalculationPeriod, other._maxFullCalculationPeriod)
-        && ObjectUtils.equals(_dumpComputationCacheToDisk, other._dumpComputationCacheToDisk) && ObjectUtils.equals(getAllCalculationConfigurationNames(), other.getAllCalculationConfigurationNames())
+        && ObjectUtils.equals(getResultModelDefinition(), other.getResultModelDefinition())
+        && ObjectUtils.equals(getMarketDataUser(), other.getMarketDataUser())
+        && ObjectUtils.equals(_minDeltaCalculationPeriod, other._minDeltaCalculationPeriod)
+        && ObjectUtils.equals(_maxDeltaCalculationPeriod, other._maxDeltaCalculationPeriod)
+        && ObjectUtils.equals(_minFullCalculationPeriod, other._minFullCalculationPeriod)
+        && ObjectUtils.equals(_maxFullCalculationPeriod, other._maxFullCalculationPeriod)
+        && ObjectUtils.equals(_dumpComputationCacheToDisk, other._dumpComputationCacheToDisk)
+        && ObjectUtils.equals(getAllCalculationConfigurationNames(), other.getAllCalculationConfigurationNames())
         && ObjectUtils.equals(_defaultCurrency, other._defaultCurrency);
     if (!basicPropertiesEqual) {
       return false;

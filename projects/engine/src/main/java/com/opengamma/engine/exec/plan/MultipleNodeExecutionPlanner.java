@@ -59,7 +59,7 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
    * Sets the minimum number of items for each job.
    * <p>
    * The planner will do its best to honor this limit, but may produce jobs smaller than this if the maximum cost would be exceeded or there is not enough work to make a larger job.
-   * 
+   *
    * @param minimumJobItems the number of items, must be more than 0
    */
   public void setMininumJobItems(final int minimumJobItems) {
@@ -69,7 +69,7 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
 
   /**
    * Returns the minimum number of items for each job.
-   * 
+   *
    * @return the number of items
    * @see #setMinimumJobItems
    */
@@ -81,7 +81,7 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
    * Sets the maximum number of items for each job.
    * <p>
    * The planner will do its best to honor this limit, but may produce jobs larger than this if the minimum cost would not be met.
-   * 
+   *
    * @param maximumJobItems the number of items, must be more than 0
    */
   public void setMaximimJobItems(final int maximumJobItems) {
@@ -91,7 +91,7 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
 
   /**
    * Returns the maximum number of items for each job.
-   * 
+   *
    * @return the number of items
    * @see #setMaximumJobItems
    */
@@ -103,7 +103,7 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
    * Sets the minimum estimated cost of jobs.
    * <p>
    * The planner will do its best to honor this limit, but may produce jobs with a lower cost if the maximum number of job items would be exceeded or there is not enough work to make a larger job.
-   * 
+   *
    * @param minimumJobCost the estimated cost in nanoseconds, must be at least 0
    */
   public void setMinimumJobCost(final long minimumJobCost) {
@@ -113,7 +113,7 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
 
   /**
    * Returns the minimum estimated cost of jobs.
-   * 
+   *
    * @return the estimated cost
    * @see #setMinimumJobCost
    */
@@ -125,7 +125,7 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
    * Sets the maximum estimated cost of jobs.
    * <p>
    * The planner will do its best to honor this limit, but may produce more expensive jobs if the minimum number of job items would be exceeded.
-   * 
+   *
    * @param maximumJobCost the estimated cost in nanoseconds, must be at least 0
    */
   public void setMaximumJobCost(final long maximumJobCost) {
@@ -135,7 +135,7 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
 
   /**
    * Returns the maximum estimated cost of jobs.
-   * 
+   *
    * @return the estimated cost
    * @see #setMaximumJobCost
    */
@@ -145,7 +145,7 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
 
   /**
    * Sets the concurrency limit for job tails.
-   * 
+   *
    * @param maximumConcurrency the number of job tails that are expected to be executing in parallel, must be more than 0 for tail execution. If set to 0, tail execution is disabled.
    */
   public void setMaximumConcurrency(final int maximumConcurrency) {
@@ -155,7 +155,7 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
 
   /**
    * Returns the concurrency limit for job tails.
-   * 
+   *
    * @return the number of job tails that are expected to be executing in parallel
    * @see #setMaximumConcurrency
    */
@@ -244,8 +244,8 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
    * Finds pairs of nodes with the same input set (i.e. that would execute concurrently) that are below the minimum job size and merge them together.
    */
   private boolean mergeSharedInputs(final Set<GraphFragment> rootFragments, final Set<GraphFragment> allFragments) {
-    final Map<Set<GraphFragment>, GraphFragment> possibleCandidates = new HashMap<Set<GraphFragment>, GraphFragment>();
-    final Map<GraphFragment, GraphFragment> validCandidates = new HashMap<GraphFragment, GraphFragment>();
+    final Map<Set<GraphFragment>, GraphFragment> possibleCandidates = new HashMap<>();
+    final Map<GraphFragment, GraphFragment> validCandidates = new HashMap<>();
     boolean result = false;
     do {
       // Scan all fragments for possible merges
@@ -254,7 +254,7 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
           // No inputs to consider
           continue;
         }
-        if ((fragment.getJobCost() >= getMinimumJobCost()) && (fragment.getJobItems() >= getMinimumJobItems())) {
+        if (fragment.getJobCost() >= getMinimumJobCost() && fragment.getJobItems() >= getMinimumJobItems()) {
           // We already meet the minimum requirement for the graph
           continue;
         }
@@ -342,7 +342,7 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
    */
   private void findTailFragments(final Set<GraphFragment> allFragments) {
     // Estimate start times based on fragment costs and dependencies
-    final NavigableMap<Long, Pair<List<GraphFragment>, List<GraphFragment>>> concurrencyEvent = new TreeMap<Long, Pair<List<GraphFragment>, List<GraphFragment>>>();
+    final NavigableMap<Long, Pair<List<GraphFragment>, List<GraphFragment>>> concurrencyEvent = new TreeMap<>();
     for (final GraphFragment fragment : allFragments) {
       Pair<List<GraphFragment>, List<GraphFragment>> event = concurrencyEvent.get(fragment.getStartTime());
       if (event == null) {
@@ -384,7 +384,7 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
             // No inputs, so we're a leaf node = new graph color
             starting.setExecutionId(nextExecutionId);
             executing[nextExecutionId] = 1;
-            if ((++nextExecutionId) >= executing.length) {
+            if (++nextExecutionId >= executing.length) {
               executing = Arrays.copyOf(executing, executing.length * 2);
             }
           } else if (starting.getInputFragments().size() == 1) {
@@ -394,7 +394,7 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
               // Concurrency limit exceeded so start a new color
               starting.setExecutionId(nextExecutionId);
               executing[nextExecutionId] = 1;
-              if ((++nextExecutionId) >= executing.length) {
+              if (++nextExecutionId >= executing.length) {
                 executing = Arrays.copyOf(executing, executing.length * 2);
               }
             } else {
@@ -405,14 +405,14 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
             }
           } else {
             final Iterator<GraphFragment> inputIterator = starting.getInputFragments().iterator();
-            int nodeColour = inputIterator.next().getExecutionId();
+            final int nodeColour = inputIterator.next().getExecutionId();
             while (inputIterator.hasNext()) {
               final GraphFragment input = inputIterator.next();
               if (input.getExecutionId() != nodeColour) {
                 // Inputs are from different colored graph fragments = new graph color
                 starting.setExecutionId(nextExecutionId);
                 executing[nextExecutionId] = 1;
-                if ((++nextExecutionId) >= executing.length) {
+                if (++nextExecutionId >= executing.length) {
                   executing = Arrays.copyOf(executing, executing.length * 2);
                 }
                 continue eventFragment;
@@ -423,7 +423,7 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
               // Concurrency limit exceeded so start a new color
               starting.setExecutionId(nextExecutionId);
               executing[nextExecutionId] = 1;
-              if ((++nextExecutionId) >= executing.length) {
+              if (++nextExecutionId >= executing.length) {
                 executing = Arrays.copyOf(executing, executing.length * 2);
               }
             } else {
@@ -442,20 +442,22 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
 
   /**
    * Updates the shared value cache with details of any "private" values that, as a result of tail jobs, do not need to leave the calculation node.
-   * 
+   *
    * @param context the operating context, not null
    * @param allFragments all discovered fragments, not null
    */
   private void exportPrivateValues(final GraphFragmentContext context, final Collection<GraphFragment> allFragments) {
     final Map<ValueSpecification, Boolean> sharedValues = context.getSharedCacheValues();
-    for (GraphFragment fragment : allFragments) {
+    for (final GraphFragment fragment : allFragments) {
       fragment.exportPrivateValues(sharedValues);
     }
   }
 
-  private GraphExecutionPlan createMultipleNodePlan(final DependencyGraph graph, final ExecutionLogModeSource logModeSource, final long functionInitializationId,
+  private GraphExecutionPlan createMultipleNodePlan(final DependencyGraph graph, final ExecutionLogModeSource logModeSource,
+      final long functionInitializationId,
       final Set<ValueSpecification> sharedValues, final Map<ValueSpecification, FunctionParameters> parameters) {
-    final GraphFragmentContext context = new GraphFragmentContext(graph.getCalculationConfigurationName(), logModeSource, functionInitializationId, sharedValues, parameters);
+    final GraphFragmentContext context =
+        new GraphFragmentContext(graph.getCalculationConfigurationName(), logModeSource, functionInitializationId, sharedValues, parameters);
     context.setTerminalOutputs(DependencyGraphImpl.getTerminalOutputSpecifications(graph));
     FragmentGatherer gatherer = new FragmentGatherer(graph.getSize(), getFunctionCosts().getStatistics(graph.getCalculationConfigurationName()), sharedValues);
     final Set<GraphFragment> rootFragments = createGraphFragments(graph, gatherer);
@@ -483,13 +485,13 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
     long totalSize = 0;
     long totalInvocationCost = 0;
     long totalDataCost = 0;
-    final Collection<PlannedJob> jobs = new LinkedList<PlannedJob>();
-    for (GraphFragment fragment : allFragments) {
+    final Collection<PlannedJob> jobs = new LinkedList<>();
+    for (final GraphFragment fragment : allFragments) {
       final Collection<GraphFragment> inputs = fragment.getInputFragments();
       totalSize += fragment.getJobItems();
       totalInvocationCost += fragment.getInvocationCost();
       totalDataCost += fragment.getDataIOCost();
-      if ((inputs != null) && inputs.isEmpty()) {
+      if (inputs != null && inputs.isEmpty()) {
         jobs.add(fragment.getOrCreateJob(context));
       }
     }

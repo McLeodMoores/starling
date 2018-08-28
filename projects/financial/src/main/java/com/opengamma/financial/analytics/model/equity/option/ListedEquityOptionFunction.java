@@ -142,7 +142,7 @@ public abstract class ListedEquityOptionFunction extends AbstractFunction.NonCom
 
   /**
    * Calculates the result
-   * 
+   *
    * @param derivative The derivative
    * @param market The market data bundle
    * @param inputs The market data inputs
@@ -157,7 +157,7 @@ public abstract class ListedEquityOptionFunction extends AbstractFunction.NonCom
   /**
    * Constructs a market data bundle of type StaticReplicationDataBundle. In the {@link CalculationPropertyNamesAndValues#BLACK_BASIC_METHOD}, the volatility surface is a constant inferred from the
    * market price and the forward
-   * 
+   *
    * @param underlyingId The underlying id of the index option
    * @param executionContext The execution context
    * @param inputs The market data inputs
@@ -222,7 +222,7 @@ public abstract class ListedEquityOptionFunction extends AbstractFunction.NonCom
     String forwardCurveName = null;
     String forwardCurveCalculationMethod = null;
     ValueProperties.Builder additionalConstraintsBuilder = null;
-    if ((constraints.getProperties() == null) || constraints.getProperties().isEmpty()) {
+    if (constraints.getProperties() == null || constraints.getProperties().isEmpty()) {
       return null;
     }
     final Set<String> calculationMethod = constraints.getValues(ValuePropertyNames.CALCULATION_METHOD);
@@ -261,11 +261,11 @@ public abstract class ListedEquityOptionFunction extends AbstractFunction.NonCom
           break;
       }
     }
-    if ((discountingCurveName == null) || (discountingCurveConfig == null) ||
-        (forwardCurveName == null) || (forwardCurveCalculationMethod == null)) {
+    if (discountingCurveName == null || discountingCurveConfig == null ||
+        forwardCurveName == null || forwardCurveCalculationMethod == null) {
       return null;
     }
-    final ValueProperties additionalConstraints = (additionalConstraintsBuilder != null) ? additionalConstraintsBuilder.get() : ValueProperties.none();
+    final ValueProperties additionalConstraints = additionalConstraintsBuilder != null ? additionalConstraintsBuilder.get() : ValueProperties.none();
     // Get security and its underlying's ExternalId.
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
     final ExternalId underlyingId = FinancialSecurityUtils.getUnderlyingId(security);
@@ -281,7 +281,7 @@ public abstract class ListedEquityOptionFunction extends AbstractFunction.NonCom
     final ValueRequirement forwardCurveReq;
     if (security instanceof EquityIndexFutureOptionSecurity) {
       final SecuritySource securitySource = context.getSecuritySource();
-      IndexFutureSecurity future = (IndexFutureSecurity) securitySource.getSingle(ExternalIdBundle.of(underlyingId), context.getComputationTargetResolver().getVersionCorrection());
+      final IndexFutureSecurity future = (IndexFutureSecurity) securitySource.getSingle(ExternalIdBundle.of(underlyingId), context.getComputationTargetResolver().getVersionCorrection());
       if (future == null) {
         return null;
       }
@@ -301,7 +301,7 @@ public abstract class ListedEquityOptionFunction extends AbstractFunction.NonCom
         .with(ValuePropertyNames.DISCOUNTING_CURVE_NAME, discountingCurveName)
         .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, discountingCurveConfig)
          .with(ValuePropertyNames.FORWARD_CURVE_NAME, forwardCurveName)
-        .with(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD, forwardCurveCalculationMethod)       
+        .with(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD, forwardCurveCalculationMethod)
         .get();
     final ValueRequirement volReq = new ValueRequirement(ValueRequirementNames.BLACK_VOLATILITY_SURFACE, target.toSpecification(), properties);
 
@@ -377,7 +377,7 @@ public abstract class ListedEquityOptionFunction extends AbstractFunction.NonCom
 
   /**
    * Converts result properties with a currency property to one without.
-   * 
+   *
    * @param resultsWithCurrency The set of results with the currency property set
    * @return A set of results without a currency property
    */
@@ -394,7 +394,8 @@ public abstract class ListedEquityOptionFunction extends AbstractFunction.NonCom
     return resultsWithoutCurrency;
   }
 
-  private ValueRequirement getDiscountCurveRequirement(final String fundingCurveName, final String curveCalculationConfigName, final Security security, final ValueProperties additionalConstraints) {
+  private ValueRequirement getDiscountCurveRequirement(final String fundingCurveName, final String curveCalculationConfigName,
+      final Security security, final ValueProperties additionalConstraints) {
     final ValueProperties properties = ValueProperties.builder() // TODO: Update to this => additionalConstraints.copy()
         .with(ValuePropertyNames.CURVE, fundingCurveName)
         .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfigName)
@@ -402,19 +403,20 @@ public abstract class ListedEquityOptionFunction extends AbstractFunction.NonCom
     return new ValueRequirement(ValueRequirementNames.YIELD_CURVE, ComputationTargetSpecification.of(FinancialSecurityUtils.getCurrency(security)), properties);
   }
 
-  private ValueRequirement getForwardCurveRequirement(final String forwardCurveName, final String forwardCurveCalculationMethod, final ExternalId underlyingBuid,
-      final ValueProperties additionalConstraints) {
+  private ValueRequirement getForwardCurveRequirement(final String forwardCurveName, final String forwardCurveCalculationMethod,
+      final ExternalId underlyingBuid, final ValueProperties additionalConstraints) {
     final ValueProperties properties = ValueProperties.builder() // TODO: Update to this => additionalConstraints.copy()
         .with(ValuePropertyNames.CURVE, forwardCurveName)
         .with(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD, forwardCurveCalculationMethod)
         .get();
-    // REVIEW Andrew 2012-01-17 -- Why can't we just use the underlyingBuid external identifier directly here, with a target type of SECURITY, and shift the logic into the reference resolver?
+    // REVIEW Andrew 2012-01-17 -- Why can't we just use the underlyingBuid external identifier directly here, with a
+    // target type of SECURITY, and shift the logic into the reference resolver?
     return new ValueRequirement(ValueRequirementNames.FORWARD_CURVE, ComputationTargetType.PRIMITIVE, underlyingBuid, properties);
   }
 
   /**
    * Instead of a volatility surface, we're just asking for the market_value of the option
-   * 
+   *
    * @param target {@link FinancialSecurityTypes#EQUITY_OPTION_SECURITY} or {@link FinancialSecurityTypes#EQUITY_INDEX_FUTURE_OPTION_SECURITY}
        or {@link FinancialSecurityTypes#EQUITY_INDEX_OPTION_SECURITY}
    * @return market_value requirement for the option
@@ -425,7 +427,7 @@ public abstract class ListedEquityOptionFunction extends AbstractFunction.NonCom
 
   /**
    * Gets the value requirement names
-   * 
+   *
    * @return The value requirement names
    */
   protected String[] getValueRequirementNames() {
@@ -434,14 +436,14 @@ public abstract class ListedEquityOptionFunction extends AbstractFunction.NonCom
 
   /**
    * Gets the calculation method.
-   * 
+   *
    * @return The calculation method
    */
   protected abstract String getCalculationMethod();
 
   /**
    * Gets the model type.
-   * 
+   *
    * @return The model type
    */
   protected abstract String getModelType();

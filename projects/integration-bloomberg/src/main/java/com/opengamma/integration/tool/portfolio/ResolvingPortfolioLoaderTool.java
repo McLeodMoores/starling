@@ -153,7 +153,8 @@ public class ResolvingPortfolioLoaderTool extends AbstractTool<IntegrationToolCo
   }
 
   // TODO take a stream as well as the file name, BBG master
-  private static PositionReader constructPortfolioReader(final String filename, final SecurityProvider securityProvider, final DateTimeFormatter dateFormatter) {
+  private static PositionReader constructPortfolioReader(final String filename, final SecurityProvider securityProvider,
+      final DateTimeFormatter dateFormatter) {
     InputStream stream;
     try {
       stream = new BufferedInputStream(new FileInputStream(filename));

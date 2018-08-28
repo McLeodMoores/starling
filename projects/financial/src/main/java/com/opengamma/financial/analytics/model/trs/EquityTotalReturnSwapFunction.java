@@ -80,7 +80,8 @@ public abstract class EquityTotalReturnSwapFunction extends DiscountingFunction 
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       final Set<ValueRequirement> requirements = super.getRequirements(context, target, desiredValue);
       if (requirements == null) {
         return null;

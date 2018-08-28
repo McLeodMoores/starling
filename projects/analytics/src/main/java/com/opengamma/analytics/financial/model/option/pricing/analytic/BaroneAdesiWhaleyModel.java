@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.analytic;
@@ -101,7 +101,8 @@ public class BaroneAdesiWhaleyModel {
    * @param isCall true for calls
    * @return length 3 array of price, delta and gamma
    */
-  public double[] getPriceDeltaGamma(final double s0, final double k, final double r, final double b, final double t, final double sigma, final boolean isCall) {
+  public double[] getPriceDeltaGamma(final double s0, final double k, final double r, final double b, final double t, final double sigma,
+      final boolean isCall) {
     ArgumentChecker.isTrue(s0 > 0.0, "spot must be greater than zero");
     ArgumentChecker.isTrue(k > 0.0, "strike must be greater than zero");
     ArgumentChecker.isTrue(t > 0.0, "t must be greater than zero");
@@ -180,12 +181,12 @@ public class BaroneAdesiWhaleyModel {
    */
   public double impliedVolatility(final double price, final double s0, final double k, final double r, final double b, final double t, final boolean isCall) {
 
-    ArgumentChecker.isTrue((isCall && price >= (s0 - k)) || (!isCall && price >= (k - s0)), "The price is less than the exercised immediately price");
+    ArgumentChecker.isTrue(isCall && price >= s0 - k || !isCall && price >= k - s0, "The price is less than the exercised immediately price");
     ArgumentChecker.isTrue(s0 > 0.0, "spot must be greater than zero");
     ArgumentChecker.isTrue(k > 0.0, "strike must be greater than zero");
     ArgumentChecker.isTrue(t > 0.0, "t must be greater than zero");
 
-    if ((isCall && Double.compare(price, s0 - k) == 0) || (!isCall && Double.compare(price, k - s0) == 0)) {
+    if (isCall && Double.compare(price, s0 - k) == 0 || !isCall && Double.compare(price, k - s0) == 0) {
       LOGGER.warn("The price indicates that this option should be exercised immediately, therefore there is no implied volatility. Zero is returned.");
       return 0.0;
     }
@@ -225,7 +226,8 @@ public class BaroneAdesiWhaleyModel {
    * @param isCall true for calls
    * @return The critical spot price and its sensitivities
    */
-  protected double[] getsCritAdjoint(final double s0, final double k, final double r, final double b, final double t, final double sigma, final boolean isCall) {
+  protected double[] getsCritAdjoint(final double s0, final double k, final double r, final double b, final double t, final double sigma,
+      final boolean isCall) {
     if (isCall) {
       final CallSolver solver = new CallSolver(s0, k, r, b, t, sigma);
       final double sStar = solver.getSStar();

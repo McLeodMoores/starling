@@ -61,7 +61,7 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Calculates yield curve node sensitivities for swaptions using the Black method.
- * 
+ *
  * @deprecated Use {@link BlackDiscountingYCNSSwaptionFunction}
  */
 @Deprecated
@@ -222,13 +222,14 @@ public class SwaptionBlackYieldCurveNodeSensitivitiesFunction extends SwaptionBl
 
   /**
    * Gets the Jacobian requirement.
-   * 
+   *
    * @param currency The currency
    * @param curveCalculationConfigName The curve calculation configuration name.
    * @param curveCalculationMethod The curve calculation method.
    * @return The Jacobian requirement
    */
-  private static ValueRequirement getJacobianRequirement(final Currency currency, final String curveCalculationConfigName, final String curveCalculationMethod) {
+  private static ValueRequirement getJacobianRequirement(final Currency currency, final String curveCalculationConfigName,
+      final String curveCalculationMethod) {
     final ValueProperties properties = ValueProperties.builder().with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfigName)
         .with(ValuePropertyNames.CURVE_CALCULATION_METHOD, curveCalculationMethod).get();
     return new ValueRequirement(ValueRequirementNames.YIELD_CURVE_JACOBIAN, ComputationTargetSpecification.of(currency), properties);
@@ -236,7 +237,7 @@ public class SwaptionBlackYieldCurveNodeSensitivitiesFunction extends SwaptionBl
 
   /**
    * Gets the coupon sensitivities requirement.
-   * 
+   *
    * @param currency The currency
    * @param curveCalculationConfigName The curve calculation configuration name.
    * @return The coupon sensitivities requirement
@@ -249,7 +250,7 @@ public class SwaptionBlackYieldCurveNodeSensitivitiesFunction extends SwaptionBl
 
   /**
    * Gets the curve specification requirement.
-   * 
+   *
    * @param currency The currency
    * @param curveName The curve name
    * @return The curve specification requirement

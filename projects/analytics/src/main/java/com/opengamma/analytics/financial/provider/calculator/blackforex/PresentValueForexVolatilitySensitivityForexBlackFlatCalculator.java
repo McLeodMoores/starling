@@ -25,7 +25,8 @@ public final class PresentValueForexVolatilitySensitivityForexBlackFlatCalculato
   /**
    * The unique instance of the calculator.
    */
-  private static final PresentValueForexVolatilitySensitivityForexBlackFlatCalculator INSTANCE = new PresentValueForexVolatilitySensitivityForexBlackFlatCalculator();
+  private static final PresentValueForexVolatilitySensitivityForexBlackFlatCalculator INSTANCE =
+      new PresentValueForexVolatilitySensitivityForexBlackFlatCalculator();
 
   /**
    * Constructor.
@@ -42,7 +43,8 @@ public final class PresentValueForexVolatilitySensitivityForexBlackFlatCalculato
   }
 
   @Override
-  public PresentValueForexBlackVolatilitySensitivity visitForexOptionVanilla(final ForexOptionVanilla option, final BlackForexFlatProviderInterface blackSmile) {
+  public PresentValueForexBlackVolatilitySensitivity visitForexOptionVanilla(final ForexOptionVanilla option,
+      final BlackForexFlatProviderInterface blackSmile) {
     return ForexOptionVanillaBlackFlatMethod.getInstance().presentValueBlackVolatilitySensitivity(option, blackSmile);
   }
 

@@ -47,8 +47,8 @@ public abstract class AbstractIdentifierResolver implements IdentifierResolver {
     return result;
   }
 
-  public static Map<ExternalIdBundle, UniqueId> resolveExternalIdsSingleThread(final IdentifierResolver resolver, final Collection<ExternalIdBundle> identifiers,
-      final VersionCorrection versionCorrection) {
+  public static Map<ExternalIdBundle, UniqueId> resolveExternalIdsSingleThread(final IdentifierResolver resolver,
+      final Collection<ExternalIdBundle> identifiers, final VersionCorrection versionCorrection) {
     final Map<ExternalIdBundle, UniqueId> result = Maps.newHashMapWithExpectedSize(identifiers.size());
     for (final ExternalIdBundle identifier : identifiers) {
       final UniqueId uid = resolver.resolveExternalId(identifier, versionCorrection);
@@ -59,8 +59,8 @@ public abstract class AbstractIdentifierResolver implements IdentifierResolver {
     return result;
   }
 
-  public static Map<ExternalIdBundle, UniqueId> resolveExternalIds(final IdentifierResolver resolver, final Collection<ExternalIdBundle> identifiers,
-      final VersionCorrection versionCorrection) {
+  public static Map<ExternalIdBundle, UniqueId> resolveExternalIds(final IdentifierResolver resolver,
+      final Collection<ExternalIdBundle> identifiers, final VersionCorrection versionCorrection) {
     if (identifiers.isEmpty()) {
       return Collections.emptyMap();
     } else if (identifiers.size() == 1) {

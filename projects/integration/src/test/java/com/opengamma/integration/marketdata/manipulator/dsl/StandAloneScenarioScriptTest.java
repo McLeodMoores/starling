@@ -219,7 +219,7 @@ public class StandAloneScenarioScriptTest {
     final PointSelector selector =
         new PointSelector(null, ImmutableSet.of(ExternalId.of("SCHEME", id)), null, null, null, null, null);
     final FunctionParameters parameters = definitionMap.get(selector);
-    final CompositeStructureManipulator compositeManipulator =
+    final CompositeStructureManipulator<?> compositeManipulator =
         ((SimpleFunctionParameters) parameters).getValue(StructureManipulationFunction.EXPECTED_PARAMETER_NAME);
     final MarketDataShift shift = (MarketDataShift) compositeManipulator.getManipulators().get(0);
     assertEquals(1 + shiftAmount, shift.execute(1.0, null, null));

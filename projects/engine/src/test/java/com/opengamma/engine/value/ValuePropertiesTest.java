@@ -109,7 +109,8 @@ public class ValuePropertiesTest {
   }
 
   public void testIsSatisfiedBy() {
-    final ValueProperties requirement = ValueProperties.with("A", "1").with("B", "2", "3").withAny("C").withOptional("D").with("E", "1").withOptional("E").get();
+    final ValueProperties requirement =
+        ValueProperties.with("A", "1").with("B", "2", "3").withAny("C").withOptional("D").with("E", "1").withOptional("E").get();
     assertTrue(requirement.isSatisfiedBy(requirement));
     assertTrue(requirement.isSatisfiedBy(ValueProperties.all()));
     assertFalse(requirement.isSatisfiedBy(ValueProperties.none()));
@@ -133,7 +134,8 @@ public class ValuePropertiesTest {
   }
 
   public void testCompose() {
-    final ValueProperties requirement = ValueProperties.with("A", "1").with("B", "2", "3").withAny("C").withOptional("D").with("E", "1").withOptional("E").get();
+    final ValueProperties requirement =
+        ValueProperties.with("A", "1").with("B", "2", "3").withAny("C").withOptional("D").with("E", "1").withOptional("E").get();
     ValueProperties offering = ValueProperties.with("A", "1").with("B", "2", "3").withAny("C").get();
     ValueProperties props = offering.compose(requirement);
     assertSame(offering, props);

@@ -374,7 +374,8 @@ public class BloombergHistoricalTimeSeriesProvider extends AbstractHistoricalTim
       LOGGER.warn(errorMessage);
     }
 
-    protected Map<ExternalIdBundle, Set<String>> extractPermissions(final Map<String, ExternalIdBundle> reverseBundleMap, final List<Element> responseElements) {
+    protected Map<ExternalIdBundle, Set<String>> extractPermissions(final Map<String, ExternalIdBundle> reverseBundleMap,
+        final List<Element> responseElements) {
       final Map<ExternalIdBundle, Set<String>> result = new HashMap<>();
       for (final Element resultElem : responseElements) {
         if (resultElem.hasElement(SECURITY_DATA)) {

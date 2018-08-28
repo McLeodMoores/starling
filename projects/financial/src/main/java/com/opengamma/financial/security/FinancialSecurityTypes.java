@@ -296,18 +296,20 @@ public class FinancialSecurityTypes {
   /**
    * The Non-Deliverable FX Digital Option security type.
    */
-  public static final ObjectComputationTargetType<NonDeliverableFXDigitalOptionSecurity> NON_DELIVERABLE_FX_DIGITAL_OPTION_SECURITY = ObjectComputationTargetType
-      .of(NonDeliverableFXDigitalOptionSecurity.class);
+  public static final ObjectComputationTargetType<NonDeliverableFXDigitalOptionSecurity> NON_DELIVERABLE_FX_DIGITAL_OPTION_SECURITY =
+      ObjectComputationTargetType.of(NonDeliverableFXDigitalOptionSecurity.class);
 
   /**
    * The Non-Deliverable FX Forward security type.
    */
-  public static final ObjectComputationTargetType<NonDeliverableFXForwardSecurity> NON_DELIVERABLE_FX_FORWARD_SECURITY = ObjectComputationTargetType.of(NonDeliverableFXForwardSecurity.class);
+  public static final ObjectComputationTargetType<NonDeliverableFXForwardSecurity> NON_DELIVERABLE_FX_FORWARD_SECURITY =
+      ObjectComputationTargetType.of(NonDeliverableFXForwardSecurity.class);
 
   /**
    * The Non-Deliverable FX Option security type.
    */
-  public static final ObjectComputationTargetType<NonDeliverableFXOptionSecurity> NON_DELIVERABLE_FX_OPTION_SECURITY = ObjectComputationTargetType.of(NonDeliverableFXOptionSecurity.class);
+  public static final ObjectComputationTargetType<NonDeliverableFXOptionSecurity> NON_DELIVERABLE_FX_OPTION_SECURITY =
+      ObjectComputationTargetType.of(NonDeliverableFXOptionSecurity.class);
 
   /**
    * The Periodic Zero Deposit security type.

@@ -56,11 +56,13 @@ public class DepGraphInputMergingTest extends AbstractDependencyGraphBuilderTest
     }
 
     private static Set<ValueRequirement> createRequirements(final ValueRequirement req, final String aux) {
-      return Collections.singleton(aux != null ? new ValueRequirement(req.getValueName(), req.getTargetReference(), req.getConstraints().copy().with("AUX", aux).get()) : req);
+      return Collections.singleton(aux != null ? new ValueRequirement(req.getValueName(), req.getTargetReference(),
+          req.getConstraints().copy().with("AUX", aux).get()) : req);
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       final String aux = desiredValue.getConstraints().getSingleValue("AUX'");
       if (desiredValue.getValueName() == _spec1.getValueName()) {
         return createRequirements(_req1, aux);
@@ -70,7 +72,8 @@ public class DepGraphInputMergingTest extends AbstractDependencyGraphBuilderTest
     }
 
     @Override
-    public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+    public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+        final Map<ValueSpecification, ValueRequirement> inputs) {
       final Set<ValueSpecification> result = new HashSet<>();
       for (final ValueRequirement input : inputs.values()) {
         if (input.getValueName() == _req1.getValueName()) {

@@ -121,7 +121,8 @@ public class PositionGreeksFunction extends AbstractFunction.NonCompiledInvoker 
       return null;
     }
 
-    final ValueRequirement secGreekReq = new ValueRequirement(getSecurityReqName(), ComputationTargetSpecification.of(target.getPositionOrTrade().getSecurity()),
+    final ValueRequirement secGreekReq =
+        new ValueRequirement(getSecurityReqName(), ComputationTargetSpecification.of(target.getPositionOrTrade().getSecurity()),
           desiredValue.getConstraints().withoutAny(ValuePropertyNames.FUNCTION));
     final Set<ValueRequirement> requirements = Sets.newHashSet(secGreekReq);
     return requirements;

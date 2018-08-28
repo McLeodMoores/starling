@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.pnl;
@@ -19,14 +19,15 @@ import com.opengamma.financial.property.DefaultPropertyFunction;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class ExternallyProvidedSensitivityPnLDefaultPropertiesFunction extends DefaultPropertyFunction {
   private final String _samplingPeriod;
   private final String _scheduleCalculator;
   private final String _samplingFunction;
 
-  public ExternallyProvidedSensitivityPnLDefaultPropertiesFunction(final String samplingPeriod, final String scheduleCalculator, final String samplingFunction) {
+  public ExternallyProvidedSensitivityPnLDefaultPropertiesFunction(final String samplingPeriod, final String scheduleCalculator,
+      final String samplingFunction) {
     super(ComputationTargetType.POSITION, true);
     ArgumentChecker.notNull(samplingPeriod, "sampling period");
     ArgumentChecker.notNull(scheduleCalculator, "schedule calculator");

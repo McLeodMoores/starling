@@ -36,12 +36,12 @@ public abstract class LegacyCDSSecurity extends CreditDefaultSwapSecurity {
     super(securityType);
   }
 
-  public LegacyCDSSecurity(final boolean isBuy, final ExternalId protectionSeller, final ExternalId protectionBuyer, final ExternalId referenceEntity, //CSIGNORE
-      final DebtSeniority debtSeniority, final RestructuringClause restructuringClause, final ExternalId regionId, final ZonedDateTime startDate,
-      final ZonedDateTime effectiveDate, final ZonedDateTime maturityDate, final StubType stubType, final Frequency couponFrequency, final DayCount dayCount,
-      final BusinessDayConvention businessDayConvention, final boolean immAdjustMaturityDate, final boolean adjustEffectiveDate,
-      final boolean adjustMaturityDate, final InterestRateNotional notional, final boolean includeAccruedPremium,
-      final boolean protectionStart, final String securityType) {
+  public LegacyCDSSecurity(final boolean isBuy, final ExternalId protectionSeller, final ExternalId protectionBuyer,
+      final ExternalId referenceEntity, final DebtSeniority debtSeniority, final RestructuringClause restructuringClause,
+      final ExternalId regionId, final ZonedDateTime startDate, final ZonedDateTime effectiveDate, final ZonedDateTime maturityDate,
+      final StubType stubType, final Frequency couponFrequency, final DayCount dayCount, final BusinessDayConvention businessDayConvention,
+      final boolean immAdjustMaturityDate, final boolean adjustEffectiveDate, final boolean adjustMaturityDate,
+      final InterestRateNotional notional, final boolean includeAccruedPremium, final boolean protectionStart, final String securityType) {
     super(isBuy, protectionSeller, protectionBuyer, referenceEntity, debtSeniority, restructuringClause, regionId, startDate,
         effectiveDate, maturityDate, stubType, couponFrequency, dayCount, businessDayConvention, immAdjustMaturityDate, adjustEffectiveDate,
         adjustMaturityDate, notional, includeAccruedPremium, protectionStart, securityType);

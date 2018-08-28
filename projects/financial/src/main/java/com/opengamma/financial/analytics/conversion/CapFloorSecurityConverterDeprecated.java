@@ -36,7 +36,8 @@ public class CapFloorSecurityConverterDeprecated extends FinancialSecurityVisito
   private final ConventionBundleSource _conventionSource;
   private final RegionSource _regionSource;
 
-  public CapFloorSecurityConverterDeprecated(final HolidaySource holidaySource, final ConventionBundleSource conventionSource, final RegionSource regionSource) {
+  public CapFloorSecurityConverterDeprecated(final HolidaySource holidaySource, final ConventionBundleSource conventionSource,
+      final RegionSource regionSource) {
     ArgumentChecker.notNull(holidaySource, "holiday source");
     ArgumentChecker.notNull(conventionSource, "convention source");
     _holidaySource = holidaySource;

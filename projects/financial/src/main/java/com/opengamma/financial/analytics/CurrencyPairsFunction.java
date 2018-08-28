@@ -61,7 +61,8 @@ public class CurrencyPairsFunction extends AbstractFunction.NonCompiledInvoker {
   }
 
   @Override
-  public Set<ValueRequirement> getRequirements(final FunctionCompilationContext myContext, final ComputationTarget target, final ValueRequirement desiredValue) {
+  public Set<ValueRequirement> getRequirements(final FunctionCompilationContext myContext, final ComputationTarget target,
+      final ValueRequirement desiredValue) {
     final Set<String> names = desiredValue.getConstraints().getValues(CURRENCY_PAIRS_NAME);
     if (names == null || names.size() != 1) {
       return null;

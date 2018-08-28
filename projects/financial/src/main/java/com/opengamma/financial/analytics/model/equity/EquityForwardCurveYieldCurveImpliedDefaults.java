@@ -51,7 +51,7 @@ public class EquityForwardCurveYieldCurveImpliedDefaults extends DefaultProperty
 
   /**
    * @param priority The priority, not null
-   * @param defaultArray The default values, not null: currency, 
+   * @param defaultArray The default values, not null: currency,
    */
   public EquityForwardCurveYieldCurveImpliedDefaults(final String priority, final String... defaultArray) {
     super(ComputationTargetType.PRIMITIVE, true); // // [PLAT-2286]: change to correct type; should this be SECURITY?
@@ -64,7 +64,8 @@ public class EquityForwardCurveYieldCurveImpliedDefaults extends DefaultProperty
     _curveName = defaultArray[1];
     _curveCalculationConfig = defaultArray[2];
     _dividendType = defaultArray[3];
-    ArgumentChecker.isTrue(_dividendType.equals(ValuePropertyNames.DIVIDEND_TYPE_CONTINUOUS) || _dividendType.equals(ValuePropertyNames.DIVIDEND_TYPE_DISCRETE), 
+    ArgumentChecker.isTrue(_dividendType.equals(ValuePropertyNames.DIVIDEND_TYPE_CONTINUOUS)
+        || _dividendType.equals(ValuePropertyNames.DIVIDEND_TYPE_DISCRETE),
         "4th String in defaultArray must be either Discrete or Continuous");
   }
 
@@ -90,7 +91,7 @@ public class EquityForwardCurveYieldCurveImpliedDefaults extends DefaultProperty
     //  Properties specific to STANDARD_VOLATILITY_SURFACE_DATA
     defaults.addValuePropertyName(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, ValuePropertyNames.DISCOUNTING_CURVE_NAME);
     defaults.addValuePropertyName(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, ValuePropertyNames.FORWARD_CURVE_NAME);
-    defaults.addValuePropertyName(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD);    
+    defaults.addValuePropertyName(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD);
   }
 
   @Override
@@ -99,7 +100,7 @@ public class EquityForwardCurveYieldCurveImpliedDefaults extends DefaultProperty
       case ValuePropertyNames.CURVE_CURRENCY:
         return Collections.singleton(_currency);
       case ValuePropertyNames.CURVE_CALCULATION_CONFIG:
-        return Collections.singleton(_curveCalculationConfig); 
+        return Collections.singleton(_curveCalculationConfig);
       case ValuePropertyNames.CURVE:
         return Collections.singleton(_curveName);
       case ValuePropertyNames.DIVIDEND_TYPE:

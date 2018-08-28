@@ -10,8 +10,8 @@ import com.opengamma.util.result.Function2;
 
 /**
  * A renaming function for {@link com.opengamma.financial.analytics.ircurve.CurveSpecificationBuilderConfiguration}
- * where the currency string is fixed upon construction. If {@link #_name} is null, the new name is
- * "[original name] [ISO currency string]. If {@link #_name} is not null, the new name is
+ * where the currency string is fixed upon construction. If the name is null, the new name is
+ * "[original name] [ISO currency string]. If the name is not null, the new name is
  * "[original name] [_name] [ISO currency string]".
  *
  */

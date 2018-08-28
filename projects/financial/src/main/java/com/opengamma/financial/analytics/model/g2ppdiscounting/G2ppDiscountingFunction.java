@@ -157,7 +157,7 @@ public abstract class G2ppDiscountingFunction extends MultiCurvePricingFunction 
       if (_withCurrency) {
         final Security security = target.getTrade().getSecurity();
         if (security instanceof SwapSecurity && InterestRateInstrumentType.isFixedIncomeInstrumentType((SwapSecurity) security) &&
-            (InterestRateInstrumentType.getInstrumentTypeFromSecurity((SwapSecurity) security) == InterestRateInstrumentType.SWAP_CROSS_CURRENCY)) {
+            InterestRateInstrumentType.getInstrumentTypeFromSecurity((SwapSecurity) security) == InterestRateInstrumentType.SWAP_CROSS_CURRENCY) {
           final SwapSecurity swapSecurity = (SwapSecurity) security;
           if (swapSecurity.getPayLeg().getNotional() instanceof InterestRateNotional) {
             final String currency = ((InterestRateNotional) swapSecurity.getPayLeg().getNotional()).getCurrency().getCode();
@@ -175,7 +175,8 @@ public abstract class G2ppDiscountingFunction extends MultiCurvePricingFunction 
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       final Set<ValueRequirement> requirements = super.getRequirements(context, target, desiredValue);
       if (requirements == null) {
         return null;
@@ -213,7 +214,7 @@ public abstract class G2ppDiscountingFunction extends MultiCurvePricingFunction 
 
     /**
      * Merges any {@link HullWhiteOneFactorProviderDiscount} curve bundles and FX matrices that are present in the inputs and creates a curve bundle with information for pricing using the G2++ model.
-     * 
+     *
      * @param inputs The function inputs
      * @param matrix The FX matrix
      * @return A curve bundle that can be used in G2++ pricing functions
@@ -234,7 +235,7 @@ public abstract class G2ppDiscountingFunction extends MultiCurvePricingFunction 
 
     /**
      * Merges any {@link CurveBuildingBlockBundle}s in the function inputs.
-     * 
+     *
      * @param inputs The function inputs
      * @return A curve building block bundle that contains all of the information used to construct the curves used in pricing
      */

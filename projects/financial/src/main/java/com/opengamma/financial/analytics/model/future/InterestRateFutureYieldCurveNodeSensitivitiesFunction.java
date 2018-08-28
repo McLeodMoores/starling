@@ -70,7 +70,7 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Calculates yield curve node sensitivities for interest rate future.
- * 
+ *
  * @deprecated Use {@link DiscountingYCNSFunction}
  */
 @Deprecated
@@ -264,8 +264,11 @@ public class InterestRateFutureYieldCurveNodeSensitivitiesFunction extends Abstr
   }
 
   private ValueSpecification getResultSpec(final ComputationTarget target, final Currency ccy, final String curveName, final String calculationConfig) {
-    final ValueProperties result = createValueProperties().with(ValuePropertyNames.CURRENCY, ccy.getCode()).with(ValuePropertyNames.CURVE_CURRENCY, ccy.getCode())
-        .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, calculationConfig).with(ValuePropertyNames.CURVE, curveName).get();
+    final ValueProperties result = createValueProperties()
+        .with(ValuePropertyNames.CURRENCY, ccy.getCode())
+        .with(ValuePropertyNames.CURVE_CURRENCY, ccy.getCode())
+        .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, calculationConfig)
+        .with(ValuePropertyNames.CURVE, curveName).get();
     return new ValueSpecification(VALUE_REQUIREMENT, target.toSpecification(), result);
   }
 
@@ -274,7 +277,8 @@ public class InterestRateFutureYieldCurveNodeSensitivitiesFunction extends Abstr
     return new ValueRequirement(ValueRequirementNames.YIELD_CURVE_SPEC, ComputationTargetSpecification.of(currency), properties);
   }
 
-  private static ValueRequirement getJacobianRequirement(final Currency currency, final String curveCalculationConfigName, final String curveCalculationMethod) {
+  private static ValueRequirement getJacobianRequirement(final Currency currency, final String curveCalculationConfigName,
+      final String curveCalculationMethod) {
     final ValueProperties properties = ValueProperties.builder().with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfigName)
         .with(ValuePropertyNames.CURVE_CALCULATION_METHOD, curveCalculationMethod).get();
     return new ValueRequirement(ValueRequirementNames.YIELD_CURVE_JACOBIAN, ComputationTargetSpecification.of(currency), properties);

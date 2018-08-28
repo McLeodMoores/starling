@@ -31,9 +31,10 @@ public class SABRVegaCalculationUtils {
   private static final MatrixAlgebra ALGEBRA = MatrixAlgebraFactory.OG_ALGEBRA;
   private static final DoublesPairComparator COMPARATOR = new DoublesPairComparator();
 
-  public static DoubleMatrix2D getVegaSurface(final double alpha, final double rho, final double nu, final Map<Double, Interpolator1DDataBundle> alphaDataBundle,
-      final Map<Double, Interpolator1DDataBundle> rhoDataBundle, final Map<Double, Interpolator1DDataBundle> nuDataBundle,
-      final Map<DoublesPair, DoubleMatrix2D> inverseJacobians, final DoublesPair expiryMaturity, final Interpolator2D nodeSensitivityCalculator,
+  public static DoubleMatrix2D getVegaSurface(final double alpha, final double rho, final double nu,
+      final Map<Double, Interpolator1DDataBundle> alphaDataBundle, final Map<Double, Interpolator1DDataBundle> rhoDataBundle,
+      final Map<Double, Interpolator1DDataBundle> nuDataBundle, final Map<DoublesPair, DoubleMatrix2D> inverseJacobians,
+      final DoublesPair expiryMaturity, final Interpolator2D nodeSensitivityCalculator,
       final Map<Double, List<Double>> fittedDataPoints, final VolatilitySurfaceDefinition<Object, Object> definition) {
     final Map<Double, List<Pair<Double, Double>>> alphaGridNodeSensitivities =
       SABRVegaCalculationUtils.getMaturityExpiryValueMap(nodeSensitivityCalculator.getNodeSensitivitiesForValue(alphaDataBundle, expiryMaturity));
@@ -126,7 +127,8 @@ public class SABRVegaCalculationUtils {
     return new DoubleMatrix2D(result);
   }
 
-  private static Map<Double, DoubleMatrix2D> getVegaCubeForParameter(final double parameter, final Map<Double, List<Pair<Double, Double>>> gridNodeSensitivities,
+  private static Map<Double, DoubleMatrix2D> getVegaCubeForParameter(final double parameter,
+      final Map<Double, List<Pair<Double, Double>>> gridNodeSensitivities,
       final Map<Double, List<Pair<Double, DoubleMatrix2D>>> inverseJacobians, final int parameterNumber) {
     final Map<Double, DoubleMatrix2D> vega = new TreeMap<>();
     for (final Map.Entry<Double, List<Pair<Double, Double>>> entry : gridNodeSensitivities.entrySet()) {

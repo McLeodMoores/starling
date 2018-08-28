@@ -42,7 +42,8 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class MarketDataSelectionGraphManipulatorTest {
 
-  private final ComputationTargetResolver.AtVersionCorrection _resolver = MockComputationTargetResolver.resolved().atVersionCorrection(VersionCorrection.LATEST);
+  private final ComputationTargetResolver.AtVersionCorrection _resolver =
+      MockComputationTargetResolver.resolved().atVersionCorrection(VersionCorrection.LATEST);
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullSelectorConstructionFails() {

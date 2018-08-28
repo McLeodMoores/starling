@@ -242,7 +242,8 @@ public class BjerksundStenslandModel {
     return Math.exp(lambda * t) * Math.pow(s, gamma) * (NORMAL.getCDF(d1) - Math.pow(x / s, kappa) * NORMAL.getCDF(d2));
   }
 
-  protected double getPsi(final double s, final double t1, final double t2, final double gamma, final double h, final double x2, final double x1, final double r,
+  protected double getPsi(final double s, final double t1, final double t2, final double gamma, final double h, final double x2,
+      final double x1, final double r,
       final double b, final double sigma) {
     final double sigmaSq = sigma * sigma;
     final double denom1 = getDenom(t1, sigma);
@@ -341,8 +342,8 @@ public class BjerksundStenslandModel {
   }
 
   /**
-   * Get the option price, plus its delta and gamma. <b>Note</b> if a put is required, the gamma is found by divided difference on the delta. For a call both delta and gamma
-   * are found by Algorithmic Differentiation.
+   * Get the option price, plus its delta and gamma. <b>Note</b> if a put is required, the gamma is found by divided difference on the delta.
+   * For a call both delta and gamma are found by Algorithmic Differentiation.
    * @param s0 The spot
    * @param k The strike
    * @param r The risk-free rate
@@ -352,7 +353,8 @@ public class BjerksundStenslandModel {
    * @param isCall true for calls
    * @return length 3 array of price, delta and gamma
    */
-  public double[] getPriceDeltaGamma(final double s0, final double k, final double r, final double b, final double t, final double sigma, final boolean isCall) {
+  public double[] getPriceDeltaGamma(final double s0, final double k, final double r, final double b, final double t, final double sigma,
+      final boolean isCall) {
     if (isCall) {
       final double[] deltaGamma = getCallDeltaGamma(s0, k, r, b, t, sigma);
       return deltaGammaModifier(s0, k, r, b, t, sigma, true, deltaGamma);
@@ -361,7 +363,8 @@ public class BjerksundStenslandModel {
     return deltaGammaModifier(s0, k, r, b, t, sigma, false, deltaGamma);
   }
 
-  private double[] deltaGammaModifier(final double s0, final double k, final double r, final double b, final double t, final double sigma, final boolean isCall, final double[] deltaGamma) {
+  private double[] deltaGammaModifier(final double s0, final double k, final double r, final double b, final double t, final double sigma,
+      final boolean isCall, final double[] deltaGamma) {
     final double sign = isCall ? 1. : -1.;
     final double fwd = s0 * Math.exp(b * t);
     final double df = Math.exp(-r * t);

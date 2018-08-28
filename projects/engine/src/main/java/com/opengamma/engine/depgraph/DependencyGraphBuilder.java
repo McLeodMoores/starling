@@ -111,11 +111,11 @@ public final class DependencyGraphBuilder implements Cancelable {
   /** The number of active jobs in this instance of DependencyGraphBuilder */
   private final AtomicInteger _activeJobCount = new AtomicInteger();
   /** The set of active jobs in this instance of DependencyGraphBuilder */
-  private final Set<Job> _activeJobs = new HashSet<Job>();
+  private final Set<Job> _activeJobs = new HashSet<>();
   /** The job run queue for this instance of DependencyGraphBuilder */
   private final RunQueue _runQueue;
   /** The deferred job queue for this instance of DependencyGraphBuilder */
-  private final Queue<ContextRunnable> _deferredQueue = new ConcurrentLinkedQueue<ContextRunnable>();
+  private final Queue<ContextRunnable> _deferredQueue = new ConcurrentLinkedQueue<>();
   /** The context for building the dep graph in this instance of DependencyGraphBuilder */
   private final GraphBuildingContext _context = new GraphBuildingContext(this);
   /** The number of completed graph building steps in this instance of DependencyGraphBuilder */
@@ -146,13 +146,13 @@ public final class DependencyGraphBuilder implements Cancelable {
   private FunctionExclusionGroups _functionExclusionGroups;
 
   // The resolve task is ref-counted once for the map (it is being used as a set)
-  private final ConcurrentMap<ValueRequirement, Map<ResolveTask, ResolveTask>> _requirements = new ConcurrentHashMap<ValueRequirement, Map<ResolveTask, ResolveTask>>();
+  private final ConcurrentMap<ValueRequirement, Map<ResolveTask, ResolveTask>> _requirements = new ConcurrentHashMap<>();
 
   /** The number of active resolve tasks for this instance of DependencyGraphBuilder */
   private final AtomicInteger _activeResolveTasks = new AtomicInteger();
 
   // The resolve task is NOT ref-counted (it is only used for parent comparisons), but the value producer is
-  private final ConcurrentMap<ValueSpecification, MapEx<ResolveTask, ResolvedValueProducer>> _specifications = new ConcurrentHashMap<ValueSpecification, MapEx<ResolveTask, ResolvedValueProducer>>();
+  private final ConcurrentMap<ValueSpecification, MapEx<ResolveTask, ResolvedValueProducer>> _specifications = new ConcurrentHashMap<>();
 
   /**
    * Number of additional threads to launch while requirements are being added or the graph is being built. The total number of threads used for graph construction may be up to this value or may be
@@ -173,7 +173,7 @@ public final class DependencyGraphBuilder implements Cancelable {
   // the algorithm in other projects I've worked on.
 
   public static int getDefaultMaxAdditionalThreads() {
-    return NO_BACKGROUND_THREADS ? 0 : (MAX_ADDITIONAL_THREADS >= 0) ? MAX_ADDITIONAL_THREADS : Runtime.getRuntime().availableProcessors();
+    return NO_BACKGROUND_THREADS ? 0 : MAX_ADDITIONAL_THREADS >= 0 ? MAX_ADDITIONAL_THREADS : Runtime.getRuntime().availableProcessors();
   }
 
   public static RunQueueFactory getDefaultRunQueueFactory() {
@@ -255,7 +255,7 @@ public final class DependencyGraphBuilder implements Cancelable {
 
   /**
    * Sets the function exclusion group rules to use.
-   * 
+   *
    * @param exclusionGroups the source of groups, or null to not use function exclusion groups
    */
   public void setFunctionExclusionGroups(final FunctionExclusionGroups exclusionGroups) {
@@ -264,7 +264,7 @@ public final class DependencyGraphBuilder implements Cancelable {
 
   /**
    * Returns the current function exclusion group rules.
-   * 
+   *
    * @return the function exclusion groups or null if none are being used
    */
   public FunctionExclusionGroups getFunctionExclusionGroups() {
@@ -273,7 +273,7 @@ public final class DependencyGraphBuilder implements Cancelable {
 
   /**
    * Sets the target digest rules
-   * 
+   *
    * @param targetDigests the rules, or null to not use target digest rules
    */
   public void setTargetDigests(final TargetDigests targetDigests) {
@@ -286,7 +286,7 @@ public final class DependencyGraphBuilder implements Cancelable {
 
   /**
    * Sets whether to disable extended failure reporting when values can't be resolved.
-   * 
+   *
    * @param disableFailureReporting false to propagate failure information to terminal outputs and report, true to suppress
    */
   public void setDisableFailureReporting(final boolean disableFailureReporting) {
@@ -295,7 +295,7 @@ public final class DependencyGraphBuilder implements Cancelable {
 
   /**
    * Tests whether extended failure reporting is disabled.
-   * 
+   *
    * @return true if there is no failure reporting, false otherwise
    */
   public boolean isDisableFailureReporting() {
@@ -309,7 +309,7 @@ public final class DependencyGraphBuilder implements Cancelable {
   /**
    * Sets the maximum number of background threads to use for graph building. Set to zero to disable background building. When set to a non-zero amount, if there is additional pending work jobs may be
    * started.
-   * 
+   *
    * @param maxAdditionalThreads maximum number of background threads to use
    */
   public void setMaxAdditionalThreads(final int maxAdditionalThreads) {
@@ -355,7 +355,7 @@ public final class DependencyGraphBuilder implements Cancelable {
   };
 
   protected ComputationTargetSpecification resolveTargetReference(final ComputationTargetReference reference) {
-    ComputationTargetSpecification specification = getCompilationContext().getComputationTargetResolver().getSpecificationResolver().getTargetSpecification(reference);
+    final ComputationTargetSpecification specification = getCompilationContext().getComputationTargetResolver().getSpecificationResolver().getTargetSpecification(reference);
     if (specification == null) {
       LOGGER.warn("Couldn't resolve {}", reference);
       return null;
@@ -378,7 +378,7 @@ public final class DependencyGraphBuilder implements Cancelable {
   protected MapEx<ResolveTask, ResolvedValueProducer> getOrCreateTasks(final ValueSpecification valueSpecification) {
     MapEx<ResolveTask, ResolvedValueProducer> tasks = getTasks(valueSpecification);
     if (tasks == null) {
-      tasks = new MapEx<ResolveTask, ResolvedValueProducer>();
+      tasks = new MapEx<>();
       final MapEx<ResolveTask, ResolvedValueProducer> existing = _specifications.putIfAbsent(valueSpecification, tasks);
       if (existing != null) {
         return existing;
@@ -394,7 +394,7 @@ public final class DependencyGraphBuilder implements Cancelable {
   protected Map<ResolveTask, ResolveTask> getOrCreateTasks(final ValueRequirement valueRequirement) {
     Map<ResolveTask, ResolveTask> tasks = getTasks(valueRequirement);
     if (tasks == null) {
-      tasks = new HashMap<ResolveTask, ResolveTask>();
+      tasks = new HashMap<>();
       final Map<ResolveTask, ResolveTask> existing = _requirements.putIfAbsent(valueRequirement, tasks);
       if (existing != null) {
         return existing;
@@ -407,7 +407,7 @@ public final class DependencyGraphBuilder implements Cancelable {
    * Fetches an existing resolution of the given value specification.
    * <p>
    * The {@code valueSpecification} parameter must be normalized.
-   * 
+   *
    * @param valueSpecification the specification to search for, not null
    * @return the resolved value, or null if not resolved
    */
@@ -426,7 +426,7 @@ public final class DependencyGraphBuilder implements Cancelable {
   /**
    * Sets the listener to receive resolution failures. ResolutionFailureVisitors can also be registered here. If not set, a synthetic exception is created for each failure in the miscellaneous
    * exception set.
-   * 
+   *
    * @param failureListener the listener to use, or null to create synthetic exceptions
    */
   public void setResolutionFailureListener(final ResolutionFailureListener failureListener) {
@@ -448,7 +448,7 @@ public final class DependencyGraphBuilder implements Cancelable {
    * <p>
    * This may not be called concurrently because of the way the root/global context gets used. Everything that calls it should hold the {@link #getContext} monitor so nothing else can use the context
    * - this monitor also serves as the build complete lock.
-   * 
+   *
    * @param requirement the requirement to resolve
    */
   private void addTargetImpl(final ValueRequirement requirement) {
@@ -463,7 +463,7 @@ public final class DependencyGraphBuilder implements Cancelable {
   /**
    * Passes a previously constructed dependency graph to the builder as part of an incremental build. The nodes from the graph will be adopted by the builder and may be returned in the graph that this
    * eventually produces. This should be called before adding any targets to the build.
-   * 
+   *
    * @param graph the result of a previous graph build
    */
   public void setDependencyGraph(final DependencyGraph graph) {
@@ -477,7 +477,7 @@ public final class DependencyGraphBuilder implements Cancelable {
    * The caller must ensure that the same requirement is not passed multiple times to the builder. Depending on scheduling and memory availability, the cases may be identified and coalesced (by
    * {@link GraphBuildingContext#resolveRequirement}) into a single logical operation. Alternatively the resolutions may run to completion to include terminal outputs in the result. If the function
    * library contains an ambiguity or other aspect that means the resolved value specification could differ this will result in an invalid dependency graph.
-   * 
+   *
    * @param requirement requirement to add, not null
    */
   public void addTarget(final ValueRequirement requirement) {
@@ -505,7 +505,7 @@ public final class DependencyGraphBuilder implements Cancelable {
    * The caller must ensure that the same requirement is not passed multiple times to the builder. Depending on scheduling and memory availability, the cases may be identified and coalesced (by
    * {@link GraphBuildingContext#resolveRequirement}) into a single logical operation. Alternatively the resolutions may run to completion to include terminal outputs in the result. If the function
    * library contains an ambiguity or other aspect that means the resolved value specification could differ this will result in an invalid dependency graph.
-   * 
+   *
    * @param requirements requirements to add, not null and not containing nulls.
    */
   public void addTarget(final Collection<ValueRequirement> requirements) {
@@ -527,7 +527,7 @@ public final class DependencyGraphBuilder implements Cancelable {
   /**
    * Add a task to the run queue, increment the count of scheduled steps, and start/wake up a background thread if the run queue was empty, as this indicates that there are probably no active threads
    * at this precise moment.
-   * 
+   *
    * @param runnable the task to add to the run queue
    */
   protected void addToRunQueue(final ContextRunnable runnable) {
@@ -570,11 +570,11 @@ public final class DependencyGraphBuilder implements Cancelable {
     LOGGER.debug("Checking for tasks to abort");
     ABORT_LOOPS.begin();
     try {
-      final Collection<ResolveTask> toCheck = new ArrayList<ResolveTask>();
+      final Collection<ResolveTask> toCheck = new ArrayList<>();
       for (final MapEx<ResolveTask, ResolvedValueProducer> tasks : _specifications.values()) {
         synchronized (tasks) {
           if (!tasks.containsKey(null)) {
-            toCheck.addAll((Collection<ResolveTask>) tasks.keySet());
+            toCheck.addAll(tasks.keySet());
           }
         }
       }
@@ -588,7 +588,7 @@ public final class DependencyGraphBuilder implements Cancelable {
       final GraphBuildingContext context = new GraphBuildingContext(this);
       int cancelled = 0;
       final Map<Chain, Chain.LoopState> checked = Maps.newHashMapWithExpectedSize(toCheck.size());
-      for (ResolveTask task : toCheck) {
+      for (final ResolveTask task : toCheck) {
         cancelled += task.cancelLoopMembers(context, checked);
       }
       getContext().mergeThreadContext(context);
@@ -654,7 +654,7 @@ public final class DependencyGraphBuilder implements Cancelable {
 
         // Watch for late arrivals in the run queue; they might have seen the old value
         // of activeJobs and not started anything.
-        while (!_runQueue.isEmpty() && (activeJobs < getMaxAdditionalThreads()) && !_poison) {
+        while (!_runQueue.isEmpty() && activeJobs < getMaxAdditionalThreads() && !_poison) {
           if (_activeJobCount.compareAndSet(activeJobs, activeJobs + 1)) {
             LOGGER.debug("Building job resuming");
             // Note the log messages may go from "resuming" to stopped if the poison arrives between
@@ -702,7 +702,7 @@ public final class DependencyGraphBuilder implements Cancelable {
   /**
    * Main process loop, takes a runnable task and executes it. If the graph has not been built when getDependencyGraph is called, the calling thread will also join this. There are additional threads
    * that also run in a pool to complete the work of the graph building.
-   * 
+   *
    * @param context the calling thread's building context
    * @return true if there is more work still to do, false if all the work is done
    */
@@ -738,7 +738,7 @@ public final class DependencyGraphBuilder implements Cancelable {
 
   /**
    * Tests if the graph has been built or if work is still required. Graphs are only built in the background if additional threads is set to non-zero.
-   * 
+   *
    * @return true if the graph has been built, false if it is outstanding
    * @throws CancellationException if the graph build has been canceled
    */
@@ -756,17 +756,17 @@ public final class DependencyGraphBuilder implements Cancelable {
 
   /**
    * Returns the top-level value requirements currently being resolved.
-   * 
+   *
    * @return the value requirements
    */
   public Collection<ValueRequirement> getOutstandingResolutions() {
-    return new ArrayList<ValueRequirement>(_pendingRequirements.getValueRequirements());
+    return new ArrayList<>(_pendingRequirements.getValueRequirements());
   }
 
   /**
    * Returns the dependency graph if it has been completed by background threads. If the graph has not been completed it will return null. If the number of additional threads is set to zero then the
    * graph will not be built until {@link #getDependencyGraph} is called.
-   * 
+   *
    * @return the graph if built, null otherwise
    */
   public DependencyGraph pollDependencyGraph() {
@@ -781,7 +781,7 @@ public final class DependencyGraphBuilder implements Cancelable {
    * additional threads to zero to prevent further threads from being started by the existing ones before they terminate. If a thread is already blocked in a call to {@link #getDependencyGraph} it
    * will receive a {@link CancellationException} unless the graph construction completes before the cancellation is noted by that or other background threads. The cancellation is temporary, the
    * additional threads can be reset afterwards for continued background building or a subsequent call to getDependencyGraph can finish the work.
-   * 
+   *
    * @param mayInterruptIfRunning ignored
    * @return true if the build was cancelled
    */
@@ -818,7 +818,7 @@ public final class DependencyGraphBuilder implements Cancelable {
 
   /**
    * Estimate the completion of the build, from 0 (nothing completed) to 1 (all done). The completion is based on the number of completed steps versus the currently known number of steps.
-   * 
+   *
    * @return the completion estimate
    */
   public Supplier<Double> buildFractionEstimate() {
@@ -837,7 +837,7 @@ public final class DependencyGraphBuilder implements Cancelable {
    * Returns the constructed dependency graph able to compute as many of the requirements requested as possible. If graph construction has not completed, will block the caller until it has and the
    * calling thread will be used for the remaining graph construction work (which will be the full graph construction if additional threads is set to zero). For a non-blocking form see
    * {@link #pollDependencyGraph} or {@link #getDependencyGraph(boolean)}.
-   * 
+   *
    * @return the graph, not null
    */
   public DependencyGraph getDependencyGraph() {
@@ -880,7 +880,7 @@ public final class DependencyGraphBuilder implements Cancelable {
    * Returns the constructed dependency graph able to compute as many of the requirements requested as possible. If graph construction has not completed, the calling thread will participate in graph
    * construction (which will be the full graph construction if additional threads is set to zero). When background threads are being used, the caller may optionally be blocked until all have
    * completed. For a completely non-blocking form see {@link #pollDependencyGraph}.
-   * 
+   *
    * @param allowBackgroundContinuation whether to block the caller until graph construction is complete. If set to false the function may return null if background threads are still completing but
    *          there was no work for the calling thread to do.
    * @return the graph if built, null if still being built in the background
@@ -908,14 +908,14 @@ public final class DependencyGraphBuilder implements Cancelable {
    * Flushes data that is unlikely to be needed again from the resolution caches. Anything discarded will either never be needed again for any pending resolutions, or is a cached production that can
    * be recalculated if necessary. Discards can be a multiple stage process - repeated calls all the while this function returns true must be used to flush all possible state and make as much memory
    * available as possible for the garbage collector.
-   * 
+   *
    * @return true if one or more states were discarded, false if there was nothing that can be discarded
    */
   @SuppressWarnings("unchecked")
   protected boolean flushCachedStates() {
     // TODO: use heuristics to throw data away more sensibly (e.g. LRU)
     int removed = 0;
-    final List<ResolvedValueProducer> discards = new ArrayList<ResolvedValueProducer>();
+    final List<ResolvedValueProducer> discards = new ArrayList<>();
     GraphBuildingContext context = null;
     final Iterator<MapEx<ResolveTask, ResolvedValueProducer>> itrSpecifications = _specifications.values().iterator();
     while (itrSpecifications.hasNext()) {
@@ -1019,8 +1019,8 @@ public final class DependencyGraphBuilder implements Cancelable {
 
   protected DependencyGraph createDependencyGraph() {
     final Pair<Collection<DependencyNode>, Integer> nodes = getTerminalValuesCallback().getGraphRootNodes();
-    final DependencyGraphImpl graph = new DependencyGraphImpl(getCalculationConfigurationName(), nodes.getFirst(), nodes.getSecond(), getTerminalValuesCallback()
-        .getTerminalValuesBySpecification());
+    final DependencyGraphImpl graph = new DependencyGraphImpl(getCalculationConfigurationName(), nodes.getFirst(), nodes.getSecond(),
+        getTerminalValuesCallback().getTerminalValuesBySpecification());
     if (DEBUG_DUMP_DEPENDENCY_GRAPH) {
       final PrintStream ps = openDebugStream("dependencyGraph");
       ps.println("Configuration = " + getCalculationConfigurationName());
@@ -1056,7 +1056,7 @@ public final class DependencyGraphBuilder implements Cancelable {
   /**
    * Returns a map of the originally requested value requirements to the value specifications that were put into the graph as terminal outputs. Any unsatisfied requirements will be absent from the
    * map.
-   * 
+   *
    * @return the map of requirements to value specifications, not null
    */
   public Map<ValueRequirement, ValueSpecification> getValueRequirementMapping() {
@@ -1065,7 +1065,7 @@ public final class DependencyGraphBuilder implements Cancelable {
 
   /**
    * Returns the set of exceptions that may have prevented graph construction.
-   * 
+   *
    * @return the set of exceptions that were thrown by the building process, null for none
    */
   public Map<Throwable, Integer> getExceptions() {

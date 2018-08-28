@@ -88,7 +88,8 @@ public class InterpolatedSurfaceMultiplicativeShiftFunction implements SurfaceSh
    * {@inheritDoc}
    */
   @Override
-  public InterpolatedDoublesSurface evaluate(final InterpolatedDoublesSurface surface, final double[] xShift, final double[] yShift, final double[] percentage) {
+  public InterpolatedDoublesSurface evaluate(final InterpolatedDoublesSurface surface, final double[] xShift, final double[] yShift,
+      final double[] percentage) {
     Validate.notNull(surface, "surface");
     return evaluate(surface, xShift, yShift, percentage, "MULTIPLE_MULTIPLIER_" + surface.getName());
   }
@@ -97,7 +98,8 @@ public class InterpolatedSurfaceMultiplicativeShiftFunction implements SurfaceSh
    * {@inheritDoc}
    */
   @Override
-  public InterpolatedDoublesSurface evaluate(final InterpolatedDoublesSurface surface, final double[] xShift, final double[] yShift, final double[] percentage, final String newName) {
+  public InterpolatedDoublesSurface evaluate(final InterpolatedDoublesSurface surface, final double[] xShift, final double[] yShift,
+      final double[] percentage, final String newName) {
     Validate.notNull(surface, "surface");
     Validate.notNull(xShift, "x shift");
     Validate.notNull(yShift, "y shift");

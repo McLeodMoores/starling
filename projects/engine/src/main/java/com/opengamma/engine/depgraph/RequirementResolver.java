@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph;
@@ -14,8 +14,9 @@ import com.opengamma.engine.function.exclusion.FunctionExclusionGroup;
 import com.opengamma.engine.value.ValueRequirement;
 
 /**
- * Resolves an individual requirement by aggregating the results of any existing tasks already resolving that requirement. If these missed an exploration because of a recursion constraint introduced
- * by their parent tasks, a "fallback" task is created to finish the job for the caller's parent.
+ * Resolves an individual requirement by aggregating the results of any existing tasks already resolving that requirement.
+ * If these missed an exploration because of a recursion constraint introduced by their parent tasks, a "fallback" task is
+ * created to finish the job for the caller's parent.
  */
 /* package */final class RequirementResolver extends AggregateResolvedValueProducer {
 
@@ -28,7 +29,8 @@ import com.opengamma.engine.value.ValueRequirement;
   private ResolveTask _fallback;
   private ResolvedValue[] _coreResults;
 
-  public RequirementResolver(final ValueRequirement valueRequirement, final ResolveTask parentTask, final Collection<FunctionExclusionGroup> functionExclusion) {
+  public RequirementResolver(final ValueRequirement valueRequirement, final ResolveTask parentTask,
+      final Collection<FunctionExclusionGroup> functionExclusion) {
     super(valueRequirement);
     LOGGER.debug("Created requirement resolver {}/{}", valueRequirement, parentTask);
     _parentTask = parentTask;
@@ -37,7 +39,7 @@ import com.opengamma.engine.value.ValueRequirement;
 
   public void setTasks(final GraphBuildingContext context, final ResolveTask[] tasks) {
     _tasks = tasks;
-    for (ResolveTask task : tasks) {
+    for (final ResolveTask task : tasks) {
       addProducer(context, task);
     }
   }
@@ -46,7 +48,7 @@ import com.opengamma.engine.value.ValueRequirement;
   protected boolean isLastResult() {
     // Caller already holds monitor - see javadoc
     if (_fallback == null) {
-      for (ResolveTask task : _tasks) {
+      for (final ResolveTask task : _tasks) {
         if (!task.wasRecursionDetected()) {
           // One ran to completion without hitting a recursion constraint so no fallback task will be created - this is the last result
           return true;
@@ -71,12 +73,12 @@ import com.opengamma.engine.value.ValueRequirement;
         LOGGER.debug("Ignoring finish on discarded {}", this);
         return;
       }
-      assert (pendingTasks == 0) || (pendingTasks == 1); // Either the final pending task running with the "lastValue" flag, or all tasks have finished
+      assert pendingTasks == 0 || pendingTasks == 1; // Either the final pending task running with the "lastValue" flag, or all tasks have finished
       fallback = _fallback;
       if (fallback == null) {
         // Only create a fallback if none of the others ran to completion without hitting a recursion constraint.
         useFallback = true;
-        for (ResolveTask task : _tasks) {
+        for (final ResolveTask task : _tasks) {
           if (!task.wasRecursionDetected()) {
             useFallback = false;
             break;
@@ -88,7 +90,7 @@ import com.opengamma.engine.value.ValueRequirement;
         _fallback = null;
       }
     }
-    if ((fallback == null) && useFallback) {
+    if (fallback == null && useFallback) {
       fallback = context.getOrCreateTaskResolving(getValueRequirement(), _parentTask, _functionExclusion);
       LOGGER.debug("Creating fallback task {}", fallback);
       synchronized (this) {
@@ -106,17 +108,17 @@ import com.opengamma.engine.value.ValueRequirement;
       if (fallback.wasRecursionDetected()) {
         final ResolvedValue[] fallbackResults = getResults();
         // If this resolver was ref-counted to zero (nothing subscribed to it) then the results can be null at this point
-        if ((fallbackResults == null) || (fallbackResults.length == 0)) {
+        if (fallbackResults == null || fallbackResults.length == 0) {
           // Task produced no new results - discard
           LOGGER.debug("Discarding fallback task {} by {}", fallback, this);
           context.discardTask(fallback);
         } else {
           boolean matched = true;
           synchronized (this) {
-            for (int i = 0; i < fallbackResults.length; i++) {
+            for (final ResolvedValue fallbackResult : fallbackResults) {
               boolean found = false;
-              for (int j = 0; j < _coreResults.length; j++) {
-                if (fallbackResults[i].equals(_coreResults[j])) {
+              for (final ResolvedValue coreResult : _coreResults) {
+                if (fallbackResult.equals(coreResult)) {
                   found = true;
                   break;
                 }

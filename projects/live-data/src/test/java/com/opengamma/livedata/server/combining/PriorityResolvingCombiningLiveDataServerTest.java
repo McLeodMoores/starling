@@ -203,7 +203,8 @@ public class PriorityResolvingCombiningLiveDataServerTest {
 
   public void notEntitled() {
     final LiveDataSpecification spec = new LiveDataSpecification("No Normalization", ExternalId.of(_domainC, "X"));
-    final LiveDataSubscriptionRequest request = new LiveDataSubscriptionRequest(UNAUTHORIZED_USER, SubscriptionType.NON_PERSISTENT, Collections.singleton(spec));
+    final LiveDataSubscriptionRequest request = new LiveDataSubscriptionRequest(UNAUTHORIZED_USER, SubscriptionType.NON_PERSISTENT,
+        Collections.singleton(spec));
     final LiveDataSubscriptionResponseMsg responseMsg = _combiningServer.subscriptionRequestMade(request);
     assertEquals(responseMsg.getRequestingUser(), UNAUTHORIZED_USER);
     assertEquals(1, responseMsg.getResponses().size());

@@ -197,7 +197,7 @@ public abstract class SABRYCNSFunction extends AbstractFunction.NonCompiledInvok
     final ValueProperties constraints = desiredValue.getConstraints();
     Set<String> requestedCurveNames = constraints.getValues(ValuePropertyNames.CURVE);
     final boolean permissive = OpenGammaCompilationContext.isPermissive(context);
-    if (!permissive && ((requestedCurveNames == null) || requestedCurveNames.isEmpty())) {
+    if (!permissive && (requestedCurveNames == null || requestedCurveNames.isEmpty())) {
       LOGGER.error("Must ask for a single named curve");
       return null;
     }
@@ -237,7 +237,7 @@ public abstract class SABRYCNSFunction extends AbstractFunction.NonCompiledInvok
       return null;
     }
     final String[] availableCurveNames = curveCalculationConfig.getYieldCurveNames();
-    if ((requestedCurveNames == null) || requestedCurveNames.isEmpty()) {
+    if (requestedCurveNames == null || requestedCurveNames.isEmpty()) {
       requestedCurveNames = Sets.newHashSet(availableCurveNames);
     } else {
       final Set<String> intersection = YieldCurveFunctionUtils.intersection(requestedCurveNames, availableCurveNames);
@@ -247,7 +247,7 @@ public abstract class SABRYCNSFunction extends AbstractFunction.NonCompiledInvok
       }
       requestedCurveNames = intersection;
     }
-    if (!permissive && (requestedCurveNames.size() != 1)) {
+    if (!permissive && requestedCurveNames.size() != 1) {
       LOGGER.error("Must specify single curve name constraint, got {}", requestedCurveNames);
       return null;
     }
@@ -323,7 +323,8 @@ public abstract class SABRYCNSFunction extends AbstractFunction.NonCompiledInvok
     return new ValueRequirement(ValueRequirementNames.PRESENT_VALUE_COUPON_SENSITIVITY, ComputationTargetSpecification.of(currency), properties);
   }
 
-  private static ValueRequirement getJacobianRequirement(final Currency currency, final String curveCalculationConfigName, final String curveCalculationMethod) {
+  private static ValueRequirement getJacobianRequirement(final Currency currency, final String curveCalculationConfigName,
+      final String curveCalculationMethod) {
     final ValueProperties properties = ValueProperties.builder().with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfigName)
         .with(ValuePropertyNames.CURVE_CALCULATION_METHOD, curveCalculationMethod).get();
     return new ValueRequirement(ValueRequirementNames.YIELD_CURVE_JACOBIAN, ComputationTargetSpecification.of(currency), properties);

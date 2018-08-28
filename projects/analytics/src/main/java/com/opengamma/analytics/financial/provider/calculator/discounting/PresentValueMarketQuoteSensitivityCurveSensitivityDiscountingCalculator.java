@@ -105,7 +105,8 @@ public final class PresentValueMarketQuoteSensitivityCurveSensitivityDiscounting
   }
 
   @Override
-  public MulticurveSensitivity visitCouponIborCompoundingFlatSpread(final CouponIborCompoundingFlatSpread coupon, final MulticurveProviderInterface multicurve) {
+  public MulticurveSensitivity visitCouponIborCompoundingFlatSpread(final CouponIborCompoundingFlatSpread coupon,
+      final MulticurveProviderInterface multicurve) {
     // TODO: [PLAT-5978] Change to exact sensitivity.
     return visitCoupon(coupon, multicurve);
   }

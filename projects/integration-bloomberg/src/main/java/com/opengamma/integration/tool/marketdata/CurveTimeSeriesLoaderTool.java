@@ -104,8 +104,8 @@ public final class CurveTimeSeriesLoaderTool extends AbstractTool<IntegrationToo
    * @return list of curve construction configurations
    */
   private List<CurveConstructionConfiguration> getCurveConstructionConfigs(final ConfigMaster configMaster) {
-    final List<CurveConstructionConfiguration> results = new ArrayList<CurveConstructionConfiguration>();
-    final ConfigSearchRequest<CurveConstructionConfiguration> request = new ConfigSearchRequest<CurveConstructionConfiguration>(CurveConstructionConfiguration.class);
+    final List<CurveConstructionConfiguration> results = new ArrayList<>();
+    final ConfigSearchRequest<CurveConstructionConfiguration> request = new ConfigSearchRequest<>(CurveConstructionConfiguration.class);
     for (final ConfigDocument doc : ConfigSearchIterator.iterable(configMaster, request)) {
       results.add((CurveConstructionConfiguration) doc.getConfig().getValue());
     }
@@ -191,9 +191,11 @@ public final class CurveTimeSeriesLoaderTool extends AbstractTool<IntegrationToo
    * @param externalIdSets a varargs list of sets of external ids
    */
   @SafeVarargs
-  private final void loadHistoricalData(final boolean write, final String[] dataFields, final String dataProvider, final Set<ExternalId>... externalIdSets) { //CSIGNORE
-    final BloombergHistoricalTimeSeriesLoader loader = new BloombergHistoricalTimeSeriesLoader(getToolContext().getHistoricalTimeSeriesMaster(), getToolContext()
-        .getHistoricalTimeSeriesProvider(), new BloombergIdentifierProvider(getToolContext().getBloombergReferenceDataProvider()));
+  private final void loadHistoricalData(final boolean write, final String[] dataFields, final String dataProvider,
+      final Set<ExternalId>... externalIdSets) {
+    final BloombergHistoricalTimeSeriesLoader loader =
+        new BloombergHistoricalTimeSeriesLoader(getToolContext().getHistoricalTimeSeriesMaster(), getToolContext()
+            .getHistoricalTimeSeriesProvider(), new BloombergIdentifierProvider(getToolContext().getBloombergReferenceDataProvider()));
 
     for (final Set<ExternalId> externalIds : externalIdSets) {
       if (externalIds.size() > 0) {

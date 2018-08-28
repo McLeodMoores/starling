@@ -49,7 +49,8 @@ public class FinancialUserManager {
    * @param clientTracker  the tracker, not null
    * @param userDataTracker  the tracker, not null
    */
-  public FinancialUserManager(final FinancialUserServices services, final FinancialClientTracker clientTracker, final FinancialUserDataTracker userDataTracker) {
+  public FinancialUserManager(final FinancialUserServices services, final FinancialClientTracker clientTracker,
+      final FinancialUserDataTracker userDataTracker) {
     _services = services;
     _clientTracker = clientTracker;
     _userDataTracker = userDataTracker;

@@ -280,7 +280,8 @@ public class InterestRateSwapSecurityConverter extends FinancialSecurityVisitorA
     // Fallback to convention lookup for old behaviour
     final Convention convention = _conventionSource.getSingle(floatLeg.getFloatingReferenceRateId());
     if (!(convention instanceof OvernightIndexConvention)) {
-      throw new OpenGammaRuntimeException("Mis-match between floating rate type " + floatLeg.getFloatingRateType() + " and convention " + convention.getClass());
+      throw new OpenGammaRuntimeException("Mis-match between floating rate type " + floatLeg.getFloatingRateType()
+        + " and convention " + convention.getClass());
     }
     final OvernightIndexConvention onIndexConvention = (OvernightIndexConvention) convention;
     return new IndexON(
@@ -304,7 +305,8 @@ public class InterestRateSwapSecurityConverter extends FinancialSecurityVisitorA
     if (iborLegConvention == null) {
     }
     if (!(iborLegConvention instanceof VanillaIborLegConvention)) {
-      throw new OpenGammaRuntimeException("Mis-match between floating rate type " + floatLeg.getFloatingRateType() + " and convention " + iborLegConvention.getClass());
+      throw new OpenGammaRuntimeException("Mis-match between floating rate type " + floatLeg.getFloatingRateType()
+      + " and convention " + iborLegConvention.getClass());
     }
     final Convention iborConvention = _conventionSource.getSingle(((VanillaIborLegConvention) iborLegConvention).getIborIndexConvention());
     if (iborConvention == null) {

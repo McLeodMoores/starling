@@ -32,7 +32,7 @@ public class ComputationTargetResolverUtilsTest {
 
   public void testCreateResolvedTarget_noRewrite() {
     // No re-write
-    ComputationTarget target = ComputationTargetResolverUtils.createResolvedTarget(
+    final ComputationTarget target = ComputationTargetResolverUtils.createResolvedTarget(
         new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, NODE.getUniqueId()).containing(ComputationTargetType.POSITION, POSITION.getUniqueId()), POSITION);
     assertEquals(target.getType(), ComputationTargetType.PORTFOLIO_NODE.containing(ComputationTargetType.of(SimplePosition.class)));
     assertEquals(target.getContextSpecification(), ComputationTargetSpecification.of(NODE));
@@ -41,7 +41,7 @@ public class ComputationTargetResolverUtilsTest {
 
   public void testCreateResolvedTarget_rewriteUnion() {
     // Rewrite to remove the union type
-    ComputationTarget target = ComputationTargetResolverUtils.createResolvedTarget(
+    final ComputationTarget target = ComputationTargetResolverUtils.createResolvedTarget(
         new ComputationTargetSpecification(ComputationTargetType.POSITION.or(ComputationTargetType.TRADE), POSITION.getUniqueId()), POSITION);
     assertEquals(target.getType(), ComputationTargetType.of(SimplePosition.class));
     assertEquals(target.getContextSpecification(), null);
@@ -51,21 +51,26 @@ public class ComputationTargetResolverUtilsTest {
   public void testCreateResolvedTarget_rewriteNested() {
     // Rewrite the nested type
     ComputationTarget target = ComputationTargetResolverUtils.createResolvedTarget(
-        new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, NODE.getUniqueId()).containing(ComputationTargetType.POSITION.or(ComputationTargetType.TRADE),
-            POSITION.getUniqueId()), POSITION);
+        new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE,
+            NODE.getUniqueId()).containing(ComputationTargetType.POSITION.or(ComputationTargetType.TRADE), POSITION.getUniqueId()), POSITION);
     assertEquals(target.getType(), ComputationTargetType.PORTFOLIO_NODE.containing(ComputationTargetType.of(SimplePosition.class)));
     assertEquals(target.getContextSpecification(), ComputationTargetSpecification.of(NODE));
     assertSame(target.getValue(), POSITION);
     target = ComputationTargetResolverUtils.createResolvedTarget(
-        new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, NODE.getUniqueId()).containing(ComputationTargetType.PORTFOLIO_NODE, NODE.getUniqueId()).containing(
+        new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE,
+            NODE.getUniqueId()).containing(ComputationTargetType.PORTFOLIO_NODE, NODE.getUniqueId()).containing(
             ComputationTargetType.POSITION.or(ComputationTargetType.TRADE), POSITION.getUniqueId()), POSITION);
-    assertEquals(target.getType(), ComputationTargetType.PORTFOLIO_NODE.containing(ComputationTargetType.PORTFOLIO_NODE).containing(ComputationTargetType.of(SimplePosition.class)));
-    assertEquals(target.getContextSpecification(), ComputationTargetSpecification.of(NODE).containing(ComputationTargetType.PORTFOLIO_NODE, NODE.getUniqueId()));
+    assertEquals(target.getType(),
+        ComputationTargetType.PORTFOLIO_NODE.containing(ComputationTargetType.PORTFOLIO_NODE).containing(ComputationTargetType.of(SimplePosition.class)));
+    assertEquals(target.getContextSpecification(),
+        ComputationTargetSpecification.of(NODE).containing(ComputationTargetType.PORTFOLIO_NODE, NODE.getUniqueId()));
     assertSame(target.getValue(), POSITION);
   }
 
   public void testCreateResolvedTarget_rewriteSpec() {
-    ComputationTarget target = ComputationTargetResolverUtils.createResolvedTarget(new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, NODE.getUniqueId().toLatest()), NODE);
+    final ComputationTarget target =
+        ComputationTargetResolverUtils.createResolvedTarget(new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE,
+            NODE.getUniqueId().toLatest()), NODE);
     assertEquals(target.getType(), ComputationTargetType.of(SimplePortfolioNode.class));
     assertEquals(target.getUniqueId(), NODE.getUniqueId());
   }

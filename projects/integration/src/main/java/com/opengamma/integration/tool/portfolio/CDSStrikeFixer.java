@@ -83,7 +83,8 @@ public class CDSStrikeFixer extends AbstractTool<ToolContext> {
     final String snapshotName = "Sameday spread";
     final MarketDataSnapshotSearchRequest marketDataSnapshotSearchRequest = new MarketDataSnapshotSearchRequest();
     marketDataSnapshotSearchRequest.setName(snapshotName);
-    final MarketDataSnapshotSearchResult marketDataSnapshotSearchResult = getToolContext().getMarketDataSnapshotMaster().search(marketDataSnapshotSearchRequest);
+    final MarketDataSnapshotSearchResult marketDataSnapshotSearchResult =
+        getToolContext().getMarketDataSnapshotMaster().search(marketDataSnapshotSearchRequest);
     final ManageableMarketDataSnapshot snapshot = marketDataSnapshotSearchResult.getFirstSnapshot();
 
     final PortfolioSearchRequest portfolioSearchRequest = new PortfolioSearchRequest();
@@ -121,7 +122,7 @@ public class CDSStrikeFixer extends AbstractTool<ToolContext> {
           final String curveDefinitionID = "SAMEDAY_" + cds.getReferenceEntity().getValue() + "_" + cds.getNotional().getCurrency() + "_" +
               cds.getDebtSeniority().toString() + "_" + cds.getRestructuringClause();
 
-          final ConfigSearchRequest<CurveDefinition> curveDefinitionConfigSearchRequest = new ConfigSearchRequest<CurveDefinition>(CurveDefinition.class);
+          final ConfigSearchRequest<CurveDefinition> curveDefinitionConfigSearchRequest = new ConfigSearchRequest<>(CurveDefinition.class);
           curveDefinitionConfigSearchRequest.setName(curveDefinitionID);
           final CurveDefinition curveDefinition = getToolContext().getConfigMaster().search(
               curveDefinitionConfigSearchRequest).getFirstValue().getValue();

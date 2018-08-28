@@ -73,25 +73,27 @@ public class SimpleResolutionFailureVisitor extends ResolutionFailureVisitor<Lis
   }
 
   @Override
-  protected List<ResolutionFailure> visitGetAdditionalRequirementsFailed(final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput,
+  protected List<ResolutionFailure> visitGetAdditionalRequirementsFailed(final ValueRequirement valueRequirement, final String function,
+      final ValueSpecification desiredOutput, final Map<ValueSpecification, ValueRequirement> requirements) {
+    return Collections.emptyList(); //TODO is this correct?
+  }
+
+  @Override
+  protected List<ResolutionFailure> visitGetResultsFailed(final ValueRequirement valueRequirement, final String function,
+      final ValueSpecification desiredOutput,
       final Map<ValueSpecification, ValueRequirement> requirements) {
     return Collections.emptyList(); //TODO is this correct?
   }
 
   @Override
-  protected List<ResolutionFailure> visitGetResultsFailed(final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput,
-      final Map<ValueSpecification, ValueRequirement> requirements) {
+  protected List<ResolutionFailure> visitGetRequirementsFailed(final ValueRequirement valueRequirement, final String function,
+      final ValueSpecification desiredOutput) {
     return Collections.emptyList(); //TODO is this correct?
   }
 
   @Override
-  protected List<ResolutionFailure> visitGetRequirementsFailed(final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput) {
-    return Collections.emptyList(); //TODO is this correct?
-  }
-
-  @Override
-  protected List<ResolutionFailure> visitLateResolutionFailure(final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput,
-      final Map<ValueSpecification, ValueRequirement> requirements) {
+  protected List<ResolutionFailure> visitLateResolutionFailure(final ValueRequirement valueRequirement, final String function,
+      final ValueSpecification desiredOutput, final Map<ValueSpecification, ValueRequirement> requirements) {
     return Collections.emptyList(); //TODO is this correct?
   }
 

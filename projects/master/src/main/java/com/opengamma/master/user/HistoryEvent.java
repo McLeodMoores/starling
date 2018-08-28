@@ -75,7 +75,8 @@ public class HistoryEvent implements ImmutableBean, Comparable<HistoryEvent> {
    * @param changes  the changes that occurred, not null
    * @return the event, not null
    */
-  public static HistoryEvent of(final HistoryEventType type, final UniqueId uniqueId, final String userName, final Instant instant, final List<String> changes) {
+  public static HistoryEvent of(final HistoryEventType type, final UniqueId uniqueId, final String userName,
+      final Instant instant, final List<String> changes) {
     return new HistoryEvent(type, uniqueId, userName, instant, changes);
   }
 

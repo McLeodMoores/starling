@@ -109,10 +109,12 @@ public class DefaultPropertyFunctionsTest {
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       final Trade trade = target.getTrade();
       final Security security = trade.getSecurity();
-      final ValueRequirement requirement = new ValueRequirement(_requirementName, ComputationTargetType.SECURITY, security.getUniqueId(), getInputConstraint(desiredValue));
+      final ValueRequirement requirement = new ValueRequirement(_requirementName, ComputationTargetType.SECURITY,
+          security.getUniqueId(), getInputConstraint(desiredValue));
       return Collections.singleton(requirement);
     }
 
@@ -123,8 +125,10 @@ public class DefaultPropertyFunctionsTest {
     }
 
     @Override
-    public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
-      final ValueSpecification specification = new ValueSpecification(_requirementName, target.toSpecification(), getResultProperties(inputs.keySet().iterator().next()));
+    public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+        final Map<ValueSpecification, ValueRequirement> inputs) {
+      final ValueSpecification specification = new ValueSpecification(_requirementName, target.toSpecification(),
+          getResultProperties(inputs.keySet().iterator().next()));
       return Collections.singleton(specification);
     }
 
@@ -190,7 +194,8 @@ public class DefaultPropertyFunctionsTest {
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       final Set<String> forwardCurves = desiredValue.getConstraints().getValues("ForwardCurve");
       if (forwardCurves == null || forwardCurves.isEmpty()) {
         return null;
@@ -207,7 +212,8 @@ public class DefaultPropertyFunctionsTest {
 
     @Override
     public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
-      return Collections.singleton(new ValueSpecification("Present Value", target.toSpecification(), createValueProperties().withAny("ForwardCurve").withAny("FundingCurve")
+      return Collections.singleton(new ValueSpecification("Present Value", target.toSpecification(),
+          createValueProperties().withAny("ForwardCurve").withAny("FundingCurve")
           .with("Currency", "USD").get()));
     }
 

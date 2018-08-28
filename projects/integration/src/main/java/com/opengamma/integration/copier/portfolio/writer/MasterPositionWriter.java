@@ -537,8 +537,9 @@ public class MasterPositionWriter implements PositionWriter {
             if (position.getSecurity() != null) {
               if (_securityIdToPosition.containsKey(position.getSecurity())) {
                 final ManageablePosition existing = _securityIdToPosition.get(position.getSecurity());
-                LOGGER.warn("Merging positions but found existing duplicates under path " + StringUtils.join(newPath, '/') + ": " + position + " and " + existing
-                    + ".  New trades for security " + position.getSecurity().getUniqueId().getObjectId() + " will be added to position " + position.getUniqueId());
+                LOGGER.warn("Merging positions but found existing duplicates under path " + StringUtils.join(newPath, '/')
+                    + ": " + position + " and " + existing + ".  New trades for security "
+                    + position.getSecurity().getUniqueId().getObjectId() + " will be added to position " + position.getUniqueId());
 
               } else {
                 _securityIdToPosition.put(position.getSecurity().getUniqueId().getObjectId(), position);

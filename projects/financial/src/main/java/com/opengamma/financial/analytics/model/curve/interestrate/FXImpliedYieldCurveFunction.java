@@ -5,8 +5,6 @@
  */
 package com.opengamma.financial.analytics.model.curve.interestrate;
 
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -89,9 +87,11 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.UnorderedCurrencyPair;
 import com.opengamma.util.time.Tenor;
 
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+
 /**
  * Constructs a single yield curve and its Jacobian from exogenously-supplied yield curves and a {@link FXForwardCurveDefinition} and {@link FXForwardCurveSpecification}.
- * 
+ *
  * @deprecated This function uses configuration objects that have been superseded. Use functions that descend from {@link MultiCurveFunction}. Curves that use FX forwards directly in
  *             {@link CurveDefinition} (see {@link FXForwardNode}) are constructed in these classes.
  */
@@ -420,7 +420,7 @@ public class FXImpliedYieldCurveFunction extends AbstractFunction.NonCompiledInv
 
   /**
    * Gets the properties for the foreign curve i.e. the fixed yield curve that is being used to imply the yield curve.
-   * 
+   *
    * @param foreignConfig The foreign curve configuration name
    * @param foreignCurveName The foreign curve name
    * @return The foreign curve properties
@@ -432,7 +432,7 @@ public class FXImpliedYieldCurveFunction extends AbstractFunction.NonCompiledInv
 
   /**
    * Gets the properties for the foreign curve configuration Jacobian i.e. the Jacobian that is being used to imply the yield curve.
-   * 
+   *
    * @param foreignConfig The foreign curve configuration name
    * @return The foreign Jacobian properties
    */
@@ -443,7 +443,7 @@ public class FXImpliedYieldCurveFunction extends AbstractFunction.NonCompiledInv
 
   /**
    * Gets the properties of the implied yield curve with no values set.
-   * 
+   *
    * @return The properties
    */
   private ValueProperties getCurveProperties() {
@@ -456,7 +456,7 @@ public class FXImpliedYieldCurveFunction extends AbstractFunction.NonCompiledInv
 
   /**
    * Gets the properties of the Jacobian with no values set.
-   * 
+   *
    * @return The properties.
    */
   private ValueProperties getProperties() {
@@ -469,7 +469,7 @@ public class FXImpliedYieldCurveFunction extends AbstractFunction.NonCompiledInv
 
   /**
    * Gets the properties of the implied yield curve.
-   * 
+   *
    * @param curveCalculationConfigName The curve calculation configuration name
    * @param curveName The curve name
    * @param absoluteTolerance The absolute tolerance
@@ -482,20 +482,26 @@ public class FXImpliedYieldCurveFunction extends AbstractFunction.NonCompiledInv
    * @param rightExtrapolatorName The right extrapolator name
    * @return The curve properties
    */
-  private ValueProperties getCurveProperties(final String curveCalculationConfigName, final String curveName, final String absoluteTolerance, final String relativeTolerance,
-      final String maxIterations, final String decomposition, final String useFiniteDifference, final String interpolatorName, final String leftExtrapolatorName,
-      final String rightExtrapolatorName) {
-    return createValueProperties().with(ValuePropertyNames.CURVE_CALCULATION_METHOD, FX_IMPLIED).with(ValuePropertyNames.CURVE, curveName)
-        .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfigName).with(MultiYieldCurvePropertiesAndDefaults.PROPERTY_ROOT_FINDER_ABSOLUTE_TOLERANCE, absoluteTolerance)
+  private ValueProperties getCurveProperties(final String curveCalculationConfigName, final String curveName, final String absoluteTolerance,
+      final String relativeTolerance, final String maxIterations, final String decomposition, final String useFiniteDifference,
+      final String interpolatorName, final String leftExtrapolatorName, final String rightExtrapolatorName) {
+    return createValueProperties()
+        .with(ValuePropertyNames.CURVE_CALCULATION_METHOD, FX_IMPLIED)
+        .with(ValuePropertyNames.CURVE, curveName)
+        .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfigName).
+        with(MultiYieldCurvePropertiesAndDefaults.PROPERTY_ROOT_FINDER_ABSOLUTE_TOLERANCE, absoluteTolerance)
         .with(MultiYieldCurvePropertiesAndDefaults.PROPERTY_ROOT_FINDER_RELATIVE_TOLERANCE, relativeTolerance)
-        .with(MultiYieldCurvePropertiesAndDefaults.PROPERTY_ROOT_FINDER_MAX_ITERATIONS, maxIterations).with(MultiYieldCurvePropertiesAndDefaults.PROPERTY_DECOMPOSITION, decomposition)
-        .with(MultiYieldCurvePropertiesAndDefaults.PROPERTY_USE_FINITE_DIFFERENCE, useFiniteDifference).with(InterpolatedDataProperties.X_INTERPOLATOR_NAME, interpolatorName)
-        .with(InterpolatedDataProperties.LEFT_X_EXTRAPOLATOR_NAME, leftExtrapolatorName).with(InterpolatedDataProperties.RIGHT_X_EXTRAPOLATOR_NAME, rightExtrapolatorName).get();
+        .with(MultiYieldCurvePropertiesAndDefaults.PROPERTY_ROOT_FINDER_MAX_ITERATIONS, maxIterations)
+        .with(MultiYieldCurvePropertiesAndDefaults.PROPERTY_DECOMPOSITION, decomposition)
+        .with(MultiYieldCurvePropertiesAndDefaults.PROPERTY_USE_FINITE_DIFFERENCE, useFiniteDifference)
+        .with(InterpolatedDataProperties.X_INTERPOLATOR_NAME, interpolatorName)
+        .with(InterpolatedDataProperties.LEFT_X_EXTRAPOLATOR_NAME, leftExtrapolatorName)
+        .with(InterpolatedDataProperties.RIGHT_X_EXTRAPOLATOR_NAME, rightExtrapolatorName).get();
   }
 
   /**
    * Gets the properties of the Jacobian for the implied yield curve.
-   * 
+   *
    * @param curveCalculationConfigName The curve calculation configuration name
    * @param absoluteTolerance The absolute tolerance
    * @param relativeTolerance The relative tolerance

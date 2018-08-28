@@ -76,20 +76,23 @@ public class ParameterSensitivityIssuerCalculator<DATA_TYPE extends ParameterIss
    * @return The sensitivity (as a ParameterSensitivity).
    */
   @Override
-  public MultipleCurrencyParameterSensitivity pointToParameterSensitivity(final MultipleCurrencyMulticurveSensitivity sensitivity, final DATA_TYPE multicurves) {
+  public MultipleCurrencyParameterSensitivity pointToParameterSensitivity(final MultipleCurrencyMulticurveSensitivity sensitivity,
+      final DATA_TYPE multicurves) {
     MultipleCurrencyParameterSensitivity result = new MultipleCurrencyParameterSensitivity();
     // YieldAndDiscount
     for (final Currency ccySensi : sensitivity.getCurrencies()) {
       final Map<String, List<DoublesPair>> sensitivityDsc = sensitivity.getSensitivity(ccySensi).getYieldDiscountingSensitivities();
       for (final Map.Entry<String, List<DoublesPair>> entry : sensitivityDsc.entrySet()) {
-        result = result.plus(Pairs.of(entry.getKey(), ccySensi), new DoubleMatrix1D(multicurves.getIssuerProvider().parameterSensitivity(entry.getKey(), entry.getValue())));
+        result = result.plus(Pairs.of(entry.getKey(), ccySensi),
+            new DoubleMatrix1D(multicurves.getIssuerProvider().parameterSensitivity(entry.getKey(), entry.getValue())));
       }
     }
     // Forward
     for (final Currency ccySensi : sensitivity.getCurrencies()) {
       final Map<String, List<ForwardSensitivity>> sensitivityFwd = sensitivity.getSensitivity(ccySensi).getForwardSensitivities();
       for (final Map.Entry<String, List<ForwardSensitivity>> entry : sensitivityFwd.entrySet()) {
-        result = result.plus(Pairs.of(entry.getKey(), ccySensi), new DoubleMatrix1D(multicurves.getIssuerProvider().parameterForwardSensitivity(entry.getKey(), entry.getValue())));
+        result = result.plus(Pairs.of(entry.getKey(), ccySensi),
+            new DoubleMatrix1D(multicurves.getIssuerProvider().parameterForwardSensitivity(entry.getKey(), entry.getValue())));
       }
     }
     return result;

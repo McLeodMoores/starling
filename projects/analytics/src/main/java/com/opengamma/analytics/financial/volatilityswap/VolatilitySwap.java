@@ -14,8 +14,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * A volatility swap is a forward contract on the realised volatility of a generic underlying. This could be a single equity price, the value of an equity index,
- * an FX rate or <b>any</b> other financial metric on which a volatility swap contract is based.<p>
+ * A volatility swap is a forward contract on the realised volatility of a generic underlying. This could be a single equity price,
+ * the value of an equity index, an FX rate or <b>any</b> other financial metric on which a volatility swap contract is based.<p>
  */
 public class VolatilitySwap implements InstrumentDerivative {
   /** Time to the start of volatility observations */
@@ -157,19 +157,19 @@ public class VolatilitySwap implements InstrumentDerivative {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_annualizationFactor);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _currency.hashCode();
     temp = Double.doubleToLongBits(_timeToObservationEnd);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_timeToObservationStart);
     result = prime * result + _observationFrequency.hashCode();
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_timeToMaturity);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_volNotional);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_volStrike);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

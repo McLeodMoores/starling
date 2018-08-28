@@ -99,7 +99,7 @@ public class USDTest extends AbstractMockSourcesTest {
     // Convert the swap security into a swap definition 
     final SwapSecurityConverterDeprecated swapConverter = new SwapSecurityConverterDeprecated(_holidaySource, _conventionBundleSource, _regionSource, false);
     final FRASecurityConverterDeprecated fraConverter = new FRASecurityConverterDeprecated(_holidaySource, _regionSource, _conventionBundleSource);
-    final ZeroDepositConverter ZeroCouponConverter = new ZeroDepositConverter(_conventionBundleSource, _holidaySource);
+    final ZeroDepositConverter zeroCouponConverter = new ZeroDepositConverter(_conventionBundleSource, _holidaySource);
     List<SwapDefinition> swapsDefinition = Lists.newArrayList();
     List<ForwardRateAgreementDefinition> frasDefinition = Lists.newArrayList();
     List<DepositZeroDefinition> zcsDefinition = Lists.newArrayList();

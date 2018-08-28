@@ -74,7 +74,8 @@ public abstract class AbstractPositionPnLFunction extends AbstractFunction.NonCo
 
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
-    return Collections.singleton(new ValueSpecification(ValueRequirementNames.PNL, target.toSpecification(), createValueProperties(target.getPosition()).get()));
+    return Collections.singleton(new ValueSpecification(ValueRequirementNames.PNL, target.toSpecification(),
+        createValueProperties(target.getPosition()).get()));
   }
 
   @Override
@@ -87,7 +88,7 @@ public abstract class AbstractPositionPnLFunction extends AbstractFunction.NonCo
     } else {
       constraints = ValueProperties.none();
     }
-    final Set<ValueRequirement> requirements = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> requirements = new HashSet<>();
     for (final Trade trade : position.getTrades()) {
       requirements.add(new ValueRequirement(ValueRequirementNames.PNL, ComputationTargetType.TRADE, trade.getUniqueId(), constraints));
     }

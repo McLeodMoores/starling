@@ -80,7 +80,8 @@ public class FXForwardCurveHistoricalTimeSeriesFunction extends AbstractFunction
       }
     }
     final ExternalIdBundle id = ExternalIdBundle.of(curveInstrumentProvider.getSpotInstrument());
-    final HistoricalTimeSeries timeSeries = timeSeriesSource.getHistoricalTimeSeries(dataField, id, resolutionKey, startDate, includeStart, endDate, includeEnd);
+    final HistoricalTimeSeries timeSeries =
+        timeSeriesSource.getHistoricalTimeSeries(dataField, id, resolutionKey, startDate, includeStart, endDate, includeEnd);
     if (timeSeries != null) {
       if (timeSeries.getTimeSeries().isEmpty()) {
         LOGGER.warn("Time series for {} is empty", id);
@@ -90,8 +91,8 @@ public class FXForwardCurveHistoricalTimeSeriesFunction extends AbstractFunction
     } else {
       LOGGER.warn("Couldn't get time series for {}", id);
     }
-    return Collections.singleton(new ComputedValue(new ValueSpecification(ValueRequirementNames.FX_FORWARD_CURVE_HISTORICAL_TIME_SERIES, target.toSpecification(),
-        desiredValue.getConstraints()), bundle));
+    return Collections.singleton(new ComputedValue(new ValueSpecification(ValueRequirementNames.FX_FORWARD_CURVE_HISTORICAL_TIME_SERIES,
+        target.toSpecification(), desiredValue.getConstraints()), bundle));
   }
 
   @Override
@@ -101,28 +102,30 @@ public class FXForwardCurveHistoricalTimeSeriesFunction extends AbstractFunction
 
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
-    return Collections.singleton(new ValueSpecification(ValueRequirementNames.FX_FORWARD_CURVE_HISTORICAL_TIME_SERIES, target.toSpecification(), createValueProperties()
+    return Collections.singleton(new ValueSpecification(ValueRequirementNames.FX_FORWARD_CURVE_HISTORICAL_TIME_SERIES, target.toSpecification(),
+        createValueProperties()
         .withAny(ValuePropertyNames.CURVE)
         .withAny(HistoricalTimeSeriesFunctionUtils.DATA_FIELD_PROPERTY)
         .withAny(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY)
         .withAny(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY)
         .with(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY, HistoricalTimeSeriesFunctionUtils.YES_VALUE, HistoricalTimeSeriesFunctionUtils.NO_VALUE)
         .withAny(HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY)
-        .with(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY, HistoricalTimeSeriesFunctionUtils.YES_VALUE, HistoricalTimeSeriesFunctionUtils.NO_VALUE).get()));
+        .with(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY, HistoricalTimeSeriesFunctionUtils.YES_VALUE, HistoricalTimeSeriesFunctionUtils.NO_VALUE)
+        .get()));
   }
 
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     ValueProperties.Builder constraints = null;
     Set<String> values = desiredValue.getConstraints().getValues(HistoricalTimeSeriesFunctionUtils.DATA_FIELD_PROPERTY);
-    if ((values == null) || values.isEmpty()) {
+    if (values == null || values.isEmpty()) {
       constraints = desiredValue.getConstraints().copy().with(HistoricalTimeSeriesFunctionUtils.DATA_FIELD_PROPERTY, MarketDataRequirementNames.MARKET_VALUE);
     } else if (values.size() > 1) {
       constraints = desiredValue.getConstraints().copy().withoutAny(HistoricalTimeSeriesFunctionUtils.DATA_FIELD_PROPERTY)
           .with(HistoricalTimeSeriesFunctionUtils.DATA_FIELD_PROPERTY, values.iterator().next());
     }
     values = desiredValue.getConstraints().getValues(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY);
-    if ((values == null) || values.isEmpty()) {
+    if (values == null || values.isEmpty()) {
       if (constraints == null) {
         constraints = desiredValue.getConstraints().copy();
       }
@@ -131,31 +134,32 @@ public class FXForwardCurveHistoricalTimeSeriesFunction extends AbstractFunction
       if (constraints == null) {
         constraints = desiredValue.getConstraints().copy();
       }
-      constraints.withoutAny(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY).with(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY, values.iterator().next());
+      constraints.withoutAny(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY)
+                 .with(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY, values.iterator().next());
     }
     values = desiredValue.getConstraints().getValues(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY);
-    if ((values == null) || values.isEmpty()) {
+    if (values == null || values.isEmpty()) {
       if (constraints == null) {
         constraints = desiredValue.getConstraints().copy();
       }
       constraints.with(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY, "Null");
     }
     values = desiredValue.getConstraints().getValues(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY);
-    if ((values == null) || (values.size() != 1)) {
+    if (values == null || values.size() != 1) {
       if (constraints == null) {
         constraints = desiredValue.getConstraints().copy();
       }
       constraints.with(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY, HistoricalTimeSeriesFunctionUtils.YES_VALUE);
     }
     values = desiredValue.getConstraints().getValues(HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY);
-    if ((values == null) || values.isEmpty()) {
+    if (values == null || values.isEmpty()) {
       if (constraints == null) {
         constraints = desiredValue.getConstraints().copy();
       }
       constraints.with(HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY, "Now");
     }
     values = desiredValue.getConstraints().getValues(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY);
-    if ((values == null) || (values.size() != 1)) {
+    if (values == null || values.size() != 1) {
       if (constraints == null) {
         constraints = desiredValue.getConstraints().copy();
       }
@@ -180,11 +184,13 @@ public class FXForwardCurveHistoricalTimeSeriesFunction extends AbstractFunction
       return requirements;
     }
     // We need to substitute ourselves with the adjusted constraints
-    return Collections.singleton(new ValueRequirement(ValueRequirementNames.FX_FORWARD_CURVE_HISTORICAL_TIME_SERIES, target.toSpecification(), constraints.get()));
+    return Collections.singleton(new ValueRequirement(ValueRequirementNames.FX_FORWARD_CURVE_HISTORICAL_TIME_SERIES,
+        target.toSpecification(), constraints.get()));
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final ValueSpecification input = inputs.keySet().iterator().next();
     if (ValueRequirementNames.FX_FORWARD_CURVE_HISTORICAL_TIME_SERIES.equals(input.getValueName())) {
       // Use the substituted result

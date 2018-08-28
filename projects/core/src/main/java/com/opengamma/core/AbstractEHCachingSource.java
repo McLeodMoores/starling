@@ -10,10 +10,6 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,13 +27,17 @@ import com.opengamma.util.ehcache.EHCacheUtils;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
+
 /**
  * Partial implementation of a cache on top of another source implementation using {@code EHCache}.
- * 
+ *
  * @param <V> the type returned by the source
  * @param <S> the source
  */
-public abstract class AbstractEHCachingSource<V extends UniqueIdentifiable, S extends Source<V>> extends AbstractSource<V> implements Source<V>, ChangeProvider {
+public abstract class AbstractEHCachingSource<V extends UniqueIdentifiable, S extends Source<V>> extends AbstractSource<V> implements ChangeProvider {
 
   /** Logger. */
   private static final Logger LOGGER = LoggerFactory.getLogger(AbstractEHCachingSource.class);
@@ -48,8 +48,9 @@ public abstract class AbstractEHCachingSource<V extends UniqueIdentifiable, S ex
   private final String _uidCacheName = getClass().getName() + "-uid-cache";
 
   /**
-   * EHCache doesn't like being hammered repeatedly for the same objects. Also, if the window of objects being requested is bigger than the in memory window then new objects get created as the on-disk
-   * values get deserialized. The solution is to maintain a soft referenced buffer so that all the while the objects we have previously returned are in use we won't re-query EHCache for them.
+   * EHCache doesn't like being hammered repeatedly for the same objects. Also, if the window of objects being requested is bigger than
+   * the in memory window then new objects get created as the on-disk values get deserialized. The solution is to maintain a soft
+   * referenced buffer so that all the while the objects we have previously returned are in use we won't re-query EHCache for them.
    */
   private final ConcurrentMap<UniqueId, V> _frontCacheByUID = new MapMaker().weakValues().makeMap();
 
@@ -72,7 +73,7 @@ public abstract class AbstractEHCachingSource<V extends UniqueIdentifiable, S ex
 
   /**
    * Creates an instance over an underlying source specifying the cache manager.
-   * 
+   *
    * @param underlying the underlying security source, not null
    * @param cacheManager the cache manager, not null
    */
@@ -90,7 +91,7 @@ public abstract class AbstractEHCachingSource<V extends UniqueIdentifiable, S ex
   //-------------------------------------------------------------------------
   /**
    * Gets the underlying source of items.
-   * 
+   *
    * @return the underlying source of items, not null
    */
   protected S getUnderlying() {
@@ -99,7 +100,7 @@ public abstract class AbstractEHCachingSource<V extends UniqueIdentifiable, S ex
 
   /**
    * Gets the cache manager.
-   * 
+   *
    * @return the cache manager, not null
    */
   protected CacheManager getCacheManager() {
@@ -120,7 +121,7 @@ public abstract class AbstractEHCachingSource<V extends UniqueIdentifiable, S ex
         if (e != null) {
           result = (V) e.getObjectValue();
           LOGGER.debug("retrieved object: {} from uid-cache", result);
-          V existing = _frontCacheByUID.putIfAbsent(uid, result);
+          final V existing = _frontCacheByUID.putIfAbsent(uid, result);
           if (existing != null) {
             result = existing;
           }
@@ -135,8 +136,8 @@ public abstract class AbstractEHCachingSource<V extends UniqueIdentifiable, S ex
   @Override
   public Map<UniqueId, V> get(final Collection<UniqueId> uids) {
     final Map<UniqueId, V> results = Maps.newHashMapWithExpectedSize(uids.size());
-    final Collection<UniqueId> misses = new ArrayList<UniqueId>(uids.size());
-    for (UniqueId uid : uids) {
+    final Collection<UniqueId> misses = new ArrayList<>(uids.size());
+    for (final UniqueId uid : uids) {
       if (uid.isLatest()) {
         misses.add(uid);
       } else {
@@ -147,10 +148,11 @@ public abstract class AbstractEHCachingSource<V extends UniqueIdentifiable, S ex
           final Element e = _uidCache.get(uid);
           if (e != null) {
             @SuppressWarnings("unchecked")
+            final
             V objectValue = (V) e.getObjectValue();
             result = objectValue;
             LOGGER.debug("retrieved object: {} from uid-cache", result);
-            V existing = _frontCacheByUID.putIfAbsent(uid, result);
+            final V existing = _frontCacheByUID.putIfAbsent(uid, result);
             if (existing != null) {
               result = existing;
             }
@@ -163,7 +165,7 @@ public abstract class AbstractEHCachingSource<V extends UniqueIdentifiable, S ex
     }
     if (!misses.isEmpty()) {
       final Map<UniqueId, V> underlying = getUnderlying().get(misses);
-      for (UniqueId uid : misses) {
+      for (final UniqueId uid : misses) {
         V result = underlying.get(uid);
         if (result != null) {
           result = cacheItem(result);
@@ -200,16 +202,16 @@ public abstract class AbstractEHCachingSource<V extends UniqueIdentifiable, S ex
     final Map<ObjectId, V> results = Maps.newHashMapWithExpectedSize(objectIds.size());
     if (versionCorrection.containsLatest()) {
       final Map<ObjectId, V> underlying = getUnderlying().get(objectIds, versionCorrection);
-      for (ObjectId objectId : objectIds) {
+      for (final ObjectId objectId : objectIds) {
         final V result = underlying.get(objectId);
         if (result != null) {
           results.put(objectId, cacheItem(result));
         }
       }
     } else {
-      final Collection<ObjectId> misses = new ArrayList<ObjectId>(objectIds.size());
+      final Collection<ObjectId> misses = new ArrayList<>(objectIds.size());
       final Map<ObjectId, UniqueId> lookups = Maps.newHashMapWithExpectedSize(objectIds.size());
-      for (ObjectId objectId : objectIds) {
+      for (final ObjectId objectId : objectIds) {
         final Pair<ObjectId, VersionCorrection> key = Pairs.of(objectId, versionCorrection);
         final Element e = _oidCache.get(key);
         if (e != null) {
@@ -221,7 +223,7 @@ public abstract class AbstractEHCachingSource<V extends UniqueIdentifiable, S ex
       }
       if (!lookups.isEmpty()) {
         final Map<UniqueId, V> underlying = get(lookups.values());
-        for (Map.Entry<ObjectId, UniqueId> lookup : lookups.entrySet()) {
+        for (final Map.Entry<ObjectId, UniqueId> lookup : lookups.entrySet()) {
           final V result = underlying.get(lookup.getValue());
           if (result != null) {
             results.put(lookup.getKey(), cacheItem(result));
@@ -230,7 +232,7 @@ public abstract class AbstractEHCachingSource<V extends UniqueIdentifiable, S ex
       }
       if (!misses.isEmpty()) {
         final Map<ObjectId, V> underlying = getUnderlying().get(misses, versionCorrection);
-        for (ObjectId miss : misses) {
+        for (final ObjectId miss : misses) {
           V result = underlying.get(miss);
           if (result != null) {
             result = cacheItem(result);
@@ -280,7 +282,7 @@ public abstract class AbstractEHCachingSource<V extends UniqueIdentifiable, S ex
       cacheItem(item);
     }
   }
-  
+
   protected void flush() {
     _uidCache.flush();
     _frontCacheByUID.clear();

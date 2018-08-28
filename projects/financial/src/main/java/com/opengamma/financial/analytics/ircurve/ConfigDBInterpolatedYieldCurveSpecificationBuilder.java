@@ -44,7 +44,8 @@ public class ConfigDBInterpolatedYieldCurveSpecificationBuilder implements Inter
   }
 
   @Override
-  public InterpolatedYieldCurveSpecification buildCurve(final LocalDate curveDate, final YieldCurveDefinition curveDefinition, final VersionCorrection version) {
+  public InterpolatedYieldCurveSpecification buildCurve(final LocalDate curveDate, final YieldCurveDefinition curveDefinition,
+      final VersionCorrection version) {
     try {
       final Map<String, CurveSpecificationBuilderConfiguration> cache = new HashMap<>();
       final Collection<FixedIncomeStripWithIdentifier> securities = new ArrayList<>();
@@ -52,8 +53,8 @@ public class ConfigDBInterpolatedYieldCurveSpecificationBuilder implements Inter
         final String conventionName = strip.getConventionName() + "_" + curveDefinition.getCurrency().getCode();
         final CurveSpecificationBuilderConfiguration builderConfig = getBuilderConfig(cache, conventionName, version);
         if (builderConfig == null) {
-          throw new OpenGammaRuntimeException("Could not get specification builder configuration for curve=" + curveDefinition.getName() + ", currency=" + curveDefinition.getCurrency() +
-              ", strip=" + strip);
+          throw new OpenGammaRuntimeException("Could not get specification builder configuration for curve="
+              + curveDefinition.getName() + ", currency=" + curveDefinition.getCurrency() + ", strip=" + strip);
         }
         ExternalId identifier;
         switch (strip.getInstrumentType()) {
@@ -131,11 +132,13 @@ public class ConfigDBInterpolatedYieldCurveSpecificationBuilder implements Inter
       final String leftExtrapolatorName = curveDefinition.getLeftExtrapolatorName();
       final String rightExtrapolatorName = curveDefinition.getRightExtrapolatorName();
       final boolean interpolateYield = curveDefinition.isInterpolateYields();
-      final Interpolator1D interpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
-      return new InterpolatedYieldCurveSpecification(curveDate, curveDefinition.getName(), curveDefinition.getCurrency(), interpolator, interpolateYield, securities,
-          curveDefinition.getRegionId());
+      final Interpolator1D interpolator =
+          CombinedInterpolatorExtrapolatorFactory.getInterpolator(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
+      return new InterpolatedYieldCurveSpecification(curveDate, curveDefinition.getName(), curveDefinition.getCurrency(), interpolator,
+          interpolateYield, securities, curveDefinition.getRegionId());
     } catch (final OpenGammaRuntimeException e) {
-      throw new OpenGammaRuntimeException("Error constructing " + curveDefinition.getName() + "_" + curveDefinition.getCurrency().getCode() + ": " + e.getMessage());
+      throw new OpenGammaRuntimeException("Error constructing " + curveDefinition.getName() + "_"
+          + curveDefinition.getCurrency().getCode() + ": " + e.getMessage());
     }
   }
 }

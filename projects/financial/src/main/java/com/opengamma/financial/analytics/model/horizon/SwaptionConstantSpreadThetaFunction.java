@@ -162,7 +162,7 @@ public class SwaptionConstantSpreadThetaFunction extends AbstractFunction.NonCom
       return null;
     }
     final String surfaceName = surfaceNames.iterator().next();
-    final Set<ValueRequirement> requirements = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> requirements = new HashSet<>();
     requirements.add(getVolatilityRequirement(surfaceName, FinancialSecurityUtils.getCurrency(target.getSecurity())));
     requirements.addAll(YieldCurveFunctionUtils.getCurveRequirements(curveCalculationConfig, _curveCalculationConfigSource));
     return requirements;
@@ -174,9 +174,13 @@ public class SwaptionConstantSpreadThetaFunction extends AbstractFunction.NonCom
     return properties;
   }
 
-  private ValueProperties.Builder getResultProperties(final String currency, final String curveCalculationConfig, final String surfaceName, final String daysForward) {
-    final ValueProperties.Builder properties = createValueProperties().with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfig)
-        .with(ValuePropertyNames.SURFACE, surfaceName).with(ValuePropertyNames.CURRENCY, currency).with(PROPERTY_THETA_CALCULATION_METHOD, THETA_CONSTANT_SPREAD)
+  private ValueProperties.Builder getResultProperties(final String currency, final String curveCalculationConfig, final String surfaceName,
+      final String daysForward) {
+    final ValueProperties.Builder properties = createValueProperties()
+        .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfig)
+        .with(ValuePropertyNames.SURFACE, surfaceName)
+        .with(ValuePropertyNames.CURRENCY, currency)
+        .with(PROPERTY_THETA_CALCULATION_METHOD, THETA_CONSTANT_SPREAD)
         .with(PROPERTY_DAYS_TO_MOVE_FORWARD, daysForward);
     return properties;
   }
@@ -187,7 +191,8 @@ public class SwaptionConstantSpreadThetaFunction extends AbstractFunction.NonCom
     return new ValueRequirement(ValueRequirementNames.INTERPOLATED_VOLATILITY_SURFACE, ComputationTargetSpecification.of(currency), properties);
   }
 
-  private ValueSpecification getResultSpec(final ComputationTarget target, final String curveCalculationConfig, final String surfaceName, final String currency, final String daysForward) {
+  private ValueSpecification getResultSpec(final ComputationTarget target, final String curveCalculationConfig, final String surfaceName,
+      final String currency, final String daysForward) {
     return new ValueSpecification(ValueRequirementNames.VALUE_THETA, target.toSpecification(), getResultProperties(currency, curveCalculationConfig, surfaceName, daysForward).get());
   }
 }

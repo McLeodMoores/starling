@@ -100,7 +100,8 @@ public class FXForwardCurrencyExposurePnLFunction extends AbstractFunction {
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       final ValueProperties constraints = desiredValue.getConstraints();
       final Set<String> payCurveNames = constraints.getValues(ValuePropertyNames.PAY_CURVE);
       if (payCurveNames == null || payCurveNames.size() != 1) {

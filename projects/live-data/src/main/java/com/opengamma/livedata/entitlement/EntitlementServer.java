@@ -57,7 +57,8 @@ public class EntitlementServer implements FudgeRequestReceiver {
     final EntitlementRequest entitlementRequest = EntitlementRequest.fromFudgeMsg(deserializer, requestFudgeMsg);
     LOGGER.debug("Received entitlement request {}", entitlementRequest);
 
-    final Map<LiveDataSpecification, Boolean> isEntitledMap = _delegate.isEntitled(entitlementRequest.getUser(), entitlementRequest.getLiveDataSpecifications());
+    final Map<LiveDataSpecification, Boolean> isEntitledMap = _delegate.isEntitled(entitlementRequest.getUser(),
+        entitlementRequest.getLiveDataSpecifications());
 
     final ArrayList<EntitlementResponse> responses = new ArrayList<>();
     for (final LiveDataSpecification spec : entitlementRequest.getLiveDataSpecifications()) {

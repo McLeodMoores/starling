@@ -46,7 +46,8 @@ import com.opengamma.util.tuple.Pair;
  * Calculates the node sensitivities to the market quotes of a bond or bond future for all curves
  * to which the instruments are sensitive.
  */
-public class BondAndBondFutureYCNSFunction extends BondAndBondFutureFromCurvesFunction<ParameterIssuerProviderInterface, MultipleCurrencyMulticurveSensitivity> {
+public class BondAndBondFutureYCNSFunction
+extends BondAndBondFutureFromCurvesFunction<ParameterIssuerProviderInterface, MultipleCurrencyMulticurveSensitivity> {
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(BondAndBondFutureYCNSFunction.class);
 

@@ -239,7 +239,8 @@ public class ComponentManager {
     if (resource.getFilename().endsWith(".properties")) {
       final String nextConfig = loadProperties(resource);
       if (nextConfig == null) {
-        throw new ComponentConfigException("The properties file must contain the key '" + MANAGER_NEXT_FILE + "' to specify the next file to load: " + resource);
+        throw new ComponentConfigException("The properties file must contain the key '" + MANAGER_NEXT_FILE
+            + "' to specify the next file to load: " + resource);
       }
       return load(nextConfig);
     }

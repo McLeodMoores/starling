@@ -186,7 +186,8 @@ public class PaymentService {
   }
 
   private UniqueId getPaymentViewDefinition(final Portfolio portfolio) {
-    final ViewDefinition viewDefinition = new ViewDefinition(VIEW_DEFINITION_PREFIX + portfolio.getName(), portfolio.getUniqueId(), UserPrincipal.getTestUser());
+    final ViewDefinition viewDefinition = new ViewDefinition(VIEW_DEFINITION_PREFIX + portfolio.getName(), portfolio.getUniqueId(),
+        UserPrincipal.getTestUser());
     final ViewCalculationConfiguration calcConfig = new ViewCalculationConfiguration(viewDefinition, CALC_CONFIG_NAME);
     for (final String requirementName : CASH_FLOW_VALUE_NAMES) {
       for (final String securityType : getPortfolioSecurityTypes(portfolio)) {

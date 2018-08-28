@@ -47,7 +47,7 @@ import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesResolver;
 import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 
 /**
- * 
+ *
  */
 public class SecurityPriceSeriesFunction extends AbstractFunction.NonCompiledInvoker {
   private static final HolidayDateRemovalFunction HOLIDAY_REMOVER = HolidayDateRemovalFunction.getInstance();
@@ -108,7 +108,7 @@ public class SecurityPriceSeriesFunction extends AbstractFunction.NonCompiledInv
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final Set<String> samplingPeriods = desiredValue.getConstraints().getValues(ValuePropertyNames.SAMPLING_PERIOD);
-    if ((samplingPeriods == null) || (samplingPeriods.size() != 1)) {
+    if (samplingPeriods == null || samplingPeriods.size() != 1) {
       return null;
     }
     final HistoricalTimeSeriesResolver resolver = OpenGammaCompilationContext.getHistoricalTimeSeriesResolver(context);
@@ -133,7 +133,8 @@ public class SecurityPriceSeriesFunction extends AbstractFunction.NonCompiledInv
 
   @Override
   public ComputationTargetType getTargetType() {
-    // REVIEW 2013-05-14 Andrew -- Instead of relying on "canApplyTo", putting only the classes for which "getCurrency" will return a happy value would be faster
+    // REVIEW 2013-05-14 Andrew -- Instead of relying on "canApplyTo", putting only the classes for which "getCurrency"
+    // will return a happy value would be faster
     return TYPE;
   }
 

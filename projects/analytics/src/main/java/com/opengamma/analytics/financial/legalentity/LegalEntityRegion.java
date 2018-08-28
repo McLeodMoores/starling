@@ -149,8 +149,8 @@ public class LegalEntityRegion implements LegalEntityFilter<LegalEntity>, Bean {
   }
 
   /**
-   * Sets the countries to be used as a filter. This also sets the {@link LegalEntityRegion#_useCountry} field to true.
-   * 
+   * Sets the countries to be used as a filter. This also sets the _useCountry field to true.
+   *
    * @param countries The new value of the property, not null
    */
   public void setCountries(final Set<Country> countries) {
@@ -162,8 +162,8 @@ public class LegalEntityRegion implements LegalEntityFilter<LegalEntity>, Bean {
   }
 
   /**
-   * Sets the currencies to be used as a filter. This also sets the {@link LegalEntityRegion#_useCountry} field to true.
-   * 
+   * Sets the currencies to be used as a filter. This also sets the _useCountry field to true.
+   *
    * @param currencies The new value of the property, not null
    */
   public void setCurrencies(final Set<Currency> currencies) {

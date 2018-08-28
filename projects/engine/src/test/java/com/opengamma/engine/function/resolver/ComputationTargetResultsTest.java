@@ -91,11 +91,13 @@ public class ComputationTargetResultsTest {
 
     @Override
     public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
-      return Collections.singleton(new ValueSpecification(_resultValue, target.toSpecification(), _resultProperties.copy().with(ValuePropertyNames.FUNCTION, getUniqueId()).get()));
+      return Collections.singleton(new ValueSpecification(_resultValue, target.toSpecification(),
+          _resultProperties.copy().with(ValuePropertyNames.FUNCTION, getUniqueId()).get()));
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       return Collections.singleton(new ValueRequirement(_requirementValue, target.toSpecification(), _requirementConstraints));
     }
 

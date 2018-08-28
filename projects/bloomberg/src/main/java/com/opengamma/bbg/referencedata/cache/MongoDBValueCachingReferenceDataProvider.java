@@ -50,7 +50,8 @@ public class MongoDBValueCachingReferenceDataProvider extends AbstractValueCachi
    * @param mongoConnector  the Mongo connector, not null
    * @param fudgeContext  the Fudge context, not null
    */
-  public MongoDBValueCachingReferenceDataProvider(final ReferenceDataProvider underlying, final MongoConnector mongoConnector, final FudgeContext fudgeContext) {
+  public MongoDBValueCachingReferenceDataProvider(final ReferenceDataProvider underlying, final MongoConnector mongoConnector,
+      final FudgeContext fudgeContext) {
     super(underlying, fudgeContext);
     ArgumentChecker.notNull(mongoConnector, "mongoConnector");
     _cache = new MongoDBReferenceDataCache(mongoConnector, REFERENCE_DATA);

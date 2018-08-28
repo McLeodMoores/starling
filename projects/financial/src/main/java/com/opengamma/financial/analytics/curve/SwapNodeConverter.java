@@ -24,7 +24,8 @@ import com.opengamma.util.ArgumentChecker;
  * Convert a swap node into an Instrument definition.
  * The dates of the swap are computed in the following way:
  * - The spot date is computed from the valuation date adding the "Settlement Days" (i.e. the number of business days) of the convention.
- * - The start date is computed from the spot date adding the "StartTenor" of the node and using the business-day-convention, calendar and EOM of the convention.
+ * - The start date is computed from the spot date adding the "StartTenor" of the node and using the business-day-convention, calendar
+ *   and EOM of the convention.
  * - The end date is computed from the start date adding the "MaturityTenor" of the node and using Annuity constructor.
  * The swap notional for each leg is 1.
  * A fixed leg always has the market quote as fixed rate.
@@ -86,5 +87,5 @@ public class SwapNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
     return NodeConverterUtils.getSwapDefinition(payLegConvention, receiveLegConvention, startTenor, maturityTenor, _securitySource, _regionSource,
         _holidaySource, _conventionSource, _marketData, _dataId, _valuationTime, _fx);
   }
-  
+
 }

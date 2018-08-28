@@ -34,7 +34,8 @@ public abstract class CommodityBlackVolatilitySurfaceDefaults extends DefaultPro
   private final Map<String, Set<String>> _currencyToCurveCalculationMethodName;
   private final Map<String, Set<String>> _currencyToSurfaceName;
 
-  public CommodityBlackVolatilitySurfaceDefaults(final ComputationTargetType target, final String[] valueRequirementNames, final String... defaultsPerCurrency) {
+  public CommodityBlackVolatilitySurfaceDefaults(final ComputationTargetType target, final String[] valueRequirementNames,
+      final String... defaultsPerCurrency) {
     super(target, true);
     ArgumentChecker.notNull(defaultsPerCurrency, "defaults per currency");
     ArgumentChecker.notNull(valueRequirementNames, "value requiremement names");
@@ -65,7 +66,8 @@ public abstract class CommodityBlackVolatilitySurfaceDefaults extends DefaultPro
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     final String currencyPair = getCurrency(target);
     switch (propertyName) {
       case ValuePropertyNames.CURVE:

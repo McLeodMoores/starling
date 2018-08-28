@@ -5,8 +5,6 @@
  */
 package com.opengamma.financial.analytics.volatility.surface;
 
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -47,6 +45,8 @@ import com.opengamma.util.CompareUtils;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
+
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 /**
  *
@@ -95,8 +95,10 @@ public class BondFutureOptionVolatilitySurfaceDataFunction extends AbstractFunct
     final ZonedDateTime now = ZonedDateTime.now(executionContext.getValuationClock());
     final ValueProperties surfaceProperties = ValueProperties.builder().with(ValuePropertyNames.SURFACE, surfaceName)
         .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.BOND_FUTURE_OPTION)
-        .with(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_QUOTE_TYPE, surfaceQuoteType).with(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_UNITS, surfaceQuoteUnits).get();
-    final Object volatilityDataObject = inputs.getValue(new ValueRequirement(ValueRequirementNames.VOLATILITY_SURFACE_DATA, target.toSpecification(), surfaceProperties));
+        .with(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_QUOTE_TYPE, surfaceQuoteType)
+        .with(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_UNITS, surfaceQuoteUnits).get();
+    final Object volatilityDataObject =
+        inputs.getValue(new ValueRequirement(ValueRequirementNames.VOLATILITY_SURFACE_DATA, target.toSpecification(), surfaceProperties));
     if (volatilityDataObject == null) {
       throw new OpenGammaRuntimeException("Could not get volatility surface data");
     }
@@ -109,12 +111,14 @@ public class BondFutureOptionVolatilitySurfaceDataFunction extends AbstractFunct
       return Collections.singleton(new ComputedValue(spec, getSurfaceFromVolatilityQuote(surfaceData, now, calendar)));
     } else if (surfaceQuoteUnits.equals(SurfaceAndCubePropertyNames.PRICE_QUOTE)) {
       final NodalDoublesCurve futuresPrices = getFuturePricesCurve(target, curveName, inputs);
-      final VolatilitySurfaceData<Double, Double> volSurface = getSurfaceFromPriceQuote(specification, surfaceData, futuresPrices, now, surfaceQuoteType, calendar);
+      final VolatilitySurfaceData<Double, Double> volSurface =
+          getSurfaceFromPriceQuote(specification, surfaceData, futuresPrices, now, surfaceQuoteType, calendar);
       if (volSurface != null) {
         return Collections.singleton(new ComputedValue(spec, volSurface));
       }
     }
-    throw new OpenGammaRuntimeException("Encountered an unexpected surfaceQuoteUnits. Valid values are found in SurfaceAndCubePropertyNames as VolatilityQuote or PriceQuote.");
+    throw new OpenGammaRuntimeException("Encountered an unexpected surfaceQuoteUnits. "
+        + "Valid values are found in SurfaceAndCubePropertyNames as VolatilityQuote or PriceQuote.");
   }
 
   @Override
@@ -124,8 +128,9 @@ public class BondFutureOptionVolatilitySurfaceDataFunction extends AbstractFunct
 
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
-    return Collections.singleton(new ValueSpecification(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, target.toSpecification(), createValueProperties()
-        .withAny(ValuePropertyNames.SURFACE).with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.BOND_FUTURE_OPTION).get()));
+    return Collections.singleton(new ValueSpecification(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, target.toSpecification(),
+        createValueProperties().withAny(ValuePropertyNames.SURFACE)
+                               .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.BOND_FUTURE_OPTION).get()));
   }
 
   @Override
@@ -137,12 +142,13 @@ public class BondFutureOptionVolatilitySurfaceDataFunction extends AbstractFunct
     }
     final String surfaceName = surfaceNames.iterator().next();
     final String fullSpecificationName = surfaceName + "_" + target.getUniqueId().getValue();
-    final VolatilitySurfaceSpecification specification = _volatilitySurfaceSpecificationSource.getSpecification(fullSpecificationName, InstrumentTypeProperties.BOND_FUTURE_OPTION);
+    final VolatilitySurfaceSpecification specification =
+        _volatilitySurfaceSpecificationSource.getSpecification(fullSpecificationName, InstrumentTypeProperties.BOND_FUTURE_OPTION);
     if (specification == null) {
       LOGGER.error("Could not get volatility surface specification named {}", fullSpecificationName);
       return null;
     }
-    final Set<ValueRequirement> requirements = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> requirements = new HashSet<>();
     final ValueProperties surfaceProperties = ValueProperties.builder().with(ValuePropertyNames.SURFACE, surfaceName)
         .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.BOND_FUTURE_OPTION)
         .with(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_QUOTE_TYPE, specification.getSurfaceQuoteType())
@@ -164,20 +170,20 @@ public class BondFutureOptionVolatilitySurfaceDataFunction extends AbstractFunct
     return requirements;
   }
 
-  private static VolatilitySurfaceData<Double, Double> getSurfaceFromVolatilityQuote(final VolatilitySurfaceData<Number, Double> optionVolatilities, final ZonedDateTime now,
-      final Calendar calendar) {
+  private static VolatilitySurfaceData<Double, Double> getSurfaceFromVolatilityQuote(final VolatilitySurfaceData<Number, Double> optionVolatilities,
+      final ZonedDateTime now, final Calendar calendar) {
     final BondFutureOptionExpiryCalculator expiryCalculator = BondFutureOptionExpiryCalculator.getInstance();
-    final Map<Pair<Double, Double>, Double> volatilityValues = new HashMap<Pair<Double, Double>, Double>();
+    final Map<Pair<Double, Double>, Double> volatilityValues = new HashMap<>();
     final DoubleArrayList tList = new DoubleArrayList();
     final DoubleArrayList kList = new DoubleArrayList();
     final LocalDate today = now.toLocalDate();
     final Object[] xs = optionVolatilities.getXs();
     for (final Object xObj : xs) {
-      Number x = (Number) xObj;
+      final Number x = (Number) xObj;
       final Double t = TimeCalculator.getTimeBetween(today, expiryCalculator.getExpiryDate(x.intValue(), today, calendar));
       final Object[] ys = optionVolatilities.getYs();
       for (final Object yObj : ys) {
-        Double y = (Double) yObj;
+        final Double y = (Double) yObj;
         final Double volatility = optionVolatilities.getVolatility(x, y);
         if (volatility != null) {
           tList.add(t);
@@ -186,18 +192,19 @@ public class BondFutureOptionVolatilitySurfaceDataFunction extends AbstractFunct
         }
       }
     }
-    return new VolatilitySurfaceData<Double, Double>(optionVolatilities.getDefinitionName(), optionVolatilities.getSpecificationName(), optionVolatilities.getTarget(),
+    return new VolatilitySurfaceData<>(optionVolatilities.getDefinitionName(), optionVolatilities.getSpecificationName(), optionVolatilities.getTarget(),
         tList.toArray(new Double[0]), kList.toArray(new Double[0]), volatilityValues);
   }
 
-  private static VolatilitySurfaceData<Double, Double> getSurfaceFromPriceQuote(final VolatilitySurfaceSpecification specification, final VolatilitySurfaceData<Number, Double> optionPrices,
-      final NodalDoublesCurve futurePrices, final ZonedDateTime now, final String surfaceQuoteType, final Calendar calendar) {
+  private static VolatilitySurfaceData<Double, Double> getSurfaceFromPriceQuote(final VolatilitySurfaceSpecification specification,
+      final VolatilitySurfaceData<Number, Double> optionPrices, final NodalDoublesCurve futurePrices, final ZonedDateTime now,
+      final String surfaceQuoteType, final Calendar calendar) {
     final BondFutureOptionExpiryCalculator expiryCalculator = BondFutureOptionExpiryCalculator.getInstance();
     double callAboveStrike = 0;
     if (specification.getSurfaceInstrumentProvider() instanceof CallPutSurfaceInstrumentProvider) {
       callAboveStrike = ((CallPutSurfaceInstrumentProvider<?, ?>) specification.getSurfaceInstrumentProvider()).useCallAboveStrike();
     }
-    final Map<Pair<Double, Double>, Double> volatilityValues = new HashMap<Pair<Double, Double>, Double>();
+    final Map<Pair<Double, Double>, Double> volatilityValues = new HashMap<>();
     final DoubleArrayList txList = new DoubleArrayList();
     final DoubleArrayList kList = new DoubleArrayList();
     final LocalDate today = now.toLocalDate();
@@ -245,8 +252,8 @@ public class BondFutureOptionVolatilitySurfaceDataFunction extends AbstractFunct
         }
       }
     }
-    return new VolatilitySurfaceData<Double, Double>(optionPrices.getDefinitionName(), optionPrices.getSpecificationName(), optionPrices.getTarget(), txList.toArray(new Double[0]),
-        kList.toArray(new Double[0]), volatilityValues);
+    return new VolatilitySurfaceData<>(optionPrices.getDefinitionName(), optionPrices.getSpecificationName(), optionPrices.getTarget(),
+        txList.toArray(new Double[0]), kList.toArray(new Double[0]), volatilityValues);
   }
 
   private static NodalDoublesCurve getFuturePricesCurve(final ComputationTarget target, final String curveName, final FunctionInputs inputs) {
@@ -254,8 +261,10 @@ public class BondFutureOptionVolatilitySurfaceDataFunction extends AbstractFunct
       throw new OpenGammaRuntimeException("Could not get curve name");
     }
 
-    final ValueRequirement futuresRequirement = new ValueRequirement(ValueRequirementNames.FUTURE_PRICE_CURVE_DATA, target.toSpecification(), ValueProperties.builder()
-        .with(ValuePropertyNames.CURVE, curveName).with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.BOND_FUTURE_PRICE).get());
+    final ValueRequirement futuresRequirement = new ValueRequirement(ValueRequirementNames.FUTURE_PRICE_CURVE_DATA, target.toSpecification(),
+        ValueProperties.builder()
+                       .with(ValuePropertyNames.CURVE, curveName)
+                       .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.BOND_FUTURE_PRICE).get());
     final Object futurePricesObject = inputs.getValue(futuresRequirement);
     if (futurePricesObject == null) {
       throw new OpenGammaRuntimeException("Could not get futures price data");

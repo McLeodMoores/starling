@@ -142,13 +142,13 @@ public class NonVersionedRedisPositionSourceTest extends AbstractRedisTestCase {
     final Portfolio p = source.getPortfolio(uniqueId, null);
 
     final long start = System.nanoTime();
-    final int NUM_POSITIONS = 50000;
-    for (int i = 0; i < NUM_POSITIONS; i++) {
+    final int numPositions = 50000;
+    for (int i = 0; i < numPositions; i++) {
       source.addPositionToPortfolio(p, addPosition(i));
     }
     final long end = System.nanoTime();
     final double durationInSec = (end - start) / 1000000000.0;
-    System.out.println("Adding " + NUM_POSITIONS + " took " + durationInSec + " sec");
+    System.out.println("Adding " + numPositions + " took " + durationInSec + " sec");
 
   }
 

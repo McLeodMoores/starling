@@ -26,7 +26,8 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class DependencyNodeImpl implements DependencyNode, Serializable {
 
-  // TODO: Change DependencyNode from an interface to an abstract class and put the static stuff into it rather than have static methods & instanceof checks here
+  // TODO: Change DependencyNode from an interface to an abstract class and put the static stuff into it rather than have
+  // static methods & instanceof checks here
 
   private static final long serialVersionUID = 1L;
 
@@ -66,7 +67,7 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
 
   /**
    * Creates a new node.
-   * 
+   *
    * @param function the function, not null
    * @param target the target specification, not null
    * @param outputs the outputs of the node, not null and not containing null
@@ -83,7 +84,7 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
     int size = outputs.size();
     _outputValues = new ValueSpecification[size];
     int i = 0;
-    for (ValueSpecification output : outputs) {
+    for (final ValueSpecification output : outputs) {
       ArgumentChecker.notNull(output, "output");
       assert _target.equals(output.getTargetSpecification());
       _outputValues[i++] = output;
@@ -97,7 +98,7 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
       _inputValues = new ValueSpecification[size];
       _inputNodes = new DependencyNode[size];
       i = 0;
-      for (Map.Entry<ValueSpecification, DependencyNode> input : inputs.entrySet()) {
+      for (final Map.Entry<ValueSpecification, DependencyNode> input : inputs.entrySet()) {
         ArgumentChecker.notNull(input, "input");
         ArgumentChecker.notNull(input.getKey(), "input.key");
         ArgumentChecker.notNull(input.getValue(), "input.value");
@@ -240,7 +241,7 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
   }
 
   private static boolean outputValueTargets(final ComputationTargetSpecification target, final ValueSpecification[] outputValues) {
-    for (ValueSpecification outputValue : outputValues) {
+    for (final ValueSpecification outputValue : outputValues) {
       if (!target.equals(outputValue.getTargetSpecification())) {
         return false;
       }
@@ -279,7 +280,7 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
         }
       }
     }
-    if ((newOutputs != null) && (newOutputCount == 0)) {
+    if (newOutputs != null && newOutputCount == 0) {
       // We have a node that isn't needed anymore - it produces no necessary outputs
       return null;
     }
@@ -353,7 +354,7 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
     if (oldNode instanceof DependencyNodeImpl) {
       return ((DependencyNodeImpl) oldNode).removeUnnecessaryValues(necessary);
     } else {
-      int outputCount = oldNode.getOutputCount();
+      final int outputCount = oldNode.getOutputCount();
       ValueSpecification[] newOutputs = null;
       int newOutputCount = 0;
       for (int j = 0; j < outputCount; j++) {
@@ -371,7 +372,7 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
           }
         }
       }
-      if ((newOutputs != null) && (newOutputCount == 0)) {
+      if (newOutputs != null && newOutputCount == 0) {
         // We have a node that isn't needed anymore - it produces no necessary outputs
         return null;
       }
@@ -485,7 +486,7 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
 
   /**
    * Obtains a copy of the input value specifications for a node as a set.
-   * 
+   *
    * @param node the node instance to query
    * @return the set of input value specifications to the node
    */
@@ -500,7 +501,7 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
 
   /**
    * Obtains a copy of the input value specifications and nodes as a map of value specifications to the node that produces each one
-   * 
+   *
    * @param node the node instance to query
    * @return the input values and nodes
    */
@@ -515,7 +516,7 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
 
   /**
    * Obtains a copy of the input values to a node as an array.
-   * 
+   *
    * @param node the node instance to query, not null
    * @return the array of input values to the node, not null and not containing null
    */
@@ -533,7 +534,7 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
 
   /**
    * Obtains a copy of the input nodes to a node as an array.
-   * 
+   *
    * @param node the node instance to query, not null
    * @return the array of input nodes, not null and not containing null
    */
@@ -563,8 +564,8 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
 
   @Override
   public boolean hasOutputValue(final ValueSpecification value) {
-    for (int i = 0; i < _outputValues.length; i++) {
-      if (value.equals(_outputValues[i])) {
+    for (final ValueSpecification outputValue : _outputValues) {
+      if (value.equals(outputValue)) {
         return true;
       }
     }
@@ -573,7 +574,7 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
 
   /**
    * Obtains a copy of the output value specifications for a node as a set.
-   * 
+   *
    * @param node the node instance to query, not null
    * @return the set of output value specifications to the node, not null
    */
@@ -588,7 +589,7 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
 
   /**
    * Obtains a copy of the output value specifications for a node as an array.
-   * 
+   *
    * @param node the node instance to query, not null
    * @return the array of output value specifications to the node, not null
    */
@@ -605,7 +606,7 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
     int count = node.getOutputCount();
     for (int i = 0; i < count; i++) {
       final ValueSpecification output = node.getOutputValue(i);
-      DependencyNode existing = outputs.put(output, node);
+      final DependencyNode existing = outputs.put(output, node);
       if (existing != null) {
         assert existing == node;
         return;

@@ -328,12 +328,13 @@ public class ISDACompliantCDSFunction extends NonCompiledInvoker {
    * @param security
    */
   private static CreditCurveIdentifier getCreditCurveIdentifier(final CreditDefaultSwapSecurity security, final String name) {
-    final CreditCurveIdentifier curveIdentifier = CreditCurveIdentifier.of(name + security.getReferenceEntity().getValue(), security.getNotional().getCurrency(),
-        security.getDebtSeniority().toString(), security.getRestructuringClause().toString());
+    final CreditCurveIdentifier curveIdentifier = CreditCurveIdentifier.of(name + security.getReferenceEntity().getValue(),
+        security.getNotional().getCurrency(), security.getDebtSeniority().toString(), security.getRestructuringClause().toString());
     return curveIdentifier;
   }
 
-  public PointsUpFront getPointsUpfront(final CDSQuoteConvention quote, final BuySellProtection buySellProtection, final ISDACompliantYieldCurve yieldCurve, final CDSAnalytic analytic, final ISDACompliantCreditCurve creditCurve) {
+  public PointsUpFront getPointsUpfront(final CDSQuoteConvention quote, final BuySellProtection buySellProtection, final ISDACompliantYieldCurve yieldCurve,
+      final CDSAnalytic analytic, final ISDACompliantCreditCurve creditCurve) {
     double puf = 0.0;
     if (quote instanceof PointsUpFront) {
       return (PointsUpFront) quote;

@@ -43,22 +43,26 @@ public class MarketDataCovarianceMatrixFunction extends SampledCovarianceMatrixF
 
   @Override
   protected Set<ValueRequirement> createRequirements(final ComputationTargetSpecification tempTargetSpec) {
-    return Collections.singleton(new ValueRequirement(ValueRequirementNames.HISTORICAL_TIME_SERIES, tempTargetSpec, ValueProperties.with(HistoricalViewEvaluationFunction.MARKET_DATA_PROPERTY_NAME,
+    return Collections.singleton(new ValueRequirement(ValueRequirementNames.HISTORICAL_TIME_SERIES, tempTargetSpec,
+        ValueProperties.with(HistoricalViewEvaluationFunction.MARKET_DATA_PROPERTY_NAME,
         HistoricalViewEvaluationFunction.MARKET_DATA_PROPERTY_VALUE).get()));
   }
 
   // FunctionInvoker
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final HistoricalViewEvaluationMarketData marketData = (HistoricalViewEvaluationMarketData) inputs.getValue(ValueRequirementNames.HISTORICAL_TIME_SERIES);
-    final ValueSpecification[] marketDataSpecs = marketData.getValueSpecifications().toArray(new ValueSpecification[marketData.getValueSpecifications().size()]);
+    final ValueSpecification[] marketDataSpecs =
+        marketData.getValueSpecifications().toArray(new ValueSpecification[marketData.getValueSpecifications().size()]);
     final LocalDateDoubleTimeSeries[] timeSeries = new LocalDateDoubleTimeSeries[marketDataSpecs.length];
     for (int i = 0; i < marketDataSpecs.length; i++) {
       timeSeries[i] = marketData.getDoubleTimeSeries(marketDataSpecs[i]);
     }
     final ValueRequirement desiredValueReq = desiredValues.iterator().next();
-    final ValueSpecification desiredValueSpec = new ValueSpecification(ValueRequirementNames.COVARIANCE_MATRIX, target.toSpecification(), desiredValueReq.getConstraints());
+    final ValueSpecification desiredValueSpec =
+        new ValueSpecification(ValueRequirementNames.COVARIANCE_MATRIX, target.toSpecification(), desiredValueReq.getConstraints());
     return Collections.singleton(new ComputedValue(desiredValueSpec, createCovarianceMatrix(timeSeries, marketDataSpecs)));
   }
 

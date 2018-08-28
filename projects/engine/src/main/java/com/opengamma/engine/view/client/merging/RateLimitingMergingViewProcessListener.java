@@ -56,9 +56,11 @@ public class RateLimitingMergingViewProcessListener extends MergingViewProcessLi
   }
 
   /**
-   * Sets whether output from the provider is paused. While it is paused, updates are merged into a single update which is released when the provider is resumed.
+   * Sets whether output from the provider is paused. While it is paused, updates are merged into a single update which is
+   * released when the provider is resumed.
    *
-   * @param isPaused <code>true</code> to indicate that output should be paused, or <code>false</code> to indicate that output should flow normally according to the update rate.
+   * @param isPaused <code>true</code> to indicate that output should be paused, or <code>false</code> to indicate that output
+   * should flow normally according to the update rate.
    */
   public void setPaused(final boolean isPaused) {
     final Call<?> drain;

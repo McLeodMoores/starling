@@ -45,7 +45,7 @@ public interface AnalyticsView {
 
   /**
    * Updates the grid structures when the view definition compiles and its structure is available.
-   * 
+   *
    * @param compiledViewDefinition  the compiled view definition whose data will be displayed in the grids
    * @param resolvedPortfolio  the view's portfolio with all securities resolved
    * @return the callback IDs of grids that were updated
@@ -62,7 +62,7 @@ public interface AnalyticsView {
 
   /**
    * Updates the data in the grids when a cycle completes in the calculation engine.
-   * 
+   *
    * @param results  the results of the calculation cycle
    * @param viewCycle  the data associated with the calculation cycle
    * @return the callback IDs of the viewports whose data changed
@@ -73,7 +73,7 @@ public interface AnalyticsView {
 
   /**
    * Returns the row and column structure of one of the top level grids.
-   * 
+   *
    * @param gridType  the required grid structure, not null
    * @param viewportId  the ID of the viewport
    * @return the row and column structure of the specified grid
@@ -108,7 +108,8 @@ public interface AnalyticsView {
    *  expanded or a summary for data types which can't fit in a cell, e.g. vectors, matrices, curves.
    * @return true if there is data available for the new viewport
    */
-  boolean createViewport(int requestId, GridType gridType, int viewportId, String callbackId, String structureCallbackId, ViewportDefinition viewportDefinition);
+  boolean createViewport(int requestId, GridType gridType, int viewportId, String callbackId, String structureCallbackId,
+      ViewportDefinition viewportDefinition);
 
   /**
    * Updates a viewport. A viewport will be updated when the user scrolls the grid.
@@ -123,7 +124,7 @@ public interface AnalyticsView {
 
   /**
    * Deletes a viewport.
-   * 
+   *
    * @param gridType  the required grid structure, not null
    * @param viewportId  the ID of the viewport
    */
@@ -131,7 +132,7 @@ public interface AnalyticsView {
 
   /**
    * Returns the current data for a viewport.
-   * 
+   *
    * @param gridType  the required grid structure, not null
    * @param viewportId  the ID of the viewport
    * @return the current data for the viewport
@@ -171,7 +172,7 @@ public interface AnalyticsView {
   /**
    * Opens a grid showing the dependency graph of calculations for a cell in one of the main grids.
    * TODO should include the structure version otherwise there's a minor race condition
-   * 
+   *
    * @param requestId  the ID of the request
    * @param gridType Specifies which of the main grids
    * @param graphId A unique ID for the dependency graph grid
@@ -203,7 +204,7 @@ public interface AnalyticsView {
 
   /**
    * Closes a dependency graph.
-   * 
+   *
    * @param gridType  the grid that the dependency graph grid belongs to
    * @param graphId  the ID of the dependency graph
    */
@@ -246,7 +247,7 @@ public interface AnalyticsView {
 
   /**
    * Deletes a viewport from a dependency graph grid.
-   * 
+   *
    * @param gridType  the grid that the dependency graph grid belongs to
    * @param graphId  the ID of the dependency graph
    * @param viewportId  the ID of the viewport
@@ -255,7 +256,7 @@ public interface AnalyticsView {
 
   /**
    * Returns the current data for a viewport of a dependency graph grid.
-   * 
+   *
    * @param gridType  the grids that the dependency graph grid belongs to
    * @param graphId  the ID of the dependency graph
    * @param viewportId  the ID of the viewport
@@ -266,19 +267,19 @@ public interface AnalyticsView {
   List<String> entityChanged(MasterChangeNotification<?> notification);
 
   List<String> portfolioChanged();
-  
+
   /**
    * Returns the current data for all cells in a grid without publishing it.
-   * 
+   *
    * @param gridType  the grid type, not null.
    * @param format  the type formatter type, not null.
    * @return the current data for the viewport
    */
   ViewportResults getAllGridData(GridType gridType, TypeFormatter.Format format);
-  
+
   /**
    * Gets the id of the view definition that produces this analytics view.
-   * 
+   *
    * @return the view definition unique id.
    */
   UniqueId getViewDefinitionId();

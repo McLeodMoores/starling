@@ -35,13 +35,14 @@ public class LiborMarketModelDisplacedDiffusionProvider implements LiborMarketMo
   private final Currency _ccy;
 
   /**
-   * Constructor from exiting multicurveProvider and LMM parameters. The given provider and parameters are used for the new provider (the same maps are used, not copied).
+   * Constructor from exiting multicurveProvider and LMM parameters. The given provider and parameters are used for the new provider
+   * (the same maps are used, not copied).
    * @param multicurves The multi-curves provider, not null
    * @param parameters The LMM parameters, not null
    * @param ccy The currency for which the LMM parameters are valid (LMM on the discounting curve), not null
    */
-  public LiborMarketModelDisplacedDiffusionProvider(final MulticurveProviderInterface multicurves, final LiborMarketModelDisplacedDiffusionParameters parameters,
-      final Currency ccy) {
+  public LiborMarketModelDisplacedDiffusionProvider(final MulticurveProviderInterface multicurves,
+      final LiborMarketModelDisplacedDiffusionParameters parameters, final Currency ccy) {
     ArgumentChecker.notNull(multicurves, "multicurves");
     ArgumentChecker.notNull(parameters, "parameters");
     ArgumentChecker.notNull(ccy, "ccy");

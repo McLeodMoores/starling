@@ -504,9 +504,11 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
             ++counter;
           }
         }
-        values = function.getNextOptionValues(discount, upProbability, middleProbability, downProbability, values, assetPriceBase, sumDiscountDiv, downFactor, middleOverDown, i);
+        values = function.getNextOptionValues(discount, upProbability, middleProbability, downProbability, values, assetPriceBase, sumDiscountDiv,
+            downFactor, middleOverDown, i);
         if (i == 2) {
-          final double[] pForGamma = dividend.getAssetPricesForGamma(assetPriceBase, interestRate, divSteps, upFactor, middleFactor, downFactor, sumDiscountDiv);
+          final double[] pForGamma =
+              dividend.getAssetPricesForGamma(assetPriceBase, interestRate, divSteps, upFactor, middleFactor, downFactor, sumDiscountDiv);
           final double delta1 = (values[4] - values[3]) / (pForGamma[4] - pForGamma[3]);
           final double delta2 = (values[3] - values[2]) / (pForGamma[3] - pForGamma[2]);
           final double delta3 = (values[2] - values[1]) / (pForGamma[2] - pForGamma[1]);
@@ -518,7 +520,8 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
           res[3] = values[2];
         }
         if (i == 1) {
-          final double[] pForDelta = dividend.getAssetPricesForDelta(assetPriceBase, interestRate, divSteps, upFactor, middleFactor, downFactor, sumDiscountDiv);
+          final double[] pForDelta =
+              dividend.getAssetPricesForDelta(assetPriceBase, interestRate, divSteps, upFactor, middleFactor, downFactor, sumDiscountDiv);
           final double delta1 = (values[1] - values[0]) / (pForDelta[1] - pForDelta[0]);
           final double delta2 = (values[2] - values[1]) / (pForDelta[2] - pForDelta[1]);
           res[1] = 0.5 * (delta1 + delta2);

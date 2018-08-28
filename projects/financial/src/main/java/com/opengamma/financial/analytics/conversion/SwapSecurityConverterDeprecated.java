@@ -190,10 +190,10 @@ public class SwapSecurityConverterDeprecated extends FinancialSecurityVisitorAda
     final FixedInterestRateLeg fixedLeg = (FixedInterestRateLeg) (payFixed ? payLeg : receiveLeg);
     final FloatingInterestRateLeg iborLeg = (FloatingInterestRateLeg) (payFixed ? receiveLeg : payLeg);
     // Swap data
-    final double signFixed = (payFixed ? -1.0 : 1.0);
+    final double signFixed = payFixed ? -1.0 : 1.0;
     int nbNotional = 0;
-    nbNotional = (swapSecurity.isExchangeInitialNotional() ? nbNotional + 1 : nbNotional);
-    nbNotional = (swapSecurity.isExchangeFinalNotional() ? nbNotional + 1 : nbNotional);
+    nbNotional = swapSecurity.isExchangeInitialNotional() ? nbNotional + 1 : nbNotional;
+    nbNotional = swapSecurity.isExchangeFinalNotional() ? nbNotional + 1 : nbNotional;
     final double spread;
     if (hasSpread) {
       spread = ((FloatingSpreadIRLeg) iborLeg).getSpread();
@@ -248,22 +248,22 @@ public class SwapSecurityConverterDeprecated extends FinancialSecurityVisitorAda
     final AnnuityCouponFixedDefinition fixedLegDefinition;
     if (Frequency.NEVER_NAME.equals(freqFixed.getName())) { // If NEVER, then treated as a zero-coupon and coupon not used.
       final int nbPayment = Math.max(nbNotional, 1); // Implementation note: If zero-coupon with no notional, create a fake coupon of 0.
-      final double accruedEnd = (nbNotional == 0 ? 0.0 : 1.0);
+      final double accruedEnd = nbNotional == 0 ? 0.0 : 1.0;
       final CouponFixedDefinition[] notional = new CouponFixedDefinition[nbPayment];
       int loopnot = 0;
       if (swapSecurity.isExchangeInitialNotional()) {
         notional[0] = new CouponFixedDefinition(currencyIbor, effectiveDate, effectiveDate, effectiveDate, 1.0, -signFixed * fixedLegNotional, 1.0);
         loopnot++;
       }
-      if (swapSecurity.isExchangeFinalNotional() || (nbNotional == 0)) {
+      if (swapSecurity.isExchangeFinalNotional() || nbNotional == 0) {
         notional[loopnot] = new CouponFixedDefinition(currencyIbor, maturityDate, maturityDate, maturityDate, accruedEnd, signFixed * fixedLegNotional, 1.0);
       }
       fixedLegDefinition = new AnnuityCouponFixedDefinition(notional, calendarFixed);
     } else {
       final Period tenorFixed = ConversionUtils.getTenor(freqFixed);
       fixedLegDefinition = AnnuityDefinitionBuilder.couponFixedWithNotional(currencyFixed, effectiveDate, maturityDate, tenorFixed, calendarFixed,
-          fixedLeg.getDayCount(), fixedLeg.getBusinessDayConvention(), fixedLeg.isEom(), fixedLegNotional, fixedLeg.getRate(), payFixed, StubType.SHORT_START, 0,
-          swapSecurity.isExchangeInitialNotional(), swapSecurity.isExchangeFinalNotional());
+          fixedLeg.getDayCount(), fixedLeg.getBusinessDayConvention(), fixedLeg.isEom(), fixedLegNotional, fixedLeg.getRate(), payFixed,
+          StubType.SHORT_START, 0, swapSecurity.isExchangeInitialNotional(), swapSecurity.isExchangeFinalNotional());
     }
     return new SwapCouponFixedCouponDefinition(fixedLegDefinition, iborLegDefinition);
   }
@@ -309,17 +309,21 @@ public class SwapSecurityConverterDeprecated extends FinancialSecurityVisitorAda
     final Calendar calendar = CalendarUtils.getCalendar(_regionSource, _holidaySource, regionId);
     final Currency currency = ((InterestRateNotional) payLeg.getNotional()).getCurrency();
     if (floatPayLeg instanceof FloatingSpreadIRLeg) {
-      final AnnuityCouponIborSpreadDefinition payLegDefinition = getIborSwapLegDefinition(effectiveDate, maturityDate, (FloatingSpreadIRLeg) floatPayLeg, calendar, currency, true);
+      final AnnuityCouponIborSpreadDefinition payLegDefinition =
+          getIborSwapLegDefinition(effectiveDate, maturityDate, (FloatingSpreadIRLeg) floatPayLeg, calendar, currency, true);
       if (floatReceiveLeg instanceof FloatingSpreadIRLeg) {
-        final AnnuityCouponIborSpreadDefinition receiveLegDefinition = getIborSwapLegDefinition(effectiveDate, maturityDate, (FloatingSpreadIRLeg) floatReceiveLeg, calendar, currency, false);
+        final AnnuityCouponIborSpreadDefinition receiveLegDefinition =
+            getIborSwapLegDefinition(effectiveDate, maturityDate, (FloatingSpreadIRLeg) floatReceiveLeg, calendar, currency, false);
         return SwapIborIborDefinition.from(payLegDefinition, receiveLegDefinition);
       }
-      final AnnuityCouponIborDefinition receiveLegDefinition = getIborSwapLegDefinition(effectiveDate, maturityDate, floatReceiveLeg, calendar, currency, false);
+      final AnnuityCouponIborDefinition receiveLegDefinition =
+          getIborSwapLegDefinition(effectiveDate, maturityDate, floatReceiveLeg, calendar, currency, false);
       return SwapIborIborDefinition.from(payLegDefinition, receiveLegDefinition);
     }
     final AnnuityCouponIborDefinition payLegDefinition = getIborSwapLegDefinition(effectiveDate, maturityDate, floatPayLeg, calendar, currency, true);
     if (floatReceiveLeg instanceof FloatingSpreadIRLeg) {
-      final AnnuityCouponIborSpreadDefinition receiveLegDefinition = getIborSwapLegDefinition(effectiveDate, maturityDate, (FloatingSpreadIRLeg) floatReceiveLeg, calendar, currency, false);
+      final AnnuityCouponIborSpreadDefinition receiveLegDefinition =
+          getIborSwapLegDefinition(effectiveDate, maturityDate, (FloatingSpreadIRLeg) floatReceiveLeg, calendar, currency, false);
       return SwapIborIborDefinition.from(payLegDefinition, receiveLegDefinition);
     }
     final AnnuityCouponIborDefinition receiveLegDefinition = getIborSwapLegDefinition(effectiveDate, maturityDate, floatReceiveLeg, calendar, currency, false);

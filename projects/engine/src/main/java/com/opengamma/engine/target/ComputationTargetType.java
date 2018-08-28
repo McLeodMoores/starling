@@ -116,16 +116,18 @@ public abstract class ComputationTargetType implements Serializable {
       new CreditCurveIdentifierResolver());
 
   /**
-   * A wildcard type. This may be used when declaring the target type of a function. It should not be used as part of a target reference as the lack of specific type details will prevent a resolver
-   * from producing the concrete target object.
+   * A wildcard type. This may be used when declaring the target type of a function. It should not be used as part of a target reference
+   * as the lack of specific type details will prevent a resolver from producing the concrete target object.
    */
   public static final ObjectComputationTargetType<UniqueIdentifiable> ANYTHING = defaultObject(UniqueIdentifiable.class, "ANYTHING");
 
   /**
-   * A position or a trade object. This is a union type for an object that is either an instance of {@link Position}, {@link Trade}, or both. This may be used when declaring the target type of a
-   * function. It should not normally be used as part of a target reference as the resolver will have to try multiple resolution strategies to determine the concrete instance.
+   * A position or a trade object. This is a union type for an object that is either an instance of {@link Position}, {@link Trade},
+   * or both. This may be used when declaring the target type of a function. It should not normally be used as part of a target
+   * reference as the resolver will have to try multiple resolution strategies to determine the concrete instance.
    */
-  public static final ObjectComputationTargetType<PositionOrTrade> POSITION_OR_TRADE = ObjectComputationTargetType.of(POSITION.or(TRADE), PositionOrTrade.class);
+  public static final ObjectComputationTargetType<PositionOrTrade> POSITION_OR_TRADE =
+      ObjectComputationTargetType.of(POSITION.or(TRADE), PositionOrTrade.class);
 
   /**
    * An explicit null, for the anonymous target.
@@ -133,9 +135,11 @@ public abstract class ComputationTargetType implements Serializable {
   public static final ComputationTargetType NULL = new NullComputationTargetType();
 
   /**
-   * An equivalent to the previous use of {@code PRIMITIVE}. It means primitives in their new sense, plus currencies and unordered currency pairs that now have explicit types.
-   * 
-   * @deprecated This is not particularly efficient to use and may not be correct, but is better than using {@link #ANYTHING}. It will be removed at the first opportunity.
+   * An equivalent to the previous use of {@code PRIMITIVE}. It means primitives in their new sense, plus currencies and unordered
+   * currency pairs that now have explicit types.
+   *
+   * @deprecated This is not particularly efficient to use and may not be correct, but is better than using {@link #ANYTHING}.
+   * It will be removed at the first opportunity.
    */
   @Deprecated
   public static final ComputationTargetType LEGACY_PRIMITIVE = PRIMITIVE.or(CURRENCY).or(UNORDERED_CURRENCY_PAIR);
@@ -157,7 +161,8 @@ public abstract class ComputationTargetType implements Serializable {
     return ObjectComputationTargetType.of(defaultType(clazz, name), clazz);
   }
 
-  private static <T extends UniqueIdentifiable> PrimitiveComputationTargetType<T> defaultPrimitive(final Class<T> clazz, final String name, final ObjectResolver<T> resolver) {
+  private static <T extends UniqueIdentifiable> PrimitiveComputationTargetType<T> defaultPrimitive(final Class<T> clazz, final String name,
+      final ObjectResolver<T> resolver) {
     return PrimitiveComputationTargetType.of(defaultType(clazz, name), clazz, resolver);
   }
 
@@ -166,14 +171,14 @@ public abstract class ComputationTargetType implements Serializable {
   }
 
   public static <T extends UniqueIdentifiable> ComputationTargetType of(final Class<T> clazz) {
-    Map<Class<?>, ComputationTargetType> cache = CLASS_TYPES.get();
+    final Map<Class<?>, ComputationTargetType> cache = CLASS_TYPES.get();
     ComputationTargetType type = cache.get(clazz);
     if (type != null) {
       return type;
     }
     ArgumentChecker.notNull(clazz, "clazz");
     type = of(clazz, clazz.getSimpleName(), false);
-    final Map<Class<?>, ComputationTargetType> updatedCache = new HashMap<Class<?>, ComputationTargetType>(cache);
+    final Map<Class<?>, ComputationTargetType> updatedCache = new HashMap<>(cache);
     updatedCache.put(clazz, type);
     CLASS_TYPES.compareAndSet(cache, updatedCache);
     return type;
@@ -194,7 +199,7 @@ public abstract class ComputationTargetType implements Serializable {
 
   /**
    * Creates a composite type that is either this instance or the alternative.
-   * 
+   *
    * @param alternative the alternative type to this one, not null
    * @return the composite type instance, not null
    */
@@ -207,7 +212,7 @@ public abstract class ComputationTargetType implements Serializable {
    * Creates a composite type that is any of the given alternatives.
    * <p>
    * {@code multiple(a, b, c)} will give the same result as {@code a.or(b).or(c)} but is more efficient.
-   * 
+   *
    * @param alternatives the alternative types to this one, not null, not containing null, and with at least two different types
    * @return the composite type instance, not null
    */
@@ -218,7 +223,7 @@ public abstract class ComputationTargetType implements Serializable {
 
   /**
    * Tests if the given target object is valid for this type descriptor.
-   * 
+   *
    * @param target the object to test
    * @return true if the object is compatible, false if the object is not of the descriptor's type
    */
@@ -226,7 +231,7 @@ public abstract class ComputationTargetType implements Serializable {
 
   /**
    * Tests if the given type descriptor is compatible with this type descriptor. The target class must be the same class or a subclass at each nesting level.
-   * 
+   *
    * @param type the type to test
    * @return true if the type is compatible, false otherwise
    */
@@ -234,7 +239,7 @@ public abstract class ComputationTargetType implements Serializable {
 
   /**
    * Tests if the given target class is valid for this type descriptor.
-   * 
+   *
    * @param clazz the object class to test
    * @return true if the class is compatible, false if it is not of the descriptor's type
    */
@@ -250,7 +255,7 @@ public abstract class ComputationTargetType implements Serializable {
     }
 
     private static boolean isIdentifier(final char c) {
-      return (c != '/') && (c != '|') && (c != '(') && (c != ')');
+      return c != '/' && c != '|' && c != '(' && c != ')';
     }
 
     public ComputationTargetType parse() {
@@ -295,7 +300,7 @@ public abstract class ComputationTargetType implements Serializable {
             final StringBuilder sb = new StringBuilder();
             do {
               sb.append(_buffer.charAt(_index++));
-            } while ((_index < _buffer.length()) && isIdentifier(_buffer.charAt(_index)));
+            } while (_index < _buffer.length() && isIdentifier(_buffer.charAt(_index)));
             type = ComputationTargetTypeFudgeBuilder.fromString(sb.toString());
             break;
         }
@@ -307,7 +312,7 @@ public abstract class ComputationTargetType implements Serializable {
 
   /**
    * Parses a string produced by {@link #toString}.
-   * 
+   *
    * @param str the string to parse, not null
    * @return the computation target type, not null
    */
@@ -317,7 +322,7 @@ public abstract class ComputationTargetType implements Serializable {
 
   /**
    * Apply the visitor operation to this target type.
-   * 
+   *
    * @param <T> the return type of the visitor
    * @param <D> the parameter data type of the visitor
    * @param visitor the visitor to apply, not null
@@ -328,14 +333,14 @@ public abstract class ComputationTargetType implements Serializable {
 
   /**
    * Produces a string representation of the type that includes outer brackets if necessary to maintain the structure of composite types for handling by {@link #parse}.
-   * 
+   *
    * @param sb the string builder to append the string representation to
    */
   protected abstract void toStringNested(StringBuilder sb);
 
   /**
    * Produces a string representation of the type that can be parsed by {@link #parse} and is vaguely human readable.
-   * 
+   *
    * @return the string representation
    */
   @Override
@@ -343,14 +348,14 @@ public abstract class ComputationTargetType implements Serializable {
 
   /**
    * Produces a string representation of the type that includes outer brackets if necessary to maintain the structure of composite types for viewing by a user.
-   * 
+   *
    * @param sb the string builder to append the string representation to
    */
   protected abstract void getNameNested(StringBuilder sb);
 
   /**
    * Produces a string representation of the type that can be displayed to the user.
-   * 
+   *
    * @return the string representation
    */
   public abstract String getName();
@@ -365,7 +370,7 @@ public abstract class ComputationTargetType implements Serializable {
 
   /**
    * Tests if the leaf target type(s) matches the given type. {@code x.isTargetType(y) == y.isCompatible(x) }
-   * 
+   *
    * @param type the type to test, not null
    * @return true if the leaf target type (or one of the types if there are multiple choices) matches the given type, false otherwise
    */
@@ -373,7 +378,7 @@ public abstract class ComputationTargetType implements Serializable {
 
   /**
    * Tests if the leaf target type(s) matches the given type.
-   * 
+   *
    * @param type the type to test, not null
    * @return true if the leaf target type (or one of the types if there are multiple choices) matches the given type, false otherwise
    */

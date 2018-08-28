@@ -86,7 +86,8 @@ public class FXForwardYieldCurvesPnLFunction extends AbstractFunction {
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       final FXForwardSecurity security = (FXForwardSecurity) target.getPosition().getSecurity();
       final ValueProperties constraints = desiredValue.getConstraints();
       final Set<String> resultCurrencies = constraints.getValues(CURRENCY);

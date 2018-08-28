@@ -17,7 +17,8 @@ public class ViewListCellRenderer extends DefaultListCellRenderer {
   private static final long serialVersionUID = 1L;
 
   @Override
-  public Component getListCellRendererComponent(final JList<?> list, final Object value, final int index, final boolean isSelected, final boolean cellHasFocus) {
+  public Component getListCellRendererComponent(final JList<?> list, final Object value, final int index, final boolean isSelected,
+      final boolean cellHasFocus) {
     if (value == null) {
       return super.getListCellRendererComponent(list, "< no views >", index, isSelected, cellHasFocus);
     } else {

@@ -141,8 +141,8 @@ public class LegalEntityCreditRatings implements LegalEntityFilter<LegalEntity>,
   }
 
   /**
-   * Sets the agencies with which to filter ratings. This also sets the {@link LegalEntityCreditRatings#_useRating} field to true.
-   * 
+   * Sets the agencies with which to filter ratings. This also sets the _useRating field to true.
+   *
    * @param perAgencyRatings The new value of the property, not null
    */
   public void setPerAgencyRatings(final Set<String> perAgencyRatings) {
@@ -154,8 +154,8 @@ public class LegalEntityCreditRatings implements LegalEntityFilter<LegalEntity>,
   }
 
   /**
-   * Sets the agencies with which to filter rating descriptions. This also sets the {@link LegalEntityCreditRatings#_useRatingDescription} field to true.
-   * 
+   * Sets the agencies with which to filter rating descriptions. This also sets the _useRatingDescription field to true.
+   *
    * @param perAgencyRatingDescriptions The new value of the property, not null
    */
   public void setPerAgencyRatingDescriptions(final Set<String> perAgencyRatingDescriptions) {

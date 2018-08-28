@@ -455,7 +455,7 @@ public class MergingViewProcessListener implements ViewResultListener {
   }
 
   /**
-   * Makes queued calls to the underlying. The caller must not hold the {@link #_mergerLock} lock.
+   * Makes queued calls to the underlying. The caller must not hold the _mergerLock lock.
    *
    * @param call the node head of the list, null for an empty list
    */
@@ -472,7 +472,7 @@ public class MergingViewProcessListener implements ViewResultListener {
   }
 
   /**
-   * Invokes all of the calls from the queue, clearing it. The caller must not hold the {@link #_mergerLock} lock.
+   * Invokes all of the calls from the queue, clearing it. The caller must not hold the _mergerLock lock.
    */
   protected void drain() {
     final Call<?> calls;

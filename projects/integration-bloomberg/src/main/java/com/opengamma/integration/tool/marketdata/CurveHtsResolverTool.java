@@ -144,7 +144,7 @@ public class CurveHtsResolverTool extends AbstractTool<IntegrationToolContext> {
    */
   private List<LocalDate> buildDates() {
     final Clock clock = Clock.systemDefaultZone();
-    final List<LocalDate> dates = new ArrayList<LocalDate>();
+    final List<LocalDate> dates = new ArrayList<>();
     final LocalDate twoYearsAgo = LocalDate.now(clock).minusYears(2);
     final LocalDate twoYearsTime = LocalDate.now(clock).plusYears(2);
     for (LocalDate next = twoYearsAgo; next.isBefore(twoYearsTime); next = next.plusMonths(3)) {
@@ -161,8 +161,8 @@ public class CurveHtsResolverTool extends AbstractTool<IntegrationToolContext> {
    * @return list of names of config objects matching glob expression
    */
   private List<YieldCurveDefinition> getCurveDefinitionNames(final ConfigMaster configMaster, final String nameExpr) {
-    final List<YieldCurveDefinition> results = new ArrayList<YieldCurveDefinition>();
-    final ConfigSearchRequest<YieldCurveDefinition> request = new ConfigSearchRequest<YieldCurveDefinition>(YieldCurveDefinition.class);
+    final List<YieldCurveDefinition> results = new ArrayList<>();
+    final ConfigSearchRequest<YieldCurveDefinition> request = new ConfigSearchRequest<>(YieldCurveDefinition.class);
     request.setName(nameExpr);
     for (final ConfigDocument doc : ConfigSearchIterator.iterable(configMaster, request)) {
       results.add((YieldCurveDefinition) doc.getConfig().getValue());
@@ -205,8 +205,9 @@ public class CurveHtsResolverTool extends AbstractTool<IntegrationToolContext> {
   }
 
   private void loadHistoricalData(final boolean write, final String[] dataFields, final String dataProvider, final Set<ExternalId>... externalIdSets) {
-    final BloombergHistoricalTimeSeriesLoader loader = new BloombergHistoricalTimeSeriesLoader(getToolContext().getHistoricalTimeSeriesMaster(), getToolContext()
-        .getHistoricalTimeSeriesProvider(), new BloombergIdentifierProvider(getToolContext().getBloombergReferenceDataProvider()));
+    final BloombergHistoricalTimeSeriesLoader loader =
+        new BloombergHistoricalTimeSeriesLoader(getToolContext().getHistoricalTimeSeriesMaster(), getToolContext()
+            .getHistoricalTimeSeriesProvider(), new BloombergIdentifierProvider(getToolContext().getBloombergReferenceDataProvider()));
 
     for (final Set<ExternalId> externalIds : externalIdSets) {
       if (externalIds.size() > 0) {

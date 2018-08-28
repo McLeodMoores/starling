@@ -95,7 +95,8 @@ import com.opengamma.util.ArgumentChecker;
   }
 
   @Override
-  protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final UniqueId identifier, final ValueRequirement desiredValue) {
+  protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final UniqueId identifier,
+      final ValueRequirement desiredValue) {
     // Can't provide any live data unless there is an external identifier recognized by the data provider
     return null;
   }

@@ -236,20 +236,20 @@ public class BondCapitalIndexedSecurity<C extends Coupon> extends BondSecurity<C
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_accruedInterest);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _couponPerYear;
     temp = Double.doubleToLongBits(_factorToNextCoupon);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_indexStartValue);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_lastIndexKnownFixing);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_lastKnownFixingTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_ratioPeriodToNextCoupon);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    result = prime * result + ((_settlement == null) ? 0 : _settlement.hashCode());
-    result = prime * result + ((_yieldConvention == null) ? 0 : _yieldConvention.hashCode());
+    result = prime * result + (int) (temp ^ temp >>> 32);
+    result = prime * result + (_settlement == null ? 0 : _settlement.hashCode());
+    result = prime * result + (_yieldConvention == null ? 0 : _yieldConvention.hashCode());
     return result;
   }
 
@@ -267,7 +267,7 @@ public class BondCapitalIndexedSecurity<C extends Coupon> extends BondSecurity<C
     if (getClass() != obj.getClass()) {
       return false;
     }
-    final BondCapitalIndexedSecurity other = (BondCapitalIndexedSecurity) obj;
+    final BondCapitalIndexedSecurity<?> other = (BondCapitalIndexedSecurity<?>) obj;
     if (Double.doubleToLongBits(_accruedInterest) != Double.doubleToLongBits(other._accruedInterest)) {
       return false;
     }

@@ -125,9 +125,11 @@ public class CompiledViewDefinitionWithGraphsImpl extends CompiledViewDefinition
   }
 
   private CompiledViewDefinitionWithGraphsImpl(final CompiledViewDefinitionWithGraphsImpl copyFrom, final Map<String, DependencyGraphExplorer> graphsByConfig,
-      final Map<String, Map<DistinctMarketDataSelector, Set<ValueSpecification>>> selectionsByConfig, final Map<String, Map<DistinctMarketDataSelector, FunctionParameters>> paramsByConfig) {
-    super(copyFrom.getResolverVersionCorrection(), copyFrom.getCompilationIdentifier(), copyFrom.getViewDefinition(), copyFrom.getPortfolio(), processCompiledCalculationConfigurations(
-        copyFrom.getCompiledCalculationConfigurationsMap(), graphsByConfig, selectionsByConfig, paramsByConfig), copyFrom.getValidFrom(), copyFrom.getValidTo());
+      final Map<String, Map<DistinctMarketDataSelector, Set<ValueSpecification>>> selectionsByConfig,
+      final Map<String, Map<DistinctMarketDataSelector, FunctionParameters>> paramsByConfig) {
+    super(copyFrom.getResolverVersionCorrection(), copyFrom.getCompilationIdentifier(), copyFrom.getViewDefinition(), copyFrom.getPortfolio(),
+        processCompiledCalculationConfigurations(copyFrom.getCompiledCalculationConfigurationsMap(), graphsByConfig, selectionsByConfig, paramsByConfig),
+        copyFrom.getValidFrom(), copyFrom.getValidTo());
     _graphsByConfiguration = graphsByConfig;
     _functionInitId = copyFrom._functionInitId;
     _resolutions = copyFrom._resolutions;
@@ -140,7 +142,8 @@ public class CompiledViewDefinitionWithGraphsImpl extends CompiledViewDefinition
 
   @Override
   public CompiledViewDefinitionWithGraphs withMarketDataManipulationSelections(final Map<String, DependencyGraph> newGraphsByConfig,
-      final Map<String, Map<DistinctMarketDataSelector, Set<ValueSpecification>>> selectionsByConfig, final Map<String, Map<DistinctMarketDataSelector, FunctionParameters>> paramsByConfig) {
+      final Map<String, Map<DistinctMarketDataSelector, Set<ValueSpecification>>> selectionsByConfig,
+      final Map<String, Map<DistinctMarketDataSelector, FunctionParameters>> paramsByConfig) {
     final Map<String, DependencyGraphExplorer> graphsByConfig = Maps.newHashMap(_graphsByConfiguration);
     for (final Map.Entry<String, DependencyGraph> graph : newGraphsByConfig.entrySet()) {
       graphsByConfig.put(graph.getKey(), new DependencyGraphExplorerImpl(graph.getValue()));

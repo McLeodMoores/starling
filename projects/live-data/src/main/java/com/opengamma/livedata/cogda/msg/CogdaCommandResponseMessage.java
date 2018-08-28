@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.livedata.cogda.msg;
@@ -21,7 +21,7 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
  * The common base class for any response from a server based on
- * a {@link CogdaCommandMessage} request. 
+ * a {@link CogdaCommandMessage} request.
  */
 @BeanDefinition
 public abstract class CogdaCommandResponseMessage extends DirectBean {
@@ -36,7 +36,7 @@ public abstract class CogdaCommandResponseMessage extends DirectBean {
   @PropertyDefinition(validate = "notNull")
   private CogdaCommandResponseResult _genericResult;
   /**
-   * Where the {@link _genericResult} requires additional detail, a
+   * Where the _genericResult field requires additional detail, a
    * user-capable string to be presented to the user.
    */
   @PropertyDefinition
@@ -115,7 +115,7 @@ public abstract class CogdaCommandResponseMessage extends DirectBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets where the {@link _genericResult} requires additional detail, a
+   * Gets where the _genericResult field requires additional detail, a
    * user-capable string to be presented to the user.
    * @return the value of the property
    */
@@ -124,7 +124,7 @@ public abstract class CogdaCommandResponseMessage extends DirectBean {
   }
 
   /**
-   * Sets where the {@link _genericResult} requires additional detail, a
+   * Sets where the _genericResult field requires additional detail, a
    * user-capable string to be presented to the user.
    * @param userMessage  the new value of the property
    */

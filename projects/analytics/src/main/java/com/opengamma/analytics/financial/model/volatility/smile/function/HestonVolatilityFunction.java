@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.smile.function;
@@ -25,7 +25,7 @@ import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
 import com.opengamma.lang.annotation.ExternalFunction;
 
 /**
- * 
+ *
  */
 public class HestonVolatilityFunction extends VolatilityFunctionProvider<HestonModelData> {
   /** The FFT pricer */
@@ -208,7 +208,8 @@ public class HestonVolatilityFunction extends VolatilityFunctionProvider<HestonM
       @Override
       public double[][] evaluate(final HestonModelData x) {
         final MartingaleCharacteristicExponent ce = new HestonCharacteristicExponent(x);
-        final double[][] greeks = greekCal.getGreeks(forward, 1.0, timeToExpiry, true, ce, lowestStrike, highestStrike, n, _limitSigma, _alpha, _limitTolerance);
+        final double[][] greeks =
+            greekCal.getGreeks(forward, 1.0, timeToExpiry, true, ce, lowestStrike, highestStrike, n, _limitSigma, _alpha, _limitTolerance);
         //1st array is strikes and the second is prices (which we don't need)
         final double[] k = greeks[0];
         final double[] prices = greeks[1];
@@ -288,7 +289,8 @@ public class HestonVolatilityFunction extends VolatilityFunctionProvider<HestonM
       @Override
       public double[][] evaluate(final HestonModelData x) {
         final MartingaleCharacteristicExponent ce = new HestonCharacteristicExponent(x);
-        final double[][] greeks = greekCal.getGreeks(forward, 1.0, timeToExpiry, true, ce, lowestStrike, highestStrike, n, _limitSigma, _alpha, _limitTolerance);
+        final double[][] greeks =
+            greekCal.getGreeks(forward, 1.0, timeToExpiry, true, ce, lowestStrike, highestStrike, n, _limitSigma, _alpha, _limitTolerance);
         //1st array is strikes and the second is prices (which we don't need)
 
         final double[] k = greeks[0];

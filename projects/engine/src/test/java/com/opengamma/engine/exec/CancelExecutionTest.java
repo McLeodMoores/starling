@@ -183,14 +183,19 @@ public class CancelExecutionTest {
       } else {
         inputs = Collections.emptyMap();
       }
-      previousValue = new ValueSpecification(Integer.toString(i), ComputationTargetSpecification.NULL, ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get());
+      previousValue =
+          new ValueSpecification(Integer.toString(i), ComputationTargetSpecification.NULL, ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get());
       mockFunction.addResult(new ComputedValue(previousValue, "Mock"));
-      final DependencyNode node = new DependencyNodeImpl(DependencyNodeFunctionImpl.of(mockFunction), ComputationTargetSpecification.NULL, Collections.singleton(previousValue), inputs);
+      final DependencyNode node =
+          new DependencyNodeImpl(DependencyNodeFunctionImpl.of(mockFunction), ComputationTargetSpecification.NULL,
+              Collections.singleton(previousValue), inputs);
       previousNode = node;
     }
-    final DependencyGraph graph = new DependencyGraphImpl("Test", Collections.singleton(previousNode), JOB_SIZE, Collections.<ValueSpecification, Set<ValueRequirement>>emptyMap());
+    final DependencyGraph graph =
+        new DependencyGraphImpl("Test", Collections.singleton(previousNode), JOB_SIZE, Collections.<ValueSpecification, Set<ValueRequirement>>emptyMap());
     final Instant now = Instant.now();
-    final CompiledViewDefinitionWithGraphsImpl viewEvaluationModel = new CompiledViewDefinitionWithGraphsImpl(VersionCorrection.of(now, now), "", viewDefinition,
+    final CompiledViewDefinitionWithGraphsImpl viewEvaluationModel =
+        new CompiledViewDefinitionWithGraphsImpl(VersionCorrection.of(now, now), "", viewDefinition,
         Collections.singleton(graph), Collections.<ComputationTargetReference, UniqueId>emptyMap(), new SimplePortfolio("Test Portfolio"), 0,
         Collections.<CompiledViewCalculationConfiguration>singleton(CompiledViewCalculationConfigurationImpl.of(graph)), null, null);
     final ViewCycleExecutionOptions cycleOptions = ViewCycleExecutionOptions.builder().setValuationTime(Instant.ofEpochMilli(1))
@@ -201,7 +206,8 @@ public class CancelExecutionTest {
         //ignore
       }
     }, vpc, viewEvaluationModel, cycleOptions, VersionCorrection.of(Instant.ofEpochMilli(1), Instant.ofEpochMilli(1)));
-    return factory.createExecutor(cycle).execute(graph, Collections.<ValueSpecification>emptySet(), Collections.<ValueSpecification, FunctionParameters>emptyMap());
+    return factory.createExecutor(cycle).execute(graph, Collections.<ValueSpecification>emptySet(),
+        Collections.<ValueSpecification, FunctionParameters>emptyMap());
   }
 
   private boolean jobFinished() {

@@ -63,9 +63,11 @@ public class TRConventions {
         following, Period.ofMonths(8), 2, false, sg);
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("TYDRI Curncy"), simpleNameSecurityId("TRY DEPOSIT 9m")), "TRY DEPOSIT 9m", act360,
         following, Period.ofMonths(9), 2, false, sg);
-    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("TYDRJ Curncy"), simpleNameSecurityId("TRY DEPOSIT 10m")), "TRY DEPOSIT 10m", act360,
+    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("TYDRJ Curncy"),
+        simpleNameSecurityId("TRY DEPOSIT 10m")), "TRY DEPOSIT 10m", act360,
         following, Period.ofMonths(10), 2, false, sg);
-    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("TYDRK Curncy"), simpleNameSecurityId("TRY DEPOSIT 11m")), "TRY DEPOSIT 11m", act360,
+    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("TYDRK Curncy"),
+        simpleNameSecurityId("TRY DEPOSIT 11m")), "TRY DEPOSIT 11m", act360,
         following, Period.ofMonths(11), 2, false, sg);
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("TYDR1 Curncy"), simpleNameSecurityId("TRY DEPOSIT 1y")), "TRY DEPOSIT 1y", act360,
         following, Period.ofYears(1), 2, false, sg);

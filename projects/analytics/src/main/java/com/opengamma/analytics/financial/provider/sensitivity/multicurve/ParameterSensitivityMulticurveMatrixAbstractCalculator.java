@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.sensitivity.multicurve;
@@ -48,7 +48,8 @@ public abstract class ParameterSensitivityMulticurveMatrixAbstractCalculator {
    * instrument sensitivity but only the one in the set will be in the output. The curve order in the output is the set order.
    * @return The sensitivity (as a Matrix). The order of the sensitivity is by curve as provided by the curvesSet.
    */
-  public DoubleMatrix1D calculateSensitivity(final InstrumentDerivative instrument, final MulticurveProviderInterface multicurves, final Set<String> curvesSet) {
+  public DoubleMatrix1D calculateSensitivity(final InstrumentDerivative instrument, final MulticurveProviderInterface multicurves,
+      final Set<String> curvesSet) {
     Validate.notNull(instrument, "null InterestRateDerivative");
     Validate.notNull(multicurves, "null multicurve");
     Validate.notNull(curvesSet, "null curves set");

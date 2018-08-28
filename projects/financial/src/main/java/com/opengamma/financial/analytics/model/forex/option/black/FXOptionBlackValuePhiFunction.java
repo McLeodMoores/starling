@@ -221,9 +221,9 @@ public class FXOptionBlackValuePhiFunction extends AbstractFunction.NonCompiledI
         .with(ValuePropertyNames.CURRENCY, getResultCurrency(target, baseQuotePair));
   }
 
-  private static ValueRequirement getCurveSensitivitiesRequirement(final String putCurveName, final String putCurveCalculationConfig, final String callCurveName,
-      final String callCurveCalculationConfig, final String surfaceName, final String interpolatorName, final String leftExtrapolatorName,
-      final String rightExtrapolatorName, final ComputationTarget target) {
+  private static ValueRequirement getCurveSensitivitiesRequirement(final String putCurveName, final String putCurveCalculationConfig,
+      final String callCurveName, final String callCurveCalculationConfig, final String surfaceName, final String interpolatorName,
+      final String leftExtrapolatorName, final String rightExtrapolatorName, final ComputationTarget target) {
     final ValueProperties properties = ValueProperties.builder()
         .with(FXOptionBlackFunction.PUT_CURVE, putCurveName)
         .with(FXOptionBlackFunction.CALL_CURVE, callCurveName)

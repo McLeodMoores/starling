@@ -53,10 +53,10 @@ public class PerformanceTest extends AbstractDbTest {
   public void createUpdateReadLotsOfTimeSeries() {
     final long start = System.nanoTime();
 
-    final int NUM_SERIES = 100;
-    final int NUM_POINTS = 100;
+    final int numSeries = 100;
+    final int numPoints = 100;
 
-    for (int i = 0; i < NUM_SERIES; i++) {
+    for (int i = 0; i < numSeries; i++) {
       final ExternalId id1 = ExternalId.of("sa" + i, "ida" + i);
       final ExternalIdBundle identifiers = ExternalIdBundle.of(id1);
 
@@ -73,9 +73,9 @@ public class PerformanceTest extends AbstractDbTest {
 
       LocalDateDoubleTimeSeries randomPoints = RandomTimeSeriesGenerator.makeRandomTimeSeries(1);
       _htsMaster.updateTimeSeriesDataPoints(doc.getInfo().getTimeSeriesObjectId(), randomPoints);
-      randomPoints = RandomTimeSeriesGenerator.makeRandomTimeSeries(NUM_POINTS);
+      randomPoints = RandomTimeSeriesGenerator.makeRandomTimeSeries(numPoints);
 
-      for (int j = 1; j < NUM_POINTS; j++) {
+      for (int j = 1; j < numPoints; j++) {
         final ImmutableLocalDateDoubleTimeSeries points = ImmutableLocalDateDoubleTimeSeries.of(
             Lists.newArrayList(randomPoints.getTimeAtIndex(j)),
             Lists.newArrayList(randomPoints.getValueAtIndex(j)));
@@ -87,7 +87,7 @@ public class PerformanceTest extends AbstractDbTest {
     final long end = System.nanoTime();
 
     LOGGER.info("Creating {} series with {} points each took {} ms",
-        new Object[] { NUM_SERIES, NUM_POINTS, (end - start) / 1E6 });
+        new Object[] { numSeries, numPoints, (end - start) / 1E6 });
   }
 
 }

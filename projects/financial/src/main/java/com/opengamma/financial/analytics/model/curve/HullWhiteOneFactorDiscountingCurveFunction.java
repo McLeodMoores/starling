@@ -106,7 +106,8 @@ public class HullWhiteOneFactorDiscountingCurveFunction extends
   /** The calculator */
   private static final ParSpreadMarketQuoteHullWhiteCalculator PSMQHWC = ParSpreadMarketQuoteHullWhiteCalculator.getInstance();
   /** The sensitivity calculator */
-  private static final ParSpreadMarketQuoteCurveSensitivityHullWhiteCalculator PSMQCSHWC = ParSpreadMarketQuoteCurveSensitivityHullWhiteCalculator.getInstance();
+  private static final ParSpreadMarketQuoteCurveSensitivityHullWhiteCalculator PSMQCSHWC =
+      ParSpreadMarketQuoteCurveSensitivityHullWhiteCalculator.getInstance();
 
   /**
    * @param configurationName The configuration name, not null
@@ -123,9 +124,9 @@ public class HullWhiteOneFactorDiscountingCurveFunction extends
 
   @Override
   public CompiledFunctionDefinition getCompiledFunction(final ZonedDateTime earliestInvokation, final ZonedDateTime latestInvokation, final String[] curveNames,
-                                                        final Set<ValueRequirement> exogenousRequirements, final CurveConstructionConfiguration curveConstructionConfiguration,
-                                                        final String[] currencies) {
-    return new MyCompiledFunctionDefinition(earliestInvokation, latestInvokation, curveNames, exogenousRequirements, curveConstructionConfiguration, currencies);
+      final Set<ValueRequirement> exogenousRequirements, final CurveConstructionConfiguration curveConstructionConfiguration, final String[] currencies) {
+    return new MyCompiledFunctionDefinition(earliestInvokation, latestInvokation, curveNames, exogenousRequirements,
+        curveConstructionConfiguration, currencies);
   }
 
   @Override

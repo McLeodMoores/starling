@@ -978,12 +978,14 @@ public abstract class StandardFunctionConfiguration extends AbstractFunctionConf
   }
 
   protected FunctionConfigurationSource forexOptionFunctions() {
-    final com.opengamma.financial.analytics.model.forex.option.black.BlackFunctions.Defaults defaults = new com.opengamma.financial.analytics.model.forex.option.black.BlackFunctions.Defaults();
+    final com.opengamma.financial.analytics.model.forex.option.black.BlackFunctions.Defaults defaults =
+        new com.opengamma.financial.analytics.model.forex.option.black.BlackFunctions.Defaults();
     setForexOptionDefaults(defaults);
     return getRepository(defaults);
   }
 
-  protected void setForexDigitalDefaults(final com.opengamma.financial.analytics.model.forex.option.callspreadblack.CallSpreadBlackFunctions.Defaults defaults) {
+  protected void setForexDigitalDefaults(
+      final com.opengamma.financial.analytics.model.forex.option.callspreadblack.CallSpreadBlackFunctions.Defaults defaults) {
   }
 
   protected FunctionConfigurationSource forexDigitalFunctions() {

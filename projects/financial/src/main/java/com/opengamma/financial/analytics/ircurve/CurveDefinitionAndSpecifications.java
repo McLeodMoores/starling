@@ -1015,7 +1015,8 @@ public class CurveDefinitionAndSpecifications {
   public static Map<Tenor, CurveInstrumentProvider> buildStandardBloomberg6MSwapInstrumentProvider(final String prefix) {
     final Map<Tenor, CurveInstrumentProvider> provider = new LinkedHashMap<>();
     for (int i = 1; i < 12; i++) {
-      provider.put(Tenor.ofMonths(i), new StaticCurveInstrumentProvider(ExternalSchemes.bloombergTickerSecurityId(prefix + BBG_MONTH_CODES[i - 1] + " Curncy")));
+      provider.put(Tenor.ofMonths(i),
+          new StaticCurveInstrumentProvider(ExternalSchemes.bloombergTickerSecurityId(prefix + BBG_MONTH_CODES[i - 1] + " Curncy")));
     }
     for (int i = 12; i < 60; i += 3) {
       final int year = i / 12;
@@ -1060,7 +1061,8 @@ public class CurveDefinitionAndSpecifications {
       provider.put(Tenor.ofDays(i * 7), new StaticCurveInstrumentProvider(ExternalSchemes.bloombergTickerSecurityId(prefix + i + "Z Curncy")));
     }
     for (int i = 1; i < 12; i++) {
-      provider.put(Tenor.ofMonths(i), new StaticCurveInstrumentProvider(ExternalSchemes.bloombergTickerSecurityId(prefix + BBG_MONTH_CODES[i - 1] + " Curncy")));
+      provider.put(Tenor.ofMonths(i),
+          new StaticCurveInstrumentProvider(ExternalSchemes.bloombergTickerSecurityId(prefix + BBG_MONTH_CODES[i - 1] + " Curncy")));
     }
     for (int i = 12; i < 36; i += 3) {
       final int year = i / 12;

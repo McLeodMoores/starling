@@ -1696,7 +1696,8 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
   /**
    * Returns a single value for a property that is part of a strict set.
    * <p>
-   * If defined, the property must have a single value only. This is provided as a more efficient form than using the {@link Set} returned by {@link #getValues}.
+   * If defined, the property must have a single value only. This is provided as a more efficient form than using the
+   * {@link Set} returned by {@link #getValues}.
    *
    * @param propertyName the name required, not null
    * @return the strict value or null if the property is absent or not strict
@@ -1706,8 +1707,9 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
   /**
    * Returns a single value for any property that is not a wild-card.
    * <p>
-   * If defined, the property must have at least one value. If there are multiple values then an arbitrary one is returned. This is provides as a more efficient form than using the {@link Set}
-   * returned by {@link #getValues} to obtain an arbitrary single element.
+   * If defined, the property must have at least one value. If there are multiple values then an arbitrary one is returned.
+   * This is provides as a more efficient form than using the {@link Set} returned by {@link #getValues} to obtain an arbitrary
+   * single element.
    *
    * @param propertyName the name required, not null
    * @return a value if the property is defined and not a wild-card, null otherwise

@@ -116,7 +116,8 @@ public abstract class PiecewiseSABRSurfaceFunction extends AbstractFunction.NonC
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     String surfaceName = null;
     String forwardCurveCalculationMethod = null;
     String forwardCurveName = null;
@@ -124,7 +125,8 @@ public abstract class PiecewiseSABRSurfaceFunction extends AbstractFunction.NonC
       final ValueProperties constraints = input.getValue().getConstraints();
       if (input.getValue().getValueName().equals(ValueRequirementNames.FORWARD_CURVE)) {
         if (constraints.getValues(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD) != null) {
-          final Set<String> forwardCurveCalculationMethodNames = constraints.getValues(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD);
+          final Set<String> forwardCurveCalculationMethodNames =
+              constraints.getValues(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD);
           if (forwardCurveCalculationMethodNames == null || forwardCurveCalculationMethodNames.size() != 1) {
             throw new OpenGammaRuntimeException("Missing or non-unique forward curve calculation method name");
           }
@@ -158,7 +160,8 @@ public abstract class PiecewiseSABRSurfaceFunction extends AbstractFunction.NonC
 
   protected abstract ValueProperties getResultProperties();
 
-  protected abstract ValueProperties getResultProperties(final String definitionName, final String forwardCurveCalculationMethod, final String forwardCurveName);
+  protected abstract ValueProperties getResultProperties(final String definitionName, final String forwardCurveCalculationMethod,
+      final String forwardCurveName);
 
   protected abstract ValueProperties getResultProperties(final String definitionName, final String surfaceType, final String xAxis, final String yAxis,
       final String yAxisType, final String forwardCurveCalculationMethod, final String forwardCurveName);

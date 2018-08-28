@@ -90,16 +90,19 @@ public class HistoricalValuationPnLFunction extends AbstractFunction.NonCompiled
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final Entry<ValueSpecification, ValueRequirement> tsInput = Iterables.getOnlyElement(inputs.entrySet());
     final ValueSpecification tsSpec = tsInput.getKey();
-    final String pnlStartDate = tsInput.getValue().getConstraint(ValueRequirementNames.PNL_SERIES + "_" + HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY);
+    final String pnlStartDate =
+        tsInput.getValue().getConstraint(ValueRequirementNames.PNL_SERIES + "_" + HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY);
     final ValueSpecification valueSpec = getResultSpec(target, tsSpec.getProperties(), pnlStartDate, null);
     return ImmutableSet.of(valueSpec);
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
     final ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);
     final ComputedValue priceTsComputedValue = inputs.getComputedValue(ValueRequirementNames.HISTORICAL_TIME_SERIES);
     final LocalDateDoubleTimeSeries priceTs = (LocalDateDoubleTimeSeries) priceTsComputedValue.getValue();

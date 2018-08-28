@@ -18,7 +18,7 @@ import java.lang.annotation.Target;
 public @interface Config {
 
   /**
-   * The class type to use for searching for the configuration item in a {@link ConfigMaster}.
+   * The class type to use for searching for the configuration item in a ConfigMaster.
    * <p>
    * Optional search type when it is different from base class
    */

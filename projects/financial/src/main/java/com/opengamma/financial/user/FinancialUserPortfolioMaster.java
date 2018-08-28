@@ -43,7 +43,8 @@ public class FinancialUserPortfolioMaster extends AbstractFinancialUserMaster<Po
    * @param tracker  the tracker, not null
    * @param underlying  the underlying master, not null
    */
-  public FinancialUserPortfolioMaster(final String userName, final String clientName, final FinancialUserDataTracker tracker, final PortfolioMaster underlying) {
+  public FinancialUserPortfolioMaster(final String userName, final String clientName, final FinancialUserDataTracker tracker,
+      final PortfolioMaster underlying) {
     super(userName, clientName, tracker, FinancialUserDataType.PORTFOLIO);
     _underlying = underlying;
     _changeProvidingMaster = ChangeProvidingDecorator.wrap(underlying);

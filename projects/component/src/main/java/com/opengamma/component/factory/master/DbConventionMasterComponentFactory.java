@@ -52,7 +52,8 @@ public class DbConventionMasterComponentFactory extends AbstractDocumentDbMaster
   @Override
   protected DbConventionBeanMaster createDbDocumentMaster() throws Exception {
     final DbConventionBeanMaster master = new DbConventionBeanMaster(getDbConnector());
-    master.registerMetrics(OpenGammaMetricRegistry.getSummaryInstance(), OpenGammaMetricRegistry.getDetailedInstance(), "DbConventionMaster-" + getClassifier());
+    master.registerMetrics(
+        OpenGammaMetricRegistry.getSummaryInstance(), OpenGammaMetricRegistry.getDetailedInstance(), "DbConventionMaster-" + getClassifier());
     return master;
   }
 

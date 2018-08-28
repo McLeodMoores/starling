@@ -63,7 +63,7 @@ public class SuccessiveRootFinderInflationYearOnYearCapFloorCalibrationEngine<DA
    */
   @Override
   public void addInstrument(final InstrumentDerivative instrument, final double calibrationPrice) {
-    ArgumentChecker.isTrue((instrument instanceof CapFloorInflationYearOnYearInterpolation) || (instrument instanceof CapFloorInflationYearOnYearMonthly) || (instrument instanceof Annuity),
+    ArgumentChecker.isTrue(instrument instanceof CapFloorInflationYearOnYearInterpolation || instrument instanceof CapFloorInflationYearOnYearMonthly || instrument instanceof Annuity,
         "Instrument should be cap inflation year on year.");
     getBasket().add(instrument);
     getCalibrationPrices().add(calibrationPrice);
@@ -86,23 +86,26 @@ public class SuccessiveRootFinderInflationYearOnYearCapFloorCalibrationEngine<DA
 
     if (instrument instanceof Annuity) {
       final Annuity<?> annuity = (Annuity<?>) instrument;
-      ArgumentChecker.isTrue((annuity.getNthPayment(annuity.getNumberOfPayments() - 1) instanceof CapFloorInflationYearOnYearInterpolation) ||
-          (annuity.getNthPayment(annuity.getNumberOfPayments() - 1) instanceof CapFloorInflationYearOnYearMonthly),
+      ArgumentChecker.isTrue(annuity.getNthPayment(annuity.getNumberOfPayments() - 1) instanceof CapFloorInflationYearOnYearInterpolation
+          || annuity.getNthPayment(annuity.getNumberOfPayments() - 1) instanceof CapFloorInflationYearOnYearMonthly,
           "Instrument should be cap inflation year on year.");
 
       if (annuity.getNthPayment(annuity.getNumberOfPayments() - 1) instanceof CapFloorInflationYearOnYearInterpolation) {
-        final CapFloorInflationYearOnYearInterpolation cap = (CapFloorInflationYearOnYearInterpolation) annuity.getNthPayment(annuity.getNumberOfPayments() - 1);
+        final CapFloorInflationYearOnYearInterpolation cap =
+            (CapFloorInflationYearOnYearInterpolation) annuity.getNthPayment(annuity.getNumberOfPayments() - 1);
         _calibrationTimes.add(cap.getPaymentTime());
-        _instrumentExpiryIndex.add(Arrays.binarySearch(((SuccessiveRootFinderInflationYearOnYearCapFloorCalibrationObjective) _calibrationObjective).getInflationCapYearOnYearParameters()
-            .getExpiryTimes(), cap.getReferenceEndTime()[1]));
+        _instrumentExpiryIndex.add(Arrays.binarySearch(
+            ((SuccessiveRootFinderInflationYearOnYearCapFloorCalibrationObjective) _calibrationObjective).getInflationCapYearOnYearParameters()
+              .getExpiryTimes(), cap.getReferenceEndTime()[1]));
         _instrumentStrikeIndex.add(Arrays.binarySearch(
             ((SuccessiveRootFinderInflationYearOnYearCapFloorCalibrationObjective) _calibrationObjective).getInflationCapYearOnYearParameters().getStrikes(),
-            cap.getStrike()));
+              cap.getStrike()));
       }
       if (annuity.getNthPayment(annuity.getNumberOfPayments() - 1) instanceof CapFloorInflationYearOnYearMonthly) {
         final CapFloorInflationYearOnYearMonthly cap = (CapFloorInflationYearOnYearMonthly) annuity.getNthPayment(annuity.getNumberOfPayments() - 1);
         _calibrationTimes.add(cap.getPaymentTime());
-        _instrumentExpiryIndex.add(Arrays.binarySearch(((SuccessiveRootFinderInflationYearOnYearCapFloorCalibrationObjective) _calibrationObjective).getInflationCapYearOnYearParameters()
+        _instrumentExpiryIndex.add(Arrays.binarySearch(
+            ((SuccessiveRootFinderInflationYearOnYearCapFloorCalibrationObjective) _calibrationObjective).getInflationCapYearOnYearParameters()
             .getExpiryTimes(), cap.getReferenceEndTime()));
         _instrumentStrikeIndex.add(Arrays.binarySearch(
             ((SuccessiveRootFinderInflationYearOnYearCapFloorCalibrationObjective) _calibrationObjective).getInflationCapYearOnYearParameters().getStrikes(),

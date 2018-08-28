@@ -271,43 +271,57 @@ final class PDEResultsFudgeBuilder {
     @Override
     public ForexLocalVolatilityPDEPresentValueResultCollection buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
       final double[] strikes = deserializer.fieldValueToObject(double[].class, message.getByName(STRIKES_FIELD));
-      final Map<String, double[]> pvDataMap = new HashMap<String, double[]>();
+      final Map<String, double[]> pvDataMap = new HashMap<>();
       if (message.getByName(ForexLocalVolatilityPDEPresentValueResultCollection.LV_PIPS) != null) {
         final double[] array = deserializer.fieldValueToObject(double[].class, message.getByName(ForexLocalVolatilityPDEPresentValueResultCollection.LV_PIPS));
         pvDataMap.put(ForexLocalVolatilityPDEPresentValueResultCollection.LV_PIPS, array);
       }
       if (message.getByName(ForexLocalVolatilityPDEPresentValueResultCollection.LV_PUT_PV) != null) {
-        final double[] array = deserializer.fieldValueToObject(double[].class, message.getByName(ForexLocalVolatilityPDEPresentValueResultCollection.LV_PUT_PV));
+        final double[] array =
+            deserializer.fieldValueToObject(double[].class, message.getByName(ForexLocalVolatilityPDEPresentValueResultCollection.LV_PUT_PV));
         pvDataMap.put(ForexLocalVolatilityPDEPresentValueResultCollection.LV_PUT_PV, array);
       }
       if (message.getByName(ForexLocalVolatilityPDEPresentValueResultCollection.LV_CALL_PV) != null) {
-        final double[] array = deserializer.fieldValueToObject(double[].class, message.getByName(ForexLocalVolatilityPDEPresentValueResultCollection.LV_CALL_PV));
+        final double[] array =
+            deserializer.fieldValueToObject(double[].class, message.getByName(ForexLocalVolatilityPDEPresentValueResultCollection.LV_CALL_PV));
         pvDataMap.put(ForexLocalVolatilityPDEPresentValueResultCollection.LV_CALL_PV, array);
       }
       if (message.getByName(ForexLocalVolatilityPDEPresentValueResultCollection.BLACK_PIPS) != null) {
-        final double[] array = deserializer.fieldValueToObject(double[].class, message.getByName(ForexLocalVolatilityPDEPresentValueResultCollection.BLACK_PIPS));
+        final double[] array =
+            deserializer.fieldValueToObject(double[].class, message.getByName(ForexLocalVolatilityPDEPresentValueResultCollection.BLACK_PIPS));
         pvDataMap.put(ForexLocalVolatilityPDEPresentValueResultCollection.BLACK_PIPS, array);
       }
       if (message.getByName(ForexLocalVolatilityPDEPresentValueResultCollection.BLACK_PUT_PV) != null) {
-        final double[] array = deserializer.fieldValueToObject(double[].class, message.getByName(ForexLocalVolatilityPDEPresentValueResultCollection.BLACK_PUT_PV));
+        final double[] array =
+            deserializer.fieldValueToObject(double[].class, message.getByName(ForexLocalVolatilityPDEPresentValueResultCollection.BLACK_PUT_PV));
         pvDataMap.put(ForexLocalVolatilityPDEPresentValueResultCollection.BLACK_PUT_PV, array);
       }
       if (message.getByName(ForexLocalVolatilityPDEPresentValueResultCollection.BLACK_CALL_PV) != null) {
-        final double[] array = deserializer.fieldValueToObject(double[].class, message.getByName(ForexLocalVolatilityPDEPresentValueResultCollection.BLACK_CALL_PV));
+        final double[] array =
+            deserializer.fieldValueToObject(double[].class, message.getByName(ForexLocalVolatilityPDEPresentValueResultCollection.BLACK_CALL_PV));
         pvDataMap.put(ForexLocalVolatilityPDEPresentValueResultCollection.BLACK_CALL_PV, array);
       }
       return new ForexLocalVolatilityPDEPresentValueResultCollection(strikes, pvDataMap);
     }
 
     @Override
-    protected void buildMessage(final FudgeSerializer serializer, final MutableFudgeMsg message, final ForexLocalVolatilityPDEPresentValueResultCollection object) {
+    protected void buildMessage(final FudgeSerializer serializer, final MutableFudgeMsg message,
+        final ForexLocalVolatilityPDEPresentValueResultCollection object) {
       serializer.addToMessage(message, STRIKES_FIELD, null, object.getStrikes());
-      serializer.addToMessage(message, ForexLocalVolatilityPDEPresentValueResultCollection.LV_PIPS, null, object.getPV(ForexLocalVolatilityPDEPresentValueResultCollection.LV_PIPS));
-      serializer.addToMessage(message, ForexLocalVolatilityPDEPresentValueResultCollection.LV_PUT_PV, null, object.getPV(ForexLocalVolatilityPDEPresentValueResultCollection.LV_PUT_PV));
-      serializer.addToMessage(message, ForexLocalVolatilityPDEPresentValueResultCollection.LV_CALL_PV, null, object.getPV(ForexLocalVolatilityPDEPresentValueResultCollection.LV_CALL_PV));
-      serializer.addToMessage(message, ForexLocalVolatilityPDEPresentValueResultCollection.BLACK_PIPS, null, object.getPV(ForexLocalVolatilityPDEPresentValueResultCollection.BLACK_PIPS));
-      serializer.addToMessage(message, ForexLocalVolatilityPDEPresentValueResultCollection.BLACK_PUT_PV, null, object.getPV(ForexLocalVolatilityPDEPresentValueResultCollection.BLACK_PUT_PV));
-      serializer.addToMessage(message, ForexLocalVolatilityPDEPresentValueResultCollection.BLACK_CALL_PV, null, object.getPV(ForexLocalVolatilityPDEPresentValueResultCollection.BLACK_CALL_PV));
+      serializer.addToMessage(message,
+          ForexLocalVolatilityPDEPresentValueResultCollection.LV_PIPS, null, object.getPV(ForexLocalVolatilityPDEPresentValueResultCollection.LV_PIPS));
+      serializer.addToMessage(message,
+          ForexLocalVolatilityPDEPresentValueResultCollection.LV_PUT_PV, null, object.getPV(ForexLocalVolatilityPDEPresentValueResultCollection.LV_PUT_PV));
+      serializer.addToMessage(message,
+          ForexLocalVolatilityPDEPresentValueResultCollection.LV_CALL_PV, null, object.getPV(ForexLocalVolatilityPDEPresentValueResultCollection.LV_CALL_PV));
+      serializer.addToMessage(message,
+          ForexLocalVolatilityPDEPresentValueResultCollection.BLACK_PIPS, null, object.getPV(ForexLocalVolatilityPDEPresentValueResultCollection.BLACK_PIPS));
+      serializer.addToMessage(message,
+          ForexLocalVolatilityPDEPresentValueResultCollection.BLACK_PUT_PV, null,
+            object.getPV(ForexLocalVolatilityPDEPresentValueResultCollection.BLACK_PUT_PV));
+      serializer.addToMessage(message,
+          ForexLocalVolatilityPDEPresentValueResultCollection.BLACK_CALL_PV, null,
+            object.getPV(ForexLocalVolatilityPDEPresentValueResultCollection.BLACK_CALL_PV));
     }
   }
 }

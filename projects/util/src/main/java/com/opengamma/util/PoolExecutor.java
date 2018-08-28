@@ -314,7 +314,8 @@ public class PoolExecutor implements Executor, Lifecycle {
 
     private final Reference<PoolExecutor> _owner;
 
-    private ExecutorThread(final Reference<PoolExecutor> owner, final ThreadGroup group, final Runnable runnable, final String threadName, final int stackSize) {
+    private ExecutorThread(final Reference<PoolExecutor> owner, final ThreadGroup group, final Runnable runnable, final String threadName,
+        final int stackSize) {
       super(group, runnable, threadName, stackSize);
       _owner = owner;
     }

@@ -246,11 +246,13 @@ public class FuturePriceCurveCreator extends AbstractTool<IntegrationToolContext
       final BloombergTickerParserFutureOption tickerParser = new BloombergTickerParserCommodityFutureOption(ticker);
       //      final String postfix = BloombergDataUtils.splitTickerAtMarketSector(ticker).getSecond();
       final String underlyingOptChainTicker = getUnderlyingTicker(ticker, security.getUnderlyingId(), tickerParser.getTypeName());
-      final String name = BBG_PREFIX + tickerParser.getSymbol() + "_" + security.getCurrency().getCode() + "_" + InstrumentTypeProperties.COMMODITY_FUTURE_PRICE;
+      final String name = BBG_PREFIX + tickerParser.getSymbol() + "_" + security.getCurrency().getCode()
+          + "_" + InstrumentTypeProperties.COMMODITY_FUTURE_PRICE;
       if (!_knownCurveSpecNames.contains(name)) {
         LOGGER.info("Creating FuturePriceCurveSpecification \"{}\"", name);
         final BloombergCommodityFuturePriceCurveInstrumentProvider curveInstrumentProvider =
-            new BloombergCommodityFuturePriceCurveInstrumentProvider(tickerParser.getSymbol(), tickerParser.getTypeName(), FIELD_NAME_PRICE, ExternalSchemes.BLOOMBERG_TICKER_WEAK.getName());
+            new BloombergCommodityFuturePriceCurveInstrumentProvider(tickerParser.getSymbol(), tickerParser.getTypeName(),
+                FIELD_NAME_PRICE, ExternalSchemes.BLOOMBERG_TICKER_WEAK.getName());
         createFuturePriceCurveSpecification(security.getCurrency(), name, curveInstrumentProvider);
       }
       createFuturePriceCurveDefinition(underlyingOptChainTicker, name, security.getCurrency());

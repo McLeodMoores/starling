@@ -37,8 +37,8 @@ public final class ToolUtils {
   }
 
   /**
-   * Returns the name of the default logback configuration file if none is explicitly specified. This will be {@link #TOOL_LOGBACK_XML} unless the global {@code logback.configurationFile property} has
-   * been set.
+   * Returns the name of the default logback configuration file if none is explicitly specified. This will be "tool-logback.xml"
+   * unless the global {@code logback.configurationFile property} has been set.
    *
    * @return the logback configuration file resource address, not null
    */

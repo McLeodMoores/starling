@@ -73,10 +73,16 @@ public class NettedFixedCashFlowFunction extends AbstractFunction {
     final FRASecurityConverterDeprecated fraConverter = new FRASecurityConverterDeprecated(holidaySource, regionSource, conventionSource);
     final SwapSecurityConverterDeprecated swapConverter = new SwapSecurityConverterDeprecated(holidaySource, conventionSource, regionSource, false);
     final BondSecurityConverter bondConverter = new BondSecurityConverter(holidaySource, conventionSource, regionSource);
-    final InterestRateFutureSecurityConverterDeprecated irFutureConverter = new InterestRateFutureSecurityConverterDeprecated(holidaySource, conventionSource, regionSource);
+    final InterestRateFutureSecurityConverterDeprecated irFutureConverter =
+        new InterestRateFutureSecurityConverterDeprecated(holidaySource, conventionSource, regionSource);
     final ForexSecurityConverter fxConverter = new ForexSecurityConverter(baseQuotePairs);
-    return new Compiled(FinancialSecurityVisitorAdapter.<InstrumentDefinition<?>>builder().cashSecurityVisitor(cashConverter).fraSecurityVisitor(fraConverter)
-        .swapSecurityVisitor(swapConverter).interestRateFutureSecurityVisitor(irFutureConverter).bondSecurityVisitor(bondConverter).fxForwardVisitor(fxConverter)
+    return new Compiled(FinancialSecurityVisitorAdapter.<InstrumentDefinition<?>>builder()
+        .cashSecurityVisitor(cashConverter)
+        .fraSecurityVisitor(fraConverter)
+        .swapSecurityVisitor(swapConverter)
+        .interestRateFutureSecurityVisitor(irFutureConverter)
+        .bondSecurityVisitor(bondConverter)
+        .fxForwardVisitor(fxConverter)
         .nonDeliverableFxForwardVisitor(fxConverter).create(), new FixedIncomeConverterDataProvider(conventionSource, securitySource, timeSeriesResolver));
   }
 
@@ -100,7 +106,8 @@ public class NettedFixedCashFlowFunction extends AbstractFunction {
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       final ValueProperties constraints = desiredValue.getConstraints();
       if (!OpenGammaCompilationContext.isPermissive(context)) {
         final String date = constraints.getStrictValue(PROPERTY_DATE);
@@ -135,7 +142,7 @@ public class NettedFixedCashFlowFunction extends AbstractFunction {
       final ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);
       final ValueProperties properties = desiredValue.getConstraints();
       final String dateString = properties.getSingleValue(PROPERTY_DATE);
-      final LocalDate date = (dateString != null) ? LocalDate.parse(dateString) : LocalDate.now(executionContext.getValuationClock());
+      final LocalDate date = dateString != null ? LocalDate.parse(dateString) : LocalDate.now(executionContext.getValuationClock());
       final Map<LocalDate, MultipleCurrencyAmount> cashFlows;
       if (inputs.getAllValues().isEmpty()) {
         cashFlows = NETTING_CASH_FLOW_CALCULATOR.getCashFlows(definition, date);

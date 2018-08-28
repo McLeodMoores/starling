@@ -295,8 +295,8 @@ public final class ScheduleCalculator {
    * When the rule applies, the end date is the last business day of the month.
    * @return The end date.
    */
-  public static ZonedDateTime getAdjustedDate(final ZonedDateTime startDate, final Period tenor, final BusinessDayConvention convention, final Calendar calendar,
-      final boolean endOfMonthRule) {
+  public static ZonedDateTime getAdjustedDate(final ZonedDateTime startDate, final Period tenor, final BusinessDayConvention convention,
+      final Calendar calendar, final boolean endOfMonthRule) {
     ArgumentChecker.notNull(startDate, "Start date");
     ArgumentChecker.notNull(convention, "Convention");
     ArgumentChecker.notNull(calendar, "Calendar");
@@ -553,8 +553,8 @@ public final class ScheduleCalculator {
     return dates.toArray(EMPTY_ARRAY);
   }
 
-  public static ZonedDateTime[] getUnadjustedDateSchedule(final ZonedDateTime startDate, final ZonedDateTime endDate, final Tenor tenor, final boolean stubShort,
-      final boolean fromEnd) {
+  public static ZonedDateTime[] getUnadjustedDateSchedule(final ZonedDateTime startDate, final ZonedDateTime endDate, final Tenor tenor,
+      final boolean stubShort, final boolean fromEnd) {
     ArgumentChecker.notNull(startDate, "Start date");
     ArgumentChecker.notNull(endDate, "End date");
     ArgumentChecker.notNull(tenor, "tenor");

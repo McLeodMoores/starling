@@ -202,7 +202,7 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
 
     private List<Entry> drain(final Queue<Entry> source) {
       // Make the list bigger than the source queue as writes will probably occur while we're draining it.
-      final List<Entry> dest = new ArrayList<Entry>(source.size() * 2);
+      final List<Entry> dest = new ArrayList<>(source.size() * 2);
       Entry value = source.poll();
       while (value != null) {
         dest.add(value);
@@ -240,7 +240,7 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
         do {
           LOGGER.info("Write-behind thread running for {}", getUnderlying());
           do {
-            if ((_pendingSharedValues != null) && !_pendingSharedValues.isEmpty()) {
+            if (_pendingSharedValues != null && !_pendingSharedValues.isEmpty()) {
               values = drain(_pendingSharedValues);
               if (values.size() > 1) {
                 getUnderlying().putSharedValues(new ComputedValueCollection(values));
@@ -254,7 +254,7 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
               }
               values = null;
             }
-            if ((_pendingPrivateValues != null) && !_pendingPrivateValues.isEmpty()) {
+            if (_pendingPrivateValues != null && !_pendingPrivateValues.isEmpty()) {
               values = drain(_pendingPrivateValues);
               if (values.size() > 1) {
                 getUnderlying().putPrivateValues(new ComputedValueCollection(values));
@@ -268,10 +268,11 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
               }
               values = null;
             }
-          } while (((_pendingSharedValues != null) && !_pendingSharedValues.isEmpty()) || ((_pendingPrivateValues != null) && !_pendingPrivateValues.isEmpty()));
+          } while (_pendingSharedValues != null && !_pendingSharedValues.isEmpty()
+              || _pendingPrivateValues != null && !_pendingPrivateValues.isEmpty());
           _valueWriterActive.set(VALUE_WRITER_IDLE);
-        } while ((((_pendingSharedValues != null) && !_pendingSharedValues.isEmpty()) || ((_pendingPrivateValues != null) && !_pendingPrivateValues.isEmpty())) &&
-            _valueWriterActive.compareAndSet(VALUE_WRITER_IDLE, VALUE_WRITER_RUNNING));
+        } while ((_pendingSharedValues != null && !_pendingSharedValues.isEmpty() || _pendingPrivateValues != null && !_pendingPrivateValues.isEmpty())
+            && _valueWriterActive.compareAndSet(VALUE_WRITER_IDLE, VALUE_WRITER_RUNNING));
         LOGGER.info("Write-behind thread terminated after {} operations", count);
       } catch (final RuntimeException e) {
         LOGGER.warn("Write-behind thread failed after {} operations: {}", count, e.getMessage());
@@ -390,8 +391,8 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
       if (object != null) {
         // Found one in the pending set, so split the set into hits & misses
         int size = specifications.size();
-        final List<ValueSpecification> cacheMisses = new ArrayList<ValueSpecification>(size - 1);
-        result = new ArrayList<Pair<ValueSpecification, Object>>(size);
+        final List<ValueSpecification> cacheMisses = new ArrayList<>(size - 1);
+        result = new ArrayList<>(size);
         result.add(Pairs.of(specification, object));
         for (final ValueSpecification specification2 : specifications) {
           // Note the check below; if the write has since completed, the specification we originally hit may now be a miss
@@ -437,8 +438,8 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
       if (object != null) {
         // Found one in the pending set, so split the set into hits & misses
         int size = specifications.size();
-        final List<ValueSpecification> cacheMisses = new ArrayList<ValueSpecification>(size - 1);
-        result = new ArrayList<Pair<ValueSpecification, Object>>(size);
+        final List<ValueSpecification> cacheMisses = new ArrayList<>(size - 1);
+        result = new ArrayList<>(size);
         result.add(Pairs.of(specification, object));
         for (final ValueSpecification specification2 : specifications) {
           // Note the check below; if the write has since completed, the specification we originally hit may now be a miss
@@ -647,7 +648,7 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
         throw _valueWriterFault;
     }
     final PendingLock write = _pendingWrites.remove(Thread.currentThread());
-    if ((write == null) || write.isZero()) {
+    if (write == null || write.isZero()) {
       // Haven't written anything (null) or have written everything asked for (zero)
       LOGGER.debug("Writer flushed");
       return;

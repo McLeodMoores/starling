@@ -46,9 +46,9 @@ public class BloombergFXForwardCurveInstrumentProvider implements FXForwardCurve
   private final boolean _useSpotRateFromGraph;
 
   /**
-   * Constructor where only FX forward ticker information is supplied. This sets the {@link #_useSpotRateFromGraph}
+   * Constructor where only FX forward ticker information is supplied. This sets the _useSpotRateFromGraph
    * field to true, which means that the FX spot rate will be supplied by {@link ValueRequirementNames#SPOT_RATE}.
-   * @param prefix The FX forward prefix, not null 
+   * @param prefix The FX forward prefix, not null
    * @param postfix The FX forward postfix, not null
    * @param dataFieldName The Bloomberg data field name, not null
    */
@@ -67,10 +67,10 @@ public class BloombergFXForwardCurveInstrumentProvider implements FXForwardCurve
 
   /**
    * Constructor where the FX forward ticker and FX spot rate ticker information is supplied. This sets the
-   * {@link #_useSpotRateFromGraph} field to false, which means that the FX spot rate will be requested from
+   * _useSpotRateFromGraph field to false, which means that the FX spot rate will be requested from
    * the Bloomberg ticker.
    * @param prefix The FX forward prefix, not null
-   * @param postfix The FX forward postfix, not null 
+   * @param postfix The FX forward postfix, not null
    * @param spotPrefix The FX spot prefix, not null
    * @param dataFieldName The FX spot data field name, not null
    */

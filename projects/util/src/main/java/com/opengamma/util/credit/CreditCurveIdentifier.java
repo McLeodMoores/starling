@@ -139,7 +139,7 @@ public final class CreditCurveIdentifier implements UniqueIdentifiable, ObjectId
   public static CreditCurveIdentifier of(final String redCode) {
     return new CreditCurveIdentifier(redCode);
   }
-  
+
   /**
    * Creates an {@code CreditCurveIdentifier} from the red code (used for CDX)
    *
@@ -195,7 +195,8 @@ public final class CreditCurveIdentifier implements UniqueIdentifiable, ObjectId
     _restructuringClause = restructuringClause;
     _term = term;
     // ignore term in id if null
-    _idValue = _redCode + SEPARATOR + _currency.getCode() + SEPARATOR + _seniority + SEPARATOR + _restructuringClause + (_term != null ? SEPARATOR + _term : "");
+    _idValue = _redCode + SEPARATOR + _currency.getCode() + SEPARATOR + _seniority + SEPARATOR
+        + _restructuringClause + (_term != null ? SEPARATOR + _term : "");
   }
 
   /**
@@ -225,10 +226,10 @@ public final class CreditCurveIdentifier implements UniqueIdentifiable, ObjectId
     _restructuringClause = restructuringClause;
     _term = term;
     // ignore term in id if null
-    _idValue = _curveTypePrefix + SEPARATOR + _redCode + SEPARATOR + _currency.getCode() + SEPARATOR + _seniority + SEPARATOR + _restructuringClause + 
+    _idValue = _curveTypePrefix + SEPARATOR + _redCode + SEPARATOR + _currency.getCode() + SEPARATOR + _seniority + SEPARATOR + _restructuringClause +
         (_term != null ? SEPARATOR + _term : "");
   }
-  
+
   private CreditCurveIdentifier(final String redCode) {
     ArgumentChecker.notNull(redCode, "red code");
     _curveTypePrefix = null;
@@ -239,7 +240,7 @@ public final class CreditCurveIdentifier implements UniqueIdentifiable, ObjectId
     _term = null;
     _idValue = _redCode;
   }
-  
+
   /**
    * Gets the RED code.
    *
@@ -287,7 +288,7 @@ public final class CreditCurveIdentifier implements UniqueIdentifiable, ObjectId
   public String getTerm() {
     return _term;
   }
-  
+
   /**
    * Gets the curve type prefix.
    * @return The curve type prefix

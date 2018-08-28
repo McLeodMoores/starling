@@ -138,7 +138,8 @@ public class FXOptionBlackVegaPnLFunction extends AbstractFunction {
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       final ValueProperties constraints = desiredValue.getConstraints();
       final Set<String> putCurveNames = constraints.getValues(FXOptionBlackFunction.PUT_CURVE);
       if (putCurveNames == null || putCurveNames.size() != 1) {

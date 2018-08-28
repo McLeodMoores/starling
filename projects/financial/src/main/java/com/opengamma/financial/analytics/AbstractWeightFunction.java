@@ -27,7 +27,7 @@ import com.opengamma.financial.property.UnitProperties;
 import com.opengamma.id.UniqueId;
 
 /**
- * 
+ *
  */
 public abstract class AbstractWeightFunction extends AbstractFunction.NonCompiledInvoker {
 
@@ -51,7 +51,7 @@ public abstract class AbstractWeightFunction extends AbstractFunction.NonCompile
     final ValueProperties constraints = desiredValue.getConstraints();
     Set<String> values = constraints.getValues(VALUE_PROPERTY_NAME);
     final String inputValue;
-    if ((values == null) || values.isEmpty()) {
+    if (values == null || values.isEmpty()) {
       inputValue = DEFAULT_VALUE_NAME;
     } else if (values.size() == 1) {
       inputValue = values.iterator().next();
@@ -60,7 +60,7 @@ public abstract class AbstractWeightFunction extends AbstractFunction.NonCompile
     }
     // Propogate the desired value constraints onto the requirements, removing those specific to this function and adding a unit homogeneity clause
     final ValueProperties.Builder requirementConstraintsBuilder = constraints.copy().withoutAny(VALUE_PROPERTY_NAME);
-    for (String unit : UnitProperties.unitPropertyNames()) {
+    for (final String unit : UnitProperties.unitPropertyNames()) {
       values = constraints.getValues(unit);
       if (values == null) {
         // Unit was not specified on the output, but we specify it on the inputs so we can check homogeneity to ensure the division is valid
@@ -81,7 +81,7 @@ public abstract class AbstractWeightFunction extends AbstractFunction.NonCompile
     ValueSpecification inputValue = null;
     ValueSpecification inputParent = null;
     final UniqueId value = target.getUniqueId();
-    for (ValueSpecification input : inputs.keySet()) {
+    for (final ValueSpecification input : inputs.keySet()) {
       if (value.equals(input.getTargetSpecification().getUniqueId())) {
         assert inputValue == null;
         inputValue = input;
@@ -92,7 +92,7 @@ public abstract class AbstractWeightFunction extends AbstractFunction.NonCompile
     }
     final ValueProperties rawResultProperties = inputValue.getProperties().intersect(inputParent.getProperties());
     final ValueProperties.Builder resultPropertiesBuilder = rawResultProperties.copy();
-    for (String unit : UnitProperties.unitPropertyNames()) {
+    for (final String unit : UnitProperties.unitPropertyNames()) {
       final Set<String> valueUnits = inputValue.getProperties().getValues(unit);
       final Set<String> parentUnits = inputParent.getProperties().getValues(unit);
       if (valueUnits != null) {
@@ -121,7 +121,8 @@ public abstract class AbstractWeightFunction extends AbstractFunction.NonCompile
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     double parentValue = 0;
     double targetValue = 0;
     final UniqueId targetIdentifier = target.getUniqueId();
@@ -133,8 +134,8 @@ public abstract class AbstractWeightFunction extends AbstractFunction.NonCompile
       }
     }
     final ValueRequirement desiredValue = desiredValues.iterator().next();
-    return Collections.singleton(new ComputedValue(new ValueSpecification(ValueRequirementNames.WEIGHT, target.toSpecification(), desiredValue.getConstraints()),
-        targetValue / parentValue));
+    return Collections.singleton(new ComputedValue(new ValueSpecification(ValueRequirementNames.WEIGHT, target.toSpecification(),
+        desiredValue.getConstraints()), targetValue / parentValue));
   }
 
 }

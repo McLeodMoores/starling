@@ -56,8 +56,9 @@ public class BondFutureSecurity extends FutureSecurity {
     super();
   }
 
-  public BondFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency, final double unitAmount,
-      final Collection<? extends BondFutureDeliverable> basket, final ZonedDateTime firstDeliveryDate, final ZonedDateTime lastDeliveryDate, final String category) {
+  public BondFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency,
+      final double unitAmount, final Collection<? extends BondFutureDeliverable> basket, final ZonedDateTime firstDeliveryDate,
+      final ZonedDateTime lastDeliveryDate, final String category) {
     super(expiry, tradingExchange, settlementExchange, currency, unitAmount, category);
     setBasket(ImmutableList.copyOf(basket));
     setFirstDeliveryDate(firstDeliveryDate);

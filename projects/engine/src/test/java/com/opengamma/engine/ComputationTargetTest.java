@@ -57,7 +57,8 @@ public class ComputationTargetTest {
   }
 
   public void testConstructor_nested_1() {
-    final ComputationTargetSpecification targetSpec = ComputationTargetSpecification.of(NODE).containing(ComputationTargetType.POSITION, POSITION.getUniqueId());
+    final ComputationTargetSpecification targetSpec =
+        ComputationTargetSpecification.of(NODE).containing(ComputationTargetType.POSITION, POSITION.getUniqueId());
     final ComputationTarget target = new ComputationTarget(targetSpec, POSITION);
     assertEquals(target.toSpecification(), ComputationTargetSpecification.of(NODE).containing(ComputationTargetType.POSITION, POSITION.getUniqueId()));
     assertEquals(target.getContextSpecification(), ComputationTargetSpecification.of(NODE));

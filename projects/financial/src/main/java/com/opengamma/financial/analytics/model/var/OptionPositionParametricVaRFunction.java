@@ -7,7 +7,7 @@ package com.opengamma.financial.analytics.model.var;
 
 
 /**
- * 
+ *
  */
 public class OptionPositionParametricVaRFunction { /*extends AbstractFunction.NonCompiledInvoker {
   private final String _resolutionKey;
@@ -51,11 +51,13 @@ public class OptionPositionParametricVaRFunction { /*extends AbstractFunction.No
     _covarianceMatrixCalculator = new VaRCovarianceMatrixCalculator(new CovarianceMatrixCalculator(covarianceCalculator));
     _scheduleCalculator = ScheduleCalculatorFactory.getScheduleCalculator(scheduleName);
     _samplingCalculator = TimeSeriesSamplingFunctionFactory.getFunction(samplingFunctionName);
-    _normalVaRCalculator = new NormalLinearVaRCalculator<Map<Integer, ParametricVaRDataBundle>>(1, 1, Double.valueOf(confidenceLevel), _meanCalculator, _stdCalculator); //TODO
+    _normalVaRCalculator = new NormalLinearVaRCalculator<Map<Integer, ParametricVaRDataBundle>>(1, 1, Double.valueOf(confidenceLevel),
+    _meanCalculator, _stdCalculator); //TODO
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final HbComputationTargetSpecification target, 
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs,
+  final HbComputationTargetSpecification target,
   final Set<ValueRequirement> desiredValues) {
     final Position position = target.getPosition();
     final Clock snapshotClock = executionContext.getValuationClock();

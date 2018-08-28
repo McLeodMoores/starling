@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function;
@@ -44,12 +44,14 @@ public final class MarketDataAliasingFunction extends IntrinsicFunction {
   // FunctionInvoker
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final Collection<ComputedValue> values = inputs.getAllValues();
     final Object value = values.isEmpty() ? MissingInput.MISSING_MARKET_DATA : Iterables.getOnlyElement(values).getValue();
     final Set<ComputedValue> result = Sets.newHashSetWithExpectedSize(desiredValues.size());
-    for (ValueRequirement desiredValueReq : desiredValues) {
-      final ValueSpecification desiredValue = new ValueSpecification(desiredValueReq.getValueName(), target.toSpecification(), desiredValueReq.getConstraints());
+    for (final ValueRequirement desiredValueReq : desiredValues) {
+      final ValueSpecification desiredValue = new ValueSpecification(desiredValueReq.getValueName(), target.toSpecification(),
+          desiredValueReq.getConstraints());
       result.add(new ComputedValue(desiredValue, value));
     }
     return result;

@@ -24,23 +24,25 @@ import com.opengamma.id.VersionCorrection;
 public interface CompiledViewDefinition {
 
   /**
-   * Gets the resolver version/correction date that was used to retrieve the portfolio and any other data structures needed by functions used in the compilation.
-   * 
+   * Gets the resolver version/correction date that was used to retrieve the portfolio and any other data structures needed by
+   * functions used in the compilation.
+   *
    * @return the version/correction used to resolve any targets, including the portfolio
    */
   VersionCorrection getResolverVersionCorrection();
 
   /**
-   * Gets the unique compilation identifier. Two compiled view definitions with the same unique compilation identifier will contain the same dependency graphs for exactly the same reasons - that is,
-   * the compiled forms are identical except for the resolver version/correction timestamp.
-   * 
+   * Gets the unique compilation identifier. Two compiled view definitions with the same unique compilation identifier will
+   * contain the same dependency graphs for exactly the same reasons - that is, the compiled forms are identical except for
+   * the resolver version/correction timestamp.
+   *
    * @return a compilation identifier, unique within the scope of any caches that may persist or transport compiled view definitions around an installation
    */
   String getCompilationIdentifier();
 
   /**
    * Returns a copy of this object with an updated version/correction parameter.
-   * 
+   *
    * @param resolverVersionCorrection the resolver version/correction date for the copy
    * @return the copy
    */

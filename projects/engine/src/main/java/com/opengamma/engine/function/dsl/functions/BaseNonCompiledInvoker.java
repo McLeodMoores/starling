@@ -255,7 +255,7 @@ public abstract class BaseNonCompiledInvoker extends AbstractFunction.NonCompile
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
     final FunctionSignature signature = getFunctionSignature();
     final ComputationTargetType ctt = signature.getComputationTargetType();
-    final Class ctc = signature.getComputationTargetClass();
+    final Class<?> ctc = signature.getComputationTargetClass();
     if (ctt != null && !ctt.isCompatible(target.getType())) {
       return false;
     }

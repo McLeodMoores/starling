@@ -128,7 +128,7 @@ import com.opengamma.util.tuple.Pairs;
   /**
    * Add the specified value requirement to the dep graph builder, triggering graph building by background threads.
    * <p>
-   * If supplied, the {@link #_alreadyAdded} set member is used to identify anything that has already been added from the specific requirements of a view or as part of invalidating a previous graph.
+   * If supplied, the _alreadyAdded set member is used to identify anything that has already been added from the specific requirements of a view or as part of invalidating a previous graph.
    * See the notes in {@link DependencyGraphBuilder} for the hazards of requesting the same value requirement multiple times.
    *
    * @param valueRequirement the value requirement to add

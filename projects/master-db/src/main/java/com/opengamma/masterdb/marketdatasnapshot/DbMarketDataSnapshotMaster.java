@@ -72,12 +72,18 @@ public class DbMarketDataSnapshotMaster
   static {
     //Registered here because I can't guarantee that the classes themselves are loaded
     final FudgeTypeDictionary typeDictionary = OpenGammaFudgeContext.getInstance().getTypeDictionary();
-    typeDictionary.registerClassRename("com.opengamma.master.marketdatasnapshot.ManageableUnstructuredMarketDataSnapshot", ManageableUnstructuredMarketDataSnapshot.class);
-    typeDictionary.registerClassRename("com.opengamma.master.marketdatasnapshot.ManageableMarketDataSnapshot", ManageableMarketDataSnapshot.class);
-    typeDictionary.registerClassRename("com.opengamma.master.marketdatasnapshot.ManageableYieldCurveSnapshot", ManageableYieldCurveSnapshot.class);
-    typeDictionary.registerClassRename("com.opengamma.master.marketdatasnapshot.ManageableCurveSnapshot", ManageableCurveSnapshot.class);
-    typeDictionary.registerClassRename("com.opengamma.master.marketdatasnapshot.ManageableVolatilitySurfaceSnapshot", ManageableVolatilitySurfaceSnapshot.class);
-    typeDictionary.registerClassRename("com.opengamma.master.marketdatasnapshot.ManageableVolatilityCubeSnapshot", ManageableVolatilityCubeSnapshot.class);
+    typeDictionary.registerClassRename("com.opengamma.master.marketdatasnapshot.ManageableUnstructuredMarketDataSnapshot",
+        ManageableUnstructuredMarketDataSnapshot.class);
+    typeDictionary.registerClassRename("com.opengamma.master.marketdatasnapshot.ManageableMarketDataSnapshot",
+        ManageableMarketDataSnapshot.class);
+    typeDictionary.registerClassRename("com.opengamma.master.marketdatasnapshot.ManageableYieldCurveSnapshot",
+        ManageableYieldCurveSnapshot.class);
+    typeDictionary.registerClassRename("com.opengamma.master.marketdatasnapshot.ManageableCurveSnapshot",
+        ManageableCurveSnapshot.class);
+    typeDictionary.registerClassRename("com.opengamma.master.marketdatasnapshot.ManageableVolatilitySurfaceSnapshot",
+        ManageableVolatilitySurfaceSnapshot.class);
+    typeDictionary.registerClassRename("com.opengamma.master.marketdatasnapshot.ManageableVolatilityCubeSnapshot",
+        ManageableVolatilityCubeSnapshot.class);
   }
 
   /** Logger. */

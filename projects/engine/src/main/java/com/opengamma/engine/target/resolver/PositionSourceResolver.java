@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.target.resolver;
@@ -49,7 +49,7 @@ public class PositionSourceResolver {
     public Trade resolveObject(final UniqueId uniqueId, final VersionCorrection versionCorrection) {
       try {
         return getUnderlying().getTrade(uniqueId);
-      } catch (DataNotFoundException e) {
+      } catch (final DataNotFoundException e) {
         return null;
       }
     }
@@ -74,9 +74,10 @@ public class PositionSourceResolver {
     @Override
     public UniqueId resolveObjectId(final ObjectId identifier, final VersionCorrection versionCorrection) {
       try {
-        // [PLAT-4491] TODO: PositionSource doesn't have a trade by OID lookup. This is probably wrong, but no worse than treating the identifier as v/c resolved
+        // [PLAT-4491] TODO: PositionSource doesn't have a trade by OID lookup. This is probably wrong,
+        //  but no worse than treating the identifier as v/c resolved
         return getUnderlying().getTrade(identifier.atLatestVersion()).getUniqueId();
-      } catch (DataNotFoundException e) {
+      } catch (final DataNotFoundException e) {
         return null;
       }
     }
@@ -100,7 +101,7 @@ public class PositionSourceResolver {
     public Position resolveObject(final UniqueId uniqueId, final VersionCorrection versionCorrection) {
       try {
         return getUnderlying().getPosition(uniqueId);
-      } catch (DataNotFoundException e) {
+      } catch (final DataNotFoundException e) {
         return null;
       }
     }
@@ -126,7 +127,7 @@ public class PositionSourceResolver {
     public UniqueId resolveObjectId(final ObjectId identifier, final VersionCorrection versionCorrection) {
       try {
         return getUnderlying().getPosition(identifier, versionCorrection).getUniqueId();
-      } catch (DataNotFoundException e) {
+      } catch (final DataNotFoundException e) {
         return null;
       }
     }
@@ -150,7 +151,7 @@ public class PositionSourceResolver {
     public Portfolio resolveObject(final UniqueId uniqueId, final VersionCorrection versionCorrection) {
       try {
         return getUnderlying().getPortfolio(uniqueId, versionCorrection);
-      } catch (DataNotFoundException e) {
+      } catch (final DataNotFoundException e) {
         return null;
       }
     }
@@ -176,7 +177,7 @@ public class PositionSourceResolver {
     public UniqueId resolveObjectId(final ObjectId identifier, final VersionCorrection versionCorrection) {
       try {
         return getUnderlying().getPortfolio(identifier, versionCorrection).getUniqueId();
-      } catch (DataNotFoundException e) {
+      } catch (final DataNotFoundException e) {
         return null;
       }
     }
@@ -211,7 +212,7 @@ public class PositionSourceResolver {
     public PortfolioNode resolveObject(final UniqueId uniqueId, final VersionCorrection versionCorrection) {
       try {
         return getUnderlying().getPortfolioNode(uniqueId, versionCorrection);
-      } catch (DataNotFoundException e) {
+      } catch (final DataNotFoundException e) {
         return null;
       }
     }
@@ -249,7 +250,7 @@ public class PositionSourceResolver {
       try {
         // [PLAT-4491] TODO: PositionSource doesn't have a node by OID lookup. This is probably wrong, but no worse than treating the identifier as v/c resolved
         return getUnderlying().getPortfolioNode(identifier.atLatestVersion(), versionCorrection).getUniqueId();
-      } catch (DataNotFoundException e) {
+      } catch (final DataNotFoundException e) {
         return null;
       }
     }

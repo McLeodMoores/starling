@@ -112,7 +112,8 @@ public class FXForwardYieldCurveNodePnLFunction extends AbstractFunction {
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       final ValueProperties constraints = desiredValue.getConstraints();
       final Set<String> payCurveNames = constraints.getValues(ValuePropertyNames.PAY_CURVE);
       if (payCurveNames == null || payCurveNames.size() != 1) {
@@ -294,7 +295,7 @@ public class FXForwardYieldCurveNodePnLFunction extends AbstractFunction {
 
     /**
      * Gets the yield curve node sensitivities requirement
-     * 
+     *
      * @param payCurveName The pay curve name
      * @param payCurveCalculationConfigName The pay curve calculation configuration name
      * @param receiveCurveName The receive curve name
@@ -324,7 +325,7 @@ public class FXForwardYieldCurveNodePnLFunction extends AbstractFunction {
 
     /**
      * Gets the requirement for the return series of a yield curve that is not FX-implied and adds an optional property for the result currency.
-     * 
+     *
      * @param curveName The curve name
      * @param curveCurrency The curve currency
      * @param curveCalculationConfigName The curve calculation configuration name
@@ -342,7 +343,7 @@ public class FXForwardYieldCurveNodePnLFunction extends AbstractFunction {
 
     /**
      * Gets the requirement for the return series of a yield curve that is FX-implied and adds an optional property for the result currency.
-     * 
+     *
      * @param curveName The curve name
      * @param payCurrency The pay currency
      * @param receiveCurrency The receive currency
@@ -361,7 +362,7 @@ public class FXForwardYieldCurveNodePnLFunction extends AbstractFunction {
 
     /**
      * Calculates the P&L vector without currency conversion.
-     * 
+     *
      * @param returnSeries The return series for the nodes in a curve
      * @param sensitivities The sensitivities to the curve
      * @return The P&L vector for each curve node tenor
@@ -378,7 +379,7 @@ public class FXForwardYieldCurveNodePnLFunction extends AbstractFunction {
 
     /**
      * Calculates the P&L vector with currency conversion.
-     * 
+     *
      * @param returnSeries The return series for the nodes in a curve
      * @param sensitivities The sensitivities to the curve
      * @param resultCurveCurrency True if the result is in the curve currency

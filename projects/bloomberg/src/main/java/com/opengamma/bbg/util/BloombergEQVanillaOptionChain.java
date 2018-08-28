@@ -29,7 +29,7 @@ import com.opengamma.util.OpenGammaClock;
 /**
  * <p>
  * Class for narrowing an option chain by expiry, strike, and option type.  Typically, this class is initialized with the output
- * of {@link com.opengamma.bbg.util.BloombergDataUtils#getOptionChain(org.slf4j.Logger, com.opengamma.bbg.ReferenceDataProvider, String) BloombergDataUtil.getOptionChain()}.
+ * of {@link com.opengamma.bbg.util.BloombergDataUtils#getOptionChain(com.opengamma.bbg.referencedata.ReferenceDataProvider, String)}.
  * The caller then uses the different {@code narrow*} methods to select the desired option or options.  In this way, the caller can pick
  * very specific options before looking up their information in Bloomberg.
  * </p>

@@ -75,8 +75,8 @@ public class MultipleCurrencyParameterSensitivity {
   }
 
   /**
-   * Create a copy of the sensitivity and add a given named sensitivity to it. If the name / currency pair is in the map, the two sensitivity matrices are added.
-   * Otherwise, a new entry is put into the map
+   * Create a copy of the sensitivity and add a given named sensitivity to it. If the name / currency pair is in the map,
+   * the two sensitivity matrices are added. Otherwise, a new entry is put into the map.
    * @param nameCcy The name and the currency, not null
    * @param sensitivity The sensitivity to add, not null
    * @return The total sensitivity.

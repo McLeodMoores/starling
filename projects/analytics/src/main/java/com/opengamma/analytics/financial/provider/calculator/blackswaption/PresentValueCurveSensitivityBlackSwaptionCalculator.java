@@ -43,12 +43,14 @@ public final class PresentValueCurveSensitivityBlackSwaptionCalculator extends I
   private static final SwaptionCashFixedIborBlackMethod METHOD_SWT_CASH = SwaptionCashFixedIborBlackMethod.getInstance();
 
   @Override
-  public MultipleCurrencyMulticurveSensitivity visitSwaptionPhysicalFixedIbor(final SwaptionPhysicalFixedIbor swaption, final BlackSwaptionFlatProviderInterface black) {
+  public MultipleCurrencyMulticurveSensitivity visitSwaptionPhysicalFixedIbor(final SwaptionPhysicalFixedIbor swaption,
+      final BlackSwaptionFlatProviderInterface black) {
     return METHOD_SWT_PHYS.presentValueCurveSensitivity(swaption, black);
   }
 
   @Override
-  public MultipleCurrencyMulticurveSensitivity visitSwaptionCashFixedIbor(final SwaptionCashFixedIbor swaption, final BlackSwaptionFlatProviderInterface black) {
+  public MultipleCurrencyMulticurveSensitivity visitSwaptionCashFixedIbor(final SwaptionCashFixedIbor swaption,
+      final BlackSwaptionFlatProviderInterface black) {
     return METHOD_SWT_CASH.presentValueCurveSensitivity(swaption, black);
   }
 }

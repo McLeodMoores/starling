@@ -176,7 +176,7 @@ public abstract class AbstractRegressionTest {
   /**
    * If true, a report with the differences will be written to
    * the location specified by {@link #getDifferencesReportFile(String, String)}.
-   * @return True if specified as a system property by {@value #FILE_WRITE_MODE_PROPERTY},
+   * @return True if specified as a system property by "Regression.writeReportToFile",
    * else false.
    */
   protected boolean isWriteReportToFile() {
@@ -203,7 +203,7 @@ public abstract class AbstractRegressionTest {
   /**
    * If true, a report will be written to console.
    * @return If defined, will return the value given as a system property by
-   * {@value #CONSOLE_WRITE_MODE_PROPERTY}. Else defaults to true.
+   * "Regression.writeReportToConsole". Else defaults to true.
    */
   protected boolean isWriteReportToConsole() {
     if (System.getProperty(CONSOLE_WRITE_MODE_PROPERTY) != null) {

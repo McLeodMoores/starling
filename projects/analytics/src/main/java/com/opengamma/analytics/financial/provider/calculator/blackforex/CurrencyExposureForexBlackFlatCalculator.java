@@ -18,7 +18,8 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 /**
  * Calculates the currency exposure of FX options using a Black model without smile.
  */
-public final class CurrencyExposureForexBlackFlatCalculator extends InstrumentDerivativeVisitorAdapter<BlackForexFlatProviderInterface, MultipleCurrencyAmount> {
+public final class CurrencyExposureForexBlackFlatCalculator extends
+InstrumentDerivativeVisitorAdapter<BlackForexFlatProviderInterface, MultipleCurrencyAmount> {
 
   /**
    * The unique instance of the calculator.

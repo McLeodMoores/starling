@@ -60,7 +60,7 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Base class for a range of functions computing values on an IRFuturesOption using the Black Model
- * 
+ *
  * @deprecated Use classes that descend from {@link BlackDiscountingIRFutureOptionFunction}
  */
 @Deprecated
@@ -87,7 +87,7 @@ public abstract class InterestRateFutureOptionBlackFunction extends AbstractFunc
 
   /**
    * Gets the interest rate future option trade converter.
-   * 
+   *
    * @param context The compilation context
    * @return The converter
    */
@@ -102,7 +102,7 @@ public abstract class InterestRateFutureOptionBlackFunction extends AbstractFunc
 
   /**
    * Gets the interest rate future option trade converter.
-   * 
+   *
    * @param context The execution context
    * @return The converter
    */
@@ -207,7 +207,8 @@ public abstract class InterestRateFutureOptionBlackFunction extends AbstractFunc
     requirements.addAll(YieldCurveFunctionUtils.getCurveRequirements(curveCalculationConfig, _curveCalculationConfigSource));
     requirements.add(getVolatilityRequirement(surfaceName, currency));
     try {
-      final Set<ValueRequirement> tsRequirements = _dataConverter.getConversionTimeSeriesRequirements(trade.getSecurity(), getConverter(context).convert(trade));
+      final Set<ValueRequirement> tsRequirements =
+          _dataConverter.getConversionTimeSeriesRequirements(trade.getSecurity(), getConverter(context).convert(trade));
       if (tsRequirements != null) {
         requirements.addAll(tsRequirements);
       }
@@ -219,8 +220,8 @@ public abstract class InterestRateFutureOptionBlackFunction extends AbstractFunc
   }
 
   /**
-   * Calculates the result
-   * 
+   * Calculates the result.
+   *
    * @param irFutureOption The IR future option
    * @param data The data used in pricing
    * @param spec The value specification of the result
@@ -232,7 +233,7 @@ public abstract class InterestRateFutureOptionBlackFunction extends AbstractFunc
 
   /**
    * Gets the result properties.
-   * 
+   *
    * @param currency The currency
    * @return The result properties
    */
@@ -247,7 +248,7 @@ public abstract class InterestRateFutureOptionBlackFunction extends AbstractFunc
 
   /**
    * Gets the volatility surface requirement.
-   * 
+   *
    * @param surface The surface name
    * @param currency The currency
    * @return The volatility surface requirement

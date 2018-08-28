@@ -171,7 +171,7 @@ public abstract class RawVolatilitySurfaceDataFunction extends AbstractFunction 
   }
 
   /**
-   * Implementation of the compiled function
+   * Implementation of the compiled function.
    */
   protected class CompiledFunction extends AbstractInvokingCompiledFunction {
     /** The valuation time */
@@ -188,7 +188,8 @@ public abstract class RawVolatilitySurfaceDataFunction extends AbstractFunction 
      * @param definitionSource The volatility surface definition source
      * @param specificationSource The volatility surface specification source
      */
-    public CompiledFunction(final ZonedDateTime from, final ZonedDateTime to, final ZonedDateTime now, final ConfigDBVolatilitySurfaceDefinitionSource definitionSource,
+    public CompiledFunction(final ZonedDateTime from, final ZonedDateTime to, final ZonedDateTime now,
+        final ConfigDBVolatilitySurfaceDefinitionSource definitionSource,
         final ConfigDBVolatilitySurfaceSpecificationSource specificationSource) {
       super(from.toInstant(), to.toInstant());
       _now = now;
@@ -211,7 +212,8 @@ public abstract class RawVolatilitySurfaceDataFunction extends AbstractFunction 
 
     @SuppressWarnings("synthetic-access")
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       // REVIEW 2013-11-06 Andrew -- This logic with the instrument type is not necessary - see getResults
       final String instrumentType = desiredValue.getConstraints().getStrictValue(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE);
       if (instrumentType == null) {
@@ -226,14 +228,18 @@ public abstract class RawVolatilitySurfaceDataFunction extends AbstractFunction 
         return null;
       }
       try {
-        final VolatilitySurfaceDefinition<?, ?> definition = getDefinition(_definitionSource, context.getComputationTargetResolver().getVersionCorrection(), target, surfaceName);
+        final VolatilitySurfaceDefinition<?, ?> definition =
+            getDefinition(_definitionSource, context.getComputationTargetResolver().getVersionCorrection(), target, surfaceName);
         if (definition == null) {
-          LOGGER.error("Could not get volatility surface definition for instrument type {} with target {} called {}", new Object[] {target, _instrumentType, surfaceName });
+          LOGGER.error("Could not get volatility surface definition for instrument type {} with target {} called {}",
+              new Object[] {target, _instrumentType, surfaceName });
           return null;
         }
-        final VolatilitySurfaceSpecification specification = getSpecification(_specificationSource, context.getComputationTargetResolver().getVersionCorrection(), target, surfaceName);
+        final VolatilitySurfaceSpecification specification =
+            getSpecification(_specificationSource, context.getComputationTargetResolver().getVersionCorrection(), target, surfaceName);
         if (specification == null) {
-          LOGGER.error("Could not get volatility surface specification for instrument type {} with target {} called {}", new Object[] {target, _instrumentType, surfaceName });
+          LOGGER.error("Could not get volatility surface specification for instrument type {} with target {} called {}",
+              new Object[] {target, _instrumentType, surfaceName });
           return null;
         }
         final Set<ValueRequirement> requirements = buildDataRequirements(specification, definition, _now, surfaceName, instrumentType);
@@ -254,7 +260,8 @@ public abstract class RawVolatilitySurfaceDataFunction extends AbstractFunction 
 
     @SuppressWarnings("synthetic-access")
     @Override
-    public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+    public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+        final Map<ValueSpecification, ValueRequirement> inputs) {
       String surfaceQuoteType = null;
       String surfaceQuoteUnits = null;
       String surfaceName = null;
@@ -274,7 +281,8 @@ public abstract class RawVolatilitySurfaceDataFunction extends AbstractFunction 
       assert surfaceQuoteUnits != null;
       return Collections.singleton(new ValueSpecification(ValueRequirementNames.VOLATILITY_SURFACE_DATA, target.toSpecification(), createValueProperties()
           .with(ValuePropertyNames.SURFACE, surfaceName).with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, _instrumentType)
-          .with(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_QUOTE_TYPE, surfaceQuoteType).with(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_UNITS, surfaceQuoteUnits).get()));
+          .with(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_QUOTE_TYPE, surfaceQuoteType)
+          .with(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_UNITS, surfaceQuoteUnits).get()));
     }
 
     @Override
@@ -289,7 +297,8 @@ public abstract class RawVolatilitySurfaceDataFunction extends AbstractFunction 
 
     @SuppressWarnings({"synthetic-access" })
     @Override
-    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+        final Set<ValueRequirement> desiredValues) {
       final ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);
       final String surfaceName = desiredValue.getConstraint(ValuePropertyNames.SURFACE);
       final String instrumentType = desiredValue.getConstraint(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE);
@@ -323,8 +332,8 @@ public abstract class RawVolatilitySurfaceDataFunction extends AbstractFunction 
           }
         }
       }
-      final VolatilitySurfaceData<Object, Object> volSurfaceData = new VolatilitySurfaceData<>(definition.getName(), specification.getName(), definition.getTarget(), definition.getXs(),
-          definition.getYs(), volatilityValues);
+      final VolatilitySurfaceData<Object, Object> volSurfaceData = new VolatilitySurfaceData<>(definition.getName(), specification.getName(),
+          definition.getTarget(), definition.getXs(), definition.getYs(), volatilityValues);
       final ValueSpecification result = new ValueSpecification(ValueRequirementNames.VOLATILITY_SURFACE_DATA, target.toSpecification(), createValueProperties()
           .with(ValuePropertyNames.SURFACE, surfaceName).with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, instrumentType)
           .with(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_QUOTE_TYPE, specification.getSurfaceQuoteType())

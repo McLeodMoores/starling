@@ -62,7 +62,7 @@ public class CurrencySeriesConversionFunction extends AbstractFunction.NonCompil
 
   public CurrencySeriesConversionFunction(final String... valueNames) {
     ArgumentChecker.notEmpty(valueNames, "valueNames");
-    _valueNames = new HashSet<String>(Arrays.asList(valueNames));
+    _valueNames = new HashSet<>(Arrays.asList(valueNames));
   }
 
   protected Set<String> getValueNames() {
@@ -78,7 +78,7 @@ public class CurrencySeriesConversionFunction extends AbstractFunction.NonCompil
   }
 
   private ValueRequirement getInputValueRequirement(final ComputationTargetSpecification targetSpec, final ValueRequirement desiredValue) {
-    Builder properties = desiredValue.getConstraints().copy()
+    final Builder properties = desiredValue.getConstraints().copy()
         .withoutAny(CURRENCY_INJECTION_PROPERTY)
         .withoutAny(ValuePropertyNames.CONVERSION_METHOD)
         .withAny(ValuePropertyNames.CURRENCY);
@@ -104,7 +104,7 @@ public class CurrencySeriesConversionFunction extends AbstractFunction.NonCompil
 
   @VisibleForTesting
   /* package */ TenorLabelledLocalDateDoubleTimeSeriesMatrix1D convertLabelledMatrix(final LabelledObjectMatrix1D<Tenor, LocalDateDoubleTimeSeries, Period> values, final DoubleTimeSeries<LocalDate> conversionRates) {
-    LocalDateDoubleTimeSeries[] convertedValues = new LocalDateDoubleTimeSeries[values.size()];
+    final LocalDateDoubleTimeSeries[] convertedValues = new LocalDateDoubleTimeSeries[values.size()];
     for (int i = 0; i < values.size(); i++) {
       convertedValues[i] = (LocalDateDoubleTimeSeries) convertTimeSeries(values.getValues()[i], conversionRates);
     }
@@ -122,7 +122,7 @@ public class CurrencySeriesConversionFunction extends AbstractFunction.NonCompil
       return convertDouble((Double) value, conversionRates);
     } else if (value instanceof DoubleTimeSeries) {
       // TODO: Note the unchecked cast. We'll either get a zero intersection and empty result if the rates aren't the same type or a class cast exception.
-      return convertTimeSeries((DoubleTimeSeries) value, conversionRates);
+      return convertTimeSeries((DoubleTimeSeries<LocalDate>) value, conversionRates);
     } else if (value instanceof TenorLabelledLocalDateDoubleTimeSeriesMatrix1D) {
       // Try to make this more generic
       return convertLabelledMatrix((TenorLabelledLocalDateDoubleTimeSeriesMatrix1D) value, conversionRates);
@@ -138,7 +138,7 @@ public class CurrencySeriesConversionFunction extends AbstractFunction.NonCompil
     if (value instanceof Double) {
       return convertDouble((Double) value, conversionRate);
     } else if (value instanceof DoubleTimeSeries) {
-      return convertTimeSeries((DoubleTimeSeries) value, conversionRate);
+      return convertTimeSeries((DoubleTimeSeries<LocalDate>) value, conversionRate);
     } else {
       LOGGER.error("Can't convert object with type {} to {}", inputValue.getValue().getClass(), desiredValue);
       return null;
@@ -158,7 +158,7 @@ public class CurrencySeriesConversionFunction extends AbstractFunction.NonCompil
           exchangeRate = (Double) input.getValue();
         } else if (input.getValue() instanceof DoubleTimeSeries) {
           // TODO: Note the unchecked cast. We'll either get a zero intersection and empty result if the values aren't the same type or a class cast exception.
-          exchangeRates = (DoubleTimeSeries) input.getValue();
+          exchangeRates = (DoubleTimeSeries<LocalDate>) input.getValue();
         } else {
           return null;
         }
@@ -226,7 +226,7 @@ public class CurrencySeriesConversionFunction extends AbstractFunction.NonCompil
     if (getValueNames().size() == 1) {
       return Collections.singleton(new ValueSpecification(getValueNames().iterator().next(), targetSpec, ValueProperties.all()));
     }
-    final Set<ValueSpecification> result = new HashSet<ValueSpecification>();
+    final Set<ValueSpecification> result = new HashSet<>();
     for (final String valueName : getValueNames()) {
       result.add(new ValueSpecification(valueName, targetSpec, ValueProperties.all()));
     }
@@ -240,7 +240,7 @@ public class CurrencySeriesConversionFunction extends AbstractFunction.NonCompil
       // Resolved output is the input with the currency wild-carded, and the function ID the same (this is so that after composition the node might
       // be removed from the graph)
       final ValueSpecification value = input.getKey();
-      Builder properties = value.getProperties().copy()
+      final Builder properties = value.getProperties().copy()
           .withAny(ValuePropertyNames.CURRENCY)
           .with(ValuePropertyNames.CONVERSION_METHOD, CONVERSION_METHOD_VALUE);
       return Collections.singleton(new ValueSpecification(value.getValueName(), value.getTargetSpecification(), properties.get()));
@@ -252,7 +252,7 @@ public class CurrencySeriesConversionFunction extends AbstractFunction.NonCompil
   private String getCurrency(final Collection<ValueSpecification> specifications) {
     final ValueSpecification specification = specifications.iterator().next();
     final Set<String> currencies = specification.getProperties().getValues(ValuePropertyNames.CURRENCY);
-    if ((currencies == null) || (currencies.size() != 1)) {
+    if (currencies == null || currencies.size() != 1) {
       return null;
     }
     return currencies.iterator().next();

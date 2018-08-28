@@ -15,7 +15,8 @@ public class GetRequirementsFailedNode extends AbstractFailureNode {
 
   private static final String NAME = "GetRequirementsFailed";
 
-  public GetRequirementsFailedNode(final Object parent, final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput) {
+  public GetRequirementsFailedNode(final Object parent, final ValueRequirement valueRequirement, final String function,
+      final ValueSpecification desiredOutput) {
     super(parent, valueRequirement, function, desiredOutput);
   }
 

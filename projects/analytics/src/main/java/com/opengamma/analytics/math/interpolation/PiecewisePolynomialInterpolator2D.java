@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.interpolation;
@@ -9,27 +9,27 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Abstract class for interpolations based on 2d piecewise polynomial functions 
+ * Abstract class for interpolations based on 2d piecewise polynomial functions.
  */
 public abstract class PiecewisePolynomialInterpolator2D {
 
   /**
-   * Given a set of data points (x0Values_i, x1Values_j, yValues_{ij}), 2d spline interpolation is returned such that f(x0Values_i, x1Values_j) = yValues_{ij}
-   * @param x0Values 
-   * @param x1Values 
-   * @param yValues 
-   * @return {@link PiecewisePolynomialResult2D} containing positions of knots in x0 direction, positions of knots in x1 direction, coefficients of interpolant, 
-   * number of intervals in x0 direction, number of intervals in x1 direction, order of polynomial function
+   * Given a set of data points (x0Values_i, x1Values_j, yValues_{ij}), 2d spline interpolation is returned such that f(x0Values_i, x1Values_j) = yValues_{ij}.
+   * @param x0Values
+   * @param x1Values
+   * @param yValues
+   * @return {@link PiecewisePolynomialResult2D} containing positions of knots in x0 direction, positions of knots in x1 direction,
+   * coefficients of interpolant, number of intervals in x0 direction, number of intervals in x1 direction, order of polynomial function
    */
-  public abstract PiecewisePolynomialResult2D interpolate(final double[] x0Values, final double[] x1Values, final double[][] yValues);
+  public abstract PiecewisePolynomialResult2D interpolate(double[] x0Values, double[] x1Values, double[][] yValues);
 
   /**
-   * @param x0Values 
-   * @param x1Values 
-   * @param yValues 
-   * @param x0Keys 
-   * @param x1Keys 
-   * @return Values of 2D interpolant at (x0Key_i, x1Keys_j) 
+   * @param x0Values
+   * @param x1Values
+   * @param yValues
+   * @param x0Keys
+   * @param x1Keys
+   * @return Values of 2D interpolant at (x0Key_i, x1Keys_j)
    */
   public DoubleMatrix2D interpolate(final double[] x0Values, final double[] x1Values, final double[][] yValues, final double[] x0Keys, final double[] x1Keys) {
     ArgumentChecker.notNull(x0Keys, "x0Keys");
@@ -47,14 +47,14 @@ public abstract class PiecewisePolynomialInterpolator2D {
       ArgumentChecker.isFalse(Double.isInfinite(x1Keys[i]), "x1Keys containing Infinity");
     }
 
-    PiecewisePolynomialResult2D result = this.interpolate(x0Values, x1Values, yValues);
+    final PiecewisePolynomialResult2D result = this.interpolate(x0Values, x1Values, yValues);
 
     final double[] knots0 = result.getKnots0().getData();
     final double[] knots1 = result.getKnots1().getData();
     final int nKnots0 = knots0.length;
     final int nKnots1 = knots1.length;
 
-    double[][] res = new double[n0Keys][n1Keys];
+    final double[][] res = new double[n0Keys][n1Keys];
 
     for (int i = 0; i < n0Keys; ++i) {
       for (int j = 0; j < n1Keys; ++j) {
@@ -82,16 +82,16 @@ public abstract class PiecewisePolynomialInterpolator2D {
   }
 
   /**
-   * @param x0Values 
-   * @param x1Values 
-   * @param yValues 
-   * @param x0Key 
-   * @param x1Key 
-   * @return Value of 2D interpolant at (x0Key, x1Key) 
+   * @param x0Values
+   * @param x1Values
+   * @param yValues
+   * @param x0Key
+   * @param x1Key
+   * @return Value of 2D interpolant at (x0Key, x1Key)
    */
   public double interpolate(final double[] x0Values, final double[] x1Values, final double[][] yValues, final double x0Key, final double x1Key) {
 
-    PiecewisePolynomialResult2D result = this.interpolate(x0Values, x1Values, yValues);
+    final PiecewisePolynomialResult2D result = this.interpolate(x0Values, x1Values, yValues);
     ArgumentChecker.isFalse(Double.isNaN(x0Key), "x0Key containing NaN");
     ArgumentChecker.isFalse(Double.isInfinite(x0Key), "x0Key containing Infinity");
     ArgumentChecker.isFalse(Double.isNaN(x1Key), "x1Key containing NaN");
@@ -125,11 +125,11 @@ public abstract class PiecewisePolynomialInterpolator2D {
   }
 
   /**
-   * @param coefMat 
-   * @param x0 
-   * @param x1 
-   * @param leftKnot0 
-   * @param leftKnot1 
+   * @param coefMat
+   * @param x0
+   * @param x1
+   * @param leftKnot0
+   * @param leftKnot1
    * @return sum_{i=0}^{order0-1} sum_{j=0}^{order1-1} coefMat_{ij} (x0-leftKnots0)^{order0-1-i} (x1-leftKnots1)^{order0-1-j}
    */
   protected double getValue(final DoubleMatrix2D coefMat, final double x0, final double x1, final double leftKnot0, final double leftKnot1) {

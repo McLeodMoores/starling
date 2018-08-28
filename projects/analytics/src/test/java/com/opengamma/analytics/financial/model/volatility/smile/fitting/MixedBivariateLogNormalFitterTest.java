@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.smile.fitting;
@@ -194,7 +194,7 @@ public class MixedBivariateLogNormalFitterTest {
       final EuropeanVanillaOption optionPut = new EuropeanVanillaOption(k, time, false);
       final double callPrice = getPrice(optionCall, fwdX, objAns1X);
       final double putPrice = getPrice(optionPut, fwdX, objAns1X);
-      assertEquals((callPrice - putPrice), (fwdX - k), fwdX * 1e-12);
+      assertEquals(callPrice - putPrice, fwdX - k, fwdX * 1e-12);
     }
 
     for (int i = 0; i < 100; i++) {
@@ -203,13 +203,13 @@ public class MixedBivariateLogNormalFitterTest {
       final EuropeanVanillaOption optionPut = new EuropeanVanillaOption(k, time, false);
       final double callPrice = getPrice(optionCall, fwdY, objAns1Y);
       final double putPrice = getPrice(optionPut, fwdY, objAns1Y);
-      assertEquals((callPrice - putPrice), (fwdY - k), fwdY * 1e-12);
+      assertEquals(callPrice - putPrice, fwdY - k, fwdY * 1e-12);
     }
 
   }
 
   /**
-   * 
+   *
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void nullaaGuessTest() {
@@ -229,7 +229,7 @@ public class MixedBivariateLogNormalFitterTest {
   }
 
   /**
-   * 
+   *
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void nullxxTest() {
@@ -249,7 +249,7 @@ public class MixedBivariateLogNormalFitterTest {
   }
 
   /**
-   * 
+   *
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void nullyyTest() {
@@ -269,7 +269,7 @@ public class MixedBivariateLogNormalFitterTest {
   }
 
   /**
-   * 
+   *
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void naNaaGuessTest() {
@@ -289,7 +289,7 @@ public class MixedBivariateLogNormalFitterTest {
   }
 
   /**
-   * 
+   *
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void naNxxTest() {
@@ -309,7 +309,7 @@ public class MixedBivariateLogNormalFitterTest {
   }
 
   /**
-   * 
+   *
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void naNyyTest() {
@@ -329,7 +329,7 @@ public class MixedBivariateLogNormalFitterTest {
   }
 
   /**
-   * 
+   *
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void naNtimeTest() {
@@ -349,7 +349,7 @@ public class MixedBivariateLogNormalFitterTest {
   }
 
   /**
-   * 
+   *
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void naNfwdXTest() {
@@ -369,7 +369,7 @@ public class MixedBivariateLogNormalFitterTest {
   }
 
   /**
-   * 
+   *
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void naNfwdYTest() {
@@ -389,7 +389,7 @@ public class MixedBivariateLogNormalFitterTest {
   }
 
   /**
-   * 
+   *
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void naNparamsGuessCorrectionTest() {
@@ -410,7 +410,7 @@ public class MixedBivariateLogNormalFitterTest {
   }
 
   /**
-   * 
+   *
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void iNFaaGuessTest() {
@@ -430,7 +430,7 @@ public class MixedBivariateLogNormalFitterTest {
   }
 
   /**
-   * 
+   *
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void iNFxxTest() {
@@ -450,7 +450,7 @@ public class MixedBivariateLogNormalFitterTest {
   }
 
   /**
-   * 
+   *
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void iNFyyTest() {
@@ -470,7 +470,7 @@ public class MixedBivariateLogNormalFitterTest {
   }
 
   /**
-   * 
+   *
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void iNFtimeTest() {
@@ -490,7 +490,7 @@ public class MixedBivariateLogNormalFitterTest {
   }
 
   /**
-   * 
+   *
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void iNFfwdXTest() {
@@ -510,7 +510,7 @@ public class MixedBivariateLogNormalFitterTest {
   }
 
   /**
-   * 
+   *
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void iNFfwdYTest() {
@@ -530,7 +530,7 @@ public class MixedBivariateLogNormalFitterTest {
   }
 
   /**
-   * 
+   *
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void iNFparamsGuessCorrectionTest() {
@@ -551,7 +551,7 @@ public class MixedBivariateLogNormalFitterTest {
   }
 
   /**
-   * 
+   *
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void wrongnDataPtsXTest() {
@@ -571,7 +571,7 @@ public class MixedBivariateLogNormalFitterTest {
   }
 
   /**
-   * 
+   *
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void wrongYYlengthTest() {
@@ -591,7 +591,7 @@ public class MixedBivariateLogNormalFitterTest {
   }
 
   /**
-   * 
+   *
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void wrongParamLengthTest() {
@@ -611,7 +611,7 @@ public class MixedBivariateLogNormalFitterTest {
   }
 
   /**
-   * 
+   *
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void negativeTimeTest() {
@@ -631,7 +631,7 @@ public class MixedBivariateLogNormalFitterTest {
   }
 
   /**
-   * 
+   *
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void negativeFwdXTest() {
@@ -651,7 +651,7 @@ public class MixedBivariateLogNormalFitterTest {
   }
 
   /**
-   * 
+   *
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void negativeFwdYTest() {
@@ -671,7 +671,7 @@ public class MixedBivariateLogNormalFitterTest {
   }
 
   /**
-   * 
+   *
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void negativeParamsGuessCorrectionTest() {
@@ -806,7 +806,7 @@ public class MixedBivariateLogNormalFitterTest {
   }
 
   /**
-   * 
+   *
    */
   @Test
       (enabled = false)
@@ -1101,7 +1101,7 @@ public class MixedBivariateLogNormalFitterTest {
       final double callPrice = getPrice(optionCall, fwdX, objAns1X);
       final double putPrice = getPrice(optionPut, fwdX, objAns1X);
       //     System.out.println(k + "\t" + (callPrice - putPrice) + "\t" + (fwdX - k));
-      assertEquals((callPrice - putPrice), (fwdX - k), fwdX * 1e-10);
+      assertEquals(callPrice - putPrice, fwdX - k, fwdX * 1e-10);
     }
 
     System.out.println("\n");
@@ -1114,7 +1114,7 @@ public class MixedBivariateLogNormalFitterTest {
       final double callPrice = getPrice(optionCall, fwdY, objAns1Y);
       final double putPrice = getPrice(optionPut, fwdY, objAns1Y);
       //    System.out.println(k + "\t" + (callPrice - putPrice) + "\t" + (fwdY - k));
-      assertEquals((callPrice - putPrice), (fwdY - k), fwdY * 1e-10);
+      assertEquals(callPrice - putPrice, fwdY - k, fwdY * 1e-10);
     }
 
     System.out.println("\n");
@@ -1127,13 +1127,13 @@ public class MixedBivariateLogNormalFitterTest {
       final double callPrice = objZ.getPriceZ(optionCall, fwdZ);
       final double putPrice = objZ.getPriceZ(optionPut, fwdZ);
       //     System.out.println(k + "\t" + (callPrice - putPrice) + "\t" + (fwdY - k));
-      assertEquals((callPrice - putPrice), (fwdY - k), fwdY * 1e-10);
+      assertEquals(callPrice - putPrice, fwdY - k, fwdY * 1e-10);
     }
 
   }
 
   /**
-   * 
+   *
    */
   @Test
       (enabled = false)
@@ -1204,7 +1204,7 @@ public class MixedBivariateLogNormalFitterTest {
     final boolean fitDone = false;
     int counter = 0;
 
-    while (fitDone == false && counter <= 100000) {
+    while (!fitDone && counter <= 100000) {
       counter += 1;
 
       for (int i = 0; i < nNorms; ++i) {
@@ -1327,7 +1327,7 @@ public class MixedBivariateLogNormalFitterTest {
   }
 
   /**
-   * 
+   *
    */
   @Test(enabled = false)
   public void testAccuracy() {
@@ -1506,7 +1506,7 @@ public class MixedBivariateLogNormalFitterTest {
   }
 
   /**
-   * 
+   *
    */
   @Test
       (enabled = false)
@@ -1737,7 +1737,7 @@ public class MixedBivariateLogNormalFitterTest {
   }
 
   /**
-   * 
+   *
    */
   @Test
       (enabled = false)
@@ -1960,7 +1960,7 @@ public class MixedBivariateLogNormalFitterTest {
   }
 
   /**
-   * 
+   *
    */
   @Test
       (enabled = false)
@@ -2230,7 +2230,7 @@ public class MixedBivariateLogNormalFitterTest {
   }
 
   /**
-   * 
+   *
    */
   @Test(enabled = false)
   public void testXYfitterZfitter() {
@@ -2562,7 +2562,7 @@ public class MixedBivariateLogNormalFitterTest {
   }
 
   /**
-   * 
+   *
    */
   @Test
       (enabled = false)

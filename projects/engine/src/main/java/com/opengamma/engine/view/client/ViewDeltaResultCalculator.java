@@ -34,7 +34,8 @@ public class ViewDeltaResultCalculator {
    * @param result the new result
    * @return the delta between the two results, not null
    */
-  public static ViewDeltaResultModel computeDeltaModel(final ViewDefinition viewDefinition, final ViewResultModel previousResult, final ViewResultModel result) {
+  public static ViewDeltaResultModel computeDeltaModel(final ViewDefinition viewDefinition, final ViewResultModel previousResult,
+      final ViewResultModel result) {
     final InMemoryViewDeltaResultModel deltaModel = new InMemoryViewDeltaResultModel();
     deltaModel.setViewCycleExecutionOptions(result.getViewCycleExecutionOptions());
     deltaModel.setCalculationTime(result.getCalculationTime());

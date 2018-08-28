@@ -664,7 +664,8 @@ public class SimpleCalculationNode extends SimpleCalculationNodeState implements
   }
 
   private void invokeResult(final FunctionInvoker invoker, final DeferredInvocationStatistics statistics,
-      final Set<ValueSpecification> missing, final ValueSpecification[] outputs, final Collection<ComputedValue> results, final CalculationJobResultItemBuilder resultItemBuilder) {
+      final Set<ValueSpecification> missing, final ValueSpecification[] outputs, final Collection<ComputedValue> results,
+      final CalculationJobResultItemBuilder resultItemBuilder) {
     if (results == null) {
       postEvaluationErrors(outputs, MissingOutput.EVALUATION_ERROR);
       resultItemBuilder.withException(ERROR_INVOKING, "No results returned by invoker " + invoker);
@@ -681,7 +682,8 @@ public class SimpleCalculationNode extends SimpleCalculationNodeState implements
     final Collection<ComputedValue> newResults = new ArrayList<>(outputs.length);
     for (ComputedValue result : results) {
       ValueSpecification resultSpec = result.getSpecification();
-      final ComputationTargetSpecification targetSpec = ComputationTargetResolverUtils.simplifyType(resultSpec.getTargetSpecification(), getRawTargetResolver());
+      final ComputationTargetSpecification targetSpec =
+          ComputationTargetResolverUtils.simplifyType(resultSpec.getTargetSpecification(), getRawTargetResolver());
       if (targetSpec != resultSpec.getTargetSpecification()) {
         resultSpec = new ValueSpecification(resultSpec.getValueName(), targetSpec, resultSpec.getProperties());
         result = new ComputedValue(resultSpec, result.getValue());
