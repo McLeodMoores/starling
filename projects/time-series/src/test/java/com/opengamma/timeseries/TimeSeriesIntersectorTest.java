@@ -34,7 +34,7 @@ public class TimeSeriesIntersectorTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNull() {
-    TimeSeriesIntersector.intersect(null);
+    TimeSeriesIntersector.intersect((DoubleTimeSeries<?>[]) null);
   }
 
   /**

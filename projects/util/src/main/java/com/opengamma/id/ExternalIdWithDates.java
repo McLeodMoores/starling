@@ -26,7 +26,7 @@ import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import org.threeten.bp.LocalDate;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.opengamma.util.ArgumentChecker;
 
 /**
@@ -143,9 +143,9 @@ public final class ExternalIdWithDates implements ImmutableBean,
     if (date == null) {
       return true;
     }
-    final LocalDate from = Objects.firstNonNull(getValidFrom(), LocalDate.MIN);
-    final LocalDate to = Objects.firstNonNull(getValidTo(), LocalDate.MAX);
-    return date.isBefore(from) == false && date.isAfter(to) == false;
+    final LocalDate from = MoreObjects.firstNonNull(getValidFrom(), LocalDate.MIN);
+    final LocalDate to = MoreObjects.firstNonNull(getValidTo(), LocalDate.MAX);
+    return !date.isBefore(from) && !date.isAfter(to);
   }
 
   //-------------------------------------------------------------------------
@@ -178,9 +178,9 @@ public final class ExternalIdWithDates implements ImmutableBean,
     }
     if (obj instanceof ExternalIdWithDates) {
       final ExternalIdWithDates other = (ExternalIdWithDates) obj;
-      return ObjectUtils.equals(_externalId, other._externalId) &&
-          ObjectUtils.equals(_validFrom, other._validFrom) &&
-          ObjectUtils.equals(_validTo, other._validTo);
+      return ObjectUtils.equals(_externalId, other._externalId)
+          && ObjectUtils.equals(_validFrom, other._validFrom)
+          && ObjectUtils.equals(_validTo, other._validTo);
     }
     return false;
   }

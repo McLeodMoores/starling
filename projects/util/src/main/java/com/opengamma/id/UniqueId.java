@@ -137,19 +137,21 @@ public final class UniqueId
    * @throws IllegalArgumentException if the identifier cannot be parsed
    */
   @FromString
-  public static UniqueId parse(String str) {
+  public static UniqueId parse(final String str) {
     ArgumentChecker.notEmpty(str, "str");
-    if (str.contains("~") == false) {
-      str = StringUtils.replace(str, "::", "~");  // leniently parse old data
+    String s = str;
+    if (!s.contains("~")) {
+      s = StringUtils.replace(s, "::", "~");  // leniently parse old data
     }
-    final String[] split = StringUtils.splitByWholeSeparatorPreserveAllTokens(str, "~");
+    final String[] split = StringUtils.splitByWholeSeparatorPreserveAllTokens(s, "~");
     switch (split.length) {
       case 2:
         return UniqueId.of(split[0], split[1], null);
       case 3:
         return UniqueId.of(split[0], split[1], split[2]);
+      default:
+        throw new IllegalArgumentException("Invalid identifier format: " + str);
     }
-    throw new IllegalArgumentException("Invalid identifier format: " + str);
   }
 
   /**
@@ -292,9 +294,8 @@ public final class UniqueId
   public UniqueId toLatest() {
     if (isVersioned()) {
       return new UniqueId(_scheme, _value, null);
-    } else {
-      return this;
     }
+    return this;
   }
 
   /**
@@ -324,8 +325,8 @@ public final class UniqueId
       return false;
     }
     final ObjectId objectId = other.getObjectId();
-    return _scheme.equals(objectId.getScheme()) &&
-        _value.equals(objectId.getValue());
+    return _scheme.equals(objectId.getScheme())
+        && _value.equals(objectId.getValue());
   }
 
   //-------------------------------------------------------------------------
@@ -355,9 +356,9 @@ public final class UniqueId
     }
     if (obj instanceof UniqueId) {
       final UniqueId other = (UniqueId) obj;
-      return _scheme.equals(other._scheme) &&
-          _value.equals(other._value) &&
-          ObjectUtils.equals(_version, other._version);
+      return _scheme.equals(other._scheme)
+          && _value.equals(other._value)
+          && ObjectUtils.equals(_version, other._version);
     }
     return false;
   }

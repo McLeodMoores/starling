@@ -32,7 +32,7 @@ public class ObjectIdSupplier implements Supplier<ObjectId> {
 
   /**
    * Creates an instance specifying the scheme.
-   * 
+   *
    * @param scheme  the scheme, not empty
    */
   public ObjectIdSupplier(final String scheme) {
@@ -43,7 +43,7 @@ public class ObjectIdSupplier implements Supplier<ObjectId> {
   //-------------------------------------------------------------------------
   /**
    * Gets the scheme in use.
-   * 
+   *
    * @return the scheme, not null
    */
   public String getScheme() {
@@ -53,9 +53,10 @@ public class ObjectIdSupplier implements Supplier<ObjectId> {
   //-------------------------------------------------------------------------
   /**
    * Generates the next object identifier.
-   * 
+   *
    * @return the next unique identifier, not null
    */
+  @Override
   public ObjectId get() {
     final long id = _idCount.incrementAndGet();
     return ObjectId.of(_scheme, Long.toString(id));
@@ -63,7 +64,7 @@ public class ObjectIdSupplier implements Supplier<ObjectId> {
 
   /**
    * Generates the next object identifier prefixing the value.
-   * 
+   *
    * @param valuePrefix  the prefix for the value, not null
    * @return the next unique identifier, not null
    */

@@ -187,7 +187,7 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
    * @return the external identifier search with the specified identifier removed, not null
    */
   public ExternalIdSearch withExternalIdRemoved(final ExternalId externalId) {
-    if (externalId == null || contains(externalId) == false) {
+    if (externalId == null || !contains(externalId)) {
       return this;
     }
     final Set<ExternalId> ids = Sets.newHashSet(_externalIds);
@@ -250,9 +250,10 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
       case ANY:
         return contains(otherId);
       case NONE:
-        return contains(otherId) == false;
+        return !contains(otherId);
+      default:
+        return false;
     }
-    return false;
   }
 
   /**
@@ -276,9 +277,10 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
       case ANY:
         return containsAny(otherId);
       case NONE:
-        return containsAny(otherId) == false;
+        return !containsAny(otherId);
+      default:
+        return false;
     }
-    return false;
   }
 
   //-------------------------------------------------------------------------
@@ -295,7 +297,7 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
   public boolean containsAll(final Iterable<ExternalId> otherId) {
     ArgumentChecker.notNull(otherId, "otherId");
     for (final ExternalId identifier : otherId) {
-      if (_externalIds.contains(identifier) == false) {
+      if (!_externalIds.contains(identifier)) {
         return false;
       }
     }

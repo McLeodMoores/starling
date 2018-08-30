@@ -29,7 +29,7 @@ import org.joda.convert.ToString;
 import org.threeten.bp.DateTimeException;
 import org.threeten.bp.Instant;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.google.common.collect.Ordering;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.PublicAPI;
@@ -39,7 +39,7 @@ import com.opengamma.util.PublicAPI;
  * <p>
  * History can be stored in two dimensions and the version-correction provides the key.
  * The first historic dimension is the classic series of versions.
- * Each new version is stored in such a manor that previous versions can be accessed.
+ * Each new version is stored in such a manner that previous versions can be accessed.
  * The second historic dimension is corrections.
  * A correction occurs when it is realized that the original data stored was incorrect.
  * <p>
@@ -85,7 +85,7 @@ public final class VersionCorrection implements ImmutableBean, Comparable<Versio
    * @return the version-correction combination, not null
    */
   public static VersionCorrection of(final VersionCorrection versionCorrection) {
-    return Objects.firstNonNull(versionCorrection, VersionCorrection.LATEST);
+    return MoreObjects.firstNonNull(versionCorrection, VersionCorrection.LATEST);
   }
 
   /**
@@ -178,12 +178,11 @@ public final class VersionCorrection implements ImmutableBean, Comparable<Versio
   private static Instant parseInstantString(final String instantStr) {
     if (instantStr == null || instantStr.equals("LATEST")) {
       return null;
-    } else {
-      try {
-        return Instant.parse(instantStr);
-      } catch (final DateTimeException ex) {
-        throw new IllegalArgumentException(ex);
-      }
+    }
+    try {
+      return Instant.parse(instantStr);
+    } catch (final DateTimeException ex) {
+      throw new IllegalArgumentException(ex);
     }
   }
 

@@ -35,6 +35,13 @@ public final class ExternalIdBundleFudgeBuilder extends AbstractFudgeBuilder imp
     return msg;
   }
 
+  /**
+   * Converts an {@link ExternalIdBundle} to a mutable Fudge message. Returns null if the id bundle is null.
+   *
+   * @param serializer  the Fudge serializer
+   * @param object  the id bundle
+   * @return  the message
+   */
   public static MutableFudgeMsg toFudgeMsg(final FudgeSerializer serializer, final ExternalIdBundle object) {
     if (object == null) {
       return null;
@@ -44,6 +51,13 @@ public final class ExternalIdBundleFudgeBuilder extends AbstractFudgeBuilder imp
     return msg;
   }
 
+  /**
+   * Adds an {@link ExternalIdBundle} to a message.
+   *
+   * @param serializer  the Fudge serializer, not null
+   * @param object  the id bundle
+   * @param msg  the message, not null
+   */
   public static void toFudgeMsg(final FudgeSerializer serializer, final ExternalIdBundle object, final MutableFudgeMsg msg) {
     for (final ExternalId externalId : object) {
       addToMessage(msg, ID_FIELD_NAME, ExternalIdFudgeBuilder.toFudgeMsg(serializer, externalId));
@@ -56,6 +70,13 @@ public final class ExternalIdBundleFudgeBuilder extends AbstractFudgeBuilder imp
     return fromFudgeMsg(deserializer, msg);
   }
 
+  /**
+   * Converts a Fudge message to an {@link ExternalIdBundle}. Returns null if the message is null.
+   *
+   * @param deserializer  the Fudge deserializer
+   * @param msg  the message
+   * @return  the id bundle
+   */
   public static ExternalIdBundle fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     if (msg == null) {
       return null;

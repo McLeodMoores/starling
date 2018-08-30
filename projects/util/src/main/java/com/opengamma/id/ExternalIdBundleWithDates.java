@@ -162,7 +162,7 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
   public ExternalIdBundleWithDates withExternalId(final ExternalIdWithDates externalId) {
     ArgumentChecker.notNull(externalId, "externalId");
     final Set<ExternalIdWithDates> ids = new HashSet<>(_externalIds);
-    if (ids.add(externalId) == false) {
+    if (!ids.add(externalId)) {
       return this;
     }
     return create(ids);
@@ -178,7 +178,7 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
   public ExternalIdBundleWithDates withoutExternalId(final ExternalIdWithDates externalId) {
     ArgumentChecker.notNull(externalId, "externalId");
     final Set<ExternalIdWithDates> ids = new HashSet<>(_externalIds);
-    if (ids.remove(externalId) == false) {
+    if (!ids.remove(externalId)) {
       return this;
     }
     return create(ids);
@@ -194,7 +194,7 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
   public ExternalIdBundleWithDates withoutScheme(final ExternalScheme scheme) {
     final Set<ExternalIdWithDates> ids = new HashSet<>(_externalIds.size());
     for (final ExternalIdWithDates id : _externalIds) {
-      if (id.getExternalId().isScheme(scheme) == false) {
+      if (!id.getExternalId().isScheme(scheme)) {
         ids.add(id);
       }
     }
@@ -230,7 +230,7 @@ public final class ExternalIdBundleWithDates implements ImmutableBean,
   public boolean containsAll(final ExternalIdBundleWithDates bundle) {
     ArgumentChecker.notNull(bundle, "bundle");
     for (final ExternalIdWithDates externalId : bundle.getExternalIds()) {
-      if (_externalIds.contains(externalId) == false) {
+      if (!_externalIds.contains(externalId)) {
         return false;
       }
     }

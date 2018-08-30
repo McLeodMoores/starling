@@ -44,7 +44,7 @@ public final class ObjectId
 
   /**
    * Identification scheme for the object identifier.
-   * This allows a unique identifier to be stored and passed using an {@code ExternalId}.
+   * This allows an object identifier to be stored and passed using an {@code ExternalId}.
    */
   public static final ExternalScheme EXTERNAL_SCHEME = ExternalScheme.of("OID");
 
@@ -82,17 +82,19 @@ public final class ObjectId
    * @throws IllegalArgumentException if the identifier cannot be parsed
    */
   @FromString
-  public static ObjectId parse(String str) {
+  public static ObjectId parse(final String str) {
     ArgumentChecker.notEmpty(str, "str");
-    if (str.contains("~") == false) {
-      str = StringUtils.replace(str, "::", "~");  // leniently parse old data
+    String s = str;
+    if (!s.contains("~")) {
+      s = StringUtils.replace(s, "::", "~");  // leniently parse old data
     }
-    final String[] split = StringUtils.splitByWholeSeparatorPreserveAllTokens(str, "~");
+    final String[] split = StringUtils.splitByWholeSeparatorPreserveAllTokens(s, "~");
     switch (split.length) {
       case 2:
         return ObjectId.of(split[0], split[1]);
+      default:
+        throw new IllegalArgumentException("Invalid identifier format: " + str);
     }
-    throw new IllegalArgumentException("Invalid identifier format: " + str);
   }
 
   /**
@@ -214,8 +216,8 @@ public final class ObjectId
     }
     if (obj instanceof ObjectId) {
       final ObjectId other = (ObjectId) obj;
-      return _scheme.equals(other._scheme) &&
-          _value.equals(other._value);
+      return _scheme.equals(other._scheme)
+          && _value.equals(other._value);
     }
     return false;
   }
