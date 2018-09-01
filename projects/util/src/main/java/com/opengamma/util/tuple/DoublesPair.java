@@ -145,7 +145,7 @@ public final class DoublesPair
    * @deprecated Use public factory of(double,double)
    */
   @Deprecated
-  public DoublesPair(final double first, final double second) {
+  public DoublesPair(final double first, final double second) { // CSIGNORE
     this.first = first;
     this.second = second;
   }
@@ -194,7 +194,7 @@ public final class DoublesPair
   public double setValue(final double newValue) {
     throw new UnsupportedOperationException("Immutable");
   }
-
+  // CSOFF
   //-------------------------------------------------------------------------
   /**
    * The meta-bean for {@code DoublesPair}.

@@ -109,7 +109,8 @@ public class AnnotationScanningStringListFactoryBean extends SingletonFactoryBea
   private Set<String> getByScanning(final String annotationClassName) {
     Set<Class<?>> annotated;
     try {
-      annotated = AnnotationReflector.getDefaultReflector().getReflector().getTypesAnnotatedWith((Class<? extends Annotation>) Class.forName(annotationClassName));
+      annotated =
+          AnnotationReflector.getDefaultReflector().getReflector().getTypesAnnotatedWith((Class<? extends Annotation>) Class.forName(annotationClassName));
     } catch (final ClassNotFoundException ex) {
       throw new OpenGammaRuntimeException("Annotation " + annotationClassName + " not found", ex);
     }

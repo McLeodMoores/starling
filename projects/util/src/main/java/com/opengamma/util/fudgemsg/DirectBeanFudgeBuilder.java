@@ -239,7 +239,8 @@ public final class DirectBeanFudgeBuilder<T extends Bean> implements FudgeBuilde
     return list;
   }
 
-  private Set<Object> buildObjectSet(final FudgeDeserializer deserializer, final MetaProperty<?> prop, final Class<?> type, final FudgeMsg msg, final Set<Object> set) {
+  private Set<Object> buildObjectSet(final FudgeDeserializer deserializer, final MetaProperty<?> prop, final Class<?> type, final FudgeMsg msg,
+      final Set<Object> set) {
     final Class<?> contentType = JodaBeanUtils.collectionType(prop, type);
     for (final FudgeField field : msg) {
       if (field.getOrdinal() != null && field.getOrdinal() != 1) {

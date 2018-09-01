@@ -85,7 +85,8 @@ public class JmsByteArrayRequestSender extends AbstractJmsByteArraySender implem
                 final BytesMessage bytesMessage = session.createBytesMessage();
                 bytesMessage.writeBytes(request);
                 bytesMessage.setJMSReplyTo(tempTopic);
-                final Destination requestDestination = getJmsTemplate().getDestinationResolver().resolveDestinationName(session, getDestinationName(), getJmsTemplate().isPubSubDomain());
+                final Destination requestDestination = getJmsTemplate().getDestinationResolver().resolveDestinationName(session,
+                    getDestinationName(), getJmsTemplate().isPubSubDomain());
                 final MessageProducer producer = session.createProducer(requestDestination);
                 try {
                   producer.send(bytesMessage);

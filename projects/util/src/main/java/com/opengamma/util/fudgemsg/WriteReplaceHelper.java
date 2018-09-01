@@ -14,8 +14,9 @@ import java.util.concurrent.ConcurrentMap;
 import com.opengamma.OpenGammaRuntimeException;
 
 /**
- * Helper methods for using the {@code writeReplace} method defined by Java serialization to allow an object to nominate another for encoding or serialization. For example, inner classes may implement
- * a {@code writeReplace} that allows them to be represented using an alternative strategy.
+ * Helper methods for using the {@code writeReplace} method defined by Java serialization to allow an object to nominate another
+ * for encoding or serialization. For example, inner classes may implement a {@code writeReplace} that allows them to be represented
+ * using an alternative strategy.
  */
 public final class WriteReplaceHelper {
 
@@ -25,7 +26,7 @@ public final class WriteReplaceHelper {
   /**
    * The cache of previously resolved (and forced accessible) {@code writeReplace} methods.
    */
-  private static final ConcurrentMap<Class<?>, Object> WRITE_REPLACE = new ConcurrentHashMap<Class<?>, Object>();
+  private static final ConcurrentMap<Class<?>, Object> WRITE_REPLACE = new ConcurrentHashMap<>();
 
   private WriteReplaceHelper() {
   }
@@ -73,7 +74,7 @@ public final class WriteReplaceHelper {
 
   /**
    * Replaces an class with a serializable substitution based on its {@code writeReplace} method.
-   * 
+   *
    * @param object the object to substitute, not null
    * @return the substitution object as returned by its {@code writeReplace} method or the original object if there is no write replace
    * @throws OpenGammaRuntimeException if the class is an inner class and does not defined a {@code writeReplace}

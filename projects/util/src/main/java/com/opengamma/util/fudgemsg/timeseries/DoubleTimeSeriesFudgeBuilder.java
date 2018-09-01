@@ -116,8 +116,9 @@ public class DoubleTimeSeriesFudgeBuilder implements FudgeBuilder<DoubleTimeSeri
   @Override
   public DoubleTimeSeries<?> buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
     // read old LocalDateDoubleTimeSeries, see OpenGammaFudgeContext
-    if (message.getByOrdinal(0).toString().contains("ArrayLocalDateDoubleTimeSeries") || message.getByOrdinal(0).toString().contains("ListLocalDateDoubleTimeSeries") ||
-        message.getByOrdinal(0).toString().contains("MapLocalDateDoubleTimeSeries")) {
+    if (message.getByOrdinal(0).toString().contains("ArrayLocalDateDoubleTimeSeries")
+        || message.getByOrdinal(0).toString().contains("ListLocalDateDoubleTimeSeries")
+        || message.getByOrdinal(0).toString().contains("MapLocalDateDoubleTimeSeries")) {
       final FudgeMsg fastSeries = message.getMessage(2);
       final String encoding = fastSeries.getMessage(1).getString(1);
       final int[] dates = (int[]) fastSeries.getValue(2);

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util;
@@ -20,7 +20,7 @@ public class ExecutorServiceFactoryBean extends SingletonFactoryBean<ExecutorSer
    * The style of executor required.
    * The names correspond to those in the {@link Executors} class.
    */
-  public static enum Style {
+  public enum Style {
     /**
      * Creates using {@link Executors#newCachedThreadPool}.
      */

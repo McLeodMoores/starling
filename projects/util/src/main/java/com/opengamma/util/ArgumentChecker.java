@@ -190,7 +190,7 @@ public final class ArgumentChecker {
    *  _name = ArgumentChecker.notBlank(name, "name");
    * </pre>
    * <p>
-   * The parameter is trimmed using {@link StringUtils#strip()} before testing for length zero.
+   * The parameter is trimmed using {@link StringUtils#strip(String)} before testing for length zero.
    * This matches the definition of {@link StringUtils#isBlank(String)}.
    * The trimmed parameter is returned.
    *
@@ -199,13 +199,13 @@ public final class ArgumentChecker {
    * @return the trimmed input {@code parameter}, not null
    * @throws IllegalArgumentException if the input is null or blank
    */
-  public static String notBlank(String parameter, final String name) {
+  public static String notBlank(final String parameter, final String name) {
     notNull(parameter, name);
-    parameter = StringUtils.strip(parameter);
-    if (parameter.length() == 0) {
+    final String p = StringUtils.strip(parameter);
+    if (p.length() == 0) {
       throw new IllegalArgumentException("Input parameter '" + name + "' must not be empty");
     }
-    return parameter;
+    return p;
   }
 
   //-------------------------------------------------------------------------
@@ -776,7 +776,6 @@ public final class ArgumentChecker {
    * @param value  the value
    * @return true if low &lt; x &lt;= high
    */
-
   public static boolean isInRangeExcludingLow(final double low, final double high, final double value) {
     return value > low && value <= high;
   }

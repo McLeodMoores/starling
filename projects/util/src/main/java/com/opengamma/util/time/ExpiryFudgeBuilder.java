@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.time;
@@ -39,7 +39,8 @@ public final class ExpiryFudgeBuilder extends AbstractFudgeBuilder implements Fu
    * Dummy secondary type to force serialization.
    */
   @FudgeSecondaryType
-  public static final SecondaryFieldType<Expiry, FudgeMsg> SECONDARY_TYPE_INSTANCE = new SecondaryFieldType<Expiry, FudgeMsg>(FudgeWireType.SUB_MESSAGE, Expiry.class) {
+  public static final SecondaryFieldType<Expiry, FudgeMsg> SECONDARY_TYPE_INSTANCE =
+       new SecondaryFieldType<Expiry, FudgeMsg>(FudgeWireType.SUB_MESSAGE, Expiry.class) {
     /** Serialization version. */
     private static final long serialVersionUID = 1L;
 
@@ -67,7 +68,8 @@ public final class ExpiryFudgeBuilder extends AbstractFudgeBuilder implements Fu
       case DAY_MONTH_YEAR:
         return new FudgeDateTime(FudgeDate.from(object.getExpiry()), new FudgeTime(DateTimeAccuracy.DAY, 0, 0, 0));
       case MONTH_YEAR:
-        return new FudgeDateTime(FudgeDate.ofYearMonth(object.getExpiry().getYear(), object.getExpiry().getMonthValue()), new FudgeTime(DateTimeAccuracy.MONTH, 0, 0, 0));
+        return new FudgeDateTime(FudgeDate.ofYearMonth(object.getExpiry().getYear(), object.getExpiry().getMonthValue()),
+            new FudgeTime(DateTimeAccuracy.MONTH, 0, 0, 0));
       case YEAR:
         return new FudgeDateTime(FudgeDate.ofYear(object.getExpiry().getYear()), new FudgeTime(DateTimeAccuracy.YEAR, 0, 0, 0));
       default:

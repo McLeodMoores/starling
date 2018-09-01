@@ -6,5 +6,5 @@
 package com.opengamma.fudge.inner;
 
 public interface TestOuterInterface {
-  public double eval(double arg);
+  double eval(double arg);
 }

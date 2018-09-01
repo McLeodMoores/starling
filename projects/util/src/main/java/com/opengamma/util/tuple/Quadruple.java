@@ -165,6 +165,7 @@ public final class Quadruple<A, B, C, D>
         .toComparison();
   }
 
+  // CSOFF
   @Override
   public boolean equals(final Object obj) {
     if (this == obj) {
@@ -219,7 +220,6 @@ public final class Quadruple<A, B, C, D>
     JodaBeanUtils.registerMetaBean(Quadruple.Meta.INSTANCE);
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public Quadruple.Meta<A, B, C, D> metaBean() {
     return Quadruple.Meta.INSTANCE;

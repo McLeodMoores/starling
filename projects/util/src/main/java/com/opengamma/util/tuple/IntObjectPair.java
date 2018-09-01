@@ -66,7 +66,7 @@ public class IntObjectPair<T>
    * @deprecated Use public factory of(int,Object)
    */
   @Deprecated
-  public IntObjectPair(final int first, final T second) {
+  public IntObjectPair(final int first, final T second) { // CSIGNORE
     this.first = first;
     this.second = second;
   }
@@ -102,6 +102,7 @@ public class IntObjectPair<T>
     throw new UnsupportedOperationException("Immutable");
   }
 
+  // CSOFF
   //-------------------------------------------------------------------------
   /**
    * The meta-bean for {@code IntObjectPair}.

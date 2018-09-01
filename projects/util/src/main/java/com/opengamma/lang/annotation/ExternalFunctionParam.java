@@ -23,11 +23,15 @@ public @interface ExternalFunctionParam {
   /**
    * The name of the parameter. If not specified, a name will be inferred from
    * the parameter order, for example, first param = a, second = b, etc.
+   *
+   * @return  the name
    */
   String name() default "";
 
   /**
    * Whether to allow null to be passed.
+   *
+   * @return  true to allow nulls
    */
   boolean allowNull() default true;
 
@@ -36,6 +40,8 @@ public @interface ExternalFunctionParam {
    * used. This is only necessary in the case of parameterized types or if the
    * application conventions requires a stricter sub-class than the method
    * signature indicates.
+   *
+   * @return  the type of the parameter
    */
   String type() default "";
 
@@ -47,6 +53,8 @@ public @interface ExternalFunctionParam {
    * <p>
    * This should be written in complete sentences but with no trailing full
    * stop, properly capitalized. For example, "The number of foos".
+   *
+   * @return  the description
    */
   String description() default "";
 

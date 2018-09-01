@@ -5,9 +5,9 @@
  */
 package com.opengamma.util;
 
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertFalse;
-import static org.testng.AssertJUnit.assertTrue;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -28,679 +28,712 @@ import com.opengamma.util.tuple.ObjectsPair;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Test ArgumentChecker.
+ * Test {@link ArgumentChecker}.
  */
 @Test(groups = TestGroup.UNIT)
 public class ArgumentCheckerTest {
 
   //-------------------------------------------------------------------------
-  public void test_isTrue_ok() {
+  /**
+   * Tests that a value is true.
+   */
+  @Test
+  public void testIsTrueOk() {
      ArgumentChecker.isTrue(true, "Message");
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_isTrue_false() {
-    try {
-      ArgumentChecker.isTrue(false, "Message");
-    } catch (final IllegalArgumentException ex) {
-      assertEquals(ex.getMessage().equals("Message"), true);
-      throw ex;
-    }
+  /**
+   * Tests the exception when a value is false.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Message")
+  public void testIsTrueFalse() {
+    ArgumentChecker.isTrue(false, "Message");
   }
 
-  public void test_isTrue_ok_args() {
+  /**
+   * Tests that a value is true.
+   */
+  @Test
+  public void testIsTrueOkArgs() {
     ArgumentChecker.isTrue(true, "Message {} {} {}", "A", 2, 3.);
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_isTrue_false_args() {
-    try {
-      ArgumentChecker.isTrue(false, "Message {} {} {}", "A", 2, 3.);
-    } catch (final IllegalArgumentException ex) {
-      assertEquals(ex.getMessage().equals("Message A 2 3.0"), true);
-      throw ex;
-    }
+  /**
+   * Tests the exception and message when a value is false.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Message A 2 3.0")
+  public void testIsTrueFalseArgs() {
+    ArgumentChecker.isTrue(false, "Message {} {} {}", "A", 2, 3.);
   }
 
-  public void test_isFalse_ok() {
+  /**
+   * Tests that a value is false.
+   */
+  public void testIsFalseOk() {
     ArgumentChecker.isFalse(false, "Message");
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_isFalse_true() {
-    try {
-      ArgumentChecker.isFalse(true, "Message");
-    } catch (final IllegalArgumentException ex) {
-      assertEquals(ex.getMessage().equals("Message"), true);
-      throw ex;
-    }
+  /**
+   * Tests the exception when the value is true.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Message")
+  public void testIsFalseTrue() {
+    ArgumentChecker.isFalse(true, "Message");
   }
 
-  public void test_isFalse_ok_args() {
+  /**
+   * Tests that a value is false.
+   */
+  @Test
+  public void testIsFalseOkArgs() {
     ArgumentChecker.isFalse(false, "Message {} {} {}", "A", 2., 3, true);
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_isFalse_true_args() {
-    try {
-      ArgumentChecker.isFalse(true, "Message {} {} {} {}", "A", 2., 3, true);
-    } catch (final IllegalArgumentException ex) {
-      assertEquals(ex.getMessage().equals("Message A 2.0 3 true"), true);
-      throw ex;
-    }
+  /**
+   * Tests the exception and message when a value is true.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Message A 2.0 3 true")
+  public void testIsFalseTrueArgs() {
+    ArgumentChecker.isFalse(true, "Message {} {} {} {}", "A", 2., 3, true);
   }
 
   //-------------------------------------------------------------------------
-  public void test_notNull_ok() {
-    assertEquals("Kirk", ArgumentChecker.notNull("Kirk", "name"));
-    assertEquals(Integer.valueOf(1), ArgumentChecker.notNull(Integer.valueOf(1), "name"));
+  /**
+   * Tests that a value is not null.
+   */
+  @Test
+  public void testNotNullOk() {
+    assertEquals(ArgumentChecker.notNull("Kirk", "name"), "Kirk");
+    assertEquals(ArgumentChecker.notNull(Integer.valueOf(1), "name"), Integer.valueOf(1));
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_notNull_null() {
-    try {
-      ArgumentChecker.notNull(null, "name");
-    } catch (final IllegalArgumentException ex) {
-      assertEquals(ex.getMessage().contains("'name'"), true);
-      assertEquals(ex.getMessage().contains("Injected"), false);
-      throw ex;
-    }
-  }
-
-  //-------------------------------------------------------------------------
-  public void test_notNullInjected_ok() {
-    assertEquals("Kirk", ArgumentChecker.notNullInjected("Kirk", "name"));
-  }
-
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_notNullInjected_null() {
-    try {
-      ArgumentChecker.notNullInjected(null, "name");
-    } catch (final IllegalArgumentException ex) {
-      assertEquals(ex.getMessage().contains("'name'"), true);
-      assertEquals(ex.getMessage().contains("Injected"), true);
-      throw ex;
-    }
+  /**
+   * Tests the exception and message when a value is null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter 'name' must not be null")
+  public void testNotNullNull() {
+    ArgumentChecker.notNull(null, "name");
   }
 
   //-------------------------------------------------------------------------
-  public void test_notBlank_String_ok() {
+  /**
+   * Tests that a value is not null.
+   */
+  @Test
+  public void testNotNullInjectedOk() {
+    assertEquals(ArgumentChecker.notNullInjected("Kirk", "name"), "Kirk");
+  }
+
+  /**
+   * Tests the exception and message when a value is null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Injected input parameter 'name' must not be null")
+  public void testNotNullInjectedNull() {
+    ArgumentChecker.notNullInjected(null, "name");
+  }
+
+  //-------------------------------------------------------------------------
+  /**
+   * Tests that a string is not empty.
+   */
+  @Test
+  public void testNotBlankStringOk() {
     assertEquals("Kirk", ArgumentChecker.notBlank("Kirk", "name"));
   }
 
-  public void test_notBlank_String_ok_trimmed() {
+  /**
+   * Tests that the returned string is trimmed of whitespace.
+   */
+  @Test
+  public void testNotBlankStringOkTrimmed() {
     assertEquals("Kirk", ArgumentChecker.notBlank(" Kirk ", "name"));
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_notBlank_String_null() {
-    try {
-      ArgumentChecker.notBlank((String) null, "name");
-    } catch (final IllegalArgumentException ex) {
-      assertEquals(ex.getMessage().contains("'name'"), true);
-      throw ex;
-    }
+  /**
+   * Tests the exception and message when the value is null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter 'name' must not be null")
+  public void testNotBlankStringNull() {
+    ArgumentChecker.notBlank((String) null, "name");
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_notBlank_String_empty() {
-    try {
-      ArgumentChecker.notBlank("", "name");
-    } catch (final IllegalArgumentException ex) {
-      assertEquals(ex.getMessage().contains("'name'"), true);
-      throw ex;
-    }
+  /**
+   * Tests the exception and message when the value is empty.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter 'name' must not be empty")
+  public void testNotBlankStringEmpty() {
+    ArgumentChecker.notBlank("", "name");
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_notBlank_String_spaces() {
-    try {
-      ArgumentChecker.notBlank("  ", "name");
-    } catch (final IllegalArgumentException ex) {
-      assertEquals(ex.getMessage().contains("'name'"), true);
-      throw ex;
-    }
+  /**
+   * Tests the exception and message when the value contains only whitespace.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter 'name' must not be empty")
+  public void testNotBlankStringSpaces() {
+    ArgumentChecker.notBlank("  ", "name");
   }
 
   //-------------------------------------------------------------------------
-  public void test_notEmpty_String_ok() {
-    assertEquals("Kirk", ArgumentChecker.notEmpty("Kirk", "name"));
-    assertEquals(" ", ArgumentChecker.notEmpty(" ", "name"));
+  /**
+   * Tests that a string is not empty.
+   */
+  @Test
+  public void testNotEmptyStringOk() {
+    assertEquals(ArgumentChecker.notEmpty("Kirk", "name"), "Kirk");
+    assertEquals(ArgumentChecker.notEmpty(" ", "name"), " ");
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_notEmpty_String_null() {
-    final String str = null;
-    try {
-      ArgumentChecker.notEmpty(str, "name");
-    } catch (final IllegalArgumentException ex) {
-      assertEquals(ex.getMessage().contains("'name'"), true);
-      throw ex;
-    }
+  /**
+   * Tests the exception and message when the value is null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter 'name' must not be null")
+  public void testNotEmptyStringNull() {
+    ArgumentChecker.notEmpty((String) null, "name");
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_notEmpty_String_empty() {
-    final String str = "";
-    try {
-      ArgumentChecker.notEmpty(str, "name");
-    } catch (final IllegalArgumentException ex) {
-      assertEquals(ex.getMessage().contains("'name'"), true);
-      throw ex;
-    }
+  /**
+   * Tests the exception and message when the value is empty.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter 'name' must not be empty")
+  public void testNotEmptyStringEmpty() {
+    ArgumentChecker.notEmpty("", "name");
   }
 
   //-------------------------------------------------------------------------
-  public void test_notEmpty_Array_ok() {
+  /**
+   * Tests that an array is not empty.
+   */
+  @Test
+  public void testNotEmptyArrayOk() {
     final Object[] array = new Object[] {"Element"};
     final Object[] result = ArgumentChecker.notEmpty(array, "name");
-    assertEquals(array, result);
+    assertEquals(result, array);
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_notEmpty_Array_null() {
-    final Object[] array = null;
-    try {
-      ArgumentChecker.notEmpty(array, "name");
-    } catch (final IllegalArgumentException ex) {
-      assertEquals(ex.getMessage().contains("'name'"), true);
-      throw ex;
-    }
+  /**
+   * Tests the exception and message when the value is null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter 'name' must not be null")
+  public void testNotEmptyArrayNull() {
+    ArgumentChecker.notEmpty((Object[]) null, "name");
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_notEmpty_Array_empty() {
-    final Object[] array = new Object[] {};
-    try {
-      ArgumentChecker.notEmpty(array, "name");
-    } catch (final IllegalArgumentException ex) {
-      assertEquals(ex.getMessage().contains("'name'"), true);
-      throw ex;
-    }
+  /**
+   * Tests the exception and message when the value is empty.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter array 'name' must not be empty")
+  public void testNotEmptyArrayEmpty() {
+    ArgumentChecker.notEmpty(new Object[0], "name");
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_notEmpty_2DArray_null() {
-    final Object[][] array = null;
-    try {
-      ArgumentChecker.notEmpty(array, "name");
-    } catch (final IllegalArgumentException ex) {
-      assertEquals(ex.getMessage().contains("'name'"), true);
-      throw ex;
-    }
+  /**
+   * Tests the exception and message when the value is null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter 'name' must not be null")
+  public void testNotEmpty2dArrayNull() {
+    ArgumentChecker.notEmpty((Object[][]) null, "name");
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_notEmpty_2DArray_empty() {
-    final Object[][] array = new Object[0][0];
-    try {
-      ArgumentChecker.notEmpty(array, "name");
-    } catch (final IllegalArgumentException ex) {
-      assertEquals(ex.getMessage().contains("'name'"), true);
-      throw ex;
-    }
+  /**
+   * Tests the exception and message when the value is empty.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter array 'name' must not be empty")
+  public void testNotEmpty2dArrayEmpty() {
+    ArgumentChecker.notEmpty(new Object[0][], "name");
   }
 
   //-------------------------------------------------------------------------
-  public void test_notEmpty_intArray_ok() {
+  /**
+   * Tests that an array is not empty.
+   */
+  @Test
+  public void testNotEmptyIntArrayOk() {
     final int[] array = new int[] {6};
     final int[] result = ArgumentChecker.notEmpty(array, "name");
-    assertEquals(array, result);
+    assertEquals(result, array);
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_notEmpty_intArray_null() {
-    final int[] array = null;
-    try {
-      ArgumentChecker.notEmpty(array, "name");
-    } catch (final IllegalArgumentException ex) {
-      assertEquals(ex.getMessage().contains("'name'"), true);
-      throw ex;
-    }
+  /**
+   * Tests the exception and message when the value is null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter 'name' must not be null")
+  public void testNotEmptyIntArrayNull() {
+    ArgumentChecker.notEmpty((int[]) null, "name");
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_notEmpty_intArray_empty() {
-    final int[] array = new int[0];
-    try {
-      ArgumentChecker.notEmpty(array, "name");
-    } catch (final IllegalArgumentException ex) {
-      assertEquals(ex.getMessage().contains("'name'"), true);
-      throw ex;
-    }
+  /**
+   * Tests the exception and message when the value is empty.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter array 'name' must not be empty")
+  public void testNotEmptyIntArrayEmpty() {
+    ArgumentChecker.notEmpty(new int[0], "name");
   }
 
   //-------------------------------------------------------------------------
-  public void test_notEmpty_longArray_ok() {
+  /**
+   * Tests that an array is not empty.
+   */
+  @Test
+  public void testNotEmptyLongArrayOk() {
     final long[] array = new long[] {6L};
     final long[] result = ArgumentChecker.notEmpty(array, "name");
-    assertEquals(array, result);
+    assertEquals(result, array);
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_notEmpty_longArray_null() {
-    final long[] array = null;
-    try {
-      ArgumentChecker.notEmpty(array, "name");
-    } catch (final IllegalArgumentException ex) {
-      assertEquals(ex.getMessage().contains("'name'"), true);
-      throw ex;
-    }
+  /**
+   * Tests the exception and message when the value is null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter 'name' must not be null")
+  public void testNotEmptyLongArrayNull() {
+    ArgumentChecker.notEmpty((long[]) null, "name");
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_notEmpty_longArray_empty() {
-    final long[] array = new long[0];
-    try {
-      ArgumentChecker.notEmpty(array, "name");
-    } catch (final IllegalArgumentException ex) {
-      assertEquals(ex.getMessage().contains("'name'"), true);
-      throw ex;
-    }
+  /**
+   * Tests the exception and message when the value is empty.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter array 'name' must not be empty")
+  public void testNotEmptyLongArrayEmpty() {
+    ArgumentChecker.notEmpty(new long[0], "name");
   }
 
   //-------------------------------------------------------------------------
-  public void test_notEmpty_doubleArray_ok() {
+  /**
+   * Tests that an array is not empty.
+   */
+  @Test
+  public void testNotEmptyDoubleArrayOk() {
     final double[] array = new double[] {6.0d};
     final double[] result = ArgumentChecker.notEmpty(array, "name");
-    assertEquals(array, result);
+    assertEquals(result, array);
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_notEmpty_doubleArray_null() {
-    final double[] array = null;
-    try {
-      ArgumentChecker.notEmpty(array, "name");
-    } catch (final IllegalArgumentException ex) {
-      assertEquals(ex.getMessage().contains("'name'"), true);
-      throw ex;
-    }
+  /**
+   * Tests the exception and message when the value is null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter 'name' must not be null")
+  public void testNotEmptyDoubleArrayNull() {
+    ArgumentChecker.notEmpty((double[]) null, "name");
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_notEmpty_doubleArray_empty() {
-    final double[] array = new double[0];
-    try {
-      ArgumentChecker.notEmpty(array, "name");
-    } catch (final IllegalArgumentException ex) {
-      assertEquals(ex.getMessage().contains("'name'"), true);
-      throw ex;
-    }
+  /**
+   * Tests the exception and message when the value is empty.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter array 'name' must not be empty")
+  public void testNotEmptyDoubleArrayEmpty() {
+    ArgumentChecker.notEmpty(new double[0], "name");
   }
 
   //-------------------------------------------------------------------------
-  public void test_notEmpty_Iterable_ok() {
+  /**
+   * Tests that an iterable is not empty.
+   */
+  @Test
+  public void testNotEmptyIterableOk() {
     final Iterable<String> coll = Arrays.asList("Element");
     final Iterable<String> result = ArgumentChecker.notEmpty(coll, "name");
-    assertEquals(coll, result);
+    assertEquals(result, coll);
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_notEmpty_Iterable_null() {
-    final Iterable<?> coll = null;
-    try {
-      ArgumentChecker.notEmpty(coll, "name");
-    } catch (final IllegalArgumentException ex) {
-      assertEquals(ex.getMessage().contains("'name'"), true);
-      throw ex;
-    }
+  /**
+   * Tests the exception and message when the value is null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter 'name' must not be null")
+  public void testNotEmptyIterableNull() {
+    ArgumentChecker.notEmpty((Iterable<?>) null, "name");
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_notEmpty_Iterable_empty() {
-    final Iterable<?> coll = Collections.emptyList();
-    try {
-      ArgumentChecker.notEmpty(coll, "name");
-    } catch (final IllegalArgumentException ex) {
-      assertEquals(ex.getMessage().contains("'name'"), true);
-      throw ex;
-    }
+  /**
+   * Tests the exception and message when the value is empty.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter iterable 'name' must not be empty")
+  public void testNotEmptyIterableEmpty() {
+    ArgumentChecker.notEmpty((Iterable<?>) Collections.emptyList(), "name");
   }
 
   //-------------------------------------------------------------------------
-  public void test_notEmpty_Collection_ok() {
+  /**
+   * Tests that a collection is not empty.
+   */
+  @Test
+  public void testNotEmptyCollectionOk() {
     final List<String> coll = Arrays.asList("Element");
     final List<String> result = ArgumentChecker.notEmpty(coll, "name");
-    assertEquals(coll, result);
+    assertEquals(result, coll);
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_notEmpty_Collection_null() {
-    final Collection<?> coll = null;
-    try {
-      ArgumentChecker.notEmpty(coll, "name");
-    } catch (final IllegalArgumentException ex) {
-      assertEquals(ex.getMessage().contains("'name'"), true);
-      throw ex;
-    }
+  /**
+   * Tests the exception and message when the value is null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter 'name' must not be null")
+  public void testNotEmptyCollectionNull() {
+    ArgumentChecker.notEmpty((Collection<?>) null, "name");
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_notEmpty_Collection_empty() {
-    final Collection<?> coll = Collections.emptyList();
-    try {
-      ArgumentChecker.notEmpty(coll, "name");
-    } catch (final IllegalArgumentException ex) {
-      assertEquals(ex.getMessage().contains("'name'"), true);
-      throw ex;
-    }
+  /**
+   * Tests the exception and message when the value is empty.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter collection 'name' must not be empty")
+  public void testNotEmptyCollectionEmpty() {
+    ArgumentChecker.notEmpty(Collections.emptySet(), "name");
   }
 
   //-------------------------------------------------------------------------
-  public void test_notEmpty_Map_ok() {
+  /**
+   * Tests that a map is not empty.
+   */
+  @Test
+  public void testNotEmptyMapOk() {
     final SortedMap<String, String> map = ImmutableSortedMap.of("Element", "Element");
     final SortedMap<String, String> result = ArgumentChecker.notEmpty(map, "name");
-    assertEquals(map, result);
+    assertEquals(result, map);
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_notEmpty_Map_null() {
-    final Map<?, ?> map = null;
-    try {
-      ArgumentChecker.notEmpty(map, "name");
-    } catch (final IllegalArgumentException ex) {
-      assertEquals(ex.getMessage().contains("'name'"), true);
-      throw ex;
-    }
+  /**
+   * Tests the exception and message when the value is null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter 'name' must not be null")
+  public void testNotEmptyMapNull() {
+    ArgumentChecker.notEmpty((Map<?, ?>) null, "name");
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_notEmpty_Map_empty() {
-    final Map<?, ?> map = Collections.emptyMap();
-    try {
-      ArgumentChecker.notEmpty(map, "name");
-    } catch (final IllegalArgumentException ex) {
-      assertEquals(ex.getMessage().contains("'name'"), true);
-      throw ex;
-    }
+  /**
+   * Tests the exception and message when the value is empty.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter map 'name' must not be empty")
+  public void testNotEmptyMapEmpty() {
+    ArgumentChecker.notEmpty(Collections.emptyMap(), "name");
   }
 
   //-------------------------------------------------------------------------
-  public void test_noNulls_Array_ok() {
+  /**
+   * Tests that an array contains no nulls.
+   */
+  @Test
+  public void testNoNullsArrayOk() {
     final String[] array = new String[] {"Element"};
     final String[] result = ArgumentChecker.noNulls(array, "name");
-    assertEquals(array, result);
+    assertEquals(result, array);
   }
 
-  public void test_noNulls_Array_ok_empty() {
+  /**
+   * Tests that an empty array is allowed.
+   */
+  @Test
+  public void testNoNullsArrayOkEmpty() {
     final Object[] array = new Object[] {};
-    ArgumentChecker.noNulls(array, "name");
+    assertEquals(ArgumentChecker.noNulls(array, "name"), array);
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_noNulls_Array_null() {
-    final Object[] array = null;
-    try {
-      ArgumentChecker.noNulls(array, "name");
-    } catch (final IllegalArgumentException ex) {
-      assertEquals(ex.getMessage().contains("'name'"), true);
-      throw ex;
-    }
+  /**
+   * Tests the exception and message when the value is null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter 'name' must not be null")
+  public void testNoNullsArrayNull() {
+    ArgumentChecker.noNulls((Object[]) null, "name");
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_noNulls_Array_nullElement() {
-    final Object[] array = new Object[] {null};
-    try {
-      ArgumentChecker.noNulls(array, "name");
-    } catch (final IllegalArgumentException ex) {
-      assertEquals(ex.getMessage().contains("'name'"), true);
-      throw ex;
-    }
+  /**
+   * Tests the exception and message when a value is null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter array 'name' must not contain null at index 1")
+  public void testNoNullsArrayNullElement() {
+    ArgumentChecker.noNulls(new Object[] { 1, null }, "name");
   }
 
   //-------------------------------------------------------------------------
-  public void test_noNulls_Iterable_ok() {
+  /**
+   * Tests that a collection contains no nulls.
+   */
+  @Test
+  public void testNoNullsIterableOk() {
     final List<String> coll = Arrays.asList("Element");
     final List<String> result = ArgumentChecker.noNulls(coll, "name");
-    assertEquals(coll, result);
+    assertEquals(result, coll);
   }
 
-  public void test_noNulls_Iterable_ok_empty() {
+  /**
+   * Tests that an empty collection is allowed.
+   */
+  @Test
+  public void testNoNullsIterableOkEmpty() {
     final Iterable<?> coll = Arrays.asList();
     ArgumentChecker.noNulls(coll, "name");
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_noNulls_Iterable_null() {
-    final Iterable<?> coll = null;
-    try {
-      ArgumentChecker.noNulls(coll, "name");
-    } catch (final IllegalArgumentException ex) {
-      assertEquals(ex.getMessage().contains("'name'"), true);
-      throw ex;
-    }
+  /**
+   * Tests the exception and message when the value is null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter 'name' must not be null")
+  public void testNoNullsIterableNull() {
+    ArgumentChecker.noNulls((Iterable<?>) null, "name");
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_noNulls_Iterable_nullElement() {
-    final Iterable<?> coll = Arrays.asList((Object) null);
-    try {
-      ArgumentChecker.noNulls(coll, "name");
-    } catch (final IllegalArgumentException ex) {
-      assertEquals(ex.getMessage().contains("'name'"), true);
-      throw ex;
-    }
+  /**
+   * Tests the exception and message when a value is null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter iterable 'name' must not contain null")
+  public void testNoNullsIterableNullElement() {
+    ArgumentChecker.noNulls(Arrays.asList((Object) null), "name");
   }
 
   //-------------------------------------------------------------------------
-  public void test_noNulls_Map_ok() {
+  /**
+   * Tests that a map contains no nulls.
+   */
+  @Test
+  public void testNoNullsMapOk() {
     final ImmutableSortedMap<String, String> map = ImmutableSortedMap.of("A", "B");
     final ImmutableSortedMap<String, String> result = ArgumentChecker.noNulls(map, "name");
-    assertEquals(map, result);
+    assertEquals(result, map);
   }
 
-  public void test_noNulls_Map_ok_empty() {
+  /**
+   * Tests that an empty map is allowed.
+   */
+  @Test
+  public void testNoNullsMapOkEmpty() {
     final Map<Object, Object> map = new HashMap<>();
     ArgumentChecker.noNulls(map, "name");
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_noNulls_Map_null() {
-    final Map<Object, Object> map = null;
-    try {
-      ArgumentChecker.noNulls(map, "name");
-    } catch (final IllegalArgumentException ex) {
-      assertEquals(ex.getMessage().contains("'name'"), true);
-      throw ex;
-    }
+  /**
+   * Tests the exception and message when the value is null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter 'name' must not be null")
+  public void testNoNullsMapNull() {
+    ArgumentChecker.noNulls((Map<?, ?>) null, "name");
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_noNulls_Map_nullKey() {
+  /**
+   * Tests the exception and message when a key is null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter map 'name' must not contain a null key")
+  public void testNoNullsMapNullKey() {
     final Map<Object, Object> map = new HashMap<>();
     map.put("A", "B");
     map.put(null, "Z");
-    try {
-      ArgumentChecker.noNulls(map, "name");
-    } catch (final IllegalArgumentException ex) {
-      assertEquals(ex.getMessage().contains("'name'"), true);
-      throw ex;
-    }
+    ArgumentChecker.noNulls(map, "name");
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_noNulls_Map_nullValue() {
+  /**
+   * Tests the exception and message when a value is null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter map 'name' must not contain a null value")
+  public void testNoNullsMapNullValue() {
     final Map<Object, Object> map = new HashMap<>();
     map.put("A", "B");
     map.put("Z", null);
-    try {
-      ArgumentChecker.noNulls(map, "name");
-    } catch (final IllegalArgumentException ex) {
-      assertEquals(ex.getMessage().contains("'name'"), true);
-      throw ex;
-    }
+    ArgumentChecker.noNulls(map, "name");
   }
 
   //-------------------------------------------------------------------------
-  public void test_notNegative_int_ok() {
-    assertEquals(0, ArgumentChecker.notNegative(0, "name"));
-    assertEquals(1, ArgumentChecker.notNegative(1, "name"));
+  /**
+   * Tests that an integer is not negative.
+   */
+  @Test
+  public void testNotNegativeIntOk() {
+    assertEquals(ArgumentChecker.notNegative(0, "name"), 0);
+    assertEquals(ArgumentChecker.notNegative(1, "name"), 1);
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_notNegative_int_negative() {
-    try {
-      ArgumentChecker.notNegative(-1, "name");
-    } catch (final IllegalArgumentException iae) {
-      assertEquals(iae.getMessage().contains("'name'"), true);
-      throw iae;
-    }
+  /**
+   * Tests the exception and message when an integer is negative.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter 'name' must not be negative")
+  public void testNotNegativeIntNegative() {
+    ArgumentChecker.notNegative(-1, "name");
   }
 
-  public void test_notNegative_long_ok() {
-    assertEquals(0L, ArgumentChecker.notNegative(0L, "name"));
-    assertEquals(1L, ArgumentChecker.notNegative(1L, "name"));
+  /**
+   * Tests that a long is not negative.
+   */
+  @Test
+  public void testNotNegativeLongOk() {
+    assertEquals(ArgumentChecker.notNegative(0L, "name"), 0L);
+    assertEquals(ArgumentChecker.notNegative(1L, "name"), 1L);
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_notNegative_long_negative() {
-    try {
-      ArgumentChecker.notNegative(-1L, "name");
-    } catch (final IllegalArgumentException iae) {
-      assertEquals(iae.getMessage().contains("'name'"), true);
-      throw iae;
-    }
+  /**
+   * Tests the exception and message when a long is negative.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter 'name' must not be negative")
+  public void testNotNegativeLongNegative() {
+    ArgumentChecker.notNegative(-1L, "name");
   }
 
-  public void test_notNegative_double_ok() {
-    assertEquals(0d, ArgumentChecker.notNegative(0d, "name"), 0.0001d);
-    assertEquals(1d, ArgumentChecker.notNegative(1d, "name"), 0.0001d);
+  /**
+   * Tests that a double is not negative.
+   */
+  @Test
+  public void testNotNegativeDoubleOk() {
+    assertEquals(ArgumentChecker.notNegative(0d, "name"), 0d, 0.0001d);
+    assertEquals(ArgumentChecker.notNegative(0.1d, "name"), 0.1d, 0.0001d);
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_notNegative_double_negative() {
-    try {
-      ArgumentChecker.notNegative(-1.0d, "name");
-    } catch (final IllegalArgumentException iae) {
-      assertEquals(iae.getMessage().contains("'name'"), true);
-      throw iae;
-    }
-  }
-
-  //-------------------------------------------------------------------------
-  public void test_notNegativeOrZero_int_ok() {
-    assertEquals(1, ArgumentChecker.notNegativeOrZero(1, "name"));
-  }
-
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_notNegativeOrZero_int_zero() {
-    try {
-      ArgumentChecker.notNegativeOrZero(0, "name");
-    } catch (final IllegalArgumentException iae) {
-      assertEquals(iae.getMessage().contains("'name'"), true);
-      throw iae;
-    }
-  }
-
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_notNegativeOrZero_int_negative() {
-    try {
-      ArgumentChecker.notNegativeOrZero(-1, "name");
-    } catch (final IllegalArgumentException iae) {
-      assertEquals(iae.getMessage().contains("'name'"), true);
-      throw iae;
-    }
-  }
-
-  public void test_notNegativeOrZero_long_ok() {
-    assertEquals(1, ArgumentChecker.notNegativeOrZero(1L, "name"));
-  }
-
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_notNegativeOrZero_long_zero() {
-    try {
-      ArgumentChecker.notNegativeOrZero(0L, "name");
-    } catch (final IllegalArgumentException iae) {
-      assertEquals(iae.getMessage().contains("'name'"), true);
-      throw iae;
-    }
-  }
-
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_notNegativeOrZero_long_negative() {
-    try {
-      ArgumentChecker.notNegativeOrZero(-1L, "name");
-    } catch (final IllegalArgumentException iae) {
-      assertEquals(iae.getMessage().contains("'name'"), true);
-      throw iae;
-    }
-  }
-
-  public void test_notNegativeOrZero_double_ok() {
-    assertEquals(1d, ArgumentChecker.notNegativeOrZero(1d, "name"), 0.0001d);
-  }
-
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_notNegativeOrZero_double_zero() {
-    try {
-      ArgumentChecker.notNegativeOrZero(0.0d, "name");
-    } catch (final IllegalArgumentException iae) {
-      assertEquals(iae.getMessage().contains("'name'"), true);
-      throw iae;
-    }
-  }
-
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_notNegativeOrZero_double_negative() {
-    try {
-      ArgumentChecker.notNegativeOrZero(-1.0d, "name");
-    } catch (final IllegalArgumentException iae) {
-      assertEquals(iae.getMessage().contains("'name'"), true);
-      throw iae;
-    }
-  }
-
-  public void test_notNegativeOrZero_double_eps_ok() {
-    assertEquals(1d, ArgumentChecker.notNegativeOrZero(1d, 0.0001d, "name"), 0.0001d);
-    assertEquals(0.1d, ArgumentChecker.notNegativeOrZero(0.1d, 0.0001d, "name"), 0.0001d);
-  }
-
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_notNegativeOrZero_double_eps_zero() {
-    try {
-      ArgumentChecker.notNegativeOrZero(0.0000001d, 0.0001d, "name");
-    } catch (final IllegalArgumentException iae) {
-      assertEquals(iae.getMessage().contains("'name'"), true);
-      throw iae;
-    }
-  }
-
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_notNegativeOrZero_double_eps_negative() {
-    try {
-      ArgumentChecker.notNegativeOrZero(-1.0d, 0.0001d, "name");
-    } catch (final IllegalArgumentException iae) {
-      assertEquals(iae.getMessage().contains("'name'"), true);
-      throw iae;
-    }
+  /**
+   * Tests the exception and message when a double is negative.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter 'name' must not be negative")
+  public void testNotNegativeDoubleNegative() {
+    ArgumentChecker.notNegative(-1.0d, "name");
   }
 
   //-------------------------------------------------------------------------
-  public void test_notZero_double_ok() {
-    assertEquals(1d, ArgumentChecker.notZero(1d, 0.1d, "name"), 0.0001d);
+  /**
+   * Tests that an integer is greater than zero.
+   */
+  @Test
+  public void testNotNegativeOrZeroIntOk() {
+    assertEquals(ArgumentChecker.notNegativeOrZero(1, "name"), 1);
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_notZero_double_zero() {
-    try {
-      ArgumentChecker.notZero(0d, 0.1d, "name");
-    } catch (final IllegalArgumentException iae) {
-      assertEquals(iae.getMessage().contains("'name'"), true);
-      throw iae;
-    }
+  /**
+   * Tests the exception and message when an integer is 0.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter 'name' must not be negative or zero")
+  public void testNotNegativeOrZeroIntZero() {
+    ArgumentChecker.notNegativeOrZero(0, "name");
   }
 
-  public void test_notZero_double_negative() {
-    try {
-      ArgumentChecker.notZero(-1d, 0.1d, "name");
-    } catch (final IllegalArgumentException iae) {
-      assertEquals(iae.getMessage().contains("'name'"), true);
-      throw iae;
-    }
+  /**
+   * Tests the exception and message when an integer is negative.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter 'name' must not be negative or zero")
+  public void testNotNegativeOrZeroIntNegative() {
+    ArgumentChecker.notNegativeOrZero(-1, "name");
+  }
+
+  /**
+   * Tests that a long is greater than zero.
+   */
+  @Test
+  public void testNotNegativeOrZeroLongOk() {
+    assertEquals(ArgumentChecker.notNegativeOrZero(1L, "name"), 1);
+  }
+
+  /**
+   * Tests the exception and message when a long is 0.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter 'name' must not be negative or zero")
+  public void testNotNegativeOrZeroLongZero() {
+    ArgumentChecker.notNegativeOrZero(0L, "name");
+  }
+
+  /**
+   * Tests the exception and message when a long is negative.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter 'name' must not be negative or zero")
+  public void testNotNegativeOrZeroLongNegative() {
+    ArgumentChecker.notNegativeOrZero(-1L, "name");
+  }
+
+  /**
+   * Tests that a double is greater than zero.
+   */
+  @Test
+  public void testNotNegativeOrZeroDoubleOk() {
+    assertEquals(ArgumentChecker.notNegativeOrZero(1d, "name"), 1d, 0.0001d);
+  }
+
+  /**
+   * Tests the exception and message when a double is 0.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter 'name' must not be negative or zero")
+  public void testNotNegativeOrZeroDoubleZero() {
+    ArgumentChecker.notNegativeOrZero(0.0d, "name");
+  }
+
+  /**
+   * Tests the exception and message when a double is negative.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter 'name' must not be negative or zero")
+  public void testNotNegativeOrZeroDoubleNegative() {
+    ArgumentChecker.notNegativeOrZero(-1.0d, "name");
+  }
+
+  /**
+   * Tests that a double is greater than zero.
+   */
+  @Test
+  public void testNotNegativeOrZeroDoubleEpsOk() {
+    assertEquals(ArgumentChecker.notNegativeOrZero(1d, 0.0001d, "name"), 1d, 0.0001d);
+    assertEquals(ArgumentChecker.notNegativeOrZero(0.1d, 0.0001d, "name"), 0.1d, 0.0001d);
+  }
+
+  /**
+   * Tests the exception and message when a double is 0.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter 'name' must not be zero")
+  public void testNotNegativeOrZeroDoubleEpsZero() {
+    ArgumentChecker.notNegativeOrZero(0.0000001d, 0.0001d, "name");
+  }
+
+  /**
+   * Tests the exception and message when a double is negative.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter 'name' must be greater than zero")
+  public void testNotNegativeOrZeroDoubleEpsNegative() {
+    ArgumentChecker.notNegativeOrZero(-1.0d, 0.0001d, "name");
+  }
+
+  /**
+   * Tests that a double is greater than zero.
+   */
+  @SuppressWarnings("deprecation")
+  @Test
+  public void testNotNegativeOrZeroDoubleEpsOkDep() {
+    assertEquals(ArgumentChecker.notNegativeOrZero(1d, 0.0001d, "name", "a", "b"), 1d, 0.0001d);
+    assertEquals(ArgumentChecker.notNegativeOrZero(0.1d, 0.0001d, "name", "a", "b"), 0.1d, 0.0001d);
+  }
+
+  /**
+   * Tests the exception and message when a double is 0.
+   */
+  @SuppressWarnings("deprecation")
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "name")
+  public void testNotNegativeOrZeroDoubleEpsZeroDep() {
+    ArgumentChecker.notNegativeOrZero(0.0000001d, 0.0001d, "name", "a", "b");
+  }
+
+  /**
+   * Tests the exception and message when a double is negative.
+   */
+  @SuppressWarnings("deprecation")
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "name")
+  public void testNotNegativeOrZeroDoubleEpsNegativeDep() {
+    ArgumentChecker.notNegativeOrZero(-1.0d, 0.0001d, "name", "a", "b");
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests that a double is not zero.
+   */
+  @Test
+  public void testNotZeroDoubleOk() {
+    assertEquals(ArgumentChecker.notZero(1d, 0.1d, "name"), 1d, 0.0001d);
+  }
+
+  /**
+   * Tests the exception and message when a double is 0.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter 'name' must not be zero")
+  public void testNotZeroDoubleZero() {
+    ArgumentChecker.notZero(0d, 0.1d, "name");
+  }
+
+  /**
+   * Tests the exception and message when a double is 0.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter 'name' must not be zero")
+  public void testNotZeroDoubleNegative() {
+    ArgumentChecker.notZero(-0d, 0.1d, "name");
+  }
+
+  //-------------------------------------------------------------------------
+  /**
+   * Tests that a collection has a null element.
+   */
+  @Test
   public void testHasNullElement() {
     Collection<?> c = Sets.newHashSet(null, new Object(), new Object());
     assertTrue(ArgumentChecker.hasNullElement(c));
@@ -708,6 +741,10 @@ public class ArgumentCheckerTest {
     assertFalse(ArgumentChecker.hasNullElement(c));
   }
 
+  /**
+   * Tests that a collection has a negative element.
+   */
+  @Test
   public void testHasNegativeElement() {
     Collection<Double> c = Sets.newHashSet(4., -5., -6.);
     assertTrue(ArgumentChecker.hasNegativeElement(c));
@@ -715,6 +752,10 @@ public class ArgumentCheckerTest {
     assertFalse(ArgumentChecker.hasNegativeElement(c));
   }
 
+  /**
+   * Tests that a value is within a range.
+   */
+  @Test
   public void testIsInRange() {
     final double low = 0;
     final double high = 1;
@@ -740,30 +781,28 @@ public class ArgumentCheckerTest {
     assertFalse(ArgumentChecker.isInRangeExcludingHigh(low, high, high));
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  /**
+   * Tests the exception and message when an array is empty.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter array 'name' must not be empty")
   public void testNotEmptyDoubleArray() {
-    final double[] d = new double[0];
-    try {
-      ArgumentChecker.notEmpty(d, "name");
-    } catch (final IllegalArgumentException ex) {
-      assertEquals(ex.getMessage().contains("'name'"), true);
-      throw ex;
-    }
+    ArgumentChecker.notEmpty(new double[0], "name");
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  /**
+   * Tests the exception and message when an array is empty.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter array 'name' must not be empty")
   public void testNotEmptyLongArray() {
-    final double[] d = new double[0];
-    try {
-      ArgumentChecker.notEmpty(d, "name");
-    } catch (final IllegalArgumentException ex) {
-      assertEquals(ex.getMessage().contains("'name'"), true);
-      throw ex;
-    }
+    ArgumentChecker.notEmpty(new long[0], "name");
   }
 
   //-------------------------------------------------------------------------
-  public void test_inOrderOrEqual_true() {
+  /**
+   * Tests that dates are in order or equal i.e. not decreasing in time.
+   */
+  @Test
+  public void testInOrderOrEqualTrue() {
     final LocalDate a = LocalDate.of(2011, 7, 2);
     final LocalDate b = LocalDate.of(2011, 7, 3);
     ArgumentChecker.inOrderOrEqual(a, b, "a", "b");
@@ -771,7 +810,11 @@ public class ArgumentCheckerTest {
     ArgumentChecker.inOrderOrEqual(b, b, "a", "b");
   }
 
-  public void test_inOrderOrEqual_generics() {
+  /**
+   * Tests that comparable values are in order or equal i.e. not decreasing.
+   */
+  @Test
+  public void testInOrderOrEqualGenerics() {
     final Pair<String, String> a = ObjectsPair.of("c", "d");
     final Pair<String, String> b = ObjectsPair.of("e", "f");
     final FirstThenSecondPairComparator<String, String> comparator = new FirstThenSecondPairComparator<>();
@@ -792,17 +835,14 @@ public class ArgumentCheckerTest {
     ArgumentChecker.inOrderOrEqual(cb, b, "a", "b");
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_inOrderOrEqual_false() {
+  /**
+   * Tests the exception and message when the values are decreasing.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Input parameter 'a' must be before 'b'")
+  public void testInOrderOrEqualFalse() {
     final LocalDate a = LocalDate.of(2011, 7, 3);
     final LocalDate b = LocalDate.of(2011, 7, 2);
-    try {
-      ArgumentChecker.inOrderOrEqual(a, b, "a", "b");
-    } catch (final IllegalArgumentException ex) {
-      assertEquals(ex.getMessage().contains("'a'"), true);
-      assertEquals(ex.getMessage().contains("'b'"), true);
-      throw ex;
-    }
+    ArgumentChecker.inOrderOrEqual(a, b, "a", "b");
   }
 
 }

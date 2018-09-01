@@ -5,7 +5,6 @@
  */
 package com.opengamma.util.tuple;
 
-import java.io.Serializable;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -32,8 +31,7 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
  * @param <B> the type of the second side of the pair
  */
 public final class ObjectsPair<A, B>
-    extends Pair<A, B>
-    implements Serializable {
+    extends Pair<A, B> {
   // this ImmutableBean is not auto-generated
 
   /** Serialization version. */
@@ -67,7 +65,7 @@ public final class ObjectsPair<A, B>
    * @deprecated Use of(first, second)
    */
   @Deprecated
-  public ObjectsPair(final A first, final B second) {
+  public ObjectsPair(final A first, final B second) { // CSIGNORE
     this.first = first;
     this.second = second;
   }
@@ -83,6 +81,7 @@ public final class ObjectsPair<A, B>
     return second;
   }
 
+  // CSOFF
   //-------------------------------------------------------------------------
   /**
    * The meta-bean for {@code ObjectsPair}.
@@ -97,7 +96,6 @@ public final class ObjectsPair<A, B>
     JodaBeanUtils.registerMetaBean(ObjectsPair.Meta.INSTANCE);
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public ObjectsPair.Meta<A, B> metaBean() {
     return ObjectsPair.Meta.INSTANCE;

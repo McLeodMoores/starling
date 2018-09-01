@@ -14,7 +14,6 @@ import org.threeten.bp.LocalDate;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.UniqueId;
-import com.opengamma.util.fudgemsg.tuple.ObjectsPairFudgeBuilder;
 import com.opengamma.util.test.AbstractFudgeBuilderTestCase;
 import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.Tenor;
@@ -33,52 +32,52 @@ import com.opengamma.util.tuple.Pair;
 public class PairFudgeEncodingTest extends AbstractFudgeBuilderTestCase {
 
   public void test_OO_Bundle() {
-    Pair<String, ExternalIdBundle> object = ObjectsPair.of("Hello", ExternalIdBundle.of(ExternalId.of("A", "B")));
+    final Pair<String, ExternalIdBundle> object = ObjectsPair.of("Hello", ExternalIdBundle.of(ExternalId.of("A", "B")));
     assertEncodeDecodeCycle(Pair.class, object);
   }
 
   public void test_OO_UniqueId() {
-    Pair<String, UniqueId> object = ObjectsPair.of("Hello", UniqueId.of("A", "B"));
+    final Pair<String, UniqueId> object = ObjectsPair.of("Hello", UniqueId.of("A", "B"));
     assertEncodeDecodeCycle(Pair.class, object);
   }
 
   public void test_OO_null() {
-    Pair<String, UniqueId> object = ObjectsPair.of("Hello", null);
+    final Pair<String, UniqueId> object = ObjectsPair.of("Hello", null);
     assertEncodeDecodeCycle(Pair.class, object);
   }
 
   public void test_LO() {
-    Pair<Long, UniqueId> object = LongObjectPair.of(23L, UniqueId.of("A", "B"));
+    final Pair<Long, UniqueId> object = LongObjectPair.of(23L, UniqueId.of("A", "B"));
     assertEncodeDecodeCycle(Pair.class, object);
   }
 
   public void test_LD() {
-    Pair<Long, Double> object = LongDoublePair.of(23L, 4.5d);
+    final Pair<Long, Double> object = LongDoublePair.of(23L, 4.5d);
     assertEncodeDecodeCycle(Pair.class, object);
   }
 
   public void test_IO() {
-    Pair<Integer, UniqueId> object = IntObjectPair.of(23, UniqueId.of("A", "B"));
+    final Pair<Integer, UniqueId> object = IntObjectPair.of(23, UniqueId.of("A", "B"));
     assertEncodeDecodeCycle(Pair.class, object);
   }
 
   public void test_ID() {
-    Pair<Integer, Double> object = IntDoublePair.of(23, 4.5d);
+    final Pair<Integer, Double> object = IntDoublePair.of(23, 4.5d);
     assertEncodeDecodeCycle(Pair.class, object);
   }
 
   public void test_DD() {
-    Pair<Double, Double> object = DoublesPair.of(23.2, 4.5d);
+    final Pair<Double, Double> object = DoublesPair.of(23.2, 4.5d);
     assertEncodeDecodeCycle(Pair.class, object);
   }
 
   public void test_TypeWithSecondaryTypeAndBuilderEncoding() {
-    Pair<Tenor, Tenor> object = ObjectsPair.of(Tenor.DAY, Tenor.TWELVE_MONTHS);
+    final Pair<Tenor, Tenor> object = ObjectsPair.of(Tenor.DAY, Tenor.TWELVE_MONTHS);
     assertEncodeDecodeCycle(Pair.class, object);
   }
 
   public void test_staticTypedMethods() {
-    ObjectsPair<Tenor, Tenor> in = ObjectsPair.of(Tenor.DAY, Tenor.TEN_YEARS);
+    final ObjectsPair<Tenor, Tenor> in = ObjectsPair.of(Tenor.DAY, Tenor.TEN_YEARS);
     FudgeMsg msg = ObjectsPairFudgeBuilder.buildMessage(getFudgeSerializer(), in, Tenor.class, Tenor.class);
     ObjectsPair<Tenor, Tenor> out = ObjectsPairFudgeBuilder.buildObject(getFudgeDeserializer(), msg, Tenor.class, Tenor.class);
     assertEquals(out, in);
@@ -88,17 +87,17 @@ public class PairFudgeEncodingTest extends AbstractFudgeBuilderTestCase {
   }
 
   public void test_TypeWithSecondaryTypeAndReducedNumber() {
-    ObjectsPair<LocalDate, Long> object = ObjectsPair.of(LocalDate.of(2011, 6, 30), 6L);
+    final ObjectsPair<LocalDate, Long> object = ObjectsPair.of(LocalDate.of(2011, 6, 30), 6L);
     assertEncodeDecodeCycle(Pair.class, object);
   }
 
   public void test_nullFirst() {
-    ObjectsPair<String, String> object = ObjectsPair.of(null, "B");
+    final ObjectsPair<String, String> object = ObjectsPair.of(null, "B");
     assertEncodeDecodeCycle(Pair.class, object);
   }
 
   public void test_nullSecond() {
-    ObjectsPair<String, String> object = ObjectsPair.of("A", null);
+    final ObjectsPair<String, String> object = ObjectsPair.of("A", null);
     assertEncodeDecodeCycle(Pair.class, object);
   }
 

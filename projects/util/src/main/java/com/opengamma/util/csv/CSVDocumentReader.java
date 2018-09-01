@@ -103,7 +103,7 @@ public final class CSVDocumentReader implements Iterable<FudgeMsg> {
     private String[] _header;
     private String[] _currentRow;
 
-    public FudgeMsgCSVIterator() {
+    FudgeMsgCSVIterator() {
       try {
         InputStream is = _docUrl.openStream();
         if (_docUrl.getFile().endsWith(".gz")) {

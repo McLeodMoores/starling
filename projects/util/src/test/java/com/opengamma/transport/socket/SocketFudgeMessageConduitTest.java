@@ -82,7 +82,7 @@ public class SocketFudgeMessageConduitTest {
           maxConcurrency.set(concurrency);
         }
         try {
-          Thread.sleep (1000);
+          Thread.sleep(1000);
         } catch (final InterruptedException e) {
         }
         _concurrency.decrementAndGet();
@@ -97,8 +97,8 @@ public class SocketFudgeMessageConduitTest {
     sender.setPortNumber(server.getPortNumber());
     sender.send(FudgeContext.EMPTY_MESSAGE);
     sender.send(FudgeContext.EMPTY_MESSAGE);
-    assertNotNull (receiver.waitForMessage(2000));
-    assertNotNull (receiver.waitForMessage(2000));
+    assertNotNull(receiver.waitForMessage(2000));
+    assertNotNull(receiver.waitForMessage(2000));
   }
 
   public void parallelSendTest_single() throws Exception {

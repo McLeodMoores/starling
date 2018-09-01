@@ -153,7 +153,8 @@ public final class Profiler {
     final Map<String, Object[]> report = new HashMap<>();
     for (final Profiler profiler : PROFILERS) {
       profiler.snapshot();
-      final Object[] arg = new Object[] {profiler._name, profiler._snapshotOperations, profiler._snapshotTime, profiler._snapshotTime / profiler._snapshotOperations };
+      final Object[] arg = new Object[] {profiler._name, profiler._snapshotOperations, profiler._snapshotTime,
+          profiler._snapshotTime / profiler._snapshotOperations };
       insertNoClash(report, arg, profiler._name.lastIndexOf('.'));
     }
     final List<String> keys = new ArrayList<>(report.keySet());

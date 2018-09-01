@@ -196,8 +196,8 @@ public final class DateUtils {
 
   //-------------------------------------------------------------------------
   /**
-   * Method that allows a fraction of a year to be added to a date. If the yearFraction that is used does not give an integer number of seconds, it is rounded to the nearest nanosecond. Note that the
-   * number of days in a year is defined to be 365.25.
+   * Method that allows a fraction of a year to be added to a date. If the yearFraction that is used does not give an integer number
+   * of seconds, it is rounded to the nearest nanosecond. Note that the number of days in a year is defined to be 365.25.
    *
    * @param startDate the start date, not null
    * @param yearFraction the fraction of a year
@@ -213,8 +213,8 @@ public final class DateUtils {
   }
 
   /**
-   * Method that allows a fraction of a year to be added to a date. If the yearFraction that is used does not give an integer number of seconds, it is rounded to the nearest nanosecond. Note that the
-   * number of days in a year is defined to be 365.25.
+   * Method that allows a fraction of a year to be added to a date. If the yearFraction that is used does not give an integer number
+   * of seconds, it is rounded to the nearest nanosecond. Note that the number of days in a year is defined to be 365.25.
    *
    * @param startDate the start date, not null
    * @param yearFraction the fraction of a year
@@ -231,7 +231,8 @@ public final class DateUtils {
   }
 
   /**
-   * Method that allows a fraction of a year to be added to a date. If the yearFraction that is used does not give an integer number of seconds, it is rounded to the nearest nanosecond.
+   * Method that allows a fraction of a year to be added to a date. If the yearFraction that is used does not give an integer number of seconds,
+   * it is rounded to the nearest nanosecond.
    *
    * @param startDate the start date, not null
    * @param yearFraction the fraction of a year
@@ -248,7 +249,8 @@ public final class DateUtils {
   }
 
   /**
-   * Method that allows a fraction of a year to be added to a date. If the yearFraction that is used does not give an integer number of seconds, it is rounded to the nearest nanosecond.
+   * Method that allows a fraction of a year to be added to a date. If the yearFraction that is used does not give an integer number of seconds,
+   * it is rounded to the nearest nanosecond.
    *
    * @param startDate the start date, not null
    * @param yearFraction the fraction of a year

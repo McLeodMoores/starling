@@ -92,7 +92,8 @@ public final class ParameterizedTypeImpl implements ParameterizedType {
       return false;
     }
     final ParameterizedType other = (ParameterizedType) o;
-    return ObjectUtils.equals(_rawType, other.getRawType()) && ObjectUtils.equals(_ownerType, other.getOwnerType()) && Arrays.equals(_actualTypeArguments, other.getActualTypeArguments());
+    return ObjectUtils.equals(_rawType, other.getRawType()) && ObjectUtils.equals(_ownerType, other.getOwnerType())
+        && Arrays.equals(_actualTypeArguments, other.getActualTypeArguments());
   }
 
   @Override

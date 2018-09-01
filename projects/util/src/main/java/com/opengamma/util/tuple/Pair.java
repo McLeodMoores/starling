@@ -232,6 +232,7 @@ public abstract class Pair<A, B>
         .toComparison();
   }
 
+  // CSOFF
   @Override
   public boolean equals(final Object obj) {
     // see Map.Entry API specification

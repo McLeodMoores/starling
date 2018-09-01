@@ -44,7 +44,8 @@ public abstract class AbstractSpringContainerFactory {
    * @param listener  the listener, not null
    * @return the container, not null
    */
-  protected DefaultMessageListenerContainer doCreate(final ConnectionFactory connectionFactory, final String destinationName, final boolean isPubSub, final Object listener) {
+  protected DefaultMessageListenerContainer doCreate(final ConnectionFactory connectionFactory, final String destinationName,
+      final boolean isPubSub, final Object listener) {
     final DefaultMessageListenerContainer jmsContainer = new DefaultMessageListenerContainer();
     jmsContainer.setConnectionFactory(connectionFactory);
     jmsContainer.setDestinationName(destinationName);

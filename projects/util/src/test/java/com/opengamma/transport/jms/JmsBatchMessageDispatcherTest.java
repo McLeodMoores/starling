@@ -65,7 +65,7 @@ public class JmsBatchMessageDispatcherTest {
     messageSender.send(new byte[10]);
 
     // Add in a delay.
-    Thread.sleep(1000l);
+    Thread.sleep(1000L);
 
     // Now start the dispatcher.
     dispatcher.start();

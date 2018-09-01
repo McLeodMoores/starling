@@ -96,7 +96,8 @@ public final class UnorderedCurrencyPair implements ImmutableBean,
         return new UnorderedCurrencyPair(ccy1, ccy2);
       }
     }
-    throw new IllegalArgumentException("Cannot create an UnorderedCurrencyPair from this UniqueId; need an ObjectScheme of UnorderedCurrencyPair, have " + uniqueId.getScheme());
+    throw new IllegalArgumentException("Cannot create an UnorderedCurrencyPair from this UniqueId; need an ObjectScheme of "
+        + "UnorderedCurrencyPair, have " + uniqueId.getScheme());
   }
 
   /**

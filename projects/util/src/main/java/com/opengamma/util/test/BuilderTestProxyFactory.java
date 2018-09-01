@@ -31,7 +31,7 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 public class BuilderTestProxyFactory {
 
   interface BuilderTestProxy {
-    FudgeMsg proxy(final Class<?> clazz, FudgeMsg orig);
+    FudgeMsg proxy(Class<?> clazz, FudgeMsg orig);
   }
 
   public BuilderTestProxy getProxy() {
@@ -54,7 +54,7 @@ public class BuilderTestProxyFactory {
 
     private final String _execPath;
 
-    public ExecBuilderTestProxy(final String execPath) {
+    ExecBuilderTestProxy(final String execPath) {
       _execPath = execPath;
     }
 

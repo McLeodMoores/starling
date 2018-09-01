@@ -206,7 +206,7 @@ public class Tenor implements Comparable<Tenor>, NamedInstance, Serializable {
      * @param approximateDuration The approximate duration of a business day tenor. It is not
      * exact because there could be holidays in the period.
      */
-    private BusinessDayTenor(final Period approximateDuration) {
+    BusinessDayTenor(final Period approximateDuration) {
       _approximateDuration = DAYS.getDuration().multipliedBy(approximateDuration.getDays());
     }
 
@@ -232,7 +232,7 @@ public class Tenor implements Comparable<Tenor>, NamedInstance, Serializable {
   //-------------------------------------------------------------------------
   /**
    * Obtains a {@code Tenor} from a {@code Period}.
-   * 
+   *
    * @param period  the period to convert to a tenor, not null
    * @return the tenor, not null
    */
@@ -243,7 +243,7 @@ public class Tenor implements Comparable<Tenor>, NamedInstance, Serializable {
 
   /**
    * Obtains a {@code Tenor} from a {@code BusinessDayTenor}.
-   * 
+   *
    * @param businessDayTenor  the tenor to convert, not null
    * @return the tenor, not null
    */
@@ -256,7 +256,7 @@ public class Tenor implements Comparable<Tenor>, NamedInstance, Serializable {
    * Parses a formatted string representing the tenor.
    * <p>
    * The format is based on ISO-8601, such as 'P3M'.
-   * 
+   *
    * @param tenorStr  the string representing the tenor, not null
    * @return the tenor, not null
    */
@@ -266,7 +266,7 @@ public class Tenor implements Comparable<Tenor>, NamedInstance, Serializable {
     ArgumentChecker.notNull(tenorStr, "tenorStr");
     try {
       return new Tenor(DateUtils.toPeriod(tenorStr));
-    } catch (DateTimeParseException e) {
+    } catch (final DateTimeParseException e) {
       return new Tenor(BusinessDayTenor.valueOf(tenorStr));
     }
   }
@@ -293,7 +293,7 @@ public class Tenor implements Comparable<Tenor>, NamedInstance, Serializable {
     _period = null;
     _businessDayTenor = businessDayTenor;
   }
-  
+
   /**
    * Gets the tenor period.
    * @return the period
@@ -317,7 +317,7 @@ public class Tenor implements Comparable<Tenor>, NamedInstance, Serializable {
     }
     return _businessDayTenor;
   }
-  
+
   /**
    * Returns true if the tenor is a business day tenor.
    * @return True if the tenor is a business day tenor
@@ -325,7 +325,7 @@ public class Tenor implements Comparable<Tenor>, NamedInstance, Serializable {
   public boolean isBusinessDayTenor() {
     return _period == null;
   }
-  
+
   /**
    * Returns a tenor backed by a period of days.
    * @param days The number of days
@@ -350,7 +350,7 @@ public class Tenor implements Comparable<Tenor>, NamedInstance, Serializable {
    * @return The tenor
    */
   public static final Tenor ofMonths(final int months) {
-    return new Tenor(Period.ofMonths(months)); // TODO: what do we do here
+    return new Tenor(Period.ofMonths(months));
   }
 
   /**
@@ -359,7 +359,7 @@ public class Tenor implements Comparable<Tenor>, NamedInstance, Serializable {
    * @return The tenor
    */
   public static final Tenor ofYears(final int years) {
-    return new Tenor(Period.ofYears(years)); // TODO: what do we do here
+    return new Tenor(Period.ofYears(years));
   }
 
   /**
@@ -370,7 +370,7 @@ public class Tenor implements Comparable<Tenor>, NamedInstance, Serializable {
   public static final Tenor ofBusinessDay(final BusinessDayTenor businessDayTenor) {
     return new Tenor(businessDayTenor);
   }
-  
+
   /**
    * Returns a tenor of business days.
    * @param businessDayTenor The business days name
@@ -385,21 +385,21 @@ public class Tenor implements Comparable<Tenor>, NamedInstance, Serializable {
    * Returns a formatted string representing the tenor.
    * <p>
    * The format is based on ISO-8601, such as 'P3M'.
-   * 
+   *
    * @return the formatted tenor, not null
    */
   @ToString
   public String toFormattedString() {
     if (_period != null) {
       return getPeriod().toString();
-    } 
+    }
     return getBusinessDayTenor().toString();
   }
 
   //-------------------------------------------------------------------------
   @Override
   public int compareTo(final Tenor other) {
-    final Duration thisDur, otherDur;    
+    final Duration thisDur, otherDur;
     if (_period == null) {
       thisDur = _businessDayTenor.getApproximateDuration();
     } else {
@@ -425,7 +425,7 @@ public class Tenor implements Comparable<Tenor>, NamedInstance, Serializable {
     if (_period == null) {
       if (other._period == null) {
         return _businessDayTenor == other._businessDayTenor;
-      } 
+      }
       return false;
     }
     if (other._period == null) {
@@ -444,7 +444,7 @@ public class Tenor implements Comparable<Tenor>, NamedInstance, Serializable {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
+    final StringBuilder sb = new StringBuilder();
     sb.append("Tenor[");
     if (_period == null) {
       sb.append(getBusinessDayTenor().toString());

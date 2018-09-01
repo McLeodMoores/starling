@@ -81,8 +81,8 @@ public class BeanCompare {
     ArgumentChecker.notNull(bean1, "bean1");
     ArgumentChecker.notNull(bean2, "bean2");
     if (!sameClass(bean1, bean2)) {
-      throw new IllegalArgumentException("Beans must be of the same class. bean1 class: " + bean1.getClass() +
-          ", bean2 class: " + bean2.getClass());
+      throw new IllegalArgumentException("Beans must be of the same class. bean1 class: " + bean1.getClass()
+          + ", bean2 class: " + bean2.getClass());
     }
     return compare(bean1, bean2, Collections.<MetaProperty<?>>emptyList());
   }

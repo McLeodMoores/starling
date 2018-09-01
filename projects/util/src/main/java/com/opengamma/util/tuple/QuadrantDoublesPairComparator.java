@@ -52,14 +52,13 @@ public final class QuadrantDoublesPairComparator implements Comparator<DoublesPa
    * @param pair  the pair to extract from, not null
    * @return the quadrant from 1 to 4
    */
-  private int getQuadrant(final DoublesPair pair) {
+  private static int getQuadrant(final DoublesPair pair) {
     final double x = pair.first;
     final double y = pair.second;
     if (x >= 0) {
       return y >= 0 ? 1 : 4;
-    } else {
-      return y >= 0 ? 2 : 3;
     }
+    return y >= 0 ? 2 : 3;
   }
 
 }

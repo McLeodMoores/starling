@@ -66,7 +66,7 @@ public class LongObjectPair<T>
    * @deprecated Use public factory of(long,Object)
    */
   @Deprecated
-  public LongObjectPair(final long first, final T second) {
+  public LongObjectPair(final long first, final T second) { // CSIGNORE
     this.first = first;
     this.second = second;
   }
@@ -102,6 +102,7 @@ public class LongObjectPair<T>
     throw new UnsupportedOperationException("Immutable");
   }
 
+  // CSOFF
   //-------------------------------------------------------------------------
   /**
    * The meta-bean for {@code LongObjectPair}.
@@ -116,7 +117,6 @@ public class LongObjectPair<T>
     JodaBeanUtils.registerMetaBean(LongObjectPair.Meta.INSTANCE);
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public LongObjectPair.Meta<T> metaBean() {
     return LongObjectPair.Meta.INSTANCE;

@@ -14,12 +14,12 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Stores the date required to uniquely identify a credit curve - the red code, currency, tenor, seniority and restructuring clause
+ * Stores the date required to uniquely identify a credit curve - the red code, currency, tenor, seniority and restructuring clause.
  */
 public final class CreditCurveIdentifier implements UniqueIdentifiable, ObjectIdentifiable {
 
   /**
-   * The scheme to use in object identifiers
+   * The scheme to use in object identifiers.
    */
   public static final String OBJECT_SCHEME = "CreditCurveIdentifier";
   private static final String SEPARATOR = "_";
@@ -80,7 +80,7 @@ public final class CreditCurveIdentifier implements UniqueIdentifiable, ObjectId
   }
 
   /**
-   * Creates an {@code CreditCurveIdentifier} from issuer, seniority and restructuring clause data
+   * Creates an {@code CreditCurveIdentifier} from issuer, seniority and restructuring clause data.
    *
    * @param redCode the RED code, not null
    * @param currency the currency, not null
@@ -97,7 +97,7 @@ public final class CreditCurveIdentifier implements UniqueIdentifiable, ObjectId
   }
 
   /**
-   * Creates an {@code CreditCurveIdentifier} from issuer, seniority and restructuring clause data
+   * Creates an {@code CreditCurveIdentifier} from issuer, seniority and restructuring clause data.
    *
    * @param redCode the RED code, not null
    * @param currency the currency, not null
@@ -131,7 +131,7 @@ public final class CreditCurveIdentifier implements UniqueIdentifiable, ObjectId
   }
 
   /**
-   * Creates an {@code CreditCurveIdentifier} from the red code (used for CDX)
+   * Creates an {@code CreditCurveIdentifier} from the red code (used for CDX).
    *
    * @param redCode the RED code, not null
    * @return the credit curve identifier, not null
@@ -141,7 +141,7 @@ public final class CreditCurveIdentifier implements UniqueIdentifiable, ObjectId
   }
 
   /**
-   * Creates an {@code CreditCurveIdentifier} from the red code (used for CDX)
+   * Creates an {@code CreditCurveIdentifier} from the red code (used for CDX).
    *
    * @param redCode the RED code, not null
    * @return the credit curve identifier, not null
@@ -226,8 +226,8 @@ public final class CreditCurveIdentifier implements UniqueIdentifiable, ObjectId
     _restructuringClause = restructuringClause;
     _term = term;
     // ignore term in id if null
-    _idValue = _curveTypePrefix + SEPARATOR + _redCode + SEPARATOR + _currency.getCode() + SEPARATOR + _seniority + SEPARATOR + _restructuringClause +
-        (_term != null ? SEPARATOR + _term : "");
+    _idValue = _curveTypePrefix + SEPARATOR + _redCode + SEPARATOR + _currency.getCode() + SEPARATOR + _seniority + SEPARATOR + _restructuringClause
+        + (_term != null ? SEPARATOR + _term : "");
   }
 
   private CreditCurveIdentifier(final String redCode) {
@@ -322,7 +322,7 @@ public final class CreditCurveIdentifier implements UniqueIdentifiable, ObjectId
   }
 
   /**
-   * Returns a suitable hash code for the identifier,
+   * Returns a suitable hash code for the identifier.
    *
    * @return the hash code
    */
@@ -349,7 +349,7 @@ public final class CreditCurveIdentifier implements UniqueIdentifiable, ObjectId
   }
 
   /**
-   * Gets the credit curve identifier as a string
+   * Gets the credit curve identifier as a string.
    *
    * @return the string representing this identifier, not null
    */

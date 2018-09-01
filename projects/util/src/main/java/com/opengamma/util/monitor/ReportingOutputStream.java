@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.monitor;
@@ -53,7 +53,7 @@ public class ReportingOutputStream extends FilterOutputStream {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param logger  the device to report to, not null
    * @param streamName  the name to include in the log output, should not be null
    * @param underlying  the underlying stream, not null
@@ -114,13 +114,13 @@ public class ReportingOutputStream extends FilterOutputStream {
    */
   private void endWrite() {
     if (--_callStack == 0) {
-      long time = System.nanoTime();
+      final long time = System.nanoTime();
       _writeTime += time;
       if (time >= _nextReportTime) {
         _nextReportTime = time + TIME_TO_REPORT;
-        _logger.info("Stream {} wrote {}Kb in {}ms from {} operations ({}M)", new Object[] {_streamName, (double) _writeBytes / 1024d, (double) _writeTime / 1000000d, _writeOperations,
-          (double) _writeBytes * 8192d / (double) _writeTime});
-        
+        _logger.info("Stream {} wrote {}Kb in {}ms from {} operations ({}M)",
+            new Object[] {_streamName, _writeBytes / 1024d, _writeTime / 1000000d, _writeOperations, _writeBytes * 8192d / _writeTime});
+
         // scale down influence of older data
         _writeOperations >>= 1;
         _writeBytes >>= 1;

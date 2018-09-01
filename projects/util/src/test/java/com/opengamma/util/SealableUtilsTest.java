@@ -15,44 +15,66 @@ import org.testng.annotations.Test;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Test.
+ * Tests for {@link SealableUtils}.
  */
 @Test(groups = TestGroup.UNIT)
 public class SealableUtilsTest {
 
+  /**
+   * Tests the constructor via reflection.
+   *
+   * @throws Exception  if there is a problem constructing the object
+   */
   @SuppressWarnings("unchecked")
-  public void test_constructor() throws Exception {
-    Constructor<?>[] cons = SealableUtils.class.getDeclaredConstructors();
+  @Test
+  public void testConstructor() throws Exception {
+    final Constructor<?>[] cons = SealableUtils.class.getDeclaredConstructors();
     assertEquals(1, cons.length);
     assertEquals(0, cons[0].getParameterTypes().length);
     assertEquals(true, Modifier.isPrivate(cons[0].getModifiers()));
-    Constructor<SealableUtils> con = (Constructor<SealableUtils>) cons[0];
+    final Constructor<SealableUtils> con = (Constructor<SealableUtils>) cons[0];
     con.setAccessible(true);
     con.newInstance();
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Test implementation.
+   */
   private static class MockSealed implements Sealable {
+    @Override
     public void seal() {
     }
+    @Override
     public boolean isSealed() {
       return true;
     }
   }
+  /**
+   * Test implementation.
+   */
   private static class MockUnsealed implements Sealable {
+    @Override
     public void seal() {
     }
+    @Override
     public boolean isSealed() {
       return false;
     }
   }
 
+  /**
+   * Tests that a class is sealed.
+   */
   @Test(expectedExceptions = IllegalStateException.class)
-  public void test_sealed() {
+  public void testSealed() {
     SealableUtils.checkSealed(new MockSealed());
   }
 
-  public void test_unsealed() {
+  /**
+   * Tests that a class is unsealed.
+   */
+  public void testUnsealed() {
     SealableUtils.checkSealed(new MockUnsealed());
   }
 

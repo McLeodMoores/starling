@@ -1,3 +1,4 @@
+// CSOFF
 /**
  * Utility class copied from RESTEasy (ASLv2) and reformatted and generified.
  */

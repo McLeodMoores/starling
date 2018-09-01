@@ -263,7 +263,7 @@ public class PoolExecutor implements Executor, Lifecycle {
     private final Runnable _runnable;
     private final T _result;
 
-    public ExecuteRunnable(final Service<T> service, final Runnable runnable, final T result) {
+    ExecuteRunnable(final Service<T> service, final Runnable runnable, final T result) {
       super(service);
       ArgumentChecker.notNull(runnable, "runnable");
       _runnable = runnable;
@@ -287,7 +287,7 @@ public class PoolExecutor implements Executor, Lifecycle {
 
     private final Callable<T> _callable;
 
-    public ExecuteCallable(final Service<T> service, final Callable<T> callable) {
+    ExecuteCallable(final Service<T> service, final Callable<T> callable) {
       super(service);
       ArgumentChecker.notNull(callable, "callable");
       _callable = callable;
@@ -347,7 +347,8 @@ public class PoolExecutor implements Executor, Lifecycle {
   /**
    * Creates a new execution pool with the given (maximum) number of threads.
    * <p>
-   * This can be created with no threads. Tasks submitted will never be executed unless they arrive from a pool and another thread then joins that pool to complete its execution.
+   * This can be created with no threads. Tasks submitted will never be executed unless they arrive from a pool and another thread
+   * then joins that pool to complete its execution.
    *
    * @param maxThreads the maximum number of threads to put in the pool
    * @param name the diagnostic name to use for the pool

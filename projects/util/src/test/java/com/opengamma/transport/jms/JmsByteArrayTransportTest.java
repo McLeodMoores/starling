@@ -91,7 +91,7 @@ public class JmsByteArrayTransportTest {
     final JmsTemplate jmsTemplate = new JmsTemplate();
     jmsTemplate.setConnectionFactory(cf);
     jmsTemplate.setPubSubDomain(true);
-    jmsTemplate.setReceiveTimeout(5000l);
+    jmsTemplate.setReceiveTimeout(5000L);
 
     final Random random = new Random();
     final byte[] responseBytes = new byte[512];

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.transport;
@@ -17,8 +17,8 @@ import com.opengamma.util.SingletonFactoryBean;
 import com.opengamma.util.jms.JmsConnector;
 
 /**
- * Creates a {@link FudgeRequestSender} based on an end-point description. An end-point could be a determined at runtime by a REST request to another host, or specified statically. Examples of end
- * points include TCP/IP host/socket pairs, REST URLs, and JMS topic names.
+ * Creates a {@link FudgeRequestSender} based on an end-point description. An end-point could be a determined at runtime by a REST
+ * request to another host, or specified statically. Examples of end points include TCP/IP host/socket pairs, REST URLs, and JMS topic names.
  */
 public class FudgeRequestSenderFactoryBean extends SingletonFactoryBean<FudgeRequestSender> {
 

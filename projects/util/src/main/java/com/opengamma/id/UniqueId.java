@@ -120,6 +120,7 @@ public final class UniqueId
    * @return the unique identifier, not null
    */
   public static UniqueId of(final ExternalId externalId) {
+    ArgumentChecker.notNull(externalId, "externalId");
     if (externalId.isNotScheme(EXTERNAL_SCHEME)) {
       throw new IllegalArgumentException("ExternalId is not a valid UniqueId");
     }
