@@ -55,6 +55,12 @@ public final class ExpiryFudgeBuilder extends AbstractFudgeBuilder implements Fu
     }
   };
 
+  /**
+   * Converts an expiry to a Fudge date time.
+   *
+   * @param object  the expiry
+   * @return  the Fudge date time
+   */
   protected static FudgeDateTime expiryToDateTime(final Expiry object) {
     ExpiryAccuracy accuracy = object.getAccuracy();
     if (accuracy == null) {
@@ -77,6 +83,13 @@ public final class ExpiryFudgeBuilder extends AbstractFudgeBuilder implements Fu
     }
   }
 
+  /**
+   * Converts a Fudge date time and time zone string to an expiry.
+   *
+   * @param datetime  a Fudge date time
+   * @param timezone  the time zone
+   * @return  the expiry
+   */
   protected static Expiry dateTimeToExpiry(final FudgeDateTime datetime, final String timezone) {
     switch (datetime.getAccuracy()) {
       case NANOSECOND:
@@ -106,6 +119,13 @@ public final class ExpiryFudgeBuilder extends AbstractFudgeBuilder implements Fu
     return msg;
   }
 
+  /**
+   * Converts an expiry to a message, returning null if the expiry is null.
+   *
+   * @param serializer  a serializer
+   * @param object  an expiry
+   * @return  a message
+   */
   public static MutableFudgeMsg toFudgeMsg(final FudgeSerializer serializer, final Expiry object) {
     if (object == null) {
       return null;
@@ -115,6 +135,13 @@ public final class ExpiryFudgeBuilder extends AbstractFudgeBuilder implements Fu
     return msg;
   }
 
+  /**
+   * Adds an encoded expiry to a message.
+   *
+   * @param serializer  a serializer
+   * @param object  an expiry
+   * @param msg  the message
+   */
   public static void toFudgeMsg(final FudgeSerializer serializer, final Expiry object, final MutableFudgeMsg msg) {
     addToMessage(msg, DATETIME_FIELD_NAME, expiryToDateTime(object));
     addToMessage(msg, TIMEZONE_FIELD_NAME, object.getExpiry().getZone().getId());
@@ -126,6 +153,13 @@ public final class ExpiryFudgeBuilder extends AbstractFudgeBuilder implements Fu
     return fromFudgeMsg(deserializer, msg);
   }
 
+  /**
+   * Converts a message to an expiry, returning null if the message is null.
+   *
+   * @param deserializer  a deserializer
+   * @param msg  a message
+   * @return  an expiry
+   */
   public static Expiry fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     if (msg == null) {
       return null;

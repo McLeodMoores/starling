@@ -56,10 +56,13 @@ public final class DateUtils {
    */
   public static final long SECONDS_PER_DAY = 86400L;
   /**
-   * The number of days in one year (estimated as 365.25).
+   * The number of days in one year (estimated as 365.25, commonly used in financial calculations).
    */
-  //TODO change this to 365.2425 to be consistent with JSR-310
   public static final double DAYS_PER_YEAR = 365.25;
+  /**
+   * The exact number of days per year.
+   */
+  public static final double EXACT_DAYS_PER_YEAR = 365.2435;
   /**
    * The number of milliseconds in one day.
    */
@@ -129,12 +132,8 @@ public final class DateUtils {
    * @throws IllegalArgumentException if either date is null
    */
   public static double getDifferenceInYears(final Instant startDate, final Instant endDate) {
-    if (startDate == null) {
-      throw new IllegalArgumentException("Start date was null");
-    }
-    if (endDate == null) {
-      throw new IllegalArgumentException("End date was null");
-    }
+    ArgumentChecker.notNull(startDate, "startDate");
+    ArgumentChecker.notNull(endDate, "endDate");
     return (double) (endDate.toEpochMilli() - startDate.toEpochMilli()) / MILLISECONDS_PER_YEAR;
   }
 
@@ -147,12 +146,8 @@ public final class DateUtils {
    * @throws IllegalArgumentException if either date is null
    */
   public static double getDifferenceInYears(final ZonedDateTime startDate, final ZonedDateTime endDate) {
-    if (startDate == null) {
-      throw new IllegalArgumentException("Start date was null");
-    }
-    if (endDate == null) {
-      throw new IllegalArgumentException("End date was null");
-    }
+    ArgumentChecker.notNull(startDate, "startDate");
+    ArgumentChecker.notNull(endDate, "endDate");
     return (double) (endDate.toInstant().toEpochMilli() - startDate.toInstant().toEpochMilli()) / MILLISECONDS_PER_YEAR;
   }
 
@@ -165,12 +160,8 @@ public final class DateUtils {
    * @throws IllegalArgumentException if either date is null
    */
   public static double getDifferenceInYears(final LocalDate startDate, final LocalDate endDate) {
-    if (startDate == null) {
-      throw new IllegalArgumentException("Start date was null");
-    }
-    if (endDate == null) {
-      throw new IllegalArgumentException("End date was null");
-    }
+    ArgumentChecker.notNull(startDate, "startDate");
+    ArgumentChecker.notNull(endDate, "endDate");
     final double diff = endDate.toEpochDay() - startDate.toEpochDay();
     return diff / DAYS_PER_YEAR;
   }
@@ -185,12 +176,8 @@ public final class DateUtils {
    * @throws IllegalArgumentException if either date is null
    */
   public static double getDifferenceInYears(final Instant startDate, final Instant endDate, final double daysPerYear) {
-    if (startDate == null) {
-      throw new IllegalArgumentException("Start date was null");
-    }
-    if (endDate == null) {
-      throw new IllegalArgumentException("End date was null");
-    }
+    ArgumentChecker.notNull(startDate, "startDate");
+    ArgumentChecker.notNull(endDate, "endDate");
     return (endDate.toEpochMilli() - startDate.toEpochMilli()) / MILLISECONDS_PER_DAY / daysPerYear;
   }
 
@@ -205,9 +192,7 @@ public final class DateUtils {
    * @throws IllegalArgumentException if the date is null
    */
   public static Instant getDateOffsetWithYearFraction(final Instant startDate, final double yearFraction) {
-    if (startDate == null) {
-      throw new IllegalArgumentException("Date was null");
-    }
+    ArgumentChecker.notNull(startDate, "startDate");
     final long nanos = Math.round(1e9 * SECONDS_PER_YEAR * yearFraction);
     return startDate.plusNanos(nanos);
   }
@@ -222,9 +207,7 @@ public final class DateUtils {
    * @throws IllegalArgumentException if the date is null
    */
   public static ZonedDateTime getDateOffsetWithYearFraction(final ZonedDateTime startDate, final double yearFraction) {
-    if (startDate == null) {
-      throw new IllegalArgumentException("Date was null");
-    }
+    ArgumentChecker.notNull(startDate, "startDate");
     final Instant instant = startDate.toInstant();
     final Instant offsetDate = getDateOffsetWithYearFraction(instant, yearFraction);
     return ZonedDateTime.ofInstant(offsetDate, startDate.getZone());
@@ -241,9 +224,7 @@ public final class DateUtils {
    * @throws IllegalArgumentException if the date is null
    */
   public static Instant getDateOffsetWithYearFraction(final Instant startDate, final double yearFraction, final double daysPerYear) {
-    if (startDate == null) {
-      throw new IllegalArgumentException("Date was null");
-    }
+    ArgumentChecker.notNull(startDate, "startDate");
     final long nanos = Math.round(1e9 * SECONDS_PER_DAY * daysPerYear * yearFraction);
     return startDate.plusNanos(nanos);
   }
@@ -259,9 +240,7 @@ public final class DateUtils {
    * @throws IllegalArgumentException if the date is null
    */
   public static ZonedDateTime getDateOffsetWithYearFraction(final ZonedDateTime startDate, final double yearFraction, final double daysPerYear) {
-    if (startDate == null) {
-      throw new IllegalArgumentException("Date was null");
-    }
+    ArgumentChecker.notNull(startDate, "startDate");
     final Instant instant = startDate.toInstant();
     final Instant offsetDate = getDateOffsetWithYearFraction(instant, yearFraction, daysPerYear);
     return ZonedDateTime.ofInstant(offsetDate, startDate.getZone());
@@ -304,13 +283,8 @@ public final class DateUtils {
    * @throws IllegalArgumentException if the date is null
    */
   public static double getExactDaysBetween(final ZonedDateTime startDate, final ZonedDateTime endDate) {
-    // TODO: was 24-hour days intended?
-    if (startDate == null) {
-      throw new IllegalArgumentException("Start date was null");
-    }
-    if (endDate == null) {
-      throw new IllegalArgumentException("End date was null");
-    }
+    ArgumentChecker.notNull(startDate, "startDate");
+    ArgumentChecker.notNull(endDate, "endDate");
     return (endDate.toInstant().getEpochSecond() - startDate.toInstant().getEpochSecond()) / (double) SECONDS_PER_DAY;
   }
 
@@ -337,12 +311,8 @@ public final class DateUtils {
    * @throws IllegalArgumentException if the date is null
    */
   public static int getDaysBetween(final Temporal startDate, final boolean includeStart, final Temporal endDate, final boolean includeEnd) {
-    if (startDate == null) {
-      throw new IllegalArgumentException("Start date was null");
-    }
-    if (endDate == null) {
-      throw new IllegalArgumentException("End date was null");
-    }
+    ArgumentChecker.notNull(startDate, "startDate");
+    ArgumentChecker.notNull(endDate, "endDate");
     int daysBetween = (int) Math.abs(DAYS.between(startDate, endDate));
     if (includeStart && includeEnd) {
       daysBetween++;
@@ -360,9 +330,7 @@ public final class DateUtils {
    * @throws IllegalArgumentException if the date is null
    */
   public static String printYYYYMMDD(final Temporal date) {
-    if (date == null) {
-      throw new IllegalArgumentException("date was null");
-    }
+    ArgumentChecker.notNull(date, "date");
     return YYYYMMDD_LOCAL_DATE.format(date);
   }
 
@@ -374,9 +342,7 @@ public final class DateUtils {
    * @throws IllegalArgumentException if the date is null
    */
   public static String printMMDD(final Temporal date) {
-    if (date == null) {
-      throw new IllegalArgumentException("date was null");
-    }
+    ArgumentChecker.notNull(date, "date");
     return MM_DD_LOCAL_DATE.format(date);
   }
 
@@ -407,9 +373,7 @@ public final class DateUtils {
    * @return the date, not null
    */
   public static LocalDate nextWeekDay(final LocalDate startDate) {
-    if (startDate == null) {
-      throw new IllegalArgumentException("date was null");
-    }
+    ArgumentChecker.notNull(startDate, "startDate");
     LocalDate next = null;
     final DayOfWeek dayOfWeek = startDate.getDayOfWeek();
     switch (dayOfWeek) {
@@ -439,9 +403,7 @@ public final class DateUtils {
    * @return the date, not null
    */
   public static LocalDate previousWeekDay(final LocalDate startDate) {
-    if (startDate == null) {
-      throw new IllegalArgumentException("date was null");
-    }
+    ArgumentChecker.notNull(startDate, "startDate");
     LocalDate previous = null;
     final DayOfWeek dayOfWeek = startDate.getDayOfWeek();
     switch (dayOfWeek) {
@@ -520,15 +482,12 @@ public final class DateUtils {
    */
   @SuppressWarnings("deprecation")
   public static LocalDate fromDateFields(final java.util.Date date) {
-    if (date == null) {
-      throw new IllegalArgumentException("The date must not be null");
-    }
+    ArgumentChecker.notNull(date, "date");
     return LocalDate.of(date.getYear() + 1900, date.getMonth() + 1, date.getDate());
   }
 
   /**
-   * Constructs a LocalDate from a Function Requirement / Input passed over the wire via {@link FudgeMsg} <p>
-   * Example usage: LocalDate nextDividendDate = DateUtils.toLocalDate(inputs.getValue(MarketDataRequirementNames.NEXT_DIVIDEND_DATE));
+   * Constructs a LocalDate from a date or passed over the wire via {@link FudgeMsg}.
    *
    * @param date an Object
    * @return the created LocalDate
@@ -569,7 +528,7 @@ public final class DateUtils {
   }
 
   /**
-   * Converts GregorianCalendar to ZonedDateTime
+   * Converts GregorianCalendar to ZonedDateTime.
    *
    * @param calendar the calendar, not null
    * @return the zoned-date-time, not null
@@ -591,9 +550,8 @@ public final class DateUtils {
   public static Period toPeriod(final String period) {
     if ("PT0S".equals(period)) {
       return Period.ZERO;
-    } else {
-      return Period.parse(period);
     }
+    return Period.parse(period);
   }
 
 }

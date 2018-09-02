@@ -7,6 +7,9 @@ package com.opengamma.util.time;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNotEquals;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNotSame;
 import static org.testng.Assert.assertTrue;
 
 import org.testng.annotations.Test;
@@ -203,19 +206,77 @@ public class LocalDateRangeTest {
     assertEquals(false, test.isStartDateMinimum());
     assertEquals(false, test.isEndDateMaximum());
   }
-//  /**
-//   * Tests the bean.
-//   */
-//  @Test
-//  public void testBean() {
-//    final DoublesPair pair = DoublesPair.of(2., 3.);
-//    assertNotNull(pair.metaBean());
-//    assertNotNull(pair.metaBean().first());
-//    assertNotNull(pair.metaBean().second());
-//    assertEquals(pair.metaBean().first().get(pair), 2.);
-//    assertEquals(pair.metaBean().second().get(pair), 3.);
-//    assertEquals(pair.property("first").get(), 2.);
-//    assertEquals(pair.property("second").get(), 3.);
-//  }
+
+  /**
+   * Tests the withStartDate() method.
+   */
+  @Test
+  public void testWithStartDate() {
+    final LocalDateRange range = LocalDateRange.of(LocalDate.of(2011, 7, 30), LocalDate.of(2012, 7, 20), false);
+    LocalDateRange other = range.withStartDate(LocalDate.of(2012, 6, 30));
+    assertNotEquals(range, other);
+    assertEquals(other.getStartDateInclusive(), LocalDate.of(2012, 6, 30));
+    other = range.withStartDate(range.getStartDateInclusive());
+    assertEquals(range, other);
+    assertNotSame(range, other);
+  }
+
+  /**
+   * Tests the withEndDate() method.
+   */
+  @Test
+  public void testWithEndDate() {
+    final LocalDateRange range = LocalDateRange.of(LocalDate.of(2011, 7, 30), LocalDate.of(2012, 7, 20), false);
+    LocalDateRange other = range.withEndDate(LocalDate.of(2013, 6, 30));
+    assertNotEquals(range, other);
+    assertEquals(other.getEndDateInclusive(), LocalDate.of(2013, 6, 30));
+    other = range.withEndDate(range.getEndDateInclusive());
+    assertEquals(range, other);
+    assertNotSame(range, other);
+  }
+
+  /**
+   * Tests the equals() method.
+   */
+  @Test
+  public void testEquals() {
+    final LocalDateRange range = LocalDateRange.of(LocalDate.of(2011, 7, 30), LocalDate.of(2012, 7, 20), false);
+    LocalDateRange other = LocalDateRange.of(LocalDate.of(2011, 7, 30), LocalDate.of(2012, 7, 20), false);
+    assertEquals(range, range);
+    assertEquals(range, other);
+    assertNotEquals(null, range);
+    assertNotEquals(LocalDate.of(2011, 7, 30), range);
+    other = LocalDateRange.of(LocalDate.of(2011, 7, 30), LocalDate.of(2012, 7, 20), true);
+    assertNotEquals(range, other);
+    other = LocalDateRange.of(LocalDate.of(2010, 7, 30), LocalDate.of(2012, 7, 20), false);
+    assertNotEquals(range, other);
+    other = LocalDateRange.of(LocalDate.of(2011, 7, 30), LocalDate.of(2013, 7, 20), false);
+    assertNotEquals(range, other);
+  }
+
+  /**
+   * Tests the hashCode() method.
+   */
+  @Test
+  public void testHashCode() {
+    final LocalDateRange range = LocalDateRange.of(LocalDate.of(2011, 7, 30), LocalDate.of(2012, 7, 20), false);
+    final LocalDateRange other = LocalDateRange.of(LocalDate.of(2011, 7, 30), LocalDate.of(2012, 7, 20), false);
+    assertEquals(range.hashCode(), other.hashCode());
+  }
+
+  /**
+   * Tests the bean.
+   */
+  @Test
+  public void testBean() {
+    final LocalDateRange range = LocalDateRange.of(LocalDate.of(2011, 7, 30), LocalDate.of(2012, 7, 20), true);
+    assertNotNull(range.metaBean());
+    assertNotNull(range.metaBean().startDateInclusive());
+    assertNotNull(range.metaBean().endDateInclusive());
+    assertEquals(range.metaBean().startDateInclusive().get(range), LocalDate.of(2011, 7, 30));
+    assertEquals(range.metaBean().endDateInclusive().get(range), LocalDate.of(2012, 7, 20));
+    assertEquals(range.property("startDateInclusive").get(), LocalDate.of(2011, 7, 30));
+    assertEquals(range.property("endDateInclusive").get(), LocalDate.of(2012, 7, 20));
+  }
 
 }

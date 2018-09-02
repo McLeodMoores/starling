@@ -22,6 +22,24 @@
 <listEntry value="com.opengamma.test"/>
 <listEntry value="com.opengamma.transport"/>
 <listEntry value="com.opengamma.util"/>
+<listEntry value="com.opengamma.util.annotation"/>
+<listEntry value="com.opengamma.util.async"/>
+<listEntry value="com.opengamma.util.auth"/>
+<listEntry value="com.opengamma.util.beancompare"/>
+<listEntry value="com.opengamma.util.credit"/>
+<listEntry value="com.opengamma.util.csv"/>
+<listEntry value="com.opengamma.util.fudgemsg"/>
+<listEntry value="com.opengamma.util.i18n"/>
+<listEntry value="com.opengamma.util.map"/>
+<listEntry value="com.opengamma.util.money"/>
+<listEntry value="com.opengamma.util.monitor"/>
+<listEntry value="com.opengamma.util.paging"/>
+<listEntry value="com.opengamma.util.result"/>
+<listEntry value="com.opengamma.util.spring"/>
+<listEntry value="com.opengamma.util.test"/>
+<listEntry value="com.opengamma.util.time"/>
+<listEntry value="com.opengamma.util.tuple"/>
+<listEntry value="com.opengamma.util.types"/>
 </listAttribute>
 <mapAttribute key="org.testng.eclipse.PARAMETERS"/>
 <stringAttribute key="org.testng.eclipse.PROTOCOL" value="json"/>
