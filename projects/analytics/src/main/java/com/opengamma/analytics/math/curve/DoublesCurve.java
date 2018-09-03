@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.curve;
@@ -28,7 +28,7 @@ public abstract class DoublesCurve
 
   /**
    * Constructor with a name.
-   * 
+   *
    * @param name  the curve name, not null
    */
   protected DoublesCurve(final String name) {
@@ -38,7 +38,7 @@ public abstract class DoublesCurve
   //-------------------------------------------------------------------------
   /**
    * Computes the sensitivity of the Y value with respect to the curve parameters.
-   * 
+   *
    * @param x  the value at which the parameter sensitivity is computed, not null
    * @return the sensitivity, not null
    */
@@ -46,9 +46,9 @@ public abstract class DoublesCurve
 
   /**
    * Compute the first derivative of the curve, $\frac{dy}{dx}$.
-   * 
+   *
    * @param x  the value at which the derivative is taken
-   * @return the first derivative 
+   * @return the first derivative
    */
   public abstract double getDyDx(final double x);
 

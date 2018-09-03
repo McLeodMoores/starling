@@ -69,7 +69,7 @@ public class AnnotationCacheTest {
     }
   }
 
-  public void testGetClasses() throws ClassNotFoundException {
+  public void testGetClasses() {
     final AnnotationCache cache = AnnotationCache.create(Instant.now(), MockType.class, Arrays.asList(AnnotationCacheTest.class.getName()));
     final Collection<Class<?>> classes = cache.getClasses();
     assertEquals(classes.size(), 1);

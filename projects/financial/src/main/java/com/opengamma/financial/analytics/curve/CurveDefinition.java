@@ -18,14 +18,12 @@ import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
 import org.joda.beans.PropertyDefinition;
 import org.joda.beans.impl.direct.DirectBeanBuilder;
-import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.opengamma.core.config.Config;
 import com.opengamma.core.config.ConfigGroups;
 import com.opengamma.financial.analytics.ircurve.strips.CurveNode;
-import com.opengamma.id.UniqueId;
 
 /**
  * Basic curve definition class containing only a name and curve nodes. Some curve definitions (e.g. {@link InterpolatedCurveDefinition}) will descend from this class,

@@ -15,7 +15,7 @@ import org.fudgemsg.mapping.FudgeSerializer;
 import com.opengamma.timeseries.date.localdate.ImmutableLocalDateDoubleTimeSeries;
 
 /**
- * Fudge message encoder/decoder (builder) for ImmutableLocalDateDoubleTimeSeries
+ * Fudge message encoder/decoder (builder) for ImmutableLocalDateDoubleTimeSeries.
  */
 @FudgeBuilderFor(ImmutableLocalDateDoubleTimeSeries.class)
 public class ImmutableLocalDateDoubleTimeSeriesFudgeBuilder implements FudgeBuilder<ImmutableLocalDateDoubleTimeSeries> {

@@ -101,7 +101,7 @@ public class ListMultimapMockBean implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       ListMultimapMockBean other = (ListMultimapMockBean) obj;
-      return JodaBeanUtils.equal(getListMultimap(), other.getListMultimap());
+      return JodaBeanUtils.equal(_listMultimap, other._listMultimap);
     }
     return false;
   }
@@ -109,7 +109,7 @@ public class ListMultimapMockBean implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getListMultimap());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_listMultimap);
     return hash;
   }
 
@@ -127,7 +127,7 @@ public class ListMultimapMockBean implements ImmutableBean {
   }
 
   protected void toString(StringBuilder buf) {
-    buf.append("listMultimap").append('=').append(JodaBeanUtils.toString(getListMultimap())).append(',').append(' ');
+    buf.append("listMultimap").append('=').append(JodaBeanUtils.toString(_listMultimap)).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------
@@ -265,19 +265,31 @@ public class ListMultimapMockBean implements ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

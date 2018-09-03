@@ -15,7 +15,7 @@ import org.fudgemsg.mapping.FudgeSerializer;
 import com.opengamma.timeseries.precise.zdt.ZonedDateTimeDoubleTimeSeries;
 
 /**
- * Fudge message encoder/decoder (builder) for ZonedDateTimeDoubleTimeSeries
+ * Fudge message encoder/decoder (builder) for ZonedDateTimeDoubleTimeSeries.
  */
 @FudgeBuilderFor(ZonedDateTimeDoubleTimeSeries.class)
 public class ZonedDateTimeDoubleTimeSeriesFudgeBuilder implements FudgeBuilder<ZonedDateTimeDoubleTimeSeries> {

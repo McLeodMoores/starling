@@ -158,10 +158,10 @@ public final class HistoricalShockMarketDataSpecification implements ImmutableBe
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       HistoricalShockMarketDataSpecification other = (HistoricalShockMarketDataSpecification) obj;
-      return JodaBeanUtils.equal(getShockType(), other.getShockType()) &&
-          JodaBeanUtils.equal(getHistoricalSpecification1(), other.getHistoricalSpecification1()) &&
-          JodaBeanUtils.equal(getHistoricalSpecification2(), other.getHistoricalSpecification2()) &&
-          JodaBeanUtils.equal(getBaseSpecification(), other.getBaseSpecification());
+      return JodaBeanUtils.equal(_shockType, other._shockType) &&
+          JodaBeanUtils.equal(_historicalSpecification1, other._historicalSpecification1) &&
+          JodaBeanUtils.equal(_historicalSpecification2, other._historicalSpecification2) &&
+          JodaBeanUtils.equal(_baseSpecification, other._baseSpecification);
     }
     return false;
   }
@@ -169,10 +169,10 @@ public final class HistoricalShockMarketDataSpecification implements ImmutableBe
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getShockType());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getHistoricalSpecification1());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getHistoricalSpecification2());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getBaseSpecification());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_shockType);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_historicalSpecification1);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_historicalSpecification2);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_baseSpecification);
     return hash;
   }
 
@@ -180,10 +180,10 @@ public final class HistoricalShockMarketDataSpecification implements ImmutableBe
   public String toString() {
     StringBuilder buf = new StringBuilder(160);
     buf.append("HistoricalShockMarketDataSpecification{");
-    buf.append("shockType").append('=').append(getShockType()).append(',').append(' ');
-    buf.append("historicalSpecification1").append('=').append(getHistoricalSpecification1()).append(',').append(' ');
-    buf.append("historicalSpecification2").append('=').append(getHistoricalSpecification2()).append(',').append(' ');
-    buf.append("baseSpecification").append('=').append(JodaBeanUtils.toString(getBaseSpecification()));
+    buf.append("shockType").append('=').append(_shockType).append(',').append(' ');
+    buf.append("historicalSpecification1").append('=').append(_historicalSpecification1).append(',').append(' ');
+    buf.append("historicalSpecification2").append('=').append(_historicalSpecification2).append(',').append(' ');
+    buf.append("baseSpecification").append('=').append(JodaBeanUtils.toString(_baseSpecification));
     buf.append('}');
     return buf.toString();
   }
@@ -396,19 +396,31 @@ public final class HistoricalShockMarketDataSpecification implements ImmutableBe
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

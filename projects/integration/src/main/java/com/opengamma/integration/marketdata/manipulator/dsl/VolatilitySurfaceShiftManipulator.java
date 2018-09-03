@@ -283,7 +283,7 @@ public class VolatilitySurfaceShiftManipulator implements StructureManipulator<V
    * @return the value of the property, not null
    */
   public double[] getShiftValues() {
-    return (_shiftValues != null ? _shiftValues.clone() : null);
+    return _shiftValues.clone();
   }
 
   //-----------------------------------------------------------------------
@@ -302,8 +302,8 @@ public class VolatilitySurfaceShiftManipulator implements StructureManipulator<V
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       VolatilitySurfaceShiftManipulator other = (VolatilitySurfaceShiftManipulator) obj;
-      return JodaBeanUtils.equal(getShiftType(), other.getShiftType()) &&
-          JodaBeanUtils.equal(getShiftValues(), other.getShiftValues());
+      return JodaBeanUtils.equal(_shiftType, other._shiftType) &&
+          JodaBeanUtils.equal(_shiftValues, other._shiftValues);
     }
     return false;
   }
@@ -311,8 +311,8 @@ public class VolatilitySurfaceShiftManipulator implements StructureManipulator<V
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getShiftType());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getShiftValues());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_shiftType);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_shiftValues);
     return hash;
   }
 
@@ -330,8 +330,8 @@ public class VolatilitySurfaceShiftManipulator implements StructureManipulator<V
   }
 
   protected void toString(StringBuilder buf) {
-    buf.append("shiftType").append('=').append(JodaBeanUtils.toString(getShiftType())).append(',').append(' ');
-    buf.append("shiftValues").append('=').append(JodaBeanUtils.toString(getShiftValues())).append(',').append(' ');
+    buf.append("shiftType").append('=').append(JodaBeanUtils.toString(_shiftType)).append(',').append(' ');
+    buf.append("shiftValues").append('=').append(JodaBeanUtils.toString(_shiftValues)).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------
@@ -492,19 +492,31 @@ public class VolatilitySurfaceShiftManipulator implements StructureManipulator<V
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

@@ -156,7 +156,7 @@ public class ResolvableConfigLink<T> extends ConfigLink<T> implements ImmutableB
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       ResolvableConfigLink<?> other = (ResolvableConfigLink<?>) obj;
-      return JodaBeanUtils.equal(getIdentifier(), other.getIdentifier());
+      return JodaBeanUtils.equal(_identifier, other._identifier);
     }
     return false;
   }
@@ -164,7 +164,7 @@ public class ResolvableConfigLink<T> extends ConfigLink<T> implements ImmutableB
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getIdentifier());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_identifier);
     return hash;
   }
 
@@ -182,7 +182,7 @@ public class ResolvableConfigLink<T> extends ConfigLink<T> implements ImmutableB
   }
 
   protected void toString(StringBuilder buf) {
-    buf.append("identifier").append('=').append(JodaBeanUtils.toString(getIdentifier())).append(',').append(' ');
+    buf.append("identifier").append('=').append(JodaBeanUtils.toString(_identifier)).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------
@@ -324,19 +324,31 @@ public class ResolvableConfigLink<T> extends ConfigLink<T> implements ImmutableB
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder<T> setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder<T> setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder<T> setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

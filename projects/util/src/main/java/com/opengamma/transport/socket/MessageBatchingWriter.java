@@ -81,11 +81,10 @@ public class MessageBatchingWriter {
           // Another thread is already blocked, so tag onto that and return
           _messages.add(message);
           return;
-        } else {
-          // Another thread is already writing
-          messages = new LinkedList<>();
-          _messages = messages;
         }
+        // Another thread is already writing
+        messages = new LinkedList<>();
+        _messages = messages;
       } else {
         _writingThreadActive = true;
       }

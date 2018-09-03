@@ -34,17 +34,17 @@ import com.opengamma.core.marketdatasnapshot.VolatilitySurfaceSnapshot;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * 
+ *
  */
 @BeanDefinition
 public class ManageableVolatilitySurfaceSnapshot implements Bean, VolatilitySurfaceSnapshot {
-  
+
   /**
    * The values in the snapshot.
    */
   @PropertyDefinition(validate = "notNull")
   private Map<Pair<Object, Object>, ValueSnapshot> _values;
-  
+
   /**
    * Creates a Fudge representation of the snapshot:
    * <pre>
@@ -55,17 +55,17 @@ public class ManageableVolatilitySurfaceSnapshot implements Bean, VolatilitySurf
    *     } values;
    *   }
    * </pre>
-   * 
+   *
    * @param serializer Fudge serialization context, not null
    * @return the message representation of this snapshot
    */
   public FudgeMsg toFudgeMsg(final FudgeSerializer serializer) {
-    MutableFudgeMsg ret = serializer.newMessage();
+    final MutableFudgeMsg ret = serializer.newMessage();
     // TODO: this should not be adding it's own class header; the caller should be doing that, or this be registered as a generic builder for VolatilitySurfaceSnapshot and that class name be added
     FudgeSerializer.addClassHeader(ret, ManageableVolatilitySurfaceSnapshot.class);
-    MutableFudgeMsg valuesMsg = serializer.newMessage();
+    final MutableFudgeMsg valuesMsg = serializer.newMessage();
     if (_values != null) {
-      for (Entry<Pair<Object, Object>, ValueSnapshot> entry : _values.entrySet()) {
+      for (final Entry<Pair<Object, Object>, ValueSnapshot> entry : _values.entrySet()) {
         serializer.addToMessage(valuesMsg, null, 1, entry.getKey());
         if (entry.getValue() == null) {
           valuesMsg.add(2, IndicatorType.INSTANCE);
@@ -83,7 +83,7 @@ public class ManageableVolatilitySurfaceSnapshot implements Bean, VolatilitySurf
   /**
    * Creates a snapshot object from a Fudge message representation. See {@link #toFudgeMsg}
    * for the message format.
-   * 
+   *
    * @param deserializer the Fudge deserialization context, not null
    * @param msg message containing the snapshot representation, not null
    * @return a snapshot object
@@ -92,8 +92,8 @@ public class ManageableVolatilitySurfaceSnapshot implements Bean, VolatilitySurf
   public static ManageableVolatilitySurfaceSnapshot fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     final HashMap<Pair<Object, Object>, ValueSnapshot> values = Maps.newHashMap();
     Pair<Object, Object> key = null;
-    for (FudgeField fudgeField : msg.getMessage("values")) {
-      Integer ordinal = fudgeField.getOrdinal();
+    for (final FudgeField fudgeField : msg.getMessage("values")) {
+      final Integer ordinal = fudgeField.getOrdinal();
       if (ordinal == null) {
         continue;
       }
@@ -101,7 +101,7 @@ public class ManageableVolatilitySurfaceSnapshot implements Bean, VolatilitySurf
       if (intValue == 1) {
         key = deserializer.fieldValueToObject(Pair.class, fudgeField);
       } else if (intValue == 2) {
-        ValueSnapshot value = deserializer.fieldValueToObject(ValueSnapshot.class, fudgeField);
+        final ValueSnapshot value = deserializer.fieldValueToObject(ValueSnapshot.class, fudgeField);
         values.put(key, value);
         key = null;
       }

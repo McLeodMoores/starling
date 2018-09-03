@@ -53,22 +53,19 @@ public final class WriteReplaceHelper {
         if (clazz.isAnonymousClass()) {
           WRITE_REPLACE.putIfAbsent(clazz, BAD_ANONYMOUS_CLASS);
           throw new OpenGammaRuntimeException("No serialization substitution available for anonymous inner class object " + clazz);
-        } else {
-          WRITE_REPLACE.putIfAbsent(clazz, NO_WRITE_REPLACE);
-          return null;
         }
-      } else {
-        WRITE_REPLACE.putIfAbsent(clazz, method);
-        return (Method) method;
-      }
-    } else {
-      if (method == NO_WRITE_REPLACE) {
+        WRITE_REPLACE.putIfAbsent(clazz, NO_WRITE_REPLACE);
         return null;
-      } else if (method == BAD_ANONYMOUS_CLASS) {
-        throw new OpenGammaRuntimeException("No serialization substitution available for anonymous inner class object " + clazz);
-      } else {
-        return (Method) method;
       }
+      WRITE_REPLACE.putIfAbsent(clazz, method);
+      return (Method) method;
+    }
+    if (method == NO_WRITE_REPLACE) {
+      return null;
+    } else if (method == BAD_ANONYMOUS_CLASS) {
+      throw new OpenGammaRuntimeException("No serialization substitution available for anonymous inner class object " + clazz);
+    } else {
+      return (Method) method;
     }
   }
 

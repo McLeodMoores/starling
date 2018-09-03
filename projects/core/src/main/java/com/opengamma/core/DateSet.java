@@ -158,7 +158,7 @@ public class DateSet implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       DateSet other = (DateSet) obj;
-      return JodaBeanUtils.equal(getDates(), other.getDates());
+      return JodaBeanUtils.equal(_dates, other._dates);
     }
     return false;
   }
@@ -166,7 +166,7 @@ public class DateSet implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getDates());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_dates);
     return hash;
   }
 
@@ -184,7 +184,7 @@ public class DateSet implements ImmutableBean {
   }
 
   protected void toString(StringBuilder buf) {
-    buf.append("dates").append('=').append(JodaBeanUtils.toString(getDates())).append(',').append(' ');
+    buf.append("dates").append('=').append(JodaBeanUtils.toString(_dates)).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------
@@ -322,19 +322,31 @@ public class DateSet implements ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

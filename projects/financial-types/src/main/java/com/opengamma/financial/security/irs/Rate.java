@@ -223,9 +223,9 @@ public final class Rate implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       Rate other = (Rate) obj;
-      return JodaBeanUtils.equal(getDates(), other.getDates()) &&
-          JodaBeanUtils.equal(getRates(), other.getRates()) &&
-          JodaBeanUtils.equal(getTypes(), other.getTypes());
+      return JodaBeanUtils.equal(_dates, other._dates) &&
+          JodaBeanUtils.equal(_rates, other._rates) &&
+          JodaBeanUtils.equal(_types, other._types);
     }
     return false;
   }
@@ -233,9 +233,9 @@ public final class Rate implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getDates());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getRates());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getTypes());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_dates);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_rates);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_types);
     return hash;
   }
 
@@ -243,9 +243,9 @@ public final class Rate implements ImmutableBean {
   public String toString() {
     StringBuilder buf = new StringBuilder(128);
     buf.append("Rate{");
-    buf.append("dates").append('=').append(getDates()).append(',').append(' ');
-    buf.append("rates").append('=').append(getRates()).append(',').append(' ');
-    buf.append("types").append('=').append(JodaBeanUtils.toString(getTypes()));
+    buf.append("dates").append('=').append(_dates).append(',').append(' ');
+    buf.append("rates").append('=').append(_rates).append(',').append(' ');
+    buf.append("types").append('=').append(JodaBeanUtils.toString(_types));
     buf.append('}');
     return buf.toString();
   }
@@ -433,19 +433,31 @@ public final class Rate implements ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

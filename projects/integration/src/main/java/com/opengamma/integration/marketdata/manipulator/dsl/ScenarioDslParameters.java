@@ -165,7 +165,7 @@ public final class ScenarioDslParameters implements ImmutableBean, ScenarioParam
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       ScenarioDslParameters other = (ScenarioDslParameters) obj;
-      return JodaBeanUtils.equal(getScript(), other.getScript());
+      return JodaBeanUtils.equal(_script, other._script);
     }
     return false;
   }
@@ -173,7 +173,7 @@ public final class ScenarioDslParameters implements ImmutableBean, ScenarioParam
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getScript());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_script);
     return hash;
   }
 
@@ -181,7 +181,7 @@ public final class ScenarioDslParameters implements ImmutableBean, ScenarioParam
   public String toString() {
     StringBuilder buf = new StringBuilder(64);
     buf.append("ScenarioDslParameters{");
-    buf.append("script").append('=').append(JodaBeanUtils.toString(getScript()));
+    buf.append("script").append('=').append(JodaBeanUtils.toString(_script));
     buf.append('}');
     return buf.toString();
   }
@@ -319,19 +319,31 @@ public final class ScenarioDslParameters implements ImmutableBean, ScenarioParam
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

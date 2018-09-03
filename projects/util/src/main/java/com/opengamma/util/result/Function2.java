@@ -7,7 +7,7 @@ package com.opengamma.util.result;
 
 /**
  * A function taking two arguments.
- * 
+ *
  * @param <T>  the type of the first argument
  * @param <U>  the type of the second argument
  * @param <R>  the return type
@@ -15,7 +15,7 @@ package com.opengamma.util.result;
 public interface Function2<T, U, R> {
 
   /**
-   * Applies the function to the arguments
+   * Applies the function to the arguments.
    *
    * @param t  the first argument
    * @param u  the second argument

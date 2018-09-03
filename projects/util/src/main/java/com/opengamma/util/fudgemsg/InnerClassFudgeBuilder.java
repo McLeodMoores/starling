@@ -71,12 +71,12 @@ public final class InnerClassFudgeBuilder<T extends AutoFudgable<K>, K> implemen
                 it.remove();
               }
             }
-            final List<Object> parameters = newArrayList();
+            final List<Object> parametersList = newArrayList();
             for (final Field paramField : fs) {
               paramField.setAccessible(true);
-              parameters.add(paramField.get(inner));
+              parametersList.add(paramField.get(inner));
             }
-            return parameters;
+            return parametersList;
 
           } catch (final IllegalAccessException ex) {
             throw new OpenGammaRuntimeException(ex.getMessage());
@@ -149,7 +149,7 @@ public final class InnerClassFudgeBuilder<T extends AutoFudgable<K>, K> implemen
     }
   }
 
-  private void assertValid(final Class<?> clazz) {
+  private static void assertValid(final Class<?> clazz) {
     if (clazz.getEnclosingClass() == null) {
       throw new OpenGammaRuntimeException("AutoFudgable can be used only with inner classes");
     }

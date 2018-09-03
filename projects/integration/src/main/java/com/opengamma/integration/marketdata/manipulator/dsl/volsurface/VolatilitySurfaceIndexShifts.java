@@ -238,8 +238,8 @@ public final class VolatilitySurfaceIndexShifts implements StructureManipulator<
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       VolatilitySurfaceIndexShifts other = (VolatilitySurfaceIndexShifts) obj;
-      return JodaBeanUtils.equal(getShiftType(), other.getShiftType()) &&
-          JodaBeanUtils.equal(getShifts(), other.getShifts());
+      return JodaBeanUtils.equal(_shiftType, other._shiftType) &&
+          JodaBeanUtils.equal(_shifts, other._shifts);
     }
     return false;
   }
@@ -247,8 +247,8 @@ public final class VolatilitySurfaceIndexShifts implements StructureManipulator<
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getShiftType());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getShifts());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_shiftType);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_shifts);
     return hash;
   }
 
@@ -256,8 +256,8 @@ public final class VolatilitySurfaceIndexShifts implements StructureManipulator<
   public String toString() {
     StringBuilder buf = new StringBuilder(96);
     buf.append("VolatilitySurfaceIndexShifts{");
-    buf.append("shiftType").append('=').append(getShiftType()).append(',').append(' ');
-    buf.append("shifts").append('=').append(JodaBeanUtils.toString(getShifts()));
+    buf.append("shiftType").append('=').append(_shiftType).append(',').append(' ');
+    buf.append("shifts").append('=').append(JodaBeanUtils.toString(_shifts));
     buf.append('}');
     return buf.toString();
   }
@@ -422,19 +422,31 @@ public final class VolatilitySurfaceIndexShifts implements StructureManipulator<
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

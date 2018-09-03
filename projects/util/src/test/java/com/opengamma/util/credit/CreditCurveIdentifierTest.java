@@ -5,6 +5,7 @@
  */
 package com.opengamma.util.credit;
 
+import static org.testng.Assert.assertNotEquals;
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertFalse;
 
@@ -55,7 +56,7 @@ public class CreditCurveIdentifierTest {
     assertEquals(id, other);
     assertEquals(id.hashCode(), other.hashCode());
     assertFalse(id.equals(null));
-    assertFalse(id.equals(UnorderedCurrencyPair.of(Currency.AUD, Currency.CAD)));
+    assertNotEquals("AUDCAD", UnorderedCurrencyPair.of(Currency.AUD, Currency.CAD));
     other = CreditCurveIdentifier.of(ExternalId.of("Scheme", "DEF"), CURRENCY, TERM, SENIORITY, RESTRUCTURING_CLAUSE);
     assertFalse(other.equals(id));
     other = CreditCurveIdentifier.of(RED_CODE, CURRENCY, TERM, RESTRUCTURING_CLAUSE, RESTRUCTURING_CLAUSE);

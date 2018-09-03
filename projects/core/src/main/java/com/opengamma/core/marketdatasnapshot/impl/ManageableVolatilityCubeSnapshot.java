@@ -33,7 +33,7 @@ import com.opengamma.core.marketdatasnapshot.VolatilityCubeSnapshot;
 import com.opengamma.util.tuple.Triple;
 
 /**
- * 
+ *
  */
 @BeanDefinition
 public class ManageableVolatilityCubeSnapshot implements Bean, VolatilityCubeSnapshot {

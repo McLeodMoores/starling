@@ -134,9 +134,8 @@ public class BeanCompare {
     }
     if (value1 == null || value2 == null || comparator == null) {
       return JodaBeanUtils.equal(value1, value2);
-    } else {
-      return comparator.compare(value1, value2) == 0;
     }
+    return comparator.compare(value1, value2) == 0;
   }
 
   private static boolean sameClass(final Object value1, final Object value2) {

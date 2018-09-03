@@ -85,7 +85,7 @@ public class FixedLegRollDateConvention extends FinancialConvention {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param name  the name of the convention, not null
    * @param externalIdBundle  the external identifiers for this convention, not null
    * @param paymentTenor  the payment tenor, not null
@@ -113,7 +113,7 @@ public class FixedLegRollDateConvention extends FinancialConvention {
   //-------------------------------------------------------------------------
   /**
    * Gets the type identifying this convention.
-   * 
+   *
    * @return the {@link #TYPE} constant, not null
    */
   @Override

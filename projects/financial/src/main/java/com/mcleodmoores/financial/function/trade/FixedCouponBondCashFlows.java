@@ -326,15 +326,15 @@ public class FixedCouponBondCashFlows implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       FixedCouponBondCashFlows other = (FixedCouponBondCashFlows) obj;
-      return JodaBeanUtils.equal(getAccrualStart(), other.getAccrualStart()) &&
-          JodaBeanUtils.equal(getAccrualEnd(), other.getAccrualEnd()) &&
-          JodaBeanUtils.equal(getDiscountFactors(), other.getDiscountFactors()) &&
-          JodaBeanUtils.equal(getPaymentTimes(), other.getPaymentTimes()) &&
-          JodaBeanUtils.equal(getAccrualFractions(), other.getAccrualFractions()) &&
-          JodaBeanUtils.equal(getPaymentAmounts(), other.getPaymentAmounts()) &&
-          JodaBeanUtils.equal(getNotionals(), other.getNotionals()) &&
-          JodaBeanUtils.equal(getCouponRates(), other.getCouponRates()) &&
-          JodaBeanUtils.equal(getNominalPaymentDates(), other.getNominalPaymentDates());
+      return JodaBeanUtils.equal(_accrualStart, other._accrualStart) &&
+          JodaBeanUtils.equal(_accrualEnd, other._accrualEnd) &&
+          JodaBeanUtils.equal(_discountFactors, other._discountFactors) &&
+          JodaBeanUtils.equal(_paymentTimes, other._paymentTimes) &&
+          JodaBeanUtils.equal(_accrualFractions, other._accrualFractions) &&
+          JodaBeanUtils.equal(_paymentAmounts, other._paymentAmounts) &&
+          JodaBeanUtils.equal(_notionals, other._notionals) &&
+          JodaBeanUtils.equal(_couponRates, other._couponRates) &&
+          JodaBeanUtils.equal(_nominalPaymentDates, other._nominalPaymentDates);
     }
     return false;
   }
@@ -342,21 +342,21 @@ public class FixedCouponBondCashFlows implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getAccrualStart());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getAccrualEnd());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getDiscountFactors());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getPaymentTimes());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getAccrualFractions());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getPaymentAmounts());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getNotionals());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getCouponRates());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getNominalPaymentDates());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_accrualStart);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_accrualEnd);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_discountFactors);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_paymentTimes);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_accrualFractions);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_paymentAmounts);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_notionals);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_couponRates);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_nominalPaymentDates);
     return hash;
   }
 
   @Override
   public String toString() {
-    StringBuilder buf = new StringBuilder(384);
+    StringBuilder buf = new StringBuilder(320);
     buf.append("FixedCouponBondCashFlows{");
     int len = buf.length();
     toString(buf);
@@ -368,17 +368,15 @@ public class FixedCouponBondCashFlows implements ImmutableBean {
   }
 
   protected void toString(StringBuilder buf) {
-    buf.append("accrualStart").append('=').append(JodaBeanUtils.toString(getAccrualStart())).append(',').append(' ');
-    buf.append("accrualEnd").append('=').append(JodaBeanUtils.toString(getAccrualEnd())).append(',').append(' ');
-    buf.append("discountFactors").append('=').append(JodaBeanUtils.toString(getDiscountFactors())).append(',').append(' ');
-    buf.append("paymentTimes").append('=').append(JodaBeanUtils.toString(getPaymentTimes())).append(',').append(' ');
-    buf.append("accrualFractions").append('=').append(JodaBeanUtils.toString(getAccrualFractions())).append(',').append(' ');
-    buf.append("paymentAmounts").append('=').append(JodaBeanUtils.toString(getPaymentAmounts())).append(',').append(' ');
-    buf.append("notionals").append('=').append(JodaBeanUtils.toString(getNotionals())).append(',').append(' ');
-    buf.append("couponRates").append('=').append(JodaBeanUtils.toString(getCouponRates())).append(',').append(' ');
-    buf.append("nominalPaymentDates").append('=').append(JodaBeanUtils.toString(getNominalPaymentDates())).append(',').append(' ');
-    buf.append("discountedPaymentAmounts").append('=').append(JodaBeanUtils.toString(getDiscountedPaymentAmounts())).append(',').append(' ');
-    buf.append("numberOfCashFlows").append('=').append(JodaBeanUtils.toString(getNumberOfCashFlows())).append(',').append(' ');
+    buf.append("accrualStart").append('=').append(JodaBeanUtils.toString(_accrualStart)).append(',').append(' ');
+    buf.append("accrualEnd").append('=').append(JodaBeanUtils.toString(_accrualEnd)).append(',').append(' ');
+    buf.append("discountFactors").append('=').append(JodaBeanUtils.toString(_discountFactors)).append(',').append(' ');
+    buf.append("paymentTimes").append('=').append(JodaBeanUtils.toString(_paymentTimes)).append(',').append(' ');
+    buf.append("accrualFractions").append('=').append(JodaBeanUtils.toString(_accrualFractions)).append(',').append(' ');
+    buf.append("paymentAmounts").append('=').append(JodaBeanUtils.toString(_paymentAmounts)).append(',').append(' ');
+    buf.append("notionals").append('=').append(JodaBeanUtils.toString(_notionals)).append(',').append(' ');
+    buf.append("couponRates").append('=').append(JodaBeanUtils.toString(_couponRates)).append(',').append(' ');
+    buf.append("nominalPaymentDates").append('=').append(JodaBeanUtils.toString(_nominalPaymentDates)).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------
@@ -761,19 +759,31 @@ public class FixedCouponBondCashFlows implements ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

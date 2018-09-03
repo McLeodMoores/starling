@@ -54,9 +54,8 @@ public class FudgeRequestSenderFactoryBean extends SingletonFactoryBean<FudgeReq
     if (_endPointDescriptionProvider != null) {
       ArgumentChecker.notNullInjected(getFudgeContext(), "fudgeContext");
       return _endPointDescriptionProvider.getEndPointDescription(getFudgeContext());
-    } else {
-      return null;
     }
+    return null;
   }
 
   private FudgeRequestSender createSocketFudgeRequestSender(final FudgeMsg endPoint) {

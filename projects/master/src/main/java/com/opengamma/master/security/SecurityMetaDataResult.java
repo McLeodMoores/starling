@@ -37,14 +37,14 @@ public class SecurityMetaDataResult extends AbstractMetaDataResult {
    * This is only populated if requested.
    */
   @PropertyDefinition
-  private final List<String> _securityTypes = new ArrayList<String>();
+  private final List<String> _securityTypes = new ArrayList<>();
   /**
    * The database schema version.
    * This is only populated if requested.
    */
   @PropertyDefinition
   private String _schemaVersion;
-  
+
   /**
    * Creates an instance.
    */

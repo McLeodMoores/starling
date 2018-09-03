@@ -554,7 +554,7 @@ public class ManageablePosition extends DirectBean
 
   @Override
   public String toString() {
-    StringBuilder buf = new StringBuilder(256);
+    StringBuilder buf = new StringBuilder(224);
     buf.append("ManageablePosition{");
     int len = buf.length();
     toString(buf);
@@ -572,7 +572,6 @@ public class ManageablePosition extends DirectBean
     buf.append("trades").append('=').append(JodaBeanUtils.toString(getTrades())).append(',').append(' ');
     buf.append("attributes").append('=').append(JodaBeanUtils.toString(getAttributes())).append(',').append(' ');
     buf.append("providerId").append('=').append(JodaBeanUtils.toString(getProviderId())).append(',').append(' ');
-    buf.append("name").append('=').append(JodaBeanUtils.toString(getName())).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------

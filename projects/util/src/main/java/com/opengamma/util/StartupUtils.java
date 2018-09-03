@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util;
@@ -23,16 +23,16 @@ public final class StartupUtils {
   public static void init() {
     try {
       // avoid EHCache/Quartz calling the internet
-      if (System.getProperties().containsKey("net.sf.ehcache.skipUpdateCheck") == false) {
+      if (!System.getProperties().containsKey("net.sf.ehcache.skipUpdateCheck")) {
         System.setProperty("net.sf.ehcache.skipUpdateCheck", "true");
       }
-      if (System.getProperties().containsKey("org.terracotta.quartz.skipUpdateCheck") == false) {
+      if (!System.getProperties().containsKey("org.terracotta.quartz.skipUpdateCheck")) {
         System.setProperty("org.terracotta.quartz.skipUpdateCheck", "true");
       }
-      
-    } catch (SecurityException ex) {
+
+    } catch (final SecurityException ex) {
       // ignore silently
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       ex.printStackTrace();
     }
   }

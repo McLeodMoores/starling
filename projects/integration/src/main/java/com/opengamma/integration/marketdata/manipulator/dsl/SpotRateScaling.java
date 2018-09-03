@@ -204,10 +204,10 @@ public final class SpotRateScaling implements StructureManipulator<Double>, Immu
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       SpotRateScaling other = (SpotRateScaling) obj;
-      return JodaBeanUtils.equal(getScalingFactor(), other.getScalingFactor()) &&
-          JodaBeanUtils.equal(getMinRate(), other.getMinRate()) &&
-          JodaBeanUtils.equal(getMaxRate(), other.getMaxRate()) &&
-          JodaBeanUtils.equal(getCurrencyPairs(), other.getCurrencyPairs());
+      return JodaBeanUtils.equal(_scalingFactor, other._scalingFactor) &&
+          JodaBeanUtils.equal(_minRate, other._minRate) &&
+          JodaBeanUtils.equal(_maxRate, other._maxRate) &&
+          JodaBeanUtils.equal(_currencyPairs, other._currencyPairs);
     }
     return false;
   }
@@ -215,10 +215,10 @@ public final class SpotRateScaling implements StructureManipulator<Double>, Immu
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getScalingFactor());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getMinRate());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getMaxRate());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getCurrencyPairs());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_scalingFactor);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_minRate);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_maxRate);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_currencyPairs);
     return hash;
   }
 
@@ -226,10 +226,10 @@ public final class SpotRateScaling implements StructureManipulator<Double>, Immu
   public String toString() {
     StringBuilder buf = new StringBuilder(160);
     buf.append("SpotRateScaling{");
-    buf.append("scalingFactor").append('=').append(getScalingFactor()).append(',').append(' ');
-    buf.append("minRate").append('=').append(getMinRate()).append(',').append(' ');
-    buf.append("maxRate").append('=').append(getMaxRate()).append(',').append(' ');
-    buf.append("currencyPairs").append('=').append(JodaBeanUtils.toString(getCurrencyPairs()));
+    buf.append("scalingFactor").append('=').append(_scalingFactor).append(',').append(' ');
+    buf.append("minRate").append('=').append(_minRate).append(',').append(' ');
+    buf.append("maxRate").append('=').append(_maxRate).append(',').append(' ');
+    buf.append("currencyPairs").append('=').append(JodaBeanUtils.toString(_currencyPairs));
     buf.append('}');
     return buf.toString();
   }
@@ -444,19 +444,31 @@ public final class SpotRateScaling implements StructureManipulator<Double>, Immu
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

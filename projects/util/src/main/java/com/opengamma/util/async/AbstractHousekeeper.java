@@ -68,9 +68,8 @@ public abstract class AbstractHousekeeper<T> {
             try {
               if (housekeep()) {
                 return;
-              } else {
-                LOGGER.info("Housekeeper {} for {} returned false", this, _target);
               }
+              LOGGER.info("Housekeeper {} for {} returned false", this, _target);
             } catch (final Throwable t) {
               LOGGER.error("Cancelling errored {} for {}", this, _target);
               LOGGER.warn("Caught exception", t);

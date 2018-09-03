@@ -36,14 +36,14 @@ public class OvernightIndexBean extends IndexBean {
     if (!(other instanceof OvernightIndexBean)) {
       return false;
     }
-    OvernightIndexBean index = (OvernightIndexBean) other;
+    final OvernightIndexBean index = (OvernightIndexBean) other;
     return new EqualsBuilder()
       .append(getId(), index.getId())
       .append(getDescription(), index.getDescription())
       .append(getConventionId(), index.getConventionId())
       .isEquals();
   }
-  
+
   @Override
   public int hashCode() {
     return new HashCodeBuilder()

@@ -7,6 +7,7 @@ package com.opengamma.util.log;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.log4j.Level;
+import org.apache.log4j.Priority;
 
 import com.opengamma.util.ArgumentChecker;
 
@@ -28,15 +29,15 @@ public class LogbackLogEvent implements LogEvent {
   @Override
   public LogLevel getLevel() {
     switch (getLoggingEvent().getLevel().toInt()) {
-      case Level.FATAL_INT:
+      case Priority.FATAL_INT:
         return LogLevel.FATAL;
-      case Level.ERROR_INT:
+      case Priority.ERROR_INT:
         return LogLevel.ERROR;
-      case Level.WARN_INT:
+      case Priority.WARN_INT:
         return LogLevel.WARN;
-      case Level.INFO_INT:
+      case Priority.INFO_INT:
         return LogLevel.INFO;
-      case Level.DEBUG_INT:
+      case Priority.DEBUG_INT:
         return LogLevel.DEBUG;
       case Level.TRACE_INT:
         return LogLevel.TRACE;

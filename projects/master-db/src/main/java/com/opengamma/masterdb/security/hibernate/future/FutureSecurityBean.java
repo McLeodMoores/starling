@@ -92,7 +92,7 @@ public abstract class FutureSecurityBean extends SecurityBean {
     T visitEquityFutureType(EquityFutureBean bean);
 
     T visitEquityIndexDividendFutureType(EquityIndexDividendFutureBean bean);
-    
+
     T visitFederalFundsFutureType(FederalFundsFutureBean bean);
   }
 

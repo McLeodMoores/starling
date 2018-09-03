@@ -68,7 +68,7 @@ public class PerformanceCounter {
 
   //-------------------------------------------------------------------------
   /**
-   * Gets the number of seconds to keep history for,
+   * Gets the number of seconds to keep history for.
    * @return the history storage length in seconds
    */
   public int getSecondsOfHistoryToKeep() {

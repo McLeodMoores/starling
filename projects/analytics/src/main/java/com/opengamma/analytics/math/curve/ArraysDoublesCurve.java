@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.curve;
@@ -25,9 +25,9 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.ParallelArrayBinarySort;
 import com.opengamma.util.tuple.DoublesPair;
 
-/** 
+/**
  * Parent class for a family of curves where the data is stored as arrays.
- * It is possible to construct a curve using either unsorted (in <i>x</i>) data or sorted (ascending in <i>x</i>). 
+ * It is possible to construct a curve using either unsorted (in <i>x</i>) data or sorted (ascending in <i>x</i>).
  * Note that if the constructor is told that unsorted data are sorted then no sorting will take place, which will give unpredictable results.
  */
 @BeanDefinition
@@ -67,7 +67,7 @@ public abstract class ArraysDoublesCurve extends DoublesCurve {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param xData  the array of <i>x</i> data, not null
    * @param yData  the array of <i>y</i> data, contains same number of entries as <i>x</i>, not null
    * @param isSorted  whether the <i>x</i>-data is sorted ascending
@@ -86,7 +86,7 @@ public abstract class ArraysDoublesCurve extends DoublesCurve {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param xData  the array of <i>x</i> data, not null
    * @param yData  the array of <i>y</i> data, contains same number of entries as <i>x</i>, not null
    * @param isSorted  whether the <i>x</i>-data is sorted ascending
@@ -100,8 +100,8 @@ public abstract class ArraysDoublesCurve extends DoublesCurve {
     _xData = new double[_n];
     _yData = new double[_n];
     for (int i = 0; i < _n; i++) {
-      Double x = xData[i];
-      Double y = yData[i];
+      final Double x = xData[i];
+      final Double y = yData[i];
       ArgumentChecker.notNull(x, "x");
       ArgumentChecker.notNull(y, "y");
       _xData[i] = x;
@@ -114,7 +114,7 @@ public abstract class ArraysDoublesCurve extends DoublesCurve {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param data  the map of <i>x-y</i> data, not null
    * @param isSorted  whether the <i>x</i>-data is sorted ascending
    */
@@ -126,8 +126,8 @@ public abstract class ArraysDoublesCurve extends DoublesCurve {
     _yData = new double[_n];
     int i = 0;
     for (final Map.Entry<Double, Double> entry : data.entrySet()) {
-      Double x = entry.getKey();
-      Double y = entry.getValue();
+      final Double x = entry.getKey();
+      final Double y = entry.getValue();
       ArgumentChecker.notNull(x, "x");
       ArgumentChecker.notNull(y, "y");
       _xData[i] = x;
@@ -140,7 +140,7 @@ public abstract class ArraysDoublesCurve extends DoublesCurve {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param data  the array of pairs of <i>x-y</i> data, not null
    * @param isSorted  whether the <i>x</i>-data is sorted ascending
    */
@@ -151,7 +151,7 @@ public abstract class ArraysDoublesCurve extends DoublesCurve {
     _xData = new double[_n];
     _yData = new double[_n];
     for (int i = 0; i < _n; i++) {
-      DoublesPair pair = data[i];
+      final DoublesPair pair = data[i];
       ArgumentChecker.notNull(pair, "pair");
       _xData[i] = pair.first;
       _yData[i] = pair.second;
@@ -163,7 +163,7 @@ public abstract class ArraysDoublesCurve extends DoublesCurve {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param data  the set of pairs of <i>x-y</i> data, not null
    * @param isSorted  whether the <i>x</i>-data is sorted ascending
    */
@@ -186,7 +186,7 @@ public abstract class ArraysDoublesCurve extends DoublesCurve {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param xData  the list of <i>x</i> data, not null
    * @param yData  the list of <i>y</i> data, contains same number of entries as <i>x</i>, not null
    * @param isSorted  whether the <i>x</i>-data is sorted ascending
@@ -200,8 +200,8 @@ public abstract class ArraysDoublesCurve extends DoublesCurve {
     _xData = new double[_n];
     _yData = new double[_n];
     for (int i = 0; i < _n; i++) {
-      Double x = xData.get(i);
-      Double y = yData.get(i);
+      final Double x = xData.get(i);
+      final Double y = yData.get(i);
       ArgumentChecker.notNull(x, "x");
       ArgumentChecker.notNull(y, "y");
       _xData[i] = x;
@@ -214,7 +214,7 @@ public abstract class ArraysDoublesCurve extends DoublesCurve {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param data  the list of pairs of <i>x-y</i> data, not null
    * @param isSorted  whether the <i>x</i>-data is sorted ascending
    */
@@ -237,7 +237,7 @@ public abstract class ArraysDoublesCurve extends DoublesCurve {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param xData  the array of <i>x</i> data, not null
    * @param yData  the array of <i>y</i> data, contains same number of entries as <i>x</i>, not null
    * @param isSorted  whether the <i>x</i>-data is sorted ascending
@@ -258,7 +258,7 @@ public abstract class ArraysDoublesCurve extends DoublesCurve {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param xData  the array of <i>x</i> data, not null
    * @param yData  the array of <i>y</i> data, contains same number of entries as <i>x</i>, not null
    * @param isSorted  whether the <i>x</i>-data is sorted ascending
@@ -285,7 +285,7 @@ public abstract class ArraysDoublesCurve extends DoublesCurve {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param data  the map of <i>x-y</i> data, not null
    * @param isSorted  whether the <i>x</i>-data is sorted ascending
    * @param name  the name of the curve, not null
@@ -310,7 +310,7 @@ public abstract class ArraysDoublesCurve extends DoublesCurve {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param data  the array of pairs of <i>x-y</i> data, not null
    * @param isSorted  whether the <i>x</i>-data is sorted ascending
    * @param name  the name of the curve, not null
@@ -333,7 +333,7 @@ public abstract class ArraysDoublesCurve extends DoublesCurve {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param data  the set of pairs of <i>x-y</i> data, not null
    * @param isSorted  whether the <i>x</i>-data is sorted ascending
    * @param name  the name of the curve, not null
@@ -357,7 +357,7 @@ public abstract class ArraysDoublesCurve extends DoublesCurve {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param xData  the list of <i>x</i> data, not null
    * @param yData  the list of <i>y</i> data, contains same number of entries as <i>x</i>, not null
    * @param isSorted  whether the <i>x</i>-data is sorted ascending
@@ -384,7 +384,7 @@ public abstract class ArraysDoublesCurve extends DoublesCurve {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param data  the list of pairs of <i>x-y</i> data, not null
    * @param isSorted  whether the <i>x</i>-data is sorted ascending
    * @param name  the name of the curve, not null
@@ -433,7 +433,7 @@ public abstract class ArraysDoublesCurve extends DoublesCurve {
 
   /**
     * Returns the <i>x</i> data points as a primitive array.
-    * 
+    *
     * @return the <i>x</i> data, not null
     */
   public double[] getXDataAsPrimitive() {
@@ -442,7 +442,7 @@ public abstract class ArraysDoublesCurve extends DoublesCurve {
 
   /**
     * Returns the <i>y</i> data points as a primitive array.
-    * 
+    *
     * @return the <i>y</i> data, not null
     */
   public double[] getYDataAsPrimitive() {

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.cds;
@@ -31,7 +31,7 @@ import com.opengamma.masterdb.security.hibernate.TenorBean;
  */
 @BeanDefinition
 public class CreditDefaultSwapIndexDefinitionSecurityBean extends SecurityBean {
-  
+
   @PropertyDefinition
   private String _name;
   @PropertyDefinition

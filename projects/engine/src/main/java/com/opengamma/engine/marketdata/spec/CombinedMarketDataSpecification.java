@@ -119,8 +119,8 @@ public final class CombinedMarketDataSpecification implements ImmutableBean, Mar
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       CombinedMarketDataSpecification other = (CombinedMarketDataSpecification) obj;
-      return JodaBeanUtils.equal(getPreferredSpecification(), other.getPreferredSpecification()) &&
-          JodaBeanUtils.equal(getFallbackSpecification(), other.getFallbackSpecification());
+      return JodaBeanUtils.equal(_preferredSpecification, other._preferredSpecification) &&
+          JodaBeanUtils.equal(_fallbackSpecification, other._fallbackSpecification);
     }
     return false;
   }
@@ -128,8 +128,8 @@ public final class CombinedMarketDataSpecification implements ImmutableBean, Mar
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getPreferredSpecification());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getFallbackSpecification());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_preferredSpecification);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_fallbackSpecification);
     return hash;
   }
 
@@ -137,8 +137,8 @@ public final class CombinedMarketDataSpecification implements ImmutableBean, Mar
   public String toString() {
     StringBuilder buf = new StringBuilder(96);
     buf.append("CombinedMarketDataSpecification{");
-    buf.append("preferredSpecification").append('=').append(getPreferredSpecification()).append(',').append(' ');
-    buf.append("fallbackSpecification").append('=').append(JodaBeanUtils.toString(getFallbackSpecification()));
+    buf.append("preferredSpecification").append('=').append(_preferredSpecification).append(',').append(' ');
+    buf.append("fallbackSpecification").append('=').append(JodaBeanUtils.toString(_fallbackSpecification));
     buf.append('}');
     return buf.toString();
   }
@@ -301,19 +301,31 @@ public final class CombinedMarketDataSpecification implements ImmutableBean, Mar
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

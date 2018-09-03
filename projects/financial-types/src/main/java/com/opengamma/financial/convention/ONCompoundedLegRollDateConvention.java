@@ -73,7 +73,7 @@ public class ONCompoundedLegRollDateConvention extends FinancialConvention {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param name  the convention name, not null
    * @param externalIdBundle  the external identifiers for this convention, not null
    * @param overnightIndexConvention  the underlying overnight index convention, not null
@@ -97,7 +97,7 @@ public class ONCompoundedLegRollDateConvention extends FinancialConvention {
   //-------------------------------------------------------------------------
   /**
    * Gets the type identifying this convention.
-   * 
+   *
    * @return the {@link #TYPE} constant, not null
    */
   @Override

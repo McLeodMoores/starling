@@ -78,7 +78,7 @@ public class SimpleExchange extends DirectBean
   //-------------------------------------------------------------------------
   /**
    * Adds an external identifier to the bundle.
-   * 
+   *
    * @param externalId  the external identifier, not null
    */
   public void addExternalId(final ExternalId externalId) {

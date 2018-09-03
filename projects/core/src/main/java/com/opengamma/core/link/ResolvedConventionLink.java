@@ -137,7 +137,7 @@ public final class ResolvedConventionLink<C extends Convention> extends Conventi
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       ResolvedConventionLink<?> other = (ResolvedConventionLink<?>) obj;
-      return JodaBeanUtils.equal(getConvention(), other.getConvention());
+      return JodaBeanUtils.equal(_convention, other._convention);
     }
     return false;
   }
@@ -145,7 +145,7 @@ public final class ResolvedConventionLink<C extends Convention> extends Conventi
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getConvention());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_convention);
     return hash;
   }
 
@@ -153,7 +153,7 @@ public final class ResolvedConventionLink<C extends Convention> extends Conventi
   public String toString() {
     StringBuilder buf = new StringBuilder(64);
     buf.append("ResolvedConventionLink{");
-    buf.append("convention").append('=').append(JodaBeanUtils.toString(getConvention()));
+    buf.append("convention").append('=').append(JodaBeanUtils.toString(_convention));
     buf.append('}');
     return buf.toString();
   }
@@ -297,19 +297,31 @@ public final class ResolvedConventionLink<C extends Convention> extends Conventi
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder<C> setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder<C> setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder<C> setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

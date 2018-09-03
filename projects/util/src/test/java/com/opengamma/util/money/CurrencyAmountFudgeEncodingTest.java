@@ -17,24 +17,34 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class CurrencyAmountFudgeEncodingTest extends AbstractFudgeBuilderTestCase {
 
+  /**
+   * Tests a cycle.
+   */
+  @Test
   public void test() {
-    CurrencyAmount object = CurrencyAmount.of(Currency.AUD, 101);
+    final CurrencyAmount object = CurrencyAmount.of(Currency.AUD, 101);
     assertEncodeDecodeCycle(CurrencyAmount.class, object);
   }
 
+  /**
+   * Tests an un-decodable message.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_fromFudgeMsg_badMessage1() {
-    MutableFudgeMsg msg = getFudgeContext().newMessage();
+  public void testFromFudgeMsgBadMessage1() {
+    final MutableFudgeMsg msg = getFudgeContext().newMessage();
     msg.add(CurrencyAmountFudgeBuilder.AMOUNT_FIELD_NAME, "100");
-    CurrencyAmountFudgeBuilder bld = new CurrencyAmountFudgeBuilder();
+    final CurrencyAmountFudgeBuilder bld = new CurrencyAmountFudgeBuilder();
     bld.buildObject(getFudgeDeserializer(), msg);
   }
 
+  /**
+   * Tests an un-decodable message.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_fromFudgeMsg_badMessage2() {
-    MutableFudgeMsg msg = getFudgeContext().newMessage();
+  public void testFromFudgeMsgBadMessage2() {
+    final MutableFudgeMsg msg = getFudgeContext().newMessage();
     msg.add(CurrencyAmountFudgeBuilder.CURRENCY_FIELD_NAME, "USD");
-    CurrencyAmountFudgeBuilder bld = new CurrencyAmountFudgeBuilder();
+    final CurrencyAmountFudgeBuilder bld = new CurrencyAmountFudgeBuilder();
     bld.buildObject(getFudgeDeserializer(), msg);
   }
 

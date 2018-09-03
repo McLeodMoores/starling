@@ -62,7 +62,7 @@ public class ExternalIdOrderConfig extends DirectBean {
 
   /**
    * Apply the ordering to obtain the most preferred identifier from a bundle.
-   * 
+   *
    * @param identifiers the bundle of identifiers to query
    * @return the preferred identifier from the bundle, or null if it is empty
    */
@@ -107,7 +107,7 @@ public class ExternalIdOrderConfig extends DirectBean {
 
   /**
    * Returns a {@link Comparator} that will order schemes from highest to lowest rank.
-   * 
+   *
    * @return the comparator
    */
   public Comparator<ExternalScheme> schemeComparator() {
@@ -144,7 +144,7 @@ public class ExternalIdOrderConfig extends DirectBean {
 
   /**
    * Returns a {@link Comparator} that will order identifiers from highest to lowest ranked scheme.
-   * 
+   *
    * @return the comparator
    */
   public Comparator<ExternalId> identifierComparator() {
@@ -165,12 +165,12 @@ public class ExternalIdOrderConfig extends DirectBean {
 
   /**
    * Sorts the identifiers from a bundle from highest to lowest ranked scheme. Identifiers with the same scheme will be sorted naturally.
-   * 
+   *
    * @param bundle the identifiers to sort
    * @return the identifiers in descending tank order
    */
   public List<ExternalId> sort(final ExternalIdBundle bundle) {
-    final List<ExternalId> identifiers = new ArrayList<ExternalId>(bundle.getExternalIds());
+    final List<ExternalId> identifiers = new ArrayList<>(bundle.getExternalIds());
     Collections.sort(identifiers, identifierComparator());
     return identifiers;
   }

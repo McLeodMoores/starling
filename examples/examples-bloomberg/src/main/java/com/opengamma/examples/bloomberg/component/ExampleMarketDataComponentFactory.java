@@ -10,6 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
 import org.joda.beans.JodaBeanUtils;
@@ -41,7 +42,6 @@ import com.opengamma.provider.livedata.LiveDataMetaDataProvider;
 import com.opengamma.provider.livedata.LiveDataServerTypes;
 import com.opengamma.util.jms.JmsConnector;
 import com.opengamma.util.jms.JmsConnectorFactoryBean;
-import org.joda.beans.Bean;
 
 /**
  * Component factory for consuming Bloomberg market data.
@@ -92,8 +92,8 @@ public class ExampleMarketDataComponentFactory extends AbstractComponentFactory 
     final MarketDataProviderFactory marketDataProviderFactory = new InMemoryLKVLiveMarketDataProviderFactory(defaultFactory, factoryMap);
 
     // notifies LiveDataFactories when market data providers come up so they can retry failed subscriptions
-    List<LiveDataFactory> factoryList = ImmutableList.of(defaultFactory);
-    LiveDataAvailabilityNotificationListener availabilityNotificationListener =
+    final List<LiveDataFactory> factoryList = ImmutableList.of(defaultFactory);
+    final LiveDataAvailabilityNotificationListener availabilityNotificationListener =
         new LiveDataAvailabilityNotificationListener(getJmsMarketDataAvailabilityTopic(), factoryList, getJmsConnector());
     repo.registerLifecycle(availabilityNotificationListener);
 

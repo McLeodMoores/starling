@@ -170,7 +170,7 @@ public class HistoricalTimeSeriesInfoDocument extends AbstractDocument {
 
   @Override
   public String toString() {
-    StringBuilder buf = new StringBuilder(96);
+    StringBuilder buf = new StringBuilder(64);
     buf.append("HistoricalTimeSeriesInfoDocument{");
     int len = buf.length();
     toString(buf);
@@ -185,7 +185,6 @@ public class HistoricalTimeSeriesInfoDocument extends AbstractDocument {
   protected void toString(StringBuilder buf) {
     super.toString(buf);
     buf.append("info").append('=').append(JodaBeanUtils.toString(getInfo())).append(',').append(' ');
-    buf.append("uniqueId").append('=').append(JodaBeanUtils.toString(getUniqueId())).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------

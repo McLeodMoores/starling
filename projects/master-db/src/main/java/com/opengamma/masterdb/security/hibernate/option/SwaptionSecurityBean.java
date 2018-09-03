@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.option;
@@ -34,34 +34,34 @@ import com.opengamma.masterdb.security.hibernate.ZonedDateTimeBean;
 public class SwaptionSecurityBean extends SecurityBean {
   @PropertyDefinition
   private ExpiryBean _expiry;
-  
+
   @PropertyDefinition
   private ExternalIdBean _underlying;
-  
+
   @PropertyDefinition
   private Boolean _cashSettled;
-  
+
   @PropertyDefinition
   private Boolean _longShort;
-  
+
   @PropertyDefinition
   private Boolean _payer;
-  
+
   @PropertyDefinition
   private CurrencyBean _currency;
-  
+
   @PropertyDefinition
   private Double _notional;
-  
+
   @PropertyDefinition
   private OptionExerciseType _optionExerciseType;
-  
+
   @PropertyDefinition
   private ZonedDateTimeBean _settlementDate;
-  
+
   public SwaptionSecurityBean() {
     super();
-  }  
+  }
 
   @Override
   public boolean equals(final Object other) {

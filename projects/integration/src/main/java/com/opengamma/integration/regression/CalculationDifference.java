@@ -392,16 +392,16 @@ public final class CalculationDifference implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       CalculationDifference other = (CalculationDifference) obj;
-      return (getEqualResultCount() == other.getEqualResultCount()) &&
-          JodaBeanUtils.equal(getViewDefinitionName(), other.getViewDefinitionName()) &&
-          JodaBeanUtils.equal(getSnapshotName(), other.getSnapshotName()) &&
-          JodaBeanUtils.equal(getValuationTime(), other.getValuationTime()) &&
-          JodaBeanUtils.equal(getBaseVersion(), other.getBaseVersion()) &&
-          JodaBeanUtils.equal(getTestVersion(), other.getTestVersion()) &&
-          JodaBeanUtils.equal(getOnlyBase(), other.getOnlyBase()) &&
-          JodaBeanUtils.equal(getOnlyTest(), other.getOnlyTest()) &&
-          JodaBeanUtils.equal(getDifferent(), other.getDifferent()) &&
-          JodaBeanUtils.equal(getDifferentProperties(), other.getDifferentProperties());
+      return (_equalResultCount == other._equalResultCount) &&
+          JodaBeanUtils.equal(_viewDefinitionName, other._viewDefinitionName) &&
+          JodaBeanUtils.equal(_snapshotName, other._snapshotName) &&
+          JodaBeanUtils.equal(_valuationTime, other._valuationTime) &&
+          JodaBeanUtils.equal(_baseVersion, other._baseVersion) &&
+          JodaBeanUtils.equal(_testVersion, other._testVersion) &&
+          JodaBeanUtils.equal(_onlyBase, other._onlyBase) &&
+          JodaBeanUtils.equal(_onlyTest, other._onlyTest) &&
+          JodaBeanUtils.equal(_different, other._different) &&
+          JodaBeanUtils.equal(_differentProperties, other._differentProperties);
     }
     return false;
   }
@@ -409,34 +409,33 @@ public final class CalculationDifference implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getEqualResultCount());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getViewDefinitionName());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getSnapshotName());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getValuationTime());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getBaseVersion());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getTestVersion());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getOnlyBase());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getOnlyTest());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getDifferent());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getDifferentProperties());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_equalResultCount);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_viewDefinitionName);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_snapshotName);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_valuationTime);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_baseVersion);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_testVersion);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_onlyBase);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_onlyTest);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_different);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_differentProperties);
     return hash;
   }
 
   @Override
   public String toString() {
-    StringBuilder buf = new StringBuilder(384);
+    StringBuilder buf = new StringBuilder(352);
     buf.append("CalculationDifference{");
-    buf.append("equalResultCount").append('=').append(getEqualResultCount()).append(',').append(' ');
-    buf.append("viewDefinitionName").append('=').append(getViewDefinitionName()).append(',').append(' ');
-    buf.append("snapshotName").append('=').append(getSnapshotName()).append(',').append(' ');
-    buf.append("valuationTime").append('=').append(getValuationTime()).append(',').append(' ');
-    buf.append("baseVersion").append('=').append(getBaseVersion()).append(',').append(' ');
-    buf.append("testVersion").append('=').append(getTestVersion()).append(',').append(' ');
-    buf.append("onlyBase").append('=').append(getOnlyBase()).append(',').append(' ');
-    buf.append("onlyTest").append('=').append(getOnlyTest()).append(',').append(' ');
-    buf.append("different").append('=').append(getDifferent()).append(',').append(' ');
-    buf.append("differentProperties").append('=').append(getDifferentProperties()).append(',').append(' ');
-    buf.append("status").append('=').append(JodaBeanUtils.toString(getStatus()));
+    buf.append("equalResultCount").append('=').append(_equalResultCount).append(',').append(' ');
+    buf.append("viewDefinitionName").append('=').append(_viewDefinitionName).append(',').append(' ');
+    buf.append("snapshotName").append('=').append(_snapshotName).append(',').append(' ');
+    buf.append("valuationTime").append('=').append(_valuationTime).append(',').append(' ');
+    buf.append("baseVersion").append('=').append(_baseVersion).append(',').append(' ');
+    buf.append("testVersion").append('=').append(_testVersion).append(',').append(' ');
+    buf.append("onlyBase").append('=').append(_onlyBase).append(',').append(' ');
+    buf.append("onlyTest").append('=').append(_onlyTest).append(',').append(' ');
+    buf.append("different").append('=').append(_different).append(',').append(' ');
+    buf.append("differentProperties").append('=').append(JodaBeanUtils.toString(_differentProperties));
     buf.append('}');
     return buf.toString();
   }
@@ -822,19 +821,31 @@ public final class CalculationDifference implements ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

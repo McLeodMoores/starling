@@ -69,7 +69,7 @@ public class InMemoryFunctionBlacklistProviderComponentFactory extends AbstractC
     infoRO.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     infoRO.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteFunctionBlacklistProvider.class);
     repo.registerComponent(infoRO, provider);
-    
+
     final ComponentInfo infoMng = new ComponentInfo(ManageableFunctionBlacklistProvider.class, getClassifier());
     infoMng.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     infoMng.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteManageableFunctionBlacklistProvider.class);

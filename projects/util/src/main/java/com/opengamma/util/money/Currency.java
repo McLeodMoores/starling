@@ -81,63 +81,63 @@ public final class Currency implements ObjectIdentifiable, UniqueIdentifiable, C
    */
   public static final Currency NZD = of("NZD");
   /**
-   * The currency 'DKK' - Danish Krone
+   * The currency 'DKK' - Danish Krone.
    */
   public static final Currency DKK = of("DKK");
   /**
-   * The currency 'DEM' - Deutsche Mark
+   * The currency 'DEM' - Deutsche Mark.
    */
   public static final Currency DEM = of("DEM");
   /**
-   * The currency 'CZK' - Czeck Krona
+   * The currency 'CZK' - Czeck Krona.
    */
   public static final Currency CZK = of("CZK");
   /**
-   * The currency 'SEK' - Swedish Krona
+   * The currency 'SEK' - Swedish Krona.
    */
   public static final Currency SEK = of("SEK");
   /**
-   * The currency 'SKK' - Slovak Korona
+   * The currency 'SKK' - Slovak Korona.
    */
   public static final Currency SKK = of("SKK");
   /**
-   * The currency 'ITL' - Italian Lira
+   * The currency 'ITL' - Italian Lira.
    */
   public static final Currency ITL = of("ITL");
   /**
-   * The currency 'HUF' = Hugarian Forint
+   * The currency 'HUF' = Hugarian Forint.
    */
   public static final Currency HUF = of("HUF");
   /**
-   * The currency 'FRF' - French Franc
+   * The currency 'FRF' - French Franc.
    */
   public static final Currency FRF = of("FRF");
   /**
-   * The currency 'NOK' - Norwegian Krone
+   * The currency 'NOK' - Norwegian Krone.
    */
   public static final Currency NOK = of("NOK");
   /**
-   * The currency 'HKD' - Hong Kong Dollar
+   * The currency 'HKD' - Hong Kong Dollar.
    */
   public static final Currency HKD = of("HKD");
   /**
-   * The currency 'BRL' - Brazil Dollar
+   * The currency 'BRL' - Brazil Dollar.
    */
   public static final Currency BRL = of("BRL");
   /**
-   * The currency 'ZAR' - South African Rand
+   * The currency 'ZAR' - South African Rand.
    */
   public static final Currency ZAR = of("ZAR");
   /**
-   * The currency 'PLN' - Polish Zloty
+   * The currency 'PLN' - Polish Zloty.
    */
   public static final Currency PLN = of("PLN");
   /**
-   * The currency 'SGD' - Singapore Dollar
+   * The currency 'SGD' - Singapore Dollar.
    */
   public static final Currency SGD = of("SGD");
   /**
-   * The currency 'MXN' - Mexican Peso
+   * The currency 'MXN' - Mexican Peso.
    */
   public static final Currency MXN = of("MXN");
 
@@ -189,7 +189,7 @@ public final class Currency implements ObjectIdentifiable, UniqueIdentifiable, C
     if (previous != null) {
       return previous;
     }
-    if (currencyCode.matches("[A-Z][A-Z][A-Z]") == false) {
+    if (!currencyCode.matches("[A-Z][A-Z][A-Z]")) {
       throw new IllegalArgumentException("Invalid currency code: " + currencyCode);
     }
     INSTANCE_MAP.putIfAbsent(currencyCode, new Currency(currencyCode));

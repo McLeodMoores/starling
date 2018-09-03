@@ -37,7 +37,7 @@ public class ConfigMetaDataResult extends AbstractMetaDataResult {
    * This is only populated if requested.
    */
   @PropertyDefinition
-  private final List<Class<?>> _configTypes = new ArrayList<Class<?>>();
+  private final List<Class<?>> _configTypes = new ArrayList<>();
 
   /**
    * Creates an instance.

@@ -38,7 +38,7 @@ import com.opengamma.util.tuple.Pairs;
 /**
  * Data structure to hold the data points of a surface.
  * Note no interpolation or fitting is done in this code.
- * 
+ *
  * @param <X> Type of the x-data
  * @param <Y> Type of the y-data
  */

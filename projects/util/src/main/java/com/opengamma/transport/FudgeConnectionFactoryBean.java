@@ -52,9 +52,8 @@ public class FudgeConnectionFactoryBean extends SingletonFactoryBean<FudgeConnec
     if (_endPointDescriptionProvider != null) {
       ArgumentChecker.notNull(getFudgeContext(), "fudgeContext");
       return _endPointDescriptionProvider.getEndPointDescription(getFudgeContext());
-    } else {
-      return null;
     }
+    return null;
   }
 
   @Override

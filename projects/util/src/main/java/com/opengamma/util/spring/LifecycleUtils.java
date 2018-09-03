@@ -20,7 +20,7 @@ public final class LifecycleUtils {
 
   /**
    * Calls the {@link Lifecycle#start} method if available on the object.
-   * 
+   *
    * @param o object to test and call
    */
   public static void start(final Object o) {
@@ -30,8 +30,8 @@ public final class LifecycleUtils {
   }
 
   /**
-   * Calls the {@link Lifecycle#isRunning} method if available on the object, returning a default state if it's not implemented
-   * 
+   * Calls the {@link Lifecycle#isRunning} method if available on the object, returning a default state if it's not implemented.
+   *
    * @param o object to test and call
    * @param defaultState the default return value if the object doesn't implement {@link Lifecycle}
    * @return the running state
@@ -39,14 +39,13 @@ public final class LifecycleUtils {
   public static boolean isRunning(final Object o, final boolean defaultState) {
     if (o instanceof Lifecycle) {
       return ((Lifecycle) o).isRunning();
-    } else {
-      return defaultState;
     }
+    return defaultState;
   }
 
   /**
    * Calls the {@link Lifecycle#stop} method if available on the object.
-   * 
+   *
    * @param o object to test and call
    */
   public static void stop(final Object o) {

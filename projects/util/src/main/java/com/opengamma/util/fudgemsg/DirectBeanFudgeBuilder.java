@@ -207,13 +207,13 @@ public final class DirectBeanFudgeBuilder<T extends Bean> implements FudgeBuilde
               try {
                 value = deserializer.fieldValueToObject(mp.propertyType(), field);
               } catch (final IllegalArgumentException ex) {
-                if (field.getValue() instanceof String == false) {
+                if (!(field.getValue() instanceof String)) {
                   throw ex;
                 }
                 value = JodaBeanUtils.stringConverter().convertFromString(mp.propertyType(), (String) field.getValue());
               }
             }
-            if (value != null || mp.propertyType().isPrimitive() == false) {
+            if (value != null || !mp.propertyType().isPrimitive()) {
               builder.set(mp.name(), value);
             }
           }

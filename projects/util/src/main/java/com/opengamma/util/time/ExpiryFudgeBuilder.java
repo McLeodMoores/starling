@@ -34,6 +34,8 @@ public final class ExpiryFudgeBuilder extends AbstractFudgeBuilder implements Fu
   public static final String DATETIME_FIELD_NAME = "datetime";
   /** Field name. */
   public static final String TIMEZONE_FIELD_NAME = "timezone";
+  /** Field name. */
+  public static final String EXPIRY_ACCURACY_NAME = "accuracy";
 
   /**
    * Dummy secondary type to force serialization.
@@ -111,6 +113,30 @@ public final class ExpiryFudgeBuilder extends AbstractFudgeBuilder implements Fu
     }
   }
 
+  /**
+   * Converts a Fudge date time and time zone string to an expiry.
+   *
+   * @param datetime  a Fudge date time
+   * @param timezone  the time zone
+   * @param accuracy  the accuracy
+   * @return  the expiry
+   */
+  protected static Expiry dateTimeToExpiry(final FudgeDateTime datetime, final String timezone, final ExpiryAccuracy accuracy) {
+    switch (accuracy) {
+      case MIN_HOUR_DAY_MONTH_YEAR:
+        return new Expiry(ZonedDateTime.ofInstant(datetime.toInstant(), ZoneId.of(timezone)), ExpiryAccuracy.MIN_HOUR_DAY_MONTH_YEAR);
+      case HOUR_DAY_MONTH_YEAR:
+        return new Expiry(ZonedDateTime.ofInstant(datetime.toInstant(), ZoneId.of(timezone)), ExpiryAccuracy.HOUR_DAY_MONTH_YEAR);
+      case DAY_MONTH_YEAR:
+        return new Expiry(datetime.getDate().toLocalDate().atStartOfDay(ZoneId.of(timezone)), ExpiryAccuracy.DAY_MONTH_YEAR);
+      case MONTH_YEAR:
+        return new Expiry(datetime.getDate().toLocalDate().atStartOfDay(ZoneId.of(timezone)), ExpiryAccuracy.MONTH_YEAR);
+      case YEAR:
+        return new Expiry(datetime.getDate().toLocalDate().atStartOfDay(ZoneId.of(timezone)), ExpiryAccuracy.YEAR);
+      default:
+        throw new IllegalArgumentException("Invalid accuracy value on " + datetime);
+    }
+  }
   //-------------------------------------------------------------------------
   @Override
   public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final Expiry object) {
@@ -145,6 +171,7 @@ public final class ExpiryFudgeBuilder extends AbstractFudgeBuilder implements Fu
   public static void toFudgeMsg(final FudgeSerializer serializer, final Expiry object, final MutableFudgeMsg msg) {
     addToMessage(msg, DATETIME_FIELD_NAME, expiryToDateTime(object));
     addToMessage(msg, TIMEZONE_FIELD_NAME, object.getExpiry().getZone().getId());
+    addToMessage(msg, EXPIRY_ACCURACY_NAME, object.getAccuracy().name());
   }
 
   //-------------------------------------------------------------------------
@@ -166,7 +193,8 @@ public final class ExpiryFudgeBuilder extends AbstractFudgeBuilder implements Fu
     }
     return dateTimeToExpiry(
         msg.getValue(FudgeDateTime.class, DATETIME_FIELD_NAME),
-        msg.getString(TIMEZONE_FIELD_NAME));
+        msg.getString(TIMEZONE_FIELD_NAME),
+        ExpiryAccuracy.valueOf(msg.getString(EXPIRY_ACCURACY_NAME)));
   }
 
 }

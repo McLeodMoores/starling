@@ -55,7 +55,7 @@ public class UserEventHistoryRequest implements Bean {
 
   /**
    * Creates an instance with object identifier.
-   * 
+   *
    * @param objectId  the object identifier, not null
    */
   public UserEventHistoryRequest(final ObjectId objectId) {
@@ -64,7 +64,7 @@ public class UserEventHistoryRequest implements Bean {
 
   /**
    * Creates an instance with user name.
-   * 
+   *
    * @param userName  the user name, not null
    */
   public UserEventHistoryRequest(final String userName) {

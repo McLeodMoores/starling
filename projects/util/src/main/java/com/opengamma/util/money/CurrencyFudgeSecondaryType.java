@@ -43,16 +43,14 @@ public final class CurrencyFudgeSecondaryType extends SecondaryFieldType<Currenc
     if (isoCodeOrUniqueId.length() == 3) {
       // 3 letters means ISO code
       return Currency.of(isoCodeOrUniqueId);
-    } else {
-      // Otherwise, try as a UID
-      final UniqueId uniqueId = UniqueId.parse(isoCodeOrUniqueId);
-      if (Currency.OBJECT_SCHEME.equals(uniqueId.getScheme())) {
-        return Currency.of(uniqueId.getValue());
-      } else {
-        throw new IllegalArgumentException("Not a unique identifier or currency ISO code - '"
-            + isoCodeOrUniqueId + "'");
-      }
     }
+    // Otherwise, try as a UID
+    final UniqueId uniqueId = UniqueId.parse(isoCodeOrUniqueId);
+    if (Currency.OBJECT_SCHEME.equals(uniqueId.getScheme())) {
+      return Currency.of(uniqueId.getValue());
+    }
+    throw new IllegalArgumentException("Not a unique identifier or currency ISO code - '"
+        + isoCodeOrUniqueId + "'");
   }
 
 }

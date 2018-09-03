@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.security.option;
@@ -26,7 +26,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Expiry;
 
 /**
- * 
+ *
  */
 @BeanDefinition
 @SecurityDescription(type = EquityWarrantSecurity.SECURITY_TYPE, description = "Equity warrant")

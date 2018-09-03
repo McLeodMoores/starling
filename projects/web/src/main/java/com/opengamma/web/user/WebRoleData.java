@@ -64,7 +64,7 @@ public class WebRoleData extends WebPerRequestData {
   //-------------------------------------------------------------------------
   /**
    * Gets the role master.
-   * 
+   *
    * @return the role master, may be null
    */
   public RoleMaster getRoleMaster() {

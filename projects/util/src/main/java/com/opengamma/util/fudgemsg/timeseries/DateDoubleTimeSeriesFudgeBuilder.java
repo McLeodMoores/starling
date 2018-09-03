@@ -15,7 +15,7 @@ import org.fudgemsg.mapping.FudgeSerializer;
 import com.opengamma.timeseries.date.DateDoubleTimeSeries;
 
 /**
- * Fudge message encoder/decoder (builder) for DateDoubleTimeSeries
+ * Fudge message encoder/decoder (builder) for DateDoubleTimeSeries.
  */
 @FudgeBuilderFor(DateDoubleTimeSeries.class)
 public class DateDoubleTimeSeriesFudgeBuilder implements FudgeBuilder<DateDoubleTimeSeries<?>> {

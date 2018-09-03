@@ -182,10 +182,10 @@ public final class RandomizingMarketDataSpecification implements ImmutableBean, 
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       RandomizingMarketDataSpecification other = (RandomizingMarketDataSpecification) obj;
-      return JodaBeanUtils.equal(getUnderlying(), other.getUnderlying()) &&
-          JodaBeanUtils.equal(getUpdateProbability(), other.getUpdateProbability()) &&
-          JodaBeanUtils.equal(getMaxPercentageChange(), other.getMaxPercentageChange()) &&
-          JodaBeanUtils.equal(getAverageCycleInterval(), other.getAverageCycleInterval());
+      return JodaBeanUtils.equal(_underlying, other._underlying) &&
+          JodaBeanUtils.equal(_updateProbability, other._updateProbability) &&
+          JodaBeanUtils.equal(_maxPercentageChange, other._maxPercentageChange) &&
+          JodaBeanUtils.equal(_averageCycleInterval, other._averageCycleInterval);
     }
     return false;
   }
@@ -193,10 +193,10 @@ public final class RandomizingMarketDataSpecification implements ImmutableBean, 
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getUnderlying());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getUpdateProbability());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getMaxPercentageChange());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getAverageCycleInterval());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_underlying);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_updateProbability);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_maxPercentageChange);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_averageCycleInterval);
     return hash;
   }
 
@@ -204,10 +204,10 @@ public final class RandomizingMarketDataSpecification implements ImmutableBean, 
   public String toString() {
     StringBuilder buf = new StringBuilder(160);
     buf.append("RandomizingMarketDataSpecification{");
-    buf.append("underlying").append('=').append(getUnderlying()).append(',').append(' ');
-    buf.append("updateProbability").append('=').append(getUpdateProbability()).append(',').append(' ');
-    buf.append("maxPercentageChange").append('=').append(getMaxPercentageChange()).append(',').append(' ');
-    buf.append("averageCycleInterval").append('=').append(JodaBeanUtils.toString(getAverageCycleInterval()));
+    buf.append("underlying").append('=').append(_underlying).append(',').append(' ');
+    buf.append("updateProbability").append('=').append(_updateProbability).append(',').append(' ');
+    buf.append("maxPercentageChange").append('=').append(_maxPercentageChange).append(',').append(' ');
+    buf.append("averageCycleInterval").append('=').append(JodaBeanUtils.toString(_averageCycleInterval));
     buf.append('}');
     return buf.toString();
   }
@@ -420,19 +420,31 @@ public final class RandomizingMarketDataSpecification implements ImmutableBean, 
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

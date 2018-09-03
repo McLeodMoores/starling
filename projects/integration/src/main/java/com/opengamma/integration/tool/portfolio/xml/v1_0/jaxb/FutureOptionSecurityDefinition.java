@@ -72,6 +72,7 @@ public class FutureOptionSecurityDefinition extends ListedSecurityDefinition {
   @PropertyDefinition
   private boolean _isMargined;
 
+  @Override
   public ListedSecurityExtractor getSecurityExtractor() {
     return new ListedFutureOptionSecurityExtractor(this);
   }

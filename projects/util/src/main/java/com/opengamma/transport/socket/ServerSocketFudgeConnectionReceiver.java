@@ -32,7 +32,7 @@ import com.opengamma.util.TerminatableJob;
 import com.opengamma.util.TerminatableJobContainer;
 
 /**
- * Listens on a ServerSocket and passes FudgeConnections to an underlying FudgeConnectionReceiver
+ * Listens on a ServerSocket and passes FudgeConnections to an underlying FudgeConnectionReceiver.
  */
 public class ServerSocketFudgeConnectionReceiver extends AbstractServerSocketProcess {
 

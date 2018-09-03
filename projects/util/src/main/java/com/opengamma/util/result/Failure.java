@@ -216,10 +216,10 @@ public final class Failure implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       Failure other = (Failure) obj;
-      return JodaBeanUtils.equal(getStatus(), other.getStatus()) &&
-          JodaBeanUtils.equal(getMessage(), other.getMessage()) &&
-          JodaBeanUtils.equal(getStackTrace(), other.getStackTrace()) &&
-          JodaBeanUtils.equal(getCauseType(), other.getCauseType());
+      return JodaBeanUtils.equal(_status, other._status) &&
+          JodaBeanUtils.equal(_message, other._message) &&
+          JodaBeanUtils.equal(_stackTrace, other._stackTrace) &&
+          JodaBeanUtils.equal(_causeType, other._causeType);
     }
     return false;
   }
@@ -227,10 +227,10 @@ public final class Failure implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getStatus());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getMessage());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getStackTrace());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getCauseType());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_status);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_message);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_stackTrace);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_causeType);
     return hash;
   }
 
@@ -238,10 +238,10 @@ public final class Failure implements ImmutableBean {
   public String toString() {
     StringBuilder buf = new StringBuilder(160);
     buf.append("Failure{");
-    buf.append("status").append('=').append(getStatus()).append(',').append(' ');
-    buf.append("message").append('=').append(getMessage()).append(',').append(' ');
-    buf.append("stackTrace").append('=').append(getStackTrace()).append(',').append(' ');
-    buf.append("causeType").append('=').append(JodaBeanUtils.toString(getCauseType()));
+    buf.append("status").append('=').append(_status).append(',').append(' ');
+    buf.append("message").append('=').append(_message).append(',').append(' ');
+    buf.append("stackTrace").append('=').append(_stackTrace).append(',').append(' ');
+    buf.append("causeType").append('=').append(JodaBeanUtils.toString(_causeType));
     buf.append('}');
     return buf.toString();
   }
@@ -456,19 +456,31 @@ public final class Failure implements ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

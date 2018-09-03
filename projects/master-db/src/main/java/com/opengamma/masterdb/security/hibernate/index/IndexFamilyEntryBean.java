@@ -41,13 +41,13 @@ public class IndexFamilyEntryBean extends DirectBean {
     if (!(other instanceof IndexFamilyEntryBean)) {
       return false;
     }
-    IndexFamilyEntryBean index = (IndexFamilyEntryBean) other;
+    final IndexFamilyEntryBean index = (IndexFamilyEntryBean) other;
     return new EqualsBuilder()
       .append(getTenor(), index.getTenor())
       .append(getIdentifier(), index.getIdentifier())
       .isEquals();
   }
-  
+
   @Override
   public int hashCode() {
     return new HashCodeBuilder()

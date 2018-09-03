@@ -29,6 +29,9 @@
 <listEntry value="com.opengamma.util.credit"/>
 <listEntry value="com.opengamma.util.csv"/>
 <listEntry value="com.opengamma.util.fudgemsg"/>
+<listEntry value="com.opengamma.util.fudgemsg.multimap"/>
+<listEntry value="com.opengamma.util.fudgemsg.timeseries"/>
+<listEntry value="com.opengamma.util.fudgemsg.tuple"/>
 <listEntry value="com.opengamma.util.i18n"/>
 <listEntry value="com.opengamma.util.map"/>
 <listEntry value="com.opengamma.util.money"/>

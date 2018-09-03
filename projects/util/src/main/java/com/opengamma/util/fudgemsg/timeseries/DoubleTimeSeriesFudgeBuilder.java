@@ -27,7 +27,7 @@ import com.opengamma.timeseries.precise.zdt.ImmutableZonedDateTimeDoubleTimeSeri
 import com.opengamma.timeseries.precise.zdt.ZonedDateTimeDoubleTimeSeries;
 
 /**
- * Fudge message encoder/decoder (builder) for DoubleTimeSeries
+ * Fudge message encoder/decoder (builder) for DoubleTimeSeries.
  */
 @FudgeBuilderFor(DoubleTimeSeries.class)
 public class DoubleTimeSeriesFudgeBuilder implements FudgeBuilder<DoubleTimeSeries<?>> {
@@ -177,9 +177,8 @@ public class DoubleTimeSeriesFudgeBuilder implements FudgeBuilder<DoubleTimeSeri
       if (zoneId != null) {
         final ZoneId zone = ZoneId.of(zoneId);
         return ImmutableZonedDateTimeDoubleTimeSeries.of(instants, values, zone);
-      } else {
-        return ImmutableInstantDoubleTimeSeries.of(instants, values);
       }
+      return ImmutableInstantDoubleTimeSeries.of(instants, values);
     }
     throw new IllegalArgumentException("Unrecognized Fudge message: " + dates + " " + instants + " " + zoneId);
   }

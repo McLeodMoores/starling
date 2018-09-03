@@ -52,7 +52,7 @@ public class InterestRateFutureConvention extends ExchangeTradedFutureAndOptionC
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param name  the convention name, not null
    * @param externalIdBundle  the external identifiers for this convention, not null
    * @param expiryConvention  the expiry convention, not null
@@ -69,7 +69,7 @@ public class InterestRateFutureConvention extends ExchangeTradedFutureAndOptionC
   //-------------------------------------------------------------------------
   /**
    * Gets the type identifying this convention.
-   * 
+   *
    * @return the {@link #TYPE} constant, not null
    */
   @Override

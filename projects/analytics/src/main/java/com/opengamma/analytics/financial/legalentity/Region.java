@@ -7,28 +7,27 @@ package com.opengamma.analytics.financial.legalentity;
 
 import java.io.Serializable;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
 import org.joda.beans.Bean;
+import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
 import org.joda.beans.ImmutableBean;
 import org.joda.beans.JodaBeanUtils;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
 import org.joda.beans.PropertyDefinition;
-import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
+import org.joda.beans.impl.direct.DirectPrivateBeanBuilder;
 
 import com.google.common.collect.ImmutableSet;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.i18n.Country;
 import com.opengamma.util.money.Currency;
-import org.joda.beans.BeanBuilder;
 
 /**
  *
@@ -167,9 +166,9 @@ public final class Region implements ImmutableBean, Serializable {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       Region other = (Region) obj;
-      return JodaBeanUtils.equal(getName(), other.getName()) &&
-          JodaBeanUtils.equal(getCountries(), other.getCountries()) &&
-          JodaBeanUtils.equal(getCurrencies(), other.getCurrencies());
+      return JodaBeanUtils.equal(_name, other._name) &&
+          JodaBeanUtils.equal(_countries, other._countries) &&
+          JodaBeanUtils.equal(_currencies, other._currencies);
     }
     return false;
   }
@@ -177,9 +176,9 @@ public final class Region implements ImmutableBean, Serializable {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getName());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getCountries());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getCurrencies());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_name);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_countries);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_currencies);
     return hash;
   }
 
@@ -187,9 +186,9 @@ public final class Region implements ImmutableBean, Serializable {
   public String toString() {
     StringBuilder buf = new StringBuilder(128);
     buf.append("Region{");
-    buf.append("name").append('=').append(getName()).append(',').append(' ');
-    buf.append("countries").append('=').append(getCountries()).append(',').append(' ');
-    buf.append("currencies").append('=').append(JodaBeanUtils.toString(getCurrencies()));
+    buf.append("name").append('=').append(_name).append(',').append(' ');
+    buf.append("countries").append('=').append(_countries).append(',').append(' ');
+    buf.append("currencies").append('=').append(JodaBeanUtils.toString(_currencies));
     buf.append('}');
     return buf.toString();
   }
@@ -318,7 +317,7 @@ public final class Region implements ImmutableBean, Serializable {
   /**
    * The bean-builder for {@code Region}.
    */
-  private static final class Builder extends DirectFieldsBeanBuilder<Region> {
+  private static final class Builder extends DirectPrivateBeanBuilder<Region> {
 
     private String _name;
     private Set<Country> _countries = ImmutableSet.of();
@@ -328,6 +327,7 @@ public final class Region implements ImmutableBean, Serializable {
      * Restricted constructor.
      */
     private Builder() {
+      super(meta());
     }
 
     //-----------------------------------------------------------------------
@@ -361,30 +361,6 @@ public final class Region implements ImmutableBean, Serializable {
         default:
           throw new NoSuchElementException("Unknown property: " + propertyName);
       }
-      return this;
-    }
-
-    @Override
-    public Builder set(MetaProperty<?> property, Object value) {
-      super.set(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(String propertyName, String value) {
-      setString(meta().metaProperty(propertyName), value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(MetaProperty<?> property, String value) {
-      super.setString(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
-      super.setAll(propertyValueMap);
       return this;
     }
 

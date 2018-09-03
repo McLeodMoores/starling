@@ -238,8 +238,8 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
   }
 
   private void initThreadLocalServiceContext() {
-    
-    VersionCorrectionProvider vcProvider = new VersionCorrectionProvider() {
+
+    final VersionCorrectionProvider vcProvider = new VersionCorrectionProvider() {
         @Override
         public VersionCorrection getPortfolioVersionCorrection() {
           return VersionCorrection.LATEST;
@@ -250,7 +250,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
         }
       };
 
-    ImmutableMap.Builder<Class<?>, Object> services = ImmutableMap.<Class<?>, Object>builder()
+    final ImmutableMap.Builder<Class<?>, Object> services = ImmutableMap.<Class<?>, Object>builder()
         .put(ConfigSource.class, getConfigSource())
         .put(RegionSource.class, getRegionSource())
         .put(ConventionBundleSource.class, getConventionBundleSource())

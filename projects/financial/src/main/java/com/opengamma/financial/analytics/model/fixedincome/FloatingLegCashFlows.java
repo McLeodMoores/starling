@@ -589,23 +589,23 @@ public class FloatingLegCashFlows implements ImmutableBean, SwapLegCashFlows {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       FloatingLegCashFlows other = (FloatingLegCashFlows) obj;
-      return JodaBeanUtils.equal(getAccrualStart(), other.getAccrualStart()) &&
-          JodaBeanUtils.equal(getAccrualEnd(), other.getAccrualEnd()) &&
-          JodaBeanUtils.equal(getAccrualYearFractions(), other.getAccrualYearFractions()) &&
-          JodaBeanUtils.equal(getFixingStart(), other.getFixingStart()) &&
-          JodaBeanUtils.equal(getFixingEnd(), other.getFixingEnd()) &&
-          JodaBeanUtils.equal(getFixingYearFractions(), other.getFixingYearFractions()) &&
-          JodaBeanUtils.equal(getForwardRates(), other.getForwardRates()) &&
-          JodaBeanUtils.equal(getFixedRates(), other.getFixedRates()) &&
-          JodaBeanUtils.equal(getPaymentDates(), other.getPaymentDates()) &&
-          JodaBeanUtils.equal(getPaymentTimes(), other.getPaymentTimes()) &&
-          JodaBeanUtils.equal(getPaymentDiscountFactors(), other.getPaymentDiscountFactors()) &&
-          JodaBeanUtils.equal(getPaymentAmounts(), other.getPaymentAmounts()) &&
-          JodaBeanUtils.equal(getProjectedAmounts(), other.getProjectedAmounts()) &&
-          JodaBeanUtils.equal(getNotionals(), other.getNotionals()) &&
-          JodaBeanUtils.equal(getSpreads(), other.getSpreads()) &&
-          JodaBeanUtils.equal(getGearings(), other.getGearings()) &&
-          JodaBeanUtils.equal(getIndexTenors(), other.getIndexTenors());
+      return JodaBeanUtils.equal(_accrualStart, other._accrualStart) &&
+          JodaBeanUtils.equal(_accrualEnd, other._accrualEnd) &&
+          JodaBeanUtils.equal(_accrualYearFractions, other._accrualYearFractions) &&
+          JodaBeanUtils.equal(_fixingStart, other._fixingStart) &&
+          JodaBeanUtils.equal(_fixingEnd, other._fixingEnd) &&
+          JodaBeanUtils.equal(_fixingYearFractions, other._fixingYearFractions) &&
+          JodaBeanUtils.equal(_forwardRates, other._forwardRates) &&
+          JodaBeanUtils.equal(_fixedRates, other._fixedRates) &&
+          JodaBeanUtils.equal(_paymentDates, other._paymentDates) &&
+          JodaBeanUtils.equal(_paymentTimes, other._paymentTimes) &&
+          JodaBeanUtils.equal(_paymentDiscountFactors, other._paymentDiscountFactors) &&
+          JodaBeanUtils.equal(_paymentAmounts, other._paymentAmounts) &&
+          JodaBeanUtils.equal(_projectedAmounts, other._projectedAmounts) &&
+          JodaBeanUtils.equal(_notionals, other._notionals) &&
+          JodaBeanUtils.equal(_spreads, other._spreads) &&
+          JodaBeanUtils.equal(_gearings, other._gearings) &&
+          JodaBeanUtils.equal(_indexTenors, other._indexTenors);
     }
     return false;
   }
@@ -613,29 +613,29 @@ public class FloatingLegCashFlows implements ImmutableBean, SwapLegCashFlows {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getAccrualStart());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getAccrualEnd());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getAccrualYearFractions());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getFixingStart());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getFixingEnd());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getFixingYearFractions());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getForwardRates());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getFixedRates());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getPaymentDates());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getPaymentTimes());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getPaymentDiscountFactors());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getPaymentAmounts());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getProjectedAmounts());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getNotionals());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getSpreads());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getGearings());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getIndexTenors());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_accrualStart);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_accrualEnd);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_accrualYearFractions);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_fixingStart);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_fixingEnd);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_fixingYearFractions);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_forwardRates);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_fixedRates);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_paymentDates);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_paymentTimes);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_paymentDiscountFactors);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_paymentAmounts);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_projectedAmounts);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_notionals);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_spreads);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_gearings);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_indexTenors);
     return hash;
   }
 
   @Override
   public String toString() {
-    StringBuilder buf = new StringBuilder(736);
+    StringBuilder buf = new StringBuilder(576);
     buf.append("FloatingLegCashFlows{");
     int len = buf.length();
     toString(buf);
@@ -647,28 +647,23 @@ public class FloatingLegCashFlows implements ImmutableBean, SwapLegCashFlows {
   }
 
   protected void toString(StringBuilder buf) {
-    buf.append("accrualStart").append('=').append(JodaBeanUtils.toString(getAccrualStart())).append(',').append(' ');
-    buf.append("accrualEnd").append('=').append(JodaBeanUtils.toString(getAccrualEnd())).append(',').append(' ');
-    buf.append("accrualYearFractions").append('=').append(JodaBeanUtils.toString(getAccrualYearFractions())).append(',').append(' ');
-    buf.append("fixingStart").append('=').append(JodaBeanUtils.toString(getFixingStart())).append(',').append(' ');
-    buf.append("fixingEnd").append('=').append(JodaBeanUtils.toString(getFixingEnd())).append(',').append(' ');
-    buf.append("fixingYearFractions").append('=').append(JodaBeanUtils.toString(getFixingYearFractions())).append(',').append(' ');
-    buf.append("forwardRates").append('=').append(JodaBeanUtils.toString(getForwardRates())).append(',').append(' ');
-    buf.append("fixedRates").append('=').append(JodaBeanUtils.toString(getFixedRates())).append(',').append(' ');
-    buf.append("paymentDates").append('=').append(JodaBeanUtils.toString(getPaymentDates())).append(',').append(' ');
-    buf.append("paymentTimes").append('=').append(JodaBeanUtils.toString(getPaymentTimes())).append(',').append(' ');
-    buf.append("paymentDiscountFactors").append('=').append(JodaBeanUtils.toString(getPaymentDiscountFactors())).append(',').append(' ');
-    buf.append("paymentAmounts").append('=').append(JodaBeanUtils.toString(getPaymentAmounts())).append(',').append(' ');
-    buf.append("projectedAmounts").append('=').append(JodaBeanUtils.toString(getProjectedAmounts())).append(',').append(' ');
-    buf.append("notionals").append('=').append(JodaBeanUtils.toString(getNotionals())).append(',').append(' ');
-    buf.append("spreads").append('=').append(JodaBeanUtils.toString(getSpreads())).append(',').append(' ');
-    buf.append("gearings").append('=').append(JodaBeanUtils.toString(getGearings())).append(',').append(' ');
-    buf.append("indexTenors").append('=').append(JodaBeanUtils.toString(getIndexTenors())).append(',').append(' ');
-    buf.append("numberOfFixedCashFlows").append('=').append(JodaBeanUtils.toString(getNumberOfFixedCashFlows())).append(',').append(' ');
-    buf.append("numberOfFloatingCashFlows").append('=').append(JodaBeanUtils.toString(getNumberOfFloatingCashFlows())).append(',').append(' ');
-    buf.append("numberOfCashFlows").append('=').append(JodaBeanUtils.toString(getNumberOfCashFlows())).append(',').append(' ');
-    buf.append("discountedPaymentAmounts").append('=').append(JodaBeanUtils.toString(getDiscountedPaymentAmounts())).append(',').append(' ');
-    buf.append("discountedProjectedAmounts").append('=').append(JodaBeanUtils.toString(getDiscountedProjectedAmounts())).append(',').append(' ');
+    buf.append("accrualStart").append('=').append(JodaBeanUtils.toString(_accrualStart)).append(',').append(' ');
+    buf.append("accrualEnd").append('=').append(JodaBeanUtils.toString(_accrualEnd)).append(',').append(' ');
+    buf.append("accrualYearFractions").append('=').append(JodaBeanUtils.toString(_accrualYearFractions)).append(',').append(' ');
+    buf.append("fixingStart").append('=').append(JodaBeanUtils.toString(_fixingStart)).append(',').append(' ');
+    buf.append("fixingEnd").append('=').append(JodaBeanUtils.toString(_fixingEnd)).append(',').append(' ');
+    buf.append("fixingYearFractions").append('=').append(JodaBeanUtils.toString(_fixingYearFractions)).append(',').append(' ');
+    buf.append("forwardRates").append('=').append(JodaBeanUtils.toString(_forwardRates)).append(',').append(' ');
+    buf.append("fixedRates").append('=').append(JodaBeanUtils.toString(_fixedRates)).append(',').append(' ');
+    buf.append("paymentDates").append('=').append(JodaBeanUtils.toString(_paymentDates)).append(',').append(' ');
+    buf.append("paymentTimes").append('=').append(JodaBeanUtils.toString(_paymentTimes)).append(',').append(' ');
+    buf.append("paymentDiscountFactors").append('=').append(JodaBeanUtils.toString(_paymentDiscountFactors)).append(',').append(' ');
+    buf.append("paymentAmounts").append('=').append(JodaBeanUtils.toString(_paymentAmounts)).append(',').append(' ');
+    buf.append("projectedAmounts").append('=').append(JodaBeanUtils.toString(_projectedAmounts)).append(',').append(' ');
+    buf.append("notionals").append('=').append(JodaBeanUtils.toString(_notionals)).append(',').append(' ');
+    buf.append("spreads").append('=').append(JodaBeanUtils.toString(_spreads)).append(',').append(' ');
+    buf.append("gearings").append('=').append(JodaBeanUtils.toString(_gearings)).append(',').append(' ');
+    buf.append("indexTenors").append('=').append(JodaBeanUtils.toString(_indexTenors)).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------
@@ -1314,19 +1309,31 @@ public class FloatingLegCashFlows implements ImmutableBean, SwapLegCashFlows {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

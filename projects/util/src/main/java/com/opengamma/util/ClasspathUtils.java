@@ -34,7 +34,7 @@ import com.google.common.collect.Sets;
 import com.opengamma.OpenGammaRuntimeException;
 
 /**
- * Classpath utilities
+ * Classpath utilities.
  */
 public class ClasspathUtils {
 
@@ -245,7 +245,7 @@ public class ClasspathUtils {
      * @return true if a jar
      */
     public boolean isInfoParsed() {
-      return "?".equals(_version) == false;
+      return !"?".equals(_version);
     }
 
     /**
@@ -253,7 +253,7 @@ public class ClasspathUtils {
      * @return true if a jar
      */
     public boolean isGroupParsed() {
-      return "?".equals(_groupId) == false;
+      return !"?".equals(_groupId);
     }
 
     /**

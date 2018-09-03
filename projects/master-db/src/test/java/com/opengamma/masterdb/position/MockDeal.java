@@ -164,7 +164,7 @@ import com.opengamma.util.ArgumentChecker;
   /**
    * The meta-bean for {@code MockDeal}.
    */
-  public static class Meta extends DirectMetaBean {
+  static class Meta extends DirectMetaBean {
     /**
      * The singleton instance of the meta-bean.
      */

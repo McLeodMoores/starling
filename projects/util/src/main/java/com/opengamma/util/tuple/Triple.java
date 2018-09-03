@@ -252,17 +252,17 @@ public final class Triple<A, B, C>
     /**
      * The meta-property for the {@code first} property.
      */
-    private final MetaProperty<Object> _first = DirectMetaProperty.ofDerived(
+    private final MetaProperty<Object> _first = DirectMetaProperty.ofImmutable(
         this, "first", Triple.class, Object.class);
     /**
      * The meta-property for the {@code second} property.
      */
-    private final MetaProperty<Object> _second = DirectMetaProperty.ofDerived(
+    private final MetaProperty<Object> _second = DirectMetaProperty.ofImmutable(
         this, "second", Triple.class, Object.class);
     /**
      * The meta-property for the {@code third} property.
      */
-    private final MetaProperty<Object> _third = DirectMetaProperty.ofDerived(
+    private final MetaProperty<Object> _third = DirectMetaProperty.ofImmutable(
         this, "third", Triple.class, Object.class);
     /**
      * The meta-properties.

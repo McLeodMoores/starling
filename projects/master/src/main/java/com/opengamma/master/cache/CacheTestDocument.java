@@ -133,7 +133,7 @@ class CacheTestDocument extends AbstractDocument {
   /**
    * The meta-bean for {@code CacheTestDocument}.
    */
-  public static class Meta extends AbstractDocument.Meta {
+  static class Meta extends AbstractDocument.Meta {
     /**
      * The singleton instance of the meta-bean.
      */

@@ -201,7 +201,7 @@ public class DbConnectorComponentFactory extends AbstractAliasedComponentFactory
     } catch (final IllegalAccessException ex) {
       throw new OpenGammaRuntimeException("Could not access Hibernate mapping files implementation: " + hibernateMappingFilesClassName, ex);
     }
-    final Set<String> config = new HashSet<String>();
+    final Set<String> config = new HashSet<>();
     for (final Class<?> cls : hibernateMappingFiles.getHibernateMappingFiles()) {
       final String hbm = cls.getName().replace('.', '/') + ".hbm.xml";
       config.add(hbm);

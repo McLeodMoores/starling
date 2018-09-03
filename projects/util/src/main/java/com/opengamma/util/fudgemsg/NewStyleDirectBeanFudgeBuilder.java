@@ -111,12 +111,12 @@ public final class NewStyleDirectBeanFudgeBuilder<T extends Bean> implements Fud
                 }
               }
             } catch (final IllegalArgumentException ex) {
-              if (field.getValue() instanceof String == false) {
+              if (!(field.getValue() instanceof String)) {
                 throw ex;
               }
               value = JodaBeanUtils.stringConverter().convertFromString(mp.propertyType(), (String) field.getValue());
             }
-            if (value != null || mp.propertyType().isPrimitive() == false) {
+            if (value != null || !mp.propertyType().isPrimitive()) {
               builder.set(mp.name(), value);
             }
           }

@@ -197,9 +197,9 @@ public final class AnalyticsEnvironment implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       AnalyticsEnvironment other = (AnalyticsEnvironment) obj;
-      return JodaBeanUtils.equal(getModelDayCount(), other.getModelDayCount()) &&
-          JodaBeanUtils.equal(getFixedAnnuityDefinitionBuilder(), other.getFixedAnnuityDefinitionBuilder()) &&
-          JodaBeanUtils.equal(getFloatingAnnuityDefinitionBuilder(), other.getFloatingAnnuityDefinitionBuilder());
+      return JodaBeanUtils.equal(_modelDayCount, other._modelDayCount) &&
+          JodaBeanUtils.equal(_fixedAnnuityDefinitionBuilder, other._fixedAnnuityDefinitionBuilder) &&
+          JodaBeanUtils.equal(_floatingAnnuityDefinitionBuilder, other._floatingAnnuityDefinitionBuilder);
     }
     return false;
   }
@@ -207,9 +207,9 @@ public final class AnalyticsEnvironment implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getModelDayCount());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getFixedAnnuityDefinitionBuilder());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getFloatingAnnuityDefinitionBuilder());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_modelDayCount);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_fixedAnnuityDefinitionBuilder);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_floatingAnnuityDefinitionBuilder);
     return hash;
   }
 
@@ -217,9 +217,9 @@ public final class AnalyticsEnvironment implements ImmutableBean {
   public String toString() {
     StringBuilder buf = new StringBuilder(128);
     buf.append("AnalyticsEnvironment{");
-    buf.append("modelDayCount").append('=').append(getModelDayCount()).append(',').append(' ');
-    buf.append("fixedAnnuityDefinitionBuilder").append('=').append(getFixedAnnuityDefinitionBuilder()).append(',').append(' ');
-    buf.append("floatingAnnuityDefinitionBuilder").append('=').append(JodaBeanUtils.toString(getFloatingAnnuityDefinitionBuilder()));
+    buf.append("modelDayCount").append('=').append(_modelDayCount).append(',').append(' ');
+    buf.append("fixedAnnuityDefinitionBuilder").append('=').append(_fixedAnnuityDefinitionBuilder).append(',').append(' ');
+    buf.append("floatingAnnuityDefinitionBuilder").append('=').append(JodaBeanUtils.toString(_floatingAnnuityDefinitionBuilder));
     buf.append('}');
     return buf.toString();
   }
@@ -407,19 +407,31 @@ public final class AnalyticsEnvironment implements ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

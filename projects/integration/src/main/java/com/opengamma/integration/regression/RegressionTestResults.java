@@ -148,9 +148,9 @@ public final class RegressionTestResults implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       RegressionTestResults other = (RegressionTestResults) obj;
-      return JodaBeanUtils.equal(getBaseVersion(), other.getBaseVersion()) &&
-          JodaBeanUtils.equal(getTestVersion(), other.getTestVersion()) &&
-          JodaBeanUtils.equal(getDifferences(), other.getDifferences());
+      return JodaBeanUtils.equal(_baseVersion, other._baseVersion) &&
+          JodaBeanUtils.equal(_testVersion, other._testVersion) &&
+          JodaBeanUtils.equal(_differences, other._differences);
     }
     return false;
   }
@@ -158,20 +158,19 @@ public final class RegressionTestResults implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getBaseVersion());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getTestVersion());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getDifferences());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_baseVersion);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_testVersion);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_differences);
     return hash;
   }
 
   @Override
   public String toString() {
-    StringBuilder buf = new StringBuilder(160);
+    StringBuilder buf = new StringBuilder(128);
     buf.append("RegressionTestResults{");
-    buf.append("baseVersion").append('=').append(getBaseVersion()).append(',').append(' ');
-    buf.append("testVersion").append('=').append(getTestVersion()).append(',').append(' ');
-    buf.append("differences").append('=').append(getDifferences()).append(',').append(' ');
-    buf.append("status").append('=').append(JodaBeanUtils.toString(getStatus()));
+    buf.append("baseVersion").append('=').append(_baseVersion).append(',').append(' ');
+    buf.append("testVersion").append('=').append(_testVersion).append(',').append(' ');
+    buf.append("differences").append('=').append(JodaBeanUtils.toString(_differences));
     buf.append('}');
     return buf.toString();
   }
@@ -379,19 +378,31 @@ public final class RegressionTestResults implements ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

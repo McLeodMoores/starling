@@ -123,7 +123,7 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
   }
 
   /**
-   * This fails because fudge can't serialize arrays of something other than primitives
+   * This fails because fudge can't serialize arrays of something other than primitives.
    */
   @Test(enabled = false)
   public void test_inner_with_array_of_pojos_context() {
@@ -286,7 +286,7 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
   }
 
   /**
-   * This fails because fudge can't serialize arrays of something other than primitives
+   * This fails because fudge can't serialize arrays of something other than primitives.
    */
   @Test(enabled = false)
   public void test_inner_implementing_iface_with_array_of_pojos_context() {

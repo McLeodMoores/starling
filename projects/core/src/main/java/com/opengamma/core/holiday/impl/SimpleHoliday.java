@@ -99,7 +99,7 @@ public class SimpleHoliday extends DirectBean
 
   /**
    * Creates an instance populated with a set of dates.
-   * 
+   *
    * @param dates  the dates to add, not null
    */
   public SimpleHoliday(final Iterable<LocalDate> dates) {
@@ -109,26 +109,26 @@ public class SimpleHoliday extends DirectBean
   //-------------------------------------------------------------------------
   /**
    * Adds a holiday date to the list.
-   * 
+   *
    * @param date  the date to add, not null
    */
   public void addHolidayDate(final LocalDate date) {
     ArgumentChecker.notNull(date, "date");
     if (_holidayDates.contains(date) == false) {
       int index = Collections.binarySearch(_holidayDates, date);
-      index = (index < 0 ? -(index + 1) : index);
+      index = index < 0 ? -(index + 1) : index;
       _holidayDates.add(index, date);
     }
   }
 
   /**
    * Adds a set of holiday dates to the list.
-   * 
+   *
    * @param dates  the dates to add, not null
    */
   public void addHolidayDates(final Iterable<LocalDate> dates) {
     ArgumentChecker.notNull(dates, "dates");
-    Set<LocalDate> deduplicatedAdditions = new HashSet<>();
+    final Set<LocalDate> deduplicatedAdditions = new HashSet<>();
     Iterables.addAll(deduplicatedAdditions, dates);
     deduplicatedAdditions.removeAll(_holidayDates);
     _holidayDates.addAll(deduplicatedAdditions);

@@ -1,33 +1,33 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.curve;
 
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.joda.beans.Bean;
-import org.joda.beans.BeanDefinition;
-import org.joda.beans.PropertyDefinition;
-
-import com.opengamma.analytics.math.function.Function1D;
-import com.opengamma.util.ArgumentChecker;
-import java.util.Map;
-import java.util.Set;
 import org.joda.beans.BeanBuilder;
+import org.joda.beans.BeanDefinition;
 import org.joda.beans.JodaBeanUtils;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
+import org.joda.beans.PropertyDefinition;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
+import com.opengamma.analytics.math.function.Function1D;
+import com.opengamma.util.ArgumentChecker;
+
 /**
  * Defines a general curve <i>(x, y)</i> class. The <i>x</i> and <i>y</i> data can be any type.
  * The curves are named; if a name is not provided then a unique ID will be used.
- * 
+ *
  * @param <T>  the type of the <i>x</i> data
  * @param <U>  the type of the <i>y</i> data
  */
@@ -55,7 +55,7 @@ public abstract class Curve<T extends Comparable<T>, U>
 
   /**
    * Constructs a curve with the given name.
-   * 
+   *
    * @param name  the name of the curve, not null
    */
   protected Curve(final String name) {
@@ -66,21 +66,21 @@ public abstract class Curve<T extends Comparable<T>, U>
   //-------------------------------------------------------------------------
   /**
    * Gets the <i>x</i> data for this curve.
-   * 
+   *
    * @return the <i>x</i> data for this curve, not null
    */
   public abstract T[] getXData();
 
   /**
    * Gets the <i>y</i> data for this curve.
-   * 
+   *
    * @return the <i>y</i> data for this curve, not null
    */
   public abstract U[] getYData();
 
   /**
    * Gets the number of data points used to construct this curve.
-   * 
+   *
    * @return the number of data points used to construct this curve
    */
   public abstract int size();
@@ -88,7 +88,7 @@ public abstract class Curve<T extends Comparable<T>, U>
   //-------------------------------------------------------------------------
   /**
    * Given an <i>x</i> value, return the <i>y</i> value from this curve.
-   * 
+   *
    * @param x  the <i>x</i> value, not null
    * @return the <i>y</i> value, not null
    */
@@ -96,7 +96,7 @@ public abstract class Curve<T extends Comparable<T>, U>
 
   /**
    * Converts a curve to a Function1D.
-   * 
+   *
    * @return the curve as a mapping {@code f(x) -> y}, not null
    */
   public Function1D<T, U> toFunction1D() {
@@ -113,7 +113,7 @@ public abstract class Curve<T extends Comparable<T>, U>
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_name == null) ? 0 : _name.hashCode());
+    result = prime * result + (_name == null ? 0 : _name.hashCode());
     return result;
   }
 

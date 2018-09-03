@@ -19,7 +19,7 @@ import com.opengamma.master.AbstractHistoryResult;
 
 /**
  * Provides access to the results of querying history in a {@code DbBeanMaster}.
- * 
+ *
  * @param <D>  the type of the document
  */
 @BeanDefinition

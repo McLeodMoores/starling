@@ -71,7 +71,7 @@ public final class VolatilitySurfaceKey implements ImmutableBean, StructuredMark
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param target  the target
    * @param name  the name
    * @param instrumentType  the instrument type
@@ -87,7 +87,7 @@ public final class VolatilitySurfaceKey implements ImmutableBean, StructuredMark
   //-------------------------------------------------------------------------
   /**
    * Compares this key to another, by currency then name.
-   * 
+   *
    * @param other  the other key, not null
    * @return the comparison value
    */
@@ -255,11 +255,11 @@ public final class VolatilitySurfaceKey implements ImmutableBean, StructuredMark
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       VolatilitySurfaceKey other = (VolatilitySurfaceKey) obj;
-      return JodaBeanUtils.equal(getTarget(), other.getTarget()) &&
-          JodaBeanUtils.equal(getName(), other.getName()) &&
-          JodaBeanUtils.equal(getInstrumentType(), other.getInstrumentType()) &&
-          JodaBeanUtils.equal(getQuoteType(), other.getQuoteType()) &&
-          JodaBeanUtils.equal(getQuoteUnits(), other.getQuoteUnits());
+      return JodaBeanUtils.equal(_target, other._target) &&
+          JodaBeanUtils.equal(_name, other._name) &&
+          JodaBeanUtils.equal(_instrumentType, other._instrumentType) &&
+          JodaBeanUtils.equal(_quoteType, other._quoteType) &&
+          JodaBeanUtils.equal(_quoteUnits, other._quoteUnits);
     }
     return false;
   }
@@ -267,11 +267,11 @@ public final class VolatilitySurfaceKey implements ImmutableBean, StructuredMark
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getTarget());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getName());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getInstrumentType());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getQuoteType());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getQuoteUnits());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_target);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_name);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_instrumentType);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_quoteType);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_quoteUnits);
     return hash;
   }
 
@@ -279,11 +279,11 @@ public final class VolatilitySurfaceKey implements ImmutableBean, StructuredMark
   public String toString() {
     StringBuilder buf = new StringBuilder(192);
     buf.append("VolatilitySurfaceKey{");
-    buf.append("target").append('=').append(getTarget()).append(',').append(' ');
-    buf.append("name").append('=').append(getName()).append(',').append(' ');
-    buf.append("instrumentType").append('=').append(getInstrumentType()).append(',').append(' ');
-    buf.append("quoteType").append('=').append(getQuoteType()).append(',').append(' ');
-    buf.append("quoteUnits").append('=').append(JodaBeanUtils.toString(getQuoteUnits()));
+    buf.append("target").append('=').append(_target).append(',').append(' ');
+    buf.append("name").append('=').append(_name).append(',').append(' ');
+    buf.append("instrumentType").append('=').append(_instrumentType).append(',').append(' ');
+    buf.append("quoteType").append('=').append(_quoteType).append(',').append(' ');
+    buf.append("quoteUnits").append('=').append(JodaBeanUtils.toString(_quoteUnits));
     buf.append('}');
     return buf.toString();
   }
@@ -521,19 +521,31 @@ public final class VolatilitySurfaceKey implements ImmutableBean, StructuredMark
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

@@ -91,7 +91,7 @@ public class FunctionConfigurationSourceComponentFactory extends AbstractCompone
 
   /**
    * Debug utility to sort a repository. This allows two to be compared more easily.
-   * 
+   *
    * @param source the raw repository configuration source
    * @return a source that return a sorted list of functions
    */
@@ -100,7 +100,7 @@ public class FunctionConfigurationSourceComponentFactory extends AbstractCompone
 
       @Override
       public FunctionConfigurationBundle getFunctionConfiguration(final Instant version) {
-        final List<FunctionConfiguration> functions = new ArrayList<FunctionConfiguration>(source.getFunctionConfiguration(version).getFunctions());
+        final List<FunctionConfiguration> functions = new ArrayList<>(source.getFunctionConfiguration(version).getFunctions());
         Collections.sort(functions, new Comparator<FunctionConfiguration>() {
 
           @Override
@@ -161,7 +161,7 @@ public class FunctionConfigurationSourceComponentFactory extends AbstractCompone
    * Initializes the source.
    * <p>
    * Calls {@link #initSources()} and combines the result using {@link CombiningFunctionConfigurationSource}.
-   * 
+   *
    * @return the list of base sources to be combined, not null
    */
   protected FunctionConfigurationSource initSource() {
@@ -216,7 +216,7 @@ public class FunctionConfigurationSourceComponentFactory extends AbstractCompone
 
   /**
    * Initializes the list of sources to be combined.
-   * 
+   *
    * @return the list of base sources to be combined, not null
    */
   protected List<FunctionConfigurationSource> initSources() {
@@ -230,7 +230,7 @@ public class FunctionConfigurationSourceComponentFactory extends AbstractCompone
 
   /**
    * Gets the list of curve and surface function configuration sources.
-   * 
+   *
    * @return the curve and surface function configuration sources, not null
    */
   protected List<FunctionConfigurationSource> curveAndSurfaceSources() {

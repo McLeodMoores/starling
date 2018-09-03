@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 
@@ -62,7 +62,7 @@ public class CapFloorSecurityBean extends SecurityBean {
     if (!(other instanceof CapFloorSecurityBean)) {
       return false;
     }
-    CapFloorSecurityBean capFloor = (CapFloorSecurityBean) other;
+    final CapFloorSecurityBean capFloor = (CapFloorSecurityBean) other;
     return new EqualsBuilder()
         .append(getId(), capFloor.getId())
         .append(getNotional(), capFloor.getNotional())
@@ -78,7 +78,7 @@ public class CapFloorSecurityBean extends SecurityBean {
         .append(isPayer(), capFloor.isPayer())
         .isEquals();
   }
-  
+
   @Override
   public int hashCode() {
     return new HashCodeBuilder()

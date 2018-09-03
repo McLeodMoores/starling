@@ -28,7 +28,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.TerminatableJob;
 
 /**
- * A Socket implementation of FudgeConnection
+ * A Socket implementation of FudgeConnection.
  */
 public class SocketFudgeConnection extends AbstractSocketProcess implements FudgeConnection {
 

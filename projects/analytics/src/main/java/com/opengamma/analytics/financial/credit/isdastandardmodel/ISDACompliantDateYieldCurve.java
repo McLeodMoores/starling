@@ -63,7 +63,7 @@ public class ISDACompliantDateYieldCurve
   /**
    * Builds a yield curve from a baseDate with a set of <b>continually compounded</b> zero rates at given knot dates.
    * The times (year-fractions) between the baseDate and the knot dates is calculated using ACT/365.
-   * 
+   *
    * @param baseDate  the base date for the curve (i.e. this is time zero), not null
    * @param dates  the knot dates on the curve. These must be ascending with the first date after the baseDate, not null
    * @param rates  the continually compounded zero rates at given knot dates, not null
@@ -75,7 +75,7 @@ public class ISDACompliantDateYieldCurve
   /**
    * Builds a yield curve from a baseDate with a set of <b>continually compounded</b> zero rates at given knot dates.
    * The times (year-fractions) between the baseDate and the knot dates is calculated using the specified day-count-convention.
-   * 
+   *
    * @param baseDate  the base date for the curve (i.e. this is time zero), not null
    * @param dates  the knot dates on the curve. These must be ascending with the first date after the baseDate, not null
    * @param rates  the continually compounded zero rates at given knot dates, not null

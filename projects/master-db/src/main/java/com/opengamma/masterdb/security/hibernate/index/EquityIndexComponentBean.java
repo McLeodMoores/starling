@@ -40,7 +40,7 @@ public class EquityIndexComponentBean extends DirectBean {
   private EquityIndexBean _equityIndex;
   @PropertyDefinition
   private Set<ExternalIdBean> _identifiers;
-  @PropertyDefinition 
+  @PropertyDefinition
   private BigDecimal _weight;
 
   @Override
@@ -48,7 +48,7 @@ public class EquityIndexComponentBean extends DirectBean {
     if (!(other instanceof EquityIndexComponentBean)) {
       return false;
     }
-    EquityIndexComponentBean index = (EquityIndexComponentBean) other;
+    final EquityIndexComponentBean index = (EquityIndexComponentBean) other;
     return new EqualsBuilder()
       .append(getId(), index.getId())
       .append(getPosition(), index.getPosition())
@@ -57,7 +57,7 @@ public class EquityIndexComponentBean extends DirectBean {
       .append(getWeight(), index.getWeight())
       .isEquals();
   }
-  
+
   @Override
   public int hashCode() {
     return new HashCodeBuilder()

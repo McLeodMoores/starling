@@ -124,35 +124,30 @@ public class ExecutorServiceFactoryBean extends SingletonFactoryBean<ExecutorSer
       case CACHED:
         if (getThreadFactory() != null) {
           return Executors.newCachedThreadPool(getThreadFactory());
-        } else {
-          return Executors.newCachedThreadPool();
         }
+        return Executors.newCachedThreadPool();
       case FIXED:
         ArgumentChecker.notNegativeOrZero(getNumberOfThreads(), "numberOfThreads");
         if (getThreadFactory() != null) {
           return Executors.newFixedThreadPool(getNumberOfThreads(), getThreadFactory());
-        } else {
-          return Executors.newFixedThreadPool(getNumberOfThreads());
         }
+        return Executors.newFixedThreadPool(getNumberOfThreads());
       case SCHEDULED:
         ArgumentChecker.notNegativeOrZero(getNumberOfThreads(), "numberOfThreads");
         if (getThreadFactory() != null) {
           return Executors.newScheduledThreadPool(getNumberOfThreads(), getThreadFactory());
-        } else {
-          return Executors.newScheduledThreadPool(getNumberOfThreads());
         }
+        return Executors.newScheduledThreadPool(getNumberOfThreads());
       case SINGLE:
         if (getThreadFactory() != null) {
           return Executors.newSingleThreadExecutor(getThreadFactory());
-        } else {
-          return Executors.newSingleThreadExecutor();
         }
+        return Executors.newSingleThreadExecutor();
       case SINGLE_SCHEDULED:
         if (getThreadFactory() != null) {
           return Executors.newSingleThreadScheduledExecutor(getThreadFactory());
-        } else {
-          return Executors.newSingleThreadScheduledExecutor();
         }
+        return Executors.newSingleThreadScheduledExecutor();
       default:
         throw new IllegalStateException("Unhandled executor style - " + getStyle());
     }

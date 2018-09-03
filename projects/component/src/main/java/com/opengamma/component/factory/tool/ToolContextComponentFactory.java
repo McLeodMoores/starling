@@ -215,7 +215,7 @@ public class ToolContextComponentFactory extends AbstractComponentFactory {
   @Override
   public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
     final ToolContext context = createToolContext();
-    final Map<String, MetaProperty<?>> mapTarget = new HashMap<String, MetaProperty<?>>(context.metaBean().metaPropertyMap());
+    final Map<String, MetaProperty<?>> mapTarget = new HashMap<>(context.metaBean().metaPropertyMap());
     mapTarget.keySet().retainAll(this.metaBean().metaPropertyMap().keySet());
     for (final MetaProperty<?> mp : mapTarget.values()) {
       mp.set(context, mp.get(this));

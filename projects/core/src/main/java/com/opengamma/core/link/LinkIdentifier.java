@@ -157,8 +157,8 @@ public final class LinkIdentifier<I, T> implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       LinkIdentifier<?, ?> other = (LinkIdentifier<?, ?>) obj;
-      return JodaBeanUtils.equal(getIdentifier(), other.getIdentifier()) &&
-          JodaBeanUtils.equal(getType(), other.getType());
+      return JodaBeanUtils.equal(_identifier, other._identifier) &&
+          JodaBeanUtils.equal(_type, other._type);
     }
     return false;
   }
@@ -166,8 +166,8 @@ public final class LinkIdentifier<I, T> implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getIdentifier());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getType());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_identifier);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_type);
     return hash;
   }
 
@@ -175,8 +175,8 @@ public final class LinkIdentifier<I, T> implements ImmutableBean {
   public String toString() {
     StringBuilder buf = new StringBuilder(96);
     buf.append("LinkIdentifier{");
-    buf.append("identifier").append('=').append(getIdentifier()).append(',').append(' ');
-    buf.append("type").append('=').append(JodaBeanUtils.toString(getType()));
+    buf.append("identifier").append('=').append(_identifier).append(',').append(' ');
+    buf.append("type").append('=').append(JodaBeanUtils.toString(_type));
     buf.append('}');
     return buf.toString();
   }
@@ -348,19 +348,31 @@ public final class LinkIdentifier<I, T> implements ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder<I, T> setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder<I, T> setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder<I, T> setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

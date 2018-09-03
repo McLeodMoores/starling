@@ -154,7 +154,7 @@ public class ManageableTrade extends DirectBean
     _tradeDate = trade.getTradeDate();
     _tradeTime = trade.getTradeTime();
     // this is a bug - PLAT-3117 - counterparty ID isn't nullable. use a default or throw an exception?
-    _counterpartyExternalId = (trade.getCounterparty() != null ? trade.getCounterparty().getExternalId() : null);
+    _counterpartyExternalId = trade.getCounterparty() != null ? trade.getCounterparty().getExternalId() : null;
     _premium = trade.getPremium();
     _premiumCurrency = trade.getPremiumCurrency();
     _premiumDate = trade.getPremiumDate();

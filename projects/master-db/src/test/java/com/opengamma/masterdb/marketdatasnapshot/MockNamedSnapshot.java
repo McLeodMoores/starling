@@ -68,7 +68,7 @@ final class MockNamedSnapshot implements NamedSnapshot, ImmutableBean {
    * Returns a builder used to create an instance of the bean.
    * @return the builder, not null
    */
-  public static MockNamedSnapshot.Builder builder() {
+  static MockNamedSnapshot.Builder builder() {
     return new MockNamedSnapshot.Builder();
   }
 
@@ -119,7 +119,7 @@ final class MockNamedSnapshot implements NamedSnapshot, ImmutableBean {
    * Returns a builder that allows this bean to be mutated.
    * @return the mutable builder, not null
    */
-  public Builder toBuilder() {
+  Builder toBuilder() {
     return new Builder(this);
   }
 
@@ -130,9 +130,9 @@ final class MockNamedSnapshot implements NamedSnapshot, ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       MockNamedSnapshot other = (MockNamedSnapshot) obj;
-      return JodaBeanUtils.equal(getUniqueId(), other.getUniqueId()) &&
-          JodaBeanUtils.equal(getName(), other.getName()) &&
-          (getAnswer() == other.getAnswer());
+      return JodaBeanUtils.equal(_uniqueId, other._uniqueId) &&
+          JodaBeanUtils.equal(_name, other._name) &&
+          (_answer == other._answer);
     }
     return false;
   }
@@ -140,9 +140,9 @@ final class MockNamedSnapshot implements NamedSnapshot, ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getUniqueId());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getName());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getAnswer());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_uniqueId);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_name);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_answer);
     return hash;
   }
 
@@ -150,9 +150,9 @@ final class MockNamedSnapshot implements NamedSnapshot, ImmutableBean {
   public String toString() {
     StringBuilder buf = new StringBuilder(128);
     buf.append("MockNamedSnapshot{");
-    buf.append("uniqueId").append('=').append(getUniqueId()).append(',').append(' ');
-    buf.append("name").append('=').append(getName()).append(',').append(' ');
-    buf.append("answer").append('=').append(JodaBeanUtils.toString(getAnswer()));
+    buf.append("uniqueId").append('=').append(_uniqueId).append(',').append(' ');
+    buf.append("name").append('=').append(_name).append(',').append(' ');
+    buf.append("answer").append('=').append(JodaBeanUtils.toString(_answer));
     buf.append('}');
     return buf.toString();
   }
@@ -161,7 +161,7 @@ final class MockNamedSnapshot implements NamedSnapshot, ImmutableBean {
   /**
    * The meta-bean for {@code MockNamedSnapshot}.
    */
-  public static final class Meta extends DirectMetaBean {
+  static final class Meta extends DirectMetaBean {
     /**
      * The singleton instance of the meta-bean.
      */
@@ -279,7 +279,7 @@ final class MockNamedSnapshot implements NamedSnapshot, ImmutableBean {
   /**
    * The bean-builder for {@code MockNamedSnapshot}.
    */
-  public static final class Builder extends DirectFieldsBeanBuilder<MockNamedSnapshot> {
+  static final class Builder extends DirectFieldsBeanBuilder<MockNamedSnapshot> {
 
     private UniqueId _uniqueId;
     private String _name;
@@ -340,19 +340,31 @@ final class MockNamedSnapshot implements NamedSnapshot, ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

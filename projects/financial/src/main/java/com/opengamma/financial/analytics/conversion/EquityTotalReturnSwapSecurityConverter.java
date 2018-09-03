@@ -82,7 +82,7 @@ public class EquityTotalReturnSwapSecurityConverter extends FinancialSecurityVis
     final EquityDefinition equityDefinition = new EquityDefinition(legalEntity, equity.getCurrency(), security.getNumberOfShares());
     final ZonedDateTime startDateTime = startDate.atTime(LocalTime.MIN).atZone(ZoneId.systemDefault());
     final ZonedDateTime endDateTime = endDate.atTime(LocalTime.MIN).atZone(ZoneId.systemDefault());
-    return new EquityTotalReturnSwapDefinition(startDateTime, endDateTime, annuityDefinition, equityDefinition, security.getNotionalAmount(), 
+    return new EquityTotalReturnSwapDefinition(startDateTime, endDateTime, annuityDefinition, equityDefinition, security.getNotionalAmount(),
         security.getNotionalCurrency(), security.getDividendPercentage() / 100.);
   }
 

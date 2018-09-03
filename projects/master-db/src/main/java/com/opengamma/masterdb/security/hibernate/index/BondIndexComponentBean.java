@@ -40,7 +40,7 @@ public class BondIndexComponentBean extends DirectBean {
   private BondIndexBean _bondIndex;
   @PropertyDefinition
   private Set<ExternalIdBean> _identifiers;
-  @PropertyDefinition 
+  @PropertyDefinition
   private BigDecimal _weight;
 
   @Override
@@ -48,7 +48,7 @@ public class BondIndexComponentBean extends DirectBean {
     if (!(other instanceof BondIndexComponentBean)) {
       return false;
     }
-    BondIndexComponentBean index = (BondIndexComponentBean) other;
+    final BondIndexComponentBean index = (BondIndexComponentBean) other;
     return new EqualsBuilder()
       .append(getId(), index.getId())
       .append(getPosition(), index.getPosition())
@@ -57,7 +57,7 @@ public class BondIndexComponentBean extends DirectBean {
       .append(getWeight(), index.getWeight())
       .isEquals();
   }
-  
+
   @Override
   public int hashCode() {
     return new HashCodeBuilder()

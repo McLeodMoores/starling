@@ -22,7 +22,7 @@ import com.opengamma.util.tuple.Pairs;
 import au.com.bytecode.opencsv.CSVReader;
 
 /**
- * Look up whether you a pair of currencies is in the standard order
+ * Look up whether you a pair of currencies is in the standard order.
  */
 public class StandardCurrencyPairs {
 

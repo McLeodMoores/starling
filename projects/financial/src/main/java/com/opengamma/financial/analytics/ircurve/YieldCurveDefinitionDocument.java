@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.ircurve;
@@ -52,7 +52,7 @@ public class YieldCurveDefinitionDocument extends AbstractDocument implements Se
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param uniqueId  the unique identifier, not null
    * @param yieldCurveDefinition  the yield curve definition, not null
    */
@@ -66,7 +66,7 @@ public class YieldCurveDefinitionDocument extends AbstractDocument implements Se
   /**
    * Creates an instance.
    * This sets the unique identifier from the definition.
-   * 
+   *
    * @param yieldCurveDefinition  the yield curve definition, not null
    */
   public YieldCurveDefinitionDocument(final YieldCurveDefinition yieldCurveDefinition) {

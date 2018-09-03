@@ -89,7 +89,7 @@ public class ONArithmeticAverageLegConvention extends FinancialConvention {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param name  the convention name, not null
    * @param externalIdBundle  the external identifiers for this convention, not null
    * @param overnightIndexConvention  the id of the overnight index, not null
@@ -119,7 +119,7 @@ public class ONArithmeticAverageLegConvention extends FinancialConvention {
   //-------------------------------------------------------------------------
   /**
    * Gets the type identifying this convention.
-   * 
+   *
    * @return the {@link #TYPE} constant, not null
    */
   @Override

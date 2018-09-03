@@ -182,7 +182,7 @@ public final class ZipUtils {
     final ByteArrayList collector = new ByteArrayList(bytes.length + 32);
     final byte[] buf = new byte[1024];
     deflater.finish();
-    while (deflater.finished() == false) {
+    while (!deflater.finished()) {
       final int size = deflater.deflate(buf);
       collector.addElements(collector.size(), buf, 0, size);
     }
@@ -205,7 +205,7 @@ public final class ZipUtils {
       inflater.setInput(input);
       final ByteArrayList collector = new ByteArrayList(input.length * 4);
       final byte[] buf = new byte[1024];
-      while (inflater.finished() == false) {
+      while (!inflater.finished()) {
         final int size = inflater.inflate(buf);
         collector.addElements(collector.size(), buf, 0, size);
       }

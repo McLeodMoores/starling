@@ -118,7 +118,7 @@ public final class BucketedCurveSensitivities implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       BucketedCurveSensitivities other = (BucketedCurveSensitivities) obj;
-      return JodaBeanUtils.equal(getSensitivities(), other.getSensitivities());
+      return JodaBeanUtils.equal(_sensitivities, other._sensitivities);
     }
     return false;
   }
@@ -126,7 +126,7 @@ public final class BucketedCurveSensitivities implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getSensitivities());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_sensitivities);
     return hash;
   }
 
@@ -134,7 +134,7 @@ public final class BucketedCurveSensitivities implements ImmutableBean {
   public String toString() {
     StringBuilder buf = new StringBuilder(64);
     buf.append("BucketedCurveSensitivities{");
-    buf.append("sensitivities").append('=').append(JodaBeanUtils.toString(getSensitivities()));
+    buf.append("sensitivities").append('=').append(JodaBeanUtils.toString(_sensitivities));
     buf.append('}');
     return buf.toString();
   }
@@ -274,19 +274,31 @@ public final class BucketedCurveSensitivities implements ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

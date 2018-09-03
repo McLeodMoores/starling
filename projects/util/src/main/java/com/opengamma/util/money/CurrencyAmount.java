@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.money;
@@ -12,6 +12,7 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.joda.beans.Bean;
+import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
 import org.joda.beans.ImmutableBean;
 import org.joda.beans.ImmutableConstructor;
@@ -19,15 +20,14 @@ import org.joda.beans.JodaBeanUtils;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
 import org.joda.beans.PropertyDefinition;
-import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
+import org.joda.beans.impl.direct.DirectPrivateBeanBuilder;
 import org.joda.convert.FromString;
 import org.joda.convert.ToString;
 
 import com.opengamma.util.ArgumentChecker;
-import org.joda.beans.BeanBuilder;
 
 /**
  * An amount of a currency.
@@ -104,7 +104,7 @@ public final class CurrencyAmount implements ImmutableBean, Serializable {
    * Parses the string to produce a {@code CurrencyAmount}.
    * <p>
    * This parses the {@code toString} format of '${currency} ${amount}'.
-   * 
+   *
    * @param amountStr  the amount string, not null
    * @return the currency amount
    * @throws IllegalArgumentException if the amount cannot be parsed
@@ -112,15 +112,15 @@ public final class CurrencyAmount implements ImmutableBean, Serializable {
   @FromString
   public static CurrencyAmount parse(final String amountStr) {
     ArgumentChecker.notNull(amountStr, "amountStr");
-    String[] parts = StringUtils.split(amountStr, ' ');
+    final String[] parts = StringUtils.split(amountStr, ' ');
     if (parts.length != 2) {
       throw new IllegalArgumentException("Unable to parse amount, invalid format: " + amountStr);
     }
     try {
-      Currency cur = Currency.parse(parts[0]);
-      double amount = Double.parseDouble(parts[1]);
+      final Currency cur = Currency.parse(parts[0]);
+      final double amount = Double.parseDouble(parts[1]);
       return new CurrencyAmount(cur, amount);
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       throw new IllegalArgumentException("Unable to parse amount: " + amountStr, ex);
     }
   }
@@ -128,7 +128,7 @@ public final class CurrencyAmount implements ImmutableBean, Serializable {
   //-------------------------------------------------------------------------
   /**
    * Creates an instance.
-   * 
+   *
    * @param currency  the currency, not null
    * @param amount  the amount
    */
@@ -143,7 +143,7 @@ public final class CurrencyAmount implements ImmutableBean, Serializable {
   /**
    * Gets the currency.
    * For example, in the value 'GBP 12.34' the currency is 'GBP'.
-   * 
+   *
    * @return the currency, not null
    */
   public Currency getCurrency() {
@@ -153,7 +153,7 @@ public final class CurrencyAmount implements ImmutableBean, Serializable {
   /**
    * Gets the amount of the currency.
    * For example, in the value 'GBP 12.34' the amount is 12.34.
-   * 
+   *
    * @return the amount
    */
   public double getAmount() {
@@ -167,8 +167,8 @@ public final class CurrencyAmount implements ImmutableBean, Serializable {
    * This adds the specified amount to this monetary amount, returning a new object.
    * The addition simply uses standard {@code double} arithmetic.
    * <p>
-   * This instance is immutable and unaffected by this method. 
-   * 
+   * This instance is immutable and unaffected by this method.
+   *
    * @param amountToAdd  the amount to add, in the same currency, not null
    * @return an amount based on this with the specified amount added, not null
    * @throws IllegalArgumentException if the currencies are not equal
@@ -185,8 +185,8 @@ public final class CurrencyAmount implements ImmutableBean, Serializable {
    * This adds the specified amount to this monetary amount, returning a new object.
    * The addition simply uses standard {@code double} arithmetic.
    * <p>
-   * This instance is immutable and unaffected by this method. 
-   * 
+   * This instance is immutable and unaffected by this method.
+   *
    * @param amountToAdd  the amount to add, in the same currency
    * @return an amount based on this with the specified amount added, not null
    */
@@ -200,8 +200,8 @@ public final class CurrencyAmount implements ImmutableBean, Serializable {
    * This takes this amount and multiplies it by the specified value.
    * The multiplication simply uses standard {@code double} arithmetic.
    * <p>
-   * This instance is immutable and unaffected by this method. 
-   * 
+   * This instance is immutable and unaffected by this method.
+   *
    * @param valueToMultiplyBy  the scalar amount to multiply by
    * @return an amount based on this with the amount multiplied, not null
    */
@@ -215,7 +215,7 @@ public final class CurrencyAmount implements ImmutableBean, Serializable {
    * <p>
    * The format is the currency code, followed by a space, followed by the
    * amount: '${currency} ${amount}'.
-   * 
+   *
    * @return the currency amount, not null
    */
   @Override
@@ -261,8 +261,8 @@ public final class CurrencyAmount implements ImmutableBean, Serializable {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       CurrencyAmount other = (CurrencyAmount) obj;
-      return JodaBeanUtils.equal(getCurrency(), other.getCurrency()) &&
-          JodaBeanUtils.equal(getAmount(), other.getAmount());
+      return JodaBeanUtils.equal(_currency, other._currency) &&
+          JodaBeanUtils.equal(_amount, other._amount);
     }
     return false;
   }
@@ -270,8 +270,8 @@ public final class CurrencyAmount implements ImmutableBean, Serializable {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getCurrency());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getAmount());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_currency);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_amount);
     return hash;
   }
 
@@ -379,7 +379,7 @@ public final class CurrencyAmount implements ImmutableBean, Serializable {
   /**
    * The bean-builder for {@code CurrencyAmount}.
    */
-  private static final class Builder extends DirectFieldsBeanBuilder<CurrencyAmount> {
+  private static final class Builder extends DirectPrivateBeanBuilder<CurrencyAmount> {
 
     private Currency _currency;
     private double _amount;
@@ -388,6 +388,7 @@ public final class CurrencyAmount implements ImmutableBean, Serializable {
      * Restricted constructor.
      */
     private Builder() {
+      super(meta());
     }
 
     //-----------------------------------------------------------------------
@@ -415,30 +416,6 @@ public final class CurrencyAmount implements ImmutableBean, Serializable {
         default:
           throw new NoSuchElementException("Unknown property: " + propertyName);
       }
-      return this;
-    }
-
-    @Override
-    public Builder set(MetaProperty<?> property, Object value) {
-      super.set(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(String propertyName, String value) {
-      setString(meta().metaProperty(propertyName), value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(MetaProperty<?> property, String value) {
-      super.setString(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
-      super.setAll(propertyValueMap);
       return this;
     }
 

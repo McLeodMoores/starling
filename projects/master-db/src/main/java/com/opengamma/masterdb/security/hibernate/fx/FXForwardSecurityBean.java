@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 
@@ -51,7 +51,7 @@ public class FXForwardSecurityBean extends SecurityBean {
     if (!(other instanceof FXForwardSecurityBean)) {
       return false;
     }
-    FXForwardSecurityBean fxForward = (FXForwardSecurityBean) other;
+    final FXForwardSecurityBean fxForward = (FXForwardSecurityBean) other;
     return new EqualsBuilder()
       .append(getId(), fxForward.getId())
       .append(getForwardDate(), fxForward.getForwardDate())
@@ -62,7 +62,7 @@ public class FXForwardSecurityBean extends SecurityBean {
       .append(getRegion(), fxForward.getRegion())
       .isEquals();
   }
-  
+
   @Override
   public int hashCode() {
     return new HashCodeBuilder()

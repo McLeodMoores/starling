@@ -91,9 +91,8 @@ public abstract class AbstractJUnitResults implements Runnable {
     public String getText() {
       if (_text == null) {
         return "";
-      } else {
-        return _text.toString();
       }
+      return _text.toString();
     }
 
     public void setComputerName(final String computerName) {

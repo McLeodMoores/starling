@@ -174,8 +174,8 @@ public final class YieldCurveKey implements ImmutableBean, StructuredMarketDataK
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       YieldCurveKey other = (YieldCurveKey) obj;
-      return JodaBeanUtils.equal(getCurrency(), other.getCurrency()) &&
-          JodaBeanUtils.equal(getName(), other.getName());
+      return JodaBeanUtils.equal(_currency, other._currency) &&
+          JodaBeanUtils.equal(_name, other._name);
     }
     return false;
   }
@@ -183,8 +183,8 @@ public final class YieldCurveKey implements ImmutableBean, StructuredMarketDataK
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getCurrency());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getName());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_currency);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_name);
     return hash;
   }
 
@@ -192,8 +192,8 @@ public final class YieldCurveKey implements ImmutableBean, StructuredMarketDataK
   public String toString() {
     StringBuilder buf = new StringBuilder(96);
     buf.append("YieldCurveKey{");
-    buf.append("currency").append('=').append(getCurrency()).append(',').append(' ');
-    buf.append("name").append('=').append(JodaBeanUtils.toString(getName()));
+    buf.append("currency").append('=').append(_currency).append(',').append(' ');
+    buf.append("name").append('=').append(JodaBeanUtils.toString(_name));
     buf.append('}');
     return buf.toString();
   }
@@ -356,19 +356,31 @@ public final class YieldCurveKey implements ImmutableBean, StructuredMarketDataK
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

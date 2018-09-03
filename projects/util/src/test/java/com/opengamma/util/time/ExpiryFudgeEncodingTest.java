@@ -10,6 +10,10 @@ import static org.testng.Assert.assertNull;
 
 import org.fudgemsg.MutableFudgeMsg;
 import org.testng.annotations.Test;
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalDateTime;
+import org.threeten.bp.LocalTime;
+import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.ZonedDateTime;
 
 import com.opengamma.OpenGammaRuntimeException;
@@ -45,7 +49,8 @@ public class ExpiryFudgeEncodingTest extends AbstractFudgeBuilderTestCase {
    */
   @Test
   public void testAccuracyDay() {
-    final Expiry object = new Expiry(ZonedDateTime.now(), ExpiryAccuracy.DAY_MONTH_YEAR);
+    final ZonedDateTime date = ZonedDateTime.of(LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 0)), ZoneOffset.UTC);
+    final Expiry object = new Expiry(date, ExpiryAccuracy.DAY_MONTH_YEAR);
     assertEncodeDecodeCycle(Expiry.class, object);
   }
 

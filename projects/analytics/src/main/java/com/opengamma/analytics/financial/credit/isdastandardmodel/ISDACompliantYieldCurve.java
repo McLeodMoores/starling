@@ -42,7 +42,7 @@ public class ISDACompliantYieldCurve extends ISDACompliantCurve {
 
   /**
    * Creates a flat yield curve at level r.
-   * 
+   *
    * @param t  the (arbitrary) single knot point (t > 0)
    * @param r  the level
    */
@@ -53,7 +53,7 @@ public class ISDACompliantYieldCurve extends ISDACompliantCurve {
   /**
    * Creates a yield (discount) curve with knots at times, t, zero rates, r, at the knots and piecewise constant
    * forward  rates between knots (i.e. linear interpolation of r*t or the -log(discountFactor).
-   * 
+   *
    * @param t  the set of times that form the knots of the curve. Must be ascending with the first value >= 0, not null
    * @param r  the set of zero rates, not null
    */
@@ -69,10 +69,10 @@ public class ISDACompliantYieldCurve extends ISDACompliantCurve {
    * the yield curve today.  <br>
    * In general, a discount curve observed at time $t_1$ can be written as $P(t_1,T)$. Observed from time $t_2$ this is
    * $P(t_2,T) = \frac{P(t_1,T)}{P(t_1,t_2)}$
-   * 
+   *
    * @param timesFromBaseDate  the times measured from the base date of the curve, not null
    * @param r  the zero rates, not null
-   * @param newBaseFromOriginalBase  if this curve is to be used from a new base-date, what is the offset of the new base from the original 
+   * @param newBaseFromOriginalBase  if this curve is to be used from a new base-date, what is the offset of the new base from the original
    */
   ISDACompliantYieldCurve(final double[] timesFromBaseDate, final double[] r, final double newBaseFromOriginalBase) {
     super(timesFromBaseDate, r, newBaseFromOriginalBase);
@@ -80,7 +80,7 @@ public class ISDACompliantYieldCurve extends ISDACompliantCurve {
 
   /**
    * Creates a shallow copy of the specified curve, used to down cast from ISDACompliantCurve.
-   * 
+   *
    * @param from  the curve to copy from, not null
    */
   public ISDACompliantYieldCurve(final ISDACompliantCurve from) {

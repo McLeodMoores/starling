@@ -175,9 +175,8 @@ public final class AsynchronousOperation<T> {
     }
     if (result == null) {
       throw new AsynchronousExecution(this);
-    } else {
-      return result.getResult();
     }
+    return result.getResult();
   }
 
   /**

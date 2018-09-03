@@ -41,7 +41,7 @@ public class ISDACompliantCreditCurve extends ISDACompliantCurve {
 
   /**
    * Creates a flat credit (hazard) curve at hazard rate h.
-   * 
+   *
    * @param t  the (arbitrary) single knot point (t > 0)
    * @param h  the level
    */
@@ -53,7 +53,7 @@ public class ISDACompliantCreditCurve extends ISDACompliantCurve {
    * Creates a credit (hazard) curve with knots at times, t, zero hazard rates, h,
    * at the knots and piecewise constant forward hazard rates between knots
    * (i.e. linear interpolation of h*t or the -log(survival-probability).
-   * 
+   *
    * @param t  the knot (node) times, not null
    * @param h  the zero hazard rates, not null
    */
@@ -63,7 +63,7 @@ public class ISDACompliantCreditCurve extends ISDACompliantCurve {
 
   /**
    * Creates a shallow copy of the specified curve, used to down cast from ISDACompliantCurve.
-   * 
+   *
    * @param from  the curve to clone from, not null
    */
   public ISDACompliantCreditCurve(final ISDACompliantCurve from) {
@@ -73,7 +73,7 @@ public class ISDACompliantCreditCurve extends ISDACompliantCurve {
   //-------------------------------------------------------------------------
   /**
    * Get the zero hazard rate at time t (note: this simply a pseudonym for getZeroRate).
-   * 
+   *
    * @param t  the time
    * @return zero hazard rate at time t
    */
@@ -83,7 +83,7 @@ public class ISDACompliantCreditCurve extends ISDACompliantCurve {
 
   /**
    * Get the survival probability at time t (note: this simply a pseudonym for getDiscountFactor).
-   * 
+   *
    * @param t  the time
    * @return survival probability at time t
    */

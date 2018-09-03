@@ -192,11 +192,11 @@ public class SwapDetailsProvider implements ImmutableBean, InstrumentDetailsProv
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       SwapDetailsProvider other = (SwapDetailsProvider) obj;
-      return JodaBeanUtils.equal(getCurves(), other.getCurves()) &&
-          JodaBeanUtils.equal(getValuationTime(), other.getValuationTime()) &&
-          (isFixed() == other.isFixed()) &&
-          JodaBeanUtils.equal(getDefinition(), other.getDefinition()) &&
-          JodaBeanUtils.equal(getType(), other.getType());
+      return JodaBeanUtils.equal(_curves, other._curves) &&
+          JodaBeanUtils.equal(_valuationTime, other._valuationTime) &&
+          (_fixed == other._fixed) &&
+          JodaBeanUtils.equal(_definition, other._definition) &&
+          JodaBeanUtils.equal(_type, other._type);
     }
     return false;
   }
@@ -204,11 +204,11 @@ public class SwapDetailsProvider implements ImmutableBean, InstrumentDetailsProv
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getCurves());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getValuationTime());
-    hash = hash * 31 + JodaBeanUtils.hashCode(isFixed());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getDefinition());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getType());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_curves);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_valuationTime);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_fixed);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_definition);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_type);
     return hash;
   }
 
@@ -226,11 +226,11 @@ public class SwapDetailsProvider implements ImmutableBean, InstrumentDetailsProv
   }
 
   protected void toString(StringBuilder buf) {
-    buf.append("curves").append('=').append(JodaBeanUtils.toString(getCurves())).append(',').append(' ');
-    buf.append("valuationTime").append('=').append(JodaBeanUtils.toString(getValuationTime())).append(',').append(' ');
-    buf.append("fixed").append('=').append(JodaBeanUtils.toString(isFixed())).append(',').append(' ');
-    buf.append("definition").append('=').append(JodaBeanUtils.toString(getDefinition())).append(',').append(' ');
-    buf.append("type").append('=').append(JodaBeanUtils.toString(getType())).append(',').append(' ');
+    buf.append("curves").append('=').append(JodaBeanUtils.toString(_curves)).append(',').append(' ');
+    buf.append("valuationTime").append('=').append(JodaBeanUtils.toString(_valuationTime)).append(',').append(' ');
+    buf.append("fixed").append('=').append(JodaBeanUtils.toString(_fixed)).append(',').append(' ');
+    buf.append("definition").append('=').append(JodaBeanUtils.toString(_definition)).append(',').append(' ');
+    buf.append("type").append('=').append(JodaBeanUtils.toString(_type)).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------
@@ -466,19 +466,31 @@ public class SwapDetailsProvider implements ImmutableBean, InstrumentDetailsProv
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

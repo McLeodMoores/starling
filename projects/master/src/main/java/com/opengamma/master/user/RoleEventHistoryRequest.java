@@ -52,7 +52,7 @@ public class RoleEventHistoryRequest implements Bean {
 
   /**
    * Creates an instance with object identifier.
-   * 
+   *
    * @param objectId  the object identifier, not null
    */
   public RoleEventHistoryRequest(final ObjectId objectId) {
@@ -61,7 +61,7 @@ public class RoleEventHistoryRequest implements Bean {
 
   /**
    * Creates an instance with role name.
-   * 
+   *
    * @param roleName  the role name, not null
    */
   public RoleEventHistoryRequest(final String roleName) {

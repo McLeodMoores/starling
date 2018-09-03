@@ -24,7 +24,6 @@ import org.threeten.bp.LocalDate;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.financial.security.FinancialSecurity;
 import com.opengamma.financial.security.FinancialSecurityVisitor;
 import com.opengamma.id.ExternalIdBundle;
@@ -182,10 +181,10 @@ public final class InterestRateSwapSecurity extends FinancialSecurity {
     }
     try {
       metaBean().validate(this);
-      for (InterestRateSwapLeg leg : getLegs()) {
+      for (final InterestRateSwapLeg leg : getLegs()) {
         leg.metaBean().validate(leg);
       }
-    } catch (IllegalArgumentException ex) {
+    } catch (final IllegalArgumentException ex) {
       throw new IllegalArgumentException(name + " details invalid: " + ex.getMessage());
     }
   }

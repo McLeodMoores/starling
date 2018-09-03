@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 
@@ -53,7 +53,7 @@ public class NonDeliverableFXForwardSecurityBean extends SecurityBean {
     if (!(other instanceof NonDeliverableFXForwardSecurityBean)) {
       return false;
     }
-    NonDeliverableFXForwardSecurityBean fxForward = (NonDeliverableFXForwardSecurityBean) other;
+    final NonDeliverableFXForwardSecurityBean fxForward = (NonDeliverableFXForwardSecurityBean) other;
     return new EqualsBuilder()
       .append(getId(), fxForward.getId())
       .append(getForwardDate(), fxForward.getForwardDate())

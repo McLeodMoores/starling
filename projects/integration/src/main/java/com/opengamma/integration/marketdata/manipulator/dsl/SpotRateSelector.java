@@ -164,8 +164,8 @@ public final class SpotRateSelector implements DistinctMarketDataSelector, Immut
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       SpotRateSelector other = (SpotRateSelector) obj;
-      return JodaBeanUtils.equal(getCalcConfigNames(), other.getCalcConfigNames()) &&
-          JodaBeanUtils.equal(getCurrencyPairs(), other.getCurrencyPairs());
+      return JodaBeanUtils.equal(_calcConfigNames, other._calcConfigNames) &&
+          JodaBeanUtils.equal(_currencyPairs, other._currencyPairs);
     }
     return false;
   }
@@ -173,8 +173,8 @@ public final class SpotRateSelector implements DistinctMarketDataSelector, Immut
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getCalcConfigNames());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getCurrencyPairs());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_calcConfigNames);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_currencyPairs);
     return hash;
   }
 
@@ -182,8 +182,8 @@ public final class SpotRateSelector implements DistinctMarketDataSelector, Immut
   public String toString() {
     StringBuilder buf = new StringBuilder(96);
     buf.append("SpotRateSelector{");
-    buf.append("calcConfigNames").append('=').append(getCalcConfigNames()).append(',').append(' ');
-    buf.append("currencyPairs").append('=').append(JodaBeanUtils.toString(getCurrencyPairs()));
+    buf.append("calcConfigNames").append('=').append(_calcConfigNames).append(',').append(' ');
+    buf.append("currencyPairs").append('=').append(JodaBeanUtils.toString(_currencyPairs));
     buf.append('}');
     return buf.toString();
   }
@@ -349,19 +349,31 @@ public final class SpotRateSelector implements DistinctMarketDataSelector, Immut
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

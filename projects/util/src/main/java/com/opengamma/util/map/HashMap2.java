@@ -131,9 +131,8 @@ public class HashMap2<K1, K2, V> implements Map2<K1, K2, V> {
     final ConcurrentMap<K2, V> values = _values.get(key1);
     if (values != null) {
       return values.get(key2);
-    } else {
-      return null;
     }
+    return null;
   }
 
   @Override
@@ -166,9 +165,8 @@ public class HashMap2<K1, K2, V> implements Map2<K1, K2, V> {
     final ConcurrentMap<K2, V> values = _values.get(key1);
     if (values != null) {
       return values.containsKey(key2);
-    } else {
-      return false;
     }
+    return false;
   }
 
   @Override

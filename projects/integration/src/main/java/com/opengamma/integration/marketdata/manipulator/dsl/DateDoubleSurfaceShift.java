@@ -97,7 +97,7 @@ public final class DateDoubleSurfaceShift extends VolatilitySurfaceShiftManipula
    * @return the value of the property, not null
    */
   public double[] getYValues() {
-    return (_yValues != null ? _yValues.clone() : null);
+    return _yValues.clone();
   }
 
   //-----------------------------------------------------------------------
@@ -126,8 +126,8 @@ public final class DateDoubleSurfaceShift extends VolatilitySurfaceShiftManipula
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       DateDoubleSurfaceShift other = (DateDoubleSurfaceShift) obj;
-      return JodaBeanUtils.equal(getYValues(), other.getYValues()) &&
-          JodaBeanUtils.equal(getXValues(), other.getXValues()) &&
+      return JodaBeanUtils.equal(_yValues, other._yValues) &&
+          JodaBeanUtils.equal(_xValues, other._xValues) &&
           super.equals(obj);
     }
     return false;
@@ -136,8 +136,8 @@ public final class DateDoubleSurfaceShift extends VolatilitySurfaceShiftManipula
   @Override
   public int hashCode() {
     int hash = 7;
-    hash = hash * 31 + JodaBeanUtils.hashCode(getYValues());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getXValues());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_yValues);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_xValues);
     return hash ^ super.hashCode();
   }
 
@@ -157,8 +157,8 @@ public final class DateDoubleSurfaceShift extends VolatilitySurfaceShiftManipula
   @Override
   protected void toString(StringBuilder buf) {
     super.toString(buf);
-    buf.append("yValues").append('=').append(JodaBeanUtils.toString(getYValues())).append(',').append(' ');
-    buf.append("xValues").append('=').append(JodaBeanUtils.toString(getXValues())).append(',').append(' ');
+    buf.append("yValues").append('=').append(JodaBeanUtils.toString(_yValues)).append(',').append(' ');
+    buf.append("xValues").append('=').append(JodaBeanUtils.toString(_xValues)).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------
@@ -282,6 +282,7 @@ public final class DateDoubleSurfaceShift extends VolatilitySurfaceShiftManipula
      * @param beanToCopy  the bean to copy from, not null
      */
     private Builder(DateDoubleSurfaceShift beanToCopy) {
+      super(beanToCopy);
       this._yValues = beanToCopy.getYValues().clone();
       this._xValues = ImmutableList.copyOf(beanToCopy.getXValues());
     }
@@ -322,19 +323,31 @@ public final class DateDoubleSurfaceShift extends VolatilitySurfaceShiftManipula
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;
