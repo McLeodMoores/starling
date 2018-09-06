@@ -6,12 +6,18 @@
 package com.opengamma.core;
 
 
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNull;
+import static org.testng.Assert.assertTrue;
 import static org.testng.AssertJUnit.assertEquals;
 
 import org.testng.annotations.Test;
 
+import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.security.impl.SimpleSecurityLink;
+import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
+import com.opengamma.id.ExternalScheme;
 import com.opengamma.id.ObjectId;
 import com.opengamma.util.test.TestGroup;
 
@@ -25,83 +31,190 @@ public class LinkUtilsTest {
   private static final ObjectId OBJECT_ID = ObjectId.of("A", "B");
   private static final ExternalIdBundle EXTERNAL_ID_BUNDLE = ExternalIdBundle.of("C", "D");
 
-  public void test_best_empty() {
+  /**
+   * Tests that the link cannot be null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testNullLinkForBest() {
+    LinkUtils.best(null);
+  }
+
+  /**
+   * Tests that a link with no object id will return the id bundle.
+   */
+  @Test
+  public void testBestEmpty() {
     final SimpleSecurityLink test = new SimpleSecurityLink();
     assertEquals(ExternalIdBundle.EMPTY, LinkUtils.best(test));
   }
 
-  public void test_best_objectId() {
-    final SimpleSecurityLink test = new SimpleSecurityLink(OBJECT_ID);
+  /**
+   * Tests that the object id is returned.
+   */
+  @Test
+  public void testBestObjectId() {
+    final SimpleSecurityLink test = new SimpleSecurityLink();
+    test.setObjectId(OBJECT_ID);
     assertEquals(OBJECT_ID, LinkUtils.best(test));
   }
 
-  public void test_best_externalId() {
+  /**
+   * Tests that the bundle is returned.
+   */
+  @Test
+  public void testBestExternalId() {
     final SimpleSecurityLink test = new SimpleSecurityLink(EXTERNAL_ID_BUNDLE);
     assertEquals(EXTERNAL_ID_BUNDLE, LinkUtils.best(test));
   }
 
-  public void test_best_bothIds() {
-    final SimpleSecurityLink test = new SimpleSecurityLink(OBJECT_ID);
+  /**
+   * Tests that the object id is returned in preference to the external ids.
+   */
+  @Test
+  public void testBestBothIds() {
+    final SimpleSecurityLink test = new SimpleSecurityLink();
     test.setExternalId(EXTERNAL_ID_BUNDLE);
+    test.setObjectId(OBJECT_ID);
     assertEquals(OBJECT_ID, LinkUtils.best(test));
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_best_null() {
-    assertEquals(null, LinkUtils.best(null));
-  }
-
   //-------------------------------------------------------------------------
-  public void test_bestName_empty() {
+  /**
+   * Tests that the best name wen the link is empty.
+   */
+  @Test
+  public void testBestNameEmpty() {
     final SimpleSecurityLink test = new SimpleSecurityLink();
     assertEquals("", LinkUtils.bestName(test));
   }
 
-  public void test_bestName_objectId() {
-    final SimpleSecurityLink test = new SimpleSecurityLink(OBJECT_ID);
+  /**
+   * Tests that the object id is returned if there are no external ids.
+   */
+  @Test
+  public void testBestNameObjectId() {
+    final SimpleSecurityLink test = new SimpleSecurityLink();
+    test.setObjectId(OBJECT_ID);
     assertEquals("A~B", LinkUtils.bestName(test));
   }
 
-  public void test_bestName_externalId() {
+  /**
+   * Tests that the value of the external id is returned.
+   */
+  @Test
+  public void testBestNameExternalId() {
     final SimpleSecurityLink test = new SimpleSecurityLink(EXTERNAL_ID_BUNDLE);
     assertEquals("D", LinkUtils.bestName(test));
   }
 
-  public void test_bestName_bothIds() {
-    final SimpleSecurityLink test = new SimpleSecurityLink(OBJECT_ID);
+  /**
+   * Tests the value when the external id bundle is empty.
+   */
+  @Test
+  public void testBestNameEmptyExternalId() {
+    final SimpleSecurityLink test = new SimpleSecurityLink(ExternalIdBundle.EMPTY);
+    assertEquals("", LinkUtils.bestName(test));
+  }
+
+  /**
+   * Tests that the external id is returned in preference to the object id.
+   */
+  @Test
+  public void testBestNameBothIds() {
+    final SimpleSecurityLink test = new SimpleSecurityLink();
+    test.setObjectId(OBJECT_ID);
     test.setExternalId(EXTERNAL_ID_BUNDLE);
     assertEquals("D", LinkUtils.bestName(test));
   }
 
+  /**
+   * Tests that the link cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_bestName_null() {
-    assertEquals(null, LinkUtils.bestName(null));
+  public void testBestNameNull() {
+    assertNull(LinkUtils.bestName(null));
+  }
+
+  /**
+   * Tests the order of valid links.
+   */
+  @Test
+  public void testBestNameOrder() {
+    ExternalIdBundle bundle = ExternalIdBundle.of(ExternalSchemes.BLOOMBERG_TICKER, "A");
+    bundle = bundle.withExternalId(ExternalId.of(ExternalSchemes.RIC, "B"));
+    bundle = bundle.withExternalId(ExternalId.of(ExternalSchemes.ACTIVFEED_TICKER, "C"));
+    bundle = bundle.withExternalId(ExternalId.of("TEST", "D"));
+    final SimpleSecurityLink test = new SimpleSecurityLink();
+    test.setExternalId(bundle);
+    assertEquals("A", LinkUtils.bestName(test));
+    bundle = bundle.withoutScheme(ExternalSchemes.BLOOMBERG_TICKER);
+    test.setExternalId(bundle);
+    assertEquals("B", LinkUtils.bestName(test));
+    bundle = bundle.withoutScheme(ExternalSchemes.RIC);
+    test.setExternalId(bundle);
+    assertEquals("C", LinkUtils.bestName(test));
+    bundle = bundle.withoutScheme(ExternalSchemes.ACTIVFEED_TICKER);
+    test.setExternalId(bundle);
+    assertEquals("D", LinkUtils.bestName(test));
+    bundle = bundle.withoutScheme(ExternalScheme.of("TEST"));
+    test.setExternalId(bundle);
+    assertEquals("", LinkUtils.bestName(test));
   }
 
   //-------------------------------------------------------------------------
-  public void test_isValid_empty() {
+  /**
+   * Tests the result when the link is empty.
+   */
+  @Test
+  public void testIsValidEmpty() {
     final SimpleSecurityLink test = new SimpleSecurityLink();
-    assertEquals(false, LinkUtils.isValid(test));
+    assertFalse(LinkUtils.isValid(test));
   }
 
-  public void test_isValid_objectId() {
-    final SimpleSecurityLink test = new SimpleSecurityLink(OBJECT_ID);
-    assertEquals(true, LinkUtils.isValid(test));
+  /**
+   * Tests the result when the link contains an object id.
+   */
+  @Test
+  public void testIsValidObjectId() {
+    final SimpleSecurityLink test = new SimpleSecurityLink();
+    test.setObjectId(OBJECT_ID);
+    assertTrue(LinkUtils.isValid(test));
   }
 
-  public void test_isValid_externalId() {
+  /**
+   * Tests the result when the link contains a non-empty external id bundle.
+   */
+  @Test
+  public void testIsValidExternalId() {
     final SimpleSecurityLink test = new SimpleSecurityLink(EXTERNAL_ID_BUNDLE);
-    assertEquals(true, LinkUtils.isValid(test));
+    assertTrue(LinkUtils.isValid(test));
   }
 
-  public void test_isValid_bothIds() {
-    final SimpleSecurityLink test = new SimpleSecurityLink(OBJECT_ID);
+  /**
+   * Tests the result when the link contains both id types.
+   */
+  @Test
+  public void testIdValidBothIds() {
+    final SimpleSecurityLink test = new SimpleSecurityLink();
+    test.setObjectId(OBJECT_ID);
     test.setExternalId(EXTERNAL_ID_BUNDLE);
-    assertEquals(true, LinkUtils.isValid(test));
+    assertTrue(LinkUtils.isValid(test));
   }
 
-  public void test_isValid_null() {
-    assertEquals(false, LinkUtils.isValid(null));
+  /**
+   * Tests the result when the link is null.
+   */
+  @Test
+  public void testIsValidNull() {
+    assertFalse(LinkUtils.isValid(null));
   }
 
+  /**
+   * Tests the result when the id bundle is empty.
+   */
+  @Test
+  public void testIsValidEmptyBundle() {
+    final SimpleSecurityLink test = new SimpleSecurityLink(ExternalIdBundle.EMPTY);
+    assertFalse(LinkUtils.isValid(test));
+  }
 }

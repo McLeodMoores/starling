@@ -21,6 +21,8 @@ public @interface Config {
    * The class type to use for searching for the configuration item in a ConfigMaster.
    * <p>
    * Optional search type when it is different from base class
+   *
+   * @return  the class of the search type
    */
   Class<?> searchType() default Object.class;
 
@@ -28,11 +30,15 @@ public @interface Config {
    * A short description of the configuration to be used in GUIs.
    * <p>
    * This is typically an expansion of the class name.
+   *
+   * @return  the description
    */
   String description() default "";
 
   /**
    * A way to categorize configurations to enable meaningful grouping used in GUIs.
+   *
+   * @return  the configuration group
    */
   String group() default ConfigGroups.MISC;
 

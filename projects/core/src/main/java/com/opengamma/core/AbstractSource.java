@@ -16,7 +16,7 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.id.VersionCorrection;
 
 /**
- * A partial implementation of {@link Source}
+ * A partial implementation of {@link Source}.
  *
  * @param <V> the type returned by the source
  */

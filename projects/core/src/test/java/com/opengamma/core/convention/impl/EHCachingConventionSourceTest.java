@@ -8,7 +8,6 @@ package com.opengamma.core.convention.impl;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertSame;
 import static org.testng.AssertJUnit.fail;
-import net.sf.ehcache.CacheManager;
 
 import org.mockito.Mockito;
 import org.testng.annotations.AfterClass;
@@ -28,6 +27,8 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.ehcache.EHCacheUtils;
 import com.opengamma.util.test.TestGroup;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Tests the {@link EHCachingConventionSource} class
@@ -76,7 +77,7 @@ public class EHCachingConventionSourceTest {
       assertEquals(_source.get(UID_MISS), null);
       Mockito.verify(_underlying, Mockito.times(1)).get(UID_MISS);
       fail();
-    } catch (DataNotFoundException ex) {
+    } catch (final DataNotFoundException ex) {
       // expected
     }
   }
@@ -102,7 +103,7 @@ public class EHCachingConventionSourceTest {
       assertEquals(_source.get(OID_MISS, VERSION_CORRECTION), null);
       Mockito.verify(_underlying, Mockito.times(1)).get(OID_MISS, VERSION_CORRECTION);
       fail();
-    } catch (DataNotFoundException ex) {
+    } catch (final DataNotFoundException ex) {
       // expected
     }
   }
@@ -132,7 +133,7 @@ public class EHCachingConventionSourceTest {
       assertEquals(_source.getSingle(BUNDLE_MISS, VERSION_CORRECTION), null);
       Mockito.verify(_underlying, Mockito.times(1)).getSingle(BUNDLE_MISS, VERSION_CORRECTION);
       fail();
-    } catch (DataNotFoundException ex) {
+    } catch (final DataNotFoundException ex) {
       // expected
     }
   }

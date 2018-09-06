@@ -37,7 +37,7 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
-/*
+/**
  * REDIS DATA STRUCTURES:
  * Key["ALL_CLASSES"] -> Set[ClassName]
  * Key[ClassName] -> Set[ConfigName]

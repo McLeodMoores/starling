@@ -39,7 +39,14 @@ public class DateSet implements ImmutableBean {
   @PropertyDefinition(validate = "notNull")
   private final SortedSet<LocalDate> _dates;
 
+  /**
+   * Static constructor that sorts dates.
+   *
+   * @param dates  the dates, not null
+   * @return  the object
+   */
   public static DateSet of(final Set<LocalDate> dates) {
+    ArgumentChecker.notNull(dates, "dates");
     return builder().dates(new TreeSet<>(dates)).build();
   }
 
@@ -62,9 +69,7 @@ public class DateSet implements ImmutableBean {
    */
   public LocalDate getNextDate(final LocalDate date, final int n) {
     ArgumentChecker.notNull(date, "date");
-    if (n <= 0) {
-      throw new IllegalArgumentException("n must be greater than 0");
-    }
+    ArgumentChecker.notNegativeOrZero(n, "n");
     final SortedSet<LocalDate> tailSet = _dates.tailSet(date.plusDays(1));
     if (tailSet.isEmpty() || tailSet.size() < n) {
       return null;

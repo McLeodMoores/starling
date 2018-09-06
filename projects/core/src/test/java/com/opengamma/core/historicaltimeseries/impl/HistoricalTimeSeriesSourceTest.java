@@ -190,7 +190,7 @@ public class HistoricalTimeSeriesSourceTest {
       final LocalDate startDate = Math.random() > 0.5 ? LocalDate.of(1998, 1, 2).plusDays(random(356 * 10)) : null;
       final boolean includeStart = Math.random() > 0.5 ? true : false;
       final LocalDate endDate = Math.random() > 0.5
-          ? startDate == null ? LocalDate.of(2000, 1, 2).plusDays(random(356 * 10)) : startDate.plusDays(random(356 * 5))
+          ? startDate == null ? LocalDate.of(2000, 1, 2).plusDays(random(356 * 10)) : startDate.plusDays(10 + random(356 * 5))
           : null;
       final boolean includeEnd = Math.random() > 0.5 ? true : false;
       final Integer maxPoints = Math.random() > 0.5 ? random(356 * 5) : null;

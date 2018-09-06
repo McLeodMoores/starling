@@ -21,7 +21,7 @@ import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.PoolExecutor;
 
 /**
- * A partial implementation of {@link SourceWithExternalBundle}
+ * A partial implementation of {@link SourceWithExternalBundle}.
  *
  * @param <V> the type returned by the source
  */

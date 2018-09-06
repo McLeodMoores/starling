@@ -7,7 +7,7 @@ package com.opengamma.core;
 
 import org.apache.commons.lang.ObjectUtils;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.ObjectId;
@@ -42,7 +42,7 @@ public class LinkUtils {
     ArgumentChecker.notNull(link, "link");
     final ObjectId objectId = link.getObjectId();
     final ExternalIdBundle bundle = link.getExternalId();
-    return Objects.firstNonNull(objectId, bundle);
+    return MoreObjects.firstNonNull(objectId, bundle);
   }
 
   /**

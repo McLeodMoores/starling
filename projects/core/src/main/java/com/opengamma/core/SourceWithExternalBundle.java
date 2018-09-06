@@ -15,10 +15,10 @@ import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.id.VersionCorrection;
 
 /**
- * A source of with additional methods working with external bundle ids.
+ * A source with additional methods working with external bundle ids.
  * <p>
  * This interface is read-only. Implementations must be thread-safe.
- * 
+ *
  * @param <V> the type returned by the source
  */
 public interface SourceWithExternalBundle<V extends UniqueIdentifiable & ExternalBundleIdentifiable>
@@ -32,7 +32,7 @@ public interface SourceWithExternalBundle<V extends UniqueIdentifiable & Externa
    * The default behavior in standard implementations should be to return any
    * element with <strong>any</strong> external identifier that matches <strong>any</strong>
    * identifier in the bundle. While specific implementations may modify this behavior,
-   * this should be explicitly documented to avoid confusion. 
+   * this should be explicitly documented to avoid confusion.
    *
    * @param bundle  the external identifier bundle to search for, not null
    * @param versionCorrection  the version-correction, not null
@@ -51,7 +51,7 @@ public interface SourceWithExternalBundle<V extends UniqueIdentifiable & Externa
    * <p>
    * This bulk method is equivalent to {@link #get(ExternalIdBundle, VersionCorrection)}
    * for multiple lookups and potentially more efficient.
-   * 
+   *
    * @param bundles  the set of bundles to search for, not null
    * @param versionCorrection the version-correction to search at, not null
    * @return the map of results, not null
@@ -71,7 +71,7 @@ public interface SourceWithExternalBundle<V extends UniqueIdentifiable & Externa
    * The default behavior in standard implementations should be to return any
    * element with <strong>any</strong> external identifier that matches <strong>any</strong>
    * identifier in the bundle. While specific implementations may modify this behavior,
-   * this should be explicitly documented to avoid confusion. 
+   * this should be explicitly documented to avoid confusion.
    *
    * @param bundle  the external identifier bundle to search for, not null
    * @return all objects matching the bundle, empty if no matches, not null
@@ -91,7 +91,7 @@ public interface SourceWithExternalBundle<V extends UniqueIdentifiable & Externa
    * However, since each identifier is not completely unique, multiple may match.
    * To further complicate matters, some identifiers are more unique than others.
    * The best-match mechanism is implementation specific.
-   * 
+   *
    * @param bundle  the external identifier bundle to search for, not null
    * @return the matched object, null if not found
    * @throws IllegalArgumentException if the identifier is invalid
@@ -110,7 +110,7 @@ public interface SourceWithExternalBundle<V extends UniqueIdentifiable & Externa
    * However, since each identifier is not completely unique, multiple may match.
    * To further complicate matters, some identifiers are more unique than others.
    * The best-match mechanism is implementation specific.
-   * 
+   *
    * @param bundle  the external identifier bundle to search for, not null
    * @param versionCorrection  the version-correction, not null
    * @return the matched object, null if not found
@@ -128,7 +128,7 @@ public interface SourceWithExternalBundle<V extends UniqueIdentifiable & Externa
    * <p>
    * This bulk method is equivalent to {@link #getSingle(ExternalIdBundle, VersionCorrection)}
    * for multiple lookups and potentially more efficient.
-   * 
+   *
    * @param bundles  the external identifier bundles to search for, not null
    * @param versionCorrection  the version-correction, not null
    * @return the map of results, if there is no data for an identifier it will be missing from the map, not null

@@ -20,8 +20,8 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * A {@link ConfigSource} wrapper which sets a specific version/correction on all requests that would otherwise request "latest".
  * <p>
- * Where possible, code should be written that explicitly passes the necessary version/correction information around - this is an intermediate solution for working with existing code that is not
- * properly version aware.
+ * Where possible, code should be written that explicitly passes the necessary version/correction information
+ * around - this is an intermediate solution for working with existing code that is not properly version aware.
  *
  * @deprecated Call code that is properly version aware (whenever possible)
  */
@@ -31,27 +31,49 @@ public class VersionLockedConfigSource implements ConfigSource {
   private final ConfigSource _underlying;
   private final VersionCorrection _versionCorrection;
 
+  /**
+   * Constructs a config source with a locked version.
+   *
+   * @param underlying  the underlying source, not null
+   * @param versionCorrection  the version/correction, not null
+   */
   public VersionLockedConfigSource(final ConfigSource underlying, final VersionCorrection versionCorrection) {
     _underlying = ArgumentChecker.notNull(underlying, "underlying");
     _versionCorrection = ArgumentChecker.notNull(versionCorrection, "versionCorrection");
   }
 
+  /**
+   * Gets the underlying config source.
+   *
+   * @return  the source
+   */
   protected ConfigSource getUnderlying() {
     return _underlying;
   }
 
+  /**
+   * Gets the locked version/correction.
+   *
+   * @return  the version/correction
+   */
   protected VersionCorrection getVersionCorrection() {
     return _versionCorrection;
   }
 
+  /**
+   * Locks the version/correction. If the input is either the latest version or correction, then the locked
+   * version or correction respectively is returned in the result. Otherwise, the original version is used.
+   *
+   * @param versionCorrection  the new version/correction
+   * @return  the version/correction that is used to get data from the source
+   */
   protected VersionCorrection lockVersionCorrection(final VersionCorrection versionCorrection) {
     if (versionCorrection.containsLatest()) {
       final Instant version = versionCorrection.getVersionAsOf() == null ? getVersionCorrection().getVersionAsOf() : versionCorrection.getVersionAsOf();
       final Instant correction = versionCorrection.getCorrectedTo() == null ? getVersionCorrection().getCorrectedTo() : versionCorrection.getCorrectedTo();
       return VersionCorrection.of(version, correction);
-    } else {
-      return versionCorrection;
     }
+    return versionCorrection;
   }
 
   @Override

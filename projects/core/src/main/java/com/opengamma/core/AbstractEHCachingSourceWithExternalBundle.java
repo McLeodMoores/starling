@@ -42,7 +42,8 @@ import net.sf.ehcache.Element;
  * @param <V> the type returned by the source
  * @param <S> the source
  */
-public abstract class AbstractEHCachingSourceWithExternalBundle<V extends UniqueIdentifiable & ExternalBundleIdentifiable, S extends SourceWithExternalBundle<V>>
+public abstract
+class AbstractEHCachingSourceWithExternalBundle<V extends UniqueIdentifiable & ExternalBundleIdentifiable, S extends SourceWithExternalBundle<V>>
     extends AbstractEHCachingSource<V, S>
     implements SourceWithExternalBundle<V> {
 
@@ -102,9 +103,8 @@ public abstract class AbstractEHCachingSourceWithExternalBundle<V extends Unique
         final Collection<UniqueId> identifiers = (Collection<UniqueId>) e.getObjectValue();
         if (identifiers.isEmpty()) {
           return Collections.emptySet();
-        } else {
-          return get(identifiers).values();
         }
+        return get(identifiers).values();
       }
     }
     final Collection<V> result = getUnderlying().get(bundle, versionCorrection);
@@ -296,6 +296,12 @@ public abstract class AbstractEHCachingSourceWithExternalBundle<V extends Unique
     return results;
   }
 
+  /**
+   * Caches a unique id for an external identifier / version correction key.
+   *
+   * @param uniqueId  the unique id
+   * @param key  the key
+   */
   protected void cacheIdentifiers(final UniqueId uniqueId, final Pair<ExternalIdBundle, VersionCorrection> key) {
     synchronized (_eidToUidCache) {
       final Element e = _eidToUidCache.get(key);
@@ -305,6 +311,12 @@ public abstract class AbstractEHCachingSourceWithExternalBundle<V extends Unique
     }
   }
 
+  /**
+   * Caches a list of matching unique ids for an external identifier / version correction key.
+   *
+   * @param uniqueIds  the unique ids
+   * @param key  the key
+   */
   protected void cacheIdentifiers(final List<UniqueId> uniqueIds, final Pair<ExternalIdBundle, VersionCorrection> key) {
     synchronized (_eidToUidCache) {
       _eidToUidCache.put(new Element(key, uniqueIds));

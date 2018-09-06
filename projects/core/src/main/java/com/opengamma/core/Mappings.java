@@ -20,8 +20,13 @@ public class Mappings {
   /** The mappings. */
   private final Map<String, String> _mappings;
 
+  /**
+   * Constructs a mappings object.
+   *
+   * @param mappings  the string mappings, not null
+   */
   public Mappings(final Map<String, String> mappings) {
-    ArgumentChecker.notNull(mappings, "mappingValues");
+    ArgumentChecker.notNull(mappings, "mappings");
     _mappings = ImmutableMap.copyOf(mappings);
   }
 
