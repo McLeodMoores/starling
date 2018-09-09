@@ -138,6 +138,6 @@ public class BasicChangeManagerTest {
    */
   @Test
   public void testToString() {
-    assertEquals("BasicChangeManager", _changeManager);
+    assertEquals("BasicChangeManager", _changeManager.toString());
   }
 }

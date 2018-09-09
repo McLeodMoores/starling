@@ -252,9 +252,8 @@ public class NonVersionedRedisSecuritySource implements SecuritySource {
     final Security security = getSingle(bundle);
     if (security == null) {
       return Collections.emptySet();
-    } else {
-      return Collections.singleton(security);
     }
+    return Collections.singleton(security);
   }
 
   @Override
@@ -362,17 +361,15 @@ public class NonVersionedRedisSecuritySource implements SecuritySource {
     if (securityData == null) {
       LOGGER.warn("No data for security unique ID {}", uniqueId);
       return null;
-    } else {
-      final String className = Charsets.UTF_8.decode(ByteBuffer.wrap(classNameData)).toString();
-      Security security = null;
-      try {
-        security = SecurityFudgeUtil.convertFromFudge(getFudgeContext(), className, securityData);
-      } catch (final Exception ex) {
-        LOGGER.warn("Unable to convert from fudge for security unique ID " + uniqueId, ex);
-      }
-      return security;
     }
-
+    final String className = Charsets.UTF_8.decode(ByteBuffer.wrap(classNameData)).toString();
+    Security security = null;
+    try {
+      security = SecurityFudgeUtil.convertFromFudge(getFudgeContext(), className, securityData);
+    } catch (final Exception ex) {
+      LOGGER.warn("Unable to convert from fudge for security unique ID " + uniqueId, ex);
+    }
+    return security;
   }
 
 }

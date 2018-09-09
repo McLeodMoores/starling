@@ -20,39 +20,39 @@ import com.opengamma.util.test.TestGroup;
  * Test Paging.
  */
 @Test(groups = TestGroup.UNIT)
-public final class PagingTest {
+public class PagingTest {
 
-  public void test_factory_of_Collection_empty() {
-    Paging test = Paging.ofAll(Arrays.asList());
+  public void testFactoryOfCollectionEmpty() {
+    final Paging test = Paging.ofAll(Arrays.asList());
     assertEquals(PagingRequest.ALL, test.getRequest());
     assertEquals(0, test.getTotalItems());
   }
 
   public void test_factory_of_Collection_sizeTwo() {
-    Paging test = Paging.ofAll(Arrays.asList("Hello", "There"));
+    final Paging test = Paging.ofAll(Arrays.asList("Hello", "There"));
     assertEquals(PagingRequest.ALL, test.getRequest());
     assertEquals(2, test.getTotalItems());
   }
 
   //-------------------------------------------------------------------------
   public void test_factory_of_Collection_PagingRequest_empty() {
-    PagingRequest request = PagingRequest.ofPage(1, 20);
-    Paging test = Paging.of(request, Arrays.asList());
+    final PagingRequest request = PagingRequest.ofPage(1, 20);
+    final Paging test = Paging.of(request, Arrays.asList());
     assertEquals(request, test.getRequest());
     assertEquals(0, test.getTotalItems());
   }
 
   public void test_factory_of_Collection_PagingRequest_sizeTwo() {
-    PagingRequest request = PagingRequest.ofPage(1, 20);
-    Paging test = Paging.of(request, Arrays.asList("Hello", "There"));
+    final PagingRequest request = PagingRequest.ofPage(1, 20);
+    final Paging test = Paging.of(request, Arrays.asList("Hello", "There"));
     assertEquals(request, test.getRequest());
     assertEquals(2, test.getTotalItems());
   }
 
   //-------------------------------------------------------------------------
   public void test_factory_of_PagingRequest_int() {
-    PagingRequest request = PagingRequest.ofPage(1, 20);
-    Paging test = Paging.of(request, 32);
+    final PagingRequest request = PagingRequest.ofPage(1, 20);
+    final Paging test = Paging.of(request, 32);
     assertEquals(request, test.getRequest());
     assertEquals(32, test.getTotalItems());
   }
@@ -69,7 +69,7 @@ public final class PagingTest {
 
   //-------------------------------------------------------------------------
   public void test_getItems_page1() {
-    Paging test = Paging.of(PagingRequest.ofPage(1, 20), 52);
+    final Paging test = Paging.of(PagingRequest.ofPage(1, 20), 52);
     assertEquals(1, test.getPageNumber());
     assertEquals(0, test.getFirstItem());
     assertEquals(1, test.getFirstItemOneBased());
@@ -78,7 +78,7 @@ public final class PagingTest {
   }
 
   public void test_getItems_page2() {
-    Paging test = Paging.of(PagingRequest.ofPage(2, 20), 52);
+    final Paging test = Paging.of(PagingRequest.ofPage(2, 20), 52);
     assertEquals(2, test.getPageNumber());
     assertEquals(20, test.getFirstItem());
     assertEquals(21, test.getFirstItemOneBased());
@@ -87,7 +87,7 @@ public final class PagingTest {
   }
 
   public void test_getItems_page3() {
-    Paging test = Paging.of(PagingRequest.ofPage(3, 20), 52);
+    final Paging test = Paging.of(PagingRequest.ofPage(3, 20), 52);
     assertEquals(3, test.getPageNumber());
     assertEquals(40, test.getFirstItem());
     assertEquals(41, test.getFirstItemOneBased());
@@ -175,8 +175,8 @@ public final class PagingTest {
 
   //-------------------------------------------------------------------------
   public void test_equals_equal() {
-    Paging test1 = Paging.of(PagingRequest.ofPage(1, 20), 52);
-    Paging test2 = Paging.of(PagingRequest.ofPage(1, 20), 52);
+    final Paging test1 = Paging.of(PagingRequest.ofPage(1, 20), 52);
+    final Paging test2 = Paging.of(PagingRequest.ofPage(1, 20), 52);
     assertEquals(true, test1.equals(test1));
     assertEquals(true, test1.equals(test2));
     assertEquals(true, test2.equals(test1));
@@ -184,42 +184,42 @@ public final class PagingTest {
   }
 
   public void test_equals_notEqualPage() {
-    Paging test1 = Paging.of(PagingRequest.ofPage(1, 20), 52);
-    Paging test2 = Paging.of(PagingRequest.ofPage(2, 20), 52);
+    final Paging test1 = Paging.of(PagingRequest.ofPage(1, 20), 52);
+    final Paging test2 = Paging.of(PagingRequest.ofPage(2, 20), 52);
     assertEquals(false, test1.equals(test2));
     assertEquals(false, test2.equals(test1));
   }
 
   public void test_equals_notEqualPagingSize() {
-    Paging test1 = Paging.of(PagingRequest.ofPage(1, 20), 52);
-    Paging test2 = Paging.of(PagingRequest.NONE, 52);
+    final Paging test1 = Paging.of(PagingRequest.ofPage(1, 20), 52);
+    final Paging test2 = Paging.of(PagingRequest.NONE, 52);
     assertEquals(false, test1.equals(test2));
     assertEquals(false, test2.equals(test1));
   }
 
   public void test_equals_notEqualTotalItems() {
-    Paging test1 = Paging.of(PagingRequest.ofPage(1, 20), 52);
-    Paging test2 = Paging.of(PagingRequest.ofPage(1, 20), 12);
+    final Paging test1 = Paging.of(PagingRequest.ofPage(1, 20), 52);
+    final Paging test2 = Paging.of(PagingRequest.ofPage(1, 20), 12);
     assertEquals(false, test1.equals(test2));
     assertEquals(false, test2.equals(test1));
   }
 
   public void test_equals_other() {
-    Paging test = Paging.of(PagingRequest.ofPage(1, 20), 52);
+    final Paging test = Paging.of(PagingRequest.ofPage(1, 20), 52);
     assertEquals(false, test.equals(""));
     assertEquals(false, test.equals(null));
   }
 
   //-------------------------------------------------------------------------
   public void test_hashCode_equal() {
-    Paging test1 = Paging.of(PagingRequest.ofPage(1, 20), 52);
-    Paging test2 = Paging.of(PagingRequest.ofPage(1, 20), 52);
+    final Paging test1 = Paging.of(PagingRequest.ofPage(1, 20), 52);
+    final Paging test2 = Paging.of(PagingRequest.ofPage(1, 20), 52);
     assertEquals(test1.hashCode(), test2.hashCode());
   }
 
   //-------------------------------------------------------------------------
   public void test_toString() {
-    Paging test = Paging.of(PagingRequest.ofPage(1, 20), 52);
+    final Paging test = Paging.of(PagingRequest.ofPage(1, 20), 52);
     assertEquals("Paging[first=0, size=20, totalItems=52]", test.toString());
   }
 

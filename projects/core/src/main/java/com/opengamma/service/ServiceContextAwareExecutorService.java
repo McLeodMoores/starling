@@ -19,7 +19,7 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Wraps another {@link ExecutorService} instance, ensuring {@link ThreadLocalServiceContext} is initialized before
- * every task is run and that it is cleared after every task completes. {@link ThreadLocalServiceContext#init} is
+ * every task is run and that it is cleared after every task completes. {@link ThreadLocalServiceContext#init(ServiceContext)} is
  * called on the pooled thread using the {@link ServiceContext} returned by
  * {@link ThreadLocalServiceContext#getInstance()} on the thread that submits the task.
  */

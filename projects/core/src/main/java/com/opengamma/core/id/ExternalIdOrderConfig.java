@@ -42,22 +42,22 @@ public class ExternalIdOrderConfig extends DirectBean {
    */
   public static final ExternalIdOrderConfig DEFAULT_CONFIG = new ExternalIdOrderConfig();
 
-  private static Map<ExternalScheme, Integer> s_defaultScoreMap = Maps.newHashMap();
+  private static final Map<ExternalScheme, Integer> DEFAULT_SCORE_MAP = Maps.newHashMap();
 
   static {
-    s_defaultScoreMap.put(ExternalSchemes.BLOOMBERG_TCM, 20); // Because if there's both ticker and TCM, you want to see TCM.
-    s_defaultScoreMap.put(ExternalSchemes.BLOOMBERG_TICKER, 19);
-    s_defaultScoreMap.put(ExternalSchemes.RIC, 17);
-    s_defaultScoreMap.put(ExternalSchemes.BLOOMBERG_TICKER_WEAK, 16);
-    s_defaultScoreMap.put(ExternalSchemes.ACTIVFEED_TICKER, 15);
-    s_defaultScoreMap.put(ExternalSchemes.SURF, 14);
-    s_defaultScoreMap.put(ExternalSchemes.ISIN, 13);
-    s_defaultScoreMap.put(ExternalSchemes.CUSIP, 12);
-    s_defaultScoreMap.put(ExternalSchemes.SEDOL1, 11);
-    s_defaultScoreMap.put(ExternalSchemes.OG_SYNTHETIC_TICKER, 10);
-    s_defaultScoreMap.put(ExternalSchemes.BLOOMBERG_BUID, 5);
-    s_defaultScoreMap.put(ExternalSchemes.BLOOMBERG_BUID_WEAK, 4);
-    DEFAULT_CONFIG.setRateMap(s_defaultScoreMap);
+    DEFAULT_SCORE_MAP.put(ExternalSchemes.BLOOMBERG_TCM, 20); // Because if there's both ticker and TCM, you want to see TCM.
+    DEFAULT_SCORE_MAP.put(ExternalSchemes.BLOOMBERG_TICKER, 19);
+    DEFAULT_SCORE_MAP.put(ExternalSchemes.RIC, 17);
+    DEFAULT_SCORE_MAP.put(ExternalSchemes.BLOOMBERG_TICKER_WEAK, 16);
+    DEFAULT_SCORE_MAP.put(ExternalSchemes.ACTIVFEED_TICKER, 15);
+    DEFAULT_SCORE_MAP.put(ExternalSchemes.SURF, 14);
+    DEFAULT_SCORE_MAP.put(ExternalSchemes.ISIN, 13);
+    DEFAULT_SCORE_MAP.put(ExternalSchemes.CUSIP, 12);
+    DEFAULT_SCORE_MAP.put(ExternalSchemes.SEDOL1, 11);
+    DEFAULT_SCORE_MAP.put(ExternalSchemes.OG_SYNTHETIC_TICKER, 10);
+    DEFAULT_SCORE_MAP.put(ExternalSchemes.BLOOMBERG_BUID, 5);
+    DEFAULT_SCORE_MAP.put(ExternalSchemes.BLOOMBERG_BUID_WEAK, 4);
+    DEFAULT_CONFIG.setRateMap(DEFAULT_SCORE_MAP);
   }
 
   /**

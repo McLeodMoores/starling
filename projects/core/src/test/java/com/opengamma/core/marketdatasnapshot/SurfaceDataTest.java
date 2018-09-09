@@ -42,7 +42,7 @@ public class SurfaceDataTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullValues() {
-    new SurfaceData(NAME, null);
+    new SurfaceData<>(NAME, null);
   }
 
   /**

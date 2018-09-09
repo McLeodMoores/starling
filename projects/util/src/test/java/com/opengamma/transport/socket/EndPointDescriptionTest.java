@@ -72,7 +72,7 @@ public class EndPointDescriptionTest {
     testEndPoints(false);
   }
 
-  public void testConnectToEndPoint() throws IOException {
+  public void testConnectToEndPoint() {
     final AbstractServerSocketProcess server = new AbstractServerSocketProcess() {
 
       @Override
@@ -100,7 +100,7 @@ public class EndPointDescriptionTest {
     server.stop();
   }
 
-  public void testConnectToStaticEndPoint() throws IOException {
+  public void testConnectToStaticEndPoint() {
     final AbstractServerSocketProcess server = new AbstractServerSocketProcess() {
 
       @Override

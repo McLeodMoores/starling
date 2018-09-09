@@ -164,8 +164,8 @@ public class PortfolioNodeAndPositionFudgeEncodingTest extends AbstractFudgeBuil
   }
 
   public void testPosition() {
-    final FudgeMsg message = runPositionTest(new SimplePosition(nextUniqueId(), new BigDecimal(100), ExternalIdBundle.of(ExternalId.of("Scheme 1", "Id 1"), ExternalId
-        .of("Scheme 2", "Id 2"))));
+    final FudgeMsg message = runPositionTest(new SimplePosition(nextUniqueId(), new BigDecimal(100),
+        ExternalIdBundle.of(ExternalId.of("Scheme 1", "Id 1"), ExternalId.of("Scheme 2", "Id 2"))));
     assertEquals(0, countParents(message));
   }
 

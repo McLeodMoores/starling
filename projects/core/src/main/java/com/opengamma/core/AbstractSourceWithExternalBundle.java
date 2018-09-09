@@ -44,6 +44,17 @@ extends AbstractSource<V> implements SourceWithExternalBundle<V> {
     }
   };
 
+  /**
+   * Gets objects from the source. If there is more than one match for the id bundle then any one of the matches
+   * could be returned.
+   *
+   * @param executor  a pooled executor
+   * @param source  the source
+   * @param bundles  the bundles for which to get the objects
+   * @param versionCorrection  the version/correction of the objects
+   * @return  the objects
+   * @param <V>  the type of the objects
+   */
   public static <V extends UniqueIdentifiable & ExternalBundleIdentifiable> Map<ExternalIdBundle, Collection<V>> getAllMultiThread(final PoolExecutor executor,
       final SourceWithExternalBundle<V> source, final Collection<ExternalIdBundle> bundles,
       final VersionCorrection versionCorrection) {
@@ -72,6 +83,16 @@ extends AbstractSource<V> implements SourceWithExternalBundle<V> {
     return results;
   }
 
+  /**
+   * Gets objects from the source. If there is more than one match for the id bundle then any one of the matches
+   * could be returned.
+   *
+   * @param source  the source
+   * @param bundles  the bundles for which to get the objects
+   * @param versionCorrection  the version/correction of the objects
+   * @return  the objects
+   * @param <V>  the type of the objects
+   */
   public static <V extends UniqueIdentifiable & ExternalBundleIdentifiable> Map<ExternalIdBundle, Collection<V>> getAllSingleThread(
       final SourceWithExternalBundle<V> source, final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
     final Map<ExternalIdBundle, Collection<V>> results = Maps.newHashMapWithExpectedSize(bundles.size());
@@ -84,6 +105,16 @@ extends AbstractSource<V> implements SourceWithExternalBundle<V> {
     return results;
   }
 
+  /**
+   * Gets objects from the source. If there is more than one match for the id bundle then all of the matches
+   * are be returned.
+   *
+   * @param source  the source
+   * @param bundles  the bundles for which to get the objects
+   * @param versionCorrection  the version/correction of the objects
+   * @return  the objects
+   * @param <V>  the type of the objects
+   */
   public static <V extends UniqueIdentifiable & ExternalBundleIdentifiable> Map<ExternalIdBundle, Collection<V>> getAll(
       final SourceWithExternalBundle<V> source, final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
     if (bundles.isEmpty()) {
@@ -108,6 +139,15 @@ extends AbstractSource<V> implements SourceWithExternalBundle<V> {
     return getAll(this, bundles, versionCorrection);
   }
 
+  /**
+   * Gets the latest version of an object from the source. If there is more than one match for the id bundle then any one of the matches
+   * could be returned.
+   *
+   * @param source  the source
+   * @param bundle  the identifiers of the object
+   * @return  the objects
+   * @param <V>  the type of the objects
+   */
   public static <V extends UniqueIdentifiable & ExternalBundleIdentifiable> Collection<V> get(final SourceWithExternalBundle<V> source,
       final ExternalIdBundle bundle) {
     return source.get(bundle, VersionCorrection.LATEST);
@@ -118,6 +158,15 @@ extends AbstractSource<V> implements SourceWithExternalBundle<V> {
     return get(this, bundle);
   }
 
+  /**
+   * Gets the latest version of an object from the source. If there is more than one match for the id bundle then any one of the matches
+   * could be returned.
+   *
+   * @param source  the source
+   * @param bundle  the identifiers of the object
+   * @return  the objects
+   * @param <V>  the type of the objects
+   */
   public static <V extends UniqueIdentifiable & ExternalBundleIdentifiable> V getSingle(final SourceWithExternalBundle<V> source,
       final ExternalIdBundle bundle) {
     return source.getSingle(bundle, VersionCorrection.LATEST);
@@ -128,6 +177,16 @@ extends AbstractSource<V> implements SourceWithExternalBundle<V> {
     return getSingle(this, bundle);
   }
 
+  /**
+   * Gets the an object from the source. If there is more than one match for the id bundle then any one of the matches
+   * could be returned.
+   *
+   * @param source  the source
+   * @param bundle  the identifiers of the object
+   * @param versionCorrection  the version of the object
+   * @return  the objects
+   * @param <V>  the type of the objects
+   */
   public static <V extends UniqueIdentifiable & ExternalBundleIdentifiable> V getSingle(final SourceWithExternalBundle<V> source, final ExternalIdBundle bundle,
       final VersionCorrection versionCorrection) {
     final Collection<V> results = source.get(bundle, versionCorrection);
@@ -142,6 +201,17 @@ extends AbstractSource<V> implements SourceWithExternalBundle<V> {
     return getSingle(this, bundle, versionCorrection);
   }
 
+  /**
+   * Gets objects from the source. If there is more than one match for the id bundle then any one of the matches
+   * could be returned.
+   *
+   * @param executor  a pool executor
+   * @param source  the source
+   * @param bundles  the bundles for which to get the objects
+   * @param versionCorrection  the version/correction of the objects
+   * @return  the objects
+   * @param <V>  the type of the objects
+   */
   public static <V extends UniqueIdentifiable & ExternalBundleIdentifiable> Map<ExternalIdBundle, V> getSingleMultiThread(
       final PoolExecutor executor, final SourceWithExternalBundle<V> source,
       final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
@@ -170,6 +240,16 @@ extends AbstractSource<V> implements SourceWithExternalBundle<V> {
     return results;
   }
 
+  /**
+   * Gets objects from the source. If there is more than one match for the id bundle then any one of the matches
+   * could be returned.
+   *
+   * @param source  the source
+   * @param bundles  the bundles for which to get the objects
+   * @param versionCorrection  the version/correction of the objects
+   * @return  the objects
+   * @param <V>  the type of the objects
+   */
   public static <V extends UniqueIdentifiable & ExternalBundleIdentifiable> Map<ExternalIdBundle, V> getSingleSingleThread(
       final SourceWithExternalBundle<V> source, final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
     final Map<ExternalIdBundle, V> results = Maps.newHashMapWithExpectedSize(bundles.size());
@@ -182,6 +262,16 @@ extends AbstractSource<V> implements SourceWithExternalBundle<V> {
     return results;
   }
 
+  /**
+   * Gets objects from the source. If there is more than one match for the id bundle then any one of the matches
+   * could be returned.
+   *
+   * @param source  the source
+   * @param bundles  the bundles for which to get the objects
+   * @param versionCorrection  the version/correction of the objects
+   * @return  the objects
+   * @param <V>  the type of the objects
+   */
   public static <V extends UniqueIdentifiable & ExternalBundleIdentifiable> Map<ExternalIdBundle, V> getSingle(final SourceWithExternalBundle<V> source,
       final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
     if (bundles.isEmpty()) {

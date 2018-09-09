@@ -52,7 +52,7 @@ public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeries
   /** The cache prefix. */
   /*package*/static final String CACHE_PREFIX = "HistoricalTimeSeries";
 
-  private final HierarhicalEHCache<Object, HistoricalTimeSeries> _cache;
+  private final HierarchicalEHCache<Object, HistoricalTimeSeries> _cache;
 
   /** Id bundle cache name. */
   private static final String ID_BUNDLE_CACHE_NAME = CACHE_PREFIX + "IdBundleCache";
@@ -70,7 +70,7 @@ public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeries
   /** The underlying source. */
   private final HistoricalTimeSeriesSource _underlying;
   /** The identifier bundle cache */
-  private final HierarhicalEHCache<UniqueId, ExternalIdBundle> _identifierBundleCache;
+  private final HierarchicalEHCache<UniqueId, ExternalIdBundle> _identifierBundleCache;
   /** The clock. */
   private final Clock _clock = OpenGammaClock.getInstance();
 
@@ -85,7 +85,7 @@ public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeries
     ArgumentChecker.notNull(cacheManager, "Cache Manager");
     _underlying = underlying;
 
-    _cache = new HierarhicalEHCache<Object, HistoricalTimeSeries>(cacheManager) {
+    _cache = new HierarchicalEHCache<Object, HistoricalTimeSeries>(cacheManager) {
       @Override
       String getCachePrefix() {
         return CACHE_PREFIX;
@@ -97,7 +97,7 @@ public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeries
       }
     };
 
-    _identifierBundleCache = new HierarhicalEHCache<UniqueId, ExternalIdBundle>(cacheManager) {
+    _identifierBundleCache = new HierarchicalEHCache<UniqueId, ExternalIdBundle>(cacheManager) {
       @Override
       String getCachePrefix() {
         return ID_BUNDLE_CACHE_NAME;

@@ -62,7 +62,7 @@ public class MessageBatchingWriterTest {
   private MessageBatchingWriter _writer;
 
   @BeforeMethod
-  public void init() throws IOException {
+  public void init() {
     _out = new DelayingOutputStream();
     _writer = new MessageBatchingWriter(FudgeContext.GLOBAL_DEFAULT, _out);
   }

@@ -204,10 +204,12 @@ public class SimplePositionTest {
   public void test_addTrade() {
     final SimplePosition testPosition = new SimplePosition(UniqueId.of("B", "C"), BigDecimal.ONE, ExternalId.of("A", "B"));
     assertTrue(testPosition.getTrades().isEmpty());
-    final SimpleTrade testTrade1 = new SimpleTrade(createLink("A", "B"), BigDecimal.ONE, COUNTERPARTY, TRADE_OFFSET_DATETIME.toLocalDate(), TRADE_OFFSET_DATETIME.toOffsetTime());
+    final SimpleTrade testTrade1 = new SimpleTrade(createLink("A", "B"), BigDecimal.ONE, COUNTERPARTY,
+        TRADE_OFFSET_DATETIME.toLocalDate(), TRADE_OFFSET_DATETIME.toOffsetTime());
     testPosition.addTrade(testTrade1);
 
-    final SimpleTrade testTrade2 = new SimpleTrade(createLink("C", "D"), BigDecimal.ONE, COUNTERPARTY, TRADE_OFFSET_DATETIME.toLocalDate(), TRADE_OFFSET_DATETIME.toOffsetTime());
+    final SimpleTrade testTrade2 = new SimpleTrade(createLink("C", "D"), BigDecimal.ONE, COUNTERPARTY,
+        TRADE_OFFSET_DATETIME.toLocalDate(), TRADE_OFFSET_DATETIME.toOffsetTime());
     testPosition.addTrade(testTrade2);
 
     assertEquals(2, testPosition.getTrades().size());
@@ -224,12 +226,15 @@ public class SimplePositionTest {
   public void test_removeTrade() {
     final SimplePosition testPosition = new SimplePosition(UniqueId.of("B", "C"), BigDecimal.ONE, ExternalId.of("A", "B"));
     assertTrue(testPosition.getTrades().isEmpty());
-    final SimpleTrade testTrade1 = new SimpleTrade(createLink("A", "B"), BigDecimal.ONE, COUNTERPARTY, TRADE_OFFSET_DATETIME.toLocalDate(), TRADE_OFFSET_DATETIME.toOffsetTime());
+    final SimpleTrade testTrade1 = new SimpleTrade(createLink("A", "B"), BigDecimal.ONE, COUNTERPARTY,
+        TRADE_OFFSET_DATETIME.toLocalDate(), TRADE_OFFSET_DATETIME.toOffsetTime());
     testPosition.addTrade(testTrade1);
-    final SimpleTrade testTrade2 = new SimpleTrade(createLink("C", "D"), BigDecimal.ONE, COUNTERPARTY, TRADE_OFFSET_DATETIME.toLocalDate(), TRADE_OFFSET_DATETIME.toOffsetTime());
+    final SimpleTrade testTrade2 = new SimpleTrade(createLink("C", "D"), BigDecimal.ONE, COUNTERPARTY,
+        TRADE_OFFSET_DATETIME.toLocalDate(), TRADE_OFFSET_DATETIME.toOffsetTime());
     testPosition.addTrade(testTrade2);
 
-    final SimpleTrade testTrade3 = new SimpleTrade(createLink("E", "F"), BigDecimal.ONE, COUNTERPARTY, TRADE_OFFSET_DATETIME.toLocalDate(), TRADE_OFFSET_DATETIME.toOffsetTime());
+    final SimpleTrade testTrade3 = new SimpleTrade(createLink("E", "F"), BigDecimal.ONE, COUNTERPARTY,
+        TRADE_OFFSET_DATETIME.toLocalDate(), TRADE_OFFSET_DATETIME.toOffsetTime());
 
     assertTrue(testPosition.removeTrade(testTrade1));
     assertTrue(testPosition.removeTrade(testTrade2));

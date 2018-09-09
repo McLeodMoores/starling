@@ -18,14 +18,24 @@ import com.opengamma.util.PublicSPI;
  */
 @PublicSPI
 public class HistoricalTimeSeriesResolutionResult {
-
   private final HistoricalTimeSeriesInfo _historicalTimeSeriesInfo;
   private final HistoricalTimeSeriesAdjuster _adjuster;
 
+  /**
+   * Constructs a result with no adjuster.
+   *
+   * @param historicalTimeSeriesInfo  information about the time series
+   */
   public HistoricalTimeSeriesResolutionResult(final HistoricalTimeSeriesInfo historicalTimeSeriesInfo) {
     this(historicalTimeSeriesInfo, null);
   }
 
+  /**
+   * Constructs a result.
+   *
+   * @param historicalTimeSeriesInfo  information about the time series
+   * @param adjuster  the time series adjuster
+   */
   public HistoricalTimeSeriesResolutionResult(final HistoricalTimeSeriesInfo historicalTimeSeriesInfo, final HistoricalTimeSeriesAdjuster adjuster) {
     _historicalTimeSeriesInfo = historicalTimeSeriesInfo;
     _adjuster = adjuster;

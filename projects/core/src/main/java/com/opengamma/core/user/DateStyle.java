@@ -53,6 +53,9 @@ public enum DateStyle {
 
   private final DateTimeFormatter _formatter;
 
+  /**
+   * @param formatter  the formatter, not null
+   */
   DateStyle(final DateTimeFormatter formatter) {
     _formatter = formatter;
   }

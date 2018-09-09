@@ -25,7 +25,7 @@ import com.opengamma.util.ArgumentChecker;
  * <p>
  * If no scheme-specific handler has been registered, a default is used.
  */
-public class DelegatingSecuritySource extends AbstractSecuritySource implements SecuritySource {
+public class DelegatingSecuritySource extends AbstractSecuritySource {
 
   /**
    * The change manager

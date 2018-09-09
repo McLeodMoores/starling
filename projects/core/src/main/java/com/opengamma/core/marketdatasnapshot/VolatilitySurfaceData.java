@@ -47,12 +47,34 @@ public class VolatilitySurfaceData<X, Y> {
   private final String _xLabel;
   private final String _yLabel;
 
+  /**
+   * Constructs a surface with default x and y labels.
+   *
+   * @param definitionName  the surface definition name, not null
+   * @param specificationName  the surface specification name, not null
+   * @param target  the surface target, not null
+   * @param xs  the x values, not null
+   * @param ys  the y values, not null
+   * @param values  the surface values, not null
+   */
   public VolatilitySurfaceData(final String definitionName, final String specificationName, final UniqueIdentifiable target,
                                final X[] xs, final Y[] ys, final Map<Pair<X, Y>, Double> values) {
     this(definitionName, specificationName, target, xs, DEFAULT_X_LABEL, ys, DEFAULT_Y_LABEL, values);
   }
 
 
+  /**
+   * Constructs a surface.
+   *
+   * @param definitionName  the surface definition name, not null
+   * @param specificationName  the surface specification name, not null
+   * @param target  the surface target, not null
+   * @param xs  the x values, not null
+   * @param xLabel  the x-axis label, not null
+   * @param ys  the y values, not null
+   * @param yLabel  the y-axis label, not null
+   * @param values  the surface values, not null
+   */
   public VolatilitySurfaceData(final String definitionName, final String specificationName, final UniqueIdentifiable target,
                                final X[] xs, final String xLabel, final Y[] ys, final String yLabel, final Map<Pair<X, Y>, Double> values) {
     ArgumentChecker.notNull(definitionName, "Definition Name");
@@ -85,34 +107,78 @@ public class VolatilitySurfaceData<X, Y> {
     }
   }
 
+  /**
+   * Gets the number of values in the surface.
+   *
+   * @return  the number of values
+   */
   public int size() {
     return _values.size();
   }
 
+  /**
+   * Gets the x-axis values.
+   *
+   * @return  the x-axis values
+   */
   public X[] getXs() {
     return _xs;
   }
 
+  /**
+   * Gets the x-axis labels.
+   *
+   * @return  the x-axis labels
+   */
   public String getXLabel() {
     return _xLabel;
   }
 
+  /**
+   * Gets the y-axis values.
+   *
+   * @return  the y-axis values
+   */
   public Y[] getYs() {
     return _ys;
   }
 
+  /**
+   * Gets the y-axis labels.
+   *
+   * @return  the y-axis labels
+   */
   public String getYLabel() {
     return _yLabel;
   }
 
+  /**
+   * Gets the volatility at a point.
+   *
+   * @param x  the x value
+   * @param y  the y value
+   * @return  the value or null if it is not present in the surface
+   */
   public Double getVolatility(final X x, final Y y) {
     return _values.get(ObjectsPair.of(x, y));
   }
 
+  /**
+   * Gets the unique x values.
+   *
+   * @return  the unique x values
+   */
   public SortedSet<X> getUniqueXValues() {
     return _uniqueXs;
   }
 
+  /**
+   * Gets all y and volatility values for an x value. Throws an exception if there are
+   * no values for this x value.
+   *
+   * @param x  the x value, not null
+   * @return  the y and volatility values
+   */
   public List<ObjectsPair<Y, Double>> getYValuesForX(final X x) {
     ArgumentChecker.notNull(x, "x");
     if (!_strips.containsKey(x)) {
@@ -123,18 +189,38 @@ public class VolatilitySurfaceData<X, Y> {
     return result;
   }
 
+  /**
+   * Returns the values as a map.
+   *
+   * @return  a map
+   */
   public Map<Pair<X, Y>, Double> asMap() {
     return _values;
   }
 
+  /**
+   * Gets the definition name.
+   *
+   * @return  the name
+   */
   public String getDefinitionName() {
     return _definitionName;
   }
 
+  /**
+   * Gets the specification name.
+   *
+   * @return  the name
+   */
   public String getSpecificationName() {
     return _specificationName;
   }
 
+  /**
+   * Gets the surface target.
+   *
+   * @return  the target
+   */
   public UniqueIdentifiable getTarget() {
     return _target;
   }

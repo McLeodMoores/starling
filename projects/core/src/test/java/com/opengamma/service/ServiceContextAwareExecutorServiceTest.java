@@ -29,6 +29,9 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.opengamma.util.test.TestGroup;
 
+/**
+ * Tests for {@link ServiceContextAwareExecutorService} and {@link ThreadLocalServiceContext}.
+ */
 @Test(groups = TestGroup.UNIT)
 @SuppressWarnings("unchecked")
 public class ServiceContextAwareExecutorServiceTest {
@@ -36,16 +39,31 @@ public class ServiceContextAwareExecutorServiceTest {
   private final ExecutorService _underlying = Executors.newSingleThreadExecutor();
   private final ExecutorService _executor = new ServiceContextAwareExecutorService(_underlying);
 
+  /**
+   * Sets up an empty thread local context.
+   *
+   * @throws Exception  if the context cannot be created
+   */
   @BeforeMethod
   public void setUp() throws Exception {
     ThreadLocalServiceContext.init(ServiceContext.of(Collections.<Class<?>, Object>emptyMap()));
   }
 
+  /**
+   * Removes services after each method.
+   *
+   * @throws Exception  if the services cannot be removed
+   */
   @AfterMethod
   public void tearDown() throws Exception {
     ThreadLocalServiceContext.init(null);
   }
 
+  /**
+   *
+   * @throws ExecutionException
+   * @throws InterruptedException
+   */
   @Test
   public void submitCallable() throws ExecutionException, InterruptedException {
     assertFalse(_underlying.submit(callable()).get());
@@ -99,7 +117,7 @@ public class ServiceContextAwareExecutorServiceTest {
     assertThat(executor.submit(stringCallable()).get(), is("WithoutString"));
   }
 
-  private Callable<String> stringCallable() {
+  private static Callable<String> stringCallable() {
     return new Callable<String>() {
       @Override
       public String call() throws Exception {
@@ -117,7 +135,7 @@ public class ServiceContextAwareExecutorServiceTest {
     };
   }
 
-  private Predicate<Future<Boolean>> predicate() {
+  private static Predicate<Future<Boolean>> predicate() {
     return new Predicate<Future<Boolean>>() {
       @Override
       public boolean apply(final Future<Boolean> future) {
@@ -130,7 +148,7 @@ public class ServiceContextAwareExecutorServiceTest {
     };
   }
 
-  private Callable<Boolean> callable() {
+  private static Callable<Boolean> callable() {
     return new Callable<Boolean>() {
       @Override
       public Boolean call() throws Exception {

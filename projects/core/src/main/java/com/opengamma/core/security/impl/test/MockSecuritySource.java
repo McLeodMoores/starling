@@ -16,7 +16,7 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.id.VersionCorrection;
 
 /**
- * A mock security source.
+ * A mock security source that does not support any operations.
  */
 public class MockSecuritySource extends AbstractSecuritySource {
 

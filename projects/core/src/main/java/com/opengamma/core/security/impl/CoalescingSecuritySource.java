@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.security.impl;
@@ -28,8 +28,9 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * Wrapper around an existing {@link SecuritySource} that coalesces concurrent calls into a single call to one of the bulk operation methods on the underlying. This can improve efficiency where the
- * underlying uses network resources and the round trip of multiple single calls is less desirable than a single bulk call.
+ * Wrapper around an existing {@link SecuritySource} that coalesces concurrent calls into a single call to one of the
+ * bulk operation methods on the underlying. This can improve efficiency where the underlying uses network resources
+ * and the round trip of multiple single calls is less desirable than a single bulk call.
  */
 public class CoalescingSecuritySource implements SecuritySource {
 
@@ -43,7 +44,7 @@ public class CoalescingSecuritySource implements SecuritySource {
       _expected = expected;
     }
 
-    protected abstract void store(final UniqueId uid, final Security security);
+    protected abstract void store(UniqueId uid, Security security);
 
     public synchronized void found(final UniqueId uid, final Security security) {
       store(uid, security);
@@ -63,11 +64,11 @@ public class CoalescingSecuritySource implements SecuritySource {
      */
     public synchronized boolean waitForResult(final AtomicBoolean writing) {
       try {
-        while ((_expected > 0) && !writing.compareAndSet(false, true)) {
+        while (_expected > 0 && !writing.compareAndSet(false, true)) {
           wait();
         }
         return _expected <= 0;
-      } catch (InterruptedException e) {
+      } catch (final InterruptedException e) {
         throw new OpenGammaRuntimeException("Interrupted", e);
       }
     }
@@ -118,7 +119,7 @@ public class CoalescingSecuritySource implements SecuritySource {
   }
 
   private final AtomicBoolean _fetching = new AtomicBoolean();
-  private final Queue<Pair<UniqueId, ? extends Callback>> _pending = new ConcurrentLinkedQueue<Pair<UniqueId, ? extends Callback>>();
+  private final Queue<Pair<UniqueId, ? extends Callback>> _pending = new ConcurrentLinkedQueue<>();
 
   public CoalescingSecuritySource(final SecuritySource underlying) {
     _underlying = underlying;
@@ -134,7 +135,7 @@ public class CoalescingSecuritySource implements SecuritySource {
   }
 
   private Collection<Pair<UniqueId, ? extends Callback>> drainPending() {
-    final Collection<Pair<UniqueId, ? extends Callback>> pending = new LinkedList<Pair<UniqueId, ? extends Callback>>();
+    final Collection<Pair<UniqueId, ? extends Callback>> pending = new LinkedList<>();
     Pair<UniqueId, ? extends Callback> entry = _pending.poll();
     while (entry != null) {
       pending.add(entry);
@@ -144,13 +145,13 @@ public class CoalescingSecuritySource implements SecuritySource {
   }
 
   private void addPendingToRequest(final Collection<Pair<UniqueId, ? extends Callback>> pending, final Set<UniqueId> request) {
-    for (Pair<UniqueId, ? extends Callback> pendingEntry : pending) {
+    for (final Pair<UniqueId, ? extends Callback> pendingEntry : pending) {
       request.add(pendingEntry.getFirst());
     }
   }
 
   private void notifyPending(final Collection<Pair<UniqueId, ? extends Callback>> pending, final Map<UniqueId, Security> result) {
-    for (Pair<UniqueId, ? extends Callback> pendingEntry : pending) {
+    for (final Pair<UniqueId, ? extends Callback> pendingEntry : pending) {
       final Security security = result.get(pendingEntry.getFirst());
       if (security != null) {
         pendingEntry.getSecond().found(pendingEntry.getFirst(), security);
@@ -161,7 +162,7 @@ public class CoalescingSecuritySource implements SecuritySource {
   }
 
   private void errorPending(final Collection<Pair<UniqueId, ? extends Callback>> pending) {
-    for (Pair<UniqueId, ? extends Callback> pendingEntry : pending) {
+    for (final Pair<UniqueId, ? extends Callback> pendingEntry : pending) {
       pendingEntry.getSecond().missed();
     }
   }
@@ -190,7 +191,7 @@ public class CoalescingSecuritySource implements SecuritySource {
       try {
         fullResult = getUnderlying().get(request);
         notifyPending(pending, fullResult);
-      } catch (RuntimeException t) {
+      } catch (final RuntimeException t) {
         errorPending(pending);
         throw t;
       } finally {
@@ -199,48 +200,46 @@ public class CoalescingSecuritySource implements SecuritySource {
       }
       // We've either notified our own callback or another thread has already done it
       return callback.getSecurity();
-    } else {
-      Pair<UniqueId, ? extends Callback> e = _pending.poll();
-      if (e == null) {
-        // Single request
-        Security security = null;
-        try {
-          security = getUnderlying().get(uniqueId);
-        } catch (DataNotFoundException ex) {
-          // Ignore
-        } finally {
-          _fetching.set(false);
-          releaseOtherWritingThreads();
-        }
-        return security;
-      } else {
-        // Single request, e and the content of the pending queue
-        final Collection<Pair<UniqueId, ? extends Callback>> pending = drainPending();
-        pending.add(e);
-        final Set<UniqueId> request = Sets.newHashSetWithExpectedSize(pending.size() + 1);
-        request.add(uniqueId);
-        addPendingToRequest(pending, request);
-        final Map<UniqueId, Security> fullResult;
-        try {
-          fullResult = getUnderlying().get(request);
-          notifyPending(pending, fullResult);
-        } catch (RuntimeException t) {
-          errorPending(pending);
-          throw t;
-        } finally {
-          _fetching.set(false);
-          releaseOtherWritingThreads();
-        }
-        return fullResult.get(uniqueId);
-      }
     }
+    final Pair<UniqueId, ? extends Callback> e = _pending.poll();
+    if (e == null) {
+      // Single request
+      Security security = null;
+      try {
+        security = getUnderlying().get(uniqueId);
+      } catch (final DataNotFoundException ex) {
+        // Ignore
+      } finally {
+        _fetching.set(false);
+        releaseOtherWritingThreads();
+      }
+      return security;
+    }
+    // Single request, e and the content of the pending queue
+    final Collection<Pair<UniqueId, ? extends Callback>> pending = drainPending();
+    pending.add(e);
+    final Set<UniqueId> request = Sets.newHashSetWithExpectedSize(pending.size() + 1);
+    request.add(uniqueId);
+    addPendingToRequest(pending, request);
+    final Map<UniqueId, Security> fullResult;
+    try {
+      fullResult = getUnderlying().get(request);
+      notifyPending(pending, fullResult);
+    } catch (final RuntimeException t) {
+      errorPending(pending);
+      throw t;
+    } finally {
+      _fetching.set(false);
+      releaseOtherWritingThreads();
+    }
+    return fullResult.get(uniqueId);
   }
 
   @Override
   public Map<UniqueId, Security> get(final Collection<UniqueId> uniqueIds) {
     if (!_fetching.compareAndSet(false, true)) {
       final MultipleCallback callback = new MultipleCallback(uniqueIds.size());
-      for (UniqueId uniqueId : uniqueIds) {
+      for (final UniqueId uniqueId : uniqueIds) {
         _pending.add(Pairs.of(uniqueId, callback));
       }
       if (callback.waitForResult(_fetching)) {
@@ -254,7 +253,7 @@ public class CoalescingSecuritySource implements SecuritySource {
       try {
         fullResult = getUnderlying().get(request);
         notifyPending(pending, fullResult);
-      } catch (RuntimeException t) {
+      } catch (final RuntimeException t) {
         errorPending(pending);
         throw t;
       } finally {
@@ -263,46 +262,44 @@ public class CoalescingSecuritySource implements SecuritySource {
       }
       // We've either notified our own callback or another thread has already done it
       return callback.getSecurities();
-    } else {
-      Pair<UniqueId, ? extends Callback> e = _pending.poll();
-      if (e == null) {
-        // Direct request
-        final Map<UniqueId, Security> result;
-        try {
-          result = getUnderlying().get(uniqueIds);
-        } finally {
-          _fetching.set(false);
-          releaseOtherWritingThreads();
-        }
-        return result;
-      } else {
-        // Bulk request, e and the content of the pending queue
-        final Collection<Pair<UniqueId, ? extends Callback>> pending = drainPending();
-        pending.add(e);
-        final Set<UniqueId> request = Sets.newHashSetWithExpectedSize(pending.size() + uniqueIds.size());
-        request.addAll(uniqueIds);
-        addPendingToRequest(pending, request);
-        final Map<UniqueId, Security> fullResult;
-        try {
-          fullResult = getUnderlying().get(request);
-          notifyPending(pending, fullResult);
-        } catch (RuntimeException t) {
-          errorPending(pending);
-          throw t;
-        } finally {
-          _fetching.set(false);
-          releaseOtherWritingThreads();
-        }
-        final Map<UniqueId, Security> result = Maps.newHashMapWithExpectedSize(uniqueIds.size());
-        for (UniqueId uniqueId : uniqueIds) {
-          final Security security = fullResult.get(uniqueId);
-          if (security != null) {
-            result.put(uniqueId, security);
-          }
-        }
-        return result;
+    }
+    final Pair<UniqueId, ? extends Callback> e = _pending.poll();
+    if (e == null) {
+      // Direct request
+      final Map<UniqueId, Security> result;
+      try {
+        result = getUnderlying().get(uniqueIds);
+      } finally {
+        _fetching.set(false);
+        releaseOtherWritingThreads();
+      }
+      return result;
+    }
+    // Bulk request, e and the content of the pending queue
+    final Collection<Pair<UniqueId, ? extends Callback>> pending = drainPending();
+    pending.add(e);
+    final Set<UniqueId> request = Sets.newHashSetWithExpectedSize(pending.size() + uniqueIds.size());
+    request.addAll(uniqueIds);
+    addPendingToRequest(pending, request);
+    final Map<UniqueId, Security> fullResult;
+    try {
+      fullResult = getUnderlying().get(request);
+      notifyPending(pending, fullResult);
+    } catch (final RuntimeException t) {
+      errorPending(pending);
+      throw t;
+    } finally {
+      _fetching.set(false);
+      releaseOtherWritingThreads();
+    }
+    final Map<UniqueId, Security> result = Maps.newHashMapWithExpectedSize(uniqueIds.size());
+    for (final UniqueId uniqueId : uniqueIds) {
+      final Security security = fullResult.get(uniqueId);
+      if (security != null) {
+        result.put(uniqueId, security);
       }
     }
+    return result;
   }
 
   @Override

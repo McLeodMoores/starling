@@ -24,7 +24,7 @@ public class ExternalIdDisplayComparator implements Comparator<ExternalId> {
    */
   static final Map<ExternalScheme, Integer> SCORE_MAP = Maps.newHashMap();
   static {
-    SCORE_MAP.put(ExternalSchemes.BLOOMBERG_TCM, 20); // beacuse if there's both ticker and tcm, you want to see tcm.
+    SCORE_MAP.put(ExternalSchemes.BLOOMBERG_TCM, 20); // because if there's both ticker and tcm, you want to see tcm.
     SCORE_MAP.put(ExternalSchemes.BLOOMBERG_TICKER, 19);
     SCORE_MAP.put(ExternalSchemes.RIC, 17);
     SCORE_MAP.put(ExternalSchemes.BLOOMBERG_TICKER_WEAK, 16);
@@ -62,9 +62,8 @@ public class ExternalIdDisplayComparator implements Comparator<ExternalId> {
   private int scoreExternalId(final ExternalId id) {
     if (_scoreMap.containsKey(id.getScheme())) {
       return _scoreMap.get(id.getScheme());
-    } else {
-      return 0;
     }
+    return 0;
   }
 
   @Override
@@ -73,9 +72,8 @@ public class ExternalIdDisplayComparator implements Comparator<ExternalId> {
     final int score1 = scoreExternalId(id1);
     if (score1 - score0 != 0) {
       return score1 - score0;
-    } else {
-      return id0.compareTo(id1);
     }
+    return id0.compareTo(id1);
   }
 
 }
