@@ -69,9 +69,8 @@ public class CachedHolidaySource extends AbstractSource<Holiday> implements Holi
   protected Object safeNull(final Object o) {
     if (o != null) {
       return o;
-    } else {
-      return NULL;
     }
+    return NULL;
   }
 
   @Override
@@ -123,9 +122,8 @@ public class CachedHolidaySource extends AbstractSource<Holiday> implements Holi
       result = _getHoliday3.putIfAbsent(currency, holidays);
       if (result != null) {
         return getOrThrow(result);
-      } else {
-        return holidays;
       }
+      return holidays;
     } catch (final RuntimeException ex) {
       _getHoliday3.putIfAbsent(currency, ex);
       throw ex;
@@ -144,9 +142,8 @@ public class CachedHolidaySource extends AbstractSource<Holiday> implements Holi
       result = _getHoliday4.putIfAbsent(holidayType, regionOrExchangeIds, safeNull(holidays));
       if (result != null) {
         return getOrThrow(result);
-      } else {
-        return holidays;
       }
+      return holidays;
     } catch (final RuntimeException ex) {
       _getHoliday4.putIfAbsent(holidayType, regionOrExchangeIds, ex);
       throw ex;
@@ -184,6 +181,7 @@ public class CachedHolidaySource extends AbstractSource<Holiday> implements Holi
       return (Boolean) getOrThrow(result);
     }
     try {
+      @SuppressWarnings("deprecation")
       final boolean isHoliday = getUnderlying().isHoliday(dateToCheck, holidayType, regionOrExchangeIds);
       _isHoliday2.putIfAbsent(dateToCheck, holidayType, regionOrExchangeIds, isHoliday);
       return isHoliday;

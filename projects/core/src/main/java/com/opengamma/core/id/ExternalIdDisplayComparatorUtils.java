@@ -18,7 +18,7 @@ public class ExternalIdDisplayComparatorUtils {
   private static final Logger LOGGER = LoggerFactory.getLogger(ExternalIdDisplayComparatorUtils.class);
 
   /**
-   * Default name for config object defining behavior of ExternalIdDisplayComparator
+   * Default name for config object defining behavior of ExternalIdDisplayComparator.
    */
   public static final String DEFAULT_CONFIG_NAME = "DEFAULT";
 

@@ -60,28 +60,28 @@ public interface LegalEntity extends UniqueIdentifiable, ExternalBundleIdentifia
   List<Capability> getCapabilities();
 
   /**
-   * Gets the securities issued by the legal entity
+   * Gets the securities issued by the legal entity.
    *
    * @return the securities issued by the legal entity
    */
   List<ExternalIdBundle> getIssuedSecurities(); //TODO refactor <ExternalIdBundle> to <SecurityLink> when SecurityLink is ready.
 
   /**
-   * Gets the obligations of the legal entity
+   * Gets the obligations of the legal entity.
    *
    * @return the obligations of a legal entity
    */
   List<Obligation> getObligations();
 
   /**
-   * Gets the accounts of the legal entity
+   * Gets the accounts of the legal entity.
    *
    * @return the accounts of a legal entity
    */
   List<Account> getAccounts();
 
   /**
-   * Gets the portfolio of the legal entity
+   * Gets the portfolio of the legal entity.
    *
    * @return the portfolio of the legal entity
    */

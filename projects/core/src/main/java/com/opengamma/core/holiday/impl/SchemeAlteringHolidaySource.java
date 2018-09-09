@@ -29,9 +29,7 @@ import com.opengamma.util.money.Currency;
  * identifiers requested from one scheme to another, but <em>ONLY</em> for the
  * {@code isHoliday} calls. For all other requests, the underlying is invoked
  * unmodified.
- * <strong>This class should only be used in conjunction with {@link HolidaySourceCalendarAdapter}.
- * <p/>
- * For the original requirements, see <a href="http://jira.opengamma.com/browse/PLAT-5498">PLAT-5498</a>.
+ * <strong>This class should only be used in conjunction with HolidaySourceCalendarAdapter</strong>.
  */
 public class SchemeAlteringHolidaySource implements HolidaySource {
   private final HolidaySource _underlying;

@@ -103,14 +103,14 @@ public class ManageableMarketDataSnapshot extends DirectBean implements Structur
   private Instant _valuationTime;
 
   /**
-   * Creates a snapshot
+   * Creates a snapshot.
    */
   public ManageableMarketDataSnapshot() {
     super();
   }
 
   /**
-   * Creates a snapshot
+   * Creates a snapshot.
    *
    * @param name the name of the snapshot
    * @param globalValues the snapshot for the global scope
@@ -204,7 +204,7 @@ public class ManageableMarketDataSnapshot extends DirectBean implements Structur
   }
 
   /**
-   * Gets the valuation time of the snapshot
+   * Gets the valuation time of the snapshot.
    * @return the valuation time of the snapshot, or null if
    * no valuation time could be inferred from the snapshot
    */

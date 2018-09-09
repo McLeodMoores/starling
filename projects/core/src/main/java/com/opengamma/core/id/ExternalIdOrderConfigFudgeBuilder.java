@@ -20,7 +20,7 @@ import com.opengamma.id.ExternalScheme;
 import com.opengamma.util.fudgemsg.AbstractFudgeBuilder;
 
 /**
- * Fudge builder for ExternalIdOrderConfig
+ * Fudge builder for ExternalIdOrderConfig.
  */
 @FudgeBuilderFor(ExternalIdOrderConfig.class)
 public class ExternalIdOrderConfigFudgeBuilder extends AbstractFudgeBuilder implements FudgeBuilder<ExternalIdOrderConfig> {

@@ -188,9 +188,8 @@ public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeries
     final HistoricalTimeSeries hts = doGetHistoricalTimeSeries(uniqueId, null, true, null, true, -1);
     if (hts == null || hts.getTimeSeries() == null || hts.getTimeSeries().isEmpty()) {
       return null;
-    } else {
-      return Pairs.of(hts.getTimeSeries().getLatestTime(), hts.getTimeSeries().getLatestValue());
     }
+    return Pairs.of(hts.getTimeSeries().getLatestTime(), hts.getTimeSeries().getLatestValue());
   }
 
   @Override
@@ -202,9 +201,8 @@ public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeries
     final HistoricalTimeSeries hts = doGetHistoricalTimeSeries(uniqueId, start, includeStart, end, includeEnd, -1);
     if (hts == null || hts.getTimeSeries() == null || hts.getTimeSeries().isEmpty()) {
       return null;
-    } else {
-      return Pairs.of(hts.getTimeSeries().getLatestTime(), hts.getTimeSeries().getLatestValue());
     }
+    return Pairs.of(hts.getTimeSeries().getLatestTime(), hts.getTimeSeries().getLatestValue());
   }
 
   private HistoricalTimeSeries doGetHistoricalTimeSeries(
@@ -226,14 +224,13 @@ public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeries
                                                      true,
                                                      subseriesKey.getEnd(),
                                                      subseriesKey.getIncludeEnd());
-        } else {
-          return _underlying.getHistoricalTimeSeries(uniqueId,
-                                                     subseriesKey.getStart(),
-                                                     true,
-                                                     subseriesKey.getEnd(),
-                                                     subseriesKey.getIncludeEnd(),
-                                                     subseriesKey.getMaxPoints());
         }
+        return _underlying.getHistoricalTimeSeries(uniqueId,
+                                                   subseriesKey.getStart(),
+                                                   true,
+                                                   subseriesKey.getEnd(),
+                                                   subseriesKey.getIncludeEnd(),
+                                                   subseriesKey.getMaxPoints());
       }
     };
 
@@ -358,9 +355,8 @@ public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeries
                                                          -1);
     if (hts == null || hts.getTimeSeries() == null || hts.getTimeSeries().isEmpty()) {
       return null;
-    } else {
-      return Pairs.of(hts.getTimeSeries().getLatestTime(), hts.getTimeSeries().getLatestValue());
     }
+    return Pairs.of(hts.getTimeSeries().getLatestTime(), hts.getTimeSeries().getLatestValue());
   }
 
   @Override
@@ -379,9 +375,8 @@ public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeries
                                                          -1);
     if (hts == null || hts.getTimeSeries() == null || hts.getTimeSeries().isEmpty()) {
       return null;
-    } else {
-      return Pairs.of(hts.getTimeSeries().getLatestTime(), hts.getTimeSeries().getLatestValue());
     }
+    return Pairs.of(hts.getTimeSeries().getLatestTime(), hts.getTimeSeries().getLatestValue());
   }
 
   @Override
@@ -431,18 +426,17 @@ public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeries
                                                      true,
                                                      subseriesKey.getEnd(),
                                                      subseriesKey.getIncludeEnd());
-        } else {
-          return _underlying.getHistoricalTimeSeries(identifiers,
-                                                     currentDate,
-                                                     dataSource,
-                                                     dataProvider,
-                                                     dataField,
-                                                     subseriesKey.getStart(),
-                                                     true,
-                                                     subseriesKey.getEnd(),
-                                                     subseriesKey.getIncludeEnd(),
-                                                     subseriesKey.getMaxPoints());
         }
+        return _underlying.getHistoricalTimeSeries(identifiers,
+                                                   currentDate,
+                                                   dataSource,
+                                                   dataProvider,
+                                                   dataField,
+                                                   subseriesKey.getStart(),
+                                                   true,
+                                                   subseriesKey.getEnd(),
+                                                   subseriesKey.getIncludeEnd(),
+                                                   subseriesKey.getMaxPoints());
       }
     };
 
@@ -532,7 +526,7 @@ public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeries
     private final LocalDate _end;
     private final Integer _maxPoints;
 
-    public SubSeriesKey(final LocalDate start, final LocalDate end, final Integer maxPoints) {
+    SubSeriesKey(final LocalDate start, final LocalDate end, final Integer maxPoints) {
       super();
       this._start = start != null ? start.withDayOfMonth(1).withMonth(1) : null;
       this._end = end != null ? end.plusYears(1).withMonth(1).withDayOfMonth(1) : null;
@@ -577,7 +571,7 @@ public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeries
      * Tests whether this key exactly matches the user request, or if it would be a larger time-series that needs to be
      * cut down to match.
      *
-     * @param true if an exact match, false if it needs trimming
+     * @return  true if an exact match, false if it needs trimming
      */
     public boolean isMatch(final LocalDate start,
                            final boolean includeStart,
@@ -688,9 +682,8 @@ public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeries
         start, includeStart, end, includeEnd, -1);
     if (hts == null || hts.getTimeSeries() == null || hts.getTimeSeries().isEmpty()) {
       return null;
-    } else {
-      return Pairs.of(hts.getTimeSeries().getLatestTime(), hts.getTimeSeries().getLatestValue());
     }
+    return Pairs.of(hts.getTimeSeries().getLatestTime(), hts.getTimeSeries().getLatestValue());
   }
 
   private HistoricalTimeSeries doGetHistoricalTimeSeries(final String dataField,
@@ -723,17 +716,16 @@ public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeries
                                                      true,
                                                      subseriesKey.getEnd(),
                                                      subseriesKey.getIncludeEnd());
-        } else {
-          return _underlying.getHistoricalTimeSeries(dataField,
-                                                     identifierBundle,
-                                                     identifierValidityDate,
-                                                     resolutionKey,
-                                                     subseriesKey.getStart(),
-                                                     true,
-                                                     subseriesKey.getEnd(),
-                                                     subseriesKey.getIncludeEnd(),
-                                                     subseriesKey.getMaxPoints());
         }
+        return _underlying.getHistoricalTimeSeries(dataField,
+                                                   identifierBundle,
+                                                   identifierValidityDate,
+                                                   resolutionKey,
+                                                   subseriesKey.getStart(),
+                                                   true,
+                                                   subseriesKey.getEnd(),
+                                                   subseriesKey.getIncludeEnd(),
+                                                   subseriesKey.getMaxPoints());
       }
     };
 
@@ -811,7 +803,7 @@ public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeries
    * @param includeEnd whether or not the end date is included in the result
    * @return the historical time-series, null if null input
    */
-  private HistoricalTimeSeries getSubSeries(
+  private static HistoricalTimeSeries getSubSeries(
       final HistoricalTimeSeries hts,
       final LocalDate startDate,
       final boolean includeStart,

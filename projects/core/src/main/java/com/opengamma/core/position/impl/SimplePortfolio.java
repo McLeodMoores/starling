@@ -167,9 +167,9 @@ public class SimplePortfolio extends DirectBean
     }
     if (obj instanceof SimplePortfolio) {
       final SimplePortfolio other = (SimplePortfolio) obj;
-      return ObjectUtils.equals(getUniqueId(), other.getUniqueId()) &&
-          ObjectUtils.equals(getName(), other.getName()) &&
-          ObjectUtils.equals(getRootNode(), other.getRootNode());
+      return ObjectUtils.equals(getUniqueId(), other.getUniqueId())
+          && ObjectUtils.equals(getName(), other.getName())
+          && ObjectUtils.equals(getRootNode(), other.getRootNode());
     }
     return false;
   }

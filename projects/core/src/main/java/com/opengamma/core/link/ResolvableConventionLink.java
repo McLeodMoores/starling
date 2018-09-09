@@ -45,6 +45,13 @@ public class ResolvableConventionLink<T extends Convention> extends ConventionLi
   // of the bean
   private final LinkResolver<ExternalIdBundle, T> _resolver;
 
+  /**
+   * Constructs a link.
+   *
+   * @param identifier  the identifier for the convention, not null
+   * @param type  the type of the convention, not null
+   * @param linkResolver  a link resolver, not null
+   */
   /* package */ ResolvableConventionLink(final ExternalIdBundle identifier,
                                          final Class<T> type,
                                          final LinkResolver<ExternalIdBundle, T> linkResolver) {

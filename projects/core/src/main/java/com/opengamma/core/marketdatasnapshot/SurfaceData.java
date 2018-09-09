@@ -90,19 +90,19 @@ public class SurfaceData<X, Y> implements Bean, Serializable {
   /**
    * The x values
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", set = "private")
   private X[] _xs;
 
   /**
    * The y values
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", set = "private")
   private Y[] _ys;
 
   /**
    * The volatilities
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", set = "private")
   private Double[] _vs;
 
   /**
@@ -390,7 +390,7 @@ public class SurfaceData<X, Y> implements Bean, Serializable {
    * Sets the x values
    * @param xs  the new value of the property, not null
    */
-  public void setXs(X[] xs) {
+  private void setXs(X[] xs) {
     JodaBeanUtils.notNull(xs, "xs");
     this._xs = xs;
   }
@@ -416,7 +416,7 @@ public class SurfaceData<X, Y> implements Bean, Serializable {
    * Sets the y values
    * @param ys  the new value of the property, not null
    */
-  public void setYs(Y[] ys) {
+  private void setYs(Y[] ys) {
     JodaBeanUtils.notNull(ys, "ys");
     this._ys = ys;
   }
@@ -442,7 +442,7 @@ public class SurfaceData<X, Y> implements Bean, Serializable {
    * Sets the volatilities
    * @param vs  the new value of the property, not null
    */
-  public void setVs(Double[] vs) {
+  private void setVs(Double[] vs) {
     JodaBeanUtils.notNull(vs, "vs");
     this._vs = vs;
   }

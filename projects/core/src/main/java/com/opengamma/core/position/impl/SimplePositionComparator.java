@@ -28,9 +28,8 @@ public class SimplePositionComparator implements Comparator<Position> {
     final int result = CompareUtils.compareWithNullLow(bestExId1, bestExId2);
     if (result == 0) {
       return positionOrTrade2.getQuantity().compareTo(positionOrTrade1.getQuantity());
-    } else {
-      return result;
     }
+    return result;
   }
 
   @SuppressWarnings("deprecation")

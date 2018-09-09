@@ -54,9 +54,8 @@ public class NarrowingConventionSource implements ConventionSource {
     final Collection<Convention> conventions = get(bundle, versionCorrection);
     if (conventions.isEmpty()) {
       throw new DataNotFoundException("No convention found for bundle: " + bundle);
-    } else {
-      return conventions.iterator().next();
     }
+    return conventions.iterator().next();
   }
 
   @Override
@@ -84,16 +83,14 @@ public class NarrowingConventionSource implements ConventionSource {
     final Collection<Convention> conventions = get(bundle, versionCorrection);
     if (conventions.isEmpty()) {
       throw new DataNotFoundException("No convention found for bundle: " + bundle);
-    } else {
-
-      // Return first item matching name and type
-      for (final Convention convention : conventions) {
-        if (type.isAssignableFrom(convention.getClass())) {
-          return type.cast(convention);
-        }
-      }
-      throw new DataNotFoundException("No convention of type: " + type + " found for bundle: " + bundle);
     }
+    // Return first item matching name and type
+    for (final Convention convention : conventions) {
+      if (type.isAssignableFrom(convention.getClass())) {
+        return type.cast(convention);
+      }
+    }
+    throw new DataNotFoundException("No convention of type: " + type + " found for bundle: " + bundle);
   }
 
   @Override
@@ -139,6 +136,7 @@ public class NarrowingConventionSource implements ConventionSource {
     return builder.build();
   }
 
+  @SuppressWarnings("deprecation")
   @Override
   public Collection<Convention> get(final ExternalIdBundle bundle) {
     return _delegate.get(bundle);

@@ -32,7 +32,7 @@ public interface Region extends UniqueIdentifiable, ExternalBundleIdentifiable {
    * Gets the unique identifier of the region.
    * <p>
    * This specifies a single version-correction of the region.
-   * 
+   *
    * @return the unique identifier for this region, not null within the engine
    */
   @Override
@@ -46,7 +46,7 @@ public interface Region extends UniqueIdentifiable, ExternalBundleIdentifiable {
    * This bundle stores the set of these external identifiers.
    * <p>
    * This will include the country, currency and time-zone.
-   * 
+   *
    * @return the bundle defining the region, not null
    */
   @Override  // override for Javadoc
@@ -54,56 +54,57 @@ public interface Region extends UniqueIdentifiable, ExternalBundleIdentifiable {
 
   /**
    * Gets the classification of the region.
-   * 
+   *
    * @return the classification of region, such as SUPER_NATIONAL or INDEPENDENT_STATE, not null
    */
   RegionClassification getClassification();
 
   /**
-   * Gets the unique identifiers of the regions that this region is a member of. For example, a country might be a member of the World, UN, European Union and NATO.
-   * 
+   * Gets the unique identifiers of the regions that this region is a member of. For example, a country might be a member
+   * of the World, UN, European Union and NATO.
+   *
    * @return the parent unique identifiers, null if this is the root entry
    */
   Set<UniqueId> getParentRegionIds();
 
   /**
    * Gets the country.
-   * 
+   *
    * @return the country, null if not applicable
    */
   Country getCountry();
 
   /**
    * Gets the currency.
-   * 
+   *
    * @return the currency, null if not applicable
    */
   Currency getCurrency();
 
   /**
    * Gets the time-zone. For larger regions, there can be multiple time-zones, so this is only reliable for municipalities.
-   * 
+   *
    * @return the time-zone, null if not applicable
    */
   ZoneId getTimeZone();
 
   /**
    * Gets the short descriptive name of the region.
-   * 
+   *
    * @return the name of the region, not null
    */
   String getName();
 
   /**
    * Gets the full descriptive name of the region.
-   * 
+   *
    * @return the full name of the region, not null
    */
   String getFullName();
 
   /**
    * Gets the extensible data store for additional information. Applications may store additional region based information here.
-   * 
+   *
    * @return the additional data, not null
    */
   FlexiBean getData();

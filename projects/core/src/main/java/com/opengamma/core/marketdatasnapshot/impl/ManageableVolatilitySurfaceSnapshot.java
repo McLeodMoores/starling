@@ -46,7 +46,7 @@ public class ManageableVolatilitySurfaceSnapshot implements Bean, VolatilitySurf
   private Map<Pair<Object, Object>, ValueSnapshot> _values;
 
   /**
-   * Creates a Fudge representation of the snapshot:
+   * Creates a Fudge representation of the snapshot.
    * <pre>
    *   message {
    *     message { // map
@@ -61,7 +61,8 @@ public class ManageableVolatilitySurfaceSnapshot implements Bean, VolatilitySurf
    */
   public FudgeMsg toFudgeMsg(final FudgeSerializer serializer) {
     final MutableFudgeMsg ret = serializer.newMessage();
-    // TODO: this should not be adding it's own class header; the caller should be doing that, or this be registered as a generic builder for VolatilitySurfaceSnapshot and that class name be added
+    // TODO: this should not be adding it's own class header; the caller should be doing that, or this be registered
+    // as a generic builder for VolatilitySurfaceSnapshot and that class name be added
     FudgeSerializer.addClassHeader(ret, ManageableVolatilitySurfaceSnapshot.class);
     final MutableFudgeMsg valuesMsg = serializer.newMessage();
     if (_values != null) {

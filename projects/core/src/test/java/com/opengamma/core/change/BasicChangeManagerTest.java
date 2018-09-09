@@ -16,7 +16,7 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Test.
+ * Tests for{@link BasicChangeManager}.
  */
 @Test(groups = TestGroup.UNIT)
 public class BasicChangeManagerTest {
@@ -28,6 +28,9 @@ public class BasicChangeManagerTest {
   private BasicChangeManager _changeManager;
   private ChangeListener _testListener;
 
+  /**
+   * Sets up the listeners.
+   */
   @BeforeMethod
   public void setUp() {
     _changeManager = new BasicChangeManager();
@@ -39,7 +42,10 @@ public class BasicChangeManagerTest {
   }
 
   //-------------------------------------------------------------------------
-  public void test_addRemove() {
+  /**
+   * Tests adition and removal of change listeners.
+   */
+  public void testAddRemove() {
     assertEquals(0, _changeManager.getListeners().size());
     _changeManager.addChangeListener(_testListener);
     assertEquals(1, _changeManager.getListeners().size());
@@ -48,18 +54,27 @@ public class BasicChangeManagerTest {
     assertEquals(0, _changeManager.getListeners().size());
   }
 
+  /**
+   * Tests that the change listener cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_add_null() {
+  public void testAddNull() {
     _changeManager.addChangeListener(null);
   }
 
+  /**
+   * Tests that null cannot be removed.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_remove_null() {
+  public void testRemoveNull() {
     _changeManager.removeChangeListener(null);
   }
 
   //-------------------------------------------------------------------------
-  public void test_fire_add() {
+  /**
+   * Tests the addition of an object.
+   */
+  public void testFireAdd() {
     _changeManager.addChangeListener(new ChangeListener() {
       @Override
       public void entityChanged(final ChangeEvent event) {
@@ -71,7 +86,10 @@ public class BasicChangeManagerTest {
     _changeManager.entityChanged(ChangeType.ADDED, UID_A_B_1.getObjectId(), NOW, NOW, NOW);
   }
 
-  public void test_fire_remove() {
+  /**
+   * Tests the removal of an object.
+   */
+  public void testFireRemove() {
     _changeManager.addChangeListener(new ChangeListener() {
       @Override
       public void entityChanged(final ChangeEvent event) {
@@ -83,7 +101,10 @@ public class BasicChangeManagerTest {
     _changeManager.entityChanged(ChangeType.REMOVED, UID_A_B_1.getObjectId(), NOW, NOW, NOW);
   }
 
-  public void test_fire_update() {
+  /**
+   * Tests the update of an object.
+   */
+  public void testFireUpdate() {
     _changeManager.addChangeListener(new ChangeListener() {
       @Override
       public void entityChanged(final ChangeEvent event) {
@@ -96,7 +117,10 @@ public class BasicChangeManagerTest {
     _changeManager.entityChanged(ChangeType.CHANGED, UID_A_B_1.getObjectId(), NOW, NOW, NOW);
   }
 
-  public void test_fire_correct() {
+  /**
+   * Tests the correction of an object.
+   */
+  public void testFireCorrect() {
     _changeManager.addChangeListener(new ChangeListener() {
       @Override
       public void entityChanged(final ChangeEvent event) {
@@ -109,4 +133,11 @@ public class BasicChangeManagerTest {
     _changeManager.entityChanged(ChangeType.CHANGED, UID_A_B_1.getObjectId(), NOW, NOW, NOW);
   }
 
+  /**
+   * Tests the toString method.
+   */
+  @Test
+  public void testToString() {
+    assertEquals("BasicChangeManager", _changeManager);
+  }
 }

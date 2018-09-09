@@ -114,7 +114,7 @@ public class SimpleHoliday extends DirectBean
    */
   public void addHolidayDate(final LocalDate date) {
     ArgumentChecker.notNull(date, "date");
-    if (_holidayDates.contains(date) == false) {
+    if (!_holidayDates.contains(date)) {
       int index = Collections.binarySearch(_holidayDates, date);
       index = index < 0 ? -(index + 1) : index;
       _holidayDates.add(index, date);

@@ -25,7 +25,8 @@ import com.opengamma.util.PoolExecutor;
  *
  * @param <V> the type returned by the source
  */
-public abstract class AbstractSourceWithExternalBundle<V extends UniqueIdentifiable & ExternalBundleIdentifiable> extends AbstractSource<V> implements SourceWithExternalBundle<V> {
+public abstract class AbstractSourceWithExternalBundle<V extends UniqueIdentifiable & ExternalBundleIdentifiable>
+extends AbstractSource<V> implements SourceWithExternalBundle<V> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AbstractSourceWithExternalBundle.class);
 
@@ -71,8 +72,8 @@ public abstract class AbstractSourceWithExternalBundle<V extends UniqueIdentifia
     return results;
   }
 
-  public static <V extends UniqueIdentifiable & ExternalBundleIdentifiable> Map<ExternalIdBundle, Collection<V>> getAllSingleThread(final SourceWithExternalBundle<V> source,
-      final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
+  public static <V extends UniqueIdentifiable & ExternalBundleIdentifiable> Map<ExternalIdBundle, Collection<V>> getAllSingleThread(
+      final SourceWithExternalBundle<V> source, final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
     final Map<ExternalIdBundle, Collection<V>> results = Maps.newHashMapWithExpectedSize(bundles.size());
     for (final ExternalIdBundle bundle : bundles) {
       final Collection<V> result = source.get(bundle, versionCorrection);
@@ -92,16 +93,14 @@ public abstract class AbstractSourceWithExternalBundle<V extends UniqueIdentifia
       final Collection<V> result = source.get(bundle, versionCorrection);
       if (result != null && !result.isEmpty()) {
         return Collections.<ExternalIdBundle, Collection<V>>singletonMap(bundle, result);
-      } else {
-        return Collections.emptyMap();
       }
+      return Collections.emptyMap();
     }
     final PoolExecutor executor = PoolExecutor.instance();
     if (executor != null) {
       return getAllMultiThread(executor, source, bundles, versionCorrection);
-    } else {
-      return getAllSingleThread(source, bundles, versionCorrection);
     }
+    return getAllSingleThread(source, bundles, versionCorrection);
   }
 
   @Override
@@ -109,7 +108,8 @@ public abstract class AbstractSourceWithExternalBundle<V extends UniqueIdentifia
     return getAll(this, bundles, versionCorrection);
   }
 
-  public static <V extends UniqueIdentifiable & ExternalBundleIdentifiable> Collection<V> get(final SourceWithExternalBundle<V> source, final ExternalIdBundle bundle) {
+  public static <V extends UniqueIdentifiable & ExternalBundleIdentifiable> Collection<V> get(final SourceWithExternalBundle<V> source,
+      final ExternalIdBundle bundle) {
     return source.get(bundle, VersionCorrection.LATEST);
   }
 
@@ -118,7 +118,8 @@ public abstract class AbstractSourceWithExternalBundle<V extends UniqueIdentifia
     return get(this, bundle);
   }
 
-  public static <V extends UniqueIdentifiable & ExternalBundleIdentifiable> V getSingle(final SourceWithExternalBundle<V> source, final ExternalIdBundle bundle) {
+  public static <V extends UniqueIdentifiable & ExternalBundleIdentifiable> V getSingle(final SourceWithExternalBundle<V> source,
+      final ExternalIdBundle bundle) {
     return source.getSingle(bundle, VersionCorrection.LATEST);
   }
 
@@ -141,7 +142,8 @@ public abstract class AbstractSourceWithExternalBundle<V extends UniqueIdentifia
     return getSingle(this, bundle, versionCorrection);
   }
 
-  public static <V extends UniqueIdentifiable & ExternalBundleIdentifiable> Map<ExternalIdBundle, V> getSingleMultiThread(final PoolExecutor executor, final SourceWithExternalBundle<V> source,
+  public static <V extends UniqueIdentifiable & ExternalBundleIdentifiable> Map<ExternalIdBundle, V> getSingleMultiThread(
+      final PoolExecutor executor, final SourceWithExternalBundle<V> source,
       final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
     final PoolExecutor.Service<Void> jobs = executor.createService(REPORT_EXCEPTIONS);
     final Map<ExternalIdBundle, V> results = Maps.newHashMapWithExpectedSize(bundles.size());
@@ -168,8 +170,8 @@ public abstract class AbstractSourceWithExternalBundle<V extends UniqueIdentifia
     return results;
   }
 
-  public static <V extends UniqueIdentifiable & ExternalBundleIdentifiable> Map<ExternalIdBundle, V> getSingleSingleThread(final SourceWithExternalBundle<V> source,
-      final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
+  public static <V extends UniqueIdentifiable & ExternalBundleIdentifiable> Map<ExternalIdBundle, V> getSingleSingleThread(
+      final SourceWithExternalBundle<V> source, final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
     final Map<ExternalIdBundle, V> results = Maps.newHashMapWithExpectedSize(bundles.size());
     for (final ExternalIdBundle bundle : bundles) {
       final V result = source.getSingle(bundle, versionCorrection);
@@ -180,8 +182,8 @@ public abstract class AbstractSourceWithExternalBundle<V extends UniqueIdentifia
     return results;
   }
 
-  public static <V extends UniqueIdentifiable & ExternalBundleIdentifiable> Map<ExternalIdBundle, V> getSingle(final SourceWithExternalBundle<V> source, final Collection<ExternalIdBundle> bundles,
-      final VersionCorrection versionCorrection) {
+  public static <V extends UniqueIdentifiable & ExternalBundleIdentifiable> Map<ExternalIdBundle, V> getSingle(final SourceWithExternalBundle<V> source,
+      final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
     if (bundles.isEmpty()) {
       return Collections.emptyMap();
     } else if (bundles.size() == 1) {
@@ -189,16 +191,14 @@ public abstract class AbstractSourceWithExternalBundle<V extends UniqueIdentifia
       final V object = source.getSingle(bundle, versionCorrection);
       if (object != null) {
         return Collections.<ExternalIdBundle, V>singletonMap(bundle, object);
-      } else {
-        return Collections.emptyMap();
       }
+      return Collections.emptyMap();
     }
     final PoolExecutor executor = PoolExecutor.instance();
     if (executor != null) {
       return getSingleMultiThread(executor, source, bundles, versionCorrection);
-    } else {
-      return getSingleSingleThread(source, bundles, versionCorrection);
     }
+    return getSingleSingleThread(source, bundles, versionCorrection);
   }
 
   @Override

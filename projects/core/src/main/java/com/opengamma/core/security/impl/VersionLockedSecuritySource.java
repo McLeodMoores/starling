@@ -22,8 +22,8 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * A {@link SecuritySource} wrapper which sets a specific version/correction on all requests that would otherwise request "latest".
  * <p>
- * Where possible, code should be written that explicitly passes the necessary version/correction information around - this is an intermediate solution for working with existing code that is not
- * properly version aware.
+ * Where possible, code should be written that explicitly passes the necessary version/correction information around - this
+ * is an intermediate solution for working with existing code that is not properly version aware.
  *
  * @deprecated Call code that is properly version aware (whenever possible)
  */
@@ -51,9 +51,8 @@ public class VersionLockedSecuritySource implements SecuritySource {
       final Instant version = versionCorrection.getVersionAsOf() == null ? getVersionCorrection().getVersionAsOf() : versionCorrection.getVersionAsOf();
       final Instant correction = versionCorrection.getCorrectedTo() == null ? getVersionCorrection().getCorrectedTo() : versionCorrection.getCorrectedTo();
       return VersionCorrection.of(version, correction);
-    } else {
-      return versionCorrection;
     }
+    return versionCorrection;
   }
 
   @Override

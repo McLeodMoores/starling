@@ -33,18 +33,18 @@ public class SimplePortfolioNode implements PortfolioNode, MutableUniqueIdentifi
   private static final long serialVersionUID = 1L;
 
   /**
-   * Debugging flag for artificially limiting the size of all portfolios. Use this to truncate large portfolios to isolate error cases more easily. The default value is off but can be controlled by
-   * the {@code SimplePortfolioNode.debugFlag} property.
+   * Debugging flag for artificially limiting the size of all portfolios. Use this to truncate large portfolios to
+   * isolate error cases more easily. The default value is off but can be controlled by the {@code SimplePortfolioNode.debugFlag} property.
    */
   private static final boolean DEBUG_FLAG = System.getProperty("SimplePortfolioNode.debugFlag", "FALSE").equalsIgnoreCase("TRUE");
   /**
-   * Maximum number of nodes to present immediately underneath this node. This is only used if {@link #DEBUG_FLAG} is on. The default value is 1 but can be controlled by the
-   * {@code SimplePortfolioNode.debugMaxNodes} property.
+   * Maximum number of nodes to present immediately underneath this node. This is only used if {@link #DEBUG_FLAG}
+   * is on. The default value is 1 but can be controlled by the {@code SimplePortfolioNode.debugMaxNodes} property.
    */
   private static final int DEBUG_MAX_NODES = Integer.parseInt(System.getProperty("SimplePortfolioNode.debugMaxNodes", "1"));
   /**
-   * Maximum number of positions to present immediately underneath this node. This is only used if {@link #DEBUG_FLAG} is on. The default value is 1 but can be controlled by the
-   * {@code SimplePortfolioNode.debugMaxPositions} property.
+   * Maximum number of positions to present immediately underneath this node. This is only used if {@link #DEBUG_FLAG}
+   * is on. The default value is 1 but can be controlled by the {@code SimplePortfolioNode.debugMaxPositions} property.
    */
   private static final int DEBUG_MAX_POSITIONS = Integer.parseInt(System.getProperty("SimplePortfolioNode.debugMaxPositions", "1"));
 
@@ -212,14 +212,15 @@ public class SimplePortfolioNode implements PortfolioNode, MutableUniqueIdentifi
    *
    * @param childNode  the child node to add, not null
    */
-  public void addChildNode(PortfolioNode childNode) {
+  public void addChildNode(final PortfolioNode childNode) {
     ArgumentChecker.notNull(childNode, "child node");
+    PortfolioNode cn = childNode;
     if (!ObjectUtils.equals(getUniqueId(), childNode.getParentNodeId())) {
       final SimplePortfolioNode newChildNode = new SimplePortfolioNode(childNode);
       newChildNode.setParentNodeId(getUniqueId());
-      childNode = newChildNode;
+      cn = newChildNode;
     }
-    _childNodes.add(childNode);
+    _childNodes.add(cn);
   }
 
   /**
@@ -398,13 +399,13 @@ public class SimplePortfolioNode implements PortfolioNode, MutableUniqueIdentifi
       final SimplePortfolioNode other = (SimplePortfolioNode) obj;
       final List<PortfolioNode> otherChildNodes = other.getChildNodes();
       final List<Position> otherPositions = other.getPositions();
-      return ObjectUtils.equals(getUniqueId(), other.getUniqueId()) &&
-          ObjectUtils.equals(getParentNodeId(), other.getParentNodeId()) &&
-          ObjectUtils.equals(getName(), other.getName()) &&
-          getChildNodes().size() == otherChildNodes.size() &&
-          getPositions().size() == otherPositions.size() &&
-          getChildNodes().equals(otherChildNodes) &&
-          getPositions().equals(otherPositions);
+      return ObjectUtils.equals(getUniqueId(), other.getUniqueId())
+          && ObjectUtils.equals(getParentNodeId(), other.getParentNodeId())
+          && ObjectUtils.equals(getName(), other.getName())
+          && getChildNodes().size() == otherChildNodes.size()
+          && getPositions().size() == otherPositions.size()
+          && getChildNodes().equals(otherChildNodes)
+          && getPositions().equals(otherPositions);
     }
     return false;
   }

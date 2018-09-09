@@ -43,11 +43,11 @@ public class HistoricalTimeSeriesSourceTest {
   private static final String ALPHAS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   private final Set<String> _usedIds = new HashSet<>();
 
-  private boolean isWeekday(final LocalDate day) {
+  private static boolean isWeekday(final LocalDate day) {
     return day.getDayOfWeek() != DayOfWeek.SATURDAY && day.getDayOfWeek() != DayOfWeek.SUNDAY;
   }
 
-  private LocalDateDoubleTimeSeries randomTimeSeries() {
+  private static LocalDateDoubleTimeSeries randomTimeSeries() {
     final LocalDateDoubleTimeSeriesBuilder bld = ImmutableLocalDateDoubleTimeSeries.builder();
     final LocalDate start = LocalDate.of(2000, 1, 2);
     final LocalDate end = start.plusYears(10);
@@ -61,11 +61,11 @@ public class HistoricalTimeSeriesSourceTest {
     return bld.build();
   }
 
-  private int random(final int maxBoundExclusive) {
+  private static int random(final int maxBoundExclusive) {
     return (int) Math.floor(Math.random() * maxBoundExclusive);
   }
 
-  private String makeRandomId() {
+  private static String makeRandomId() {
     final StringBuilder sb = new StringBuilder();
     sb.append(ALPHAS.charAt(random(26)));
     sb.append(ALPHAS.charAt(random(26)));

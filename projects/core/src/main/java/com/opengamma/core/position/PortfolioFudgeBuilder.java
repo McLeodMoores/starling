@@ -52,7 +52,7 @@ public class PortfolioFudgeBuilder implements FudgeBuilder<Portfolio> {
     return message;
   }
 
-  private boolean haveAttributes(final Portfolio portfolio) {
+  private static boolean haveAttributes(final Portfolio portfolio) {
     return portfolio.getAttributes() != null && !portfolio.getAttributes().isEmpty();
   }
 

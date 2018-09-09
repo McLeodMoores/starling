@@ -79,7 +79,8 @@ public final class VolatilitySurfaceKey implements ImmutableBean, StructuredMark
    * @param quoteUnits the quote units
    * @return the volatility surface key, not null
    */
-  public static VolatilitySurfaceKey of(final UniqueIdentifiable target, final String name, final String instrumentType, final String quoteType, final String quoteUnits) {
+  public static VolatilitySurfaceKey of(final UniqueIdentifiable target, final String name, final String instrumentType, final String quoteType,
+      final String quoteUnits) {
     ArgumentChecker.notNull(target, "target");
     return new VolatilitySurfaceKey(target.getUniqueId(), name, instrumentType, quoteType, quoteUnits);
   }
@@ -120,6 +121,12 @@ public final class VolatilitySurfaceKey implements ImmutableBean, StructuredMark
     return visitor.visitVolatilitySurfaceKey(this);
   }
 
+  /**
+   * Converts a key to a Fudge message.
+   *
+   * @param serializer  the serializer, not null
+   * @return  a message
+   */
   public MutableFudgeMsg toFudgeMsg(final FudgeSerializer serializer) {
     final MutableFudgeMsg msg = serializer.newMessage();
     msg.add("target", _target.toString());
@@ -130,6 +137,13 @@ public final class VolatilitySurfaceKey implements ImmutableBean, StructuredMark
     return msg;
   }
 
+  /**
+   * Converts a Fudge message to a key.
+   *
+   * @param deserializer  the deserializer, not null
+   * @param msg  the message, not null
+   * @return  a key
+   */
   public static VolatilitySurfaceKey fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     final UniqueId targetUid;
     final String target = msg.getString("target");

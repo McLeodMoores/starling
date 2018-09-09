@@ -144,7 +144,8 @@ public class SimpleTrade extends DirectBean
    * @param tradeDate  the trade date, not null
    * @param tradeTime  the trade time with offset, may be null
    */
-  public SimpleTrade(final Security security, final BigDecimal quantity, final Counterparty counterparty, final LocalDate tradeDate, final OffsetTime tradeTime) {
+  public SimpleTrade(final Security security, final BigDecimal quantity, final Counterparty counterparty, final LocalDate tradeDate,
+      final OffsetTime tradeTime) {
     ArgumentChecker.notNull(security, "security");
     ArgumentChecker.notNull(quantity, "quantity");
     ArgumentChecker.notNull(counterparty, "counterparty");

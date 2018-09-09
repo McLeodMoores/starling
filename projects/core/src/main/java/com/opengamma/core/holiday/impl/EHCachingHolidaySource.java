@@ -27,7 +27,8 @@ import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 
 /**
- * An EHCache based {@link HolidaySource}. This is better than having no cache but is not very efficient. Also does not listen for changes to the underlying data.
+ * An EHCache based {@link HolidaySource}. This is better than having no cache but is not very efficient. Also does not listen for
+ * changes to the underlying data.
  */
 public class EHCachingHolidaySource extends AbstractEHCachingSource<Holiday, HolidaySource> implements HolidaySource {
 

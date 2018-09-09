@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.historicaltimeseries;
@@ -45,7 +45,7 @@ public abstract class HistoricalTimeSeriesAdjustment {
 
     @Override
     public LocalDateDoubleTimeSeries adjust(final LocalDateDoubleTimeSeries timeSeries) {
-      return (LocalDateDoubleTimeSeries) timeSeries.divide(getAmountToDivideBy());
+      return timeSeries.divide(getAmountToDivideBy());
     }
 
     @Override
@@ -77,7 +77,7 @@ public abstract class HistoricalTimeSeriesAdjustment {
 
     @Override
     public LocalDateDoubleTimeSeries adjust(final LocalDateDoubleTimeSeries timeSeries) {
-      return (LocalDateDoubleTimeSeries) timeSeries.subtract(getAmountToSubtract());
+      return timeSeries.subtract(getAmountToSubtract());
     }
 
     @Override
@@ -166,16 +166,16 @@ public abstract class HistoricalTimeSeriesAdjustment {
   }
 
   /**
-   * Produces an instance based on the string representation returned by {@link #toString}. Strings are not intended to be human writable, but should be created by forming the adjustment objects and
-   * calling {@code toString} on them.
-   * 
+   * Produces an instance based on the string representation returned by {@link #toString}. Strings are not intended
+   * to be human writable, but should be created by forming the adjustment objects and calling {@code toString} on them.
+   *
    * @param str the string to parse, not null
    * @return the adjustment instance, not null
    */
   public static HistoricalTimeSeriesAdjustment parse(final String str) {
     final String[] elements = str.split("\\s+");
-    final Stack<Object> stack = new Stack<Object>();
-    for (String element : elements) {
+    final Stack<Object> stack = new Stack<>();
+    for (final String element : elements) {
       if ("/".equals(element)) {
         stack.push(new DivideBy(Double.parseDouble((String) stack.pop())));
       } else if ("-".equals(element)) {
@@ -196,7 +196,7 @@ public abstract class HistoricalTimeSeriesAdjustment {
 
   /**
    * Produces a string representation that can be parsed by {@link #parse}.
-   * 
+   *
    * @return the string
    */
   @Override

@@ -15,7 +15,7 @@ import com.opengamma.id.ObjectId;
 public final class DummyChangeManager implements ChangeManager {
 
   /**
-   * Singleton instance
+   * Singleton instance.
    */
   public static final DummyChangeManager INSTANCE = new DummyChangeManager();
 

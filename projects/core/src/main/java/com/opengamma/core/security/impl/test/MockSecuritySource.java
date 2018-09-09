@@ -10,7 +10,6 @@ import java.util.Collection;
 import com.opengamma.core.change.ChangeManager;
 import com.opengamma.core.security.AbstractSecuritySource;
 import com.opengamma.core.security.Security;
-import com.opengamma.core.security.SecuritySource;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.ObjectId;
 import com.opengamma.id.UniqueId;
@@ -19,7 +18,7 @@ import com.opengamma.id.VersionCorrection;
 /**
  * A mock security source.
  */
-public class MockSecuritySource extends AbstractSecuritySource implements SecuritySource {
+public class MockSecuritySource extends AbstractSecuritySource {
 
   @Override
   public ChangeManager changeManager() {

@@ -53,7 +53,7 @@ import redis.clients.jedis.JedisPool;
  *   <li>{@link #get(UniqueId)}</li>
  *   <li>{@link #get(ExternalIdBundle)}</li>
  *   <li>{@link #get(ExternalIdBundle, VersionCorrection)}</li>
- * <ul>
+ * </ul>
  * <p/>
  * In addition, this implementation <strong>does not support {@link ExternalId} changes</strong>.
  * While {@link #get(UniqueId)} by definition can always be cached, because a {@link Security}
@@ -74,7 +74,7 @@ import redis.clients.jedis.JedisPool;
  * pointed at the same repository (given as a combination of the same pool and same prefix),
  * by default, all instances will attempt to update the Redis instance, which is not ideal.
  */
-public class RedisCachingSecuritySource extends AbstractSecuritySource implements SecuritySource {
+public class RedisCachingSecuritySource extends AbstractSecuritySource {
   private static final Logger LOGGER = LoggerFactory.getLogger(RedisCachingSecuritySource.class);
   private final SecuritySource _underlying;
   private final JedisPool _jedisPool;
@@ -322,7 +322,7 @@ public class RedisCachingSecuritySource extends AbstractSecuritySource implement
     return bytes;
   }*/
 
-  private byte[] toRedisData(final ObjectId objectId) {
+  private static byte[] toRedisData(final ObjectId objectId) {
     ArgumentChecker.notNull(objectId, "objectId");
     final String data = objectId.toString();
     final byte[] bytes = Charsets.UTF_8.encode(data).array();

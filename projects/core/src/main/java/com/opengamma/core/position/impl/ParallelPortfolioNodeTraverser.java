@@ -47,7 +47,7 @@ public class ParallelPortfolioNodeTraverser extends PortfolioNodeTraverser {
     private final PoolExecutor.Service<?> _executorService;
     private final PortfolioNodeTraversalCallback _callback;
 
-    public Context(final PoolExecutor.Service<?> executorService, final PortfolioNodeTraversalCallback callback) {
+    Context(final PoolExecutor.Service<?> executorService, final PortfolioNodeTraversalCallback callback) {
       _executorService = executorService;
       _callback = callback;
     }
@@ -59,7 +59,7 @@ public class ParallelPortfolioNodeTraverser extends PortfolioNodeTraverser {
       private final AtomicInteger _count = new AtomicInteger();
       private volatile boolean _secondPass;
 
-      public NodeTraverser(final PortfolioNode node, final NodeTraverser parent) {
+      NodeTraverser(final PortfolioNode node, final NodeTraverser parent) {
         _node = node;
         _parent = parent;
       }

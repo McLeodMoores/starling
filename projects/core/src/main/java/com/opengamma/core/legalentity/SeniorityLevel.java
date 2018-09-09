@@ -5,9 +5,9 @@
  */
 package com.opengamma.core.legalentity;
 
-/** Seniority Levels */
+/** Seniority Levels. */
 public enum SeniorityLevel {
-  /** Junior Subordinated or Upper Tier 2 Debt (Banks) */
+  /** Junior Subordinated or Upper Tier 2 Debt (Banks). */
   JRSUBUT2,
   /** First Lien – Secured Debt with a First Lien on a pool of assets. (Introduced in August 2006) */
   LIEN1,
@@ -20,12 +20,12 @@ public enum SeniorityLevel {
    * Commonly used in leveraged buyouts or by middle-market companies. (Introduced in August 2006)
    */
   MEZZ,
-  /** Preference Shares, or Tier 1 Capital (Banks) */
+  /** Preference Shares, or Tier 1 Capital (Banks). */
   PREFT1,
-  /** Secured Debt (Corporate/Financial) or Domestic Currency Sovereign Debt (Government) */
+  /** Secured Debt (Corporate/Financial) or Domestic Currency Sovereign Debt (Government). */
   SECDOM,
-  /** Senior Unsecured Debt (Corporate/Financial), Foreign Currency Sovereign Debt (Government) */
+  /** Senior Unsecured Debt (Corporate/Financial), Foreign Currency Sovereign Debt (Government). */
   SNRFOR,
-  /** Subordinated or Lower Tier 2 Debt (Banks) */
+  /** Subordinated or Lower Tier 2 Debt (Banks). */
   SUBLT2
 }

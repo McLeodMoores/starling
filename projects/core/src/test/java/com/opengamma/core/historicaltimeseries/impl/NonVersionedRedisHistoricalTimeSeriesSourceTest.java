@@ -469,7 +469,7 @@ public class NonVersionedRedisHistoricalTimeSeriesSourceTest extends AbstractRed
     System.out.println("Reading " + hts.getTimeSeries().size() + " datapoints took " + totalDurationInSec / ITER_SIZE + " sec");
   }
 
-  private HistoricalTimeSeries createSampleHts() {
+  private static HistoricalTimeSeries createSampleHts() {
     final UniqueId id = UniqueId.of("HTS", UUID.randomUUID().toString());
     final LocalDateDoubleTimeSeriesBuilder builder = ImmutableLocalDateDoubleTimeSeries.builder();
     final LocalDate start = LocalDate.now();

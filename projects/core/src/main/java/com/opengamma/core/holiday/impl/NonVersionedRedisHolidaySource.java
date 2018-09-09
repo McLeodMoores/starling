@@ -15,10 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
 
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.exceptions.JedisConnectionException;
-
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 import com.google.common.collect.ImmutableList;
@@ -38,6 +34,10 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.GUIDGenerator;
 import com.opengamma.util.metric.OpenGammaMetricRegistry;
 import com.opengamma.util.money.Currency;
+
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.exceptions.JedisConnectionException;
 
 /*
  * REDIS DATA STRUCTURES:
@@ -76,17 +76,17 @@ public class NonVersionedRedisHolidaySource implements HolidaySource {
   private static final String EXCHANGE = "EXCHANGE";
   private static final String EXCHANGE_SCHEME = "EXCHANGE_SCHEME";
   private static final String CUSTOM_SCHEME = "CUSTOM_SCHEME";
-  /** Currency key */
+  /** Currency key. */
   public static final String CURRENCY = "CURRENCY";
-  /** Type key */
+  /** Type key. */
   public static final String TYPE = "TYPE";
-  /** UniqueId key */
+  /** UniqueId key. */
   public static final String UNIQUE_ID = "UNIQUE_ID";
-  /** Region value key */
+  /** Region value key. */
   public static final String REGION = "REGION";
-  /** Custom value key */
+  /** Custom value key. */
   public static final String CUSTOM = "CUSTOM";
-  /** Region scheme key */
+  /** Region scheme key. */
   public static final String REGION_SCHEME = "REGION_SCHEME";
   /** The default scheme for unique identifiers. */
   public static final String IDENTIFIER_SCHEME_DEFAULT = "RedisHol";
@@ -308,7 +308,7 @@ public class NonVersionedRedisHolidaySource implements HolidaySource {
 
   @Override
   public Map<UniqueId, Holiday> get(final Collection<UniqueId> uniqueIds) {
-    final Map<UniqueId, Holiday> result = new HashMap<UniqueId, Holiday>();
+    final Map<UniqueId, Holiday> result = new HashMap<>();
 
     for (final UniqueId uniqueId : uniqueIds) {
       result.put(uniqueId, get(uniqueId));
@@ -319,7 +319,7 @@ public class NonVersionedRedisHolidaySource implements HolidaySource {
 
   @Override
   public Map<ObjectId, Holiday> get(final Collection<ObjectId> objectIds, final VersionCorrection versionCorrection) {
-    final Map<ObjectId, Holiday> result = new HashMap<ObjectId, Holiday>();
+    final Map<ObjectId, Holiday> result = new HashMap<>();
 
     for (final ObjectId objectId : objectIds) {
       result.put(objectId, get(objectId, null));
@@ -481,9 +481,8 @@ public class NonVersionedRedisHolidaySource implements HolidaySource {
         holiday.setCurrency(currency);
         holiday.setHolidayDates(parseHolidayDates(dates));
         return ImmutableList.<Holiday>of(holiday);
-      } else {
-        return ImmutableList.of();
       }
+      return ImmutableList.of();
     } catch (final JedisConnectionException e) {
       LOGGER.error("Unable to get holiday - " + currency, e);
       getJedisPool().returnBrokenResource(jedis);

@@ -38,7 +38,8 @@ public class Obligor extends DirectBean {
 
   // ----------------------------------------------------------------------------------------------------------------------------------------
 
-  // TODO : Need to be able to allow the user to add user-defined fields to the definition of an obligor on an ad-hoc basis (each user will have different ways of representing an obligor)
+  // TODO : Need to be able to allow the user to add user-defined fields to the definition of an obligor on an ad-hoc
+  // basis (each user will have different ways of representing an obligor)
   // TODO : Should we include the recovery rate model as part of the obligors composition (private final RecoveryRateModel _recoveryRateModel;)?
 
   // NOTE : There should be no market data within this objects definition (should only have the obligor characteristics)

@@ -23,7 +23,7 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import com.opengamma.core.obligor.CreditRating;
 
 /**
- * Legal Entity Rating
+ * Legal Entity Rating.
  */
 @BeanDefinition
 public class Rating implements Bean {

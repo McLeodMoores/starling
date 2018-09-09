@@ -30,6 +30,8 @@ import com.opengamma.service.VersionCorrectionProvider;
 
   /**
    * Creates the resolver using the supplied service context.
+   *
+   * @param serviceContext  the service context
    */
    /* package */ ServiceContextSecurityLinkResolver(final ServiceContext serviceContext) {
     super(serviceContext);
@@ -54,9 +56,8 @@ import com.opengamma.service.VersionCorrectionProvider;
     final S result = (S) source.getSingle(identifier, versionCorrection);
     if (result != null) {
       return result;
-    } else {
-      throw new DataNotFoundException("No security found with id bundle: [" + identifier +
-                                      "] and versionCorrection: [" + versionCorrection + "]");
     }
+    throw new DataNotFoundException("No security found with id bundle: [" + identifier
+                                    + "] and versionCorrection: [" + versionCorrection + "]");
   }
 }

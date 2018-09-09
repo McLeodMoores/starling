@@ -28,7 +28,7 @@ import com.opengamma.util.test.TestGroup;
 /**
  * Test.
  */
-@Test(groups = TestGroup.INTEGRATION, enabled = true)
+@Test(groups = TestGroup.INTEGRATION, enabled = false)
 public class RedisSimulationSeriesSourceTest extends AbstractRedisTestCase {
   private static final Logger LOGGER = LoggerFactory.getLogger(RedisSimulationSeriesSourceTest.class);
 

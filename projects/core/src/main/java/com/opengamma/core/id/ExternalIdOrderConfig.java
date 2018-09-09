@@ -120,24 +120,20 @@ public class ExternalIdOrderConfig extends DirectBean {
           if (r2 == null) {
             // neither have a rank, use the natural ordering
             return o1.compareTo(o2);
-          } else {
-            // o2 has a rank, use that
-            return 1;
           }
-        } else {
-          if (r2 == null) {
-            // o1 has a rank, use that
-            return -1;
-          } else {
-            final int r = r2 - r1;
-            if (r != 0) {
-              return r;
-            } else {
-              // both have the same rank, use the natural ordering
-              return o1.compareTo(o2);
-            }
-          }
+          // o2 has a rank, use that
+          return 1;
         }
+        if (r2 == null) {
+          // o1 has a rank, use that
+          return -1;
+        }
+        final int r = r2 - r1;
+        if (r != 0) {
+          return r;
+        }
+        // both have the same rank, use the natural ordering
+        return o1.compareTo(o2);
       }
     };
   }
@@ -155,10 +151,9 @@ public class ExternalIdOrderConfig extends DirectBean {
         final int c = scheme.compare(o1.getScheme(), o2.getScheme());
         if (c != 0) {
           return c;
-        } else {
-          // Same scheme, order by identifier value
-          return o1.getValue().compareTo(o2.getValue());
         }
+        // Same scheme, order by identifier value
+        return o1.getValue().compareTo(o2.getValue());
       }
     };
   }

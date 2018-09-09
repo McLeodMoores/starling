@@ -25,7 +25,7 @@ import org.threeten.bp.LocalDate;
 import com.opengamma.id.ExternalIdBundle;
 
 /**
- * Fields for a historicalDataRequest
+ * Fields for a historicalDataRequest.
  */
 @BeanDefinition
 public final class HistoricalDataRequest implements ImmutableBean {

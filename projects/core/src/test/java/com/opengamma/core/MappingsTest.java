@@ -17,7 +17,7 @@ import com.opengamma.util.test.TestGroup;
 /**
  * Tests for {@link Mappings}.
  */
-@Test(groups = TestGroup.UNIT )
+@Test(groups = TestGroup.UNIT)
 public class MappingsTest {
   private static final Map<String, String> MAPPINGS = new HashMap<>();
 

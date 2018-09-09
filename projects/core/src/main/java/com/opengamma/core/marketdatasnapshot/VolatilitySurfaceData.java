@@ -26,14 +26,14 @@ import com.opengamma.util.tuple.Pair;
 /**
  * Data structure to hold a particular volatility surface's data points.
  * Note no interpolation or fitting is done in this code.
- * 
+ *
  * @param <X> Type of the x-data
  * @param <Y> Type of the y-data
  */
 public class VolatilitySurfaceData<X, Y> {
-  /** Default name for the x axis */
+  /** Default name for the x axis. */
   public static final String DEFAULT_X_LABEL = "x";
-  /** Default name for the y axis */
+  /** Default name for the y axis. */
   public static final String DEFAULT_Y_LABEL = "y";
   private static final Comparator<Pair<?, ?>> COMPARATOR = FirstThenSecondPairComparator.INSTANCE;
   private final String _definitionName;
@@ -51,7 +51,7 @@ public class VolatilitySurfaceData<X, Y> {
                                final X[] xs, final Y[] ys, final Map<Pair<X, Y>, Double> values) {
     this(definitionName, specificationName, target, xs, DEFAULT_X_LABEL, ys, DEFAULT_Y_LABEL, values);
   }
-  
+
 
   public VolatilitySurfaceData(final String definitionName, final String specificationName, final UniqueIdentifiable target,
                                final X[] xs, final String xLabel, final Y[] ys, final String yLabel, final Map<Pair<X, Y>, Double> values) {
@@ -71,9 +71,9 @@ public class VolatilitySurfaceData<X, Y> {
     _xLabel = xLabel;
     _ys = ys;
     _yLabel = yLabel;
-    _uniqueXs = new TreeSet<X>();
+    _uniqueXs = new TreeSet<>();
     _strips = Maps.newHashMap();
-    for (Map.Entry<Pair<X, Y>, Double> entries : values.entrySet()) {
+    for (final Map.Entry<Pair<X, Y>, Double> entries : values.entrySet()) {
       if (_strips.containsKey(entries.getKey().getFirst())) {
         _strips.get(entries.getKey().getFirst()).add(ObjectsPair.of(entries.getKey().getSecond(), entries.getValue()));
       } else {
@@ -88,7 +88,7 @@ public class VolatilitySurfaceData<X, Y> {
   public int size() {
     return _values.size();
   }
-  
+
   public X[] getXs() {
     return _xs;
   }
@@ -96,7 +96,7 @@ public class VolatilitySurfaceData<X, Y> {
   public String getXLabel() {
     return _xLabel;
   }
-  
+
   public Y[] getYs() {
     return _ys;
   }
@@ -104,25 +104,25 @@ public class VolatilitySurfaceData<X, Y> {
   public String getYLabel() {
     return _yLabel;
   }
-  
+
   public Double getVolatility(final X x, final Y y) {
     return _values.get(ObjectsPair.of(x, y));
   }
-  
+
   public SortedSet<X> getUniqueXValues() {
     return _uniqueXs;
   }
-  
+
   public List<ObjectsPair<Y, Double>> getYValuesForX(final X x) {
     ArgumentChecker.notNull(x, "x");
     if (!_strips.containsKey(x)) {
       throw new OpenGammaRuntimeException("Could not get strip for x value " + x);
     }
-    List<ObjectsPair<Y, Double>> result = _strips.get(x);
+    final List<ObjectsPair<Y, Double>> result = _strips.get(x);
     Collections.sort(result, COMPARATOR);
     return result;
   }
-  
+
   public Map<Pair<X, Y>, Double> asMap() {
     return _values;
   }
@@ -158,14 +158,14 @@ public class VolatilitySurfaceData<X, Y> {
       return false;
     }
     final VolatilitySurfaceData<?, ?> other = (VolatilitySurfaceData<?, ?>) o;
-    return getDefinitionName().equals(other.getDefinitionName()) &&
-           getSpecificationName().equals(other.getSpecificationName()) &&
-           getTarget().equals(other.getTarget()) &&
-           Arrays.equals(getXs(), other.getXs()) &&
-           Arrays.equals(getYs(), other.getYs()) &&
-           getXLabel().equals(other.getXLabel()) &&
-           getYLabel().equals(other.getYLabel()) &&
-           _values.equals(other._values);
+    return getDefinitionName().equals(other.getDefinitionName())
+           && getSpecificationName().equals(other.getSpecificationName())
+           && getTarget().equals(other.getTarget())
+           && Arrays.equals(getXs(), other.getXs())
+           && Arrays.equals(getYs(), other.getYs())
+           && getXLabel().equals(other.getXLabel())
+           && getYLabel().equals(other.getYLabel())
+           && _values.equals(other._values);
   }
 
   @Override
@@ -175,17 +175,17 @@ public class VolatilitySurfaceData<X, Y> {
 
   @Override
   public String toString() {
-    return "VolatilitySurfaceData [" +
-        "_definitionName='" + _definitionName + "'" +
-        ", _specificationName='" + _specificationName + "'" +
-        ", _target=" + _target +
-        ", _xLabel='" + _xLabel + "'" +
-        ", _yLabel='" + _yLabel + "'" +
-        ", _xs=" + (_xs == null ? null : Arrays.asList(_xs)) +
-        ", _ys=" + (_ys == null ? null : Arrays.asList(_ys)) +
-        ", _values=" + _values +
-        ", _uniqueXs=" + _uniqueXs +
-        ", _strips=" + _strips +
-        "]";
+    return "VolatilitySurfaceData ["
+        + "_definitionName='" + _definitionName + "'"
+        + ", _specificationName='" + _specificationName + "'"
+        + ", _target=" + _target
+        + ", _xLabel='" + _xLabel + "'"
+        + ", _yLabel='" + _yLabel + "'"
+        + ", _xs=" + (_xs == null ? null : Arrays.asList(_xs))
+        + ", _ys=" + (_ys == null ? null : Arrays.asList(_ys))
+        + ", _values=" + _values
+        + ", _uniqueXs=" + _uniqueXs
+        + ", _strips=" + _strips
+        + "]";
   }
 }

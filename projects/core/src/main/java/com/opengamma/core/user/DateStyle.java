@@ -19,7 +19,7 @@ import com.opengamma.util.PublicAPI;
 public enum DateStyle {
 
   /**
-   * The standard ISO-8601 format
+   * The standard ISO-8601 format.
    */
   ISO(DateTimeFormatter.ISO_LOCAL_DATE),
   /**
@@ -53,7 +53,7 @@ public enum DateStyle {
 
   private final DateTimeFormatter _formatter;
 
-  private DateStyle(final DateTimeFormatter formatter) {
+  DateStyle(final DateTimeFormatter formatter) {
     _formatter = formatter;
   }
 

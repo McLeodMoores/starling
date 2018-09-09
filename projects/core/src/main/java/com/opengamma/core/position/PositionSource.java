@@ -28,7 +28,7 @@ public interface PositionSource extends ChangeProvider {
    * Gets a portfolio by unique identifier.
    * <p>
    * A unique identifier exactly specifies a single portfolio at a single version-correction.
-   * 
+   *
    * @param uniqueId the unique identifier, not null
    * @param versionCorrection the version/correction to use for deep resolution of the portfolio structure, not null
    * @return the portfolio, not null
@@ -38,14 +38,15 @@ public interface PositionSource extends ChangeProvider {
    */
   Portfolio getPortfolio(UniqueId uniqueId, VersionCorrection versionCorrection);
 
-  // REVIEW 2012-10-19 Andrew -- If PortfolioNode had a PositionLink members (like Position does to security) then we wouldn't need the v/c parameter to getPortfolio(UID)
+  // REVIEW 2012-10-19 Andrew -- If PortfolioNode had a PositionLink members (like Position does to security)
+  // then we wouldn't need the v/c parameter to getPortfolio(UID)
 
   /**
    * Gets a portfolio by object identifier and version-correction.
    * <p>
    * In combination, the object identifier and version-correction exactly specify
    * a single portfolio at a single version-correction.
-   * 
+   *
    * @param objectId  the object identifier, not null
    * @param versionCorrection  the version-correction, not null
    * @return the portfolio, not null
@@ -59,7 +60,7 @@ public interface PositionSource extends ChangeProvider {
    * Gets a node by unique identifier.
    * <p>
    * A unique identifier exactly specifies a single node at a single version-correction.
-   * 
+   *
    * @param uniqueId the unique identifier, not null
    * @param versionCorrection the version/correction to use for deep resolution of the portfolio structure, not null
    * @return the node, not null
@@ -69,13 +70,14 @@ public interface PositionSource extends ChangeProvider {
    */
   PortfolioNode getPortfolioNode(UniqueId uniqueId, VersionCorrection versionCorrection);
 
-  // REVIEW 2012-10-19 Andrew -- If PortfolioNode had a PositionLink members (like Position does to security) then we wouldn't need the v/c parameter to getPortfolioNode(UID) 
+  // REVIEW 2012-10-19 Andrew -- If PortfolioNode had a PositionLink members (like Position does to security)
+  // then we wouldn't need the v/c parameter to getPortfolioNode(UID)
 
   /**
    * Gets a position by unique identifier.
    * <p>
    * A unique identifier exactly specifies a single position at a single version-correction.
-   * 
+   *
    * @param uniqueId  the unique identifier, not null
    * @return the position, not null
    * @throws IllegalArgumentException if the identifier is invalid
@@ -87,8 +89,9 @@ public interface PositionSource extends ChangeProvider {
   /**
    * Gets a position by its object identifier and version-correction.
    * <p>
-   * In combination, the object identifier and version-correction exactly specify a single position at a single version-correction that can then be referenced by its unique identifier.
-   * 
+   * In combination, the object identifier and version-correction exactly specify a single position at a single
+   * version-correction that can then be referenced by its unique identifier.
+   *
    * @param objectId the object identifier, not null
    * @param versionCorrection the version-correction, not null
    * @return the position, not null
@@ -102,7 +105,7 @@ public interface PositionSource extends ChangeProvider {
    * Gets a trade by unique identifier.
    * <p>
    * A unique identifier exactly specifies a single trade at a single version-correction.
-   * 
+   *
    * @param uniqueId  the unique identifier, not null
    * @return the trade, not null
    * @throws IllegalArgumentException if the identifier is invalid

@@ -98,12 +98,11 @@ public abstract class HierarhicalEHCache<A, B> {
     if (b == null) {
       _missedCache.put(new Element(aKey, null));
       return null;
-    } else {
-      final Object bKey = extractKey(aKey, b);
-      deepInsert(aKey, bKey, b);
-      _aCache.put(new Element(aKey, bKey));
-      return b;
     }
+    final Object bKey = extractKey(aKey, b);
+    deepInsert(aKey, bKey, b);
+    _aCache.put(new Element(aKey, bKey));
+    return b;
   }
 
   @SuppressWarnings("unchecked")
@@ -138,10 +137,9 @@ public abstract class HierarhicalEHCache<A, B> {
     if (b == null) {
       _missedCache.put(new Element(bKey, null));
       return null;
-    } else {
-      shallowInsert(bKey, b);
-      return b;
     }
+    shallowInsert(bKey, b);
+    return b;
   }
 
   public B get(final A aKey, final Function0<B> closure) {
@@ -160,9 +158,8 @@ public abstract class HierarhicalEHCache<A, B> {
         final B value = map.get(aKey);
         if (value == null) {
           return deepInsertAndMarkMissed(aKey, closure);
-        } else {
-          return value;
         }
+        return value;
       }
     }
     return deepInsertAndMarkMissed(aKey, closure);
@@ -181,9 +178,8 @@ public abstract class HierarhicalEHCache<A, B> {
       final B value = map.get(bKey);
       if (value == null) {
         return shallowInsertAndMarkMissed(bKey, closure);
-      } else {
-        return value;
       }
+      return value;
     }
     return shallowInsertAndMarkMissed(bKey, closure);
   }

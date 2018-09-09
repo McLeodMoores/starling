@@ -90,19 +90,18 @@ public class MockHistoricalTimeSeriesSource implements HistoricalTimeSeriesSourc
     final HistoricalTimeSeries hts = getHistoricalTimeSeries(uniqueId);
     if (hts == null || hts.getTimeSeries() == null || hts.getTimeSeries().isEmpty()) {
       return null;
-    } else {
-      return Pairs.of(hts.getTimeSeries().getLatestTime(), hts.getTimeSeries().getLatestValue());
     }
+    return Pairs.of(hts.getTimeSeries().getLatestTime(), hts.getTimeSeries().getLatestValue());
   }
 
   @Override
-  public Pair<LocalDate, Double> getLatestDataPoint(final UniqueId uniqueId, final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {
+  public Pair<LocalDate, Double> getLatestDataPoint(final UniqueId uniqueId, final LocalDate start, final boolean includeStart,
+      final LocalDate end, final boolean includeEnd) {
     final HistoricalTimeSeries hts = getSubSeries(getHistoricalTimeSeries(uniqueId), start, includeStart, end, includeEnd, -1);
     if (hts == null || hts.getTimeSeries() == null || hts.getTimeSeries().isEmpty()) {
       return null;
-    } else {
-      return Pairs.of(hts.getTimeSeries().getLatestTime(), hts.getTimeSeries().getLatestValue());
     }
+    return Pairs.of(hts.getTimeSeries().getLatestTime(), hts.getTimeSeries().getLatestValue());
   }
 
   //-------------------------------------------------------------------------
@@ -162,9 +161,8 @@ public class MockHistoricalTimeSeriesSource implements HistoricalTimeSeriesSourc
     final HistoricalTimeSeries hts = getHistoricalTimeSeries(identifiers, identifierValidityDate, dataSource, dataProvider, dataField);
     if (hts == null || hts.getTimeSeries() == null || hts.getTimeSeries().isEmpty()) {
       return null;
-    } else {
-      return Pairs.of(hts.getTimeSeries().getLatestTime(), hts.getTimeSeries().getLatestValue());
     }
+    return Pairs.of(hts.getTimeSeries().getLatestTime(), hts.getTimeSeries().getLatestValue());
   }
 
   @Override
@@ -176,19 +174,18 @@ public class MockHistoricalTimeSeriesSource implements HistoricalTimeSeriesSourc
         start, includeStart, end, includeEnd, -1);
     if (hts == null || hts.getTimeSeries() == null || hts.getTimeSeries().isEmpty()) {
       return null;
-    } else {
-      return Pairs.of(hts.getTimeSeries().getLatestTime(), hts.getTimeSeries().getLatestValue());
     }
+    return Pairs.of(hts.getTimeSeries().getLatestTime(), hts.getTimeSeries().getLatestValue());
   }
 
   @Override
-  public Pair<LocalDate, Double> getLatestDataPoint(final ExternalIdBundle identifierBundle, final String dataSource, final String dataProvider, final String dataField) {
+  public Pair<LocalDate, Double> getLatestDataPoint(final ExternalIdBundle identifierBundle, final String dataSource,
+      final String dataProvider, final String dataField) {
     final HistoricalTimeSeries hts = getHistoricalTimeSeries(identifierBundle, (LocalDate) null, dataSource, dataProvider, dataField);
     if (hts == null || hts.getTimeSeries() == null || hts.getTimeSeries().isEmpty()) {
       return null;
-    } else {
-      return Pairs.of(hts.getTimeSeries().getLatestTime(), hts.getTimeSeries().getLatestValue());
     }
+    return Pairs.of(hts.getTimeSeries().getLatestTime(), hts.getTimeSeries().getLatestValue());
   }
 
   @Override
@@ -201,9 +198,8 @@ public class MockHistoricalTimeSeriesSource implements HistoricalTimeSeriesSourc
 
     if (hts == null || hts.getTimeSeries() == null || hts.getTimeSeries().isEmpty()) {
       return null;
-    } else {
-      return Pairs.of(hts.getTimeSeries().getLatestTime(), hts.getTimeSeries().getLatestValue());
     }
+    return Pairs.of(hts.getTimeSeries().getLatestTime(), hts.getTimeSeries().getLatestValue());
   }
 
   private HistoricalTimeSeries getAnyMatching(final String dataField, final ExternalIdBundle identifiers) {
@@ -220,9 +216,8 @@ public class MockHistoricalTimeSeriesSource implements HistoricalTimeSeriesSourc
       final String dataField, final ExternalIdBundle identifiers, final String resolutionKey) {
     if (resolutionKey == null) {
       return getAnyMatching(dataField, identifiers);
-    } else {
-      throw new UnsupportedOperationException(getClass().getName() + " does not support resolved getHistoricalTimeSeries");
     }
+    throw new UnsupportedOperationException(getClass().getName() + " does not support resolved getHistoricalTimeSeries");
   }
 
   @Override
@@ -231,9 +226,8 @@ public class MockHistoricalTimeSeriesSource implements HistoricalTimeSeriesSourc
       final LocalDate start, final boolean inclusiveStart, final LocalDate end, final boolean includeEnd) {
     if (configName == null) {
       return getSubSeries(getAnyMatching(dataField, identifiers), start, inclusiveStart, end, includeEnd, null);
-    } else {
-      throw new UnsupportedOperationException(getClass().getName() + " does not support resolved getHistoricalTimeSeries");
     }
+    throw new UnsupportedOperationException(getClass().getName() + " does not support resolved getHistoricalTimeSeries");
   }
 
   @Override
@@ -250,13 +244,15 @@ public class MockHistoricalTimeSeriesSource implements HistoricalTimeSeriesSourc
   }
 
   @Override
-  public HistoricalTimeSeries getHistoricalTimeSeries(final String dataField, final ExternalIdBundle identifierBundle, final String resolutionKey, final LocalDate start, final boolean includeStart, final LocalDate end,
+  public HistoricalTimeSeries getHistoricalTimeSeries(final String dataField, final ExternalIdBundle identifierBundle,
+      final String resolutionKey, final LocalDate start, final boolean includeStart, final LocalDate end,
       final boolean includeEnd, final int maxPoints) {
     throw new UnsupportedOperationException(getClass().getName() + " does not support resolved getHistoricalTimeSeries");
   }
 
   @Override
-  public HistoricalTimeSeries getHistoricalTimeSeries(final String dataField, final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String resolutionKey, final LocalDate start,
+  public HistoricalTimeSeries getHistoricalTimeSeries(final String dataField, final ExternalIdBundle identifierBundle,
+      final LocalDate identifierValidityDate, final String resolutionKey, final LocalDate start,
       final boolean includeStart, final LocalDate end, final boolean includeEnd, final int maxPoints) {
     throw new UnsupportedOperationException(getClass().getName() + " does not support resolved getHistoricalTimeSeries");
   }
@@ -268,17 +264,20 @@ public class MockHistoricalTimeSeriesSource implements HistoricalTimeSeriesSourc
 
   @Override
   public Pair<LocalDate, Double> getLatestDataPoint(
-      final String dataField, final ExternalIdBundle identifierBundle, final String resolutionKey, final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {
+      final String dataField, final ExternalIdBundle identifierBundle, final String resolutionKey, final LocalDate start,
+      final boolean includeStart, final LocalDate end, final boolean includeEnd) {
     throw new UnsupportedOperationException(getClass().getName() + " does not support resolved getHistoricalTimeSeries");
   }
 
   @Override
-  public Pair<LocalDate, Double> getLatestDataPoint(final String dataField, final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String resolutionKey) {
+  public Pair<LocalDate, Double> getLatestDataPoint(final String dataField, final ExternalIdBundle identifierBundle,
+      final LocalDate identifierValidityDate, final String resolutionKey) {
     throw new UnsupportedOperationException(getClass().getName() + " does not support resolved getHistoricalTimeSeries");
   }
 
   @Override
-  public Pair<LocalDate, Double> getLatestDataPoint(final String dataField, final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String resolutionKey, final LocalDate start, final boolean includeStart,
+  public Pair<LocalDate, Double> getLatestDataPoint(final String dataField, final ExternalIdBundle identifierBundle,
+      final LocalDate identifierValidityDate, final String resolutionKey, final LocalDate start, final boolean includeStart,
       final LocalDate end, final boolean includeEnd) {
     throw new UnsupportedOperationException(getClass().getName() + " does not support resolved getHistoricalTimeSeries");
   }
@@ -302,7 +301,8 @@ public class MockHistoricalTimeSeriesSource implements HistoricalTimeSeriesSourc
    * @param timeSeriesDataPoints the time-series data points, not null
    */
   public void storeHistoricalTimeSeries(
-      final ExternalIdBundle identifiers, final String dataSource, final String dataProvider, final String dataField, final LocalDateDoubleTimeSeries timeSeriesDataPoints) {
+      final ExternalIdBundle identifiers, final String dataSource, final String dataProvider, final String dataField,
+      final LocalDateDoubleTimeSeries timeSeriesDataPoints) {
     ArgumentChecker.notNull(identifiers, "identifiers");
     ArgumentChecker.notNull(dataSource, "dataSource");
     ArgumentChecker.notNull(dataProvider, "dataProvider");
@@ -331,8 +331,8 @@ public class MockHistoricalTimeSeriesSource implements HistoricalTimeSeriesSourc
    * @param includeEnd whether or not the end date is included in the result
    * @return the historical time-series, null if null input
    */
-  private HistoricalTimeSeries getSubSeries(
-      final HistoricalTimeSeries hts, final LocalDate startDate, final boolean includeStart, final LocalDate endDate, final boolean includeEnd, final Integer maxPoints) {
+  private static HistoricalTimeSeries getSubSeries(final HistoricalTimeSeries hts, final LocalDate startDate, final boolean includeStart,
+      final LocalDate endDate, final boolean includeEnd, final Integer maxPoints) {
     LocalDate start = startDate;
     LocalDate end = endDate;
     if (hts == null) {
