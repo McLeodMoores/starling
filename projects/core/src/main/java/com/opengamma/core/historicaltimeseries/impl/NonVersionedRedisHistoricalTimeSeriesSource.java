@@ -168,8 +168,7 @@ public class NonVersionedRedisHistoricalTimeSeriesSource implements HistoricalTi
         } else {
           jedis.zrem(redisHtsDaysKey, dates.inverse().keySet().toArray(new String[dates.size()]));
         }
-
-        jedis.zadd(redisHtsDaysKey, dates);
+        jedis.zadd(redisHtsDaysKey, dates.inverse());
 
         getJedisPool().returnResource(jedis);
       } catch (final Throwable e) {

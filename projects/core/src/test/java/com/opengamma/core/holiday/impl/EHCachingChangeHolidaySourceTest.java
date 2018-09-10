@@ -26,8 +26,10 @@ import org.threeten.bp.Instant;
 import org.threeten.bp.LocalDate;
 
 import com.opengamma.DataNotFoundException;
+import com.opengamma.core.change.BasicChangeManager;
+import com.opengamma.core.change.ChangeType;
+import com.opengamma.core.holiday.ChangeHolidaySource;
 import com.opengamma.core.holiday.Holiday;
-import com.opengamma.core.holiday.HolidaySource;
 import com.opengamma.core.holiday.HolidayType;
 import com.opengamma.core.holiday.WeekendType;
 import com.opengamma.core.id.ExternalSchemes;
@@ -42,10 +44,10 @@ import com.opengamma.util.test.TestGroup;
 import net.sf.ehcache.CacheManager;
 
 /**
- * Test {@link EHCachingHolidaySource} where the underlying does not have a change manager..
+ * Test {@link EHCachingHolidaySource} with an underlying {@link ChangeHolidaySource}.
  */
 @Test(groups = {TestGroup.UNIT, "ehcache" })
-public class EHCachingHolidaySourceTest {
+public class EHCachingChangeHolidaySourceTest {
   private static final UniqueId UID = UniqueId.of("A", "B", "123");
   private static final ObjectId OID = ObjectId.of("A", "B");
   private static final ExternalId EID_1 = ExternalSchemes.financialRegionId("US");
@@ -61,7 +63,7 @@ public class EHCachingHolidaySourceTest {
     HOLIDAY_2.setUniqueId(UniqueId.of("A", "C", "23"));
     HOLIDAY_2.setCurrency(Currency.AUD);
   }
-  private HolidaySource _underlyingSource;
+  private ChangeHolidaySource _underlyingSource;
   private EHCachingHolidaySource _cachingSource;
   private CacheManager _cacheManager;
 
@@ -70,7 +72,7 @@ public class EHCachingHolidaySourceTest {
    */
   @BeforeClass
   public void setUpClass() {
-    _cacheManager = EHCacheUtils.createTestCacheManager(EHCachingHolidaySourceTest.class);
+    _cacheManager = EHCacheUtils.createTestCacheManager(EHCachingChangeHolidaySourceTest.class);
   }
 
   /**
@@ -87,7 +89,8 @@ public class EHCachingHolidaySourceTest {
   @SuppressWarnings({ "unchecked", "deprecation" })
   @BeforeMethod
   public void setUp() {
-    _underlyingSource = mock(HolidaySource.class);
+    _underlyingSource = mock(ChangeHolidaySource.class);
+    when(_underlyingSource.changeManager()).thenReturn(new BasicChangeManager());
     _cachingSource = new EHCachingHolidaySource(_underlyingSource, _cacheManager);
     when(_underlyingSource.get(UID)).thenReturn(HOLIDAY_1);
     when(_underlyingSource.get(OID, VC)).thenReturn(HOLIDAY_1);
@@ -227,4 +230,138 @@ public class EHCachingHolidaySourceTest {
     verify(_underlyingSource, times(1)).isHoliday(LocalDate.of(2017, 1, 1), HolidayType.CURRENCY, EID_1.toBundle());
   }
 
+  /**
+   * Tests that the cache is flushed after a change event.
+   */
+  @Test
+  public void testChangeChangeEvent() {
+    assertEquals(_cachingSource.get(OID, VC), HOLIDAY_1);
+    assertEquals(_cachingSource.get(Currency.AUD), Collections.singleton(HOLIDAY_2));
+    assertEquals(_cachingSource.get(OID, VC), HOLIDAY_1);
+    assertEquals(_cachingSource.get(Currency.AUD), Collections.singleton(HOLIDAY_2));
+    // values were cached
+    verify(_underlyingSource, times(1)).get(OID, VC);
+    verify(_underlyingSource, times(1)).get(Currency.AUD);
+
+    // change a value
+    _underlyingSource.changeManager().entityChanged(ChangeType.CHANGED, OID,
+        VC.getVersionAsOf().plusSeconds(100), VC.getCorrectedTo().plusSeconds(200), VC.getVersionAsOf().plusSeconds(1000));
+    assertEquals(_cachingSource.get(OID, VC), HOLIDAY_1);
+    assertEquals(_cachingSource.get(Currency.AUD), Collections.singleton(HOLIDAY_2));
+    assertEquals(_cachingSource.get(OID, VC), HOLIDAY_1);
+    assertEquals(_cachingSource.get(Currency.AUD), Collections.singleton(HOLIDAY_2));
+    // cache was emptied and then refilled
+    verify(_underlyingSource, times(2)).get(OID, VC);
+    verify(_underlyingSource, times(2)).get(Currency.AUD);
+  }
+
+  /**
+   * Tests that the cache is unchanged after an add event.
+   */
+  @Test
+  public void testAddChangeEvent() {
+    assertEquals(_cachingSource.get(OID, VC), HOLIDAY_1);
+    assertEquals(_cachingSource.get(Currency.AUD), Collections.singleton(HOLIDAY_2));
+    assertEquals(_cachingSource.get(OID, VC), HOLIDAY_1);
+    assertEquals(_cachingSource.get(Currency.AUD), Collections.singleton(HOLIDAY_2));
+    // values were cached
+    verify(_underlyingSource, times(1)).get(OID, VC);
+    verify(_underlyingSource, times(1)).get(Currency.AUD);
+
+    // add a value
+    _underlyingSource.changeManager().entityChanged(ChangeType.ADDED, OID,
+        VC.getVersionAsOf().plusSeconds(100), VC.getCorrectedTo().plusSeconds(200), VC.getVersionAsOf().plusSeconds(1000));
+    assertEquals(_cachingSource.get(OID, VC), HOLIDAY_1);
+    assertEquals(_cachingSource.get(Currency.AUD), Collections.singleton(HOLIDAY_2));
+    assertEquals(_cachingSource.get(OID, VC), HOLIDAY_1);
+    assertEquals(_cachingSource.get(Currency.AUD), Collections.singleton(HOLIDAY_2));
+    // cache unaffected
+    verify(_underlyingSource, times(1)).get(OID, VC);
+    verify(_underlyingSource, times(1)).get(Currency.AUD);
+  }
+
+  /**
+   * Tests that the cache is flushed after a remove event.
+   */
+  @Test
+  public void testRemoveChangeEvent() {
+    assertEquals(_cachingSource.get(OID, VC), HOLIDAY_1);
+    assertEquals(_cachingSource.get(Currency.AUD), Collections.singleton(HOLIDAY_2));
+    assertEquals(_cachingSource.get(OID, VC), HOLIDAY_1);
+    assertEquals(_cachingSource.get(Currency.AUD), Collections.singleton(HOLIDAY_2));
+    // values were cached
+    verify(_underlyingSource, times(1)).get(OID, VC);
+    verify(_underlyingSource, times(1)).get(Currency.AUD);
+
+    // remove a value
+    _underlyingSource.changeManager().entityChanged(ChangeType.REMOVED, OID,
+        VC.getVersionAsOf().plusSeconds(100), VC.getCorrectedTo().plusSeconds(200), VC.getVersionAsOf().plusSeconds(1000));
+    assertEquals(_cachingSource.get(OID, VC), HOLIDAY_1);
+    assertEquals(_cachingSource.get(Currency.AUD), Collections.singleton(HOLIDAY_2));
+    assertEquals(_cachingSource.get(OID, VC), HOLIDAY_1);
+    assertEquals(_cachingSource.get(Currency.AUD), Collections.singleton(HOLIDAY_2));
+    // cache was emptied and then refilled
+    verify(_underlyingSource, times(2)).get(OID, VC);
+    verify(_underlyingSource, times(2)).get(Currency.AUD);
+  }
+
+  /**
+   * Tests that the cache is flushed after a change event.
+   */
+  @SuppressWarnings("deprecation")
+  @Test
+  public void testIsHolidayChangeChangeEvent() {
+    assertTrue(_cachingSource.isHoliday(LocalDate.of(2018, 1, 1), Currency.USD));
+    assertTrue(_cachingSource.isHoliday(LocalDate.of(2018, 1, 1), Currency.USD));
+    // values were cached
+    verify(_underlyingSource, times(1)).isHoliday(LocalDate.of(2018, 1, 1), Currency.USD);
+
+    // change a value
+    _underlyingSource.changeManager().entityChanged(ChangeType.CHANGED, OID,
+        VC.getVersionAsOf().plusSeconds(100), VC.getCorrectedTo().plusSeconds(200), VC.getVersionAsOf().plusSeconds(1000));
+    assertTrue(_cachingSource.isHoliday(LocalDate.of(2018, 1, 1), Currency.USD));
+    assertTrue(_cachingSource.isHoliday(LocalDate.of(2018, 1, 1), Currency.USD));
+    // values were cached
+    verify(_underlyingSource, times(2)).isHoliday(LocalDate.of(2018, 1, 1), Currency.USD);
+  }
+
+  /**
+   * Tests that the cache is unchanged after an add event.
+   */
+  @SuppressWarnings("deprecation")
+  @Test
+  public void testIsHolidayAddChangeEvent() {
+    assertTrue(_cachingSource.isHoliday(LocalDate.of(2018, 1, 1), Currency.USD));
+    assertTrue(_cachingSource.isHoliday(LocalDate.of(2018, 1, 1), Currency.USD));
+    // values were cached
+    verify(_underlyingSource, times(1)).isHoliday(LocalDate.of(2018, 1, 1), Currency.USD);
+
+    // add a value
+    _underlyingSource.changeManager().entityChanged(ChangeType.ADDED, OID,
+        VC.getVersionAsOf().plusSeconds(100), VC.getCorrectedTo().plusSeconds(200), VC.getVersionAsOf().plusSeconds(1000));
+    assertTrue(_cachingSource.isHoliday(LocalDate.of(2018, 1, 1), Currency.USD));
+    assertTrue(_cachingSource.isHoliday(LocalDate.of(2018, 1, 1), Currency.USD));
+    // values were cached
+    verify(_underlyingSource, times(1)).isHoliday(LocalDate.of(2018, 1, 1), Currency.USD);
+  }
+
+  /**
+   * Tests that the cache is flushed after a remove event.
+   */
+  @SuppressWarnings("deprecation")
+  @Test
+  public void testIsHolidayRemoveChangeEvent() {
+    assertTrue(_cachingSource.isHoliday(LocalDate.of(2018, 1, 1), Currency.USD));
+    assertTrue(_cachingSource.isHoliday(LocalDate.of(2018, 1, 1), Currency.USD));
+    // values were cached
+    verify(_underlyingSource, times(1)).isHoliday(LocalDate.of(2018, 1, 1), Currency.USD);
+
+    // remove a value
+    _underlyingSource.changeManager().entityChanged(ChangeType.REMOVED, OID,
+        VC.getVersionAsOf().plusSeconds(100), VC.getCorrectedTo().plusSeconds(200), VC.getVersionAsOf().plusSeconds(1000));
+    assertTrue(_cachingSource.isHoliday(LocalDate.of(2018, 1, 1), Currency.USD));
+    assertTrue(_cachingSource.isHoliday(LocalDate.of(2018, 1, 1), Currency.USD));
+    // values were cached
+    verify(_underlyingSource, times(2)).isHoliday(LocalDate.of(2018, 1, 1), Currency.USD);
+  }
 }

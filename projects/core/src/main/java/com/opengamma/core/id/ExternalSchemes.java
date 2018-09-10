@@ -233,9 +233,6 @@ public class ExternalSchemes {
     if (code.length() == 0) {
       throw new IllegalArgumentException("ISIN code is invalid: " + code);
     }
-    //    if (code.matches("[A-Z]{2}[A-Z0-9]{9}[0-9]") == false) {
-    //      throw new IllegalArgumentException("ISIN code is invalid: " + code);
-    //    }
     return ExternalId.of(ISIN, code);
   }
 
@@ -254,9 +251,6 @@ public class ExternalSchemes {
     if (code.length() == 0) {
       throw new IllegalArgumentException("CUSIP code is invalid: " + code);
     }
-    //    if (code.matches("[A-Z0-9]{8}[0-9]?") == false) {
-    //      throw new IllegalArgumentException("CUSIP code is invalid: " + code);
-    //    }
     return ExternalId.of(CUSIP, code);
   }
 
@@ -275,9 +269,6 @@ public class ExternalSchemes {
     if (code.length() == 0) {
       throw new IllegalArgumentException("SEDOL1 code is invalid: " + code);
     }
-    //    if (code.matches("[A-Z0-9]{6}[0-9]?") == false) {
-    //      throw new IllegalArgumentException("SEDOL1 code is invalid: " + code);
-    //    }
     return ExternalId.of(SEDOL1, code);
   }
 

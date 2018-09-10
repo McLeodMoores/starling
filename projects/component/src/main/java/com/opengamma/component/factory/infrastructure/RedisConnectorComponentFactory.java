@@ -77,7 +77,6 @@ public class RedisConnectorComponentFactory extends AbstractComponentFactory {
    */
   protected RedisConnector createRedisConnector(final ComponentRepository repo) {
     final JedisPoolConfig poolConfig = new JedisPoolConfig();
-    poolConfig.setMaxActive(Runtime.getRuntime().availableProcessors() + 5);
     return new RedisConnector(getClassifier(), getHostName(), getRedisPort(), getPassword(), poolConfig, getTimeOut());
   }
 

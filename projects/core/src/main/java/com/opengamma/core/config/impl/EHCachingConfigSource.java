@@ -52,7 +52,7 @@ public class EHCachingConfigSource extends AbstractEHCachingSource<ConfigItem<?>
   }
 
   /**
-   * Constructs a source..
+   * Constructs a source.
    *
    * @param underlying  the underlying source
    * @param cacheManager  the cache manager

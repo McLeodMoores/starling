@@ -31,15 +31,26 @@ import com.opengamma.util.money.Currency;
  * unmodified.
  * <strong>This class should only be used in conjunction with HolidaySourceCalendarAdapter</strong>.
  */
+@SuppressWarnings("deprecation")
 public class SchemeAlteringHolidaySource implements HolidaySource {
   private final HolidaySource _underlying;
   private final Map<String, String> _schemeMappings = new ConcurrentHashMap<>();
 
+  /**
+   * Constructs a source.
+   *
+   * @param underlying  the underlying source, not null
+   */
   public SchemeAlteringHolidaySource(final HolidaySource underlying) {
-    ArgumentChecker.notNull(underlying, "underlying");
-    _underlying = underlying;
+    _underlying = ArgumentChecker.notNull(underlying, "underlying");
   }
 
+  /**
+   * Adds a scheme mapping.
+   *
+   * @param sourceScheme  the source scheme, not null
+   * @param targetScheme  the target shceme, not null
+   */
   public void addMapping(final String sourceScheme, final String targetScheme) {
     ArgumentChecker.notNull(sourceScheme, "sourceScheme");
     ArgumentChecker.notNull(targetScheme, "targetScheme");
@@ -54,6 +65,12 @@ public class SchemeAlteringHolidaySource implements HolidaySource {
     return _underlying;
   }
 
+  /**
+   * Returns the scheme mapping or the input, if no mapping is available.
+   *
+   * @param scheme  the scheme to map
+   * @return  the mapping or the input
+   */
   protected String translateScheme(final String scheme) {
     String result = _schemeMappings.get(scheme);
     if (result == null) {
@@ -62,6 +79,12 @@ public class SchemeAlteringHolidaySource implements HolidaySource {
     return result;
   }
 
+  /**
+   * Replaces the scheme of an external id.
+   *
+   * @param externalId  the identifier
+   * @return  an identifier with the mapped scheme
+   */
   protected ExternalId translateExternalId(final ExternalId externalId) {
     final String newScheme = translateScheme(externalId.getScheme().getName());
     return ExternalId.of(newScheme, externalId.getValue());

@@ -17,15 +17,14 @@ import static org.testng.AssertJUnit.assertSame;
 import java.util.Arrays;
 import java.util.Collections;
 
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.threeten.bp.Instant;
 import org.threeten.bp.LocalDate;
 
 import com.opengamma.DataNotFoundException;
+import com.opengamma.core.holiday.ChangeHolidaySource;
 import com.opengamma.core.holiday.Holiday;
 import com.opengamma.core.holiday.HolidaySource;
 import com.opengamma.core.holiday.HolidayType;
@@ -35,17 +34,14 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.id.ObjectId;
 import com.opengamma.id.UniqueId;
 import com.opengamma.id.VersionCorrection;
-import com.opengamma.util.ehcache.EHCacheUtils;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.test.TestGroup;
 
-import net.sf.ehcache.CacheManager;
-
 /**
- * Test {@link EHCachingHolidaySource} where the underlying does not have a change manager..
+ * Test {@link CachedHolidaySource} with an underlying {@link ChangeHolidaySource}.
  */
-@Test(groups = {TestGroup.UNIT, "ehcache" })
-public class EHCachingHolidaySourceTest {
+@Test(groups = {TestGroup.UNIT })
+public class CachedHolidaySourceTest {
   private static final UniqueId UID = UniqueId.of("A", "B", "123");
   private static final ObjectId OID = ObjectId.of("A", "B");
   private static final ExternalId EID_1 = ExternalSchemes.financialRegionId("US");
@@ -62,24 +58,7 @@ public class EHCachingHolidaySourceTest {
     HOLIDAY_2.setCurrency(Currency.AUD);
   }
   private HolidaySource _underlyingSource;
-  private EHCachingHolidaySource _cachingSource;
-  private CacheManager _cacheManager;
-
-  /**
-   * Sets up the cache managers.
-   */
-  @BeforeClass
-  public void setUpClass() {
-    _cacheManager = EHCacheUtils.createTestCacheManager(EHCachingHolidaySourceTest.class);
-  }
-
-  /**
-   * Shuts down the caches.
-   */
-  @AfterClass
-  public void tearDownClass() {
-    EHCacheUtils.shutdownQuiet(_cacheManager);
-  }
+  private CachedHolidaySource _cachingSource;
 
   /**
    * Initialises the underlying source.
@@ -88,7 +67,7 @@ public class EHCachingHolidaySourceTest {
   @BeforeMethod
   public void setUp() {
     _underlyingSource = mock(HolidaySource.class);
-    _cachingSource = new EHCachingHolidaySource(_underlyingSource, _cacheManager);
+    _cachingSource = new CachedHolidaySource(_underlyingSource);
     when(_underlyingSource.get(UID)).thenReturn(HOLIDAY_1);
     when(_underlyingSource.get(OID, VC)).thenReturn(HOLIDAY_1);
     when(_underlyingSource.get(HolidayType.BANK, EID_1.toBundle())).thenReturn(Collections.<Holiday>singleton(HOLIDAY_1));
@@ -105,7 +84,7 @@ public class EHCachingHolidaySourceTest {
    */
   @AfterMethod
   public void tearDown() {
-    _cachingSource.shutdown();
+    _cachingSource.clearCaches();
   }
 
   //-------------------------------------------------------------------------

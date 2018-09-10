@@ -57,7 +57,7 @@ public final class ClassUtils {
    *
    * @param className  the class name, not null
    * @return the class object, not null
-   * @throws ClassNotFoundException
+   * @throws ClassNotFoundException  if the class cannot be located
    */
   public static Class<?> loadClass(final String className) throws ClassNotFoundException {
     Class<?> clazz = CLASS_CACHE.get(className);

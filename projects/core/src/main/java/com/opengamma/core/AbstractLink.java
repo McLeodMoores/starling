@@ -50,7 +50,7 @@ public abstract class AbstractLink<T extends UniqueIdentifiable> extends DirectB
   /**
    * The object identifier that strongly references the target.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private ObjectId _objectId;
   /**
    * The external identifier bundle that references the target.
@@ -199,6 +199,7 @@ public abstract class AbstractLink<T extends UniqueIdentifiable> extends DirectB
    * Gets the object identifier that strongly references the target.
    * @return the value of the property
    */
+  @Override
   public ObjectId getObjectId() {
     return _objectId;
   }

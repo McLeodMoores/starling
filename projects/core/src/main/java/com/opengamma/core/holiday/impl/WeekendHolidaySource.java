@@ -74,7 +74,7 @@ public class WeekendHolidaySource extends AbstractSource<Holiday> implements Hol
     return isWeekend(dateToCheck);
   }
 
-  private boolean isWeekend(final LocalDate dateToCheck) {
+  private static boolean isWeekend(final LocalDate dateToCheck) {
     return dateToCheck.getDayOfWeek() == DayOfWeek.SATURDAY || dateToCheck.getDayOfWeek() == DayOfWeek.SUNDAY;
   }
 
