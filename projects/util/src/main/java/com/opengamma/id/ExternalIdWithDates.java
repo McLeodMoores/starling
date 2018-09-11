@@ -46,7 +46,7 @@ public final class ExternalIdWithDates implements ImmutableBean,
   /**
    * The external identifier.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private final ExternalId _externalId;
   /**
    * The valid from date, inclusive, null means far past.
@@ -241,6 +241,7 @@ public final class ExternalIdWithDates implements ImmutableBean,
    * Gets the external identifier.
    * @return the value of the property, not null
    */
+  @Override
   public ExternalId getExternalId() {
     return _externalId;
   }

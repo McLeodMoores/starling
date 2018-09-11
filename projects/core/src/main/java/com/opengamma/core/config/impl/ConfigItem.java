@@ -59,7 +59,7 @@ public class ConfigItem<T> extends DirectBean implements UniqueIdentifiable, Obj
   /**
    * The unique identifier.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private UniqueId _uniqueId;
   /**
    * The name of the item.
@@ -223,6 +223,7 @@ public class ConfigItem<T> extends DirectBean implements UniqueIdentifiable, Obj
    * Gets the unique identifier.
    * @return the value of the property
    */
+  @Override
   public UniqueId getUniqueId() {
     return _uniqueId;
   }

@@ -37,12 +37,12 @@ public class ManageableCurveSnapshot implements Bean, CurveSnapshot {
   /**
    * The valuation instant.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private Instant _valuationTime;
   /**
    * The values.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private ManageableUnstructuredMarketDataSnapshot _values;
 
   /**
@@ -133,6 +133,7 @@ public class ManageableCurveSnapshot implements Bean, CurveSnapshot {
    * Gets the valuation instant.
    * @return the value of the property, not null
    */
+  @Override
   public Instant getValuationTime() {
     return _valuationTime;
   }
@@ -159,6 +160,7 @@ public class ManageableCurveSnapshot implements Bean, CurveSnapshot {
    * Gets the values.
    * @return the value of the property, not null
    */
+  @Override
   public ManageableUnstructuredMarketDataSnapshot getValues() {
     return _values;
   }

@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +21,6 @@ import com.codahale.metrics.Timer;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.core.change.ChangeManager;
@@ -37,6 +35,7 @@ import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeriesBuilder;
 import com.opengamma.timeseries.date.localdate.LocalDateToIntConverter;
 import com.opengamma.util.ArgumentChecker;
+import com.opengamma.util.ParallelArrayBinarySort;
 import com.opengamma.util.metric.OpenGammaMetricRegistry;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
@@ -315,22 +314,24 @@ public class NonVersionedRedisHistoricalTimeSeriesSource implements HistoricalTi
           final String redisHtsDatapointKey = toRedisHtsDatapointKey(redisKey);
           final List<String> valueTexts = jedis.hmget(redisHtsDatapointKey, dateTexts.toArray(new String[dateTexts.size()]));
 
-          final List<Integer> times = Lists.newArrayListWithCapacity(dateTexts.size());
-          final List<Double> values = Lists.newArrayListWithCapacity(valueTexts.size());
+          final int[] times = new int[dateTexts.size()];
+          final double[] values = new double[valueTexts.size()];
 
           final Iterator<String> dateItr = dateTexts.iterator();
           final Iterator<String> valueItr = valueTexts.iterator();
 
+          int i = 0;
+          int j = 0;
           while (dateItr.hasNext()) {
             final String dateAsIntText = dateItr.next();
             final String valueText = StringUtils.trimToNull(valueItr.next());
             if (valueText != null) {
-              times.add(Integer.parseInt(dateAsIntText));
-              values.add(Double.parseDouble(valueText));
+              times[i++] = Integer.parseInt(dateAsIntText);
+              values[j++] = Double.parseDouble(valueText);
             }
           }
-          ts = ImmutableLocalDateDoubleTimeSeries.of(ArrayUtils.toPrimitive(times.toArray(new Integer[times.size()])),
-              ArrayUtils.toPrimitive(values.toArray(new Double[values.size()])));
+          ParallelArrayBinarySort.parallelBinarySort(times, values);
+          ts = ImmutableLocalDateDoubleTimeSeries.of(times, values);
         }
         getJedisPool().returnResource(jedis);
       } catch (final Exception e) {

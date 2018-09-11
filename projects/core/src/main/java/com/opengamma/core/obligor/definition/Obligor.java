@@ -29,7 +29,7 @@ import com.opengamma.core.obligor.Sector;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Class for defining the characteristics of an obligor in a derivative contract
+ * Class for defining the characteristics of an obligor in a derivative contract.
  * In the credit derivative context obligors can be protection buyers, protection sellers or the reference entity
  * More generally an obligor is someone to whom one has counterparty risk
  */

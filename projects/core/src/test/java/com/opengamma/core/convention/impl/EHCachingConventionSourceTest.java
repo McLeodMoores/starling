@@ -31,7 +31,7 @@ import com.opengamma.util.test.TestGroup;
 import net.sf.ehcache.CacheManager;
 
 /**
- * Tests the {@link EHCachingConventionSource} class
+ * Tests the {@link EHCachingConventionSource} class.
  */
 @Test(groups = {TestGroup.UNIT, "ehcache" })
 public class EHCachingConventionSourceTest {

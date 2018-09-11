@@ -40,7 +40,7 @@ public class CoalescingSecuritySource implements SecuritySource {
 
     private int _expected;
 
-    public Callback(final int expected) {
+    Callback(final int expected) {
       _expected = expected;
     }
 
@@ -83,7 +83,7 @@ public class CoalescingSecuritySource implements SecuritySource {
 
     private Security _security;
 
-    public SingleCallback() {
+    SingleCallback() {
       super(1);
     }
 
@@ -102,7 +102,7 @@ public class CoalescingSecuritySource implements SecuritySource {
 
     private final Map<UniqueId, Security> _result;
 
-    public MultipleCallback(final int expected) {
+    MultipleCallback(final int expected) {
       super(expected);
       _result = Maps.newHashMapWithExpectedSize(expected);
     }

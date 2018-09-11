@@ -101,7 +101,7 @@ public class EHCachingPositionSource implements PositionSource {
     private final PortfolioNode _rootNode;
     private final String _name;
 
-    public CachedPortfolio(final Portfolio original, final PortfolioNode replacementRoot) {
+    CachedPortfolio(final Portfolio original, final PortfolioNode replacementRoot) {
       _attributes = original.getAttributes();
       _uniqueId = original.getUniqueId();
       _rootNode = replacementRoot;

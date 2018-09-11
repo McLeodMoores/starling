@@ -78,6 +78,9 @@ public class NonVersionedRedisHistoricalTimeSeriesSourceTest extends AbstractRed
 
   private static final int ITER_SIZE = 50;
 
+  /**
+   * Tests updating and and getting timeseries and data points from the database.
+   */
   public void basicOperation() {
     final NonVersionedRedisHistoricalTimeSeriesSource source = new NonVersionedRedisHistoricalTimeSeriesSource(getJedisPool(), getRedisPrefix());
 
@@ -145,6 +148,9 @@ public class NonVersionedRedisHistoricalTimeSeriesSourceTest extends AbstractRed
     assertEquals(18.0, ts.getValue(LocalDate.parse("2013-06-08")), 0.00001);
   }
 
+  /**
+   * Tests that points can be added to time series.
+   */
   public void updateDataPoint() {
     final NonVersionedRedisHistoricalTimeSeriesSource source = new NonVersionedRedisHistoricalTimeSeriesSource(getJedisPool(), getRedisPrefix());
 
@@ -197,7 +203,6 @@ public class NonVersionedRedisHistoricalTimeSeriesSourceTest extends AbstractRed
     assertEquals(5, ts.size());
     assertEquals(11.0, ts.getValue(LocalDate.parse("2013-06-08")), 0.00001);
   }
-
 
 
   public void appendTimeSeries() {
