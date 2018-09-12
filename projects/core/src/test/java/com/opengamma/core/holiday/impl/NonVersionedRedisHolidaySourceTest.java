@@ -244,8 +244,8 @@ public class NonVersionedRedisHolidaySourceTest extends AbstractRedisTestCase {
 
     assertTrue(source.isHoliday(LocalDate.of(2018, 9, 8), Currency.USD));
     assertFalse(source.isHoliday(LocalDate.of(2018, 9, 10), Currency.CAD));
-    assertTrue(source.isHoliday(LocalDate.of(2018, 9, 11), Currency.USD));
-    assertFalse(source.isHoliday(LocalDate.of(2018, 9, 12), Currency.USD));
+    assertFalse(source.isHoliday(LocalDate.of(2018, 9, 11), Currency.USD));
+    assertTrue(source.isHoliday(LocalDate.of(2018, 9, 12), Currency.USD));
   }
 
   /**
@@ -327,7 +327,7 @@ public class NonVersionedRedisHolidaySourceTest extends AbstractRedisTestCase {
   protected SimpleHoliday generateHoliday(final int nHolidays) {
     final SimpleHoliday holiday = new SimpleHoliday();
 
-    LocalDate date = LocalDate.now();
+    LocalDate date = LocalDate.of(2018, 9, 6);
     for (int i = 0; i < nHolidays; i++) {
       holiday.addHolidayDate(date);
       date = date.plusDays(3);
