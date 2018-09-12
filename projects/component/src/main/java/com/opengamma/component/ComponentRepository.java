@@ -345,7 +345,7 @@ public class ComponentRepository implements Lifecycle, ServletContextAware {
    */
   public ComponentInfo findInfo(final String componentKey) {
     ArgumentChecker.notNull(componentKey, "qualifiedClassifier");
-    if (componentKey.contains("::") == false) {
+    if (!componentKey.contains("::")) {
       return null;
     }
     final String type = StringUtils.substringBefore(componentKey, "::");
@@ -446,7 +446,7 @@ public class ComponentRepository implements Lifecycle, ServletContextAware {
    * @throws OpenGammaRuntimeException if the object cannot be initialized
    */
   public void initialize(final InitializingBean object) {
-    if (isInitialized(object) == false) {
+    if (!isInitialized(object)) {
       try {
         object.afterPropertiesSet();
       } catch (final Exception ex) {
@@ -502,41 +502,42 @@ public class ComponentRepository implements Lifecycle, ServletContextAware {
    * @param instance  the component instance to register, not null
    * @throws OpenGammaRuntimeException if an error occurs
    */
-  public void registerComponent(final ComponentInfo info, Object instance) {
+  public void registerComponent(final ComponentInfo info, final Object instance) {
     ArgumentChecker.notNull(info, "info");
     ArgumentChecker.notNull(instance, "instance");
     checkStatus(Status.CREATING);
 
+    Object instance0 = instance;
     final ComponentKey key = info.toComponentKey();
     try {
       // initialize
-      initialize0(instance);
-      registerInstanceInterfaces0(instance);
+      initialize0(instance0);
+      registerInstanceInterfaces0(instance0);
 
       // handle factories
-      if (instance instanceof FactoryBean<?>) {
+      if (instance0 instanceof FactoryBean<?>) {
         try {
-          instance = ((FactoryBean<?>) instance).getObject();
+          instance0 = ((FactoryBean<?>) instance0).getObject();
         } catch (final Exception ex) {
           throw new OpenGammaRuntimeException("FactoryBean threw exception", ex);
         }
-        initialize0(instance);
-        registerInstanceInterfaces0(instance);
+        initialize0(instance0);
+        registerInstanceInterfaces0(instance0);
       }
 
       // register into data structures
-      final Object current = _instanceMap.putIfAbsent(key, instance);
+      final Object current = _instanceMap.putIfAbsent(key, instance0);
       if (current != null) {
         throw new ComponentConfigException("Component already registered for specified information: " + key);
       }
       _infoMap.putIfAbsent(info.getType(), new ComponentTypeInfo(info.getType()));
       final ComponentTypeInfo typeInfo = getTypeInfo(info.getType());
       typeInfo.getInfoMap().put(info.getClassifier(), info);
-      registeredComponent(info, instance);
+      registeredComponent(info, instance0);
 
       // If the component being registered is also an MBean, then register it as such
-      if (JmxUtils.isMBean(instance.getClass())) {
-        registerMBean(instance);
+      if (JmxUtils.isMBean(instance0.getClass())) {
+        registerMBean(instance0);
       }
     } catch (final RuntimeException ex) {
       _status.set(Status.FAILED);
@@ -811,7 +812,7 @@ public class ComponentRepository implements Lifecycle, ServletContextAware {
    * @return the object name, not null
    * @throws OpenGammaRuntimeException if an error occurs
    */
-  private ObjectName generateObjectName(final Object managedResource) {
+  private static ObjectName generateObjectName(final Object managedResource) {
     ObjectName objectName;
     try {
       objectName = new ObjectName("com.opengamma:name=" + managedResource.getClass().getSimpleName());
@@ -838,7 +839,7 @@ public class ComponentRepository implements Lifecycle, ServletContextAware {
       return;  // already starting
     }
     checkStatus(status, Status.CREATING);
-    if (_status.compareAndSet(status, Status.STARTING) == false) {
+    if (!_status.compareAndSet(status, Status.STARTING)) {
       return;  // another thread just beat this one
     }
     try {
@@ -880,7 +881,7 @@ public class ComponentRepository implements Lifecycle, ServletContextAware {
     if (status == Status.STOPPING || status == Status.STOPPED) {
       return;  // nothing to stop in this thread
     }
-    if (_status.compareAndSet(status, Status.STOPPING) == false) {
+    if (!_status.compareAndSet(status, Status.STOPPING)) {
       return;  // another thread just beat this one
     }
     for (final List<Lifecycle> list : Lists.reverse(ImmutableList.copyOf(_lifecycles.values()))) {
@@ -966,7 +967,7 @@ public class ComponentRepository implements Lifecycle, ServletContextAware {
     }
   }
 
-  private static enum Status {
+  private enum Status {
     CREATING, STARTING, RUNNING, STOPPING, STOPPED, FAILED,
   }
 

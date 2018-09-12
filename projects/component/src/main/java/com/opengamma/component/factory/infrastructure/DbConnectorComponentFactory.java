@@ -167,7 +167,8 @@ public class DbConnectorComponentFactory extends AbstractAliasedComponentFactory
     props.setProperty("hibernate.connection.release_mode", "on_close");
     if (isAllowHibernateThreadBoundSession()) {
       props.setProperty(AvailableSettings.CURRENT_SESSION_CONTEXT_CLASS, "thread");
-      props.setProperty(AvailableSettings.TRANSACTION_COORDINATOR_STRATEGY, "org.hibernate.resource.transaction.backend.jdbc.internal.JdbcResourceLocalTransactionCoordinatorImpl");
+      props.setProperty(AvailableSettings.TRANSACTION_COORDINATOR_STRATEGY,
+          "org.hibernate.resource.transaction.backend.jdbc.internal.JdbcResourceLocalTransactionCoordinatorImpl");
     }
     factory.setHibernateProperties(props);
     //factory.setLobHandler(dialect.getLobHandler());

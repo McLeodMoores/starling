@@ -105,7 +105,7 @@ public class SpringViewProcessorComponentFactory extends AbstractSpringComponent
   private MarketDataProviderResolver _marketDataProviderResolver;
   /**
    * Whether to stripe portfolio requirements during a graph build.
-   * 
+   *
    * @deprecated this is a temporary measure until enabling/disabling the striping logic can be implemented using suitable heuristics
    */
   @Deprecated
@@ -136,12 +136,13 @@ public class SpringViewProcessorComponentFactory extends AbstractSpringComponent
     initForDebugging(repo, appContext);
     registerSpringLifecycleStop(repo, appContext);
     ViewDefinitionCompiler.setStripedPortfolioRequirements(isCompileViewsWithRequirementStriping());
-    ViewDefinitionCompiler.registerMetricsStatic(OpenGammaMetricRegistry.getSummaryInstance(), OpenGammaMetricRegistry.getDetailedInstance(), "ViewDefinitionCompiler");
+    ViewDefinitionCompiler.registerMetricsStatic(OpenGammaMetricRegistry.getSummaryInstance(), OpenGammaMetricRegistry.getDetailedInstance(),
+        "ViewDefinitionCompiler");
   }
 
   /**
    * Registers the view processor.
-   * 
+   *
    * @param repo the repository to register with, not null
    * @param appContext the Spring application context, not null
    */
@@ -153,13 +154,14 @@ public class SpringViewProcessorComponentFactory extends AbstractSpringComponent
     }
     repo.registerComponent(info, viewProcessor);
     if (isPublishRest()) {
-      final DataViewProcessorResource vpResource = new DataViewProcessorResource(viewProcessor, repo.getInstance(FunctionCompilationContext.class, "main").getRawComputationTargetResolver(),
-          getVolatilityCubeDefinitionSource(), getJmsConnector(), getFudgeContext(), getScheduler(), getHistoricalTimeSeriesSource());
+      final DataViewProcessorResource vpResource =
+          new DataViewProcessorResource(viewProcessor, repo.getInstance(FunctionCompilationContext.class, "main").getRawComputationTargetResolver(),
+              getVolatilityCubeDefinitionSource(), getJmsConnector(), getFudgeContext(), getScheduler(), getHistoricalTimeSeriesSource());
       repo.getRestComponents().publish(info, vpResource);
     }
     if (getJmsConnector() != null && viewProcessor instanceof ViewProcessorInternal) {
-      ViewProcessAvailabilityNotificationListener listener = new ViewProcessAvailabilityNotificationListener(getJmsMarketDataAvailabilityTopic(), getJmsConnector(),
-          (ViewProcessorInternal) viewProcessor);
+      final ViewProcessAvailabilityNotificationListener listener =
+          new ViewProcessAvailabilityNotificationListener(getJmsMarketDataAvailabilityTopic(), getJmsConnector(), (ViewProcessorInternal) viewProcessor);
       repo.registerLifecycle(listener);
 
       final ViewProcessorManager viewProcessorManager = appContext.getBean(ViewProcessorManager.class);
@@ -169,7 +171,7 @@ public class SpringViewProcessorComponentFactory extends AbstractSpringComponent
 
   /**
    * Registers the available outputs.
-   * 
+   *
    * @param repo the repository to register with, not null
    * @param appContext the Spring application context, not null
    */
@@ -189,7 +191,7 @@ public class SpringViewProcessorComponentFactory extends AbstractSpringComponent
 
   /**
    * Registers the configuration resource.
-   * 
+   *
    * @param repo the repository to register with, not null
    * @param appContext the Spring application context, not null
    */
@@ -198,14 +200,14 @@ public class SpringViewProcessorComponentFactory extends AbstractSpringComponent
       final CalcNodeSocketConfiguration calcNodeSocketConfig = appContext.getBean(CalcNodeSocketConfiguration.class);
       final ComponentInfo info = new ComponentInfo(CalcNodeSocketConfiguration.class, getClassifier());
       repo.registerComponent(info, calcNodeSocketConfig);
-    } catch (NoSuchBeanDefinitionException e) {
+    } catch (final NoSuchBeanDefinitionException e) {
       repo.getLogger().logInfo("No CalcNodeSocketConfiguration found; external calc nodes not supported.");
     }
   }
 
   /**
    * Registers the aggregators.
-   * 
+   *
    * @param repo the repository to register with, not null
    * @param appContext the Spring application context, not null
    */
@@ -215,7 +217,7 @@ public class SpringViewProcessorComponentFactory extends AbstractSpringComponent
 
   /**
    * Registers the user (used until proper user management present).
-   * 
+   *
    * @param repo the repository to register with, not null
    * @param appContext the Spring application context, not null
    */
@@ -227,7 +229,7 @@ public class SpringViewProcessorComponentFactory extends AbstractSpringComponent
 
     private final CompiledFunctionService _cfs;
 
-    public FunctionRepositorySupplier(final CompiledFunctionService cfs) {
+    FunctionRepositorySupplier(final CompiledFunctionService cfs) {
       _cfs = cfs;
     }
 
@@ -239,7 +241,7 @@ public class SpringViewProcessorComponentFactory extends AbstractSpringComponent
 
   /**
    * Registers the compiled function service and function .
-   * 
+   *
    * @param repo the repository to register with, not null
    * @param appContext the Spring application context, not null
    */
@@ -261,7 +263,7 @@ public class SpringViewProcessorComponentFactory extends AbstractSpringComponent
 
   /**
    * Registers the debugging RESTful artifacts.
-   * 
+   *
    * @param repo the repository to register with, not null
    * @param appContext the Spring application context, not null
    */

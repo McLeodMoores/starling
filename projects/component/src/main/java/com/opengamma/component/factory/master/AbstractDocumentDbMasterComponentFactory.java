@@ -33,7 +33,8 @@ import com.opengamma.util.jms.JmsConnector;
  * @param <M> the db master type
  */
 @BeanDefinition
-public abstract class AbstractDocumentDbMasterComponentFactory<I, M extends ConfigurableDbChangeProvidingMaster> extends AbstractDbMasterComponentFactory<I, M> {
+public abstract class AbstractDocumentDbMasterComponentFactory<I, M extends ConfigurableDbChangeProvidingMaster>
+extends AbstractDbMasterComponentFactory<I, M> {
 
   /**
    * Whether to use change management. If true, requires jms settings to be non-null.

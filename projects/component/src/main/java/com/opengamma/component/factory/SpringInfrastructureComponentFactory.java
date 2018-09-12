@@ -26,7 +26,6 @@ import org.springframework.context.Lifecycle;
 import org.springframework.context.support.GenericApplicationContext;
 
 import com.google.common.collect.Sets;
-import com.opengamma.component.ComponentFactory;
 import com.opengamma.component.ComponentRepository;
 import com.opengamma.util.Connector;
 
@@ -38,7 +37,7 @@ import net.sf.ehcache.management.ManagementService;
  * Component definition for the infrastructure defined in Spring.
  */
 @BeanDefinition
-public class SpringInfrastructureComponentFactory extends AbstractSpringComponentFactory implements ComponentFactory {
+public class SpringInfrastructureComponentFactory extends AbstractSpringComponentFactory {
 
   @Override
   public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
@@ -100,7 +99,7 @@ public class SpringInfrastructureComponentFactory extends AbstractSpringComponen
       try {
         _jmxService.init();
       } catch (final CacheException ex) {
-        if (ex.getCause() instanceof InstanceAlreadyExistsException == false) {
+        if (!(ex.getCause() instanceof InstanceAlreadyExistsException)) {
           throw ex;
         }
       }

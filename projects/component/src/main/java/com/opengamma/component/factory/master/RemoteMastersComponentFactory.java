@@ -74,8 +74,8 @@ public class RemoteMastersComponentFactory extends AbstractComponentFactory {
   protected void initComponent(final ComponentRepository repo, final ComponentInfo info) {
     final URI componentUri = info.getUri();
 
-    if (info.getAttributes().containsKey(ComponentInfoAttributes.REMOTE_CLIENT_JAVA) &&
-        info.getAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA).endsWith("Master")) {
+    if (info.getAttributes().containsKey(ComponentInfoAttributes.REMOTE_CLIENT_JAVA)
+        && info.getAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA).endsWith("Master")) {
       final String remoteTypeStr = info.getAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA);
       final Class<?> remoteType = ReflectionUtils.loadClass(remoteTypeStr);
       final String jmsBrokerUri = info.getAttributes().get(ComponentInfoAttributes.JMS_BROKER_URI);

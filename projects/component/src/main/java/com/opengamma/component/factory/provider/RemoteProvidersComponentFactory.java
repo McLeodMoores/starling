@@ -68,8 +68,8 @@ public class RemoteProvidersComponentFactory extends AbstractComponentFactory {
    */
   protected void initComponent(final ComponentRepository repo, final ComponentInfo info) {
     final URI componentUri = info.getUri();
-    if (info.getAttributes().containsKey(ComponentInfoAttributes.REMOTE_CLIENT_JAVA) &&
-        info.getAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA).endsWith("Provider")) {
+    if (info.getAttributes().containsKey(ComponentInfoAttributes.REMOTE_CLIENT_JAVA)
+        && info.getAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA).endsWith("Provider")) {
       final String remoteTypeStr = info.getAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA);
       final Class<?> remoteType = ReflectionUtils.loadClass(remoteTypeStr);
       final Constructor<?> con = ReflectionUtils.findConstructor(remoteType, URI.class);
@@ -92,7 +92,7 @@ public class RemoteProvidersComponentFactory extends AbstractComponentFactory {
    * @param provider  the remote provider, not null
    */
   protected void connectPermissionCheckProvider(final ComponentRepository repo, final ComponentInfo info, final PermissionCheckProvider provider) {
-    if (AuthUtils.isPermissive() == false && info.getAttributes().containsKey(ComponentInfoAttributes.ACCEPTED_TYPES)) {
+    if (!AuthUtils.isPermissive() && info.getAttributes().containsKey(ComponentInfoAttributes.ACCEPTED_TYPES)) {
       final String[] permissionPrefixes = StringUtils.split(info.getAttribute(ComponentInfoAttributes.ACCEPTED_TYPES), ',');
       for (final String permissionPrefix : permissionPrefixes) {
         AuthUtils.getPermissionResolver().register(

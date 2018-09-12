@@ -20,8 +20,8 @@ public interface ComponentFactory {
    * The remaining configuration data is a live map that is normally empty.
    * If the implementation can handle additional configuration items, it must ensure that the map
    * if empty after the completion of this method, otherwise initialization will stop.
-   * This is normally accomplished using {@link java.util.Map#remove(Object)) to extract the configuration.
-   * 
+   * This is normally accomplished using {@link java.util.Map#remove(Object)} to extract the configuration.
+   *
    * @param repo  the repository to register the component(s) with, not null
    * @param configuration  the remaining configuration data, not null
    * @throws Exception allows the implementation to throw checked exceptions

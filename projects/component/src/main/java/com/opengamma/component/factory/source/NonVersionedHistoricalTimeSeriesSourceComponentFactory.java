@@ -33,7 +33,8 @@ public class NonVersionedHistoricalTimeSeriesSourceComponentFactory extends Abst
 
   @Override
   public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
-    final NonVersionedRedisHistoricalTimeSeriesSource source = new NonVersionedRedisHistoricalTimeSeriesSource(getRedisConnector().getJedisPool(), getRedisPrefix());
+    final NonVersionedRedisHistoricalTimeSeriesSource source =
+        new NonVersionedRedisHistoricalTimeSeriesSource(getRedisConnector().getJedisPool(), getRedisPrefix());
 
     ComponentInfo info = new ComponentInfo(HistoricalTimeSeriesSource.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 1);

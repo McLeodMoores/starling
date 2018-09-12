@@ -122,7 +122,7 @@ public class CacheManagerComponentFactory extends AbstractAliasedComponentFactor
         try {
           _jmxService.init();
         } catch (final CacheException ex) {
-          if (ex.getCause() instanceof InstanceAlreadyExistsException == false) {
+          if (!(ex.getCause() instanceof InstanceAlreadyExistsException)) {
             throw ex;
           }
         }

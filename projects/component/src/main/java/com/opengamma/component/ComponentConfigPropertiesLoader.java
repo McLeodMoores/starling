@@ -96,7 +96,7 @@ public class ComponentConfigPropertiesLoader extends AbstractComponentConfigLoad
       } else {
         // store property
         fileProperties.put(key, resolved.getValue());
-        if (key.equals(ComponentManager.MANAGER_NEXT_FILE) == false) {
+        if (!key.equals(ComponentManager.MANAGER_NEXT_FILE)) {
           getProperties().addIfAbsent(resolved);  // first definition wins
         }
       }

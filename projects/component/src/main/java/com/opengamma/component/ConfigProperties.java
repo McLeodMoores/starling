@@ -163,7 +163,7 @@ public final class ConfigProperties {
    */
   public void addIfAbsent(final ConfigProperty resolved) {
     ArgumentChecker.notNull(resolved, "resolved");
-    if (_properties.containsKey(resolved.getKey()) == false) {
+    if (!_properties.containsKey(resolved.getKey())) {
       add(resolved);
     }
   }
@@ -180,19 +180,20 @@ public final class ConfigProperties {
    * @return the resolved value, not null
    * @throws ComponentConfigException if a variable expansion is not found
    */
-  public ConfigProperty resolveProperty(final String key, String value, final int lineNum) {
+  public ConfigProperty resolveProperty(final String key, final String value, final int lineNum) {
     boolean hidden = key.contains("password") || key.startsWith("shiro.");
     String variable = findVariable(value);
+    String varValue = value;
     while (variable != null) {
       final ConfigProperty variableProperty = _properties.get(variable);
       if (variableProperty == null) {
         throw new ComponentConfigException("Variable expansion not found: ${" + variable + "}, line " + lineNum);
       }
       hidden = hidden | variableProperty.isHidden();
-      value = StringUtils.replaceOnce(value, "${" + variable + "}", variableProperty.getValue());
-      variable = findVariable(value);
+      varValue = StringUtils.replaceOnce(varValue, "${" + variable + "}", variableProperty.getValue());
+      variable = findVariable(varValue);
     }
-    return ConfigProperty.of(key, value, hidden);
+    return ConfigProperty.of(key, varValue, hidden);
   }
 
   /**
@@ -201,7 +202,7 @@ public final class ConfigProperties {
    * @param value  the value to search, not null
    * @return the variable, null if not found
    */
-  private String findVariable(final String value) {
+  private static String findVariable(final String value) {
     int start = value.lastIndexOf("${");
     if (start >= 0) {
       start += 2;

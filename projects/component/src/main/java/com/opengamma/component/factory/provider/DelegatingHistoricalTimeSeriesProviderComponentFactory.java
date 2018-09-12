@@ -110,7 +110,8 @@ public class DelegatingHistoricalTimeSeriesProviderComponentFactory extends Abst
     }
   }
 
-  private int buildProviders(final ComponentRepository repo, final ComponentInfo info, final Map<String, HistoricalTimeSeriesProvider> map, final List<String> acceptedTypes, final int maxLevel) {
+  private int buildProviders(final ComponentRepository repo, final ComponentInfo info, final Map<String, HistoricalTimeSeriesProvider> map,
+      final List<String> acceptedTypes, final int maxLevel) {
     if (info.getType() != HistoricalTimeSeriesProvider.class) {
       throw new IllegalArgumentException("Component info must be a HistoricalTimeSeriesProvider");
     }
@@ -119,7 +120,7 @@ public class DelegatingHistoricalTimeSeriesProviderComponentFactory extends Abst
     }
     final List<String> accepteds = Arrays.asList(StringUtils.split(info.getAttribute(ComponentInfoAttributes.ACCEPTED_TYPES), ","));
     for (final String accepted : accepteds) {
-      if (map.containsKey(accepted) == false) {
+      if (!map.containsKey(accepted)) {
         map.put(accepted, (HistoricalTimeSeriesProvider) repo.getInstance(info));
         acceptedTypes.add(accepted);
       }

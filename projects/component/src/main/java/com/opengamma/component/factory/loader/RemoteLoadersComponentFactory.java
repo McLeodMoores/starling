@@ -64,8 +64,8 @@ public class RemoteLoadersComponentFactory extends AbstractComponentFactory {
    */
   protected void initComponent(final ComponentRepository repo, final ComponentInfo info) {
     final URI componentUri = info.getUri();
-    if (info.getAttributes().containsKey(ComponentInfoAttributes.REMOTE_CLIENT_JAVA) &&
-        info.getAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA).endsWith("Loader")) {
+    if (info.getAttributes().containsKey(ComponentInfoAttributes.REMOTE_CLIENT_JAVA)
+        && info.getAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA).endsWith("Loader")) {
       final String remoteTypeStr = info.getAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA);
       final Class<?> remoteType = ReflectionUtils.loadClass(remoteTypeStr);
       final Constructor<?> con = ReflectionUtils.findConstructor(remoteType, URI.class);

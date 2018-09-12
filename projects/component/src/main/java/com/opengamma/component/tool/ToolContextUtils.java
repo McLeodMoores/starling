@@ -83,7 +83,8 @@ public final class ToolContextUtils {
    * @param classifierChain  the classifier chain to use when determining which components to select
    * @return the context, not null
    */
-  public static <T extends ToolContext> T getToolContext(String configResourceLocation, final Class<T> toolContextClazz, final List<String> classifierChain) {
+  public static <T extends ToolContext> T getToolContext(String configResourceLocation, final Class<T> toolContextClazz,
+      final List<String> classifierChain) {
     configResourceLocation = configResourceLocation.trim();
 
     if (configResourceLocation.startsWith("http://")) {
@@ -97,9 +98,10 @@ public final class ToolContextUtils {
     }
   }
 
-  private static <T extends ToolContext> T createToolContextByHttp(String configResourceLocation, final Class<T> toolContextClazz, final List<String> classifierChain) {
+  private static <T extends ToolContext> T createToolContextByHttp(String configResourceLocation, final Class<T> toolContextClazz,
+      final List<String> classifierChain) {
     configResourceLocation = StringUtils.stripEnd(configResourceLocation, "/");
-    if (configResourceLocation.endsWith("/jax") == false) {
+    if (!configResourceLocation.endsWith("/jax")) {
       configResourceLocation += "/jax";
     }
 
@@ -123,8 +125,8 @@ public final class ToolContextUtils {
         try {
           final ComponentInfo componentInfo = getComponentInfo(componentServer, classifierChain, metaProperty.propertyType());
           if (componentInfo == null) {
-            LOGGER.debug("Unable to populate tool context '" + metaProperty.name() +
-                "', no appropriate component found on the server");
+            LOGGER.debug("Unable to populate tool context '" + metaProperty.name()
+            + "', no appropriate component found on the server");
             continue;
           }
           if (ViewProcessor.class.equals(componentInfo.getType())) {
@@ -142,8 +144,8 @@ public final class ToolContextUtils {
           } else {
             final String clazzName = componentInfo.getAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA);
             if (clazzName == null) {
-              LOGGER.warn("Unable to populate tool context '" + metaProperty.name() +
-                  "', no remote access class found");
+              LOGGER.warn("Unable to populate tool context '" + metaProperty.name()
+              + "', no remote access class found");
               continue;
             }
             final Class<?> clazz = Class.forName(clazzName);

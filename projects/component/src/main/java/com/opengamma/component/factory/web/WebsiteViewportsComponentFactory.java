@@ -234,14 +234,16 @@ public class WebsiteViewportsComponentFactory extends AbstractComponentFactory {
     final AggregatorNamesResource aggregatorsResource = new AggregatorNamesResource(getPortfolioAggregationFunctions().getMappedFunctions().keySet());
     final MarketDataSnapshotListResource snapshotResource = new MarketDataSnapshotListResource(getMarketDataSnapshotMaster());
     final MasterConfigSource configSource = new MasterConfigSource(getConfigMaster());
-    final AggregatedViewDefinitionManager aggregatedViewDefManager = new AggregatedViewDefinitionManager(getPositionSource(), getSecuritySource(), getCombinedConfigSource(),
-        getUserConfigMaster(), getUserPortfolioMaster(), getUserPositionMaster(), getPortfolioAggregationFunctions().getMappedFunctions());
+    final AggregatedViewDefinitionManager aggregatedViewDefManager = new AggregatedViewDefinitionManager(getPositionSource(),
+        getSecuritySource(), getCombinedConfigSource(), getUserConfigMaster(), getUserPortfolioMaster(), getUserPositionMaster(),
+        getPortfolioAggregationFunctions().getMappedFunctions());
     final CurrencyPairsSource currencyPairsSource = new ConfigDBCurrencyPairsSource(configSource);
     // TODO should be able to configure the currency pairs
     final CurrencyPairs currencyPairs = currencyPairsSource.getCurrencyPairs(CurrencyPairs.DEFAULT_CURRENCY_PAIRS);
     final SecurityAttributeMapper blotterColumnMapper = DefaultSecurityAttributeMappings.create(currencyPairs);
-    final AnalyticsViewManager analyticsViewManager = new AnalyticsViewManager(getViewProcessor(), getParallelViewRecompilation(), aggregatedViewDefManager, getComputationTargetResolver(),
-        getFunctionRepository(), getMarketDataSpecificationRepository(), blotterColumnMapper, getPositionSource(), getCombinedConfigSource(), getSecuritySource(), getSecurityMaster(),
+    final AnalyticsViewManager analyticsViewManager = new AnalyticsViewManager(getViewProcessor(), getParallelViewRecompilation(),
+        aggregatedViewDefManager, getComputationTargetResolver(), getFunctionRepository(), getMarketDataSpecificationRepository(),
+        blotterColumnMapper, getPositionSource(), getCombinedConfigSource(), getSecuritySource(), getSecurityMaster(),
         getPositionMaster());
     final ResultsFormatter resultsFormatter = new ResultsFormatter(_suppressCurrencyDisplay ? SUPPRESS_CURRENCY : DISPLAY_CURRENCY);
     final GridColumnsJsonWriter columnWriter = new GridColumnsJsonWriter(resultsFormatter);

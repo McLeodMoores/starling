@@ -86,11 +86,10 @@ import com.opengamma.util.tuple.Pairs;
 import net.sf.ehcache.CacheManager;
 
 /**
- * Component factory for {@link FunctionCompilationContext} and {@link FunctionExecutionContext} instances that are based on a remote configuration document and local factory which determines the
- * required construction pattern.
+ * Component factory for {@link FunctionCompilationContext} and {@link FunctionExecutionContext} instances that are based on a remote configuration
+ * document and local factory which determines the required construction pattern.
  */
 @BeanDefinition
-@SuppressWarnings("deprecation")
 public class RemoteEngineContextsComponentFactory extends AbstractComponentFactory {
 
   // TODO: Update the Spring based configuration for remote calc nodes to use this
@@ -118,8 +117,9 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
   private Class<? extends AbstractComponentFactory> _templateEngineContexts = EngineContextsComponentFactory.class;
 
   /**
-   * The component factory to use as a template for the target resolver. Target resolvers aren't accessed remotely as the components that make them up are often used independently. Performance is
-   * better if the resolver goes through these, cached, instances rather than make independently cached remote requests.
+   * The component factory to use as a template for the target resolver. Target resolvers aren't accessed remotely as the components that make
+   * them up are often used independently. Performance is better if the resolver goes through these, cached, instances rather than make independently
+   * cached remote requests.
    */
   @PropertyDefinition(validate = "notNull")
   private Class<? extends AbstractComponentFactory> _templateTargetResolver = TargetResolverComponentFactory.class;
@@ -415,7 +415,8 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
   }
 
   /**
-   * Sets the component in the template and registers it in the local repository. The local repository is used as a cache when local forms, such as the target resolver, are constructed.
+   * Sets the component in the template and registers it in the local repository. The local repository is used as a cache when local forms,
+   * such as the target resolver, are constructed.
    *
    * @param repo the component repository, not null
    * @param property the template property, not null
@@ -423,7 +424,8 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
    * @param component the remote component, null if none is available
    */
   @SuppressWarnings("unchecked")
-  protected void remoteComponent(final ComponentRepository repo, final MetaProperty<?> property, final AbstractComponentFactory template, final Object component) {
+  protected void remoteComponent(final ComponentRepository repo, final MetaProperty<?> property, final AbstractComponentFactory template,
+      final Object component) {
     // Always set the template so that it's null validation can take place
     property.set(template, component);
     if (component != null) {
@@ -433,7 +435,8 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
   }
 
   /**
-   * Processes a field from the template component factory, either passing a value from the local configuration or using a value from the remote configuration document to set it accordingly.
+   * Processes a field from the template component factory, either passing a value from the local configuration or using a value from the
+   * remote configuration document to set it accordingly.
    *
    * @param repo the component repository, not null
    * @param property the template property, not null
@@ -487,10 +490,12 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
         remoteComponent(repo, property, template, createHolidaySource(fetchURI(remoteConfiguration, "holidaySource")));
         break;
       case "interpolatedYieldCurveDefinitionSource":
-        remoteComponent(repo, property, template, createInterpolatedYieldCurveDefinitionSource(fetchURI(remoteConfiguration, "interpolatedYieldCurveDefinitionSource")));
+        remoteComponent(repo, property, template,
+            createInterpolatedYieldCurveDefinitionSource(fetchURI(remoteConfiguration, "interpolatedYieldCurveDefinitionSource")));
         break;
       case "interpolatedYieldCurveSpecificationBuilder":
-        remoteComponent(repo, property, template, createInterpolatedYieldCurveSpecificationBuilder(fetchURI(remoteConfiguration, "interpolatedYieldCurveSpecificationBuilder")));
+        remoteComponent(repo, property, template,
+            createInterpolatedYieldCurveSpecificationBuilder(fetchURI(remoteConfiguration, "interpolatedYieldCurveSpecificationBuilder")));
         break;
       case "legalEntitySource":
         remoteComponent(repo, property, template, createLegalEntitySource(fetchURI(remoteConfiguration, "legalEntitySource")));
@@ -529,7 +534,8 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
   }
 
   /**
-   * Processes the fields from a template component factory, either passing a value from local configuration, if any, or using a value from the remote configuration document to set it accordingly.
+   * Processes the fields from a template component factory, either passing a value from local configuration, if any, or using a value
+   * from the remote configuration document to set it accordingly.
    *
    * @param repo the component repository, not null
    * @param localConfiguration the local configuration, null if none
@@ -709,8 +715,9 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the component factory to use as a template for the target resolver. Target resolvers aren't accessed remotely as the components that make them up are often used independently. Performance is
-   * better if the resolver goes through these, cached, instances rather than make independently cached remote requests.
+   * Gets the component factory to use as a template for the target resolver. Target resolvers aren't accessed remotely as the components that make
+   * them up are often used independently. Performance is better if the resolver goes through these, cached, instances rather than make independently
+   * cached remote requests.
    * @return the value of the property, not null
    */
   public Class<? extends AbstractComponentFactory> getTemplateTargetResolver() {
@@ -718,8 +725,9 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
   }
 
   /**
-   * Sets the component factory to use as a template for the target resolver. Target resolvers aren't accessed remotely as the components that make them up are often used independently. Performance is
-   * better if the resolver goes through these, cached, instances rather than make independently cached remote requests.
+   * Sets the component factory to use as a template for the target resolver. Target resolvers aren't accessed remotely as the components that make
+   * them up are often used independently. Performance is better if the resolver goes through these, cached, instances rather than make independently
+   * cached remote requests.
    * @param templateTargetResolver  the new value of the property, not null
    */
   public void setTemplateTargetResolver(Class<? extends AbstractComponentFactory> templateTargetResolver) {
@@ -729,7 +737,8 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
 
   /**
    * Gets the the {@code templateTargetResolver} property.
-   * better if the resolver goes through these, cached, instances rather than make independently cached remote requests.
+   * them up are often used independently. Performance is better if the resolver goes through these, cached, instances rather than make independently
+   * cached remote requests.
    * @return the property, not null
    */
   public final Property<Class<? extends AbstractComponentFactory>> templateTargetResolver() {

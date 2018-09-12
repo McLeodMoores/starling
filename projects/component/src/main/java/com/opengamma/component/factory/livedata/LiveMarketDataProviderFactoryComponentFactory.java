@@ -98,7 +98,8 @@ public class LiveMarketDataProviderFactoryComponentFactory extends AbstractCompo
     initLiveMarketDataProviderFactory(repo.getInstances(LiveDataMetaDataProvider.class), defaultProviders, repo);
   }
 
-  private LiveMarketDataProviderFactory initLiveMarketDataProviderFactory(final Collection<LiveDataMetaDataProvider> metaDataProviders, final List<String> defaultProviders, final ComponentRepository repo) {
+  private LiveMarketDataProviderFactory initLiveMarketDataProviderFactory(final Collection<LiveDataMetaDataProvider> metaDataProviders,
+      final List<String> defaultProviders, final ComponentRepository repo) {
     final Map<String, LiveDataFactory> factories = Maps.newLinkedHashMap();
     for (final LiveDataMetaDataProvider metaDataProvider : metaDataProviders) {
       final MarketDataAvailabilityFilter filter = createMarketDataAvailabilityFilter(metaDataProvider);
@@ -121,10 +122,11 @@ public class LiveMarketDataProviderFactoryComponentFactory extends AbstractCompo
     }
     if (defaultFactory == null) {
       throw new OpenGammaRuntimeException("Unable to find a default provider matching one of [" + StringUtils.join(defaultProviders, ", ")
-          + "] from available providers [" + StringUtils.join(factories.keySet(), ", ") + "]");
+      + "] from available providers [" + StringUtils.join(factories.keySet(), ", ") + "]");
     }
 
-    final InMemoryLKVLiveMarketDataProviderFactory liveMarketDataProviderFactory = new InMemoryLKVLiveMarketDataProviderFactory(defaultFactory, ImmutableMap.copyOf(factories));
+    final InMemoryLKVLiveMarketDataProviderFactory liveMarketDataProviderFactory =
+        new InMemoryLKVLiveMarketDataProviderFactory(defaultFactory, ImmutableMap.copyOf(factories));
     ComponentInfo info = new ComponentInfo(LiveMarketDataProviderFactory.class, getClassifier());
     repo.registerComponent(info, liveMarketDataProviderFactory);
 
@@ -159,26 +161,28 @@ public class LiveMarketDataProviderFactoryComponentFactory extends AbstractCompo
    * @return the client
    */
   @SuppressWarnings("deprecation")
-  public static LiveDataClient createLiveDataClient(final LiveDataMetaDataProvider provider, JmsConnector jmsConnector) {
+  public static LiveDataClient createLiveDataClient(final LiveDataMetaDataProvider provider, final JmsConnector jmsConnector) {
     ArgumentChecker.notNull(jmsConnector, "jmsConnector");
+    JmsConnector jmsc = jmsConnector;
     final LiveDataMetaData metaData = provider.metaData();
     final URI jmsUri = metaData.getJmsBrokerUri();
     if (metaData.getServerType() != LiveDataServerTypes.STANDARD || jmsUri == null) {
-      LOGGER.warn("Unsupported live data server type " + metaData.getServerType() + " for " + metaData.getDescription() + " live data provider. This provider will not be available.");
+      LOGGER.warn("Unsupported live data server type " + metaData.getServerType() + " for " + metaData.getDescription()
+      + " live data provider. This provider will not be available.");
       return null;
     }
-    if (!jmsConnector.getClientBrokerUri().equals(jmsUri)) {
-      final JmsConnectorFactoryBean jmsFactory = new JmsConnectorFactoryBean(jmsConnector);
+    if (!jmsc.getClientBrokerUri().equals(jmsUri)) {
+      final JmsConnectorFactoryBean jmsFactory = new JmsConnectorFactoryBean(jmsc);
       jmsFactory.setClientBrokerUri(jmsUri);
-      jmsConnector = jmsFactory.getObjectCreating();
+      jmsc = jmsFactory.getObjectCreating();
     }
 
-    final JmsTemplate jmsTemplate = jmsConnector.getJmsTemplateTopic();
+    final JmsTemplate jmsTemplate = jmsc.getJmsTemplateTopic();
 
     JmsByteArrayRequestSender jmsSubscriptionRequestSender;
 
     if (metaData.getJmsSubscriptionQueue() != null) {
-      final JmsTemplate subscriptionRequestTemplate = jmsConnector.getJmsTemplateQueue();
+      final JmsTemplate subscriptionRequestTemplate = jmsc.getJmsTemplateQueue();
       jmsSubscriptionRequestSender = new JmsByteArrayRequestSender(metaData.getJmsSubscriptionQueue(), subscriptionRequestTemplate);
     } else {
       jmsSubscriptionRequestSender = new JmsByteArrayRequestSender(metaData.getJmsSubscriptionTopic(), jmsTemplate);
@@ -189,14 +193,15 @@ public class LiveMarketDataProviderFactoryComponentFactory extends AbstractCompo
     final ByteArrayFudgeRequestSender fudgeEntitlementRequestSender = new ByteArrayFudgeRequestSender(jmsEntitlementRequestSender);
 
     final JmsLiveDataClient liveDataClient = new JmsLiveDataClient(fudgeSubscriptionRequestSender,
-        fudgeEntitlementRequestSender, jmsConnector, OpenGammaFudgeContext.getInstance(), JmsLiveDataClient.DEFAULT_NUM_SESSIONS);
+        fudgeEntitlementRequestSender, jmsc, OpenGammaFudgeContext.getInstance(), JmsLiveDataClient.DEFAULT_NUM_SESSIONS);
     liveDataClient.setFudgeContext(OpenGammaFudgeContext.getInstance());
     if (metaData.getJmsHeartbeatTopic() != null) {
       final JmsByteArrayMessageSender jmsHeartbeatSender = new JmsByteArrayMessageSender(metaData.getJmsHeartbeatTopic(), jmsTemplate);
       liveDataClient.setHeartbeatMessageSender(jmsHeartbeatSender);
     }
     liveDataClient.start();
-    liveDataClient.registerMetrics(OpenGammaMetricRegistry.getSummaryInstance(), OpenGammaMetricRegistry.getDetailedInstance(), "LiveDataClient - " + provider.metaData().getDescription());
+    liveDataClient.registerMetrics(OpenGammaMetricRegistry.getSummaryInstance(), OpenGammaMetricRegistry.getDetailedInstance(),
+        "LiveDataClient - " + provider.metaData().getDescription());
     return liveDataClient;
   }
 
@@ -209,7 +214,8 @@ public class LiveMarketDataProviderFactoryComponentFactory extends AbstractCompo
   protected MarketDataAvailabilityFilter createMarketDataAvailabilityFilter(final LiveDataMetaDataProvider metaDataProvider) {
     final List<ExternalScheme> supportedSchemes = metaDataProvider.metaData().getSupportedSchemes();
     if (supportedSchemes == null || supportedSchemes.isEmpty()) {
-      LOGGER.warn("No supported external identifier schemes declared for " + metaDataProvider.metaData().getDescription() + " live data provider. This provider will not be available.");
+      LOGGER.warn("No supported external identifier schemes declared for " + metaDataProvider.metaData().getDescription()
+          + " live data provider. This provider will not be available.");
       return null;
     }
     final Set<ExternalScheme> acceptableSchemes = ImmutableSet.copyOf(supportedSchemes);

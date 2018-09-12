@@ -82,7 +82,8 @@ public class NonVersionedRedisSecuritySourceComponentFactory extends AbstractCom
     SecuritySource rawSource = source;
 
     if (getCacheManager() != null && getLruCacheElements() > 0) {
-      final Cache cache = new Cache("NonVersionedRedisSecuritySource", getLruCacheElements(), MemoryStoreEvictionPolicy.LRU, false, null, true, -1L, -1L, false, -1L, null);
+      final Cache cache =
+          new Cache("NonVersionedRedisSecuritySource", getLruCacheElements(), MemoryStoreEvictionPolicy.LRU, false, null, true, -1L, -1L, false, -1L, null);
       getCacheManager().addCache(cache);
       rawSource = new NonVersionedEHCachingSecuritySource(source, cache);
     }

@@ -30,13 +30,13 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 public class MockComponentFactoryTwo implements Bean, ComponentFactory {
 
   @PropertyDefinition(validate = "notNull")
-  private MockComponent delta;
+  private MockComponent _delta;
   @PropertyDefinition
-  private MockComponent epsilon;
+  private MockComponent _epsilon;
   @PropertyDefinition
-  private ComponentInfo info;
+  private ComponentInfo _info;
   @PropertyDefinition
-  private final List<String> list = new ArrayList<>();
+  private final List<String> _list = new ArrayList<>();
 
   //-------------------------------------------------------------------------
   @Override
@@ -80,7 +80,7 @@ public class MockComponentFactoryTwo implements Bean, ComponentFactory {
    * @return the value of the property, not null
    */
   public MockComponent getDelta() {
-    return delta;
+    return _delta;
   }
 
   /**
@@ -89,7 +89,7 @@ public class MockComponentFactoryTwo implements Bean, ComponentFactory {
    */
   public void setDelta(MockComponent delta) {
     JodaBeanUtils.notNull(delta, "delta");
-    this.delta = delta;
+    this._delta = delta;
   }
 
   /**
@@ -106,7 +106,7 @@ public class MockComponentFactoryTwo implements Bean, ComponentFactory {
    * @return the value of the property
    */
   public MockComponent getEpsilon() {
-    return epsilon;
+    return _epsilon;
   }
 
   /**
@@ -114,7 +114,7 @@ public class MockComponentFactoryTwo implements Bean, ComponentFactory {
    * @param epsilon  the new value of the property
    */
   public void setEpsilon(MockComponent epsilon) {
-    this.epsilon = epsilon;
+    this._epsilon = epsilon;
   }
 
   /**
@@ -131,7 +131,7 @@ public class MockComponentFactoryTwo implements Bean, ComponentFactory {
    * @return the value of the property
    */
   public ComponentInfo getInfo() {
-    return info;
+    return _info;
   }
 
   /**
@@ -139,7 +139,7 @@ public class MockComponentFactoryTwo implements Bean, ComponentFactory {
    * @param info  the new value of the property
    */
   public void setInfo(ComponentInfo info) {
-    this.info = info;
+    this._info = info;
   }
 
   /**
@@ -156,7 +156,7 @@ public class MockComponentFactoryTwo implements Bean, ComponentFactory {
    * @return the value of the property, not null
    */
   public List<String> getList() {
-    return list;
+    return _list;
   }
 
   /**
@@ -165,8 +165,8 @@ public class MockComponentFactoryTwo implements Bean, ComponentFactory {
    */
   public void setList(List<String> list) {
     JodaBeanUtils.notNull(list, "list");
-    this.list.clear();
-    this.list.addAll(list);
+    this._list.clear();
+    this._list.addAll(list);
   }
 
   /**
@@ -376,8 +376,8 @@ public class MockComponentFactoryTwo implements Bean, ComponentFactory {
 
     @Override
     protected void validate(Bean bean) {
-      JodaBeanUtils.notNull(((MockComponentFactoryTwo) bean).delta, "delta");
-      JodaBeanUtils.notNull(((MockComponentFactoryTwo) bean).list, "list");
+      JodaBeanUtils.notNull(((MockComponentFactoryTwo) bean)._delta, "delta");
+      JodaBeanUtils.notNull(((MockComponentFactoryTwo) bean)._list, "list");
     }
 
   }

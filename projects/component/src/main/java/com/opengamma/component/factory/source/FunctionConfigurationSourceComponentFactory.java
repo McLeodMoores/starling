@@ -85,13 +85,14 @@ public class FunctionConfigurationSourceComponentFactory extends AbstractCompone
 
     if (isPublishRest()) {
       repo.getRestComponents().publish(info, new DataRepositoryConfigurationSourceResource(source));
-      // TODO: The REST resource will be incorrect; we should publish a facade of the ViewProcessor form so that calc nodes see the same version of the repository as the one last queried here
+      // TODO: The REST resource will be incorrect; we should publish a facade of the ViewProcessor form so that calc
+      // nodes see the same version of the repository as the one last queried here
     }
   }
 
   /**
    * Debug utility to sort a repository. This allows two to be compared more easily.
-   * 
+   *
    * @param source the raw repository configuration source
    * @return a source that return a sorted list of functions
    */
@@ -161,7 +162,7 @@ public class FunctionConfigurationSourceComponentFactory extends AbstractCompone
    * Initializes the source.
    * <p>
    * Calls {@link #initSources()} and combines the result using {@link CombiningFunctionConfigurationSource}.
-   * 
+   *
    * @return the list of base sources to be combined, not null
    */
   protected FunctionConfigurationSource initSource() {
@@ -216,7 +217,7 @@ public class FunctionConfigurationSourceComponentFactory extends AbstractCompone
 
   /**
    * Initializes the list of sources to be combined.
-   * 
+   *
    * @return the list of base sources to be combined, not null
    */
   protected List<FunctionConfigurationSource> initSources() {
@@ -230,7 +231,7 @@ public class FunctionConfigurationSourceComponentFactory extends AbstractCompone
 
   /**
    * Gets the list of curve and surface function configuration sources.
-   * 
+   *
    * @return the curve and surface function configuration sources, not null
    */
   protected List<FunctionConfigurationSource> curveAndSurfaceSources() {

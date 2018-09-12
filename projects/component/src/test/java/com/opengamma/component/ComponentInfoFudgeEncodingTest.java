@@ -16,8 +16,11 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class ComponentInfoFudgeEncodingTest extends AbstractFudgeBuilderTestCase {
 
+  /**
+   * Tests an encoding / decoding cycle.
+   */
   public void test() {
-    ComponentInfo object = new ComponentInfo(String.class, "shared");
+    final ComponentInfo object = new ComponentInfo(String.class, "shared");
     object.addAttribute("A", "B");
     assertEncodeDecodeCycle(ComponentInfo.class, object);
   }

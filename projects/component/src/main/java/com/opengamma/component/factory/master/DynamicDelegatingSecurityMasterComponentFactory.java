@@ -8,6 +8,7 @@ package com.opengamma.component.factory.master;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
 import org.joda.beans.JodaBeanUtils;
@@ -27,10 +28,9 @@ import com.opengamma.master.security.SecurityMaster;
 import com.opengamma.master.security.impl.DataSecurityMasterResource;
 import com.opengamma.master.security.impl.DynamicDelegatingSecurityMaster;
 import com.opengamma.master.security.impl.RemoteSecurityMaster;
-import org.joda.beans.Bean;
 
 /**
- * Component factory for delegating master that maintains a map of delegate masters
+ * Component factory for delegating master that maintains a map of delegate masters.
  * <p/>
  * Register as both a generic SecurityMaster as well as the concrete type
  * DynamicDelegatingSecurityMasterComponentFactory, to allow command processor

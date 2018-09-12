@@ -80,7 +80,6 @@ public class ComponentConfigIniLoader extends AbstractComponentConfigLoader {
    * @param resource  the config resource to load, not null
    * @param depth  the depth of the properties file, used for logging
    * @param config  the config being loaded, not null
-   * @return the config, not null
    * @throws ComponentConfigException if the resource has an invalid format
    */
   private void doLoad(final Resource resource, final int depth, final ComponentConfig config) {

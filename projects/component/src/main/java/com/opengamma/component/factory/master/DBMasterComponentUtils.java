@@ -22,24 +22,26 @@ public final class DBMasterComponentUtils {
 
 
   /**
-   * Tests whether a given jms config is valid, logging an error if not
+   * Tests whether a given jms config is valid, logging an error if not.
+   *
    * @param classifier the classifier of the master
    * @param cfClazz the component factory of the master
    * @param jmsConnector the jmsConnector
    * @param jmsChangeManagerTopic the jmsChangeManagerTopic
    * @return whether this configuration is valid
    */
-  public static boolean isValidJmsConfiguration(final String classifier, final Class<? extends AbstractComponentFactory> cfClazz, final JmsConnector jmsConnector, final String jmsChangeManagerTopic) {
+  public static boolean isValidJmsConfiguration(final String classifier, final Class<? extends AbstractComponentFactory> cfClazz,
+      final JmsConnector jmsConnector, final String jmsChangeManagerTopic) {
 
     final boolean valid = jmsConnector != null && jmsChangeManagerTopic != null;
     if (!valid) {
-      LOGGER.warn("Change management for master enabled in {} (classifier '{}') " +
-             "but not all jms settings present: jmsChangeManagerTopic={}, jmsConnector={}. " +
-             "Will be disabled. Set enableChangeManagement=false to suppress this warning.",
-             cfClazz,
-             classifier,
-             jmsChangeManagerTopic,
-             jmsConnector);
+      LOGGER.warn("Change management for master enabled in {} (classifier '{}') "
+          + "but not all jms settings present: jmsChangeManagerTopic={}, jmsConnector={}. "
+          + "Will be disabled. Set enableChangeManagement=false to suppress this warning.",
+          cfClazz,
+          classifier,
+          jmsChangeManagerTopic,
+          jmsConnector);
     }
     return valid;
 

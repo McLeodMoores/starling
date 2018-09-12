@@ -113,11 +113,12 @@ public class OpenGammaComponentServer {
    * @return true if the server is started, false if there was a problem
    * @throws RuntimeException if an error occurs
    */
-  public boolean run(String[] args) {
+  public boolean run(final String[] args) {
     // parse command line
     CommandLine cmdLine;
+    String[] args0 = args;
     try {
-      cmdLine = new PosixParser().parse(OPTIONS, args);
+      cmdLine = new PosixParser().parse(OPTIONS, args0);
     } catch (final ParseException ex) {
       _logger.logError(ex.getMessage());
       usage();
@@ -137,18 +138,18 @@ public class OpenGammaComponentServer {
     }
     _logger = createLogger(verbosity);
     // config file
-    args = cmdLine.getArgs();
-    if (args.length == 0) {
+    args0 = cmdLine.getArgs();
+    if (args0.length == 0) {
       _logger.logError("No config file specified");
       usage();
       return false;
     }
-    final String configFile = args[0];
+    final String configFile = args0[0];
     // properties
     final Map<String, String> properties = new HashMap<>();
-    if (args.length > 1) {
-      for (int i = 1; i < args.length; i++) {
-        final String arg = args[i];
+    if (args0.length > 1) {
+      for (int i = 1; i < args0.length; i++) {
+        final String arg = args0[i];
         final int equalsPosition = arg.indexOf('=');
         if (equalsPosition < 0) {
           throw new ComponentConfigException("Invalid property format, must be key=value (no spaces)");
@@ -343,13 +344,14 @@ public class OpenGammaComponentServer {
    * @param fileName  the name to extract from, not null
    * @return the server name, not null
    */
-  protected String extractServerName(String fileName) {
-    if (fileName.contains(":")) {
-      fileName = StringUtils.substringAfter(fileName, ":");
+  protected String extractServerName(final String fileName) {
+    String fn = fileName;
+    if (fn.contains(":")) {
+      fn = StringUtils.substringAfter(fn, ":");
     }
-    fileName = FilenameUtils.removeExtension(fileName);
-    final String first = FilenameUtils.getName(FilenameUtils.getPathNoEndSeparator(fileName));
-    final String second = FilenameUtils.getName(fileName);
+    fn = FilenameUtils.removeExtension(fn);
+    final String first = FilenameUtils.getName(FilenameUtils.getPathNoEndSeparator(fn));
+    final String second = FilenameUtils.getName(fn);
     if (StringUtils.isEmpty(first) || first.equals(second) || second.startsWith(first + "-")) {
       return second;
     }

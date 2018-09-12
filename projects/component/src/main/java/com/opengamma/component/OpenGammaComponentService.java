@@ -125,6 +125,9 @@ public class OpenGammaComponentService extends OpenGammaComponentServer {
     assert previous == null;
   }
 
+  /**
+   * Stops the components.
+   */
   protected void serverStopping() {
     final ComponentRepository repository = _repository.getAndSet(null);
     if (repository != null) {

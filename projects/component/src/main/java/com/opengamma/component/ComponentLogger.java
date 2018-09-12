@@ -22,41 +22,41 @@ public interface ComponentLogger {
    *
    * @param message  the string message, not null
    */
-  void logDebug(final String message);
+  void logDebug(String message);
 
   /**
    * Logs a normal info message.
    *
    * @param message  the string message, not null
    */
-  void logInfo(final String message);
+  void logInfo(String message);
 
   /**
    * Logs a warning message.
    *
    * @param message  the string message, not null
    */
-  void logWarn(final String message);
+  void logWarn(String message);
 
   /**
    * Logs an error.
    *
    * @param message  the string message, not null
    */
-  void logError(final String message);
+  void logError(String message);
 
   /**
    * Logs an error.
    *
    * @param throwable  the exception, not null
    */
-  void logError(final Throwable throwable);
+  void logError(Throwable throwable);
 
   //-------------------------------------------------------------------------
   /**
    * Logger that outputs no logging.
    */
-  public static final class Sink implements ComponentLogger {
+  final class Sink implements ComponentLogger {
     /**
      * Singleton instance of a sink logger.
      */
@@ -95,7 +95,7 @@ public interface ComponentLogger {
   /**
    * Logger that throws an exception for errors.
    */
-  public static final class Throws implements ComponentLogger {
+  final class Throws implements ComponentLogger {
     /**
      * Singleton instance of a sink logger.
      */
@@ -134,7 +134,7 @@ public interface ComponentLogger {
   /**
    * Logger that outputs to the console.
    */
-  public static final class Console implements ComponentLogger {
+  final class Console implements ComponentLogger {
     /**
      * Singleton instance of a verbose logger.
      */
@@ -195,7 +195,7 @@ public interface ComponentLogger {
   /**
    * Logger that outputs to a real logger.
    */
-  public static class Slf4JLogger implements ComponentLogger {
+  class Slf4JLogger implements ComponentLogger {
     private final Logger _logger;
 
     /**

@@ -19,7 +19,6 @@ import org.springframework.context.Lifecycle;
 import org.springframework.context.support.GenericApplicationContext;
 
 import com.opengamma.OpenGammaRuntimeException;
-import com.opengamma.component.ComponentFactory;
 import com.opengamma.component.ComponentRepository;
 import com.opengamma.transport.jms.ActiveMQJmsConfiguration;
 
@@ -27,7 +26,7 @@ import com.opengamma.transport.jms.ActiveMQJmsConfiguration;
  * Component definition for starting Active MQ.
  */
 @BeanDefinition
-public class SpringActiveMqComponentFactory extends AbstractSpringComponentFactory implements ComponentFactory {
+public class SpringActiveMqComponentFactory extends AbstractSpringComponentFactory {
 
   //-------------------------------------------------------------------------
   @Override
@@ -51,7 +50,7 @@ public class SpringActiveMqComponentFactory extends AbstractSpringComponentFacto
   static class ActiveMQLifecycle implements Lifecycle {
     private final BrokerService _broker;
 
-    public ActiveMQLifecycle(final BrokerService broker) {
+    ActiveMQLifecycle(final BrokerService broker) {
       _broker = broker;
     }
 

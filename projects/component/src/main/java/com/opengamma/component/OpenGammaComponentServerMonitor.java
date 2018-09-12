@@ -72,7 +72,7 @@ public final class OpenGammaComponentServerMonitor extends Thread {
       }
       final String received = new String(packet.getData(), 0, packet.getLength());
 
-      if (received.matches("secret:" + _secret + "\\s+command:\\w+\\s*") == false) {
+      if (!received.matches("secret:" + _secret + "\\s+command:\\w+\\s*")) {
         LOGGER.debug("Malformed command or wrong secret");
         continue;
       }

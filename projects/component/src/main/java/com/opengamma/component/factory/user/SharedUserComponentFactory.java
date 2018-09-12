@@ -25,7 +25,7 @@ import com.opengamma.component.factory.AbstractComponentFactory;
 import com.opengamma.livedata.UserPrincipal;
 
 /**
- * Component factory for a shared user
+ * Component factory for a shared user.
  */
 @BeanDefinition
 public class SharedUserComponentFactory extends AbstractComponentFactory {

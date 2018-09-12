@@ -28,7 +28,8 @@ import com.opengamma.util.rest.AbstractDataResource;
  * Component factory for the database historical time-series master.
  */
 @BeanDefinition
-public class DbHistoricalTimeSeriesMasterComponentFactory extends AbstractDocumentDbMasterComponentFactory<HistoricalTimeSeriesMaster, DbHistoricalTimeSeriesMaster> {
+public class DbHistoricalTimeSeriesMasterComponentFactory
+extends AbstractDocumentDbMasterComponentFactory<HistoricalTimeSeriesMaster, DbHistoricalTimeSeriesMaster> {
 
   /**
    * Creates an instance.
@@ -46,7 +47,8 @@ public class DbHistoricalTimeSeriesMasterComponentFactory extends AbstractDocume
   @Override
   protected DbHistoricalTimeSeriesMaster createDbDocumentMaster() {
     final DbHistoricalTimeSeriesMaster master = new DbHistoricalTimeSeriesMaster(getDbConnector());
-    master.registerMetrics(OpenGammaMetricRegistry.getSummaryInstance(), OpenGammaMetricRegistry.getDetailedInstance(), "DbHistoricalTimeSeriesMaster" + getClassifier());
+    master.registerMetrics(OpenGammaMetricRegistry.getSummaryInstance(), OpenGammaMetricRegistry.getDetailedInstance(),
+        "DbHistoricalTimeSeriesMaster" + getClassifier());
     return master;
   }
 

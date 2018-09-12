@@ -69,14 +69,15 @@ public class InMemoryFunctionBlacklistProviderComponentFactory extends AbstractC
     infoRO.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     infoRO.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteFunctionBlacklistProvider.class);
     repo.registerComponent(infoRO, provider);
-    
+
     final ComponentInfo infoMng = new ComponentInfo(ManageableFunctionBlacklistProvider.class, getClassifier());
     infoMng.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     infoMng.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteManageableFunctionBlacklistProvider.class);
     repo.registerComponent(infoMng, provider);
     if (isPublishRest()) {
       repo.getRestComponents().publish(infoRO, new DataFunctionBlacklistProviderResource(provider, OpenGammaFudgeContext.getInstance(), getJmsConnector()));
-      repo.getRestComponents().publish(infoMng, new DataManageableFunctionBlacklistProviderResource(provider, OpenGammaFudgeContext.getInstance(), getJmsConnector()));
+      repo.getRestComponents().publish(infoMng,
+          new DataManageableFunctionBlacklistProviderResource(provider, OpenGammaFudgeContext.getInstance(), getJmsConnector()));
     }
   }
 

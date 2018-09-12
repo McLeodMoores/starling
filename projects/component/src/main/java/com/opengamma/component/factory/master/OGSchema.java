@@ -41,7 +41,7 @@ public final class OGSchema {
   }
 
   /**
-   * For building OGSchema objects
+   * For building OGSchema objects.
    */
   public static final class Builder {
     private final DbConnector _dbConnector;
@@ -163,9 +163,9 @@ public final class OGSchema {
       final DbUpgradeOperation upgradeOperation = new DbUpgradeOperation(dbToolContext, true, null);
       upgradeOperation.execute();
     } else if (expectedSchemaVersion > actualSchemaVersion) {
-      throw new OpenGammaRuntimeException(schemaName + " schema too new. This build of the OpenGamma Platform works with version " +
-          expectedSchemaVersion + " of the " + schemaName + " schema, but the database contains version " + actualSchemaVersion +
-          ". Unable to downgrade an existing database.");
+      throw new OpenGammaRuntimeException(schemaName + " schema too new. This build of the OpenGamma Platform works with version "
+          + expectedSchemaVersion + " of the " + schemaName + " schema, but the database contains version " + actualSchemaVersion
+          + ". Unable to downgrade an existing database.");
     }
   }
 
@@ -184,15 +184,12 @@ public final class OGSchema {
       return;
     }
     final String relativeDbAge = expectedSchemaVersion.intValue() < actualSchemaVersion ? "new" : "old";
-    final String message = schemaName + " schema too " + relativeDbAge + ". This build of the OpenGamma Platform works with version " +
-        expectedSchemaVersion + " of the " + schemaName + " schema, but the database contains version " + actualSchemaVersion + ".";
+    final String message = schemaName + " schema too " + relativeDbAge + ". This build of the OpenGamma Platform works with version "
+        + expectedSchemaVersion + " of the " + schemaName + " schema, but the database contains version " + actualSchemaVersion + ".";
     if (isEnforceSchemaVersion()) {
       throw new OpenGammaRuntimeException(message);
-    } else {
-      LOGGER.warn(message);
     }
+    LOGGER.warn(message);
   }
-
-
 
 }

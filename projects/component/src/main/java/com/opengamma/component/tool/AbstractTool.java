@@ -54,7 +54,7 @@ public abstract class AbstractTool<T extends ToolContext> {
    * Logging command line option.
    */
   private static final String LOGBACK_RESOURCE_OPTION = "l";
-  
+
   static {
     StartupUtils.init();
   }
@@ -131,26 +131,27 @@ public abstract class AbstractTool<T extends ToolContext> {
       Class<?> cls = getClass();
       ParameterizedType type = null;
       while (cls != AbstractTool.class) {
-        Type loop = cls.getGenericSuperclass();
+        final Type loop = cls.getGenericSuperclass();
         if (loop instanceof ParameterizedType) {
           type = (ParameterizedType) loop;
           break;
         }
         cls = cls.getSuperclass();
       }
-      if (type == null || type.getActualTypeArguments().length != 1 ||
-          type.getActualTypeArguments()[0] instanceof Class == false ||
-          ToolContext.class.isAssignableFrom((Class<?>) type.getActualTypeArguments()[0]) == false) {
+      if (type == null || type.getActualTypeArguments().length != 1
+          || !(type.getActualTypeArguments()[0] instanceof Class)
+          || !ToolContext.class.isAssignableFrom((Class<?>) type.getActualTypeArguments()[0])) {
         System.err.println("Subclass must declare tool context type");
         ShutdownUtils.exit(-2);
       }
       @SuppressWarnings("unchecked")
+      final
       Class<T> toolContextClass = (Class<T>) type.getActualTypeArguments()[0];
       // invoke and terminate the tool
-      boolean success = initAndRun(args, defaultConfigResource, defaultLogbackResource, toolContextClass);
+      final boolean success = initAndRun(args, defaultConfigResource, defaultLogbackResource, toolContextClass);
       ShutdownUtils.exit(success ? 0 : -1);
-      
-    } catch (Throwable ex) {
+
+    } catch (final Throwable ex) {
       ex.printStackTrace();
       ShutdownUtils.exit(-2);
     }
@@ -187,7 +188,7 @@ public abstract class AbstractTool<T extends ToolContext> {
    * @return true if successful, false otherwise
    */
   public boolean initAndRun(final String[] args, final String defaultConfigResource, final String defaultLogbackResource,
-                            final Class<? extends T> toolContextClass) {
+      final Class<? extends T> toolContextClass) {
     ArgumentChecker.notNull(args, "args");
 
     final Options options = createOptions(defaultConfigResource == null);
@@ -322,7 +323,7 @@ public abstract class AbstractTool<T extends ToolContext> {
     return getToolContext(0);
   }
 
-   //-------------------------------------------------------------------------
+  //-------------------------------------------------------------------------
   /**
    * Gets the i-th tool context.
    *
@@ -338,7 +339,7 @@ public abstract class AbstractTool<T extends ToolContext> {
     }
   }
 
-   //-------------------------------------------------------------------------
+  //-------------------------------------------------------------------------
   /**
    * Gets all tool contexts.
    *

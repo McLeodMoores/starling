@@ -48,7 +48,8 @@ public class CurveCalculationConfigSourceComponentFactory extends AbstractCompon
 
   //-------------------------------------------------------------------------
   /**
-   * Initializes the curve calculation config source, setting up component information and REST. Override using {@link #createCurveCalculationConfigSource(ComponentRepository)}.
+   * Initializes the curve calculation config source, setting up component information and REST.
+   * Override using {@link #createCurveCalculationConfigSource(ComponentRepository)}.
    *
    * @param repo the component repository, not null
    * @param configuration the remaining configuration, not null

@@ -146,7 +146,8 @@ public class MetricsRepositoryComponentFactory extends AbstractComponentFactory 
    * @param summaryRegistry  the summary metrics registry, not null
    * @param detailedRegistry  the detailed metrics registry, not null
    */
-  protected void initGangliaPublish(final ComponentRepository repo, final MetricRegistry summaryRegistry, final MetricRegistry detailedRegistry) throws IOException {
+  protected void initGangliaPublish(final ComponentRepository repo, final MetricRegistry summaryRegistry,
+      final MetricRegistry detailedRegistry) throws IOException {
     ArgumentChecker.notNull(getGangliaAddress(), "gangliaAddress");
     ArgumentChecker.notNull(getGangliaPort(), "gangliaPort");
     ArgumentChecker.notNull(getGangliaAddressingMode(), "gangliaAddressingMode");
@@ -212,7 +213,7 @@ public class MetricsRepositoryComponentFactory extends AbstractComponentFactory 
    */
   static final class GangliaReporterLifecycle implements Lifecycle {
     private volatile GangliaReporter _gangliaReporter;
-    public GangliaReporterLifecycle(final GangliaReporter gangliaReporter) {
+    GangliaReporterLifecycle(final GangliaReporter gangliaReporter) {
       _gangliaReporter = gangliaReporter;
     }
     @Override

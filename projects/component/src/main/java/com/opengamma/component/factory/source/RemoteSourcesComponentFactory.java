@@ -72,8 +72,8 @@ public class RemoteSourcesComponentFactory extends AbstractComponentFactory {
    */
   protected void initComponent(final ComponentRepository repo, final ComponentInfo info) {
     final URI componentUri = info.getUri();
-    if (info.getAttributes().containsKey(ComponentInfoAttributes.REMOTE_CLIENT_JAVA) &&
-        info.getAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA).endsWith("Source")) {
+    if (info.getAttributes().containsKey(ComponentInfoAttributes.REMOTE_CLIENT_JAVA)
+        && info.getAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA).endsWith("Source")) {
       final String remoteTypeStr = info.getAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA);
       final Class<?> remoteType = ReflectionUtils.loadClass(remoteTypeStr);
       final String jmsTopic = info.getAttributes().get(ComponentInfoAttributes.JMS_CHANGE_MANAGER_TOPIC);

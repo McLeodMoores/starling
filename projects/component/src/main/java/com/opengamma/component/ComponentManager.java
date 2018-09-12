@@ -44,7 +44,7 @@ import com.opengamma.util.fudgemsg.ServletContextHolder;
  * The INI file is the primary file for loading the components, see {@link ComponentConfigIniLoader}.
  * The behavior of an INI file can be controlled using properties.
  * <p>
- * The properties can either be specified manually before {@link #start(Resource))}
+ * The properties can either be specified manually before {@link #start(Resource)}
  * is called or loaded by specifying a properties file instead of an INI file.
  * The properties file must contain the key "MANAGER.NEXT.FILE" which is used to load the next file.
  * The next file is normally the INI file, but could be another properties file.
@@ -184,7 +184,7 @@ public class ComponentManager {
   /**
    * Loads, initializes and starts the components based on the specified resource.
    * <p>
-   * See {@link #createResource(String)} for the valid resource location formats.
+   * See {@link ResourceUtils#createResource(String)} for the valid resource location formats.
    * <p>
    * Calls {@link #start(Resource)}.
    *
@@ -215,7 +215,7 @@ public class ComponentManager {
   /**
    * Loads the component configuration based on the specified resource.
    * <p>
-   * See {@link #createResource(String)} for the valid resource location formats.
+   * See {@link ResourceUtils#createResource(String)} for the valid resource location formats.
    * <p>
    * Calls {@link #load(Resource)}.
    *
@@ -598,9 +598,8 @@ public class ComponentManager {
     try {
       if (type == Resource.class) {
         return ResourceUtils.createResource(value);
-      } else {
-        return JodaBeanUtils.stringConverter().convertFromString(type, value);
       }
+      return JodaBeanUtils.stringConverter().convertFromString(type, value);
     } catch (final RuntimeException ex) {
       throw new ComponentConfigException(String.format("Unable to convert String to %s from value: %s", type.getSimpleName(), value), ex);
     }
