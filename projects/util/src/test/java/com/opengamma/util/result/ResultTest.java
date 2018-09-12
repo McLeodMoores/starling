@@ -174,7 +174,7 @@ public class ResultTest {
   }
 
   @Test
-  public void allSuccess_iterable() {
+  public void testAllSuccessIterable() {
     final Result<String> success1 = Result.success("success 1");
     final Result<String> success2 = Result.success("success 1");
     final Result<Object> failure1 = Result.failure(FailureStatus.MISSING_DATA, "failure 1");

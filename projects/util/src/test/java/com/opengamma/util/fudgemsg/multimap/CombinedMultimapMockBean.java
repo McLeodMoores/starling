@@ -21,8 +21,6 @@ import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ImmutableSetMultimap;
@@ -135,9 +133,9 @@ public class CombinedMultimapMockBean implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       CombinedMultimapMockBean other = (CombinedMultimapMockBean) obj;
-      return JodaBeanUtils.equal(getSetMultimap(), other.getSetMultimap()) &&
-          JodaBeanUtils.equal(getListMultimap(), other.getListMultimap()) &&
-          JodaBeanUtils.equal(getNoTypeMultimap(), other.getNoTypeMultimap());
+      return JodaBeanUtils.equal(_setMultimap, other._setMultimap) &&
+          JodaBeanUtils.equal(_listMultimap, other._listMultimap) &&
+          JodaBeanUtils.equal(_noTypeMultimap, other._noTypeMultimap);
     }
     return false;
   }
@@ -145,9 +143,9 @@ public class CombinedMultimapMockBean implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getSetMultimap());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getListMultimap());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getNoTypeMultimap());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_setMultimap);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_listMultimap);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_noTypeMultimap);
     return hash;
   }
 
@@ -165,9 +163,9 @@ public class CombinedMultimapMockBean implements ImmutableBean {
   }
 
   protected void toString(StringBuilder buf) {
-    buf.append("setMultimap").append('=').append(JodaBeanUtils.toString(getSetMultimap())).append(',').append(' ');
-    buf.append("listMultimap").append('=').append(JodaBeanUtils.toString(getListMultimap())).append(',').append(' ');
-    buf.append("noTypeMultimap").append('=').append(JodaBeanUtils.toString(getNoTypeMultimap())).append(',').append(' ');
+    buf.append("setMultimap").append('=').append(JodaBeanUtils.toString(_setMultimap)).append(',').append(' ');
+    buf.append("listMultimap").append('=').append(JodaBeanUtils.toString(_listMultimap)).append(',').append(' ');
+    buf.append("noTypeMultimap").append('=').append(JodaBeanUtils.toString(_noTypeMultimap)).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------
@@ -357,19 +355,31 @@ public class CombinedMultimapMockBean implements ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

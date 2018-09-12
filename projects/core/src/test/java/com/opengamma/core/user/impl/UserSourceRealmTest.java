@@ -39,6 +39,9 @@ public class UserSourceRealmTest {
 
   private UserSource _userSource;
 
+  /**
+   * Sets up a user source with a basic change manager.
+   */
   @BeforeMethod
   public void setUp() {
     _userSource = mock(UserSource.class);
@@ -46,8 +49,11 @@ public class UserSourceRealmTest {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests that a principal with a named permission is permitted.
+   */
   @Test
-  public void testIsPermitted_true() {
+  public void testIsPermittedTrue() {
     final ShiroPermissionResolver resolver = new ShiroPermissionResolver();
     final UserSourceRealm realm = new UserSourceRealm(_userSource) {
       @Override
@@ -61,8 +67,11 @@ public class UserSourceRealmTest {
     assertEquals(true, realm.isPermitted(PRINCIPALS, "Master:view"));
   }
 
+  /**
+   * Tests that a principal without a named permission is not permitted.
+   */
   @Test
-  public void testIsPermitted_false() {
+  public void testIsPermittedFalse() {
     final ShiroPermissionResolver resolver = new ShiroPermissionResolver();
     final UserSourceRealm realm = new UserSourceRealm(_userSource) {
       @Override
@@ -76,8 +85,11 @@ public class UserSourceRealmTest {
     assertEquals(false, realm.isPermitted(PRINCIPALS, "Master:edit"));
   }
 
+  /**
+   * Tests that a principal without a permission is not permitted.
+   */
   @Test
-  public void testIsPermitted_otherType() {
+  public void testIsPermittedOtherType() {
     final ShiroPermissionResolver resolver = new ShiroPermissionResolver();
     final UserSourceRealm realm = new UserSourceRealm(_userSource) {
       @Override

@@ -54,41 +54,41 @@ public class SimpleHoliday extends DirectBean
   /**
    * The unique identifier of the holiday.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true, overrideSet = true)
   private UniqueId _uniqueId;
   /**
    * The type of the holiday.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private HolidayType _type;
   /**
    * The region external identifier bundle, used when this is a holiday of type BANK.
    * This must be null if the type is not BANK.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private ExternalId _regionExternalId;
   /**
    * The exchange external identifier bundle, used when this is a holiday of type SETTLEMENT or TRADING.
    * This must be null if the type is not SETTLEMENT or TRADING.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private ExternalId _exchangeExternalId;
   /**
    * The custom external identifier bundle, used when this is a holiday of type CUSTOM.
    * This must be null if the type is not CUSTOM.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private ExternalId _customExternalId;
   /**
    * The currency, used when this is a holiday of type CURRENCY.
    * This must be null if the type is not CURRENCY.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private Currency _currency;
   /**
    * The list of dates that the target (currency/region/exchange) is on holiday, not null.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private final List<LocalDate> _holidayDates = Lists.newArrayList();
 
   /**
@@ -99,7 +99,7 @@ public class SimpleHoliday extends DirectBean
 
   /**
    * Creates an instance populated with a set of dates.
-   * 
+   *
    * @param dates  the dates to add, not null
    */
   public SimpleHoliday(final Iterable<LocalDate> dates) {
@@ -109,26 +109,26 @@ public class SimpleHoliday extends DirectBean
   //-------------------------------------------------------------------------
   /**
    * Adds a holiday date to the list.
-   * 
+   *
    * @param date  the date to add, not null
    */
   public void addHolidayDate(final LocalDate date) {
     ArgumentChecker.notNull(date, "date");
-    if (_holidayDates.contains(date) == false) {
+    if (!_holidayDates.contains(date)) {
       int index = Collections.binarySearch(_holidayDates, date);
-      index = (index < 0 ? -(index + 1) : index);
+      index = index < 0 ? -(index + 1) : index;
       _holidayDates.add(index, date);
     }
   }
 
   /**
    * Adds a set of holiday dates to the list.
-   * 
+   *
    * @param dates  the dates to add, not null
    */
   public void addHolidayDates(final Iterable<LocalDate> dates) {
     ArgumentChecker.notNull(dates, "dates");
-    Set<LocalDate> deduplicatedAdditions = new HashSet<>();
+    final Set<LocalDate> deduplicatedAdditions = new HashSet<>();
     Iterables.addAll(deduplicatedAdditions, dates);
     deduplicatedAdditions.removeAll(_holidayDates);
     _holidayDates.addAll(deduplicatedAdditions);
@@ -159,6 +159,7 @@ public class SimpleHoliday extends DirectBean
    * Gets the unique identifier of the holiday.
    * @return the value of the property
    */
+  @Override
   public UniqueId getUniqueId() {
     return _uniqueId;
   }
@@ -167,6 +168,7 @@ public class SimpleHoliday extends DirectBean
    * Sets the unique identifier of the holiday.
    * @param uniqueId  the new value of the property
    */
+  @Override
   public void setUniqueId(UniqueId uniqueId) {
     this._uniqueId = uniqueId;
   }
@@ -184,6 +186,7 @@ public class SimpleHoliday extends DirectBean
    * Gets the type of the holiday.
    * @return the value of the property
    */
+  @Override
   public HolidayType getType() {
     return _type;
   }
@@ -210,6 +213,7 @@ public class SimpleHoliday extends DirectBean
    * This must be null if the type is not BANK.
    * @return the value of the property
    */
+  @Override
   public ExternalId getRegionExternalId() {
     return _regionExternalId;
   }
@@ -238,6 +242,7 @@ public class SimpleHoliday extends DirectBean
    * This must be null if the type is not SETTLEMENT or TRADING.
    * @return the value of the property
    */
+  @Override
   public ExternalId getExchangeExternalId() {
     return _exchangeExternalId;
   }
@@ -266,6 +271,7 @@ public class SimpleHoliday extends DirectBean
    * This must be null if the type is not CUSTOM.
    * @return the value of the property
    */
+  @Override
   public ExternalId getCustomExternalId() {
     return _customExternalId;
   }
@@ -294,6 +300,7 @@ public class SimpleHoliday extends DirectBean
    * This must be null if the type is not CURRENCY.
    * @return the value of the property
    */
+  @Override
   public Currency getCurrency() {
     return _currency;
   }
@@ -321,6 +328,7 @@ public class SimpleHoliday extends DirectBean
    * Gets the list of dates that the target (currency/region/exchange) is on holiday, not null.
    * @return the value of the property, not null
    */
+  @Override
   public List<LocalDate> getHolidayDates() {
     return _holidayDates;
   }

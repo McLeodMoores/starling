@@ -38,7 +38,7 @@ import com.opengamma.util.tuple.Triple;
 /**
  * Data structure to hold a particular volatility cube's data points.
  * Note no interpolation or fitting is done in this code.
- * 
+ *
  * @param <X> Type of the x-data
  * @param <Y> Type of the y-data
  * @param <Z> Type of the z-data

@@ -35,6 +35,14 @@ public final class ExternalIdBundleWithDatesFudgeBuilder extends AbstractFudgeBu
     return msg;
   }
 
+  /**
+   * Converts an {@link ExternalIdBundleWithDates} to a mutable Fudge message. Returns null if the id bundle
+   * is null.
+   *
+   * @param serializer  the Fudge serializer
+   * @param object  the id bundle
+   * @return  the message
+   */
   public static MutableFudgeMsg toFudgeMsg(final FudgeSerializer serializer, final ExternalIdBundleWithDates object) {
     if (object == null) {
       return null;
@@ -44,6 +52,13 @@ public final class ExternalIdBundleWithDatesFudgeBuilder extends AbstractFudgeBu
     return msg;
   }
 
+  /**
+   * Adds an {@link ExternalIdBundleWithDates} to a message.
+   *
+   * @param serializer  the Fudge serializer, not null
+   * @param object  the id bundle
+   * @param msg  the message, not null
+   */
   public static void toFudgeMsg(final FudgeSerializer serializer, final ExternalIdBundleWithDates object, final MutableFudgeMsg msg) {
     for (final ExternalIdWithDates externalId : object) {
       addToMessage(msg, ID_FIELD_NAME, ExternalIdWithDatesFudgeBuilder.toFudgeMsg(serializer, externalId));
@@ -56,6 +71,13 @@ public final class ExternalIdBundleWithDatesFudgeBuilder extends AbstractFudgeBu
     return fromFudgeMsg(deserializer, msg);
   }
 
+  /**
+   * Converts a Fudge message to an {@link ExternalIdBundle}. Returns null if the message is null.
+   *
+   * @param deserializer  the Fudge deserializer
+   * @param msg  the message
+   * @return  the id bundle
+   */
   public static ExternalIdBundleWithDates fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     if (msg == null) {
       return null;

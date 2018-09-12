@@ -194,10 +194,10 @@ public final class CalculatedValue implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       CalculatedValue other = (CalculatedValue) obj;
-      return JodaBeanUtils.equal(getValue(), other.getValue()) &&
-          JodaBeanUtils.equal(getSpecificationProperties(), other.getSpecificationProperties()) &&
-          JodaBeanUtils.equal(getTargetType(), other.getTargetType()) &&
-          JodaBeanUtils.equal(getTargetName(), other.getTargetName());
+      return JodaBeanUtils.equal(_value, other._value) &&
+          JodaBeanUtils.equal(_specificationProperties, other._specificationProperties) &&
+          JodaBeanUtils.equal(_targetType, other._targetType) &&
+          JodaBeanUtils.equal(_targetName, other._targetName);
     }
     return false;
   }
@@ -205,10 +205,10 @@ public final class CalculatedValue implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getValue());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getSpecificationProperties());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getTargetType());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getTargetName());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_value);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_specificationProperties);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_targetType);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_targetName);
     return hash;
   }
 
@@ -216,10 +216,10 @@ public final class CalculatedValue implements ImmutableBean {
   public String toString() {
     StringBuilder buf = new StringBuilder(160);
     buf.append("CalculatedValue{");
-    buf.append("value").append('=').append(getValue()).append(',').append(' ');
-    buf.append("specificationProperties").append('=').append(getSpecificationProperties()).append(',').append(' ');
-    buf.append("targetType").append('=').append(getTargetType()).append(',').append(' ');
-    buf.append("targetName").append('=').append(JodaBeanUtils.toString(getTargetName()));
+    buf.append("value").append('=').append(_value).append(',').append(' ');
+    buf.append("specificationProperties").append('=').append(_specificationProperties).append(',').append(' ');
+    buf.append("targetType").append('=').append(_targetType).append(',').append(' ');
+    buf.append("targetName").append('=').append(JodaBeanUtils.toString(_targetName));
     buf.append('}');
     return buf.toString();
   }
@@ -432,19 +432,31 @@ public final class CalculatedValue implements ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

@@ -91,14 +91,14 @@ public final class ExternalId
    * @throws IllegalArgumentException if the identifier cannot be parsed
    */
   @FromString
-  public static ExternalId parse(String str) {
+  public static ExternalId parse(final String str) {
     ArgumentChecker.notEmpty(str, "str");
-    str = StringUtils.replace(str, "::", "~");  // leniently parse old data
-    final int pos = str.indexOf("~");
+    final String s = StringUtils.replace(str, "::", "~");  // leniently parse old data
+    final int pos = s.indexOf("~");
     if (pos < 0) {
-      throw new IllegalArgumentException("Invalid identifier format: " + str);
+      throw new IllegalArgumentException("Invalid identifier format: " + s);
     }
-    return new ExternalId(ExternalScheme.of(str.substring(0, pos)), str.substring(pos + 1));
+    return new ExternalId(ExternalScheme.of(s.substring(0, pos)), s.substring(pos + 1));
   }
 
   /**
@@ -163,7 +163,7 @@ public final class ExternalId
    * @return true if the schemes are different
    */
   public boolean isNotScheme(final ExternalScheme scheme) {
-    return _scheme.equals(scheme) == false;
+    return !_scheme.equals(scheme);
   }
 
   /**
@@ -173,7 +173,7 @@ public final class ExternalId
    * @return true if the schemes are different
    */
   public boolean isNotScheme(final String scheme) {
-    return _scheme.getName().equals(scheme) == false;
+    return !_scheme.getName().equals(scheme);
   }
 
   //-------------------------------------------------------------------------
@@ -222,8 +222,8 @@ public final class ExternalId
     }
     if (obj instanceof ExternalId) {
       final ExternalId other = (ExternalId) obj;
-      return _scheme.equals(other._scheme) &&
-          _value.equals(other._value);
+      return _scheme.equals(other._scheme)
+          && _value.equals(other._value);
     }
     return false;
   }

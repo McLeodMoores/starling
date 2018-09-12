@@ -45,6 +45,13 @@ public class ResolvableConventionLink<T extends Convention> extends ConventionLi
   // of the bean
   private final LinkResolver<ExternalIdBundle, T> _resolver;
 
+  /**
+   * Constructs a link.
+   *
+   * @param identifier  the identifier for the convention, not null
+   * @param type  the type of the convention, not null
+   * @param linkResolver  a link resolver, not null
+   */
   /* package */ ResolvableConventionLink(final ExternalIdBundle identifier,
                                          final Class<T> type,
                                          final LinkResolver<ExternalIdBundle, T> linkResolver) {
@@ -148,7 +155,7 @@ public class ResolvableConventionLink<T extends Convention> extends ConventionLi
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       ResolvableConventionLink<?> other = (ResolvableConventionLink<?>) obj;
-      return JodaBeanUtils.equal(getIdentifier(), other.getIdentifier());
+      return JodaBeanUtils.equal(_identifier, other._identifier);
     }
     return false;
   }
@@ -156,7 +163,7 @@ public class ResolvableConventionLink<T extends Convention> extends ConventionLi
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getIdentifier());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_identifier);
     return hash;
   }
 
@@ -174,7 +181,7 @@ public class ResolvableConventionLink<T extends Convention> extends ConventionLi
   }
 
   protected void toString(StringBuilder buf) {
-    buf.append("identifier").append('=').append(JodaBeanUtils.toString(getIdentifier())).append(',').append(' ');
+    buf.append("identifier").append('=').append(JodaBeanUtils.toString(_identifier)).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------
@@ -316,19 +323,31 @@ public class ResolvableConventionLink<T extends Convention> extends ConventionLi
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder<T> setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder<T> setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder<T> setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

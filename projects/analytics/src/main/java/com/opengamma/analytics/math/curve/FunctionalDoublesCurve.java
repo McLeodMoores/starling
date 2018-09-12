@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.curve;
@@ -47,7 +47,7 @@ public class FunctionalDoublesCurve extends DoublesCurve {
   //-------------------------------------------------------------------------
   /**
    * Obtains the curve.
-   * 
+   *
    * @param function  the function that defines the curve, not null
    * @return a functional curve with an automatically-generated name, not null
    */
@@ -57,7 +57,7 @@ public class FunctionalDoublesCurve extends DoublesCurve {
 
   /**
    * Obtains the curve.
-   * 
+   *
    * @param function  the function that defines the curve, not null
    * @param derivative  the first derivative for the function, not null
    * @return A functional curve with an automatically-generated name, not null
@@ -68,7 +68,7 @@ public class FunctionalDoublesCurve extends DoublesCurve {
 
   /**
    * Obtains the curve.
-   * 
+   *
    * @param function  the function that defines the curve, not null
    * @param name  the name of the curve, not null
    * @return a functional curve, not null
@@ -79,7 +79,7 @@ public class FunctionalDoublesCurve extends DoublesCurve {
 
   /**
    * Obtains the curve.
-   * 
+   *
    * @param function  the function that defines the curve, not null
    * @param derivative  the first derivative for the function, not null
    * @param name  the name of the curve, not null
@@ -98,7 +98,7 @@ public class FunctionalDoublesCurve extends DoublesCurve {
 
   /**
    * Creates a curve.
-   * 
+   *
    * @param function  the function that defines the curve, not null
    */
   public FunctionalDoublesCurve(final Function1D<Double, Double> function) {
@@ -110,7 +110,7 @@ public class FunctionalDoublesCurve extends DoublesCurve {
 
   /**
    * Creates a curve.
-   * 
+   *
    * @param function  the function that defines the curve, not null
    * @param derivative  the first derivative for the function, not null
    */
@@ -124,7 +124,7 @@ public class FunctionalDoublesCurve extends DoublesCurve {
 
   /**
    * Creates a curve.
-   * 
+   *
    * @param function  the function that defines the curve, not null
    * @param name  the name of the curve, not null
    */
@@ -137,7 +137,7 @@ public class FunctionalDoublesCurve extends DoublesCurve {
 
   /**
    * Creates a curve.
-   * 
+   *
    * @param function  the function that defines the curve, not null
    * @param derivative  the first derivative for the function, not null
    * @param name  the name of the curve, not null
@@ -153,7 +153,7 @@ public class FunctionalDoublesCurve extends DoublesCurve {
   //-------------------------------------------------------------------------
   /**
    * Throws an exception as there is no <i>x</i> data.
-   * 
+   *
    * @return throws UnsupportedOperationException
    * @throws UnsupportedOperationException always
    */
@@ -164,7 +164,7 @@ public class FunctionalDoublesCurve extends DoublesCurve {
 
   /**
    * Throws an exception as there is no <i>y</i> data.
-   * 
+   *
    * @return throws UnsupportedOperationException
    * @throws UnsupportedOperationException always
    */
@@ -191,7 +191,7 @@ public class FunctionalDoublesCurve extends DoublesCurve {
 
   /**
    * Throws an exception as there is no <i>x</i> or <i>y</i> data.
-   * 
+   *
    * @return throws UnsupportedOperationException
    * @throws UnsupportedOperationException always
    */
@@ -202,7 +202,7 @@ public class FunctionalDoublesCurve extends DoublesCurve {
 
   /**
    * Creates an interpolated curve using the specified <i>x</i> values and the evaluated <i>y</i> values.
-   * 
+   *
    * @param x  the array of <i>x</i> values, not null
    * @param interpolator  the interpolator, not null
    * @return the interpolated curve with values <i>(x, f(x))</i>, not null
@@ -220,7 +220,7 @@ public class FunctionalDoublesCurve extends DoublesCurve {
 
   /**
    * Gets the function.
-   * 
+   *
    * @return the function, not null
    */
   public Function1D<Double, Double> getFunction() {
@@ -229,7 +229,7 @@ public class FunctionalDoublesCurve extends DoublesCurve {
 
   /**
    * Gets the first derivative function.
-   * 
+   *
    * @return the function, not null
    */
   public Function1D<Double, Double> getFirstDerivativeFunction() {

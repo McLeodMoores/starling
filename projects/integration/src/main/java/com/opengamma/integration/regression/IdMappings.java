@@ -124,8 +124,8 @@ public final class IdMappings implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       IdMappings other = (IdMappings) obj;
-      return JodaBeanUtils.equal(getIds(), other.getIds()) &&
-          (getMaxId() == other.getMaxId());
+      return JodaBeanUtils.equal(_ids, other._ids) &&
+          (_maxId == other._maxId);
     }
     return false;
   }
@@ -133,8 +133,8 @@ public final class IdMappings implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getIds());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getMaxId());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_ids);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_maxId);
     return hash;
   }
 
@@ -142,8 +142,8 @@ public final class IdMappings implements ImmutableBean {
   public String toString() {
     StringBuilder buf = new StringBuilder(96);
     buf.append("IdMappings{");
-    buf.append("ids").append('=').append(getIds()).append(',').append(' ');
-    buf.append("maxId").append('=').append(JodaBeanUtils.toString(getMaxId()));
+    buf.append("ids").append('=').append(_ids).append(',').append(' ');
+    buf.append("maxId").append('=').append(JodaBeanUtils.toString(_maxId));
     buf.append('}');
     return buf.toString();
   }
@@ -308,19 +308,31 @@ public final class IdMappings implements ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

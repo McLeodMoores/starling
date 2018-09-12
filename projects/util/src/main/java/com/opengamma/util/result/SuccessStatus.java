@@ -24,6 +24,7 @@ public enum SuccessStatus implements ResultStatus {
    *
    * @return true
    */
+  @Override
   public boolean isResultAvailable() {
     return true;
   }

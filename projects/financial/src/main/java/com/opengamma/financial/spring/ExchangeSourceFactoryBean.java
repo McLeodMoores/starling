@@ -7,8 +7,6 @@ package com.opengamma.financial.spring;
 
 import java.util.Map;
 
-import net.sf.ehcache.CacheManager;
-
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
@@ -25,6 +23,8 @@ import com.opengamma.master.exchange.ExchangeMaster;
 import com.opengamma.master.exchange.impl.EHCachingExchangeSource;
 import com.opengamma.master.exchange.impl.MasterExchangeSource;
 import com.opengamma.util.spring.SpringFactoryBean;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Spring factory bean to create the exchange source.

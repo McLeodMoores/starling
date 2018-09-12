@@ -21,7 +21,8 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * An abstract base implementation of {@code SecurityResolver}.
  * <p>
- * This resolver implementation obtains the securities from {@link SecuritySource}. It uses a single fixed instance variable of {@link VersionCorrection}. Resolution between the candidate options
+ * This resolver implementation obtains the securities from {@link SecuritySource}. It uses a single fixed instance
+ * variable of {@link VersionCorrection}. Resolution between the candidate options
  * returned for an external identifier bundle is determined by the subclass.
  */
 public abstract class AbstractSecurityResolver implements SecurityResolver {
@@ -79,7 +80,7 @@ public abstract class AbstractSecurityResolver implements SecurityResolver {
       return getSecurity(objectId);
     }
     final ExternalIdBundle externalId = link.getExternalId();
-    if (externalId.isEmpty() == false) {
+    if (!externalId.isEmpty()) {
       return getSecurity(externalId);
     }
     throw new DataNotFoundException("Link " + link + " does not contain any references");
@@ -121,9 +122,9 @@ public abstract class AbstractSecurityResolver implements SecurityResolver {
   //-------------------------------------------------------------------------
   @Override
   public String toString() {
-    return getClass().getSimpleName() +
-        "[versionCorrection=" + getVersionCorrection() +
-        ", securitySource=" + getSecuritySource() + "]";
+    return getClass().getSimpleName()
+        + "[versionCorrection=" + getVersionCorrection()
+        + ", securitySource=" + getSecuritySource() + "]";
   }
 
 }

@@ -48,7 +48,8 @@ public final class ObjectsPairFudgeBuilder implements FudgeBuilder<ObjectsPair<?
     return msg;
   }
 
-  public static <K, V> MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final Pair<? extends K, ? extends V> object, final Class<K> baseK, final Class<V> baseV) {
+  public static <K, V> MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final Pair<? extends K, ? extends V> object,
+      final Class<K> baseK, final Class<V> baseV) {
     final MutableFudgeMsg msg = serializer.newMessage();
     if (object.getFirst() != null) {
       serializer.addToMessageWithClassHeaders(msg, FIRST_FIELD_NAME, null, object.getFirst(), baseK);

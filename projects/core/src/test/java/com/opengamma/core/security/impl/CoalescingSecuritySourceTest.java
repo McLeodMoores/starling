@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.security.impl;
@@ -43,7 +43,7 @@ public class CoalescingSecuritySourceTest {
   private static void join(final CyclicBarrier barrier) {
     try {
       barrier.await(Timeout.standardTimeoutMillis(), TimeUnit.MILLISECONDS);
-    } catch (Exception e) {
+    } catch (final Exception e) {
       throw new OpenGammaRuntimeException("interrupted", e);
     }
   }
@@ -51,7 +51,7 @@ public class CoalescingSecuritySourceTest {
   private static void sleep() {
     try {
       Thread.sleep(Timeout.standardTimeoutMillis() / 4);
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
       throw new OpenGammaRuntimeException("interrupted", e);
     }
   }
@@ -66,7 +66,7 @@ public class CoalescingSecuritySourceTest {
     final CyclicBarrier barrier = new CyclicBarrier(4);
     final MockSecuritySource underlying = new MockSecuritySource() {
 
-      int _state;
+      private int _state;
 
       @Override
       public Security get(final UniqueId uid) {
@@ -139,7 +139,7 @@ public class CoalescingSecuritySourceTest {
     final CyclicBarrier barrier2 = new CyclicBarrier(2);
     final MockSecuritySource underlying = new MockSecuritySource() {
 
-      int _state;
+      private int _state;
 
       @Override
       public Security get(final UniqueId uid) {
@@ -217,7 +217,7 @@ public class CoalescingSecuritySourceTest {
     final CyclicBarrier barrier = new CyclicBarrier(4);
     final MockSecuritySource underlying = new MockSecuritySource() {
 
-      int _state;
+      private int _state;
 
       @Override
       public Map<UniqueId, Security> get(final Collection<UniqueId> uids) {
@@ -300,7 +300,7 @@ public class CoalescingSecuritySourceTest {
     final CyclicBarrier barrier2 = new CyclicBarrier(2);
     final MockSecuritySource underlying = new MockSecuritySource() {
 
-      int _state;
+      private int _state;
 
       @Override
       public Map<UniqueId, Security> get(final Collection<UniqueId> uids) {

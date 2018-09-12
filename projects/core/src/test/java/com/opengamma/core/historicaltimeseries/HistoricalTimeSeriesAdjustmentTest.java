@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.historicaltimeseries;
@@ -22,10 +22,13 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class HistoricalTimeSeriesAdjustmentTest {
 
-  private HistoricalTimeSeries createTestSeries() {
+  private static HistoricalTimeSeries createTestSeries() {
     return new SimpleHistoricalTimeSeries(UniqueId.of("HTS", "Test"), ImmutableLocalDateDoubleTimeSeries.of(LocalDate.now(), 100d));
   }
 
+  /**
+   * Tests the no-op adjuster.
+   */
   public void testNoOp() {
     final HistoricalTimeSeriesAdjustment noop = HistoricalTimeSeriesAdjustment.NoOp.INSTANCE;
     assertEquals(noop.toString(), "");
@@ -33,8 +36,12 @@ public class HistoricalTimeSeriesAdjustmentTest {
     final HistoricalTimeSeries hts = noop.adjust(createTestSeries());
     assertEquals(hts.getTimeSeries().getLatestValue(), 100d);
     assertEquals(noop.adjust(100d), 100d);
+    assertEquals(noop.adjust(hts.getTimeSeries()).getLatestValue(), 100d);
   }
 
+  /**
+   * Tests the divide by operator.
+   */
   public void testDivideBy() {
     final HistoricalTimeSeriesAdjustment div = new HistoricalTimeSeriesAdjustment.DivideBy(100d);
     assertEquals(div.toString(), "100.0 /");
@@ -45,6 +52,9 @@ public class HistoricalTimeSeriesAdjustmentTest {
     assertEquals(dec.adjust(100d), 1d);
   }
 
+  /**
+   * Tests the subtract from operator.
+   */
   public void testSubtractFrom() {
     final HistoricalTimeSeriesAdjustment sub = new HistoricalTimeSeriesAdjustment.Subtract(1d);
     assertEquals(sub.toString(), "1.0 -");
@@ -53,10 +63,15 @@ public class HistoricalTimeSeriesAdjustmentTest {
     final HistoricalTimeSeries hts = dec.adjust(createTestSeries());
     assertEquals(hts.getTimeSeries().getLatestValue(), 99d);
     assertEquals(dec.adjust(100d), 99d);
+    assertEquals(dec.adjust(hts.getTimeSeries()).getLatestValue(), 98d);
   }
 
+  /**
+   * Tests the sequence operator.
+   */
   public void testSequence() {
-    final HistoricalTimeSeriesAdjustment seq = new HistoricalTimeSeriesAdjustment.Sequence(new HistoricalTimeSeriesAdjustment.Sequence(new HistoricalTimeSeriesAdjustment.Subtract(50d),
+    final HistoricalTimeSeriesAdjustment seq =
+        new HistoricalTimeSeriesAdjustment.Sequence(new HistoricalTimeSeriesAdjustment.Sequence(new HistoricalTimeSeriesAdjustment.Subtract(50d),
         new HistoricalTimeSeriesAdjustment.DivideBy(100d)), new HistoricalTimeSeriesAdjustment.Subtract(0.1));
     assertEquals(seq.toString(), "50.0 - 100.0 / 0.1 -");
     final HistoricalTimeSeriesAdjustment dec = HistoricalTimeSeriesAdjustment.parse("50.0 - 100.0 / 0.1 -");

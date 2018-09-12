@@ -50,7 +50,7 @@ public class InMemorySecurityMasterComponentFactory extends AbstractComponentFac
    */
   @PropertyDefinition
   private String _idScheme;
-  
+
   @Override
   public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
     final SecurityMaster master;

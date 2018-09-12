@@ -32,11 +32,13 @@ public class ExternalIdOrderConfigTest {
   }
 
   public void testGetPreferred_notListed() {
-    assertEquals(ExternalIdOrderConfig.DEFAULT_CONFIG.getPreferred(ExternalIdBundle.of(ExternalId.of("Foo", "Bar"), ExternalId.of("Bar", "Foo"))), ExternalId.of("Bar", "Foo"));
+    assertEquals(ExternalIdOrderConfig.DEFAULT_CONFIG.getPreferred(ExternalIdBundle.of(ExternalId.of("Foo", "Bar"),
+        ExternalId.of("Bar", "Foo"))), ExternalId.of("Bar", "Foo"));
   }
 
   public void testGetPreferred_default() {
-    assertEquals(ExternalIdOrderConfig.DEFAULT_CONFIG.getPreferred(ExternalIdBundle.of(ExternalId.of(ExternalSchemes.BLOOMBERG_TCM, "tcm"), ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, "ticker"),
+    assertEquals(ExternalIdOrderConfig.DEFAULT_CONFIG.getPreferred(ExternalIdBundle.of(ExternalId.of(ExternalSchemes.BLOOMBERG_TCM, "tcm"),
+        ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, "ticker"),
         ExternalId.of("Foo", "Bar"))), ExternalId.of(ExternalSchemes.BLOOMBERG_TCM, "tcm"));
   }
 

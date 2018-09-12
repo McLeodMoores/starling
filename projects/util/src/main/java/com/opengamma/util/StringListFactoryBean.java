@@ -25,7 +25,7 @@ public class StringListFactoryBean extends SingletonFactoryBean<List<String>> {
   private File _file;
 
   /**
-   * Gets the file
+   * Gets the file.
    *
    * @return the file
    */

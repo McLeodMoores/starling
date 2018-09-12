@@ -25,7 +25,7 @@ public abstract class PortfolioNodeTraverser {
 
   /**
    * Creates a traverser using depth-first searching. If you don't know whether to use depth-first or breadth-first, then use depth-first.
-   * 
+   *
    * @param callback the callback to invoke, not null
    * @return the traverser, not null
    */
@@ -35,7 +35,7 @@ public abstract class PortfolioNodeTraverser {
 
   /**
    * Creates a traverser using breadth-first searching. If you don't know whether to use depth-first or breadth-first, then use depth-first.
-   * 
+   *
    * @param callback the callback to invoke, not null
    * @return the traverser, not null
    */
@@ -44,8 +44,9 @@ public abstract class PortfolioNodeTraverser {
   }
 
   /**
-   * Creates a traverser using a parallel searching approach. The ordering of nodes and positions to the callback is non-deterministic. If you don't know whether to use this or not use depth-first.
-   * 
+   * Creates a traverser using a parallel searching approach. The ordering of nodes and positions to the callback is
+   * non-deterministic. If you don't know whether to use this or not use depth-first.
+   *
    * @param callback the callback to invoke, not null
    * @param executorService the executor service for parallel execution, not null
    * @return the traverser, not null
@@ -56,7 +57,7 @@ public abstract class PortfolioNodeTraverser {
 
   /**
    * Creates a traverser.
-   * 
+   *
    * @param callback the callback to invoke, not null
    */
   protected PortfolioNodeTraverser(final PortfolioNodeTraversalCallback callback) {
@@ -66,7 +67,7 @@ public abstract class PortfolioNodeTraverser {
 
   /**
    * Gets the callback to be used.
-   * 
+   *
    * @return the callback, not null
    */
   public PortfolioNodeTraversalCallback getCallback() {
@@ -75,7 +76,7 @@ public abstract class PortfolioNodeTraverser {
 
   /**
    * Traverse the nodes notifying using the callback.
-   * 
+   *
    * @param portfolioNode the node to start from, null does nothing
    */
   public abstract void traverse(PortfolioNode portfolioNode);

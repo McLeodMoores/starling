@@ -45,9 +45,8 @@ public class FudgeMsgCSVIterator implements Iterator<FudgeMsg> {
       _header = _csvReader.readNext();
       if (_header == null) {
         throw new OpenGammaRuntimeException("Column headers is missing, can not create iterator");
-      } else {
-        trimColumnHeaders();
       }
+      trimColumnHeaders();
     } catch (final IOException ex) {
       throw new OpenGammaRuntimeException("IO Exception trying to read next line", ex);
     }

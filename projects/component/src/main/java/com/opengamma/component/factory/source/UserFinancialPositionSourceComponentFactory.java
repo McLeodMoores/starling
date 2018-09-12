@@ -9,8 +9,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import net.sf.ehcache.CacheManager;
-
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
@@ -34,6 +32,8 @@ import com.opengamma.core.position.impl.RemotePositionSource;
 import com.opengamma.master.portfolio.PortfolioMaster;
 import com.opengamma.master.position.PositionMaster;
 import com.opengamma.master.position.impl.MasterPositionSource;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Component factory for the position source.
@@ -97,7 +97,7 @@ public class UserFinancialPositionSourceComponentFactory extends AbstractCompone
 
     // add user level if requested
     final PositionSource userSource = initUser(repo, configuration);
-    final Map<String, PositionSource> map = new HashMap<String, PositionSource>();
+    final Map<String, PositionSource> map = new HashMap<>();
     if (userSource != null) {
       String scheme = repo.getInfo(getUserPortfolioMaster()).getAttribute(ComponentInfoAttributes.UNIQUE_ID_SCHEME);
       map.put(scheme, userSource);

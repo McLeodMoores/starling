@@ -1,3 +1,4 @@
+// CSOFF
 /**
  * Utility class copied from RESTEasy (ASLv2) and reformatted and generified.
  */
@@ -60,9 +61,8 @@ public class Types {
             return rtn;
           }
           return type;
-        } else {
-          return null;
         }
+        return null;
       }
     }
     if (base.getSuperclass() == null || base.getSuperclass().equals(Object.class)) {
@@ -486,8 +486,7 @@ public class Types {
       System.arraycopy(types, 0, returnTypes, 0, types.length);
       extractTypeVariables(typeVarMap, returnTypes);
       return returnTypes;
-    } else {
-      return EMPTY_TYPE_ARRAY;
     }
+    return EMPTY_TYPE_ARRAY;
   }
 }

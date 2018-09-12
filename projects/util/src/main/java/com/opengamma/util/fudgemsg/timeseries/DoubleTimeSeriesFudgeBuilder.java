@@ -27,7 +27,7 @@ import com.opengamma.timeseries.precise.zdt.ImmutableZonedDateTimeDoubleTimeSeri
 import com.opengamma.timeseries.precise.zdt.ZonedDateTimeDoubleTimeSeries;
 
 /**
- * Fudge message encoder/decoder (builder) for DoubleTimeSeries
+ * Fudge message encoder/decoder (builder) for DoubleTimeSeries.
  */
 @FudgeBuilderFor(DoubleTimeSeries.class)
 public class DoubleTimeSeriesFudgeBuilder implements FudgeBuilder<DoubleTimeSeries<?>> {
@@ -116,8 +116,9 @@ public class DoubleTimeSeriesFudgeBuilder implements FudgeBuilder<DoubleTimeSeri
   @Override
   public DoubleTimeSeries<?> buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
     // read old LocalDateDoubleTimeSeries, see OpenGammaFudgeContext
-    if (message.getByOrdinal(0).toString().contains("ArrayLocalDateDoubleTimeSeries") || message.getByOrdinal(0).toString().contains("ListLocalDateDoubleTimeSeries") ||
-        message.getByOrdinal(0).toString().contains("MapLocalDateDoubleTimeSeries")) {
+    if (message.getByOrdinal(0).toString().contains("ArrayLocalDateDoubleTimeSeries")
+        || message.getByOrdinal(0).toString().contains("ListLocalDateDoubleTimeSeries")
+        || message.getByOrdinal(0).toString().contains("MapLocalDateDoubleTimeSeries")) {
       final FudgeMsg fastSeries = message.getMessage(2);
       final String encoding = fastSeries.getMessage(1).getString(1);
       final int[] dates = (int[]) fastSeries.getValue(2);
@@ -176,9 +177,8 @@ public class DoubleTimeSeriesFudgeBuilder implements FudgeBuilder<DoubleTimeSeri
       if (zoneId != null) {
         final ZoneId zone = ZoneId.of(zoneId);
         return ImmutableZonedDateTimeDoubleTimeSeries.of(instants, values, zone);
-      } else {
-        return ImmutableInstantDoubleTimeSeries.of(instants, values);
       }
+      return ImmutableInstantDoubleTimeSeries.of(instants, values);
     }
     throw new IllegalArgumentException("Unrecognized Fudge message: " + dates + " " + instants + " " + zoneId);
   }

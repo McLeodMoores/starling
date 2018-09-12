@@ -37,7 +37,7 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
-/*
+/**
  * REDIS DATA STRUCTURES:
  * Key["ALL_CLASSES"] -> Set[ClassName]
  * Key[ClassName] -> Set[ConfigName]
@@ -79,14 +79,32 @@ public class NonVersionedRedisConfigSource implements ConfigSource {
   public static final String IDENTIFIER_SCHEME_DEFAULT = "RedisCfg";
 
 
+  /**
+   * Constructs a source without a prefix and that uses the default Fudge context.
+   *
+   * @param jedisPool  the pool, not null
+   */
   public NonVersionedRedisConfigSource(final JedisPool jedisPool) {
     this(jedisPool, "");
   }
 
+  /**
+   * Constructs a source that uses the default Fudge context.
+   *
+   * @param jedisPool  the pool, not null
+   * @param redisPrefix  the prefix, not null
+   */
   public NonVersionedRedisConfigSource(final JedisPool jedisPool, final String redisPrefix) {
     this(jedisPool, redisPrefix, OpenGammaFudgeContext.getInstance());
   }
 
+  /**
+   * Constructs a source.
+   *
+   * @param jedisPool  the pool, not null
+   * @param redisPrefix  the prefix, not null
+   * @param fudgeContext  the Fudge context, not null
+   */
   public NonVersionedRedisConfigSource(final JedisPool jedisPool, final String redisPrefix, final FudgeContext fudgeContext) {
     ArgumentChecker.notNull(jedisPool, "jedisPool");
     ArgumentChecker.notNull(redisPrefix, "redisPrefix");
@@ -133,6 +151,13 @@ public class NonVersionedRedisConfigSource implements ConfigSource {
   // REDIS UTILITIES AND KEY MANAGEMENT
   // ---------------------------------------------------------------------
 
+  /**
+   * Gets a key from a class name. The key is in the form <code>[PREFIX]-[CLASS NAME]</code>.
+   *
+   * @param clazz  the class
+   * @return  the key
+   * @param <R>  the type of the config
+   */
   protected <R> String getClassKeyName(final Class<R> clazz) {
     final StringBuilder sb = new StringBuilder();
     if (!getRedisPrefix().isEmpty()) {
@@ -143,6 +168,14 @@ public class NonVersionedRedisConfigSource implements ConfigSource {
     return sb.toString();
   }
 
+  /**
+   * Gets a key from the class name and config name. The key is in the form <code>[PREFIX]-[CLASS NAME]-[CONFIG NAME]</code>.
+   *
+   * @param clazz  the class
+   * @param configName  the config name
+   * @return  the key
+   * @param <R>  the type of the config
+   */
   protected <R> String getClassNameRedisKey(final Class<R> clazz, final String configName) {
     final StringBuilder sb = new StringBuilder();
     sb.append(getClassKeyName(clazz));
@@ -164,6 +197,14 @@ public class NonVersionedRedisConfigSource implements ConfigSource {
     return bytes;
   }
 
+  /**
+   * Converts an array of bytes to an object using the Fudge deserializer.
+   *
+   * @param clazz  the expected class
+   * @param dataAsBytes  the data
+   * @return  the object
+   * @param <R>  the type of the config
+   */
   protected <R> R convertBytesToConfigurationObject(final Class<R> clazz, final byte[] dataAsBytes) {
     final FudgeObjectReader objectReader = getFudgeContext().createObjectReader(new ByteArrayInputStream(dataAsBytes));
     final R object = objectReader.read(clazz);
@@ -175,6 +216,15 @@ public class NonVersionedRedisConfigSource implements ConfigSource {
   // UNIQUE TO THIS CLASS
   // ---------------------------------------------------------------------
 
+  /**
+   * Puts a config into the database.
+   *
+   * @param clazz  the config class, not null
+   * @param configName  the config name, not null
+   * @param object  the config, not null
+   * @return  the identifier of the stored object
+   * @param <R>  the type of the config
+   */
   public <R> UniqueId put(final Class<R> clazz, final String configName, final R object) {
     ArgumentChecker.notNull(clazz, "clazz");
     ArgumentChecker.notNull(configName, "configName");
@@ -209,15 +259,22 @@ public class NonVersionedRedisConfigSource implements ConfigSource {
       jedis.hset(uniqueIdKey, CLASS_NAME_AS_BYTES, clazz.getName().getBytes(Charsets.UTF_8));
       jedis.hset(uniqueIdKey, ITEM_NAME_AS_BYTES, configName.getBytes(Charsets.UTF_8));
 
-      getJedisPool().returnResource(jedis);
+      getJedisPool().close();
     } catch (final Exception e) {
       LOGGER.warn("Unable to persist to Redis - " + clazz + " - " + configName, e);
-      getJedisPool().returnBrokenResource(jedis);
+      getJedisPool().close();
       throw new OpenGammaRuntimeException("Unable to persist to Redis - " + clazz + " - " + configName, e);
     }
     return uniqueId;
   }
 
+  /**
+   * Deletes a config from the database.
+   *
+   * @param clazz  the config class, not null
+   * @param configName  the config name, not null
+   * @param <R>  the type of the config
+   */
   public <R> void delete(final Class<R> clazz, final String configName) {
     ArgumentChecker.notNull(clazz, "clazz");
     ArgumentChecker.notNull(configName, "configName");
@@ -237,10 +294,10 @@ public class NonVersionedRedisConfigSource implements ConfigSource {
       }
       jedis.del(classNameRedisKey);
 
-      getJedisPool().returnResource(jedis);
+      getJedisPool().close();
     } catch (final Exception e) {
       LOGGER.warn("Unable to delete from Redis - " + clazz + " - " + configName, e);
-      getJedisPool().returnBrokenResource(jedis);
+      getJedisPool().close();
       throw new OpenGammaRuntimeException("Unable to persist from Redis - " + clazz + " - " + configName, e);
     }
   }
@@ -287,10 +344,10 @@ public class NonVersionedRedisConfigSource implements ConfigSource {
         }
       }
 
-      getJedisPool().returnResource(jedis);
+      getJedisPool().close();
     } catch (final Exception e) {
       LOGGER.warn("Unable to lookup from Redis - " + clazz, e);
-      getJedisPool().returnBrokenResource(jedis);
+      getJedisPool().close();
       throw new OpenGammaRuntimeException("Unable to lookup from Redis - " + clazz, e);
     }
 
@@ -311,6 +368,14 @@ public class NonVersionedRedisConfigSource implements ConfigSource {
     return latestItem.getValue();
   }
 
+  /**
+   * Gets a config from the database.
+   *
+   * @param clazz  the config class, not null
+   * @param configName  the config name, not null
+   * @return  the config
+   * @param <R>  the type of the config
+   */
   public <R> ConfigItem<R> getLatestItemByName(final Class<R> clazz, final String configName) {
     ArgumentChecker.notNull(clazz, "clazz");
     ArgumentChecker.notNull(configName, "configName");
@@ -344,10 +409,10 @@ public class NonVersionedRedisConfigSource implements ConfigSource {
         }
       }
 
-      getJedisPool().returnResource(jedis);
+      getJedisPool().close();
     } catch (final Exception e) {
       LOGGER.warn("Unable to lookup latest by name from Redis - " + clazz + " - " + configName, e);
-      getJedisPool().returnBrokenResource(jedis);
+      getJedisPool().close();
       throw new OpenGammaRuntimeException("Unable to lookup latest by name from Redis - " + clazz + " - " + configName, e);
     }
 
@@ -405,10 +470,10 @@ public class NonVersionedRedisConfigSource implements ConfigSource {
     try {
       dataAsBytes = jedis.hget(uniqueIdKey, DATA_NAME_AS_BYTES);
       className = new String(jedis.hget(uniqueIdKey, CLASS_NAME_AS_BYTES), Charsets.UTF_8);
-      getJedisPool().returnResource(jedis);
+      getJedisPool().close();
     } catch (final Exception e) {
       LOGGER.warn("Unable to lookup by unique id - " + uniqueId, e);
-      getJedisPool().returnBrokenResource(jedis);
+      getJedisPool().close();
       throw new OpenGammaRuntimeException("Unable to lookup by unique id - " + uniqueId, e);
     }
 

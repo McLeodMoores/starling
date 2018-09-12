@@ -33,6 +33,10 @@ import net.sf.ehcache.Element;
 
 /**
  * Partial implementation of a cache on top of another source implementation using {@code EHCache}.
+ * <p>
+ * EHCache doesn't like being hammered repeatedly for the same objects. Also, if the window of objects being requested is bigger than
+ * the in memory window then new objects get created as the on-disk values get deserialized. The solution is to maintain a soft
+ * referenced buffer so that all the while the objects we have previously returned are in use we won't re-query EHCache for them.
  *
  * @param <V> the type returned by the source
  * @param <S> the source
@@ -46,12 +50,7 @@ public abstract class AbstractEHCachingSource<V extends UniqueIdentifiable, S ex
   private final String _oidCacheName = getClass().getName() + "-oid-cache";
   /** The uid cache key. */
   private final String _uidCacheName = getClass().getName() + "-uid-cache";
-
-  /**
-   * EHCache doesn't like being hammered repeatedly for the same objects. Also, if the window of objects being requested is bigger than
-   * the in memory window then new objects get created as the on-disk values get deserialized. The solution is to maintain a soft
-   * referenced buffer so that all the while the objects we have previously returned are in use we won't re-query EHCache for them.
-   */
+  /** The front cache */
   private final ConcurrentMap<UniqueId, V> _frontCacheByUID = new MapMaker().weakValues().makeMap();
 
   /**
@@ -135,6 +134,7 @@ public abstract class AbstractEHCachingSource<V extends UniqueIdentifiable, S ex
 
   @Override
   public Map<UniqueId, V> get(final Collection<UniqueId> uids) {
+    ArgumentChecker.notNull(uids, "uids");
     final Map<UniqueId, V> results = Maps.newHashMapWithExpectedSize(uids.size());
     final Collection<UniqueId> misses = new ArrayList<>(uids.size());
     for (final UniqueId uid : uids) {
@@ -199,6 +199,8 @@ public abstract class AbstractEHCachingSource<V extends UniqueIdentifiable, S ex
 
   @Override
   public Map<ObjectId, V> get(final Collection<ObjectId> objectIds, final VersionCorrection versionCorrection) {
+    ArgumentChecker.notNull(objectIds, "objectIds");
+    ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     final Map<ObjectId, V> results = Maps.newHashMapWithExpectedSize(objectIds.size());
     if (versionCorrection.containsLatest()) {
       final Map<ObjectId, V> underlying = getUnderlying().get(objectIds, versionCorrection);
@@ -249,9 +251,8 @@ public abstract class AbstractEHCachingSource<V extends UniqueIdentifiable, S ex
   public ChangeManager changeManager() {
     if (getUnderlying() instanceof ChangeProvider) {
       return ((ChangeProvider) getUnderlying()).changeManager();
-    } else {
-      return DummyChangeManager.INSTANCE;
     }
+    return DummyChangeManager.INSTANCE;
   }
 
   /**
@@ -263,30 +264,49 @@ public abstract class AbstractEHCachingSource<V extends UniqueIdentifiable, S ex
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Caches an item. If non-null, puts into the front cache and also adds to backing EHCache.
+   *
+   * @param item  the item
+   * @return  the item or null
+   */
   protected V cacheItem(final V item) {
     if (item != null) {
       final V existing = _frontCacheByUID.putIfAbsent(item.getUniqueId(), item);
       if (existing != null) {
         return existing;
-      } else {
-        _uidCache.put(new Element(item.getUniqueId(), item));
-        return item;
       }
-    } else {
-      return null;
+      _uidCache.put(new Element(item.getUniqueId(), item));
+      return item;
     }
+    return null;
   }
 
+  /**
+   * Caches each item in the collection.
+   *
+   * @param items  the items to cache
+   */
   protected void cacheItems(final Collection<? extends V> items) {
     for (final V item : items) {
       cacheItem(item);
     }
   }
 
+  /**
+   * Flushes the UniqueId and ObjectId caches and clears the front cache.
+   */
   protected void flush() {
     _uidCache.flush();
     _frontCacheByUID.clear();
     _oidCache.flush();
+  }
+
+  /**
+   * Clears the front cache. Used only in testing.
+   */
+  public void flushFrontCache() {
+    _frontCacheByUID.clear();
   }
 
   //-------------------------------------------------------------------------

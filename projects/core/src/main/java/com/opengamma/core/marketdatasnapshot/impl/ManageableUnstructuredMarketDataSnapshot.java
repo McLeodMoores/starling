@@ -92,9 +92,8 @@ public class ManageableUnstructuredMarketDataSnapshot implements Bean, Unstructu
     final Map<String, ValueSnapshot> values = _values.get(identifiers);
     if (values != null) {
       return values.get(valueName);
-    } else {
-      return null;
     }
+    return null;
   }
 
   @Override
@@ -119,15 +118,14 @@ public class ManageableUnstructuredMarketDataSnapshot implements Bean, Unstructu
     ValueSnapshot value = getImpl(identifiers, valueName);
     if (value != null) {
       return value;
-    } else {
-      for (final ExternalId identifier : identifiers) {
-        value = getValue(identifier, valueName);
-        if (value != null) {
-          return value;
-        }
-      }
-      return null;
     }
+    for (final ExternalId identifier : identifiers) {
+      value = getValue(identifier, valueName);
+      if (value != null) {
+        return value;
+      }
+    }
+    return null;
   }
 
   @Override
@@ -140,13 +138,12 @@ public class ManageableUnstructuredMarketDataSnapshot implements Bean, Unstructu
     final Map<String, ValueSnapshot> values = _values.get(identifiers);
     if (values != null) {
       return Collections.unmodifiableMap(values);
-    } else {
-      return null;
     }
+    return null;
   }
 
   /**
-   * Stores a value against the target identifier, replacing any previous association
+   * Stores a value against the target identifier, replacing any previous association.
    *
    * @param identifier the target identifier, not null
    * @param valueName the value name, not null

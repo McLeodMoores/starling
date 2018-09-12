@@ -33,7 +33,7 @@ public class DbMarketDataSnapshotMasterFactoryBean extends AbstractDbMasterFacto
   //-------------------------------------------------------------------------
   @Override
   protected DbMarketDataSnapshotMaster createObject() {
-    DbMarketDataSnapshotMaster master = new DbMarketDataSnapshotMaster(getDbConnector());
+    final DbMarketDataSnapshotMaster master = new DbMarketDataSnapshotMaster(getDbConnector());
     if (getUniqueIdScheme() != null) {
       master.setUniqueIdScheme(getUniqueIdScheme());
     }
@@ -41,7 +41,7 @@ public class DbMarketDataSnapshotMasterFactoryBean extends AbstractDbMasterFacto
       master.setMaxRetries(getMaxRetries());
     }
     if (getJmsConnector() != null) {
-      JmsChangeManager cm = new JmsChangeManager(getJmsConnector().ensureTopicName(getJmsChangeManagerTopic()));
+      final JmsChangeManager cm = new JmsChangeManager(getJmsConnector().ensureTopicName(getJmsChangeManagerTopic()));
       master.setChangeManager(cm);
       cm.start();
     }

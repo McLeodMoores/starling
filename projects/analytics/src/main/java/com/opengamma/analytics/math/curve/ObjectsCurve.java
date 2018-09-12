@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.curve;
@@ -55,7 +55,7 @@ public abstract class ObjectsCurve<T extends Comparable<T>, U>
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param xData  the array of <i>x</i> data, not null
    * @param yData  the array of <i>y</i> data, contains same number of entries as <i>x</i>, not null
    * @param isSorted  whether the <i>x</i>-data is sorted ascending
@@ -79,7 +79,7 @@ public abstract class ObjectsCurve<T extends Comparable<T>, U>
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param data  the map of <i>x-y</i> data, not null
    * @param isSorted  whether the <i>x</i>-data is sorted ascending
    */
@@ -99,7 +99,7 @@ public abstract class ObjectsCurve<T extends Comparable<T>, U>
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param data  the set of <i>x-y</i> pairs, not null
    * @param isSorted  whether the <i>x</i>-data is sorted ascending
    */
@@ -125,7 +125,7 @@ public abstract class ObjectsCurve<T extends Comparable<T>, U>
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param xData  the list of <i>x</i> data, not null
    * @param yData  the list of <i>y</i> data, contains same number of entries as <i>x</i>, not null
    * @param isSorted  whether the <i>x</i>-data is sorted ascending
@@ -147,7 +147,7 @@ public abstract class ObjectsCurve<T extends Comparable<T>, U>
   //-------------------------------------------------------------------------
   /**
    * Creates an instance.
-   * 
+   *
    * @param xData  the array of <i>x</i> data, not null
    * @param yData  the array of <i>y</i> data, not null, contains same number of entries as <i>x</i>
    * @param isSorted  whether the <i>x</i>-data is sorted ascending
@@ -168,7 +168,7 @@ public abstract class ObjectsCurve<T extends Comparable<T>, U>
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param data  the map of <i>x-y</i> data, not null
    * @param isSorted  whether the <i>x</i>-data is sorted ascending
    * @param name  the name of the curve, not null
@@ -190,7 +190,7 @@ public abstract class ObjectsCurve<T extends Comparable<T>, U>
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param data the set of <i>x-y</i> pairs, not null
    * @param isSorted  whether the <i>x</i>-data is sorted ascending
    * @param name  the name of the curve, not null
@@ -218,7 +218,7 @@ public abstract class ObjectsCurve<T extends Comparable<T>, U>
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param xData  the list of <i>x</i> data, not null
    * @param yData  the list of <i>y</i> data, not null, contains same number of entries as <i>x</i>
    * @param isSorted  whether the <i>x</i>-data is sorted ascending

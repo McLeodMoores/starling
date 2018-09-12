@@ -8,7 +8,6 @@ package com.opengamma.financial.analytics.curve;
 import java.io.Serializable;
 import java.util.Map;
 
-import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
 import org.joda.beans.JodaBeanUtils;

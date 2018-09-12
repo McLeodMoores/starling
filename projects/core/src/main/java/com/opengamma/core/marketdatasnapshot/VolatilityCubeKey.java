@@ -217,10 +217,10 @@ public final class VolatilityCubeKey implements ImmutableBean, StructuredMarketD
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       VolatilityCubeKey other = (VolatilityCubeKey) obj;
-      return JodaBeanUtils.equal(getDefinitionName(), other.getDefinitionName()) &&
-          JodaBeanUtils.equal(getSpecificationName(), other.getSpecificationName()) &&
-          JodaBeanUtils.equal(getQuoteType(), other.getQuoteType()) &&
-          JodaBeanUtils.equal(getQuoteUnits(), other.getQuoteUnits());
+      return JodaBeanUtils.equal(_definitionName, other._definitionName) &&
+          JodaBeanUtils.equal(_specificationName, other._specificationName) &&
+          JodaBeanUtils.equal(_quoteType, other._quoteType) &&
+          JodaBeanUtils.equal(_quoteUnits, other._quoteUnits);
     }
     return false;
   }
@@ -228,10 +228,10 @@ public final class VolatilityCubeKey implements ImmutableBean, StructuredMarketD
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getDefinitionName());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getSpecificationName());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getQuoteType());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getQuoteUnits());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_definitionName);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_specificationName);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_quoteType);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_quoteUnits);
     return hash;
   }
 
@@ -239,10 +239,10 @@ public final class VolatilityCubeKey implements ImmutableBean, StructuredMarketD
   public String toString() {
     StringBuilder buf = new StringBuilder(160);
     buf.append("VolatilityCubeKey{");
-    buf.append("definitionName").append('=').append(getDefinitionName()).append(',').append(' ');
-    buf.append("specificationName").append('=').append(getSpecificationName()).append(',').append(' ');
-    buf.append("quoteType").append('=').append(getQuoteType()).append(',').append(' ');
-    buf.append("quoteUnits").append('=').append(JodaBeanUtils.toString(getQuoteUnits()));
+    buf.append("definitionName").append('=').append(_definitionName).append(',').append(' ');
+    buf.append("specificationName").append('=').append(_specificationName).append(',').append(' ');
+    buf.append("quoteType").append('=').append(_quoteType).append(',').append(' ');
+    buf.append("quoteUnits").append('=').append(JodaBeanUtils.toString(_quoteUnits));
     buf.append('}');
     return buf.toString();
   }
@@ -455,19 +455,31 @@ public final class VolatilityCubeKey implements ImmutableBean, StructuredMarketD
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

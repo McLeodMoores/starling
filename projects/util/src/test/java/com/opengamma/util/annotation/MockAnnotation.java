@@ -18,7 +18,7 @@ package com.opengamma.util.annotation;
   private String _type;
 
   @MockConstructor
-  public MockAnnotation() {
+  MockAnnotation() {
   }
 
   /**

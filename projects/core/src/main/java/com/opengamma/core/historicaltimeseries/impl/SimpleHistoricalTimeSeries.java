@@ -9,7 +9,6 @@ import java.io.Serializable;
 
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeries;
 import com.opengamma.id.UniqueId;
-import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 import com.opengamma.util.ArgumentChecker;
 
@@ -22,7 +21,7 @@ import com.opengamma.util.ArgumentChecker;
  * It is intended to be used in the engine via the read-only {@code HistoricalTimeSeries} interface.
  */
 public final class SimpleHistoricalTimeSeries
-    implements HistoricalTimeSeries, UniqueIdentifiable, Serializable {
+    implements HistoricalTimeSeries, Serializable {
 
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
@@ -90,8 +89,8 @@ public final class SimpleHistoricalTimeSeries
     }
     if (obj instanceof SimpleHistoricalTimeSeries) {
       final SimpleHistoricalTimeSeries other = (SimpleHistoricalTimeSeries) obj;
-      return getUniqueId().equals(other.getUniqueId()) &&
-              getTimeSeries().equals(other.getTimeSeries());
+      return getUniqueId().equals(other.getUniqueId())
+             && getTimeSeries().equals(other.getTimeSeries());
     }
     return false;
   }

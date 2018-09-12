@@ -262,7 +262,8 @@ public class JmsConnectorFactoryBean extends SingletonFactoryBean<JmsConnector> 
    * @param providedTemplateQueue  the provided template for queues, may be null
    * @return the topic template, may be null
    */
-  protected JmsTemplate createTemplateTopic(ConnectionFactory providedFactory, final JmsTemplate providedTemplateTopic, final JmsTemplate providedTemplateQueue) {
+  protected JmsTemplate createTemplateTopic(ConnectionFactory providedFactory, final JmsTemplate providedTemplateTopic,
+      final JmsTemplate providedTemplateQueue) {
     if (providedTemplateTopic != null) {
       return providedTemplateTopic;
     }
@@ -285,7 +286,8 @@ public class JmsConnectorFactoryBean extends SingletonFactoryBean<JmsConnector> 
    * @param providedTemplateQueue  the provided template for queues, may be null
    * @return the topic template, may be null
    */
-  protected JmsTemplate createTemplateQueue(ConnectionFactory providedFactory, final JmsTemplate providedTemplateTopic, final JmsTemplate providedTemplateQueue) {
+  protected JmsTemplate createTemplateQueue(ConnectionFactory providedFactory, final JmsTemplate providedTemplateTopic,
+      final JmsTemplate providedTemplateQueue) {
     if (providedTemplateQueue != null) {
       return providedTemplateQueue;
     }
@@ -310,7 +312,8 @@ public class JmsConnectorFactoryBean extends SingletonFactoryBean<JmsConnector> 
    * @param connectionFactory  the JMS connection factory, not null
    * @return the container factory, may be null
    */
-  protected JmsTopicContainerFactory createTopicContainerFactory(final JmsTopicContainerFactory providedContainerfactory, final ConnectionFactory connectionFactory) {
+  protected JmsTopicContainerFactory createTopicContainerFactory(final JmsTopicContainerFactory providedContainerfactory,
+      final ConnectionFactory connectionFactory) {
     if (providedContainerfactory != null) {
       return providedContainerfactory;
     }
@@ -327,7 +330,8 @@ public class JmsConnectorFactoryBean extends SingletonFactoryBean<JmsConnector> 
    * @param connectionFactory  the JMS connection factory, not null
    * @return the container factory, may be null
    */
-  protected JmsQueueContainerFactory createQueueContainerFactory(final JmsQueueContainerFactory providedContainerfactory, final ConnectionFactory connectionFactory) {
+  protected JmsQueueContainerFactory createQueueContainerFactory(final JmsQueueContainerFactory providedContainerfactory,
+      final ConnectionFactory connectionFactory) {
     if (providedContainerfactory != null) {
       return providedContainerfactory;
     }

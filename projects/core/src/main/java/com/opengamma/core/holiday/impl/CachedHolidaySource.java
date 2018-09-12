@@ -12,6 +12,9 @@ import java.util.concurrent.ConcurrentMap;
 import org.threeten.bp.LocalDate;
 
 import com.opengamma.core.AbstractSource;
+import com.opengamma.core.change.ChangeEvent;
+import com.opengamma.core.change.ChangeListener;
+import com.opengamma.core.holiday.ChangeHolidaySource;
 import com.opengamma.core.holiday.Holiday;
 import com.opengamma.core.holiday.HolidaySource;
 import com.opengamma.core.holiday.HolidayType;
@@ -30,8 +33,7 @@ import com.opengamma.util.money.Currency;
 /**
  * A cached {@link HolidaySource} using a concurrent hash map and
  * no eviction policy. This is better than having no cache but is
- * not very efficient. Also does not listen for changes to the underlying
- * data.
+ * not very efficient.
  */
 public class CachedHolidaySource extends AbstractSource<Holiday> implements HolidaySource {
 
@@ -46,15 +48,64 @@ public class CachedHolidaySource extends AbstractSource<Holiday> implements Holi
   private final Map3<LocalDate, HolidayType, ExternalIdBundle, Object> _isHoliday2 = new HashMap3<>();
   private final Map3<LocalDate, HolidayType, ExternalId, Object> _isHoliday3 = new HashMap3<>();
 
+  /**
+   * Constructs a source.
+   *
+   * @param underlying  the underlying source
+   */
   public CachedHolidaySource(final HolidaySource underlying) {
-    ArgumentChecker.notNull(underlying, "underlying");
-    _underlying = underlying;
+    _underlying = ArgumentChecker.notNull(underlying, "underlying");
+    if (getUnderlying() instanceof ChangeHolidaySource) {
+      final ChangeHolidaySource changeUnderlying = (ChangeHolidaySource) getUnderlying();
+      // this is not nice, but it's better than a stale cache.
+      changeUnderlying.changeManager().addChangeListener(new ChangeListener() {
+        @Override
+        public void entityChanged(final ChangeEvent event) {
+          switch (event.getType()) {
+            case ADDED:
+              break;
+            case CHANGED:
+              _getHoliday1.clear();
+              _getHoliday2.clear();
+              _getHoliday3.clear();
+              _getHoliday4.clear();
+              _isHoliday1.clear();
+              _isHoliday2.clear();
+              _isHoliday3.clear();
+              break;
+            case REMOVED:
+              _getHoliday1.clear();
+              _getHoliday2.clear();
+              _getHoliday3.clear();
+              _getHoliday4.clear();
+              _isHoliday1.clear();
+              _isHoliday2.clear();
+              _isHoliday3.clear();
+              break;
+            default:
+              break;
+          }
+        }
+      });
+    }
   }
 
+  /**
+   * Gets the underlying source.
+   *
+   * @return  the underlying source
+   */
   protected HolidaySource getUnderlying() {
     return _underlying;
   }
 
+  /**
+   * Returns the result, null or throws an exception depending on the value in the cache.
+   *
+   * @param o  the key
+   * @return  the result
+   * @param <T>  the type of the result
+   */
   @SuppressWarnings("unchecked")
   protected <T> T getOrThrow(final Object o) {
     if (o instanceof RuntimeException) {
@@ -66,12 +117,17 @@ public class CachedHolidaySource extends AbstractSource<Holiday> implements Holi
     }
   }
 
+  /**
+   * Returns either the input or an object designating null, rather than null itself.
+   *
+   * @param o  the object
+   * @return  the result
+   */
   protected Object safeNull(final Object o) {
     if (o != null) {
       return o;
-    } else {
-      return NULL;
     }
+    return NULL;
   }
 
   @Override
@@ -123,9 +179,8 @@ public class CachedHolidaySource extends AbstractSource<Holiday> implements Holi
       result = _getHoliday3.putIfAbsent(currency, holidays);
       if (result != null) {
         return getOrThrow(result);
-      } else {
-        return holidays;
       }
+      return holidays;
     } catch (final RuntimeException ex) {
       _getHoliday3.putIfAbsent(currency, ex);
       throw ex;
@@ -144,9 +199,8 @@ public class CachedHolidaySource extends AbstractSource<Holiday> implements Holi
       result = _getHoliday4.putIfAbsent(holidayType, regionOrExchangeIds, safeNull(holidays));
       if (result != null) {
         return getOrThrow(result);
-      } else {
-        return holidays;
       }
+      return holidays;
     } catch (final RuntimeException ex) {
       _getHoliday4.putIfAbsent(holidayType, regionOrExchangeIds, ex);
       throw ex;
@@ -168,6 +222,7 @@ public class CachedHolidaySource extends AbstractSource<Holiday> implements Holi
       return (Boolean) getOrThrow(result);
     }
     try {
+      @SuppressWarnings("deprecation")
       final boolean isHoliday = getUnderlying().isHoliday(dateToCheck, currency);
       dates.putIfAbsent(dateToCheck, isHoliday);
       return isHoliday;
@@ -184,6 +239,7 @@ public class CachedHolidaySource extends AbstractSource<Holiday> implements Holi
       return (Boolean) getOrThrow(result);
     }
     try {
+      @SuppressWarnings("deprecation")
       final boolean isHoliday = getUnderlying().isHoliday(dateToCheck, holidayType, regionOrExchangeIds);
       _isHoliday2.putIfAbsent(dateToCheck, holidayType, regionOrExchangeIds, isHoliday);
       return isHoliday;
@@ -200,6 +256,7 @@ public class CachedHolidaySource extends AbstractSource<Holiday> implements Holi
       return (Boolean) getOrThrow(result);
     }
     try {
+      @SuppressWarnings("deprecation")
       final boolean isHoliday = getUnderlying().isHoliday(dateToCheck, holidayType, regionOrExchangeId);
       _isHoliday3.putIfAbsent(dateToCheck, holidayType, regionOrExchangeId, isHoliday);
       return isHoliday;
@@ -209,4 +266,16 @@ public class CachedHolidaySource extends AbstractSource<Holiday> implements Holi
     }
   }
 
+  /**
+   * Clears all caches. Should only be used by unit tests.
+   */
+  void clearCaches() {
+    _getHoliday1.clear();
+    _getHoliday2.clear();
+    _getHoliday3.clear();
+    _getHoliday4.clear();
+    _isHoliday1.clear();
+    _isHoliday2.clear();
+    _isHoliday3.clear();
+  }
 }

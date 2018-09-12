@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.option;
@@ -32,28 +32,28 @@ import com.opengamma.masterdb.security.hibernate.ZonedDateTimeBean;
  */
 @BeanDefinition
 public class FXOptionSecurityBean extends SecurityBean {
-  
+
   @PropertyDefinition
   private double _putAmount;
-  
+
   @PropertyDefinition
   private double _callAmount;
-  
+
   @PropertyDefinition
   private ExpiryBean _expiry;
-  
+
   @PropertyDefinition
   private CurrencyBean _putCurrency;
-  
+
   @PropertyDefinition
   private CurrencyBean _callCurrency;
-  
+
   @PropertyDefinition
   private ZonedDateTimeBean _settlementDate;
-  
+
   @PropertyDefinition
   private Boolean _isLong;
-  
+
   @PropertyDefinition
   private OptionExerciseType _optionExerciseType;
 

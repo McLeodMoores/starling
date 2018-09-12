@@ -293,7 +293,7 @@ public final class ImmutableLocalDateDoubleTimeSeries
   public LocalDateDoubleTimeSeries subSeriesFast(final int startTime, final boolean includeStart,
       final int endTime, final boolean includeEnd) {
     if (endTime < startTime) {
-      throw new IllegalArgumentException("Invalid subSeries: endTime < startTime");
+      throw new IllegalArgumentException("Invalid subSeries: endTime " + endTime + " < startTime " + startTime);
     }
     // special case when this is empty
     if (isEmpty()) {

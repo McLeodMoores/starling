@@ -32,7 +32,7 @@ public final class AnnotationCache {
   private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationCache.class);
 
   /**
-   * The cache path property name
+   * The cache path property name.
    */
   public static final String CACHE_PATH_PROPERTY = "opengamma.annotationCachePath";
 
@@ -169,7 +169,7 @@ public final class AnnotationCache {
   }
 
   /**
-   * Creates a function cache from a set of class names
+   * Creates a function cache from a set of class names.
    *
    * @param timestamp  the cache timestamp, not null
    * @param annotationClass  the annotation class, not null

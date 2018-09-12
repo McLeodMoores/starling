@@ -19,10 +19,10 @@ import org.joda.beans.JodaBeanUtils;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
 import org.joda.beans.PropertyDefinition;
-import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
+import org.joda.beans.impl.direct.DirectPrivateBeanBuilder;
 
 import com.opengamma.util.ArgumentChecker;
 
@@ -358,8 +358,8 @@ public final class Paging implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       Paging other = (Paging) obj;
-      return JodaBeanUtils.equal(getRequest(), other.getRequest()) &&
-          (getTotalItems() == other.getTotalItems());
+      return JodaBeanUtils.equal(_request, other._request) &&
+          (_totalItems == other._totalItems);
     }
     return false;
   }
@@ -367,8 +367,8 @@ public final class Paging implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getRequest());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getTotalItems());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_request);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_totalItems);
     return hash;
   }
 
@@ -476,7 +476,7 @@ public final class Paging implements ImmutableBean {
   /**
    * The bean-builder for {@code Paging}.
    */
-  private static final class Builder extends DirectFieldsBeanBuilder<Paging> {
+  private static final class Builder extends DirectPrivateBeanBuilder<Paging> {
 
     private PagingRequest _request;
     private int _totalItems;
@@ -485,6 +485,7 @@ public final class Paging implements ImmutableBean {
      * Restricted constructor.
      */
     private Builder() {
+      super(meta());
     }
 
     //-----------------------------------------------------------------------
@@ -512,30 +513,6 @@ public final class Paging implements ImmutableBean {
         default:
           throw new NoSuchElementException("Unknown property: " + propertyName);
       }
-      return this;
-    }
-
-    @Override
-    public Builder set(MetaProperty<?> property, Object value) {
-      super.set(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(String propertyName, String value) {
-      setString(meta().metaProperty(propertyName), value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(MetaProperty<?> property, String value) {
-      super.setString(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
-      super.setAll(propertyValueMap);
       return this;
     }
 

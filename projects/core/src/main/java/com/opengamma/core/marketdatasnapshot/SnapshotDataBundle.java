@@ -2,7 +2,7 @@
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
- * 
+ *
  * Modified by McLeod Moores Software Limited.
  *
  * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
@@ -27,12 +27,12 @@ public final class SnapshotDataBundle {
   /**
    * The market values in the bundle.
    */
-  private final Map<ExternalIdBundle, Double> _dataPoints = new HashMap<ExternalIdBundle, Double>();
+  private final Map<ExternalIdBundle, Double> _dataPoints = new HashMap<>();
 
   /**
    * The index for lookup operations.
    */
-  private final Map<ExternalId, ExternalIdBundle> _index = new HashMap<ExternalId, ExternalIdBundle>();
+  private final Map<ExternalId, ExternalIdBundle> _index = new HashMap<>();
 
   /**
    * Creates an instance.
@@ -41,8 +41,8 @@ public final class SnapshotDataBundle {
   }
 
   /**
-   * Queries the data using an identifier bundle. Any data point matching one of the identifiers in the supplied bundle will be returned. If the identifier bundle is such that multiple points match
-   * then an arbitrary one will be returned.
+   * Queries the data using an identifier bundle. Any data point matching one of the identifiers in the supplied bundle
+   * will be returned. If the identifier bundle is such that multiple points match then an arbitrary one will be returned.
    *
    * @param identifiers the identifier(s) to search for
    * @return the data point found, or null if none

@@ -38,7 +38,7 @@ public class IndexFamily extends ManageableSecurity {
   public static final String METADATA_TYPE = "INDEX_FAMILY";
   @PropertyDefinition
   private final SortedMap<Tenor, ExternalId> _members = new TreeMap<>();
-  
+
   /**
    * For the builder.
    */

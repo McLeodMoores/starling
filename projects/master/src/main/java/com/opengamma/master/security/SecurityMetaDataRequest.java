@@ -35,7 +35,7 @@ public class SecurityMetaDataRequest extends AbstractMetaDataRequest {
    */
   @PropertyDefinition
   private boolean _securityTypes = true;
-  
+
   /**
    * Whether to fetch the db_schema_version, false by default.
    */

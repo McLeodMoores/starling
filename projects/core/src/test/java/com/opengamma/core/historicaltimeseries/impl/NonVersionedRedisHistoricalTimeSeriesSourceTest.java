@@ -12,9 +12,14 @@ import static org.testng.AssertJUnit.assertNull;
 import java.util.Map.Entry;
 import java.util.UUID;
 
+import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.threeten.bp.LocalDate;
 
+import com.fiftyonred.mock_jedis.MockJedisPool;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeries;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
@@ -26,14 +31,56 @@ import com.opengamma.util.test.AbstractRedisTestCase;
 import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.tuple.Pair;
 
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+
 /**
  * Test.
  */
-@Test(groups = TestGroup.INTEGRATION, enabled = false)
+@Test(groups = TestGroup.UNIT)
 public class NonVersionedRedisHistoricalTimeSeriesSourceTest extends AbstractRedisTestCase {
+  private MockJedisPool _pool;
+
+  @Override
+  @BeforeClass
+  public void launchJedisPool() {
+    final GenericObjectPoolConfig config = new GenericObjectPoolConfig();
+    _pool = new MockJedisPool(config, "host");
+  }
+
+  @Override
+  @AfterClass
+  public void clearJedisPool() {
+    if (_pool == null) {
+      return;
+    }
+    _pool.getResource().close();
+    _pool.destroy();
+  }
+
+  @Override
+  @BeforeMethod
+  public void clearRedisDb() {
+    final Jedis jedis = _pool.getResource();
+    jedis.flushDB();
+    _pool.returnResource(jedis);
+  }
+
+  @Override
+  protected JedisPool getJedisPool() {
+    return _pool;
+  }
+
+  @Override
+  protected String getRedisPrefix() {
+    return "prefix";
+  }
 
   private static final int ITER_SIZE = 50;
 
+  /**
+   * Tests updating and and getting timeseries and data points from the database.
+   */
   public void basicOperation() {
     final NonVersionedRedisHistoricalTimeSeriesSource source = new NonVersionedRedisHistoricalTimeSeriesSource(getJedisPool(), getRedisPrefix());
 
@@ -101,6 +148,9 @@ public class NonVersionedRedisHistoricalTimeSeriesSourceTest extends AbstractRed
     assertEquals(18.0, ts.getValue(LocalDate.parse("2013-06-08")), 0.00001);
   }
 
+  /**
+   * Tests that points can be added to time series.
+   */
   public void updateDataPoint() {
     final NonVersionedRedisHistoricalTimeSeriesSource source = new NonVersionedRedisHistoricalTimeSeriesSource(getJedisPool(), getRedisPrefix());
 
@@ -153,7 +203,6 @@ public class NonVersionedRedisHistoricalTimeSeriesSourceTest extends AbstractRed
     assertEquals(5, ts.size());
     assertEquals(11.0, ts.getValue(LocalDate.parse("2013-06-08")), 0.00001);
   }
-
 
 
   public void appendTimeSeries() {
@@ -469,7 +518,7 @@ public class NonVersionedRedisHistoricalTimeSeriesSourceTest extends AbstractRed
     System.out.println("Reading " + hts.getTimeSeries().size() + " datapoints took " + totalDurationInSec / ITER_SIZE + " sec");
   }
 
-  private HistoricalTimeSeries createSampleHts() {
+  private static HistoricalTimeSeries createSampleHts() {
     final UniqueId id = UniqueId.of("HTS", UUID.randomUUID().toString());
     final LocalDateDoubleTimeSeriesBuilder builder = ImmutableLocalDateDoubleTimeSeries.builder();
     final LocalDate start = LocalDate.now();

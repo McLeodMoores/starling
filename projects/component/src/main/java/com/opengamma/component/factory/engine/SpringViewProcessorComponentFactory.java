@@ -163,7 +163,6 @@ public class SpringViewProcessorComponentFactory extends AbstractSpringComponent
       final ViewProcessAvailabilityNotificationListener listener =
           new ViewProcessAvailabilityNotificationListener(getJmsMarketDataAvailabilityTopic(), getJmsConnector(), (ViewProcessorInternal) viewProcessor);
       repo.registerLifecycle(listener);
-
       final ViewProcessorManager viewProcessorManager = appContext.getBean(ViewProcessorManager.class);
       repo.registerLifecycle(viewProcessorManager);
     }
@@ -306,7 +305,7 @@ public class SpringViewProcessorComponentFactory extends AbstractSpringComponent
    * Sets the classifier that the factory should publish under. The Spring config must create this.
    * @param classifier  the new value of the property, not null
    */
-  public void setClassifier(String classifier) {
+  public void setClassifier(final String classifier) {
     JodaBeanUtils.notNull(classifier, "classifier");
     this._classifier = classifier;
   }
@@ -332,7 +331,7 @@ public class SpringViewProcessorComponentFactory extends AbstractSpringComponent
    * Sets the flag determining whether the component should be published by REST (default true).
    * @param publishRest  the new value of the property
    */
-  public void setPublishRest(boolean publishRest) {
+  public void setPublishRest(final boolean publishRest) {
     this._publishRest = publishRest;
   }
 
@@ -357,7 +356,7 @@ public class SpringViewProcessorComponentFactory extends AbstractSpringComponent
    * Sets the fudge context.
    * @param fudgeContext  the new value of the property, not null
    */
-  public void setFudgeContext(FudgeContext fudgeContext) {
+  public void setFudgeContext(final FudgeContext fudgeContext) {
     JodaBeanUtils.notNull(fudgeContext, "fudgeContext");
     this._fudgeContext = fudgeContext;
   }
@@ -383,7 +382,7 @@ public class SpringViewProcessorComponentFactory extends AbstractSpringComponent
    * Sets the JMS connector.
    * @param jmsConnector  the new value of the property
    */
-  public void setJmsConnector(JmsConnector jmsConnector) {
+  public void setJmsConnector(final JmsConnector jmsConnector) {
     this._jmsConnector = jmsConnector;
   }
 
@@ -408,7 +407,7 @@ public class SpringViewProcessorComponentFactory extends AbstractSpringComponent
    * Sets the JMS broker URI.
    * @param jmsBrokerUri  the new value of the property
    */
-  public void setJmsBrokerUri(String jmsBrokerUri) {
+  public void setJmsBrokerUri(final String jmsBrokerUri) {
     this._jmsBrokerUri = jmsBrokerUri;
   }
 
@@ -433,7 +432,7 @@ public class SpringViewProcessorComponentFactory extends AbstractSpringComponent
    * Sets the scheduler.
    * @param scheduler  the new value of the property, not null
    */
-  public void setScheduler(ScheduledExecutorService scheduler) {
+  public void setScheduler(final ScheduledExecutorService scheduler) {
     JodaBeanUtils.notNull(scheduler, "scheduler");
     this._scheduler = scheduler;
   }
@@ -459,7 +458,7 @@ public class SpringViewProcessorComponentFactory extends AbstractSpringComponent
    * Sets the volatility (for market data snapshots).
    * @param volatilityCubeDefinitionSource  the new value of the property
    */
-  public void setVolatilityCubeDefinitionSource(VolatilityCubeDefinitionSource volatilityCubeDefinitionSource) {
+  public void setVolatilityCubeDefinitionSource(final VolatilityCubeDefinitionSource volatilityCubeDefinitionSource) {
     this._volatilityCubeDefinitionSource = volatilityCubeDefinitionSource;
   }
 
@@ -484,7 +483,7 @@ public class SpringViewProcessorComponentFactory extends AbstractSpringComponent
    * Sets the market data (for debugging).
    * @param marketDataProviderResolver  the new value of the property
    */
-  public void setMarketDataProviderResolver(MarketDataProviderResolver marketDataProviderResolver) {
+  public void setMarketDataProviderResolver(final MarketDataProviderResolver marketDataProviderResolver) {
     this._marketDataProviderResolver = marketDataProviderResolver;
   }
 
@@ -499,7 +498,7 @@ public class SpringViewProcessorComponentFactory extends AbstractSpringComponent
   //-----------------------------------------------------------------------
   /**
    * Gets whether to stripe portfolio requirements during a graph build.
-   * 
+   *
    * @deprecated this is a temporary measure until enabling/disabling the striping logic can be implemented using suitable heuristics
    * @return the value of the property
    */
@@ -510,18 +509,18 @@ public class SpringViewProcessorComponentFactory extends AbstractSpringComponent
 
   /**
    * Sets whether to stripe portfolio requirements during a graph build.
-   * 
+   *
    * @deprecated this is a temporary measure until enabling/disabling the striping logic can be implemented using suitable heuristics
    * @param compileViewsWithRequirementStriping  the new value of the property
    */
   @Deprecated
-  public void setCompileViewsWithRequirementStriping(boolean compileViewsWithRequirementStriping) {
+  public void setCompileViewsWithRequirementStriping(final boolean compileViewsWithRequirementStriping) {
     this._compileViewsWithRequirementStriping = compileViewsWithRequirementStriping;
   }
 
   /**
    * Gets the the {@code compileViewsWithRequirementStriping} property.
-   * 
+   *
    * @deprecated this is a temporary measure until enabling/disabling the striping logic can be implemented using suitable heuristics
    * @return the property, not null
    */
@@ -543,7 +542,7 @@ public class SpringViewProcessorComponentFactory extends AbstractSpringComponent
    * Sets the hts source, used in snapshotting if hts data used in place of live data. May be null or not specified.
    * @param historicalTimeSeriesSource  the new value of the property
    */
-  public void setHistoricalTimeSeriesSource(HistoricalTimeSeriesSource historicalTimeSeriesSource) {
+  public void setHistoricalTimeSeriesSource(final HistoricalTimeSeriesSource historicalTimeSeriesSource) {
     this._historicalTimeSeriesSource = historicalTimeSeriesSource;
   }
 
@@ -568,7 +567,7 @@ public class SpringViewProcessorComponentFactory extends AbstractSpringComponent
    * Sets jMS topic for notifications that the connection Bloomberg has come up.
    * @param jmsMarketDataAvailabilityTopic  the new value of the property
    */
-  public void setJmsMarketDataAvailabilityTopic(String jmsMarketDataAvailabilityTopic) {
+  public void setJmsMarketDataAvailabilityTopic(final String jmsMarketDataAvailabilityTopic) {
     this._jmsMarketDataAvailabilityTopic = jmsMarketDataAvailabilityTopic;
   }
 
@@ -587,21 +586,21 @@ public class SpringViewProcessorComponentFactory extends AbstractSpringComponent
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (obj == this) {
       return true;
     }
     if (obj != null && obj.getClass() == this.getClass()) {
-      SpringViewProcessorComponentFactory other = (SpringViewProcessorComponentFactory) obj;
+      final SpringViewProcessorComponentFactory other = (SpringViewProcessorComponentFactory) obj;
       return JodaBeanUtils.equal(getClassifier(), other.getClassifier()) &&
-          (isPublishRest() == other.isPublishRest()) &&
+          isPublishRest() == other.isPublishRest() &&
           JodaBeanUtils.equal(getFudgeContext(), other.getFudgeContext()) &&
           JodaBeanUtils.equal(getJmsConnector(), other.getJmsConnector()) &&
           JodaBeanUtils.equal(getJmsBrokerUri(), other.getJmsBrokerUri()) &&
           JodaBeanUtils.equal(getScheduler(), other.getScheduler()) &&
           JodaBeanUtils.equal(getVolatilityCubeDefinitionSource(), other.getVolatilityCubeDefinitionSource()) &&
           JodaBeanUtils.equal(getMarketDataProviderResolver(), other.getMarketDataProviderResolver()) &&
-          (isCompileViewsWithRequirementStriping() == other.isCompileViewsWithRequirementStriping()) &&
+          isCompileViewsWithRequirementStriping() == other.isCompileViewsWithRequirementStriping() &&
           JodaBeanUtils.equal(getHistoricalTimeSeriesSource(), other.getHistoricalTimeSeriesSource()) &&
           JodaBeanUtils.equal(getJmsMarketDataAvailabilityTopic(), other.getJmsMarketDataAvailabilityTopic()) &&
           super.equals(obj);
@@ -628,9 +627,9 @@ public class SpringViewProcessorComponentFactory extends AbstractSpringComponent
 
   @Override
   public String toString() {
-    StringBuilder buf = new StringBuilder(384);
+    final StringBuilder buf = new StringBuilder(384);
     buf.append("SpringViewProcessorComponentFactory{");
-    int len = buf.length();
+    final int len = buf.length();
     toString(buf);
     if (buf.length() > len) {
       buf.setLength(buf.length() - 2);
@@ -640,7 +639,7 @@ public class SpringViewProcessorComponentFactory extends AbstractSpringComponent
   }
 
   @Override
-  protected void toString(StringBuilder buf) {
+  protected void toString(final StringBuilder buf) {
     super.toString(buf);
     buf.append("classifier").append('=').append(JodaBeanUtils.toString(getClassifier())).append(',').append(' ');
     buf.append("publishRest").append('=').append(JodaBeanUtils.toString(isPublishRest())).append(',').append(' ');
@@ -744,7 +743,7 @@ public class SpringViewProcessorComponentFactory extends AbstractSpringComponent
     }
 
     @Override
-    protected MetaProperty<?> metaPropertyGet(String propertyName) {
+    protected MetaProperty<?> metaPropertyGet(final String propertyName) {
       switch (propertyName.hashCode()) {
         case -281470431:  // classifier
           return _classifier;
@@ -880,7 +879,7 @@ public class SpringViewProcessorComponentFactory extends AbstractSpringComponent
 
     //-----------------------------------------------------------------------
     @Override
-    protected Object propertyGet(Bean bean, String propertyName, boolean quiet) {
+    protected Object propertyGet(final Bean bean, final String propertyName, final boolean quiet) {
       switch (propertyName.hashCode()) {
         case -281470431:  // classifier
           return ((SpringViewProcessorComponentFactory) bean).getClassifier();
@@ -909,7 +908,7 @@ public class SpringViewProcessorComponentFactory extends AbstractSpringComponent
     }
 
     @Override
-    protected void propertySet(Bean bean, String propertyName, Object newValue, boolean quiet) {
+    protected void propertySet(final Bean bean, final String propertyName, final Object newValue, final boolean quiet) {
       switch (propertyName.hashCode()) {
         case -281470431:  // classifier
           ((SpringViewProcessorComponentFactory) bean).setClassifier((String) newValue);
@@ -949,7 +948,7 @@ public class SpringViewProcessorComponentFactory extends AbstractSpringComponent
     }
 
     @Override
-    protected void validate(Bean bean) {
+    protected void validate(final Bean bean) {
       JodaBeanUtils.notNull(((SpringViewProcessorComponentFactory) bean)._classifier, "classifier");
       JodaBeanUtils.notNull(((SpringViewProcessorComponentFactory) bean)._fudgeContext, "fudgeContext");
       JodaBeanUtils.notNull(((SpringViewProcessorComponentFactory) bean)._scheduler, "scheduler");

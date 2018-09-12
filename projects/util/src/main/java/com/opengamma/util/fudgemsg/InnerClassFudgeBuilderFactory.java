@@ -29,7 +29,7 @@ public final class InnerClassFudgeBuilderFactory extends FudgeBuilderFactoryAdap
    * @param dictionary  the object dictionary to install into, not null
    */
   public static void init(final FudgeObjectDictionary dictionary) {
-    FudgeBuilderFactory factory = new InnerClassFudgeBuilderFactory(dictionary.getDefaultBuilderFactory());
+    final FudgeBuilderFactory factory = new InnerClassFudgeBuilderFactory(dictionary.getDefaultBuilderFactory());
     dictionary.setDefaultBuilderFactory(factory);
   }
 
@@ -46,9 +46,8 @@ public final class InnerClassFudgeBuilderFactory extends FudgeBuilderFactoryAdap
   public <T> FudgeMessageBuilder<T> createMessageBuilder(final Class<T> clazz) {
     if (AutoFudgable.class.isAssignableFrom(clazz)) {
       return _innerClassFudgeBuilder;
-    } else {
-      return super.createMessageBuilder(clazz);
     }
+    return super.createMessageBuilder(clazz);
   }
 
 
@@ -57,9 +56,8 @@ public final class InnerClassFudgeBuilderFactory extends FudgeBuilderFactoryAdap
   public <T> FudgeObjectBuilder<T> createObjectBuilder(final Class<T> clazz) {
     if (AutoFudgable.class.isAssignableFrom(clazz)) {
       return _innerClassFudgeBuilder;
-    } else {
-      return super.createObjectBuilder(clazz);
     }
+    return super.createObjectBuilder(clazz);
   }
 
 }

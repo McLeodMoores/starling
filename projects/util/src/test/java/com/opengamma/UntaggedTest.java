@@ -15,7 +15,10 @@ import org.testng.annotations.Test;
 @Test // has no test group
 public class UntaggedTest {
 
-  public void test_notVeryMuch() {
+  /**
+   *
+   */
+  public void testNotVeryMuch() {
     assertEquals("Bamboo", "Bamboo");
   }
 

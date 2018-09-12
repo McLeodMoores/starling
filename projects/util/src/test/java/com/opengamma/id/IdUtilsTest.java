@@ -22,8 +22,14 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class IdUtilsTest {
 
+  /**
+   * Tests the private constructor via reflection.
+   *
+   * @throws Exception  if the class cannot be created
+   */
   @SuppressWarnings("unchecked")
-  public void test_constructor() throws Exception {
+  @Test
+  public void testConstructor() throws Exception {
     final Constructor<?>[] cons = IdUtils.class.getDeclaredConstructors();
     assertEquals(1, cons.length);
     assertEquals(0, cons[0].getParameterTypes().length);
@@ -34,63 +40,107 @@ public class IdUtilsTest {
   }
 
   //-------------------------------------------------------------------------
-  public void test_set_success() {
+  /**
+   * Checks that the unique id can be set if the object is MutableUniqueIdentifiable.
+   */
+  @Test
+  public void testSetSuccess() {
     final UniqueId uniqueId = UniqueId.of("A", "B");
     final MockMutable mock = new MockMutable();
     IdUtils.setInto(mock, uniqueId);
-    assertEquals(uniqueId, mock.uniqueId);
+    assertEquals(uniqueId, mock.getUniqueId());
   }
 
-  public void test_set_notMutableUniqueIdentifiable() {
+  /**
+   * Checks that no error is thrown if the object is not MutableUniqueIdentifiable.
+   */
+  @Test
+  public void testSetNotMutableUniqueIdentifiable() {
     final UniqueId uniqueId = UniqueId.of("A", "B");
     IdUtils.setInto(new Object(), uniqueId);
     // no error
   }
 
+  /**
+   * Test class.
+   */
   static class MockMutable implements MutableUniqueIdentifiable {
-    UniqueId uniqueId;
+    private UniqueId _uniqueId;
 
     @Override
     public void setUniqueId(final UniqueId uniqueId) {
-      this.uniqueId = uniqueId;
+      _uniqueId = uniqueId;
+    }
+
+    /**
+     * Gets the id.
+     * @return  the id
+     */
+    public UniqueId getUniqueId() {
+      return _uniqueId;
     }
   }
 
   //-------------------------------------------------------------------------
-  public void test_toStringList() {
-    final Iterable<ObjectIdentifiable> objectIds = ImmutableList.<ObjectIdentifiable>of(ObjectId.of("A", "X"), UniqueId.of("B", "Y", "1"), ObjectId.of("C", "Z"));
+  /**
+   * Tests the conversion of ObjectIds and UniqueIds to a string list.
+   */
+  @Test
+  public void testToStringList() {
+    final Iterable<ObjectIdentifiable> objectIds =
+        ImmutableList.<ObjectIdentifiable>of(ObjectId.of("A", "X"), UniqueId.of("B", "Y", "1"), ObjectId.of("C", "Z"));
     final Iterable<String> expected = ImmutableList.of("A~X", "B~Y~1", "C~Z");
     final List<String> test = IdUtils.toStringList(objectIds);
     assertEquals(expected, test);
   }
 
-  public void test_toStringList_null() {
+  /**
+   * Tests the conversion of null to a string list.
+   */
+  @Test
+  public void testToStringListNull() {
     final List<String> test = IdUtils.toStringList(null);
     assertEquals(0, test.size());
   }
 
   //-------------------------------------------------------------------------
-  public void test_parseObjectIds() {
+  /**
+   * Tests parsing object ids from a lit of strings.
+   */
+  @Test
+  public void testParseObjectIds() {
     final Iterable<String> objectIds = ImmutableList.of("A~X", "B~Y", "C~Z");
     final Iterable<ObjectId> expected = ImmutableList.of(ObjectId.of("A", "X"), ObjectId.of("B", "Y"), ObjectId.of("C", "Z"));
     final List<ObjectId> test = IdUtils.parseObjectIds(objectIds);
     assertEquals(expected, test);
   }
 
-  public void test_parseObjectIds_null() {
+  /**
+   * Tests that attempting to parse a null does nothing.
+   */
+  @Test
+  public void testParseObjectIdsNull() {
     final List<ObjectId> test = IdUtils.parseObjectIds(null);
     assertEquals(0, test.size());
   }
 
   //-------------------------------------------------------------------------
-  public void test_parseUniqueIds() {
+  /**
+   * Tests parsing unique ids from a list of strings.
+   */
+  @Test
+  public void testParseUniqueIds() {
     final Iterable<String> objectIds = ImmutableList.of("A~X", "B~Y~1", "C~Z");
     final Iterable<UniqueId> expected = ImmutableList.of(UniqueId.of("A", "X"), UniqueId.of("B", "Y", "1"), UniqueId.of("C", "Z"));
     final List<UniqueId> test = IdUtils.parseUniqueIds(objectIds);
     assertEquals(expected, test);
   }
 
-  public void test_parseUniqueIds_null() {
+  /**
+   * Tests that attempting to parse a null does nothing.
+   */
+  @Test
+  public void testParseUniqueIdsNull() {
     final List<UniqueId> test = IdUtils.parseUniqueIds(null);
     assertEquals(0, test.size());
   }

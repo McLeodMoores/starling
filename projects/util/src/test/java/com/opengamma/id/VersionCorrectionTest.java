@@ -5,6 +5,7 @@
  */
 package com.opengamma.id;
 
+import static org.testng.Assert.assertNotEquals;
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertSame;
 
@@ -19,12 +20,15 @@ import com.opengamma.util.test.TestGroup;
  */
 @Test(groups = TestGroup.UNIT)
 public class VersionCorrectionTest {
-
   private static final Instant INSTANT1 = Instant.ofEpochSecond(1);
   private static final Instant INSTANT2 = Instant.ofEpochSecond(2);
   private static final Instant INSTANT3 = Instant.ofEpochSecond(3);
 
-  public void test_LATEST() {
+  /**
+   * Tests the latest version.
+   */
+  @Test
+  public void testLatest() {
     final VersionCorrection test = VersionCorrection.LATEST;
     assertEquals(null, test.getVersionAsOf());
     assertEquals(null, test.getCorrectedTo());
@@ -32,71 +36,116 @@ public class VersionCorrectionTest {
   }
 
   //-------------------------------------------------------------------------
-  public void test_of_VersionCorrection() {
+  /**
+   * Tests that the original version correction is returned.
+   */
+  @Test
+  public void testOfVersionCorrection() {
     final VersionCorrection base = VersionCorrection.of(INSTANT1, INSTANT2);
     final VersionCorrection test = VersionCorrection.of(base);
     assertSame(base, test);
   }
 
-  public void test_of_VersionCorrection_null() {
+  /**
+   * Tests that LATEST is returned.
+   */
+  @Test
+  public void testOfVersionCorrectionNull() {
     final VersionCorrection test = VersionCorrection.of((VersionCorrection) null);
     assertSame(VersionCorrection.LATEST, test);
   }
 
   //-------------------------------------------------------------------------
-  public void test_of_InstantInstant() {
+  /**
+   * Tests construction from instants.
+   */
+  @Test
+  public void testOfInstantInstant() {
     final VersionCorrection test = VersionCorrection.of(INSTANT1, INSTANT2);
     assertEquals(INSTANT1, test.getVersionAsOf());
     assertEquals(INSTANT2, test.getCorrectedTo());
     assertEquals("V1970-01-01T00:00:01Z.C1970-01-01T00:00:02Z", test.toString());
   }
 
-  public void test_of_InstantInstant_nullVersion() {
+  /**
+   * Tests construction from instants without a version.
+   */
+  @Test
+  public void testOfInstantInstantNullVersion() {
     final VersionCorrection test = VersionCorrection.of((Instant) null, INSTANT2);
     assertEquals(null, test.getVersionAsOf());
     assertEquals(INSTANT2, test.getCorrectedTo());
     assertEquals("VLATEST.C1970-01-01T00:00:02Z", test.toString());
   }
 
-  public void test_of_InstantInstant_nullCorrection() {
+  /**
+   * Tests construction from instants without a correction.
+   */
+  @Test
+  public void testOfInstantInstantNullCorrection() {
     final VersionCorrection test = VersionCorrection.of(INSTANT1, (Instant) null);
     assertEquals(INSTANT1, test.getVersionAsOf());
     assertEquals(null, test.getCorrectedTo());
     assertEquals("V1970-01-01T00:00:01Z.CLATEST", test.toString());
   }
 
-  public void test_of_InstantInstant_nulls() {
+  /**
+   * Tests that null version and correction returns LATEST.
+   */
+  @Test
+  public void testOfInstantInstantNulls() {
     final VersionCorrection test = VersionCorrection.of((Instant) null, (Instant) null);
     assertSame(VersionCorrection.LATEST, test);
   }
 
   //-------------------------------------------------------------------------
-  public void test_ofVersionAsOf_Instant() {
+  /**
+   * Tests a version-correction as of a version.
+   */
+  @Test
+  public void testOfVersionAsOfInstant() {
     final VersionCorrection test = VersionCorrection.ofVersionAsOf(INSTANT1);
     assertEquals(INSTANT1, test.getVersionAsOf());
     assertEquals(null, test.getCorrectedTo());
   }
 
-  public void test_ofVersionAsOf_Instant_null() {
+  /**
+   * Tests a version-correction as of a null version.
+   */
+  @Test
+  public void testOfVersionAsOfInstantNull() {
     final VersionCorrection test = VersionCorrection.ofVersionAsOf((Instant) null);
     assertSame(VersionCorrection.LATEST, test);
   }
 
   //-------------------------------------------------------------------------
-  public void test_ofCorrectedTo_Instant() {
+  /**
+   * Tests a version-correction corrected to another instant.
+   */
+  @Test
+  public void testOfCorrectedToInstant() {
     final VersionCorrection test = VersionCorrection.ofCorrectedTo(INSTANT2);
     assertEquals(null, test.getVersionAsOf());
     assertEquals(INSTANT2, test.getCorrectedTo());
   }
 
-  public void test_ofCorrectedTo_Instant_null() {
+  /**
+   * Tests a version-correction corrected to a null instant.
+   */
+  @Test
+  public void testOfCorrectedToInstantNull() {
     final VersionCorrection test = VersionCorrection.ofCorrectedTo((Instant) null);
     assertSame(VersionCorrection.LATEST, test);
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Provides valid strings.
+   *
+   * @return  valid strings and expected values
+   */
   @DataProvider(name = "parseValid")
-  Object[][] data_parseValid() {
+  Object[][] dataParseValid() {
     return new Object[][] {
         {"1970-01-01T00:00:01Z", "1970-01-01T00:00:02Z", VersionCorrection.of(INSTANT1, INSTANT2)},
         {"LATEST", "1970-01-01T00:00:02Z", VersionCorrection.of(null, INSTANT2)},
@@ -105,28 +154,54 @@ public class VersionCorrectionTest {
     };
   }
 
+  /**
+   * Tests string parsing.
+   *
+   * @param first  the version string
+   * @param second  the correction string
+   * @param expected  the expected value
+   */
   @Test(dataProvider = "parseValid")
-  public void test_parse_String(final String first, final String second, final VersionCorrection expected) {
+  public void testParseString(final String first, final String second, final VersionCorrection expected) {
     final VersionCorrection test = VersionCorrection.parse("V" + first + ".C" + second);
     assertEquals(expected, test);
   }
 
+  /**
+   * Tests string parsing.
+   *
+   * @param first  the version string
+   * @param second  the correction string
+   * @param expected  the expected value
+   */
   @Test(dataProvider = "parseValid")
-  public void test_parse_StringString(final String first, final String second, final VersionCorrection expected) {
+  public void testParseStringString(final String first, final String second, final VersionCorrection expected) {
     final VersionCorrection test = VersionCorrection.parse(first, second);
     assertEquals(expected, test);
   }
 
+  /**
+   * Tests string parsing.
+   *
+   * @param first  the version string
+   * @param second  the correction string
+   * @param expected  the expected value
+   */
   @Test(dataProvider = "parseValid")
-  public void test_parse_StringString_nullsAllowed(final String first, final String second, final VersionCorrection expected) {
+  public void testParseStringStringNullsAllowed(final String first, final String second, final VersionCorrection expected) {
     final String firstString = first.equals("LATEST") ? null : first;
     final String secondString = second.equals("LATEST") ? null : second;
     final VersionCorrection test = VersionCorrection.parse(firstString, secondString);
     assertEquals(expected, test);
   }
 
+  /**
+   * Provides invalid strings.
+   *
+   * @return  invalid strings
+   */
   @DataProvider(name = "parseInvalid")
-  Object[][] data_parseInvalid() {
+  Object[][] dataParseInvalid() {
     return new Object[][] {
         {"1970-01-01T00:00:01Z.C1970-01-01T00:00:02Z"},  // no V
         {"V1970-01-01T00:00:01Z.1970-01-01T00:00:02Z"},  // no C
@@ -138,60 +213,104 @@ public class VersionCorrectionTest {
     };
   }
 
+  /**
+   * Tests string parsing.
+   *
+   * @param input  the invalid string
+   */
   @Test(dataProvider = "parseInvalid", expectedExceptions = IllegalArgumentException.class)
-  public void test_parse_String_invalid(final String input) {
+  public void testParseStringInvalid(final String input) {
     VersionCorrection.parse(input);
   }
 
+  /**
+   * Tests parsing of an invalid string.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_parse_StringString_invalid() {
+  public void testParseStringStringInvalid() {
     VersionCorrection.parse("LATS", "LATS");
   }
 
   //-------------------------------------------------------------------------
-  public void test_withVersionAsOf_instantToInstant() {
+  /**
+   * Tests the withVersionAsOf() method.
+   */
+  @Test
+  public void testWithVersionAsOfInstantToInstant() {
     final VersionCorrection test = VersionCorrection.of(INSTANT1, INSTANT2);
     assertEquals(VersionCorrection.of(INSTANT3, INSTANT2), test.withVersionAsOf(INSTANT3));
   }
 
-  public void test_withVersionAsOf_instantToNull() {
+  /**
+   * Tests the withVersionAsOf() method.
+   */
+  @Test
+  public void testWithVersionAsOfInstantToNull() {
     final VersionCorrection test = VersionCorrection.of(INSTANT1, INSTANT2);
     assertEquals(VersionCorrection.of(null, INSTANT2), test.withVersionAsOf(null));
   }
 
-  public void test_withVersionAsOf_nullToInstant() {
+  /**
+   * Tests the withVersionAsOf() method.
+   */
+  @Test
+  public void testWithVersionAsOfNullToInstant() {
     final VersionCorrection test = VersionCorrection.of(null, INSTANT2);
     assertEquals(VersionCorrection.of(INSTANT3, INSTANT2), test.withVersionAsOf(INSTANT3));
   }
 
-  public void test_withVersionAsOf_nullToNull() {
+  /**
+   * Tests the withVersionAsOf() method.
+   */
+  @Test
+  public void testWithVersionAsOfNullToNull() {
     final VersionCorrection test = VersionCorrection.of(null, INSTANT2);
     assertEquals(VersionCorrection.of(null, INSTANT2), test.withVersionAsOf(null));
   }
 
   //-------------------------------------------------------------------------
-  public void test_withCorrectedTo_instantToInstant() {
+  /**
+   * Tests the withCorrectedTo() method.
+   */
+  @Test
+  public void testWithCorrectedToInstantToInstant() {
     final VersionCorrection test = VersionCorrection.of(INSTANT1, INSTANT2);
     assertEquals(VersionCorrection.of(INSTANT1, INSTANT3), test.withCorrectedTo(INSTANT3));
   }
 
-  public void test_withCorrectedTo_instantToNull() {
+  /**
+   * Tests the withCorrectedTo() method.
+   */
+  @Test
+  public void testWithCorrectedToInstantToNull() {
     final VersionCorrection test = VersionCorrection.of(INSTANT1, INSTANT2);
     assertEquals(VersionCorrection.of(INSTANT1, null), test.withCorrectedTo(null));
   }
 
-  public void test_withCorrectedTo_nullToInstant() {
+  /**
+   * Tests the withCorrectedTo() method.
+   */
+  @Test
+  public void testWithCorrectedToNullToInstant() {
     final VersionCorrection test = VersionCorrection.of(INSTANT1, null);
     assertEquals(VersionCorrection.of(INSTANT1, INSTANT3), test.withCorrectedTo(INSTANT3));
   }
 
-  public void test_withCorrectedTo_nullToNull() {
+  /**
+   * Tests the withCorrectedTo() method.
+   */
+  @Test
+  public void testWithCorrectedToNullToNull() {
     final VersionCorrection test = VersionCorrection.of(INSTANT1, null);
     assertEquals(VersionCorrection.of(INSTANT1, null), test.withCorrectedTo(null));
   }
 
   //-------------------------------------------------------------------------
-  public void test_containsLatest() {
+  /**
+   * Tests the containsLatest() method.
+   */
+  @Test
+  public void testContainsLatest() {
     assertEquals(false, VersionCorrection.of(INSTANT1, INSTANT2).containsLatest());
     assertEquals(true, VersionCorrection.of(null, INSTANT2).containsLatest());
     assertEquals(true, VersionCorrection.of(INSTANT1, null).containsLatest());
@@ -199,28 +318,47 @@ public class VersionCorrectionTest {
   }
 
   //-------------------------------------------------------------------------
-  public void test_withLatestFixed_noNulls() {
+  /**
+   * Tests that existing version/correction instants are not replaced.
+   */
+  @Test
+  public void testWithLatestFixedNoNulls() {
     final VersionCorrection test = VersionCorrection.of(INSTANT1, INSTANT2);
     assertSame(test, test.withLatestFixed(INSTANT3));
   }
 
-  public void test_withLatestFixed_nullVersion() {
+  /**
+   * Tests that only the version is replaced.
+   */
+  @Test
+  public void testWithLatestFixedNullVersion() {
     final VersionCorrection test = VersionCorrection.of(null, INSTANT2);
     assertEquals(VersionCorrection.of(INSTANT3, INSTANT2), test.withLatestFixed(INSTANT3));
   }
 
-  public void test_withLatestFixed_nullCorrection() {
+  /**
+   * Tests that only the correction is replaced.
+   */
+  @Test
+  public void testWithLatestFixedNullCorrection() {
     final VersionCorrection test = VersionCorrection.of(INSTANT1, null);
     assertEquals(VersionCorrection.of(INSTANT1, INSTANT3), test.withLatestFixed(INSTANT3));
   }
 
-  public void test_withLatestFixed_nulls() {
+  /**
+   * Tests that the version and correction are replaced.
+   */
+  public void testWithLatestFixedNulls() {
     final VersionCorrection test = VersionCorrection.of(null, null);
     assertEquals(VersionCorrection.of(INSTANT3, INSTANT3), test.withLatestFixed(INSTANT3));
   }
 
   //-------------------------------------------------------------------------
-  public void test_compareTo_nonNull() {
+  /**
+   * Tests the compareTo() method.
+   */
+  @Test
+  public void testCompareToNonNull() {
     final VersionCorrection a = VersionCorrection.of(INSTANT1, INSTANT2);
     final VersionCorrection b = VersionCorrection.of(INSTANT1, INSTANT3);
     final VersionCorrection c = VersionCorrection.of(INSTANT2, INSTANT3);
@@ -238,7 +376,11 @@ public class VersionCorrectionTest {
     assertEquals(true, c.compareTo(c) == 0);
   }
 
-  public void test_compareTo_nullVersion() {
+  /**
+   * Tests the compareTo() method.
+   */
+  @Test
+  public void testCompareToNullVersion() {
     final VersionCorrection a = VersionCorrection.of(INSTANT1, INSTANT2);
     final VersionCorrection b = VersionCorrection.of(null, INSTANT2);
 
@@ -249,7 +391,11 @@ public class VersionCorrectionTest {
     assertEquals(true, b.compareTo(b) == 0);
   }
 
-  public void test_compareTo_nullCorrection() {
+  /**
+   * Tests the compareTo() method.
+   */
+  @Test
+  public void testCompareToNullCorrection() {
     final VersionCorrection a = VersionCorrection.of(INSTANT1, INSTANT2);
     final VersionCorrection b = VersionCorrection.of(INSTANT1, null);
 
@@ -260,14 +406,21 @@ public class VersionCorrectionTest {
     assertEquals(true, b.compareTo(b) == 0);
   }
 
+  /**
+   * Tests the compareTo() method.
+   */
   @Test(expectedExceptions = NullPointerException.class)
-  public void test_compareTo_null() {
+  public void testCompareToNull() {
     final VersionCorrection test = VersionCorrection.of(INSTANT1, INSTANT2);
     test.compareTo(null);
   }
 
   //-------------------------------------------------------------------------
-  public void test_equals() {
+  /**
+   * Tests the equals() method.
+   */
+  @Test
+  public void testEquals() {
     final VersionCorrection d1a = VersionCorrection.of(INSTANT1, INSTANT2);
     final VersionCorrection d1b = VersionCorrection.of(INSTANT1, INSTANT2);
     final VersionCorrection d2 = VersionCorrection.of(INSTANT1, INSTANT3);
@@ -284,11 +437,15 @@ public class VersionCorrectionTest {
     assertEquals(false, d2.equals(d1b));
     assertEquals(true, d2.equals(d2));
 
-    assertEquals(false, d1b.equals("d1"));
-    assertEquals(false, d1b.equals(null));
+    assertNotEquals(d1b, "d1");
+    assertNotEquals(null, d1b);
   }
 
-  public void test_hashCode() {
+  /**
+   * Tests the hashCode() method.
+   */
+  @Test
+  public void testHashCode() {
     final VersionCorrection d1a = VersionCorrection.of(INSTANT1, INSTANT2);
     final VersionCorrection d1b = VersionCorrection.of(INSTANT1, INSTANT2);
 

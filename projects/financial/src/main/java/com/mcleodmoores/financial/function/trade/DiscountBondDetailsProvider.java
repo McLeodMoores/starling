@@ -3,26 +3,27 @@
  */
 package com.mcleodmoores.financial.function.trade;
 
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
+
+import org.joda.beans.Bean;
 import org.joda.beans.BeanDefinition;
 import org.joda.beans.ImmutableBean;
 import org.joda.beans.ImmutableConstructor;
+import org.joda.beans.JodaBeanUtils;
+import org.joda.beans.MetaProperty;
+import org.joda.beans.Property;
 import org.joda.beans.PropertyDefinition;
+import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
+import org.joda.beans.impl.direct.DirectMetaBean;
+import org.joda.beans.impl.direct.DirectMetaProperty;
+import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import org.threeten.bp.ZonedDateTime;
 
 import com.opengamma.analytics.financial.instrument.bond.BillTransactionDefinition;
 import com.opengamma.analytics.financial.provider.description.interestrate.IssuerProviderInterface;
 import com.opengamma.util.ArgumentChecker;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Set;
-import org.joda.beans.Bean;
-import org.joda.beans.JodaBeanUtils;
-import org.joda.beans.MetaProperty;
-import org.joda.beans.Property;
-import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
-import org.joda.beans.impl.direct.DirectMetaBean;
-import org.joda.beans.impl.direct.DirectMetaProperty;
-import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
  *
@@ -133,9 +134,9 @@ public class DiscountBondDetailsProvider implements ImmutableBean, InstrumentDet
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       DiscountBondDetailsProvider other = (DiscountBondDetailsProvider) obj;
-      return JodaBeanUtils.equal(getCurves(), other.getCurves()) &&
-          JodaBeanUtils.equal(getValuationTime(), other.getValuationTime()) &&
-          JodaBeanUtils.equal(getDefinition(), other.getDefinition());
+      return JodaBeanUtils.equal(_curves, other._curves) &&
+          JodaBeanUtils.equal(_valuationTime, other._valuationTime) &&
+          JodaBeanUtils.equal(_definition, other._definition);
     }
     return false;
   }
@@ -143,9 +144,9 @@ public class DiscountBondDetailsProvider implements ImmutableBean, InstrumentDet
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getCurves());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getValuationTime());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getDefinition());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_curves);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_valuationTime);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_definition);
     return hash;
   }
 
@@ -163,9 +164,9 @@ public class DiscountBondDetailsProvider implements ImmutableBean, InstrumentDet
   }
 
   protected void toString(StringBuilder buf) {
-    buf.append("curves").append('=').append(JodaBeanUtils.toString(getCurves())).append(',').append(' ');
-    buf.append("valuationTime").append('=').append(JodaBeanUtils.toString(getValuationTime())).append(',').append(' ');
-    buf.append("definition").append('=').append(JodaBeanUtils.toString(getDefinition())).append(',').append(' ');
+    buf.append("curves").append('=').append(JodaBeanUtils.toString(_curves)).append(',').append(' ');
+    buf.append("valuationTime").append('=').append(JodaBeanUtils.toString(_valuationTime)).append(',').append(' ');
+    buf.append("definition").append('=').append(JodaBeanUtils.toString(_definition)).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------
@@ -351,19 +352,31 @@ public class DiscountBondDetailsProvider implements ImmutableBean, InstrumentDet
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

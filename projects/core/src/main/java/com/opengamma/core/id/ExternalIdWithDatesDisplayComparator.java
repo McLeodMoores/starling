@@ -29,7 +29,7 @@ public class ExternalIdWithDatesDisplayComparator implements Comparator<External
   }
 
   /**
-   * Initialize comparator using configuration object stored in config database
+   * Initialize comparator using configuration object stored in config database.
    * @param orderConfig sourced from a ConfigSource
    */
   public ExternalIdWithDatesDisplayComparator(final ExternalIdOrderConfig orderConfig) {
@@ -40,9 +40,8 @@ public class ExternalIdWithDatesDisplayComparator implements Comparator<External
   private int scoreExternalId(final ExternalIdWithDates id) {
     if (_scoreMap.containsKey(id.getExternalId().getScheme())) {
       return _scoreMap.get(id.getExternalId().getScheme());
-    } else {
-      return 0;
     }
+    return 0;
   }
 
   @Override
@@ -51,8 +50,7 @@ public class ExternalIdWithDatesDisplayComparator implements Comparator<External
     final int score1 = scoreExternalId(id1);
     if (score1 - score0 != 0) {
       return score1 - score0;
-    } else {
-      return id0.compareTo(id1);
     }
+    return id0.compareTo(id1);
   }
 }

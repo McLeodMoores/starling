@@ -110,8 +110,8 @@ public final class YieldCurvePointShift implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       YieldCurvePointShift other = (YieldCurvePointShift) obj;
-      return (getPointIndex() == other.getPointIndex()) &&
-          JodaBeanUtils.equal(getShift(), other.getShift());
+      return (_pointIndex == other._pointIndex) &&
+          JodaBeanUtils.equal(_shift, other._shift);
     }
     return false;
   }
@@ -119,8 +119,8 @@ public final class YieldCurvePointShift implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getPointIndex());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getShift());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_pointIndex);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_shift);
     return hash;
   }
 
@@ -128,8 +128,8 @@ public final class YieldCurvePointShift implements ImmutableBean {
   public String toString() {
     StringBuilder buf = new StringBuilder(96);
     buf.append("YieldCurvePointShift{");
-    buf.append("pointIndex").append('=').append(getPointIndex()).append(',').append(' ');
-    buf.append("shift").append('=').append(JodaBeanUtils.toString(getShift()));
+    buf.append("pointIndex").append('=').append(_pointIndex).append(',').append(' ');
+    buf.append("shift").append('=').append(JodaBeanUtils.toString(_shift));
     buf.append('}');
     return buf.toString();
   }
@@ -292,19 +292,31 @@ public final class YieldCurvePointShift implements ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

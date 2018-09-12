@@ -112,7 +112,7 @@ public final class UserMarketDataSpecification implements ImmutableBean, MarketD
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       UserMarketDataSpecification other = (UserMarketDataSpecification) obj;
-      return JodaBeanUtils.equal(getUserSnapshotId(), other.getUserSnapshotId());
+      return JodaBeanUtils.equal(_userSnapshotId, other._userSnapshotId);
     }
     return false;
   }
@@ -120,7 +120,7 @@ public final class UserMarketDataSpecification implements ImmutableBean, MarketD
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getUserSnapshotId());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_userSnapshotId);
     return hash;
   }
 
@@ -128,7 +128,7 @@ public final class UserMarketDataSpecification implements ImmutableBean, MarketD
   public String toString() {
     StringBuilder buf = new StringBuilder(64);
     buf.append("UserMarketDataSpecification{");
-    buf.append("userSnapshotId").append('=').append(JodaBeanUtils.toString(getUserSnapshotId()));
+    buf.append("userSnapshotId").append('=').append(JodaBeanUtils.toString(_userSnapshotId));
     buf.append('}');
     return buf.toString();
   }
@@ -266,19 +266,31 @@ public final class UserMarketDataSpecification implements ImmutableBean, MarketD
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

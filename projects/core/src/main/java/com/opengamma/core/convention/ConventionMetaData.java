@@ -17,17 +17,19 @@ public @interface ConventionMetaData {
 
   /**
    * A short description of the convention to be used in GUIs.
-   * <p>
+   * @return  the description
    */
   String description() default "";
 
   /**
    * A categorization for conventions.
+   * @return  the category
    */
   String group() default ConventionGroups.MISC;
 
   /**
    * A longer information string about how the convention is to be used.
+   * @return  information about usage
    */
   String info() default "";
 }

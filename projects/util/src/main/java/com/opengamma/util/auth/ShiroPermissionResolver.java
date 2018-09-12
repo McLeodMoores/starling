@@ -80,7 +80,7 @@ public final class ShiroPermissionResolver implements PermissionResolver {
   public void register(final PrefixedPermissionResolver resolver) {
     ArgumentChecker.notNull(resolver, "resolver");
     final PrefixedPermissionResolver existing = _prefixed.putIfAbsent(resolver.getPrefix(), resolver);
-    if (existing != null && existing.equals(resolver) == false) {
+    if (existing != null && !existing.equals(resolver)) {
       throw new IllegalArgumentException("Prefix is already registered");
     }
   }
@@ -168,7 +168,7 @@ public final class ShiroPermissionResolver implements PermissionResolver {
     }
     // normal non-bulk check
     for (final Permission requiredPermission : requiredPermissions) {
-      if (implies(subjectPermissions, requiredPermission) == false) {
+      if (!implies(subjectPermissions, requiredPermission)) {
         return false;
       }
     }
@@ -176,7 +176,7 @@ public final class ShiroPermissionResolver implements PermissionResolver {
   }
 
   // does one of the subject permissions imply the required permission
-  private boolean implies(final Collection<? extends Permission> subjectPermissions, final Permission requiredPermission) {
+  private static boolean implies(final Collection<? extends Permission> subjectPermissions, final Permission requiredPermission) {
     for (final Permission subjectPermission : subjectPermissions) {
       if (subjectPermission.implies(requiredPermission)) {
         return true;
@@ -219,7 +219,7 @@ public final class ShiroPermissionResolver implements PermissionResolver {
   }
 
   // does one of the subject permissions imply the required permission, exception if not
-  private void checkImplies(final Collection<? extends Permission> subjectPermissions, final Permission requiredPermission) {
+  private static void checkImplies(final Collection<? extends Permission> subjectPermissions, final Permission requiredPermission) {
     for (final Permission subjectPermission : subjectPermissions) {
       if (subjectPermission instanceof ExtendedPermission) {
         if (((ExtendedPermission) subjectPermission).checkImplies(requiredPermission)) {

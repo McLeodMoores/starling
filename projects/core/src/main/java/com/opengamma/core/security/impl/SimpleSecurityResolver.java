@@ -14,7 +14,8 @@ import com.opengamma.id.VersionCorrection;
 /**
  * Simple implementation of {@code SecurityResolver} that picks the first option.
  * <p>
- * Resolution of a single security from multiple candidate securities is performed by selecting the first. Since the input is not necessarily sorted, this may be random.
+ * Resolution of a single security from multiple candidate securities is performed by selecting the first.
+ * Since the input is not necessarily sorted, this may be random.
  */
 public class SimpleSecurityResolver extends AbstractSecurityResolver {
 

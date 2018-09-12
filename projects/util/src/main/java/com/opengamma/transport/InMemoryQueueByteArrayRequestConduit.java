@@ -26,7 +26,7 @@ public class InMemoryQueueByteArrayRequestConduit implements Lifecycle, ByteArra
     private final byte[] _requestMessage;
     private final ByteArrayMessageReceiver _responseReceiver;
 
-    public DispatchJob(final byte[] requestMessage, final ByteArrayMessageReceiver responseReceiver) {
+    DispatchJob(final byte[] requestMessage, final ByteArrayMessageReceiver responseReceiver) {
       _requestMessage = requestMessage;
       _responseReceiver = responseReceiver;
     }

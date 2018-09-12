@@ -224,9 +224,9 @@ public final class FixedIncomeCurvesProvider implements FxDataProvider, Discount
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       FixedIncomeCurvesProvider other = (FixedIncomeCurvesProvider) obj;
-      return JodaBeanUtils.equal(getDiscountingCurves(), other.getDiscountingCurves()) &&
-          JodaBeanUtils.equal(getIndexCurves(), other.getIndexCurves()) &&
-          JodaBeanUtils.equal(getFxMatrix(), other.getFxMatrix());
+      return JodaBeanUtils.equal(_discountingCurves, other._discountingCurves) &&
+          JodaBeanUtils.equal(_indexCurves, other._indexCurves) &&
+          JodaBeanUtils.equal(_fxMatrix, other._fxMatrix);
     }
     return false;
   }
@@ -234,9 +234,9 @@ public final class FixedIncomeCurvesProvider implements FxDataProvider, Discount
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getDiscountingCurves());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getIndexCurves());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getFxMatrix());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_discountingCurves);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_indexCurves);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_fxMatrix);
     return hash;
   }
 
@@ -244,9 +244,9 @@ public final class FixedIncomeCurvesProvider implements FxDataProvider, Discount
   public String toString() {
     StringBuilder buf = new StringBuilder(128);
     buf.append("FixedIncomeCurvesProvider{");
-    buf.append("discountingCurves").append('=').append(getDiscountingCurves()).append(',').append(' ');
-    buf.append("indexCurves").append('=').append(getIndexCurves()).append(',').append(' ');
-    buf.append("fxMatrix").append('=').append(JodaBeanUtils.toString(getFxMatrix()));
+    buf.append("discountingCurves").append('=').append(_discountingCurves).append(',').append(' ');
+    buf.append("indexCurves").append('=').append(_indexCurves).append(',').append(' ');
+    buf.append("fxMatrix").append('=').append(JodaBeanUtils.toString(_fxMatrix));
     buf.append('}');
     return buf.toString();
   }
@@ -437,19 +437,31 @@ public final class FixedIncomeCurvesProvider implements FxDataProvider, Discount
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

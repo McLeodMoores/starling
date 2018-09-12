@@ -20,6 +20,12 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 @Deprecated
 public class TuplesUtil {
 
+  /**
+   * Gets a map entry.
+   *
+   * @param pair  the pair
+   * @return  an entry
+   */
   public static Map.Entry pairToEntry(final Pair pair) {
     return new Map.Entry() {
       @Override
@@ -39,6 +45,12 @@ public class TuplesUtil {
     };
   }
 
+  /**
+   * Gets a map entry.
+   *
+   * @param pair  the pair
+   * @return  an entry
+   */
   public static Long2ObjectMap.Entry pairToEntry(final LongObjectPair pair) {
     return new Long2ObjectMap.Entry() {
       @Override
@@ -63,6 +75,12 @@ public class TuplesUtil {
     };
   }
 
+  /**
+   * Gets a map entry.
+   *
+   * @param pair  the pair
+   * @return  an entry
+   */
   public static Long2DoubleMap.Entry pairToEntry(final LongDoublePair pair) {
     return new Long2DoubleMap.Entry() {
       @Override
@@ -97,6 +115,12 @@ public class TuplesUtil {
     };
   }
 
+  /**
+   * Gets a map entry.
+   *
+   * @param pair  the pair
+   * @return  an entry
+   */
   public static Int2DoubleMap.Entry pairToEntry(final IntDoublePair pair) {
     return new Int2DoubleMap.Entry() {
       @Override
@@ -131,6 +155,12 @@ public class TuplesUtil {
     };
   }
 
+  /**
+   * Gets a map entry.
+   *
+   * @param pair  the pair
+   * @return  an entry
+   */
   public static Int2ObjectMap.Entry pairToEntry(final IntObjectPair pair) {
     return new Int2ObjectMap.Entry() {
       @Override

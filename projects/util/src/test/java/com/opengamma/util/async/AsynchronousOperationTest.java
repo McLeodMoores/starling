@@ -26,7 +26,7 @@ public class AsynchronousOperationTest {
 
   private static final String RESULT = "Foo";
 
-  private void asyncTask(final ResultCallback<String> callback, final boolean result) {
+  private static void asyncTask(final ResultCallback<String> callback, final boolean result) {
     if (result) {
       callback.setResult(RESULT);
     } else {
@@ -34,7 +34,7 @@ public class AsynchronousOperationTest {
     }
   }
 
-  private String immediateSignal(final boolean result) throws AsynchronousExecution {
+  private static String immediateSignal(final boolean result) throws AsynchronousExecution {
     final AsynchronousOperation<String> operation = AsynchronousOperation.create(String.class);
     asyncTask(operation.getCallback(), result);
     return operation.getResult();
@@ -49,7 +49,7 @@ public class AsynchronousOperationTest {
     immediateSignal(false);
   }
 
-  private void deferredSignal(final boolean listenerFirst, final boolean result) {
+  private static void deferredSignal(final boolean listenerFirst, final boolean result) {
     final AsynchronousOperation<String> operation = AsynchronousOperation.create(String.class);
     try {
       operation.getResult();
@@ -108,7 +108,7 @@ public class AsynchronousOperationTest {
     deferredSignal(false, false);
   }
 
-  private String blockingCall(final boolean result) throws InterruptedException {
+  private static String blockingCall(final boolean result) throws InterruptedException {
     final AsynchronousOperation<String> operation = AsynchronousOperation.create(String.class);
     new Thread() {
       @Override

@@ -38,6 +38,9 @@ import com.opengamma.util.ArgumentChecker;
     _serviceContext = ArgumentChecker.notNull(serviceContext, "serviceContext");
   }
 
+  /**
+   * Creates a resolver with null service context.
+   */
   /* package */ SourceLinkResolver() {
     _serviceContext = null;
   }
@@ -93,6 +96,8 @@ import com.opengamma.util.ArgumentChecker;
    * Execute a query against the source to retrieve the target of the link.
    *
    * @param source the source to retrieve the object from, not null
+   * @param type  the type of the result
+   * @param identifier  the identifier
    * @param versionCorrection  the version correction to be used during the query, not null
    * @return the target of the link
    * @throws DataNotFoundException if the link is not resolved

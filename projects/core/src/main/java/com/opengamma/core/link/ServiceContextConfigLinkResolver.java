@@ -64,9 +64,9 @@ import com.opengamma.service.VersionCorrectionProvider;
     // The database stores config items with exact type, but we may want to search
     // with a more general type. We therefore may need to try the search twice.
     final T result = findWithMatchingType(configSource, type, name, versionCorrection);
-    return result != null ?
-        result :
-        findWithGeneralType(configSource, type, name, versionCorrection);
+    return result != null
+        ? result
+        : findWithGeneralType(configSource, type, name, versionCorrection);
   }
 
   private T findWithMatchingType(final ConfigSource configSource, final Class<T> type,
@@ -85,10 +85,9 @@ import com.opengamma.service.VersionCorrectionProvider;
     final T result = (T) selectResult(type, identifier, results);
     if (result != null) {
       return result;
-    } else {
-      throw new DataNotFoundException("No config found with type: [" + type.getName() + "], id: [" +
-                                      identifier + "] and versionCorrection: [" + versionCorrection + "]");
     }
+    throw new DataNotFoundException("No config found with type: [" + type.getName() + "], id: ["
+                                    + identifier + "] and versionCorrection: [" + versionCorrection + "]");
   }
 
   private Iterable<ConfigItem<Object>> filterForCorrectType(final Collection<ConfigItem<Object>> allMatches,

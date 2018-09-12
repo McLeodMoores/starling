@@ -20,10 +20,10 @@ import org.joda.beans.JodaBeanUtils;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
 import org.joda.beans.PropertyDefinition;
-import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
+import org.joda.beans.impl.direct.DirectPrivateBeanBuilder;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
@@ -187,7 +187,7 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
    * @return the external identifier search with the specified identifier removed, not null
    */
   public ExternalIdSearch withExternalIdRemoved(final ExternalId externalId) {
-    if (externalId == null || contains(externalId) == false) {
+    if (externalId == null || !contains(externalId)) {
       return this;
     }
     final Set<ExternalId> ids = Sets.newHashSet(_externalIds);
@@ -250,9 +250,10 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
       case ANY:
         return contains(otherId);
       case NONE:
-        return contains(otherId) == false;
+        return !contains(otherId);
+      default:
+        return false;
     }
-    return false;
   }
 
   /**
@@ -276,9 +277,10 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
       case ANY:
         return containsAny(otherId);
       case NONE:
-        return containsAny(otherId) == false;
+        return !containsAny(otherId);
+      default:
+        return false;
     }
-    return false;
   }
 
   //-------------------------------------------------------------------------
@@ -295,7 +297,7 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
   public boolean containsAll(final Iterable<ExternalId> otherId) {
     ArgumentChecker.notNull(otherId, "otherId");
     for (final ExternalId identifier : otherId) {
-      if (_externalIds.contains(identifier) == false) {
+      if (!_externalIds.contains(identifier)) {
         return false;
       }
     }
@@ -418,8 +420,8 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       ExternalIdSearch other = (ExternalIdSearch) obj;
-      return JodaBeanUtils.equal(getExternalIds(), other.getExternalIds()) &&
-          JodaBeanUtils.equal(getSearchType(), other.getSearchType());
+      return JodaBeanUtils.equal(_externalIds, other._externalIds) &&
+          JodaBeanUtils.equal(_searchType, other._searchType);
     }
     return false;
   }
@@ -427,8 +429,8 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getExternalIds());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getSearchType());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_externalIds);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_searchType);
     return hash;
   }
 
@@ -436,8 +438,8 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
   public String toString() {
     StringBuilder buf = new StringBuilder(96);
     buf.append("ExternalIdSearch{");
-    buf.append("externalIds").append('=').append(getExternalIds()).append(',').append(' ');
-    buf.append("searchType").append('=').append(JodaBeanUtils.toString(getSearchType()));
+    buf.append("externalIds").append('=').append(_externalIds).append(',').append(' ');
+    buf.append("searchType").append('=').append(JodaBeanUtils.toString(_searchType));
     buf.append('}');
     return buf.toString();
   }
@@ -547,7 +549,7 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
   /**
    * The bean-builder for {@code ExternalIdSearch}.
    */
-  private static final class Builder extends DirectFieldsBeanBuilder<ExternalIdSearch> {
+  private static final class Builder extends DirectPrivateBeanBuilder<ExternalIdSearch> {
 
     private Set<ExternalId> _externalIds = ImmutableSet.of();
     private ExternalIdSearchType _searchType;
@@ -556,6 +558,7 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
      * Restricted constructor.
      */
     private Builder() {
+      super(meta());
     }
 
     //-----------------------------------------------------------------------
@@ -584,30 +587,6 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
         default:
           throw new NoSuchElementException("Unknown property: " + propertyName);
       }
-      return this;
-    }
-
-    @Override
-    public Builder set(MetaProperty<?> property, Object value) {
-      super.set(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(String propertyName, String value) {
-      setString(meta().metaProperty(propertyName), value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(MetaProperty<?> property, String value) {
-      super.setString(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
-      super.setAll(propertyValueMap);
       return this;
     }
 

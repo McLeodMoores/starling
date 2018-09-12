@@ -37,25 +37,25 @@ public class HistoricalTimeSeriesInfoMetaDataResult extends AbstractMetaDataResu
    * This is only populated if requested.
    */
   @PropertyDefinition
-  private final List<String> _dataFields = new ArrayList<String>();
+  private final List<String> _dataFields = new ArrayList<>();
   /**
    * The list if valid data sources.
    * This is only populated if requested.
    */
   @PropertyDefinition
-  private final List<String> _dataSources = new ArrayList<String>();
+  private final List<String> _dataSources = new ArrayList<>();
   /**
    * The list if valid data providers.
    * This is only populated if requested.
    */
   @PropertyDefinition
-  private final List<String> _dataProviders = new ArrayList<String>();
+  private final List<String> _dataProviders = new ArrayList<>();
   /**
    * The list if valid observation times.
    * This is only populated if requested.
    */
   @PropertyDefinition
-  private final List<String> _observationTimes = new ArrayList<String>();
+  private final List<String> _observationTimes = new ArrayList<>();
 
   /**
    * Creates an instance.

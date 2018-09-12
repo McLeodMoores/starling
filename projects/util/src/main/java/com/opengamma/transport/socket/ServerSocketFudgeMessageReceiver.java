@@ -106,7 +106,7 @@ public class ServerSocketFudgeMessageReceiver extends AbstractServerSocketProces
 
     // NOTE kirk 2010-05-12 -- Have to pass in the InputStream explicitly so that
     // we can force the IOException catch up above.
-    public MessageReceiveJob(final Socket socket, final InputStream inputStream) {
+    MessageReceiveJob(final Socket socket, final InputStream inputStream) {
       ArgumentChecker.notNull(socket, "socket");
       ArgumentChecker.notNull(inputStream, "inputStream");
       _socket = socket;

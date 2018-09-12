@@ -103,7 +103,7 @@ public class ServerSocketFudgeRequestDispatcher extends AbstractServerSocketProc
 
     // NOTE kirk 2010-05-12 -- Have to pass in the InputStream and OutputStream explicitly so that
     // we can force the IOException catch up above.
-    public RequestDispatchJob(final Socket socket, final InputStream inputStream, final OutputStream outputStream) {
+    RequestDispatchJob(final Socket socket, final InputStream inputStream, final OutputStream outputStream) {
       ArgumentChecker.notNull(socket, "Socket");
       ArgumentChecker.notNull(inputStream, "inputStream");
       ArgumentChecker.notNull(outputStream, "outputStream");

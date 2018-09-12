@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.core.holiday;
 
@@ -39,7 +39,7 @@ public class HolidayWithWeekendAdapter extends DirectBean implements Holiday, We
    * The unique identifier of the holiday.
    * This must be null when adding to a master and not null when retrieved from a master.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true, overrideSet = true)
   private UniqueId _uniqueId;
 
   /**
@@ -51,7 +51,7 @@ public class HolidayWithWeekendAdapter extends DirectBean implements Holiday, We
   /**
    * The weekend type.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private WeekendType _weekendType;
 
   /**
@@ -153,6 +153,7 @@ public class HolidayWithWeekendAdapter extends DirectBean implements Holiday, We
    * This must be null when adding to a master and not null when retrieved from a master.
    * @return the value of the property
    */
+  @Override
   public UniqueId getUniqueId() {
     return _uniqueId;
   }
@@ -162,6 +163,7 @@ public class HolidayWithWeekendAdapter extends DirectBean implements Holiday, We
    * This must be null when adding to a master and not null when retrieved from a master.
    * @param uniqueId  the new value of the property
    */
+  @Override
   public void setUniqueId(UniqueId uniqueId) {
     this._uniqueId = uniqueId;
   }
@@ -206,6 +208,7 @@ public class HolidayWithWeekendAdapter extends DirectBean implements Holiday, We
    * Gets the weekend type.
    * @return the value of the property, not null
    */
+  @Override
   public WeekendType getWeekendType() {
     return _weekendType;
   }

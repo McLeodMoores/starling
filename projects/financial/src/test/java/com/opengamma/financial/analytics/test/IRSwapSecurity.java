@@ -120,8 +120,8 @@ public final class IRSwapSecurity implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       IRSwapSecurity other = (IRSwapSecurity) obj;
-      return JodaBeanUtils.equal(getSwapSecurity(), other.getSwapSecurity()) &&
-          JodaBeanUtils.equal(getRawInput(), other.getRawInput());
+      return JodaBeanUtils.equal(_swapSecurity, other._swapSecurity) &&
+          JodaBeanUtils.equal(_rawInput, other._rawInput);
     }
     return false;
   }
@@ -129,8 +129,8 @@ public final class IRSwapSecurity implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getSwapSecurity());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getRawInput());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_swapSecurity);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_rawInput);
     return hash;
   }
 
@@ -138,8 +138,8 @@ public final class IRSwapSecurity implements ImmutableBean {
   public String toString() {
     StringBuilder buf = new StringBuilder(96);
     buf.append("IRSwapSecurity{");
-    buf.append("swapSecurity").append('=').append(getSwapSecurity()).append(',').append(' ');
-    buf.append("rawInput").append('=').append(JodaBeanUtils.toString(getRawInput()));
+    buf.append("swapSecurity").append('=').append(_swapSecurity).append(',').append(' ');
+    buf.append("rawInput").append('=').append(JodaBeanUtils.toString(_rawInput));
     buf.append('}');
     return buf.toString();
   }
@@ -302,19 +302,31 @@ public final class IRSwapSecurity implements ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

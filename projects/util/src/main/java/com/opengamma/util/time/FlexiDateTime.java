@@ -20,7 +20,7 @@ import org.threeten.bp.temporal.Temporal;
 import org.threeten.bp.temporal.TemporalAccessor;
 import org.threeten.bp.temporal.TemporalQueries;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.opengamma.util.ArgumentChecker;
 
 /**
@@ -128,7 +128,7 @@ public final class FlexiDateTime implements Serializable {
    * @return the date-time, not null
    */
   public static FlexiDateTime from(final TemporalAccessor temporal) {
-    ArgumentChecker.notNull(temporal, "calendrical");
+    ArgumentChecker.notNull(temporal, "temporal");
     final LocalDate date = LocalDate.from(temporal);
     LocalTime time;
     try {
@@ -182,10 +182,12 @@ public final class FlexiDateTime implements Serializable {
    */
   public static FlexiDateTime create(final LocalDate date, final OffsetTime time) {
     if (date != null) {
-      return FlexiDateTime.create(date, time);
-    } else {
-      return null;
+      if (time != null) {
+        return new FlexiDateTime(date, time.toLocalTime(), time.getOffset());
+      }
+      return new FlexiDateTime(date, null, null);
     }
+    return null;
   }
 
   /**
@@ -199,10 +201,9 @@ public final class FlexiDateTime implements Serializable {
    */
   public static FlexiDateTime create(final LocalDate date, final LocalTime time, final ZoneId zone) {
     if (date != null) {
-      return FlexiDateTime.create(date, time, zone);
-    } else {
-      return null;
+      return new FlexiDateTime(date, time, zone);
     }
+    return null;
   }
 
   //-------------------------------------------------------------------------
@@ -267,7 +268,7 @@ public final class FlexiDateTime implements Serializable {
    */
   public LocalDateTime toLocalDateTime(final LocalTime defaultTime) {
     ArgumentChecker.notNull(defaultTime, "defaultTime");
-    return LocalDateTime.of(_date, Objects.firstNonNull(_time, defaultTime));
+    return LocalDateTime.of(_date, MoreObjects.firstNonNull(_time, defaultTime));
   }
 
   /**
@@ -315,7 +316,7 @@ public final class FlexiDateTime implements Serializable {
   public ZonedDateTime toZonedDateTime(final LocalTime defaultTime, final ZoneId defaultZone) {
     ArgumentChecker.notNull(defaultTime, "defaultTime");
     ArgumentChecker.notNull(defaultZone, "defaultZone");
-    return toLocalDateTime(defaultTime).atZone(Objects.firstNonNull(_zone, defaultZone));
+    return toLocalDateTime(defaultTime).atZone(MoreObjects.firstNonNull(_zone, defaultZone));
   }
 
   /**

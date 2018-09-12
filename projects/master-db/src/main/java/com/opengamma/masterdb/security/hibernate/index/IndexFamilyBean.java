@@ -37,13 +37,13 @@ public class IndexFamilyBean extends SecurityBean {
     if (!(other instanceof IndexFamilyBean)) {
       return false;
     }
-    IndexFamilyBean index = (IndexFamilyBean) other;
+    final IndexFamilyBean index = (IndexFamilyBean) other;
     return new EqualsBuilder()
       .append(getId(), index.getId())
       .append(getEntries(), index.getEntries())
       .isEquals();
   }
-  
+
   @Override
   public int hashCode() {
     return new HashCodeBuilder()

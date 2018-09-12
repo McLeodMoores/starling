@@ -42,7 +42,7 @@ public class CashFlowSecurityBean extends SecurityBean {
     if (!(other instanceof CashFlowSecurityBean)) {
       return false;
     }
-    CashFlowSecurityBean cashflow = (CashFlowSecurityBean) other;
+    final CashFlowSecurityBean cashflow = (CashFlowSecurityBean) other;
     return new EqualsBuilder()
       .append(getId(), cashflow.getId())
       .append(getCurrency(), cashflow.getCurrency())

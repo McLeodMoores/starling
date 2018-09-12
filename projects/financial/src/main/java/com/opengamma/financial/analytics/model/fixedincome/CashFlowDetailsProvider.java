@@ -206,11 +206,11 @@ public class CashFlowDetailsProvider implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       CashFlowDetailsProvider other = (CashFlowDetailsProvider) obj;
-      return JodaBeanUtils.equal(getMulticurveProviderInterface(), other.getMulticurveProviderInterface()) &&
-          JodaBeanUtils.equal(getZonedDateTime(), other.getZonedDateTime()) &&
-          (isFixed() == other.isFixed()) &&
-          JodaBeanUtils.equal(getDefinition(), other.getDefinition()) &&
-          JodaBeanUtils.equal(getType(), other.getType());
+      return JodaBeanUtils.equal(_multicurveProviderInterface, other._multicurveProviderInterface) &&
+          JodaBeanUtils.equal(_zonedDateTime, other._zonedDateTime) &&
+          (_fixed == other._fixed) &&
+          JodaBeanUtils.equal(_definition, other._definition) &&
+          JodaBeanUtils.equal(_type, other._type);
     }
     return false;
   }
@@ -218,11 +218,11 @@ public class CashFlowDetailsProvider implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getMulticurveProviderInterface());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getZonedDateTime());
-    hash = hash * 31 + JodaBeanUtils.hashCode(isFixed());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getDefinition());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getType());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_multicurveProviderInterface);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_zonedDateTime);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_fixed);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_definition);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_type);
     return hash;
   }
 
@@ -240,11 +240,11 @@ public class CashFlowDetailsProvider implements ImmutableBean {
   }
 
   protected void toString(StringBuilder buf) {
-    buf.append("multicurveProviderInterface").append('=').append(JodaBeanUtils.toString(getMulticurveProviderInterface())).append(',').append(' ');
-    buf.append("zonedDateTime").append('=').append(JodaBeanUtils.toString(getZonedDateTime())).append(',').append(' ');
-    buf.append("fixed").append('=').append(JodaBeanUtils.toString(isFixed())).append(',').append(' ');
-    buf.append("definition").append('=').append(JodaBeanUtils.toString(getDefinition())).append(',').append(' ');
-    buf.append("type").append('=').append(JodaBeanUtils.toString(getType())).append(',').append(' ');
+    buf.append("multicurveProviderInterface").append('=').append(JodaBeanUtils.toString(_multicurveProviderInterface)).append(',').append(' ');
+    buf.append("zonedDateTime").append('=').append(JodaBeanUtils.toString(_zonedDateTime)).append(',').append(' ');
+    buf.append("fixed").append('=').append(JodaBeanUtils.toString(_fixed)).append(',').append(' ');
+    buf.append("definition").append('=').append(JodaBeanUtils.toString(_definition)).append(',').append(' ');
+    buf.append("type").append('=').append(JodaBeanUtils.toString(_type)).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------
@@ -480,19 +480,31 @@ public class CashFlowDetailsProvider implements ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

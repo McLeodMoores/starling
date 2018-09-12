@@ -57,7 +57,7 @@ public final class ClassUtils {
    *
    * @param className  the class name, not null
    * @return the class object, not null
-   * @throws ClassNotFoundException
+   * @throws ClassNotFoundException  if the class cannot be located
    */
   public static Class<?> loadClass(final String className) throws ClassNotFoundException {
     Class<?> clazz = CLASS_CACHE.get(className);
@@ -132,7 +132,7 @@ public final class ClassUtils {
    */
   public static <T> Class<T> initClass(final Class<T> clazz) {
     final String className = clazz.getName();
-    if (CLASS_CACHE.containsKey(className) == false) {
+    if (!CLASS_CACHE.containsKey(className)) {
       try {
         Class.forName(className, true, clazz.getClassLoader());
       } catch (final ClassNotFoundException ex) {

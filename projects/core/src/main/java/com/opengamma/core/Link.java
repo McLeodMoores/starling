@@ -7,7 +7,6 @@ package com.opengamma.core;
 
 import com.opengamma.DataNotFoundException;
 import com.opengamma.id.ExternalIdBundle;
-import com.opengamma.id.ObjectId;
 import com.opengamma.id.ObjectIdentifiable;
 import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.util.PublicAPI;
@@ -21,23 +20,16 @@ import com.opengamma.util.PublicAPI;
  * <p>
  * This interface makes no guarantees about the thread-safety of implementations.
  * However, it is strongly recommended that the methods in this interface are individually thread-safe.
- * 
+ *
  * @param <T> the target type of the link
  */
 @PublicAPI
 public interface Link<T extends UniqueIdentifiable> extends ObjectIdentifiable {
 
   /**
-   * Gets the object identifier that strongly references the target.
-   * 
-   * @return the object identifier, may be null
-   */
-  ObjectId getObjectId();
-
-  /**
    * Gets the external identifier bundle that references the target.
    * An empty bundle is used if not referencing a target by external bundle.
-   * 
+   *
    * @return the external identifier bundle, not null
    */
   ExternalIdBundle getExternalId();
@@ -46,7 +38,7 @@ public interface Link<T extends UniqueIdentifiable> extends ObjectIdentifiable {
    * Resolves the link to the target object.
    * <p>
    * This is normally implemented by calling {@link LinkResolver#resolve(Link)}.
-   * 
+   *
    * @param resolver  the resolver capable of finding the target, not null
    * @return the resolved target, null if unable to resolve
    * @throws DataNotFoundException if the target could not be resolved

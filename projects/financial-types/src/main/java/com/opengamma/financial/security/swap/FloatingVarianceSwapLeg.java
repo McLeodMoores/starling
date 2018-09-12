@@ -50,7 +50,7 @@ public class FloatingVarianceSwapLeg extends VarianceSwapLeg {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param dayCount The day count convention, not null
    * @param paymentFrequency The payment frequency, not null
    * @param regionId The region ID, not null

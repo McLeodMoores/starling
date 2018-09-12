@@ -101,7 +101,7 @@ public class FunctionConfigurationSourceComponentFactory extends AbstractCompone
 
       @Override
       public FunctionConfigurationBundle getFunctionConfiguration(final Instant version) {
-        final List<FunctionConfiguration> functions = new ArrayList<FunctionConfiguration>(source.getFunctionConfiguration(version).getFunctions());
+        final List<FunctionConfiguration> functions = new ArrayList<>(source.getFunctionConfiguration(version).getFunctions());
         Collections.sort(functions, new Comparator<FunctionConfiguration>() {
 
           @Override

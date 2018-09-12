@@ -7,8 +7,6 @@ package com.opengamma.financial.spring;
 
 import java.util.Map;
 
-import net.sf.ehcache.CacheManager;
-
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
@@ -25,6 +23,8 @@ import com.opengamma.core.marketdatasnapshot.impl.DelegatingSnapshotSource;
 import com.opengamma.master.marketdatasnapshot.MarketDataSnapshotMaster;
 import com.opengamma.master.marketdatasnapshot.impl.MasterSnapshotSource;
 import com.opengamma.util.spring.SpringFactoryBean;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Spring factory bean to create the snapshot source.

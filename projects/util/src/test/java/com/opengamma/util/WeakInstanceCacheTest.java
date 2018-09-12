@@ -24,7 +24,7 @@ public class WeakInstanceCacheTest {
 
     private final int _value;
 
-    public Foo(final int hash, final int value) {
+    Foo(final int hash, final int value) {
       _hash = hash;
       _value = value;
     }
@@ -36,13 +36,13 @@ public class WeakInstanceCacheTest {
 
     @Override
     public boolean equals(final Object o) {
-      return (o instanceof Foo) && (((Foo) o)._value == _value);
+      return o instanceof Foo && ((Foo) o)._value == _value;
     }
 
   }
 
   public void testBasicOperation() {
-    final WeakInstanceCache<Foo> cache = new WeakInstanceCache<Foo>();
+    final WeakInstanceCache<Foo> cache = new WeakInstanceCache<>();
     final Foo a1 = new Foo(1, 1);
     final Foo a2 = new Foo(1, 2);
     final Foo b1 = new Foo(3, 3);

@@ -20,13 +20,13 @@ import org.joda.beans.JodaBeanUtils;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
 import org.joda.beans.PropertyDefinition;
-import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
+import org.joda.beans.impl.direct.DirectPrivateBeanBuilder;
 import org.threeten.bp.LocalDate;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.opengamma.util.ArgumentChecker;
 
 /**
@@ -46,7 +46,7 @@ public final class ExternalIdWithDates implements ImmutableBean,
   /**
    * The external identifier.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private final ExternalId _externalId;
   /**
    * The valid from date, inclusive, null means far past.
@@ -143,9 +143,9 @@ public final class ExternalIdWithDates implements ImmutableBean,
     if (date == null) {
       return true;
     }
-    final LocalDate from = Objects.firstNonNull(getValidFrom(), LocalDate.MIN);
-    final LocalDate to = Objects.firstNonNull(getValidTo(), LocalDate.MAX);
-    return date.isBefore(from) == false && date.isAfter(to) == false;
+    final LocalDate from = MoreObjects.firstNonNull(getValidFrom(), LocalDate.MIN);
+    final LocalDate to = MoreObjects.firstNonNull(getValidTo(), LocalDate.MAX);
+    return !date.isBefore(from) && !date.isAfter(to);
   }
 
   //-------------------------------------------------------------------------
@@ -178,9 +178,9 @@ public final class ExternalIdWithDates implements ImmutableBean,
     }
     if (obj instanceof ExternalIdWithDates) {
       final ExternalIdWithDates other = (ExternalIdWithDates) obj;
-      return ObjectUtils.equals(_externalId, other._externalId) &&
-          ObjectUtils.equals(_validFrom, other._validFrom) &&
-          ObjectUtils.equals(_validTo, other._validTo);
+      return ObjectUtils.equals(_externalId, other._externalId)
+          && ObjectUtils.equals(_validFrom, other._validFrom)
+          && ObjectUtils.equals(_validTo, other._validTo);
     }
     return false;
   }
@@ -241,6 +241,7 @@ public final class ExternalIdWithDates implements ImmutableBean,
    * Gets the external identifier.
    * @return the value of the property, not null
    */
+  @Override
   public ExternalId getExternalId() {
     return _externalId;
   }
@@ -385,7 +386,7 @@ public final class ExternalIdWithDates implements ImmutableBean,
   /**
    * The bean-builder for {@code ExternalIdWithDates}.
    */
-  private static final class Builder extends DirectFieldsBeanBuilder<ExternalIdWithDates> {
+  private static final class Builder extends DirectPrivateBeanBuilder<ExternalIdWithDates> {
 
     private ExternalId _externalId;
     private LocalDate _validFrom;
@@ -395,6 +396,7 @@ public final class ExternalIdWithDates implements ImmutableBean,
      * Restricted constructor.
      */
     private Builder() {
+      super(meta());
     }
 
     //-----------------------------------------------------------------------
@@ -427,30 +429,6 @@ public final class ExternalIdWithDates implements ImmutableBean,
         default:
           throw new NoSuchElementException("Unknown property: " + propertyName);
       }
-      return this;
-    }
-
-    @Override
-    public Builder set(MetaProperty<?> property, Object value) {
-      super.set(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(String propertyName, String value) {
-      setString(meta().metaProperty(propertyName), value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(MetaProperty<?> property, String value) {
-      super.setString(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
-      super.setAll(propertyValueMap);
       return this;
     }
 

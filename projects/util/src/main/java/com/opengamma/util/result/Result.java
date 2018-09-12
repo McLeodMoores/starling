@@ -179,7 +179,7 @@ public abstract class Result<T> {
 
   //-------------------------------------------------------------------------
   /**
-   * Creates a successful result wrapping a value
+   * Creates a successful result wrapping a value.
    *
    * @param value  the result value
    * @param <U> the type of the value
@@ -324,9 +324,8 @@ public abstract class Result<T> {
     }
     if (failures.isEmpty()) {
       throw new IllegalArgumentException("All results were successes");
-    } else {
-      return FailureResult.of(failures);
     }
+    return FailureResult.of(failures);
   }
 
   /**
@@ -355,9 +354,8 @@ public abstract class Result<T> {
     }
     if (failures.isEmpty()) {
       throw new IllegalArgumentException("All results were successes");
-    } else {
-      return FailureResult.of(failures);
     }
+    return FailureResult.of(failures);
   }
 
   //-------------------------------------------------------------------------

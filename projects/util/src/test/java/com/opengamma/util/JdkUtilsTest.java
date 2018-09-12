@@ -16,24 +16,34 @@ import org.testng.annotations.Test;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Test.
+ * Tests for {@link JdkUtils}.
  */
 @Test(groups = TestGroup.UNIT)
 public class JdkUtilsTest {
 
+  /**
+   * Tests the constructor via reflection.
+   *
+   * @throws Exception  if there is a problem constructing the object
+   */
   @SuppressWarnings("unchecked")
-  public void test_constructor() throws Exception {
-    Constructor<?>[] cons = JdkUtils.class.getDeclaredConstructors();
+  @Test
+  public void testConstructor() throws Exception {
+    final Constructor<?>[] cons = JdkUtils.class.getDeclaredConstructors();
     assertEquals(1, cons.length);
     assertEquals(0, cons[0].getParameterTypes().length);
     assertEquals(true, Modifier.isPrivate(cons[0].getModifiers()));
-    Constructor<JdkUtils> con = (Constructor<JdkUtils>) cons[0];
+    final Constructor<JdkUtils> con = (Constructor<JdkUtils>) cons[0];
     con.setAccessible(true);
     con.newInstance();
   }
 
   //-------------------------------------------------------------------------
-  public void test_strip() {
+  /**
+   * Tests that trailing zeros are stripped.
+   */
+  @Test
+  public void testStrip() {
     assertEquals(BigDecimal.valueOf(0, 0), JdkUtils.stripTrailingZeros(BigDecimal.valueOf(0, 2)));
     assertEquals(BigDecimal.valueOf(1, 0), JdkUtils.stripTrailingZeros(BigDecimal.valueOf(1, 0)));
   }

@@ -150,12 +150,11 @@ public final class OpenGammaFudgeContext {
     @Override
     public Dir createDir(final URL url) throws Exception {
       final File file = Vfs.getFile(url);
-      if (file == null || file.exists() == false) {
+      if (file == null || !file.exists()) {
         LOGGER.warn("URL could not be resolved to a file: " + url);
         return new EmptyDir(file);
-      } else {
-        return new SystemDir(file);
       }
+      return new SystemDir(file);
     }
 
     @Override
@@ -174,12 +173,11 @@ public final class OpenGammaFudgeContext {
     @Override
     public Dir createDir(final URL url) throws Exception {
       final File file = Vfs.getFile(url);
-      if (file == null || file.exists() == false) {
+      if (file == null || !file.exists()) {
         LOGGER.warn("URL could not be resolved to a file: " + url);
         return new EmptyDir(file);
-      } else {
-        return new SystemDir(file);
       }
+      return new SystemDir(file);
     }
 
     @Override

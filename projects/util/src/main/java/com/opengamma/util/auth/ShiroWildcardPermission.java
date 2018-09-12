@@ -85,7 +85,7 @@ final class ShiroWildcardPermission implements Permission {
         if (partStr.isEmpty()) {
           throw new InvalidPermissionStringException("Permission string must not contain an empty part: " + permissionString, permissionString);
         }
-        if (partStr.contains("*") && partStr.equals("*") == false) {
+        if (partStr.contains("*") && !partStr.equals("*")) {
           throw new InvalidPermissionStringException("Permission string wildcard can only be applied to whole segment: " + permissionString, permissionString);
         }
         parts.add(partStr);
@@ -124,7 +124,7 @@ final class ShiroWildcardPermission implements Permission {
   // the other permission is the permission being checked
   @Override
   public boolean implies(final Permission requiredPermission) {
-    if (requiredPermission instanceof ShiroWildcardPermission == false) {
+    if (!(requiredPermission instanceof ShiroWildcardPermission)) {
       return false;
     }
     final ShiroWildcardPermission requiredPerm = (ShiroWildcardPermission) requiredPermission;
@@ -137,7 +137,7 @@ final class ShiroWildcardPermission implements Permission {
     for (int i = 0; i < commonLen; i++) {
       final Set<String> thisSegment = thisSegments.get(i);
       final Set<String> otherSegment = otherSegments.get(i);
-      if (thisSegment != WILDCARD_SEGMENT && thisSegment.containsAll(otherSegment) == false) {
+      if (thisSegment != WILDCARD_SEGMENT && !thisSegment.containsAll(otherSegment)) {
         return false;
       }
     }

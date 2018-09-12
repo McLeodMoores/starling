@@ -74,7 +74,7 @@ public class DeliverablePriceQuotedSwapFutureConvention extends ExchangeTradedFu
   //-------------------------------------------------------------------------
   /**
    * Gets the type identifying this convention.
-   * 
+   *
    * @return the {@link #TYPE} constant, not null
    */
   @Override

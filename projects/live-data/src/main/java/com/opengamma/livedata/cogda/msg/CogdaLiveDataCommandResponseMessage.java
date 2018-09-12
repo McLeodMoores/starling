@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.livedata.cogda.msg;
@@ -20,7 +20,7 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import com.opengamma.id.ExternalId;
 
 /**
- * 
+ *
  */
 @BeanDefinition
 public abstract class CogdaLiveDataCommandResponseMessage extends CogdaCommandResponseMessage {

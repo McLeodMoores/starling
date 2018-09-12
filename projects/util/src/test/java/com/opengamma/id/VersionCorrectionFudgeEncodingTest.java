@@ -12,7 +12,7 @@ import com.opengamma.util.test.AbstractFudgeBuilderTestCase;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Test Fudge encoding.
+ * Test Fudge encoding of {@link VersionCorrection}.
  */
 @Test(groups = TestGroup.UNIT)
 public class VersionCorrectionFudgeEncodingTest extends AbstractFudgeBuilderTestCase {
@@ -20,13 +20,21 @@ public class VersionCorrectionFudgeEncodingTest extends AbstractFudgeBuilderTest
   private static final Instant INSTANT1 = Instant.ofEpochSecond(1);
   private static final Instant INSTANT2 = Instant.ofEpochSecond(2);
 
-  public void test_instants() {
-    VersionCorrection object = VersionCorrection.of(INSTANT1, INSTANT2);
+  /**
+   * Tests an encode/decode cycle.
+   */
+  @Test
+  public void testInstants() {
+    final VersionCorrection object = VersionCorrection.of(INSTANT1, INSTANT2);
     assertEncodeDecodeCycle(VersionCorrection.class, object);
   }
 
-  public void test_latest() {
-    VersionCorrection object = VersionCorrection.LATEST;
+  /**
+   * Tests an encode/decode cycle.
+   */
+  @Test
+  public void testLatest() {
+    final VersionCorrection object = VersionCorrection.LATEST;
     assertEncodeDecodeCycle(VersionCorrection.class, object);
   }
 

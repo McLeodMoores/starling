@@ -113,7 +113,7 @@ public class IntDoublePair
    * @deprecated Use public factory of(int,double)
    */
   @Deprecated
-  public IntDoublePair(final int first, final double second) {
+  public IntDoublePair(final int first, final double second) { // CSIGNORE
     this.first = first;
     this.second = second;
   }
@@ -163,6 +163,7 @@ public class IntDoublePair
     throw new UnsupportedOperationException("Immutable");
   }
 
+  // CSOFF
   //-------------------------------------------------------------------------
   /**
    * The meta-bean for {@code IntDoublePair}.

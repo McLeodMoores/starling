@@ -25,10 +25,10 @@ import org.joda.beans.JodaBeanUtils;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
 import org.joda.beans.PropertyDefinition;
-import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
+import org.joda.beans.impl.direct.DirectPrivateBeanBuilder;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSortedSet;
@@ -39,11 +39,13 @@ import com.opengamma.util.PublicAPI;
 /**
  * An immutable bundle of external identifiers.
  * <p>
- * A bundle allows multiple {@link ExternalId external identifiers} to be grouped together when they all refer to the same conceptual object. For example, a Reuters RIC and Bloomberg Ticker might both
- * refer to the same equity.
+ * A bundle allows multiple {@link ExternalId external identifiers} to be grouped together when they all refer to the same
+ * conceptual object. For example, a Reuters RIC and Bloomberg Ticker might both refer to the same equity.
  * <p>
- * The bundle holds a <i>set</i> of external identifiers, not a <i>map</i> from scheme to value. This permits multiple values within the same scheme to refer to the same conceptual object. For
- * example, a renamed ticker could be grouped as both the old and new value. In general however, each external identifier in a bundle will be in a different scheme.
+ * The bundle holds a <i>set</i> of external identifiers, not a <i>map</i> from scheme to value. This permits multiple values
+ * within the same scheme to refer to the same conceptual object. For
+ * example, a renamed ticker could be grouped as both the old and new value. In general however, each external identifier
+ * in a bundle will be in a different scheme.
  * <p>
  * This class is immutable and thread-safe.
  */
@@ -251,7 +253,7 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
   public ExternalIdBundle withExternalId(final ExternalId externalId) {
     ArgumentChecker.notNull(externalId, "externalId");
     final Set<ExternalId> ids = new HashSet<>(_externalIds);
-    if (ids.add(externalId) == false) {
+    if (!ids.add(externalId)) {
       return this;
     }
     return create(ids);
@@ -267,7 +269,7 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
     ArgumentChecker.notNull(externalIds, "externalIds");
     final Set<ExternalId> toAdd = ImmutableSortedSet.copyOf(externalIds);
     final Set<ExternalId> ids = new HashSet<>(_externalIds);
-    if (ids.addAll(toAdd) == false) {
+    if (!ids.addAll(toAdd)) {
       return this;
     }
     return create(ids);
@@ -282,7 +284,7 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
   public ExternalIdBundle withoutExternalId(final ExternalId externalId) {
     ArgumentChecker.notNull(externalId, "externalId");
     final Set<ExternalId> ids = new HashSet<>(_externalIds);
-    if (ids.remove(externalId) == false) {
+    if (!ids.remove(externalId)) {
       return this;
     }
     return create(ids);
@@ -297,7 +299,7 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
   public ExternalIdBundle withoutScheme(final ExternalScheme scheme) {
     final Set<ExternalId> ids = new HashSet<>(_externalIds.size());
     for (final ExternalId id : _externalIds) {
-      if (id.isScheme(scheme) == false) {
+      if (!id.isScheme(scheme)) {
         ids.add(id);
       }
     }
@@ -342,7 +344,7 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
   public boolean containsAll(final ExternalIdBundle bundle) {
     ArgumentChecker.notNull(bundle, "bundle");
     for (final ExternalId externalId : bundle.getExternalIds()) {
-      if (_externalIds.contains(externalId) == false) {
+      if (!_externalIds.contains(externalId)) {
         return false;
       }
     }
@@ -613,7 +615,7 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
   /**
    * The bean-builder for {@code ExternalIdBundle}.
    */
-  private static final class Builder extends DirectFieldsBeanBuilder<ExternalIdBundle> {
+  private static final class Builder extends DirectPrivateBeanBuilder<ExternalIdBundle> {
 
     private SortedSet<ExternalId> _externalIds = ImmutableSortedSet.of();
 
@@ -621,6 +623,7 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
      * Restricted constructor.
      */
     private Builder() {
+      super(meta());
     }
 
     //-----------------------------------------------------------------------
@@ -644,30 +647,6 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
         default:
           throw new NoSuchElementException("Unknown property: " + propertyName);
       }
-      return this;
-    }
-
-    @Override
-    public Builder set(MetaProperty<?> property, Object value) {
-      super.set(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(String propertyName, String value) {
-      setString(meta().metaProperty(propertyName), value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(MetaProperty<?> property, String value) {
-      super.setString(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
-      super.setAll(propertyValueMap);
       return this;
     }
 

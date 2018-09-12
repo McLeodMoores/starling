@@ -42,27 +42,27 @@ public class ExternalIdOrderConfig extends DirectBean {
    */
   public static final ExternalIdOrderConfig DEFAULT_CONFIG = new ExternalIdOrderConfig();
 
-  private static Map<ExternalScheme, Integer> s_defaultScoreMap = Maps.newHashMap();
+  private static final Map<ExternalScheme, Integer> DEFAULT_SCORE_MAP = Maps.newHashMap();
 
   static {
-    s_defaultScoreMap.put(ExternalSchemes.BLOOMBERG_TCM, 20); // Because if there's both ticker and TCM, you want to see TCM.
-    s_defaultScoreMap.put(ExternalSchemes.BLOOMBERG_TICKER, 19);
-    s_defaultScoreMap.put(ExternalSchemes.RIC, 17);
-    s_defaultScoreMap.put(ExternalSchemes.BLOOMBERG_TICKER_WEAK, 16);
-    s_defaultScoreMap.put(ExternalSchemes.ACTIVFEED_TICKER, 15);
-    s_defaultScoreMap.put(ExternalSchemes.SURF, 14);
-    s_defaultScoreMap.put(ExternalSchemes.ISIN, 13);
-    s_defaultScoreMap.put(ExternalSchemes.CUSIP, 12);
-    s_defaultScoreMap.put(ExternalSchemes.SEDOL1, 11);
-    s_defaultScoreMap.put(ExternalSchemes.OG_SYNTHETIC_TICKER, 10);
-    s_defaultScoreMap.put(ExternalSchemes.BLOOMBERG_BUID, 5);
-    s_defaultScoreMap.put(ExternalSchemes.BLOOMBERG_BUID_WEAK, 4);
-    DEFAULT_CONFIG.setRateMap(s_defaultScoreMap);
+    DEFAULT_SCORE_MAP.put(ExternalSchemes.BLOOMBERG_TCM, 20); // Because if there's both ticker and TCM, you want to see TCM.
+    DEFAULT_SCORE_MAP.put(ExternalSchemes.BLOOMBERG_TICKER, 19);
+    DEFAULT_SCORE_MAP.put(ExternalSchemes.RIC, 17);
+    DEFAULT_SCORE_MAP.put(ExternalSchemes.BLOOMBERG_TICKER_WEAK, 16);
+    DEFAULT_SCORE_MAP.put(ExternalSchemes.ACTIVFEED_TICKER, 15);
+    DEFAULT_SCORE_MAP.put(ExternalSchemes.SURF, 14);
+    DEFAULT_SCORE_MAP.put(ExternalSchemes.ISIN, 13);
+    DEFAULT_SCORE_MAP.put(ExternalSchemes.CUSIP, 12);
+    DEFAULT_SCORE_MAP.put(ExternalSchemes.SEDOL1, 11);
+    DEFAULT_SCORE_MAP.put(ExternalSchemes.OG_SYNTHETIC_TICKER, 10);
+    DEFAULT_SCORE_MAP.put(ExternalSchemes.BLOOMBERG_BUID, 5);
+    DEFAULT_SCORE_MAP.put(ExternalSchemes.BLOOMBERG_BUID_WEAK, 4);
+    DEFAULT_CONFIG.setRateMap(DEFAULT_SCORE_MAP);
   }
 
   /**
    * Apply the ordering to obtain the most preferred identifier from a bundle.
-   * 
+   *
    * @param identifiers the bundle of identifiers to query
    * @return the preferred identifier from the bundle, or null if it is empty
    */
@@ -107,7 +107,7 @@ public class ExternalIdOrderConfig extends DirectBean {
 
   /**
    * Returns a {@link Comparator} that will order schemes from highest to lowest rank.
-   * 
+   *
    * @return the comparator
    */
   public Comparator<ExternalScheme> schemeComparator() {
@@ -120,31 +120,27 @@ public class ExternalIdOrderConfig extends DirectBean {
           if (r2 == null) {
             // neither have a rank, use the natural ordering
             return o1.compareTo(o2);
-          } else {
-            // o2 has a rank, use that
-            return 1;
           }
-        } else {
-          if (r2 == null) {
-            // o1 has a rank, use that
-            return -1;
-          } else {
-            final int r = r2 - r1;
-            if (r != 0) {
-              return r;
-            } else {
-              // both have the same rank, use the natural ordering
-              return o1.compareTo(o2);
-            }
-          }
+          // o2 has a rank, use that
+          return 1;
         }
+        if (r2 == null) {
+          // o1 has a rank, use that
+          return -1;
+        }
+        final int r = r2 - r1;
+        if (r != 0) {
+          return r;
+        }
+        // both have the same rank, use the natural ordering
+        return o1.compareTo(o2);
       }
     };
   }
 
   /**
    * Returns a {@link Comparator} that will order identifiers from highest to lowest ranked scheme.
-   * 
+   *
    * @return the comparator
    */
   public Comparator<ExternalId> identifierComparator() {
@@ -155,22 +151,21 @@ public class ExternalIdOrderConfig extends DirectBean {
         final int c = scheme.compare(o1.getScheme(), o2.getScheme());
         if (c != 0) {
           return c;
-        } else {
-          // Same scheme, order by identifier value
-          return o1.getValue().compareTo(o2.getValue());
         }
+        // Same scheme, order by identifier value
+        return o1.getValue().compareTo(o2.getValue());
       }
     };
   }
 
   /**
    * Sorts the identifiers from a bundle from highest to lowest ranked scheme. Identifiers with the same scheme will be sorted naturally.
-   * 
+   *
    * @param bundle the identifiers to sort
    * @return the identifiers in descending tank order
    */
   public List<ExternalId> sort(final ExternalIdBundle bundle) {
-    final List<ExternalId> identifiers = new ArrayList<ExternalId>(bundle.getExternalIds());
+    final List<ExternalId> identifiers = new ArrayList<>(bundle.getExternalIds());
     Collections.sort(identifiers, identifierComparator());
     return identifiers;
   }

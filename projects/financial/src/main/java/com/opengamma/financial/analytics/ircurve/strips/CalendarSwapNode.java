@@ -39,7 +39,7 @@ public class CalendarSwapNode extends CurveNode {
    */
   @PropertyDefinition(validate = "notNull")
   private String _dateSetName;
-  
+
   /**
    * The start tenor.
    */

@@ -196,10 +196,10 @@ public final class FloatingInterestRateSwapLegSchedule implements ImmutableBean 
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       FloatingInterestRateSwapLegSchedule other = (FloatingInterestRateSwapLegSchedule) obj;
-      return JodaBeanUtils.equal(getConvention(), other.getConvention()) &&
-          JodaBeanUtils.equal(getDates(), other.getDates()) &&
-          JodaBeanUtils.equal(getPaymentDates(), other.getPaymentDates()) &&
-          JodaBeanUtils.equal(getCalculationDates(), other.getCalculationDates());
+      return JodaBeanUtils.equal(_convention, other._convention) &&
+          JodaBeanUtils.equal(_dates, other._dates) &&
+          JodaBeanUtils.equal(_paymentDates, other._paymentDates) &&
+          JodaBeanUtils.equal(_calculationDates, other._calculationDates);
     }
     return false;
   }
@@ -207,10 +207,10 @@ public final class FloatingInterestRateSwapLegSchedule implements ImmutableBean 
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getConvention());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getDates());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getPaymentDates());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getCalculationDates());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_convention);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_dates);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_paymentDates);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_calculationDates);
     return hash;
   }
 
@@ -218,10 +218,10 @@ public final class FloatingInterestRateSwapLegSchedule implements ImmutableBean 
   public String toString() {
     StringBuilder buf = new StringBuilder(160);
     buf.append("FloatingInterestRateSwapLegSchedule{");
-    buf.append("convention").append('=').append(getConvention()).append(',').append(' ');
-    buf.append("dates").append('=').append(getDates()).append(',').append(' ');
-    buf.append("paymentDates").append('=').append(getPaymentDates()).append(',').append(' ');
-    buf.append("calculationDates").append('=').append(JodaBeanUtils.toString(getCalculationDates()));
+    buf.append("convention").append('=').append(_convention).append(',').append(' ');
+    buf.append("dates").append('=').append(_dates).append(',').append(' ');
+    buf.append("paymentDates").append('=').append(_paymentDates).append(',').append(' ');
+    buf.append("calculationDates").append('=').append(JodaBeanUtils.toString(_calculationDates));
     buf.append('}');
     return buf.toString();
   }
@@ -434,19 +434,31 @@ public final class FloatingInterestRateSwapLegSchedule implements ImmutableBean 
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

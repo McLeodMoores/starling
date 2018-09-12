@@ -28,7 +28,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.TerminatableJob;
 
 /**
- * A Socket implementation of FudgeConnection
+ * A Socket implementation of FudgeConnection.
  */
 public class SocketFudgeConnection extends AbstractSocketProcess implements FudgeConnection {
 
@@ -53,7 +53,8 @@ public class SocketFudgeConnection extends AbstractSocketProcess implements Fudg
         } catch (final OpenGammaRuntimeException e) {
           if (e.getCause() instanceof IOException) {
             notifyConnectionFailed((IOException) e.getCause());
-            // Should we still carry on and throw the exception if the user's been given it as a callback? Maybe allow the connectionFailed callback specify which to rethrow?
+            // Should we still carry on and throw the exception if the user's been given it as a callback? Maybe allow the
+            // connectionFailed callback specify which to rethrow?
           }
           throw e;
         } finally {

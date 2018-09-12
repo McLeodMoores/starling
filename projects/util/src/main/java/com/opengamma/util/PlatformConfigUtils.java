@@ -40,7 +40,7 @@ public final class PlatformConfigUtils {
   /**
    * Enumerates the valid operating system types.
    */
-  public static enum OsType {
+  public enum OsType {
     /**
      * Windows.
      */

@@ -19,7 +19,7 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Wraps another {@link ExecutorService} instance, ensuring {@link ThreadLocalServiceContext} is initialized before
- * every task is run and that it is cleared after every task completes. {@link ThreadLocalServiceContext#init} is
+ * every task is run and that it is cleared after every task completes. {@link ThreadLocalServiceContext#init(ServiceContext)} is
  * called on the pooled thread using the {@link ServiceContext} returned by
  * {@link ThreadLocalServiceContext#getInstance()} on the thread that submits the task.
  */
@@ -91,7 +91,8 @@ public class ServiceContextAwareExecutorService implements ExecutorService {
   }
 
   @Override
-  public <T> T invokeAny(final Collection<? extends Callable<T>> tasks, final long timeout, final TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+  public <T> T invokeAny(final Collection<? extends Callable<T>> tasks, final long timeout,
+      final TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
     return _delegateExecutor.invokeAny(wrapTasks(tasks), timeout, unit);
   }
 
@@ -115,6 +116,8 @@ public class ServiceContextAwareExecutorService implements ExecutorService {
   /**
    * {@link Callable} implementation that sets up and tears down thread local {@link ServiceContext} bindings around
    * a call to a delegate {@link Callable} instance.
+   *
+   * @param <T>  the type of the callable
    */
   private final class ServiceContextAwareCallable<T> implements Callable<T> {
 

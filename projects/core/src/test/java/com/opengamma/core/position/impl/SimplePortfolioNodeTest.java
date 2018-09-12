@@ -85,14 +85,14 @@ public class SimplePortfolioNodeTest {
   //-------------------------------------------------------------------------
   @Test(expectedExceptions = UnsupportedOperationException.class)
   public void test_getChildNodes_immutable() {
-    final SimplePortfolioNode test = new SimplePortfolioNode(UniqueId.of ("A", "test"), "test");
-    final SimplePortfolioNode child = new SimplePortfolioNode(UniqueId.of ("A", "child"), "child");
+    final SimplePortfolioNode test = new SimplePortfolioNode(UniqueId.of("A", "test"), "test");
+    final SimplePortfolioNode child = new SimplePortfolioNode(UniqueId.of("A", "child"), "child");
     test.getChildNodes().add(child);
   }
 
   public void test_addChildNode() {
-    final SimplePortfolioNode test = new SimplePortfolioNode(UniqueId.of ("A", "test"), "test");
-    final SimplePortfolioNode child = new SimplePortfolioNode(UniqueId.of ("A", "child"), "child");
+    final SimplePortfolioNode test = new SimplePortfolioNode(UniqueId.of("A", "test"), "test");
+    final SimplePortfolioNode child = new SimplePortfolioNode(UniqueId.of("A", "child"), "child");
     child.setParentNodeId(test.getUniqueId());
     test.addChildNode(child);
     assertEquals(1, test.getChildNodes().size());
@@ -102,9 +102,9 @@ public class SimplePortfolioNodeTest {
   }
 
   public void test_addChildNodes() {
-    final SimplePortfolioNode test = new SimplePortfolioNode(UniqueId.of ("A", "test"), "test");
-    final SimplePortfolioNode child0 = new SimplePortfolioNode(UniqueId.of ("A", "child0"), "child0");
-    final SimplePortfolioNode child1 = new SimplePortfolioNode(UniqueId.of ("A", "child1"), "child1");
+    final SimplePortfolioNode test = new SimplePortfolioNode(UniqueId.of("A", "test"), "test");
+    final SimplePortfolioNode child0 = new SimplePortfolioNode(UniqueId.of("A", "child0"), "child0");
+    final SimplePortfolioNode child1 = new SimplePortfolioNode(UniqueId.of("A", "child1"), "child1");
     child0.setParentNodeId(test.getUniqueId());
     child1.setParentNodeId(test.getUniqueId());
     test.addChildNodes(Arrays.asList(child0, child1));
@@ -116,9 +116,9 @@ public class SimplePortfolioNodeTest {
   }
 
   public void test_removeChildNode_match() {
-    final SimplePortfolioNode test = new SimplePortfolioNode(UniqueId.of ("A", "test"), "test");
-    final SimplePortfolioNode child = new SimplePortfolioNode(UniqueId.of ("A", "child"), "child");
-    child.setParentNodeId(test.getUniqueId ());
+    final SimplePortfolioNode test = new SimplePortfolioNode(UniqueId.of("A", "test"), "test");
+    final SimplePortfolioNode child = new SimplePortfolioNode(UniqueId.of("A", "child"), "child");
+    child.setParentNodeId(test.getUniqueId());
     test.addChildNode(child);
     assertEquals(1, test.getChildNodes().size());
     test.removeChildNode(child);
@@ -126,10 +126,10 @@ public class SimplePortfolioNodeTest {
   }
 
   public void test_removeChildNode_noMatch() {
-    final SimplePortfolioNode test = new SimplePortfolioNode(UniqueId.of ("A", "test"), "test");
-    final SimplePortfolioNode child = new SimplePortfolioNode(UniqueId.of ("A", "child"), "child");
-    final SimplePortfolioNode removing = new SimplePortfolioNode(UniqueId.of ("A", "removing"), "removing");
-    child.setParentNodeId (test.getUniqueId ());
+    final SimplePortfolioNode test = new SimplePortfolioNode(UniqueId.of("A", "test"), "test");
+    final SimplePortfolioNode child = new SimplePortfolioNode(UniqueId.of("A", "child"), "child");
+    final SimplePortfolioNode removing = new SimplePortfolioNode(UniqueId.of("A", "removing"), "removing");
+    child.setParentNodeId(test.getUniqueId());
     test.addChildNode(child);
     assertEquals(1, test.getChildNodes().size());
     test.removeChildNode(removing);
@@ -205,13 +205,13 @@ public class SimplePortfolioNodeTest {
     final SimplePortfolioNode child1 = new SimplePortfolioNode(UniqueId.of("Child", "A"), "Name");
     root.addChildNode(child1);
     final SimplePortfolioNode child2 = new SimplePortfolioNode(UniqueId.of("Child", "B"), "Name");
-    child2.setParentNodeId (root.getUniqueId ());
+    child2.setParentNodeId(root.getUniqueId());
     root.addChildNode(child2);
     assertSame(root, root.getNode(UniqueId.of("Root", "A")));
     assertNotSame(child1, root.getNode(UniqueId.of("Child", "A")));
     // equal except for the parent link
-    assertFalse(child1.equals (root.getNode(UniqueId.of("Child", "A"))));
-    child1.setParentNodeId (root.getUniqueId ());
+    assertFalse(child1.equals(root.getNode(UniqueId.of("Child", "A"))));
+    child1.setParentNodeId(root.getUniqueId());
     assertEquals(child1, root.getNode(UniqueId.of("Child", "A")));
     assertSame(child2, root.getNode(UniqueId.of("Child", "B")));
     assertEquals(null, root.getNode(UniqueId.of("NotFound", "A")));

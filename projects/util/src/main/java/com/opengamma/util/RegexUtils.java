@@ -47,7 +47,7 @@ public final class RegexUtils {
         buf.append('.');
         lastStar = false;
       } else if (str.equals("*")) {
-        if (lastStar == false) {
+        if (!lastStar) {
           buf.append(".*");
         }
         lastStar = true;
@@ -89,7 +89,7 @@ public final class RegexUtils {
   }
 
   /**
-   * Extracts first group from matched regex
+   * Extracts first group from matched regex.
    * @param string input string
    * @param regex regex string
    * @return extracted text
@@ -99,7 +99,7 @@ public final class RegexUtils {
   }
 
   /**
-   * Extracts given group from matched regex
+   * Extracts given group from matched regex.
    * @param string input string
    * @param regex regex string
    * @param group group index
@@ -110,7 +110,7 @@ public final class RegexUtils {
   }
 
   /**
-   * Extracts given group from matched regex
+   * Extracts given group from matched regex.
    * @param string input string
    * @param pattern pattern object
    * @param group group index
@@ -125,7 +125,7 @@ public final class RegexUtils {
   }
 
   /**
-   * Returns true if given input string matches given pattern
+   * Returns true if given input string matches given pattern.
    * @param input the input
    * @param pattern the pattern
    * @return true if given input string matches given pattern

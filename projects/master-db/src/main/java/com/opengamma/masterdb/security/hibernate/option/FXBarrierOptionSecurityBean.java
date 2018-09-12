@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.option;
@@ -60,7 +60,7 @@ public class FXBarrierOptionSecurityBean extends SecurityBean {
   private double _barrierLevel;
   @PropertyDefinition
   private boolean _longShort;
-  
+
   @Override
   public boolean equals(final Object other) {
     if (!(other instanceof FXBarrierOptionSecurityBean)) {

@@ -123,7 +123,7 @@ public class HistoricalMarketDataSpecification implements ImmutableBean, MarketD
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       HistoricalMarketDataSpecification other = (HistoricalMarketDataSpecification) obj;
-      return JodaBeanUtils.equal(getTimeSeriesResolverKey(), other.getTimeSeriesResolverKey());
+      return JodaBeanUtils.equal(_timeSeriesResolverKey, other._timeSeriesResolverKey);
     }
     return false;
   }
@@ -131,7 +131,7 @@ public class HistoricalMarketDataSpecification implements ImmutableBean, MarketD
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getTimeSeriesResolverKey());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_timeSeriesResolverKey);
     return hash;
   }
 
@@ -149,7 +149,7 @@ public class HistoricalMarketDataSpecification implements ImmutableBean, MarketD
   }
 
   protected void toString(StringBuilder buf) {
-    buf.append("timeSeriesResolverKey").append('=').append(JodaBeanUtils.toString(getTimeSeriesResolverKey())).append(',').append(' ');
+    buf.append("timeSeriesResolverKey").append('=').append(JodaBeanUtils.toString(_timeSeriesResolverKey)).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------
@@ -285,19 +285,31 @@ public class HistoricalMarketDataSpecification implements ImmutableBean, MarketD
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

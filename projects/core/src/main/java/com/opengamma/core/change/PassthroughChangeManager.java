@@ -19,7 +19,7 @@ import com.opengamma.id.ObjectId;
  */
 public class PassthroughChangeManager implements ChangeManager {
 
-  private final List<ChangeManager> _underlying = new CopyOnWriteArrayList<ChangeManager>();
+  private final List<ChangeManager> _underlying = new CopyOnWriteArrayList<>();
 
   /**
    * Creates an instance.
@@ -50,8 +50,8 @@ public class PassthroughChangeManager implements ChangeManager {
   }
 
   /**
-   * Adds the manager as an underlying. Once added as an underlying, the manager cannot be removed. Any requests to add or remove a listener made on this instance will be passed to all underlying
-   * change managers.
+   * Adds the manager as an underlying. Once added as an underlying, the manager cannot be removed. Any requests to
+   * add or remove a listener made on this instance will be passed to all underlying change managers.
    *
    * @param changeManager the change manager to add, not null
    */

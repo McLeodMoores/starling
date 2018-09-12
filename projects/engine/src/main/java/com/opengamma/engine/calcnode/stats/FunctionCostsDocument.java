@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode.stats;
@@ -68,7 +68,7 @@ public class FunctionCostsDocument extends DirectBean {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param configurationName  the configuration name, not null
    * @param functionId  the function id, not null
    */
@@ -81,11 +81,12 @@ public class FunctionCostsDocument extends DirectBean {
 
   /**
    * Creates a clone of this document.
-   * 
+   *
    * @return the clone, not null
    */
+  @Override
   public FunctionCostsDocument clone() {
-    FunctionCostsDocument cloned = new FunctionCostsDocument();
+    final FunctionCostsDocument cloned = new FunctionCostsDocument();
     cloned.setConfigurationName(getConfigurationName());
     cloned.setFunctionId(getFunctionId());
     cloned.setVersion(getVersion());

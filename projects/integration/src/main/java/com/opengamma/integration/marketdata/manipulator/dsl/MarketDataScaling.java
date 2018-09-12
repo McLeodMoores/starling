@@ -116,7 +116,7 @@ public class MarketDataScaling implements StructureManipulator<Double>, Immutabl
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       MarketDataScaling other = (MarketDataScaling) obj;
-      return JodaBeanUtils.equal(getScalingFactor(), other.getScalingFactor());
+      return JodaBeanUtils.equal(_scalingFactor, other._scalingFactor);
     }
     return false;
   }
@@ -124,7 +124,7 @@ public class MarketDataScaling implements StructureManipulator<Double>, Immutabl
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getScalingFactor());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_scalingFactor);
     return hash;
   }
 
@@ -142,7 +142,7 @@ public class MarketDataScaling implements StructureManipulator<Double>, Immutabl
   }
 
   protected void toString(StringBuilder buf) {
-    buf.append("scalingFactor").append('=').append(JodaBeanUtils.toString(getScalingFactor())).append(',').append(' ');
+    buf.append("scalingFactor").append('=').append(JodaBeanUtils.toString(_scalingFactor)).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------
@@ -278,19 +278,31 @@ public class MarketDataScaling implements StructureManipulator<Double>, Immutabl
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

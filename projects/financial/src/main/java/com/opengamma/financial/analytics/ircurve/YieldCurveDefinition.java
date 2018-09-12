@@ -92,7 +92,7 @@ public class YieldCurveDefinition extends DirectBean implements Serializable, Un
    * The underlying strips.
    */
   @PropertyDefinition
-  private final SortedSet<FixedIncomeStrip> _strips = new TreeSet<FixedIncomeStrip>();
+  private final SortedSet<FixedIncomeStrip> _strips = new TreeSet<>();
 
   /**
    * Creates an instance for Joda-Beans.

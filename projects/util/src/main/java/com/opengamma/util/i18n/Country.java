@@ -216,7 +216,7 @@ public final class Country implements ObjectIdentifiable, UniqueIdentifiable, Co
   @FromString
   public static Country of(final String countryCode) {
     ArgumentChecker.notNull(countryCode, "countryCode");
-    if (countryCode.matches("[A-Z][A-Z]") == false) {
+    if (!countryCode.matches("[A-Z][A-Z]")) {
       throw new IllegalArgumentException("Invalid country code: " + countryCode);
     }
     INSTANCE_MAP.putIfAbsent(countryCode, new Country(countryCode));

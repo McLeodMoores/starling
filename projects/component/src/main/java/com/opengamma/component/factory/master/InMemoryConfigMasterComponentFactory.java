@@ -45,13 +45,13 @@ public class InMemoryConfigMasterComponentFactory extends AbstractComponentFacto
    */
   @PropertyDefinition
   private boolean _publishRest = true;
-  
+
   /**
    * Optional scheme to use for unique and object ids on this master.  If not set, the default will be used.
    */
   @PropertyDefinition
   private String _idScheme;
-  
+
   @Override
   public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
 

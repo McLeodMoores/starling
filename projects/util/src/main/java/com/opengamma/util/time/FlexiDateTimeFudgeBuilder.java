@@ -42,6 +42,13 @@ public final class FlexiDateTimeFudgeBuilder extends AbstractFudgeBuilder implem
     return msg;
   }
 
+  /**
+   * Performs the serialization, returning null if the object is null.
+   *
+   * @param serializer  the serializer
+   * @param object  the object
+   * @return  a message
+   */
   public static MutableFudgeMsg toFudgeMsg(final FudgeSerializer serializer, final FlexiDateTime object) {
     if (object == null) {
       return null;
@@ -51,12 +58,19 @@ public final class FlexiDateTimeFudgeBuilder extends AbstractFudgeBuilder implem
     return msg;
   }
 
+  /**
+   * Adds the serialized object to a message.
+   *
+   * @param serializer  the serializer
+   * @param object  the object
+   * @param msg  the message
+   */
   public static void toFudgeMsg(final FudgeSerializer serializer, final FlexiDateTime object, final MutableFudgeMsg msg) {
     Temporal best = object.toBest();
     best = best instanceof ZonedDateTime ? ((ZonedDateTime) best).toOffsetDateTime() : best;
     addToMessage(msg, DATETIME_FIELD_NAME, best);
     final ZoneId zone = object.getZone();
-    if (zone != null && zone instanceof ZoneOffset == false) {
+    if (zone != null && !(zone instanceof ZoneOffset)) {
       addToMessage(msg, ZONE_FIELD_NAME, zone);
     }
   }
@@ -67,6 +81,13 @@ public final class FlexiDateTimeFudgeBuilder extends AbstractFudgeBuilder implem
     return fromFudgeMsg(deserializer, msg);
   }
 
+  /**
+   * Deserializes a message, returning null if the message is null.
+   *
+   * @param deserializer  the deserializer
+   * @param msg  the message
+   * @return  a flexi date time
+   */
   public static FlexiDateTime fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     if (msg == null) {
       return null;
@@ -81,9 +102,8 @@ public final class FlexiDateTimeFudgeBuilder extends AbstractFudgeBuilder implem
           return FlexiDateTime.of(odt.atZoneSameInstant(zone));
         }
         return FlexiDateTime.of(odt);
-      } else {
-        return FlexiDateTime.of(fudge.toLocalDateTime());
       }
+      return FlexiDateTime.of(fudge.toLocalDateTime());
     } else if (obj instanceof FudgeDate) {
       final FudgeDate fudge = (FudgeDate) obj;
       return FlexiDateTime.of(fudge.toLocalDate());

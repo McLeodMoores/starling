@@ -101,9 +101,8 @@ public final class MultipleFailureResult<T> extends Result<T> implements Immutab
   public <U, V> Result<V> combineWith(final Result<U> other, final Function2<T, U, Result<V>> function) {
     if (other.isSuccess()) {
       return Result.failure(this);
-    } else {
-      return Result.failure(this, other);
     }
+    return Result.failure(this, other);
   }
 
   /**
@@ -211,9 +210,9 @@ public final class MultipleFailureResult<T> extends Result<T> implements Immutab
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       MultipleFailureResult<?> other = (MultipleFailureResult<?>) obj;
-      return JodaBeanUtils.equal(getFailures(), other.getFailures()) &&
-          JodaBeanUtils.equal(getStatus(), other.getStatus()) &&
-          JodaBeanUtils.equal(getMessage(), other.getMessage());
+      return JodaBeanUtils.equal(_failures, other._failures) &&
+          JodaBeanUtils.equal(_status, other._status) &&
+          JodaBeanUtils.equal(_message, other._message);
     }
     return false;
   }
@@ -221,9 +220,9 @@ public final class MultipleFailureResult<T> extends Result<T> implements Immutab
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getFailures());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getStatus());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getMessage());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_failures);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_status);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_message);
     return hash;
   }
 
@@ -231,9 +230,9 @@ public final class MultipleFailureResult<T> extends Result<T> implements Immutab
   public String toString() {
     StringBuilder buf = new StringBuilder(128);
     buf.append("MultipleFailureResult{");
-    buf.append("failures").append('=').append(getFailures()).append(',').append(' ');
-    buf.append("status").append('=').append(getStatus()).append(',').append(' ');
-    buf.append("message").append('=').append(JodaBeanUtils.toString(getMessage()));
+    buf.append("failures").append('=').append(_failures).append(',').append(' ');
+    buf.append("status").append('=').append(_status).append(',').append(' ');
+    buf.append("message").append('=').append(JodaBeanUtils.toString(_message));
     buf.append('}');
     return buf.toString();
   }
@@ -427,19 +426,31 @@ public final class MultipleFailureResult<T> extends Result<T> implements Immutab
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder<T> setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder<T> setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder<T> setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

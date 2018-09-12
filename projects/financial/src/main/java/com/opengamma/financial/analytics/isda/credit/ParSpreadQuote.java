@@ -120,7 +120,7 @@ public class ParSpreadQuote implements CdsQuote, ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       ParSpreadQuote other = (ParSpreadQuote) obj;
-      return JodaBeanUtils.equal(getParSpread(), other.getParSpread());
+      return JodaBeanUtils.equal(_parSpread, other._parSpread);
     }
     return false;
   }
@@ -128,7 +128,7 @@ public class ParSpreadQuote implements CdsQuote, ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getParSpread());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_parSpread);
     return hash;
   }
 
@@ -146,7 +146,7 @@ public class ParSpreadQuote implements CdsQuote, ImmutableBean {
   }
 
   protected void toString(StringBuilder buf) {
-    buf.append("parSpread").append('=').append(JodaBeanUtils.toString(getParSpread())).append(',').append(' ');
+    buf.append("parSpread").append('=').append(JodaBeanUtils.toString(_parSpread)).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------
@@ -282,19 +282,31 @@ public class ParSpreadQuote implements CdsQuote, ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

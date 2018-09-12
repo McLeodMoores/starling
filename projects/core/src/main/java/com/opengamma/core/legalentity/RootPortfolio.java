@@ -23,7 +23,7 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import com.opengamma.id.ObjectId;
 
 /**
- * Portfolio of a legal entity
+ * Portfolio of a legal entity.
  */
 @BeanDefinition
 public class RootPortfolio implements Bean {

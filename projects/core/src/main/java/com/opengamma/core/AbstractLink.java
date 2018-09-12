@@ -50,13 +50,13 @@ public abstract class AbstractLink<T extends UniqueIdentifiable> extends DirectB
   /**
    * The object identifier that strongly references the target.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private ObjectId _objectId;
   /**
    * The external identifier bundle that references the target.
    * An empty bundle is used if not referencing a target by external bundle.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private ExternalIdBundle _externalId = ExternalIdBundle.EMPTY;
 
   /**
@@ -199,6 +199,7 @@ public abstract class AbstractLink<T extends UniqueIdentifiable> extends DirectB
    * Gets the object identifier that strongly references the target.
    * @return the value of the property
    */
+  @Override
   public ObjectId getObjectId() {
     return _objectId;
   }
@@ -225,6 +226,7 @@ public abstract class AbstractLink<T extends UniqueIdentifiable> extends DirectB
    * An empty bundle is used if not referencing a target by external bundle.
    * @return the value of the property, not null
    */
+  @Override
   public ExternalIdBundle getExternalId() {
     return _externalId;
   }

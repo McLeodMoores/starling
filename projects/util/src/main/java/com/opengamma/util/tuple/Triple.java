@@ -167,6 +167,8 @@ public final class Triple<A, B, C>
         .toComparison();
   }
 
+  // CSOFF
+  ///CLOVER:OFF
   @Override
   public boolean equals(final Object obj) {
     if (this == obj) {
@@ -203,7 +205,6 @@ public final class Triple<A, B, C>
         .append("]").toString();
   }
 
-  //-------------------------------------------------------------------------
   /**
    * The meta-bean for {@code Triple}.
    * @return the meta-bean, not null
@@ -217,7 +218,6 @@ public final class Triple<A, B, C>
     JodaBeanUtils.registerMetaBean(Triple.Meta.INSTANCE);
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public Triple.Meta<A, B, C> metaBean() {
     return Triple.Meta.INSTANCE;
@@ -252,17 +252,17 @@ public final class Triple<A, B, C>
     /**
      * The meta-property for the {@code first} property.
      */
-    private final MetaProperty<Object> _first = DirectMetaProperty.ofDerived(
+    private final MetaProperty<Object> _first = DirectMetaProperty.ofImmutable(
         this, "first", Triple.class, Object.class);
     /**
      * The meta-property for the {@code second} property.
      */
-    private final MetaProperty<Object> _second = DirectMetaProperty.ofDerived(
+    private final MetaProperty<Object> _second = DirectMetaProperty.ofImmutable(
         this, "second", Triple.class, Object.class);
     /**
      * The meta-property for the {@code third} property.
      */
-    private final MetaProperty<Object> _third = DirectMetaProperty.ofDerived(
+    private final MetaProperty<Object> _third = DirectMetaProperty.ofImmutable(
         this, "third", Triple.class, Object.class);
     /**
      * The meta-properties.

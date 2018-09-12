@@ -137,8 +137,8 @@ public class PointsUpFrontQuote implements CdsQuote, ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       PointsUpFrontQuote other = (PointsUpFrontQuote) obj;
-      return JodaBeanUtils.equal(getCoupon(), other.getCoupon()) &&
-          JodaBeanUtils.equal(getPointsUpFront(), other.getPointsUpFront());
+      return JodaBeanUtils.equal(_coupon, other._coupon) &&
+          JodaBeanUtils.equal(_pointsUpFront, other._pointsUpFront);
     }
     return false;
   }
@@ -146,8 +146,8 @@ public class PointsUpFrontQuote implements CdsQuote, ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getCoupon());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getPointsUpFront());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_coupon);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_pointsUpFront);
     return hash;
   }
 
@@ -165,8 +165,8 @@ public class PointsUpFrontQuote implements CdsQuote, ImmutableBean {
   }
 
   protected void toString(StringBuilder buf) {
-    buf.append("coupon").append('=').append(JodaBeanUtils.toString(getCoupon())).append(',').append(' ');
-    buf.append("pointsUpFront").append('=').append(JodaBeanUtils.toString(getPointsUpFront())).append(',').append(' ');
+    buf.append("coupon").append('=').append(JodaBeanUtils.toString(_coupon)).append(',').append(' ');
+    buf.append("pointsUpFront").append('=').append(JodaBeanUtils.toString(_pointsUpFront)).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------
@@ -327,19 +327,31 @@ public class PointsUpFrontQuote implements CdsQuote, ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

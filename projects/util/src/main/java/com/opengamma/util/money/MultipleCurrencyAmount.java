@@ -8,13 +8,14 @@ package com.opengamma.util.money;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.NavigableMap;
 import java.util.NoSuchElementException;
 import java.util.Set;
-import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.joda.beans.Bean;
@@ -25,12 +26,13 @@ import org.joda.beans.JodaBeanUtils;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
 import org.joda.beans.PropertyDefinition;
-import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
+import org.joda.beans.impl.direct.DirectPrivateBeanBuilder;
 
 import com.google.common.collect.ImmutableSortedMap;
+import com.google.common.collect.Maps;
 import com.opengamma.util.ArgumentChecker;
 
 /**
@@ -56,7 +58,7 @@ public final class MultipleCurrencyAmount implements ImmutableBean,
    * The map of {@code CurrencyAmount} keyed by currency.
    */
   @PropertyDefinition(validate = "notNull")
-  private final ImmutableSortedMap<Currency, CurrencyAmount> _currencyAmountMap;
+  private final NavigableMap<Currency, CurrencyAmount> _currencyAmountMap;
 
   /**
    * Obtains a {@code MultipleCurrencyAmount} from a currency and amount.
@@ -66,7 +68,9 @@ public final class MultipleCurrencyAmount implements ImmutableBean,
    * @return the amount, not null
    */
   public static MultipleCurrencyAmount of(final Currency currency, final double amount) {
-    return new MultipleCurrencyAmount(ImmutableSortedMap.of(currency, CurrencyAmount.of(currency, amount)));
+    final NavigableMap<Currency, CurrencyAmount> underlying = new TreeMap<>();
+    underlying.put(currency, CurrencyAmount.of(currency, amount));
+    return new MultipleCurrencyAmount(Collections.unmodifiableNavigableMap(underlying));
   }
 
   /**
@@ -383,9 +387,9 @@ public final class MultipleCurrencyAmount implements ImmutableBean,
   }
 
   private MultipleCurrencyAmount(
-      SortedMap<Currency, CurrencyAmount> currencyAmountMap) {
+      NavigableMap<Currency, CurrencyAmount> currencyAmountMap) {
     JodaBeanUtils.notNull(currencyAmountMap, "currencyAmountMap");
-    this._currencyAmountMap = ImmutableSortedMap.copyOfSorted(currencyAmountMap);
+    this._currencyAmountMap = Maps.unmodifiableNavigableMap(Maps.newTreeMap(currencyAmountMap));
   }
 
   @Override
@@ -408,7 +412,7 @@ public final class MultipleCurrencyAmount implements ImmutableBean,
    * Gets the map of {@code CurrencyAmount} keyed by currency.
    * @return the value of the property, not null
    */
-  public ImmutableSortedMap<Currency, CurrencyAmount> getCurrencyAmountMap() {
+  public NavigableMap<Currency, CurrencyAmount> getCurrencyAmountMap() {
     return _currencyAmountMap;
   }
 
@@ -420,7 +424,7 @@ public final class MultipleCurrencyAmount implements ImmutableBean,
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       MultipleCurrencyAmount other = (MultipleCurrencyAmount) obj;
-      return JodaBeanUtils.equal(getCurrencyAmountMap(), other.getCurrencyAmountMap());
+      return JodaBeanUtils.equal(_currencyAmountMap, other._currencyAmountMap);
     }
     return false;
   }
@@ -428,7 +432,7 @@ public final class MultipleCurrencyAmount implements ImmutableBean,
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getCurrencyAmountMap());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_currencyAmountMap);
     return hash;
   }
 
@@ -446,8 +450,8 @@ public final class MultipleCurrencyAmount implements ImmutableBean,
      * The meta-property for the {@code currencyAmountMap} property.
      */
     @SuppressWarnings({"unchecked", "rawtypes" })
-    private final MetaProperty<ImmutableSortedMap<Currency, CurrencyAmount>> _currencyAmountMap = DirectMetaProperty.ofImmutable(
-        this, "currencyAmountMap", MultipleCurrencyAmount.class, (Class) ImmutableSortedMap.class);
+    private final MetaProperty<NavigableMap<Currency, CurrencyAmount>> _currencyAmountMap = DirectMetaProperty.ofImmutable(
+        this, "currencyAmountMap", MultipleCurrencyAmount.class, (Class) NavigableMap.class);
     /**
      * The meta-properties.
      */
@@ -490,7 +494,7 @@ public final class MultipleCurrencyAmount implements ImmutableBean,
      * The meta-property for the {@code currencyAmountMap} property.
      * @return the meta-property, not null
      */
-    public MetaProperty<ImmutableSortedMap<Currency, CurrencyAmount>> currencyAmountMap() {
+    public MetaProperty<NavigableMap<Currency, CurrencyAmount>> currencyAmountMap() {
       return _currencyAmountMap;
     }
 
@@ -519,14 +523,15 @@ public final class MultipleCurrencyAmount implements ImmutableBean,
   /**
    * The bean-builder for {@code MultipleCurrencyAmount}.
    */
-  private static final class Builder extends DirectFieldsBeanBuilder<MultipleCurrencyAmount> {
+  private static final class Builder extends DirectPrivateBeanBuilder<MultipleCurrencyAmount> {
 
-    private SortedMap<Currency, CurrencyAmount> _currencyAmountMap = ImmutableSortedMap.of();
+    private NavigableMap<Currency, CurrencyAmount> _currencyAmountMap = new TreeMap<Currency, CurrencyAmount>();
 
     /**
      * Restricted constructor.
      */
     private Builder() {
+      super(meta());
     }
 
     //-----------------------------------------------------------------------
@@ -545,35 +550,11 @@ public final class MultipleCurrencyAmount implements ImmutableBean,
     public Builder set(String propertyName, Object newValue) {
       switch (propertyName.hashCode()) {
         case -218001197:  // currencyAmountMap
-          this._currencyAmountMap = (SortedMap<Currency, CurrencyAmount>) newValue;
+          this._currencyAmountMap = (NavigableMap<Currency, CurrencyAmount>) newValue;
           break;
         default:
           throw new NoSuchElementException("Unknown property: " + propertyName);
       }
-      return this;
-    }
-
-    @Override
-    public Builder set(MetaProperty<?> property, Object value) {
-      super.set(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(String propertyName, String value) {
-      setString(meta().metaProperty(propertyName), value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(MetaProperty<?> property, String value) {
-      super.setString(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
-      super.setAll(propertyValueMap);
       return this;
     }
 

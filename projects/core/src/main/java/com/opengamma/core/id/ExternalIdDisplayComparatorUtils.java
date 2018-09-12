@@ -18,7 +18,7 @@ public class ExternalIdDisplayComparatorUtils {
   private static final Logger LOGGER = LoggerFactory.getLogger(ExternalIdDisplayComparatorUtils.class);
 
   /**
-   * Default name for config object defining behavior of ExternalIdDisplayComparator
+   * Default name for config object defining behavior of ExternalIdDisplayComparator.
    */
   public static final String DEFAULT_CONFIG_NAME = "DEFAULT";
 
@@ -28,19 +28,17 @@ public class ExternalIdDisplayComparatorUtils {
     if (configSource == null) {
       LOGGER.error("null config source, defaulting to default configuration");
       return new ExternalIdDisplayComparator(ExternalIdOrderConfig.DEFAULT_CONFIG);
-    } else {
-      try {
-        config = configSource.getLatestByName(ExternalIdOrderConfig.class, name);
-      } catch (final RuntimeException fourOhFour) {
-        // this happens if there's nothing of this type in there...  swallow it
-        config = null;
-      }
-      if (config == null) {
-        LOGGER.error("No ExternalIdOrderConfig object called " + name + " in config database, defaulting");
-        return new ExternalIdDisplayComparator(ExternalIdOrderConfig.DEFAULT_CONFIG);
-      } else {
-        return new ExternalIdDisplayComparator(config);
-      }
     }
+    try {
+      config = configSource.getLatestByName(ExternalIdOrderConfig.class, name);
+    } catch (final RuntimeException fourOhFour) {
+      // this happens if there's nothing of this type in there...  swallow it
+      config = null;
+    }
+    if (config == null) {
+      LOGGER.error("No ExternalIdOrderConfig object called " + name + " in config database, defaulting");
+      return new ExternalIdDisplayComparator(ExternalIdOrderConfig.DEFAULT_CONFIG);
+    }
+    return new ExternalIdDisplayComparator(config);
   }
 }

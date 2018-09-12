@@ -6,7 +6,7 @@
 package com.opengamma.core.obligor;
 
 /**
- * Enumerate the industrial sector classification of a reference entity
+ * Enumerate the industrial sector classification of a reference entity.
  */
 public enum Sector {
   /**

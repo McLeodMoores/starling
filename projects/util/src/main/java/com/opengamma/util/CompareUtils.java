@@ -36,12 +36,10 @@ public final class CompareUtils {
     if (a == null) {
       if (b == null) {
         return null;
-      } else {
-        return b;
       }
-    } else {
-      return a;
+      return b;
     }
+    return a;
   }
 
   /**
@@ -59,12 +57,10 @@ public final class CompareUtils {
     if (a == null) {
       if (b == null) {
         return null;
-      } else {
-        return b;
       }
-    } else {
-      return a;
+      return b;
     }
+    return a;
   }
 
   //-------------------------------------------------------------------------
@@ -188,19 +184,15 @@ public final class CompareUtils {
     if (a == null) {
       if (b == null) {
         return 0;
-      } else {
-        return -1;
       }
-    } else {
-      if (b == null) {
-        return 1;
-      } else {
-        if (list.contains(a) && list.contains(b)) {
-          return list.indexOf(a) - list.indexOf(b);
-        } else {
-          return compareWithNullLow(a.toString(), b.toString());
-        }
-      }
+      return -1;
     }
+    if (b == null) {
+      return 1;
+    }
+    if (list.contains(a) && list.contains(b)) {
+      return list.indexOf(a) - list.indexOf(b);
+    }
+    return compareWithNullLow(a.toString(), b.toString());
   }
 }

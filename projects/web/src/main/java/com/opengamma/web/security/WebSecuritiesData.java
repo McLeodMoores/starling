@@ -5,12 +5,21 @@
  */
 package com.opengamma.web.security;
 
+import java.util.Map;
 import java.util.SortedMap;
 
 import javax.ws.rs.core.UriInfo;
 
+import org.joda.beans.Bean;
+import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
+import org.joda.beans.JodaBeanUtils;
+import org.joda.beans.MetaProperty;
+import org.joda.beans.Property;
 import org.joda.beans.PropertyDefinition;
+import org.joda.beans.impl.direct.DirectBeanBuilder;
+import org.joda.beans.impl.direct.DirectMetaProperty;
+import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.opengamma.id.UniqueId;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesMaster;
@@ -19,15 +28,6 @@ import com.opengamma.master.security.SecurityDocument;
 import com.opengamma.master.security.SecurityLoader;
 import com.opengamma.master.security.SecurityMaster;
 import com.opengamma.web.WebPerRequestData;
-import java.util.Map;
-import org.joda.beans.Bean;
-import org.joda.beans.BeanBuilder;
-import org.joda.beans.JodaBeanUtils;
-import org.joda.beans.MetaProperty;
-import org.joda.beans.Property;
-import org.joda.beans.impl.direct.DirectBeanBuilder;
-import org.joda.beans.impl.direct.DirectMetaProperty;
-import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
  * Data class for web-based securities.

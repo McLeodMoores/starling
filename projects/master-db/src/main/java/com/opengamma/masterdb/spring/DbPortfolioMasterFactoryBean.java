@@ -33,7 +33,7 @@ public class DbPortfolioMasterFactoryBean extends AbstractDbMasterFactoryBean<Db
   //-------------------------------------------------------------------------
   @Override
   public DbPortfolioMaster createObject() {
-    DbPortfolioMaster master = new DbPortfolioMaster(getDbConnector());
+    final DbPortfolioMaster master = new DbPortfolioMaster(getDbConnector());
     if (getUniqueIdScheme() != null) {
       master.setUniqueIdScheme(getUniqueIdScheme());
     }
@@ -41,7 +41,7 @@ public class DbPortfolioMasterFactoryBean extends AbstractDbMasterFactoryBean<Db
       master.setMaxRetries(getMaxRetries());
     }
     if (getJmsConnector() != null) {
-      JmsChangeManager cm = new JmsChangeManager(getJmsConnector().ensureTopicName(getJmsChangeManagerTopic()));
+      final JmsChangeManager cm = new JmsChangeManager(getJmsConnector().ensureTopicName(getJmsChangeManagerTopic()));
       master.setChangeManager(cm);
       cm.start();
     }

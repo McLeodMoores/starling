@@ -39,7 +39,7 @@ public class IborIndexBean extends IndexBean {
     if (!(other instanceof IborIndexBean)) {
       return false;
     }
-    IborIndexBean index = (IborIndexBean) other;
+    final IborIndexBean index = (IborIndexBean) other;
     return new EqualsBuilder()
       .append(getId(), index.getId())
       .append(getDescription(), index.getDescription())
@@ -47,7 +47,7 @@ public class IborIndexBean extends IndexBean {
       .append(getConventionId(), index.getConventionId())
       .isEquals();
   }
-  
+
   @Override
   public int hashCode() {
     return new HashCodeBuilder()

@@ -20,16 +20,16 @@ import org.joda.beans.JodaBeanUtils;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
 import org.joda.beans.PropertyDefinition;
-import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
+import org.joda.beans.impl.direct.DirectPrivateBeanBuilder;
 import org.joda.convert.FromString;
 import org.joda.convert.ToString;
 import org.threeten.bp.DateTimeException;
 import org.threeten.bp.Instant;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.google.common.collect.Ordering;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.PublicAPI;
@@ -39,7 +39,7 @@ import com.opengamma.util.PublicAPI;
  * <p>
  * History can be stored in two dimensions and the version-correction provides the key.
  * The first historic dimension is the classic series of versions.
- * Each new version is stored in such a manor that previous versions can be accessed.
+ * Each new version is stored in such a manner that previous versions can be accessed.
  * The second historic dimension is corrections.
  * A correction occurs when it is realized that the original data stored was incorrect.
  * <p>
@@ -85,7 +85,7 @@ public final class VersionCorrection implements ImmutableBean, Comparable<Versio
    * @return the version-correction combination, not null
    */
   public static VersionCorrection of(final VersionCorrection versionCorrection) {
-    return Objects.firstNonNull(versionCorrection, VersionCorrection.LATEST);
+    return MoreObjects.firstNonNull(versionCorrection, VersionCorrection.LATEST);
   }
 
   /**
@@ -138,7 +138,14 @@ public final class VersionCorrection implements ImmutableBean, Comparable<Versio
   public static VersionCorrection parse(final String str) {
     ArgumentChecker.notEmpty(str, "str");
     final int posC = str.indexOf(".C");
-    if (str.charAt(0) != 'V' || posC < 0) {
+    if (posC < 0) {
+      // see if it's attempting to deserialize LATEST
+      if (str.equals("\n")) {
+        return VersionCorrection.LATEST;
+      }
+      throw new IllegalArgumentException("Invalid identifier format: " + str);
+    }
+    if (str.charAt(0) != 'V') {
       throw new IllegalArgumentException("Invalid identifier format: " + str);
     }
     final String verStr = str.substring(1, posC);
@@ -178,12 +185,11 @@ public final class VersionCorrection implements ImmutableBean, Comparable<Versio
   private static Instant parseInstantString(final String instantStr) {
     if (instantStr == null || instantStr.equals("LATEST")) {
       return null;
-    } else {
-      try {
-        return Instant.parse(instantStr);
-      } catch (final DateTimeException ex) {
-        throw new IllegalArgumentException(ex);
-      }
+    }
+    try {
+      return Instant.parse(instantStr);
+    } catch (final DateTimeException ex) {
+      throw new IllegalArgumentException(ex);
     }
   }
 
@@ -371,8 +377,8 @@ public final class VersionCorrection implements ImmutableBean, Comparable<Versio
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       VersionCorrection other = (VersionCorrection) obj;
-      return JodaBeanUtils.equal(getVersionAsOf(), other.getVersionAsOf()) &&
-          JodaBeanUtils.equal(getCorrectedTo(), other.getCorrectedTo());
+      return JodaBeanUtils.equal(_versionAsOf, other._versionAsOf) &&
+          JodaBeanUtils.equal(_correctedTo, other._correctedTo);
     }
     return false;
   }
@@ -380,8 +386,8 @@ public final class VersionCorrection implements ImmutableBean, Comparable<Versio
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getVersionAsOf());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getCorrectedTo());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_versionAsOf);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_correctedTo);
     return hash;
   }
 
@@ -489,7 +495,7 @@ public final class VersionCorrection implements ImmutableBean, Comparable<Versio
   /**
    * The bean-builder for {@code VersionCorrection}.
    */
-  private static final class Builder extends DirectFieldsBeanBuilder<VersionCorrection> {
+  private static final class Builder extends DirectPrivateBeanBuilder<VersionCorrection> {
 
     private Instant _versionAsOf;
     private Instant _correctedTo;
@@ -498,6 +504,7 @@ public final class VersionCorrection implements ImmutableBean, Comparable<Versio
      * Restricted constructor.
      */
     private Builder() {
+      super(meta());
     }
 
     //-----------------------------------------------------------------------
@@ -525,30 +532,6 @@ public final class VersionCorrection implements ImmutableBean, Comparable<Versio
         default:
           throw new NoSuchElementException("Unknown property: " + propertyName);
       }
-      return this;
-    }
-
-    @Override
-    public Builder set(MetaProperty<?> property, Object value) {
-      super.set(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(String propertyName, String value) {
-      setString(meta().metaProperty(propertyName), value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(MetaProperty<?> property, String value) {
-      super.setString(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
-      super.setAll(propertyValueMap);
       return this;
     }
 

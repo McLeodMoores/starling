@@ -33,7 +33,7 @@ public final class FirstThenSecondPairComparator<A extends Comparable<A>, B exte
   /**
    * Singleton instance that is based on doubles.
    */
-  public static final FirstThenSecondPairComparator<Double, Double> INSTANCE_DOUBLES = new FirstThenSecondPairComparator<Double, Double>();
+  public static final FirstThenSecondPairComparator<Double, Double> INSTANCE_DOUBLES = new FirstThenSecondPairComparator<>();
 
   @Override
   public int compare(final Pair<A, B> p1, final Pair<A, B> p2) {

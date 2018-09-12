@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.convention;
@@ -30,14 +30,14 @@ import com.opengamma.master.convention.ManageableConvention;
 /**
  * Fields defined here apply to CDSs created via the {@link CDSAnalyticFactory}.
  * These apply to CDSs created for curve calibration.
- * 
+ *
  * For a more detailed explanation on each of the fields listed here, see {@link CDSAnalyticFactory}.
  */
 @BeanDefinition
 public class IsdaCreditCurveConvention extends ManageableConvention {
 
   private static final long serialVersionUID = 1L;
-  
+
   private static final ConventionType TYPE = ConventionType.of("ISDACreditCurve");
 
   /**
@@ -45,62 +45,62 @@ public class IsdaCreditCurveConvention extends ManageableConvention {
    */
   @PropertyDefinition
   private int _stepIn;
-  
+
   /**
    * Cash settle date for which PV is calculated.
    */
   @PropertyDefinition
   private int _cashSettle;
-  
+
   /**
    * Whether accrued premium is paid on default.
    */
   @PropertyDefinition(validate = "notNull")
   private boolean _payAccOnDefault;
-  
+
   /**
    * The coupon interval.
    */
   @PropertyDefinition(validate = "notNull")
   private Period _couponInterval;
-  
+
   /**
    * The stub type. See {@link StubType} for available values.
    */
   @PropertyDefinition(validate = "notNull")
   private StubType _stubType;
-  
+
   /**
    * Protection starts at beginning of day if true, otherwise at the end.
    */
   @PropertyDefinition
   private boolean _protectFromStartOfDay;
-  
+
   /**
    * Business day convention used for date rolling.
    */
   @PropertyDefinition(validate = "notNull")
   private BusinessDayConvention _businessDayConvention;
-  
+
   /**
    * The calendar to use.
    */
   @PropertyDefinition(validate = "notNull")
   private Calendar _regionCalendar;
-  
+
   /**
    * Day count for accrual calculations.
    */
   @PropertyDefinition(validate = "notNull")
   private DayCount _accrualDayCount;
-  
+
   /**
    * Day count used for curve. (Note, values other than ACT/365 are not recommended. This is used by ISDA).
    */
   @PropertyDefinition(validate = "notNull")
   private DayCount _curveDayCount;
 
-  
+
   @Override
   public ConventionType getConventionType() {
     return TYPE;

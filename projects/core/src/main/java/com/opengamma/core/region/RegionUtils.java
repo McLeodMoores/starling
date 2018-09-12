@@ -9,10 +9,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.lang.Validate;
-
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.id.ExternalId;
+import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.PublicAPI;
 
 
@@ -40,8 +39,8 @@ public class RegionUtils {
    * @return a set of the region(s)
    */
   public static Set<Region> getRegions(final RegionSource regionSource, final ExternalId regionId) {
-    Validate.notNull(regionSource, "region source");
-    Validate.notNull(regionId, "region id");
+    ArgumentChecker.notNull(regionSource, "regionSource");
+    ArgumentChecker.notNull(regionId, "regionId");
     if (regionId.isScheme(ExternalSchemes.FINANCIAL) && regionId.getValue().contains("+")) {
       final String[] regions = regionId.getValue().split("\\+");
       final Set<Region> resultRegions = new HashSet<>();

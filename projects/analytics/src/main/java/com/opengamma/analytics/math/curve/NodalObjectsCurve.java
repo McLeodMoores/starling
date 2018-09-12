@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.curve;
@@ -22,7 +22,7 @@ import com.opengamma.util.tuple.Pair;
 
 /**
  * A curve.
- * 
+ *
  * @param <T>  the type of the x data
  * @param <U>  the type of the y data
  */

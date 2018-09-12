@@ -8,8 +8,6 @@ package com.opengamma.examples.simulated.component;
 import java.util.Collection;
 import java.util.Map;
 
-import net.sf.ehcache.CacheManager;
-
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
@@ -39,6 +37,8 @@ import com.opengamma.livedata.server.StandardLiveDataServer;
 import com.opengamma.livedata.server.distribution.JmsSenderFactory;
 import com.opengamma.provider.livedata.LiveDataMetaData;
 import com.opengamma.provider.livedata.LiveDataServerTypes;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Component factory for producing simulated live data.

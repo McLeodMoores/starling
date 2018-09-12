@@ -61,7 +61,7 @@ public class NonVersionedEHCachingSecuritySource implements SecuritySource {
   }
 
   private static class SecurityCacheEntry {
-    public SecurityCacheEntry(final CacheEntryType entryType, final ExternalIdBundle bundle, final UniqueId uniqueId) {
+    SecurityCacheEntry(final CacheEntryType entryType, final ExternalIdBundle bundle, final UniqueId uniqueId) {
       _entryType = entryType;
       _bundle = bundle;
       _uniqueId = uniqueId;

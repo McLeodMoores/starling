@@ -11,6 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
 import org.joda.beans.JodaBeanUtils;
@@ -31,8 +32,8 @@ import com.opengamma.engine.marketdata.MarketDataProviderFactory;
 import com.opengamma.engine.marketdata.NamedMarketDataSpecificationRepository;
 import com.opengamma.engine.marketdata.availability.DomainMarketDataAvailabilityFilter;
 import com.opengamma.engine.marketdata.availability.MarketDataAvailabilityFilter;
-import com.opengamma.engine.marketdata.live.LiveDataFactory;
 import com.opengamma.engine.marketdata.live.InMemoryLKVLiveMarketDataProviderFactory;
+import com.opengamma.engine.marketdata.live.LiveDataFactory;
 import com.opengamma.engine.marketdata.spec.LiveMarketDataSpecification;
 import com.opengamma.id.ExternalScheme;
 import com.opengamma.livedata.LiveDataClient;
@@ -42,7 +43,6 @@ import com.opengamma.provider.livedata.LiveDataMetaDataProvider;
 import com.opengamma.provider.livedata.LiveDataServerTypes;
 import com.opengamma.util.jms.JmsConnector;
 import com.opengamma.util.jms.JmsConnectorFactoryBean;
-import org.joda.beans.Bean;
 
 /**
  * Component factory for consuming simulated live data.

@@ -114,7 +114,7 @@ public class FixedHistoricalMarketDataSpecification extends HistoricalMarketData
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       FixedHistoricalMarketDataSpecification other = (FixedHistoricalMarketDataSpecification) obj;
-      return JodaBeanUtils.equal(getSnapshotDate(), other.getSnapshotDate()) &&
+      return JodaBeanUtils.equal(_snapshotDate, other._snapshotDate) &&
           super.equals(obj);
     }
     return false;
@@ -123,7 +123,7 @@ public class FixedHistoricalMarketDataSpecification extends HistoricalMarketData
   @Override
   public int hashCode() {
     int hash = 7;
-    hash = hash * 31 + JodaBeanUtils.hashCode(getSnapshotDate());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_snapshotDate);
     return hash ^ super.hashCode();
   }
 
@@ -143,7 +143,7 @@ public class FixedHistoricalMarketDataSpecification extends HistoricalMarketData
   @Override
   protected void toString(StringBuilder buf) {
     super.toString(buf);
-    buf.append("snapshotDate").append('=').append(JodaBeanUtils.toString(getSnapshotDate())).append(',').append(' ');
+    buf.append("snapshotDate").append('=').append(JodaBeanUtils.toString(_snapshotDate)).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------
@@ -247,6 +247,7 @@ public class FixedHistoricalMarketDataSpecification extends HistoricalMarketData
      * @param beanToCopy  the bean to copy from, not null
      */
     protected Builder(FixedHistoricalMarketDataSpecification beanToCopy) {
+      super(beanToCopy);
       this._snapshotDate = beanToCopy.getSnapshotDate();
     }
 
@@ -280,19 +281,31 @@ public class FixedHistoricalMarketDataSpecification extends HistoricalMarketData
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

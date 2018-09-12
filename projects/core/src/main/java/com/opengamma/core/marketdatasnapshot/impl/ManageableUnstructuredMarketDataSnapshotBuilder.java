@@ -23,8 +23,8 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 
 /**
- * Fudge message builder for {@link ManageableUnstructuredMarketDataSnapshot}
- * 
+ * Fudge message builder for {@link ManageableUnstructuredMarketDataSnapshot}.
+ *
  * <pre>
  *   message {
  *     repeated message { // set
@@ -38,7 +38,7 @@ import com.opengamma.id.ExternalIdBundle;
 @FudgeBuilderFor(ManageableUnstructuredMarketDataSnapshot.class)
 public class ManageableUnstructuredMarketDataSnapshotBuilder implements FudgeBuilder<ManageableUnstructuredMarketDataSnapshot> {
   private static final Logger LOGGER = LoggerFactory.getLogger(ManageableUnstructuredMarketDataSnapshot.class);
-  
+
   /** Field name. */
   public static final String IDENTIFIERS_FIELD_NAME = "identifiers";
   /** Field name. */
@@ -77,9 +77,9 @@ public class ManageableUnstructuredMarketDataSnapshotBuilder implements FudgeBui
       ExternalIdBundle identifiers;
       if (innerValue.hasField(VALUE_SPEC_NAME)) {
         LOGGER.warn("Massively old version of snapshot deserializer being used, trying to convert...");
-        FudgeMsg valueSpec = (FudgeMsg) innerValue.getValue(VALUE_SPEC_NAME);
+        final FudgeMsg valueSpec = (FudgeMsg) innerValue.getValue(VALUE_SPEC_NAME);
         if (innerValue.hasField(UNIQUE_ID_NAME)) {
-          identifiers = ExternalId.parse(valueSpec.getString(UNIQUE_ID_NAME)).toBundle();          
+          identifiers = ExternalId.parse(valueSpec.getString(UNIQUE_ID_NAME)).toBundle();
         } else {
           throw new OpenGammaRuntimeException("Detected out of date unstructured snapshot encoding, tried to convert but failed");
         }

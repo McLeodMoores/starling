@@ -344,11 +344,11 @@ public final class CalculationResults implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       CalculationResults other = (CalculationResults) obj;
-      return JodaBeanUtils.equal(getValues(), other.getValues()) &&
-          JodaBeanUtils.equal(getViewDefinitionName(), other.getViewDefinitionName()) &&
-          JodaBeanUtils.equal(getSnapshotName(), other.getSnapshotName()) &&
-          JodaBeanUtils.equal(getValuationTime(), other.getValuationTime()) &&
-          JodaBeanUtils.equal(getVersion(), other.getVersion());
+      return JodaBeanUtils.equal(_values, other._values) &&
+          JodaBeanUtils.equal(_viewDefinitionName, other._viewDefinitionName) &&
+          JodaBeanUtils.equal(_snapshotName, other._snapshotName) &&
+          JodaBeanUtils.equal(_valuationTime, other._valuationTime) &&
+          JodaBeanUtils.equal(_version, other._version);
     }
     return false;
   }
@@ -356,11 +356,11 @@ public final class CalculationResults implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getValues());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getViewDefinitionName());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getSnapshotName());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getValuationTime());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getVersion());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_values);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_viewDefinitionName);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_snapshotName);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_valuationTime);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_version);
     return hash;
   }
 
@@ -368,11 +368,11 @@ public final class CalculationResults implements ImmutableBean {
   public String toString() {
     StringBuilder buf = new StringBuilder(192);
     buf.append("CalculationResults{");
-    buf.append("values").append('=').append(getValues()).append(',').append(' ');
-    buf.append("viewDefinitionName").append('=').append(getViewDefinitionName()).append(',').append(' ');
-    buf.append("snapshotName").append('=').append(getSnapshotName()).append(',').append(' ');
-    buf.append("valuationTime").append('=').append(getValuationTime()).append(',').append(' ');
-    buf.append("version").append('=').append(JodaBeanUtils.toString(getVersion()));
+    buf.append("values").append('=').append(_values).append(',').append(' ');
+    buf.append("viewDefinitionName").append('=').append(_viewDefinitionName).append(',').append(' ');
+    buf.append("snapshotName").append('=').append(_snapshotName).append(',').append(' ');
+    buf.append("valuationTime").append('=').append(_valuationTime).append(',').append(' ');
+    buf.append("version").append('=').append(JodaBeanUtils.toString(_version));
     buf.append('}');
     return buf.toString();
   }
@@ -612,19 +612,31 @@ public final class CalculationResults implements ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

@@ -15,7 +15,7 @@ import org.fudgemsg.mapping.FudgeSerializer;
 import com.opengamma.timeseries.precise.instant.ImmutableInstantDoubleTimeSeries;
 
 /**
- * Fudge message encoder/decoder (builder) for ImmutableInstantDoubleTimeSeries
+ * Fudge message encoder/decoder (builder) for ImmutableInstantDoubleTimeSeries.
  */
 @FudgeBuilderFor(ImmutableInstantDoubleTimeSeries.class)
 public class ImmutableInstantDoubleTimeSeriesFudgeBuilder implements FudgeBuilder<ImmutableInstantDoubleTimeSeries> {

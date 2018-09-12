@@ -15,7 +15,7 @@ import org.fudgemsg.mapping.FudgeDeserializer;
 import org.fudgemsg.mapping.FudgeSerializer;
 
 /**
- * Builder for big decimals
+ * Builder for big decimals.
  */
 @FudgeBuilderFor(BigDecimal.class)
 public class BigDecimalFudgeBuilder implements FudgeBuilder<BigDecimal> {

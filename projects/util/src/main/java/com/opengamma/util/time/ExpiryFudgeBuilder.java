@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.time;
@@ -34,12 +34,15 @@ public final class ExpiryFudgeBuilder extends AbstractFudgeBuilder implements Fu
   public static final String DATETIME_FIELD_NAME = "datetime";
   /** Field name. */
   public static final String TIMEZONE_FIELD_NAME = "timezone";
+  /** Field name. */
+  public static final String EXPIRY_ACCURACY_NAME = "accuracy";
 
   /**
    * Dummy secondary type to force serialization.
    */
   @FudgeSecondaryType
-  public static final SecondaryFieldType<Expiry, FudgeMsg> SECONDARY_TYPE_INSTANCE = new SecondaryFieldType<Expiry, FudgeMsg>(FudgeWireType.SUB_MESSAGE, Expiry.class) {
+  public static final SecondaryFieldType<Expiry, FudgeMsg> SECONDARY_TYPE_INSTANCE =
+       new SecondaryFieldType<Expiry, FudgeMsg>(FudgeWireType.SUB_MESSAGE, Expiry.class) {
     /** Serialization version. */
     private static final long serialVersionUID = 1L;
 
@@ -54,6 +57,12 @@ public final class ExpiryFudgeBuilder extends AbstractFudgeBuilder implements Fu
     }
   };
 
+  /**
+   * Converts an expiry to a Fudge date time.
+   *
+   * @param object  the expiry
+   * @return  the Fudge date time
+   */
   protected static FudgeDateTime expiryToDateTime(final Expiry object) {
     ExpiryAccuracy accuracy = object.getAccuracy();
     if (accuracy == null) {
@@ -67,7 +76,8 @@ public final class ExpiryFudgeBuilder extends AbstractFudgeBuilder implements Fu
       case DAY_MONTH_YEAR:
         return new FudgeDateTime(FudgeDate.from(object.getExpiry()), new FudgeTime(DateTimeAccuracy.DAY, 0, 0, 0));
       case MONTH_YEAR:
-        return new FudgeDateTime(FudgeDate.ofYearMonth(object.getExpiry().getYear(), object.getExpiry().getMonthValue()), new FudgeTime(DateTimeAccuracy.MONTH, 0, 0, 0));
+        return new FudgeDateTime(FudgeDate.ofYearMonth(object.getExpiry().getYear(), object.getExpiry().getMonthValue()),
+            new FudgeTime(DateTimeAccuracy.MONTH, 0, 0, 0));
       case YEAR:
         return new FudgeDateTime(FudgeDate.ofYear(object.getExpiry().getYear()), new FudgeTime(DateTimeAccuracy.YEAR, 0, 0, 0));
       default:
@@ -75,6 +85,13 @@ public final class ExpiryFudgeBuilder extends AbstractFudgeBuilder implements Fu
     }
   }
 
+  /**
+   * Converts a Fudge date time and time zone string to an expiry.
+   *
+   * @param datetime  a Fudge date time
+   * @param timezone  the time zone
+   * @return  the expiry
+   */
   protected static Expiry dateTimeToExpiry(final FudgeDateTime datetime, final String timezone) {
     switch (datetime.getAccuracy()) {
       case NANOSECOND:
@@ -96,6 +113,30 @@ public final class ExpiryFudgeBuilder extends AbstractFudgeBuilder implements Fu
     }
   }
 
+  /**
+   * Converts a Fudge date time and time zone string to an expiry.
+   *
+   * @param datetime  a Fudge date time
+   * @param timezone  the time zone
+   * @param accuracy  the accuracy
+   * @return  the expiry
+   */
+  protected static Expiry dateTimeToExpiry(final FudgeDateTime datetime, final String timezone, final ExpiryAccuracy accuracy) {
+    switch (accuracy) {
+      case MIN_HOUR_DAY_MONTH_YEAR:
+        return new Expiry(ZonedDateTime.ofInstant(datetime.toInstant(), ZoneId.of(timezone)), ExpiryAccuracy.MIN_HOUR_DAY_MONTH_YEAR);
+      case HOUR_DAY_MONTH_YEAR:
+        return new Expiry(ZonedDateTime.ofInstant(datetime.toInstant(), ZoneId.of(timezone)), ExpiryAccuracy.HOUR_DAY_MONTH_YEAR);
+      case DAY_MONTH_YEAR:
+        return new Expiry(datetime.getDate().toLocalDate().atStartOfDay(ZoneId.of(timezone)), ExpiryAccuracy.DAY_MONTH_YEAR);
+      case MONTH_YEAR:
+        return new Expiry(datetime.getDate().toLocalDate().atStartOfDay(ZoneId.of(timezone)), ExpiryAccuracy.MONTH_YEAR);
+      case YEAR:
+        return new Expiry(datetime.getDate().toLocalDate().atStartOfDay(ZoneId.of(timezone)), ExpiryAccuracy.YEAR);
+      default:
+        throw new IllegalArgumentException("Invalid accuracy value on " + datetime);
+    }
+  }
   //-------------------------------------------------------------------------
   @Override
   public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final Expiry object) {
@@ -104,6 +145,13 @@ public final class ExpiryFudgeBuilder extends AbstractFudgeBuilder implements Fu
     return msg;
   }
 
+  /**
+   * Converts an expiry to a message, returning null if the expiry is null.
+   *
+   * @param serializer  a serializer
+   * @param object  an expiry
+   * @return  a message
+   */
   public static MutableFudgeMsg toFudgeMsg(final FudgeSerializer serializer, final Expiry object) {
     if (object == null) {
       return null;
@@ -113,9 +161,17 @@ public final class ExpiryFudgeBuilder extends AbstractFudgeBuilder implements Fu
     return msg;
   }
 
+  /**
+   * Adds an encoded expiry to a message.
+   *
+   * @param serializer  a serializer
+   * @param object  an expiry
+   * @param msg  the message
+   */
   public static void toFudgeMsg(final FudgeSerializer serializer, final Expiry object, final MutableFudgeMsg msg) {
     addToMessage(msg, DATETIME_FIELD_NAME, expiryToDateTime(object));
     addToMessage(msg, TIMEZONE_FIELD_NAME, object.getExpiry().getZone().getId());
+    addToMessage(msg, EXPIRY_ACCURACY_NAME, object.getAccuracy().name());
   }
 
   //-------------------------------------------------------------------------
@@ -124,13 +180,21 @@ public final class ExpiryFudgeBuilder extends AbstractFudgeBuilder implements Fu
     return fromFudgeMsg(deserializer, msg);
   }
 
+  /**
+   * Converts a message to an expiry, returning null if the message is null.
+   *
+   * @param deserializer  a deserializer
+   * @param msg  a message
+   * @return  an expiry
+   */
   public static Expiry fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     if (msg == null) {
       return null;
     }
     return dateTimeToExpiry(
         msg.getValue(FudgeDateTime.class, DATETIME_FIELD_NAME),
-        msg.getString(TIMEZONE_FIELD_NAME));
+        msg.getString(TIMEZONE_FIELD_NAME),
+        ExpiryAccuracy.valueOf(msg.getString(EXPIRY_ACCURACY_NAME)));
   }
 
 }

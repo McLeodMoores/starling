@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.async;
@@ -20,7 +20,7 @@ import com.opengamma.util.NamedThreadPoolFactory;
  * Abstraction of an aysnchronous housekeeping thread/service.
  * <p>
  * Once started the housekeeper will run until the target is garbage collected or it is explicitly stopped.
- * 
+ *
  * @param <T> the target of the housekeeping action
  */
 public abstract class AbstractHousekeeper<T> {
@@ -36,18 +36,18 @@ public abstract class AbstractHousekeeper<T> {
 
   /**
    * Constructs a new instance.
-   * 
+   *
    * @param target the target to perform the action on, not null
    */
   protected AbstractHousekeeper(final T target) {
     LOGGER.debug("Created housekeeper {} for {}", this, target);
-    _target = new WeakReference<T>(target);
+    _target = new WeakReference<>(target);
   }
 
   /**
-   * Returns the time between housekeeping operations in seconds, the default is controlled by a system property. Only override this if there is a specific requirement to run at a particular
-   * frequency, or multiple of the default.
-   * 
+   * Returns the time between housekeeping operations in seconds, the default is controlled by a system property. Only override this if
+   * there is a specific requirement to run at a particular frequency, or multiple of the default.
+   *
    * @return the period in seconds, or 0 for no operations
    */
   protected int getPeriodSeconds() {
@@ -68,10 +68,9 @@ public abstract class AbstractHousekeeper<T> {
             try {
               if (housekeep()) {
                 return;
-              } else {
-                LOGGER.info("Housekeeper {} for {} returned false", this, _target);
               }
-            } catch (Throwable t) {
+              LOGGER.info("Housekeeper {} for {} returned false", this, _target);
+            } catch (final Throwable t) {
               LOGGER.error("Cancelling errored {} for {}", this, _target);
               LOGGER.warn("Caught exception", t);
             }
@@ -107,7 +106,7 @@ public abstract class AbstractHousekeeper<T> {
 
   /**
    * Returns the target of the housekeeper, possibly null if it has already been garbage collected.
-   * 
+   *
    * @return the target, possibly null
    */
   protected T getTarget() {
@@ -116,15 +115,16 @@ public abstract class AbstractHousekeeper<T> {
 
   /**
    * Performs the housekeeping action.
-   * 
+   *
    * @param target the housekeeping target, not null
    * @return true to carry on scheduling, or false to stop the scheduling
    */
   protected abstract boolean housekeep(T target);
 
   /**
-   * Handles a scheduled tick from the underlying executor. If the target has not been garbage collected, calls the user {@link #housekeep} operation, otherwise ceases the scheduling.
-   * 
+   * Handles a scheduled tick from the underlying executor. If the target has not been garbage collected, calls the user
+   * {@link #housekeep(Object)} operation, otherwise ceases the scheduling.
+   *
    * @return true to carry on scheduling, or false to stop the scheduling
    */
   protected boolean housekeep() {
@@ -132,10 +132,9 @@ public abstract class AbstractHousekeeper<T> {
     if (target != null) {
       LOGGER.debug("Tick {} for {}", this, target);
       return housekeep(target);
-    } else {
-      LOGGER.info("Target discarded, releasing callback {}", this);
-      return false;
     }
+    LOGGER.info("Target discarded, releasing callback {}", this);
+    return false;
   }
 
 }

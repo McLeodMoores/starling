@@ -10,7 +10,7 @@ import com.opengamma.util.PublicAPI;
 /**
  * Represents a result that may be produced by another thread and potentially allow the original calling thread to
  * perform another action in the meantime.
- * 
+ *
  * @param <T> type of the result
  */
 @PublicAPI
@@ -21,7 +21,7 @@ public class AsynchronousResult<T> {
 
   /**
    * Creates a new instance.
-   * 
+   *
    * @param result the result value, or null if {@code exception} is specified
    * @param exception the exception thrown, or null if a result was signaled
    */
@@ -32,15 +32,14 @@ public class AsynchronousResult<T> {
 
   /**
    * Returns the result or throws the exception that was signaled.
-   * 
+   *
    * @return the result
    */
   public T getResult() {
     if (_exception != null) {
       throw _exception;
-    } else {
-      return _result;
     }
+    return _result;
   }
 
 }

@@ -17,10 +17,10 @@ import org.joda.beans.JodaBeanUtils;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
 import org.joda.beans.PropertyDefinition;
-import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
+import org.joda.beans.impl.direct.DirectPrivateBeanBuilder;
 
 /**
  * A cache key used to hold the user ID and IP address for Bloomberg authentication.
@@ -114,8 +114,8 @@ public final class IdentityCacheKey implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       IdentityCacheKey other = (IdentityCacheKey) obj;
-      return JodaBeanUtils.equal(getIpAddress(), other.getIpAddress()) &&
-          JodaBeanUtils.equal(getUserId(), other.getUserId());
+      return JodaBeanUtils.equal(_ipAddress, other._ipAddress) &&
+          JodaBeanUtils.equal(_userId, other._userId);
     }
     return false;
   }
@@ -123,8 +123,8 @@ public final class IdentityCacheKey implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getIpAddress());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getUserId());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_ipAddress);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_userId);
     return hash;
   }
 
@@ -132,8 +132,8 @@ public final class IdentityCacheKey implements ImmutableBean {
   public String toString() {
     StringBuilder buf = new StringBuilder(96);
     buf.append("IdentityCacheKey{");
-    buf.append("ipAddress").append('=').append(getIpAddress()).append(',').append(' ');
-    buf.append("userId").append('=').append(JodaBeanUtils.toString(getUserId()));
+    buf.append("ipAddress").append('=').append(_ipAddress).append(',').append(' ');
+    buf.append("userId").append('=').append(JodaBeanUtils.toString(_userId));
     buf.append('}');
     return buf.toString();
   }
@@ -242,7 +242,7 @@ public final class IdentityCacheKey implements ImmutableBean {
   /**
    * The bean-builder for {@code IdentityCacheKey}.
    */
-  private static final class Builder extends DirectFieldsBeanBuilder<IdentityCacheKey> {
+  private static final class Builder extends DirectPrivateBeanBuilder<IdentityCacheKey> {
 
     private String _ipAddress;
     private String _userId;
@@ -251,6 +251,7 @@ public final class IdentityCacheKey implements ImmutableBean {
      * Restricted constructor.
      */
     private Builder() {
+      super(meta());
     }
 
     //-----------------------------------------------------------------------
@@ -278,30 +279,6 @@ public final class IdentityCacheKey implements ImmutableBean {
         default:
           throw new NoSuchElementException("Unknown property: " + propertyName);
       }
-      return this;
-    }
-
-    @Override
-    public Builder set(MetaProperty<?> property, Object value) {
-      super.set(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(String propertyName, String value) {
-      setString(meta().metaProperty(propertyName), value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(MetaProperty<?> property, String value) {
-      super.setString(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
-      super.setAll(propertyValueMap);
       return this;
     }
 

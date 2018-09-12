@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.component.factory.livedata;
@@ -22,33 +22,33 @@ import com.opengamma.util.jms.JmsConnector;
 
 
 /**
- * 
+ *
  */
 @BeanDefinition
 public abstract class CogdaDataDistributorFactory extends AbstractComponentFactory {
 
   @PropertyDefinition
   private String _redisServer;
-  
+
   @PropertyDefinition
   private Integer _redisPort;
-  
+
   @PropertyDefinition
   private String _redisPrefix;
-  
+
   @PropertyDefinition
   private boolean _updateRedis = true;
-  
+
   @PropertyDefinition(validate = "notNull")
   private JmsConnector _publishJmsConnector;
-  
+
   @PropertyDefinition(validate = "notNull")
   private String _publishTopicName;
-  
-  
+
+
   @PropertyDefinition(validate = "notNull")
   private JmsConnector _listenJmsConnector;
-  
+
   @PropertyDefinition(validate = "notNull")
   private String _listenTopicName;
 

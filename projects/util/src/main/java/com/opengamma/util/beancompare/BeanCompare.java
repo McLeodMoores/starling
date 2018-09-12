@@ -81,8 +81,8 @@ public class BeanCompare {
     ArgumentChecker.notNull(bean1, "bean1");
     ArgumentChecker.notNull(bean2, "bean2");
     if (!sameClass(bean1, bean2)) {
-      throw new IllegalArgumentException("Beans must be of the same class. bean1 class: " + bean1.getClass() +
-          ", bean2 class: " + bean2.getClass());
+      throw new IllegalArgumentException("Beans must be of the same class. bean1 class: " + bean1.getClass()
+          + ", bean2 class: " + bean2.getClass());
     }
     return compare(bean1, bean2, Collections.<MetaProperty<?>>emptyList());
   }
@@ -134,9 +134,8 @@ public class BeanCompare {
     }
     if (value1 == null || value2 == null || comparator == null) {
       return JodaBeanUtils.equal(value1, value2);
-    } else {
-      return comparator.compare(value1, value2) == 0;
     }
+    return comparator.compare(value1, value2) == 0;
   }
 
   private static boolean sameClass(final Object value1, final Object value2) {

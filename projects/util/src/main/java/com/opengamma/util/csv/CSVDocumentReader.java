@@ -103,7 +103,7 @@ public final class CSVDocumentReader implements Iterable<FudgeMsg> {
     private String[] _header;
     private String[] _currentRow;
 
-    public FudgeMsgCSVIterator() {
+    FudgeMsgCSVIterator() {
       try {
         InputStream is = _docUrl.openStream();
         if (_docUrl.getFile().endsWith(".gz")) {
@@ -113,9 +113,8 @@ public final class CSVDocumentReader implements Iterable<FudgeMsg> {
         _header = _csvReader.readNext();
         if (_header == null) {
           throw new OpenGammaRuntimeException("Column headers is missing, can not create iterator");
-        } else {
-          trimColumnHeaders();
         }
+        trimColumnHeaders();
       } catch (final IOException ex) {
         throw new OpenGammaRuntimeException("IO Exception trying to create an Iterator", ex);
       }

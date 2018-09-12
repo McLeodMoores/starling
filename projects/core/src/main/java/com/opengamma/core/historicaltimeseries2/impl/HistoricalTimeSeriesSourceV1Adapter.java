@@ -10,6 +10,7 @@ import com.opengamma.core.historicaltimeseries.HistoricalTimeSeries;
 import com.opengamma.core.historicaltimeseries2.HistoricalDataRequest;
 import com.opengamma.core.historicaltimeseries2.HistoricalTimeSeriesSource;
 import com.opengamma.core.value.MarketDataRequirementNames;
+import com.opengamma.util.ArgumentChecker;
 
 /**
  * This class wraps an original implementation of HistoricalTimeSeriesSource and marshalls requests to it.
@@ -19,9 +20,15 @@ public final class HistoricalTimeSeriesSourceV1Adapter implements HistoricalTime
   private final com.opengamma.core.historicaltimeseries.HistoricalTimeSeriesSource _originalSource;
 
   private HistoricalTimeSeriesSourceV1Adapter(final com.opengamma.core.historicaltimeseries.HistoricalTimeSeriesSource originalSource) {
-    _originalSource = originalSource;
+    _originalSource = ArgumentChecker.notNull(originalSource, "originalSource");
   }
 
+  /**
+   * Wraps the original source.
+   *
+   * @param originalSource  the original source, not null
+   * @return  a wrapped source
+   */
   public static HistoricalTimeSeriesSource of(final com.opengamma.core.historicaltimeseries.HistoricalTimeSeriesSource originalSource) {
     return new HistoricalTimeSeriesSourceV1Adapter(originalSource);
   }

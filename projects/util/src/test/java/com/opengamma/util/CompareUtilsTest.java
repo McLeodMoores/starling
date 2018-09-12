@@ -17,46 +17,63 @@ import org.testng.annotations.Test;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Test.
+ * Test for {@link CompareUtils}.
  */
 @Test(groups = TestGroup.UNIT)
 public class CompareUtilsTest {
 
+  /**
+   * Tests the constructor via reflection.
+   *
+   * @throws Exception  if the object cannot be constructed
+   */
+  @Test
   @SuppressWarnings("unchecked")
-  public void test_constructor() throws Exception {
-    Constructor<?>[] cons = CompareUtils.class.getDeclaredConstructors();
+  public void testConstructor() throws Exception {
+    final Constructor<?>[] cons = CompareUtils.class.getDeclaredConstructors();
     assertEquals(1, cons.length);
     assertEquals(0, cons[0].getParameterTypes().length);
     assertEquals(true, Modifier.isPrivate(cons[0].getModifiers()));
-    Constructor<CompareUtils> con = (Constructor<CompareUtils>) cons[0];
+    final Constructor<CompareUtils> con = (Constructor<CompareUtils>) cons[0];
     con.setAccessible(true);
     con.newInstance();
   }
 
   //-------------------------------------------------------------------------
-  public void test_max() {
+  /**
+   * Tests the max() method.
+   */
+  public void testMax() {
     assertEquals(null, CompareUtils.<String>max(null, null));
     assertEquals("A", CompareUtils.max(null, "A"));
     assertEquals("A", CompareUtils.max("A", null));
-    Integer a = new Integer(1); // need to use new, not autoboxing
-    Integer b = new Integer(1); // need to use new, not autoboxing
+    final Integer a = new Integer(1); // need to use new, not autoboxing
+    final Integer b = new Integer(1); // need to use new, not autoboxing
     assertSame(a, CompareUtils.max(a, b));  // as we test for same here
     assertEquals("B", CompareUtils.max("A", "B"));
     assertEquals("B", CompareUtils.max("B", "A"));
   }
 
-  public void test_min() {
+  /**
+   * Tests the min() method.
+   */
+  @Test
+  public void testMin() {
     assertEquals(null, CompareUtils.<String>min(null, null));
     assertEquals("A", CompareUtils.min(null, "A"));
     assertEquals("A", CompareUtils.min("A", null));
-    Integer a = new Integer(1); // need to use new, not autoboxing
-    Integer b = new Integer(1); // need to use new, not autoboxing
+    final Integer a = new Integer(1); // need to use new, not autoboxing
+    final Integer b = new Integer(1); // need to use new, not autoboxing
     assertSame(a, CompareUtils.min(a, b));  // as we test for same here
     assertEquals("A", CompareUtils.min("A", "B"));
     assertEquals("A", CompareUtils.min("B", "A"));
   }
 
-  public void test_compareWithNullLow() {
+  /**
+   * Tests the compareWithNullLow().
+   */
+  @Test
+  public void testCompareWithNullLow() {
     assertTrue(CompareUtils.compareWithNullLow(null, null) == 0);
     assertTrue(CompareUtils.compareWithNullLow(null, "Test") < 0);
     assertTrue(CompareUtils.compareWithNullLow("Test", null) > 0);
@@ -64,7 +81,11 @@ public class CompareUtilsTest {
     assertTrue(CompareUtils.compareWithNullLow("AAAA", "BBBB") == "AAAA".compareTo("BBBB"));
   }
 
-  public void test_compareWithNullHigh() {
+  /**
+   * Tests the compareWithNullHigh().
+   */
+  @Test
+  public void testCompareWithNullHigh() {
     assertTrue(CompareUtils.compareWithNullHigh(null, null) == 0);
     assertTrue(CompareUtils.compareWithNullHigh(null, "Test") > 0);
     assertTrue(CompareUtils.compareWithNullHigh("Test", null) < 0);
@@ -73,7 +94,11 @@ public class CompareUtilsTest {
   }
 
   //-------------------------------------------------------------------------
-  public void test_closeEquals() {
+  /**
+   * Tests the closeEquals() method.
+   */
+  @Test
+  public void testCloseEquals() {
     assertEquals(CompareUtils.closeEquals(0.2d, 0.2d), true);
     assertEquals(CompareUtils.closeEquals(0.2d, 0.3d), false);
     assertEquals(CompareUtils.closeEquals(0.2d, 0.1d), false);
@@ -88,7 +113,11 @@ public class CompareUtilsTest {
     assertEquals(CompareUtils.closeEquals(Double.NaN, Double.NEGATIVE_INFINITY), false);
   }
 
-  public void test_closeEquals_tolerance() {
+  /**
+   * Tests the closeEquals() method.
+   */
+  @Test
+  public void testCloseEqualsTolerance() {
     assertEquals(CompareUtils.closeEquals(0.2d, 0.2d, 0.0001d), true);
     assertEquals(CompareUtils.closeEquals(0.2d, 0.3d, 0.0001d), false);
     assertEquals(CompareUtils.closeEquals(0.2d, 0.1d, 0.0001d), false);
@@ -106,7 +135,11 @@ public class CompareUtilsTest {
     assertEquals(CompareUtils.closeEquals(Double.NaN, Double.NEGATIVE_INFINITY, 0.0001d), false);
   }
 
-  public void test_compareWithTolerance() {
+  /**
+   * Tests the compareWithTolerance() method.
+   */
+  @Test
+  public void testCompareWithTolerance() {
     assertEquals(CompareUtils.compareWithTolerance(0.2d, 0.2d, 0.0001d), 0);
     assertEquals(CompareUtils.compareWithTolerance(0.2d, 0.3d, 0.0001d), -1);
     assertEquals(CompareUtils.compareWithTolerance(0.2d, 0.1d, 0.0001d), 1);

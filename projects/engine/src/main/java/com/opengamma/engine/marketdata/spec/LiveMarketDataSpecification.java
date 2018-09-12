@@ -121,7 +121,7 @@ public final class LiveMarketDataSpecification implements ImmutableBean, MarketD
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       LiveMarketDataSpecification other = (LiveMarketDataSpecification) obj;
-      return JodaBeanUtils.equal(getDataSource(), other.getDataSource());
+      return JodaBeanUtils.equal(_dataSource, other._dataSource);
     }
     return false;
   }
@@ -129,7 +129,7 @@ public final class LiveMarketDataSpecification implements ImmutableBean, MarketD
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getDataSource());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_dataSource);
     return hash;
   }
 
@@ -137,7 +137,7 @@ public final class LiveMarketDataSpecification implements ImmutableBean, MarketD
   public String toString() {
     StringBuilder buf = new StringBuilder(64);
     buf.append("LiveMarketDataSpecification{");
-    buf.append("dataSource").append('=').append(JodaBeanUtils.toString(getDataSource()));
+    buf.append("dataSource").append('=').append(JodaBeanUtils.toString(_dataSource));
     buf.append('}');
     return buf.toString();
   }
@@ -275,19 +275,31 @@ public final class LiveMarketDataSpecification implements ImmutableBean, MarketD
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

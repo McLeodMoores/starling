@@ -153,26 +153,25 @@ public class PoolExecutor implements Executor, Lifecycle {
                 LOGGER.info("No pending tasks");
                 _shutdown = true;
                 return;
-              } else {
-                if (itrQueue == null || !itrQueue.hasNext()) {
-                  itrQueue = getQueue().iterator();
-                }
-                while (itrQueue.hasNext()) {
-                  final Runnable entry = itrQueue.next();
-                  if (entry instanceof Execute) {
-                    final Execute<?> execute = (Execute<?>) entry;
-                    if (execute._service == this && execute.markExecuted()) {
-                      LOGGER.debug("Inline execution of {}", execute);
-                      itrQueue.remove();
-                      inline = execute;
-                      break;
-                    }
+              }
+              if (itrQueue == null || !itrQueue.hasNext()) {
+                itrQueue = getQueue().iterator();
+              }
+              while (itrQueue.hasNext()) {
+                final Runnable entry = itrQueue.next();
+                if (entry instanceof Execute) {
+                  final Execute<?> execute = (Execute<?>) entry;
+                  if (execute._service == this && execute.markExecuted()) {
+                    LOGGER.debug("Inline execution of {}", execute);
+                    itrQueue.remove();
+                    inline = execute;
+                    break;
                   }
                 }
-                if (inline == null) {
-                  LOGGER.info("No inline executions available, waiting for {} remaining tasks", _pending);
-                  wait();
-                }
+              }
+              if (inline == null) {
+                LOGGER.info("No inline executions available, waiting for {} remaining tasks", _pending);
+                wait();
               }
             } finally {
               _joining = false;
@@ -263,7 +262,7 @@ public class PoolExecutor implements Executor, Lifecycle {
     private final Runnable _runnable;
     private final T _result;
 
-    public ExecuteRunnable(final Service<T> service, final Runnable runnable, final T result) {
+    ExecuteRunnable(final Service<T> service, final Runnable runnable, final T result) {
       super(service);
       ArgumentChecker.notNull(runnable, "runnable");
       _runnable = runnable;
@@ -287,7 +286,7 @@ public class PoolExecutor implements Executor, Lifecycle {
 
     private final Callable<T> _callable;
 
-    public ExecuteCallable(final Service<T> service, final Callable<T> callable) {
+    ExecuteCallable(final Service<T> service, final Callable<T> callable) {
       super(service);
       ArgumentChecker.notNull(callable, "callable");
       _callable = callable;
@@ -347,7 +346,8 @@ public class PoolExecutor implements Executor, Lifecycle {
   /**
    * Creates a new execution pool with the given (maximum) number of threads.
    * <p>
-   * This can be created with no threads. Tasks submitted will never be executed unless they arrive from a pool and another thread then joins that pool to complete its execution.
+   * This can be created with no threads. Tasks submitted will never be executed unless they arrive from a pool and another thread
+   * then joins that pool to complete its execution.
    *
    * @param maxThreads the maximum number of threads to put in the pool
    * @param name the diagnostic name to use for the pool
@@ -403,9 +403,8 @@ public class PoolExecutor implements Executor, Lifecycle {
     }
     if (previous != null) {
       return previous.get();
-    } else {
-      return null;
     }
+    return null;
   }
 
   /**
@@ -417,9 +416,8 @@ public class PoolExecutor implements Executor, Lifecycle {
     final Reference<PoolExecutor> executor = INSTANCE.get();
     if (executor != null) {
       return executor.get();
-    } else {
-      return null;
     }
+    return null;
   }
 
   // Executor

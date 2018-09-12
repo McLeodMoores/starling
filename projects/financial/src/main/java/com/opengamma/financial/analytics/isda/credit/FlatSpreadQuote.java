@@ -137,8 +137,8 @@ public class FlatSpreadQuote implements CdsQuote, ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       FlatSpreadQuote other = (FlatSpreadQuote) obj;
-      return JodaBeanUtils.equal(getCoupon(), other.getCoupon()) &&
-          JodaBeanUtils.equal(getQuotedSpread(), other.getQuotedSpread());
+      return JodaBeanUtils.equal(_coupon, other._coupon) &&
+          JodaBeanUtils.equal(_quotedSpread, other._quotedSpread);
     }
     return false;
   }
@@ -146,8 +146,8 @@ public class FlatSpreadQuote implements CdsQuote, ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getCoupon());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getQuotedSpread());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_coupon);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_quotedSpread);
     return hash;
   }
 
@@ -165,8 +165,8 @@ public class FlatSpreadQuote implements CdsQuote, ImmutableBean {
   }
 
   protected void toString(StringBuilder buf) {
-    buf.append("coupon").append('=').append(JodaBeanUtils.toString(getCoupon())).append(',').append(' ');
-    buf.append("quotedSpread").append('=').append(JodaBeanUtils.toString(getQuotedSpread())).append(',').append(' ');
+    buf.append("coupon").append('=').append(JodaBeanUtils.toString(_coupon)).append(',').append(' ');
+    buf.append("quotedSpread").append('=').append(JodaBeanUtils.toString(_quotedSpread)).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------
@@ -327,19 +327,31 @@ public class FlatSpreadQuote implements CdsQuote, ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

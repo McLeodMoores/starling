@@ -136,9 +136,9 @@ public final class YieldCurveBucketedShift implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       YieldCurveBucketedShift other = (YieldCurveBucketedShift) obj;
-      return JodaBeanUtils.equal(getStart(), other.getStart()) &&
-          JodaBeanUtils.equal(getEnd(), other.getEnd()) &&
-          JodaBeanUtils.equal(getShift(), other.getShift());
+      return JodaBeanUtils.equal(_start, other._start) &&
+          JodaBeanUtils.equal(_end, other._end) &&
+          JodaBeanUtils.equal(_shift, other._shift);
     }
     return false;
   }
@@ -146,9 +146,9 @@ public final class YieldCurveBucketedShift implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getStart());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getEnd());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getShift());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_start);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_end);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_shift);
     return hash;
   }
 
@@ -156,9 +156,9 @@ public final class YieldCurveBucketedShift implements ImmutableBean {
   public String toString() {
     StringBuilder buf = new StringBuilder(128);
     buf.append("YieldCurveBucketedShift{");
-    buf.append("start").append('=').append(getStart()).append(',').append(' ');
-    buf.append("end").append('=').append(getEnd()).append(',').append(' ');
-    buf.append("shift").append('=').append(JodaBeanUtils.toString(getShift()));
+    buf.append("start").append('=').append(_start).append(',').append(' ');
+    buf.append("end").append('=').append(_end).append(',').append(' ');
+    buf.append("shift").append('=').append(JodaBeanUtils.toString(_shift));
     buf.append('}');
     return buf.toString();
   }
@@ -346,19 +346,31 @@ public final class YieldCurveBucketedShift implements ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

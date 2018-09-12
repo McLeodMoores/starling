@@ -23,7 +23,7 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import com.opengamma.util.time.Tenor;
 
 /**
- * A key which specifies a point in volatility space
+ * A key which specifies a point in volatility space.
  */
 @BeanDefinition
 public class VolatilityPoint extends DirectBean {

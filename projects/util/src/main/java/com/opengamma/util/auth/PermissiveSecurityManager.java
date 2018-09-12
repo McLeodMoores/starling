@@ -24,7 +24,7 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 public final class PermissiveSecurityManager extends DefaultWebSecurityManager {
 
   /**
-   * The default security manager
+   * The default security manager.
    */
   static final PermissiveSecurityManager DEFAULT = new PermissiveSecurityManager();
 

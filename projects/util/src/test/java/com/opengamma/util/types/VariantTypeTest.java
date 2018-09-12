@@ -37,13 +37,14 @@ public class VariantTypeTest {
     assertVariantEquals(VariantType.either(VariantType.either(Integer.class, Double.class), String.class), Integer.class, Double.class, String.class);
     assertVariantEquals(VariantType.either(String.class, VariantType.either(Integer.class, Double.class)), Integer.class, Double.class, String.class);
     assertVariantEquals(VariantType.either(String.class, Integer.class), String.class, Integer.class);
-    assertVariantEquals(VariantType.either(VariantType.either(Integer.class, Double.class), VariantType.either(Double.class, String.class)), Integer.class, Double.class, String.class);
+    assertVariantEquals(VariantType.either(VariantType.either(Integer.class, Double.class), VariantType.either(Double.class, String.class)),
+        Integer.class, Double.class, String.class);
   }
 
   public void testEquals() {
     @SuppressWarnings("serial")
-    final ParameterizedType setType = (ParameterizedType) (new TypeToken<Set<? extends Number>>() {
-    }).getType();
+    final ParameterizedType setType = (ParameterizedType) new TypeToken<Set<? extends Number>>() {
+    }.getType();
     final WildcardType wildType = (WildcardType) setType.getActualTypeArguments()[0];
     assertTrue(wildType.equals(VariantType.either(Integer.class, Double.class)));
     assertTrue(VariantType.either(Integer.class, Double.class).equals(wildType));
@@ -51,8 +52,8 @@ public class VariantTypeTest {
 
   public void testHashCode() {
     @SuppressWarnings("serial")
-    final ParameterizedType setType = (ParameterizedType) (new TypeToken<Set<? extends Number>>() {
-    }).getType();
+    final ParameterizedType setType = (ParameterizedType) new TypeToken<Set<? extends Number>>() {
+    }.getType();
     final WildcardType wildType = (WildcardType) setType.getActualTypeArguments()[0];
     assertEquals(wildType.hashCode(), VariantType.either(Integer.class, Double.class).hashCode());
   }

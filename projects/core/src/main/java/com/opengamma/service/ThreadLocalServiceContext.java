@@ -11,7 +11,7 @@ package com.opengamma.service;
 public final class ThreadLocalServiceContext {
 
   /**
-   * The thread-local serice context.
+   * The thread-local service context.
    */
   private static ThreadLocal<ServiceContext> s_instance = new InheritableThreadLocal<>();
 

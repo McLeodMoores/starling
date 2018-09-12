@@ -36,7 +36,7 @@ public final class Timeout {
       final Thread slave = new Thread() {
         @Override
         public void run() {
-          for (int i = 0; i < NUM_CYCLES; i++) {
+          for (int ii = 0; ii < NUM_CYCLES; ii++) {
             final double[] block = new double[ALLOC_LENGTH];
             block[0] = 1.0;
             for (int j = 1; j < block.length; j++) {

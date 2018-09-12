@@ -253,11 +253,11 @@ public final class CalculationResultKey implements ImmutableBean, Comparable<Cal
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       CalculationResultKey other = (CalculationResultKey) obj;
-      return JodaBeanUtils.equal(getCalcConfigName(), other.getCalcConfigName()) &&
-          JodaBeanUtils.equal(getValueName(), other.getValueName()) &&
-          JodaBeanUtils.equal(getProperties(), other.getProperties()) &&
-          JodaBeanUtils.equal(getPath(), other.getPath()) &&
-          JodaBeanUtils.equal(getTargetId(), other.getTargetId());
+      return JodaBeanUtils.equal(_calcConfigName, other._calcConfigName) &&
+          JodaBeanUtils.equal(_valueName, other._valueName) &&
+          JodaBeanUtils.equal(_properties, other._properties) &&
+          JodaBeanUtils.equal(_path, other._path) &&
+          JodaBeanUtils.equal(_targetId, other._targetId);
     }
     return false;
   }
@@ -265,11 +265,11 @@ public final class CalculationResultKey implements ImmutableBean, Comparable<Cal
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getCalcConfigName());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getValueName());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getProperties());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getPath());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getTargetId());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_calcConfigName);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_valueName);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_properties);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_path);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_targetId);
     return hash;
   }
 
@@ -277,11 +277,11 @@ public final class CalculationResultKey implements ImmutableBean, Comparable<Cal
   public String toString() {
     StringBuilder buf = new StringBuilder(192);
     buf.append("CalculationResultKey{");
-    buf.append("calcConfigName").append('=').append(getCalcConfigName()).append(',').append(' ');
-    buf.append("valueName").append('=').append(getValueName()).append(',').append(' ');
-    buf.append("properties").append('=').append(getProperties()).append(',').append(' ');
-    buf.append("path").append('=').append(getPath()).append(',').append(' ');
-    buf.append("targetId").append('=').append(JodaBeanUtils.toString(getTargetId()));
+    buf.append("calcConfigName").append('=').append(_calcConfigName).append(',').append(' ');
+    buf.append("valueName").append('=').append(_valueName).append(',').append(' ');
+    buf.append("properties").append('=').append(_properties).append(',').append(' ');
+    buf.append("path").append('=').append(_path).append(',').append(' ');
+    buf.append("targetId").append('=').append(JodaBeanUtils.toString(_targetId));
     buf.append('}');
     return buf.toString();
   }
@@ -521,19 +521,31 @@ public final class CalculationResultKey implements ImmutableBean, Comparable<Cal
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

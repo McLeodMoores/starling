@@ -28,7 +28,7 @@ import com.opengamma.util.money.Currency;
 
 /**
  * A holiday source that delegates to an another source, but which ensures that
- * it only calls the get methods on the delegate. This is intended to allow
+ * it only calls the get() methods on the delegate. This is intended to allow
  * the use of proxy classes as the delegates which allows different
  * behaviours e.g. capturing the data returned from sources.
  * <p>

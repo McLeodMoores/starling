@@ -113,7 +113,7 @@ public class LongDoublePair
    * @deprecated Use public factory of(long,double)
    */
   @Deprecated
-  public LongDoublePair(final long first, final double second) {
+  public LongDoublePair(final long first, final double second) { // CSIGNORE
     this.first = first;
     this.second = second;
   }
@@ -163,6 +163,7 @@ public class LongDoublePair
     throw new UnsupportedOperationException("Immutable");
   }
 
+  // CSOFF
   //-------------------------------------------------------------------------
   /**
    * The meta-bean for {@code LongDoublePair}.

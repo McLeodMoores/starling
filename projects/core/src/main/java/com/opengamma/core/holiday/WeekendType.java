@@ -50,7 +50,7 @@ public enum WeekendType {
    * @param day1  the first day of the weekend
    * @param day2  the second day of the weekend
    */
-  private WeekendType(final DayOfWeek day1, final DayOfWeek day2) {
+  WeekendType(final DayOfWeek day1, final DayOfWeek day2) {
     _day1 = day1;
     _day2 = day2;
   }

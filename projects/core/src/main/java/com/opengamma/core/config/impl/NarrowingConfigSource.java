@@ -65,7 +65,6 @@ public class NarrowingConfigSource implements ConfigSource {
   }
 
   @Override
-  @SuppressWarnings("unchecked")
   public <R> R getConfig(final Class<R> clazz, final UniqueId uniqueId) {
     return checkAndCast(clazz, get(uniqueId));
   }
@@ -75,7 +74,7 @@ public class NarrowingConfigSource implements ConfigSource {
     return checkAndCast(clazz, get(objectId, versionCorrection));
   }
 
-  private <R> R checkAndCast(final Class<R> clazz, final ConfigItem<?> item) {
+  private static <R> R checkAndCast(final Class<R> clazz, final ConfigItem<?> item) {
     return clazz.isAssignableFrom(item.getType()) ? clazz.cast(item.getValue()) : null;
   }
 

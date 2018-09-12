@@ -6,11 +6,12 @@
 package com.opengamma.util.async;
 
 /**
- * Utility allowing operations to be implemented in blocking forms by default with a non-blocking mode. If blocking operations (the default) are off then a method may throw this exception in order to
- * indicate a non-blocking failure. The stack frame that most recently disabled blocking exceptions on that thread may then handle the exception.
+ * Utility allowing operations to be implemented in blocking forms by default with a non-blocking mode. If blocking operations (the default)
+ * are off then a method may throw this exception in order to indicate a non-blocking failure. The stack frame that most recently disabled
+ * blocking exceptions on that thread may then handle the exception.
  * <p>
- * It is only normally wise to disable blocking operations for tasks that are read-only as an otherwise atomic write task could leave the system in an inconsistent state if the blocking exception is
- * thrown by one of its component tasks.
+ * It is only normally wise to disable blocking operations for tasks that are read-only as an otherwise atomic write task could leave the
+ * system in an inconsistent state if the blocking exception is thrown by one of its component tasks.
  */
 public final class BlockingOperation extends Error {
 
@@ -33,7 +34,8 @@ public final class BlockingOperation extends Error {
   }
 
   /**
-   * Disable blocking operations for the calling thread. This must be matched by a later call to {@link #on}. If blocking operations are already disabled they remain disabled and an internal counter
+   * Disable blocking operations for the calling thread. This must be matched by a later call to {@link #on}.
+   * If blocking operations are already disabled they remain disabled and an internal counter
    * will ensure they will stay off after the corresponding call to {@code on}.
    */
   public static void off() {
@@ -42,8 +44,8 @@ public final class BlockingOperation extends Error {
   }
 
   /**
-   * Restore blocking operations for the calling thread. This must be matched by an earlier call to {@link #off}. If blocking operations were already disabled at the preceding call to {@code off} they
-   * will remain off.
+   * Restore blocking operations for the calling thread. This must be matched by an earlier call to {@link #off}.
+   * If blocking operations were already disabled at the preceding call to {@code off} they will remain off.
    */
   public static void on() {
     assert TLS.get()._offCount > 0;
@@ -61,7 +63,7 @@ public final class BlockingOperation extends Error {
 
   /**
    * Tests if blocking operations (the default) are enabled.
-   * 
+   *
    * @return true if operations must block, false if they may throw an exception instead.
    */
   public static boolean isOn() {
@@ -70,7 +72,7 @@ public final class BlockingOperation extends Error {
 
   /**
    * Tests if blocking operations are disabled.
-   * 
+   *
    * @return true if operations may throw an exception, false if they must block
    */
   public static boolean isOff() {

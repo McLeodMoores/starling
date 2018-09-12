@@ -43,11 +43,11 @@ public class HistoricalTimeSeriesSourceTest {
   private static final String ALPHAS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   private final Set<String> _usedIds = new HashSet<>();
 
-  private boolean isWeekday(final LocalDate day) {
+  private static boolean isWeekday(final LocalDate day) {
     return day.getDayOfWeek() != DayOfWeek.SATURDAY && day.getDayOfWeek() != DayOfWeek.SUNDAY;
   }
 
-  private LocalDateDoubleTimeSeries randomTimeSeries() {
+  private static LocalDateDoubleTimeSeries randomTimeSeries() {
     final LocalDateDoubleTimeSeriesBuilder bld = ImmutableLocalDateDoubleTimeSeries.builder();
     final LocalDate start = LocalDate.of(2000, 1, 2);
     final LocalDate end = start.plusYears(10);
@@ -61,11 +61,11 @@ public class HistoricalTimeSeriesSourceTest {
     return bld.build();
   }
 
-  private int random(final int maxBoundExclusive) {
+  private static int random(final int maxBoundExclusive) {
     return (int) Math.floor(Math.random() * maxBoundExclusive);
   }
 
-  private String makeRandomId() {
+  private static String makeRandomId() {
     final StringBuilder sb = new StringBuilder();
     sb.append(ALPHAS.charAt(random(26)));
     sb.append(ALPHAS.charAt(random(26)));
@@ -190,7 +190,7 @@ public class HistoricalTimeSeriesSourceTest {
       final LocalDate startDate = Math.random() > 0.5 ? LocalDate.of(1998, 1, 2).plusDays(random(356 * 10)) : null;
       final boolean includeStart = Math.random() > 0.5 ? true : false;
       final LocalDate endDate = Math.random() > 0.5
-          ? startDate == null ? LocalDate.of(2000, 1, 2).plusDays(random(356 * 10)) : startDate.plusDays(random(356 * 5))
+          ? startDate == null ? LocalDate.of(2000, 1, 2).plusDays(random(356 * 10)) : startDate.plusDays(10 + random(356 * 5))
           : null;
       final boolean includeEnd = Math.random() > 0.5 ? true : false;
       final Integer maxPoints = Math.random() > 0.5 ? random(356 * 5) : null;

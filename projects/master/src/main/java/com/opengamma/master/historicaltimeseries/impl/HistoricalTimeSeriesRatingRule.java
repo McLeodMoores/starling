@@ -160,9 +160,9 @@ public final class HistoricalTimeSeriesRatingRule implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       HistoricalTimeSeriesRatingRule other = (HistoricalTimeSeriesRatingRule) obj;
-      return JodaBeanUtils.equal(getFieldName(), other.getFieldName()) &&
-          JodaBeanUtils.equal(getFieldValue(), other.getFieldValue()) &&
-          (getRating() == other.getRating());
+      return JodaBeanUtils.equal(_fieldName, other._fieldName) &&
+          JodaBeanUtils.equal(_fieldValue, other._fieldValue) &&
+          (_rating == other._rating);
     }
     return false;
   }
@@ -170,9 +170,9 @@ public final class HistoricalTimeSeriesRatingRule implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getFieldName());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getFieldValue());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getRating());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_fieldName);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_fieldValue);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_rating);
     return hash;
   }
 
@@ -180,9 +180,9 @@ public final class HistoricalTimeSeriesRatingRule implements ImmutableBean {
   public String toString() {
     StringBuilder buf = new StringBuilder(128);
     buf.append("HistoricalTimeSeriesRatingRule{");
-    buf.append("fieldName").append('=').append(getFieldName()).append(',').append(' ');
-    buf.append("fieldValue").append('=').append(getFieldValue()).append(',').append(' ');
-    buf.append("rating").append('=').append(JodaBeanUtils.toString(getRating()));
+    buf.append("fieldName").append('=').append(_fieldName).append(',').append(' ');
+    buf.append("fieldValue").append('=').append(_fieldValue).append(',').append(' ');
+    buf.append("rating").append('=').append(JodaBeanUtils.toString(_rating));
     buf.append('}');
     return buf.toString();
   }
@@ -370,19 +370,31 @@ public final class HistoricalTimeSeriesRatingRule implements ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

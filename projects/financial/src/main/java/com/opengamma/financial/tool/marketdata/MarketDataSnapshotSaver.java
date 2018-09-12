@@ -403,11 +403,11 @@ public final class MarketDataSnapshotSaver implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       MarketDataSnapshotSaver other = (MarketDataSnapshotSaver) obj;
-      return JodaBeanUtils.equal(getViewProcessor(), other.getViewProcessor()) &&
-          JodaBeanUtils.equal(getConfigMaster(), other.getConfigMaster()) &&
-          JodaBeanUtils.equal(getMarketDataSnapshotMaster(), other.getMarketDataSnapshotMaster()) &&
-          JodaBeanUtils.equal(getSnapshotter(), other.getSnapshotter()) &&
-          JodaBeanUtils.equal(getMarketDataTimeoutMillis(), other.getMarketDataTimeoutMillis());
+      return JodaBeanUtils.equal(_viewProcessor, other._viewProcessor) &&
+          JodaBeanUtils.equal(_configMaster, other._configMaster) &&
+          JodaBeanUtils.equal(_marketDataSnapshotMaster, other._marketDataSnapshotMaster) &&
+          JodaBeanUtils.equal(_snapshotter, other._snapshotter) &&
+          JodaBeanUtils.equal(_marketDataTimeoutMillis, other._marketDataTimeoutMillis);
     }
     return false;
   }
@@ -415,11 +415,11 @@ public final class MarketDataSnapshotSaver implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getViewProcessor());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getConfigMaster());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getMarketDataSnapshotMaster());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getSnapshotter());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getMarketDataTimeoutMillis());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_viewProcessor);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_configMaster);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_marketDataSnapshotMaster);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_snapshotter);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_marketDataTimeoutMillis);
     return hash;
   }
 
@@ -427,11 +427,11 @@ public final class MarketDataSnapshotSaver implements ImmutableBean {
   public String toString() {
     StringBuilder buf = new StringBuilder(192);
     buf.append("MarketDataSnapshotSaver{");
-    buf.append("viewProcessor").append('=').append(getViewProcessor()).append(',').append(' ');
-    buf.append("configMaster").append('=').append(getConfigMaster()).append(',').append(' ');
-    buf.append("marketDataSnapshotMaster").append('=').append(getMarketDataSnapshotMaster()).append(',').append(' ');
-    buf.append("snapshotter").append('=').append(getSnapshotter()).append(',').append(' ');
-    buf.append("marketDataTimeoutMillis").append('=').append(JodaBeanUtils.toString(getMarketDataTimeoutMillis()));
+    buf.append("viewProcessor").append('=').append(_viewProcessor).append(',').append(' ');
+    buf.append("configMaster").append('=').append(_configMaster).append(',').append(' ');
+    buf.append("marketDataSnapshotMaster").append('=').append(_marketDataSnapshotMaster).append(',').append(' ');
+    buf.append("snapshotter").append('=').append(_snapshotter).append(',').append(' ');
+    buf.append("marketDataTimeoutMillis").append('=').append(JodaBeanUtils.toString(_marketDataTimeoutMillis));
     buf.append('}');
     return buf.toString();
   }
@@ -669,19 +669,31 @@ public final class MarketDataSnapshotSaver implements ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

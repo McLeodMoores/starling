@@ -64,7 +64,7 @@ public final class FixedInterestRateSwapLegConvention extends InterestRateSwapLe
    * Creates an instance.
    * <p>
    * This instance will be incomplete with fields that are null that should not be.
-   * 
+   *
    * @param name  the convention name, not null
    * @param externalIdBundle  the external identifiers for this convention, not null
    */
@@ -74,7 +74,7 @@ public final class FixedInterestRateSwapLegConvention extends InterestRateSwapLe
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param name  the convention name, not null
    * @param externalIdBundle  the external identifiers for this convention, not null
    * @param paymentCalendars  the payment calendars, not null
@@ -119,7 +119,7 @@ public final class FixedInterestRateSwapLegConvention extends InterestRateSwapLe
   //-------------------------------------------------------------------------
   /**
    * Gets the type identifying this convention.
-   * 
+   *
    * @return the {@link #TYPE} constant, not null
    */
   @Override
@@ -170,7 +170,7 @@ public final class FixedInterestRateSwapLegConvention extends InterestRateSwapLe
     leg.setAccrualPeriodBusinessDayConvention(getCalculationBusinessDayConvention());
     leg.setAccrualPeriodCalendars(getCalculationCalendars());
     leg.setAccrualPeriodFrequency(getCalculationFrequency());
-    // compounding method 
+    // compounding method
     leg.setCompoundingMethod(getCompoundingMethod());
     return leg;
   }

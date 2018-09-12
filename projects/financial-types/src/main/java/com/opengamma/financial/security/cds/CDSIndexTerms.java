@@ -20,10 +20,10 @@ import org.joda.beans.JodaBeanUtils;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
 import org.joda.beans.PropertyDefinition;
-import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
+import org.joda.beans.impl.direct.DirectPrivateBeanBuilder;
 
 import com.google.common.collect.ImmutableSortedSet;
 import com.opengamma.util.ArgumentChecker;
@@ -147,7 +147,7 @@ public final class CDSIndexTerms
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       CDSIndexTerms other = (CDSIndexTerms) obj;
-      return JodaBeanUtils.equal(getTenors(), other.getTenors());
+      return JodaBeanUtils.equal(_tenors, other._tenors);
     }
     return false;
   }
@@ -155,7 +155,7 @@ public final class CDSIndexTerms
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getTenors());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_tenors);
     return hash;
   }
 
@@ -163,7 +163,7 @@ public final class CDSIndexTerms
   public String toString() {
     StringBuilder buf = new StringBuilder(64);
     buf.append("CDSIndexTerms{");
-    buf.append("tenors").append('=').append(JodaBeanUtils.toString(getTenors()));
+    buf.append("tenors").append('=').append(JodaBeanUtils.toString(_tenors));
     buf.append('}');
     return buf.toString();
   }
@@ -255,7 +255,7 @@ public final class CDSIndexTerms
   /**
    * The bean-builder for {@code CDSIndexTerms}.
    */
-  private static final class Builder extends DirectFieldsBeanBuilder<CDSIndexTerms> {
+  private static final class Builder extends DirectPrivateBeanBuilder<CDSIndexTerms> {
 
     private SortedSet<Tenor> _tenors = ImmutableSortedSet.of();
 
@@ -263,6 +263,7 @@ public final class CDSIndexTerms
      * Restricted constructor.
      */
     private Builder() {
+      super(meta());
     }
 
     //-----------------------------------------------------------------------
@@ -286,30 +287,6 @@ public final class CDSIndexTerms
         default:
           throw new NoSuchElementException("Unknown property: " + propertyName);
       }
-      return this;
-    }
-
-    @Override
-    public Builder set(MetaProperty<?> property, Object value) {
-      super.set(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(String propertyName, String value) {
-      setString(meta().metaProperty(propertyName), value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(MetaProperty<?> property, String value) {
-      super.setString(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
-      super.setAll(propertyValueMap);
       return this;
     }
 

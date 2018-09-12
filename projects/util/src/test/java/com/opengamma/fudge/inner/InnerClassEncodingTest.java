@@ -26,7 +26,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
 
-  Random generator = new Random(System.currentTimeMillis());
+  Random _generator = new Random(System.currentTimeMillis());
 
   public void test_inner_without_context() {
     final TestOuterClass inner = new TestOuterClass() {
@@ -36,13 +36,13 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
 
     final TestOuterClass cycled = cycleObjectOverBytes(autoFudge(inner)).object();
     for (int i = 0; i < 100; i++) {
-      final double randomArg = generator.nextDouble();
+      final double randomArg = _generator.nextDouble();
       assertEquals(inner.eval(randomArg), cycled.eval(randomArg));
     }
   }
 
   public void test_inner_with_primitive_context() {
-    final double someContext = generator.nextDouble();
+    final double someContext = _generator.nextDouble();
     final TestOuterClass inner = new TestOuterClass() {
       @Override
       public double eval(final double arg) {
@@ -54,7 +54,7 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
 
     final TestOuterClass cycled = cycleObjectOverBytes(autoFudge(inner)).object();
     for (int i = 0; i < 100; i++) {
-      final double randomArg = generator.nextDouble();
+      final double randomArg = _generator.nextDouble();
       assertEquals(inner.eval(randomArg), cycled.eval(randomArg));
     }
   }
@@ -71,18 +71,18 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
 
     final TestOuterClass cycled = cycleObjectOverBytes(autoFudge(inner)).object();
     for (int i = 0; i < 100; i++) {
-      final double randomArg = generator.nextDouble();
+      final double randomArg = _generator.nextDouble();
       assertEquals(inner.eval(randomArg), cycled.eval(randomArg));
     }
   }
 
   public void test_inner_with_array_of_primitives_context() {
 
-    final int count = generator.nextInt(100);
+    final int count = _generator.nextInt(100);
     final double[] someContext = new double[count];
 
     for (int j = 0; j < count; j++) {
-      someContext[j] = generator.nextDouble();
+      someContext[j] = _generator.nextDouble();
     }
 
     final TestOuterClass inner = new TestOuterClass() {
@@ -99,14 +99,14 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
     final TestOuterClass cycled = cycleObjectOverBytes(autoFudge(inner)).object();
 
     for (int i = 0; i < 100; i++) {
-      final double randomArg = generator.nextDouble();
+      final double randomArg = _generator.nextDouble();
       assertEquals(inner.eval(randomArg), cycled.eval(randomArg));
     }
   }
 
   public void test_inner_with_pojo_context() {
     final ContextPOJO someContext = new ContextPOJO();
-    someContext.setValue(generator.nextDouble());
+    someContext.setValue(_generator.nextDouble());
 
     final TestOuterClass inner = new TestOuterClass() {
       @Override
@@ -117,22 +117,22 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
 
     final TestOuterClass cycled = cycleObjectOverBytes(autoFudge(inner)).object();
     for (int i = 0; i < 100; i++) {
-      final double randomArg = generator.nextDouble();
+      final double randomArg = _generator.nextDouble();
       assertEquals(inner.eval(randomArg), cycled.eval(randomArg));
     }
   }
 
   /**
-   * This fails because fudge can't serialize arrays of something other than primitives
+   * This fails because fudge can't serialize arrays of something other than primitives.
    */
   @Test(enabled = false)
   public void test_inner_with_array_of_pojos_context() {
-    final int count = generator.nextInt(100);
+    final int count = _generator.nextInt(100);
     final ContextPOJO[] someContext = new ContextPOJO[count];
 
     for (int j = 0; j < count; j++) {
       someContext[j] = new ContextPOJO();
-      someContext[j].setValue(generator.nextDouble());
+      someContext[j].setValue(_generator.nextDouble());
     }
 
     final TestOuterClass inner = new TestOuterClass() {
@@ -151,18 +151,18 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
     final TestOuterClass cycled = cycleObjectOverBytes(autoFudge(inner)).object();
 
     for (int i = 0; i < 100; i++) {
-      final double randomArg = generator.nextDouble();
+      final double randomArg = _generator.nextDouble();
       assertEquals(inner.eval(randomArg), cycled.eval(randomArg));
     }
   }
 
   public void test_inner_with_list_of_pojos_context() {
-    final int count = generator.nextInt(100);
+    final int count = _generator.nextInt(100);
     final List<ContextPOJO> someContext = newArrayList();
 
     for (int j = 0; j < count; j++) {
       final ContextPOJO pojo = new ContextPOJO();
-      pojo.setValue(generator.nextDouble());
+      pojo.setValue(_generator.nextDouble());
       someContext.add(pojo);
     }
 
@@ -182,13 +182,13 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
     final TestOuterClass cycled = cycleObjectOverBytes(autoFudge(inner)).object();
 
     for (int i = 0; i < 100; i++) {
-      final double randomArg = generator.nextDouble();
+      final double randomArg = _generator.nextDouble();
       assertEquals(inner.eval(randomArg), cycled.eval(randomArg));
     }
   }
 
   public void test_inner_with_context_copied_from_enclosing_class() {
-    final double someContext = some_outer_context;
+    final double someContext = _someOuterContext;
     final TestOuterClass inner = new TestOuterClass() {
       @Override
       public double eval(final double arg) {
@@ -200,7 +200,7 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
 
     final TestOuterClass cycled = cycleObjectOverBytes(autoFudge(inner)).object();
     for (int i = 0; i < 100; i++) {
-      final double randomArg = generator.nextDouble();
+      final double randomArg = _generator.nextDouble();
       assertEquals(inner.eval(randomArg), cycled.eval(randomArg));
     }
   }
@@ -217,13 +217,13 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
 
     final TestOuterInterface cycled = cycleObjectOverBytes(autoFudge(inner)).object();
     for (int i = 0; i < 100; i++) {
-      final double randomArg = generator.nextDouble();
+      final double randomArg = _generator.nextDouble();
       assertEquals(inner.eval(randomArg), cycled.eval(randomArg));
     }
   }
 
   public void test_inner_implementing_iface_with_primitive_context() {
-    final double someContext = generator.nextDouble();
+    final double someContext = _generator.nextDouble();
     final TestOuterInterface inner = new TestOuterInterface() {
       @Override
       public double eval(final double arg) {
@@ -233,7 +233,7 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
 
     final TestOuterInterface cycled = cycleObjectOverBytes(autoFudge(inner)).object();
     for (int i = 0; i < 100; i++) {
-      final double randomArg = generator.nextDouble();
+      final double randomArg = _generator.nextDouble();
       assertEquals(inner.eval(randomArg), cycled.eval(randomArg));
     }
   }
@@ -241,11 +241,11 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
 
   public void test_inner_implementing_iface_with_array_of_primitives_context() {
 
-    final int count = generator.nextInt(100);
+    final int count = _generator.nextInt(100);
     final double[] someContext = new double[count];
 
     for (int j = 0; j < count; j++) {
-      someContext[j] = generator.nextDouble();
+      someContext[j] = _generator.nextDouble();
     }
 
     final TestOuterInterface inner = new TestOuterInterface() {
@@ -262,14 +262,14 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
     final TestOuterInterface cycled = cycleObjectOverBytes(autoFudge(inner)).object();
 
     for (int i = 0; i < 100; i++) {
-      final double randomArg = generator.nextDouble();
+      final double randomArg = _generator.nextDouble();
       assertEquals(inner.eval(randomArg), cycled.eval(randomArg));
     }
   }
 
   public void test_inner_implementing_iface_with_pojo_context() {
     final ContextPOJO someContext = new ContextPOJO();
-    someContext.setValue(generator.nextDouble());
+    someContext.setValue(_generator.nextDouble());
 
     final TestOuterInterface inner = new TestOuterInterface() {
       @Override
@@ -280,22 +280,22 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
 
     final TestOuterInterface cycled = cycleObjectOverBytes(autoFudge(inner)).object();
     for (int i = 0; i < 100; i++) {
-      final double randomArg = generator.nextDouble();
+      final double randomArg = _generator.nextDouble();
       assertEquals(inner.eval(randomArg), cycled.eval(randomArg));
     }
   }
 
   /**
-   * This fails because fudge can't serialize arrays of something other than primitives
+   * This fails because fudge can't serialize arrays of something other than primitives.
    */
   @Test(enabled = false)
   public void test_inner_implementing_iface_with_array_of_pojos_context() {
-    final int count = generator.nextInt(100);
+    final int count = _generator.nextInt(100);
     final ContextPOJO[] someContext = new ContextPOJO[count];
 
     for (int j = 0; j < count; j++) {
       someContext[j] = new ContextPOJO();
-      someContext[j].setValue(generator.nextDouble());
+      someContext[j].setValue(_generator.nextDouble());
     }
 
     final TestOuterInterface inner = new TestOuterInterface() {
@@ -312,18 +312,18 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
     final TestOuterInterface cycled = cycleObjectOverBytes(autoFudge(inner)).object();
 
     for (int i = 0; i < 100; i++) {
-      final double randomArg = generator.nextDouble();
+      final double randomArg = _generator.nextDouble();
       assertEquals(inner.eval(randomArg), cycled.eval(randomArg));
     }
   }
 
   public void test_inner_implementing_iface_with_list_of_pojos_context() {
-    final int count = generator.nextInt(100);
+    final int count = _generator.nextInt(100);
     final List<ContextPOJO> someContext = newArrayList();
 
     for (int j = 0; j < count; j++) {
       final ContextPOJO pojo = new ContextPOJO();
-      pojo.setValue(generator.nextDouble());
+      pojo.setValue(_generator.nextDouble());
       someContext.add(pojo);
     }
 
@@ -341,15 +341,15 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
     final TestOuterInterface cycled = cycleObjectOverBytes(autoFudge(inner)).object();
 
     for (int i = 0; i < 100; i++) {
-      final double randomArg = generator.nextDouble();
+      final double randomArg = _generator.nextDouble();
       assertEquals(inner.eval(randomArg), cycled.eval(randomArg));
     }
   }
 
-  double some_outer_context = generator.nextDouble();
+  double _someOuterContext = _generator.nextDouble();
 
   public void test_inner_implementing_iface_with_context_copied_from_enclosing_class() {
-    final double someContext = some_outer_context;
+    final double someContext = _someOuterContext;
     final TestOuterInterface inner = new TestOuterInterface() {
       @Override
       public double eval(final double arg) {
@@ -359,7 +359,7 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
 
     final TestOuterInterface cycled = cycleObjectOverBytes(autoFudge(inner)).object();
     for (int i = 0; i < 100; i++) {
-      final double randomArg = generator.nextDouble();
+      final double randomArg = _generator.nextDouble();
       assertEquals(inner.eval(randomArg), cycled.eval(randomArg));
     }
   }

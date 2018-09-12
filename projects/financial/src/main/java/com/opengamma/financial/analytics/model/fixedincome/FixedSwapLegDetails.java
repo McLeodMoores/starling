@@ -477,7 +477,7 @@ public class FixedSwapLegDetails extends DirectBean implements Serializable {
 
   @Override
   public String toString() {
-    StringBuilder buf = new StringBuilder(352);
+    StringBuilder buf = new StringBuilder(288);
     buf.append("FixedSwapLegDetails{");
     int len = buf.length();
     toString(buf);
@@ -497,8 +497,6 @@ public class FixedSwapLegDetails extends DirectBean implements Serializable {
     buf.append("paymentAmounts").append('=').append(JodaBeanUtils.toString(getPaymentAmounts())).append(',').append(' ');
     buf.append("notionals").append('=').append(JodaBeanUtils.toString(getNotionals())).append(',').append(' ');
     buf.append("fixedRates").append('=').append(JodaBeanUtils.toString(getFixedRates())).append(',').append(' ');
-    buf.append("numberOfCashFlows").append('=').append(JodaBeanUtils.toString(getNumberOfCashFlows())).append(',').append(' ');
-    buf.append("discountedPaymentAmounts").append('=').append(JodaBeanUtils.toString(getDiscountedPaymentAmounts())).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------

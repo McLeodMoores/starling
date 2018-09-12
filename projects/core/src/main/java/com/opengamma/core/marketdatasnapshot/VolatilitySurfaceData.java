@@ -26,14 +26,14 @@ import com.opengamma.util.tuple.Pair;
 /**
  * Data structure to hold a particular volatility surface's data points.
  * Note no interpolation or fitting is done in this code.
- * 
+ *
  * @param <X> Type of the x-data
  * @param <Y> Type of the y-data
  */
 public class VolatilitySurfaceData<X, Y> {
-  /** Default name for the x axis */
+  /** Default name for the x axis. */
   public static final String DEFAULT_X_LABEL = "x";
-  /** Default name for the y axis */
+  /** Default name for the y axis. */
   public static final String DEFAULT_Y_LABEL = "y";
   private static final Comparator<Pair<?, ?>> COMPARATOR = FirstThenSecondPairComparator.INSTANCE;
   private final String _definitionName;
@@ -47,12 +47,34 @@ public class VolatilitySurfaceData<X, Y> {
   private final String _xLabel;
   private final String _yLabel;
 
+  /**
+   * Constructs a surface with default x and y labels.
+   *
+   * @param definitionName  the surface definition name, not null
+   * @param specificationName  the surface specification name, not null
+   * @param target  the surface target, not null
+   * @param xs  the x values, not null
+   * @param ys  the y values, not null
+   * @param values  the surface values, not null
+   */
   public VolatilitySurfaceData(final String definitionName, final String specificationName, final UniqueIdentifiable target,
                                final X[] xs, final Y[] ys, final Map<Pair<X, Y>, Double> values) {
     this(definitionName, specificationName, target, xs, DEFAULT_X_LABEL, ys, DEFAULT_Y_LABEL, values);
   }
-  
 
+
+  /**
+   * Constructs a surface.
+   *
+   * @param definitionName  the surface definition name, not null
+   * @param specificationName  the surface specification name, not null
+   * @param target  the surface target, not null
+   * @param xs  the x values, not null
+   * @param xLabel  the x-axis label, not null
+   * @param ys  the y values, not null
+   * @param yLabel  the y-axis label, not null
+   * @param values  the surface values, not null
+   */
   public VolatilitySurfaceData(final String definitionName, final String specificationName, final UniqueIdentifiable target,
                                final X[] xs, final String xLabel, final Y[] ys, final String yLabel, final Map<Pair<X, Y>, Double> values) {
     ArgumentChecker.notNull(definitionName, "Definition Name");
@@ -71,9 +93,9 @@ public class VolatilitySurfaceData<X, Y> {
     _xLabel = xLabel;
     _ys = ys;
     _yLabel = yLabel;
-    _uniqueXs = new TreeSet<X>();
+    _uniqueXs = new TreeSet<>();
     _strips = Maps.newHashMap();
-    for (Map.Entry<Pair<X, Y>, Double> entries : values.entrySet()) {
+    for (final Map.Entry<Pair<X, Y>, Double> entries : values.entrySet()) {
       if (_strips.containsKey(entries.getKey().getFirst())) {
         _strips.get(entries.getKey().getFirst()).add(ObjectsPair.of(entries.getKey().getSecond(), entries.getValue()));
       } else {
@@ -85,56 +107,120 @@ public class VolatilitySurfaceData<X, Y> {
     }
   }
 
+  /**
+   * Gets the number of values in the surface.
+   *
+   * @return  the number of values
+   */
   public int size() {
     return _values.size();
   }
-  
+
+  /**
+   * Gets the x-axis values.
+   *
+   * @return  the x-axis values
+   */
   public X[] getXs() {
     return _xs;
   }
 
+  /**
+   * Gets the x-axis labels.
+   *
+   * @return  the x-axis labels
+   */
   public String getXLabel() {
     return _xLabel;
   }
-  
+
+  /**
+   * Gets the y-axis values.
+   *
+   * @return  the y-axis values
+   */
   public Y[] getYs() {
     return _ys;
   }
 
+  /**
+   * Gets the y-axis labels.
+   *
+   * @return  the y-axis labels
+   */
   public String getYLabel() {
     return _yLabel;
   }
-  
+
+  /**
+   * Gets the volatility at a point.
+   *
+   * @param x  the x value
+   * @param y  the y value
+   * @return  the value or null if it is not present in the surface
+   */
   public Double getVolatility(final X x, final Y y) {
     return _values.get(ObjectsPair.of(x, y));
   }
-  
+
+  /**
+   * Gets the unique x values.
+   *
+   * @return  the unique x values
+   */
   public SortedSet<X> getUniqueXValues() {
     return _uniqueXs;
   }
-  
+
+  /**
+   * Gets all y and volatility values for an x value. Throws an exception if there are
+   * no values for this x value.
+   *
+   * @param x  the x value, not null
+   * @return  the y and volatility values
+   */
   public List<ObjectsPair<Y, Double>> getYValuesForX(final X x) {
     ArgumentChecker.notNull(x, "x");
     if (!_strips.containsKey(x)) {
       throw new OpenGammaRuntimeException("Could not get strip for x value " + x);
     }
-    List<ObjectsPair<Y, Double>> result = _strips.get(x);
+    final List<ObjectsPair<Y, Double>> result = _strips.get(x);
     Collections.sort(result, COMPARATOR);
     return result;
   }
-  
+
+  /**
+   * Returns the values as a map.
+   *
+   * @return  a map
+   */
   public Map<Pair<X, Y>, Double> asMap() {
     return _values;
   }
 
+  /**
+   * Gets the definition name.
+   *
+   * @return  the name
+   */
   public String getDefinitionName() {
     return _definitionName;
   }
 
+  /**
+   * Gets the specification name.
+   *
+   * @return  the name
+   */
   public String getSpecificationName() {
     return _specificationName;
   }
 
+  /**
+   * Gets the surface target.
+   *
+   * @return  the target
+   */
   public UniqueIdentifiable getTarget() {
     return _target;
   }
@@ -158,14 +244,14 @@ public class VolatilitySurfaceData<X, Y> {
       return false;
     }
     final VolatilitySurfaceData<?, ?> other = (VolatilitySurfaceData<?, ?>) o;
-    return getDefinitionName().equals(other.getDefinitionName()) &&
-           getSpecificationName().equals(other.getSpecificationName()) &&
-           getTarget().equals(other.getTarget()) &&
-           Arrays.equals(getXs(), other.getXs()) &&
-           Arrays.equals(getYs(), other.getYs()) &&
-           getXLabel().equals(other.getXLabel()) &&
-           getYLabel().equals(other.getYLabel()) &&
-           _values.equals(other._values);
+    return getDefinitionName().equals(other.getDefinitionName())
+           && getSpecificationName().equals(other.getSpecificationName())
+           && getTarget().equals(other.getTarget())
+           && Arrays.equals(getXs(), other.getXs())
+           && Arrays.equals(getYs(), other.getYs())
+           && getXLabel().equals(other.getXLabel())
+           && getYLabel().equals(other.getYLabel())
+           && _values.equals(other._values);
   }
 
   @Override
@@ -175,17 +261,17 @@ public class VolatilitySurfaceData<X, Y> {
 
   @Override
   public String toString() {
-    return "VolatilitySurfaceData [" +
-        "_definitionName='" + _definitionName + "'" +
-        ", _specificationName='" + _specificationName + "'" +
-        ", _target=" + _target +
-        ", _xLabel='" + _xLabel + "'" +
-        ", _yLabel='" + _yLabel + "'" +
-        ", _xs=" + (_xs == null ? null : Arrays.asList(_xs)) +
-        ", _ys=" + (_ys == null ? null : Arrays.asList(_ys)) +
-        ", _values=" + _values +
-        ", _uniqueXs=" + _uniqueXs +
-        ", _strips=" + _strips +
-        "]";
+    return "VolatilitySurfaceData ["
+        + "_definitionName='" + _definitionName + "'"
+        + ", _specificationName='" + _specificationName + "'"
+        + ", _target=" + _target
+        + ", _xLabel='" + _xLabel + "'"
+        + ", _yLabel='" + _yLabel + "'"
+        + ", _xs=" + (_xs == null ? null : Arrays.asList(_xs))
+        + ", _ys=" + (_ys == null ? null : Arrays.asList(_ys))
+        + ", _values=" + _values
+        + ", _uniqueXs=" + _uniqueXs
+        + ", _strips=" + _strips
+        + "]";
   }
 }

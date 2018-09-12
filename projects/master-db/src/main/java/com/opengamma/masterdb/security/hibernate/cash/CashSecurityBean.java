@@ -47,13 +47,13 @@ public class CashSecurityBean extends SecurityBean {
   private double _rate;
   @PropertyDefinition
   private double _amount;
-    
+
   @Override
   public boolean equals(final Object other) {
     if (!(other instanceof CashSecurityBean)) {
       return false;
     }
-    CashSecurityBean cash = (CashSecurityBean) other;
+    final CashSecurityBean cash = (CashSecurityBean) other;
     return new EqualsBuilder()
       .append(getId(), cash.getId())
       .append(getCurrency(), cash.getCurrency())
@@ -64,7 +64,7 @@ public class CashSecurityBean extends SecurityBean {
       .append(getRate(), cash.getRate())
       .append(getAmount(), cash.getAmount()).isEquals();
   }
-  
+
   @Override
   public int hashCode() {
     return new HashCodeBuilder()

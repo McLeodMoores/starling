@@ -37,7 +37,7 @@ import com.opengamma.util.ArgumentChecker;
    * @param fn  the function that generates values for the portfolio's nodes, not null
    * @param resultCollection  the collection instance to which the results will be added, not null
    */
-  public MappingCallback(final PortfolioMapperFunction<T> fn, final V resultCollection) {
+  MappingCallback(final PortfolioMapperFunction<T> fn, final V resultCollection) {
     ArgumentChecker.notNull(fn, "fn");
     ArgumentChecker.notNull(resultCollection, "resultCollection");
     _fn = fn;

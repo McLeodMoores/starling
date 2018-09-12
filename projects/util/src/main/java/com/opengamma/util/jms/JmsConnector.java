@@ -179,7 +179,7 @@ public class JmsConnector implements Connector {
 
   //-------------------------------------------------------------------------
   /**
-   * Ensures that the topic name is set, using the current name or the specified default
+   * Ensures that the topic name is set, using the current name or the specified default.
    *
    * @return a connector which definitely has a topic name, not null
    */
@@ -191,7 +191,7 @@ public class JmsConnector implements Connector {
   }
 
   /**
-   * Ensures that the topic name is set, using the current name or the specified default
+   * Ensures that the topic name is set, using the current name or the specified default.
    *
    * @param defaultTopicName  the default topic name, not empty
    * @return a connector which definitely has a topic name, not null

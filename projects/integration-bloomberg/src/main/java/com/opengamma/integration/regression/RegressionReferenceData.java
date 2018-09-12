@@ -106,7 +106,7 @@ public final class RegressionReferenceData implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       RegressionReferenceData other = (RegressionReferenceData) obj;
-      return JodaBeanUtils.equal(getReferenceData(), other.getReferenceData());
+      return JodaBeanUtils.equal(_referenceData, other._referenceData);
     }
     return false;
   }
@@ -114,7 +114,7 @@ public final class RegressionReferenceData implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getReferenceData());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_referenceData);
     return hash;
   }
 
@@ -122,7 +122,7 @@ public final class RegressionReferenceData implements ImmutableBean {
   public String toString() {
     StringBuilder buf = new StringBuilder(64);
     buf.append("RegressionReferenceData{");
-    buf.append("referenceData").append('=').append(JodaBeanUtils.toString(getReferenceData()));
+    buf.append("referenceData").append('=').append(JodaBeanUtils.toString(_referenceData));
     buf.append('}');
     return buf.toString();
   }
@@ -262,19 +262,31 @@ public final class RegressionReferenceData implements ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

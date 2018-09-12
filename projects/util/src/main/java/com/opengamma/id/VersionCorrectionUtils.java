@@ -46,7 +46,8 @@ public final class VersionCorrectionUtils {
 
   private static final Map<VersionCorrection, AtomicInteger> LOCKS = new HashMap<>();
 
-  private static final Set<VersionCorrectionLockListener> LISTENERS = Sets.newSetFromMap(new MapMaker().weakKeys().<VersionCorrectionLockListener, Boolean>makeMap());
+  private static final Set<VersionCorrectionLockListener> LISTENERS =
+      Sets.newSetFromMap(new MapMaker().weakKeys().<VersionCorrectionLockListener, Boolean>makeMap());
 
   private static final Map<Reference<Object>, VersionCorrection> AUTO_LOCKS = new ConcurrentHashMap<>();
 
@@ -59,8 +60,8 @@ public final class VersionCorrectionUtils {
   }
 
   /**
-   * Acquires a lock on a version/correction pair. It is possible for other threads to determine whether there are any outstanding locks, or to execute actions when the last lock is released. Must be
-   * paired with a call to {@link #unlock}.
+   * Acquires a lock on a version/correction pair. It is possible for other threads to determine whether there are any
+   * outstanding locks, or to execute actions when the last lock is released. Must be paired with a call to {@link #unlock}.
    *
    * @param versionCorrection the version/correction pair to lock, not null
    */
@@ -80,28 +81,30 @@ public final class VersionCorrectionUtils {
   }
 
   /**
-   * Acquires a lock on a version/correction pair for the lifetime of the monitor object. It is possible for other threads to determine whether there are any outstanding locks, or to execute actions
-   * when the last lock is released. Must be paired with a call to {@link #unlock}.
+   * Acquires a lock on a version/correction pair for the lifetime of the monitor object. It is possible for other threads to
+   * determine whether there are any outstanding locks, or to execute actions when the last lock is released. Must be
+   * paired with a call to {@link #unlock}.
    *
    * @param versionCorrection the version/correction pair to lock, not null
    * @param monitor the monitor object - the lock will be released when this falls out of scope, not null
    */
-  public static void lockForLifetime(VersionCorrection versionCorrection, final Object monitor) {
-    lock(versionCorrection);
-    AUTO_LOCKS.put(new PhantomReference<>(monitor, AUTO_UNLOCKS), versionCorrection);
+  public static void lockForLifetime(final VersionCorrection versionCorrection, final Object monitor) {
+    VersionCorrection vc = versionCorrection;
+    lock(vc);
+    AUTO_LOCKS.put(new PhantomReference<>(monitor, AUTO_UNLOCKS), vc);
     Reference<? extends Object> ref = AUTO_UNLOCKS.poll();
     while (ref != null) {
-      versionCorrection = AUTO_LOCKS.remove(ref);
-      if (versionCorrection != null) {
-        unlock(versionCorrection);
+      vc = AUTO_LOCKS.remove(ref);
+      if (vc != null) {
+        unlock(vc);
       }
       ref = AUTO_UNLOCKS.poll();
     }
   }
 
   /**
-   * Releases a lock on a version/correction pair. It is possible for other threads to determine whether there are any outstanding locks, or to execute actions when the last lock is released. Must be
-   * paired with a call to {@link #unlock}.
+   * Releases a lock on a version/correction pair. It is possible for other threads to determine whether there are any outstanding
+   * locks, or to execute actions when the last lock is released. Must be paired with a call to {@link #unlock}.
    *
    * @param versionCorrection the version/correction pair to lock, not null
    */
@@ -129,10 +132,20 @@ public final class VersionCorrectionUtils {
     }
   }
 
+  /**
+   * Adds a version correction lock listener.
+   *
+   * @param listener  the listener
+   */
   public static void addVersionCorrectionLockListener(final VersionCorrectionLockListener listener) {
     LISTENERS.add(listener);
   }
 
+  /**
+   * Removes the listener from the available version correction lock listeners.
+   *
+   * @param listener  the listener
+   */
   public static void removeVersionCorrectionLockListener(final VersionCorrectionLockListener listener) {
     LISTENERS.remove(listener);
   }

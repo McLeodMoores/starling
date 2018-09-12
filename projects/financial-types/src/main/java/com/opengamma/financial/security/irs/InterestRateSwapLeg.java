@@ -53,92 +53,92 @@ public abstract class InterestRateSwapLeg extends DirectBean {
    */
   @PropertyDefinition
   private StubCalculationMethod _stubCalculationMethod;
-  
+
   /**
    * The day count.
    */
   @PropertyDefinition(validate = "notNull")
   private DayCount _dayCountConvention;
-  
+
   /**
    * The roll convention used for adjusting dates.
    */
   @PropertyDefinition(validate = "notNull")
   private RollConvention _rollConvention = RollConvention.NONE;
-  
-  
+
+
   /*
    * Maturity date parameters
    */
-  
+
   @PropertyDefinition
   private Set<ExternalId> _maturityDateCalendars = Sets.newHashSet();
-  
+
   @PropertyDefinition(validate = "notNull")
   private BusinessDayConvention _maturityDateBusinessDayConvention;
-  
+
   /*
    * Payment date parameters
    */
-  
+
   /**
    * The calendars used to adjust the payment dates.
    */
   @PropertyDefinition
   private Set<ExternalId> _paymentDateCalendars = Sets.newHashSet();
-  
+
   /**
    * The business day convention used to adjust the payment dates.
    */
   @PropertyDefinition(validate = "notNull")
   private BusinessDayConvention _paymentDateBusinessDayConvention;
-  
+
   /**
    * The frequency of the payment dates.
    */
   @PropertyDefinition(validate = "notNull")
   private Frequency _paymentDateFrequency;
-  
+
   /**
    * Flag that describes whether the payment date is relative to the start or end of the accrual period.
    */
   @PropertyDefinition(validate = "notNull")
   private DateRelativeTo _paymentDateRelativeTo = DateRelativeTo.END;
-  
+
   /**
    * The number of days offset of the payment dates, relative to the accrual periods.
    */
   @PropertyDefinition
   private int _paymentOffset;
-  
+
   /*
    * Accrual period parameters
    */
-  
+
   /**
    * The calendar used to adjust the accrual period dates.
    */
   @PropertyDefinition
   private Set<ExternalId> _accrualPeriodCalendars = Sets.newHashSet();
-  
+
   /**
    * The business day convention used to adjust the accrual period dates.
    */
   @PropertyDefinition(validate = "notNull")
   private BusinessDayConvention _accrualPeriodBusinessDayConvention;
-  
+
   /**
    * The frequency of the accrual periods.
    */
   @PropertyDefinition(validate = "notNull")
   private Frequency _accrualPeriodFrequency;
-  
+
   /**
    * The compounding method used when the reset frequency is higher than the payment frequency.
    */
   @PropertyDefinition(validate = "notNull")
   private CompoundingMethod _compoundingMethod = CompoundingMethod.NONE;
-  
+
   /**
    * Accepts a visitor to manage traversal of the hierarchy.
    *

@@ -207,13 +207,13 @@ public final class DirectBeanFudgeBuilder<T extends Bean> implements FudgeBuilde
               try {
                 value = deserializer.fieldValueToObject(mp.propertyType(), field);
               } catch (final IllegalArgumentException ex) {
-                if (field.getValue() instanceof String == false) {
+                if (!(field.getValue() instanceof String)) {
                   throw ex;
                 }
                 value = JodaBeanUtils.stringConverter().convertFromString(mp.propertyType(), (String) field.getValue());
               }
             }
-            if (value != null || mp.propertyType().isPrimitive() == false) {
+            if (value != null || !mp.propertyType().isPrimitive()) {
               builder.set(mp.name(), value);
             }
           }
@@ -239,7 +239,8 @@ public final class DirectBeanFudgeBuilder<T extends Bean> implements FudgeBuilde
     return list;
   }
 
-  private Set<Object> buildObjectSet(final FudgeDeserializer deserializer, final MetaProperty<?> prop, final Class<?> type, final FudgeMsg msg, final Set<Object> set) {
+  private Set<Object> buildObjectSet(final FudgeDeserializer deserializer, final MetaProperty<?> prop, final Class<?> type, final FudgeMsg msg,
+      final Set<Object> set) {
     final Class<?> contentType = JodaBeanUtils.collectionType(prop, type);
     for (final FudgeField field : msg) {
       if (field.getOrdinal() != null && field.getOrdinal() != 1) {

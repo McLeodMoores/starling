@@ -9,7 +9,7 @@ import com.opengamma.core.position.PortfolioNode;
 import com.opengamma.core.position.Position;
 
 /**
- * A depth-first traversal of the portfolio node tree
+ * A depth-first traversal of the portfolio node tree.
  */
 public class DepthFirstPortfolioNodeTraverser extends PortfolioNodeTraverser {
 

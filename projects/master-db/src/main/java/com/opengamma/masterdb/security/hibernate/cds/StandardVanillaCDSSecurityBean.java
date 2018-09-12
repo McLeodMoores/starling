@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.cds;
@@ -21,11 +21,11 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import com.opengamma.masterdb.security.hibernate.ZonedDateTimeBean;
 
 /**
- * 
+ *
  */
 @BeanDefinition
 public class StandardVanillaCDSSecurityBean extends StandardCDSSecurityBean {
-  
+
   @PropertyDefinition
   private Double _coupon;
   @PropertyDefinition

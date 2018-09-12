@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.time;
@@ -13,12 +13,15 @@ import org.threeten.bp.ZonedDateTime;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Test.
+ * Tests for TenorUtils.
  */
 @SuppressWarnings("deprecation")
 @Test(groups = TestGroup.UNIT)
 public class TenorUtilsTest {
 
+  /**
+   * Tests the getDaysInTenor() method.
+   */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testGetDaysInTenor() {
     assertEquals(1, TenorUtils.getDaysInTenor(Tenor.ONE_DAY), 0);
@@ -30,15 +33,21 @@ public class TenorUtilsTest {
     TenorUtils.getDaysInTenor(Tenor.SN); // no period in business day tenors
   }
 
+  /**
+   * Tests the getDateWithTenorOffset() method.
+   */
   @Test
   public void testOffsetDate() {
-    ZonedDateTime dateTime = DateUtils.getUTCDate(2013, 12, 31);
+    final ZonedDateTime dateTime = DateUtils.getUTCDate(2013, 12, 31);
     assertEquals(DateUtils.getUTCDate(2012, 12, 31), TenorUtils.getDateWithTenorOffset(dateTime, Tenor.ONE_YEAR));
     assertEquals(DateUtils.getUTCDate(2013, 11, 30), TenorUtils.getDateWithTenorOffset(dateTime, Tenor.ONE_MONTH));
     assertEquals(DateUtils.getUTCDate(2013, 12, 30), TenorUtils.getDateWithTenorOffset(dateTime, Tenor.ONE_DAY));
     assertEquals(DateUtils.getUTCDate(2012, 12, 31), TenorUtils.getDateWithTenorOffset(DateUtils.getUTCDate(2013, 1, 1), Tenor.ONE_DAY));
   }
 
+  /**
+   * Tests the getTenorsInTenor() method.
+   */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testTenorsInTenor() {
     assertEquals(7, TenorUtils.getTenorsInTenor(Tenor.ONE_WEEK, Tenor.ONE_DAY), 0);

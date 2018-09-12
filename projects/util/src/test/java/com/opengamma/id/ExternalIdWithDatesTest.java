@@ -5,6 +5,9 @@
  */
 package com.opengamma.id;
 
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNotEquals;
+import static org.testng.Assert.assertTrue;
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertNull;
 import static org.threeten.bp.Month.DECEMBER;
@@ -16,52 +19,86 @@ import org.threeten.bp.LocalDate;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Test {@link ExternalIdWithDates}. 
+ * Test {@link ExternalIdWithDates}.
  */
 @Test(groups = TestGroup.UNIT)
 public class ExternalIdWithDatesTest {
-
   private static final ExternalScheme SCHEME = ExternalScheme.of("Scheme");
   private static final ExternalId IDENTIFIER = ExternalId.of(SCHEME, "value");
   private static final LocalDate VALID_FROM = LocalDate.of(2010, JANUARY, 1);
   private static final LocalDate VALID_TO = LocalDate.of(2010, DECEMBER, 1);
 
-  public void test_factory_ExternalId_LocalDate_LocalDate() {
-    ExternalIdWithDates test = ExternalIdWithDates.of(IDENTIFIER, VALID_FROM, VALID_TO);
+  /**
+   * Tests the creation of an id.
+   */
+  @Test
+  public void testFactoryExternalIdLocalDateLocalDate() {
+    final ExternalIdWithDates test = ExternalIdWithDates.of(IDENTIFIER, VALID_FROM, VALID_TO);
     assertEquals(IDENTIFIER, test.toExternalId());
     assertEquals(VALID_FROM, test.getValidFrom());
     assertEquals(VALID_TO, test.getValidTo());
     assertEquals("Scheme~value~S~2010-01-01~E~2010-12-01", test.toString());
   }
 
+  /**
+   * Tests that the external id cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_factory_ExternalId_LocalDate_LocalDate_nullExternalId() {
+  public void testFactoryExternalIdLocalDateLocalDateNullExternalId() {
     ExternalIdWithDates.of((ExternalId) null, VALID_FROM, VALID_TO);
   }
 
-  public void test_factory_ExternalId_LocalDate_LocalDate_nullValidFrom() {
-    ExternalIdWithDates test = ExternalIdWithDates.of(IDENTIFIER, (LocalDate) null, VALID_TO);
+  /**
+   * Tests that an id can have a null valid from entry.
+   */
+  @Test
+  public void testFactoryExternalIdNullValidFrom() {
+    final ExternalIdWithDates test = ExternalIdWithDates.of(IDENTIFIER, (LocalDate) null, VALID_TO);
     assertEquals(IDENTIFIER, test.toExternalId());
     assertNull(test.getValidFrom());
     assertEquals(VALID_TO, test.getValidTo());
     assertEquals("Scheme~value~E~2010-12-01", test.toString());
   }
 
-  public void test_factory_ExternalId_LocalDate_LocalDate_nullValidTo() {
-    ExternalIdWithDates test = ExternalIdWithDates.of(IDENTIFIER, VALID_FROM, (LocalDate) null);
+  /**
+   * Tests that an id can have a null valid to entry.
+   */
+  @Test
+  public void testFactoryExternalIdNullValidTo() {
+    final ExternalIdWithDates test = ExternalIdWithDates.of(IDENTIFIER, VALID_FROM, (LocalDate) null);
     assertEquals(IDENTIFIER, test.toExternalId());
     assertNull(test.getValidTo());
     assertEquals(VALID_FROM, test.getValidFrom());
     assertEquals("Scheme~value~S~2010-01-01", test.toString());
   }
 
+  /**
+   * Tests that an id can have a null valid from and to entries.
+   */
+  @Test
+  public void testFactoryExternalIdNullValidFromTo() {
+    final ExternalIdWithDates test = ExternalIdWithDates.of(IDENTIFIER, (LocalDate) null, (LocalDate) null);
+    assertEquals(IDENTIFIER, test.toExternalId());
+    assertNull(test.getValidTo());
+    assertNull(test.getValidFrom());
+    assertEquals("Scheme~value", test.toString());
+    assertEquals(test, ExternalIdWithDates.of(IDENTIFIER));
+  }
+
+  /**
+   * Tests that the valid from date must be before the valid to date.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_factory_validFrom_after_validTo() {
+  public void testFactoryValidFromAfterValidTo() {
     ExternalIdWithDates.of(IDENTIFIER, VALID_TO, VALID_FROM);
   }
 
   //-------------------------------------------------------------------------
-  public void test_parse() {
+  /**
+   * Tests the parser.
+   */
+  @Test
+  public void testParse() {
     ExternalIdWithDates test = ExternalIdWithDates.parse("Scheme~value~S~2010-01-01~E~2010-12-01");
     assertEquals(IDENTIFIER, test.toExternalId());
     assertEquals(VALID_FROM, test.getValidFrom());
@@ -76,56 +113,101 @@ public class ExternalIdWithDatesTest {
     assertEquals(IDENTIFIER, test.toExternalId());
     assertEquals(VALID_TO, test.getValidTo());
     assertNull(test.getValidFrom());
+
+    test = ExternalIdWithDates.parse("Scheme~value");
+    assertEquals(IDENTIFIER, test.toExternalId());
+    assertNull(test.getValidTo());
+    assertNull(test.getValidFrom());
   }
 
+  /**
+   * Tests the error when an invalid string is parsed.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_parse_invalidFormat() {
-    ExternalId.parse("Scheme:value");
+  public void testParseInvalidFormat() {
+    ExternalIdWithDates.parse("Scheme:value");
   }
 
   //-------------------------------------------------------------------------
-  public void test_getIdentityKey() {
-    ExternalIdWithDates test = ExternalIdWithDates.of(IDENTIFIER, VALID_FROM, VALID_TO);
+  /**
+   * Tests that the getExternalId() method returns the same object.
+   */
+  @Test
+  public void testGetIdentityKey() {
+    final ExternalIdWithDates test = ExternalIdWithDates.of(IDENTIFIER, VALID_FROM, VALID_TO);
     assertEquals(IDENTIFIER, test.getExternalId());
   }
 
   //-------------------------------------------------------------------------
-  public void test_isValid() {
-    ExternalIdWithDates test = ExternalIdWithDates.of(IDENTIFIER, VALID_FROM, VALID_TO);
-    assertEquals(true, test.isValidOn(null));
-    assertEquals(false, test.isValidOn(LocalDate.of(1999, 1, 1)));
-    assertEquals(true, test.isValidOn(VALID_FROM));
-    assertEquals(true, test.isValidOn(VALID_TO));
-    assertEquals(false, test.isValidOn(LocalDate.of(2099, 1, 1)));
+  /**
+   * Tests the isValid() method.
+   */
+  @Test
+  public void testIsValid() {
+    final ExternalIdWithDates test = ExternalIdWithDates.of(IDENTIFIER, VALID_FROM, VALID_TO);
+    assertTrue(test.isValidOn(null));
+    assertFalse(test.isValidOn(LocalDate.of(1999, 1, 1)));
+    assertTrue(test.isValidOn(VALID_FROM));
+    assertTrue(test.isValidOn(VALID_TO));
+    assertFalse(test.isValidOn(LocalDate.of(2099, 1, 1)));
   }
 
   //-------------------------------------------------------------------------
-  public void test_equals() {
-    ExternalIdWithDates d1a = ExternalIdWithDates.of(IDENTIFIER, VALID_FROM, VALID_TO);
-    ExternalIdWithDates d1b = ExternalIdWithDates.of(IDENTIFIER, VALID_FROM, VALID_TO);
-    ExternalIdWithDates d2 = ExternalIdWithDates.of(IDENTIFIER, LocalDate.of(2000, 1, 1), LocalDate.of(2000, 12, 1));
+  /**
+   * Tests the equals() method.
+   */
+  @Test
+  public void testEquals() {
+    final ExternalIdWithDates d1a = ExternalIdWithDates.of(IDENTIFIER, VALID_FROM, VALID_TO);
+    final ExternalIdWithDates d1b = ExternalIdWithDates.of(IDENTIFIER, VALID_FROM, VALID_TO);
+    final ExternalIdWithDates d2 = ExternalIdWithDates.of(IDENTIFIER, VALID_FROM.minusDays(1), VALID_TO);
+    final ExternalIdWithDates d3 = ExternalIdWithDates.of(IDENTIFIER, VALID_FROM, VALID_TO.plusDays(1));
+    final ExternalIdWithDates d4 = ExternalIdWithDates.of(ExternalId.of("A", "B"), VALID_FROM, VALID_TO);
 
-    assertEquals(true, d1a.equals(d1a));
-    assertEquals(true, d1a.equals(d1b));
-    assertEquals(false, d1a.equals(d2));
+    assertEquals(d1a, d1a);
+    assertEquals(d1a, d1b);
+    assertNotEquals(d1a, d2);
 
-    assertEquals(true, d1b.equals(d1a));
-    assertEquals(true, d1b.equals(d1b));
-    assertEquals(false, d1b.equals(d2));
+    assertEquals(d1b, d1a);
+    assertEquals(d1b, d1b);
+    assertNotEquals(d1b, d2);
 
-    assertEquals(false, d2.equals(d1a));
-    assertEquals(false, d2.equals(d1b));
-    assertEquals(true, d2.equals(d2));
+    assertNotEquals(d2, d1a);
+    assertNotEquals(d2, d1b);
+    assertEquals(d2, d2);
 
-    assertEquals(false, d1b.equals("d1"));
-    assertEquals(false, d1b.equals(null));
+    assertNotEquals(d3, d1a);
+    assertNotEquals(d3, d1b);
+    assertEquals(d3, d3);
+
+    assertNotEquals(d4, d1a);
+    assertNotEquals(d4, d1b);
+    assertEquals(d4, d4);
+
+    assertNotEquals("d1b", d1b);
+    assertNotEquals(null, d1b);
   }
 
-  public void test_hashCode() {
-    ExternalIdWithDates d1a = ExternalIdWithDates.of(IDENTIFIER, VALID_FROM, VALID_TO);
-    ExternalIdWithDates d1b = ExternalIdWithDates.of(IDENTIFIER, VALID_FROM, VALID_TO);
+  /**
+   * Tests the hashCode() method.
+   */
+  @Test
+  public void testHashCode() {
+    final ExternalIdWithDates d1a = ExternalIdWithDates.of(IDENTIFIER, VALID_FROM, VALID_TO);
+    final ExternalIdWithDates d1b = ExternalIdWithDates.of(IDENTIFIER, VALID_FROM, VALID_TO);
 
     assertEquals(d1a.hashCode(), d1b.hashCode());
   }
 
+  /**
+   * Tests the compareTo() method. The comparison ignores the validity dates.
+   */
+  @Test
+  public void testCompareTo() {
+    final ExternalIdWithDates eid1 = ExternalIdWithDates.of(IDENTIFIER, VALID_FROM, VALID_TO);
+    assertEquals(eid1.compareTo(ExternalIdWithDates.of(IDENTIFIER, VALID_FROM.minusDays(1), VALID_TO)), 0);
+    assertEquals(eid1.compareTo(ExternalIdWithDates.of(IDENTIFIER, VALID_FROM, VALID_TO.plusDays(1))), 0);
+    assertTrue(eid1.compareTo(ExternalIdWithDates.of(ExternalId.of("A", "B"), VALID_FROM, VALID_TO)) > 0);
+    assertTrue(eid1.compareTo(ExternalIdWithDates.of(ExternalId.of("Z", "B"), VALID_FROM, VALID_TO)) < 0);
+  }
 }

@@ -57,7 +57,7 @@ public class RollDateFRAConvention extends FinancialConvention {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param name  the convention name, not null
    * @param externalIdBundle  the external identifiers for this convention, not null
    * @param indexConvention  the index convention, not null TODO: Index
@@ -74,7 +74,7 @@ public class RollDateFRAConvention extends FinancialConvention {
   //-------------------------------------------------------------------------
   /**
    * Gets the type identifying this convention.
-   * 
+   *
    * @return the {@link #TYPE} constant, not null
    */
   @Override

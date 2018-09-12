@@ -147,10 +147,8 @@ public class MdcAwareThreadPoolExecutorTest {
     return new Runnable() {
       @Override
       public void run() {
-        @SuppressWarnings("unchecked")
-        final
-        Map<String, String> mdc = MDC.getCopyOfContextMap();
-        System.out.println("Running on thread-" + Thread.currentThread().getName() + " => " + mdc) ;
+        final Map<String, String> mdc = MDC.getCopyOfContextMap();
+        System.out.println("Running on thread-" + Thread.currentThread().getName() + " => " + mdc);
         try {
           assertThat(mdc, is(expectedContext));
           checkCount.incrementAndGet();

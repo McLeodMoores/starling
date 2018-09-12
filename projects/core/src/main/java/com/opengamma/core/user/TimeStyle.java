@@ -19,7 +19,7 @@ import com.opengamma.util.PublicAPI;
 public enum TimeStyle {
 
   /**
-   * The standard ISO-8601 format
+   * The standard ISO-8601 format.
    */
   ISO(DateTimeFormatter.ofPattern("HH:mm:ss")),
   /**
@@ -41,7 +41,10 @@ public enum TimeStyle {
 
   private final DateTimeFormatter _formatter;
 
-  private TimeStyle(final DateTimeFormatter formatter) {
+  /**
+   * @param formatter  the formatter, not null
+   */
+  TimeStyle(final DateTimeFormatter formatter) {
     _formatter = formatter;
   }
 

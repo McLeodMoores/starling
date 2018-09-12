@@ -145,9 +145,9 @@ public final class VolatilitySurfaceShift implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       VolatilitySurfaceShift other = (VolatilitySurfaceShift) obj;
-      return JodaBeanUtils.equal(getX(), other.getX()) &&
-          JodaBeanUtils.equal(getY(), other.getY()) &&
-          JodaBeanUtils.equal(getShift(), other.getShift());
+      return JodaBeanUtils.equal(_x, other._x) &&
+          JodaBeanUtils.equal(_y, other._y) &&
+          JodaBeanUtils.equal(_shift, other._shift);
     }
     return false;
   }
@@ -155,9 +155,9 @@ public final class VolatilitySurfaceShift implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getX());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getY());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getShift());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_x);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_y);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_shift);
     return hash;
   }
 
@@ -165,9 +165,9 @@ public final class VolatilitySurfaceShift implements ImmutableBean {
   public String toString() {
     StringBuilder buf = new StringBuilder(128);
     buf.append("VolatilitySurfaceShift{");
-    buf.append("x").append('=').append(getX()).append(',').append(' ');
-    buf.append("y").append('=').append(getY()).append(',').append(' ');
-    buf.append("shift").append('=').append(JodaBeanUtils.toString(getShift()));
+    buf.append("x").append('=').append(_x).append(',').append(' ');
+    buf.append("y").append('=').append(_y).append(',').append(' ');
+    buf.append("shift").append('=').append(JodaBeanUtils.toString(_shift));
     buf.append('}');
     return buf.toString();
   }
@@ -355,19 +355,31 @@ public final class VolatilitySurfaceShift implements ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

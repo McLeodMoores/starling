@@ -15,7 +15,7 @@ import org.testng.annotations.Test;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Tests the {@link LifecycleUtils} class
+ * Tests the {@link LifecycleUtils} class.
  */
 @Test(groups = TestGroup.UNIT)
 public class LifecycleUtilsTest {

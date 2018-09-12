@@ -13,8 +13,13 @@ import static org.testng.AssertJUnit.assertTrue;
 import java.util.BitSet;
 import java.util.Collection;
 
+import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import com.fiftyonred.mock_jedis.MockJedisPool;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.ExternalScheme;
@@ -22,11 +27,50 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.util.test.AbstractRedisTestCase;
 import com.opengamma.util.test.TestGroup;
 
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+
 /**
  * Test.
  */
-@Test(groups = TestGroup.INTEGRATION, enabled = false)
+@Test(groups = TestGroup.UNIT)
 public class NonVersionedRedisConfigSourceTest extends AbstractRedisTestCase {
+  private MockJedisPool _pool;
+
+  @Override
+  @BeforeClass
+  public void launchJedisPool() {
+    final GenericObjectPoolConfig config = new GenericObjectPoolConfig();
+    _pool = new MockJedisPool(config, "host");
+  }
+
+  @Override
+  @AfterClass
+  public void clearJedisPool() {
+    if (_pool == null) {
+      return;
+    }
+    _pool.getResource().close();
+    _pool.destroy();
+  }
+
+  @Override
+  @BeforeMethod
+  public void clearRedisDb() {
+    final Jedis jedis = _pool.getResource();
+    jedis.flushDB();
+    _pool.returnResource(jedis);
+  }
+
+  @Override
+  protected JedisPool getJedisPool() {
+    return _pool;
+  }
+
+  @Override
+  protected String getRedisPrefix() {
+    return "prefix";
+  }
 
   public void putDeleteGetAll() {
     final NonVersionedRedisConfigSource configSource = new NonVersionedRedisConfigSource(getJedisPool(), getRedisPrefix());

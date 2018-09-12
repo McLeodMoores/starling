@@ -23,11 +23,17 @@ public class PeriodFudgeEncodingTest extends AbstractFudgeBuilderTestCase {
 
   private static final Period REF =  Period.ofDays(2);
 
+  /**
+   * Tests and encoding/decoding cycle.
+   */
   @Test
   public void testCycle() {
     assertEncodeDecodeCycle(Period.class, REF);
   }
 
+  /**
+   * Tests a cycle using the secondary type.
+   */
   @Test
   public void testFromString() {
     assertEquals(REF, getFudgeContext().getFieldValue(Period.class,

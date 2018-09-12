@@ -53,7 +53,7 @@ public class SimpleSecurityLink extends AbstractLink<Security>
   /**
    * The target security.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private Security _target;
   // TODO: remove
 
@@ -236,6 +236,7 @@ public class SimpleSecurityLink extends AbstractLink<Security>
    * Gets the target security.
    * @return the value of the property
    */
+  @Override
   public Security getTarget() {
     return _target;
   }

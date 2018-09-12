@@ -94,7 +94,7 @@ public final class DoubleDoubleSurfaceShift extends VolatilitySurfaceShiftManipu
    * @return the value of the property, not null
    */
   public double[] getXValues() {
-    return (_xValues != null ? _xValues.clone() : null);
+    return _xValues.clone();
   }
 
   //-----------------------------------------------------------------------
@@ -103,7 +103,7 @@ public final class DoubleDoubleSurfaceShift extends VolatilitySurfaceShiftManipu
    * @return the value of the property, not null
    */
   public double[] getYValues() {
-    return (_yValues != null ? _yValues.clone() : null);
+    return _yValues.clone();
   }
 
   //-----------------------------------------------------------------------
@@ -123,8 +123,8 @@ public final class DoubleDoubleSurfaceShift extends VolatilitySurfaceShiftManipu
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       DoubleDoubleSurfaceShift other = (DoubleDoubleSurfaceShift) obj;
-      return JodaBeanUtils.equal(getXValues(), other.getXValues()) &&
-          JodaBeanUtils.equal(getYValues(), other.getYValues()) &&
+      return JodaBeanUtils.equal(_xValues, other._xValues) &&
+          JodaBeanUtils.equal(_yValues, other._yValues) &&
           super.equals(obj);
     }
     return false;
@@ -133,8 +133,8 @@ public final class DoubleDoubleSurfaceShift extends VolatilitySurfaceShiftManipu
   @Override
   public int hashCode() {
     int hash = 7;
-    hash = hash * 31 + JodaBeanUtils.hashCode(getXValues());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getYValues());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_xValues);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_yValues);
     return hash ^ super.hashCode();
   }
 
@@ -154,8 +154,8 @@ public final class DoubleDoubleSurfaceShift extends VolatilitySurfaceShiftManipu
   @Override
   protected void toString(StringBuilder buf) {
     super.toString(buf);
-    buf.append("xValues").append('=').append(JodaBeanUtils.toString(getXValues())).append(',').append(' ');
-    buf.append("yValues").append('=').append(JodaBeanUtils.toString(getYValues())).append(',').append(' ');
+    buf.append("xValues").append('=').append(JodaBeanUtils.toString(_xValues)).append(',').append(' ');
+    buf.append("yValues").append('=').append(JodaBeanUtils.toString(_yValues)).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------
@@ -278,6 +278,7 @@ public final class DoubleDoubleSurfaceShift extends VolatilitySurfaceShiftManipu
      * @param beanToCopy  the bean to copy from, not null
      */
     private Builder(DoubleDoubleSurfaceShift beanToCopy) {
+      super(beanToCopy);
       this._xValues = beanToCopy.getXValues().clone();
       this._yValues = beanToCopy.getYValues().clone();
     }
@@ -317,19 +318,31 @@ public final class DoubleDoubleSurfaceShift extends VolatilitySurfaceShiftManipu
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

@@ -138,7 +138,6 @@ public class MdcAwareThreadPoolExecutor extends ThreadPoolExecutor {
     return success;
   }
 
-  @SuppressWarnings("unchecked")
   private void recordDiagnosticContext(final Runnable task) {
     final Map<String, String> contextMap = MDC.getCopyOfContextMap();
     if (contextMap != null) {

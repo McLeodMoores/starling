@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.joda.beans.Bean;
+import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
 import org.joda.beans.ImmutableBean;
 import org.joda.beans.ImmutableConstructor;
@@ -19,13 +20,12 @@ import org.joda.beans.JodaBeanUtils;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
 import org.joda.beans.PropertyDefinition;
-import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
+import org.joda.beans.impl.direct.DirectPrivateBeanBuilder;
 
 import com.opengamma.util.ArgumentChecker;
-import org.joda.beans.BeanBuilder;
 
 /**
  * Class representing an Industry Classification Benchmark (ICB).
@@ -68,7 +68,7 @@ public final class ICBCode implements ImmutableBean, Serializable {
    * @return The ICB code
    */
   public static ICBCode of(final int code) {
-    if ((code < 1000) || (code > 9999)) {
+    if (code < 1000 || code > 9999) {
       throw new IllegalArgumentException("Code out of range: " + code);
     }
     return ICBCode.of(Integer.toString(code));
@@ -150,7 +150,7 @@ public final class ICBCode implements ImmutableBean, Serializable {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       ICBCode other = (ICBCode) obj;
-      return JodaBeanUtils.equal(getCode(), other.getCode());
+      return JodaBeanUtils.equal(_code, other._code);
     }
     return false;
   }
@@ -158,7 +158,7 @@ public final class ICBCode implements ImmutableBean, Serializable {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getCode());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_code);
     return hash;
   }
 
@@ -166,7 +166,7 @@ public final class ICBCode implements ImmutableBean, Serializable {
   public String toString() {
     StringBuilder buf = new StringBuilder(64);
     buf.append("ICBCode{");
-    buf.append("code").append('=').append(JodaBeanUtils.toString(getCode()));
+    buf.append("code").append('=').append(JodaBeanUtils.toString(_code));
     buf.append('}');
     return buf.toString();
   }
@@ -257,7 +257,7 @@ public final class ICBCode implements ImmutableBean, Serializable {
   /**
    * The bean-builder for {@code ICBCode}.
    */
-  private static final class Builder extends DirectFieldsBeanBuilder<ICBCode> {
+  private static final class Builder extends DirectPrivateBeanBuilder<ICBCode> {
 
     private String _code;
 
@@ -265,6 +265,7 @@ public final class ICBCode implements ImmutableBean, Serializable {
      * Restricted constructor.
      */
     private Builder() {
+      super(meta());
     }
 
     //-----------------------------------------------------------------------
@@ -287,30 +288,6 @@ public final class ICBCode implements ImmutableBean, Serializable {
         default:
           throw new NoSuchElementException("Unknown property: " + propertyName);
       }
-      return this;
-    }
-
-    @Override
-    public Builder set(MetaProperty<?> property, Object value) {
-      super.set(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(String propertyName, String value) {
-      setString(meta().metaProperty(propertyName), value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(MetaProperty<?> property, String value) {
-      super.setString(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
-      super.setAll(propertyValueMap);
       return this;
     }
 

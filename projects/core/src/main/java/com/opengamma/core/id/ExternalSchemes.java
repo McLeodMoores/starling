@@ -37,11 +37,11 @@ public class ExternalSchemes {
    */
   public static final ExternalScheme WINDOWS_USER_ID = ExternalScheme.of("WINDOWS_USER_ID");
   /**
-   * Identification scheme for UUID identifier
+   * Identification scheme for UUID identifier.
    */
   public static final ExternalScheme BLOOMBERG_UUID = ExternalScheme.of("BLOOMBERG_UUID");
   /**
-   * Identification scheme for EMRSID identifier
+   * Identification scheme for EMRSID identifier.
    */
   public static final ExternalScheme BLOOMBERG_EMRSID = ExternalScheme.of("BLOOMBERG_EMRSID");
 
@@ -87,11 +87,11 @@ public class ExternalSchemes {
   @Deprecated
   public static final ExternalScheme BLOOMBERG_TCM = ExternalScheme.of("BLOOMBERG_TCM");
   /**
-   * Identification scheme for conventions, using the stub of SECURITY_DES (minus date information)
+   * Identification scheme for conventions, using the stub of SECURITY_DES (minus date information).
    */
   public static final ExternalScheme BLOOMBERG_CONVENTION_NAME = ExternalScheme.of("BLOOMBERG_CONVENTION_NAME");
   /**
-   * Identification scheme for index families, using the stub of SECURITY_DES (minus date information)
+   * Identification scheme for index families, using the stub of SECURITY_DES (minus date information).
    */
   public static final ExternalScheme BLOOMBERG_INDEX_FAMILY = ExternalScheme.of("BLOOMBERG_INDEX_FAMILY");
   /**
@@ -233,9 +233,6 @@ public class ExternalSchemes {
     if (code.length() == 0) {
       throw new IllegalArgumentException("ISIN code is invalid: " + code);
     }
-    //    if (code.matches("[A-Z]{2}[A-Z0-9]{9}[0-9]") == false) {
-    //      throw new IllegalArgumentException("ISIN code is invalid: " + code);
-    //    }
     return ExternalId.of(ISIN, code);
   }
 
@@ -254,9 +251,6 @@ public class ExternalSchemes {
     if (code.length() == 0) {
       throw new IllegalArgumentException("CUSIP code is invalid: " + code);
     }
-    //    if (code.matches("[A-Z0-9]{8}[0-9]?") == false) {
-    //      throw new IllegalArgumentException("CUSIP code is invalid: " + code);
-    //    }
     return ExternalId.of(CUSIP, code);
   }
 
@@ -275,9 +269,6 @@ public class ExternalSchemes {
     if (code.length() == 0) {
       throw new IllegalArgumentException("SEDOL1 code is invalid: " + code);
     }
-    //    if (code.matches("[A-Z0-9]{6}[0-9]?") == false) {
-    //      throw new IllegalArgumentException("SEDOL1 code is invalid: " + code);
-    //    }
     return ExternalId.of(SEDOL1, code);
   }
 
@@ -358,7 +349,8 @@ public class ExternalSchemes {
       throw new IllegalArgumentException("Maturity must not be empty, ticker = " + tickerWithoutSector + ", coupon = " + coupon);
     }
     if (StringUtils.isEmpty(marketSector)) {
-      throw new IllegalArgumentException("Market sector must not be empty, ticker = " + tickerWithoutSector + ", coupon = " + coupon + ", maturity = " + maturity);
+      throw new IllegalArgumentException("Market sector must not be empty, ticker = " + tickerWithoutSector
+          + ", coupon = " + coupon + ", maturity = " + maturity);
     }
     Double couponDbl;
     try {
@@ -462,7 +454,7 @@ public class ExternalSchemes {
   }
 
   /**
-   * Creates a MarkIt RED_CODE identifier
+   * Creates a MarkIt RED_CODE identifier.
    * <p>
    * @param redcode the redcode identifier, not null or empty
    * @return the security redcode identifier, not null
@@ -474,7 +466,7 @@ public class ExternalSchemes {
   }
 
   /**
-   * Creates an ISDA identifier
+   * Creates an ISDA identifier.
    * <p>
    * @param isdaName the isda name, not null or empty
    * @return the isda identifier, not null
@@ -494,7 +486,7 @@ public class ExternalSchemes {
    */
   public static ExternalId financialRegionId(final String code) {
     ArgumentChecker.notNull(code, "code");
-    if (code.matches("[A-Z+]+") == false) {
+    if (!code.matches("[A-Z+]+")) {
       throw new IllegalArgumentException("Code is invalid: " + code);
     }
     return ExternalId.of(ExternalSchemes.FINANCIAL, code);
@@ -524,7 +516,7 @@ public class ExternalSchemes {
    */
   public static ExternalId coppClarkRegionId(final String locode) {
     ArgumentChecker.notNull(locode, "locode");
-    if (locode.matches("[A-Z]{2}[A-Z0-9]{3}") == false) {
+    if (!locode.matches("[A-Z]{2}[A-Z0-9]{3}")) {
       throw new IllegalArgumentException("Copp Clark LOCODE is invalid: " + locode);
     }
     return ExternalId.of(ExternalSchemes.COPP_CLARK_LOCODE, locode);
@@ -540,7 +532,7 @@ public class ExternalSchemes {
    */
   public static ExternalId unLocode20102RegionId(final String locode) {
     ArgumentChecker.notNull(locode, "locode");
-    if (locode.matches("[A-Z]{2}[A-Z0-9]{3}") == false) {
+    if (!locode.matches("[A-Z]{2}[A-Z0-9]{3}")) {
       throw new IllegalArgumentException("UN/LOCODE is invalid: " + locode);
     }
     return ExternalId.of(ExternalSchemes.UN_LOCODE_2010_2, locode);
@@ -583,7 +575,7 @@ public class ExternalSchemes {
    */
   public static ExternalId isoMicExchangeId(final String code) {
     ArgumentChecker.notNull(code, "code");
-    if (code.matches("[A-Z0-9]{4}([-][A-Z0-9]{3})?") == false) {
+    if (!code.matches("[A-Z0-9]{4}([-][A-Z0-9]{3})?")) {
       throw new IllegalArgumentException("ISO MIC code is invalid: " + code);
     }
     return ExternalId.of(ExternalSchemes.ISO_MIC, code);

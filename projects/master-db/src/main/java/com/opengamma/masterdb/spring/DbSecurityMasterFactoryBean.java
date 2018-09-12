@@ -7,8 +7,6 @@ package com.opengamma.masterdb.spring;
 
 import java.util.Map;
 
-import net.sf.ehcache.CacheManager;
-
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
@@ -24,6 +22,8 @@ import com.opengamma.core.change.JmsChangeManager;
 import com.opengamma.masterdb.security.DbSecurityMaster;
 import com.opengamma.masterdb.security.EHCachingSecurityMasterDetailProvider;
 import com.opengamma.masterdb.security.hibernate.HibernateSecurityMasterDetailProvider;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Spring factory bean to create the database security master.
@@ -47,7 +47,7 @@ public class DbSecurityMasterFactoryBean extends AbstractDbMasterFactoryBean<DbS
   //-------------------------------------------------------------------------
   @Override
   public DbSecurityMaster createObject() {
-    DbSecurityMaster master = new DbSecurityMaster(getDbConnector());
+    final DbSecurityMaster master = new DbSecurityMaster(getDbConnector());
     if (getUniqueIdScheme() != null) {
       master.setUniqueIdScheme(getUniqueIdScheme());
     }
@@ -55,7 +55,7 @@ public class DbSecurityMasterFactoryBean extends AbstractDbMasterFactoryBean<DbS
       master.setMaxRetries(getMaxRetries());
     }
     if (getJmsConnector() != null) {
-      JmsChangeManager cm = new JmsChangeManager(getJmsConnector().ensureTopicName(getJmsChangeManagerTopic()));
+      final JmsChangeManager cm = new JmsChangeManager(getJmsConnector().ensureTopicName(getJmsChangeManagerTopic()));
       master.setChangeManager(cm);
       cm.start();
     }

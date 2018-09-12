@@ -22,10 +22,10 @@ import org.joda.beans.JodaBeanUtils;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
 import org.joda.beans.PropertyDefinition;
-import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
+import org.joda.beans.impl.direct.DirectPrivateBeanBuilder;
 
 import com.google.common.collect.ImmutableMap;
 import com.opengamma.util.PublicSPI;
@@ -240,9 +240,9 @@ public final class PermissionCheckProviderResult implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       PermissionCheckProviderResult other = (PermissionCheckProviderResult) obj;
-      return JodaBeanUtils.equal(getCheckedPermissions(), other.getCheckedPermissions()) &&
-          JodaBeanUtils.equal(getAuthenticationError(), other.getAuthenticationError()) &&
-          JodaBeanUtils.equal(getAuthorizationError(), other.getAuthorizationError());
+      return JodaBeanUtils.equal(_checkedPermissions, other._checkedPermissions) &&
+          JodaBeanUtils.equal(_authenticationError, other._authenticationError) &&
+          JodaBeanUtils.equal(_authorizationError, other._authorizationError);
     }
     return false;
   }
@@ -250,9 +250,9 @@ public final class PermissionCheckProviderResult implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getCheckedPermissions());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getAuthenticationError());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getAuthorizationError());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_checkedPermissions);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_authenticationError);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_authorizationError);
     return hash;
   }
 
@@ -260,9 +260,9 @@ public final class PermissionCheckProviderResult implements ImmutableBean {
   public String toString() {
     StringBuilder buf = new StringBuilder(128);
     buf.append("PermissionCheckProviderResult{");
-    buf.append("checkedPermissions").append('=').append(getCheckedPermissions()).append(',').append(' ');
-    buf.append("authenticationError").append('=').append(getAuthenticationError()).append(',').append(' ');
-    buf.append("authorizationError").append('=').append(JodaBeanUtils.toString(getAuthorizationError()));
+    buf.append("checkedPermissions").append('=').append(_checkedPermissions).append(',').append(' ');
+    buf.append("authenticationError").append('=').append(_authenticationError).append(',').append(' ');
+    buf.append("authorizationError").append('=').append(JodaBeanUtils.toString(_authorizationError));
     buf.append('}');
     return buf.toString();
   }
@@ -390,7 +390,7 @@ public final class PermissionCheckProviderResult implements ImmutableBean {
   /**
    * The bean-builder for {@code PermissionCheckProviderResult}.
    */
-  private static final class Builder extends DirectFieldsBeanBuilder<PermissionCheckProviderResult> {
+  private static final class Builder extends DirectPrivateBeanBuilder<PermissionCheckProviderResult> {
 
     private Map<String, Boolean> _checkedPermissions = ImmutableMap.of();
     private String _authenticationError;
@@ -400,6 +400,7 @@ public final class PermissionCheckProviderResult implements ImmutableBean {
      * Restricted constructor.
      */
     private Builder() {
+      super(meta());
     }
 
     //-----------------------------------------------------------------------
@@ -433,30 +434,6 @@ public final class PermissionCheckProviderResult implements ImmutableBean {
         default:
           throw new NoSuchElementException("Unknown property: " + propertyName);
       }
-      return this;
-    }
-
-    @Override
-    public Builder set(MetaProperty<?> property, Object value) {
-      super.set(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(String propertyName, String value) {
-      setString(meta().metaProperty(propertyName), value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(MetaProperty<?> property, String value) {
-      super.setString(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
-      super.setAll(propertyValueMap);
       return this;
     }
 

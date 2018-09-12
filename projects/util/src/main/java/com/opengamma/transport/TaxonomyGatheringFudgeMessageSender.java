@@ -61,7 +61,8 @@ public class TaxonomyGatheringFudgeMessageSender implements FudgeMessageSender {
     this(underlying, outputFileName, FudgeContext.GLOBAL_DEFAULT, DEFAULT_PERIOD);
   }
 
-  public TaxonomyGatheringFudgeMessageSender(final FudgeMessageSender underlying, final String outputFileName, final FudgeContext fudgeContext, final long fileWritePeriod) {
+  public TaxonomyGatheringFudgeMessageSender(final FudgeMessageSender underlying, final String outputFileName,
+      final FudgeContext fudgeContext, final long fileWritePeriod) {
     ArgumentChecker.notNull(underlying, "underlying");
     ArgumentChecker.notNull(fudgeContext, "fudgeContext");
     ArgumentChecker.notEmpty(outputFileName, "outputFileName");

@@ -99,7 +99,7 @@ public class CompoundingIborLegConvention extends FinancialConvention {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param name  the name of the convention, not null
    * @param externalIdBundle  the external identifiers for this convention, not null
    * @param iborIndexConvention  the id of the underlying ibor index convention, not null
@@ -134,7 +134,7 @@ public class CompoundingIborLegConvention extends FinancialConvention {
   //-------------------------------------------------------------------------
   /**
    * Gets the type identifying this convention.
-   * 
+   *
    * @return the {@link #TYPE} constant, not null
    */
   @Override

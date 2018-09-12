@@ -33,14 +33,15 @@ public interface PositionOrTrade extends UniqueIdentifiable {
    * Gets the unique identifier of the position/trade.
    * <p>
    * This specifies a single version-correction of the position/trade.
-   * 
+   *
    * @return the unique identifier for this position/trade, not null within the engine
    */
+  @Override
   UniqueId getUniqueId();
 
   /**
    * Gets the amount of the position held in terms of the security.
-   * 
+   *
    * @return the amount of the position
    */
   BigDecimal getQuantity();
@@ -50,7 +51,7 @@ public interface PositionOrTrade extends UniqueIdentifiable {
    * <p>
    * The link holds a strong or weak reference to the security
    * and can be resolved to the actual security when required.
-   * 
+   *
    * @return the security link, not null
    */
   SecurityLink getSecurityLink();
@@ -60,7 +61,7 @@ public interface PositionOrTrade extends UniqueIdentifiable {
    * <p>
    * This convenience method gets the target security from the link.
    * This is guaranteed to return a security within an analytic function.
-   * 
+   *
    * @return the security link, null if target not resolved in the link
    */
   Security getSecurity();

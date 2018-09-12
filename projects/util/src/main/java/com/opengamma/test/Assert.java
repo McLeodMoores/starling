@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.test;
 
@@ -109,4 +109,5 @@ public final class Assert {
     assertEquals(actual.size(), expected.size(), message);
     assertTrue(actual.entrySet().containsAll(expected.entrySet()), message);
   }
+
 }

@@ -109,7 +109,8 @@ public class SocketFudgeRequestConduitTest {
         return requestEnvelope.getMessage();
       }
     };
-    final ServerSocketFudgeRequestDispatcher requestDispatcher = executor != null ? new ServerSocketFudgeRequestDispatcher(requestReceiver, FudgeContext.GLOBAL_DEFAULT, executor)
+    final ServerSocketFudgeRequestDispatcher requestDispatcher = executor != null
+        ? new ServerSocketFudgeRequestDispatcher(requestReceiver, FudgeContext.GLOBAL_DEFAULT, executor)
         : new ServerSocketFudgeRequestDispatcher(requestReceiver, FudgeContext.GLOBAL_DEFAULT);
     requestDispatcher.start();
 

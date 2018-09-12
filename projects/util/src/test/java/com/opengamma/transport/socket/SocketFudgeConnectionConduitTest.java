@@ -30,7 +30,7 @@ import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.test.Timeout;
 
 /**
- * Tests the SocketFudgeConnection and ServerSocketFudgeConnectionReceiver classes
+ * Tests the SocketFudgeConnection and ServerSocketFudgeConnectionReceiver classes.
  */
 @Test(groups = TestGroup.INTEGRATION, singleThreaded = true)
 public class SocketFudgeConnectionConduitTest {
@@ -105,8 +105,8 @@ public class SocketFudgeConnectionConduitTest {
     final ServerSocketFudgeConnectionReceiver server = new ServerSocketFudgeConnectionReceiver(FudgeContext.GLOBAL_DEFAULT, serverReceiver);
     server.start();
     final SocketFudgeConnection client = new SocketFudgeConnection(FudgeContext.GLOBAL_DEFAULT);
-    client.setInetAddress (InetAddress.getLocalHost ());
-    client.setPortNumber (server.getPortNumber ());
+    client.setInetAddress(InetAddress.getLocalHost());
+    client.setPortNumber(server.getPortNumber());
     // send messages 1, 2, 3 and verify 3 went to the test receiver
     client.getFudgeMessageSender().send(testMessage1);
     assertTrue(message3Receiver.getMessages().isEmpty());
@@ -188,7 +188,8 @@ public class SocketFudgeConnectionConduitTest {
     client.stop();
   }
 
-  private int[] parallelSendTest(final ExecutorService executorClient, final ExecutorService executorServer, final AtomicInteger concurrencyMax) throws Exception {
+  private int[] parallelSendTest(final ExecutorService executorClient, final ExecutorService executorServer,
+      final AtomicInteger concurrencyMax) throws Exception {
     final FudgeConnectionReceiver serverReceiver = new FudgeConnectionReceiver() {
       @Override
       public void connectionReceived(final FudgeContext fudgeContext, final FudgeMsgEnvelope envelope, final FudgeConnection connection) {
@@ -209,26 +210,28 @@ public class SocketFudgeConnectionConduitTest {
         });
       }
     };
-    final ServerSocketFudgeConnectionReceiver server = executorServer != null ? new ServerSocketFudgeConnectionReceiver(FudgeContext.GLOBAL_DEFAULT, serverReceiver, executorServer)
+    final ServerSocketFudgeConnectionReceiver server = executorServer != null
+        ? new ServerSocketFudgeConnectionReceiver(FudgeContext.GLOBAL_DEFAULT, serverReceiver, executorServer)
         : new ServerSocketFudgeConnectionReceiver(FudgeContext.GLOBAL_DEFAULT, serverReceiver);
     server.start();
-    final SocketFudgeConnection client = executorClient != null ? new SocketFudgeConnection(FudgeContext.GLOBAL_DEFAULT, executorClient) : new SocketFudgeConnection(FudgeContext.GLOBAL_DEFAULT);
+    final SocketFudgeConnection client = executorClient != null
+        ? new SocketFudgeConnection(FudgeContext.GLOBAL_DEFAULT, executorClient) : new SocketFudgeConnection(FudgeContext.GLOBAL_DEFAULT);
     client.setInetAddress(InetAddress.getLocalHost());
     client.setPortNumber(server.getPortNumber());
-    final CollectingFudgeMessageReceiver responses = new CollectingFudgeMessageReceiver () {
-      private final AtomicInteger _concurrency = new AtomicInteger (0);
+    final CollectingFudgeMessageReceiver responses = new CollectingFudgeMessageReceiver() {
+      private final AtomicInteger _concurrency = new AtomicInteger(0);
       @Override
-      public void messageReceived (final FudgeContext fudgeContext, final FudgeMsgEnvelope envelope) {
-        final int concurrency = _concurrency.incrementAndGet ();
-        if (concurrency > concurrencyMax.get ()) {
-          concurrencyMax.set (concurrency);
+      public void messageReceived(final FudgeContext fudgeContext, final FudgeMsgEnvelope envelope) {
+        final int concurrency = _concurrency.incrementAndGet();
+        if (concurrency > concurrencyMax.get()) {
+          concurrencyMax.set(concurrency);
         }
         try {
           Thread.sleep(Timeout.standardTimeoutMillis() / 2L);
         } catch (final InterruptedException e) {
         }
-        _concurrency.decrementAndGet ();
-        super.messageReceived (fudgeContext, envelope);
+        _concurrency.decrementAndGet();
+        super.messageReceived(fudgeContext, envelope);
       }
     };
     client.setFudgeMessageReceiver(responses);
@@ -238,7 +241,7 @@ public class SocketFudgeConnectionConduitTest {
     final int[] result = new int[4];
     for (int i = 0; i < 4; i++) {
       final FudgeMsgEnvelope envelope = responses.waitForMessage(Timeout.standardTimeoutMillis() * 2L);
-      assertNotNull (envelope);
+      assertNotNull(envelope);
       result[i] = envelope.getMessage().getInt("foo");
     }
     return result;

@@ -39,11 +39,10 @@ public class MSTestToJUnit extends AbstractJUnitResults {
   private static double parseTime(final String time) {
     if (time == null) {
       return 0;
-    } else {
-      final String[] times = time.split(":");
-      return (Integer.parseInt(times[0]) * 60 + Integer.parseInt(times[1])) * 60
-          + Double.parseDouble(times[2]);
     }
+    final String[] times = time.split(":");
+    return (Integer.parseInt(times[0]) * 60 + Integer.parseInt(times[1])) * 60
+        + Double.parseDouble(times[2]);
   }
 
   @Override

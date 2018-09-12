@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.monitor;
@@ -53,7 +53,7 @@ public class ReportingInputStream extends FilterInputStream {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param logger  the device to report to, not null
    * @param streamName  the name to include in the log output, should not be null
    * @param underlying  the underlying stream, not null
@@ -108,13 +108,13 @@ public class ReportingInputStream extends FilterInputStream {
    */
   private void endRead() {
     if (--_callStack == 0) {
-      long time = System.nanoTime();
+      final long time = System.nanoTime();
       _readTime += time;
       if (time - _nextReportTime >= 0) {
         _nextReportTime = time + TIME_TO_REPORT;
-        _logger.info("Stream {} read {}Kb in {}ms from {} operations ({}M)}", new Object[] {_streamName, (double) _readBytes / 1024d, (double) _readTime / 1000000d, _readOperations,
-          (double) _readBytes * 8192d / (double) _readTime });
-        
+        _logger.info("Stream {} read {}Kb in {}ms from {} operations ({}M)}",
+            new Object[] {_streamName, _readBytes / 1024d, _readTime / 1000000d, _readOperations, _readBytes * 8192d / _readTime });
+
         // scale down influence of older data
         _readOperations >>= 1;
         _readBytes >>= 1;
