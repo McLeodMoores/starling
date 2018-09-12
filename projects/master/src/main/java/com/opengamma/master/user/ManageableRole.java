@@ -43,7 +43,7 @@ import com.opengamma.id.UniqueIdentifiable;
  */
 @BeanDefinition
 public class ManageableRole
-    implements Bean, UniqueIdentifiable, MutableUniqueIdentifiable, Serializable {
+implements Bean, UniqueIdentifiable, MutableUniqueIdentifiable, Serializable {
 
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
@@ -52,7 +52,7 @@ public class ManageableRole
    * The unique identifier of this role.
    * This must be null when adding to a master and not null when retrieved from a master.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true, overrideSet = true)
   private UniqueId _uniqueId;
   /**
    * The name that uniquely identifies this role.
@@ -143,6 +143,7 @@ public class ManageableRole
    * This must be null when adding to a master and not null when retrieved from a master.
    * @return the value of the property
    */
+  @Override
   public UniqueId getUniqueId() {
     return _uniqueId;
   }
@@ -152,6 +153,7 @@ public class ManageableRole
    * This must be null when adding to a master and not null when retrieved from a master.
    * @param uniqueId  the new value of the property
    */
+  @Override
   public void setUniqueId(UniqueId uniqueId) {
     this._uniqueId = uniqueId;
   }

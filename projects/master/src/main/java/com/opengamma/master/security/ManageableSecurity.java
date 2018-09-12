@@ -43,8 +43,8 @@ import com.opengamma.util.auth.Permissionable;
 @PublicSPI
 @BeanDefinition
 public class ManageableSecurity
-    extends DirectBean
-    implements Serializable, Security, MutableUniqueIdentifiable, Permissionable {
+extends DirectBean
+implements Serializable, Security, MutableUniqueIdentifiable, Permissionable {
 
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
@@ -58,35 +58,35 @@ public class ManageableSecurity
    * The unique identifier of the security.
    * This must be null when adding to a master and not null when retrieved from a master.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true, overrideSet = true)
   private UniqueId _uniqueId;
   /**
    * The bundle of external identifiers that define the security.
    * Each external system will typically refer to a security using a different identifier.
    * Thus the bundle consists of a set of identifiers, one for each external system.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private ExternalIdBundle _externalIdBundle = ExternalIdBundle.EMPTY;
   /**
    * The name of the security intended for display purposes.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private String _name = "";
   /**
    * The security type.
    */
-  @PropertyDefinition(validate = "notNull", set = "private")
+  @PropertyDefinition(validate = "notNull", set = "private", overrideGet = true)
   private String _securityType;
   /**
    * The general purpose trade attributes, which can be used for aggregating in portfolios.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true, overrideSet = true)
   private final Map<String, String> _attributes = new HashMap<>();
   /**
    * The set of required permissions.
    * This is a set of permissions that a user needs to be able to view a security.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private final Set<String> _requiredPermissions = new TreeSet<>();
 
   /**
@@ -181,6 +181,7 @@ public class ManageableSecurity
    * This must be null when adding to a master and not null when retrieved from a master.
    * @return the value of the property
    */
+  @Override
   public UniqueId getUniqueId() {
     return _uniqueId;
   }
@@ -190,6 +191,7 @@ public class ManageableSecurity
    * This must be null when adding to a master and not null when retrieved from a master.
    * @param uniqueId  the new value of the property
    */
+  @Override
   public void setUniqueId(UniqueId uniqueId) {
     this._uniqueId = uniqueId;
   }
@@ -210,6 +212,7 @@ public class ManageableSecurity
    * Thus the bundle consists of a set of identifiers, one for each external system.
    * @return the value of the property, not null
    */
+  @Override
   public ExternalIdBundle getExternalIdBundle() {
     return _externalIdBundle;
   }
@@ -240,6 +243,7 @@ public class ManageableSecurity
    * Gets the name of the security intended for display purposes.
    * @return the value of the property, not null
    */
+  @Override
   public String getName() {
     return _name;
   }
@@ -266,6 +270,7 @@ public class ManageableSecurity
    * Gets the security type.
    * @return the value of the property, not null
    */
+  @Override
   public String getSecurityType() {
     return _securityType;
   }
@@ -292,6 +297,7 @@ public class ManageableSecurity
    * Gets the general purpose trade attributes, which can be used for aggregating in portfolios.
    * @return the value of the property, not null
    */
+  @Override
   public Map<String, String> getAttributes() {
     return _attributes;
   }
@@ -300,6 +306,7 @@ public class ManageableSecurity
    * Sets the general purpose trade attributes, which can be used for aggregating in portfolios.
    * @param attributes  the new value of the property, not null
    */
+  @Override
   public void setAttributes(Map<String, String> attributes) {
     JodaBeanUtils.notNull(attributes, "attributes");
     this._attributes.clear();
@@ -320,6 +327,7 @@ public class ManageableSecurity
    * This is a set of permissions that a user needs to be able to view a security.
    * @return the value of the property, not null
    */
+  @Override
   public Set<String> getRequiredPermissions() {
     return _requiredPermissions;
   }

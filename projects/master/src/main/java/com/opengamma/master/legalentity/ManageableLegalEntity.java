@@ -24,7 +24,6 @@ import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
-import com.opengamma.core.Attributable;
 import com.opengamma.core.legalentity.Account;
 import com.opengamma.core.legalentity.Capability;
 import com.opengamma.core.legalentity.LegalEntity;
@@ -35,7 +34,6 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.MutableUniqueIdentifiable;
 import com.opengamma.id.UniqueId;
-import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.PublicSPI;
 
@@ -43,7 +41,7 @@ import com.opengamma.util.PublicSPI;
 @PublicSPI
 @BeanDefinition
 public class ManageableLegalEntity
-    implements LegalEntity, Bean, UniqueIdentifiable, MutableUniqueIdentifiable, Attributable, Serializable {
+implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
 
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
@@ -52,43 +50,43 @@ public class ManageableLegalEntity
    * The unique identifier of the legal entity.
    * This must be null when adding to a master and not null when retrieved from a master.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true, overrideSet = true)
   private UniqueId _uniqueId;
   /**
    * The bundle of external identifiers that define the legal entity.
    * This field must not be null for the object to be valid.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private ExternalIdBundle _externalIdBundle = ExternalIdBundle.EMPTY;
   /** The map of attributes, which can be used for attaching additional application-level information. */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true, overrideSet = true)
   private final Map<String, String> _attributes = new HashMap<>();
   /** The map of details, which can be used for attaching additional application-level information. */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true, overrideSet = true)
   private final Map<String, String> _details = new HashMap<>();
   /**
    * The name of the legal entity.
    * This field must not be null for the object to be valid.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private String _name = "";
 
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private List<Rating> _ratings = new ArrayList<>();
 
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private List<Capability> _capabilities = new ArrayList<>();
 
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private List<ExternalIdBundle> _issuedSecurities = new ArrayList<>();
 
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private List<Obligation> _obligations = new ArrayList<>();
 
-  @PropertyDefinition()
+  @PropertyDefinition(overrideGet = true)
   private RootPortfolio _rootPortfolio;
 
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private List<Account> _accounts = new ArrayList<>();
 
   /** Creates a legal entity. */
@@ -183,6 +181,7 @@ public class ManageableLegalEntity
    * This must be null when adding to a master and not null when retrieved from a master.
    * @return the value of the property
    */
+  @Override
   public UniqueId getUniqueId() {
     return _uniqueId;
   }
@@ -192,6 +191,7 @@ public class ManageableLegalEntity
    * This must be null when adding to a master and not null when retrieved from a master.
    * @param uniqueId  the new value of the property
    */
+  @Override
   public void setUniqueId(UniqueId uniqueId) {
     this._uniqueId = uniqueId;
   }
@@ -211,6 +211,7 @@ public class ManageableLegalEntity
    * This field must not be null for the object to be valid.
    * @return the value of the property, not null
    */
+  @Override
   public ExternalIdBundle getExternalIdBundle() {
     return _externalIdBundle;
   }
@@ -239,6 +240,7 @@ public class ManageableLegalEntity
    * Gets the map of attributes, which can be used for attaching additional application-level information.
    * @return the value of the property, not null
    */
+  @Override
   public Map<String, String> getAttributes() {
     return _attributes;
   }
@@ -247,6 +249,7 @@ public class ManageableLegalEntity
    * Sets the map of attributes, which can be used for attaching additional application-level information.
    * @param attributes  the new value of the property, not null
    */
+  @Override
   public void setAttributes(Map<String, String> attributes) {
     JodaBeanUtils.notNull(attributes, "attributes");
     this._attributes.clear();
@@ -266,6 +269,7 @@ public class ManageableLegalEntity
    * Gets the map of details, which can be used for attaching additional application-level information.
    * @return the value of the property, not null
    */
+  @Override
   public Map<String, String> getDetails() {
     return _details;
   }
@@ -274,6 +278,7 @@ public class ManageableLegalEntity
    * Sets the map of details, which can be used for attaching additional application-level information.
    * @param details  the new value of the property, not null
    */
+  @Override
   public void setDetails(Map<String, String> details) {
     JodaBeanUtils.notNull(details, "details");
     this._details.clear();
@@ -294,6 +299,7 @@ public class ManageableLegalEntity
    * This field must not be null for the object to be valid.
    * @return the value of the property, not null
    */
+  @Override
   public String getName() {
     return _name;
   }
@@ -322,6 +328,7 @@ public class ManageableLegalEntity
    * Gets the ratings.
    * @return the value of the property, not null
    */
+  @Override
   public List<Rating> getRatings() {
     return _ratings;
   }
@@ -348,6 +355,7 @@ public class ManageableLegalEntity
    * Gets the capabilities.
    * @return the value of the property, not null
    */
+  @Override
   public List<Capability> getCapabilities() {
     return _capabilities;
   }
@@ -374,6 +382,7 @@ public class ManageableLegalEntity
    * Gets the issuedSecurities.
    * @return the value of the property, not null
    */
+  @Override
   public List<ExternalIdBundle> getIssuedSecurities() {
     return _issuedSecurities;
   }
@@ -400,6 +409,7 @@ public class ManageableLegalEntity
    * Gets the obligations.
    * @return the value of the property, not null
    */
+  @Override
   public List<Obligation> getObligations() {
     return _obligations;
   }
@@ -426,6 +436,7 @@ public class ManageableLegalEntity
    * Gets the rootPortfolio.
    * @return the value of the property
    */
+  @Override
   public RootPortfolio getRootPortfolio() {
     return _rootPortfolio;
   }
@@ -451,6 +462,7 @@ public class ManageableLegalEntity
    * Gets the accounts.
    * @return the value of the property, not null
    */
+  @Override
   public List<Account> getAccounts() {
     return _accounts;
   }

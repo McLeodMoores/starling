@@ -33,6 +33,7 @@ import com.opengamma.util.ArgumentChecker;
  * Abstract base providing a simple, in-memory master.
  * <p>
  * This master does not support versioning.
+ * @param <T> the type of the object to be stored, updated, queried, etc.
  */
 abstract class AbstractInMemoryMaster<T extends UniqueIdentifiable & MutableUniqueIdentifiable> {
   // see UserMaster and RoleMaster for method descriptions
@@ -152,18 +153,18 @@ abstract class AbstractInMemoryMaster<T extends UniqueIdentifiable & MutableUniq
   }
 
   //-------------------------------------------------------------------------
-  UniqueId add(T object) {
+  UniqueId add(final T object) {
     ArgumentChecker.notNull(object, "object");
     final ObjectId objectId = _objectIdSupplier.get();
     final UniqueId uniqueId = objectId.atVersion("1");
-    object = clone(object);
-    object.setUniqueId(uniqueId);
-    final String nameKey = caseInsensitive(extractName(object));
+    final T o = clone(object);
+    o.setUniqueId(uniqueId);
+    final String nameKey = caseInsensitive(extractName(o));
     synchronized (this) {
       if (_names.containsKey(nameKey)) {
-        throw new DataDuplicationException(_objectDescription + " already exists: " + extractName(object));
+        throw new DataDuplicationException(_objectDescription + " already exists: " + extractName(o));
       }
-      _objects.put(objectId, object);
+      _objects.put(objectId, o);
       _names.put(nameKey, objectId);
     }
     final Instant now = Instant.now();
@@ -171,28 +172,28 @@ abstract class AbstractInMemoryMaster<T extends UniqueIdentifiable & MutableUniq
     return uniqueId;
   }
 
-  UniqueId update(T object) {
+  UniqueId update(final T object) {
     ArgumentChecker.notNull(object, "object");
     ArgumentChecker.notNull(object.getUniqueId(), "object.uniqueId");
     ArgumentChecker.notNull(object.getUniqueId().getVersion(), "object.uniqueId.version");
     final ObjectId objectId = object.getUniqueId().getObjectId();
     final String oldVersion = object.getUniqueId().getVersion();
     final UniqueId newUniqueId = objectId.atVersion(Integer.toString(Integer.parseInt(oldVersion) + 1));
-    object = clone(object);
-    object.setUniqueId(newUniqueId);
-    final String nameKey = caseInsensitive(extractName(object));
+    final T o = clone(object);
+    o.setUniqueId(newUniqueId);
+    final String nameKey = caseInsensitive(extractName(o));
     synchronized (this) {
       final T stored = getById0(objectId);
-      if (stored.getUniqueId().getVersion().equals(oldVersion) == false) {
+      if (!stored.getUniqueId().getVersion().equals(oldVersion)) {
         throw new DataVersionException("Invalid version, " + _objectDescription + " has already been updated: " + objectId);
       }
       if (nameKey.equals(caseInsensitive(extractName(stored)))) {
-        _objects.put(objectId, object);  // replace
+        _objects.put(objectId, o);  // replace
       } else {
         if (_names.containsKey(nameKey)) {
-          throw new DataDuplicationException(_objectDescription + " cannot be renamed, new name already exists: " + extractName(object));
+          throw new DataDuplicationException(_objectDescription + " cannot be renamed, new name already exists: " + extractName(o));
         }
-        _objects.put(objectId, object);  // replace
+        _objects.put(objectId, o);  // replace
         _names.put(nameKey, objectId);
         // leave old name to forward to same object
       }
@@ -206,9 +207,8 @@ abstract class AbstractInMemoryMaster<T extends UniqueIdentifiable & MutableUniq
     ArgumentChecker.notNull(object, "object");
     if (object.getUniqueId() != null) {
       return update(object);
-    } else {
-      return add(object);
     }
+    return add(object);
   }
 
   //-------------------------------------------------------------------------
@@ -239,9 +239,9 @@ abstract class AbstractInMemoryMaster<T extends UniqueIdentifiable & MutableUniq
 
   //-------------------------------------------------------------------------
   List<HistoryEvent> eventHistory(final ObjectId objectId, final String name) {
-    if (objectId != null && _objects.containsKey(objectId) == false) {
+    if (objectId != null && !_objects.containsKey(objectId)) {
       throw new DataNotFoundException(_objectDescription + " identifier not found: " + objectId);
-    } else if (name != null && _names.containsKey(caseInsensitive(name)) == false) {
+    } else if (name != null && !_names.containsKey(caseInsensitive(name))) {
       throw new DataNotFoundException(_objectDescription + " name not found: " + name);
     }
     return ImmutableList.of();

@@ -28,7 +28,8 @@ import com.opengamma.util.PublicSPI;
 /**
  * A {@code ConfigSource} implemented using an underlying {@code ConfigMaster}.
  * <p>
- * The {@link ConfigSource} interface provides securities to the engine via a narrow API. This class provides the source on top of a standard {@link ConfigMaster}.
+ * The {@link ConfigSource} interface provides securities to the engine via a narrow API. This class provides the source
+ * on top of a standard {@link ConfigMaster}.
  */
 @PublicSPI
 public class MasterConfigSource extends AbstractSource<ConfigItem<?>> implements ConfigSource {
@@ -40,7 +41,7 @@ public class MasterConfigSource extends AbstractSource<ConfigItem<?>> implements
 
   /**
    * Creates an instance with an underlying config master.
-   * 
+   *
    * @param configMaster the config master, not null
    */
   public MasterConfigSource(final ConfigMaster configMaster) {
@@ -51,7 +52,7 @@ public class MasterConfigSource extends AbstractSource<ConfigItem<?>> implements
   //-------------------------------------------------------------------------
   /**
    * Gets the underlying config master.
-   * 
+   *
    * @return the config master, not null
    */
   public ConfigMaster getMaster() {
@@ -60,7 +61,7 @@ public class MasterConfigSource extends AbstractSource<ConfigItem<?>> implements
 
   /**
    * Gets the change manager.
-   * 
+   *
    * @return the change manager, not null
    */
   @Override
@@ -71,7 +72,7 @@ public class MasterConfigSource extends AbstractSource<ConfigItem<?>> implements
   //-------------------------------------------------------------------------
   /**
    * Search for configuration elements using a request object.
-   * 
+   *
    * @param <R> the type of configuration element
    * @param request the request object with value for search fields, not null
    * @return all configuration elements matching the request, not null
@@ -90,9 +91,8 @@ public class MasterConfigSource extends AbstractSource<ConfigItem<?>> implements
     final ConfigItem<?> item = getMaster().get(uniqueId).getConfig();
     if (clazz.isAssignableFrom(item.getType())) {
       return (R) item.getValue();
-    } else {
-      return null;
     }
+    return null;
   }
 
   @Override
@@ -120,14 +120,13 @@ public class MasterConfigSource extends AbstractSource<ConfigItem<?>> implements
     final ConfigItem<?> item = getMaster().get(objectId, versionCorrection).getConfig();
     if (clazz.isAssignableFrom(item.getType())) {
       return (R) item.getValue();
-    } else {
-      return null;
     }
+    return null;
   }
 
   @Override
   public <R> Collection<ConfigItem<R>> get(final Class<R> clazz, final String configName, final VersionCorrection versionCorrection) {
-    final ConfigSearchRequest<R> searchRequest = new ConfigSearchRequest<R>(clazz);
+    final ConfigSearchRequest<R> searchRequest = new ConfigSearchRequest<>(clazz);
     searchRequest.setName(configName);
     searchRequest.setVersionCorrection(versionCorrection);
     return getMaster().search(searchRequest).getValues();
@@ -135,7 +134,7 @@ public class MasterConfigSource extends AbstractSource<ConfigItem<?>> implements
 
   @Override
   public <R> Collection<ConfigItem<R>> getAll(final Class<R> clazz, final VersionCorrection versionCorrection) {
-    final ConfigSearchRequest<R> searchRequest = new ConfigSearchRequest<R>(clazz);
+    final ConfigSearchRequest<R> searchRequest = new ConfigSearchRequest<>(clazz);
     searchRequest.setType(clazz);
     searchRequest.setVersionCorrection(versionCorrection);
     return getMaster().search(searchRequest).getValues();

@@ -241,9 +241,9 @@ public class UserForm implements Bean {
    * @return the added user
    * @throws UserFormException if the proposed user is invalid
    */
-  protected ManageableUser validate(UserMaster userMaster, PasswordService pwService, final boolean add) {
-    userMaster = ArgumentChecker.notNull(userMaster, "userMaster");
-    pwService = ArgumentChecker.notNull(pwService, "pwService");
+  protected ManageableUser validate(final UserMaster userMaster, final PasswordService pwService, final boolean add) {
+    final UserMaster master = ArgumentChecker.notNull(userMaster, "userMaster");
+    final PasswordService service = ArgumentChecker.notNull(pwService, "pwService");
     final String userName = StringUtils.trimToNull(getUserName());
     final String password = StringUtils.trimToNull(getPasswordRaw());
     final String email = StringUtils.trimToNull(getEmailAddress());
@@ -263,7 +263,7 @@ public class UserForm implements Bean {
     } else if (isUserNameInvalid(userName)) {
       errors.add(UserFormError.USERNAME_INVALID);
     } else {
-      if (add && userMaster.nameExists(userName)) {
+      if (add && master.nameExists(userName)) {
         errors.add(UserFormError.USERNAME_ALREADY_IN_USE);
       }
     }
@@ -283,7 +283,7 @@ public class UserForm implements Bean {
     } else if (isPasswordWeak(userName, password)) {
       errors.add(UserFormError.PASSWORD_WEAK);
     } else {
-      passwordHash = pwService.encryptPassword(password);
+      passwordHash = service.encryptPassword(password);
     }
     // email
     if (email == null) {
@@ -386,7 +386,7 @@ public class UserForm implements Bean {
    * @return true if invalid
    */
   protected boolean isUserNameInvalid(final String userName) {
-    return VALID_NAME.matcher(userName).matches() == false;
+    return !VALID_NAME.matcher(userName).matches();
   }
 
   /**
@@ -416,10 +416,10 @@ public class UserForm implements Bean {
    * @param password  the password, not null
    * @return true if weak
    */
-  protected boolean isPasswordWeak(String userName, String password) {
-    userName = userName.toLowerCase(Locale.ENGLISH);
-    password = password.toLowerCase(Locale.ENGLISH);
-    return userName.equals(password) || password.equals("password");
+  protected boolean isPasswordWeak(final String userName, final String password) {
+    final String un = userName.toLowerCase(Locale.ENGLISH);
+    final String pwd = password.toLowerCase(Locale.ENGLISH);
+    return un.equals(pwd) || pwd.equals("password");
   }
 
   /**
@@ -439,7 +439,7 @@ public class UserForm implements Bean {
    * @return true if invalid
    */
   protected boolean isEmailAddressInvalid(final String email) {
-    return email.contains("@") == false;
+    return !email.contains("@");
   }
 
   /**

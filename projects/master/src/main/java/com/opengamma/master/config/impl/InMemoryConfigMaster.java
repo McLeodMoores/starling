@@ -66,7 +66,7 @@ public class InMemoryConfigMaster implements ConfigMaster {
   /**
    * A cache of configurations by identifier.
    */
-  private final ConcurrentMap<ObjectId, ConfigDocument> _store = new ConcurrentHashMap<ObjectId, ConfigDocument>();
+  private final ConcurrentMap<ObjectId, ConfigDocument> _store = new ConcurrentHashMap<>();
   /**
    * The supplied of identifiers.
    */
@@ -89,7 +89,7 @@ public class InMemoryConfigMaster implements ConfigMaster {
 
   /**
    * Creates an instance specifying the change manager.
-   * 
+   *
    * @param changeManager the change manager, not null
    */
   public InMemoryConfigMaster(final ChangeManager changeManager) {
@@ -98,7 +98,7 @@ public class InMemoryConfigMaster implements ConfigMaster {
 
   /**
    * Creates an instance specifying the supplier of object identifiers.
-   * 
+   *
    * @param objectIdSupplier the supplier of object identifiers, not null
    */
   public InMemoryConfigMaster(final Supplier<ObjectId> objectIdSupplier) {
@@ -107,7 +107,7 @@ public class InMemoryConfigMaster implements ConfigMaster {
 
   /**
    * Creates an instance specifying the supplier of object identifiers and change manager.
-   * 
+   *
    * @param objectIdSupplier the supplier of object identifiers, not null
    * @param changeManager the change manager, not null
    */
@@ -122,9 +122,9 @@ public class InMemoryConfigMaster implements ConfigMaster {
   @Override
   public <T> ConfigSearchResult<T> search(final ConfigSearchRequest<T> request) {
     ArgumentChecker.notNull(request, "request");
-    ConfigSearchRequest<T> req = request.clone();
+    final ConfigSearchRequest<T> req = request.clone();
     req.setVersionCorrection(VersionCorrection.LATEST);
-    final List<ConfigDocument> list = new ArrayList<ConfigDocument>();
+    final List<ConfigDocument> list = new ArrayList<>();
     for (final ConfigDocument doc : _store.values()) {
       if (req.matches(doc)) {
         list.add(doc);
@@ -132,7 +132,7 @@ public class InMemoryConfigMaster implements ConfigMaster {
     }
     Collections.sort(list, req.getSortOrder());
 
-    final ConfigSearchResult<T> result = new ConfigSearchResult<T>();
+    final ConfigSearchResult<T> result = new ConfigSearchResult<>();
     result.setPaging(Paging.of(req.getPagingRequest(), list));
     result.getDocuments().addAll(req.getPagingRequest().select(list));
     return result;
@@ -194,7 +194,7 @@ public class InMemoryConfigMaster implements ConfigMaster {
     uniqueId = uniqueId.withVersion(Long.toString(_versions.incrementAndGet()));
     document.setUniqueId(uniqueId);
     IdUtils.setInto(document.getConfig().getValue(), uniqueId);
-    if (_store.replace(uniqueId.getObjectId(), storedDocument, document) == false) {
+    if (!_store.replace(uniqueId.getObjectId(), storedDocument, document)) {
       throw new IllegalArgumentException("Concurrent modification");
     }
     _changeManager.entityChanged(ChangeType.CHANGED, document.getObjectId(), document.getVersionFromInstant(), document.getVersionToInstant(), now);
@@ -206,8 +206,9 @@ public class InMemoryConfigMaster implements ConfigMaster {
   public void remove(final ObjectIdentifiable objectIdentifiable) {
     ArgumentChecker.notNull(objectIdentifiable, "objectIdentifiable");
     // we do this before because we get called back to see what the 'old' version was to determine the type of config being removed.
-    Instant now = Instant.now();
-    _changeManager.entityChanged(ChangeType.REMOVED, objectIdentifiable.getObjectId(), Instant.MIN.plusNanos(1), now, now); // start needs to be min + 1 because change provider does -1 nano.
+    final Instant now = Instant.now();
+    _changeManager.entityChanged(ChangeType.REMOVED, objectIdentifiable.getObjectId(), Instant.MIN.plusNanos(1),
+        now, now); // start needs to be min + 1 because change provider does -1 nano.
     if (_store.remove(objectIdentifiable.getObjectId()) == null) {
       throw new DataNotFoundException("Config not found: " + objectIdentifiable);
     }
@@ -280,19 +281,18 @@ public class InMemoryConfigMaster implements ConfigMaster {
       _store.remove(objectId.getObjectId());
       _changeManager.entityChanged(ChangeType.REMOVED, objectId.getObjectId(), null, null, now);
       return Collections.emptyList();
-    } else {
-      final Instant storedVersionFrom = storedDocument.getVersionFromInstant();
-      final Instant storedVersionTo = storedDocument.getVersionToInstant();
-
-      final List<ConfigDocument> orderedReplacementDocuments = MasterUtils.adjustVersionInstants(now, storedVersionFrom, storedVersionTo, replacementDocuments);
-
-      final ConfigDocument lastReplacementDocument = orderedReplacementDocuments.get(orderedReplacementDocuments.size() - 1);
-
-      if (_store.replace(objectId.getObjectId(), storedDocument, lastReplacementDocument) == false) {
-        throw new IllegalArgumentException("Concurrent modification");
-      }
-      return ImmutableList.of(lastReplacementDocument.getUniqueId());
     }
+    final Instant storedVersionFrom = storedDocument.getVersionFromInstant();
+    final Instant storedVersionTo = storedDocument.getVersionToInstant();
+
+    final List<ConfigDocument> orderedReplacementDocuments = MasterUtils.adjustVersionInstants(now, storedVersionFrom, storedVersionTo, replacementDocuments);
+
+    final ConfigDocument lastReplacementDocument = orderedReplacementDocuments.get(orderedReplacementDocuments.size() - 1);
+
+    if (!_store.replace(objectId.getObjectId(), storedDocument, lastReplacementDocument)) {
+      throw new IllegalArgumentException("Concurrent modification");
+    }
+    return ImmutableList.of(lastReplacementDocument.getUniqueId());
   }
 
   @Override
@@ -300,9 +300,8 @@ public class InMemoryConfigMaster implements ConfigMaster {
     final List<UniqueId> result = replaceVersions(objectId, Collections.singletonList(documentToAdd));
     if (result.isEmpty()) {
       return null;
-    } else {
-      return result.get(0);
     }
+    return result.get(0);
   }
 
   @Override
@@ -315,12 +314,11 @@ public class InMemoryConfigMaster implements ConfigMaster {
     final List<UniqueId> result = replaceVersion(replacementDocument.getUniqueId(), Collections.singletonList(replacementDocument));
     if (result.isEmpty()) {
       return null;
-    } else {
-      return result.get(0);
     }
+    return result.get(0);
   }
 
-  private <T> void validateDocument(final ConfigDocument document) {
+  private void validateDocument(final ConfigDocument document) {
     ArgumentChecker.notNull(document.getConfig(), "document.object");
     ArgumentChecker.notNull(document.getConfig().getValue(), "document.object.value");
     ArgumentChecker.notNull(document.getName(), "document.name");
@@ -333,29 +331,29 @@ public class InMemoryConfigMaster implements ConfigMaster {
     final ObjectId oid = request.getObjectId();
     final PagingRequest pagingRequest = request.getPagingRequest();
 
-    return new ConfigHistoryResult<R>(
+    return new ConfigHistoryResult<>(
         pagingRequest.select(
             functional(_store.keySet())
-                .map(new Function1<ObjectId, ConfigDocument>() {
-                  @Override
-                  public ConfigDocument execute(final ObjectId objectId) {
-                    return _store.get(objectId);
-                  }
-                })
-                .filter(new Function1<ConfigDocument, Boolean>() {
-                  @Override
-                  public Boolean execute(final ConfigDocument configDocument) {
-                    return (oid == null || (configDocument.getObjectId().equals(oid))) &&
-                        (type == null || (type.isAssignableFrom(configDocument.getType())));
-                  }
-                })
-                .sortBy(new Comparator<ConfigDocument>() {
-                  @Override
-                  public int compare(final ConfigDocument configDocument, final ConfigDocument configDocument1) {
-                    return configDocument.getVersionFromInstant().compareTo(configDocument1.getVersionFromInstant());
-                  }
-                })
-                .asList()));
+            .map(new Function1<ObjectId, ConfigDocument>() {
+              @Override
+              public ConfigDocument execute(final ObjectId objectId) {
+                return _store.get(objectId);
+              }
+            })
+            .filter(new Function1<ConfigDocument, Boolean>() {
+              @Override
+              public Boolean execute(final ConfigDocument configDocument) {
+                return (oid == null || configDocument.getObjectId().equals(oid))
+                    && (type == null || type.isAssignableFrom(configDocument.getType()));
+              }
+            })
+            .sortBy(new Comparator<ConfigDocument>() {
+              @Override
+              public int compare(final ConfigDocument configDocument, final ConfigDocument configDocument1) {
+                return configDocument.getVersionFromInstant().compareTo(configDocument1.getVersionFromInstant());
+              }
+            })
+            .asList()));
   }
 
   @Override

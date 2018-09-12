@@ -42,7 +42,7 @@ import com.opengamma.util.ArgumentChecker;
  * @param <D>  the type of the document
  */
 public abstract class SimpleAbstractInMemoryMaster<D extends AbstractDocument>
-    implements AbstractMaster<D>, ChangeProvider {
+implements AbstractMaster<D>, ChangeProvider {
 
   /**
    * A cache of documents by identifier.
@@ -166,32 +166,31 @@ public abstract class SimpleAbstractInMemoryMaster<D extends AbstractDocument>
       _changeManager.entityChanged(ChangeType.REMOVED, objectId.getObjectId(), null, null, now);
       return Collections.emptyList();
 
-    } else {
-      final Instant storedVersionFrom = storedDocument.getVersionFromInstant();
-      final Instant storedVersionTo = storedDocument.getVersionToInstant();
-
-      final List<D> orderedReplacementDocuments = MasterUtils.adjustVersionInstants(now, storedVersionFrom, storedVersionTo, replacementDocuments);
-      final D lastReplacementDocument = orderedReplacementDocuments.get(orderedReplacementDocuments.size() - 1);
-      // Start of fix for no id
-      final UniqueId newUniqueId = objectId.getObjectId().atLatestVersion();
-      lastReplacementDocument.setUniqueId(newUniqueId);
-      if (lastReplacementDocument.getValue() instanceof MutableUniqueIdentifiable) {
-        final MutableUniqueIdentifiable muidable = (MutableUniqueIdentifiable) lastReplacementDocument.getValue();
-        muidable.setUniqueId(newUniqueId);
-      }
-      // end fix for no id
-      if (_store.replace(objectId.getObjectId(), storedDocument, lastReplacementDocument) == false) {
-        throw new IllegalArgumentException("Concurrent modification");
-      }
-
-      final Instant versionFromInstant = functional(orderedReplacementDocuments).first().getVersionFromInstant();
-      final Instant versionToInstant = functional(orderedReplacementDocuments).last().getVersionToInstant();
-      changeManager().entityChanged(ChangeType.CHANGED, objectId.getObjectId(), versionFromInstant, versionToInstant, now);
-
-      updateCaches(objectId, lastReplacementDocument);
-
-      return ImmutableList.of(lastReplacementDocument.getUniqueId());
     }
+    final Instant storedVersionFrom = storedDocument.getVersionFromInstant();
+    final Instant storedVersionTo = storedDocument.getVersionToInstant();
+
+    final List<D> orderedReplacementDocuments = MasterUtils.adjustVersionInstants(now, storedVersionFrom, storedVersionTo, replacementDocuments);
+    final D lastReplacementDocument = orderedReplacementDocuments.get(orderedReplacementDocuments.size() - 1);
+    // Start of fix for no id
+    final UniqueId newUniqueId = objectId.getObjectId().atLatestVersion();
+    lastReplacementDocument.setUniqueId(newUniqueId);
+    if (lastReplacementDocument.getValue() instanceof MutableUniqueIdentifiable) {
+      final MutableUniqueIdentifiable muidable = (MutableUniqueIdentifiable) lastReplacementDocument.getValue();
+      muidable.setUniqueId(newUniqueId);
+    }
+    // end fix for no id
+    if (!_store.replace(objectId.getObjectId(), storedDocument, lastReplacementDocument)) {
+      throw new IllegalArgumentException("Concurrent modification");
+    }
+
+    final Instant versionFromInstant = functional(orderedReplacementDocuments).first().getVersionFromInstant();
+    final Instant versionToInstant = functional(orderedReplacementDocuments).last().getVersionToInstant();
+    changeManager().entityChanged(ChangeType.CHANGED, objectId.getObjectId(), versionFromInstant, versionToInstant, now);
+
+    updateCaches(objectId, lastReplacementDocument);
+
+    return ImmutableList.of(lastReplacementDocument.getUniqueId());
   }
 
   /**
@@ -209,9 +208,8 @@ public abstract class SimpleAbstractInMemoryMaster<D extends AbstractDocument>
     final List<UniqueId> result = replaceVersions(objectId, Collections.singletonList(documentToAdd));
     if (result.isEmpty()) {
       return null;
-    } else {
-      return result.get(0);
     }
+    return result.get(0);
   }
 
   @Override
@@ -224,9 +222,8 @@ public abstract class SimpleAbstractInMemoryMaster<D extends AbstractDocument>
     final List<UniqueId> result = replaceVersion(replacementDocument.getUniqueId(), Collections.singletonList(replacementDocument));
     if (result.isEmpty()) {
       return null;
-    } else {
-      return result.get(0);
     }
+    return result.get(0);
   }
 
   //-------------------------------------------------------------------------

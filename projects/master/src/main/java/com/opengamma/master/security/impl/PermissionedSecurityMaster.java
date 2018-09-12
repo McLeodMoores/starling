@@ -139,7 +139,7 @@ public class PermissionedSecurityMaster implements SecurityMaster {
     final Map<UniqueId, SecurityDocument> result = new HashMap<>(getUnderlying().get(uniqueIds));
     for (final Iterator<SecurityDocument> it = result.values().iterator(); it.hasNext();) {
       final SecurityDocument doc = it.next();
-      if (AuthUtils.isPermitted(doc.getValue()) == false) {
+      if (!AuthUtils.isPermitted(doc.getValue())) {
         it.remove();
       }
     }
@@ -153,7 +153,7 @@ public class PermissionedSecurityMaster implements SecurityMaster {
     int removed = 0;
     for (final Iterator<SecurityDocument> it = result.getDocuments().iterator(); it.hasNext();) {
       final SecurityDocument doc = it.next();
-      if (AuthUtils.isPermitted(doc.getValue()) == false) {
+      if (!AuthUtils.isPermitted(doc.getValue())) {
         it.remove();
         removed++;
       }
@@ -169,7 +169,7 @@ public class PermissionedSecurityMaster implements SecurityMaster {
     int removed = 0;
     for (final Iterator<SecurityDocument> it = result.getDocuments().iterator(); it.hasNext();) {
       final SecurityDocument doc = it.next();
-      if (AuthUtils.isPermitted(doc.getValue()) == false) {
+      if (!AuthUtils.isPermitted(doc.getValue())) {
         it.remove();
         removed++;
       }

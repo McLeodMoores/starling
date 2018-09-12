@@ -384,7 +384,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
    * Sets the classifier that the factory should publish under.
    * @param classifier  the new value of the property, not null
    */
-  public void setClassifier(final String classifier) {
+  public void setClassifier(String classifier) {
     JodaBeanUtils.notNull(classifier, "classifier");
     this._classifier = classifier;
   }
@@ -418,7 +418,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
    * in the future.
    * @param configSource  the new value of the property, not null
    */
-  public void setConfigSource(final ConfigSource configSource) {
+  public void setConfigSource(ConfigSource configSource) {
     JodaBeanUtils.notNull(configSource, "configSource");
     this._configSource = configSource;
   }
@@ -458,7 +458,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
    * views from the persistent config master and temporary/short-lived views created programatically.
    * @param configMaster  the new value of the property
    */
-  public void setConfigMaster(final ConfigMaster configMaster) {
+  public void setConfigMaster(ConfigMaster configMaster) {
     this._configMaster = configMaster;
   }
 
@@ -488,7 +488,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
    * Sets the security source.
    * @param securitySource  the new value of the property, not null
    */
-  public void setSecuritySource(final SecuritySource securitySource) {
+  public void setSecuritySource(SecuritySource securitySource) {
     JodaBeanUtils.notNull(securitySource, "securitySource");
     this._securitySource = securitySource;
   }
@@ -514,7 +514,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
    * Sets the position source.
    * @param positionSource  the new value of the property, not null
    */
-  public void setPositionSource(final PositionSource positionSource) {
+  public void setPositionSource(PositionSource positionSource) {
     JodaBeanUtils.notNull(positionSource, "positionSource");
     this._positionSource = positionSource;
   }
@@ -540,7 +540,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
    * Sets the target resolver.
    * @param targetResolver  the new value of the property, not null
    */
-  public void setTargetResolver(final ComputationTargetResolver targetResolver) {
+  public void setTargetResolver(ComputationTargetResolver targetResolver) {
     JodaBeanUtils.notNull(targetResolver, "targetResolver");
     this._targetResolver = targetResolver;
   }
@@ -566,7 +566,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
    * Sets the region source.
    * @param regionSource  the new value of the property, not null
    */
-  public void setRegionSource(final RegionSource regionSource) {
+  public void setRegionSource(RegionSource regionSource) {
     JodaBeanUtils.notNull(regionSource, "regionSource");
     this._regionSource = regionSource;
   }
@@ -592,7 +592,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
    * Sets the organization source.
    * @param legalEntitySource  the new value of the property, not null
    */
-  public void setLegalEntitySource(final LegalEntitySource legalEntitySource) {
+  public void setLegalEntitySource(LegalEntitySource legalEntitySource) {
     JodaBeanUtils.notNull(legalEntitySource, "legalEntitySource");
     this._legalEntitySource = legalEntitySource;
   }
@@ -618,7 +618,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
    * Sets the convention bundle source.
    * @param conventionBundleSource  the new value of the property, not null
    */
-  public void setConventionBundleSource(final ConventionBundleSource conventionBundleSource) {
+  public void setConventionBundleSource(ConventionBundleSource conventionBundleSource) {
     JodaBeanUtils.notNull(conventionBundleSource, "conventionBundleSource");
     this._conventionBundleSource = conventionBundleSource;
   }
@@ -644,7 +644,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
    * Sets the yield curve definition source.
    * @param interpolatedYieldCurveDefinitionSource  the new value of the property
    */
-  public void setInterpolatedYieldCurveDefinitionSource(final InterpolatedYieldCurveDefinitionSource interpolatedYieldCurveDefinitionSource) {
+  public void setInterpolatedYieldCurveDefinitionSource(InterpolatedYieldCurveDefinitionSource interpolatedYieldCurveDefinitionSource) {
     this._interpolatedYieldCurveDefinitionSource = interpolatedYieldCurveDefinitionSource;
   }
 
@@ -669,7 +669,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
    * Sets the yield curve specification source.
    * @param interpolatedYieldCurveSpecificationBuilder  the new value of the property
    */
-  public void setInterpolatedYieldCurveSpecificationBuilder(final InterpolatedYieldCurveSpecificationBuilder interpolatedYieldCurveSpecificationBuilder) {
+  public void setInterpolatedYieldCurveSpecificationBuilder(InterpolatedYieldCurveSpecificationBuilder interpolatedYieldCurveSpecificationBuilder) {
     this._interpolatedYieldCurveSpecificationBuilder = interpolatedYieldCurveSpecificationBuilder;
   }
 
@@ -694,7 +694,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
    * Sets the volitility cube source.
    * @param volatilityCubeDefinitionSource  the new value of the property
    */
-  public void setVolatilityCubeDefinitionSource(final VolatilityCubeDefinitionSource volatilityCubeDefinitionSource) {
+  public void setVolatilityCubeDefinitionSource(VolatilityCubeDefinitionSource volatilityCubeDefinitionSource) {
     this._volatilityCubeDefinitionSource = volatilityCubeDefinitionSource;
   }
 
@@ -719,7 +719,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
    * Sets the holiday source.
    * @param holidaySource  the new value of the property, not null
    */
-  public void setHolidaySource(final HolidaySource holidaySource) {
+  public void setHolidaySource(HolidaySource holidaySource) {
     JodaBeanUtils.notNull(holidaySource, "holidaySource");
     this._holidaySource = holidaySource;
   }
@@ -745,7 +745,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
    * Sets the exchange source.
    * @param exchangeSource  the new value of the property, not null
    */
-  public void setExchangeSource(final ExchangeSource exchangeSource) {
+  public void setExchangeSource(ExchangeSource exchangeSource) {
     JodaBeanUtils.notNull(exchangeSource, "exchangeSource");
     this._exchangeSource = exchangeSource;
   }
@@ -771,7 +771,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
    * Sets the time-series source.
    * @param historicalTimeSeriesSource  the new value of the property, not null
    */
-  public void setHistoricalTimeSeriesSource(final HistoricalTimeSeriesSource historicalTimeSeriesSource) {
+  public void setHistoricalTimeSeriesSource(HistoricalTimeSeriesSource historicalTimeSeriesSource) {
     JodaBeanUtils.notNull(historicalTimeSeriesSource, "historicalTimeSeriesSource");
     this._historicalTimeSeriesSource = historicalTimeSeriesSource;
   }
@@ -797,7 +797,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
    * Sets the time-series resolver.
    * @param historicalTimeSeriesResolver  the new value of the property, not null
    */
-  public void setHistoricalTimeSeriesResolver(final HistoricalTimeSeriesResolver historicalTimeSeriesResolver) {
+  public void setHistoricalTimeSeriesResolver(HistoricalTimeSeriesResolver historicalTimeSeriesResolver) {
     JodaBeanUtils.notNull(historicalTimeSeriesResolver, "historicalTimeSeriesResolver");
     this._historicalTimeSeriesResolver = historicalTimeSeriesResolver;
   }
@@ -823,7 +823,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
    * Sets the convention source.
    * @param conventionSource  the new value of the property, not null
    */
-  public void setConventionSource(final ConventionSource conventionSource) {
+  public void setConventionSource(ConventionSource conventionSource) {
     JodaBeanUtils.notNull(conventionSource, "conventionSource");
     this._conventionSource = conventionSource;
   }
@@ -849,7 +849,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
    * Sets the execution blacklist. View processors will not submit nodes matched by this blacklist for execution.
    * @param executionBlacklist  the new value of the property
    */
-  public void setExecutionBlacklist(final FunctionBlacklist executionBlacklist) {
+  public void setExecutionBlacklist(FunctionBlacklist executionBlacklist) {
     this._executionBlacklist = executionBlacklist;
   }
 
@@ -874,7 +874,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
    * Sets the compilation blacklist. Dependency graph builders will not produce graphs which contain nodes matched by this blacklist.
    * @param compilationBlacklist  the new value of the property
    */
-  public void setCompilationBlacklist(final FunctionBlacklist compilationBlacklist) {
+  public void setCompilationBlacklist(FunctionBlacklist compilationBlacklist) {
     this._compilationBlacklist = compilationBlacklist;
   }
 
@@ -899,7 +899,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
    * Sets the temporary target repository.
    * @param tempTargetRepository  the new value of the property
    */
-  public void setTempTargetRepository(final TempTargetRepository tempTargetRepository) {
+  public void setTempTargetRepository(TempTargetRepository tempTargetRepository) {
     this._tempTargetRepository = tempTargetRepository;
   }
 
@@ -926,7 +926,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
    * but might be a different but compatible one.
    * @param viewProcessor  the new value of the property
    */
-  public void setViewProcessor(final ViewProcessor viewProcessor) {
+  public void setViewProcessor(ViewProcessor viewProcessor) {
     this._viewProcessor = viewProcessor;
   }
 
@@ -952,7 +952,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
    * Sets the permissive behavior flag.
    * @param permissive  the new value of the property
    */
-  public void setPermissive(final Boolean permissive) {
+  public void setPermissive(Boolean permissive) {
     this._permissive = permissive;
   }
 
@@ -977,7 +977,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
    * Sets the PnL requirements gatherer.
    * @param pnlRequirementsGatherer  the new value of the property
    */
-  public void setPnlRequirementsGatherer(final PnLRequirementsGatherer pnlRequirementsGatherer) {
+  public void setPnlRequirementsGatherer(PnLRequirementsGatherer pnlRequirementsGatherer) {
     this._pnlRequirementsGatherer = pnlRequirementsGatherer;
   }
 
@@ -1002,7 +1002,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
    * Sets the risk factors requirements gatherer.
    * @param riskFactorsGatherer  the new value of the property
    */
-  public void setRiskFactorsGatherer(final RiskFactorsGatherer riskFactorsGatherer) {
+  public void setRiskFactorsGatherer(RiskFactorsGatherer riskFactorsGatherer) {
     this._riskFactorsGatherer = riskFactorsGatherer;
   }
 
@@ -1021,12 +1021,12 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
   }
 
   @Override
-  public boolean equals(final Object obj) {
+  public boolean equals(Object obj) {
     if (obj == this) {
       return true;
     }
     if (obj != null && obj.getClass() == this.getClass()) {
-      final EngineContextsComponentFactory other = (EngineContextsComponentFactory) obj;
+      EngineContextsComponentFactory other = (EngineContextsComponentFactory) obj;
       return JodaBeanUtils.equal(getClassifier(), other.getClassifier()) &&
           JodaBeanUtils.equal(getConfigSource(), other.getConfigSource()) &&
           JodaBeanUtils.equal(getConfigMaster(), other.getConfigMaster()) &&
@@ -1088,9 +1088,9 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
 
   @Override
   public String toString() {
-    final StringBuilder buf = new StringBuilder(800);
+    StringBuilder buf = new StringBuilder(800);
     buf.append("EngineContextsComponentFactory{");
-    final int len = buf.length();
+    int len = buf.length();
     toString(buf);
     if (buf.length() > len) {
       buf.setLength(buf.length() - 2);
@@ -1100,7 +1100,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
   }
 
   @Override
-  protected void toString(final StringBuilder buf) {
+  protected void toString(StringBuilder buf) {
     super.toString(buf);
     buf.append("classifier").append('=').append(JodaBeanUtils.toString(getClassifier())).append(',').append(' ');
     buf.append("configSource").append('=').append(JodaBeanUtils.toString(getConfigSource())).append(',').append(' ');
@@ -1295,7 +1295,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
     }
 
     @Override
-    protected MetaProperty<?> metaPropertyGet(final String propertyName) {
+    protected MetaProperty<?> metaPropertyGet(String propertyName) {
       switch (propertyName.hashCode()) {
         case -281470431:  // classifier
           return _classifier;
@@ -1559,7 +1559,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
 
     //-----------------------------------------------------------------------
     @Override
-    protected Object propertyGet(final Bean bean, final String propertyName, final boolean quiet) {
+    protected Object propertyGet(Bean bean, String propertyName, boolean quiet) {
       switch (propertyName.hashCode()) {
         case -281470431:  // classifier
           return ((EngineContextsComponentFactory) bean).getClassifier();
@@ -1614,7 +1614,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
     }
 
     @Override
-    protected void propertySet(final Bean bean, final String propertyName, final Object newValue, final boolean quiet) {
+    protected void propertySet(Bean bean, String propertyName, Object newValue, boolean quiet) {
       switch (propertyName.hashCode()) {
         case -281470431:  // classifier
           ((EngineContextsComponentFactory) bean).setClassifier((String) newValue);
@@ -1693,7 +1693,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
     }
 
     @Override
-    protected void validate(final Bean bean) {
+    protected void validate(Bean bean) {
       JodaBeanUtils.notNull(((EngineContextsComponentFactory) bean)._classifier, "classifier");
       JodaBeanUtils.notNull(((EngineContextsComponentFactory) bean)._configSource, "configSource");
       JodaBeanUtils.notNull(((EngineContextsComponentFactory) bean)._securitySource, "securitySource");

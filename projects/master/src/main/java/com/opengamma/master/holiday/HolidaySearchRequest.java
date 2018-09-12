@@ -376,36 +376,36 @@ public class HolidaySearchRequest extends AbstractSearchRequest implements Seria
   //-------------------------------------------------------------------------
   @Override
   public boolean matches(final AbstractDocument obj) {
-    if (obj instanceof HolidayDocument == false) {
+    if (!(obj instanceof HolidayDocument)) {
       return false;
     }
     final HolidayDocument document = (HolidayDocument) obj;
     final ManageableHoliday holiday = document.getHoliday();
-    if (getHolidayObjectIds() != null && getHolidayObjectIds().contains(document.getObjectId()) == false) {
+    if (getHolidayObjectIds() != null && !getHolidayObjectIds().contains(document.getObjectId())) {
       return false;
     }
-    if (getType() != null && getType().equals(holiday.getType()) == false) {
+    if (getType() != null && !getType().equals(holiday.getType())) {
       return false;
     }
-    if (getProviderId() != null && getProviderId().equals(document.getProviderId()) == false) {
+    if (getProviderId() != null && !getProviderId().equals(document.getProviderId())) {
       return false;
     }
-    if (getDateToCheck() != null && holiday.getHolidayDates().contains(getDateToCheck()) == false) {
+    if (getDateToCheck() != null && !holiday.getHolidayDates().contains(getDateToCheck())) {
       return false;
     }
-    if (getCurrency() != null && getCurrency().equals(holiday.getCurrency()) == false) {
+    if (getCurrency() != null && !getCurrency().equals(holiday.getCurrency())) {
       return false;
     }
-    if (getRegionExternalIdSearch() != null && getRegionExternalIdSearch().matches(holiday.getRegionExternalId()) == false) {
+    if (getRegionExternalIdSearch() != null && !getRegionExternalIdSearch().matches(holiday.getRegionExternalId())) {
       return false;
     }
-    if (getExchangeExternalIdSearch() != null && getExchangeExternalIdSearch().matches(holiday.getExchangeExternalId()) == false) {
+    if (getExchangeExternalIdSearch() != null && !getExchangeExternalIdSearch().matches(holiday.getExchangeExternalId())) {
       return false;
     }
-    if (getCustomExternalIdSearch() != null && getCustomExternalIdSearch().matches(holiday.getCustomExternalId()) == false) {
+    if (getCustomExternalIdSearch() != null && !getCustomExternalIdSearch().matches(holiday.getCustomExternalId())) {
       return false;
     }
-    if (getName() != null && RegexUtils.wildcardMatch(getName(), document.getName()) == false) {
+    if (getName() != null && !RegexUtils.wildcardMatch(getName(), document.getName())) {
       return false;
     }
     return true;

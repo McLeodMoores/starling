@@ -235,44 +235,44 @@ public class SecuritySearchRequest extends AbstractSearchRequest {
   //-------------------------------------------------------------------------
   @Override
   public boolean matches(final AbstractDocument obj) {
-    if (obj instanceof SecurityDocument == false) {
+    if (!(obj instanceof SecurityDocument)) {
       return false;
     }
     final SecurityDocument document = (SecurityDocument) obj;
     final ManageableSecurity security = document.getSecurity();
-    if (getObjectIds() != null && getObjectIds().contains(document.getObjectId()) == false) {
+    if (getObjectIds() != null && !getObjectIds().contains(document.getObjectId())) {
       return false;
     }
-    if (getExternalIdSearch() != null && getExternalIdSearch().matches(security.getExternalIdBundle()) == false) {
+    if (getExternalIdSearch() != null && !getExternalIdSearch().matches(security.getExternalIdBundle())) {
       return false;
     }
-    if (getName() != null && RegexUtils.wildcardMatch(getName(), document.getName()) == false) {
+    if (getName() != null && !RegexUtils.wildcardMatch(getName(), document.getName())) {
       return false;
     }
-    if (getSecurityType() != null && getSecurityType().equals(security.getSecurityType()) == false) {
+    if (getSecurityType() != null && !getSecurityType().equals(security.getSecurityType())) {
       return false;
     }
     if (getExternalIdValue() != null) {
       for (final ExternalId identifier : security.getExternalIdBundle()) {
-        if (RegexUtils.wildcardMatch(getExternalIdValue(), identifier.getValue()) == false) {
+        if (!RegexUtils.wildcardMatch(getExternalIdValue(), identifier.getValue())) {
           return false;
         }
       }
     }
     if (getExternalIdScheme() != null) {
       for (final ExternalId identifier : security.getExternalIdBundle()) {
-        if (RegexUtils.wildcardMatch(getExternalIdScheme(), identifier.getScheme().getName()) == false) {
+        if (!RegexUtils.wildcardMatch(getExternalIdScheme(), identifier.getScheme().getName())) {
           return false;
         }
       }
     }
     if (getAttributes().size() > 0) {
       for (final Entry<String, String> entry : getAttributes().entrySet()) {
-        if (security.getAttributes().containsKey(entry.getKey()) == false) {
+        if (!security.getAttributes().containsKey(entry.getKey())) {
           return false;
         }
         final String otherValue = security.getAttributes().get(entry.getKey());
-        if (RegexUtils.wildcardMatch(entry.getValue(), otherValue) == false) {
+        if (!RegexUtils.wildcardMatch(entry.getValue(), otherValue)) {
           return false;
         }
       }

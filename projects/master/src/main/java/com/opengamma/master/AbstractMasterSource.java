@@ -12,7 +12,6 @@ import com.opengamma.DataNotFoundException;
 import com.opengamma.core.AbstractSource;
 import com.opengamma.core.ObjectChangeListener;
 import com.opengamma.core.ObjectChangeListenerManager;
-import com.opengamma.core.Source;
 import com.opengamma.core.change.ChangeEvent;
 import com.opengamma.core.change.ChangeListener;
 import com.opengamma.core.change.ChangeManager;
@@ -34,8 +33,8 @@ import com.opengamma.util.tuple.Pairs;
  */
 @PublicSPI
 public abstract class AbstractMasterSource<V extends UniqueIdentifiable, D extends AbstractDocument, M extends AbstractChangeProvidingMaster<? extends D>>
-    extends AbstractSource<V>
-    implements Source<V>, ObjectChangeListenerManager {
+extends AbstractSource<V>
+implements ObjectChangeListenerManager {
 
   /**
    * The master.

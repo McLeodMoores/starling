@@ -76,7 +76,7 @@ public class EHCachingLegalEntityMaster extends AbstractEHCachingMaster<LegalEnt
 
         // Return the list of result UniqueIds
         return IntObjectPair.of(result.getPaging().getTotalItems(),
-                                EHCachingSearchCache.extractUniqueIds(result.getDocuments()));
+            EHCachingSearchCache.extractUniqueIds(result.getDocuments()));
       }
     });
 
@@ -93,7 +93,7 @@ public class EHCachingLegalEntityMaster extends AbstractEHCachingMaster<LegalEnt
 
         // Return the list of result UniqueIds
         return IntObjectPair.of(result.getPaging().getTotalItems(),
-                                EHCachingSearchCache.extractUniqueIds(result.getDocuments()));
+            EHCachingSearchCache.extractUniqueIds(result.getDocuments()));
       }
     });
 
@@ -132,12 +132,12 @@ public class EHCachingLegalEntityMaster extends AbstractEHCachingMaster<LegalEnt
     if (EHCachingSearchCache.TEST_AGAINST_UNDERLYING) {
       final LegalEntitySearchResult check = ((LegalEntityMaster) getUnderlying()).search(request);
       if (!result.getPaging().equals(check.getPaging())) {
-        LOGGER.error("_documentSearchCache.getCache().getName() + \" returned paging:\\n\"" + result.getPaging() +
-            "\nbut the underlying master returned paging:\n" + check.getPaging());
+        LOGGER.error("_documentSearchCache.getCache().getName() + \" returned paging:\\n\"" + result.getPaging()
+        + "\nbut the underlying master returned paging:\n" + check.getPaging());
       }
       if (!result.getDocuments().equals(check.getDocuments())) {
-        LOGGER.error(_documentSearchCache.getCache().getName() + " returned documents:\n" + result.getDocuments() +
-            "\nbut the underlying master returned documents:\n" + check.getDocuments());
+        LOGGER.error(_documentSearchCache.getCache().getName() + " returned documents:\n" + result.getDocuments()
+        + "\nbut the underlying master returned documents:\n" + check.getDocuments());
       }
     }
 

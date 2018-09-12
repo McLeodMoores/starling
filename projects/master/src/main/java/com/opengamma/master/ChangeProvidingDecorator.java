@@ -20,7 +20,7 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.id.VersionCorrection;
 
 /**
- * Turns any master into change providing master
+ * Turns any master into change providing master.
  */
 public class ChangeProvidingDecorator {
 

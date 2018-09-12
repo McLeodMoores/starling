@@ -34,7 +34,8 @@ public class FieldMappingHistoricalTimeSeriesResolver extends DefaultHistoricalT
 
   private final Map<String, HistoricalTimeSeriesFieldAdjustmentMap> _fieldMaps;
 
-  public FieldMappingHistoricalTimeSeriesResolver(final Collection<HistoricalTimeSeriesFieldAdjustmentMap> fieldMaps, final HistoricalTimeSeriesSelector selector, final HistoricalTimeSeriesMaster master) {
+  public FieldMappingHistoricalTimeSeriesResolver(final Collection<HistoricalTimeSeriesFieldAdjustmentMap> fieldMaps,
+      final HistoricalTimeSeriesSelector selector, final HistoricalTimeSeriesMaster master) {
     super(selector, master);
     _fieldMaps = getFieldMaps(fieldMaps);
   }
@@ -70,8 +71,8 @@ public class FieldMappingHistoricalTimeSeriesResolver extends DefaultHistoricalT
         while (it.hasNext()) {
           final ManageableHistoricalTimeSeriesInfo candidate = it.next();
           final HistoricalTimeSeriesFieldAdjustment fieldAdjustment = fieldMappings.get(candidate.getDataSource());
-          if (fieldAdjustment == null ||
-              fieldAdjustment.getUnderlyingDataProvider() != null && !fieldAdjustment.getUnderlyingDataProvider().equals(candidate.getDataProvider())
+          if (fieldAdjustment == null
+              || fieldAdjustment.getUnderlyingDataProvider() != null && !fieldAdjustment.getUnderlyingDataProvider().equals(candidate.getDataProvider())
               || !fieldAdjustment.getUnderlyingDataField().equals(candidate.getDataField())) {
             // Incompatible
             it.remove();
@@ -86,9 +87,8 @@ public class FieldMappingHistoricalTimeSeriesResolver extends DefaultHistoricalT
       final HistoricalTimeSeriesFieldAdjustment fieldAdjustment = fieldMappings.get(selectedResult.getDataSource());
       final HistoricalTimeSeriesAdjuster adjuster = fieldAdjustment != null ? fieldAdjustment.getAdjuster() : null;
       return new HistoricalTimeSeriesResolutionResult(selectedResult, adjuster);
-    } else {
-      return search(multiDataSource, multiDataProvider, multiDataField);
     }
+    return search(multiDataSource, multiDataProvider, multiDataField);
   }
 
   public Collection<HistoricalTimeSeriesFieldAdjustmentMap> getFieldMaps() {
@@ -96,7 +96,7 @@ public class FieldMappingHistoricalTimeSeriesResolver extends DefaultHistoricalT
   }
 
   //-------------------------------------------------------------------------
-  private Map<String, HistoricalTimeSeriesFieldAdjustmentMap> getFieldMaps(final Collection<HistoricalTimeSeriesFieldAdjustmentMap> fieldMaps) {
+  private static Map<String, HistoricalTimeSeriesFieldAdjustmentMap> getFieldMaps(final Collection<HistoricalTimeSeriesFieldAdjustmentMap> fieldMaps) {
     final Map<String, HistoricalTimeSeriesFieldAdjustmentMap> result = new HashMap<>();
     for (final HistoricalTimeSeriesFieldAdjustmentMap fieldMap : fieldMaps) {
       if (result.put(fieldMap.getDataSource(), fieldMap) != null) {

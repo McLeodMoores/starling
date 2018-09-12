@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.impl;
@@ -29,13 +29,14 @@ import com.opengamma.util.PoolExecutor.CompletionListener;
 import com.opengamma.util.async.BlockingOperation;
 
 /**
- * A partial master implementation that divides search operations into a number of smaller operations to pass to the underlying. This is intended for use with some database backed position masters
- * where performance decreases, or becomes unstable, with large queries.
- * 
+ * A partial master implementation that divides search operations into a number of smaller operations to pass to the underlying.
+ * This is intended for use with some database backed position masters where performance decreases, or becomes unstable, with large queries.
+ *
  * @param <D> the document type
  * @param <M> the underlying master type
  */
-public abstract class AbstractQuerySplittingMaster<D extends AbstractDocument, M extends AbstractChangeProvidingMaster<D>> implements AbstractChangeProvidingMaster<D> {
+public abstract class AbstractQuerySplittingMaster<D extends AbstractDocument, M extends AbstractChangeProvidingMaster<D>>
+implements AbstractChangeProvidingMaster<D> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AbstractQuerySplittingMaster.class);
 
@@ -58,7 +59,7 @@ public abstract class AbstractQuerySplittingMaster<D extends AbstractDocument, M
 
   /**
    * Creates a new instance wrapping the underlying with default properties.
-   * 
+   *
    * @param underlying the underlying master to satisfy the requests, not null
    */
   public AbstractQuerySplittingMaster(final M underlying) {
@@ -84,7 +85,7 @@ public abstract class AbstractQuerySplittingMaster<D extends AbstractDocument, M
 
   /**
    * Returns the underlying master.
-   * 
+   *
    * @return the master, not null
    */
   protected M getUnderlying() {
@@ -94,9 +95,10 @@ public abstract class AbstractQuerySplittingMaster<D extends AbstractDocument, M
   /**
    * Tests whether it is sensible to attempt to split a request.
    * <p>
-   * When the database connection pool is running in a polling mode (throwing an exception when there is no immediately available connection so alternative work can be done instead of blocking) then
-   * splitting queries may mean that the composite never completes on a busy system.
-   * 
+   * When the database connection pool is running in a polling mode (throwing an exception when there is no immediately available
+   * connection so alternative work can be done instead of blocking) then splitting queries may mean that the composite never
+   * completes on a busy system.
+   *
    * @return true to attempt to split the operation, false otherwise
    */
   protected boolean canSplit() {
@@ -105,7 +107,7 @@ public abstract class AbstractQuerySplittingMaster<D extends AbstractDocument, M
 
   /**
    * Returns the maximum number of items to pass to the {@link AbstractChangeProvidingMaster#get(Collection)} method in each call.
-   * 
+   *
    * @return the current limit, zero or negative if none
    */
   public int getMaxGetRequest() {
@@ -114,7 +116,7 @@ public abstract class AbstractQuerySplittingMaster<D extends AbstractDocument, M
 
   /**
    * Sets the maximum number of items to pass to the {@link AbstractChangeProvidingMaster#get(Collection)} method in each call.
-   * 
+   *
    * @param maxGetRequest the new limit, zero or negative if none
    */
   public void setMaxGetRequest(final int maxGetRequest) {
@@ -123,24 +125,24 @@ public abstract class AbstractQuerySplittingMaster<D extends AbstractDocument, M
 
   /**
    * Splits the get request into a number of smaller chunks.
-   * 
+   *
    * @param uniqueIds the original request, not null
    * @return the collection of smaller requests, or null to not split
    */
   protected Collection<Collection<UniqueId>> splitGetRequest(final Collection<UniqueId> uniqueIds) {
     int chunkSize = getMaxGetRequest();
     final int count = uniqueIds.size();
-    if ((chunkSize <= 0) || (chunkSize >= count)) {
+    if (chunkSize <= 0 || chunkSize >= count) {
       // Request too small, or splitting is disabled
       return null;
     }
     int chunks = (count + chunkSize - 1) / chunkSize;
-    final Collection<Collection<UniqueId>> requests = new ArrayList<Collection<UniqueId>>();
+    final Collection<Collection<UniqueId>> requests = new ArrayList<>();
     final Iterator<UniqueId> itr = uniqueIds.iterator();
     for (int i = 0; i < count;) {
-      chunkSize = (count - i) / (chunks--);
-      final Collection<UniqueId> request = new ArrayList<UniqueId>(chunkSize);
-      for (int j = 0; (j < chunkSize) && itr.hasNext(); j++) {
+      chunkSize = (count - i) / chunks--;
+      final Collection<UniqueId> request = new ArrayList<>(chunkSize);
+      for (int j = 0; j < chunkSize && itr.hasNext(); j++) {
         request.add(itr.next());
       }
       requests.add(request);
@@ -152,7 +154,7 @@ public abstract class AbstractQuerySplittingMaster<D extends AbstractDocument, M
 
   /**
    * Combines the results from each call to the underlying.
-   * 
+   *
    * @param mergeWith the result to return, not null
    * @param result the result from a single call to the underlying
    */
@@ -162,13 +164,13 @@ public abstract class AbstractQuerySplittingMaster<D extends AbstractDocument, M
 
   /**
    * Makes multiple calls to the underlying, combining them into a single result.
-   * 
+   *
    * @param requests the requests, typically created by calling {@link #splitGetRequest}.
-   * @return the combined result, typically created by calling {@link #mergeSplitGetRequest} with each underlying call result.
+   * @return the combined result, typically created by calling {@link #mergeSplitGetResult(Map, Map)} with each underlying call result.
    */
   protected Map<UniqueId, D> callSplitGetRequest(final Collection<Collection<UniqueId>> requests) {
-    final Map<UniqueId, D> result = new HashMap<UniqueId, D>();
-    for (Collection<UniqueId> request : requests) {
+    final Map<UniqueId, D> result = new HashMap<>();
+    for (final Collection<UniqueId> request : requests) {
       mergeSplitGetResult(result, getUnderlying().get(request));
     }
     return result;
@@ -176,12 +178,12 @@ public abstract class AbstractQuerySplittingMaster<D extends AbstractDocument, M
 
   /**
    * Alternative implementation of {@link #callSplitGetRequest} that sub-classes can use instead.
-   * 
+   *
    * @param requests the requests, created by calling {@link #splitGetRequest}.
-   * @return the combined result, created by calling {@link #mergeSplitGetRequest} with each underlying call result.
+   * @return the combined result, created by calling {@link #mergeSplitGetResult(Map, Map)} with each underlying call result.
    */
   protected Map<UniqueId, D> parallelSplitGetRequest(final Collection<Collection<UniqueId>> requests) {
-    final Map<UniqueId, D> mergedResult = new HashMap<UniqueId, D>();
+    final Map<UniqueId, D> mergedResult = new HashMap<>();
     final PoolExecutor.Service<Map<UniqueId, D>> service = parallelService(new CompletionListener<Map<UniqueId, D>>() {
 
       @Override
@@ -198,25 +200,25 @@ public abstract class AbstractQuerySplittingMaster<D extends AbstractDocument, M
 
     });
     LOGGER.debug("Issuing {} parallel queries", requests.size());
-    long t = System.nanoTime();
+    final long t = System.nanoTime();
     for (final Collection<UniqueId> request : requests) {
       service.execute(new Callable<Map<UniqueId, D>>() {
         @Override
         public Map<UniqueId, D> call() throws Exception {
           LOGGER.debug("Requesting {} records", request.size());
-          long t = System.nanoTime();
+          final long time = System.nanoTime();
           final Map<UniqueId, D> result = getUnderlying().get(request);
-          LOGGER.info("{} records queried in {}ms", request.size(), (double) (System.nanoTime() - t) / 1e6);
+          LOGGER.info("{} records queried in {}ms", request.size(), (System.nanoTime() - time) / 1e6);
           return result;
         }
       });
     }
     try {
       service.join();
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
       throw new OpenGammaRuntimeException("Interrupted", e);
     }
-    LOGGER.info("Finished queries for {} records in {}ms", mergedResult.size(), (double) (System.nanoTime() - t) / 1e6);
+    LOGGER.info("Finished queries for {} records in {}ms", mergedResult.size(), (System.nanoTime() - t) / 1e6);
     return mergedResult;
   }
 
@@ -242,14 +244,12 @@ public abstract class AbstractQuerySplittingMaster<D extends AbstractDocument, M
       if (requests == null) {
         // Small query pass-through
         return getUnderlying().get(uniqueIds);
-      } else {
-        // Multiple queries
-        return callSplitGetRequest(requests);
       }
-    } else {
-      // Splitting disabled
-      return getUnderlying().get(uniqueIds);
+      // Multiple queries
+      return callSplitGetRequest(requests);
     }
+    // Splitting disabled
+    return getUnderlying().get(uniqueIds);
   }
 
   @Override

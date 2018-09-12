@@ -59,7 +59,7 @@ import com.opengamma.util.PublicSPI;
 @PublicSPI
 @BeanDefinition
 public class ManageablePosition extends DirectBean
-    implements MutableUniqueIdentifiable, UniqueIdentifiable, Serializable {
+implements MutableUniqueIdentifiable, UniqueIdentifiable, Serializable {
 
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
@@ -68,7 +68,7 @@ public class ManageablePosition extends DirectBean
    * The unique identifier of the position.
    * This must be null when adding to a master and not null when retrieved from a master.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true, overrideSet = true)
   private UniqueId _uniqueId;
   /**
    * The number of units in the position.
@@ -260,7 +260,7 @@ public class ManageablePosition extends DirectBean
 
   //-------------------------------------------------------------------------
   /**
-   * Adds a key value pair to attributes
+   * Adds a key value pair to attributes.
    *
    * @param key  the key to add, not null
    * @param value  the value to add, not null
@@ -339,6 +339,7 @@ public class ManageablePosition extends DirectBean
    * This must be null when adding to a master and not null when retrieved from a master.
    * @return the value of the property
    */
+  @Override
   public UniqueId getUniqueId() {
     return _uniqueId;
   }
@@ -348,6 +349,7 @@ public class ManageablePosition extends DirectBean
    * This must be null when adding to a master and not null when retrieved from a master.
    * @param uniqueId  the new value of the property
    */
+  @Override
   public void setUniqueId(UniqueId uniqueId) {
     this._uniqueId = uniqueId;
   }

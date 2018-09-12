@@ -224,41 +224,41 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
   //-------------------------------------------------------------------------
   @Override
   public boolean matches(final AbstractDocument obj) {
-    if (obj instanceof LegalEntityDocument == false) {
+    if (!(obj instanceof LegalEntityDocument)) {
       return false;
     }
     final LegalEntityDocument document = (LegalEntityDocument) obj;
     final ManageableLegalEntity legalentity = document.getLegalEntity();
-    if (getObjectIds() != null && getObjectIds().contains(document.getObjectId()) == false) {
+    if (getObjectIds() != null && !getObjectIds().contains(document.getObjectId())) {
       return false;
     }
-    if (getExternalIdSearch() != null && getExternalIdSearch().matches(legalentity.getExternalIdBundle()) == false) {
+    if (getExternalIdSearch() != null && !getExternalIdSearch().matches(legalentity.getExternalIdBundle())) {
       return false;
     }
-    if (getName() != null && RegexUtils.wildcardMatch(getName(), legalentity.getName()) == false) {
+    if (getName() != null && !RegexUtils.wildcardMatch(getName(), legalentity.getName())) {
       return false;
     }
     if (getExternalIdValue() != null) {
       for (final ExternalId identifier : legalentity.getExternalIdBundle()) {
-        if (RegexUtils.wildcardMatch(getExternalIdValue(), identifier.getValue()) == false) {
+        if (!RegexUtils.wildcardMatch(getExternalIdValue(), identifier.getValue())) {
           return false;
         }
       }
     }
     if (getExternalIdScheme() != null) {
       for (final ExternalId identifier : legalentity.getExternalIdBundle()) {
-        if (RegexUtils.wildcardMatch(getExternalIdScheme(), identifier.getScheme().getName()) == false) {
+        if (!RegexUtils.wildcardMatch(getExternalIdScheme(), identifier.getScheme().getName())) {
           return false;
         }
       }
     }
     if (getAttributes().size() > 0) {
       for (final Entry<String, String> entry : getAttributes().entrySet()) {
-        if (legalentity.getAttributes().containsKey(entry.getKey()) == false) {
+        if (!legalentity.getAttributes().containsKey(entry.getKey())) {
           return false;
         }
         final String otherValue = legalentity.getAttributes().get(entry.getKey());
-        if (RegexUtils.wildcardMatch(entry.getValue(), otherValue) == false) {
+        if (!RegexUtils.wildcardMatch(entry.getValue(), otherValue)) {
           return false;
         }
       }

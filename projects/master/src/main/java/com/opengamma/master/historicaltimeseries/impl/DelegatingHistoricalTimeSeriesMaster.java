@@ -66,7 +66,8 @@ public class DelegatingHistoricalTimeSeriesMaster extends UniqueIdSchemeDelegato
    * @param defaultMaster  the master to use when no scheme matches, not null
    * @param schemePrefixToMasterMap  the map of masters by scheme to switch on, not null
    */
-  public DelegatingHistoricalTimeSeriesMaster(final HistoricalTimeSeriesMaster defaultMaster, final Map<String, HistoricalTimeSeriesMaster> schemePrefixToMasterMap) {
+  public DelegatingHistoricalTimeSeriesMaster(final HistoricalTimeSeriesMaster defaultMaster,
+      final Map<String, HistoricalTimeSeriesMaster> schemePrefixToMasterMap) {
     super(defaultMaster, schemePrefixToMasterMap);
     final AggregatingChangeManager changeManager = new AggregatingChangeManager();
 
@@ -238,7 +239,8 @@ public class DelegatingHistoricalTimeSeriesMaster extends UniqueIdSchemeDelegato
   }
 
   @Override
-  public ManageableHistoricalTimeSeries getTimeSeries(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection, final HistoricalTimeSeriesGetFilter filter) {
+  public ManageableHistoricalTimeSeries getTimeSeries(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection,
+      final HistoricalTimeSeriesGetFilter filter) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     ArgumentChecker.notNull(filter, "filter");

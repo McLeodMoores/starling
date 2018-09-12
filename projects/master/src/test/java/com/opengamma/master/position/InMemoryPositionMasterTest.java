@@ -35,10 +35,10 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class InMemoryPositionMasterTest {
 
-  private static final ExternalId SEC1 = ExternalId.of ("Test", "sec1");
-  private static final ExternalId SEC2 = ExternalId.of ("Test", "sec2");
-  private static final ExternalId SEC3 = ExternalId.of ("Test", "sec3");
-  private static final ExternalId COUNTER_PARTY = ExternalId.of ("Test", "counterParty");
+  private static final ExternalId SEC1 = ExternalId.of("Test", "sec1");
+  private static final ExternalId SEC2 = ExternalId.of("Test", "sec2");
+  private static final ExternalId SEC3 = ExternalId.of("Test", "sec3");
+  private static final ExternalId COUNTER_PARTY = ExternalId.of("Test", "counterParty");
 
   private static final ManageableTrade TRADE1 = new ManageableTrade(BigDecimal.ONE, SEC1, LocalDate.now(), OffsetTime.now(), COUNTER_PARTY);
   private static final ManageableTrade TRADE2 = new ManageableTrade(BigDecimal.ONE, SEC2, LocalDate.now(), OffsetTime.now(), COUNTER_PARTY);

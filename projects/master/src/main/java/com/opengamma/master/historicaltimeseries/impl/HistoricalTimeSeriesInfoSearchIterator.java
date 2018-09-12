@@ -21,7 +21,8 @@ import com.opengamma.util.ArgumentChecker;
  * A simple search request that pulls back the entire database is unrealistic.
  * This remote iterator allows the database to be queried in a consistent way remotely.
  */
-public class HistoricalTimeSeriesInfoSearchIterator extends AbstractSearchIterator<HistoricalTimeSeriesInfoDocument, HistoricalTimeSeriesMaster, HistoricalTimeSeriesInfoSearchRequest> {
+public class HistoricalTimeSeriesInfoSearchIterator
+extends AbstractSearchIterator<HistoricalTimeSeriesInfoDocument, HistoricalTimeSeriesMaster, HistoricalTimeSeriesInfoSearchRequest> {
 
   /**
    * Creates an instance based on a request.
@@ -32,7 +33,8 @@ public class HistoricalTimeSeriesInfoSearchIterator extends AbstractSearchIterat
    * @param request  the request object, not null
    * @return an iterable suitable for use in a for-each loop, not null
    */
-  public static Iterable<HistoricalTimeSeriesInfoDocument> iterable(final HistoricalTimeSeriesMaster master, final HistoricalTimeSeriesInfoSearchRequest request) {
+  public static Iterable<HistoricalTimeSeriesInfoDocument> iterable(final HistoricalTimeSeriesMaster master,
+      final HistoricalTimeSeriesInfoSearchRequest request) {
     ArgumentChecker.notNull(master, "master");
     ArgumentChecker.notNull(request, "request");
     return new Iterable<HistoricalTimeSeriesInfoDocument>() {

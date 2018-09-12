@@ -43,8 +43,8 @@ import com.opengamma.util.paging.Paging;
  * As such, this implementation is currently most useful for testing scenarios.
  */
 public class InMemoryLegalEntityMaster
-    extends SimpleAbstractInMemoryMaster<LegalEntityDocument>
-    implements LegalEntityMaster {
+extends SimpleAbstractInMemoryMaster<LegalEntityDocument>
+implements LegalEntityMaster {
 
   /**
    * The default scheme used for each {@link com.opengamma.id.ObjectId}.
@@ -175,7 +175,7 @@ public class InMemoryLegalEntityMaster
     document.setCorrectionFromInstant(now);
     document.setCorrectionToInstant(null);
     document.setUniqueId(uniqueId.withVersion(""));
-    if (_store.replace(uniqueId.getObjectId(), storedDocument, document) == false) {
+    if (!_store.replace(uniqueId.getObjectId(), storedDocument, document)) {
       throw new IllegalArgumentException("Concurrent modification");
     }
     _changeManager.entityChanged(ChangeType.CHANGED, document.getObjectId(), storedDocument.getVersionFromInstant(), document.getVersionToInstant(), now);

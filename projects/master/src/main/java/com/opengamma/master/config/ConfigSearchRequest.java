@@ -95,7 +95,8 @@ public class ConfigSearchRequest<T> extends AbstractSearchRequest {
   }
 
   /**
-   * Sets the set of configuration object identifiers, null to not limit by configuration object identifiers. Note that an empty set will return no configurations.
+   * Sets the set of configuration object identifiers, null to not limit by configuration object identifiers.
+   * Note that an empty set will return no configurations.
    *
    * @param configIds the new configuration identifiers, null clears the configuration id search
    */
@@ -117,10 +118,10 @@ public class ConfigSearchRequest<T> extends AbstractSearchRequest {
       return false;
     }
     final ConfigDocument configDoc = (ConfigDocument) doc;
-    if (getConfigIds() != null && getConfigIds().contains(configDoc.getObjectId()) == false) {
+    if (getConfigIds() != null && !getConfigIds().contains(configDoc.getObjectId())) {
       return false;
     }
-    if (getName() != null && RegexUtils.wildcardMatch(getName(), configDoc.getName()) == false) {
+    if (getName() != null && !RegexUtils.wildcardMatch(getName(), configDoc.getName())) {
       return false;
     }
     return super.matches(doc) && (getType() == null || getType().isAssignableFrom(configDoc.getType()));

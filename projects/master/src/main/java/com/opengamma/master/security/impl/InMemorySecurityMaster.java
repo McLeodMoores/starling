@@ -45,8 +45,8 @@ import com.opengamma.util.paging.Paging;
  * This security master does not support versioning of securities.
  */
 public class InMemorySecurityMaster
-    extends SimpleAbstractInMemoryMaster<SecurityDocument>
-    implements SecurityMaster {
+extends SimpleAbstractInMemoryMaster<SecurityDocument>
+implements SecurityMaster {
   // TODO: This is not hardened for production, as the data in the master can
   // be altered from outside as it is the same object
 
@@ -201,7 +201,7 @@ public class InMemorySecurityMaster
     document.setVersionToInstant(null);
     document.setCorrectionFromInstant(now);
     document.setCorrectionToInstant(null);
-    if (_store.replace(uniqueId.getObjectId(), storedDocument, document) == false) {
+    if (!_store.replace(uniqueId.getObjectId(), storedDocument, document)) {
       throw new IllegalArgumentException("Concurrent modification");
     }
     _changeManager.entityChanged(ChangeType.CHANGED, uniqueId.getObjectId(), storedDocument.getVersionFromInstant(), document.getVersionToInstant(), now);

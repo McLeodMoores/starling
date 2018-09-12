@@ -31,7 +31,8 @@ import com.opengamma.util.PublicSPI;
 /**
  * A {@code ConventionSource} implemented using an underlying {@code ConventionMaster}.
  * <p>
- * The {@link ConventionSource} interface provides conventions to the engine via a narrow API. This class provides the source on top of a standard {@link ConventionMaster}.
+ * The {@link ConventionSource} interface provides conventions to the engine via a narrow API. This class provides the source
+ * on top of a standard {@link ConventionMaster}.
  */
 @PublicSPI
 public class MasterConventionSource extends AbstractMasterSource<Convention, ConventionDocument, ConventionMaster> implements ConventionSource {
@@ -91,7 +92,6 @@ public class MasterConventionSource extends AbstractMasterSource<Convention, Con
     return AbstractSourceWithExternalBundle.getSingle(this, bundles, versionCorrection);
   }
 
-  @SuppressWarnings({"rawtypes", "unchecked" })
   private Collection<ManageableConvention> getSecuritiesInternal(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     final ConventionSearchRequest request = new ConventionSearchRequest();
     request.addExternalIds(bundle);

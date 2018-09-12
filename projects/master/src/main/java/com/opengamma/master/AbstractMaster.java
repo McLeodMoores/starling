@@ -121,7 +121,7 @@ public interface AbstractMaster<D extends AbstractDocument> {
    * @throws IllegalArgumentException if the request is invalid
    * @throws DataNotFoundException if there is no document with that unique identifier
    */
-  void remove(final ObjectIdentifiable oid);
+  void remove(ObjectIdentifiable oid);
 
   /**
    * Corrects a document in the data store.
@@ -155,7 +155,7 @@ public interface AbstractMaster<D extends AbstractDocument> {
    * If the "version from" instant is null, version from of the replaced document is used
    * No two versioned documents may have the same "version from" instant.
    * The versions must all be within the version range of the original version being replaced.
-   * The list can not be empty. 
+   * The list can not be empty.
    * <p>
    * The unique identifier must specify a version of the document that is active when
    * queried with the {@link VersionCorrection latest correction instant}.
@@ -225,7 +225,7 @@ public interface AbstractMaster<D extends AbstractDocument> {
    * <p>
    * This applies a correction that replaces a single version in the data store
    * with the specified list.
-   * This is equivalent to calling {@link #replace(UniqueId, List)} with a single
+   * This is equivalent to calling {@link #replaceVersion(UniqueId, List)} with a single
    * element list of the specified document.
    * <p>
    * The unique identifier must specify a version of the document that is active when
@@ -246,7 +246,7 @@ public interface AbstractMaster<D extends AbstractDocument> {
    * The "version to" instant and "correction" instants will be ignored on input.
    * No two active versioned documents in the data store may have the same "version from" instant.
    * If the "version from" instant is null, the latest instant is used which would
-   * be equivalent to calling {@link #update(D)}.
+   * be equivalent to calling {@link #update(AbstractDocument)}.
    * <p>
    * If the object identifier is a {@link UniqueId}, then it must specify a version of the
    * document that is active when queried with the {@link VersionCorrection latest correction instant}.

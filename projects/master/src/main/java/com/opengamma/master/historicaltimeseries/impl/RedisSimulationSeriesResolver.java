@@ -38,12 +38,13 @@ public class RedisSimulationSeriesResolver extends HistoricalTimeSeriesResolverW
   }
 
   @Override
-  public HistoricalTimeSeriesResolutionResult resolve(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource, final String dataProvider, final String dataField,
-                                                      final String resolutionKey) {
+  public HistoricalTimeSeriesResolutionResult resolve(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate,
+      final String dataSource, final String dataProvider, final String dataField, final String resolutionKey) {
     if (identifierBundle.isEmpty()) {
       return null; // is this the correct action?
     } else if (identifierBundle.size() > 1) {
-      LOGGER.warn("Attempted to call RedisSimulationSeriesSource with bundle {}. Calls with more than 1 entry in ID bundle are probably misuse of this class.", identifierBundle);
+      LOGGER.warn("Attempted to call RedisSimulationSeriesSource with bundle {}. Calls with more than 1 entry in ID bundle "
+          + "are probably misuse of this class.", identifierBundle);
     }
     final ExternalId externalId = identifierBundle.getExternalIds().iterator().next();
     if (!MarketDataRequirementNames.MARKET_VALUE.equals(dataField)) {

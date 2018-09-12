@@ -28,7 +28,7 @@ import com.opengamma.util.paging.PagingRequest;
  * @param <R>  the type of the search request
  */
 public abstract class AbstractSearchIterator<D extends AbstractDocument, M extends AbstractMaster<D>, R extends AbstractSearchRequest>
-    implements Iterator<D> {
+implements Iterator<D> {
 
   /**
    * The master that is being used.
@@ -81,7 +81,7 @@ public abstract class AbstractSearchIterator<D extends AbstractDocument, M exten
 
   @Override
   public D next() {
-    if (hasNext() == false) {
+    if (!hasNext()) {
       throw new NoSuchElementException("No more elements found");
     }
     return doNext();

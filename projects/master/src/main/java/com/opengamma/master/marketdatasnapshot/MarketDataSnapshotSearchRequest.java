@@ -117,15 +117,15 @@ public class MarketDataSnapshotSearchRequest extends AbstractSearchRequest imple
   //-------------------------------------------------------------------------
   @Override
   public boolean matches(final AbstractDocument obj) {
-    if (obj instanceof MarketDataSnapshotDocument == false) {
+    if (!(obj instanceof MarketDataSnapshotDocument)) {
       return false;
     }
     final MarketDataSnapshotDocument document = (MarketDataSnapshotDocument) obj;
     final NamedSnapshot marketDataSnapshot = document.getNamedSnapshot();
-    if (getSnapshotIds() != null && getSnapshotIds().contains(document.getObjectId()) == false) {
+    if (getSnapshotIds() != null && !getSnapshotIds().contains(document.getObjectId())) {
       return false;
     }
-    if (getName() != null && RegexUtils.wildcardMatch(getName(), marketDataSnapshot.getName()) == false) {
+    if (getName() != null && !RegexUtils.wildcardMatch(getName(), marketDataSnapshot.getName())) {
       return false;
     }
     if (getType() != null && !getType().isAssignableFrom(marketDataSnapshot.getClass())) {

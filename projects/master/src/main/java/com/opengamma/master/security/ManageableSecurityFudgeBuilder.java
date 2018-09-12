@@ -35,7 +35,7 @@ public class ManageableSecurityFudgeBuilder extends AbstractFudgeBuilder impleme
   public static final String IDENTIFIERS_FIELD_NAME = "identifiers";
   /** Field name. */
   public static final String ATTRIBUTES_FIELD_NAME = "attributes";
-  /** Field name */
+  /** Field name. */
   public static final String PERMISSIONS_FIELD_NAME = "permissions";
 
   @Override

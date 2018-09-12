@@ -143,7 +143,7 @@ public class PermissionedHistoricalTimeSeriesMaster implements HistoricalTimeSer
     final Map<UniqueId, HistoricalTimeSeriesInfoDocument> result = new HashMap<>(getUnderlying().get(uniqueIds));
     for (final Iterator<HistoricalTimeSeriesInfoDocument> it = result.values().iterator(); it.hasNext();) {
       final HistoricalTimeSeriesInfoDocument doc = it.next();
-      if (AuthUtils.isPermitted(doc.getValue()) == false) {
+      if (!AuthUtils.isPermitted(doc.getValue())) {
         it.remove();
       }
     }
@@ -157,7 +157,7 @@ public class PermissionedHistoricalTimeSeriesMaster implements HistoricalTimeSer
     int removed = 0;
     for (final Iterator<HistoricalTimeSeriesInfoDocument> it = result.getDocuments().iterator(); it.hasNext();) {
       final HistoricalTimeSeriesInfoDocument doc = it.next();
-      if (AuthUtils.isPermitted(doc.getValue()) == false) {
+      if (!AuthUtils.isPermitted(doc.getValue())) {
         it.remove();
         removed++;
       }
@@ -274,7 +274,8 @@ public class PermissionedHistoricalTimeSeriesMaster implements HistoricalTimeSer
   }
 
   @Override
-  public ManageableHistoricalTimeSeries getTimeSeries(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection, final HistoricalTimeSeriesGetFilter filter) {
+  public ManageableHistoricalTimeSeries getTimeSeries(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection,
+      final HistoricalTimeSeriesGetFilter filter) {
     AuthUtils.getSubject().checkPermission(PERMISSION_VIEW);
     return getUnderlying().getTimeSeries(objectId, versionCorrection, filter);
   }

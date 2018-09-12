@@ -10,7 +10,7 @@ import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.google.common.collect.Iterables;
 import com.opengamma.core.config.ConfigSource;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesSelector;
@@ -39,8 +39,9 @@ public class DefaultHistoricalTimeSeriesSelector implements HistoricalTimeSeries
 
   //-------------------------------------------------------------------------
   @Override
-  public ManageableHistoricalTimeSeriesInfo select(final Collection<ManageableHistoricalTimeSeriesInfo> candidates, String selectionKey) {
-    selectionKey = Objects.firstNonNull(selectionKey, HistoricalTimeSeriesRatingFieldNames.DEFAULT_CONFIG_NAME);
+  public ManageableHistoricalTimeSeriesInfo select(final Collection<ManageableHistoricalTimeSeriesInfo> candidates, final String selectionKey) {
+    String sKey = selectionKey;
+    sKey = MoreObjects.firstNonNull(sKey, HistoricalTimeSeriesRatingFieldNames.DEFAULT_CONFIG_NAME);
 
     //IGN-139 - avoid rating unless we have to
     switch (candidates.size()) {
@@ -50,9 +51,9 @@ public class DefaultHistoricalTimeSeriesSelector implements HistoricalTimeSeries
         return Iterables.getOnlyElement(candidates);
       default:
         // Pick best using rules from configuration
-        final HistoricalTimeSeriesRating rating = _configSource.getLatestByName(HistoricalTimeSeriesRating.class, selectionKey);
+        final HistoricalTimeSeriesRating rating = _configSource.getLatestByName(HistoricalTimeSeriesRating.class, sKey);
         if (rating == null) {
-          LOGGER.warn("Resolver failed to find configuration: {}", selectionKey);
+          LOGGER.warn("Resolver failed to find configuration: {}", sKey);
           return null;
         }
         return bestMatch(candidates, rating);
@@ -67,7 +68,8 @@ public class DefaultHistoricalTimeSeriesSelector implements HistoricalTimeSeries
    * @param rating  the rules for scoring the matches, not null
    * @return the best match, null if no match
    */
-  private ManageableHistoricalTimeSeriesInfo bestMatch(final Collection<ManageableHistoricalTimeSeriesInfo> matches, final HistoricalTimeSeriesRating rating) {
+  private static ManageableHistoricalTimeSeriesInfo bestMatch(final Collection<ManageableHistoricalTimeSeriesInfo> matches,
+      final HistoricalTimeSeriesRating rating) {
     LOGGER.debug("Find best match using rules: {}", rating);
     int currentScore = Integer.MIN_VALUE;
     ManageableHistoricalTimeSeriesInfo bestMatch = null;

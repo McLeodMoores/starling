@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.user;
@@ -8,7 +8,6 @@ package com.opengamma.master.user;
 import com.opengamma.DataDuplicationException;
 import com.opengamma.DataNotFoundException;
 import com.opengamma.DataVersionException;
-import com.opengamma.core.change.ChangeProvider;
 import com.opengamma.core.user.UserAccount;
 import com.opengamma.core.user.UserSource;
 import com.opengamma.id.ObjectId;
@@ -29,7 +28,7 @@ import com.opengamma.id.UniqueId;
  * Unlike some other master interfaces, a user master only maintains lightweight history.
  * Each version is assigned a unique identifier, but only the current version can be queried.
  */
-public interface UserMaster extends UserSource, ChangeProvider {
+public interface UserMaster extends UserSource {
 
   /**
    * Checks if a user name already exists.
@@ -127,7 +126,7 @@ public interface UserMaster extends UserSource, ChangeProvider {
   //-------------------------------------------------------------------------
   /**
    * Searches for users matching the specified search criteria.
-   * 
+   *
    * @param request  the search request, not null
    * @return the search result, not null
    * @throws IllegalArgumentException if the request is invalid
@@ -138,7 +137,7 @@ public interface UserMaster extends UserSource, ChangeProvider {
    * Queries the event history of a single user.
    * <p>
    * If an implementation does not store history, and empty object must be returned.
-   * 
+   *
    * @param request  the history request, not null
    * @return the user history, not null
    * @throws IllegalArgumentException if the request is invalid
@@ -149,17 +148,18 @@ public interface UserMaster extends UserSource, ChangeProvider {
   //-------------------------------------------------------------------------
   /**
    * Gets the fully resolved user account by user name.
-   * 
+   *
    * @param userName  the user name, not null
    * @return the user account with the specified user name, not null
    * @throws DataNotFoundException if the user could not be found
    * @throws RuntimeException if an error occurs
    */
+  @Override
   UserAccount getAccount(String userName);
 
   /**
    * Gets the {@code RoleMaster} used to query and manage users.
-   * 
+   *
    * @return the user master, not null
    */
   RoleMaster roleMaster();

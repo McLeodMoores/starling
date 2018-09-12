@@ -228,41 +228,41 @@ public class ConventionSearchRequest extends AbstractSearchRequest {
   //-------------------------------------------------------------------------
   @Override
   public boolean matches(final AbstractDocument obj) {
-    if (obj instanceof ConventionDocument == false) {
+    if (!(obj instanceof ConventionDocument)) {
       return false;
     }
     final ConventionDocument document = (ConventionDocument) obj;
     final ManageableConvention convention = document.getConvention();
-    if (getObjectIds() != null && getObjectIds().contains(document.getObjectId()) == false) {
+    if (getObjectIds() != null && !getObjectIds().contains(document.getObjectId())) {
       return false;
     }
-    if (getExternalIdSearch() != null && getExternalIdSearch().matches(convention.getExternalIdBundle()) == false) {
+    if (getExternalIdSearch() != null && !getExternalIdSearch().matches(convention.getExternalIdBundle())) {
       return false;
     }
-    if (getName() != null && RegexUtils.wildcardMatch(getName(), convention.getName()) == false) {
+    if (getName() != null && !RegexUtils.wildcardMatch(getName(), convention.getName())) {
       return false;
     }
     if (getExternalIdValue() != null) {
       for (final ExternalId identifier : convention.getExternalIdBundle()) {
-        if (RegexUtils.wildcardMatch(getExternalIdValue(), identifier.getValue()) == false) {
+        if (!RegexUtils.wildcardMatch(getExternalIdValue(), identifier.getValue())) {
           return false;
         }
       }
     }
     if (getExternalIdScheme() != null) {
       for (final ExternalId identifier : convention.getExternalIdBundle()) {
-        if (RegexUtils.wildcardMatch(getExternalIdScheme(), identifier.getScheme().getName()) == false) {
+        if (!RegexUtils.wildcardMatch(getExternalIdScheme(), identifier.getScheme().getName())) {
           return false;
         }
       }
     }
     if (getAttributes().size() > 0) {
       for (final Entry<String, String> entry : getAttributes().entrySet()) {
-        if (convention.getAttributes().containsKey(entry.getKey()) == false) {
+        if (!convention.getAttributes().containsKey(entry.getKey())) {
           return false;
         }
         final String otherValue = convention.getAttributes().get(entry.getKey());
-        if (RegexUtils.wildcardMatch(entry.getValue(), otherValue) == false) {
+        if (!RegexUtils.wildcardMatch(entry.getValue(), otherValue)) {
           return false;
         }
       }

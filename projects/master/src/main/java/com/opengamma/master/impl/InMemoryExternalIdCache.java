@@ -89,9 +89,10 @@ public class InMemoryExternalIdCache<T extends ExternalBundleIdentifiable, V> {
         return getMatchesAll(search);
       case ANY:
         return getMatchesAny(search);
+      default:
+        throw new IllegalStateException("All branches should have been handled in the switch statement.");
     }
 
-    throw new IllegalStateException("All branches should have been handled in the switch statement.");
   }
 
   private Set<V> getMatchesAny(final ExternalIdSearch search) {

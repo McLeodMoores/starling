@@ -26,7 +26,8 @@ import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 /**
  * HistoricalTimeSeries master which tracks accesses using UniqueIds.
  */
-public class DataTrackingHistoricalTimeSeriesMaster extends AbstractDataTrackingMaster<HistoricalTimeSeriesInfoDocument, HistoricalTimeSeriesMaster> implements HistoricalTimeSeriesMaster {
+public class DataTrackingHistoricalTimeSeriesMaster
+extends AbstractDataTrackingMaster<HistoricalTimeSeriesInfoDocument, HistoricalTimeSeriesMaster> implements HistoricalTimeSeriesMaster {
 
   private static final String DATA_POINT_PREFIX = "DP";
 
@@ -75,7 +76,8 @@ public class DataTrackingHistoricalTimeSeriesMaster extends AbstractDataTracking
   }
 
   @Override
-  public ManageableHistoricalTimeSeries getTimeSeries(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection, final HistoricalTimeSeriesGetFilter filter) {
+  public ManageableHistoricalTimeSeries getTimeSeries(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection,
+      final HistoricalTimeSeriesGetFilter filter) {
     final ManageableHistoricalTimeSeries timeSeries = delegate().getTimeSeries(objectId, versionCorrection, filter);
     trackId(timeSeries.getUniqueId());
     return timeSeries;
@@ -113,7 +115,7 @@ public class DataTrackingHistoricalTimeSeriesMaster extends AbstractDataTracking
     return id;
   }
 
-  private boolean isDPId(final UniqueId id) {
+  private static boolean isDPId(final UniqueId id) {
     return id != null && id.getValue().startsWith(DATA_POINT_PREFIX);
   }
 

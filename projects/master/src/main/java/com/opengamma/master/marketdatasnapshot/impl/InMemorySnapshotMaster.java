@@ -38,8 +38,8 @@ import com.opengamma.util.paging.Paging;
  * This snapshot master does not support versioning of snapshots.
  */
 public class InMemorySnapshotMaster
-    extends SimpleAbstractInMemoryMaster<MarketDataSnapshotDocument>
-    implements MarketDataSnapshotMaster {
+extends SimpleAbstractInMemoryMaster<MarketDataSnapshotDocument>
+implements MarketDataSnapshotMaster {
   //TODO: This is not hardened for production, as the data in the master can
   // be altered from outside as it is the same object
 
@@ -171,7 +171,7 @@ public class InMemorySnapshotMaster
     document.setVersionToInstant(null);
     document.setCorrectionFromInstant(now);
     document.setCorrectionToInstant(null);
-    if (_store.replace(uniqueId.getObjectId(), storedDocument, document) == false) {
+    if (!_store.replace(uniqueId.getObjectId(), storedDocument, document)) {
       throw new IllegalArgumentException("Concurrent modification");
     }
     _changeManager.entityChanged(ChangeType.CHANGED, document.getObjectId(), document.getVersionFromInstant(), document.getVersionToInstant(), now);

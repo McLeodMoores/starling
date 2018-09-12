@@ -156,7 +156,7 @@ public class PortfolioSearchRequest extends AbstractSearchRequest {
   //-------------------------------------------------------------------------
   @Override
   public boolean matches(final AbstractDocument obj) {
-    if (obj instanceof PortfolioDocument == false) {
+    if (!(obj instanceof PortfolioDocument)) {
       return false;
     }
     final PortfolioDocument document = (PortfolioDocument) obj;
@@ -164,13 +164,13 @@ public class PortfolioSearchRequest extends AbstractSearchRequest {
       return false;
     }
     final ManageablePortfolio portfolio = document.getPortfolio();
-    if (getPortfolioObjectIds() != null && getPortfolioObjectIds().contains(document.getObjectId()) == false) {
+    if (getPortfolioObjectIds() != null && !getPortfolioObjectIds().contains(document.getObjectId())) {
       return false;
     }
-    if (getNodeObjectIds() != null && portfolio.getRootNode().matchesAnyNode(getNodeObjectIds()) == false) {
+    if (getNodeObjectIds() != null && !portfolio.getRootNode().matchesAnyNode(getNodeObjectIds())) {
       return false;
     }
-    if (getName() != null && RegexUtils.wildcardMatch(getName(), portfolio.getName()) == false) {
+    if (getName() != null && !RegexUtils.wildcardMatch(getName(), portfolio.getName())) {
       return false;
     }
     return true;

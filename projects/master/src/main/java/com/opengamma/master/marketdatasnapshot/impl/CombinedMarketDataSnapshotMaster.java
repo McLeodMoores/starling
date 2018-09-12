@@ -23,7 +23,8 @@ import com.opengamma.master.marketdatasnapshot.MarketDataSnapshotSearchResult;
  *
  * This class extends {@link ChangeProvidingCombinedMaster} to implement methods specific to the {@link MarketDataSnapshotMaster}.
  */
-public class CombinedMarketDataSnapshotMaster extends ChangeProvidingCombinedMaster<MarketDataSnapshotDocument, MarketDataSnapshotMaster> implements MarketDataSnapshotMaster {
+public class CombinedMarketDataSnapshotMaster extends ChangeProvidingCombinedMaster<MarketDataSnapshotDocument, MarketDataSnapshotMaster>
+implements MarketDataSnapshotMaster {
 
   public CombinedMarketDataSnapshotMaster(final List<MarketDataSnapshotMaster> masterList) {
     super(masterList);
@@ -36,7 +37,8 @@ public class CombinedMarketDataSnapshotMaster extends ChangeProvidingCombinedMas
     pagedSearch(new SnapshotSearchStrategy() {
 
       @Override
-      public AbstractDocumentsResult<MarketDataSnapshotDocument> search(final MarketDataSnapshotMaster master, final MarketDataSnapshotSearchRequest searchRequest) {
+      public AbstractDocumentsResult<MarketDataSnapshotDocument> search(final MarketDataSnapshotMaster master,
+          final MarketDataSnapshotSearchRequest searchRequest) {
         final MarketDataSnapshotSearchResult masterResult = master.search(searchRequest);
         masterResult.setVersionCorrection(overallResult.getVersionCorrection());
         return masterResult;

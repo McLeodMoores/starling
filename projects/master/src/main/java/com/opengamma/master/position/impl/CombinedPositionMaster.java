@@ -78,8 +78,8 @@ public class CombinedPositionMaster extends ChangeProvidingCombinedMaster<Positi
     }
     return new Try<PositionHistoryResult>() {
       @Override
-      public PositionHistoryResult tryMaster(final PositionMaster master) {
-        return master.history(request);
+      public PositionHistoryResult tryMaster(final PositionMaster pm) {
+        return pm.history(request);
       }
     }.each(request.getObjectId().getScheme());
   }

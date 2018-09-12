@@ -21,7 +21,8 @@ import com.opengamma.util.ArgumentChecker;
  * A simple search request that pulls back the entire database is unrealistic.
  * This remote iterator allows the database to be queried in a consistent way remotely.
  */
-public class MarketDataSnapshotSearchIterator extends AbstractSearchIterator<MarketDataSnapshotDocument, MarketDataSnapshotMaster, MarketDataSnapshotSearchRequest> {
+public class MarketDataSnapshotSearchIterator
+extends AbstractSearchIterator<MarketDataSnapshotDocument, MarketDataSnapshotMaster, MarketDataSnapshotSearchRequest> {
 
   /**
    * Creates an instance based on a request.

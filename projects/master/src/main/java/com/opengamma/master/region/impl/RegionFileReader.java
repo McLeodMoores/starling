@@ -252,11 +252,11 @@ public class RegionFileReader {
    * @param subRegions  the set to trim, not null
    * @return the trimmed set, not null
    */
-  private Set<String> trim(final Set<String> subRegions) {
+  private static Set<String> trim(final Set<String> subRegions) {
     final Set<String> result = new HashSet<>();
     for (final String subRegion : subRegions) {
       final String trimmed = subRegion.trim();
-      if (trimmed.isEmpty() == false) {
+      if (!trimmed.isEmpty()) {
         result.add(trimmed);
       }
     }

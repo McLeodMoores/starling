@@ -75,7 +75,7 @@ public class MasterHolidaySource extends AbstractMasterSource<Holiday, HolidayDo
 
   @Override
   public Collection<Holiday> get(final HolidayType holidayType,
-                                 final ExternalIdBundle regionOrExchangeIds) {
+      final ExternalIdBundle regionOrExchangeIds) {
     final HolidaySearchRequest request = createNonCurrencySearchRequest(holidayType, regionOrExchangeIds);
     return processDocuments(getMaster().search(request));
   }
@@ -86,7 +86,7 @@ public class MasterHolidaySource extends AbstractMasterSource<Holiday, HolidayDo
     return processDocuments(getMaster().search(request));
   }
 
-  private Collection<Holiday> processDocuments(final HolidaySearchResult search) {
+  private static Collection<Holiday> processDocuments(final HolidaySearchResult search) {
     return ImmutableList.<Holiday>copyOf(search.getHolidays());
   }
 
@@ -107,20 +107,20 @@ public class MasterHolidaySource extends AbstractMasterSource<Holiday, HolidayDo
    * by the engine, and always returned LATEST, it's been removed.
    * @return the version/correction (always LATEST currently)
    */
-  private VersionCorrection getVersionCorrection() {
+  private static VersionCorrection getVersionCorrection() {
     return VersionCorrection.LATEST;
   }
 
-  private HolidaySearchRequest createCurrencySearchRequest(final Currency currency) {
+  private static HolidaySearchRequest createCurrencySearchRequest(final Currency currency) {
     return createdVersionCorrectedSearchRequest(new HolidaySearchRequest(currency));
   }
 
-  private HolidaySearchRequest createNonCurrencySearchRequest(final HolidayType holidayType,
-                                                              final ExternalIdBundle regionOrExchangeIds) {
+  private static HolidaySearchRequest createNonCurrencySearchRequest(final HolidayType holidayType,
+      final ExternalIdBundle regionOrExchangeIds) {
     return createdVersionCorrectedSearchRequest(new HolidaySearchRequest(holidayType, regionOrExchangeIds));
   }
 
-  private HolidaySearchRequest createdVersionCorrectedSearchRequest(final HolidaySearchRequest searchRequest) {
+  private static HolidaySearchRequest createdVersionCorrectedSearchRequest(final HolidaySearchRequest searchRequest) {
     searchRequest.setVersionCorrection(getVersionCorrection());
     return searchRequest;
   }

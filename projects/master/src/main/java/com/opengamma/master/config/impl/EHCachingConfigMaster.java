@@ -59,7 +59,7 @@ public class EHCachingConfigMaster extends AbstractEHCachingMaster<ConfigDocumen
   public EHCachingConfigMaster(final String name, final ConfigMaster underlying, final CacheManager cacheManager) {
     super(name + "Config", underlying, cacheManager);
 
-        // Create the doc search cache and register a config master searcher
+    // Create the doc search cache and register a config master searcher
     _documentSearchCache = new EHCachingSearchCache(name + "Config", cacheManager, new EHCachingSearchCache.Searcher() {
       @Override
       public IntObjectPair<List<UniqueId>> search(final Bean request, final PagingRequest pagingRequest) {
@@ -124,12 +124,12 @@ public class EHCachingConfigMaster extends AbstractEHCachingMaster<ConfigDocumen
     if (EHCachingSearchCache.TEST_AGAINST_UNDERLYING) {
       final ConfigSearchResult<T> check = ((ConfigMaster) getUnderlying()).search(request);
       if (!result.getPaging().equals(check.getPaging())) {
-        LOGGER.error("_documentSearchCache.getCache().getName() + \" returned paging:\\n\"" + result.getPaging() +
-                           "\nbut the underlying master returned paging:\n" + check.getPaging());
+        LOGGER.error("_documentSearchCache.getCache().getName() + \" returned paging:\\n\"" + result.getPaging()
+        + "\nbut the underlying master returned paging:\n" + check.getPaging());
       }
       if (!result.getDocuments().equals(check.getDocuments())) {
-        LOGGER.error(_documentSearchCache.getCache().getName() + " returned documents:\n" + result.getDocuments() +
-                           "\nbut the underlying master returned documents:\n" + check.getDocuments());
+        LOGGER.error(_documentSearchCache.getCache().getName() + " returned documents:\n" + result.getDocuments()
+        + "\nbut the underlying master returned documents:\n" + check.getDocuments());
       }
     }
     return result;

@@ -49,7 +49,7 @@ import com.opengamma.util.money.Currency;
 @PublicSPI
 @BeanDefinition
 public class ManageableTrade extends DirectBean
-    implements Trade, MutableUniqueIdentifiable, Serializable {
+implements Trade, MutableUniqueIdentifiable, Serializable {
 
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
@@ -58,7 +58,7 @@ public class ManageableTrade extends DirectBean
    * The unique identifier of the trade.
    * This field should be null until added to the master.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true, overrideSet = true)
   private UniqueId _uniqueId;
   /**
    * The unique identifier of the parent position. This field is managed by the master.
@@ -68,13 +68,13 @@ public class ManageableTrade extends DirectBean
   /**
    * The quantity. This field must not be null for the object to be valid.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private BigDecimal _quantity;
   /**
    * The link referencing the security, not null.
    * This may also hold the resolved security.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private ManageableSecurityLink _securityLink;
   /**
    * The counterparty external identifier, not null.
@@ -84,39 +84,39 @@ public class ManageableTrade extends DirectBean
   /**
    * The trade date.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private LocalDate _tradeDate;
   /**
    * The trade time with offset, null if not known.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private OffsetTime _tradeTime;
   /**
    * Amount paid for trade at time of purchase, null if not known.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private Double _premium;
   /**
    * Currency of payment at time of purchase, null if not known.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private Currency _premiumCurrency;
   /**
    * Date of premium payment, null if not known.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private LocalDate _premiumDate;
   /**
    * Time of premium payment, null if not known.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private OffsetTime _premiumTime;
   /**
    * The general purpose trade attributes.
    * These can be used to add arbitrary additional information to the object
    * and for aggregating in portfolios.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true, overrideSet = true)
   private final Map<String, String> _attributes = Maps.newHashMap();
   /**
    * The details of the deal, null if not known.
@@ -175,7 +175,8 @@ public class ManageableTrade extends DirectBean
    * @param tradeTime  the trade time with offset, may be null
    * @param counterpartyId  the counterparty identifier, not null
    */
-  public ManageableTrade(final BigDecimal quantity, final ExternalId securityId, final LocalDate tradeDate, final OffsetTime tradeTime, final ExternalId counterpartyId) {
+  public ManageableTrade(final BigDecimal quantity, final ExternalId securityId, final LocalDate tradeDate, final OffsetTime tradeTime,
+      final ExternalId counterpartyId) {
     ArgumentChecker.notNull(quantity, "quantity");
     ArgumentChecker.notNull(tradeDate, "tradeDate");
     ArgumentChecker.notNull(counterpartyId, "counterpartyId");
@@ -196,7 +197,8 @@ public class ManageableTrade extends DirectBean
    * @param tradeTime  the trade time with offset, may be null
    * @param counterpartyId  the counterparty identifier, not null
    */
-  public ManageableTrade(final BigDecimal quantity, final ExternalIdBundle securityId, final LocalDate tradeDate, final OffsetTime tradeTime, final ExternalId counterpartyId) {
+  public ManageableTrade(final BigDecimal quantity, final ExternalIdBundle securityId, final LocalDate tradeDate, final OffsetTime tradeTime,
+      final ExternalId counterpartyId) {
     ArgumentChecker.notNull(quantity, "quantity");
     ArgumentChecker.notNull(securityId, "securityId");
     ArgumentChecker.notNull(tradeDate, "tradeDate");
@@ -252,6 +254,7 @@ public class ManageableTrade extends DirectBean
    * This field should be null until added to the master.
    * @return the value of the property
    */
+  @Override
   public UniqueId getUniqueId() {
     return _uniqueId;
   }
@@ -261,6 +264,7 @@ public class ManageableTrade extends DirectBean
    * This field should be null until added to the master.
    * @param uniqueId  the new value of the property
    */
+  @Override
   public void setUniqueId(UniqueId uniqueId) {
     this._uniqueId = uniqueId;
   }
@@ -304,6 +308,7 @@ public class ManageableTrade extends DirectBean
    * Gets the quantity. This field must not be null for the object to be valid.
    * @return the value of the property, not null
    */
+  @Override
   public BigDecimal getQuantity() {
     return _quantity;
   }
@@ -331,6 +336,7 @@ public class ManageableTrade extends DirectBean
    * This may also hold the resolved security.
    * @return the value of the property, not null
    */
+  @Override
   public ManageableSecurityLink getSecurityLink() {
     return _securityLink;
   }
@@ -385,6 +391,7 @@ public class ManageableTrade extends DirectBean
    * Gets the trade date.
    * @return the value of the property, not null
    */
+  @Override
   public LocalDate getTradeDate() {
     return _tradeDate;
   }
@@ -411,6 +418,7 @@ public class ManageableTrade extends DirectBean
    * Gets the trade time with offset, null if not known.
    * @return the value of the property
    */
+  @Override
   public OffsetTime getTradeTime() {
     return _tradeTime;
   }
@@ -436,6 +444,7 @@ public class ManageableTrade extends DirectBean
    * Gets amount paid for trade at time of purchase, null if not known.
    * @return the value of the property
    */
+  @Override
   public Double getPremium() {
     return _premium;
   }
@@ -461,6 +470,7 @@ public class ManageableTrade extends DirectBean
    * Gets currency of payment at time of purchase, null if not known.
    * @return the value of the property
    */
+  @Override
   public Currency getPremiumCurrency() {
     return _premiumCurrency;
   }
@@ -486,6 +496,7 @@ public class ManageableTrade extends DirectBean
    * Gets date of premium payment, null if not known.
    * @return the value of the property
    */
+  @Override
   public LocalDate getPremiumDate() {
     return _premiumDate;
   }
@@ -511,6 +522,7 @@ public class ManageableTrade extends DirectBean
    * Gets time of premium payment, null if not known.
    * @return the value of the property
    */
+  @Override
   public OffsetTime getPremiumTime() {
     return _premiumTime;
   }
@@ -538,6 +550,7 @@ public class ManageableTrade extends DirectBean
    * and for aggregating in portfolios.
    * @return the value of the property, not null
    */
+  @Override
   public Map<String, String> getAttributes() {
     return _attributes;
   }
@@ -548,6 +561,7 @@ public class ManageableTrade extends DirectBean
    * and for aggregating in portfolios.
    * @param attributes  the new value of the property, not null
    */
+  @Override
   public void setAttributes(Map<String, String> attributes) {
     JodaBeanUtils.notNull(attributes, "attributes");
     this._attributes.clear();

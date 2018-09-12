@@ -35,26 +35,25 @@ public class InstantExtractor implements AttributeExtractor {
       switch (attributeName) {
         case "VersionFromInstant":
           return ((AbstractDocument) element.getObjectValue()).getVersionFromInstant() != null
-                    ? ((AbstractDocument) element.getObjectValue()).getVersionFromInstant().toString()
-                    : MIN_INSTANT.toString();
+          ? ((AbstractDocument) element.getObjectValue()).getVersionFromInstant().toString()
+              : MIN_INSTANT.toString();
         case "VersionToInstant":
           return ((AbstractDocument) element.getObjectValue()).getVersionToInstant() != null
-                    ? ((AbstractDocument) element.getObjectValue()).getVersionToInstant().toString()
-                    : MAX_INSTANT.toString();
+          ? ((AbstractDocument) element.getObjectValue()).getVersionToInstant().toString()
+              : MAX_INSTANT.toString();
         case "CorrectionFromInstant":
           return ((AbstractDocument) element.getObjectValue()).getCorrectionFromInstant() != null
-                    ? ((AbstractDocument) element.getObjectValue()).getCorrectionFromInstant().toString()
-                    : MIN_INSTANT.toString();
+          ? ((AbstractDocument) element.getObjectValue()).getCorrectionFromInstant().toString()
+              : MIN_INSTANT.toString();
         case "CorrectionToInstant":
           return ((AbstractDocument) element.getObjectValue()).getCorrectionToInstant() != null
-                    ? ((AbstractDocument) element.getObjectValue()).getCorrectionToInstant().toString()
-                    : MAX_INSTANT.toString();
+          ? ((AbstractDocument) element.getObjectValue()).getCorrectionToInstant().toString()
+              : MAX_INSTANT.toString();
         default:
           throw new AttributeExtractorException("Unknown attribute name in InstantExtractor");
       }
-    } else {
-      throw new AttributeExtractorException("Null or non-document element passed to InstantExtractor");
     }
+    throw new AttributeExtractorException("Null or non-document element passed to InstantExtractor");
   }
 
 }

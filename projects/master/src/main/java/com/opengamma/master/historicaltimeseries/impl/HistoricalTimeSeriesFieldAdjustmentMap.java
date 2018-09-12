@@ -51,7 +51,8 @@ public class HistoricalTimeSeriesFieldAdjustmentMap {
    * @param underlyingField  the underlying field, not null
    * @param adjuster  the adjuster, null for none
    */
-  public void addFieldAdjustment(final String requestedField, final String underlyingProvider, final String underlyingField, final HistoricalTimeSeriesAdjuster adjuster) {
+  public void addFieldAdjustment(final String requestedField, final String underlyingProvider, final String underlyingField,
+      final HistoricalTimeSeriesAdjuster adjuster) {
     _fieldAdjustments.put(requestedField, new HistoricalTimeSeriesFieldAdjustment(underlyingProvider, underlyingField, adjuster));
   }
 

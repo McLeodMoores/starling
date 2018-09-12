@@ -11,7 +11,8 @@ import com.opengamma.util.PublicSPI;
 /**
  * Contains the result of resolving an historical time-series.
  * <p>
- * Time-series whose data points are derived from the same points of another time-series may be exposed by referencing the parent time-series and including an adjuster. The adjuster is expected to be
+ * Time-series whose data points are derived from the same points of another time-series may be exposed by referencing the parent
+ * time-series and including an adjuster. The adjuster is expected to be
  * applied to the relevant part of the parent time-series in order to satisfy the resolution request.
  * <p>
  * For example, an adjuster may be provided to apply normalization rules to a parent time-series that contains unnormalized data.

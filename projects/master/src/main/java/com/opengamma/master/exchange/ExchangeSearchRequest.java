@@ -183,18 +183,18 @@ public class ExchangeSearchRequest extends AbstractSearchRequest {
   //-------------------------------------------------------------------------
   @Override
   public boolean matches(final AbstractDocument obj) {
-    if (obj instanceof ExchangeDocument == false) {
+    if (!(obj instanceof ExchangeDocument)) {
       return false;
     }
     final ExchangeDocument document = (ExchangeDocument) obj;
     final ManageableExchange exchange = document.getExchange();
-    if (getObjectIds() != null && getObjectIds().contains(document.getObjectId()) == false) {
+    if (getObjectIds() != null && !getObjectIds().contains(document.getObjectId())) {
       return false;
     }
-    if (getExternalIdSearch() != null && getExternalIdSearch().matches(exchange.getExternalIdBundle()) == false) {
+    if (getExternalIdSearch() != null && !getExternalIdSearch().matches(exchange.getExternalIdBundle())) {
       return false;
     }
-    if (getName() != null && RegexUtils.wildcardMatch(getName(), exchange.getName()) == false) {
+    if (getName() != null && !RegexUtils.wildcardMatch(getName(), exchange.getName())) {
       return false;
     }
     return true;

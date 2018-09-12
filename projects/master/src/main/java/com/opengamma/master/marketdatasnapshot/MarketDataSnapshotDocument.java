@@ -60,7 +60,7 @@ public class MarketDataSnapshotDocument extends AbstractDocument implements Seri
    * The snapshot document unique identifier.
    * This field is managed by the master but must be set for updates.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true, overrideSet = true)
   private UniqueId _uniqueId;
 
   /**
@@ -105,9 +105,8 @@ public class MarketDataSnapshotDocument extends AbstractDocument implements Seri
 
     if (type.isAssignableFrom(_namedSnapshot.getClass())) {
       return type.cast(_namedSnapshot);
-    } else {
-      throw new IllegalStateException("Snapshot is of type: " + _namedSnapshot.getClass() + " but expected type: " + type);
     }
+    throw new IllegalStateException("Snapshot is of type: " + _namedSnapshot.getClass() + " but expected type: " + type);
   }
 
   /**
@@ -228,6 +227,7 @@ public class MarketDataSnapshotDocument extends AbstractDocument implements Seri
    * This field is managed by the master but must be set for updates.
    * @return the value of the property
    */
+  @Override
   public UniqueId getUniqueId() {
     return _uniqueId;
   }
@@ -237,6 +237,7 @@ public class MarketDataSnapshotDocument extends AbstractDocument implements Seri
    * This field is managed by the master but must be set for updates.
    * @param uniqueId  the new value of the property
    */
+  @Override
   public void setUniqueId(UniqueId uniqueId) {
     this._uniqueId = uniqueId;
   }

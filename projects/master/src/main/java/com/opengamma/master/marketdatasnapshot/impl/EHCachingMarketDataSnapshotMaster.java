@@ -54,8 +54,8 @@ public class EHCachingMarketDataSnapshotMaster extends AbstractEHCachingMaster<M
    * @param cacheManager  the cache manager, not null
    */
   public EHCachingMarketDataSnapshotMaster(final String name,
-                                           final MarketDataSnapshotMaster underlying,
-                                           final CacheManager cacheManager) {
+      final MarketDataSnapshotMaster underlying,
+      final CacheManager cacheManager) {
     super(name + "MarketDataSnapshot", underlying, cacheManager);
 
     // Create the document search cache and register a marketDataSnapshot master searcher
@@ -71,7 +71,7 @@ public class EHCachingMarketDataSnapshotMaster extends AbstractEHCachingMaster<M
 
         // Return the list of result UniqueIds
         return IntObjectPair.of(result.getPaging().getTotalItems(),
-                                 EHCachingSearchCache.extractUniqueIds(result.getDocuments()));
+            EHCachingSearchCache.extractUniqueIds(result.getDocuments()));
       }
     });
 
@@ -88,7 +88,7 @@ public class EHCachingMarketDataSnapshotMaster extends AbstractEHCachingMaster<M
 
         // Return the list of result UniqueIds
         return IntObjectPair.of(result.getPaging().getTotalItems(),
-                                 EHCachingSearchCache.extractUniqueIds(result.getDocuments()));
+            EHCachingSearchCache.extractUniqueIds(result.getDocuments()));
       }
     });
 
@@ -122,12 +122,12 @@ public class EHCachingMarketDataSnapshotMaster extends AbstractEHCachingMaster<M
     if (EHCachingSearchCache.TEST_AGAINST_UNDERLYING) {
       final MarketDataSnapshotSearchResult check = ((MarketDataSnapshotMaster) getUnderlying()).search(request);
       if (!result.getPaging().equals(check.getPaging())) {
-        LOGGER.error("_documentSearchCache.getCache().getName() + \" returned paging:\\n\"" + result.getPaging() +
-                           "\nbut the underlying master returned paging:\n" + check.getPaging());
+        LOGGER.error("_documentSearchCache.getCache().getName() + \" returned paging:\\n\"" + result.getPaging()
+        + "\nbut the underlying master returned paging:\n" + check.getPaging());
       }
       if (!result.getDocuments().equals(check.getDocuments())) {
-        LOGGER.error(_documentSearchCache.getCache().getName() + " returned documents:\n" + result.getDocuments() +
-                           "\nbut the underlying master returned documents:\n" + check.getDocuments());
+        LOGGER.error(_documentSearchCache.getCache().getName() + " returned documents:\n" + result.getDocuments()
+        + "\nbut the underlying master returned documents:\n" + check.getDocuments());
       }
     }
 

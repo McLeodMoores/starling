@@ -27,11 +27,11 @@ public final class HistoricalTimeSeriesRatingFieldNames {
    */
   public static final String STAR_VALUE = "*";
   /**
-   * Valid field names
+   * Valid field names.
    */
   public static final Collection<String> VALID_FIELD_NAMES = ImmutableSet.of(DATA_SOURCE_NAME, DATA_PROVIDER_NAME);
   /**
-   * Default name for the default configuration
+   * Default name for the default configuration.
    */
   public static final String DEFAULT_CONFIG_NAME = "DEFAULT_TSS_CONFIG";
 

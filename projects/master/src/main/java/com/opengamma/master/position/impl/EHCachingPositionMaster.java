@@ -70,7 +70,7 @@ public class EHCachingPositionMaster extends AbstractEHCachingMaster<PositionDoc
 
         // Return the list of result UniqueIds
         return IntObjectPair.of(result.getPaging().getTotalItems(),
-                                 EHCachingSearchCache.extractUniqueIds(result.getDocuments()));
+            EHCachingSearchCache.extractUniqueIds(result.getDocuments()));
       }
     });
 
@@ -87,7 +87,7 @@ public class EHCachingPositionMaster extends AbstractEHCachingMaster<PositionDoc
 
         // Return the list of result UniqueIds
         return IntObjectPair.of(result.getPaging().getTotalItems(),
-                                 EHCachingSearchCache.extractUniqueIds(result.getDocuments()));
+            EHCachingSearchCache.extractUniqueIds(result.getDocuments()));
       }
     });
 
@@ -109,7 +109,7 @@ public class EHCachingPositionMaster extends AbstractEHCachingMaster<PositionDoc
     // Fetch the paged request range; if not entirely cached then fetch and cache it in foreground
     final IntObjectPair<List<UniqueId>> pair = _documentSearchCache.search(
         EHCachingSearchCache.withPagingRequest(request, null),
-        request.getPagingRequest() , false); // don't block until cached
+        request.getPagingRequest(), false); // don't block until cached
 
     final List<PositionDocument> documents = new ArrayList<>();
     for (final UniqueId uniqueId : pair.getSecond()) {
@@ -127,14 +127,14 @@ public class EHCachingPositionMaster extends AbstractEHCachingMaster<PositionDoc
       final PositionSearchResult check = ((PositionMaster) getUnderlying()).search(request);
       if (!result.getPaging().equals(check.getPaging())) {
         LOGGER.error(_documentSearchCache.getCache().getName()
-                           + "\n\tCache:\t" + result.getPaging()
-                           + "\n\tUnderlying:\t" + check.getPaging());
+            + "\n\tCache:\t" + result.getPaging()
+            + "\n\tUnderlying:\t" + check.getPaging());
       }
       if (!result.getDocuments().equals(check.getDocuments())) {
         System.out.println(_documentSearchCache.getCache().getName() + ": ");
         if (check.getDocuments().size() != result.getDocuments().size()) {
           System.out.println("\tSizes differ (Underlying " + check.getDocuments().size()
-                             + "; Cache " + result.getDocuments().size() + ")");
+              + "; Cache " + result.getDocuments().size() + ")");
         } else {
           for (int i = 0; i < check.getDocuments().size(); i++) {
             if (!check.getDocuments().get(i).equals(result.getDocuments().get(i))) {

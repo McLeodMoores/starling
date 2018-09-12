@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.position.impl;
@@ -56,25 +56,25 @@ public class ParallelQuerySplittingPositionMaster extends QuerySplittingPosition
 
     });
     LOGGER.debug("Issuing {} parallel queries", requests.size());
-    long t = System.nanoTime();
+    final long t = System.nanoTime();
     for (final PositionSearchRequest request : requests) {
       service.execute(new Callable<PositionSearchResult>() {
         @Override
         public PositionSearchResult call() throws Exception {
           LOGGER.debug("Requesting {} positions", request.getPositionObjectIds().size());
-          long t = System.nanoTime();
+          final long time = System.nanoTime();
           final PositionSearchResult result = getUnderlying().search(request);
-          LOGGER.info("{} positions queried in {}ms", request.getPositionObjectIds().size(), (double) (System.nanoTime() - t) / 1e6);
+          LOGGER.info("{} positions queried in {}ms", request.getPositionObjectIds().size(), (System.nanoTime() - time) / 1.e6);
           return result;
         }
       });
     }
     try {
       service.join();
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
       throw new OpenGammaRuntimeException("Interrupted", e);
     }
-    LOGGER.info("Finished queries for {} position in {}ms", mergedResult.getDocuments().size(), (double) (System.nanoTime() - t) / 1e6);
+    LOGGER.info("Finished queries for {} position in {}ms", mergedResult.getDocuments().size(), (System.nanoTime() - t) / 1.e6);
     return mergedResult;
   }
 

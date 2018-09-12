@@ -17,7 +17,7 @@ import org.joda.beans.JodaBeanUtils;
 import org.threeten.bp.Instant;
 import org.threeten.bp.LocalDate;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Supplier;
 import com.opengamma.DataNotFoundException;
 import com.opengamma.core.change.BasicChangeManager;
@@ -52,8 +52,8 @@ import com.opengamma.util.paging.Paging;
  * An in-memory implementation of a historical time-series master.
  */
 public class InMemoryHistoricalTimeSeriesMaster
-    extends SimpleAbstractInMemoryMaster<HistoricalTimeSeriesInfoDocument>
-    implements HistoricalTimeSeriesMaster {
+extends SimpleAbstractInMemoryMaster<HistoricalTimeSeriesInfoDocument>
+implements HistoricalTimeSeriesMaster {
 
   /**
    * The default scheme used for each {@link UniqueId}.
@@ -222,7 +222,7 @@ public class InMemoryHistoricalTimeSeriesMaster
     document.setVersionToInstant(null);
     document.setCorrectionFromInstant(now);
     document.setCorrectionToInstant(null);
-    if (_store.replace(uniqueId.getObjectId(), storedDocument, document) == false) {
+    if (!_store.replace(uniqueId.getObjectId(), storedDocument, document)) {
       throw new IllegalArgumentException("Concurrent modification");
     }
     _changeManager.entityChanged(ChangeType.CHANGED, document.getObjectId(), document.getVersionFromInstant(), document.getVersionToInstant(), now);
@@ -278,10 +278,13 @@ public class InMemoryHistoricalTimeSeriesMaster
   }
 
   @Override
-  public ManageableHistoricalTimeSeries getTimeSeries(final ObjectIdentifiable objectKey, final VersionCorrection versionCorrection, final HistoricalTimeSeriesGetFilter filter) {
+  public ManageableHistoricalTimeSeries getTimeSeries(final ObjectIdentifiable objectKey, final VersionCorrection versionCorrection,
+      final HistoricalTimeSeriesGetFilter filter) {
     validateId(objectKey);
-    final LocalDate fromDateInclusive = Objects.firstNonNull(filter.getEarliestDate(), LocalDate.of(1000, 1, 1));  // TODO: JSR-310 min/max date
-    final LocalDate toDateInclusive = Objects.firstNonNull(filter.getLatestDate(), LocalDate.of(9999, 1, 1));
+    final LocalDate fromDateInclusive = MoreObjects.firstNonNull(filter.getEarliestDate(), LocalDate.of(1000, 1, 1));  // TODO: JSR-310 min/max date
+    final LocalDate toDateInclusive = MoreObjects.firstNonNull(filter.getLatestDate(), LocalDate.of(9999, 1, 1));
+    //    final LocalDate fromDateInclusive = MoreObjects.firstNonNull(filter.getEarliestDate(), LocalDate.MIN);
+    //    final LocalDate toDateInclusive = MoreObjects.firstNonNull(filter.getLatestDate(), LocalDate.MAX);
     ArgumentChecker.inOrderOrEqual(fromDateInclusive, toDateInclusive, "fromDateInclusive", "toDateInclusive");
     final ObjectId objectId = objectKey.getObjectId();
 
@@ -320,11 +323,12 @@ public class InMemoryHistoricalTimeSeriesMaster
 
     final LocalDateDoubleTimeSeries existingSeries = _storePoints.get(objectId);
     if (existingSeries != null) {
-      if (existingSeries.size() > 0 && !(series.getLatestTime().isBefore(existingSeries.getEarliestTime()) || series.getEarliestTime().isAfter(existingSeries.getLatestTime()))) {
+      if (existingSeries.size() > 0 && !(series.getLatestTime().isBefore(existingSeries.getEarliestTime())
+          || series.getEarliestTime().isAfter(existingSeries.getLatestTime()))) {
         throw new IllegalArgumentException("Unable to add time-series as dates overlap");
       }
       final LocalDateDoubleTimeSeries newSeries = existingSeries.noIntersectionOperation(series);
-      if (_storePoints.replace(objectId, existingSeries, newSeries) == false) {
+      if (!_storePoints.replace(objectId, existingSeries, newSeries)) {
         throw new IllegalArgumentException("Concurrent modification");
       }
     } else {
@@ -348,7 +352,7 @@ public class InMemoryHistoricalTimeSeriesMaster
     final LocalDateDoubleTimeSeries existingSeries = _storePoints.get(objectId);
     if (existingSeries != null) {
       final LocalDateDoubleTimeSeries newSeries = existingSeries.unionOperate(series, DoubleTimeSeriesOperators.SECOND_OPERATOR);
-      if (_storePoints.replace(objectId, existingSeries, newSeries) == false) {
+      if (!_storePoints.replace(objectId, existingSeries, newSeries)) {
         throw new IllegalArgumentException("Concurrent modification");
       }
     } else {
@@ -366,8 +370,8 @@ public class InMemoryHistoricalTimeSeriesMaster
   @Override
   public UniqueId removeTimeSeriesDataPoints(final ObjectIdentifiable objectKey, final LocalDate fromDateInclusive, final LocalDate toDateInclusive) {
     ArgumentChecker.notNull(objectKey, "objectKey");
-    final LocalDate fromDate = Objects.firstNonNull(fromDateInclusive, LocalDate.MIN);
-    final LocalDate toDate = Objects.firstNonNull(toDateInclusive, LocalDate.MAX);
+    final LocalDate fromDate = MoreObjects.firstNonNull(fromDateInclusive, LocalDate.MIN);
+    final LocalDate toDate = MoreObjects.firstNonNull(toDateInclusive, LocalDate.MAX);
     ArgumentChecker.inOrderOrEqual(fromDate, toDate, "fromDate", "toDate");
     final ObjectId objectId = objectKey.getObjectId();
 
@@ -378,18 +382,18 @@ public class InMemoryHistoricalTimeSeriesMaster
     final LocalDateDoubleTimeSeriesBuilder bld = existingSeries.toBuilder();
     for (final LocalDateDoubleEntryIterator it = bld.iterator(); it.hasNext();) {
       final LocalDate date = it.nextTime();
-      if (date.isBefore(fromDate) == false && date.isAfter(toDate) == false) {
+      if (!date.isBefore(fromDate) && !date.isAfter(toDate)) {
         it.remove();
       }
     }
-    if (_storePoints.replace(objectId, existingSeries, bld.build()) == false) {
+    if (!_storePoints.replace(objectId, existingSeries, bld.build())) {
       throw new IllegalArgumentException("Concurrent modification");
     }
     return objectId.atLatestVersion();
   }
 
   //-------------------------------------------------------------------------
-  private long validateId(final ObjectIdentifiable objectId) {
+  private static long validateId(final ObjectIdentifiable objectId) {
     ArgumentChecker.notNull(objectId, "objectId");
     try {
       return Long.parseLong(objectId.getObjectId().getValue());

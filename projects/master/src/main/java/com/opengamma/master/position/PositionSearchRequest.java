@@ -224,24 +224,24 @@ public class PositionSearchRequest extends AbstractSearchRequest {
   //-------------------------------------------------------------------------
   @Override
   public boolean matches(final AbstractDocument obj) {
-    if (obj instanceof PositionDocument == false) {
+    if (!(obj instanceof PositionDocument)) {
       return false;
     }
     final PositionDocument document = (PositionDocument) obj;
     final ManageablePosition position = document.getPosition();
-    if (getPositionObjectIds() != null && getPositionObjectIds().contains(document.getObjectId()) == false) {
+    if (getPositionObjectIds() != null && !getPositionObjectIds().contains(document.getObjectId())) {
       return false;
     }
-    if (getTradeObjectIds() != null && position.matchesAnyTrade(getTradeObjectIds()) == false) {
+    if (getTradeObjectIds() != null && !position.matchesAnyTrade(getTradeObjectIds())) {
       return false;
     }
-    if (getSecurityIdSearch() != null && getSecurityIdSearch().matches(position.getSecurityLink().getAllExternalIds()) == false) {
+    if (getSecurityIdSearch() != null && !getSecurityIdSearch().matches(position.getSecurityLink().getAllExternalIds())) {
       return false;
     }
-    if (getPositionProviderId() != null && getPositionProviderId().equals(position.getProviderId()) == false) {
+    if (getPositionProviderId() != null && !getPositionProviderId().equals(position.getProviderId())) {
       return false;
     }
-    if (getTradeProviderId() != null && position.matchesAnyTradeProviderId(getTradeProviderId()) == false) {
+    if (getTradeProviderId() != null && !position.matchesAnyTradeProviderId(getTradeProviderId())) {
       return false;
     }
     if (getMinQuantity() != null && (position.getQuantity() == null || position.getQuantity().compareTo(getMinQuantity()) < 0)) {

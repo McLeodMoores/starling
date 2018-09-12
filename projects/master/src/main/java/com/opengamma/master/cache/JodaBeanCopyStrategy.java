@@ -26,29 +26,27 @@ public class JodaBeanCopyStrategy implements ReadWriteCopyStrategy<Element> {
   public Element copyForWrite(final Element element) {
     if (element == null) {
       return null;
-    } else {
-      final Bean bean = (Bean) element.getObjectValue();
-      final Element result = new Element(element.getObjectKey(), JodaBeanUtils.clone(bean));
-
-      // Clear any resolved links that point to other documents (e.g. positions linking to securities)
-      for (final MetaProperty<?> metaProperty : bean.metaBean().metaPropertyIterable()) {
-        if (AbstractLink.class.isAssignableFrom(metaProperty.propertyType())) {
-          final AbstractLink<?> link = (AbstractLink<?>) metaProperty.get(bean);
-          link.setTarget(null);
-        }
-      }
-      return result;
     }
+    final Bean bean = (Bean) element.getObjectValue();
+    final Element result = new Element(element.getObjectKey(), JodaBeanUtils.clone(bean));
+
+    // Clear any resolved links that point to other documents (e.g. positions linking to securities)
+    for (final MetaProperty<?> metaProperty : bean.metaBean().metaPropertyIterable()) {
+      if (AbstractLink.class.isAssignableFrom(metaProperty.propertyType())) {
+        final AbstractLink<?> link = (AbstractLink<?>) metaProperty.get(bean);
+        link.setTarget(null);
+      }
+    }
+    return result;
   }
 
   @Override
   public Element copyForRead(final Element element) {
     if (element == null) {
       return null;
-    } else {
-      final Bean bean = (Bean) element.getObjectValue();
-      return new Element(element.getObjectKey(), JodaBeanUtils.clone(bean));
     }
+    final Bean bean = (Bean) element.getObjectValue();
+    return new Element(element.getObjectKey(), JodaBeanUtils.clone(bean));
   }
 
 }

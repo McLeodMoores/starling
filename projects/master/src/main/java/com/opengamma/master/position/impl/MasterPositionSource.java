@@ -30,11 +30,12 @@ import com.opengamma.util.PublicSPI;
 /**
  * A {@code PositionSource} implemented using an underlying {@code PositionMaster} and {@code PortfolioMaster}.
  * <p>
- * The {@link PositionSource} interface provides portfolio and position to the engine via a narrow API. This class provides the source on top of a standard {@link PortfolioMaster} and
+ * The {@link PositionSource} interface provides portfolio and position to the engine via a narrow API. This class provides the
+ * source on top of a standard {@link PortfolioMaster} and
  * {@link PositionMaster}.
  */
 @PublicSPI
-public class MasterPositionSource extends AbstractMasterPositionSource implements PositionSource {
+public class MasterPositionSource extends AbstractMasterPositionSource {
   // TODO: This still needs work re versioning, as it crosses the boundary between two masters
 
   /**

@@ -52,7 +52,7 @@ public enum DocumentVisibility {
    *
    * @param visibilityLevel  the level, typically from 0 (highest) to 100 (lowest)
    */
-  private DocumentVisibility(final short visibilityLevel) {
+  DocumentVisibility(final short visibilityLevel) {
     _visibilityLevel = visibilityLevel;
   }
 

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.historicaltimeseries;
@@ -20,9 +20,10 @@ public interface HistoricalTimeSeriesResolver extends com.opengamma.core.histori
   /**
    * Resolves a time-series from a bundle of identifiers and a data field.
    * <p>
-   * The desired series is specified by identifier bundle, typically a security, and the data field name, such as "price" or "volume". However, the underlying sources of data may contain multiple
-   * matching time-series. The resolver allows the preferred series to be chosen based on a key. The meaning of the key is resolver-specific, and it might be treated as a DSL or a configuration key.
-   * 
+   * The desired series is specified by identifier bundle, typically a security, and the data field name, such as "price" or "volume".
+   * However, the underlying sources of data may contain multiple matching time-series. The resolver allows the preferred series to be
+   * chosen based on a key. The meaning of the key is resolver-specific, and it might be treated as a DSL or a configuration key.
+   *
    * @param identifierBundle the bundle of identifiers to resolve, not null
    * @param identifierValidityDate the date that the identifier must be valid on, null to use all identifiers
    * @param dataSource the data source name associated with the time-series, null for any
@@ -32,8 +33,10 @@ public interface HistoricalTimeSeriesResolver extends com.opengamma.core.histori
    * @return a resolution result for the best match, null if unable to find a match
    */
   @Override
-  HistoricalTimeSeriesResolutionResult resolve(ExternalIdBundle identifierBundle, LocalDate identifierValidityDate, String dataSource, String dataProvider, String dataField, String resolutionKey);
+  HistoricalTimeSeriesResolutionResult resolve(ExternalIdBundle identifierBundle, LocalDate identifierValidityDate,
+      String dataSource, String dataProvider, String dataField, String resolutionKey);
 
-  // REVIEW 2012-07-10 Andrew -- Should this be in OG-Core rather than OG-Master? Should it be possible to obtain the resolver from the HistoricalTimeSeriesSource?
+  // REVIEW 2012-07-10 Andrew -- Should this be in OG-Core rather than OG-Master? Should it be possible to obtain
+  // the resolver from the HistoricalTimeSeriesSource?
 
 }

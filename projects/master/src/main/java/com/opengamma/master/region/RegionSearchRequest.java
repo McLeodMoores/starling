@@ -236,27 +236,27 @@ public class RegionSearchRequest extends AbstractSearchRequest implements Serial
   //-------------------------------------------------------------------------
   @Override
   public boolean matches(final AbstractDocument obj) {
-    if (obj instanceof RegionDocument == false) {
+    if (!(obj instanceof RegionDocument)) {
       return false;
     }
     final RegionDocument document = (RegionDocument) obj;
     final ManageableRegion region = document.getRegion();
-    if (getObjectIds() != null && getObjectIds().contains(document.getObjectId()) == false) {
+    if (getObjectIds() != null && !getObjectIds().contains(document.getObjectId())) {
       return false;
     }
-    if (getExternalIdSearch() != null && getExternalIdSearch().matches(region.getExternalIdBundle()) == false) {
+    if (getExternalIdSearch() != null && !getExternalIdSearch().matches(region.getExternalIdBundle())) {
       return false;
     }
-    if (getName() != null && RegexUtils.wildcardMatch(getName(), region.getName()) == false) {
+    if (getName() != null && !RegexUtils.wildcardMatch(getName(), region.getName())) {
       return false;
     }
     if (getClassification() != null && getClassification() != region.getClassification()) {
       return false;
     }
-    if (getProviderId() != null && getProviderId().equals(document.getProviderId()) == false) {
+    if (getProviderId() != null && !getProviderId().equals(document.getProviderId())) {
       return false;
     }
-    if (getChildrenOfId() != null && region.getParentRegionIds().contains(getChildrenOfId()) == false) {
+    if (getChildrenOfId() != null && !region.getParentRegionIds().contains(getChildrenOfId())) {
       return false;
     }
     return true;

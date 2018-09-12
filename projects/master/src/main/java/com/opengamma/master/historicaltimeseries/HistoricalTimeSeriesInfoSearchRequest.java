@@ -215,43 +215,43 @@ public class HistoricalTimeSeriesInfoSearchRequest extends AbstractSearchRequest
   //-------------------------------------------------------------------------
   @Override
   public boolean matches(final AbstractDocument obj) {
-    if (obj instanceof HistoricalTimeSeriesInfoDocument == false) {
+    if (!(obj instanceof HistoricalTimeSeriesInfoDocument)) {
       return false;
     }
     final HistoricalTimeSeriesInfoDocument document = (HistoricalTimeSeriesInfoDocument) obj;
     final ManageableHistoricalTimeSeriesInfo info = document.getInfo();
-    if (getObjectIds() != null && getObjectIds().contains(document.getObjectId()) == false) {
+    if (getObjectIds() != null && !getObjectIds().contains(document.getObjectId())) {
       return false;
     }
-    if (getExternalIdSearch() != null && getExternalIdSearch().matches(
-        info.getExternalIdBundle().toBundle(getValidityDate())) == false) {
+    if (getExternalIdSearch() != null && !getExternalIdSearch().matches(
+        info.getExternalIdBundle().toBundle(getValidityDate()))) {
       return false;
     }
-    if (getName() != null && RegexUtils.wildcardMatch(getName(), info.getName()) == false) {
+    if (getName() != null && !RegexUtils.wildcardMatch(getName(), info.getName())) {
       return false;
     }
-    if (getDataSource() != null && getDataSource().equals(info.getDataSource()) == false) {
+    if (getDataSource() != null && !getDataSource().equals(info.getDataSource())) {
       return false;
     }
-    if (getDataProvider() != null && getDataProvider().equals(info.getDataProvider()) == false) {
+    if (getDataProvider() != null && !getDataProvider().equals(info.getDataProvider())) {
       return false;
     }
-    if (getDataField() != null && getDataField().equals(info.getDataField()) == false) {
+    if (getDataField() != null && !getDataField().equals(info.getDataField())) {
       return false;
     }
-    if (getObservationTime() != null && getObservationTime().equals(info.getObservationTime()) == false) {
+    if (getObservationTime() != null && !getObservationTime().equals(info.getObservationTime())) {
       return false;
     }
     if (getExternalIdValue() != null) {
       success: {  // label used with break statement, CSIGNORE
-        final ExternalIdBundle docBundle = info.getExternalIdBundle().toBundle();
-        for (final ExternalId identifier : docBundle.getExternalIds()) {
-          if (RegexUtils.wildcardMatch(getExternalIdValue(), identifier.getValue())) {
-            break success;
-          }
+      final ExternalIdBundle docBundle = info.getExternalIdBundle().toBundle();
+      for (final ExternalId identifier : docBundle.getExternalIds()) {
+        if (RegexUtils.wildcardMatch(getExternalIdValue(), identifier.getValue())) {
+          break success;
         }
-        return false;
       }
+      return false;
+    }
     }
     return true;
   }

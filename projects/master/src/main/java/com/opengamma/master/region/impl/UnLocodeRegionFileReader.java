@@ -19,7 +19,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.google.common.base.Charsets;
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.region.RegionClassification;
@@ -138,13 +138,13 @@ class UnLocodeRegionFileReader {
         name = StringUtils.trimToNull(row[nameColumnIdx]);
         final String type = StringUtils.trimToNull(row[typeIdx]);
         String fullName = StringUtils.trimToNull(row[fullNameColumnIdx]);
-        fullName = Objects.firstNonNull(fullName, name);
+        fullName = MoreObjects.firstNonNull(fullName, name);
         final String countryISO = StringUtils.trimToNull(row[countryIsoIdx]);
         final String unlocodePart = StringUtils.trimToNull(row[unlocodePartIdx]);
         final String unlocode = countryISO + unlocodePart;
-        if (StringUtils.isEmpty(name) || StringUtils.isEmpty(fullName) || StringUtils.isEmpty(countryISO) ||
-            StringUtils.isEmpty(unlocodePart) || unlocode.length() != 5 ||
-            countryISO.equals("XZ") || "=".equals(type) || required.remove(unlocode) == false) {
+        if (StringUtils.isEmpty(name) || StringUtils.isEmpty(fullName) || StringUtils.isEmpty(countryISO)
+            || StringUtils.isEmpty(unlocodePart) || unlocode.length() != 5
+            || countryISO.equals("XZ") || "=".equals(type) || !required.remove(unlocode)) {
           continue;
         }
 
@@ -187,7 +187,7 @@ class UnLocodeRegionFileReader {
       final String coppClarkLocode = COPP_CLARK_ALTERATIONS.get(unLocode);
       if (coppClarkLocode != null) {
         region.addExternalId(ExternalSchemes.coppClarkRegionId(coppClarkLocode));
-        if (coppClarkLocode.substring(0, 2).equals(unLocode.substring(0, 2)) == false) {
+        if (!coppClarkLocode.substring(0, 2).equals(unLocode.substring(0, 2))) {
           addParent(region, coppClarkLocode.substring(0, 2));
         }
       } else {
@@ -212,8 +212,8 @@ class UnLocodeRegionFileReader {
         _regionMaster.add(doc);
       } else {
         final RegionDocument existing = result.getFirstDocument();
-        if (existing.getRegion().getName().equals(doc.getRegion().getName()) == false ||
-            existing.getRegion().getFullName().equals(doc.getRegion().getFullName()) == false) {
+        if (!existing.getRegion().getName().equals(doc.getRegion().getName())
+            || !existing.getRegion().getFullName().equals(doc.getRegion().getFullName())) {
           existing.getRegion().setName(doc.getRegion().getName());
           existing.getRegion().setFullName(doc.getRegion().getFullName());
           _regionMaster.update(existing);

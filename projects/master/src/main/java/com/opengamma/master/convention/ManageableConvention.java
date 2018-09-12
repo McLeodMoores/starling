@@ -21,13 +21,11 @@ import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
-import com.opengamma.core.Attributable;
 import com.opengamma.core.convention.Convention;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.MutableUniqueIdentifiable;
 import com.opengamma.id.UniqueId;
-import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.PublicSPI;
 
@@ -39,7 +37,7 @@ import com.opengamma.util.PublicSPI;
 @PublicSPI
 @BeanDefinition
 public abstract class ManageableConvention
-    implements Convention, Bean, UniqueIdentifiable, MutableUniqueIdentifiable, Attributable, Serializable {
+implements Convention, Bean, MutableUniqueIdentifiable, Serializable {
 
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
@@ -48,24 +46,24 @@ public abstract class ManageableConvention
    * The unique identifier of the convention.
    * This must be null when adding to a master and not null when retrieved from a master.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true, overrideSet = true)
   private UniqueId _uniqueId;
   /**
    * The bundle of external identifiers that define the convention.
    * This field must not be null for the object to be valid.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private ExternalIdBundle _externalIdBundle = ExternalIdBundle.EMPTY;
   /**
    * The map of attributes, which can be used for attaching additional application-level information.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private final Map<String, String> _attributes = new HashMap<>();
   /**
    * The name of the convention intended for display purposes.
    * This field must not be null for the object to be valid.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private String _name = "";
 
   /**
@@ -154,6 +152,7 @@ public abstract class ManageableConvention
    * This must be null when adding to a master and not null when retrieved from a master.
    * @return the value of the property
    */
+  @Override
   public UniqueId getUniqueId() {
     return _uniqueId;
   }
@@ -163,6 +162,7 @@ public abstract class ManageableConvention
    * This must be null when adding to a master and not null when retrieved from a master.
    * @param uniqueId  the new value of the property
    */
+  @Override
   public void setUniqueId(UniqueId uniqueId) {
     this._uniqueId = uniqueId;
   }
@@ -182,6 +182,7 @@ public abstract class ManageableConvention
    * This field must not be null for the object to be valid.
    * @return the value of the property, not null
    */
+  @Override
   public ExternalIdBundle getExternalIdBundle() {
     return _externalIdBundle;
   }
@@ -210,6 +211,7 @@ public abstract class ManageableConvention
    * Gets the map of attributes, which can be used for attaching additional application-level information.
    * @return the value of the property, not null
    */
+  @Override
   public Map<String, String> getAttributes() {
     return _attributes;
   }
@@ -238,6 +240,7 @@ public abstract class ManageableConvention
    * This field must not be null for the object to be valid.
    * @return the value of the property, not null
    */
+  @Override
   public String getName() {
     return _name;
   }

@@ -145,31 +145,31 @@ public class UserSearchRequest implements Bean {
     if (user == null) {
       return false;
     }
-    if (getObjectIds() != null && getObjectIds().contains(user.getObjectId()) == false) {
+    if (getObjectIds() != null && !getObjectIds().contains(user.getObjectId())) {
       return false;
     }
-    if (getUserName() != null && RegexUtils.wildcardMatch(getUserName(), user.getUserName()) == false) {
+    if (getUserName() != null && !RegexUtils.wildcardMatch(getUserName(), user.getUserName())) {
       return false;
     }
-    if (getDisplayName() != null && RegexUtils.wildcardMatch(getDisplayName(), user.getProfile().getDisplayName()) == false) {
+    if (getDisplayName() != null && !RegexUtils.wildcardMatch(getDisplayName(), user.getProfile().getDisplayName())) {
       return false;
     }
-    if (getEmailAddress() != null && RegexUtils.wildcardMatch(getEmailAddress(), user.getEmailAddress()) == false) {
+    if (getEmailAddress() != null && !RegexUtils.wildcardMatch(getEmailAddress(), user.getEmailAddress())) {
       return false;
     }
-    if (user.getAssociatedPermissions().contains(getAssociatedPermission()) == false) {
+    if (!user.getAssociatedPermissions().contains(getAssociatedPermission())) {
       return false;
     }
     if (getAlternateIdValue() != null) {
       for (final ExternalId identifier : user.getAlternateIds()) {
-        if (RegexUtils.wildcardMatch(getAlternateIdValue(), identifier.getValue()) == false) {
+        if (!RegexUtils.wildcardMatch(getAlternateIdValue(), identifier.getValue())) {
           return false;
         }
       }
     }
     if (getAlternateIdScheme() != null) {
       for (final ExternalId identifier : user.getAlternateIds()) {
-        if (RegexUtils.wildcardMatch(getAlternateIdScheme(), identifier.getScheme().getName()) == false) {
+        if (!RegexUtils.wildcardMatch(getAlternateIdScheme(), identifier.getScheme().getName())) {
           return false;
         }
       }

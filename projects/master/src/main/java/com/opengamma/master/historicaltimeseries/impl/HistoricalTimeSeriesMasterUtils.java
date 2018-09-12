@@ -100,31 +100,31 @@ public class HistoricalTimeSeriesMasterUtils {
    * @param timeSeries  the time-series, not null
    * @return the unique identifier of the time-series
    */
-  public UniqueId writeTimeSeries(UniqueId uniqueId, final LocalDateDoubleTimeSeries timeSeries) {
-
-    final ManageableHistoricalTimeSeries existingManageableTs = _htsMaster.getTimeSeries(uniqueId);
+  public UniqueId writeTimeSeries(final UniqueId uniqueId, final LocalDateDoubleTimeSeries timeSeries) {
+    UniqueId uid = uniqueId;
+    final ManageableHistoricalTimeSeries existingManageableTs = _htsMaster.getTimeSeries(uid);
     final LocalDateDoubleTimeSeries existingTs = existingManageableTs.getTimeSeries();
     if (existingTs.isEmpty()) {
-      _htsMaster.updateTimeSeriesDataPoints(uniqueId, timeSeries);
-      LOGGER.debug("Updating time series " + uniqueId + " with all as currently emtpy)");
+      _htsMaster.updateTimeSeriesDataPoints(uid, timeSeries);
+      LOGGER.debug("Updating time series " + uid + " with all as currently emtpy)");
     } else {
       // There is a matching time-series already in the master so update it to reflect the new time-series
       // 1: 'correct' any differences in the subseries already present
       final LocalDateDoubleTimeSeries tsIntersection = timeSeries.subSeries(existingTs.getEarliestTime(), true, existingTs.getLatestTime(), true);
       if (!tsIntersection.equals(existingTs)) {
-        LOGGER.debug("Correcting time series " + uniqueId + " from " + existingTs.getEarliestTime() + " to " + existingTs.getLatestTime());
-        uniqueId = _htsMaster.correctTimeSeriesDataPoints(uniqueId.getObjectId(), tsIntersection);
+        LOGGER.debug("Correcting time series " + uid + " from " + existingTs.getEarliestTime() + " to " + existingTs.getLatestTime());
+        uid = _htsMaster.correctTimeSeriesDataPoints(uid.getObjectId(), tsIntersection);
       }
       // 2: 'update' the time-series to add any new, later points
       if (existingTs.getLatestTime().isBefore(timeSeries.getLatestTime())) {
         final LocalDateDoubleTimeSeries newSeries = timeSeries.subSeries(existingTs.getLatestTime(), false, timeSeries.getLatestTime(), true);
         if (newSeries.size() > 0) {
-          LOGGER.debug("Updating time series " + uniqueId + " from " + newSeries.getEarliestTime() + " to " + newSeries.getLatestTime());
-          uniqueId = _htsMaster.updateTimeSeriesDataPoints(uniqueId, newSeries);
+          LOGGER.debug("Updating time series " + uid + " from " + newSeries.getEarliestTime() + " to " + newSeries.getLatestTime());
+          uid = _htsMaster.updateTimeSeriesDataPoints(uid, newSeries);
         }
       }
     }
-    return uniqueId;
+    return uid;
   }
 
   //-------------------------------------------------------------------------
@@ -190,22 +190,21 @@ public class HistoricalTimeSeriesMasterUtils {
       // update existing time series
       final HistoricalTimeSeriesInfoDocument existingTsDoc = searchResult.getFirstDocument();
       return writeTimeSeries(description, dataSource, dataProvider, dataField, observationTime, existingTsDoc.getObjectId(), timeSeries);
-    } else {
-      // add new time series
-      final ManageableHistoricalTimeSeriesInfo info = new ManageableHistoricalTimeSeriesInfo();
-      info.setDataField(dataField);
-      info.setDataSource(dataSource);
-      info.setDataProvider(dataProvider);
-      info.setObservationTime(observationTime);
-      info.setExternalIdBundle(ExternalIdBundleWithDates.of(externalIdBundle));
-      info.setName(description);
-      final HistoricalTimeSeriesInfoDocument htsInfoDoc = new HistoricalTimeSeriesInfoDocument();
-      htsInfoDoc.setInfo(info);
-
-      final HistoricalTimeSeriesInfoDocument addedInfoDoc = _htsMaster.add(htsInfoDoc);
-      LOGGER.debug("Adding time series " + externalIdBundle + " from " + timeSeries.getEarliestTime() + " to " + timeSeries.getLatestTime());
-      return _htsMaster.updateTimeSeriesDataPoints(addedInfoDoc.getInfo().getTimeSeriesObjectId(), timeSeries);
     }
+    // add new time series
+    final ManageableHistoricalTimeSeriesInfo info = new ManageableHistoricalTimeSeriesInfo();
+    info.setDataField(dataField);
+    info.setDataSource(dataSource);
+    info.setDataProvider(dataProvider);
+    info.setObservationTime(observationTime);
+    info.setExternalIdBundle(ExternalIdBundleWithDates.of(externalIdBundle));
+    info.setName(description);
+    final HistoricalTimeSeriesInfoDocument htsInfoDoc = new HistoricalTimeSeriesInfoDocument();
+    htsInfoDoc.setInfo(info);
+
+    final HistoricalTimeSeriesInfoDocument addedInfoDoc = _htsMaster.add(htsInfoDoc);
+    LOGGER.debug("Adding time series " + externalIdBundle + " from " + timeSeries.getEarliestTime() + " to " + timeSeries.getLatestTime());
+    return _htsMaster.updateTimeSeriesDataPoints(addedInfoDoc.getInfo().getTimeSeriesObjectId(), timeSeries);
   }
 
   /**

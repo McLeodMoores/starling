@@ -19,14 +19,14 @@ import com.opengamma.util.beancompare.BeanCompare;
 import com.opengamma.util.beancompare.BeanDifference;
 
 /**
- * Static utility methods for using a security master
+ * Static utility methods for using a security master.
  */
 public class SecurityMasterUtils {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SecurityMasterUtils.class);
 
   /**
-   * Adds a security if not present, otherwise creates a new version of an existing security if it's changed (by comparing all fields except the UniqueId
+   * Adds a security if not present, otherwise creates a new version of an existing security if it's changed (by comparing all fields except the UniqueId).
    * @param securityMaster the security master to use when performing the operation
    * @param security the security to add or update
    * @return the persisted security
@@ -36,7 +36,7 @@ public class SecurityMasterUtils {
   }
 
   /**
-   * Adds a security if not present, otherwise creates a new version of an existing security if it's changed (by comparing all fields except the UniqueId
+   * Adds a security if not present, otherwise creates a new version of an existing security if it's changed (by comparing all fields except the UniqueId).
    * @param securityMaster the security master to use when performing the operation
    * @param security the security to add or update
    * @param deleteAndReAdd optionally delete any existing security and start a new version
@@ -72,20 +72,19 @@ public class SecurityMasterUtils {
         if (differences != null && (differences.isEmpty() || differences.size() == 1 && differences.get(0).getProperty().propertyType() == UniqueId.class)) {
           // It's already there, don't update or add it
           return foundSecurity;
-        } else {
-          final SecurityDocument updateDoc = new SecurityDocument(security);
-          updateDoc.setVersionFromInstant(Instant.now());
-          try {
-            //updateDoc.setUniqueId(foundSecurity.getUniqueId());
-            //return _securityMaster.update(updateDoc).getSecurity();
-            final UniqueId newId = securityMaster.addVersion(foundSecurity.getUniqueId().getObjectId(), updateDoc);
-            //UniqueId newId = securityMaster.addVersion(foundSecurityDoc, updateDoc);
-            security.setUniqueId(newId);
-            return security;
-          } catch (final Throwable t) {
-            LOGGER.error("Unable to update security " + security.getUniqueId() + ": " + t.getMessage(), t);
-            return null;
-          }
+        }
+        final SecurityDocument updateDoc = new SecurityDocument(security);
+        updateDoc.setVersionFromInstant(Instant.now());
+        try {
+          //updateDoc.setUniqueId(foundSecurity.getUniqueId());
+          //return _securityMaster.update(updateDoc).getSecurity();
+          final UniqueId newId = securityMaster.addVersion(foundSecurity.getUniqueId().getObjectId(), updateDoc);
+          //UniqueId newId = securityMaster.addVersion(foundSecurityDoc, updateDoc);
+          security.setUniqueId(newId);
+          return security;
+        } catch (final Throwable t) {
+          LOGGER.error("Unable to update security " + security.getUniqueId() + ": " + t.getMessage(), t);
+          return null;
         }
       }
     }

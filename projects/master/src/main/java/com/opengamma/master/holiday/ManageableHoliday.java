@@ -50,42 +50,42 @@ public class ManageableHoliday extends DirectBean implements Holiday, Serializab
    * The unique identifier of the holiday.
    * This must be null when adding to a master and not null when retrieved from a master.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true, overrideSet = true)
   private UniqueId _uniqueId;
   /**
    * The type of the holiday.
    * This field must not be null for the object to be valid.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private HolidayType _type;
   /**
    * The region external identifier bundle, used when this is a holiday of type BANK.
    * This must be null if the type is not BANK.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private ExternalId _regionExternalId;
   /**
    * The exchange external identifier bundle, used when this is a holiday of type SETTLEMENT or TRADING.
    * This must be null if the type is not SETTLEMENT or TRADING.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private ExternalId _exchangeExternalId;
   /**
    * The custom external identifier, used when this is a holiday of type CUSTOM
    * This must be null if the type is not CUSTOM.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private ExternalId _customExternalId;
   /**
    * The currency, used when this is a holiday of type CURRENCY.
    * This must be null if the type is not CURRENCY.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private Currency _currency;
   /**
    * The list of dates that the target (currency/region/exchange) is on holiday, not null.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private final List<LocalDate> _holidayDates = new ArrayList<>();
 
   /**
@@ -198,6 +198,7 @@ public class ManageableHoliday extends DirectBean implements Holiday, Serializab
    * This must be null when adding to a master and not null when retrieved from a master.
    * @return the value of the property
    */
+  @Override
   public UniqueId getUniqueId() {
     return _uniqueId;
   }
@@ -207,6 +208,7 @@ public class ManageableHoliday extends DirectBean implements Holiday, Serializab
    * This must be null when adding to a master and not null when retrieved from a master.
    * @param uniqueId  the new value of the property
    */
+  @Override
   public void setUniqueId(UniqueId uniqueId) {
     this._uniqueId = uniqueId;
   }
@@ -226,6 +228,7 @@ public class ManageableHoliday extends DirectBean implements Holiday, Serializab
    * This field must not be null for the object to be valid.
    * @return the value of the property
    */
+  @Override
   public HolidayType getType() {
     return _type;
   }
@@ -254,6 +257,7 @@ public class ManageableHoliday extends DirectBean implements Holiday, Serializab
    * This must be null if the type is not BANK.
    * @return the value of the property
    */
+  @Override
   public ExternalId getRegionExternalId() {
     return _regionExternalId;
   }
@@ -282,6 +286,7 @@ public class ManageableHoliday extends DirectBean implements Holiday, Serializab
    * This must be null if the type is not SETTLEMENT or TRADING.
    * @return the value of the property
    */
+  @Override
   public ExternalId getExchangeExternalId() {
     return _exchangeExternalId;
   }
@@ -310,6 +315,7 @@ public class ManageableHoliday extends DirectBean implements Holiday, Serializab
    * This must be null if the type is not CUSTOM.
    * @return the value of the property
    */
+  @Override
   public ExternalId getCustomExternalId() {
     return _customExternalId;
   }
@@ -338,6 +344,7 @@ public class ManageableHoliday extends DirectBean implements Holiday, Serializab
    * This must be null if the type is not CURRENCY.
    * @return the value of the property
    */
+  @Override
   public Currency getCurrency() {
     return _currency;
   }
@@ -365,6 +372,7 @@ public class ManageableHoliday extends DirectBean implements Holiday, Serializab
    * Gets the list of dates that the target (currency/region/exchange) is on holiday, not null.
    * @return the value of the property, not null
    */
+  @Override
   public List<LocalDate> getHolidayDates() {
     return _holidayDates;
   }

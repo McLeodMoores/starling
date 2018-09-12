@@ -24,7 +24,8 @@ import com.opengamma.id.VersionCorrection;
  * @param <D> the document type
  * @param <M> the master
  */
-public abstract class AbstractDataTrackingMaster<D extends AbstractDocument, M extends AbstractChangeProvidingMaster<D>> implements AbstractChangeProvidingMaster<D> {
+public abstract class AbstractDataTrackingMaster<D extends AbstractDocument, M extends AbstractChangeProvidingMaster<D>>
+implements AbstractChangeProvidingMaster<D> {
 
   private final M _delegate;
   private final Set<UniqueId> _ids = Sets.newHashSet();
@@ -47,7 +48,7 @@ public abstract class AbstractDataTrackingMaster<D extends AbstractDocument, M e
 
 
   /**
-   * Track access to the given doc (via its {@link UniqueId})
+   * Track access to the given doc (via its {@link UniqueId}).
    * @param doc the document to track
    * @return the document passed
    */
@@ -60,7 +61,7 @@ public abstract class AbstractDataTrackingMaster<D extends AbstractDocument, M e
   }
 
   /**
-   * Track access to the given docs (via their {@link UniqueId}s)
+   * Track access to the given docs (via their {@link UniqueId}s).
    * @param docs the documents to track
    * @return the documents passed
    */
@@ -76,7 +77,7 @@ public abstract class AbstractDataTrackingMaster<D extends AbstractDocument, M e
   }
 
   /**
-   * Track access to the given ids
+   * Track access to the given ids.
    * @param ids the ids to track
    * @param <T> the type of iterable used
    * @return the ids passed

@@ -112,7 +112,7 @@ public class CombinedMasterTest {
     HolidaySearchResult sr;
     sr = new HolidaySearchResult(ImmutableList.of(m1h1, m1h2, m1h3, m1h4));
 
-    PagingRequest ofIndex ;
+    PagingRequest ofIndex;
     ofIndex = PagingRequest.ofIndex(1, 3);
 
     cMaster.applyPaging(sr, ofIndex);
@@ -372,7 +372,7 @@ public class CombinedMasterTest {
   @Test
   public void pagedSearchOnlyFirst() {
     final List<HolidayDocument> m2Result = Lists.newArrayList();
-    List<HolidayDocument> result ;
+    List<HolidayDocument> result;
 
     result = runPagedSearch(PagingRequest.ofIndex(0, 2), Lists.newArrayList(d1, d1), 3, m2Result, 0);
     assertEquals(2, result.size());

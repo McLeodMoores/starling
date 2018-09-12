@@ -177,8 +177,8 @@ public class RoleForm implements Bean {
    * @return the added role
    * @throws RoleFormException if the proposed role is invalid
    */
-  protected ManageableRole validate(UserMaster userMaster, final boolean add) {
-    userMaster = ArgumentChecker.notNull(userMaster, "userMaster");
+  protected ManageableRole validate(final UserMaster userMaster, final boolean add) {
+    final UserMaster master = ArgumentChecker.notNull(userMaster, "userMaster");
     String roleName = StringUtils.trimToNull(getRoleName());
     final String description = StringUtils.trimToNull(getDescription());
     final String addRolesStr = StringUtils.trimToEmpty(getAddRoles());
@@ -203,7 +203,7 @@ public class RoleForm implements Bean {
     } else if (isRoleNameInvalid(roleName)) {
       errors.add(RoleFormError.ROLENAME_INVALID);
     } else {
-      if (add && userMaster.roleMaster().nameExists(roleName)) {
+      if (add && master.roleMaster().nameExists(roleName)) {
         errors.add(RoleFormError.ROLENAME_ALREADY_IN_USE);
       }
     }
@@ -230,7 +230,7 @@ public class RoleForm implements Bean {
     // roles
     for (String roleStr : StringUtils.split(addRolesStr, ',')) {
       roleStr = roleStr.trim();
-      if (VALID_NAME.matcher(roleStr).matches() && userMaster.roleMaster().nameExists(roleStr)) {
+      if (VALID_NAME.matcher(roleStr).matches() && master.roleMaster().nameExists(roleStr)) {
         role.getAssociatedRoles().add(roleStr);
       }
     }
@@ -250,7 +250,7 @@ public class RoleForm implements Bean {
     // users
     for (String userStr : StringUtils.split(addUsersStr, ',')) {
       userStr = userStr.trim();
-      if (UserForm.VALID_NAME.matcher(userStr).matches() && userMaster.nameExists(userStr)) {
+      if (UserForm.VALID_NAME.matcher(userStr).matches() && master.nameExists(userStr)) {
         role.getAssociatedUsers().add(userStr);
       }
     }
@@ -288,7 +288,7 @@ public class RoleForm implements Bean {
    * @return true if invalid
    */
   protected boolean isRoleNameInvalid(final String roleName) {
-    return VALID_NAME.matcher(roleName).matches() == false;
+    return !VALID_NAME.matcher(roleName).matches();
   }
 
   /**

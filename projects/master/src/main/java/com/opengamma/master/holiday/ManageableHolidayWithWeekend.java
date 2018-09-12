@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.master.holiday;
 
@@ -41,7 +41,7 @@ public class ManageableHolidayWithWeekend extends ManageableHoliday implements W
   /**
    * The weekend type.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private WeekendType _weekendType;
 
   /**
@@ -133,6 +133,7 @@ public class ManageableHolidayWithWeekend extends ManageableHoliday implements W
    * Gets the weekend type.
    * @return the value of the property, not null
    */
+  @Override
   public WeekendType getWeekendType() {
     return _weekendType;
   }

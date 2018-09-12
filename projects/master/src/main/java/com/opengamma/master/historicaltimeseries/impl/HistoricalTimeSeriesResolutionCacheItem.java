@@ -49,7 +49,8 @@ public class HistoricalTimeSeriesResolutionCacheItem {
   public void putInvalid(final LocalDate validityDate) {
     if (validityDate == null) {
       if (_results.size() != 0) {
-        throw new OpenGammaRuntimeException("Already have " + _results.size() + " valid results for " + _externalId + " but attempted to mark every date as invalid");
+        throw new OpenGammaRuntimeException("Already have " + _results.size() + " valid results for " + _externalId
+            + " but attempted to mark every date as invalid");
       }
       _allInvalid.set(true);
       _invalidDates.clear();

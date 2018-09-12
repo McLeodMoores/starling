@@ -49,29 +49,29 @@ public class ManageableExchange extends DirectBean implements Exchange, Serializ
    * The unique identifier of the exchange.
    * This must be null when adding to a master and not null when retrieved from a master.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private UniqueId _uniqueId;
   /**
    * The bundle of external identifiers that define the exchange.
    * This field must not be null for the object to be valid.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private ExternalIdBundle _externalIdBundle = ExternalIdBundle.EMPTY;
   /**
    * The name of the exchange intended for display purposes.
    * This field must not be null for the object to be valid.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private String _name;
   /**
    * The region external identifier bundle that defines where the exchange is located.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private ExternalIdBundle _regionIdBundle;
   /**
    * The time-zone of the exchange.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private ZoneId _timeZone;
   /**
    * The detailed information about when an exchange is open or closed, not null.
@@ -175,6 +175,7 @@ public class ManageableExchange extends DirectBean implements Exchange, Serializ
    * This must be null when adding to a master and not null when retrieved from a master.
    * @return the value of the property
    */
+  @Override
   public UniqueId getUniqueId() {
     return _uniqueId;
   }
@@ -203,6 +204,7 @@ public class ManageableExchange extends DirectBean implements Exchange, Serializ
    * This field must not be null for the object to be valid.
    * @return the value of the property
    */
+  @Override
   public ExternalIdBundle getExternalIdBundle() {
     return _externalIdBundle;
   }
@@ -231,6 +233,7 @@ public class ManageableExchange extends DirectBean implements Exchange, Serializ
    * This field must not be null for the object to be valid.
    * @return the value of the property
    */
+  @Override
   public String getName() {
     return _name;
   }
@@ -258,6 +261,7 @@ public class ManageableExchange extends DirectBean implements Exchange, Serializ
    * Gets the region external identifier bundle that defines where the exchange is located.
    * @return the value of the property
    */
+  @Override
   public ExternalIdBundle getRegionIdBundle() {
     return _regionIdBundle;
   }
@@ -283,6 +287,7 @@ public class ManageableExchange extends DirectBean implements Exchange, Serializ
    * Gets the time-zone of the exchange.
    * @return the value of the property
    */
+  @Override
   public ZoneId getTimeZone() {
     return _timeZone;
   }

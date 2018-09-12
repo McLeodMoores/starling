@@ -186,7 +186,8 @@ public abstract class CombinedMaster<D extends AbstractDocument, M extends Abstr
    * @param searchRequest the search request to execute
    * @param <S> the search request type
    */
-  protected <S extends PagedRequest> void pagedSearch(final SearchStrategy<D, M, S> searchStrategy, final AbstractDocumentsResult<D> documentsResult, final S searchRequest) {
+  protected <S extends PagedRequest> void pagedSearch(
+      final SearchStrategy<D, M, S> searchStrategy, final AbstractDocumentsResult<D> documentsResult, final S searchRequest) {
     //first, hive off the original paging request. this is
     //because we're about to mutate the searchRequest so
     //that it is appropriate for downstream masters.
@@ -279,6 +280,7 @@ public abstract class CombinedMaster<D extends AbstractDocument, M extends Abstr
    * A callback object which describes a document order, a filtering policy,
    * and a callback method for handling the document.
    * @param <D> The document type.
+   * @param <M> The master type.
    */
   public interface SearchCallback<D, M> extends Comparator<D> {
 
@@ -418,7 +420,9 @@ public abstract class CombinedMaster<D extends AbstractDocument, M extends Abstr
     } while (true);
   }
 
-  private int refillElements(final List<IndexedElement> elements, final SearchCallback<D, M> callback, final List<ListIterator<D>> iterators, final Set<Integer> nextIteratorsToUse, int remainingIterators) {
+  private int refillElements(final List<IndexedElement> elements, final SearchCallback<D, M> callback, final List<ListIterator<D>> iterators,
+      final Set<Integer> nextIteratorsToUse, final int remainingIterators) {
+    int iteratorCount = remainingIterators;
     for (final Iterator<Integer> it = nextIteratorsToUse.iterator(); it.hasNext();) {
       final Integer i = it.next();
       it.remove();
@@ -430,11 +434,11 @@ public abstract class CombinedMaster<D extends AbstractDocument, M extends Abstr
       } else {
         //iterator is done. set to null
         iterators.set(i, null);
-        remainingIterators--;
+        iteratorCount--;
       }
 
     }
-    return remainingIterators;
+    return iteratorCount;
   }
 
 
@@ -452,7 +456,7 @@ public abstract class CombinedMaster<D extends AbstractDocument, M extends Abstr
     private final int _index;
     private final D _element;
 
-    public IndexedElement(final int index, final D element, final Comparator<D> comparator) {
+    IndexedElement(final int index, final D element, final Comparator<D> comparator) {
       _index = index;
       _element = element;
       this._comparator = comparator;
@@ -520,9 +524,8 @@ public abstract class CombinedMaster<D extends AbstractDocument, M extends Abstr
     final List<UniqueId> result = replaceVersion(replacementDocument.getUniqueId(), Collections.singletonList(replacementDocument));
     if (result.isEmpty()) {
       return null;
-    } else {
-      return result.get(0);
     }
+    return result.get(0);
   }
 
   @Override
@@ -530,9 +533,8 @@ public abstract class CombinedMaster<D extends AbstractDocument, M extends Abstr
     final List<UniqueId> result = replaceVersions(objectId, Collections.singletonList(documentToAdd));
     if (result.isEmpty()) {
       return null;
-    } else {
-      return result.get(0);
     }
+    return result.get(0);
   }
 
   @Override
@@ -548,7 +550,7 @@ public abstract class CombinedMaster<D extends AbstractDocument, M extends Abstr
    * Resets the paging on a search request back to ALL and returns
    * the configured {@link PagingRequest}. This is useful for
    * implementing search methods which require support for paging
-   * and can be used with {@link #applyPaging(AbstractSearchResult, PagingRequest)}
+   * and can be used with {@link #applyPaging(AbstractDocumentsResult, PagingRequest)}
    * to restrict the resultset back to what was originally requested.
    * Obviously, querying everything then filtering out the subset
    * required for the page is not the most efficient approach but

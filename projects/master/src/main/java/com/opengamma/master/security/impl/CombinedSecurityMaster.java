@@ -83,8 +83,8 @@ public class CombinedSecurityMaster extends ChangeProvidingCombinedMaster<Securi
     }
     return new Try<SecurityHistoryResult>() {
       @Override
-      public SecurityHistoryResult tryMaster(final SecurityMaster master) {
-        return master.history(request);
+      public SecurityHistoryResult tryMaster(final SecurityMaster sm) {
+        return sm.history(request);
       }
     }.each(request.getObjectId().getScheme());
   }

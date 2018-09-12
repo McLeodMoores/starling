@@ -12,8 +12,6 @@ import static org.testng.AssertJUnit.assertSame;
 import java.util.Collection;
 import java.util.concurrent.atomic.AtomicLong;
 
-import net.sf.ehcache.CacheManager;
-
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
@@ -32,6 +30,8 @@ import com.opengamma.master.config.ConfigSearchRequest;
 import com.opengamma.master.config.ConfigSearchResult;
 import com.opengamma.util.ehcache.EHCacheUtils;
 import com.opengamma.util.test.TestGroup;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Test.
@@ -121,7 +121,7 @@ public class EHCachingMasterConfigSourceTest {
     assertSame(_cachingSource.getLatestByName(ExternalId.class, CONFIG_NAME), CONFIG);
     assertEquals(1, _underlyingConfigMaster.getCounter().get());
 
-    final ExternalId lastestConfig = ExternalId.of ("Test", "sec1");
+    final ExternalId lastestConfig = ExternalId.of("Test", "sec1");
     addedDoc.setConfig(ConfigItem.of(lastestConfig));
     _underlyingConfigMaster.update(addedDoc);
     assertSame(_cachingSource.getLatestByName(ExternalId.class, CONFIG_NAME), lastestConfig);

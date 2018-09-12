@@ -15,7 +15,8 @@ import com.opengamma.core.change.ChangeManager;
  * @param <D> document type
  * @param <M> type of a change providing master
  */
-public class ChangeProvidingCombinedMaster<D extends AbstractDocument, M extends AbstractChangeProvidingMaster<D>> extends CombinedMaster<D, M> implements AbstractChangeProvidingMaster<D> {
+public class ChangeProvidingCombinedMaster<D extends AbstractDocument, M extends AbstractChangeProvidingMaster<D>> extends CombinedMaster<D, M>
+implements AbstractChangeProvidingMaster<D> {
 
   private final AggregatingChangeManager _changeManager;
 

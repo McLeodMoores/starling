@@ -47,7 +47,7 @@ public class MasterHistoricalTimeSeriesSourceTest {
   private static final String CMPL_DATA_PROVIDER = "CMPL";
   private static final String BBG_DATA_SOURCE = "BLOOMBERG";
   private static final ExternalIdBundle IDENTIFIERS = ExternalIdBundle.of("A", "B");
-  
+
   private HistoricalTimeSeriesMaster _mockMaster;
   private HistoricalTimeSeriesResolver _mockResolver;
   private MasterHistoricalTimeSeriesSource _tsSource;
@@ -69,13 +69,13 @@ public class MasterHistoricalTimeSeriesSourceTest {
   //-------------------------------------------------------------------------
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void constructorWith1ArgNull() throws Exception {
-    HistoricalTimeSeriesResolver mock = mock(HistoricalTimeSeriesResolver.class);
+    final HistoricalTimeSeriesResolver mock = mock(HistoricalTimeSeriesResolver.class);
     new MasterHistoricalTimeSeriesSource(null, mock);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void constructorWith2ArgNull() throws Exception {
-    HistoricalTimeSeriesMaster mock = mock(HistoricalTimeSeriesMaster.class);
+    final HistoricalTimeSeriesMaster mock = mock(HistoricalTimeSeriesMaster.class);
     new MasterHistoricalTimeSeriesSource(mock, null);
   }
 
@@ -85,73 +85,73 @@ public class MasterHistoricalTimeSeriesSourceTest {
   }
 
   public void getHistoricalTimeSeriesByExternalIdWithMetaData() throws Exception {
-    HistoricalTimeSeriesInfoSearchRequest request = new HistoricalTimeSeriesInfoSearchRequest(IDENTIFIERS);
+    final HistoricalTimeSeriesInfoSearchRequest request = new HistoricalTimeSeriesInfoSearchRequest(IDENTIFIERS);
     request.setValidityDate(LocalDate.now());
     request.setDataSource(BBG_DATA_SOURCE);
     request.setDataProvider(CMPL_DATA_PROVIDER);
     request.setDataField(CLOSE_DATA_FIELD);
-    
-    HistoricalTimeSeriesInfoSearchResult searchResult = new HistoricalTimeSeriesInfoSearchResult();
-    HistoricalTimeSeriesInfoDocument doc = new HistoricalTimeSeriesInfoDocument();
+
+    final HistoricalTimeSeriesInfoSearchResult searchResult = new HistoricalTimeSeriesInfoSearchResult();
+    final HistoricalTimeSeriesInfoDocument doc = new HistoricalTimeSeriesInfoDocument();
     doc.setUniqueId(UID);
-    
+
     when(_mockResolver.resolve(IDENTIFIERS, LocalDate.now(), BBG_DATA_SOURCE, CMPL_DATA_PROVIDER, CLOSE_DATA_FIELD, null)).thenReturn(new HistoricalTimeSeriesResolutionResult(doc.getInfo()));
-    
+
     doc.getInfo().setTimeSeriesObjectId(UID.getObjectId());
     searchResult.getDocuments().add(doc);
     when(_mockMaster.search(request)).thenReturn(searchResult);
-    
-    ManageableHistoricalTimeSeries hts = new ManageableHistoricalTimeSeries();
+
+    final ManageableHistoricalTimeSeries hts = new ManageableHistoricalTimeSeries();
     hts.setUniqueId(UID);
     hts.setTimeSeries(randomTimeSeries());
     when(_mockMaster.getTimeSeries(UID.getObjectId(), VersionCorrection.LATEST, HistoricalTimeSeriesGetFilter.ofRange(null, null))).thenReturn(hts);
-    
-    HistoricalTimeSeries test = _tsSource.getHistoricalTimeSeries(IDENTIFIERS, BBG_DATA_SOURCE, CMPL_DATA_PROVIDER, CLOSE_DATA_FIELD);
+
+    final HistoricalTimeSeries test = _tsSource.getHistoricalTimeSeries(IDENTIFIERS, BBG_DATA_SOURCE, CMPL_DATA_PROVIDER, CLOSE_DATA_FIELD);
     verify(_mockMaster, times(1)).getTimeSeries(UID.getObjectId(), VersionCorrection.LATEST, HistoricalTimeSeriesGetFilter.ofRange(null, null));
-    
+
     assertEquals(UID, test.getUniqueId());
   }
 
   public void getHistoricalTimeSeriesByExternalIdWithoutMetaData() throws Exception {
-    ManageableHistoricalTimeSeries hts = new ManageableHistoricalTimeSeries();
+    final ManageableHistoricalTimeSeries hts = new ManageableHistoricalTimeSeries();
     hts.setUniqueId(UID);
     hts.setTimeSeries(randomTimeSeries());
     when(_mockMaster.getTimeSeries(UID, HistoricalTimeSeriesGetFilter.ofRange(null, null))).thenReturn(hts);
-    ManageableHistoricalTimeSeriesInfo tsInfo = new ManageableHistoricalTimeSeriesInfo();
+    final ManageableHistoricalTimeSeriesInfo tsInfo = new ManageableHistoricalTimeSeriesInfo();
     tsInfo.setUniqueId(UID);
     when(_mockResolver.resolve(IDENTIFIERS, LocalDate.now(), null, null, CLOSE_DATA_FIELD, TEST_CONFIG)).thenReturn(new HistoricalTimeSeriesResolutionResult(tsInfo));
-    
-    HistoricalTimeSeries test = _tsSource.getHistoricalTimeSeries(CLOSE_DATA_FIELD, IDENTIFIERS, TEST_CONFIG);
+
+    final HistoricalTimeSeries test = _tsSource.getHistoricalTimeSeries(CLOSE_DATA_FIELD, IDENTIFIERS, TEST_CONFIG);
     verify(_mockMaster, times(1)).getTimeSeries(UID, HistoricalTimeSeriesGetFilter.ofRange(null, null));
-    
+
     assertEquals(UID, test.getUniqueId());
     assertEquals(hts.getTimeSeries().times(), test.getTimeSeries().times());
     assertEquals(hts.getTimeSeries().values(), test.getTimeSeries().values());
   }
 
   public void getHistoricalWithInclusiveExclusiveDates() throws Exception {
-    LocalDate end = DateUtils.previousWeekDay();
-    LocalDate start = end.minusDays(7);
-    
-    HistoricalTimeSeriesInfoSearchRequest request = new HistoricalTimeSeriesInfoSearchRequest(IDENTIFIERS);
+    final LocalDate end = DateUtils.previousWeekDay();
+    final LocalDate start = end.minusDays(7);
+
+    final HistoricalTimeSeriesInfoSearchRequest request = new HistoricalTimeSeriesInfoSearchRequest(IDENTIFIERS);
     request.setValidityDate(LocalDate.now());
     request.setDataSource(BBG_DATA_SOURCE);
     request.setDataProvider(CMPL_DATA_PROVIDER);
     request.setDataField(CLOSE_DATA_FIELD);
-    LocalDateDoubleTimeSeries timeSeries = randomTimeSeries();
-    
-    HistoricalTimeSeriesInfoSearchResult searchResult = new HistoricalTimeSeriesInfoSearchResult();
-    HistoricalTimeSeriesInfoDocument doc = new HistoricalTimeSeriesInfoDocument();
+    final LocalDateDoubleTimeSeries timeSeries = randomTimeSeries();
+
+    final HistoricalTimeSeriesInfoSearchResult searchResult = new HistoricalTimeSeriesInfoSearchResult();
+    final HistoricalTimeSeriesInfoDocument doc = new HistoricalTimeSeriesInfoDocument();
     doc.setUniqueId(UID);
     doc.getInfo().setTimeSeriesObjectId(UID.getObjectId());
     searchResult.getDocuments().add(doc);
-    
+
     when(_mockResolver.resolve(IDENTIFIERS, LocalDate.now(), BBG_DATA_SOURCE, CMPL_DATA_PROVIDER, CLOSE_DATA_FIELD, null)).thenReturn(new HistoricalTimeSeriesResolutionResult(doc.getInfo()));
-    
-    for (boolean includeStart : new boolean[] {true, false})  {
-      for (boolean includeEnd : new boolean[] {true, false}) {
+
+    for (final boolean includeStart : new boolean[] {true, false})  {
+      for (final boolean includeEnd : new boolean[] {true, false}) {
         // Also test max points limit for various values
-        for (Integer maxPoints : new Integer[] {null, -10, -1, 1, 0, -2, 2, 10} ) {
+        for (final Integer maxPoints : new Integer[] {null, -10, -1, 1, 0, -2, 2, 10}) {
           LocalDate startInput = start;
           LocalDate endInput = end;
           if (!includeStart) {
@@ -160,39 +160,39 @@ public class MasterHistoricalTimeSeriesSourceTest {
           if (!includeEnd) {
             endInput = end.minusDays(1);
           }
-          
-          ManageableHistoricalTimeSeries hts = new ManageableHistoricalTimeSeries();
-          LocalDateDoubleTimeSeries lddts = 
-              (maxPoints == null) || (Math.abs(maxPoints) >= timeSeries.subSeries(start, includeStart, end, includeEnd).size())
+
+          final ManageableHistoricalTimeSeries hts = new ManageableHistoricalTimeSeries();
+          final LocalDateDoubleTimeSeries lddts =
+              maxPoints == null || Math.abs(maxPoints) >= timeSeries.subSeries(start, includeStart, end, includeEnd).size()
               ? timeSeries.subSeries(start, includeStart, end, includeEnd)
-              : (maxPoints >= 0)
-                ? timeSeries.subSeries(start, includeStart, end, includeEnd).head(maxPoints)
-                : timeSeries.subSeries(start, includeStart, end, includeEnd).tail(-maxPoints);
-          hts.setUniqueId(UID);
-          hts.setTimeSeries(lddts);
-          when(_mockMaster.getTimeSeries(UID.getObjectId(), VersionCorrection.LATEST, HistoricalTimeSeriesGetFilter.ofRange(startInput, endInput, maxPoints))).thenReturn(hts);
-          when(_mockMaster.search(request)).thenReturn(searchResult);
-          
-          HistoricalTimeSeries test = (maxPoints == null)
-              ? _tsSource.getHistoricalTimeSeries(IDENTIFIERS, BBG_DATA_SOURCE, CMPL_DATA_PROVIDER, CLOSE_DATA_FIELD, start, includeStart, end, includeEnd)
-              : _tsSource.getHistoricalTimeSeries(IDENTIFIERS, BBG_DATA_SOURCE, CMPL_DATA_PROVIDER, CLOSE_DATA_FIELD, start, includeStart, end, includeEnd, maxPoints);
-          
-          assertEquals(UID, test.getUniqueId());
-          assertEquals(hts.getTimeSeries(), test.getTimeSeries());
+                  : maxPoints >= 0
+                  ? timeSeries.subSeries(start, includeStart, end, includeEnd).head(maxPoints)
+                      : timeSeries.subSeries(start, includeStart, end, includeEnd).tail(-maxPoints);
+                  hts.setUniqueId(UID);
+                  hts.setTimeSeries(lddts);
+                  when(_mockMaster.getTimeSeries(UID.getObjectId(), VersionCorrection.LATEST, HistoricalTimeSeriesGetFilter.ofRange(startInput, endInput, maxPoints))).thenReturn(hts);
+                  when(_mockMaster.search(request)).thenReturn(searchResult);
+
+                  final HistoricalTimeSeries test = maxPoints == null
+                      ? _tsSource.getHistoricalTimeSeries(IDENTIFIERS, BBG_DATA_SOURCE, CMPL_DATA_PROVIDER, CLOSE_DATA_FIELD, start, includeStart, end, includeEnd)
+                          : _tsSource.getHistoricalTimeSeries(IDENTIFIERS, BBG_DATA_SOURCE, CMPL_DATA_PROVIDER, CLOSE_DATA_FIELD, start, includeStart, end, includeEnd, maxPoints);
+
+                      assertEquals(UID, test.getUniqueId());
+                      assertEquals(hts.getTimeSeries(), test.getTimeSeries());
         }
       }
     }
   }
 
   public void getHistoricalTimeSeriesByUID() throws Exception {
-    ManageableHistoricalTimeSeries hts = new ManageableHistoricalTimeSeries();
+    final ManageableHistoricalTimeSeries hts = new ManageableHistoricalTimeSeries();
     hts.setUniqueId(UID);
     hts.setTimeSeries(randomTimeSeries());
     when(_mockMaster.getTimeSeries(UID, HistoricalTimeSeriesGetFilter.ofRange(null, null))).thenReturn(hts);
-    
-    HistoricalTimeSeries test = _tsSource.getHistoricalTimeSeries(UID);
+
+    final HistoricalTimeSeries test = _tsSource.getHistoricalTimeSeries(UID);
     verify(_mockMaster, times(1)).getTimeSeries(UID, HistoricalTimeSeriesGetFilter.ofRange(null, null));
-    
+
     assertEquals(UID, test.getUniqueId());
     assertEquals(hts.getTimeSeries().times(), test.getTimeSeries().times());
     assertEquals(hts.getTimeSeries().values(), test.getTimeSeries().values());

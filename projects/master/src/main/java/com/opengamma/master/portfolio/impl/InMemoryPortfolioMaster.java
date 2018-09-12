@@ -15,8 +15,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import org.joda.beans.JodaBeanUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.threeten.bp.Instant;
 
 import com.google.common.base.Supplier;
@@ -46,8 +44,6 @@ import com.opengamma.util.paging.Paging;
  * An in-memory implementation of a portfolio master.
  */
 public class InMemoryPortfolioMaster extends SimpleAbstractInMemoryMaster<PortfolioDocument> implements PortfolioMaster {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(InMemoryPortfolioMaster.class);
   /**
    * The default scheme used for each {@link UniqueId}.
    */
@@ -145,9 +141,8 @@ public class InMemoryPortfolioMaster extends SimpleAbstractInMemoryMaster<Portfo
       portfolioClone.setRootNode(clonePortfolioNode(portfolioClone.getRootNode()));
       clone.setPortfolio(portfolioClone);
       return clone;
-    } else {
-      return document;
     }
+    return document;
   }
 
   private ManageablePortfolioNode clonePortfolioNode(final ManageablePortfolioNode node) {
@@ -159,9 +154,8 @@ public class InMemoryPortfolioMaster extends SimpleAbstractInMemoryMaster<Portfo
       }
       clone.setChildNodes(childNodes);
       return clone;
-    } else {
-      return node;
     }
+    return node;
   }
 
   @Override
@@ -183,14 +177,15 @@ public class InMemoryPortfolioMaster extends SimpleAbstractInMemoryMaster<Portfo
     return document;
   }
 
-  private void setDocumentId(final PortfolioDocument document, final PortfolioDocument clonedDoc, final UniqueId uniqueId) {
+  private static void setDocumentId(final PortfolioDocument document, final PortfolioDocument clonedDoc, final UniqueId uniqueId) {
     document.getPortfolio().setUniqueId(uniqueId);
     clonedDoc.getPortfolio().setUniqueId(uniqueId);
     document.setUniqueId(uniqueId);
     clonedDoc.setUniqueId(uniqueId);
   }
 
-  private void storeNodes(final ManageablePortfolioNode clonedNode, final ManageablePortfolioNode origNode, final UniqueId portfolioId, final UniqueId parentNodeId) {
+  private void storeNodes(final ManageablePortfolioNode clonedNode, final ManageablePortfolioNode origNode, final UniqueId portfolioId,
+      final UniqueId parentNodeId) {
     final ObjectId objectId = _objectIdSupplier.get();
     final UniqueId uniqueId = objectId.atVersion("");
     clonedNode.setUniqueId(uniqueId);
@@ -205,7 +200,7 @@ public class InMemoryPortfolioMaster extends SimpleAbstractInMemoryMaster<Portfo
     }
   }
 
-  private void setVersionTimes(final PortfolioDocument document, final PortfolioDocument clonedDoc,
+  private static void setVersionTimes(final PortfolioDocument document, final PortfolioDocument clonedDoc,
       final Instant versionFromInstant, final Instant versionToInstant, final Instant correctionFromInstant, final Instant correctionToInstant) {
 
     clonedDoc.setVersionFromInstant(versionFromInstant);
@@ -240,7 +235,7 @@ public class InMemoryPortfolioMaster extends SimpleAbstractInMemoryMaster<Portfo
 
     setVersionTimes(document, clonedDoc, now, null, now, null);
 
-    if (_store.replace(uniqueId.getObjectId(), storedDocument, clonedDoc) == false) {
+    if (!_store.replace(uniqueId.getObjectId(), storedDocument, clonedDoc)) {
       throw new IllegalArgumentException("Concurrent modification");
     }
     storeNodes(clonedDoc.getPortfolio().getRootNode(), document.getPortfolio().getRootNode(), uniqueId, null);
@@ -316,8 +311,7 @@ public class InMemoryPortfolioMaster extends SimpleAbstractInMemoryMaster<Portfo
     }
     if (isCloneResults()) {
       return clonePortfolioNode(node);
-    } else {
-      return node;
     }
+    return node;
   }
 }

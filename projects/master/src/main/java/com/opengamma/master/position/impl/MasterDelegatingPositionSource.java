@@ -28,11 +28,11 @@ import com.opengamma.util.PublicSPI;
 /**
  * A {@code PositionSource} implemented using an underlying {@code PositionMaster} and {@code DelegatingPositionSource}.
  * <p>
- * The {@link PositionSource} interface provides portfolio and position to the engine via a narrow API. This class provides the source on top of a standard {@link PortfolioMaster} and
- * {@link DelegatingPositionSource}.
+ * The {@link PositionSource} interface provides portfolio and position to the engine via a narrow API. This class provides the
+ * source on top of a standard {@link PortfolioMaster} and {@link DelegatingPositionSource}.
  */
 @PublicSPI
-public class MasterDelegatingPositionSource extends AbstractMasterPositionSource implements PositionSource {
+public class MasterDelegatingPositionSource extends AbstractMasterPositionSource {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(MasterDelegatingPositionSource.class);
 

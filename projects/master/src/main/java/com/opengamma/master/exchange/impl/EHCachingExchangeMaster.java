@@ -69,7 +69,7 @@ public class EHCachingExchangeMaster extends AbstractEHCachingMaster<ExchangeDoc
 
         // Return the list of result UniqueIds
         return IntObjectPair.of(result.getPaging().getTotalItems(),
-                                 EHCachingSearchCache.extractUniqueIds(result.getDocuments()));
+            EHCachingSearchCache.extractUniqueIds(result.getDocuments()));
       }
     });
 
@@ -86,7 +86,7 @@ public class EHCachingExchangeMaster extends AbstractEHCachingMaster<ExchangeDoc
 
         // Return the list of result UniqueIds
         return IntObjectPair.of(result.getPaging().getTotalItems(),
-                                 EHCachingSearchCache.extractUniqueIds(result.getDocuments()));
+            EHCachingSearchCache.extractUniqueIds(result.getDocuments()));
       }
     });
 
@@ -119,12 +119,12 @@ public class EHCachingExchangeMaster extends AbstractEHCachingMaster<ExchangeDoc
     if (EHCachingSearchCache.TEST_AGAINST_UNDERLYING) {
       final ExchangeSearchResult check = ((ExchangeMaster) getUnderlying()).search(request);
       if (!result.getPaging().equals(check.getPaging())) {
-        LOGGER.error("_documentSearchCache.getCache().getName() + \" returned paging:\\n\"" + result.getPaging() +
-                           "\nbut the underlying master returned paging:\n" + check.getPaging());
+        LOGGER.error("_documentSearchCache.getCache().getName() + \" returned paging:\\n\"" + result.getPaging()
+        + "\nbut the underlying master returned paging:\n" + check.getPaging());
       }
       if (!result.getDocuments().equals(check.getDocuments())) {
-        LOGGER.error(_documentSearchCache.getCache().getName() + " returned documents:\n" + result.getDocuments() +
-                           "\nbut the underlying master returned documents:\n" + check.getDocuments());
+        LOGGER.error(_documentSearchCache.getCache().getName() + " returned documents:\n" + result.getDocuments()
+        + "\nbut the underlying master returned documents:\n" + check.getDocuments());
       }
     }
 

@@ -46,8 +46,8 @@ import com.opengamma.util.paging.Paging;
  * As such, this implementation is currently most useful for testing scenarios.
  */
 public class InMemoryConventionMaster
-    extends SimpleAbstractInMemoryMaster<ConventionDocument>
-    implements ConventionMaster {
+extends SimpleAbstractInMemoryMaster<ConventionDocument>
+implements ConventionMaster {
 
   /**
    * The default scheme used for each {@link ObjectId}.
@@ -185,7 +185,7 @@ public class InMemoryConventionMaster
     document.setCorrectionFromInstant(now);
     document.setCorrectionToInstant(null);
     document.setUniqueId(uniqueId.withVersion(""));
-    if (_store.replace(uniqueId.getObjectId(), storedDocument, document) == false) {
+    if (!_store.replace(uniqueId.getObjectId(), storedDocument, document)) {
       throw new IllegalArgumentException("Concurrent modification");
     }
     _changeManager.entityChanged(ChangeType.CHANGED, document.getObjectId(), storedDocument.getVersionFromInstant(), document.getVersionToInstant(), now);

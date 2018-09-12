@@ -61,10 +61,12 @@ public class DefaultHistoricalTimeSeriesResolver extends HistoricalTimeSeriesRes
   }
 
   @Override
-  public HistoricalTimeSeriesResolutionResult resolve(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource, final String dataProvider,
+  public HistoricalTimeSeriesResolutionResult resolve(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate,
+      final String dataSource, final String dataProvider,
       final String dataField, final String resolutionKey) {
     if (identifierBundle != null) {
-      final Collection<ManageableHistoricalTimeSeriesInfo> timeSeriesCandidates = search(identifierBundle, identifierValidityDate, dataSource, dataProvider, dataField);
+      final Collection<ManageableHistoricalTimeSeriesInfo> timeSeriesCandidates = search(identifierBundle, identifierValidityDate,
+          dataSource, dataProvider, dataField);
       final ManageableHistoricalTimeSeriesInfo selectedResult = select(timeSeriesCandidates, resolutionKey);
       if (selectedResult == null) {
         LOGGER.warn("Resolver failed to find any time-series for {} using {}/{}", new Object[] {identifierBundle, dataField, resolutionKey });
@@ -79,8 +81,8 @@ public class DefaultHistoricalTimeSeriesResolver extends HistoricalTimeSeriesRes
     return getSelector().select(timeSeriesCandidates, resolutionKey);
   }
 
-  protected Collection<ManageableHistoricalTimeSeriesInfo> search(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource,
-      final String dataProvider, final String dataField) {
+  protected Collection<ManageableHistoricalTimeSeriesInfo> search(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate,
+      final String dataSource, final String dataProvider, final String dataField) {
     final HistoricalTimeSeriesInfoSearchRequest searchRequest = new HistoricalTimeSeriesInfoSearchRequest(identifierBundle);
     searchRequest.setValidityDate(identifierValidityDate);
     searchRequest.setDataSource(dataSource);

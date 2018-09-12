@@ -67,9 +67,8 @@ public abstract class AbstractMasterPositionSource implements PositionSource {
     final ChangeProvider[] changeProviders = changeProviders();
     if (changeProviders != null) {
       return new PassthroughChangeManager(changeProviders());
-    } else {
-      return DummyChangeManager.INSTANCE;
     }
+    return DummyChangeManager.INSTANCE;
   }
 
   @Override
@@ -110,7 +109,7 @@ public abstract class AbstractMasterPositionSource implements PositionSource {
 
 
 
-  private void copyAttributes(final ManageablePortfolio manPrt, final SimplePortfolio prt) {
+  private static void copyAttributes(final ManageablePortfolio manPrt, final SimplePortfolio prt) {
     if (manPrt.getAttributes() != null) {
       for (final Entry<String, String> entry : manPrt.getAttributes().entrySet()) {
         if (entry.getKey() != null && entry.getValue() != null) {

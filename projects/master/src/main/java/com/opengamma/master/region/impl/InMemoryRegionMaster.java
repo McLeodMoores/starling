@@ -42,8 +42,8 @@ import com.opengamma.util.paging.Paging;
  * As such, this implementation is currently most useful for testing scenarios.
  */
 public class InMemoryRegionMaster
-    extends SimpleAbstractInMemoryMaster<RegionDocument>
-    implements RegionMaster {
+extends SimpleAbstractInMemoryMaster<RegionDocument>
+implements RegionMaster {
 
   /**
    * The default scheme used for each {@link ObjectId}.
@@ -158,7 +158,7 @@ public class InMemoryRegionMaster
     document.setVersionToInstant(null);
     document.setCorrectionFromInstant(now);
     document.setCorrectionToInstant(null);
-    if (_store.replace(uniqueId.getObjectId(), storedDocument, document) == false) {
+    if (!_store.replace(uniqueId.getObjectId(), storedDocument, document)) {
       throw new IllegalArgumentException("Concurrent modification");
     }
     _changeManager.entityChanged(ChangeType.CHANGED, document.getObjectId(), storedDocument.getVersionFromInstant(), document.getVersionToInstant(), now);

@@ -25,7 +25,7 @@ import com.opengamma.master.AbstractDocument;
 @BeanDefinition
 class CacheTestDocument extends AbstractDocument {
 
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true, overrideSet = true)
   private UniqueId _uniqueId;
 
   CacheTestDocument() {
@@ -64,6 +64,7 @@ class CacheTestDocument extends AbstractDocument {
    * Gets the uniqueId.
    * @return the value of the property
    */
+  @Override
   public UniqueId getUniqueId() {
     return _uniqueId;
   }
@@ -72,6 +73,7 @@ class CacheTestDocument extends AbstractDocument {
    * Sets the uniqueId.
    * @param uniqueId  the new value of the property
    */
+  @Override
   public void setUniqueId(UniqueId uniqueId) {
     this._uniqueId = uniqueId;
   }

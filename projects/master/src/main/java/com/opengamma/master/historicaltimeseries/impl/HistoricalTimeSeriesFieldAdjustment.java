@@ -28,7 +28,8 @@ public class HistoricalTimeSeriesFieldAdjustment {
    * @param adjuster  the adjuster
    */
   @Deprecated
-  public HistoricalTimeSeriesFieldAdjustment(final String underlyingDataProvider, final String underlyingDataField, final HistoricalTimeSeriesAdjuster adjuster) {
+  public HistoricalTimeSeriesFieldAdjustment(final String underlyingDataProvider, final String underlyingDataField,
+      final HistoricalTimeSeriesAdjuster adjuster) {
     ArgumentChecker.notNull(underlyingDataField, "underlyingDataField");
     _underlyingDataProvider = underlyingDataProvider;
     _underlyingDataFields = Collections.singletonList(underlyingDataField);
@@ -36,12 +37,13 @@ public class HistoricalTimeSeriesFieldAdjustment {
   }
 
   /**
-   * Create a HTS field adjustment
+   * Create a HTS field adjustment.
    * @param underlyingDataProvider  the original data provider
    * @param underlyingDataFields  the list of possible field names of the original data provider, in order of likelihood
    * @param adjuster  the adjuster
    */
-  public HistoricalTimeSeriesFieldAdjustment(final String underlyingDataProvider, final List<String> underlyingDataFields, final HistoricalTimeSeriesAdjuster adjuster) {
+  public HistoricalTimeSeriesFieldAdjustment(final String underlyingDataProvider, final List<String> underlyingDataFields,
+      final HistoricalTimeSeriesAdjuster adjuster) {
     ArgumentChecker.notNull(underlyingDataFields, "underlyingDataFields");
     _underlyingDataProvider = underlyingDataProvider;
     _underlyingDataFields = underlyingDataFields;

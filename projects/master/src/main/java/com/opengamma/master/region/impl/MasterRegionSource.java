@@ -26,7 +26,8 @@ import com.opengamma.util.paging.PagingRequest;
 /**
  * A {@code RegionSource} implemented using an underlying {@code RegionMaster}.
  * <p>
- * The {@link RegionSource} interface provides regions to the application via a narrow API. This class provides the source on top of a standard {@link RegionMaster}.
+ * The {@link RegionSource} interface provides regions to the application via a narrow API. This class provides the source on top of
+ * a standard {@link RegionMaster}.
  */
 @PublicSPI
 public class MasterRegionSource extends AbstractMasterSource<Region, RegionDocument, RegionMaster> implements RegionSource {

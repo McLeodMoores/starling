@@ -16,7 +16,8 @@ import com.opengamma.master.marketdatasnapshot.MarketDataSnapshotSearchResult;
 /**
  * MarketDataSnapshot master which tracks accesses using UniqueIds.
  */
-public class DataTrackingMarketDataSnapshotMaster extends AbstractDataTrackingMaster<MarketDataSnapshotDocument, MarketDataSnapshotMaster> implements MarketDataSnapshotMaster {
+public class DataTrackingMarketDataSnapshotMaster extends AbstractDataTrackingMaster<MarketDataSnapshotDocument, MarketDataSnapshotMaster>
+implements MarketDataSnapshotMaster {
 
   public DataTrackingMarketDataSnapshotMaster(final MarketDataSnapshotMaster delegate) {
     super(delegate);

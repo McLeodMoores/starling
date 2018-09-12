@@ -40,8 +40,8 @@ import com.opengamma.util.tuple.Pairs;
  */
 @PublicSPI
 public class MasterSnapshotSource
-    extends AbstractMasterSource<StructuredMarketDataSnapshot, MarketDataSnapshotDocument, MarketDataSnapshotMaster>
-    implements MarketDataSnapshotSource {
+extends AbstractMasterSource<StructuredMarketDataSnapshot, MarketDataSnapshotDocument, MarketDataSnapshotMaster>
+implements MarketDataSnapshotSource {
 
   /**
    * The listeners.
@@ -65,8 +65,8 @@ public class MasterSnapshotSource
       @Override
       public void entityChanged(final ChangeEvent event) {
         final ObjectId changedId = event.getObjectId();
-        if (changedId != null && changedId.getScheme().equals(uniqueId.getScheme()) &&
-            changedId.getValue().equals(uniqueId.getValue())) {
+        if (changedId != null && changedId.getScheme().equals(uniqueId.getScheme())
+            && changedId.getValue().equals(uniqueId.getValue())) {
           //TODO This is over cautious in the case of corrections to non latest versions
           listener.objectChanged(uniqueId.getObjectId());
         }
@@ -85,8 +85,8 @@ public class MasterSnapshotSource
 
   @Override
   public <S extends NamedSnapshot> S getSingle(final Class<S> type,
-                                               final String snapshotName,
-                                               final VersionCorrection versionCorrection) {
+      final String snapshotName,
+      final VersionCorrection versionCorrection) {
 
     // Try to find an exact match using the name and type first. If this doesn't work
     // (perhaps as the type searched for is a superclass of the type held), we search
@@ -141,10 +141,10 @@ public class MasterSnapshotSource
      * @param  snapshotName the name of the snapshot being searched for
      * @param  versionCorrection the version correction of the snapshot being searched for
      */
-    public TypedSnapshotSearcher(final MarketDataSnapshotMaster master,
-                                 final Class<S> type,
-                                 final String snapshotName,
-                                 final VersionCorrection versionCorrection) {
+    TypedSnapshotSearcher(final MarketDataSnapshotMaster master,
+        final Class<S> type,
+        final String snapshotName,
+        final VersionCorrection versionCorrection) {
       _master = ArgumentChecker.notNull(master, "master");
       _type = ArgumentChecker.notNull(type, "type");
       _snapshotName = ArgumentChecker.notNull(snapshotName, "snapshotName");
@@ -176,10 +176,9 @@ public class MasterSnapshotSource
 
       if (result != null) {
         return result;
-      } else {
-        throw new DataNotFoundException("No snapshot found with type: [" + _type.getName() + "], id: [" +
-                                            _snapshotName + "] and versionCorrection: [" + _versionCorrection + "]");
       }
+      throw new DataNotFoundException("No snapshot found with type: [" + _type.getName() + "], id: ["
+          + _snapshotName + "] and versionCorrection: [" + _versionCorrection + "]");
     }
 
     private MarketDataSnapshotSearchRequest createBaseSearchRequest() {
@@ -208,7 +207,7 @@ public class MasterSnapshotSource
           builder.add(_type.cast(snapshot));
         } else if (warnOnTypeMismatch) {
           LOGGER.warn("Found matching snapshot with expected type: {} and name: {} - but actual type was: {}",
-                        _type.getName(), _snapshotName, snapshot.getClass().getName());
+              _type.getName(), _snapshotName, snapshot.getClass().getName());
         }
       }
 
@@ -222,7 +221,7 @@ public class MasterSnapshotSource
 
       if (filtered.size() > 1) {
         LOGGER.warn("Found multiple matching snapshot results for type: {} and name: {} - returning first match found",
-                      _type.getName(), _snapshotName);
+            _type.getName(), _snapshotName);
       }
 
       return filtered.get(0);

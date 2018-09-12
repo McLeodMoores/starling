@@ -36,7 +36,8 @@ import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 
 /**
- * A <code>HistoricalTimeSeriesResolver</code> that tries to find the distribution spec in a cache. If it doesn't find it, it will delegate to an underlying <code>HistoricalTimeSeriesResolver</code>.
+ * A <code>HistoricalTimeSeriesResolver</code> that tries to find the distribution spec in a cache. If it doesn't find it,
+ * it will delegate to an underlying <code>HistoricalTimeSeriesResolver</code>.
  */
 public class EHCachingHistoricalTimeSeriesResolver extends HistoricalTimeSeriesResolverWithBasicChangeManager {
 
@@ -56,7 +57,8 @@ public class EHCachingHistoricalTimeSeriesResolver extends HistoricalTimeSeriesR
     private HistoricalTimeSeriesResolutionResult _result;
     private RuntimeException _error;
 
-    public void init(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource, final String dataProvider, final String dataField,
+    public void init(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource,
+        final String dataProvider, final String dataField,
         final String resolutionKey) {
       _identifierBundle = identifierBundle;
       _identifierValidityDate = identifierValidityDate;
@@ -176,7 +178,8 @@ public class EHCachingHistoricalTimeSeriesResolver extends HistoricalTimeSeriesR
 
   private final ConcurrentMap<ThreadLocalWorker, ThreadLocalWorker> _workers = new ConcurrentHashMap<>();
 
-  // TODO: Do we need optimistic identifier resolution? E.g. are there graphs with large number of currency identifiers as their targets and nothing in HTS for them?
+  // TODO: Do we need optimistic identifier resolution? E.g. are there graphs with large number of currency identifiers as their
+  // targets and nothing in HTS for them?
 
   public EHCachingHistoricalTimeSeriesResolver(final HistoricalTimeSeriesResolver underlying, final CacheManager cacheManager) {
     this(underlying, cacheManager, HISTORICAL_TIME_SERIES_RESOLUTION_CACHE_DEFAULT_ARG);
@@ -204,8 +207,9 @@ public class EHCachingHistoricalTimeSeriesResolver extends HistoricalTimeSeriesR
   }
 
   /**
-   * Sets whether to assume the time series is likely to exist or not. Optimistic resolution will always go to the underlying immediately. Pessimistic resolution will cache source/provider/field
-   * combinations that are known to exist or not exist and check these first to avoid hitting the underlying so heavily. If the resolutions will mostly succeed, use an optimistic mode. If the
+   * Sets whether to assume the time series is likely to exist or not. Optimistic resolution will always go to the underlying immediately.
+   * Pessimistic resolution will cache source/provider/field combinations that are known to exist or not exist and check these first to
+   * avoid hitting the underlying so heavily. If the resolutions will mostly succeed, use an optimistic mode. If the
    * resolutions will mostly fail, use a pessimistic mode.
    *
    * @param optimisticResolution the mode to set
@@ -262,19 +266,19 @@ public class EHCachingHistoricalTimeSeriesResolver extends HistoricalTimeSeriesR
       LOGGER.debug("Verified {} in database", key);
       _cache.put(new Element(key, Boolean.TRUE));
       return true;
-    } else {
-      // There is nothing in the database for this combination
-      LOGGER.debug("Verified {} absent from database", key);
-      _cache.put(new Element(key, null));
-      if (isAutomaticFieldResolutionOptimisation()) {
-        updateAutoFieldResolutionOptimisation();
-      }
-      return false;
     }
+    // There is nothing in the database for this combination
+    LOGGER.debug("Verified {} absent from database", key);
+    _cache.put(new Element(key, null));
+    if (isAutomaticFieldResolutionOptimisation()) {
+      updateAutoFieldResolutionOptimisation();
+    }
+    return false;
   }
 
-  protected HistoricalTimeSeriesResolutionResult resolveImpl(final ThreadLocalWorker worker, final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate,
-      final String dataSource, final String dataProvider, final String dataField, final String resolutionKey) {
+  protected HistoricalTimeSeriesResolutionResult resolveImpl(final ThreadLocalWorker worker, final ExternalIdBundle identifierBundle,
+      final LocalDate identifierValidityDate, final String dataSource, final String dataProvider, final String dataField,
+      final String resolutionKey) {
     boolean knownPresent = false;
     Element e;
     if (identifierBundle != null && isOptimisticFieldResolution()) {
@@ -289,13 +293,12 @@ public class EHCachingHistoricalTimeSeriesResolver extends HistoricalTimeSeriesR
             updateAutoFieldResolutionOptimisation();
           }
           return null;
-        } else {
-          // We know there's at least one time-series
-          knownPresent = true;
-          if (isAutomaticFieldResolutionOptimisation()) {
-            _optimisticFieldMetric1.decrementAndGet();
-            updateAutoFieldResolutionOptimisation();
-          }
+        }
+        // We know there's at least one time-series
+        knownPresent = true;
+        if (isAutomaticFieldResolutionOptimisation()) {
+          _optimisticFieldMetric1.decrementAndGet();
+          updateAutoFieldResolutionOptimisation();
         }
       } else {
         LOGGER.debug("No lookup information for {}", dataField);
@@ -304,17 +307,16 @@ public class EHCachingHistoricalTimeSeriesResolver extends HistoricalTimeSeriesR
     if (identifierBundle == null) {
       if (knownPresent || verifyInDatabase(dataSource, dataProvider, dataField)) {
         return new HistoricalTimeSeriesResolutionResult(null);
-      } else {
-        return null;
       }
+      return null;
     }
     HistoricalTimeSeriesResolutionResult resolveResult;
     for (final ExternalId id : identifierBundle) {
-      final String key = id.toString() + SEPARATOR +
-          dataField + SEPARATOR +
-          (dataSource != null ? dataSource : "") + SEPARATOR +
-          (dataProvider != null ? dataProvider : "") + SEPARATOR +
-          resolutionKey;
+      final String key = id.toString() + SEPARATOR
+          + dataField + SEPARATOR
+          + (dataSource != null ? dataSource : "") + SEPARATOR
+          + (dataProvider != null ? dataProvider : "") + SEPARATOR
+          + resolutionKey;
       e = _cache.get(key);
       final HistoricalTimeSeriesResolutionCacheItem cacheItem = e != null ? (HistoricalTimeSeriesResolutionCacheItem) e.getObjectValue() : null;
       if (cacheItem != null) {
@@ -345,32 +347,32 @@ public class EHCachingHistoricalTimeSeriesResolver extends HistoricalTimeSeriesR
       final ManageableHistoricalTimeSeriesInfo info = resolveResult.getHistoricalTimeSeriesInfo();
       for (final ExternalIdWithDates id : info.getExternalIdBundle()) {
         if (id.isValidOn(identifierValidityDate)) {
-          String key = id.getExternalId().toString() + SEPARATOR +
-              dataField + SEPARATOR +
-              info.getDataSource() + SEPARATOR +
-              info.getDataProvider() + SEPARATOR +
-              resolutionKey;
+          String key = id.getExternalId().toString() + SEPARATOR
+              + dataField + SEPARATOR
+              + info.getDataSource() + SEPARATOR
+              + info.getDataProvider() + SEPARATOR
+              + resolutionKey;
           addResultToCache(key, id, resolveResult);
 
-          key = id.getExternalId().toString() + SEPARATOR +
-              dataField + SEPARATOR +
-              SEPARATOR +
-              info.getDataProvider() + SEPARATOR +
-              resolutionKey;
+          key = id.getExternalId().toString() + SEPARATOR
+              + dataField + SEPARATOR
+              + SEPARATOR
+              + info.getDataProvider() + SEPARATOR
+              + resolutionKey;
           addResultToCache(key, id, resolveResult);
 
-          key = id.getExternalId().toString() + SEPARATOR +
-              dataField + SEPARATOR +
-              info.getDataSource() + SEPARATOR +
-              SEPARATOR +
-              resolutionKey;
+          key = id.getExternalId().toString() + SEPARATOR
+              + dataField + SEPARATOR
+              + info.getDataSource() + SEPARATOR
+              + SEPARATOR
+              + resolutionKey;
           addResultToCache(key, id, resolveResult);
 
-          key = id.getExternalId().toString() + SEPARATOR +
-              dataField + SEPARATOR +
-              SEPARATOR +
-              SEPARATOR +
-              resolutionKey;
+          key = id.getExternalId().toString() + SEPARATOR
+              + dataField + SEPARATOR
+              + SEPARATOR
+              + SEPARATOR
+              + resolutionKey;
           addResultToCache(key, id, resolveResult);
         }
       }
@@ -383,11 +385,11 @@ public class EHCachingHistoricalTimeSeriesResolver extends HistoricalTimeSeriesR
     } else {
       // PLAT-2633: Record resolution failures (misses) in the cache as well
       for (final ExternalId id : identifierBundle) {
-        final String key = id.toString() + SEPARATOR +
-            dataField + SEPARATOR +
-            (dataSource != null ? dataSource : "") + SEPARATOR +
-            (dataProvider != null ? dataProvider : "") + SEPARATOR +
-            resolutionKey;
+        final String key = id.toString() + SEPARATOR
+            + dataField + SEPARATOR
+            + (dataSource != null ? dataSource : "") + SEPARATOR
+            + (dataProvider != null ? dataProvider : "") + SEPARATOR
+            + resolutionKey;
         addInvalidDateToCache(key, identifierValidityDate, id);
       }
       if (isAutomaticFieldResolutionOptimisation()) {
@@ -447,11 +449,10 @@ public class EHCachingHistoricalTimeSeriesResolver extends HistoricalTimeSeriesR
       final ThreadLocalWorker delegate = _workers.putIfAbsent(worker, worker);
       if (delegate == null) {
         break;
-      } else {
-        synchronized (delegate) {
-          if (_workers.get(worker) == delegate) {
-            return worker.getResult(delegate);
-          }
+      }
+      synchronized (delegate) {
+        if (_workers.get(worker) == delegate) {
+          return worker.getResult(delegate);
         }
       }
     } while (true);

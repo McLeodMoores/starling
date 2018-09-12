@@ -23,7 +23,7 @@ import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.opengamma.core.Link;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
@@ -47,7 +47,7 @@ import com.opengamma.util.PublicAPI;
 @PublicAPI
 @BeanDefinition
 public abstract class AbstractLink<T extends UniqueIdentifiable> extends DirectBean
-    implements Link<T>, Iterable<ExternalId>, Serializable, Cloneable {
+implements Link<T>, Iterable<ExternalId>, Serializable, Cloneable {
 
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
@@ -55,13 +55,13 @@ public abstract class AbstractLink<T extends UniqueIdentifiable> extends DirectB
   /**
    * The object identifier that strongly references the target.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private ObjectId _objectId;
   /**
    * The external identifier bundle that references the target.
    * An empty bundle is used if not referencing a target by external bundle.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private ExternalIdBundle _externalId = ExternalIdBundle.EMPTY;
   /**
    * The resolved target.
@@ -162,7 +162,7 @@ public abstract class AbstractLink<T extends UniqueIdentifiable> extends DirectB
     final T target = getTarget();
     final ObjectId objectId = getObjectId();
     final ExternalIdBundle bundle = getExternalId();
-    return Objects.firstNonNull(target, Objects.firstNonNull(objectId, bundle));
+    return MoreObjects.firstNonNull(target, MoreObjects.firstNonNull(objectId, bundle));
   }
 
   //-------------------------------------------------------------------------
@@ -261,6 +261,7 @@ public abstract class AbstractLink<T extends UniqueIdentifiable> extends DirectB
    * Gets the object identifier that strongly references the target.
    * @return the value of the property
    */
+  @Override
   public ObjectId getObjectId() {
     return _objectId;
   }
@@ -287,6 +288,7 @@ public abstract class AbstractLink<T extends UniqueIdentifiable> extends DirectB
    * An empty bundle is used if not referencing a target by external bundle.
    * @return the value of the property, not null
    */
+  @Override
   public ExternalIdBundle getExternalId() {
     return _externalId;
   }

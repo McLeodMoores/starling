@@ -78,8 +78,8 @@ public class CombinedPortfolioMaster extends ChangeProvidingCombinedMaster<Portf
     }
     return new Try<PortfolioHistoryResult>() {
       @Override
-      public PortfolioHistoryResult tryMaster(final PortfolioMaster master) {
-        return master.history(request);
+      public PortfolioHistoryResult tryMaster(final PortfolioMaster pm) {
+        return pm.history(request);
       }
     }.each(request.getObjectId().getScheme());
   }
@@ -92,8 +92,8 @@ public class CombinedPortfolioMaster extends ChangeProvidingCombinedMaster<Portf
     }
     return new Try<ManageablePortfolioNode>() {
       @Override
-      public ManageablePortfolioNode tryMaster(final PortfolioMaster master) {
-        return master.getNode(nodeId);
+      public ManageablePortfolioNode tryMaster(final PortfolioMaster pm) {
+        return pm.getNode(nodeId);
       }
     }.each(nodeId.getScheme());
   }

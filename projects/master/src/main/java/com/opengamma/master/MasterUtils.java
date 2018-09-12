@@ -29,7 +29,8 @@ import com.opengamma.lambdava.functions.Function1;
  */
 public class MasterUtils {
 
-  public static <D extends AbstractDocument> List<D> adjustVersionInstants(final Instant now, final Instant from, final Instant to, final List<D> documents) {
+  public static <D extends AbstractDocument> List<D> adjustVersionInstants(final Instant now, final Instant from,
+      final Instant to, final List<D> documents) {
     for (final D document : documents) {
       final Instant fromInstant = document.getVersionFromInstant();
       if (fromInstant == null) {
@@ -67,7 +68,8 @@ public class MasterUtils {
     return instants.size() == documents.size();
   }
 
-  public static <D extends AbstractDocument> boolean checkVersionInstantsWithinRange(final Instant missing, final Instant from, final Instant to, final List<D> documents, final boolean equalFrom) {
+  public static <D extends AbstractDocument> boolean checkVersionInstantsWithinRange(final Instant missing, final Instant from,
+      final Instant to, final List<D> documents, final boolean equalFrom) {
     if (!documents.isEmpty()) {
       final SortedSet<Instant> instants = new TreeSet<>();
       for (final D document : documents) {
@@ -80,13 +82,10 @@ public class MasterUtils {
       }
       final Instant minFromVersion = instants.first();
       final Instant maxFromVersion = instants.last();
-      return
-        (equalFrom && minFromVersion.equals(from) || !equalFrom && !minFromVersion.isBefore(from))
-          &&
-          (to == null || !maxFromVersion.isAfter(to));
-    } else {
-      return true;
+      return (equalFrom && minFromVersion.equals(from) || !equalFrom && !minFromVersion.isBefore(from))
+          && (to == null || !maxFromVersion.isAfter(to));
     }
+    return true;
   }
 
   public static <D extends UniqueIdentifiable> List<UniqueId> mapToUniqueIDs(final List<D> documents) {
