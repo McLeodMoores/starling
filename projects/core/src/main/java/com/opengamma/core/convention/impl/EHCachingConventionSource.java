@@ -110,6 +110,13 @@ public class EHCachingConventionSource implements ConventionSource {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Adds an object to the front cache unless it is the latest version.
+   *
+   * @param convention  the convention
+   * @param versionCorrection  the version / correction
+   * @return  the legal entity
+   */
   protected Convention addToFrontCache(final Convention convention, final VersionCorrection versionCorrection) {
     if (convention.getUniqueId().isLatest()) {
       return convention;
@@ -125,18 +132,28 @@ public class EHCachingConventionSource implements ConventionSource {
     return convention;
   }
 
+  /**
+   * Adds an object to the EH cache unless it is the latest version.
+   *
+   * @param convention  the convention
+   * @param versionCorrection  the version / correction
+   * @return  the legal entity
+   */
   protected Convention addToCache(final Convention convention, final VersionCorrection versionCorrection) {
-    final Convention front = addToFrontCache(convention, null);
-    if (front == convention) {
-      if (convention.getUniqueId().isVersioned()) {
-        _conventionCache.put(new Element(convention.getUniqueId(), convention));
+    if (convention != null) {
+      final Convention front = addToFrontCache(convention, null);
+      if (front == convention) {
+        if (convention.getUniqueId().isVersioned()) {
+          _conventionCache.put(new Element(convention.getUniqueId(), convention));
+        }
+        if (versionCorrection != null) {
+          _conventionCache.put(new Element(Pairs.of(convention.getExternalIdBundle(), versionCorrection), convention));
+          _conventionCache.put(new Element(Pairs.of(convention.getUniqueId().getObjectId(), versionCorrection), convention));
+        }
       }
-      if (versionCorrection != null) {
-        _conventionCache.put(new Element(Pairs.of(convention.getExternalIdBundle(), versionCorrection), convention));
-        _conventionCache.put(new Element(Pairs.of(convention.getUniqueId().getObjectId(), versionCorrection), convention));
-      }
+      return front;
     }
-    return front;
+    return null;
   }
 
   //-------------------------------------------------------------------------

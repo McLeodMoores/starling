@@ -516,8 +516,8 @@ public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeries
         maxPoints);
   }
 
-  /*
-   * PLAT-1589
+  /**
+   * Creates a sub-series key that is used to cache sub-series requests.
    */
   private static final class SubSeriesKey implements Serializable {
 
@@ -571,6 +571,11 @@ public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeries
      * Tests whether this key exactly matches the user request, or if it would be a larger time-series that needs to be
      * cut down to match.
      *
+     * @param start  the start date
+     * @param includeStart  true to include the data on the start date
+     * @param end  the end date
+     * @param includeEnd  true to include the data on the end date
+     * @param maxPoints  the maximum number of points in the result
      * @return  true if an exact match, false if it needs trimming
      */
     public boolean isMatch(final LocalDate start,

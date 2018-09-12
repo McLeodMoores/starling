@@ -105,6 +105,7 @@ public class EHCachingConfigSourceTest {
   @AfterMethod
   public void clearCaches() {
     EHCacheUtils.clear(_cacheManager);
+    _source.emptyCaches();
   }
 
   /**
