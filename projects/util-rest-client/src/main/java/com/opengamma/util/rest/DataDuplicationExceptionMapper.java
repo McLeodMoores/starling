@@ -34,4 +34,12 @@ public class DataDuplicationExceptionMapper
     return createHtmlErrorPage("error-dataduplication.html", data);
   }
 
+  /**
+   * Gets the error message.
+   *
+   * @return  the message
+   */
+  Map<String, String> getMessage() {
+    return new HashMap<>();
+  }
 }

@@ -146,7 +146,7 @@ public abstract class AbstractDataResource {
     }
   }
 
-  private Object wrap(final Object value) {
+  private static Object wrap(final Object value) {
     if (value instanceof FudgeMsgEnvelope || value instanceof FudgeMsg || value instanceof Bean) {
       return value;
     }

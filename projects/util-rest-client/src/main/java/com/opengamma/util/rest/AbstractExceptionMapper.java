@@ -39,7 +39,7 @@ public abstract class AbstractExceptionMapper<T extends Throwable>
     implements ExceptionMapper<T> {
 
   /** Logger. */
-  protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractExceptionMapper.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractExceptionMapper.class);
 
   /**
    * The RESTful request headers.
@@ -77,10 +77,9 @@ public abstract class AbstractExceptionMapper<T extends Throwable>
       final String page = buildHtmlErrorPage(exception);
       logHtmlException(exception, page);
       return doHtmlResponse(exception, page);
-    } else {
-      logRestfulError(exception);
-      return doRestfulResponse(exception);
     }
+    logRestfulError(exception);
+    return doRestfulResponse(exception);
   }
 
   //-------------------------------------------------------------------------
@@ -147,11 +146,11 @@ public abstract class AbstractExceptionMapper<T extends Throwable>
       }
       String message = exception.getMessage();
       final String rootMessage = rootCause.getMessage();
-      if (message.contains(rootMessage) == false) {
+      if (!message.contains(rootMessage)) {
         message = message + " caused by " + rootMessage;
       }
       data.put("message", message);
-      if (Throwables.getRootCause(exception) instanceof UniformInterfaceException == false) {
+      if (!(Throwables.getRootCause(exception) instanceof UniformInterfaceException)) {
         data.put("locator", "<p>" + errorLocator(rootCause) + "</p>");
       } else {
         data.put("locator", "");
@@ -159,7 +158,7 @@ public abstract class AbstractExceptionMapper<T extends Throwable>
     }
   }
 
-  private String errorLocator(final Throwable exception) {
+  private static String errorLocator(final Throwable exception) {
     final String base = exception.getClass().getSimpleName();
     if (exception.getStackTrace().length == 0) {
       return base;
@@ -169,8 +168,8 @@ public abstract class AbstractExceptionMapper<T extends Throwable>
     int count = 0;
     for (int i = 0; i < exception.getStackTrace().length && count < 4; i++) {
       final StackTraceElement ste = exception.getStackTrace()[i];
-      if (ste.getClassName().startsWith("sun.") || ste.getClassName().startsWith("javax.") || ste.getClassName().startsWith("com.sun.") ||
-          ste.getClassName().equals("java.lang.reflect.Method") && ste.getMethodName().equals("invoke")) {
+      if (ste.getClassName().startsWith("sun.") || ste.getClassName().startsWith("javax.") || ste.getClassName().startsWith("com.sun.")
+          || ste.getClassName().equals("java.lang.reflect.Method") && ste.getMethodName().equals("invoke")) {
         continue;
       }
       if (ste.getLineNumber() >= 0) {

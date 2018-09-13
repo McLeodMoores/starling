@@ -27,6 +27,13 @@ import com.sun.jersey.api.client.ClientResponse.Status;
  */
 public abstract class AbstractExceptionMapperTestHelper {
 
+  /**
+   * Initialises the test.
+   *
+   * @param mapper  the mapper
+   * @param mediaType  the media type
+   * @throws Exception  an exception if the test cannot be initialized
+   */
   protected void init(final ExceptionMapper<?> mapper, final MediaType mediaType) throws Exception {
     final HttpHeaders headers = mock(HttpHeaders.class);
     when(headers.getAcceptableMediaTypes()).thenReturn(Arrays.asList(mediaType));
@@ -36,6 +43,13 @@ public abstract class AbstractExceptionMapperTestHelper {
     field.set(mapper, headers);
   }
 
+  /**
+   * Tests the result.
+   *
+   * @param test  the response
+   * @param status  the status
+   * @param th  the exception
+   */
   protected void testResult(final Response test, final Status status, final Throwable th) {
     assertEquals("Status: " + status.getStatusCode() + " " + status.getReasonPhrase() + "; Message: " + th.getMessage(), test.getEntity());
     assertEquals(status.getStatusCode(), test.getStatus());
@@ -48,8 +62,13 @@ public abstract class AbstractExceptionMapperTestHelper {
     assertEquals(true, test.getMetadata().get(ExceptionThrowingClientFilter.EXCEPTION_POINT).get(0).toString().contains(".java"));
   }
 
+  /**
+   * Provides data types for test cases.
+   *
+   * @return  the types
+   */
   @DataProvider(name = "mediaTypes")
-  public Object[][] data_mediaTypes() {
+  public Object[][] dataMediaTypes() {
     return new Object[][] {
         {MediaType.APPLICATION_JSON_TYPE},
         {FudgeRest.MEDIA_TYPE},

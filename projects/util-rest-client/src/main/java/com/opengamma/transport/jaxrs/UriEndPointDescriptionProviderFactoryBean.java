@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.transport.jaxrs;
@@ -32,7 +32,7 @@ public class UriEndPointDescriptionProviderFactoryBean extends SingletonFactoryB
   private static final boolean ENABLE_IPV4 = System.getProperty("com.opengamma.transport.jaxrs.UriEndPointDescriptionProviderFactoryBean.disableIPv4") == null;
   private static final boolean ENABLE_IPV6 = System.getProperty("com.opengamma.transport.jaxrs.UriEndPointDescriptionProviderFactoryBean.enableIPv6") != null;
 
-  private final List<String> _uris = new LinkedList<String>();
+  private final List<String> _uris = new LinkedList<>();
 
   private String _local;
   private int _port = 80;
@@ -41,8 +41,8 @@ public class UriEndPointDescriptionProviderFactoryBean extends SingletonFactoryB
 
   //-------------------------------------------------------------------------
   /**
-   * Sets an absolute URI. 
-   * 
+   * Sets an absolute URI.
+   *
    * @param uri the absolute URI, e.g. {@code http://hostname.domain:port/foo/bar}
    */
   public void setAbsolute(final String uri) {
@@ -51,7 +51,7 @@ public class UriEndPointDescriptionProviderFactoryBean extends SingletonFactoryB
 
   /**
    * Sets a local path using the default host and port.
-   * 
+   *
    * @param local  the local path, e.g. {@code /foo/bar}
    */
   public void setLocal(final String local) {
@@ -59,30 +59,55 @@ public class UriEndPointDescriptionProviderFactoryBean extends SingletonFactoryB
   }
 
   /**
-   * Sets the default port
-   * 
+   * Sets the default port.
+   *
    * @param port  the default port
    */
   public void setPort(final int port) {
     _port = port;
   }
 
+  /**
+   * Gets the port.
+   *
+   * @return  the port
+   */
   public int getPort() {
     return _port;
   }
 
+  /**
+   * Sets the secure port.
+   *
+   * @param securePort  the secure port
+   */
   public void setSecurePort(final int securePort) {
     _securePort = securePort;
   }
 
+  /**
+   * Gets the secure port.
+   *
+   * @return  the secure port
+   */
   public int getSecurePort() {
     return _securePort;
   }
 
+  /**
+   * Sets whether or not the port is secure.
+   *
+   * @param isSecure  true if the port should be secure
+   */
   public void setSecure(final boolean isSecure) {
     _secure = isSecure;
   }
 
+  /**
+   * True if the port is secure.
+   *
+   * @return  true if the port is secure
+   */
   public boolean isSecure() {
     return _secure;
   }
@@ -94,9 +119,9 @@ public class UriEndPointDescriptionProviderFactoryBean extends SingletonFactoryB
       if (_secure) {
         LOGGER.warn("Secure local connections not available - using unsecured connections");
       }
-      Collection<String> localAddresses = getLocalNetworkAddresses();
-      for (String address : localAddresses) {
-        String uri = "http://" + address + ":" + _port + _local;
+      final Collection<String> localAddresses = getLocalNetworkAddresses();
+      for (final String address : localAddresses) {
+        final String uri = "http://" + address + ":" + _port + _local;
         _uris.add(uri);
         LOGGER.debug("Publishing {}", uri);
       }
@@ -106,13 +131,13 @@ public class UriEndPointDescriptionProviderFactoryBean extends SingletonFactoryB
 
   //-------------------------------------------------------------------------
   private Collection<String> getLocalNetworkAddresses() {
-    final List<String> addresses = new LinkedList<String>();
+    final List<String> addresses = new LinkedList<>();
     try {
-      Enumeration<NetworkInterface> ni = NetworkInterface.getNetworkInterfaces();
+      final Enumeration<NetworkInterface> ni = NetworkInterface.getNetworkInterfaces();
       while (ni.hasMoreElements()) {
         loadInterfaceAddress(ni.nextElement(), addresses);
       }
-    } catch (IOException e) {
+    } catch (final IOException e) {
       LOGGER.warn("Error resolving local addresses; no local connections available", e);
       return Collections.emptySet();
     }

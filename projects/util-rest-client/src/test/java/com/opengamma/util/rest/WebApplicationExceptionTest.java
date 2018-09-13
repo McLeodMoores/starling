@@ -22,8 +22,14 @@ import com.sun.jersey.api.client.ClientResponse.Status;
 @Test(groups = TestGroup.UNIT)
 public class WebApplicationExceptionTest extends AbstractExceptionMapperTestHelper {
 
+  /**
+   * Tests the mapping for the data types.
+   *
+   * @param mediaType  the media type
+   * @throws Exception  if there is a problem
+   */
   @Test(dataProvider = "mediaTypes")
-  public void test_mapping(final MediaType mediaType) throws Exception {
+  public void testMapping(final MediaType mediaType) throws Exception {
     final WebApplicationException ex = new WebApplicationException(Status.CONFLICT.getStatusCode());
     final WebApplicationExceptionMapper mapper = new WebApplicationExceptionMapper();
     init(mapper, mediaType);

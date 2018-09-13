@@ -28,7 +28,7 @@ public abstract class AbstractRemoteClient {
   private final FudgeRestClient _client;
 
   /**
-   * Creates an instance.
+   * Creates an instance with a Fudge REST client.
    *
    * @param baseUri the base target URI for all RESTful web services, not null
    */
@@ -36,6 +36,12 @@ public abstract class AbstractRemoteClient {
     this(baseUri, FudgeRestClient.create());
   }
 
+  /**
+   * Creates an instance.
+   *
+   * @param baseUri  the base URI for all RESTful web services, not null
+   * @param client  the REST client, not null
+   */
   public AbstractRemoteClient(final URI baseUri, final FudgeRestClient client) {
     ArgumentChecker.notNull(baseUri, "baseUri");
     ArgumentChecker.notNull(client, "client");

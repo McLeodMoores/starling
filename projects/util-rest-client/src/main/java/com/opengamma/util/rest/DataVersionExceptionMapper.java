@@ -30,8 +30,16 @@ public class DataVersionExceptionMapper
   //-------------------------------------------------------------------------
   @Override
   protected String buildHtmlErrorPage(final DataVersionException exception) {
-    final Map<String, String> data = new HashMap<>();
+    final Map<String, String> data = getMessage();
     return createHtmlErrorPage("error-dataversion.html", data);
   }
 
+  /**
+   * Gets the error message.
+   *
+   * @return  the message
+   */
+  Map<String, String> getMessage() {
+    return new HashMap<>();
+  }
 }

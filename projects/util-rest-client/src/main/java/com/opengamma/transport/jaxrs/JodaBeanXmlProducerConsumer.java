@@ -51,8 +51,8 @@ public class JodaBeanXmlProducerConsumer implements MessageBodyReader<Object>, M
   //-------------------------------------------------------------------------
   @Override
   public boolean isReadable(final Class<?> type, final Type genericType, final Annotation[] annotations, final MediaType mediaType) {
-    return Bean.class.isAssignableFrom(type) || type == FudgeResponse.class ||
-        FudgeMsgEnvelope.class.isAssignableFrom(type) || FudgeMsg.class.isAssignableFrom(type);
+    return Bean.class.isAssignableFrom(type) || type == FudgeResponse.class
+        || FudgeMsgEnvelope.class.isAssignableFrom(type) || FudgeMsg.class.isAssignableFrom(type);
   }
 
   @Override
@@ -92,8 +92,8 @@ public class JodaBeanXmlProducerConsumer implements MessageBodyReader<Object>, M
 
   @Override
   public boolean isWriteable(final Class<?> type, final Type genericType, final Annotation[] annotations, final MediaType mediaType) {
-    return Bean.class.isAssignableFrom(type) || type == FudgeResponse.class ||
-        FudgeMsgEnvelope.class.isAssignableFrom(type) || FudgeMsg.class.isAssignableFrom(type);
+    return Bean.class.isAssignableFrom(type) || type == FudgeResponse.class
+        || FudgeMsgEnvelope.class.isAssignableFrom(type) || FudgeMsg.class.isAssignableFrom(type);
   }
 
   @Override

@@ -32,10 +32,20 @@ public class UriEndPointUriFactoryBean extends SingletonFactoryBean<URI> {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Gets the URI.
+   *
+   * @return  the URI
+   */
   public URI getUri() {
     return _uri;
   }
 
+  /**
+   * Sets the URI.
+   *
+   * @param uri  the URI
+   */
   public void setUri(final URI uri) {
     _uri = uri;
   }
@@ -45,7 +55,7 @@ public class UriEndPointUriFactoryBean extends SingletonFactoryBean<URI> {
   protected URI createObject() {
     final FudgeRestClient restClient = FudgeRestClient.create();
     final FudgeMsg msg = restClient.accessFudge(getUri()).get(FudgeMsg.class);
-    if (UriEndPointDescriptionProvider.TYPE_VALUE.equals(msg.getString(UriEndPointDescriptionProvider.TYPE_KEY)) == false) {
+    if (!UriEndPointDescriptionProvider.TYPE_VALUE.equals(msg.getString(UriEndPointDescriptionProvider.TYPE_KEY))) {
       throw new IllegalArgumentException("End point is not a URI target - " + msg);
     }
     URI uri = URI.create(msg.getString(UriEndPointDescriptionProvider.URI_KEY));

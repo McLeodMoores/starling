@@ -28,7 +28,7 @@ public class IllegalArgumentExceptionMapper
   //-------------------------------------------------------------------------
   @Override
   protected String buildHtmlErrorPage(final IllegalArgumentException exception) {
-    final Map<String, String> data = new HashMap<>();
+    final Map<String, String> data = getMessage();
     buildOutputMessage(exception, data);
     return createHtmlErrorPage("error-badrequest.html", data);
   }
@@ -43,4 +43,12 @@ public class IllegalArgumentExceptionMapper
     LOGGER.error("RESTful web-service exception caught and tunnelled to client:", exception);
   }
 
+  /**
+   * Gets the error message.
+   *
+   * @return  the message
+   */
+  Map<String, String> getMessage() {
+    return new HashMap<>();
+  }
 }

@@ -24,11 +24,12 @@ public final class FudgeResponse {
    * @param value  the value to unwrap, not null
    * @return the unwrapped value or the input value, not null
    */
-  public static Object unwrap(Object value) {
-    if (value instanceof FudgeResponse) {
-      value = ((FudgeResponse) value).getValue();
+  public static Object unwrap(final Object value) {
+    Object unwrapped = value;
+    if (unwrapped instanceof FudgeResponse) {
+      unwrapped = ((FudgeResponse) unwrapped).getValue();
     }
-    return value;
+    return unwrapped;
   }
 
   /**

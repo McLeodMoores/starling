@@ -52,8 +52,8 @@ public class FudgeObjectBinaryProducer extends FudgeBase implements MessageBodyW
   //-------------------------------------------------------------------------
   @Override
   public boolean isWriteable(final Class<?> type, final Type genericType, final Annotation[] annotations, final MediaType mediaType) {
-    return FudgeRest.MEDIA_TYPE.equals(mediaType) || type == FudgeResponse.class || Bean.class.isAssignableFrom(type) || FudgeMsgEnvelope.class.isAssignableFrom(type) ||
-        FudgeMsg.class.isAssignableFrom(type);
+    return FudgeRest.MEDIA_TYPE.equals(mediaType) || type == FudgeResponse.class || Bean.class.isAssignableFrom(type)
+        || FudgeMsgEnvelope.class.isAssignableFrom(type) || FudgeMsg.class.isAssignableFrom(type);
   }
 
   @Override

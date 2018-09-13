@@ -46,4 +46,21 @@ public class AuthorizationExceptionMapper
     return createHtmlErrorPage("error-authorization.html", data);
   }
 
+  /**
+   * Gets the message.
+   *
+   * @param exception  the exception
+   * @return  the message
+   */
+  Map<String, String> getMessage(final AuthorizationException exception) {
+    final Map<String, String> data = new HashMap<>();
+    data.put("user", AuthUtils.getSubject().isAuthenticated() ? AuthUtils.getUserName() : "Not Logged in");
+    final String msg = exception.getMessage();
+    final String permission = StringUtils.substringBetween(msg, "[", "]");
+    data.put("locator", "");
+    if (StringUtils.isNotEmpty(permission)) {
+      data.put("message", "Required permission: " + permission);
+    }
+    return data;
+  }
 }

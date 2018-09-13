@@ -55,12 +55,11 @@ public class FudgeObjectBinaryConsumer extends FudgeBase implements MessageBodyR
   }
 
   @Override
+  @SuppressWarnings("resource")
   public Object readFrom(final Class<Object> type, final Type genericType, final Annotation[] annotations,
       final MediaType mediaType, final MultivaluedMap<String, String> httpHeaders, final InputStream entityStream) throws IOException, WebApplicationException {
 
-    @SuppressWarnings("resource")
-    final
-    FudgeMsgReader reader = new FudgeMsgReader(new FudgeDataInputStreamReader(getFudgeContext(), entityStream));
+    final FudgeMsgReader reader = new FudgeMsgReader(new FudgeDataInputStreamReader(getFudgeContext(), entityStream));
     final FudgeMsg message = reader.nextMessage();
     if (message == null) {
       return null;

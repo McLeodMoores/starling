@@ -50,6 +50,7 @@ public class FudgeObjectJSONConsumer extends FudgeBase implements MessageBodyRea
   }
 
   @Override
+  @SuppressWarnings("resource")  // wraps stream that cannot be closed here
   public Object readFrom(
       final Class<Object> type,
       final Type genericType,
@@ -59,7 +60,6 @@ public class FudgeObjectJSONConsumer extends FudgeBase implements MessageBodyRea
       final InputStream entityStream) throws IOException, WebApplicationException {
 
     final InputStreamReader entityReader = new InputStreamReader(entityStream, Charsets.UTF_8);
-    @SuppressWarnings("resource")  // wraps stream that cannot be closed here
     final
     FudgeMsgReader reader = new FudgeMsgReader(new FudgeJSONStreamReader(getFudgeContext(), entityReader));
     final FudgeMsg message = reader.nextMessage();

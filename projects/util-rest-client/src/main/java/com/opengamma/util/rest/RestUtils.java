@@ -31,12 +31,12 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 public final class RestUtils {
 
   /**
-   * text/csv
+   * text/csv.
    */
   public static final String TEXT_CSV = "text/csv";
 
   /**
-   * text/csv type
+   * text/csv type.
    */
   public static final MediaType TEXT_CSV_TYPE = new MediaType("text", "csv");
 

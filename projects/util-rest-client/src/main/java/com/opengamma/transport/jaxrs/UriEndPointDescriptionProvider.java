@@ -28,7 +28,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.sun.jersey.api.client.Client;
 
 /**
- * An implementation of {@link EndPointDescriptionProvider} that describes URLs
+ * An implementation of {@link EndPointDescriptionProvider} that describes URLs.
  */
 public class UriEndPointDescriptionProvider implements EndPointDescriptionProvider {
 
@@ -49,10 +49,20 @@ public class UriEndPointDescriptionProvider implements EndPointDescriptionProvid
 
   private final List<String> _uris;
 
+  /**
+   * Constructs a provider.
+   *
+   * @param uri  a URI
+   */
   public UriEndPointDescriptionProvider(final String uri) {
     _uris = Collections.singletonList(uri);
   }
 
+  /**
+   * Constructs a provider.
+   *
+   * @param uris  URI
+   */
   public UriEndPointDescriptionProvider(final List<String> uris) {
     _uris = new ArrayList<>(uris);
   }
@@ -78,7 +88,8 @@ public class UriEndPointDescriptionProvider implements EndPointDescriptionProvid
   }
 
   /**
-   * Validation service to extract a URI that can be contacted. E.g. if the remote description publishes a number of alternative ones for failover/redundancy purposes.
+   * Validation service to extract a URI that can be contacted. E.g. if the remote description publishes a number of alternative
+   * ones for failover/redundancy purposes.
    */
   public static final class Validater {
 
@@ -125,12 +136,17 @@ public class UriEndPointDescriptionProvider implements EndPointDescriptionProvid
       }
     }
 
+    /**
+     * Sets the timeout.
+     *
+     * @param timeout  the timeout
+     */
     public synchronized void setTimeout(final int timeout) {
       _timeout = timeout;
       createOrConfigureClient();
     }
 
-    private boolean validateType(final FudgeMsg endPoint) {
+    private static boolean validateType(final FudgeMsg endPoint) {
       for (final FudgeField typeField : endPoint.getAllByName(TYPE_KEY)) {
         if (TYPE_VALUE.equals(typeField.getValue())) {
           return true;
@@ -149,6 +165,8 @@ public class UriEndPointDescriptionProvider implements EndPointDescriptionProvid
           case 200:
           case 405:
             return uri;
+          default:
+            return NULL_URI;
         }
       } catch (final Exception ex) {
         LOGGER.warn("URI {} not accessible", uriField);
@@ -157,6 +175,12 @@ public class UriEndPointDescriptionProvider implements EndPointDescriptionProvid
       return NULL_URI;
     }
 
+    /**
+     * Gets the accessible URI.
+     *
+     * @param endPoint  the end point
+     * @return  the URI
+     */
     public URI getAccessibleURI(final FudgeMsg endPoint) {
       ArgumentChecker.notNull(endPoint, "endPoint");
       if (!validateType(endPoint)) {
@@ -188,12 +212,17 @@ public class UriEndPointDescriptionProvider implements EndPointDescriptionProvid
       if (uri == NULL_URI) {
         LOGGER.error("No accessible URIs found in {}", endPoint);
         return null;
-      } else {
-        LOGGER.info("Using {}", uri);
-        return uri;
       }
+      LOGGER.info("Using {}", uri);
+      return uri;
     }
 
+    /**
+     * Gets all URI strings.
+     *
+     * @param endPoint  the end point
+     * @return  the URI strings
+     */
     public Collection<String> getAllURIStrings(final FudgeMsg endPoint) {
       ArgumentChecker.notNull(endPoint, "endPoint");
       if (!validateType(endPoint)) {
@@ -210,6 +239,13 @@ public class UriEndPointDescriptionProvider implements EndPointDescriptionProvid
       return results;
     }
 
+    /**
+     * Gets the accessible URI from the provider.
+     *
+     * @param fudgeContext  the Fudge context
+     * @param endPointProvider  the provider
+     * @return  the URI
+     */
     public URI getAccessibleURI(final FudgeContext fudgeContext, final EndPointDescriptionProvider endPointProvider) {
       return getAccessibleURI(endPointProvider.getEndPointDescription(fudgeContext));
     }

@@ -48,12 +48,13 @@ public class FudgeObjectXMLConsumer extends FudgeBase implements MessageBodyRead
   @Override
   public boolean isReadable(final Class<?> type, final Type genericType, final Annotation[] annotations, final MediaType mediaType) {
     final FudgeMessageBuilder<?> builder = getFudgeContext().getObjectDictionary().getMessageBuilder(type);
-    return type != String.class &&  // allow manually created JSON string to work
-        (builder != null && !builder.getClass().getCanonicalName().equals("org.fudgemsg.mapping.JavaBeanBuilder") ||
-          type == FudgeMsgEnvelope.class);
+    return type != String.class  // allow manually created JSON string to work
+        && (builder != null && !builder.getClass().getCanonicalName().equals("org.fudgemsg.mapping.JavaBeanBuilder")
+        ||  type == FudgeMsgEnvelope.class);
   }
 
   @Override
+  @SuppressWarnings("resource")  // wraps stream that cannot be closed here
   public Object readFrom(
       final Class<Object> type,
       final Type genericType,
@@ -63,9 +64,7 @@ public class FudgeObjectXMLConsumer extends FudgeBase implements MessageBodyRead
       final InputStream entityStream) throws IOException, WebApplicationException {
 
     final InputStreamReader entityReader = new InputStreamReader(entityStream, Charsets.UTF_8);
-    @SuppressWarnings("resource")  // wraps stream that cannot be closed here
-    final
-    FudgeMsgReader reader = new FudgeMsgReader(new FudgeXMLStreamReader(getFudgeContext(), entityReader));
+    final FudgeMsgReader reader = new FudgeMsgReader(new FudgeXMLStreamReader(getFudgeContext(), entityReader));
     final FudgeMsg message = reader.nextMessage();
     if (message == null) {
       return null;

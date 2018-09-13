@@ -24,7 +24,7 @@ import com.google.common.base.Supplier;
 import com.opengamma.transport.jaxrs.FudgeFieldContainerBrowser;
 
 /**
- * RESTful resource for providing simple a configuration map.
+ * RESTful resource for providing a simple configuration map.
  * <p>
  * This resource receives and processes RESTful calls to part of a map of configuration.
  * This is a basic mechanism used to expose aspects of a server at a well-known URI,
@@ -36,27 +36,59 @@ public class DataConfigurationResource extends AbstractDataResource {
   private final FudgeContext _fudgeContext;
   private final Map<String, Object> _resources;
 
+  /**
+   * Creates an instance with empty resources.
+   *
+   * @param fudgeContext  the context
+   */
   public DataConfigurationResource(final FudgeContext fudgeContext) {
     this(fudgeContext, new ConcurrentHashMap<String, Object>());
   }
 
+  /**
+   * Creates an instance.
+   *
+   * @param fudgeContext  the context
+   * @param resources  the resources
+   */
   public DataConfigurationResource(final FudgeContext fudgeContext, final Map<String, Object> resources) {
     _fudgeContext = fudgeContext;
     _resources = resources;
   }
 
+  /**
+   * Gets the resources.
+   *
+   * @return  the resources
+   */
   protected Map<String, Object> getResources() {
     return _resources;
   }
 
+  /**
+   * Adds a resource.
+   *
+   * @param name  the resource name
+   * @param value  the resource value
+   */
   public void addResource(final String name, final Object value) {
     getResources().put(name, value);
   }
 
+  /**
+   * Adds resources.
+   *
+   * @param map  the resources
+   */
   public void addResources(final Map<String, Object> map) {
     getResources().putAll(map);
   }
 
+  /**
+   * Gets the Fudge context.
+   *
+   * @return  the context
+   */
   public FudgeContext getFudgeContext() {
     return _fudgeContext;
   }
@@ -78,12 +110,23 @@ public class DataConfigurationResource extends AbstractDataResource {
     return message;
   }
 
+  /**
+   * Returns an envelope wrapping a Fudge message encoding the resources.
+   *
+   * @return  the envelope
+   */
   @GET
   public FudgeMsgEnvelope getResource() {
     final FudgeSerializer serializer = new FudgeSerializer(getFudgeContext());
     return new FudgeMsgEnvelope(mapToMessage(serializer, getResources()));
   }
 
+  /**
+   * Gets the resources for a particular entry.
+   *
+   * @param entry  the resource name
+   * @return  the resource
+   */
   @SuppressWarnings("unchecked")
   @Path("{entry}")
   public Object getResource(@PathParam("entry") final String entry) {
@@ -93,10 +136,9 @@ public class DataConfigurationResource extends AbstractDataResource {
     }
     if (object instanceof Map<?, ?>) {
       return new DataConfigurationResource(getFudgeContext(), (Map<String, Object>) object);
-    } else {
-      final FudgeSerializer serializer = new FudgeSerializer(getFudgeContext());
-      return new FudgeFieldContainerBrowser(serializer.objectToFudgeMsg(object));
     }
+    final FudgeSerializer serializer = new FudgeSerializer(getFudgeContext());
+    return new FudgeFieldContainerBrowser(serializer.objectToFudgeMsg(object));
   }
 
   //-------------------------------------------------------------------------

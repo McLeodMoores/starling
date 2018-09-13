@@ -16,14 +16,14 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 
 /**
- * Converter from FudgeMessage to JSON
+ * Converter from FudgeMessage to JSON.
  */
 public class FudgeMessageJSONBuilder {
 
   private final FudgeContext _fudgeContext;
 
   /**
-   * Creates the builder
+   * Creates the builder.
    *
    * @param fudgeContext the fudge context
    */
@@ -40,7 +40,7 @@ public class FudgeMessageJSONBuilder {
   }
 
   /**
-   * Converts the given fudgeMsg to a JSON string representation
+   * Converts the given fudgeMsg to a JSON string representation.
    *
    * @param fudgeMsg the fudge message
    * @return the json representation
