@@ -4,6 +4,7 @@
 package com.opengamma.core.marketdatasnapshot;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 
 import java.util.HashMap;
@@ -14,6 +15,7 @@ import java.util.SortedSet;
 import org.testng.annotations.Test;
 
 import com.opengamma.OpenGammaRuntimeException;
+import com.opengamma.util.test.AbstractFudgeBuilderTestCase;
 import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.tuple.ObjectsPair;
 import com.opengamma.util.tuple.Pair;
@@ -23,7 +25,7 @@ import com.opengamma.util.tuple.Pairs;
  * Tests for {@link SurfaceData}.
  */
 @Test(groups = TestGroup.UNIT)
-public class SurfaceDataTest {
+public class SurfaceDataTest extends AbstractFudgeBuilderTestCase {
   private static final String NAME = "NAME";
   private static final double[] XS = new double[] {1, 2, 3, 4, 5, 6, 7, 8};
   private static final double[] YS = new double[] {10, 20, 30, 40, 50, 60};
@@ -178,5 +180,39 @@ public class SurfaceDataTest {
     final SurfaceData<Double, Double> data = new SurfaceData<>(NAME, "y", "z", VALS);
     assertEquals(data.getXLabel(), "y");
     assertEquals(data.getYLabel(), "z");
+  }
+
+  /**
+   * Tests a cycle.
+   */
+  @Test
+  public void testCycle() {
+    assertEncodeDecodeCycle(SurfaceData.class, DATA);
+  }
+
+  /**
+   * Tests the bean.
+   */
+  @Test
+  public void testBean() {
+    assertNotNull(DATA.metaBean());
+    assertNotNull(DATA.metaBean().name());
+    assertNotNull(DATA.metaBean().values());
+    assertNotNull(DATA.metaBean().xs());
+    assertNotNull(DATA.metaBean().xLabel());
+    assertNotNull(DATA.metaBean().ys());
+    assertNotNull(DATA.metaBean().yLabel());
+    assertEquals(DATA.metaBean().name().get(DATA), NAME);
+    assertEquals(DATA.metaBean().values().get(DATA), VALS);
+    assertEquals(DATA.metaBean().xs().get(DATA), DATA.getXs());
+    assertEquals(DATA.metaBean().xLabel().get(DATA), DATA.getXLabel());
+    assertEquals(DATA.metaBean().ys().get(DATA), DATA.getYs());
+    assertEquals(DATA.metaBean().yLabel().get(DATA), DATA.getYLabel());
+    assertEquals(DATA.property("name").get(), NAME);
+    assertEquals(DATA.property("values").get(), VALS);
+    assertEquals(DATA.property("xs").get(), DATA.getXs());
+    assertEquals(DATA.property("xLabel").get(), DATA.getXLabel());
+    assertEquals(DATA.property("ys").get(), DATA.getYs());
+    assertEquals(DATA.property("yLabel").get(), DATA.getYLabel());
   }
 }

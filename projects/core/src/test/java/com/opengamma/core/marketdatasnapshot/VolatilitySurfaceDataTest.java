@@ -194,4 +194,5 @@ public class VolatilitySurfaceDataTest {
   public void testNoValues() {
     VOLS_1.getYValuesForX(-1.);
   }
+
 }

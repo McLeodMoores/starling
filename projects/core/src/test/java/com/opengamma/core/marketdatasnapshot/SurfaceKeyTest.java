@@ -10,10 +10,12 @@ import static org.testng.Assert.assertNotNull;
 import org.testng.annotations.Test;
 
 import com.opengamma.util.test.AbstractFudgeBuilderTestCase;
+import com.opengamma.util.test.TestGroup;
 
 /**
  * Tests for {@link SurfaceKey}.
  */
+@Test(groups = TestGroup.UNIT)
 public class SurfaceKeyTest extends AbstractFudgeBuilderTestCase {
   private static final String NAME = "FOO";
 

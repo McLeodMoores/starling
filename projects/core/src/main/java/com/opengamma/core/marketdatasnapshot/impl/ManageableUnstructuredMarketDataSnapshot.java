@@ -47,7 +47,7 @@ public class ManageableUnstructuredMarketDataSnapshot implements Bean, Unstructu
    * <p>
    * Note the use of {@link LinkedHashMap} to preserve the ordering of items.
    * This is used by yield curve based logic as the ordering of the market data
-   * may have meaning to someone manipulating the* snapshot (PLAT-1889).
+   * may have meaning to someone manipulating the snapshot.
    */
   @PropertyDefinition(get = "manual", set = "manual")
   private final Map<ExternalIdBundle, Map<String, ValueSnapshot>> _values = Maps.newLinkedHashMap();
@@ -55,7 +55,7 @@ public class ManageableUnstructuredMarketDataSnapshot implements Bean, Unstructu
    * The index for lookup operations.
    */
   // not a property
-  private final Map<ExternalId, Map<String, ExternalIdBundle>> _index = Maps.newHashMap();
+  private final transient Map<ExternalId, Map<String, ExternalIdBundle>> _index = Maps.newHashMap();
 
   /**
    * Creates an empty snapshot.
@@ -88,6 +88,13 @@ public class ManageableUnstructuredMarketDataSnapshot implements Bean, Unstructu
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Gets a named value for an id bundle.
+   *
+   * @param identifiers  the id bundle
+   * @param valueName  the value name
+   * @return  the snapshot for the value
+   */
   protected ValueSnapshot getImpl(final ExternalIdBundle identifiers, final String valueName) {
     final Map<String, ValueSnapshot> values = _values.get(identifiers);
     if (values != null) {
@@ -305,7 +312,7 @@ public class ManageableUnstructuredMarketDataSnapshot implements Bean, Unstructu
    * <p>
    * Note the use of {@link LinkedHashMap} to preserve the ordering of items.
    * This is used by yield curve based logic as the ordering of the market data
-   * may have meaning to someone manipulating the* snapshot (PLAT-1889).
+   * may have meaning to someone manipulating the snapshot.
    * @return the property, not null
    */
   public final Property<Map<ExternalIdBundle, Map<String, ValueSnapshot>>> values() {

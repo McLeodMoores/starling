@@ -10,11 +10,13 @@ import static org.testng.Assert.assertNotNull;
 import org.testng.annotations.Test;
 
 import com.opengamma.util.test.AbstractFudgeBuilderTestCase;
+import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.Tenor;
 
 /**
  * Tests for {@link VolatilityPoint}.
  */
+@Test(groups = TestGroup.UNIT)
 public class VolatilityPointTest extends AbstractFudgeBuilderTestCase {
   private static final Tenor SWAP_TENOR = Tenor.TEN_YEARS;
   private static final Tenor OPTION_EXPIRY = Tenor.FIVE_YEARS;

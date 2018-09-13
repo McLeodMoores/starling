@@ -292,13 +292,14 @@ public class NonVersionedRedisHolidaySourceTest extends AbstractRedisTestCase {
     holiday2.setUniqueId(UniqueId.of("EUREX", "2"));
     source.addHoliday(holiday2);
 
-    assertTrue(source.isHoliday(LocalDate.now(), HolidayType.TRADING, exchangeId));
-    compareVsWeekends(LocalDate.now().minusDays(10), source, HolidayType.TRADING, exchangeId);
-    compareVsWeekends(LocalDate.now().plusYears(1), source, HolidayType.TRADING, exchangeId);
+    final LocalDate date = LocalDate.of(2018, 9, 6);
+    assertTrue(source.isHoliday(date, HolidayType.TRADING, exchangeId));
+    compareVsWeekends(date.minusDays(10), source, HolidayType.TRADING, exchangeId);
+    compareVsWeekends(date.plusYears(1), source, HolidayType.TRADING, exchangeId);
 
-    assertTrue(source.isHoliday(LocalDate.now(), HolidayType.SETTLEMENT, exchangeId));
-    compareVsWeekends(LocalDate.now().minusDays(10), source, HolidayType.SETTLEMENT, exchangeId);
-    compareVsWeekends(LocalDate.now().plusYears(1), source, HolidayType.SETTLEMENT, exchangeId);
+    assertTrue(source.isHoliday(date, HolidayType.SETTLEMENT, exchangeId));
+    compareVsWeekends(date.minusDays(10), source, HolidayType.SETTLEMENT, exchangeId);
+    compareVsWeekends(date.plusYears(1), source, HolidayType.SETTLEMENT, exchangeId);
 
     assertTrue(source.isHoliday(LocalDate.of(2018, 9, 8), HolidayType.SETTLEMENT, exchangeId));
     assertTrue(source.isHoliday(LocalDate.of(2018, 9, 8), HolidayType.TRADING, exchangeId));

@@ -11,10 +11,12 @@ import org.fudgemsg.MutableFudgeMsg;
 import org.testng.annotations.Test;
 
 import com.opengamma.util.test.AbstractFudgeBuilderTestCase;
+import com.opengamma.util.test.TestGroup;
 
 /**
  * Tests for {@link CurveKey}.
  */
+@Test(groups = TestGroup.UNIT)
 public class CurveKeyTest extends AbstractFudgeBuilderTestCase {
   private static final String NAME = "FOO";
 
