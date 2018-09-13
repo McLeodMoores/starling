@@ -19,7 +19,7 @@ public class HttpMethodFilter implements ContainerRequestFilter {
 
   @Override
   public ContainerRequest filter(final ContainerRequest request) {
-    if (request.getMethod().equalsIgnoreCase("POST") == false) {
+    if (!request.getMethod().equalsIgnoreCase("POST")) {
       return request;
     }
     final String methodFormParam = request.getFormParameters().getFirst("method");  // getFormParameters() returns empty when not a form

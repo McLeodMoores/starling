@@ -61,7 +61,7 @@ public class UrlSuffixFilter implements ContainerRequestFilter {
     return request;
   }
 
-  private void adjustHeader(final ContainerRequest request, final String path, final String suffix) {
+  private static void adjustHeader(final ContainerRequest request, final String path, final String suffix) {
     final String mime = SUFFIXES.get(suffix);
 
     // change accept header

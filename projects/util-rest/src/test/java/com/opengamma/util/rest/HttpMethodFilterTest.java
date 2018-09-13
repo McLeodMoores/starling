@@ -25,42 +25,51 @@ import com.sun.jersey.spi.container.ContainerRequest;
 @Test(groups = TestGroup.UNIT)
 public class HttpMethodFilterTest {
 
-  public void test_filter_noActionOnGet() {
-    ContainerRequest mock = Mockito.mock(ContainerRequest.class);
+  /**
+   * Tests a filter on GET.
+   */
+  public void testFilterNoActionOnGet() {
+    final ContainerRequest mock = Mockito.mock(ContainerRequest.class);
     when(mock.getMethod()).thenReturn("GET");
-    
-    HttpMethodFilter test = new HttpMethodFilter();
-    ContainerRequest result = test.filter(mock);
-    
+
+    final HttpMethodFilter test = new HttpMethodFilter();
+    final ContainerRequest result = test.filter(mock);
+
     assertSame(mock, result);
     verify(mock).getMethod();
     verifyNoMoreInteractions(mock);
   }
 
-  public void test_filter_noActionOnPostNoForm() {
-    ContainerRequest mock = Mockito.mock(ContainerRequest.class);
+  /**
+   * Tests a filter on POST.
+   */
+  public void testFilterNoActionOnPostNoForm() {
+    final ContainerRequest mock = Mockito.mock(ContainerRequest.class);
     when(mock.getMethod()).thenReturn("POST");
     when(mock.getFormParameters()).thenReturn(new Form());
-    
-    HttpMethodFilter test = new HttpMethodFilter();
-    ContainerRequest result = test.filter(mock);
-    
+
+    final HttpMethodFilter test = new HttpMethodFilter();
+    final ContainerRequest result = test.filter(mock);
+
     assertSame(mock, result);
     verify(mock).getMethod();
     verify(mock).getFormParameters();
     verifyNoMoreInteractions(mock);
   }
 
-  public void test_filter_noActionOnPostFormPut() {
-    ContainerRequest mock = Mockito.mock(ContainerRequest.class);
+  /**
+   * Tests a filter on PUT.
+   */
+  public void testFilterNoActionOnPostFormPut() {
+    final ContainerRequest mock = Mockito.mock(ContainerRequest.class);
     when(mock.getMethod()).thenReturn("POST");
-    Form form = new Form();
+    final Form form = new Form();
     form.put("method", Arrays.asList("PUT"));
     when(mock.getFormParameters()).thenReturn(form);
-    
-    HttpMethodFilter test = new HttpMethodFilter();
-    ContainerRequest result = test.filter(mock);
-    
+
+    final HttpMethodFilter test = new HttpMethodFilter();
+    final ContainerRequest result = test.filter(mock);
+
     assertSame(mock, result);
     verify(mock).getMethod();
     verify(mock).getFormParameters();
@@ -68,16 +77,19 @@ public class HttpMethodFilterTest {
     verifyNoMoreInteractions(mock);
   }
 
-  public void test_filter_noActionOnPostFormDelete() {
-    ContainerRequest mock = Mockito.mock(ContainerRequest.class);
+  /**
+   * Tests a filter on DELETE.
+   */
+  public void testFilterNoActionOnPostFormDelete() {
+    final ContainerRequest mock = Mockito.mock(ContainerRequest.class);
     when(mock.getMethod()).thenReturn("POST");
-    Form form = new Form();
+    final Form form = new Form();
     form.put("method", Arrays.asList("DELETE"));
     when(mock.getFormParameters()).thenReturn(form);
-    
-    HttpMethodFilter test = new HttpMethodFilter();
-    ContainerRequest result = test.filter(mock);
-    
+
+    final HttpMethodFilter test = new HttpMethodFilter();
+    final ContainerRequest result = test.filter(mock);
+
     assertSame(mock, result);
     verify(mock).getMethod();
     verify(mock).getFormParameters();
@@ -85,16 +97,19 @@ public class HttpMethodFilterTest {
     verifyNoMoreInteractions(mock);
   }
 
-  public void test_filter_noActionOnPostFormOptions() {
-    ContainerRequest mock = Mockito.mock(ContainerRequest.class);
+  /**
+   * Tests a filter on POSTing options.
+   */
+  public void testFilterNoActionOnPostFormOptions() {
+    final ContainerRequest mock = Mockito.mock(ContainerRequest.class);
     when(mock.getMethod()).thenReturn("POST");
-    Form form = new Form();
+    final Form form = new Form();
     form.put("method", Arrays.asList("OPTIONS"));
     when(mock.getFormParameters()).thenReturn(form);
-    
-    HttpMethodFilter test = new HttpMethodFilter();
-    ContainerRequest result = test.filter(mock);
-    
+
+    final HttpMethodFilter test = new HttpMethodFilter();
+    final ContainerRequest result = test.filter(mock);
+
     assertSame(mock, result);
     verify(mock).getMethod();
     verify(mock).getFormParameters();
@@ -102,16 +117,19 @@ public class HttpMethodFilterTest {
     verifyNoMoreInteractions(mock);
   }
 
-  public void test_filter_noActionOnPostFormHead() {
-    ContainerRequest mock = Mockito.mock(ContainerRequest.class);
+  /**
+   * Tests a filter on POSTing head.
+   */
+  public void testFilterNoActionOnPostFormHead() {
+    final ContainerRequest mock = Mockito.mock(ContainerRequest.class);
     when(mock.getMethod()).thenReturn("POST");
-    Form form = new Form();
+    final Form form = new Form();
     form.put("method", Arrays.asList("HEAD"));
     when(mock.getFormParameters()).thenReturn(form);
-    
-    HttpMethodFilter test = new HttpMethodFilter();
-    ContainerRequest result = test.filter(mock);
-    
+
+    final HttpMethodFilter test = new HttpMethodFilter();
+    final ContainerRequest result = test.filter(mock);
+
     assertSame(mock, result);
     verify(mock).getMethod();
     verify(mock).getFormParameters();
@@ -119,16 +137,19 @@ public class HttpMethodFilterTest {
     verifyNoMoreInteractions(mock);
   }
 
-  public void test_filter_noActionOnPostFormPost() {
-    ContainerRequest mock = Mockito.mock(ContainerRequest.class);
+  /**
+   * Tests a filter on POST.
+   */
+  public void testFilterNoActionOnPostFormPost() {
+    final ContainerRequest mock = Mockito.mock(ContainerRequest.class);
     when(mock.getMethod()).thenReturn("POST");
-    Form form = new Form();
+    final Form form = new Form();
     form.put("method", Arrays.asList("POST"));
     when(mock.getFormParameters()).thenReturn(form);
-    
-    HttpMethodFilter test = new HttpMethodFilter();
-    ContainerRequest result = test.filter(mock);
-    
+
+    final HttpMethodFilter test = new HttpMethodFilter();
+    final ContainerRequest result = test.filter(mock);
+
     assertSame(mock, result);
     verify(mock).getMethod();
     verify(mock).getFormParameters();
@@ -136,16 +157,19 @@ public class HttpMethodFilterTest {
     verifyNoMoreInteractions(mock);
   }
 
-  public void test_filter_noActionOnPostFormGet() {
-    ContainerRequest mock = Mockito.mock(ContainerRequest.class);
+  /**
+   * Tests a filter on POST.
+   */
+  public void testFilterNoActionOnPostFormGet() {
+    final ContainerRequest mock = Mockito.mock(ContainerRequest.class);
     when(mock.getMethod()).thenReturn("POST");
-    Form form = new Form();
+    final Form form = new Form();
     form.put("method", Arrays.asList("GET"));
     when(mock.getFormParameters()).thenReturn(form);
-    
-    HttpMethodFilter test = new HttpMethodFilter();
-    ContainerRequest result = test.filter(mock);
-    
+
+    final HttpMethodFilter test = new HttpMethodFilter();
+    final ContainerRequest result = test.filter(mock);
+
     assertSame(mock, result);
     verify(mock).getMethod();
     verify(mock).getFormParameters();
@@ -153,16 +177,19 @@ public class HttpMethodFilterTest {
     verifyNoMoreInteractions(mock);
   }
 
-  public void test_filter_noActionOnPostFormNoMatch() {
-    ContainerRequest mock = Mockito.mock(ContainerRequest.class);
+  /**
+   * Tests a filter on POST.
+   */
+  public void testFilterNoActionOnPostFormNoMatch() {
+    final ContainerRequest mock = Mockito.mock(ContainerRequest.class);
     when(mock.getMethod()).thenReturn("POST");
-    Form form = new Form();
+    final Form form = new Form();
     form.put("method", Arrays.asList("FOOBAR"));
     when(mock.getFormParameters()).thenReturn(form);
-    
-    HttpMethodFilter test = new HttpMethodFilter();
-    ContainerRequest result = test.filter(mock);
-    
+
+    final HttpMethodFilter test = new HttpMethodFilter();
+    final ContainerRequest result = test.filter(mock);
+
     assertSame(mock, result);
     verify(mock).getMethod();
     verify(mock).getFormParameters();

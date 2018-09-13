@@ -70,10 +70,20 @@ public class User implements UserDetails {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Gets the identifier.
+   *
+   * @return  the identifier
+   */
   public Long getId() {
     return _id;
   }
 
+  /**
+   * Sets the identifier.
+   *
+   * @param id  the identifier
+   */
   public void setId(final Long id) {
     _id = id;
   }
@@ -83,6 +93,11 @@ public class User implements UserDetails {
     return _username;
   }
 
+  /**
+   * Sets the username.
+   *
+   * @param username  the username
+   */
   public void setUsername(final String username) {
     this._username = username;
   }
@@ -114,26 +129,56 @@ public class User implements UserDetails {
     return BCrypt.checkpw(password, _passwordHash);
   }
 
+  /**
+   * Gets the password hash.
+   *
+   * @return  the password hash
+   */
   public String getPasswordHash() {
     return _passwordHash;
   }
 
+  /**
+   * Sets the password hash.
+   *
+   * @param passwordHash  the password hash
+   */
   public void setPasswordHash(final String passwordHash) {
     this._passwordHash = passwordHash;
   }
 
+  /**
+   * Gets the user groups.
+   *
+   * @return  the user groups
+   */
   public Set<UserGroup> getUserGroups() {
     return _userGroups;
   }
 
+  /**
+   * Sets the user groups.
+   *
+   * @param userGroups  the user groups
+   */
   public void setUserGroups(final Set<UserGroup> userGroups) {
     this._userGroups = userGroups;
   }
 
+  /**
+   * Gets the last login.
+   *
+   * @return  the last login
+   */
   public Date getLastLogin() {
     return _lastLogin;
   }
 
+  /**
+   * Sets the last login.
+   *
+   * @param lastLogin  the last login
+   */
   public void setLastLogin(final Date lastLogin) {
     this._lastLogin = lastLogin;
   }
@@ -167,6 +212,11 @@ public class User implements UserDetails {
     return true;
   }
 
+  /**
+   * Gets a set of Authorities.
+   *
+   * @return  the authorities
+   */
   public Set<Authority> getAuthoritySet() {
     final Set<Authority> authorities = new HashSet<>();
     for (final UserGroup group : _userGroups) {
