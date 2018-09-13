@@ -25,6 +25,11 @@ public class DbSchemaGroupMetadata {
   private final String _baseResourceUrl;
   private final int _currentVersion;
 
+  /**
+   * @param schemaGroupName  the schema group name
+   * @param baseResourceUrl  the base resource URL
+   * @param currentVersion  the current version
+   */
   public DbSchemaGroupMetadata(final String schemaGroupName, final String baseResourceUrl, final int currentVersion) {
     _schemaGroupName = schemaGroupName;
     _baseResourceUrl = baseResourceUrl;
@@ -60,6 +65,13 @@ public class DbSchemaGroupMetadata {
     return getScript(dbVendorName, MIGRATE_TYPE, fromVersion + 1);
   }
 
+  /**
+   * Gets the migration scripts.
+   *
+   * @param dbVendorName  the database type
+   * @param fromVersion  the version to migrate from
+   * @return  the scripts
+   */
   public List<DbScript> getMigrateScripts(final String dbVendorName, final int fromVersion) {
     final List<DbScript> result = new LinkedList<>();
     for (int i = fromVersion; i < getCurrentVersion(); i++) {

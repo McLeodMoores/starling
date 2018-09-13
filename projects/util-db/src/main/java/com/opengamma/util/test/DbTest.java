@@ -34,8 +34,13 @@ public final class DbTest {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Returns the parameters for an HSQL database.
+   *
+   * @return  the parameters
+   */
   @DataProvider(name = "localDatabase")
-  public static Object[][] data_localDatabase() {  // CSIGNORE
+  public static Object[][] dataLocalDatabase() {
     final Object[][] data = getParametersForDatabase("hsqldb");
     if (data.length == 0) {
       throw new IllegalStateException("No databases available");
@@ -43,8 +48,13 @@ public final class DbTest {
     return data;
   }
 
+  /**
+   * Gets the parameters for the databases set in the <code>test.database.type</code> system property.
+   *
+   * @return  the parameters
+   */
   @DataProvider(name = "databases")
-  public static Object[][] data_databases() {  // CSIGNORE
+  public static Object[][] dataDatabases() {
     final Object[][] data = getParameters();
     if (data.length == 0) {
       throw new IllegalStateException("No databases available");
@@ -52,8 +62,13 @@ public final class DbTest {
     return data;
   }
 
+  /**
+   * Gets the parameters for previous three versions of the databases set in the <code>test.database.type</code> system property.
+   *
+   * @return  the parameters
+   */
   @DataProvider(name = "databasesVersionsForSeparateMasters")
-  public static Object[][] data_databasesVersionsForSeparateMasters() {  // CSIGNORE
+  public static Object[][] dataDatabasesVersionsForSeparateMasters() {
     final Object[][] data = getParametersForSeparateMasters(3);
     if (data.length == 0) {
       throw new IllegalStateException("No databases available");
@@ -111,7 +126,7 @@ public final class DbTest {
     if (databaseType == null) {
       databaseTypes = Sets.newHashSet(DbDialectUtils.getAvailableDatabaseTypes());
     } else {
-      if (DbDialectUtils.getAvailableDatabaseTypes().contains(databaseType) == false) {
+      if (!DbDialectUtils.getAvailableDatabaseTypes().contains(databaseType)) {
         throw new IllegalArgumentException("Unknown database: " + databaseType);
       }
       databaseTypes = Sets.newHashSet(databaseType);
@@ -140,6 +155,12 @@ public final class DbTest {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Gets the database dialect. The type is taken from the <code>[PREFIX].jdbc.type</code> system property.
+   *
+   * @param databaseConfigPrefix  the prefix
+   * @return  the dialect
+   */
   public static DbDialect getDbType(final String databaseConfigPrefix) {
     final String dbTypeProperty = databaseConfigPrefix + ".jdbc.type";
     final String dbType = TestProperties.getTestProperties().getProperty(dbTypeProperty);
@@ -149,6 +170,12 @@ public final class DbTest {
     return DbDialectUtils.getSupportedDbDialect(dbType);
   }
 
+  /**
+   * Gets the database host. The host is taken from the <code>[PREFIX].jdbc.url</code> system property.
+   *
+   * @param databaseConfigPrefix  the prefix
+   * @return  the host
+   */
   public static String getDbHost(final String databaseConfigPrefix) {
     final String dbHostProperty = databaseConfigPrefix + ".jdbc.url";
     final String dbHost = TestProperties.getTestProperties().getProperty(dbHostProperty);
@@ -158,6 +185,12 @@ public final class DbTest {
     return dbHost;
   }
 
+  /**
+   * Gets the database user name. The name is taken from the <code>[PREFIX].jdbc.username</code> system property.
+   *
+   * @param databaseConfigPrefix  the prefix
+   * @return  the host
+   */
   public static String getDbUsername(final String databaseConfigPrefix) {
     final String userProperty = databaseConfigPrefix + ".jdbc.username";
     final String user = TestProperties.getTestProperties().getProperty(userProperty);
@@ -167,6 +200,12 @@ public final class DbTest {
     return user;
   }
 
+  /**
+   * Gets the database password. The password is taken from the <code>[PREFIX].jdbc.password</code> system property.
+   *
+   * @param databaseConfigPrefix  the prefix
+   * @return  the host
+   */
   public static String getDbPassword(final String databaseConfigPrefix) {
     final String passwordProperty = databaseConfigPrefix + ".jdbc.password";
     final String password = TestProperties.getTestProperties().getProperty(passwordProperty);

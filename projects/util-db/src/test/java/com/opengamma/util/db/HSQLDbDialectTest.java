@@ -17,40 +17,59 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class HSQLDbDialectTest extends DbDialectTest {
 
+  /**
+   * Tests a HSQL dialect.
+   */
   public HSQLDbDialectTest() {
-    _dialect = HSQLDbDialect.INSTANCE;
+    setDialect(HSQLDbDialect.INSTANCE);
   }
 
   //-------------------------------------------------------------------------
-  public void test_getJDBCDriver() {
-    assertEquals(org.hsqldb.jdbcDriver.class, _dialect.getJDBCDriverClass());
+  /**
+   * Tests getting the driver.
+   */
+  public void testGetJDBCDriver() {
+    assertEquals(org.hsqldb.jdbcDriver.class, getDialect().getJDBCDriverClass());
   }
 
-  public void test_getHibernateDialect() {
-    assertEquals(org.hibernate.dialect.HSQLDialect.class, _dialect.getHibernateDialect().getClass());
+  /**
+   * Tests getting the Hibernate dialect.
+   */
+  public void testGetHibernateDialect() {
+    assertEquals(org.hibernate.dialect.HSQLDialect.class, getDialect().getHibernateDialect().getClass());
   }
 
-  public void test_getName() {
-    assertEquals("HSQL", _dialect.getName());
+  /**
+   * Tests getting the name.
+   */
+  public void testGetName() {
+    assertEquals("HSQL", getDialect().getName());
   }
 
   //-------------------------------------------------------------------------
-  public void test_sqlNextSequenceValueSelect() {
-    assertEquals("CALL NEXT VALUE FOR MySeq", _dialect.sqlNextSequenceValueSelect("MySeq"));
+  /**
+   * Tests next sequence value select.
+   */
+  public void testSqlNextSequenceValueSelect() {
+    assertEquals("CALL NEXT VALUE FOR MySeq", getDialect().sqlNextSequenceValueSelect("MySeq"));
   }
-  
+
   //-------------------------------------------------------------------------
-  public void test_sqlWildcardQuery() {
-    assertEquals("AND col LIKE :arg ESCAPE '\\' ", _dialect.sqlWildcardQuery("AND col ", ":arg", "a*"));
-    assertEquals("AND col LIKE :arg ESCAPE '\\' ", _dialect.sqlWildcardQuery("AND col ", ":arg", "a?"));
-    assertEquals("AND col LIKE :arg ESCAPE '\\' ", _dialect.sqlWildcardQuery("AND col ", ":arg", "a*b"));
-    assertEquals("AND col LIKE :arg ESCAPE '\\' ", _dialect.sqlWildcardQuery("AND col ", ":arg", "a?b"));
-    assertEquals("AND col LIKE :arg ESCAPE '\\' ", _dialect.sqlWildcardQuery("AND col ", ":arg", "*b"));
-    assertEquals("AND col LIKE :arg ESCAPE '\\' ", _dialect.sqlWildcardQuery("AND col ", ":arg", "?b"));
-    
-    assertEquals("AND col = :arg ", _dialect.sqlWildcardQuery("AND col ", ":arg", "a"));
-    assertEquals("AND col = :arg ", _dialect.sqlWildcardQuery("AND col ", ":arg", ""));
-    assertEquals("", _dialect.sqlWildcardQuery("AND col ", ":arg", null));
+  /**
+   * Tests a wildcard query.
+   */
+  @Override
+  public void testSqlWildcardQuery() {
+    assertEquals("AND col LIKE :arg ESCAPE '\\' ", getDialect().sqlWildcardQuery("AND col ", ":arg", "a*"));
+    assertEquals("AND col LIKE :arg ESCAPE '\\' ", getDialect().sqlWildcardQuery("AND col ", ":arg", "a?"));
+    assertEquals("AND col LIKE :arg ESCAPE '\\' ", getDialect().sqlWildcardQuery("AND col ", ":arg", "a*b"));
+    assertEquals("AND col LIKE :arg ESCAPE '\\' ", getDialect().sqlWildcardQuery("AND col ", ":arg", "a?b"));
+    assertEquals("AND col LIKE :arg ESCAPE '\\' ", getDialect().sqlWildcardQuery("AND col ", ":arg", "*b"));
+    assertEquals("AND col LIKE :arg ESCAPE '\\' ", getDialect().sqlWildcardQuery("AND col ", ":arg", "?b"));
+
+    assertEquals("AND col = :arg ", getDialect().sqlWildcardQuery("AND col ", ":arg", "a"));
+    assertEquals("AND col = :arg ", getDialect().sqlWildcardQuery("AND col ", ":arg", ""));
+    assertEquals("", getDialect().sqlWildcardQuery("AND col ", ":arg", null));
   }
 
 }

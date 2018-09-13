@@ -85,6 +85,8 @@ public abstract class AbstractDbTest implements TableCreationCallback {
    * Initialize the database to the required version.
    * This tracks the last initialized version in a static map to avoid duplicate
    * DB operations on bigger test classes. This might not be such a good idea.
+   *
+   * @throws Exception  if a problem occurs
    */
   @BeforeMethod(alwaysRun = true)
   public final void setUp() throws Exception {
@@ -195,23 +197,48 @@ public abstract class AbstractDbTest implements TableCreationCallback {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Gets the database type.
+   *
+   * @return  the database type
+   */
   protected String getDatabaseType() {
     return _databaseType;
   }
 
+  /**
+   * Gets the database version.
+   *
+   * @return  the database version
+   */
   protected String getDatabaseVersion() {
     return _databaseVersion;
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Gets the database tool.
+   *
+   * @return  the database tool
+   */
   protected DbTool getDbTool() {
     return initDbTool();
   }
 
+  /**
+   * Gets the transaction manager.
+   *
+   * @return  the transaction manager
+   */
   protected DataSourceTransactionManager getTransactionManager() {
     return new DataSourceTransactionManager(getDbTool().getDataSource());
   }
 
+  /**
+   * Gets the database connector.
+   *
+   * @return  the connector
+   */
   protected DbConnector getDbConnector() {
     return initConnector();
   }
@@ -247,7 +274,8 @@ public abstract class AbstractDbTest implements TableCreationCallback {
         dbTool = _dbTool;
         if (dbTool == null) {
           final DbConnector connector = CONNECTORS.get(Pairs.of(_databaseType, dbConnectorScope()));
-          _dbTool = dbTool = DbTest.createDbTool(_databaseType, connector);  // CSIGNORE
+          dbTool = DbTest.createDbTool(_databaseType, connector);
+          _dbTool = dbTool;
         }
       }
     }

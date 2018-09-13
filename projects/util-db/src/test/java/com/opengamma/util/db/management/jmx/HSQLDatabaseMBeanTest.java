@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.db.management.jmx;
@@ -15,6 +15,7 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
+import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.testng.annotations.Test;
 
@@ -37,7 +38,7 @@ public class HSQLDatabaseMBeanTest {
   private static void delete(final File file) {
     final File[] subfiles = file.listFiles();
     if (subfiles != null) {
-      for (File subfile : subfiles) {
+      for (final File subfile : subfiles) {
         if (!subfile.getName().startsWith(".")) {
           delete(subfile);
         }
@@ -46,7 +47,7 @@ public class HSQLDatabaseMBeanTest {
     file.delete();
   }
 
-  private HSQLDatabaseMBean construct(final String jdbc, final DataSource ds) {
+  private static HSQLDatabaseMBean construct(final String jdbc, final DataSource ds) {
     final DatabaseMBean.Local impl = new DatabaseMBean.Local(HSQLDatabaseMBean.DRIVER_CLASS, ds);
     impl.setLocalJdbc(jdbc);
     final DatabaseMBean mbean = impl.mbean();
@@ -54,10 +55,13 @@ public class HSQLDatabaseMBeanTest {
     return (HSQLDatabaseMBean) mbean;
   }
 
-  private HSQLDatabaseMBean construct(final String jdbc) {
+  private static HSQLDatabaseMBean construct(final String jdbc) {
     return construct(jdbc, Mockito.mock(DataSource.class));
   }
 
+  /**
+   * Tests creation of the backup name.
+   */
   public void testCreateBackupName() {
     HSQLDatabaseMBean.flush();
     final HSQLDatabaseMBean mb1 = construct("jdbc:file:/path/to/something/Foo");
@@ -74,8 +78,11 @@ public class HSQLDatabaseMBeanTest {
     assertEquals(mb6.createBackupName(), "Dog");
   }
 
+  /**
+   * Tests failure of backup name creation.
+   */
   @Test(expectedExceptions = UnsupportedOperationException.class)
-  public void testCreateBackupName_fail() {
+  public void testCreateBackupNameFail() {
     HSQLDatabaseMBean.flush();
     final HSQLDatabaseMBean mb1 = construct("jdbc:file:/a/x");
     final HSQLDatabaseMBean mb2 = construct("jdbc:file:/b/x");
@@ -85,8 +92,11 @@ public class HSQLDatabaseMBeanTest {
     mb3.createBackupName();
   }
 
+  /**
+   * Tests the behaviour when there is no property.
+   */
   @Test(expectedExceptions = UnsupportedOperationException.class)
-  public void testCreateBackupPath_noproperty() {
+  public void testCreateBackupPathNoproperty() {
     final String preserve = System.getProperty("backup.dir");
     try {
       System.getProperties().remove("backup.dir");
@@ -100,8 +110,13 @@ public class HSQLDatabaseMBeanTest {
     }
   }
 
+  /**
+   * Tests the behaviour when the path is incorrect.
+   *
+   * @throws IOException  if there is a problem
+   */
   @Test(expectedExceptions = UnsupportedOperationException.class)
-  public void testCreateBackupPath_cantcreate() throws IOException {
+  public void testCreateBackupPathCantcreate() throws IOException {
     final String preserve = System.getProperty("backup.dir");
     try {
       final File tmp = new File(tmpdir(), name());
@@ -121,14 +136,19 @@ public class HSQLDatabaseMBeanTest {
     }
   }
 
+  /**
+   * Tests the behaviour when the path does not point to a folder.
+   *
+   * @throws IOException  if there is an unexpected problem
+   */
   @Test(expectedExceptions = UnsupportedOperationException.class)
-  public void testCreateBackupPath_notFolder() throws IOException {
+  public void testCreateBackupPathNotFolder() throws IOException {
     final String preserve = System.getProperty("backup.dir");
     try {
       final File tmp = new File(tmpdir(), name());
       try {
-        (new File(tmp, "hsqldb")).mkdirs();
-        (new File(tmp, "hsqldb" + File.separatorChar + "XYZ")).createNewFile();
+        new File(tmp, "hsqldb").mkdirs();
+        new File(tmp, "hsqldb" + File.separatorChar + "XYZ").createNewFile();
         System.setProperty("backup.dir", tmp.getAbsolutePath());
         HSQLDatabaseMBean.flush();
         final HSQLDatabaseMBean mbean = construct("jdbc:file:/path/to/something/XYZ");
@@ -143,6 +163,11 @@ public class HSQLDatabaseMBeanTest {
     }
   }
 
+  /**
+   * Tests a backup.
+   *
+   * @throws SQLException  if there is a problem
+   */
   public void testHotBackup() throws SQLException {
     final String preserve = System.getProperty("backup.dir");
     try {
@@ -154,10 +179,12 @@ public class HSQLDatabaseMBeanTest {
         final Connection c = Mockito.mock(Connection.class);
         Mockito.when(ds.getConnection()).thenReturn(c);
         final PreparedStatement ps = Mockito.mock(PreparedStatement.class);
-        Mockito.when(c.prepareStatement("BACKUP DATABASE TO '" + tmp.getAbsolutePath() + File.separatorChar + "hsqldb" + File.separatorChar + "XYZ" + File.separatorChar + "' NOT BLOCKING"))
+        Mockito.when(c.prepareStatement("BACKUP DATABASE TO '" + tmp.getAbsolutePath() + File.separatorChar
+            + "hsqldb" + File.separatorChar + "XYZ" + File.separatorChar + "' NOT BLOCKING"))
             .thenReturn(ps);
         final HSQLDatabaseMBean mbean = construct("jdbc:file:/path/to/something/XYZ", ds);
-        assertEquals(mbean.hotBackup(), "Files backed up to:\n" + tmp.getAbsolutePath() + File.separatorChar + "hsqldb" + File.separatorChar + "XYZ" + File.separatorChar);
+        assertEquals(mbean.hotBackup(), "Files backed up to:\n" + tmp.getAbsolutePath() + File.separatorChar
+            + "hsqldb" + File.separatorChar + "XYZ" + File.separatorChar);
       } finally {
         delete(tmp);
       }
@@ -168,8 +195,13 @@ public class HSQLDatabaseMBeanTest {
     }
   }
 
+  /**
+   * Tests a backup when there is an error.
+   *
+   * @throws SQLException  if there is an unexpected problem
+   */
   @Test(expectedExceptions = UnsupportedOperationException.class)
-  public void testHotBackup_error() throws SQLException {
+  public void testHotBackupError() throws SQLException {
     final String preserve = System.getProperty("backup.dir");
     try {
       final File tmp = new File(tmpdir(), name());
@@ -179,7 +211,7 @@ public class HSQLDatabaseMBeanTest {
         final DataSource ds = Mockito.mock(DataSource.class);
         final Connection c = Mockito.mock(Connection.class);
         Mockito.when(ds.getConnection()).thenReturn(c);
-        Mockito.when(c.prepareStatement(Mockito.anyString())).thenThrow(new SQLException());
+        Mockito.when(c.prepareStatement(Matchers.anyString())).thenThrow(new SQLException());
         final HSQLDatabaseMBean mbean = construct("jdbc:file:/path/to/something/XYZ", ds);
         mbean.hotBackup();
       } finally {
@@ -192,6 +224,11 @@ public class HSQLDatabaseMBeanTest {
     }
   }
 
+  /**
+   * Tests a checkpointed backup.
+   *
+   * @throws SQLException  if there is a problem
+   */
   public void testCheckpointedBackup() throws SQLException {
     final String preserve = System.getProperty("backup.dir");
     try {
@@ -203,10 +240,12 @@ public class HSQLDatabaseMBeanTest {
         final Connection c = Mockito.mock(Connection.class);
         Mockito.when(ds.getConnection()).thenReturn(c);
         final PreparedStatement ps = Mockito.mock(PreparedStatement.class);
-        Mockito.when(c.prepareStatement("BACKUP DATABASE TO '" + tmp.getAbsolutePath() + File.separatorChar + "hsqldb" + File.separatorChar + "XYZ" + File.separatorChar + "' BLOCKING"))
+        Mockito.when(c.prepareStatement("BACKUP DATABASE TO '" + tmp.getAbsolutePath() + File.separatorChar
+            + "hsqldb" + File.separatorChar + "XYZ" + File.separatorChar + "' BLOCKING"))
             .thenReturn(ps);
         final HSQLDatabaseMBean mbean = construct("jdbc:file:/path/to/something/XYZ", ds);
-        assertEquals(mbean.onlineBackup(), "Files backed up to:\n" + tmp.getAbsolutePath() + File.separatorChar + "hsqldb" + File.separatorChar + "XYZ" + File.separatorChar);
+        assertEquals(mbean.onlineBackup(), "Files backed up to:\n" + tmp.getAbsolutePath() + File.separatorChar
+            + "hsqldb" + File.separatorChar + "XYZ" + File.separatorChar);
       } finally {
         delete(tmp);
       }
@@ -217,8 +256,13 @@ public class HSQLDatabaseMBeanTest {
     }
   }
 
+  /**
+   * Tests a checkpointed backup when there is an error.
+   *
+   * @throws SQLException  if there is an unexpected error
+   */
   @Test(expectedExceptions = UnsupportedOperationException.class)
-  public void testCheckpointedBackup_error() throws SQLException {
+  public void testCheckpointedBackupError() throws SQLException {
     final String preserve = System.getProperty("backup.dir");
     try {
       final File tmp = new File(tmpdir(), name());
@@ -228,7 +272,7 @@ public class HSQLDatabaseMBeanTest {
         final DataSource ds = Mockito.mock(DataSource.class);
         final Connection c = Mockito.mock(Connection.class);
         Mockito.when(ds.getConnection()).thenReturn(c);
-        Mockito.when(c.prepareStatement(Mockito.anyString())).thenThrow(new SQLException());
+        Mockito.when(c.prepareStatement(Matchers.anyString())).thenThrow(new SQLException());
         final HSQLDatabaseMBean mbean = construct("jdbc:file:/path/to/something/XYZ", ds);
         mbean.onlineBackup();
       } finally {

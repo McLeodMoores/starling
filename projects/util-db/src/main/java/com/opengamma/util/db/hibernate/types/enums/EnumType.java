@@ -37,7 +37,7 @@ public class EnumType<T extends Enum<T>> implements EnhancedUserType, Parameteri
    */
   private String _defaultValue;
 
-  /** Creates a new instance of ActiveStateEnumType */
+  /** Creates a new instance of ActiveStateEnumType. */
   public EnumType() {
   }
 

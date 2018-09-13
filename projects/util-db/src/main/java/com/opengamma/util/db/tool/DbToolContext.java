@@ -67,6 +67,15 @@ public class DbToolContext extends DirectBean implements Closeable {
     }
   }
 
+  /**
+   * Creates a tool context.
+   *
+   * @param dbConnector  the database connector
+   * @param jdbcUrl  the JDBC URL, must contain a "/" before the database name and between the server host and database name
+   * @param user  the user
+   * @param password  the password
+   * @return  the tool context
+   */
   public static DbToolContext from(final com.opengamma.util.db.DbConnector dbConnector, final String jdbcUrl, final String user, final String password) {
     final DbManagement dbManagement = DbManagementUtils.getDbManagement(jdbcUrl);
     final int lastSlashIdx = jdbcUrl.lastIndexOf("/");

@@ -38,7 +38,7 @@ public class SqlServer2008DbDialect extends DbDialect {
   public Class<? extends Driver> getJDBCDriverClass() {
     try {
       return (Class<? extends Driver>) Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-    } catch (ClassNotFoundException ex) {
+    } catch (final ClassNotFoundException ex) {
       throw new OpenGammaRuntimeException("Could not load the Microsoft JDBC driver: " + ex.getMessage());
     }
     // Use the MS driver...
@@ -64,17 +64,16 @@ public class SqlServer2008DbDialect extends DbDialect {
     if (paging == null || paging.equals(PagingRequest.ALL) || paging.equals(PagingRequest.NONE)) {
       return sqlSelectFromWhere + sqlOrderBy;
     }
-    return ElSqlConfig.SQL_SERVER_2008.addPaging(sqlSelectFromWhere, paging.getFirstItem(), paging.getPagingSize()) +
-        sqlOrderBy;
+    return ElSqlConfig.SQL_SERVER_2008.addPaging(sqlSelectFromWhere, paging.getFirstItem(), paging.getPagingSize()) + sqlOrderBy;
 
   }
 
   @Override
   public String sqlNextSequenceValueSelect(final String sequenceName) {
-    return 
-        "DECLARE @NewSeqValue INT; SET NOCOUNT ON; INSERT INTO " + sequenceName + 
-        " (SeqVal) VALUES ('a'); SET @NewSeqValue = scope_identity(); DELETE FROM " + sequenceName +
-        " WITH (READPAST); SELECT nextval = @NewSeqValue; SET NOCOUNT OFF";
+    return
+        "DECLARE @NewSeqValue INT; SET NOCOUNT ON; INSERT INTO " + sequenceName
+        + " (SeqVal) VALUES ('a'); SET @NewSeqValue = scope_identity(); DELETE FROM " + sequenceName
+        + " WITH (READPAST); SELECT nextval = @NewSeqValue; SET NOCOUNT OFF";
   }
 
   @Override

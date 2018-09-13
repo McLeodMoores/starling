@@ -43,9 +43,8 @@ public class HibernateDbUtils {
   public static Criterion eqOrIsNull(final String propertyName, final Object value) {
     if (value == null) {
       return Restrictions.isNull(propertyName);
-    } else {
-      return Restrictions.eq(propertyName, value);
     }
+    return Restrictions.eq(propertyName, value);
   }
 
 }

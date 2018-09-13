@@ -64,6 +64,11 @@ public abstract class AbstractDbUpgradeTest implements TableCreationCallback {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Sets the target and create versions, initializes the database and creates the tables.
+   *
+   * @throws Exception  if there is a problem
+   */
   @BeforeMethod(alwaysRun = true)
   public void setUp() throws Exception {
     final DbTool dbTool = getDbTool();
@@ -71,10 +76,14 @@ public abstract class AbstractDbUpgradeTest implements TableCreationCallback {
     dbTool.setCreateVersion(_createVersion);
     dbTool.dropTestSchema();
     dbTool.createTestSchema();
-    dbTool.createTables(DbScriptUtils.getDbSchemaGroupMetadata(_schemaGroupName), dbTool.getTestCatalog(), dbTool.getTestSchema(), _targetVersion, _createVersion, this);
+    dbTool.createTables(DbScriptUtils.getDbSchemaGroupMetadata(_schemaGroupName), dbTool.getTestCatalog(),
+        dbTool.getTestSchema(), _targetVersion, _createVersion, this);
     dbTool.clearTestTables();
   }
 
+  /**
+   * Clears all databases.
+   */
   @AfterMethod(alwaysRun = true)
   public void tearDown() {
     // need to clear version cache from here
@@ -83,6 +92,11 @@ public abstract class AbstractDbUpgradeTest implements TableCreationCallback {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Gets the database tool.
+   *
+   * @return  the tool
+   */
   protected DbTool getDbTool() {
     return initDbTool();
   }
@@ -98,7 +112,8 @@ public abstract class AbstractDbUpgradeTest implements TableCreationCallback {
       synchronized (this) {
         dbTool = _dbTool;
         if (dbTool == null) {
-          _dbTool = dbTool = DbTest.createDbTool(_databaseType, null);  // CSIGNORE
+          dbTool = DbTest.createDbTool(_databaseType, null);
+          _dbTool = dbTool;
         }
       }
     }
@@ -106,6 +121,11 @@ public abstract class AbstractDbUpgradeTest implements TableCreationCallback {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Gets the version schemas for each database type.
+   *
+   * @return  the version schemas
+   */
   protected Map<String, String> getVersionSchemas() {
     Map<String, String> versionSchema = TARGET_SCHEMA.get(_databaseType);
     if (versionSchema == null) {
@@ -116,6 +136,9 @@ public abstract class AbstractDbUpgradeTest implements TableCreationCallback {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests an upgrade.
+   */
   @Test(groups = TestGroup.UNIT_DB)
   public void testDatabaseUpgrade() {
     for (final Triple<String, String, String> comparison : _comparisons) {
@@ -128,10 +151,10 @@ public abstract class AbstractDbUpgradeTest implements TableCreationCallback {
       final int diff = StringUtils.indexOfDifference(comparison.getSecond(), comparison.getThird());
       if (diff >= 0) {
         System.err.println("Difference at " + diff + "in " + _databaseType + "/" + comparison.getFirst());
-        System.err.println("Upgraded --->..." + StringUtils.substring(comparison.getSecond(), diff - 200, diff) +
-          "<-!!!->" + StringUtils.substring(comparison.getSecond(), diff, diff + 200) + "...");
-        System.err.println(" Created --->..." + StringUtils.substring(comparison.getThird(), diff - 200, diff) +
-          "<-!!!->" + StringUtils.substring(comparison.getThird(), diff, diff + 200) + "...");
+        System.err.println("Upgraded --->..." + StringUtils.substring(comparison.getSecond(), diff - 200, diff)
+          + "<-!!!->" + StringUtils.substring(comparison.getSecond(), diff, diff + 200) + "...");
+        System.err.println(" Created --->..." + StringUtils.substring(comparison.getThird(), diff - 200, diff)
+          + "<-!!!->" + StringUtils.substring(comparison.getThird(), diff, diff + 200) + "...");
       }
       assertEquals(_databaseType + ": " + comparison.getFirst(), comparison.getSecond(), comparison.getThird());
     }

@@ -151,15 +151,15 @@ public abstract class DbDialect {
    * @param value  the string value, may be null
    * @return the SQL fragment, not null
    */
-  public String sqlWildcardAdjustValue(String value) {
-    if (value == null || isWildcard(value) == false) {
+  public String sqlWildcardAdjustValue(final String value) {
+    if (value == null || !isWildcard(value)) {
       return value;
     }
-    value = StringUtils.replace(value, "%", "\\%");
-    value = StringUtils.replace(value, "_", "\\_");
-    value = StringUtils.replace(value, "*", "%");
-    value = StringUtils.replace(value, "?", "_");
-    return value;
+    String v = StringUtils.replace(value, "%", "\\%");
+    v = StringUtils.replace(v, "_", "\\_");
+    v = StringUtils.replace(v, "*", "%");
+    v = StringUtils.replace(v, "?", "_");
+    return v;
   }
 
   //-------------------------------------------------------------------------
@@ -181,12 +181,12 @@ public abstract class DbDialect {
     // MySQL uses LIMIT ... OFFSET ...
     // Others use window functions (more complex)
     if (paging.getFirstItem() == 0) {
-      return sqlSelectFromWhere + sqlOrderBy +
-          "FETCH FIRST " + paging.getPagingSize() + " ROWS ONLY ";
+      return sqlSelectFromWhere + sqlOrderBy
+          + "FETCH FIRST " + paging.getPagingSize() + " ROWS ONLY ";
     }
-    return sqlSelectFromWhere + sqlOrderBy +
-        "OFFSET " + paging.getFirstItem() + " ROWS " +
-        "FETCH NEXT " + paging.getPagingSize() + " ROWS ONLY ";
+    return sqlSelectFromWhere + sqlOrderBy
+        + "OFFSET " + paging.getFirstItem() + " ROWS "
+        + "FETCH NEXT " + paging.getPagingSize() + " ROWS ONLY ";
   }
 
   //-------------------------------------------------------------------------

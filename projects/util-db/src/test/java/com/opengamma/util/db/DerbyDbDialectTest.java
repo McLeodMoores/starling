@@ -17,26 +17,41 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class DerbyDbDialectTest extends DbDialectTest {
 
+  /**
+   * Tests a Derby dialect.
+   */
   public DerbyDbDialectTest() {
-    _dialect = DerbyDbDialect.INSTANCE;
+    setDialect(DerbyDbDialect.INSTANCE);
   }
 
   //-------------------------------------------------------------------------
-  public void test_getJDBCDriver() {
-    assertEquals(org.apache.derby.jdbc.EmbeddedDriver.class, _dialect.getJDBCDriverClass());
+  /**
+   * Tests getting the driver.
+   */
+  public void testGetJDBCDriver() {
+    assertEquals(org.apache.derby.jdbc.EmbeddedDriver.class, getDialect().getJDBCDriverClass());
   }
 
-  public void test_getHibernateDialect() {
-    assertEquals(org.hibernate.dialect.DerbyDialect.class, _dialect.getHibernateDialect().getClass());
+  /**
+   * Tests getting the Hibernate dialect.
+   */
+  public void testGetHibernateDialect() {
+    assertEquals(org.hibernate.dialect.DerbyDialect.class, getDialect().getHibernateDialect().getClass());
   }
 
-  public void test_getName() {
-    assertEquals("Derby", _dialect.getName());
+  /**
+   * Tests getting the name.
+   */
+  public void testGetName() {
+    assertEquals("Derby", getDialect().getName());
   }
 
   //-------------------------------------------------------------------------
-  public void test_sqlNextSequenceValueSelect() {
-    assertEquals("SELECT NEXT VALUE FOR MySeq FROM sysibm.sysdummy1", _dialect.sqlNextSequenceValueSelect("MySeq"));
+  /**
+   * Tests next sequence value select.
+   */
+  public void testSqlNextSequenceValueSelect() {
+    assertEquals("SELECT NEXT VALUE FOR MySeq FROM sysibm.sysdummy1", getDialect().sqlNextSequenceValueSelect("MySeq"));
   }
 
 }

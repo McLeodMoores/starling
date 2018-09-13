@@ -115,13 +115,13 @@ public class BoneCPHack implements ConnectionHook {
   public boolean onAcquireFail(final Throwable t, final AcquireFailConfig acquireConfig) {
     if (_underlying != null) {
       return _underlying.onAcquireFail(t, acquireConfig);
-    } else {
-      return false;
     }
+    return false;
   }
 
   @Override
-  public void onQueryExecuteTimeLimitExceeded(final ConnectionHandle conn, final Statement statement, final String sql, final Map<Object, Object> logParams, final long timeElapsedInNs) {
+  public void onQueryExecuteTimeLimitExceeded(final ConnectionHandle conn, final Statement statement,
+      final String sql, final Map<Object, Object> logParams, final long timeElapsedInNs) {
     if (_underlying != null) {
       _underlying.onQueryExecuteTimeLimitExceeded(conn, statement, sql, logParams, timeElapsedInNs);
     }
@@ -161,17 +161,15 @@ public class BoneCPHack implements ConnectionHook {
   public boolean onConnectionException(final ConnectionHandle connection, final String state, final Throwable t) {
     if (_underlying != null) {
       return _underlying.onConnectionException(connection, state, t);
-    } else {
-      return false;
     }
+    return false;
   }
 
   @Override
   public ConnectionState onMarkPossiblyBroken(final ConnectionHandle connection, final String state, final SQLException e) {
     if (_underlying != null) {
       return _underlying.onMarkPossiblyBroken(connection, state, e);
-    } else {
-      return ConnectionState.NOP;
     }
+    return ConnectionState.NOP;
   }
 }

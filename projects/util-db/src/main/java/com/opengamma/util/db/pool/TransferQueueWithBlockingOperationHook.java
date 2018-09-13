@@ -51,10 +51,9 @@ public final class TransferQueueWithBlockingOperationHook<T> implements Transfer
   public boolean offer(final T e, final long timeout, final TimeUnit unit) throws InterruptedException {
     if (offer(e)) {
       return true;
-    } else {
-      BlockingOperation.wouldBlock();
-      return getUnderlying().offer(e, timeout, unit);
     }
+    BlockingOperation.wouldBlock();
+    return getUnderlying().offer(e, timeout, unit);
   }
 
   @Override
@@ -62,10 +61,9 @@ public final class TransferQueueWithBlockingOperationHook<T> implements Transfer
     final T result = poll();
     if (result != null) {
       return result;
-    } else {
-      BlockingOperation.wouldBlock();
-      return getUnderlying().take();
     }
+    BlockingOperation.wouldBlock();
+    return getUnderlying().take();
   }
 
   @Override
@@ -73,10 +71,9 @@ public final class TransferQueueWithBlockingOperationHook<T> implements Transfer
     final T result = poll();
     if (result != null) {
       return result;
-    } else {
-      BlockingOperation.wouldBlock();
-      return getUnderlying().poll(timeout, unit);
     }
+    BlockingOperation.wouldBlock();
+    return getUnderlying().poll(timeout, unit);
   }
 
   @Override
@@ -189,10 +186,9 @@ public final class TransferQueueWithBlockingOperationHook<T> implements Transfer
   public boolean tryTransfer(final T e, final long timeout, final TimeUnit unit) throws InterruptedException {
     if (tryTransfer(e)) {
       return true;
-    } else {
-      BlockingOperation.wouldBlock();
-      return getUnderlying().tryTransfer(e, timeout, unit);
     }
+    BlockingOperation.wouldBlock();
+    return getUnderlying().tryTransfer(e, timeout, unit);
   }
 
   @Override

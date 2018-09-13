@@ -102,10 +102,10 @@ public final class DerbyDbManagement extends AbstractDbManagement {
 
   @Override
   public String getAllForeignKeyConstraintsSQL(final String catalog, final String schema) {
-    String sql = "SELECT constraintname AS name, " +
-      "tablename AS table_name " +
-      "FROM SYS.SYSCONSTRAINTS, SYS.SYSTABLES " +
-      "WHERE SYS.SYSTABLES.tableid = SYS.SYSCONSTRAINTS.tableid AND type = 'F'";
+    String sql = "SELECT constraintname AS name, "
+      + "tablename AS table_name "
+      + "FROM SYS.SYSCONSTRAINTS, SYS.SYSTABLES "
+      + "WHERE SYS.SYSTABLES.tableid = SYS.SYSCONSTRAINTS.tableid AND type = 'F'";
     if (schema != null) {
       sql += " AND SYS.SYSCONSTRAINTS.schemaid = (SELECT schemaid FROM SYS.SYSSCHEMAS WHERE schemaname = '" + schema + "')";
     }
@@ -141,8 +141,8 @@ public final class DerbyDbManagement extends AbstractDbManagement {
 
   @Override
   public String getAllColumnsSQL(final String catalog, final String schema, final String table) {
-    final StringBuilder sql = new StringBuilder("SELECT c.columnname AS name,c.columndatatype AS datatype,'' AS allowsnull,c.columndefault AS defaultvalue " +
-        "FROM SYS.SYSCOLUMNS AS c INNER JOIN SYS.SYSTABLES AS t ON c.referenceid=t.tableid WHERE t.tablename='");
+    final StringBuilder sql = new StringBuilder("SELECT c.columnname AS name,c.columndatatype AS datatype,'' AS allowsnull,c.columndefault AS defaultvalue "
+        + "FROM SYS.SYSCOLUMNS AS c INNER JOIN SYS.SYSTABLES AS t ON c.referenceid=t.tableid WHERE t.tablename='");
     sql.append(table).append("'");
     if (schema != null) {
       sql.append(" AND t.schemaid=(SELECT schemaid FROM SYS.SYSSCHEMAS WHERE schemaname='").append(schema).append("')");

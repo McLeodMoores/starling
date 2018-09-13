@@ -78,9 +78,9 @@ public final class HSQLDbManagement extends AbstractDbManagement {
 
   @Override
   public String getAllForeignKeyConstraintsSQL(final String catalog, final String schema) {
-    String sql = "SELECT FK_NAME AS name, " +
-      "FKTABLE_NAME AS table_name " +
-      "FROM INFORMATION_SCHEMA.SYSTEM_CROSSREFERENCE";
+    String sql = "SELECT FK_NAME AS name, "
+      + "FKTABLE_NAME AS table_name "
+      + "FROM INFORMATION_SCHEMA.SYSTEM_CROSSREFERENCE";
     if (schema != null) {
       sql += " WHERE FKTABLE_SCHEM = '" + schema + "'";
     }
@@ -89,8 +89,8 @@ public final class HSQLDbManagement extends AbstractDbManagement {
 
   @Override
   public String getAllSequencesSQL(final String catalog, final String schema) {
-    String sql = "SELECT SEQUENCE_NAME AS name FROM INFORMATION_SCHEMA.SYSTEM_SEQUENCES " +
-      " WHERE SEQUENCE_NAME <> 'LOB_ID'";
+    String sql = "SELECT SEQUENCE_NAME AS name FROM INFORMATION_SCHEMA.SYSTEM_SEQUENCES "
+      + " WHERE SEQUENCE_NAME <> 'LOB_ID'";
     if (schema != null) {
       sql += " AND SEQUENCE_SCHEMA =  '" + schema + "'";
     }
@@ -117,8 +117,8 @@ public final class HSQLDbManagement extends AbstractDbManagement {
 
   @Override
   public String getAllColumnsSQL(final String catalog, final String schema, final String table) {
-    final StringBuilder sql = new StringBuilder("SELECT COLUMN_NAME AS name, DATA_TYPE AS datatype, IS_NULLABLE AS allowsnull, COLUMN_DEF AS defaultvalue " +
-        "FROM INFORMATION_SCHEMA.SYSTEM_COLUMNS WHERE TABLE_NAME='");
+    final StringBuilder sql = new StringBuilder("SELECT COLUMN_NAME AS name, DATA_TYPE AS datatype, IS_NULLABLE AS allowsnull, COLUMN_DEF AS defaultvalue "
+        + "FROM INFORMATION_SCHEMA.SYSTEM_COLUMNS WHERE TABLE_NAME='");
     sql.append(table).append("'");
     if (schema != null) {
       sql.append(" AND TABLE_SCHEM='").append(schema).append("'");

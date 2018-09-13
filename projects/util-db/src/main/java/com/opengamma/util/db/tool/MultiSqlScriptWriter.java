@@ -18,6 +18,9 @@ public class MultiSqlScriptWriter implements SqlScriptWriter {
 
   private final Collection<SqlScriptWriter> _writers;
 
+  /**
+   * @param writers  the underlying writers, not null
+   */
   public MultiSqlScriptWriter(final Collection<SqlScriptWriter> writers) {
     ArgumentChecker.notNull(writers, "writers");
     _writers = writers;

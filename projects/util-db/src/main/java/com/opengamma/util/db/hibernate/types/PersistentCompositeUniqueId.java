@@ -122,7 +122,8 @@ public class PersistentCompositeUniqueId implements CompositeUserType {
   }
 
   @Override
-  public Object replace(final Object original, final Object target, final SharedSessionContractImplementor session, final Object owner) throws HibernateException {
+  public Object replace(final Object original, final Object target, final SharedSessionContractImplementor session,
+      final Object owner) throws HibernateException {
     return original;
   }
 

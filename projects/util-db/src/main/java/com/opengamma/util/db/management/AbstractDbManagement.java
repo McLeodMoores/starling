@@ -89,14 +89,29 @@ public abstract class AbstractDbManagement implements DbManagement {
     // by default, do nothing
   }
 
+  /**
+   * Gets the database server.
+   *
+   * @return  the database server
+   */
   public String getDbHost() {
     return _dbServerHost;
   }
 
+  /**
+   * Gets the user.
+   *
+   * @return  the user
+   */
   public String getUser() {
     return _user;
   }
 
+  /**
+   * Gets the password.
+   *
+   * @return  the password
+   */
   public String getPassword() {
     return _password;
   }
@@ -215,7 +230,7 @@ public abstract class AbstractDbManagement implements DbManagement {
   }
 
   protected List<String> getAllTables(final String catalog, final String schema, final Statement statement) throws SQLException {
-    final List<String> tables = new LinkedList<String>();
+    final List<String> tables = new LinkedList<>();
     final ResultSet rs = statement.executeQuery(getAllTablesSQL(catalog, schema));
     while (rs.next()) {
       tables.add(rs.getString("name"));
@@ -225,7 +240,7 @@ public abstract class AbstractDbManagement implements DbManagement {
   }
 
   protected List<String> getAllViews(final String catalog, final String schema, final Statement statement) throws SQLException {
-    final List<String> tables = new LinkedList<String>();
+    final List<String> tables = new LinkedList<>();
     final ResultSet rs = statement.executeQuery(getAllViewsSQL(catalog, schema));
     while (rs.next()) {
       tables.add(rs.getString("name"));
@@ -235,7 +250,7 @@ public abstract class AbstractDbManagement implements DbManagement {
   }
 
   private List<ColumnDefinition> getAllColumns(final String catalog, final String schema, final String table, final Statement statement) throws SQLException {
-    final List<ColumnDefinition> columns = new LinkedList<ColumnDefinition>();
+    final List<ColumnDefinition> columns = new LinkedList<>();
     final ResultSet rs = statement.executeQuery(getAllColumnsSQL(catalog, schema, table));
     while (rs.next()) {
       columns.add(new ColumnDefinition(rs.getString("name"), rs.getString("datatype"), rs.getString("defaultvalue"), rs.getString("allowsnull")));
@@ -246,7 +261,7 @@ public abstract class AbstractDbManagement implements DbManagement {
 
   @Override
   public void clearTables(final String catalog, final String schema, final Collection<String> ignoredTables) {
-    final LinkedList<String> script = new LinkedList<String>();
+    final LinkedList<String> script = new LinkedList<>();
     Connection conn = null;
     try {
       if (!getCatalogCreationStrategy().catalogExists(catalog)) {
@@ -258,7 +273,7 @@ public abstract class AbstractDbManagement implements DbManagement {
       final Statement statement = conn.createStatement();
 
       // Clear tables SQL
-      final List<String> tablesToClear = new ArrayList<String>();
+      final List<String> tablesToClear = new ArrayList<>();
       for (final String name : getAllTables(catalog, schema, statement)) {
         if (!ignoredTables.contains(name.toLowerCase())) {
           tablesToClear.add(name);
@@ -309,7 +324,7 @@ public abstract class AbstractDbManagement implements DbManagement {
   }
 
   protected List<String> getClearTablesCommand(final String schema, final List<String> tablesToClear) {
-    final List<String> clearTablesCommands = new ArrayList<String>();
+    final List<String> clearTablesCommands = new ArrayList<>();
     for (final String name : tablesToClear) {
       final Table table = new Table(name);
       clearTablesCommands.add("DELETE FROM " + table.getQualifiedName(getHibernateDialect(), null, schema));
@@ -318,7 +333,7 @@ public abstract class AbstractDbManagement implements DbManagement {
   }
 
   protected List<String> getAllSchemas(final String catalog, final Statement stmt) throws SQLException {
-    final List<String> schemas = new LinkedList<String>();
+    final List<String> schemas = new LinkedList<>();
     final ResultSet rs = stmt.executeQuery(getAllSchemasSQL(catalog));
     while (rs.next()) {
       schemas.add(rs.getString("name"));
@@ -360,7 +375,7 @@ public abstract class AbstractDbManagement implements DbManagement {
   }
 
   protected List<String> getAllSequences(final String catalog, final String schema, final Statement stmt) throws SQLException {
-    final List<String> sequences = new LinkedList<String>();
+    final List<String> sequences = new LinkedList<>();
     final String sql = getAllSequencesSQL(catalog, schema);
     if (sql != null) {
       final ResultSet rs = stmt.executeQuery(sql);
@@ -373,7 +388,7 @@ public abstract class AbstractDbManagement implements DbManagement {
   }
 
   protected List<Pair<String, String>> getAllForeignKeyConstraints(final String catalog, final String schema, final Statement stmt) throws SQLException {
-    final List<Pair<String, String>> sequences = new LinkedList<Pair<String, String>>();
+    final List<Pair<String, String>> sequences = new LinkedList<>();
     final String sql = getAllForeignKeyConstraintsSQL(catalog, schema);
     if (sql != null) {
       final ResultSet rs = stmt.executeQuery(sql);
@@ -388,7 +403,7 @@ public abstract class AbstractDbManagement implements DbManagement {
   @Override
   public void dropSchema(final String catalog, final String schema) {
     // Does not handle triggers or stored procedures yet
-    final ArrayList<String> script = new ArrayList<String>();
+    final ArrayList<String> script = new ArrayList<>();
 
     Connection conn = null;
     try {

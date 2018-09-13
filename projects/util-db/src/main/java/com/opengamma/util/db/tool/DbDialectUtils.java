@@ -108,7 +108,7 @@ public final class DbDialectUtils {
         }
         AVAILABLE_DIALECTS.put(dbType, available);
       }
-      if (available == false) {
+      if (!available) {
         it.remove();
       }
     }

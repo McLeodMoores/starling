@@ -36,7 +36,8 @@ import com.opengamma.util.time.DateUtils;
 /**
  * Connector used to access SQL databases.
  * <p>
- * This class provides a simple-to-setup and simple-to-use way to access databases. It can be configured for access via JDBC, Hibernate or both. The main benefit is simpler configuration, especially
+ * This class provides a simple-to-setup and simple-to-use way to access databases. It can be configured for
+ * access via JDBC, Hibernate or both. The main benefit is simpler configuration, especially
  * if that configuration is in XML.
  * <p>
  * This class is usually configured using the associated factory bean.
@@ -305,6 +306,9 @@ public class DbConnector implements Connector {
     private final int _retries;
     private final TransactionTemplate _transactionTemplate;
 
+    /**
+     * @param retries  the number of retries
+     */
     TransactionTemplateRetrying(final int retries) {
       _retries = retries;
       _transactionTemplate = getTransactionTemplate();
@@ -343,6 +347,9 @@ public class DbConnector implements Connector {
     private final TransactionTemplate _transactionTemplate;
     private final HibernateTemplate _hibernateTemplate;
 
+    /**
+     * Creates a standard template.
+     */
     HibernateTransactionTemplate() {
       _transactionTemplate = getTransactionTemplate();
       _hibernateTemplate = getHibernateTemplate();
@@ -379,6 +386,9 @@ public class DbConnector implements Connector {
     private final TransactionTemplate _transactionTemplate;
     private final HibernateTemplate _hibernateTemplate;
 
+    /**
+     * @param retries  the number of retries
+     */
     HibernateTransactionTemplateRetrying(final int retries) {
       _retries = retries;
       _transactionTemplate = getTransactionTemplate();

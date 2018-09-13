@@ -107,9 +107,9 @@ public final class Oracle11gDbManagement extends AbstractDbManagement {
 
   @Override
   public String getAllColumnsSQL(final String catalog, final String schema, final String table) {
-    final StringBuilder sql = new StringBuilder("SELECT column_name AS name, data_type AS datatype, " +
-        "nullable AS allowsnull, data_default AS defaultvalue FROM ALL_TAB_COLUMNS WHERE owner = '" + getUser() +
-        "' AND table_name = '" + table + "'");
+    final StringBuilder sql = new StringBuilder("SELECT column_name AS name, data_type AS datatype, "
+        + "nullable AS allowsnull, data_default AS defaultvalue FROM ALL_TAB_COLUMNS WHERE owner = '" + getUser()
+        + "' AND table_name = '" + table + "'");
     return sql.toString();
   }
 

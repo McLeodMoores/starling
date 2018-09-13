@@ -91,9 +91,8 @@ public class SQLCatalogCreationStrategy implements CatalogCreationStrategy {
   private String getCatalogToConnectTo() {
     if (_blankCatalog == null) {
       return _dbManagement.getDbHost();
-    } else {
-      return _dbManagement.getCatalogToConnectTo(_blankCatalog);
     }
+    return _dbManagement.getCatalogToConnectTo(_blankCatalog);
   }
 
   @Override

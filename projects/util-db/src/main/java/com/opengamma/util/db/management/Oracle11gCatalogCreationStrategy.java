@@ -101,9 +101,8 @@ public class Oracle11gCatalogCreationStrategy implements CatalogCreationStrategy
   private String getCatalogToConnectTo() {
     if (_blankCatalog == null) {
       return _dbManagement.getDbHost();
-    } else {
-      return _dbManagement.getCatalogToConnectTo(_blankCatalog);
     }
+    return _dbManagement.getCatalogToConnectTo(_blankCatalog);
   }
 
   @Override
@@ -121,10 +120,10 @@ public class Oracle11gCatalogCreationStrategy implements CatalogCreationStrategy
       }
       conn.setAutoCommit(true);
 
-      final String createCatalogSql = "CREATE USER " + _user + " IDENTIFIED BY " + _password + "\n" +
-          "DEFAULT TABLESPACE users\n" +
-          "TEMPORARY TABLESPACE temp\n" +
-          "QUOTA UNLIMITED ON users";
+      final String createCatalogSql = "CREATE USER " + _user + " IDENTIFIED BY " + _password + "\n"
+          + "DEFAULT TABLESPACE users\n"
+          + "TEMPORARY TABLESPACE temp\n"
+          + "QUOTA UNLIMITED ON users";
       //"GRANT CONNECT TO " + _user + ";\n" +
       //"GRANT CREATE TABLE TO " + _user + ";\n" +
       //"GRANT CREATE SEQUENCE TO " + _user + ";";

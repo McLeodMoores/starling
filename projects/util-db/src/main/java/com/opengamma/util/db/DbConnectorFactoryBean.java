@@ -125,114 +125,254 @@ public class DbConnectorFactoryBean extends SingletonFactoryBean<DbConnector> {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Gets the source name.
+   *
+   * @return  the name
+   */
   public String getName() {
     return _name;
   }
 
+  /**
+   * Sets the source name.
+   *
+   * @param name  the name
+   */
   public void setName(final String name) {
     _name = name;
   }
 
+  /**
+   * Gets the data source.
+   *
+   * @return  the data source
+   */
   public DataSource getDataSource() {
     return _dataSource;
   }
 
+  /**
+   * Sets the data source.
+   *
+   * @param dataSource  the data source
+   */
   public void setDataSource(final DataSource dataSource) {
     _dataSource = dataSource;
   }
 
+  /**
+   * Gets the dialect name.
+   *
+   * @return  the dialect name
+   */
   public String getDialectName() {
     return _databaseDialectClass;
   }
 
+  /**
+   * Sets the dialect name.
+   *
+   * @param databaseDialectClass  the dialect name
+   */
   public void setDialectName(final String databaseDialectClass) {
     _databaseDialectClass = databaseDialectClass;
   }
 
+  /**
+   * Gets the database dialect.
+   *
+   * @return  the dialect
+   */
   public DbDialect getDialect() {
     return _databaseDialect;
   }
 
+  /**
+   * Sets the database dialect.
+   *
+   * @param dialect  the dialect
+   */
   public void setDialect(final DbDialect dialect) {
     _databaseDialect = dialect;
   }
 
+  /**
+   * Gets the Hibernate factory bean.
+   *
+   * @return  the bean
+   */
   public LocalSessionFactoryBean getHibernateFactoryBean() {
     return _hibernateFactoryBean;
   }
 
+  /**
+   * Sets the Hibernate factory bean.
+   *
+   * @param hibernateFactoryBean  the bean
+   */
   public void setHibernateFactoryBean(final LocalSessionFactoryBean hibernateFactoryBean) {
     _hibernateFactoryBean = hibernateFactoryBean;
   }
 
+  /**
+   * Gets the Hibernate mapping configurations.
+   *
+   * @return  the mapping configurations
+   */
   public HibernateMappingFiles[] getHibernateMappingFiles() {
     return _mappingConfigurations;
   }
 
+  /**
+   * Sets the Hibernate mapping configurations.
+   *
+   * @param mappingConfigurations  the mapping configurations
+   */
   public void setHibernateMappingFiles(final HibernateMappingFiles[] mappingConfigurations) {
     _mappingConfigurations = mappingConfigurations;
   }
 
+  /**
+   * Gets the Hibernate mapping resources.
+   *
+   * @return  the mapping resources
+   */
   public String[] getHibernateMappingResources() {
     return _mappingResources;
   }
 
+  /**
+   * Sets the Hibernate mapping resources.
+   *
+   * @param mappingResources the mapping resources
+   */
   public void setHibernateMappingResources(final String[] mappingResources) {
     _mappingResources = mappingResources;
   }
 
+  /**
+   * True if the SQL should be shown.
+   *
+   * @return  true if the SQL should be shown
+   */
   public boolean isHibernateShowSql() {
     return _hibernateShowSql;
   }
 
+  /**
+   * Sets the show SQL option.
+   *
+   * @param hibernateShowSql  true if the SQL should be shown
+   */
   public void setHibernateShowSql(final boolean hibernateShowSql) {
     _hibernateShowSql = hibernateShowSql;
   }
 
+  /**
+   * True if the session should be thread bound.
+   *
+   * @return  true if the session should be thread bound
+   */
   public boolean isAllowHibernateThreadBoundSession() {
     return _allowHibernateThreadBoundSession;
   }
 
+  /**
+   * Sets the allow thread bound session option.
+   *
+   * @param allowHibernateThreadBoundSession  true to allow a thread bound session
+   */
   public void setAllowHibernateThreadBoundSession(final boolean allowHibernateThreadBoundSession) {
     _allowHibernateThreadBoundSession = allowHibernateThreadBoundSession;
   }
 
+  /**
+   * Gets the Hibernate session factory.
+   *
+   * @return  the factory
+   */
   public SessionFactory getHibernateSessionFactory() {
     return _hibernateSessionFactory;
   }
 
+  /**
+   * Sets the Hibernate session factory.
+   *
+   * @param sessionFactory  the factory
+   */
   public void setHibernateSessionFactory(final SessionFactory sessionFactory) {
     _hibernateSessionFactory = sessionFactory;
   }
 
+  /**
+   * Gets the transaction isolation level name.
+   *
+   * @return  the name
+   */
   public String getTransactionIsolationLevelName() {
     return _transactionIsolationLevelName;
   }
 
+  /**
+   * Sets the transaction isolation level name.
+   *
+   * @param transactionIsolationLevelName  the name
+   */
   public void setTransactionIsolationLevelName(final String transactionIsolationLevelName) {
     _transactionIsolationLevelName = transactionIsolationLevelName;
   }
 
+  /**
+   * Gets the transaction propagation behaviour name.
+   *
+   * @return  the name
+   */
   public String getTransactionPropagationBehaviorName() {
     return _transactionPropagationBehaviorName;
   }
 
+  /**
+   * Sets the transaction propagation behaviour name.
+   *
+   * @param transactionPropagationBehaviorName  the name
+   */
   public void setTransactionPropagationBehaviorName(final String transactionPropagationBehaviorName) {
     _transactionPropagationBehaviorName = transactionPropagationBehaviorName;
   }
 
+  /**
+   * Gets the transaction timeout in seconds.
+   *
+   * @return  the timeout
+   */
   public int getTransactionTimeout() {
     return _transactionTimeoutSecs;
   }
 
+  /**
+   * Sets the transaction timeout in seconds.
+   *
+   * @param transactionTimeoutSecs  sets the timeout
+   */
   public void setTransactionTimeout(final int transactionTimeoutSecs) {
     _transactionTimeoutSecs = transactionTimeoutSecs;
   }
 
+  /**
+   * Gets the transaction manager.
+   *
+   * @return  the transaction manager
+   */
   public PlatformTransactionManager getTransactionManager() {
     return _transactionManager;
   }
 
+  /**
+   * Sets the transaction manager.
+   *
+   * @param transactionManager  the transaction manager
+   */
   public void setTransactionManager(final PlatformTransactionManager transactionManager) {
     _transactionManager = transactionManager;
   }
@@ -260,7 +400,7 @@ public class DbConnectorFactoryBean extends SingletonFactoryBean<DbConnector> {
     if (dialect == null) {
       String dialectStr = getDialectName();
       ArgumentChecker.notNull(dialectStr, "dialectStr");
-      if (dialectStr.contains(".") == false) {
+      if (!dialectStr.contains(".")) {
         dialectStr = "org.opengamma.util." + dialectStr;
       }
       try {
@@ -308,7 +448,8 @@ public class DbConnectorFactoryBean extends SingletonFactoryBean<DbConnector> {
       props.setProperty("hibernate.connection.release_mode", "on_close");
       if (isAllowHibernateThreadBoundSession()) {
         props.setProperty(AvailableSettings.CURRENT_SESSION_CONTEXT_CLASS, "thread");
-        props.setProperty(AvailableSettings.TRANSACTION_COORDINATOR_STRATEGY, "org.hibernate.resource.transaction.backend.jdbc.internal.JdbcResourceLocalTransactionCoordinatorImpl");
+        props.setProperty(AvailableSettings.TRANSACTION_COORDINATOR_STRATEGY,
+            "org.hibernate.resource.transaction.backend.jdbc.internal.JdbcResourceLocalTransactionCoordinatorImpl");
       }
       factory.setHibernateProperties(props);
       //factory.setLobHandler(dialect.getLobHandler());
@@ -332,7 +473,7 @@ public class DbConnectorFactoryBean extends SingletonFactoryBean<DbConnector> {
     if (nameArray == null && filesArray == null) {
       return new String[0];
     }
-    final Set<String> config = new HashSet<String>();
+    final Set<String> config = new HashSet<>();
     if (nameArray != null) {
       config.addAll(Arrays.asList(nameArray));
     }

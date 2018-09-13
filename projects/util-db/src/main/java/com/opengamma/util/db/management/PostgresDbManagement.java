@@ -23,7 +23,8 @@ public final class PostgresDbManagement extends AbstractDbManagement {
    * SQL to retrieve all the columns.
    */
   private static final String GET_ALL_COLUMNS_SQL =
-    "SELECT column_name AS name,data_type AS datatype,is_nullable AS allowsnull,column_default AS defaultvalue FROM information_schema.columns WHERE table_catalog='";
+    "SELECT column_name AS name,data_type AS datatype,is_nullable AS allowsnull,"
+    + "column_default AS defaultvalue FROM information_schema.columns WHERE table_catalog='";
   /**
    * The Postgres default schema.
    */
@@ -80,52 +81,57 @@ public final class PostgresDbManagement extends AbstractDbManagement {
   }
 
   @Override
-  public String getAllForeignKeyConstraintsSQL(final String catalog, String schema) {
-    if (schema == null) {
-      schema = POSTGRES_DEFAULT_SCHEMA;
+  public String getAllForeignKeyConstraintsSQL(final String catalog, final String schema) {
+    String constraintSchema = schema;
+    if (constraintSchema == null) {
+      constraintSchema = POSTGRES_DEFAULT_SCHEMA;
     }
-    final String sql = "SELECT constraint_name AS name, table_name FROM information_schema.table_constraints WHERE " +
-      "constraint_catalog = '" + catalog + "' AND constraint_schema = '" + schema + "'" + " AND constraint_type = 'FOREIGN KEY'";
+    final String sql = "SELECT constraint_name AS name, table_name FROM information_schema.table_constraints WHERE "
+      + "constraint_catalog = '" + catalog + "' AND constraint_schema = '" + constraintSchema + "'" + " AND constraint_type = 'FOREIGN KEY'";
     return sql;
   }
 
   @Override
-  public String getAllSequencesSQL(final String catalog, String schema) {
-    if (schema == null) {
-      schema = POSTGRES_DEFAULT_SCHEMA;
+  public String getAllSequencesSQL(final String catalog, final String schema) {
+    String sequenceSchema = schema;
+    if (sequenceSchema == null) {
+      sequenceSchema = POSTGRES_DEFAULT_SCHEMA;
     }
-    final String sql = "SELECT sequence_name AS name FROM information_schema.sequences WHERE " +
-      "sequence_catalog = '" + catalog + "'" + " AND sequence_schema = '" + schema + "'";
+    final String sql = "SELECT sequence_name AS name FROM information_schema.sequences WHERE "
+      + "sequence_catalog = '" + catalog + "'" + " AND sequence_schema = '" + sequenceSchema + "'";
     return sql;
   }
 
   @Override
-  public String getAllTablesSQL(final String catalog, String schema) {
-    if (schema == null) {
-      schema = POSTGRES_DEFAULT_SCHEMA;
+  public String getAllTablesSQL(final String catalog, final String schema) {
+    String tableSchema = schema;
+    if (tableSchema == null) {
+      tableSchema = POSTGRES_DEFAULT_SCHEMA;
     }
-    final String sql = "SELECT table_name AS name FROM information_schema.tables WHERE " +
-      "table_catalog = '" + catalog + "'" + " AND table_schema = '" + schema + "' AND table_type = 'BASE TABLE'";
+    final String sql = "SELECT table_name AS name FROM information_schema.tables WHERE "
+      + "table_catalog = '" + catalog + "'" + " AND table_schema = '" + tableSchema + "' AND table_type = 'BASE TABLE'";
     return sql;
   }
 
   @Override
-  public String getAllViewsSQL(final String catalog, String schema) {
-    if (schema == null) {
-      schema = POSTGRES_DEFAULT_SCHEMA;
+  public String getAllViewsSQL(final String catalog, final String schema) {
+    String tableSchema = schema;
+    if (tableSchema == null) {
+      tableSchema = POSTGRES_DEFAULT_SCHEMA;
     }
-    final String sql = "SELECT table_name AS name FROM information_schema.tables WHERE " +
-      "table_catalog = '" + catalog + "'" + " AND table_schema = '" + schema + "' AND table_type = 'VIEW'";
+    final String sql = "SELECT table_name AS name FROM information_schema.tables WHERE "
+      + "table_catalog = '" + catalog + "'" + " AND table_schema = '" + tableSchema + "' AND table_type = 'VIEW'";
     return sql;
   }
 
   @Override
-  public String getAllColumnsSQL(final String catalog, String schema, final String table) {
-    if (schema == null) {
-      schema = POSTGRES_DEFAULT_SCHEMA;
+  public String getAllColumnsSQL(final String catalog, final String schema, final String table) {
+    String tableSchema = schema;
+    if (tableSchema == null) {
+      tableSchema = POSTGRES_DEFAULT_SCHEMA;
     }
     final StringBuilder sql = new StringBuilder(GET_ALL_COLUMNS_SQL);
-    sql.append(catalog).append("' AND table_schema='").append(schema).append("' AND table_name='");
+    sql.append(catalog).append("' AND table_schema='").append(tableSchema).append("' AND table_name='");
     sql.append(table).append("'");
     return sql.toString();
   }

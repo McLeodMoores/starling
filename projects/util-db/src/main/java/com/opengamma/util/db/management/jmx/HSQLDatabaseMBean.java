@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.db.management.jmx;
@@ -54,14 +54,14 @@ public class HSQLDatabaseMBean extends DatabaseMBean {
    * Find the shortest unique name among the active instances.
    * <p>
    * Working from the right hand end of the local JDBC string the shortest form is found that uniquely identifies the database.
-   * 
+   *
    * @return a name, not containing slashes, that can be used for the backup set.
    */
   protected String createBackupName() {
     final Integer one = 1;
-    final Map<String, Integer> nameCount = new HashMap<String, Integer>();
+    final Map<String, Integer> nameCount = new HashMap<>();
     synchronized (INSTANCES) {
-      for (HSQLDatabaseMBean instance : INSTANCES) {
+      for (final HSQLDatabaseMBean instance : INSTANCES) {
         String jdbc = instance.getLocalJdbc();
         if (nameCount.put(jdbc, one) != null) {
           // Another MBean already has this JDBC string -- ignore
@@ -134,7 +134,7 @@ public class HSQLDatabaseMBean extends DatabaseMBean {
       final PreparedStatement statement = connection.prepareStatement("BACKUP DATABASE TO '" + path + "' BLOCKING");
       statement.execute();
       LOGGER.info("Checkpoint backup written to {}", path);
-    } catch (SQLException e) {
+    } catch (final SQLException e) {
       LOGGER.error("Caught exception", e);
       throw new UnsupportedOperationException("SQL error attempting backup: " + e.getMessage());
     }
@@ -148,7 +148,7 @@ public class HSQLDatabaseMBean extends DatabaseMBean {
       final PreparedStatement statement = connection.prepareStatement("BACKUP DATABASE TO '" + path + "' NOT BLOCKING");
       statement.execute();
       LOGGER.info("Hot backup written to {}", path);
-    } catch (SQLException e) {
+    } catch (final SQLException e) {
       LOGGER.error("Caught exception", e);
       throw new UnsupportedOperationException("SQL error attempting backup: " + e.getMessage());
     }

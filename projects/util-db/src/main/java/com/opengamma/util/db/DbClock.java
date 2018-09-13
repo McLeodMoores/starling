@@ -70,6 +70,7 @@ class DbClock extends Clock {
    * Creates the clock.
    *
    * @param connector the connector, not null
+   * @param zone  the time zone, not null
    */
   DbClock(final DbConnector connector, final ZoneId zone) {
     _connector = Objects.requireNonNull(connector, "connector");
@@ -96,9 +97,8 @@ class DbClock extends Clock {
           _nowInstant = DbDateUtils.fromSqlTimestamp(_connector.nowDb()).truncatedTo(_precision);
           _nowNanoTime = System.nanoTime();
           return _nowInstant;
-        } else {
-          _lock.readLock().lock(); // safely downgrade to read lock
         }
+        _lock.readLock().lock(); // safely downgrade to read lock
       } finally {
         _lock.writeLock().unlock();
       }
@@ -125,11 +125,10 @@ class DbClock extends Clock {
       if (_previousNow.compareAndSet(null, instant)) {
         // This is the first result
         return instant;
-      } else {
-        // Another thread did the first result; check against that
-        previous = _previousNow.get();
-        // [PLAT-3965] This might not be necessary. I think the problem is more to do with two successive calls from the same thread getting invalid times
       }
+      // Another thread did the first result; check against that
+      previous = _previousNow.get();
+      // [PLAT-3965] This might not be necessary. I think the problem is more to do with two successive calls from the same thread getting invalid times
     }
     do {
       if (previous.isAfter(instant)) {

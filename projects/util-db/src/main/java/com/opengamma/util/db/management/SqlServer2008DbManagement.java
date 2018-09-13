@@ -28,7 +28,8 @@ public final class SqlServer2008DbManagement extends AbstractDbManagement {
    * SQL to retrieve all the columns.
    */
   private static final String GET_ALL_COLUMNS_SQL =
-    "SELECT column_name AS name,data_type AS datatype,is_nullable AS allowsnull,column_default AS defaultvalue FROM information_schema.columns WHERE table_name='";
+    "SELECT column_name AS name,data_type AS datatype,is_nullable AS allowsnull,"
+    + "column_default AS defaultvalue FROM information_schema.columns WHERE table_name='";
   /**
    * The default schema.
    */
@@ -68,7 +69,6 @@ public final class SqlServer2008DbManagement extends AbstractDbManagement {
     return _hibernateDialect;
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public Class<?> getJDBCDriverClass() {
     try {
@@ -99,12 +99,13 @@ public final class SqlServer2008DbManagement extends AbstractDbManagement {
   }
 
   @Override
-  public String getAllForeignKeyConstraintsSQL(final String catalog, String schema) {
-    if (schema == null) {
-      schema = SQLSERVER2008_DEFAULT_SCHEMA;
+  public String getAllForeignKeyConstraintsSQL(final String catalog, final String schema) {
+    String constraintSchema = schema;
+    if (constraintSchema == null) {
+      constraintSchema = SQLSERVER2008_DEFAULT_SCHEMA;
     }
-    final String sql = "SELECT constraint_name AS name, table_name FROM information_schema.table_constraints WHERE " +
-      "constraint_catalog = '" + catalog + "' AND constraint_schema = '" + schema + "'" + " AND constraint_type = 'FOREIGN KEY'";
+    final String sql = "SELECT constraint_name AS name, table_name FROM information_schema.table_constraints WHERE "
+      + "constraint_catalog = '" + catalog + "' AND constraint_schema = '" + constraintSchema + "'" + " AND constraint_type = 'FOREIGN KEY'";
     return sql;
   }
 
@@ -113,8 +114,8 @@ public final class SqlServer2008DbManagement extends AbstractDbManagement {
     if (schema == null) {
       schema = SQLSERVER2008_DEFAULT_SCHEMA;
     }
-    final String sql = "SELECT table_name AS name FROM information_schema.tables WHERE table_name LIKE '%_seq' AND " +
-      "table_catalog = '" + catalog + "'" + " AND table_schema = '" + schema + "' AND table_type = 'BASE TABLE'";
+    final String sql = "SELECT table_name AS name FROM information_schema.tables WHERE table_name LIKE '%_seq' AND "
+      + "table_catalog = '" + catalog + "'" + " AND table_schema = '" + schema + "' AND table_type = 'BASE TABLE'";
     return sql;
   }
 
@@ -123,8 +124,8 @@ public final class SqlServer2008DbManagement extends AbstractDbManagement {
     if (schema == null) {
       schema = SQLSERVER2008_DEFAULT_SCHEMA;
     }
-    final String sql = "SELECT table_name AS name FROM information_schema.tables WHERE NOT table_name LIKE '%_seq' AND " +
-      "table_catalog = '" + catalog + "'" + " AND table_schema = '" + schema + "' AND table_type = 'BASE TABLE'";
+    final String sql = "SELECT table_name AS name FROM information_schema.tables WHERE NOT table_name LIKE '%_seq' AND "
+      + "table_catalog = '" + catalog + "'" + " AND table_schema = '" + schema + "' AND table_type = 'BASE TABLE'";
     return sql;
   }
 
@@ -133,8 +134,8 @@ public final class SqlServer2008DbManagement extends AbstractDbManagement {
     if (schema == null) {
       schema = SQLSERVER2008_DEFAULT_SCHEMA;
     }
-    final String sql = "SELECT table_name AS name FROM information_schema.tables WHERE " +
-      "table_catalog = '" + catalog + "'" + " AND table_schema = '" + schema + "' AND table_type = 'VIEW'";
+    final String sql = "SELECT table_name AS name FROM information_schema.tables WHERE "
+      + "table_catalog = '" + catalog + "'" + " AND table_schema = '" + schema + "' AND table_type = 'VIEW'";
     return sql;
   }
 
