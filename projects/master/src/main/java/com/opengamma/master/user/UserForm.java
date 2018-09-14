@@ -280,7 +280,7 @@ public class UserForm implements Bean {
       errors.add(UserFormError.PASSWORD_TOO_SHORT);
     } else if (isPasswordTooLong(password)) {
       errors.add(UserFormError.PASSWORD_TOO_LONG);
-    } else if (isPasswordWeak(userName, password)) {
+    } else if (userName != null && isPasswordWeak(userName, password)) {
       errors.add(UserFormError.PASSWORD_WEAK);
     } else {
       passwordHash = service.encryptPassword(password);
