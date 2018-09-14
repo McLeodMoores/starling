@@ -281,10 +281,8 @@ implements HistoricalTimeSeriesMaster {
   public ManageableHistoricalTimeSeries getTimeSeries(final ObjectIdentifiable objectKey, final VersionCorrection versionCorrection,
       final HistoricalTimeSeriesGetFilter filter) {
     validateId(objectKey);
-    final LocalDate fromDateInclusive = MoreObjects.firstNonNull(filter.getEarliestDate(), LocalDate.of(1000, 1, 1));  // TODO: JSR-310 min/max date
-    final LocalDate toDateInclusive = MoreObjects.firstNonNull(filter.getLatestDate(), LocalDate.of(9999, 1, 1));
-    //    final LocalDate fromDateInclusive = MoreObjects.firstNonNull(filter.getEarliestDate(), LocalDate.MIN);
-    //    final LocalDate toDateInclusive = MoreObjects.firstNonNull(filter.getLatestDate(), LocalDate.MAX);
+    final LocalDate fromDateInclusive = MoreObjects.firstNonNull(filter.getEarliestDate(), LocalDate.MIN);
+    final LocalDate toDateInclusive = MoreObjects.firstNonNull(filter.getLatestDate(), LocalDate.MAX);
     ArgumentChecker.inOrderOrEqual(fromDateInclusive, toDateInclusive, "fromDateInclusive", "toDateInclusive");
     final ObjectId objectId = objectKey.getObjectId();
 
@@ -299,7 +297,8 @@ implements HistoricalTimeSeriesMaster {
 
     // Filter points by date range and max points to return
     // Heeds LocalDateDoubleTimeSeries convention: inclusive start, exclusive end
-    LocalDateDoubleTimeSeries subSeries = existingSeries.subSeries(fromDateInclusive, toDateInclusive.plusDays(1));
+    final LocalDate toDate = toDateInclusive.equals(LocalDate.MAX) ? LocalDate.MAX : toDateInclusive.plusDays(1);
+    LocalDateDoubleTimeSeries subSeries = existingSeries.subSeries(fromDateInclusive, toDate);
     final Integer maxPoints = filter.getMaxPoints();
     if (maxPoints != null && Math.abs(maxPoints) < subSeries.size()) {
       subSeries = maxPoints >= 0 ? subSeries.head(maxPoints) : subSeries.tail(-maxPoints);
