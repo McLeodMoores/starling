@@ -13,31 +13,34 @@ import org.testng.annotations.Test;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Test.
+ * Tests for {@link PathMatcher}.
  */
 @Test(groups = TestGroup.UNIT)
 public class PathMatcherTest {
 
+  /**
+   * Tests the matcher.
+   */
   public void testMatching() {
     assertTrue(PathMatcher.matches("/MarketData/Bloomberg/AAPL/View", "/MarketData/Bloomberg/*/View"));
     assertFalse(PathMatcher.matches("/MarketData2/Bloomberg/AAPL/View", "/MarketData/Bloomberg/*/View"));
-    
+
     assertTrue(PathMatcher.matches("/Portfolio/2DFS/View", "/Portf*/**"));
     assertTrue(PathMatcher.matches("/Portfolio/3XYZ/Modify", "/Portf*/**"));
     assertFalse(PathMatcher.matches("/MarketData/Bloomberg/AAPL/View", "/Portf*/**"));
-    
+
     assertTrue(PathMatcher.matches("/anything/anything", "**"));
     assertTrue(PathMatcher.matches("/anything", "**"));
     assertTrue(PathMatcher.matches("/", "**"));
     assertTrue(PathMatcher.matches("", "**"));
-    
+
     assertTrue(PathMatcher.matches("/random", "/*"));
     assertFalse(PathMatcher.matches("random", "/*"));
-    
+
     assertFalse(PathMatcher.matches("/random", "*"));
     assertFalse(PathMatcher.matches("random/", "*"));
     assertTrue(PathMatcher.matches("random", "*"));
-    
+
     assertTrue(PathMatcher.matches("random/", "*/"));
     assertFalse(PathMatcher.matches("random", "*/"));
   }

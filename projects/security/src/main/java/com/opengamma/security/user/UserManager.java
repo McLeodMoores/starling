@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.security.user;
@@ -13,23 +13,86 @@ package com.opengamma.security.user;
  * <p>
  * In this case, the user's password and their group membership would be changed. However, to update the
  * name of the group, you would need to call {@link #updateUserGroup} separately.
- *      
+ *
  */
 public interface UserManager {
 
-  User getUser(final String username);
+  /**
+   * Gets the user.
+   *
+   * @param username  the username
+   * @return  the name
+   */
+  User getUser(String username);
+  /**
+   * Adds a user.
+   *
+   * @param user  the user
+   */
   void addUser(User user);
+  /**
+   * Deletes a user.
+   *
+   * @param user  the user
+   */
   void deleteUser(User user);
+  /**
+   * Updates user information.
+   *
+   * @param user  the user
+   */
   void updateUser(User user);
 
-  UserGroup getUserGroup(final String name);
+  /**
+   * Gets the user group.
+   *
+   * @param name  the group name
+   * @return  the user group
+   */
+  UserGroup getUserGroup(String name);
+  /**
+   * Adds a user group.
+   *
+   * @param group  the group
+   */
   void addUserGroup(UserGroup group);
+  /**
+   * Deletes a user group.
+   *
+   * @param group  the group
+   */
   void deleteUserGroup(UserGroup group);
+  /**
+   * Updates user group information.
+   *
+   * @param group  the group
+   */
   void updateUserGroup(UserGroup group);
 
-  Authority getAuthority(final String authority);
+  /**
+   * Gets the authority.
+   *
+   * @param authority  the authority name
+   * @return  the authority
+   */
+  Authority getAuthority(String authority);
+  /**
+   * Adds the authority.
+   *
+   * @param authority  the authority
+   */
   void addAuthority(Authority authority);
+  /**
+   * Deletes the authority.
+   *
+   * @param authority  the authority
+   */
   void deleteAuthority(Authority authority);
+  /**
+   * Updates the authority.
+   *
+   * @param authority  the authority
+   */
   void updateAuthority(Authority authority);
 
 }

@@ -20,39 +20,41 @@ import com.opengamma.transport.CollectingByteArrayMessageSender;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Test.
+ * Tests {@link DistributedAuditLogger}.
  */
 @Test(groups = TestGroup.UNIT)
 public class DistributedAuditLoggerTest {
+  private static final FudgeContext FUDGE_CONTEXT = new FudgeContext();
 
-  private static final FudgeContext FUDGE_CONTEXT = new FudgeContext ();
-
+  /**
+   * Tests the logging.
+   */
   public void testClientServerAuditLogging() {
-    CollectingByteArrayMessageSender msgStore = new CollectingByteArrayMessageSender();
+    final CollectingByteArrayMessageSender msgStore = new CollectingByteArrayMessageSender();
     assertEquals(0, msgStore.getMessages().size());
-    
-    DistributedAuditLogger client = new DistributedAuditLogger("testoriginatingsystem", new ByteArrayFudgeMessageSender(msgStore));
+
+    final DistributedAuditLogger client = new DistributedAuditLogger("testoriginatingsystem", new ByteArrayFudgeMessageSender(msgStore));
     client.log("lisa", "testobject", "testop", "testdescription", true);
     assertEquals(1, msgStore.getMessages().size());
-    
-    FudgeMsgEnvelope fudgeMsgEnvelope = FUDGE_CONTEXT.deserialize(msgStore.getMessages().get(0));
-    
-    InMemoryAuditLogger memoryAuditLogger = new InMemoryAuditLogger();
+
+    final FudgeMsgEnvelope fudgeMsgEnvelope = FUDGE_CONTEXT.deserialize(msgStore.getMessages().get(0));
+
+    final InMemoryAuditLogger memoryAuditLogger = new InMemoryAuditLogger();
     assertEquals(0, memoryAuditLogger.getMessages().size());
-    
-    DistributedAuditLoggerServer server = new DistributedAuditLoggerServer(memoryAuditLogger);
+
+    final DistributedAuditLoggerServer server = new DistributedAuditLoggerServer(memoryAuditLogger);
     server.messageReceived(FUDGE_CONTEXT, fudgeMsgEnvelope);
     assertEquals(1, memoryAuditLogger.getMessages().size());
-    
-    AuditLogEntry entry = memoryAuditLogger.getMessages().get(0);
+
+    final AuditLogEntry entry = memoryAuditLogger.getMessages().get(0);
     assertEquals("lisa", entry.getUser());
     assertEquals("testoriginatingsystem", entry.getOriginatingSystem());
     assertEquals("testobject", entry.getObject());
     assertEquals("testop", entry.getOperation());
     assertEquals("testdescription", entry.getDescription());
     assertTrue(entry.isSuccess());
-    
-    List<FudgeMsgEnvelope> msgEnvelopes = new ArrayList<FudgeMsgEnvelope>();
+
+    final List<FudgeMsgEnvelope> msgEnvelopes = new ArrayList<>();
     msgEnvelopes.add(fudgeMsgEnvelope);
     msgEnvelopes.add(fudgeMsgEnvelope);
     msgEnvelopes.add(fudgeMsgEnvelope);

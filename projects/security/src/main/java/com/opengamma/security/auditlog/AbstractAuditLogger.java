@@ -27,6 +27,9 @@ public abstract class AbstractAuditLogger implements AuditLogger {
 
   private final String _originatingSystem;
 
+  /**
+   * Constructs an instance using the default originating system, with the name of the local host.
+   */
   public AbstractAuditLogger() {
     _originatingSystem = getDefaultOriginatingSystem();
   }
@@ -42,6 +45,11 @@ public abstract class AbstractAuditLogger implements AuditLogger {
     _originatingSystem = originatingSystem;
   }
 
+  /**
+   * Gets the default originating system name.
+   *
+   * @return  the originating system name
+   */
   public static String getDefaultOriginatingSystem() {
     try {
       return InetAddress.getLocalHost().getHostName();

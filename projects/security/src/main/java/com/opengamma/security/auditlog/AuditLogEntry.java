@@ -33,6 +33,17 @@ public class AuditLogEntry {
   private boolean _success;
   private Date _timestamp;
 
+  /**
+   * Constructs an instance.
+   *
+   * @param user  the user, not null
+   * @param originatingSystem  the originating system, not null
+   * @param object  the object, not null
+   * @param operation  the operation, not null
+   * @param description  the description, not null
+   * @param success  true if the operation was a success
+   * @param timestamp  the time stamp, not null
+   */
   public AuditLogEntry(final String user,
       final String originatingSystem,
       final String object,
@@ -40,89 +51,172 @@ public class AuditLogEntry {
       final String description,
       final boolean success,
       final Date timestamp) {
-    ArgumentChecker.notNull(user, "User name");
-    ArgumentChecker.notNull(originatingSystem, "Originating system");
-    ArgumentChecker.notNull(object, "Object name");
-    ArgumentChecker.notNull(operation, "Operation name");
-    ArgumentChecker.notNull(timestamp, "timestamp");
-
     _id = null;
-    _user = user;
-    _originatingSystem = originatingSystem;
-    _object = object;
-    _operation = operation;
+    _user = ArgumentChecker.notNull(user, "user");
+    _originatingSystem = ArgumentChecker.notNull(originatingSystem, "originatingSystem");
+    _object = ArgumentChecker.notNull(object, "objectName");
+    _operation = ArgumentChecker.notNull(operation, "operationName");
     _description = description;
     _success = success;
-    _timestamp = timestamp;
+    _timestamp = ArgumentChecker.notNull(timestamp, "timestamp");
   }
 
+  /**
+   * Constructs an empty instance.
+   */
   protected AuditLogEntry() {
   }
 
+  /**
+   * Gets the id.
+   *
+   * @return  the id
+   */
   public Long getId() {
     return _id;
   }
 
+  /**
+   * Sets the id.
+   *
+   * @param id  the id
+   */
   public void setId(final Long id) {
     _id = id;
   }
 
+  /**
+   * Gets the user.
+   *
+   * @return  the user
+   */
   public String getUser() {
     return _user;
   }
 
+  /**
+   * Sets the user.
+   *
+   * @param user  the user, not null
+   */
   public void setUser(final String user) {
-    _user = user;
+    _user = ArgumentChecker.notNull(user, "user");
   }
 
+  /**
+   * Gets the originating system.
+   *
+   * @return  the originating system
+   */
   public String getOriginatingSystem() {
     return _originatingSystem;
   }
 
+  /**
+   * Sets the originating system.
+   *
+   * @param originatingSystem  the originating system, not null
+   */
   public void setOriginatingSystem(final String originatingSystem) {
-    _originatingSystem = originatingSystem;
+    _originatingSystem = ArgumentChecker.notNull(originatingSystem, "originatingSystem");
   }
 
+  /**
+   * Gets the object.
+   *
+   * @return  the object
+   */
   public String getObject() {
     return _object;
   }
 
+  /**
+   * Sets the object.
+   *
+   * @param object  the object, not null
+   */
   public void setObject(final String object) {
-    _object = object;
+    _object = ArgumentChecker.notNull(object, "object");
   }
 
+  /**
+   * Gets the operation.
+   *
+   * @return  the operation
+   */
   public String getOperation() {
     return _operation;
   }
 
+  /**
+   * Sets the operation.
+   *
+   * @param operation  the operation, not null
+   */
   public void setOperation(final String operation) {
     _operation = operation;
   }
 
+  /**
+   * Gets the description.
+   *
+   * @return  the description
+   */
   public String getDescription() {
     return _description;
   }
 
+  /**
+   * Sets the description.
+   *
+   * @param description  the description
+   */
   public void setDescription(final String description) {
     _description = description;
   }
 
+  /**
+   * True if the operation was a success.
+   *
+   * @return  true if the operation was a success
+   */
   public boolean isSuccess() {
     return _success;
   }
 
+  /**
+   * Sets the success of the operation.
+   *
+   * @param success  true if the operation was a success
+   */
   public void setSuccess(final boolean success) {
     _success = success;
   }
 
+  /**
+   * Gets the time stamp.
+   *
+   * @return  the time stamp
+   */
   public Date getTimestamp() {
     return _timestamp;
   }
 
+  /**
+   * Sets the time stamp.
+   *
+   * @param timestamp  the time stamp
+   */
   public void setTimestamp(final Date timestamp) {
-    _timestamp = timestamp;
+    _timestamp = ArgumentChecker.notNull(timestamp, "timestamp");
   }
 
+  /**
+   * Converts the entry to a Fudge message.
+   *
+   * @param fudgeMessageFactory  a message factory
+   * @return  the message
+   */
   public FudgeMsg toFudgeMsg(final FudgeMsgFactory fudgeMessageFactory) {
     final MutableFudgeMsg msg = fudgeMessageFactory.newMessage();
     msg.add("user", getUser());
@@ -138,6 +232,12 @@ public class AuditLogEntry {
     return msg;
   }
 
+  /**
+   * Converts a Fudge message to an entry.
+   *
+   * @param msg  the message
+   * @return  the entry
+   */
   public static AuditLogEntry fromFudgeMsg(final FudgeMsg msg) {
     final String user = msg.getString("user");
     final String originatingSystem = msg.getString("originatingSystem");

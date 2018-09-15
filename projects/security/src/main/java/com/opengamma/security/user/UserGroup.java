@@ -60,34 +60,74 @@ public class UserGroup {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Gets the user group id.
+   *
+   * @return  the id
+   */
   public Long getId() {
     return _id;
   }
 
+  /**
+   * Sets the user group id.
+   *
+   * @param id  the id
+   */
   public void setId(final Long id) {
     _id = id;
   }
 
+  /**
+   * Gets the name.
+   *
+   * @return  the name
+   */
   public String getName() {
     return _name;
   }
 
+  /**
+   * Sets the name.
+   *
+   * @param name  the name
+   */
   public void setName(final String name) {
     this._name = name;
   }
 
+  /**
+   * Gets the users.
+   *
+   * @return  the users
+   */
   public Set<User> getUsers() {
     return _users;
   }
 
+  /**
+   * Sets the users.
+   *
+   * @param users  the users
+   */
   public void setUsers(final Set<User> users) {
     this._users = users;
   }
 
+  /**
+   * Gets the authorities.
+   *
+   * @return  the authorities
+   */
   public Set<Authority> getAuthorities() {
     return _authorities;
   }
 
+  /**
+   * Sets the authorities.
+   *
+   * @param authorities  the authorities
+   */
   public void setAuthorities(final Set<Authority> authorities) {
     this._authorities = authorities;
   }

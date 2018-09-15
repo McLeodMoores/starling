@@ -5,6 +5,8 @@
  */
 package com.opengamma.security.auditlog;
 
+import java.util.Objects;
+
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.ehcache.EHCacheUtils;
 
@@ -23,11 +25,16 @@ public class DuplicateFilteringAuditLogger extends AbstractAuditLogger {
   private final AbstractAuditLogger _delegate;
   private final Cache _cache;
 
+  /**
+   * Creates an instance.
+   *
+   * @param delegate  the delegate logger, not null
+   * @param maxElementsInMemory  the maximum number of elements to keep in memory
+   * @param secondsToKeepInMemory  the number of seconds to keep in memory
+   */
   public DuplicateFilteringAuditLogger(final AbstractAuditLogger delegate,
       final int maxElementsInMemory, final int secondsToKeepInMemory) {
-    ArgumentChecker.notNull(delegate, "Delegate logger");
-
-    _delegate = delegate;
+    _delegate = ArgumentChecker.notNull(delegate, "Delegate logger");
     _cache = new Cache("audit_log_entry_cache", maxElementsInMemory, false,
         false, secondsToKeepInMemory, secondsToKeepInMemory);
     _cache.setCacheManager(EHCacheUtils.createCacheManager());
@@ -48,6 +55,9 @@ public class DuplicateFilteringAuditLogger extends AbstractAuditLogger {
     }
   }
 
+  /**
+   * Creates a cache key.
+   */
   private static class CacheKey {
     private final String _user;
     private final String _originatingSystem;
@@ -94,42 +104,22 @@ public class DuplicateFilteringAuditLogger extends AbstractAuditLogger {
         return false;
       }
       final CacheKey other = (CacheKey) obj;
-      if (_description == null) {
-        if (other._description != null) {
-          return false;
-        }
-      } else if (!_description.equals(other._description)) {
+      if (!Objects.equals(_description, other._description)) {
         return false;
       }
-      if (_object == null) {
-        if (other._object != null) {
-          return false;
-        }
-      } else if (!_object.equals(other._object)) {
+      if (!Objects.equals(_object, other._object)) {
         return false;
       }
-      if (_operation == null) {
-        if (other._operation != null) {
-          return false;
-        }
-      } else if (!_operation.equals(other._operation)) {
+      if (!Objects.equals(_operation, other._operation)) {
         return false;
       }
-      if (_originatingSystem == null) {
-        if (other._originatingSystem != null) {
-          return false;
-        }
-      } else if (!_originatingSystem.equals(other._originatingSystem)) {
+      if (!Objects.equals(_originatingSystem, other._originatingSystem)) {
         return false;
       }
       if (_success != other._success) {
         return false;
       }
-      if (_user == null) {
-        if (other._user != null) {
-          return false;
-        }
-      } else if (!_user.equals(other._user)) {
+      if (!Objects.equals(_user, other._user)) {
         return false;
       }
       return true;

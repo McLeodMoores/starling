@@ -55,18 +55,38 @@ public class Authority {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Gets the database id.
+   *
+   * @return  the id
+   */
   public Long getId() {
     return _id;
   }
 
+  /**
+   * Sets the database id.
+   *
+   * @param id  the id
+   */
   public void setId(final Long id) {
     _id = id;
   }
 
+  /**
+   * Gets the matcher regex.
+   *
+   * @return  the regex
+   */
   public String getRegex() {
     return _regex;
   }
 
+  /**
+   * Sets the matcher regex.
+   *
+   * @param regex  the regex
+   */
   public void setRegex(final String regex) {
     this._regex = regex;
   }
@@ -74,6 +94,7 @@ public class Authority {
   //-------------------------------------------------------------------------
   /**
    * Returns whether this <code>Authority</code> can be used to grant the requested permission.
+   *
    * @param requestedPermission The requested permission, for example /MarketData/Bloomberg/AAPL/View
    * @return Whether the regular expression pattern stored in this <code>Authority</code>,
    * for example <code>/MarketData/Bloomberg/&#42;/View</code>, matches the requested permission

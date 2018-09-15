@@ -12,11 +12,16 @@ import org.testng.annotations.Test;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Test.
+ * Tests {@link DuplicateFilteringAuditLogger}.
  */
 @Test(groups = TestGroup.INTEGRATION, invocationCount = 4)
 public class DuplicateFilteringAuditLoggerTest {
 
+  /**
+   * Tests that duplicates are filtered.
+   *
+   * @throws InterruptedException  if the logger is interrupted
+   */
   public void testDuplicateFiltering() throws InterruptedException {
     final InMemoryAuditLogger memoryLogger = new InMemoryAuditLogger();
 
@@ -39,7 +44,7 @@ public class DuplicateFilteringAuditLoggerTest {
     assertEquals(10, memoryLogger.getMessages().size());
   }
 
-  private void log5Messages(final DuplicateFilteringAuditLogger filteringLogger) {
+  private static void log5Messages(final DuplicateFilteringAuditLogger filteringLogger) {
     filteringLogger.log("alice", "obj1", "op1", true);
     filteringLogger.log("lisa", "obj1", "op1", true);
     filteringLogger.log("alice", "obj2", "op1", true);
