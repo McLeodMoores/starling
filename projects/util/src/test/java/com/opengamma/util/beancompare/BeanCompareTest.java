@@ -22,6 +22,7 @@ import com.google.common.collect.ImmutableMap;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.UniqueId;
+import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.test.TestGroup;
 
 /**
@@ -34,6 +35,9 @@ public class BeanCompareTest {
   private static final String EXTERNAL_ID_BUNDLE = "externalIdBundle";
   private static final String NAME = "name";
 
+  /**
+   * Tests equality ignoring come properties.
+   */
   @Test
   @SuppressWarnings("deprecation")
   public void equalIgnoring() {
@@ -47,8 +51,11 @@ public class BeanCompareTest {
     assertTrue(BeanCompare.equalIgnoring(bean1, bean2, bean1.metaBean().metaProperty(UNIQUE_ID)));
   }
 
+  /**
+   * Tests comparison of the same object.
+   */
   @Test
-  public void propertyComparators_same() {
+  public void propertyComparatorsSame() {
     final UniqueId uid1 = UniqueId.of("uid", "123");
     final UniqueId uid2 = UniqueId.of("uid", "123");
     final ExternalIdBundle eid1 = ExternalIdBundle.of(ExternalId.of("eid1", "321"));
@@ -60,8 +67,11 @@ public class BeanCompareTest {
     assertTrue(diff.isEmpty());
   }
 
+  /**
+   * Tests comparison of different objects.
+   */
   @Test
-  public void propertyComparators_different() {
+  public void propertyComparatorsDifferent() {
     final UniqueId uid1 = UniqueId.of("uid", "123");
     final UniqueId uid2 = UniqueId.of("uid", "123");
     final ExternalIdBundle eid1 = ExternalIdBundle.of(ExternalId.of("eid1", "321"));
@@ -73,8 +83,11 @@ public class BeanCompareTest {
     assertFalse(diff.isEmpty());
   }
 
+  /**
+   * Tests comparison of different objects ignoring some properties.
+   */
   @Test
-  public void propertyComparators_ignoreDifferences() {
+  public void propertyComparatorsIgnoreDifferences() {
     final Comparator<Object> alwaysEqualComparator = new Comparator<Object>() {
       @Override
       public int compare(final Object notUsed1, final Object notUsed2) {
@@ -97,6 +110,18 @@ public class BeanCompareTest {
     // same despite different IDs
     final List<BeanDifference<?>> diff = beanCompare.compare(bean1, bean2);
     assertTrue(diff.toString(), diff.isEmpty());
+  }
+
+  /**
+   * Tests that the beans must be the same class.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testDifferentClasses() {
+    final BeanCompare compare = new BeanCompare();
+    final FlexiBean bean = new FlexiBean();
+    bean.propertyDefine(EXTERNAL_ID_BUNDLE, ExternalIdBundle.class);
+    bean.propertySet(EXTERNAL_ID_BUNDLE, ExternalIdBundle.of("A", "B"));
+    compare.compare(VersionCorrection.LATEST, bean);
   }
 
   private static Bean createBean(final UniqueId uniqueId, final ExternalIdBundle idBundle, final String name) {

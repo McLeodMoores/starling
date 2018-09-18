@@ -21,12 +21,21 @@ import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
+/**
+ * Container for {@link Result}s for use in tests.
+ */
 @BeanDefinition
 public final class ResultContainer implements ImmutableBean {
 
   @PropertyDefinition(validate = "notNull")
   private final Result<?> _result;
 
+  /**
+   * Constructs the container.
+   *
+   * @param result  the result, not null
+   * @return  the container
+   */
   public static ResultContainer of(final Result<?> result) {
     return new ResultContainer(result);
   }

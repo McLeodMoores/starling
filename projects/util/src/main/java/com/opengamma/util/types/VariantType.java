@@ -151,6 +151,11 @@ public final class VariantType implements WildcardType {
     return LOWER;
   }
 
+  /**
+   * Gets the logical types.
+   *
+   * @return  the types
+   */
   public Type[] getLogicalTypes() {
     return _logicalTypes.clone();
   }
@@ -189,7 +194,6 @@ public final class VariantType implements WildcardType {
    */
   @Override
   public int hashCode() {
-    // Arrays.hashCode(getUpperBounds()) ^ Arrays.hashCode(getLowerBounds())
     return 31 + _upper.hashCode() ^ 1;
   }
 

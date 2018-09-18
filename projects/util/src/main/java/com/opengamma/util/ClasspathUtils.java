@@ -151,6 +151,12 @@ public class ClasspathUtils {
     return classpathUrlArray;
   }
 
+  /**
+   * Obtains an array of URLs from a collection of file names.
+   *
+   * @param classpath  the classpath, may be null
+   * @return an array of URLs, not null
+   */
   public static URL[] getClasspathURLs(final Collection<String> classpath) {
     String[] classpathArray = new String[classpath.size()];
     classpathArray = classpath.toArray(classpathArray);
@@ -181,6 +187,7 @@ public class ClasspathUtils {
    * Information about a dependency in the classpath.
    */
   public static class DependencyInfo {
+    /** The dependencies. */
     static final ImmutableList<DependencyInfo> DEPENDENCIES;
     private final URL _url;
     private final String _version;
@@ -199,6 +206,10 @@ public class ClasspathUtils {
       DEPENDENCIES = builder.build();
     }
 
+    /**
+     * @param uri  the UIR
+     * @throws MalformedURLException  if the URL is malformed
+     */
     public DependencyInfo(final URI uri) throws MalformedURLException {
       _url = uri.toURL();
 

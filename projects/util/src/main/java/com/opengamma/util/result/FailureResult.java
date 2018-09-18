@@ -61,6 +61,7 @@ public final class FailureResult<T>
    *
    * @param failure  the failure instance, not null
    * @return the failure result, not null
+   * @param <U>  the type of the result
    */
   static <U> Result<U> of(final Failure failure) {
     ArgumentChecker.notNull(failure, "failure");
@@ -72,6 +73,7 @@ public final class FailureResult<T>
    *
    * @param failures  the failures, not empty, not null
    * @return the failure result, not null
+   * @param <U>  the type of the result
    */
   static <U> Result<U> of(final List<Failure> failures) {
     ArgumentChecker.notEmpty(failures, "failures");

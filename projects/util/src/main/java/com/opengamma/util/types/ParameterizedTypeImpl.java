@@ -32,18 +32,40 @@ public final class ParameterizedTypeImpl implements ParameterizedType {
     _ownerType = ownerType;
   }
 
+  /**
+   * Constructs a parameterized type from a raw type and multiple type arguments.
+   *
+   * @param rawType  the raw type, not null
+   * @param actualTypeArguments  the type arguments, not null
+   * @return  the parameterized type
+   */
   public static ParameterizedTypeImpl of(final Class<?> rawType, final Type... actualTypeArguments) {
     ArgumentChecker.notNull(rawType, "rawType");
     ArgumentChecker.noNulls(actualTypeArguments, "actualTypeArguments");
     return new ParameterizedTypeImpl(actualTypeArguments.clone(), rawType, rawType.getEnclosingClass());
   }
 
+  /**
+   * Constructs a parameterized type from a raw type and single type argument.
+   *
+   * @param rawType  the raw type, not null
+   * @param typeArg1  the type argument, not null
+   * @return  the parameterized type
+   */
   public static ParameterizedTypeImpl of(final Class<?> rawType, final Type typeArg1) {
     ArgumentChecker.notNull(rawType, "rawType");
     ArgumentChecker.notNull(typeArg1, "typeArg1");
     return new ParameterizedTypeImpl(new Type[] {typeArg1 }, rawType, rawType.getEnclosingClass());
   }
 
+  /**
+   * Constructs a parameterized type from a raw type and two type arguments.
+   *
+   * @param rawType  the raw type, not null
+   * @param typeArg1  the type argument, not null
+   * @param typeArg2  the type argument, not null
+   * @return  the parameterized type
+   */
   public static ParameterizedTypeImpl of(final Class<?> rawType, final Type typeArg1, final Type typeArg2) {
     ArgumentChecker.notNull(rawType, "rawType");
     ArgumentChecker.notNull(typeArg1, "typeArg1");
@@ -51,6 +73,15 @@ public final class ParameterizedTypeImpl implements ParameterizedType {
     return new ParameterizedTypeImpl(new Type[] {typeArg1, typeArg2 }, rawType, rawType.getEnclosingClass());
   }
 
+  /**
+   * Constructs a parameterized type from a raw type and three type arguments.
+   *
+   * @param rawType  the raw type, not null
+   * @param typeArg1  the type argument, not null
+   * @param typeArg2  the type argument, not null
+   * @param typeArg3  the type argument, not null
+   * @return  the parameterized type
+   */
   public static ParameterizedTypeImpl of(final Class<?> rawType, final Type typeArg1, final Type typeArg2, final Type typeArg3) {
     ArgumentChecker.notNull(rawType, "rawType");
     ArgumentChecker.notNull(typeArg1, "typeArg1");
@@ -59,6 +90,16 @@ public final class ParameterizedTypeImpl implements ParameterizedType {
     return new ParameterizedTypeImpl(new Type[] {typeArg1, typeArg2, typeArg3 }, rawType, rawType.getEnclosingClass());
   }
 
+  /**
+   * Constructs a parameterized type from a raw type and four type arguments.
+   *
+   * @param rawType  the raw type, not null
+   * @param typeArg1  the type argument, not null
+   * @param typeArg2  the type argument, not null
+   * @param typeArg3  the type argument, not null
+   * @param typeArg4  the type argument, not null
+   * @return  the parameterized type
+   */
   public static ParameterizedTypeImpl of(final Class<?> rawType, final Type typeArg1, final Type typeArg2, final Type typeArg3, final Type typeArg4) {
     ArgumentChecker.notNull(rawType, "rawType");
     ArgumentChecker.notNull(typeArg1, "typeArg1");

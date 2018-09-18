@@ -8,6 +8,8 @@ import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +27,7 @@ import com.opengamma.core.legalentity.LegalEntitySource;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.ExternalScheme;
+import com.opengamma.id.ObjectId;
 import com.opengamma.id.UniqueId;
 import com.opengamma.id.VersionCorrection;
 import com.opengamma.test.Assert;
@@ -400,7 +403,7 @@ public class EHCachingLegalEntitySourceTest {
   }
 
   /**
-   * Tests get by unique id collection.
+   * Tests get by unique id collection - currently the values are not cached.
    */
   @Test
   public void testGetUniqueIdCollection() {
@@ -425,6 +428,78 @@ public class EHCachingLegalEntitySourceTest {
     Mockito.verify(_underlying, Mockito.times(2)).get(uids);
   }
 
+  /**
+   * Tests get by object id collection - currently the values are not cached.
+   */
+  @Test
+  public void testGetObjectIdCollection() {
+    final Cache ehCache = _cacheManager.getCache("legalentity");
+    // nothing in the cache
+    assertNull(ehCache.get(UID_1.getObjectId()));
+    assertNull(ehCache.get(UID_2.getObjectId()));
+    assertNull(ehCache.get(UID_3.getObjectId()));
+    assertNull(ehCache.get(UID_4.getObjectId()));
+    // caching versioned objects
+    final List<ObjectId> oids = Arrays.asList(UID_1.getObjectId(), UID_2.getObjectId());
+    final Map<ObjectId, LegalEntity> mOid = _source.get(oids, VersionCorrection.LATEST);
+    Assert.assertEqualsNoOrder(mOid.keySet(), oids);
+    Assert.assertEqualsNoOrder(mOid.values(), Arrays.asList(LATEST_1, LATEST_2));
+    // not cached
+    assertNull(ehCache.get(UID_1.getObjectId()));
+    assertNull(ehCache.get(UID_2.getObjectId()));
+    assertNull(ehCache.get(UID_3.getObjectId()));
+    assertNull(ehCache.get(UID_4.getObjectId()));
+    _source.get(oids, VersionCorrection.LATEST);
+    // underlying has been called twice
+    Mockito.verify(_underlying, Mockito.times(2)).get(oids, VersionCorrection.LATEST);
+  }
+
+  /**
+   * Tests get by external id bundle collection - currently the values are not cached.
+   */
+  @Test
+  public void testGetAllExternalIdBundleCollection() {
+    final Cache ehCache = _cacheManager.getCache("legalentity");
+    // nothing in the cache
+    assertNull(ehCache.get(EID_1));
+    assertNull(ehCache.get(EID_2));
+    assertNull(ehCache.get(EID_3));
+    // caching versioned objects
+    final List<ExternalIdBundle> eids = Arrays.asList(EID_1, EID_2, EID_3);
+    final Map<ExternalIdBundle, Collection<LegalEntity>> mEid = _source.getAll(eids, VC_1);
+    Assert.assertEqualsNoOrder(mEid.keySet(), eids);
+    // not cached
+    assertNull(ehCache.get(EID_1));
+    assertNull(ehCache.get(EID_2));
+    assertNull(ehCache.get(EID_3));
+    _source.getAll(eids, VC_1);
+    // underlying has been called twice
+    Mockito.verify(_underlying, Mockito.times(2)).getAll(eids, VC_1);
+  }
+
+  /**
+   * Tests get by external id bundle collection - currently the values are not cached.
+   */
+  @Test
+  public void testGetSingleExternalIdBundleCollection() {
+    final Cache ehCache = _cacheManager.getCache("legalentity");
+    // nothing in the cache
+    assertNull(ehCache.get(EID_1));
+    assertNull(ehCache.get(EID_2));
+    assertNull(ehCache.get(EID_3));
+    // caching versioned objects
+    final List<ExternalIdBundle> eids = Arrays.asList(EID_1, EID_2, EID_3);
+    final Map<ExternalIdBundle, LegalEntity> mEid = _source.getSingle(eids, VC_1);
+    Assert.assertEqualsNoOrder(mEid.keySet(), eids);
+    // not cached
+    assertNull(ehCache.get(EID_1));
+    assertNull(ehCache.get(EID_2));
+    assertNull(ehCache.get(EID_3));
+    _source.getSingle(eids, VC_1);
+    // underlying has been called twice
+    Mockito.verify(_underlying, Mockito.times(2)).getSingle(eids, VC_1);
+  }
+
   private static void populateByUniqueId(final LegalEntitySource source) {
     Mockito.when(source.get(UID_1)).thenReturn(LATEST_1);
     Mockito.when(source.get(UID_2)).thenReturn(LATEST_2);
@@ -443,6 +518,13 @@ public class EHCachingLegalEntitySourceTest {
     Mockito.when(source.get(UID_2.getObjectId(), VersionCorrection.LATEST)).thenReturn(LATEST_2);
     Mockito.when(source.get(UID_3.getObjectId(), VC_1)).thenReturn(VERSIONED_1);
     Mockito.when(source.get(UID_4.getObjectId(), VC_2)).thenReturn(VERSIONED_2);
+
+    final Map<ObjectId, LegalEntity> mOid = new HashMap<>();
+    mOid.put(UID_1.getObjectId(), LATEST_1);
+    mOid.put(UID_2.getObjectId(), LATEST_2);
+    Mockito
+      .when(source.get(Arrays.asList(UID_1.getObjectId(), UID_2.getObjectId()), VersionCorrection.LATEST))
+      .thenReturn(mOid);
   }
 
   private static void populateByExternalId(final LegalEntitySource source) {
@@ -452,5 +534,17 @@ public class EHCachingLegalEntitySourceTest {
     Mockito.when(source.getSingle(EID_2, VersionCorrection.LATEST)).thenReturn(LATEST_2);
     Mockito.when(source.getSingle(EID_1, VC_1)).thenReturn(VERSIONED_1);
     Mockito.when(source.getSingle(EID_3, VC_2)).thenReturn(VERSIONED_2);
+
+    final Map<ExternalIdBundle, Collection<LegalEntity>> mEid = new HashMap<>();
+    mEid.put(EID_1, Arrays.<LegalEntity>asList(LATEST_1, VERSIONED_1));
+    mEid.put(EID_2, Collections.<LegalEntity>singleton(LATEST_2));
+    mEid.put(EID_3, Collections.<LegalEntity>singleton(VERSIONED_2));
+    Mockito.when(source.getAll(Arrays.asList(EID_1, EID_2, EID_3), VC_1)).thenReturn(mEid);
+
+    final Map<ExternalIdBundle, LegalEntity> mEidSingle = new HashMap<>();
+    mEidSingle.put(EID_1, VERSIONED_1);
+    mEidSingle.put(EID_2, LATEST_2);
+    mEidSingle.put(EID_3, VERSIONED_2);
+    Mockito.when(source.getSingle(Arrays.asList(EID_1, EID_2, EID_3), VC_1)).thenReturn(mEidSingle);
   }
 }

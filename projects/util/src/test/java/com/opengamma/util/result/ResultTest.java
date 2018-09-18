@@ -26,6 +26,9 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.opengamma.util.test.TestGroup;
 
+/**
+ * Tests for {@link Result}s.
+ */
 @Test(groups = TestGroup.UNIT)
 public class ResultTest {
 
@@ -43,28 +46,41 @@ public class ResultTest {
   };
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests a successful result.
+   */
   @Test
   public void success() {
     final Result<String> test = Result.success("success");
     assertEquals(true, test.isSuccess());
     assertEquals(SuccessStatus.SUCCESS, test.getStatus());
     assertEquals("success", test.getValue());
+    assertTrue(test.getStatus().isResultAvailable());
   }
 
+  /**
+   * Tests that a successful result does not have a failure message.
+   */
   @Test(expectedExceptions = IllegalStateException.class)
-  public void success_getFailureMessage() {
+  public void successGetFailureMessage() {
     final Result<String> test = Result.success("success");
     test.getFailureMessage();
   }
 
+  /**
+   * Tests that a successful result does not contain any failures.
+   */
   @Test(expectedExceptions = IllegalStateException.class)
-  public void success_getFailures() {
+  public void successGetFailures() {
     final Result<String> test = Result.success("success");
     test.getFailures();
   }
 
+  /**
+   * Tests a flat map of a success.
+   */
   @Test
-  public void success_flatMap() {
+  public void successFlatMap() {
     final Result<String> success = Result.success("success");
     final Result<Integer> test = success.flatMap(FUNCTION_STRLEN);
     assertEquals(true, test.isSuccess());
@@ -72,8 +88,11 @@ public class ResultTest {
     assertEquals(Integer.valueOf(7), test.getValue());
   }
 
+  /**
+   * Tests the indication of the success.
+   */
   @Test
-  public void success_ifSuccess() {
+  public void successIfSuccess() {
     final Result<String> success = Result.success("success");
     final Result<Integer> test = success.ifSuccess(FUNCTION_STRLEN);
     assertEquals(true, test.isSuccess());
@@ -81,27 +100,38 @@ public class ResultTest {
     assertEquals(Integer.valueOf(7), test.getValue());
   }
 
+  /**
+   * Combines two successful results.
+   */
   @Test
-  public void success_combineWith_success() {
+  public void successCombineWithSuccess() {
     final Result<String> success1 = Result.success("Hello");
     final Result<String> success2 = Result.success("World");
     final Result<String> test = success1.combineWith(success2, FUNCTION_MERGE);
     assertEquals(true, test.isSuccess());
     assertEquals(SuccessStatus.SUCCESS, test.getStatus());
+    assertTrue(test.getStatus().isResultAvailable());
     assertEquals("Hello World", test.getValue());
   }
 
+  /**
+   * Combines a success and a failure.
+   */
   @Test
-  public void success_combineWith_failure() {
+  public void successCombineWithFailure() {
     final Result<String> success = Result.success("Hello");
     final Result<String> failure = Result.failure(new IllegalArgumentException());
     final Result<String> test = success.combineWith(failure, FUNCTION_MERGE);
     assertEquals(false, test.isSuccess());
     assertEquals(FailureStatus.ERROR, test.getStatus());
+    assertFalse(test.getStatus().isResultAvailable());
     assertEquals(1, test.getFailures().size());
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests a failure result.
+   */
   @Test
   public void failure() {
     final Result<String> test = Result.failure(new IllegalArgumentException("failure"));
@@ -115,23 +145,33 @@ public class ResultTest {
     assertSame(test, test3);
   }
 
+  /**
+   * Tests that a value cannot be retrieved from a failure.
+   */
   @Test(expectedExceptions = IllegalStateException.class)
-  public void failure_getValue() {
+  public void failureGetValue() {
     final Result<String> test = Result.failure(new IllegalArgumentException());
     test.getValue();
   }
 
+  /**
+   * Combines a failure and a success.
+   */
   @Test
-  public void failure_combineWith_success() {
+  public void failureCombineWithSuccess() {
     final Result<String> failure = Result.failure(new IllegalArgumentException("failure"));
     final Result<String> success = Result.success("World");
     final Result<String> test = failure.combineWith(success, FUNCTION_MERGE);
     assertEquals(FailureStatus.ERROR, test.getStatus());
+    assertFalse(test.getStatus().isResultAvailable());
     assertEquals("failure", test.getFailureMessage());
   }
 
+  /**
+   * Combines two failures..
+   */
   @Test
-  public void failure_combineWith_failure() {
+  public void failureCombineWithFailure() {
     final Result<String> failure1 = Result.failure(new IllegalArgumentException("failure"));
     final Result<String> failure2 = Result.failure(new IllegalArgumentException("fail"));
     final Result<String> test = failure1.combineWith(failure2, FUNCTION_MERGE);
@@ -140,8 +180,11 @@ public class ResultTest {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests if there are failures in varargs results.
+   */
   @Test
-  public void anyFailures_varargs() {
+  public void anyFailuresVarargs() {
     final Result<String> success1 = Result.success("success 1");
     final Result<String> success2 = Result.success("success 1");
     final Result<Object> failure1 = Result.failure(FailureStatus.MISSING_DATA, "failure 1");
@@ -151,8 +194,11 @@ public class ResultTest {
     assertFalse(Result.anyFailures(success1, success2));
   }
 
+  /**
+   * Tests if there are failures in an iterable of results.
+   */
   @Test
-  public void anyFailures_iterable() {
+  public void anyFailuresIterable() {
     final Result<String> success1 = Result.success("success 1");
     final Result<String> success2 = Result.success("success 1");
     final Result<Object> failure1 = Result.failure(FailureStatus.MISSING_DATA, "failure 1");
@@ -162,8 +208,11 @@ public class ResultTest {
     assertFalse(Result.anyFailures(ImmutableList.of(success1, success2)));
   }
 
+  /**
+   * Tests if all results are successful in varargs results.
+   */
   @Test
-  public void allSuccess_varargs() {
+  public void allSuccessVarargs() {
     final Result<String> success1 = Result.success("success 1");
     final Result<String> success2 = Result.success("success 1");
     final Result<Object> failure1 = Result.failure(FailureStatus.MISSING_DATA, "failure 1");
@@ -173,6 +222,9 @@ public class ResultTest {
     assertTrue(Result.allSuccessful(success1, success2));
   }
 
+  /**
+   * Tets if all results are successful in an iterable of results.
+   */
   @Test
   public void testAllSuccessIterable() {
     final Result<String> success1 = Result.success("success 1");
@@ -184,6 +236,9 @@ public class ResultTest {
     assertTrue(Result.allSuccessful(ImmutableList.of(success1, success2)));
   }
 
+  /**
+   * Tests that failures are propagated when combining results.
+   */
   @Test
   public void propagateFailures() {
     final Result<String> success1 = Result.success("success 1");
@@ -198,6 +253,9 @@ public class ResultTest {
     assertEquals(expected, failures);
   }
 
+  /**
+   * Tests that successes cannot construct a failure.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void propagateSuccesses() {
     final Result<String> success1 = Result.success("success 1");
@@ -205,6 +263,9 @@ public class ResultTest {
     Result.failure(success1, success2);
   }
 
+  /**
+   * Tests the construction of a failure from an exception.
+   */
   @Test
   public void generateFailureFromException() {
     final Exception exception = new Exception("something went wrong");
@@ -213,6 +274,9 @@ public class ResultTest {
     assertThat(failure.getFailureMessage(), is("something went wrong"));
   }
 
+  /**
+   * Tests that the exception message is used.
+   */
   @Test
   public void generateFailureFromExceptionWithMessage() {
     final Exception exception = new Exception("something went wrong");
@@ -221,6 +285,9 @@ public class ResultTest {
     assertThat(failure.getFailureMessage(), is("my message"));
   }
 
+  /**
+   * Tests that the exception message is used.
+   */
   @Test
   public void generateFailureFromExceptionWithCustomStatus() {
     final Exception exception = new Exception("something went wrong");
@@ -229,6 +296,9 @@ public class ResultTest {
     assertThat(failure.getFailureMessage(), is("something went wrong"));
   }
 
+  /**
+   * Tests that the exception message is used.
+   */
   @Test
   public void generateFailureFromExceptionWithCustomStatusAndMessage() {
     final Exception exception = new Exception("something went wrong");
@@ -238,6 +308,9 @@ public class ResultTest {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests a duplicate failure.
+   */
   @Test
   public void failureDeduplicateFailure() {
     final Result<Object> result = Result.failure(FailureStatus.MISSING_DATA, "failure");
@@ -249,6 +322,9 @@ public class ResultTest {
     assertEquals("failure", test1.getFailureMessage());
   }
 
+  /**
+   * Tests combining multiple failures of the same type.
+   */
   @Test
   public void failureSameType() {
     final Result<Object> failure1 = Result.failure(FailureStatus.MISSING_DATA, "message 1");
@@ -263,6 +339,9 @@ public class ResultTest {
     AssertJUnit.assertEquals("message 1, message 2, message 3", composite.getFailureMessage());
   }
 
+  /**
+   * Tests combining multiple failures of different types.
+   */
   @Test
   public void failureDifferentTypes() {
     final Result<Object> failure1 = Result.failure(FailureStatus.MISSING_DATA, "message 1");

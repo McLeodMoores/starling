@@ -119,7 +119,7 @@ public final class VersionUtils {
     } else {
       final List<DependencyInfo> dependencies = ClasspathUtils.getDependencies();
       for (final DependencyInfo dependency : dependencies) {
-        if ("og-util".equals(dependency.getArtifactId())) {
+        if ("util".equals(dependency.getArtifactId())) {
           return dependency.getVersion();
         }
       }

@@ -30,6 +30,9 @@ public class VariantTypeTest {
     assertEquals(ImmutableSet.copyOf(((VariantType) type).getLogicalTypes()), ImmutableSet.copyOf(types));
   }
 
+  /**
+   * Tests the either() method.
+   */
   public void testEither() {
     assertEquals(VariantType.either(null, String.class), String.class);
     assertEquals(VariantType.either(String.class, null), String.class);
@@ -41,6 +44,9 @@ public class VariantTypeTest {
         Integer.class, Double.class, String.class);
   }
 
+  /**
+   * Tests the equals() method.
+   */
   public void testEquals() {
     @SuppressWarnings("serial")
     final ParameterizedType setType = (ParameterizedType) new TypeToken<Set<? extends Number>>() {
@@ -50,6 +56,9 @@ public class VariantTypeTest {
     assertTrue(VariantType.either(Integer.class, Double.class).equals(wildType));
   }
 
+  /**
+   * Tests the hashCode() method.
+   */
   public void testHashCode() {
     @SuppressWarnings("serial")
     final ParameterizedType setType = (ParameterizedType) new TypeToken<Set<? extends Number>>() {

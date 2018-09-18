@@ -13,13 +13,14 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import org.threeten.bp.Instant;
 
+import com.opengamma.util.test.AbstractFudgeBuilderTestCase;
 import com.opengamma.util.test.TestGroup;
 
 /**
  * Test {@link VersionCorrection}.
  */
 @Test(groups = TestGroup.UNIT)
-public class VersionCorrectionTest {
+public class VersionCorrectionTest extends AbstractFudgeBuilderTestCase {
   private static final Instant INSTANT1 = Instant.ofEpochSecond(1);
   private static final Instant INSTANT2 = Instant.ofEpochSecond(2);
   private static final Instant INSTANT3 = Instant.ofEpochSecond(3);
@@ -452,4 +453,14 @@ public class VersionCorrectionTest {
     assertEquals(d1a.hashCode(), d1b.hashCode());
   }
 
+  /**
+   * Tests a cycle.
+   */
+  @Test
+  public void testCycle() {
+    final VersionCorrection vc = VersionCorrection.of(INSTANT1, INSTANT2);
+
+    assertEquals(cycleObjectJodaXml(VersionCorrection.class, vc), vc);
+    assertEquals(cycleObjectJodaXml(VersionCorrection.class, VersionCorrection.LATEST), VersionCorrection.LATEST);
+  }
 }
