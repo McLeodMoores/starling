@@ -26,7 +26,7 @@ import net.sf.ehcache.CacheManager;
 
 /**
  * Combines live data servers by choosing the first server which can resolve the ID
- * If none can then the first server is returned ( which will fail )
+ * If none can then the first server is returned (which will fail).
  */
 public class PriorityResolvingCombiningLiveDataServer extends CombiningLiveDataServer {
   private final List<? extends StandardLiveDataServer> _servers;
@@ -82,7 +82,11 @@ public class PriorityResolvingCombiningLiveDataServer extends CombiningLiveDataS
 
   }
 
-  private class DelegatingDistributionSpecificationResolver extends AbstractResolver<LiveDataSpecification, DistributionSpecification> implements DistributionSpecificationResolver {
+  /**
+   * Delegates the distribution of market data to clients.
+   */
+  private class DelegatingDistributionSpecificationResolver extends AbstractResolver<LiveDataSpecification, DistributionSpecification>
+  implements DistributionSpecificationResolver {
     //TODO: dedupe with group by ?
 
     @Override
@@ -91,11 +95,9 @@ public class PriorityResolvingCombiningLiveDataServer extends CombiningLiveDataS
 
       Collection<LiveDataSpecification> unresolvedSpecs = specs;
       for (final StandardLiveDataServer server : _servers) {
-        final Map<LiveDataSpecification, DistributionSpecification> resolved = server.getDistributionSpecificationResolver()
-            .resolve(unresolvedSpecs);
-
+        final Map<LiveDataSpecification, DistributionSpecification> resolved =
+            server.getDistributionSpecificationResolver().resolve(unresolvedSpecs);
         unresolvedSpecs = new HashSet<>();
-
         for (final Entry<LiveDataSpecification, DistributionSpecification> entry : resolved.entrySet()) {
           if (entry.getValue() != null) {
             ret.put(entry.getKey(), entry.getValue());
@@ -115,6 +117,9 @@ public class PriorityResolvingCombiningLiveDataServer extends CombiningLiveDataS
     }
   }
 
+  /**
+   * @return
+   */
   public DistributionSpecificationResolver getDefaultDistributionSpecificationResolver() {
     final DistributionSpecificationResolver distributionSpecResolver = new DelegatingDistributionSpecificationResolver();
     //TODO should I cache here

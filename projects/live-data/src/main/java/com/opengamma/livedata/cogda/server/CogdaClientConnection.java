@@ -59,11 +59,11 @@ import com.opengamma.util.ArgumentChecker;
 public class CogdaClientConnection implements FudgeConnectionStateListener, FudgeMessageReceiver {
 
   /**
-   * Subscribe to a stream
+   * Subscribe to a stream.
    */
   public static final String SUBSCRIBE = "subscribe";
   /**
-   * Snapshot the state of the world
+   * Snapshot the state of the world.
    */
   public static final String SNAPSHOT = "snapshot";
 

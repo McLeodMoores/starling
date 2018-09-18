@@ -11,21 +11,21 @@ import org.fudgemsg.FudgeMsg;
  * An enumeration of all message types to support ease of event loop processing.
  */
 public enum CogdaMessageType {
-  /** {@see ConnectionRequestMessage} */
+  /** {@link ConnectionRequestMessage}. */
   CONNECTION_REQUEST,
-  /** {@see ConnectionResponseMessage} */
+  /** {@link ConnectionResponseMessage}. */
   CONNECTION_RESPONSE,
-  /** {@see CogdaLiveDataSnapshotRequestMessage} */
+  /** {@link CogdaLiveDataSnapshotRequestMessage}. */
   SNAPSHOT_REQUEST,
-  /** {@see CogdaLiveDataSnapshotResponseMessage} */
+  /** {@link CogdaLiveDataSnapshotResponseMessage}. */
   SNAPSHOT_RESPONSE,
-  /** {@see CogdaLiveDataSubscriptionRequestMessage} */
+  /** {@link CogdaLiveDataSubscriptionRequestMessage}. */
   SUBSCRIPTION_REQUEST,
-  /** {@see CogdaLiveDataSubscriptionResponseMessage} */
+  /** {@link CogdaLiveDataSubscriptionResponseMessage}. */
   SUBSCRIPTION_RESPONSE,
-  /** {@see CogdaLiveDataUnsubscribeMessage} */
+  /** {@link CogdaLiveDataUnsubscribeMessage}. */
   UNSUBSCRIBE,
-  /** {@see CogdaLiveDataUpdateMessage} */
+  /** {@link CogdaLiveDataUpdateMessage}. */
   LIVE_DATA_UPDATE;
 
   public static CogdaMessageType getFromMessage(final FudgeMsg msg) {

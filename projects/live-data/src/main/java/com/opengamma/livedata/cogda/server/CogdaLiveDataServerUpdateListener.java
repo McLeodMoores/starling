@@ -16,7 +16,7 @@ import com.opengamma.transport.FudgeMessageReceiver;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Listens to Fudge updates containing {@link CogdaLiveDataUpdateBean} instances and
+ * Listens to Fudge updates containing {@link LiveDataValueUpdateBean} instances and
  * dispatches them to a {@link CogdaLiveDataServer}.
  */
 public class CogdaLiveDataServerUpdateListener implements FudgeMessageReceiver {

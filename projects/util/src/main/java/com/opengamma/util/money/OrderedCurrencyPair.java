@@ -54,10 +54,24 @@ public final class OrderedCurrencyPair implements ImmutableBean, UniqueIdentifia
   private final Currency _secondCurrency;
   private final String _idValue;
 
+  /**
+   * Obtains an {@code OrderedCurrencyPair} from two currencies.
+   *
+   * @param ccy1  the first currency, not null
+   * @param ccy2  the second currency, not null
+   * @return  the pair, not null
+   */
   public static OrderedCurrencyPair of(final Currency ccy1, final Currency ccy2) {
     return new OrderedCurrencyPair(ccy1, ccy2);
   }
 
+  /**
+   * Extracts an {@code OrderedCurrencyPair} from a unique identifier.
+   *
+   * @param uniqueId  the unique identifier, not null
+   * @return  the pair, not null
+   * @throws IllegalArgumentException if the input is invalid
+   */
   public static OrderedCurrencyPair of(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     if (uniqueId.getScheme().equals(OBJECT_SCHEME)) {
@@ -73,6 +87,15 @@ public final class OrderedCurrencyPair implements ImmutableBean, UniqueIdentifia
         + "UniqueId; " + uniqueId.getScheme());
   }
 
+  /**
+   * Parses the string to produce a {@code OrderedCurrencyPair}.
+   * <p>
+   * This parses the {@code toString} format of '${currency1}${currency2}'
+   *
+   * @param string  the amount string, not null
+   * @return the currency amount
+   * @throws IllegalArgumentException if the amount cannot be parsed
+   */
   @FromString
   public static OrderedCurrencyPair parse(final String string) {
     ArgumentChecker.notNull(string, "string");
@@ -103,11 +126,23 @@ public final class OrderedCurrencyPair implements ImmutableBean, UniqueIdentifia
     return UniqueId.of(OBJECT_SCHEME, _idValue);
   }
 
+  /**
+   * True if the input is the inverse pair of this ordered pair i.e. the numerator and denominator
+   * are switched.
+   *
+   * @param other  the other pair, not null
+   * @return  true if the input is the inverse of this pair
+   */
   public boolean isInverse(final OrderedCurrencyPair other) {
     ArgumentChecker.notNull(other, "other");
     return other._firstCurrency.equals(_secondCurrency) && other._secondCurrency.equals(_firstCurrency);
   }
 
+  /**
+   * Gets the inverse of this pair.
+   *
+   * @return  the inverse pair
+   */
   public OrderedCurrencyPair getInverse() {
     return new OrderedCurrencyPair(_secondCurrency, _firstCurrency);
   }

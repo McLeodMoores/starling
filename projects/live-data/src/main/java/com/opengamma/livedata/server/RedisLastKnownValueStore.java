@@ -183,7 +183,7 @@ public class RedisLastKnownValueStore implements LastKnownValueStore {
    * A few problems with this:
    * <ol>
    *   <li>It's still not clear that storing all data as text is appropriate. See PLAT-2536 for commentary.</li>
-   *   <li>Our Redis storage (see {@link #toRedisTextValue(FudgeField)} does not have a type
+   *   <li>Our Redis storage (see {@link #toRedisTextValue(String, FudgeField)} does not have a type
    *       prefix. Therefore, we're relying on the cascading parse attempts here.
    *       This is clearly not optimal, and will cause us serious issues to try to support
    *       all the various Fudge types.</li>

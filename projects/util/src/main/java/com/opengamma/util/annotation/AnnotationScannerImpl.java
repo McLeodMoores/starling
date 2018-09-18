@@ -27,6 +27,13 @@ public class AnnotationScannerImpl implements AnnotationScanner {
 
     AnnotationCache cache = AnnotationCache.load(annotationClass);
     final ClasspathScanner scanner = new ClasspathScanner();
+    final StringBuilder sb = new StringBuilder("-------------------------------------------------------------");
+    sb.append("\n scanner timestamp: ");
+    sb.append(scanner.getTimestamp());
+    sb.append("\n cache timestamp: ");
+    sb.append(cache.getTimestamp());
+    sb.append("\n------------------------------------------------------------------------");
+    System.out.println(sb.toString());
     if (!scanner.getTimestamp().isAfter(cache.getTimestamp())) {
       LOGGER.info("loading {} annotation from cache", annotationClass.getSimpleName());
       return ImmutableSet.copyOf(cache.getClasses());

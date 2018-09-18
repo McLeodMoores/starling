@@ -104,14 +104,14 @@ public class MarketValueCalculator implements NormalizationRule {
     return lastKnownMarketValue(msg, fieldHistory);
   }
 
-  private double getRelativeSpread(final Double bid, final Double ask) {
+  private static double getRelativeSpread(final Double bid, final Double ask) {
     return Math.abs(ask - bid) / Math.abs(ask);
   }
 
   /**
    * Tries to populate MARKET_VALUE from the history.
    */
-  private MutableFudgeMsg lastKnownMarketValue(
+  private static MutableFudgeMsg lastKnownMarketValue(
       final MutableFudgeMsg msg,
       final FieldHistoryStore fieldHistory) {
 

@@ -15,8 +15,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sf.ehcache.CacheManager;
-
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -27,6 +25,8 @@ import com.opengamma.livedata.normalization.StandardRules;
 import com.opengamma.livedata.server.DistributionSpecification;
 import com.opengamma.util.ehcache.EHCacheUtils;
 import com.opengamma.util.test.TestGroup;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Test.
@@ -48,24 +48,24 @@ public class EHCachingDistributionSpecificationResolverTest {
 
   //-------------------------------------------------------------------------
   public void testCaching() {
-    ExternalId id = ExternalId.of("foo", "bar");
-    
-    LiveDataSpecification request = new LiveDataSpecification(
+    final ExternalId id = ExternalId.of("foo", "bar");
+
+    final LiveDataSpecification request = new LiveDataSpecification(
         "TestNormalization",
         ExternalId.of("foo", "bar"));
-    
-    DistributionSpecification distributionSpec = new DistributionSpecification(id, StandardRules.getNoNormalization(), "testtopic");
-    Map<LiveDataSpecification, DistributionSpecification> returnValue = new HashMap<LiveDataSpecification, DistributionSpecification>();
-    returnValue.put(request, distributionSpec);        
-    
-    DistributionSpecificationResolver underlying = mock(DistributionSpecificationResolver.class);
+
+    final DistributionSpecification distributionSpec = new DistributionSpecification(id, StandardRules.getNoNormalization(), "testtopic");
+    final Map<LiveDataSpecification, DistributionSpecification> returnValue = new HashMap<>();
+    returnValue.put(request, distributionSpec);
+
+    final DistributionSpecificationResolver underlying = mock(DistributionSpecificationResolver.class);
     when(underlying.resolve(Collections.singletonList(request))).thenReturn(returnValue);
-    
-    EHCachingDistributionSpecificationResolver resolver =
+
+    final EHCachingDistributionSpecificationResolver resolver =
         new EHCachingDistributionSpecificationResolver(underlying, _cacheManager);
     assertEquals(distributionSpec, resolver.resolve(request));
     assertEquals(distributionSpec, resolver.resolve(request));
-    
+
     verify(underlying, times(1)).resolve(Collections.singletonList(request));
   }
 

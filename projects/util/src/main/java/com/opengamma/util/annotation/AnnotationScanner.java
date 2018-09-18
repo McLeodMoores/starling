@@ -13,6 +13,12 @@ import java.util.Set;
  */
 public interface AnnotationScanner {
 
+  /**
+   * Scans the archive for a particular annotation.
+   *
+   * @param annotationClass  the annotation class
+   * @return  the set of annotated classes
+   */
   Set<Class<?>> scan(Class<? extends Annotation> annotationClass);
 
 }

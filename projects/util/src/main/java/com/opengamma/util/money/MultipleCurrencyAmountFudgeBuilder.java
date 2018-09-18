@@ -5,6 +5,9 @@
  */
 package com.opengamma.util.money;
 
+import java.util.List;
+
+import org.fudgemsg.FudgeField;
 import org.fudgemsg.FudgeMsg;
 import org.fudgemsg.MutableFudgeMsg;
 import org.fudgemsg.mapping.FudgeBuilder;
@@ -15,18 +18,17 @@ import org.fudgemsg.mapping.FudgeSerializer;
 import com.opengamma.util.fudgemsg.AbstractFudgeBuilder;
 
 /**
- * Fudge builder for {@code MultipleCurrencyAmount}.
+ * Fudge builder for {@code MultipleCurrencyAmount}. Uses the currency code as the Fudge field name and the amount
+ * as the value.
  */
 @FudgeBuilderFor(MultipleCurrencyAmount.class)
 public final class MultipleCurrencyAmountFudgeBuilder extends AbstractFudgeBuilder implements FudgeBuilder<MultipleCurrencyAmount> {
-
-  // REVIEW 2012-03-14 Andrew -- Using the Fudge field name for the currency code and give that the value field would be a more
-  // efficient encoding and be simpler to decode
-
   /** Field name. */
   public static final String CURRENCIES_FIELD_NAME = "currencies";
   /** Field name. */
   public static final String AMOUNTS_FIELD_NAME = "amounts";
+  /** Ordinal value. */
+  private static final int ORDINAL = 1;
 
   //-------------------------------------------------------------------------
   @Override
@@ -36,6 +38,13 @@ public final class MultipleCurrencyAmountFudgeBuilder extends AbstractFudgeBuild
     return msg;
   }
 
+  /**
+   * Converts a multiple currency amount to a message.
+   *
+   * @param serializer  the serializer, not null
+   * @param object  the multiple currency amount, not null
+   * @return  the message
+   */
   public static MutableFudgeMsg toFudgeMsg(final FudgeSerializer serializer, final MultipleCurrencyAmount object) {
     if (object == null) {
       return null;
@@ -45,17 +54,18 @@ public final class MultipleCurrencyAmountFudgeBuilder extends AbstractFudgeBuild
     return msg;
   }
 
+  /**
+   * Converts the multiple currency amount to a message.
+   *
+   * @param serializer  the serializer, not used
+   * @param object  the multiple currency amount, not null
+   * @param msg  the message
+   */
   public static void toFudgeMsg(final FudgeSerializer serializer, final MultipleCurrencyAmount object, final MutableFudgeMsg msg) {
     final CurrencyAmount[] currencyAmounts = object.getCurrencyAmounts();
-    final String[] currencies = new String[currencyAmounts.length];
-    final double[] amounts = new double[currencyAmounts.length];
-    int i = 0;
     for (final CurrencyAmount ca : currencyAmounts) {
-      currencies[i] = ca.getCurrency().getCode();
-      amounts[i++] = ca.getAmount();
+      serializer.addToMessage(msg, ca.getCurrency().getCode(), ORDINAL, ca.getAmount());
     }
-    serializer.addToMessage(msg, CURRENCIES_FIELD_NAME, null, currencies);
-    serializer.addToMessage(msg, AMOUNTS_FIELD_NAME, null, amounts);
   }
 
   //-------------------------------------------------------------------------
@@ -64,18 +74,25 @@ public final class MultipleCurrencyAmountFudgeBuilder extends AbstractFudgeBuild
     return fromFudgeMsg(deserializer, msg);
   }
 
+  /**
+   * Converts a message to a multiple currency amount.
+   *
+   * @param deserializer  the deserializer, not used
+   * @param msg  the message
+   * @return  the multiple currency amount, or null if the message is null
+   */
   public static MultipleCurrencyAmount fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     if (msg == null) {
       return null;
     }
-    final String[] currencyNames = deserializer.fieldValueToObject(String[].class, msg.getByName(CURRENCIES_FIELD_NAME));
-    final int length = currencyNames.length;
-    final Currency[] currencies = new Currency[length];
-    for (int i = 0; i < length; i++) {
-      currencies[i] = Currency.of(currencyNames[i]);
+    final List<FudgeField> fields = msg.getAllByOrdinal(ORDINAL);
+    final CurrencyAmount[] amounts = new CurrencyAmount[fields.size()];
+    int i = 0;
+    for (final FudgeField field : fields) {
+      final Double value = deserializer.fieldValueToObject(Double.class, field);
+      amounts[i++] = CurrencyAmount.of(field.getName(), value);
     }
-    final double[] amounts = deserializer.fieldValueToObject(double[].class, msg.getByName(AMOUNTS_FIELD_NAME));
-    return MultipleCurrencyAmount.of(currencies, amounts);
+    return MultipleCurrencyAmount.of(amounts);
   }
 
 }

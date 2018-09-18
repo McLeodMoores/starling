@@ -15,7 +15,7 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Factory for {@link Currency} named instances.
  */
-//TODO this isn't an exhausive list - https://en.wikipedia.org/wiki/ISO_4217
+//TODO this isn't an exhaustive list - https://en.wikipedia.org/wiki/ISO_4217
 // plus it should be possible to easily add a currency and have it stored somewhere
 public final class CurrencyFactory extends AbstractNamedInstanceFactory<Currency> {
 

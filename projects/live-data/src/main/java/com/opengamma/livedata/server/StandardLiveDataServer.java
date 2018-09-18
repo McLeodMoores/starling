@@ -268,8 +268,8 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
   /**
    * Subscribes to the specified tickers using the underlying market data provider.
    * <p>
-   * This returns a map from identifier to subscription handle. The map must contain an entry for each input <code>uniqueId</code>. Failure to subscribe to any <code>uniqueId</code> should result in
-   * an exception being thrown.
+   * This returns a map from identifier to subscription handle. The map must contain an entry for each input <code>uniqueId</code>.
+   * Failure to subscribe to any <code>uniqueId</code> should result in an exception being thrown.
    *
    * @param uniqueIds the collection of identifiers to subscribe to, may be empty, not null
    * @return the subscription handles corresponding to the identifiers, not null
@@ -288,8 +288,8 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
   /**
    * Returns an image (i.e., all fields) from the underlying market data provider.
    * <p>
-   * This returns a map from identifier to a message describing the fields. The map must contain an entry for each <code>uniqueId</code>. Failure to snapshot any <code>uniqueId</code> should result in
-   * an exception being thrown.
+   * This returns a map from identifier to a message describing the fields. The map must contain an entry for each <code>uniqueId</code>.
+   * Failure to snapshot any <code>uniqueId</code> should result in an exception being thrown.
    *
    * @param uniqueIds the collection of identifiers to query, may be empty, not null
    * @return the snapshot result, not null
@@ -317,7 +317,8 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
   protected abstract void doDisconnect();
 
   /**
-   * In some cases, the underlying market data API may not, when a subscription is created, return a full image of all fields. If so, we need to get the full image explicitly.
+   * In some cases, the underlying market data API may not, when a subscription is created, return a full image of all fields.
+   * If so, we need to get the full image explicitly.
    *
    * @param subscription the subscription currently being created, not null
    * @return true if a snapshot should be made when a new subscription is created
@@ -331,14 +332,15 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
    * @return true if an empty subscription indicates that the snapshot result would be empty
    */
   protected boolean canSatisfySnapshotFromEmptySubscription(final MarketDataDistributor distributior) {
-    //NOTE simon 28/11/2011: Only in the case of requiring a snapshot is it safe to use an empty snapshot from a subscription, since in the other case we may still be waiting for values
+    //NOTE simon 28/11/2011: Only in the case of requiring a snapshot is it safe to use an empty snapshot from a subscription,
+    // since in the other case we may still be waiting for values
     return snapshotOnSubscriptionStartRequired(distributior.getSubscription());
   }
 
   public LiveDataEntitlementChecker getSubscriptionEntitlementChecker() {
-    return _subscriptionEntitlementChecker != null ?
-        _subscriptionEntitlementChecker :
-        _entitlementChecker;
+    return _subscriptionEntitlementChecker != null
+        ? _subscriptionEntitlementChecker
+        : _entitlementChecker;
   }
 
   //-------------------------------------------------------------------------
@@ -348,9 +350,9 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
    * Is the server connected to underlying market data API?
    */
   public enum ConnectionStatus {
-    /** Connection active */
+    /** Connection active. */
     CONNECTED,
-    /** Connection not active */
+    /** Connection not active. */
     NOT_CONNECTED;
   }
   /**
@@ -389,8 +391,8 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
         final Map<String, Object> subscriptions = doSubscribe(securities);
 
         if (securities.size() != subscriptions.size()) {
-          LOGGER.warn("Attempting to re-establish security subscriptions - have {} securities " +
-                            "but only managed to establish subscriptions to {}",
+          LOGGER.warn("Attempting to re-establish security subscriptions - have {} securities "
+                       + "but only managed to establish subscriptions to {}",
                         securities.size(), subscriptions.size());
         }
 
@@ -511,7 +513,8 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
     }
     final LiveDataSubscriptionResponse result = results.iterator().next();
     if (!liveDataSpecificationFromClient.equals(result.getRequestedSpecification())) {
-      final String errorMsg = "Expected a subscription result for " + liveDataSpecificationFromClient + " but received one for " + result.getRequestedSpecification();
+      final String errorMsg = "Expected a subscription result for " + liveDataSpecificationFromClient
+          + " but received one for " + result.getRequestedSpecification();
       return buildErrorMessageResponse(liveDataSpecificationFromClient, LiveDataSubscriptionResult.INTERNAL_ERROR, errorMsg);
     }
 
@@ -539,7 +542,8 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
         final DistributionSpecification distributionSpec = distrSpecs.get(specFromClient);
         if (distributionSpec == null) {
           LOGGER.info("Unable to work out distribution spec for specification " + specFromClient);
-          responses.put(specFromClient.getIdentifiers(), buildErrorMessageResponse(specFromClient, LiveDataSubscriptionResult.NOT_PRESENT, "Unable to work out distribution spec"));
+          responses.put(specFromClient.getIdentifiers(),
+              buildErrorMessageResponse(specFromClient, LiveDataSubscriptionResult.NOT_PRESENT, "Unable to work out distribution spec"));
           continue;
         }
         final LiveDataSpecification fullyQualifiedSpec = distributionSpec.getFullyQualifiedLiveDataSpecification();
@@ -674,8 +678,8 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
   }
 
   /**
-   * Returns a snapshot of the requested market data. If the server already subscribes to the market data, the last known value from that subscription is used. Otherwise a snapshot is requested from
-   * the underlying market data API.
+   * Returns a snapshot of the requested market data. If the server already subscribes to the market data, the last known value
+   * from that subscription is used. Otherwise a snapshot is requested from the underlying market data API.
    *
    * @param liveDataSpecificationsFromClient What snapshot(s) are being requested. Not empty
    * @return Responses to snapshot requests. Some, or even all, of them might be failures.
@@ -709,8 +713,8 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
         } else if (canSatisfySnapshotFromEmptySubscription(currentlyActiveDistributor)) {
           //BBG-91 - don't requery when an existing subscription indicates that the snapshot will fail
           LOGGER.debug("Able to satisfy failed snapshot {} from existing LKV", liveDataSpecificationFromClient);
-          final String errorMsg = "Existing subscription for " + currentlyActiveDistributor.getDistributionSpec().getMarketDataId() +
-              " failed to retrieve a snapshot.  Perhaps required fields are unavailable.";
+          final String errorMsg = "Existing subscription for " + currentlyActiveDistributor.getDistributionSpec().getMarketDataId()
+              + " failed to retrieve a snapshot.  Perhaps required fields are unavailable.";
           responses.add(buildErrorMessageResponse(liveDataSpecificationFromClient, LiveDataSubscriptionResult.INTERNAL_ERROR, errorMsg));
           continue;
         } else {
@@ -740,9 +744,9 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
       final DistributionSpecification distributionSpec = resolved.get(liveDataSpecFromClient);
       final FudgeMsg normalizedMsg = distributionSpec.getNormalizedMessage(msg, securityUniqueId);
       if (normalizedMsg == null) {
-        final String errorMsg = "When snapshot for " + securityUniqueId + " was run through normalization, the message disappeared. " +
-            " This indicates there are buggy normalization rules in place, or that buggy (or unexpected) data was" +
-            " received from the underlying market data API. Check your normalization rules. Raw, unnormalized msg = " + msg;
+        final String errorMsg = "When snapshot for " + securityUniqueId + " was run through normalization, the message disappeared. "
+            + " This indicates there are buggy normalization rules in place, or that buggy (or unexpected) data was"
+            + " received from the underlying market data API. Check your normalization rules. Raw, unnormalized msg = " + msg;
         responses.add(buildErrorMessageResponse(liveDataSpecFromClient, LiveDataSubscriptionResult.INTERNAL_ERROR, errorMsg));
         continue;
       }
@@ -970,7 +974,8 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
   }
 
   /**
-   * Stops a market data distributor. If the distributor is persistent, this call will be a no-op. If you want to stop a persistent distributor, make it non-persistent first.
+   * Stops a market data distributor. If the distributor is persistent, this call will be a no-op. If you want to stop a persistent distributor,
+   * make it non-persistent first.
    * <p>
    * If the subscription to which the distributor belongs no longer has any active distributors after this, that subscription will be deleted.
    *
@@ -1002,8 +1007,8 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
   /**
    * Stops any expired, non-persistent, market data distributors.
    * <p>
-   * This holds the subscription lock for its duration. Checking each individual distributor for expiry and then calling {@link #stopDistributor} may incorrectly stop the distribution if another
-   * thread is currently subscribing to it.
+   * This holds the subscription lock for its duration. Checking each individual distributor for expiry and then calling
+   * {@link #stopDistributor} may incorrectly stop the distribution if another thread is currently subscribing to it.
    * <p>
    * This is normally called by the expiration manager.
    *
@@ -1056,8 +1061,8 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
       // REVIEW kirk 2013-04-26 -- Should this really be a WARN? I believe some gateway systems
       // handle unsubscribes asynchronously so it's totally valid to get a few ticks after
       // unsubscribe has pulled it out of the subscription list.
-      LOGGER.warn("Unexpectedly got data for security unique ID {} - " +
-                        "no subscription is held for this data (has it recently expired?)", securityUniqueId);
+      LOGGER.warn("Unexpectedly got data for security unique ID {} - "
+                        + "no subscription is held for this data (has it recently expired?)", securityUniqueId);
       return;
     }
 
@@ -1155,7 +1160,8 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
    *
    * @param securityUniqueId Security unique ID
    * @return The only market data distributor associated with the security unique ID.
-   * @throws OpenGammaRuntimeException If there is no distributor associated with the given {@code securityUniqueId}, or if there is more than 1 such distributor.
+   * @throws OpenGammaRuntimeException If there is no distributor associated with the given
+   * {@code securityUniqueId}, or if there is more than 1 such distributor.
    */
   public MarketDataDistributor getMarketDataDistributor(final String securityUniqueId) {
     final Subscription sub = getSubscription(securityUniqueId);
@@ -1245,8 +1251,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
       }
 
       return new SubscriptionTrace(identifier, instant.toString(), distributors, sub.getLiveDataHistory().getLastKnownValues().toString());
-    } else {
-      return new SubscriptionTrace(identifier);
     }
+    return new SubscriptionTrace(identifier);
   }
 }

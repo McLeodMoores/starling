@@ -9,7 +9,7 @@ import org.fudgemsg.FudgeMsg;
 
 /**
  * Default implementation of {@link LastKnownValueStore} that backs onto a
- * {@link FudgeHistoryStore}, which is backed by a {@code Map}.
+ * {@link FieldHistoryStore}, which is backed by a {@code Map}.
  */
 public class MapLastKnownValueStore implements LastKnownValueStore {
   private final FieldHistoryStore _historyStore = new FieldHistoryStore();

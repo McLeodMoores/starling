@@ -176,7 +176,7 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
     private final Collection<LiveDataSubscriptionResponse> _responses = new ArrayList<>();
     private final AtomicInteger _responsesOutstanding;
 
-    public SnapshotListener(final int expectedNumberOfResponses) {
+    SnapshotListener(final int expectedNumberOfResponses) {
       _responsesOutstanding = new AtomicInteger(expectedNumberOfResponses);
     }
 
@@ -222,7 +222,7 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
 
   private final class SynchronousSnapshotListener extends SnapshotListener {
 
-    public SynchronousSnapshotListener(final int expectedNumberOfResponses) {
+    SynchronousSnapshotListener(final int expectedNumberOfResponses) {
       super(expectedNumberOfResponses);
     }
 
@@ -249,7 +249,8 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
 
     private PoolExecutor.CompletionListener<Collection<LiveDataSubscriptionResponse>> _callback;
 
-    public AsynchronousSnapshotListener(final int expectedNumberOfResponses, final PoolExecutor.CompletionListener<Collection<LiveDataSubscriptionResponse>> callback) {
+    AsynchronousSnapshotListener(final int expectedNumberOfResponses,
+        final PoolExecutor.CompletionListener<Collection<LiveDataSubscriptionResponse>> callback) {
       super(expectedNumberOfResponses);
       _callback = callback;
     }
@@ -285,7 +286,8 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
   }
 
   @Override
-  public Collection<LiveDataSubscriptionResponse> snapshot(final UserPrincipal user, final Collection<LiveDataSpecification> requestedSpecifications, final long timeout) {
+  public Collection<LiveDataSubscriptionResponse> snapshot(final UserPrincipal user, final Collection<LiveDataSpecification> requestedSpecifications,
+      final long timeout) {
     ArgumentChecker.notNull(user, "User");
     ArgumentChecker.notNull(requestedSpecifications, "Live Data specifications");
     if (requestedSpecifications.isEmpty()) {
@@ -307,17 +309,16 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
     }
     if (success) {
       return listener.getResponses();
-    } else {
-      throw new OpenGammaRuntimeException("Timeout " + timeout + "ms reached when obtaining snapshot of " + requestedSpecifications.size() + " handles");
     }
+    throw new OpenGammaRuntimeException("Timeout " + timeout + "ms reached when obtaining snapshot of " + requestedSpecifications.size() + " handles");
   }
 
   /**
-   * Asynchronous form of {@link #snapshot(UserPrincipal, Collection<LiveDataSpecification>, long)}.
+   * Asynchronous form of {@link #snapshot(UserPrincipal, Collection, long)}.
    *
-   * @param user see {@link #snapshot(UserPrincipal, Collection<LiveDataSpecification>, long)}
-   * @param requestedSpecifications see {@link #snapshot(UserPrincipal, Collection<LiveDataSpecification>, long)}
-   * @param timeout see {@link #snapshot(UserPrincipal, Collection<LiveDataSpecification>, long)}
+   * @param user see {@link #snapshot(UserPrincipal, Collection, long)}
+   * @param requestedSpecifications see {@link #snapshot(UserPrincipal, Collection, long)}
+   * @param timeout see {@link #snapshot(UserPrincipal, Collection, long)}
    * @param callback receives the result of execution
    */
   protected void snapshot(final UserPrincipal user, final Collection<LiveDataSpecification> requestedSpecifications, final long timeout,
@@ -336,7 +337,8 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
             if (result != null) {
               callback.success(result);
             } else {
-              callback.failure(new OpenGammaRuntimeException("Timeout " + timeout + "ms reached when obtaining snapshot of " + requestedSpecifications.size() + " handles"));
+              callback.failure(new OpenGammaRuntimeException("Timeout " + timeout + "ms reached when obtaining snapshot of "
+                  + requestedSpecifications.size() + " handles"));
             }
           }
 

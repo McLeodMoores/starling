@@ -26,7 +26,7 @@ public class FixedPaymentMatrixTest extends AnalyticsTestBase {
 
   @Test
   public void cycleObject() {
-    final TreeMap<LocalDate, MultipleCurrencyAmount> map = new TreeMap<LocalDate, MultipleCurrencyAmount>();
+    final TreeMap<LocalDate, MultipleCurrencyAmount> map = new TreeMap<>();
     map.put(LocalDate.of(2000, 1, 1), MultipleCurrencyAmount.of(CurrencyAmount.of(Currency.USD, 1000)));
     map.put(LocalDate.of(2000, 2, 5), MultipleCurrencyAmount.of(CurrencyAmount.of(Currency.USD, 2000), CurrencyAmount.of(Currency.EUR, 4000)));
     map.put(LocalDate.of(2010, 1, 1), MultipleCurrencyAmount.of(CurrencyAmount.of(Currency.USD, -3000), CurrencyAmount.of(Currency.GBP, 700)));

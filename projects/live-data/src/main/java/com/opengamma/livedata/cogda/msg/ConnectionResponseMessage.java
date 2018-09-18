@@ -28,7 +28,7 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 
 /**
- *
+ * A live data server for connection responses.
  */
 @BeanDefinition
 public class ConnectionResponseMessage extends DirectBean {
@@ -48,6 +48,11 @@ public class ConnectionResponseMessage extends DirectBean {
   @PropertyDefinition(validate = "notNull")
   private MutableFudgeMsg _capabilities = OpenGammaFudgeContext.getInstance().newMessage();
 
+  /**
+   * Adds capabilities to the response.
+   *
+   * @param capabilities  the capabilities, not null
+   */
   public void applyCapabilities(final FudgeMsg capabilities) {
     for (final FudgeField field : capabilities.getAllFields()) {
       getCapabilities().add(field);

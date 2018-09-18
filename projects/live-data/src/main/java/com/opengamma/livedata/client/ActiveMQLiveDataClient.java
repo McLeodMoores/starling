@@ -71,7 +71,7 @@ public class ActiveMQLiveDataClient extends JmsLiveDataClient {
     private final Set<String> _allReceiving;
     private final Set<String> _receiving;
 
-    public ConsumerRecord(final MessageConsumer consumer, final Collection<String> receiving) {
+    ConsumerRecord(final MessageConsumer consumer, final Collection<String> receiving) {
       super();
       _consumer = consumer;
       _receiving = new HashSet<>(receiving);
@@ -147,7 +147,7 @@ public class ActiveMQLiveDataClient extends JmsLiveDataClient {
     };
   }
 
-  private String getCompositeTopicName(final Collection<String> specs) {
+  private static String getCompositeTopicName(final Collection<String> specs) {
     ArgumentChecker.notEmpty(specs, "specs");
     final StringBuilder topicNameBuilder = new StringBuilder();
     for (final String spec : specs) {

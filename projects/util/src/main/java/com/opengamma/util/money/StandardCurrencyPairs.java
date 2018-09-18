@@ -27,11 +27,15 @@ import au.com.bytecode.opencsv.CSVReader;
 public class StandardCurrencyPairs {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(StandardCurrencyPairs.class);
-  private static Set<Pair<Currency, Currency>> s_currencyPairs = new HashSet<>();
+  private static final Set<Pair<Currency, Currency>> CURRENCY_PAIRS = new HashSet<>();
 
   static {
-    final InputStream is = StandardCurrencyPairs.class.getClassLoader().getResourceAsStream("com/opengamma/util/money/standard-currency-pairs.csv");
-    parseCSV("standard-currency-pairs.csv", is);
+    final String filename = "com/opengamma/util/money/standard-currency-pairs.csv";
+    try (InputStream is = StandardCurrencyPairs.class.getClassLoader().getResourceAsStream(filename)) {
+      parseCSV("standard-currency-pairs.csv", is);
+    } catch (final IOException e) {
+      LOGGER.warn("Could not read " + filename);
+    }
   }
 
   private static void parseCSV(final String filename, final InputStream is) {
@@ -43,7 +47,7 @@ public class StandardCurrencyPairs {
         final String numerator = row[0].trim();
         final String denominator = row[1].trim();
         try {
-          s_currencyPairs.add(Pairs.of(Currency.of(numerator), Currency.of(denominator)));
+          CURRENCY_PAIRS.add(Pairs.of(Currency.of(numerator), Currency.of(denominator)));
         } catch (final IllegalArgumentException iae) {
           LOGGER.warn("Couldn't create currency from " + filename + ":" + line);
         }
@@ -54,12 +58,25 @@ public class StandardCurrencyPairs {
     }
   }
 
+  /**
+   * Returns true if the pair is in the list of known currency pairs and in standard base / counter order.
+   *
+   * @param numerator  the numerator currency, not null
+   * @param denominator  the denominator currency, not null
+   * @return  true if the pair is in the list of standard currency pairs
+   */
   public static boolean isStandardPair(final Currency numerator, final Currency denominator) {
-    return s_currencyPairs.contains(Pairs.of(numerator, denominator));
+    return CURRENCY_PAIRS.contains(Pairs.of(numerator, denominator));
   }
 
+  /**
+   * Returns true if there is an entry for CCY/USD in the list of known currency pairs.
+   *
+   * @param ccy  the currency, not null
+   * @return  true if there is a CCY/USD entry
+   */
   public static boolean isSingleCurrencyNumerator(final Currency ccy) {
-    return s_currencyPairs.contains(Pairs.of(ccy, Currency.USD));
+    return CURRENCY_PAIRS.contains(Pairs.of(ccy, Currency.USD));
   }
 
 }

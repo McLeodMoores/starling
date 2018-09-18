@@ -96,11 +96,11 @@ public class PriorityResolvingCombiningLiveDataServerTest {
   }
 
   //-------------------------------------------------------------------------
-  private void setEntitlementChecker(final MockLiveDataServer server) {
-    server.setEntitlementChecker(getEntitlementChecker(server.getUniqueIdDomain()));
+  private static void setEntitlementChecker(final MockLiveDataServer server) {
+    server.setEntitlementChecker(getEntitlementChecker());
   }
 
-  private LiveDataEntitlementChecker getEntitlementChecker(final ExternalScheme domain) {
+  private static LiveDataEntitlementChecker getEntitlementChecker() {
     return new AbstractEntitlementChecker() {
       @Override
       public boolean isEntitled(final UserPrincipal user, final LiveDataSpecification requestedSpecification) {
@@ -126,14 +126,15 @@ public class PriorityResolvingCombiningLiveDataServerTest {
   public void failingSubscriptionsDontStopWorking() {
     final LiveDataSpecification specWorking = new LiveDataSpecification("No Normalization", ExternalId.of(_domainC, "X"));
     final LiveDataSpecification specFailed = new LiveDataSpecification("No Normalization", ExternalId.of(_domainD, "X"));
-    final LiveDataSubscriptionResponseMsg subscriptionRequestMade = _combiningServer.subscriptionRequestMade(new LiveDataSubscriptionRequest(UserPrincipal.getLocalUser(), SubscriptionType.NON_PERSISTENT,  Lists.newArrayList(specWorking, specFailed)));
+    final LiveDataSubscriptionResponseMsg subscriptionRequestMade =
+        _combiningServer.subscriptionRequestMade(new LiveDataSubscriptionRequest(UserPrincipal.getLocalUser(),
+            SubscriptionType.NON_PERSISTENT,  Lists.newArrayList(specWorking, specFailed)));
 
     assertEquals(2, subscriptionRequestMade.getResponses().size());
     for (final LiveDataSubscriptionResponse response : subscriptionRequestMade.getResponses()) {
       if (response.getRequestedSpecification().equals(specWorking)) {
         assertEquals(LiveDataSubscriptionResult.SUCCESS, response.getSubscriptionResult());
-      }
-      else if (response.getRequestedSpecification().equals(specFailed)) {
+      } else if (response.getRequestedSpecification().equals(specFailed)) {
         assertEquals(LiveDataSubscriptionResult.INTERNAL_ERROR, response.getSubscriptionResult());
       }
     }

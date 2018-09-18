@@ -86,7 +86,7 @@ public class SubscriptionHandle {
   }
 
   /**
-   * Informs the client listener about the response received from the server
+   * Informs the client listener about the response received from the server.
    *
    * @param response Response received, not null
    */

@@ -136,7 +136,8 @@ public class DelegatingLiveDataClient implements LiveDataClient {
   }
 
   @Override
-  public Collection<LiveDataSubscriptionResponse> snapshot(final UserPrincipal user, final Collection<LiveDataSpecification> requestedSpecifications, final long timeout) {
+  public Collection<LiveDataSubscriptionResponse> snapshot(final UserPrincipal user, final Collection<LiveDataSpecification> requestedSpecifications,
+      final long timeout) {
     final Map<LiveDataClient, List<LiveDataSpecification>> split = splitCollection(requestedSpecifications);
     final List<LiveDataSubscriptionResponse> snapshots = new ArrayList<>(requestedSpecifications.size());
     for (final Map.Entry<LiveDataClient, List<LiveDataSpecification>> entry : split.entrySet()) {

@@ -75,10 +75,10 @@ public class RedisLastKnownValueStorePerformanceTest {
       final Thread t = new Thread(new Runnable() {
         @Override
         public void run() {
-          for (int i = 0; i < NUM_CYCLES; i++) {
+          for (int ii = 0; ii < NUM_CYCLES; ii++) {
             oneCycle();
             //if ((i % 5) == 0) {
-              System.out.println("" + i + " cycles done.");
+              System.out.println("" + ii + " cycles done.");
             //}
           }
         }

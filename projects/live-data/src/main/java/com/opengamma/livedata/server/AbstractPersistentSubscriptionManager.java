@@ -50,7 +50,7 @@ public abstract class AbstractPersistentSubscriptionManager implements Lifecycle
       .getLogger(AbstractPersistentSubscriptionManager.class);
 
   /**
-   * Default how often to save the persistent subscriptions to the database, milliseconds
+   * Default how often to save the persistent subscriptions to the database, milliseconds.
    */
   public static final long DEFAULT_SAVE_PERIOD = 60000L;
 
@@ -176,7 +176,8 @@ public abstract class AbstractPersistentSubscriptionManager implements Lifecycle
 
     final OperationTimer operationTimer = new OperationTimer(LOGGER, "Updating server's persistent subscriptions {}", persistentSubscriptionsToMake.size());
 
-    final int partitionSize = 50; //Aim is to make sure we can convert subscriptions quickly enough that nothing expires, and to leave the server responsive, and make retrys not take too long
+    final int partitionSize = 50; //Aim is to make sure we can convert subscriptions quickly enough that nothing expires,
+    // and to leave the server responsive, and make retrys not take too long
 
     final List<List<LiveDataSpecification>> partitions = Lists.partition(Lists.newArrayList(persistentSubscriptionsToMake), partitionSize);
     for (final List<LiveDataSpecification> partition : partitions) {
@@ -233,7 +234,7 @@ public abstract class AbstractPersistentSubscriptionManager implements Lifecycle
     }
   }
 
-  private Collection<LiveDataSpecification> getSpecs(final Set<PersistentSubscription> subs) {
+  private static Collection<LiveDataSpecification> getSpecs(final Set<PersistentSubscription> subs) {
     final Collection<LiveDataSpecification> specs = new ArrayList<>();
     for (final PersistentSubscription sub : subs) {
       specs.add(sub.getFullyQualifiedSpec());

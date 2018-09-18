@@ -17,7 +17,7 @@ import com.opengamma.livedata.resolver.DistributionSpecificationResolver;
 import com.opengamma.livedata.resolver.NaiveDistributionSpecificationResolver;
 
 /**
- * Will return null for IDs not in the domain, value otherwise
+ * Will return null for IDs not in the domain, value otherwise.
  */
 public class MockDistributionSpecificationResolver implements DistributionSpecificationResolver {
 
@@ -38,12 +38,11 @@ public class MockDistributionSpecificationResolver implements DistributionSpecif
     final String id = liveDataSpecificationFromClient.getIdentifier(_domain);
     if (id == null) {
       return null;
-    } else {
-      final LiveDataSpecification inner = new LiveDataSpecification(
-          liveDataSpecificationFromClient.getNormalizationRuleSetId(), Collections.singleton(ExternalId.of(_domain,
-              id)));
-      return _distributionSpecificationResolver.resolve(inner);
     }
+    final LiveDataSpecification inner = new LiveDataSpecification(
+        liveDataSpecificationFromClient.getNormalizationRuleSetId(), Collections.singleton(ExternalId.of(_domain,
+            id)));
+    return _distributionSpecificationResolver.resolve(inner);
   }
 
   @Override

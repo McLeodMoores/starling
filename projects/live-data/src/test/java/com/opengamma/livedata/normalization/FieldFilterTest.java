@@ -25,43 +25,43 @@ import com.opengamma.util.test.TestGroup;
 public class FieldFilterTest {
 
   public void normalCase() {
-    Set<String> fieldsToAccept = new HashSet<String>();
-    fieldsToAccept.add("Foo");    
+    final Set<String> fieldsToAccept = new HashSet<>();
+    fieldsToAccept.add("Foo");
     fieldsToAccept.add("Bar");
-    FieldFilter filter = new FieldFilter(fieldsToAccept);
-    
-    MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
+    final FieldFilter filter = new FieldFilter(fieldsToAccept);
+
+    final MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
     msg.add("Foo", "1");
     msg.add("Bar", 2.0);
     msg.add("Baz", 500);
-    
-    MutableFudgeMsg normalized = filter.apply(msg, "123", new FieldHistoryStore());
+
+    final MutableFudgeMsg normalized = filter.apply(msg, "123", new FieldHistoryStore());
     assertEquals("1", normalized.getString("Foo"));
     assertEquals(2.0, normalized.getDouble("Bar"), 0.0001);
     assertNull(normalized.getByName("Baz"));
   }
 
   public void extinguishmentWithNonEmptyFieldsToAccept() {
-    Set<String> fieldsToAccept = new HashSet<String>();
-    fieldsToAccept.add("Foo");    
+    final Set<String> fieldsToAccept = new HashSet<>();
+    fieldsToAccept.add("Foo");
     fieldsToAccept.add("Bar");
-    FieldFilter filter = new FieldFilter(fieldsToAccept);
-    
-    MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
+    final FieldFilter filter = new FieldFilter(fieldsToAccept);
+
+    final MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
     msg.add("Foo2", "1");
-    
-    MutableFudgeMsg normalized = filter.apply(msg, "123", new FieldHistoryStore());
+
+    final MutableFudgeMsg normalized = filter.apply(msg, "123", new FieldHistoryStore());
     assertNull(normalized);
   }
 
   public void extinguishmentWithEmptyFieldsToAccept() {
-    Set<String> fieldsToAccept = new HashSet<String>();
-    FieldFilter filter = new FieldFilter(fieldsToAccept);
-    
-    MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
+    final Set<String> fieldsToAccept = new HashSet<>();
+    final FieldFilter filter = new FieldFilter(fieldsToAccept);
+
+    final MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
     msg.add("Foo", "1");
-    
-    MutableFudgeMsg normalized = filter.apply(msg, "123", new FieldHistoryStore());
+
+    final MutableFudgeMsg normalized = filter.apply(msg, "123", new FieldHistoryStore());
     assertNull(normalized);
   }
 

@@ -15,7 +15,8 @@ public class LiveDataSubscriptionResponse implements java.io.Serializable {
   public static final String TICK_DISTRIBUTION_SPECIFICATION_KEY = "tickDistributionSpecification";
   private com.opengamma.livedata.LiveDataValueUpdateBean _snapshot;
   public static final String SNAPSHOT_KEY = "snapshot";
-  public LiveDataSubscriptionResponse (final com.opengamma.livedata.LiveDataSpecification requestedSpecification, final com.opengamma.livedata.msg.LiveDataSubscriptionResult subscriptionResult) {
+  public LiveDataSubscriptionResponse (final com.opengamma.livedata.LiveDataSpecification requestedSpecification,
+      final com.opengamma.livedata.msg.LiveDataSubscriptionResult subscriptionResult) {
     if (requestedSpecification == null) {
       throw new NullPointerException ("'requestedSpecification' cannot be null");
     } else {

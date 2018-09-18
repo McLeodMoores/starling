@@ -48,6 +48,11 @@ public class ConnectionRequestMessage extends DirectBean {
   @PropertyDefinition(validate = "notNull")
   private MutableFudgeMsg _capabilities = OpenGammaFudgeContext.getInstance().newMessage();
 
+  /**
+   * Adds capabilities to the request.
+   *
+   * @param capabilities  the capabilities, not null
+   */
   public void applyCapabilities(final FudgeMsg capabilities) {
     for (final FudgeField field : capabilities.getAllFields()) {
       getCapabilities().add(field);

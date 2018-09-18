@@ -63,7 +63,8 @@ public class EHCachingDistributionSpecificationResolver
     this(underlying, cacheManager, DISTRIBUTION_SPEC_CACHE_DEFAULT_ARG);
   }
 
-  public EHCachingDistributionSpecificationResolver(final DistributionSpecificationResolver underlying, final CacheManager cacheManager, final String cacheName) {
+  public EHCachingDistributionSpecificationResolver(final DistributionSpecificationResolver underlying, final CacheManager cacheManager,
+      final String cacheName) {
     ArgumentChecker.notNull(underlying, "Underlying DistributionSpecificationResolver");
     ArgumentChecker.notNull(cacheManager, "cacheManager");
     ArgumentChecker.notNull(cacheName, "cacheName");

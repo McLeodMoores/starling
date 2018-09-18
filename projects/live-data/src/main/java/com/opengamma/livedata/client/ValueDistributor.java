@@ -80,13 +80,11 @@ public class ValueDistributor {
         final boolean removed = _listenersBySpec.remove(fullyQualifiedSpecification, actualListeners);
         if (removed) {
           return false;
-        } else {
-          // Someone else added a new one in addListener.
-          return true;
         }
-      } else {
+        // Someone else added a new one in addListener.
         return true;
       }
+      return true;
     }
   }
 

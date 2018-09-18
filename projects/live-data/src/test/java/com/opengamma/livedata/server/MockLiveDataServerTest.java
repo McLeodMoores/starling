@@ -198,7 +198,7 @@ public class MockLiveDataServerTest {
     assertFalse(_server.stopDistributor(distributor));
   }
 
-  private void checkResponse(final UserPrincipal user, final LiveDataSpecification requestedSpec,
+  private static void checkResponse(final UserPrincipal user, final LiveDataSpecification requestedSpec,
       final LiveDataSubscriptionResponseMsg response) {
     assertEquals(user, response.getRequestingUser());
     assertEquals(1, response.getResponses().size());
@@ -231,10 +231,10 @@ public class MockLiveDataServerTest {
     assertEquals(LiveDataSubscriptionResult.INTERNAL_ERROR, response.getResponses().get(0).getSubscriptionResult());
     assertNull(response.getResponses().get(0).getSnapshot());
     assertNull(response.getResponses().get(0).getTickDistributionSpecification());
-    assertEquals("When snapshot for testsub was run through normalization, the message disappeared.  " +
-        "This indicates there are buggy normalization rules in place, or that buggy (or unexpected) data was " +
-        "received from the underlying market data API. Check your normalization rules. " +
-        "Raw, unnormalized msg = FudgeMsg[]",
+    assertEquals("When snapshot for testsub was run through normalization, the message disappeared.  "
+        + "This indicates there are buggy normalization rules in place, or that buggy (or unexpected) data was "
+        + "received from the underlying market data API. Check your normalization rules. "
+        + "Raw, unnormalized msg = FudgeMsg[]",
         response.getResponses().get(0).getUserMessage());
 
     assertFalse(_server.unsubscribe("testsub"));

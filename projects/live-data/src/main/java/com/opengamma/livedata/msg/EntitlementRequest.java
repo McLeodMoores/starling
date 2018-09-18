@@ -55,7 +55,8 @@ public class EntitlementRequest implements java.io.Serializable {
         _liveDataSpecifications.add (fudge2);
       }
       catch (final IllegalArgumentException e) {
-        throw new IllegalArgumentException ("Fudge message is not a EntitlementRequest - field 'liveDataSpecifications' is not LiveDataSpecification message", e);
+        throw new IllegalArgumentException ("Fudge message is not a EntitlementRequest "
+            + "- field 'liveDataSpecifications' is not LiveDataSpecification message", e);
       }
     }
   }

@@ -68,7 +68,8 @@ public class HistoricalTimeSeriesProviderGetResult extends DirectBean {
    * @param result  the map of results, not null
    * @param permissions the permissions
    */
-  public HistoricalTimeSeriesProviderGetResult(final Map<ExternalIdBundle, LocalDateDoubleTimeSeries> result, final Map<ExternalIdBundle, Set<String>> permissions) {
+  public HistoricalTimeSeriesProviderGetResult(final Map<ExternalIdBundle, LocalDateDoubleTimeSeries> result,
+      final Map<ExternalIdBundle, Set<String>> permissions) {
     setResultMap(result);
     setPermissionsMap(permissions);
   }

@@ -122,9 +122,9 @@ public class ResubscribingLiveDataClient implements LiveDataClient {
       }
       final Subscription other = (Subscription) obj;
       return
-          Objects.equals(this._user, other._user) &&
-          Objects.equals(this._spec, other._spec) &&
-          Objects.equals(this._listener, other._listener);
+          Objects.equals(this._user, other._user)
+          && Objects.equals(this._spec, other._spec)
+          && Objects.equals(this._listener, other._listener);
     }
   }
 }

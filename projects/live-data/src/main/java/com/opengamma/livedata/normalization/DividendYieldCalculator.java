@@ -63,7 +63,7 @@ public class DividendYieldCalculator implements NormalizationRule {
   /**
    * Tries to populate DIVIDEND_YIELD from the history.
    */
-  private MutableFudgeMsg lastKnownMarketValue(
+  private static MutableFudgeMsg lastKnownMarketValue(
       final MutableFudgeMsg msg,
       final FieldHistoryStore fieldHistory) {
 

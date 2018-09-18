@@ -37,7 +37,7 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 public class DistributedEntitlementChecker {
 
   /**
-   * If no response from server is received within this period of time, throw exception
+   * If no response from server is received within this period of time, throw exception.
    */
   public static final long TIMEOUT_MS = 5000;
 

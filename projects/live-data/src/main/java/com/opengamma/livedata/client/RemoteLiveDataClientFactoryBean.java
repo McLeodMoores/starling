@@ -93,22 +93,22 @@ public class RemoteLiveDataClientFactoryBean extends SingletonFactoryBean<Distri
   protected DistributedLiveDataClient createObject() {
     final JmsTemplate jmsTemplate = getJmsConnector().getJmsTemplateTopic();
     final int maxConcurrent = getMaxConcurrentRequests();
-    final ThreadPoolExecutor executor = new ThreadPoolExecutor(maxConcurrent, maxConcurrent, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(), new NamedThreadPoolFactory(
-        "RemoteLiveDataClient"));
+    final ThreadPoolExecutor executor = new ThreadPoolExecutor(maxConcurrent, maxConcurrent, 60L, TimeUnit.SECONDS,
+        new LinkedBlockingQueue<Runnable>(), new NamedThreadPoolFactory("RemoteLiveDataClient"));
     final JmsByteArrayRequestSender jmsSubscriptionRequestSender = new JmsByteArrayRequestSender(getSubscriptionTopic(), jmsTemplate, executor);
     final ByteArrayFudgeRequestSender fudgeSubscriptionRequestSender = new ByteArrayFudgeRequestSender(jmsSubscriptionRequestSender);
     final JmsByteArrayRequestSender jmsEntitlementRequestSender = new JmsByteArrayRequestSender(getEntitlementTopic(), jmsTemplate, executor);
     final ByteArrayFudgeRequestSender fudgeEntitlementRequestSender = new ByteArrayFudgeRequestSender(jmsEntitlementRequestSender);
-    final JmsLiveDataClient liveDataClient = new JmsLiveDataClient(fudgeSubscriptionRequestSender, fudgeEntitlementRequestSender, getJmsConnector(), OpenGammaFudgeContext.getInstance(),
-        JmsLiveDataClient.DEFAULT_NUM_SESSIONS);
+    final JmsLiveDataClient liveDataClient = new JmsLiveDataClient(fudgeSubscriptionRequestSender, fudgeEntitlementRequestSender,
+        getJmsConnector(), OpenGammaFudgeContext.getInstance(), JmsLiveDataClient.DEFAULT_NUM_SESSIONS);
     liveDataClient.setFudgeContext(OpenGammaFudgeContext.getInstance());
     if (getHeartbeatTopic() != null) {
       final JmsByteArrayMessageSender jmsHeartbeatSender = new JmsByteArrayMessageSender(getHeartbeatTopic(), jmsTemplate);
       liveDataClient.setHeartbeatMessageSender(jmsHeartbeatSender);
     }
     liveDataClient.start();
-    LOGGER.debug("Created and started live data client using {} subscription topic {}, entitlement topic {} and heartbeat topic {}", new Object[] {getJmsConnector().getClientBrokerUri(),
-        getSubscriptionTopic(), getEntitlementTopic(), getHeartbeatTopic() });
+    LOGGER.debug("Created and started live data client using {} subscription topic {}, entitlement topic {} and heartbeat topic {}",
+        new Object[] {getJmsConnector().getClientBrokerUri(), getSubscriptionTopic(), getEntitlementTopic(), getHeartbeatTopic() });
     return liveDataClient;
   }
 

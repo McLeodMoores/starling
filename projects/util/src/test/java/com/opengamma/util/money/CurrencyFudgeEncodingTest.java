@@ -24,38 +24,56 @@ public class CurrencyFudgeEncodingTest extends AbstractFudgeBuilderTestCase {
 
   private static final Currency REF = Currency.USD;
 
+  /**
+   * Tests an encoding / decoding cycle.
+   */
   @Test
   public void testCycle() {
     assertEncodeDecodeCycle(Currency.class, REF);
   }
 
+  /**
+   * Tests secondary type encoding, which uses a string.
+   */
   @Test
   public void testFromString() {
     assertEquals(REF, getFudgeContext().getFieldValue(Currency.class,
         UnmodifiableFudgeField.of(FudgeWireType.STRING, REF.getCode())));
   }
 
+  /**
+   * Tests encoding from the currency unique id.
+   */
   @Test
   public void testFromUniqueId() {
     assertEquals(REF, getFudgeContext().getFieldValue(Currency.class,
         UnmodifiableFudgeField.of(FudgeWireType.STRING, REF.getUniqueId().toString())));
   }
 
+  /**
+   * Tests the behaviour when the unique id is not a currency uid.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testFromUniqueId_bad1() {
+  public void testFromUniqueIdBad1() {
     getFudgeContext().getFieldValue(Currency.class,
         UnmodifiableFudgeField.of(FudgeWireType.STRING, "Rubbish~ID"));
   }
 
+  /**
+   * Tests the behaviour when the unique id is not a currency uid.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testFromUniqueId_bad2() {
+  public void testFromUniqueIdBad2() {
     getFudgeContext().getFieldValue(Currency.class,
         UnmodifiableFudgeField.of(FudgeWireType.STRING, Currency.OBJECT_SCHEME + "~Rubbish"));
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests conversion to a Fudge message.
+   */
   @Test
-  public void test_toFudgeMsg() {
+  public void testToFudgeMsg() {
     final CurrencyFudgeBuilder bld = new CurrencyFudgeBuilder();
     final MutableFudgeMsg msg = bld.buildMessage(getFudgeSerializer(), REF);
     assertEquals(ImmutableSet.of(CurrencyFudgeBuilder.CURRENCY_FIELD_NAME), msg.getAllFieldNames());
@@ -63,16 +81,22 @@ public class CurrencyFudgeEncodingTest extends AbstractFudgeBuilderTestCase {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests conversion from a Fudge message.
+   */
   @Test
-  public void test_fromFudgeMsg() {
+  public void testFromFudgeMsg() {
     final MutableFudgeMsg msg = getFudgeContext().newMessage();
     msg.add(CurrencyFudgeBuilder.CURRENCY_FIELD_NAME, "USD");
     final CurrencyFudgeBuilder bld = new CurrencyFudgeBuilder();
     bld.buildObject(getFudgeDeserializer(), msg);
   }
 
+  /**
+   * Tests the behaviour when the Fudge message cannot be converted to a currency.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_fromFudgeMsg_badMessage1() {
+  public void testFromFudgeMsgBadMessage1() {
     final MutableFudgeMsg msg = getFudgeContext().newMessage();
     final CurrencyFudgeBuilder bld = new CurrencyFudgeBuilder();
     bld.buildObject(getFudgeDeserializer(), msg);

@@ -19,17 +19,26 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class MoneyCalculationTest {
 
-  public void test_add() {
+  /**
+   * Tests the addition of amounts.
+   */
+  public void testAdd() {
     assertEquals(BigDecimal.valueOf(300, 2), MoneyCalculationUtils.add(BigDecimal.valueOf(2, 0), BigDecimal.valueOf(1, 0)));
     assertEquals(BigDecimal.valueOf(100, 2), MoneyCalculationUtils.add(BigDecimal.valueOf(3, 0), BigDecimal.valueOf(-2, 0)));
   }
 
-  public void test_subtract() {
+  /**
+   * Tests the subtraction of amounts.
+   */
+  public void testSubtract() {
     assertEquals(BigDecimal.valueOf(100, 2), MoneyCalculationUtils.subtract(BigDecimal.valueOf(2, 0), BigDecimal.valueOf(1, 0)));
     assertEquals(BigDecimal.valueOf(500, 2), MoneyCalculationUtils.subtract(BigDecimal.valueOf(3, 0), BigDecimal.valueOf(-2, 0)));
   }
 
-  public void test_rounded() {
+  /**
+   * Tests the rounding.
+   */
+  public void testRounded() {
     assertEquals(BigDecimal.valueOf(200, 2), MoneyCalculationUtils.rounded(BigDecimal.valueOf(2, 0)));
   }
 

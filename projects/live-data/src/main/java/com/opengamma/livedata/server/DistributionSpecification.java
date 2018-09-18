@@ -141,9 +141,9 @@ public class DistributionSpecification {
     }
     if (obj instanceof DistributionSpecification) {
       final DistributionSpecification other = (DistributionSpecification) obj;
-      return _marketDataId.equals(other._marketDataId) &&
-          _normalizationRuleSet.equals(other._normalizationRuleSet) &&
-          _jmsTopic.equals(other._jmsTopic);
+      return _marketDataId.equals(other._marketDataId)
+          && _normalizationRuleSet.equals(other._normalizationRuleSet)
+          && _jmsTopic.equals(other._jmsTopic);
     }
     return false;
   }

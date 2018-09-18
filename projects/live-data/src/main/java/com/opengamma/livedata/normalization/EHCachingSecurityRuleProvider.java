@@ -34,7 +34,8 @@ public class EHCachingSecurityRuleProvider implements SecurityRuleProvider {
    * @param cacheName  the name of the cache, not null
    * @param maxElementsInMemory  the maximum number of security rules to cache
    */
-  public EHCachingSecurityRuleProvider(final SecurityRuleProvider underlying, final CacheManager cacheManager, final String cacheName, final int maxElementsInMemory) {
+  public EHCachingSecurityRuleProvider(final SecurityRuleProvider underlying, final CacheManager cacheManager, final String cacheName,
+      final int maxElementsInMemory) {
     ArgumentChecker.notNull(underlying, "underlying");
     ArgumentChecker.notNull(cacheManager, "cacheManager");
     ArgumentChecker.notNull(cacheName, "cacheName");

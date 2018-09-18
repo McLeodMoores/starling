@@ -61,7 +61,8 @@ public class DistributedLiveDataClient extends AbstractLiveDataClient implements
     this(subscriptionRequestSender, entitlementRequestSender, OpenGammaFudgeContext.getInstance());
   }
 
-  public DistributedLiveDataClient(final FudgeRequestSender subscriptionRequestSender, final FudgeRequestSender entitlementRequestSender, final FudgeContext fudgeContext) {
+  public DistributedLiveDataClient(final FudgeRequestSender subscriptionRequestSender, final FudgeRequestSender entitlementRequestSender,
+      final FudgeContext fudgeContext) {
     ArgumentChecker.notNull(subscriptionRequestSender, "Subscription request sender");
     ArgumentChecker.notNull(entitlementRequestSender, "Entitlement request sender");
     ArgumentChecker.notNull(fudgeContext, "Fudge Context");
@@ -147,7 +148,7 @@ public class DistributedLiveDataClient extends AbstractLiveDataClient implements
 
     private UserPrincipal _user;
 
-    public AbstractSubscriptionResponseReceiver(final Collection<SubscriptionHandle> subHandles) {
+    AbstractSubscriptionResponseReceiver(final Collection<SubscriptionHandle> subHandles) {
       _spec2SubHandle = new HashMap<>();
       for (final SubscriptionHandle subHandle : subHandles) {
         _spec2SubHandle.put(subHandle.getRequestedSpecification(), subHandle);
@@ -188,8 +189,8 @@ public class DistributedLiveDataClient extends AbstractLiveDataClient implements
           LOGGER.error("Failed to process response message", error);
           for (final SubscriptionHandle handle : getSpec2SubHandle().values()) {
             if (handle.getSubscriptionType() != SubscriptionType.SNAPSHOT) {
-              subscriptionRequestFailed(handle, new LiveDataSubscriptionResponse(handle.getRequestedSpecification(), LiveDataSubscriptionResult.INTERNAL_ERROR, error.toString(), null, null,
-                  null));
+              subscriptionRequestFailed(handle, new LiveDataSubscriptionResponse(handle.getRequestedSpecification(),
+                  LiveDataSubscriptionResult.INTERNAL_ERROR, error.toString(), null, null, null));
             }
           }
         }
@@ -289,7 +290,7 @@ public class DistributedLiveDataClient extends AbstractLiveDataClient implements
    */
   private class SnapshotResponseReceiver extends AbstractSubscriptionResponseReceiver {
 
-    public SnapshotResponseReceiver(final Collection<SubscriptionHandle> subHandles) {
+    SnapshotResponseReceiver(final Collection<SubscriptionHandle> subHandles) {
       super(subHandles);
     }
 
@@ -298,12 +299,12 @@ public class DistributedLiveDataClient extends AbstractLiveDataClient implements
   /**
    * Some market data requests are non-snapshot requests where market data is continuously read from a JMS topic; this means they require a JMS subscription.
    * <p>
-   * As per LIV-19, after we've subscribed to the market data (and started getting deltas), we do a snapshot to make sure we get a full initial image of the data. Things are done in this order (first
-   * subscribe, then snapshot) so we don't lose any ticks. See LIV-19.
+   * After we've subscribed to the market data (and started getting deltas), we do a snapshot to make sure we get a full
+   * initial image of the data. Things are done in this order (first subscribe, then snapshot) so we don't lose any ticks.
    */
   private class TopicBasedSubscriptionResponseReceiver extends AbstractSubscriptionResponseReceiver {
 
-    public TopicBasedSubscriptionResponseReceiver(final Collection<SubscriptionHandle> subHandles) {
+    TopicBasedSubscriptionResponseReceiver(final Collection<SubscriptionHandle> subHandles) {
       super(subHandles);
     }
 
@@ -365,7 +366,8 @@ public class DistributedLiveDataClient extends AbstractLiveDataClient implements
       for (final LiveDataSubscriptionResponse response : getSuccessResponses().values()) {
         successLiveDataSpecs.add(response.getRequestedSpecification());
       }
-      DistributedLiveDataClient.this.snapshot(getUser(), successLiveDataSpecs, TIMEOUT, new PoolExecutor.CompletionListener<Collection<LiveDataSubscriptionResponse>>() {
+      DistributedLiveDataClient.this.snapshot(getUser(), successLiveDataSpecs, TIMEOUT,
+          new PoolExecutor.CompletionListener<Collection<LiveDataSubscriptionResponse>>() {
 
         @Override
         public void success(final Collection<LiveDataSubscriptionResponse> snapshots) {

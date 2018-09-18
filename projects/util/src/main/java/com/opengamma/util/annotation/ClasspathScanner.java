@@ -23,6 +23,7 @@ import org.fudgemsg.FudgeRuntimeException;
 import org.reflections.scanners.FieldAnnotationsScanner;
 import org.reflections.scanners.MethodAnnotationsScanner;
 import org.reflections.scanners.MethodParameterScanner;
+import org.reflections.scanners.SubTypesScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
 import org.threeten.bp.Instant;
 
@@ -121,10 +122,11 @@ public final class ClasspathScanner {
     if (isScanParameterAnnotations()) {
       scanners++;
     }
-    final Object[] config = new Object[scanners + 2];
+    final Object[] config = new Object[scanners + 3];
     scanners = 0;
     if (isScanClassAnnotations()) {
       config[scanners++] = new TypeAnnotationsScanner();
+      config[scanners++] = new SubTypesScanner();
     }
     if (isScanFieldAnnotations()) {
       config[scanners++] = new FieldAnnotationsScanner();
@@ -137,13 +139,13 @@ public final class ClasspathScanner {
     }
     config[scanners++] = ClasspathScanner.class.getClassLoader();
     config[scanners++] = Thread.currentThread().getContextClassLoader();
-    final AnnotationReflector reflector = new AnnotationReflector(null, _urls, config);
+    final AnnotationReflector annotationReflector = new AnnotationReflector(null, _urls, config);
     final HashSet<String> classNames = new HashSet<>();
     if (isScanClassAnnotations()) {
 
       Set<Class<?>> classes;
       try {
-        classes = reflector.getReflector().getTypesAnnotatedWith((Class<? extends Annotation>) Class.forName(annotationClass.getName()));
+        classes = annotationReflector.getReflector().getTypesAnnotatedWith((Class<? extends Annotation>) Class.forName(annotationClass.getName()));
       } catch (final ClassNotFoundException ex) {
         throw new OpenGammaRuntimeException("Can't find class " + annotationClass, ex);
       }
@@ -152,23 +154,23 @@ public final class ClasspathScanner {
       }
     }
     if (isScanFieldAnnotations()) {
-      final Set<Field> fields = reflector.getReflector().getFieldsAnnotatedWith(annotationClass);
+      final Set<Field> fields = annotationReflector.getReflector().getFieldsAnnotatedWith(annotationClass);
       for (final Field field : fields) {
         classNames.add(field.getDeclaringClass().getName());
       }
     }
     if (isScanMethodAnnotations()) {
-      final Set<Method> methods = reflector.getReflector().getMethodsAnnotatedWith(annotationClass);
+      final Set<Method> methods = annotationReflector.getReflector().getMethodsAnnotatedWith(annotationClass);
       for (final Method method : methods) {
         classNames.add(method.getDeclaringClass().getName());
       }
-      final Set<Constructor> constructors = reflector.getReflector().getConstructorsAnnotatedWith(annotationClass);
+      final Set<Constructor> constructors = annotationReflector.getReflector().getConstructorsAnnotatedWith(annotationClass);
       for (final Constructor constructor : constructors) {
         classNames.add(constructor.getDeclaringClass().getName());
       }
     }
     if (isScanParameterAnnotations()) {
-      final Set<Method> paramMethods = reflector.getReflector().getMethodsWithAnyParamAnnotated(annotationClass);
+      final Set<Method> paramMethods = annotationReflector.getReflector().getMethodsWithAnyParamAnnotated(annotationClass);
       for (final Method method : paramMethods) {
         classNames.add(method.getDeclaringClass().getName());
       }

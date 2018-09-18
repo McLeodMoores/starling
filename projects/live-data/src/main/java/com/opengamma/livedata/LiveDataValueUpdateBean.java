@@ -72,9 +72,9 @@ public class LiveDataValueUpdateBean implements LiveDataValueUpdate, Serializabl
     }
     if (obj instanceof LiveDataValueUpdateBean) {
       final LiveDataValueUpdateBean other = (LiveDataValueUpdateBean) obj;
-      return _sequenceNumber == other._sequenceNumber &&
-          ObjectUtils.equals(_specification, other._specification) &&
-          ObjectUtils.equals(_fieldContainer, other._fieldContainer);
+      return _sequenceNumber == other._sequenceNumber
+          && ObjectUtils.equals(_specification, other._specification)
+          && ObjectUtils.equals(_fieldContainer, other._fieldContainer);
     }
     return false;
   }

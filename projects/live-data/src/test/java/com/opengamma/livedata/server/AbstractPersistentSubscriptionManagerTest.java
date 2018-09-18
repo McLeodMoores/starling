@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
+ *
+ * Please see distribution for license.
+ */
 package com.opengamma.livedata.server;
 
 import static org.testng.AssertJUnit.assertEquals;
@@ -91,7 +96,7 @@ public class AbstractPersistentSubscriptionManagerTest {
 
   class TestPersistentSubscriptionManager extends AbstractPersistentSubscriptionManager  {
 
-    public TestPersistentSubscriptionManager(final StandardLiveDataServer server) {
+    TestPersistentSubscriptionManager(final StandardLiveDataServer server) {
       super(server);
     }
 

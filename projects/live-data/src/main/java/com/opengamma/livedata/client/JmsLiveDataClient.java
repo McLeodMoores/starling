@@ -39,14 +39,14 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 import com.opengamma.util.jms.JmsConnector;
 
 /**
- * A JMS LiveData client. This client is implemented using JMS's asynchronous onMessage() notification capability. The client creates 10 JMS sessions by default. New market data subscriptions are
- * assigned to sessions in round-robin fashion.
+ * A JMS LiveData client. This client is implemented using JMS's asynchronous onMessage() notification capability. The client creates
+ * 10 JMS sessions by default. New market data subscriptions are assigned to sessions in round-robin fashion.
  */
 @PublicAPI
 public class JmsLiveDataClient extends DistributedLiveDataClient implements Lifecycle {
 
   /**
-   * How many JMS sessions the client will create by default
+   * How many JMS sessions the client will create by default.
    */
   public static final int DEFAULT_NUM_SESSIONS = 10;
 
@@ -201,7 +201,7 @@ public class JmsLiveDataClient extends DistributedLiveDataClient implements Life
 
         final MessageConsumer messageConsumer = session.createConsumer(topic);
         messageConsumer.setMessageListener(jmsDispatcher);
-        ret.put(tickDistributionSpecification, getCloseAction(tickDistributionSpecification, messageConsumer));
+        ret.put(tickDistributionSpecification, getCloseAction(messageConsumer));
       } catch (final JMSException e) {
         throw new OpenGammaRuntimeException("Failed to create subscription to JMS topic " + tickDistributionSpecification, e);
       }
@@ -209,7 +209,7 @@ public class JmsLiveDataClient extends DistributedLiveDataClient implements Life
     return ret;
   }
 
-  private Runnable getCloseAction(final String tickDistributionSpecification, final MessageConsumer messageConsumer) {
+  private static Runnable getCloseAction(final MessageConsumer messageConsumer) {
     return new Runnable() {
       @Override
       public void run() {

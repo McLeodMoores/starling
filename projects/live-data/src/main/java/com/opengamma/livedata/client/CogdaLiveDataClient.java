@@ -238,6 +238,8 @@ public class CogdaLiveDataClient extends AbstractLiveDataClient implements Lifec
           _activeSubscriptionRequests.put(correlationId, handle);
           _messageSender.send(CogdaLiveDataSnapshotRequestBuilder.buildMessageStatic(new FudgeSerializer(getFudgeContext()), snapshotRequest));
           break;
+        default:
+          throw new OpenGammaRuntimeException("Unhandled subscription type " + handle.getSubscriptionType());
       }
     }
   }
@@ -320,7 +322,8 @@ public class CogdaLiveDataClient extends AbstractLiveDataClient implements Lifec
    * @param subHandle  the subscription handle, not null
    */
   private void dispatchSnapshotResponse(final FudgeMsg msg, final SubscriptionHandle subHandle) {
-    final CogdaLiveDataSnapshotResponseMessage responseMessage = CogdaLiveDataSnapshotResponseBuilder.buildObjectStatic(new FudgeDeserializer(getFudgeContext()), msg);
+    final CogdaLiveDataSnapshotResponseMessage responseMessage =
+        CogdaLiveDataSnapshotResponseBuilder.buildObjectStatic(new FudgeDeserializer(getFudgeContext()), msg);
     final LiveDataSpecification ldSpec = new LiveDataSpecification(responseMessage.getNormalizationScheme(), responseMessage.getSubscriptionId());
 
     final LiveDataSubscriptionResult ldsResult = responseMessage.getGenericResult().toLiveDataSubscriptionResult();
@@ -340,7 +343,8 @@ public class CogdaLiveDataClient extends AbstractLiveDataClient implements Lifec
    * @param subHandle  the subscription handle, not null
    */
   private void dispatchSubscriptionResponse(final FudgeMsg msg, final SubscriptionHandle subHandle) {
-    final CogdaLiveDataSubscriptionResponseMessage responseMessage = CogdaLiveDataSubscriptionResponseBuilder.buildObjectStatic(new FudgeDeserializer(getFudgeContext()), msg);
+    final CogdaLiveDataSubscriptionResponseMessage responseMessage =
+        CogdaLiveDataSubscriptionResponseBuilder.buildObjectStatic(new FudgeDeserializer(getFudgeContext()), msg);
     final LiveDataSpecification ldSpec = new LiveDataSpecification(responseMessage.getNormalizationScheme(), responseMessage.getSubscriptionId());
 
     final LiveDataSubscriptionResult ldsResult = responseMessage.getGenericResult().toLiveDataSubscriptionResult();
@@ -398,7 +402,7 @@ public class CogdaLiveDataClient extends AbstractLiveDataClient implements Lifec
 
   }
 
-  protected void login(final InputStream is) throws IOException {
+  protected void login(final InputStream is) {
     final ConnectionRequestMessage requestMessage = new ConnectionRequestMessage();
     requestMessage.setUserName(_user.getUserName());
     _messageSender.send(ConnectionRequestBuilder.buildMessageStatic(new FudgeSerializer(getFudgeContext()), requestMessage));
@@ -416,6 +420,8 @@ public class CogdaLiveDataClient extends AbstractLiveDataClient implements Lifec
       case NOT_AUTHORIZED:
         // REVIEW kirk 2012-08-15 -- Is this the right error?
         throw new OpenGammaRuntimeException("Server says NOT_AUTHORIZED");
+      default:
+        throw new OpenGammaRuntimeException("Cannot handle response result " + response.getResult());
     }
   }
 

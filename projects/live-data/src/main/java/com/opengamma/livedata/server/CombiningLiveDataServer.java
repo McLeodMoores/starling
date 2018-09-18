@@ -39,7 +39,7 @@ import com.opengamma.util.tuple.Pairs;
 import net.sf.ehcache.CacheManager;
 
 /**
- * A {@link StandardLiveDataServer} which delegates all the work to a set of {@link StandardLiveDataServer}
+ * A {@link StandardLiveDataServer} which delegates all the work to a set of {@link StandardLiveDataServer}.
  */
 public abstract class CombiningLiveDataServer extends StandardLiveDataServer {
 
@@ -106,7 +106,8 @@ public abstract class CombiningLiveDataServer extends StandardLiveDataServer {
         subscriptionRequest.getSpecifications(),
         new SubscribeAction() {
           @Override
-          public Collection<LiveDataSubscriptionResponse> subscribe(final StandardLiveDataServer server, final Collection<LiveDataSpecification> specifications) {
+          public Collection<LiveDataSubscriptionResponse> subscribe(final StandardLiveDataServer server,
+              final Collection<LiveDataSpecification> specifications) {
             final LiveDataSubscriptionRequest liveDataSubscriptionRequest = buildSubRequest(subscriptionRequest, specifications);
             //NOTE: we call up to subscriptionRequestMade to get the exception catching
             final LiveDataSubscriptionResponseMsg response = server.subscriptionRequestMade(liveDataSubscriptionRequest);
@@ -126,8 +127,10 @@ public abstract class CombiningLiveDataServer extends StandardLiveDataServer {
     return new LiveDataSubscriptionResponseMsg(subscriptionRequest.getUser(), responses);
   }
 
-  private LiveDataSubscriptionRequest buildSubRequest(final LiveDataSubscriptionRequest subscriptionRequest, final Collection<LiveDataSpecification> specifications) {
-    final LiveDataSubscriptionRequest liveDataSubscriptionRequest = new LiveDataSubscriptionRequest(subscriptionRequest.getUser(), subscriptionRequest.getType(), specifications);
+  private static LiveDataSubscriptionRequest buildSubRequest(final LiveDataSubscriptionRequest subscriptionRequest,
+      final Collection<LiveDataSpecification> specifications) {
+    final LiveDataSubscriptionRequest liveDataSubscriptionRequest =
+        new LiveDataSubscriptionRequest(subscriptionRequest.getUser(), subscriptionRequest.getType(), specifications);
     return liveDataSubscriptionRequest;
   }
 
@@ -138,7 +141,8 @@ public abstract class CombiningLiveDataServer extends StandardLiveDataServer {
   }
 
   private Collection<LiveDataSubscriptionResponse> subscribeByServer(final Collection<LiveDataSpecification> specifications, final SubscribeAction action) {
-    return forEachServer(specifications, new Function<Pair<StandardLiveDataServer, Collection<LiveDataSpecification>>, Collection<LiveDataSubscriptionResponse>>() {
+    return forEachServer(specifications,
+        new Function<Pair<StandardLiveDataServer, Collection<LiveDataSpecification>>, Collection<LiveDataSubscriptionResponse>>() {
       @Override
       public Collection<LiveDataSubscriptionResponse> apply(final Pair<StandardLiveDataServer, Collection<LiveDataSpecification>> input) {
         final StandardLiveDataServer specs = input.getFirst();
@@ -149,7 +153,8 @@ public abstract class CombiningLiveDataServer extends StandardLiveDataServer {
     });
   }
 
-  private <T> Collection<T> forEachServer(final Collection<LiveDataSpecification> specifications, final Function<Pair<StandardLiveDataServer, Collection<LiveDataSpecification>>, Collection<T>> operation) {
+  private <T> Collection<T> forEachServer(final Collection<LiveDataSpecification> specifications,
+      final Function<Pair<StandardLiveDataServer, Collection<LiveDataSpecification>>, Collection<T>> operation) {
     final Map<StandardLiveDataServer, Collection<LiveDataSpecification>> mapped = groupByServer(specifications);
 
     final Collection<Future<Collection<T>>> futures = new ArrayList<>(mapped.size());

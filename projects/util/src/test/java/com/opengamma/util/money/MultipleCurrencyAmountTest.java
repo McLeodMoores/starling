@@ -7,6 +7,7 @@ package com.opengamma.util.money;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertTrue;
 import static org.testng.AssertJUnit.assertSame;
 
@@ -62,61 +63,97 @@ public class MultipleCurrencyAmountTest {
     MULTIPLE = MultipleCurrencyAmount.of(CA_ARRAY);
   }
 
+  /**
+   * Tests that the currency cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullCurrency() {
     MultipleCurrencyAmount.of(null, A1);
   }
 
+  /**
+   * Tests that the currencies cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullCurrencyArray() {
     MultipleCurrencyAmount.of(null, A_ARRAY);
   }
 
+  /**
+   * Tests that the currency array cannot contain a null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullInCurrencyArray() {
     MultipleCurrencyAmount.of(new Currency[] {CCY1, null, CCY2 }, A_ARRAY);
   }
 
+  /**
+   * Tests that the amounts cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullAmountArray() {
     MultipleCurrencyAmount.of(CCY_ARRAY, null);
   }
 
+  /**
+   * Tests that the arrays must be the same length.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testWrongLengthAmountArray() {
-    MultipleCurrencyAmount.of(CCY_ARRAY, new double[] {A1, A2 });
+    MultipleCurrencyAmount.of(CCY_ARRAY, new double[] { A1, A2 });
   }
 
+  /**
+   * Tests that the currency list cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullCurrencyList() {
     MultipleCurrencyAmount.of(null, A_LIST);
   }
 
+  /**
+   * Tests that the currency list cannot contain a null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullInCurrencyList() {
     MultipleCurrencyAmount.of(Arrays.asList(CCY1, null, CCY2), A_LIST);
   }
 
+  /**
+   * Tests that the amount list cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullAmountList() {
     MultipleCurrencyAmount.of(CCY_LIST, null);
   }
 
+  /**
+   * Tests that the amount list cannot contain a null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullInAmountList() {
     MultipleCurrencyAmount.of(CCY_LIST, Arrays.asList(null, A2, A3));
   }
 
+  /**
+   * Tests that the lists must be the same size.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testWrongLengthAmountList() {
     MultipleCurrencyAmount.of(CCY_LIST, Arrays.asList(A1, A2));
   }
 
+  /**
+   * Tests that the map cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullMap() {
     MultipleCurrencyAmount.of((Map<Currency, Double>) null);
   }
 
+  /**
+   * Tests that there cannot be a null in the currency keys.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullCurrencyInMap() {
     final Map<Currency, Double> map = new HashMap<>();
@@ -126,6 +163,9 @@ public class MultipleCurrencyAmountTest {
     MultipleCurrencyAmount.of(map);
   }
 
+  /**
+   * Tests that there cannot be a null in the amount values.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullAmountInMap() {
     final Map<Currency, Double> map = new HashMap<>();
@@ -135,74 +175,116 @@ public class MultipleCurrencyAmountTest {
     MultipleCurrencyAmount.of(map);
   }
 
+  /**
+   * Tests that the currency amount array cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullCurrencyAmountArray() {
     MultipleCurrencyAmount.of((CurrencyAmount[]) null);
   }
 
+  /**
+   * Tests that the currency amount array cannot contain a null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullInCurrencyAmountArray() {
     MultipleCurrencyAmount.of(new CurrencyAmount[] {null, CA2, CA3 });
   }
 
+  /**
+   * Tests that the currency amount list cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullCurrencyAmountList() {
     MultipleCurrencyAmount.of((List<CurrencyAmount>) null);
   }
 
+  /**
+   * Tests that the currency amount list cannot contain a null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullInCurrencyAmountList() {
     MultipleCurrencyAmount.of(Arrays.asList(null, CA2, CA3));
   }
 
+  /**
+   * Tests that the currency amount set cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullCurrencyAmountSet() {
     MultipleCurrencyAmount.of((Set<CurrencyAmount>) null);
   }
 
+  /**
+   * Tests that the currency amount set cannot contain a null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullInCurrencyAmountSet() {
     MultipleCurrencyAmount.of(Sets.newHashSet(null, CA2, CA3));
   }
 
+  /**
+   * Tests that null is not allowed as an input.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testGetAmountNullCurrency() {
     MULTIPLE.getAmount(null);
   }
 
+  /**
+   * Tests the behaviour when there is no amount for a currency.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testGetAmountWrongCurrency() {
     MULTIPLE.getAmount(Currency.DEM);
   }
 
+  /**
+   * Tests that null is not allowed as an input.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testGetCurrencyAmountNullCurrency() {
     MULTIPLE.getCurrencyAmount(null);
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests that a null amount cannot be added.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testPlusNullCurrencyAmount() {
     MULTIPLE.plus((CurrencyAmount) null);
   }
 
+  /**
+   * Tests that the currency cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testPlusNullCurrency() {
     MULTIPLE.plus(null, A1);
   }
 
+  /**
+   * Tests that a null amount cannot be added.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testPlusNullMultipleCurrencyAmount() {
     MULTIPLE.plus((MultipleCurrencyAmount) null);
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests that null is not allowed as an input.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testWithoutNull() {
     MULTIPLE.without(null);
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests the object.
+   */
   @Test
   public void testObject() {
     assertEquals(MULTIPLE.size(), CA_LIST.size());
@@ -224,12 +306,18 @@ public class MultipleCurrencyAmountTest {
     assertTrue(MULTIPLE.equals(MULTIPLE));
   }
 
+  /**
+   * Tests the equals method.
+   */
   @Test
   public void testEqualsRubbish() {
-    assertFalse(MULTIPLE.equals(""));
-    assertFalse(MULTIPLE.equals(null));
+    assertNotEquals("", MULTIPLE);
+    assertNotEquals(null, MULTIPLE);
   }
 
+  /**
+   * Tests the toString method.
+   */
   @Test
   public void testToString() {
     assertTrue(MULTIPLE.toString().contains(CA1.toString()));
@@ -237,6 +325,9 @@ public class MultipleCurrencyAmountTest {
     assertTrue(MULTIPLE.toString().contains(CA3.toString()));
   }
 
+  /**
+   * Tests equivalence of constructors.
+   */
   @Test
   public void testConstructors() {
     assertEquals(MULTIPLE, MultipleCurrencyAmount.of(CCY_LIST, A_LIST));
@@ -246,6 +337,9 @@ public class MultipleCurrencyAmountTest {
     assertEquals(MULTIPLE, MultipleCurrencyAmount.of(CA_SET));
   }
 
+  /**
+   * Tests the constructors.
+   */
   @Test
   public void testStaticConstruction() {
     assertEquals(MultipleCurrencyAmount.of(CCY1, A1), MultipleCurrencyAmount.of(CCY1, A1));
@@ -256,6 +350,9 @@ public class MultipleCurrencyAmountTest {
     assertEquals(MULTIPLE, MultipleCurrencyAmount.of(CA_SET));
   }
 
+  /**
+   * Tests that repeated currency amounts are added.
+   */
   @Test
   public void testConstructionRepeatedCurrencies() {
     final CurrencyAmount ca4 = CurrencyAmount.of(CCY1, A1 * 2);
@@ -276,6 +373,9 @@ public class MultipleCurrencyAmountTest {
     assertSameData(expected, MultipleCurrencyAmount.of(caSet));
   }
 
+  /**
+   * Tests getting an amount for a currency.
+   */
   @Test
   public void testGetAmount() {
     for (int i = 0; i < CCY_ARRAY.length; i++) {
@@ -284,12 +384,18 @@ public class MultipleCurrencyAmountTest {
     }
   }
 
+  /**
+   * Tests that null is returned when there is no amount for a currency.
+   */
   @Test
   public void testGetCurrencyAmountWrongCurrency() {
     assertEquals(null, MULTIPLE.getCurrencyAmount(Currency.DEM));
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests addition of amounts.
+   */
   @Test
   public void testPlus1() {
     final double a = 117;
@@ -301,6 +407,9 @@ public class MultipleCurrencyAmountTest {
     assertSameData(expected, test);
   }
 
+  /**
+   * Tests addition of amounts.
+   */
   @Test
   public void testPlus2() {
     final double a = 117;
@@ -311,8 +420,11 @@ public class MultipleCurrencyAmountTest {
     assertSameData(expected, test);
   }
 
+  /**
+   * Tests addition of amounts.
+   */
   @Test
-  public void testPlus_CurrencyAmount() {
+  public void testPlusCurrencyAmount() {
     final CurrencyAmount ca = CurrencyAmount.of(Currency.AUD, 117);
     final CurrencyAmount cb = CurrencyAmount.of(Currency.USD, 12);
     final CurrencyAmount cc = CurrencyAmount.of(Currency.AUD, 3);
@@ -325,6 +437,9 @@ public class MultipleCurrencyAmountTest {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests multiplication of amounts.
+   */
   @Test
   public void testMultipliedBy() {
     final double factor = 2.5;
@@ -339,6 +454,9 @@ public class MultipleCurrencyAmountTest {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests removal of a currency.
+   */
   @Test
   public void testWithout() {
     final Set<CurrencyAmount> expected = Sets.newHashSet(CA1, CA3);
@@ -347,6 +465,9 @@ public class MultipleCurrencyAmountTest {
     assertSameData(expected, test);
   }
 
+  /**
+   * Tests removal of all currencies.
+   */
   @Test
   public void testWithoutToEmpty() {
     final Set<CurrencyAmount> expected = Sets.newHashSet();
@@ -355,6 +476,9 @@ public class MultipleCurrencyAmountTest {
     assertSameData(expected, test);
   }
 
+  /**
+   * Tests removal of all amounts.
+   */
   @Test
   public void testWithoutEmpty() {
     final Set<CurrencyAmount> expected = Sets.newHashSet();
@@ -363,12 +487,18 @@ public class MultipleCurrencyAmountTest {
     assertSameData(expected, test);
   }
 
+  /**
+   * Tests that there is no effect when removing a currency without a value.
+   */
   @Test
   public void testWithoutKeyNotPresent() {
     assertSame(MULTIPLE, MULTIPLE.without(Currency.DEM));
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests adding a currency.
+   */
   @Test
   public void testWith() {
     final double a = A2 * 10;
@@ -379,6 +509,9 @@ public class MultipleCurrencyAmountTest {
     assertSameData(expected, test);
   }
 
+  /**
+   * Tests adding a currency.
+   */
   @Test
   public void testWithKeyNotPresent() {
     final Set<CurrencyAmount> expected = Sets.newHashSet(CA1, CA2, CA3, CurrencyAmount.of(Currency.DEM, A1));
@@ -387,7 +520,13 @@ public class MultipleCurrencyAmountTest {
   }
 
   //-------------------------------------------------------------------------
-  private void assertSameData(final Set<CurrencyAmount> expected, final MultipleCurrencyAmount actual) {
+  /**
+   * Tests that the amounts are the same.
+   *
+   * @param expected  the expected values
+   * @param actual  the actual values
+   */
+  private static void assertSameData(final Set<CurrencyAmount> expected, final MultipleCurrencyAmount actual) {
     final CurrencyAmount[] amounts = actual.getCurrencyAmounts();
     assertEquals(amounts.length, expected.size());
     for (final CurrencyAmount amount : amounts) {

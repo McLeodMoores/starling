@@ -22,8 +22,6 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Receives <code>ResolveRequests</code>, passes them onto a delegate <code>IdResolver</code>,
  * and returns <code>ResolveResponses</code>.
- *
- * @author pietari
  */
 public class IdResolverServer implements FudgeRequestReceiver {
 

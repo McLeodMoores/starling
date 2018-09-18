@@ -20,7 +20,7 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import com.opengamma.id.ExternalId;
 
 /**
- *
+ * Response from a live data server producing Cogda responses.
  */
 @BeanDefinition
 public abstract class CogdaLiveDataCommandResponseMessage extends CogdaCommandResponseMessage {

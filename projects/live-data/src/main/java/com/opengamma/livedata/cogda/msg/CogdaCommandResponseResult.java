@@ -1,10 +1,11 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.livedata.cogda.msg;
 
+import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.livedata.msg.LiveDataSubscriptionResult;
 
 /**
@@ -38,6 +39,8 @@ public enum CogdaCommandResponseResult {
       case SUCCESSFUL:
         ldsResult = LiveDataSubscriptionResult.SUCCESS;
         break;
+      default:
+        throw new OpenGammaRuntimeException("Unhandled response result " + this);
     }
 
     return ldsResult;

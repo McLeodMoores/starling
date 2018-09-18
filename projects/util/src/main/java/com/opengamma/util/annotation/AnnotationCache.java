@@ -109,6 +109,12 @@ public final class AnnotationCache {
     return classes;
   }
 
+  /**
+   * Gets the cache file name by using the annotation class simple name.
+   *
+   * @param annotationClass  the annotation class
+   * @return  the file name
+   */
   protected static String getCacheFileName(final Class<? extends Annotation> annotationClass) {
     return "." + annotationClass.getSimpleName();
   }
@@ -126,9 +132,9 @@ public final class AnnotationCache {
       LOGGER.warn("No cache path set in system property {}", CACHE_PATH_PROPERTY);
       return new AnnotationCache(Instant.EPOCH, annotationClass);
     }
-    final File cacheFile = new File(new File(path), getCacheFileName(annotationClass));
-    try {
-      final BufferedReader br = new BufferedReader(new FileReader(cacheFile));
+    final String fileName = getCacheFileName(annotationClass);
+    final File cacheFile = new File(new File(path), fileName);
+    try (BufferedReader br = new BufferedReader(new FileReader(cacheFile))) {
       String str = br.readLine();
       final AnnotationCache cache = new AnnotationCache(Instant.ofEpochMilli(Long.parseLong(str.trim())), annotationClass);
       while ((str = br.readLine()) != null) {
@@ -140,7 +146,7 @@ public final class AnnotationCache {
       br.close();
       return cache;
     } catch (final Throwable t) {
-      LOGGER.warn("Couldn't read cache file", t);
+      LOGGER.warn("Couldn't read cache file " + fileName, t);
       return new AnnotationCache(Instant.EPOCH, annotationClass);
     }
   }
@@ -155,8 +161,7 @@ public final class AnnotationCache {
       return;
     }
     final File cacheFile = new File(new File(path), getCacheFileName());
-    try {
-      final PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(cacheFile)));
+    try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(cacheFile)))) {
       pw.println(getTimestamp().toEpochMilli());
       for (final String className : getClassNames()) {
         pw.println(className);
