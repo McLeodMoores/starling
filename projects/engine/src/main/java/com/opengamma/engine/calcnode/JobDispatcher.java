@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode;
@@ -37,9 +37,9 @@ public class JobDispatcher implements JobInvokerRegister {
   /* package */static final long DEFAULT_MAX_JOB_EXECUTION_QUERY_TIMEOUT = 5000;
   /* package */static final String DEFAULT_JOB_FAILURE_NODE_ID = "NOT EXECUTED";
 
-  private final Queue<DispatchableJob> _pending = new LinkedList<DispatchableJob>();
-  private final Queue<JobInvoker> _invokers = new ConcurrentLinkedQueue<JobInvoker>();
-  private final Map<JobInvoker, Collection<Capability>> _capabilityCache = new ConcurrentHashMap<JobInvoker, Collection<Capability>>();
+  private final Queue<DispatchableJob> _pending = new LinkedList<>();
+  private final Queue<JobInvoker> _invokers = new ConcurrentLinkedQueue<>();
+  private final Map<JobInvoker, Collection<Capability>> _capabilityCache = new ConcurrentHashMap<>();
 
   /**
    * Maximum number of times a job will be submitted in its entirety to remote nodes before it gets partitioned to isolate an individual failure.
@@ -67,7 +67,7 @@ public class JobDispatcher implements JobInvokerRegister {
   }
 
   public JobDispatcher(final Collection<JobInvoker> invokers) {
-    for (JobInvoker invoker : invokers) {
+    for (final JobInvoker invoker : invokers) {
       registerJobInvoker(invoker);
     }
   }
@@ -109,7 +109,7 @@ public class JobDispatcher implements JobInvokerRegister {
    * Sets the maximum time for a job to be with an invoker in milliseconds. To disable the upper limit,
    * pass 0 or negative. This doesn't affect jobs already launched; only ones that are invoked after
    * the call.
-   * 
+   *
    * @param maxJobExecutionTime time in milliseconds
    */
   public synchronized void setMaxJobExecutionTime(final long maxJobExecutionTime) {
@@ -195,8 +195,10 @@ public class JobDispatcher implements JobInvokerRegister {
     }
   }
 
-  // TODO [ENG-42] schedule retryPending to be called periodically with failJobsBefore set to `System.nanoTime() - a timeout` to cancel jobs which can't be executed at all
-  // TODO [ENG-42] the invoker selection logic is inefficient; it's likely that capability requirements objects won't vary much so comparison against the capabilities of invokers should be cached
+  // TODO [ENG-42] schedule retryPending to be called periodically with failJobsBefore set to `System.nanoTime() - a timeout`
+  // to cancel jobs which can't be executed at all
+  // TODO [ENG-42] the invoker selection logic is inefficient; it's likely that capability requirements objects won't vary
+  // much so comparison against the capabilities of invokers should be cached
   // TODO [ENG-42] job dispatch should not be O(n) on number of invokers; the caching of capabilities should allow a nearer O(1) selection
 
   // caller must already own monitor
@@ -223,7 +225,7 @@ public class JobDispatcher implements JobInvokerRegister {
             if (jobInvoker.notifyWhenAvailable(this)) {
               LOGGER.info("Invoker {} requested immediate retry", jobInvoker);
               if (retry == null) {
-                retry = new LinkedList<JobInvoker>();
+                retry = new LinkedList<>();
               }
               retry.add(jobInvoker);
             }
@@ -257,7 +259,7 @@ public class JobDispatcher implements JobInvokerRegister {
    * main job. If the job had a tail, a callback will also occur for each tail job. The {@link Cancellable}
    * callback returned may be used to abort operation. If operation is aborted, results may still be received
    * if they were too far in the pipeline to be stopped.
-   * 
+   *
    * @param job The job to dispatch
    * @param resultReceiver callback to receive the results
    * @return A {@link Cancellable} callback to attempt to abort the job
@@ -273,12 +275,12 @@ public class JobDispatcher implements JobInvokerRegister {
 
   /**
    * Returns capabilities from all available invokers.
-   * 
+   *
    * @return Map of invoker identifier to capability set.
    */
   public Map<String, Collection<Capability>> getAllCapabilities() {
     final Iterator<Map.Entry<JobInvoker, Collection<Capability>>> invokerCapabilityIterator = getCapabilityCache().entrySet().iterator();
-    final Map<String, Collection<Capability>> result = new HashMap<String, Collection<Capability>>();
+    final Map<String, Collection<Capability>> result = new HashMap<>();
     while (invokerCapabilityIterator.hasNext()) {
       final Map.Entry<JobInvoker, Collection<Capability>> invokerCapability = invokerCapabilityIterator.next();
       final String identifier = invokerCapability.getKey().getInvokerId();

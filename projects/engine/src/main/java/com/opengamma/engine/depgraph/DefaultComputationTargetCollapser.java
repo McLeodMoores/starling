@@ -43,7 +43,7 @@ public class DefaultComputationTargetCollapser implements ComputationTargetColla
 
   }
 
-  private final ComputationTargetTypeMap<ComputationTargetCollapser> _collapsers = new ComputationTargetTypeMap<ComputationTargetCollapser>(
+  private final ComputationTargetTypeMap<ComputationTargetCollapser> _collapsers = new ComputationTargetTypeMap<>(
       new Function2<ComputationTargetCollapser, ComputationTargetCollapser, ComputationTargetCollapser>() {
         @Override
         public ComputationTargetCollapser execute(final ComputationTargetCollapser a, final ComputationTargetCollapser b) {
@@ -74,13 +74,13 @@ public class DefaultComputationTargetCollapser implements ComputationTargetColla
     final ComputationTargetCollapser collapser = getCollapser(target.getType());
     if (collapser != null) {
       return collapser.canApplyTo(target);
-    } else {
-      return false;
     }
+    return false;
   }
 
   @Override
-  public ComputationTargetSpecification collapse(final CompiledFunctionDefinition function, final ComputationTargetSpecification a, final ComputationTargetSpecification b) {
+  public ComputationTargetSpecification collapse(final CompiledFunctionDefinition function, final ComputationTargetSpecification a,
+      final ComputationTargetSpecification b) {
     // A and B are the same type, and the type must have been matched for canApplyTo to return true
     return getCollapser(a.getType()).collapse(function, a, b);
   }

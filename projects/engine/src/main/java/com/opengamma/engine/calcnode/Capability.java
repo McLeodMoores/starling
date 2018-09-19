@@ -107,26 +107,22 @@ public final class Capability implements Comparable<Capability> {
     } else {
       if (o.getLowerBoundParameter() == null) {
         return 1;
-      } else {
-        cmp = getLowerBoundParameter().compareTo(o.getLowerBoundParameter());
-        if (cmp != 0) {
-          return cmp;
-        }
+      }
+      cmp = getLowerBoundParameter().compareTo(o.getLowerBoundParameter());
+      if (cmp != 0) {
+        return cmp;
       }
     }
     if (getUpperBoundParameter() != null) {
       if (o.getUpperBoundParameter() != null) {
         return getUpperBoundParameter().compareTo(o.getUpperBoundParameter());
-      } else {
-        return -1;
       }
-    } else {
-      if (o.getUpperBoundParameter() != null) {
-        return 1;
-      } else {
-        return 0;
-      }
+      return -1;
     }
+    if (o.getUpperBoundParameter() != null) {
+      return 1;
+    }
+    return 0;
   }
 
 }

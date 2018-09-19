@@ -43,7 +43,7 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
     private final DeferredStatistics _statistics;
     private final PendingLock _owner;
 
-    public Entry(final ComputedValue value, final DeferredStatistics statistics, final PendingLock owner) {
+    Entry(final ComputedValue value, final DeferredStatistics statistics, final PendingLock owner) {
       _value = value;
       _statistics = statistics;
       _owner = owner;
@@ -67,7 +67,7 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
 
     private final Collection<Entry> _underlying;
 
-    public ComputedValueCollection(final Collection<Entry> underlying) {
+    ComputedValueCollection(final Collection<Entry> underlying) {
       _underlying = underlying;
     }
 
@@ -107,7 +107,7 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
     private int _count;
     private ResultCallback<Void> _callback;
 
-    public PendingLock(final int count) {
+    PendingLock(final int count) {
       _count = count;
     }
 
@@ -183,9 +183,10 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
   private final ViewComputationCache _underlying;
   private final ExecutorService _executorService;
   /**
-   * The in memory map contains all entries that are in the queues and have not been written to the underlying yet as well as values that have been retrieved from the underlying. Use of a soft
-   * reference on the values will keep the values in memory for as long as possible so that the serialization/deserialization overhead of the underlying can probably be avoided for frequently used
-   * objects.
+   * The in memory map contains all entries that are in the queues and have not been written to the underlying yet as well
+   * as values that have been retrieved from the underlying. Use of a soft reference on the values will keep the values
+   * in memory for as long as possible so that the serialization/deserialization overhead of the underlying can probably
+   * be avoided for frequently used objects.
    */
   private final Map<ValueSpecification, Object> _buffer = new MapMaker().softValues().makeMap();
   private final Queue<Entry> _pendingPrivateValues;
@@ -287,7 +288,8 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
 
   };
 
-  public WriteBehindViewComputationCache(final ViewComputationCache underlying, final ExecutorService executorService, final boolean useShared, final boolean usePrivate) {
+  public WriteBehindViewComputationCache(final ViewComputationCache underlying, final ExecutorService executorService,
+      final boolean useShared, final boolean usePrivate) {
     ArgumentChecker.notNull(underlying, "underlying");
     ArgumentChecker.notNull(executorService, "executorService");
     _underlying = underlying;
@@ -646,6 +648,7 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
       case VALUE_WRITER_FAILED:
         LOGGER.error("Writer already failed at flush: {}", _valueWriterFault.getMessage());
         throw _valueWriterFault;
+      default:
     }
     final PendingLock write = _pendingWrites.remove(Thread.currentThread());
     if (write == null || write.isZero()) {

@@ -8,7 +8,7 @@ package com.opengamma.engine.view.listener;
 import com.google.common.base.Function;
 
 /**
- * Represents a call to {@link ViewResultListener#clientShutdown(Exception)}
+ * Represents a call to {@link ViewResultListener#clientShutdown(Exception)}.
  */
 public class ClientShutdownCall implements Function<ViewResultListener, Object> {
 

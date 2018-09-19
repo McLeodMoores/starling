@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.blacklist;
@@ -59,14 +59,14 @@ public class DefaultFunctionBlacklistMaintainerTest {
   public void testSimplePolicy() {
     final ExecutorService executor = Executors.newSingleThreadExecutor();
     try {
-      final Collection<FunctionBlacklistPolicy.Entry> entries = new ArrayList<FunctionBlacklistPolicy.Entry>();
+      final Collection<FunctionBlacklistPolicy.Entry> entries = new ArrayList<>();
       entries.add(FunctionBlacklistPolicy.Entry.WILDCARD.activationPeriod(5));
       entries.add(FunctionBlacklistPolicy.Entry.FUNCTION.activationPeriod(10));
       entries.add(FunctionBlacklistPolicy.Entry.PARAMETERIZED_FUNCTION.activationPeriod(30));
       entries.add(FunctionBlacklistPolicy.Entry.PARTIAL_NODE.activationPeriod(60));
       entries.add(FunctionBlacklistPolicy.Entry.EXECUTION_NODE);
       final FunctionBlacklistPolicy policy = new DefaultFunctionBlacklistPolicy(UniqueId.of("Test", "Test"), 120, entries);
-      final Map<FunctionBlacklistRule, Integer> rules = new HashMap<FunctionBlacklistRule, Integer>();
+      final Map<FunctionBlacklistRule, Integer> rules = new HashMap<>();
       final ManageableFunctionBlacklist update = new AbstractManageableFunctionBlacklist("Test", executor, 0) {
 
         @Override

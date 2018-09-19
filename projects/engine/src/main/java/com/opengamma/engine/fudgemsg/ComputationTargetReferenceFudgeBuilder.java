@@ -123,13 +123,12 @@ public class ComputationTargetReferenceFudgeBuilder implements FudgeBuilder<Comp
       final FudgeField typeFieldName = message.getByName(TYPE_FIELD_NAME);
       if (identifierFieldName == null) {
       return ComputationTargetSpecification.NULL;
-      } else {
-        final Object identifierFieldValue = identifierFieldName.getValue();
-        if (typeFieldName.getValue().equals("NULL") && identifierFieldValue instanceof FudgeMsg && ((FudgeMsg) identifierFieldValue).isEmpty()) {
-          return ComputationTargetSpecification.NULL;
-        }
-        return new ComputationTargetRequirement(type, ExternalIdBundle.EMPTY);
       }
+      final Object identifierFieldValue = identifierFieldName.getValue();
+      if (typeFieldName.getValue().equals("NULL") && identifierFieldValue instanceof FudgeMsg && ((FudgeMsg) identifierFieldValue).isEmpty()) {
+        return ComputationTargetSpecification.NULL;
+      }
+      return new ComputationTargetRequirement(type, ExternalIdBundle.EMPTY);
     } else if (types.isEmpty()) {
       FudgeField field = identifierFieldName;
       if (field == null) {
@@ -137,9 +136,8 @@ public class ComputationTargetReferenceFudgeBuilder implements FudgeBuilder<Comp
       }
       if (field.getValue() instanceof FudgeMsg) {
         return new ComputationTargetRequirement(type, deserializer.fieldValueToObject(ExternalIdBundle.class, field));
-      } else {
-        return new ComputationTargetSpecification(type, message.getFieldValue(UniqueId.class, field));
       }
+      return new ComputationTargetSpecification(type, message.getFieldValue(UniqueId.class, field));
     } else {
       ComputationTargetReference result = null;
       final Iterator<ComputationTargetType> itrType = types.iterator();

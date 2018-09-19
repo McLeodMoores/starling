@@ -94,10 +94,10 @@ public class CSVPositionSource implements PositionSource {
    */
   public CSVPositionSource(final File baseDirectory) {
     ArgumentChecker.notNull(baseDirectory, "base directory");
-    if (baseDirectory.exists() == false) {
+    if (!baseDirectory.exists()) {
       throw new IllegalArgumentException("Base directory must exist: " + baseDirectory);
     }
-    if (baseDirectory.isDirectory() == false) {
+    if (!baseDirectory.isDirectory()) {
       throw new IllegalArgumentException("Base directory must be a directory: " + baseDirectory);
     }
     try {
@@ -114,7 +114,7 @@ public class CSVPositionSource implements PositionSource {
   private void populatePortfolioIds() {
     final File[] filesInBaseDirectory = getBaseDirectory().listFiles();
     for (final File file : filesInBaseDirectory) {
-      if (file.isFile() == false || file.isHidden() || file.canRead() == false) {
+      if (!file.isFile() || file.isHidden() || !file.canRead()) {
         continue;
       }
       final String portfolioName = buildPortfolioName(file.getName());

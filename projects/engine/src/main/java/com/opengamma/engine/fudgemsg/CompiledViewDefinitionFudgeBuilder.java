@@ -26,7 +26,7 @@ import com.opengamma.engine.view.compilation.CompiledViewDefinitionImpl;
 import com.opengamma.id.VersionCorrection;
 
 /**
- * Fudge message builder for {@link CompiledViewDefinition}
+ * Fudge message builder for {@link CompiledViewDefinition}.
  */
 @GenericFudgeBuilderFor(CompiledViewDefinition.class)
 public class CompiledViewDefinitionFudgeBuilder implements FudgeBuilder<CompiledViewDefinition> {
@@ -76,7 +76,8 @@ public class CompiledViewDefinitionFudgeBuilder implements FudgeBuilder<Compiled
     final Instant earliestValidity = earliestValidityField != null ? deserializer.fieldValueToObject(Instant.class, earliestValidityField) : null;
     final FudgeField latestValidityField = message.getByName(LATEST_VALIDITY_FIELD);
     final Instant latestValidity = latestValidityField != null ? deserializer.fieldValueToObject(Instant.class, latestValidityField) : null;
-    return new CompiledViewDefinitionImpl(versionCorrection, compilationId, viewDefinition, portfolio, compiledCalculationConfigurations, earliestValidity, latestValidity);
+    return new CompiledViewDefinitionImpl(versionCorrection, compilationId, viewDefinition, portfolio, compiledCalculationConfigurations,
+        earliestValidity, latestValidity);
   }
 
 }

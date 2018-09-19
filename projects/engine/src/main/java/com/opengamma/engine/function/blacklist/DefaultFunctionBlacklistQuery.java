@@ -308,33 +308,28 @@ public class DefaultFunctionBlacklistQuery extends AbstractFunctionBlacklistQuer
         case FUNCTION_IDENTIFIER:
           if (rule.getFunctionIdentifier() != null) {
             return removeEntry(rule, rule.getFunctionIdentifier());
-          } else {
-            return removeWildcard(rule);
           }
+          return removeWildcard(rule);
         case FUNCTION_PARAMETERS:
           if (rule.getFunctionParameters() != null) {
             return removeEntry(rule, rule.getFunctionParameters());
-          } else {
-            return removeWildcard(rule);
           }
+          return removeWildcard(rule);
         case TARGET:
           if (rule.getTarget() != null) {
             return removeEntry(rule, rule.getTarget());
-          } else {
-            return removeWildcard(rule);
           }
+          return removeWildcard(rule);
         case INPUTS:
           if (rule.getInputs() != null) {
             return removeEntry(rule, rule.getInputs());
-          } else {
-            return removeWildcard(rule);
           }
+          return removeWildcard(rule);
         case OUTPUTS:
           if (rule.getOutputs() != null) {
             return removeEntry(rule, rule.getOutputs());
-          } else {
-            return removeWildcard(rule);
           }
+          return removeWildcard(rule);
         default:
           throw new IllegalStateException();
       }
@@ -488,9 +483,8 @@ public class DefaultFunctionBlacklistQuery extends AbstractFunctionBlacklistQuer
       final PivotField pivot = nextPivotField(unpivoted);
       if (unpivoted == pivot.mask()) {
         return new LeafTreeEntry(pivot);
-      } else {
-        return new MidTreeEntry(pivot);
       }
+      return new MidTreeEntry(pivot);
     }
 
     @Override
@@ -530,18 +524,15 @@ public class DefaultFunctionBlacklistQuery extends AbstractFunctionBlacklistQuer
         if (next != null) {
           if (next.remove(rule)) {
             return true;
-          } else {
-            values = new HashMap<>(values);
-            values.remove(key);
-            _values = values;
-            return _wildcard != null || !values.isEmpty();
           }
-        } else {
-          throw new IllegalStateException("Rule " + rule + " not in the collection");
+          values = new HashMap<>(values);
+          values.remove(key);
+          _values = values;
+          return _wildcard != null || !values.isEmpty();
         }
-      } else {
         throw new IllegalStateException("Rule " + rule + " not in the collection");
       }
+      throw new IllegalStateException("Rule " + rule + " not in the collection");
     }
 
     @Override
@@ -550,14 +541,12 @@ public class DefaultFunctionBlacklistQuery extends AbstractFunctionBlacklistQuer
       if (wildcard != null) {
         if (wildcard.remove(rule)) {
           return true;
-        } else {
-          _wildcard = null;
-          final Map<Object, TreeEntry> values = _values;
-          return values != null && !values.isEmpty();
         }
-      } else {
-        throw new IllegalStateException("Rule " + rule + " not in the collection");
+        _wildcard = null;
+        final Map<Object, TreeEntry> values = _values;
+        return values != null && !values.isEmpty();
       }
+      throw new IllegalStateException("Rule " + rule + " not in the collection");
     }
 
   }
@@ -768,12 +757,10 @@ public class DefaultFunctionBlacklistQuery extends AbstractFunctionBlacklistQuer
         if (values.remove(key)) {
           _values = values;
           return _wildcard > 0 || !values.isEmpty();
-        } else {
-          throw new IllegalStateException("Rule " + rule + " not in the collection");
         }
-      } else {
         throw new IllegalStateException("Rule " + rule + " not in the collection");
       }
+      throw new IllegalStateException("Rule " + rule + " not in the collection");
     }
 
     @Override
@@ -783,9 +770,8 @@ public class DefaultFunctionBlacklistQuery extends AbstractFunctionBlacklistQuer
         _wildcard = wildcard - 1;
         final Set<Object> values = _values;
         return wildcard > 1 || values != null && !values.isEmpty();
-      } else {
-        throw new IllegalStateException("Rule " + rule + " not in the collection");
       }
+      throw new IllegalStateException("Rule " + rule + " not in the collection");
     }
 
   }

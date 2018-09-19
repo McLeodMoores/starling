@@ -74,9 +74,8 @@ public class ComputationTargetFudgeBuilder implements FudgeBuilder<ComputationTa
     if (valueType != null) {
       final UniqueIdentifiable value = deserializer.fieldValueToObject(valueType, message.getByName(VALUE_FIELD));
       return new ComputationTarget(specification, value);
-    } else {
-      return ComputationTarget.NULL;
     }
+    return ComputationTarget.NULL;
   }
 
 }

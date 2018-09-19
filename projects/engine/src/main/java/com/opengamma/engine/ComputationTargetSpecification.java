@@ -32,8 +32,9 @@ public final class ComputationTargetSpecification extends ComputationTargetRefer
   // [PLAT-444]: move to com.opengamma.engine.target
 
   /**
-   * An specification that describes a target value of null. This will always be resolved to a {@link ComputationTarget} that contains a type of {@link ComputationTargetType#NULL} and a null value. It
-   * can be used when the function is self describing and can gain no behavioral information from the target.
+   * An specification that describes a target value of null. This will always be resolved to a {@link ComputationTarget} that contains a
+   * type of {@link ComputationTargetType#NULL} and a null value. It can be used when the function is self describing and can gain no
+   * behavioral information from the target.
    */
   public static final ComputationTargetSpecification NULL = MemoryUtils.instance(new ComputationTargetSpecification(ComputationTargetType.NULL, null));
 
@@ -46,7 +47,7 @@ public final class ComputationTargetSpecification extends ComputationTargetRefer
 
   /**
    * Creates a lightweight specification of a computation target.
-   * 
+   *
    * @param targetType the type of the target, not null
    * @param uid the target identifier, may be null for the {@link ComputationTargetType#NULL} target type only
    */
@@ -60,19 +61,19 @@ public final class ComputationTargetSpecification extends ComputationTargetRefer
     _uniqueId = uid;
   }
 
-  public/* [PLAT-444]: should be package visible */ComputationTargetSpecification(final ComputationTargetType type, final UniqueId uid, final ComputationTargetReference parent) {
+  public ComputationTargetSpecification(final ComputationTargetType type, final UniqueId uid, final ComputationTargetReference parent) {
     super(type, parent);
     _uniqueId = uid;
   }
 
-  public/* [PLAT-444]: should be package visible */ComputationTargetSpecification(final ComputationTargetReference parent, final ComputationTargetType type, final UniqueId uid) {
+  public ComputationTargetSpecification(final ComputationTargetReference parent, final ComputationTargetType type, final UniqueId uid) {
     super(parent, type);
     _uniqueId = uid;
   }
 
   /**
    * Creates a specification that will reference a portfolio node.
-   * 
+   *
    * @param portfolioNode the node that will be the target, not null
    * @return the target specification, not null
    */
@@ -82,7 +83,7 @@ public final class ComputationTargetSpecification extends ComputationTargetRefer
 
   /**
    * Creates a specification that will reference a position.
-   * 
+   *
    * @param position the position that will be the target, not null
    * @return the target specification, not null
    */
@@ -92,7 +93,7 @@ public final class ComputationTargetSpecification extends ComputationTargetRefer
 
   /**
    * Creates a specification that will reference a security.
-   * 
+   *
    * @param security the security that will be the target, not null
    * @return the target specification, not null
    */
@@ -102,7 +103,7 @@ public final class ComputationTargetSpecification extends ComputationTargetRefer
 
   /**
    * Creates a specification that will reference a trade.
-   * 
+   *
    * @param trade the trade that will be the target, not null
    * @return the target specification, not null
    */
@@ -111,9 +112,9 @@ public final class ComputationTargetSpecification extends ComputationTargetRefer
   }
 
   /**
-   * Creates a specification that describes a currency. A currency may be used as an arbitrary parameter to a function, for example one that provides curve definitions or other meta data that is keyed
-   * by currency.
-   * 
+   * Creates a specification that describes a currency. A currency may be used as an arbitrary parameter to a function,
+   * for example one that provides curve definitions or other meta data that is keyed by currency.
+   *
    * @param currency the currency described, not null
    * @return the target specification, not null
    */
@@ -122,9 +123,9 @@ public final class ComputationTargetSpecification extends ComputationTargetRefer
   }
 
   /**
-   * Creates a specification that describes a credit curve identifier. A credit curve identifier may be used as an arbitrary parameter to a function, for example one that provides spread curve
-   * definitions or other meta data that is keyed by id.
-   * 
+   * Creates a specification that describes a credit curve identifier. A credit curve identifier may be used as an arbitrary
+   * parameter to a function, for example one that provides spread curve definitions or other meta data that is keyed by id.
+   *
    * @param creditCurveIdentifier the credit curve identifier described, not null
    * @return the target specification, not null
    */
@@ -133,8 +134,9 @@ public final class ComputationTargetSpecification extends ComputationTargetRefer
   }
 
   /**
-   * Creates a specification that describes an arbitrary target. The unique identifier is not resolved to a target but will be presented as an arbitrary parameter to a function.
-   * 
+   * Creates a specification that describes an arbitrary target. The unique identifier is not resolved to a target but will
+   * be presented as an arbitrary parameter to a function.
+   *
    * @param uniqueId the identifier to hold, not null
    * @return the target specification, not null
    */
@@ -144,7 +146,7 @@ public final class ComputationTargetSpecification extends ComputationTargetRefer
 
   /**
    * Gets the unique identifier, if one exists.
-   * 
+   *
    * @return the unique identifier, may be null if the target type is {@link ComputationTargetType#NULL}
    */
   public UniqueId getUniqueId() {
@@ -152,8 +154,9 @@ public final class ComputationTargetSpecification extends ComputationTargetRefer
   }
 
   /**
-   * Tests if this specification is compatible with another. To be compatible, the target types must be compatible and the unique identifier chain match at each level.
-   * 
+   * Tests if this specification is compatible with another. To be compatible, the target types must be compatible and the
+   * unique identifier chain match at each level.
+   *
    * @param other the target specification to test against, not null
    * @return true if the object described by the supplied specification is suitable for this specification
    */
@@ -196,9 +199,8 @@ public final class ComputationTargetSpecification extends ComputationTargetRefer
   protected String getIdStringImpl() {
     if (getUniqueId() != null) {
       return getUniqueId().toString();
-    } else {
-      return "NULL";
     }
+    return "NULL";
   }
 
   @Override

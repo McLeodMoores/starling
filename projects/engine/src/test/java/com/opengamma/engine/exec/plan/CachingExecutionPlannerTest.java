@@ -76,8 +76,8 @@ public class CachingExecutionPlannerTest {
       final NodeBuilder nb = gb.addNode(new MockFunction("Foo" + i, new ComputationTarget(ComputationTargetType.PRIMITIVE, UniqueId.of("Test", "X"))));
       if (i > 0) {
         nb.addOutput(Integer.toString(i));
-        nb.addInput(new ValueSpecification(Integer.toString(i - 1), ComputationTargetSpecification.of(UniqueId.of("Test", "X")), ValueProperties.with(ValuePropertyNames.FUNCTION, "Foo" + (i - 1))
-            .get()));
+        nb.addInput(new ValueSpecification(Integer.toString(i - 1), ComputationTargetSpecification.of(UniqueId.of("Test", "X")),
+            ValueProperties.with(ValuePropertyNames.FUNCTION, "Foo" + (i - 1)).get()));
       } else {
         nb.addTerminalOutput("0");
       }
@@ -85,15 +85,17 @@ public class CachingExecutionPlannerTest {
     return gb;
   }
 
-  public void testCacheKey_same() {
-    final CacheKey ak = new CacheKey(testGraphBuilder("Default").buildGraph(), 0, Collections.<ValueSpecification>emptySet(), Collections.<ValueSpecification, FunctionParameters>emptyMap());
-    final CacheKey bk = new CacheKey(testGraphBuilder("Default").buildGraph(), 0, Collections.<ValueSpecification>emptySet(), Collections.<ValueSpecification, FunctionParameters>emptyMap());
+  public void testCacheKeySame() {
+    final CacheKey ak = new CacheKey(testGraphBuilder("Default").buildGraph(), 0, Collections.<ValueSpecification>emptySet(),
+        Collections.<ValueSpecification, FunctionParameters>emptyMap());
+    final CacheKey bk = new CacheKey(testGraphBuilder("Default").buildGraph(), 0, Collections.<ValueSpecification>emptySet(),
+        Collections.<ValueSpecification, FunctionParameters>emptyMap());
     assertTrue(ak.equals(bk));
     assertTrue(bk.equals(ak));
     assertEquals(ak.hashCode(), bk.hashCode());
   }
 
-  public void testCacheKey_graph1() {
+  public void testCacheKeyGraph1() {
     final DependencyGraph a = testGraphBuilder("A").buildGraph();
     final DependencyGraph b = testGraphBuilder("B").buildGraph();
     assertFalse(a.equals(b));
@@ -104,7 +106,7 @@ public class CachingExecutionPlannerTest {
     assertFalse(bk.equals(ak));
   }
 
-  public void testCacheKey_initId() {
+  public void testCacheKeyInitId() {
     final DependencyGraph graph = testGraphBuilder("Default").buildGraph();
     final CacheKey ak = new CacheKey(graph, 1, Collections.<ValueSpecification>emptySet(), Collections.<ValueSpecification, FunctionParameters>emptyMap());
     final CacheKey bk = new CacheKey(graph, 2, Collections.<ValueSpecification>emptySet(), Collections.<ValueSpecification, FunctionParameters>emptyMap());
@@ -112,40 +114,48 @@ public class CachingExecutionPlannerTest {
     assertFalse(bk.equals(ak));
   }
 
-  public void testCacheKey_graph2() {
+  public void testCacheKeyGraph2() {
     final TestDependencyGraphBuilder a = testGraphBuilder("Default");
-    a.addTerminalOutput(new ValueSpecification("1", ComputationTargetSpecification.of(UniqueId.of("Test", "X")), ValueProperties.with(ValuePropertyNames.FUNCTION, "Foo1").get()),
+    a.addTerminalOutput(new ValueSpecification("1", ComputationTargetSpecification.of(UniqueId.of("Test", "X")),
+        ValueProperties.with(ValuePropertyNames.FUNCTION, "Foo1").get()),
         Collections.singleton(new ValueRequirement("1", ComputationTargetSpecification.of(UniqueId.of("Test", "X")))));
     final TestDependencyGraphBuilder b = testGraphBuilder("Default");
-    b.addTerminalOutput(new ValueSpecification("2", ComputationTargetSpecification.of(UniqueId.of("Test", "X")), ValueProperties.with(ValuePropertyNames.FUNCTION, "Foo2").get()),
+    b.addTerminalOutput(new ValueSpecification("2", ComputationTargetSpecification.of(UniqueId.of("Test", "X")),
+        ValueProperties.with(ValuePropertyNames.FUNCTION, "Foo2").get()),
         Collections.singleton(new ValueRequirement("2", ComputationTargetSpecification.of(UniqueId.of("Test", "X")))));
-    final CacheKey ak = new CacheKey(a.buildGraph(), 0, Collections.<ValueSpecification>emptySet(), Collections.<ValueSpecification, FunctionParameters>emptyMap());
-    final CacheKey bk = new CacheKey(b.buildGraph(), 0, Collections.<ValueSpecification>emptySet(), Collections.<ValueSpecification, FunctionParameters>emptyMap());
+    final CacheKey ak = new CacheKey(a.buildGraph(), 0, Collections.<ValueSpecification>emptySet(),
+        Collections.<ValueSpecification, FunctionParameters>emptyMap());
+    final CacheKey bk = new CacheKey(b.buildGraph(), 0, Collections.<ValueSpecification>emptySet(),
+        Collections.<ValueSpecification, FunctionParameters>emptyMap());
     assertFalse(ak.equals(bk));
     assertFalse(bk.equals(ak));
   }
 
-  public void testCacheKey_shared() {
+  public void testCacheKeyShared() {
     final TestDependencyGraphBuilder graph = testGraphBuilder("Default");
     final ValueSpecification value = graph.addNode("Foo", ComputationTargetSpecification.NULL).addTerminalOutput("Bar");
     final CacheKey ak = new CacheKey(graph.buildGraph(), 0, Collections.singleton(value), Collections.<ValueSpecification, FunctionParameters>emptyMap());
-    final CacheKey bk = new CacheKey(graph.buildGraph(), 0, Collections.<ValueSpecification>emptySet(), Collections.<ValueSpecification, FunctionParameters>emptyMap());
+    final CacheKey bk = new CacheKey(graph.buildGraph(), 0, Collections.<ValueSpecification>emptySet(),
+        Collections.<ValueSpecification, FunctionParameters>emptyMap());
     assertFalse(ak.equals(bk));
     assertFalse(bk.equals(ak));
   }
 
-  public void testCacheKey_parameters() {
+  public void testCacheKeyParameters() {
     final TestDependencyGraphBuilder graph = testGraphBuilder("Default");
     final ValueSpecification value = graph.addNode("Foo", ComputationTargetSpecification.NULL).addTerminalOutput("Bar");
-    final CacheKey ak = new CacheKey(graph.buildGraph(), 0, Collections.<ValueSpecification>emptySet(), Collections.<ValueSpecification, FunctionParameters>emptyMap());
-    final CacheKey bk = new CacheKey(graph.buildGraph(), 0, Collections.<ValueSpecification>emptySet(), Collections.<ValueSpecification, FunctionParameters>singletonMap(value,
+    final CacheKey ak = new CacheKey(graph.buildGraph(), 0, Collections.<ValueSpecification>emptySet(),
+        Collections.<ValueSpecification, FunctionParameters>emptyMap());
+    final CacheKey bk = new CacheKey(graph.buildGraph(), 0, Collections.<ValueSpecification>emptySet(),
+        Collections.<ValueSpecification, FunctionParameters>singletonMap(value,
         EmptyFunctionParameters.INSTANCE));
     assertFalse(ak.equals(bk));
     assertFalse(bk.equals(ak));
   }
 
-  public void testCacheKey_serialization() throws Exception {
-    final CacheKey a = new CacheKey(testGraphBuilder("Default").buildGraph(), 0, Collections.<ValueSpecification>emptySet(), Collections.<ValueSpecification, FunctionParameters>emptyMap());
+  public void testCacheKeySerialization() throws Exception {
+    final CacheKey a = new CacheKey(testGraphBuilder("Default").buildGraph(), 0, Collections.<ValueSpecification>emptySet(),
+        Collections.<ValueSpecification, FunctionParameters>emptyMap());
     final ByteArrayOutputStream baos = new ByteArrayOutputStream();
     final ObjectOutputStream oos = new ObjectOutputStream(baos);
     oos.writeObject(a);
@@ -157,19 +167,22 @@ public class CachingExecutionPlannerTest {
   private GraphExecutionPlanner createExecutionPlanner() {
     return new GraphExecutionPlanner() {
       @Override
-      public GraphExecutionPlan createPlan(final DependencyGraph graph, final ExecutionLogModeSource logModeSource, final long functionInitialisationId, final Set<ValueSpecification> sharedValues,
+      public GraphExecutionPlan createPlan(final DependencyGraph graph, final ExecutionLogModeSource logModeSource,
+          final long functionInitialisationId, final Set<ValueSpecification> sharedValues,
           final Map<ValueSpecification, FunctionParameters> parameters) {
         return new GraphExecutionPlan(graph.getCalculationConfigurationName(), 0L, Collections.<PlannedJob>emptySet(), 0, 0d, 0d, 0d);
       }
     };
   }
 
-  public void testCache_match() {
+  public void testCacheMatch() {
     final CachingExecutionPlanner cache = new CachingExecutionPlanner(createExecutionPlanner(), _cacheManager);
     try {
-      final GraphExecutionPlan plan1 = cache.createPlan(testGraphBuilder("Default").buildGraph(), Mockito.mock(ExecutionLogModeSource.class), 0, Collections.<ValueSpecification>emptySet(),
+      final GraphExecutionPlan plan1 = cache.createPlan(testGraphBuilder("Default").buildGraph(),
+          Mockito.mock(ExecutionLogModeSource.class), 0, Collections.<ValueSpecification>emptySet(),
           Collections.<ValueSpecification, FunctionParameters>emptyMap());
-      final GraphExecutionPlan plan2 = cache.createPlan(testGraphBuilder("Default").buildGraph(), Mockito.mock(ExecutionLogModeSource.class), 0, Collections.<ValueSpecification>emptySet(),
+      final GraphExecutionPlan plan2 = cache.createPlan(testGraphBuilder("Default").buildGraph(),
+          Mockito.mock(ExecutionLogModeSource.class), 0, Collections.<ValueSpecification>emptySet(),
           Collections.<ValueSpecification, FunctionParameters>emptyMap());
       assertSame(plan2, plan1);
       assertNotNull(plan1);
@@ -179,16 +192,18 @@ public class CachingExecutionPlannerTest {
     }
   }
 
-  public void testCache_mismatch() {
+  public void testCacheMismatch() {
     final CachingExecutionPlanner cache = new CachingExecutionPlanner(createExecutionPlanner(), _cacheManager);
     try {
-      final GraphExecutionPlan plan1 = cache.createPlan(testGraphBuilder("Default").buildGraph(), Mockito.mock(ExecutionLogModeSource.class), 0, Collections.<ValueSpecification>emptySet(),
+      final GraphExecutionPlan plan1 = cache.createPlan(testGraphBuilder("Default").buildGraph(),
+          Mockito.mock(ExecutionLogModeSource.class), 0, Collections.<ValueSpecification>emptySet(),
           Collections.<ValueSpecification, FunctionParameters>emptyMap());
       final TestDependencyGraphBuilder gb = testGraphBuilder("Default");
-      gb.addTerminalOutput(new ValueSpecification("1", ComputationTargetSpecification.of(UniqueId.of("Test", "X")), ValueProperties.with(ValuePropertyNames.FUNCTION, "Foo1").get()),
+      gb.addTerminalOutput(new ValueSpecification("1", ComputationTargetSpecification.of(UniqueId.of("Test", "X")),
+          ValueProperties.with(ValuePropertyNames.FUNCTION, "Foo1").get()),
           Collections.singleton(new ValueRequirement("1", ComputationTargetSpecification.of(UniqueId.of("Test", "X")))));
-      final GraphExecutionPlan plan2 = cache.createPlan(gb.buildGraph(), Mockito.mock(ExecutionLogModeSource.class), 0, Collections.<ValueSpecification>emptySet(),
-          Collections.<ValueSpecification, FunctionParameters>emptyMap());
+      final GraphExecutionPlan plan2 = cache.createPlan(gb.buildGraph(), Mockito.mock(ExecutionLogModeSource.class), 0,
+          Collections.<ValueSpecification>emptySet(), Collections.<ValueSpecification, FunctionParameters>emptyMap());
       assertNotSame(plan2, plan1);
       assertNotNull(plan1);
       assertNotNull(plan2);

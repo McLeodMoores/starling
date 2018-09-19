@@ -23,7 +23,7 @@ import com.opengamma.util.ArgumentChecker;
   private final UniqueId _viewCycleId;
   private final String _calculationConfigurationName;
 
-  public ViewComputationCacheKey(final UniqueId viewCycleId, final String calculationConfigurationName) {
+  ViewComputationCacheKey(final UniqueId viewCycleId, final String calculationConfigurationName) {
     ArgumentChecker.notNull(viewCycleId, "viewCycleId");
     ArgumentChecker.notNull(calculationConfigurationName, "calculationConfigurationName");
     _viewCycleId = viewCycleId;

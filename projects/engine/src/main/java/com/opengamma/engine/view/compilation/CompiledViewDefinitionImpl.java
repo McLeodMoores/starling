@@ -38,8 +38,9 @@ public class CompiledViewDefinitionImpl implements CompiledViewDefinition {
   private final Instant _latestValidity;
   private volatile Set<ValueSpecification> _marketDataRequirements;
 
-  public CompiledViewDefinitionImpl(final VersionCorrection versionCorrection, final String identifier, final ViewDefinition viewDefinition, final Portfolio portfolio,
-      final Collection<CompiledViewCalculationConfiguration> compiledCalculationConfigurations, final Instant earliestValidity, final Instant latestValidity) {
+  public CompiledViewDefinitionImpl(final VersionCorrection versionCorrection, final String identifier, final ViewDefinition viewDefinition,
+      final Portfolio portfolio, final Collection<CompiledViewCalculationConfiguration> compiledCalculationConfigurations,
+      final Instant earliestValidity, final Instant latestValidity) {
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     assert !versionCorrection.containsLatest();
     ArgumentChecker.notNull(identifier, "identifier");
@@ -150,20 +151,20 @@ public class CompiledViewDefinitionImpl implements CompiledViewDefinition {
   }
 
   /**
-   * Checks whether the compilation results encapsulated in an instance are valid for a specific cycle. Note that this does not ensure that the view definition used for compilation is still
-   * up-to-date.
-   * 
+   * Checks whether the compilation results encapsulated in an instance are valid for a specific cycle. Note that this does
+   * not ensure that the view definition used for compilation is still up-to-date.
+   *
    * @param viewDefinition the compiled view definition instance, not null
    * @param valuationTime the valuation time, not null
    * @return true if the compilation results are valid for the valuation time
    */
   public static boolean isValidFor(final CompiledViewDefinition viewDefinition, final Instant valuationTime) {
     final Instant validFrom = viewDefinition.getValidFrom();
-    if ((validFrom != null) && valuationTime.isBefore(validFrom)) {
+    if (validFrom != null && valuationTime.isBefore(validFrom)) {
       return false;
     }
     final Instant validTo = viewDefinition.getValidTo();
-    return (validTo == null) || !valuationTime.isAfter(validTo);
+    return validTo == null || !valuationTime.isAfter(validTo);
   }
 
   //-------------------------------------------------------------------------

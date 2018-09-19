@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode;
@@ -48,7 +48,7 @@ import com.opengamma.transport.FudgeConnectionReceiver;
 public class RemoteNodeServer implements FudgeConnectionReceiver {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(RemoteNodeServer.class);
-  
+
   /**
    * Callback interface for supplying a blacklist maintainer to each host invoker.
    */
@@ -56,14 +56,14 @@ public class RemoteNodeServer implements FudgeConnectionReceiver {
 
     /**
      * Returns the maintenance interface.
-     * 
+     *
      * @param hostId the host handshake identifier
      * @return the interface, or null for none
      */
     FunctionBlacklistMaintainer getUpdate(String hostId);
-    
+
   }
-  
+
   /**
    * Implementation of {@link FunctionBlacklistMaintainerProvider} that always returns a fixed blacklist maintainer.
    */
@@ -83,8 +83,9 @@ public class RemoteNodeServer implements FudgeConnectionReceiver {
   }
 
   /**
-   * Implementation of {@link FunctionBlacklistMaintainerProvider} that updates a blacklist which is the host identifier prefixed with a fixed string. For example host "calc42" might use a blacklist
-   * called "REMOTE_NODE_calc42" if the bean is set with the default prefix of "REMOTE_NODE_".
+   * Implementation of {@link FunctionBlacklistMaintainerProvider} that updates a blacklist which is the host identifier
+   * prefixed with a fixed string. For example host "calc42" might use a blacklist called "REMOTE_NODE_calc42" if the
+   * bean is set with the default prefix of "REMOTE_NODE_".
    */
   public static class FunctionBlacklistMaintainerProviderBean implements FunctionBlacklistMaintainerProvider {
 
@@ -133,7 +134,8 @@ public class RemoteNodeServer implements FudgeConnectionReceiver {
   }
 
   /**
-   * Implementation of {@link FunctionBlacklistMaintainerProvider} that wraps multiple maintainers up to create a {@link MultipleFunctionBlacklistMaintainer} for the host.
+   * Implementation of {@link FunctionBlacklistMaintainerProvider} that wraps multiple maintainers up to create a
+   * {@link MultipleFunctionBlacklistMaintainer} for the host.
    */
   public static class MultipleFunctionBlacklistMaintainerProvider implements FunctionBlacklistMaintainerProvider {
 
@@ -145,8 +147,8 @@ public class RemoteNodeServer implements FudgeConnectionReceiver {
 
     @Override
     public FunctionBlacklistMaintainer getUpdate(final String hostId) {
-      final Collection<FunctionBlacklistMaintainer> maintainers = new ArrayList<FunctionBlacklistMaintainer>(_providers.size());
-      for (FunctionBlacklistMaintainerProvider provider : _providers) {
+      final Collection<FunctionBlacklistMaintainer> maintainers = new ArrayList<>(_providers.size());
+      for (final FunctionBlacklistMaintainerProvider provider : _providers) {
         final FunctionBlacklistMaintainer maintainer = provider.getUpdate(hostId);
         if (maintainer != null) {
           maintainers.add(maintainer);
@@ -168,12 +170,12 @@ public class RemoteNodeServer implements FudgeConnectionReceiver {
 
     /**
      * Returns the query interface.
-     * 
+     *
      * @param hostId the host handshake identifier
      * @return the interface, or null for none
      */
     FunctionBlacklistQuery getQuery(String hostId);
-    
+
   }
 
   /**
@@ -195,8 +197,9 @@ public class RemoteNodeServer implements FudgeConnectionReceiver {
   }
 
   /**
-   * Implementation of {@link FunctionBlacklistQueryProvider} that queries a blacklist which is the host identifier prefixed with a fixed string. For example host "calc42" might use a blacklist called
-   * "REMOTE_NODE_calc42" if the bean is set with the default prefix of "REMOTE_NODE_".
+   * Implementation of {@link FunctionBlacklistQueryProvider} that queries a blacklist which is the host identifier prefixed
+   * with a fixed string. For example host "calc42" might use a blacklist called "REMOTE_NODE_calc42" if the bean is set
+   * with the default prefix of "REMOTE_NODE_".
    */
   public static class FunctionBlacklistQueryProviderBean implements FunctionBlacklistQueryProvider {
 
@@ -240,8 +243,8 @@ public class RemoteNodeServer implements FudgeConnectionReceiver {
 
     @Override
     public FunctionBlacklistQuery getQuery(final String hostId) {
-      final Collection<FunctionBlacklistQuery> queries = new ArrayList<FunctionBlacklistQuery>(_providers.size());
-      for (FunctionBlacklistQueryProvider provider : _providers) {
+      final Collection<FunctionBlacklistQuery> queries = new ArrayList<>(_providers.size());
+      for (final FunctionBlacklistQueryProvider provider : _providers) {
         final FunctionBlacklistQuery query = provider.getQuery(hostId);
         if (query != null) {
           queries.add(query);
@@ -277,19 +280,19 @@ public class RemoteNodeServer implements FudgeConnectionReceiver {
    * Specify capabilities to add to those explicitly declared by the remote nodes. If the nodes declare these
    * in the initial connection they will be overridden. After the initial connection any changes the node
    * sends will take effect again.
-   * 
+   *
    * @param parameters Capabilities to add
    */
   public void setCapabilitiesToAdd(final Map<String, Double> parameters) {
-    _capabilitiesToAdd = new HashSet<Capability>();
-    for (Map.Entry<String, Double> parameter : parameters.entrySet()) {
+    _capabilitiesToAdd = new HashSet<>();
+    for (final Map.Entry<String, Double> parameter : parameters.entrySet()) {
       _capabilitiesToAdd.add(Capability.parameterInstanceOf(parameter.getKey(), parameter.getValue()));
     }
   }
 
   /**
    * Returns the mechanism for updating a node-specific blacklist with job failures.
-   * 
+   *
    * @return the update mechanism, null for none
    */
   public FunctionBlacklistMaintainerProvider getBlacklistUpdate() {
@@ -298,7 +301,7 @@ public class RemoteNodeServer implements FudgeConnectionReceiver {
 
   /**
    * Sets a mechanism for updating a node-specific blacklist with job failures.
-   * 
+   *
    * @param provider the update mechanism, null for none
    */
   public void setBlacklistUpdate(final FunctionBlacklistMaintainerProvider provider) {
@@ -318,7 +321,7 @@ public class RemoteNodeServer implements FudgeConnectionReceiver {
 
   /**
    * Returns the mechanism for querying a node-specific blacklist for job item suppression.
-   * 
+   *
    * @return the query mechanism, null for none
    */
   public FunctionBlacklistQueryProvider getBlacklistQuery() {
@@ -327,7 +330,7 @@ public class RemoteNodeServer implements FudgeConnectionReceiver {
 
   /**
    * Sets the mechanism for querying a node-specific blacklist for job item suppression.
-   * 
+   *
    * @param provider the query mechanism, null for none
    */
   public void setBlacklistQuery(final FunctionBlacklistQueryProvider provider) {
@@ -379,7 +382,8 @@ public class RemoteNodeServer implements FudgeConnectionReceiver {
       @Override
       protected void visitReadyMessage(final Ready message) {
         LOGGER.info("Remote node {} connected - {}", message.getHostId(), connection);
-        final RemoteNodeJobInvoker invoker = new RemoteNodeJobInvoker(getExecutorService(), message, connection, getIdentifierMap(), getFunctionCosts(), getBlacklistQuery(message.getHostId()),
+        final RemoteNodeJobInvoker invoker = new RemoteNodeJobInvoker(getExecutorService(), message, connection,
+            getIdentifierMap(), getFunctionCosts(), getBlacklistQuery(message.getHostId()),
             getBlacklistUpdate(message.getHostId()));
         if (_capabilitiesToAdd != null) {
           invoker.addCapabilities(_capabilitiesToAdd);

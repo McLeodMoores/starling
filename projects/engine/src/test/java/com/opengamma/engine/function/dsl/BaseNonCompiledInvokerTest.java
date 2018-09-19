@@ -48,9 +48,9 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT, enabled = false, description = "FAILING")
 public class BaseNonCompiledInvokerTest {
 
-  public void getResultsTest_1() {
+  public void getResultsTest1() {
     final FunctionCompilationContext fcctx = mock(FunctionCompilationContext.class);
-    final DV01_test_fun dv01 = new DV01_test_fun();
+    final DV01TestFun dv01 = new DV01TestFun();
 
     assertTrue(dv01.canApplyTo(fcctx, new ComputationTarget(ComputationTargetType.POSITION, new SimplePosition())));
 
@@ -68,7 +68,7 @@ public class BaseNonCompiledInvokerTest {
 
   public void getRequirements() {
     final FunctionCompilationContext fcctx = mock(FunctionCompilationContext.class);
-    final DV01_test_fun dv01 = new DV01_test_fun();
+    final DV01TestFun dv01 = new DV01TestFun();
 
     assertTrue(dv01.canApplyTo(fcctx, new ComputationTarget(ComputationTargetType.POSITION, new SimplePosition())));
 
@@ -87,9 +87,9 @@ public class BaseNonCompiledInvokerTest {
     assertEquals(requirement.getValueName(), "PV01");
   }
 
-  public void getResultsTest_2() {
+  public void getResultsTest2() {
     final FunctionCompilationContext fcctx = mock(FunctionCompilationContext.class);
-    final DV01_test_fun dv01 = new DV01_test_fun();
+    final DV01TestFun dv01 = new DV01TestFun();
 
     assertTrue(dv01.canApplyTo(fcctx, new ComputationTarget(ComputationTargetType.POSITION, new SimplePosition())));
 
@@ -98,7 +98,8 @@ public class BaseNonCompiledInvokerTest {
     when(ct.toSpecification()).thenReturn(cts);
     final ValueProperties valueProperties = ValueProperties.builder().with("A", "1").with("B", "1").with(ValuePropertyNames.FUNCTION, "PV01_Function").get();
     final ValueRequirement desiredValue = new ValueRequirement("PV01", ct.getType(), ct.getUniqueId(), valueProperties);
-    final ValueSpecification specifiedValue = new ValueSpecification(desiredValue.getValueName(), desiredValue.getTargetReference().getSpecification(), desiredValue.getConstraints().copy().with("X", "3").get());
+    final ValueSpecification specifiedValue = new ValueSpecification(desiredValue.getValueName(),
+        desiredValue.getTargetReference().getSpecification(), desiredValue.getConstraints().copy().with("X", "3").get());
     final Map<ValueSpecification, ValueRequirement> inputSpecificationsMap = new HashMap<>();
     inputSpecificationsMap.put(specifiedValue, desiredValue);
     final Set<ValueSpecification> specs = dv01.getResults(null, ct, inputSpecificationsMap);
@@ -110,7 +111,7 @@ public class BaseNonCompiledInvokerTest {
     assertEquals(spec.getValueName(), "DV01");
   }
 
-  class DV01_test_fun extends BaseNonCompiledInvoker {
+  class DV01TestFun extends BaseNonCompiledInvoker {
     @Override
     protected FunctionSignature functionSignature() {
 
@@ -134,7 +135,8 @@ public class BaseNonCompiledInvokerTest {
     }
 
     @Override
-    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs,
+        final ComputationTarget target, final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
       return null;
     }
 

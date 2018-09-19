@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.blacklist;
@@ -30,7 +30,7 @@ public class DefaultManageableFunctionBlacklist extends AbstractManageableFuncti
 
   /**
    * Creates a new updateable blacklist.
-   * 
+   *
    * @param name the name of the blacklist
    * @param scheduler the scheduler to use for blacklist housekeeping
    * @param defaultTTL the default time to live
@@ -51,7 +51,7 @@ public class DefaultManageableFunctionBlacklist extends AbstractManageableFuncti
             // Listeners will be notified as a bulk operation when the re-entry ends
             synchronized (DefaultManageableFunctionBlacklist.this) {
               if (_added == null) {
-                _added = new LinkedList<FunctionBlacklistRule>();
+                _added = new LinkedList<>();
               }
               _added.add(rule);
             }
@@ -73,7 +73,7 @@ public class DefaultManageableFunctionBlacklist extends AbstractManageableFuncti
             // Listeners will be notified as a bulk operation when the re-entry ends
             synchronized (DefaultManageableFunctionBlacklist.this) {
               if (_removed == null) {
-                _removed = new LinkedList<FunctionBlacklistRule>();
+                _removed = new LinkedList<>();
               }
               _removed.add(rule);
             }

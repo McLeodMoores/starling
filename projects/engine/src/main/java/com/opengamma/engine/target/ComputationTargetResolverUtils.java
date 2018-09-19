@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.target;
@@ -89,7 +89,7 @@ public class ComputationTargetResolverUtils {
   /**
    * Creates a {@link ComputationTarget} instance that describes the resolved object. The type in the target will accurately describe the target type to the scoping level of the requested
    * specification. For example a target of type {@code FooSecurity} resolved from a specification of type {@code POSITION/SECURITY} will end up as type {@code POSITION/FooSecurity}.
-   * 
+   *
    * @param requestedSpecification the original specification as passed to the {@link ComputationTargetResolver#resolve} method, not null
    * @param target the resolved object, never null
    * @return the target object instance with the correct logical type, not null
@@ -118,18 +118,20 @@ public class ComputationTargetResolverUtils {
   }
 
   @SuppressWarnings("unchecked")
-  private static <T extends ComputationTargetReference> T simplifyType(final T reference, final ComputationTargetType oldType, final ComputationTargetType newType) {
-    if ((newType == null) || (newType == oldType)) {
+  private static <T extends ComputationTargetReference> T simplifyType(final T reference, final ComputationTargetType oldType,
+      final ComputationTargetType newType) {
+    if (newType == null || newType == oldType) {
       return reference;
-    } else {
-      return (T) reference.replaceType(newType);
     }
+    return (T) reference.replaceType(newType);
   }
 
   /**
-   * Simplifies the type within a reference to the simplest form that the resolver will recognize. For example {@code CTSpec[FooSecurity, Sec~1]} might be simplified to {@code CTSpec[SECURITY, Sec~1]}
-   * if the same resolution will take place regardless of whether the type is a security or a sub-class of it. If no simplification is possible, the original reference may be returned.
-   * 
+   * Simplifies the type within a reference to the simplest form that the resolver will recognize. For example
+   * {@code CTSpec[FooSecurity, Sec~1]} might be simplified to {@code CTSpec[SECURITY, Sec~1]} if the same resolution
+   * will take place regardless of whether the type is a security or a sub-class of it. If no simplification is possible,
+   * the original reference may be returned.
+   *
    * @param <T> the object type, either {@link ComputationTargetSpecification} or {@link ComputationTargetReference}
    * @param reference the reference to simplify, not null
    * @param resolver the resolver to simplify against, not null

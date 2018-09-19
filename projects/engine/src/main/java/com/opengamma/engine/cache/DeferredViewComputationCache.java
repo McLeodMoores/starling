@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.cache;
@@ -28,7 +28,8 @@ public interface DeferredViewComputationCache extends ViewComputationCache {
   void putValues(Collection<? extends ComputedValue> values, CacheSelectHint filter, DeferredStatistics statistics);
 
   /**
-   * Cause all put operations issued by this thread to complete. This may block until the operations have completed or return an asynchronous handle to that additional work can be done.
+   * Cause all put operations issued by this thread to complete. This may block until the operations have completed or return
+   * an asynchronous handle to that additional work can be done.
    */
   void flush() throws AsynchronousExecution;
 

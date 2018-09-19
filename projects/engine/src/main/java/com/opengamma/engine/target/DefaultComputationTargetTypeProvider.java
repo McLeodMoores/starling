@@ -26,8 +26,8 @@ public final class DefaultComputationTargetTypeProvider implements ComputationTa
   private final Collection<ComputationTargetType> _allTypes;
 
   public DefaultComputationTargetTypeProvider() {
-    final List<ComputationTargetType> simpleTypes = new ArrayList<ComputationTargetType>();
-    final List<ComputationTargetType> additionalTypes = new ArrayList<ComputationTargetType>();
+    final List<ComputationTargetType> simpleTypes = new ArrayList<>();
+    final List<ComputationTargetType> additionalTypes = new ArrayList<>();
     final ComputationTargetTypeVisitor<Void, Boolean> isSimple = new ComputationTargetTypeVisitor<Void, Boolean>() {
 
       @Override
@@ -49,17 +49,16 @@ public final class DefaultComputationTargetTypeProvider implements ComputationTa
       public Boolean visitClassComputationTargetType(final Class<? extends UniqueIdentifiable> type, final Void data) {
         if (UniqueIdentifiable.class.equals(type)) {
           return null;
-        } else {
-          return Boolean.TRUE;
         }
+        return Boolean.TRUE;
       }
 
     };
     try {
       final Class<?> c = ComputationTargetType.class;
-      for (Field field : c.getDeclaredFields()) {
-        if (Modifier.isPublic(field.getModifiers()) && Modifier.isStatic(field.getModifiers()) &&
-            field.isSynthetic() == false && c.isAssignableFrom(field.getType())) {
+      for (final Field field : c.getDeclaredFields()) {
+        if (Modifier.isPublic(field.getModifiers()) && Modifier.isStatic(field.getModifiers())
+            && !field.isSynthetic() && c.isAssignableFrom(field.getType())) {
           final ComputationTargetType type = (ComputationTargetType) field.get(null);
           final Boolean simple = type.accept(isSimple, null);
           if (simple != null) {
@@ -71,12 +70,12 @@ public final class DefaultComputationTargetTypeProvider implements ComputationTa
           }
         }
       }
-    } catch (IllegalAccessException e) {
+    } catch (final IllegalAccessException e) {
       throw new OpenGammaRuntimeException("Can't initialise", e);
     }
     _simpleTypes = Collections.unmodifiableList(simpleTypes);
     _additionalTypes = Collections.unmodifiableList(additionalTypes);
-    final List<ComputationTargetType> allTypes = new ArrayList<ComputationTargetType>(simpleTypes);
+    final List<ComputationTargetType> allTypes = new ArrayList<>(simpleTypes);
     allTypes.addAll(additionalTypes);
     _allTypes = Collections.unmodifiableList(allTypes);
   }

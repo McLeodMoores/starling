@@ -65,15 +65,15 @@ import com.opengamma.util.tuple.Triple;
   /**
    * Removes any optional flags on constraints. If the constraint is optional and the provider produced no value, then the constraint is removed. If the provider produced values for the constraint,
    * and an intersection exists, then the intersection is used. Otherwise the maximal value set is used to satisfy the original constraint.
-   * 
+   *
    * @param constraints the requested constraints, not null
    * @param properties the provider's value specification properties, not null
    * @return the builder for constraints
    */
   private static ValueProperties.Builder intersectOptional(final ValueProperties constraints, final ValueProperties properties) {
-    ValueProperties.Builder builder = constraints.copy();
+    final ValueProperties.Builder builder = constraints.copy();
     // TODO: [PLAT-3446] Return the builder immediately to recreate the observed fault
-    for (String property : constraints.getProperties()) {
+    for (final String property : constraints.getProperties()) {
       final Set<String> providerValues = properties.getValues(property);
       if (providerValues != null) {
         // Remove optional flag and take intersection if there is one
@@ -135,10 +135,12 @@ import com.opengamma.util.tuple.Triple;
         // The system resolver did not produce a target that we can monitor, so use the MDAP supplied value
         targetSpec = marketDataSpec.getTargetSpecification();
       }
-      ResolvedValue resolvedValue = createResult(marketDataSpec, MARKET_DATA_SOURCING_FUNCTION, Collections.<ValueSpecification>emptySet(), Collections.singleton(marketDataSpec));
+      ResolvedValue resolvedValue = createResult(marketDataSpec, MARKET_DATA_SOURCING_FUNCTION,
+          Collections.<ValueSpecification>emptySet(), Collections.singleton(marketDataSpec));
       final ValueProperties constraints = requirement.getConstraints();
-      boolean constraintsSatisfied = constraints.isSatisfiedBy(marketDataSpec.getProperties());
-      if ((requirement.getValueName() != marketDataSpec.getValueName()) || !targetSpec.equals(marketDataSpec.getTargetSpecification()) || !constraintsSatisfied) {
+      final boolean constraintsSatisfied = constraints.isSatisfiedBy(marketDataSpec.getProperties());
+      if (requirement.getValueName() != marketDataSpec.getValueName() || !targetSpec.equals(marketDataSpec.getTargetSpecification())
+          || !constraintsSatisfied) {
         // The specification returned by market data provision does not match the logical target; publish a substitute node
         context.declareProduction(resolvedValue);
         final ValueProperties properties;
@@ -247,7 +249,7 @@ import com.opengamma.util.tuple.Triple;
    * Fetches all of the functions that can apply to the target, changing the state to then process that collection.
    * <p>
    * The collection returned from the function resolver must include normalized value specifications.
-   * 
+   *
    * @param target the target to apply the functions to, not null
    * @param context the graph building context, not null
    * @param state the current task execution state, not null

@@ -21,7 +21,7 @@ public final class DependencyNodeFunctionImpl implements DependencyNodeFunction,
 
   private static final long serialVersionUID = 1L;
 
-  private static final WeakInstanceCache<DependencyNodeFunctionImpl> INSTANCES = new WeakInstanceCache<DependencyNodeFunctionImpl>();
+  private static final WeakInstanceCache<DependencyNodeFunctionImpl> INSTANCES = new WeakInstanceCache<>();
 
   private final String _functionId;
 

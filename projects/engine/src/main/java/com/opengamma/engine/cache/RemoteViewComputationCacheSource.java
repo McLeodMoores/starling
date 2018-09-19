@@ -1,14 +1,12 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.cache;
 
 import java.util.List;
 import java.util.Map;
-
-import net.sf.ehcache.CacheManager;
 
 import org.fudgemsg.FudgeContext;
 import org.fudgemsg.FudgeMsg;
@@ -22,6 +20,8 @@ import com.opengamma.engine.cache.msg.CacheMessageVisitor;
 import com.opengamma.engine.cache.msg.FindMessage;
 import com.opengamma.engine.cache.msg.ReleaseCacheMessage;
 import com.opengamma.transport.FudgeMessageReceiver;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Caching client for {@link ViewComputationCacheServer}.
@@ -65,7 +65,8 @@ public class RemoteViewComputationCacheSource extends DefaultViewComputationCach
     @Override
     protected CacheMessage visitReleaseCacheMessage(final ReleaseCacheMessage message) {
       LOGGER.debug("Releasing caches for cycle {}", message.getViewCycleId());
-      // [ENG-256] make sure we don't cause a cascade of messages if e.g. release called on a client, must cause release on server, which must send release to other clients but these must not generate
+      // [ENG-256] make sure we don't cause a cascade of messages if e.g. release called on a client, must cause release on
+      // server, which must send release to other clients but these must not generate
       // further messages
       releaseCaches(message.getViewCycleId());
       return null;
@@ -107,7 +108,8 @@ public class RemoteViewComputationCacheSource extends DefaultViewComputationCach
 
   };
 
-  // [ENG-256] Override, or register callback handler for releaseCaches so that if it is called by user code we propogate the message to the server and other clients, noting the warning about cascade
+  // [ENG-256] Override, or register callback handler for releaseCaches so that if it is called by user code we propagate
+  // the message to the server and other clients, noting the warning about cascade
   // above
 
   @Override

@@ -22,7 +22,8 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * A wrapper around an existing {@link ViewComputationCache} implementation that will attempt to buffer data in memory to speed up writes rapidly followed by a read.
+ * A wrapper around an existing {@link ViewComputationCache} implementation that will attempt to buffer data in memory to
+ * speed up writes rapidly followed by a read.
  */
 public class WriteThroughViewComputationCache implements ViewComputationCache {
 
@@ -39,7 +40,7 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
     private final ValueSpecification _specification;
     private Object _value;
 
-    public Pending(final ValueSpecification specification) {
+    Pending(final ValueSpecification specification) {
       _specification = specification;
     }
 
@@ -98,8 +99,8 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
   }
 
   /**
-   * This method will clear all instances of this class. It should be called after confirming with OpenGamma support that it is necessary to handle certain memory situations regarding custom View
-   * Processor configurations.
+   * This method will clear all instances of this class. It should be called after confirming with OpenGamma support that it
+   * is necessary to handle certain memory situations regarding custom View Processor configurations.
    */
   public static void clearAllWriteThroughCaches() {
     for (final WriteThroughViewComputationCache cache : INSTANCES.values()) {
@@ -126,14 +127,15 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
     }
   }
 
-  protected void post(final ValueSpecification specification, Object value) {
-    if (value == null) {
-      value = NULL;
+  protected void post(final ValueSpecification specification, final Object value) {
+    Object val = value;
+    if (val == null) {
+      val = NULL;
     }
-    _readCache.put(specification, value);
+    _readCache.put(specification, val);
     final Pending pending = _pending.remove(specification);
     if (pending != null) {
-      pending.post(value);
+      pending.post(val);
     }
   }
 

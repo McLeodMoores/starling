@@ -335,7 +335,7 @@ public abstract class AbstractPersistentSubscriptionManager implements Lifecycle
   protected abstract void readFromStorage();
 
   /**
-   * Saves entries to persistent storage (DB, flat file, ...)
+   * Saves entries to persistent storage (DB, flat file, ...).
    *
    * @param newState Entries to be saved
    */

@@ -38,7 +38,8 @@ public abstract class BaseNonCompiledInvoker extends AbstractFunction.NonCompile
   private FunctionSignature _functionSignature;
 
   private static Pair<Map<String, StreamI<FunctionInput>>, Map<String, StreamI<FunctionOutput>>> ioputsByName(final FunctionSignature signature) {
-    final Map<String, StreamI<FunctionInput>> inputsByName = signature.getInputs().reduce(new HashMap<String, StreamI<FunctionInput>>(), new Function2<HashMap<String, StreamI<FunctionInput>>, FunctionInput, HashMap<String, StreamI<FunctionInput>>>() {
+    final Map<String, StreamI<FunctionInput>> inputsByName = signature.getInputs().reduce(new HashMap<String, StreamI<FunctionInput>>(),
+        new Function2<HashMap<String, StreamI<FunctionInput>>, FunctionInput, HashMap<String, StreamI<FunctionInput>>>() {
       @Override
       public HashMap<String, StreamI<FunctionInput>> execute(final HashMap<String, StreamI<FunctionInput>> acc, final FunctionInput functionInput) {
         final String name = functionInput.getName();
@@ -55,7 +56,8 @@ public abstract class BaseNonCompiledInvoker extends AbstractFunction.NonCompile
       }
     });
 
-    final Map<String, StreamI<FunctionOutput>> outputsByName = signature.getOutputs().reduce(new HashMap<String, StreamI<FunctionOutput>>(), new Function2<HashMap<String, StreamI<FunctionOutput>>, FunctionOutput, HashMap<String, StreamI<FunctionOutput>>>() {
+    final Map<String, StreamI<FunctionOutput>> outputsByName = signature.getOutputs().reduce(new HashMap<String, StreamI<FunctionOutput>>(),
+        new Function2<HashMap<String, StreamI<FunctionOutput>>, FunctionOutput, HashMap<String, StreamI<FunctionOutput>>>() {
       @Override
       public HashMap<String, StreamI<FunctionOutput>> execute(final HashMap<String, StreamI<FunctionOutput>> acc, final FunctionOutput functionOutput) {
         final String name = functionOutput.getName();
@@ -167,7 +169,8 @@ public abstract class BaseNonCompiledInvoker extends AbstractFunction.NonCompile
         } else {
           final ValueProperties.Builder copiedValueProperties = desiredValue.getConstraints().copy();
           final StreamI<ValuePropertiesModifier> recorderValueProperties = rvps.getRecordedValueProperties();
-          final ValueProperties.Builder valuePropertiesBuilder = recorderValueProperties.reduce(copiedValueProperties, new Function2<ValueProperties.Builder, ValuePropertiesModifier, ValueProperties.Builder>() {
+          final ValueProperties.Builder valuePropertiesBuilder = recorderValueProperties.reduce(copiedValueProperties,
+              new Function2<ValueProperties.Builder, ValuePropertiesModifier, ValueProperties.Builder>() {
             @Override
             public ValueProperties.Builder execute(final ValueProperties.Builder builder, final ValuePropertiesModifier modifier) {
               return modifier.modify(builder);
@@ -184,7 +187,8 @@ public abstract class BaseNonCompiledInvoker extends AbstractFunction.NonCompile
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputSpecificationsMap) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputSpecificationsMap) {
     final FunctionSignature signature = getFunctionSignature();
     final Pair<Map<String, StreamI<FunctionInput>>, Map<String, StreamI<FunctionOutput>>> ioputsByName = ioputsByName(signature);
 
@@ -236,7 +240,8 @@ public abstract class BaseNonCompiledInvoker extends AbstractFunction.NonCompile
             builder = ValueProperties.all().copy();
           }
           final StreamI<ValuePropertiesModifier> recorderValueProperties = rvps.getRecordedValueProperties();
-          final ValueProperties.Builder valuePropertiesBuilder = recorderValueProperties.reduce(builder, new Function2<ValueProperties.Builder, ValuePropertiesModifier, ValueProperties.Builder>() {
+          final ValueProperties.Builder valuePropertiesBuilder = recorderValueProperties.reduce(builder,
+              new Function2<ValueProperties.Builder, ValuePropertiesModifier, ValueProperties.Builder>() {
             @Override
             public ValueProperties.Builder execute(final ValueProperties.Builder builder, final ValuePropertiesModifier modifier) {
               return modifier.modify(builder);

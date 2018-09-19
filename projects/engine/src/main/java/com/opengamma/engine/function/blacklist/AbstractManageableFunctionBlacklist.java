@@ -41,8 +41,8 @@ public abstract class AbstractManageableFunctionBlacklist extends AbstractFuncti
   }
 
   /**
-   * Marks the start of an update operation. Re-entry to updates is counted so that bulk operations can be identified. Subclasses could also use this to acquire a lock and release it in
-   * {@link #endUpdate}.
+   * Marks the start of an update operation. Re-entry to updates is counted so that bulk operations can be identified.
+   * Subclasses could also use this to acquire a lock and release it in {@link #endUpdate}.
    *
    * @return true if this is the first call, false if this is a re-entry
    */
@@ -51,8 +51,8 @@ public abstract class AbstractManageableFunctionBlacklist extends AbstractFuncti
   }
 
   /**
-   * Marks the end of an update operation. Re-entry to updates is counted so that bulk operations can be identifier. Subclasses could also use this to release any locks acquired by
-   * {@link #beginUpdate}.
+   * Marks the end of an update operation. Re-entry to updates is counted so that bulk operations can be identifier.
+   * Subclasses could also use this to release any locks acquired by {@link #beginUpdate}.
    *
    * @return true if this was the last call, false if there is still re-entry
    */

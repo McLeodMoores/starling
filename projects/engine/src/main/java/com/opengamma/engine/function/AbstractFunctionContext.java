@@ -31,7 +31,7 @@ import com.opengamma.util.PublicAPI;
    * This ensures that each get/put is safe, but operations relying on two different gets
    * could see inconsistent state.
    */
-  private final Map<String, Object> _backingMap = new ConcurrentSkipListMap<String, Object>();
+  private final Map<String, Object> _backingMap = new ConcurrentSkipListMap<>();
 
   /**
    * Constructor.
@@ -116,11 +116,11 @@ import com.opengamma.util.PublicAPI;
    */
   public Set<String> getAllElementNames() {
     // See UTL-20. No need to reorder into a TreeSet<>.
-    return new TreeSet<String>(_backingMap.keySet());
+    return new TreeSet<>(_backingMap.keySet());
   }
 
   protected Collection<Object> getAllElements() {
-    return new ArrayList<Object>(_backingMap.values());
+    return new ArrayList<>(_backingMap.values());
   }
 
   /**

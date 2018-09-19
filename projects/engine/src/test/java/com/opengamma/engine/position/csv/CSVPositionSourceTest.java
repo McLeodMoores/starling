@@ -35,7 +35,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class CSVPositionSourceTest {
 
-  private static UniqueId UID = UniqueId.of("A", "B");
+  private static final UniqueId UID = UniqueId.of("A", "B");
 
   public void parseLineEmpty() {
     assertNull(CSVPositionSource.parseLine(new String[] {""}, UID));

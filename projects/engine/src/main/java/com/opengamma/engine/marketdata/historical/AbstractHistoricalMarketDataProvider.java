@@ -55,12 +55,13 @@ public abstract class AbstractHistoricalMarketDataProvider extends AbstractMarke
 
   /**
    * Creates a new market data provider.
-   * 
+   *
    * @param historicalTimeSeriesSource the underlying source of historical data, not null
    * @param historicalTimeSeriesResolver the resolver to identifier historical data, not null
    * @param timeSeriesResolverKey the source resolver key, or null to use the source default
    */
-  public AbstractHistoricalMarketDataProvider(final HistoricalTimeSeriesSource historicalTimeSeriesSource, final HistoricalTimeSeriesResolver historicalTimeSeriesResolver,
+  public AbstractHistoricalMarketDataProvider(final HistoricalTimeSeriesSource historicalTimeSeriesSource,
+      final HistoricalTimeSeriesResolver historicalTimeSeriesResolver,
       final String timeSeriesResolverKey) {
     ArgumentChecker.notNull(historicalTimeSeriesSource, "historicalTimeSeriesSource");
     ArgumentChecker.notNull(historicalTimeSeriesResolver, "historicalTimeSeriesResolver");
@@ -70,7 +71,8 @@ public abstract class AbstractHistoricalMarketDataProvider extends AbstractMarke
     _permissionProvider = new PermissiveMarketDataPermissionProvider();
   }
 
-  public AbstractHistoricalMarketDataProvider(final HistoricalTimeSeriesSource historicalTimeSeriesSource, final HistoricalTimeSeriesResolver historicalTimeSeriesResolver) {
+  public AbstractHistoricalMarketDataProvider(final HistoricalTimeSeriesSource historicalTimeSeriesSource,
+      final HistoricalTimeSeriesResolver historicalTimeSeriesResolver) {
     this(historicalTimeSeriesSource, historicalTimeSeriesResolver, null);
   }
 
@@ -96,7 +98,7 @@ public abstract class AbstractHistoricalMarketDataProvider extends AbstractMarke
     LOGGER.debug("Removed subscriptions from {}", valueSpecifications);
   }
 
-  protected abstract LocalDate getHistoricalResolutionDate(final MarketDataSpecification marketDataSpec);
+  protected abstract LocalDate getHistoricalResolutionDate(MarketDataSpecification marketDataSpec);
 
   @Override
   public MarketDataAvailabilityProvider getAvailabilityProvider(final MarketDataSpecification marketDataSpec) {
@@ -104,31 +106,35 @@ public abstract class AbstractHistoricalMarketDataProvider extends AbstractMarke
     return new AbstractMarketDataAvailabilityProvider() {
 
       @Override
-      protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ExternalId identifier, final ValueRequirement desiredValue) {
+      protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ExternalId identifier,
+          final ValueRequirement desiredValue) {
         return getAvailability(targetSpec, identifier.toBundle(), desiredValue);
       }
 
       @Override
-      protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ExternalIdBundle identifiers, final ValueRequirement desiredValue) {
-        HistoricalTimeSeriesResolutionResult resolved = getTimeSeriesResolver().resolve(identifiers, date, null, null, desiredValue.getValueName(), getTimeSeriesResolverKey());
+      protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ExternalIdBundle identifiers,
+          final ValueRequirement desiredValue) {
+        final HistoricalTimeSeriesResolutionResult resolved =
+            getTimeSeriesResolver().resolve(identifiers, date, null, null, desiredValue.getValueName(), getTimeSeriesResolverKey());
         if (resolved == null) {
           if (LOGGER.isDebugEnabled() && desiredValue.getValueName().equals(MarketDataRequirementNames.MARKET_VALUE)) {
             LOGGER.debug("Missing market data {}", desiredValue);
           }
           return null;
-        } else {
-          final ValueProperties.Builder properties = ValueProperties.with(ValuePropertyNames.FUNCTION, getSyntheticFunctionName());
-          if (resolved.getAdjuster() != null) {
-            final ExternalIdBundle resolvedIdentifiers = resolved.getHistoricalTimeSeriesInfo().getExternalIdBundle().toBundle(date);
-            final HistoricalTimeSeriesAdjustment adjustment = resolved.getAdjuster().getAdjustment(resolvedIdentifiers);
-            properties.with(NORMALIZATION_PROPERTY, adjustment.toString());
-          }
-          return new ValueSpecification(desiredValue.getValueName(), ComputationTargetSpecification.of(resolved.getHistoricalTimeSeriesInfo().getUniqueId()), properties.get());
         }
+        final ValueProperties.Builder properties = ValueProperties.with(ValuePropertyNames.FUNCTION, getSyntheticFunctionName());
+        if (resolved.getAdjuster() != null) {
+          final ExternalIdBundle resolvedIdentifiers = resolved.getHistoricalTimeSeriesInfo().getExternalIdBundle().toBundle(date);
+          final HistoricalTimeSeriesAdjustment adjustment = resolved.getAdjuster().getAdjustment(resolvedIdentifiers);
+          properties.with(NORMALIZATION_PROPERTY, adjustment.toString());
+        }
+        return new ValueSpecification(desiredValue.getValueName(),
+            ComputationTargetSpecification.of(resolved.getHistoricalTimeSeriesInfo().getUniqueId()), properties.get());
       }
 
       @Override
-      protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final UniqueId identifier, final ValueRequirement desiredValue) {
+      protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final UniqueId identifier,
+          final ValueRequirement desiredValue) {
         return null;
       }
 
@@ -139,7 +145,7 @@ public abstract class AbstractHistoricalMarketDataProvider extends AbstractMarke
 
       @Override
       public Serializable getAvailabilityHintKey() {
-        final ArrayList<Serializable> key = new ArrayList<Serializable>(3);
+        final ArrayList<Serializable> key = new ArrayList<>(3);
         key.add(AbstractHistoricalMarketDataProvider.this.getClass().getName());
         key.add(date);
         key.add(getTimeSeriesResolverKey());
@@ -177,8 +183,9 @@ public abstract class AbstractHistoricalMarketDataProvider extends AbstractMarke
   }
 
   /**
-   * The function name used in value specifications describing items sourced by this provider. This is only used for diagnostics when browsing the dependency graph.
-   * 
+   * The function name used in value specifications describing items sourced by this provider. This is only used for
+   * diagnostics when browsing the dependency graph.
+   *
    * @return the function name
    */
   protected String getSyntheticFunctionName() {

@@ -48,7 +48,7 @@ public class CompiledViewCalculationConfigurationImpl implements CompiledViewCal
   private final Map<DistinctMarketDataSelector, FunctionParameters> _marketDataSelectionFunctionParameters;
 
   /**
-   * Constructs an instance
+   * Constructs an instance.
    *
    * @param name the name of the view calculation configuration, not null
    * @param computationTargets the computation targets, not null
@@ -65,7 +65,7 @@ public class CompiledViewCalculationConfigurationImpl implements CompiledViewCal
   }
 
   /**
-   * Constructs an instance
+   * Constructs an instance.
    *
    * @param name the name of the view calculation configuration, not null
    * @param computationTargets the computation targets, not null
@@ -96,17 +96,18 @@ public class CompiledViewCalculationConfigurationImpl implements CompiledViewCal
   }
 
   /**
-   * Constructs an instance from a dependency graph
+   * Constructs an instance from a dependency graph.
    *
    * @param dependencyGraph the dependency graph, not null
    * @return the new instance, not null
    */
   public static CompiledViewCalculationConfigurationImpl of(final DependencyGraph dependencyGraph) {
-    return of(dependencyGraph, Collections.<DistinctMarketDataSelector, Set<ValueSpecification>>emptyMap(), Collections.<DistinctMarketDataSelector, FunctionParameters>emptyMap());
+    return of(dependencyGraph, Collections.<DistinctMarketDataSelector, Set<ValueSpecification>>emptyMap(),
+        Collections.<DistinctMarketDataSelector, FunctionParameters>emptyMap());
   }
 
   /**
-   * Constructs an instance from a dependency graph with market data manipulation selections and function parameters
+   * Constructs an instance from a dependency graph with market data manipulation selections and function parameters.
    *
    * @param graph the dependency graph, not null
    * @param marketDataSelections the market data selections that have been made to support manipulation of the structured market data, not null

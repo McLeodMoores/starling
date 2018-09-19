@@ -163,18 +163,17 @@ public class DependencyGraphImpl implements DependencyGraph, Serializable {
   public static Map<ValueSpecification, DependencyNode> getAllOutputs(final DependencyGraph graph) {
     if (graph instanceof DependencyGraphImpl) {
       return ((DependencyGraphImpl) graph).getAllOutputs();
-    } else {
-      final Map<ValueSpecification, DependencyNode> outputs = new HashMap<>();
-      final Iterator<DependencyNode> itr = graph.nodeIterator();
-      while (itr.hasNext()) {
-        final DependencyNode node = itr.next();
-        final int count = node.getOutputCount();
-        for (int i = 0; i < count; i++) {
-          outputs.put(node.getOutputValue(i), node);
-        }
-      }
-      return outputs;
     }
+    final Map<ValueSpecification, DependencyNode> outputs = new HashMap<>();
+    final Iterator<DependencyNode> itr = graph.nodeIterator();
+    while (itr.hasNext()) {
+      final DependencyNode node = itr.next();
+      final int count = node.getOutputCount();
+      for (int i = 0; i < count; i++) {
+        outputs.put(node.getOutputValue(i), node);
+      }
+    }
+    return outputs;
   }
 
   /**

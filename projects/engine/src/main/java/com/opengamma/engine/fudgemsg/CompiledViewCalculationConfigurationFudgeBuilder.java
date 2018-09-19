@@ -72,7 +72,8 @@ public class CompiledViewCalculationConfigurationFudgeBuilder implements FudgeBu
     return result;
   }
 
-  protected void encodeTerminalOutputSpecifications(final FudgeSerializer serializer, final MutableFudgeMsg msg, final Map<ValueSpecification, Set<ValueRequirement>> outputs) {
+  protected void encodeTerminalOutputSpecifications(final FudgeSerializer serializer, final MutableFudgeMsg msg,
+      final Map<ValueSpecification, Set<ValueRequirement>> outputs) {
     final MutableFudgeMsg submsg = msg.addSubMessage(TERMINAL_OUTPUT_SPECIFICATIONS_FIELD, null);
     for (final Map.Entry<ValueSpecification, Set<ValueRequirement>> output : outputs.entrySet()) {
       serializer.addToMessage(submsg, null, MAP_KEY, output.getKey());
@@ -141,7 +142,8 @@ public class CompiledViewCalculationConfigurationFudgeBuilder implements FudgeBu
     return result;
   }
 
-  protected void encodeMarketDataAliases(final FudgeSerializer serializer, final MutableFudgeMsg msg, final Map<ValueSpecification, Collection<ValueSpecification>> marketDataEntries) {
+  protected void encodeMarketDataAliases(final FudgeSerializer serializer, final MutableFudgeMsg msg,
+      final Map<ValueSpecification, Collection<ValueSpecification>> marketDataEntries) {
     final MutableFudgeMsg msgRequirements = msg.addSubMessage(MARKET_DATA_REQUIREMENTS_FIELD, null);
     final MutableFudgeMsg msgAliases = msg.addSubMessage(MARKET_DATA_ALIASES_FIELD, null);
     for (final Map.Entry<ValueSpecification, Collection<ValueSpecification>> requirement : marketDataEntries.entrySet()) {

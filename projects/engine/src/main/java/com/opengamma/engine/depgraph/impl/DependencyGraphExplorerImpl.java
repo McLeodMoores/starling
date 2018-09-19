@@ -51,8 +51,8 @@ public class DependencyGraphExplorerImpl implements DependencyGraphExplorer {
     return _graph;
   }
 
-  private static int terminalOutputSubset(final Map<ValueSpecification, Set<ValueRequirement>> allTerminals, final DependencyNode node, final Set<DependencyNode> visited,
-      final Map<ValueSpecification, Set<ValueRequirement>> subsetTerminals) {
+  private static int terminalOutputSubset(final Map<ValueSpecification, Set<ValueRequirement>> allTerminals,
+      final DependencyNode node, final Set<DependencyNode> visited, final Map<ValueSpecification, Set<ValueRequirement>> subsetTerminals) {
     if (visited.add(node)) {
       int count = node.getInputCount();
       int size = 1;
@@ -67,9 +67,8 @@ public class DependencyGraphExplorerImpl implements DependencyGraphExplorer {
         }
       }
       return size;
-    } else {
-      return 0;
     }
+    return 0;
   }
 
   @Override

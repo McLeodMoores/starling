@@ -68,7 +68,7 @@ public abstract class SimpleCalculationNodeInvocationContainer implements Lifecy
     private ExecutionReceiver _receiver;
     private AtomicInteger _blockCount;
 
-    public JobEntry(final CalculationJob job, final JobExecution execution, final ExecutionReceiver receiver) {
+    JobEntry(final CalculationJob job, final JobExecution execution, final ExecutionReceiver receiver) {
       _job = job;
       _execution = execution;
       _receiver = receiver;
@@ -87,9 +87,10 @@ public abstract class SimpleCalculationNodeInvocationContainer implements Lifecy
     }
 
     /**
-     * This is only called from a single thread - doing the addJob operation - once it has been called once, another thread will manipulate the block count (e.g. if a job is finishing) and possibly
-     * spawn the job. Note that we initialize the count to two so that the job does not get spawned prematurely until the addJob thread has processed the required job list and performs a decrement to
-     * clear the additional value.
+     * This is only called from a single thread - doing the addJob operation - once it has been called once, another thread
+     * will manipulate the block count (e.g. if a job is finishing) and possibly spawn the job. Note that we initialize the
+     * count to two so that the job does not get spawned prematurely until the addJob thread has processed the required job
+     * list and performs a decrement to clear the additional value.
      */
     public void incrementBlockCount() {
       if (_blockCount == null) {
@@ -136,7 +137,8 @@ public abstract class SimpleCalculationNodeInvocationContainer implements Lifecy
     private final SimpleCalculationNodeState _nodeState;
     private final AsynchronousResult<SimpleCalculationNode.Deferred<CalculationJobResult>> _handle;
 
-    public PartialJobEntry(final JobEntry entry, final SimpleCalculationNodeState nodeState, final AsynchronousResult<SimpleCalculationNode.Deferred<CalculationJobResult>> handle) {
+    PartialJobEntry(final JobEntry entry, final SimpleCalculationNodeState nodeState,
+        final AsynchronousResult<SimpleCalculationNode.Deferred<CalculationJobResult>> handle) {
       _entry = entry;
       _nodeState = nodeState;
       _handle = handle;
@@ -168,7 +170,7 @@ public abstract class SimpleCalculationNodeInvocationContainer implements Lifecy
     private Set<JobEntry> _blocked;
     private Pair<Thread, CalculationJob> _executor;
 
-    public JobExecution(final long jobId) {
+    JobExecution(final long jobId) {
       _jobId = jobId;
       _timestamp = System.nanoTime();
       _status = Status.RUNNING;
@@ -244,14 +246,16 @@ public abstract class SimpleCalculationNodeInvocationContainer implements Lifecy
   private final AtomicInteger _failureCount = new AtomicInteger();
 
   /**
-   * The queue of runnable jobs. Each are jobs that have been received and are ready to run but have not been started, probably because they are waiting for a node to become available. When nodes are
-   * available they will take partial jobs from the {@link #_partialJobs} queue in preference to this queue.
+   * The queue of runnable jobs. Each are jobs that have been received and are ready to run but have not been started,
+   * probably because they are waiting for a node to become available. When nodes are available they will take partial
+   * jobs from the {@link #_partialJobs} queue in preference to this queue.
    */
   private final Queue<JobEntry> _runnableJobs = new ConcurrentLinkedQueue<>();
   /**
-   * The queue of partially executed jobs. Each represents a piece of work that was started, became blocked on something external, but is now ready to run again. Note that the resume may not take
-   * place on the original node and/or original thread. This is to avoid a potential bottleneck. Nothing should be retaining thread/node specific state (other than the saved node state) so this should
-   * not be a problem.
+   * The queue of partially executed jobs. Each represents a piece of work that was started, became blocked on something
+   * external, but is now ready to run again. Note that the resume may not take place on the original node and/or
+   * original thread. This is to avoid a potential bottleneck. Nothing should be retaining thread/node specific state
+   * (other than the saved node state) so this should not be a problem.
    */
   private final Queue<PartialJobEntry> _partialJobs = new ConcurrentLinkedQueue<>();
 
@@ -327,7 +331,8 @@ public abstract class SimpleCalculationNodeInvocationContainer implements Lifecy
   }
 
   /**
-   * Returns the total number of jobs enqueued at this node. This includes both runnable, partial and blocked jobs. Note that the structure that holds the jobs may have quite a costly size operation.
+   * Returns the total number of jobs enqueued at this node. This includes both runnable, partial and blocked jobs.
+   * Note that the structure that holds the jobs may have quite a costly size operation.
    *
    * @return the number of jobs
    */
@@ -336,8 +341,8 @@ public abstract class SimpleCalculationNodeInvocationContainer implements Lifecy
   }
 
   /**
-   * Returns the number of jobs enqueued at this node that are available to start. This includes both runnable, partial and blocked jobs. Note that the structure that holds the jobs may have quite a
-   * costly size operation.
+   * Returns the number of jobs enqueued at this node that are available to start. This includes both runnable, partial
+   * and blocked jobs. Note that the structure that holds the jobs may have quite a costly size operation.
    *
    * @return the number of jobs
    */
@@ -346,8 +351,8 @@ public abstract class SimpleCalculationNodeInvocationContainer implements Lifecy
   }
 
   /**
-   * Returns the number of jobs enqueued at this node that have been partially completed and are ready for continuation. Note that the structure that holds the jobs may have quite a costly size
-   * operation.
+   * Returns the number of jobs enqueued at this node that have been partially completed and are ready for continuation.
+   * Note that the structure that holds the jobs may have quite a costly size operation.
    *
    * @return the number of jobs
    */
@@ -465,8 +470,10 @@ public abstract class SimpleCalculationNodeInvocationContainer implements Lifecy
   }
 
   /**
-   * Adds jobs to the runnable queue, spawning a worker thread if a node is supplied or one is available. Jobs must be added in dependency order - i.e. a job must be submitted before any that require
-   * it. This is to simplify retention of job status as we only need to track jobs that are still running or have failed which saves a lot of housekeeping overhead.
+   * Adds jobs to the runnable queue, spawning a worker thread if a node is supplied or one is available. Jobs must
+   * be added in dependency order - i.e. a job must be submitted before any that require it. This is to simplify
+   * retention of job status as we only need to track jobs that are still running or have failed which saves a lot
+   * of housekeeping overhead.
    *
    * @param job job to run, not null
    * @param receiver execution status receiver, not null
@@ -504,6 +511,7 @@ public abstract class SimpleCalculationNodeInvocationContainer implements Lifecy
                 required.blockJob(jobEntry);
                 LOGGER.debug("Required job {} blocking {}", requiredId, jobExecution.getJobId());
                 break;
+              default:
             }
           }
         } else {

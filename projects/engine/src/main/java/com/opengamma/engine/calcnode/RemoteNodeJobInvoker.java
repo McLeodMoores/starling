@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode;
@@ -68,7 +68,7 @@ import com.opengamma.transport.FudgeMessageSender;
      */
     private final CalculationJob _job;
 
-    public JobInfo(final JobInvocationReceiver receiver, final CalculationJob job) {
+    JobInfo(final JobInvocationReceiver receiver, final CalculationJob job) {
       _receiver = receiver;
       _job = job;
     }
@@ -78,7 +78,7 @@ import com.opengamma.transport.FudgeMessageSender;
     }
 
     public int getLaunchDelta() {
-      return (_job.getTail() != null) ? _job.getTail().size() - 1 : -1;
+      return _job.getTail() != null ? _job.getTail().size() - 1 : -1;
     }
 
     public CalculationJob getJob() {
@@ -87,13 +87,13 @@ import com.opengamma.transport.FudgeMessageSender;
 
   }
 
-  private final ConcurrentMap<CalculationJobSpecification, JobInfo> _pendingJobs = new ConcurrentHashMap<CalculationJobSpecification, JobInfo>();
+  private final ConcurrentMap<CalculationJobSpecification, JobInfo> _pendingJobs = new ConcurrentHashMap<>();
   private final ExecutorService _executorService;
   private final FudgeMessageSender _fudgeMessageSender;
   private final CapabilitySet _capabilitySet = new CapabilitySet();
   private volatile int _capacity;
   private final AtomicInteger _launched = new AtomicInteger();
-  private final AtomicReference<JobInvokerRegister> _dispatchCallback = new AtomicReference<JobInvokerRegister>();
+  private final AtomicReference<JobInvokerRegister> _dispatchCallback = new AtomicReference<>();
   private final IdentifierMap _identifierMap;
   private final FunctionCosts _functionCosts;
   private final FunctionBlacklistQuery _blacklistQuery;
@@ -187,7 +187,7 @@ import com.opengamma.transport.FudgeMessageSender;
 
   };
 
-  public RemoteNodeJobInvoker(
+  RemoteNodeJobInvoker(
       final ExecutorService executorService, final Ready initialMessage, final FudgeConnection fudgeConnection,
       final IdentifierMap identifierMap, final FunctionCosts functionCosts, final FunctionBlacklistQuery blacklistQuery,
       final FunctionBlacklistMaintainer blacklistUpdate) {
@@ -267,7 +267,8 @@ import com.opengamma.transport.FudgeMessageSender;
   }
 
   /**
-   * Replaces any blacklisted job items with no-op functions. This keeps the shape of the job the same and may allow continuation of dependent jobs that can operate on missing inputs.
+   * Replaces any blacklisted job items with no-op functions. This keeps the shape of the job the same and may allow
+   * continuation of dependent jobs that can operate on missing inputs.
    */
   /* package */static CalculationJob blacklist(final FunctionBlacklistQuery query, final CalculationJob job) {
     if (query.isEmpty()) {
@@ -278,7 +279,7 @@ import com.opengamma.transport.FudgeMessageSender;
     for (int i = 0; i < size; i++) {
       CalculationJobItem item = originalItems.get(i);
       if (query.isBlacklisted(item)) {
-        final List<CalculationJobItem> newItems = new ArrayList<CalculationJobItem>(size);
+        final List<CalculationJobItem> newItems = new ArrayList<>(size);
         for (int j = 0; j < i; j++) {
           newItems.add(originalItems.get(j));
         }
@@ -295,7 +296,8 @@ import com.opengamma.transport.FudgeMessageSender;
             newItems.add(item);
           }
         }
-        return new CalculationJob(job.getSpecification(), job.getFunctionInitializationIdentifier(), job.getResolverVersionCorrection(), job.getRequiredJobIds(), newItems, job.getCacheSelectHint());
+        return new CalculationJob(job.getSpecification(), job.getFunctionInitializationIdentifier(),
+            job.getResolverVersionCorrection(), job.getRequiredJobIds(), newItems, job.getCacheSelectHint());
       }
     }
     return job;
@@ -325,7 +327,7 @@ import com.opengamma.transport.FudgeMessageSender;
         try {
           sendJob(rootJob);
           if (rootJob.getTail() != null) {
-            final Queue<CalculationJob> jobs = new LinkedList<CalculationJob>(rootJob.getTail());
+            final Queue<CalculationJob> jobs = new LinkedList<>(rootJob.getTail());
             CalculationJob job = jobs.poll();
             while (job != null) {
               sendJob(job);
@@ -335,7 +337,7 @@ import com.opengamma.transport.FudgeMessageSender;
               job = jobs.poll();
             }
           }
-        } catch (Exception e) {
+        } catch (final Exception e) {
           LOGGER.warn("Error sending job {}", rootJob.getSpecification().getJobId());
           jobFailed(receiver, rootJob, "node on " + getInvokerId(), e);
           // Not knowing where the failure occurred, we may get an additional decrement if any of the jobs started completing. This may have
@@ -418,7 +420,7 @@ import com.opengamma.transport.FudgeMessageSender;
     _launched.addAndGet(_capacity); // Force over capacity to prevent any new submissions
     final String invokerId = _invokerId;
     _invokerId = null;
-    for (CalculationJobSpecification jobSpec : getPendingJobs().keySet()) {
+    for (final CalculationJobSpecification jobSpec : getPendingJobs().keySet()) {
       final JobInfo job = getPendingJobs().remove(jobSpec);
       // There could still be late messages arriving from a buffer even though the connection has now failed
       if (job != null) {

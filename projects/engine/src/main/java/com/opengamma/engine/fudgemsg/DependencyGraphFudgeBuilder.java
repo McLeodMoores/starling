@@ -299,17 +299,16 @@ public class DependencyGraphFudgeBuilder implements FudgeBuilder<DependencyGraph
         final int identifier = ((Number) value).intValue();
         assert _nodes[identifier] != null;
         return _nodes[identifier].getFunction();
-      } else {
-        final String functionId = (String) value;
-        field = msg.getByName(FUNCTION_PARAMETERS_FIELD);
-        final FunctionParameters parameters;
-        if (field != null) {
-          parameters = _deserializer.fieldValueToObject(FunctionParameters.class, field);
-        } else {
-          parameters = EmptyFunctionParameters.INSTANCE;
-        }
-        return DependencyNodeFunctionImpl.of(functionId, parameters);
       }
+      final String functionId = (String) value;
+      field = msg.getByName(FUNCTION_PARAMETERS_FIELD);
+      final FunctionParameters parameters;
+      if (field != null) {
+        parameters = _deserializer.fieldValueToObject(FunctionParameters.class, field);
+      } else {
+        parameters = EmptyFunctionParameters.INSTANCE;
+      }
+      return DependencyNodeFunctionImpl.of(functionId, parameters);
     }
 
     private ComputationTargetSpecification getTargetFromField(final FudgeField field) {
@@ -318,9 +317,8 @@ public class DependencyGraphFudgeBuilder implements FudgeBuilder<DependencyGraph
         final int identifier = ((Number) fieldValue).intValue();
         assert _nodes[identifier] != null;
         return _nodes[identifier].getTarget();
-      } else {
-        return MemoryUtils.instance(_deserializer.fudgeMsgToObject(ComputationTargetReference.class, (FudgeMsg) fieldValue).getSpecification());
       }
+      return MemoryUtils.instance(_deserializer.fudgeMsgToObject(ComputationTargetReference.class, (FudgeMsg) fieldValue).getSpecification());
     }
 
     private ValueProperties getValuePropertiesFromField(final FudgeField field) {
@@ -329,15 +327,14 @@ public class DependencyGraphFudgeBuilder implements FudgeBuilder<DependencyGraph
         final Integer identifier = ((Number) fieldValue).intValue();
         assert _properties.containsKey(identifier);
         return _properties.get(identifier);
-      } else {
-        final FudgeMsg msg = (FudgeMsg) fieldValue;
-        final ValueProperties properties = _deserializer.fudgeMsgToObject(ValueProperties.class, msg);
-        final Integer identifier = msg.getInt(IDENTIFIER_FIELD);
-        if (identifier != null) {
-          _properties.put(identifier, properties);
-        }
-        return properties;
       }
+      final FudgeMsg msg = (FudgeMsg) fieldValue;
+      final ValueProperties properties = _deserializer.fudgeMsgToObject(ValueProperties.class, msg);
+      final Integer identifier = msg.getInt(IDENTIFIER_FIELD);
+      if (identifier != null) {
+        _properties.put(identifier, properties);
+      }
+      return properties;
     }
 
     private TempDependencyNode getNodeFromField(final FudgeField field) {

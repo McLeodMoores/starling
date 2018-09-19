@@ -80,9 +80,8 @@ public class DefaultComputationTargetSpecificationResolverTest {
         assertEquals(versionCorrection, VC);
         if (identifiers.contains(ExternalId.of("Test", "B"))) {
           return SPECIFICATION_FOO_VERSIONED.getUniqueId();
-        } else {
-          return null;
         }
+        return null;
       }
 
       @Override
@@ -90,9 +89,8 @@ public class DefaultComputationTargetSpecificationResolverTest {
         assertEquals(versionCorrection, VC);
         if (identifier.getValue().equals("Bar")) {
           return SPECIFICATION_FOO_VERSIONED.getUniqueId();
-        } else {
-          return null;
         }
+        return null;
       }
 
     });
@@ -154,7 +152,7 @@ public class DefaultComputationTargetSpecificationResolverTest {
   }
 
   public void testAll() {
-    final Set<ComputationTargetReference> request = new HashSet<ComputationTargetReference>();
+    final Set<ComputationTargetReference> request = new HashSet<>();
     request.add(SPECIFICATION_NULL);
     request.add(SPECIFICATION_PRIMITIVE_VERSIONED);
     request.add(SPECIFICATION_PRIMITIVE_LATEST);

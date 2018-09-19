@@ -1,16 +1,11 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.cache;
 
 import static org.testng.Assert.assertEquals;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.longs.LongArrayList;
-import it.unimi.dsi.fastutil.objects.Object2LongMap;
-import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -24,6 +19,12 @@ import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValuePropertyNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.util.test.TestGroup;
+
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.longs.LongArrayList;
+import it.unimi.dsi.fastutil.objects.Object2LongMap;
+import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
 
 /**
  * Tests the {@link CachingIdentifierMap} class.
@@ -59,10 +60,10 @@ public class CachingIdentifierMapTest {
     final ValueSpecification spec1 = createValueSpec(1);
     final ValueSpecification spec2 = createValueSpec(2);
     final ValueSpecification spec3 = createValueSpec(3);
-    final Collection<ValueSpecification> spec1And2 = new LinkedList<ValueSpecification>();
+    final Collection<ValueSpecification> spec1And2 = new LinkedList<>();
     spec1And2.add(spec1);
     spec1And2.add(spec2);
-    final Object2LongMap<ValueSpecification> identifier1And2 = new Object2LongOpenHashMap<ValueSpecification>();
+    final Object2LongMap<ValueSpecification> identifier1And2 = new Object2LongOpenHashMap<>();
     identifier1And2.put(spec1, 1L);
     identifier1And2.put(spec2, 2L);
     final IdentifierMap underlying = Mockito.mock(IdentifierMap.class);
@@ -99,7 +100,7 @@ public class CachingIdentifierMapTest {
     final ValueSpecification spec1 = createValueSpec(1);
     final ValueSpecification spec2 = createValueSpec(2);
     final ValueSpecification spec3 = createValueSpec(3);
-    final Long2ObjectMap<ValueSpecification> spec1And2 = new Long2ObjectOpenHashMap<ValueSpecification>(new long[] {1L, 2L }, new ValueSpecification[] {spec1, spec2 });
+    final Long2ObjectMap<ValueSpecification> spec1And2 = new Long2ObjectOpenHashMap<>(new long[] {1L, 2L }, new ValueSpecification[] {spec1, spec2 });
     final IdentifierMap underlying = Mockito.mock(IdentifierMap.class);
     final CachingIdentifierMap cache = new CachingIdentifierMap(underlying);
     Mockito.when(underlying.getValueSpecifications(new LongArrayList(new long[] {1L, 2L }))).thenReturn(spec1And2);

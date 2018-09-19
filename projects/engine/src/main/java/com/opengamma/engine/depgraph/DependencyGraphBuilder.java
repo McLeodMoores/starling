@@ -355,7 +355,8 @@ public final class DependencyGraphBuilder implements Cancelable {
   };
 
   protected ComputationTargetSpecification resolveTargetReference(final ComputationTargetReference reference) {
-    final ComputationTargetSpecification specification = getCompilationContext().getComputationTargetResolver().getSpecificationResolver().getTargetSpecification(reference);
+    final ComputationTargetSpecification specification =
+        getCompilationContext().getComputationTargetResolver().getSpecificationResolver().getTargetSpecification(reference);
     if (specification == null) {
       LOGGER.warn("Couldn't resolve {}", reference);
       return null;
@@ -364,9 +365,8 @@ public final class DependencyGraphBuilder implements Cancelable {
       final ComputationTarget target = getCompilationContext().getComputationTargetResolver().resolve(specification);
       if (target != null) {
         return target.toSpecification();
-      } else {
-        LOGGER.warn("Resolved {} to {} but can't resolve target to eliminate union", reference, specification);
       }
+      LOGGER.warn("Resolved {} to {} but can't resolve target to eliminate union", reference, specification);
     }
     return specification;
   }
@@ -471,12 +471,15 @@ public final class DependencyGraphBuilder implements Cancelable {
   }
 
   /**
-   * Adds a target requirement to the graph. The requirement is queued and the call returns; construction of the graph will happen on a background thread (if additional threads is non-zero), or when
-   * the call to {@link #getDependencyGraph} is made. If it was not possible to satisfy the requirement that must be checked after graph construction is complete.
+   * Adds a target requirement to the graph. The requirement is queued and the call returns; construction of the graph
+   * will happen on a background thread (if additional threads is non-zero), or when the call to {@link #getDependencyGraph}
+   * is made. If it was not possible to satisfy the requirement that must be checked after graph construction is complete.
    * <p>
-   * The caller must ensure that the same requirement is not passed multiple times to the builder. Depending on scheduling and memory availability, the cases may be identified and coalesced (by
-   * {@link GraphBuildingContext#resolveRequirement}) into a single logical operation. Alternatively the resolutions may run to completion to include terminal outputs in the result. If the function
-   * library contains an ambiguity or other aspect that means the resolved value specification could differ this will result in an invalid dependency graph.
+   * The caller must ensure that the same requirement is not passed multiple times to the builder. Depending on scheduling
+   * and memory availability, the cases may be identified and coalesced (by {@link GraphBuildingContext#resolveRequirement})
+   * into a single logical operation. Alternatively the resolutions may run to completion to include terminal outputs in
+   * the result. If the function library contains an ambiguity or other aspect that means the resolved value specification
+   * could differ this will result in an invalid dependency graph.
    *
    * @param requirement requirement to add, not null
    */
@@ -565,7 +568,6 @@ public final class DependencyGraphBuilder implements Cancelable {
     return false;
   }
 
-  @SuppressWarnings("unchecked")
   protected void abortLoops() {
     LOGGER.debug("Checking for tasks to abort");
     ABORT_LOOPS.begin();
@@ -905,13 +907,13 @@ public final class DependencyGraphBuilder implements Cancelable {
   }
 
   /**
-   * Flushes data that is unlikely to be needed again from the resolution caches. Anything discarded will either never be needed again for any pending resolutions, or is a cached production that can
-   * be recalculated if necessary. Discards can be a multiple stage process - repeated calls all the while this function returns true must be used to flush all possible state and make as much memory
-   * available as possible for the garbage collector.
+   * Flushes data that is unlikely to be needed again from the resolution caches. Anything discarded will either never
+   * be needed again for any pending resolutions, or is a cached production that can be recalculated if necessary.
+   * Discards can be a multiple stage process - repeated calls all the while this function returns true must be used to
+   * flush all possible state and make as much memory available as possible for the garbage collector.
    *
    * @return true if one or more states were discarded, false if there was nothing that can be discarded
    */
-  @SuppressWarnings("unchecked")
   protected boolean flushCachedStates() {
     // TODO: use heuristics to throw data away more sensibly (e.g. LRU)
     int removed = 0;

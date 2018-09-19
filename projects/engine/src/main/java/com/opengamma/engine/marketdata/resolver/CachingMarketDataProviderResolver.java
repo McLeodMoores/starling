@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.marketdata.resolver;
@@ -17,15 +17,15 @@ import com.opengamma.util.map.Map2;
 import com.opengamma.util.map.WeakValueHashMap2;
 
 /**
- * Caching wrapper around {@link MarketDataProviderResolver} - this can be used when resolvers will create new instances each time when the call with the same user and specification could share the
- * same instance.
+ * Caching wrapper around {@link MarketDataProviderResolver} - this can be used when resolvers will create new instances each time
+ * when the call with the same user and specification could share the same instance.
  */
 public class CachingMarketDataProviderResolver implements MarketDataProviderResolver {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CachingMarketDataProviderResolver.class);
 
   private final MarketDataProviderResolver _underlying;
-  private final Map2<UserPrincipal, MarketDataSpecification, MarketDataProvider> _cache = new WeakValueHashMap2<UserPrincipal, MarketDataSpecification, MarketDataProvider>(HashMap2.STRONG_KEYS);
+  private final Map2<UserPrincipal, MarketDataSpecification, MarketDataProvider> _cache = new WeakValueHashMap2<>(HashMap2.STRONG_KEYS);
 
   public CachingMarketDataProviderResolver(final MarketDataProviderResolver underlying) {
     ArgumentChecker.notNull(underlying, "underlying");
@@ -55,10 +55,9 @@ public class CachingMarketDataProviderResolver implements MarketDataProviderReso
     if (existing == null) {
       LOGGER.debug("Stored cache entry of {} for {}", snapshotSpec, marketDataUser);
       return provider;
-    } else {
-      LOGGER.debug("Using existing cached entry of {} for {}", snapshotSpec, marketDataUser);
-      return existing;
     }
+    LOGGER.debug("Using existing cached entry of {} for {}", snapshotSpec, marketDataUser);
+    return existing;
   }
 
   // MarketDataProviderResolver

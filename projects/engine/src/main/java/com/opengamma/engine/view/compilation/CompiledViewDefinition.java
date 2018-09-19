@@ -85,9 +85,11 @@ public interface CompiledViewDefinition {
   Map<String, CompiledViewCalculationConfiguration> getCompiledCalculationConfigurationsMap();
 
   /**
-   * Gets the combined market data requirements of all calculation configurations. These specifications correspond to the values that must be sourced by the leaf nodes of the graph and may be used to
-   * establish market data subscriptions. If the external identifiers corresponding to the market data lines are required, the associated market data provider that participated in the graph building
-   * must be consulted to provide a conversion, or the aliased requirements from the individual calculation configurations may be used.
+   * Gets the combined market data requirements of all calculation configurations. These specifications correspond to the
+   * values that must be sourced by the leaf nodes of the graph and may be used to establish market data subscriptions.
+   * If the external identifiers corresponding to the market data lines are required, the associated market data provider
+   * that participated in the graph building must be consulted to provide a conversion, or the aliased requirements from
+   * the individual calculation configurations may be used.
    *
    * @return the value specifications for all necessary market data, not null
    */

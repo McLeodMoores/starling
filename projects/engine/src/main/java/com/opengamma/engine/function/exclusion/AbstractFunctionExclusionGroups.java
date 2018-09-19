@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.exclusion;
@@ -24,12 +24,12 @@ public abstract class AbstractFunctionExclusionGroups implements FunctionExclusi
    */
   private static final FunctionExclusionGroup NULL = new FunctionExclusionGroup();
 
-  private final ConcurrentMap<Object, FunctionExclusionGroup> _groupsByKey = new ConcurrentHashMap<Object, FunctionExclusionGroup>();
+  private final ConcurrentMap<Object, FunctionExclusionGroup> _groupsByKey = new ConcurrentHashMap<>();
   private final ConcurrentMap<FunctionDefinition, FunctionExclusionGroup> _groupsByFunction = new MapMaker().weakKeys().makeMap();
 
   /**
    * Returns a key that identifies the exclusion group, if any.
-   * 
+   *
    * @param function the function to test
    * @return the key or null if the function is not part of a group
    */
@@ -63,26 +63,23 @@ public abstract class AbstractFunctionExclusionGroups implements FunctionExclusi
       if (key == null) {
         _groupsByFunction.putIfAbsent(function, NULL);
         return null;
-      } else {
-        group = _groupsByKey.get(key);
-        if (group == null) {
-          group = createExclusionGroup(key);
-          final FunctionExclusionGroup existing = _groupsByKey.putIfAbsent(key, group);
-          if (existing == null) {
-            _groupsByFunction.putIfAbsent(function, group);
-          } else {
-            group = existing;
-          }
+      }
+      group = _groupsByKey.get(key);
+      if (group == null) {
+        group = createExclusionGroup(key);
+        final FunctionExclusionGroup existing = _groupsByKey.putIfAbsent(key, group);
+        if (existing == null) {
+          _groupsByFunction.putIfAbsent(function, group);
+        } else {
+          group = existing;
         }
-        return group;
       }
-    } else {
-      if (group != NULL) {
-        return group;
-      } else {
-        return null;
-      }
+      return group;
     }
+    if (group != NULL) {
+      return group;
+    }
+    return null;
   }
 
   @Override

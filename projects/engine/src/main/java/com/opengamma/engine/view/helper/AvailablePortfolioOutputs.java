@@ -52,8 +52,9 @@ import com.opengamma.util.tuple.Pairs;
 /**
  * Implementation of {@link AvailableOutputs} that scans a function repository to give possible outputs available on a portfolio.
  * <p>
- * The named values aren't guaranteed to be computable for all nodes, positions or security types indicated as the full set of functions may require underlying market data or other information that is
- * not available or computable. Due to the black-box nature of the function definitions additional values not mentioned may be available for a portfolio.
+ * The named values aren't guaranteed to be computable for all nodes, positions or security types indicated as the full set
+ * of functions may require underlying market data or other information that is not available or computable. Due to the black-box
+ * nature of the function definitions additional values not mentioned may be available for a portfolio.
  * <p>
  * For more accurate details, refer to the documentation for the functions installed in the repository.
  */
@@ -67,7 +68,7 @@ public class AvailablePortfolioOutputs extends AvailableOutputsImpl {
 
     private T _item;
 
-    public SingleItem(final T item) {
+    SingleItem(final T item) {
       _item = item;
     }
 
@@ -99,7 +100,7 @@ public class AvailablePortfolioOutputs extends AvailableOutputsImpl {
     private final Map<UniqueId, UniqueIdentifiable> _targetCache = new HashMap<>();
     private int _work;
 
-    public TargetCachePopulator() {
+    TargetCachePopulator() {
     }
 
     public Map<UniqueId, UniqueIdentifiable> getCache() {
@@ -144,7 +145,7 @@ public class AvailablePortfolioOutputs extends AvailableOutputsImpl {
     private final Integer _totalWork;
     private int _work;
 
-    public FunctionApplicator(final FunctionCompilationContext context, final Collection<CompiledFunctionDefinition> functions,
+    FunctionApplicator(final FunctionCompilationContext context, final Collection<CompiledFunctionDefinition> functions,
         final FunctionExclusionGroups functionExclusionGroups, final MarketDataAvailabilityFilter marketDataAvailabilityFilter,
         final TargetCachePopulator targetCache) {
       _context = context;
@@ -210,17 +211,17 @@ public class AvailablePortfolioOutputs extends AvailableOutputsImpl {
       entries.add(Pairs.of(list, results != null ? results : Collections.<ValueSpecification>emptySet()));
     }
 
-    private Set<ValueSpecification> satisfyRequirement(final Set<ValueRequirement> visitedRequirements, final Set<FunctionExclusionGroup> visitedFunctions, final ComputationTarget target,
+    private Set<ValueSpecification> satisfyRequirement(final Set<ValueRequirement> visitedRequirements,
+        final Set<FunctionExclusionGroup> visitedFunctions, final ComputationTarget target,
         final ValueRequirement requirement) {
       Set<ValueSpecification> allResults = getCachedResult(visitedRequirements, requirement);
       if (allResults != null) {
         if (allResults.isEmpty()) {
           LOGGER.debug("Cache failure hit on {}", requirement);
           return null;
-        } else {
-          LOGGER.debug("Cache result hit on {}", requirement);
-          return allResults;
         }
+        LOGGER.debug("Cache result hit on {}", requirement);
+        return allResults;
       }
       Map<CompiledFunctionDefinition, Set<ValueSpecification>> functionResults = _resultsCache.get(target);
       if (functionResults == null) {
@@ -249,10 +250,12 @@ public class AvailablePortfolioOutputs extends AvailableOutputsImpl {
         final CompiledFunctionDefinition function = functionResult.getKey();
         for (final ValueSpecification result : functionResult.getValue()) {
           if (isSatisfied(requirement, result)) {
-            final FunctionExclusionGroup group = _functionExclusionGroups == null ? null : _functionExclusionGroups.getExclusionGroup(function.getFunctionDefinition());
+            final FunctionExclusionGroup group =
+                _functionExclusionGroups == null ? null : _functionExclusionGroups.getExclusionGroup(function.getFunctionDefinition());
             if (group == null || visitedFunctions.add(group)) {
               LOGGER.debug("Resolving {} to satisfy {}", result, requirement);
-              final Set<ValueSpecification> resolved = resultWithSatisfiedRequirements(visitedRequirements, visitedFunctions, function, target, requirement, result.compose(requirement));
+              final Set<ValueSpecification> resolved =
+                  resultWithSatisfiedRequirements(visitedRequirements, visitedFunctions, function, target, requirement, result.compose(requirement));
               if (resolved != null) {
                 if (allResults == null) {
                   allResults = new HashSet<>();
@@ -295,32 +298,32 @@ public class AvailablePortfolioOutputs extends AvailableOutputsImpl {
           // Requirement used a nearly infinite property bundle that omitted a function identifier
           return constraints.copy().withAny(ValuePropertyNames.FUNCTION).get();
         }
-      } else {
-        if (functionNames.isEmpty()) {
-          final Set<String> allProperties = constraints.getProperties();
-          if (allProperties.isEmpty()) {
-            // Requirement is for an infinite or nearly infinite property bundle. This is valid but may be indicative of an error
-            return constraints;
-          } else {
-            // Requirement had a wild card for the function but is otherwise finite
-            return constraints.copy().withoutAny(ValuePropertyNames.FUNCTION).with(ValuePropertyNames.FUNCTION, functionName).get();
-          }
-        } else if (functionNames.size() == 1) {
-          // Requirement is fully specified
+      }
+      if (functionNames.isEmpty()) {
+        final Set<String> allProperties = constraints.getProperties();
+        if (allProperties.isEmpty()) {
+          // Requirement is for an infinite or nearly infinite property bundle. This is valid but may be indicative of an error
           return constraints;
-        } else {
-          // Requirement allowed a choice of function - pick one
-          return constraints.copy().withoutAny(ValuePropertyNames.FUNCTION).with(ValuePropertyNames.FUNCTION, functionNames.iterator().next()).get();
         }
+        // Requirement had a wild card for the function but is otherwise finite
+        return constraints.copy().withoutAny(ValuePropertyNames.FUNCTION).with(ValuePropertyNames.FUNCTION, functionName).get();
+      } else if (functionNames.size() == 1) {
+        // Requirement is fully specified
+        return constraints;
+      } else {
+        // Requirement allowed a choice of function - pick one
+        return constraints.copy().withoutAny(ValuePropertyNames.FUNCTION).with(ValuePropertyNames.FUNCTION, functionNames.iterator().next()).get();
       }
     }
 
-    private ValueSpecification satisfyingSpecification(final ValueRequirement requirement, final ComputationTargetSpecification targetSpec, final String functionName) {
+    private ValueSpecification satisfyingSpecification(final ValueRequirement requirement, final ComputationTargetSpecification targetSpec,
+        final String functionName) {
       return new ValueSpecification(requirement.getValueName(), targetSpec, satisfyingProperties(requirement, functionName));
     }
 
-    private Set<ValueSpecification> resultWithSatisfiedRequirements(final Set<ValueRequirement> visitedRequirements, final Set<FunctionExclusionGroup> visitedFunctions,
-        final CompiledFunctionDefinition function, final ComputationTarget target, final ValueRequirement requiredOutputValue, final ValueSpecification resolvedOutputValue) {
+    private Set<ValueSpecification> resultWithSatisfiedRequirements(final Set<ValueRequirement> visitedRequirements,
+        final Set<FunctionExclusionGroup> visitedFunctions, final CompiledFunctionDefinition function, final ComputationTarget target,
+        final ValueRequirement requiredOutputValue, final ValueSpecification resolvedOutputValue) {
       final Set<ValueRequirement> requirements;
       try {
         requirements = function.getRequirements(_context, target, requiredOutputValue);
@@ -373,7 +376,8 @@ public class AvailablePortfolioOutputs extends AvailableOutputsImpl {
           LOGGER.debug("Externally referenced entity {}, assuming ok", targetRef);
           final ExternalId eid = targetRef.getRequirement().getIdentifiers().iterator().next();
           final UniqueId uid = UniqueId.of(eid.getScheme().getName(), eid.getValue());
-          inputs.put(new SingleItem<>(satisfyingSpecification(requirement, new ComputationTargetSpecification(targetRef.getType(), uid), "ExternalEntity")), requirement);
+          inputs.put(new SingleItem<>(satisfyingSpecification(requirement,
+              new ComputationTargetSpecification(targetRef.getType(), uid), "ExternalEntity")), requirement);
         }
       }
       final Set<ValueSpecification> outputs = new HashSet<>();
@@ -388,29 +392,27 @@ public class AvailablePortfolioOutputs extends AvailableOutputsImpl {
         }
         if (inputSet.isEmpty()) {
           break;
-        } else {
-          try {
-            final Set<ValueSpecification> results = function.getResults(_context, target, inputSet);
-            if (results != null) {
-              for (final ValueSpecification result : results) {
-                if (resolvedOutputValue == result || isSatisfied(requiredOutputValue, result)) {
-                  outputs.add(result.compose(requiredOutputValue));
-                }
+        }
+        try {
+          final Set<ValueSpecification> results = function.getResults(_context, target, inputSet);
+          if (results != null) {
+            for (final ValueSpecification result : results) {
+              if (resolvedOutputValue == result || isSatisfied(requiredOutputValue, result)) {
+                outputs.add(result.compose(requiredOutputValue));
               }
             }
-          } catch (final Throwable t) {
-            LOGGER.error("Error applying {} to {}", function, target);
-            LOGGER.info("Exception thrown", t);
           }
-          inputSet.clear();
+        } catch (final Throwable t) {
+          LOGGER.error("Error applying {} to {}", function, target);
+          LOGGER.info("Exception thrown", t);
         }
+        inputSet.clear();
       } while (true);
       if (outputs.isEmpty()) {
         LOGGER.debug("Provisional result {} not in results after late resolution", resolvedOutputValue);
         return null;
-      } else {
-        return outputs;
       }
+      return outputs;
     }
 
     private final String _watch = null; // Don't check in with != null
@@ -434,7 +436,8 @@ public class AvailablePortfolioOutputs extends AvailableOutputsImpl {
             for (final ValueSpecification result : results) {
               visitedRequirements.clear();
               visitedFunctions.clear();
-              final FunctionExclusionGroup group = _functionExclusionGroups == null ? null : _functionExclusionGroups.getExclusionGroup(function.getFunctionDefinition());
+              final FunctionExclusionGroup group =
+                  _functionExclusionGroups == null ? null : _functionExclusionGroups.getExclusionGroup(function.getFunctionDefinition());
               if (group != null) {
                 visitedFunctions.add(group);
               }
@@ -445,7 +448,8 @@ public class AvailablePortfolioOutputs extends AvailableOutputsImpl {
                   continue;
                 }
               }
-              final Set<ValueSpecification> resolved = resultWithSatisfiedRequirements(visitedRequirements, visitedFunctions, function, target, new ValueRequirement(result.getValueName(),
+              final Set<ValueSpecification> resolved =
+                  resultWithSatisfiedRequirements(visitedRequirements, visitedFunctions, function, target, new ValueRequirement(result.getValueName(),
                   result.getTargetSpecification()), result);
               if (resolved != null) {
                 LOGGER.info("Resolved {} on {}", result.getValueName(), portfolioNode);
@@ -483,7 +487,8 @@ public class AvailablePortfolioOutputs extends AvailableOutputsImpl {
             for (final ValueSpecification result : results) {
               visitedRequirements.clear();
               visitedFunctions.clear();
-              final FunctionExclusionGroup group = _functionExclusionGroups == null ? null : _functionExclusionGroups.getExclusionGroup(function.getFunctionDefinition());
+              final FunctionExclusionGroup group =
+                  _functionExclusionGroups == null ? null : _functionExclusionGroups.getExclusionGroup(function.getFunctionDefinition());
               if (group != null) {
                 visitedFunctions.add(group);
               }
@@ -494,8 +499,8 @@ public class AvailablePortfolioOutputs extends AvailableOutputsImpl {
                   continue;
                 }
               }
-              final Set<ValueSpecification> resolved = resultWithSatisfiedRequirements(visitedRequirements, visitedFunctions, function, target, new ValueRequirement(result.getValueName(),
-                  result.getTargetSpecification()), result);
+              final Set<ValueSpecification> resolved = resultWithSatisfiedRequirements(visitedRequirements, visitedFunctions,
+                  function, target, new ValueRequirement(result.getValueName(), result.getTargetSpecification()), result);
               if (resolved != null) {
                 LOGGER.info("Resolved {} on {}", result.getValueName(), position);
                 for (final ValueSpecification resolvedItem : resolved) {
@@ -531,7 +536,8 @@ public class AvailablePortfolioOutputs extends AvailableOutputsImpl {
    * @param marketDataAvailability the market data availability, not null
    * @param anyValue value to use when composing a wild-card with a finite set of property values, or null to not compose
    */
-  public AvailablePortfolioOutputs(final Portfolio portfolio, final CompiledFunctionRepository functionRepository, final FunctionExclusionGroups functionExclusionGroups,
+  public AvailablePortfolioOutputs(final Portfolio portfolio, final CompiledFunctionRepository functionRepository,
+      final FunctionExclusionGroups functionExclusionGroups,
       final MarketDataAvailabilityFilter marketDataAvailability, final String anyValue) {
     ArgumentChecker.notNull(portfolio, "portfolio");
     ArgumentChecker.notNull(functionRepository, "functions");
@@ -540,8 +546,8 @@ public class AvailablePortfolioOutputs extends AvailableOutputsImpl {
     final Collection<CompiledFunctionDefinition> functions = functionRepository.getAllFunctions();
     final TargetCachePopulator targetCachePopulator = new TargetCachePopulator();
     PortfolioNodeTraverser.depthFirst(targetCachePopulator).traverse(portfolio.getRootNode());
-    PortfolioNodeTraverser.depthFirst(new FunctionApplicator(functionRepository.getCompilationContext(), functions, functionExclusionGroups, marketDataAvailability, targetCachePopulator))
-        .traverse(portfolio.getRootNode());
+    PortfolioNodeTraverser.depthFirst(new FunctionApplicator(functionRepository.getCompilationContext(), functions,
+        functionExclusionGroups, marketDataAvailability, targetCachePopulator)).traverse(portfolio.getRootNode());
   }
 
   @Override

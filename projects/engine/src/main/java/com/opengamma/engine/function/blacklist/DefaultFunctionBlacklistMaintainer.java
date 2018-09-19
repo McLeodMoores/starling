@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.blacklist;
@@ -59,7 +59,7 @@ public class DefaultFunctionBlacklistMaintainer implements FunctionBlacklistMain
   @Override
   public void failedJobItem(final CalculationJobItem item) {
     final Collection<Entry> entries = getPolicy().getEntries();
-    for (Entry entry : entries) {
+    for (final Entry entry : entries) {
       getUpdate().addBlacklistRule(createRule(entry, item), entry.getActivationPeriod(getPolicy()));
     }
   }
@@ -67,10 +67,10 @@ public class DefaultFunctionBlacklistMaintainer implements FunctionBlacklistMain
   @Override
   public void failedJobItems(final Collection<CalculationJobItem> items) {
     final Collection<Entry> entries = getPolicy().getEntries();
-    final ArrayList<FunctionBlacklistRule> rules = new ArrayList<FunctionBlacklistRule>(items.size());
-    for (Entry entry : entries) {
+    final ArrayList<FunctionBlacklistRule> rules = new ArrayList<>(items.size());
+    for (final Entry entry : entries) {
       rules.clear();
-      for (CalculationJobItem item : items) {
+      for (final CalculationJobItem item : items) {
         rules.add(createRule(entry, item));
       }
       getUpdate().addBlacklistRules(rules, entry.getActivationPeriod(getPolicy()));

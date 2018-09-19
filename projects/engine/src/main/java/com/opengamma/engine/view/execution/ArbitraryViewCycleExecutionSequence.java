@@ -30,7 +30,7 @@ public class ArbitraryViewCycleExecutionSequence extends MergingViewCycleExecuti
 
     private Cycle _next;
 
-    public Cycle(final ViewCycleExecutionOptions options) {
+    Cycle(final ViewCycleExecutionOptions options) {
       _options = options;
     }
 
@@ -145,9 +145,8 @@ public class ArbitraryViewCycleExecutionSequence extends MergingViewCycleExecuti
       _executionSequenceHead = head.getNext();
       _size--;
       return merge(head.getOptions(), defaultExecutionOptions);
-    } else {
-      return null;
     }
+    return null;
   }
 
   @Override

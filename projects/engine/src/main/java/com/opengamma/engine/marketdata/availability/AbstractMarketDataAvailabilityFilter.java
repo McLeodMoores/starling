@@ -45,9 +45,8 @@ public abstract class AbstractMarketDataAvailabilityFilter implements MarketData
       final AbstractMarketDataAvailabilityProvider underlying) {
     if (isAvailable(targetSpec, identifier, desiredValue)) {
       return underlying.getAvailability(targetSpec, identifier, desiredValue);
-    } else {
-      return null;
     }
+    return null;
   }
 
   /**
@@ -83,12 +82,10 @@ public abstract class AbstractMarketDataAvailabilityFilter implements MarketData
     if (acceptable != null) {
       if (acceptable.size() > 1) {
         return underlying.getAvailability(targetSpec, ExternalIdBundle.of(acceptable), desiredValue);
-      } else {
-        return underlying.getAvailability(targetSpec, acceptable.get(0), desiredValue);
       }
-    } else {
-      return null;
+      return underlying.getAvailability(targetSpec, acceptable.get(0), desiredValue);
     }
+    return null;
   }
 
   /**
@@ -109,9 +106,8 @@ public abstract class AbstractMarketDataAvailabilityFilter implements MarketData
       final AbstractMarketDataAvailabilityProvider underlying) {
     if (isAvailable(targetSpec, identifier, desiredValue)) {
       return underlying.getAvailability(targetSpec, identifier, desiredValue);
-    } else {
-      return null;
     }
+    return null;
   }
 
   /**
@@ -127,12 +123,12 @@ public abstract class AbstractMarketDataAvailabilityFilter implements MarketData
     return isAvailable(targetSpec, (UniqueId) null, desiredValue);
   }
 
-  protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ValueRequirement desiredValue, final AbstractMarketDataAvailabilityProvider underlying) {
+  protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ValueRequirement desiredValue,
+      final AbstractMarketDataAvailabilityProvider underlying) {
     if (isAvailable(targetSpec, desiredValue)) {
       return underlying.getAvailability(targetSpec, desiredValue);
-    } else {
-      return null;
     }
+    return null;
   }
 
   /**
@@ -162,13 +158,13 @@ public abstract class AbstractMarketDataAvailabilityFilter implements MarketData
     }
     if (target == null) {
       return isAvailable(targetSpec, desiredValue);
-    } else {
-      return false;
     }
+    return false;
   }
 
   /**
-   * Updates a collection containing keys that will be used to form the cache hint when this is used to construct an availability provider. A sub-class should put any construction parameters into the
+   * Updates a collection containing keys that will be used to form the cache hint when this is used to construct an
+   * availability provider. A sub-class should put any construction parameters into the
    * key that distinguish its behavior from other filters of the same class.
    *
    * @param key the key to update
@@ -186,17 +182,20 @@ public abstract class AbstractMarketDataAvailabilityFilter implements MarketData
       }
 
       @Override
-      protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ExternalId identifier, final ValueRequirement desiredValue) {
+      protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ExternalId identifier,
+          final ValueRequirement desiredValue) {
         return AbstractMarketDataAvailabilityFilter.this.getAvailability(targetSpec, identifier, desiredValue, underlying);
       }
 
       @Override
-      protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ExternalIdBundle identifiers, final ValueRequirement desiredValue) {
+      protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ExternalIdBundle identifiers,
+          final ValueRequirement desiredValue) {
         return AbstractMarketDataAvailabilityFilter.this.getAvailability(targetSpec, identifiers, desiredValue, underlying);
       }
 
       @Override
-      protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final UniqueId identifier, final ValueRequirement desiredValue) {
+      protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final UniqueId identifier,
+          final ValueRequirement desiredValue) {
         return AbstractMarketDataAvailabilityFilter.this.getAvailability(targetSpec, identifier, desiredValue, underlying);
       }
 

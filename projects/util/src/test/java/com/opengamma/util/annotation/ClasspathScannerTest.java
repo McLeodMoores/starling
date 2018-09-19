@@ -34,23 +34,23 @@ public class ClasspathScannerTest {
     assertFalse(Instant.now().isBefore(instant));
   }
 
-  public void test_scanType()  {
+  public void testScanType()  {
     assertAnnotation(MockType.class);
   }
 
-  public void test_scanField() {
+  public void testScanField() {
     assertAnnotation(MockField.class);
   }
 
-  public void test_scanConstructor() {
+  public void testScanConstructor() {
     assertAnnotation(MockConstructor.class);
   }
 
-  public void test_scanMethod() {
+  public void testScanMethod() {
     assertAnnotation(MockMethod.class);
   }
 
-  public void test_scanParameter() {
+  public void testScanParameter() {
     assertAnnotation(MockParameter.class);
   }
 

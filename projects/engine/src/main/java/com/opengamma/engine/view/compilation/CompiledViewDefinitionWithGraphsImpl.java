@@ -52,7 +52,8 @@ public class CompiledViewDefinitionWithGraphsImpl extends CompiledViewDefinition
    * @param portfolio the portfolio, possibly null
    * @return the new instance, not null
    */
-  public static CompiledViewDefinitionWithGraphsImpl of(final ViewCompilationContext context, final String identifier, final Collection<DependencyGraph> graphs, final Portfolio portfolio) {
+  public static CompiledViewDefinitionWithGraphsImpl of(final ViewCompilationContext context, final String identifier,
+      final Collection<DependencyGraph> graphs, final Portfolio portfolio) {
     final Collection<CompiledViewCalculationConfiguration> calcConfigs = new ArrayList<>();
     Instant validFrom = null;
     Instant validTo = null;
@@ -86,8 +87,9 @@ public class CompiledViewDefinitionWithGraphsImpl extends CompiledViewDefinition
         }
       }
     }
-    return new CompiledViewDefinitionWithGraphsImpl(context.getResolverVersionCorrection(), identifier, context.getViewDefinition(), graphs, context.getActiveResolutions(), portfolio, context
-        .getServices().getFunctionCompilationContext().getFunctionInitId(), calcConfigs, validFrom, validTo);
+    return new CompiledViewDefinitionWithGraphsImpl(context.getResolverVersionCorrection(), identifier, context.getViewDefinition(),
+        graphs, context.getActiveResolutions(), portfolio, context.getServices().getFunctionCompilationContext().getFunctionInitId(),
+        calcConfigs, validFrom, validTo);
   }
 
   public CompiledViewDefinitionWithGraphsImpl(final VersionCorrection versionCorrection,
@@ -166,7 +168,7 @@ public class CompiledViewDefinitionWithGraphsImpl extends CompiledViewDefinition
   }
 
   /**
-   * Gets the function init ID that was used when creating the dependency graphs
+   * Gets the function init ID that was used when creating the dependency graphs.
    *
    * @return the function init ID that was used when creating the dependency graphs
    * @deprecated this needs to go
@@ -202,7 +204,8 @@ public class CompiledViewDefinitionWithGraphsImpl extends CompiledViewDefinition
     for (final Map.Entry<String, DependencyGraphExplorer> entry : graphsByConfiguration.entrySet()) {
       final String configName = entry.getKey();
       final DependencyGraph graph = entry.getValue().getWholeGraph();
-      final CompiledViewCalculationConfiguration cvcc = createCalculationConfiguration(configName, graph, selectionsByConfig, paramsByConfig, compiledCalculationConfigurations);
+      final CompiledViewCalculationConfiguration cvcc =
+          createCalculationConfiguration(configName, graph, selectionsByConfig, paramsByConfig, compiledCalculationConfigurations);
       compiledViewCalculationConfigurations.add(cvcc);
     }
     return compiledViewCalculationConfigurations;

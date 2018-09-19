@@ -130,8 +130,8 @@ public abstract class AbstractCompletedResultsCallTest {
   }
 
   private Set<ComputedValue> values(final ViewResultModel model) {
-    final Set<ComputedValue> values = new HashSet<ComputedValue>();
-    for (ComputedValueResult result : model.getTargetResult(ComputationTargetSpecification.NULL).getAllValues("Default")) {
+    final Set<ComputedValue> values = new HashSet<>();
+    for (final ComputedValueResult result : model.getTargetResult(ComputationTargetSpecification.NULL).getAllValues("Default")) {
       values.add(new ComputedValue(result.getSpecification(), result.getValue()));
     }
     return values;
@@ -140,33 +140,47 @@ public abstract class AbstractCompletedResultsCallTest {
   public void testNormalOrder() {
     final Instant now = Instant.now();
     final AbstractCompletedResultsCall instance = create(createFull1(now), null);
-    assertEquals(instance.getViewComputationResultModel().getAllMarketData(), ImmutableSet.of(new ComputedValue(value(1), "A"), new ComputedValue(value(2), "A"), new ComputedValue(value(3), "A")));
-    assertEquals(values(instance.getViewComputationResultModel()), ImmutableSet.of(new ComputedValue(value(10), "A"), new ComputedValue(value(20), "A"), new ComputedValue(value(30), "A")));
+    assertEquals(instance.getViewComputationResultModel().getAllMarketData(), ImmutableSet.of(new ComputedValue(value(1), "A"),
+        new ComputedValue(value(2), "A"), new ComputedValue(value(3), "A")));
+    assertEquals(values(instance.getViewComputationResultModel()), ImmutableSet.of(new ComputedValue(value(10), "A"),
+        new ComputedValue(value(20), "A"), new ComputedValue(value(30), "A")));
     instance.update(createFull2a(now), createDelta2a(now));
-    assertEquals(instance.getViewComputationResultModel().getAllMarketData(), ImmutableSet.of(new ComputedValue(value(1), "A"), new ComputedValue(value(2), "B"), new ComputedValue(value(3), "A")));
+    assertEquals(instance.getViewComputationResultModel().getAllMarketData(), ImmutableSet.of(new ComputedValue(value(1), "A"),
+        new ComputedValue(value(2), "B"), new ComputedValue(value(3), "A")));
     assertEquals(values(instance.getViewDeltaResultModel()), ImmutableSet.of(new ComputedValue(value(20), "B")));
     instance.update(createFull2b(now), createDelta2b(now));
-    assertEquals(instance.getViewComputationResultModel().getAllMarketData(), ImmutableSet.of(new ComputedValue(value(1), "B"), new ComputedValue(value(2), "B"), new ComputedValue(value(3), "B")));
-    assertEquals(values(instance.getViewDeltaResultModel()), ImmutableSet.of(new ComputedValue(value(10), "B"), new ComputedValue(value(20), "B"), new ComputedValue(value(30), "B")));
+    assertEquals(instance.getViewComputationResultModel().getAllMarketData(), ImmutableSet.of(new ComputedValue(value(1), "B"),
+        new ComputedValue(value(2), "B"), new ComputedValue(value(3), "B")));
+    assertEquals(values(instance.getViewDeltaResultModel()), ImmutableSet.of(new ComputedValue(value(10), "B"),
+        new ComputedValue(value(20), "B"), new ComputedValue(value(30), "B")));
     instance.update(createFull3(now), createDelta3(now));
-    assertEquals(instance.getViewComputationResultModel().getAllMarketData(), ImmutableSet.of(new ComputedValue(value(1), "B"), new ComputedValue(value(2), "C"), new ComputedValue(value(3), "B")));
-    assertEquals(values(instance.getViewComputationResultModel()), ImmutableSet.of(new ComputedValue(value(10), "B"), new ComputedValue(value(20), "C"), new ComputedValue(value(30), "B")));
-    assertEquals(values(instance.getViewDeltaResultModel()), ImmutableSet.of(new ComputedValue(value(10), "B"), new ComputedValue(value(20), "C"), new ComputedValue(value(30), "B")));
+    assertEquals(instance.getViewComputationResultModel().getAllMarketData(), ImmutableSet.of(new ComputedValue(value(1), "B"),
+        new ComputedValue(value(2), "C"), new ComputedValue(value(3), "B")));
+    assertEquals(values(instance.getViewComputationResultModel()), ImmutableSet.of(new ComputedValue(value(10), "B"),
+        new ComputedValue(value(20), "C"), new ComputedValue(value(30), "B")));
+    assertEquals(values(instance.getViewDeltaResultModel()), ImmutableSet.of(new ComputedValue(value(10), "B"),
+        new ComputedValue(value(20), "C"), new ComputedValue(value(30), "B")));
   }
 
   public void testOutOfOrderResult1() {
     final Instant now = Instant.now();
     final AbstractCompletedResultsCall instance = create(createFull1(now), null);
     instance.update(createFull2b(now), createDelta2b(now));
-    assertEquals(instance.getViewComputationResultModel().getAllMarketData(), ImmutableSet.of(new ComputedValue(value(1), "B"), new ComputedValue(value(2), "B"), new ComputedValue(value(3), "B")));
+    assertEquals(instance.getViewComputationResultModel().getAllMarketData(), ImmutableSet.of(new ComputedValue(value(1), "B"),
+        new ComputedValue(value(2), "B"), new ComputedValue(value(3), "B")));
     assertEquals(values(instance.getViewDeltaResultModel()), ImmutableSet.of(new ComputedValue(value(10), "B"), new ComputedValue(value(30), "B")));
     instance.update(createFull2a(now), createDelta2a(now));
-    assertEquals(instance.getViewComputationResultModel().getAllMarketData(), ImmutableSet.of(new ComputedValue(value(1), "A"), new ComputedValue(value(2), "B"), new ComputedValue(value(3), "A")));
-    assertEquals(values(instance.getViewDeltaResultModel()), ImmutableSet.of(new ComputedValue(value(10), "B"), new ComputedValue(value(20), "B"), new ComputedValue(value(30), "B")));
+    assertEquals(instance.getViewComputationResultModel().getAllMarketData(), ImmutableSet.of(new ComputedValue(value(1), "A"),
+        new ComputedValue(value(2), "B"), new ComputedValue(value(3), "A")));
+    assertEquals(values(instance.getViewDeltaResultModel()), ImmutableSet.of(new ComputedValue(value(10), "B"), new ComputedValue(value(20), "B"),
+        new ComputedValue(value(30), "B")));
     instance.update(createFull3(now), createDelta3(now));
-    assertEquals(instance.getViewComputationResultModel().getAllMarketData(), ImmutableSet.of(new ComputedValue(value(1), "B"), new ComputedValue(value(2), "C"), new ComputedValue(value(3), "B")));
-    assertEquals(values(instance.getViewComputationResultModel()), ImmutableSet.of(new ComputedValue(value(10), "B"), new ComputedValue(value(20), "C"), new ComputedValue(value(30), "B")));
-    assertEquals(values(instance.getViewDeltaResultModel()), ImmutableSet.of(new ComputedValue(value(10), "B"), new ComputedValue(value(20), "C"), new ComputedValue(value(30), "B")));
+    assertEquals(instance.getViewComputationResultModel().getAllMarketData(), ImmutableSet.of(new ComputedValue(value(1), "B"),
+        new ComputedValue(value(2), "C"), new ComputedValue(value(3), "B")));
+    assertEquals(values(instance.getViewComputationResultModel()), ImmutableSet.of(new ComputedValue(value(10), "B"),
+        new ComputedValue(value(20), "C"), new ComputedValue(value(30), "B")));
+    assertEquals(values(instance.getViewDeltaResultModel()), ImmutableSet.of(new ComputedValue(value(10), "B"),
+        new ComputedValue(value(20), "C"), new ComputedValue(value(30), "B")));
   }
 
   public void testOutOfOrderResult2() {
@@ -174,11 +188,15 @@ public abstract class AbstractCompletedResultsCallTest {
     final AbstractCompletedResultsCall instance = create(createFull1(now), null);
     instance.update(createFull2b(now), createDelta2b(now));
     instance.update(createFull3(now), createDelta3(now));
-    assertEquals(instance.getViewComputationResultModel().getAllMarketData(), ImmutableSet.of(new ComputedValue(value(1), "B"), new ComputedValue(value(2), "C"), new ComputedValue(value(3), "B")));
-    assertEquals(values(instance.getViewDeltaResultModel()), ImmutableSet.of(new ComputedValue(value(10), "B"), new ComputedValue(value(20), "C"), new ComputedValue(value(30), "B")));
+    assertEquals(instance.getViewComputationResultModel().getAllMarketData(), ImmutableSet.of(new ComputedValue(value(1), "B"),
+        new ComputedValue(value(2), "C"), new ComputedValue(value(3), "B")));
+    assertEquals(values(instance.getViewDeltaResultModel()), ImmutableSet.of(new ComputedValue(value(10), "B"),
+        new ComputedValue(value(20), "C"), new ComputedValue(value(30), "B")));
     instance.update(createFull2a(now), createDelta2a(now));
-    assertEquals(instance.getViewComputationResultModel().getAllMarketData(), ImmutableSet.of(new ComputedValue(value(1), "B"), new ComputedValue(value(2), "C"), new ComputedValue(value(3), "B")));
-    assertEquals(values(instance.getViewComputationResultModel()), ImmutableSet.of(new ComputedValue(value(10), "B"), new ComputedValue(value(20), "C"), new ComputedValue(value(30), "B")));
+    assertEquals(instance.getViewComputationResultModel().getAllMarketData(), ImmutableSet.of(new ComputedValue(value(1), "B"),
+        new ComputedValue(value(2), "C"), new ComputedValue(value(3), "B")));
+    assertEquals(values(instance.getViewComputationResultModel()), ImmutableSet.of(new ComputedValue(value(10), "B"),
+        new ComputedValue(value(20), "C"), new ComputedValue(value(30), "B")));
   }
 
 }

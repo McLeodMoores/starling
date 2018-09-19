@@ -43,7 +43,7 @@ public abstract class AbstractJobInvoker implements JobInvoker {
   }
 
   /**
-   * Default implementation that does nothing
+   * Default implementation that does nothing.
    *
    * @param jobs the jobs to cancel, ignored
    */

@@ -44,7 +44,8 @@ public class CalculationJob implements IdentifierEncodedValueSpecifications {
    */
   private boolean _cancelled;
 
-  public CalculationJob(final CalculationJobSpecification specification, final long functionInitializationIdentifier, final VersionCorrection resolverVersionCorrection, final long[] requiredJobIds,
+  public CalculationJob(final CalculationJobSpecification specification, final long functionInitializationIdentifier,
+      final VersionCorrection resolverVersionCorrection, final long[] requiredJobIds,
       final List<CalculationJobItem> jobItems, final CacheSelectHint cacheSelect) {
     ArgumentChecker.notNull(specification, "specification");
     ArgumentChecker.notNull(resolverVersionCorrection, "resolverVersionCorrection");

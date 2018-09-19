@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph;
@@ -42,7 +42,7 @@ import com.opengamma.util.tuple.Triple;
    * Creates a new instance.
    * <p>
    * The {@code resolvedOutput} parameter must be normalized.
-   * 
+   *
    * @param task the resolve task this step is part of, not null
    * @param base the superclass data, not null
    * @param resolved the resolved function information, not null
@@ -230,7 +230,7 @@ import com.opengamma.util.tuple.Triple;
         //DebugUtils.getResults2_enter();
         newOutputValues = getFunction().getFunction().getResults(context.getCompilationContext(), getComputationTarget(context), inputs);
         //DebugUtils.getResults2_leave();
-      } catch (Throwable t) {
+      } catch (final Throwable t) {
         //DebugUtils.getResults2_leave();
         LOGGER.warn("Exception thrown by getResults", t);
         context.exception(t);
@@ -240,9 +240,9 @@ import com.opengamma.util.tuple.Triple;
         getWorker().storeFailure(functionApplication(context).requirements(inputs).getResultsFailed());
         return false;
       }
-      if ((getOutputs().size() == newOutputValues.size()) && newOutputValues.containsAll(getOutputs())) {
+      if (getOutputs().size() == newOutputValues.size() && newOutputValues.containsAll(getOutputs())) {
         // Fetch any additional input requirements now needed as a result of input and output resolution
-        return getAdditionalRequirementsAndPushResults(context, null, inputs, resolvedOutput, new HashSet<ValueSpecification>(getOutputs()), lastWorkerResult);
+        return getAdditionalRequirementsAndPushResults(context, null, inputs, resolvedOutput, new HashSet<>(getOutputs()), lastWorkerResult);
       }
       // Resolve output value is now different (probably more precise), so adjust ResolvedValueProducer
       final Set<ValueSpecification> resolvedOutputValues = Sets.newHashSetWithExpectedSize(newOutputValues.size());
@@ -307,7 +307,7 @@ import com.opengamma.util.tuple.Triple;
      * Late resolution based on the resolved inputs gives a different output, so we must create a new worker to produce that value.
      * <p>
      * The {@code resolvedOutput} value specification must be a normalized/canonical form.
-     * 
+     *
      * @param context the graph builder context, not null
      * @param inputs the resolved inputs and the requirements they satisfy, not null
      * @param resolvedOutput the new resolved output as it should appear from the substitute, not null
@@ -324,7 +324,7 @@ import com.opengamma.util.tuple.Triple;
       if (producer == newWorker) {
         producer.release(context);
         // The new worker is going to produce the value specification
-        boolean result = getAdditionalRequirementsAndPushResults(context, newWorker, inputs, resolvedOutput, resolvedOutputs, false);
+        final boolean result = getAdditionalRequirementsAndPushResults(context, newWorker, inputs, resolvedOutput, resolvedOutputs, false);
         newWorker.release(context);
         return result;
       } else {
@@ -453,7 +453,7 @@ import com.opengamma.util.tuple.Triple;
      * Checks whether any additional requirements are required, resolving them if necessary, and formalizing the result of this resolution if successful.
      * <p>
      * The {@code resolvedOutput} specification must be a normalized/canonical form.
-     * 
+     *
      * @param context the graph building context, not null
      * @param substituteWorker the alternative worker, if the late resolution was different to the provisional resolution
      * @param inputs the function inputs and the requirements they resolved, not null and not containing null
@@ -462,15 +462,17 @@ import com.opengamma.util.tuple.Triple;
      * @param lastWorkerResult true if this is known to be the last result, otherwise false
      */
     private boolean getAdditionalRequirementsAndPushResults(final GraphBuildingContext context, final FunctionApplicationWorker substituteWorker,
-        final Map<ValueSpecification, ValueRequirement> inputs, final ValueSpecification resolvedOutput, final Set<ValueSpecification> resolvedOutputs, final boolean lastWorkerResult) {
+        final Map<ValueSpecification, ValueRequirement> inputs, final ValueSpecification resolvedOutput,
+        final Set<ValueSpecification> resolvedOutputs, final boolean lastWorkerResult) {
       // the substituteWorker is not ref-counted from here
       final ComputationTarget target = getComputationTarget(context);
       Set<ValueRequirement> additionalRequirements = null;
       try {
         //DebugUtils.getAdditionalRequirements_enter();
-        additionalRequirements = getFunction().getFunction().getAdditionalRequirements(context.getCompilationContext(), target, inputs.keySet(), resolvedOutputs);
+        additionalRequirements = getFunction().getFunction().getAdditionalRequirements(context.getCompilationContext(), target,
+            inputs.keySet(), resolvedOutputs);
         //DebugUtils.getAdditionalRequirements_leave();
-      } catch (Throwable t) {
+      } catch (final Throwable t) {
         //DebugUtils.getAdditionalRequirements_leave();
         LOGGER.warn("Exception thrown by getAdditionalRequirements", t);
         context.exception(t);
@@ -547,9 +549,9 @@ import com.opengamma.util.tuple.Triple;
       };
       String functionExclusionValueName = getValueRequirement().getValueName();
       Collection<FunctionExclusionGroup> functionExclusion = null;
-      for (ValueRequirement inputRequirement : additionalRequirements) {
+      for (final ValueRequirement inputRequirement : additionalRequirements) {
         final ResolvedValueProducer inputProducer;
-        if ((inputRequirement.getValueName() == functionExclusionValueName) && inputRequirement.getTargetReference().equals(target.toSpecification())) {
+        if (inputRequirement.getValueName() == functionExclusionValueName && inputRequirement.getTargetReference().equals(target.toSpecification())) {
           if (functionExclusion == null) {
             functionExclusion = getFunctionExclusion(context, getFunction().getFunction());
             if (functionExclusion == null) {
@@ -581,7 +583,7 @@ import com.opengamma.util.tuple.Triple;
      * Formalizes the resolved result and passes it to any consumers waiting for the resolution.
      * <p>
      * The {@code resolvedOutput} specification must be a normalized/canonical form.
-     * 
+     *
      * @param context the graph building context, not null
      * @param substituteWorker the alternative worker, if the late resolution was different to the provisional resolution
      * @param inputs the function inputs and the requirements they resolved, not null and not containing null
@@ -604,7 +606,7 @@ import com.opengamma.util.tuple.Triple;
         return false;
       }
       final ResolvedValue result = createResult(resolvedOutput, getFunction(), inputs.keySet(), resolvedOutputs);
-      // TODO: Control this with a flag? 
+      // TODO: Control this with a flag?
       getIterationBase().reportResult();
       context.declareProduction(result);
       if (substituteWorker != null) {
@@ -664,7 +666,7 @@ import com.opengamma.util.tuple.Triple;
         //DebugUtils.getRequirements_enter();
         inputRequirements = functionDefinition.getRequirements(context.getCompilationContext(), target, getIterationBase().getDesiredValue());
         //DebugUtils.getRequirements_leave();
-      } catch (Throwable t) {
+      } catch (final Throwable t) {
         //DebugUtils.getRequirements_leave();
         LOGGER.warn("Exception thrown by getRequirements", t);
         context.exception(t);
@@ -685,8 +687,8 @@ import com.opengamma.util.tuple.Triple;
         resolvedOutputValues = getOriginalOutputs();
       } else {
         final Collection<ValueSpecification> originalOutputValues = getOriginalOutputs();
-        resolvedOutputValues = new ArrayList<ValueSpecification>(originalOutputValues.size());
-        for (ValueSpecification outputValue : originalOutputValues) {
+        resolvedOutputValues = new ArrayList<>(originalOutputValues.size());
+        for (final ValueSpecification outputValue : originalOutputValues) {
           if (getOriginalOutput().equals(outputValue)) {
             LOGGER.debug("Substituting {} with {}", outputValue, getResolvedOutput());
             resolvedOutputValues.add(getResolvedOutput());
@@ -711,9 +713,9 @@ import com.opengamma.util.tuple.Triple;
 
           String functionExclusionValueName = getValueRequirement().getValueName();
           Collection<FunctionExclusionGroup> functionExclusion = null;
-          for (ValueRequirement inputRequirement : inputRequirements) {
+          for (final ValueRequirement inputRequirement : inputRequirements) {
             final ResolvedValueProducer inputProducer;
-            if ((inputRequirement.getValueName() == functionExclusionValueName) && inputRequirement.getTargetReference().equals(target.toSpecification())) {
+            if (inputRequirement.getValueName() == functionExclusionValueName && inputRequirement.getTargetReference().equals(target.toSpecification())) {
               if (functionExclusion == null) {
                 functionExclusion = getFunctionExclusion(context, functionDefinition);
                 if (functionExclusion == null) {

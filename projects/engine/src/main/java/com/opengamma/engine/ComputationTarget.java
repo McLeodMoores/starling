@@ -59,8 +59,10 @@ public class ComputationTarget implements Serializable {
   private transient int _hashCode;  // safe via racy single check idiom
 
   /**
-   * Creates a target for computation. The type is a primitive type that is capable of converting the unique identifier form of the value to its {@link UniqueIdentifiable} form without any resolution
-   * services. This is intended for creating test cases only. Code requiring resolution of a type/unique identifier pair to a target should use a {@link ComputationTargetResolver} instance.
+   * Creates a target for computation. The type is a primitive type that is capable of converting the unique identifier
+   * form of the value to its {@link UniqueIdentifiable} form without any resolution services. This is intended for
+   * creating test cases only. Code requiring resolution of a type/unique identifier pair to a target should use a
+   * {@link ComputationTargetResolver} instance.
    *
    * @param type the type of the target, not null
    * @param value the target itself, not null
@@ -71,7 +73,8 @@ public class ComputationTarget implements Serializable {
   }
 
   /**
-   * Creates a target for computation. This is intended for creating test cases only. Code which is resolving a target specification should use the constructor which takes that specification.
+   * Creates a target for computation. This is intended for creating test cases only. Code which is resolving a target
+   * specification should use the constructor which takes that specification.
    *
    * @param type the type of the target, not null
    * @param value the target itself, not null
@@ -114,7 +117,7 @@ public class ComputationTarget implements Serializable {
   }
 
   /**
-   * Gets the unique identifier of the target object
+   * Gets the unique identifier of the target object.
    *
    * @return the unique identifier, may be null
    */
@@ -148,7 +151,8 @@ public class ComputationTarget implements Serializable {
       };
 
   /**
-   * Returns the target specification of the context this target is part of. If the actual target object is required a {@link ComputationTargetResolver} can be used to obtain it.
+   * Returns the target specification of the context this target is part of. If the actual target object is required a
+   * {@link ComputationTargetResolver} can be used to obtain it.
    *
    * @return the reference of the containing object, or null if there is none
    */
@@ -175,9 +179,8 @@ public class ComputationTarget implements Serializable {
   public PortfolioNode getPortfolioNode() {
     if (getValue() instanceof PortfolioNode) {
       return (PortfolioNode) getValue();
-    } else {
-      throw new IllegalStateException("Requested a PortfolioNode for a target of type " + getType());
     }
+    throw new IllegalStateException("Requested a PortfolioNode for a target of type " + getType());
   }
 
   /**
@@ -189,9 +192,8 @@ public class ComputationTarget implements Serializable {
   public Position getPosition() {
     if (getValue() instanceof Position) {
       return (Position) getValue();
-    } else {
-      throw new IllegalStateException("Requested a Position for a target of type " + getType());
     }
+    throw new IllegalStateException("Requested a Position for a target of type " + getType());
   }
 
   /**
@@ -203,9 +205,8 @@ public class ComputationTarget implements Serializable {
   public Trade getTrade() {
     if (getValue() instanceof Trade) {
       return (Trade) getValue();
-    } else {
-      throw new IllegalStateException("Requested a Trade for a target of type " + getType());
     }
+    throw new IllegalStateException("Requested a Trade for a target of type " + getType());
   }
 
   /**
@@ -217,9 +218,8 @@ public class ComputationTarget implements Serializable {
   public PositionOrTrade getPositionOrTrade() {
     if (getValue() instanceof PositionOrTrade) {
       return (PositionOrTrade) getValue();
-    } else {
-      throw new IllegalStateException("Requested a Position or Trade for a target of type " + getType());
     }
+    throw new IllegalStateException("Requested a Position or Trade for a target of type " + getType());
   }
 
   /**
@@ -231,31 +231,27 @@ public class ComputationTarget implements Serializable {
   public Security getSecurity() {
     if (getValue() instanceof Security) {
       return (Security) getValue();
-    } else {
-      throw new IllegalStateException("Requested a Security for a target of type " + getType());
     }
+    throw new IllegalStateException("Requested a Security for a target of type " + getType());
   }
 
   @SuppressWarnings("unchecked")
   public <T extends UniqueIdentifiable> T getValue(final ObjectComputationTargetType<T> type) {
     if (type.getObjectClass().isAssignableFrom(getValue().getClass())) {
       return (T) getValue();
-    } else {
-      throw new IllegalStateException("Requested a " + type + " for a target of type " + getType());
     }
+    throw new IllegalStateException("Requested a " + type + " for a target of type " + getType());
   }
 
   private String getNameImpl(final String name) {
     if (name != null) {
       return name;
-    } else {
-      final UniqueId uid = getUniqueId();
-      if (uid != null) {
-        return uid.toString();
-      } else {
-        return null;
-      }
     }
+    final UniqueId uid = getUniqueId();
+    if (uid != null) {
+      return uid.toString();
+    }
+    return null;
   }
 
   private static final ComputationTargetTypeMap<Function1<ComputationTarget, String>> GET_NAME = createGetName();
@@ -292,9 +288,8 @@ public class ComputationTarget implements Serializable {
           if (identifiers != null) {
             if (identifiers.size() > 0) {
               return position.getQuantity() + " x " + identifiers.iterator().next();
-            } else {
-              return position.getQuantity() + " x " + identifiers;
             }
+            return position.getQuantity() + " x " + identifiers;
           } else if (link.getObjectId() != null) {
             return position.getQuantity() + " x " + link.getObjectId();
           }
@@ -316,9 +311,8 @@ public class ComputationTarget implements Serializable {
     final Function1<ComputationTarget, String> getName = GET_NAME.get(getType());
     if (getName != null) {
       return getNameImpl(getName.execute(this));
-    } else {
-      return getNameImpl(null);
     }
+    return getNameImpl(null);
   }
 
   /**

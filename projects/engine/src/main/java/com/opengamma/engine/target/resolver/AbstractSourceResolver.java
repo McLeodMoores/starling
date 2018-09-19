@@ -23,8 +23,10 @@ import com.opengamma.util.ArgumentChecker;
  * Partial implementation of {@link Resolver} based on a {@link Source}.
  *
  * @param <S> the type of the source
+ * @param <T> the type of the identifiable
  */
-public abstract class AbstractSourceResolver<T extends UniqueIdentifiable, S extends Source<T> & ChangeProvider> extends AbstractIdentifierResolver implements Resolver<T> { //CSIGNORE
+public abstract class AbstractSourceResolver<T extends UniqueIdentifiable, S extends Source<T> & ChangeProvider>
+extends AbstractIdentifierResolver implements Resolver<T> {
 
   private final ExternalScheme _identifierScheme;
   private final S _underlying;

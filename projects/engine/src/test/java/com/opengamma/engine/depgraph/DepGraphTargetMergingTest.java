@@ -142,7 +142,8 @@ public class DepGraphTargetMergingTest extends AbstractDependencyGraphBuilderTes
       }
 
       @Override
-      public ComputationTargetSpecification collapse(final CompiledFunctionDefinition function, final ComputationTargetSpecification a, final ComputationTargetSpecification b) {
+      public ComputationTargetSpecification collapse(final CompiledFunctionDefinition function, final ComputationTargetSpecification a,
+          final ComputationTargetSpecification b) {
         LOGGER.debug("Collapse {} on {} + {}", new Object[] {function, a, b });
         if (function instanceof MergeableFunction && a.getUniqueId().getValue().charAt(0) == b.getUniqueId().getValue().charAt(0)) {
           final Set<String> idSet = new HashSet<>();
@@ -155,9 +156,8 @@ public class DepGraphTargetMergingTest extends AbstractDependencyGraphBuilderTes
             sb.append(id);
           }
           return a.replaceIdentifier(UniqueId.of("Test", sb.toString()));
-        } else {
-          return null;
         }
+        return null;
       }
 
     });

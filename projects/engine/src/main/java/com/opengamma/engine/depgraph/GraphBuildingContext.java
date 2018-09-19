@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph;
@@ -86,7 +86,7 @@ import com.opengamma.util.tuple.Pairs;
 
   /**
    * Schedule the task for execution.
-   * 
+   *
    * @param runnable task to execute, not null
    */
   public void run(final ResolveTask runnable) {
@@ -94,7 +94,7 @@ import com.opengamma.util.tuple.Pairs;
     // no-one is going to consume its results)
     if (runnable.addRef()) {
       // Added a reference for the run-queue (which will be removed by tryRun)
-      if ((++_stackDepth > MAX_CALLBACK_DEPTH) || !runnable.tryRun(this)) {
+      if (++_stackDepth > MAX_CALLBACK_DEPTH || !runnable.tryRun(this)) {
         submit(runnable);
       }
       _stackDepth--;
@@ -103,7 +103,7 @@ import com.opengamma.util.tuple.Pairs;
 
   /**
    * Trigger an underlying pump operation. This may happen before returning or be deferred if the stack is past a depth threshold.
-   * 
+   *
    * @param pump underlying operation
    */
   public void pump(final ResolutionPump pump) {
@@ -118,7 +118,7 @@ import com.opengamma.util.tuple.Pairs;
 
   /**
    * Trigger an underlying close operation. This may happen before returning or be deferred if the stack is past a depth threshold.
-   * 
+   *
    * @param pump underlying operation
    */
   public void close(final ResolutionPump pump) {
@@ -133,7 +133,7 @@ import com.opengamma.util.tuple.Pairs;
 
   /**
    * Trigger a resolved callback.
-   * 
+   *
    * @param callback callback object
    * @param valueRequirement requirement resolved
    * @param resolvedValue value resolved to
@@ -149,7 +149,7 @@ import com.opengamma.util.tuple.Pairs;
 
   /**
    * Trigger a resolution failure.
-   * 
+   *
    * @param callback callback object
    * @param valueRequirement requirement that failed to resolve or for which there are no further resolutions
    * @param failure description of the failure
@@ -163,22 +163,24 @@ import com.opengamma.util.tuple.Pairs;
   }
 
   /**
-   * Stores an exception that should be reported to the user. Only store the first copy of an exception; after that increment the count of times that it occurred.
-   * 
+   * Stores an exception that should be reported to the user. Only store the first copy of an exception; after that increment
+   * the count of times that it occurred.
+   *
    * @param t exception to store, not null
    */
   public void exception(final Throwable t) {
     LOGGER.debug("Caught exception", t);
     if (_exceptions == null) {
-      _exceptions = new HashMap<ExceptionWrapper, ExceptionWrapper>();
+      _exceptions = new HashMap<>();
     }
     ExceptionWrapper.createAndPut(t, _exceptions);
   }
 
-  public ResolvedValueProducer resolveRequirement(final ValueRequirement rawRequirement, final ResolveTask dependent, final Collection<FunctionExclusionGroup> functionExclusion) {
+  public ResolvedValueProducer resolveRequirement(final ValueRequirement rawRequirement, final ResolveTask dependent,
+      final Collection<FunctionExclusionGroup> functionExclusion) {
     final ValueRequirement requirement = simplifyType(rawRequirement);
     LOGGER.debug("Resolve requirement {}", requirement);
-    if ((dependent != null) && dependent.hasParent(requirement)) {
+    if (dependent != null && dependent.hasParent(requirement)) {
       LOGGER.debug("Can't introduce a ValueRequirement loop");
       return null;
     }
@@ -189,8 +191,8 @@ import com.opengamma.util.tuple.Pairs;
       int l = tasks.length;
       while (i < l) {
         final ResolveTask task = tasks[i];
-        if ((dependent == null) || !dependent.hasParent(task)) {
-          if ((task.isFinished() && !task.wasRecursionDetected()) || (ObjectUtils.equals(functionExclusion, task.getFunctionExclusion()) && task.hasParentValueRequirements(dependent))) {
+        if (dependent == null || !dependent.hasParent(task)) {
+          if (task.isFinished() && !task.wasRecursionDetected() || ObjectUtils.equals(functionExclusion, task.getFunctionExclusion()) && task.hasParentValueRequirements(dependent)) {
             // The task we've found has either already completed, without hitting a recursion constraint. Or
             // the task is identical to the fallback task we'd create naturally. In either case, release everything
             // else and use it.
@@ -320,7 +322,7 @@ import com.opengamma.util.tuple.Pairs;
    * Fetches an existing resolution of the given value specification.
    * <p>
    * The {@code valueSpecification} parameter must be normalized.
-   * 
+   *
    * @param valueSpecification the specification to search for, not null
    * @return the resolved value, or null if not resolved
    */
@@ -370,13 +372,13 @@ import com.opengamma.util.tuple.Pairs;
 
   /**
    * Returns an iterator over previous resolutions (that are present in the dependency graph) on the same target digest for the same value name.
-   * 
+   *
    * @param targetDigest the target's digest, not null
    * @param desiredValue the value requirement name, not null
    * @return any existing resolutions, null if there are none
    */
   public ResolutionIterator getResolutions(final ComputationTargetSpecification targetSpec, final String desiredValue) {
-    Pair<?, ?> properties = getBuilder().getResolutions(targetSpec, desiredValue);
+    final Pair<?, ?> properties = getBuilder().getResolutions(targetSpec, desiredValue);
     if (properties == null) {
       return null;
     }
@@ -425,7 +427,7 @@ import com.opengamma.util.tuple.Pairs;
    * Declares a task that has been created to deliver a potential resolution.
    * <p>
    * The {@code valueSpecification} parameter must be normalized
-   * 
+   *
    * @param valueSpecification the tentative resolution the value producer will attempt to deliver, not null
    * @param task the task to perform the resolution, not null
    * @param producer the value producer managed by the task which will deliver the value specification, not null
@@ -517,7 +519,7 @@ import com.opengamma.util.tuple.Pairs;
    * Simplifies the type based on the associated {@link ComputationTargetResolver}.
    * <p>
    * This returns a normalized form of the value specification.
-   * 
+   *
    * @param valueSpec the specification to process, not null
    * @return the possibly simplified specification, not null
    */
@@ -533,7 +535,7 @@ import com.opengamma.util.tuple.Pairs;
 
   /**
    * Bulk form of {@link #simplifyType(ValueSpecification)}. If the values are already in their simplified form then the original collection is returned.
-   * 
+   *
    * @param specifications the specifications to process, not null
    * @return the possibly simplified specifications, not null
    */
@@ -547,8 +549,8 @@ import com.opengamma.util.tuple.Pairs;
         return Collections.singleton(reducedSpecification);
       }
     } else {
-      final Collection<ValueSpecification> result = new ArrayList<ValueSpecification>(specifications.size());
-      for (ValueSpecification specification : specifications) {
+      final Collection<ValueSpecification> result = new ArrayList<>(specifications.size());
+      for (final ValueSpecification specification : specifications) {
         result.add(simplifyType(specification));
       }
       return result;
@@ -557,7 +559,7 @@ import com.opengamma.util.tuple.Pairs;
 
   /**
    * Simplifies the type based on the associated {@link ComputationTargetResolver}.
-   * 
+   *
    * @param valueReq the requirement to process, not null
    * @return the possibly simplified requirement, not null
    */
@@ -625,12 +627,12 @@ import com.opengamma.util.tuple.Pairs;
 
   /**
    * Merge information from the other context into this (a root context). The caller must be the thread that was working with the other context.
-   * 
+   *
    * @param context the other context
    */
   public synchronized void mergeThreadContext(final GraphBuildingContext context) {
     if (_exceptions == null) {
-      _exceptions = new HashMap<ExceptionWrapper, ExceptionWrapper>();
+      _exceptions = new HashMap<>();
     }
     if (context._exceptions != null) {
       for (final ExceptionWrapper exception : context._exceptions.keySet()) {
@@ -648,7 +650,7 @@ import com.opengamma.util.tuple.Pairs;
     if (_exceptions == null) {
       return Collections.emptyMap();
     }
-    final Map<Throwable, Integer> result = new HashMap<Throwable, Integer>();
+    final Map<Throwable, Integer> result = new HashMap<>();
     for (final ExceptionWrapper exception : _exceptions.keySet()) {
       result.put(exception.getException(), exception.getCount());
     }

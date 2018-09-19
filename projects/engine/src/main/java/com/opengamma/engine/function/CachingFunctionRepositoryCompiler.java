@@ -54,13 +54,13 @@ public class CachingFunctionRepositoryCompiler implements FunctionRepositoryComp
       return o1.getSecond().compareTo(o2.getSecond());
     }
   };
-  private final TreeMap<Pair<FunctionRepository, Instant>, InMemoryCompiledFunctionRepository> _compilationCache = new TreeMap<Pair<FunctionRepository, Instant>, InMemoryCompiledFunctionRepository>(
+  private final TreeMap<Pair<FunctionRepository, Instant>, InMemoryCompiledFunctionRepository> _compilationCache = new TreeMap<>(
       COMPARATOR);
-  private final Queue<Pair<FunctionRepository, Instant>> _activeEntries = new ArrayDeque<Pair<FunctionRepository, Instant>>();
+  private final Queue<Pair<FunctionRepository, Instant>> _activeEntries = new ArrayDeque<>();
   private int _cacheSize = 16;
   private long _functionInitId;
   private final ConcurrentMap<Pair<FunctionRepository, Instant>, Callable<CompiledFunctionRepository>> _activeCompilations =
-      new ConcurrentHashMap<Pair<FunctionRepository, Instant>, Callable<CompiledFunctionRepository>>();
+      new ConcurrentHashMap<>();
 
   public synchronized void setCacheSize(final int cacheSize) {
     _cacheSize = cacheSize;
@@ -81,7 +81,8 @@ public class CachingFunctionRepositoryCompiler implements FunctionRepositoryComp
     return _activeEntries;
   }
 
-  protected boolean addFunctionFromCachedRepository(final InMemoryCompiledFunctionRepository before, final InMemoryCompiledFunctionRepository after, final InMemoryCompiledFunctionRepository compiled,
+  protected boolean addFunctionFromCachedRepository(final InMemoryCompiledFunctionRepository before,
+      final InMemoryCompiledFunctionRepository after, final InMemoryCompiledFunctionRepository compiled,
       final FunctionDefinition function, final Instant atInstant) {
     if (before != null) {
       final CompiledFunctionDefinition compiledFunction = before.findDefinition(function.getUniqueId());
@@ -90,13 +91,12 @@ public class CachingFunctionRepositoryCompiler implements FunctionRepositoryComp
           // previous one always valid
           compiled.addFunction(compiledFunction);
           return true;
-        } else {
-          final Instant validUntil = compiledFunction.getLatestInvocationTime();
-          if (!validUntil.isBefore(atInstant)) {
-            // previous one still valid
-            compiled.addFunction(compiledFunction);
-            return true;
-          }
+        }
+        final Instant validUntil = compiledFunction.getLatestInvocationTime();
+        if (!validUntil.isBefore(atInstant)) {
+          // previous one still valid
+          compiled.addFunction(compiledFunction);
+          return true;
         }
       }
     }
@@ -107,13 +107,12 @@ public class CachingFunctionRepositoryCompiler implements FunctionRepositoryComp
           // next one always valid
           compiled.addFunction(compiledFunction);
           return true;
-        } else {
-          final Instant validFrom = compiledFunction.getEarliestInvocationTime();
-          if (!validFrom.isAfter(atInstant)) {
-            // next one already valid
-            compiled.addFunction(compiledFunction);
-            return true;
-          }
+        }
+        final Instant validFrom = compiledFunction.getEarliestInvocationTime();
+        if (!validFrom.isAfter(atInstant)) {
+          // next one already valid
+          compiled.addFunction(compiledFunction);
+          return true;
         }
       }
     }
@@ -158,7 +157,7 @@ public class CachingFunctionRepositoryCompiler implements FunctionRepositoryComp
     }
     try {
       jobs.join();
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
       e.fillInStackTrace();
       Thread.interrupted();
       throw new OpenGammaRuntimeException("Interrupted while compiling function definitions.", e);
@@ -175,7 +174,7 @@ public class CachingFunctionRepositoryCompiler implements FunctionRepositoryComp
 
   protected synchronized InMemoryCompiledFunctionRepository getPreviousCompilation(final Pair<FunctionRepository, Instant> key) {
     final Map.Entry<Pair<FunctionRepository, Instant>, InMemoryCompiledFunctionRepository> entry = getCompilationCache().lowerEntry(key);
-    if ((entry != null) && (entry.getKey().getFirst() == key.getFirst())) {
+    if (entry != null && entry.getKey().getFirst() == key.getFirst()) {
       return entry.getValue();
     }
     return null;
@@ -183,7 +182,7 @@ public class CachingFunctionRepositoryCompiler implements FunctionRepositoryComp
 
   protected synchronized InMemoryCompiledFunctionRepository getNextCompilation(final Pair<FunctionRepository, Instant> key) {
     final Map.Entry<Pair<FunctionRepository, Instant>, InMemoryCompiledFunctionRepository> entry = getCompilationCache().higherEntry(key);
-    if ((entry != null) && (entry.getKey().getFirst() == key.getFirst())) {
+    if (entry != null && entry.getKey().getFirst() == key.getFirst()) {
       return entry.getValue();
     }
     return null;
@@ -199,7 +198,8 @@ public class CachingFunctionRepositoryCompiler implements FunctionRepositoryComp
   }
 
   @Override
-  public CompiledFunctionRepository compile(final FunctionRepository repository, final FunctionCompilationContext context, final PoolExecutor executor, final Instant atInstant) {
+  public CompiledFunctionRepository compile(final FunctionRepository repository, final FunctionCompilationContext context,
+      final PoolExecutor executor, final Instant atInstant) {
     clearInvalidCache(context.getFunctionInitId());
     final Pair<FunctionRepository, Instant> key = Pairs.of(repository, atInstant);
     // Try a previous compilation
@@ -207,10 +207,9 @@ public class CachingFunctionRepositoryCompiler implements FunctionRepositoryComp
     if (previous != null) {
       if (previous.getLatestInvocationTime() == null) {
         return previous;
-      } else {
-        if (!atInstant.isAfter(previous.getLatestInvocationTime())) {
-          return previous;
-        }
+      }
+      if (!atInstant.isAfter(previous.getLatestInvocationTime())) {
+        return previous;
       }
     }
     // Try a future compilation
@@ -218,10 +217,9 @@ public class CachingFunctionRepositoryCompiler implements FunctionRepositoryComp
     if (next != null) {
       if (next.getEarliestInvocationTime() == null) {
         return next;
-      } else {
-        if (!atInstant.isBefore(next.getEarliestInvocationTime())) {
-          return next;
-        }
+      }
+      if (!atInstant.isBefore(next.getEarliestInvocationTime())) {
+        return next;
       }
     }
     // Try the exact timestamp
@@ -265,7 +263,7 @@ public class CachingFunctionRepositoryCompiler implements FunctionRepositoryComp
   }
 
   protected synchronized void clearInvalidCache(final Long initId) {
-    if ((initId != null) && (_functionInitId != initId)) {
+    if (initId != null && _functionInitId != initId) {
       getCompilationCache().clear();
       _functionInitId = initId;
     }

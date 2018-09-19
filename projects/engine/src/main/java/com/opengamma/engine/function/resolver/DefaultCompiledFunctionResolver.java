@@ -115,26 +115,25 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
     public Iterable<Collection<ResolutionRule>> prioritize() {
       if (_rules.isEmpty()) {
         return null;
-      } else {
-        final Map<Integer, Collection<ResolutionRule>> priorityToRules = new HashMap<>();
-        for (final ResolutionRule rule : _rules) {
-          Collection<ResolutionRule> rules = priorityToRules.get(rule.getPriority());
-          if (rules == null) {
-            rules = new LinkedList<>();
-            priorityToRules.put(rule.getPriority(), rules);
-          }
-          rules.add(rule);
-        }
-        final Integer[] priorities = priorityToRules.keySet().toArray(new Integer[priorityToRules.size()]);
-        Arrays.sort(priorities);
-        final Collection<Collection<ResolutionRule>> rules = new ArrayList<>(priorities.length);
-        for (int i = priorities.length; --i >= 0;) {
-          final List<ResolutionRule> list = new ArrayList<>(priorityToRules.get(priorities[i]));
-          Collections.sort(list, RULE_COMPARATOR);
-          rules.add(list);
-        }
-        return rules;
       }
+      final Map<Integer, Collection<ResolutionRule>> priorityToRules = new HashMap<>();
+      for (final ResolutionRule rule : _rules) {
+        Collection<ResolutionRule> rules = priorityToRules.get(rule.getPriority());
+        if (rules == null) {
+          rules = new LinkedList<>();
+          priorityToRules.put(rule.getPriority(), rules);
+        }
+        rules.add(rule);
+      }
+      final Integer[] priorities = priorityToRules.keySet().toArray(new Integer[priorityToRules.size()]);
+      Arrays.sort(priorities);
+      final Collection<Collection<ResolutionRule>> rules = new ArrayList<>(priorities.length);
+      for (int i = priorities.length; --i >= 0;) {
+        final List<ResolutionRule> list = new ArrayList<>(priorityToRules.get(priorities[i]));
+        Collections.sort(list, RULE_COMPARATOR);
+        rules.add(list);
+      }
+      return rules;
     }
 
     /**
@@ -185,9 +184,8 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
           bundles.add(b);
         }
         return new FoldedChainedRuleBundle(bundles);
-      } else {
-        return new FoldedChainedRuleBundle(Arrays.asList(a, b));
       }
+      return new FoldedChainedRuleBundle(Arrays.asList(a, b));
     }
 
     @Override
@@ -218,7 +216,7 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
 
   }
 
-  private static class FoldedCompiledRuleBundle extends ArrayList<Collection<ResolutionRule>> implements Iterable<Collection<ResolutionRule>> {
+  private static class FoldedCompiledRuleBundle extends ArrayList<Collection<ResolutionRule>> {
 
     private static final long serialVersionUID = 1L;
 
@@ -286,21 +284,19 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
       if (a instanceof ChainedRuleBundle) {
         if (b instanceof ChainedRuleBundle) {
           return FoldedChainedRuleBundle.of((ChainedRuleBundle) a, (ChainedRuleBundle) b);
-        } else {
-          throw new IllegalStateException("Rules have been partially compiled");
         }
-      } else {
-        if (b instanceof ChainedRuleBundle) {
-          throw new IllegalStateException("Rules have been partially compiled");
-        } else {
-          return new FoldedCompiledRuleBundle(a, b);
-        }
+        throw new IllegalStateException("Rules have been partially compiled");
       }
+      if (b instanceof ChainedRuleBundle) {
+        throw new IllegalStateException("Rules have been partially compiled");
+      }
+      return new FoldedCompiledRuleBundle(a, b);
     }
   };
 
   /**
-   * The rules by target type. The map values are {@link ChainedRuleBundle} instances during construction, after which return an iterator giving the rules in blocks of descending priority order.
+   * The rules by target type. The map values are {@link ChainedRuleBundle} instances during construction, after which return an iterator
+   * giving the rules in blocks of descending priority order.
    */
   private final ComputationTargetTypeMap<Iterable<Collection<ResolutionRule>>> _type2Rules = new ComputationTargetTypeMap<>(FOLD_RULES);
 
@@ -482,37 +478,36 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
     final ComputationTargetSpecification newTargetSpec = ComputationTargetResolverUtils.simplifyType(oldTargetSpec, resolver);
     if (newTargetSpec == oldTargetSpec) {
       return MemoryUtils.instance(valueSpec);
-    } else {
-      return MemoryUtils.instance(new ValueSpecification(valueSpec.getValueName(), newTargetSpec, valueSpec.getProperties()));
     }
+    return MemoryUtils.instance(new ValueSpecification(valueSpec.getValueName(), newTargetSpec, valueSpec.getProperties()));
   }
 
-  private static Collection<ValueSpecification> reduceMemory(final Set<ValueSpecification> specifications, final ComputationTargetResolver.AtVersionCorrection resolver) {
+  private static Collection<ValueSpecification> reduceMemory(final Set<ValueSpecification> specifications,
+      final ComputationTargetResolver.AtVersionCorrection resolver) {
     if (specifications.size() == 1) {
       final ValueSpecification specification = specifications.iterator().next();
       final ValueSpecification reducedSpecification = reduceMemory(specification, resolver);
       if (specification == reducedSpecification) {
         return specifications;
-      } else {
-        return Collections.singleton(reducedSpecification);
       }
-    } else {
-      final Collection<ValueSpecification> result = new ArrayList<>(specifications.size());
-      for (final ValueSpecification specification : specifications) {
-        result.add(reduceMemory(specification, resolver));
-      }
-      return result;
+      return Collections.singleton(reducedSpecification);
     }
+    final Collection<ValueSpecification> result = new ArrayList<>(specifications.size());
+    for (final ValueSpecification specification : specifications) {
+      result.add(reduceMemory(specification, resolver));
+    }
+    return result;
   }
 
   @SuppressWarnings("unchecked")
   @Override
-  public Iterator<Triple<ParameterizedFunction, ValueSpecification, Collection<ValueSpecification>>> resolveFunction(final String valueName, final ComputationTarget target,
-      final ValueProperties constraints) {
+  public Iterator<Triple<ParameterizedFunction, ValueSpecification, Collection<ValueSpecification>>> resolveFunction(
+      final String valueName, final ComputationTarget target, final ValueProperties constraints) {
     final ComputationTargetResolver.AtVersionCorrection resolver = getFunctionCompilationContext().getComputationTargetResolver();
     // TODO [PLAT-2286] Don't key the cache by target specification as the contexts may vary. E.g. the (PORTFOLIO_NODE/POSITION, node0, pos0) target
     // will have considered all the rules for (POSITION, pos0). We want to share this, not duplicate the effort (and the storage)
-    final ComputationTargetSpecification targetSpecification = MemoryUtils.instance(ComputationTargetResolverUtils.simplifyType(target.toSpecification(), resolver));
+    final ComputationTargetSpecification targetSpecification =
+        MemoryUtils.instance(ComputationTargetResolverUtils.simplifyType(target.toSpecification(), resolver));
     Pair<ResolutionRule[], Collection<ValueSpecification>[]> cached = _targetCache.get(targetSpecification);
     if (cached == null) {
       int resolutions = 0;

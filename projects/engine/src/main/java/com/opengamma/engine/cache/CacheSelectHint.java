@@ -1,14 +1,10 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 
 package com.opengamma.engine.cache;
-
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import it.unimi.dsi.fastutil.longs.LongSet;
-import it.unimi.dsi.fastutil.objects.Object2LongMap;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -17,6 +13,10 @@ import java.util.Set;
 
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.util.ArgumentChecker;
+
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.LongSet;
+import it.unimi.dsi.fastutil.objects.Object2LongMap;
 
 /**
  * A filter to determine whether given values are to go into a private or shared cache.
@@ -34,9 +34,9 @@ public final class CacheSelectHint implements IdentifierEncodedValueSpecificatio
 
   private CacheSelectHint(final Collection<ValueSpecification> valueSpecifications, final long[] valueIdentifiers, final boolean isPrivate) {
     if (valueSpecifications != null) {
-      _valueSpecifications = new HashSet<ValueSpecification>(valueSpecifications);
+      _valueSpecifications = new HashSet<>(valueSpecifications);
     } else {
-      _valueSpecifications = new HashSet<ValueSpecification>();
+      _valueSpecifications = new HashSet<>();
     }
     _valueIdentifiers = valueIdentifiers;
     _isPrivate = isPrivate;
@@ -95,14 +95,13 @@ public final class CacheSelectHint implements IdentifierEncodedValueSpecificatio
   public boolean isPrivateValue(final ValueSpecification valueSpecification) {
     if (_isPrivate) {
       return _valueSpecifications.contains(valueSpecification);
-    } else {
-      return !_valueSpecifications.contains(valueSpecification);
     }
+    return !_valueSpecifications.contains(valueSpecification);
   }
 
   /**
    * Gets the valueIdentifiers field.
-   * 
+   *
    * @return the valueIdentifiers
    */
   public long[] getValueIdentifiers() {
@@ -111,7 +110,7 @@ public final class CacheSelectHint implements IdentifierEncodedValueSpecificatio
 
   /**
    * Gets the isPrivate field.
-   * 
+   *
    * @return the isPrivate
    */
   public boolean isPrivate() {

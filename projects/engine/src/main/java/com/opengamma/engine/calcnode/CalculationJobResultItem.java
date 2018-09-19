@@ -97,13 +97,11 @@ public final class CalculationJobResultItem implements IdentifierEncodedValueSpe
       } else {
         return InvocationResult.FUNCTION_THREW_EXCEPTION;
       }
-    } else {
-      if (_missingOutputs.isEmpty()) {
-        return InvocationResult.SUCCESS;
-      } else {
-        return InvocationResult.PARTIAL_SUCCESS;
-      }
     }
+    if (_missingOutputs.isEmpty()) {
+      return InvocationResult.SUCCESS;
+    }
+    return InvocationResult.PARTIAL_SUCCESS;
   }
 
   public Set<ValueSpecification> getMissingInputs() {

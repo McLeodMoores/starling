@@ -15,8 +15,9 @@ import com.sleepycat.je.Environment;
 import com.sleepycat.je.Transaction;
 
 /**
- * A worker thread that will perform all Berkeley I/O operations. Berkeley DB doesn't like its threads getting interrupted so we have to isolate it from the OpenGamma calculation and worker threads
- * that use interrupts to cancel running jobs.
+ * A worker thread that will perform all Berkeley I/O operations. Berkeley DB doesn't like its threads getting
+ * interrupted so we have to isolate it from the OpenGamma calculation and worker threads that use interrupts to
+ * cancel running jobs.
  */
 public class AbstractBerkeleyDBWorker implements Runnable {
 

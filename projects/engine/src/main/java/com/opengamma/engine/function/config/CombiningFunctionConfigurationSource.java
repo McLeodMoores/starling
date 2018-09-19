@@ -55,10 +55,11 @@ public class CombiningFunctionConfigurationSource implements FunctionConfigurati
   }
 
   /**
-   * Creates an instance that is the union of the given sources. The sources are not queried for their configuration until the composite object get queried.
+   * Creates an instance that is the union of the given sources. The sources are not queried for their configuration until the composite
+   * object get queried.
    * <p>
-   * Any nulls in the combined sources are ignored. Any sources that are themselves {@code CombinedRepositoryConfigurationSource} instances are expanded and their members used directly in the
-   * composite.
+   * Any nulls in the combined sources are ignored. Any sources that are themselves {@code CombinedRepositoryConfigurationSource}
+   * instances are expanded and their members used directly in the composite.
    *
    * @param sources the sources to combine, may contain nulls
    * @return the composite source, not null
@@ -117,9 +118,8 @@ public class CombiningFunctionConfigurationSource implements FunctionConfigurati
     }
     if (changeManager == null) {
       return DummyChangeManager.INSTANCE;
-    } else {
-      return changeManager;
     }
+    return changeManager;
   }
 
 }

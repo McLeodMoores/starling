@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.cache;
@@ -21,15 +21,19 @@ public enum MissingInput implements MissingValue {
    * Value used in place of the input when market data was available but could not be used.
    */
   INSUFFICIENT_MARKET_DATA("Insufficient market data");
-    
+
   private final String _reason;
 
-  private MissingInput(final String reason) {
+  /**
+   * @param reason  the error reason string
+   */
+  MissingInput(final String reason) {
     _reason = reason;
   }
 
+  @Override
   public String toString() {
     return _reason;
   }
-  
+
 }

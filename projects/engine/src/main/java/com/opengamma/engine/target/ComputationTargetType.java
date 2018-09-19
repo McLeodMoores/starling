@@ -265,19 +265,17 @@ public abstract class ComputationTargetType implements Serializable {
           case '/':
             if (type == null) {
               throw new IllegalArgumentException("Unexpected / at index " + _index + " of " + _buffer);
-            } else {
-              _index++;
-              type = new NestedComputationTargetType(type, parse());
-              break;
             }
+            _index++;
+            type = new NestedComputationTargetType(type, parse());
+            break;
           case '|':
             if (type == null) {
               throw new IllegalArgumentException("Unexpected | at index " + _index + " of " + _buffer);
-            } else {
-              _index++;
-              type = new MultipleComputationTargetType(type, parse());
-              break;
             }
+            _index++;
+            type = new MultipleComputationTargetType(type, parse());
+            break;
           case '(':
             _index++;
             if (type == null) {
@@ -289,10 +287,9 @@ public abstract class ComputationTargetType implements Serializable {
           case ')':
             if (type == null) {
               throw new IllegalArgumentException("Unexpected ) at index " + _index + " of " + _buffer);
-            } else {
-              _index++;
-              return type;
             }
+            _index++;
+            return type;
           default:
             if (type != null) {
               throw new IllegalArgumentException("Unexpected identifier at index " + _index + " of " + _buffer);

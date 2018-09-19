@@ -59,11 +59,6 @@ public class ServiceContextAwareExecutorServiceTest {
     ThreadLocalServiceContext.init(null);
   }
 
-  /**
-   *
-   * @throws ExecutionException
-   * @throws InterruptedException
-   */
   @Test
   public void submitCallable() throws ExecutionException, InterruptedException {
     assertFalse(_underlying.submit(callable()).get());

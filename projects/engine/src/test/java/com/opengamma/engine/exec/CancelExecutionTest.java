@@ -107,7 +107,7 @@ public class CancelExecutionTest {
   private static final Logger LOGGER = LoggerFactory.getLogger(CancelExecutionTest.class);
 
   @DataProvider(name = "executors")
-  Object[][] data_executors() {
+  Object[][] dataExecutors() {
     return new Object[][] { {multipleNodeExecutorFactoryManyJobs() }, {multipleNodeExecutorFactoryOneJob() }, {new SingleNodeExecutorFactory() }, };
   }
 
@@ -135,7 +135,8 @@ public class CancelExecutionTest {
 
   private DependencyGraphExecutionFuture executeTestJob(final DependencyGraphExecutorFactory factory) {
     final InMemoryLKVMarketDataProvider marketDataProvider = new InMemoryLKVMarketDataProvider();
-    final MarketDataProviderResolver marketDataProviderResolver = new SingleMarketDataProviderResolver(new SingletonMarketDataProviderFactory(marketDataProvider));
+    final MarketDataProviderResolver marketDataProviderResolver =
+        new SingleMarketDataProviderResolver(new SingletonMarketDataProviderFactory(marketDataProvider));
     final InMemoryFunctionRepository functionRepository = new InMemoryFunctionRepository();
     _functionCount.set(0);
     final MockFunction mockFunction = new MockFunction(ComputationTarget.NULL) {
@@ -153,7 +154,8 @@ public class CancelExecutionTest {
     };
     functionRepository.addFunction(mockFunction);
     final FunctionCompilationContext compilationContext = new FunctionCompilationContext();
-    final CompiledFunctionService compilationService = new CompiledFunctionService(functionRepository, new CachingFunctionRepositoryCompiler(), compilationContext);
+    final CompiledFunctionService compilationService =
+        new CompiledFunctionService(functionRepository, new CachingFunctionRepositoryCompiler(), compilationContext);
     compilationService.initialize();
     final FunctionResolver functionResolver = new DefaultFunctionResolver(compilationService);
     final InMemorySecuritySource securitySource = new InMemorySecuritySource();
@@ -162,7 +164,8 @@ public class CancelExecutionTest {
     final ViewComputationCacheSource computationCacheSource = new InMemoryViewComputationCacheSource(FudgeContext.GLOBAL_DEFAULT);
     final FunctionInvocationStatisticsGatherer functionInvocationStatistics = new DiscardingInvocationStatisticsGatherer();
     final FunctionExecutionContext executionContext = new FunctionExecutionContext();
-    final JobDispatcher jobDispatcher = new JobDispatcher(new LocalNodeJobInvoker(new SimpleCalculationNode(computationCacheSource, compilationService, executionContext, "node",
+    final JobDispatcher jobDispatcher =
+        new JobDispatcher(new LocalNodeJobInvoker(new SimpleCalculationNode(computationCacheSource, compilationService, executionContext, "node",
         Executors.newCachedThreadPool(), functionInvocationStatistics, new CalculationNodeLogEventListener(new ThreadLocalLogEventListener()))));
     final ViewPermissionProvider viewPermissionProvider = new DefaultViewPermissionProvider();
     final GraphExecutorStatisticsGathererProvider graphExecutorStatisticsProvider = new DiscardingGraphStatisticsGathererProvider();
@@ -170,10 +173,11 @@ public class CancelExecutionTest {
     viewDefinition.addViewCalculationConfiguration(new ViewCalculationConfiguration(viewDefinition, "default"));
     final MockConfigSource configSource = new MockConfigSource();
     configSource.put(viewDefinition);
-    final ViewProcessContext vpc = new ViewProcessContext(UniqueId.of("Process", "Test"), configSource, viewPermissionProvider, new DefaultViewPortfolioPermissionProvider(),
+    final ViewProcessContext vpc =
+        new ViewProcessContext(UniqueId.of("Process", "Test"), configSource, viewPermissionProvider, new DefaultViewPortfolioPermissionProvider(),
         marketDataProviderResolver, compilationService, functionResolver, computationCacheSource, jobDispatcher, new SingleThreadViewProcessWorkerFactory(),
-        new DependencyGraphBuilderFactory(), factory, graphExecutorStatisticsProvider, new DummyOverrideOperationCompiler(), new EngineResourceManagerImpl<SingleComputationCycle>(),
-        new VersionedUniqueIdSupplier("Test", "1"), new InMemoryViewExecutionCache());
+        new DependencyGraphBuilderFactory(), factory, graphExecutorStatisticsProvider, new DummyOverrideOperationCompiler(),
+        new EngineResourceManagerImpl<SingleComputationCycle>(), new VersionedUniqueIdSupplier("Test", "1"), new InMemoryViewExecutionCache());
     DependencyNode previousNode = null;
     ValueSpecification previousValue = null;
     for (int i = 0; i < JOB_SIZE; i++) {

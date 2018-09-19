@@ -13,7 +13,8 @@ import com.opengamma.lambdava.functions.Function2;
  */
 /* package */abstract class AbstractParallelRecompilationTest {
 
-  protected abstract void testImpl(final Function2<ParallelRecompilationViewProcessWorker, ViewExecutionOptions, Void> callback) throws InterruptedException;
+  protected abstract void testImpl(Function2<ParallelRecompilationViewProcessWorker, ViewExecutionOptions, Void> callback)
+      throws InterruptedException;
 
   public void testParallel() throws InterruptedException {
     testImpl(new Function2<ParallelRecompilationViewProcessWorker, ViewExecutionOptions, Void>() {

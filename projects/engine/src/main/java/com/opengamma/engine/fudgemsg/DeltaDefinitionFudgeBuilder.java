@@ -35,7 +35,6 @@ public class DeltaDefinitionFudgeBuilder implements FudgeBuilder<DeltaDefinition
     return msg;
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public DeltaDefinition buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
     final FudgeField fudgeField = message.getByName(NUMBER_COMPARER_KEY);

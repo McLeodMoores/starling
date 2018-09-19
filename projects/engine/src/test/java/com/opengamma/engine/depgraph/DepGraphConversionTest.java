@@ -398,18 +398,19 @@ public class DepGraphConversionTest extends AbstractDependencyGraphBuilderTest {
         }
 
         @Override
-        public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+        public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs,
+            final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
           return null;
         }
 
         @Override
-        public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+        public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+            final ValueRequirement desiredValue) {
           final Set<String> props = desiredValue.getConstraints().getValues(property);
           if (props == null) {
             return Collections.singleton(new ValueRequirement("C", target.toSpecification(), ValueProperties.with(property, "Default").get()));
-          } else {
-            return Collections.singleton(new ValueRequirement("C", target.toSpecification(), ValueProperties.withAny(property).get()));
           }
+          return Collections.singleton(new ValueRequirement("C", target.toSpecification(), ValueProperties.withAny(property).get()));
         }
 
         @Override
@@ -418,7 +419,8 @@ public class DepGraphConversionTest extends AbstractDependencyGraphBuilderTest {
         }
 
         @Override
-        public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+        public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+            final Map<ValueSpecification, ValueRequirement> inputs) {
           final Set<ValueSpecification> result = Sets.newHashSetWithExpectedSize(inputs.size());
           for (final ValueSpecification input : inputs.keySet()) {
             result.add(new ValueSpecification(input.getValueName(), input.getTargetSpecification(), input.getProperties().copy().withAny(property).get()));

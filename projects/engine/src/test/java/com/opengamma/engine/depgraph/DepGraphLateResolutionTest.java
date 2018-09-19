@@ -142,12 +142,12 @@ public class DepGraphLateResolutionTest extends AbstractDependencyGraphBuilderTe
         }
 
         @Override
-        public Set<ValueRequirement> getAdditionalRequirements(final FunctionCompilationContext context, final ComputationTarget target, final Set<ValueSpecification> inputs, final Set<ValueSpecification> outputs) {
+        public Set<ValueRequirement> getAdditionalRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+            final Set<ValueSpecification> inputs, final Set<ValueSpecification> outputs) {
           if (inputs.contains(helper.getSpec2Foo())) {
             return Collections.singleton(helper.getRequirement2Beta());
-          } else {
-            return Collections.singleton(helper.getRequirement1Foo());
           }
+          return Collections.singleton(helper.getRequirement1Foo());
         }
 
       };

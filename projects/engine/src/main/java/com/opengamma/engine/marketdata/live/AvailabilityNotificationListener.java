@@ -38,7 +38,7 @@ import com.opengamma.util.jms.JmsTopicContainer;
    * @param topic The topic for {@link MarketDataAvailabilityNotification} messages
    * @param jmsConnector For receiving JMS messages
    */
-  public AvailabilityNotificationListener(final String topic, final JmsConnector jmsConnector) {
+  AvailabilityNotificationListener(final String topic, final JmsConnector jmsConnector) {
     final ByteArrayFudgeMessageReceiver receiver = new ByteArrayFudgeMessageReceiver(new Receiver());
     final JmsByteArrayMessageDispatcher dispatcher = new JmsByteArrayMessageDispatcher(receiver);
     _jmsTopicContainer = jmsConnector.getTopicContainerFactory().create(topic, dispatcher);

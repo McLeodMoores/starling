@@ -48,8 +48,9 @@ public class AdditivePropertiesBuilder extends ValueProperties.Builder {
   /**
    * Creates an instance as a deep copy of another.
    * <p>
-   * A full copy is performed rather than taking an unowned reference. The latter approach works when referencing the immutable content of an existing value property set, but not when the owner is a
-   * builder as that may continue to modify the structure.
+   * A full copy is performed rather than taking an unowned reference. The latter approach works when referencing the
+   * immutable content of an existing value property set, but not when the owner is a builder as that may continue to
+   * modify the structure.
    *
    * @param copyFrom the builder to copy from
    */
@@ -226,13 +227,12 @@ public class AdditivePropertiesBuilder extends ValueProperties.Builder {
     final int size = propertyValues.length;
     if (size <= ArrayValueProperty.MAX_ARRAY_LENGTH) {
       return new ArrayValueProperty(propertyName, false, propertyValues, next);
-    } else {
-      final Set<String> values = Sets.newHashSetWithExpectedSize(size);
-      for (final String value : propertyValues) {
-        values.add(value);
-      }
-      return createValuePropertyFromSet(propertyName, values, next);
     }
+    final Set<String> values = Sets.newHashSetWithExpectedSize(size);
+    for (final String value : propertyValues) {
+      values.add(value);
+    }
+    return createValuePropertyFromSet(propertyName, values, next);
   }
 
   private AbstractValueProperty createValueProperty(final String propertyName, final Collection<String> propertyValues, final AbstractValueProperty next) {
@@ -485,21 +485,20 @@ public class AdditivePropertiesBuilder extends ValueProperties.Builder {
     ArgumentChecker.notNull(propertyName, "propertyName");
     if (_properties == null) {
       return this;
-    } else {
-      localCopy();
-      final int hc = propertyName.hashCode() & 0x7FFFFFFF;
-      final int i = hc % _properties.length;
-      AbstractValueProperty e = _properties[i];
+    }
+    localCopy();
+    final int hc = propertyName.hashCode() & 0x7FFFFFFF;
+    final int i = hc % _properties.length;
+    AbstractValueProperty e = _properties[i];
+    if (e != null) {
+      if (!_copies[i]) {
+        e = e.copy();
+        _properties[i] = e;
+        _copies[i] = true;
+      }
+      e = e.setOptional(propertyName, false);
       if (e != null) {
-        if (!_copies[i]) {
-          e = e.copy();
-          _properties[i] = e;
-          _copies[i] = true;
-        }
-        e = e.setOptional(propertyName, false);
-        if (e != null) {
-          _properties[i] = e;
-        }
+        _properties[i] = e;
       }
     }
     return this;
@@ -534,11 +533,10 @@ public class AdditivePropertiesBuilder extends ValueProperties.Builder {
     final int count = count();
     if (count == 0) {
       return ValueProperties.none();
-    } else {
-      rehash(count);
-      _copies = null;
-      return createAdditive(_properties);
     }
+    rehash(count);
+    _copies = null;
+    return createAdditive(_properties);
   }
 
   @Override

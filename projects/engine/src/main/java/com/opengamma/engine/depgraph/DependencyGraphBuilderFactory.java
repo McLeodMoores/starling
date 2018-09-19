@@ -79,7 +79,7 @@ public class DependencyGraphBuilderFactory {
    * Set whether the graph building algorithm should retain information about failed productions and backtracking options to produce more thorough details of why requirements could not be specified.
    * Enabling this will increase the memory footprint of the graph building algorithm. The default setting is taken from system property {@code DependencyGraphBuilderFactory.enableFailureReporting} if
    * set, otherwise it is off.
-   * 
+   *
    * @param enableFailureReporting true to enable, false to disable
    */
   public void setEnableFailureReporting(final boolean enableFailureReporting) {
@@ -141,7 +141,7 @@ public class DependencyGraphBuilderFactory {
     return new Executor() {
 
       private final AtomicInteger _threads = new AtomicInteger();
-      private final Queue<Runnable> _commands = new ConcurrentLinkedQueue<Runnable>();
+      private final Queue<Runnable> _commands = new ConcurrentLinkedQueue<>();
 
       class WrappedRunnable implements Runnable {
 

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode;
@@ -14,8 +14,9 @@ package com.opengamma.engine.calcnode;
 public interface CapabilityRequirementsProvider {
 
   /**
-   * Returns the {@link CapabilityRequirements} object for the job. The object will never be modified by the caller so the same instance can be returned for multiple jobs.
-   * 
+   * Returns the {@link CapabilityRequirements} object for the job. The object will never be modified by the caller so the
+   * same instance can be returned for multiple jobs.
+   *
    * @param job job details
    * @return the requirements, not null.
    */

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode;
@@ -17,7 +17,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class CapabilityRequirements {
 
-  private final Set<Capability> _requiredCapabilities = new HashSet<Capability>();
+  private final Set<Capability> _requiredCapabilities = new HashSet<>();
 
   public CapabilityRequirements() {
   }
@@ -40,6 +40,7 @@ public class CapabilityRequirements {
     return _requiredCapabilities;
   }
 
+  @Override
   public CapabilityRequirements clone() {
     return new CapabilityRequirements(this);
   }

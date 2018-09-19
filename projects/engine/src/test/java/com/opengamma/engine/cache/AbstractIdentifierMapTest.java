@@ -8,7 +8,6 @@ package com.opengamma.engine.cache;
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertFalse;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -53,7 +52,7 @@ public abstract class AbstractIdentifierMapTest {
   }
 
   @Test
-  public void simpleOperation() throws IOException {
+  public void simpleOperation() {
     final IdentifierMap idMap = createIdentifierMap("simpleOperation");
 
     final Map<String, Long> identifiers = new HashMap<>();
@@ -141,7 +140,8 @@ public abstract class AbstractIdentifierMapTest {
     final double msPerPut = (double) numMillis / (double) numSpecifications;
     final double putsPerSecond = 1000.0 / msPerPut;
 
-    LOGGER.warn("put {}-{} ({}) Split time was {} ms/put, {} puts/sec", new Object[] {numRequirementNames, numIdentifiers, bulkOperation, msPerPut, putsPerSecond });
+    LOGGER.warn("put {}-{} ({}) Split time was {} ms/put, {} puts/sec", new Object[] {numRequirementNames, numIdentifiers,
+        bulkOperation, msPerPut, putsPerSecond });
   }
 
   protected void getPerformanceTestImpl(final boolean bulkOperation) {
@@ -164,7 +164,8 @@ public abstract class AbstractIdentifierMapTest {
       final long numMillis = timer.finished();
       final double msPerPut = (double) numMillis / (double) numSpecifications;
       final double putsPerSecond = 1000.0 / msPerPut;
-      LOGGER.warn("get {}-{} ({}) Split time was {} ms/get, {} gets/sec", new Object[] {numRequirementNames, numIdentifiers, bulkOperation, msPerPut, putsPerSecond });
+      LOGGER.warn("get {}-{} ({}) Split time was {} ms/get, {} gets/sec", new Object[] {numRequirementNames, numIdentifiers,
+          bulkOperation, msPerPut, putsPerSecond });
     } finally {
       stopIdentifierMap(idMap);
     }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph;
@@ -30,7 +30,7 @@ import com.opengamma.engine.value.ValueSpecification;
     private ResolvedValue[] _results;
     private int _resultsPushed;
 
-    public Callback(final ResolvedValueCallback callback) {
+    Callback(final ResolvedValueCallback callback) {
       _callback = callback;
       // Don't reference count the callback; the interface doesn't support it and if it is something like an
       // AggregateResolvedValueProducer then counting references in this direction will introduce a loop and
@@ -55,7 +55,7 @@ import com.opengamma.engine.value.ValueSpecification;
             _results = AbstractResolvedValueProducer.this._results;
             if (_resultsPushed < _results.length) {
               nextValue = _results[_resultsPushed++];
-              if (_finished && (_resultsPushed == _results.length)) {
+              if (_finished && _resultsPushed == _results.length) {
                 finished = true;
               }
             } else {
@@ -160,7 +160,7 @@ import com.opengamma.engine.value.ValueSpecification;
     public boolean cancel(final GraphBuildingContext context) {
       LOGGER.debug("Cancelling callback {}", this);
       synchronized (AbstractResolvedValueProducer.this) {
-        if ((_pumped != null) && _pumped.remove(this)) {
+        if (_pumped != null && _pumped.remove(this)) {
           // Was in a pumped state; close and release the parent resolver
         } else {
           // Not in a pumped state - perhaps cancel was already called
@@ -189,7 +189,7 @@ import com.opengamma.engine.value.ValueSpecification;
   private final int _objectId = NEXT_OBJECT_ID.getAndIncrement();
   //private final InstanceCount _instanceCount = new InstanceCount(this);
   private Set<ValueSpecification> _resolvedValues;
-  private Set<Callback> _pumped = new HashSet<Callback>();
+  private Set<Callback> _pumped = new HashSet<>();
   private int _pumping; // 0 = not, 1 = pumpImpl about to be called, 3 = next result ready, 7 = last result ready
   private int _refCount;
   private ResolvedValue[] _results;
@@ -197,7 +197,7 @@ import com.opengamma.engine.value.ValueSpecification;
   private ResolutionFailure _failure;
   private boolean _failureCopied;
 
-  public AbstractResolvedValueProducer(final ValueRequirement valueRequirement) {
+  AbstractResolvedValueProducer(final ValueRequirement valueRequirement) {
     _valueRequirement = valueRequirement;
     _results = NO_RESULTS;
     _refCount = 1;
@@ -234,11 +234,10 @@ import com.opengamma.engine.value.ValueSpecification;
         release(context); // reference held by callback object
         context.resolved(valueCallback, getValueRequirement(), firstResult, null);
         return null;
-      } else {
-        LOGGER.debug("Pushing first callback result {}", firstResult);
-        context.resolved(valueCallback, getValueRequirement(), firstResult, callback);
-        return callback;
       }
+      LOGGER.debug("Pushing first callback result {}", firstResult);
+      context.resolved(valueCallback, getValueRequirement(), firstResult, callback);
+      return callback;
     } else if (finished) {
       LOGGER.debug("Pushing failure");
       release(context); // reference held by callback object
@@ -259,13 +258,13 @@ import com.opengamma.engine.value.ValueSpecification;
         results = _results;
         failure = _failure;
       }
-      for (Callback callback : pumped) {
+      for (final Callback callback : pumped) {
         ResolvedValue pumpValue = null;
         boolean lastCallbackResult = false;
         synchronized (callback) {
           if (callback._resultsPushed < results.length) {
             pumpValue = results[callback._resultsPushed++];
-            lastCallbackResult = lastResult && (callback._resultsPushed == results.length);
+            lastCallbackResult = lastResult && callback._resultsPushed == results.length;
           } else {
             assert finished;
           }
@@ -290,16 +289,17 @@ import com.opengamma.engine.value.ValueSpecification;
 
   private static boolean equals(final ValueSpecification a, final ValueSpecification b) {
     // The ValueSpecifications put into ResolvedValue objects are normalized
-    assert (a == b) == a.equals(b);
+    assert a == b == a.equals(b);
     return a == b;
   }
 
   /**
    * Stores the result in the producer, publishing to any active subscribers that are currently waiting for a value.
-   * 
+   *
    * @param context the graph building context
    * @param value the value to store
-   * @param lastResult last result indicator - if this is definitely the last result, the subscribers won't receive a "pump" handle allowing possible garbage collection of this producer
+   * @param lastResult last result indicator - if this is definitely the last result, the subscribers won't receive a "pump"
+   * handle allowing possible garbage collection of this producer
    * @return true if a value was pushed to the subscribers, false if no value was generated and pushResult or finished must still be called
    */
   protected boolean pushResult(final GraphBuildingContext context, final ResolvedValue value, final boolean lastResult) {
@@ -353,7 +353,7 @@ import com.opengamma.engine.value.ValueSpecification;
               LOGGER.debug("Rejecting {} already available from {}", value, this);
               return false;
             }
-            _resolvedValues = new HashSet<ValueSpecification>(8);
+            _resolvedValues = new HashSet<>(8);
             _resolvedValues.add(_results[0].getValueSpecification());
             _resolvedValues.add(_results[1].getValueSpecification());
             _resolvedValues.add(_results[2].getValueSpecification());
@@ -406,13 +406,14 @@ import com.opengamma.engine.value.ValueSpecification;
 
   /**
    * Triggers either a future (or immediate) call to either one or more {@link #pushResult} or a single {@link #finished}.
-   * 
+   *
    * @param context building context
    */
-  protected abstract void pumpImpl(final GraphBuildingContext context);
+  protected abstract void pumpImpl(GraphBuildingContext context);
 
   /**
-   * Call when there are no more values that can be pushed. Any callbacks that have had pump called on them will receive a failure notification. This must only be called once.
+   * Call when there are no more values that can be pushed. Any callbacks that have had pump called on them will receive a
+   * failure notification. This must only be called once.
    */
   protected void finished(final GraphBuildingContext context) {
     assert !_finished;
@@ -442,7 +443,7 @@ import com.opengamma.engine.value.ValueSpecification;
   protected void storeFailure(final ResolutionFailure failure) {
     if (failure != null) {
       synchronized (this) {
-        if ((_results != null) && (_results.length == 0)) {
+        if (_results != null && _results.length == 0) {
           // Only store failure info if there are no results to push
           if (_failure == null) {
             _failure = failure;
@@ -459,9 +460,9 @@ import com.opengamma.engine.value.ValueSpecification;
   }
 
   /**
-   * Returns the current results in the order they were produced. If the producer is not in a "finished" state, the results are the current intermediate values. The caller must not modify the content
-   * of the array.
-   * 
+   * Returns the current results in the order they were produced. If the producer is not in a "finished" state, the results are
+   * the current intermediate values. The caller must not modify the content of the array.
+   *
    * @return the current results
    */
   protected synchronized ResolvedValue[] getResults() {
@@ -482,9 +483,8 @@ import com.opengamma.engine.value.ValueSpecification;
     if (_refCount > 0) {
       _refCount++;
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
 
   @Override
@@ -503,7 +503,7 @@ import com.opengamma.engine.value.ValueSpecification;
 
   /**
    * Returns the current reference count for the object.
-   * 
+   *
    * @return the reference count
    */
   @Override
@@ -514,12 +514,12 @@ import com.opengamma.engine.value.ValueSpecification;
   protected void setRecursionDetected() {
     final List<Callback> pumped;
     synchronized (this) {
-      if ((_pumped == null) || _pumped.isEmpty()) {
+      if (_pumped == null || _pumped.isEmpty()) {
         return;
       }
-      pumped = new ArrayList<Callback>(_pumped);
+      pumped = new ArrayList<>(_pumped);
     }
-    for (Callback callback : pumped) {
+    for (final Callback callback : pumped) {
       callback._callback.recursionDetected();
     }
   }
@@ -528,15 +528,15 @@ import com.opengamma.engine.value.ValueSpecification;
   public int cancelLoopMembers(final GraphBuildingContext context, final Map<Chain, LoopState> visited) {
     final List<Callback> pumped;
     synchronized (this) {
-      if ((_pumped == null) || _pumped.isEmpty()) {
+      if (_pumped == null || _pumped.isEmpty()) {
         LOGGER.debug("Callback {} has no pumped callbacks", this);
         // No callbacks pumped (or has already finished), so can't be in a loop
         return 0;
       }
-      pumped = new ArrayList<Callback>(_pumped);
+      pumped = new ArrayList<>(_pumped);
     }
     int result = 0;
-    for (Callback callback : pumped) {
+    for (final Callback callback : pumped) {
       if (callback._callback instanceof Chain) {
         final Chain chained = (Chain) callback._callback;
         final LoopState state = visited.put(chained, LoopState.CHECKING);

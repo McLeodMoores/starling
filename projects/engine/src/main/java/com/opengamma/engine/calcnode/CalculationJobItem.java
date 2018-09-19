@@ -108,7 +108,8 @@ public final class CalculationJobItem implements IdentifierEncodedValueSpecifica
   }
 
   /**
-   * Returns the identifiers of the function inputs. The identifier will only be populated after deserialization from a Fudge message or after {@link #convertIdentifiers} has been called.
+   * Returns the identifiers of the function inputs. The identifier will only be populated after deserialization from a Fudge
+   * message or after {@link #convertIdentifiers} has been called.
    *
    * @return the identifiers or null if they have not been converted
    */
@@ -117,7 +118,8 @@ public final class CalculationJobItem implements IdentifierEncodedValueSpecifica
   }
 
   /**
-   * Returns the function input specifications. If the item has been deserialized the specifications will only be populated after {@link #resolveIdentifiers} has been called
+   * Returns the function input specifications. If the item has been deserialized the specifications will only be populated
+   * after {@link #resolveIdentifiers} has been called
    *
    * @return the input specifications or null if they have not been resolved
    */
@@ -126,7 +128,8 @@ public final class CalculationJobItem implements IdentifierEncodedValueSpecifica
   }
 
   /**
-   * Returns the identifiers of the function outputs. The identifiers will only be populated after deserialization from a Fudge message or after {@link #convertIdentifiers} has been called.
+   * Returns the identifiers of the function outputs. The identifiers will only be populated after deserialization from a
+   * Fudge message or after {@link #convertIdentifiers} has been called.
    *
    * @return the identifiers or null if they have not been converted
    */
@@ -135,7 +138,8 @@ public final class CalculationJobItem implements IdentifierEncodedValueSpecifica
   }
 
   /**
-   * Returns the function output specifications. If the item has been deserialized the specifications will only be populated after {@link #resolveIdentifiers} has been called.
+   * Returns the function output specifications. If the item has been deserialized the specifications will only be populated
+   * after {@link #resolveIdentifiers} has been called.
    *
    * @return the output specifications or null if they have not been converted
    */
@@ -231,7 +235,8 @@ public final class CalculationJobItem implements IdentifierEncodedValueSpecifica
   //-------------------------------------------------------------------------
   @Override
   public String toString() {
-    return new ToStringBuilder(this).append("Function unique ID", getFunctionUniqueIdentifier()).append("Computation target", getComputationTargetSpecification()).toString();
+    return new ToStringBuilder(this).append("Function unique ID", getFunctionUniqueIdentifier()).append("Computation target",
+        getComputationTargetSpecification()).toString();
   }
 
   //-------------------------------------------------------------------------
@@ -241,8 +246,8 @@ public final class CalculationJobItem implements IdentifierEncodedValueSpecifica
       return false;
     }
     final CalculationJobItem other = (CalculationJobItem) o;
-    return _functionUniqueIdentifier.equals(other._functionUniqueIdentifier) && _computationTargetSpecification.equals(other._computationTargetSpecification) &&
-        Arrays.deepEquals(_inputSpecifications, other._inputSpecifications) && Arrays.deepEquals(_outputSpecifications, other._outputSpecifications);
+    return _functionUniqueIdentifier.equals(other._functionUniqueIdentifier) && _computationTargetSpecification.equals(other._computationTargetSpecification)
+        && Arrays.deepEquals(_inputSpecifications, other._inputSpecifications) && Arrays.deepEquals(_outputSpecifications, other._outputSpecifications);
   }
 
   @Override

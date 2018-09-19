@@ -23,10 +23,12 @@ import com.opengamma.util.WeakInstanceCache;
  */
 public final class MemoryUtils {
 
-  // TODO: Why do we need value specifications everywhere; can't we just work with the longs that go into the jobs? Converting ValueSpecifications to/from the longs
-  // is cheap enough - if in the cache, map operations no more costly than the approach here
+  // TODO: Why do we need value specifications everywhere; can't we just work with the longs that go into the jobs?
+  // Converting ValueSpecifications to/from the longs is cheap enough - if in the cache, map operations no more
+  // costly than the approach here
 
-  private static final WeakInstanceCache<? extends ComputationTargetReference> COMPUTATION_TARGET_REFERENCE = new NormalizingWeakInstanceCache<ComputationTargetReference>() {
+  private static final WeakInstanceCache<? extends ComputationTargetReference> COMPUTATION_TARGET_REFERENCE =
+      new NormalizingWeakInstanceCache<ComputationTargetReference>() {
     @Override
     protected ComputationTargetReference normalize(final ComputationTargetReference value) {
       return value.normalize();

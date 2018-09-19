@@ -34,26 +34,30 @@ import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValuePropertyNames;
 import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
-import com.opengamma.engine.view.worker.CompositeMarketDataSnapshot;
-import com.opengamma.engine.view.worker.SnapshottingViewExecutionDataProvider;
 import com.opengamma.id.UniqueId;
 import com.opengamma.util.test.TestGroup;
 
 @Test(groups = TestGroup.UNIT)
 public class CompositeMarketDataSnapshotTest {
 
-  private static final ComputationTargetSpecification TARGET = new ComputationTargetSpecification(ComputationTargetType.SECURITY, UniqueId.of("scheme", "value"));
+  private static final ComputationTargetSpecification TARGET =
+      new ComputationTargetSpecification(ComputationTargetType.SECURITY, UniqueId.of("scheme", "value"));
   private static final ValueRequirement REQUIREMENT1 = new ValueRequirement("r1", TARGET);
   private static final ValueRequirement REQUIREMENT2 = new ValueRequirement("r2", TARGET);
-  private static final ValueSpecification SPECIFICATION1 = new ValueSpecification(REQUIREMENT1.getValueName(), TARGET, ValueProperties.with(ValuePropertyNames.FUNCTION, "F").get());
-  private static final ValueSpecification SPECIFICATION1_EXT = new ValueSpecification(REQUIREMENT1.getValueName(), TARGET, ValueProperties.with(ValuePropertyNames.FUNCTION, "F")
+  private static final ValueSpecification SPECIFICATION1 =
+      new ValueSpecification(REQUIREMENT1.getValueName(), TARGET, ValueProperties.with(ValuePropertyNames.FUNCTION, "F").get());
+  private static final ValueSpecification SPECIFICATION1_EXT =
+      new ValueSpecification(REQUIREMENT1.getValueName(), TARGET, ValueProperties.with(ValuePropertyNames.FUNCTION, "F")
       .with(ValuePropertyNames.DATA_PROVIDER, "0").get());
-  private static final ValueSpecification SPECIFICATION2 = new ValueSpecification(REQUIREMENT2.getValueName(), TARGET, ValueProperties.with(ValuePropertyNames.FUNCTION, "F").get());
-  private static final ValueSpecification SPECIFICATION2_EXT = new ValueSpecification(REQUIREMENT2.getValueName(), TARGET, ValueProperties.with(ValuePropertyNames.FUNCTION, "F")
+  private static final ValueSpecification SPECIFICATION2 =
+      new ValueSpecification(REQUIREMENT2.getValueName(), TARGET, ValueProperties.with(ValuePropertyNames.FUNCTION, "F").get());
+  private static final ValueSpecification SPECIFICATION2_EXT =
+      new ValueSpecification(REQUIREMENT2.getValueName(), TARGET, ValueProperties.with(ValuePropertyNames.FUNCTION, "F")
       .with(ValuePropertyNames.DATA_PROVIDER, "1").get());
   private static final Object VALUE1 = "V1";
   private static final Object VALUE2 = "V2";
-  private static final ValueSpecification UNKNOWN_SPECIFICATION = new ValueSpecification("u", TARGET, ValueProperties.with(ValuePropertyNames.FUNCTION, "F").get());
+  private static final ValueSpecification UNKNOWN_SPECIFICATION =
+      new ValueSpecification("u", TARGET, ValueProperties.with(ValuePropertyNames.FUNCTION, "F").get());
 
   private MarketDataSnapshot _delegate1;
   private MarketDataSnapshot _delegate2;
@@ -63,7 +67,8 @@ public class CompositeMarketDataSnapshotTest {
   public void setUp() throws Exception {
     _delegate1 = mock(MarketDataSnapshot.class);
     _delegate2 = mock(MarketDataSnapshot.class);
-    _snapshot = new CompositeMarketDataSnapshot(Lists.newArrayList(_delegate1, _delegate2), new SnapshottingViewExecutionDataProvider.ValueSpecificationProvider(2));
+    _snapshot = new CompositeMarketDataSnapshot(Lists.newArrayList(_delegate1, _delegate2),
+        new SnapshottingViewExecutionDataProvider.ValueSpecificationProvider(2));
     stub(_delegate1.query(SPECIFICATION1)).toReturn(VALUE1);
     stub(_delegate2.query(SPECIFICATION2)).toReturn(VALUE2);
     stub(_delegate1.query(Sets.newHashSet(SPECIFICATION1))).toReturn(ImmutableMap.of(SPECIFICATION1, VALUE1));
@@ -83,9 +88,8 @@ public class CompositeMarketDataSnapshotTest {
   }
 
   /**
-   * initialize the snapshot with a set of requirements that is a subset of the requirements in the underlying snapshots
+   * Initialize the snapshot with a set of requirements that is a subset of the requirements in the underlying snapshots.
    */
-  @SuppressWarnings("unchecked")
   @Test
   public void initMultiSubset() {
     // check all delegates are initialized with the appropriate subset of requirements
@@ -98,7 +102,7 @@ public class CompositeMarketDataSnapshotTest {
   }
 
   /**
-   * initialize the snapshot with a set of requirements that includes all the requirements in the underlying snapshots
+   * Initialize the snapshot with a set of requirements that includes all the requirements in the underlying snapshots.
    */
   @Test
   public void initMultiAll() {
@@ -121,7 +125,7 @@ public class CompositeMarketDataSnapshotTest {
   }
 
   /**
-   * query the snapshot with a set of requirements that is a subset of the requirements in the underlying snapshots
+   * Query the snapshot with a set of requirements that is a subset of the requirements in the underlying snapshots.
    */
   @Test
   public void queryMultiSubset() {
@@ -133,7 +137,7 @@ public class CompositeMarketDataSnapshotTest {
   }
 
   /**
-   * query the snapshot with a set of requirements that includes all the requirements in the underlying snapshots
+   * Query the snapshot with a set of requirements that includes all the requirements in the underlying snapshots.
    */
   @Test
   public void queryMultiAll() {
@@ -145,7 +149,7 @@ public class CompositeMarketDataSnapshotTest {
   }
 
   /**
-   * If the first underlying provider doesn't have a snapshot time then the others should be tried
+   * If the first underlying provider doesn't have a snapshot time then the others should be tried.
    */
   @Test
   public void snapshotTime() {
@@ -153,7 +157,7 @@ public class CompositeMarketDataSnapshotTest {
   }
 
   /**
-   * If the first underlying provider doesn't have a snapshot time indication then the others should be tried
+   * If the first underlying provider doesn't have a snapshot time indication then the others should be tried.
    */
   @Test
   public void snapshotTimeIndication() {

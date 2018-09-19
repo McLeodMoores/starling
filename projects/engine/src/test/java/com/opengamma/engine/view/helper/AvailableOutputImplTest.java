@@ -128,7 +128,8 @@ public class AvailableOutputImplTest {
     final AvailableOutputImpl output = new AvailableOutputImpl(VALUE_NAME, null);
     output.setPortfolioNodeProperties(ValueProperties.with(ValuePropertyNames.FUNCTION, FUNCTION_ID_1).with(PROPERTY_1, VALUE_A).get());
     output.setPortfolioNodeProperties(ValueProperties.with(ValuePropertyNames.FUNCTION, FUNCTION_ID_2).with(PROPERTY_2, VALUE_A).get());
-    assertEquals(output.getProperties(), ValueProperties.with(ValuePropertyNames.FUNCTION, FUNCTION_ID_1, FUNCTION_ID_2).withOptional(PROPERTY_1).with(PROPERTY_1, VALUE_A).withOptional(PROPERTY_2)
+    assertEquals(output.getProperties(), ValueProperties.with(ValuePropertyNames.FUNCTION, FUNCTION_ID_1, FUNCTION_ID_2)
+        .withOptional(PROPERTY_1).with(PROPERTY_1, VALUE_A).withOptional(PROPERTY_2)
         .with(PROPERTY_2, VALUE_A).get());
   }
 
@@ -136,7 +137,8 @@ public class AvailableOutputImplTest {
     final AvailableOutputImpl output = new AvailableOutputImpl(VALUE_NAME, null);
     output.setPortfolioNodeProperties(ValueProperties.with(ValuePropertyNames.FUNCTION, FUNCTION_ID_1).with(PROPERTY_1, VALUE_A).withAny(PROPERTY_2).get());
     output.setPortfolioNodeProperties(ValueProperties.with(ValuePropertyNames.FUNCTION, FUNCTION_ID_2).withAny(PROPERTY_1).with(PROPERTY_2, VALUE_A).get());
-    assertEquals(output.getProperties(), ValueProperties.with(ValuePropertyNames.FUNCTION, FUNCTION_ID_1, FUNCTION_ID_2).with(PROPERTY_1, VALUE_A).with(PROPERTY_2, VALUE_A).get());
+    assertEquals(output.getProperties(), ValueProperties.with(ValuePropertyNames.FUNCTION, FUNCTION_ID_1, FUNCTION_ID_2)
+        .with(PROPERTY_1, VALUE_A).with(PROPERTY_2, VALUE_A).get());
   }
 
 }

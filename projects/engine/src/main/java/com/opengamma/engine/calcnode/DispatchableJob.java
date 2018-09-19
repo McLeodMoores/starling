@@ -18,15 +18,19 @@ import com.opengamma.engine.view.ExecutionLogMode;
 import com.opengamma.util.async.Cancelable;
 
 /**
- * A job and all of its tails that can be dispatched to calculation nodes via an invoker. If the job fails (the local JobInvoker instance will make sure a failure is reported when loss of a remote
- * node is detected) it may be rescheduled. If the maximum number of reschedules is exceeded, or the job is failed on the same node twice, it becomes a "watched" job.
+ * A job and all of its tails that can be dispatched to calculation nodes via an invoker. If the job fails (the local
+ * JobInvoker instance will make sure a failure is reported when loss of a remote node is detected) it may be rescheduled.
+ * If the maximum number of reschedules is exceeded, or the job is failed on the same node twice, it becomes a "watched" job.
  * <p>
- * A watched job may not have a tail. If a job has a tail, the tails are extracted and rewritten, along with the root job, to use shared cache for values. The original job may then be resubmitted to
- * the dispatcher with a job result receiver that will submit the tail job(s) on original job completion. When those tails have complete the original result receiver will be notified.
+ * A watched job may not have a tail. If a job has a tail, the tails are extracted and rewritten, along with the root
+ * job, to use shared cache for values. The original job may then be resubmitted to the dispatcher with a job result
+ * receiver that will submit the tail job(s) on original job completion. When those tails have complete the original result
+ * receiver will be notified.
  * <p>
- * When a watched job fails, if it contains a single job item that item can be reported to a blacklist maintainer. If the job contains multiple items it is split into two parts, rewritten to use the
- * shared cache for values. The first will then be resubmitted with a job result receiver that will submit the second part of the job on first part completion. When the second part of the job
- * completed the original callback will be notified.
+ * When a watched job fails, if it contains a single job item that item can be reported to a blacklist maintainer. If the
+ * job contains multiple items it is split into two parts, rewritten to use the shared cache for values. The first will
+ * then be resubmitted with a job result receiver that will submit the second part of the job on first part completion. When
+ * the second part of the job completed the original callback will be notified.
  */
 /* package */abstract class DispatchableJob implements JobInvocationReceiver {
 
@@ -70,13 +74,12 @@ import com.opengamma.util.async.Cancelable;
       if (jobs.length == 0) {
         // Nothing here to cancel - probably already finished
         return false;
-      } else {
-        boolean result = true;
-        for (final DispatchableJob job : jobs) {
-          result &= job.cancel(mayInterruptIfRunning);
-        }
-        return result;
       }
+      boolean result = true;
+      for (final DispatchableJob job : jobs) {
+        result &= job.cancel(mayInterruptIfRunning);
+      }
+      return result;
     }
 
   }
@@ -158,7 +161,8 @@ import com.opengamma.util.async.Cancelable;
     LOGGER.info("Job {} completed on node {}", this, result.getComputeNodeId());
     resultReceiver.resultReceived(result);
     final long durationNanos = getDurationNanos();
-    LOGGER.debug("Reported time = {}ms, non-executing job time = {}ms", result.getDuration() / 1000000d, ((double) durationNanos - (double) result.getDuration()) / 1000000d);
+    LOGGER.debug("Reported time = {}ms, non-executing job time = {}ms", result.getDuration() / 1000000d,
+        ((double) durationNanos - (double) result.getDuration()) / 1000000d);
     if (getDispatcher().getStatisticsGatherer() != null) {
       final int size = result.getResultItems().size();
       getDispatcher().getStatisticsGatherer().jobCompleted(result.getComputeNodeId(), size, result.getDuration(), getDurationNanos());
@@ -170,7 +174,7 @@ import com.opengamma.util.async.Cancelable;
   @Override
   public void jobFailed(final JobInvoker jobInvoker, final String computeNodeId, final Exception exception) {
     LOGGER.warn("Job {} failed, {}", this, exception != null ? exception.getMessage() : "no exception passed");
-    if (_completed.getAndSet(true) == false) {
+    if (!_completed.getAndSet(true)) {
       cancelTimeout(null);
       final DispatchableJob retry = prepareRetryJob(jobInvoker);
       if (retry != null) {
@@ -203,14 +207,15 @@ import com.opengamma.util.async.Cancelable;
     for (int i = 0; i < size; i++) {
       failureItems.add(failure);
     }
-    final CalculationJobResult jobResult = new CalculationJobResult(job.getSpecification(), getDurationNanos(), failureItems, getDispatcher().getJobFailureNodeId());
+    final CalculationJobResult jobResult = new CalculationJobResult(job.getSpecification(), getDurationNanos(), failureItems,
+        getDispatcher().getJobFailureNodeId());
     resultReceiver.resultReceived(jobResult);
   }
 
-  protected abstract void fail(final CalculationJob job, final CalculationJobResultItem failure);
+  protected abstract void fail(CalculationJob job, CalculationJobResultItem failure);
 
   public void abort(Exception exception, final String alternativeError) {
-    if (_completed.getAndSet(true) == false) {
+    if (!_completed.getAndSet(true)) {
       cancelTimeout(DispatchableJobTimeout.FINISHED);
       if (exception == null) {
         LOGGER.error("Aborted job {} with {}", this, alternativeError);
@@ -228,7 +233,7 @@ import com.opengamma.util.async.Cancelable;
     }
   }
 
-  protected abstract boolean isAlive(final JobInvoker jobInvoker);
+  protected abstract boolean isAlive(JobInvoker jobInvoker);
 
   public void timeout(final long timeAccrued, final JobInvoker jobInvoker) {
     LOGGER.debug("Timeout on {}, {}ms accrued", jobInvoker.getInvokerId(), timeAccrued);
@@ -238,11 +243,10 @@ import com.opengamma.util.async.Cancelable;
         LOGGER.debug("Invoker {} reports job {} still alive", jobInvoker.getInvokerId(), this);
         extendTimeout(remaining, false);
         return;
-      } else {
-        LOGGER.warn("Invoker {} reports job {} failure", jobInvoker.getInvokerId(), this);
-        jobFailed(jobInvoker, "node on " + jobInvoker.getInvokerId(), new OpenGammaRuntimeException("Node reported failure at "
-        + timeAccrued + "ms keepalive"));
       }
+      LOGGER.warn("Invoker {} reports job {} failure", jobInvoker.getInvokerId(), this);
+      jobFailed(jobInvoker, "node on " + jobInvoker.getInvokerId(), new OpenGammaRuntimeException("Node reported failure at "
+      + timeAccrued + "ms keepalive"));
     } else {
       jobFailed(jobInvoker, "node on " + jobInvoker.getInvokerId(),
           new OpenGammaRuntimeException("Invocation limit of " + getDispatcher().getMaxJobExecutionTime() + "ms exceeded"));
@@ -284,11 +288,11 @@ import com.opengamma.util.async.Cancelable;
     return getRequirements().satisfiedBy(jobInvoker.getCapabilities());
   }
 
-  protected abstract void cancel(final JobInvoker jobInvoker);
+  protected abstract void cancel(JobInvoker jobInvoker);
 
   private boolean cancel(final boolean mayInterruptIfRunning) {
     LOGGER.info("Cancelling job {}", this);
-    while (_completed.getAndSet(true) != false) {
+    while (_completed.getAndSet(true)) {
       Thread.yield();
       final DispatchableJobTimeout timeout = _timeout.get();
       if (timeout.isActive()) {
@@ -297,10 +301,9 @@ import com.opengamma.util.async.Cancelable;
         if (timeout == DispatchableJobTimeout.CANCELLED) {
           LOGGER.info("Job {} already cancelled", this);
           return true;
-        } else {
-          LOGGER.info("Job {} - can't cancel: {}", this, timeout);
-          return false;
         }
+        LOGGER.info("Job {} - can't cancel: {}", this, timeout);
+        return false;
       }
     }
     final DispatchableJobTimeout timeout = cancelTimeout(DispatchableJobTimeout.CANCELLED);

@@ -93,7 +93,7 @@ public class BerkeleyDBValueIdentifierMapTest extends AbstractIdentifierMapTest 
   }
 
   @Test
-  public void reloadPreservesMaxValue() throws IOException {
+  public void reloadPreservesMaxValue() {
     final File dbDir = createDbDir("reloadPreservesMaxValue");
     Environment dbEnvironment = createDbEnvironment(dbDir);
     final FudgeContext fudgeContext = OpenGammaFudgeContext.getInstance();

@@ -18,7 +18,7 @@ import com.opengamma.engine.view.execution.ArbitraryViewCycleExecutionSequence;
 import com.opengamma.engine.view.execution.ViewCycleExecutionOptions;
 
 /**
- * Fudge message builder for {@link ArbitraryViewCycleExecutionSequence}
+ * Fudge message builder for {@link ArbitraryViewCycleExecutionSequence}.
  */
 @FudgeBuilderFor(ArbitraryViewCycleExecutionSequence.class)
 public class ArbitraryViewCycleExecutionSequenceFudgeBuilder implements FudgeBuilder<ArbitraryViewCycleExecutionSequence> {
@@ -33,7 +33,6 @@ public class ArbitraryViewCycleExecutionSequenceFudgeBuilder implements FudgeBui
     return msg;
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public ArbitraryViewCycleExecutionSequence buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     final List<ViewCycleExecutionOptions> sequence = deserializer.fieldValueToObject(List.class, msg.getByName(SEQUENCE_FIELD));

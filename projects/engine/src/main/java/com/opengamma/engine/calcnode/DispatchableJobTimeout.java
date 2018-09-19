@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode;
@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 
     private final String _label;
 
-    public Placeholder(final String label) {
+    Placeholder(final String label) {
       _label = label;
     }
 
@@ -54,10 +54,10 @@ import java.util.concurrent.TimeUnit;
     return true;
   }
 
-  public DispatchableJobTimeout(final DispatchableJob dispatchJob, final JobInvoker jobInvoker) {
+  DispatchableJobTimeout(final DispatchableJob dispatchJob, final JobInvoker jobInvoker) {
     _dispatchJob = dispatchJob;
     _jobInvoker = jobInvoker;
-    long timeoutMillis = Math.min(dispatchJob.getDispatcher().getMaxJobExecutionTime(), dispatchJob.getDispatcher().getMaxJobExecutionTimeQuery());
+    final long timeoutMillis = Math.min(dispatchJob.getDispatcher().getMaxJobExecutionTime(), dispatchJob.getDispatcher().getMaxJobExecutionTimeQuery());
     _timeAccrued = timeoutMillis;
     setTimeout(timeoutMillis);
   }

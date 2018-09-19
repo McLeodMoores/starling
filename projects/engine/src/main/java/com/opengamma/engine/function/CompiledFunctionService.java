@@ -78,8 +78,8 @@ public class CompiledFunctionService implements Lifecycle {
   /**
    * Creates a new instance.
    * <p>
-   * This method will use a static function repository - it will reinitialize functions, but cannot respond to addition or removal of functions. Use a constructor that takes
-   * {@link FunctionConfigurationSource} instead.
+   * This method will use a static function repository - it will reinitialize functions, but cannot respond to addition or
+   * removal of functions. Use a constructor that takes {@link FunctionConfigurationSource} instead.
    *
    * @param functionRepository the static function repository, not null
    * @param functionRepositoryCompiler the repository compiler service, not null
@@ -95,8 +95,8 @@ public class CompiledFunctionService implements Lifecycle {
   /**
    * Creates a new instance.
    * <p>
-   * This method will use a static function repository - it will reinitialize functions, but cannot respond to addition or removal of functions. Use a constructor that takes
-   * {@link FunctionConfigurationSource} instead.
+   * This method will use a static function repository - it will reinitialize functions, but cannot respond to addition or
+   * removal of functions. Use a constructor that takes {@link FunctionConfigurationSource} instead.
    *
    * @param functionRepository the static function repository, not null
    * @param functionRepositoryCompiler the repository compiler service, not null
@@ -333,8 +333,8 @@ public class CompiledFunctionService implements Lifecycle {
   }
 
   /**
-   * Returns the source of the underlying (raw) function repository. The repository sourced from here will be used during initialization operations to populate the {@link #getFunctionRepository} and
-   * {@link #getInitializedFunctionRepository} values.
+   * Returns the source of the underlying (raw) function repository. The repository sourced from here will be used during
+   * initialization operations to populate the {@link #getFunctionRepository} and {@link #getInitializedFunctionRepository} values.
    *
    * @return the source of the underlying function repository, not null
    */
@@ -343,8 +343,8 @@ public class CompiledFunctionService implements Lifecycle {
   }
 
   /**
-   * Returns the underlying (raw) function repository. Definitions in the repository may or may not be properly initialized. If functions are needed that can be reliably used, use
-   * {@link #getInitializedFunctionRepository} instead.
+   * Returns the underlying (raw) function repository. Definitions in the repository may or may not be properly initialized.
+   * If functions are needed that can be reliably used, use {@link #getInitializedFunctionRepository} instead.
    *
    * @return the function repository, not null
    */
@@ -353,7 +353,8 @@ public class CompiledFunctionService implements Lifecycle {
   }
 
   /**
-   * Returns a repository of initialized functions. This may be a subset of the underlying (raw) repository if one or more threw exceptions during their {@link FunctionDefinition#init} calls.
+   * Returns a repository of initialized functions. This may be a subset of the underlying (raw) repository if one or more
+   * threw exceptions during their {@link FunctionDefinition#init} calls.
    *
    * @return the function repository, not null
    */

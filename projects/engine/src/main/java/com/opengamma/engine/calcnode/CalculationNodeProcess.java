@@ -142,7 +142,7 @@ public final class CalculationNodeProcess {
   }
 
   /**
-   * Starts a calculation node, retrieving configuration from the given URL
+   * Starts a calculation node, retrieving configuration from the given URL.
    *
    * @param url The URL to use
    */
@@ -200,14 +200,16 @@ public final class CalculationNodeProcess {
             // TODO: wait for the graceful shutdown to complete (i.e. node goes idle)
             System.exit(0);
             break;
+          default:
         }
       }
-      LOGGER.info("Free memory = {}Mb, total memory = {}Mb", Runtime.getRuntime().freeMemory() / (1024d * 1024d), Runtime.getRuntime().totalMemory() / (1024d * 1024d));
+      LOGGER.info("Free memory = {}Mb, total memory = {}Mb", Runtime.getRuntime().freeMemory() / (1024d * 1024d),
+          Runtime.getRuntime().totalMemory() / (1024d * 1024d));
     } while (true);
   }
 
   /**
-   * Starts a calculation node
+   * Starts a calculation node.
    *
    * @param args the arguments, should contain one parameter - the configuration URL to use
    */

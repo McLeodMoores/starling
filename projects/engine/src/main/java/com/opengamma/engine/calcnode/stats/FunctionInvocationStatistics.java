@@ -187,8 +187,8 @@ public class FunctionInvocationStatistics {
    */
   @Override
   public String toString() {
-    return getFunctionId() + " = " + getInvocationCost() + "ns, " + getDataInputCost() + " bytes/input, " +
-        getDataOutputCost() + " bytes/output, at " + getLastUpdateNanos();
+    return getFunctionId() + " = " + getInvocationCost() + "ns, " + getDataInputCost() + " bytes/input, "
+        + getDataOutputCost() + " bytes/output, at " + getLastUpdateNanos();
   }
 
   // For debug purposes only, remove when PLAT-882 is complete

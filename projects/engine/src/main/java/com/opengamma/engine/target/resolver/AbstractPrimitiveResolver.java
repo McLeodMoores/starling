@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.target.resolver;
@@ -14,7 +14,7 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Partial implementation of {@link Resolver} for trivial conversions of unique identifier encoded values to primitive objects.
- * 
+ *
  * @param <T> the target type resolved by this class
  */
 public abstract class AbstractPrimitiveResolver<T extends UniqueIdentifiable> implements ObjectResolver<T> {
@@ -44,9 +44,8 @@ public abstract class AbstractPrimitiveResolver<T extends UniqueIdentifiable> im
   public T resolveObject(final UniqueId uniqueId, final VersionCorrection versionCorrection) {
     if (getIdentifierScheme().equals(uniqueId.getScheme())) {
       return resolveObject(uniqueId);
-    } else {
-      return null;
     }
+    return null;
   }
 
   @Override

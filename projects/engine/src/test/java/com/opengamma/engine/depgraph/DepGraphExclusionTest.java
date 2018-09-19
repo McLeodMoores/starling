@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph;
@@ -44,7 +44,7 @@ public class DepGraphExclusionTest extends AbstractDependencyGraphBuilderTest {
     TestLifecycle.begin();
     try {
       final DepGraphTestHelper helper = helper();
-      final Map<CompiledFunctionDefinition, Integer> priority = new HashMap<CompiledFunctionDefinition, Integer>();
+      final Map<CompiledFunctionDefinition, Integer> priority = new HashMap<>();
       priority.put(helper.addFunctionRequiringProducing(helper.getRequirement1Bar(), helper.getValue1Foo()), 5); // 0
       priority.put(helper.addFunctionRequiringProducing(helper.getRequirement2Bar(), helper.getValue1Bar()), 5); // 1
       priority.put(helper.addFunctionRequiringProducing(helper.getRequirement2Foo(), helper.getValue2Bar()), 5); // 2

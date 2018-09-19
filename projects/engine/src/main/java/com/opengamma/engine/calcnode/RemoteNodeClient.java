@@ -16,7 +16,6 @@ import org.fudgemsg.mapping.FudgeDeserializer;
 import org.fudgemsg.mapping.FudgeSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.Lifecycle;
 
 import com.opengamma.engine.cache.AbstractIdentifierMap;
 import com.opengamma.engine.cache.IdentifierMap;
@@ -39,10 +38,11 @@ import com.opengamma.transport.FudgeMessageReceiver;
 import com.opengamma.transport.FudgeMessageSender;
 
 /**
- * Client end to RemoteNodeServer for registering one or more AbstractCalculationNodes with a remote job dispatcher. The connection must deliver messages in network order (i.e. not use an executor
+ * Client end to RemoteNodeServer for registering one or more AbstractCalculationNodes with a remote job dispatcher.
+ * The connection must deliver messages in network order (i.e. not use an executor
  * service).
  */
-public class RemoteNodeClient extends SimpleCalculationNodeInvocationContainer implements FudgeMessageReceiver, Lifecycle, FudgeConnectionStateListener {
+public class RemoteNodeClient extends SimpleCalculationNodeInvocationContainer implements FudgeMessageReceiver, FudgeConnectionStateListener {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(RemoteNodeClient.class);
 

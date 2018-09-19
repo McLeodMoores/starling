@@ -64,7 +64,7 @@ public class ComputationTargetResults implements FunctionCompilationContextAware
    */
   public ComputationTargetResults(final Collection<ResolutionRule> rules) {
     ArgumentChecker.notNull(rules, "rules");
-    _rules = new ArrayList<ResolutionRule>(rules);
+    _rules = new ArrayList<>(rules);
     Collections.sort(_rules, new Comparator<ResolutionRule>() {
 
       @Override
@@ -133,7 +133,7 @@ public class ComputationTargetResults implements FunctionCompilationContextAware
    * @return the list of maximal results, not null
    */
   public List<ValueSpecification> getMaximalResults(final ComputationTarget target) {
-    final Set<ValueSpecification> result = new LinkedHashSet<ValueSpecification>();
+    final Set<ValueSpecification> result = new LinkedHashSet<>();
     for (final ResolutionRule rule : getRules()) {
       if (rule.getParameterizedFunction().getFunction().getTargetType().isCompatible(target.getType())) {
         final Set<ValueSpecification> results = rule.getResults(target, getContext());
@@ -143,7 +143,7 @@ public class ComputationTargetResults implements FunctionCompilationContextAware
       }
     }
     LOGGER.info("Maximal results for {} = {}", target, result);
-    return new ArrayList<ValueSpecification>(result);
+    return new ArrayList<>(result);
   }
 
   /**
@@ -158,8 +158,8 @@ public class ComputationTargetResults implements FunctionCompilationContextAware
    * @return the list of partially resolved results, not null
    */
   public List<ValueSpecification> getPartialResults(final ComputationTarget target) {
-    final Map<ComputationTargetType, ComputationTarget> adjustedTargetCache = new HashMap<ComputationTargetType, ComputationTarget>();
-    final Set<ValueSpecification> result = new LinkedHashSet<ValueSpecification>();
+    final Map<ComputationTargetType, ComputationTarget> adjustedTargetCache = new HashMap<>();
+    final Set<ValueSpecification> result = new LinkedHashSet<>();
     for (final ResolutionRule rule : getRules()) {
       final CompiledFunctionDefinition function = rule.getParameterizedFunction().getFunction();
       if (!function.getTargetType().isCompatible(target.getType())) {
@@ -192,7 +192,7 @@ public class ComputationTargetResults implements FunctionCompilationContextAware
       }
     }
     LOGGER.info("Maximal results for {} = {}", target, result);
-    return new ArrayList<ValueSpecification>(result);
+    return new ArrayList<>(result);
   }
 
   /**
@@ -289,7 +289,7 @@ public class ComputationTargetResults implements FunctionCompilationContextAware
     final Set<ValueSpecification> lateResults;
     try {
       lateResults = function.getResults(getContext(), target, resolved);
-      if ((lateResults == null) || lateResults.isEmpty()) {
+      if (lateResults == null || lateResults.isEmpty()) {
         return null;
       }
     } catch (final Throwable t) {

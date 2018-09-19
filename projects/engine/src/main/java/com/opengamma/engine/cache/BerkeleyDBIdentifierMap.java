@@ -56,7 +56,8 @@ import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
 
 /**
- * An implementation of {@link IdentifierMap} that backs all lookups in a Berkeley DB table. Internally, it maintains an {@link AtomicLong} to allocate the next identifier to be used.
+ * An implementation of {@link IdentifierMap} that backs all lookups in a Berkeley DB table. Internally, it maintains an {@link AtomicLong}
+ * to allocate the next identifier to be used.
  */
 public class BerkeleyDBIdentifierMap implements IdentifierMap, Lifecycle {
 
@@ -80,7 +81,7 @@ public class BerkeleyDBIdentifierMap implements IdentifierMap, Lifecycle {
     private final DatabaseEntry _valueSpecKey = new DatabaseEntry();
     private final DatabaseEntry _valueSpecValue = new DatabaseEntry();
 
-    public Worker(final BlockingQueue<Request> requests) {
+    Worker(final BlockingQueue<Request> requests) {
       super(getDbEnvironment(), requests);
     }
 
@@ -192,7 +193,7 @@ public class BerkeleyDBIdentifierMap implements IdentifierMap, Lifecycle {
     private final ValueSpecification _spec;
     private volatile long _result;
 
-    public GetIdentifierRequest(final ValueSpecification spec) {
+    GetIdentifierRequest(final ValueSpecification spec) {
       _spec = spec;
     }
 
@@ -224,7 +225,7 @@ public class BerkeleyDBIdentifierMap implements IdentifierMap, Lifecycle {
     private final Collection<ValueSpecification> _specs;
     private Object2LongMap<ValueSpecification> _result;
 
-    public GetIdentifiersRequest(final Collection<ValueSpecification> specs) {
+    GetIdentifiersRequest(final Collection<ValueSpecification> specs) {
       _specs = specs;
     }
 
@@ -256,7 +257,7 @@ public class BerkeleyDBIdentifierMap implements IdentifierMap, Lifecycle {
     private final long _identifier;
     private ValueSpecification _result;
 
-    public GetValueSpecificationRequest(final long identifier) {
+    GetValueSpecificationRequest(final long identifier) {
       _identifier = identifier;
     }
 
@@ -287,7 +288,7 @@ public class BerkeleyDBIdentifierMap implements IdentifierMap, Lifecycle {
     private final long[] _identifiers;
     private Long2ObjectMap<ValueSpecification> _result;
 
-    public GetValueSpecificationsRequest(final long[] identifiers) {
+    GetValueSpecificationsRequest(final long[] identifiers) {
       _identifiers = identifiers;
     }
 
@@ -368,9 +369,11 @@ public class BerkeleyDBIdentifierMap implements IdentifierMap, Lifecycle {
 }
 
 /**
- * Creates a string representation of a {@link ValueSpecification}. The same string will be produced for different {@link ValueSpecification} instances if they are logically equal. This isn't
- * necessarily true of Fudge encoding which can produce a different binary encoding for equal specifications. The format produced by this class isn't intended to be parsed, it's only needed to produce
- * a unique binary key for a specification. The readability is only intended to help debugging.
+ * Creates a string representation of a {@link ValueSpecification}. The same string will be produced for different
+ * {@link ValueSpecification} instances if they are logically equal. This isn't necessarily true of Fudge encoding
+ * which can produce a different binary encoding for equal specifications. The format produced by this class isn't
+ * intended to be parsed, it's only needed to produce a unique binary key for a specification. The readability is
+ * only intended to help debugging.
  */
 /* package */class ValueSpecificationStringEncoder {
 
@@ -435,9 +438,8 @@ public class BerkeleyDBIdentifierMap implements IdentifierMap, Lifecycle {
       if (reference.getParent() != null) {
         final StringBuilder sb = new StringBuilder(reference.getParent().accept(REF_TO_STRING));
         return sb.append(',').append(toString).toString();
-      } else {
-        return toString;
       }
+      return toString;
     }
 
     @Override
@@ -449,9 +451,8 @@ public class BerkeleyDBIdentifierMap implements IdentifierMap, Lifecycle {
     public String visitComputationTargetSpecification(final ComputationTargetSpecification specification) {
       if (specification.getUniqueId() != null) {
         return createResult(specification, specification.getUniqueId().toString());
-      } else {
-        return "NULL";
       }
+      return "NULL";
     }
 
   };

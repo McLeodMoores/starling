@@ -72,9 +72,8 @@ import com.opengamma.id.UniqueIdentifiable;
       if (rewriteParent != null) {
         if (rewriteSelf != null) {
           return rewriteParent.containing(specification.getType().accept(GET_LEAF_TYPE, null), rewriteSelf);
-        } else {
-          return rewriteParent.containing(specification.getType().accept(GET_LEAF_TYPE, null), specification.getUniqueId());
         }
+        return rewriteParent.containing(specification.getType().accept(GET_LEAF_TYPE, null), specification.getUniqueId());
       }
     }
     if (rewriteSelf != null) {

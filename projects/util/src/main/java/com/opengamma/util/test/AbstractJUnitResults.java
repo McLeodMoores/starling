@@ -75,9 +75,9 @@ public abstract class AbstractJUnitResults implements Runnable {
       return _passed;
     }
 
-    public void appendText(String text) {
-      text = text.trim();
-      if (text.length() == 0) {
+    public void appendText(final String text) {
+      final String trimmed = text.trim();
+      if (trimmed.length() == 0) {
         return;
       }
       if (_text == null) {
@@ -85,7 +85,7 @@ public abstract class AbstractJUnitResults implements Runnable {
       } else {
         _text.append('\n');
       }
-      _text.append(text);
+      _text.append(trimmed);
     }
 
     public String getText() {

@@ -44,9 +44,8 @@ public class ExternalIdBundleResolver implements ComputationTargetReferenceVisit
     final ComputationTargetSpecification specification = _specificationResolver.getTargetSpecification(requirement);
     if (specification != null) {
       return visitComputationTargetSpecification(specification);
-    } else {
-      return requirement.getIdentifiers();
     }
+    return requirement.getIdentifiers();
   }
 
   @Override

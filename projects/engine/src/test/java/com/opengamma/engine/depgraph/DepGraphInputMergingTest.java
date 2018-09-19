@@ -66,9 +66,8 @@ public class DepGraphInputMergingTest extends AbstractDependencyGraphBuilderTest
       final String aux = desiredValue.getConstraints().getSingleValue("AUX'");
       if (desiredValue.getValueName() == _spec1.getValueName()) {
         return createRequirements(_req1, aux);
-      } else {
-        return createRequirements(_req2, aux);
       }
+      return createRequirements(_req2, aux);
     }
 
     @Override
@@ -106,8 +105,8 @@ public class DepGraphInputMergingTest extends AbstractDependencyGraphBuilderTest
       assertNotNull(graph);
       assertEquals(graph.getSize(), 2); // VariantFunction & NodeProducing1
       assertEquals(DependencyGraphImpl.getAllOutputSpecifications(graph), ImmutableSet.of(v._spec1, helper.getSpecification1Bar()));
-      final ValueRequirement req = new ValueRequirement(helper.getRequirement1().getValueName(), helper.getRequirement1().getTargetReference(), ValueProperties.with("TEST", "Foo")
-          .with("AUX", "X").get());
+      final ValueRequirement req = new ValueRequirement(helper.getRequirement1().getValueName(),
+          helper.getRequirement1().getTargetReference(), ValueProperties.with("TEST", "Foo").with("AUX", "X").get());
       builder.addTarget(req);
       graph = builder.getDependencyGraph();
       assertNotNull(graph);

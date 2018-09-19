@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph;
@@ -22,9 +22,9 @@ import com.opengamma.engine.value.ValueRequirement;
 
   private int _pendingTasks = 1;
   private boolean _wantResult = true;
-  private final List<ResolutionPump> _pumps = new ArrayList<ResolutionPump>();
+  private final List<ResolutionPump> _pumps = new ArrayList<>();
 
-  public AggregateResolvedValueProducer(final ValueRequirement valueRequirement) {
+  AggregateResolvedValueProducer(final ValueRequirement valueRequirement) {
     super(valueRequirement);
   }
 
@@ -64,11 +64,12 @@ import com.opengamma.engine.value.ValueRequirement;
   }
 
   /**
-   * Tests if the result about to be pushed from {@link #resolved} can be considered the "last result". The result has come from the last pending task. The default behavior is to return true but a
-   * sub-class that hooks the {@link #finished} call to introduce more productions must return false to avoid an intermediate last result being passed to the consumer of this aggregate.
+   * Tests if the result about to be pushed from {@link #resolved} can be considered the "last result". The result has come from the
+   * last pending task. The default behavior is to return true but a sub-class that hooks the {@link #finished} call to introduce
+   * more productions must return false to avoid an intermediate last result being passed to the consumer of this aggregate.
    * <p>
    * This is called holding the monitor.
-   * 
+   *
    * @return true if the result really is the last result, false otherwise
    */
   protected boolean isLastResult() {
@@ -93,7 +94,7 @@ import com.opengamma.engine.value.ValueRequirement;
           wantedResult = true;
           _wantResult = false;
         }
-        lastResult = (pump == null) && (_pendingTasks == 1) && _pumps.isEmpty() && isLastResult();
+        lastResult = pump == null && _pendingTasks == 1 && _pumps.isEmpty() && isLastResult();
       }
       // Note that the lastResult indicator isn't 100% if there are concurrent calls to resolved. The "last" condition may
       // not be seen. The alternative would be to serialize the calls through pushResult so that we can guarantee spotting
@@ -173,13 +174,12 @@ import com.opengamma.engine.value.ValueRequirement;
   private Collection<ResolutionPump> pumpImpl() {
     if (_pumps.isEmpty()) {
       return Collections.emptyList();
-    } else {
-      final List<ResolutionPump> pumps = new ArrayList<ResolutionPump>(_pumps);
-      _pumps.clear();
-      _pendingTasks = pumps.size();
-      _wantResult = true;
-      return pumps;
     }
+    final List<ResolutionPump> pumps = new ArrayList<>(_pumps);
+    _pumps.clear();
+    _pendingTasks = pumps.size();
+    _wantResult = true;
+    return pumps;
   }
 
   private void pumpImpl(final GraphBuildingContext context, final Collection<ResolutionPump> pumps) {
@@ -192,7 +192,7 @@ import com.opengamma.engine.value.ValueRequirement;
         if (LOGGER.isDebugEnabled()) {
           LOGGER.debug("Pumping {} origin tasks from {}", pumps.size(), this);
         }
-        for (ResolutionPump pump : pumps) {
+        for (final ResolutionPump pump : pumps) {
           context.pump(pump);
         }
       }
@@ -255,10 +255,10 @@ import com.opengamma.engine.value.ValueRequirement;
         if (_pumps.isEmpty()) {
           return count;
         }
-        pumps = new ArrayList<ResolutionPump>(_pumps);
+        pumps = new ArrayList<>(_pumps);
         _pumps.clear();
       }
-      for (ResolutionPump pump : pumps) {
+      for (final ResolutionPump pump : pumps) {
         context.close(pump);
       }
     }

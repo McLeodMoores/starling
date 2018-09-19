@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.exec.plan;
@@ -10,10 +10,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,12 +21,17 @@ import com.opengamma.engine.view.impl.ExecutionLogModeSource;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.ehcache.EHCacheUtils;
 
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
+
 /**
  * Caches the plans produced by other execution planners.
  */
 public class CachingExecutionPlanner implements GraphExecutionPlanner {
 
-  // NOTE: This class has been created for completeness, to preserve the previous behaviours of ExecutionPlanCache, even though those behaviours are unlikely to be correct.
+  // NOTE: This class has been created for completeness, to preserve the previous behaviours of ExecutionPlanCache,
+  // even though those behaviours are unlikely to be correct.
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CachingExecutionPlanner.class);
 
@@ -40,16 +41,17 @@ public class CachingExecutionPlanner implements GraphExecutionPlanner {
 
     private static final long serialVersionUID = 1L;
 
-    private DependencyGraph _graph;
-    private long _functionInitId;
-    private Set<ValueSpecification> _sharedValues;
-    private Map<ValueSpecification, FunctionParameters> _parameters;
+    private final DependencyGraph _graph;
+    private final long _functionInitId;
+    private final Set<ValueSpecification> _sharedValues;
+    private final Map<ValueSpecification, FunctionParameters> _parameters;
 
-    public CacheKey(final DependencyGraph graph, final long functionInitId, final Set<ValueSpecification> sharedValues, final Map<ValueSpecification, FunctionParameters> parameters) {
+    CacheKey(final DependencyGraph graph, final long functionInitId, final Set<ValueSpecification> sharedValues,
+        final Map<ValueSpecification, FunctionParameters> parameters) {
       _graph = graph;
       _functionInitId = functionInitId;
-      _sharedValues = new HashSet<ValueSpecification>(sharedValues);
-      _parameters = new HashMap<ValueSpecification, FunctionParameters>(parameters);
+      _sharedValues = new HashSet<>(sharedValues);
+      _parameters = new HashMap<>(parameters);
     }
 
     @Override
@@ -76,7 +78,7 @@ public class CachingExecutionPlanner implements GraphExecutionPlanner {
     @Override
     public int hashCode() {
       int hc = 0;
-      hc += (hc << 4) + (int) (_functionInitId ^ (_functionInitId >>> 32));
+      hc += (hc << 4) + (int) (_functionInitId ^ _functionInitId >>> 32);
       hc += (hc << 4) + _graph.hashCode();
       hc += (hc << 4) + _sharedValues.hashCode();
       hc += (hc << 4) + _parameters.hashCode();
@@ -90,7 +92,7 @@ public class CachingExecutionPlanner implements GraphExecutionPlanner {
 
   /**
    * Constructs an instance.
-   * 
+   *
    * @param underlying the underlying execution planner, not null
    * @param manager the cache manager from which to obtain the execution plan cache not null
    */
@@ -112,23 +114,22 @@ public class CachingExecutionPlanner implements GraphExecutionPlanner {
   // GraphExecutionPlanner
 
   @Override
-  public GraphExecutionPlan createPlan(final DependencyGraph graph, final ExecutionLogModeSource logModeSource, final long functionInitId, final Set<ValueSpecification> sharedValues,
-      final Map<ValueSpecification, FunctionParameters> parameters) {
+  public GraphExecutionPlan createPlan(final DependencyGraph graph, final ExecutionLogModeSource logModeSource,
+      final long functionInitId, final Set<ValueSpecification> sharedValues, final Map<ValueSpecification, FunctionParameters> parameters) {
     // NOTE: The logModeSource is not used as part of the key; this is wrong as the plan contains job items which embed the logging requirements
     LOGGER.debug("Searching for cached execution plan for {}/{}", graph, functionInitId);
-    CacheKey key = new CacheKey(graph, functionInitId, sharedValues, parameters);
+    final CacheKey key = new CacheKey(graph, functionInitId, sharedValues, parameters);
     final Element element = _cache.get(key);
     if (element != null) {
       LOGGER.debug("Cache hit");
       return ((GraphExecutionPlan) element.getObjectValue()).withCalculationConfiguration(graph.getCalculationConfigurationName());
-    } else {
-      LOGGER.debug("Cache miss");
-      final GraphExecutionPlan plan = _underlying.createPlan(graph, logModeSource, functionInitId, sharedValues, parameters);
-      if (plan != null) {
-        _cache.put(new Element(key, plan));
-      }
-      return plan;
     }
+    LOGGER.debug("Cache miss");
+    final GraphExecutionPlan plan = _underlying.createPlan(graph, logModeSource, functionInitId, sharedValues, parameters);
+    if (plan != null) {
+      _cache.put(new Element(key, plan));
+    }
+    return plan;
   }
 
   /**

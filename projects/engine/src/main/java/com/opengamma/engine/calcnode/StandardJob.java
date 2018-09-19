@@ -60,7 +60,7 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
    * @param job the root job to send
    * @param resultReceiver the callback for when the job and it's tail completes
    */
-  public StandardJob(final JobDispatcher dispatcher, final CalculationJob job, final JobResultReceiver resultReceiver) {
+  StandardJob(final JobDispatcher dispatcher, final CalculationJob job, final JobResultReceiver resultReceiver) {
     super(dispatcher, job);
     _resultReceivers = new ConcurrentHashMap<>();
     final List<CalculationJob> jobs = getAllJobs(job, null);
@@ -80,11 +80,12 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
   }
 
   /**
-   * Change the cache hints on a job. Tail jobs run on the same node as their parent but if we split them into discreet jobs any values previously produced by their parents into the private cache must
+   * Change the cache hints on a job. Tail jobs run on the same node as their parent but if we split them into discreet
+   * jobs any values previously produced by their parents into the private cache must
    * now go into the shared cache.
    *
    * @param job the job to process, not null
-   * @param the adjusted job, not null
+   * @param outputs the adjusted job, not null
    */
   /* package */static CalculationJob adjustCacheHints(final CalculationJob job,
       final Map<ValueSpecification, Triple<CalculationJob, ? extends Set<ValueSpecification>, ? extends Set<ValueSpecification>>> outputs) {
@@ -139,8 +140,8 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
     }
     LOGGER.debug("Rewriting {} to {}", hint, newHint);
     // Construct the rewritten job
-    final CalculationJob newJob = new CalculationJob(job.getSpecification(), job.getFunctionInitializationIdentifier(), job.getResolverVersionCorrection(), job.getRequiredJobIds(), job.getJobItems(),
-        newHint);
+    final CalculationJob newJob = new CalculationJob(job.getSpecification(), job.getFunctionInitializationIdentifier(),
+        job.getResolverVersionCorrection(), job.getRequiredJobIds(), job.getJobItems(), newHint);
     if (newTail != null) {
       for (final CalculationJob tail : newTail) {
         newJob.addTail(tail);
@@ -150,7 +151,8 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
   }
 
   /**
-   * A watched job instance that corresponds to one of the original jobs. The job may have a tail. When it completes, new watched job instances will be submitted for each tail job.
+   * A watched job instance that corresponds to one of the original jobs. The job may have a tail. When it completes,
+   * new watched job instances will be submitted for each tail job.
    */
   /* package */static final class WholeWatchedJob extends WatchedJob implements JobResultReceiver {
 
@@ -159,7 +161,7 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
       private final CalculationJob _job;
       private int _count;
 
-      public BlockedJob(final CalculationJob job) {
+      BlockedJob(final CalculationJob job) {
         _job = job;
       }
 
@@ -177,7 +179,7 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
       private final ConcurrentMap<CalculationJobSpecification, JobResultReceiver> _resultReceivers;
       private final Long2ObjectMap<JobState> _jobs = new Long2ObjectOpenHashMap<>();
 
-      public Context(final ConcurrentMap<CalculationJobSpecification, JobResultReceiver> resultReceivers) {
+      Context(final ConcurrentMap<CalculationJobSpecification, JobResultReceiver> resultReceivers) {
         _resultReceivers = resultReceivers;
       }
 
@@ -234,7 +236,8 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
     private final Collection<CalculationJob> _tail;
 
     private WholeWatchedJob(final DispatchableJob creator, final CalculationJob job, final Context context) {
-      super(creator, new CalculationJob(job.getSpecification(), job.getFunctionInitializationIdentifier(), job.getResolverVersionCorrection(), null, job.getJobItems(), job.getCacheSelectHint()));
+      super(creator, new CalculationJob(job.getSpecification(), job.getFunctionInitializationIdentifier(),
+          job.getResolverVersionCorrection(), null, job.getJobItems(), job.getCacheSelectHint()));
       _context = context;
       _tail = job.getTail();
       context.declareJobPending(job.getSpecification().getJobId());
@@ -311,7 +314,8 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
     } else {
       // Rewrite the private/shared caching information and submit a watched job for the root. Any tail jobs will be submitted after their
       // parent jobs complete
-      final CalculationJob job = adjustCacheHints(getJob(), new HashMap<ValueSpecification, Triple<CalculationJob, ? extends Set<ValueSpecification>, ? extends Set<ValueSpecification>>>());
+      final CalculationJob job = adjustCacheHints(getJob(),
+          new HashMap<ValueSpecification, Triple<CalculationJob, ? extends Set<ValueSpecification>, ? extends Set<ValueSpecification>>>());
       LOGGER.debug("Submitting adjusted watched job for {}", this);
       return createWholeWatchedJob(job);
     }

@@ -21,7 +21,7 @@ import com.opengamma.core.change.DummyChangeManager;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Tests the {@link CombiningFunctionConfigurationSource} class
+ * Tests the {@link CombiningFunctionConfigurationSource} class.
  */
 @Test(groups = TestGroup.UNIT)
 public class CombiningFunctionConfigurationSourceTest {
@@ -35,16 +35,21 @@ public class CombiningFunctionConfigurationSourceTest {
   }
 
   public void testOfSingleton() {
-    final FunctionConfigurationBundle foo = new FunctionConfigurationBundle(Collections.<FunctionConfiguration>singleton(new StaticFunctionConfiguration("Foo")));
+    final FunctionConfigurationBundle foo =
+        new FunctionConfigurationBundle(Collections.<FunctionConfiguration>singleton(new StaticFunctionConfiguration("Foo")));
     final FunctionConfigurationSource source = new SimpleFunctionConfigurationSource(foo);
     assertEquals(CombiningFunctionConfigurationSource.of(null, source, null), source);
   }
 
   public void testOfExpanded() {
-    final FunctionConfigurationBundle foo = new FunctionConfigurationBundle(Collections.<FunctionConfiguration>singleton(new StaticFunctionConfiguration("Foo")));
-    final FunctionConfigurationBundle bar = new FunctionConfigurationBundle(Collections.<FunctionConfiguration>singleton(new StaticFunctionConfiguration("Bar")));
-    final FunctionConfigurationBundle cow = new FunctionConfigurationBundle(Collections.<FunctionConfiguration>singleton(new StaticFunctionConfiguration("Cow")));
-    final FunctionConfigurationSource foobar = CombiningFunctionConfigurationSource.of(new SimpleFunctionConfigurationSource(foo), new SimpleFunctionConfigurationSource(bar));
+    final FunctionConfigurationBundle foo =
+        new FunctionConfigurationBundle(Collections.<FunctionConfiguration>singleton(new StaticFunctionConfiguration("Foo")));
+    final FunctionConfigurationBundle bar =
+        new FunctionConfigurationBundle(Collections.<FunctionConfiguration>singleton(new StaticFunctionConfiguration("Bar")));
+    final FunctionConfigurationBundle cow =
+        new FunctionConfigurationBundle(Collections.<FunctionConfiguration>singleton(new StaticFunctionConfiguration("Cow")));
+    final FunctionConfigurationSource foobar =
+        CombiningFunctionConfigurationSource.of(new SimpleFunctionConfigurationSource(foo), new SimpleFunctionConfigurationSource(bar));
     assertEquals(foobar.getFunctionConfiguration(Instant.now()).getFunctions().size(), 2);
     assertEquals(((CombiningFunctionConfigurationSource) foobar).getSources().length, 2);
     final FunctionConfigurationSource all = CombiningFunctionConfigurationSource.of(foobar, new SimpleFunctionConfigurationSource(cow));
@@ -56,8 +61,10 @@ public class CombiningFunctionConfigurationSourceTest {
     final FunctionConfigurationSource foo = Mockito.mock(FunctionConfigurationSource.class);
     final FunctionConfigurationSource bar = Mockito.mock(FunctionConfigurationSource.class);
     final Instant t = Instant.now();
-    Mockito.when(foo.getFunctionConfiguration(t)).thenReturn(new FunctionConfigurationBundle(Collections.<FunctionConfiguration>singleton(new StaticFunctionConfiguration("Foo"))));
-    Mockito.when(bar.getFunctionConfiguration(t)).thenReturn(new FunctionConfigurationBundle(Collections.<FunctionConfiguration>singleton(new StaticFunctionConfiguration("Bar"))));
+    Mockito.when(foo.getFunctionConfiguration(t))
+      .thenReturn(new FunctionConfigurationBundle(Collections.<FunctionConfiguration>singleton(new StaticFunctionConfiguration("Foo"))));
+    Mockito.when(bar.getFunctionConfiguration(t))
+      .thenReturn(new FunctionConfigurationBundle(Collections.<FunctionConfiguration>singleton(new StaticFunctionConfiguration("Bar"))));
     assertEquals(CombiningFunctionConfigurationSource.of(foo, bar).getFunctionConfiguration(t).getFunctions().size(), 2);
   }
 
@@ -75,7 +82,7 @@ public class CombiningFunctionConfigurationSourceTest {
     Mockito.verify(fooCM).removeChangeListener(cl);
   }
 
-  public void testChangeManager_dummy() {
+  public void testChangeManagerDummy() {
     final FunctionConfigurationSource foo = new SimpleFunctionConfigurationSource(new FunctionConfigurationBundle(
         Collections.<FunctionConfiguration>singleton(new StaticFunctionConfiguration("Foo"))));
     final FunctionConfigurationSource bar = new SimpleFunctionConfigurationSource(new FunctionConfigurationBundle(

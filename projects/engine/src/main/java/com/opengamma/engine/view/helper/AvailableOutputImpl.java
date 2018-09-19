@@ -19,13 +19,13 @@ import com.opengamma.util.ArgumentChecker;
  * Describes an available output from an input set.
  * <p>
  * The quality of the output - i.e. how likely it is that the value can be generated from the input set, or how accurate/complete
- * the property sets are - depends on the implementation of {@link AvailableOutputs} that produced it. 
+ * the property sets are - depends on the implementation of {@link AvailableOutputs} that produced it.
  */
 public final class AvailableOutputImpl implements AvailableOutput {
 
   private final String _valueName;
   private final String _anyValue;
-  private final Map<String, ValueProperties> _positionProperties = new HashMap<String, ValueProperties>();
+  private final Map<String, ValueProperties> _positionProperties = new HashMap<>();
   private ValueProperties _portfolioNodeProperties;
 
   protected AvailableOutputImpl(final String valueName, final String anyValue) {
@@ -52,6 +52,7 @@ public final class AvailableOutputImpl implements AvailableOutput {
     return newInstance;
   }
 
+  @Override
   public String getValueName() {
     return _valueName;
   }
@@ -60,7 +61,7 @@ public final class AvailableOutputImpl implements AvailableOutput {
    * Returns the indicator used to indicate a property can take any value in addition to the listed ones, null if no
    * explicit indicator has been used. When there is no indicator, the set of property values may be incomplete -
    * wild-card values may be available.
-   * 
+   *
    * @return the indicator string, or null if none
    */
   public String getAnyValue() {
@@ -95,7 +96,7 @@ public final class AvailableOutputImpl implements AvailableOutput {
    * available on an output value.
    * <p>
    * This is a commutative operation; i.e. merge(A, B) gives the same result as merge(B, A).
-   * 
+   *
    * @param left left component of merge, not null
    * @param right right component of merge, not null
    * @return the merged properties
@@ -105,15 +106,15 @@ public final class AvailableOutputImpl implements AvailableOutput {
       // left composed against EMPTY or INFINITE (or near-infinite) is unchanged
       return left;
     }
-    ValueProperties.Builder builder = left.copy();
-    for (String property : left.getProperties()) {
+    final ValueProperties.Builder builder = left.copy();
+    for (final String property : left.getProperties()) {
       final Set<String> rightValues = right.getValues(property);
       if (rightValues == null) {
         // Right doesn't define, so make optional
         builder.withOptional(property);
       }
     }
-    for (String property : right.getProperties()) {
+    for (final String property : right.getProperties()) {
       final Set<String> rightValues = right.getValues(property);
       final Set<String> leftValues = left.getValues(property);
       if (leftValues == null) {
@@ -172,7 +173,7 @@ public final class AvailableOutputImpl implements AvailableOutput {
   @Override
   public ValueProperties getProperties() {
     ValueProperties result = _portfolioNodeProperties;
-    for (ValueProperties properties : _positionProperties.values()) {
+    for (final ValueProperties properties : _positionProperties.values()) {
       if (result == null) {
         result = properties;
       } else {

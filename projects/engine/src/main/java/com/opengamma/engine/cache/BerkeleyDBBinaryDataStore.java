@@ -35,7 +35,7 @@ public class BerkeleyDBBinaryDataStore extends AbstractBerkeleyDBComponent imple
     private final DatabaseEntry _key = new DatabaseEntry();
     private final DatabaseEntry _value = new DatabaseEntry();
 
-    public Worker(final BlockingQueue<Request> requests) {
+    Worker(final BlockingQueue<Request> requests) {
       super(null, requests);
     }
 
@@ -152,7 +152,7 @@ public class BerkeleyDBBinaryDataStore extends AbstractBerkeleyDBComponent imple
     private final long _identifier;
     private byte[] _result;
 
-    public GetRequest(final long identifier) {
+    GetRequest(final long identifier) {
       _identifier = identifier;
     }
 
@@ -183,7 +183,7 @@ public class BerkeleyDBBinaryDataStore extends AbstractBerkeleyDBComponent imple
     private final long _identifier;
     private final byte[] _data;
 
-    public PutRequest(final long identifier, final byte[] data) {
+    PutRequest(final long identifier, final byte[] data) {
       _identifier = identifier;
       _data = data;
     }
@@ -215,7 +215,7 @@ public class BerkeleyDBBinaryDataStore extends AbstractBerkeleyDBComponent imple
     private final Collection<Long> _identifiers;
     private Map<Long, byte[]> _result;
 
-    public BulkGetRequest(final Collection<Long> identifiers) {
+    BulkGetRequest(final Collection<Long> identifiers) {
       _identifiers = identifiers;
     }
 
@@ -245,7 +245,7 @@ public class BerkeleyDBBinaryDataStore extends AbstractBerkeleyDBComponent imple
 
     private final Map<Long, byte[]> _data;
 
-    public BulkPutRequest(final Map<Long, byte[]> data) {
+    BulkPutRequest(final Map<Long, byte[]> data) {
       _data = data;
     }
 

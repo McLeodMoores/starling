@@ -63,11 +63,12 @@ import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * A calculation node implementation. The node can only be used by one thread - i.e. executeJob cannot be called concurrently to do multiple jobs. To execute multiple jobs concurrently separate
- * calculation nodes must be used.
+ * A calculation node implementation. The node can only be used by one thread - i.e. executeJob cannot be called concurrently
+ * to do multiple jobs. To execute multiple jobs concurrently separate calculation nodes must be used.
  * <p>
- * The function repository (and anything else) must be properly initialized and ready for use by the node when it receives its first job. Responsibility for initialization should therefore lie with
- * whatever will logically be dispatching jobs. This is typically a {@link ViewProcessor} for local nodes or a {@link RemoteNodeClient} for remote nodes.
+ * The function repository (and anything else) must be properly initialized and ready for use by the node when it receives its
+ * first job. Responsibility for initialization should therefore lie with whatever will logically be dispatching jobs. This is
+ * typically a {@link ViewProcessor} for local nodes or a {@link RemoteNodeClient} for remote nodes.
  */
 public class SimpleCalculationNode extends SimpleCalculationNodeState implements CalculationNode {
 
@@ -106,9 +107,11 @@ public class SimpleCalculationNode extends SimpleCalculationNodeState implements
   };
 
   /**
-   * Interface used by deferred executions. Any {@link AsynchronousExecution} exceptions thrown by this class will supply either an instance of {@code Deferred} on the original method type, or the
-   * original method type. Instances of {@code Deferred} are not bound (tightly) to their original calculation node instance allowing them to run on another (for example if the original node is now
-   * being reused for another job). Thus the caller must supply the node that will now host the deferred operation. The state from the original node must be preserved and then restored into the new
+   * Interface used by deferred executions. Any {@link AsynchronousExecution} exceptions thrown by this class will supply
+   * either an instance of {@code Deferred} on the original method type, or the original method type. Instances of
+   * {@code Deferred} are not bound (tightly) to their original calculation node instance allowing them to run on another
+   * (for example if the original node is now being reused for another job). Thus the caller must supply the node that
+   * will now host the deferred operation. The state from the original node must be preserved and then restored into the new
    * host node.
    *
    * @param <T> the original return type of the asynchronous method
@@ -127,8 +130,9 @@ public class SimpleCalculationNode extends SimpleCalculationNodeState implements
   private static int s_nodeUniqueID;
 
   /**
-   * The deferred caches for performing write-behind and late write completion (asynchronous flush) to the value cache. The map contains weak values so that entries can be cleared when the deferred
-   * cache is dead (i.e. no calculation node is currently using it and its writer is not running).
+   * The deferred caches for performing write-behind and late write completion (asynchronous flush) to the value cache.
+   * The map contains weak values so that entries can be cleared when the deferred cache is dead (i.e. no calculation
+   * node is currently using it and its writer is not running).
    */
   private static final ConcurrentMap<ViewComputationCache, DeferredViewComputationCache> DEFERRED_CACHES = new MapMaker().weakValues().makeMap();
 
@@ -147,8 +151,8 @@ public class SimpleCalculationNode extends SimpleCalculationNodeState implements
   private MaximumJobItemExecutionWatchdog _maxJobItemExecution = new MaximumJobItemExecutionWatchdog();
 
   public SimpleCalculationNode(final ViewComputationCacheSource cacheSource, final CompiledFunctionService functionCompilationService,
-      final FunctionExecutionContext functionExecutionContext, final String nodeId, final ExecutorService executorService, final FunctionInvocationStatisticsGatherer functionInvocationStatistics,
-      final CalculationNodeLogEventListener logListener) {
+      final FunctionExecutionContext functionExecutionContext, final String nodeId, final ExecutorService executorService,
+      final FunctionInvocationStatisticsGatherer functionInvocationStatistics, final CalculationNodeLogEventListener logListener) {
     super(functionExecutionContext);
     ArgumentChecker.notNull(cacheSource, "cacheSource");
     ArgumentChecker.notNull(functionCompilationService, "functionCompilationService");
@@ -190,8 +194,9 @@ public class SimpleCalculationNode extends SimpleCalculationNodeState implements
   }
 
   /**
-   * Sets whether to use a write-behind strategy when writing to the shared value cache. Write-behind can work well if the cost of writing is high (e.g. network overhead). If the write is cheap (e.g.
-   * to an in-process, in-memory store) then the overheads of the write-behind become a burden. An executor service must be available if this is selected.
+   * Sets whether to use a write-behind strategy when writing to the shared value cache. Write-behind can work well
+   * if the cost of writing is high (e.g. network overhead). If the write is cheap (e.g. to an in-process, in-memory store)
+   * then the overheads of the write-behind become a burden. An executor service must be available if this is selected.
    *
    * @param writeBehind true to use write-behind on the shared value cache, false not to
    */
@@ -205,8 +210,9 @@ public class SimpleCalculationNode extends SimpleCalculationNodeState implements
   }
 
   /**
-   * Sets whether to use a write-behind strategy when writing to the private value cache. Write-behind can work well if the cost of writing is high (e.g. disk overhead). If the write is cheap (e.g. to
-   * an in-process, in-memory store) then the overheads of the write-behind become a burden. An executor service must be available if this is selected.
+   * Sets whether to use a write-behind strategy when writing to the private value cache. Write-behind can work well if the
+   * cost of writing is high (e.g. disk overhead). If the write is cheap (e.g. to an in-process, in-memory store) then the
+   * overheads of the write-behind become a burden. An executor service must be available if this is selected.
    *
    * @param writeBehind true to use write-behind on the private value cache, false not to
    */
@@ -241,7 +247,8 @@ public class SimpleCalculationNode extends SimpleCalculationNodeState implements
   }
 
   /**
-   * Sets a function blacklist to use for checking each job invocation. The blacklist(s) used may suppress particular functions on this node, the logical group of nodes or at all nodes.
+   * Sets a function blacklist to use for checking each job invocation. The blacklist(s) used may suppress particular
+   * functions on this node, the logical group of nodes or at all nodes.
    *
    * @param query the blacklist to query against, not null
    */
@@ -260,8 +267,10 @@ public class SimpleCalculationNode extends SimpleCalculationNodeState implements
   }
 
   /**
-   * Sets a maintenance policy for updating one or more blacklist(s) when a job item throws an exception. The application of a policy at this point will depend on the nature of the function library.
-   * Issuing updates from the function's {@link FunctionInvoker} can allow more specific control over how a function failure should be reported.
+   * Sets a maintenance policy for updating one or more blacklist(s) when a job item throws an exception. The
+   * application of a policy at this point will depend on the nature of the function library.
+   * Issuing updates from the function's {@link FunctionInvoker} can allow more specific control over how a function
+   * failure should be reported.
    *
    * @param update the maintainer to notify of a job item that threw an exception
    */
@@ -335,11 +344,13 @@ public class SimpleCalculationNode extends SimpleCalculationNodeState implements
   }
 
   /**
-   * Invokes all of the items from a calculation job on this node. If asynchronous execution occurs, the {@link AsynchronousExecution} will report either a {@code Deferred&lt;CalculationJobResult&gt;}
-   * or a {@code CalculationJobResult}. This is to allow the node to be reused if calculations are running externally and for tail job executions on the local nodes to start immediately but block the
+   * Invokes all of the items from a calculation job on this node. If asynchronous execution occurs, the {@link AsynchronousExecution}
+   * will report either a {@code Deferred&lt;CalculationJobResult&gt;} or a {@code CalculationJobResult}. This is to allow the node
+   * to be reused if calculations are running externally and for tail job executions on the local nodes to start immediately but block the
    * central dispatcher until the cache has been flushed.
    * <p>
-   * If a deferred result is returned, and this node will be used for other work, its state must be saved and then later restored into a node that will be used to complete the deferred action.
+   * If a deferred result is returned, and this node will be used for other work, its state must be saved and then later restored
+   * into a node that will be used to complete the deferred action.
    *
    * @param job the job to execute
    * @return the job result
@@ -382,7 +393,7 @@ public class SimpleCalculationNode extends SimpleCalculationNodeState implements
 
     private final Deferred<List<CalculationJobResultItem>> _deferredExecute;
 
-    public ExecuteJobFinish(final Deferred<List<CalculationJobResultItem>> deferredExecute) {
+    ExecuteJobFinish(final Deferred<List<CalculationJobResultItem>> deferredExecute) {
       _deferredExecute = deferredExecute;
     }
 
@@ -443,8 +454,9 @@ public class SimpleCalculationNode extends SimpleCalculationNodeState implements
   }
 
   /**
-   * Executes one or more items from the supplied iterator, populating the supplied list. If a job item starts running asynchronously, an exception will be thrown. At resumption of the operation,
-   * another call to this method will occur with the same parameters allowing it to continue with the remaining items the iterator has.
+   * Executes one or more items from the supplied iterator, populating the supplied list. If a job item starts running
+   * asynchronously, an exception will be thrown. At resumption of the operation, another call to this method will occur
+   * with the same parameters allowing it to continue with the remaining items the iterator has.
    *
    * @param jobItemItr the job items to execute, not null
    * @param resultItems the list to populate with results, not null
@@ -465,7 +477,8 @@ public class SimpleCalculationNode extends SimpleCalculationNodeState implements
         attachLog(executionLog);
         boolean logAttached = true;
         try {
-          invoke(jobItem, new DeferredInvocationStatistics(getFunctionInvocationStatistics(), getConfiguration(), jobItem.getFunctionUniqueIdentifier()), resultItemBuilder);
+          invoke(jobItem, new DeferredInvocationStatistics(getFunctionInvocationStatistics(), getConfiguration(),
+              jobItem.getFunctionUniqueIdentifier()), resultItemBuilder);
         } catch (final AsynchronousExecution e) {
           LOGGER.debug("Asynchronous job item invocation at {}", _nodeId);
           detachLog();
@@ -509,7 +522,8 @@ public class SimpleCalculationNode extends SimpleCalculationNodeState implements
     private MutableExecutionLog _executionLog;
     private final CalculationJobResultItemBuilder _resultItemBuilder;
 
-    public ExecuteJobItemsInvoke(final CalculationJobItem jobItem, final MutableExecutionLog executionLog, final CalculationJobResultItemBuilder resultItemBuilder) {
+    ExecuteJobItemsInvoke(final CalculationJobItem jobItem, final MutableExecutionLog executionLog,
+        final CalculationJobResultItemBuilder resultItemBuilder) {
       _jobItem = jobItem;
       _executionLog = executionLog;
       _resultItemBuilder = resultItemBuilder;
@@ -550,7 +564,7 @@ public class SimpleCalculationNode extends SimpleCalculationNodeState implements
     private Deferred<Void> _deferredInvoke;
     private final Iterator<CalculationJobItem> _jobItemItr;
 
-    public ExecuteJobItemsResume(final List<CalculationJobResultItem> resultItems, final ExecuteJobItemsInvoke invoke, final Deferred<Void> deferredInvoke,
+    ExecuteJobItemsResume(final List<CalculationJobResultItem> resultItems, final ExecuteJobItemsInvoke invoke, final Deferred<Void> deferredInvoke,
         final Iterator<CalculationJobItem> jobItemItr) {
       _resultItems = resultItems;
       _invoke = invoke;
@@ -601,7 +615,7 @@ public class SimpleCalculationNode extends SimpleCalculationNodeState implements
     private final List<CalculationJobResultItem> _results;
     private final Deferred<Void> _deferredResult;
 
-    public ExecuteJobItemsFinish(final List<CalculationJobResultItem> results, final Deferred<Void> deferredResult) {
+    ExecuteJobItemsFinish(final List<CalculationJobResultItem> results, final Deferred<Void> deferredResult) {
       _results = results;
       _deferredResult = deferredResult;
     }
@@ -711,7 +725,8 @@ public class SimpleCalculationNode extends SimpleCalculationNodeState implements
     resultItemBuilder.withException(t);
   }
 
-  private void invoke(final CalculationJobItem jobItem, final DeferredInvocationStatistics statistics, final CalculationJobResultItemBuilder resultItemBuilder) throws AsynchronousExecution {
+  private void invoke(final CalculationJobItem jobItem, final DeferredInvocationStatistics statistics,
+      final CalculationJobResultItemBuilder resultItemBuilder) throws AsynchronousExecution {
     final ValueSpecification[] outputs = jobItem.getOutputs();
     final String functionUniqueId = jobItem.getFunctionUniqueIdentifier();
     Future<ComputationTarget> targetFuture = null;
@@ -801,7 +816,8 @@ public class SimpleCalculationNode extends SimpleCalculationNodeState implements
       if (target == null) {
         if (invoker.canHandleMissingInputs()) {
           // A missing target is just a special case of missing input
-          missing.add(new ValueSpecification(ValueRequirementNames.TARGET, jobItem.getComputationTargetSpecification(), ValueProperties.with(ValuePropertyNames.FUNCTION, "TargetSourcingFunction")
+          missing.add(new ValueSpecification(ValueRequirementNames.TARGET,
+              jobItem.getComputationTargetSpecification(), ValueProperties.with(ValuePropertyNames.FUNCTION, "TargetSourcingFunction")
               .get()));
         } else {
           postEvaluationErrors(outputs, MissingOutput.EVALUATION_ERROR);

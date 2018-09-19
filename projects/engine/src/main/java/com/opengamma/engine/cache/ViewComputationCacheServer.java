@@ -53,7 +53,7 @@ public class ViewComputationCacheServer implements FudgeConnectionReceiver, Fudg
     private final FudgeConnection _connection;
     private final CacheMessageVisitor _binaryDataStore;
 
-    public MessageHandler(final FudgeConnection connection) {
+    MessageHandler(final FudgeConnection connection) {
       _connection = connection;
       _binaryDataStore = ViewComputationCacheServer.this.getBinaryDataStore().onNewConnection(connection);
     }

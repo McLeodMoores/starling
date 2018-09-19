@@ -8,8 +8,9 @@ package com.opengamma.engine.cache;
 import com.opengamma.id.UniqueId;
 
 /**
- * Decorates an existing {@link ViewComputationCacheSource} to put a {@link WriteThroughViewComputationCache} around the returned cache instances. This can be faster in some cases where large items
- * are read multiple times rapidly after they are created. The reads will come from the object cached in memory.
+ * Decorates an existing {@link ViewComputationCacheSource} to put a {@link WriteThroughViewComputationCache} around the
+ * returned cache instances. This can be faster in some cases where large items are read multiple times rapidly after they
+ * are created. The reads will come from the object cached in memory.
  */
 public class WriteThroughViewComputationCacheSource implements ViewComputationCacheSource {
 

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.cache;
@@ -47,7 +47,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.NamedThreadPoolFactory;
 
 /**
- * Server for {@link RemoteFudgeMessageStore} clients created by a {@link RemoteFudgeMessageStoreFactory}. The underlying is the shared data store component of a {@link DefaultViewComputationCache}.
+ * Server for {@link RemoteFudgeMessageStore} clients created by a {@link RemoteFudgeMessageStoreFactory}. The underlying
+ * is the shared data store component of a {@link DefaultViewComputationCache}.
  */
 public class FudgeMessageStoreServer implements FudgeConnectionReceiver, ReleaseCachesCallback, MissingValueLoader, FudgeConnectionStateListener {
 
@@ -55,7 +56,7 @@ public class FudgeMessageStoreServer implements FudgeConnectionReceiver, Release
 
   private static class ValueSearch {
 
-    private final ConcurrentMap<Long, CountDownLatch> _pending = new ConcurrentHashMap<Long, CountDownLatch>();
+    private final ConcurrentMap<Long, CountDownLatch> _pending = new ConcurrentHashMap<>();
     private int _refCount = 1;
 
     public void incrementRefCount() {
@@ -89,8 +90,8 @@ public class FudgeMessageStoreServer implements FudgeConnectionReceiver, Release
 
   private static final ExecutorService EXECUTOR_SERVICE = NamedThreadPoolFactory.newCachedThreadPool("FudgeMessageStoreBroadcast", true);
   private final DefaultViewComputationCacheSource _underlying;
-  private final Map<FudgeConnection, Object> _connections = new ConcurrentHashMap<FudgeConnection, Object>();
-  private final Map<ViewComputationCacheKey, ValueSearch> _searching = new HashMap<ViewComputationCacheKey, ValueSearch>();
+  private final Map<FudgeConnection, Object> _connections = new ConcurrentHashMap<>();
+  private final Map<ViewComputationCacheKey, ValueSearch> _searching = new HashMap<>();
 
   private long _findValueTimeout = 5000L; // 5s default timeout
 
@@ -111,14 +112,14 @@ public class FudgeMessageStoreServer implements FudgeConnectionReceiver, Release
 
   /**
    * Asynchronously sends a message to all open connections.
-   * 
+   *
    * @param message the message to send, not null.
    */
   protected void broadcast(final CacheMessage message) {
     final MutableFudgeMsg msg = getUnderlying().getFudgeContext().newMessage();
     message.toFudgeMsg(new FudgeSerializer(getUnderlying().getFudgeContext()), msg);
     FudgeSerializer.addClassHeader(msg, message.getClass(), CacheMessage.class);
-    for (Map.Entry<FudgeConnection, Object> connectionEntry : getConnections().entrySet()) {
+    for (final Map.Entry<FudgeConnection, Object> connectionEntry : getConnections().entrySet()) {
       final FudgeConnection connection = connectionEntry.getKey();
       EXECUTOR_SERVICE.execute(new Runnable() {
         @Override
@@ -141,7 +142,7 @@ public class FudgeMessageStoreServer implements FudgeConnectionReceiver, Release
 
   /**
    * Set the timeout for any given value wait when retrieving data from the clients' private caches. Set to {@code 0} for no timeout.
-   * 
+   *
    * @param findValueTimeout the timeout in milliseconds.
    */
   public void setFindValueTimeout(final long findValueTimeout) {
@@ -163,7 +164,7 @@ public class FudgeMessageStoreServer implements FudgeConnectionReceiver, Release
           LOGGER.warn("{}ms timeout exceeded waiting for value ID {}", getFindValueTimeout(), identifier);
           // don't try to avoid the store.get call as data may yet arrive
         }
-      } catch (InterruptedException e) {
+      } catch (final InterruptedException e) {
         LOGGER.warn("Thread interrupted waiting for missing value response");
         // don't try to avoid the store.get call as data may yet arrive
       }
@@ -186,10 +187,10 @@ public class FudgeMessageStoreServer implements FudgeConnectionReceiver, Release
     final FudgeMessageStore store = getUnderlying().findCache(cache).getSharedDataStore();
     final Long[] identifierArray = new Long[identifiers.size()];
     int identifierCount = 0;
-    for (Long identifier : identifiers) {
+    for (final Long identifier : identifiers) {
       identifierArray[identifierCount++] = identifier;
     }
-    final Map<Long, FudgeMsg> map = new HashMap<Long, FudgeMsg>();
+    final Map<Long, FudgeMsg> map = new HashMap<>();
     try {
       while (identifierCount > 0) {
         final Long identifier = identifierArray[0];
@@ -213,7 +214,7 @@ public class FudgeMessageStoreServer implements FudgeConnectionReceiver, Release
           break;
         }
       }
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
       LOGGER.warn("Thread interrupted waiting for missing value response - {} outstanding", identifierCount);
     }
     releaseValueSearch(cache, search);
@@ -245,7 +246,7 @@ public class FudgeMessageStoreServer implements FudgeConnectionReceiver, Release
 
     private final FudgeConnection _connection;
 
-    public MessageHandler(final FudgeConnection connection) {
+    MessageHandler(final FudgeConnection connection) {
       _connection = connection;
     }
 
@@ -287,9 +288,9 @@ public class FudgeMessageStoreServer implements FudgeConnectionReceiver, Release
           }
           response = Collections.singleton(data);
         } else {
-          response = new ArrayList<FudgeMsg>(identifiers.size());
+          response = new ArrayList<>(identifiers.size());
           final Map<Long, FudgeMsg> data = store.get(identifiers);
-          for (Long identifier : identifiers) {
+          for (final Long identifier : identifiers) {
             FudgeMsg value = data.get(identifier);
             if (value == null) {
               value = FudgeContext.EMPTY_MESSAGE;
@@ -311,7 +312,7 @@ public class FudgeMessageStoreServer implements FudgeConnectionReceiver, Release
       if (identifiers.size() == 1) {
         store.put(identifiers.get(0), data.get(0));
       } else {
-        final Map<Long, FudgeMsg> map = new HashMap<Long, FudgeMsg>();
+        final Map<Long, FudgeMsg> map = new HashMap<>();
         final Iterator<Long> i = identifiers.iterator();
         final Iterator<FudgeMsg> j = data.iterator();
         while (i.hasNext()) {
@@ -321,7 +322,7 @@ public class FudgeMessageStoreServer implements FudgeConnectionReceiver, Release
       }
       final ValueSearch searching = getValueSearch(key);
       if (searching != null) {
-        for (Long identifier : identifiers) {
+        for (final Long identifier : identifiers) {
           searching.found(identifier);
         }
       }
