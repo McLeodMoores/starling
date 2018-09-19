@@ -30,9 +30,11 @@ public class ExecutionLogModeSource {
   private CompiledViewDefinitionWithGraphs _compiledViewDefinition;
 
   /**
-   * Ensures at least a minimum level of logging output is present in the results for the given value specifications. Changes will take effect from the next computation cycle.
+   * Ensures at least a minimum level of logging output is present in the results for the given value specifications. Changes will
+   * take effect from the next computation cycle.
    * <p>
-   * Each call to elevate the minimum level of logging output for a result must be paired with exactly one call to reduce the level of logging output, if required.
+   * Each call to elevate the minimum level of logging output for a result must be paired with exactly one call to reduce the level
+   * of logging output, if required.
    *
    * @param minimumLogMode the minimum log mode to ensure, not null
    * @param targets the targets affected, not null or empty

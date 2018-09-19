@@ -37,11 +37,12 @@ import com.opengamma.util.tuple.Pairs;
 /**
  * Produces an execution plan for a graph that will execute on multiple calculation nodes.
  * <p>
- * Note that the parameters used to control job partitioning are guidance values and not hard constraints. The planner may produce jobs that do not meet onr or more of the limits. It is therefore
- * possible, but perhaps not useful, to specify conflicting values.
+ * Note that the parameters used to control job partitioning are guidance values and not hard constraints. The planner may produce jobs that do
+ * not meet one or more of the limits. It is therefore possible, but perhaps not useful, to specify conflicting values.
  * <p>
- * Job cost estimates are in nanoseconds. These are using the (normalized) time estimate for the function execution and the estimated input/output data volumes using an approximate data rate. The
- * actual jobs produced may take longer to execute because of additional scheduling and housekeeping overheads.
+ * Job cost estimates are in nanoseconds. These are using the (normalized) time estimate for the function execution and the estimated input/output
+ * data volumes using an approximate data rate. The actual jobs produced may take longer to execute because of additional scheduling and housekeeping
+ * overheads.
  */
 public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
 
@@ -58,7 +59,8 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
   /**
    * Sets the minimum number of items for each job.
    * <p>
-   * The planner will do its best to honor this limit, but may produce jobs smaller than this if the maximum cost would be exceeded or there is not enough work to make a larger job.
+   * The planner will do its best to honor this limit, but may produce jobs smaller than this if the maximum cost would be exceeded or there is not
+   * enough work to make a larger job.
    *
    * @param minimumJobItems the number of items, must be more than 0
    */
@@ -102,7 +104,8 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
   /**
    * Sets the minimum estimated cost of jobs.
    * <p>
-   * The planner will do its best to honor this limit, but may produce jobs with a lower cost if the maximum number of job items would be exceeded or there is not enough work to make a larger job.
+   * The planner will do its best to honor this limit, but may produce jobs with a lower cost if the maximum number of job items would be exceeded or
+   * there is not enough work to make a larger job.
    *
    * @param minimumJobCost the estimated cost in nanoseconds, must be at least 0
    */
@@ -146,7 +149,8 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
   /**
    * Sets the concurrency limit for job tails.
    *
-   * @param maximumConcurrency the number of job tails that are expected to be executing in parallel, must be more than 0 for tail execution. If set to 0, tail execution is disabled.
+   * @param maximumConcurrency the number of job tails that are expected to be executing in parallel, must be more than 0 for tail execution.
+   * If set to 0, tail execution is disabled.
    */
   public void setMaximumConcurrency(final int maximumConcurrency) {
     ArgumentChecker.isTrue(maximumConcurrency >= 0, "maximumConcurrency");
@@ -337,8 +341,8 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
   }
 
   /**
-   * If a fragment has only a single input, it can be a tail to the fragment generating that input. A fragment with multiple inputs can be a tail to all of them iff they are tails to a common fragment
-   * (ie all will end up at the same calculation node).
+   * If a fragment has only a single input, it can be a tail to the fragment generating that input. A fragment with multiple inputs
+   * can be a tail to all of them iff they are tails to a common fragment (ie all will end up at the same calculation node).
    */
   private void findTailFragments(final Set<GraphFragment> allFragments) {
     // Estimate start times based on fragment costs and dependencies
@@ -496,8 +500,9 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
       }
     }
     final int totalJobs = allFragments.size();
-    return new GraphExecutionPlan(graph.getCalculationConfigurationName(), functionInitializationId, jobs, allFragments.size(), (double) totalSize / (double) totalJobs,
-        (double) totalInvocationCost / (double) totalJobs, (double) totalDataCost / (double) totalJobs);
+    return new GraphExecutionPlan(graph.getCalculationConfigurationName(), functionInitializationId, jobs, allFragments.size(),
+        (double) totalSize / (double) totalJobs, (double) totalInvocationCost / (double) totalJobs,
+        (double) totalDataCost / (double) totalJobs);
   }
 
   // GraphExecutionPlanner

@@ -124,7 +124,8 @@ import com.opengamma.engine.value.ValueSpecification;
     return resolvedValues;
   }
 
-  private void inputsAvailable(final GraphBuildingContext context, final FunctionApplicationStep.PumpingState state, final Map<ValueSpecification, ValueRequirement> resolvedValues) {
+  private void inputsAvailable(final GraphBuildingContext context, final FunctionApplicationStep.PumpingState state,
+      final Map<ValueSpecification, ValueRequirement> resolvedValues) {
     if (resolvedValues != null) {
       final boolean lastResult;
       synchronized (this) {

@@ -36,7 +36,7 @@ public class SimplePositionTest {
   private static final Counterparty COUNTERPARTY = new SimpleCounterparty(ExternalId.of("CPARTY", "C100"));
   private static final OffsetDateTime TRADE_OFFSET_DATETIME = OffsetDateTime.now();
 
-  public void test_construction_BigDecimal_ExternalId() {
+  public void testConstructionBigDecimalExternalId() {
     final SimplePosition test = new SimplePosition(BigDecimal.ONE, ExternalId.of("A", "B"));
     assertEquals(null, test.getUniqueId());
     assertEquals(BigDecimal.ONE, test.getQuantity());
@@ -46,17 +46,17 @@ public class SimplePositionTest {
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_construction_BigDecimal_ExternalId_nullBigDecimal() {
+  public void testConstructionBigDecimalExternalIdNullBigDecimal() {
     new SimplePosition(null, ExternalId.of("A", "B"));
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_construction_BigDecimal_ExternalId_nullExternalId() {
+  public void testConstructionBigDecimalExternalIdNullExternalId() {
     new SimplePosition(BigDecimal.ONE, (ExternalId) null);
   }
 
   //-------------------------------------------------------------------------
-  public void test_construction_BigDecimal_ExternalIdBundle() {
+  public void testConstructionBigDecimalExternalIdBundle() {
     final SimplePosition test = new SimplePosition(BigDecimal.ONE, ExternalIdBundle.of(ExternalId.of("A", "B")));
     assertEquals(null, test.getUniqueId());
     assertEquals(BigDecimal.ONE, test.getQuantity());
@@ -66,17 +66,17 @@ public class SimplePositionTest {
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_construction_BigDecimal_ExternalIdBundle_nullBigDecimal() {
+  public void testConstructionBigDecimalExternalIdBundleNullBigDecimal() {
     new SimplePosition(null, ExternalIdBundle.of(ExternalId.of("A", "B")));
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_construction_BigDecimal_ExternalIdBundle_nullExternalId() {
+  public void testConstructionBigDecimalExternalIdBundleNullExternalId() {
     new SimplePosition(BigDecimal.ONE, (ExternalIdBundle) null);
   }
 
   //-------------------------------------------------------------------------
-  public void test_construction_UniqueId_BigDecimal_ExternalId() {
+  public void testConstructionUniqueIdBigDecimalExternalId() {
     final SimplePosition test = new SimplePosition(UniqueId.of("B", "C"), BigDecimal.ONE, ExternalId.of("A", "B"));
     assertEquals(UniqueId.of("B", "C"), test.getUniqueId());
     assertEquals(BigDecimal.ONE, test.getQuantity());
@@ -86,22 +86,22 @@ public class SimplePositionTest {
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_construction_UniqueId_BigDecimal_ExternalId_nullUniqueId() {
+  public void testConstructionUniqueIdBigDecimalExternalIdNullUniqueId() {
     new SimplePosition(null, BigDecimal.ONE, ExternalId.of("A", "B"));
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_construction_UniqueId_BigDecimal_ExternalId_nullBigDecimal() {
+  public void testConstructionUniqueIdBigDecimalExternalIdNullBigDecimal() {
     new SimplePosition(UniqueId.of("B", "C"), null, ExternalId.of("A", "B"));
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_construction_UniqueId_BigDecimal_ExternalId_nullExternalId() {
+  public void testConstructionUniqueIdBigDecimalExternalIdNullExternalId() {
     new SimplePosition(UniqueId.of("B", "C"), BigDecimal.ONE, (ExternalId) null);
   }
 
   //-------------------------------------------------------------------------
-  public void test_construction_UniqueId_BigDecimal_ExternalIdBundle() {
+  public void testConstructionUniqueIdBigDecimalExternalIdBundle() {
     final SimplePosition test = new SimplePosition(UniqueId.of("B", "C"), BigDecimal.ONE, ExternalIdBundle.of(ExternalId.of("A", "B")));
     assertEquals(UniqueId.of("B", "C"), test.getUniqueId());
     assertEquals(BigDecimal.ONE, test.getQuantity());
@@ -111,22 +111,22 @@ public class SimplePositionTest {
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_construction_UniqueId_BigDecimal_ExternalIdBundle_nullUniqueId() {
+  public void testConstructionUniqueIdBigDecimalExternalIdBundleNullUniqueId() {
     new SimplePosition(null, BigDecimal.ONE, ExternalId.of("A", "B"));
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_construction_UniqueId_BigDecimal_ExternalIdBundle_nullBigDecimal() {
+  public void testConstructionUniqueIdBigDecimalExternalIdBundleNullBigDecimal() {
     new SimplePosition(UniqueId.of("B", "C"), null, ExternalIdBundle.of(ExternalId.of("A", "B")));
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_construction_UniqueId_BigDecimal_ExternalIdBundle_nullExternalIdBundle() {
+  public void testConstructionUniqueIdBigDecimalExternalIdBundleNullExternalIdBundle() {
     new SimplePosition(UniqueId.of("B", "C"), BigDecimal.ONE, (ExternalIdBundle) null);
   }
 
   //-------------------------------------------------------------------------
-  public void test_construction_UniqueId_BigDecimal_Security() {
+  public void testConstructionUniqueIdBigDecimalSecurity() {
     final SimpleSecurity sec = new SimpleSecurity("A");
     sec.setExternalIdBundle(ExternalIdBundle.of(ExternalId.of("A", "B")));
     final SimplePosition test = new SimplePosition(UniqueId.of("B", "C"), BigDecimal.ONE, sec);
@@ -138,21 +138,21 @@ public class SimplePositionTest {
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_construction_UniqueId_BigDecimal_Security_nullUniqueId() {
+  public void testConstructionUniqueIdBigDecimalSecurityNullUniqueId() {
     new SimplePosition(null, BigDecimal.ONE, ExternalId.of("A", "B"));
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_construction_UniqueId_BigDecimal_Security_nullBigDecimal() {
+  public void testConstructionUniqueIdBigDecimalSecurityNullBigDecimal() {
     new SimplePosition(UniqueId.of("B", "C"), null, ExternalIdBundle.of(ExternalId.of("A", "B")));
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_construction_UniqueId_BigDecimal_Security_nullSecurity() {
+  public void testConstructionUniqueIdBigDecimalSecurityNullSecurity() {
     new SimplePosition(UniqueId.of("B", "C"), BigDecimal.ONE, (Security) null);
   }
 
-  public void test_construction_copyFromPosition() {
+  public void testConstructionCopyFromPosition() {
     final SimplePosition position = new SimplePosition(UniqueId.of("B", "C"), BigDecimal.ONE, ExternalId.of("A", "B"));
     position.addAttribute("A", "B");
     position.addAttribute("C", "D");
@@ -162,46 +162,46 @@ public class SimplePositionTest {
   }
 
   //-------------------------------------------------------------------------
-  public void test_setUniqueId() {
+  public void testSetUniqueId() {
     final SimplePosition test = new SimplePosition(UniqueId.of("B", "C"), BigDecimal.ONE, ExternalId.of("A", "B"));
     test.setUniqueId(UniqueId.of("B", "D"));
     assertEquals(UniqueId.of("B", "D"), test.getUniqueId());
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_setUniqueId_null() {
+  public void testSetUniqueIdNull() {
     final SimplePosition test = new SimplePosition(UniqueId.of("B", "C"), BigDecimal.ONE, ExternalId.of("A", "B"));
     test.setUniqueId(null);
   }
 
   //-------------------------------------------------------------------------
-  public void test_setQuantity() {
+  public void testSetQuantity() {
     final SimplePosition test = new SimplePosition(UniqueId.of("B", "C"), BigDecimal.ONE, ExternalId.of("A", "B"));
     test.setQuantity(BigDecimal.ZERO);
     assertSame(BigDecimal.ZERO, test.getQuantity());
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_setQuantity_null() {
+  public void testSetQuantityNull() {
     final SimplePosition test = new SimplePosition(UniqueId.of("B", "C"), BigDecimal.ONE, ExternalId.of("A", "B"));
     test.setQuantity(null);
   }
 
   //-------------------------------------------------------------------------
-  public void test_setSecurityLink() {
+  public void testSetSecurityLink() {
     final SimplePosition test = new SimplePosition(UniqueId.of("B", "C"), BigDecimal.ONE, ExternalId.of("A", "B"));
     test.setSecurityLink(new SimpleSecurityLink());
     assertEquals(new SimpleSecurityLink(), test.getSecurityLink());
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_setSecurityKey_null() {
+  public void testSetSecurityKeyNull() {
     final SimplePosition test = new SimplePosition(UniqueId.of("B", "C"), BigDecimal.ONE, ExternalId.of("A", "B"));
     test.setSecurityLink(null);
   }
 
   //-------------------------------------------------------------------------
-  public void test_addTrade() {
+  public void testAddTrade() {
     final SimplePosition testPosition = new SimplePosition(UniqueId.of("B", "C"), BigDecimal.ONE, ExternalId.of("A", "B"));
     assertTrue(testPosition.getTrades().isEmpty());
     final SimpleTrade testTrade1 = new SimpleTrade(createLink("A", "B"), BigDecimal.ONE, COUNTERPARTY,
@@ -217,7 +217,7 @@ public class SimplePositionTest {
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_addTrade_null() {
+  public void testAddTradeNull() {
     final SimplePosition test = new SimplePosition(UniqueId.of("B", "C"), BigDecimal.ONE, ExternalId.of("A", "B"));
     test.addTrade(null);
   }
@@ -244,20 +244,20 @@ public class SimplePositionTest {
 
   //------------------------------------------------------------------------
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_addAttribute_null_key() {
+  public void testAddAttributeNullKey() {
     final SimplePosition testPosition = new SimplePosition(UniqueId.of("B", "C"), BigDecimal.ONE, ExternalId.of("A", "B"));
     assertTrue(testPosition.getAttributes().isEmpty());
     testPosition.addAttribute(null, "B");
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_addAttribute_null_value() {
+  public void testAddAttributeNullValue() {
     final SimplePosition testPosition = new SimplePosition(UniqueId.of("B", "C"), BigDecimal.ONE, ExternalId.of("A", "B"));
     assertTrue(testPosition.getAttributes().isEmpty());
     testPosition.addAttribute("A", null);
   }
 
-  public void test_addAttribute() {
+  public void testAddAttribute() {
     final SimplePosition testPosition = new SimplePosition(UniqueId.of("B", "C"), BigDecimal.ONE, ExternalId.of("A", "B"));
     assertTrue(testPosition.getAttributes().isEmpty());
     testPosition.addAttribute("A", "B");

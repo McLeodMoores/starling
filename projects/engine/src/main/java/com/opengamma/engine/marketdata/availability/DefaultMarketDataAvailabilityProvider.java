@@ -23,8 +23,8 @@ import com.opengamma.id.VersionCorrection;
 /**
  * An implementation of {@link MarketDataAvailabilityProvider} that produces arbitrary value specifications for all values.
  * <p>
- * This is provided for use in test cases only, and would normally be used as the provider passed to an existing {@link MarketDataAvailabilityFilter}. A market data provider would normally require
- * more control over the specifications issued in order to manage later subscriptions to the values.
+ * This is provided for use in test cases only, and would normally be used as the provider passed to an existing {@link MarketDataAvailabilityFilter}.
+ * A market data provider would normally require more control over the specifications issued in order to manage later subscriptions to the values.
  */
 public class DefaultMarketDataAvailabilityProvider implements MarketDataAvailabilityProvider {
 

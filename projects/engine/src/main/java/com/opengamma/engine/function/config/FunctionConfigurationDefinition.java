@@ -49,15 +49,15 @@ public final class FunctionConfigurationDefinition {
   private final List<ParameterizedFunctionConfiguration> _parameterizedFunctions;
 
   /**
-   * Creates an instance
+   * Creates an instance.
    *
    * @param name the name of the function configuration definition, not null.
    * @param functionConfigurationDefinitions the names of linked function configuration definition documents, not null.
    * @param staticFunctions the list of static function configurations, not null.
    * @param parameterizedFunctions the list of parameterized function configurations, not null.
    */
-  public FunctionConfigurationDefinition(final String name, final List<String> functionConfigurationDefinitions, final List<StaticFunctionConfiguration> staticFunctions,
-      final List<ParameterizedFunctionConfiguration> parameterizedFunctions) {
+  public FunctionConfigurationDefinition(final String name, final List<String> functionConfigurationDefinitions,
+      final List<StaticFunctionConfiguration> staticFunctions, final List<ParameterizedFunctionConfiguration> parameterizedFunctions) {
     ArgumentChecker.notNull(name, "name");
     ArgumentChecker.notNull(functionConfigurationDefinitions, "functionConfigurationDefinitions");
     ArgumentChecker.notNull(staticFunctions, "staticFunctions");
@@ -121,7 +121,7 @@ public final class FunctionConfigurationDefinition {
   }
 
   /**
-   * Creates a FunctionConfigurationDefinition from a given FunctionConfigurationSource
+   * Creates a FunctionConfigurationDefinition from a given FunctionConfigurationSource.
    *
    * @param name the definition name, not-null.
    * @param configurationSource the function configuration source, not-null.
@@ -132,7 +132,7 @@ public final class FunctionConfigurationDefinition {
   }
 
   /**
-   * Creates a static FunctionConfigurationDefinition from a given FunctionConfigurationSource
+   * Creates a static FunctionConfigurationDefinition from a given FunctionConfigurationSource.
    *
    * @param name the definition name, not-null.
    * @param linkedConfigs the list of linked configs, not-null.

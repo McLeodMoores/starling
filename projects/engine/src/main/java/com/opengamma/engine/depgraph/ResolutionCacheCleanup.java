@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph;
@@ -9,8 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Cleanup task for the intermediate state used by the graph builder. Periodically checks that the number of resolvers that are in the cache is not too many and discards any finished ones. This
- * releases the memory used to hold resultant specifications or errors from the resolution. If the resolution is required again then the algorithm will be repeated - this is a tradeoff between memory
+ * Cleanup task for the intermediate state used by the graph builder. Periodically checks that the number of resolvers that are in the
+ * cache is not too many and discards any finished ones. This releases the memory used to hold resultant specifications or errors from
+ * the resolution. If the resolution is required again then the algorithm will be repeated - this is a tradeoff between memory
  * and speed.
  */
 /* package */final class ResolutionCacheCleanup implements Housekeeper.Callback<Void> {
@@ -27,11 +28,13 @@ import org.slf4j.LoggerFactory;
    */
   private static final double THRESHOLD = 0.3;
   /**
-   * Only run cleanup whenever the free memory is below this threshold, regardless of the % of total memory this is. For example never run if 1Gb or more is free.
+   * Only run cleanup whenever the free memory is below this threshold, regardless of the % of total memory this is. For example
+   * never run if 1Gb or more is free.
    */
   private static final long MAX_FREE = 1024L * 1024L * 1024L;
   /**
-   * Always run cleanup whenever the free memory is below this threshold, regardless of the % of total memory this is. For example always run if under 150Mb is free.
+   * Always run cleanup whenever the free memory is below this threshold, regardless of the % of total memory this is. For example
+   * always run if under 150Mb is free.
    */
   private static final long MIN_FREE = 150L * 1024L * 1024L;
 

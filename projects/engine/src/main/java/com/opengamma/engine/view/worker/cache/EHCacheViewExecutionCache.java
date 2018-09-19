@@ -58,7 +58,8 @@ public class EHCacheViewExecutionCache implements ViewExecutionCache {
 
   private final ComputationTargetResolver _targetResolver;
 
-  private final ConcurrentMap<ViewExecutionCacheKey, CompiledViewDefinitionWithGraphs> _compiledViewDefinitionsFrontCache = new MapMaker().weakValues().makeMap();
+  private final ConcurrentMap<ViewExecutionCacheKey, CompiledViewDefinitionWithGraphs> _compiledViewDefinitionsFrontCache =
+      new MapMaker().weakValues().makeMap();
 
   private final Cache _compiledViewDefinitions;
 
@@ -159,9 +160,11 @@ public class EHCacheViewExecutionCache implements ViewExecutionCache {
       final EHCacheViewExecutionCache parent = instance(_parent);
       final ViewDefinition viewDefinition = (ViewDefinition) parent.getTargetResolver()
           .resolve(new ComputationTargetSpecification(ComputationTargetType.of(ViewDefinition.class), _viewDefinition), VersionCorrection.LATEST).getValue();
-      final Portfolio portfolio = (Portfolio) parent.getTargetResolver().resolve(new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO, _portfolio), _versionCorrection).getValue();
-      final CompiledViewDefinitionWithGraphsImpl compiledViewDef = new CompiledViewDefinitionWithGraphsImpl(_versionCorrection, _compilationId, viewDefinition, _graphs, _resolutions, portfolio,
-          _functionInitId, _calcConfigs, _validFrom, _validTo);
+      final Portfolio portfolio = (Portfolio) parent.getTargetResolver().resolve(
+          new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO, _portfolio), _versionCorrection).getValue();
+      final CompiledViewDefinitionWithGraphsImpl compiledViewDef =
+          new CompiledViewDefinitionWithGraphsImpl(_versionCorrection, _compilationId, viewDefinition, _graphs, _resolutions, portfolio, _functionInitId,
+              _calcConfigs, _validFrom, _validTo);
       return parent.new CompiledViewDefinitionWithGraphsHolder(compiledViewDef);
     }
 

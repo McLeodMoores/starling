@@ -33,14 +33,14 @@ import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Implementation of {@link ViewProcessWorker} that rolls work between two delegate workers to allow the secondary one to recompile a view while the first is still calculating values from the old
- * compilation.
+ * Implementation of {@link ViewProcessWorker} that rolls work between two delegate workers to allow the secondary one to recompile a view
+ * while the first is still calculating values from the old compilation.
  */
 public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ParallelRecompilationViewProcessWorker.class);
 
-  private static enum WorkerAction {
+  private enum WorkerAction {
 
     TERMINATE,
 
@@ -106,7 +106,8 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
     /**
      * Called on a primary context to indicate a secondary is about to start a cycle.
      *
-     * @return {@code PROCEED} to allow the secondary to continue (may terminate this one), {@code IGNORE} to discard/defer the notification, or {@code BLOCK} to block the secondary
+     * @return {@code PROCEED} to allow the secondary to continue (may terminate this one), {@code IGNORE} to discard/defer the notification,
+     * or {@code BLOCK} to block the secondary
      */
     protected abstract WorkerAction secondaryCycleStarted();
 
@@ -518,8 +519,8 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
    * @param options the options for this worker (and its spawned workers), not null
    * @param viewDefinition the initial view definition, not null
    */
-  public ParallelRecompilationViewProcessWorker(final ViewProcessWorkerFactory delegate, final ViewProcessWorkerContext context, final ViewExecutionOptions options,
-      final ViewDefinition viewDefinition) {
+  public ParallelRecompilationViewProcessWorker(final ViewProcessWorkerFactory delegate, final ViewProcessWorkerContext context,
+      final ViewExecutionOptions options, final ViewDefinition viewDefinition) {
     ArgumentChecker.notNull(delegate, "delegate");
     ArgumentChecker.notNull(context, "context");
     ArgumentChecker.notNull(options, "options");
@@ -635,7 +636,8 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
               }
             }
           };
-          getContext().getProcessContext().getFunctionCompilationService().getFunctionCompilationContext().getRawComputationTargetResolver().changeManager().addChangeListener(_resolverChanges);
+          getContext().getProcessContext().getFunctionCompilationService().getFunctionCompilationContext()
+                      .getRawComputationTargetResolver().changeManager().addChangeListener(_resolverChanges);
         }
         final Collection<UniqueId> uids = compiled.getResolvedIdentifiers().values();
         final Set<ObjectId> oids = Sets.newHashSetWithExpectedSize(uids.size());
@@ -649,7 +651,8 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
         _resolverChanges.watchOnly(oids);
       } else {
         if (_resolverChanges != null) {
-          getContext().getProcessContext().getFunctionCompilationService().getFunctionCompilationContext().getRawComputationTargetResolver().changeManager().removeChangeListener(_resolverChanges);
+          getContext().getProcessContext().getFunctionCompilationService().getFunctionCompilationContext()
+                      .getRawComputationTargetResolver().changeManager().removeChangeListener(_resolverChanges);
           _resolverChanges = null;
         }
       }
@@ -682,11 +685,10 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
           LOGGER.debug("Rejecting compilation from secondary worker");
           _secondary = null;
           return false;
-        } else {
-          LOGGER.debug("Secondary compilation valid");
-          getSecondary().setCompiled(compiled);
-          return true;
         }
+        LOGGER.debug("Secondary compilation valid");
+        getSecondary().setCompiled(compiled);
+        return true;
       }
     }
     return false;
@@ -797,15 +799,15 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
           promoteSecondaryWorker();
           secondary.unblock(WorkerAction.PROCEED);
           return false;
-        } else {
-          LOGGER.info("Primary worker completed - no secondary worker");
-          _primary = null;
-          if (_resolverChanges != null) {
-            getContext().getProcessContext().getFunctionCompilationService().getFunctionCompilationContext().getRawComputationTargetResolver().changeManager().removeChangeListener(_resolverChanges);
-            _resolverChanges = null;
-          }
-          return true;
         }
+        LOGGER.info("Primary worker completed - no secondary worker");
+        _primary = null;
+        if (_resolverChanges != null) {
+          getContext().getProcessContext().getFunctionCompilationService().getFunctionCompilationContext()
+                      .getRawComputationTargetResolver().changeManager().removeChangeListener(_resolverChanges);
+          _resolverChanges = null;
+        }
+        return true;
       } else if (getSecondary() == context) {
         assert getPrimary() != null;
         LOGGER.info("Secondary worker completed");

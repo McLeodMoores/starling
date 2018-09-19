@@ -32,7 +32,8 @@ public final class NoOpMarketDataSelector implements MarketDataSelector {
   }
 
   @Override
-  public DistinctMarketDataSelector findMatchingSelector(final ValueSpecification valueSpecification, final String calculationConfigurationName, final SelectorResolver resolver) {
+  public DistinctMarketDataSelector findMatchingSelector(final ValueSpecification valueSpecification, final String calculationConfigurationName,
+      final SelectorResolver resolver) {
     return null;
   }
 

@@ -76,7 +76,8 @@ public class MarketDataSelectionGraphManipulatorTest {
 
   @Test
   public void testYieldCurveSelectorAltersGraph() {
-    final MarketDataSelectionGraphManipulator manipulator = new MarketDataSelectionGraphManipulator(createYieldCurveSelector(Currency.USD, "Forward3M"), createEmptyViewCalcManipulations());
+    final MarketDataSelectionGraphManipulator manipulator =
+        new MarketDataSelectionGraphManipulator(createYieldCurveSelector(Currency.USD, "Forward3M"), createEmptyViewCalcManipulations());
     final DependencyGraph graph = createSimpleGraphWithMarketDataNodes();
     final Set<ValueSpecification> originalOutputSpecifications = DependencyGraphImpl.getAllOutputSpecifications(graph);
     final Map<DistinctMarketDataSelector, Set<ValueSpecification>> result = new HashMap<>();
@@ -122,7 +123,8 @@ public class MarketDataSelectionGraphManipulatorTest {
   @Test
   public void testCompositeSelectorReturnsUnderlyingSelector() {
     final MarketDataSelector yieldCurveSelector = createYieldCurveSelector(Currency.USD, "Forward3M");
-    final MarketDataSelectionGraphManipulator manipulator = new MarketDataSelectionGraphManipulator(CompositeMarketDataSelector.of(yieldCurveSelector), createEmptyViewCalcManipulations());
+    final MarketDataSelectionGraphManipulator manipulator =
+        new MarketDataSelectionGraphManipulator(CompositeMarketDataSelector.of(yieldCurveSelector), createEmptyViewCalcManipulations());
     final DependencyGraph graph = createSimpleGraphWithMarketDataNodes();
     final Set<ValueSpecification> originalOutputSpecifications = DependencyGraphImpl.getAllOutputSpecifications(graph);
     final Map<DistinctMarketDataSelector, Set<ValueSpecification>> result = new HashMap<>();
@@ -160,7 +162,8 @@ public class MarketDataSelectionGraphManipulatorTest {
     final ValueSpecification additionalSpec = Iterables.getOnlyElement(outputSpecifications);
     assertEquals(additionalSpec.getValueName(), originalValueSpec.getValueName());
     assertEquals(additionalSpec.getTargetSpecification(), originalValueSpec.getTargetSpecification());
-    final ValueProperties expectedProps = originalValueSpec.getProperties().copy().withoutAny(ValuePropertyNames.FUNCTION).with(ValuePropertyNames.FUNCTION, "someFunctionStructureManipulator").get();
+    final ValueProperties expectedProps = originalValueSpec.getProperties().copy().withoutAny(ValuePropertyNames.FUNCTION)
+        .with(ValuePropertyNames.FUNCTION, "someFunctionStructureManipulator").get();
     assertEquals(additionalSpec.getProperties(), expectedProps);
   }
 

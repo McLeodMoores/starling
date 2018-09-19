@@ -57,8 +57,9 @@ public class ViewDeltaResultCalculator {
     return deltaModel;
   }
 
-  private static void computeDeltaModel(final DeltaDefinition deltaDefinition, final InMemoryViewDeltaResultModel deltaModel, final ComputationTargetSpecification targetSpec,
-      final String calcConfigName, final ViewCalculationResultModel previousCalcModel, final ViewCalculationResultModel resultCalcModel) {
+  private static void computeDeltaModel(final DeltaDefinition deltaDefinition, final InMemoryViewDeltaResultModel deltaModel,
+      final ComputationTargetSpecification targetSpec, final String calcConfigName, final ViewCalculationResultModel previousCalcModel,
+      final ViewCalculationResultModel resultCalcModel) {
     final Map<Pair<String, ValueProperties>, ComputedValueResult> resultValues = resultCalcModel.getValues(targetSpec);
     if (resultValues != null) {
       if (previousCalcModel == null) {
@@ -84,7 +85,8 @@ public class ViewDeltaResultCalculator {
             // values after truncation to the required decimal place, rather than testing whether the difference of the
             // full values is greater than some threshold; this way, there will always be a point beyond which a change
             // is detected, even in the event of gradual creep.
-            if (deltaDefinition.isDelta(previousValue, resultValue) || !ObjectUtils.equals(previousValue.getAggregatedExecutionLog(), resultValue.getAggregatedExecutionLog())) {
+            if (deltaDefinition.isDelta(previousValue, resultValue)
+                || !ObjectUtils.equals(previousValue.getAggregatedExecutionLog(), resultValue.getAggregatedExecutionLog())) {
               deltaModel.addValue(calcConfigName, resultEntry.getValue());
             }
           }

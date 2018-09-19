@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.view.worker;
@@ -40,28 +40,29 @@ import com.opengamma.util.PoolExecutor;
   /**
    * The market data specifications from the leaves of the graph. Mapped to {@link Boolean#TRUE} if the value is valid, mapped to {@link Boolean#FALSE} if not.
    */
-  private final Map<ValueSpecification, Boolean> _valid = new ConcurrentHashMap<ValueSpecification, Boolean>();
+  private final Map<ValueSpecification, Boolean> _valid = new ConcurrentHashMap<>();
 
   /**
-   * The market data specifications to check. This is a map from an aliased market data value to the underlying market data value values. If the value is used in an unaliased form then the key and
-   * value are the same for an entry.
+   * The market data specifications to check. This is a map from an aliased market data value to the underlying market data value values. If the value is used
+   * in an unaliased form then the key and value are the same for an entry.
    */
-  private Map<ValueSpecification, ValueSpecification> _toCheck = new HashMap<ValueSpecification, ValueSpecification>();
+  private Map<ValueSpecification, ValueSpecification> _toCheck = new HashMap<>();
 
   /**
    * Flag to indicate that there is at least one invalid node.
    */
   private volatile boolean _invalidNodes;
 
-  public InvalidMarketDataDependencyNodeFilter(final ComputationTargetResolver.AtVersionCorrection targetResolver, final MarketDataAvailabilityProvider marketData) {
+  public InvalidMarketDataDependencyNodeFilter(final ComputationTargetResolver.AtVersionCorrection targetResolver,
+      final MarketDataAvailabilityProvider marketData) {
     _targetResolver = targetResolver;
     _marketData = marketData;
   }
 
   /**
-   * Updates the "to-check" list with market data from the given graph. This must be called for all graph fragments that this sub-grapher will be required to act on before {@link #checkMarketData} is
-   * called.
-   * 
+   * Updates the "to-check" list with market data from the given graph. This must be called for all graph fragments that this
+   * sub-grapher will be required to act on before {@link #checkMarketData} is called.
+   *
    * @param node a root node of the graph to consider, not null
    * @param terminalOutputs the graph's terminal outputs, not null
    * @param visited the "visited" buffer, not null
@@ -100,10 +101,11 @@ import com.opengamma.util.PoolExecutor;
   }
 
   /**
-   * Tests whether the alias used in the graph still resolves to a usable target and the market data provider satisfies the requirement with the same underlying market data.
+   * Tests whether the alias used in the graph still resolves to a usable target and the market data provider satisfies the requirement with the same underlying
+   * market data.
    * <p>
    * This may be called by multiple threads and will update the {@link #_valid} and {@link #_invalidNodes} properties.
-   * 
+   *
    * @param alias the alias (might be the same as {@code marketData} if it is used directly), not null
    * @param marketData the previous market data specification returned by the data provider, not null
    */
@@ -118,7 +120,8 @@ import com.opengamma.util.PoolExecutor;
       return;
     }
     final Object targetValue = target.getValue();
-    final ValueRequirement desiredValue = new ValueRequirement(alias.getValueName(), alias.getTargetSpecification(), alias.getProperties().withoutAny(ValuePropertyNames.DATA_PROVIDER));
+    final ValueRequirement desiredValue =
+        new ValueRequirement(alias.getValueName(), alias.getTargetSpecification(), alias.getProperties().withoutAny(ValuePropertyNames.DATA_PROVIDER));
     final ValueSpecification requiredMarketData = _marketData.getAvailability(alias.getTargetSpecification(), targetValue, desiredValue);
     if (marketData.equals(requiredMarketData)) {
       LOGGER.debug("Market data entry {} still available for {}", marketData, desiredValue);
@@ -157,15 +160,16 @@ import com.opengamma.util.PoolExecutor;
   }
 
   /**
-   * After the "to-check" list is populated by calling {@link #init}, call this to check the market data. Checks are submitted to an executor in batches for parallel operation.
-   * 
+   * After the "to-check" list is populated by calling {@link #init}, call this to check the market data. Checks are submitted to an executor in batches for
+   * parallel operation.
+   *
    * @param executor the executor to use, not null
    * @param batchSize the number of items to check in each batch
    * @return true if at least one market data node is now invalid, false if all are okay
    */
   public boolean checkMarketData(final PoolExecutor executor, final int batchSize) {
     final PoolExecutor.Service<?> service = executor.createService(null);
-    Map<ValueSpecification, ValueSpecification> toCheck = _toCheck;
+    final Map<ValueSpecification, ValueSpecification> toCheck = _toCheck;
     _toCheck = null;
     int count = toCheck.size();
     final Iterator<Map.Entry<ValueSpecification, ValueSpecification>> itr = toCheck.entrySet().iterator();
@@ -176,14 +180,13 @@ import com.opengamma.util.PoolExecutor;
           check(e.getKey(), e.getValue());
         }
         break;
-      } else {
-        service.execute(new CheckBatch(itr, batchSize));
-        count -= batchSize;
       }
+      service.execute(new CheckBatch(itr, batchSize));
+      count -= batchSize;
     }
     try {
       service.join();
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
       throw new OpenGammaRuntimeException("Interrupted", e);
     }
     return _invalidNodes;

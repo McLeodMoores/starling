@@ -143,7 +143,8 @@ public class ComputationTargetTypeMapTest {
   public void testChained() {
     final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>();
     map.put(ComputationTargetType.SECURITY, "A");
-    map.put(ComputationTargetType.POSITION.containing(ComputationTargetType.TRADE.or(ComputationTargetType.of(MockSecurity.class))), "B", new Function2<String, String, String>() {
+    map.put(ComputationTargetType.POSITION.containing(
+        ComputationTargetType.TRADE.or(ComputationTargetType.of(MockSecurity.class))), "B", new Function2<String, String, String>() {
       @Override
       public String execute(final String a, final String b) {
         return a + b;

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph;
@@ -17,8 +17,8 @@ public final class Housekeeper extends AbstractHousekeeper<DependencyGraphBuilde
   /**
    * Callback for receiving housekeeping notifications.
    * <p>
-   * Note that the data object that is registered with the housekeeper must not have a strong reference to the dependency graph builder. The data will be held from the timer thread which can prevent
-   * garbage collection of the graph builder.
+   * Note that the data object that is registered with the housekeeper must not have a strong reference to the dependency graph builder.
+   * The data will be held from the timer thread which can prevent garbage collection of the graph builder.
    */
   public interface Callback<D> {
 
@@ -61,7 +61,7 @@ public final class Housekeeper extends AbstractHousekeeper<DependencyGraphBuilde
     final boolean isGraphBuilt;
     try {
       isGraphBuilt = builder.isGraphBuilt();
-    } catch (CancellationException e) {
+    } catch (final CancellationException e) {
       return getCallback().cancelled(builder, getData());
     }
     if (isGraphBuilt) {
@@ -78,7 +78,7 @@ public final class Housekeeper extends AbstractHousekeeper<DependencyGraphBuilde
 
   @Override
   public String toString() {
-    Callback<Object> callback = getCallback();
+    final Callback<Object> callback = getCallback();
     if (callback != null) {
       return callback.toString();
     } else {

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.value.properties;
@@ -31,10 +31,11 @@ public final class SetValueProperty extends AbstractValueProperty {
 
   /**
    * Creates a new instance.
-   * 
+   *
    * @param key the value key, never null
    * @param optional the optional flag
-   * @param values the values to store, never null, containing more than {@link ArrayValueProperty#MAX_ARRAY_LENGTH} entries. The object will use this object but will not modify it.
+   * @param values the values to store, never null, containing more than {@link ArrayValueProperty#MAX_ARRAY_LENGTH} entries.
+   * The object will use this object but will not modify it.
    * @param next the next property in the bucket, or null if this is the end of the chain
    */
   public SetValueProperty(final String key, final boolean optional, final Set<String> values, final AbstractValueProperty next) {
@@ -71,7 +72,7 @@ public final class SetValueProperty extends AbstractValueProperty {
   @Override
   protected AbstractValueProperty addValueImpl(final String value) {
     if (!_values.contains(value)) {
-      final Set<String> newValues = new HashSet<String>(_values);
+      final Set<String> newValues = new HashSet<>(_values);
       newValues.add(value);
       _values = newValues;
     }
@@ -81,7 +82,7 @@ public final class SetValueProperty extends AbstractValueProperty {
   @Override
   protected AbstractValueProperty addValuesImpl(final String[] values) {
     int newValues = 0;
-    for (String value : values) {
+    for (final String value : values) {
       if (!_values.contains(value)) {
         newValues++;
       }
@@ -89,7 +90,7 @@ public final class SetValueProperty extends AbstractValueProperty {
     if (newValues > 0) {
       final Set<String> copy = Sets.newHashSetWithExpectedSize(_values.size() + newValues);
       copy.addAll(_values);
-      for (String value : values) {
+      for (final String value : values) {
         copy.add(value);
       }
       _values = copy;
@@ -100,7 +101,7 @@ public final class SetValueProperty extends AbstractValueProperty {
   @Override
   protected AbstractValueProperty addValuesImpl(final Collection<String> values) {
     int newValues = 0;
-    for (String value : values) {
+    for (final String value : values) {
       if (!_values.contains(value)) {
         newValues++;
       }
@@ -126,7 +127,7 @@ public final class SetValueProperty extends AbstractValueProperty {
 
   @Override
   protected boolean containsAllValues(final String[] values) {
-    for (String value : values) {
+    for (final String value : values) {
       if (!_values.contains(value)) {
         return false;
       }
@@ -171,7 +172,7 @@ public final class SetValueProperty extends AbstractValueProperty {
 
   @Override
   public boolean isSatisfyValue(final AbstractValueProperty property) {
-    for (String myValue : _values) {
+    for (final String myValue : _values) {
       if (property.isSatisfiedBy(myValue)) {
         return true;
       }
@@ -195,7 +196,7 @@ public final class SetValueProperty extends AbstractValueProperty {
   @Override
   protected AbstractValueProperty intersectSetValue(final SetValueProperty other) {
     final Set<String> otherValues = other.getValuesImpl();
-    final Set<String> intersect = new HashSet<String>(_values);
+    final Set<String> intersect = new HashSet<>(_values);
     intersect.retainAll(otherValues);
     if (intersect.isEmpty()) {
       return null;
@@ -234,7 +235,7 @@ public final class SetValueProperty extends AbstractValueProperty {
       subMsg.add(ValuePropertiesFudgeBuilder.OPTIONAL_FIELD, null, FudgeWireType.INDICATOR, IndicatorType.INSTANCE);
     }
     int ordinal = 0;
-    for (String value : _values) {
+    for (final String value : _values) {
       subMsg.add(null, ordinal++, FudgeWireType.STRING, value);
     }
   }

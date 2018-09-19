@@ -364,7 +364,7 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
     }
   }
 
-  public void test_a_collection_which_is_inner_class() {
+  public void testACollectionWhichIsInnerClass() {
     final Map<Byte, Byte> map = Collections.unmodifiableMap(new HashMap<Byte, Byte>() {
       private static final long serialVersionUID = 1L;
       {

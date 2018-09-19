@@ -101,7 +101,7 @@ public class SocketFudgeMessageConduitTest {
     assertNotNull(receiver.waitForMessage(2000));
   }
 
-  public void parallelSendTest_single() throws Exception {
+  public void parallelSendTestSingle() throws Exception {
     for (int retry = 0; retry < 3; retry++) {
       try {
         final AtomicInteger concurrencyMax = new AtomicInteger(0);
@@ -114,7 +114,7 @@ public class SocketFudgeMessageConduitTest {
     }
   }
 
-  public void parallelSendTest_multi() throws Exception {
+  public void parallelSendTestMulti() throws Exception {
     for (int retry = 0; retry < 3; retry++) {
       try {
         final AtomicInteger concurrencyMax = new AtomicInteger(0);

@@ -36,17 +36,17 @@ import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Test the {@link PositionSource} based resolvers
+ * Test the {@link PositionSource} based resolvers.
  */
 @Test(groups = TestGroup.UNIT)
 public class PositionSourceResolverTest {
 
-  private final SimplePortfolioNode NODE = new SimplePortfolioNode("Root");
-  private final SimplePosition POSITION = new SimplePosition();
-  private final SimpleTrade TRADE = new SimpleTrade();
-  private final SimplePortfolio PORTFOLIO = new SimplePortfolio("Test");
-  private final MockPositionSource POSITION_SOURCE = new MockPositionSource();
-  private final UniqueId BAD_ID = UniqueId.of("Missing", "0");
+  private static final SimplePortfolioNode NODE = new SimplePortfolioNode("Root");
+  private static final SimplePosition POSITION = new SimplePosition();
+  private static final SimpleTrade TRADE = new SimpleTrade();
+  private static final SimplePortfolio PORTFOLIO = new SimplePortfolio("Test");
+  private static final MockPositionSource POSITION_SOURCE = new MockPositionSource();
+  private static final UniqueId BAD_ID = UniqueId.of("Missing", "0");
 
   public PositionSourceResolverTest() {
     POSITION.setQuantity(BigDecimal.ONE);
@@ -64,106 +64,108 @@ public class PositionSourceResolverTest {
     return new PositionSourceResolver(POSITION_SOURCE);
   }
 
-  public void trade_object_resolved() {
+  public void tradeObjectResolved() {
     assertEquals(resolver().trade().resolveObject(TRADE.getUniqueId(), VersionCorrection.LATEST), TRADE);
   }
 
-  public void trade_object_unresolved() {
+  public void tradeObjectUnresolved() {
     assertEquals(resolver().trade().resolveObject(BAD_ID, VersionCorrection.LATEST), null);
   }
 
-  public void trade_deep() {
+  public void tradeDeep() {
     assertNull(resolver().trade().deepResolver());
   }
 
-  public void position_object_resolved() {
+  public void positionObjectResolved() {
     assertEquals(resolver().position().resolveObject(POSITION.getUniqueId(), VersionCorrection.LATEST), POSITION);
   }
 
-  public void position_object_unresolved() {
+  public void positionObjectUnresolved() {
     assertEquals(resolver().position().resolveObject(BAD_ID, VersionCorrection.LATEST), null);
   }
 
-  public void position_identifier_single() {
+  public void positionIdentifierSingle() {
     assertEquals(resolver().position().resolveExternalId(ExternalIdBundle.EMPTY, VersionCorrection.LATEST), null);
   }
 
-  public void position_identifier_multiple() {
+  public void positionIdentifierMultiple() {
     assertEquals(resolver().position().resolveExternalIds(Collections.singleton(ExternalIdBundle.EMPTY), VersionCorrection.LATEST), Collections.emptyMap());
   }
 
-  public void position_uniqueid_resolved() {
+  public void positionUniqueidResolved() {
     assertEquals(resolver().position().resolveObjectId(POSITION.getUniqueId().getObjectId(), VersionCorrection.LATEST), POSITION.getUniqueId());
   }
 
-  public void position_uniqueid_unresolved() {
+  public void positionUniqueidUnresolved() {
     assertEquals(resolver().position().resolveObjectId(BAD_ID.getObjectId(), VersionCorrection.LATEST), null);
   }
 
-  public void position_uniqueid_multiple() {
-    final Set<ObjectId> request = new HashSet<ObjectId>();
+  public void positionUniqueidMultiple() {
+    final Set<ObjectId> request = new HashSet<>();
     request.add(POSITION.getUniqueId().getObjectId());
     request.add(BAD_ID.getObjectId());
-    assertEquals(resolver().position().resolveObjectIds(request, VersionCorrection.LATEST), Collections.singletonMap(POSITION.getUniqueId().getObjectId(), POSITION.getUniqueId()));
+    assertEquals(resolver().position().resolveObjectIds(request, VersionCorrection.LATEST),
+        Collections.singletonMap(POSITION.getUniqueId().getObjectId(), POSITION.getUniqueId()));
   }
 
-  public void position_deep() {
+  public void positionDeep() {
     assertNull(resolver().position().deepResolver());
   }
 
-  public void portfolio_object_resolved() {
+  public void portfolioObjectResolved() {
     assertEquals(resolver().portfolio().resolveObject(PORTFOLIO.getUniqueId(), VersionCorrection.LATEST), PORTFOLIO);
   }
 
-  public void portfolio_object_unresolved() {
+  public void portfolioObjectUnresolved() {
     assertEquals(resolver().portfolio().resolveObject(BAD_ID, VersionCorrection.LATEST), null);
   }
 
-  public void portfolio_identifier_single() {
+  public void portfolioIdentifierSingle() {
     assertEquals(resolver().portfolio().resolveExternalId(ExternalIdBundle.EMPTY, VersionCorrection.LATEST), null);
   }
 
-  public void portfolio_identifier_multiple() {
+  public void portfolioIdentifierMultiple() {
     assertEquals(resolver().portfolio().resolveExternalIds(Collections.singleton(ExternalIdBundle.EMPTY), VersionCorrection.LATEST), Collections.emptyMap());
   }
 
-  public void portfolio_uniqueid_resolved() {
+  public void portfolioUniqueidResolved() {
     assertEquals(resolver().portfolio().resolveObjectId(PORTFOLIO.getUniqueId().getObjectId(), VersionCorrection.LATEST), PORTFOLIO.getUniqueId());
   }
 
-  public void portfolio_uniqueid_unresolved() {
+  public void portfolioUniqueidUnresolved() {
     assertEquals(resolver().portfolio().resolveObjectId(BAD_ID.getObjectId(), VersionCorrection.LATEST), null);
   }
 
-  public void portfolio_uniqueid_multiple() {
-    final Set<ObjectId> request = new HashSet<ObjectId>();
+  public void portfolioUniqueidMultiple() {
+    final Set<ObjectId> request = new HashSet<>();
     request.add(PORTFOLIO.getUniqueId().getObjectId());
     request.add(BAD_ID.getObjectId());
-    assertEquals(resolver().portfolio().resolveObjectIds(request, VersionCorrection.LATEST), Collections.singletonMap(PORTFOLIO.getUniqueId().getObjectId(), PORTFOLIO.getUniqueId()));
+    assertEquals(resolver().portfolio().resolveObjectIds(request, VersionCorrection.LATEST),
+        Collections.singletonMap(PORTFOLIO.getUniqueId().getObjectId(), PORTFOLIO.getUniqueId()));
   }
 
-  public void portfolio_deep() {
+  public void portfolioDeep() {
     final DeepResolver deep = resolver().portfolio().deepResolver();
     assertNotNull(deep);
-    ResolutionLogger logger = Mockito.mock(ResolutionLogger.class);
+    final ResolutionLogger logger = Mockito.mock(ResolutionLogger.class);
     final Portfolio portfolio = (Portfolio) deep.withLogger(PORTFOLIO, logger);
     assertNotNull(portfolio);
     assertNotSame(portfolio, PORTFOLIO);
     assertEquals(portfolio.getUniqueId(), PORTFOLIO.getUniqueId());
   }
 
-  public void node_object_resolved() {
+  public void nodeObjectResolved() {
     assertEquals(resolver().portfolioNode().resolveObject(NODE.getUniqueId(), VersionCorrection.LATEST), NODE);
   }
 
-  public void node_object_unresolved() {
+  public void nodeObjectUnresolved() {
     assertEquals(resolver().portfolioNode().resolveObject(BAD_ID, VersionCorrection.LATEST), null);
   }
 
-  public void node_deep() {
+  public void nodeDeep() {
     final DeepResolver deep = resolver().portfolioNode().deepResolver();
     assertNotNull(deep);
-    ResolutionLogger logger = Mockito.mock(ResolutionLogger.class);
+    final ResolutionLogger logger = Mockito.mock(ResolutionLogger.class);
     final PortfolioNode node = (PortfolioNode) deep.withLogger(NODE, logger);
     assertNotNull(node);
     assertNotSame(node, NODE);

@@ -247,7 +247,7 @@ public class SocketFudgeConnectionConduitTest {
     return result;
   }
 
-  public void parallelSendTest_single_single() throws Exception {
+  public void parallelSendTestSingleSingle() throws Exception {
     final AtomicInteger concurrencyMax = new AtomicInteger(0);
     final int[] result = parallelSendTest(null, null, concurrencyMax);
     assertEquals(1, concurrencyMax.get());
@@ -257,7 +257,7 @@ public class SocketFudgeConnectionConduitTest {
     assertEquals(2, result[3]);
   }
 
-  public void parallelSendTest_multi_single() throws Exception {
+  public void parallelSendTestMultiSingle() throws Exception {
     final AtomicInteger concurrencyMax = new AtomicInteger(0);
     final int[] result = parallelSendTest(Executors.newCachedThreadPool(), null, concurrencyMax);
     assertEquals(2, concurrencyMax.get());
@@ -273,7 +273,7 @@ public class SocketFudgeConnectionConduitTest {
     assertEquals(2, result[3]);
   }
 
-  public void parallelSendTest_single_multi() throws Exception {
+  public void parallelSendTestSingleMulti() throws Exception {
     final AtomicInteger concurrencyMax = new AtomicInteger(0);
     final int[] result = parallelSendTest(null, Executors.newCachedThreadPool(), concurrencyMax);
     assertEquals(1, concurrencyMax.get());
@@ -283,7 +283,7 @@ public class SocketFudgeConnectionConduitTest {
     assertEquals(2, result[3]);
   }
 
-  public void parallelSendTest_multi_multi() throws Exception {
+  public void parallelSendTestMultiMulti() throws Exception {
     final AtomicInteger concurrencyMax = new AtomicInteger(0);
     final int[] result = parallelSendTest(Executors.newCachedThreadPool(), Executors.newCachedThreadPool(), concurrencyMax);
     assertEquals(2, concurrencyMax.get());

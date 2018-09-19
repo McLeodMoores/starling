@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.marketdata.historical;
@@ -22,7 +22,8 @@ public class LatestHistoricalMarketDataProviderFactory implements MarketDataProv
   private final HistoricalTimeSeriesSource _timeSeriesSource;
   private final HistoricalTimeSeriesResolver _timeSeriesResolver;
 
-  public LatestHistoricalMarketDataProviderFactory(final HistoricalTimeSeriesSource timeSeriesSource, final HistoricalTimeSeriesResolver timeSeriesResolver) {
+  public LatestHistoricalMarketDataProviderFactory(final HistoricalTimeSeriesSource timeSeriesSource,
+      final HistoricalTimeSeriesResolver timeSeriesResolver) {
     ArgumentChecker.notNull(timeSeriesSource, "timeSeriesSource");
     ArgumentChecker.notNull(timeSeriesResolver, "timeSeriesResolver");
     _timeSeriesSource = timeSeriesSource;
@@ -32,7 +33,8 @@ public class LatestHistoricalMarketDataProviderFactory implements MarketDataProv
   @Override
   public MarketDataProvider create(final UserPrincipal marketDataUser, final MarketDataSpecification marketDataSpec) {
     if (marketDataSpec instanceof HistoricalMarketDataSpecification) {
-      return new LatestHistoricalMarketDataProvider(_timeSeriesSource, _timeSeriesResolver, ((HistoricalMarketDataSpecification) marketDataSpec).getTimeSeriesResolverKey());
+      return new LatestHistoricalMarketDataProvider(_timeSeriesSource, _timeSeriesResolver,
+          ((HistoricalMarketDataSpecification) marketDataSpec).getTimeSeriesResolverKey());
     }
     return new LatestHistoricalMarketDataProvider(_timeSeriesSource, _timeSeriesResolver, null);
   }

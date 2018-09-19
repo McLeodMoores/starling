@@ -22,8 +22,9 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Describes a way of executing a dependency graph - that is, a sequence of jobs that will produce the desired result.
  * <p>
- * An execution plan may be executed on an arbitrary node set, but is typically generated in such a way that it will perform best on a given configuration (for example it might have been created with
- * the intention of being used on {@code X} calculation nodes, each with {@code Y} available execution threads).
+ * An execution plan may be executed on an arbitrary node set, but is typically generated in such a way that it will perform
+ * best on a given configuration (for example it might have been created with the intention of being used on {@code X} calculation
+ * nodes, each with {@code Y} available execution threads).
  */
 public class GraphExecutionPlan implements Serializable {
 
@@ -48,8 +49,8 @@ public class GraphExecutionPlan implements Serializable {
    * @param meanJobCycleCost the mean of each job's CPU cost
    * @param meanJobIOCost the mean of each job's I/O cost
    */
-  public GraphExecutionPlan(final String calculationConfiguration, final long functionInitializationId, final Collection<PlannedJob> leafJobs, final int totalJobs, final double meanJobSize,
-      final double meanJobCycleCost, final double meanJobIOCost) {
+  public GraphExecutionPlan(final String calculationConfiguration, final long functionInitializationId, final Collection<PlannedJob> leafJobs,
+      final int totalJobs, final double meanJobSize, final double meanJobCycleCost, final double meanJobIOCost) {
     ArgumentChecker.notNull(calculationConfiguration, "calculationConfiguration");
     ArgumentChecker.notNull(leafJobs, "leafJobs");
     assert !leafJobs.contains(null);

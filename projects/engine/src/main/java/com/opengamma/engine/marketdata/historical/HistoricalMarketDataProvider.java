@@ -22,7 +22,7 @@ public class HistoricalMarketDataProvider extends AbstractHistoricalMarketDataPr
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param historicalTimeSeriesSource the underlying source of historical data, not null
    * @param historicalTimeSeriesResolver the time series resolver, not null
    * @param timeSeriesResolverKey the source resolver key, or null to use the source default
@@ -34,11 +34,12 @@ public class HistoricalMarketDataProvider extends AbstractHistoricalMarketDataPr
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param historicalTimeSeriesSource the underlying source of historical data, not null
    * @param historicalTimeSeriesResolver the time series resolver, not null
    */
-  public HistoricalMarketDataProvider(final HistoricalTimeSeriesSource historicalTimeSeriesSource, final HistoricalTimeSeriesResolver historicalTimeSeriesResolver) {
+  public HistoricalMarketDataProvider(final HistoricalTimeSeriesSource historicalTimeSeriesSource,
+      final HistoricalTimeSeriesResolver historicalTimeSeriesResolver) {
     super(historicalTimeSeriesSource, historicalTimeSeriesResolver);
   }
 

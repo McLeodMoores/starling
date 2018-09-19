@@ -257,7 +257,7 @@ public class ViewCalculationConfiguration implements Serializable {
    * Sets the transformation to use on resolution rules when compiling a view for execution under this
    * configuration.
    *
-   * @param resulutionRuleTransform the resolution rule transformation
+   * @param resolutionRuleTransform the resolution rule transformation
    */
   public void setResolutionRuleTransform(final ResolutionRuleTransform resolutionRuleTransform) {
     ArgumentChecker.notNull(resolutionRuleTransform, "resolutionRuleTransform");
@@ -466,8 +466,9 @@ public class ViewCalculationConfiguration implements Serializable {
     }
 
     final ViewCalculationConfiguration other = (ViewCalculationConfiguration) obj;
-    if (!(ObjectUtils.equals(getName(), other.getName()) && ObjectUtils.equals(getDeltaDefinition(), other.getDeltaDefinition()) && ObjectUtils.equals(getSpecificRequirements(), other
-        .getSpecificRequirements()))
+    if (!(ObjectUtils.equals(getName(), other.getName())
+        && ObjectUtils.equals(getDeltaDefinition(), other.getDeltaDefinition())
+        && ObjectUtils.equals(getSpecificRequirements(), other.getSpecificRequirements()))
         && ObjectUtils.equals(_portfolioRequirementsBySecurityType.keySet(), other._portfolioRequirementsBySecurityType.keySet())) {
       return false;
     }

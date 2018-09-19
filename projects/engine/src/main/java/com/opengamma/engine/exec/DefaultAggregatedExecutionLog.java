@@ -27,8 +27,8 @@ import com.opengamma.util.log.LogLevel;
 /**
  * Default implementation of {@link AggregatedExecutionLog}.
  * <p>
- * In {@link ExecutionLogMode#INDICATORS} mode, the root log and dependent logs are inspected to obtain an aggregate of the log levels, but no individual logs are stored. In
- * {@link ExecutionLogMode#FULL} mode, individual non-empty logs are also stored.
+ * In {@link ExecutionLogMode#INDICATORS} mode, the root log and dependent logs are inspected to obtain an aggregate of the log levels, but no individual
+ * logs are stored. In {@link ExecutionLogMode#FULL} mode, individual non-empty logs are also stored.
  */
 public final class DefaultAggregatedExecutionLog implements AggregatedExecutionLog {
 
@@ -50,7 +50,8 @@ public final class DefaultAggregatedExecutionLog implements AggregatedExecutionL
    * @param dependentLogs the dependent logs, if any, may be null or empty
    * @return the log instance
    */
-  public static DefaultAggregatedExecutionLog fullLogMode(final String functionName, final ComputationTargetSpecification target, final ExecutionLog rootLog, final Collection<AggregatedExecutionLog> dependentLogs) {
+  public static DefaultAggregatedExecutionLog fullLogMode(final String functionName, final ComputationTargetSpecification target,
+      final ExecutionLog rootLog, final Collection<AggregatedExecutionLog> dependentLogs) {
     ArgumentChecker.notNull(functionName, "functionName");
     ArgumentChecker.notNull(target, "target");
     ArgumentChecker.notNull(rootLog, "rootLog");

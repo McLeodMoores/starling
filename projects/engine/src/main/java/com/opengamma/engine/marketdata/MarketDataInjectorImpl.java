@@ -37,7 +37,8 @@ public class MarketDataInjectorImpl implements MarketDataInjector {
     private final Map<ValueRequirement, Object> _valuesByRequirement;
     private final Map<ValueSpecification, Object> _valuesBySpecification;
 
-    private Snapshot(final MarketDataAvailabilityProvider availability, final Map<ValueRequirement, Object> valuesByRequirement, final Map<ValueSpecification, Object> valuesBySpecification) {
+    private Snapshot(final MarketDataAvailabilityProvider availability, final Map<ValueRequirement, Object> valuesByRequirement,
+        final Map<ValueSpecification, Object> valuesBySpecification) {
       _availability = availability;
       _valuesByRequirement = valuesByRequirement;
       _valuesBySpecification = valuesBySpecification;

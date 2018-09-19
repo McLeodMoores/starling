@@ -13,7 +13,8 @@ import com.opengamma.livedata.UserPrincipal;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * A {@link MarketDataProviderResolver} which delegates resolution to an underlying provider, but wraps any resolved provider in a {@link MarketDataProviderResolverWithOverride}.
+ * A {@link MarketDataProviderResolver} which delegates resolution to an underlying provider, but wraps any resolved provider in a
+ * {@link MarketDataProviderResolverWithOverride}.
  */
 public class MarketDataProviderResolverWithOverride implements MarketDataProviderResolver {
 

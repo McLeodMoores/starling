@@ -80,7 +80,8 @@ public class DependencyGraphExplorerImpl implements DependencyGraphExplorer {
     final Set<DependencyNode> visited = new HashSet<>();
     final Map<ValueSpecification, Set<ValueRequirement>> terminals = new HashMap<>();
     final int nodes = terminalOutputSubset(_graph.getTerminalOutputs(), terminalNode, visited, terminals);
-    return new DependencyGraphExplorerImpl(new DependencyGraphImpl(_graph.getCalculationConfigurationName(), Collections.singleton(terminalNode), nodes, terminals));
+    return new DependencyGraphExplorerImpl(new DependencyGraphImpl(_graph.getCalculationConfigurationName(),
+        Collections.singleton(terminalNode), nodes, terminals));
   }
 
   @Override

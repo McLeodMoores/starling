@@ -33,10 +33,12 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * A source of market data that aggregates data from multiple underlying {@link MarketDataProvider}s. Each request for market data is handled by one of the underlying providers. When a subscription is
- * made the underlying providers are checked in priority order until one of them is able to provide the data.
+ * A source of market data that aggregates data from multiple underlying {@link MarketDataProvider}s. Each request for market data is handled by
+ * one of the underlying providers. When a subscription is made the underlying providers are checked in priority order until one of them is able
+ * to provide the data.
  * <p>
- * All notifications of market data updates and subscription changes are delivered to all listeners. Therefore instances of this class shouldn't be shared between multiple view processes.
+ * All notifications of market data updates and subscription changes are delivered to all listeners. Therefore instances of this class shouldn't
+ * be shared between multiple view processes.
  */
 public class SnapshottingViewExecutionDataProvider extends ViewExecutionDataProvider {
 
@@ -87,7 +89,7 @@ public class SnapshottingViewExecutionDataProvider extends ViewExecutionDataProv
   }
 
   /**
-   * Sets up subscriptions for market data
+   * Sets up subscriptions for market data.
    *
    * @param specifications The market data items, not null
    */
@@ -228,8 +230,8 @@ public class SnapshottingViewExecutionDataProvider extends ViewExecutionDataProv
   }
 
   /**
-   * {@link MarketDataAvailabilityProvider} that checks the underlying providers for availability. If the data is available from any underlying provider then it is available. If it isn't available but
-   * is missing from any of the underlying providers then it is missing. Otherwise it is unavailable.
+   * {@link MarketDataAvailabilityProvider} that checks the underlying providers for availability. If the data is available from any underlying provider
+   * then it is available. If it isn't available but is missing from any of the underlying providers then it is missing. Otherwise it is unavailable.
    */
   private static final class CompositeAvailabilityProvider implements MarketDataAvailabilityProvider {
 

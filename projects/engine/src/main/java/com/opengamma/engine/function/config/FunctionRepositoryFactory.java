@@ -39,8 +39,8 @@ public abstract class FunctionRepositoryFactory implements ChangeProvider {
   /**
    * The set of functions that are always in a constructed repository regardless of the {@link FunctionConfigurationBundle} document used.
    */
-  private static final List<FunctionDefinition> INTRINSIC_FUNCTIONS = ImmutableList.<FunctionDefinition>of(NoOpFunction.INSTANCE, MarketDataAliasingFunction.INSTANCE,
-      StructureManipulationFunction.INSTANCE);
+  private static final List<FunctionDefinition> INTRINSIC_FUNCTIONS = ImmutableList.<FunctionDefinition>of(NoOpFunction.INSTANCE,
+      MarketDataAliasingFunction.INSTANCE, StructureManipulationFunction.INSTANCE);
 
   /**
    * The number of functions that are always in a constructed repository regardless of the {@link FunctionConfigurationBundle} document used. For example:
@@ -53,7 +53,7 @@ public abstract class FunctionRepositoryFactory implements ChangeProvider {
 
   /**
    * Creates a new repository, with functions from the given version timestamp.
-   * 
+   *
    * @param configurationVersion the version timestamp, not null
    * @return the function repository, not null
    */
@@ -61,7 +61,7 @@ public abstract class FunctionRepositoryFactory implements ChangeProvider {
 
   /**
    * Creates a new factory that always returns the same repository.
-   * 
+   *
    * @param staticFunctions the function repository to return, not null
    * @return the repository factory, not null
    */
@@ -86,7 +86,7 @@ public abstract class FunctionRepositoryFactory implements ChangeProvider {
    * Creates a new factory that queries a {@link FunctionConfigurationSource} for function definitions.
    * <p>
    * The source is queried with each call, but if it returns the same document then the same repository instance is returned.
-   * 
+   *
    * @param dynamicFunctions the configuration source, not null
    * @return the repository factory, not null
    */
@@ -100,7 +100,7 @@ public abstract class FunctionRepositoryFactory implements ChangeProvider {
       @Override
       public synchronized FunctionRepository constructRepository(final Instant configurationVersion) {
         final FunctionConfigurationBundle repositoryConfiguration = dynamicFunctions.getFunctionConfiguration(configurationVersion);
-        if ((_previousConfiguration == null) || !_previousConfiguration.equals(repositoryConfiguration)) {
+        if (_previousConfiguration == null || !_previousConfiguration.equals(repositoryConfiguration)) {
           _previousConfiguration = repositoryConfiguration;
           _previousRepository = constructRepository(repositoryConfiguration);
         }
@@ -117,7 +117,7 @@ public abstract class FunctionRepositoryFactory implements ChangeProvider {
 
   /**
    * Constructs a repository from the configuration.
-   * 
+   *
    * @param configuration the configuration, not null
    * @return the repository, not null
    */
@@ -139,14 +139,15 @@ public abstract class FunctionRepositoryFactory implements ChangeProvider {
 
   private static InMemoryFunctionRepository constructRepositoryWithIntrinsicFunctions() {
     final InMemoryFunctionRepository repository = new InMemoryFunctionRepository();
-    for (FunctionDefinition intrinsicFunction : INTRINSIC_FUNCTIONS) {
+    for (final FunctionDefinition intrinsicFunction : INTRINSIC_FUNCTIONS) {
       repository.addFunction(intrinsicFunction);
     }
     return repository;
   }
 
   //-------------------------------------------------------------------------
-  protected static void addParameterizedFunctionConfiguration(final InMemoryFunctionRepository repository, final ParameterizedFunctionConfiguration functionConfig) {
+  protected static void addParameterizedFunctionConfiguration(final InMemoryFunctionRepository repository,
+      final ParameterizedFunctionConfiguration functionConfig) {
     try {
       final Class<?> definitionClass = ReflectionUtils.loadClass(functionConfig.getDefinitionClassName());
       final AbstractFunction functionDefinition = createParameterizedFunction(definitionClass, functionConfig.getParameter());
@@ -179,7 +180,7 @@ public abstract class FunctionRepositoryFactory implements ChangeProvider {
               } else if (parameters[i].isAssignableFrom(List.class)) {
                 args[i] = parameterList.subList(i, used);
               } else if (parameters[i].isAssignableFrom(Set.class)) {
-                args[i] = new HashSet<String>(parameterList.subList(i, used));
+                args[i] = new HashSet<>(parameterList.subList(i, used));
               } else {
                 continue constructors;
               }

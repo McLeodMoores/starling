@@ -63,7 +63,8 @@ public class RateLimitingMergingViewProcessListenerTest {
     final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
     try {
       final TestViewResultListener testListener = new TestViewResultListener();
-      final RateLimitingMergingViewProcessListener mergingListener = new RateLimitingMergingViewProcessListener(testListener, mock(EngineResourceManagerImpl.class), executor);
+      final RateLimitingMergingViewProcessListener mergingListener =
+          new RateLimitingMergingViewProcessListener(testListener, mock(EngineResourceManagerImpl.class), executor);
 
       // OK, it doesn't really test the 'synchronous' bit, but it at least checks that no merging has happened.
       addCompile(mergingListener);
@@ -98,7 +99,8 @@ public class RateLimitingMergingViewProcessListenerTest {
     final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
     try {
       final TestViewResultListener testListener = new TestViewResultListener();
-      final RateLimitingMergingViewProcessListener mergingListener = new RateLimitingMergingViewProcessListener(testListener, mock(EngineResourceManagerImpl.class), executor);
+      final RateLimitingMergingViewProcessListener mergingListener =
+          new RateLimitingMergingViewProcessListener(testListener, mock(EngineResourceManagerImpl.class), executor);
       mergingListener.setMinimumUpdatePeriodMillis(500);
 
       addResults(mergingListener, 1000);
@@ -117,7 +119,8 @@ public class RateLimitingMergingViewProcessListenerTest {
     final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
     try {
       final TestViewResultListener testListener = new TestViewResultListener();
-      final RateLimitingMergingViewProcessListener mergingListener = new RateLimitingMergingViewProcessListener(testListener, mock(EngineResourceManagerImpl.class), executor);
+      final RateLimitingMergingViewProcessListener mergingListener =
+          new RateLimitingMergingViewProcessListener(testListener, mock(EngineResourceManagerImpl.class), executor);
 
       assertCorrectUpdateRate(mergingListener, testListener, 100);
       assertCorrectUpdateRate(mergingListener, testListener, 400);
@@ -134,7 +137,8 @@ public class RateLimitingMergingViewProcessListenerTest {
     final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
     try {
       final TestViewResultListener testListener = new TestViewResultListener();
-      final RateLimitingMergingViewProcessListener mergingListener = new RateLimitingMergingViewProcessListener(testListener, mock(EngineResourceManagerImpl.class), executor);
+      final RateLimitingMergingViewProcessListener mergingListener =
+          new RateLimitingMergingViewProcessListener(testListener, mock(EngineResourceManagerImpl.class), executor);
 
       mergingListener.setPaused(true);
       testListener.assertNoCalls();
@@ -168,7 +172,7 @@ public class RateLimitingMergingViewProcessListenerTest {
       testListener.assertViewDefinitionCompiled(Timeout.standardTimeoutMillis(), preCompilation);
       final ViewDeltaResultModel mergedDelta = testListener.getCycleCompleted(Timeout.standardTimeoutMillis()).getDeltaResult();
       assertEquals(2, mergedDelta.getAllResults().size());
-      final Set<Pair<String, Integer>> results = new HashSet<Pair<String, Integer>>();
+      final Set<Pair<String, Integer>> results = new HashSet<>();
       for (final ViewResultEntry deltaItem : mergedDelta.getAllResults()) {
         results.add(Pairs.of(deltaItem.getComputedValue().getSpecification().getValueName(), (Integer) deltaItem.getComputedValue().getValue()));
       }
@@ -192,10 +196,12 @@ public class RateLimitingMergingViewProcessListenerTest {
 
   private ComputedValueResult getComputedValueResult(final String valueName, final Object value) {
     final ComputationTargetSpecification target = ComputationTargetSpecification.of(UniqueId.of("Scheme", valueName));
-    return new ComputedValueResult(new ValueSpecification(valueName, target, ValueProperties.with(ValuePropertyNames.FUNCTION, "FunctionId").get()), value, AggregatedExecutionLog.EMPTY);
+    return new ComputedValueResult(new ValueSpecification(valueName, target,
+        ValueProperties.with(ValuePropertyNames.FUNCTION, "FunctionId").get()), value, AggregatedExecutionLog.EMPTY);
   }
 
-  private void assertCorrectUpdateRate(final RateLimitingMergingViewProcessListener mergingListener, final TestViewResultListener testListener, final int period) throws InterruptedException {
+  private void assertCorrectUpdateRate(final RateLimitingMergingViewProcessListener mergingListener, final TestViewResultListener testListener,
+      final int period) throws InterruptedException {
     mergingListener.setMinimumUpdatePeriodMillis(period);
     assertUpdateRate(mergingListener, testListener, period);
 
@@ -215,7 +221,8 @@ public class RateLimitingMergingViewProcessListenerTest {
     assertUpdateRate(mergingListener, testListener, period);
   }
 
-  private void assertUpdateRate(final RateLimitingMergingViewProcessListener mergingListener, final TestViewResultListener testListener, final int period) throws InterruptedException {
+  private void assertUpdateRate(final RateLimitingMergingViewProcessListener mergingListener, final TestViewResultListener testListener,
+      final int period) throws InterruptedException {
     testListener.resetShortestDelay();
     for (int i = 0; i < 100; i++) {
       Thread.sleep(10);
@@ -225,8 +232,9 @@ public class RateLimitingMergingViewProcessListenerTest {
     Thread.sleep(2 * period);
     // Check that the results didn't come any faster than we asked for (give or take 10%), and not too slowly (allow up to twice)
     assertTrue("Expecting results no faster than " + period + " ms, but got a result after " + testListener.getShortestDelay() + " ms",
-        testListener.getShortestDelay() >= (period - period / 10));
-    assertTrue("Expecting results no slower than " + (period * 2) + " ms, but got a result after " + testListener.getShortestDelay() + " ms", testListener.getShortestDelay() <= (period * 2));
+        testListener.getShortestDelay() >= period - period / 10);
+    assertTrue("Expecting results no slower than " + period * 2 + " ms, but got a result after " + testListener.getShortestDelay()
+    + " ms", testListener.getShortestDelay() <= period * 2);
     LOGGER.info("Size = {}", testListener.getQueueSize());
     testListener.clear();
   }

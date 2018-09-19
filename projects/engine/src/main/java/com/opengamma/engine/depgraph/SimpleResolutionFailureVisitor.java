@@ -67,8 +67,9 @@ public class SimpleResolutionFailureVisitor extends ResolutionFailureVisitor<Lis
   }
 
   @Override
-  protected List<ResolutionFailure> visitFunction(final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput, final Map<ValueSpecification, ValueRequirement> satisfied,
-      final Set<ResolutionFailure> unsatisfied, final Set<ResolutionFailure> unsatisfiedAdditional) {
+  protected List<ResolutionFailure> visitFunction(final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput,
+      final Map<ValueSpecification, ValueRequirement> satisfied, final Set<ResolutionFailure> unsatisfied,
+      final Set<ResolutionFailure> unsatisfiedAdditional) {
     return ImmutableList.copyOf(Iterables.concat(unsatisfied, unsatisfiedAdditional));
   }
 
@@ -98,7 +99,8 @@ public class SimpleResolutionFailureVisitor extends ResolutionFailureVisitor<Lis
   }
 
   @Override
-  protected List<ResolutionFailure> visitBlacklistSuppressed(final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput,
+  protected List<ResolutionFailure> visitBlacklistSuppressed(final ValueRequirement valueRequirement, final String function,
+      final ValueSpecification desiredOutput,
       final Map<ValueSpecification, ValueRequirement> requirements) {
     return Collections.emptyList(); //TODO is this correct?
   }

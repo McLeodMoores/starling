@@ -19,8 +19,9 @@ import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.UniqueId;
 
 /**
- * A no-op function that relabels an input as any of the desired outputs. This will be selected during graph construction to handle any mismatches between value specifications the market data provider
- * is capable of recognizing and the value specifications corresponding to the requirements of a function. The will typically mean that a target has become re-labeled - for example the market data is
+ * A no-op function that relabels an input as any of the desired outputs. This will be selected during graph construction to handle any
+ * mismatches between value specifications the market data provider is capable of recognizing and the value specifications corresponding
+ * to the requirements of a function. The will typically mean that a target has become re-labeled - for example the market data is
  * keyed off a {@link UniqueId} that is not easily converted to/from the {@link ExternalIdBundle} for the actual target.
  * <p>
  * This should be present in all function repositories with its preferred identifier.

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.fudgemsg;
@@ -48,29 +48,35 @@ public class FullRequirementResolutionFudgeBuilderTest extends AbstractFudgeBuil
 
   public void testSingleResolution() {
     final FullRequirementResolution resolution = new FullRequirementResolution(requirement());
-    resolution.addResolutions(Collections.singleton(new RequirementResolution(valueSpecification("Test"), function("Test"), Collections.<FullRequirementResolution>emptySet())));
+    resolution.addResolutions(
+        Collections.singleton(new RequirementResolution(valueSpecification("Test"), function("Test"), Collections.<FullRequirementResolution>emptySet())));
     assertEncodeDecodeCycle(FullRequirementResolution.class, resolution);
   }
 
   public void testAmbiguousResolution() {
     final FullRequirementResolution resolution = new FullRequirementResolution(requirement());
-    resolution.addResolutions(Arrays.asList(new RequirementResolution(valueSpecification("A"), function("A"), Collections.<FullRequirementResolution>emptySet()), new RequirementResolution(
-        valueSpecification("B"), function("B"), Collections.<FullRequirementResolution>emptySet())));
+    resolution.addResolutions(
+        Arrays.asList(new RequirementResolution(valueSpecification("A"), function("A"), Collections.<FullRequirementResolution>emptySet()),
+            new RequirementResolution(valueSpecification("B"), function("B"), Collections.<FullRequirementResolution>emptySet())));
     assertEncodeDecodeCycle(FullRequirementResolution.class, resolution);
   }
 
   public void testMultipleResolutions() {
     final FullRequirementResolution resolution = new FullRequirementResolution(requirement());
-    resolution.addResolutions(Collections.singleton(new RequirementResolution(valueSpecification("A"), function("A"), Collections.<FullRequirementResolution>emptySet())));
-    resolution.addResolutions(Collections.singleton(new RequirementResolution(valueSpecification("B"), function("B"), Collections.<FullRequirementResolution>emptySet())));
+    resolution.addResolutions(
+        Collections.singleton(new RequirementResolution(valueSpecification("A"), function("A"), Collections.<FullRequirementResolution>emptySet())));
+    resolution.addResolutions(
+        Collections.singleton(new RequirementResolution(valueSpecification("B"), function("B"), Collections.<FullRequirementResolution>emptySet())));
     assertEncodeDecodeCycle(FullRequirementResolution.class, resolution);
   }
 
   public void testMultipleAmbiguousResolutions() {
     final FullRequirementResolution resolution = new FullRequirementResolution(requirement());
-    resolution.addResolutions(Arrays.asList(new RequirementResolution(valueSpecification("A"), function("A"), Collections.<FullRequirementResolution>emptySet()), new RequirementResolution(
-        valueSpecification("B"), function("B"), Collections.<FullRequirementResolution>emptySet())));
-    resolution.addResolutions(Arrays.asList(new RequirementResolution(valueSpecification("C"), function("C"), Collections.<FullRequirementResolution>emptySet()), null));
+    resolution.addResolutions(
+        Arrays.asList(new RequirementResolution(valueSpecification("A"), function("A"), Collections.<FullRequirementResolution>emptySet()),
+            new RequirementResolution(valueSpecification("B"), function("B"), Collections.<FullRequirementResolution>emptySet())));
+    resolution.addResolutions(
+        Arrays.asList(new RequirementResolution(valueSpecification("C"), function("C"), Collections.<FullRequirementResolution>emptySet()), null));
     assertEncodeDecodeCycle(FullRequirementResolution.class, resolution);
   }
 

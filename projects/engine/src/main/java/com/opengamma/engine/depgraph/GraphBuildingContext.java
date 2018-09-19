@@ -36,7 +36,8 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * Algorithm state. A context object is used by a single job thread. The root context is not used by any builder thread. The synchronization on the collation methods only is therefore sufficient.
+ * Algorithm state. A context object is used by a single job thread. The root context is not used by any builder thread. The synchronization on the
+ * collation methods only is therefore sufficient.
  */
 /* package */final class GraphBuildingContext {
 
@@ -139,7 +140,8 @@ import com.opengamma.util.tuple.Pairs;
    * @param resolvedValue value resolved to
    * @param pump source of the next value
    */
-  public void resolved(final ResolvedValueCallback callback, final ValueRequirement valueRequirement, final ResolvedValue resolvedValue, final ResolutionPump pump) {
+  public void resolved(final ResolvedValueCallback callback, final ValueRequirement valueRequirement, final ResolvedValue resolvedValue,
+      final ResolutionPump pump) {
     LOGGER.debug("Resolved {} to {}", valueRequirement, resolvedValue);
     _stackDepth++;
     // Scheduling failure and resolved callbacks from the run queue is a real headache to debug, so always call them inline
@@ -192,7 +194,8 @@ import com.opengamma.util.tuple.Pairs;
       while (i < l) {
         final ResolveTask task = tasks[i];
         if (dependent == null || !dependent.hasParent(task)) {
-          if (task.isFinished() && !task.wasRecursionDetected() || ObjectUtils.equals(functionExclusion, task.getFunctionExclusion()) && task.hasParentValueRequirements(dependent)) {
+          if (task.isFinished() && !task.wasRecursionDetected()
+              || ObjectUtils.equals(functionExclusion, task.getFunctionExclusion()) && task.hasParentValueRequirements(dependent)) {
             // The task we've found has either already completed, without hitting a recursion constraint. Or
             // the task is identical to the fallback task we'd create naturally. In either case, release everything
             // else and use it.
@@ -232,7 +235,8 @@ import com.opengamma.util.tuple.Pairs;
     }
   }
 
-  public ResolveTask getOrCreateTaskResolving(final ValueRequirement valueRequirement, final ResolveTask parentTask, final Collection<FunctionExclusionGroup> functionExclusion) {
+  public ResolveTask getOrCreateTaskResolving(final ValueRequirement valueRequirement, final ResolveTask parentTask,
+      final Collection<FunctionExclusionGroup> functionExclusion) {
     final ResolveTask newTask = new ResolveTask(valueRequirement, parentTask, functionExclusion);
     do {
       ResolveTask task;
@@ -525,12 +529,12 @@ import com.opengamma.util.tuple.Pairs;
    */
   public ValueSpecification simplifyType(final ValueSpecification valueSpec) {
     final ComputationTargetSpecification oldTargetSpec = valueSpec.getTargetSpecification();
-    final ComputationTargetSpecification newTargetSpec = ComputationTargetResolverUtils.simplifyType(oldTargetSpec, getCompilationContext().getComputationTargetResolver());
+    final ComputationTargetSpecification newTargetSpec =
+        ComputationTargetResolverUtils.simplifyType(oldTargetSpec, getCompilationContext().getComputationTargetResolver());
     if (newTargetSpec == oldTargetSpec) {
       return MemoryUtils.instance(valueSpec);
-    } else {
-      return MemoryUtils.instance(new ValueSpecification(valueSpec.getValueName(), newTargetSpec, valueSpec.getProperties()));
     }
+    return MemoryUtils.instance(new ValueSpecification(valueSpec.getValueName(), newTargetSpec, valueSpec.getProperties()));
   }
 
   /**
@@ -565,12 +569,12 @@ import com.opengamma.util.tuple.Pairs;
    */
   public ValueRequirement simplifyType(final ValueRequirement valueReq) {
     final ComputationTargetReference oldTargetRef = valueReq.getTargetReference();
-    final ComputationTargetReference newTargetRef = ComputationTargetResolverUtils.simplifyType(oldTargetRef, getCompilationContext().getComputationTargetResolver());
+    final ComputationTargetReference newTargetRef =
+        ComputationTargetResolverUtils.simplifyType(oldTargetRef, getCompilationContext().getComputationTargetResolver());
     if (newTargetRef == oldTargetRef) {
       return valueReq;
-    } else {
-      return MemoryUtils.instance(new ValueRequirement(valueReq.getValueName(), newTargetRef, valueReq.getConstraints()));
     }
+    return MemoryUtils.instance(new ValueRequirement(valueReq.getValueName(), newTargetRef, valueReq.getConstraints()));
   }
 
   // Failure reporting
@@ -578,49 +582,44 @@ import com.opengamma.util.tuple.Pairs;
   public ResolutionFailure recursiveRequirement(final ValueRequirement valueRequirement) {
     if (getBuilder().isDisableFailureReporting()) {
       return NullResolutionFailure.INSTANCE;
-    } else {
-      return ResolutionFailureImpl.recursiveRequirement(valueRequirement);
     }
+    return ResolutionFailureImpl.recursiveRequirement(valueRequirement);
   }
 
-  public ResolutionFailure functionApplication(final ValueRequirement valueRequirement, final ParameterizedFunction function, final ValueSpecification outputSpecification) {
+  public ResolutionFailure functionApplication(final ValueRequirement valueRequirement, final ParameterizedFunction function,
+      final ValueSpecification outputSpecification) {
     if (getBuilder().isDisableFailureReporting()) {
       return NullResolutionFailure.INSTANCE;
-    } else {
-      return ResolutionFailureImpl.functionApplication(valueRequirement, function, outputSpecification);
     }
+    return ResolutionFailureImpl.functionApplication(valueRequirement, function, outputSpecification);
   }
 
   public ResolutionFailure noFunctions(final ValueRequirement valueRequirement) {
     if (getBuilder().isDisableFailureReporting()) {
       return NullResolutionFailure.INSTANCE;
-    } else {
-      return ResolutionFailureImpl.noFunctions(valueRequirement);
     }
+    return ResolutionFailureImpl.noFunctions(valueRequirement);
   }
 
   public ResolutionFailure couldNotResolve(final ValueRequirement valueRequirement) {
     if (getBuilder().isDisableFailureReporting()) {
       return NullResolutionFailure.INSTANCE;
-    } else {
-      return ResolutionFailureImpl.couldNotResolve(valueRequirement);
     }
+    return ResolutionFailureImpl.couldNotResolve(valueRequirement);
   }
 
   public ResolutionFailure unsatisfied(final ValueRequirement valueRequirement) {
     if (getBuilder().isDisableFailureReporting()) {
       return NullResolutionFailure.INSTANCE;
-    } else {
-      return ResolutionFailureImpl.unsatisfied(valueRequirement);
     }
+    return ResolutionFailureImpl.unsatisfied(valueRequirement);
   }
 
   public ResolutionFailure marketDataMissing(final ValueRequirement valueRequirement) {
     if (getBuilder().isDisableFailureReporting()) {
       return NullResolutionFailure.INSTANCE;
-    } else {
-      return ResolutionFailureImpl.marketDataMissing(valueRequirement);
     }
+    return ResolutionFailureImpl.marketDataMissing(valueRequirement);
   }
 
   // Collation

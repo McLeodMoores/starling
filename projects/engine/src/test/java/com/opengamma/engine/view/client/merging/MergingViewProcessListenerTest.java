@@ -20,7 +20,6 @@ import org.threeten.bp.Instant;
 import com.google.common.base.Function;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.engine.ComputationTargetSpecification;
-import com.opengamma.engine.resource.EngineResource;
 import com.opengamma.engine.resource.EngineResourceManagerImpl;
 import com.opengamma.engine.resource.EngineResourceManagerInternal;
 import com.opengamma.engine.test.TestViewResultListener;
@@ -69,7 +68,7 @@ public class MergingViewProcessListenerTest {
 
   public void testPassthroughFlag() {
     final ViewResultListener underlying = Mockito.mock(ViewResultListener.class);
-    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<EngineResource>();
+    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<>();
     final MergingViewProcessListener listener = new MergingViewProcessListener(underlying, cycleManager);
     // Default is pass-through
     assertTrue(listener.isPassThrough());
@@ -81,7 +80,7 @@ public class MergingViewProcessListenerTest {
 
   public void testCycleRetainedFlag() {
     final ViewResultListener underlying = Mockito.mock(ViewResultListener.class);
-    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<EngineResource>();
+    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<>();
     final MergingViewProcessListener listener = new MergingViewProcessListener(underlying, cycleManager);
     // Default is off
     assertFalse(listener.isLatestResultCycleRetained());
@@ -93,7 +92,7 @@ public class MergingViewProcessListenerTest {
 
   public void testGetUser() {
     final ViewResultListener underlying = Mockito.mock(ViewResultListener.class);
-    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<EngineResource>();
+    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<>();
     final MergingViewProcessListener listener = new MergingViewProcessListener(underlying, cycleManager);
     final UserPrincipal user = Mockito.mock(UserPrincipal.class);
     Mockito.when(underlying.getUser()).thenReturn(user);
@@ -102,7 +101,7 @@ public class MergingViewProcessListenerTest {
 
   public void testViewDefinitionCompiled_passThrough() {
     final ViewResultListener underlying = Mockito.mock(ViewResultListener.class);
-    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<EngineResource>();
+    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<>();
     final MergingViewProcessListener listener = new MergingViewProcessListener(underlying, cycleManager);
     assertEquals(listener.getLastUpdateTimeMillis(), 0L);
     final CompiledViewDefinition compiledViewDefinition = Mockito.mock(CompiledViewDefinition.class);
@@ -114,7 +113,7 @@ public class MergingViewProcessListenerTest {
 
   public void testViewDefinitionCompiled_queued() {
     final ViewResultListener underlying = Mockito.mock(ViewResultListener.class);
-    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<EngineResource>();
+    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<>();
     final MergingViewProcessListener listener = new MergingViewProcessListener(underlying, cycleManager);
     assertEquals(listener.getLastUpdateTimeMillis(), 0L);
     listener.setPassThrough(false);
@@ -129,7 +128,7 @@ public class MergingViewProcessListenerTest {
 
   public void testViewDefinitionFailed_passThrough() {
     final ViewResultListener underlying = Mockito.mock(ViewResultListener.class);
-    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<EngineResource>();
+    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<>();
     final MergingViewProcessListener listener = new MergingViewProcessListener(underlying, cycleManager);
     assertEquals(listener.getLastUpdateTimeMillis(), 0L);
     final Instant now = now();
@@ -142,7 +141,7 @@ public class MergingViewProcessListenerTest {
 
   public void testViewDefinitionFailed_queued() {
     final ViewResultListener underlying = Mockito.mock(ViewResultListener.class);
-    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<EngineResource>();
+    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<>();
     final MergingViewProcessListener listener = new MergingViewProcessListener(underlying, cycleManager);
     assertEquals(listener.getLastUpdateTimeMillis(), 0L);
     listener.setPassThrough(false);
@@ -158,7 +157,7 @@ public class MergingViewProcessListenerTest {
 
   public void testCycleStarted_passThrough() {
     final ViewResultListener underlying = Mockito.mock(ViewResultListener.class);
-    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<EngineResource>();
+    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<>();
     final MergingViewProcessListener listener = new MergingViewProcessListener(underlying, cycleManager);
     assertEquals(listener.getLastUpdateTimeMillis(), 0L);
     final ViewCycleMetadata viewCycleMetadata = Mockito.mock(ViewCycleMetadata.class);
@@ -170,7 +169,7 @@ public class MergingViewProcessListenerTest {
 
   public void testCycleStarted_queued() {
     final ViewResultListener underlying = Mockito.mock(ViewResultListener.class);
-    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<EngineResource>();
+    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<>();
     final MergingViewProcessListener listener = new MergingViewProcessListener(underlying, cycleManager);
     assertEquals(listener.getLastUpdateTimeMillis(), 0L);
     listener.setPassThrough(false);
@@ -185,7 +184,7 @@ public class MergingViewProcessListenerTest {
 
   public void testCycleCompleted_passThrough() {
     final ViewResultListener underlying = Mockito.mock(ViewResultListener.class);
-    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<EngineResource>();
+    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<>();
     final MergingViewProcessListener listener = new MergingViewProcessListener(underlying, cycleManager);
     assertEquals(listener.getLastUpdateTimeMillis(), 0L);
     final ViewComputationResultModel fullResult = Mockito.mock(ViewComputationResultModel.class);
@@ -198,7 +197,7 @@ public class MergingViewProcessListenerTest {
 
   public void testCycleCompleted_queued() {
     final ViewResultListener underlying = Mockito.mock(ViewResultListener.class);
-    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<EngineResource>();
+    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<>();
     final MergingViewProcessListener listener = new MergingViewProcessListener(underlying, cycleManager);
     assertEquals(listener.getLastUpdateTimeMillis(), 0L);
     listener.setPassThrough(false);
@@ -214,7 +213,7 @@ public class MergingViewProcessListenerTest {
 
   public void testCycleFragmentCompleted_passThrough() {
     final ViewResultListener underlying = Mockito.mock(ViewResultListener.class);
-    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<EngineResource>();
+    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<>();
     final MergingViewProcessListener listener = new MergingViewProcessListener(underlying, cycleManager);
     assertEquals(listener.getLastUpdateTimeMillis(), 0L);
     final ViewComputationResultModel fullFragment = Mockito.mock(ViewComputationResultModel.class);
@@ -227,7 +226,7 @@ public class MergingViewProcessListenerTest {
 
   public void testCycleFragmentCompleted_queued() {
     final ViewResultListener underlying = Mockito.mock(ViewResultListener.class);
-    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<EngineResource>();
+    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<>();
     final MergingViewProcessListener listener = new MergingViewProcessListener(underlying, cycleManager);
     assertEquals(listener.getLastUpdateTimeMillis(), 0L);
     listener.setPassThrough(false);
@@ -243,7 +242,7 @@ public class MergingViewProcessListenerTest {
 
   public void testCycleExecutionFailed_passThrough() {
     final ViewResultListener underlying = Mockito.mock(ViewResultListener.class);
-    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<EngineResource>();
+    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<>();
     final MergingViewProcessListener listener = new MergingViewProcessListener(underlying, cycleManager);
     assertEquals(listener.getLastUpdateTimeMillis(), 0L);
     final ViewCycleExecutionOptions viewCycleExecutionOptions = Mockito.mock(ViewCycleExecutionOptions.class);
@@ -256,7 +255,7 @@ public class MergingViewProcessListenerTest {
 
   public void testCycleExecutionFailed_queued() {
     final ViewResultListener underlying = Mockito.mock(ViewResultListener.class);
-    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<EngineResource>();
+    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<>();
     final MergingViewProcessListener listener = new MergingViewProcessListener(underlying, cycleManager);
     assertEquals(listener.getLastUpdateTimeMillis(), 0L);
     listener.setPassThrough(false);
@@ -272,7 +271,7 @@ public class MergingViewProcessListenerTest {
 
   public void testProcessCompleted_passThrough() {
     final ViewResultListener underlying = Mockito.mock(ViewResultListener.class);
-    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<EngineResource>();
+    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<>();
     final MergingViewProcessListener listener = new MergingViewProcessListener(underlying, cycleManager);
     assertEquals(listener.getLastUpdateTimeMillis(), 0L);
     listener.processCompleted();
@@ -283,7 +282,7 @@ public class MergingViewProcessListenerTest {
 
   public void testProcessCompleted_queued() {
     final ViewResultListener underlying = Mockito.mock(ViewResultListener.class);
-    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<EngineResource>();
+    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<>();
     final MergingViewProcessListener listener = new MergingViewProcessListener(underlying, cycleManager);
     assertEquals(listener.getLastUpdateTimeMillis(), 0L);
     listener.setPassThrough(false);
@@ -297,7 +296,7 @@ public class MergingViewProcessListenerTest {
 
   public void testProcessTerminated_passThrough() {
     final ViewResultListener underlying = Mockito.mock(ViewResultListener.class);
-    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<EngineResource>();
+    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<>();
     final MergingViewProcessListener listener = new MergingViewProcessListener(underlying, cycleManager);
     assertEquals(listener.getLastUpdateTimeMillis(), 0L);
     listener.processTerminated(false);
@@ -308,7 +307,7 @@ public class MergingViewProcessListenerTest {
 
   public void testProcessTerminated_queued() {
     final ViewResultListener underlying = Mockito.mock(ViewResultListener.class);
-    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<EngineResource>();
+    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<>();
     final MergingViewProcessListener listener = new MergingViewProcessListener(underlying, cycleManager);
     assertEquals(listener.getLastUpdateTimeMillis(), 0L);
     listener.setPassThrough(false);
@@ -322,7 +321,7 @@ public class MergingViewProcessListenerTest {
 
   public void testClientShutdown_passThrough() {
     final ViewResultListener underlying = Mockito.mock(ViewResultListener.class);
-    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<EngineResource>();
+    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<>();
     final MergingViewProcessListener listener = new MergingViewProcessListener(underlying, cycleManager);
     assertEquals(listener.getLastUpdateTimeMillis(), 0L);
     final Exception e = new OpenGammaRuntimeException("Test");
@@ -334,7 +333,7 @@ public class MergingViewProcessListenerTest {
 
   public void testClientShutdown_queued() {
     final ViewResultListener underlying = Mockito.mock(ViewResultListener.class);
-    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<EngineResource>();
+    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<>();
     final MergingViewProcessListener listener = new MergingViewProcessListener(underlying, cycleManager);
     assertEquals(listener.getLastUpdateTimeMillis(), 0L);
     listener.setPassThrough(false);
@@ -348,8 +347,8 @@ public class MergingViewProcessListenerTest {
   }
 
   private ComputedValueResult result(final int n, final String v) {
-    return new ComputedValueResult(new ValueSpecification(Integer.toString(n), ComputationTargetSpecification.NULL, ValueProperties.with(ValuePropertyNames.FUNCTION, "Test").get()), v,
-        AggregatedExecutionLog.EMPTY);
+    return new ComputedValueResult(new ValueSpecification(Integer.toString(n), ComputationTargetSpecification.NULL,
+        ValueProperties.with(ValuePropertyNames.FUNCTION, "Test").get()), v, AggregatedExecutionLog.EMPTY);
   }
 
   private ViewComputationResultModel fullFragment(final int n, final String v) {
@@ -390,7 +389,7 @@ public class MergingViewProcessListenerTest {
 
   public void testReset() {
     final ViewResultListener underlying = Mockito.mock(ViewResultListener.class);
-    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<EngineResource>();
+    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<>();
     final MergingViewProcessListener listener = new MergingViewProcessListener(underlying, cycleManager);
     assertEquals(listener.getLastUpdateTimeMillis(), 0L);
     listener.setPassThrough(false);
@@ -404,24 +403,37 @@ public class MergingViewProcessListenerTest {
 
   @SuppressWarnings("unchecked")
   private Function<ViewResultListener, ?>[] events() {
-    return new Function[] {/*0*/new ViewDefinitionCompiledCall(Mockito.mock(CompiledViewDefinition.class), true), /*1*/new CycleStartedCall(Mockito.mock(ViewCycleMetadata.class)),
-    /*2*/new CycleFragmentCompletedCall(fullFragment(0, "A"), deltaFragment(0, "A")), /*3*/new CycleFragmentCompletedCall(fullFragment(1, "A"), deltaFragment(1, "A")),
-    /*4*/new CycleFragmentCompletedCall(fullFragment(2, "A"), deltaFragment(2, "A")), /*5*/new CycleCompletedCall(fullResult("A"), deltaResult("A")),
-    /*6*/new CycleStartedCall(Mockito.mock(ViewCycleMetadata.class)), /*7*/new CycleFragmentCompletedCall(fullFragment(0, "B"), deltaFragment(0, "B")),
-    /*8*/new CycleFragmentCompletedCall(fullFragment(1, "B"), deltaFragment(1, "B")), /*9*/new CycleFragmentCompletedCall(fullFragment(2, "B"), deltaFragment(2, "B")),
-    /*10*/new CycleCompletedCall(fullResult("B"), deltaResult("B")), /*11*/new ViewDefinitionCompiledCall(Mockito.mock(CompiledViewDefinition.class), true),
-    /*12*/new CycleStartedCall(Mockito.mock(ViewCycleMetadata.class)), /*13*/new CycleFragmentCompletedCall(fullFragment(0, "C"), deltaFragment(0, "C")),
-    /*14*/new CycleFragmentCompletedCall(fullFragment(1, "C"), deltaFragment(1, "C")), /*15*/new CycleFragmentCompletedCall(fullFragment(2, "C"), deltaFragment(2, "C")),
-    /*16*/new CycleCompletedCall(fullResult("C"), deltaResult("C")), /*17*/new CycleStartedCall(Mockito.mock(ViewCycleMetadata.class)),
-    /*18*/new CycleFragmentCompletedCall(fullFragment(0, "D"), deltaFragment(0, "D")),
-    /*19*/new CycleExecutionFailedCall(Mockito.mock(ViewCycleExecutionOptions.class), new OpenGammaRuntimeException("Test")),
-    /*20*/new ViewDefinitionCompilationFailedCall(now(), new OpenGammaRuntimeException("Test")),
-    /*21*/new ViewDefinitionCompilationFailedCall(now(), new OpenGammaRuntimeException("Test")),
-    /*22*/new ViewDefinitionCompilationFailedCall(now(), new OpenGammaRuntimeException("Test")),
-    /*23*/new ViewDefinitionCompilationFailedCall(now(), new OpenGammaRuntimeException("Test")),
-    /*24*/new ViewDefinitionCompiledCall(Mockito.mock(CompiledViewDefinition.class), true), /*25*/new CycleStartedCall(Mockito.mock(ViewCycleMetadata.class)),
-    /*26*/new CycleFragmentCompletedCall(fullFragment(0, "E"), deltaFragment(0, "E")), /*27*/new CycleFragmentCompletedCall(fullFragment(1, "E"), deltaFragment(1, "E")),
-    /*28*/new CycleFragmentCompletedCall(fullFragment(2, "E"), deltaFragment(2, "E")), /*29*/new CycleCompletedCall(fullResult("E"), deltaResult("E")), /*30*/new ProcessCompletedCall() };
+    return new Function[] {/*0*/new ViewDefinitionCompiledCall(Mockito.mock(CompiledViewDefinition.class), true),
+        /*1*/new CycleStartedCall(Mockito.mock(ViewCycleMetadata.class)),
+        /*2*/new CycleFragmentCompletedCall(fullFragment(0, "A"), deltaFragment(0, "A")),
+        /*3*/new CycleFragmentCompletedCall(fullFragment(1, "A"), deltaFragment(1, "A")),
+        /*4*/new CycleFragmentCompletedCall(fullFragment(2, "A"), deltaFragment(2, "A")),
+        /*5*/new CycleCompletedCall(fullResult("A"), deltaResult("A")),
+        /*6*/new CycleStartedCall(Mockito.mock(ViewCycleMetadata.class)),
+        /*7*/new CycleFragmentCompletedCall(fullFragment(0, "B"), deltaFragment(0, "B")),
+        /*8*/new CycleFragmentCompletedCall(fullFragment(1, "B"), deltaFragment(1, "B")),
+        /*9*/new CycleFragmentCompletedCall(fullFragment(2, "B"), deltaFragment(2, "B")),
+        /*10*/new CycleCompletedCall(fullResult("B"), deltaResult("B")),
+        /*11*/new ViewDefinitionCompiledCall(Mockito.mock(CompiledViewDefinition.class), true),
+        /*12*/new CycleStartedCall(Mockito.mock(ViewCycleMetadata.class)),
+        /*13*/new CycleFragmentCompletedCall(fullFragment(0, "C"), deltaFragment(0, "C")),
+        /*14*/new CycleFragmentCompletedCall(fullFragment(1, "C"), deltaFragment(1, "C")),
+        /*15*/new CycleFragmentCompletedCall(fullFragment(2, "C"), deltaFragment(2, "C")),
+        /*16*/new CycleCompletedCall(fullResult("C"), deltaResult("C")),
+        /*17*/new CycleStartedCall(Mockito.mock(ViewCycleMetadata.class)),
+        /*18*/new CycleFragmentCompletedCall(fullFragment(0, "D"), deltaFragment(0, "D")),
+        /*19*/new CycleExecutionFailedCall(Mockito.mock(ViewCycleExecutionOptions.class), new OpenGammaRuntimeException("Test")),
+        /*20*/new ViewDefinitionCompilationFailedCall(now(), new OpenGammaRuntimeException("Test")),
+        /*21*/new ViewDefinitionCompilationFailedCall(now(), new OpenGammaRuntimeException("Test")),
+        /*22*/new ViewDefinitionCompilationFailedCall(now(), new OpenGammaRuntimeException("Test")),
+        /*23*/new ViewDefinitionCompilationFailedCall(now(), new OpenGammaRuntimeException("Test")),
+        /*24*/new ViewDefinitionCompiledCall(Mockito.mock(CompiledViewDefinition.class), true),
+        /*25*/new CycleStartedCall(Mockito.mock(ViewCycleMetadata.class)),
+        /*26*/new CycleFragmentCompletedCall(fullFragment(0, "E"), deltaFragment(0, "E")),
+        /*27*/new CycleFragmentCompletedCall(fullFragment(1, "E"), deltaFragment(1, "E")),
+        /*28*/new CycleFragmentCompletedCall(fullFragment(2, "E"), deltaFragment(2, "E")),
+        /*29*/new CycleCompletedCall(fullResult("E"), deltaResult("E")),
+        /*30*/new ProcessCompletedCall() };
   }
 
   private void testCalls(final MergingViewProcessListener listener, final Function<ViewResultListener, ?>[] calls, final int start, final int end) {
@@ -435,7 +447,7 @@ public class MergingViewProcessListenerTest {
 
   public void testMerge1() throws InterruptedException {
     final TestViewResultListener underlying = new TestViewResultListener();
-    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<EngineResource>();
+    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<>();
     final MergingViewProcessListener listener = new MergingViewProcessListener(underlying, cycleManager);
     final Function<ViewResultListener, ?>[] events = events();
     // Fragments from first cycle merged, partial data from second cycle available
@@ -458,7 +470,7 @@ public class MergingViewProcessListenerTest {
 
   public void testMerge2() throws InterruptedException {
     final TestViewResultListener underlying = new TestViewResultListener();
-    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<EngineResource>();
+    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<>();
     final MergingViewProcessListener listener = new MergingViewProcessListener(underlying, cycleManager);
     final Function<ViewResultListener, ?>[] events = events();
     // First cycle discarded when second completes
@@ -478,7 +490,7 @@ public class MergingViewProcessListenerTest {
 
   public void testMerge3() throws InterruptedException {
     final TestViewResultListener underlying = new TestViewResultListener();
-    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<EngineResource>();
+    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<>();
     final MergingViewProcessListener listener = new MergingViewProcessListener(underlying, cycleManager);
     final Function<ViewResultListener, ?>[] events = events();
     // Full result from the first compilation, partial data from the second compilation
@@ -502,7 +514,7 @@ public class MergingViewProcessListenerTest {
 
   public void testMerge4() throws InterruptedException {
     final TestViewResultListener underlying = new TestViewResultListener();
-    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<EngineResource>();
+    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<>();
     final MergingViewProcessListener listener = new MergingViewProcessListener(underlying, cycleManager);
     final Function<ViewResultListener, ?>[] events = events();
     // Everything discarded except for the final view cycle
@@ -517,7 +529,7 @@ public class MergingViewProcessListenerTest {
 
   public void testMerge5() throws InterruptedException {
     final TestViewResultListener underlying = new TestViewResultListener();
-    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<EngineResource>();
+    final EngineResourceManagerInternal<?> cycleManager = new EngineResourceManagerImpl<>();
     final MergingViewProcessListener listener = new MergingViewProcessListener(underlying, cycleManager);
     final Function<ViewResultListener, ?>[] events = events();
     // Partial execution of fourth cycle

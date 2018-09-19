@@ -23,7 +23,8 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Default implementation of the function resolver.
  * <p>
- * The aim of the resolution is to find functions that are capable of satisfying a requirement. In addition, a priority mechanism is used to return functions in priority order from highest to lowest.
+ * The aim of the resolution is to find functions that are capable of satisfying a requirement. In addition, a priority mechanism is used to
+ * return functions in priority order from highest to lowest.
  * Resolution actually occurs in the {@code CompiledFunctionResolver}. This class creates a {@code DefaultCompiledFunctionResolver} instance.
  * <p>
  * This class is not thread-safe.

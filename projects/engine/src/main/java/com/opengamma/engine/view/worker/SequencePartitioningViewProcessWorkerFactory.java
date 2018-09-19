@@ -11,10 +11,11 @@ import com.opengamma.engine.view.execution.ViewExecutionOptions;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * When the "run as fast as possible" flag is set for a view, the sequence is partitioned into chunks and these farmed to delegate workers allowing concurrent execution.
+ * When the "run as fast as possible" flag is set for a view, the sequence is partitioned into chunks and these farmed to delegate workers allowing
+ * concurrent execution.
  * <p>
- * For example in the case of a historical simulation, requesting an evaluation on each day for a year might run faster overall if we do each month in parallel. Within each of those twelve jobs the
- * successive days allow for delta operations.
+ * For example in the case of a historical simulation, requesting an evaluation on each day for a year might run faster overall if we do each month
+ * in parallel. Within each of those twelve jobs the successive days allow for delta operations.
  */
 public abstract class SequencePartitioningViewProcessWorkerFactory implements ViewProcessWorkerFactory {
 
@@ -30,7 +31,8 @@ public abstract class SequencePartitioningViewProcessWorkerFactory implements Vi
   }
 
   /**
-   * Estimate the saturation level for the execution environment. This is the number of workers that we should run in parallel at any time. If the total number of cycles is known then we should spawn
+   * Estimate the saturation level for the execution environment. This is the number of workers that we should run in parallel at any time.
+   * If the total number of cycles is known then we should spawn
    * this many workers, each with a fair subset of the total cycles.
    *
    * @param context the context as passed to {@link #createWorker}
@@ -38,32 +40,33 @@ public abstract class SequencePartitioningViewProcessWorkerFactory implements Vi
    * @param viewDefinition the view as passed to {@link #createWorker}
    * @return the estimate
    */
-  protected abstract int estimateSaturation(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions, final ViewDefinition viewDefinition);
+  protected abstract int estimateSaturation(ViewProcessWorkerContext context, ViewExecutionOptions executionOptions, ViewDefinition viewDefinition);
 
   /**
-   * Estimate the minimum number of cycles to execute in a worker batch. This should be the smallest number such that running two, or more, workers with subsets of the cycles will be slower overall
-   * than running one with all of them.
+   * Estimate the minimum number of cycles to execute in a worker batch. This should be the smallest number such that running two, or more,
+   * workers with subsets of the cycles will be slower overall than running one with all of them.
    *
    * @param context the context as passed to {@link #createWorker}
    * @param executionOptions the options as passed to {@link #createWorker}
    * @param viewDefinition the view as passed to {@link #createWorker}
    * @return the estimate
    */
-  protected abstract int estimateMinimumCycles(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions, final ViewDefinition viewDefinition);
+  protected abstract int estimateMinimumCycles(ViewProcessWorkerContext context, ViewExecutionOptions executionOptions, ViewDefinition viewDefinition);
 
   /**
-   * Estimate the maximum number of cycles to execute in a worker batch. This should be decided based on a reasonable throughput to have each worker complete within a shortish time so that timeouts
-   * may be used to detect crashed/failed remote workers.
+   * Estimate the maximum number of cycles to execute in a worker batch. This should be decided based on a reasonable throughput to have each
+   * worker complete within a shortish time so that timeouts may be used to detect crashed/failed remote workers.
    *
    * @param context the context as passed to {@link #createWorker}
    * @param executionOptions the options as passed to {@link #createWorker}
    * @param viewDefinition the view as passed to {@link #createWorker}
    * @return the estimate
    */
-  protected abstract int estimateMaximumCycles(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions, final ViewDefinition viewDefinition);
+  protected abstract int estimateMaximumCycles(ViewProcessWorkerContext context, ViewExecutionOptions executionOptions, ViewDefinition viewDefinition);
 
   @Override
-  public ViewProcessWorker createWorker(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions, final ViewDefinition viewDefinition) {
+  public ViewProcessWorker createWorker(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions,
+      final ViewDefinition viewDefinition) {
     if (!executionOptions.getFlags().contains(ViewExecutionFlags.RUN_AS_FAST_AS_POSSIBLE)) {
       return getDelegate().createWorker(context, executionOptions, viewDefinition);
     }

@@ -110,8 +110,8 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
     }
   }
 
-  private DependencyNodeImpl(final DependencyNodeFunction function, final ComputationTargetSpecification target, final ValueSpecification[] outputValues, final ValueSpecification[] inputValues,
-      final DependencyNode[] inputNodes) {
+  private DependencyNodeImpl(final DependencyNodeFunction function, final ComputationTargetSpecification target, final ValueSpecification[] outputValues,
+      final ValueSpecification[] inputValues, final DependencyNode[] inputNodes) {
     _function = function;
     _target = target;
     _outputValues = outputValues;
@@ -197,7 +197,8 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
     return new DependencyNodeImpl(_function, _target, _outputValues, newInputValues, newInputNodes);
   }
 
-  public static DependencyNode replaceInput(final DependencyNode oldNode, final ValueSpecification oldInputValue, final ValueSpecification newInputValue, final DependencyNode newInputNode) {
+  public static DependencyNode replaceInput(final DependencyNode oldNode, final ValueSpecification oldInputValue, final ValueSpecification newInputValue,
+      final DependencyNode newInputNode) {
     if (oldNode instanceof DependencyNodeImpl) {
       return ((DependencyNodeImpl) oldNode).replaceInput(oldInputValue, newInputValue, newInputNode);
     }
@@ -246,8 +247,8 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
     return true;
   }
 
-  public static DependencyNode of(final DependencyNodeFunction function, final ComputationTargetSpecification target, final ValueSpecification[] outputValues, final ValueSpecification[] inputValues,
-      final DependencyNode[] inputNodes) {
+  public static DependencyNode of(final DependencyNodeFunction function, final ComputationTargetSpecification target, final ValueSpecification[] outputValues,
+      final ValueSpecification[] inputValues, final DependencyNode[] inputNodes) {
     ArgumentChecker.notNull(function, "function");
     ArgumentChecker.notNull(target, "target");
     ArgumentChecker.noNulls(outputValues, "outputValues");
@@ -618,7 +619,8 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
 
   @Override
   public String toString() {
-    return "Node" + Integer.toHexString(System.identityHashCode(this)) + "[" + getFunction() + " on " + getTarget() + ", " + _inputValues.length + " input(s), " + _outputValues.length + " output(s)]";
+    return "Node" + Integer.toHexString(System.identityHashCode(this)) + "[" + getFunction() + " on " + getTarget() + ", "
+  + _inputValues.length + " input(s), " + _outputValues.length + " output(s)]";
   }
 
   private void writeObject(final ObjectOutputStream out) throws IOException {

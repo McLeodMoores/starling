@@ -79,7 +79,8 @@ public class RepositoryFactoryTest {
     }
 
     @Override
-    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+        final Set<ValueRequirement> desiredValues) {
       return null;
     }
 
@@ -182,7 +183,8 @@ public class RepositoryFactoryTest {
     final FunctionConfigurationBundle configuration = new FunctionConfigurationBundle();
     configuration.addFunctions(new ParameterizedFunctionConfiguration(MockSingleArgumentFunction.class.getName(), Collections.singleton("foo")));
     configuration.addFunctions(new ParameterizedFunctionConfiguration(MockMultiArgumentFunctionArrayForm.class.getName(), Lists.newArrayList("foo1", "foo2")));
-    configuration.addFunctions(new ParameterizedFunctionConfiguration(MockMultiArgumentFunctionIndividualParameterForm.class.getName(), Lists.newArrayList("bar1", "bar2")));
+    configuration.addFunctions(new ParameterizedFunctionConfiguration(MockMultiArgumentFunctionIndividualParameterForm.class.getName(),
+        Lists.newArrayList("bar1", "bar2")));
     final InMemoryFunctionRepository repo = FunctionRepositoryFactory.constructRepository(configuration);
     assertNotNull(repo);
 

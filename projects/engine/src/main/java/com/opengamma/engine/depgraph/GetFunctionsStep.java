@@ -63,8 +63,9 @@ import com.opengamma.util.tuple.Triple;
   };
 
   /**
-   * Removes any optional flags on constraints. If the constraint is optional and the provider produced no value, then the constraint is removed. If the provider produced values for the constraint,
-   * and an intersection exists, then the intersection is used. Otherwise the maximal value set is used to satisfy the original constraint.
+   * Removes any optional flags on constraints. If the constraint is optional and the provider produced no value, then the constraint is removed.
+   * If the provider produced values for the constraint, and an intersection exists, then the intersection is used. Otherwise the maximal value
+   * set is used to satisfy the original constraint.
    *
    * @param constraints the requested constraints, not null
    * @param properties the provider's value specification properties, not null
@@ -156,7 +157,8 @@ import com.opengamma.util.tuple.Triple;
               properties = ValueProperties.with(ValuePropertyNames.FUNCTION, MarketDataAliasingFunction.UNIQUE_ID).get();
             } else if (!allProperties.isEmpty()) {
               // Requirement made no constraint on function identifier
-              properties = intersectOptional(constraints, marketDataSpec.getProperties()).with(ValuePropertyNames.FUNCTION, MarketDataAliasingFunction.UNIQUE_ID).get();
+              properties =
+                  intersectOptional(constraints, marketDataSpec.getProperties()).with(ValuePropertyNames.FUNCTION, MarketDataAliasingFunction.UNIQUE_ID).get();
             } else {
               // Requirement used a nearly infinite property bundle that omitted a function identifier
               properties = constraints.copy().withAny(ValuePropertyNames.FUNCTION).get();
@@ -197,7 +199,8 @@ import com.opengamma.util.tuple.Triple;
         existing.addCallback(context, new ResolvedValueCallback() {
 
           @Override
-          public void resolved(final GraphBuildingContext context, final ValueRequirement valueRequirement, final ResolvedValue resolvedValue, final ResolutionPump pump) {
+          public void resolved(final GraphBuildingContext context, final ValueRequirement valueRequirement, final ResolvedValue resolvedValue,
+              final ResolutionPump pump) {
             if (pump != null) {
               pump.close(context);
             }
@@ -256,8 +259,8 @@ import com.opengamma.util.tuple.Triple;
    */
   protected static void getFunctions(final ComputationTarget target, final GraphBuildingContext context, final ResolveTask.State state) {
     final ValueRequirement requirement = state.getValueRequirement();
-    final Iterator<Triple<ParameterizedFunction, ValueSpecification, Collection<ValueSpecification>>> itr = context.getFunctionResolver().resolveFunction(requirement.getValueName(), target,
-        requirement.getConstraints());
+    final Iterator<Triple<ParameterizedFunction, ValueSpecification, Collection<ValueSpecification>>> itr =
+        context.getFunctionResolver().resolveFunction(requirement.getValueName(), target, requirement.getConstraints());
     if (itr.hasNext()) {
       LOGGER.debug("Found functions for {}", requirement);
       state.setRunnableTaskState(new ResolvedFunctionStep(state.getTask(), itr), context);

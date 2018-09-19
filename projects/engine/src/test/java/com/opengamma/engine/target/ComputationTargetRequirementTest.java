@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.target;
@@ -53,7 +53,8 @@ public class ComputationTargetRequirementTest {
   }
 
   public void testConstructor_bundle() {
-    final ComputationTargetRequirement requirement = new ComputationTargetRequirement(ComputationTargetType.PRIMITIVE, ExternalIdBundle.of(ExternalId.of("Foo", "1"), ExternalId.of("Bar", "2")));
+    final ComputationTargetRequirement requirement = new ComputationTargetRequirement(ComputationTargetType.PRIMITIVE,
+        ExternalIdBundle.of(ExternalId.of("Foo", "1"), ExternalId.of("Bar", "2")));
     assertEquals(requirement.getType(), ComputationTargetType.PRIMITIVE);
     assertEquals(requirement.getIdentifiers(), ExternalIdBundle.of(ExternalId.of("Foo", "1"), ExternalId.of("Bar", "2")));
   }
@@ -65,7 +66,8 @@ public class ComputationTargetRequirementTest {
 
   @Test(expectedExceptions = {AssertionError.class })
   public void testConstructor_bundle_invalidType_1() {
-    new ComputationTargetRequirement(ComputationTargetType.POSITION.containing(ComputationTargetType.SECURITY), ExternalIdBundle.of(ExternalId.of("Foo", "1"), ExternalId.of("Bar", "2")));
+    new ComputationTargetRequirement(ComputationTargetType.POSITION.containing(ComputationTargetType.SECURITY),
+        ExternalIdBundle.of(ExternalId.of("Foo", "1"), ExternalId.of("Bar", "2")));
   }
 
   @Test(expectedExceptions = {AssertionError.class })

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode;
@@ -19,8 +19,6 @@ import org.mockito.Mockito;
 import org.testng.annotations.Test;
 
 import com.opengamma.engine.ComputationTargetSpecification;
-import com.opengamma.engine.calcnode.CalculationJobItem;
-import com.opengamma.engine.calcnode.RemoteNodeServer;
 import com.opengamma.engine.calcnode.RemoteNodeServer.FunctionBlacklistMaintainerProvider;
 import com.opengamma.engine.calcnode.RemoteNodeServer.FunctionBlacklistMaintainerProviderBean;
 import com.opengamma.engine.calcnode.RemoteNodeServer.FunctionBlacklistQueryProvider;
@@ -52,7 +50,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class RemoteNodeServerTest {
 
-  private final CalculationJobItem JOB_ITEM = new CalculationJobItem("1", new EmptyFunctionParameters(), ComputationTargetSpecification.NULL,
+  private static final CalculationJobItem JOB_ITEM = new CalculationJobItem("1", new EmptyFunctionParameters(), ComputationTargetSpecification.NULL,
       Collections.<ValueSpecification>emptySet(), Collections.<ValueSpecification>emptySet(), ExecutionLogMode.INDICATORS);
 
   // Blacklisting subclasses
@@ -98,8 +96,10 @@ public class RemoteNodeServerTest {
   public void testMultipleFunctionBlacklistMaintainerProvider_full() {
     final FunctionBlacklistMaintainer a = Mockito.mock(FunctionBlacklistMaintainer.class);
     final FunctionBlacklistMaintainer b = Mockito.mock(FunctionBlacklistMaintainer.class);
-    final MultipleFunctionBlacklistMaintainerProvider provider = new MultipleFunctionBlacklistMaintainerProvider(Arrays.<FunctionBlacklistMaintainerProvider>asList(
-        new StaticFunctionBlacklistMaintainerProvider(null), new StaticFunctionBlacklistMaintainerProvider(a), new StaticFunctionBlacklistMaintainerProvider(b)));
+    final MultipleFunctionBlacklistMaintainerProvider provider =
+        new MultipleFunctionBlacklistMaintainerProvider(Arrays.<FunctionBlacklistMaintainerProvider>asList(
+        new StaticFunctionBlacklistMaintainerProvider(null), new StaticFunctionBlacklistMaintainerProvider(a),
+        new StaticFunctionBlacklistMaintainerProvider(b)));
     final FunctionBlacklistMaintainer m = provider.getUpdate("Foo");
     m.failedJobItem(JOB_ITEM);
     Mockito.verify(a).failedJobItem(JOB_ITEM);

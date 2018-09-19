@@ -36,7 +36,8 @@ public final class StaticSequencePartitioningViewProcessWorkerFactory implements
     }
   }
 
-  public static void registerMBeans(final com.opengamma.engine.view.worker.StaticSequencePartitioningViewProcessWorkerFactory factory, final MBeanServer server) throws JMException {
+  public static void registerMBeans(final com.opengamma.engine.view.worker.StaticSequencePartitioningViewProcessWorkerFactory factory,
+      final MBeanServer server) throws JMException {
     new StaticSequencePartitioningViewProcessWorkerFactory(factory).registerMBean(server);
   }
 

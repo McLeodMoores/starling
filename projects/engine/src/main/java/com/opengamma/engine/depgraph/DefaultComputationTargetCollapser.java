@@ -33,7 +33,8 @@ public class DefaultComputationTargetCollapser implements ComputationTargetColla
     }
 
     @Override
-    public ComputationTargetSpecification collapse(final CompiledFunctionDefinition function, final ComputationTargetSpecification a, final ComputationTargetSpecification b) {
+    public ComputationTargetSpecification collapse(final CompiledFunctionDefinition function, final ComputationTargetSpecification a,
+        final ComputationTargetSpecification b) {
       ComputationTargetSpecification result = _first.collapse(function, a, b);
       if (result == null) {
         result = _second.collapse(function, a, b);
@@ -52,7 +53,8 @@ public class DefaultComputationTargetCollapser implements ComputationTargetColla
       });
 
   /**
-   * Creates a new instance with no underlying collapsers. Unless one or more collapser instances are added to it by {@link #addCollapser}, {@link #canApplyTo} will always return false.
+   * Creates a new instance with no underlying collapsers. Unless one or more collapser instances are added to it by {@link #addCollapser},
+   * {@link #canApplyTo} will always return false.
    */
   public DefaultComputationTargetCollapser() {
   }

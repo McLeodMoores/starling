@@ -43,7 +43,7 @@ public final class ViewExecutionCacheKey implements Serializable {
 
   /**
    * Creates a new key based on the view definition and a single market data availability provider (this may be a composite data provider).
-   * 
+   *
    * @param viewDefinition the view definition, not null
    * @param marketDataProvider the market data availability provider, not null
    * @param graphManipulations any selectors that have been applied to the graph which will cause deviation from the normally produced graph, null for none
@@ -51,7 +51,8 @@ public final class ViewExecutionCacheKey implements Serializable {
    */
   public static ViewExecutionCacheKey of(final ViewDefinition viewDefinition, final MarketDataAvailabilityProvider marketDataProvider,
       final MarketDataSelectionGraphManipulator graphManipulations) {
-    return new ViewExecutionCacheKey(viewDefinition.getUniqueId(), marketDataProvider.getAvailabilityHintKey(), getMarketDataSelectorCacheHintKey(graphManipulations));
+    return new ViewExecutionCacheKey(viewDefinition.getUniqueId(), marketDataProvider.getAvailabilityHintKey(),
+        getMarketDataSelectorCacheHintKey(graphManipulations));
   }
 
   @Override

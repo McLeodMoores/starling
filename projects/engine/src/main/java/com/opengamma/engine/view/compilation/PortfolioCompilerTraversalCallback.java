@@ -42,10 +42,12 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * Portfolio tree traversal callback methods that construct value requirements for the specified portfolio's nodes, positions and trades (as per options specified in the result model definition). The
- * value requirements are added to the specified dependency graph builder, possibly triggering the background compilation of dependency graphs for each stage in a portfolio tree while this traversal
- * is still ongoing. The pre-order method for a portfolio node sets up an empty requirements container for that node, which is filled up as its children are traversed (if aggregation is specified in
- * the result model definition), and then added to the dependency graph's list of targets in the post-order method for that portfolio node.
+ * Portfolio tree traversal callback methods that construct value requirements for the specified portfolio's nodes, positions and trades (as per
+ * options specified in the result model definition). The value requirements are added to the specified dependency graph builder, possibly
+ * triggering the background compilation of dependency graphs for each stage in a portfolio tree while this traversal is still ongoing. The
+ * pre-order method for a portfolio node sets up an empty requirements container for that node, which is filled up as its children are traversed
+ * (if aggregation is specified in the result model definition), and then added to the dependency graph's list of targets in the post-order
+ * method for that portfolio node.
  */
 /* package */final class PortfolioCompilerTraversalCallback extends AbstractPortfolioNodeTraversalCallback {
 
@@ -92,8 +94,8 @@ import com.opengamma.util.tuple.Pairs;
   private final boolean _outputTrades;
 
   /**
-   * This map persists gathered information for each portfolio node and position across multiple traversal steps, thus allowing child nodes/positions to insert aggregate requirements into their parent
-   * node.
+   * This map persists gathered information for each portfolio node and position across multiple traversal steps, thus allowing child nodes/positions
+   * to insert aggregate requirements into their parent node.
    */
   private final ConcurrentMap<UniqueId, NodeData> _nodeData = new ConcurrentHashMap<>();
 
@@ -128,8 +130,9 @@ import com.opengamma.util.tuple.Pairs;
   /**
    * Add the specified value requirement to the dep graph builder, triggering graph building by background threads.
    * <p>
-   * If supplied, the _alreadyAdded set member is used to identify anything that has already been added from the specific requirements of a view or as part of invalidating a previous graph.
-   * See the notes in {@link DependencyGraphBuilder} for the hazards of requesting the same value requirement multiple times.
+   * If supplied, the _alreadyAdded set member is used to identify anything that has already been added from the specific requirements
+   * of a view or as part of invalidating a previous graph. See the notes in {@link DependencyGraphBuilder} for the hazards of requesting
+   * the same value requirement multiple times.
    *
    * @param valueRequirement the value requirement to add
    */
@@ -142,8 +145,8 @@ import com.opengamma.util.tuple.Pairs;
   }
 
   /**
-   * Store details of the security link in the resolution cache. The link is assumed to be a record of the link to the object, for example is it held by strong (object id) or weak (external id)
-   * reference.
+   * Store details of the security link in the resolution cache. The link is assumed to be a record of the link to the object, for example
+   * is it held by strong (object id) or weak (external id) reference.
    * <p>
    * Securities are already resolved when the functions see the positions, so the logging target resolver will not capture any uses of the security.
    *
@@ -162,7 +165,8 @@ import com.opengamma.util.tuple.Pairs;
         return;
       }
       if (uid == null) {
-        throw new IllegalArgumentException("Provided a SecurityLink " + link + " where the UniqueId could not be identified. Error in underlying Source/Master.");
+        throw new IllegalArgumentException("Provided a SecurityLink " + link + " where the UniqueId could not be identified. "
+            + "Error in underlying Source/Master.");
       }
       final UniqueId existing = _resolutions.putIfAbsent(MemoryUtils.instance(key), uid);
       assert existing == null || existing.equals(uid);
@@ -175,11 +179,13 @@ import com.opengamma.util.tuple.Pairs;
    * @param position the position to store
    */
   private void store(final Position position) {
-    _resolutions.putIfAbsent(MemoryUtils.instance(new ComputationTargetSpecification(ComputationTargetType.POSITION, position.getUniqueId().toLatest())), position.getUniqueId());
+    _resolutions.putIfAbsent(MemoryUtils.instance(new ComputationTargetSpecification(ComputationTargetType.POSITION,
+        position.getUniqueId().toLatest())), position.getUniqueId());
   }
 
   /**
-   * The pre-order operation for a portfolio node, which adds the aggregate value requirements for the current portfolio node to the graph builder's set of value requirements.
+   * The pre-order operation for a portfolio node, which adds the aggregate value requirements for the current portfolio node to the graph
+   * builder's set of value requirements.
    *
    * @param node the portfolio node being traversed
    */
@@ -218,8 +224,9 @@ import com.opengamma.util.tuple.Pairs;
   }
 
   /**
-   * The pre-order operation for a position in a portfolio. which adds the value requirements for the current position and/or its trades to the graph builder's set of value requirements (if the result
-   * model specifies it), and also adds aggregate value requirements to the parent's requirements (again, if the result model specifies it) to be reaped post-order.
+   * The pre-order operation for a position in a portfolio. which adds the value requirements for the current position and/or
+   * its trades to the graph builder's set of value requirements (if the result model specifies it), and also adds aggregate
+   * value requirements to the parent's requirements (again, if the result model specifies it) to be reaped post-order.
    *
    * @param position the position being traversed
    */
@@ -267,7 +274,8 @@ import com.opengamma.util.tuple.Pairs;
         }
         // Are we interested in any results at all for this position?
         if (_outputPositions && !positionExcluded) {
-          final ComputationTargetSpecification positionSpec = nodeData.getTargetSpecification().containing(ComputationTargetType.POSITION, position.getUniqueId().toLatest());
+          final ComputationTargetSpecification positionSpec =
+              nodeData.getTargetSpecification().containing(ComputationTargetType.POSITION, position.getUniqueId().toLatest());
           // Add the value requirements for the current position to the graph builder's set of value requirements,
           // building them using the retrieved required outputs for this security type and the newly created computation
           // target spec for this position.
@@ -285,7 +293,8 @@ import com.opengamma.util.tuple.Pairs;
           nodeData.addRequirements(ImmutableSet.of(Pairs.of(ValueRequirementNames.MERGED_OUTPUT, constraints)));
         }
         if (_outputPositions && !positionExcluded) {
-          final ComputationTargetSpecification positionSpec = nodeData.getTargetSpecification().containing(ComputationTargetType.POSITION, position.getUniqueId().toLatest());
+          final ComputationTargetSpecification positionSpec =
+              nodeData.getTargetSpecification().containing(ComputationTargetType.POSITION, position.getUniqueId().toLatest());
           addValueRequirement(new ValueRequirement(ValueRequirementNames.MERGED_OUTPUT, positionSpec, constraints));
         }
       }
@@ -323,8 +332,8 @@ import com.opengamma.util.tuple.Pairs;
   }
 
   /**
-   * The post-order operation for a portfolio node, which adds the value requirements gathered while traversing this portfolio node's children to the graph builder's set of value requirements. This
-   * portfolio node's requirements are also passed up into its own parent node's requirments.
+   * The post-order operation for a portfolio node, which adds the value requirements gathered while traversing this portfolio node's children to
+   * the graph builder's set of value requirements. This portfolio node's requirements are also passed up into its own parent node's requirments.
    *
    * @param node the portfolio node being traversed
    */

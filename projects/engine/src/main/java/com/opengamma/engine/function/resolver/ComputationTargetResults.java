@@ -185,7 +185,8 @@ public class ComputationTargetResults implements FunctionCompilationContextAware
           result.add(spec);
           continue resultsLoop;
         }
-        final ValueSpecification resolvedSpec = resolvePartialSpecification(spec, adjustedTarget, function, new HashSet<ValueRequirement>(), adjustedTargetCache, ValueProperties.none());
+        final ValueSpecification resolvedSpec = resolvePartialSpecification(spec, adjustedTarget, function,
+            new HashSet<ValueRequirement>(), adjustedTargetCache, ValueProperties.none());
         if (resolvedSpec != null) {
           result.add(resolvedSpec);
         }
@@ -240,7 +241,8 @@ public class ComputationTargetResults implements FunctionCompilationContextAware
         visited.remove(requirement);
         return result;
       }
-      final ValueSpecification resolvedResult = resolvePartialSpecification(result, adjustedTarget, function, visited, adjustedTargetCache, requirement.getConstraints());
+      final ValueSpecification resolvedResult =
+          resolvePartialSpecification(result, adjustedTarget, function, visited, adjustedTargetCache, requirement.getConstraints());
       if (resolvedResult != null) {
         LOGGER.debug("Partial resolution of {} to {}", requirement, resolvedResult);
         visited.remove(requirement);
@@ -253,7 +255,8 @@ public class ComputationTargetResults implements FunctionCompilationContextAware
   }
 
   /**
-   * Attempts partial resolution of a non-finite specification produced as part of a function's maximal outputs. Requirement chains are followed until a specification is found with finite properties.
+   * Attempts partial resolution of a non-finite specification produced as part of a function's maximal outputs. Requirement
+   * chains are followed until a specification is found with finite properties.
    *
    * @param specification maximal output specification, non-finite properties, not null
    * @param target computation target the function is to operate on, not null
@@ -263,11 +266,13 @@ public class ComputationTargetResults implements FunctionCompilationContextAware
    * @param constraints requirement constraints, not null
    * @return the partially resolved specification, or null if resolution is not possible
    */
-  protected ValueSpecification resolvePartialSpecification(final ValueSpecification specification, final ComputationTarget target, final CompiledFunctionDefinition function,
+  protected ValueSpecification resolvePartialSpecification(final ValueSpecification specification, final ComputationTarget target,
+      final CompiledFunctionDefinition function,
       final Set<ValueRequirement> visited, final Map<ComputationTargetType, ComputationTarget> adjustedTarget, final ValueProperties constraints) {
     final Set<ValueRequirement> reqs;
     try {
-      reqs = function.getRequirements(getContext(), target, new ValueRequirement(specification.getValueName(), specification.getTargetSpecification(), constraints));
+      reqs = function.getRequirements(getContext(), target,
+          new ValueRequirement(specification.getValueName(), specification.getTargetSpecification(), constraints));
       if (reqs == null) {
         return null;
       }

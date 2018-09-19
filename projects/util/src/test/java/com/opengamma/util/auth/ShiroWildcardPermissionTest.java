@@ -18,37 +18,37 @@ import org.testng.annotations.Test;
 public class ShiroWildcardPermissionTest {
 
   @Test(expectedExceptions = InvalidPermissionStringException.class)
-  public void test_of_null() {
+  public void testOfNull() {
     ShiroWildcardPermission.of(null);
   }
 
   @Test(expectedExceptions = InvalidPermissionStringException.class)
-  public void test_of_empty() {
+  public void testOfEmpty() {
     ShiroWildcardPermission.of("");
   }
 
   @Test(expectedExceptions = InvalidPermissionStringException.class)
-  public void test_of_blank() {
+  public void testOfBlank() {
     ShiroWildcardPermission.of("   ");
   }
 
   @Test(expectedExceptions = InvalidPermissionStringException.class)
-  public void test_of_onlyColons() {
+  public void testOfOnlyColons() {
     ShiroWildcardPermission.of("::");
   }
 
   @Test(expectedExceptions = InvalidPermissionStringException.class)
-  public void test_of_onlyCommas() {
+  public void testOfOnlyCommas() {
     ShiroWildcardPermission.of("a:,:b");
   }
 
   @Test(expectedExceptions = InvalidPermissionStringException.class)
-  public void test_of_invalidWildcard() {
+  public void testOfInvalidWildcard() {
     ShiroWildcardPermission.of("a:beta*");
   }
 
   @Test
-  public void test_of_caseInsensitive() {
+  public void testOfCaseInsensitive() {
     final Permission p1 = ShiroWildcardPermission.of("something");
     final Permission p2 = ShiroWildcardPermission.of("SOMETHING");
     assertEquals(p1, p2);
@@ -56,7 +56,7 @@ public class ShiroWildcardPermissionTest {
 
   //-------------------------------------------------------------------------
   @DataProvider(name = "simplifications")
-  Object[][] data_simplifications() {
+  Object[][] dataSimplifications() {
     return new Object[][] {
         {"a", "a"},
         {"a:*", "a"},
@@ -93,7 +93,7 @@ public class ShiroWildcardPermissionTest {
 
   //-------------------------------------------------------------------------
   @DataProvider(name = "permissions")
-  Object[][] data_permissions() {
+  Object[][] dataPermissions() {
     return new Object[][] {
         {"a", "a", true, true},
         {"a", "b", false, false},

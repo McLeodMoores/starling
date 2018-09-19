@@ -25,7 +25,10 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class SimplePortfolioNodeTest {
 
-  public void test_construction() {
+  /**
+   * Tests construction of an empty node.
+   */
+  public void testConstruction() {
     final SimplePortfolioNode test = new SimplePortfolioNode();
     assertEquals(null, test.getUniqueId());
     assertEquals("", test.getName());
@@ -36,7 +39,10 @@ public class SimplePortfolioNodeTest {
   }
 
   //-------------------------------------------------------------------------
-  public void test_construction_String() {
+  /**
+   * Tests construction of an empty, named node.
+   */
+  public void testConstructionString() {
     final SimplePortfolioNode test = new SimplePortfolioNode(UniqueId.of("A", "B"), "Name");
     assertEquals(UniqueId.of("A", "B"), test.getUniqueId());
     assertEquals("Name", test.getName());
@@ -46,7 +52,10 @@ public class SimplePortfolioNodeTest {
     assertEquals("PortfolioNode[A~B, 0 child-nodes, 0 positions]", test.toString());
   }
 
-  public void test_construction_String_null() {
+  /**
+   * Tests that the name of a node can be null.
+   */
+  public void testConstructionStringNull() {
     final SimplePortfolioNode test = new SimplePortfolioNode(UniqueId.of("A", "B"), null);
     assertEquals(UniqueId.of("A", "B"), test.getUniqueId());
     assertEquals("", test.getName());
@@ -57,40 +66,58 @@ public class SimplePortfolioNodeTest {
   }
 
   //-------------------------------------------------------------------------
-  public void test_setUniqueId() {
+  /**
+   * Tests that setting the unique id is allowed.
+   */
+  public void testSetUniqueId() {
     final SimplePortfolio test = new SimplePortfolio(UniqueId.of("Scheme", "Id"), "Name");
     test.setUniqueId(UniqueId.of("Scheme2", "Id2"));
     assertEquals(UniqueId.of("Scheme2", "Id2"), test.getUniqueId());
   }
 
+  /**
+   * Tests that the unique id cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_setUniqueId_null() {
+  public void testSetUniqueIdNull() {
     final SimplePortfolio test = new SimplePortfolio(UniqueId.of("Scheme", "Id"), "Name");
     test.setUniqueId(null);
   }
 
   //-------------------------------------------------------------------------
-  public void test_setName() {
+  /**
+   * Tests that the name can be set.
+   */
+  public void testSetName() {
     final SimplePortfolio test = new SimplePortfolio(UniqueId.of("Scheme", "Id"), "Name");
     test.setName("Name2");
     assertEquals("Name2", test.getName());
   }
 
+  /**
+   * Tests that the name cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_setName_null() {
+  public void testSetNameNull() {
     final SimplePortfolio test = new SimplePortfolio(UniqueId.of("Scheme", "Id"), "Name");
     test.setName(null);
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests that the child nodes are immutable.
+   */
   @Test(expectedExceptions = UnsupportedOperationException.class)
-  public void test_getChildNodes_immutable() {
+  public void testGetChildNodesImmutable() {
     final SimplePortfolioNode test = new SimplePortfolioNode(UniqueId.of("A", "test"), "test");
     final SimplePortfolioNode child = new SimplePortfolioNode(UniqueId.of("A", "child"), "child");
     test.getChildNodes().add(child);
   }
 
-  public void test_addChildNode() {
+  /**
+   * Tests the addition of a child node.
+   */
+  public void testAddChildNode() {
     final SimplePortfolioNode test = new SimplePortfolioNode(UniqueId.of("A", "test"), "test");
     final SimplePortfolioNode child = new SimplePortfolioNode(UniqueId.of("A", "child"), "child");
     child.setParentNodeId(test.getUniqueId());
@@ -101,7 +128,10 @@ public class SimplePortfolioNodeTest {
     assertEquals(1, test.size());
   }
 
-  public void test_addChildNodes() {
+  /**
+   * Tests the addition of child nodes.
+   */
+  public void testAddChildNodes() {
     final SimplePortfolioNode test = new SimplePortfolioNode(UniqueId.of("A", "test"), "test");
     final SimplePortfolioNode child0 = new SimplePortfolioNode(UniqueId.of("A", "child0"), "child0");
     final SimplePortfolioNode child1 = new SimplePortfolioNode(UniqueId.of("A", "child1"), "child1");
@@ -115,7 +145,10 @@ public class SimplePortfolioNodeTest {
     assertEquals(2, test.size());
   }
 
-  public void test_removeChildNode_match() {
+  /**
+   * Tests the removal of a child node.
+   */
+  public void testRemoveChildNodeMatch() {
     final SimplePortfolioNode test = new SimplePortfolioNode(UniqueId.of("A", "test"), "test");
     final SimplePortfolioNode child = new SimplePortfolioNode(UniqueId.of("A", "child"), "child");
     child.setParentNodeId(test.getUniqueId());
@@ -125,7 +158,10 @@ public class SimplePortfolioNodeTest {
     assertEquals(0, test.getChildNodes().size());
   }
 
-  public void test_removeChildNode_noMatch() {
+  /**
+   * Tests that trying to remove a child that is not present has no effect on the parent.
+   */
+  public void testRemoveChildNodeNoMatch() {
     final SimplePortfolioNode test = new SimplePortfolioNode(UniqueId.of("A", "test"), "test");
     final SimplePortfolioNode child = new SimplePortfolioNode(UniqueId.of("A", "child"), "child");
     final SimplePortfolioNode removing = new SimplePortfolioNode(UniqueId.of("A", "removing"), "removing");
@@ -138,14 +174,20 @@ public class SimplePortfolioNodeTest {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests that the list of positions is immutable.
+   */
   @Test(expectedExceptions = UnsupportedOperationException.class)
-  public void test_getPositions_immutable() {
+  public void testGetPositionsimmutable() {
     final SimplePortfolioNode test = new SimplePortfolioNode();
     final SimplePosition child = new SimplePosition(BigDecimal.ONE, ExternalId.of("K", "V"));
     test.getPositions().add(child);
   }
 
-  public void test_addPosition() {
+  /**
+   * Tests the addition of a position.
+   */
+  public void testAddPosition() {
     final SimplePortfolioNode test = new SimplePortfolioNode();
     final SimplePosition child = new SimplePosition(BigDecimal.ONE, ExternalId.of("K", "V"));
     test.addPosition(child);
@@ -155,7 +197,10 @@ public class SimplePortfolioNodeTest {
     assertEquals(1, test.size());
   }
 
-  public void test_addPositions() {
+  /**
+   * Tests the addition of multiple positions.
+   */
+  public void testAddPositions() {
     final SimplePortfolioNode test = new SimplePortfolioNode();
     final SimplePosition child0 = new SimplePosition(BigDecimal.ONE, ExternalId.of("K", "V"));
     final SimplePosition child1 = new SimplePosition(BigDecimal.ONE, ExternalId.of("K", "V"));
@@ -167,7 +212,10 @@ public class SimplePortfolioNodeTest {
     assertEquals(2, test.size());
   }
 
-  public void test_removePosition_match() {
+  /**
+   * Tests removing a position.
+   */
+  public void testRemovePositionMatch() {
     final SimplePortfolioNode test = new SimplePortfolioNode();
     final SimplePosition child = new SimplePosition(BigDecimal.ONE, ExternalId.of("K", "V"));
     test.addPosition(child);
@@ -176,7 +224,10 @@ public class SimplePortfolioNodeTest {
     assertEquals(0, test.getPositions().size());
   }
 
-  public void test_removePosition_noMatch() {
+  /**
+   * Tests attempting to remove a position that is not in the portfolio has no effect.
+   */
+  public void testRemovePositionNoMatch() {
     final SimplePortfolioNode test = new SimplePortfolioNode();
     final SimplePosition child = new SimplePosition(BigDecimal.ONE, ExternalId.of("K", "V"));
     final SimplePosition removing = new SimplePosition(BigDecimal.ONE, ExternalId.of("K", "OTHER"));
@@ -188,7 +239,10 @@ public class SimplePortfolioNodeTest {
   }
 
   //-------------------------------------------------------------------------
-  public void test_size() {
+  /**
+   * Tests the size of the portfolio.
+   */
+  public void testSize() {
     final SimplePortfolioNode test = new SimplePortfolioNode();
     final SimplePortfolioNode child1 = new SimplePortfolioNode();
     final SimplePosition child2 = new SimplePosition(BigDecimal.ONE, ExternalId.of("K", "V"));
@@ -200,7 +254,10 @@ public class SimplePortfolioNodeTest {
   }
 
   //-------------------------------------------------------------------------
-  public void test_getNode_UniqueId() {
+  /**
+   * Tests that the root node or a copy of the child node is returned when requesting by unique id.
+   */
+  public void testGetNodeUniqueId() {
     final SimplePortfolioNode root = new SimplePortfolioNode(UniqueId.of("Root", "A"), "Name");
     final SimplePortfolioNode child1 = new SimplePortfolioNode(UniqueId.of("Child", "A"), "Name");
     root.addChildNode(child1);
@@ -217,7 +274,10 @@ public class SimplePortfolioNodeTest {
     assertEquals(null, root.getNode(UniqueId.of("NotFound", "A")));
   }
 
-  public void test_getPosition_UniqueId() {
+  /**
+   * Tests that a copy of the position is returned when requested by unique id.
+   */
+  public void testGetPositionUniqueId() {
     final SimplePortfolioNode root = new SimplePortfolioNode(UniqueId.of("Root", "A"), "Name");
     final SimplePortfolioNode child = new SimplePortfolioNode(UniqueId.of("Child", "A"), "Name");
     final SimplePosition position1 = new SimplePosition(UniqueId.of("Child", "A"), BigDecimal.ZERO, ExternalId.of("A", "B"));

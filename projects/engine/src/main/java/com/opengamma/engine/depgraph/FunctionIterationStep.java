@@ -119,8 +119,8 @@ import com.opengamma.util.tuple.Triple;
     protected abstract ValueRequirement getDesiredValue();
 
     /**
-     * Resolves the output values declared by a function at late resolution against the current requirement. The one that satisfies the requirement is composed, added to the set, and returned. All
-     * other output specifications are added to the output set unchanged.
+     * Resolves the output values declared by a function at late resolution against the current requirement. The one that satisfies the requirement is
+     * composed, added to the set, and returned. All other output specifications are added to the output set unchanged.
      * <p>
      * The returned specification must be normalized.
      *
@@ -129,7 +129,8 @@ import com.opengamma.util.tuple.Triple;
      * @param resolvedOutputValues the composed output values, not null
      * @return the satisfying resolved output, or null if none satisfy
      */
-    protected abstract ValueSpecification getResolvedOutputs(GraphBuildingContext context, Set<ValueSpecification> newOutputValues, Set<ValueSpecification> resolvedOutputValues);
+    protected abstract ValueSpecification getResolvedOutputs(GraphBuildingContext context, Set<ValueSpecification> newOutputValues,
+        Set<ValueSpecification> resolvedOutputValues);
 
     /**
      * For debugging/diagnostic reporting.

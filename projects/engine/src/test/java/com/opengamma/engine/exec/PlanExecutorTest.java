@@ -88,17 +88,16 @@ public class PlanExecutorTest {
   }
 
   private List<CalculationJobItem> createJobItems(final int count) {
-    final List<CalculationJobItem> result = new ArrayList<CalculationJobItem>(count);
+    final List<CalculationJobItem> result = new ArrayList<>(count);
     for (int i = 0; i < count; i++) {
-      result.add(new CalculationJobItem("Func", new EmptyFunctionParameters(), ComputationTargetSpecification.NULL, Collections.<ValueSpecification>emptySet(), Collections
-          .<ValueSpecification>emptySet(),
-          ExecutionLogMode.INDICATORS));
+      result.add(new CalculationJobItem("Func", new EmptyFunctionParameters(), ComputationTargetSpecification.NULL, Collections.<ValueSpecification>emptySet(),
+          Collections.<ValueSpecification>emptySet(), ExecutionLogMode.INDICATORS));
     }
     return result;
   }
 
   private List<CalculationJobResultItem> createResultItems(final List<CalculationJobItem> items) {
-    final List<CalculationJobResultItem> result = new ArrayList<CalculationJobResultItem>(items.size());
+    final List<CalculationJobResultItem> result = new ArrayList<>(items.size());
     for (int i = 0; i < items.size(); i++) {
       result.add(new CalculationJobResultItem(Collections.<ValueSpecification>emptySet(), Collections.<ValueSpecification>emptySet(), ExecutionLog.EMPTY));
     }
@@ -118,16 +117,16 @@ public class PlanExecutorTest {
 
   private class NormalExecutionJobDispatcher extends JobDispatcher {
 
-    private final Queue<Pair<CalculationJob, JobResultReceiver>> _jobs = new LinkedList<Pair<CalculationJob, JobResultReceiver>>();
+    private final Queue<Pair<CalculationJob, JobResultReceiver>> _jobs = new LinkedList<>();
 
-    private final Queue<Pair<CalculationJob, CalculationJobResult>> _results = new LinkedList<Pair<CalculationJob, CalculationJobResult>>();
+    private final Queue<Pair<CalculationJob, CalculationJobResult>> _results = new LinkedList<>();
 
     @Override
     public Cancelable dispatchJob(final CalculationJob job, final JobResultReceiver receiver) {
       LOGGER.debug("Dispatching {}", job);
       _jobs.add(Pairs.of(job, receiver));
       if (job.getTail() != null) {
-        for (CalculationJob tail : job.getTail()) {
+        for (final CalculationJob tail : job.getTail()) {
           dispatchJob(tail, receiver);
         }
       }
@@ -143,7 +142,7 @@ public class PlanExecutorTest {
 
     public void completeJobs() {
       do {
-        Pair<CalculationJob, JobResultReceiver> job = _jobs.poll();
+        final Pair<CalculationJob, JobResultReceiver> job = _jobs.poll();
         if (job == null) {
           LOGGER.debug("No more jobs");
           return;
@@ -167,7 +166,8 @@ public class PlanExecutorTest {
   public void testStatisticsReporting() {
     final NormalExecutionJobDispatcher dispatcher = new NormalExecutionJobDispatcher();
     final PlanExecutor executor = new PlanExecutor(createCycle(dispatcher), createPlan());
-    final GraphExecutorStatisticsGatherer statsGatherer = executor.getCycle().getViewProcessContext().getGraphExecutorStatisticsGathererProvider().getStatisticsGatherer(UniqueId.of("View", "Test"));
+    final GraphExecutorStatisticsGatherer statsGatherer =
+        executor.getCycle().getViewProcessContext().getGraphExecutorStatisticsGathererProvider().getStatisticsGatherer(UniqueId.of("View", "Test"));
     final GraphExecutionStatistics stats = ((Statistics) statsGatherer).getExecutionStatistics().get(0);
     assertEquals(stats.getCalcConfigName(), "Default");
     assertEquals(stats.getProcessedGraphs(), 1L);
@@ -274,7 +274,7 @@ public class PlanExecutorTest {
 
   public void testCancelDuringDispatch() {
     final Cancelable handle = Mockito.mock(Cancelable.class);
-    final AtomicReference<PlanExecutor> executor = new AtomicReference<PlanExecutor>();
+    final AtomicReference<PlanExecutor> executor = new AtomicReference<>();
     final JobDispatcher dispatcher = new JobDispatcher() {
       @Override
       public Cancelable dispatchJob(final CalculationJob job, final JobResultReceiver receiver) {
@@ -316,7 +316,7 @@ public class PlanExecutorTest {
   public void testAddListenerBeforeCompletion() throws Throwable {
     final NormalExecutionJobDispatcher dispatcher = new NormalExecutionJobDispatcher();
     final PlanExecutor executor = new PlanExecutor(createCycle(dispatcher), createPlan());
-    final AtomicReference<String> result = new AtomicReference<String>();
+    final AtomicReference<String> result = new AtomicReference<>();
     executor.setListener(new Listener() {
       @Override
       public void graphCompleted(final String calculationConfiguration) {
@@ -331,7 +331,7 @@ public class PlanExecutorTest {
     final NormalExecutionJobDispatcher dispatcher = new NormalExecutionJobDispatcher();
     final PlanExecutor executor = new PlanExecutor(createCycle(dispatcher), createPlan());
     dispatcher.execute(executor);
-    final AtomicReference<String> result = new AtomicReference<String>();
+    final AtomicReference<String> result = new AtomicReference<>();
     executor.setListener(new Listener() {
       @Override
       public void graphCompleted(final String calculationConfiguration) {

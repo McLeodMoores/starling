@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.view.compilation;
@@ -17,8 +17,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.Future;
-
-import net.sf.ehcache.CacheManager;
 
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -58,6 +56,8 @@ import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.ehcache.EHCacheUtils;
 import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.test.TestLifecycle;
+
+import net.sf.ehcache.CacheManager;
 
 @Test(groups = {TestGroup.UNIT, "ehcache" })
 public class ViewDefinitionCompilerTest {
@@ -103,17 +103,18 @@ public class ViewDefinitionCompilerTest {
       final InMemoryFunctionRepository functionRepo = new InMemoryFunctionRepository();
       final FunctionCompilationContext functionCompilationContext = new FunctionCompilationContext();
       functionCompilationContext.setFunctionInitId(123);
-      functionCompilationContext.setRawComputationTargetResolver(new DefaultCachingComputationTargetResolver(new DefaultComputationTargetResolver(securitySource, positionSource),
-          _cacheManager));
+      functionCompilationContext.setRawComputationTargetResolver(
+          new DefaultCachingComputationTargetResolver(new DefaultComputationTargetResolver(securitySource, positionSource), _cacheManager));
       final CompiledFunctionService cfs = new CompiledFunctionService(functionRepo, new CachingFunctionRepositoryCompiler(), functionCompilationContext);
       TestLifecycle.register(cfs);
       cfs.initialize();
       final DefaultFunctionResolver functionResolver = new DefaultFunctionResolver(cfs);
-      final ViewCompilationServices vcs = new ViewCompilationServices(new FixedMarketDataAvailabilityProvider(), functionResolver, functionCompilationContext, cfs.getExecutorService(),
-          new DependencyGraphBuilderFactory());
+      final ViewCompilationServices vcs = new ViewCompilationServices(new FixedMarketDataAvailabilityProvider(), functionResolver,
+          functionCompilationContext, cfs.getExecutorService(), new DependencyGraphBuilderFactory());
       final ViewDefinition viewDefinition = new ViewDefinition("My View", UniqueId.of("FOO", "BAR"), "kirk");
       final Instant now = Instant.now();
-      final CompiledViewDefinitionWithGraphsImpl compiledViewDefinition = ViewDefinitionCompiler.compile(viewDefinition, vcs, now, VersionCorrection.of(now, now));
+      final CompiledViewDefinitionWithGraphsImpl compiledViewDefinition =
+          ViewDefinitionCompiler.compile(viewDefinition, vcs, now, VersionCorrection.of(now, now));
       assertTrue(compiledViewDefinition.getMarketDataRequirements().isEmpty());
       assertTrue(compiledViewDefinition.getDependencyGraphExplorers().isEmpty());
       assertEquals(0, compiledViewDefinition.getComputationTargets().size());
@@ -149,10 +150,12 @@ public class ViewDefinitionCompilerTest {
       TestLifecycle.register(cfs);
       cfs.initialize();
       final DefaultFunctionResolver functionResolver = new DefaultFunctionResolver(cfs);
-      final DefaultCachingComputationTargetResolver computationTargetResolver = new DefaultCachingComputationTargetResolver(new DefaultComputationTargetResolver(securitySource,
+      final DefaultCachingComputationTargetResolver computationTargetResolver =
+          new DefaultCachingComputationTargetResolver(new DefaultComputationTargetResolver(securitySource,
           positionSource), _cacheManager);
       functionCompilationContext.setRawComputationTargetResolver(computationTargetResolver);
-      final ViewCompilationServices vcs = new ViewCompilationServices(new FixedMarketDataAvailabilityProvider(), functionResolver, functionCompilationContext, cfs.getExecutorService(),
+      final ViewCompilationServices vcs =
+          new ViewCompilationServices(new FixedMarketDataAvailabilityProvider(), functionResolver, functionCompilationContext, cfs.getExecutorService(),
           new DependencyGraphBuilderFactory());
       final ViewDefinition viewDefinition = new ViewDefinition("My View", UniqueId.of("FOO", "BAR"), "kirk");
       // We've not provided a function that targets the position level, so we can't ask for it.
@@ -161,7 +164,8 @@ public class ViewDefinitionCompilerTest {
       calcConfig.addPortfolioRequirementName("My Sec", "OUTPUT");
       viewDefinition.addViewCalculationConfiguration(calcConfig);
       final Instant now = Instant.now();
-      final CompiledViewDefinitionWithGraphsImpl compiledViewDefinition = ViewDefinitionCompiler.compile(viewDefinition, vcs, now, VersionCorrection.of(now, now));
+      final CompiledViewDefinitionWithGraphsImpl compiledViewDefinition =
+          ViewDefinitionCompiler.compile(viewDefinition, vcs, now, VersionCorrection.of(now, now));
       assertTrue(compiledViewDefinition.getMarketDataRequirements().isEmpty());
       assertEquals(1, compiledViewDefinition.getDependencyGraphExplorers().size());
       assertNotNull(compiledViewDefinition.getDependencyGraphExplorer("Fibble"));
@@ -201,18 +205,20 @@ public class ViewDefinitionCompilerTest {
       TestLifecycle.register(cfs);
       cfs.initialize();
       final DefaultFunctionResolver functionResolver = new DefaultFunctionResolver(cfs);
-      final DefaultCachingComputationTargetResolver computationTargetResolver = new DefaultCachingComputationTargetResolver(new DefaultComputationTargetResolver(securitySource,
-          positionSource), _cacheManager);
+      final DefaultCachingComputationTargetResolver computationTargetResolver =
+          new DefaultCachingComputationTargetResolver(new DefaultComputationTargetResolver(securitySource, positionSource), _cacheManager);
       functionCompilationContext.setRawComputationTargetResolver(computationTargetResolver);
-      final ViewCompilationServices vcs = new ViewCompilationServices(new FixedMarketDataAvailabilityProvider(), functionResolver, functionCompilationContext, cfs.getExecutorService(),
-          new DependencyGraphBuilderFactory());
+      final ViewCompilationServices vcs =
+          new ViewCompilationServices(new FixedMarketDataAvailabilityProvider(), functionResolver, functionCompilationContext, cfs.getExecutorService(),
+              new DependencyGraphBuilderFactory());
       final ViewDefinition viewDefinition = new ViewDefinition("My View", UniqueId.of("FOO", "BAR"), "kirk");
       viewDefinition.getResultModelDefinition().setPositionOutputMode(ResultOutputMode.NONE);
       final ViewCalculationConfiguration calcConfig = new ViewCalculationConfiguration(viewDefinition, "Fibble");
       calcConfig.addPortfolioRequirementName("My Sec", "OUTPUT");
       viewDefinition.addViewCalculationConfiguration(calcConfig);
       final Instant now = Instant.now();
-      final CompiledViewDefinitionWithGraphsImpl compiledViewDefinition = ViewDefinitionCompiler.compile(viewDefinition, vcs, now, VersionCorrection.of(now, now));
+      final CompiledViewDefinitionWithGraphsImpl compiledViewDefinition =
+          ViewDefinitionCompiler.compile(viewDefinition, vcs, now, VersionCorrection.of(now, now));
       assertTrue(compiledViewDefinition.getMarketDataRequirements().isEmpty());
       assertEquals(1, compiledViewDefinition.getDependencyGraphExplorers().size());
       final DependencyGraph dg = compiledViewDefinition.getDependencyGraphExplorer("Fibble").getWholeGraph();
@@ -243,14 +249,17 @@ public class ViewDefinitionCompilerTest {
       TestLifecycle.register(cfs);
       cfs.initialize();
       final DefaultFunctionResolver functionResolver = new DefaultFunctionResolver(cfs);
-      final DefaultCachingComputationTargetResolver computationTargetResolver = new DefaultCachingComputationTargetResolver(new DefaultComputationTargetResolver(), _cacheManager);
+      final DefaultCachingComputationTargetResolver computationTargetResolver =
+          new DefaultCachingComputationTargetResolver(new DefaultComputationTargetResolver(), _cacheManager);
       compilationContext.setRawComputationTargetResolver(computationTargetResolver);
-      final ViewCompilationServices compilationServices = new ViewCompilationServices(new FixedMarketDataAvailabilityProvider(), functionResolver, compilationContext,
-          cfs.getExecutorService(), new DependencyGraphBuilderFactory());
+      final ViewCompilationServices compilationServices =
+          new ViewCompilationServices(new FixedMarketDataAvailabilityProvider(), functionResolver, compilationContext,
+              cfs.getExecutorService(), new DependencyGraphBuilderFactory());
       // We'll require r1 which can be satisfied by f1
       calcConfig.addSpecificRequirement(f1.getResultSpec().toRequirementSpecification());
       final Instant now = Instant.now();
-      final CompiledViewDefinitionWithGraphsImpl compiledViewDefinition = ViewDefinitionCompiler.compile(viewDefinition, compilationServices, now, VersionCorrection.of(now, now));
+      final CompiledViewDefinitionWithGraphsImpl compiledViewDefinition =
+          ViewDefinitionCompiler.compile(viewDefinition, compilationServices, now, VersionCorrection.of(now, now));
       assertTrue(compiledViewDefinition.getMarketDataRequirements().isEmpty());
       assertEquals(1, compiledViewDefinition.getDependencyGraphExplorers().size());
       assertNotNull(compiledViewDefinition.getDependencyGraphExplorer("Config1"));
@@ -283,17 +292,20 @@ public class ViewDefinitionCompilerTest {
       TestLifecycle.register(cfs);
       cfs.initialize();
       final DefaultFunctionResolver functionResolver = new DefaultFunctionResolver(cfs);
-      final DefaultCachingComputationTargetResolver computationTargetResolver = new DefaultCachingComputationTargetResolver(new DefaultComputationTargetResolver(securitySource),
+      final DefaultCachingComputationTargetResolver computationTargetResolver =
+          new DefaultCachingComputationTargetResolver(new DefaultComputationTargetResolver(securitySource),
           _cacheManager);
       compilationContext.setRawComputationTargetResolver(computationTargetResolver);
-      final ViewCompilationServices compilationServices = new ViewCompilationServices(new FixedMarketDataAvailabilityProvider(), functionResolver, compilationContext,
+      final ViewCompilationServices compilationServices =
+          new ViewCompilationServices(new FixedMarketDataAvailabilityProvider(), functionResolver, compilationContext,
           cfs.getExecutorService(), new DependencyGraphBuilderFactory());
       // We'll require r2 which can be satisfied by f2, which in turn requires the output of f1
       // Additionally, the security should be resolved through the ComputationTargetResolver, which only has a security
       // source.
       calcConfig.addSpecificRequirement(f2.getResultSpec().toRequirementSpecification());
       final Instant now = Instant.now();
-      CompiledViewDefinitionWithGraphsImpl compiledViewDefinition = ViewDefinitionCompiler.compile(viewDefinition, compilationServices, now, VersionCorrection.of(now, now));
+      CompiledViewDefinitionWithGraphsImpl compiledViewDefinition =
+          ViewDefinitionCompiler.compile(viewDefinition, compilationServices, now, VersionCorrection.of(now, now));
       assertTrue(compiledViewDefinition.getMarketDataRequirements().isEmpty());
       assertEquals(1, compiledViewDefinition.getDependencyGraphExplorers().size());
       assertNotNull(compiledViewDefinition.getDependencyGraphExplorer("Config1"));
@@ -326,12 +338,13 @@ public class ViewDefinitionCompilerTest {
       cfs.initialize();
       final DefaultFunctionResolver functionResolver = new DefaultFunctionResolver(cfs);
       final SecuritySource securitySource = new InMemorySecuritySource();
-      final DefaultCachingComputationTargetResolver computationTargetResolver = new DefaultCachingComputationTargetResolver(new DefaultComputationTargetResolver(securitySource),
+      final DefaultCachingComputationTargetResolver computationTargetResolver =
+          new DefaultCachingComputationTargetResolver(new DefaultComputationTargetResolver(securitySource),
           _cacheManager);
       compilationContext.setRawComputationTargetResolver(computationTargetResolver);
       final Future<CompiledViewDefinitionWithGraphsImpl> future = ViewDefinitionCompiler.fullCompileTask(viewDefinition, new ViewCompilationServices(
-          new FixedMarketDataAvailabilityProvider(), functionResolver, compilationContext, cfs.getExecutorService(), new DependencyGraphBuilderFactory()), Instant.now(),
-          VersionCorrection.LATEST);
+          new FixedMarketDataAvailabilityProvider(), functionResolver, compilationContext, cfs.getExecutorService(),
+          new DependencyGraphBuilderFactory()), Instant.now(), VersionCorrection.LATEST);
       assertFalse(future.isDone());
       assertFalse(future.isCancelled());
       assertTrue(future.cancel(true));
@@ -348,7 +361,7 @@ public class ViewDefinitionCompilerTest {
   }
 
   private void assertTargets(final CompiledViewDefinitionWithGraphsImpl compiledViewDefinition, final UniqueId... targets) {
-    final Set<UniqueId> expectedTargets = new HashSet<UniqueId>(Arrays.asList(targets));
+    final Set<UniqueId> expectedTargets = new HashSet<>(Arrays.asList(targets));
     final Set<ComputationTargetSpecification> actualTargets = compiledViewDefinition.getComputationTargets();
     assertEquals(expectedTargets.size(), actualTargets.size());
     for (final ComputationTargetSpecification actualTarget : actualTargets) {

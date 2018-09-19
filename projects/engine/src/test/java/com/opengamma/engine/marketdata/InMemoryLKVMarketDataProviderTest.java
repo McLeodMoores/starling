@@ -61,10 +61,11 @@ public class InMemoryLKVMarketDataProviderTest {
   public void testAvailabilityAndSnapshot() {
     final InMemoryLKVMarketDataProvider provider = new InMemoryLKVMarketDataProvider();
     ValueSpecification fooNull = provider.getAvailabilityProvider(MarketData.live()).getAvailability(ComputationTargetSpecification.NULL, null,
-        new ValueRequirement("Foo", ComputationTargetSpecification.NULL));
+            new ValueRequirement("Foo", ComputationTargetSpecification.NULL));
     assertNull(fooNull);
     provider.addValue(new ValueRequirement("Foo", ComputationTargetSpecification.NULL), "FooValue1");
-    fooNull = provider.getAvailabilityProvider(MarketData.live()).getAvailability(ComputationTargetSpecification.NULL, null, new ValueRequirement("Foo", ComputationTargetSpecification.NULL));
+    fooNull = provider.getAvailabilityProvider(MarketData.live()).getAvailability(ComputationTargetSpecification.NULL, null,
+            new ValueRequirement("Foo", ComputationTargetSpecification.NULL));
     assertNotNull(fooNull);
     provider.addValue(new ValueRequirement("Bar", ComputationTargetSpecification.NULL), "BarValue1");
     final ValueSpecification barNull = provider.getAvailabilityProvider(MarketData.live()).getAvailability(ComputationTargetSpecification.NULL, null,
@@ -72,8 +73,9 @@ public class InMemoryLKVMarketDataProviderTest {
     assertNotNull(barNull);
     final ExternalIdBundle identifiers = ExternalIdBundle.of(ExternalId.of("A", "1"), ExternalId.of("B", "1"));
     provider.addValue(new ValueRequirement("Foo", ComputationTargetRequirement.of(identifiers)), "FooValue2");
-    final ValueSpecification foo = provider.getAvailabilityProvider(MarketData.live()).getAvailability(ComputationTargetSpecification.of(UniqueId.of("X", "1")), identifiers,
-        new ValueRequirement("Foo", ComputationTargetRequirement.of(identifiers)));
+    final ValueSpecification foo =
+        provider.getAvailabilityProvider(MarketData.live()).getAvailability(ComputationTargetSpecification.of(UniqueId.of("X", "1")), identifiers,
+            new ValueRequirement("Foo", ComputationTargetRequirement.of(identifiers)));
     assertNotNull(foo);
     assertEquals(provider.getAllValueKeys(), ImmutableSet.of(fooNull, barNull, foo));
     assertEquals(provider.getCurrentValue(fooNull), "FooValue1");

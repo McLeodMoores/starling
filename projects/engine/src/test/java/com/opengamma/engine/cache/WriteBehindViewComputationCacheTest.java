@@ -45,7 +45,7 @@ import com.opengamma.util.tuple.Pairs;
 public class WriteBehindViewComputationCacheTest {
 
   @DataProvider(name = "cacheHints")
-  public static Object[][] data_cacheHints() {
+  public static Object[][] dataCacheHints() {
     return new Object[][] {
         {CacheSelectHint.allPrivate() },
         {CacheSelectHint.allShared() },
@@ -108,7 +108,7 @@ public class WriteBehindViewComputationCacheTest {
       if (_throwException) {
         throw new OpenGammaRuntimeException("woot");
       }
-      _putValues = new ArrayList<ComputedValue>(values);
+      _putValues = new ArrayList<>(values);
     }
 
     @Override
@@ -127,7 +127,8 @@ public class WriteBehindViewComputationCacheTest {
     }
   }
 
-  private static final ComputationTargetSpecification TARGET_SPEC = new ComputationTargetSpecification(ComputationTargetType.SECURITY, UniqueId.of("TEST", "SECURITY"));
+  private static final ComputationTargetSpecification TARGET_SPEC =
+      new ComputationTargetSpecification(ComputationTargetType.SECURITY, UniqueId.of("TEST", "SECURITY"));
   private static final ValueProperties PROPERTIES = ValueProperties.with(ValuePropertyNames.FUNCTION, "Function UID").get();
   private static final ValueSpecification VALUE_SPEC_1 = new ValueSpecification("Value 1", TARGET_SPEC, PROPERTIES);
   private static final ValueSpecification VALUE_SPEC_2 = new ValueSpecification("Value 2", TARGET_SPEC, PROPERTIES);

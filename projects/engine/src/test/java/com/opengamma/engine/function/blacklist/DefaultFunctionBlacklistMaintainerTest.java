@@ -43,8 +43,10 @@ public class DefaultFunctionBlacklistMaintainerTest {
   private final ComputationTargetSpecification _targetSpecification = _target.toSpecification();
   private final Set<ValueSpecification> _inputs = Collections.<ValueSpecification>emptySet();
   private final Set<ValueSpecification> _outputs = Collections.<ValueSpecification>emptySet();
-  private final CalculationJobItem _jobItem1 = new CalculationJobItem(_functionIdentifier1, _functionParameters, _targetSpecification, _inputs, _outputs, ExecutionLogMode.INDICATORS);
-  private final CalculationJobItem _jobItem2 = new CalculationJobItem(_functionIdentifier2, _functionParameters, _targetSpecification, _inputs, _outputs, ExecutionLogMode.INDICATORS);
+  private final CalculationJobItem _jobItem1 =
+      new CalculationJobItem(_functionIdentifier1, _functionParameters, _targetSpecification, _inputs, _outputs, ExecutionLogMode.INDICATORS);
+  private final CalculationJobItem _jobItem2 =
+      new CalculationJobItem(_functionIdentifier2, _functionParameters, _targetSpecification, _inputs, _outputs, ExecutionLogMode.INDICATORS);
 
   public void testEmptyPolicy() {
     final FunctionBlacklistPolicy policy = new EmptyFunctionBlacklistPolicy();

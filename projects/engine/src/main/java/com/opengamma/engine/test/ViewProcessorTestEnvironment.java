@@ -98,7 +98,8 @@ public class ViewProcessorTestEnvironment {
 
     final FudgeContext fudgeContext = OpenGammaFudgeContext.getInstance();
     final SecuritySource securitySource = getSecuritySource() != null ? getSecuritySource() : generateSecuritySource();
-    final FunctionCompilationContext functionCompilationContext = getFunctionCompilationContext() != null ? getFunctionCompilationContext() : generateFunctionCompilationContext();
+    final FunctionCompilationContext functionCompilationContext =
+        getFunctionCompilationContext() != null ? getFunctionCompilationContext() : generateFunctionCompilationContext();
 
     final ConfigSource configSource = getConfigSource() != null ? getConfigSource() : generateConfigSource();
 
@@ -110,12 +111,14 @@ public class ViewProcessorTestEnvironment {
     vpFactBean.setDependencyGraphExecutorFactory(dependencyGraphExecutorFactory);
 
     final FunctionRepository functionRepository = getFunctionRepository() != null ? getFunctionRepository() : generateFunctionRepository();
-    final CompiledFunctionService compiledFunctions = new CompiledFunctionService(functionRepository, new CachingFunctionRepositoryCompiler(), functionCompilationContext);
+    final CompiledFunctionService compiledFunctions =
+        new CompiledFunctionService(functionRepository, new CachingFunctionRepositoryCompiler(), functionCompilationContext);
     TestLifecycle.register(compiledFunctions);
     compiledFunctions.initialize();
     vpFactBean.setFunctionCompilationService(compiledFunctions);
 
-    final MarketDataProviderResolver marketDataProviderResolver = getMarketDataProviderResolver() != null ? getMarketDataProviderResolver() : generateMarketDataProviderResolver();
+    final MarketDataProviderResolver marketDataProviderResolver =
+        getMarketDataProviderResolver() != null ? getMarketDataProviderResolver() : generateMarketDataProviderResolver();
     vpFactBean.setMarketDataProviderResolver(marketDataProviderResolver);
 
     vpFactBean.setConfigSource(configSource);
@@ -123,7 +126,8 @@ public class ViewProcessorTestEnvironment {
     vpFactBean.setNamedMarketDataSpecificationRepository(new InMemoryNamedMarketDataSpecificationRepository());
     _configSource = configSource;
 
-    final FunctionExecutionContext functionExecutionContext = getFunctionExecutionContext() != null ? getFunctionExecutionContext() : generateFunctionExecutionContext();
+    final FunctionExecutionContext functionExecutionContext =
+        getFunctionExecutionContext() != null ? getFunctionExecutionContext() : generateFunctionExecutionContext();
     functionExecutionContext.setSecuritySource(securitySource);
 
     final ThreadLocalLogEventListener threadLocalLogListener = new ThreadLocalLogEventListener();
@@ -144,9 +148,10 @@ public class ViewProcessorTestEnvironment {
     if (getViewProcessor() == null) {
       throw new IllegalStateException(ViewProcessorTestEnvironment.class.getName() + " has not been initialised");
     }
-    final ViewCompilationServices compilationServices = new ViewCompilationServices(getMarketDataProvider().getAvailabilityProvider(MarketData.live()), getFunctionResolver(),
+    final ViewCompilationServices compilationServices =
+        new ViewCompilationServices(getMarketDataProvider().getAvailabilityProvider(MarketData.live()), getFunctionResolver(),
         getFunctionCompilationContext(), getViewProcessor().getFunctionCompilationService().getExecutorService(),
-        (getDependencyGraphBuilderFactory() != null) ? getDependencyGraphBuilderFactory() : generateDependencyGraphBuilderFactory());
+        getDependencyGraphBuilderFactory() != null ? getDependencyGraphBuilderFactory() : generateDependencyGraphBuilderFactory());
     return ViewDefinitionCompiler.compile(getViewDefinition(), compilationServices, valuationTime, versionCorrection);
   }
 

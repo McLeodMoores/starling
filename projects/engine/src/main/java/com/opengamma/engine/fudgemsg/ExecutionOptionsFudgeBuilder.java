@@ -78,7 +78,8 @@ public class ExecutionOptionsFudgeBuilder implements FudgeBuilder<ExecutionOptio
 
   @Override
   public ExecutionOptions buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
-    final ViewCycleExecutionSequence executionSequence = deserializer.fudgeMsgToObject(ViewCycleExecutionSequence.class, message.getMessage(EXECUTION_SEQUENCE_FIELD));
+    final ViewCycleExecutionSequence executionSequence =
+        deserializer.fudgeMsgToObject(ViewCycleExecutionSequence.class, message.getMessage(EXECUTION_SEQUENCE_FIELD));
     final EnumSet<ViewExecutionFlags> flags = EnumSet.noneOf(ViewExecutionFlags.class);
     for (final Pair<String, ViewExecutionFlags> flagField : FLAGS) {
       if (BooleanUtils.isTrue(message.getBoolean(flagField.getFirst()))) {

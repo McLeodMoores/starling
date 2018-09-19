@@ -64,11 +64,12 @@ public class ViewExecutionCacheKeyTest {
     assertEquals(key.toString(), "ViewExecution[View~123, Foo, Test~Foo & {}]");
     assertEquals(key.hashCode(), 838623242);
     assertFalse(key.equals(ViewExecutionCacheKey.of(viewDefinition1(), marketDataProvider("Foo"), null)));
-    assertTrue(key
-        .equals(ViewExecutionCacheKey.of(viewDefinition1(), marketDataProvider("Foo"), new MarketDataSelectionGraphManipulator(MarketDataPointSelector.of(ExternalId.of("Test", "Foo")),
-            Collections.<String, Map<DistinctMarketDataSelector, FunctionParameters>>emptyMap()))));
-    assertFalse(key
-        .equals(ViewExecutionCacheKey.of(viewDefinition1(), marketDataProvider("Foo"), new MarketDataSelectionGraphManipulator(MarketDataPointSelector.of(ExternalId.of("Test", "Bar")),
-            Collections.<String, Map<DistinctMarketDataSelector, FunctionParameters>>emptyMap()))));
+    assertTrue(key.equals(
+        ViewExecutionCacheKey.of(viewDefinition1(), marketDataProvider("Foo"),
+            new MarketDataSelectionGraphManipulator(MarketDataPointSelector.of(ExternalId.of("Test", "Foo")),
+                Collections.<String, Map<DistinctMarketDataSelector, FunctionParameters>>emptyMap()))));
+    assertFalse(key.equals(ViewExecutionCacheKey.of(viewDefinition1(), marketDataProvider("Foo"),
+            new MarketDataSelectionGraphManipulator(MarketDataPointSelector.of(ExternalId.of("Test", "Bar")),
+                Collections.<String, Map<DistinctMarketDataSelector, FunctionParameters>>emptyMap()))));
   }
 }

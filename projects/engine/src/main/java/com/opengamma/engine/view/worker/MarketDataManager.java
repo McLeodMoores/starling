@@ -66,7 +66,8 @@ public class MarketDataManager implements MarketDataListener, Lifecycle, Subscri
   private static final int MAX_SUBSCRIPTION_BATCH_SIZE = 10000;
 
   /**
-   * How long do wait for a subscription response to come back before giving up on it. Note that retries may well have occurred depnding on the value of {@link #SUBSCRIPTION_RETRY_DURATION}
+   * How long do wait for a subscription response to come back before giving up on it. Note that retries may well have occurred depending
+   * on the value of {@link #SUBSCRIPTION_RETRY_DURATION}
    */
   public static final Duration SUBSCRIPTION_ABANDONMENT_DURATION = Duration.ofMinutes(15);
 
@@ -78,8 +79,8 @@ public class MarketDataManager implements MarketDataListener, Lifecycle, Subscri
   /**
    * Thread pool for subscription operations.
    * <p>
-   * The shared "housekeeper" pool is not suitable for use by this class as it will block during the calls while subscriptions are made to the underlying provider, or while waiting for said locks in
-   * order to ever do the log reporting.
+   * The shared "housekeeper" pool is not suitable for use by this class as it will block during the calls while subscriptions are made
+   * to the underlying provider, or while waiting for said locks in order to ever do the log reporting.
    */
   private static final ScheduledExecutorService SUBMONITOR = Executors.newScheduledThreadPool(1, new NamedThreadPoolFactory("Subscription Monitor"));
 
@@ -175,9 +176,9 @@ public class MarketDataManager implements MarketDataListener, Lifecycle, Subscri
     _marketDataChangeListener = listener;
     _marketDataProviderResolver = marketDataProviderResolver;
 
-    _objectName = viewProcessorName != null && viewProcessId != null ?
-        createObjectName(viewProcessId) :
-        null;
+    _objectName = viewProcessorName != null && viewProcessId != null
+        ? createObjectName(viewProcessId)
+        : null;
 
     _jmxServer = setupJmxServer();
     registerJmx();

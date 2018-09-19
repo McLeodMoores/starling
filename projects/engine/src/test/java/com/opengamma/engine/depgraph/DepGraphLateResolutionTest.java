@@ -47,12 +47,13 @@ public class DepGraphLateResolutionTest extends AbstractDependencyGraphBuilderTe
         @Override
         public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
           final ValueRequirement req = helper.getRequirement1Any();
-          return Collections.singleton(new ValueSpecification(req.getValueName(), target.toSpecification(), req.getConstraints().copy().with(ValuePropertyNames.FUNCTION, getUniqueId())
-              .get()));
+          return Collections.singleton(new ValueSpecification(req.getValueName(), target.toSpecification(),
+              req.getConstraints().copy().with(ValuePropertyNames.FUNCTION, getUniqueId()).get()));
         }
 
         @Override
-        public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+        public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+            final Map<ValueSpecification, ValueRequirement> inputs) {
           LOGGER.debug("fnConv late resolving with inputs {}", inputs);
           assertEquals(1, inputs.size());
           final ValueSpecification input = inputs.keySet().iterator().next();
@@ -97,12 +98,13 @@ public class DepGraphLateResolutionTest extends AbstractDependencyGraphBuilderTe
         @Override
         public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
           final ValueRequirement req = helper.getRequirement1Any();
-          return Collections.singleton(new ValueSpecification(req.getValueName(), target.toSpecification(), req.getConstraints().copy().with(ValuePropertyNames.FUNCTION, getUniqueId())
-              .get()));
+          return Collections.singleton(new ValueSpecification(req.getValueName(), target.toSpecification(),
+              req.getConstraints().copy().with(ValuePropertyNames.FUNCTION, getUniqueId()).get()));
         }
 
         @Override
-        public Set<ValueRequirement> getAdditionalRequirements(final FunctionCompilationContext context, final ComputationTarget target, final Set<ValueSpecification> inputs, final Set<ValueSpecification> outputs) {
+        public Set<ValueRequirement> getAdditionalRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+            final Set<ValueSpecification> inputs, final Set<ValueSpecification> outputs) {
           assertEquals(1, inputs.size());
           assertTrue(inputs.contains(helper.getSpec2Bar()));
           assertEquals(1, outputs.size());
@@ -137,8 +139,8 @@ public class DepGraphLateResolutionTest extends AbstractDependencyGraphBuilderTe
         @Override
         public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
           final ValueRequirement req = helper.getRequirement1Any();
-          return Collections.singleton(new ValueSpecification(req.getValueName(), target.toSpecification(), req.getConstraints().copy().with(ValuePropertyNames.FUNCTION, getUniqueId())
-              .get()));
+          return Collections.singleton(new ValueSpecification(req.getValueName(), target.toSpecification(),
+              req.getConstraints().copy().with(ValuePropertyNames.FUNCTION, getUniqueId()).get()));
         }
 
         @Override

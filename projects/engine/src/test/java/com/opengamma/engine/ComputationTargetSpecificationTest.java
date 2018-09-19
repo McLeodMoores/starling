@@ -45,7 +45,8 @@ public class ComputationTargetSpecificationTest {
   private static final Trade TRADE = createTrade();
 
   private static Trade createTrade() {
-    final SimpleTrade trade = new SimpleTrade(SECURITY, BigDecimal.ONE, new SimpleCounterparty(ExternalId.of(Counterparty.DEFAULT_SCHEME, "Foo")), LocalDate.now(), null);
+    final SimpleTrade trade = new SimpleTrade(SECURITY, BigDecimal.ONE,
+        new SimpleCounterparty(ExternalId.of(Counterparty.DEFAULT_SCHEME, "Foo")), LocalDate.now(), null);
     trade.setUniqueId(UID);
     return trade;
   }

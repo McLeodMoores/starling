@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph;
@@ -43,7 +43,7 @@ import com.opengamma.engine.value.ValueRequirement;
   };
 
   private final Housekeeper _monitor;
-  private final ConcurrentMap<ValueRequirement, ValueRequirement> _valueRequirements = new ConcurrentHashMap<ValueRequirement, ValueRequirement>();
+  private final ConcurrentMap<ValueRequirement, ValueRequirement> _valueRequirements = new ConcurrentHashMap<>();
   private int _tick;
 
   public PendingRequirements(final DependencyGraphBuilder builder) {
@@ -51,7 +51,8 @@ import com.opengamma.engine.value.ValueRequirement;
   }
 
   @Override
-  public void resolved(final GraphBuildingContext context, final ValueRequirement valueRequirement, final ResolvedValue resolvedValue, final ResolutionPump pump) {
+  public void resolved(final GraphBuildingContext context, final ValueRequirement valueRequirement, final ResolvedValue resolvedValue,
+      final ResolutionPump pump) {
     _valueRequirements.remove(valueRequirement);
     if (pump != null) {
       context.close(pump);
@@ -69,7 +70,7 @@ import com.opengamma.engine.value.ValueRequirement;
   }
 
   private void tick() {
-    if ((++_tick % REPORT_PERIOD) == 0) {
+    if (++_tick % REPORT_PERIOD == 0) {
       if (LOGGER.isDebugEnabled()) {
         LOGGER.debug("{} pending in run queue", _valueRequirements);
       } else {

@@ -144,7 +144,8 @@ public class DepGraphConstraintsTest extends AbstractDependencyGraphBuilderTest 
         }
 
         @Override
-        public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+        public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+            final ValueRequirement desiredValue) {
           return Collections.singleton(new ValueRequirement(helper.getRequirement2Any().getValueName(), target.toSpecification(), ValueProperties.with("TEST",
               desiredValue.getConstraints().getValues("TEST")).get()));
         }

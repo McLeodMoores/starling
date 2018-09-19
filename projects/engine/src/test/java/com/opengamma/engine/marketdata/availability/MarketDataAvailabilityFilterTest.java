@@ -57,7 +57,8 @@ public class MarketDataAvailabilityFilterTest {
     final Object target = new ExternalIdentifiablePrimitive(targetSpec.getUniqueId(), identifier);
     assertTrue(filter.isAvailable(targetSpec, target, desiredValue));
     final AbstractMarketDataAvailabilityProvider provider = Mockito.mock(AbstractMarketDataAvailabilityProvider.class);
-    final ValueSpecification valueSpec = new ValueSpecification(desiredValue.getValueName(), targetSpec, ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get());
+    final ValueSpecification valueSpec =
+        new ValueSpecification(desiredValue.getValueName(), targetSpec, ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get());
     Mockito.when(provider.getAvailability(targetSpec, identifier, desiredValue)).thenReturn(valueSpec);
     assertEquals(filter.withProvider(provider).getAvailability(targetSpec, target, desiredValue), valueSpec);
   }
@@ -114,7 +115,8 @@ public class MarketDataAvailabilityFilterTest {
     final Object target = new ExternalBundleIdentifiablePrimitive(targetSpec.getUniqueId(), identifiers);
     assertTrue(filter.isAvailable(targetSpec, target, desiredValue));
     final AbstractMarketDataAvailabilityProvider provider = Mockito.mock(AbstractMarketDataAvailabilityProvider.class);
-    final ValueSpecification valueSpec = new ValueSpecification(desiredValue.getValueName(), targetSpec, ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get());
+    final ValueSpecification valueSpec =
+        new ValueSpecification(desiredValue.getValueName(), targetSpec, ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get());
     Mockito.when(provider.getAvailability(targetSpec, identifiers, desiredValue)).thenReturn(valueSpec);
     assertEquals(filter.withProvider(provider).getAvailability(targetSpec, target, desiredValue), valueSpec);
   }
@@ -144,7 +146,8 @@ public class MarketDataAvailabilityFilterTest {
     final Object target = identifiers;
     assertTrue(filter.isAvailable(targetSpec, target, desiredValue));
     final AbstractMarketDataAvailabilityProvider provider = Mockito.mock(AbstractMarketDataAvailabilityProvider.class);
-    final ValueSpecification valueSpec = new ValueSpecification(desiredValue.getValueName(), targetSpec, ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get());
+    final ValueSpecification valueSpec =
+        new ValueSpecification(desiredValue.getValueName(), targetSpec, ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get());
     Mockito.when(provider.getAvailability(targetSpec, identifier1, desiredValue)).thenReturn(valueSpec);
     assertEquals(filter.withProvider(provider).getAvailability(targetSpec, target, desiredValue), valueSpec);
   }
@@ -200,7 +203,8 @@ public class MarketDataAvailabilityFilterTest {
     final Object target = new Primitive(targetSpec.getUniqueId());
     assertTrue(filter.isAvailable(targetSpec, target, desiredValue));
     final AbstractMarketDataAvailabilityProvider provider = Mockito.mock(AbstractMarketDataAvailabilityProvider.class);
-    final ValueSpecification valueSpec = new ValueSpecification(desiredValue.getValueName(), targetSpec, ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get());
+    final ValueSpecification valueSpec =
+        new ValueSpecification(desiredValue.getValueName(), targetSpec, ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get());
     Mockito.when(provider.getAvailability(targetSpec, targetSpec.getUniqueId(), desiredValue)).thenReturn(valueSpec);
     assertEquals(filter.withProvider(provider).getAvailability(targetSpec, target, desiredValue), valueSpec);
   }
@@ -250,7 +254,8 @@ public class MarketDataAvailabilityFilterTest {
     };
     assertTrue(filter.isAvailable(ComputationTargetSpecification.NULL, null, desiredValue));
     final AbstractMarketDataAvailabilityProvider provider = Mockito.mock(AbstractMarketDataAvailabilityProvider.class);
-    final ValueSpecification valueSpec = new ValueSpecification(desiredValue.getValueName(), ComputationTargetSpecification.NULL, ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get());
+    final ValueSpecification valueSpec = new ValueSpecification(desiredValue.getValueName(), ComputationTargetSpecification.NULL,
+        ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get());
     Mockito.when(provider.getAvailability(ComputationTargetSpecification.NULL, desiredValue)).thenReturn(valueSpec);
     assertEquals(filter.withProvider(provider).getAvailability(ComputationTargetSpecification.NULL, null, desiredValue), valueSpec);
   }

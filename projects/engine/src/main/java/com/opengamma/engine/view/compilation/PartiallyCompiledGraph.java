@@ -23,8 +23,8 @@ import com.opengamma.engine.value.ValueSpecification;
 /**
  * Holds state relating to an incremental compilation. This is essentially the content of a {@link DependencyGraph} in mutable form.
  * <p>
- * Note that this implements {@link DependencyGraph} as a convenience for some uses of the data; it should not be passed around as a general purpose dependency graph as not all methods are
- * implemented.
+ * Note that this implements {@link DependencyGraph} as a convenience for some uses of the data; it should not be passed around as a general
+ * purpose dependency graph as not all methods are implemented.
  */
 public final class PartiallyCompiledGraph implements DependencyGraph {
 

@@ -30,7 +30,8 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class DependencyGraphImpl implements DependencyGraph, Serializable {
 
-  // TODO: Change DependencyGraph from an interface to an abstract class and put the static stuff into it rather than have static methods & instanceof checks here
+  // TODO: Change DependencyGraph from an interface to an abstract class and put the static stuff into it rather than have static
+  // methods & instanceof checks here
 
   // TODO: Make ExecutionOrderNodeIterator package visible
 
@@ -69,7 +70,8 @@ public class DependencyGraphImpl implements DependencyGraph, Serializable {
    * @param size the size of the graph
    * @param terminalOutputs the terminal outputs from the graph, not null and not containing null
    */
-  public DependencyGraphImpl(final String calcConfigName, final Collection<DependencyNode> roots, final int size, final Map<ValueSpecification, Set<ValueRequirement>> terminalOutputs) {
+  public DependencyGraphImpl(final String calcConfigName, final Collection<DependencyNode> roots, final int size,
+      final Map<ValueSpecification, Set<ValueRequirement>> terminalOutputs) {
     ArgumentChecker.notNull(calcConfigName, "calcConfigName");
     ArgumentChecker.noNulls(roots, "roots");
     ArgumentChecker.notNull(terminalOutputs, "terminalOutputs");
@@ -84,7 +86,8 @@ public class DependencyGraphImpl implements DependencyGraph, Serializable {
     _size = size;
   }
 
-  private DependencyGraphImpl(final String calcConfigName, final DependencyNode[] roots, final int size, final Map<ValueSpecification, Set<ValueRequirement>> terminalOutputs) {
+  private DependencyGraphImpl(final String calcConfigName, final DependencyNode[] roots, final int size,
+      final Map<ValueSpecification, Set<ValueRequirement>> terminalOutputs) {
     _calculationConfigurationName = calcConfigName;
     _roots = roots;
     _size = size;
@@ -196,9 +199,10 @@ public class DependencyGraphImpl implements DependencyGraph, Serializable {
   /**
    * Returns all of the nodes from a graph.
    * <p>
-   * This is provided mainly for tests and compatibility with code prior to major changes made to the {@link DependencyGraph} class. It is unlikely to be efficient in terms of memory or the time taken
-   * to construct the collection as the work may be performed twice; once building a set to ensure that each node is visited only once (see {@link #executionOrderIterator}) and again for the returned
-   * set.
+   * This is provided mainly for tests and compatibility with code prior to major changes made to the {@link DependencyGraph} class.
+   * It is unlikely to be efficient in terms of memory or the time taken to construct the collection as the work may be performed
+   * twice; once building a set to ensure that each node is visited only once (see {@link #executionOrderIterator}) and again for
+   * the returned set.
    *
    * @param graph the graph to query, not null
    * @return all of the nodes in the graph, not null and not containing null
@@ -263,7 +267,8 @@ public class DependencyGraphImpl implements DependencyGraph, Serializable {
     return backward;
   }
 
-  private static Map<ValueSpecification, DependencyNode> findRoots(final DependencyGraph graph, final Map<ValueSpecification, ?> terminals, final Collection<DependencyNode> roots) {
+  private static Map<ValueSpecification, DependencyNode> findRoots(final DependencyGraph graph, final Map<ValueSpecification, ?> terminals,
+      final Collection<DependencyNode> roots) {
     final DependencyNode[] nodes = reverseExecution(graph);
     final Map<ValueSpecification, DependencyNode> necessary = Maps.newHashMapWithExpectedSize(nodes.length);
     findNodes: for (final DependencyNode node : nodes) { //CSIGNORE
@@ -299,10 +304,12 @@ public class DependencyGraphImpl implements DependencyGraph, Serializable {
   }
 
   /**
-   * Removes any unnecessary values from a graph, returning the new graph. A necessary output is one that is marked as terminal or is consumed by a node that produces a necessary value.
+   * Removes any unnecessary values from a graph, returning the new graph. A necessary output is one that is marked as terminal or is consumed by a
+   * node that produces a necessary value.
    * <p>
-   * Graph construction may be based on functions which can produce multiple outputs which may not then be needed. Removing them may make execution more efficient. Similarly an incremental graph build
-   * may have fragments of graph from an earlier iteration producing values which are no longer terminal and no longer need to be calculated, making execution more efficient.
+   * Graph construction may be based on functions which can produce multiple outputs which may not then be needed. Removing them may make execution
+   * more efficient. Similarly an incremental graph build may have fragments of graph from an earlier iteration producing values which are no longer
+   * terminal and no longer need to be calculated, making execution more efficient.
    *
    * @param graph the graph to remove values from, not null
    * @return the new graph object, or the previous graph instance if it only contains necessary values
@@ -361,7 +368,8 @@ public class DependencyGraphImpl implements DependencyGraph, Serializable {
   /**
    * Produces an ASCII representation of a dependency graph.
    * <p>
-   * This is provided for diagnostic/debugging purposes only. It must not be used for any form of data interchange or persistence as the formatting may change in future releases without prior notice.
+   * This is provided for diagnostic/debugging purposes only. It must not be used for any form of data interchange or persistence as the
+   * formatting may change in future releases without prior notice.
    *
    * @param graph the graph to dump out, not null
    * @param out the stream to write to, not null

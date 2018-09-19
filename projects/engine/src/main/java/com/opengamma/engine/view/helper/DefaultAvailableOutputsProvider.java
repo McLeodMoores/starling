@@ -39,13 +39,14 @@ public class DefaultAvailableOutputsProvider implements AvailableOutputsProvider
   private final MarketDataAvailabilityFilter _marketDataAvailability;
   private final String _wildcardIndicator;
 
-  public DefaultAvailableOutputsProvider(final CompiledFunctionService compiledFunctionService, final FunctionExclusionGroups functionExclusionGroups, final PositionSource positionSource,
-      final SecuritySource securitySource, final String wildcardIndicator) {
+  public DefaultAvailableOutputsProvider(final CompiledFunctionService compiledFunctionService, final FunctionExclusionGroups functionExclusionGroups,
+      final PositionSource positionSource, final SecuritySource securitySource, final String wildcardIndicator) {
     this(compiledFunctionService, functionExclusionGroups, new OptimisticMarketDataAvailabilityFilter(), positionSource, securitySource, wildcardIndicator);
   }
 
   public DefaultAvailableOutputsProvider(final CompiledFunctionService compiledFunctionService, final FunctionExclusionGroups functionExclusionGroups,
-      final MarketDataAvailabilityFilter marketDataAvailability, final PositionSource positionSource, final SecuritySource securitySource, final String wildcardIndicator) {
+      final MarketDataAvailabilityFilter marketDataAvailability, final PositionSource positionSource, final SecuritySource securitySource,
+      final String wildcardIndicator) {
     ArgumentChecker.notNull(compiledFunctionService, "compiledFunctionService");
     ArgumentChecker.notNull(marketDataAvailability, "marketDataAvailability");
     ArgumentChecker.notNull(positionSource, "positionSource");

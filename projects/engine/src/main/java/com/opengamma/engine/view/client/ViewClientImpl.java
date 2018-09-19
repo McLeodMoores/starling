@@ -159,15 +159,14 @@ public class ViewClientImpl implements ViewClient {
           for (final DependencyGraphExplorer explorer : dependencyGraphExplorers) {
             graphs.add(explorer.getWholeGraph());
           }
-          return new CompiledViewDefinitionWithGraphsImpl(cvdwg.getResolverVersionCorrection(), cvdwg.getCompilationIdentifier(), cvdwg.getViewDefinition(), graphs,
-              cvdwg.getResolvedIdentifiers(), filter.generateRestrictedPortfolio(compiledViewDefinition.getPortfolio()), cvdwg.getFunctionInitId(),
+          return new CompiledViewDefinitionWithGraphsImpl(cvdwg.getResolverVersionCorrection(), cvdwg.getCompilationIdentifier(), cvdwg.getViewDefinition(),
+              graphs, cvdwg.getResolvedIdentifiers(), filter.generateRestrictedPortfolio(compiledViewDefinition.getPortfolio()), cvdwg.getFunctionInitId(),
               cvdwg.getCompiledCalculationConfigurations(), cvdwg.getValidFrom(), cvdwg.getValidTo());
-        } else {
-          // Would be better if there was a builder for this!
-          return new CompiledViewDefinitionImpl(compiledViewDefinition.getResolverVersionCorrection(), compiledViewDefinition.getCompilationIdentifier(),
-              compiledViewDefinition.getViewDefinition(), filter.generateRestrictedPortfolio(compiledViewDefinition.getPortfolio()),
-              compiledViewDefinition.getCompiledCalculationConfigurations(), compiledViewDefinition.getValidFrom(), compiledViewDefinition.getValidTo());
         }
+        // Would be better if there was a builder for this!
+        return new CompiledViewDefinitionImpl(compiledViewDefinition.getResolverVersionCorrection(), compiledViewDefinition.getCompilationIdentifier(),
+            compiledViewDefinition.getViewDefinition(), filter.generateRestrictedPortfolio(compiledViewDefinition.getPortfolio()),
+            compiledViewDefinition.getCompiledCalculationConfigurations(), compiledViewDefinition.getValidFrom(), compiledViewDefinition.getValidTo());
       }
 
       @Override
@@ -310,8 +309,11 @@ public class ViewClientImpl implements ViewClient {
       // deadlocks as the initial notifications will be passed to the merging listener while the _clientLock is held -
       // they must not be passed on to the underlying listener.
       final ViewProcessorImpl viewProcessor = getViewProcessor();
-      final ViewPermissionContext context = privateProcess ? viewProcessor.attachClientToPrivateViewProcess(getUniqueId(), _mergingViewProcessListener, viewDefinitionId, executionOptions,
-          _viewProcessContextMap) : viewProcessor.attachClientToSharedViewProcess(getUniqueId(), _mergingViewProcessListener, viewDefinitionId, executionOptions, _viewProcessContextMap);
+      final ViewPermissionContext context = privateProcess
+          ? viewProcessor
+              .attachClientToPrivateViewProcess(getUniqueId(), _mergingViewProcessListener, viewDefinitionId, executionOptions, _viewProcessContextMap)
+          : viewProcessor
+              .attachClientToSharedViewProcess(getUniqueId(), _mergingViewProcessListener, viewDefinitionId, executionOptions, _viewProcessContextMap);
       isPaused = attachToViewProcessCore(context);
     } finally {
       _clientLock.unlock();

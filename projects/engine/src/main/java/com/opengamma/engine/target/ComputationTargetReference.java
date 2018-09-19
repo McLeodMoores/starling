@@ -20,8 +20,8 @@ import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.util.PublicAPI;
 
 /**
- * A reference to a particular computation target that will be resolved later to a real target. The reference may be "strict" and refer to a specific object or concept by {@link UniqueId} or "loose"
- * and refer to it by a broader identifier bundle that must first be resolved.
+ * A reference to a particular computation target that will be resolved later to a real target. The reference may be "strict" and refer to a
+ * specific object or concept by {@link UniqueId} or "loose" and refer to it by a broader identifier bundle that must first be resolved.
  */
 @PublicAPI
 public abstract class ComputationTargetReference implements Serializable {
@@ -139,8 +139,8 @@ public abstract class ComputationTargetReference implements Serializable {
   }
 
   /**
-   * Returns this as a target requirement if it is one. If it is not a requirement, an exception will be thrown. Use the visitor pattern to deal with the alternative types; such as to resolve a
-   * requirement to a specification using the compilation context.
+   * Returns this as a target requirement if it is one. If it is not a requirement, an exception will be thrown. Use the visitor pattern to deal
+   * with the alternative types; such as to resolve a requirement to a specification using the compilation context.
    *
    * @return the computation target requirement instance, not null
    * @throws IllegalStateException if this is not a {@link ComputationTargetRequirement}
@@ -150,8 +150,8 @@ public abstract class ComputationTargetReference implements Serializable {
   }
 
   /**
-   * Returns this as a target specification if it is one. If it is not a specification, an exception will be thrown. Use the visitor pattern to deal with the alternative types; such as to resolve a
-   * requirement to a specification using the compilation context.
+   * Returns this as a target specification if it is one. If it is not a specification, an exception will be thrown. Use the visitor pattern to
+   * deal with the alternative types; such as to resolve a requirement to a specification using the compilation context.
    *
    * @return the computation target specification instance, not null
    * @throws IllegalStateException if this is not a {@link ComputationTargetSpecification}

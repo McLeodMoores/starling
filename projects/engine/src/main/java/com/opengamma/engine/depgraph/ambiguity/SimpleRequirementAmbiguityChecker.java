@@ -231,13 +231,12 @@ public class SimpleRequirementAmbiguityChecker implements RequirementAmbiguityCh
     }
     if (parentExclusion != null) {
       return groups.withExclusion(parentExclusion, functionExclusion);
-    } else {
-      return Collections.singleton(functionExclusion);
     }
+    return Collections.singleton(functionExclusion);
   }
 
-  private Collection<FullRequirementResolution> resolve(final CheckingCache cache, final Collection<FunctionExclusionGroup> parentExclusion, final ComputationTarget target,
-      final ValueRequirement desiredValue, final ResolutionRule rule, final Set<ValueRequirement> inputs) {
+  private Collection<FullRequirementResolution> resolve(final CheckingCache cache, final Collection<FunctionExclusionGroup> parentExclusion,
+      final ComputationTarget target, final ValueRequirement desiredValue, final ResolutionRule rule, final Set<ValueRequirement> inputs) {
     String functionExclusionValueName = desiredValue.getValueName();
     Collection<FunctionExclusionGroup> functionExclusion = null;
     final Collection<FullRequirementResolution> resolvedInputs = new ArrayList<>(inputs.size());
@@ -261,7 +260,8 @@ public class SimpleRequirementAmbiguityChecker implements RequirementAmbiguityCh
     return resolvedInputs;
   }
 
-  private void getResolvedInputs(final Collection<FullRequirementResolution> resolvedInputs, final ValueRequirement[] inputArray, final Iterator<Collection<RequirementResolution>>[] itrResolvedInputs) {
+  private void getResolvedInputs(final Collection<FullRequirementResolution> resolvedInputs, final ValueRequirement[] inputArray,
+      final Iterator<Collection<RequirementResolution>>[] itrResolvedInputs) {
     int i = 0;
     for (final FullRequirementResolution resolvedInput : resolvedInputs) {
       inputArray[i] = resolvedInput.getRequirement();
@@ -269,7 +269,8 @@ public class SimpleRequirementAmbiguityChecker implements RequirementAmbiguityCh
     }
   }
 
-  private boolean getResolvedInputs(final int j, final ValueRequirement[] inputArray, final RequirementResolution[][] resolvedInputsSlice, final Map<ValueSpecification, ValueRequirement> inputMap) {
+  private boolean getResolvedInputs(final int j, final ValueRequirement[] inputArray, final RequirementResolution[][] resolvedInputsSlice,
+      final Map<ValueSpecification, ValueRequirement> inputMap) {
     inputMap.clear();
     int base = 1;
     boolean success = true;
@@ -286,7 +287,8 @@ public class SimpleRequirementAmbiguityChecker implements RequirementAmbiguityCh
     return success;
   }
 
-  protected FullRequirementResolution resolve(final CheckingCache cache, final Collection<FunctionExclusionGroup> exclusions, final ValueRequirement requirement) {
+  protected FullRequirementResolution resolve(final CheckingCache cache, final Collection<FunctionExclusionGroup> exclusions,
+      final ValueRequirement requirement) {
     if (!cache.begin(requirement)) {
       // Recursive requirement; abort
       LOGGER.debug("Recursive requirement on {}", requirement);
@@ -308,7 +310,8 @@ public class SimpleRequirementAmbiguityChecker implements RequirementAmbiguityCh
       if (marketData != null) {
         LOGGER.debug("Market data satisfies {} with {}", requirement, marketData);
         marketData = alias(marketData, targetSpec, requirement);
-        resolved.addResolutions(Collections.singleton(new RequirementResolution(marketData, MARKET_DATA_SOURCING_FUNCTION, Collections.<FullRequirementResolution>emptySet())));
+        resolved.addResolutions(
+            Collections.singleton(new RequirementResolution(marketData, MARKET_DATA_SOURCING_FUNCTION, Collections.<FullRequirementResolution>emptySet())));
       } else {
         if (target != null) {
           final List<Collection<RequirementResolution>> resolutions = new ArrayList<>();
@@ -321,7 +324,8 @@ public class SimpleRequirementAmbiguityChecker implements RequirementAmbiguityCh
                   continue;
                 }
                 final ComputationTarget adjustedTarget = rule.adjustTarget(targetCache, target);
-                final ValueSpecification nominalResult = rule.getResult(requirement.getValueName(), adjustedTarget, requirement.getConstraints(), getCompilationContext());
+                final ValueSpecification nominalResult =
+                    rule.getResult(requirement.getValueName(), adjustedTarget, requirement.getConstraints(), getCompilationContext());
                 if (nominalResult != null) {
                   LOGGER.debug("Possible resolution of {} to {}", requirement, nominalResult);
                   Set<ValueRequirement> inputs = null;
@@ -402,8 +406,10 @@ public class SimpleRequirementAmbiguityChecker implements RequirementAmbiguityCh
                                 resolutions.get(resolutionIndex).add(new RequirementResolution(finalResult, rule.getParameterizedFunction(), resolvedInputs));
                                 succeeded = true;
                               } else {
-                                final Collection<FullRequirementResolution> additionalResolvedRequirements = resolve(cache, exclusions, target, requirement, rule, additionalRequirements);
-                                if (additionalResolvedRequirements.size() == additionalRequirements.size() || rule.getParameterizedFunction().getFunction().canHandleMissingRequirements()) {
+                                final Collection<FullRequirementResolution> additionalResolvedRequirements =
+                                    resolve(cache, exclusions, target, requirement, rule, additionalRequirements);
+                                if (additionalResolvedRequirements.size() == additionalRequirements.size()
+                                    || rule.getParameterizedFunction().getFunction().canHandleMissingRequirements()) {
                                   resolvedInputs.addAll(additionalResolvedRequirements);
                                   LOGGER.debug("Resolved {} to {}", requirement, finalResult);
                                   if (resolutionIndex >= resolutions.size()) {

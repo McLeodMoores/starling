@@ -83,7 +83,8 @@ public final class SecurityLinkResolver {
    * @param versionCorrection the version-correction, not null
    */
   public SecurityLinkResolver(final ViewCompilationContext viewCompilationContext, final VersionCorrection versionCorrection) {
-    this(viewCompilationContext.getServices().getExecutorService().asService(), viewCompilationContext.getServices().getFunctionCompilationContext().getSecuritySource(),
+    this(viewCompilationContext.getServices().getExecutorService().asService(),
+        viewCompilationContext.getServices().getFunctionCompilationContext().getSecuritySource(),
         versionCorrection);
   }
 
@@ -252,7 +253,8 @@ public final class SecurityLinkResolver {
     private final SecuritySource _securitySource;
     private final VersionCorrection _versionCorrection;
 
-    private SingleSecurityResolutionJob(final Pair<ObjectId, ExternalIdBundle> key, final SecurityLink link, final SecuritySource securitySource, final VersionCorrection versionCorrection) {
+    private SingleSecurityResolutionJob(final Pair<ObjectId, ExternalIdBundle> key, final SecurityLink link, final SecuritySource securitySource,
+        final VersionCorrection versionCorrection) {
       _key = key;
       _securitySource = securitySource;
       _link = link;

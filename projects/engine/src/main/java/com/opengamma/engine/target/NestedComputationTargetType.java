@@ -23,7 +23,8 @@ import com.opengamma.util.ArgumentChecker;
 
   private final List<ComputationTargetType> _target;
 
-  private static final ComputationTargetTypeVisitor<List<ComputationTargetType>, Boolean> CONSTRUCT = new ComputationTargetTypeVisitor<List<ComputationTargetType>, Boolean>() {
+  private static final ComputationTargetTypeVisitor<List<ComputationTargetType>, Boolean> CONSTRUCT =
+      new ComputationTargetTypeVisitor<List<ComputationTargetType>, Boolean>() {
 
     @Override
     public Boolean visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final List<ComputationTargetType> data) {
@@ -34,7 +35,7 @@ import com.opengamma.util.ArgumentChecker;
     @Override
     public Boolean visitNestedComputationTargetTypes(final List<ComputationTargetType> types, final List<ComputationTargetType> data) {
       // Flatten and accept the contents
-      for (ComputationTargetType type : types) {
+      for (final ComputationTargetType type : types) {
         if (type.accept(this, data)) {
           data.add(type);
         }
@@ -62,7 +63,7 @@ import com.opengamma.util.ArgumentChecker;
   }
 
   private static List<ComputationTargetType> copy(final ComputationTargetType outerType, final ComputationTargetType innerType) {
-    final List<ComputationTargetType> copy = new LinkedList<ComputationTargetType>();
+    final List<ComputationTargetType> copy = new LinkedList<>();
     if (outerType.accept(CONSTRUCT, copy)) {
       copy.add(outerType);
     }
@@ -70,12 +71,12 @@ import com.opengamma.util.ArgumentChecker;
       copy.add(innerType);
     }
     ArgumentChecker.isTrue(copy.size() >= 2, "target");
-    return Collections.unmodifiableList(new ArrayList<ComputationTargetType>(copy));
+    return Collections.unmodifiableList(new ArrayList<>(copy));
   }
 
   /**
    * Creates a new instance.
-   * 
+   *
    * @param outerType the type(s) of the outer context object(s), not null
    * @param innerType the type(s) of the target object(s), not null
    */
@@ -94,11 +95,12 @@ import com.opengamma.util.ArgumentChecker;
     return type.isCompatible(target);
   }
 
-  private static final ComputationTargetTypeVisitor<NestedComputationTargetType, Boolean> IS_COMPATIBLE = new ComputationTargetTypeVisitor<NestedComputationTargetType, Boolean>() {
+  private static final ComputationTargetTypeVisitor<NestedComputationTargetType, Boolean> IS_COMPATIBLE =
+      new ComputationTargetTypeVisitor<NestedComputationTargetType, Boolean>() {
 
     @Override
     public Boolean visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final NestedComputationTargetType self) {
-      for (ComputationTargetType type : types) {
+      for (final ComputationTargetType type : types) {
         if (self.isCompatible(type)) {
           return Boolean.TRUE;
         }
@@ -144,13 +146,14 @@ import com.opengamma.util.ArgumentChecker;
     return type.isCompatible(clazz);
   }
 
-  private static final ComputationTargetTypeVisitor<NestedComputationTargetType, Boolean> IS_TARGET_TYPE = new ComputationTargetTypeVisitor<NestedComputationTargetType, Boolean>() {
+  private static final ComputationTargetTypeVisitor<NestedComputationTargetType, Boolean> IS_TARGET_TYPE =
+      new ComputationTargetTypeVisitor<NestedComputationTargetType, Boolean>() {
 
     @Override
     public Boolean visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final NestedComputationTargetType self) {
       final List<ComputationTargetType> selfTypes = self.getTypes();
       final ComputationTargetType selfType = selfTypes.get(selfTypes.size() - 1);
-      for (ComputationTargetType type : types) {
+      for (final ComputationTargetType type : types) {
         if (selfType.isTargetType(type)) {
           return Boolean.TRUE;
         }
@@ -203,7 +206,7 @@ import com.opengamma.util.ArgumentChecker;
 
   protected void toStringImpl(final StringBuilder sb) {
     boolean sep = false;
-    for (ComputationTargetType type : getTypes()) {
+    for (final ComputationTargetType type : getTypes()) {
       if (sep) {
         sb.append('/');
       } else {
@@ -229,7 +232,7 @@ import com.opengamma.util.ArgumentChecker;
 
   protected void getNameImpl(final StringBuilder sb) {
     boolean sep = false;
-    for (ComputationTargetType type : getTypes()) {
+    for (final ComputationTargetType type : getTypes()) {
       if (sep) {
         sb.append('/');
       } else {
@@ -253,7 +256,8 @@ import com.opengamma.util.ArgumentChecker;
     return sb.toString();
   }
 
-  private static final ComputationTargetTypeVisitor<NestedComputationTargetType, Boolean> EQUALS = new ComputationTargetTypeVisitor<NestedComputationTargetType, Boolean>() {
+  private static final ComputationTargetTypeVisitor<NestedComputationTargetType, Boolean> EQUALS =
+      new ComputationTargetTypeVisitor<NestedComputationTargetType, Boolean>() {
 
     @Override
     public Boolean visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final NestedComputationTargetType self) {

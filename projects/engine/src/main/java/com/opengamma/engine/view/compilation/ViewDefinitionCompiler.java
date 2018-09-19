@@ -61,10 +61,11 @@ import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Ultimately produces a set of {@link DependencyGraph}s from a {@link ViewDefinition}, one for each {@link ViewCalculationConfiguration}. Additional information, such as the live data requirements,
- * is collected along the way and exposed after compilation.
+ * Ultimately produces a set of {@link DependencyGraph}s from a {@link ViewDefinition}, one for each {@link ViewCalculationConfiguration}.
+ * Additional information, such as the live data requirements, is collected along the way and exposed after compilation.
  * <p>
- * The compiled graphs are guaranteed to be calculable for at least the requested timestamp. One or more of the referenced functions may not be valid at other timestamps.
+ * The compiled graphs are guaranteed to be calculable for at least the requested timestamp. One or more of the referenced functions may
+ * not be valid at other timestamps.
  */
 public final class ViewDefinitionCompiler {
 
@@ -96,8 +97,9 @@ public final class ViewDefinitionCompiler {
   //-------------------------------------------------------------------------
 
   /**
-   * Compiles the specified view definition wrt the supplied compilation context, valuation time and version correction and returns the compiled view. This method wraps the compileTask method, waiting
-   * for completion of the async compilation task and returning the resulting CompiledViewDefinitionWithGraphsImpl, rather than a future reference to it.
+   * Compiles the specified view definition wrt the supplied compilation context, valuation time and version correction and returns the compiled view.
+   * This method wraps the compileTask method, waiting for completion of the async compilation task and returning the resulting
+   * CompiledViewDefinitionWithGraphsImpl, rather than a future reference to it.
    *
    * @param viewDefinition the view definition to compile
    * @param compilationServices the compilation context (market data availability provider, graph builder factory, etc.)
@@ -112,7 +114,7 @@ public final class ViewDefinitionCompiler {
 
     private CompilationCompletionEstimate(final ViewCompilationContext context) {
       final Collection<DependencyGraphBuilder> builders = context.getBuilders();
-      _buildEstimates = new ConcurrentHashMap<String, Double>();
+      _buildEstimates = new ConcurrentHashMap<>();
       for (final DependencyGraphBuilder builder : builders) {
         _buildEstimates.put(builder.getCalculationConfigurationName(), 0d);
         Housekeeper.of(builder, this, builder.buildFractionEstimate()).start();
@@ -170,7 +172,8 @@ public final class ViewDefinitionCompiler {
         new CompilationCompletionEstimate(_viewCompilationContext);
       }
       final ResultModelDefinition resultModelDefinition = context.getViewDefinition().getResultModelDefinition();
-      _portfolioOutputs = resultModelDefinition.getPositionOutputMode() != ResultOutputMode.NONE || resultModelDefinition.getAggregatePositionOutputMode() != ResultOutputMode.NONE;
+      _portfolioOutputs = resultModelDefinition.getPositionOutputMode() != ResultOutputMode.NONE
+          || resultModelDefinition.getAggregatePositionOutputMode() != ResultOutputMode.NONE;
     }
 
     protected ViewCompilationContext getContext() {
@@ -195,7 +198,7 @@ public final class ViewDefinitionCompiler {
     }
 
     private void removeUnusedResolutions(final Collection<DependencyGraph> graphs) {
-      final Set<UniqueId> validIdentifiers = new HashSet<UniqueId>(getContext().getActiveResolutions().size());
+      final Set<UniqueId> validIdentifiers = new HashSet<>(getContext().getActiveResolutions().size());
       if (_portfolio != null) {
         validIdentifiers.add(_portfolio.getUniqueId());
       }
@@ -222,15 +225,16 @@ public final class ViewDefinitionCompiler {
     }
 
     /**
-     * Fully resolves the portfolio structure for a view. A fully resolved structure has resolved {@link Security} objects for each {@link Position} within the portfolio. Note however that any
-     * underlying or related data referenced by a security will not be resolved at this stage.
+     * Fully resolves the portfolio structure for a view. A fully resolved structure has resolved {@link Security} objects for each {@link Position}
+     * within the portfolio. Note however that any underlying or related data referenced by a security will not be resolved at this stage.
      *
      * @return the resolved portfolio, not null
      */
     private Portfolio resolvePortfolio() {
       final UniqueId portfolioId = getContext().getViewDefinition().getPortfolioId();
       if (portfolioId == null) {
-        throw new OpenGammaRuntimeException("The view definition '" + getContext().getViewDefinition().getName() + "' contains required portfolio outputs, but it does not reference a portfolio.");
+        throw new OpenGammaRuntimeException("The view definition '" + getContext().getViewDefinition().getName()
+            + "' contains required portfolio outputs, but it does not reference a portfolio.");
       }
       final ComputationTargetResolver resolver = getContext().getServices().getFunctionCompilationContext().getRawComputationTargetResolver();
       final ComputationTargetResolver.AtVersionCorrection versioned = resolver.atVersionCorrection(getContext().getResolverVersionCorrection());
@@ -241,7 +245,8 @@ public final class ViewDefinitionCompiler {
       }
       final ComputationTarget target = versioned.resolve(specification);
       if (target == null) {
-        throw new OpenGammaRuntimeException("Unable to resolve portfolio ID " + specification.getUniqueId() + " for view '" + getContext().getViewDefinition().getName() + "'");
+        throw new OpenGammaRuntimeException("Unable to resolve portfolio ID " + specification.getUniqueId()
+            + " for view '" + getContext().getViewDefinition().getName() + "'");
       }
       return target.getValue(ComputationTargetType.PORTFOLIO);
     }
@@ -308,7 +313,8 @@ public final class ViewDefinitionCompiler {
             if (_portfolio == null) {
               _portfolio = resolvePortfolio();
               final UniqueId newPortfolioId = _portfolio.getUniqueId();
-              final UniqueId oldPortfolioId = resolutions.put(new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO, getContext().getViewDefinition().getPortfolioId()), newPortfolioId);
+              final UniqueId oldPortfolioId = resolutions.put(new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO,
+                  getContext().getViewDefinition().getPortfolioId()), newPortfolioId);
               if (oldPortfolioId != null) {
                 if (newPortfolioId.equals(oldPortfolioId)) {
                   LOGGER.debug("No change to the portfolio {}", oldPortfolioId);
@@ -385,8 +391,8 @@ public final class ViewDefinitionCompiler {
     private final Set<UniqueId> _unchangedNodes;
     private final Set<UniqueId> _changedPositions;
 
-    protected IncrementalCompilationTask(final ViewCompilationContext context, final Map<String, PartiallyCompiledGraph> previousGraphs, final Set<UniqueId> changedPositions,
-        final Set<UniqueId> unchangedNodes) {
+    protected IncrementalCompilationTask(final ViewCompilationContext context, final Map<String, PartiallyCompiledGraph> previousGraphs,
+        final Set<UniqueId> changedPositions, final Set<UniqueId> unchangedNodes) {
       super(context);
       _previousGraphs = previousGraphs;
       _unchangedNodes = unchangedNodes;
@@ -403,7 +409,8 @@ public final class ViewDefinitionCompiler {
         if (builder.getCompilationContext().getPortfolio() != null) {
           // Remove any invalid terminal outputs from the graph and update the changed position set with any late noticed changes
           final PortfolioIdentifierGatherer gatherer = new PortfolioIdentifierGatherer();
-          PortfolioNodeTraverser.parallel(gatherer, getContext().getServices().getExecutorService()).traverse(builder.getCompilationContext().getPortfolio().getRootNode());
+          PortfolioNodeTraverser.parallel(gatherer, getContext().getServices().getExecutorService())
+                                .traverse(builder.getCompilationContext().getPortfolio().getRootNode());
           final Set<UniqueId> identifiers = gatherer.getIdentifiers();
           final Set<ValueRequirement> specifics = calcConfig.getSpecificRequirements();
           final Iterator<Map.Entry<ValueSpecification, Set<ValueRequirement>>> itrTerminal = previousGraph.getTerminalOutputs().entrySet().iterator();
@@ -448,7 +455,7 @@ public final class ViewDefinitionCompiler {
                     // the incremental-P compilation started. An incremental-N will have observed the updated by not matching the node
                     // identifier.
                     if (updatedPositions == null) {
-                      updatedPositions = new HashSet<UniqueId>();
+                      updatedPositions = new HashSet<>();
                     }
                     updatedPositions.add(terminalTarget.getUniqueId());
                   }
@@ -465,7 +472,7 @@ public final class ViewDefinitionCompiler {
             final PositionSource ps = getContext().getServices().getFunctionCompilationContext().getPortfolioStructure().getPositionSource();
             final VersionCorrection vc = getContext().getResolverVersionCorrection();
             if (changedPositions == null) {
-              changedPositions = new HashSet<UniqueId>();
+              changedPositions = new HashSet<>();
             }
             for (final UniqueId oldPositionId : updatedPositions) {
               try {
@@ -515,8 +522,8 @@ public final class ViewDefinitionCompiler {
           final Set<UniqueId> expiredResolutions = getContext().takeExpiredResolutions();
           LOGGER.debug("Revalidate graph(s) against {} expired resolutions", expiredResolutions.size());
           final RootDiscardingSubgrapher filter = new InvalidTargetDependencyNodeFilter(expiredResolutions);
-          final Set<ValueRequirement> missing = new HashSet<ValueRequirement>();
-          final Collection<DependencyGraph> graphs = new ArrayList<DependencyGraph>(getContext().getGraphs());
+          final Set<ValueRequirement> missing = new HashSet<>();
+          final Collection<DependencyGraph> graphs = new ArrayList<>(getContext().getGraphs());
           getContext().getGraphs().clear();
           for (DependencyGraph graph : graphs) {
             DependencyGraph filtered = filter.subGraph(graph, missing);
@@ -532,7 +539,8 @@ public final class ViewDefinitionCompiler {
               continue;
             }
             LOGGER.info("Late changes detected affecting {} requirements", missing.size());
-            final DependencyGraphBuilder builder = getContext().createBuilder(getContext().getViewDefinition().getCalculationConfiguration(graph.getCalculationConfigurationName()));
+            final DependencyGraphBuilder builder =
+                getContext().createBuilder(getContext().getViewDefinition().getCalculationConfiguration(graph.getCalculationConfigurationName()));
             graph = null;
             if (getPortfolio() != null) {
               builder.getCompilationContext().setPortfolio(getPortfolio());
@@ -553,10 +561,12 @@ public final class ViewDefinitionCompiler {
 
   }
 
-  public static Future<CompiledViewDefinitionWithGraphsImpl> fullCompileTask(final ViewDefinition viewDefinition, final ViewCompilationServices compilationServices, final Instant valuationTime,
+  public static Future<CompiledViewDefinitionWithGraphsImpl> fullCompileTask(final ViewDefinition viewDefinition,
+      final ViewCompilationServices compilationServices, final Instant valuationTime,
       final VersionCorrection versionCorrection) {
     LOGGER.info("Full compile of {} for use at {}", viewDefinition.getName(), valuationTime);
-    return new FullCompilationTask(new ViewCompilationContext(viewDefinition, compilationServices, valuationTime, versionCorrection, new ConcurrentHashMap<ComputationTargetReference, UniqueId>()));
+    return new FullCompilationTask(new ViewCompilationContext(viewDefinition, compilationServices, valuationTime, versionCorrection,
+        new ConcurrentHashMap<ComputationTargetReference, UniqueId>()));
   }
 
   /**
@@ -570,16 +580,17 @@ public final class ViewDefinitionCompiler {
    * @param unchangedNodes the identifiers of nodes which are known not to have changed, null if none
    * @return a future for controlling/monitoring the compilation
    */
-  public static Future<CompiledViewDefinitionWithGraphsImpl> incrementalCompileTask(final ViewDefinition viewDefinition, final ViewCompilationServices compilationServices,
-      final Instant valuationTime, final VersionCorrection versionCorrection, final Map<String, PartiallyCompiledGraph> previousGraphs,
-      final ConcurrentMap<ComputationTargetReference, UniqueId> resolutions, final Set<UniqueId> changedPositions, final Set<UniqueId> unchangedNodes) {
+  public static Future<CompiledViewDefinitionWithGraphsImpl> incrementalCompileTask(final ViewDefinition viewDefinition,
+      final ViewCompilationServices compilationServices, final Instant valuationTime, final VersionCorrection versionCorrection,
+      final Map<String, PartiallyCompiledGraph> previousGraphs, final ConcurrentMap<ComputationTargetReference, UniqueId> resolutions,
+      final Set<UniqueId> changedPositions, final Set<UniqueId> unchangedNodes) {
     LOGGER.info("Incremental compile of {} for use at {}", viewDefinition.getName(), valuationTime);
-    return new IncrementalCompilationTask(new ViewCompilationContext(viewDefinition, compilationServices, valuationTime, versionCorrection, resolutions), previousGraphs, changedPositions,
-        unchangedNodes);
+    return new IncrementalCompilationTask(new ViewCompilationContext(viewDefinition, compilationServices, valuationTime, versionCorrection, resolutions),
+        previousGraphs, changedPositions, unchangedNodes);
   }
 
-  public static CompiledViewDefinitionWithGraphsImpl compile(final ViewDefinition viewDefinition, final ViewCompilationServices compilationServices, final Instant valuationTime,
-      final VersionCorrection versionCorrection) {
+  public static CompiledViewDefinitionWithGraphsImpl compile(final ViewDefinition viewDefinition, final ViewCompilationServices compilationServices,
+      final Instant valuationTime, final VersionCorrection versionCorrection) {
     try {
       return fullCompileTask(viewDefinition, compilationServices, valuationTime, versionCorrection).get();
     } catch (final InterruptedException e) {
@@ -590,7 +601,7 @@ public final class ViewDefinitionCompiler {
   }
 
   private static Set<Pair<String, ValueProperties>> getStripes(final Map<String, Set<Pair<String, ValueProperties>>> portfolioRequirementsBySecurityType) {
-    final Set<Pair<String, ValueProperties>> stripes = new HashSet<Pair<String, ValueProperties>>();
+    final Set<Pair<String, ValueProperties>> stripes = new HashSet<>();
     for (final Set<Pair<String, ValueProperties>> stripe : portfolioRequirementsBySecurityType.values()) {
       stripes.addAll(stripe);
     }
@@ -598,9 +609,11 @@ public final class ViewDefinitionCompiler {
   }
 
   /**
-   * Indicates whether portfolio requirements should be added in batches or together. All together may use more memory but may be quicker. In batches may use less memory but may be slower.
+   * Indicates whether portfolio requirements should be added in batches or together. All together may use more memory but may be quicker. In batches may
+   * use less memory but may be slower.
    * <p>
-   * Views with many column definitions on large portfolios can benefit significantly from this as the memory required to process them all concurrently may be prohibitive.
+   * Views with many column definitions on large portfolios can benefit significantly from this as the memory required to process them all concurrently may
+   * be prohibitive.
    *
    * @return true to stripe the portfolio requirements in batches to the graph builder, false to do them all at once
    * @deprecated this is a temporary measure; enabling/disabling the striping should be performed programaticaly based on view/portfolio heuristics
@@ -622,14 +635,16 @@ public final class ViewDefinitionCompiler {
     s_striped = useStripes;
   }
 
-  private static void addPortfolioRequirements(final DependencyGraphBuilder builder, final Set<ValueRequirement> alreadyAdded, final ViewCompilationContext context,
-      final ViewCalculationConfiguration calcConfig, final Set<UniqueId> includeEvents, final Set<UniqueId> excludeEvents) {
+  private static void addPortfolioRequirements(final DependencyGraphBuilder builder, final Set<ValueRequirement> alreadyAdded,
+      final ViewCompilationContext context, final ViewCalculationConfiguration calcConfig, final Set<UniqueId> includeEvents,
+      final Set<UniqueId> excludeEvents) {
     if (calcConfig.getAllPortfolioRequirements().size() == 0) {
       // No portfolio requirements for this calculation configuration - avoid further processing.
       return;
     }
     final Portfolio portfolio = builder.getCompilationContext().getPortfolio();
-    final PortfolioCompilerTraversalCallback traversalCallback = new PortfolioCompilerTraversalCallback(calcConfig, builder, alreadyAdded, context.getActiveResolutions(), includeEvents, excludeEvents);
+    final PortfolioCompilerTraversalCallback traversalCallback =
+        new PortfolioCompilerTraversalCallback(calcConfig, builder, alreadyAdded, context.getActiveResolutions(), includeEvents, excludeEvents);
     final PortfolioNodeTraverser traverser = PortfolioNodeTraverser.parallel(traversalCallback, context.getServices().getExecutorService());
     if (isStripedPortfolioRequirements()) {
       final Map<String, Set<Pair<String, ValueProperties>>> requirementsBySecurityType = traversalCallback.getPortfolioRequirementsBySecurityType();
@@ -649,7 +664,8 @@ public final class ViewDefinitionCompiler {
         traverser.traverse(portfolio.getRootNode());
         try {
           LOGGER.debug("Waiting for stripe {} to complete", stripe);
-          // TODO: Waiting for a completion state causes any progress tracker to abort (it sees 100% and stops). Need to rethink how to do the progress estimates.
+          // TODO: Waiting for a completion state causes any progress tracker to abort (it sees 100% and stops). Need to rethink
+          // how to do the progress estimates.
           builder.waitForDependencyGraphBuild();
         } catch (final InterruptedException e) {
           throw new OpenGammaRuntimeException("Interrupted during striped compilation", e);

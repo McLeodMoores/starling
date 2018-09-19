@@ -119,7 +119,7 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
   }
 
   /**
-   * Constructs an instance
+   * Constructs an instance.
    *
    * @param name  the name of the view definition, not null
    * @param portfolioId the unique identifier of the portfolio referenced by this view definition, null if
@@ -132,7 +132,7 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
   }
 
   /**
-   * Constructs an instance
+   * Constructs an instance.
    *
    * @param name  the name of the view definition, not null
    * @param portfolioId the unique identifier of the portfolio referenced by this view definition, null if
@@ -193,7 +193,7 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
   }
 
   /**
-   * Constructs an instance
+   * Constructs an instance.
    *
    * @param uniqueId  the unique id of the view definition
    * @param name  the name of the view definition, not null
@@ -206,7 +206,7 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
   }
 
   /**
-   * Constructs an instance
+   * Constructs an instance.
    *
    * @param uniqueId  the unique id of the view definition
    * @param name  the name of the view definition, not null
@@ -215,7 +215,8 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
    * @param marketDataUser  the user who owns the view definition, not null
    * @param resultModelDefinition  configuration of the results from the view, not null
    */
-  public ViewDefinition(final UniqueId uniqueId, final String name, final UniqueId portfolioId, final UserPrincipal marketDataUser, final ResultModelDefinition resultModelDefinition) {
+  public ViewDefinition(final UniqueId uniqueId, final String name, final UniqueId portfolioId, final UserPrincipal marketDataUser,
+      final ResultModelDefinition resultModelDefinition) {
     ArgumentChecker.notNull(name, "View name");
     ArgumentChecker.notNull(marketDataUser, "User name");
     ArgumentChecker.notNull(resultModelDefinition, "Result model definition");
@@ -299,7 +300,7 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
   }
 
   /**
-   * Gets the default currency defined for this view
+   * Gets the default currency defined for this view.
    *
    * @return the currency
    */
@@ -308,7 +309,7 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
   }
 
   /**
-   * Sets the default currency to use
+   * Sets the default currency to use.
    *
    * @param currency The default currency
    */
@@ -376,7 +377,8 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
    * @param constraints additional constraints on the value produced, not null. For example this could be used to specify a currency
    * rather than use the view or portfolio default.
    */
-  public void addPortfolioRequirement(final String calculationConfigurationName, final String securityType, final String requirementName, final ValueProperties constraints) {
+  public void addPortfolioRequirement(final String calculationConfigurationName, final String securityType, final String requirementName,
+      final ValueProperties constraints) {
     ViewCalculationConfiguration calcConfig = _calculationConfigurationsByName.get(calculationConfigurationName);
     if (calcConfig == null) {
       calcConfig = new ViewCalculationConfiguration(this, calculationConfigurationName);
@@ -616,9 +618,8 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
   public String toString() {
     if (LOGGER.isDebugEnabled()) {
       return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE, false);
-    } else {
-      return "ViewDefinition[" + getName() + "]";
     }
+    return "ViewDefinition[" + getName() + "]";
   }
 
 }

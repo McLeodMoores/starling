@@ -252,9 +252,12 @@ public class DepGraphTargetMergingTest extends AbstractDependencyGraphBuilderTes
       builder.addTarget(new ValueRequirement("Foo", ComputationTargetSpecification.of(UniqueId.of("Test", "3B"))));
       builder.addTarget(new ValueRequirement("Bar", ComputationTargetSpecification.of(UniqueId.of("Test", "3C"))));
       final DependencyGraph graph = builder.getDependencyGraph();
-      assertEquals(graph.getSize(), 12); // Foo(0A0B0C) -> Bar(0B), Req1 -> Foo(1A1B1C) -> { Bar(1A), Bar(1C) }, Req2 -> Foo(2A2B2C) -> Bar(2B), { Req1, Req2 } -> Foo(3A3B3C) -> { Bar(3A), Bar (3C) }
+      // Foo(0A0B0C) -> Bar(0B), Req1 -> Foo(1A1B1C) -> { Bar(1A), Bar(1C) }, Req2 -> Foo(2A2B2C) -> Bar(2B), { Req1, Req2 }
+      // -> Foo(3A3B3C) -> { Bar(3A), Bar (3C) }
+      assertEquals(graph.getSize(), 12);
       assertEquals(getTargets(graph),
-          ImmutableSet.of("0A0B0C", "1A1B1C", "2A2B2C", "3A3B3C", helper.getTarget().toSpecification().getUniqueId().getValue(), "0B", "1A", "1C", "2B", "3A", "3C"));
+          ImmutableSet.of("0A0B0C", "1A1B1C", "2A2B2C", "3A3B3C", helper.getTarget().toSpecification().getUniqueId().getValue(),
+              "0B", "1A", "1C", "2B", "3A", "3C"));
     } finally {
       TestLifecycle.end();
     }

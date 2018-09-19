@@ -18,8 +18,9 @@ import com.opengamma.util.PublicAPI;
 /**
  * Service to interrogate the portfolio structure.
  * <p>
- * The {@link PortfolioNode} object only contains the unique identifier of its parent nodes, requiring additional resolution steps and queries to a {@link PositionSource}. This is exposed to functions
- * as part of the {@link FunctionExecutionContext} to allow such queries. At function execution, all child nodes, positions, trades and referenced securities will be resolved and can be queried
+ * The {@link PortfolioNode} object only contains the unique identifier of its parent nodes, requiring additional resolution steps and
+ * queries to a {@link PositionSource}. This is exposed to functions as part of the {@link FunctionExecutionContext} to allow such
+ * queries. At function execution, all child nodes, positions, trades and referenced securities will be resolved and can be queried
  * directly from the node object or using utility methods from {@link PositionAccumulator}.
  */
 @PublicAPI
@@ -51,7 +52,8 @@ public class PortfolioStructure {
 
   //-------------------------------------------------------------------------
   /**
-   * Returns the portfolio node that is the immediate parent of the given node. This is equivalent to resolving the unique identifier reported by a portfolio node as its parent.
+   * Returns the portfolio node that is the immediate parent of the given node. This is equivalent to resolving the unique identifier reported
+   * by a portfolio node as its parent.
    *
    * @param node the node to search for, not null
    * @return the parent node, null if the parent cannot be resolved or the node is a root node
@@ -95,8 +97,8 @@ public class PortfolioStructure {
   }
 
   /**
-   * Returns the root node for the portfolio containing the given position. The position must be in a {@link ComputationTarget} of type {@code PORTFOLIO_NODE/POSITION}. This is equivalent to
-   * traversing up the tree from the position's portfolio node until the root is found.
+   * Returns the root node for the portfolio containing the given position. The position must be in a {@link ComputationTarget} of type
+   * {@code PORTFOLIO_NODE/POSITION}. This is equivalent to traversing up the tree from the position's portfolio node until the root is found.
    *
    * @param position the position to search for, not null
    * @return the root node, null if parent node hierarchy incomplete

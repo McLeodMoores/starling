@@ -16,12 +16,12 @@ import com.opengamma.core.position.impl.AbstractPortfolioNodeTraversalCallback;
 import com.opengamma.id.UniqueId;
 
 /**
- * Traverses a portfolio, gathering identifiers corresponding to {@link PortfolioNode}, {@link Position} and {@link Trade} entities. These are targets that may potentially create terminal output
- * requirements from on a view definition.
+ * Traverses a portfolio, gathering identifiers corresponding to {@link PortfolioNode}, {@link Position} and {@link Trade} entities.
+ * These are targets that may potentially create terminal output requirements from on a view definition.
  */
 /* package */class PortfolioIdentifierGatherer extends AbstractPortfolioNodeTraversalCallback {
 
-  private final ConcurrentMap<UniqueId, Boolean> _identifiers = new ConcurrentHashMap<UniqueId, Boolean>();
+  private final ConcurrentMap<UniqueId, Boolean> _identifiers = new ConcurrentHashMap<>();
 
   public Set<UniqueId> getIdentifiers() {
     return _identifiers.keySet();
@@ -35,7 +35,7 @@ import com.opengamma.id.UniqueId;
   @Override
   public void preOrderOperation(final PortfolioNode parentNode, final Position position) {
     if (_identifiers.putIfAbsent(position.getUniqueId(), Boolean.TRUE) == null) {
-      for (Trade trade : position.getTrades()) {
+      for (final Trade trade : position.getTrades()) {
         _identifiers.put(trade.getUniqueId(), Boolean.TRUE);
       }
     }

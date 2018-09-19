@@ -229,7 +229,7 @@ public class VersionLockedSecuritySourceTest {
     assertSame(test.get(ids, VersionCorrection.of(t3, t4)), result);
   }
 
-  public void test_changeManager() {
+  public void testChangeManager() {
     final SecuritySource underlying = Mockito.mock(SecuritySource.class);
     final SecuritySource test = new VersionLockedSecuritySource(underlying, VersionCorrection.LATEST);
     final ChangeManager result = Mockito.mock(ChangeManager.class);

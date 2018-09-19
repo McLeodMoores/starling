@@ -31,8 +31,9 @@ public class HistoricalMarketDataSnapshot extends AbstractMarketDataSnapshot {
   private final LocalDate _snapshotDate;
 
   /**
-   * Creates a market data snapshot based on historical time-series data. The data provider will have created value specifications which reference the resolved time series.
-   * 
+   * Creates a market data snapshot based on historical time-series data. The data provider will have created value specifications which reference
+   * the resolved time series.
+   *
    * @param timeSeriesSource the time-series source, not null
    * @param snapshotInstant the snapshot instant to report to the engine, not null
    * @param snapshotDate the date of the required value, null for the latest
@@ -50,12 +51,12 @@ public class HistoricalMarketDataSnapshot extends AbstractMarketDataSnapshot {
     // REVIEW 2013-02-04 Andrew -- This is not an appropriate unique identifier.
     return UniqueId.of(MARKET_DATA_SNAPSHOT_ID_SCHEME, "HistoricalMarketDataSnapshot:" + getSnapshotTime());
   }
-  
+
   @Override
   public boolean isInitialized() {
     return true;
   }
-  
+
   @Override
   public boolean isEmpty() {
     return false;
@@ -79,7 +80,7 @@ public class HistoricalMarketDataSnapshot extends AbstractMarketDataSnapshot {
       LOGGER.info("No time-series for {}", specification);
       return null;
     }
-    final Double value = (_snapshotDate != null) ? hts.getTimeSeries().getValue(_snapshotDate) : hts.getTimeSeries().getLatestValue();
+    final Double value = _snapshotDate != null ? hts.getTimeSeries().getValue(_snapshotDate) : hts.getTimeSeries().getLatestValue();
     if (value == null) {
       return null;
     }

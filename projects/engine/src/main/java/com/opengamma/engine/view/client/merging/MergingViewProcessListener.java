@@ -34,12 +34,12 @@ import com.opengamma.livedata.UserPrincipal;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Collects and merges view process updates, releasing them only when {@code drain()} is called. Also ensures that different update types are passed to the underlying listener in the correct order
- * when drained.
+ * Collects and merges view process updates, releasing them only when {@code drain()} is called. Also ensures that different update types are
+ * passed to the underlying listener in the correct order when drained.
  * <p>
- * Fragments and delta results are merged so that those corresponding to the latest cycle will be available. Individual notifications from earlier cycles will be discarded. For example, if there is a
- * view compilation and a number of cycles run, the events released will be the compilation notification, merged events corresponding to the last full cycle, and anything available for any incomplete
- * cycle.
+ * Fragments and delta results are merged so that those corresponding to the latest cycle will be available. Individual notifications from
+ * earlier cycles will be discarded. For example, if there is a view compilation and a number of cycles run, the events released will be the
+ * compilation notification, merged events corresponding to the last full cycle, and anything available for any incomplete cycle.
  */
 public class MergingViewProcessListener implements ViewResultListener {
 
@@ -148,7 +148,8 @@ public class MergingViewProcessListener implements ViewResultListener {
 
   //-------------------------------------------------------------------------
   /**
-   * Gets whether incoming updates should be allowed to pass straight through without merging. If this is false then updates will not be released unless an update is triggered.
+   * Gets whether incoming updates should be allowed to pass straight through without merging. If this is false then updates will not be
+   * released unless an update is triggered.
    *
    * @return true if updates should be passed straight to listeners without merging
    */
@@ -162,10 +163,12 @@ public class MergingViewProcessListener implements ViewResultListener {
   }
 
   /**
-   * Sets whether incoming updates should be allowed to pass straight through without merging. If this is changed to <code>true</code> then an update is first triggered to clear any existing merged
-   * updates. Subsequent updates will pass straight through until this is set to <code>false</code>.
+   * Sets whether incoming updates should be allowed to pass straight through without merging. If this is changed to
+   * <code>true</code> then an update is first triggered to clear any existing merged updates. Subsequent updates will
+   * pass straight through until this is set to <code>false</code>.
    *
-   * @param passThrough true if incoming updates should be allowed to pass straight through without merging, or false to merge updates until an update is triggered
+   * @param passThrough true if incoming updates should be allowed to pass straight through without merging, or false to
+   * merge updates until an update is triggered
    * @return previously batched invocations on the underlying listener as a result of enabling pass-through. It is up to the caller to invoke them.
    */
   protected Call<?> setPassThrough(final boolean passThrough) {

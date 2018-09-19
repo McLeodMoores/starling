@@ -83,8 +83,9 @@ public final class ValuePropertyNames {
   public static final String CURVE_CURRENCY = "CurveCurrency";
 
   /**
-   * The data provider used to source external values into the view cycle. This may be used by {@link MarketDataAvailabilityProvider} instances that work with multiple underlying providers to indicate
-   * which data provider should be queried for the value. In the case of a "route" of nested data providers existing, the {@code /} character can be used as a separator between elements.
+   * The data provider used to source external values into the view cycle. This may be used by {@link MarketDataAvailabilityProvider} instances that work
+   * with multiple underlying providers to indicate which data provider should be queried for the value. In the case of a "route" of nested data providers
+   * existing, the {@code /} character can be used as a separator between elements.
    */
   public static final String DATA_PROVIDER = "DataProvider";
 
@@ -138,22 +139,22 @@ public final class ValuePropertyNames {
   public static final String SURFACE = "Surface";
 
   /**
-   * The symbolic name of the calculation method used to produce a curve
+   * The symbolic name of the calculation method used to produce a curve.
    */
   public static final String CURVE_CALCULATION_METHOD = "CurveCalculationMethod";
 
   /**
-   * A general name for a property describing how a value was calculated
+   * A general name for a property describing how a value was calculated.
    */
   public static final String CALCULATION_METHOD = "CalculationMethod";
 
   /**
-   * A general name for a property describing how a surface was calculated
+   * A general name for a property describing how a surface was calculated.
    */
   public static final String SURFACE_CALCULATION_METHOD = "SurfaceCalculationMethod";
 
   /**
-   * A general name for a property describing how a surface was calculated
+   * A general name for a property describing how a surface was calculated.
    */
   public static final String CUBE_CALCULATION_METHOD = "CubeCalculationMethod";
 
@@ -176,7 +177,7 @@ public final class ValuePropertyNames {
   public static final String SAMPLING_PERIOD = "SamplingPeriod";
 
   /**
-   * A general name for a property describing how to calculate the returns of a given timeseries
+   * A general name for a property describing how to calculate the returns of a given timeseries.
    */
   public static final String RETURN_CALCULATOR = "ReturnMethod";
 
@@ -191,47 +192,47 @@ public final class ValuePropertyNames {
   public static final String SAMPLING_FUNCTION = "SamplingMethod";
 
   /**
-   * A general name for a property describing how to calculate the mean of a series
+   * A general name for a property describing how to calculate the mean of a series.
    */
   public static final String MEAN_CALCULATOR = "MeanMethod";
 
   /**
-   * A general name for a property describing how to calculate the standard deviation of a series
+   * A general name for a property describing how to calculate the standard deviation of a series.
    */
   public static final String STD_DEV_CALCULATOR = "StandardDeviationMethod";
 
   /**
-   * A general name for a property describing the confidence level to use for VaR calculations
+   * A general name for a property describing the confidence level to use for VaR calculations.
    */
   public static final String CONFIDENCE_LEVEL = "Percentile";
 
   /**
-   * A general name for a property describing the horizon in sampling periods to use for VaR calculations
+   * A general name for a property describing the horizon in sampling periods to use for VaR calculations.
    */
   public static final String HORIZON = "Horizon";
 
   /**
-   * A general name for a property describing how to calculate the covariance of two time series
+   * A general name for a property describing how to calculate the covariance of two time series.
    */
   public static final String COVARIANCE_CALCULATOR = "CovarianceMethod";
 
   /**
-   * A general name for a property describing how to calculate the variance of a series
+   * A general name for a property describing how to calculate the variance of a series.
    */
   public static final String VARIANCE_CALCULATOR = "VarianceMethod";
 
   /**
-   * A general name for a property describing the maximum order of sensitivities to use when calculating VaR
+   * A general name for a property describing the maximum order of sensitivities to use when calculating VaR.
    */
   public static final String ORDER = "Order";
 
   /**
-   * A general name for a property describing how the calculate the excess return of a series
+   * A general name for a property describing how the calculate the excess return of a series.
    */
   public static final String EXCESS_RETURN_CALCULATOR = "ExcessReturnMethod";
 
   /**
-   * The name for a property describing the curve calculation configuration
+   * The name for a property describing the curve calculation configuration.
    */
   public static final String CURVE_CALCULATION_CONFIG = "CurveCalculationConfig";
 
@@ -247,23 +248,23 @@ public final class ValuePropertyNames {
 
   /**
    * The name for a property describing the shift of the strike
-   * when approximating a binary option as a call or put spread
+   * when approximating a binary option as a call or put spread.
    */
   public static final String BINARY_OVERHEDGE = "BinaryOverhedge";
 
   /**
    * The name for a property describing the full width of the spread between the two calls or puts
-   * used when approximating a binary option as a call or put spread
+   * used when approximating a binary option as a call or put spread.
    */
   public static final String BINARY_SMOOTHING_FULLWIDTH = "BinarySmoothingFullWidth";
 
   /**
-   * The amount to shift DV01 by in basis points
+   * The amount to shift DV01 by in basis points.
    */
   public static final String SHIFT = "Shift";
 
   /**
-   * The amount to shift DV01 by in basis points
+   * The amount to shift DV01 by in basis points.
    */
   public static final String SCALING_FACTOR = "ScalingFactor";
 
@@ -278,7 +279,7 @@ public final class ValuePropertyNames {
 
   /**
    * The underlying ticker is used in Equity Options to tie results to the vol surface used,
-   * such that each column may represent, for example, the vega of all positions sensitive to changes in that specific surface
+   * such that each column may represent, for example, the vega of all positions sensitive to changes in that specific surface.
    */
   public static final String UNDERLYING_TICKER = "UnderlyingTicker";
 
@@ -304,22 +305,22 @@ public final class ValuePropertyNames {
   public static final String TRANSFORMATION_METHOD = "TransformationMethod";
 
   /**
-   * The name of a property that provides the type of dividends, be they Continuous, Discrete or None
+   * The name of a property that provides the type of dividends, be they Continuous, Discrete or None.
    */
   public static final String DIVIDEND_TYPE = "DividendType";
 
   /**
-   * Instance of DIVIDEND_TYPE_PROPERTY representing a continuous dividend yield
+   * Instance of DIVIDEND_TYPE_PROPERTY representing a continuous dividend yield.
    */
   public static final String DIVIDEND_TYPE_CONTINUOUS = "Continuous";
 
   /**
-   * Instance of DIVIDEND_TYPE_PROPERTY representing discrete dividend payments. See { @link DiscreteDividendFunction}
+   * Instance of DIVIDEND_TYPE_PROPERTY representing discrete dividend payments. See { @link DiscreteDividendFunction}.
    */
   public static final String DIVIDEND_TYPE_DISCRETE = "Discrete";
 
   /**
-   * Instance of DIVIDEND_TYPE_PROPERTY representing no dividends
+   * Instance of DIVIDEND_TYPE_PROPERTY representing no dividends.
    */
   public static final String DIVIDEND_TYPE_NONE = "None";
 
@@ -329,7 +330,7 @@ public final class ValuePropertyNames {
   public static final String SCALE = "Scale";
 
   /**
-   * The name of a property representing the exposure configuration used for pricing
+   * The name of a property representing the exposure configuration used for pricing.
    */
   public static final String CURVE_EXPOSURES = "CurveExposures";
 
@@ -351,12 +352,12 @@ public final class ValuePropertyNames {
   public static final String SNAP_TIME_VOL = "VolSnapTime";
 
   /**
-   * Value for {@link ValuePropertyNames#SNAP_TIME} when data is to be snapped at current, Live, time
+   * Value for {@link ValuePropertyNames#SNAP_TIME} when data is to be snapped at current, Live, time.
    */
   public static final String SNAP_TIME_LIVE = "Live";
 
   /**
-   * Value for {@link ValuePropertyNames#SNAP_TIME} when data is to be snapped at time of previous Close
+   * Value for {@link ValuePropertyNames#SNAP_TIME} when data is to be snapped at time of previous Close.
    */
   public static final String SNAP_TIME_CLOSE = "Close";
 

@@ -18,8 +18,9 @@ import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.lambdava.functions.Function2;
 
 /**
- * A map of {@link ComputationTargetType} instances to other values based on the target class (or classes). Instances are thread-safe for multiple readers, but only one may update the map at any one
- * time. Due to the caching behavior of class lookups, it is best not to read from the map until all of the required class entries have been written. Not doing so can give a collision between a cached
+ * A map of {@link ComputationTargetType} instances to other values based on the target class (or classes). Instances are thread-safe for
+ * multiple readers, but only one may update the map at any one time. Due to the caching behavior of class lookups, it is best not to read
+ * from the map until all of the required class entries have been written. Not doing so can give a collision between a cached
  * class entry and one that is intended to be added.
  *
  * @param <V> the value type
@@ -42,8 +43,8 @@ public class ComputationTargetTypeMap<V> {
   }
 
   /**
-   * Creates a new instance with a folding operation to handle union types in the map giving multiple matches on {@link #get} or {@link #put}. If there is no folding operation then the value returned
-   * by {@link #get} is an arbitrary choice and {@link #put} will fail if multiple matches occur.
+   * Creates a new instance with a folding operation to handle union types in the map giving multiple matches on {@link #get} or {@link #put}.
+   * If there is no folding operation then the value returned by {@link #get} is an arbitrary choice and {@link #put} will fail if multiple matches occur.
    *
    * @param fold the folding operation, null for none
    */

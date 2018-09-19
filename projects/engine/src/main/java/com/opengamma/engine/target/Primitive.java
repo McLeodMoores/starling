@@ -20,15 +20,15 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.id.UniqueIdentifiable;
 
 /**
- * Wrapper for a "primitive" value. This is to allow the {@link ComputationTargetType#PRIMITIVE} to be defined as something more specific than {@link UniqueIdentifiable} which causes function
- * resolution issues.
+ * Wrapper for a "primitive" value. This is to allow the {@link ComputationTargetType#PRIMITIVE} to be defined as something more specific
+ * than {@link UniqueIdentifiable} which causes function resolution issues.
  */
 public class Primitive implements UniqueIdentifiable, Serializable {
 
   private static final long serialVersionUID = 1L;
 
   /**
-   * Implementation of {@link Primitive} that is based on an external identifier
+   * Implementation of {@link Primitive} that is based on an external identifier.
    */
   public static final class ExternalIdentifiablePrimitive extends Primitive implements ExternalIdentifiable {
 

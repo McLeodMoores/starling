@@ -43,24 +43,28 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
 /**
  * Fudge message builder for {@link DependencyGraph}
  * <p>
- * Nodes are all allocated an identifier. When a node is used by two or more other nodes, one will write the node content (including its identifier) as a sub-message and the other(s) will reference
- * the node with a numeric field value.
+ * Nodes are all allocated an identifier. When a node is used by two or more other nodes, one will write the node content (including its identifier)
+ * as a sub-message and the other(s) will reference the node with a numeric field value.
  * <p>
- * {@link ComputationTargetSpecification}values are either written in full for a node as a Fudge message, or if they are present elsewhere in the graph are written as the numeric identifier of the
- * node that has the full target specification sub-message.
+ * {@link ComputationTargetSpecification}values are either written in full for a node as a Fudge message, or if they are present elsewhere in the
+ * graph are written as the numeric identifier of the node that has the full target specification sub-message.
  * <p>
- * {@link DependencyNodeFunction} values are either written in full for a node as a Fudge message, as a pair of {@link #FUNCTION_IDENTIFIER_FIELD} and {@link #FUNCTION_PARAMETERS_FIELD}, or if they
- * are present elsewhere in the graph are written as the numeric identifier of the node that has the full function details. If the parameters are empty, the parameter field is omitted.
+ * {@link DependencyNodeFunction} values are either written in full for a node as a Fudge message, as a pair of {@link #FUNCTION_IDENTIFIER_FIELD}
+ * and {@link #FUNCTION_PARAMETERS_FIELD}, or if they are present elsewhere in the graph are written as the numeric identifier of the node that has
+ * the full function details. If the parameters are empty, the parameter field is omitted.
  * <p>
- * {@link ValueSpecification} labels on graph edges are written as a value name and {@link ValueProperties} pair instead of a full value specification as the target is implied by the target of the
- * node. The inputs to a node are written in full - these imply the outputs of the node that provides them. Only outputs that are not consumed by other nodes (typically terminal outputs in a graph
- * that has had unnecessary values removed from it) are written for each node explicitly.
+ * {@link ValueSpecification} labels on graph edges are written as a value name and {@link ValueProperties} pair instead of a full value specification
+ * as the target is implied by the target of the node. The inputs to a node are written in full - these imply the outputs of the node that provides them.
+ * Only outputs that are not consumed by other nodes (typically terminal outputs in a graph that has had unnecessary values removed from it) are written
+ * for each node explicitly.
  * <p>
- * The terminal outputs are written as repeated {@link #TERMINAL_OUTPUT_FIELD} fields containing the value name, properties and target with repeated {@link #VALUE_REQUIREMENT_FIELD} fields for the
- * corresponding requirements. The target will always be the identifier of a node acting on that target; but may not necessarily be the node that produced that value specification.
+ * The terminal outputs are written as repeated {@link #TERMINAL_OUTPUT_FIELD} fields containing the value name, properties and target with repeated
+ * {@link #VALUE_REQUIREMENT_FIELD} fields for the corresponding requirements. The target will always be the identifier of a node acting on that target;
+ * but may not necessarily be the node that produced that value specification.
  * <p>
- * {@code ValueProperties} values are either written as a Fudge message encoding the value properties, possibly with an additional {@link #IDENTIFIER_FIELD} field allocating a numeric value to it.
- * Instead of duplicating value property data, other values might be written as a numeric field referencing another instance in the message.
+ * {@code ValueProperties} values are either written as a Fudge message encoding the value properties, possibly with an additional {@link #IDENTIFIER_FIELD}
+ * field allocating a numeric value to it. Instead of duplicating value property data, other values might be written as a numeric field referencing
+ * another instance in the message.
  */
 @GenericFudgeBuilderFor(DependencyGraph.class)
 public class DependencyGraphFudgeBuilder implements FudgeBuilder<DependencyGraph> {
@@ -237,8 +241,8 @@ public class DependencyGraphFudgeBuilder implements FudgeBuilder<DependencyGraph
     private ValueSpecification[] _outputValues;
     private DependencyNode _node;
 
-    public TempDependencyNode(final DependencyNodeFunction function, final ComputationTargetSpecification target, final ValueSpecification[] outputValues, final ValueSpecification[] inputValues,
-        final TempDependencyNode[] inputNodes) {
+    TempDependencyNode(final DependencyNodeFunction function, final ComputationTargetSpecification target, final ValueSpecification[] outputValues,
+        final ValueSpecification[] inputValues, final TempDependencyNode[] inputNodes) {
       _function = function;
       _target = target;
       _outputValues = outputValues;

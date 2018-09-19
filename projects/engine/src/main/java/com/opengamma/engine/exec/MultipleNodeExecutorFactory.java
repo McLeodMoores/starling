@@ -146,8 +146,8 @@ public class MultipleNodeExecutorFactory extends PlanBasedGraphExecutorFactory i
   }
 
   /**
-   * Invalidates any cached execution plans (if caching is enabled). If any of the parameters have been changed then this should be called so that they will take effect instead of any previously
-   * cached plans being used.
+   * Invalidates any cached execution plans (if caching is enabled). If any of the parameters have been changed then this should be
+   * called so that they will take effect instead of any previously cached plans being used.
    */
   public void invalidateCache() {
     final CachingExecutionPlanner planner = _cachingPlanner;

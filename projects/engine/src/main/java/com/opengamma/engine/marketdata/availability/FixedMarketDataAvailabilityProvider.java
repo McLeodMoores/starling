@@ -86,7 +86,8 @@ public class FixedMarketDataAvailabilityProvider extends AbstractMarketDataAvail
   private final AtomicInteger _nextSyntheticIdentifier = new AtomicInteger();
   private final ConcurrentMap<ExternalId, ComputationTargetSpecification> _weakIndex;
   private final ConcurrentMap<ComputationTargetSpecification, TargetData> _strictIndex;
-  private final ComputationTargetReferenceVisitor<ComputationTargetSpecification> _getTargetSpecification = new ComputationTargetReferenceVisitor<ComputationTargetSpecification>() {
+  private final ComputationTargetReferenceVisitor<ComputationTargetSpecification> _getTargetSpecification =
+      new ComputationTargetReferenceVisitor<ComputationTargetSpecification>() {
 
     @Override
     public ComputationTargetSpecification visitComputationTargetRequirement(final ComputationTargetRequirement requirement) {
@@ -133,7 +134,8 @@ public class FixedMarketDataAvailabilityProvider extends AbstractMarketDataAvail
     this(new ConcurrentHashMap<ExternalId, ComputationTargetSpecification>(), new ConcurrentHashMap<ComputationTargetSpecification, TargetData>());
   }
 
-  private FixedMarketDataAvailabilityProvider(final ConcurrentMap<ExternalId, ComputationTargetSpecification> weakIndex, final ConcurrentMap<ComputationTargetSpecification, TargetData> strictIndex) {
+  private FixedMarketDataAvailabilityProvider(final ConcurrentMap<ExternalId, ComputationTargetSpecification> weakIndex,
+      final ConcurrentMap<ComputationTargetSpecification, TargetData> strictIndex) {
     _weakIndex = weakIndex;
     _strictIndex = strictIndex;
   }
@@ -152,13 +154,13 @@ public class FixedMarketDataAvailabilityProvider extends AbstractMarketDataAvail
     final ComputationTargetSpecification target = _weakIndex.get(key);
     if (target != null) {
       return getAvailabilityImpl(target, desiredValue);
-    } else {
-      return null;
     }
+    return null;
   }
 
   @Override
-  protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ExternalId identifier, final ValueRequirement desiredValue) {
+  protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ExternalId identifier,
+      final ValueRequirement desiredValue) {
     ValueSpecification available = getAvailabilityImpl(targetSpec, desiredValue);
     if (available == null) {
       available = getAvailabilityImpl(identifier, desiredValue);
@@ -167,7 +169,8 @@ public class FixedMarketDataAvailabilityProvider extends AbstractMarketDataAvail
   }
 
   @Override
-  protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ExternalIdBundle identifiers, final ValueRequirement desiredValue) {
+  protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ExternalIdBundle identifiers,
+      final ValueRequirement desiredValue) {
     ValueSpecification available = getAvailabilityImpl(targetSpec, desiredValue);
     if (available == null) {
       for (final ExternalId identifier : identifiers) {

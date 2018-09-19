@@ -20,8 +20,8 @@ import com.opengamma.id.UniqueId;
 /**
  * Combines an underlying {@link MarketDataSnapshot} with one designed to provide overrides for certain requirements.
  * <p>
- * Note that the overriding snapshot can provide instances of {@link OverrideOperation} instead of (or as well as) actual values for this to return. In this case the operation is applied to the
- * underlying.
+ * Note that the overriding snapshot can provide instances of {@link OverrideOperation} instead of (or as well as) actual values for
+ * this to return. In this case the operation is applied to the underlying.
  */
 public class MarketDataSnapshotWithOverride extends AbstractMarketDataSnapshot {
 
@@ -73,7 +73,7 @@ public class MarketDataSnapshotWithOverride extends AbstractMarketDataSnapshot {
   @Override
   public boolean isEmpty() {
     assertInitialized();
-    return getUnderlying().isEmpty() && (getOverride() == null);
+    return getUnderlying().isEmpty() && getOverride() == null;
   }
 
   @Override
@@ -105,11 +105,11 @@ public class MarketDataSnapshotWithOverride extends AbstractMarketDataSnapshot {
   @Override
   public Map<ValueSpecification, Object> query(final Set<ValueSpecification> values) {
     if (getOverride() != null) {
-      final Set<ValueSpecification> unresolved = new HashSet<ValueSpecification>(values);
+      final Set<ValueSpecification> unresolved = new HashSet<>(values);
       final Map<ValueSpecification, Object> result = Maps.newHashMapWithExpectedSize(values.size());
       final Map<ValueSpecification, OverrideOperation> overrideOperations = Maps.newHashMapWithExpectedSize(values.size());
-      for (ValueSpecification value : values) {
-        Object response = getOverride().query(value);
+      for (final ValueSpecification value : values) {
+        final Object response = getOverride().query(value);
         if (response == null) {
           continue;
         } else if (response instanceof OverrideOperation) {

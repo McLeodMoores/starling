@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.target.logger;
@@ -55,7 +55,7 @@ public class LoggedResolutionTradeTest {
     Mockito.verifyZeroInteractions(logger);
   }
 
-  public void getSecurity_externalId() {
+  public void getSecurityExternalId() {
     final Trade trade = Mockito.mock(Trade.class);
     final ResolutionLogger logger = Mockito.mock(ResolutionLogger.class);
     final Trade logged = new LoggedResolutionTrade(trade, logger);
@@ -68,7 +68,7 @@ public class LoggedResolutionTradeTest {
     Mockito.verifyNoMoreInteractions(logger);
   }
 
-  public void getSecurity_objectId() {
+  public void getSecurityObjectId() {
     final Trade trade = Mockito.mock(Trade.class);
     final ResolutionLogger logger = Mockito.mock(ResolutionLogger.class);
     final Trade logged = new LoggedResolutionTrade(trade, logger);

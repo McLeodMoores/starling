@@ -20,8 +20,9 @@ import com.opengamma.engine.target.ComputationTargetType;
 /**
  * Basic implementation that returns the security type as the digest.
  * <p>
- * This is supplied mainly for use as an example implementation. The quality of these digests will depend on the function repository and security modeling being used. An implementation that has more
- * detailed knowledge of the analytic functions or targets in use might be necessary to benefit from the target digest algorithm.
+ * This is supplied mainly for use as an example implementation. The quality of these digests will depend on the function repository
+ * and security modeling being used. An implementation that has more detailed knowledge of the analytic functions or targets in use
+ * might be necessary to benefit from the target digest algorithm.
  */
 public class SecurityTypeTargetDigests extends AbstractTargetDigests {
 
@@ -77,7 +78,8 @@ public class SecurityTypeTargetDigests extends AbstractTargetDigests {
   }
 
   /**
-   * Normalization cache of digests. This is to avoid excessive object creation, and cheapens the comparison operations as any digest may be compared by identity only.
+   * Normalization cache of digests. This is to avoid excessive object creation, and cheapens the comparison operations as any digest may
+   * be compared by identity only.
    */
   protected static final class Digests extends MapImpl<Object, Digest> {
 

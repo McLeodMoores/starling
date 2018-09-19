@@ -16,7 +16,8 @@ import com.opengamma.engine.view.listener.ViewResultListener;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Merges view process results to satisfy a specified maximum downstream update rate (given in terms of a minimum period between updates). This maximum rate can be adjusted on-the-fly.
+ * Merges view process results to satisfy a specified maximum downstream update rate (given in terms of a minimum period between updates). This maximum
+ * rate can be adjusted on-the-fly.
  */
 public class RateLimitingMergingViewProcessListener extends MergingViewProcessListener {
 
@@ -35,7 +36,8 @@ public class RateLimitingMergingViewProcessListener extends MergingViewProcessLi
    */
   private final AtomicLong _lastUpdateTimeMillis = new AtomicLong();
 
-  public RateLimitingMergingViewProcessListener(final ViewResultListener underlying, final EngineResourceManagerInternal<?> cycleManager, final ScheduledExecutorService timer) {
+  public RateLimitingMergingViewProcessListener(final ViewResultListener underlying, final EngineResourceManagerInternal<?> cycleManager,
+      final ScheduledExecutorService timer) {
     super(underlying, cycleManager);
     ArgumentChecker.notNull(timer, "timer");
     _timer = timer;
@@ -88,11 +90,11 @@ public class RateLimitingMergingViewProcessListener extends MergingViewProcessLi
   }
 
   /**
-   * Sets the minimum period which must have elapsed since the last update before an update is triggered. The value given is only a minimum, and the actual period between updates may be higher. If
-   * more frequent updates are required then consider using a pass-through provider instead.
+   * Sets the minimum period which must have elapsed since the last update before an update is triggered. The value given is only a minimum, and the
+   * actual period between updates may be higher. If more frequent updates are required then consider using a pass-through provider instead.
    *
-   * @param minimumUpdatePeriodMillis the minimum period which must have elapsed since the last update before an update is triggered, in milliseconds. If 0, updates will be passed to listeners
-   *          immediately and synchronously (unless paused).
+   * @param minimumUpdatePeriodMillis the minimum period which must have elapsed since the last update before an update is triggered, in milliseconds.
+   * If 0, updates will be passed to listeners immediately and synchronously (unless paused).
    */
   public void setMinimumUpdatePeriodMillis(long minimumUpdatePeriodMillis) {
     final Call<?> drain;

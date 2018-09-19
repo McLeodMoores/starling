@@ -90,12 +90,13 @@ public class InMemoryLKVLiveMarketDataProvider extends AbstractMarketDataProvide
   private final WriteLock _subscriptionWriteLock = _subscriptionLock.writeLock();
   private final ReadLock _subscriptionReadLock = _subscriptionLock.readLock();
 
-  public InMemoryLKVLiveMarketDataProvider(final LiveDataClient liveDataClient, final MarketDataAvailabilityFilter availabilityFilter, final UserPrincipal marketDataUser) {
+  public InMemoryLKVLiveMarketDataProvider(final LiveDataClient liveDataClient, final MarketDataAvailabilityFilter availabilityFilter,
+      final UserPrincipal marketDataUser) {
     this(liveDataClient, availabilityFilter, new LiveMarketDataPermissionProvider(liveDataClient), marketDataUser);
   }
 
-  public InMemoryLKVLiveMarketDataProvider(final LiveDataClient liveDataClient, final MarketDataAvailabilityFilter availabilityFilter, final MarketDataPermissionProvider permissionProvider,
-      final UserPrincipal marketDataUser) {
+  public InMemoryLKVLiveMarketDataProvider(final LiveDataClient liveDataClient, final MarketDataAvailabilityFilter availabilityFilter,
+      final MarketDataPermissionProvider permissionProvider, final UserPrincipal marketDataUser) {
     ArgumentChecker.notNull(liveDataClient, "liveDataClient");
     ArgumentChecker.notNull(availabilityFilter, "availabilityFilter");
     ArgumentChecker.notNull(permissionProvider, "permissionProvider");
@@ -269,7 +270,8 @@ public class InMemoryLKVLiveMarketDataProvider extends AbstractMarketDataProvide
               toFullyUnsubscribe.add(fullyQualifiedSpec);
             }
           } else {
-            LOGGER.warn("Received unsubscription request for " + valueSpecification + " with no existing subscription, which indicates that something is maintaining reference counts incorrectly.");
+            LOGGER.warn("Received unsubscription request for " + valueSpecification + " with no existing subscription, which indicates that "
+                + "something is maintaining reference counts incorrectly.");
           }
         }
       }
@@ -344,7 +346,8 @@ public class InMemoryLKVLiveMarketDataProvider extends AbstractMarketDataProvide
           final Collection<ValueSpecification> allSubscribers = _activeSubscriptionsByQualifiedSpec.get(fullyQualifiedSpec);
           if (subscriptionResult.getSubscriptionResult() == LiveDataSubscriptionResult.SUCCESS) {
             successfulSubscriptions.addAll(allSubscribers);
-            LOGGER.debug("Subscription made to {} resulted in fully qualified {}", subscriptionResult.getRequestedSpecification(), subscriptionResult.getFullyQualifiedSpecification());
+            LOGGER.debug("Subscription made to {} resulted in fully qualified {}",
+                subscriptionResult.getRequestedSpecification(), subscriptionResult.getFullyQualifiedSpecification());
           } else {
             failedSubscriptions.addAll(allSubscribers);
             if (subscriptionResult.getSubscriptionResult() == LiveDataSubscriptionResult.NOT_AUTHORIZED) {
@@ -362,7 +365,8 @@ public class InMemoryLKVLiveMarketDataProvider extends AbstractMarketDataProvide
     }
     try {
       if (!toFullyUnsubscribe.isEmpty()) {
-        LOGGER.info("Unsubscribing {} from {} live data specifications which were pending but have since been unsubscribed", _marketDataUser, toFullyUnsubscribe.size());
+        LOGGER.info("Unsubscribing {} from {} live data specifications which were pending but have since been unsubscribed",
+            _marketDataUser, toFullyUnsubscribe.size());
         _liveDataClient.unsubscribe(_marketDataUser, toFullyUnsubscribe, this);
       }
     } finally {
@@ -372,7 +376,8 @@ public class InMemoryLKVLiveMarketDataProvider extends AbstractMarketDataProvide
     LOGGER.info("Subscription results - {} success, {} failures", successfulSubscriptions.size(), failedSubscriptions.size());
     if (!failedSubscriptions.isEmpty()) {
       valuesChanged(failedSubscriptions); // PLAT-1429: wake up the init call
-      subscriptionFailed(failedSubscriptions, "TODO: get/concat message(s) from " + failedSubscriptions.size() + " failures"/*subscriptionResult.getUserMessage()*/);
+      subscriptionFailed(failedSubscriptions, "TODO: get/concat message(s) from " + failedSubscriptions.size()
+          + " failures"/*subscriptionResult.getUserMessage()*/);
     }
     if (!successfulSubscriptions.isEmpty()) {
       subscriptionsSucceeded(successfulSubscriptions);
@@ -416,7 +421,8 @@ public class InMemoryLKVLiveMarketDataProvider extends AbstractMarketDataProvide
         if (previousValue == null) {
           value = msg;
         } else if (!(previousValue instanceof FudgeMsg)) {
-          LOGGER.error("Found unexpected previous market value " + previousValue + " of type " + previousValue.getClass() + " for specification " + subscription);
+          LOGGER.error("Found unexpected previous market value " + previousValue + " of type " + previousValue.getClass()
+            + " for specification " + subscription);
           value = msg;
         } else {
           final FudgeMsg currentValueMsg = (FudgeMsg) previousValue;
@@ -465,8 +471,8 @@ public class InMemoryLKVLiveMarketDataProvider extends AbstractMarketDataProvide
   }
 
   /**
-   * Reattempts subscriptions for any data identified by the specified schemes. If a data provider becomes available this method will be invoked with the schemes handled by the provider. This gives
-   * this class the opportunity to reattempt previously failed subscriptions.
+   * Reattempts subscriptions for any data identified by the specified schemes. If a data provider becomes available this method will be
+   * invoked with the schemes handled by the provider. This gives this class the opportunity to reattempt previously failed subscriptions.
    *
    * @param schemes The schemes for which market data subscriptions should be reattempted.
    */

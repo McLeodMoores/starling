@@ -56,7 +56,8 @@ public class LazyResolvedPortfolioNodeTest {
   public void testBasicMethods() {
     final MockComputationTargetResolver resolver = MockComputationTargetResolver.resolved();
     final PortfolioNode underlying = resolver.getPositionSource().getPortfolioNode(UniqueId.of("Node", "0"), VersionCorrection.LATEST);
-    final PortfolioNode node = new LazyResolvedPortfolioNode(new LazyResolveContext(resolver.getSecuritySource(), null).atVersionCorrection(VersionCorrection.LATEST), underlying);
+    final PortfolioNode node =
+        new LazyResolvedPortfolioNode(new LazyResolveContext(resolver.getSecuritySource(), null).atVersionCorrection(VersionCorrection.LATEST), underlying);
     assertEquals(node.getName(), underlying.getName());
     assertEquals(node.getParentNodeId(), underlying.getParentNodeId());
     assertEquals(node.getUniqueId(), underlying.getUniqueId());
@@ -67,7 +68,8 @@ public class LazyResolvedPortfolioNodeTest {
   public void testSerialization_full() throws Exception {
     final MockComputationTargetResolver resolver = MockComputationTargetResolver.resolved();
     final PortfolioNode underlying = resolver.getPositionSource().getPortfolioNode(UniqueId.of("Node", "0"), VersionCorrection.LATEST);
-    PortfolioNode node = new LazyResolvedPortfolioNode(new LazyResolveContext(resolver.getSecuritySource(), null).atVersionCorrection(VersionCorrection.LATEST), underlying);
+    PortfolioNode node =
+        new LazyResolvedPortfolioNode(new LazyResolveContext(resolver.getSecuritySource(), null).atVersionCorrection(VersionCorrection.LATEST), underlying);
     final ByteArrayOutputStream baos = new ByteArrayOutputStream();
     new ObjectOutputStream(baos).writeObject(node);
     final Object resultObject = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray())).readObject();

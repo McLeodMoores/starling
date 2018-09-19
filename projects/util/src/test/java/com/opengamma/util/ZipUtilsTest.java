@@ -20,7 +20,7 @@ import com.opengamma.util.test.TestGroup;
 public class ZipUtilsTest {
 
   @DataProvider(name = "compressString")
-  Object[][] data_compressString() {
+  Object[][] dataCompressString() {
     return new Object[][] {
         {""},
         {"A"},
@@ -35,7 +35,7 @@ public class ZipUtilsTest {
   }
 
   @Test(dataProvider = "compressString")
-  public void test_zipString(final String input) {
+  public void testZipString(final String input) {
     final byte[] bytes = ZipUtils.zipString(input);
     final byte[] expected = ZipUtils.zipString(input, false);
     assertEquals(expected, bytes);

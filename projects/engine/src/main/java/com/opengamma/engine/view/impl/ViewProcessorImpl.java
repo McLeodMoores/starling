@@ -143,12 +143,15 @@ public class ViewProcessorImpl implements ViewProcessorInternal {
    */
   private final int _permissionCheckInterval;
 
-  public ViewProcessorImpl(final String name, final ConfigSource configSource, final NamedMarketDataSpecificationRepository namedMarketDataSpecificationRepository,
-                           final CompiledFunctionService compiledFunctionService, final FunctionResolver functionResolver, final MarketDataProviderResolver marketDataProviderFactoryResolver,
-                           final ViewComputationCacheSource computationCacheSource, final JobDispatcher jobDispatcher, final DependencyGraphBuilderFactory dependencyGraphBuilderFactory,
-                           final DependencyGraphExecutorFactory dependencyGraphExecutorFactory, final GraphExecutorStatisticsGathererProvider graphExecutionStatisticsProvider,
-                           final ViewPermissionProvider viewPermissionProvider, final ViewPortfolioPermissionProvider viewPortfolioPermissionProvider, final OverrideOperationCompiler overrideOperationCompiler,
-                           final ViewResultListenerFactory viewResultListenerFactory, final ViewProcessWorkerFactory workerFactory, final ViewExecutionCache executionCache, final boolean useAutoStartViews) {
+  public ViewProcessorImpl(final String name, final ConfigSource configSource,
+      final NamedMarketDataSpecificationRepository namedMarketDataSpecificationRepository, final CompiledFunctionService compiledFunctionService,
+      final FunctionResolver functionResolver, final MarketDataProviderResolver marketDataProviderFactoryResolver,
+      final ViewComputationCacheSource computationCacheSource, final JobDispatcher jobDispatcher,
+      final DependencyGraphBuilderFactory dependencyGraphBuilderFactory, final DependencyGraphExecutorFactory dependencyGraphExecutorFactory,
+      final GraphExecutorStatisticsGathererProvider graphExecutionStatisticsProvider, final ViewPermissionProvider viewPermissionProvider,
+      final ViewPortfolioPermissionProvider viewPortfolioPermissionProvider, final OverrideOperationCompiler overrideOperationCompiler,
+      final ViewResultListenerFactory viewResultListenerFactory, final ViewProcessWorkerFactory workerFactory, final ViewExecutionCache executionCache,
+      final boolean useAutoStartViews) {
 
     this(name, configSource, namedMarketDataSpecificationRepository, compiledFunctionService,
          functionResolver, marketDataProviderFactoryResolver, computationCacheSource, jobDispatcher,
@@ -157,13 +160,15 @@ public class ViewProcessorImpl implements ViewProcessorInternal {
          viewResultListenerFactory, workerFactory, executionCache, 0, useAutoStartViews);
   }
 
-  public ViewProcessorImpl(final String name, final ConfigSource configSource, final NamedMarketDataSpecificationRepository namedMarketDataSpecificationRepository,
-                           final CompiledFunctionService compiledFunctionService, final FunctionResolver functionResolver, final MarketDataProviderResolver marketDataProviderFactoryResolver,
-                           final ViewComputationCacheSource computationCacheSource, final JobDispatcher jobDispatcher, final DependencyGraphBuilderFactory dependencyGraphBuilderFactory,
-                           final DependencyGraphExecutorFactory dependencyGraphExecutorFactory, final GraphExecutorStatisticsGathererProvider graphExecutionStatisticsProvider,
-                           final ViewPermissionProvider viewPermissionProvider, final ViewPortfolioPermissionProvider viewPortfolioPermissionProvider, final OverrideOperationCompiler overrideOperationCompiler,
-                           final ViewResultListenerFactory viewResultListenerFactory, final ViewProcessWorkerFactory workerFactory, final ViewExecutionCache executionCache,
-                           final int permissionCheckInterval, final boolean useAutoStartViews) {
+  public ViewProcessorImpl(final String name, final ConfigSource configSource,
+      final NamedMarketDataSpecificationRepository namedMarketDataSpecificationRepository, final CompiledFunctionService compiledFunctionService,
+      final FunctionResolver functionResolver, final MarketDataProviderResolver marketDataProviderFactoryResolver,
+      final ViewComputationCacheSource computationCacheSource, final JobDispatcher jobDispatcher,
+      final DependencyGraphBuilderFactory dependencyGraphBuilderFactory, final DependencyGraphExecutorFactory dependencyGraphExecutorFactory,
+      final GraphExecutorStatisticsGathererProvider graphExecutionStatisticsProvider, final ViewPermissionProvider viewPermissionProvider,
+      final ViewPortfolioPermissionProvider viewPortfolioPermissionProvider, final OverrideOperationCompiler overrideOperationCompiler,
+      final ViewResultListenerFactory viewResultListenerFactory, final ViewProcessWorkerFactory workerFactory, final ViewExecutionCache executionCache,
+      final int permissionCheckInterval, final boolean useAutoStartViews) {
     _name = name;
     _configSource = configSource;
     _namedMarketDataSpecificationRepository = namedMarketDataSpecificationRepository;
@@ -244,7 +249,8 @@ public class ViewProcessorImpl implements ViewProcessorInternal {
     _processLock.lock();
     ViewProcessImpl process = null;
     try {
-      process = getOrCreateSharedViewProcess(viewDefinitionId, executionOptions, client.getResultMode(), client.getFragmentResultMode(), viewProcessContextMap, false);
+      process = getOrCreateSharedViewProcess(viewDefinitionId, executionOptions, client.getResultMode(), client.getFragmentResultMode(),
+          viewProcessContextMap, false);
       result = attachClientToViewProcessCore(client, listener, process);
       process = null;
     } catch (final RuntimeException e) {
@@ -332,7 +338,8 @@ public class ViewProcessorImpl implements ViewProcessorInternal {
     try {
       final Pair<ViewProcessImpl, ViewResultListener> existingAttachment = _clientToProcess.get(client.getUniqueId());
       if (existingAttachment != null) {
-        throw new IllegalStateException("View client " + client.getUniqueId() + " is already attached to view process " + existingAttachment.getFirst().getUniqueId());
+        throw new IllegalStateException("View client " + client.getUniqueId() + " is already attached to view process "
+                  + existingAttachment.getFirst().getUniqueId());
       }
       final ViewPermissionContext permissionProvider = process.attachListener(listener, client.getResultMode(), client.getFragmentResultMode());
       _clientToProcess.put(client.getUniqueId(), processListenerPair);
@@ -365,8 +372,9 @@ public class ViewProcessorImpl implements ViewProcessorInternal {
     }
   }
 
-  private ViewProcessImpl getOrCreateSharedViewProcess(final UniqueId viewDefinitionId, final ViewExecutionOptions executionOptions, final ViewResultMode resultMode, final ViewResultMode fragmentResultMode,
-      final Map<String, String> viewProcessContextMap, final boolean runPersistently) {
+  private ViewProcessImpl getOrCreateSharedViewProcess(final UniqueId viewDefinitionId, final ViewExecutionOptions executionOptions,
+      final ViewResultMode resultMode, final ViewResultMode fragmentResultMode, final Map<String, String> viewProcessContextMap,
+      final boolean runPersistently) {
     _processLock.lock();
     try {
       final ViewProcessDescription viewDescription = new ViewProcessDescription(viewDefinitionId, executionOptions);
@@ -382,8 +390,8 @@ public class ViewProcessorImpl implements ViewProcessorInternal {
     }
   }
 
-  private ViewProcessImpl createViewProcess(final UniqueId definitionId, final ViewExecutionOptions viewExecutionOptions, final ViewResultMode resultMode, final ViewResultMode fragmentResultMode,
-      final Map<String, String> viewProcessContextMap, final boolean runPersistently) {
+  private ViewProcessImpl createViewProcess(final UniqueId definitionId, final ViewExecutionOptions viewExecutionOptions, final ViewResultMode resultMode,
+      final ViewResultMode fragmentResultMode, final Map<String, String> viewProcessContextMap, final boolean runPersistently) {
 
     // TEMPORARY CODE - This method should be removed post credit work and supports Excel (Jim)
     final ViewExecutionOptions executionOptions = verifyLiveDataViewExecutionOptions(viewExecutionOptions);
@@ -412,7 +420,8 @@ public class ViewProcessorImpl implements ViewProcessorInternal {
         if (_viewResultListenerFactory == null) {
           throw new IllegalStateException("Batch mode requires a ViewResultListenerFactory");
         }
-        viewProcess.attachListener(_viewResultListenerFactory.createViewResultListener(viewProcess.getLatestViewDefinition().getMarketDataUser()), resultMode, fragmentResultMode);
+        viewProcess.attachListener(
+            _viewResultListenerFactory.createViewResultListener(viewProcess.getLatestViewDefinition().getMarketDataUser()), resultMode, fragmentResultMode);
       }
 
       // The view must be created in a locked state if this view processor is suspended
@@ -458,7 +467,8 @@ public class ViewProcessorImpl implements ViewProcessorInternal {
         }
         if (changed) {
           final ViewCycleExecutionOptions defaultOptions = defaultExecutionOptions.copy().setMarketDataSpecifications(specifications).create();
-          return new ExecutionOptions(executionOptions.getExecutionSequence(), executionOptions.getFlags(), executionOptions.getMaxSuccessiveDeltaCycles(), defaultOptions);
+          return new ExecutionOptions(executionOptions.getExecutionSequence(), executionOptions.getFlags(), executionOptions.getMaxSuccessiveDeltaCycles(),
+              defaultOptions);
         }
       }
     }
@@ -646,8 +656,9 @@ public class ViewProcessorImpl implements ViewProcessorInternal {
   }
 
   private ViewProcessContext createViewProcessContext(final UniqueId processId, final Supplier<UniqueId> cycleIds) {
-    return new ViewProcessContext(processId, _configSource, _viewPermissionProvider, _viewPortfolioPermissionProvider, _marketDataProviderFactoryResolver, _functionCompilationService,
-        _functionResolver, _computationCacheSource, _computationJobDispatcher, _viewProcessWorkerFactory, _dependencyGraphBuilderFactory, _dependencyGraphExecutorFactory,
+    return new ViewProcessContext(processId, _configSource, _viewPermissionProvider, _viewPortfolioPermissionProvider,
+        _marketDataProviderFactoryResolver, _functionCompilationService, _functionResolver, _computationCacheSource,
+        _computationJobDispatcher, _viewProcessWorkerFactory, _dependencyGraphBuilderFactory, _dependencyGraphExecutorFactory,
         _graphExecutionStatistics, _overrideOperationCompiler, _cycleManager, cycleIds, _executionCache);
   }
 
@@ -788,7 +799,8 @@ public class ViewProcessorImpl implements ViewProcessorInternal {
       _clientResultTimer = null;
       _isStarted = false;
 
-      // REVIEW Andrew 2010-03-25 -- It might be coincidence, but if this gets called during undeploy/stop within a container the Bloomberg API explodes with a ton of NPEs.
+      // REVIEW Andrew 2010-03-25 -- It might be coincidence, but if this gets called during undeploy/stop within a container the Bloomberg API
+      // explodes with a ton of NPEs.
       _viewProcessorEventListenerRegistry.notifyViewProcessorStopped();
     } finally {
       _lifecycleLock.unlock();

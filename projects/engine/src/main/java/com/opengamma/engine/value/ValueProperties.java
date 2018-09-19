@@ -115,9 +115,9 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
     /**
      * Declares a property as optional when used as a constraint.
      * <p>
-     * By default constraints are required, and can only be satisfied if the other property set defines a matching value. If a constraint is optional the other set may define a matching value, or have
-     * no definition for the property. If no explicit values for the property are set with one of the other calls, the property will have a wild-card value (i.e. as if {@link #withAny (String)} had
-     * been called.
+     * By default constraints are required, and can only be satisfied if the other property set defines a matching value. If a constraint is
+     * optional the other set may define a matching value, or have no definition for the property. If no explicit values for the property are
+     * set with one of the other calls, the property will have a wild-card value (i.e. as if {@link #withAny (String)} had been called.
      *
      * @param propertyName the name of the property, not null
      * @return {@code this} for chaining in the builder pattern, not null
@@ -171,18 +171,16 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
     if (s1 == null) {
       if (s2 == null) {
         return 0;
-      } else {
-        return -1;
       }
+      return -1;
     } else if (s2 == null) {
       return 1;
     }
     if (s1.isEmpty()) {
       if (s2.isEmpty()) {
         return 0;
-      } else {
-        return 1;
       }
+      return 1;
     } else if (s2.isEmpty()) {
       return -1;
     }
@@ -196,9 +194,8 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
     for (final String s : sorted) {
       if (s1.contains(s)) {
         return -1;
-      } else {
-        return 1;
       }
+      return 1;
     }
     return 0;
   }
@@ -259,10 +256,9 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
               if (bucket.isSatisfyValue(property)) {
                 // Satisfied
                 continue propertyLoop;
-              } else {
-                // Didn't satisfy
-                return false;
               }
+              // Didn't satisfy
+              return false;
             }
             bucket = bucket.getNext();
           }
@@ -336,9 +332,8 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
       }
       if (builder.hasLocalCopy()) {
         return builder.get();
-      } else {
-        return other;
       }
+      return other;
     }
 
     private ValueProperties intersectSimpleImpl(final SimpleValueProperties other) {
@@ -369,18 +364,16 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
       }
       if (equalsThis) {
         return this;
-      } else {
-        return builder.get();
       }
+      return builder.get();
     }
 
     @Override
     /* package */ValueProperties intersectSimple(final SimpleValueProperties other) {
       if (isLongerPropertyCount(other)) {
         return other.intersectSimpleImpl(this);
-      } else {
-        return intersectSimpleImpl(other);
       }
+      return intersectSimpleImpl(other);
     }
 
     @Override
@@ -1519,8 +1512,9 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
   /**
    * Tests if a property instance corresponds to a near-infinite set.
    * <p>
-   * This method was introduced to assist in migrating code that was explicitly handling the previously publicly classes. The empty and infinite tests can be identified by comparison with the values
-   * returned by {@link #all} or {@code #none}. For any thing else, a normal property set (previously publicly visible as ValuePropertiesImpl) will return false from this and a near-infinite set
+   * This method was introduced to assist in migrating code that was explicitly handling the previously publicly classes. The empty and
+   * infinite tests can be identified by comparison with the values returned by {@link #all} or {@code #none}. For any thing else, a normal
+   * property set (previously publicly visible as ValuePropertiesImpl) will return false from this and a near-infinite set
    * (previously publicly visible as NearlyInfinitePropertiesImpl) will return true.
    *
    * @param properties the properties to test
@@ -1751,8 +1745,8 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
   /**
    * Composes two value properties by taking a "left" intersection.
    * <p>
-   * This produces a set of properties such that for any properties defined by the other, the intersection of the property values is taken. Any properties defined in this set but not in the other
-   * remain untouched.
+   * This produces a set of properties such that for any properties defined by the other, the intersection of the property values is taken.
+   * Any properties defined in this set but not in the other remain untouched.
    *
    * @param properties the other property set to compose against, not null
    * @return the new set of properties, or this object if the composition result is equal, not null
@@ -1762,8 +1756,9 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
   /**
    * Produces the strict intersection of two property sets.
    * <p>
-   * This produces a set of properties such that only properties defined in both this and the other are present in the output. For these, the intersection of common values is available for each
-   * property. If there are no common property values, the property is omitted from the result.
+   * This produces a set of properties such that only properties defined in both this and the other are present in the output. For these,
+   * the intersection of common values is available for each property. If there are no common property values, the property is omitted
+   * from the result.
    *
    * @param properties the other property set to compose against, not null
    * @return the new set of properties, or this (or the other) object if the intersection result is equal, not null
@@ -1773,7 +1768,8 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
   /**
    * Produces the union of two property sets.
    * <p>
-   * This produces a set of properties such that any properties defined in either this or the other are present in the output. For these, the union of values from each property set is taken.
+   * This produces a set of properties such that any properties defined in either this or the other are present in the output.
+   * For these, the union of values from each property set is taken.
    *
    * @param properties the other property set to compose against, not null
    * @return the new set of properties, or this (or the other) object if the union result is equal, not null
@@ -1805,8 +1801,8 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
   public abstract ValueProperties withoutAny(String propertyName);
 
   /**
-   * Returns a simple string representation of the {@link ValueProperties} instance. This simple representation omits unnecessary brackets for better readability. The output remains valid as the input
-   * to {@link #parse(String)}.
+   * Returns a simple string representation of the {@link ValueProperties} instance. This simple representation omits unnecessary brackets
+   * for better readability. The output remains valid as the input to {@link #parse(String)}.
    *
    * @return a simple string representation
    */
@@ -1829,7 +1825,8 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
    * <li>INFINITE-{name1,name2}
    * <li>{name1=[value1,value2],name2=[value3]}
    * </ul>
-   * These are intentionally the same as the forms generated by {@link #toString()}. For maximum flexibility, and especially for user input, more abbreviated forms are also valid. In particular:
+   * These are intentionally the same as the forms generated by {@link #toString()}. For maximum flexibility, and especially for user input,
+   * more abbreviated forms are also valid. In particular:
    * <ul>
    * <li>Curly braces may be omitted
    * <li>Square brackets around single values may be omitted
@@ -1888,8 +1885,8 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
           }
           space = 0;
           final char escapedCharacter = s.charAt(pos);
-          if (escapedCharacter == '\\' || escapedCharacter == ',' || escapedCharacter == '=' || escapedCharacter == '[' || escapedCharacter == ']' || escapedCharacter == '?' ||
-              escapedCharacter == ' ') {
+          if (escapedCharacter == '\\' || escapedCharacter == ',' || escapedCharacter == '=' || escapedCharacter == '['
+              || escapedCharacter == ']' || escapedCharacter == '?' || escapedCharacter == ' ') {
             substring.append(escapedCharacter);
           } else {
             throw new IllegalArgumentException("Unrecognised escape sequence: \\" + escapedCharacter);
@@ -1991,8 +1988,9 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
    * @param optional any properties that are optional, not null
    * @param strict whether to include delimiting '{' and '}' characters in the string
    * @return the string form
-   * @deprecated This is based on the internal representation of {@code ValueProperties} from an older version and used mainly to implement the {@link #toString()} and {@link #toSimpleString()}
-   *             methods. New code should not be calling it as it may be removed in future versions of the platform.
+   * @deprecated This is based on the internal representation of {@code ValueProperties} from an older version and used mainly to
+   * implement the {@link #toString()} and {@link #toSimpleString()} methods. New code should not be calling it as it may be
+   * removed in future versions of the platform.
    */
   @Deprecated
   public static String toString(final Map<String, Set<String>> properties, final Set<String> optional, final boolean strict) {

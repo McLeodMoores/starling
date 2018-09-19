@@ -24,10 +24,11 @@ public class ComputationTargetResolverUtils {
   private static final Logger LOGGER = LoggerFactory.getLogger(ComputationTargetResolverUtils.class);
 
   /**
-   * Visitor to remove any union selections from the leaf. Returns null if the type did not match the resolved object, {@link ComputationTargetType#NULL} if the object did match, or the correct type
-   * selection if it was modified.
+   * Visitor to remove any union selections from the leaf. Returns null if the type did not match the resolved object, {@link ComputationTargetType#NULL}
+   * if the object did match, or the correct type selection if it was modified.
    */
-  private static final ComputationTargetTypeVisitor<UniqueIdentifiable, ComputationTargetType> RESOLVE_TYPE = new ComputationTargetTypeVisitor<UniqueIdentifiable, ComputationTargetType>() {
+  private static final ComputationTargetTypeVisitor<UniqueIdentifiable, ComputationTargetType> RESOLVE_TYPE =
+      new ComputationTargetTypeVisitor<UniqueIdentifiable, ComputationTargetType>() {
 
     @Override
     public ComputationTargetType visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final UniqueIdentifiable resolved) {
@@ -87,8 +88,9 @@ public class ComputationTargetResolverUtils {
   };
 
   /**
-   * Creates a {@link ComputationTarget} instance that describes the resolved object. The type in the target will accurately describe the target type to the scoping level of the requested
-   * specification. For example a target of type {@code FooSecurity} resolved from a specification of type {@code POSITION/SECURITY} will end up as type {@code POSITION/FooSecurity}.
+   * Creates a {@link ComputationTarget} instance that describes the resolved object. The type in the target will accurately describe the target type to
+   * the scoping level of the requested specification. For example a target of type {@code FooSecurity} resolved from a specification of type
+   * {@code POSITION/SECURITY} will end up as type {@code POSITION/FooSecurity}.
    *
    * @param requestedSpecification the original specification as passed to the {@link ComputationTargetResolver#resolve} method, not null
    * @param target the resolved object, never null

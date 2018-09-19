@@ -138,8 +138,10 @@ public class DefaultViewComputationCacheTest {
   }
 
   private void assertPutValues(final int type, final CacheSelectHint correctHint, final CacheSelectHint incorrectHint) {
-    final ValueSpecification valueSpecFoo = new ValueSpecification("foo", ComputationTargetSpecification.NULL, ValueProperties.with(ValuePropertyNames.FUNCTION, "mockFunctionId").get());
-    final ValueSpecification valueSpecBar = new ValueSpecification("bar", ComputationTargetSpecification.NULL, ValueProperties.with(ValuePropertyNames.FUNCTION, "mockFunctionId").get());
+    final ValueSpecification valueSpecFoo =
+        new ValueSpecification("foo", ComputationTargetSpecification.NULL, ValueProperties.with(ValuePropertyNames.FUNCTION, "mockFunctionId").get());
+    final ValueSpecification valueSpecBar =
+        new ValueSpecification("bar", ComputationTargetSpecification.NULL, ValueProperties.with(ValuePropertyNames.FUNCTION, "mockFunctionId").get());
     final ComputedValue valueFoo = new ComputedValue(valueSpecFoo, "Foo");
     final ComputedValue valueBar = new ComputedValue(valueSpecBar, "Bar");
     switch (type) {
@@ -211,13 +213,15 @@ public class DefaultViewComputationCacheTest {
 
   @Test
   public void testPutValuesMixedPrivate() {
-    final ValueSpecification valueSpecFoo = new ValueSpecification("foo", ComputationTargetSpecification.NULL, ValueProperties.with(ValuePropertyNames.FUNCTION, "mockFunctionId").get());
+    final ValueSpecification valueSpecFoo =
+        new ValueSpecification("foo", ComputationTargetSpecification.NULL, ValueProperties.with(ValuePropertyNames.FUNCTION, "mockFunctionId").get());
     assertPutValues(2, CacheSelectHint.privateValues(Arrays.asList(valueSpecFoo)), CacheSelectHint.sharedValues(Arrays.asList(valueSpecFoo)));
   }
 
   @Test
   public void testPutValuesMixedShared() {
-    final ValueSpecification valueSpecFoo = new ValueSpecification("foo", ComputationTargetSpecification.NULL, ValueProperties.with(ValuePropertyNames.FUNCTION, "mockFunctionId").get());
+    final ValueSpecification valueSpecFoo =
+        new ValueSpecification("foo", ComputationTargetSpecification.NULL, ValueProperties.with(ValuePropertyNames.FUNCTION, "mockFunctionId").get());
     assertPutValues(2, CacheSelectHint.sharedValues(Arrays.asList(valueSpecFoo)), CacheSelectHint.privateValues(Arrays.asList(valueSpecFoo)));
   }
 

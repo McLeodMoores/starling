@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.config;
@@ -15,9 +15,9 @@ import com.opengamma.util.SingletonFactoryBean;
 
 /**
  * Bean for constructing a {@link FunctionRepository} from a {@link FunctionConfigurationSource} using the {@link FunctionRepositoryFactory}.
- * 
- * @deprecated The {@code FunctionConfigurationSource} requires a version to deliver a reliable repository; configuration using this will not be able to work correctly with dynamically changing
- *             function repositories
+ *
+ * @deprecated The {@code FunctionConfigurationSource} requires a version to deliver a reliable repository; configuration using this will
+ * not be able to work correctly with dynamically changing function repositories
  */
 @Deprecated
 public class FunctionRepositoryFactoryBean extends SingletonFactoryBean<FunctionRepository> {

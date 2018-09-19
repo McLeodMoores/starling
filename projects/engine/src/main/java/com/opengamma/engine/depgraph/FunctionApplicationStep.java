@@ -313,8 +313,8 @@ import com.opengamma.util.tuple.Triple;
      * @param resolvedOutput the new resolved output as it should appear from the substitute, not null
      * @param resolvedOutputs the full set of resolved outputs, not null
      */
-    private boolean produceSubstitute(final GraphBuildingContext context, final Map<ValueSpecification, ValueRequirement> inputs, final ValueSpecification resolvedOutput,
-        final Set<ValueSpecification> resolvedOutputs) {
+    private boolean produceSubstitute(final GraphBuildingContext context, final Map<ValueSpecification, ValueRequirement> inputs,
+        final ValueSpecification resolvedOutput, final Set<ValueSpecification> resolvedOutputs) {
       if (inputs.containsKey(resolvedOutput)) {
         LOGGER.debug("Backtracking on identity reduction");
         return false;
@@ -365,7 +365,8 @@ import com.opengamma.util.tuple.Triple;
       protected abstract void failedImpl(final GraphBuildingContext context);
 
       @Override
-      public final void resolved(final GraphBuildingContext context, final ValueRequirement valueRequirement, final ResolvedValue resolvedValue, final ResolutionPump pump) {
+      public final void resolved(final GraphBuildingContext context, final ValueRequirement valueRequirement, final ResolvedValue resolvedValue,
+          final ResolutionPump pump) {
         if (pump != null) {
           synchronized (this) {
             _pump = pump;
@@ -513,7 +514,8 @@ import com.opengamma.util.tuple.Triple;
         }
 
         @Override
-        public void resolved(final GraphBuildingContext context, final ValueRequirement valueRequirement, final ResolvedValue resolvedValue, final ResolutionPump pump) {
+        public void resolved(final GraphBuildingContext context, final ValueRequirement valueRequirement, final ResolvedValue resolvedValue,
+            final ResolutionPump pump) {
           LOGGER.debug("Resolved additional requirement {} to {}", valueRequirement, resolvedValue);
           inputs.put(resolvedValue.getValueSpecification(), valueRequirement);
           if (pump != null) {
@@ -591,10 +593,12 @@ import com.opengamma.util.tuple.Triple;
      * @param resolvedOutputs the function outputs as they will appear in the dependency graph, not null and not containing null
      * @param lastWorkerResult true if this is known to be the last result, otherwise false
      */
-    private boolean pushResult(final GraphBuildingContext context, final FunctionApplicationWorker substituteWorker, final Map<ValueSpecification, ValueRequirement> inputs,
+    private boolean pushResult(final GraphBuildingContext context, final FunctionApplicationWorker substituteWorker,
+        final Map<ValueSpecification, ValueRequirement> inputs,
         final ValueSpecification resolvedOutput, final Set<ValueSpecification> resolvedOutputs, final boolean lastWorkerResult) {
       // the substituteWorker is not ref-counted from here
-      if (context.getCompilationContext().getGraphBuildingBlacklist().isBlacklisted(getFunction(), resolvedOutput.getTargetSpecification(), inputs.keySet(), resolvedOutputs)) {
+      if (context.getCompilationContext().getGraphBuildingBlacklist().isBlacklisted(getFunction(), resolvedOutput.getTargetSpecification(),
+          inputs.keySet(), resolvedOutputs)) {
         LOGGER.info("Result {} for {} suppressed by blacklist", resolvedOutput, getValueRequirement());
         final ResolutionFailure failure = functionApplication(context).requirements(inputs).suppressed();
         if (substituteWorker != null) {

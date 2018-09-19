@@ -58,13 +58,14 @@ public final class ManagementService implements ViewProcessorEventListener {
   private final ConcurrentHashMap<UniqueId, Set<String>> _calcConfigByViewProcessId = new ConcurrentHashMap<>();
 
   /**
-   * Should beans be categorized by view processor or not. If only one view processor is expected then setting this to false means the MBean hierarchy is simpler to navigate.
+   * Should beans be categorized by view processor or not. If only one view processor is expected then setting this to false means the MBean
+   * hierarchy is simpler to navigate.
    */
   private final boolean _splitByViewProcessor;
 
   /**
-   * Have the MBeans already been initialized for the view processor. Used to avoid trying to register on the notifyViewProcessorStarted method if registration has already happened through the
-   * constructor.
+   * Have the MBeans already been initialized for the view processor. Used to avoid trying to register on the notifyViewProcessorStarted method
+   * if registration has already happened through the constructor.
    */
   private boolean _isInitialized;
 
@@ -78,7 +79,8 @@ public final class ManagementService implements ViewProcessorEventListener {
    * @deprecated add section containing JmxManagementServiceFactory to ini file instead
    */
   @Deprecated
-  public static void registerMBeans(final ViewProcessorImpl viewProcessor, final TotallingGraphStatisticsGathererProvider statisticsProvider, final MBeanServer mBeanServer) {
+  public static void registerMBeans(final ViewProcessorImpl viewProcessor, final TotallingGraphStatisticsGathererProvider statisticsProvider,
+      final MBeanServer mBeanServer) {
     final ManagementService registry = new ManagementService(viewProcessor, statisticsProvider, mBeanServer, false);
     registry.init();
   }
@@ -92,7 +94,8 @@ public final class ManagementService implements ViewProcessorEventListener {
    * @param mBeanServer the MBeanServer to register MBeans to, not null
    * @param splitByViewProcessor if true, then classify registered beans by their view processor. Only required if more than one view processor will be running.
    */
-  public ManagementService(final ViewProcessorImpl viewProcessor, final TotallingGraphStatisticsGathererProvider statisticsProvider, final MBeanServer mBeanServer, final boolean splitByViewProcessor) {
+  public ManagementService(final ViewProcessorImpl viewProcessor, final TotallingGraphStatisticsGathererProvider statisticsProvider,
+      final MBeanServer mBeanServer, final boolean splitByViewProcessor) {
     ArgumentChecker.notNull(viewProcessor, "View Processor");
     ArgumentChecker.notNull(mBeanServer, "MBeanServer");
     ArgumentChecker.notNull(statisticsProvider, "TotallingGraphStatisticsGathererProvider");
@@ -139,7 +142,8 @@ public final class ManagementService implements ViewProcessorEventListener {
       final Set<String> configurationNames = viewProcess.getLatestViewDefinition().getAllCalculationConfigurationNames();
       _calcConfigByViewProcessId.putIfAbsent(viewProcess.getUniqueId(), configurationNames);
       for (final String calcConfigName : configurationNames) {
-        final GraphExecutionStatisticsMBeanImpl graphStatistics = new GraphExecutionStatisticsMBeanImpl(viewProcess, _statisticsProvider, _viewProcessor.getName(), calcConfigName);
+        final GraphExecutionStatisticsMBeanImpl graphStatistics =
+            new GraphExecutionStatisticsMBeanImpl(viewProcess, _statisticsProvider, _viewProcessor.getName(), calcConfigName);
         registerGraphStatistics(graphStatistics);
       }
     }
@@ -237,7 +241,8 @@ public final class ManagementService implements ViewProcessorEventListener {
     }
     _calcConfigByViewProcessId.putIfAbsent(viewProcessId, configurationNames);
     for (final String calcConfigName : configurationNames) {
-      final GraphExecutionStatisticsMBeanImpl graphStatistics = new GraphExecutionStatisticsMBeanImpl(view, _statisticsProvider, _viewProcessor.getName(), calcConfigName);
+      final GraphExecutionStatisticsMBeanImpl graphStatistics =
+          new GraphExecutionStatisticsMBeanImpl(view, _statisticsProvider, _viewProcessor.getName(), calcConfigName);
       try {
         registerGraphStatistics(graphStatistics);
       } catch (final Exception e) {
@@ -254,7 +259,8 @@ public final class ManagementService implements ViewProcessorEventListener {
     }
     final ViewProcessMXBeanImpl viewManagement = new ViewProcessMXBeanImpl(view, _viewProcessor, _splitByViewProcessor);
     try {
-      final String beanNamePrefix = _splitByViewProcessor ? "com.opengamma:type=ViewProcessors,ViewProcessor=ViewProcessor " + _viewProcessor.getName() : "com.opengamma:type=ViewProcessor";
+      final String beanNamePrefix = _splitByViewProcessor
+          ? "com.opengamma:type=ViewProcessors,ViewProcessor=ViewProcessor " + _viewProcessor.getName() : "com.opengamma:type=ViewProcessor";
       final String beanName = beanNamePrefix + ",AutoStartViews=AutoStartViews,name=AutoStart [" + autoStartName + "]";
       registerViewProcess(viewManagement, new ObjectName(beanName));
     } catch (final Exception e) {

@@ -117,7 +117,8 @@ public class SingleComputationCycleTest {
     }
 
     @Override
-    public DependencyGraphExecutionFuture execute(final DependencyGraph graph, final Set<ValueSpecification> sharedValues, final Map<ValueSpecification, FunctionParameters> parameters) {
+    public DependencyGraphExecutionFuture execute(final DependencyGraph graph, final Set<ValueSpecification> sharedValues,
+        final Map<ValueSpecification, FunctionParameters> parameters) {
       final FutureTask<String> future = new FutureTask<>(new Runnable() {
         @Override
         public void run() {

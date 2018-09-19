@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.fudgemsg;
@@ -48,12 +48,13 @@ public class RequirementResolutionFudgeBuilderTest extends AbstractFudgeBuilderT
   }
 
   public void testNoInputs() {
-    final RequirementResolution resolution = new RequirementResolution(valueSpecification(), functionNoParameters(), Collections.<FullRequirementResolution>emptySet());
+    final RequirementResolution resolution =
+        new RequirementResolution(valueSpecification(), functionNoParameters(), Collections.<FullRequirementResolution>emptySet());
     assertEncodeDecodeCycle(RequirementResolution.class, resolution);
   }
 
   public void testInputs() {
-    final Collection<FullRequirementResolution> inputs = new ArrayList<FullRequirementResolution>();
+    final Collection<FullRequirementResolution> inputs = new ArrayList<>();
     inputs.add(new FullRequirementResolution(requirement("A")));
     inputs.add(new FullRequirementResolution(requirement("B")));
     final RequirementResolution resolution = new RequirementResolution(valueSpecification(), functionNoParameters(), inputs);
@@ -61,7 +62,8 @@ public class RequirementResolutionFudgeBuilderTest extends AbstractFudgeBuilderT
   }
 
   public void testFunctionParameters() {
-    final RequirementResolution resolution = new RequirementResolution(valueSpecification(), functionWithParameters(), Collections.<FullRequirementResolution>emptySet());
+    final RequirementResolution resolution =
+        new RequirementResolution(valueSpecification(), functionWithParameters(), Collections.<FullRequirementResolution>emptySet());
     assertEncodeDecodeCycle(RequirementResolution.class, resolution);
   }
 

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.exec;
@@ -26,8 +26,8 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * <p>
- * Continuously tunes the parameters to a {@link MultipleNodeExecutorFactory} to maintain good performance while aspects of the computing cluster change. Schedule this to run periodically to update
- * its sampling and make continuous adjustments.
+ * Continuously tunes the parameters to a {@link MultipleNodeExecutorFactory} to maintain good performance while aspects of the computing
+ * cluster change. Schedule this to run periodically to update its sampling and make continuous adjustments.
  * </p>
  * <h2>Tuning rules<h2>
  * <p>
@@ -116,8 +116,8 @@ public class MultipleNodeExecutorTuner implements Runnable {
       int nodesPerInvokerCount = 0;
       double nodesPerInvoker = 0;
       boolean changed = false;
-      for (Map.Entry<String, Collection<Capability>> capabilities : allCapabilities.entrySet()) {
-        for (Capability capability : capabilities.getValue()) {
+      for (final Map.Entry<String, Collection<Capability>> capabilities : allCapabilities.entrySet()) {
+        for (final Capability capability : capabilities.getValue()) {
           if (PlatformCapabilities.NODE_COUNT.equals(capability.getIdentifier())) {
             nodesPerInvokerCount++;
             nodesPerInvoker += capability.getUpperBoundParameter();
@@ -126,8 +126,8 @@ public class MultipleNodeExecutorTuner implements Runnable {
       }
       if (nodesPerInvokerCount > 0) {
         LOGGER.debug("Found {} nodes at {} invokers", nodesPerInvoker, nodesPerInvokerCount);
-        int maxConcurrency = getFactory().getMaximumConcurrency();
-        int newMaxConcurrency = (int) Math.ceil(nodesPerInvoker / (double) nodesPerInvokerCount);
+        final int maxConcurrency = getFactory().getMaximumConcurrency();
+        final int newMaxConcurrency = (int) Math.ceil(nodesPerInvoker / nodesPerInvokerCount);
         if (newMaxConcurrency != maxConcurrency) {
           LOGGER.info("Changing maximum concurrency to {}", newMaxConcurrency);
           getFactory().setMaximumConcurrency(newMaxConcurrency);
@@ -140,8 +140,8 @@ public class MultipleNodeExecutorTuner implements Runnable {
     }
     if (getGraphExecutionStatistics() != null) {
       LOGGER.debug("Processing graph execution statistics");
-      for (TotallingGraphStatisticsGathererProvider.Statistics gatherer : getGraphExecutionStatistics().getViewStatistics()) {
-        for (GraphExecutionStatistics statistics : gatherer.getExecutionStatistics()) {
+      for (final TotallingGraphStatisticsGathererProvider.Statistics gatherer : getGraphExecutionStatistics().getViewStatistics()) {
+        for (final GraphExecutionStatistics statistics : gatherer.getExecutionStatistics()) {
           statistics.decay(getStatisticsDecayRate());
         }
       }
@@ -149,7 +149,7 @@ public class MultipleNodeExecutorTuner implements Runnable {
     }
     if (getJobDispatchStatistics() != null) {
       LOGGER.debug("Processing job dispatch statistics");
-      for (CalculationNodeStatistics statistics : getJobDispatchStatistics().getNodeStatistics()) {
+      for (final CalculationNodeStatistics statistics : getJobDispatchStatistics().getNodeStatistics()) {
         statistics.decay(getStatisticsDecayRate());
       }
       getJobDispatchStatistics().dropStatisticsBefore(Instant.now().minusSeconds(getStatisticsKeepAlive()));
@@ -159,7 +159,7 @@ public class MultipleNodeExecutorTuner implements Runnable {
   private FudgeMsg dumpCapabilities(final FudgeSerializer serializer, final String invokerId, final Collection<Capability> capabilities) {
     final MutableFudgeMsg message = serializer.newMessage();
     message.add("identifier", invokerId);
-    for (Capability capability : capabilities) {
+    for (final Capability capability : capabilities) {
       serializer.addToMessageWithClassHeaders(message, capability.getIdentifier(), null, capability, Capability.class);
     }
     return message;
@@ -169,7 +169,7 @@ public class MultipleNodeExecutorTuner implements Runnable {
     final MutableFudgeMsg message = serializer.newMessage();
     serializer.addToMessage(message, "factory", null, getFactory());
     if (getJobDispatcher() != null) {
-      for (Map.Entry<String, Collection<Capability>> capabilities : getJobDispatcher().getAllCapabilities().entrySet()) {
+      for (final Map.Entry<String, Collection<Capability>> capabilities : getJobDispatcher().getAllCapabilities().entrySet()) {
         message.add("Invoker", dumpCapabilities(serializer, capabilities.getKey(), capabilities.getValue()));
       }
     }

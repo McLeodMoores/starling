@@ -37,8 +37,9 @@ public class TestCalculationNode extends SimpleCalculationNode implements Lifecy
 
   private static CompiledFunctionService initializedCFS() {
     final InMemoryFunctionRepository repository = new InMemoryFunctionRepository();
-    final CompiledFunctionService cfs = new CompiledFunctionService(FunctionRepositoryFactory.constructRepositoryFactory(repository), new CachingFunctionRepositoryCompiler(),
-        compilationContext());
+    final CompiledFunctionService cfs =
+        new CompiledFunctionService(FunctionRepositoryFactory.constructRepositoryFactory(repository), new CachingFunctionRepositoryCompiler(),
+            compilationContext());
     cfs.initialize();
     return cfs;
   }
@@ -48,8 +49,9 @@ public class TestCalculationNode extends SimpleCalculationNode implements Lifecy
   }
 
   public TestCalculationNode(final ThreadLocalLogEventListener logEventListener) {
-    super(new InMemoryViewComputationCacheSource(OpenGammaFudgeContext.getInstance()), initializedCFS(), new FunctionExecutionContext(), InetAddressUtils.getLocalHostName(), Executors
-        .newCachedThreadPool(), new DiscardingInvocationStatisticsGatherer(), new CalculationNodeLogEventListener(logEventListener));
+    super(new InMemoryViewComputationCacheSource(OpenGammaFudgeContext.getInstance()), initializedCFS(),
+        new FunctionExecutionContext(), InetAddressUtils.getLocalHostName(), Executors.newCachedThreadPool(),
+        new DiscardingInvocationStatisticsGatherer(), new CalculationNodeLogEventListener(logEventListener));
   }
 
   // Lifecycle

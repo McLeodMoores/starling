@@ -31,8 +31,9 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Performs manipulation of the compiled dependency graphs based on a general marketDataSelector (which is applied to all graphs) and a set of specific market data selectors (which is applied only to
- * named graphs). If the graph contains nodes that match the selectors, they will be updated such that proxy nodes are inserted which are able to intercept market data values and transform then.
+ * Performs manipulation of the compiled dependency graphs based on a general marketDataSelector (which is applied to all graphs) and a set of specific
+ * market data selectors (which is applied only to named graphs). If the graph contains nodes that match the selectors, they will be updated such that
+ * proxy nodes are inserted which are able to intercept market data values and transform then.
  */
 public class MarketDataSelectionGraphManipulator {
 
@@ -97,7 +98,8 @@ public class MarketDataSelectionGraphManipulator {
    * @param marketDataSelector the market data selector which will be applied to all graphs, not null
    * @param specificSelectors the market data selectors which will be applied only to named graphs, not null
    */
-  public MarketDataSelectionGraphManipulator(final MarketDataSelector marketDataSelector, final Map<String, Map<DistinctMarketDataSelector, FunctionParameters>> specificSelectors) {
+  public MarketDataSelectionGraphManipulator(final MarketDataSelector marketDataSelector,
+      final Map<String, Map<DistinctMarketDataSelector, FunctionParameters>> specificSelectors) {
     ArgumentChecker.notNull(marketDataSelector, "marketDataSelector");
     ArgumentChecker.notNull(specificSelectors, "specificSelectors");
     _marketDataSelector = marketDataSelector;
@@ -113,7 +115,8 @@ public class MarketDataSelectionGraphManipulator {
     _cacheHintKey = new CacheHintKey(marketDataSelector, selectorsMap);
   }
 
-  private DependencyNode modifyDependencyNode(final DependencyNode node, final ValueSpecification desiredOutput, final DependencyGraphStructureExtractor extractor) {
+  private DependencyNode modifyDependencyNode(final DependencyNode node, final ValueSpecification desiredOutput,
+      final DependencyGraphStructureExtractor extractor) {
     DependencyNode newNode = extractor.getProduction(desiredOutput);
     if (newNode != null) {
       return newNode;
@@ -177,7 +180,8 @@ public class MarketDataSelectionGraphManipulator {
             .with(ValuePropertyNames.FUNCTION, originalFunction + StructureManipulationFunction.UNIQUE_ID).get());
         // REVIEW Chris 2014-01-14 - This isn't a good design. it's deliberately mutating the internal state of the extractor
         proxySpecs.add(proxyOutput);
-        final DependencyNode proxyNode = new DependencyNodeImpl(MANIPULATION_FUNCTION, target, Collections.singleton(proxyOutput), Collections.singletonMap(output, newNode));
+        final DependencyNode proxyNode =
+            new DependencyNodeImpl(MANIPULATION_FUNCTION, target, Collections.singleton(proxyOutput), Collections.singletonMap(output, newNode));
         extractor.storeProduction(proxyOutput, proxyNode);
         extractor.storeProduction(output, proxyNode);
         extractor.addProxyValue(output, proxyOutput);
@@ -192,8 +196,9 @@ public class MarketDataSelectionGraphManipulator {
   }
 
   /**
-   * Processes the specified graph, identifying any nodes which meet the selection criteria of the market data selectors. Those which do match will have new nodes inserted into the graph, proxying the
-   * original nodes, and providing the ability to perform transformations on the data as required.
+   * Processes the specified graph, identifying any nodes which meet the selection criteria of the market data selectors. Those which do match
+   * will have new nodes inserted into the graph, proxying the original nodes, and providing the ability to perform transformations on the data
+   * as required.
    *
    * @param graph the graph to inspect, not null
    * @param resolver for looking up data used in selection criteria, for example securities, not null
@@ -215,7 +220,8 @@ public class MarketDataSelectionGraphManipulator {
     final int roots = graph.getRootCount();
     final Set<DependencyNode> newRoots = Sets.newHashSetWithExpectedSize(roots);
     final DefaultSelectorResolver selectorResolver = new DefaultSelectorResolver(resolver);
-    final DependencyGraphStructureExtractor extractor = new DependencyGraphStructureExtractor(configurationName, combinedSelector, selectorResolver, selectorMapping);
+    final DependencyGraphStructureExtractor extractor =
+        new DependencyGraphStructureExtractor(configurationName, combinedSelector, selectorResolver, selectorMapping);
     for (int i = 0; i < roots; i++) {
       final DependencyNode root = graph.getRootNode(i);
       newRoots.add(modifyDependencyNode(root, root.getOutputValue(0), extractor));

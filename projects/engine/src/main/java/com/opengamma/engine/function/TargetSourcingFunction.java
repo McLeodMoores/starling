@@ -20,15 +20,16 @@ import com.opengamma.id.ObjectId;
 import com.opengamma.id.UniqueId;
 
 /**
- * Special case of function implementation that is never executed by the graph executor but is used to source computation targets. It will not be considered directly during graph construction; the
- * singleton instance is associated with DependencyNode objects to act as a marker on the node.
+ * Special case of function implementation that is never executed by the graph executor but is used to source computation targets. It will not be
+ * considered directly during graph construction; the singleton instance is associated with DependencyNode objects to act as a marker on the node.
  * <p>
  * This should never be present in a function repository as it should never be selected for execution.
  */
 public final class TargetSourcingFunction extends IntrinsicFunction {
 
   /**
-   * Property on the value specification indicating that the resolution is suitable for relative referencing (for example by object id or one of the associated external identifiers).
+   * Property on the value specification indicating that the resolution is suitable for relative referencing (for example by object id or one
+   * of the associated external identifiers).
    */
   public static final String REFERENCE_MODE_PROPERTY = "Ref";
 
@@ -47,7 +48,8 @@ public final class TargetSourcingFunction extends IntrinsicFunction {
    */
   public static final String UNIQUE_ID = "TargetSourcingFunction";
 
-  private static final ValueProperties RELATIVE_REFERENCED = ValueProperties.with(ValuePropertyNames.FUNCTION, UNIQUE_ID).with(REFERENCE_MODE_PROPERTY, REFERENCE_MODE_RELATIVE).get();
+  private static final ValueProperties RELATIVE_REFERENCED =
+      ValueProperties.with(ValuePropertyNames.FUNCTION, UNIQUE_ID).with(REFERENCE_MODE_PROPERTY, REFERENCE_MODE_RELATIVE).get();
 
   private static final ValueProperties ABSOLUTE_REFERENCED = ValueProperties.with(ValuePropertyNames.FUNCTION, UNIQUE_ID).get();
 

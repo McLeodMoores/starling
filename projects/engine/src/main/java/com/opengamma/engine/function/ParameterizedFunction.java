@@ -12,8 +12,8 @@ import com.opengamma.util.PublicAPI;
 /**
  * A function configured to be invoked with certain parameters.
  * <p>
- * For example, suppose you have a function, PriceCDOMonteCarlo, which takes one parameter, IterationCount. You could then have two {@code ParameterizedFunctions}, one where IterationCount = 20000 and
- * another where IterationCount = 50000.
+ * For example, suppose you have a function, PriceCDOMonteCarlo, which takes one parameter, IterationCount. You could then have two
+ * {@code ParameterizedFunctions}, one where IterationCount = 20000 and another where IterationCount = 50000.
  */
 @PublicAPI
 public class ParameterizedFunction implements DependencyNodeFunction {
@@ -24,7 +24,7 @@ public class ParameterizedFunction implements DependencyNodeFunction {
 
   /**
    * Creates a function/parameter pair.
-   * 
+   *
    * @param function the function definition, not null
    * @param parameters the function parameters, not null
    */
@@ -38,7 +38,7 @@ public class ParameterizedFunction implements DependencyNodeFunction {
 
   /**
    * Returns the unique identifier of the parameterized function, if set.
-   * 
+   *
    * @return the unique identifier, null if none is set
    */
   public String getUniqueId() {
@@ -47,7 +47,7 @@ public class ParameterizedFunction implements DependencyNodeFunction {
 
   /**
    * Sets the unique identifier of the parameterized function.
-   * 
+   *
    * @param uniqueId the unique identifier
    */
   public void setUniqueId(final String uniqueId) {
@@ -56,7 +56,7 @@ public class ParameterizedFunction implements DependencyNodeFunction {
 
   /**
    * Returns the function definition.
-   * 
+   *
    * @return the function definition
    */
   public CompiledFunctionDefinition getFunction() {
@@ -65,7 +65,7 @@ public class ParameterizedFunction implements DependencyNodeFunction {
 
   /**
    * Returns the function identifier.
-   * 
+   *
    * @return the function identifier
    */
   @Override
@@ -75,7 +75,7 @@ public class ParameterizedFunction implements DependencyNodeFunction {
 
   /**
    * Returns the function parameters.
-   * 
+   *
    * @return the function parameters
    */
   @Override
@@ -109,8 +109,8 @@ public class ParameterizedFunction implements DependencyNodeFunction {
       return _uniqueId.equals(other._uniqueId);
     }
     if (_function != other._function) {
-      FunctionDefinition myFunction = _function.getFunctionDefinition();
-      FunctionDefinition otherFunction = other._function.getFunctionDefinition();
+      final FunctionDefinition myFunction = _function.getFunctionDefinition();
+      final FunctionDefinition otherFunction = other._function.getFunctionDefinition();
       if (myFunction != otherFunction) {
         if (!myFunction.getUniqueId().equals(otherFunction.getUniqueId())) {
           return false;

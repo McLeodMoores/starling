@@ -52,12 +52,12 @@ public final class MarketDataPointSelector implements DistinctMarketDataSelector
   }
 
   @Override
-  public DistinctMarketDataSelector findMatchingSelector(final ValueSpecification valueSpecification, final String calculationConfigurationName, final SelectorResolver resolver) {
+  public DistinctMarketDataSelector findMatchingSelector(final ValueSpecification valueSpecification, final String calculationConfigurationName,
+      final SelectorResolver resolver) {
     if (_externalId.equals(createId(valueSpecification))) {
       return this;
-    } else {
-      return null;
     }
+    return null;
   }
 
   public MutableFudgeMsg toFudgeMsg(final FudgeSerializer serializer) {

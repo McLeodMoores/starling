@@ -95,12 +95,13 @@ public class DepGraphConversionTest extends AbstractDependencyGraphBuilderTest {
         @Override
         public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
           final ValueRequirement req = helper.getRequirement2Any();
-          return Collections.singleton(new ValueSpecification(req.getValueName(), target.toSpecification(), req.getConstraints().copy().with(ValuePropertyNames.FUNCTION, getUniqueId())
-              .get()));
+          return Collections.singleton(new ValueSpecification(req.getValueName(), target.toSpecification(),
+              req.getConstraints().copy().with(ValuePropertyNames.FUNCTION, getUniqueId()).get()));
         }
 
         @Override
-        public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+        public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+            final Map<ValueSpecification, ValueRequirement> inputs) {
           LOGGER.debug("fnConv late resolving with inputs {}");
           getResultsCalled.set(true);
           return super.getResults(context, target, inputs);
@@ -140,12 +141,13 @@ public class DepGraphConversionTest extends AbstractDependencyGraphBuilderTest {
         @Override
         public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
           final ValueRequirement req = helper.getRequirement2Any();
-          return Collections.singleton(new ValueSpecification(req.getValueName(), target.toSpecification(), req.getConstraints().copy().with(ValuePropertyNames.FUNCTION, getUniqueId())
-              .get()));
+          return Collections.singleton(new ValueSpecification(req.getValueName(), target.toSpecification(),
+              req.getConstraints().copy().with(ValuePropertyNames.FUNCTION, getUniqueId()).get()));
         }
 
         @Override
-        public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+        public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+            final Map<ValueSpecification, ValueRequirement> inputs) {
           LOGGER.debug("fnConv1 late resolving with inputs {}", inputs);
           assertEquals(1, inputs.size());
           final ValueSpecification input = inputs.keySet().iterator().next();
@@ -163,12 +165,13 @@ public class DepGraphConversionTest extends AbstractDependencyGraphBuilderTest {
         @Override
         public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
           final ValueRequirement req = helper.getRequirement2Any();
-          return Collections.singleton(new ValueSpecification(req.getValueName(), target.toSpecification(), req.getConstraints().copy().with(ValuePropertyNames.FUNCTION, getUniqueId())
-              .get()));
+          return Collections.singleton(new ValueSpecification(req.getValueName(), target.toSpecification(),
+              req.getConstraints().copy().with(ValuePropertyNames.FUNCTION, getUniqueId()).get()));
         }
 
         @Override
-        public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+        public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+            final Map<ValueSpecification, ValueRequirement> inputs) {
           LOGGER.debug("fnConv2 late resolving with inputs {}", inputs);
           assertEquals(1, inputs.size());
           return super.getResults(context, target, inputs);
@@ -221,12 +224,13 @@ public class DepGraphConversionTest extends AbstractDependencyGraphBuilderTest {
         @Override
         public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
           final ValueRequirement req = helper.getRequirement2Any();
-          return Collections.singleton(new ValueSpecification(req.getValueName(), target.toSpecification(), req.getConstraints().copy().with(ValuePropertyNames.FUNCTION, getUniqueId())
-              .get()));
+          return Collections.singleton(new ValueSpecification(req.getValueName(), target.toSpecification(),
+              req.getConstraints().copy().with(ValuePropertyNames.FUNCTION, getUniqueId()).get()));
         }
 
         @Override
-        public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+        public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+            final Map<ValueSpecification, ValueRequirement> inputs) {
           LOGGER.debug("fnConv late resolving with inputs {}", inputs);
           assertEquals(1, inputs.size());
           getResultsInvoked.incrementAndGet();
@@ -260,10 +264,12 @@ public class DepGraphConversionTest extends AbstractDependencyGraphBuilderTest {
       final ComputationTarget target3 = new ComputationTarget(ComputationTargetType.PRIMITIVE, UniqueId.of("Target", "3"));
       final String property = "Constraint";
       MockFunction source = new MockFunction("source1", target1);
-      source.addResult(new ComputedValue(new ValueSpecification("A", target1.toSpecification(), ValueProperties.with(ValuePropertyNames.FUNCTION, "1").with(property, "Foo").get()), 1.0));
+      source.addResult(new ComputedValue(new ValueSpecification("A", target1.toSpecification(),
+          ValueProperties.with(ValuePropertyNames.FUNCTION, "1").with(property, "Foo").get()), 1.0));
       helper.getFunctionRepository().addFunction(source);
       source = new MockFunction("source2", target2);
-      source.addResult(new ComputedValue(new ValueSpecification("A", target2.toSpecification(), ValueProperties.with(ValuePropertyNames.FUNCTION, "1").with(property, "Bar").get()), 2.0));
+      source.addResult(new ComputedValue(new ValueSpecification("A", target2.toSpecification(),
+          ValueProperties.with(ValuePropertyNames.FUNCTION, "1").with(property, "Bar").get()), 2.0));
       helper.getFunctionRepository().addFunction(source);
       // Constraint preserving A->B
       helper.getFunctionRepository().addFunction(new TestFunction() {
@@ -274,7 +280,8 @@ public class DepGraphConversionTest extends AbstractDependencyGraphBuilderTest {
         }
 
         @Override
-        public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+        public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+            final ValueRequirement desiredValue) {
           return Collections.singleton(new ValueRequirement("A", target.toSpecification(), ValueProperties.withAny(property).get()));
         }
 
@@ -284,13 +291,15 @@ public class DepGraphConversionTest extends AbstractDependencyGraphBuilderTest {
         }
 
         @Override
-        public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
-          return Collections.singleton(new ValueSpecification("B", target.toSpecification(), createValueProperties().with(property, inputs.keySet().iterator().next().getProperty(property))
-              .get()));
+        public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+            final Map<ValueSpecification, ValueRequirement> inputs) {
+          return Collections.singleton(new ValueSpecification("B", target.toSpecification(),
+              createValueProperties().with(property, inputs.keySet().iterator().next().getProperty(property)).get()));
         }
 
         @Override
-        public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+        public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs,
+            final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
           return null;
         }
 
@@ -304,12 +313,14 @@ public class DepGraphConversionTest extends AbstractDependencyGraphBuilderTest {
         }
 
         @Override
-        public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+        public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs,
+            final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
           return null;
         }
 
         @Override
-        public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+        public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+            final ValueRequirement desiredValue) {
           return Collections.singleton(new ValueRequirement("B", target.toSpecification(), ValueProperties.withAny(property).get()));
         }
 
@@ -319,7 +330,8 @@ public class DepGraphConversionTest extends AbstractDependencyGraphBuilderTest {
         }
 
         @Override
-        public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+        public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+            final Map<ValueSpecification, ValueRequirement> inputs) {
           final Set<ValueSpecification> result = Sets.newHashSetWithExpectedSize(inputs.size());
           for (final ValueSpecification input : inputs.keySet()) {
             result.add(new ValueSpecification(input.getValueName(), input.getTargetSpecification(), input.getProperties().copy().withAny(property).get()));
@@ -342,12 +354,14 @@ public class DepGraphConversionTest extends AbstractDependencyGraphBuilderTest {
         }
 
         @Override
-        public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+        public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+            final Set<ValueRequirement> desiredValues) {
           return null;
         }
 
         @Override
-        public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+        public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+            final ValueRequirement desiredValue) {
           final Set<ValueRequirement> req = new HashSet<>();
           final Set<String> props = desiredValue.getConstraints().getValues(property);
           if (props == null) {
@@ -374,7 +388,8 @@ public class DepGraphConversionTest extends AbstractDependencyGraphBuilderTest {
         }
 
         @Override
-        public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+        public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+            final Map<ValueSpecification, ValueRequirement> inputs) {
           String propValue = null;
           for (final ValueSpecification input : inputs.keySet()) {
             if (propValue == null) {

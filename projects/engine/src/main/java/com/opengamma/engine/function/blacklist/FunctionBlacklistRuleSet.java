@@ -229,7 +229,8 @@ public class FunctionBlacklistRuleSet implements Set<FunctionBlacklistRule> {
   }
 
   /**
-   * Called when a rule has been added to the set. This is provided so that a subclass may perform specific actions. This is called after the rule has been added.
+   * Called when a rule has been added to the set. This is provided so that a subclass may perform specific actions.
+   * This is called after the rule has been added.
    *
    * @param rule the rule that was added to the set
    */
@@ -238,7 +239,8 @@ public class FunctionBlacklistRuleSet implements Set<FunctionBlacklistRule> {
   }
 
   /**
-   * Called when a rule added to the set is removed, perhaps because it's reached its expiry. This is provided so that a subclass may perform specific actions. This is called after the rule has been
+   * Called when a rule added to the set is removed, perhaps because it's reached its expiry. This is provided so that a subclass
+   * may perform specific actions. This is called after the rule has been
    * removed.
    *
    * @param rule the rule that was removed from the set

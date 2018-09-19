@@ -41,7 +41,10 @@ public class SimpleTradeTest {
   private static final OffsetDateTime TRADE_OFFSET_DATETIME = OffsetDateTime.now();
   private static final ExternalIdBundle BUNDLE = POSITION.getSecurityLink().getExternalId();
 
-  public void test_construction_ExternalIdBundle_BigDecimal_Counterparty_LocalDate_OffsetTime() {
+  /**
+   * Tests construction.
+   */
+  public void testConstructionExternalIdBundleBigDecimalCounterpartyLocalDateOffsetTime() {
     final SimpleTrade test = new SimpleTrade(new SimpleSecurityLink(BUNDLE), BigDecimal.ONE, COUNTERPARTY,
         TRADE_OFFSET_DATETIME.toLocalDate(), TRADE_OFFSET_DATETIME.toOffsetTime());
     assertNull(test.getUniqueId());
@@ -54,27 +57,42 @@ public class SimpleTradeTest {
     assertEquals(TRADE_OFFSET_DATETIME.toOffsetTime(), test.getTradeTime());
   }
 
+  /**
+   * Tests that the security link cannot be null
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_construction_ExternalIdBundle_BigDecimal_Counterparty_LocalDate_OffsetTime_nullLink() {
+  public void testConstructionExternalIdBundleBigDecimalCounterpartyLocalDateOffsetTimeNullLink() {
     new SimpleTrade((SecurityLink) null, BigDecimal.ONE, COUNTERPARTY, TRADE_OFFSET_DATETIME.toLocalDate(), TRADE_OFFSET_DATETIME.toOffsetTime());
   }
 
+  /**
+   * Tests that the quantity cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_construction_ExternalIdBundle_BigDecimal_Counterparty_LocalDate_OffsetTime_nullBigDecimal() {
+  public void testConstructionExternalIdBundleBigDecimalCounterpartyLocalDateOffsetTimeNullBigDecimal() {
     new SimpleTrade(new SimpleSecurityLink(BUNDLE), null, COUNTERPARTY, TRADE_OFFSET_DATETIME.toLocalDate(), TRADE_OFFSET_DATETIME.toOffsetTime());
   }
 
+  /**
+   * Tests that the counterparty cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_construction_ExternalIdBundle_BigDecimal_Counterparty_LocalDate_OffsetTime_nullCounterparty() {
+  public void testConstructionExternalIdBundleBigDecimalCounterpartyLocalDateOffsetTimeNullCounterparty() {
     new SimpleTrade(new SimpleSecurityLink(BUNDLE), BigDecimal.ONE, null, TRADE_OFFSET_DATETIME.toLocalDate(), TRADE_OFFSET_DATETIME.toOffsetTime());
   }
 
+  /**
+   * Test sthat the trade date cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_construction_ExternalIdBundle_BigDecimal_Counterparty_LocalDate_OffsetTime_nullLocalDate() {
+  public void testConstructionExternalIdBundleBigDecimalCounterpartyLocalDateOffsetTimeNullLocalDate() {
     new SimpleTrade(new SimpleSecurityLink(BUNDLE), BigDecimal.ONE, COUNTERPARTY, null, TRADE_OFFSET_DATETIME.toOffsetTime());
   }
 
-  public void test_construction_Security_BigDecimal_Counterparty_Instant() {
+  /**
+   * Tests construction.
+   */
+  public void testConstructionSecurityBigDecimalCounterpartyInstant() {
     final ExternalIdBundle securityKey = ExternalIdBundle.of(ExternalId.of("A", "B"));
     final SimpleSecurity security = new SimpleSecurity("A");
     security.setExternalIdBundle(securityKey);
@@ -88,7 +106,10 @@ public class SimpleTradeTest {
     assertEquals(security, test.getSecurityLink().getTarget());
   }
 
-  public void test_construction_copyFromPosition() {
+  /**
+   * Tests the copy constructor.
+   */
+  public void testConstructionCopyFromTrade() {
     final SimpleTrade trade = new SimpleTrade(new SimpleSecurityLink(ExternalId.of("A", "B")), BigDecimal.ONE,
         COUNTERPARTY, TRADE_OFFSET_DATETIME.toLocalDate(), TRADE_OFFSET_DATETIME.toOffsetTime());
     trade.addAttribute("A", "B");
@@ -98,7 +119,10 @@ public class SimpleTradeTest {
     assertEquals(copy, trade);
   }
 
-  public void test_collectionsOfTradesWithDifferentFields() {
+  /**
+   * Tests equality.
+   */
+  public void testCollectionsOfTradesWithDifferentFields() {
     final Set<SimpleTrade> trades = Sets.newHashSet();
 
     final SimpleTrade trade1 = new SimpleTrade(new SimpleSecurityLink(ExternalId.of("A", "B")), BigDecimal.ONE,
@@ -147,23 +171,32 @@ public class SimpleTradeTest {
   }
 
   //------------------------------------------------------------------------
+  /**
+   * Tests that attribute keys cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_addAttribute_null_key() {
+  public void testAddAttributeNullKey() {
     final SimpleTrade trade = new SimpleTrade(new SimpleSecurityLink(ExternalId.of("A", "B")), BigDecimal.ONE,
         COUNTERPARTY, TRADE_OFFSET_DATETIME.toLocalDate(), TRADE_OFFSET_DATETIME.toOffsetTime());
     assertTrue(trade.getAttributes().isEmpty());
     trade.addAttribute(null, "B");
   }
 
+  /**
+   * Tests the attribute values cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_addAttribute_null_value() {
+  public void testAddAttributeNullValue() {
     final SimpleTrade trade = new SimpleTrade(new SimpleSecurityLink(ExternalId.of("A", "B")), BigDecimal.ONE,
         COUNTERPARTY, TRADE_OFFSET_DATETIME.toLocalDate(), TRADE_OFFSET_DATETIME.toOffsetTime());
     assertTrue(trade.getAttributes().isEmpty());
     trade.addAttribute("A", null);
   }
 
-  public void test_addAttribute() {
+  /**
+   * Tests the addition of an attribute.
+   */
+  public void testAddAttribute() {
     final SimpleTrade trade = new SimpleTrade(new SimpleSecurityLink(ExternalId.of("A", "B")), BigDecimal.ONE,
         COUNTERPARTY, TRADE_OFFSET_DATETIME.toLocalDate(), TRADE_OFFSET_DATETIME.toOffsetTime());
     assertTrue(trade.getAttributes().isEmpty());
@@ -175,7 +208,10 @@ public class SimpleTradeTest {
     assertEquals("D", trade.getAttributes().get("C"));
   }
 
-  public void test_removeAttribute() {
+  /**
+   * Tests the removal of attribute.
+   */
+  public void testRemoveAttribute() {
     final SimpleTrade trade = new SimpleTrade(new SimpleSecurityLink(ExternalId.of("A", "B")), BigDecimal.ONE,
         COUNTERPARTY, TRADE_OFFSET_DATETIME.toLocalDate(), TRADE_OFFSET_DATETIME.toOffsetTime());
     assertTrue(trade.getAttributes().isEmpty());

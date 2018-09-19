@@ -164,7 +164,7 @@ public class JobDispatcherTest {
     for (int i = 0; i < jobInvokers.length; i++) {
       jobDispatcher.registerJobInvoker(new AbstractJobInvoker("" + (i + 1)) {
 
-        private final Random rnd = new Random();
+        private final Random _rnd = new Random();
         private boolean _busy;
         private JobInvokerRegister _callback;
 
@@ -179,7 +179,7 @@ public class JobDispatcherTest {
               @Override
               public void run() {
                 try {
-                  Thread.sleep(rnd.nextInt(50));
+                  Thread.sleep(_rnd.nextInt(50));
                 } catch (final InterruptedException e) {
                   LOGGER.warn("invoker {} interrupted", getInvokerId());
                 }
@@ -224,7 +224,9 @@ public class JobDispatcherTest {
     final TestJobResultReceiver[] resultReceivers = new TestJobResultReceiver[jobs.length];
     LOGGER.debug("Dispatching {} jobs to {} nodes", jobs.length, jobInvokers.length);
     for (int i = 0; i < jobs.length; i++) {
-      jobDispatcher.dispatchJob(jobs[i] = createTestJob(), resultReceivers[i] = new TestJobResultReceiver());
+      jobs[i] = createTestJob();
+      resultReceivers[i] = new TestJobResultReceiver();
+      jobDispatcher.dispatchJob(jobs[i], resultReceivers[i]);
     }
     LOGGER.debug("Jobs dispatched");
     for (int i = 0; i < jobs.length; i++) {

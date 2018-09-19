@@ -20,8 +20,8 @@ import com.opengamma.engine.view.compilation.CompiledViewCalculationConfiguratio
 import com.opengamma.engine.view.compilation.CompiledViewDefinition;
 
 /**
- * Contains mappings between {@link ValueRequirement}s and {@link ValueSpecification}s for a compiled view definition. These mappings can be large and are used by both the primitives and portfolio
- * grids so it makes sense to share them.
+ * Contains mappings between {@link ValueRequirement}s and {@link ValueSpecification}s for a compiled view definition. These mappings can be
+ * large and are used by both the primitives and portfolio grids so it makes sense to share them.
  */
 public class ValueMappings {
 
@@ -36,7 +36,8 @@ public class ValueMappings {
       for (final Map.Entry<ValueSpecification, Set<ValueRequirement>> entry : terminalOutputs.entrySet()) {
         final Set<ValueRequirement> requirements = entry.getValue();
         if (requirements == null) {
-          LOGGER.error("Unexpected set of null requirements in terminal outputs map from " + entry.getKey() + ". This is a bug in incremental dependency graph compilation.");
+          LOGGER.error("Unexpected set of null requirements in terminal outputs map from " + entry.getKey()
+          + ". This is a bug in incremental dependency graph compilation.");
           continue;
         }
         for (final ValueRequirement valueRequirement : requirements) {
@@ -52,7 +53,8 @@ public class ValueMappings {
 
   /**
    * Subclasses of ValueMappings need to alter the ValueRequirement, for example
-   * UnversionedValueMappings strips out version from the unique id
+   * UnversionedValueMappings strips out version from the unique id.
+   *
    * @param valueRequirement in this case it is returned unaltered
    * @return valueRequirement
    */

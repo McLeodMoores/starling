@@ -35,10 +35,14 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class ComputationTargetTest {
 
-  private final SimplePortfolioNode NODE = new SimplePortfolioNode(UniqueId.of("A", "B"), "Name");
-  private final Position POSITION = new SimplePosition(UniqueId.of("Test", "1"), new BigDecimal(1), ExternalId.of("Foo", "Sec").toBundle());
-  private final Security SECURITY = new SimpleSecurity(UniqueId.of("Test", "SEC"), ExternalId.of("Foo", "Sec").toBundle(), "EQUITY", "Test Security");
-  private final SimpleTrade TRADE = new SimpleTrade(SECURITY, BigDecimal.ONE, new SimpleCounterparty(ExternalId.of("Cpty", "Foo")), LocalDate.now(), OffsetTime.now());
+  private static final SimplePortfolioNode NODE =
+      new SimplePortfolioNode(UniqueId.of("A", "B"), "Name");
+  private static final Position POSITION =
+      new SimplePosition(UniqueId.of("Test", "1"), new BigDecimal(1), ExternalId.of("Foo", "Sec").toBundle());
+  private static final Security SECURITY =
+      new SimpleSecurity(UniqueId.of("Test", "SEC"), ExternalId.of("Foo", "Sec").toBundle(), "EQUITY", "Test Security");
+  private static final SimpleTrade TRADE =
+      new SimpleTrade(SECURITY, BigDecimal.ONE, new SimpleCounterparty(ExternalId.of("Cpty", "Foo")), LocalDate.now(), OffsetTime.now());
 
   public ComputationTargetTest() {
     TRADE.setUniqueId(UniqueId.of("Test", "Trade"));
@@ -151,7 +155,8 @@ public class ComputationTargetTest {
     final ComputationTarget pos2 = new ComputationTarget(ComputationTargetType.POSITION, POSITION);
     final ComputationTarget prim1 = new ComputationTarget(ComputationTargetType.CURRENCY, Currency.USD);
     final ComputationTarget prim2 = new ComputationTarget(ComputationTargetType.CURRENCY, Currency.GBP);
-    final ComputationTarget prtPos = new ComputationTarget(ComputationTargetSpecification.of(NODE).containing(ComputationTargetType.POSITION, POSITION.getUniqueId()), POSITION);
+    final ComputationTarget prtPos =
+        new ComputationTarget(ComputationTargetSpecification.of(NODE).containing(ComputationTargetType.POSITION, POSITION.getUniqueId()), POSITION);
     final ComputationTarget nil = new ComputationTarget(ComputationTargetType.NULL, null);
     assertTrue(pos1.equals(pos2));
     assertTrue(pos2.equals(pos1));
@@ -173,8 +178,10 @@ public class ComputationTargetTest {
     final ComputationTarget pos1 = new ComputationTarget(ComputationTargetType.POSITION, POSITION);
     final ComputationTarget pos2 = new ComputationTarget(ComputationTargetType.POSITION, POSITION);
     assertEquals(pos1.hashCode(), pos2.hashCode());
-    final ComputationTarget prtPos1 = new ComputationTarget(ComputationTargetSpecification.of(NODE).containing(ComputationTargetType.POSITION, POSITION.getUniqueId()), POSITION);
-    final ComputationTarget prtPos2 = new ComputationTarget(ComputationTargetSpecification.of(NODE).containing(ComputationTargetType.POSITION, POSITION.getUniqueId()), POSITION);
+    final ComputationTarget prtPos1 =
+        new ComputationTarget(ComputationTargetSpecification.of(NODE).containing(ComputationTargetType.POSITION, POSITION.getUniqueId()), POSITION);
+    final ComputationTarget prtPos2 =
+        new ComputationTarget(ComputationTargetSpecification.of(NODE).containing(ComputationTargetType.POSITION, POSITION.getUniqueId()), POSITION);
     assertEquals(prtPos1.hashCode(), prtPos2.hashCode());
     final ComputationTarget nil1 = new ComputationTarget(ComputationTargetType.NULL, null);
     assertEquals(nil1.hashCode(), ComputationTarget.NULL.hashCode());

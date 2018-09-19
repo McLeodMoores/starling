@@ -176,7 +176,8 @@ public class UserMarketDataSnapshot extends AbstractMarketDataSnapshot {
     return new SurfaceData<>(marketDataKey.getName(), values);
   }
 
-  private static VolatilityCubeData<Object, Object, Object> createVolatilityCubeData(final VolatilityCubeSnapshot volCubeSnapshot, final VolatilityCubeKey marketDataKey) {
+  private static VolatilityCubeData<Object, Object, Object> createVolatilityCubeData(final VolatilityCubeSnapshot volCubeSnapshot,
+      final VolatilityCubeKey marketDataKey) {
     final Set<Object> xs = Sets.newHashSet();
     final Set<Object> ys = Sets.newHashSet();
     final Set<Object> zs = Sets.newHashSet();

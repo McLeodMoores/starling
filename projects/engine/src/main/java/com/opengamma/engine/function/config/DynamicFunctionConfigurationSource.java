@@ -32,7 +32,8 @@ public abstract class DynamicFunctionConfigurationSource implements FunctionConf
     public void entityChanged(final ChangeEvent event) {
       if (isPropogateEvent(event)) {
         LOGGER.info("Function configuration change at {} caused by {}", DynamicFunctionConfigurationSource.this, event);
-        _changeManager.entityChanged(ChangeType.CHANGED, FunctionConfigurationSource.OBJECT_ID, event.getVersionFrom(), event.getVersionTo(), event.getVersionInstant());
+        _changeManager.entityChanged(ChangeType.CHANGED, FunctionConfigurationSource.OBJECT_ID, event.getVersionFrom(), event.getVersionTo(),
+            event.getVersionInstant());
       } else {
         LOGGER.debug("Ignoring event {} at {}", event, DynamicFunctionConfigurationSource.this);
       }

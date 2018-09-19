@@ -43,12 +43,13 @@ public class ViewProcessMBeanImpl implements ViewProcessMBean {
   }
 
   /**
-   * Creates an object name using the scheme "com.opengamma:type=View,ViewProcessor=<viewProcessorName>,name=<viewProcessId>"
+   * Creates an object name using the scheme "com.opengamma:type=View,ViewProcessor=<viewProcessorName>,name=<viewProcessId>".
    */
   static ObjectName createObjectName(final String viewProcessorName, final UniqueId viewProcessId) {
     ObjectName objectName;
     try {
-      objectName = new ObjectName("com.opengamma:type=ViewProcess,ViewProcessor=ViewProcessor " + viewProcessorName + ",name=ViewProcess " + viewProcessId.getValue());
+      objectName =
+          new ObjectName("com.opengamma:type=ViewProcess,ViewProcessor=ViewProcessor " + viewProcessorName + ",name=ViewProcess " + viewProcessId.getValue());
     } catch (final MalformedObjectNameException e) {
       throw new CacheException(e);
     }

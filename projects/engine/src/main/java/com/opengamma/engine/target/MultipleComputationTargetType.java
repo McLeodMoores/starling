@@ -22,12 +22,13 @@ import com.opengamma.util.ArgumentChecker;
 
   private final Set<ComputationTargetType> _target;
 
-  private static final ComputationTargetTypeVisitor<Set<ComputationTargetType>, Boolean> CONSTRUCT = new ComputationTargetTypeVisitor<Set<ComputationTargetType>, Boolean>() {
+  private static final ComputationTargetTypeVisitor<Set<ComputationTargetType>, Boolean> CONSTRUCT =
+      new ComputationTargetTypeVisitor<Set<ComputationTargetType>, Boolean>() {
 
     @Override
     public Boolean visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final Set<ComputationTargetType> data) {
       // Flatten and accept the contents
-      for (ComputationTargetType type : types) {
+      for (final ComputationTargetType type : types) {
         if (type.accept(this, data)) {
           data.add(type);
         }
@@ -61,7 +62,7 @@ import com.opengamma.util.ArgumentChecker;
   }
 
   private static Set<ComputationTargetType> copy(final ComputationTargetType a, final ComputationTargetType b) {
-    final Set<ComputationTargetType> copy = new HashSet<ComputationTargetType>();
+    final Set<ComputationTargetType> copy = new HashSet<>();
     if (a.accept(CONSTRUCT, copy)) {
       copy.add(a);
     }
@@ -74,7 +75,7 @@ import com.opengamma.util.ArgumentChecker;
 
   /**
    * Creates a new instance.
-   * 
+   *
    * @param a the first alternative for the construction, not null
    * @param b the second alternative for the construction, not null
    */
@@ -83,8 +84,8 @@ import com.opengamma.util.ArgumentChecker;
   }
 
   private static Set<ComputationTargetType> copy(final ComputationTargetType[] types) {
-    final Set<ComputationTargetType> copy = new HashSet<ComputationTargetType>();
-    for (ComputationTargetType type : types) {
+    final Set<ComputationTargetType> copy = new HashSet<>();
+    for (final ComputationTargetType type : types) {
       if (type.accept(CONSTRUCT, copy)) {
         copy.add(type);
       }
@@ -95,7 +96,7 @@ import com.opengamma.util.ArgumentChecker;
 
   /**
    * Creates a new instance.
-   * 
+   *
    * @param types the alternative types for the construction, not null and not containing null
    */
   public MultipleComputationTargetType(final ComputationTargetType[] types) {
@@ -108,7 +109,7 @@ import com.opengamma.util.ArgumentChecker;
 
   @Override
   public boolean isCompatible(final UniqueIdentifiable target) {
-    for (ComputationTargetType type : getTarget()) {
+    for (final ComputationTargetType type : getTarget()) {
       if (type.isCompatible(target)) {
         return true;
       }
@@ -118,7 +119,7 @@ import com.opengamma.util.ArgumentChecker;
 
   @Override
   public boolean isCompatible(final ComputationTargetType type) {
-    for (ComputationTargetType target : getTarget()) {
+    for (final ComputationTargetType target : getTarget()) {
       if (target.isCompatible(type)) {
         return true;
       }
@@ -128,7 +129,7 @@ import com.opengamma.util.ArgumentChecker;
 
   @Override
   public boolean isCompatible(final Class<? extends UniqueIdentifiable> clazz) {
-    for (ComputationTargetType target : getTarget()) {
+    for (final ComputationTargetType target : getTarget()) {
       if (target.isCompatible(clazz)) {
         return true;
       }
@@ -138,7 +139,7 @@ import com.opengamma.util.ArgumentChecker;
 
   @Override
   public boolean isTargetType(final ComputationTargetType type) {
-    for (ComputationTargetType target : getTarget()) {
+    for (final ComputationTargetType target : getTarget()) {
       if (target.isTargetType(type)) {
         return true;
       }
@@ -148,7 +149,7 @@ import com.opengamma.util.ArgumentChecker;
 
   @Override
   public boolean isTargetType(final Class<? extends UniqueIdentifiable> type) {
-    for (ComputationTargetType target : getTarget()) {
+    for (final ComputationTargetType target : getTarget()) {
       if (target.isTargetType(type)) {
         return true;
       }
@@ -163,7 +164,7 @@ import com.opengamma.util.ArgumentChecker;
 
   protected void toStringImpl(final StringBuilder sb) {
     boolean sep = false;
-    for (ComputationTargetType type : getTarget()) {
+    for (final ComputationTargetType type : getTarget()) {
       if (sep) {
         sb.append('|');
       } else {
@@ -203,7 +204,7 @@ import com.opengamma.util.ArgumentChecker;
 
   protected void getNameImpl(final StringBuilder sb) {
     boolean sep = false;
-    for (ComputationTargetType type : getTarget()) {
+    for (final ComputationTargetType type : getTarget()) {
       if (sep) {
         sb.append('|');
       } else {
@@ -213,7 +214,8 @@ import com.opengamma.util.ArgumentChecker;
     }
   }
 
-  private static final ComputationTargetTypeVisitor<MultipleComputationTargetType, Boolean> EQUALS = new ComputationTargetTypeVisitor<MultipleComputationTargetType, Boolean>() {
+  private static final ComputationTargetTypeVisitor<MultipleComputationTargetType, Boolean> EQUALS =
+      new ComputationTargetTypeVisitor<MultipleComputationTargetType, Boolean>() {
 
     @Override
     public Boolean visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final MultipleComputationTargetType self) {

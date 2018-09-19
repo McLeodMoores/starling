@@ -65,7 +65,8 @@ public class ParallelRecompilationInfiniteLatestTest extends AbstractParallelRec
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ParallelRecompilationInfiniteLatestTest.class);
 
-  private CompiledViewDefinitionWithGraphs compiledViewDefinition(final ViewDefinition viewDefinition, final Map<ComputationTargetReference, UniqueId> resolutions) {
+  private CompiledViewDefinitionWithGraphs compiledViewDefinition(final ViewDefinition viewDefinition,
+      final Map<ComputationTargetReference, UniqueId> resolutions) {
     final VersionCorrection versionCorrection = VersionCorrection.of(Instant.now(), Instant.now());
     final DependencyGraph graph = new TestDependencyGraphBuilder("Default").buildGraph();
     final Portfolio portfolio = Mockito.mock(Portfolio.class);
@@ -77,7 +78,8 @@ public class ParallelRecompilationInfiniteLatestTest extends AbstractParallelRec
     final Random rand = new Random();
     return new ViewProcessWorkerFactory() {
       @Override
-      public ViewProcessWorker createWorker(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions, final ViewDefinition viewDefinition) {
+      public ViewProcessWorker createWorker(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions,
+          final ViewDefinition viewDefinition) {
         final ViewProcessWorker worker = Mockito.mock(ViewProcessWorker.class);
         final AtomicBoolean terminated = new AtomicBoolean();
         Mockito.doAnswer(new Answer<Void>() {
@@ -186,7 +188,8 @@ public class ParallelRecompilationInfiniteLatestTest extends AbstractParallelRec
       final MockContext context = new MockContext(vpContext);
       final ViewExecutionOptions options = ExecutionOptions.infinite(MarketData.live(), ExecutionFlags.none().ignoreCompilationValidity().get());
       final ViewDefinition viewDefinition = Mockito.mock(ViewDefinition.class);
-      final ParallelRecompilationViewProcessWorker worker = new ParallelRecompilationViewProcessWorker(workerFactory(executor, resolutions), context, options, viewDefinition);
+      final ParallelRecompilationViewProcessWorker worker =
+          new ParallelRecompilationViewProcessWorker(workerFactory(executor, resolutions), context, options, viewDefinition);
       callback.execute(worker, options);
       LOGGER.debug("Waiting for initial compilation");
       assertEquals(context.event(), "view definition compiled"); // From primary worker
@@ -203,7 +206,8 @@ public class ParallelRecompilationInfiniteLatestTest extends AbstractParallelRec
         }
         // Signal change ...
         LOGGER.debug("Signalling change");
-        resolutions.put(new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO, UniqueId.of("Test", "0")), UniqueId.of("Test", "0", Integer.toString(j + 1)));
+        resolutions.put(new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO,
+            UniqueId.of("Test", "0")), UniqueId.of("Test", "0", Integer.toString(j + 1)));
         changeManager.entityChanged(ChangeType.CHANGED, ObjectId.of("Test", "0"), Instant.now(), Instant.now(), Instant.now());
         LOGGER.info("Change signalled");
         // ... and expect a view definition compiled to interrupt the sequence

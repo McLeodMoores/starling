@@ -28,7 +28,7 @@ import com.opengamma.engine.view.execution.ViewExecutionOptions;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Tests the {@link SequencePartitioningViewProcessWorkerFactory} class
+ * Tests the {@link SequencePartitioningViewProcessWorkerFactory} class.
  */
 @Test(groups = TestGroup.UNIT)
 public class SequencePartitioningViewProcessWorkerFactoryTest {
@@ -38,7 +38,8 @@ public class SequencePartitioningViewProcessWorkerFactoryTest {
     private final List<ViewExecutionOptions> _executionOptions = new LinkedList<>();
 
     @Override
-    public ViewProcessWorker createWorker(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions, final ViewDefinition viewDefinition) {
+    public ViewProcessWorker createWorker(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions,
+        final ViewDefinition viewDefinition) {
       _executionOptions.add(executionOptions);
       return Mockito.mock(ViewProcessWorker.class);
     }

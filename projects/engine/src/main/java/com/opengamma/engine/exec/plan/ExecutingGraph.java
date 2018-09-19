@@ -20,7 +20,8 @@ import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Holds the state corresponding to a current graph execution. The state is capable of delivering executable jobs by tracking when all dependant jobs have completed.
+ * Holds the state corresponding to a current graph execution. The state is capable of delivering executable jobs by tracking when all
+ * dependent jobs have completed.
  */
 public class ExecutingGraph {
 
@@ -51,7 +52,8 @@ public class ExecutingGraph {
   /**
    * Information about planned jobs that are currently blocked on one or more executing jobs.
    * <p>
-   * Tail jobs are not represented here - the blocking information is held in TailJobInfo - as the calculation node they are dispatched to is responsible for executing them in the correct sequence.
+   * Tail jobs are not represented here - the blocking information is held in TailJobInfo - as the calculation node they are dispatched to
+   * is responsible for executing them in the correct sequence.
    */
   private static final class BlockedJobInfo {
 
@@ -90,7 +92,8 @@ public class ExecutingGraph {
    * @param valuationTime the valuation time for job specifications, not null
    * @param resolverVersionCorrection the resolution time stamp, not null
    */
-  protected ExecutingGraph(final GraphExecutionPlan plan, final UniqueId cycleId, final Instant valuationTime, final VersionCorrection resolverVersionCorrection) {
+  protected ExecutingGraph(final GraphExecutionPlan plan, final UniqueId cycleId, final Instant valuationTime,
+      final VersionCorrection resolverVersionCorrection) {
     ArgumentChecker.notNull(plan, "plan");
     ArgumentChecker.notNull(cycleId, "cycleId");
     ArgumentChecker.notNull(valuationTime, "valuationTime");
@@ -150,7 +153,8 @@ public class ExecutingGraph {
    */
   protected CalculationJob createTailCalculationJob(final PlannedJob planned, final Map<PlannedJob, TailJobInfo> jobInfo) {
     final long[] requiredJobIds = jobInfo.get(planned).getRequiredJobIds();
-    final CalculationJob actual = planned.createCalculationJob(createJobSpecification(), getFunctionInitializationId(), getResolverVersionCorrection(), requiredJobIds);
+    final CalculationJob actual =
+        planned.createCalculationJob(createJobSpecification(), getFunctionInitializationId(), getResolverVersionCorrection(), requiredJobIds);
     addDependentCalculationJobs(actual, planned);
     addTailCalculationJobs(actual, planned, jobInfo);
     return actual;

@@ -46,8 +46,8 @@ import com.opengamma.id.UniqueIdentifiable;
  *
  * </pre>
  *
- * When references are nested to give object context, the outermost identifier is listed first followed by inner identifiers. The type is the type that should be assigned to the resultant inner most
- * reference.
+ * When references are nested to give object context, the outermost identifier is listed first followed by inner identifiers.
+ * The type is the type that should be assigned to the resultant inner most reference.
  */
 @GenericFudgeBuilderFor(ComputationTargetReference.class)
 public class ComputationTargetReferenceFudgeBuilder implements FudgeBuilder<ComputationTargetReference> {
@@ -91,7 +91,8 @@ public class ComputationTargetReferenceFudgeBuilder implements FudgeBuilder<Comp
     return msg;
   }
 
-  private static ComputationTargetTypeVisitor<Void, List<ComputationTargetType>> s_getNestedType = new ComputationTargetTypeVisitor<Void, List<ComputationTargetType>>() {
+  private static ComputationTargetTypeVisitor<Void, List<ComputationTargetType>> s_getNestedType =
+      new ComputationTargetTypeVisitor<Void, List<ComputationTargetType>>() {
 
     @Override
     public List<ComputationTargetType> visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final Void reserved) {

@@ -43,7 +43,8 @@ public class ComputationTargetFudgeBuilder implements FudgeBuilder<ComputationTa
     return msg;
   }
 
-  private static final ComputationTargetTypeVisitor<Void, Class<? extends UniqueIdentifiable>> GET_LEAF_TYPE = new ComputationTargetTypeVisitor<Void, Class<? extends UniqueIdentifiable>>() {
+  private static final ComputationTargetTypeVisitor<Void, Class<? extends UniqueIdentifiable>> GET_LEAF_TYPE =
+      new ComputationTargetTypeVisitor<Void, Class<? extends UniqueIdentifiable>>() {
 
     @Override
     public Class<? extends UniqueIdentifiable> visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final Void data) {

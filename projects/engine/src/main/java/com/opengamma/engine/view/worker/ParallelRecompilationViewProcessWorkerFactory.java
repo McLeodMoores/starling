@@ -14,8 +14,9 @@ import com.opengamma.engine.view.execution.ViewExecutionOptions;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * When the "parallel recompilation" flags are set, work is distributed between two delegate workers. The primary worker executes cycles without considering recompilation changes. When a change is
- * detected, a secondary worker begins the recompilation. When compilation is complete, the primary worker is terminated and the secondary worker promoted to a primary role.
+ * When the "parallel recompilation" flags are set, work is distributed between two delegate workers. The primary worker executes cycles without
+ * considering recompilation changes. When a change is detected, a secondary worker begins the recompilation. When compilation is complete, the
+ * primary worker is terminated and the secondary worker promoted to a primary role.
  * <p>
  * For example in the case of presenting live market data, this can be used to avoid the interface stalling during configuration changes.
  */
@@ -49,7 +50,8 @@ public class ParallelRecompilationViewProcessWorkerFactory implements ViewProces
     flags.remove(ViewExecutionFlags.PARALLEL_RECOMPILATION_DEFERRED_EXECUTION);
     flags.remove(ViewExecutionFlags.PARALLEL_RECOMPILATION_IMMEDIATE_EXECUTION);
     flags.add(ViewExecutionFlags.IGNORE_COMPILATION_VALIDITY);
-    return new ExecutionOptions(executionOptions.getExecutionSequence(), flags, executionOptions.getMaxSuccessiveDeltaCycles(), executionOptions.getDefaultExecutionOptions());
+    return new ExecutionOptions(executionOptions.getExecutionSequence(), flags, executionOptions.getMaxSuccessiveDeltaCycles(),
+        executionOptions.getDefaultExecutionOptions());
   }
 
   protected ViewExecutionOptions getSecondaryExecutionOptions(final ViewExecutionOptions executionOptions) {
@@ -57,28 +59,33 @@ public class ParallelRecompilationViewProcessWorkerFactory implements ViewProces
     if (!flags.remove(ViewExecutionFlags.WAIT_FOR_INITIAL_TRIGGER)) {
       return executionOptions;
     }
-    return new ExecutionOptions(executionOptions.getExecutionSequence(), flags, executionOptions.getMaxSuccessiveDeltaCycles(), executionOptions.getDefaultExecutionOptions());
+    return new ExecutionOptions(executionOptions.getExecutionSequence(), flags, executionOptions.getMaxSuccessiveDeltaCycles(),
+        executionOptions.getDefaultExecutionOptions());
   }
 
-  protected ParallelRecompilationViewProcessWorker createWorkerImpl(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions, final ViewDefinition viewDefinition) {
+  protected ParallelRecompilationViewProcessWorker createWorkerImpl(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions,
+      final ViewDefinition viewDefinition) {
     return new ParallelRecompilationViewProcessWorker(getDelegate(), context, getSecondaryExecutionOptions(executionOptions), viewDefinition);
   }
 
-  protected ViewProcessWorker parallelExecution(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions, final ViewDefinition viewDefinition) {
+  protected ViewProcessWorker parallelExecution(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions,
+      final ViewDefinition viewDefinition) {
     final ViewExecutionOptions primaryOptions = getPrimaryExecutionOptions(executionOptions);
     final ParallelRecompilationViewProcessWorker worker = createWorkerImpl(context, primaryOptions, viewDefinition);
     worker.startParallel(primaryOptions);
     return worker;
   }
 
-  protected ViewProcessWorker deferredExecution(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions, final ViewDefinition viewDefinition) {
+  protected ViewProcessWorker deferredExecution(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions,
+      final ViewDefinition viewDefinition) {
     final ViewExecutionOptions primaryOptions = getPrimaryExecutionOptions(executionOptions);
     final ParallelRecompilationViewProcessWorker worker = createWorkerImpl(context, primaryOptions, viewDefinition);
     worker.startDeferred(primaryOptions);
     return worker;
   }
 
-  protected ViewProcessWorker immediateExecution(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions, final ViewDefinition viewDefinition) {
+  protected ViewProcessWorker immediateExecution(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions,
+      final ViewDefinition viewDefinition) {
     final ViewExecutionOptions primaryOptions = getPrimaryExecutionOptions(executionOptions);
     final ParallelRecompilationViewProcessWorker worker = createWorkerImpl(context, primaryOptions, viewDefinition);
     worker.startImmediate(primaryOptions);
@@ -88,7 +95,8 @@ public class ParallelRecompilationViewProcessWorkerFactory implements ViewProces
   // ViewProcessWorkerFactory
 
   @Override
-  public ViewProcessWorker createWorker(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions, final ViewDefinition viewDefinition) {
+  public ViewProcessWorker createWorker(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions,
+      final ViewDefinition viewDefinition) {
     if (!executionOptions.getFlags().contains(ViewExecutionFlags.IGNORE_COMPILATION_VALIDITY)) {
       if (executionOptions.getFlags().contains(ViewExecutionFlags.PARALLEL_RECOMPILATION_AND_EXECUTION)) {
         return parallelExecution(context, executionOptions, viewDefinition);

@@ -61,7 +61,7 @@ public class ViewCycleExecutionOptions {
     }
 
     /**
-     * Sets the name of the view cycle
+     * Sets the name of the view cycle.
      *
      * @param name name of the view cycle
      * @return this instance
@@ -72,7 +72,8 @@ public class ViewCycleExecutionOptions {
     }
 
     /**
-     * Sets the valuation time for the view cycle. If set to null then a time implied by the data source will be used - if no time is implied the view process' clock will be used.
+     * Sets the valuation time for the view cycle. If set to null then a time implied by the data source will be used - if no time is implied the view
+     * process' clock will be used.
      *
      * @param valuationTime the valuation time to set
      * @return this instance
@@ -83,7 +84,8 @@ public class ViewCycleExecutionOptions {
     }
 
     /**
-     * Returns the valuation time for the view cycle. If set to null then a time implied by the data source will be used - if no time is implied the view process' clock will be used.
+     * Returns the valuation time for the view cycle. If set to null then a time implied by the data source will be used - if no time is implied the
+     * view process' clock will be used.
      *
      * @return the valuation time
      */
@@ -92,7 +94,8 @@ public class ViewCycleExecutionOptions {
     }
 
     /**
-     * Sets the market data specification for the view cycle. This is equivalent to calling {@link #setMarketDataSpecitications} with a list containing a single element.
+     * Sets the market data specification for the view cycle. This is equivalent to calling {@link #setMarketDataSpecitications} with a list containing
+     * a single element.
      *
      * @param marketDataSpecification the market data specification, not null
      * @return this instance
@@ -157,8 +160,9 @@ public class ViewCycleExecutionOptions {
     }
 
     /**
-     * Sets the version/correction to use when resolving references (for example the portfolio, positions, securities, time-series and so on). If set to null, the version correction from the default
-     * cycle options will be used. If these are the default cycle options then a value of null will imply {@link VersionCorrection#LATEST}.
+     * Sets the version/correction to use when resolving references (for example the portfolio, positions, securities, time-series and so on).
+     * If set to null, the version correction from the default cycle options will be used. If these are the default cycle options then a value
+     * of null will imply {@link VersionCorrection#LATEST}.
      *
      * @param versionCorrection the version
      * @return this instance
@@ -169,8 +173,9 @@ public class ViewCycleExecutionOptions {
     }
 
     /**
-     * Returns the version/correction to use when resolving references (for example the portfolio, positions, securities, time-series and so on). If not set the default cycle options will be used. If
-     * these are the default cycle options then a value of null will imply {@link VersionCorrection#LATEST}.
+     * Returns the version/correction to use when resolving references (for example the portfolio, positions, securities, time-series and so on).
+     * If not set the default cycle options will be used. If these are the default cycle options then a value of null will imply
+     * {@link VersionCorrection#LATEST}.
      *
      * @return the version/correction to use for reference resolution
      */
@@ -244,7 +249,8 @@ public class ViewCycleExecutionOptions {
   }
 
   /**
-   * Creates a builder initialized with the values from this instance. The builder can be modified before {@link Builder#create} called to create a new {@link ViewCycleExecutionOptions} instance.
+   * Creates a builder initialized with the values from this instance. The builder can be modified before {@link Builder#create} called to create a
+   * new {@link ViewCycleExecutionOptions} instance.
    *
    * @return a builder instance
    */
@@ -257,7 +263,7 @@ public class ViewCycleExecutionOptions {
   }
 
   /**
-   * Returns the name of the view cycle
+   * Returns the name of the view cycle.
    *
    * @return the name of the view cycle, or null if not specified
    */
@@ -266,7 +272,8 @@ public class ViewCycleExecutionOptions {
   }
 
   /**
-   * Returns the valuation time for the view cycle. If set to null then a time implied by the data source will be used - if no time is implied the view process' clock will be used.
+   * Returns the valuation time for the view cycle. If set to null then a time implied by the data source will be used - if no time is implied the view
+   * process' clock will be used.
    *
    * @return the valuation time, or null if not specified
    */
@@ -293,8 +300,8 @@ public class ViewCycleExecutionOptions {
   }
 
   /**
-   * Returns the version/correction to use when resolving references (for example the portfolio, positions, securities, time-series and so on). If not set the default cycle options will be used. If
-   * these are the default cycle options then a value of null will imply {@link VersionCorrection#LATEST}.
+   * Returns the version/correction to use when resolving references (for example the portfolio, positions, securities, time-series and so on).
+   * If not set the default cycle options will be used. If these are the default cycle options then a value of null will imply {@link VersionCorrection#LATEST}.
    *
    * @return the version/correction to use for reference resolution
    */

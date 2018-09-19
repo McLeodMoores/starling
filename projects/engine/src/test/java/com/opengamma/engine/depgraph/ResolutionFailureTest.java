@@ -121,7 +121,8 @@ public class ResolutionFailureTest {
   }
 
   private ValueSpecification valueSpecification(final ValueRequirement requirement) {
-    return new ValueSpecification(requirement.getValueName(), requirement.getTargetReference().getSpecification(), ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get());
+    return new ValueSpecification(requirement.getValueName(),
+        requirement.getTargetReference().getSpecification(), ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get());
   }
 
   private void assertEquals(final ResolutionFailure failure, final List<String> expected) {
@@ -146,28 +147,32 @@ public class ResolutionFailureTest {
     final ParameterizedFunction function = parameterizedFunction();
     final ValueSpecification spec1 = valueSpecification(req1);
     final ValueSpecification spec2 = valueSpecification(req2);
-    assertEquals(ResolutionFailureImpl.functionApplication(req1, function, spec1).getRequirementsFailed(), "getRequirementsFailed=" + req1 + ",mock," + spec1);
-    assertEquals(ResolutionFailureImpl.functionApplication(req1, function, spec1).requirement(req2, null), "failedFunction=" + req1 + ",mock," + spec1 + ",{},[unsatisfied=" + req2 + "]");
-    assertEquals(ResolutionFailureImpl.functionApplication(req1, function, spec1).requirement(req2, ResolutionFailureImpl.recursiveRequirement(req2)), "failedFunction=" + req1 + ",mock," + spec1 +
-        ",{},[recursiveRequirement=" + req2 + "]");
-    assertEquals(ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2)), "successfulFunction=" + req1 + ",mock," + spec1 + ",{" + spec2 +
-        "=" + req2 + "}");
-    assertEquals(ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2)).requirement(req3, null), "failedFunction=" + req1 + ",mock," +
-        spec1 + ",{" + spec2 + "=" + req2 + "},[unsatisfied=" + req3 + "]");
-    assertEquals(ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2)).getAdditionalRequirementsFailed(),
+    assertEquals(ResolutionFailureImpl.functionApplication(req1, function, spec1).getRequirementsFailed(),
+        "getRequirementsFailed=" + req1 + ",mock," + spec1);
+    assertEquals(ResolutionFailureImpl.functionApplication(req1, function, spec1).requirement(req2, null),
+        "failedFunction=" + req1 + ",mock," + spec1 + ",{},[unsatisfied=" + req2 + "]");
+    assertEquals(ResolutionFailureImpl.functionApplication(req1, function, spec1).requirement(req2, ResolutionFailureImpl.recursiveRequirement(req2)),
+        "failedFunction=" + req1 + ",mock," + spec1 + ",{},[recursiveRequirement=" + req2 + "]");
+    assertEquals(ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2)),
+        "successfulFunction=" + req1 + ",mock," + spec1 + ",{" + spec2 + "=" + req2 + "}");
+    assertEquals(ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2)).requirement(req3, null),
+        "failedFunction=" + req1 + ",mock," + spec1 + ",{" + spec2 + "=" + req2 + "},[unsatisfied=" + req3 + "]");
+    assertEquals(ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2))
+            .getAdditionalRequirementsFailed(),
         "getAdditionalRequirementsFailed=" + req1 + ",mock," + spec1 + ",{" + spec2 + "=" + req2 + "}");
-    assertEquals(ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2)).getResultsFailed(), "getResultsFailed=" + req1 + ",mock," +
-        spec1 + ",{" + spec2 + "=" + req2 + "}");
-    assertEquals(ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2)).suppressed(), "blacklistSuppressed=" + req1 + ",mock," + spec1 +
-        ",{" + spec2 + "=" + req2 + "}");
-    assertEquals(ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2)).lateResolutionFailure(), "lateResolutionFailure=" + req1 +
-        ",mock," + spec1 + ",{" + spec2 + "=" + req2 + "}");
-    assertEquals(ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2)).additionalRequirement(req3, null), "failedFunction=" + req1 +
-        ",mock," + spec1 + ",{" + spec2 + "=" + req2 + "},[unsatisfied=" + req3 + "]");
+    assertEquals(ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2)).getResultsFailed(),
+        "getResultsFailed=" + req1 + ",mock," + spec1 + ",{" + spec2 + "=" + req2 + "}");
+    assertEquals(ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2)).suppressed(),
+        "blacklistSuppressed=" + req1 + ",mock," + spec1 + ",{" + spec2 + "=" + req2 + "}");
+    assertEquals(ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2)).lateResolutionFailure(),
+        "lateResolutionFailure=" + req1 + ",mock," + spec1 + ",{" + spec2 + "=" + req2 + "}");
+    assertEquals(ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2))
+            .additionalRequirement(req3, null),
+        "failedFunction=" + req1 + ",mock," + spec1 + ",{" + spec2 + "=" + req2 + "},[unsatisfied=" + req3 + "]");
     assertEquals(
         ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2))
-            .additionalRequirement(req3, ResolutionFailureImpl.recursiveRequirement(req3)), "failedFunction=" + req1 + ",mock," + spec1 + ",{" + spec2 + "=" + req2 + "},[recursiveRequirement=" +
-            req3 + "]");
+            .additionalRequirement(req3, ResolutionFailureImpl.recursiveRequirement(req3)),
+        "failedFunction=" + req1 + ",mock," + spec1 + ",{" + spec2 + "=" + req2 + "},[recursiveRequirement=" + req3 + "]");
   }
 
   public void testNoFunctions() {

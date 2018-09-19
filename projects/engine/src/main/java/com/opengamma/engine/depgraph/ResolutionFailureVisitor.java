@@ -16,7 +16,8 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Visitor for processing resolution failure information. The basic implementation writes messages to a logger. Override these methods for more useful error reporting or handling.
+ * Visitor for processing resolution failure information. The basic implementation writes messages to a logger. Override these methods for more
+ * useful error reporting or handling.
  *
  * @param <T> return type of the visit methods
  */

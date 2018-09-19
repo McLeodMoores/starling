@@ -27,7 +27,8 @@ public class DependencyNodeJobExecutionResult {
    * @param jobResultItem the calculation job result item, not null
    * @param aggregatedExecutionLog the aggregated execution log for the job and its inputs, not null
    */
-  public DependencyNodeJobExecutionResult(final String computeNodeId, final CalculationJobResultItem jobResultItem, final AggregatedExecutionLog aggregatedExecutionLog) {
+  public DependencyNodeJobExecutionResult(final String computeNodeId, final CalculationJobResultItem jobResultItem,
+      final AggregatedExecutionLog aggregatedExecutionLog) {
     ArgumentChecker.notNull(computeNodeId, "computeNodeId");
     ArgumentChecker.notNull(jobResultItem, "jobResultItem");
     ArgumentChecker.notNull(aggregatedExecutionLog, "aggregatedExecutionLog");

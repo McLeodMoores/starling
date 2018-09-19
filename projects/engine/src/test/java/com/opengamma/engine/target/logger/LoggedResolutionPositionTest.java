@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.target.logger;
@@ -56,7 +56,7 @@ public class LoggedResolutionPositionTest {
     Mockito.verifyZeroInteractions(logger);
   }
 
-  public void getSecurity_externalId() {
+  public void getSecurityExternalId() {
     final Position position = Mockito.mock(Position.class);
     final ResolutionLogger logger = Mockito.mock(ResolutionLogger.class);
     final Position logged = new LoggedResolutionPosition(position, logger);
@@ -69,7 +69,7 @@ public class LoggedResolutionPositionTest {
     Mockito.verifyNoMoreInteractions(logger);
   }
 
-  public void getSecurity_objectId() {
+  public void getSecurityObjectId() {
     final Position position = Mockito.mock(Position.class);
     final ResolutionLogger logger = Mockito.mock(ResolutionLogger.class);
     final Position logged = new LoggedResolutionPosition(position, logger);
@@ -86,7 +86,7 @@ public class LoggedResolutionPositionTest {
     final Position position = Mockito.mock(Position.class);
     final ResolutionLogger logger = Mockito.mock(ResolutionLogger.class);
     final Position logged = new LoggedResolutionPosition(position, logger);
-    final List<Trade> trades = new ArrayList<Trade>();
+    final List<Trade> trades = new ArrayList<>();
     for (int i = 0; i < 3; i++) {
       final Trade trade = Mockito.mock(Trade.class);
       Mockito.when(trade.getUniqueId()).thenReturn(UniqueId.of("Trade", Integer.toString(i), "0"));
@@ -96,9 +96,10 @@ public class LoggedResolutionPositionTest {
     final Collection<Trade> loggedTrades = logged.getTrades();
     assertEquals(loggedTrades.size(), 3);
     int i = 0;
-    for (Trade trade : loggedTrades) {
+    for (final Trade trade : loggedTrades) {
       assertTrue(trade instanceof LoggedResolutionTrade);
-      // Mockito.verify(logger).log(new ComputationTargetSpecification(ComputationTargetType.TRADE, UniqueId.of("Trade", Integer.toString(i))), UniqueId.of("Trade", Integer.toString(i), "0"));
+      // Mockito.verify(logger).log(new ComputationTargetSpecification(ComputationTargetType.TRADE, UniqueId.of("Trade", Integer.toString(i))),
+      // UniqueId.of("Trade", Integer.toString(i), "0"));
       i++;
     }
     Mockito.verifyNoMoreInteractions(logger);

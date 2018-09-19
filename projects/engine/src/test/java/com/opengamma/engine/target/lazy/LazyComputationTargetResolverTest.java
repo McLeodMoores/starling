@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.target.lazy;
@@ -39,7 +39,8 @@ public class LazyComputationTargetResolverTest {
   public void testPortfolioNode() {
     final MockComputationTargetResolver mock = MockComputationTargetResolver.unresolved();
     final ComputationTargetResolver resolver = new LazyComputationTargetResolver(mock);
-    final ComputationTarget target = resolver.resolve(new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, UniqueId.of("Node", "0")), VersionCorrection.LATEST);
+    final ComputationTarget target =
+        resolver.resolve(new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, UniqueId.of("Node", "0")), VersionCorrection.LATEST);
     final PortfolioNode node = target.getPortfolioNode();
     assertEquals(node.getUniqueId(), UniqueId.of("Node", "0"));
     assertEquals(mock.getResolveCalls(), 0);
@@ -70,7 +71,8 @@ public class LazyComputationTargetResolverTest {
   public void testPosition() {
     final MockComputationTargetResolver mock = MockComputationTargetResolver.unresolved();
     final ComputationTargetResolver resolver = new LazyComputationTargetResolver(mock);
-    final ComputationTarget target = resolver.resolve(new ComputationTargetSpecification(ComputationTargetType.POSITION, UniqueId.of("Position", "0")), VersionCorrection.LATEST);
+    final ComputationTarget target =
+        resolver.resolve(new ComputationTargetSpecification(ComputationTargetType.POSITION, UniqueId.of("Position", "0")), VersionCorrection.LATEST);
     final Position position = target.getPosition();
     assertEquals(position.getUniqueId(), UniqueId.of("Position", "0"));
     assertEquals(mock.getResolveCalls(), 0);
@@ -93,7 +95,8 @@ public class LazyComputationTargetResolverTest {
   public void testTrade() {
     final MockComputationTargetResolver mock = MockComputationTargetResolver.unresolved();
     final ComputationTargetResolver resolver = new LazyComputationTargetResolver(mock);
-    final ComputationTarget target = resolver.resolve(new ComputationTargetSpecification(ComputationTargetType.TRADE, UniqueId.of("Trade", "0")), VersionCorrection.LATEST);
+    final ComputationTarget target =
+        resolver.resolve(new ComputationTargetSpecification(ComputationTargetType.TRADE, UniqueId.of("Trade", "0")), VersionCorrection.LATEST);
     final Trade trade = target.getTrade();
     assertEquals(trade.getUniqueId(), UniqueId.of("Trade", "0"));
     assertEquals(mock.getResolveCalls(), 0);
@@ -119,7 +122,8 @@ public class LazyComputationTargetResolverTest {
   public void testSecurity() {
     final MockComputationTargetResolver mock = MockComputationTargetResolver.unresolved();
     final ComputationTargetResolver resolver = new LazyComputationTargetResolver(mock);
-    final ComputationTarget target = resolver.resolve(new ComputationTargetSpecification(ComputationTargetType.SECURITY, UniqueId.of("Security", "0")), VersionCorrection.LATEST);
+    final ComputationTarget target =
+        resolver.resolve(new ComputationTargetSpecification(ComputationTargetType.SECURITY, UniqueId.of("Security", "0")), VersionCorrection.LATEST);
     final Security security = target.getSecurity();
     assertEquals(mock.getResolveCalls(), 1);
     assertEquals(security.getSecurityType(), "MOCK");

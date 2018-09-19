@@ -40,8 +40,8 @@ public final class FullRequirementResolution {
   /**
    * Returns all of the possible resolutions in descending priority order.
    * <p>
-   * Each entry in the list will, under non-ambiguous circumstances, be a singleton collection. When an ambiguity exists elements will be sets containing all of the possible resolutions with null
-   * included if non-resolution is a possible outcome.
+   * Each entry in the list will, under non-ambiguous circumstances, be a singleton collection. When an ambiguity exists elements will be sets
+   * containing all of the possible resolutions with null included if non-resolution is a possible outcome.
    *
    * @return the resolutions, not null
    */
@@ -49,12 +49,14 @@ public final class FullRequirementResolution {
     return Collections.unmodifiableList(_resolutions);
   }
 
-  // Note: there is not a addResolution method to avoid confusion. It would add a singleton set; repeated calls to it would not be the same as making a single call to addResolutions which is the
+  // Note: there is not a addResolution method to avoid confusion. It would add a singleton set; repeated calls to it would not be
+  // the same as making a single call to addResolutions which is the
   // more typical behavior when there appear to be bulk and single operation
 
   /**
-   * Stores a resolution result set into the overall result. If this is a non-ambiguous result, the collection must contain only a single value. If this is an ambiguous result, the collection may
-   * contain all possible values and null if one of the outcomes was non-resolution.
+   * Stores a resolution result set into the overall result. If this is a non-ambiguous result, the collection must contain only a
+   * single value. If this is an ambiguous result, the collection may contain all possible values and null if one of the outcomes
+   * was non-resolution.
    *
    * @param resolutions the possible resolutions for this value requirement, not null, and non-empty
    * @throws IllegalArgumentException if the parameters are invalid or attempt to create a recursive structure
@@ -96,8 +98,8 @@ public final class FullRequirementResolution {
   }
 
   /**
-   * Tests if there is any ambiguity in this resolution. This only applies to the exact value requirement; there may be ambiguities in resolving items deeper in the graph but which have no effect on
-   * this requirement.
+   * Tests if there is any ambiguity in this resolution. This only applies to the exact value requirement; there may be ambiguities in resolving
+   * items deeper in the graph but which have no effect on this requirement.
    *
    * @return true if there is an ambiguity, false otherwise
    */

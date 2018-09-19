@@ -46,6 +46,9 @@ public class SimpleSecurityResolverTest {
   private final Instant _now = Instant.now();
   private final SecuritySource _securitySource;
 
+  /**
+   * Sets up mocks.
+   */
   @SuppressWarnings({"unchecked", "rawtypes" })
   public SimpleSecurityResolverTest() {
     _securityExternalId = ExternalId.of("Scheme1", "Value1");
@@ -82,17 +85,26 @@ public class SimpleSecurityResolverTest {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests that the security source cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_constructor_nullSecuritySource() {
+  public void testConstructorNullSecuritySource() {
     new SimpleSecurityResolver((SecuritySource) null, VersionCorrection.LATEST);
   }
 
+  /**
+   * Tests that the version correction cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_constructor_nullVersionCorrection() {
+  public void testConstructorNullVersionCorrection() {
     new SimpleSecurityResolver(_securitySource, (VersionCorrection) null);
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests the resolution using an object id.
+   */
   @Test
   @SuppressWarnings("deprecation")
   public void testResolveLinkWithObjectId() {
@@ -102,6 +114,9 @@ public class SimpleSecurityResolverTest {
     assertEquals(_securityV2, resolvedSecurity);
   }
 
+  /**
+   * Tests resolution of a security that is not available from the source.
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
   @SuppressWarnings("deprecation")
   public void testResolveLinkWithUnknownObjectId() {
@@ -111,6 +126,9 @@ public class SimpleSecurityResolverTest {
     resolver.resolve(link);
   }
 
+  /**
+   * Tests resolution using an external id bundle.
+   */
   @Test
   public void testResolveLinkWithExternalIdBundle() {
     final SimpleSecurityResolver resolver = new SimpleSecurityResolver(_securitySource, VersionCorrection.of(_securityV2ValidFrom, _now));
@@ -124,6 +142,9 @@ public class SimpleSecurityResolverTest {
     assertEquals(_securityV2, resolvedSecurity);
   }
 
+  /**
+   * Tests resolution of a security that is not available from the source.
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
   public void testResolveLinkWithUnknownExternalIdBundle() {
     final SimpleSecurityResolver resolver = new SimpleSecurityResolver(_securitySource,
@@ -132,6 +153,9 @@ public class SimpleSecurityResolverTest {
     resolver.resolve(link);
   }
 
+  /**
+   * Tests resolution of a security with an empty link.
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
   public void testResolveEmptyLink() {
     final SimpleSecurityResolver resolver = new SimpleSecurityResolver(_securitySource,
@@ -141,6 +165,9 @@ public class SimpleSecurityResolverTest {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests resolution by unique id.
+   */
   @Test
   public void testGetSecurityByUniqueId() {
     SimpleSecurityResolver resolver = new SimpleSecurityResolver(_securitySource, VersionCorrection.of(_securityV2ValidFrom.minusMillis(1), _now));
@@ -153,6 +180,9 @@ public class SimpleSecurityResolverTest {
     assertEquals(_securityV1, security);
   }
 
+  /**
+   * Tests resolution of a security that is not available from the source.
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
   public void testGetSecurityByUnknownUniqueId() {
     final SimpleSecurityResolver resolver = new SimpleSecurityResolver(_securitySource, VersionCorrection.of(_securityV2ValidFrom, _now));
@@ -160,6 +190,9 @@ public class SimpleSecurityResolverTest {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests resolution by object id.
+   */
   @Test
   public void testGetSecurityByObjectId() {
     SimpleSecurityResolver resolver = new SimpleSecurityResolver(_securitySource, VersionCorrection.of(_securityV2ValidFrom.minusMillis(1), _now));
@@ -171,6 +204,9 @@ public class SimpleSecurityResolverTest {
     assertEquals(_securityV2, security);
   }
 
+  /**
+   * Tests resolution of a security that is not available from the source.
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
   public void testGetSecurityByUnknownObjectId() {
     final VersionCorrection vc = VersionCorrection.of(Instant.ofEpochMilli(123), Instant.ofEpochMilli(123));
@@ -179,6 +215,9 @@ public class SimpleSecurityResolverTest {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests resolution by external id bundle.
+   */
   @Test
   public void testGetSecurityByExternalIdBundle() {
     SimpleSecurityResolver resolver = new SimpleSecurityResolver(_securitySource, VersionCorrection.of(_securityV2ValidFrom.minusMillis(1), _now));
@@ -190,6 +229,9 @@ public class SimpleSecurityResolverTest {
     assertEquals(_securityV2, security);
   }
 
+  /**
+   * Tests resolution of a security that is not available from the source.
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
   public void testGetSecurityByUnknownExternalIdBundle() {
     final SimpleSecurityResolver resolver = new SimpleSecurityResolver(_securitySource, VersionCorrection.of(_securityV2ValidFrom, _now));

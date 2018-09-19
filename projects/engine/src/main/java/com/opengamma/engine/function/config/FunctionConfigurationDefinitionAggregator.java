@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.config;
@@ -15,7 +15,7 @@ import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Aggregate functions defined in a {@link FunctionConfigurationDefinition}
+ * Aggregate functions defined in a {@link FunctionConfigurationDefinition}.
  */
 public final class FunctionConfigurationDefinitionAggregator {
 
@@ -28,14 +28,14 @@ public final class FunctionConfigurationDefinitionAggregator {
 
   /**
    * Loads the given definition, aggregating any referenced definitions.
-   * 
+   *
    * @param configDefinitionName the definition to load, not null
    * @param version the configuration version/correction timestamp, not null
    * @return the configuration bundle, not null
    */
   public FunctionConfigurationBundle aggregate(final String configDefinitionName, final VersionCorrection version) {
     ArgumentChecker.notNull(configDefinitionName, "configDefinitionName");
-    FunctionConfigurationDefinition configDefinition = _configSource.getSingle(FunctionConfigurationDefinition.class, configDefinitionName, version);
+    final FunctionConfigurationDefinition configDefinition = _configSource.getSingle(FunctionConfigurationDefinition.class, configDefinitionName, version);
     FunctionConfigurationBundle bundle = new FunctionConfigurationBundle();
     if (configDefinition != null) {
       bundle = functionAggregator(configDefinition, version);
@@ -45,10 +45,11 @@ public final class FunctionConfigurationDefinitionAggregator {
 
   /**
    * Loads the given definition, aggregating any referenced definitions.
-   * 
+   *
    * @param configDefinitionName the definition to load, not null
    * @return a static {@link FunctionConfigurationSource} that returns the definitions, not null
-   * @deprecated The configuration returned will be static - make repeated calls to {@link #aggregate(String, VersionCorrection)} if you need to handle configuration changes at run-time
+   * @deprecated The configuration returned will be static - make repeated calls to {@link #aggregate(String, VersionCorrection)}
+   * if you need to handle configuration changes at run-time
    */
   @Deprecated
   public FunctionConfigurationSource aggregate(final String configDefinitionName) {
@@ -62,15 +63,15 @@ public final class FunctionConfigurationDefinitionAggregator {
     return new FunctionConfigurationBundle(functions);
   }
 
-  private void functionAggregatorHelper(final Set<FunctionConfiguration> functions, final List<String> visitedConfigs, final FunctionConfigurationDefinition configDefinition,
-      final VersionCorrection version) {
+  private void functionAggregatorHelper(final Set<FunctionConfiguration> functions, final List<String> visitedConfigs,
+      final FunctionConfigurationDefinition configDefinition, final VersionCorrection version) {
     visitedConfigs.add(configDefinition.getName());
     functions.addAll(configDefinition.getStaticFunctions());
     functions.addAll(configDefinition.getParameterizedFunctions());
 
-    for (String configDefinitionName : configDefinition.getFunctionConfigurationDefinitions()) {
+    for (final String configDefinitionName : configDefinition.getFunctionConfigurationDefinitions()) {
       if (!visitedConfigs.contains(configDefinitionName)) {
-        FunctionConfigurationDefinition linkedConfig = _configSource.getSingle(FunctionConfigurationDefinition.class, configDefinitionName, version);
+        final FunctionConfigurationDefinition linkedConfig = _configSource.getSingle(FunctionConfigurationDefinition.class, configDefinitionName, version);
         if (linkedConfig != null) {
           functionAggregatorHelper(functions, visitedConfigs, linkedConfig, version);
         }

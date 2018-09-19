@@ -130,15 +130,20 @@ public class DefaultFunctionBlacklistQuery extends AbstractFunctionBlacklistQuer
       return false;
     }
 
-    protected abstract boolean isWildcardBlacklisted(String functionIdentifier, FunctionParameters functionParameters, ComputationTargetSpecification target);
+    protected abstract boolean isWildcardBlacklisted(String functionIdentifier, FunctionParameters functionParameters,
+        ComputationTargetSpecification target);
 
-    protected abstract boolean isFunctionIdentifierBlacklisted(String functionIdentifier, FunctionParameters functionParameters, ComputationTargetSpecification target);
+    protected abstract boolean isFunctionIdentifierBlacklisted(String functionIdentifier, FunctionParameters functionParameters,
+        ComputationTargetSpecification target);
 
-    protected abstract boolean isFunctionParametersBlacklisted(String functionIdentifier, FunctionParameters functionParameters, ComputationTargetSpecification target);
+    protected abstract boolean isFunctionParametersBlacklisted(String functionIdentifier, FunctionParameters functionParameters,
+        ComputationTargetSpecification target);
 
-    protected abstract boolean isTargetBlacklisted(String functionIdentifier, FunctionParameters functionParameters, ComputationTargetSpecification target);
+    protected abstract boolean isTargetBlacklisted(String functionIdentifier, FunctionParameters functionParameters,
+        ComputationTargetSpecification target);
 
-    public static boolean isBlacklisted(final TreeEntry node, final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target) {
+    public static boolean isBlacklisted(final TreeEntry node, final String functionIdentifier, final FunctionParameters functionParameters,
+        final ComputationTargetSpecification target) {
       return node != null && node.isBlacklisted(functionIdentifier, functionParameters, target);
     }
 
@@ -158,49 +163,49 @@ public class DefaultFunctionBlacklistQuery extends AbstractFunctionBlacklistQuer
       }
     }
 
-    protected abstract boolean isWildcardBlacklisted(String functionIdentifier, FunctionParameters functionParameters, ComputationTargetSpecification target, ValueSpecification[] inputs,
-        ValueSpecification[] outputs);
-
-    protected abstract boolean isWildcardBlacklisted(String functionIdentifier, FunctionParameters functionParameters, ComputationTargetSpecification target, Collection<ValueSpecification> inputs,
-        Collection<ValueSpecification> outputs);
-
-    protected abstract boolean isFunctionIdentifierBlacklisted(String functionIdentifier, FunctionParameters functionParameters, ComputationTargetSpecification target,
+    protected abstract boolean isWildcardBlacklisted(String functionIdentifier, FunctionParameters functionParameters, ComputationTargetSpecification target,
         ValueSpecification[] inputs, ValueSpecification[] outputs);
 
-    protected abstract boolean isFunctionIdentifierBlacklisted(String functionIdentifier, FunctionParameters functionParameters, ComputationTargetSpecification target,
+    protected abstract boolean isWildcardBlacklisted(String functionIdentifier, FunctionParameters functionParameters, ComputationTargetSpecification target,
         Collection<ValueSpecification> inputs, Collection<ValueSpecification> outputs);
 
-    protected abstract boolean isFunctionParametersBlacklisted(String functionIdentifier, FunctionParameters functionParameters, ComputationTargetSpecification target,
-        ValueSpecification[] inputs, ValueSpecification[] outputs);
+    protected abstract boolean isFunctionIdentifierBlacklisted(String functionIdentifier, FunctionParameters functionParameters,
+        ComputationTargetSpecification target, ValueSpecification[] inputs, ValueSpecification[] outputs);
 
-    protected abstract boolean isFunctionParametersBlacklisted(String functionIdentifier, FunctionParameters functionParameters, ComputationTargetSpecification target,
-        Collection<ValueSpecification> inputs, Collection<ValueSpecification> outputs);
+    protected abstract boolean isFunctionIdentifierBlacklisted(String functionIdentifier, FunctionParameters functionParameters,
+        ComputationTargetSpecification target, Collection<ValueSpecification> inputs, Collection<ValueSpecification> outputs);
 
-    protected abstract boolean isTargetBlacklisted(String functionIdentifier, FunctionParameters functionParameters, ComputationTargetSpecification target, ValueSpecification[] inputs,
-        ValueSpecification[] outputs);
+    protected abstract boolean isFunctionParametersBlacklisted(String functionIdentifier, FunctionParameters functionParameters,
+        ComputationTargetSpecification target, ValueSpecification[] inputs, ValueSpecification[] outputs);
 
-    protected abstract boolean isTargetBlacklisted(String functionIdentifier, FunctionParameters functionParameters, ComputationTargetSpecification target, Collection<ValueSpecification> inputs,
-        Collection<ValueSpecification> outputs);
+    protected abstract boolean isFunctionParametersBlacklisted(String functionIdentifier, FunctionParameters functionParameters,
+        ComputationTargetSpecification target, Collection<ValueSpecification> inputs, Collection<ValueSpecification> outputs);
 
-    protected abstract boolean isInputsBlacklisted(String functionIdentifier, FunctionParameters functionParameters, ComputationTargetSpecification target, ValueSpecification[] inputs,
-        ValueSpecification[] outputs);
+    protected abstract boolean isTargetBlacklisted(String functionIdentifier, FunctionParameters functionParameters,
+        ComputationTargetSpecification target, ValueSpecification[] inputs, ValueSpecification[] outputs);
 
-    protected abstract boolean isInputsBlacklisted(String functionIdentifier, FunctionParameters functionParameters, ComputationTargetSpecification target, Collection<ValueSpecification> inputs,
-        Collection<ValueSpecification> outputs);
+    protected abstract boolean isTargetBlacklisted(String functionIdentifier, FunctionParameters functionParameters,
+        ComputationTargetSpecification target, Collection<ValueSpecification> inputs, Collection<ValueSpecification> outputs);
 
-    protected abstract boolean isOutputsBlacklisted(String functionIdentifier, FunctionParameters functionParameters, ComputationTargetSpecification target, ValueSpecification[] inputs,
-        ValueSpecification[] outputs);
+    protected abstract boolean isInputsBlacklisted(String functionIdentifier, FunctionParameters functionParameters,
+        ComputationTargetSpecification target, ValueSpecification[] inputs, ValueSpecification[] outputs);
 
-    protected abstract boolean isOutputsBlacklisted(String functionIdentifier, FunctionParameters functionParameters, ComputationTargetSpecification target, Collection<ValueSpecification> inputs,
-        Collection<ValueSpecification> outputs);
+    protected abstract boolean isInputsBlacklisted(String functionIdentifier, FunctionParameters functionParameters,
+        ComputationTargetSpecification target, Collection<ValueSpecification> inputs, Collection<ValueSpecification> outputs);
 
-    public static boolean isBlacklisted(final TreeEntry node, final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target,
-        final ValueSpecification[] inputs, final ValueSpecification[] outputs) {
+    protected abstract boolean isOutputsBlacklisted(String functionIdentifier, FunctionParameters functionParameters,
+        ComputationTargetSpecification target, ValueSpecification[] inputs, ValueSpecification[] outputs);
+
+    protected abstract boolean isOutputsBlacklisted(String functionIdentifier, FunctionParameters functionParameters,
+        ComputationTargetSpecification target, Collection<ValueSpecification> inputs, Collection<ValueSpecification> outputs);
+
+    public static boolean isBlacklisted(final TreeEntry node, final String functionIdentifier, final FunctionParameters functionParameters,
+        final ComputationTargetSpecification target, final ValueSpecification[] inputs, final ValueSpecification[] outputs) {
       return node != null && node.isBlacklisted(functionIdentifier, functionParameters, target, inputs, outputs);
     }
 
-    public static boolean isBlacklisted(final TreeEntry node, final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target,
-        final Collection<ValueSpecification> inputs, final Collection<ValueSpecification> outputs) {
+    public static boolean isBlacklisted(final TreeEntry node, final String functionIdentifier, final FunctionParameters functionParameters,
+        final ComputationTargetSpecification target, final Collection<ValueSpecification> inputs, final Collection<ValueSpecification> outputs) {
       return node != null && node.isBlacklisted(functionIdentifier, functionParameters, target, inputs, outputs);
     }
 
@@ -375,106 +380,110 @@ public class DefaultFunctionBlacklistQuery extends AbstractFunctionBlacklistQuer
     }
 
     @Override
-    protected boolean isWildcardBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target) {
+    protected boolean isWildcardBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters,
+        final ComputationTargetSpecification target) {
       return isBlacklisted(_wildcard, functionIdentifier, functionParameters, target);
     }
 
     @Override
-    protected boolean isFunctionIdentifierBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target) {
+    protected boolean isFunctionIdentifierBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters,
+        final ComputationTargetSpecification target) {
       final Map<Object, TreeEntry> values = _values;
       return values != null && isBlacklisted(values.get(functionIdentifier), functionIdentifier, functionParameters, target);
     }
 
     @Override
-    protected boolean isFunctionParametersBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target) {
+    protected boolean isFunctionParametersBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters,
+        final ComputationTargetSpecification target) {
       final Map<Object, TreeEntry> values = _values;
       return values != null && isBlacklisted(values.get(functionParameters), functionIdentifier, functionParameters, target);
     }
 
     @Override
-    protected boolean isTargetBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target) {
+    protected boolean isTargetBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters,
+        final ComputationTargetSpecification target) {
       final Map<Object, TreeEntry> values = _values;
       return values != null && isBlacklisted(values.get(target), functionIdentifier, functionParameters, target);
     }
 
     @Override
-    protected boolean isWildcardBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target,
-        final ValueSpecification[] inputs, final ValueSpecification[] outputs) {
+    protected boolean isWildcardBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters,
+        final ComputationTargetSpecification target, final ValueSpecification[] inputs, final ValueSpecification[] outputs) {
       return isBlacklisted(_wildcard, functionIdentifier, functionParameters, target, inputs, outputs);
     }
 
     @Override
-    protected boolean isWildcardBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target,
-        final Collection<ValueSpecification> inputs, final Collection<ValueSpecification> outputs) {
+    protected boolean isWildcardBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters,
+        final ComputationTargetSpecification target, final Collection<ValueSpecification> inputs, final Collection<ValueSpecification> outputs) {
       return isBlacklisted(_wildcard, functionIdentifier, functionParameters, target, inputs, outputs);
     }
 
     @Override
-    protected boolean isFunctionIdentifierBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target,
-        final ValueSpecification[] inputs, final ValueSpecification[] outputs) {
+    protected boolean isFunctionIdentifierBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters,
+        final ComputationTargetSpecification target, final ValueSpecification[] inputs, final ValueSpecification[] outputs) {
       final Map<Object, TreeEntry> values = _values;
       return values != null && isBlacklisted(values.get(functionIdentifier), functionIdentifier, functionParameters, target, inputs, outputs);
     }
 
     @Override
-    protected boolean isFunctionIdentifierBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target,
-        final Collection<ValueSpecification> inputs, final Collection<ValueSpecification> outputs) {
+    protected boolean isFunctionIdentifierBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters,
+        final ComputationTargetSpecification target, final Collection<ValueSpecification> inputs, final Collection<ValueSpecification> outputs) {
       final Map<Object, TreeEntry> values = _values;
       return values != null && isBlacklisted(values.get(functionIdentifier), functionIdentifier, functionParameters, target, inputs, outputs);
     }
 
     @Override
-    protected boolean isFunctionParametersBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target,
-        final ValueSpecification[] inputs, final ValueSpecification[] outputs) {
+    protected boolean isFunctionParametersBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters,
+        final ComputationTargetSpecification target, final ValueSpecification[] inputs, final ValueSpecification[] outputs) {
       final Map<Object, TreeEntry> values = _values;
       return values != null && isBlacklisted(values.get(functionParameters), functionIdentifier, functionParameters, target, inputs, outputs);
     }
 
     @Override
-    protected boolean isFunctionParametersBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target,
-        final Collection<ValueSpecification> inputs, final Collection<ValueSpecification> outputs) {
+    protected boolean isFunctionParametersBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters,
+        final ComputationTargetSpecification target, final Collection<ValueSpecification> inputs, final Collection<ValueSpecification> outputs) {
       final Map<Object, TreeEntry> values = _values;
       return values != null && isBlacklisted(values.get(functionParameters), functionIdentifier, functionParameters, target, inputs, outputs);
     }
 
     @Override
-    protected boolean isTargetBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target,
-        final ValueSpecification[] inputs, final ValueSpecification[] outputs) {
+    protected boolean isTargetBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters,
+        final ComputationTargetSpecification target, final ValueSpecification[] inputs, final ValueSpecification[] outputs) {
       final Map<Object, TreeEntry> values = _values;
       return values != null && isBlacklisted(values.get(target), functionIdentifier, functionParameters, target, inputs, outputs);
     }
 
     @Override
-    protected boolean isTargetBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target,
-        final Collection<ValueSpecification> inputs, final Collection<ValueSpecification> outputs) {
+    protected boolean isTargetBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters,
+        final ComputationTargetSpecification target, final Collection<ValueSpecification> inputs, final Collection<ValueSpecification> outputs) {
       final Map<Object, TreeEntry> values = _values;
       return values != null && isBlacklisted(values.get(target), functionIdentifier, functionParameters, target, inputs, outputs);
     }
 
     @Override
-    protected boolean isInputsBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target,
-        final ValueSpecification[] inputs, final ValueSpecification[] outputs) {
+    protected boolean isInputsBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters,
+        final ComputationTargetSpecification target, final ValueSpecification[] inputs, final ValueSpecification[] outputs) {
       final Map<Object, TreeEntry> values = _values;
       return values != null && isBlacklisted(values.get(inputs), functionIdentifier, functionParameters, target, inputs, outputs);
     }
 
     @Override
-    protected boolean isInputsBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target,
-        final Collection<ValueSpecification> inputs, final Collection<ValueSpecification> outputs) {
+    protected boolean isInputsBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters,
+        final ComputationTargetSpecification target, final Collection<ValueSpecification> inputs, final Collection<ValueSpecification> outputs) {
       final Map<Object, TreeEntry> values = _values;
       return values != null && isBlacklisted(values.get(inputs), functionIdentifier, functionParameters, target, inputs, outputs);
     }
 
     @Override
-    protected boolean isOutputsBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target,
-        final ValueSpecification[] inputs, final ValueSpecification[] outputs) {
+    protected boolean isOutputsBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters,
+        final ComputationTargetSpecification target, final ValueSpecification[] inputs, final ValueSpecification[] outputs) {
       final Map<Object, TreeEntry> values = _values;
       return values != null && isBlacklisted(values.get(outputs), functionIdentifier, functionParameters, target, inputs, outputs);
     }
 
     @Override
-    protected boolean isOutputsBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target,
-        final Collection<ValueSpecification> inputs, final Collection<ValueSpecification> outputs) {
+    protected boolean isOutputsBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters,
+        final ComputationTargetSpecification target, final Collection<ValueSpecification> inputs, final Collection<ValueSpecification> outputs) {
       final Map<Object, TreeEntry> values = _values;
       return values != null && isBlacklisted(values.get(outputs), functionIdentifier, functionParameters, target, inputs, outputs);
     }
@@ -589,86 +598,90 @@ public class DefaultFunctionBlacklistQuery extends AbstractFunctionBlacklistQuer
     }
 
     @Override
-    protected boolean isWildcardBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target) {
+    protected boolean isWildcardBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters,
+        final ComputationTargetSpecification target) {
       return _wildcard > 0;
     }
 
     @Override
-    protected boolean isFunctionIdentifierBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target) {
+    protected boolean isFunctionIdentifierBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters,
+        final ComputationTargetSpecification target) {
       final Set<Object> values = _values;
       return values != null && values.contains(functionIdentifier);
     }
 
     @Override
-    protected boolean isFunctionParametersBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target) {
+    protected boolean isFunctionParametersBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters,
+        final ComputationTargetSpecification target) {
       final Set<Object> values = _values;
       return values != null && values.contains(functionParameters);
     }
 
     @Override
-    protected boolean isTargetBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target) {
+    protected boolean isTargetBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters,
+        final ComputationTargetSpecification target) {
       final Set<Object> values = _values;
       return values != null && values.contains(target);
     }
 
     @Override
-    protected boolean isWildcardBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target,
-        final ValueSpecification[] inputs, final ValueSpecification[] outputs) {
+    protected boolean isWildcardBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters,
+        final ComputationTargetSpecification target, final ValueSpecification[] inputs, final ValueSpecification[] outputs) {
       return _wildcard > 0;
     }
 
     @Override
-    protected boolean isWildcardBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target,
-        final Collection<ValueSpecification> inputs, final Collection<ValueSpecification> outputs) {
+    protected boolean isWildcardBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters,
+        final ComputationTargetSpecification target, final Collection<ValueSpecification> inputs, final Collection<ValueSpecification> outputs) {
       return _wildcard > 0;
     }
 
     @Override
-    protected boolean isFunctionIdentifierBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target,
-        final ValueSpecification[] inputs, final ValueSpecification[] outputs) {
+    protected boolean isFunctionIdentifierBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters,
+        final ComputationTargetSpecification target, final ValueSpecification[] inputs, final ValueSpecification[] outputs) {
       final Set<Object> values = _values;
       return values != null && values.contains(functionIdentifier);
     }
 
     @Override
-    protected boolean isFunctionIdentifierBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target,
-        final Collection<ValueSpecification> inputs, final Collection<ValueSpecification> outputs) {
+    protected boolean isFunctionIdentifierBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters,
+        final ComputationTargetSpecification target, final Collection<ValueSpecification> inputs, final Collection<ValueSpecification> outputs) {
       final Set<Object> values = _values;
       return values != null && values.contains(functionIdentifier);
     }
 
     @Override
-    protected boolean isFunctionParametersBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target,
-        final ValueSpecification[] inputs, final ValueSpecification[] outputs) {
+    protected boolean isFunctionParametersBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters,
+        final ComputationTargetSpecification target, final ValueSpecification[] inputs, final ValueSpecification[] outputs) {
       final Set<Object> values = _values;
       return values != null && values.contains(functionParameters);
     }
 
     @Override
-    protected boolean isFunctionParametersBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target,
-        final Collection<ValueSpecification> inputs, final Collection<ValueSpecification> outputs) {
+    protected boolean isFunctionParametersBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters,
+        final ComputationTargetSpecification target, final Collection<ValueSpecification> inputs, final Collection<ValueSpecification> outputs) {
       final Set<Object> values = _values;
       return values != null && values.contains(functionParameters);
     }
 
     @Override
-    protected boolean isTargetBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target,
-        final ValueSpecification[] inputs, final ValueSpecification[] outputs) {
+    protected boolean isTargetBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters,
+        final ComputationTargetSpecification target, final ValueSpecification[] inputs, final ValueSpecification[] outputs) {
       final Set<Object> values = _values;
       return values != null && values.contains(target);
     }
 
     @Override
-    protected boolean isTargetBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target,
-        final Collection<ValueSpecification> inputs, final Collection<ValueSpecification> outputs) {
+    protected boolean isTargetBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters,
+        final ComputationTargetSpecification target, final Collection<ValueSpecification> inputs, final Collection<ValueSpecification> outputs) {
       final Set<Object> values = _values;
       return values != null && values.contains(target);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    protected boolean isInputsBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target,
-        final ValueSpecification[] inputs, final ValueSpecification[] outputs) {
+    protected boolean isInputsBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters,
+        final ComputationTargetSpecification target, final ValueSpecification[] inputs, final ValueSpecification[] outputs) {
       final Set<Object> values = _values;
       if (values == null) {
         return false;
@@ -692,16 +705,16 @@ public class DefaultFunctionBlacklistQuery extends AbstractFunctionBlacklistQuer
     }
 
     @Override
-    protected boolean isInputsBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target,
-        final Collection<ValueSpecification> inputs, final Collection<ValueSpecification> outputs) {
+    protected boolean isInputsBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters,
+        final ComputationTargetSpecification target, final Collection<ValueSpecification> inputs, final Collection<ValueSpecification> outputs) {
       final Set<Object> values = _values;
       return values != null && values.contains(inputs);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    protected boolean isOutputsBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target,
-        final ValueSpecification[] inputs, final ValueSpecification[] outputs) {
+    protected boolean isOutputsBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters,
+        final ComputationTargetSpecification target, final ValueSpecification[] inputs, final ValueSpecification[] outputs) {
       final Set<Object> values = _values;
       if (values == null) {
         return false;
@@ -725,8 +738,8 @@ public class DefaultFunctionBlacklistQuery extends AbstractFunctionBlacklistQuer
     }
 
     @Override
-    protected boolean isOutputsBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target,
-        final Collection<ValueSpecification> inputs, final Collection<ValueSpecification> outputs) {
+    protected boolean isOutputsBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters,
+        final ComputationTargetSpecification target, final Collection<ValueSpecification> inputs, final Collection<ValueSpecification> outputs) {
       final Set<Object> values = _values;
       return values != null && values.contains(outputs);
     }
@@ -870,14 +883,14 @@ public class DefaultFunctionBlacklistQuery extends AbstractFunctionBlacklistQuer
   }
 
   @Override
-  public boolean isBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target, final ValueSpecification[] inputs,
-      final ValueSpecification[] outputs) {
+  public boolean isBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target,
+      final ValueSpecification[] inputs, final ValueSpecification[] outputs) {
     return TreeEntry.isBlacklisted(_root, functionIdentifier, functionParameters, target, inputs, outputs);
   }
 
   @Override
-  public boolean isBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target, final Collection<ValueSpecification> inputs,
-      final Collection<ValueSpecification> outputs) {
+  public boolean isBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target,
+      final Collection<ValueSpecification> inputs, final Collection<ValueSpecification> outputs) {
     return TreeEntry.isBlacklisted(_root, functionIdentifier, functionParameters, target, inputs, outputs);
   }
 
@@ -934,7 +947,8 @@ public class DefaultFunctionBlacklistQuery extends AbstractFunctionBlacklistQuer
     _root.add(rule, ALL_PIVOT_FIELDS);
   }
 
-  // TODO: Sometimes might want to reorder the pivots. Would we want "cheapest" pivot first, the one with the most choices or the one with the fewest choices? The aim is
+  // TODO: Sometimes might want to reorder the pivots. Would we want "cheapest" pivot first, the one with the most choices or
+  // the one with the fewest choices? The aim is
   // to get a "FALSE" as quickly and cheaply as possible as that is the typical case.
 
   /**

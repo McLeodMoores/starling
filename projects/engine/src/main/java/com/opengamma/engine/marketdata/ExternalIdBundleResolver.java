@@ -18,8 +18,8 @@ import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.ExternalIdentifiable;
 
 /**
- * Helper class for obtaining the maximal {@link ExternalIdBundle} for a target. This is intended for use by market data integrations that must obtain external identifier appropriate to that provider
- * from a more restricted target reference or resolved object.
+ * Helper class for obtaining the maximal {@link ExternalIdBundle} for a target. This is intended for use by market data integrations
+ * that must obtain external identifier appropriate to that provider from a more restricted target reference or resolved object.
  */
 public class ExternalIdBundleResolver implements ComputationTargetReferenceVisitor<ExternalIdBundle> {
 

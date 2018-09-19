@@ -5,6 +5,7 @@
  */
 package com.opengamma.engine.value;
 
+import static org.testng.Assert.assertNotEquals;
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertFalse;
 import static org.testng.AssertJUnit.assertNotNull;
@@ -39,60 +40,90 @@ public class ValueRequirementTest {
   private static final Position POSITION = new SimplePosition(UniqueId.of("A", "B"), new BigDecimal(1), ExternalIdBundle.EMPTY);
   private static final ComputationTargetSpecification SPEC = ComputationTargetSpecification.of(POSITION);
 
-  public void test_constructor_Position() {
+  /**
+   * Tests construction from a name and computation target spec of a position.
+   */
+  public void testConstructorPosition() {
     final ValueRequirement test = new ValueRequirement("DATA", SPEC);
     assertEquals("DATA", test.getValueName());
     assertEquals(SPEC, test.getTargetReference());
   }
 
+  /**
+   * Tests that the name cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_constructor_nullValue() {
+  public void testConstructorNullValue() {
     new ValueRequirement(null, SPEC);
   }
 
+  /**
+   * Tests that the computation target specification cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_constructor_nullSpec() {
+  public void testConstructorNullSpec() {
     new ValueRequirement("DATA", (ComputationTargetSpecification) null);
   }
 
-  public void test_constructor_TypeUniqueId_Position() {
+  /**
+   * Tests construction from a name, position target type and position identifier.
+   */
+  public void testConstructorTypeUniqueIdPosition() {
     final ValueRequirement test = new ValueRequirement("DATA", ComputationTargetType.POSITION, POSITION.getUniqueId());
     assertEquals("DATA", test.getValueName());
     assertEquals(SPEC, test.getTargetReference());
   }
 
+  /**
+   * Tests that the name cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_constructor_TypeUniqueId_nullValue() {
+  public void testConstructorTypeUniqueIdNullValue() {
     new ValueRequirement(null, ComputationTargetType.POSITION, POSITION.getUniqueId());
   }
 
+  /**
+   * Tests that the target type cannot be null.
+   */
   @Test(expectedExceptions = AssertionError.class)
-  public void test_constructor_TypeUniqueId_nullType() {
+  public void testConstructorTypeUniqueIdNullType() {
     new ValueRequirement("DATA", null, POSITION.getUniqueId());
   }
 
+  /**
+   * Tests that the name cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_constructor_TypeIdentifier_nullValue() {
+  public void testConstructorTypeIdentifierNullValue() {
     new ValueRequirement(null, ComputationTargetType.PRIMITIVE, USD);
   }
 
+  /**
+   * Tests that the target type cannot be null.
+   */
   @Test(expectedExceptions = AssertionError.class)
-  public void test_constructor_TypeIdentifier_nullType() {
+  public void testConstructorTypeIdentifierNullType() {
     new ValueRequirement("DATA", null, USD);
   }
 
-  public void test_constructor_Object_Position() {
+  /**
+   * Tests construction from a name, target type and position id.
+   */
+  public void testConstructorObjectPosition() {
     final ValueRequirement test = new ValueRequirement("DATA", ComputationTargetType.POSITION, POSITION.getUniqueId());
     assertEquals("DATA", test.getValueName());
     assertEquals(SPEC, test.getTargetReference());
   }
 
   //-------------------------------------------------------------------------
-  public void test_equals() {
+  /**
+   * Tests the equals method.
+   */
+  public void testEquals() {
     final ValueRequirement req1 = new ValueRequirement(ValueRequirementNames.DISCOUNT_CURVE, ComputationTargetType.PRIMITIVE, USD);
     assertTrue(req1.equals(req1));
-    assertFalse(req1.equals(null));
-    assertFalse(req1.equals("Rubbish"));
+    assertNotEquals(null, req1);
+    assertNotEquals("Rubbish", req1);
 
     ValueRequirement req2 = new ValueRequirement(ValueRequirementNames.DISCOUNT_CURVE, ComputationTargetType.PRIMITIVE, USD);
     assertTrue(req1.equals(req2));
@@ -108,7 +139,10 @@ public class ValueRequirementTest {
     assertFalse(req1.equals(req2));
   }
 
-  public void test_hashCode() {
+  /**
+   * Tests the hash-code.
+   */
+  public void testHashCode() {
     final ValueRequirement req1 = new ValueRequirement(ValueRequirementNames.DISCOUNT_CURVE, ComputationTargetType.PRIMITIVE, USD);
     ValueRequirement req2 = new ValueRequirement(ValueRequirementNames.DISCOUNT_CURVE, ComputationTargetType.PRIMITIVE, USD);
 
@@ -123,7 +157,10 @@ public class ValueRequirementTest {
     assertFalse(req1.hashCode() == req2.hashCode());
   }
 
-  public void test_toString() {
+  /**
+   * Tests the toString method.
+   */
+  public void testToString() {
     final ValueRequirement valueReq = new ValueRequirement(ValueRequirementNames.DISCOUNT_CURVE, ComputationTargetType.PRIMITIVE, USD);
     final String toString = valueReq.toString();
     assertNotNull(toString);
@@ -133,7 +170,10 @@ public class ValueRequirementTest {
   }
 
   //-------------------------------------------------------------------------
-  public void test_fudgeEncoding() {
+  /**
+   * Tests the Fudge encoding.
+   */
+  public void testFudgeEncoding() {
     final FudgeContext context = OpenGammaFudgeContext.getInstance();
     final FudgeSerializer serializationContext = new FudgeSerializer(context);
     final FudgeDeserializer deserializationContext = new FudgeDeserializer(context);

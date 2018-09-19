@@ -24,12 +24,13 @@ import com.opengamma.util.test.TestGroup;
  */
 @Test(groups = TestGroup.UNIT)
 public class ComputedValueTest {
-  
+
   private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
 
   public void test_constructor_Object_Portfolio() {
-    ValueSpecification vspec = ValueSpecification.of("DATA", ComputationTargetType.SECURITY, UniqueId.of("Foo", "Bar"), ValueProperties.with(ValuePropertyNames.FUNCTION, "mockFunctionid").get());
-    ComputedValue test = new ComputedValue(vspec, "HELLO");
+    final ValueSpecification vspec = ValueSpecification.of("DATA", ComputationTargetType.SECURITY, UniqueId.of("Foo", "Bar"),
+        ValueProperties.with(ValuePropertyNames.FUNCTION, "mockFunctionid").get());
+    final ComputedValue test = new ComputedValue(vspec, "HELLO");
     assertEquals("HELLO", test.getValue());
     assertEquals(vspec, test.getSpecification());
   }
@@ -55,13 +56,14 @@ public class ComputedValueTest {
       return new ComplexValue(msg.getDouble("i"), msg.getDouble("j"));
     }
 
+    @Override
     public boolean equals(final Object obj) {
       if (obj == this) {
         return true;
       }
       if (obj instanceof ComplexValue) {
         final ComplexValue other = (ComplexValue) obj;
-        return (other._i == _i) && (other._j == _j);
+        return other._i == _i && other._j == _j;
       }
       return false;
     }

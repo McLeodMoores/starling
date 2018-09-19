@@ -187,7 +187,7 @@ public class ListeningViewAutoStartManagerTest {
   private static class TestConfigSource implements ConfigSource {
 
     private final BasicChangeManager _changeManager = new BasicChangeManager();
-    private final Map<ObjectId, ConfigItem<AutoStartViewDefinition>> views = new HashMap<>();
+    private final Map<ObjectId, ConfigItem<AutoStartViewDefinition>> _views = new HashMap<>();
 
     public TestConfigSource(final List<ConfigItem<AutoStartViewDefinition>> configItems) {
       for (final ConfigItem<AutoStartViewDefinition> item : configItems) {
@@ -202,7 +202,7 @@ public class ListeningViewAutoStartManagerTest {
 
     @Override
     public ConfigItem<?> get(final ObjectId objectId, final VersionCorrection versionCorrection) {
-      return views.get(objectId);
+      return _views.get(objectId);
     }
 
     @Override
@@ -221,7 +221,7 @@ public class ListeningViewAutoStartManagerTest {
 
       final Collection<ConfigItem<R>> result = new HashSet<>();
       if (clazz == AutoStartViewDefinition.class) {
-        for (final ConfigItem<AutoStartViewDefinition> item : views.values()) {
+        for (final ConfigItem<AutoStartViewDefinition> item : _views.values()) {
 
           result.add((ConfigItem<R>) item);
         }
@@ -235,7 +235,7 @@ public class ListeningViewAutoStartManagerTest {
 
       final Collection<ConfigItem<R>> result = new HashSet<>();
       if (clazz == AutoStartViewDefinition.class) {
-        for (final ConfigItem<AutoStartViewDefinition> item : views.values()) {
+        for (final ConfigItem<AutoStartViewDefinition> item : _views.values()) {
           result.add((ConfigItem<R>) item);
         }
       }
@@ -268,7 +268,7 @@ public class ListeningViewAutoStartManagerTest {
     }
 
     private void addItem(final ConfigItem<AutoStartViewDefinition> item) {
-      views.put(item.getObjectId(), item);
+      _views.put(item.getObjectId(), item);
     }
 
     public void addItemWithTrigger(final ConfigItem<AutoStartViewDefinition> item) {
@@ -278,7 +278,7 @@ public class ListeningViewAutoStartManagerTest {
 
     public void removeItemWithTrigger(final ConfigItem<AutoStartViewDefinition> item) {
       final ObjectId objectId = item.getObjectId();
-      views.remove(objectId);
+      _views.remove(objectId);
       _changeManager.entityChanged(ChangeType.REMOVED, objectId, Instant.now(), null, Instant.now());
     }
 

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function;
@@ -13,14 +13,15 @@ import org.threeten.bp.Instant;
 import com.opengamma.util.PoolExecutor;
 
 /**
- * Defers the compilation of any functions until the definitions are requested. This may be useful for remote calculation nodes to only compile functions that a node needs. It should not be used by a
- * view processor for dependency graph compilation as not all function definitions may be available.
+ * Defers the compilation of any functions until the definitions are requested. This may be useful for remote calculation nodes to only
+ * compile functions that a node needs. It should not be used by a view processor for dependency graph compilation as not all function
+ * definitions may be available.
  */
 public class LazyFunctionRepositoryCompiler extends CachingFunctionRepositoryCompiler {
 
   private static class Repository extends InMemoryCompiledFunctionRepository {
 
-    private final ConcurrentMap<String, FunctionDefinition> _uncompiled = new ConcurrentHashMap<String, FunctionDefinition>();
+    private final ConcurrentMap<String, FunctionDefinition> _uncompiled = new ConcurrentHashMap<>();
     private final Instant _atInstant;
 
     public Repository(final FunctionCompilationContext functionCompilationContext, final Instant atInstant) {

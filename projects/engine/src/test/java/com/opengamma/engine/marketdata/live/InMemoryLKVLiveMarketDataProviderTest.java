@@ -75,12 +75,18 @@ public class InMemoryLKVLiveMarketDataProviderTest {
       availabilityProvider.addAvailableData(getTicker("test1"), constructSpecification("test1"));
       availabilityProvider.addAvailableData(getTicker("test2"), constructSpecification("test2"));
       availabilityProvider.addAvailableData(getTicker("test3"), constructSpecification("test3"));
-      final InMemoryLKVLiveMarketDataProvider provider = new InMemoryLKVLiveMarketDataProvider(liveDataClient, availabilityProvider.getAvailabilityFilter(), UserPrincipal.getTestUser());
-      final ValueSpecification test1Specification = provider.getAvailabilityProvider(MarketData.live()).getAvailability(constructTargetSpec("test1"), getTicker("test1"), constructRequirement("test1"));
-      final ValueSpecification test2Specification = provider.getAvailabilityProvider(MarketData.live()).getAvailability(constructTargetSpec("test2"), getTicker("test2"), constructRequirement("test2"));
-      final ValueSpecification test3Specification = provider.getAvailabilityProvider(MarketData.live()).getAvailability(constructTargetSpec("test3"), getTicker("test3"), constructRequirement("test3"));
-      final LiveDataSpecification test1test2FullyQualifiedSpecification = new LiveDataSpecification(liveDataClient.getDefaultNormalizationRuleSetId(), ExternalId.of("fq-test1test2", "test1test2"));
-      final LiveDataSpecification test3FullyQualifiedSpecification = new LiveDataSpecification(liveDataClient.getDefaultNormalizationRuleSetId(), ExternalId.of("fq-test3", "test3"));
+      final InMemoryLKVLiveMarketDataProvider provider =
+          new InMemoryLKVLiveMarketDataProvider(liveDataClient, availabilityProvider.getAvailabilityFilter(), UserPrincipal.getTestUser());
+      final ValueSpecification test1Specification =
+          provider.getAvailabilityProvider(MarketData.live()).getAvailability(constructTargetSpec("test1"), getTicker("test1"), constructRequirement("test1"));
+      final ValueSpecification test2Specification =
+          provider.getAvailabilityProvider(MarketData.live()).getAvailability(constructTargetSpec("test2"), getTicker("test2"), constructRequirement("test2"));
+      final ValueSpecification test3Specification =
+          provider.getAvailabilityProvider(MarketData.live()).getAvailability(constructTargetSpec("test3"), getTicker("test3"), constructRequirement("test3"));
+      final LiveDataSpecification test1test2FullyQualifiedSpecification =
+          new LiveDataSpecification(liveDataClient.getDefaultNormalizationRuleSetId(), ExternalId.of("fq-test1test2", "test1test2"));
+      final LiveDataSpecification test3FullyQualifiedSpecification =
+          new LiveDataSpecification(liveDataClient.getDefaultNormalizationRuleSetId(), ExternalId.of("fq-test3", "test3"));
 
       provider.subscribe(test1Specification);
       provider.subscribe(test2Specification);
@@ -92,9 +98,15 @@ public class InMemoryLKVLiveMarketDataProviderTest {
       assertEquals(0, provider.getActiveValueSpecificationSubscriptionCount());
       assertEquals(3, liveDataClient.getSubscriptionRequests().size());
 
-      final LiveDataSubscriptionResponse test1Response = new LiveDataSubscriptionResponse(LiveMarketDataAvailabilityProvider.getLiveDataSpecification(test1Specification), LiveDataSubscriptionResult.SUCCESS, null, test1test2FullyQualifiedSpecification, "test1test2", null);
-      final LiveDataSubscriptionResponse test2Response = new LiveDataSubscriptionResponse(LiveMarketDataAvailabilityProvider.getLiveDataSpecification(test2Specification), LiveDataSubscriptionResult.SUCCESS, null, test1test2FullyQualifiedSpecification, "test1test2", null);
-      final LiveDataSubscriptionResponse test3Response = new LiveDataSubscriptionResponse(LiveMarketDataAvailabilityProvider.getLiveDataSpecification(test3Specification), LiveDataSubscriptionResult.SUCCESS, null, test3FullyQualifiedSpecification, "test3", null);
+      final LiveDataSubscriptionResponse test1Response =
+          new LiveDataSubscriptionResponse(LiveMarketDataAvailabilityProvider.getLiveDataSpecification(test1Specification),
+              LiveDataSubscriptionResult.SUCCESS, null, test1test2FullyQualifiedSpecification, "test1test2", null);
+      final LiveDataSubscriptionResponse test2Response =
+          new LiveDataSubscriptionResponse(LiveMarketDataAvailabilityProvider.getLiveDataSpecification(test2Specification),
+              LiveDataSubscriptionResult.SUCCESS, null, test1test2FullyQualifiedSpecification, "test1test2", null);
+      final LiveDataSubscriptionResponse test3Response =
+          new LiveDataSubscriptionResponse(LiveMarketDataAvailabilityProvider.getLiveDataSpecification(test3Specification),
+              LiveDataSubscriptionResult.SUCCESS, null, test3FullyQualifiedSpecification, "test3", null);
 
       provider.subscriptionResultsReceived(ImmutableList.of(test1Response, test2Response, test3Response));
 
@@ -181,9 +193,12 @@ public class InMemoryLKVLiveMarketDataProviderTest {
       final FixedMarketDataAvailabilityProvider availabilityProvider = new FixedMarketDataAvailabilityProvider();
       availabilityProvider.addAvailableData(getTicker("test1"), constructSpecification("test1"));
       availabilityProvider.addAvailableData(getTicker("test2"), constructSpecification("test2"));
-      final InMemoryLKVLiveMarketDataProvider provider = new InMemoryLKVLiveMarketDataProvider(liveDataClient, availabilityProvider.getAvailabilityFilter(), UserPrincipal.getTestUser());
-      final ValueSpecification test1Specification = provider.getAvailabilityProvider(MarketData.live()).getAvailability(constructTargetSpec("test1"), getTicker("test1"), constructRequirement("test1"));
-      final ValueSpecification test2Specification = provider.getAvailabilityProvider(MarketData.live()).getAvailability(constructTargetSpec("test2"), getTicker("test2"), constructRequirement("test2"));
+      final InMemoryLKVLiveMarketDataProvider provider =
+          new InMemoryLKVLiveMarketDataProvider(liveDataClient, availabilityProvider.getAvailabilityFilter(), UserPrincipal.getTestUser());
+      final ValueSpecification test1Specification =
+          provider.getAvailabilityProvider(MarketData.live()).getAvailability(constructTargetSpec("test1"), getTicker("test1"), constructRequirement("test1"));
+      final ValueSpecification test2Specification =
+          provider.getAvailabilityProvider(MarketData.live()).getAvailability(constructTargetSpec("test2"), getTicker("test2"), constructRequirement("test2"));
 
       // Make the fully-qualified specification the same as one of the requested specifications
       final LiveDataSpecification test1test2FullyQualifiedSpecification = LiveMarketDataAvailabilityProvider.getLiveDataSpecification(test1Specification);
@@ -195,8 +210,12 @@ public class InMemoryLKVLiveMarketDataProviderTest {
       assertEquals(0, provider.getActiveValueSpecificationSubscriptionCount());
       assertEquals(2, liveDataClient.getSubscriptionRequests().size());
 
-      final LiveDataSubscriptionResponse test1Response = new LiveDataSubscriptionResponse(LiveMarketDataAvailabilityProvider.getLiveDataSpecification(test1Specification), LiveDataSubscriptionResult.SUCCESS, null, test1test2FullyQualifiedSpecification, "test1test2", null);
-      final LiveDataSubscriptionResponse test2Response = new LiveDataSubscriptionResponse(LiveMarketDataAvailabilityProvider.getLiveDataSpecification(test2Specification), LiveDataSubscriptionResult.SUCCESS, null, test1test2FullyQualifiedSpecification, "test1test2", null);
+      final LiveDataSubscriptionResponse test1Response =
+          new LiveDataSubscriptionResponse(LiveMarketDataAvailabilityProvider.getLiveDataSpecification(test1Specification),
+              LiveDataSubscriptionResult.SUCCESS, null, test1test2FullyQualifiedSpecification, "test1test2", null);
+      final LiveDataSubscriptionResponse test2Response =
+          new LiveDataSubscriptionResponse(LiveMarketDataAvailabilityProvider.getLiveDataSpecification(test2Specification),
+              LiveDataSubscriptionResult.SUCCESS, null, test1test2FullyQualifiedSpecification, "test1test2", null);
 
       provider.subscriptionResultsReceived(ImmutableList.of(test1Response, test2Response));
 
@@ -230,7 +249,8 @@ public class InMemoryLKVLiveMarketDataProviderTest {
   @Test
   public void testUnsubscribeWhileNewSubscriptionPending() {
     final TestLiveDataClient liveDataClient = new TestLiveDataClient();
-    final InMemoryLKVLiveMarketDataProvider provider = new InMemoryLKVLiveMarketDataProvider(liveDataClient, mock(MarketDataAvailabilityFilter.class), UserPrincipal.getTestUser());
+    final InMemoryLKVLiveMarketDataProvider provider =
+        new InMemoryLKVLiveMarketDataProvider(liveDataClient, mock(MarketDataAvailabilityFilter.class), UserPrincipal.getTestUser());
     final ValueSpecification primitiveSpecification = createPrimitiveValueSpec("AAPL.");
 
     provider.subscribe(primitiveSpecification);
@@ -247,7 +267,8 @@ public class InMemoryLKVLiveMarketDataProviderTest {
     assertEquals(0, liveDataClient.getCancelRequests().size());
 
     final LiveDataSpecification liveDataSpecification = LiveMarketDataAvailabilityProvider.getLiveDataSpecification(primitiveSpecification);
-    final LiveDataSubscriptionResponse primitiveResponse = new LiveDataSubscriptionResponse(liveDataSpecification, LiveDataSubscriptionResult.SUCCESS, null, liveDataSpecification, "primitive", null);
+    final LiveDataSubscriptionResponse primitiveResponse =
+        new LiveDataSubscriptionResponse(liveDataSpecification, LiveDataSubscriptionResult.SUCCESS, null, liveDataSpecification, "primitive", null);
 
     provider.subscriptionResultReceived(primitiveResponse);
 
@@ -260,7 +281,8 @@ public class InMemoryLKVLiveMarketDataProviderTest {
   @Test
   public void testUnsubscribeWhileNewSubscriptionPendingWithExistingActiveSubscriptionOnSameFullyQualifiedSpecification() {
     final TestLiveDataClient liveDataClient = new TestLiveDataClient();
-    final InMemoryLKVLiveMarketDataProvider provider = new InMemoryLKVLiveMarketDataProvider(liveDataClient, mock(MarketDataAvailabilityFilter.class), UserPrincipal.getTestUser());
+    final InMemoryLKVLiveMarketDataProvider provider =
+        new InMemoryLKVLiveMarketDataProvider(liveDataClient, mock(MarketDataAvailabilityFilter.class), UserPrincipal.getTestUser());
     final ValueSpecification test1Specification = createPrimitiveValueSpec("AAPL.");
 
     provider.subscribe(test1Specification);
@@ -270,7 +292,8 @@ public class InMemoryLKVLiveMarketDataProviderTest {
     assertEquals(1, liveDataClient.getSubscriptionRequests().size());
 
     final LiveDataSpecification test1LiveDataSpecification = LiveMarketDataAvailabilityProvider.getLiveDataSpecification(test1Specification);
-    final LiveDataSubscriptionResponse test1Response = new LiveDataSubscriptionResponse(test1LiveDataSpecification, LiveDataSubscriptionResult.SUCCESS, null, test1LiveDataSpecification, "primitive", null);
+    final LiveDataSubscriptionResponse test1Response =
+        new LiveDataSubscriptionResponse(test1LiveDataSpecification, LiveDataSubscriptionResult.SUCCESS, null, test1LiveDataSpecification, "primitive", null);
     provider.subscriptionResultReceived(test1Response);
 
     assertEquals(1, provider.getRequestedLiveDataSubscriptionCount());
@@ -293,7 +316,8 @@ public class InMemoryLKVLiveMarketDataProviderTest {
 
     // Simulate the test2 subscription request now receiving a response indicating the same fully-qualified specification as test1
     final LiveDataSpecification test2LiveDataSpecification = LiveMarketDataAvailabilityProvider.getLiveDataSpecification(test2Specification);
-    final LiveDataSubscriptionResponse test2Response = new LiveDataSubscriptionResponse(test2LiveDataSpecification, LiveDataSubscriptionResult.SUCCESS, null, test1LiveDataSpecification, "primitive", null);
+    final LiveDataSubscriptionResponse test2Response =
+        new LiveDataSubscriptionResponse(test2LiveDataSpecification, LiveDataSubscriptionResult.SUCCESS, null, test1LiveDataSpecification, "primitive", null);
     provider.subscriptionResultReceived(test2Response);
 
     assertEquals(1, provider.getRequestedLiveDataSubscriptionCount());
@@ -307,7 +331,8 @@ public class InMemoryLKVLiveMarketDataProviderTest {
   @Test
   public void testDuplicateSubscriptionResponseReceived() {
     final TestLiveDataClient liveDataClient = new TestLiveDataClient();
-    final InMemoryLKVLiveMarketDataProvider provider = new InMemoryLKVLiveMarketDataProvider(liveDataClient, mock(MarketDataAvailabilityFilter.class), UserPrincipal.getTestUser());
+    final InMemoryLKVLiveMarketDataProvider provider =
+        new InMemoryLKVLiveMarketDataProvider(liveDataClient, mock(MarketDataAvailabilityFilter.class), UserPrincipal.getTestUser());
     final ValueSpecification primitiveSpecification = createPrimitiveValueSpec("AAPL.");
 
     provider.subscribe(primitiveSpecification);
@@ -317,7 +342,8 @@ public class InMemoryLKVLiveMarketDataProviderTest {
     assertEquals(1, liveDataClient.getSubscriptionRequests().size());
 
     final LiveDataSpecification liveDataSpecification = LiveMarketDataAvailabilityProvider.getLiveDataSpecification(primitiveSpecification);
-    final LiveDataSubscriptionResponse primitiveResponse = new LiveDataSubscriptionResponse(liveDataSpecification, LiveDataSubscriptionResult.SUCCESS, null, liveDataSpecification, "primitive", null);
+    final LiveDataSubscriptionResponse primitiveResponse =
+        new LiveDataSubscriptionResponse(liveDataSpecification, LiveDataSubscriptionResult.SUCCESS, null, liveDataSpecification, "primitive", null);
 
     provider.subscriptionResultReceived(primitiveResponse);
 
@@ -337,7 +363,8 @@ public class InMemoryLKVLiveMarketDataProviderTest {
   @Test
   public void testResubscribe() {
     final TestLiveDataClient liveDataClient = new TestLiveDataClient();
-    final InMemoryLKVLiveMarketDataProvider provider = new InMemoryLKVLiveMarketDataProvider(liveDataClient, mock(MarketDataAvailabilityFilter.class), UserPrincipal.getTestUser());
+    final InMemoryLKVLiveMarketDataProvider provider =
+        new InMemoryLKVLiveMarketDataProvider(liveDataClient, mock(MarketDataAvailabilityFilter.class), UserPrincipal.getTestUser());
     final ValueSpecification primitiveSpecification = createPrimitiveValueSpec("AAPL.");
 
     provider.subscribe(primitiveSpecification);
@@ -347,7 +374,8 @@ public class InMemoryLKVLiveMarketDataProviderTest {
     assertEquals(1, liveDataClient.getSubscriptionRequests().size());
 
     final LiveDataSpecification liveDataSpecification = LiveMarketDataAvailabilityProvider.getLiveDataSpecification(primitiveSpecification);
-    final LiveDataSubscriptionResponse primitiveResponse = new LiveDataSubscriptionResponse(liveDataSpecification, LiveDataSubscriptionResult.SUCCESS, null, liveDataSpecification, "primitive", null);
+    final LiveDataSubscriptionResponse primitiveResponse =
+        new LiveDataSubscriptionResponse(liveDataSpecification, LiveDataSubscriptionResult.SUCCESS, null, liveDataSpecification, "primitive", null);
 
     provider.subscriptionResultReceived(primitiveResponse);
 
@@ -374,7 +402,8 @@ public class InMemoryLKVLiveMarketDataProviderTest {
   @Test
   public void testDifferentSpecsSameLiveData1() {
     final TestLiveDataClient liveDataClient = new TestLiveDataClient();
-    final InMemoryLKVLiveMarketDataProvider provider = new InMemoryLKVLiveMarketDataProvider(liveDataClient, mock(MarketDataAvailabilityFilter.class), UserPrincipal.getTestUser());
+    final InMemoryLKVLiveMarketDataProvider provider =
+        new InMemoryLKVLiveMarketDataProvider(liveDataClient, mock(MarketDataAvailabilityFilter.class), UserPrincipal.getTestUser());
     final ValueSpecification primitive = createPrimitiveValueSpec("AAPL.");
     final ValueSpecification sec = createSecurityValueSpec("AAPL.");
 
@@ -395,7 +424,8 @@ public class InMemoryLKVLiveMarketDataProviderTest {
   @Test
   public void testDifferentSpecsSameLiveData2() {
     final TestLiveDataClient liveDataClient = new TestLiveDataClient();
-    final InMemoryLKVLiveMarketDataProvider provider = new InMemoryLKVLiveMarketDataProvider(liveDataClient, mock(MarketDataAvailabilityFilter.class), UserPrincipal.getTestUser());
+    final InMemoryLKVLiveMarketDataProvider provider =
+        new InMemoryLKVLiveMarketDataProvider(liveDataClient, mock(MarketDataAvailabilityFilter.class), UserPrincipal.getTestUser());
     final ValueSpecification primitive = createPrimitiveValueSpec("AAPL.");
     final ValueSpecification sec = createSecurityValueSpec("AAPL.");
 
@@ -409,7 +439,8 @@ public class InMemoryLKVLiveMarketDataProviderTest {
   @Test
   public void testSubscriptionHasTotalSubscriberCount() {
     final TestLiveDataClient liveDataClient = new TestLiveDataClient();
-    final InMemoryLKVLiveMarketDataProvider provider = new InMemoryLKVLiveMarketDataProvider(liveDataClient, mock(MarketDataAvailabilityFilter.class), UserPrincipal.getTestUser());
+    final InMemoryLKVLiveMarketDataProvider provider =
+        new InMemoryLKVLiveMarketDataProvider(liveDataClient, mock(MarketDataAvailabilityFilter.class), UserPrincipal.getTestUser());
     final ValueSpecification primitive = createPrimitiveValueSpec("AAPL.");
     final ValueSpecification sec = createSecurityValueSpec("AAPL.");
 
@@ -455,9 +486,11 @@ public class InMemoryLKVLiveMarketDataProviderTest {
     // VSpec[Market_All, CTSpec[SECURITY, DbSec~295921~0], {Normalization=[OpenGamma],Function=[LiveMarketData],Id=[ACTIVFEED_TICKER~AAPL.]}]
     final ExternalId externalId = ExternalSchemes.activFeedTickerSecurityId(ticker);
 
-    final ValueProperties properties = ValueProperties.builder().with(ValuePropertyNames.FUNCTION, "LiveMarketData").with("Normalization", "OpenGamma").with("Id", externalId.toString()).get();
+    final ValueProperties properties = ValueProperties.builder().with(ValuePropertyNames.FUNCTION, "LiveMarketData")
+        .with("Normalization", "OpenGamma").with("Id", externalId.toString()).get();
 
-    final ComputationTargetSpecification targetSpecification = new ComputationTargetSpecification(ComputationTargetType.SECURITY, UniqueId.of("DbSec", "1234", "1"));
+    final ComputationTargetSpecification targetSpecification =
+        new ComputationTargetSpecification(ComputationTargetType.SECURITY, UniqueId.of("DbSec", "1234", "1"));
 
     return new ValueSpecification("Market_All", targetSpecification, properties);
   }

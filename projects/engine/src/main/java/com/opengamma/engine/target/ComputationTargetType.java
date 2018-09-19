@@ -63,10 +63,11 @@ public abstract class ComputationTargetType implements Serializable {
   };
 
   /**
-   * A map of classes to the computation target types. This is to optimize the {@link #of(Class)} method for common cases used during target resolution. To modify the map, use a copy-and-replace
-   * approach.
+   * A map of classes to the computation target types. This is to optimize the {@link #of(Class)} method for common cases used during
+   * target resolution. To modify the map, use a copy-and-replace approach.
    */
-  private static final AtomicReference<Map<Class<?>, ComputationTargetType>> CLASS_TYPES = new AtomicReference<Map<Class<?>, ComputationTargetType>>(new HashMap<Class<?>, ComputationTargetType>());
+  private static final AtomicReference<Map<Class<?>, ComputationTargetType>> CLASS_TYPES =
+      new AtomicReference<Map<Class<?>, ComputationTargetType>>(new HashMap<Class<?>, ComputationTargetType>());
 
   /**
    * A full portfolio structure. This will seldom be needed for calculations - the root node is usually more important from an aggregation perspective.
@@ -94,7 +95,8 @@ public abstract class ComputationTargetType implements Serializable {
   public static final ObjectComputationTargetType<Trade> TRADE = defaultObject(Trade.class, "TRADE");
 
   /**
-   * A simple type, for trivial items for which a unique ID (which can just be an arbitrary string triple if scheme, value and version used) that does not need resolving is sufficient.
+   * A simple type, for trivial items for which a unique ID (which can just be an arbitrary string triple if scheme, value and version used)
+   * that does not need resolving is sufficient.
    */
   public static final PrimitiveComputationTargetType<Primitive> PRIMITIVE = defaultPrimitive(Primitive.class, "PRIMITIVE", new PrimitiveResolver());
 
@@ -106,14 +108,14 @@ public abstract class ComputationTargetType implements Serializable {
   /**
    * An unordered currency pair.
    */
-  public static final PrimitiveComputationTargetType<UnorderedCurrencyPair> UNORDERED_CURRENCY_PAIR = defaultPrimitive(UnorderedCurrencyPair.class, "UNORDERED_CURRENCY_PAIR",
-      new UnorderedCurrencyPairResolver());
+  public static final PrimitiveComputationTargetType<UnorderedCurrencyPair> UNORDERED_CURRENCY_PAIR =
+      defaultPrimitive(UnorderedCurrencyPair.class, "UNORDERED_CURRENCY_PAIR", new UnorderedCurrencyPairResolver());
 
   /**
    * A credit curve identifier.
    */
-  public static final PrimitiveComputationTargetType<CreditCurveIdentifier> CREDIT_CURVE_IDENTIFIER = defaultPrimitive(CreditCurveIdentifier.class, "CREDIT_CURVE_IDENTIFIER",
-      new CreditCurveIdentifierResolver());
+  public static final PrimitiveComputationTargetType<CreditCurveIdentifier> CREDIT_CURVE_IDENTIFIER =
+      defaultPrimitive(CreditCurveIdentifier.class, "CREDIT_CURVE_IDENTIFIER", new CreditCurveIdentifierResolver());
 
   /**
    * A wildcard type. This may be used when declaring the target type of a function. It should not be used as part of a target reference
@@ -329,7 +331,8 @@ public abstract class ComputationTargetType implements Serializable {
   public abstract <D, T> T accept(ComputationTargetTypeVisitor<D, T> visitor, D data);
 
   /**
-   * Produces a string representation of the type that includes outer brackets if necessary to maintain the structure of composite types for handling by {@link #parse}.
+   * Produces a string representation of the type that includes outer brackets if necessary to maintain the structure of composite types for
+   *  handling by {@link #parse}.
    *
    * @param sb the string builder to append the string representation to
    */

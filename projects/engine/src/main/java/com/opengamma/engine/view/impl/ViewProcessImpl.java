@@ -68,8 +68,9 @@ public class ViewProcessImpl implements ViewProcessInternal, Lifecycle, ViewProc
   private final ViewProcessorImpl _viewProcessor;
 
   /**
-   * Interval (in seconds) at which to check permissions for market data. Permissions are checked on view compilation. Then, when each cycle is run, a check is made to see if a further permission
-   * check should be undertaken. A zero value indicates that no additional permission checks should be done.
+   * Interval (in seconds) at which to check permissions for market data. Permissions are checked on view compilation. Then, when each cycle
+   * is run, a check is made to see if a further permission check should be undertaken. A zero value indicates that no additional
+   * permission checks should be done.
    */
   private final int _permissionCheckInterval;
 
@@ -79,13 +80,15 @@ public class ViewProcessImpl implements ViewProcessInternal, Lifecycle, ViewProc
   private final AtomicReference<Instant> _lastPermissionCheck = new AtomicReference<>();
 
   /**
-   * Indicates whether a user is entitled to the market data. This is maintained across cycles and is updated each time the entitlement check is made on the market data server.
+   * Indicates whether a user is entitled to the market data. This is maintained across cycles and is updated each time the entitlement check is made
+   * on the market data server.
    */
   private final Map<UserPrincipal, Boolean> _userPermissions = new ConcurrentHashMap<>();
 
   /**
-   * Manages access to critical regions of the process with respect to its observable behavior. Note that the use of {@link Semaphore} rather than, for example, {@link ReentrantLock} allows one thread
-   * to acquire the lock and another thread to release it as part of the same sequence of operations. This could be important for {@link #suspend()} and {@link #resume()}.
+   * Manages access to critical regions of the process with respect to its observable behavior. Note that the use of {@link Semaphore} rather than, for
+   * example, {@link ReentrantLock} allows one thread to acquire the lock and another thread to release it as part of the same sequence of operations.
+   * This could be important for {@link #suspend()} and {@link #resume()}.
    */
   private final Semaphore _processLock = new Semaphore(1);
 
@@ -95,8 +98,8 @@ public class ViewProcessImpl implements ViewProcessInternal, Lifecycle, ViewProc
   private final Lock _internalLock = new ReentrantLock();
 
   /**
-   * Key is the listener to which events will be dispatched. Value is true iff that listener requires delta calculations to be performed. When there are no listeners remaining that require delta
-   * calculations, they will stop being computed to save CPU and heap.
+   * Key is the listener to which events will be dispatched. Value is true iff that listener requires delta calculations to be performed. When there are
+   * no listeners remaining that require delta calculations, they will stop being computed to save CPU and heap.
    */
   private final Map<ViewResultListener, Boolean> _listeners = new HashMap<>();
   private volatile int _internalListenerCount; // only safe if used within lock
@@ -135,20 +138,21 @@ public class ViewProcessImpl implements ViewProcessInternal, Lifecycle, ViewProc
   // END TEMPORARY CODE
 
   /**
-   * Constructs an instance. Note that if runPersistently is true, the view process will start calculating immediately rather than waiting for a listener to attach. It will continue running regardless
-   * of the number of attached listeners.
+   * Constructs an instance. Note that if runPersistently is true, the view process will start calculating immediately rather than waiting for a listener
+   * to attach. It will continue running regardless of the number of attached listeners.
    *
-   * @param viewDefinitionId the identifier of the view definition, not null. If this is versioned the process will be locked to the specific instance. If this is an object identifier at "latest" then
-   *          changes to the view definition will be watched for and the process updated when the view definition changes.
+   * @param viewDefinitionId the identifier of the view definition, not null. If this is versioned the process will be locked to the specific instance.
+   * If this is an object identifier at "latest" then changes to the view definition will be watched for and the process updated when the view definition
+   * changes.
    * @param executionOptions the view execution options, not null
    * @param viewProcessContext the process context, not null
    * @param viewProcessor the parent view processor, not null
    * @param permissionCheckInterval the interval (in seconds) at which to check permissions for market data
-   * @param runPersistently if true, then the process will start running and continue running, regardless of the number of attached listeners @throws DataNotFoundException if the view definition
-   *          identifier is invalid
+   * @param runPersistently if true, then the process will start running and continue running, regardless of the number of attached listeners
+   * @throws DataNotFoundException if the view definition identifier is invalid
    */
-  public ViewProcessImpl(final UniqueId viewDefinitionId, final ViewExecutionOptions executionOptions, final ViewProcessContext viewProcessContext, final ViewProcessorImpl viewProcessor,
-      final int permissionCheckInterval, final boolean runPersistently) {
+  public ViewProcessImpl(final UniqueId viewDefinitionId, final ViewExecutionOptions executionOptions, final ViewProcessContext viewProcessContext,
+      final ViewProcessorImpl viewProcessor, final int permissionCheckInterval, final boolean runPersistently) {
     _viewDefinitionId = ArgumentChecker.notNull(viewDefinitionId, "viewDefinitionId");
     _executionOptions = ArgumentChecker.notNull(executionOptions, "executionOptions");
     _viewProcessContext = ArgumentChecker.notNull(viewProcessContext, "viewProcessContext");
@@ -481,7 +485,8 @@ public class ViewProcessImpl implements ViewProcessInternal, Lifecycle, ViewProc
     }
   }
 
-  private boolean userIsPermitted(final boolean isPermissionCheckDue, final UserPrincipal user, final MarketDataPermissionProvider permissionProvider, final Set<ValueSpecification> marketDataRequirements) {
+  private boolean userIsPermitted(final boolean isPermissionCheckDue, final UserPrincipal user, final MarketDataPermissionProvider permissionProvider,
+      final Set<ValueSpecification> marketDataRequirements) {
 
     if (user == null) {
       // No permissions checking if we're not logging in
@@ -603,8 +608,8 @@ public class ViewProcessImpl implements ViewProcessInternal, Lifecycle, ViewProc
   }
 
   /**
-   * Sets the current view process worker. This is the component responsible for coordinating the execution of the process, for example this might be a single local thread, a pool of local threads or
-   * a proxy to remotely executing code.
+   * Sets the current view process worker. This is the component responsible for coordinating the execution of the process, for example this
+   * might be a single local thread, a pool of local threads or a proxy to remotely executing code.
    * <p>
    * External visibility for testing.
    *
@@ -704,7 +709,8 @@ public class ViewProcessImpl implements ViewProcessInternal, Lifecycle, ViewProc
           if (hasMarketDataPermissions) {
             listener.cycleCompleted(latestResult, null);
           } else {
-            listener.cycleExecutionFailed(latestResult.getViewCycleExecutionOptions(), new Exception("User: " + user + " does not have permission for data in this view"));
+            listener.cycleExecutionFailed(latestResult.getViewCycleExecutionOptions(), new Exception("User: " + user
+                + " does not have permission for data in this view"));
           }
         }
       } catch (final Exception e) {
@@ -733,8 +739,9 @@ public class ViewProcessImpl implements ViewProcessInternal, Lifecycle, ViewProc
   }
 
   /**
-   * Removes a listener from the view process. Removal of the last listener generating execution demand will cause the process to stop. We allow instances extending InternalViewResultListener to be
-   * ignored for the purposes of reference counting. This allows e.g. JMX MBeans to track view events without affecting execution.
+   * Removes a listener from the view process. Removal of the last listener generating execution demand will cause the process to stop.
+   * We allow instances extending InternalViewResultListener to be ignored for the purposes of reference counting. This allows e.g.
+   * JMX MBeans to track view events without affecting execution.
    * <p>
    * The method operates with set semantics, so duplicate notifications for the same listener have no effect.
    *
@@ -839,8 +846,8 @@ public class ViewProcessImpl implements ViewProcessInternal, Lifecycle, ViewProc
   }
 
   /**
-   * Instructs the background computation job to finish. The background job might actually terminate asynchronously, but any outstanding result will be discarded. A replacement background computation
-   * job may be started immediately.
+   * Instructs the background computation job to finish. The background job might actually terminate asynchronously, but any outstanding
+   * result will be discarded. A replacement background computation job may be started immediately.
    */
   private void stopComputationJobIfRequired() {
     // Caller MUST hold the semaphore

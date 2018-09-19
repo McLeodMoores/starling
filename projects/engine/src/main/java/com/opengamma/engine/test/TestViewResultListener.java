@@ -134,7 +134,8 @@ public class TestViewResultListener extends AbstractTestResultListener implement
     assertCycleCompleted(timeoutMillis, null, null);
   }
 
-  public void assertCycleCompleted(final long timeoutMillis, final ViewComputationResultModel expectedFullResult, final ViewDeltaResultModel expectedDeltaResult) {
+  public void assertCycleCompleted(final long timeoutMillis, final ViewComputationResultModel expectedFullResult,
+      final ViewDeltaResultModel expectedDeltaResult) {
     CycleCompletedCall call;
     try {
       call = getCycleCompleted(timeoutMillis);

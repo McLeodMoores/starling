@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.exec.plan;
@@ -44,7 +44,7 @@ public class MultipleNodeExecutionPlannerTest {
 
   /**
    * Test graph:
-   * 
+   *
    * <pre>
    *      N0  N1  N4
    *        \ | /  |
@@ -52,7 +52,7 @@ public class MultipleNodeExecutionPlannerTest {
    *          |    |
    *           MDS
    * </pre>
-   * 
+   *
    * If not partitioned:
    * <ul>
    * <li>v20, v21, v24, v34 to go into private cache
@@ -65,11 +65,14 @@ public class MultipleNodeExecutionPlannerTest {
   private final ValueSpecification _testValue21 = ValueSpecification.of("21", ComputationTargetType.PRIMITIVE, UniqueId.of("Test", "2"), _properties);
   private final ValueSpecification _testValue24 = ValueSpecification.of("24", ComputationTargetType.PRIMITIVE, UniqueId.of("Test", "2"), _properties);
   private final ValueSpecification _testValue34 = ValueSpecification.of("34", ComputationTargetType.PRIMITIVE, UniqueId.of("Test", "3"), _properties);
-  private final ValueRequirement _testRequirement0x = new ValueRequirement("0x", ComputationTargetType.PRIMITIVE, UniqueId.of("Test", "0"), ValueProperties.none());
+  private final ValueRequirement _testRequirement0x =
+      new ValueRequirement("0x", ComputationTargetType.PRIMITIVE, UniqueId.of("Test", "0"), ValueProperties.none());
   private final ValueSpecification _testValue0x = ValueSpecification.of("0x", ComputationTargetType.PRIMITIVE, UniqueId.of("test", "0"), _properties);
-  private final ValueRequirement _testRequirement1x = new ValueRequirement("1x", ComputationTargetType.PRIMITIVE, UniqueId.of("Test", "1"), ValueProperties.none());
+  private final ValueRequirement _testRequirement1x =
+      new ValueRequirement("1x", ComputationTargetType.PRIMITIVE, UniqueId.of("Test", "1"), ValueProperties.none());
   private final ValueSpecification _testValue1x = ValueSpecification.of("1x", ComputationTargetType.PRIMITIVE, UniqueId.of("test", "1"), _properties);
-  private final ValueRequirement _testRequirement4x = new ValueRequirement("4x", ComputationTargetType.PRIMITIVE, UniqueId.of("Test", "4"), ValueProperties.none());
+  private final ValueRequirement _testRequirement4x =
+      new ValueRequirement("4x", ComputationTargetType.PRIMITIVE, UniqueId.of("Test", "4"), ValueProperties.none());
   private final ValueSpecification _testValue4x = ValueSpecification.of("4x", ComputationTargetType.PRIMITIVE, UniqueId.of("test", "4"), _properties);
   private final ValueSpecification _testValuex2 = ValueSpecification.of("x2", ComputationTargetType.PRIMITIVE, UniqueId.of("test", "X"), _properties);
   private final ValueSpecification _testValuex3 = ValueSpecification.of("x3", ComputationTargetType.PRIMITIVE, UniqueId.of("test", "X"), _properties);
@@ -147,10 +150,10 @@ public class MultipleNodeExecutionPlannerTest {
     if (job.getItems().size() != outputs.length) {
       return false;
     }
-    for (CalculationJobItem item : job.getItems()) {
+    for (final CalculationJobItem item : job.getItems()) {
       boolean match = false;
-      for (ValueSpecification output : outputs) {
-        for (ValueSpecification jobOutput : item.getOutputs()) {
+      for (final ValueSpecification output : outputs) {
+        for (final ValueSpecification jobOutput : item.getOutputs()) {
           if (output.equals(jobOutput)) {
             match = true;
             break;
@@ -165,7 +168,7 @@ public class MultipleNodeExecutionPlannerTest {
   }
 
   /**
-   * No changes to graph
+   * No changes to graph.
    */
   public void testMax1() {
     final MultipleNodeExecutionPlanner planner = createPlanner(1, 1, 0);
@@ -177,7 +180,7 @@ public class MultipleNodeExecutionPlannerTest {
     }
     assertEquals(plan.getLeafJobs().size(), 2);
     int mask = 0;
-    for (PlannedJob job : plan.getLeafJobs()) {
+    for (final PlannedJob job : plan.getLeafJobs()) {
       assertEquals(job.getInputJobCount(), 0);
       CacheSelectHint hint = job.getCacheSelectHint();
       if (matchJob(job, _testValue20)) {
@@ -188,7 +191,7 @@ public class MultipleNodeExecutionPlannerTest {
         assertFalse(hint.isPrivateValue(_testValue21));
         assertFalse(hint.isPrivateValue(_testValue24));
         assertFalse(hint.isPrivateValue(_testValuex2));
-        for (PlannedJob job2 : job.getDependents()) {
+        for (final PlannedJob job2 : job.getDependents()) {
           hint = job2.getCacheSelectHint();
           assertNull(job2.getDependents());
           assertNull(job2.getTails());
@@ -218,7 +221,7 @@ public class MultipleNodeExecutionPlannerTest {
         assertNull(job.getTails());
         assertFalse(hint.isPrivateValue(_testValue34));
         assertFalse(hint.isPrivateValue(_testValuex3));
-        PlannedJob job2 = job.getDependents()[0];
+        final PlannedJob job2 = job.getDependents()[0];
         hint = job2.getCacheSelectHint();
         assertEquals(job2.getInputJobCount(), 2);
         assertNull(job2.getDependents());
@@ -254,7 +257,7 @@ public class MultipleNodeExecutionPlannerTest {
     assertEquals(job.getDependents().length, 2);
     assertNull(job.getTails());
     int mask = 0;
-    for (PlannedJob job2 : job.getDependents()) {
+    for (final PlannedJob job2 : job.getDependents()) {
       assertEquals(job2.getInputJobCount(), 1);
       assertNull(job2.getDependents());
       assertNull(job2.getTails());
@@ -289,7 +292,7 @@ public class MultipleNodeExecutionPlannerTest {
       plan.print();
     }
     assertEquals(plan.getLeafJobs().size(), 1);
-    PlannedJob job = plan.getLeafJobs().iterator().next();
+    final PlannedJob job = plan.getLeafJobs().iterator().next();
     assertEquals(job.getInputJobCount(), 0);
     assertTrue(matchJob(job, _testValue20));
     assertEquals(job.getDependents().length, 1);
@@ -299,7 +302,7 @@ public class MultipleNodeExecutionPlannerTest {
     assertFalse(hint.isPrivateValue(_testValue20));
     assertFalse(hint.isPrivateValue(_testValue21));
     assertFalse(hint.isPrivateValue(_testValue24));
-    PlannedJob job2 = job.getDependents()[0];
+    final PlannedJob job2 = job.getDependents()[0];
     assertNull(job2.getTails());
     assertEquals(job2.getInputJobCount(), 1);
     assertTrue(matchJob(job2, _testValue0x, _testValue1x, _testValue34, _testValue4x));
@@ -379,7 +382,7 @@ public class MultipleNodeExecutionPlannerTest {
     assertEquals(job.getTails().length, 2);
     int mask = 0;
     final CacheSelectHint jobHint = job.getCacheSelectHint();
-    for (PlannedJob tail : job.getTails()) {
+    for (final PlannedJob tail : job.getTails()) {
       assertEquals(tail.getInputJobCount(), 1);
       assertNull(tail.getDependents());
       assertNull(tail.getTails());
@@ -405,7 +408,7 @@ public class MultipleNodeExecutionPlannerTest {
         fail();
       }
     }
-    assertTrue((mask == 3) || (mask == 5) || (mask == 6));
+    assertTrue(mask == 3 || mask == 5 || mask == 6);
   }
 
   /**
@@ -425,7 +428,7 @@ public class MultipleNodeExecutionPlannerTest {
     assertEquals(job.getTails().length, 3);
     int mask = 0;
     final CacheSelectHint jobHint = job.getCacheSelectHint();
-    for (PlannedJob tail : job.getTails()) {
+    for (final PlannedJob tail : job.getTails()) {
       assertEquals(tail.getInputJobCount(), 1);
       assertNull(tail.getDependents());
       assertNull(tail.getTails());
@@ -456,12 +459,12 @@ public class MultipleNodeExecutionPlannerTest {
 
   private void gatherTailColours(final PlannedJob job, final Set<PlannedJob> colouredJobs) {
     if (job.getTails() != null) {
-      for (PlannedJob tail : job.getTails()) {
+      for (final PlannedJob tail : job.getTails()) {
         gatherTailColours(tail, colouredJobs);
       }
     }
     if (job.getDependents() != null) {
-      for (PlannedJob dependent : job.getDependents()) {
+      for (final PlannedJob dependent : job.getDependents()) {
         gatherColours(dependent, colouredJobs);
       }
     }
@@ -474,8 +477,8 @@ public class MultipleNodeExecutionPlannerTest {
   }
 
   private int gatherColours(final GraphExecutionPlan plan) {
-    final Set<PlannedJob> jobs = new HashSet<PlannedJob>();
-    for (PlannedJob job : plan.getLeafJobs()) {
+    final Set<PlannedJob> jobs = new HashSet<>();
+    for (final PlannedJob job : plan.getLeafJobs()) {
       gatherColours(job, jobs);
     }
     return jobs.size();

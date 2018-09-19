@@ -66,7 +66,9 @@ public class DomainMarketDataAvailabilityFilterTest {
   public void testGetAvailability_externalIdBundle_nomatch() {
     final MarketDataAvailabilityFilter availability = create();
     final ComputationTargetSpecification targetSpec = new ComputationTargetSpecification(ComputationTargetType.SECURITY, UniqueId.of("Security", "Foo"));
-    final Object target = new ExternalBundleIdentifiablePrimitive(UniqueId.of("Security", "Foo"), ExternalIdBundle.of(ExternalId.of("BAD1", "Foo"), ExternalId.of("BAD2", "Foo")));
+    final Object target =
+        new ExternalBundleIdentifiablePrimitive(UniqueId.of("Security", "Foo"), ExternalIdBundle.of(ExternalId.of("BAD1", "Foo"),
+            ExternalId.of("BAD2", "Foo")));
     ValueRequirement desiredValue = new ValueRequirement("Cow", targetSpec);
     assertFalse(availability.isAvailable(targetSpec, target, desiredValue));
     desiredValue = new ValueRequirement("Foo", targetSpec);
@@ -76,7 +78,8 @@ public class DomainMarketDataAvailabilityFilterTest {
   public void testGetAvailability_externalIdBundle_match() {
     final MarketDataAvailabilityFilter availability = create();
     final ComputationTargetSpecification targetSpec = new ComputationTargetSpecification(ComputationTargetType.SECURITY, UniqueId.of("Security", "Foo"));
-    final Object target = new ExternalBundleIdentifiablePrimitive(UniqueId.of("Security", "Foo"), ExternalIdBundle.of(ExternalId.of("Ticker", "X"), ExternalId.of("BAD2", "Foo"),
+    final Object target =
+        new ExternalBundleIdentifiablePrimitive(UniqueId.of("Security", "Foo"), ExternalIdBundle.of(ExternalId.of("Ticker", "X"), ExternalId.of("BAD2", "Foo"),
         ExternalId.of("Ticker", "Y")));
     ValueRequirement desiredValue = new ValueRequirement("Cow", targetSpec);
     assertFalse(availability.isAvailable(targetSpec, target, desiredValue));

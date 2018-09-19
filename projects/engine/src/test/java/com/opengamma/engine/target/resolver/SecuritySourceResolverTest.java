@@ -24,15 +24,15 @@ import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Test the {@link SecuritySource} based resolvers
+ * Test the {@link SecuritySource} based resolvers.
  */
 @Test(groups = TestGroup.UNIT)
 public class SecuritySourceResolverTest {
 
-  private final InMemorySecuritySource SECURITY_SOURCE = new InMemorySecuritySource();
-  private final SimpleSecurity SECURITY = new SimpleSecurity("TEST");
-  private final UniqueId BAD_ID = UniqueId.of("Bad", "Id");
-  private final ExternalId GOOD_ID = ExternalId.of("Good", "Id");
+  private static final InMemorySecuritySource SECURITY_SOURCE = new InMemorySecuritySource();
+  private static final SimpleSecurity SECURITY = new SimpleSecurity("TEST");
+  private static final UniqueId BAD_ID = UniqueId.of("Bad", "Id");
+  private static final ExternalId GOOD_ID = ExternalId.of("Good", "Id");
 
   public SecuritySourceResolverTest() {
     SECURITY.addExternalId(GOOD_ID);
@@ -43,42 +43,44 @@ public class SecuritySourceResolverTest {
     return new SecuritySourceResolver(SECURITY_SOURCE);
   }
 
-  public void object_resolved() {
+  public void objectResolved() {
     assertEquals(resolver().resolveObject(SECURITY.getUniqueId(), VersionCorrection.LATEST), SECURITY);
   }
 
-  public void object_unresolved() {
+  public void objectUnresolved() {
     assertEquals(resolver().resolveObject(BAD_ID, VersionCorrection.LATEST), null);
   }
 
-  public void identifier_resolved() {
+  public void identifierResolved() {
     assertEquals(resolver().resolveExternalId(ExternalIdBundle.of(GOOD_ID), VersionCorrection.LATEST), SECURITY.getUniqueId());
   }
 
-  public void identifier_unresolved() {
+  public void identifierUnresolved() {
     assertEquals(resolver().resolveExternalId(ExternalIdBundle.EMPTY, VersionCorrection.LATEST), null);
   }
 
-  public void identifier_multiple() {
-    final Set<ExternalIdBundle> request = new HashSet<ExternalIdBundle>();
+  public void identifierMultiple() {
+    final Set<ExternalIdBundle> request = new HashSet<>();
     request.add(ExternalIdBundle.of(GOOD_ID));
     request.add(ExternalIdBundle.EMPTY);
-    assertEquals(resolver().resolveExternalIds(request, VersionCorrection.LATEST), Collections.singletonMap(ExternalIdBundle.of(GOOD_ID), SECURITY.getUniqueId()));
+    assertEquals(resolver().resolveExternalIds(request, VersionCorrection.LATEST), Collections.singletonMap(ExternalIdBundle.of(GOOD_ID),
+        SECURITY.getUniqueId()));
   }
 
-  public void objectid_resolved() {
+  public void objectIdResolved() {
     assertEquals(resolver().resolveObjectId(SECURITY.getUniqueId().getObjectId(), VersionCorrection.LATEST), SECURITY.getUniqueId());
   }
 
-  public void objectid_unresolved() {
+  public void objectIdUnresolved() {
     assertEquals(resolver().resolveObjectId(BAD_ID.getObjectId(), VersionCorrection.LATEST), null);
   }
 
-  public void objectid_multiple() {
-    final Set<ObjectId> request = new HashSet<ObjectId>();
+  public void objectIdMultiple() {
+    final Set<ObjectId> request = new HashSet<>();
     request.add(SECURITY.getUniqueId().getObjectId());
     request.add(BAD_ID.getObjectId());
-    assertEquals(resolver().resolveObjectIds(request, VersionCorrection.LATEST), Collections.singletonMap(SECURITY.getUniqueId().getObjectId(), SECURITY.getUniqueId()));
+    assertEquals(resolver().resolveObjectIds(request, VersionCorrection.LATEST),
+        Collections.singletonMap(SECURITY.getUniqueId().getObjectId(), SECURITY.getUniqueId()));
   }
 
 }

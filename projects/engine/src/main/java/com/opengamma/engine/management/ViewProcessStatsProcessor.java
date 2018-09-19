@@ -66,7 +66,8 @@ public class ViewProcessStatsProcessor {
         public void preOrderOperation(final PortfolioNode parentNode, final Position position) {
           final UniqueId positionId = position.getUniqueId().toLatest();
           // then construct a chained target spec pointing at a specific position.
-          final ComputationTargetSpecification breadcrumbTargetSpec = ComputationTargetSpecification.of(parentNode).containing(ComputationTargetType.POSITION, positionId);
+          final ComputationTargetSpecification breadcrumbTargetSpec =
+              ComputationTargetSpecification.of(parentNode).containing(ComputationTargetType.POSITION, positionId);
           final ComputationTargetSpecification targetSpec = ComputationTargetSpecification.of(position);
           final Map<Pair<String, ValueProperties>, ComputedValueResult> values = calculationResult.getValues(targetSpec);
           final String securityType = position.getSecurity().getSecurityType();

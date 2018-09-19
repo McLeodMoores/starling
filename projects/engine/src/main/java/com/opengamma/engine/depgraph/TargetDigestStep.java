@@ -25,8 +25,8 @@ import com.opengamma.util.tuple.Triple;
 /**
  * Calculates the target digest and considers existing nodes for a pattern to use for direct application.
  * <p>
- * Note that this step will produce unexpected dependency graphs if functions in the repository have applicability rules or behaviors that differ for two targets with the same digest. Care should be
- * taken when enabling this algorithm.
+ * Note that this step will produce unexpected dependency graphs if functions in the repository have applicability rules or behaviors that differ for
+ * two targets with the same digest. Care should be taken when enabling this algorithm.
  */
 /* package */final class TargetDigestStep extends FunctionIterationStep.IterationBaseStep {
 
@@ -67,8 +67,8 @@ import com.opengamma.util.tuple.Triple;
               LOGGER.debug("Function {} cannot be applied to {}", functionDef, target);
               continue;
             }
-            Collection<ValueSpecification> results = functionDef.getResults(context.getCompilationContext(), adjustedTarget);
-            if ((results == null) || results.isEmpty()) {
+            final Collection<ValueSpecification> results = functionDef.getResults(context.getCompilationContext(), adjustedTarget);
+            if (results == null || results.isEmpty()) {
               LOGGER.debug("Function {} applied to {} produced no results", functionDef, target);
               continue;
             }
@@ -83,7 +83,7 @@ import com.opengamma.util.tuple.Triple;
             ValueRequirement composedRequirement = null;
             ValueSpecification matchedResult = null;
             ValueSpecification resolvedOutput = null;
-            for (ValueSpecification result : results) {
+            for (final ValueSpecification result : results) {
               // value names are interned
               if (requirement.getValueName() == result.getValueName()) {
                 if (composedConstraints.isSatisfiedBy(result.getProperties())) {
@@ -123,7 +123,7 @@ import com.opengamma.util.tuple.Triple;
       PROFILER_WASTE.tick(_timeSpent);
     }
     if (LOGGER.isDebugEnabled()) {
-      LOGGER.debug("No more digest resolutions for {} ({}us wasted)", requirement, (double) _timeSpent / 1e3);
+      LOGGER.debug("No more digest resolutions for {} ({}us wasted)", requirement, _timeSpent / 1e3);
     }
     GetFunctionsStep.getFunctions(target, context, this);
     return true;
@@ -135,13 +135,15 @@ import com.opengamma.util.tuple.Triple;
   }
 
   @Override
-  protected ValueSpecification getResolvedOutputs(final GraphBuildingContext context, final Set<ValueSpecification> newOutputValues, final Set<ValueSpecification> resolvedOutputValues) {
+  protected ValueSpecification getResolvedOutputs(final GraphBuildingContext context, final Set<ValueSpecification> newOutputValues,
+      final Set<ValueSpecification> resolvedOutputValues) {
     final ValueRequirement desiredValue = getDesiredValue();
     final ValueProperties originalConstraints = getValueRequirement().getConstraints();
     ValueSpecification resolvedOutput = null;
-    for (ValueSpecification outputValue : newOutputValues) {
-      if ((resolvedOutput == null) && (desiredValue.getValueName() == outputValue.getValueName()) && desiredValue.getConstraints().isSatisfiedBy(outputValue.getProperties()) &&
-          originalConstraints.isSatisfiedBy(outputValue.getProperties())) {
+    for (final ValueSpecification outputValue : newOutputValues) {
+      if (resolvedOutput == null && desiredValue.getValueName() == outputValue.getValueName()
+          && desiredValue.getConstraints().isSatisfiedBy(outputValue.getProperties())
+          && originalConstraints.isSatisfiedBy(outputValue.getProperties())) {
         resolvedOutput = context.simplifyType(outputValue.compose(desiredValue));
         LOGGER.debug("Raw output {} resolves to {}", outputValue, resolvedOutput);
         resolvedOutputValues.add(resolvedOutput);

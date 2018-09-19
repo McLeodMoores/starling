@@ -56,12 +56,12 @@ public class ComputationTargetResultsTest {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ComputationTargetResultsTest.class);
 
-  private final Position POSITION = new SimplePosition(UniqueId.of("PosUID", "0"), BigDecimal.ONE, ExternalId.of("Sec", "0"));
-  private final Security SECURITY = new SimpleSecurity(UniqueId.of("SecUID", "0"), ExternalId.of("Sec", "0").toBundle(), "TEST", "Foo");
+  private static final Position POSITION = new SimplePosition(UniqueId.of("PosUID", "0"), BigDecimal.ONE, ExternalId.of("Sec", "0"));
+  private static final Security SECURITY = new SimpleSecurity(UniqueId.of("SecUID", "0"), ExternalId.of("Sec", "0").toBundle(), "TEST", "Foo");
 
   private static class MockFunction extends AbstractFunction.NonCompiled {
 
-    private static int _identifier = 0;
+    private static int s_identifier = 0;
 
     private final ComputationTargetType _type;
     private final String _resultValue;
@@ -71,7 +71,7 @@ public class ComputationTargetResultsTest {
 
     public MockFunction(final ComputationTargetType type, final String resultValue, final ValueProperties resultProperties, final String requirementValue,
         final ValueProperties requirementConstraints) {
-      setUniqueId(String.valueOf(_identifier++));
+      setUniqueId(String.valueOf(s_identifier++));
       _type = type;
       _resultValue = resultValue;
       _resultProperties = resultProperties;
@@ -121,7 +121,8 @@ public class ComputationTargetResultsTest {
     }
 
     @Override
-    public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+    public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+        final Map<ValueSpecification, ValueRequirement> inputs) {
       final ValueSpecification input = inputs.keySet().iterator().next();
       return Collections.singleton(new ValueSpecification(super._resultValue, target.toSpecification(), input.getProperties()));
     }
@@ -212,7 +213,8 @@ public class ComputationTargetResultsTest {
       final Collection<ValueSpecification> values = ctr.getMaximalResults(target);
       LOGGER.debug("testMaximalResults_basicRepo = {}", values);
       final Set<String> results = getResults(values);
-      assertEquals(results, ImmutableSet.of("A3", "A2", "A1", "B3", "B2", "B1", "C3", "D3", "D2", "E3", "F3", "G3", "G2", "G1", "H3", "H2", "H1", "I3", "J3", "J2", "K3", "L3"));
+      assertEquals(results,
+          ImmutableSet.of("A3", "A2", "A1", "B3", "B2", "B1", "C3", "D3", "D2", "E3", "F3", "G3", "G2", "G1", "H3", "H2", "H1", "I3", "J3", "J2", "K3", "L3"));
     } finally {
       TestLifecycle.end();
     }

@@ -16,8 +16,8 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.util.async.BlockingOperation;
 
 /**
- * Indicates that market data is available if any of the underlyings claim that it is. If none of the underlying claim availability, but at least one throws a {@link MarketDataNotSatisfiableException}
- * the market data is considered missing. Otherwise it is not available.
+ * Indicates that market data is available if any of the underlyings claim that it is. If none of the underlying claim availability,
+ * but at least one throws a {@link MarketDataNotSatisfiableException} the market data is considered missing. Otherwise it is not available.
  *
  * @param <T> the component type
  */
@@ -35,7 +35,8 @@ public abstract class UnionMarketDataAvailability<T> {
     }
 
     @Override
-    protected Object getAvailabilityImpl(final ComputationTargetSpecification targetSpec, final Object target, final ValueRequirement desiredValue, final MarketDataAvailabilityFilter underlying) {
+    protected Object getAvailabilityImpl(final ComputationTargetSpecification targetSpec, final Object target, final ValueRequirement desiredValue,
+        final MarketDataAvailabilityFilter underlying) {
       return underlying.isAvailable(targetSpec, target, desiredValue) ? Boolean.TRUE : null;
     }
 
@@ -66,7 +67,8 @@ public abstract class UnionMarketDataAvailability<T> {
     }
 
     @Override
-    protected Object getAvailabilityImpl(final ComputationTargetSpecification targetSpec, final Object target, final ValueRequirement desiredValue, final MarketDataAvailabilityProvider underlying) {
+    protected Object getAvailabilityImpl(final ComputationTargetSpecification targetSpec, final Object target, final ValueRequirement desiredValue,
+        final MarketDataAvailabilityProvider underlying) {
       return underlying.getAvailability(targetSpec, target, desiredValue);
     }
 

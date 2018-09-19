@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.resolver;
@@ -32,7 +32,7 @@ public class SimpleResolutionRuleTransform implements ResolutionRuleTransform {
   /**
    * The function transformations.
    */
-  private final Map<String, Action> _functionTransformations = new HashMap<String, Action>();
+  private final Map<String, Action> _functionTransformations = new HashMap<>();
 
   /**
    * Gets the map of registered transformations.
@@ -40,7 +40,7 @@ public class SimpleResolutionRuleTransform implements ResolutionRuleTransform {
    * The map is keyed by short function name, with the value being the the action to be applied.
    * If multiple actions are applied, the function will be advertised by multiple new rules in
    * place of the original. If a function is omitted from the set, the original rule is preserved.
-   * 
+   *
    * @return the set of transformations, not null
    */
   public Map<String, Action> getFunctionTransformations() {
@@ -50,7 +50,7 @@ public class SimpleResolutionRuleTransform implements ResolutionRuleTransform {
   //-------------------------------------------------------------------------
   /**
    * Suppress any rules using the given function name.
-   * 
+   *
    * @param shortFunctionName  the function to suppress, not null
    */
   public void suppressRule(final String shortFunctionName) {
@@ -59,13 +59,14 @@ public class SimpleResolutionRuleTransform implements ResolutionRuleTransform {
 
   /**
    * Adjust the rules using the given function name.
-   * 
+   *
    * @param shortFunctionName  the function to adjust, not null
    * @param parameters  the function parameters, null to use the original rule default
    * @param priorityAdjustment  the priority shift, null to use the original rule default
    * @param computationTargetFilter  the computation target filter, null to use the original rule default
    */
-  public void adjustRule(final String shortFunctionName, final FunctionParameters parameters, final ComputationTargetFilter computationTargetFilter, final Integer priorityAdjustment) {
+  public void adjustRule(final String shortFunctionName, final FunctionParameters parameters, final ComputationTargetFilter computationTargetFilter,
+      final Integer priorityAdjustment) {
     registerAction(shortFunctionName, new Adjust(parameters, computationTargetFilter, priorityAdjustment));
   }
 
@@ -82,7 +83,7 @@ public class SimpleResolutionRuleTransform implements ResolutionRuleTransform {
   @Override
   public Collection<ResolutionRule> transform(final Collection<ResolutionRule> rules) {
     final Collection<ResolutionRule> result = Lists.newArrayListWithCapacity(rules.size());
-    for (ResolutionRule rule : rules) {
+    for (final ResolutionRule rule : rules) {
       final String function = rule.getParameterizedFunction().getFunction().getFunctionDefinition().getShortName();
       final Action action = _functionTransformations.get(function);
       if (action == null) {
@@ -121,7 +122,7 @@ public class SimpleResolutionRuleTransform implements ResolutionRuleTransform {
 
   //-------------------------------------------------------------------------
   /**
-   * Describes an action as part of a rule's transformation. 
+   * Describes an action as part of a rule's transformation.
    */
   public abstract static class Action {
 
@@ -153,7 +154,7 @@ public class SimpleResolutionRuleTransform implements ResolutionRuleTransform {
 
     @Override
     public boolean equals(final Object o) {
-      return (o == this) || (o instanceof DontUse);
+      return o == this || o instanceof DontUse;
     }
 
     @Override
@@ -174,9 +175,9 @@ public class SimpleResolutionRuleTransform implements ResolutionRuleTransform {
    */
   public static final class Adjust extends Action {
 
-    private Integer _priorityAdjustment;
-    private FunctionParameters _parameters;
-    private ComputationTargetFilter _computationTargetFilter;
+    private final Integer _priorityAdjustment;
+    private final FunctionParameters _parameters;
+    private final ComputationTargetFilter _computationTargetFilter;
 
     private Adjust(final FunctionParameters parameters, final ComputationTargetFilter filter, final Integer priorityAdjustment) {
       _priorityAdjustment = priorityAdjustment;
@@ -274,7 +275,7 @@ public class SimpleResolutionRuleTransform implements ResolutionRuleTransform {
    */
   public static final class MultipleAdjust extends Action {
 
-    private final List<Adjust> _adjusts = new ArrayList<Adjust>();
+    private final List<Adjust> _adjusts = new ArrayList<>();
 
     private MultipleAdjust() {
     }
@@ -295,7 +296,7 @@ public class SimpleResolutionRuleTransform implements ResolutionRuleTransform {
 
     @Override
     protected void apply(final ResolutionRule originalRule, final Collection<ResolutionRule> output) {
-      for (Action adjust : _adjusts) {
+      for (final Action adjust : _adjusts) {
         adjust.apply(originalRule, output);
       }
     }
@@ -312,7 +313,7 @@ public class SimpleResolutionRuleTransform implements ResolutionRuleTransform {
       if (_adjusts.size() != other._adjusts.size()) {
         return false;
       }
-      for (Action adjust : _adjusts) {
+      for (final Action adjust : _adjusts) {
         if (!other._adjusts.contains(adjust)) {
           return false;
         }

@@ -29,9 +29,10 @@ import com.opengamma.util.PoolExecutor;
 /**
  * Standard implementation of a {@link ComputationTargetSpecificationResolver}.
  * <p>
- * Note that this is a fairly cheap operation; looking up the resolver and calling that. It should not normally be necessary to provide any caching on top of a specification resolver - if a
- * requirement is being resolved regularly for the same version/correction then there is probably something wrong elsewhere. If a resolver implementation is costly (for example querying an underlying
- * data source) then that is where the caching should lie.
+ * Note that this is a fairly cheap operation; looking up the resolver and calling that. It should not normally be necessary to provide any
+ * caching on top of a specification resolver - if a requirement is being resolved regularly for the same version/correction then there is
+ * probably something wrong elsewhere. If a resolver implementation is costly (for example querying an underlying data source) then that is
+ * where the caching should lie.
  */
 public class DefaultComputationTargetSpecificationResolver implements ComputationTargetSpecificationResolver {
 
@@ -156,7 +157,8 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
     }
 
     @Override
-    public ComputationTargetSpecification resolveObjectId(final ComputationTargetReference parent, final ObjectId identifier, final VersionCorrection versionCorrection) {
+    public ComputationTargetSpecification resolveObjectId(final ComputationTargetReference parent, final ObjectId identifier,
+        final VersionCorrection versionCorrection) {
       final ComputationTargetSpecification a = _a.resolveObjectId(parent, identifier, versionCorrection);
       if (a != null) {
         return a;
@@ -183,7 +185,8 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
 
   }
 
-  private static final Function2<SpecificationResolver, SpecificationResolver, SpecificationResolver> FOLD = new Function2<SpecificationResolver, SpecificationResolver, SpecificationResolver>() {
+  private static final Function2<SpecificationResolver, SpecificationResolver, SpecificationResolver> FOLD =
+      new Function2<SpecificationResolver, SpecificationResolver, SpecificationResolver>() {
     @Override
     public SpecificationResolver execute(final SpecificationResolver a, final SpecificationResolver b) {
       return new FoldedSpecificationResolver(a, b);
@@ -202,7 +205,8 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
   }
 
   @Override
-  public Map<ComputationTargetReference, ComputationTargetSpecification> getTargetSpecifications(final Set<ComputationTargetReference> references, final VersionCorrection versionCorrection) {
+  public Map<ComputationTargetReference, ComputationTargetSpecification> getTargetSpecifications(final Set<ComputationTargetReference> references,
+      final VersionCorrection versionCorrection) {
     return atVersionCorrection(versionCorrection).getTargetSpecifications(references);
   }
 
@@ -315,7 +319,8 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
           reference.accept(visitor);
         }
         final PoolExecutor.Service<Void> jobs = createService();
-        // TODO: sort the target types - some resolvers will cause caching behavior that will help others out (e.g. resolving Portfolio OID will cache all component Position OID/UIDs).
+        // TODO: sort the target types - some resolvers will cause caching behavior that will help others out (e.g. resolving Portfolio OID
+        // will cache all component Position OID/UIDs).
         // TODO: should there be a threshold for single vs bulk - e.g. are two calls in succession quicker than the map/set operations?
         for (final Map.Entry<ComputationTargetType, Set<ComputationTargetRequirement>> entry : requirementByType.entrySet()) {
           switch (entry.getValue().size()) {
@@ -374,7 +379,8 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
                   @Override
                   public void run() {
                     final ComputationTargetSpecification specification = entry.getValue().iterator().next();
-                    final ComputationTargetSpecification resolved = _resolve.get(entry.getKey()).resolveObjectId(specification.getParent(), specification.getUniqueId().getObjectId(),
+                    final ComputationTargetSpecification resolved =
+                        _resolve.get(entry.getKey()).resolveObjectId(specification.getParent(), specification.getUniqueId().getObjectId(),
                         versionCorrection);
                     if (resolved != null) {
                       result.put(specification, resolved);
@@ -383,7 +389,8 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
                 });
               } else {
                 final ComputationTargetSpecification specification = entry.getValue().iterator().next();
-                final ComputationTargetSpecification resolved = _resolve.get(entry.getKey()).resolveObjectId(specification.getParent(), specification.getUniqueId().getObjectId(), versionCorrection);
+                final ComputationTargetSpecification resolved =
+                    _resolve.get(entry.getKey()).resolveObjectId(specification.getParent(), specification.getUniqueId().getObjectId(), versionCorrection);
                 if (resolved != null) {
                   result.put(specification, resolved);
                 }

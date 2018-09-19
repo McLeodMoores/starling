@@ -51,8 +51,8 @@ public class SequencePartitioningViewProcessWorker implements ViewProcessWorker,
   private int _spawnedWorkers;
   private int _trigger;
 
-  public SequencePartitioningViewProcessWorker(final ViewProcessWorkerFactory delegate, final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions,
-      final ViewDefinition viewDefinition, final int partition, final int maxWorkers) {
+  public SequencePartitioningViewProcessWorker(final ViewProcessWorkerFactory delegate, final ViewProcessWorkerContext context,
+      final ViewExecutionOptions executionOptions, final ViewDefinition viewDefinition, final int partition, final int maxWorkers) {
     _delegate = delegate;
     _context = context;
     _executionFlags = EnumSet.copyOf(executionOptions.getFlags());
@@ -122,7 +122,8 @@ public class SequencePartitioningViewProcessWorker implements ViewProcessWorker,
       final int firstCycle = _spawnedCycleCount;
       _spawnedCycleCount += partition.size();
       LOGGER.info("Spawning worker {} for {} cycles {} - {}", new Object[] {++_spawnedWorkerCount, getWorkerContext(), firstCycle, _spawnedCycleCount });
-      final ViewProcessWorker delegate = getDelegate().createWorker(this, getExecutionOptions(new ArbitraryViewCycleExecutionSequence(partition)), getViewDefinition());
+      final ViewProcessWorker delegate =
+          getDelegate().createWorker(this, getExecutionOptions(new ArbitraryViewCycleExecutionSequence(partition)), getViewDefinition());
       _workers.add(delegate);
       _spawnedWorkers++;
     }

@@ -19,8 +19,8 @@ import com.opengamma.engine.view.ViewProcessor;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * An in-memory implementation of {@link FunctionRepository}. This can either be used as-is through a factory which scans available functions, or it can be used as a cache on top of a more costly
- * function repository.
+ * An in-memory implementation of {@link FunctionRepository}. This can either be used as-is through a factory which scans available functions,
+ * or it can be used as a cache on top of a more costly function repository.
  */
 public class InMemoryFunctionRepository implements FunctionRepository {
 

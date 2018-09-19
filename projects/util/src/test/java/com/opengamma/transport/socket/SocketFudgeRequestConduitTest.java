@@ -130,14 +130,14 @@ public class SocketFudgeRequestConduitTest {
   }
 
   @Test(invocationCount = 5, successPercentage = 19)
-  public void parallelSendTest_single() throws Exception {
+  public void parallelSendTestSingle() throws Exception {
     final AtomicInteger concurrencyMax = new AtomicInteger(0);
     parallelSendTest(null, concurrencyMax);
     assertEquals(1, concurrencyMax.get());
   }
 
   @Test(invocationCount = 5, successPercentage = 19)
-  public void parallelSendTest_multi() throws Exception {
+  public void parallelSendTestMulti() throws Exception {
     final AtomicInteger concurrencyMax = new AtomicInteger(0);
     parallelSendTest(Executors.newCachedThreadPool(), concurrencyMax);
     assertEquals(2, concurrencyMax.get());

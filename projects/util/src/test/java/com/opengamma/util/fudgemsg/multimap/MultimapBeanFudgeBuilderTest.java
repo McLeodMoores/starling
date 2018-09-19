@@ -24,38 +24,38 @@ import com.opengamma.util.test.TestGroup;
 public class MultimapBeanFudgeBuilderTest extends AbstractFudgeBuilderTestCase {
 
   public void test_empty_simple_multimap() {
-    SimpleMultimapMockBean bean = SimpleMultimapMockBean.builder()
+    final SimpleMultimapMockBean bean = SimpleMultimapMockBean.builder()
         .simpleMultimap(ArrayListMultimap.<String, String>create())
         .build();
     assertThat(cycleObject(SimpleMultimapMockBean.class, bean), is(bean));
   }
 
   public void test_non_empty_simple_multimap() {
-    Multimap<String, String> mmap = HashMultimap.create();
+    final Multimap<String, String> mmap = HashMultimap.create();
     mmap.put("one", "1");
     mmap.put("one", "42");
     mmap.put("two", "2");
 
-    SimpleMultimapMockBean bean = SimpleMultimapMockBean.builder()
+    final SimpleMultimapMockBean bean = SimpleMultimapMockBean.builder()
         .simpleMultimap(mmap)
         .build();
     assertThat(cycleObject(SimpleMultimapMockBean.class, bean), is(bean));
   }
 
   public void test_empty_list_multimap() {
-    ListMultimapMockBean bean = ListMultimapMockBean.builder()
+    final ListMultimapMockBean bean = ListMultimapMockBean.builder()
         .listMultimap(ArrayListMultimap.<String, String>create())
         .build();
     assertThat(cycleObject(ListMultimapMockBean.class, bean), is(bean));
   }
 
   public void test_non_empty_list_multimap() {
-    ListMultimap<String, String> mmap = ArrayListMultimap.create();
+    final ListMultimap<String, String> mmap = ArrayListMultimap.create();
     mmap.put("one", "1");
     mmap.put("one", "42");
     mmap.put("two", "2");
 
-    ListMultimapMockBean bean = ListMultimapMockBean.builder()
+    final ListMultimapMockBean bean = ListMultimapMockBean.builder()
         .listMultimap(mmap)
         .build();
     assertThat(cycleObject(ListMultimapMockBean.class, bean), is(bean));
@@ -71,23 +71,23 @@ public class MultimapBeanFudgeBuilderTest extends AbstractFudgeBuilderTestCase {
    * be possible to enable this test.
    */
   @Test(enabled = false)
-  public void test_combined_multimap() {
-    ListMultimap<String, String> lmmap = ArrayListMultimap.create();
+  public void testCombinedMultimap() {
+    final ListMultimap<String, String> lmmap = ArrayListMultimap.create();
     lmmap.put("one", "1");
     lmmap.put("one", "42");
     lmmap.put("two", "2");
 
-    HashMultimap<String, String> hmmap = HashMultimap.create();
+    final HashMultimap<String, String> hmmap = HashMultimap.create();
     hmmap.put("three", "100");
     hmmap.put("three", "4200");
     hmmap.put("four", "200");
 
-    HashMultimap<String, String> mmap = HashMultimap.create();
+    final HashMultimap<String, String> mmap = HashMultimap.create();
     mmap.put("seven", "-13");
     mmap.put("seven", "-423");
     mmap.put("eight", "-24");
 
-    CombinedMultimapMockBean bean = CombinedMultimapMockBean.builder()
+    final CombinedMultimapMockBean bean = CombinedMultimapMockBean.builder()
         .listMultimap(lmmap)
         .setMultimap(hmmap)
         .noTypeMultimap(mmap)

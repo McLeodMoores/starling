@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.target.logger;
@@ -66,7 +66,8 @@ public class LoggedResolutionPortfolioTest {
     final PortfolioNode returnedRoot = logged.getRootNode();
     assertTrue(returnedRoot instanceof LoggedResolutionPortfolioNode);
     assertEquals(returnedRoot.getUniqueId(), UniqueId.of("Foo", "Bar", "Cow"));
-    //Mockito.verify(logger).log(new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, UniqueId.of("Foo", "Bar")), UniqueId.of("Foo", "Bar", "Cow"));
+    //Mockito.verify(logger).log(new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE,
+    //UniqueId.of("Foo", "Bar")), UniqueId.of("Foo", "Bar", "Cow"));
     Mockito.verifyNoMoreInteractions(logger);
   }
 

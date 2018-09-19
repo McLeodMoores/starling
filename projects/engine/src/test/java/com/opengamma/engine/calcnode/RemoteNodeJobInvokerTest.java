@@ -51,7 +51,8 @@ public class RemoteNodeJobInvokerTest {
       final JobDispatcher jobDispatcher = new JobDispatcher();
       final Ready initialMessage = new Ready(1, "Test");
       final DirectFudgeConnection conduit = new DirectFudgeConnection(FUDGE_CONTEXT);
-      final RemoteNodeJobInvoker jobInvoker = new RemoteNodeJobInvoker(executor, initialMessage, conduit.getEnd1(), new InMemoryIdentifierMap(), new FunctionCosts(),
+      final RemoteNodeJobInvoker jobInvoker =
+          new RemoteNodeJobInvoker(executor, initialMessage, conduit.getEnd1(), new InMemoryIdentifierMap(), new FunctionCosts(),
           new DummyFunctionBlacklistQuery(), new DummyFunctionBlacklistMaintainer());
       jobDispatcher.registerJobInvoker(jobInvoker);
       final TestJobResultReceiver resultReceiver = new TestJobResultReceiver();
@@ -68,7 +69,8 @@ public class RemoteNodeJobInvokerTest {
           final Execute job = (Execute) message;
           final Result result = new Result(JobDispatcherTest.createTestJobResult(job.getJob().getSpecification(), 0, "Test"));
           final FudgeSerializer scontext = new FudgeSerializer(fudgeContext);
-          remoteNode.getFudgeMessageSender().send(FudgeSerializer.addClassHeader(scontext.objectToFudgeMsg(result), result.getClass(), RemoteCalcNodeMessage.class));
+          remoteNode.getFudgeMessageSender().send(FudgeSerializer.addClassHeader(scontext.objectToFudgeMsg(result),
+              result.getClass(), RemoteCalcNodeMessage.class));
         }
       });
       jobDispatcher.dispatchJob(JobDispatcherTest.createTestJob(), resultReceiver);
@@ -84,8 +86,8 @@ public class RemoteNodeJobInvokerTest {
       final JobDispatcher jobDispatcher = new JobDispatcher();
       final Ready initialMessage = new Ready(3, "Test");
       final DirectFudgeConnection conduit = new DirectFudgeConnection(FUDGE_CONTEXT);
-      final RemoteNodeJobInvoker jobInvoker = new RemoteNodeJobInvoker(executor, initialMessage, conduit.getEnd1(), new InMemoryIdentifierMap(), new FunctionCosts(),
-          new DummyFunctionBlacklistQuery(), new DummyFunctionBlacklistMaintainer());
+      final RemoteNodeJobInvoker jobInvoker = new RemoteNodeJobInvoker(executor, initialMessage, conduit.getEnd1(),
+          new InMemoryIdentifierMap(), new FunctionCosts(), new DummyFunctionBlacklistQuery(), new DummyFunctionBlacklistMaintainer());
       jobDispatcher.registerJobInvoker(jobInvoker);
       final FudgeConnection remoteNode = conduit.getEnd2();
       final Random rnd = new Random();
@@ -103,7 +105,8 @@ public class RemoteNodeJobInvokerTest {
           }
           final Result result = new Result(JobDispatcherTest.createTestJobResult(job.getJob().getSpecification(), 0, "Test"));
           final FudgeSerializer scontext = new FudgeSerializer(fudgeContext);
-          remoteNode.getFudgeMessageSender().send(FudgeSerializer.addClassHeader(scontext.objectToFudgeMsg(result), result.getClass(), RemoteCalcNodeMessage.class));
+          remoteNode.getFudgeMessageSender().send(FudgeSerializer.addClassHeader(scontext.objectToFudgeMsg(result), result.getClass(),
+              RemoteCalcNodeMessage.class));
         }
       });
       final TestJobResultReceiver[] resultReceivers = new TestJobResultReceiver[100];

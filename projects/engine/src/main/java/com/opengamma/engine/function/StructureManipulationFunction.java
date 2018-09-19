@@ -23,8 +23,8 @@ import com.opengamma.engine.value.ValueSpecification;
 /**
  * A function that takes in a structure (e.g. yield curve, volatility surface) and produces a modified version of the original as output.
  * <p>
- * The manipulation to be performed is specified by an implementation of the {@link StructureManipulator} interface. The particular instance to be used will be obtained as a FunctionParameter via the
- * executionContext passed in through the execute method.
+ * The manipulation to be performed is specified by an implementation of the {@link StructureManipulator} interface. The particular instance to be used
+ * will be obtained as a FunctionParameter via the executionContext passed in through the execute method.
  */
 public final class StructureManipulationFunction extends IntrinsicFunction {
 
@@ -53,9 +53,9 @@ public final class StructureManipulationFunction extends IntrinsicFunction {
   }
 
   /**
-   * Execute the function, performing a manipulation of the structured data which will come in via the inputs parameter. The manipulation to actually undertake will be defined by a
-   * {@link StructureManipulator} instance passed in through the executionContext. If no manipulator is available the inputs are passed through unaffected (apart from a change to the value
-   * specification to ensure they are still valid).
+   * Execute the function, performing a manipulation of the structured data which will come in via the inputs parameter. The manipulation to actually
+   * undertake will be defined by a {@link StructureManipulator} instance passed in through the executionContext. If no manipulator is available the
+   * inputs are passed through unaffected (apart from a change to the value specification to ensure they are still valid).
    *
    * @param executionContext execution context for the function, via which the parameters can be obtained
    * @param inputs the inputs to the function
@@ -64,7 +64,8 @@ public final class StructureManipulationFunction extends IntrinsicFunction {
    * @return a set of computed values corresponding to the desired values
    */
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final StructureManipulator<Object> structureManipulator;
     final FunctionParameters parameters = executionContext.getFunctionParameters();
     if (parameters instanceof SimpleFunctionParameters) {

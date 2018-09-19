@@ -33,7 +33,8 @@ public class ComputationTargetResolverUtilsTest {
   public void testCreateResolvedTarget_noRewrite() {
     // No re-write
     final ComputationTarget target = ComputationTargetResolverUtils.createResolvedTarget(
-        new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, NODE.getUniqueId()).containing(ComputationTargetType.POSITION, POSITION.getUniqueId()), POSITION);
+        new ComputationTargetSpecification(
+            ComputationTargetType.PORTFOLIO_NODE, NODE.getUniqueId()).containing(ComputationTargetType.POSITION, POSITION.getUniqueId()), POSITION);
     assertEquals(target.getType(), ComputationTargetType.PORTFOLIO_NODE.containing(ComputationTargetType.of(SimplePosition.class)));
     assertEquals(target.getContextSpecification(), ComputationTargetSpecification.of(NODE));
     assertSame(target.getValue(), POSITION);

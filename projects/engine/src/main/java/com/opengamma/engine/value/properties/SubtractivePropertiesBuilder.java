@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.value.properties;
@@ -23,7 +23,7 @@ public class SubtractivePropertiesBuilder extends ValueProperties.Builder {
 
   /**
    * Creates an instance with initial missing properties.
-   * 
+   *
    * @param properties the properties absent from this builder. This will not be modified - a copy will be taken where needed
    */
   public SubtractivePropertiesBuilder(final Set<String> properties) {
@@ -34,13 +34,13 @@ public class SubtractivePropertiesBuilder extends ValueProperties.Builder {
   /**
    * Creates an instance as a deep copy of another.
    * <p>
-   * A full copy is performed rather than taking an unowned reference. The latter approach works when referencing the immutable content of an existing value property set, but not when the owner is a
-   * builder as that may continue to modify the structure.
-   * 
+   * A full copy is performed rather than taking an unowned reference. The latter approach works when referencing the immutable content of an
+   * existing value property set, but not when the owner is a builder as that may continue to modify the structure.
+   *
    * @param copyFrom the builder to copy from
    */
   private SubtractivePropertiesBuilder(final SubtractivePropertiesBuilder copyFrom) {
-    _properties = new HashSet<String>(copyFrom._properties);
+    _properties = new HashSet<>(copyFrom._properties);
     _copied = true;
   }
 
@@ -71,7 +71,7 @@ public class SubtractivePropertiesBuilder extends ValueProperties.Builder {
   @Override
   public Builder withAny(final String propertyName) {
     if (!_copied) {
-      _properties = new HashSet<String>(_properties);
+      _properties = new HashSet<>(_properties);
       _copied = true;
     }
     _properties.remove(propertyName);
@@ -92,7 +92,7 @@ public class SubtractivePropertiesBuilder extends ValueProperties.Builder {
   @Override
   public Builder withoutAny(final String propertyName) {
     if (!_copied) {
-      _properties = new HashSet<String>(_properties);
+      _properties = new HashSet<>(_properties);
       _copied = true;
     }
     _properties.add(propertyName);

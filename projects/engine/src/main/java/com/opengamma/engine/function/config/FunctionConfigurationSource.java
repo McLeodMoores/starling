@@ -33,15 +33,17 @@ public interface FunctionConfigurationSource extends ChangeProvider {
   /**
    * Returns a function configuration bundle.
    * <p>
-   * A system will typically run with a consistent configuration. To allow for atomic update behavior, and changes to configuration during calculation cycles, a "version" instant is provided. When
-   * working on jobs within a cycle, all remote nodes will request configuration with the same version stamp that the view process marked those job with. This means that all nodes will be working with
-   * the same function repository regardless of configuration changes that may have taken place during that cycle. The next cycle will use jobs that are tagged with an updated version so the results
-   * appear coherent.
+   * A system will typically run with a consistent configuration. To allow for atomic update behavior, and changes to configuration during
+   * calculation cycles, a "version" instant is provided. When working on jobs within a cycle, all remote nodes will request configuration
+   * with the same version stamp that the view process marked those job with. This means that all nodes will be working with the same function
+   * repository regardless of configuration changes that may have taken place during that cycle. The next cycle will use jobs that are
+   * tagged with an updated version so the results appear coherent.
    * <p>
-   * Note that version 2.2 and earlier of OpenGamma did not have the {@code version} parameter on this method. If migrating implementation code from an earlier version, the value of the parameter
-   * should be ignored as the previous contract should have been to return the same configuration with each call. If migrating calling code from an earlier version, using {@link Instant#now} is
-   * reasonable, but the exact equivalent should be to use the time when the OpenGamma instance was started.
-   * 
+   * Note that version 2.2 and earlier of OpenGamma did not have the {@code version} parameter on this method. If migrating implementation
+   * code from an earlier version, the value of the parameter should be ignored as the previous contract should have been to return the same
+   * configuration with each call. If migrating calling code from an earlier version, using {@link Instant#now} is reasonable, but the exact
+   * equivalent should be to use the time when the OpenGamma instance was started.
+   *
    * @param version the version timestamp, not null
    * @return the configuration, not null
    */

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.fudgemsg;
@@ -29,13 +29,15 @@ public class ComputationTargetFudgeBuilderTest extends AbstractFudgeBuilderTestC
   }
 
   public void testBasic() {
-    assertEncodeDecodeCycle(ComputationTarget.class, new ComputationTarget(ComputationTargetType.POSITION, new SimplePosition(UniqueId.of("Pos", "Foo"), BigDecimal.ONE, ExternalId.of("Sec", "Bar"))));
+    assertEncodeDecodeCycle(ComputationTarget.class,
+        new ComputationTarget(ComputationTargetType.POSITION, new SimplePosition(UniqueId.of("Pos", "Foo"), BigDecimal.ONE, ExternalId.of("Sec", "Bar"))));
   }
 
   public void testNested_1() {
     assertEncodeDecodeCycle(ComputationTarget.class,
         new ComputationTarget(
-            new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, UniqueId.of("Prt", "Foo")).containing(ComputationTargetType.POSITION, UniqueId.of("Pos", "Foo")),
+            new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, UniqueId.of("Prt", "Foo"))
+                .containing(ComputationTargetType.POSITION, UniqueId.of("Pos", "Foo")),
             new SimplePosition(UniqueId.of("Pos", "Foo"), BigDecimal.ONE, ExternalId.of("Sec", "Bar"))));
   }
 
@@ -43,8 +45,9 @@ public class ComputationTargetFudgeBuilderTest extends AbstractFudgeBuilderTestC
     assertEncodeDecodeCycle(
         ComputationTarget.class,
         new ComputationTarget(
-            new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, UniqueId.of("Prt", "Foo")).containing(ComputationTargetType.PORTFOLIO_NODE, UniqueId.of("Prt", "Bar")).containing(
-                ComputationTargetType.POSITION, UniqueId.of("Pos", "Foo")),
+          new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, UniqueId.of("Prt", "Foo"))
+              .containing(ComputationTargetType.PORTFOLIO_NODE, UniqueId.of("Prt", "Bar"))
+              .containing(ComputationTargetType.POSITION, UniqueId.of("Pos", "Foo")),
             new SimplePosition(UniqueId.of("Pos", "Foo"), BigDecimal.ONE, ExternalId.of("Sec", "Bar"))));
   }
 

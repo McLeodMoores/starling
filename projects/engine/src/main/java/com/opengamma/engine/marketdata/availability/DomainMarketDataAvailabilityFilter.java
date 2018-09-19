@@ -17,8 +17,8 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Implements {@link MarketDataAvailabilityFilter} by providing an indication of whether an item of market data is <i>likely</i> to be available based on the scheme of its external identifiers and
- * other factors.
+ * Implements {@link MarketDataAvailabilityFilter} by providing an indication of whether an item of market data is <i>likely</i> to be available
+ * based on the scheme of its external identifiers and other factors.
  */
 public class DomainMarketDataAvailabilityFilter extends ValueNameMarketDataAvailabilityFilter {
 
@@ -29,7 +29,7 @@ public class DomainMarketDataAvailabilityFilter extends ValueNameMarketDataAvail
 
   /**
    * Creates a provider.
-   * 
+   *
    * @param acceptableSchemes the acceptable schemes, not null
    * @param validMarketDataRequirementNames the valid market data requirement names, not null
    */

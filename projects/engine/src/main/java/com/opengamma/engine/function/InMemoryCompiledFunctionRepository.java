@@ -24,7 +24,8 @@ public class InMemoryCompiledFunctionRepository implements CompiledFunctionRepos
 
   private static final FunctionInvoker MISSING = new FunctionInvoker() {
     @Override
-    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+        final Set<ValueRequirement> desiredValues) {
       return null;
     }
 

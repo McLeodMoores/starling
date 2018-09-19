@@ -41,17 +41,20 @@ public class MarketDataAvailabilityProviderTest {
     }
 
     @Override
-    protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ExternalId identifier, final ValueRequirement desiredValue) {
+    protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ExternalId identifier,
+        final ValueRequirement desiredValue) {
       return new ValueSpecification(desiredValue.getValueName(), targetSpec, ValueProperties.with(ValuePropertyNames.FUNCTION, "externalId").get());
     }
 
     @Override
-    protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ExternalIdBundle identifiers, final ValueRequirement desiredValue) {
+    protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ExternalIdBundle identifiers,
+        final ValueRequirement desiredValue) {
       return new ValueSpecification(desiredValue.getValueName(), targetSpec, ValueProperties.with(ValuePropertyNames.FUNCTION, "externalIdBundle").get());
     }
 
     @Override
-    protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final UniqueId identifier, final ValueRequirement desiredValue) {
+    protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final UniqueId identifier,
+        final ValueRequirement desiredValue) {
       return new ValueSpecification(desiredValue.getValueName(), targetSpec, ValueProperties.with(ValuePropertyNames.FUNCTION, "uniqueId").get());
     }
 
@@ -111,7 +114,8 @@ public class MarketDataAvailabilityProviderTest {
     final MarketDataAvailabilityProvider provider = new MarketDataAvailabilityProvider() {
 
       @Override
-      public ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final Object target, final ValueRequirement desiredValue) throws MarketDataNotSatisfiableException {
+      public ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final Object target,
+          final ValueRequirement desiredValue) throws MarketDataNotSatisfiableException {
         return new ValueSpecification(desiredValue.getValueName(), targetSpec, ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get());
       }
 
@@ -129,9 +133,12 @@ public class MarketDataAvailabilityProviderTest {
     final AbstractMarketDataAvailabilityProvider availability = AbstractMarketDataAvailabilityProvider.of(provider);
     assertSame(availability.getAvailabilityFilter(), filter);
     final ValueRequirement desiredValue = new ValueRequirement("Foo", ComputationTargetSpecification.NULL);
-    assertEquals(availability.getAvailability(ComputationTargetSpecification.NULL, (ExternalId) null, desiredValue).getProperty(ValuePropertyNames.FUNCTION), "Mock");
-    assertEquals(availability.getAvailability(ComputationTargetSpecification.NULL, (ExternalIdBundle) null, desiredValue).getProperty(ValuePropertyNames.FUNCTION), "Mock");
-    assertEquals(availability.getAvailability(ComputationTargetSpecification.NULL, (UniqueId) null, desiredValue).getProperty(ValuePropertyNames.FUNCTION), "Mock");
+    assertEquals(availability.getAvailability(ComputationTargetSpecification.NULL,
+        (ExternalId) null, desiredValue).getProperty(ValuePropertyNames.FUNCTION), "Mock");
+    assertEquals(availability.getAvailability(ComputationTargetSpecification.NULL,
+        (ExternalIdBundle) null, desiredValue).getProperty(ValuePropertyNames.FUNCTION), "Mock");
+    assertEquals(availability.getAvailability(ComputationTargetSpecification.NULL, (
+        UniqueId) null, desiredValue).getProperty(ValuePropertyNames.FUNCTION), "Mock");
     assertEquals(availability.getAvailability(ComputationTargetSpecification.NULL, desiredValue).getProperty(ValuePropertyNames.FUNCTION), "Mock");
   }
 

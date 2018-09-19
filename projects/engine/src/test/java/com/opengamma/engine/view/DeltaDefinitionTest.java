@@ -59,6 +59,7 @@ public class DeltaDefinitionTest {
   }
 
   private ValueSpecification createValueSpecification(final String valueName) {
-    return new ValueSpecification(valueName, ComputationTargetSpecification.of(UniqueId.of("foo", "bar")), ValueProperties.with(ValuePropertyNames.FUNCTION, "mockFunctionId").get());
+    return new ValueSpecification(valueName, ComputationTargetSpecification.of(UniqueId.of("foo", "bar")),
+        ValueProperties.with(ValuePropertyNames.FUNCTION, "mockFunctionId").get());
   }
 }

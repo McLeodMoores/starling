@@ -21,7 +21,8 @@ public class DefaultViewPermissionProvider implements ViewPermissionProvider {
   }
 
   @Override
-  public boolean canAccessComputationResults(final UserPrincipal user, final CompiledViewDefinition compiledViewDefinition, final boolean hasMarketDataPermissions) {
+  public boolean canAccessComputationResults(final UserPrincipal user, final CompiledViewDefinition compiledViewDefinition,
+      final boolean hasMarketDataPermissions) {
     return hasMarketDataPermissions;
   }
 
