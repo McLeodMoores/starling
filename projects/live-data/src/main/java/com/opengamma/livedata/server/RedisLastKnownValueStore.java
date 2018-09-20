@@ -110,7 +110,7 @@ public class RedisLastKnownValueStore implements LastKnownValueStore {
       } catch (final Exception e) {
         LOGGER.error("Unable to write fields to Redis : " + _jedisKey, e);
       } finally {
-        getJedisPool().returnResource(jedis);
+        getJedisPool().close();
       }
     }
     _inMemoryStore.liveDataReceived(fieldValues);
@@ -172,7 +172,7 @@ public class RedisLastKnownValueStore implements LastKnownValueStore {
         throw new OpenGammaRuntimeException("Unable to load state from underlying Redis instance on " + _jedisKey, e);
       }
     } finally {
-      getJedisPool().returnResource(jedis);
+      getJedisPool().close();
     }
   }
 

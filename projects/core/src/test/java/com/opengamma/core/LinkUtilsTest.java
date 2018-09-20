@@ -79,7 +79,7 @@ public class LinkUtilsTest {
 
   //-------------------------------------------------------------------------
   /**
-   * Tests that the best name wen the link is empty.
+   * Tests that the best name when the link is empty.
    */
   @Test
   public void testBestNameEmpty() {

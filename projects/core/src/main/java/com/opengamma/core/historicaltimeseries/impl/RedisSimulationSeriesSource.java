@@ -134,10 +134,10 @@ public class RedisSimulationSeriesSource extends NonVersionedRedisHistoricalTime
       if (!keys.isEmpty()) {
         jedis.del(keys.toArray(new String[0]));
       }
-      getJedisPool().returnResource(jedis);
+      getJedisPool().close();
     } catch (final Exception e) {
       LOGGER.error("Unable to clear execution date " + simulationExecutionDate, e);
-      getJedisPool().returnBrokenResource(jedis);
+      getJedisPool().close();
       throw new OpenGammaRuntimeException("Unable to clear execution date " + simulationExecutionDate, e);
     }
   }

@@ -96,7 +96,7 @@ public class ServerSocketFudgeConnectionReceiver extends AbstractServerSocketPro
   }
 
   @Override
-  public void stop() {
+  public synchronized void stop() {
     super.stop();
     _connectionJobs.terminateAll();
   }

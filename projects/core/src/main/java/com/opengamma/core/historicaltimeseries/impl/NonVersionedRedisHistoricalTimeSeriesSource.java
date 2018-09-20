@@ -168,10 +168,9 @@ public class NonVersionedRedisHistoricalTimeSeriesSource implements HistoricalTi
           jedis.zrem(redisHtsDaysKey, dates.inverse().keySet().toArray(new String[dates.size()]));
         }
         jedis.zadd(redisHtsDaysKey, dates.inverse());
-
-        getJedisPool().returnResource(jedis);
+        getJedisPool().close();
       } catch (final Throwable e) {
-        getJedisPool().returnBrokenResource(jedis);
+        getJedisPool().close();
         if (attempts > 0) {
           LOGGER.warn("Unable to put timeseries with id, will retry: " + redisKey, e);
           updateTimeSeries(redisKey, timeseries, clear, attempts - 1);
@@ -219,10 +218,10 @@ public class NonVersionedRedisHistoricalTimeSeriesSource implements HistoricalTi
     final Jedis jedis = getJedisPool().getResource();
     try {
       jedis.flushDB();
-      getJedisPool().returnResource(jedis);
+      getJedisPool().close();
     } catch (final Exception e) {
       LOGGER.error("Unable to clear database", e);
-      getJedisPool().returnBrokenResource(jedis);
+      getJedisPool().close();
       throw new OpenGammaRuntimeException("Unable to clear database", e);
     }
   }
@@ -272,10 +271,10 @@ public class NonVersionedRedisHistoricalTimeSeriesSource implements HistoricalTi
       final Jedis jedis = getJedisPool().getResource();
       try {
         exists = jedis.exists(redisHtsDaysKey);
-        getJedisPool().returnResource(jedis);
+        getJedisPool().close();
       } catch (final Exception e) {
         LOGGER.error("Unable to check for existance", e);
-        getJedisPool().returnBrokenResource(jedis);
+        getJedisPool().close();
         throw new OpenGammaRuntimeException("Unable to check for existance", e);
       }
       return exists;
@@ -333,10 +332,10 @@ public class NonVersionedRedisHistoricalTimeSeriesSource implements HistoricalTi
           ParallelArrayBinarySort.parallelBinarySort(times, values);
           ts = ImmutableLocalDateDoubleTimeSeries.of(times, values);
         }
-        getJedisPool().returnResource(jedis);
+        getJedisPool().close();
       } catch (final Exception e) {
         LOGGER.error("Unable to load points from redis for " + redisKey, e);
-        getJedisPool().returnBrokenResource(jedis);
+        getJedisPool().close();
         throw new OpenGammaRuntimeException("Unable to load points from redis for " + redisKey, e);
       }
       return ts;

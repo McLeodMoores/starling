@@ -84,4 +84,21 @@ public class ResolvedSecurityLinkTest extends AbstractFudgeBuilderTestCase {
     assertEquals(RESOLVED.property("value").get(), SECURITY);
   }
 
+  /**
+   * Tests getting the identifier.
+   */
+  @Test
+  public void testGetIdentifier() {
+    final ResolvedSecurityLink<SimpleSecurity> link = new ResolvedSecurityLink<>(new SimpleSecurity(UniqueId.of("cnv", "1"), IDS, "One", "test"));
+    assertEquals(link.getIdentifier(), link.getValue().getExternalIdBundle());
+  }
+
+  /**
+   * Tests getting the identifier when the security does not have one.
+   */
+  @Test(expectedExceptions = UnsupportedOperationException.class)
+  public void testGetIdentifierNoIdentifierOnSecurity() {
+    final ResolvedSecurityLink<SimpleSecurity> link = new ResolvedSecurityLink<>(new SimpleSecurity("TYPE"));
+    link.getIdentifier();
+  }
 }

@@ -39,9 +39,10 @@ public final class ShutdownUtils {
    * @param status  the exit status, zero for OK, non-zero for error
    * @param maxDelayMillis  the maximum delay in milliseconds, zero or negative converted to 2 seconds
    */
-  public static void exit(final int status, long maxDelayMillis) {
-    if (maxDelayMillis <= 0) {
-      maxDelayMillis = 2000L;
+  public static void exit(final int status, final long maxDelayMillis) {
+    long maxDelay = maxDelayMillis;
+    if (maxDelay <= 0) {
+      maxDelay = 2000L;
     }
     try {
       // setup a timer, so if nice exit fails, the nasty exit happens
@@ -51,7 +52,7 @@ public final class ShutdownUtils {
         public void run() {
           Runtime.getRuntime().halt(status);
         }
-      }, maxDelayMillis);
+      }, maxDelay);
       // try to exit nicely
       System.exit(status);
 

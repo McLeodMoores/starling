@@ -17,6 +17,7 @@ import org.fudgemsg.AnnotationReflector;
 import org.fudgemsg.FudgeContext;
 import org.fudgemsg.FudgeTypeDictionary;
 import org.reflections.Configuration;
+import org.reflections.Reflections;
 import org.reflections.scanners.FieldAnnotationsScanner;
 import org.reflections.scanners.SubTypesScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
@@ -110,7 +111,7 @@ public final class OpenGammaFudgeContext {
       AnnotationReflector.initDefaultReflector(new AnnotationReflector(config));
       final AnnotationReflector reflector = AnnotationReflector.getDefaultReflector();
       if (!System.getProperties().containsKey("reflections.scan")) {
-        reflector.getReflector().collect();
+        Reflections.collect();
       }
       fudgeContext.getObjectDictionary().addAllAnnotatedBuilders(reflector);
       fudgeContext.getTypeDictionary().addAllAnnotatedSecondaryTypes(reflector);

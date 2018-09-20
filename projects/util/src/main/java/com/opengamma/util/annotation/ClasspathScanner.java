@@ -56,7 +56,7 @@ public final class ClasspathScanner {
     return s_classPathElements;
   }
 
-  private Set<URL> findClassPathElements() {
+  private static Set<URL> findClassPathElements() {
     final Set<URL> results = new LinkedHashSet<>();
     final String javaClassPath = System.getProperty("java.class.path");
     final String[] paths = javaClassPath.split(Pattern.quote(File.pathSeparator));

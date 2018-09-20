@@ -91,7 +91,7 @@ public class ServerSocketFudgeRequestDispatcher extends AbstractServerSocketProc
   }
 
   @Override
-  public void stop() {
+  public synchronized void stop() {
     super.stop();
     _messageReceiveJobs.terminateAll();
   }

@@ -90,7 +90,7 @@ public class SocketFudgeRequestConduitTest {
   }
 
   //-------------------------------------------------------------------------
-  private void parallelSendTest(final ExecutorService executor, final AtomicInteger maxConcurrency) throws Exception {
+  private static void parallelSendTest(final ExecutorService executor, final AtomicInteger maxConcurrency) throws Exception {
     final CollectingFudgeMessageReceiver collectingReceiver = new CollectingFudgeMessageReceiver();
     final FudgeRequestReceiver requestReceiver = new FudgeRequestReceiver() {
       private final AtomicInteger _concurrency = new AtomicInteger(0);

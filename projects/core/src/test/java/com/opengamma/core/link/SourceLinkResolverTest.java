@@ -20,15 +20,23 @@ import com.opengamma.service.ThreadLocalServiceContext;
 import com.opengamma.service.VersionCorrectionProvider;
 import com.opengamma.util.test.TestGroup;
 
+/**
+ * Tests for {@link SourceLinkResolver}.
+ */
 @Test(groups = TestGroup.UNIT)
 public class SourceLinkResolverTest {
 
+  /**
+   * Ensure we don't have a thread local service context which could be used accidentally.
+   */
   @BeforeMethod
   public void setup() {
-    // Ensure we don't have a thread local service context which could be used accidentally
     ThreadLocalServiceContext.init(null);
   }
 
+  /**
+   * Tests that there must be a thread local context.
+   */
   @Test(expectedExceptions = IllegalStateException.class)
   public void noThreadLocalContextGivesError() {
 
@@ -36,10 +44,13 @@ public class SourceLinkResolverTest {
     resolver.resolve(createIdentifier("id"));
   }
 
-  private LinkIdentifier<String, Object> createIdentifier(final String id) {
+  private static LinkIdentifier<String, Object> createIdentifier(final String id) {
     return LinkIdentifier.of(id, Object.class);
   }
 
+  /**
+   * Tests that the local context gets used.
+   */
   public void threadLocalContextGetsUsed() {
 
     final ServiceContext serviceContext = createContext(ConfigSource.class, VersionCorrectionProvider.class);
@@ -50,7 +61,7 @@ public class SourceLinkResolverTest {
     resolver.resolve(createIdentifier("id"));
   }
 
-  private ServiceContext createContext(final Class<?>... services) {
+  private static ServiceContext createContext(final Class<?>... services) {
 
     final Map<Class<?>, Object> serviceMap = new HashMap<>();
     for (final Class<?> aClass : services) {
@@ -59,6 +70,9 @@ public class SourceLinkResolverTest {
     return ServiceContext.of(serviceMap);
   }
 
+  /**
+   * Tests that a version / correction must be available.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void noVersionCorrectionGivesError() {
 
@@ -68,6 +82,9 @@ public class SourceLinkResolverTest {
     resolver.resolve(createIdentifier("id"));
   }
 
+  /**
+   * Tests that a source must be available.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void noSourceGivesError() {
 
@@ -77,7 +94,7 @@ public class SourceLinkResolverTest {
     resolver.resolve(createIdentifier("id"));
   }
 
-  private SourceLinkResolver<String, Object, ConfigSource> createSourceLinkResolver() {
+  private static SourceLinkResolver<String, Object, ConfigSource> createSourceLinkResolver() {
     return new SourceLinkResolver<String, Object, ConfigSource>() {
         @Override
         protected Class<ConfigSource> getSourceClass() {
@@ -96,7 +113,7 @@ public class SourceLinkResolverTest {
     };
   }
 
-  private SourceLinkResolver<String, Object, ConfigSource> createSourceLinkResolver(final ServiceContext serviceContext) {
+  private static SourceLinkResolver<String, Object, ConfigSource> createSourceLinkResolver(final ServiceContext serviceContext) {
     return new SourceLinkResolver<String, Object, ConfigSource>(serviceContext) {
         @Override
         protected Class<ConfigSource> getSourceClass() {

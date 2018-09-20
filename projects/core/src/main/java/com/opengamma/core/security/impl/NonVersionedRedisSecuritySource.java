@@ -194,10 +194,10 @@ public class NonVersionedRedisSecuritySource implements SecuritySource {
         jedis.hset(redisKey, DATA_NAME_AS_BYTES, securityData);
         jedis.hset(redisKey, CLASS_NAME_AS_BYTES, security.getClass().getName().getBytes(Charsets.UTF_8));
 
-        getJedisPool().returnResource(jedis);
+        getJedisPool().close();
       } catch (final Exception e) {
         LOGGER.error("Unable to put security " + security, e);
-        getJedisPool().returnBrokenResource(jedis);
+        getJedisPool().close();
         throw new OpenGammaRuntimeException("Unable to put security " + security, e);
       }
 
@@ -220,10 +220,10 @@ public class NonVersionedRedisSecuritySource implements SecuritySource {
       T result = null;
       try {
         result = getWorker.query(jedis);
-        getJedisPool().returnResource(jedis);
+        getJedisPool().close();
       } catch (final Exception e) {
         LOGGER.error("Unable to execute get", e);
-        getJedisPool().returnBrokenResource(jedis);
+        getJedisPool().close();
         throw new OpenGammaRuntimeException("Unable to execute get()", e);
       }
 

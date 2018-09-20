@@ -104,7 +104,8 @@ public final class DirectBeanFudgeBuilder<T extends Bean> implements FudgeBuilde
     }
   }
 
-  private MutableFudgeMsg buildMessageCollection(final FudgeSerializer serializer, final MetaProperty<?> prop, final Class<?> beanType, final List<?> list) {
+  private static MutableFudgeMsg buildMessageCollection(final FudgeSerializer serializer, final MetaProperty<?> prop, final Class<?> beanType,
+      final List<?> list) {
     final Class<?> contentType = JodaBeanUtils.collectionType(prop, beanType);
     final MutableFudgeMsg msg = serializer.newMessage();
     for (final Object entry : list) {
@@ -119,20 +120,20 @@ public final class DirectBeanFudgeBuilder<T extends Bean> implements FudgeBuilde
     return msg;
   }
 
-  private MutableFudgeMsg buildMessageMap(final FudgeSerializer serializer, final Class<?> beanType, final MetaProperty<?> prop,
-                                          final Map<?, ?> map) {
+  private static MutableFudgeMsg buildMessageMap(final FudgeSerializer serializer, final Class<?> beanType, final MetaProperty<?> prop,
+                                                 final Map<?, ?> map) {
     return buildMessageMapFromEntries(map.entrySet(), serializer, beanType, prop);
   }
 
-  private MutableFudgeMsg buildMessageMultimap(final FudgeSerializer serializer, final Class<?> beanType, final MetaProperty<?> prop,
-                                               final Multimap<?, ?> multimap) {
+  private static MutableFudgeMsg buildMessageMultimap(final FudgeSerializer serializer, final Class<?> beanType, final MetaProperty<?> prop,
+                                                      final Multimap<?, ?> multimap) {
     return buildMessageMapFromEntries(multimap.entries(), serializer, beanType, prop);
   }
 
-  private MutableFudgeMsg buildMessageMapFromEntries(final Collection<? extends Map.Entry<?, ?>> entries,
-                                                     final FudgeSerializer serializer,
-                                                     final Class<?> beanType,
-                                                     final MetaProperty<?> prop) {
+  private static MutableFudgeMsg buildMessageMapFromEntries(final Collection<? extends Map.Entry<?, ?>> entries,
+                                                            final FudgeSerializer serializer,
+                                                            final Class<?> beanType,
+                                                            final MetaProperty<?> prop) {
     final Class<?> keyType = JodaBeanUtils.mapKeyType(prop, beanType);
     final Class<?> valueType = JodaBeanUtils.mapValueType(prop, beanType);
     final MutableFudgeMsg msg = serializer.newMessage();
@@ -225,7 +226,8 @@ public final class DirectBeanFudgeBuilder<T extends Bean> implements FudgeBuilde
     }
   }
 
-  private List<Object> buildObjectList(final FudgeDeserializer deserializer, final MetaProperty<?> prop, final Class<?> type, final FudgeMsg msg) {
+  private static List<Object> buildObjectList(final FudgeDeserializer deserializer, final MetaProperty<?> prop,
+      final Class<?> type, final FudgeMsg msg) {
     final Class<?> contentType = JodaBeanUtils.collectionType(prop, type);
     final List<Object> list = new ArrayList<>();  // should be List<contentType>
     for (final FudgeField field : msg) {
@@ -239,7 +241,7 @@ public final class DirectBeanFudgeBuilder<T extends Bean> implements FudgeBuilde
     return list;
   }
 
-  private Set<Object> buildObjectSet(final FudgeDeserializer deserializer, final MetaProperty<?> prop, final Class<?> type, final FudgeMsg msg,
+  private static Set<Object> buildObjectSet(final FudgeDeserializer deserializer, final MetaProperty<?> prop, final Class<?> type, final FudgeMsg msg,
       final Set<Object> set) {
     final Class<?> contentType = JodaBeanUtils.collectionType(prop, type);
     for (final FudgeField field : msg) {
@@ -253,7 +255,8 @@ public final class DirectBeanFudgeBuilder<T extends Bean> implements FudgeBuilde
     return set;
   }
 
-  private Map<Object, Object> buildObjectMap(final FudgeDeserializer deserializer, final MetaProperty<?> prop, final Class<?> type, final FudgeMsg msg) {
+  private static Map<Object, Object> buildObjectMap(final FudgeDeserializer deserializer, final MetaProperty<?> prop,
+      final Class<?> type, final FudgeMsg msg) {
     final Class<?> keyType = JodaBeanUtils.mapKeyType(prop, type);
     final boolean keyAbstractOrInterface = keyType == null || keyType.isInterface() || Modifier.isAbstract(keyType.getModifiers());
     final Class<?> valueType = JodaBeanUtils.mapValueType(prop, type);
@@ -294,11 +297,11 @@ public final class DirectBeanFudgeBuilder<T extends Bean> implements FudgeBuilde
   }
 
   @SuppressWarnings({"unchecked", "rawtypes" })
-  private Multimap<Object, Object> buildObjectMultimap(final FudgeDeserializer deserializer,
-                                                       final MetaProperty<?> prop,
-                                                       final Class<?> type,
-                                                       final FudgeMsg msg,
-                                                       final Multimap multimap) {
+  private static Multimap<Object, Object> buildObjectMultimap(final FudgeDeserializer deserializer,
+                                                              final MetaProperty<?> prop,
+                                                              final Class<?> type,
+                                                              final FudgeMsg msg,
+                                                              final Multimap multimap) {
 
     final Class<?> keyType = JodaBeanUtils.mapKeyType(prop, type);
     final boolean keyAbstractOrInterface = keyType == null || keyType.isInterface() || Modifier.isAbstract(keyType.getModifiers());

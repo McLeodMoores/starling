@@ -219,10 +219,10 @@ public class NonVersionedRedisPositionSource implements PositionSource {
         uniqueId = storePortfolio(jedis, portfolio);
         storePortfolioNodes(jedis, toPortfolioPositionsRedisKey(uniqueId), portfolio.getRootNode());
 
-        getJedisPool().returnResource(jedis);
+        getJedisPool().close();
       } catch (final Exception e) {
         LOGGER.error("Unable to store portfolio " + portfolio, e);
-        getJedisPool().returnBrokenResource(jedis);
+        getJedisPool().close();
         throw new OpenGammaRuntimeException("Unable to store portfolio " + portfolio, e);
       }
 
@@ -242,10 +242,10 @@ public class NonVersionedRedisPositionSource implements PositionSource {
 
         uniqueId = storePosition(jedis, position);
 
-        getJedisPool().returnResource(jedis);
+        getJedisPool().close();
       } catch (final Exception e) {
         LOGGER.error("Unable to store position " + position, e);
-        getJedisPool().returnBrokenResource(jedis);
+        getJedisPool().close();
         throw new OpenGammaRuntimeException("Unable to store position " + position, e);
       }
 
@@ -271,10 +271,10 @@ public class NonVersionedRedisPositionSource implements PositionSource {
         final String redisKey = toPositionRedisKey(position.getUniqueId());
         jedis.hset(redisKey, "QTY", position.getQuantity().toPlainString());
 
-        getJedisPool().returnResource(jedis);
+        getJedisPool().close();
       } catch (final Exception e) {
         LOGGER.error("Unable to store position " + position, e);
-        getJedisPool().returnBrokenResource(jedis);
+        getJedisPool().close();
         throw new OpenGammaRuntimeException("Unable to store position " + position, e);
       }
 
@@ -325,10 +325,10 @@ public class NonVersionedRedisPositionSource implements PositionSource {
         // it, but it is a known performance issue on large portfolio loading.
         jedis.sadd(portfolioPositionsKey, uniqueIdStrings);
 
-        getJedisPool().returnResource(jedis);
+        getJedisPool().close();
       } catch (final Exception e) {
         LOGGER.error("Unable to store positions " + positions, e);
-        getJedisPool().returnBrokenResource(jedis);
+        getJedisPool().close();
         throw new OpenGammaRuntimeException("Unable to store positions " + positions, e);
       }
     }
@@ -455,10 +455,10 @@ public class NonVersionedRedisPositionSource implements PositionSource {
           portfolio = getPortfolioWithJedis(jedis, uniqueId);
         }
 
-        getJedisPool().returnResource(jedis);
+        getJedisPool().close();
       } catch (final Exception e) {
         LOGGER.error("Unable to get portfolio by name " + portfolioName, e);
-        getJedisPool().returnBrokenResource(jedis);
+        getJedisPool().close();
         throw new OpenGammaRuntimeException("Unable to get portfolio by name " + portfolioName, e);
       }
 
@@ -475,10 +475,10 @@ public class NonVersionedRedisPositionSource implements PositionSource {
         result.put(entry.getKey(), UniqueId.parse(entry.getValue()));
       }
 
-      getJedisPool().returnResource(jedis);
+      getJedisPool().close();
     } catch (final Exception e) {
       LOGGER.error("Unable to get portfolio names", e);
-      getJedisPool().returnBrokenResource(jedis);
+      getJedisPool().close();
       throw new OpenGammaRuntimeException("Unable to get portfolio names", e);
     }
     return result;
@@ -505,10 +505,10 @@ public class NonVersionedRedisPositionSource implements PositionSource {
       try {
         portfolio = getPortfolioWithJedis(jedis, uniqueId);
 
-        getJedisPool().returnResource(jedis);
+        getJedisPool().close();
       } catch (final Exception e) {
         LOGGER.error("Unable to get portfolio " + uniqueId, e);
-        getJedisPool().returnBrokenResource(jedis);
+        getJedisPool().close();
         throw new OpenGammaRuntimeException("Unable to get portfolio " + uniqueId, e);
       }
 
@@ -577,10 +577,10 @@ public class NonVersionedRedisPositionSource implements PositionSource {
 
         position = getPosition(jedis, uniqueId);
 
-        getJedisPool().returnResource(jedis);
+        getJedisPool().close();
       } catch (final Exception e) {
         LOGGER.error("Unable to get position " + uniqueId, e);
-        getJedisPool().returnBrokenResource(jedis);
+        getJedisPool().close();
         throw new OpenGammaRuntimeException("Unable to get position " + uniqueId, e);
       }
 
@@ -671,10 +671,10 @@ public class NonVersionedRedisPositionSource implements PositionSource {
 
         trade = getTrade(jedis, uniqueId);
 
-        getJedisPool().returnResource(jedis);
+        getJedisPool().close();
       } catch (final Exception e) {
         LOGGER.error("Unable to get position " + uniqueId, e);
-        getJedisPool().returnBrokenResource(jedis);
+        getJedisPool().close();
         throw new OpenGammaRuntimeException("Unable to get trade " + uniqueId, e);
       }
 

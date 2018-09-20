@@ -33,7 +33,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class MdcAwareThreadPoolExecutorTest {
 
-  private ExecutorService createMdcAwareService(final int threads) {
+  private static ExecutorService createMdcAwareService(final int threads) {
     return new MdcAwareThreadPoolExecutor(threads,
                                               threads,
                                               60,
@@ -42,7 +42,7 @@ public class MdcAwareThreadPoolExecutorTest {
                                               new NamedThreadPoolFactory("mdcAware"));
   }
 
-  private ExecutorService createStandardService(final int threads) {
+  private static ExecutorService createStandardService(final int threads) {
     return new ThreadPoolExecutor(threads,
                                               threads,
                                               60,
@@ -112,10 +112,10 @@ public class MdcAwareThreadPoolExecutorTest {
     assertThat(checkCount.get(), is(12));
   }
 
-  private void createStarterThreads(final int qty,
-                                    final ExecutorService service,
-                                    final AtomicInteger checkCount,
-                                    final boolean mdcPropagationExpected) {
+  private static void createStarterThreads(final int qty,
+                                           final ExecutorService service,
+                                           final AtomicInteger checkCount,
+                                           final boolean mdcPropagationExpected) {
 
     final Set<Thread> threads = new HashSet<>();
     for (int i = 0; i < qty; i++) {
@@ -141,7 +141,7 @@ public class MdcAwareThreadPoolExecutorTest {
     System.out.println("Threads started - MDC contains: " + MDC.getCopyOfContextMap());
   }
 
-  private Runnable createCheckJob(final Map<String, String> expectedContext, final AtomicInteger checkCount) {
+  private static Runnable createCheckJob(final Map<String, String> expectedContext, final AtomicInteger checkCount) {
 
     System.out.println("Creating check job on thread - " +  Thread.currentThread().getName() + " MDC: " + MDC.getCopyOfContextMap());
     return new Runnable() {

@@ -30,7 +30,7 @@ public class EndPointDescriptionTest {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(EndPointDescriptionTest.class);
 
-  private void testEndPoints(final boolean bind) throws IOException {
+  private static void testEndPoints(final boolean bind) throws IOException {
     final AbstractServerSocketProcess server = new AbstractServerSocketProcess() {
 
       @Override

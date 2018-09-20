@@ -170,9 +170,6 @@ public class UserSourceRealm extends AuthorizingRealm {
       final SimplePrincipalCollection principals = new SimplePrincipalCollection();
       principals.add(userName, getName());
       return new SimpleAuthenticationInfo(principals, account.getPasswordHash());
-
-    } catch (final AuthenticationException ex) {
-      throw ex;
     } catch (final RuntimeException ex) {
       throw new AuthenticationException("Unable to load authentication data: " + token, ex);
     }
@@ -240,6 +237,9 @@ public class UserSourceRealm extends AuthorizingRealm {
   class ProxyProfile implements UserProfile {
     private final String _userName;
 
+    /**
+     * @param userName  the user name
+     */
     ProxyProfile(final String userName) {
       _userName = userName;
     }
@@ -288,6 +288,10 @@ public class UserSourceRealm extends AuthorizingRealm {
     private final String _userName;
     private final String _networkAddress;
 
+    /**
+     * @param userName  the user name
+     * @param networkAddress  the network address
+     */
     ProxyPrincipals(final String userName, final String networkAddress) {
       _userName = userName;
       _networkAddress = networkAddress;

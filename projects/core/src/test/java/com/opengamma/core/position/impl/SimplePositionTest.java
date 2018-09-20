@@ -279,7 +279,7 @@ public class SimplePositionTest {
     assertNull(testPosition.getAttributes().get("A"));
   }
 
-  private SecurityLink createLink(final String scheme, final String value) {
+  private static SecurityLink createLink(final String scheme, final String value) {
     return new SimpleSecurityLink(ExternalId.of(scheme, value));
   }
 

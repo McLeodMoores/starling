@@ -122,7 +122,8 @@ public class RedisSimulationSeriesSourceTest extends AbstractRedisTestCase {
     System.out.println("Loading 1000 TS took " + timer.finished());
   }
 
-  private void writeOneSimulationSeriesDate(final RedisSimulationSeriesSource simulationSource, final LocalDate simulationSeriesDate, final int nSeries) {
+  private static void writeOneSimulationSeriesDate(final RedisSimulationSeriesSource simulationSource, final LocalDate simulationSeriesDate,
+      final int nSeries) {
     final OperationTimer timer = new OperationTimer(LOGGER, "Storing many time series");
 
     // 20 points, 10 curves

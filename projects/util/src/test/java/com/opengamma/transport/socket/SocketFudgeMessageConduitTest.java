@@ -72,7 +72,7 @@ public class SocketFudgeMessageConduitTest {
     socketReceiver.stop();
   }
 
-  private void parallelSendTest(final ExecutorService executor, final AtomicInteger maxConcurrency) throws Exception {
+  private static void parallelSendTest(final ExecutorService executor, final AtomicInteger maxConcurrency) throws Exception {
     final CollectingFudgeMessageReceiver receiver = new CollectingFudgeMessageReceiver() {
       private final AtomicInteger _concurrency = new AtomicInteger(0);
       @Override

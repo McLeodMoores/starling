@@ -62,7 +62,7 @@ public abstract class AbstractRedisTestCase {
   public void clearRedisDb() {
     final Jedis jedis = _jedisPool.getResource();
     jedis.flushDB();
-    _jedisPool.returnResource(jedis);
+    getJedisPool().close();
   }
 
   /**

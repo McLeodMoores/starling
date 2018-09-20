@@ -497,7 +497,7 @@ public class NonVersionedRedisHistoricalTimeSeriesSourceTest extends AbstractRed
       assertEquals(hts.getUniqueId(), storedHts.getUniqueId());
       assertEquals(hts.getTimeSeries(), storedHts.getTimeSeries());
     }
-    System.out.println("Adding " + hts.getTimeSeries().size() + " datapoints took " + totalDurationInSec / ITER_SIZE + " sec");
+    System.out.println("Adding " + (hts == null ? 0 : hts.getTimeSeries().size()) + " datapoints took " + totalDurationInSec / ITER_SIZE + " sec");
   }
 
   @Test(enabled = false)
@@ -515,7 +515,7 @@ public class NonVersionedRedisHistoricalTimeSeriesSourceTest extends AbstractRed
       assertEquals(hts.getUniqueId(), storedHts.getUniqueId());
       assertEquals(hts.getTimeSeries(), storedHts.getTimeSeries());
     }
-    System.out.println("Reading " + hts.getTimeSeries().size() + " datapoints took " + totalDurationInSec / ITER_SIZE + " sec");
+    System.out.println("Reading " + (hts == null ? "0" : hts.getTimeSeries().size()) + " datapoints took " + totalDurationInSec / ITER_SIZE + " sec");
   }
 
   private static HistoricalTimeSeries createSampleHts() {

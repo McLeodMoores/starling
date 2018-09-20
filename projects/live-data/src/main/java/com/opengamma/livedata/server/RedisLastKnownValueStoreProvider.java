@@ -180,7 +180,7 @@ public class RedisLastKnownValueStoreProvider implements LastKnownValueStoreProv
     final Jedis jedis = _jedisPool.getResource();
     jedis.sadd(generateAllSchemesKey(), security.getScheme().getName());
     jedis.sadd(generatePerSchemeKey(security.getScheme().getName()), security.getValue());
-    _jedisPool.returnResource(jedis);
+    _jedisPool.close();
   }
 
   @Override
@@ -188,7 +188,7 @@ public class RedisLastKnownValueStoreProvider implements LastKnownValueStoreProv
     initIfNecessary();
     final Jedis jedis = _jedisPool.getResource();
     final Set<String> allMembers = jedis.smembers(generatePerSchemeKey(identifierScheme));
-    _jedisPool.returnResource(jedis);
+    _jedisPool.close();
     LOGGER.info("Loaded {} identifiers from Jedis (full contents in Debug level log)", allMembers.size());
     if (LOGGER.isDebugEnabled()) {
       LOGGER.debug("Loaded identifiers from Jedis: {}", allMembers);
@@ -202,7 +202,7 @@ public class RedisLastKnownValueStoreProvider implements LastKnownValueStoreProv
     final String redisKey = generateRedisKey(security, normalizationRuleSetId);
     final Jedis jedis = _jedisPool.getResource();
     final boolean isAvailable = jedis.exists(redisKey);
-    _jedisPool.returnResource(jedis);
+    _jedisPool.close();
     return isAvailable;
   }
 

@@ -25,7 +25,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class PortfolioNodeEquivalenceMapperTest {
 
-  private PortfolioNode createNodeA(final UniqueIdSupplier uidSupplier, final boolean swapBC, final boolean swapB, final int sizeB) {
+  private static PortfolioNode createNodeA(final UniqueIdSupplier uidSupplier, final boolean swapBC, final boolean swapB, final int sizeB) {
     final SimplePortfolioNode node = new SimplePortfolioNode(uidSupplier.get(), "A");
     if (swapBC) {
       node.addChildNode(createNodeC(uidSupplier));
@@ -37,7 +37,7 @@ public class PortfolioNodeEquivalenceMapperTest {
     return node;
   }
 
-  private PortfolioNode createNodeAUnbalanced(final UniqueIdSupplier uidSupplier, final boolean omitB, final boolean omitC) {
+  private static PortfolioNode createNodeAUnbalanced(final UniqueIdSupplier uidSupplier, final boolean omitB, final boolean omitC) {
     final SimplePortfolioNode node = new SimplePortfolioNode(uidSupplier.get(), "A");
     if (!omitB) {
       node.addChildNode(createNodeB(uidSupplier, false, 2));
@@ -48,7 +48,7 @@ public class PortfolioNodeEquivalenceMapperTest {
     return node;
   }
 
-  private PortfolioNode createNodeB(final UniqueIdSupplier uidSupplier, final boolean swap, final int size) {
+  private static PortfolioNode createNodeB(final UniqueIdSupplier uidSupplier, final boolean swap, final int size) {
     final SimplePortfolioNode node = new SimplePortfolioNode(uidSupplier.get(), "B");
     if (swap) {
       for (int i = size; i > 0; i--) {
@@ -62,20 +62,20 @@ public class PortfolioNodeEquivalenceMapperTest {
     return node;
   }
 
-  private PortfolioNode createNodeC(final UniqueIdSupplier uidSupplier) {
+  private static PortfolioNode createNodeC(final UniqueIdSupplier uidSupplier) {
     final SimplePortfolioNode node = new SimplePortfolioNode(uidSupplier.get(), "C");
     node.addChildNode(createNodeD(uidSupplier));
     node.addPosition(createPosition(3));
     return node;
   }
 
-  private PortfolioNode createNodeD(final UniqueIdSupplier uidSupplier) {
+  private static PortfolioNode createNodeD(final UniqueIdSupplier uidSupplier) {
     final SimplePortfolioNode node = new SimplePortfolioNode(uidSupplier.get(), "D");
     node.addPosition(createPosition(4));
     return node;
   }
 
-  private Position createPosition(final int i) {
+  private static Position createPosition(final int i) {
     return new SimplePosition(UniqueId.of("Test", Integer.toString(i)), BigDecimal.ONE, ExternalId.of("Test", Integer.toString(i)));
   }
 

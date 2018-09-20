@@ -188,22 +188,22 @@ public class SocketFudgeConnectionConduitTest {
     client.stop();
   }
 
-  private int[] parallelSendTest(final ExecutorService executorClient, final ExecutorService executorServer,
+  private static int[] parallelSendTest(final ExecutorService executorClient, final ExecutorService executorServer,
       final AtomicInteger concurrencyMax) throws Exception {
     final FudgeConnectionReceiver serverReceiver = new FudgeConnectionReceiver() {
       @Override
       public void connectionReceived(final FudgeContext fudgeContext, final FudgeMsgEnvelope envelope, final FudgeConnection connection) {
         connection.setFudgeMessageReceiver(new FudgeMessageReceiver() {
           @Override
-          public void messageReceived(final FudgeContext fudgeContext, final FudgeMsgEnvelope msgEnvelope) {
-            MutableFudgeMsg message = fudgeContext.newMessage();
+          public void messageReceived(final FudgeContext receivedFudgeContext, final FudgeMsgEnvelope msgEnvelope) {
+            MutableFudgeMsg message = receivedFudgeContext.newMessage();
             message.add("foo", 1);
             connection.getFudgeMessageSender().send(message);
             try {
               Thread.sleep(Timeout.standardTimeoutMillis());
             } catch (final InterruptedException e) {
             }
-            message = fudgeContext.newMessage();
+            message = receivedFudgeContext.newMessage();
             message.add("foo", 2);
             connection.getFudgeMessageSender().send(message);
           }

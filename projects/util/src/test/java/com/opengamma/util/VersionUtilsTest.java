@@ -45,7 +45,7 @@ public class VersionUtilsTest {
     checkLocalVersionOk(VersionUtils.getVersion("VersionUtilTest-3"));
   }
 
-  private void checkLocalVersionOk(final String version) {
+  private static void checkLocalVersionOk(final String version) {
     assertTrue(version.startsWith("local-"));
 
     final long currentTimeMillis = Long.parseLong(version.substring("local-".length()));

@@ -229,7 +229,7 @@ public class RedisCachingSecuritySource extends AbstractSecuritySource {
         _lock.readLock().unlock();
       }
     } finally {
-      getJedisPool().returnResource(jedis);
+      getJedisPool().close();
     }
   }
 
@@ -281,7 +281,7 @@ public class RedisCachingSecuritySource extends AbstractSecuritySource {
         _lock.readLock().unlock();
       }
     } finally {
-      getJedisPool().returnResource(jedis);
+      getJedisPool().close();
     }
 
   }

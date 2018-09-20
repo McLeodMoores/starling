@@ -144,13 +144,13 @@ public class CoalescingSecuritySource implements SecuritySource {
     return pending;
   }
 
-  private void addPendingToRequest(final Collection<Pair<UniqueId, ? extends Callback>> pending, final Set<UniqueId> request) {
+  private static void addPendingToRequest(final Collection<Pair<UniqueId, ? extends Callback>> pending, final Set<UniqueId> request) {
     for (final Pair<UniqueId, ? extends Callback> pendingEntry : pending) {
       request.add(pendingEntry.getFirst());
     }
   }
 
-  private void notifyPending(final Collection<Pair<UniqueId, ? extends Callback>> pending, final Map<UniqueId, Security> result) {
+  private static void notifyPending(final Collection<Pair<UniqueId, ? extends Callback>> pending, final Map<UniqueId, Security> result) {
     for (final Pair<UniqueId, ? extends Callback> pendingEntry : pending) {
       final Security security = result.get(pendingEntry.getFirst());
       if (security != null) {
@@ -161,7 +161,7 @@ public class CoalescingSecuritySource implements SecuritySource {
     }
   }
 
-  private void errorPending(final Collection<Pair<UniqueId, ? extends Callback>> pending) {
+  private static void errorPending(final Collection<Pair<UniqueId, ? extends Callback>> pending) {
     for (final Pair<UniqueId, ? extends Callback> pendingEntry : pending) {
       pendingEntry.getSecond().missed();
     }

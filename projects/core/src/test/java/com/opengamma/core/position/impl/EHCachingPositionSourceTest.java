@@ -47,11 +47,11 @@ public class EHCachingPositionSourceTest {
   }
 
   //-------------------------------------------------------------------------
-  private Position createPosition(final int id) {
+  private static Position createPosition(final int id) {
     return new SimplePosition(UniqueId.of("Test", Integer.toString(id)), BigDecimal.ONE, ExternalId.of("Foo", Integer.toString(id)));
   }
 
-  private PortfolioNode createPortfolioA1() {
+  private static PortfolioNode createPortfolioA1() {
     final SimplePortfolioNode root = new SimplePortfolioNode("Root");
     root.setUniqueId(UniqueId.of("Node", "Root"));
     final SimplePortfolioNode a = new SimplePortfolioNode("Left");
@@ -69,7 +69,7 @@ public class EHCachingPositionSourceTest {
     return root;
   }
 
-  private PortfolioNode createPortfolioB() {
+  private static PortfolioNode createPortfolioB() {
     final SimplePortfolioNode root = new SimplePortfolioNode("Foo");
     root.setUniqueId(UniqueId.of("Node", "Foo"));
     final SimplePortfolioNode a = new SimplePortfolioNode("A");
@@ -82,7 +82,7 @@ public class EHCachingPositionSourceTest {
     return root;
   }
 
-  private PortfolioNode createPortfolioA2() {
+  private static PortfolioNode createPortfolioA2() {
     final SimplePortfolioNode root = new SimplePortfolioNode("Root");
     root.setUniqueId(UniqueId.of("Node", "Root"));
     final SimplePortfolioNode a = new SimplePortfolioNode("Left");
@@ -100,7 +100,7 @@ public class EHCachingPositionSourceTest {
     return root;
   }
 
-  private PortfolioNode createPortfolioA3() {
+  private static PortfolioNode createPortfolioA3() {
     final SimplePortfolioNode root = new SimplePortfolioNode("Root");
     root.setUniqueId(UniqueId.of("Node", "Root"));
     final SimplePortfolioNode a = new SimplePortfolioNode("Left");

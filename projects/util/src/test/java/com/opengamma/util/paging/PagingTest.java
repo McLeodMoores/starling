@@ -5,6 +5,7 @@
  */
 package com.opengamma.util.paging;
 
+import static org.testng.Assert.assertNotEquals;
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertFalse;
 import static org.testng.AssertJUnit.assertTrue;
@@ -206,7 +207,7 @@ public class PagingTest {
 
   public void test_equals_other() {
     final Paging test = Paging.of(PagingRequest.ofPage(1, 20), 52);
-    assertEquals(false, test.equals(""));
+    assertNotEquals("Paging", test);
     assertEquals(false, test.equals(null));
   }
 

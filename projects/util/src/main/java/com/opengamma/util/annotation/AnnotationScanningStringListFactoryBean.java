@@ -90,7 +90,7 @@ public class AnnotationScanningStringListFactoryBean extends SingletonFactoryBea
     return forceScanPropertyValue != null;
   }
 
-  private List<String> getFromCache(final File cacheFile) {
+  private static List<String> getFromCache(final File cacheFile) {
     final List<String> stringList = new ArrayList<>();
     try (BufferedReader reader = new BufferedReader(new FileReader(cacheFile))) {
       String nextLine;
@@ -106,7 +106,7 @@ public class AnnotationScanningStringListFactoryBean extends SingletonFactoryBea
   }
 
   @SuppressWarnings("unchecked")
-  private Set<String> getByScanning(final String annotationClassName) {
+  private static Set<String> getByScanning(final String annotationClassName) {
     Set<Class<?>> annotated;
     try {
       annotated =

@@ -15,7 +15,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Address;
-import org.springframework.amqp.core.ExchangeTypes;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageListener;
 import org.springframework.amqp.core.MessageProperties;
@@ -130,7 +129,7 @@ public class AmqpByteArrayRequestSender extends AbstractAmqpByteArraySender impl
    */
   private Message createMessage(final byte[] request, final ByteArrayMessageReceiver responseReceiver) {
     final MessageProperties properties = new MessageProperties();
-    final Address replyTo = new Address(ExchangeTypes.DIRECT, getExchange(), getReplyToQueue());
+    final Address replyTo = new Address(getExchange(), getReplyToQueue());
     properties.setReplyToAddress(replyTo);
 
     final String correlationId = getReplyToQueue() + "-" + _correlationIdGenerator.getAndIncrement();

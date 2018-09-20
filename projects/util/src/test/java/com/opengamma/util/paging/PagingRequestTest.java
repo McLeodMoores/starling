@@ -5,6 +5,7 @@
  */
 package com.opengamma.util.paging;
 
+import static org.testng.Assert.assertNotEquals;
 import static org.testng.AssertJUnit.assertEquals;
 
 import java.util.Arrays;
@@ -18,7 +19,7 @@ import com.opengamma.util.test.TestGroup;
  * Test PagingRequest.
  */
 @Test(groups = TestGroup.UNIT)
-public final class PagingRequestTest {
+public class PagingRequestTest {
 
   public void testAll() {
     final PagingRequest test = PagingRequest.ALL;
@@ -180,7 +181,7 @@ public final class PagingRequestTest {
 
   public void test_equals_other() {
     final PagingRequest test = PagingRequest.ofPage(1, 20);
-    assertEquals(false, test.equals(""));
+    assertNotEquals("Paging", test);
     assertEquals(false, test.equals(null));
   }
 

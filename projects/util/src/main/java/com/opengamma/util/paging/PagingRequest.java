@@ -118,10 +118,12 @@ public final class PagingRequest implements ImmutableBean {
    * @return the paging request, not null
    * @throws IllegalArgumentException if either input is negative
    */
-  public static PagingRequest ofPageDefaulted(int page, int pagingSize) {
-    page = page == 0 ? 1 : page;
-    pagingSize = pagingSize == 0 ? DEFAULT_PAGING_SIZE : pagingSize;
-    return PagingRequest.ofPage(page, pagingSize);
+  public static PagingRequest ofPageDefaulted(final int page, final int pagingSize) {
+    int pageNumber = page;
+    int pageSize = pagingSize;
+    pageNumber = pageNumber == 0 ? 1 : pageNumber;
+    pageSize = pageSize == 0 ? DEFAULT_PAGING_SIZE : pageSize;
+    return PagingRequest.ofPage(pageNumber, pageSize);
   }
 
   /**

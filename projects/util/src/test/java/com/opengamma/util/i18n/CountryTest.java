@@ -5,6 +5,7 @@
  */
 package com.opengamma.util.i18n;
 
+import static org.testng.Assert.assertNotEquals;
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertSame;
 import static org.testng.AssertJUnit.assertTrue;
@@ -237,7 +238,7 @@ public class CountryTest {
   public void test_equals_false() {
     final Country a = Country.GB;
     assertEquals(a.equals(null), false);
-    assertEquals(a.equals("String"), false);
+    assertNotEquals("Country", a);
     assertEquals(a.equals(new Object()), false);
   }
 
