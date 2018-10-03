@@ -20,7 +20,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Tests for {@link WeekendHolidaySource}.
+ * Tests for WeekendHolidaySource.
  */
 @SuppressWarnings("deprecation")
 @Test(groups = TestGroup.UNIT)

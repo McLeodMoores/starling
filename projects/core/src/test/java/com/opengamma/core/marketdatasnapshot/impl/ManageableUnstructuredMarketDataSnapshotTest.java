@@ -152,4 +152,5 @@ public class ManageableUnstructuredMarketDataSnapshotTest extends AbstractFudgeB
     assertNotNull(SNAPSHOT.metaBean().values());
     assertEquals(SNAPSHOT.metaBean().values().get(SNAPSHOT), SNAPSHOT.property("values").get());
   }
+
 }

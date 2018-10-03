@@ -61,6 +61,8 @@ public class CoalescingSecuritySource implements SecuritySource {
 
     /**
      * Blocks until all expected values are out, or the write lock could be claimed.
+     * @param writing  true if the source is writing
+     * @return  true if the write has finished
      */
     public synchronized boolean waitForResult(final AtomicBoolean writing) {
       try {

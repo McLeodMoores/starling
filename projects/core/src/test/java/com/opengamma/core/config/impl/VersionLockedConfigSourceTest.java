@@ -26,7 +26,7 @@ import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Tests the {@link VersionLockedConfigSource} class.
+ * Tests the VersionLockedConfigSource class.
  */
 @SuppressWarnings("deprecation")
 @Test(groups = TestGroup.UNIT)

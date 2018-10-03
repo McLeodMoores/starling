@@ -122,7 +122,7 @@ public class SimpleRegion extends DirectBean
    * @param country  the country to set, null to remove any defined country
    */
   public void setCountry(final Country country) {
-    setExternalIdBundle(getExternalIdBundle().withoutScheme(ExternalSchemes.ISO_CURRENCY_ALPHA3));
+    setExternalIdBundle(getExternalIdBundle().withoutScheme(ExternalSchemes.ISO_COUNTRY_ALPHA2));
     if (country != null) {
       addExternalId(ExternalSchemes.countryRegionId(country));
     }
