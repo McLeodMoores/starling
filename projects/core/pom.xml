@@ -30,11 +30,11 @@
       <groupId>org.mindrot</groupId>
       <artifactId>jbcrypt</artifactId>
     </dependency>
-    <dependency>
+    <!-- dependency>
 	  <groupId>com.centricient</groupId>
       <artifactId>redis-mock</artifactId>
       <version>0.1.22</version>
-    </dependency>
+    </dependency-->
   </dependencies>
 
   <properties>
