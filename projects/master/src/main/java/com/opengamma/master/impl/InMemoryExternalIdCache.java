@@ -31,6 +31,12 @@ public class InMemoryExternalIdCache<T extends ExternalBundleIdentifiable, V> {
   private final Map<T, V> _allItems = new ConcurrentHashMap<>();
   private final ConcurrentMap<ExternalId, Map<T, V>> _store = new ConcurrentHashMap<>();
 
+  /**
+   * Adds an identifiable element to the cache.
+   *
+   * @param element  the identifiable element, not null
+   * @param document  the document, not null
+   */
   public void add(final T element, final V document) {
     ArgumentChecker.notNull(element, "element");
     ArgumentChecker.notNull(document, "document");
@@ -50,6 +56,11 @@ public class InMemoryExternalIdCache<T extends ExternalBundleIdentifiable, V> {
     _allItems.put(element, document);
   }
 
+  /**
+   * Removes an identifiable element from the cache.
+   *
+   * @param element  the identifiable element, not null
+   */
   public void remove(final T element) {
     ArgumentChecker.notNull(element, "element");
     final ExternalIdBundle bundle = element.getExternalIdBundle();
@@ -75,7 +86,7 @@ public class InMemoryExternalIdCache<T extends ExternalBundleIdentifiable, V> {
    * positives.
    * False negatives will not be returned.
    *
-   * @param search the search to evaluate
+   * @param search the search to evaluate, not null
    * @return items that are likely to match the search
    */
   public Set<V> getMatches(final ExternalIdSearch search) {
