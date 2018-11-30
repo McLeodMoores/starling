@@ -129,17 +129,15 @@ public class HolidayHistoryResultTest extends AbstractFudgeBuilderTestCase {
     assertEquals(result, result);
     assertNotEquals(null, result);
     assertEquals(result.toString(), "HolidayHistoryResult{paging=Paging[first=0, size=20, totalItems=3], "
-        + "documents=[HolidayDocument{versionFromInstant=1970-01-02T03:46:40Z, versionToInstant=null, "
-        + "correctionFromInstant=null, correctionToInstant=null, holiday=ManageableHolidayWithWeekend{uniqueId=null, "
-        + "type=null, regionExternalId=null, exchangeExternalId=null, customExternalId=null, currency=null, holidayDates=[], "
-        + "weekendType=null}, uniqueId=oid~val~v1, name=null, providerId=null}, "
+        + "documents=[HolidayDocument{versionFromInstant=1970-01-02T03:46:40Z, versionToInstant=null, correctionFromInstant=null, "
+        + "correctionToInstant=null, holiday=ManageableHoliday{uniqueId=null, type=null, regionExternalId=null, exchangeExternalId=null, "
+        + "customExternalId=null, currency=null, holidayDates=[]}, uniqueId=oid~val~v1, name=null, providerId=null}, "
         + "HolidayDocument{versionFromInstant=1970-01-03T07:33:20Z, versionToInstant=null, correctionFromInstant=null, "
-        + "correctionToInstant=null, holiday=ManageableHolidayWithWeekend{uniqueId=null, type=null, regionExternalId=null, "
-        + "exchangeExternalId=null, customExternalId=null, currency=null, holidayDates=[], weekendType=null}, "
-        + "uniqueId=oid~val~v2, name=null, providerId=null}, HolidayDocument{versionFromInstant=1970-01-04T11:20:00Z, "
-        + "versionToInstant=null, correctionFromInstant=null, correctionToInstant=null, "
-        + "holiday=ManageableHolidayWithWeekend{uniqueId=null, type=null, regionExternalId=null, exchangeExternalId=null, "
-        + "customExternalId=null, currency=null, holidayDates=[], weekendType=null}, uniqueId=oid~val~v3, name=null, providerId=null}]}");
+        + "correctionToInstant=null, holiday=ManageableHoliday{uniqueId=null, type=null, regionExternalId=null, exchangeExternalId=null, "
+        + "customExternalId=null, currency=null, holidayDates=[]}, uniqueId=oid~val~v2, name=null, providerId=null}, "
+        + "HolidayDocument{versionFromInstant=1970-01-04T11:20:00Z, versionToInstant=null, correctionFromInstant=null, "
+        + "correctionToInstant=null, holiday=ManageableHoliday{uniqueId=null, type=null, regionExternalId=null, "
+        + "exchangeExternalId=null, customExternalId=null, currency=null, holidayDates=[]}, uniqueId=oid~val~v3, name=null, providerId=null}]}");
     final HolidayHistoryResult other = new HolidayHistoryResult(docs);
     other.setPaging(PAGING);
     assertEquals(result, other);

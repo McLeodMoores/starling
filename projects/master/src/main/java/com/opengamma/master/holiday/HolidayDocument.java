@@ -36,7 +36,7 @@ import com.opengamma.util.PublicSPI;
 @PublicSPI
 @BeanDefinition
 public class HolidayDocument extends AbstractDocument implements Serializable {
-
+  //TODO using the setHoliday() method does not update the name or uid
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
 

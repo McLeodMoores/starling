@@ -48,13 +48,13 @@ import com.opengamma.util.RegexUtils;
 public class LegalEntitySearchRequest extends AbstractSearchRequest {
 
   /**
-   * The set of legalentity object identifiers, null to not limit by legalentity object identifiers.
+   * The set of legal entity object identifiers, null to not limit by legal entity object identifiers.
    * Note that an empty set will return no legal entities.
    */
   @PropertyDefinition(set = "manual")
   private List<ObjectId> _objectIds;
   /**
-   * The legalentity external identifiers to match, null to not match on legalentity identifiers.
+   * The legal entity external identifiers to match, null to not match on legal entity identifiers.
    */
   @PropertyDefinition
   private ExternalIdSearch _externalIdSearch;
@@ -82,7 +82,7 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
   @PropertyDefinition
   private final Map<String, String> _attributes = Maps.newHashMap();
   /**
-   * The legalentity name, wildcards allowed, null to not match on name.
+   * The legal entity name, wildcards allowed, null to not match on name.
    */
   @PropertyDefinition
   private String _name;
@@ -101,7 +101,7 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
   /**
    * Creates an instance using a single search identifier.
    *
-   * @param legalentityId the legalentity external identifier to search for, not null
+   * @param legalentityId the legal entity external identifier to search for, not null
    */
   public LegalEntitySearchRequest(final ExternalId legalentityId) {
     addExternalId(legalentityId);
@@ -110,7 +110,7 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
   /**
    * Creates an instance using a bundle of identifiers.
    *
-   * @param legalentityBundle the legalentity external identifiers to search for, not null
+   * @param legalentityBundle the legal entity external identifiers to search for, not null
    */
   public LegalEntitySearchRequest(final ExternalIdBundle legalentityBundle) {
     addExternalIds(legalentityBundle);
@@ -119,9 +119,9 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
   //-------------------------------------------------------------------------
 
   /**
-   * Adds a single legalentity object identifier to the set.
+   * Adds a single legal entity object identifier to the set.
    *
-   * @param legalentityId the legalentity object identifier to add, not null
+   * @param legalentityId the legal entity object identifier to add, not null
    */
   public void addObjectId(final ObjectIdentifiable legalentityId) {
     ArgumentChecker.notNull(legalentityId, "legalentityId");
@@ -132,10 +132,10 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
   }
 
   /**
-   * Sets the set of legalentity object identifiers, null to not limit by legalentity object identifiers.
+   * Sets the set of legal entity object identifiers, null to not limit by legal entity object identifiers.
    * Note that an empty set will return no legal entities.
    *
-   * @param legalentityIds the new legalentity identifiers, null clears the legalentity id search
+   * @param legalentityIds the new legal entity identifiers, null clears the legal entity id search
    */
   public void setObjectIds(final Iterable<? extends ObjectIdentifiable> legalentityIds) {
     if (legalentityIds == null) {
@@ -151,11 +151,11 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
   //-------------------------------------------------------------------------
 
   /**
-   * Adds a single legalentity external identifier to the collection to search for.
+   * Adds a single legal entity external identifier to the collection to search for.
    * Unless customized, the search will match
    * {@link com.opengamma.id.ExternalIdSearchType#ANY any} of the identifiers.
    *
-   * @param legalentityId the legalentity key identifier to add, not null
+   * @param legalentityId the legal entity key identifier to add, not null
    */
   public void addExternalId(final ExternalId legalentityId) {
     ArgumentChecker.notNull(legalentityId, "legalentityId");
@@ -163,11 +163,11 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
   }
 
   /**
-   * Adds a collection of legalentity external identifiers to the collection to search for.
+   * Adds a collection of legal entity external identifiers to the collection to search for.
    * Unless customized, the search will match
    * {@link com.opengamma.id.ExternalIdSearchType#ANY any} of the identifiers.
    *
-   * @param legalentityIds the legalentity key identifiers to add, not null
+   * @param legalentityIds the legal entity key identifiers to add, not null
    */
   public void addExternalIds(final ExternalId... legalentityIds) {
     ArgumentChecker.notNull(legalentityIds, "legalentityIds");
@@ -179,11 +179,11 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
   }
 
   /**
-   * Adds a collection of legalentity external identifiers to the collection to search for.
+   * Adds a collection of legal entity external identifiers to the collection to search for.
    * Unless customized, the search will match
    * {@link com.opengamma.id.ExternalIdSearchType#ANY any} of the identifiers.
    *
-   * @param legalentityIds the legalentity key identifiers to add, not null
+   * @param legalentityIds the legal entity key identifiers to add, not null
    */
   public void addExternalIds(final Iterable<ExternalId> legalentityIds) {
     ArgumentChecker.notNull(legalentityIds, "legalentityIds");
@@ -287,7 +287,7 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the set of legalentity object identifiers, null to not limit by legalentity object identifiers.
+   * Gets the set of legal entity object identifiers, null to not limit by legal entity object identifiers.
    * Note that an empty set will return no legal entities.
    * @return the value of the property
    */
@@ -306,7 +306,7 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the legalentity external identifiers to match, null to not match on legalentity identifiers.
+   * Gets the legal entity external identifiers to match, null to not match on legal entity identifiers.
    * @return the value of the property
    */
   public ExternalIdSearch getExternalIdSearch() {
@@ -314,7 +314,7 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
   }
 
   /**
-   * Sets the legalentity external identifiers to match, null to not match on legalentity identifiers.
+   * Sets the legal entity external identifiers to match, null to not match on legal entity identifiers.
    * @param externalIdSearch  the new value of the property
    */
   public void setExternalIdSearch(ExternalIdSearch externalIdSearch) {
@@ -432,7 +432,7 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the legalentity name, wildcards allowed, null to not match on name.
+   * Gets the legal entity name, wildcards allowed, null to not match on name.
    * @return the value of the property
    */
   public String getName() {
@@ -440,7 +440,7 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
   }
 
   /**
-   * Sets the legalentity name, wildcards allowed, null to not match on name.
+   * Sets the legal entity name, wildcards allowed, null to not match on name.
    * @param name  the new value of the property
    */
   public void setName(String name) {
