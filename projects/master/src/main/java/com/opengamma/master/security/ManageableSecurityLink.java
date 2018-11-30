@@ -105,7 +105,7 @@ public class ManageableSecurityLink extends AbstractLink<Security> implements Se
    * Creates a link from a unique identifier, only storing the object identifier.
    *
    * @param uniqueId  the unique identifier, not null
-   * @deprecated using object ids will limit ability to export links, use ExternalIds or ExternalIdBundles, even if they need to be generated GUIDs
+   * @deprecated using unique ids will limit ability to export links, use ExternalIds or ExternalIdBundles, even if they need to be generated GUIDs
    */
   @Deprecated
   public ManageableSecurityLink(final UniqueId uniqueId) {

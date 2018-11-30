@@ -76,10 +76,7 @@ public class SecurityMasterUtils {
         final SecurityDocument updateDoc = new SecurityDocument(security);
         updateDoc.setVersionFromInstant(Instant.now());
         try {
-          //updateDoc.setUniqueId(foundSecurity.getUniqueId());
-          //return _securityMaster.update(updateDoc).getSecurity();
           final UniqueId newId = securityMaster.addVersion(foundSecurity.getUniqueId().getObjectId(), updateDoc);
-          //UniqueId newId = securityMaster.addVersion(foundSecurityDoc, updateDoc);
           security.setUniqueId(newId);
           return security;
         } catch (final Throwable t) {

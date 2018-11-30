@@ -86,7 +86,12 @@ public class SecurityLoaderResult extends DirectBean {
   public Map<ExternalIdBundle, ObjectId> getResultMapAsObjectId() {
     final Map<ExternalIdBundle, ObjectId> resultMap = Maps.newHashMapWithExpectedSize(getResultMap().size());
     for (final Entry<ExternalIdBundle, UniqueId> entry : getResultMap().entrySet()) {
-      resultMap.put(entry.getKey(), entry.getValue().getObjectId());
+      final UniqueId uid = entry.getValue();
+      if (uid == null) {
+        resultMap.put(entry.getKey(), null);
+      } else {
+        resultMap.put(entry.getKey(), uid.getObjectId());
+      }
     }
     return resultMap;
   }
