@@ -247,7 +247,7 @@ HistoricalTimeSeriesSource {
   public Pair<LocalDate, Double> getLatestDataPoint(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate,
       final String dataSource, final String dataProvider, final String dataField) {
     final HistoricalTimeSeries hts = doGetHistoricalTimeSeries(identifierBundle, identifierValidityDate, dataSource, dataProvider, dataField, null, null, -1);
-    if (hts != null) {
+    if (hts != null && !hts.getTimeSeries().isEmpty()) {
       final LocalDateDoubleTimeSeries ldmts = hts.getTimeSeries();
       return Pairs.of(ldmts.getLatestTime(), ldmts.getLatestValueFast());
     }
@@ -267,7 +267,7 @@ HistoricalTimeSeriesSource {
       end = end.minusDays(1);
     }
     final HistoricalTimeSeries hts = doGetHistoricalTimeSeries(identifierBundle, identifierValidityDate, dataSource, dataProvider, dataField, start, end, -1);
-    if (hts != null) {
+    if (hts != null && !hts.getTimeSeries().isEmpty()) {
       final LocalDateDoubleTimeSeries lddts = hts.getTimeSeries();
       return Pairs.of(lddts.getLatestTime(), lddts.getLatestValueFast());
     }
@@ -285,24 +285,6 @@ HistoricalTimeSeriesSource {
       final String dataField, final LocalDate start, final boolean includeStart,
       final LocalDate end, final boolean includeEnd) {
     return getLatestDataPoint(identifierBundle, LocalDate.now(getClock()), dataSource, dataProvider, dataField, start, includeStart, end, includeEnd);
-  }
-
-  private HistoricalTimeSeries doGetHistoricalTimeSeries(final ExternalIdBundle identifiers, final LocalDate identifierValidityDate,
-      final String dataSource, final String dataProvider, final String dataField,
-      final LocalDate start, final LocalDate end, final Integer maxPoints) {
-    ArgumentChecker.notNull(identifiers, "identifiers");
-    ArgumentChecker.notNull(dataSource, "dataSource");
-    ArgumentChecker.notNull(dataField, "field");
-    final HistoricalTimeSeriesResolutionResult resolutionResult = getResolver().resolve(identifiers, identifierValidityDate,
-        dataSource, dataProvider, dataField, null);
-    if (resolutionResult == null) {
-      return null;
-    }
-    HistoricalTimeSeries hts = doGetHistoricalTimeSeries(resolutionResult.getHistoricalTimeSeriesInfo().getTimeSeriesObjectId(), start, end, maxPoints);
-    if (resolutionResult.getAdjuster() != null) {
-      hts = resolutionResult.getAdjuster().adjust(resolutionResult.getHistoricalTimeSeriesInfo().getExternalIdBundle().toBundle(), hts);
-    }
-    return hts;
   }
 
   private HistoricalTimeSeries doGetHistoricalTimeSeries(final ObjectId objectId, final LocalDate start, final LocalDate end, final Integer maxPoints) {
@@ -412,12 +394,33 @@ HistoricalTimeSeriesSource {
     if (end != null && !includeEnd) {
       end = end.minusDays(1);
     }
-    final HistoricalTimeSeries hts = doGetHistoricalTimeSeries(dataField, identifierBundle, identifierValidityDate, dataField, start, end, -1);
+    final HistoricalTimeSeries hts = doGetHistoricalTimeSeries(dataField, identifierBundle, identifierValidityDate, resolutionKey, start, end, -1);
     if (hts != null) {
       final LocalDateDoubleTimeSeries lddts = hts.getTimeSeries();
       return Pairs.of(lddts.getLatestTime(), lddts.getLatestValueFast());
     }
     return null;
+  }
+
+  private HistoricalTimeSeries doGetHistoricalTimeSeries(final ExternalIdBundle identifiers, final LocalDate identifierValidityDate,
+      final String dataSource, final String dataProvider, final String dataField,
+      final LocalDate start, final LocalDate end, final Integer maxPoints) {
+    ArgumentChecker.notNull(identifiers, "identifiers");
+    ArgumentChecker.notNull(dataSource, "dataSource");
+    ArgumentChecker.notNull(dataField, "field");
+    final HistoricalTimeSeriesResolutionResult resolutionResult = getResolver().resolve(identifiers, identifierValidityDate,
+        dataSource, dataProvider, dataField, null);
+    if (resolutionResult == null) {
+      return null;
+    }
+    if(maxPoints == null || maxPoints != 0) {
+      HistoricalTimeSeries hts = doGetHistoricalTimeSeries(resolutionResult.getHistoricalTimeSeriesInfo().getTimeSeriesObjectId(), start, end, maxPoints);
+      if (resolutionResult.getAdjuster() != null) {
+        hts = resolutionResult.getAdjuster().adjust(resolutionResult.getHistoricalTimeSeriesInfo().getExternalIdBundle().toBundle(), hts);
+      }
+      return hts;
+    }
+    return new SimpleHistoricalTimeSeries(resolutionResult.getHistoricalTimeSeriesInfo().getUniqueId(), EMPTY_TIMESERIES);
   }
 
   private HistoricalTimeSeries doGetHistoricalTimeSeries(final String dataField, final ExternalIdBundle identifierBundle,
@@ -429,9 +432,9 @@ HistoricalTimeSeriesSource {
       key = HistoricalTimeSeriesRatingFieldNames.DEFAULT_CONFIG_NAME;
     }
     final HistoricalTimeSeriesResolutionResult resolutionResult = getResolver().resolve(identifierBundle, identifierValidityDate, null,
-        null, dataField, resolutionKey);
+        null, dataField, key);
     if (resolutionResult == null) {
-      final String message = String.format("Unable to resolve hts using resolutionKey[%s] dataField[%s] bundle[%s] date[%s]", resolutionKey,
+      final String message = String.format("Unable to resolve hts using resolutionKey[%s] dataField[%s] bundle[%s] date[%s]", key,
           dataField, identifierBundle, identifierValidityDate);
       LOGGER.debug(message);
       return null;
