@@ -230,16 +230,16 @@ public class HistoricalTimeSeriesInfoSearchRequest extends AbstractSearchRequest
     if (getName() != null && !RegexUtils.wildcardMatch(getName(), info.getName())) {
       return false;
     }
-    if (getDataSource() != null && !getDataSource().equals(info.getDataSource())) {
+    if (getDataSource() != null && !RegexUtils.wildcardMatch(getDataSource(), info.getDataSource())) {
       return false;
     }
-    if (getDataProvider() != null && !getDataProvider().equals(info.getDataProvider())) {
+    if (getDataProvider() != null && !RegexUtils.wildcardMatch(getDataProvider(), info.getDataProvider())) {
       return false;
     }
-    if (getDataField() != null && !getDataField().equals(info.getDataField())) {
+    if (getDataField() != null && !RegexUtils.wildcardMatch(getDataField(), info.getDataField())) {
       return false;
     }
-    if (getObservationTime() != null && !getObservationTime().equals(info.getObservationTime())) {
+    if (getObservationTime() != null && !RegexUtils.wildcardMatch(getObservationTime(), info.getObservationTime())) {
       return false;
     }
     if (getExternalIdValue() != null) {

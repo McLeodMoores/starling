@@ -83,15 +83,16 @@ public class HistoricalTimeSeriesInfoHistoryResult extends AbstractHistoryResult
   /**
    * Gets the single result expected from a query.
    * <p>
-   * This throws an exception if more than 1 result is actually available.
-   * Thus, this method implies an assumption about uniqueness of the queried series.
+   * This throws an exception if more than 1 result is actually available. Thus,
+   * this method implies an assumption about uniqueness of the queried series.
    *
    * @return the matching exchange, not null
-   * @throws IllegalStateException if no series was found
+   * @throws OpenGammaRuntimeException
+   *           if no series was found
    */
   public ManageableHistoricalTimeSeriesInfo getSingleInfo() {
     if (getDocuments().size() != 1) {
-      throw new OpenGammaRuntimeException("Expecting zero or single resulting match, and was " + getDocuments().size());
+      throw new OpenGammaRuntimeException("Expecting single resulting match, and was " + getDocuments().size());
     }
     return getDocuments().get(0).getInfo();
   }
