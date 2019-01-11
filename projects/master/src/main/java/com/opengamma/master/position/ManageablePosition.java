@@ -74,7 +74,7 @@ implements MutableUniqueIdentifiable, UniqueIdentifiable, Serializable {
    * The number of units in the position.
    * This field must not be null for the object to be valid.
    */
-  @PropertyDefinition
+  @PropertyDefinition(validate = "notNull")
   private BigDecimal _quantity;
   /**
    * The link referencing the security, not null.
@@ -367,7 +367,7 @@ implements MutableUniqueIdentifiable, UniqueIdentifiable, Serializable {
   /**
    * Gets the number of units in the position.
    * This field must not be null for the object to be valid.
-   * @return the value of the property
+   * @return the value of the property, not null
    */
   public BigDecimal getQuantity() {
     return _quantity;
@@ -376,9 +376,10 @@ implements MutableUniqueIdentifiable, UniqueIdentifiable, Serializable {
   /**
    * Sets the number of units in the position.
    * This field must not be null for the object to be valid.
-   * @param quantity  the new value of the property
+   * @param quantity  the new value of the property, not null
    */
   public void setQuantity(BigDecimal quantity) {
+    JodaBeanUtils.notNull(quantity, "quantity");
     this._quantity = quantity;
   }
 
@@ -790,6 +791,7 @@ implements MutableUniqueIdentifiable, UniqueIdentifiable, Serializable {
 
     @Override
     protected void validate(Bean bean) {
+      JodaBeanUtils.notNull(((ManageablePosition) bean)._quantity, "quantity");
       JodaBeanUtils.notNull(((ManageablePosition) bean)._securityLink, "securityLink");
       JodaBeanUtils.notNull(((ManageablePosition) bean)._trades, "trades");
       JodaBeanUtils.notNull(((ManageablePosition) bean)._attributes, "attributes");

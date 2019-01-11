@@ -22,6 +22,8 @@ import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.OffsetTime;
 
@@ -29,6 +31,7 @@ import com.google.common.collect.Maps;
 import com.opengamma.core.position.Counterparty;
 import com.opengamma.core.position.Trade;
 import com.opengamma.core.position.impl.SimpleCounterparty;
+import com.opengamma.core.position.impl.SimpleTrade;
 import com.opengamma.core.security.Security;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
@@ -50,7 +53,7 @@ import com.opengamma.util.money.Currency;
 @BeanDefinition
 public class ManageableTrade extends DirectBean
 implements Trade, MutableUniqueIdentifiable, Serializable {
-
+  private static final Logger LOGGER = LoggerFactory.getLogger(ManageableTrade.class);
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
 
@@ -149,12 +152,24 @@ implements Trade, MutableUniqueIdentifiable, Serializable {
   public ManageableTrade(final Trade trade) {
     ArgumentChecker.notNull(trade, "trade");
     ArgumentChecker.notNull(trade.getAttributes(), "trade.attributes");
+    ArgumentChecker.notNull(trade.getSecurityLink(), "trade.securityLink");
     _quantity = trade.getQuantity();
     _securityLink = new ManageableSecurityLink(trade.getSecurityLink());
     _tradeDate = trade.getTradeDate();
     _tradeTime = trade.getTradeTime();
-    // this is a bug - PLAT-3117 - counterparty ID isn't nullable. use a default or throw an exception?
-    _counterpartyExternalId = trade.getCounterparty() != null ? trade.getCounterparty().getExternalId() : null;
+    // to maintain backwards compatibility, require a counterparty only for
+    // ManageableTrade or SimpleTrade, otherwise use a dummy value
+    if (trade instanceof ManageableTrade || trade instanceof SimpleTrade) {
+      ArgumentChecker.notNull(trade.getCounterparty(), "trade.counterparty");
+      _counterpartyExternalId = trade.getCounterparty().getExternalId();
+    } else {
+      if (trade.getCounterparty() == null) {
+        LOGGER.error("Counterparty for {} not set; using dummy value", trade);
+        _counterpartyExternalId = ExternalId.of(Counterparty.DEFAULT_SCHEME, "DUMMY COUNTERPARTY");
+      } else {
+        _counterpartyExternalId = trade.getCounterparty().getExternalId();
+      }
+    }
     _premium = trade.getPremium();
     _premiumCurrency = trade.getPremiumCurrency();
     _premiumDate = trade.getPremiumDate();

@@ -56,7 +56,7 @@ public final class ConfigMasterUtils {
 
   @SuppressWarnings("unchecked")
   private static <T> ConfigItem<T> storeByNameInner(final ConfigMaster master, final ConfigItem<T> item) {
-    final ConfigSearchRequest<T> searchRequest = new ConfigSearchRequest<T>();
+    final ConfigSearchRequest<T> searchRequest = new ConfigSearchRequest<>();
     searchRequest.setType(item.getType());
     searchRequest.setName(item.getName());
     final ConfigSearchResult<T> searchResult = master.search(searchRequest);
