@@ -12,10 +12,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.Validate;
-
 import com.google.common.base.Function;
 import com.opengamma.core.change.AggregatingChangeManager;
+import com.opengamma.core.change.BasicChangeManager;
 import com.opengamma.core.change.ChangeManager;
 import com.opengamma.id.ObjectId;
 import com.opengamma.id.ObjectIdentifiable;
@@ -63,6 +62,11 @@ public class DynamicDelegatingConfigMaster implements ConfigMaster {
   /** Delegator for maintaining map from scheme to master */
   private final UniqueIdSchemeDelegator<ConfigMaster> _delegator;
 
+  /**
+   * Default constructor that uses an in-memory master
+   * ({@link InMemoryConfigMaster}) as the default delegate and a basic change
+   * manager ({@link BasicChangeManager});
+   */
   public DynamicDelegatingConfigMaster() {
     _changeManager = new AggregatingChangeManager();
     _defaultEmptyDelegate = new InMemoryConfigMaster();
@@ -101,6 +105,17 @@ public class DynamicDelegatingConfigMaster implements ConfigMaster {
     _delegator.removeDelegate(scheme);
   }
 
+  /**
+   * Adds a config document to the appropriate delegate master, using the
+   * provided String as the scheme to search for a delegate.
+   *
+   * @param scheme
+   *          the unique identifier scheme that will choose the delegate, not
+   *          null
+   * @param document
+   *          the document to add to the master, not null
+   * @return the document with unique id set
+   */
   public ConfigDocument add(final String scheme, final ConfigDocument document) {
     ArgumentChecker.notNull(scheme, "scheme");
     ArgumentChecker.notNull(document, "document");
@@ -126,6 +141,7 @@ public class DynamicDelegatingConfigMaster implements ConfigMaster {
 
   @Override
   public Map<UniqueId, ConfigDocument> get(final Collection<UniqueId> uniqueIds) {
+    ArgumentChecker.notNull(uniqueIds, "uniqueIds");
     final Map<UniqueId, ConfigDocument> resultMap = newHashMap();
     for (final UniqueId uniqueId : uniqueIds) {
       final ConfigDocument doc = get(uniqueId);
@@ -142,8 +158,8 @@ public class DynamicDelegatingConfigMaster implements ConfigMaster {
   @Override
   public ConfigDocument update(final ConfigDocument document) {
     ArgumentChecker.notNull(document, "document");
-    Validate.notNull(document.getUniqueId(), "document has no unique id");
-    Validate.notNull(document.getObjectId(), "document has no object id");
+    ArgumentChecker.notNull(document.getUniqueId(), "document.uniqueId");
+    ArgumentChecker.notNull(document.getObjectId(), "document.objectId");
     return chooseDelegate(document.getObjectId().getScheme()).update(document);
   }
 
