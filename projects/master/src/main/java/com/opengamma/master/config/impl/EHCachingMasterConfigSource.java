@@ -44,10 +44,12 @@ public class EHCachingMasterConfigSource extends MasterConfigSource {
   private final Cache _configCache;
 
   /**
-   * Creates the cache around an underlying config source.
+   * Creates the cache around an underlying config master.
    *
-   * @param underlying the underlying data, not null
-   * @param cacheManager the cache manager, not null
+   * @param underlying
+   *          the underlying data, not null
+   * @param cacheManager
+   *          the cache manager, not null
    */
   public EHCachingMasterConfigSource(final ConfigMaster underlying, final CacheManager cacheManager) {
     super(underlying);
@@ -204,16 +206,16 @@ public class EHCachingMasterConfigSource extends MasterConfigSource {
     }
 
     private void cleanCaches(final ChangeEvent event) {
-      //    final ObjectId objectId = event.getObjectId();
-      //    if (inCache(objectId)) {
+      // final ObjectId objectId = event.getObjectId();
+      // if (inCache(objectId)) {
       _configCache.removeAll(); // Jim - 5-Aug-2013 -- This was too conservative I think.  Just flush everything for the moment.
-      //    }
+      // }
     }
 
-    //    private boolean inCache(final ObjectId objectId) {
-    //      final Element element = _configCache.get(objectId);
-    //      return element != null;
-    //    }
+    // private boolean inCache(final ObjectId objectId) {
+    // final Element element = _configCache.get(objectId);
+    // return element != null;
+    // }
   }
 
 }

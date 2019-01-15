@@ -126,22 +126,28 @@ public interface AbstractMaster<D extends AbstractDocument> {
   /**
    * Corrects a document in the data store.
    * <p>
-   * A full master will store detailed historic information on documents
-   * and will support correction of each version.
-   * To update a document with a new version, use {@link #update}.
-   * To correct a previously stored version, use this method.
-   * Older versions and corrections can be accessed using a versioned identifier.
+   * A full master will store detailed historic information on documents and
+   * will support correction of each version. To update a document with a new
+   * version, use {@link #update}. To correct a previously stored version, use
+   * this method. Older versions and corrections can be accessed using a
+   * versioned identifier.
    * <p>
-   * The specified document must contain the unique identifier.
-   * The unique identifier must specify the last correction of a specific version of the document.
+   * The specified document must contain the unique identifier. The unique
+   * identifier must specify the last correction of a specific version of the
+   * document.
    *
-   * @param document  the document, not null
-   * @return the corrected state of the version, may be an update of the input document, not null
-   * @throws IllegalArgumentException if the request is invalid
-   * @throws DataNotFoundException if there is no document with that unique identifier
+   * @param document
+   *          the document, not null
+   * @return the corrected state of the version, may be an update of the input
+   *         document, not null
+   * @throws IllegalArgumentException
+   *           if the request is invalid
+   * @throws DataNotFoundException
+   *           if there is no document with that unique identifier
+   * @deprecated Use the {@link #replaceVersion(AbstractDocument)} method
    */
+  @Deprecated
   D correct(D document);
-  // TODO: deprecate
 
   //-------------------------------------------------------------------------
   /**
@@ -218,7 +224,6 @@ public interface AbstractMaster<D extends AbstractDocument> {
    * @throws DataNotFoundException if there is no document with the object identifier
    */
   UniqueId replaceVersion(D replacementDocument);
-  // NOTE: this is the same as the current correct() method, which should be deprecated, then deleted
 
   /**
    * Removes a single version of the document from the data store.

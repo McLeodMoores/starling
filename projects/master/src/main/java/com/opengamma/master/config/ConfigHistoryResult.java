@@ -39,7 +39,8 @@ public class ConfigHistoryResult<T> extends AbstractHistoryResult<ConfigDocument
   /**
    * The generic type token.
    */
-  private final GenericType<ConfigItem<T>> _gt = new GenericType<ConfigItem<T>>() { };
+  private final GenericType<ConfigItem<T>> _gt = new GenericType<ConfigItem<T>>() {
+  };
 
   /**
    * Creates an instance.

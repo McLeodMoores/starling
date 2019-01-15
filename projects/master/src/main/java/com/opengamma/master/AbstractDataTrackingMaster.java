@@ -17,6 +17,7 @@ import com.opengamma.core.change.ChangeManager;
 import com.opengamma.id.ObjectIdentifiable;
 import com.opengamma.id.UniqueId;
 import com.opengamma.id.VersionCorrection;
+import com.opengamma.util.ArgumentChecker;
 
 /**
  * A master which provides the ability to track which records are read from a master.
@@ -35,7 +36,7 @@ implements AbstractChangeProvidingMaster<D> {
    * @param delegate the master to delegate calls to
    */
   protected AbstractDataTrackingMaster(final M delegate) {
-    _delegate = delegate;
+    _delegate = ArgumentChecker.notNull(delegate, "delegate");
   }
 
   /**
@@ -44,8 +45,6 @@ implements AbstractChangeProvidingMaster<D> {
   protected M delegate() {
     return _delegate;
   }
-
-
 
   /**
    * Track access to the given doc (via its {@link UniqueId}).

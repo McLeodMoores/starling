@@ -20,6 +20,12 @@ import com.opengamma.master.config.ConfigSearchResult;
  */
 public class DataTrackingConfigMaster extends AbstractDataTrackingMaster<ConfigDocument, ConfigMaster> implements ConfigMaster {
 
+  /**
+   * Sets up the delegate config master.
+   *
+   * @param delegate
+   *          the delegate, not null
+   */
   public DataTrackingConfigMaster(final ConfigMaster delegate) {
     super(delegate);
   }

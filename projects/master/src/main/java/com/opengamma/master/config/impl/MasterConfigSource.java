@@ -88,6 +88,7 @@ public class MasterConfigSource extends AbstractSource<ConfigItem<?>> implements
   @Override
   @SuppressWarnings("unchecked")
   public <R> R getConfig(final Class<R> clazz, final UniqueId uniqueId) {
+    ArgumentChecker.notNull(clazz, "clazz");
     final ConfigItem<?> item = getMaster().get(uniqueId).getConfig();
     if (clazz.isAssignableFrom(item.getType())) {
       return (R) item.getValue();
@@ -117,6 +118,7 @@ public class MasterConfigSource extends AbstractSource<ConfigItem<?>> implements
   @SuppressWarnings("unchecked")
   @Override
   public <R> R getConfig(final Class<R> clazz, final ObjectId objectId, final VersionCorrection versionCorrection) {
+    ArgumentChecker.notNull(clazz, "clazz");
     final ConfigItem<?> item = getMaster().get(objectId, versionCorrection).getConfig();
     if (clazz.isAssignableFrom(item.getType())) {
       return (R) item.getValue();
