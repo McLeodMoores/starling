@@ -41,7 +41,6 @@ import com.opengamma.util.RegexUtils;
  * Documents will be returned that match the search criteria.
  * This class provides the ability to page the results and to search
  * as at a specific version and correction instant.
- * See {@link LegalEntityHistoryRequest} for more details on how history works.
  */
 @PublicSPI
 @BeanDefinition
@@ -240,17 +239,19 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
     }
     if (getExternalIdValue() != null) {
       for (final ExternalId identifier : legalentity.getExternalIdBundle()) {
-        if (!RegexUtils.wildcardMatch(getExternalIdValue(), identifier.getValue())) {
-          return false;
+        if (RegexUtils.wildcardMatch(getExternalIdValue(), identifier.getValue())) {
+          return true;
         }
       }
+      return false;
     }
     if (getExternalIdScheme() != null) {
       for (final ExternalId identifier : legalentity.getExternalIdBundle()) {
-        if (!RegexUtils.wildcardMatch(getExternalIdScheme(), identifier.getScheme().getName())) {
-          return false;
+        if (RegexUtils.wildcardMatch(getExternalIdScheme(), identifier.getScheme().getName())) {
+          return true;
         }
       }
+      return false;
     }
     if (getAttributes().size() > 0) {
       for (final Entry<String, String> entry : getAttributes().entrySet()) {

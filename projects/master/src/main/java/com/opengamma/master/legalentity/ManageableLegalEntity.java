@@ -58,10 +58,16 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
    */
   @PropertyDefinition(validate = "notNull", overrideGet = true)
   private ExternalIdBundle _externalIdBundle = ExternalIdBundle.EMPTY;
-  /** The map of attributes, which can be used for attaching additional application-level information. */
+  /**
+   * The map of attributes, which can be used for attaching additional
+   * application-level information.
+   */
   @PropertyDefinition(overrideGet = true, overrideSet = true)
   private final Map<String, String> _attributes = new HashMap<>();
-  /** The map of details, which can be used for attaching additional application-level information. */
+  /**
+   * The map of details, which can be used for attaching additional
+   * application-level information.
+   */
   @PropertyDefinition(overrideGet = true, overrideSet = true)
   private final Map<String, String> _details = new HashMap<>();
   /**
@@ -70,22 +76,34 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
    */
   @PropertyDefinition(validate = "notNull", overrideGet = true)
   private String _name = "";
-
+  /**
+   * A list of ratings.
+   */
   @PropertyDefinition(validate = "notNull", overrideGet = true)
   private List<Rating> _ratings = new ArrayList<>();
-
+  /**
+   * A list of capabilities.
+   */
   @PropertyDefinition(validate = "notNull", overrideGet = true)
   private List<Capability> _capabilities = new ArrayList<>();
-
+  /**
+   * A list of identifiers of issued securities.
+   */
   @PropertyDefinition(validate = "notNull", overrideGet = true)
   private List<ExternalIdBundle> _issuedSecurities = new ArrayList<>();
-
+  /**
+   * A list of obligations.
+   */
   @PropertyDefinition(validate = "notNull", overrideGet = true)
   private List<Obligation> _obligations = new ArrayList<>();
-
+  /**
+   * The root portfolio.
+   */
   @PropertyDefinition(overrideGet = true)
   private RootPortfolio _rootPortfolio;
-
+  /**
+   * A list of accounts.
+   */
   @PropertyDefinition(validate = "notNull", overrideGet = true)
   private List<Account> _accounts = new ArrayList<>();
 
@@ -237,7 +255,8 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the map of attributes, which can be used for attaching additional application-level information.
+   * Gets the map of attributes, which can be used for attaching additional
+   * application-level information.
    * @return the value of the property, not null
    */
   @Override
@@ -246,7 +265,8 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
   }
 
   /**
-   * Sets the map of attributes, which can be used for attaching additional application-level information.
+   * Sets the map of attributes, which can be used for attaching additional
+   * application-level information.
    * @param attributes  the new value of the property, not null
    */
   @Override
@@ -258,6 +278,7 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
 
   /**
    * Gets the the {@code attributes} property.
+   * application-level information.
    * @return the property, not null
    */
   public final Property<Map<String, String>> attributes() {
@@ -266,7 +287,8 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the map of details, which can be used for attaching additional application-level information.
+   * Gets the map of details, which can be used for attaching additional
+   * application-level information.
    * @return the value of the property, not null
    */
   @Override
@@ -275,7 +297,8 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
   }
 
   /**
-   * Sets the map of details, which can be used for attaching additional application-level information.
+   * Sets the map of details, which can be used for attaching additional
+   * application-level information.
    * @param details  the new value of the property, not null
    */
   @Override
@@ -287,6 +310,7 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
 
   /**
    * Gets the the {@code details} property.
+   * application-level information.
    * @return the property, not null
    */
   public final Property<Map<String, String>> details() {
@@ -325,7 +349,7 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the ratings.
+   * Gets a list of ratings.
    * @return the value of the property, not null
    */
   @Override
@@ -334,7 +358,7 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
   }
 
   /**
-   * Sets the ratings.
+   * Sets a list of ratings.
    * @param ratings  the new value of the property, not null
    */
   public void setRatings(List<Rating> ratings) {
@@ -352,7 +376,7 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the capabilities.
+   * Gets a list of capabilities.
    * @return the value of the property, not null
    */
   @Override
@@ -361,7 +385,7 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
   }
 
   /**
-   * Sets the capabilities.
+   * Sets a list of capabilities.
    * @param capabilities  the new value of the property, not null
    */
   public void setCapabilities(List<Capability> capabilities) {
@@ -379,7 +403,7 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the issuedSecurities.
+   * Gets a list of identifiers of issued securities.
    * @return the value of the property, not null
    */
   @Override
@@ -388,7 +412,7 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
   }
 
   /**
-   * Sets the issuedSecurities.
+   * Sets a list of identifiers of issued securities.
    * @param issuedSecurities  the new value of the property, not null
    */
   public void setIssuedSecurities(List<ExternalIdBundle> issuedSecurities) {
@@ -406,7 +430,7 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the obligations.
+   * Gets a list of obligations.
    * @return the value of the property, not null
    */
   @Override
@@ -415,7 +439,7 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
   }
 
   /**
-   * Sets the obligations.
+   * Sets a list of obligations.
    * @param obligations  the new value of the property, not null
    */
   public void setObligations(List<Obligation> obligations) {
@@ -433,7 +457,7 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the rootPortfolio.
+   * Gets the root portfolio.
    * @return the value of the property
    */
   @Override
@@ -442,7 +466,7 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
   }
 
   /**
-   * Sets the rootPortfolio.
+   * Sets the root portfolio.
    * @param rootPortfolio  the new value of the property
    */
   public void setRootPortfolio(RootPortfolio rootPortfolio) {
@@ -459,7 +483,7 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the accounts.
+   * Gets a list of accounts.
    * @return the value of the property, not null
    */
   @Override
@@ -468,7 +492,7 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
   }
 
   /**
-   * Sets the accounts.
+   * Sets a list of accounts.
    * @param accounts  the new value of the property, not null
    */
   public void setAccounts(List<Account> accounts) {

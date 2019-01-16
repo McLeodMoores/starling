@@ -244,17 +244,19 @@ public class ConventionSearchRequest extends AbstractSearchRequest {
     }
     if (getExternalIdValue() != null) {
       for (final ExternalId identifier : convention.getExternalIdBundle()) {
-        if (!RegexUtils.wildcardMatch(getExternalIdValue(), identifier.getValue())) {
-          return false;
+        if (RegexUtils.wildcardMatch(getExternalIdValue(), identifier.getValue())) {
+          return true;
         }
       }
+      return false;
     }
     if (getExternalIdScheme() != null) {
       for (final ExternalId identifier : convention.getExternalIdBundle()) {
-        if (!RegexUtils.wildcardMatch(getExternalIdScheme(), identifier.getScheme().getName())) {
-          return false;
+        if (RegexUtils.wildcardMatch(getExternalIdScheme(), identifier.getScheme().getName())) {
+          return true;
         }
       }
+      return false;
     }
     if (getAttributes().size() > 0) {
       for (final Entry<String, String> entry : getAttributes().entrySet()) {
