@@ -6,7 +6,6 @@
 package com.opengamma.master.config.impl;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertSame;
@@ -496,7 +495,7 @@ public class InMemoryConfigMasterTest {
     final ConfigDocument updated = _testPopulated.update(doc);
     assertTrue(_item1.getUniqueId().getScheme().equals(updated.getUniqueId().getScheme()));
     assertTrue(_item1.getUniqueId().getValue().equals(updated.getUniqueId().getValue()));
-    assertFalse(_item1.getUniqueId().getVersion().equals(updated.getUniqueId().getVersion()));
+    assertNull(_item1.getUniqueId().getVersion());
     assertNotNull(updated.getVersionFromInstant());
     assertNotNull(updated.getVersionFromInstant());
     final List<ChangeType> changes = changeListener.getChangeType(doc.getObjectId());
@@ -533,7 +532,7 @@ public class InMemoryConfigMasterTest {
     final ConfigDocument updated = _testPopulated.correct(doc);
     assertTrue(_item1.getUniqueId().getScheme().equals(updated.getUniqueId().getScheme()));
     assertTrue(_item1.getUniqueId().getValue().equals(updated.getUniqueId().getValue()));
-    assertFalse(_item1.getUniqueId().getVersion().equals(updated.getUniqueId().getVersion()));
+    assertNull(_item1.getUniqueId().getVersion());
     assertNotNull(updated.getVersionFromInstant());
     assertNotNull(updated.getVersionFromInstant());
     final List<ChangeType> changes = changeListener.getChangeType(doc.getObjectId());

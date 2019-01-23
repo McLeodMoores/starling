@@ -5,6 +5,7 @@
  */
 package com.opengamma.master.config.impl;
 
+import com.opengamma.id.UniqueId;
 import com.opengamma.master.AbstractDataTrackingMaster;
 import com.opengamma.master.config.ConfigDocument;
 import com.opengamma.master.config.ConfigHistoryRequest;
@@ -16,7 +17,7 @@ import com.opengamma.master.config.ConfigSearchRequest;
 import com.opengamma.master.config.ConfigSearchResult;
 
 /**
- * Config master which tracks accesses using UniqueIds.
+ * Config master which tracks accesses using {@link UniqueId}s.
  */
 public class DataTrackingConfigMaster extends AbstractDataTrackingMaster<ConfigDocument, ConfigMaster> implements ConfigMaster {
 

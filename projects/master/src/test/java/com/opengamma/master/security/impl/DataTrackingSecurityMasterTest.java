@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2019 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.opengamma.master.config.impl;
+package com.opengamma.master.security.impl;
 
 import static com.opengamma.test.Assert.assertEqualsNoOrder;
 import static org.testng.Assert.assertEquals;
@@ -22,42 +22,44 @@ import org.testng.annotations.Test;
 import org.threeten.bp.Instant;
 
 import com.opengamma.DataNotFoundException;
-import com.opengamma.core.config.impl.ConfigItem;
-import com.opengamma.id.ExternalId;
+import com.opengamma.core.security.Security;
 import com.opengamma.id.UniqueId;
 import com.opengamma.id.VersionCorrection;
-import com.opengamma.master.config.ConfigDocument;
-import com.opengamma.master.config.ConfigSearchRequest;
-import com.opengamma.master.config.ConfigSearchResult;
+import com.opengamma.master.security.RawSecurity;
+import com.opengamma.master.security.SecurityDocument;
+import com.opengamma.master.security.SecurityHistoryRequest;
+import com.opengamma.master.security.SecurityHistoryResult;
+import com.opengamma.master.security.SecuritySearchRequest;
+import com.opengamma.master.security.SecuritySearchResult;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Tests for {@link DataTrackingConfigMaster}.
+ * Tests for {@link DataTrackingSecurityMaster}.
  */
 @Test(groups = TestGroup.UNIT)
-public class DataTrackingConfigMasterTest {
-  private static final ExternalId CONFIG_1 = ExternalId.of("eid", "1");
-  private static final ExternalId CONFIG_2 = ExternalId.of("eid", "2");
-  private static final ExternalId CONFIG_3 = ExternalId.of("eid", "3");
-  private static final String NAME_1 = "Name";
-  private static final String NAME_2 = "Name";
-  private static final String NAME_3 = "Other";
+public class DataTrackingSecurityMasterTest {
+  private static final String NAME_1 = "Name 1";
+  private static final String NAME_2 = "Name 2";
+  private static final String NAME_3 = "Name 1";
+  private static final String TYPE_1 = "Type";
+  private static final String TYPE_2 = "Type";
+  private static final String TYPE_3 = "Other";
   private static final VersionCorrection VC_1 = VersionCorrection.ofVersionAsOf(Instant.ofEpochSecond(1000));
   private static final VersionCorrection VC_2 = VersionCorrection.ofVersionAsOf(Instant.ofEpochSecond(2000));
   private static final VersionCorrection VC_3 = VersionCorrection.ofVersionAsOf(Instant.ofEpochSecond(3000));
-  private static final ConfigItem<?> ITEM_1;
-  private static final ConfigItem<?> ITEM_2;
-  private static final ConfigItem<?> ITEM_3;
+  private static final RawSecurity SEC_1;
+  private static final RawSecurity SEC_2;
+  private static final RawSecurity SEC_3;
   static {
-    ITEM_1 = ConfigItem.of(CONFIG_1, NAME_1);
-    ITEM_2 = ConfigItem.of(CONFIG_2, NAME_2);
-    ITEM_3 = ConfigItem.of(CONFIG_3, NAME_3);
-    ITEM_1.setType(ExternalId.class);
-    ITEM_2.setType(ExternalId.class);
-    ITEM_3.setType(ExternalId.class);
+    SEC_1 = new RawSecurity(TYPE_1);
+    SEC_2 = new RawSecurity(TYPE_2);
+    SEC_3 = new RawSecurity(TYPE_3);
+    SEC_1.setName(NAME_1);
+    SEC_2.setName(NAME_2);
+    SEC_3.setName(NAME_3);
   }
-  private InMemoryConfigMaster _delegate;
-  private DataTrackingConfigMaster _master;
+  private InMemorySecurityMaster _delegate;
+  private DataTrackingSecurityMaster _master;
   private UniqueId _uid1;
   private UniqueId _uid2;
   private UniqueId _uid3;
@@ -67,14 +69,14 @@ public class DataTrackingConfigMasterTest {
    */
   @BeforeMethod
   public void setUp() {
-    _delegate = new InMemoryConfigMaster();
-    _delegate.add(new ConfigDocument(ITEM_1));
-    _delegate.add(new ConfigDocument(ITEM_2));
-    _delegate.add(new ConfigDocument(ITEM_3));
-    _master = new DataTrackingConfigMaster(_delegate);
-    _uid1 = ITEM_1.getUniqueId();
-    _uid2 = ITEM_2.getUniqueId();
-    _uid3 = ITEM_3.getUniqueId();
+    _delegate = new InMemorySecurityMaster();
+    _delegate.add(new SecurityDocument(SEC_1));
+    _delegate.add(new SecurityDocument(SEC_2));
+    _delegate.add(new SecurityDocument(SEC_3));
+    _master = new DataTrackingSecurityMaster(_delegate);
+    _uid1 = SEC_1.getUniqueId();
+    _uid2 = SEC_2.getUniqueId();
+    _uid3 = SEC_3.getUniqueId();
     // checks the reset
     assertNotNull(_uid1);
     assertNotNull(_uid2);
@@ -99,18 +101,18 @@ public class DataTrackingConfigMasterTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullDelegate() {
-    new DataTrackingConfigMaster(null);
+    new DataTrackingSecurityMaster(null);
   }
 
   /**
    * Tests tracking after getting by unique id.
    */
   public void testGetByUniqueId() {
-    assertEquals(_master.get(_uid1).getValue(), ITEM_1);
+    assertEquals(_master.get(_uid1).getValue(), SEC_1);
     assertEqualsNoOrder(_master.getIdsAccessed(), Arrays.asList(_uid1));
-    assertEquals(_master.get(_uid2).getValue(), ITEM_2);
+    assertEquals(_master.get(_uid2).getValue(), SEC_2);
     assertEqualsNoOrder(_master.getIdsAccessed(), Arrays.asList(_uid1, _uid2));
-    assertEquals(_master.get(_uid3).getValue(), ITEM_3);
+    assertEquals(_master.get(_uid3).getValue(), SEC_3);
     assertEqualsNoOrder(_master.getIdsAccessed(), Arrays.asList(_uid1, _uid2, _uid3));
   }
 
@@ -119,11 +121,11 @@ public class DataTrackingConfigMasterTest {
    * by underling master for this test).
    */
   public void testGetByObjectIdVersionCorrection() {
-    assertEquals(_master.get(_uid1.getObjectId(), VC_1).getValue(), ITEM_1);
+    assertEquals(_master.get(_uid1.getObjectId(), VC_1).getValue(), SEC_1);
     assertEqualsNoOrder(_master.getIdsAccessed(), Arrays.asList(_uid1));
-    assertEquals(_master.get(_uid2.getObjectId(), VC_2).getValue(), ITEM_2);
+    assertEquals(_master.get(_uid2.getObjectId(), VC_2).getValue(), SEC_2);
     assertEqualsNoOrder(_master.getIdsAccessed(), Arrays.asList(_uid1, _uid2));
-    assertEquals(_master.get(_uid3.getObjectId(), VC_3).getValue(), ITEM_3);
+    assertEquals(_master.get(_uid3.getObjectId(), VC_3).getValue(), SEC_3);
     assertEqualsNoOrder(_master.getIdsAccessed(), Arrays.asList(_uid1, _uid2, _uid3));
   }
 
@@ -131,25 +133,25 @@ public class DataTrackingConfigMasterTest {
    * Tests getting a collection of unique ids.
    */
   public void testGetByUidCollection() {
-    final Map<UniqueId, ConfigDocument> configs = _master.get(Arrays.asList(_uid1, _uid2, _uid3));
-    assertEquals(configs.size(), 3);
-    assertEqualsNoOrder(configs.keySet(), Arrays.asList(_uid1, _uid2, _uid3));
-    final Set<ConfigItem<?>> items = new HashSet<>();
-    for (final Map.Entry<UniqueId, ConfigDocument> entry : configs.entrySet()) {
-      items.add(entry.getValue().getConfig());
+    final Map<UniqueId, SecurityDocument> Securitys = _master.get(Arrays.asList(_uid1, _uid2, _uid3));
+    assertEquals(Securitys.size(), 3);
+    assertEqualsNoOrder(Securitys.keySet(), Arrays.asList(_uid1, _uid2, _uid3));
+    final Set<Security> items = new HashSet<>();
+    for (final Map.Entry<UniqueId, SecurityDocument> entry : Securitys.entrySet()) {
+      items.add(entry.getValue().getSecurity());
     }
-    assertEqualsNoOrder(items, Arrays.asList(ITEM_1, ITEM_2, ITEM_3));
+    assertEqualsNoOrder(items, Arrays.asList(SEC_1, SEC_2, SEC_3));
   }
 
   /**
    * Tests the addition of documents.
    */
   public void testAddDocument() {
-    final DataTrackingConfigMaster master = new DataTrackingConfigMaster(_delegate);
+    final DataTrackingSecurityMaster master = new DataTrackingSecurityMaster(_delegate);
     assertTrue(master.getIdsAccessed().isEmpty());
-    final ConfigDocument doc1 = master.add(new ConfigDocument(ITEM_1.clone()));
-    final ConfigDocument doc2 = master.add(new ConfigDocument(ITEM_2.clone()));
-    final ConfigDocument doc3 = master.add(new ConfigDocument(ITEM_3.clone()));
+    final SecurityDocument doc1 = master.add(new SecurityDocument(SEC_1.clone()));
+    final SecurityDocument doc2 = master.add(new SecurityDocument(SEC_2.clone()));
+    final SecurityDocument doc3 = master.add(new SecurityDocument(SEC_3.clone()));
     assertEqualsNoOrder(master.getIdsAccessed(), Arrays.asList(doc1.getUniqueId(), doc2.getUniqueId(), doc3.getUniqueId()));
   }
 
@@ -158,9 +160,9 @@ public class DataTrackingConfigMasterTest {
    */
   public void testUpdateDocument() {
     assertEquals(_master.getIdsAccessed().size(), 0);
-    final ConfigDocument doc = new ConfigDocument(ITEM_1);
+    final SecurityDocument doc = new SecurityDocument(SEC_1);
     // clone because original document is updated
-    final ConfigDocument updated = _master.update(doc.clone());
+    final SecurityDocument updated = _master.update(doc.clone());
     assertNotEquals(doc, updated);
     assertEquals(_master.getIdsAccessed().size(), 1);
     assertEquals(_master.getIdsAccessed().iterator().next(), doc.getUniqueId());
@@ -168,49 +170,13 @@ public class DataTrackingConfigMasterTest {
   }
 
   /**
-   * Tests removing a document using the object id. The object is removed but
-   * the ids accessed will remain the same.
-   */
-  public void testRemove() {
-    final DataTrackingConfigMaster master = new DataTrackingConfigMaster(_delegate);
-    assertTrue(master.getIdsAccessed().isEmpty());
-    master.add(new ConfigDocument(ITEM_1.clone()));
-    master.add(new ConfigDocument(ITEM_2.clone()));
-    master.add(new ConfigDocument(ITEM_3.clone()));
-    assertEquals(master.getIdsAccessed().size(), 3);
-    master.remove(ITEM_1);
-    try {
-      master.get(ITEM_1.getUniqueId());
-      fail();
-    } catch (final DataNotFoundException e) {
-    } // behaviour specific to the delegate master used
-    assertEquals(master.getIdsAccessed().size(), 3);
-    assertEquals(master.getIdsAccessed().size(), 3);
-    master.remove(ITEM_2);
-    try {
-      master.get(ITEM_2.getUniqueId());
-      fail();
-    } catch (final DataNotFoundException e) {
-    } // behaviour specific to the delegate master used
-    assertEquals(master.getIdsAccessed().size(), 3);
-    assertEquals(master.getIdsAccessed().size(), 3);
-    master.remove(ITEM_3);
-    try {
-      master.get(ITEM_3.getUniqueId());
-      fail();
-    } catch (final DataNotFoundException e) {
-    } // behaviour specific to the delegate master used
-    assertEquals(master.getIdsAccessed().size(), 3);
-  }
-
-  /**
    * Tests correcting a document.
    */
   public void testCorrectDocument() {
     assertEquals(_master.getIdsAccessed().size(), 0);
-    final ConfigDocument doc = new ConfigDocument(ITEM_1);
+    final SecurityDocument doc = new SecurityDocument(SEC_1);
     // clone because original document is corrected
-    final ConfigDocument corrected = _master.correct(doc.clone());
+    final SecurityDocument corrected = _master.correct(doc.clone());
     assertNotEquals(doc, corrected);
     assertEquals(_master.getIdsAccessed().size(), 1);
     assertEquals(_master.getIdsAccessed().iterator().next(), doc.getUniqueId());
@@ -222,11 +188,11 @@ public class DataTrackingConfigMasterTest {
    */
   public void testReplaceVersionUid() {
     assertEquals(_master.getIdsAccessed().size(), 0);
-    final ConfigDocument replacement1 = new ConfigDocument(ITEM_2);
-    final ConfigDocument replacement2 = new ConfigDocument(ITEM_3);
-    replacement1.setUniqueId(UniqueId.of(InMemoryConfigMaster.DEFAULT_OID_SCHEME, "1000"));
+    final SecurityDocument replacement1 = new SecurityDocument(SEC_2);
+    final SecurityDocument replacement2 = new SecurityDocument(SEC_3);
+    replacement1.setUniqueId(UniqueId.of(InMemorySecurityMaster.DEFAULT_OID_SCHEME, "1000"));
     replacement1.setVersionFromInstant(Instant.ofEpochSecond(100000));
-    replacement2.setUniqueId(UniqueId.of(InMemoryConfigMaster.DEFAULT_OID_SCHEME, "2000"));
+    replacement2.setUniqueId(UniqueId.of(InMemorySecurityMaster.DEFAULT_OID_SCHEME, "2000"));
     replacement1.setVersionFromInstant(Instant.ofEpochSecond(200000));
     final List<UniqueId> replaced = _master.replaceVersion(_uid1, Arrays.asList(replacement1, replacement2));
     assertEquals(_master.getIdsAccessed().size(), 1);
@@ -241,11 +207,11 @@ public class DataTrackingConfigMasterTest {
    */
   public void testReplaceAllVersionsOid() {
     assertEquals(_master.getIdsAccessed().size(), 0);
-    final ConfigDocument replacement1 = new ConfigDocument(ITEM_2);
-    final ConfigDocument replacement2 = new ConfigDocument(ITEM_3);
-    replacement1.setUniqueId(UniqueId.of(InMemoryConfigMaster.DEFAULT_OID_SCHEME, "1000"));
+    final SecurityDocument replacement1 = new SecurityDocument(SEC_2);
+    final SecurityDocument replacement2 = new SecurityDocument(SEC_3);
+    replacement1.setUniqueId(UniqueId.of(InMemorySecurityMaster.DEFAULT_OID_SCHEME, "1000"));
     replacement1.setVersionFromInstant(Instant.ofEpochSecond(100000));
-    replacement2.setUniqueId(UniqueId.of(InMemoryConfigMaster.DEFAULT_OID_SCHEME, "2000"));
+    replacement2.setUniqueId(UniqueId.of(InMemorySecurityMaster.DEFAULT_OID_SCHEME, "2000"));
     replacement1.setVersionFromInstant(Instant.ofEpochSecond(200000));
     final List<UniqueId> replaced = _master.replaceAllVersions(_uid1.getObjectId(), Arrays.asList(replacement1, replacement2));
     assertEquals(_master.getIdsAccessed().size(), 1);
@@ -260,11 +226,11 @@ public class DataTrackingConfigMasterTest {
    */
   public void testReplaceVersionsOid() {
     assertEquals(_master.getIdsAccessed().size(), 0);
-    final ConfigDocument replacement1 = new ConfigDocument(ITEM_2);
-    final ConfigDocument replacement2 = new ConfigDocument(ITEM_3);
-    replacement1.setUniqueId(UniqueId.of(InMemoryConfigMaster.DEFAULT_OID_SCHEME, "1000"));
+    final SecurityDocument replacement1 = new SecurityDocument(SEC_2);
+    final SecurityDocument replacement2 = new SecurityDocument(SEC_3);
+    replacement1.setUniqueId(UniqueId.of(InMemorySecurityMaster.DEFAULT_OID_SCHEME, "1000"));
     replacement1.setVersionFromInstant(Instant.ofEpochSecond(100000));
-    replacement2.setUniqueId(UniqueId.of(InMemoryConfigMaster.DEFAULT_OID_SCHEME, "2000"));
+    replacement2.setUniqueId(UniqueId.of(InMemorySecurityMaster.DEFAULT_OID_SCHEME, "2000"));
     replacement1.setVersionFromInstant(Instant.ofEpochSecond(200000));
     final List<UniqueId> replaced = _master.replaceVersions(_uid1.getObjectId(), Arrays.asList(replacement1, replacement2));
     assertEquals(_master.getIdsAccessed().size(), 1);
@@ -279,8 +245,8 @@ public class DataTrackingConfigMasterTest {
    */
   public void testReplaceVersion() {
     assertEquals(_master.getIdsAccessed().size(), 0);
-    assertEquals(_master.get(_uid3).getConfig().getValue(), CONFIG_3);
-    final ConfigDocument doc = new ConfigDocument(ITEM_1);
+    assertEquals(_master.get(_uid3).getSecurity(), SEC_3);
+    final SecurityDocument doc = new SecurityDocument(SEC_1);
     doc.setUniqueId(_uid3);
     final UniqueId replaced = _master.replaceVersion(doc.clone());
     assertEquals(doc.getUniqueId(), replaced);
@@ -288,7 +254,7 @@ public class DataTrackingConfigMasterTest {
     assertEquals(_master.getIdsAccessed().iterator().next(), doc.getUniqueId());
     assertEquals(_master.getIdsAccessed().iterator().next(), replaced.getUniqueId());
     // document for this uid has been replaced
-    assertEquals(_master.get(_uid3).getConfig().getValue(), CONFIG_1);
+    assertEquals(_master.get(_uid3).getSecurity(), SEC_1);
   }
 
   /**
@@ -296,8 +262,8 @@ public class DataTrackingConfigMasterTest {
    */
   public void testRemoveVersion() {
     assertEquals(_master.getIdsAccessed().size(), 0);
-    assertEquals(_master.get(_uid3).getConfig().getValue(), CONFIG_3);
-    final ConfigDocument doc = new ConfigDocument(ITEM_1);
+    assertEquals(_master.get(_uid3).getSecurity(), SEC_3);
+    final SecurityDocument doc = new SecurityDocument(SEC_1);
     doc.setUniqueId(_uid3);
     _master.removeVersion(_uid3);
     assertEquals(_master.getIdsAccessed().size(), 1);
@@ -314,10 +280,10 @@ public class DataTrackingConfigMasterTest {
    */
   public void testAddVersionByOid() {
     assertEquals(_master.getIdsAccessed().size(), 0);
-    final ConfigDocument doc1 = new ConfigDocument(ITEM_1);
-    final ConfigDocument doc2 = new ConfigDocument(ITEM_2);
-    assertEquals(doc1.getConfig().getUniqueId(), _uid1);
-    assertEquals(doc2.getConfig().getUniqueId(), _uid2);
+    final SecurityDocument doc1 = new SecurityDocument(SEC_1);
+    final SecurityDocument doc2 = new SecurityDocument(SEC_2);
+    assertEquals(doc1.getSecurity().getUniqueId(), _uid1);
+    assertEquals(doc2.getSecurity().getUniqueId(), _uid2);
     final UniqueId newUid = _master.addVersion(doc1, doc2);
     assertNotEquals(doc1.getUniqueId(), newUid);
     assertEquals(doc2.getUniqueId(), newUid);
@@ -328,31 +294,32 @@ public class DataTrackingConfigMasterTest {
    * Tests searching by type.
    */
   public void testSearchByType() {
-    final ConfigSearchRequest<ExternalId> request = new ConfigSearchRequest<>();
-    request.setType(ExternalId.class);
-    final ConfigSearchResult<ExternalId> result = _master.search(request);
-    assertEquals(result.getDocuments().size(), 3);
-    assertEquals(_master.getIdsAccessed().size(), 3);
+    final SecuritySearchRequest request = new SecuritySearchRequest();
+    request.setSecurityType(TYPE_1);
+    final SecuritySearchResult result = _master.search(request);
+    assertEquals(result.getDocuments().size(), 2);
+    assertEquals(_master.getIdsAccessed().size(), 2);
+    assertEqualsNoOrder(result.getSecurities(), Arrays.asList(SEC_1, SEC_2));
   }
 
   /**
    * Tests searching by name.
    */
   public void testSearchByName() {
-    final ConfigSearchRequest<ExternalId> request = new ConfigSearchRequest<>();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.setName(NAME_1);
-    ConfigSearchResult<ExternalId> result = _master.search(request);
+    SecuritySearchResult result = _master.search(request);
     assertEquals(result.getDocuments().size(), 2);
     assertEquals(_master.getIdsAccessed().size(), 2);
-    assertEqualsNoOrder(_master.getIdsAccessed(), Arrays.asList(_uid1, _uid2));
+    assertEqualsNoOrder(_master.getIdsAccessed(), Arrays.asList(_uid1, _uid3));
     request.setName(NAME_2);
     result = _master.search(request);
-    assertEquals(result.getDocuments().size(), 2);
-    assertEquals(_master.getIdsAccessed().size(), 2);
-    assertEqualsNoOrder(_master.getIdsAccessed(), Arrays.asList(_uid1, _uid2));
+    assertEquals(result.getDocuments().size(), 1);
+    assertEquals(_master.getIdsAccessed().size(), 3);
+    assertEqualsNoOrder(_master.getIdsAccessed(), Arrays.asList(_uid1, _uid2, _uid3));
     request.setName(NAME_3);
     result = _master.search(request);
-    assertEquals(result.getDocuments().size(), 1);
+    assertEquals(result.getDocuments().size(), 2);
     assertEquals(_master.getIdsAccessed().size(), 3);
     assertEqualsNoOrder(_master.getIdsAccessed(), Arrays.asList(_uid1, _uid2, _uid3));
   }
@@ -360,17 +327,14 @@ public class DataTrackingConfigMasterTest {
   /**
    * Tests retrieval of the history.
    */
-  // TODO fix this
-  // public void testHistoryByTypeAndOid() {
-  // final ConfigHistoryRequest<ExternalId> request = new
-  // ConfigHistoryRequest<>();
-  // request.setType(ExternalId.class);
-  // request.setObjectId(_uid1.getObjectId());
-  // final ConfigHistoryResult<ExternalId> result = _master.history(request);
-  // assertEquals(result.getDocuments().size(), 1);
-  // assertEquals(result.getSingleValue().getValue(), CONFIG_1);
-  // assertEquals(_master.getIdsAccessed().size(), 1);
-  // assertEquals(_master.getIdsAccessed().iterator().next(), _uid1);
-  // }
+  public void testHistoryByTypeAndOid() {
+    final SecurityHistoryRequest request = new SecurityHistoryRequest();
+    request.setObjectId(_uid1.getObjectId());
+    final SecurityHistoryResult result = _master.history(request);
+    assertEquals(result.getDocuments().size(), 1);
+    assertEquals(result.getSingleSecurity(), SEC_1);
+    assertEquals(_master.getIdsAccessed().size(), 1);
+    assertEquals(_master.getIdsAccessed().iterator().next(), _uid1);
+  }
 
 }

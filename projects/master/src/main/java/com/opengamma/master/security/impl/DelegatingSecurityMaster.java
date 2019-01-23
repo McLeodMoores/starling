@@ -175,6 +175,7 @@ public class DelegatingSecurityMaster extends UniqueIdSchemeDelegator<SecurityMa
 
   @Override
   public Map<UniqueId, SecurityDocument> get(final Collection<UniqueId> uniqueIds) {
+    ArgumentChecker.notNull(uniqueIds, "uniqueIds");
     final Map<UniqueId, SecurityDocument> resultMap = newHashMap();
     for (final UniqueId uniqueId : uniqueIds) {
       final SecurityDocument doc = get(uniqueId);

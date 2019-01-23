@@ -94,6 +94,7 @@ public class DelegatingHistoricalTimeSeriesMaster extends UniqueIdSchemeDelegato
 
   @Override
   public Map<UniqueId, HistoricalTimeSeriesInfoDocument> get(final Collection<UniqueId> uniqueIds) {
+    ArgumentChecker.notNull(uniqueIds, "uniqueIds");
     final Map<UniqueId, HistoricalTimeSeriesInfoDocument> resultMap = newHashMap();
     for (final UniqueId uniqueId : uniqueIds) {
       final HistoricalTimeSeriesInfoDocument doc = get(uniqueId);
@@ -105,7 +106,11 @@ public class DelegatingHistoricalTimeSeriesMaster extends UniqueIdSchemeDelegato
   @Override
   public HistoricalTimeSeriesInfoDocument add(final HistoricalTimeSeriesInfoDocument document) {
     ArgumentChecker.notNull(document, "document");
-    return getDefaultDelegate().add(document);
+    final UniqueId uniqueId = document.getUniqueId();
+    if (uniqueId == null) {
+      return getDefaultDelegate().add(document);
+    }
+    return chooseDelegate(uniqueId.getScheme()).add(document);
   }
 
   @Override

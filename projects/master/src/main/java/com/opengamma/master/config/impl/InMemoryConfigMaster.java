@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.atomic.AtomicLong;
 
 import org.threeten.bp.Instant;
 
@@ -71,10 +70,6 @@ public class InMemoryConfigMaster implements ConfigMaster {
    * The change manager.
    */
   private final ChangeManager _changeManager;
-  /**
-   * A source of version strings so that updates to an object identifier get a new unique identifier.
-   */
-  private final AtomicLong _versions = new AtomicLong();
 
   /**
    * Creates an instance.
@@ -144,7 +139,7 @@ public class InMemoryConfigMaster implements ConfigMaster {
 
     final ConfigItem<?> item = document.getConfig();
     final ObjectId objectId = _objectIdSupplier.get();
-    final UniqueId uniqueId = objectId.atVersion(Long.toString(_versions.incrementAndGet()));
+    final UniqueId uniqueId = objectId.atVersion("");
     final Instant now = Instant.now();
     item.setUniqueId(uniqueId);
     IdUtils.setInto(item.getValue(), uniqueId);
@@ -165,7 +160,7 @@ public class InMemoryConfigMaster implements ConfigMaster {
     ArgumentChecker.notNull(document.getConfig(), "document.object");
     ArgumentChecker.notNull(document.getConfig().getValue(), "document.object.value");
 
-    UniqueId uniqueId = document.getUniqueId();
+    final UniqueId uniqueId = document.getUniqueId();
     final Instant now = Instant.now();
     final ConfigDocument storedDocument = _store.get(uniqueId.getObjectId());
     if (storedDocument == null) {
@@ -175,7 +170,6 @@ public class InMemoryConfigMaster implements ConfigMaster {
     document.setVersionToInstant(null);
     document.setCorrectionFromInstant(now);
     document.setCorrectionToInstant(null);
-    uniqueId = uniqueId.withVersion(Long.toString(_versions.incrementAndGet()));
     document.setUniqueId(uniqueId);
     IdUtils.setInto(document.getConfig().getValue(), uniqueId);
     if (!_store.replace(uniqueId.getObjectId(), storedDocument, document)) {
