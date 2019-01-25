@@ -23,7 +23,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Expiry;
 
 /**
- * A security for municipal bonds.
+ * A security for inflation bonds.
  */
 @BeanDefinition
 public class InflationBondSecurity extends BondSecurity {

@@ -13,7 +13,7 @@ import org.fudgemsg.mapping.FudgeSerializer;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.frequency.Frequency;
-import com.opengamma.financial.convention.yield.YieldConvention;
+import com.opengamma.financial.convention.yield.YieldConventionFactory;
 import com.opengamma.financial.security.FinancialSecurityFudgeBuilder;
 import com.opengamma.util.fudgemsg.AbstractFudgeBuilder;
 import com.opengamma.util.money.Currency;
@@ -79,7 +79,7 @@ public class BondSecurityFudgeBuilder extends AbstractFudgeBuilder {
     addToMessage(msg, ISSUER_DOMICILE_FIELD_NAME, object.getIssuerDomicile());
     addToMessage(msg, MARKET_FIELD_NAME, object.getMarket());
     addToMessage(msg, CURRENCY_FIELD_NAME, object.getCurrency());
-    addToMessage(msg, YIELD_CONVENTION_FIELD_NAME, object.getYieldConvention());
+    addToMessage(msg, YIELD_CONVENTION_FIELD_NAME, object.getYieldConvention().getName());
     addToMessage(msg, GUARANTEE_TYPE_FIELD_NAME, object.getGuaranteeType());
     addToMessage(msg, LAST_TRADE_DATE_FIELD_NAME, ExpiryFudgeBuilder.toFudgeMsg(serializer, object.getLastTradeDate()));
     addToMessage(msg, COUPON_TYPE_FIELD_NAME, object.getCouponType());
@@ -106,7 +106,7 @@ public class BondSecurityFudgeBuilder extends AbstractFudgeBuilder {
     object.setIssuerDomicile(msg.getString(ISSUER_DOMICILE_FIELD_NAME));
     object.setMarket(msg.getString(MARKET_FIELD_NAME));
     object.setCurrency(msg.getValue(Currency.class, CURRENCY_FIELD_NAME));
-    object.setYieldConvention(msg.getValue(YieldConvention.class, YIELD_CONVENTION_FIELD_NAME));
+    object.setYieldConvention(YieldConventionFactory.of(msg.getString(YIELD_CONVENTION_FIELD_NAME)));
     object.setGuaranteeType(msg.getString(GUARANTEE_TYPE_FIELD_NAME));
     object.setLastTradeDate(ExpiryFudgeBuilder.fromFudgeMsg(deserializer, msg.getMessage(LAST_TRADE_DATE_FIELD_NAME)));
     object.setCouponType(msg.getString(COUPON_TYPE_FIELD_NAME));

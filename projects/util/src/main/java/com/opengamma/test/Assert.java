@@ -62,7 +62,9 @@ public final class Assert {
       throw new AssertionError("Collections not equal: expected: null and actual: " + actual.toString());
     }
     assertEquals(actual.size(), expected.size(), message);
-    assertTrue(actual.containsAll(expected), message);
+    if (!actual.containsAll(expected)) {
+      throw new AssertionError("Collections not equal: expected: " + expected.toString() + " and actual: " + actual.toString());
+    }
   }
 
   /**

@@ -60,7 +60,7 @@ public class BondSecuritySearchRequest extends SecuritySearchRequest {
    * @return true if matches
    */
   public boolean matches(final SecurityDocument document) {
-    if (super.matches(document) == false || document.getSecurity() instanceof BondSecurity == false) {
+    if (super.matches(document) == false || !(document.getSecurity() instanceof BondSecurity)) {
       return false;
     }
     final BondSecurity security = (BondSecurity) document.getSecurity();

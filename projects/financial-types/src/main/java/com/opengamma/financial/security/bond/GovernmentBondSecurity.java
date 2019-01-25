@@ -23,7 +23,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Expiry;
 
 /**
- * A security for government bonds.
+ * A security representation for government bonds.
  */
 @BeanDefinition
 public class GovernmentBondSecurity extends BondSecurity {
@@ -31,10 +31,57 @@ public class GovernmentBondSecurity extends BondSecurity {
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
 
+  /**
+   * Constructs an empty security.
+   */
   GovernmentBondSecurity() { //For builder
     super();
   }
 
+  /**
+   * Constructs a government bond security.
+   *
+   * @param issuerName
+   *          the issuer name, not null
+   * @param issuerType
+   *          the issuer type, not null
+   * @param issuerDomicile
+   *          the issuer domicile, not null
+   * @param market
+   *          the market in which the bonds are issued, not null
+   * @param currency
+   *          the currency of the bond, not null
+   * @param yieldConvention
+   *          the yield convention, not null
+   * @param lastTradeDate
+   *          the last trade date, not null
+   * @param couponType
+   *          the coupon type, not null
+   * @param couponRate
+   *          the coupon rate
+   * @param couponFrequency
+   *          the coupon frequency, not null
+   * @param dayCountConvention
+   *          the day count convention, not null
+   * @param interestAccrualDate
+   *          the date on which interest starts to accrue
+   * @param settlementDate
+   *          the settlement date
+   * @param firstCouponDate
+   *          the first coupon date
+   * @param issuancePrice
+   *          the issuance price
+   * @param totalAmountIssued
+   *          the total number of bonds issued
+   * @param minimumAmount
+   *          the minimum amount that can be purchased
+   * @param minimumIncrement
+   *          the minimum increment
+   * @param parAmount
+   *          the par amount of the bond
+   * @param redemptionValue
+   *          the redemption value of the bond
+   */
   public GovernmentBondSecurity(final String issuerName, final String issuerType, final String issuerDomicile, final String market, final Currency currency,
       final YieldConvention yieldConvention, final Expiry lastTradeDate, final String couponType, final double couponRate, final Frequency couponFrequency,
       final DayCount dayCountConvention, final ZonedDateTime interestAccrualDate, final ZonedDateTime settlementDate, final ZonedDateTime firstCouponDate,

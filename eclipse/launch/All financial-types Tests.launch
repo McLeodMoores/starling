@@ -17,10 +17,26 @@
 <stringAttribute key="org.testng.eclipse.LOG_LEVEL" value="2"/>
 <listAttribute key="org.testng.eclipse.METHOD_TEST_LIST"/>
 <listAttribute key="org.testng.eclipse.PACKAGE_TEST_LIST">
+<listEntry value="com.opengamma.financial.convention"/>
 <listEntry value="com.opengamma.financial.fudgemsg"/>
+<listEntry value="com.opengamma.financial.security"/>
+<listEntry value="com.opengamma.financial.security.bond"/>
+<listEntry value="com.opengamma.financial.security.capfloor"/>
+<ListEntry value="com.opengamma.financial.security.cash"/>
+<listEntry value="com.opengamma.financial.security.cashflow"/>
 <listEntry value="com.opengamma.financial.security.cds"/>
+<listEntry value="com.opengamma.financial.security.credit"/>
+<listEntry value="com.opengamma.financial.security.deposit"/>
 <listEntry value="com.opengamma.financial.security.equity"/>
+<listEntry value="com.opengamma.financial.security.forward"/>
+<listEntry value="com.opengamma.financial.security.fra"/>
+<listEntry value="com.opengamma.financial.security.future"/>
+<listEntry value="com.opengamma.financial.security.fx"/>
+<listEntry value="com.opengamma.financial.security.index"/>
+<listEntry value="com.opengamma.financial.security.irs"/>
+<listEntry value="com.opengamma.financial.security.option"/>
 <listEntry value="com.opengamma.financial.security.swap"/>
+<listEntry value="com.opengamma.financial.security.test"/>
 </listAttribute>
 <mapAttribute key="org.testng.eclipse.PARAMETERS"/>
 <stringAttribute key="org.testng.eclipse.PRE_DEFINED_LISTENERS" value=""/>
