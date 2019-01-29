@@ -8,7 +8,6 @@ import static org.testng.Assert.assertTrue;
 
 import java.util.Arrays;
 
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.opengamma.financial.AbstractBeanTestCase;
@@ -135,10 +134,9 @@ public class BondSecuritySearchRequestTest extends AbstractBeanTestCase {
   }
 
   @Override
-  @DataProvider(name = "propertyValues")
-  public Object[][] propertyValues() {
-    return new Object[][] { { new JodaBeanProperties<>(BondSecuritySearchRequest.class, Arrays.asList("issuerName", "issuerType"),
-        Arrays.<Object> asList(ISSUER_NAME, ISSUER_TYPE), Arrays.<Object> asList(ISSUER_TYPE, ISSUER_NAME)) } };
+  public JodaBeanProperties<BondSecuritySearchRequest> getJodaBeanProperties() {
+    return new JodaBeanProperties<>(BondSecuritySearchRequest.class, Arrays.asList("issuerName", "issuerType"),
+        Arrays.<Object> asList(ISSUER_NAME, ISSUER_TYPE), Arrays.<Object> asList(ISSUER_TYPE, ISSUER_NAME));
   }
 
 }

@@ -7,7 +7,6 @@ import static org.testng.AssertJUnit.assertEquals;
 
 import java.util.Arrays;
 
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import org.threeten.bp.ZonedDateTime;
 
@@ -44,16 +43,15 @@ public class FloatingRateNoteSecurityTest extends AbstractBeanTestCase {
   private static final double LEVERAGE = 0.5;
   private static final Frequency FREQUENCY = SimpleFrequency.QUARTERLY;
 
-  @DataProvider(name = "propertyValues")
   @Override
-  public Object[][] propertyValues() {
-    return new Object[][] { { new JodaBeanProperties<>(FloatingRateNoteSecurity.class,
+  public JodaBeanProperties<FloatingRateNoteSecurity> getJodaBeanProperties() {
+    return new JodaBeanProperties<>(FloatingRateNoteSecurity.class,
         Arrays.asList("currency", "maturityDate", "issueDate", "minimumIncrement", "daysToSettle", "resetDays", "dayCount", "regionId", "legalEntityId",
             "benchmarkRateId", "spread", "leverageFactor", "couponFrequency"),
         Arrays.asList(CURRENCY, MATURITY_DATE, ISSUE_DATE, MINIMUM_INCREMENT, SETTLEMENT_DAYS, RESET_DAYS, DAY_COUNT, REGION, LEGAL_ENTITY, BENCHMARK, SPREAD,
             LEVERAGE, FREQUENCY),
         Arrays.asList(Currency.AUD, new Expiry(DateUtils.getUTCDate(2021, 10, 10)), ISSUE_DATE.plusDays(1), MINIMUM_INCREMENT + 1, SETTLEMENT_DAYS + 1,
-            RESET_DAYS + 1, DayCounts.ACT_365, LEGAL_ENTITY, BENCHMARK, REGION, SPREAD + 0.01, LEVERAGE + 0.3, SimpleFrequency.ANNUAL)) } };
+            RESET_DAYS + 1, DayCounts.ACT_365, LEGAL_ENTITY, BENCHMARK, REGION, SPREAD + 0.01, LEVERAGE + 0.3, SimpleFrequency.ANNUAL));
   }
 
   /**

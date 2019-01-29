@@ -8,10 +8,11 @@ import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.fail;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.util.List;
 
+import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
-import org.joda.beans.impl.direct.DirectBean;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -38,7 +39,16 @@ public abstract class AbstractBeanTestCase extends AbstractFudgeBuilderTestCase 
    * @return an array of bean properties
    */
   @DataProvider(name = "propertyValues")
-  public abstract Object[][] propertyValues();
+  public Object[][] propertyValues() {
+    return new Object[][] { { getJodaBeanProperties() } };
+  }
+
+  /**
+   * Gets the names of the properties and values.
+   *
+   * @return the properties
+   */
+  public abstract JodaBeanProperties<? extends Bean> getJodaBeanProperties();
 
   /**
    * Tests equality and hashCode.
@@ -47,23 +57,29 @@ public abstract class AbstractBeanTestCase extends AbstractFudgeBuilderTestCase 
    *          information about the properties to be tested
    */
   @Test(dataProvider = "propertyValues")
-  protected <TYPE extends DirectBean> void testObject(final JodaBeanProperties<TYPE> properties) {
-    final BeanBuilder<TYPE> builder = constructAndPopulateBeanBuilder(properties);
-    final BeanBuilder<TYPE> otherBuilder = constructAndPopulateBeanBuilder(properties);
-    final TYPE bean = builder.build();
-    final TYPE other = otherBuilder.build();
-    // test Object methods
-    assertEquals(bean, bean);
-    assertEquals(bean, bean.clone());
-    assertNotEquals(null, bean);
-    assertNotEquals(builder, bean);
-    assertEquals(bean, other);
-    assertEquals(bean.hashCode(), other.hashCode());
-    // test getters and bean
-    for (int i = 0; i < properties.size(); i++) {
-      final String propertyName = properties.getPropertyName(i);
-      assertEquals(bean.property(propertyName).get(), properties.getPropertyValue(i));
-      assertEquals(builder.get(propertyName), properties.getPropertyValue(i));
+  protected <TYPE extends Bean> void testObject(final JodaBeanProperties<TYPE> properties) {
+    try {
+      final BeanBuilder<TYPE> builder = constructAndPopulateBeanBuilder(properties);
+      final BeanBuilder<TYPE> otherBuilder = constructAndPopulateBeanBuilder(properties);
+      final TYPE bean = builder.build();
+      final TYPE other = otherBuilder.build();
+      final Method cloneMethod = bean.getClass().getMethod("clone", (Class<?>[]) null);
+      cloneMethod.setAccessible(true);
+      // test Object methods
+      assertEquals(bean, bean);
+      assertEquals(bean, cloneMethod.invoke(bean, (Object[]) null));
+      assertNotEquals(null, bean);
+      assertNotEquals(builder, bean);
+      assertEquals(bean, other);
+      assertEquals(bean.hashCode(), other.hashCode());
+      // test getters and bean
+      for (int i = 0; i < properties.size(); i++) {
+        final String propertyName = properties.getPropertyName(i);
+        assertEquals(bean.property(propertyName).get(), properties.getPropertyValue(i));
+        assertEquals(builder.get(propertyName), properties.getPropertyValue(i));
+      }
+    } catch (final Exception e) {
+      fail(e.getMessage());
     }
   }
 
@@ -74,16 +90,17 @@ public abstract class AbstractBeanTestCase extends AbstractFudgeBuilderTestCase 
    *          information about the properties to be tested
    */
   @Test(dataProvider = "propertyValues")
-  protected <TYPE extends DirectBean> void testNotEquals(final JodaBeanProperties<TYPE> properties) {
+  protected <TYPE extends Bean> void testNotEquals(final JodaBeanProperties<TYPE> properties) {
     final BeanBuilder<TYPE> builder = constructAndPopulateBeanBuilder(properties);
     final BeanBuilder<TYPE> otherBuilder = constructAndPopulateBeanBuilder(properties);
     assertEquals(builder.build(), otherBuilder.build());
     for (int i = 0; i < properties.size(); i++) {
       // set to a different value
-      builder.set(properties.getPropertyName(i), properties.getOtherPropertyValue(i));
-      assertNotEquals(builder.build(), otherBuilder.build());
+      final String propertyName = properties.getPropertyName(i);
+      builder.set(propertyName, properties.getOtherPropertyValue(i));
+      assertNotEquals(builder.build(), otherBuilder.build(), "Expected different values for " + propertyName);
       // set back to original
-      builder.set(properties.getPropertyName(i), properties.getPropertyValue(i));
+      builder.set(propertyName, properties.getPropertyValue(i));
     }
   }
 
@@ -94,7 +111,7 @@ public abstract class AbstractBeanTestCase extends AbstractFudgeBuilderTestCase 
    *          information about the properties to be tested
    */
   @Test(dataProvider = "propertyValues")
-  protected <TYPE extends DirectBean> void testCycle(final JodaBeanProperties<TYPE> properties) {
+  protected <TYPE extends Bean> void testCycle(final JodaBeanProperties<TYPE> properties) {
     final TYPE bean = constructAndPopulateBeanBuilder(properties).build();
     assertEncodeDecodeCycle(properties.getType(), bean);
   }
@@ -107,7 +124,7 @@ public abstract class AbstractBeanTestCase extends AbstractFudgeBuilderTestCase 
    * @return a bean builder
    */
   @SuppressWarnings("unchecked")
-  protected static <TYPE extends DirectBean> BeanBuilder<TYPE> constructAndPopulateBeanBuilder(final JodaBeanProperties<TYPE> properties) {
+  protected static <TYPE extends Bean> BeanBuilder<TYPE> constructAndPopulateBeanBuilder(final JodaBeanProperties<TYPE> properties) {
     try {
       final Class<TYPE> beanClass = properties.getType();
       final Constructor<TYPE> constructor = beanClass.getDeclaredConstructor();
@@ -138,11 +155,11 @@ public abstract class AbstractBeanTestCase extends AbstractFudgeBuilderTestCase 
    * @param <T>
    *          the type of the bean
    */
-  public class JodaBeanProperties<T extends DirectBean> {
+  public class JodaBeanProperties<T extends Bean> {
     private final Class<T> _type;
     private final List<String> _propertyNames;
-    private final List<Object> _propertyValues;
-    private final List<Object> _otherPropertyValues;
+    private final List<? extends Object> _propertyValues;
+    private final List<? extends Object> _otherPropertyValues;
 
     /**
      * @param beanType
@@ -152,8 +169,9 @@ public abstract class AbstractBeanTestCase extends AbstractFudgeBuilderTestCase 
      * @param propertyValues
      *          the values of the properties
      */
-    public JodaBeanProperties(final Class<T> beanType, final List<String> propertyNames, final List<Object> propertyValues) {
-      ArgumentChecker.isTrue(propertyNames.size() == propertyValues.size(), "Must have one property value for each name");
+    public JodaBeanProperties(final Class<T> beanType, final List<String> propertyNames, final List<? extends Object> propertyValues) {
+      ArgumentChecker.isTrue(propertyNames.size() == propertyValues.size(),
+          "Must have one property value for each name: have " + propertyNames.size() + " property names and " + propertyValues.size() + " property values");
       _type = beanType;
       _propertyNames = propertyNames;
       _propertyValues = propertyValues;
@@ -170,10 +188,13 @@ public abstract class AbstractBeanTestCase extends AbstractFudgeBuilderTestCase 
      * @param otherPropertyValues
      *          different values of the properties
      */
-    public JodaBeanProperties(final Class<T> beanType, final List<String> propertyNames, final List<Object> propertyValues,
-        final List<Object> otherPropertyValues) {
-      ArgumentChecker.isTrue(propertyNames.size() == propertyValues.size(), "Must have one property value for each name");
-      ArgumentChecker.isTrue(propertyNames.size() == otherPropertyValues.size(), "Must have one property value for each name");
+    public JodaBeanProperties(final Class<T> beanType, final List<String> propertyNames, final List<? extends Object> propertyValues,
+        final List<? extends Object> otherPropertyValues) {
+      ArgumentChecker.isTrue(propertyNames.size() == propertyValues.size(),
+          "Must have one property value for each name: have " + propertyNames.size() + " property names and " + propertyValues.size() + " property values");
+      ArgumentChecker.isTrue(propertyNames.size() == otherPropertyValues.size(),
+          "Must have one property value for each name: have " + propertyNames.size() + " property names and " + otherPropertyValues.size()
+          + " property values");
       _type = beanType;
       _propertyNames = propertyNames;
       _propertyValues = propertyValues;
@@ -229,7 +250,7 @@ public abstract class AbstractBeanTestCase extends AbstractFudgeBuilderTestCase 
      */
     public Object getOtherPropertyValue(final int i) {
       if (_otherPropertyValues == null) {
-        throw new IllegalStateException();
+        throw new IllegalStateException("No other property values available");
       }
       return _otherPropertyValues.get(i);
     }

@@ -7,7 +7,6 @@ import static org.testng.AssertJUnit.assertEquals;
 
 import java.util.Arrays;
 
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import org.threeten.bp.ZonedDateTime;
 
@@ -50,10 +49,9 @@ public class MunicipalBondSecurityTest extends AbstractBeanTestCase {
   private static final double PAR_AMOUNT = 1;
   private static final double REDEMPTION_VALUE = 0.99;
 
-  @DataProvider(name = "propertyValues")
   @Override
-  public Object[][] propertyValues() {
-    return new Object[][] { { new JodaBeanProperties<>(MunicipalBondSecurity.class,
+  public JodaBeanProperties<MunicipalBondSecurity> getJodaBeanProperties() {
+    return new JodaBeanProperties<>(MunicipalBondSecurity.class,
         Arrays.asList("issuerName", "issuerType", "issuerDomicile", "market", "currency", "yieldConvention", "lastTradeDate", "couponType", "couponRate",
             "couponFrequency", "dayCount", "interestAccrualDate", "settlementDate", "firstCouponDate", "issuancePrice", "totalAmountIssued",
             "minimumAmount", "minimumIncrement", "parAmount", "redemptionValue"),
@@ -63,7 +61,7 @@ public class MunicipalBondSecurityTest extends AbstractBeanTestCase {
         Arrays.asList(ISSUER_TYPE, ISSUER_NAME, MARKET, ISSUER_DOMICILE, Currency.AUD, SimpleYieldConvention.AUSTRALIA_EX_DIVIDEND,
             new Expiry(DateUtils.getUTCDate(2040, 12, 15)), "Float", COUPON_RATE + 1, SimpleFrequency.ANNUAL, DayCounts.ACT_360, INTEREST_ACCRUAL.plusDays(1),
             SETTLEMENT_DATE.plusDays(1), FIRST_COUPON.plusDays(1), ISSUANCE_PRICE + 1, AMOUNT_ISSUED + 1, MINIMUM_AMOUNT + 1, MINIMUM_INCREMENT + 1,
-            PAR_AMOUNT + 1, REDEMPTION_VALUE + 1)) } };
+            PAR_AMOUNT + 1, REDEMPTION_VALUE + 1));
   }
 
   /**

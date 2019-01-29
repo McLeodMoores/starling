@@ -76,7 +76,7 @@ public class CompoundingIborLegConvention extends FinancialConvention {
   @PropertyDefinition
   private int _settlementDays;
   /**
-   * Whether the schedule end-of-month.
+   * Whether the schedule is end-of-month.
    */
   @PropertyDefinition
   private boolean _isEOM;
@@ -359,7 +359,7 @@ public class CompoundingIborLegConvention extends FinancialConvention {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets whether the schedule end-of-month.
+   * Gets whether the schedule is end-of-month.
    * @return the value of the property
    */
   public boolean isIsEOM() {
@@ -367,7 +367,7 @@ public class CompoundingIborLegConvention extends FinancialConvention {
   }
 
   /**
-   * Sets whether the schedule end-of-month.
+   * Sets whether the schedule is end-of-month.
    * @param isEOM  the new value of the property
    */
   public void setIsEOM(boolean isEOM) {

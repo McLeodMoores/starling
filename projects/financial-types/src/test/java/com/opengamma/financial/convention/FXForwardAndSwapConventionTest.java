@@ -7,41 +7,41 @@ import static org.testng.Assert.assertEquals;
 
 import java.util.Arrays;
 
+import org.joda.beans.Bean;
 import org.testng.annotations.Test;
 
 import com.opengamma.financial.AbstractBeanTestCase;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
+import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Tests for {@link BondConvention}.
+ * Tests for {@link FXForwardAndSwapConvention}.
  */
 @Test(groups = TestGroup.UNIT)
-public class BondConventionTest extends AbstractBeanTestCase {
+public class FXForwardAndSwapConventionTest extends AbstractBeanTestCase {
   private static final String NAME = "name";
-  private static final ExternalIdBundle EIDS = ExternalIdBundle.of("eid", "1");
-  private static final int EX_DIVIDEND_DAYS = 7;
-  private static final int SETTLEMENT_DAYS = 2;
+  private static final ExternalIdBundle IDS = ExternalIdBundle.of("conv", "USD/CAD FX FORWARD");
+  private static final ExternalId SPOT_CONVENTION = ExternalId.of("conv", "USD/CAD");
   private static final BusinessDayConvention BDC = BusinessDayConventions.FOLLOWING;
   private static final boolean IS_EOM = true;
-  private static final boolean IS_CALCULATE_FROM_MATURITY = true;
-  private static final BondConvention CONVENTION = new BondConvention(NAME, EIDS, EX_DIVIDEND_DAYS, SETTLEMENT_DAYS, BDC, IS_EOM, IS_CALCULATE_FROM_MATURITY);
+  private static final FinancialConvention CONVENTION = new FXForwardAndSwapConvention(NAME, IDS, SPOT_CONVENTION, BDC, IS_EOM);
+
   @Override
-  public JodaBeanProperties<BondConvention> getJodaBeanProperties() {
-    return new JodaBeanProperties<>(BondConvention.class,
-        Arrays.asList("name", "externalIdBundle", "exDividendDays", "settlementDays", "businessDayConvention", "isEOM", "isCalculateScheduleFromMaturity"),
-        Arrays.asList(NAME, EIDS, EX_DIVIDEND_DAYS, SETTLEMENT_DAYS, BDC, IS_EOM, IS_CALCULATE_FROM_MATURITY),
-        Arrays.asList("other", ExternalIdBundle.of("eid", "2"), EX_DIVIDEND_DAYS + 1, SETTLEMENT_DAYS + 1, BusinessDayConventions.MODIFIED_FOLLOWING, !IS_EOM,
-            !IS_CALCULATE_FROM_MATURITY));
+  public JodaBeanProperties<? extends Bean> getJodaBeanProperties() {
+    return new JodaBeanProperties<>(FXForwardAndSwapConvention.class,
+        Arrays.asList("name", "externalIdBundle", "spotConvention", "businessDayConvention", "isEOM"), Arrays.asList(NAME, IDS, SPOT_CONVENTION, BDC, IS_EOM),
+        Arrays.asList("other", ExternalIdBundle.of("conv", "USD/CHF FX FORWARD"), ExternalId.of("conv", "USD/CHF"), BusinessDayConventions.MODIFIED_FOLLOWING,
+            !IS_EOM));
   }
 
   /**
    * Tests the returned type.
    */
   public void testType() {
-    assertEquals(CONVENTION.getConventionType(), BondConvention.TYPE);
+    assertEquals(CONVENTION.getConventionType(), FXForwardAndSwapConvention.TYPE);
   }
 
   /**
@@ -58,9 +58,10 @@ public class BondConventionTest extends AbstractBeanTestCase {
     }
 
     @Override
-    public String visitBondConvention(final BondConvention convention) {
+    public String visitFXForwardAndSwapConvention(final FXForwardAndSwapConvention convention) {
       return "visited";
     }
 
   }
+
 }

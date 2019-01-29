@@ -54,7 +54,7 @@ public class ONCompoundedLegRollDateConvention extends FinancialConvention {
   @PropertyDefinition(validate = "notNull")
   private StubType _stubType;
   /**
-   * Wheter the notional exchanged.
+   * Whether the notional exchanged.
    */
   @PropertyDefinition
   private boolean _isExchangeNotional;
@@ -217,7 +217,7 @@ public class ONCompoundedLegRollDateConvention extends FinancialConvention {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets wheter the notional exchanged.
+   * Gets whether the notional exchanged.
    * @return the value of the property
    */
   public boolean isIsExchangeNotional() {
@@ -225,7 +225,7 @@ public class ONCompoundedLegRollDateConvention extends FinancialConvention {
   }
 
   /**
-   * Sets wheter the notional exchanged.
+   * Sets whether the notional exchanged.
    * @param isExchangeNotional  the new value of the property
    */
   public void setIsExchangeNotional(boolean isExchangeNotional) {
