@@ -26,7 +26,8 @@ import com.opengamma.master.security.SecurityDescription;
 import com.opengamma.util.money.Currency;
 
 /**
- *
+ * A security representing a cash deposit with a continually-compounded zero
+ * rate.
  */
 @BeanDefinition
 @SecurityDescription(type = ContinuousZeroDepositSecurity.SECURITY_TYPE, description = "Continous zero deposit")
@@ -57,10 +58,25 @@ public class ContinuousZeroDepositSecurity extends FinancialSecurity {
   @PropertyDefinition(validate = "notNull")
   private ExternalId _region;
 
+  /**
+   * For the builder.
+   */
   ContinuousZeroDepositSecurity() {
     super(SECURITY_TYPE);
   }
 
+  /**
+   * @param currency
+   *          the currency, not null
+   * @param startDate
+   *          the start date, not null
+   * @param maturityDate
+   *          the maturity date, not null
+   * @param rate
+   *          the rate
+   * @param region
+   *          the region, not null
+   */
   public ContinuousZeroDepositSecurity(final Currency currency, final ZonedDateTime startDate, final ZonedDateTime maturityDate, final double rate, final ExternalId region) {
     super(SECURITY_TYPE);
     setCurrency(currency);

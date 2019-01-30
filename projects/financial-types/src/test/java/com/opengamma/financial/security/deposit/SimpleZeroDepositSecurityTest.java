@@ -3,7 +3,7 @@
  */
 package com.opengamma.financial.security.deposit;
 
-import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.Assert.assertEquals;
 
 import java.util.Arrays;
 

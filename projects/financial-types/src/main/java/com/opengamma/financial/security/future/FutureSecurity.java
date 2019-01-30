@@ -79,6 +79,22 @@ public abstract class FutureSecurity extends FinancialSecurity {
     super(SECURITY_TYPE);
   }
 
+  /**
+   * @param expiry
+   *          the expiry of the future, not null
+   * @param tradingExchange
+   *          the name of the trading exchange, not null
+   * @param settlementExchange
+   *          the name of the settlement exchange, not null
+   * @param currency
+   *          the currency, not null
+   * @param unitAmount
+   *          the unit amount, not null. This represents the PNL of a single
+   *          long contract if its price increases by 1.0. Also known as the
+   *          'Point Value'.
+   * @param category
+   *          the future category, not null
+   */
   protected FutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency, final double unitAmount, final String category) {
     super(SECURITY_TYPE);
     setExpiry(expiry);

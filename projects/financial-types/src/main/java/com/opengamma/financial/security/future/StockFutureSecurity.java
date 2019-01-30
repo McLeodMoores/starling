@@ -24,7 +24,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Expiry;
 
 /**
- * A security for stock futures.
+ * A security for stock futures i.e. a single-name equity future.
  */
 @BeanDefinition
 public class StockFutureSecurity extends FutureSecurity {
@@ -38,12 +38,53 @@ public class StockFutureSecurity extends FutureSecurity {
   @PropertyDefinition
   private ExternalId _underlyingId;
 
-  StockFutureSecurity() { //For builder
+  /**
+   * For the builder.
+   */
+  StockFutureSecurity() {
     super();
   }
 
+  /**
+   * @param expiry
+   *          the future expiry, not null
+   * @param tradingExchange
+   *          the trading exchange name, not null
+   * @param settlementExchange
+   *          the settlement exchange name, not null
+   * @param currency
+   *          the currency, not null
+   * @param unitAmount
+   *          the unit amount, not null
+   * @param category
+   *          the future category, not null
+   * @deprecated use the constructor that takes an underlying id
+   */
+  @Deprecated
   public StockFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency, final double unitAmount, final String category) {
     super(expiry, tradingExchange, settlementExchange, currency, unitAmount, category);
+  }
+
+  /**
+   * @param expiry
+   *          the future expiry, not null
+   * @param tradingExchange
+   *          the trading exchange name, not null
+   * @param settlementExchange
+   *          the settlement exchange name, not null
+   * @param currency
+   *          the currency, not null
+   * @param unitAmount
+   *          the unit amount, not null
+   * @param category
+   *          the future category, not null
+   * @param underlyingId
+   *          the identifier of the underlying stock, not null
+   */
+  public StockFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency,
+      final double unitAmount, final String category, final ExternalId underlyingId) {
+    super(expiry, tradingExchange, settlementExchange, currency, unitAmount, category);
+    setUnderlyingId(underlyingId);
   }
 
   //-------------------------------------------------------------------------

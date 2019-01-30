@@ -45,7 +45,24 @@ public class FederalFundsFutureSecurity extends FutureSecurity {
     super();
   }
 
-  public FederalFundsFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency, final double unitAmount, final ExternalId underlyingIdentifier, final String category) {
+  /**
+   * @param expiry
+   *          the future expiry, not null
+   * @param tradingExchange
+   *          the trading exchange name, not null
+   * @param settlementExchange
+   *          the settlement exchange name, not null
+   * @param currency
+   *          the currency, not null
+   * @param unitAmount
+   *          the unit amount, not null
+   * @param underlyingIdentifier
+   *          the identifier of the underlying
+   * @param category
+   *          the future category, not null
+   */
+  public FederalFundsFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency,
+      final double unitAmount, final ExternalId underlyingIdentifier, final String category) {
     super(expiry, tradingExchange, settlementExchange, currency, unitAmount, category);
     setUnderlyingId(underlyingIdentifier);
   }

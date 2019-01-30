@@ -19,7 +19,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Expiry;
 
 /**
- * A security for metal futures.
+ * A security for metal forwards.
  */
 @BeanDefinition
 public class MetalForwardSecurity extends CommodityForwardSecurity {
@@ -27,11 +27,27 @@ public class MetalForwardSecurity extends CommodityForwardSecurity {
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
 
-
-  MetalForwardSecurity() { //For builder
+  /**
+   * For the builder.
+   */
+  MetalForwardSecurity() {
     super();
   }
 
+  /**
+   * @param unitName
+   *          the name of the underlying commodity
+   * @param unitNumber
+   *          the number of units of the commodity to be delivered
+   * @param expiry
+   *          the expiry, not null
+   * @param currency
+   *          the currency, not null
+   * @param unitAmount
+   *          the unit amount, not null
+   * @param category
+   *          the category, not null
+   */
   public MetalForwardSecurity(final String unitName, final Double unitNumber, final Expiry expiry, final Currency currency, final double unitAmount, final String category) {
     super(unitName, unitNumber, expiry, currency, unitAmount, category);
   }

@@ -29,10 +29,31 @@ public class EquityIndexDividendFutureSecurity extends EquityFutureSecurity {
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
 
-  EquityIndexDividendFutureSecurity() { //For builder
+  /**
+   * For the builder.
+   */
+  EquityIndexDividendFutureSecurity() {
     super();
   }
 
+  /**
+   * @param expiry
+   *          the expiry, not null
+   * @param tradingExchange
+   *          the name of the trading exchange, not null
+   * @param settlementExchange
+   *          the settlement exchange, not null
+   * @param currency
+   *          the currency, not null
+   * @param unitAmount
+   *          the unit amount, not null
+   * @param settlementDate
+   *          the settlement date i.e. delivery date, not null
+   * @param underlyingIdentifier
+   *          the identifier of the underlying equity, not null
+   * @param category
+   *          the future category, not null
+   */
   public EquityIndexDividendFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency, final double unitAmount,
       final ZonedDateTime settlementDate, final ExternalId underlyingIdentifier, final String category) {
     super(expiry, tradingExchange, settlementExchange, currency, unitAmount, settlementDate, underlyingIdentifier, category);

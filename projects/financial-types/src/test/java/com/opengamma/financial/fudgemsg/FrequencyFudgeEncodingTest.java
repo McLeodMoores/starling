@@ -5,7 +5,7 @@
  */
 package com.opengamma.financial.fudgemsg;
 
-import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.Assert.assertEquals;
 
 import org.fudgemsg.UnmodifiableFudgeField;
 import org.fudgemsg.wire.types.FudgeWireType;

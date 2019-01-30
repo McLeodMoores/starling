@@ -19,7 +19,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Expiry;
 
 /**
- * A security for energy futures.
+ * A security for energy forwards.
  */
 @BeanDefinition
 public class EnergyForwardSecurity extends CommodityForwardSecurity {
@@ -27,10 +27,27 @@ public class EnergyForwardSecurity extends CommodityForwardSecurity {
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
 
-  EnergyForwardSecurity() { //For builder
+  /**
+   * For the builder.
+   */
+  EnergyForwardSecurity() {
     super();
   }
 
+  /**
+   * @param unitName
+   *          the name of the underlying commodity
+   * @param unitNumber
+   *          the number of units of the commodity to be delivered
+   * @param expiry
+   *          the expiry, not null
+   * @param currency
+   *          the currency, not null
+   * @param unitAmount
+   *          the unit amount, not null
+   * @param category
+   *          the category, not null
+   */
   public EnergyForwardSecurity(final String unitName, final Double unitNumber, final Expiry expiry, final Currency currency, final double unitAmount, final String category) {
     super(unitName, unitNumber, expiry, currency, unitAmount, category);
   }

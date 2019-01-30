@@ -5,7 +5,7 @@
  */
 package com.opengamma.financial.security.cds;
 
-import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.Test;
 

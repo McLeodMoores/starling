@@ -4,7 +4,7 @@
 package com.opengamma.financial.convention;
 
 import static org.testng.Assert.fail;
-import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.Assert.assertEquals;
 
 import java.util.Arrays;
 

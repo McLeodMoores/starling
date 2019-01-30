@@ -5,6 +5,7 @@ package com.opengamma.financial;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
+import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.fail;
 
 import java.lang.reflect.Constructor;
@@ -75,8 +76,12 @@ public abstract class AbstractBeanTestCase extends AbstractFudgeBuilderTestCase 
       // test getters and bean
       for (int i = 0; i < properties.size(); i++) {
         final String propertyName = properties.getPropertyName(i);
-        assertEquals(bean.property(propertyName).get(), properties.getPropertyValue(i));
-        assertEquals(builder.get(propertyName), properties.getPropertyValue(i));
+        final Object propertyValue = properties.getPropertyValue(i);
+        if (propertyValue != null) {
+          assertNotNull(builder.get(propertyName));
+        }
+        assertEquals(bean.property(propertyName).get(), propertyValue);
+        assertEquals(builder.get(propertyName), propertyValue);
       }
     } catch (final Exception e) {
       fail(e.getMessage());
@@ -151,7 +156,6 @@ public abstract class AbstractBeanTestCase extends AbstractFudgeBuilderTestCase 
    * <li>Alternative property values to produce a different bean (e.g. to test
    * equality).
    * </ul>
-   *
    * @param <T>
    *          the type of the bean
    */

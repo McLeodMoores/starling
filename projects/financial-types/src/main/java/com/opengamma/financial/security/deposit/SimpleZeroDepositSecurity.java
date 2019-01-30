@@ -26,7 +26,7 @@ import com.opengamma.master.security.SecurityDescription;
 import com.opengamma.util.money.Currency;
 
 /**
- * A security representing a deposit at a simply-compounded zero rate.
+ * A security representing a cash deposit with a simply-compounded zero rate.
  */
 @BeanDefinition
 @SecurityDescription(type = SimpleZeroDepositSecurity.SECURITY_TYPE, description = "Simple zero deposit")
@@ -72,7 +72,7 @@ public class SimpleZeroDepositSecurity extends FinancialSecurity {
    * @param maturityDate
    *          the maturity date, not null
    * @param rate
-   *          the simple zero rate
+   *          the zero rate
    * @param region
    *          the region, not null
    */

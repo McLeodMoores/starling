@@ -25,7 +25,8 @@ import com.opengamma.util.time.Expiry;
 
 
 /**
- * A security for deliverable swap futures
+ * A security for deliverable swap futures, a future contract that delivers a
+ * standard interest-rate swap.
  */
 @BeanDefinition
 public class DeliverableSwapFutureSecurity extends FutureSecurity {
