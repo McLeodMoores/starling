@@ -20,85 +20,110 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class GICSCodeTest {
 
+  /**
+   * Provides invalid GICS codes.
+   *
+   * @return invalid codes
+   */
   @DataProvider(name = "invalidInt")
-  public Object[][] data_invalidInt() {
+  public Object[][] datainvalidInt() {
     return new Object[][] {
-        {0},
-        {1},
-        {100},
-        {101},
-        {109},
-        {110},
-        {1000},
-        {1001},
-        {101000},
-        {101001},
-        {10101000},
-        {10101001},
-        {10100010},
-        {10100110},
-        {10001010},
-        {10011010},
-        {1101010},
-        {9},
-        {999},
-        {99999},
-        {9999999},
-        {1010101010},
-        {-5},
-        {-50},
+      {0},
+      {1},
+      {100},
+      {101},
+      {109},
+      {110},
+      {1000},
+      {1001},
+      {101000},
+      {101001},
+      {10101000},
+      {10101001},
+      {10100010},
+      {10100110},
+      {10001010},
+      {10011010},
+      {1101010},
+      {9},
+      {999},
+      {99999},
+      {9999999},
+      {1010101010},
+      {-5},
+      {-50},
     };
   }
 
+  /**
+   * Tests invalid codes.
+   *
+   * @param code
+   *          the code
+   */
   @Test(dataProvider = "invalidInt", expectedExceptions = IllegalArgumentException.class)
   public void testInvalidInt(final int code) {
     GICSCode.of(code);
   }
 
+  /**
+   * Provides invalid GICS codes.
+   *
+   * @return the code
+   */
   @DataProvider(name = "invalidString")
-  public Object[][] data_invalidString() {
+  public Object[][] dataInvalidString() {
     return new Object[][] {
-        {"0"},
-        {"00"},
-        {"1"},
-        {"01"},
-        {"100"},
-        {"0100"},
-        {"101"},
-        {"0101"},
-        {"109"},
-        {"0109"},
-        {"110"},
-        {"0110"},
-        {"1000"},
-        {"1001"},
-        {"101000"},
-        {"101001"},
-        {"10101000"},
-        {"10101001"},
-        {"10100010"},
-        {"10100110"},
-        {"10001010"},
-        {"10011010"},
-        {"1101010"},
-        {""},
-        {"Rubbish"},
-        {"9"},
-        {"999"},
-        {"99999"},
-        {"9999999"},
-        {"101010101"},
-        {"1010101010"},
-        {"-5"},
-        {"-50"},
+      {"0"},
+      {"00"},
+      {"1"},
+      {"01"},
+      {"100"},
+      {"0100"},
+      {"101"},
+      {"0101"},
+      {"109"},
+      {"0109"},
+      {"110"},
+      {"0110"},
+      {"1000"},
+      {"1001"},
+      {"101000"},
+      {"101001"},
+      {"10101000"},
+      {"10101001"},
+      {"10100010"},
+      {"10100110"},
+      {"10001010"},
+      {"10011010"},
+      {"1101010"},
+      {""},
+      {"Rubbish"},
+      {"9"},
+      {"999"},
+      {"99999"},
+      {"9999999"},
+      {"101010101"},
+      {"1010101010"},
+      {"-5"},
+      {"-50"},
     };
   }
 
+  /**
+   * Tests parsing invalid codes.
+   *
+   * @param code
+   *          the code
+   */
   @Test(dataProvider = "invalidString", expectedExceptions = IllegalArgumentException.class)
   public void testInvalidString(final String code) {
     GICSCode.of(code);
   }
 
+  /**
+   * Tests valid codes.
+   */
   @Test
   public void testValid1() {
     for (int i = 10; i <= 99; i++) {
@@ -106,6 +131,9 @@ public class GICSCodeTest {
     }
   }
 
+  /**
+   * Tests valid codes.
+   */
   @Test
   public void testValid2() {
     for (int i = 10; i <= 99; i++) {
@@ -113,6 +141,9 @@ public class GICSCodeTest {
     }
   }
 
+  /**
+   * Tests valid codes.
+   */
   @Test
   public void testValid3() {
     for (int i = 10; i <= 99; i++) {
@@ -120,6 +151,9 @@ public class GICSCodeTest {
     }
   }
 
+  /**
+   * Tests valid codes.
+   */
   @Test
   public void testValid4() {
     for (int i = 10; i <= 99; i++) {
@@ -127,6 +161,9 @@ public class GICSCodeTest {
     }
   }
 
+  /**
+   * Tests equality.
+   */
   @Test
   public void testEquals() {
     final GICSCode c1 = GICSCode.of("10");
@@ -138,6 +175,9 @@ public class GICSCodeTest {
     assertFalse(c1.equals("String"));
   }
 
+  /**
+   * Tests the hashcode.
+   */
   @Test
   public void testHashCode() {
     final GICSCode test = GICSCode.of("10");
@@ -145,6 +185,9 @@ public class GICSCodeTest {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests deconstruction of the code into sectors.
+   */
   @Test
   public void codeDeconstructionSector() {
     final GICSCode test = GICSCode.of("45");
@@ -172,6 +215,9 @@ public class GICSCodeTest {
     assertEquals("", test.getSubIndustryDescription());
   }
 
+  /**
+   * Tests deconstruction of the code into industry groups.
+   */
   @Test
   public void codeDeconstructionIndustryGroup() {
     final GICSCode test = GICSCode.of("4510");
@@ -199,6 +245,9 @@ public class GICSCodeTest {
     assertEquals("", test.getSubIndustryDescription());
   }
 
+  /**
+   * Tests deconstruction of the code into industry.
+   */
   @Test
   public void codeDeconstructionIndustry() {
     final GICSCode test = GICSCode.of("451030");
@@ -226,6 +275,9 @@ public class GICSCodeTest {
     assertEquals("", test.getSubIndustryDescription());
   }
 
+  /**
+   * Tests deconstruction of the code into sub-industry.
+   */
   @Test
   public void codeDeconstructionSubIndustry() {
     final GICSCode test = GICSCode.of("45103020");
@@ -260,6 +312,9 @@ public class GICSCodeTest {
     assertEquals(expected, actual);
   }
 
+  /**
+   * Tests conversion of the code.
+   */
   @Test
   public void conversion() {
     final GICSCode sector = GICSCode.of("45");

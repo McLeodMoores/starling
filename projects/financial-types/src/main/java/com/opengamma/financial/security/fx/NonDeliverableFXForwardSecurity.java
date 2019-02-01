@@ -80,12 +80,31 @@ public class NonDeliverableFXForwardSecurity extends FinancialSecurity {
   @PropertyDefinition
   private boolean _deliverInReceiveCurrency;
 
-  NonDeliverableFXForwardSecurity() { //For builder
+  /**
+   * For the builder.
+   */
+  NonDeliverableFXForwardSecurity() {
     super(SECURITY_TYPE);
   }
 
+  /**
+   * @param payCurrency
+   *          the pay currency, not null
+   * @param payAmount
+   *          the pay amount
+   * @param receiveCurrency
+   *          the receive currency, not null
+   * @param receiveAmount
+   *          the receive amount
+   * @param forwardDate
+   *          the forward date, not null
+   * @param region
+   *          the holiday region, not null
+   * @param deliverInReceiveCurrency
+   *          true to deliver in the receive currency
+   */
   public NonDeliverableFXForwardSecurity(final Currency payCurrency, final double payAmount, final Currency receiveCurrency, final double receiveAmount,
-                                         final ZonedDateTime forwardDate, final ExternalId region, final boolean deliverInReceiveCurrency) {
+      final ZonedDateTime forwardDate, final ExternalId region, final boolean deliverInReceiveCurrency) {
     super(SECURITY_TYPE);
     setPayCurrency(payCurrency);
     setPayAmount(payAmount);

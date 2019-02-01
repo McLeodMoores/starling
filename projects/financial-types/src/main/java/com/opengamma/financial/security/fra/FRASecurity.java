@@ -26,7 +26,7 @@ import com.opengamma.master.security.SecurityDescription;
 import com.opengamma.util.money.Currency;
 
 /**
- * A security for FRAs.
+ * A security defining a vanilla FRA.
  */
 @BeanDefinition
 @SecurityDescription(type = FRASecurity.SECURITY_TYPE, description = "Fra")
@@ -81,8 +81,10 @@ public class FRASecurity extends FinancialSecurity {
   @PropertyDefinition(validate = "notNull")
   private ExternalId _underlyingId;
 
-
-  FRASecurity() { //For builder
+  /**
+   * For the builder.
+   */
+  FRASecurity() {
     super(SECURITY_TYPE);
   }
 
@@ -99,7 +101,7 @@ public class FRASecurity extends FinancialSecurity {
    * @param fixingDate the fixing date, not null
    */
   public FRASecurity(final Currency currency, final ExternalId region, final ZonedDateTime startDate, final ZonedDateTime endDate, final double rate,
-                     final double amount, final ExternalId underlyingIdentifier, final ZonedDateTime fixingDate) {
+      final double amount, final ExternalId underlyingIdentifier, final ZonedDateTime fixingDate) {
     super(SECURITY_TYPE);
     setCurrency(currency);
     setRegionId(region);

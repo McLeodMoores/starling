@@ -113,12 +113,38 @@ public class CreditDefaultSwapOptionSecurity extends FinancialSecurity {
   private ExternalId _underlyingId;
 
   /**
-   * Constructor used by Fudge
+   * Constructor used by the builder.
    */
   CreditDefaultSwapOptionSecurity() {
     super(SECURITY_TYPE);
   }
 
+  /**
+   * @param buy
+   *          true if protection has been bought, false if it has been sold
+   * @param protectionBuyer
+   *          the protection buyer, not null
+   * @param protectionSeller
+   *          the protection seller, not null
+   * @param startDate
+   *          the start date, not null
+   * @param maturityDate
+   *          the maturity date, not null
+   * @param currency
+   *          the currency, not null
+   * @param notional
+   *          the notional, not null
+   * @param strike
+   *          the strike, not null
+   * @param isKnockOut
+   *          true if the option is a knock out
+   * @param payer
+   *          true if the option is a payer
+   * @param exerciseType
+   *          the exercise type, not null
+   * @param underlyingId
+   *          the id of the underlying CDS, not null
+   */
   public CreditDefaultSwapOptionSecurity(final boolean buy, final ExternalId protectionBuyer, final ExternalId protectionSeller, final ZonedDateTime startDate,
       final ZonedDateTime maturityDate, final Currency currency, final Double notional, final Double strike,
       final boolean isKnockOut, final boolean payer, final ExerciseType exerciseType, final ExternalId underlyingId) {

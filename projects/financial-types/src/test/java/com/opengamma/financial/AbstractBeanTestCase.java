@@ -10,6 +10,8 @@ import static org.testng.Assert.fail;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.joda.beans.Bean;
@@ -41,7 +43,13 @@ public abstract class AbstractBeanTestCase extends AbstractFudgeBuilderTestCase 
    */
   @DataProvider(name = "propertyValues")
   public Object[][] propertyValues() {
-    return new Object[][] { { getJodaBeanProperties() } };
+    final Collection<JodaBeanProperties<? extends Bean>> propertyCollection = getMultipleJodaBeanProperties();
+    final Object[][] values = new Object[propertyCollection.size()][];
+    int i = 0;
+    for (final JodaBeanProperties<? extends Bean> properties : propertyCollection) {
+      values[i++] = new Object[] { properties };
+    }
+    return values;
   }
 
   /**
@@ -50,6 +58,15 @@ public abstract class AbstractBeanTestCase extends AbstractFudgeBuilderTestCase 
    * @return the properties
    */
   public abstract JodaBeanProperties<? extends Bean> getJodaBeanProperties();
+
+  /**
+   * Gets the names of the properties and values.
+   *
+   * @return the properties
+   */
+  protected Collection<JodaBeanProperties<? extends Bean>> getMultipleJodaBeanProperties() {
+    return Collections.<JodaBeanProperties<? extends Bean>> singleton(getJodaBeanProperties());
+  }
 
   /**
    * Tests equality and hashCode.

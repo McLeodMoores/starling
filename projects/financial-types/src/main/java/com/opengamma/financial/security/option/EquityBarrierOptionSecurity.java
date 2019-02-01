@@ -106,10 +106,41 @@ public class EquityBarrierOptionSecurity extends FinancialSecurity {
   @PropertyDefinition(validate = "notNull")
   private double _barrierLevel;
 
-  EquityBarrierOptionSecurity() { //For builder
+  /**
+   * For the builder.
+   */
+  EquityBarrierOptionSecurity() {
     super(SECURITY_TYPE);
   }
 
+  /**
+   * @param optionType
+   *          the option type, not null
+   * @param strike
+   *          the strike
+   * @param currency
+   *          the currency, not null
+   * @param underlyingId
+   *          the identifier of the underlying equity, not null
+   * @param exerciseType
+   *          the exercise type, not null
+   * @param expiry
+   *          the expiry, not null
+   * @param pointValue
+   *          the value of a point, not null
+   * @param exchange
+   *          the exchange name, not null
+   * @param barrierType
+   *          the barrier type, not null
+   * @param barrierDirection
+   *          the barrier direction, not null
+   * @param monitoringType
+   *          the monitoring type, not null
+   * @param samplingFrequency
+   *          the spot price sampling frequency, not null
+   * @param barrierLevel
+   *          the barrier level
+   */
   public EquityBarrierOptionSecurity(final OptionType optionType, final double strike, final Currency currency, final ExternalId underlyingId,
       final ExerciseType exerciseType, final Expiry expiry, final double pointValue, final String exchange, final BarrierType barrierType,
       final BarrierDirection barrierDirection, final MonitoringType monitoringType, final SamplingFrequency samplingFrequency, final double barrierLevel) {

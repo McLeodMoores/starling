@@ -30,7 +30,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Expiry;
 
 /**
- * A security for equity options.
+ * A security for swaptions.
  */
 @BeanDefinition
 @SecurityDescription(type = SwaptionSecurity.SECURITY_TYPE, description = "Swaption")
@@ -107,16 +107,56 @@ public class SwaptionSecurity extends FinancialSecurity {
   @PropertyDefinition
   private ZonedDateTime _settlementDate;
 
-  SwaptionSecurity() { //For builder
+  /**
+   * For the builder.
+   */
+  SwaptionSecurity() {
     super(SECURITY_TYPE);
   }
 
+  /**
+   * Creates a European swaption with no notional or settlement date (assumes
+   * that these values will be taken from the underlying swap).
+   *
+   * @param payer
+   *          true if the underlying is a payer swap
+   * @param underlyingIdentifier
+   *          the identifier of the underlying swap, not null
+   * @param isLong
+   *          true if the trade is long
+   * @param expiry
+   *          the expiry date, not null
+   * @param cashSettled
+   *          true if the swaption is cash-settled, false for physically-settled
+   * @param currency
+   *          the currency, not null
+   */
   public SwaptionSecurity(final boolean payer, final ExternalId underlyingIdentifier, final boolean isLong, final Expiry expiry, final boolean cashSettled, final Currency currency) {
     this(payer, underlyingIdentifier, isLong, expiry, cashSettled, currency, null, new EuropeanExerciseType(), null);
   }
 
+  /**
+   * @param payer
+   *          true if the underlying is a payer swap
+   * @param underlyingIdentifier
+   *          the identifier of the underlying swap, not null
+   * @param isLong
+   *          true if the trade is long
+   * @param expiry
+   *          the expiry date, not null
+   * @param cashSettled
+   *          true if the swaption is cash-settled, false for physically-settled
+   * @param currency
+   *          the currency, not null
+   * @param notional
+   *          the notional, not null
+   * @param exerciseType
+   *          the exercise type, not null
+   * @param settlementDate
+   *          the settlement date, not null
+   */
   public SwaptionSecurity(final boolean payer, final ExternalId underlyingIdentifier, final boolean isLong,
-                          final Expiry expiry, final boolean cashSettled, final Currency currency, final Double notional, final ExerciseType exerciseType, final ZonedDateTime settlementDate) {
+      final Expiry expiry, final boolean cashSettled, final Currency currency, final Double notional, final ExerciseType exerciseType, final ZonedDateTime settlementDate) {
     super(SECURITY_TYPE);
     setPayer(payer);
     setUnderlyingId(underlyingIdentifier);
@@ -129,6 +169,26 @@ public class SwaptionSecurity extends FinancialSecurity {
     setSettlementDate(settlementDate);
   }
 
+  /**
+   * @param payer
+   *          true if the underlying is a payer swap
+   * @param underlyingLink
+   *          a link to the underlying swap, not null
+   * @param isLong
+   *          true if the trade is long
+   * @param expiry
+   *          the expiry date, not null
+   * @param cashSettled
+   *          true if the swaption is cash-settled, false for physically-settled
+   * @param currency
+   *          the currency, not null
+   * @param notional
+   *          the notional, not null
+   * @param exerciseType
+   *          the exercise type, not null
+   * @param settlementDate
+   *          the settlement date, not null
+   */
   public SwaptionSecurity(final boolean payer, final SecurityLink<FinancialSecurity> underlyingLink, final boolean isLong,
       final Expiry expiry, final boolean cashSettled, final Currency currency, final Double notional, final ExerciseType exerciseType, final ZonedDateTime settlementDate) {
     super(SECURITY_TYPE);

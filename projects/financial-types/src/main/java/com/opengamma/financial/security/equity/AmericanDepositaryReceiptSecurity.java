@@ -129,6 +129,7 @@ public class AmericanDepositaryReceiptSecurity extends FinancialSecurity {
   public AmericanDepositaryReceiptSecurity(final String shortName, final String exchange, final String exchangeCode, final String companyName, final Currency currency,
       final Currency foreignCurrency, final GICSCode gicsCode, final ExternalIdBundle underlyingIdBundle) {
     super(SECURITY_TYPE);
+    setShortName(shortName);
     setExchange(exchange);
     setExchangeCode(exchangeCode);
     setCompanyName(companyName);

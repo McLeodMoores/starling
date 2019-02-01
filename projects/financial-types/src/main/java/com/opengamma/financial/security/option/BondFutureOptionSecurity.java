@@ -90,7 +90,10 @@ public class BondFutureOptionSecurity extends FinancialSecurity {
   @PropertyDefinition(validate = "notNull")
   private OptionType _optionType;
 
-  BondFutureOptionSecurity() { //For builder
+  /**
+   * For the builder.
+   */
+  BondFutureOptionSecurity() {
     super(SECURITY_TYPE);
   }
 
@@ -108,15 +111,15 @@ public class BondFutureOptionSecurity extends FinancialSecurity {
    * @param optionType the option type, not null.
    */
   public BondFutureOptionSecurity(final String tradingExchange,
-                                  final String settlementExchange,
-                                  final Expiry expiry,
-                                  final ExerciseType exerciseType,
-                                  final ExternalId underlyingIdentifier,
-                                  final double pointValue,
-                                  final boolean margined,
-                                  final Currency currency,
-                                  final double strike,
-                                  final OptionType optionType) {
+      final String settlementExchange,
+      final Expiry expiry,
+      final ExerciseType exerciseType,
+      final ExternalId underlyingIdentifier,
+      final double pointValue,
+      final boolean margined,
+      final Currency currency,
+      final double strike,
+      final OptionType optionType) {
     super(SECURITY_TYPE);
     setTradingExchange(tradingExchange);
     setSettlementExchange(settlementExchange);
