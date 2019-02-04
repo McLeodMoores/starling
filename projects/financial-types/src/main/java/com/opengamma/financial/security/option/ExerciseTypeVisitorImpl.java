@@ -7,7 +7,8 @@ package com.opengamma.financial.security.option;
 
 
 /**
- * Default Exercise type visitor
+ * Default Exercise type visitor that returns a new instance of the exercise
+ * type.
  */
 public final class ExerciseTypeVisitorImpl implements ExerciseTypeVisitor<ExerciseType> {
 

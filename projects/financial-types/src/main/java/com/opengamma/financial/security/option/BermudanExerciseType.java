@@ -30,7 +30,7 @@ public class BermudanExerciseType extends ExerciseType {
 
   @Override
   public String getName() {
-    return "Bermudan";
+    return ExerciseTypeNameVisitor.BERMUDAN;
   }
 
   //-------------------------------------------------------------------------

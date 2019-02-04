@@ -57,10 +57,14 @@ public class CreditDefaultSwapIndexComponent extends DirectBean implements Compa
   /**
    * Creates an instance
    *
-   * @param name the entity name, not null
-   * @param obligorId the obligor red code, not null
-   * @param weight the index weight, not null
-   * @param bondId the option bond identifer
+   * @param name
+   *          the entity name, not null
+   * @param obligorId
+   *          the obligor red code, not null
+   * @param weight
+   *          the index weight, not null
+   * @param bondId
+   *          the option bond identifier
    */
   public CreditDefaultSwapIndexComponent(final String name, final ExternalId obligorId, final Double weight, final ExternalId bondId) {
     setName(name);

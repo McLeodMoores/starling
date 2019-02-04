@@ -83,6 +83,12 @@ final class SameValueVisitor<T> extends FinancialSecurityVisitorDelegate<T> {
    */
   private final T _value;
 
+  /**
+   * @param delegate
+   *          the delegate visitor, not null
+   * @param value
+   *          the value to return from all methods
+   */
   SameValueVisitor(final FinancialSecurityVisitor<T> delegate, final T value) {
     super(delegate);
     _value = value;

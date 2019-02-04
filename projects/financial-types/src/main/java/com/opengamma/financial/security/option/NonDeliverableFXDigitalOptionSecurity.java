@@ -87,12 +87,36 @@ public class NonDeliverableFXDigitalOptionSecurity extends FinancialSecurity {
   @PropertyDefinition
   private boolean _deliverInCallCurrency;
 
-  NonDeliverableFXDigitalOptionSecurity() { //For builder
+  /**
+   * For the builder.
+   */
+  NonDeliverableFXDigitalOptionSecurity() {
     super(SECURITY_TYPE);
   }
 
-  public NonDeliverableFXDigitalOptionSecurity(final Currency putCurrency, final Currency callCurrency, final double putAmount, final double callAmount, final Currency paymentCurrency, final Expiry expiry,
-      final ZonedDateTime settlementDate, final boolean isLong, final boolean deliverInCallCurrency) {
+  /**
+   * @param putCurrency
+   *          the put currency, not null
+   * @param callCurrency
+   *          the call currency, not null
+   * @param putAmount
+   *          the put amount
+   * @param callAmount
+   *          the call amount
+   * @param paymentCurrency
+   *          the payment currency, not null
+   * @param expiry
+   *          the expiry, not null
+   * @param settlementDate
+   *          the settlement date, not null
+   * @param isLong
+   *          true if the option is long, false if it is short
+   * @param deliverInCallCurrency
+   *          true if delivery is made in the call currency, false if delivery
+   *          is made in the put currency
+   */
+  public NonDeliverableFXDigitalOptionSecurity(final Currency putCurrency, final Currency callCurrency, final double putAmount, final double callAmount,
+      final Currency paymentCurrency, final Expiry expiry, final ZonedDateTime settlementDate, final boolean isLong, final boolean deliverInCallCurrency) {
     super(SECURITY_TYPE);
     setPutCurrency(putCurrency);
     setCallCurrency(callCurrency);

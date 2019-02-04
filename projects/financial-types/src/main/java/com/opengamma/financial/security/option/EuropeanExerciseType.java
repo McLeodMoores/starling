@@ -30,7 +30,7 @@ public class EuropeanExerciseType extends ExerciseType {
 
   @Override
   public String getName() {
-    return "European";
+    return ExerciseTypeNameVisitor.EUROPEAN;
   }
 
   //-------------------------------------------------------------------------

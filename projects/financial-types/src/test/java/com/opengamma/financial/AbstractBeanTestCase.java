@@ -124,6 +124,8 @@ public abstract class AbstractBeanTestCase extends AbstractFudgeBuilderTestCase 
       // set back to original
       builder.set(propertyName, properties.getPropertyValue(i));
     }
+    assertNotEquals(null, otherBuilder.build());
+    assertNotEquals(otherBuilder, otherBuilder.build());
   }
 
   /**

@@ -36,6 +36,9 @@ public class CDSIndexDefinitionSecurityFudgeEncodingTest extends AbstractFudgeBu
     CDS_INDEX_DEFINITION_SECURITY = security;
   }
 
+  /**
+   * Tests a cycle.
+   */
   @Test
   public void testCycle() {
     assertEquals(CDS_INDEX_DEFINITION_SECURITY, cycleObject(CreditDefaultSwapIndexDefinitionSecurity.class,

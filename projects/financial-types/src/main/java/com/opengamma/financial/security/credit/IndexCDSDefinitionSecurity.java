@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
@@ -110,26 +110,40 @@ public class IndexCDSDefinitionSecurity extends FinancialSecurity {
   /**
    * Creates an instance
    */
-  IndexCDSDefinitionSecurity() { //For builder
+  IndexCDSDefinitionSecurity() {
     super(SECURITY_TYPE);
   }
 
   /**
    * Index CDS definition
    *
-   * @param ids identifiers representing this cds index definition, used by cds inidicies to reference this definition
-   * @param startDate the start date, not null
-   * @param version  the version, not null
-   * @param series  the series, not null
-   * @param family  the family, not null
-   * @param currency  the currency, not null
-   * @param recoveryRate the recovery rate for the index, not null
-   * @param couponFrequency the coupon frequency, not null
-   * @param coupon the coupon, not null
-   * @param terms the terms, not null
-   * @param components the components, not null
-   * @param calendars the holiday calendars, not null
-   * @param businessDayConvention the business day convention, not null
+   * @param ids
+   *          identifiers representing this CDS index definition, used by CDS
+   *          indicies to reference this definition
+   * @param startDate
+   *          the start date, not null
+   * @param version
+   *          the version, not null
+   * @param series
+   *          the series, not null
+   * @param family
+   *          the family, not null
+   * @param currency
+   *          the currency, not null
+   * @param recoveryRate
+   *          the recovery rate for the index, not null
+   * @param couponFrequency
+   *          the coupon frequency, not null
+   * @param coupon
+   *          the coupon, not null
+   * @param terms
+   *          the terms, not null
+   * @param components
+   *          the components, not null
+   * @param calendars
+   *          the holiday calendars, not null
+   * @param businessDayConvention
+   *          the business day convention, not null
    */
   public IndexCDSDefinitionSecurity(
       final ExternalIdBundle ids,
@@ -164,20 +178,35 @@ public class IndexCDSDefinitionSecurity extends FinancialSecurity {
   /**
    * Index CDS definition
    *
-   * @param ids identifiers representing this cds index definition, used by cds inidicies to reference this definition
-   * @param name the descriptive name for this cds index definition
-   * @param startDate the start date, not null
-   * @param version  the version, not null
-   * @param series  the series, not null
-   * @param family  the family, not null
-   * @param currency  the currency, not null
-   * @param recoveryRate the recovery rate for the index, not null
-   * @param couponFrequency the coupon frequency, not null
-   * @param coupon the coupon, not null
-   * @param terms the terms, not null
-   * @param components the components, not null
-   * @param calendars the holiday calendars, not null
-   * @param businessDayConvention the business day convention, not null
+   * @param ids
+   *          identifiers representing this CDS index definition, used by CDS
+   *          indicies to reference this definition
+   * @param name
+   *          the descriptive name for this CDS index definition
+   * @param startDate
+   *          the start date, not null
+   * @param version
+   *          the version, not null
+   * @param series
+   *          the series, not null
+   * @param family
+   *          the family, not null
+   * @param currency
+   *          the currency, not null
+   * @param recoveryRate
+   *          the recovery rate for the index, not null
+   * @param couponFrequency
+   *          the coupon frequency, not null
+   * @param coupon
+   *          the coupon, not null
+   * @param terms
+   *          the terms, not null
+   * @param components
+   *          the components, not null
+   * @param calendars
+   *          the holiday calendars, not null
+   * @param businessDayConvention
+   *          the business day convention, not null
    */
   public IndexCDSDefinitionSecurity(
       final ExternalIdBundle ids,

@@ -9,14 +9,14 @@ package com.opengamma.financial.security.option;
  * Visitor that gives the name of an Exercise type
  */
 public class ExerciseTypeNameVisitor implements ExerciseTypeVisitor<String> {
-  /** American */
-  private static final String AMERICAN = "American";
-  /** Asian type */
-  private static final String ASIAN = "Asian";
-  /** Bermudan type */
-  private static final String BERMUDAN = "Bermudan";
-  /** European type */
-  private static final String EUROPEAN = "European";
+  /** American type. */
+  public static final String AMERICAN = "American";
+  /** Asian type. */
+  public static final String ASIAN = "Asian";
+  /** Bermudan type. */
+  public static final String BERMUDAN = "Bermudan";
+  /** European type. */
+  public static final String EUROPEAN = "European";
 
   @Override
   public String visitAmericanExerciseType(final AmericanExerciseType exerciseType) {

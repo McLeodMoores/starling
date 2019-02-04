@@ -92,6 +92,13 @@ public class FinancialSecurityVisitorSameMethodAdapter<T> implements FinancialSe
    * @param <T> Return type for the visitor.
    */
   public interface Visitor<T> {
+    /**
+     * The single method that will be called by all securities.
+     *
+     * @param security
+     *          the security
+     * @return the result
+     */
     T visit(FinancialSecurity security);
   }
 

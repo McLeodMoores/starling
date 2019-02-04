@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
@@ -149,7 +149,10 @@ public class LegacyCDSSecurity extends FinancialSecurity {
   @PropertyDefinition
   private Double _fixedRecovery;
 
-  LegacyCDSSecurity() { // for fudge
+  /**
+   * For the builder.
+   */
+  LegacyCDSSecurity() {
     super(SECURITY_TYPE);
   }
 
@@ -173,10 +176,10 @@ public class LegacyCDSSecurity extends FinancialSecurity {
    * @param accruedOnDefault accrual on default flag, not null
    */
   public LegacyCDSSecurity(final ExternalIdBundle ids, final LocalDate tradeDate, final LocalDate maturityDate, final ExternalId referenceEntity,
-                           final InterestRateNotional notional, final boolean isBuy, final double coupon, final DebtSeniority debtSeniority,
-                           final Frequency couponFrequency, final DayCount daycount, final BusinessDayConvention businessDayConvention,
-                           final Set<ExternalId> calendars, final RestructuringClause restructuring, final InterestRateNotional upfrontPayment,
-                           final LocalDate feeSettlementDate, final boolean accruedOnDefault) {
+      final InterestRateNotional notional, final boolean isBuy, final double coupon, final DebtSeniority debtSeniority,
+      final Frequency couponFrequency, final DayCount daycount, final BusinessDayConvention businessDayConvention,
+      final Set<ExternalId> calendars, final RestructuringClause restructuring, final InterestRateNotional upfrontPayment,
+      final LocalDate feeSettlementDate, final boolean accruedOnDefault) {
     super(SECURITY_TYPE);
     setExternalIdBundle(ids);
     setTradeDate(tradeDate);
@@ -217,10 +220,10 @@ public class LegacyCDSSecurity extends FinancialSecurity {
    * @param accruedOnDefault accrual on default flag, not null
    */
   public LegacyCDSSecurity(final ExternalIdBundle ids, final String name, final LocalDate tradeDate, final LocalDate maturityDate, final ExternalId referenceEntity,
-                           final InterestRateNotional notional, final boolean isBuy, final double coupon, final DebtSeniority debtSeniority,
-                           final Frequency couponFrequency, final DayCount daycount, final BusinessDayConvention businessDayConvention,
-                           final Set<ExternalId> calendars, final RestructuringClause restructuring, final InterestRateNotional upfrontPayment,
-                           final LocalDate feeSettlementDate, final boolean accruedOnDefault) {
+      final InterestRateNotional notional, final boolean isBuy, final double coupon, final DebtSeniority debtSeniority,
+      final Frequency couponFrequency, final DayCount daycount, final BusinessDayConvention businessDayConvention,
+      final Set<ExternalId> calendars, final RestructuringClause restructuring, final InterestRateNotional upfrontPayment,
+      final LocalDate feeSettlementDate, final boolean accruedOnDefault) {
     super(SECURITY_TYPE);
     setName(name);
     setExternalIdBundle(ids);

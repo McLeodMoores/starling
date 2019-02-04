@@ -27,7 +27,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Expiry;
 
 /**
- * A security for FX barrier options.
+ * A security for FX single-barrier options.
  */
 @BeanDefinition
 @SecurityDescription(type = FXBarrierOptionSecurity.SECURITY_TYPE, description = "Fx barrier option")
@@ -102,10 +102,39 @@ public class FXBarrierOptionSecurity extends FinancialSecurity {
   @PropertyDefinition(validate = "notNull")
   private LongShort _longShort = LongShort.LONG;
 
-  FXBarrierOptionSecurity() { //For builder
+  /**
+   * For the builder.
+   */
+  FXBarrierOptionSecurity() {
     super(SECURITY_TYPE);
   }
 
+  /**
+   * @param putCurrency
+   *          the put currency, not null
+   * @param callCurrency
+   *          the call currency, not null
+   * @param putAmount
+   *          the put amount
+   * @param callAmount
+   *          the call amount
+   * @param expiry
+   *          the expiry, not null
+   * @param settlementDate
+   *          the settlement date, not null
+   * @param barrierType
+   *          the barrier type, not null
+   * @param barrierDirection
+   *          the barrier direction, not null
+   * @param monitoringType
+   *          the spot rate monitoring type, not null
+   * @param samplingFrequency
+   *          the spot rate sampling frequency, not null
+   * @param barrierLevel
+   *          the barrier level
+   * @param isLong
+   *          true if the option is long, false if it is short
+   */
   public FXBarrierOptionSecurity(final Currency putCurrency, final Currency callCurrency, final double putAmount, final double callAmount, final Expiry expiry,
       final ZonedDateTime settlementDate, final BarrierType barrierType, final BarrierDirection barrierDirection, final MonitoringType monitoringType,
       final SamplingFrequency samplingFrequency, final double barrierLevel, final boolean isLong) {
