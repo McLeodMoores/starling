@@ -16,7 +16,11 @@ import java.util.List;
 
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
+import org.joda.beans.ImmutableBean;
+import org.joda.beans.impl.direct.DirectBean;
+import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
+import org.joda.beans.impl.direct.DirectPrivateBeanBuilder;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -81,11 +85,14 @@ public abstract class AbstractBeanTestCase extends AbstractFudgeBuilderTestCase 
       final BeanBuilder<TYPE> otherBuilder = constructAndPopulateBeanBuilder(properties);
       final TYPE bean = builder.build();
       final TYPE other = otherBuilder.build();
-      final Method cloneMethod = bean.getClass().getMethod("clone", (Class<?>[]) null);
-      cloneMethod.setAccessible(true);
+      if (DirectBean.class.isAssignableFrom(properties.getType())) {
+        // test the clone() method - immutable beans do not have this method
+        final Method cloneMethod = bean.getClass().getMethod("clone", (Class<?>[]) null);
+        cloneMethod.setAccessible(true);
+        assertEquals(bean, cloneMethod.invoke(bean, (Object[]) null));
+      }
       // test Object methods
       assertEquals(bean, bean);
-      assertEquals(bean, cloneMethod.invoke(bean, (Object[]) null));
       assertNotEquals(null, bean);
       assertNotEquals(builder, bean);
       assertEquals(bean, other);
@@ -151,15 +158,39 @@ public abstract class AbstractBeanTestCase extends AbstractFudgeBuilderTestCase 
   protected static <TYPE extends Bean> BeanBuilder<TYPE> constructAndPopulateBeanBuilder(final JodaBeanProperties<TYPE> properties) {
     try {
       final Class<TYPE> beanClass = properties.getType();
-      final Constructor<TYPE> constructor = beanClass.getDeclaredConstructor();
-      constructor.setAccessible(true);
-      final TYPE emptyBean = constructor.newInstance();
-      final DirectMetaBean meta = (DirectMetaBean) emptyBean.metaBean();
-      final BeanBuilder<TYPE> builder = (BeanBuilder<TYPE>) meta.builder();
-      for (int i = 0; i < properties.size(); i++) {
-        builder.set(properties.getPropertyName(i), properties.getPropertyValue(i));
+      if (ImmutableBean.class.isAssignableFrom(beanClass)) {
+        final Class<?> clazz = Class.forName(beanClass.getName() + "$Builder");
+        if (DirectPrivateBeanBuilder.class.isAssignableFrom(clazz)) {
+          final Class<DirectPrivateBeanBuilder<TYPE>> builderClass = (Class<DirectPrivateBeanBuilder<TYPE>>) clazz;
+          final Constructor<DirectPrivateBeanBuilder<TYPE>> constructor = builderClass.getDeclaredConstructor();
+          constructor.setAccessible(true);
+          final DirectPrivateBeanBuilder<TYPE> builder = constructor.newInstance();
+          for (int i = 0; i < properties.size(); i++) {
+            builder.set(properties.getPropertyName(i), properties.getPropertyValue(i));
+          }
+          return builder;
+        } else if (DirectFieldsBeanBuilder.class.isAssignableFrom(clazz)) {
+          final Class<DirectFieldsBeanBuilder<TYPE>> builderClass = (Class<DirectFieldsBeanBuilder<TYPE>>) clazz;
+          final Constructor<DirectFieldsBeanBuilder<TYPE>> constructor = builderClass.getDeclaredConstructor();
+          constructor.setAccessible(true);
+          final DirectFieldsBeanBuilder<TYPE> builder = constructor.newInstance();
+          for (int i = 0; i < properties.size(); i++) {
+            builder.set(properties.getPropertyName(i), properties.getPropertyValue(i));
+          }
+          return builder;
+        }
+      } else if (Bean.class.isAssignableFrom(beanClass)) {
+        final Constructor<TYPE> constructor = beanClass.getDeclaredConstructor();
+        constructor.setAccessible(true);
+        final TYPE emptyBean = constructor.newInstance();
+        final DirectMetaBean meta = (DirectMetaBean) emptyBean.metaBean();
+        final BeanBuilder<TYPE> builder = (BeanBuilder<TYPE>) meta.builder();
+        for (int i = 0; i < properties.size(); i++) {
+          builder.set(properties.getPropertyName(i), properties.getPropertyValue(i));
+        }
+        return builder;
       }
-      return builder;
+      throw new IllegalArgumentException("Unsupported bean class type " + properties.getClass().getSimpleName());
     } catch (final Exception e) {
       fail("Could not construct meta bean of type " + properties.getType().getSimpleName() + ", error was : " + e.getMessage());
       return null;

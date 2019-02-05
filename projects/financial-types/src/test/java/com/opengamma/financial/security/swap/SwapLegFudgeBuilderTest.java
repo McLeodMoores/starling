@@ -31,36 +31,54 @@ public class SwapLegFudgeBuilderTest extends AbstractFudgeBuilderTestCase {
   private static final boolean EOM = true;
   private static final ExternalId REF_ID = ExternalId.of("Test", "ASD");
 
+  /**
+   * Tests a cycle of a fixed interest rate leg.
+   */
   @Test
   public void testFixedInterestRateLeg() {
     final FixedInterestRateLeg leg = new FixedInterestRateLeg(DC, FREQUENCY, REGION_ID, BDC, NOTIONAL, EOM, 0.05);
     assertEncodeDecodeCycle(FixedInterestRateLeg.class, leg);
   }
 
+  /**
+   * Tests a cycle of a floating interest rate leg.
+   */
   @Test
   public void testFloatingInterestRateLeg() {
     final FloatingInterestRateLeg leg = new FloatingInterestRateLeg(DC, FREQUENCY, REGION_ID, BDC, NOTIONAL, EOM, REF_ID, FloatingRateType.OIS);
     assertEncodeDecodeCycle(FloatingInterestRateLeg.class, leg);
   }
 
+  /**
+   * Tests a cycle of a floating interest rate leg.
+   */
   @Test
   public void testFloatingSpreadIRLeg() {
     final FloatingSpreadIRLeg leg = new FloatingSpreadIRLeg(DC, FREQUENCY, REGION_ID, BDC, NOTIONAL, EOM, REF_ID, FloatingRateType.CMS, 0.002);
     assertEncodeDecodeCycle(FloatingSpreadIRLeg.class, leg);
   }
 
+  /**
+   * Tests a cycle of a floating interest rate leg.
+   */
   @Test
   public void testFloatingGearingIRLeg() {
     final FloatingGearingIRLeg leg = new FloatingGearingIRLeg(DC, FREQUENCY, REGION_ID, BDC, NOTIONAL, EOM, REF_ID, FloatingRateType.IBOR, 2);
     assertEncodeDecodeCycle(FloatingGearingIRLeg.class, leg);
   }
 
+  /**
+   * Tests a cycle of a fixed inflation leg.
+   */
   @Test
   public void testFixedInflationSwapLeg() {
     final FixedInflationSwapLeg leg = new FixedInflationSwapLeg(DC, FREQUENCY, REGION_ID, BDC, NOTIONAL, EOM, 0.002);
     assertEncodeDecodeCycle(FixedInflationSwapLeg.class, leg);
   }
 
+  /**
+   * Tests a cycle of a floating inflation leg.
+   */
   @Test
   public void testInflationIndexSwapLeg() {
     final InflationIndexSwapLeg leg = new InflationIndexSwapLeg(DC, FREQUENCY, REGION_ID, BDC, NOTIONAL, EOM, ExternalId.of("Test", "SDF"),

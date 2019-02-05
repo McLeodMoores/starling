@@ -119,7 +119,7 @@ public class IndexCDSDefinitionSecurity extends FinancialSecurity {
    *
    * @param ids
    *          identifiers representing this CDS index definition, used by CDS
-   *          indicies to reference this definition
+   *          indices to reference this definition
    * @param startDate
    *          the start date, not null
    * @param version
@@ -180,7 +180,7 @@ public class IndexCDSDefinitionSecurity extends FinancialSecurity {
    *
    * @param ids
    *          identifiers representing this CDS index definition, used by CDS
-   *          indicies to reference this definition
+   *          indices to reference this definition
    * @param name
    *          the descriptive name for this CDS index definition
    * @param startDate
@@ -225,6 +225,7 @@ public class IndexCDSDefinitionSecurity extends FinancialSecurity {
       final BusinessDayConvention businessDayConvention) {
     super(SECURITY_TYPE);
     setExternalIdBundle(ids);
+    setStartDate(startDate);
     setName(name);
     setVersion(version);
     setSeries(series);

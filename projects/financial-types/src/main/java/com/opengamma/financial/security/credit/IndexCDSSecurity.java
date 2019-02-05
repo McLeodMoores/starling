@@ -85,15 +85,21 @@ public class IndexCDSSecurity extends FinancialSecurity {
   /**
    * An Index CDS
    *
-   * @param id identifier for this index cds, not null
-   * @param buy is protection being bought, not null
-   * @param underlyingIndex the underling index definition identifier, not null
-   * @param indexTenor the unerlying index tenor, not null
-   * @param tradeDate the trade date, not null
-   * @param notional the notional, not null
+   * @param id
+   *          identifier for this index CDS, not null
+   * @param buy
+   *          is protection being bought, not null
+   * @param underlyingIndex
+   *          the underling index definition identifier, not null
+   * @param indexTenor
+   *          the underlying index tenor, not null
+   * @param tradeDate
+   *          the trade date, not null
+   * @param notional
+   *          the notional, not null
    */
   public IndexCDSSecurity(final ExternalIdBundle id, final boolean buy, final SecurityLink<IndexCDSDefinitionSecurity> underlyingIndex, final Tenor indexTenor,
-                          final LocalDate tradeDate, final InterestRateNotional notional) {
+      final LocalDate tradeDate, final InterestRateNotional notional) {
     super(SECURITY_TYPE);
     setExternalIdBundle(id);
     setBuyProtection(buy);
@@ -106,15 +112,21 @@ public class IndexCDSSecurity extends FinancialSecurity {
   /**
    * An Index CDS
    *
-   * @param id identifier for this index cds, not null
-   * @param buy is protection being bought, not null
-   * @param underlyingIndex the underling index definition identifier, not null
-   * @param indexTenor the unerlying index tenor, not null
-   * @param tradeDate the trade date, not null
-   * @param notional the notional, not null
+   * @param id
+   *          identifier for this index CDS, not null
+   * @param buy
+   *          is protection being bought, not null
+   * @param underlyingIndex
+   *          the underling index definition identifier, not null
+   * @param indexTenor
+   *          the underlying index tenor, not null
+   * @param tradeDate
+   *          the trade date, not null
+   * @param notional
+   *          the notional, not null
    */
   public IndexCDSSecurity(final ExternalIdBundle id, final boolean buy, final ExternalId underlyingIndex, final Tenor indexTenor,
-                          final LocalDate tradeDate, final InterestRateNotional notional) {
+      final LocalDate tradeDate, final InterestRateNotional notional) {
     super(SECURITY_TYPE);
     setExternalIdBundle(id);
     setBuyProtection(buy);
@@ -127,16 +139,23 @@ public class IndexCDSSecurity extends FinancialSecurity {
   /**
    * An Index CDS
    *
-   * @param id identifier for this index cds, not null
-   * @param name the descriptive name for the security, not null
-   * @param buy is protection being bought, not null
-   * @param underlyingIndex the underling index definition (generally a RED code), not null
-   * @param indexTenor the unerlying index tenor, not null
-   * @param tradeDate the trade date, not null
-   * @param notional the notional, not null
+   * @param id
+   *          identifier for this index CDS, not null
+   * @param name
+   *          the descriptive name for the security, not null
+   * @param buy
+   *          is protection being bought, not null
+   * @param underlyingIndex
+   *          the underling index definition (generally a RED code), not null
+   * @param indexTenor
+   *          the underlying index tenor, not null
+   * @param tradeDate
+   *          the trade date, not null
+   * @param notional
+   *          the notional, not null
    */
   public IndexCDSSecurity(final ExternalIdBundle id, final String name, final boolean buy, final SecurityLink<IndexCDSDefinitionSecurity> underlyingIndex, final Tenor indexTenor,
-                          final LocalDate tradeDate, final InterestRateNotional notional) {
+      final LocalDate tradeDate, final InterestRateNotional notional) {
     super(SECURITY_TYPE);
     setExternalIdBundle(id);
     setName(name);
@@ -159,7 +178,7 @@ public class IndexCDSSecurity extends FinancialSecurity {
    * @param notional the notional, not null
    */
   public IndexCDSSecurity(final ExternalIdBundle id, final String name, final boolean buy, final ExternalId underlyingIndex, final Tenor indexTenor,
-                          final LocalDate tradeDate, final InterestRateNotional notional) {
+      final LocalDate tradeDate, final InterestRateNotional notional) {
     super(SECURITY_TYPE);
     setExternalIdBundle(id);
     setName(name);

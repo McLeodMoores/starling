@@ -96,7 +96,7 @@ public class StandardCDSSecurity extends FinancialSecurity {
    * A standard CDS security.
    *
    * @param ids
-   *          identifer for this security
+   *          identifier for this security
    * @param tradeDate
    *          the trade date
    * @param maturityDate
@@ -110,7 +110,7 @@ public class StandardCDSSecurity extends FinancialSecurity {
    * @param coupon
    *          the premium leg coupon (fractional i.e. 100 bps = 0.01)
    * @param debtSeniority
-   *          the det seniority
+   *          the debt seniority
    */
   public StandardCDSSecurity(final ExternalIdBundle ids, final LocalDate tradeDate, final LocalDate maturityDate, final ExternalId referenceEntity,
       final InterestRateNotional notional, final boolean isBuy, final double coupon, final DebtSeniority debtSeniority) {
@@ -129,7 +129,7 @@ public class StandardCDSSecurity extends FinancialSecurity {
    * A standard CDS security.
    *
    * @param ids
-   *          identifer for this security
+   *          identifier for this security
    * @param name
    *          descriptive name
    * @param tradeDate

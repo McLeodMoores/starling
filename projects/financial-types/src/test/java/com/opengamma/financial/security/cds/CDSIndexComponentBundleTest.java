@@ -6,14 +6,21 @@
 package com.opengamma.financial.security.cds;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 
+import java.util.Arrays;
 import java.util.Comparator;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
+import org.joda.beans.Bean;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableList;
 import com.opengamma.core.id.ExternalSchemes;
+import com.opengamma.financial.AbstractBeanTestCase;
 import com.opengamma.id.ExternalId;
 import com.opengamma.util.test.TestGroup;
 
@@ -21,9 +28,9 @@ import com.opengamma.util.test.TestGroup;
  * Test.
  */
 @Test(groups = TestGroup.UNIT)
-public class CDSIndexDefinitionComponentBundleTest {
+public class CDSIndexComponentBundleTest extends AbstractBeanTestCase {
 
-  private static Comparator<CreditDefaultSwapIndexComponent> WEIGHT_COMPARATOR =
+  private static final Comparator<CreditDefaultSwapIndexComponent> WEIGHT_COMPARATOR =
       new Comparator<CreditDefaultSwapIndexComponent>() {
     @Override
     public int compare(final CreditDefaultSwapIndexComponent o1, final CreditDefaultSwapIndexComponent o2) {
@@ -37,7 +44,17 @@ public class CDSIndexDefinitionComponentBundleTest {
   private CreditDefaultSwapIndexComponent _c4;
   private CreditDefaultSwapIndexComponent _c5;
 
-
+  /**
+   * Sets up the bundle before each method.
+   */
+  @BeforeTest
+  public void setUpInit() {
+    _c1 = createComponent("d", "Maroon", 0.05);
+    _c2 = createComponent("h", "Green", 0.23);
+    _c3 = createComponent("a", "Yellow", 0.01);
+    _c4 = createComponent("b", "Blue", 0.17);
+    _c5 = createComponent("g", "Grey", 0.09);
+  }
 
   /**
    * Sets up the bundle before each method.
@@ -74,6 +91,15 @@ public class CDSIndexDefinitionComponentBundleTest {
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNoNullsAllowedInComponents() {
     CDSIndexComponentBundle.of(_c1, _c2, null, _c4, _c5);
+  }
+
+  /**
+   * Tests the size() and isEmpty() method.
+   */
+  public void testSizeAndIsEmpty() {
+    final CDSIndexComponentBundle bundle = CDSIndexComponentBundle.of(_c1, _c2, _c3, _c4);
+    assertFalse(bundle.isEmpty());
+    assertEquals(bundle.size(), 4);
   }
 
   /**
@@ -219,7 +245,7 @@ public class CDSIndexDefinitionComponentBundleTest {
 
   /**
    * Creates an index component.
-   * 
+   *
    * @param red
    *          the red code
    * @param name
@@ -241,6 +267,17 @@ public class CDSIndexDefinitionComponentBundleTest {
    */
   private static ExternalId redCode(final String red) {
     return ExternalSchemes.markItRedCode(red);
+  }
+
+  @Override
+  public JodaBeanProperties<? extends Bean> getJodaBeanProperties() {
+    final SortedSet<CreditDefaultSwapIndexComponent> values = new TreeSet<>(WEIGHT_COMPARATOR);
+    values.add(_c1);
+    values.add(_c2);
+    final SortedSet<CreditDefaultSwapIndexComponent> otherValues = new TreeSet<>(WEIGHT_COMPARATOR);
+    otherValues.add(_c3);
+    otherValues.add(_c4);
+    return new JodaBeanProperties<>(CDSIndexComponentBundle.class, Arrays.asList("components"), Arrays.asList(values), Arrays.asList(otherValues));
   }
 
 }

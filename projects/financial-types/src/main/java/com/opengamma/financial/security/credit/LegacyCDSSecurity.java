@@ -144,7 +144,7 @@ public class LegacyCDSSecurity extends FinancialSecurity {
   private boolean _accruedOnDefault;
 
   /**
-   * Recovery rate for a fixed recovery cds. Optional.
+   * Recovery rate for a fixed recovery CDS. Optional.
    */
   @PropertyDefinition
   private Double _fixedRecovery;
@@ -686,7 +686,7 @@ public class LegacyCDSSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets recovery rate for a fixed recovery cds. Optional.
+   * Gets recovery rate for a fixed recovery CDS. Optional.
    * @return the value of the property
    */
   public Double getFixedRecovery() {
@@ -694,7 +694,7 @@ public class LegacyCDSSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets recovery rate for a fixed recovery cds. Optional.
+   * Sets recovery rate for a fixed recovery CDS. Optional.
    * @param fixedRecovery  the new value of the property
    */
   public void setFixedRecovery(Double fixedRecovery) {
