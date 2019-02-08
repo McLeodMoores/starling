@@ -22,7 +22,7 @@
 <listEntry value="com.opengamma.financial.security"/>
 <listEntry value="com.opengamma.financial.security.bond"/>
 <listEntry value="com.opengamma.financial.security.capfloor"/>
-<ListEntry value="com.opengamma.financial.security.cash"/>
+<listEntry value="com.opengamma.financial.security.cash"/>
 <listEntry value="com.opengamma.financial.security.cashflow"/>
 <listEntry value="com.opengamma.financial.security.cds"/>
 <listEntry value="com.opengamma.financial.security.credit"/>

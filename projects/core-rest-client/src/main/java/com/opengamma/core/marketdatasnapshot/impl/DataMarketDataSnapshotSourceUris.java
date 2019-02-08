@@ -28,6 +28,7 @@ public class DataMarketDataSnapshotSourceUris {
    * @return the URI, not null
    */
   public static URI uriGet(final URI baseUri, final UniqueId uniqueId) {
+    ArgumentChecker.notNull(uniqueId, "uniqueId");
     final UriBuilder bld = UriBuilder.fromUri(baseUri).path("snapshots/{snapshotId}");
     if (uniqueId.getVersion() != null) {
       bld.queryParam("version", uniqueId.getVersion());
@@ -80,13 +81,13 @@ public class DataMarketDataSnapshotSourceUris {
 
     final String vc = versionCorrection != null ?
         versionCorrection.toString() :
-        VersionCorrection.LATEST.toString();
+          VersionCorrection.LATEST.toString();
 
-    return UriBuilder.fromUri(baseUri)
-        .path("snapshotSearches/single")
-        .queryParam("name", name)
-        .queryParam("type", type.getName())
-        .queryParam("versionCorrection", vc)
-        .build();
+        return UriBuilder.fromUri(baseUri)
+            .path("snapshotSearches/single")
+            .queryParam("name", name)
+            .queryParam("type", type.getName())
+            .queryParam("versionCorrection", vc)
+            .build();
   }
 }

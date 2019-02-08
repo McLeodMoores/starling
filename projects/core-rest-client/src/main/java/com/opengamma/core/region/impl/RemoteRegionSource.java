@@ -13,8 +13,8 @@ import java.util.Map;
 import com.opengamma.DataNotFoundException;
 import com.opengamma.core.AbstractRemoteSource;
 import com.opengamma.core.AbstractSourceWithExternalBundle;
+import com.opengamma.core.change.BasicChangeManager;
 import com.opengamma.core.change.ChangeManager;
-import com.opengamma.core.change.DummyChangeManager;
 import com.opengamma.core.region.Region;
 import com.opengamma.core.region.RegionSource;
 import com.opengamma.id.ExternalId;
@@ -34,14 +34,23 @@ public class RemoteRegionSource extends AbstractRemoteSource<Region> implements 
   private final ChangeManager _changeManager;
 
   /**
-   * Creates an instance.
+   * Creates an instance using a basic change manager.
    *
-   * @param baseUri the base target URI for all RESTful web services, not null
+   * @param baseUri
+   *          the base target URI for all RESTful web services, not null
    */
   public RemoteRegionSource(final URI baseUri) {
-    this(baseUri, DummyChangeManager.INSTANCE);
+    this(baseUri, new BasicChangeManager());
   }
 
+  /**
+   * Creates an instance.
+   *
+   * @param baseUri
+   *          the base target URI for all RESTful web services, not null
+   * @param changeManager
+   *          the change manager, not null
+   */
   public RemoteRegionSource(final URI baseUri, final ChangeManager changeManager) {
     super(baseUri);
     ArgumentChecker.notNull(changeManager, "changeManager");
@@ -66,7 +75,6 @@ public class RemoteRegionSource extends AbstractRemoteSource<Region> implements 
     return accessRemote(uri).get(Region.class);
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public Collection<Region> get(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(bundle, "bundle");

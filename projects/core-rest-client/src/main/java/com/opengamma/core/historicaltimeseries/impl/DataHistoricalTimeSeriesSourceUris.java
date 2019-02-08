@@ -22,13 +22,27 @@ import org.threeten.bp.LocalDate;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.UniqueId;
+import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 
 /**
  * RESTful URIs for time-series.
  */
 public class DataHistoricalTimeSeriesSourceUris {
+
+  /**
+   * Builds a URI of the form <code>{path}/hts/{id}</code>. If the unique id is
+   * versioned, a query of the form <code>version={versionString}</code> is
+   * added to the URI.
+   *
+   * @param baseUri
+   *          the base URI, not null
+   * @param uniqueId
+   *          the unique identifier, not null
+   * @return the URI, not null
+   */
   public static URI uriGet(final URI baseUri, final UniqueId uniqueId) {
+    ArgumentChecker.notNull(uniqueId, "uniqueId");
     final UriBuilder bld = UriBuilder.fromUri(baseUri).path("hts/{htsId}");
     if (uniqueId.getVersion() != null) {
       bld.queryParam("version", uniqueId.getVersion());
@@ -36,7 +50,19 @@ public class DataHistoricalTimeSeriesSourceUris {
     return bld.build(uniqueId.getObjectId());
   }
 
+  /**
+   * Builds a URI of the form <code>{path}/htsMeta/externalIdBundle/{id}</code>.
+   * If the unique id is versioned, a query of the for
+   * <code>version={versionString}</code> is added to the URI.
+   *
+   * @param baseUri
+   *          the base URI, not null
+   * @param uniqueId
+   *          the unique id, not null
+   * @return the URI, not null
+   */
   public static URI uriExternalIdBundleGet(final URI baseUri, final UniqueId uniqueId) {
+    ArgumentChecker.notNull(uniqueId, "uniqueId");
     final UriBuilder bld = UriBuilder.fromUri(baseUri).path("htsMeta/externalIdBundle/{htsId}");
     if (uniqueId.getVersion() != null) {
       bld.queryParam("version", uniqueId.getVersion());
@@ -44,7 +70,37 @@ public class DataHistoricalTimeSeriesSourceUris {
     return bld.build(uniqueId.getObjectId());
   }
 
-  public static URI uriGet(final URI baseUri, final UniqueId uniqueId, final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd, final Integer maxPoints) {
+  /**
+   * Builds a URI of the form <code>{path}/hts/{id}</code>. The following fields
+   * are added to the query:
+   * <ul>
+   * <li><code>version={versionString}</code> if the unique id is versioned</li>
+   * <li><code>start={start}&includeStart={includeStart}</code> if the start
+   * date is not null</li>
+   * <li><code>end={end}&includeEnd={includeEnd}</code> if the end data is not
+   * null</li>
+   * <li><code>maxPoints={maxPoints}</code> if the max points is not null</li>
+   * </ul>
+   *
+   * @param baseUri
+   *          the base URI, not null
+   * @param uniqueId
+   *          the identifier, not null
+   * @param start
+   *          the time series start date
+   * @param includeStart
+   *          true to include the start date
+   * @param end
+   *          the time series end date
+   * @param includeEnd
+   *          true to include the end date
+   * @param maxPoints
+   *          the maximum number of points to return
+   * @return the URI, not null
+   */
+  public static URI uriGet(final URI baseUri, final UniqueId uniqueId, final LocalDate start, final boolean includeStart, final LocalDate end,
+      final boolean includeEnd, final Integer maxPoints) {
+    ArgumentChecker.notNull(uniqueId, "uniqueId");
     final UriBuilder bld = UriBuilder.fromUri(baseUri).path("hts/{htsId}");
     if (uniqueId.getVersion() != null) {
       bld.queryParam("version", uniqueId.getVersion());
@@ -86,9 +142,50 @@ public class DataHistoricalTimeSeriesSourceUris {
     return array;
   }
 
+  /**
+   * Builds a URI of the form <code>{path}/htsSearches/single</code>. The
+   * following fields are added to the query:
+   * <ul>
+   * <li><code>id={identifierBundle}</code></li>
+   * <li><code>dataSource={dataSource}</code></li> if the data source is not
+   * null</li>
+   * <li><code>dataProvider={dataProvider}</code></li> if the data provider is
+   * not null</li>
+   * <li><code>dataField={dataField}</code></li> if the data field is not
+   * null</li>
+   * <li><code>start={start}&includeStart={includeStart}</code> if the start
+   * date is not null</li>
+   * <li><code>end={end}&includeEnd={includeEnd}</code> if the end data is not
+   * null</li>
+   * <li><code>maxPoints={maxPoints}</code> if the max points is not null</li>
+   * </ul>
+   *
+   * @param baseUri
+   *          the base URI, not null
+   * @param identifierBundle
+   *          the identifiers, not null
+   * @param dataSource
+   *          the data source
+   * @param dataProvider
+   *          the data provider
+   * @param dataField
+   *          the data field
+   * @param start
+   *          the time series start date
+   * @param includeStart
+   *          true to include the start date
+   * @param end
+   *          the time series end date
+   * @param includeEnd
+   *          true to include the end date
+   * @param maxPoints
+   *          the maximum number of points to return
+   * @return the URI, not null
+   */
   public static URI uriSearchSingle(
       final URI baseUri, final ExternalIdBundle identifierBundle, final String dataSource, final String dataProvider, final String dataField,
       final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd, final Integer maxPoints) {
+    ArgumentChecker.notNull(identifierBundle, "identifierBundle");
     final UriBuilder bld = UriBuilder.fromUri(baseUri).path("htsSearches/single");
     bld.queryParam("id", identifiers(identifierBundle));
     if (dataSource != null) {
@@ -114,9 +211,54 @@ public class DataHistoricalTimeSeriesSourceUris {
     return bld.build();
   }
 
+  /**
+   * Builds a URI of the form <code>{path}/htsSearches/single</code>. The
+   * following fields are added to the query:
+   * <ul>
+   * <li><code>id={identifierBundle}</code></li>
+   * <li><code>idValidityDate={identifierValidityDate}</code> if the validity
+   * date is not null, otherwise <code>idValidityDate=ALL</code></li>
+   * <li><code>dataSource={dataSource}</code></li> if the data source is not
+   * null</li>
+   * <li><code>dataProvider={dataProvider}</code></li> if the data provider is
+   * not null</li>
+   * <li><code>dataField={dataField}</code></li> if the data field is not
+   * null</li>
+   * <li><code>start={start}&includeStart={includeStart}</code> if the start
+   * date is not null</li>
+   * <li><code>end={end}&includeEnd={includeEnd}</code> if the end data is not
+   * null</li>
+   * <li><code>maxPoints={maxPoints}</code> if the max points is not null</li>
+   * </ul>
+   *
+   * @param baseUri
+   *          the base URI, not null
+   * @param identifierBundle
+   *          the identifiers, not null
+   * @param identifierValidityDate
+   *          the validity date of the identifiers
+   * @param dataSource
+   *          the data source
+   * @param dataProvider
+   *          the data provider
+   * @param dataField
+   *          the data field
+   * @param start
+   *          the time series start date
+   * @param includeStart
+   *          true to include the start date
+   * @param end
+   *          the time series end date
+   * @param includeEnd
+   *          true to include the end date
+   * @param maxPoints
+   *          the maximum number of points to return
+   * @return the URI, not null
+   */
   public static URI uriSearchSingle(
       final URI baseUri, final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource, final String dataProvider, final String dataField,
       final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd, final Integer maxPoints) {
+    ArgumentChecker.notNull(identifierBundle, "identifierBundle");
     final UriBuilder bld = UriBuilder.fromUri(baseUri).path("htsSearches/single");
     bld.queryParam("id", identifiers(identifierBundle));
     bld.queryParam("idValidityDate", identifierValidityDate != null ? identifierValidityDate : "ALL");

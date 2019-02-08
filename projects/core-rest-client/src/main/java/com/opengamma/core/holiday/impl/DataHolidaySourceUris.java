@@ -28,11 +28,14 @@ public class DataHolidaySourceUris {
   /**
    * Builds a URI.
    *
-   * @param baseUri  the base URI, not null
-   * @param uniqueId  the unique identifier, may be null
+   * @param baseUri
+   *          the base URI, not null
+   * @param uniqueId
+   *          the unique identifier, not null
    * @return the URI, not null
    */
   public static URI uriGet(final URI baseUri, final UniqueId uniqueId) {
+    ArgumentChecker.notNull(uniqueId, "uniqueId");
     final UriBuilder bld = UriBuilder.fromUri(baseUri).path("holidays/{holidayId}");
     if (uniqueId.getVersion() != null) {
       bld.queryParam("version", uniqueId.getVersion());
@@ -99,8 +102,8 @@ public class DataHolidaySourceUris {
    */
   public static URI uriSearchCheck(final URI baseUri, final LocalDate date, final HolidayType holidayType, final Currency currency, final ExternalIdBundle regionOrExchangeIds) {
     final UriBuilder bld = UriBuilder.fromUri(baseUri).path("holidaySearches/check")
-        .queryParam("date", date.toString())
-        .queryParam("holidayType", holidayType.name());
+        .queryParam("date", ArgumentChecker.notNull(date, "date").toString())
+        .queryParam("holidayType", ArgumentChecker.notNull(holidayType, "holidayType").name());
     if (currency != null) {
       bld.queryParam("currency", currency.getCode());
     }
