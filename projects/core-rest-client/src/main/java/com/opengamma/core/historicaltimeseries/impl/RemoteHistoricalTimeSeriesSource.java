@@ -277,7 +277,6 @@ public class RemoteHistoricalTimeSeriesSource extends AbstractRemoteClient imple
   }
 
   //-------------------------------------------------------------------------
-  @SuppressWarnings("unchecked")
   @Override
   public Map<ExternalIdBundle, HistoricalTimeSeries> getHistoricalTimeSeries(final Set<ExternalIdBundle> identifierSet, final String dataSource, final String dataProvider, final String dataField,
       final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {
@@ -292,7 +291,7 @@ public class RemoteHistoricalTimeSeriesSource extends AbstractRemoteClient imple
   }
 
   //-------------------------------------------------------------------------
-  private Pair<LocalDate, Double> extractPair(final HistoricalTimeSeries historicalTimeSeries) {
+  private static Pair<LocalDate, Double> extractPair(final HistoricalTimeSeries historicalTimeSeries) {
     if (historicalTimeSeries == null) {
       return null;
     }

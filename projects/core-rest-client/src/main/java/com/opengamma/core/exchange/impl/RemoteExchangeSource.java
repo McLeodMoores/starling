@@ -13,8 +13,8 @@ import java.util.Map;
 import com.opengamma.DataNotFoundException;
 import com.opengamma.core.AbstractRemoteSource;
 import com.opengamma.core.AbstractSourceWithExternalBundle;
+import com.opengamma.core.change.BasicChangeManager;
 import com.opengamma.core.change.ChangeManager;
-import com.opengamma.core.change.DummyChangeManager;
 import com.opengamma.core.exchange.Exchange;
 import com.opengamma.core.exchange.ExchangeSource;
 import com.opengamma.id.ExternalId;
@@ -39,9 +39,17 @@ public class RemoteExchangeSource extends AbstractRemoteSource<Exchange> impleme
    * @param baseUri the base target URI for all RESTful web services, not null
    */
   public RemoteExchangeSource(final URI baseUri) {
-    this(baseUri, DummyChangeManager.INSTANCE);
+    this(baseUri, new BasicChangeManager());
   }
 
+  /**
+   * Creates an instance.
+   *
+   * @param baseUri
+   *          the base target URI for all RESTful web services, not null
+   * @param changeManager
+   *          the change manager, not null
+   */
   public RemoteExchangeSource(final URI baseUri, final ChangeManager changeManager) {
     super(baseUri);
     ArgumentChecker.notNull(changeManager, "changeManager");
@@ -66,7 +74,6 @@ public class RemoteExchangeSource extends AbstractRemoteSource<Exchange> impleme
     return accessRemote(uri).get(Exchange.class);
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public Collection<Exchange> get(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(bundle, "bundle");
@@ -81,10 +88,8 @@ public class RemoteExchangeSource extends AbstractRemoteSource<Exchange> impleme
   public Exchange getSingle(final ExternalId identifier) {
     try {
       return getSingle(ExternalIdBundle.of(identifier));
-    } catch (final DataNotFoundException ex) {
-      return null;
     } catch (final UniformInterfaceException404NotFound ex) {
-      return null;
+      throw new DataNotFoundException(ex.getMessage());
     }
   }
 
@@ -95,10 +100,8 @@ public class RemoteExchangeSource extends AbstractRemoteSource<Exchange> impleme
     try {
       final URI uri = DataExchangeSourceUris.uriSearchSingle(getBaseUri(), bundle);
       return accessRemote(uri).get(Exchange.class);
-    } catch (final DataNotFoundException ex) {
-      return null;
     } catch (final UniformInterfaceException404NotFound ex) {
-      return null;
+      throw new DataNotFoundException(ex.getMessage());
     }
   }
 
@@ -109,6 +112,7 @@ public class RemoteExchangeSource extends AbstractRemoteSource<Exchange> impleme
 
   @Override
   public Map<ExternalIdBundle, Collection<Exchange>> getAll(final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
+    ArgumentChecker.notNull(bundles, "bundles");
     return AbstractSourceWithExternalBundle.getAll(this, bundles, versionCorrection);
   }
 
@@ -119,11 +123,16 @@ public class RemoteExchangeSource extends AbstractRemoteSource<Exchange> impleme
 
   @Override
   public Exchange getSingle(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
-    return AbstractSourceWithExternalBundle.getSingle(this, bundle, versionCorrection);
+    final Exchange exchange = AbstractSourceWithExternalBundle.getSingle(this, bundle, versionCorrection);
+    if (exchange != null) {
+      return exchange;
+    }
+    throw new DataNotFoundException("Could not get an exchange for " + bundle + " " + versionCorrection);
   }
 
   @Override
   public Map<ExternalIdBundle, Exchange> getSingle(final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
+    ArgumentChecker.notNull(bundles, "bundles");
     return AbstractSourceWithExternalBundle.getSingle(this, bundles, versionCorrection);
   }
 

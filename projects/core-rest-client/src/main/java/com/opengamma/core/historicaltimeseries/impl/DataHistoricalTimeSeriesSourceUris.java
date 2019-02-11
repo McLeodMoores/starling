@@ -52,8 +52,8 @@ public class DataHistoricalTimeSeriesSourceUris {
 
   /**
    * Builds a URI of the form <code>{path}/htsMeta/externalIdBundle/{id}</code>.
-   * If the unique id is versioned, a query of the for
-   * <code>version={versionString}</code> is added to the URI.
+   * If the unique id is versioned, a query <code>version={versionString}</code>
+   * is added to the URI.
    *
    * @param baseUri
    *          the base URI, not null
@@ -127,6 +127,7 @@ public class DataHistoricalTimeSeriesSourceUris {
    * @return the array of, possibly encoded, identifier strings
    */
   private static Object[] identifiers(final ExternalIdBundle bundle) {
+    ArgumentChecker.notNull(bundle, "bundle");
     final List<String> identifiers = bundle.toStringList();
     final String[] array = new String[identifiers.size()];
     identifiers.toArray(array);
@@ -285,6 +286,41 @@ public class DataHistoricalTimeSeriesSourceUris {
     return bld.build();
   }
 
+  /**
+   * Builds a URI of the form <code>{path}/htsSearches/resolve</code>. The
+   * following fields are added to the query:
+   * <ul>
+   * <li><code>id={identifierBundle}</code></li>
+   * <li><code>dataField={dataField}</code></li> if the data field is not
+   * null</li>
+   * <li><code>resolutionKey={resolutionKey}</code</li>
+   * <li><code>start={start}&includeStart={includeStart}</code> if the start
+   * date is not null</li>
+   * <li><code>end={end}&includeEnd={includeEnd}</code> if the end data is not
+   * null</li>
+   * <li><code>maxPoints={maxPoints}</code> if the max points is not null</li>
+   * </ul>
+   *
+   * @param baseUri
+   *          the base URI, not null
+   * @param identifierBundle
+   *          the identifiers, not null
+   * @param dataField
+   *          the data field
+   * @param resolutionKey
+   *          the time series resolution key
+   * @param start
+   *          the time series start date
+   * @param includeStart
+   *          true to include the start date
+   * @param end
+   *          the time series end date
+   * @param includeEnd
+   *          true to include the end date
+   * @param maxPoints
+   *          the maximum number of points to return
+   * @return the URI, not null
+   */
   public static URI uriSearchResolve(
       final URI baseUri, final ExternalIdBundle identifierBundle, final String dataField, final String resolutionKey,
       final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd, final Integer maxPoints) {
@@ -310,6 +346,45 @@ public class DataHistoricalTimeSeriesSourceUris {
     return bld.build();
   }
 
+  /**
+   * Builds a URI of the form <code>{path}/htsSearches/resolve</code>. The
+   * following fields are added to the query:
+   * <ul>
+   * <li><code>id={identifierBundle}</code></li>
+   * <li><code>idValidityDate={identifierValidityDate}</code> if the validity
+   * date is not null, otherwise <code>idValidityDate=ALL</code></li>
+   * <li><code>dataField={dataField}</code></li> if the data field is not
+   * null</li>
+   * <li><code>resolutionKey={resolutionKey}</code</li>
+   * <li><code>start={start}&includeStart={includeStart}</code> if the start
+   * date is not null</li>
+   * <li><code>end={end}&includeEnd={includeEnd}</code> if the end data is not
+   * null</li>
+   * <li><code>maxPoints={maxPoints}</code> if the max points is not null</li>
+   * </ul>
+   *
+   * @param baseUri
+   *          the base URI, not null
+   * @param identifierBundle
+   *          the identifiers, not null
+   * @param identifierValidityDate
+   *          the validity date of the identifiers
+   * @param dataField
+   *          the data field
+   * @param resolutionKey
+   *          the time series resolution key
+   * @param start
+   *          the time series start date
+   * @param includeStart
+   *          true to include the start date
+   * @param end
+   *          the time series end date
+   * @param includeEnd
+   *          true to include the end date
+   * @param maxPoints
+   *          the maximum number of points to return
+   * @return the URI, not null
+   */
   public static URI uriSearchResolve(
       final URI baseUri, final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataField, final String resolutionKey,
       final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd, final Integer maxPoints) {
@@ -336,11 +411,39 @@ public class DataHistoricalTimeSeriesSourceUris {
     return bld.build();
   }
 
+  /**
+   * Builds a URI of the form <code>{path}/htsSearches/bulk</code>.
+   *
+   * @param baseUri
+   *          the base URI, not null
+   * @return the URI, not null
+   */
   public static URI uriSearchBulk(final URI baseUri) {
     final UriBuilder bld = UriBuilder.fromUri(baseUri).path("htsSearches/bulk");
     return bld.build();
   }
 
+  /**
+   * Creates a Fudge message that wraps the fields for use in a bulk query.
+   *
+   * @param identifierSet
+   *          the set of identifiers
+   * @param dataSource
+   *          the data source
+   * @param dataProvider
+   *          the data provider
+   * @param dataField
+   *          the data field
+   * @param start
+   *          the start date
+   * @param includeStart
+   *          true to include the start date in the time series
+   * @param end
+   *          the end date
+   * @param includeEnd
+   *          true to include the end date in the time series
+   * @return a Fudge message
+   */
   public static FudgeMsg uriSearchBulkData(
       final Set<ExternalIdBundle> identifierSet, final String dataSource, final String dataProvider, final String dataField,
       final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {

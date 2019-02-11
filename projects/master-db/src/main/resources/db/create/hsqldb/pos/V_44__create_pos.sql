@@ -12,9 +12,9 @@ CREATE TABLE pos_schema_version (
 );
 INSERT INTO pos_schema_version (version_key, version_value) VALUES ('schema_patch', '44');
 
-CREATE SEQUENCE pos_master_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS pos_master_seq AS bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
-CREATE SEQUENCE pos_idkey_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS pos_idkey_seq AS bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
 -- "as bigint" required by Derby, not accepted by Postgresql
 
@@ -68,7 +68,7 @@ CREATE INDEX ix_pos_trade_oid ON pos_trade(oid);
 CREATE INDEX ix_pos_trade_position_id ON pos_trade(position_id);
 CREATE INDEX ix_pos_trade_position_oid ON pos_trade(position_oid);
 
-CREATE SEQUENCE pos_trade_attr_seq as bigint
+CREATE SEQUENCE IF NOT EXISTS pos_trade_attr_seq as bigint
     start with 1000 increment by 1 no cycle;
 
 CREATE TABLE pos_trade_attribute (

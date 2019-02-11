@@ -792,11 +792,13 @@ public class DbBatchWriter extends AbstractDbMaster {
         }
         return null;
       }
+
     });
     if (marketData != null) {
       LOGGER.info("Snapshot " + baseUid + " already exists. No need to create.");
     } else {
       marketData = new MarketData();
+      getHibernateTemplate().setCheckWriteOperations(false);
       marketData.setBaseUid(baseUid);
       getHibernateTemplate().save(marketData);
       getHibernateTemplate().flush();

@@ -57,7 +57,6 @@ public class RemoteHolidaySource extends AbstractRemoteSource<Holiday> implement
   }
 
   @Override
-  @SuppressWarnings("unchecked")
   public Collection<Holiday> get(final HolidayType holidayType,
                                  final ExternalIdBundle regionOrExchangeIds) {
     ArgumentChecker.notNull(holidayType, "holidayType");
@@ -68,7 +67,6 @@ public class RemoteHolidaySource extends AbstractRemoteSource<Holiday> implement
   }
 
   @Override
-  @SuppressWarnings("unchecked")
   public Collection<Holiday> get(final Currency currency) {
     ArgumentChecker.notNull(currency, "currency");
 

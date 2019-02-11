@@ -6,14 +6,20 @@ package com.opengamma.core.historicaltimeseries.impl;
 import static com.opengamma.core.historicaltimeseries.impl.DataHistoricalTimeSeriesSourceUris.uriExternalIdBundleGet;
 import static com.opengamma.core.historicaltimeseries.impl.DataHistoricalTimeSeriesSourceUris.uriGet;
 import static com.opengamma.core.historicaltimeseries.impl.DataHistoricalTimeSeriesSourceUris.uriSearchBulk;
+import static com.opengamma.core.historicaltimeseries.impl.DataHistoricalTimeSeriesSourceUris.uriSearchBulkData;
 import static com.opengamma.core.historicaltimeseries.impl.DataHistoricalTimeSeriesSourceUris.uriSearchResolve;
 import static com.opengamma.core.historicaltimeseries.impl.DataHistoricalTimeSeriesSourceUris.uriSearchSingle;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNull;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collections;
+import java.util.Set;
 
+import org.fudgemsg.FudgeMsg;
+import org.fudgemsg.mapping.FudgeDeserializer;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.threeten.bp.LocalDate;
@@ -22,6 +28,7 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.UniqueId;
 import com.opengamma.id.VersionCorrection;
+import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 import com.opengamma.util.test.TestGroup;
 
 /**
@@ -103,6 +110,25 @@ public class DataHistoricalTimeSeriesSourceUrisTest {
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testUriExternalIdBundleGetNullUid() {
     uriExternalIdBundleGet(_baseUri, null);
+  }
+
+  /**
+   * Tests the URI that is built.
+   */
+  public void testUriExternalIdBundleGetNoVersion() {
+    final URI uri = uriExternalIdBundleGet(_baseUri, UID);
+    assertEquals(uri.getPath(), "path/to/htsMeta/externalIdBundle/" + UID);
+    assertNull(uri.getQuery());
+  }
+
+  /**
+   * Tests the URI that is built.
+   */
+  public void testUriExternalIdBundleGetVersion() {
+    final UniqueId uid = UID.withVersion(VersionCorrection.LATEST.toString());
+    final URI uri = uriExternalIdBundleGet(_baseUri, uid);
+    assertEquals(uri.getPath(), "path/to/htsMeta/externalIdBundle/" + UID);
+    assertEquals(uri.getQuery(), "version=VLATEST.CLATEST");
   }
 
   /**
@@ -353,6 +379,136 @@ public class DataHistoricalTimeSeriesSourceUrisTest {
   }
 
   /**
+   * Tests that the identifier cannot be null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testUriSearchResolveNullId() {
+    uriSearchResolve(_baseUri, null, DATA_FIELD, RESOLUTION_KEY, START, INCLUDE_START, END, INCLUDE_END, MAX_POINTS);
+  }
+
+  /**
+   * Tests the URI that is built.
+   */
+  public void testSearchResolveId1() {
+    final URI uri = uriSearchResolve(_baseUri, EIDS, null, null, null, false, null, false, null);
+    assertEquals(uri.getPath(), "path/to/htsSearches/resolve");
+    assertEquals(uri.getQuery(), "id=eid1~1&id=eid2~%1");
+  }
+
+  /**
+   * Tests the URI that is built.
+   */
+  public void testSearchResolveDataField1() {
+    final URI uri = uriSearchResolve(_baseUri, EIDS, DATA_FIELD, null, null, false, null, false, null);
+    assertEquals(uri.getPath(), "path/to/htsSearches/resolve");
+    assertEquals(uri.getQuery(), "id=eid1~1&id=eid2~%1&dataField=dataField");
+  }
+
+  /**
+   * Tests the URI that is built.
+   */
+  public void testSearchResolveResolutionKey1() {
+    final URI uri = uriSearchResolve(_baseUri, EIDS, DATA_FIELD, RESOLUTION_KEY, null, false, null, false, null);
+    assertEquals(uri.getPath(), "path/to/htsSearches/resolve");
+    assertEquals(uri.getQuery(), "id=eid1~1&id=eid2~%1&dataField=dataField&resolutionKey=resolutionKey");
+  }
+
+  /**
+   * Tests the URI that is built.
+   */
+  public void testSearchResolveStart1() {
+    final URI uri = uriSearchResolve(_baseUri, EIDS, DATA_FIELD, RESOLUTION_KEY, START, INCLUDE_START, null, false, null);
+    assertEquals(uri.getPath(), "path/to/htsSearches/resolve");
+    assertEquals(uri.getQuery(), "id=eid1~1&id=eid2~%1&dataField=dataField&resolutionKey=resolutionKey&start=2018-01-01&includeStart=true");
+  }
+
+  /**
+   * Tests the URI that is built.
+   */
+  public void testSearchResolveEnd1() {
+    final URI uri = uriSearchResolve(_baseUri, EIDS, DATA_FIELD, RESOLUTION_KEY, START, INCLUDE_END, END, INCLUDE_END, null);
+    assertEquals(uri.getPath(), "path/to/htsSearches/resolve");
+    assertEquals(uri.getQuery(),
+        "id=eid1~1&id=eid2~%1&dataField=dataField&resolutionKey=resolutionKey&start=2018-01-01&includeStart=false&end=2020-01-01&includeEnd=false");
+  }
+
+  /**
+   * Tests the URI that is built.
+   */
+  public void testSearchResolveMaxPoints1() {
+    final URI uri = uriSearchResolve(_baseUri, EIDS, DATA_FIELD, RESOLUTION_KEY, START, INCLUDE_END, END, INCLUDE_END, MAX_POINTS);
+    assertEquals(uri.getPath(), "path/to/htsSearches/resolve");
+    assertEquals(uri.getQuery(),
+        "id=eid1~1&id=eid2~%1&dataField=dataField&resolutionKey=resolutionKey&start=2018-01-01&includeStart=false&end=2020-01-01&includeEnd=false&maxPoints=100");
+  }
+
+  /**
+   * Tests the URI that is built.
+   */
+  public void testSearchResolveId2() {
+    final URI uri = uriSearchResolve(_baseUri, EIDS, null, null, null, null, false, null, false, null);
+    assertEquals(uri.getPath(), "path/to/htsSearches/resolve");
+    assertEquals(uri.getQuery(), "id=eid1~1&id=eid2~%1&idValidityDate=ALL");
+  }
+
+  /**
+   * Tests the URI that is built.
+   */
+  public void testSearchResolveValidityDate() {
+    final URI uri = uriSearchResolve(_baseUri, EIDS, IDENTIFIER_VALIDITY_DATE, null, null, null, false, null, false, null);
+    assertEquals(uri.getPath(), "path/to/htsSearches/resolve");
+    assertEquals(uri.getQuery(), "id=eid1~1&id=eid2~%1&idValidityDate=2020-12-01");
+  }
+
+  /**
+   * Tests the URI that is built.
+   */
+  public void testSearchResolveDataField2() {
+    final URI uri = uriSearchResolve(_baseUri, EIDS, IDENTIFIER_VALIDITY_DATE, DATA_FIELD, null, null, false, null, false, null);
+    assertEquals(uri.getPath(), "path/to/htsSearches/resolve");
+    assertEquals(uri.getQuery(), "id=eid1~1&id=eid2~%1&idValidityDate=2020-12-01&dataField=dataField");
+  }
+
+  /**
+   * Tests the URI that is built.
+   */
+  public void testSearchResolveResolutionKey2() {
+    final URI uri = uriSearchResolve(_baseUri, EIDS, IDENTIFIER_VALIDITY_DATE, DATA_FIELD, RESOLUTION_KEY, null, false, null, false, null);
+    assertEquals(uri.getPath(), "path/to/htsSearches/resolve");
+    assertEquals(uri.getQuery(), "id=eid1~1&id=eid2~%1&idValidityDate=2020-12-01&dataField=dataField&resolutionKey=resolutionKey");
+  }
+
+  /**
+   * Tests the URI that is built.
+   */
+  public void testSearchResolveStart2() {
+    final URI uri = uriSearchResolve(_baseUri, EIDS, IDENTIFIER_VALIDITY_DATE, DATA_FIELD, RESOLUTION_KEY, START, INCLUDE_START, null, false, null);
+    assertEquals(uri.getPath(), "path/to/htsSearches/resolve");
+    assertEquals(uri.getQuery(),
+        "id=eid1~1&id=eid2~%1&idValidityDate=2020-12-01&dataField=dataField&resolutionKey=resolutionKey&start=2018-01-01&includeStart=true");
+  }
+
+  /**
+   * Tests the URI that is built.
+   */
+  public void testSearchResolveEnd2() {
+    final URI uri = uriSearchResolve(_baseUri, EIDS, IDENTIFIER_VALIDITY_DATE, DATA_FIELD, RESOLUTION_KEY, START, INCLUDE_END, END, INCLUDE_END, null);
+    assertEquals(uri.getPath(), "path/to/htsSearches/resolve");
+    assertEquals(uri.getQuery(),
+        "id=eid1~1&id=eid2~%1&idValidityDate=2020-12-01&dataField=dataField&resolutionKey=resolutionKey&start=2018-01-01&includeStart=false&end=2020-01-01&includeEnd=false");
+  }
+
+  /**
+   * Tests the URI that is built.
+   */
+  public void testSearchResolveMaxPoints2() {
+    final URI uri = uriSearchResolve(_baseUri, EIDS, IDENTIFIER_VALIDITY_DATE, DATA_FIELD, RESOLUTION_KEY, START, INCLUDE_END, END, INCLUDE_END, MAX_POINTS);
+    assertEquals(uri.getPath(), "path/to/htsSearches/resolve");
+    assertEquals(uri.getQuery(),
+        "id=eid1~1&id=eid2~%1&idValidityDate=2020-12-01&dataField=dataField&resolutionKey=resolutionKey&start=2018-01-01&includeStart=false&end=2020-01-01&includeEnd=false&maxPoints=100");
+  }
+
+  /**
    * Tests that the base URI cannot be null.
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
@@ -368,4 +524,44 @@ public class DataHistoricalTimeSeriesSourceUrisTest {
     uriSearchBulk(null);
   }
 
+  /**
+   * Tests the URI that is built.
+   */
+  public void testUriSearchBulk() {
+    final URI uri = uriSearchBulk(_baseUri);
+    assertEquals(uri.getPath(), "path/to/htsSearches/bulk");
+    assertNull(uri.getQuery());
+  }
+
+  /**
+   * Tests that null inputs return no entry in the message.
+   */
+  public void testUriSearchBulkDataNullInputs() {
+    final FudgeMsg message = uriSearchBulkData(null, null, null, null, null, false, null, false);
+    assertNull(message.getValue("id"));
+    assertNull(message.getValue("dataSource"));
+    assertNull(message.getValue("dataProvider"));
+    assertNull(message.getValue("dataField"));
+    assertNull(message.getValue("start"));
+    assertFalse((boolean) message.getValue("includeStart"));
+    assertNull(message.getValue("end"));
+    assertFalse((boolean) message.getValue("includeEnd"));
+  }
+
+  /**
+   * Tests the message.
+   */
+  public void testUriSearchBulkData() {
+    final FudgeMsg message = uriSearchBulkData(Collections.singleton(EIDS), DATA_SOURCE, DATA_PROVIDER, DATA_FIELD, START, INCLUDE_START, END, INCLUDE_END);
+    final FudgeDeserializer deserializer = new FudgeDeserializer(OpenGammaFudgeContext.getInstance());
+    final Set<?> ids = deserializer.fudgeMsgToObject(Set.class, message.getMessage("id"));
+    assertEquals(ids, Collections.singleton(EIDS));
+    assertEquals(message.getValue("dataSource"), DATA_SOURCE);
+    assertEquals(message.getValue("dataProvider"), DATA_PROVIDER);
+    assertEquals(message.getValue("dataField"), DATA_FIELD);
+    assertEquals(message.getValue("start"), START);
+    assertEquals(message.getValue("includeStart"), INCLUDE_START);
+    assertEquals(message.getValue("end"), END);
+    assertEquals((boolean) message.getValue("includeEnd"), INCLUDE_END);
+  }
 }

@@ -73,14 +73,6 @@ public class ModifyHolidayDbHolidayMasterWorkerCorrectTest extends AbstractDbHol
     _holMaster.correct(doc);
   }
 
-//  @Test(expected = IllegalArgumentException.class)
-//  public void test_correct_notLatestCorrection() {
-//    UniqueId uniqueId = UniqueId("DbHol", "201", "0");
-//    ManageableHoliday holiday = new ManageableHoliday(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
-//    HolidayDocument doc = new HolidayDocument(holiday);
-//    _orgMaster.correct(doc);
-//  }
-
   @Test
   public void test_correct_getUpdateGet() {
     final Instant now = Instant.now(_holMaster.getClock());

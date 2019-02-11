@@ -12,13 +12,13 @@ CREATE TABLE len_schema_version (
 );
 INSERT INTO len_schema_version (version_key, version_value) VALUES ('schema_patch', '1');
 
-CREATE SEQUENCE len_doc_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS len_doc_seq AS bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
-CREATE SEQUENCE len_idkey_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS len_idkey_seq AS bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
-CREATE SEQUENCE len_attr_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS len_attr_seq AS bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
-CREATE SEQUENCE len_prop_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS len_prop_seq AS bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
 -- "as bigint" required by Derby/HSQL, not accepted by Postgresql
 
