@@ -21,14 +21,17 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class StandardRuleResolverTest {
 
+  /**
+   * Tests the resolution.
+   */
   @Test
   public void resolve() {
-    Collection<NormalizationRuleSet> supportedRules = Collections.singleton(StandardRules.getNoNormalization());    
-    StandardRuleResolver resolver = new StandardRuleResolver(supportedRules);
-    
+    final Collection<NormalizationRuleSet> supportedRules = Collections.singleton(StandardRules.getNoNormalization());
+    final StandardRuleResolver resolver = new StandardRuleResolver(supportedRules);
+
     NormalizationRuleSet rules = resolver.resolve("No Normalization");
     assertNotNull(rules);
-    
+
     rules = resolver.resolve("Nonexistent");
     assertNull(rules);
   }

@@ -20,6 +20,10 @@ public class SecurityRuleApplier implements NormalizationRule {
 
   private final SecurityRuleProvider _ruleProvider;
 
+  /**
+   * @param ruleProvider
+   *          the rule provider, not null
+   */
   public SecurityRuleApplier(final SecurityRuleProvider ruleProvider) {
     ArgumentChecker.notNull(ruleProvider, "ruleProvider");
     _ruleProvider = ruleProvider;

@@ -26,8 +26,8 @@ import com.opengamma.util.ArgumentChecker;
  * {@code JmsTopicNameResolver}.
  */
 public class DefaultDistributionSpecificationResolver
-  extends AbstractResolver<LiveDataSpecification, DistributionSpecification>
-  implements DistributionSpecificationResolver {
+extends AbstractResolver<LiveDataSpecification, DistributionSpecification>
+implements DistributionSpecificationResolver {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DefaultDistributionSpecificationResolver.class);
 
@@ -35,6 +35,16 @@ public class DefaultDistributionSpecificationResolver
   private final NormalizationRuleResolver _normalizationRuleResolver;
   private final JmsTopicNameResolver _jmsTopicNameResolver;
 
+  /**
+   * Creates a resolver.
+   * 
+   * @param idResolver
+   *          the identifier resolver, not null
+   * @param normalizationRuleResolver
+   *          the normalization rule resolver, not null
+   * @param jmsTopicNameResolver
+   *          the topic name resolver, not null
+   */
   public DefaultDistributionSpecificationResolver(
       final IdResolver idResolver,
       final NormalizationRuleResolver normalizationRuleResolver,
@@ -117,7 +127,7 @@ public class DefaultDistributionSpecificationResolver
       final String jmsTopicName = liveDataSec2JmsTopicName.get(liveDataSpec);
       if (identifier == null || normalizationRule == null || jmsTopicName == null) {
         LOGGER.info("Unable to resolve liveDataSpec: {} - identifier: {}, normalizationRule: {}, jmsTopicName: {}",
-                      liveDataSpec, identifier, normalizationRule, jmsTopicName);
+            liveDataSpec, identifier, normalizationRule, jmsTopicName);
         returnValue.put(liveDataSpec, null);
       } else {
         final DistributionSpecification distributionSpec = new DistributionSpecification(

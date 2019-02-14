@@ -32,15 +32,33 @@ public class NormalizationRuleSet {
   private final List<NormalizationRule> _rules;
 
   /* Useful for tests */
+  /**
+   * @param id
+   *          the rule set identifier, not null
+   */
   public NormalizationRuleSet(final String id) {
     this(id, id, Collections.<NormalizationRule>emptyList());
   }
 
   /* Also useful for tests */
+  /**
+   * @param id
+   *          the rule set identifier, not null
+   * @param rules
+   *          the rules, not null
+   */
   public NormalizationRuleSet(final String id, final NormalizationRule... rules) {
     this(id, id, Lists.newArrayList(rules));
   }
 
+  /**
+   * @param id
+   *          the rule set identifier, not null
+   * @param jmsTopicSuffix
+   *          the topic suffix, not null
+   * @param rules
+   *          the rules, not null
+   */
   public NormalizationRuleSet(final String id,
       final String jmsTopicSuffix,
       final List<NormalizationRule> rules) {

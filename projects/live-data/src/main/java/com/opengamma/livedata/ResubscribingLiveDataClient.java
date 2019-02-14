@@ -25,6 +25,12 @@ public class ResubscribingLiveDataClient implements LiveDataClient {
   private final LiveDataClient _delegate;
   private final Set<Subscription> _subscriptions = Collections.newSetFromMap(new ConcurrentHashMap<Subscription, Boolean>());
 
+  /**
+   * Creates a live data client.
+   *
+   * @param delegate
+   *          the underlying live data client, not null
+   */
   public ResubscribingLiveDataClient(final LiveDataClient delegate) {
     _delegate = ArgumentChecker.notNull(delegate, "delegate");
   }
@@ -64,8 +70,8 @@ public class ResubscribingLiveDataClient implements LiveDataClient {
 
   @Override
   public Collection<LiveDataSubscriptionResponse> snapshot(final UserPrincipal user,
-                                                           final Collection<LiveDataSpecification> specs,
-                                                           final long timeout) {
+      final Collection<LiveDataSpecification> specs,
+      final long timeout) {
     return _delegate.snapshot(user, specs, timeout);
   }
 
@@ -89,6 +95,9 @@ public class ResubscribingLiveDataClient implements LiveDataClient {
     return _delegate.isEntitled(user, specs);
   }
 
+  /**
+   * Resubscribes each previous subscription.
+   */
   public void resubscribe() {
     for (final Subscription subscription : _subscriptions) {
       _delegate.subscribe(subscription._user, subscription._spec, subscription._listener);

@@ -21,18 +21,36 @@ public class UnitChange implements NormalizationRule {
   private final Set<String> _fields;
   private final double _multiplier;
 
+  /**
+   * @param field
+   *          the field name, not null
+   * @param multiplier
+   *          the multiplier
+   */
   public UnitChange(final String field, final double multiplier) {
     ArgumentChecker.notNull(field, "Field name");
     _fields = ImmutableSet.of(field);
     _multiplier = multiplier;
   }
 
+  /**
+   * @param fields
+   *          the field names, not null
+   * @param multiplier
+   *          the multiplier
+   */
   public UnitChange(final Set<String> fields, final double multiplier) {
     ArgumentChecker.notNull(fields, "Field names");
     _fields = fields;
     _multiplier = multiplier;
   }
 
+  /**
+   * @param multiplier
+   *          the multiplier
+   * @param fields
+   *          the field names, not null
+   */
   public UnitChange(final double multiplier, final String... fields) {
     ArgumentChecker.notNull(fields, "fields");
     _fields = ImmutableSet.copyOf(fields);

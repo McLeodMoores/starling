@@ -22,40 +22,50 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class RequiredFieldFilterTest {
 
+  /**
+   * Tests that the message is unchanged if there are no required fields.
+   */
   public void noRequiredFields() {
-    RequiredFieldFilter filter = new RequiredFieldFilter();
-    
-    MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
+    final RequiredFieldFilter filter = new RequiredFieldFilter();
+
+    final MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
     msg.add("Foo", "1");
     msg.add("Bar", 2.0);
     msg.add("Baz", 500);
-    
-    MutableFudgeMsg normalized = filter.apply(msg, "123", new FieldHistoryStore());
+
+    final MutableFudgeMsg normalized = filter.apply(msg, "123", new FieldHistoryStore());
     assertNotNull(normalized);
     assertSame(normalized, msg);
   }
 
+  /**
+   * Tests that null is returned if all of the required fields are not
+   * available.
+   */
   public void requiredFieldsNotSatisfied() {
-    RequiredFieldFilter filter = new RequiredFieldFilter("Foo", "Fibble");
-    
-    MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
+    final RequiredFieldFilter filter = new RequiredFieldFilter("Foo", "Fibble");
+
+    final MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
     msg.add("Foo", "1");
     msg.add("Bar", 2.0);
     msg.add("Baz", 500);
-    
-    MutableFudgeMsg normalized = filter.apply(msg, "123", new FieldHistoryStore());
+
+    final MutableFudgeMsg normalized = filter.apply(msg, "123", new FieldHistoryStore());
     assertNull(normalized);
   }
 
+  /**
+   * Tests the message when all required fields are present.
+   */
   public void requiredFieldsSatisfied() {
-    RequiredFieldFilter filter = new RequiredFieldFilter("Foo");
-    
-    MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
+    final RequiredFieldFilter filter = new RequiredFieldFilter("Foo");
+
+    final MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
     msg.add("Foo", "1");
     msg.add("Bar", 2.0);
     msg.add("Baz", 500);
-    
-    MutableFudgeMsg normalized = filter.apply(msg, "123", new FieldHistoryStore());
+
+    final MutableFudgeMsg normalized = filter.apply(msg, "123", new FieldHistoryStore());
     assertNotNull(normalized);
     assertSame(normalized, msg);
   }
