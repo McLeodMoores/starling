@@ -58,7 +58,7 @@ final class ProviderBasedPermission implements ExtendedPermission {
   // the other permission is the permission being checked
   @Override
   public boolean implies(final Permission requiredPermission) {
-    if (requiredPermission instanceof ProviderBasedPermission == false) {
+    if (!(requiredPermission instanceof ProviderBasedPermission)) {
       return false;
     }
     final ProviderBasedPermission requiredPerm = (ProviderBasedPermission) requiredPermission;
@@ -102,9 +102,8 @@ final class ProviderBasedPermission implements ExtendedPermission {
     if (user == null) {
       if (exceptionsOnError) {
         throw new UnauthenticatedException("Permission denied: User not logged in: " + required);
-      } else {
-        return Boolean.FALSE;
       }
+      return Boolean.FALSE;
     }
     final PermissionCheckProviderRequest request = PermissionCheckProviderRequest.createGet(
         user.getAlternateIds(), user.getNetworkAddress(), required);

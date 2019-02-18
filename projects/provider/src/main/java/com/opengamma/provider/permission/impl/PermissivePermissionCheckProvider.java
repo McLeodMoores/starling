@@ -8,7 +8,6 @@ package com.opengamma.provider.permission.impl;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.opengamma.provider.permission.PermissionCheckProvider;
 import com.opengamma.provider.permission.PermissionCheckProviderRequest;
 import com.opengamma.provider.permission.PermissionCheckProviderResult;
 import com.opengamma.util.ArgumentChecker;
@@ -16,9 +15,7 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Permission checker provider that returns true for all requests.
  */
-public final class PermissivePermissionCheckProvider
-    extends AbstractPermissionCheckProvider
-    implements PermissionCheckProvider {
+public final class PermissivePermissionCheckProvider extends AbstractPermissionCheckProvider {
 
   @Override
   public PermissionCheckProviderResult isPermitted(final PermissionCheckProviderRequest request) {

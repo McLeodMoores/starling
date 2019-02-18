@@ -172,7 +172,7 @@ public class HistoricalTimeSeriesProviderGetRequest extends DirectBean {
    * @param externalIds  the historical time-series identifiers to load, not null
    */
   public void addExternalIds(final ExternalId... externalIds) {
-    ArgumentChecker.notNull(externalIds, "externalIds");
+    ArgumentChecker.noNulls(externalIds, "externalIds");
     final List<ExternalIdBundle> list = new ArrayList<>();
     for (final ExternalId externalId : externalIds) {
       list.add(ExternalIdBundle.of(externalId));
@@ -186,7 +186,7 @@ public class HistoricalTimeSeriesProviderGetRequest extends DirectBean {
    * @param externalIdBundles  the historical time-series identifiers to load, not null
    */
   public void addExternalIds(final ExternalIdBundle... externalIdBundles) {
-    ArgumentChecker.notNull(externalIdBundles, "externalIdBundles");
+    ArgumentChecker.noNulls(externalIdBundles, "externalIdBundles");
     getExternalIdBundles().addAll(Arrays.asList(externalIdBundles));
   }
 
@@ -196,7 +196,7 @@ public class HistoricalTimeSeriesProviderGetRequest extends DirectBean {
    * @param externalIdBundles  the historical time-series identifiers to load, not null
    */
   public void addExternalIds(final Iterable<ExternalIdBundle> externalIdBundles) {
-    ArgumentChecker.notNull(externalIdBundles, "externalIdBundles");
+    ArgumentChecker.noNulls(externalIdBundles, "externalIdBundles");
     Iterables.addAll(getExternalIdBundles(), externalIdBundles);
   }
 

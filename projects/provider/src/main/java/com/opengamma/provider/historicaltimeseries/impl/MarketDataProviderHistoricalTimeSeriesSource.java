@@ -59,8 +59,8 @@ public abstract class MarketDataProviderHistoricalTimeSeriesSource implements Hi
    * @param provider the provider of HTS data
    */
   public MarketDataProviderHistoricalTimeSeriesSource(final String providerName,
-                                                      final UniqueIdSupplier uniqueIdSupplier,
-                                                      final HistoricalTimeSeriesProvider provider) {
+      final UniqueIdSupplier uniqueIdSupplier,
+      final HistoricalTimeSeriesProvider provider) {
 
     ArgumentChecker.notNull(providerName, "providerName");
     ArgumentChecker.notNull(uniqueIdSupplier, "uniqueIdSupplier");
@@ -127,8 +127,6 @@ public abstract class MarketDataProviderHistoricalTimeSeriesSource implements Hi
 
   @Override
   public HistoricalTimeSeries getHistoricalTimeSeries(final UniqueId uniqueId, final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {
-
-
     throw createUniqueIdException();
   }
 
@@ -157,22 +155,24 @@ public abstract class MarketDataProviderHistoricalTimeSeriesSource implements Hi
   @Override
   public HistoricalTimeSeries getHistoricalTimeSeries(
       final ExternalIdBundle identifiers, final String dataSource, final String dataProvider, final String dataField,
-      LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {
-    if (!includeStart && start != null) {
-      start = start.plusDays(1);
+      final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {
+    LocalDate startDate = start;
+    if (!includeStart && startDate != null) {
+      startDate = startDate.plusDays(1);
     }
-    final LocalDateRange dateRange = LocalDateRange.ofNullUnbounded(start, end, includeEnd);
+    final LocalDateRange dateRange = LocalDateRange.ofNullUnbounded(startDate, end, includeEnd);
     return doGetHistoricalTimeSeries(identifiers, dataSource, dataProvider, dataField, dateRange, null);
   }
 
   @Override
   public HistoricalTimeSeries getHistoricalTimeSeries(
       final ExternalIdBundle identifiers, final String dataSource, final String dataProvider, final String dataField,
-      LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd, final int maxPoints) {
-    if (!includeStart && start != null) {
-      start = start.plusDays(1);
+      final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd, final int maxPoints) {
+    LocalDate startDate = start;
+    if (!includeStart && startDate != null) {
+      startDate = startDate.plusDays(1);
     }
-    final LocalDateRange dateRange = LocalDateRange.ofNullUnbounded(start, end, includeEnd);
+    final LocalDateRange dateRange = LocalDateRange.ofNullUnbounded(startDate, end, includeEnd);
     final Integer maxPointsVal = maxPoints == 0 ? null : maxPoints;
     return doGetHistoricalTimeSeries(identifiers, dataSource, dataProvider, dataField, dateRange, maxPointsVal);
   }
@@ -282,12 +282,12 @@ public abstract class MarketDataProviderHistoricalTimeSeriesSource implements Hi
   //-------------------------------------------------------------------------
   @Override
   public Map<ExternalIdBundle, HistoricalTimeSeries> getHistoricalTimeSeries(
-      final Set<ExternalIdBundle> externalIdBundles, final String dataSource, final String dataProvider, final String dataField, LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {
-
-    if (!includeStart && start != null) {
-      start = start.plusDays(1);
+      final Set<ExternalIdBundle> externalIdBundles, final String dataSource, final String dataProvider, final String dataField, final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {
+    LocalDate startDate = start;
+    if (!includeStart && startDate != null) {
+      startDate = startDate.plusDays(1);
     }
-    final LocalDateRange dateRange = LocalDateRange.ofNullUnbounded(start, end, includeEnd);
+    final LocalDateRange dateRange = LocalDateRange.ofNullUnbounded(startDate, end, includeEnd);
     LOGGER.info("Getting HistoricalTimeSeries for securities {}", externalIdBundles);
 
     final Map<ExternalIdBundle, LocalDateDoubleTimeSeries> map = _provider.getHistoricalTimeSeries(externalIdBundles, dataSource, dataProvider, dataField, dateRange);
