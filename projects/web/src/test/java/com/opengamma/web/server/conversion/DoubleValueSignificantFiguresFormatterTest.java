@@ -21,6 +21,9 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class DoubleValueSignificantFiguresFormatterTest {
 
+  /**
+   * Tests a 3 s.f. converter.
+   */
   @Test
   public void test3SF() {
     final DoubleValueSignificantFiguresFormatter formatter = new DoubleValueSignificantFiguresFormatter(3, false);
@@ -32,6 +35,9 @@ public class DoubleValueSignificantFiguresFormatterTest {
     assertEquals("123,457", format(formatter, 123456.789));
   }
 
+  /**
+   * Tests that the locale is used.
+   */
   @Test
   public void testLocale() {
     DoubleValueSignificantFiguresFormatter formatter = new DoubleValueSignificantFiguresFormatter(2, false, DecimalFormatSymbols.getInstance(Locale.GERMAN));
@@ -46,7 +52,7 @@ public class DoubleValueSignificantFiguresFormatterTest {
     assertEquals("1" + nbsp + "234,5", format(formatter, 1234.4567));
   }
 
-  private String format(final DoubleValueFormatter formatter, final double number) {
+  private static String format(final DoubleValueFormatter formatter, final double number) {
     return formatter.format(BigDecimal.valueOf(number));
   }
 

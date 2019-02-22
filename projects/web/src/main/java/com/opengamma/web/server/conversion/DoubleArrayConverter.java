@@ -11,7 +11,7 @@ import java.util.Map;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- *
+ * Converts a 2D array of doubles for display.
  */
 public class DoubleArrayConverter implements ResultConverter<double[][]> {
 

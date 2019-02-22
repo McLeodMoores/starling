@@ -16,7 +16,7 @@ import javax.ws.rs.core.UriInfo;
 
 
 /**
- * MockUriInfo for testing purposed
+ * MockUriInfo for testing purposes.
  */
 public class MockUriInfo implements UriInfo {
 
@@ -95,6 +95,15 @@ public class MockUriInfo implements UriInfo {
     return _pathParameters;
   }
 
+  public void setPathParameters(final MultivaluedMap<String, String> pathParameters) {
+    _pathParameters.clear();
+    _pathParameters.putAll(pathParameters);
+  }
+
+  public void addPathParameter(final String key, final String value) {
+    _pathParameters.add(key, value);
+  }
+
   @Override
   public MultivaluedMap<String, String> getQueryParameters() {
     return _queryParameters;
@@ -103,6 +112,15 @@ public class MockUriInfo implements UriInfo {
   @Override
   public MultivaluedMap<String, String> getQueryParameters(final boolean decode) {
     return _queryParameters;
+  }
+
+  public void setQueryParameters(final MultivaluedMap<String, String> queryParameters) {
+    _queryParameters.clear();
+    _queryParameters.putAll(queryParameters);
+  }
+
+  public void setQueryParameter(final String key, final String value) {
+    _queryParameters.add(key, value);
   }
 
   @Override

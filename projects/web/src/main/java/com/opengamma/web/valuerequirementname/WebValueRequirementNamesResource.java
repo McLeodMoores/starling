@@ -52,16 +52,7 @@ public class WebValueRequirementNamesResource extends AbstractWebResource {
    * Creates the resource.
    */
   public WebValueRequirementNamesResource() {
-    final List<String> list = new ArrayList<>();
-    for (final Field field : ValueRequirementNames.class.getDeclaredFields()) {
-      try {
-        list.add((String) field.get(null));
-      } catch (final Exception ex) {
-        LOGGER.warn("Could not read in value requirement names: " + ex.getMessage());
-      }
-    }
-    Collections.sort(list, String.CASE_INSENSITIVE_ORDER);
-    _valueRequirementNames = new LinkedHashSet<>(list);
+    this(new String[] { ValueRequirementNames.class.getName() });
   }
 
   /**
@@ -88,6 +79,12 @@ public class WebValueRequirementNamesResource extends AbstractWebResource {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Gets the value requirement names as JSON. The key is "types" and the values
+   * are stored in a JSONArray.
+   *
+   * @return the values as JSON
+   */
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public String getJSON() {
@@ -100,7 +97,7 @@ public class WebValueRequirementNamesResource extends AbstractWebResource {
           .endObject()
           .toString();
     } catch (final JSONException ex) {
-      LOGGER.warn("error creating json document for valueRequirementNames");
+      LOGGER.warn("error creating json document for valueRequirementNames: ", ex.getMessage());
     }
     return result;
   }

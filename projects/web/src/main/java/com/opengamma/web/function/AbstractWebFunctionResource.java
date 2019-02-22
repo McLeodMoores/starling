@@ -19,7 +19,7 @@ import com.opengamma.web.region.WebRegionUris;
  * Abstract base class for RESTful function resources.
  */
 public abstract class AbstractWebFunctionResource
-    extends AbstractPerRequestWebResource<WebFunctionData> {
+extends AbstractPerRequestWebResource<WebFunctionData> {
 
   /**
    * HTML ftl directory
@@ -28,7 +28,7 @@ public abstract class AbstractWebFunctionResource
 
   /**
    * Creates the resource.
-   * 
+   *
    * @param functionConfigurationSource  the function master, not null
    */
   protected AbstractWebFunctionResource(final FunctionConfigurationSource functionConfigurationSource) {
@@ -39,7 +39,7 @@ public abstract class AbstractWebFunctionResource
 
   /**
    * Creates the resource.
-   * 
+   *
    * @param parent  the parent resource, not null
    */
   protected AbstractWebFunctionResource(final AbstractWebFunctionResource parent) {
@@ -49,16 +49,16 @@ public abstract class AbstractWebFunctionResource
   //-------------------------------------------------------------------------
   /**
    * Creates the output root data.
-   * 
+   *
    * @return the output root data, not null
    */
   @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
+    final FlexiBean out = super.createRootData();
     out.put("uris", new WebFunctionUris(data()));
-    WebExchangeData exchangeData = new WebExchangeData(data().getUriInfo());
+    final WebExchangeData exchangeData = new WebExchangeData(data().getUriInfo());
     out.put("exchangeUris", new WebExchangeUris(exchangeData));
-    WebRegionData regionData = new WebRegionData(data().getUriInfo());
+    final WebRegionData regionData = new WebRegionData(data().getUriInfo());
     out.put("regionUris", new WebRegionUris(regionData));
     return out;
   }

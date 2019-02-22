@@ -14,7 +14,6 @@ import com.opengamma.util.ArgumentChecker;
  * Abstract base class for formatting double values.
  */
 public abstract class DoubleValueFormatter {
-
   private static final int GROUP_SIZE = 3;
   private static final char PLAIN_STRING_MINUS_SIGN = '-';
   private static final char PLAIN_STRING_DECIMAL_SEPARATOR = '.';
@@ -26,10 +25,22 @@ public abstract class DoubleValueFormatter {
 
   private final boolean _isCurrencyAmount;
 
+  /**
+   * Uses the format of the default locale.
+   *
+   * @param isCurrencyAmount
+   *          true if the value being formatted is a currency amount
+   */
   public DoubleValueFormatter(final boolean isCurrencyAmount) {
     this(isCurrencyAmount, DecimalFormatSymbols.getInstance());
   }
 
+  /**
+   * @param isCurrencyAmount
+   *          true if the value being formatted is a currency amount
+   * @param formatSymbols
+   *          the formatting symbols
+   */
   public DoubleValueFormatter(final boolean isCurrencyAmount, final DecimalFormatSymbols formatSymbols) {
     _localeGroupingSeparator = formatSymbols.getGroupingSeparator();
     _localeDecimalSeparator = formatSymbols.getDecimalSeparator();
@@ -39,6 +50,11 @@ public abstract class DoubleValueFormatter {
     _isCurrencyAmount = isCurrencyAmount;
   }
 
+  /**
+   * Returns true if the number is a currency amount.
+   *
+   * @return true if the number is a currency amount.
+   */
   public boolean isCurrencyAmount() {
     return _isCurrencyAmount;
   }
@@ -52,10 +68,24 @@ public abstract class DoubleValueFormatter {
    */
   protected abstract BigDecimal process(BigDecimal value);
 
+  /**
+   * Gets the value after rounding.
+   *
+   * @param value
+   *          the initial value, not null
+   * @return the rounded value
+   */
   public BigDecimal getRoundedValue(final BigDecimal value) {
     return process(value);
   }
 
+  /**
+   * Formats a value.
+   * 
+   * @param value
+   *          the value, not null
+   * @return the formatted value
+   */
   public String format(final BigDecimal value) {
     final BigDecimal processedValue = process(value);
     return transformPlainNumberString(processedValue.toPlainString());

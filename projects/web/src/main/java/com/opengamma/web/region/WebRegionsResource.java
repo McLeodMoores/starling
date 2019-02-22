@@ -55,6 +55,25 @@ public class WebRegionsResource extends AbstractWebRegionResource {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Creates a HTML GET request that returns the web page.
+   *
+   * @param pgIdx
+   *          the paging first-item index, can be null
+   * @param pgNum
+   *          the paging page, can be null
+   * @param pgSze
+   *          the page size, can be null
+   * @param name
+   *          the region name, not null
+   * @param classification
+   *          the classification, not null
+   * @param regionIdStrs
+   *          the identifiers of the region, not null
+   * @param uriInfo
+   *          the URI info, not null
+   * @return the Freemarker output
+   */
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String getHTML(
@@ -70,6 +89,25 @@ public class WebRegionsResource extends AbstractWebRegionResource {
     return getFreemarker().build(HTML_DIR + "regions.ftl", out);
   }
 
+  /**
+   * Creates a HTML GET request that returns the web page.
+   *
+   * @param pgIdx
+   *          the paging first-item index, can be null
+   * @param pgNum
+   *          the paging page, can be null
+   * @param pgSze
+   *          the page size, can be null
+   * @param name
+   *          the region name, not null
+   * @param classification
+   *          the classification, not null
+   * @param regionIdStrs
+   *          the identifiers of the region, not null
+   * @param uriInfo
+   *          the URI info, not null
+   * @return the Freemarker output
+   */
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public String getJSON(
@@ -112,6 +150,15 @@ public class WebRegionsResource extends AbstractWebRegionResource {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Finds a region by identifier. If the region is not present in the master,
+   * the latest version in the history is returned. If this is not available, an
+   * exception is thrown.
+   *
+   * @param idStr
+   *          the identifier
+   * @return the region resource
+   */
   @Path("{regionId}")
   public WebRegionResource findRegion(@PathParam("regionId") final String idStr) {
     data().setUriRegionId(idStr);

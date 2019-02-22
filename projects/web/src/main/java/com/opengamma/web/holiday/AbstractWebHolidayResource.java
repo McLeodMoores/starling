@@ -23,7 +23,7 @@ import com.opengamma.web.region.WebRegionUris;
  * Abstract base class for RESTful holiday resources.
  */
 public abstract class AbstractWebHolidayResource
-    extends AbstractPerRequestWebResource<WebHolidayData> {
+extends AbstractPerRequestWebResource<WebHolidayData> {
 
   /**
    * HTML ftl directory.

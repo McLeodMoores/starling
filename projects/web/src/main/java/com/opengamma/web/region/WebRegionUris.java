@@ -54,7 +54,7 @@ public class WebRegionUris {
    * @return the URI
    */
   public URI regions(final ExternalId identifier) {
-    return WebRegionsResource.uri(_data, ExternalIdBundle.of(identifier));
+    return WebRegionsResource.uri(_data, identifier == null ? null : ExternalIdBundle.of(identifier));
   }
 
   /**

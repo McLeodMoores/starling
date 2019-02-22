@@ -12,7 +12,7 @@ import java.util.Map;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- *
+ * Converts a list of double arrays for display.
  */
 @SuppressWarnings("rawtypes")
 public class ListDoubleArrayConverter implements ResultConverter<List> {

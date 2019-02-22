@@ -16,7 +16,7 @@ import com.opengamma.analytics.financial.greeks.BucketedGreekResultCollection;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- *
+ * Converts bucketed vega values into a labelled table for display.
  */
 public class BucketedVegaConverter implements ResultConverter<BucketedGreekResultCollection> {
   private static final Logger LOGGER = LoggerFactory.getLogger(BucketedVegaConverter.class);
@@ -46,7 +46,7 @@ public class BucketedVegaConverter implements ResultConverter<BucketedGreekResul
           yLabels[i] = FORMAT.format(expiries[i]);
         }
         for (int i = 0; i < uniqueStrikes.length; i++) {
-          xLabels[i] = FORMAT.format(i);
+          xLabels[i] = FORMAT.format(uniqueStrikes[i]);
         }
         result.put("xs", xLabels);
         result.put("ys", yLabels);

@@ -21,6 +21,9 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class DoubleValueDecimalPlaceFormatterTest {
 
+  /**
+   * Tests a 0 d.p. converter.
+   */
   @Test
   public void testNoDP() {
     final DoubleValueDecimalPlaceFormatter formatter = new DoubleValueDecimalPlaceFormatter(0, false);
@@ -38,6 +41,9 @@ public class DoubleValueDecimalPlaceFormatterTest {
     assertEquals("12,345,678", format(formatter, 12345678.123));
   }
 
+  /**
+   * Tests a 1 d.p. converter.
+   */
   @Test
   public void testOneDP() {
     final DoubleValueDecimalPlaceFormatter formatter = new DoubleValueDecimalPlaceFormatter(1, false);
@@ -53,6 +59,9 @@ public class DoubleValueDecimalPlaceFormatterTest {
     assertEquals("12,345.6", format(formatter, 12345.57874));
   }
 
+  /**
+   * Tests a 5 d.p. converter.
+   */
   @Test
   public void testFiveDP() {
     final DoubleValueDecimalPlaceFormatter formatter = new DoubleValueDecimalPlaceFormatter(5, false);
@@ -60,6 +69,9 @@ public class DoubleValueDecimalPlaceFormatterTest {
     assertEquals("12,345.57874", format(formatter, 12345.57874123));
   }
 
+  /**
+   * Tests that the locale is used.
+   */
   @Test
   public void testLocale() {
     DoubleValueDecimalPlaceFormatter formatter = new DoubleValueDecimalPlaceFormatter(2, false, DecimalFormatSymbols.getInstance(Locale.GERMAN));
@@ -72,7 +84,7 @@ public class DoubleValueDecimalPlaceFormatterTest {
     assertEquals("1" + nbsp + "234,99", format(formatter, 1234.987654321));
   }
 
-  private String format(final DoubleValueFormatter formatter, final double number) {
+  private static String format(final DoubleValueFormatter formatter, final double number) {
     return formatter.format(BigDecimal.valueOf(number));
   }
 
