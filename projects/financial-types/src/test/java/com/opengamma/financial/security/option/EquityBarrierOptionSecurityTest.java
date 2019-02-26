@@ -96,7 +96,10 @@ public class EquityBarrierOptionSecurityTest extends AbstractBeanTestCase {
     assertEquals(option.accept(TestVisitor.INSTANCE), EXCHANGE);
   }
 
-  private static class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
+  /**
+   *
+   */
+  private static final class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
     public static final TestVisitor INSTANCE = new TestVisitor();
 
     private TestVisitor() {

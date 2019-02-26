@@ -37,9 +37,8 @@ public class EquityOptionSecurityTest extends AbstractBeanTestCase {
   public JodaBeanProperties<? extends Bean> getJodaBeanProperties() {
     return new JodaBeanProperties<>(EquityOptionSecurity.class,
         Arrays.asList("optionType", "strike", "currency", "underlyingId", "exerciseType", "expiry", "pointValue", "exchange"),
-        Arrays.asList(OPTION_TYPE, STRIKE, CCY, UNDERLYING, EXERCISE_TYPE, EXPIRY, POINT_VALUE, EXCHANGE),
-        Arrays.asList(OptionType.PUT, STRIKE + 2, Currency.BRL, ExternalId.of("eid", "2"), ExerciseType.of("American"),
-            new Expiry(DateUtils.getUTCDate(2020, 3, 21)), POINT_VALUE + 1, "DEF"));
+        Arrays.asList(OPTION_TYPE, STRIKE, CCY, UNDERLYING, EXERCISE_TYPE, EXPIRY, POINT_VALUE, EXCHANGE), Arrays.asList(OptionType.PUT, STRIKE + 2,
+            Currency.BRL, ExternalId.of("eid", "2"), ExerciseType.of("American"), new Expiry(DateUtils.getUTCDate(2020, 3, 21)), POINT_VALUE + 1, "DEF"));
   }
 
   /**
@@ -76,7 +75,10 @@ public class EquityOptionSecurityTest extends AbstractBeanTestCase {
     assertEquals(option.accept(TestVisitor.INSTANCE), EXCHANGE);
   }
 
-  private static class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
+  /**
+   *
+   */
+  private static final class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
     public static final TestVisitor INSTANCE = new TestVisitor();
 
     private TestVisitor() {

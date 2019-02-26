@@ -41,9 +41,8 @@ public class NonDeliverableFXOptionSecurityTest extends AbstractBeanTestCase {
         Arrays.asList("putCurrency", "callCurrency", "putAmount", "callAmount", "expiry", "settlementDate", "longShort", "exerciseType",
             "deliveryInCallCurrency"),
         Arrays.asList(PUT_CURRENCY, CALL_CURRENCY, PUT_AMOUNT, CALL_AMOUNT, EXPIRY, SETTLEMENT_DATE, LongShort.LONG, TYPE, DELIVER_IN_CALL_CURRENCY),
-        Arrays.asList(CALL_CURRENCY,
-            PUT_CURRENCY, CALL_AMOUNT, PUT_AMOUNT, new Expiry(DateUtils.getUTCDate(2022, 2, 2)), SETTLEMENT_DATE.plusDays(1), LongShort.SHORT,
-            new EuropeanExerciseType(), !DELIVER_IN_CALL_CURRENCY));
+        Arrays.asList(CALL_CURRENCY, PUT_CURRENCY, CALL_AMOUNT, PUT_AMOUNT, new Expiry(DateUtils.getUTCDate(2022, 2, 2)), SETTLEMENT_DATE.plusDays(1),
+            LongShort.SHORT, new EuropeanExerciseType(), !DELIVER_IN_CALL_CURRENCY));
   }
 
   /**
@@ -97,7 +96,10 @@ public class NonDeliverableFXOptionSecurityTest extends AbstractBeanTestCase {
     assertEquals(security.accept(TestVisitor.INSTANCE), NonDeliverableFXOptionSecurity.SECURITY_TYPE);
   }
 
-  private static class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
+  /**
+   *
+   */
+  private static final class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
     public static final TestVisitor INSTANCE = new TestVisitor();
 
     private TestVisitor() {

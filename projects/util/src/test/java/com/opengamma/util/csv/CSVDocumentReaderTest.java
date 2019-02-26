@@ -24,52 +24,61 @@ import com.opengamma.util.test.TestGroup;
  */
 @Test(groups = TestGroup.UNIT)
 public class CSVDocumentReaderTest {
-  
+
   private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
   private List<FudgeMsg> _expectedRows;
   CSVDocumentReader _csvDocReader;
-  
+
+  /**
+   *
+   */
   @BeforeMethod
   public void setUp() {
-    
+
     _expectedRows = Lists.newArrayList();
-    
+
     MutableFudgeMsg row = FUDGE_CONTEXT.newMessage();
     row.add("Name", "Kirk");
     row.add("JobTitle", "CEO");
     _expectedRows.add(row);
-    
+
     row = FUDGE_CONTEXT.newMessage();
     row.add("Name", "Jim");
     row.add("JobTitle", "CTO");
     _expectedRows.add(row);
-    
+
     row = FUDGE_CONTEXT.newMessage();
     row.add("Name", "Elaine");
     row.add("JobTitle", "CQO");
     _expectedRows.add(row);
-    
+
     row = FUDGE_CONTEXT.newMessage();
     row.add("Name", "Andrew");
     row.add("JobTitle", "Engineer");
     _expectedRows.add(row);
-    
+
     row = FUDGE_CONTEXT.newMessage();
     row.add("Name", "Alan");
     _expectedRows.add(row);
-    
+
     _csvDocReader = new CSVDocumentReader(CSVDocumentReaderTest.class.getResource("test_csv_document_read.csv"));
-    
+
   }
-  
+
+  /**
+   *
+   */
   public void read() {
-    List<FudgeMsg> actualRows = Lists.newArrayList();
-    for (FudgeMsg row : _csvDocReader) {
+    final List<FudgeMsg> actualRows = Lists.newArrayList();
+    for (final FudgeMsg row : _csvDocReader) {
       actualRows.add(row);
     }
-    assertEquals(_expectedRows, actualRows);        
+    assertEquals(_expectedRows, actualRows);
   }
-  
+
+  /**
+   *
+   */
   public void multipleReads() {
     read();
     read();

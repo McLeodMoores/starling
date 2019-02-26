@@ -80,13 +80,12 @@ public class EquityTotalReturnSwapSecurityTest extends AbstractBeanTestCase {
     otherFloating.setFloatingReferenceRateId(ExternalId.of("eid", "5"));
     return new JodaBeanProperties<>(EquityTotalReturnSwapSecurity.class,
         Arrays.asList("notionalCurrency", "notionalAmount", "numberOfShares", "dividendPercentage", "fundingLeg", "assetId", "effectiveDate", "maturityDate",
-            "paymentSettlementDays",
-            "paymentBusinessDayConvention", "paymentFrequency", "rollConvention", "paymentDateCalendar", "resetDateRelativeTo", "dates", "paymentDates"),
+            "paymentSettlementDays", "paymentBusinessDayConvention", "paymentFrequency", "rollConvention", "paymentDateCalendar", "resetDateRelativeTo",
+            "dates", "paymentDates"),
         Arrays.asList(CCY, NOTIONAL, NUMBER_OF_SHARES, DIVIDEND_PERCENTAGE, FLOATING, ASSET_ID, EFFECTIVE_DATE, MATURITY_DATE, SETTLEMENT_DAYS, BDC, FREQ, ROLL,
-            CALENDARS, RESET, DATES,
-            PAYMENT_DATES),
-        Arrays.asList(Currency.BRL, NOTIONAL * 2, NUMBER_OF_SHARES * 2, DIVIDEND_PERCENTAGE / 2, otherFloating, FLOATING_ID.toBundle(),
-            MATURITY_DATE, EFFECTIVE_DATE, SETTLEMENT_DAYS + 1, BusinessDayConventions.MODIFIED_FOLLOWING, SimpleFrequency.ANNUAL, RollConvention.EIGHT,
+            CALENDARS, RESET, DATES, PAYMENT_DATES),
+        Arrays.asList(Currency.BRL, NOTIONAL * 2, NUMBER_OF_SHARES * 2, DIVIDEND_PERCENTAGE / 2, otherFloating, FLOATING_ID.toBundle(), MATURITY_DATE,
+            EFFECTIVE_DATE, SETTLEMENT_DAYS + 1, BusinessDayConventions.MODIFIED_FOLLOWING, SimpleFrequency.ANNUAL, RollConvention.EIGHT,
             Collections.<ExternalId> emptySet(), DateRelativeTo.END, new int[0], new LocalDate[0]));
   }
 
@@ -106,8 +105,8 @@ public class EquityTotalReturnSwapSecurityTest extends AbstractBeanTestCase {
     assertNull(security.getPaymentBusinessDayConvention());
     assertNull(security.getPaymentFrequency());
     assertNull(security.getRollConvention());
-    security = new EquityTotalReturnSwapSecurity(FLOATING, ASSET_ID, EFFECTIVE_DATE, MATURITY_DATE, NUMBER_OF_SHARES, CCY, NOTIONAL,
-        SETTLEMENT_DAYS, BDC, FREQ, ROLL);
+    security = new EquityTotalReturnSwapSecurity(FLOATING, ASSET_ID, EFFECTIVE_DATE, MATURITY_DATE, NUMBER_OF_SHARES, CCY, NOTIONAL, SETTLEMENT_DAYS, BDC, FREQ,
+        ROLL);
     assertEquals(security.getSecurityType(), EquityTotalReturnSwapSecurity.SECURITY_TYPE);
     assertEquals(security.getFundingLeg(), FLOATING);
     assertEquals(security.getAssetId(), ASSET_ID);
@@ -168,7 +167,10 @@ public class EquityTotalReturnSwapSecurityTest extends AbstractBeanTestCase {
         Arrays.asList(LocalDate.of(2020, 1, 13), LocalDate.of(2020, 7, 15), LocalDate.of(2021, 1, 15), LocalDate.of(2021, 7, 15), LocalDate.of(2022, 1, 18)));
   }
 
-  private static class TestVisitor extends FinancialSecurityVisitorAdapter<Double> {
+  /**
+   *
+   */
+  private static final class TestVisitor extends FinancialSecurityVisitorAdapter<Double> {
     public static final TestVisitor INSTANCE = new TestVisitor();
 
     private TestVisitor() {

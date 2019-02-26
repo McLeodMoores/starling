@@ -61,7 +61,8 @@ public class IndexFutureSecurity extends FutureSecurity {
    * @deprecated Use the constructor that takes the underlying identifier
    */
   @Deprecated
-  public IndexFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency, final double unitAmount, final String category) {
+  public IndexFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency,
+      final double unitAmount, final String category) {
     super(expiry, tradingExchange, settlementExchange, currency, unitAmount, category);
   }
 
@@ -87,7 +88,7 @@ public class IndexFutureSecurity extends FutureSecurity {
     setUnderlyingId(underlyingId);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitIndexFutureSecurity(this);

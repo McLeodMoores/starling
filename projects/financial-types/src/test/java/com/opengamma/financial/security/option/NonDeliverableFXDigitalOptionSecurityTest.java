@@ -88,7 +88,10 @@ public class NonDeliverableFXDigitalOptionSecurityTest extends AbstractBeanTestC
     assertEquals(security.accept(TestVisitor.INSTANCE), NonDeliverableFXDigitalOptionSecurity.SECURITY_TYPE);
   }
 
-  private static class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
+  /**
+   *
+   */
+  private static final class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
     public static final TestVisitor INSTANCE = new TestVisitor();
 
     private TestVisitor() {

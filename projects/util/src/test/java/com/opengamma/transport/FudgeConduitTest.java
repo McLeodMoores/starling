@@ -26,6 +26,9 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.INTEGRATION)
 public class FudgeConduitTest {
 
+  /**
+   *
+   */
   public void oneWayTest() {
     final FudgeContext context = new FudgeContext();
     final CollectingFudgeMessageReceiver collectingReceiver = new CollectingFudgeMessageReceiver();
@@ -49,6 +52,9 @@ public class FudgeConduitTest {
     assertEquals(new Integer(99), receivedMsg.getInt("Number Problems"));
   }
 
+  /**
+   *
+   */
   public void oneWayTestWithEncryption() {
     final FudgeContext context = new FudgeContext();
     final CollectingFudgeMessageReceiver collectingReceiver = new CollectingFudgeMessageReceiver();
@@ -72,12 +78,14 @@ public class FudgeConduitTest {
     assertEquals(new Integer(99), receivedMsg.getInt("Number Problems"));
   }
 
+  /**
+   *
+   */
   public void requestResponseTest() {
     final FudgeContext context = new FudgeContext();
     final FudgeRequestReceiver requestReceiver = new FudgeRequestReceiver() {
       @Override
-      public FudgeMsg requestReceived(
-          final FudgeDeserializer deserializer, final FudgeMsgEnvelope requestEnvelope) {
+      public FudgeMsg requestReceived(final FudgeDeserializer deserializer, final FudgeMsgEnvelope requestEnvelope) {
         final MutableFudgeMsg response = deserializer.getFudgeContext().newMessage();
         response.add("Killing", "In The Name Of");
         return response;

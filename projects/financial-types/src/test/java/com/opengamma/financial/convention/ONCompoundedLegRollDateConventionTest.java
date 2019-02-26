@@ -33,11 +33,9 @@ public class ONCompoundedLegRollDateConventionTest extends AbstractBeanTestCase 
   @Override
   public JodaBeanProperties<ONCompoundedLegRollDateConvention> getJodaBeanProperties() {
     return new JodaBeanProperties<>(ONCompoundedLegRollDateConvention.class,
-        Arrays.asList("name", "externalIdBundle", "overnightIndexConvention", "paymentTenor", "stubType",
-            "isExchangeNotional", "paymentLag"),
-        Arrays.<Object> asList(NAME, EIDS, ON_INDEX_CONVENTION, PAYMENT_TENOR, STUB_TYPE, IS_EXCHANGE_NOTIONAL, PAYMENT_LAG),
-        Arrays.<Object> asList("other", ExternalIdBundle.of("eid", "2"), ExternalId.of("eid", "20"), Tenor.THREE_MONTHS, StubType.NONE, 
-            !IS_EXCHANGE_NOTIONAL, PAYMENT_LAG + 1));
+        Arrays.asList("name", "externalIdBundle", "overnightIndexConvention", "paymentTenor", "stubType", "isExchangeNotional", "paymentLag"),
+        Arrays.<Object> asList(NAME, EIDS, ON_INDEX_CONVENTION, PAYMENT_TENOR, STUB_TYPE, IS_EXCHANGE_NOTIONAL, PAYMENT_LAG), Arrays.<Object> asList("other",
+            ExternalIdBundle.of("eid", "2"), ExternalId.of("eid", "20"), Tenor.THREE_MONTHS, StubType.NONE, !IS_EXCHANGE_NOTIONAL, PAYMENT_LAG + 1));
   }
 
   /**
@@ -54,7 +52,10 @@ public class ONCompoundedLegRollDateConventionTest extends AbstractBeanTestCase 
     assertEquals(CONVENTION.accept(TestVisitor.INSTANCE), "visited");
   }
 
-  private static class TestVisitor extends FinancialConventionVisitorAdapter<String> {
+  /**
+   *
+   */
+  private static final class TestVisitor extends FinancialConventionVisitorAdapter<String> {
     public static final TestVisitor INSTANCE = new TestVisitor();
 
     private TestVisitor() {

@@ -45,10 +45,11 @@ public class CapFloorSecurityTest extends AbstractBeanTestCase {
   @Override
   public JodaBeanProperties<? extends Bean> getJodaBeanProperties() {
     return new JodaBeanProperties<>(CapFloorSecurity.class,
-        Arrays.asList("securityType", "startDate", "maturityDate", "notional", "underlyingId", "strike", "frequency", "currency", "dayCount", "payer", "cap", "ibor"),
+        Arrays.asList("securityType", "startDate", "maturityDate", "notional", "underlyingId", "strike", "frequency", "currency", "dayCount", "payer", "cap",
+            "ibor"),
         Arrays.asList(CapFloorSecurity.SECURITY_TYPE, START_DATE, END_DATE, NOTIONAL, UNDERLYING_ID, STRIKE, FREQUENCY, CCY, DC, IS_PAYER, IS_CAP, IS_IBOR),
-        Arrays.asList(FRASecurity.SECURITY_TYPE, END_DATE, START_DATE, NOTIONAL * 2, ExternalId.of("eid", "2"), STRIKE * 2, SimpleFrequency.SEMI_ANNUAL, Currency.BRL,
-            DayCounts.ACT_365, !IS_PAYER, !IS_CAP, !IS_IBOR));
+        Arrays.asList(FRASecurity.SECURITY_TYPE, END_DATE, START_DATE, NOTIONAL * 2, ExternalId.of("eid", "2"), STRIKE * 2, SimpleFrequency.SEMI_ANNUAL,
+            Currency.BRL, DayCounts.ACT_365, !IS_PAYER, !IS_CAP, !IS_IBOR));
   }
 
   /**
@@ -91,7 +92,10 @@ public class CapFloorSecurityTest extends AbstractBeanTestCase {
     assertEquals(fra.accept(TestVisitor.INSTANCE), "CapFloorSecurity");
   }
 
-  private static class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
+  /**
+   *
+   */
+  private static final class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
     public static final TestVisitor INSTANCE = new TestVisitor();
 
     private TestVisitor() {

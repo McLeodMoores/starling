@@ -32,8 +32,8 @@ public class OISLegConventionTest extends AbstractBeanTestCase {
   private static final boolean IS_EOM = true;
   private static final StubType STUB_TYPE = StubType.LONG_END;
   private static final boolean IS_EXCHANGE_NOTIONAL = true;
-  private static final OISLegConvention CONVENTION = new OISLegConvention(NAME, EIDS, ON_INDEX_CONVENTION, PAYMENT_TENOR,
-      BDC, SETTLEMENT_DAYS, IS_EOM, STUB_TYPE, IS_EXCHANGE_NOTIONAL, PAYMENT_LAG);
+  private static final OISLegConvention CONVENTION = new OISLegConvention(NAME, EIDS, ON_INDEX_CONVENTION, PAYMENT_TENOR, BDC, SETTLEMENT_DAYS, IS_EOM,
+      STUB_TYPE, IS_EXCHANGE_NOTIONAL, PAYMENT_LAG);
 
   @Override
   public JodaBeanProperties<OISLegConvention> getJodaBeanProperties() {
@@ -59,7 +59,10 @@ public class OISLegConventionTest extends AbstractBeanTestCase {
     assertEquals(CONVENTION.accept(TestVisitor.INSTANCE), "visited");
   }
 
-  private static class TestVisitor extends FinancialConventionVisitorAdapter<String> {
+  /**
+   *
+   */
+  private static final class TestVisitor extends FinancialConventionVisitorAdapter<String> {
     public static final TestVisitor INSTANCE = new TestVisitor();
 
     private TestVisitor() {

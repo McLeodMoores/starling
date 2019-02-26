@@ -43,14 +43,22 @@ public class FieldMappingHistoricalTimeSeriesResolverTest {
   private final TestHistoricalTimeSeriesSelector _selector = new TestHistoricalTimeSeriesSelector();
   private final HistoricalTimeSeriesMaster _htsMaster = new InMemoryHistoricalTimeSeriesMaster();
 
+  /**
+   *
+   */
   @BeforeClass
   public void setUp() {
-    _identifiers = HistoricalTimeSeriesMasterPopulator.populateAndTestMaster(_htsMaster, TS_DATASET_SIZE, DATA_SOURCES, DATA_PROVIDERS, DATA_FIELDS, LCLOSE_OBSERVATION_TIME);
+    _identifiers = HistoricalTimeSeriesMasterPopulator.populateAndTestMaster(_htsMaster, TS_DATASET_SIZE, DATA_SOURCES, DATA_PROVIDERS, DATA_FIELDS,
+        LCLOSE_OBSERVATION_TIME);
   }
 
+  /**
+   *
+   */
   @Test
   public void testNoMaps() {
-    final FieldMappingHistoricalTimeSeriesResolver resolver = new FieldMappingHistoricalTimeSeriesResolver(ImmutableList.<HistoricalTimeSeriesFieldAdjustmentMap>of(), _selector, _htsMaster);
+    final FieldMappingHistoricalTimeSeriesResolver resolver = new FieldMappingHistoricalTimeSeriesResolver(
+        ImmutableList.<HistoricalTimeSeriesFieldAdjustmentMap> of(), _selector, _htsMaster);
     for (final ExternalIdBundleWithDates identifierBundleWithDates : _identifiers) {
       resolver.resolve(identifierBundleWithDates.toBundle(), null, null, null, "PX_LAST", null);
       assertEquals(9, _selector.getLastCandidates().size());
@@ -60,6 +68,9 @@ public class FieldMappingHistoricalTimeSeriesResolverTest {
     }
   }
 
+  /**
+   *
+   */
   @Test
   public void testMappings() {
     final String syntheticFieldName = "Synthetic";
@@ -73,7 +84,8 @@ public class FieldMappingHistoricalTimeSeriesResolverTest {
     final HistoricalTimeSeriesAdjuster reutersAdjuster = mock(HistoricalTimeSeriesAdjuster.class);
     map2.addFieldAdjustment(syntheticFieldName, null, "VOLUME", reutersAdjuster);
 
-    final FieldMappingHistoricalTimeSeriesResolver resolver = new FieldMappingHistoricalTimeSeriesResolver(ImmutableList.<HistoricalTimeSeriesFieldAdjustmentMap>of(map1, map2), _selector, _htsMaster);
+    final FieldMappingHistoricalTimeSeriesResolver resolver = new FieldMappingHistoricalTimeSeriesResolver(
+        ImmutableList.<HistoricalTimeSeriesFieldAdjustmentMap> of(map1, map2), _selector, _htsMaster);
     for (final ExternalIdBundleWithDates identifierBundleWithDates : _identifiers) {
       resolver.resolve(identifierBundleWithDates.toBundle(), null, null, null, "PX_LAST", null);
       assertEquals(9, _selector.getLastCandidates().size());
@@ -89,13 +101,14 @@ public class FieldMappingHistoricalTimeSeriesResolverTest {
       assertTrue(candidateInfo.contains(Triple.of("REUTERS", "CMPL", "VOLUME")));
       assertTrue(candidateInfo.contains(Triple.of("REUTERS", "CMPT", "VOLUME")));
 
-      final HistoricalTimeSeriesResolutionResult resolutionResult = resolver.resolve(identifierBundleWithDates.toBundle(), null, "REUTERS", "Ignored for mapped fields", syntheticFieldName, null);
+      final HistoricalTimeSeriesResolutionResult resolutionResult = resolver.resolve(identifierBundleWithDates.toBundle(), null, "REUTERS",
+          "Ignored for mapped fields", syntheticFieldName, null);
       assertEquals(3, _selector.getLastCandidates().size());
       assertEquals(reutersAdjuster, resolutionResult.getAdjuster());
     }
   }
 
-  private Set<Triple<String, String, String>> getCandidateInfo(final Collection<ManageableHistoricalTimeSeriesInfo> candidates) {
+  private static Set<Triple<String, String, String>> getCandidateInfo(final Collection<ManageableHistoricalTimeSeriesInfo> candidates) {
     final Set<Triple<String, String, String>> results = new HashSet<>();
     for (final ManageableHistoricalTimeSeriesInfo candidate : candidates) {
       results.add(Triple.of(candidate.getDataSource(), candidate.getDataProvider(), candidate.getDataField()));

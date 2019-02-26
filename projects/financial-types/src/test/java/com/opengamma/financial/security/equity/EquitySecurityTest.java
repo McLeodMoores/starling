@@ -70,7 +70,10 @@ public class EquitySecurityTest extends AbstractBeanTestCase {
     assertEquals(sec.accept(TestVisitor.INSTANCE), "EquitySecurity");
   }
 
-  private static class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
+  /**
+   *
+   */
+  private static final class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
     public static final TestVisitor INSTANCE = new TestVisitor();
 
     private TestVisitor() {

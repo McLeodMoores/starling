@@ -26,8 +26,7 @@ import com.opengamma.util.RegexUtils;
 /**
  * Request to search for bond securities.
  * <p>
- * This extends the basic search request with criteria that are specific to bonds.
- * It also sets the security type to search for to be bonds.
+ * This extends the basic search request with criteria that are specific to bonds. It also sets the security type to search for to be bonds.
  */
 @PublicSPI
 @BeanDefinition
@@ -45,29 +44,29 @@ public class BondSecuritySearchRequest extends SecuritySearchRequest {
   private String _issuerType;
 
   /**
-   * Creates an instance.
-   * This sets the security type in the search.
+   * Creates an instance. This sets the security type in the search.
    */
   public BondSecuritySearchRequest() {
     setSecurityType(BondSecurity.SECURITY_TYPE);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Checks if this search matches the specified document.
    *
-   * @param document  the document to match, null returns false
+   * @param document
+   *          the document to match, null returns false
    * @return true if matches
    */
   public boolean matches(final SecurityDocument document) {
-    if (super.matches(document) == false || !(document.getSecurity() instanceof BondSecurity)) {
+    if (!super.matches(document) || !(document.getSecurity() instanceof BondSecurity)) {
       return false;
     }
     final BondSecurity security = (BondSecurity) document.getSecurity();
-    if (getIssuerName() != null && RegexUtils.wildcardMatch(getIssuerName(), security.getIssuerName()) == false) {
+    if (getIssuerName() != null && !RegexUtils.wildcardMatch(getIssuerName(), security.getIssuerName())) {
       return false;
     }
-    if (getIssuerType() != null && RegexUtils.wildcardMatch(getIssuerType(), security.getIssuerType()) == false) {
+    if (getIssuerType() != null && !RegexUtils.wildcardMatch(getIssuerType(), security.getIssuerType())) {
       return false;
     }
     return true;

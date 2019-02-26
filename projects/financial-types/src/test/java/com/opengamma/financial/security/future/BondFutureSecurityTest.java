@@ -45,8 +45,8 @@ public class BondFutureSecurityTest extends AbstractBeanTestCase {
         Arrays.asList("expiry", "tradingExchange", "settlementExchange", "currency", "unitAmount", "basket", "firstDeliveryDate", "lastDeliveryDate",
             "contractCategory"),
         Arrays.asList(EXPIRY, TRADING_EXCHANGE, SETTLEMENT_EXCHANGE, CCY, UNIT_AMOUNT, BASKET, FIRST_DELIVERY_DATE, LAST_DELIVERY_DATE, CONTRACT_CATEGORY),
-        Arrays.asList(new Expiry(DateUtils.getUTCDate(2020, 6, 15)), SETTLEMENT_EXCHANGE, TRADING_EXCHANGE, Currency.BRL, UNIT_AMOUNT * 2,
-            BASKET.subList(0, 1), LAST_DELIVERY_DATE, FIRST_DELIVERY_DATE, "con"));
+        Arrays.asList(new Expiry(DateUtils.getUTCDate(2020, 6, 15)), SETTLEMENT_EXCHANGE, TRADING_EXCHANGE, Currency.BRL, UNIT_AMOUNT * 2, BASKET.subList(0, 1),
+            LAST_DELIVERY_DATE, FIRST_DELIVERY_DATE, "con"));
   }
 
   /**
@@ -81,7 +81,10 @@ public class BondFutureSecurityTest extends AbstractBeanTestCase {
     assertEquals(FUTURE.accept(TestVisitor.INSTANCE), "visited");
   }
 
-  private static class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
+  /**
+   *
+   */
+  private static final class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
     public static final TestVisitor INSTANCE = new TestVisitor();
 
     private TestVisitor() {

@@ -36,7 +36,7 @@ import net.sf.ehcache.CacheManager;
 /**
  * Test.
  */
-@Test(groups = {TestGroup.UNIT, "ehcache"})
+@Test(groups = { TestGroup.UNIT, "ehcache" })
 public class EHCachingMasterConfigSourceTest {
 
   private static final VersionCorrection VC = VersionCorrection.LATEST;
@@ -54,50 +54,74 @@ public class EHCachingMasterConfigSourceTest {
   private EHCachingMasterConfigSource _cachingSource;
   private CacheManager _cacheManager;
 
+  /**
+   *
+   */
   @BeforeClass
   public void setUpClass() {
     _cacheManager = EHCacheUtils.createTestCacheManager(EHCachingMasterConfigSourceTest.class);
   }
 
+  /**
+   *
+   */
   @AfterClass
   public void tearDownClass() {
     EHCacheUtils.shutdownQuiet(_cacheManager);
   }
 
+  /**
+   *
+   */
   @BeforeMethod
   public void setUp() {
     _underlyingConfigMaster = new UnitTestConfigMaster();
     _cachingSource = new EHCachingMasterConfigSource(_underlyingConfigMaster, _cacheManager);
   }
 
+  /**
+   *
+   */
   @AfterMethod
   public void tearDown() {
     EHCacheUtils.clear(_cacheManager, EHCachingMasterConfigSource.CONFIG_CACHE);
   }
 
-  //-------------------------------------------------------------------------
-  public void getConfig_uniqueId() {
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void getConfigUniqueId() {
     final UniqueId uniqueId = _underlyingConfigMaster.add(new ConfigDocument(ITEM)).getUniqueId();
     assertSame(_cachingSource.getConfig(ExternalId.class, uniqueId), CONFIG);
     assertSame(_cachingSource.getConfig(ExternalId.class, uniqueId), CONFIG);
     assertEquals(1, _underlyingConfigMaster.getCounter().get());
   }
 
-  public void getConfig_objectId() {
+  /**
+   *
+   */
+  public void getConfigObjectId() {
     final UniqueId uniqueId = _underlyingConfigMaster.add(new ConfigDocument(ITEM)).getUniqueId();
     assertSame(_cachingSource.getConfig(ExternalId.class, uniqueId.getObjectId(), VC), CONFIG);
     assertSame(_cachingSource.getConfig(ExternalId.class, uniqueId.getObjectId(), VC), CONFIG);
     assertEquals(1, _underlyingConfigMaster.getCounter().get());
   }
 
+  /**
+   *
+   */
   public void getByName() {
     _underlyingConfigMaster.add(new ConfigDocument(ITEM));
-    final VersionCorrection versionCorrection = VersionCorrection.of(Instant.now().plusSeconds(120), null);  // avoid race condition with insert
+    final VersionCorrection versionCorrection = VersionCorrection.of(Instant.now().plusSeconds(120), null); // avoid race condition with insert
     assertSame(_cachingSource.get(ExternalId.class, CONFIG_NAME, versionCorrection).iterator().next(), ITEM);
     assertSame(_cachingSource.get(ExternalId.class, CONFIG_NAME, versionCorrection).iterator().next(), ITEM);
     assertEquals(1, _underlyingConfigMaster.getCounter().get());
   }
 
+  /**
+   *
+   */
   public void getLatestByName() {
     _underlyingConfigMaster.add(new ConfigDocument(ITEM));
     assertSame(_cachingSource.getLatestByName(ExternalId.class, CONFIG_NAME), CONFIG);
@@ -105,6 +129,9 @@ public class EHCachingMasterConfigSourceTest {
     assertEquals(1, _underlyingConfigMaster.getCounter().get());
   }
 
+  /**
+   *
+   */
   public void getConfigs() {
     final Collection<ExternalId> configs = Lists.newArrayList(CONFIG, CONFIG);
     _underlyingConfigMaster.add(new ConfigDocument(ITEM));
@@ -115,6 +142,9 @@ public class EHCachingMasterConfigSourceTest {
     assertEquals(1, _underlyingConfigMaster.getCounter().get());
   }
 
+  /**
+   *
+   */
   public void getLatestByNameAfterUpdate() {
     final ConfigDocument addedDoc = _underlyingConfigMaster.add(new ConfigDocument(ITEM));
     assertSame(_cachingSource.getLatestByName(ExternalId.class, CONFIG_NAME), CONFIG);
@@ -129,6 +159,9 @@ public class EHCachingMasterConfigSourceTest {
     assertEquals(2, _underlyingConfigMaster.getCounter().get());
   }
 
+  /**
+   *
+   */
   private static class UnitTestConfigMaster extends InMemoryConfigMaster {
 
     private final AtomicLong _counter = new AtomicLong(0);

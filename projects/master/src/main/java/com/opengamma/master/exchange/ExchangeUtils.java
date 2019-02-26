@@ -27,21 +27,18 @@ public class ExchangeUtils {
    * THIS IS NOT READY FOR PRIME TIME YET.
    *
    * @param exchangeSource
-   *          a source of exchanges, we assume it provides ManageableExchanges,
-   *          not null
+   *          a source of exchanges, we assume it provides ManageableExchanges, not null
    * @param isoMic
    *          an external id with the ISO MIC code of the exchange
    * @param today
    *          the date today (to allow for changes in opening hours over time)
    * @param defaultTime
-   *          a fallback time to use if a close time could not be established,
-   *          if set to null, will return null in time field.
-   * @return a pair of values, the end of trading period and the time zone or
-   *         null if no exchange with that code was found. Time can be null if
+   *          a fallback time to use if a close time could not be established, if set to null, will return null in time field.
+   * @return a pair of values, the end of trading period and the time zone or null if no exchange with that code was found. Time can be null if
    *         defaultTime==null.
    */
-  public static Pair<LocalTime, ZoneId> getTradingCloseTime(final ExchangeSource exchangeSource, final ExternalId isoMic,
-      final LocalDate today, final LocalTime defaultTime) {
+  public static Pair<LocalTime, ZoneId> getTradingCloseTime(final ExchangeSource exchangeSource, final ExternalId isoMic, final LocalDate today,
+      final LocalTime defaultTime) {
     ArgumentChecker.notNull(exchangeSource, "exchangeSource");
     final ManageableExchange exchange = (ManageableExchange) exchangeSource.getSingle(isoMic);
     if (exchange != null) {
@@ -62,8 +59,7 @@ public class ExchangeUtils {
   }
 
   /**
-   * Returns true if a date is on or before today or if the date is null (i.e.
-   * not set).
+   * Returns true if a date is on or before today or if the date is null (i.e. not set).
    *
    * @param date
    *          the date to compare
@@ -71,7 +67,7 @@ public class ExchangeUtils {
    *          today's date
    * @return true if the date is on or before today
    */
-  private static boolean isDateOnOrBeforeToday(final LocalDate date, final LocalDate today) {
+  public static boolean isDateOnOrBeforeToday(final LocalDate date, final LocalDate today) {
     return date == null || date.equals(today) || date.isBefore(today);
   }
 }

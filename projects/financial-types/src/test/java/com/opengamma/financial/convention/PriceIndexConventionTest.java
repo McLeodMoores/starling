@@ -31,8 +31,7 @@ public class PriceIndexConventionTest extends AbstractBeanTestCase {
 
   @Override
   public JodaBeanProperties<? extends Bean> getJodaBeanProperties() {
-    return new JodaBeanProperties<>(PriceIndexConvention.class,
-        Arrays.asList("name", "externalIdBundle", "currency", "region"),
+    return new JodaBeanProperties<>(PriceIndexConvention.class, Arrays.asList("name", "externalIdBundle", "currency", "region"),
         Arrays.<Object> asList(NAME, EID, CCY, REGION),
         Arrays.<Object> asList("other", ExternalIdBundle.of("eid", "2"), Currency.AUD, ExternalSchemes.countryRegionId(Country.AU)));
   }
@@ -51,7 +50,10 @@ public class PriceIndexConventionTest extends AbstractBeanTestCase {
     assertEquals(CONVENTION.accept(TestVisitor.INSTANCE), "visited");
   }
 
-  private static class TestVisitor extends FinancialConventionVisitorAdapter<String> {
+  /**
+   *
+   */
+  private static final class TestVisitor extends FinancialConventionVisitorAdapter<String> {
     public static final TestVisitor INSTANCE = new TestVisitor();
 
     private TestVisitor() {

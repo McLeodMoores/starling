@@ -37,7 +37,8 @@ public class ConfigMetaDataResultTest extends AbstractFudgeBuilderTestCase {
     other.setConfigTypes(CONFIG_TYPES);
     assertEquals(result, result);
     assertEquals(result.toString(), "ConfigMetaDataResult{configTypes=["
-        + "class com.opengamma.master.historicaltimeseries.impl.HistoricalTimeSeriesRating, class com.opengamma.core.DateSet, class com.opengamma.core.DateSet]}");
+        + "class com.opengamma.master.historicaltimeseries.impl.HistoricalTimeSeriesRating, class com.opengamma.core.DateSet, "
+        + "class com.opengamma.core.DateSet]}");
     assertEquals(result, other);
     assertEquals(result.hashCode(), other.hashCode());
     result.setConfigTypes(CONFIG_TYPES.subList(0, 1));

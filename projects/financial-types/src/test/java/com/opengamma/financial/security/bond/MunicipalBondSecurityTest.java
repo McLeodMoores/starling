@@ -53,11 +53,10 @@ public class MunicipalBondSecurityTest extends AbstractBeanTestCase {
   public JodaBeanProperties<MunicipalBondSecurity> getJodaBeanProperties() {
     return new JodaBeanProperties<>(MunicipalBondSecurity.class,
         Arrays.asList("issuerName", "issuerType", "issuerDomicile", "market", "currency", "yieldConvention", "lastTradeDate", "couponType", "couponRate",
-            "couponFrequency", "dayCount", "interestAccrualDate", "settlementDate", "firstCouponDate", "issuancePrice", "totalAmountIssued",
-            "minimumAmount", "minimumIncrement", "parAmount", "redemptionValue"),
+            "couponFrequency", "dayCount", "interestAccrualDate", "settlementDate", "firstCouponDate", "issuancePrice", "totalAmountIssued", "minimumAmount",
+            "minimumIncrement", "parAmount", "redemptionValue"),
         Arrays.asList(ISSUER_NAME, ISSUER_TYPE, ISSUER_DOMICILE, MARKET, CURRENCY, YIELD, LAST_TRADE_DATE, COUPON_TYPE, COUPON_RATE, FREQUENCY, DAY_COUNT,
-            INTEREST_ACCRUAL, SETTLEMENT_DATE, FIRST_COUPON, ISSUANCE_PRICE, AMOUNT_ISSUED, MINIMUM_AMOUNT, MINIMUM_INCREMENT, PAR_AMOUNT,
-            REDEMPTION_VALUE),
+            INTEREST_ACCRUAL, SETTLEMENT_DATE, FIRST_COUPON, ISSUANCE_PRICE, AMOUNT_ISSUED, MINIMUM_AMOUNT, MINIMUM_INCREMENT, PAR_AMOUNT, REDEMPTION_VALUE),
         Arrays.asList(ISSUER_TYPE, ISSUER_NAME, MARKET, ISSUER_DOMICILE, Currency.AUD, SimpleYieldConvention.AUSTRALIA_EX_DIVIDEND,
             new Expiry(DateUtils.getUTCDate(2040, 12, 15)), "Float", COUPON_RATE + 1, SimpleFrequency.ANNUAL, DayCounts.ACT_360, INTEREST_ACCRUAL.plusDays(1),
             SETTLEMENT_DATE.plusDays(1), FIRST_COUPON.plusDays(1), ISSUANCE_PRICE + 1, AMOUNT_ISSUED + 1, MINIMUM_AMOUNT + 1, MINIMUM_INCREMENT + 1,
@@ -74,7 +73,10 @@ public class MunicipalBondSecurityTest extends AbstractBeanTestCase {
     assertEquals(security.accept(TestVisitor.INSTANCE), "visited");
   }
 
-  private static class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
+  /**
+   *
+   */
+  private static final class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
     public static final TestVisitor INSTANCE = new TestVisitor();
 
     private TestVisitor() {

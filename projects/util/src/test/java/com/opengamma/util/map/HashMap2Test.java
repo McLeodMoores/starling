@@ -37,11 +37,17 @@ public class HashMap2Test {
     assertFalse(map.containsKey("A", "B"));
   }
 
-  public void testBasicOperations_strongKeys() {
+  /**
+   *
+   */
+  public void testBasicOperationsStrongKeys() {
     testBasicOperations(new HashMap2<String, String, String>(HashMap2.STRONG_KEYS));
   }
 
-  public void testBasicOperations_weakKeys() {
+  /**
+   *
+   */
+  public void testBasicOperationsWeakKeys() {
     testBasicOperations(new HashMap2<String, String, String>(HashMap2.WEAK_KEYS));
   }
 
@@ -53,10 +59,16 @@ public class HashMap2Test {
     assertEquals(map.remove("A", "B"), null);
   }
 
+  /**
+   *
+   */
   public void testRemoveStrongKeys() {
     testRemove(new HashMap2<String, String, String>(HashMap2.STRONG_KEYS));
   }
 
+  /**
+   *
+   */
   public void testRemoveWeakKeys() {
     testRemove(new HashMap2<String, String, String>(HashMap2.WEAK_KEYS));
   }
@@ -72,11 +84,17 @@ public class HashMap2Test {
     assertEquals(map.get("B", "A"), "Dog");
   }
 
-  public void testPutIfAbsent_strongKeys() {
+  /**
+   *
+   */
+  public void testPutIfAbsentStrongKeys() {
     testPutIfAbsent(new HashMap2<String, String, String>(HashMap2.STRONG_KEYS));
   }
 
-  public void testPutIfAbsent_weakKeys() {
+  /**
+   *
+   */
+  public void testPutIfAbsentWeakKeys() {
     testPutIfAbsent(new HashMap2<String, String, String>(HashMap2.WEAK_KEYS));
   }
 

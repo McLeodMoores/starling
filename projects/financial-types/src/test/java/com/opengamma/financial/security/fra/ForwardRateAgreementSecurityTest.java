@@ -134,7 +134,10 @@ public class ForwardRateAgreementSecurityTest extends AbstractBeanTestCase {
     assertEquals(fra.accept(TestVisitor.INSTANCE), "ForwardRateAgreementSecurity");
   }
 
-  private static class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
+  /**
+   *
+   */
+  private static final class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
     public static final TestVisitor INSTANCE = new TestVisitor();
 
     private TestVisitor() {

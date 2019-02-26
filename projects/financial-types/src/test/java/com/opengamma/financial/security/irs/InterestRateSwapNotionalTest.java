@@ -16,14 +16,13 @@ import com.google.common.collect.Lists;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.test.TestGroup;
 
-
 /**
  * Tests for {@link InterestRateSwapNotional}.
  */
 @Test(groups = TestGroup.UNIT)
 public class InterestRateSwapNotionalTest {
 
-  private final static double TOLERANCE = 1e-10;
+  private static final double TOLERANCE = 1e-10;
 
   /**
    * Tests a constant notional value.
@@ -48,7 +47,8 @@ public class InterestRateSwapNotionalTest {
     final LocalDate start = LocalDate.now();
     final List<LocalDate> dates = Lists.newArrayList(start, start.plusYears(1), start.plusYears(2), start.plusYears(3));
     final List<Double> notionals = Lists.newArrayList(1e6, 1e5, 1e4, 1e3);
-    final List<Rate.ShiftType> shiftTypes = Lists.newArrayList(Rate.ShiftType.OUTRIGHT, Rate.ShiftType.OUTRIGHT, Rate.ShiftType.OUTRIGHT, Rate.ShiftType.OUTRIGHT);
+    final List<Rate.ShiftType> shiftTypes = Lists.newArrayList(Rate.ShiftType.OUTRIGHT, Rate.ShiftType.OUTRIGHT, Rate.ShiftType.OUTRIGHT,
+        Rate.ShiftType.OUTRIGHT);
     final InterestRateSwapNotional amortizing = InterestRateSwapNotional.of(Currency.GBP, dates, notionals, shiftTypes);
     Assert.assertEquals(1e6, amortizing.getInitialAmount(), TOLERANCE);
     Assert.assertEquals(1e3, amortizing.getAmount(LocalDate.MAX), TOLERANCE);
@@ -91,7 +91,8 @@ public class InterestRateSwapNotionalTest {
     final LocalDate start = LocalDate.now();
     final List<LocalDate> dates = Lists.newArrayList(start, start.plusYears(1), start.plusYears(2), start.plusYears(3));
     final List<Double> notionals = Lists.newArrayList(1e6d, -2.5e5d, -2.5e5d, -2.5e5d);
-    final List<Rate.ShiftType> shiftTypes = Lists.newArrayList(Rate.ShiftType.OUTRIGHT, Rate.ShiftType.ADDITIVE, Rate.ShiftType.ADDITIVE, Rate.ShiftType.ADDITIVE);
+    final List<Rate.ShiftType> shiftTypes = Lists.newArrayList(Rate.ShiftType.OUTRIGHT, Rate.ShiftType.ADDITIVE, Rate.ShiftType.ADDITIVE,
+        Rate.ShiftType.ADDITIVE);
     final InterestRateSwapNotional amortizing = InterestRateSwapNotional.of(Currency.GBP, dates, notionals, shiftTypes);
     Assert.assertEquals(1e6, amortizing.getInitialAmount(), TOLERANCE);
     Assert.assertEquals(2.5e5d, amortizing.getAmount(LocalDate.MAX), TOLERANCE);

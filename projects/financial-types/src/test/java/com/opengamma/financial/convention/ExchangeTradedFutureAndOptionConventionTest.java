@@ -31,8 +31,7 @@ public class ExchangeTradedFutureAndOptionConventionTest extends AbstractBeanTes
   @Override
   public JodaBeanProperties<? extends Bean> getJodaBeanProperties() {
     return new JodaBeanProperties<>(ExchangeTradedFutureAndOptionConvention.class,
-        Arrays.asList("name", "externalIdBundle", "expiryConvention", "exchangeCalendar"),
-        Arrays.asList(NAME, IDS, EXPIRY_CONVENTION, EXCHANGE_CALENDAR),
+        Arrays.asList("name", "externalIdBundle", "expiryConvention", "exchangeCalendar"), Arrays.asList(NAME, IDS, EXPIRY_CONVENTION, EXCHANGE_CALENDAR),
         Arrays.asList("other", ExternalIdBundle.of("conv", "IMM SWAP"), EXCHANGE_CALENDAR, EXPIRY_CONVENTION));
   }
 
@@ -44,15 +43,17 @@ public class ExchangeTradedFutureAndOptionConventionTest extends AbstractBeanTes
   }
 
   /**
-   * Tests that this convention does not have an accept() method for a
-   * FinancialConventionVisitor.
+   * Tests that this convention does not have an accept() method for a FinancialConventionVisitor.
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testVisitor() {
     assertEquals(CONVENTION.accept(TestVisitor.INSTANCE), "visited");
   }
 
-  private static class TestVisitor extends FinancialConventionVisitorAdapter<String> {
+  /**
+   *
+   */
+  private static final class TestVisitor extends FinancialConventionVisitorAdapter<String> {
     public static final TestVisitor INSTANCE = new TestVisitor();
 
     private TestVisitor() {

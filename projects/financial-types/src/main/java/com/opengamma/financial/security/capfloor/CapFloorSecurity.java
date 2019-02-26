@@ -129,8 +129,9 @@ public class CapFloorSecurity extends FinancialSecurity {
    * @param ibor
    *          true if the underlying is an ibor-type rate
    */
-  public CapFloorSecurity(final ZonedDateTime startDate, final ZonedDateTime maturityDate, final double notional, final ExternalId underlyingIdentifier, final double strike,
-      final Frequency frequency, final Currency currency, final DayCount dayCount, final boolean payer, final boolean cap, final boolean ibor) {
+  public CapFloorSecurity(final ZonedDateTime startDate, final ZonedDateTime maturityDate, final double notional, final ExternalId underlyingIdentifier,
+      final double strike, final Frequency frequency, final Currency currency, final DayCount dayCount, final boolean payer, final boolean cap,
+      final boolean ibor) {
     super(SECURITY_TYPE);
     setStartDate(startDate);
     setMaturityDate(maturityDate);
@@ -145,7 +146,7 @@ public class CapFloorSecurity extends FinancialSecurity {
     setIbor(ibor);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public final <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitCapFloorSecurity(this);

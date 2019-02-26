@@ -84,7 +84,10 @@ public class AmericanDepositaryReceiptSecurityTest extends AbstractBeanTestCase 
     assertEquals(sec.accept(TestVisitor.INSTANCE), "AmericanDepositaryReceiptSecurity");
   }
 
-  private static class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
+  /**
+   *
+   */
+  private static final class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
     public static final TestVisitor INSTANCE = new TestVisitor();
 
     private TestVisitor() {

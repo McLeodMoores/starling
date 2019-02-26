@@ -28,8 +28,8 @@ public class RollDateFRAConventionTest extends AbstractBeanTestCase {
 
   @Override
   public JodaBeanProperties<? extends Bean> getJodaBeanProperties() {
-    return new JodaBeanProperties<>(RollDateFRAConvention.class,
-        Arrays.asList("name", "externalIdBundle", "indexConvention", "rollDateConvention"), Arrays.asList(NAME, IDS, INDEX_CONVENTION, ROLL_DATE_CONVENTION),
+    return new JodaBeanProperties<>(RollDateFRAConvention.class, Arrays.asList("name", "externalIdBundle", "indexConvention", "rollDateConvention"),
+        Arrays.asList(NAME, IDS, INDEX_CONVENTION, ROLL_DATE_CONVENTION),
         Arrays.asList("other", ExternalIdBundle.of("conv", "IMM FRA"), ROLL_DATE_CONVENTION, INDEX_CONVENTION));
   }
 
@@ -47,7 +47,10 @@ public class RollDateFRAConventionTest extends AbstractBeanTestCase {
     assertEquals(CONVENTION.accept(TestVisitor.INSTANCE), "visited");
   }
 
-  private static class TestVisitor extends FinancialConventionVisitorAdapter<String> {
+  /**
+   *
+   */
+  private static final class TestVisitor extends FinancialConventionVisitorAdapter<String> {
     public static final TestVisitor INSTANCE = new TestVisitor();
 
     private TestVisitor() {

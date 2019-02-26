@@ -27,8 +27,7 @@ import com.opengamma.master.security.SecurityDescription;
 import com.opengamma.util.money.Currency;
 
 /**
- * A security for a cash deposit containing information about the accrual
- * period, rate and notional.
+ * A security for a cash deposit containing information about the accrual period, rate and notional.
  */
 @BeanDefinition
 @SecurityDescription(type = CashSecurity.SECURITY_TYPE, description = "Cash")
@@ -101,7 +100,8 @@ public class CashSecurity extends FinancialSecurity {
    * @param amount
    *          the notional, not null
    */
-  public CashSecurity(final Currency currency, final ExternalId region, final ZonedDateTime start, final ZonedDateTime maturity, final DayCount dayCount, final double rate, final double amount) {
+  public CashSecurity(final Currency currency, final ExternalId region, final ZonedDateTime start, final ZonedDateTime maturity, final DayCount dayCount,
+      final double rate, final double amount) {
     super(SECURITY_TYPE);
     setCurrency(currency);
     setRegionId(region);
@@ -112,7 +112,7 @@ public class CashSecurity extends FinancialSecurity {
     setAmount(amount);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public final <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitCashSecurity(this);

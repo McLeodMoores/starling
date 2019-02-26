@@ -113,8 +113,9 @@ public class EquityIndexDividendFutureOptionSecurity extends FinancialSecurity {
    * @param optionType
    *          the option type, not null
    */
-  public EquityIndexDividendFutureOptionSecurity(final String exchange, final Expiry expiry, final ExerciseType exerciseType, final ExternalId underlyingIdentifier,
-      final double pointValue, final boolean margined, final Currency currency, final double strike, final OptionType optionType) {
+  public EquityIndexDividendFutureOptionSecurity(final String exchange, final Expiry expiry, final ExerciseType exerciseType,
+      final ExternalId underlyingIdentifier, final double pointValue, final boolean margined, final Currency currency, final double strike,
+      final OptionType optionType) {
     super(SECURITY_TYPE);
     setExchange(exchange);
     setExpiry(expiry);
@@ -127,7 +128,7 @@ public class EquityIndexDividendFutureOptionSecurity extends FinancialSecurity {
     setOptionType(optionType);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public final <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitEquityIndexDividendFutureOptionSecurity(this);

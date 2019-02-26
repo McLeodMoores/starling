@@ -32,21 +32,17 @@ import com.opengamma.master.config.ConfigSearchResult;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * A Config master that uses the scheme of the unique identifier to determine which
- * underlying master should handle the request.
+ * A Config master that uses the scheme of the unique identifier to determine which underlying master should handle the request.
  * <p/>
- * The underlying masters, or delegates, can be registered or deregistered at run time.
- * By default there is an {@link InMemoryConfigMaster} that will be used if specific scheme/delegate
- * combinations have not been registered.
+ * The underlying masters, or delegates, can be registered or deregistered at run time. By default there is an {@link InMemoryConfigMaster} that will be used if
+ * specific scheme/delegate combinations have not been registered.
  * <p/>
  * Change events are aggregated from the different masters and presented through a single change manager.
  * <p/>
- * The {@link #register(String, ConfigMaster)}, {@link #deregister(String)} and
- * {@link #add(String, ConfigDocument)} methods are public API outside
- * of the normal Master interface. Therefore to properly use this class the caller must have
- * a concrete instance of this class and use these methods to properly initialize the delegates
- * as well as clean up resources when a delegate is no longer needed. But the engine itself will
- * be able to interact with the component via standard Master interface.
+ * The {@link #register(String, ConfigMaster)}, {@link #deregister(String)} and {@link #add(String, ConfigDocument)} methods are public API outside of the
+ * normal Master interface. Therefore to properly use this class the caller must have a concrete instance of this class and use these methods to properly
+ * initialize the delegates as well as clean up resources when a delegate is no longer needed. But the engine itself will be able to interact with the component
+ * via standard Master interface.
  */
 public class DynamicDelegatingConfigMaster implements ConfigMaster {
 
@@ -54,8 +50,7 @@ public class DynamicDelegatingConfigMaster implements ConfigMaster {
   private final AggregatingChangeManager _changeManager;
 
   /**
-   * The default delegate. Should never have data in it. If user ask for data with an unregistered scheme,
-   * this empty master will be used
+   * The default delegate. Should never have data in it. If user ask for data with an unregistered scheme, this empty master will be used
    */
   private final InMemoryConfigMaster _defaultEmptyDelegate;
 
@@ -63,9 +58,8 @@ public class DynamicDelegatingConfigMaster implements ConfigMaster {
   private final UniqueIdSchemeDelegator<ConfigMaster> _delegator;
 
   /**
-   * Default constructor that uses an in-memory master
-   * ({@link InMemoryConfigMaster}) as the default delegate and a basic change
-   * manager ({@link BasicChangeManager});
+   * Default constructor that uses an in-memory master ({@link InMemoryConfigMaster}) as the default delegate and a basic change manager
+   * ({@link BasicChangeManager}).
    */
   public DynamicDelegatingConfigMaster() {
     _changeManager = new AggregatingChangeManager();
@@ -77,11 +71,12 @@ public class DynamicDelegatingConfigMaster implements ConfigMaster {
   /**
    * Registers a scheme and delegate pair.
    * <p/>
-   * The caller is responsible for creating a delegate and registering it before making calls
-   * to the DynamicDelegatingConfigMaster
+   * The caller is responsible for creating a delegate and registering it before making calls to the DynamicDelegatingConfigMaster
    *
-   * @param scheme the external scheme associated with this delegate master, not null
-   * @param delegate the master to be used for this scheme, not null
+   * @param scheme
+   *          the external scheme associated with this delegate master, not null
+   * @param delegate
+   *          the master to be used for this scheme, not null
    */
   public void register(final String scheme, final ConfigMaster delegate) {
     ArgumentChecker.notNull(scheme, "scheme");
@@ -93,11 +88,11 @@ public class DynamicDelegatingConfigMaster implements ConfigMaster {
   /**
    * Deregisters a scheme and delegate pair.
    * <p/>
-   * The caller is responsible for deregistering a delegate when it is no longer needed.
-   * For example, if delegates are made up of InMemoryMasters and data is no longer needed,
-   * call deregister will free up memory
+   * The caller is responsible for deregistering a delegate when it is no longer needed. For example, if delegates are made up of InMemoryMasters and data is no
+   * longer needed, call deregister will free up memory
    *
-   * @param scheme the external scheme associated with the delegate master to be removed, not null
+   * @param scheme
+   *          the external scheme associated with the delegate master to be removed, not null
    */
   public void deregister(final String scheme) {
     ArgumentChecker.notNull(scheme, "scheme");
@@ -106,12 +101,10 @@ public class DynamicDelegatingConfigMaster implements ConfigMaster {
   }
 
   /**
-   * Adds a config document to the appropriate delegate master, using the
-   * provided String as the scheme to search for a delegate.
+   * Adds a config document to the appropriate delegate master, using the provided String as the scheme to search for a delegate.
    *
    * @param scheme
-   *          the unique identifier scheme that will choose the delegate, not
-   *          null
+   *          the unique identifier scheme that will choose the delegate, not null
    * @param document
    *          the document to add to the master, not null
    * @return the document with unique id set
@@ -231,7 +224,7 @@ public class DynamicDelegatingConfigMaster implements ConfigMaster {
       }
     });
     final ConfigSearchResult<R> result = new ConfigSearchResult<>();
-    for (final ConfigSearchResult<R> delegateResult: delegateResults) {
+    for (final ConfigSearchResult<R> delegateResult : delegateResults) {
       result.getDocuments().addAll(delegateResult.getDocuments());
     }
     return result;

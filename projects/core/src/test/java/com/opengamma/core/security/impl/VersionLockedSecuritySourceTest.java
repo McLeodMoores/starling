@@ -31,10 +31,13 @@ import com.opengamma.util.test.TestGroup;
  * Tests the {@link VersionLockedSecuritySource} class.
  */
 @Test(groups = TestGroup.UNIT)
-@SuppressWarnings("deprecation")
+@SuppressWarnings({ "deprecation", "javadoc" })
 public class VersionLockedSecuritySourceTest {
 
-  public void test_get_ExternalIdBundle_VersionCorrection() {
+  /**
+   *
+   */
+  public void testGetExternalIdBundleVersionCorrection() {
     final SecuritySource underlying = Mockito.mock(SecuritySource.class);
     final Instant t1 = Instant.ofEpochMilli(1L);
     final Instant t2 = Instant.ofEpochMilli(2L);
@@ -57,7 +60,10 @@ public class VersionLockedSecuritySourceTest {
     assertSame(test.get(ExternalId.of("Test", "Foo").toBundle(), VersionCorrection.of(t3, t4)), result);
   }
 
-  public void test_getAll_Collection_VersionCorrection() {
+  /**
+   *
+   */
+  public void testGetAllCollectionVersionCorrection() {
     final SecuritySource underlying = Mockito.mock(SecuritySource.class);
     final Instant t1 = Instant.ofEpochMilli(1L);
     final Instant t2 = Instant.ofEpochMilli(2L);
@@ -65,30 +71,30 @@ public class VersionLockedSecuritySourceTest {
     final Instant t4 = Instant.ofEpochMilli(4L);
     final SecuritySource test = new VersionLockedSecuritySource(underlying, VersionCorrection.of(t1, t2));
     final Collection<ExternalIdBundle> ids = Arrays.asList(ExternalId.of("Test", "Foo").toBundle(), ExternalId.of("Test", "Bar").toBundle());
-    Map<ExternalIdBundle, Collection<Security>> result = ImmutableMap.<ExternalIdBundle, Collection<Security>>of(ExternalId.of("Test", "Foo").toBundle(),
+    Map<ExternalIdBundle, Collection<Security>> result = ImmutableMap.<ExternalIdBundle, Collection<Security>> of(ExternalId.of("Test", "Foo").toBundle(),
         Collections.singleton(Mockito.mock(Security.class)), ExternalId.of("Test", "Bar").toBundle(), Collections.singleton(Mockito.mock(Security.class)));
     Mockito.when(underlying.getAll(ids, VersionCorrection.of(t1, t2))).thenReturn(result);
     assertSame(test.getAll(ids, VersionCorrection.LATEST), result);
     assertSame(test.getAll(ids, VersionCorrection.ofVersionAsOf(t1)), result);
     assertSame(test.getAll(ids, VersionCorrection.ofCorrectedTo(t2)), result);
-    result = ImmutableMap.<ExternalIdBundle, Collection<Security>>of(ExternalId.of("Test", "Foo").toBundle(),
-        Collections.singleton(Mockito.mock(Security.class)),
-        ExternalId.of("Test", "Bar").toBundle(), Collections.singleton(Mockito.mock(Security.class)));
+    result = ImmutableMap.<ExternalIdBundle, Collection<Security>> of(ExternalId.of("Test", "Foo").toBundle(),
+        Collections.singleton(Mockito.mock(Security.class)), ExternalId.of("Test", "Bar").toBundle(), Collections.singleton(Mockito.mock(Security.class)));
     Mockito.when(underlying.getAll(ids, VersionCorrection.of(t3, t2))).thenReturn(result);
     assertSame(test.getAll(ids, VersionCorrection.ofVersionAsOf(t3)), result);
-    result = ImmutableMap.<ExternalIdBundle, Collection<Security>>of(ExternalId.of("Test", "Foo").toBundle(),
-        Collections.singleton(Mockito.mock(Security.class)),
-        ExternalId.of("Test", "Bar").toBundle(), Collections.singleton(Mockito.mock(Security.class)));
+    result = ImmutableMap.<ExternalIdBundle, Collection<Security>> of(ExternalId.of("Test", "Foo").toBundle(),
+        Collections.singleton(Mockito.mock(Security.class)), ExternalId.of("Test", "Bar").toBundle(), Collections.singleton(Mockito.mock(Security.class)));
     Mockito.when(underlying.getAll(ids, VersionCorrection.of(t1, t3))).thenReturn(result);
     assertSame(test.getAll(ids, VersionCorrection.ofCorrectedTo(t3)), result);
-    result = ImmutableMap.<ExternalIdBundle, Collection<Security>>of(ExternalId.of("Test", "Foo").toBundle(),
-        Collections.singleton(Mockito.mock(Security.class)),
-        ExternalId.of("Test", "Bar").toBundle(), Collections.singleton(Mockito.mock(Security.class)));
+    result = ImmutableMap.<ExternalIdBundle, Collection<Security>> of(ExternalId.of("Test", "Foo").toBundle(),
+        Collections.singleton(Mockito.mock(Security.class)), ExternalId.of("Test", "Bar").toBundle(), Collections.singleton(Mockito.mock(Security.class)));
     Mockito.when(underlying.getAll(ids, VersionCorrection.of(t3, t4))).thenReturn(result);
     assertSame(test.getAll(ids, VersionCorrection.of(t3, t4)), result);
   }
 
-  public void test_get_ExternalIdBundle() {
+  /**
+   *
+   */
+  public void testGetExternalIdBundle() {
     final SecuritySource underlying = Mockito.mock(SecuritySource.class);
     final Instant t1 = Instant.ofEpochMilli(1L);
     final Instant t2 = Instant.ofEpochMilli(2L);
@@ -98,7 +104,10 @@ public class VersionLockedSecuritySourceTest {
     assertSame(test.get(ExternalId.of("Test", "Foo").toBundle()), result);
   }
 
-  public void test_getSingle_ExternalIdBundle() {
+  /**
+   *
+   */
+  public void testGetSingleExternalIdBundle() {
     final SecuritySource underlying = Mockito.mock(SecuritySource.class);
     final Instant t1 = Instant.ofEpochMilli(1L);
     final Instant t2 = Instant.ofEpochMilli(2L);
@@ -108,7 +117,10 @@ public class VersionLockedSecuritySourceTest {
     assertSame(test.getSingle(ExternalId.of("Test", "Foo").toBundle()), result);
   }
 
-  public void test_getSingle_ExternalIdBundle_VersionCorrection() {
+  /**
+   *
+   */
+  public void testGetSingleExternalIdBundleVersionCorrection() {
     final SecuritySource underlying = Mockito.mock(SecuritySource.class);
     final Instant t1 = Instant.ofEpochMilli(1L);
     final Instant t2 = Instant.ofEpochMilli(2L);
@@ -131,7 +143,10 @@ public class VersionLockedSecuritySourceTest {
     assertSame(test.getSingle(ExternalId.of("Test", "Foo").toBundle(), VersionCorrection.of(t3, t4)), result);
   }
 
-  public void test_getSingle_Collection_VersionCorrection() {
+  /**
+   *
+   */
+  public void testGetSingleCollectionVersionCorrection() {
     final SecuritySource underlying = Mockito.mock(SecuritySource.class);
     final Instant t1 = Instant.ofEpochMilli(1L);
     final Instant t2 = Instant.ofEpochMilli(2L);
@@ -139,28 +154,30 @@ public class VersionLockedSecuritySourceTest {
     final Instant t4 = Instant.ofEpochMilli(4L);
     final SecuritySource test = new VersionLockedSecuritySource(underlying, VersionCorrection.of(t1, t2));
     final Collection<ExternalIdBundle> ids = Arrays.asList(ExternalId.of("Test", "Foo").toBundle(), ExternalId.of("Test", "Bar").toBundle());
-    Map<ExternalIdBundle, Security> result =
-        ImmutableMap.<ExternalIdBundle, Security>of(ExternalId.of("Test", "Foo").toBundle(), Mockito.mock(Security.class), ExternalId.of("Test", "Bar")
-        .toBundle(), Mockito.mock(Security.class));
+    Map<ExternalIdBundle, Security> result = ImmutableMap.<ExternalIdBundle, Security> of(ExternalId.of("Test", "Foo").toBundle(), Mockito.mock(Security.class),
+        ExternalId.of("Test", "Bar").toBundle(), Mockito.mock(Security.class));
     Mockito.when(underlying.getSingle(ids, VersionCorrection.of(t1, t2))).thenReturn(result);
     assertSame(test.getSingle(ids, VersionCorrection.LATEST), result);
     assertSame(test.getSingle(ids, VersionCorrection.ofVersionAsOf(t1)), result);
     assertSame(test.getSingle(ids, VersionCorrection.ofCorrectedTo(t2)), result);
-    result = ImmutableMap.<ExternalIdBundle, Security>of(ExternalId.of("Test", "Foo").toBundle(), Mockito.mock(Security.class),
+    result = ImmutableMap.<ExternalIdBundle, Security> of(ExternalId.of("Test", "Foo").toBundle(), Mockito.mock(Security.class),
         ExternalId.of("Test", "Bar").toBundle(), Mockito.mock(Security.class));
     Mockito.when(underlying.getSingle(ids, VersionCorrection.of(t3, t2))).thenReturn(result);
     assertSame(test.getSingle(ids, VersionCorrection.ofVersionAsOf(t3)), result);
-    result = ImmutableMap.<ExternalIdBundle, Security>of(ExternalId.of("Test", "Foo").toBundle(),
-        Mockito.mock(Security.class), ExternalId.of("Test", "Bar").toBundle(), Mockito.mock(Security.class));
+    result = ImmutableMap.<ExternalIdBundle, Security> of(ExternalId.of("Test", "Foo").toBundle(), Mockito.mock(Security.class),
+        ExternalId.of("Test", "Bar").toBundle(), Mockito.mock(Security.class));
     Mockito.when(underlying.getSingle(ids, VersionCorrection.of(t1, t3))).thenReturn(result);
     assertSame(test.getSingle(ids, VersionCorrection.ofCorrectedTo(t3)), result);
-    result = ImmutableMap.<ExternalIdBundle, Security>of(ExternalId.of("Test", "Foo").toBundle(),
-        Mockito.mock(Security.class), ExternalId.of("Test", "Bar").toBundle(), Mockito.mock(Security.class));
+    result = ImmutableMap.<ExternalIdBundle, Security> of(ExternalId.of("Test", "Foo").toBundle(), Mockito.mock(Security.class),
+        ExternalId.of("Test", "Bar").toBundle(), Mockito.mock(Security.class));
     Mockito.when(underlying.getSingle(ids, VersionCorrection.of(t3, t4))).thenReturn(result);
     assertSame(test.getSingle(ids, VersionCorrection.of(t3, t4)), result);
   }
 
-  public void test_get_UniqueId() {
+  /**
+   *
+   */
+  public void testGetUniqueId() {
     final SecuritySource underlying = Mockito.mock(SecuritySource.class);
     final SecuritySource test = new VersionLockedSecuritySource(underlying, VersionCorrection.LATEST);
     final Security result = Mockito.mock(Security.class);
@@ -168,7 +185,10 @@ public class VersionLockedSecuritySourceTest {
     assertSame(test.get(UniqueId.of("Test", "Foo")), result);
   }
 
-  public void test_get_ObjectId_VersionCorrection() {
+  /**
+   *
+   */
+  public void testGetObjectIdVersionCorrection() {
     final SecuritySource underlying = Mockito.mock(SecuritySource.class);
     final Instant t1 = Instant.ofEpochMilli(1L);
     final Instant t2 = Instant.ofEpochMilli(2L);
@@ -191,17 +211,23 @@ public class VersionLockedSecuritySourceTest {
     assertSame(test.get(ObjectId.of("Test", "Foo"), VersionCorrection.of(t3, t4)), result);
   }
 
-  public void test_get_Collection() {
+  /**
+   *
+   */
+  public void testGetCollection() {
     final SecuritySource underlying = Mockito.mock(SecuritySource.class);
     final SecuritySource test = new VersionLockedSecuritySource(underlying, VersionCorrection.LATEST);
     final Collection<UniqueId> params = Arrays.asList(UniqueId.of("Test", "Foo"), UniqueId.of("Test", "Bar"));
-    final Map<UniqueId, Security> result = ImmutableMap.<UniqueId, Security>of(UniqueId.of("Test", "Foo"),
-        Mockito.mock(Security.class), UniqueId.of("Test", "Bar"), Mockito.mock(Security.class));
+    final Map<UniqueId, Security> result = ImmutableMap.<UniqueId, Security> of(UniqueId.of("Test", "Foo"), Mockito.mock(Security.class),
+        UniqueId.of("Test", "Bar"), Mockito.mock(Security.class));
     Mockito.when(underlying.get(params)).thenReturn(result);
     assertSame(test.get(params), result);
   }
 
-  public void test_get_Collection_VersionCorrection() {
+  /**
+   *
+   */
+  public void testGetCollectionVersionCorrection() {
     final SecuritySource underlying = Mockito.mock(SecuritySource.class);
     final Instant t1 = Instant.ofEpochMilli(1L);
     final Instant t2 = Instant.ofEpochMilli(2L);
@@ -209,26 +235,29 @@ public class VersionLockedSecuritySourceTest {
     final Instant t4 = Instant.ofEpochMilli(4L);
     final SecuritySource test = new VersionLockedSecuritySource(underlying, VersionCorrection.of(t1, t2));
     final Collection<ObjectId> ids = Arrays.asList(ObjectId.of("Test", "Foo"), ObjectId.of("Test", "Bar"));
-    Map<ObjectId, Security> result = ImmutableMap.<ObjectId, Security>of(ObjectId.of("Test", "Foo"),
-        Mockito.mock(Security.class), ObjectId.of("Test", "Bar"), Mockito.mock(Security.class));
+    Map<ObjectId, Security> result = ImmutableMap.<ObjectId, Security> of(ObjectId.of("Test", "Foo"), Mockito.mock(Security.class), ObjectId.of("Test", "Bar"),
+        Mockito.mock(Security.class));
     Mockito.when(underlying.get(ids, VersionCorrection.of(t1, t2))).thenReturn(result);
     assertSame(test.get(ids, VersionCorrection.LATEST), result);
     assertSame(test.get(ids, VersionCorrection.ofVersionAsOf(t1)), result);
     assertSame(test.get(ids, VersionCorrection.ofCorrectedTo(t2)), result);
-    result = ImmutableMap.<ObjectId, Security>of(ObjectId.of("Test", "Foo"),
-        Mockito.mock(Security.class), ObjectId.of("Test", "Bar"), Mockito.mock(Security.class));
+    result = ImmutableMap.<ObjectId, Security> of(ObjectId.of("Test", "Foo"), Mockito.mock(Security.class), ObjectId.of("Test", "Bar"),
+        Mockito.mock(Security.class));
     Mockito.when(underlying.get(ids, VersionCorrection.of(t3, t2))).thenReturn(result);
     assertSame(test.get(ids, VersionCorrection.ofVersionAsOf(t3)), result);
-    result = ImmutableMap.<ObjectId, Security>of(ObjectId.of("Test", "Foo"), Mockito.mock(Security.class),
-        ObjectId.of("Test", "Bar"), Mockito.mock(Security.class));
+    result = ImmutableMap.<ObjectId, Security> of(ObjectId.of("Test", "Foo"), Mockito.mock(Security.class), ObjectId.of("Test", "Bar"),
+        Mockito.mock(Security.class));
     Mockito.when(underlying.get(ids, VersionCorrection.of(t1, t3))).thenReturn(result);
     assertSame(test.get(ids, VersionCorrection.ofCorrectedTo(t3)), result);
-    result = ImmutableMap.<ObjectId, Security>of(ObjectId.of("Test", "Foo"), Mockito.mock(Security.class),
-        ObjectId.of("Test", "Bar"), Mockito.mock(Security.class));
+    result = ImmutableMap.<ObjectId, Security> of(ObjectId.of("Test", "Foo"), Mockito.mock(Security.class), ObjectId.of("Test", "Bar"),
+        Mockito.mock(Security.class));
     Mockito.when(underlying.get(ids, VersionCorrection.of(t3, t4))).thenReturn(result);
     assertSame(test.get(ids, VersionCorrection.of(t3, t4)), result);
   }
 
+  /**
+   *
+   */
   public void testChangeManager() {
     final SecuritySource underlying = Mockito.mock(SecuritySource.class);
     final SecuritySource test = new VersionLockedSecuritySource(underlying, VersionCorrection.LATEST);

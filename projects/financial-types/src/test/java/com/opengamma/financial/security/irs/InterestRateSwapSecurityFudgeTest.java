@@ -82,9 +82,9 @@ public class InterestRateSwapSecurityFudgeTest extends AbstractFudgeBuilderTestC
     USD_LIBOR_3M_EOM_CONVENTION.setRollConvention(RollConvention.EOM);
     USD_LIBOR_3M_EOM_CONVENTION.setRateType(FloatingRateType.IBOR);
     USD_LIBOR_3M_EOM_CONVENTION.setCompoundingMethod(CompoundingMethod.NONE);
-
-    USD_FIX_LEG = USD_FIXED_3M_EOM_CONVENTION.toLeg(InterestRateSwapNotional.of(Currency.USD, Lists.newArrayList(LocalDate.MIN, LocalDate.MAX), Lists.newArrayList(1e6, 1e5)), PayReceiveType.PAY, new Rate(0.01234));
-
+    USD_FIX_LEG = USD_FIXED_3M_EOM_CONVENTION.toLeg(
+        InterestRateSwapNotional.of(Currency.USD, Lists.newArrayList(LocalDate.MIN, LocalDate.MAX), Lists.newArrayList(1e6, 1e5)), PayReceiveType.PAY,
+        new Rate(0.01234));
     USD_FLOAT_LEG = USD_LIBOR_3M_EOM_CONVENTION.toLeg(new InterestRateSwapNotional(Currency.USD, 1e6), PayReceiveType.RECEIVE);
   }
 
@@ -93,11 +93,9 @@ public class InterestRateSwapSecurityFudgeTest extends AbstractFudgeBuilderTestC
    */
   @Test
   public void testSwapSecurity() {
-    final InterestRateSwapSecurity security = new InterestRateSwapSecurity(ExternalIdBundle.EMPTY, "a swap",
-        LocalDate.now(), LocalDate.now(),
+    final InterestRateSwapSecurity security = new InterestRateSwapSecurity(ExternalIdBundle.EMPTY, "a swap", LocalDate.now(), LocalDate.now(),
         Sets.newHashSet(USD_FIX_LEG, USD_FLOAT_LEG));
     assertEncodeDecodeCycle(InterestRateSwapSecurity.class, security);
   }
-
 
 }

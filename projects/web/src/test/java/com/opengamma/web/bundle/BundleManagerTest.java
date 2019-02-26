@@ -42,7 +42,7 @@ public class BundleManagerTest {
 
   private final BundleManager _manager = new BundleManager();
 
-  public void test_addBundle_with_fragments() {
+  public void testAddBundle_with_fragments() {
     _manager.addBundle(makeCssBundleCommon());
     _manager.addBundle(makeCssUtil());
     _manager.addBundle(makejsBundleCommon());
@@ -60,7 +60,7 @@ public class BundleManagerTest {
     assertEquals(EXPECTED_JS_BUNDLE_COMMON, bundle.getAllFragments());
   }
   
-  public void test_addBundle_with_bundles() {
+  public void testAddBundle_with_bundles() {
     Bundle test = new Bundle("Composite");
     test.addChildNode(makeCssBundleCommon());
     test.addChildNode(makeCssUtil());

@@ -32,6 +32,9 @@ import com.opengamma.util.test.TestGroup;
 public class RedisSimulationSeriesSourceTest extends AbstractRedisTestCase {
   private static final Logger LOGGER = LoggerFactory.getLogger(RedisSimulationSeriesSourceTest.class);
 
+  /**
+   *
+   */
   public void basicOperation() {
     final LocalDate simulationSeriesDate = LocalDate.of(2013, 4, 24);
     final RedisSimulationSeriesSource simulationSource = new RedisSimulationSeriesSource(getJedisPool(), getRedisPrefix());
@@ -74,6 +77,9 @@ public class RedisSimulationSeriesSourceTest extends AbstractRedisTestCase {
     return UniqueId.of("TEST", Integer.toString(x));
   }
 
+  /**
+   *
+   */
   public void clearSpecificDate() {
     final RedisSimulationSeriesSource simulationSource = new RedisSimulationSeriesSource(getJedisPool(), getRedisPrefix());
     LocalDate simulationSeriesDate = LocalDate.now();
@@ -99,6 +105,9 @@ public class RedisSimulationSeriesSourceTest extends AbstractRedisTestCase {
     assertNotNull(hts);
   }
 
+  /**
+   *
+   */
   @Test(enabled = false)
   public void largePerformanceTest() {
     final RedisSimulationSeriesSource simulationSource = new RedisSimulationSeriesSource(getJedisPool());

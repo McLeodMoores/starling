@@ -147,7 +147,8 @@ public class ConfigSearchResultTest extends AbstractFudgeBuilderTestCase {
             + "versionToInstant=null, correctionFromInstant=null, correctionToInstant=null, config=ConfigItem{value=DateSet{dates=[2013-01-01, 2014-01-01]}, "
             + "uniqueId=null, name=name2, type=class com.opengamma.core.DateSet}, uniqueId=null}, ConfigDocument{versionFromInstant=null, "
             + "versionToInstant=null, correctionFromInstant=null, correctionToInstant=null, config=ConfigItem{value=DateSet{dates=[2015-01-01, 2016-01-01]}, "
-            + "uniqueId=null, name=name3, type=class com.opengamma.core.config.impl.ConfigItem}, uniqueId=null}], versionCorrection=VLATEST.C1970-01-01T00:16:40Z}");
+            + "uniqueId=null, name=name3, type=class com.opengamma.core.config.impl.ConfigItem}, uniqueId=null}], "
+            + "versionCorrection=VLATEST.C1970-01-01T00:16:40Z}");
     assertEquals(result, other);
     assertEquals(result.hashCode(), other.hashCode());
     other.setDocuments(CONFIGS.subList(0, 1));

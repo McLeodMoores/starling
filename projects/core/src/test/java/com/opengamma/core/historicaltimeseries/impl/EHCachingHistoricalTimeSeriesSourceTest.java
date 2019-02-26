@@ -34,7 +34,7 @@ import net.sf.ehcache.CacheManager;
 /**
  * Test.
  */
-@Test(groups = {TestGroup.UNIT, "ehcache"})
+@Test(groups = { TestGroup.UNIT, "ehcache" })
 public class EHCachingHistoricalTimeSeriesSourceTest {
 
   private static final UniqueId UID = UniqueId.of("A", "B");
@@ -43,16 +43,25 @@ public class EHCachingHistoricalTimeSeriesSourceTest {
   private EHCachingHistoricalTimeSeriesSource _cachingSource;
   private CacheManager _cacheManager;
 
+  /**
+   *
+   */
   @BeforeClass
   public void setUpClass() {
     _cacheManager = EHCacheUtils.createTestCacheManager(EHCachingHistoricalTimeSeriesSourceTest.class);
   }
 
+  /**
+   *
+   */
   @AfterClass
   public void tearDownClass() {
     EHCacheUtils.shutdownQuiet(_cacheManager);
   }
 
+  /**
+   *
+   */
   @BeforeMethod
   public void setUp() {
     _underlyingSource = mock(HistoricalTimeSeriesSource.class);
@@ -60,15 +69,21 @@ public class EHCachingHistoricalTimeSeriesSourceTest {
     _cachingSource = new EHCachingHistoricalTimeSeriesSource(_underlyingSource, _cacheManager);
   }
 
+  /**
+   *
+   */
   @AfterMethod
   public void tearDown() {
     _cachingSource.shutdown();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   public void getHistoricalTimeSeriesUniqueId() {
-    final LocalDate[] dates = {LocalDate.of(2011, 6, 30)};
-    final double[] values = {12.34d};
+    final LocalDate[] dates = { LocalDate.of(2011, 6, 30) };
+    final double[] values = { 12.34d };
     final ImmutableLocalDateDoubleTimeSeries timeSeries = ImmutableLocalDateDoubleTimeSeries.of(dates, values);
     final HistoricalTimeSeries series = new SimpleHistoricalTimeSeries(UID, timeSeries);
 
@@ -85,6 +100,9 @@ public class EHCachingHistoricalTimeSeriesSourceTest {
     verify(_underlyingSource, times(1)).getHistoricalTimeSeries(UID);
   }
 
+  /**
+   *
+   */
   public void getExternalIdBundleUniqueId() {
     final ExternalId djxTicker = ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, "DJX Index");
     final ExternalId djxBUID = ExternalId.of(ExternalSchemes.BLOOMBERG_BUID, "EI09JDX");

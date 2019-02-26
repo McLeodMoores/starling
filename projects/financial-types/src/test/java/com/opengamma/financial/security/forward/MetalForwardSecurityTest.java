@@ -32,8 +32,7 @@ public class MetalForwardSecurityTest extends AbstractBeanTestCase {
 
   @Override
   public JodaBeanProperties<? extends Bean> getJodaBeanProperties() {
-    return new JodaBeanProperties<>(MetalForwardSecurity.class,
-        Arrays.asList("unitName", "unitNumber", "expiry", "currency", "unitAmount", "contractCategory"),
+    return new JodaBeanProperties<>(MetalForwardSecurity.class, Arrays.asList("unitName", "unitNumber", "expiry", "currency", "unitAmount", "contractCategory"),
         Arrays.asList(UNIT_NAME, UNIT_NUMBER, EXPIRY, CCY, UNIT_AMOUNT, CONTRACT_CATEGORY),
         Arrays.asList("100oz silver", UNIT_NUMBER * 2, new Expiry(DateUtils.getUTCDate(2020, 6, 15)), Currency.BRL, UNIT_AMOUNT * 2, "con"));
   }
@@ -66,7 +65,10 @@ public class MetalForwardSecurityTest extends AbstractBeanTestCase {
     assertEquals(FORWARD.accept(TestVisitor.INSTANCE), "visited");
   }
 
-  private static class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
+  /**
+   *
+   */
+  private static final class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
     public static final TestVisitor INSTANCE = new TestVisitor();
 
     private TestVisitor() {

@@ -18,7 +18,7 @@ public class FinancialSecurityVisitorSameMethodAdapterTest extends VisitorTestHe
   // }
   // }
   //
-  // private static class TestVisitor implements
+  // private static final class TestVisitor implements
   // FinancialSecurityVisitorSameMethodAdapter.Visitor<String> {
   // public static final TestVisitor INSTANCE = new TestVisitor();
   //

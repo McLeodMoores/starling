@@ -23,10 +23,8 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Expiry;
 
-
 /**
- * A security for deliverable swap futures, a future contract that delivers a
- * standard interest-rate swap.
+ * A security for deliverable swap futures, a future contract that delivers a standard interest-rate swap.
  */
 @BeanDefinition
 public class DeliverableSwapFutureSecurity extends FutureSecurity {
@@ -53,17 +51,25 @@ public class DeliverableSwapFutureSecurity extends FutureSecurity {
   }
 
   /**
-   * @param expiry The expiry, not null
-   * @param tradingExchange The trading exchange, not null
-   * @param settlementExchange The settlement exchange, not null
-   * @param currency The currency, not null
-   * @param unitAmount The unit amount, not null
-   * @param category The future category, not null
-   * @param underlyingSwapId A reference to the underlying swap, not null
-   * @param notional The swap notional, not null
+   * @param expiry
+   *          The expiry, not null
+   * @param tradingExchange
+   *          The trading exchange, not null
+   * @param settlementExchange
+   *          The settlement exchange, not null
+   * @param currency
+   *          The currency, not null
+   * @param unitAmount
+   *          The unit amount, not null
+   * @param category
+   *          The future category, not null
+   * @param underlyingSwapId
+   *          A reference to the underlying swap, not null
+   * @param notional
+   *          The swap notional, not null
    */
-  public DeliverableSwapFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency, final double unitAmount,
-      final String category, final ExternalId underlyingSwapId, final double notional) {
+  public DeliverableSwapFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency,
+      final double unitAmount, final String category, final ExternalId underlyingSwapId, final double notional) {
     super(expiry, tradingExchange, settlementExchange, currency, unitAmount, category);
     setUnderlyingSwapId(underlyingSwapId);
     setNotional(notional);

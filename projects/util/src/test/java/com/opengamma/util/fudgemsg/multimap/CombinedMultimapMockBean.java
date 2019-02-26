@@ -28,6 +28,9 @@ import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.SetMultimap;
 
+/**
+ *
+ */
 @BeanDefinition
 public class CombinedMultimapMockBean implements ImmutableBean {
 

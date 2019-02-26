@@ -105,8 +105,7 @@ public class DelegatingHistoricalTimeSeriesMasterTest {
     _delegates.put(UID_SCHEME_3, _delegate2);
   }
 
-  private static void setFields(final TestManageableHistoricalTimeSeriesInfo info, final String name,
-      final ExternalIdBundleWithDates eids) {
+  private static void setFields(final TestManageableHistoricalTimeSeriesInfo info, final String name, final ExternalIdBundleWithDates eids) {
     info.setName(name);
     info.setExternalIdBundle(eids);
     info.setDataField(DATA_FIELD);
@@ -139,8 +138,7 @@ public class DelegatingHistoricalTimeSeriesMasterTest {
   }
 
   /**
-   * Tests the addition of a document when only the default delegate has been
-   * added by the constructor.
+   * Tests the addition of a document when only the default delegate has been added by the constructor.
    */
   public void testAddToDefaultDelegatingMaster() {
     final DelegatingHistoricalTimeSeriesMaster master = new DelegatingHistoricalTimeSeriesMaster(_default);
@@ -149,8 +147,7 @@ public class DelegatingHistoricalTimeSeriesMasterTest {
   }
 
   /**
-   * Tests the addition of documents when no ids have been set on the documents
-   * (i.e. they will use the default master).
+   * Tests the addition of documents when no ids have been set on the documents (i.e. they will use the default master).
    */
   public void testAddToDelegatingMasterNoUidsSet() {
     final DelegatingHistoricalTimeSeriesMaster master = new DelegatingHistoricalTimeSeriesMaster(_default, _delegates);
@@ -184,8 +181,7 @@ public class DelegatingHistoricalTimeSeriesMasterTest {
   }
 
   /**
-   * Tests the addition of documents when no ids have been set on the documents
-   * (i.e. they will use the appropriate master).
+   * Tests the addition of documents when no ids have been set on the documents (i.e. they will use the appropriate master).
    */
   public void testAddToDelegatingMasterUidsSet() {
     final DelegatingHistoricalTimeSeriesMaster master = new DelegatingHistoricalTimeSeriesMaster(_default, _delegates);
@@ -279,8 +275,7 @@ public class DelegatingHistoricalTimeSeriesMasterTest {
   }
 
   /**
-   * Tests getting documents by object id / version correction. The underlying
-   * master in this case does not track versions.
+   * Tests getting documents by object id / version correction. The underlying master in this case does not track versions.
    */
   public void testGetByObjectIdVersionCorrection() {
     final DelegatingHistoricalTimeSeriesMaster master = new DelegatingHistoricalTimeSeriesMaster(_default, _delegates);
@@ -319,8 +314,8 @@ public class DelegatingHistoricalTimeSeriesMasterTest {
     final HistoricalTimeSeriesInfoDocument doc4 = master.add(new HistoricalTimeSeriesInfoDocument(_hts4Scheme1));
     final HistoricalTimeSeriesInfoDocument doc5 = master.add(new HistoricalTimeSeriesInfoDocument(_hts5Scheme2));
     final HistoricalTimeSeriesInfoDocument doc6 = master.add(new HistoricalTimeSeriesInfoDocument(_hts6Scheme2));
-    final Collection<UniqueId> uids = Arrays.asList(doc1.getUniqueId(), doc2.getUniqueId(), doc3.getUniqueId(), doc4.getUniqueId(),
-        doc5.getUniqueId(), doc6.getUniqueId());
+    final Collection<UniqueId> uids = Arrays.asList(doc1.getUniqueId(), doc2.getUniqueId(), doc3.getUniqueId(), doc4.getUniqueId(), doc5.getUniqueId(),
+        doc6.getUniqueId());
     final Map<UniqueId, HistoricalTimeSeriesInfoDocument> docs = master.get(uids);
     assertEquals(docs.size(), 6);
     assertEquals(docs.get(doc1.getUniqueId()), doc1);
@@ -1082,10 +1077,16 @@ public class DelegatingHistoricalTimeSeriesMasterTest {
         ManageableHistoricalTimeSeriesInfo.meta().timeSeriesObjectId()));
   }
 
+  /**
+   *
+   */
   private static class TestManageableHistoricalTimeSeriesInfo extends ManageableHistoricalTimeSeriesInfo implements ObjectIdentifiable {
     private static final long serialVersionUID = 1L;
 
-    public TestManageableHistoricalTimeSeriesInfo() {
+    /**
+     *
+     */
+    TestManageableHistoricalTimeSeriesInfo() {
       super();
     }
 
@@ -1100,6 +1101,11 @@ public class DelegatingHistoricalTimeSeriesMasterTest {
         return false;
       }
       return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+      return super.hashCode();
     }
   }
 
@@ -1120,7 +1126,7 @@ public class DelegatingHistoricalTimeSeriesMasterTest {
       case 1: {
         final MetaProperty<?> ignored = properties[0];
         for (final MetaProperty<?> mp : bean1.metaBean().metaPropertyIterable()) {
-          if (ignored.equals(mp) == false && JodaBeanUtils.equal(mp.get(bean1), mp.get(bean2)) == false) {
+          if (!ignored.equals(mp) && !JodaBeanUtils.equal(mp.get(bean1), mp.get(bean2))) {
             return false;
           }
         }
@@ -1129,7 +1135,7 @@ public class DelegatingHistoricalTimeSeriesMasterTest {
       default:
         final Set<MetaProperty<?>> ignored = new HashSet<>(Arrays.asList(properties));
         for (final MetaProperty<?> mp : bean1.metaBean().metaPropertyIterable()) {
-          if (ignored.contains(mp) == false && JodaBeanUtils.equal(mp.get(bean1), mp.get(bean2)) == false) {
+          if (!ignored.contains(mp) && !JodaBeanUtils.equal(mp.get(bean1), mp.get(bean2))) {
             return false;
           }
         }

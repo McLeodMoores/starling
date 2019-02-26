@@ -7,10 +7,9 @@ package com.opengamma.master.exchange.impl;
 
 import static org.testng.AssertJUnit.assertEquals;
 
-import org.threeten.bp.ZoneId;
-
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.threeten.bp.ZoneId;
 
 import com.opengamma.DataNotFoundException;
 import com.opengamma.core.id.ExternalSchemes;
@@ -31,124 +30,166 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class InMemoryExchangeMasterTest {
 
-  private static String NAME = "LIFFE";
-  private static ExternalId ID_LIFFE_MIC = ExternalId.of(ExternalSchemes.ISO_MIC, "XLIF");
-  private static ExternalId ID_LIFFE_CCID = ExternalId.of("COPP_CLARK_CENTER_ID", "979");
-  private static ExternalId ID_LIFFE_CCNAME = ExternalId.of("COPP_CLARK_NAME", "Euronext LIFFE (UK contracts)");
-  private static ExternalId ID_OTHER1 = ExternalId.of("TEST_SCHEME", "EURONEXT LIFFE");
-  private static ExternalId ID_OTHER2 = ExternalId.of("TEST_SCHEME", "LIFFE");
-  private static ExternalIdBundle BUNDLE_FULL = ExternalIdBundle.of(ID_LIFFE_MIC, ID_LIFFE_CCNAME, ID_LIFFE_CCID);
-  private static ExternalIdBundle BUNDLE_PART = ExternalIdBundle.of(ID_LIFFE_MIC, ID_LIFFE_CCID);
-  private static ExternalIdBundle BUNDLE_OTHER = ExternalIdBundle.of(ID_LIFFE_MIC, ID_LIFFE_CCNAME, ID_OTHER1);
-  private static ExternalIdBundle GB = ExternalIdBundle.of(ExternalSchemes.countryRegionId(Country.GB));
+  private static final String NAME = "LIFFE";
+  private static final ExternalId ID_LIFFE_MIC = ExternalId.of(ExternalSchemes.ISO_MIC, "XLIF");
+  private static final ExternalId ID_LIFFE_CCID = ExternalId.of("COPP_CLARK_CENTER_ID", "979");
+  private static final ExternalId ID_LIFFE_CCNAME = ExternalId.of("COPP_CLARK_NAME", "Euronext LIFFE (UK contracts)");
+  private static final ExternalId ID_OTHER1 = ExternalId.of("TEST_SCHEME", "EURONEXT LIFFE");
+  private static final ExternalId ID_OTHER2 = ExternalId.of("TEST_SCHEME", "LIFFE");
+  private static final ExternalIdBundle BUNDLE_FULL = ExternalIdBundle.of(ID_LIFFE_MIC, ID_LIFFE_CCNAME, ID_LIFFE_CCID);
+  private static final ExternalIdBundle BUNDLE_PART = ExternalIdBundle.of(ID_LIFFE_MIC, ID_LIFFE_CCID);
+  private static final ExternalIdBundle BUNDLE_OTHER = ExternalIdBundle.of(ID_LIFFE_MIC, ID_LIFFE_CCNAME, ID_OTHER1);
+  private static final ExternalIdBundle GB = ExternalIdBundle.of(ExternalSchemes.countryRegionId(Country.GB));
 
-  private InMemoryExchangeMaster master;
-  private ExchangeDocument addedDoc;
+  private InMemoryExchangeMaster _master;
+  private ExchangeDocument _addedDoc;
 
+  /**
+   *
+   */
   @BeforeMethod
   public void setUp() {
-    master = new InMemoryExchangeMaster();
-    ManageableExchange inputExchange = new ManageableExchange(BUNDLE_FULL, NAME, GB, ZoneId.of("Europe/London"));
-    ExchangeDocument inputDoc = new ExchangeDocument(inputExchange);
-    addedDoc = master.add(inputDoc);
+    _master = new InMemoryExchangeMaster();
+    final ManageableExchange inputExchange = new ManageableExchange(BUNDLE_FULL, NAME, GB, ZoneId.of("Europe/London"));
+    final ExchangeDocument inputDoc = new ExchangeDocument(inputExchange);
+    _addedDoc = _master.add(inputDoc);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  public void test_get_noMatch() {
-    master.get(UniqueId.of("A", "B"));
+  public void testGetNoMatch() {
+    _master.get(UniqueId.of("A", "B"));
   }
 
-  public void test_get_match() {
-    ExchangeDocument result = master.get(addedDoc.getUniqueId());
+  /**
+   *
+   */
+  public void testGetMatch() {
+    final ExchangeDocument result = _master.get(_addedDoc.getUniqueId());
     assertEquals(UniqueId.of("MemExg", "1"), result.getUniqueId());
-    assertEquals(addedDoc, result);
+    assertEquals(_addedDoc, result);
   }
 
-  //-------------------------------------------------------------------------
-  public void test_search_oneId_noMatch() {
-    ExchangeSearchRequest request = new ExchangeSearchRequest(ID_OTHER1);
-    ExchangeSearchResult result = master.search(request);
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testSearchOneIdNoMatch() {
+    final ExchangeSearchRequest request = new ExchangeSearchRequest(ID_OTHER1);
+    final ExchangeSearchResult result = _master.search(request);
     assertEquals(0, result.getDocuments().size());
   }
 
-  public void test_search_oneId_mic() {
-    ExchangeSearchRequest request = new ExchangeSearchRequest(ID_LIFFE_MIC);
-    ExchangeSearchResult result = master.search(request);
+  /**
+   *
+   */
+  public void testSearchOneIdMic() {
+    final ExchangeSearchRequest request = new ExchangeSearchRequest(ID_LIFFE_MIC);
+    final ExchangeSearchResult result = _master.search(request);
     assertEquals(1, result.getDocuments().size());
-    assertEquals(addedDoc, result.getFirstDocument());
+    assertEquals(_addedDoc, result.getFirstDocument());
   }
 
-  public void test_search_oneId_ccid() {
-    ExchangeSearchRequest request = new ExchangeSearchRequest(ID_LIFFE_MIC);
-    ExchangeSearchResult result = master.search(request);
+  /**
+   *
+   */
+  public void testSearchOneIdCcid() {
+    final ExchangeSearchRequest request = new ExchangeSearchRequest(ID_LIFFE_MIC);
+    final ExchangeSearchResult result = _master.search(request);
     assertEquals(1, result.getDocuments().size());
-    assertEquals(addedDoc, result.getFirstDocument());
+    assertEquals(_addedDoc, result.getFirstDocument());
   }
 
-  //-------------------------------------------------------------------------
-  public void test_search_oneBundle_noMatch() {
-    ExchangeSearchRequest request = new ExchangeSearchRequest(BUNDLE_OTHER);
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testSearchOneBundleNoMatch() {
+    final ExchangeSearchRequest request = new ExchangeSearchRequest(BUNDLE_OTHER);
     request.setExternalIdSearch(request.getExternalIdSearch().withSearchType(ExternalIdSearchType.ALL));
-    ExchangeSearchResult result = master.search(request);
+    final ExchangeSearchResult result = _master.search(request);
     assertEquals(0, result.getDocuments().size());
   }
 
-  public void test_search_oneBundle_full() {
-    ExchangeSearchRequest request = new ExchangeSearchRequest(BUNDLE_FULL);
-    ExchangeSearchResult result = master.search(request);
+  /**
+   *
+   */
+  public void testSearchOneBundleFull() {
+    final ExchangeSearchRequest request = new ExchangeSearchRequest(BUNDLE_FULL);
+    final ExchangeSearchResult result = _master.search(request);
     assertEquals(1, result.getDocuments().size());
-    assertEquals(addedDoc, result.getFirstDocument());
+    assertEquals(_addedDoc, result.getFirstDocument());
   }
 
-  public void test_search_oneBundle_part() {
-    ExchangeSearchRequest request = new ExchangeSearchRequest(BUNDLE_PART);
-    ExchangeSearchResult result = master.search(request);
+  /**
+   *
+   */
+  public void testSearchOneBundlePart() {
+    final ExchangeSearchRequest request = new ExchangeSearchRequest(BUNDLE_PART);
+    final ExchangeSearchResult result = _master.search(request);
     assertEquals(1, result.getDocuments().size());
-    assertEquals(addedDoc, result.getFirstDocument());
+    assertEquals(_addedDoc, result.getFirstDocument());
   }
 
-  //-------------------------------------------------------------------------
-  public void test_search_twoBundles_noMatch() {
-    ExchangeSearchRequest request = new ExchangeSearchRequest();
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testSearchTwoBundlesNoMatch() {
+    final ExchangeSearchRequest request = new ExchangeSearchRequest();
     request.addExternalId(ID_OTHER1);
     request.addExternalId(ID_OTHER2);
-    ExchangeSearchResult result = master.search(request);
+    final ExchangeSearchResult result = _master.search(request);
     assertEquals(0, result.getDocuments().size());
   }
 
-  public void test_search_twoBundles_oneMatch() {
-    ExchangeSearchRequest request = new ExchangeSearchRequest();
+  /**
+   *
+   */
+  public void testSearchTwoBundlesOneMatch() {
+    final ExchangeSearchRequest request = new ExchangeSearchRequest();
     request.addExternalId(ID_LIFFE_MIC);
     request.addExternalId(ID_OTHER1);
-    ExchangeSearchResult result = master.search(request);
+    final ExchangeSearchResult result = _master.search(request);
     assertEquals(1, result.getDocuments().size());
-    assertEquals(addedDoc, result.getFirstDocument());
+    assertEquals(_addedDoc, result.getFirstDocument());
   }
 
-  public void test_search_twoBundles_bothMatch() {
-    ExchangeSearchRequest request = new ExchangeSearchRequest();
+  /**
+   *
+   */
+  public void testSearchTwoBundlesBothMatch() {
+    final ExchangeSearchRequest request = new ExchangeSearchRequest();
     request.addExternalId(ID_LIFFE_MIC);
     request.addExternalId(ID_LIFFE_CCID);
-    ExchangeSearchResult result = master.search(request);
+    final ExchangeSearchResult result = _master.search(request);
     assertEquals(1, result.getDocuments().size());
-    assertEquals(addedDoc, result.getFirstDocument());
+    assertEquals(_addedDoc, result.getFirstDocument());
   }
 
-  //-------------------------------------------------------------------------
-  public void test_search_name_noMatch() {
-    ExchangeSearchRequest request = new ExchangeSearchRequest();
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testSearchNameNoMatch() {
+    final ExchangeSearchRequest request = new ExchangeSearchRequest();
     request.setName("No match");
-    ExchangeSearchResult result = master.search(request);
+    final ExchangeSearchResult result = _master.search(request);
     assertEquals(0, result.getDocuments().size());
   }
 
-  public void test_search_name_match() {
-    ExchangeSearchRequest request = new ExchangeSearchRequest();
+  /**
+   *
+   */
+  public void testSearchNameMatch() {
+    final ExchangeSearchRequest request = new ExchangeSearchRequest();
     request.setName(NAME);
-    ExchangeSearchResult result = master.search(request);
+    final ExchangeSearchResult result = _master.search(request);
     assertEquals(1, result.getDocuments().size());
-    assertEquals(addedDoc, result.getFirstDocument());
+    assertEquals(_addedDoc, result.getFirstDocument());
   }
 
 }

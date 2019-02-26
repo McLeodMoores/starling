@@ -31,52 +31,82 @@ import com.opengamma.util.tuple.Pair;
 @Test(groups = TestGroup.UNIT)
 public class PairFudgeEncodingTest extends AbstractFudgeBuilderTestCase {
 
-  public void test_OO_Bundle() {
+  /**
+   *
+   */
+  public void testOOBundle() {
     final Pair<String, ExternalIdBundle> object = ObjectsPair.of("Hello", ExternalIdBundle.of(ExternalId.of("A", "B")));
     assertEncodeDecodeCycle(Pair.class, object);
   }
 
-  public void test_OO_UniqueId() {
+  /**
+   *
+   */
+  public void testOOUniqueId() {
     final Pair<String, UniqueId> object = ObjectsPair.of("Hello", UniqueId.of("A", "B"));
     assertEncodeDecodeCycle(Pair.class, object);
   }
 
-  public void test_OO_null() {
+  /**
+   *
+   */
+  public void testOONull() {
     final Pair<String, UniqueId> object = ObjectsPair.of("Hello", null);
     assertEncodeDecodeCycle(Pair.class, object);
   }
 
-  public void test_LO() {
+  /**
+   *
+   */
+  public void testLO() {
     final Pair<Long, UniqueId> object = LongObjectPair.of(23L, UniqueId.of("A", "B"));
     assertEncodeDecodeCycle(Pair.class, object);
   }
 
-  public void test_LD() {
+  /**
+   *
+   */
+  public void testLD() {
     final Pair<Long, Double> object = LongDoublePair.of(23L, 4.5d);
     assertEncodeDecodeCycle(Pair.class, object);
   }
 
-  public void test_IO() {
+  /**
+   *
+   */
+  public void testIO() {
     final Pair<Integer, UniqueId> object = IntObjectPair.of(23, UniqueId.of("A", "B"));
     assertEncodeDecodeCycle(Pair.class, object);
   }
 
-  public void test_ID() {
+  /**
+   *
+   */
+  public void testID() {
     final Pair<Integer, Double> object = IntDoublePair.of(23, 4.5d);
     assertEncodeDecodeCycle(Pair.class, object);
   }
 
-  public void test_DD() {
+  /**
+   *
+   */
+  public void testDD() {
     final Pair<Double, Double> object = DoublesPair.of(23.2, 4.5d);
     assertEncodeDecodeCycle(Pair.class, object);
   }
 
-  public void test_TypeWithSecondaryTypeAndBuilderEncoding() {
+  /**
+   *
+   */
+  public void testTypeWithSecondaryTypeAndBuilderEncoding() {
     final Pair<Tenor, Tenor> object = ObjectsPair.of(Tenor.DAY, Tenor.TWELVE_MONTHS);
     assertEncodeDecodeCycle(Pair.class, object);
   }
 
-  public void test_staticTypedMethods() {
+  /**
+   *
+   */
+  public void teststaticTypedMethods() {
     final ObjectsPair<Tenor, Tenor> in = ObjectsPair.of(Tenor.DAY, Tenor.TEN_YEARS);
     FudgeMsg msg = ObjectsPairFudgeBuilder.buildMessage(getFudgeSerializer(), in, Tenor.class, Tenor.class);
     ObjectsPair<Tenor, Tenor> out = ObjectsPairFudgeBuilder.buildObject(getFudgeDeserializer(), msg, Tenor.class, Tenor.class);
@@ -86,17 +116,26 @@ public class PairFudgeEncodingTest extends AbstractFudgeBuilderTestCase {
     assertEquals(out, in);
   }
 
-  public void test_TypeWithSecondaryTypeAndReducedNumber() {
+  /**
+   *
+   */
+  public void testTypeWithSecondaryTypeAndReducedNumber() {
     final ObjectsPair<LocalDate, Long> object = ObjectsPair.of(LocalDate.of(2011, 6, 30), 6L);
     assertEncodeDecodeCycle(Pair.class, object);
   }
 
-  public void test_nullFirst() {
+  /**
+   *
+   */
+  public void testNullFirst() {
     final ObjectsPair<String, String> object = ObjectsPair.of(null, "B");
     assertEncodeDecodeCycle(Pair.class, object);
   }
 
-  public void test_nullSecond() {
+  /**
+   *
+   */
+  public void testNullSecond() {
     final ObjectsPair<String, String> object = ObjectsPair.of("A", null);
     assertEncodeDecodeCycle(Pair.class, object);
   }

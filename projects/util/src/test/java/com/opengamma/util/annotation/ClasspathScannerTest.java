@@ -26,6 +26,9 @@ public class ClasspathScannerTest {
 
   private final ClasspathScanner _scanner = new ClasspathScanner();
 
+  /**
+   *
+   */
   public void testTimestamp() {
     final ClasspathScanner scanner = new ClasspathScanner();
     final Instant instant = scanner.getTimestamp();
@@ -34,22 +37,37 @@ public class ClasspathScannerTest {
     assertFalse(Instant.now().isBefore(instant));
   }
 
-  public void testScanType()  {
+  /**
+   *
+   */
+  public void testScanType() {
     assertAnnotation(MockType.class);
   }
 
+  /**
+   *
+   */
   public void testScanField() {
     assertAnnotation(MockField.class);
   }
 
+  /**
+   *
+   */
   public void testScanConstructor() {
     assertAnnotation(MockConstructor.class);
   }
 
+  /**
+   *
+   */
   public void testScanMethod() {
     assertAnnotation(MockMethod.class);
   }
 
+  /**
+   *
+   */
   public void testScanParameter() {
     assertAnnotation(MockParameter.class);
   }

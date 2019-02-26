@@ -69,7 +69,6 @@ public abstract class FutureSecurity extends FinancialSecurity {
   @PropertyDefinition(validate = "notNull")
   private String _contractCategory;
 
-
   /**
    * Creates an empty instance.
    * <p>
@@ -89,13 +88,12 @@ public abstract class FutureSecurity extends FinancialSecurity {
    * @param currency
    *          the currency, not null
    * @param unitAmount
-   *          the unit amount, not null. This represents the PNL of a single
-   *          long contract if its price increases by 1.0. Also known as the
-   *          'Point Value'.
+   *          the unit amount, not null. This represents the PNL of a single long contract if its price increases by 1.0. Also known as the 'Point Value'.
    * @param category
    *          the future category, not null
    */
-  protected FutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency, final double unitAmount, final String category) {
+  protected FutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency, final double unitAmount,
+      final String category) {
     super(SECURITY_TYPE);
     setExpiry(expiry);
     setTradingExchange(tradingExchange);

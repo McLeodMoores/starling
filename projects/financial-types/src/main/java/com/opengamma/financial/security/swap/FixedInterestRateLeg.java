@@ -5,7 +5,6 @@
  */
 package com.opengamma.financial.security.swap;
 
-
 import java.util.Map;
 
 import org.joda.beans.Bean;
@@ -42,28 +41,35 @@ public class FixedInterestRateLeg extends InterestRateLeg {
   /**
    * Creates an instance.
    */
-  FixedInterestRateLeg() { //For builder
+  FixedInterestRateLeg() { // For builder
   }
 
   /**
    * Creates an instance.
    *
-   * @param dayCount  the day count, not null
-   * @param frequency  the frequency, not null
-   * @param regionIdentifier  the region, not null
-   * @param businessDayConvention  the business day convention, not null
-   * @param notional  the notional, not null
-   * @param eom  whether this is EOM
-   * @param rate  the rate, not null
+   * @param dayCount
+   *          the day count, not null
+   * @param frequency
+   *          the frequency, not null
+   * @param regionIdentifier
+   *          the region, not null
+   * @param businessDayConvention
+   *          the business day convention, not null
+   * @param notional
+   *          the notional, not null
+   * @param eom
+   *          whether this is EOM
+   * @param rate
+   *          the rate, not null
    */
-  public FixedInterestRateLeg(final DayCount dayCount, final Frequency frequency, final ExternalId regionIdentifier, final BusinessDayConvention businessDayConvention,
-      final Notional notional, final boolean eom, final double rate) {
+  public FixedInterestRateLeg(final DayCount dayCount, final Frequency frequency, final ExternalId regionIdentifier,
+      final BusinessDayConvention businessDayConvention, final Notional notional, final boolean eom, final double rate) {
     super(dayCount, frequency, regionIdentifier, businessDayConvention, notional);
     setRate(rate);
     setEom(eom);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public <T> T accept(final SwapLegVisitor<T> visitor) {
     return visitor.visitFixedInterestRateLeg(this);

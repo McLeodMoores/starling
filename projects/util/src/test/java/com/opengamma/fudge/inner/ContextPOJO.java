@@ -12,13 +12,23 @@ public class ContextPOJO {
 
   private double _value;
 
+  /**
+   *
+   */
   public ContextPOJO() {
   }
 
+  /**
+   * @return the value
+   */
   public double getValue() {
     return _value;
   }
 
+  /**
+   * @param value
+   *          the value
+   */
   public void setValue(final double value) {
     this._value = value;
   }

@@ -48,11 +48,12 @@ public class EnergyForwardSecurity extends CommodityForwardSecurity {
    * @param category
    *          the category, not null
    */
-  public EnergyForwardSecurity(final String unitName, final Double unitNumber, final Expiry expiry, final Currency currency, final double unitAmount, final String category) {
+  public EnergyForwardSecurity(final String unitName, final Double unitNumber, final Expiry expiry, final Currency currency, final double unitAmount,
+      final String category) {
     super(unitName, unitNumber, expiry, currency, unitAmount, category);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitEnergyForwardSecurity(this);

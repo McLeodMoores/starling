@@ -43,10 +43,10 @@ public class FXVolatilitySwapSecurityTest extends AbstractBeanTestCase {
   @Override
   public JodaBeanProperties<? extends Bean> getJodaBeanProperties() {
     return new JodaBeanProperties<>(FXVolatilitySwapSecurity.class,
-        Arrays.asList("baseCurrency", "counterCurrency", "notional", "volatilitySwapType", "strike", "settlementDate", "maturityDate",
-            "annualizationFactor", "firstObservationDate", "lastObservationDate", "observationFrequency", "underlyingId"),
-        Arrays.asList(BASE_CURRENCY, COUNTER_CURRENCY, NOTIONAL, TYPE, STRIKE, SETTLEMENT_DATE, MATURITY_DATE, ANNUALIZATION, FIRST_OBS_DATE,
-            LAST_OBS_DATE, OBS_FREQUENCY, UNDERLYING_TS),
+        Arrays.asList("baseCurrency", "counterCurrency", "notional", "volatilitySwapType", "strike", "settlementDate", "maturityDate", "annualizationFactor",
+            "firstObservationDate", "lastObservationDate", "observationFrequency", "underlyingId"),
+        Arrays.asList(BASE_CURRENCY, COUNTER_CURRENCY, NOTIONAL, TYPE, STRIKE, SETTLEMENT_DATE, MATURITY_DATE, ANNUALIZATION, FIRST_OBS_DATE, LAST_OBS_DATE,
+            OBS_FREQUENCY, UNDERLYING_TS),
         Arrays.asList(COUNTER_CURRENCY, BASE_CURRENCY, NOTIONAL * 2, VolatilitySwapType.VOLATILITY, STRIKE * 2, MATURITY_DATE, SETTLEMENT_DATE,
             ANNUALIZATION + 1, LAST_OBS_DATE, FIRST_OBS_DATE, SimpleFrequency.CONTINUOUS, ExternalId.of("ts", "2")));
   }
@@ -68,8 +68,8 @@ public class FXVolatilitySwapSecurityTest extends AbstractBeanTestCase {
     assertNull(fx.getSettlementDate());
     assertEquals(fx.getStrike(), 0.);
     assertNull(fx.getUnderlyingId());
-    fx = new FXVolatilitySwapSecurity(NOTIONAL, TYPE, STRIKE, SETTLEMENT_DATE, MATURITY_DATE, ANNUALIZATION, FIRST_OBS_DATE, LAST_OBS_DATE,
-        OBS_FREQUENCY, BASE_CURRENCY, COUNTER_CURRENCY);
+    fx = new FXVolatilitySwapSecurity(NOTIONAL, TYPE, STRIKE, SETTLEMENT_DATE, MATURITY_DATE, ANNUALIZATION, FIRST_OBS_DATE, LAST_OBS_DATE, OBS_FREQUENCY,
+        BASE_CURRENCY, COUNTER_CURRENCY);
     assertEquals(fx.getAnnualizationFactor(), ANNUALIZATION);
     assertEquals(fx.getBaseCurrency(), BASE_CURRENCY);
     assertEquals(fx.getCounterCurrency(), COUNTER_CURRENCY);
@@ -82,8 +82,8 @@ public class FXVolatilitySwapSecurityTest extends AbstractBeanTestCase {
     assertEquals(fx.getSettlementDate(), SETTLEMENT_DATE);
     assertEquals(fx.getStrike(), STRIKE);
     assertNull(fx.getUnderlyingId());
-    fx = new FXVolatilitySwapSecurity(NOTIONAL, TYPE, STRIKE, SETTLEMENT_DATE, MATURITY_DATE, ANNUALIZATION, FIRST_OBS_DATE, LAST_OBS_DATE,
-        OBS_FREQUENCY, UNDERLYING_TS, BASE_CURRENCY, COUNTER_CURRENCY);
+    fx = new FXVolatilitySwapSecurity(NOTIONAL, TYPE, STRIKE, SETTLEMENT_DATE, MATURITY_DATE, ANNUALIZATION, FIRST_OBS_DATE, LAST_OBS_DATE, OBS_FREQUENCY,
+        UNDERLYING_TS, BASE_CURRENCY, COUNTER_CURRENCY);
     assertEquals(fx.getAnnualizationFactor(), ANNUALIZATION);
     assertEquals(fx.getBaseCurrency(), BASE_CURRENCY);
     assertEquals(fx.getCounterCurrency(), COUNTER_CURRENCY);
@@ -102,12 +102,15 @@ public class FXVolatilitySwapSecurityTest extends AbstractBeanTestCase {
    * Tests that accept() calls the correct method.
    */
   public void testVisitor() {
-    final FXVolatilitySwapSecurity fx = new FXVolatilitySwapSecurity(NOTIONAL, TYPE, STRIKE, SETTLEMENT_DATE, MATURITY_DATE, ANNUALIZATION,
-        FIRST_OBS_DATE, LAST_OBS_DATE, OBS_FREQUENCY, BASE_CURRENCY, COUNTER_CURRENCY);
+    final FXVolatilitySwapSecurity fx = new FXVolatilitySwapSecurity(NOTIONAL, TYPE, STRIKE, SETTLEMENT_DATE, MATURITY_DATE, ANNUALIZATION, FIRST_OBS_DATE,
+        LAST_OBS_DATE, OBS_FREQUENCY, BASE_CURRENCY, COUNTER_CURRENCY);
     assertEquals(fx.accept(TestVisitor.INSTANCE), "FXVolatilitySwapSecurity");
   }
 
-  private static class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
+  /**
+   *
+   */
+  private static final class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
     public static final TestVisitor INSTANCE = new TestVisitor();
 
     private TestVisitor() {

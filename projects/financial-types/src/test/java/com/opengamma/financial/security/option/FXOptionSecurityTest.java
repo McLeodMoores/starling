@@ -38,9 +38,9 @@ public class FXOptionSecurityTest extends AbstractBeanTestCase {
   public JodaBeanProperties<? extends Bean> getJodaBeanProperties() {
     return new JodaBeanProperties<>(FXOptionSecurity.class,
         Arrays.asList("putCurrency", "callCurrency", "putAmount", "callAmount", "expiry", "settlementDate", "longShort", "exerciseType"),
-        Arrays.asList(PUT_CURRENCY, CALL_CURRENCY, PUT_AMOUNT, CALL_AMOUNT, EXPIRY, SETTLEMENT_DATE, LongShort.LONG, TYPE), Arrays.asList(CALL_CURRENCY,
-            PUT_CURRENCY, CALL_AMOUNT, PUT_AMOUNT, new Expiry(DateUtils.getUTCDate(2022, 2, 2)), SETTLEMENT_DATE.plusDays(1), LongShort.SHORT,
-            new EuropeanExerciseType()));
+        Arrays.asList(PUT_CURRENCY, CALL_CURRENCY, PUT_AMOUNT, CALL_AMOUNT, EXPIRY, SETTLEMENT_DATE, LongShort.LONG, TYPE),
+        Arrays.asList(CALL_CURRENCY, PUT_CURRENCY, CALL_AMOUNT, PUT_AMOUNT, new Expiry(DateUtils.getUTCDate(2022, 2, 2)), SETTLEMENT_DATE.plusDays(1),
+            LongShort.SHORT, new EuropeanExerciseType()));
   }
 
   /**
@@ -81,7 +81,10 @@ public class FXOptionSecurityTest extends AbstractBeanTestCase {
     assertEquals(security.accept(TestVisitor.INSTANCE), FXOptionSecurity.SECURITY_TYPE);
   }
 
-  private static class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
+  /**
+   *
+   */
+  private static final class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
     public static final TestVisitor INSTANCE = new TestVisitor();
 
     private TestVisitor() {

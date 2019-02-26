@@ -57,7 +57,10 @@ public class ExerciseTypeVisitorTest {
     assertEquals(EUROPEAN.accept(visitor), "Eu");
   }
 
-  private static class TestVisitor implements ExerciseTypeVisitor<String> {
+  /**
+   *
+   */
+  private static final class TestVisitor implements ExerciseTypeVisitor<String> {
     public static final TestVisitor INSTANCE = new TestVisitor();
 
     private TestVisitor() {

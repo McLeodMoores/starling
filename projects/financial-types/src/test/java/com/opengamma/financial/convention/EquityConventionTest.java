@@ -26,10 +26,8 @@ public class EquityConventionTest extends AbstractBeanTestCase {
 
   @Override
   public JodaBeanProperties<? extends Bean> getJodaBeanProperties() {
-    return new JodaBeanProperties<>(EquityConvention.class,
-        Arrays.asList("name", "externalIdBundle", "exDividendPeriod"),
-        Arrays.asList(NAME, IDS, EX_DIVIDEND_DAYS),
-        Arrays.asList("other", ExternalIdBundle.of("conv", "AU DEPOSIT"), EX_DIVIDEND_DAYS + 1));
+    return new JodaBeanProperties<>(EquityConvention.class, Arrays.asList("name", "externalIdBundle", "exDividendPeriod"),
+        Arrays.asList(NAME, IDS, EX_DIVIDEND_DAYS), Arrays.asList("other", ExternalIdBundle.of("conv", "AU DEPOSIT"), EX_DIVIDEND_DAYS + 1));
   }
 
   /**
@@ -46,7 +44,10 @@ public class EquityConventionTest extends AbstractBeanTestCase {
     assertEquals(CONVENTION.accept(TestVisitor.INSTANCE), "visited");
   }
 
-  private static class TestVisitor extends FinancialConventionVisitorAdapter<String> {
+  /**
+   *
+   */
+  private static final class TestVisitor extends FinancialConventionVisitorAdapter<String> {
     public static final TestVisitor INSTANCE = new TestVisitor();
 
     private TestVisitor() {

@@ -35,19 +35,25 @@ public class ZeroCouponInflationSwapSecurity extends SwapSecurity {
   public static final String SECURITY_TYPE = "ZERO_COUPON_INFLATION_SWAP";
 
   /**
-   * For the builder
+   * For the builder.
    */
-  /* package */ZeroCouponInflationSwapSecurity() {
+  /* package */ ZeroCouponInflationSwapSecurity() {
     super(SECURITY_TYPE);
   }
 
   /**
-   * @param tradeDate The trade date, not null
-   * @param effectiveDate The effective date, not null
-   * @param maturityDate The maturity date, not null
-   * @param counterparty The counterparty, not null
-   * @param payLeg The pay leg, not null
-   * @param receiveLeg The receive leg, not null
+   * @param tradeDate
+   *          The trade date, not null
+   * @param effectiveDate
+   *          The effective date, not null
+   * @param maturityDate
+   *          The maturity date, not null
+   * @param counterparty
+   *          The counterparty, not null
+   * @param payLeg
+   *          The pay leg, not null
+   * @param receiveLeg
+   *          The receive leg, not null
    */
   public ZeroCouponInflationSwapSecurity(final ZonedDateTime tradeDate, final ZonedDateTime effectiveDate, final ZonedDateTime maturityDate,
       final String counterparty, final SwapLeg payLeg, final SwapLeg receiveLeg) {

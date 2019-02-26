@@ -138,7 +138,9 @@ public class ServerSocketFudgeConnectionReceiver extends AbstractServerSocketPro
     }
 
     @Override
-    public void write(final byte[] b, int ofs, int len) throws IOException {
+    public void write(final byte[] b, final int offset, final int length) throws IOException {
+      int ofs = offset;
+      int len = length;
       if (_bytes > 0) {
         final int room = _buffer.length - _bytes;
         if (room < len) {

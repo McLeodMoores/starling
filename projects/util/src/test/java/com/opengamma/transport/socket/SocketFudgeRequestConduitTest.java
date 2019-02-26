@@ -32,6 +32,10 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.INTEGRATION)
 public class SocketFudgeRequestConduitTest {
 
+  /**
+   * @throws Exception
+   *           if there is a problem
+   */
   @Test(invocationCount = 5, successPercentage = 19)
   public void simpleTest() throws Exception {
     final CollectingFudgeMessageReceiver collectingReceiver = new CollectingFudgeMessageReceiver();
@@ -89,7 +93,7 @@ public class SocketFudgeRequestConduitTest {
     requestDispatcher.stop();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private static void parallelSendTest(final ExecutorService executor, final AtomicInteger maxConcurrency) throws Exception {
     final CollectingFudgeMessageReceiver collectingReceiver = new CollectingFudgeMessageReceiver();
     final FudgeRequestReceiver requestReceiver = new FudgeRequestReceiver() {
@@ -129,6 +133,10 @@ public class SocketFudgeRequestConduitTest {
     assertNotNull("Message should be received in 4s timeout", collectingReceiver.waitForMessage(4000L));
   }
 
+  /**
+   * @throws Exception
+   *           if there is a problem
+   */
   @Test(invocationCount = 5, successPercentage = 19)
   public void parallelSendTestSingle() throws Exception {
     final AtomicInteger concurrencyMax = new AtomicInteger(0);
@@ -136,6 +144,10 @@ public class SocketFudgeRequestConduitTest {
     assertEquals(1, concurrencyMax.get());
   }
 
+  /**
+   * @throws Exception
+   *           if there is a problem
+   */
   @Test(invocationCount = 5, successPercentage = 19)
   public void parallelSendTestMulti() throws Exception {
     final AtomicInteger concurrencyMax = new AtomicInteger(0);

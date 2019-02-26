@@ -17,7 +17,7 @@ import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.UniqueId;
 
 /**
- * For testing
+ * For testing.
  */
 @BeanDefinition
 class DummySecurity extends FinancialSecurity {

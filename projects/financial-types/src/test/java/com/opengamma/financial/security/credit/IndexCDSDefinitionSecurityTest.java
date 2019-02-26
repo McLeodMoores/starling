@@ -128,7 +128,10 @@ public class IndexCDSDefinitionSecurityTest extends AbstractBeanTestCase {
     assertEquals(security.accept(TestVisitor.INSTANCE), NAME);
   }
 
-  private static class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
+  /**
+   *
+   */
+  private static final class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
     public static final TestVisitor INSTANCE = new TestVisitor();
 
     private TestVisitor() {

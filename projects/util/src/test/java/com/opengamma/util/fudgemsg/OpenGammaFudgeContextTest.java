@@ -22,6 +22,9 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class OpenGammaFudgeContextTest {
 
+  /**
+   *
+   */
   @Test
   public void testContext() {
     // simple basic test
@@ -32,6 +35,9 @@ public class OpenGammaFudgeContextTest {
     assertTrue(context.getObjectDictionary().getMessageBuilder(Paging.class) instanceof PagingFudgeBuilder);
   }
 
+  /**
+   *
+   */
   @Test
   public void testCached() {
     assertSame(OpenGammaFudgeContext.getInstance(), OpenGammaFudgeContext.getInstance());

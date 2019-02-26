@@ -56,7 +56,11 @@ public class CoalescingSecuritySourceTest {
     }
   }
 
-  public void testGetSecurity_byUniqueId_a() throws Exception {
+  /**
+   * @throws Exception
+   *           if there is a timeout
+   */
+  public void testGetSecurityByUniqueIdA() throws Exception {
     final UniqueId uidA = UniqueId.of("Test", "A");
     final Security secA = Mockito.mock(Security.class);
     final UniqueId uidB = UniqueId.of("Test", "B");
@@ -71,7 +75,7 @@ public class CoalescingSecuritySourceTest {
       @Override
       public Security get(final UniqueId uid) {
         assertEquals(_state++, 0);
-        join(barrier); //1
+        join(barrier); // 1
         assertEquals(uid, uidA);
         // Pause for a bit to make sure that the other threads get blocked in their getSecurity methods
         sleep();
@@ -128,7 +132,11 @@ public class CoalescingSecuritySourceTest {
     }
   }
 
-  public void testGetSecurity_byUniqueId_b() throws Exception {
+  /**
+   * @throws Exception
+   *           if there is a timeout
+   */
+  public void testGetSecurityByUniqueIdB() throws Exception {
     final UniqueId uidA = UniqueId.of("Test", "A");
     final Security secA = Mockito.mock(Security.class);
     final UniqueId uidB = UniqueId.of("Test", "B");
@@ -207,7 +215,11 @@ public class CoalescingSecuritySourceTest {
     }
   }
 
-  public void testGetSecurities_byUniqueId_a() throws Exception {
+  /**
+   * @throws Exception
+   *           if there is a timeout
+   */
+  public void testGetSecuritiesByUniqueIdA() throws Exception {
     final UniqueId uidA = UniqueId.of("Test", "A");
     final Security secA = Mockito.mock(Security.class);
     final UniqueId uidB = UniqueId.of("Test", "B");
@@ -289,7 +301,11 @@ public class CoalescingSecuritySourceTest {
     }
   }
 
-  public void testGetSecurities_byUniqueId_b() throws Exception {
+  /**
+   * @throws Exception
+   *           if there is a timeout
+   */
+  public void testGetSecuritiesByUniqueIdB() throws Exception {
     final UniqueId uidA = UniqueId.of("Test", "A");
     final Security secA = Mockito.mock(Security.class);
     final UniqueId uidB = UniqueId.of("Test", "B");
@@ -361,7 +377,7 @@ public class CoalescingSecuritySourceTest {
       final Future<?> c = exec.submit(new Runnable() {
         @Override
         public void run() {
-          join(barrier2); //1
+          join(barrier2); // 1
           final Map<UniqueId, Security> result = coalescing.get(Arrays.asList(uidB, uidC));
           assertEquals(result.size(), 2);
           assertSame(result.get(uidB), secB);
@@ -378,35 +394,50 @@ public class CoalescingSecuritySourceTest {
     }
   }
 
-  public void testGetSecurity_byObjectId() {
+  /**
+   *
+   */
+  public void testGetSecurityByObjectId() {
     final SecuritySource underlying = Mockito.mock(SecuritySource.class);
     final SecuritySource coalescing = new CoalescingSecuritySource(underlying);
     coalescing.get(ObjectId.of("Test", "Test"), VersionCorrection.LATEST);
     Mockito.verify(underlying).get(ObjectId.of("Test", "Test"), VersionCorrection.LATEST);
   }
 
-  public void testGetSecurities_byExternalIdBundleVersionCorrection() {
+  /**
+   *
+   */
+  public void testGetSecuritiesByExternalIdBundleVersionCorrection() {
     final SecuritySource underlying = Mockito.mock(SecuritySource.class);
     final SecuritySource coalescing = new CoalescingSecuritySource(underlying);
     coalescing.get(ExternalIdBundle.EMPTY, VersionCorrection.LATEST);
     Mockito.verify(underlying).get(ExternalIdBundle.EMPTY, VersionCorrection.LATEST);
   }
 
-  public void testGetSecurities_byExternalIdBundle() {
+  /**
+   *
+   */
+  public void testGetSecuritiesByExternalIdBundle() {
     final SecuritySource underlying = Mockito.mock(SecuritySource.class);
     final SecuritySource coalescing = new CoalescingSecuritySource(underlying);
     coalescing.get(ExternalIdBundle.EMPTY);
     Mockito.verify(underlying).get(ExternalIdBundle.EMPTY);
   }
 
-  public void testGetSecurity_byExternalIdBundle() {
+  /**
+   *
+   */
+  public void testGetSecurityByExternalIdBundle() {
     final SecuritySource underlying = Mockito.mock(SecuritySource.class);
     final SecuritySource coalescing = new CoalescingSecuritySource(underlying);
     coalescing.get(ExternalIdBundle.EMPTY);
     Mockito.verify(underlying).get(ExternalIdBundle.EMPTY);
   }
 
-  public void testGetSecurity_byExternalIdBundleVersionCorrection() {
+  /**
+   *
+   */
+  public void testGetSecurityByExternalIdBundleVersionCorrection() {
     final SecuritySource underlying = Mockito.mock(SecuritySource.class);
     final SecuritySource coalescing = new CoalescingSecuritySource(underlying);
     coalescing.get(ExternalIdBundle.EMPTY, VersionCorrection.LATEST);

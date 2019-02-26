@@ -45,30 +45,39 @@ public class MasterRegionSourceTest {
   private static final Instant NOW = Instant.now();
   private static final VersionCorrection VC = VersionCorrection.of(NOW.minusSeconds(2), NOW.minusSeconds(1));
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_constructor_nullMaster() throws Exception {
+  public void testConstructorNullMaster() {
     new MasterRegionSource(null);
   }
 
-  //-------------------------------------------------------------------------
-  public void test_getRegion_UniqueId_noOverride_found() throws Exception {
-    RegionMaster mock = mock(RegionMaster.class);
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testGetRegionUniqueIdNoOverrideFound() {
+    final RegionMaster mock = mock(RegionMaster.class);
 
-    RegionDocument doc = new RegionDocument(example());
+    final RegionDocument doc = new RegionDocument(example());
     when(mock.get(UID)).thenReturn(doc);
-    MasterRegionSource test = new MasterRegionSource(mock);
-    Region testResult = test.get(UID);
+    final MasterRegionSource test = new MasterRegionSource(mock);
+    final Region testResult = test.get(UID);
     verify(mock, times(1)).get(UID);
 
     assertEquals(example(), testResult);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  public void test_getRegion_UniqueId_notFound() throws Exception {
-    RegionMaster mock = mock(RegionMaster.class);
+  public void testGetRegionUniqueIdNotFound() {
+    final RegionMaster mock = mock(RegionMaster.class);
 
     when(mock.get(UID)).thenThrow(new DataNotFoundException(""));
-    MasterRegionSource test = new MasterRegionSource(mock);
+    final MasterRegionSource test = new MasterRegionSource(mock);
     try {
       test.get(UID);
     } finally {
@@ -76,25 +85,31 @@ public class MasterRegionSourceTest {
     }
   }
 
-  //-------------------------------------------------------------------------
-  public void test_getRegion_ObjectId_found() throws Exception {
-    RegionMaster mock = mock(RegionMaster.class);
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testGetRegionObjectIdFound() {
+    final RegionMaster mock = mock(RegionMaster.class);
 
-    RegionDocument doc = new RegionDocument(example());
+    final RegionDocument doc = new RegionDocument(example());
     when(mock.get(OID, VC)).thenReturn(doc);
-    MasterRegionSource test = new MasterRegionSource(mock);
-    Region testResult = test.get(OID, VC);
+    final MasterRegionSource test = new MasterRegionSource(mock);
+    final Region testResult = test.get(OID, VC);
     verify(mock, times(1)).get(OID, VC);
 
     assertEquals(example(), testResult);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  public void test_getRegion_ObjectId_notFound() throws Exception {
-    RegionMaster mock = mock(RegionMaster.class);
+  public void testGetRegionObjectIdNotFound() {
+    final RegionMaster mock = mock(RegionMaster.class);
 
     when(mock.get(OID, VC)).thenThrow(new DataNotFoundException(""));
-    MasterRegionSource test = new MasterRegionSource(mock);
+    final MasterRegionSource test = new MasterRegionSource(mock);
     try {
       test.get(OID, VC);
     } finally {
@@ -102,58 +117,70 @@ public class MasterRegionSourceTest {
     }
   }
 
-  //-------------------------------------------------------------------------
-  public void test_getHighestLevelRegion_ExternalId_found() throws Exception {
-    RegionMaster mock = mock(RegionMaster.class);
-    RegionSearchRequest request = new RegionSearchRequest(ID);
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testGetHighestLevelRegionExternalIdFound() {
+    final RegionMaster mock = mock(RegionMaster.class);
+    final RegionSearchRequest request = new RegionSearchRequest(ID);
     request.setPagingRequest(PagingRequest.ONE);
 
-    RegionSearchResult result = new RegionSearchResult();
+    final RegionSearchResult result = new RegionSearchResult();
     result.getDocuments().add(new RegionDocument(example()));
 
     when(mock.search(request)).thenReturn(result);
-    MasterRegionSource test = new MasterRegionSource(mock);
-    Region testResult = test.getHighestLevelRegion(ID);
+    final MasterRegionSource test = new MasterRegionSource(mock);
+    final Region testResult = test.getHighestLevelRegion(ID);
     verify(mock, times(1)).search(request);
 
     assertEquals(example(), testResult);
   }
 
-  public void test_getHighestLevelRegion_ExternalId_notFound() throws Exception {
-    RegionMaster mock = mock(RegionMaster.class);
-    RegionSearchRequest request = new RegionSearchRequest(ID);
+  /**
+   *
+   */
+  public void testGetHighestLevelRegionExternalIdNotFound() {
+    final RegionMaster mock = mock(RegionMaster.class);
+    final RegionSearchRequest request = new RegionSearchRequest(ID);
     request.setPagingRequest(PagingRequest.ONE);
 
-    RegionSearchResult result = new RegionSearchResult();
+    final RegionSearchResult result = new RegionSearchResult();
 
     when(mock.search(request)).thenReturn(result);
-    MasterRegionSource test = new MasterRegionSource(mock);
-    Region testResult = test.getHighestLevelRegion(ID);
+    final MasterRegionSource test = new MasterRegionSource(mock);
+    final Region testResult = test.getHighestLevelRegion(ID);
     verify(mock, times(1)).search(request);
 
     assertEquals(null, testResult);
   }
 
-  //-------------------------------------------------------------------------
-  public void test_getHighestLevelRegion_ExternalIdBundle_found() throws Exception {
-    RegionMaster mock = mock(RegionMaster.class);
-    RegionSearchRequest request = new RegionSearchRequest(BUNDLE);
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testGetHighestLevelRegionExternalIdBundleFound() {
+    final RegionMaster mock = mock(RegionMaster.class);
+    final RegionSearchRequest request = new RegionSearchRequest(BUNDLE);
     request.setPagingRequest(PagingRequest.ONE);
 
-    RegionSearchResult result = new RegionSearchResult();
+    final RegionSearchResult result = new RegionSearchResult();
     result.getDocuments().add(new RegionDocument(example()));
 
     when(mock.search(request)).thenReturn(result);
-    MasterRegionSource test = new MasterRegionSource(mock);
-    Region testResult = test.getHighestLevelRegion(BUNDLE);
+    final MasterRegionSource test = new MasterRegionSource(mock);
+    final Region testResult = test.getHighestLevelRegion(BUNDLE);
     verify(mock, times(1)).search(request);
 
     assertEquals(example(), testResult);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   * @return an example region
+   */
   protected ManageableRegion example() {
-    ManageableRegion region = new ManageableRegion();
+    final ManageableRegion region = new ManageableRegion();
     region.setUniqueId(UID);
     region.setName("United Kingdom");
     region.setCurrency(Currency.GBP);

@@ -76,12 +76,14 @@ public class CommodityFutureOptionSecurityTest extends AbstractBeanTestCase {
    */
   public void testAccept() {
     final CommodityFutureOptionSecurity option = new CommodityFutureOptionSecurity(TRADING_EXCHANGE, SETTLEMENT_EXCHANGE, EXPIRY, EXERCISE_TYPE, UNDERLYING,
-        POINT_VALUE, CCY,
-        STRIKE, OPTION_TYPE);
+        POINT_VALUE, CCY, STRIKE, OPTION_TYPE);
     assertEquals(option.accept(TestVisitor.INSTANCE), TRADING_EXCHANGE);
   }
 
-  private static class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
+  /**
+   *
+   */
+  private static final class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
     public static final TestVisitor INSTANCE = new TestVisitor();
 
     private TestVisitor() {

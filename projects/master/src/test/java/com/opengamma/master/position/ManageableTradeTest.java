@@ -390,10 +390,13 @@ public class ManageableTradeTest {
     trade.setUniqueId(T_UID);
   }
 
+  /**
+   *
+   */
   private static final class DummyDeal implements Deal {
     private final int _val;
 
-    public DummyDeal(final int val) {
+    DummyDeal(final int val) {
       _val = val;
     }
 
@@ -426,6 +429,9 @@ public class ManageableTradeTest {
     }
   }
 
+  /**
+   *
+   */
   private static class DummyTrade implements Trade {
     private Counterparty _counterparty;
     private SecurityLink _securityLink;

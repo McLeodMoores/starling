@@ -75,7 +75,10 @@ public class NonDeliverableFXForwardSecurityTest extends AbstractBeanTestCase {
     assertEquals(fx.accept(TestVisitor.INSTANCE), "NonDeliverableFXForwardSecurity");
   }
 
-  private static class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
+  /**
+   *
+   */
+  private static final class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
     public static final TestVisitor INSTANCE = new TestVisitor();
 
     private TestVisitor() {

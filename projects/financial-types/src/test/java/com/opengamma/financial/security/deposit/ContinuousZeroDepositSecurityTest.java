@@ -36,8 +36,8 @@ public class ContinuousZeroDepositSecurityTest extends AbstractBeanTestCase {
   public JodaBeanProperties<? extends Bean> getJodaBeanProperties() {
     return new JodaBeanProperties<>(ContinuousZeroDepositSecurity.class,
         Arrays.asList("securityType", "currency", "startDate", "maturityDate", "rate", "region"),
-        Arrays.asList(ContinuousZeroDepositSecurity.SECURITY_TYPE, CCY, START_DATE, MATURITY_DATE, RATE, REGION), Arrays.asList(
-            SimpleZeroDepositSecurity.SECURITY_TYPE, Currency.CAD, MATURITY_DATE, START_DATE, RATE + 1, ExternalSchemes.countryRegionId(Country.CA)));
+        Arrays.asList(ContinuousZeroDepositSecurity.SECURITY_TYPE, CCY, START_DATE, MATURITY_DATE, RATE, REGION),
+        Arrays.asList(SimpleZeroDepositSecurity.SECURITY_TYPE, Currency.CAD, MATURITY_DATE, START_DATE, RATE + 1, ExternalSchemes.countryRegionId(Country.CA)));
   }
 
   /**
@@ -54,7 +54,10 @@ public class ContinuousZeroDepositSecurityTest extends AbstractBeanTestCase {
     assertEquals(SECURITY.accept(TestVisitor.INSTANCE), "visited");
   }
 
-  private static class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
+  /**
+   *
+   */
+  private static final class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
     public static final TestVisitor INSTANCE = new TestVisitor();
 
     private TestVisitor() {

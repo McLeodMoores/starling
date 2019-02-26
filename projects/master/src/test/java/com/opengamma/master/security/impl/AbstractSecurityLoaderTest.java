@@ -166,6 +166,9 @@ public class AbstractSecurityLoaderTest {
     assertEquals(result.get(ExternalIdBundle.of("eid2", "4")), UniqueId.of("uid", "4"));
   }
 
+  /**
+   *
+   */
   private static class SecurityLoader extends AbstractSecurityLoader {
     private final Map<ExternalIdBundle, UniqueId> _securityIds;
     private final Map<UniqueId, Security> _securities;

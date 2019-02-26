@@ -31,7 +31,6 @@ import com.opengamma.master.position.ManageableTrade;
 import com.opengamma.master.position.PositionDocument;
 import com.opengamma.master.position.PositionSearchRequest;
 import com.opengamma.master.position.PositionSearchResult;
-import com.opengamma.master.position.impl.InMemoryPositionMaster;
 import com.opengamma.util.test.TestGroup;
 
 /**
@@ -55,6 +54,9 @@ public class InMemoryPositionMasterTest {
   private PositionDocument _pos2;
   private PositionDocument _pos3;
 
+  /**
+   *
+   */
   @BeforeMethod
   public void setUp() {
     _emptyMaster = new InMemoryPositionMaster();
@@ -75,27 +77,39 @@ public class InMemoryPositionMasterTest {
     _pos3 = _populatedMaster.add(_pos3);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_constructor_nullSupplier() {
+  public void testConstructorNullSupplier() {
     new InMemoryPositionMaster((Supplier<ObjectId>) null);
   }
 
-  public void test_defaultSupplier() {
+  /**
+   *
+   */
+  public void testDefaultSupplier() {
     final InMemoryPositionMaster master = new InMemoryPositionMaster();
     final PositionDocument added = master.add(new PositionDocument(_pos1.getPosition()));
     assertEquals("MemPos", added.getUniqueId().getScheme());
   }
 
-  //-------------------------------------------------------------------------
-  public void test_alternateSupplier() {
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testAlternateSupplier() {
     final InMemoryPositionMaster master = new InMemoryPositionMaster(new ObjectIdSupplier("Hello"));
     final PositionDocument added = master.add(new PositionDocument(_pos1.getPosition()));
     assertEquals("Hello", added.getUniqueId().getScheme());
   }
 
-  //-------------------------------------------------------------------------
-  public void test_add_emptyMaster() {
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testAddEmptyMaster() {
     final ManageablePosition pos = new ManageablePosition(_pos1.getPosition());
     pos.setUniqueId(null);
     pos.getTrades().clear();
@@ -124,35 +138,50 @@ public class InMemoryPositionMasterTest {
     assertEquals(pos, addedPosition);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  public void test_get_emptyMaster() {
+  public void testGetEmptyMaster() {
     assertNull(_emptyMaster.get(UniqueId.of("MemPos", "A")));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  public void test_remove_emptyMaster() {
+  public void testRemoveEmptyMaster() {
     _emptyMaster.remove(UniqueId.of("MemPos", "A"));
   }
 
-  //-------------------------------------------------------------------------
-  public void test_search_emptyMaster() {
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testSearchEmptyMaster() {
     final PositionSearchRequest request = new PositionSearchRequest();
     final PositionSearchResult result = _emptyMaster.search(request);
     assertEquals(0, result.getPaging().getTotalItems());
     assertEquals(0, result.getDocuments().size());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  public void test_update_emptyMaster() {
+  public void testUpdateEmptyMaster() {
     final PositionDocument doc = new PositionDocument(_pos1.getPosition());
     doc.setUniqueId(UniqueId.of("MemPos", "A"));
     _emptyMaster.update(doc);
   }
 
-  public void test_update_populatedMaster() {
+  /**
+   *
+   */
+  public void testUpdatePopulatedMaster() {
     final PositionDocument doc = new PositionDocument(new ManageablePosition(BigDecimal.valueOf(100), SEC3));
     doc.getPosition().addTrade(new ManageableTrade(BigDecimal.ONE, SEC3, LocalDate.now(), OffsetTime.now(), COUNTER_PARTY));
     doc.setUniqueId(_pos1.getUniqueId());
@@ -162,7 +191,10 @@ public class InMemoryPositionMasterTest {
     assertNotNull(updated.getVersionFromInstant());
   }
 
-  public void test_get_populatedMaster() {
+  /**
+   *
+   */
+  public void testGetPopulatedMaster() {
     final PositionDocument addedPos1 = _populatedMaster.get(_pos1.getUniqueId());
     assertNotSame(_pos1, addedPos1);
     assertEquals(_pos1, addedPos1);
@@ -173,18 +205,21 @@ public class InMemoryPositionMasterTest {
     assertNotSame(_pos3, addedPos3);
     assertEquals(_pos3, addedPos3);
 
-    assertNotSame(_populatedMaster.get(_pos1.getUniqueId()),
-        _populatedMaster.get(_pos1.getUniqueId()));
+    assertNotSame(_populatedMaster.get(_pos1.getUniqueId()), _populatedMaster.get(_pos1.getUniqueId()));
   }
 
-  public void test_getIsClone_populatedMaster() {
-    assertNotSame(_populatedMaster.get(_pos1.getUniqueId()),
-        _populatedMaster.get(_pos1.getUniqueId()));
-    assertEquals(_populatedMaster.get(_pos1.getUniqueId()),
-        _populatedMaster.get(_pos1.getUniqueId()));
+  /**
+   *
+   */
+  public void testGetIsClonePopulatedMaster() {
+    assertNotSame(_populatedMaster.get(_pos1.getUniqueId()), _populatedMaster.get(_pos1.getUniqueId()));
+    assertEquals(_populatedMaster.get(_pos1.getUniqueId()), _populatedMaster.get(_pos1.getUniqueId()));
   }
 
-  public void test_remove_populatedMaster() {
+  /**
+   *
+   */
+  public void testRemovePopulatedMaster() {
     _populatedMaster.remove(_pos1.getUniqueId());
     final PositionSearchRequest request = new PositionSearchRequest();
     final PositionSearchResult result = _populatedMaster.search(request);
@@ -195,7 +230,10 @@ public class InMemoryPositionMasterTest {
     assertEquals(true, docs.contains(_pos3));
   }
 
-  public void test_search_populatedMaster_all() {
+  /**
+   *
+   */
+  public void testSearchPopulatedMasterAll() {
     final PositionSearchRequest request = new PositionSearchRequest();
     final PositionSearchResult result = _populatedMaster.search(request);
     assertEquals(3, result.getPaging().getTotalItems());
@@ -206,8 +244,11 @@ public class InMemoryPositionMasterTest {
     assertTrue(docs.contains(_pos3));
   }
 
-  //-------------------------------------------------------------------------
-  public void test_search_filterByPositionId() {
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testSearchFilterByPositionId() {
     final PositionSearchRequest request = new PositionSearchRequest();
     request.addPositionObjectId(_pos1.getObjectId());
     final PositionSearchResult result = _populatedMaster.search(request);
@@ -215,16 +256,22 @@ public class InMemoryPositionMasterTest {
     assertEquals(_pos1, result.getFirstDocument());
   }
 
-  //-------------------------------------------------------------------------
-  public void test_search_filterByPositionId_noMatch() {
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testSearchFilterByPositionIdNoMatch() {
     final PositionSearchRequest request = new PositionSearchRequest();
     request.addPositionObjectId(ObjectId.of("A", "UNREAL"));
     final PositionSearchResult result = _populatedMaster.search(request);
     assertEquals(0, result.getDocuments().size());
   }
 
-  //-------------------------------------------------------------------------
-  public void test_search_filterByOneSecurityId() {
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testSearchFilterByOneSecurityId() {
     final PositionSearchRequest request = new PositionSearchRequest();
     request.addSecurityExternalId(SEC2);
     final PositionSearchResult result = _populatedMaster.search(request);
@@ -232,8 +279,11 @@ public class InMemoryPositionMasterTest {
     assertEquals(_pos2, result.getFirstDocument());
   }
 
-  //-------------------------------------------------------------------------
-  public void test_search_filterByMultiSecurityId() {
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testSearchFilterByMultiSecurityId() {
     final PositionSearchRequest request = new PositionSearchRequest();
     request.addSecurityExternalIds(SEC2, SEC1);
     final PositionSearchResult result = _populatedMaster.search(request);
@@ -243,8 +293,11 @@ public class InMemoryPositionMasterTest {
     assertTrue(docs.contains(_pos2));
   }
 
-  //-------------------------------------------------------------------------
-  public void test_search_filterBySecurityId_noMatch() {
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testSearchFilterBySecurityIdNoMatch() {
     final PositionSearchRequest request = new PositionSearchRequest();
     request.addSecurityExternalId(ExternalId.of("A", "UNREAL"));
     final PositionSearchResult result = _populatedMaster.search(request);

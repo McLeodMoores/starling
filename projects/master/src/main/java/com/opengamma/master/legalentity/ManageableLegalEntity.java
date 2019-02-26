@@ -40,39 +40,33 @@ import com.opengamma.util.PublicSPI;
 /** A legal entity. */
 @PublicSPI
 @BeanDefinition
-public class ManageableLegalEntity
-implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
+public class ManageableLegalEntity implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
 
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
 
   /**
-   * The unique identifier of the legal entity.
-   * This must be null when adding to a master and not null when retrieved from a master.
+   * The unique identifier of the legal entity. This must be null when adding to a master and not null when retrieved from a master.
    */
   @PropertyDefinition(overrideGet = true, overrideSet = true)
   private UniqueId _uniqueId;
   /**
-   * The bundle of external identifiers that define the legal entity.
-   * This field must not be null for the object to be valid.
+   * The bundle of external identifiers that define the legal entity. This field must not be null for the object to be valid.
    */
   @PropertyDefinition(validate = "notNull", overrideGet = true)
   private ExternalIdBundle _externalIdBundle = ExternalIdBundle.EMPTY;
   /**
-   * The map of attributes, which can be used for attaching additional
-   * application-level information.
+   * The map of attributes, which can be used for attaching additional application-level information.
    */
   @PropertyDefinition(overrideGet = true, overrideSet = true)
   private final Map<String, String> _attributes = new HashMap<>();
   /**
-   * The map of details, which can be used for attaching additional
-   * application-level information.
+   * The map of details, which can be used for attaching additional application-level information.
    */
   @PropertyDefinition(overrideGet = true, overrideSet = true)
   private final Map<String, String> _details = new HashMap<>();
   /**
-   * The name of the legal entity.
-   * This field must not be null for the object to be valid.
+   * The name of the legal entity. This field must not be null for the object to be valid.
    */
   @PropertyDefinition(validate = "notNull", overrideGet = true)
   private String _name = "";
@@ -114,8 +108,10 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
   /**
    * Creates a legal entity specifying the values of the main fields.
    *
-   * @param name the name of the legal entity, not null
-   * @param externalIdBundle the bundle of identifiers that define the legal entity, not null
+   * @param name
+   *          the name of the legal entity, not null
+   * @param externalIdBundle
+   *          the bundle of identifiers that define the legal entity, not null
    */
   public ManageableLegalEntity(final String name, final ExternalIdBundle externalIdBundle) {
     ArgumentChecker.notNull(name, "name");
@@ -127,9 +123,12 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
   /**
    * Creates a legal entity specifying the values of the main fields.
    *
-   * @param uniqueId the unique identifier, not null
-   * @param name the name of the legal entity, not null
-   * @param externalIdBundle the bundle of identifiers that define the legal entity, not null
+   * @param uniqueId
+   *          the unique identifier, not null
+   * @param name
+   *          the name of the legal entity, not null
+   * @param externalIdBundle
+   *          the bundle of identifiers that define the legal entity, not null
    */
   protected ManageableLegalEntity(final UniqueId uniqueId, final String name, final ExternalIdBundle externalIdBundle) {
     ArgumentChecker.notNull(name, "name");
@@ -139,12 +138,13 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
     setExternalIdBundle(externalIdBundle);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
    * Adds an external identifier to the bundle representing this legal entity.
    *
-   * @param legalEntityId the identifier to add, not null
+   * @param legalEntityId
+   *          the identifier to add, not null
    */
   public void addExternalId(final ExternalId legalEntityId) {
     setExternalIdBundle(getExternalIdBundle().withExternalId(legalEntityId));
@@ -195,8 +195,7 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the unique identifier of the legal entity.
-   * This must be null when adding to a master and not null when retrieved from a master.
+   * Gets the unique identifier of the legal entity. This must be null when adding to a master and not null when retrieved from a master.
    * @return the value of the property
    */
   @Override
@@ -205,8 +204,7 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
   }
 
   /**
-   * Sets the unique identifier of the legal entity.
-   * This must be null when adding to a master and not null when retrieved from a master.
+   * Sets the unique identifier of the legal entity. This must be null when adding to a master and not null when retrieved from a master.
    * @param uniqueId  the new value of the property
    */
   @Override
@@ -216,7 +214,6 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
 
   /**
    * Gets the the {@code uniqueId} property.
-   * This must be null when adding to a master and not null when retrieved from a master.
    * @return the property, not null
    */
   public final Property<UniqueId> uniqueId() {
@@ -225,8 +222,7 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the bundle of external identifiers that define the legal entity.
-   * This field must not be null for the object to be valid.
+   * Gets the bundle of external identifiers that define the legal entity. This field must not be null for the object to be valid.
    * @return the value of the property, not null
    */
   @Override
@@ -235,8 +231,7 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
   }
 
   /**
-   * Sets the bundle of external identifiers that define the legal entity.
-   * This field must not be null for the object to be valid.
+   * Sets the bundle of external identifiers that define the legal entity. This field must not be null for the object to be valid.
    * @param externalIdBundle  the new value of the property, not null
    */
   public void setExternalIdBundle(ExternalIdBundle externalIdBundle) {
@@ -246,7 +241,6 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
 
   /**
    * Gets the the {@code externalIdBundle} property.
-   * This field must not be null for the object to be valid.
    * @return the property, not null
    */
   public final Property<ExternalIdBundle> externalIdBundle() {
@@ -255,8 +249,7 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the map of attributes, which can be used for attaching additional
-   * application-level information.
+   * Gets the map of attributes, which can be used for attaching additional application-level information.
    * @return the value of the property, not null
    */
   @Override
@@ -265,8 +258,7 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
   }
 
   /**
-   * Sets the map of attributes, which can be used for attaching additional
-   * application-level information.
+   * Sets the map of attributes, which can be used for attaching additional application-level information.
    * @param attributes  the new value of the property, not null
    */
   @Override
@@ -278,7 +270,6 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
 
   /**
    * Gets the the {@code attributes} property.
-   * application-level information.
    * @return the property, not null
    */
   public final Property<Map<String, String>> attributes() {
@@ -287,8 +278,7 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the map of details, which can be used for attaching additional
-   * application-level information.
+   * Gets the map of details, which can be used for attaching additional application-level information.
    * @return the value of the property, not null
    */
   @Override
@@ -297,8 +287,7 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
   }
 
   /**
-   * Sets the map of details, which can be used for attaching additional
-   * application-level information.
+   * Sets the map of details, which can be used for attaching additional application-level information.
    * @param details  the new value of the property, not null
    */
   @Override
@@ -310,7 +299,6 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
 
   /**
    * Gets the the {@code details} property.
-   * application-level information.
    * @return the property, not null
    */
   public final Property<Map<String, String>> details() {
@@ -319,8 +307,7 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the name of the legal entity.
-   * This field must not be null for the object to be valid.
+   * Gets the name of the legal entity. This field must not be null for the object to be valid.
    * @return the value of the property, not null
    */
   @Override
@@ -329,8 +316,7 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
   }
 
   /**
-   * Sets the name of the legal entity.
-   * This field must not be null for the object to be valid.
+   * Sets the name of the legal entity. This field must not be null for the object to be valid.
    * @param name  the new value of the property, not null
    */
   public void setName(String name) {
@@ -340,7 +326,6 @@ implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
 
   /**
    * Gets the the {@code name} property.
-   * This field must not be null for the object to be valid.
    * @return the property, not null
    */
   public final Property<String> name() {

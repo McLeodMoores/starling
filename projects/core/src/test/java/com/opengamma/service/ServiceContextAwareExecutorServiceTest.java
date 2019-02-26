@@ -42,29 +42,41 @@ public class ServiceContextAwareExecutorServiceTest {
   /**
    * Sets up an empty thread local context.
    *
-   * @throws Exception  if the context cannot be created
+   * @throws Exception
+   *           if the context cannot be created
    */
   @BeforeMethod
   public void setUp() throws Exception {
-    ThreadLocalServiceContext.init(ServiceContext.of(Collections.<Class<?>, Object>emptyMap()));
+    ThreadLocalServiceContext.init(ServiceContext.of(Collections.<Class<?>, Object> emptyMap()));
   }
 
   /**
    * Removes services after each method.
    *
-   * @throws Exception  if the services cannot be removed
+   * @throws Exception
+   *           if the services cannot be removed
    */
   @AfterMethod
   public void tearDown() throws Exception {
     ThreadLocalServiceContext.init(null);
   }
 
+  /**
+   * @throws ExecutionException
+   *           if there is a problem with the execution
+   * @throws InterruptedException
+   *           if there is an interruption
+   */
   @Test
   public void submitCallable() throws ExecutionException, InterruptedException {
     assertFalse(_underlying.submit(callable()).get());
     assertTrue(_executor.submit(callable()).get());
   }
 
+  /**
+   * @throws InterruptedException
+   *           if there is an interruption
+   */
   @Test
   public void submitRunnable() throws InterruptedException {
     final ArrayBlockingQueue<Boolean> queue = new ArrayBlockingQueue<>(1);
@@ -89,6 +101,10 @@ public class ServiceContextAwareExecutorServiceTest {
     assertTrue(queue.take());
   }
 
+  /**
+   * @throws InterruptedException
+   *           if there is an interruption
+   */
   @Test
   public void invokeAll() throws InterruptedException {
     final List<Callable<Boolean>> tasks2 = Lists.newArrayList(callable(), callable());
@@ -100,6 +116,12 @@ public class ServiceContextAwareExecutorServiceTest {
     assertTrue(Iterables.all(futures1, Predicates.not(predicate())));
   }
 
+  /**
+   * @throws ExecutionException
+   *           if there is a problem with the execution
+   * @throws InterruptedException
+   *           if there is an interruption
+   */
   @Test
   public void amendContext() throws InterruptedException, ExecutionException {
     ThreadLocalServiceContext.init(ServiceContext.of(String.class, "StringService"));

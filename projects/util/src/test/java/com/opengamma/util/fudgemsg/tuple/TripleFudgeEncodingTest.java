@@ -25,32 +25,50 @@ import com.opengamma.util.tuple.Triple;
 @Test(groups = TestGroup.UNIT)
 public class TripleFudgeEncodingTest extends AbstractFudgeBuilderTestCase {
 
-  public void test_objectAndReducedNumber() {
+  /**
+   *
+   */
+  public void testObjectAndReducedNumber() {
     final Triple<String, ExternalIdBundle, Long> object = Triple.of("Hello", ExternalIdBundle.of(ExternalId.of("A", "B")), 6L);
     assertEncodeDecodeCycle(Triple.class, object);
   }
 
-  public void test_objectAndSecondaryType() {
+  /**
+   *
+   */
+  public void testObjectAndSecondaryType() {
     final Triple<String, UniqueId, LocalDate> object = Triple.of(null, UniqueId.of("A", "B"), LocalDate.of(2011, 6, 30));
     assertEncodeDecodeCycle(Triple.class, object);
   }
 
-  public void test_TypeWithSecondaryTypeAndBuilderEncoding() {
+  /**
+   *
+   */
+  public void testTypeWithSecondaryTypeAndBuilderEncoding() {
     final Triple<Tenor, Tenor, Expiry> object = Triple.of(Tenor.DAY, Tenor.TEN_MONTHS, new Expiry(ZonedDateTime.now(), ExpiryAccuracy.DAY_MONTH_YEAR));
     assertEncodeDecodeCycle(Triple.class, object);
   }
 
-  public void test_nullFirst() {
+  /**
+   *
+   */
+  public void testNullFirst() {
     final Triple<String, String, String> object = Triple.of(null, "B", "C");
     assertEncodeDecodeCycle(Triple.class, object);
   }
 
-  public void test_nullSecond() {
+  /**
+   *
+   */
+  public void testNullSecond() {
     final Triple<String, String, String> object = Triple.of("A", null, "C");
     assertEncodeDecodeCycle(Triple.class, object);
   }
 
-  public void test_nullThird() {
+  /**
+   *
+   */
+  public void testNullThird() {
     final Triple<String, String, String> object = Triple.of("A", "B", null);
     assertEncodeDecodeCycle(Triple.class, object);
   }

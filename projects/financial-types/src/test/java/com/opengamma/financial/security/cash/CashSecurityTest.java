@@ -40,9 +40,8 @@ public class CashSecurityTest extends AbstractBeanTestCase {
   public JodaBeanProperties<? extends Bean> getJodaBeanProperties() {
     return new JodaBeanProperties<>(CashSecurity.class,
         Arrays.asList("securityType", "currency", "regionId", "start", "maturity", "dayCount", "rate", "amount"),
-        Arrays.asList(CashSecurity.SECURITY_TYPE, CCY, REGION, START_DATE, MATURITY_DATE, DC, RATE, NOTIONAL),
-        Arrays.asList(CashBalanceSecurity.SECURITY_TYPE, Currency.CAD, ExternalSchemes.countryRegionId(Country.CA), MATURITY_DATE, START_DATE,
-            DayCounts.ACT_365, RATE + 1, NOTIONAL * 10));
+        Arrays.asList(CashSecurity.SECURITY_TYPE, CCY, REGION, START_DATE, MATURITY_DATE, DC, RATE, NOTIONAL), Arrays.asList(CashBalanceSecurity.SECURITY_TYPE,
+            Currency.CAD, ExternalSchemes.countryRegionId(Country.CA), MATURITY_DATE, START_DATE, DayCounts.ACT_365, RATE + 1, NOTIONAL * 10));
   }
 
   /**
@@ -59,7 +58,10 @@ public class CashSecurityTest extends AbstractBeanTestCase {
     assertEquals(SECURITY.accept(TestVisitor.INSTANCE), "visited");
   }
 
-  private static class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
+  /**
+   *
+   */
+  private static final class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
     public static final TestVisitor INSTANCE = new TestVisitor();
 
     private TestVisitor() {

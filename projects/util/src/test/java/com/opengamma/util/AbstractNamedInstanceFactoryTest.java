@@ -8,6 +8,9 @@ package com.opengamma.util;
  */
 public class AbstractNamedInstanceFactoryTest {
 
+  /**
+   *
+   */
   public static class Test1 implements NamedInstance {
 
     @Override
@@ -17,6 +20,9 @@ public class AbstractNamedInstanceFactoryTest {
 
   }
 
+  /**
+   *
+   */
   public static class Test2 implements NamedInstance {
 
     @Override
@@ -25,11 +31,4 @@ public class AbstractNamedInstanceFactoryTest {
     }
   }
 
-  private class TestNamedInstanceFactory extends AbstractNamedInstanceFactory<NamedInstance> {
-
-    protected TestNamedInstanceFactory() {
-      super(NamedInstance.class);
-    }
-
-  }
 }

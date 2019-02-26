@@ -23,7 +23,7 @@ import com.opengamma.id.ObjectId;
  *
  * Used for testing.
  */
-public class TestChangeManager implements ChangeManager {
+public final class TestChangeManager implements ChangeManager {
 
   /**
    * Static constructor.

@@ -133,11 +133,11 @@ public class DataTrackingSecurityMasterTest {
    * Tests getting a collection of unique ids.
    */
   public void testGetByUidCollection() {
-    final Map<UniqueId, SecurityDocument> Securitys = _master.get(Arrays.asList(_uid1, _uid2, _uid3));
-    assertEquals(Securitys.size(), 3);
-    assertEqualsNoOrder(Securitys.keySet(), Arrays.asList(_uid1, _uid2, _uid3));
+    final Map<UniqueId, SecurityDocument> securities = _master.get(Arrays.asList(_uid1, _uid2, _uid3));
+    assertEquals(securities.size(), 3);
+    assertEqualsNoOrder(securities.keySet(), Arrays.asList(_uid1, _uid2, _uid3));
     final Set<Security> items = new HashSet<>();
-    for (final Map.Entry<UniqueId, SecurityDocument> entry : Securitys.entrySet()) {
+    for (final Map.Entry<UniqueId, SecurityDocument> entry : securities.entrySet()) {
       items.add(entry.getValue().getSecurity());
     }
     assertEqualsNoOrder(items, Arrays.asList(SEC_1, SEC_2, SEC_3));

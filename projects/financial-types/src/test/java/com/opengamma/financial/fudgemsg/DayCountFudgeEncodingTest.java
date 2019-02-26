@@ -24,15 +24,20 @@ public class DayCountFudgeEncodingTest extends AbstractFudgeBuilderTestCase {
 
   private static final DayCount REF = DayCounts.ACT_360;
 
+  /**
+   *
+   */
   @Test
   public void testCycle() {
     assertEquals(REF, cycleObject(DayCount.class, REF));
   }
 
+  /**
+   *
+   */
   @Test
   public void testFromString() {
-    assertEquals(REF, getFudgeContext().getFieldValue(DayCount.class,
-        UnmodifiableFudgeField.of(FudgeWireType.STRING, REF.getName())));
+    assertEquals(REF, getFudgeContext().getFieldValue(DayCount.class, UnmodifiableFudgeField.of(FudgeWireType.STRING, REF.getName())));
   }
 
 }

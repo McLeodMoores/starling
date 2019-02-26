@@ -79,6 +79,9 @@ public class PortfolioNodeEquivalenceMapperTest {
     return new SimplePosition(UniqueId.of("Test", Integer.toString(i)), BigDecimal.ONE, ExternalId.of("Test", Integer.toString(i)));
   }
 
+  /**
+   *
+   */
   public void testIdentical() {
     final UniqueIdSupplier ids = new UniqueIdSupplier("Node");
     final PortfolioNodeEquivalenceMapper mapper = new PortfolioNodeEquivalenceMapper();
@@ -91,6 +94,9 @@ public class PortfolioNodeEquivalenceMapperTest {
     assertEquals(map.get(UniqueId.of("Node", "4")), UniqueId.of("Node", "4"));
   }
 
+  /**
+   *
+   */
   public void testEqualNodes() {
     final UniqueIdSupplier ids = new UniqueIdSupplier("Node");
     final PortfolioNodeEquivalenceMapper mapper = new PortfolioNodeEquivalenceMapper();
@@ -104,6 +110,9 @@ public class PortfolioNodeEquivalenceMapperTest {
     assertEquals(map.get(UniqueId.of("Node", "4")), UniqueId.of("Node", "8"));
   }
 
+  /**
+   *
+   */
   public void testEqualNodesSubset() {
     final UniqueIdSupplier ids = new UniqueIdSupplier("Node");
     final PortfolioNodeEquivalenceMapper mapper = new PortfolioNodeEquivalenceMapper();
@@ -126,6 +135,9 @@ public class PortfolioNodeEquivalenceMapperTest {
     assertEquals(map.get(UniqueId.of("Node", "9")), UniqueId.of("Node", "4"));
   }
 
+  /**
+   *
+   */
   public void testEqualNodesReordered() {
     final UniqueIdSupplier ids = new UniqueIdSupplier("Node");
     final PortfolioNodeEquivalenceMapper mapper = new PortfolioNodeEquivalenceMapper();
@@ -139,6 +151,9 @@ public class PortfolioNodeEquivalenceMapperTest {
     assertEquals(map.get(UniqueId.of("Node", "4")), UniqueId.of("Node", "7"));
   }
 
+  /**
+   *
+   */
   public void testPositionsReordered() {
     final UniqueIdSupplier ids = new UniqueIdSupplier("Node");
     final PortfolioNodeEquivalenceMapper mapper = new PortfolioNodeEquivalenceMapper();
@@ -150,6 +165,9 @@ public class PortfolioNodeEquivalenceMapperTest {
     assertEquals(map.get(UniqueId.of("Node", "4")), UniqueId.of("Node", "8"));
   }
 
+  /**
+   *
+   */
   public void testPositionsChanged() {
     final UniqueIdSupplier ids = new UniqueIdSupplier("Node");
     final PortfolioNodeEquivalenceMapper mapper = new PortfolioNodeEquivalenceMapper();
@@ -163,6 +181,9 @@ public class PortfolioNodeEquivalenceMapperTest {
     assertEquals(map.get(UniqueId.of("Node", "4")), UniqueId.of("Node", "8"));
   }
 
+  /**
+   *
+   */
   public void testNoMatch() {
     final UniqueIdSupplier ids = new UniqueIdSupplier("Node");
     final PortfolioNodeEquivalenceMapper mapper = new PortfolioNodeEquivalenceMapper();

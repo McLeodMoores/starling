@@ -76,12 +76,15 @@ public class IRFutureOptionSecurityTest extends AbstractBeanTestCase {
    * Tests that the accept() method points to the correct method in the visitor.
    */
   public void testAccept() {
-    final IRFutureOptionSecurity option = new IRFutureOptionSecurity(EXCHANGE, EXPIRY, EXERCISE_TYPE, UNDERLYING, POINT_VALUE, MARGINED, CCY,
-        STRIKE, OPTION_TYPE);
+    final IRFutureOptionSecurity option = new IRFutureOptionSecurity(EXCHANGE, EXPIRY, EXERCISE_TYPE, UNDERLYING, POINT_VALUE, MARGINED, CCY, STRIKE,
+        OPTION_TYPE);
     assertEquals(option.accept(TestVisitor.INSTANCE), EXCHANGE);
   }
 
-  private static class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
+  /**
+   *
+   */
+  private static final class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
     public static final TestVisitor INSTANCE = new TestVisitor();
 
     private TestVisitor() {

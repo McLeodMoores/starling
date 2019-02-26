@@ -22,7 +22,7 @@ import com.opengamma.id.ObjectId;
  *
  * Used for testing.
  */
-public class TestChangeListener implements ChangeListener {
+public final class TestChangeListener implements ChangeListener {
 
   /**
    * Static constructor.

@@ -61,30 +61,39 @@ public class FloatingInterestRateLeg extends InterestRateLeg {
   /**
    * Creates an instance.
    */
-  FloatingInterestRateLeg() { //For builder
+  FloatingInterestRateLeg() { // For builder
   }
 
   /**
    * Creates an instance.
    *
-   * @param dayCount  the day count, not null
-   * @param frequency  the frequency, not null
-   * @param regionIdentifier  the region, not null
-   * @param businessDayConvention  the business day convention, not null
-   * @param notional  the notional, not null
-   * @param eom  whether this is EOM
-   * @param floatingReferenceRateId  the reference rate, not null
-   * @param floatingRateType  the floating rate type, not null
+   * @param dayCount
+   *          the day count, not null
+   * @param frequency
+   *          the frequency, not null
+   * @param regionIdentifier
+   *          the region, not null
+   * @param businessDayConvention
+   *          the business day convention, not null
+   * @param notional
+   *          the notional, not null
+   * @param eom
+   *          whether this is EOM
+   * @param floatingReferenceRateId
+   *          the reference rate, not null
+   * @param floatingRateType
+   *          the floating rate type, not null
    */
-  public FloatingInterestRateLeg(final DayCount dayCount, final Frequency frequency, final ExternalId regionIdentifier, final BusinessDayConvention businessDayConvention,
-      final Notional notional, final boolean eom, final ExternalId floatingReferenceRateId, final FloatingRateType floatingRateType) {
+  public FloatingInterestRateLeg(final DayCount dayCount, final Frequency frequency, final ExternalId regionIdentifier,
+      final BusinessDayConvention businessDayConvention, final Notional notional, final boolean eom, final ExternalId floatingReferenceRateId,
+      final FloatingRateType floatingRateType) {
     super(dayCount, frequency, regionIdentifier, businessDayConvention, notional);
     setFloatingReferenceRateId(floatingReferenceRateId);
     setFloatingRateType(floatingRateType);
     setEom(eom);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public <T> T accept(final SwapLegVisitor<T> visitor) {
     return visitor.visitFloatingInterestRateLeg(this);

@@ -19,21 +19,21 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class ZipUtilsTest {
 
+  /**
+   * @return data to be compressed
+   */
   @DataProvider(name = "compressString")
   Object[][] dataCompressString() {
-    return new Object[][] {
-        {""},
-        {"A"},
-        {"0"},
-        {"Joda"},
-        {"Etienne"},
-        {"This is a much longer piece of text"},
-        {"<text>This is a longer piece of <i>text</i> that is surrounded by <i>XML</i> tags</text>"},
-        {"<person><forename>Stephen</forename><surname>Colebourne</surname><address>Park Street</address><city>London</city></person>"},
-        {StringUtils.repeat("<person>Stephen</person>", 100)},
-    };
+    return new Object[][] { { "" }, { "A" }, { "0" }, { "Joda" }, { "Etienne" }, { "This is a much longer piece of text" },
+        { "<text>This is a longer piece of <i>text</i> that is surrounded by <i>XML</i> tags</text>" },
+        { "<person><forename>Stephen</forename><surname>Colebourne</surname><address>Park Street</address><city>London</city></person>" },
+        { StringUtils.repeat("<person>Stephen</person>", 100) }, };
   }
 
+  /**
+   * @param input
+   *          the input
+   */
   @Test(dataProvider = "compressString")
   public void testZipString(final String input) {
     final byte[] bytes = ZipUtils.zipString(input);
@@ -41,32 +41,37 @@ public class ZipUtilsTest {
     assertEquals(expected, bytes);
   }
 
+  /**
+   * @param input
+   *          the input
+   */
   @Test(dataProvider = "compressString")
-  public void test_zipString_optimize(final String input) {
+  public void testZipStringOptimize(final String input) {
     final byte[] bytes = ZipUtils.zipString(input, true);
-    debug(input, bytes);
     final String str = ZipUtils.unzipString(bytes);
     assertEquals(str, input);
   }
 
+  /**
+   * @param input
+   *          the input
+   */
   @Test(dataProvider = "compressString")
-  public void test_zipString_noOptimize(final String input) {
+  public void testZipStringNoOptimize(final String input) {
     final byte[] bytes = ZipUtils.zipString(input, false);
-    debug(input, bytes);
     final String str = ZipUtils.unzipString(bytes);
     assertEquals(str, input);
   }
 
+  /**
+   * @param input
+   *          the input
+   */
   @Test(dataProvider = "compressString")
-  public void test_deflateString_inflateString(final String input) {
+  public void testDeflateStringInflateString(final String input) {
     final byte[] bytes = ZipUtils.deflateString(input);
-    debug(input, bytes);
     final String str = ZipUtils.inflateString(bytes);
     assertEquals(str, input);
-  }
-
-  private void debug(final String input, final byte[] bytes) {
-//    System.out.println(bytes.length + " " + input.length() + " " + Arrays.toString(bytes) + " " + input);
   }
 
 }

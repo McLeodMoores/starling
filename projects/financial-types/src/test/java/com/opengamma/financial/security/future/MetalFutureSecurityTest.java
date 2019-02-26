@@ -33,8 +33,8 @@ public class MetalFutureSecurityTest extends AbstractBeanTestCase {
   private static final double UNIT_NUMBER = 2500;
   private static final String UNIT_NAME = "100oz gold";
   private static final ExternalId UNDERLYING_ID = ExternalId.of("sec", "1");
-  private static final MetalFutureSecurity FUTURE = new MetalFutureSecurity(EXPIRY, TRADING_EXCHANGE, SETTLEMENT_EXCHANGE, CCY, UNIT_AMOUNT,
-      CONTRACT_CATEGORY, UNIT_NUMBER, UNIT_NAME, UNDERLYING_ID);
+  private static final MetalFutureSecurity FUTURE = new MetalFutureSecurity(EXPIRY, TRADING_EXCHANGE, SETTLEMENT_EXCHANGE, CCY, UNIT_AMOUNT, CONTRACT_CATEGORY,
+      UNIT_NUMBER, UNIT_NAME, UNDERLYING_ID);
 
   @Override
   public JodaBeanProperties<? extends Bean> getJodaBeanProperties() {
@@ -72,8 +72,7 @@ public class MetalFutureSecurityTest extends AbstractBeanTestCase {
     assertNull(future.getUnitNumber());
     assertNull(future.getUnitName());
     assertEquals(future.getUnderlyingId(), UNDERLYING_ID);
-    future = new MetalFutureSecurity(EXPIRY, TRADING_EXCHANGE, SETTLEMENT_EXCHANGE, CCY, UNIT_AMOUNT, CONTRACT_CATEGORY, UNIT_NUMBER, UNIT_NAME,
-        UNDERLYING_ID);
+    future = new MetalFutureSecurity(EXPIRY, TRADING_EXCHANGE, SETTLEMENT_EXCHANGE, CCY, UNIT_AMOUNT, CONTRACT_CATEGORY, UNIT_NUMBER, UNIT_NAME, UNDERLYING_ID);
     assertEquals(future.getExpiry(), EXPIRY);
     assertEquals(future.getTradingExchange(), TRADING_EXCHANGE);
     assertEquals(future.getSettlementExchange(), SETTLEMENT_EXCHANGE);
@@ -99,7 +98,10 @@ public class MetalFutureSecurityTest extends AbstractBeanTestCase {
     assertEquals(FUTURE.accept(TestVisitor.INSTANCE), "visited");
   }
 
-  private static class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
+  /**
+   *
+   */
+  private static final class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
     public static final TestVisitor INSTANCE = new TestVisitor();
 
     private TestVisitor() {

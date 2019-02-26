@@ -28,33 +28,48 @@ public class ImmutableInstantDoubleTimeSeriesFudgeEncodingTest extends AbstractF
   private double[] _values;
   private ImmutableInstantDoubleTimeSeries _ts;
 
+  /**
+   *
+   */
   @BeforeMethod
   public void setUp() {
-    _instants = new Instant[] {Instant.ofEpochSecond(30), Instant.ofEpochSecond(31)};
-    _values = new double[] {1.1d, 2.2d};
+    _instants = new Instant[] { Instant.ofEpochSecond(30), Instant.ofEpochSecond(31) };
+    _values = new double[] { 1.1d, 2.2d };
     _ts = ImmutableInstantDoubleTimeSeries.of(_instants, _values);
   }
 
+  /**
+   *
+   */
   public void testCycle1() {
-    DoubleTimeSeries<?> cycleObject = cycleObject(DoubleTimeSeries.class, _ts);
+    final DoubleTimeSeries<?> cycleObject = cycleObject(DoubleTimeSeries.class, _ts);
     assertEquals(ImmutableInstantDoubleTimeSeries.class, cycleObject.getClass());
     assertEquals(_ts, cycleObject);
   }
 
+  /**
+   *
+   */
   public void testCycle2() {
-    PreciseDoubleTimeSeries<?> cycleObject = cycleObject(PreciseDoubleTimeSeries.class, _ts);
+    final PreciseDoubleTimeSeries<?> cycleObject = cycleObject(PreciseDoubleTimeSeries.class, _ts);
     assertEquals(ImmutableInstantDoubleTimeSeries.class, cycleObject.getClass());
     assertEquals(_ts, cycleObject);
   }
 
+  /**
+   *
+   */
   public void testCycle3() {
-    InstantDoubleTimeSeries cycleObject = cycleObject(InstantDoubleTimeSeries.class, _ts);
+    final InstantDoubleTimeSeries cycleObject = cycleObject(InstantDoubleTimeSeries.class, _ts);
     assertEquals(ImmutableInstantDoubleTimeSeries.class, cycleObject.getClass());
     assertEquals(_ts, cycleObject);
   }
 
+  /**
+   *
+   */
   public void testCycle4() {
-    ImmutableInstantDoubleTimeSeries cycleObject = cycleObject(ImmutableInstantDoubleTimeSeries.class, _ts);
+    final ImmutableInstantDoubleTimeSeries cycleObject = cycleObject(ImmutableInstantDoubleTimeSeries.class, _ts);
     assertEquals(ImmutableInstantDoubleTimeSeries.class, cycleObject.getClass());
     assertEquals(_ts, cycleObject);
   }

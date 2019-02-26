@@ -47,6 +47,9 @@ public class ExchangeUtilsTest {
     MASTER.add(new ExchangeDocument(EXCH));
   }
 
+  /**
+   *
+   */
   @AfterMethod
   public void resetDetails() {
     DETAIL.setCalendarEnd(null);
@@ -123,8 +126,7 @@ public class ExchangeUtilsTest {
   }
 
   /**
-   * Tests that if the calendar start is after today, the default end time is
-   * used.
+   * Tests that if the calendar start is after today, the default end time is used.
    */
   public void testCalendarStartIsAfterToday() {
     DETAIL.setPhaseName(PHASE_NAME);
@@ -148,8 +150,7 @@ public class ExchangeUtilsTest {
   }
 
   /**
-   * Tests that if the calendar end is before today, the default end time is
-   * used.
+   * Tests that if the calendar end is before today, the default end time is used.
    */
   public void testCalendarEndIsBeforeToday() {
     DETAIL.setPhaseName(PHASE_NAME);

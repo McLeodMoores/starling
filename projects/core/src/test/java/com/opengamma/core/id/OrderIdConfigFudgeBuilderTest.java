@@ -20,10 +20,13 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class OrderIdConfigFudgeBuilderTest extends AbstractFudgeBuilderTestCase {
 
+  /**
+   *
+   */
   @Test
   @SuppressWarnings("deprecation")
   public void testFudgeBuilder() {
-    Map<ExternalScheme, Integer> scoreMap = Maps.newHashMap();
+    final Map<ExternalScheme, Integer> scoreMap = Maps.newHashMap();
     scoreMap.put(ExternalSchemes.BLOOMBERG_TCM, 20); // beacuse if there's both ticker and tcm, you want to see tcm.
     scoreMap.put(ExternalSchemes.BLOOMBERG_TICKER, 19);
     scoreMap.put(ExternalSchemes.RIC, 17);
@@ -36,7 +39,7 @@ public class OrderIdConfigFudgeBuilderTest extends AbstractFudgeBuilderTestCase 
     scoreMap.put(ExternalSchemes.OG_SYNTHETIC_TICKER, 10);
     scoreMap.put(ExternalSchemes.BLOOMBERG_BUID, 5);
     scoreMap.put(ExternalSchemes.BLOOMBERG_BUID_WEAK, 4);
-    ExternalIdOrderConfig externalIdOrderConfig = new ExternalIdOrderConfig();
+    final ExternalIdOrderConfig externalIdOrderConfig = new ExternalIdOrderConfig();
     externalIdOrderConfig.setRateMap(scoreMap);
     cycleObject(ExternalIdOrderConfig.class, externalIdOrderConfig);
   }

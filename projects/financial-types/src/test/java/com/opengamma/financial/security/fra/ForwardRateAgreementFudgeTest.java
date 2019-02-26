@@ -5,7 +5,7 @@
  */
 package com.opengamma.financial.security.fra;
 
-import java.util.HashSet;
+import java.util.Set;
 
 import org.testng.annotations.Test;
 import org.threeten.bp.LocalDate;
@@ -28,18 +28,20 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class ForwardRateAgreementFudgeTest extends AbstractFudgeBuilderTestCase {
 
-  private static HashSet<ExternalId> USNYGBLO = Sets.newHashSet(ExternalSchemes.isdaHoliday("USNY,GBLO"));
+  private static final Set<ExternalId> USNYGBLO = Sets.newHashSet(ExternalSchemes.isdaHoliday("USNY,GBLO"));
 
   private static final BusinessDayConvention MF = BusinessDayConventions.MODIFIED_FOLLOWING;
   private static final DayCount ACT360 = DayCounts.ACT_360;
 
+  /**
+   *
+   */
   @Test
   public void testSwapSecurity() {
-    ExternalId id = ExternalSchemes.syntheticSecurityId("test");
-    final ForwardRateAgreementSecurity fra = new ForwardRateAgreementSecurity(Currency.USD, id, SimpleFrequency.QUARTERLY,
-        LocalDate.now(), LocalDate.now().plusMonths(3), 0.00123, 1e6d, LocalDate.now(), ACT360, MF, USNYGBLO, 2);
+    final ExternalId id = ExternalSchemes.syntheticSecurityId("test");
+    final ForwardRateAgreementSecurity fra = new ForwardRateAgreementSecurity(Currency.USD, id, SimpleFrequency.QUARTERLY, LocalDate.now(),
+        LocalDate.now().plusMonths(3), 0.00123, 1e6d, LocalDate.now(), ACT360, MF, USNYGBLO, 2);
     assertEncodeDecodeCycle(ForwardRateAgreementSecurity.class, fra);
   }
-
 
 }

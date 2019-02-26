@@ -47,7 +47,7 @@ public class BondIndexTest extends AbstractBeanTestCase {
   private static final BondIndex INDEX_WITH_DESCRIPTION = new BondIndex(NAME, DESCRIPTION, COMPONENTS, WEIGHTING_TYPE);
 
   /**
-   * Tests that the components cannot be null
+   * Tests that the components cannot be null.
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullComponents() {
@@ -55,7 +55,7 @@ public class BondIndexTest extends AbstractBeanTestCase {
   }
 
   /**
-   * Tests that the components cannot be empty
+   * Tests that the components cannot be empty.
    */
   @Test
   public void testEmptyComponents() {
@@ -63,7 +63,7 @@ public class BondIndexTest extends AbstractBeanTestCase {
   }
 
   /**
-   * Tests that the weighting type cannot be null
+   * Tests that the weighting type cannot be null.
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullWeightingType() {

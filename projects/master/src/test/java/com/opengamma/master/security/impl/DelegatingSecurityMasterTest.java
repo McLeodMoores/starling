@@ -120,8 +120,7 @@ public class DelegatingSecurityMasterTest {
   }
 
   /**
-   * Tests the addition of a document when only the default delegate has been
-   * added by the constructor.
+   * Tests the addition of a document when only the default delegate has been added by the constructor.
    */
   public void testAddToDefaultDelegatingMaster() {
     final DelegatingSecurityMaster master = new DelegatingSecurityMaster(_default);
@@ -130,8 +129,7 @@ public class DelegatingSecurityMasterTest {
   }
 
   /**
-   * Tests the addition of documents when no ids have been set on the documents
-   * (i.e. they will use the default master).
+   * Tests the addition of documents when no ids have been set on the documents (i.e. they will use the default master).
    */
   public void testAddToDelegatingMasterNoUidsSet() {
     final DelegatingSecurityMaster master = new DelegatingSecurityMaster(_default, _delegates);
@@ -165,8 +163,7 @@ public class DelegatingSecurityMasterTest {
   }
 
   /**
-   * Tests the addition of documents when no ids have been set on the documents
-   * (i.e. they will use the appropriate master).
+   * Tests the addition of documents when no ids have been set on the documents (i.e. they will use the appropriate master).
    */
   public void testAddToDelegatingMasterUidsSet() {
     final DelegatingSecurityMaster master = new DelegatingSecurityMaster(_default, _delegates);
@@ -260,8 +257,7 @@ public class DelegatingSecurityMasterTest {
   }
 
   /**
-   * Tests getting documents by object id / version correction. The underlying
-   * master in this case does not track versions.
+   * Tests getting documents by object id / version correction. The underlying master in this case does not track versions.
    */
   public void testGetByObjectIdVersionCorrection() {
     final DelegatingSecurityMaster master = new DelegatingSecurityMaster(_default, _delegates);
@@ -300,8 +296,8 @@ public class DelegatingSecurityMasterTest {
     final SecurityDocument doc4 = master.add(new SecurityDocument(_sec4Scheme1));
     final SecurityDocument doc5 = master.add(new SecurityDocument(_sec5Scheme2));
     final SecurityDocument doc6 = master.add(new SecurityDocument(_sec6Scheme2));
-    final Collection<UniqueId> uids = Arrays.asList(doc1.getUniqueId(), doc2.getUniqueId(), doc3.getUniqueId(), doc4.getUniqueId(),
-        doc5.getUniqueId(), doc6.getUniqueId());
+    final Collection<UniqueId> uids = Arrays.asList(doc1.getUniqueId(), doc2.getUniqueId(), doc3.getUniqueId(), doc4.getUniqueId(), doc5.getUniqueId(),
+        doc6.getUniqueId());
     final Map<UniqueId, SecurityDocument> docs = master.get(uids);
     assertEquals(docs.size(), 6);
     assertEquals(docs.get(doc1.getUniqueId()), doc1);
@@ -918,8 +914,7 @@ public class DelegatingSecurityMasterTest {
   }
 
   /**
-   * Searches for documents by name using the appropriate delegate for each id
-   * scheme.
+   * Searches for documents by name using the appropriate delegate for each id scheme.
    */
   public void testSearchByType() {
     final DelegatingSecurityMaster master = new DelegatingSecurityMaster(_default, _delegates);
@@ -1013,8 +1008,7 @@ public class DelegatingSecurityMasterTest {
   }
 
   /**
-   * Tests the retrieval of meta data. The underlying masters only support
-   * searching by type.
+   * Tests the retrieval of meta data. The underlying masters only support searching by type.
    */
   @Test
   public void testMetaData() {
@@ -1041,10 +1035,14 @@ public class DelegatingSecurityMasterTest {
     assertEquals(actualDocument.getSecurity(), expectedValue);
   }
 
+  /**
+   * @author emcleod
+   *
+   */
   private static class TestSecurity extends RawSecurity implements ObjectIdentifiable {
     private static final long serialVersionUID = 1L;
 
-    public TestSecurity(final String securityType) {
+    TestSecurity(final String securityType) {
       super(securityType);
     }
 
@@ -1059,6 +1057,11 @@ public class DelegatingSecurityMasterTest {
         return false;
       }
       return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+      return super.hashCode();
     }
   }
 }

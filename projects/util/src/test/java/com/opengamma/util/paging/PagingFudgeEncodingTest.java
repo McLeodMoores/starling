@@ -22,18 +22,27 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class PagingFudgeEncodingTest extends AbstractFudgeBuilderTestCase {
 
+  /**
+   *
+   */
   public void test() {
-    Paging object = Paging.of(PagingRequest.ofIndex(0, 20), 210);
+    final Paging object = Paging.of(PagingRequest.ofIndex(0, 20), 210);
     assertEncodeDecodeCycle(Paging.class, object);
   }
 
-  public void test_toFudgeMsg() {
-    Paging sample = Paging.of(PagingRequest.ONE, 1);
+  /**
+   *
+   */
+  public void testToFudgeMsg() {
+    final Paging sample = Paging.of(PagingRequest.ONE, 1);
     assertNull(PagingFudgeBuilder.toFudgeMsg(new FudgeSerializer(OpenGammaFudgeContext.getInstance()), null));
     assertNotNull(PagingFudgeBuilder.toFudgeMsg(new FudgeSerializer(OpenGammaFudgeContext.getInstance()), sample));
   }
 
-  public void test_fromFudgeMsg() {
+  /**
+   *
+   */
+  public void testFromFudgeMsg() {
     assertNull(PagingFudgeBuilder.fromFudgeMsg(new FudgeDeserializer(OpenGammaFudgeContext.getInstance()), null));
   }
 

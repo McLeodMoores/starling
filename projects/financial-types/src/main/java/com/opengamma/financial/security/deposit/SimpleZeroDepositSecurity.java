@@ -34,7 +34,7 @@ public class SimpleZeroDepositSecurity extends FinancialSecurity {
   /** Serialization version */
   private static final long serialVersionUID = 1L;
 
-  /** The security type */
+  /** The security type. */
   public static final String SECURITY_TYPE = "SIMPLE_ZERO_DEPOSIT";
 
   /** The currency. */
@@ -76,7 +76,8 @@ public class SimpleZeroDepositSecurity extends FinancialSecurity {
    * @param region
    *          the region, not null
    */
-  public SimpleZeroDepositSecurity(final Currency currency, final ZonedDateTime startDate, final ZonedDateTime maturityDate, final double rate, final ExternalId region) {
+  public SimpleZeroDepositSecurity(final Currency currency, final ZonedDateTime startDate, final ZonedDateTime maturityDate, final double rate,
+      final ExternalId region) {
     super(SECURITY_TYPE);
     setCurrency(currency);
     setStartDate(startDate);

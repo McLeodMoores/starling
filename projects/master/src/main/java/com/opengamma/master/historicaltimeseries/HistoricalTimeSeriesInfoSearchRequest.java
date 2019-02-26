@@ -5,7 +5,6 @@
  */
 package com.opengamma.master.historicaltimeseries;
 
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,8 +37,7 @@ import com.opengamma.util.RegexUtils;
 /**
  * Request for searching for historical time-series information.
  * <p>
- * Documents will be returned that match the search criteria.
- * This class provides the ability to page the results.
+ * Documents will be returned that match the search criteria. This class provides the ability to page the results.
  * <p>
  * This class is mutable and not thread-safe.
  */
@@ -48,8 +46,7 @@ import com.opengamma.util.RegexUtils;
 public class HistoricalTimeSeriesInfoSearchRequest extends AbstractSearchRequest {
 
   /**
-   * The set of time-series object identifiers, null to not limit by exchange object identifiers.
-   * Note that an empty set will return no time-series.
+   * The set of time-series object identifiers, null to not limit by exchange object identifiers. Note that an empty set will return no time-series.
    */
   @PropertyDefinition(set = "manual")
   private List<ObjectId> _objectIds;
@@ -59,12 +56,9 @@ public class HistoricalTimeSeriesInfoSearchRequest extends AbstractSearchRequest
   @PropertyDefinition
   private ExternalIdSearch _externalIdSearch;
   /**
-   * The external identifier value, matching against the <i>value</i> of the identifiers,
-   * null to not match by identifier value.
-   * This matches against the {@link ExternalId#getValue() value} of the identifier
-   * and does not match against the key. Wildcards are allowed.
-   * This method is suitable for human searching, whereas the {@code externalIdSearch}
-   * search is useful for exact machine searching.
+   * The external identifier value, matching against the <i>value</i> of the identifiers, null to not match by identifier value. This matches against the
+   * {@link ExternalId#getValue() value} of the identifier and does not match against the key. Wildcards are allowed. This method is suitable for human
+   * searching, whereas the {@code externalIdSearch} search is useful for exact machine searching.
    */
   @PropertyDefinition
   private String _externalIdValue;
@@ -108,7 +102,8 @@ public class HistoricalTimeSeriesInfoSearchRequest extends AbstractSearchRequest
   /**
    * Creates an instance using a single search identifier.
    *
-   * @param historicalTimeSeriesId  the historical time-series external identifier to search for, not null
+   * @param historicalTimeSeriesId
+   *          the historical time-series external identifier to search for, not null
    */
   public HistoricalTimeSeriesInfoSearchRequest(final ExternalId historicalTimeSeriesId) {
     addExternalId(historicalTimeSeriesId);
@@ -117,17 +112,19 @@ public class HistoricalTimeSeriesInfoSearchRequest extends AbstractSearchRequest
   /**
    * Creates an instance using a bundle of identifiers.
    *
-   * @param historicalTimeSeriesBundle  the historical time-series external identifiers to search for, not null
+   * @param historicalTimeSeriesBundle
+   *          the historical time-series external identifiers to search for, not null
    */
   public HistoricalTimeSeriesInfoSearchRequest(final ExternalIdBundle historicalTimeSeriesBundle) {
     addExternalIds(historicalTimeSeriesBundle);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Adds a single historical time-series object identifier to the set.
    *
-   * @param infoId  the historical time-series object identifier to add, not null
+   * @param infoId
+   *          the historical time-series object identifier to add, not null
    */
   public void addObjectId(final ObjectIdentifiable infoId) {
     ArgumentChecker.notNull(infoId, "infoId");
@@ -138,10 +135,11 @@ public class HistoricalTimeSeriesInfoSearchRequest extends AbstractSearchRequest
   }
 
   /**
-   * Sets the set of historical time-series object identifiers, null to not limit by historical time-series object identifiers.
-   * Note that an empty set will return no historical time-series.
+   * Sets the set of historical time-series object identifiers, null to not limit by historical time-series object identifiers. Note that an empty set will
+   * return no historical time-series.
    *
-   * @param infoIds  the new historical time-series identifiers, null clears the historical time-series id search
+   * @param infoIds
+   *          the new historical time-series identifiers, null clears the historical time-series id search
    */
   public void setObjectIds(final Iterable<? extends ObjectIdentifiable> infoIds) {
     if (infoIds == null) {
@@ -154,13 +152,13 @@ public class HistoricalTimeSeriesInfoSearchRequest extends AbstractSearchRequest
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * Adds a single historical time-series external identifier to the collection to search for.
-   * Unless customized, the search will match
+   * Adds a single historical time-series external identifier to the collection to search for. Unless customized, the search will match
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
    *
-   * @param externalId  the historical time-series key identifier to add, not null
+   * @param externalId
+   *          the historical time-series key identifier to add, not null
    */
   public void addExternalId(final ExternalId externalId) {
     ArgumentChecker.notNull(externalId, "externalId");
@@ -168,11 +166,11 @@ public class HistoricalTimeSeriesInfoSearchRequest extends AbstractSearchRequest
   }
 
   /**
-   * Adds a collection of historical time-series external identifiers to the collection to search for.
-   * Unless customized, the search will match
+   * Adds a collection of historical time-series external identifiers to the collection to search for. Unless customized, the search will match
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
    *
-   * @param externalIds  the historical time-series key identifiers to add, not null
+   * @param externalIds
+   *          the historical time-series key identifiers to add, not null
    */
   public void addExternalIds(final ExternalId... externalIds) {
     ArgumentChecker.notNull(externalIds, "externalIds");
@@ -184,11 +182,11 @@ public class HistoricalTimeSeriesInfoSearchRequest extends AbstractSearchRequest
   }
 
   /**
-   * Adds a collection of historical time-series external identifiers to the collection to search for.
-   * Unless customized, the search will match
+   * Adds a collection of historical time-series external identifiers to the collection to search for. Unless customized, the search will match
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
    *
-   * @param externalIds  the historical time-series key identifiers to add, not null
+   * @param externalIds
+   *          the historical time-series key identifiers to add, not null
    */
   public void addExternalIds(final Iterable<ExternalId> externalIds) {
     ArgumentChecker.notNull(externalIds, "externalIds");
@@ -202,7 +200,8 @@ public class HistoricalTimeSeriesInfoSearchRequest extends AbstractSearchRequest
   /**
    * Sets the search type to use in {@code ExternalIdSearch}.
    *
-   * @param type  the type to set, not null
+   * @param type
+   *          the type to set, not null
    */
   public void setExternalIdSearchType(final ExternalIdSearchType type) {
     if (getExternalIdSearch() == null) {
@@ -212,7 +211,7 @@ public class HistoricalTimeSeriesInfoSearchRequest extends AbstractSearchRequest
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public boolean matches(final AbstractDocument obj) {
     if (!(obj instanceof HistoricalTimeSeriesInfoDocument)) {
@@ -223,8 +222,7 @@ public class HistoricalTimeSeriesInfoSearchRequest extends AbstractSearchRequest
     if (getObjectIds() != null && !getObjectIds().contains(document.getObjectId())) {
       return false;
     }
-    if (getExternalIdSearch() != null && !getExternalIdSearch().matches(
-        info.getExternalIdBundle().toBundle(getValidityDate()))) {
+    if (getExternalIdSearch() != null && !getExternalIdSearch().matches(info.getExternalIdBundle().toBundle(getValidityDate()))) {
       return false;
     }
     if (getName() != null && !RegexUtils.wildcardMatch(getName(), info.getName())) {
@@ -243,15 +241,15 @@ public class HistoricalTimeSeriesInfoSearchRequest extends AbstractSearchRequest
       return false;
     }
     if (getExternalIdValue() != null) {
-      success: {  // label used with break statement, CSIGNORE
-      final ExternalIdBundle docBundle = info.getExternalIdBundle().toBundle();
-      for (final ExternalId identifier : docBundle.getExternalIds()) {
-        if (RegexUtils.wildcardMatch(getExternalIdValue(), identifier.getValue())) {
-          break success;
+      success: { // label used with break statement, CSIGNORE
+        final ExternalIdBundle docBundle = info.getExternalIdBundle().toBundle();
+        for (final ExternalId identifier : docBundle.getExternalIds()) {
+          if (RegexUtils.wildcardMatch(getExternalIdValue(), identifier.getValue())) {
+            break success;
+          }
         }
+        return false;
       }
-      return false;
-    }
     }
     return true;
   }
@@ -277,8 +275,7 @@ public class HistoricalTimeSeriesInfoSearchRequest extends AbstractSearchRequest
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the set of time-series object identifiers, null to not limit by exchange object identifiers.
-   * Note that an empty set will return no time-series.
+   * Gets the set of time-series object identifiers, null to not limit by exchange object identifiers. Note that an empty set will return no time-series.
    * @return the value of the property
    */
   public List<ObjectId> getObjectIds() {
@@ -287,7 +284,6 @@ public class HistoricalTimeSeriesInfoSearchRequest extends AbstractSearchRequest
 
   /**
    * Gets the the {@code objectIds} property.
-   * Note that an empty set will return no time-series.
    * @return the property, not null
    */
   public final Property<List<ObjectId>> objectIds() {
@@ -321,12 +317,9 @@ public class HistoricalTimeSeriesInfoSearchRequest extends AbstractSearchRequest
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the external identifier value, matching against the <i>value</i> of the identifiers,
-   * null to not match by identifier value.
-   * This matches against the {@link ExternalId#getValue() value} of the identifier
-   * and does not match against the key. Wildcards are allowed.
-   * This method is suitable for human searching, whereas the {@code externalIdSearch}
-   * search is useful for exact machine searching.
+   * Gets the external identifier value, matching against the <i>value</i> of the identifiers, null to not match by identifier value. This matches against the
+   * {@link ExternalId#getValue() value} of the identifier and does not match against the key. Wildcards are allowed. This method is suitable for human
+   * searching, whereas the {@code externalIdSearch} search is useful for exact machine searching.
    * @return the value of the property
    */
   public String getExternalIdValue() {
@@ -334,12 +327,9 @@ public class HistoricalTimeSeriesInfoSearchRequest extends AbstractSearchRequest
   }
 
   /**
-   * Sets the external identifier value, matching against the <i>value</i> of the identifiers,
-   * null to not match by identifier value.
-   * This matches against the {@link ExternalId#getValue() value} of the identifier
-   * and does not match against the key. Wildcards are allowed.
-   * This method is suitable for human searching, whereas the {@code externalIdSearch}
-   * search is useful for exact machine searching.
+   * Sets the external identifier value, matching against the <i>value</i> of the identifiers, null to not match by identifier value. This matches against the
+   * {@link ExternalId#getValue() value} of the identifier and does not match against the key. Wildcards are allowed. This method is suitable for human
+   * searching, whereas the {@code externalIdSearch} search is useful for exact machine searching.
    * @param externalIdValue  the new value of the property
    */
   public void setExternalIdValue(String externalIdValue) {
@@ -348,11 +338,8 @@ public class HistoricalTimeSeriesInfoSearchRequest extends AbstractSearchRequest
 
   /**
    * Gets the the {@code externalIdValue} property.
-   * null to not match by identifier value.
-   * This matches against the {@link ExternalId#getValue() value} of the identifier
-   * and does not match against the key. Wildcards are allowed.
-   * This method is suitable for human searching, whereas the {@code externalIdSearch}
-   * search is useful for exact machine searching.
+   * {@link ExternalId#getValue() value} of the identifier and does not match against the key. Wildcards are allowed. This method is suitable for human
+   * searching, whereas the {@code externalIdSearch} search is useful for exact machine searching.
    * @return the property, not null
    */
   public final Property<String> externalIdValue() {

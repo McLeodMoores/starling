@@ -18,6 +18,9 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class WeakInstanceCacheTest {
 
+  /**
+   *
+   */
   private static final class Foo {
 
     private final int _hash;
@@ -41,6 +44,9 @@ public class WeakInstanceCacheTest {
 
   }
 
+  /**
+   *
+   */
   public void testBasicOperation() {
     final WeakInstanceCache<Foo> cache = new WeakInstanceCache<>();
     final Foo a1 = new Foo(1, 1);

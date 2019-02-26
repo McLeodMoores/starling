@@ -27,7 +27,7 @@ public abstract class AbstractSecurityTestCaseAdapter implements SecurityTestCas
   }
 
   @Override
-  public void testEquitySecurity() throws Exception {
+  public void testEquitySecurity() {
   }
 
   @Override
@@ -39,7 +39,7 @@ public abstract class AbstractSecurityTestCaseAdapter implements SecurityTestCas
   }
 
   @Override
-  public void testBondFutureSecurity() throws Exception {
+  public void testBondFutureSecurity() {
   }
 
   @Override

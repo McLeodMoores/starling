@@ -31,8 +31,8 @@ public class IndexFutureSecurityTest extends AbstractBeanTestCase {
   private static final double UNIT_AMOUNT = 25;
   private static final String CONTRACT_CATEGORY = "cat";
   private static final ExternalId UNDERLYING_ID = ExternalId.of("sec", "1");
-  private static final IndexFutureSecurity FUTURE = new IndexFutureSecurity(EXPIRY, TRADING_EXCHANGE, SETTLEMENT_EXCHANGE, CCY, UNIT_AMOUNT,
-      CONTRACT_CATEGORY, UNDERLYING_ID);
+  private static final IndexFutureSecurity FUTURE = new IndexFutureSecurity(EXPIRY, TRADING_EXCHANGE, SETTLEMENT_EXCHANGE, CCY, UNIT_AMOUNT, CONTRACT_CATEGORY,
+      UNDERLYING_ID);
 
   @Override
   public JodaBeanProperties<? extends Bean> getJodaBeanProperties() {
@@ -81,7 +81,10 @@ public class IndexFutureSecurityTest extends AbstractBeanTestCase {
     assertEquals(FUTURE.accept(TestVisitor.INSTANCE), "visited");
   }
 
-  private static class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
+  /**
+   *
+   */
+  private static final class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
     public static final TestVisitor INSTANCE = new TestVisitor();
 
     private TestVisitor() {

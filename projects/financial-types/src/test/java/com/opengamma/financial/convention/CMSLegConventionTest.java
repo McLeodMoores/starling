@@ -30,8 +30,7 @@ public class CMSLegConventionTest extends AbstractBeanTestCase {
 
   @Override
   public JodaBeanProperties<CMSLegConvention> getJodaBeanProperties() {
-    return new JodaBeanProperties<>(CMSLegConvention.class,
-        Arrays.asList("name", "externalIdBundle", "swapIndexConvention", "paymentTenor", "isAdvanceFixing"),
+    return new JodaBeanProperties<>(CMSLegConvention.class, Arrays.asList("name", "externalIdBundle", "swapIndexConvention", "paymentTenor", "isAdvanceFixing"),
         Arrays.<Object> asList(NAME, EIDS, SWAP_INDEX_CONVENTION, PAYMENT_TENOR, IS_ADVANCE_FIXING),
         Arrays.<Object> asList("other", ExternalIdBundle.of("eid", "2"), ExternalId.of("eid", "20"), Tenor.THREE_MONTHS, !IS_ADVANCE_FIXING));
   }
@@ -50,7 +49,10 @@ public class CMSLegConventionTest extends AbstractBeanTestCase {
     assertEquals(CONVENTION.accept(TestVisitor.INSTANCE), "visited");
   }
 
-  private static class TestVisitor extends FinancialConventionVisitorAdapter<String> {
+  /**
+   *
+   */
+  private static final class TestVisitor extends FinancialConventionVisitorAdapter<String> {
     public static final TestVisitor INSTANCE = new TestVisitor();
 
     private TestVisitor() {

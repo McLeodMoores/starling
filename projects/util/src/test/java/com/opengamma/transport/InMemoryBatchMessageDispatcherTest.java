@@ -22,6 +22,10 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.INTEGRATION)
 public class InMemoryBatchMessageDispatcherTest {
 
+  /**
+   * @throws Exception
+   *           if there is an interruption
+   */
   public void testBaseUsage() throws Exception {
     final InMemoryBatchMessageDispatcher dispatcher = new InMemoryBatchMessageDispatcher();
     final List<Integer> batchSizes = Collections.synchronizedList(new ArrayList<Integer>());

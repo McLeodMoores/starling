@@ -65,7 +65,8 @@ public abstract class CommodityFutureSecurity extends FutureSecurity {
    * @deprecated Use the constructor that takes the unit number and name
    */
   @Deprecated
-  public CommodityFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency, final double unitAmount, final String category) {
+  public CommodityFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency,
+      final double unitAmount, final String category) {
     super(expiry, tradingExchange, settlementExchange, currency, unitAmount, category);
   }
 
@@ -83,8 +84,7 @@ public abstract class CommodityFutureSecurity extends FutureSecurity {
    * @param category
    *          the future category, not null
    * @param unitNumber
-   *          the number of units of the commodity to be delivered (or cash
-   *          equivalent received)
+   *          the number of units of the commodity to be delivered (or cash equivalent received)
    * @param unitName
    *          the name of the underlying commodity
    */

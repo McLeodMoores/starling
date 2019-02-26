@@ -313,7 +313,10 @@ public class ConfigDocumentTest extends AbstractFudgeBuilderTestCase {
     assertEncodeDecodeCycle(ConfigDocument.class, doc);
   }
 
-  private static class NamelessConfig {
+  /**
+   *
+   */
+  private static final class NamelessConfig {
 
     public static NamelessConfig of(final int n) {
       return new NamelessConfig(n);

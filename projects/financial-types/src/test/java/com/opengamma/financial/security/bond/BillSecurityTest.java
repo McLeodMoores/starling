@@ -68,7 +68,10 @@ public class BillSecurityTest extends AbstractBeanTestCase {
     assertEquals(security, cycleObjectJodaXml(properties.getType(), security));
   }
 
-  private static class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
+  /**
+   *
+   */
+  private static final class TestVisitor extends FinancialSecurityVisitorAdapter<String> {
     public static final TestVisitor INSTANCE = new TestVisitor();
 
     private TestVisitor() {

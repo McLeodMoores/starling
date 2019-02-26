@@ -240,7 +240,7 @@ public abstract class CombinedMaster<D extends AbstractDocument, M extends Abstr
    * @param lastRequest the last paging request
    * @return the next paging request
    */
-  private PagingRequest getNextPage(final int itemsFound, final PagingRequest lastRequest) {
+  private static PagingRequest getNextPage(final int itemsFound, final PagingRequest lastRequest) {
     int nextFirstItem = lastRequest.getFirstItem() - itemsFound;
     int nextWindowSize = lastRequest.getPagingSize();
     if (nextFirstItem < 0) {
