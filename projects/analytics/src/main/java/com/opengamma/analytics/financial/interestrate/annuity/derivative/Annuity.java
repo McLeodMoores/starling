@@ -19,9 +19,11 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * A generic annuity is a set of payments (cash flows) at known future times. All payments have the same currency.
- * There payments can be known in advance, or depend on the future value of some (possibly several) indices, e.g. the Libor.
- * @param <P> The payment type
+ * A generic annuity is a set of payments (cash flows) at known future times. All payments have the same currency. There payments can be known in advance, or
+ * depend on the future value of some (possibly several) indices, e.g. the Libor.
+ * 
+ * @param <P>
+ *          The payment type
  */
 public class Annuity<P extends Payment> implements InstrumentDerivative {
 
@@ -30,13 +32,14 @@ public class Annuity<P extends Payment> implements InstrumentDerivative {
    */
   private final P[] _payments;
   /**
-   * Flag indicating if the annuity is payer (true) or receiver (false). Deduced from the first non-zero amount;
-   * if all amounts don't have the same sign, the flag may be incorrect.
+   * Flag indicating if the annuity is payer (true) or receiver (false). Deduced from the first non-zero amount; if all amounts don't have the same sign, the
+   * flag may be incorrect.
    */
   private final boolean _isPayer;
 
   /**
-   * @param payments The payments, not null or empty
+   * @param payments
+   *          The payments, not null or empty
    */
   public Annuity(final P[] payments) {
     ArgumentChecker.noNulls(payments, "payments");
@@ -45,17 +48,21 @@ public class Annuity<P extends Payment> implements InstrumentDerivative {
     double amount = payments[0].getReferenceAmount();
     for (int loopcpn = 1; loopcpn < payments.length; loopcpn++) {
       ArgumentChecker.isTrue(currency0.equals(payments[loopcpn].getCurrency()), "currency not the same for all payments");
-      amount = (amount == 0) ? payments[loopcpn].getReferenceAmount() : amount;
+      amount = amount == 0 ? payments[loopcpn].getReferenceAmount() : amount;
     }
     _payments = payments;
-    _isPayer = (amount < 0);
+    _isPayer = amount < 0;
   }
 
   /**
-   * @param payments The payments, not null or empty
-   * @param pType The type of the payments, not null
-   * @param isPayer True if the annuity is to be paid
+   * @param payments
+   *          The payments, not null or empty
+   * @param pType
+   *          The type of the payments, not null
+   * @param isPayer
+   *          True if the annuity is to be paid
    */
+  @SuppressWarnings("unchecked")
   public Annuity(final List<? extends P> payments, final Class<P> pType, final boolean isPayer) {
     ArgumentChecker.noNulls(payments, "payments");
     ArgumentChecker.notNull(pType, "type");
@@ -66,6 +73,7 @@ public class Annuity<P extends Payment> implements InstrumentDerivative {
 
   /**
    * Gets the number of payments in the annuity.
+   * 
    * @return The number of payments
    */
   public int getNumberOfPayments() {
@@ -74,7 +82,9 @@ public class Annuity<P extends Payment> implements InstrumentDerivative {
 
   /**
    * Gets the nth payment in an annuity. <b>Note that n = 0 will give the first payment</b>.
-   * @param n The number of the payment
+   * 
+   * @param n
+   *          The number of the payment
    * @return The nth payment
    */
   public P getNthPayment(final int n) {
@@ -83,6 +93,7 @@ public class Annuity<P extends Payment> implements InstrumentDerivative {
 
   /**
    * Return the currency of the annuity.
+   * 
    * @return The currency.
    */
   public Currency getCurrency() {
@@ -91,9 +102,10 @@ public class Annuity<P extends Payment> implements InstrumentDerivative {
 
   /**
    * Check if the payments of an annuity is of the type CouponFixed or CouponIbor. Used to check that payment are of vanilla type.
-   * @return  True if IborCoupon or FixedCoupon
+   * 
+   * @return True if IborCoupon or FixedCoupon
    */
-  public boolean isIborOrFixed() { //TODO: is this method necessary?
+  public boolean isIborOrFixed() { // TODO: is this method necessary?
     boolean result = true;
     for (final P payment : _payments) {
       result = result && payment.isIborOrFixed();
@@ -103,6 +115,7 @@ public class Annuity<P extends Payment> implements InstrumentDerivative {
 
   /**
    * Gets the payments array.
+   * 
    * @return the payments
    */
   public P[] getPayments() {
@@ -111,9 +124,9 @@ public class Annuity<P extends Payment> implements InstrumentDerivative {
 
   /**
    * Gets the payer flag: payer (true) or receiver (false)
+   * 
    * @return The payer flag.
-   * @deprecated The payer flag is no longer used; the sign of the notional
-   * determines whether a leg is paid or received
+   * @deprecated The payer flag is no longer used; the sign of the notional determines whether a leg is paid or received
    */
   @Deprecated
   public boolean isPayer() {
@@ -122,6 +135,7 @@ public class Annuity<P extends Payment> implements InstrumentDerivative {
 
   /**
    * Return the discounting (or funding) curve name. Deduced from the first payment.
+   * 
    * @return The name.
    * @deprecated Curve names should not be set in {@link InstrumentDerivative}s
    */
@@ -132,7 +146,9 @@ public class Annuity<P extends Payment> implements InstrumentDerivative {
 
   /**
    * Create a new annuity with the payments of the original one paying strictly after the given time.
-   * @param trimTime The time.
+   * 
+   * @param trimTime
+   *          The time.
    * @return The trimmed annuity.
    */
   @SuppressWarnings("unchecked")
@@ -149,7 +165,9 @@ public class Annuity<P extends Payment> implements InstrumentDerivative {
 
   /**
    * Create a new annuity with the payments of the original one paying before or on the given time.
-   * @param trimTime The time.
+   * 
+   * @param trimTime
+   *          The time.
    * @return The trimmed annuity.
    */
   @SuppressWarnings("unchecked")

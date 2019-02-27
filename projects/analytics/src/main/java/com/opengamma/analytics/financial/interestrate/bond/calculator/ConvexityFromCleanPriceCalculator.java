@@ -31,6 +31,7 @@ public final class ConvexityFromCleanPriceCalculator extends InstrumentDerivativ
 
   /**
    * Return the calculator instance.
+   * 
    * @return The instance.
    */
   public static ConvexityFromCleanPriceCalculator getInstance() {
@@ -61,7 +62,6 @@ public final class ConvexityFromCleanPriceCalculator extends InstrumentDerivativ
   public Double visitBondCapitalIndexedTransaction(final BondCapitalIndexedTransaction<?> bond, final Double yield) {
     ArgumentChecker.notNull(bond, "bond");
     ArgumentChecker.notNull(yield, "yield");
-    ArgumentChecker.notNull(bond.getBondStandard() instanceof BondCapitalIndexedSecurity<?>, "the bond should be a BondCapitalIndexedSecurity");
 
     final BondCapitalIndexedSecurity<?> bondSecurity = bond.getBondStandard();
     return METHOD_INFLATION_BOND_SECURITY.convexityFromCleanPrice(bondSecurity, yield) / 100;
@@ -71,7 +71,6 @@ public final class ConvexityFromCleanPriceCalculator extends InstrumentDerivativ
   public Double visitBondCapitalIndexedSecurity(final BondCapitalIndexedSecurity<?> bond, final Double yield) {
     ArgumentChecker.notNull(bond, "bond");
     ArgumentChecker.notNull(yield, "yield");
-    ArgumentChecker.notNull(bond instanceof BondCapitalIndexedSecurity<?>, "the bond should be a BondCapitalIndexedSecurity");
     return METHOD_INFLATION_BOND_SECURITY.convexityFromCleanPrice(bond, yield) / 100;
   }
 }

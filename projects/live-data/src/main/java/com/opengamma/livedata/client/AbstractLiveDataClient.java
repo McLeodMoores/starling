@@ -84,6 +84,12 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
     });
   }
 
+  /**
+   * Creates a new {@link Heartbeater} using the message sender.
+   *
+   * @param messageSender
+   *          the message sender, not null
+   */
   public void setHeartbeatMessageSender(final ByteArrayMessageSender messageSender) {
     ArgumentChecker.notNull(messageSender, "Message Sender");
     _heartbeater = new Heartbeater(_valueDistributor, new HeartbeatSender(messageSender, getFudgeContext()), getTimer(), getHeartbeatPeriod());
@@ -116,7 +122,8 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
   }
 
   /**
-   * @param heartbeatPeriod the heartbeatPeriod to set
+   * @param heartbeatPeriod
+   *          the heartbeatPeriod to set
    */
   public void setHeartbeatPeriod(final long heartbeatPeriod) {
     _heartbeatPeriod = heartbeatPeriod;
@@ -137,7 +144,8 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
   }
 
   /**
-   * @param fudgeContext the fudgeContext to set
+   * @param fudgeContext
+   *          the fudgeContext to set
    */
   public void setFudgeContext(final FudgeContext fudgeContext) {
     _fudgeContext = fudgeContext;
@@ -171,6 +179,9 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
     subscribe(user, Collections.singleton(requestedSpecification), listener);
   }
 
+  /**
+   * A listener that takes a snapshot.
+   */
   private abstract class SnapshotListener implements LiveDataListener {
 
     private final Collection<LiveDataSubscriptionResponse> _responses = new ArrayList<>();
@@ -220,6 +231,9 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
 
   }
 
+  /**
+   * A synchronous listener that creates a snapshot.
+   */
   private final class SynchronousSnapshotListener extends SnapshotListener {
 
     SynchronousSnapshotListener(final int expectedNumberOfResponses) {
@@ -245,6 +259,9 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
 
   }
 
+  /**
+   * An asynchronous listener that creates a snapshot.
+   */
   private final class AsynchronousSnapshotListener extends SnapshotListener {
 
     private PoolExecutor.CompletionListener<Collection<LiveDataSubscriptionResponse>> _callback;
@@ -316,17 +333,21 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
   /**
    * Asynchronous form of {@link #snapshot(UserPrincipal, Collection, long)}.
    *
-   * @param user see {@link #snapshot(UserPrincipal, Collection, long)}
-   * @param requestedSpecifications see {@link #snapshot(UserPrincipal, Collection, long)}
-   * @param timeout see {@link #snapshot(UserPrincipal, Collection, long)}
-   * @param callback receives the result of execution
+   * @param user
+   *          see {@link #snapshot(UserPrincipal, Collection, long)}
+   * @param requestedSpecifications
+   *          see {@link #snapshot(UserPrincipal, Collection, long)}
+   * @param timeout
+   *          see {@link #snapshot(UserPrincipal, Collection, long)}
+   * @param callback
+   *          receives the result of execution
    */
   protected void snapshot(final UserPrincipal user, final Collection<LiveDataSpecification> requestedSpecifications, final long timeout,
       final PoolExecutor.CompletionListener<Collection<LiveDataSubscriptionResponse>> callback) {
     ArgumentChecker.notNull(user, "User");
     ArgumentChecker.notNull(requestedSpecifications, "Live Data specifications");
     if (requestedSpecifications.isEmpty()) {
-      callback.success(Collections.<LiveDataSubscriptionResponse>emptySet());
+      callback.success(Collections.<LiveDataSubscriptionResponse> emptySet());
       return;
     }
     final AsynchronousSnapshotListener listener = new AsynchronousSnapshotListener(requestedSpecifications.size(),
@@ -337,8 +358,8 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
             if (result != null) {
               callback.success(result);
             } else {
-              callback.failure(new OpenGammaRuntimeException("Timeout " + timeout + "ms reached when obtaining snapshot of "
-                  + requestedSpecifications.size() + " handles"));
+              callback.failure(
+                  new OpenGammaRuntimeException("Timeout " + timeout + "ms reached when obtaining snapshot of " + requestedSpecifications.size() + " handles"));
             }
           }
 
@@ -370,10 +391,21 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
   }
 
   /**
-   * @param subHandle Not null, not empty
+   * Handles subscription requests.
+   *
+   * @param subHandle
+   *          Not null, not empty
    */
   protected abstract void handleSubscriptionRequest(Collection<SubscriptionHandle> subHandle);
 
+  /**
+   * Sets up the pending subscriptions when ticks start.
+   *
+   * @param subHandle
+   *          the subscription handle, not null
+   * @param response
+   *          the response, not null
+   */
   protected void subscriptionStartingToReceiveTicks(final SubscriptionHandle subHandle, final LiveDataSubscriptionResponse response) {
     _pendingSubscriptionWriteLock.lock();
     try {
@@ -384,6 +416,14 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
     }
   }
 
+  /**
+   * Convert a pending subscription into a full subscription.
+   *
+   * @param subHandle
+   *          the subscription handle, not null
+   * @param response
+   *          the subscription response, not null
+   */
   protected void subscriptionRequestSatisfied(final SubscriptionHandle subHandle, final LiveDataSubscriptionResponse response) {
     _pendingSubscriptionWriteLock.lock();
     try {
@@ -403,10 +443,24 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
     }
   }
 
+  /**
+   * Removes a subscription request if the request fails.
+   *
+   * @param subHandle
+   *          the subscription handle, not null
+   * @param response
+   *          the response, not null
+   */
   protected void subscriptionRequestFailed(final SubscriptionHandle subHandle, final LiveDataSubscriptionResponse response) {
     removePendingSubscription(subHandle);
   }
 
+  /**
+   * Removes a pending subscription.
+   *
+   * @param subHandle
+   *          the subscription handle, not null
+   */
   protected void removePendingSubscription(final SubscriptionHandle subHandle) {
     _pendingSubscriptionWriteLock.lock();
     try {
@@ -422,7 +476,7 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
   @Override
   public void unsubscribe(final UserPrincipal user, final Collection<LiveDataSpecification> fullyQualifiedSpecifications, final LiveDataListener listener) {
     for (final LiveDataSpecification fullyQualifiedSpecification : fullyQualifiedSpecifications) {
-      LOGGER.info("Unsubscribing by {} to {} delivered to {}", new Object[] {user, fullyQualifiedSpecification, listener });
+      LOGGER.info("Unsubscribing by {} to {} delivered to {}", new Object[] { user, fullyQualifiedSpecification, listener });
       boolean unsubscribeToSpec = false;
       _subscriptionLock.lock();
       try {
@@ -448,6 +502,12 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
     unsubscribe(user, Collections.singleton(fullyQualifiedSpecification), listener);
   }
 
+  /**
+   * Cancels publication of a specification.
+   *
+   * @param fullyQualifiedSpecification
+   *          the specification, not null
+   */
   protected abstract void cancelPublication(LiveDataSpecification fullyQualifiedSpecification);
 
   @Override
@@ -455,6 +515,12 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
     return StandardRules.getOpenGammaRuleSetId();
   }
 
+  /**
+   * Updates a value.
+   * 
+   * @param update
+   *          the update
+   */
   protected void valueUpdate(final LiveDataValueUpdateBean update) {
 
     if (_inboundTickMeter != null) {

@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.differentiation;
 
 /**
- * Enum representing the various differencing types that can be used to estimate the gradient of a function:
+ * Enum representing the various differencing types that can be used to estimate the gradient of a function.
  * <p>
  * Forward: $\frac{f(x + \epsilon) - f(x)}{\epsilon}$
  * <p>
@@ -16,15 +16,15 @@ package com.opengamma.analytics.math.differentiation;
  */
 public enum FiniteDifferenceType {
   /**
-   * Forward differencing
+   * Forward differencing.
    */
   FORWARD,
   /**
-   * Central differencing
+   * Central differencing.
    */
   CENTRAL,
   /**
-   * Backward differencing
+   * Backward differencing.
    */
   BACKWARD
 }

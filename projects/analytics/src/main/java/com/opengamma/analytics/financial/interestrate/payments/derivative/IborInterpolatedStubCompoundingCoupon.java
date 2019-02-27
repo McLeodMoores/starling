@@ -11,24 +11,26 @@ import com.opengamma.analytics.financial.provider.calculator.discounting.Interpo
 /**
  *
  */
-public final class IborInterpolatedStubCompoundingCoupon extends InterpolatedStubCoupon<DepositIndexCompoundingCoupon<IborIndex>, IborIndex> implements DepositIndexCoupon<IborIndex> {
+public final class IborInterpolatedStubCompoundingCoupon extends InterpolatedStubCoupon<DepositIndexCompoundingCoupon<IborIndex>, IborIndex>
+    implements DepositIndexCoupon<IborIndex> {
 
-  private IborInterpolatedStubCompoundingCoupon(
-      final DepositIndexCompoundingCoupon<IborIndex> fullCoupon,
-      final double firstInterpolatedTime,
-      final double firstInterpolatedYearFraction,
-      final double secondInterpolatedTime,
-      final double secondInterpolatedYearFraction) {
+  private IborInterpolatedStubCompoundingCoupon(final DepositIndexCompoundingCoupon<IborIndex> fullCoupon, final double firstInterpolatedTime,
+      final double firstInterpolatedYearFraction, final double secondInterpolatedTime, final double secondInterpolatedYearFraction) {
     super(fullCoupon, firstInterpolatedTime, firstInterpolatedYearFraction, secondInterpolatedTime, secondInterpolatedYearFraction);
   }
 
-  public static IborInterpolatedStubCompoundingCoupon from(
-      final DepositIndexCompoundingCoupon<IborIndex> fullCoupon,
-      final double firstInterpolatedTime,
-      final double firstInterpolatedYearFraction,
-      final double secondInterpolatedTime,
-      final double secondInterpolatedYearFraction) {
-    return new IborInterpolatedStubCompoundingCoupon(fullCoupon, firstInterpolatedTime, firstInterpolatedYearFraction, secondInterpolatedTime, secondInterpolatedYearFraction);
+  /**
+   * @param fullCoupon
+   * @param firstInterpolatedTime
+   * @param firstInterpolatedYearFraction
+   * @param secondInterpolatedTime
+   * @param secondInterpolatedYearFraction
+   * @return
+   */
+  public static IborInterpolatedStubCompoundingCoupon from(final DepositIndexCompoundingCoupon<IborIndex> fullCoupon, final double firstInterpolatedTime,
+      final double firstInterpolatedYearFraction, final double secondInterpolatedTime, final double secondInterpolatedYearFraction) {
+    return new IborInterpolatedStubCompoundingCoupon(fullCoupon, firstInterpolatedTime, firstInterpolatedYearFraction, secondInterpolatedTime,
+        secondInterpolatedYearFraction);
   }
 
   @Override

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.curve;
@@ -8,8 +8,8 @@ package com.opengamma.analytics.math.curve;
 import org.apache.commons.lang.Validate;
 
 /**
- * Shifts a {@link ConstantDoublesCurve}. Only parallel shifts of the curve are supported - the other methods would result in a curve that was
- * not constant in <i>y</i>.
+ * Shifts a {@link ConstantDoublesCurve}. Only parallel shifts of the curve are supported - the other methods would result in a curve that was not constant in
+ * <i>y</i>.
  */
 public class ConstantCurveShiftFunction implements CurveShiftFunction<ConstantDoublesCurve> {
 
@@ -34,8 +34,8 @@ public class ConstantCurveShiftFunction implements CurveShiftFunction<ConstantDo
 
   /**
    * {@inheritDoc}
+   * 
    * @return Not supported
-   * @throws UnsupportedOperationException
    */
   @Override
   public ConstantDoublesCurve evaluate(final ConstantDoublesCurve curve, final double x, final double shift) {
@@ -44,8 +44,8 @@ public class ConstantCurveShiftFunction implements CurveShiftFunction<ConstantDo
 
   /**
    * {@inheritDoc}
+   * 
    * @return Not supported
-   * @throws UnsupportedOperationException
    */
   @Override
   public ConstantDoublesCurve evaluate(final ConstantDoublesCurve curve, final double x, final double shift, final String newName) {
@@ -54,8 +54,8 @@ public class ConstantCurveShiftFunction implements CurveShiftFunction<ConstantDo
 
   /**
    * {@inheritDoc}
+   * 
    * @return Not supported
-   * @throws UnsupportedOperationException
    */
   @Override
   public ConstantDoublesCurve evaluate(final ConstantDoublesCurve curve, final double[] xShift, final double[] yShift) {
@@ -64,8 +64,8 @@ public class ConstantCurveShiftFunction implements CurveShiftFunction<ConstantDo
 
   /**
    * {@inheritDoc}
+   * 
    * @return Not supported
-   * @throws UnsupportedOperationException
    */
   @Override
   public ConstantDoublesCurve evaluate(final ConstantDoublesCurve curve, final double[] xShift, final double[] yShift, final String newName) {

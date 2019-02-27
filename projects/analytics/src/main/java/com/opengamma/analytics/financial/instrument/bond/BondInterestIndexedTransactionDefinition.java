@@ -29,18 +29,27 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Describes a interest inflation indexed bond transaction. Both the coupon and the nominal are indexed on a price index.
- * @param <N> Type of  fix payment coupon.
- * @param <C> Type of inflation coupon. Can be {@link CouponInflationZeroCouponMonthlyGearingDefinition} or {@link CouponInflationZeroCouponInterpolationGearingDefinition}.
+ * 
+ * @param <N>
+ *          Type of fix payment coupon.
+ * @param <C>
+ *          Type of inflation coupon. Can be {@link CouponInflationZeroCouponMonthlyGearingDefinition} or
+ *          {@link CouponInflationZeroCouponInterpolationGearingDefinition}.
  */
 public class BondInterestIndexedTransactionDefinition<N extends PaymentFixedDefinition, C extends CouponDefinition> extends BondTransactionDefinition<N, C>
     implements InstrumentDefinitionWithData<BondTransaction<? extends BondSecurity<? extends Payment, ? extends Coupon>>, DoubleTimeSeries<ZonedDateTime>> {
 
   /**
    * Constructor of a interest indexed bond transaction from all the transaction details.
-   * @param underlyingBond The interest indexed bond underlying the transaction.
-   * @param quantity The number of bonds purchased (can be negative or positive).
-   * @param settlementDate Transaction settlement date.
-   * @param price The (clean quoted) price of the transaction in relative term (i.e. 0.90 if the dirty price is 90% of nominal).
+   * 
+   * @param underlyingBond
+   *          The interest indexed bond underlying the transaction.
+   * @param quantity
+   *          The number of bonds purchased (can be negative or positive).
+   * @param settlementDate
+   *          Transaction settlement date.
+   * @param price
+   *          The (clean quoted) price of the transaction in relative term (i.e. 0.90 if the dirty price is 90% of nominal).
    */
   public BondInterestIndexedTransactionDefinition(final BondSecurityDefinition<N, C> underlyingBond, final double quantity, final ZonedDateTime settlementDate,
       final double price) {
@@ -48,10 +57,11 @@ public class BondInterestIndexedTransactionDefinition<N extends PaymentFixedDefi
     ArgumentChecker.isTrue(underlyingBond instanceof BondInterestIndexedSecurityDefinition, "interest Indexed bond");
   }
 
-  //TODO: from clean price adjusted monthly (for UK linked-gilts pre-2005).
+  // TODO: from clean price adjusted monthly (for UK linked-gilts pre-2005).
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -62,11 +72,13 @@ public class BondInterestIndexedTransactionDefinition<N extends PaymentFixedDefi
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
   @Override
-  public BondInterestIndexedTransaction<PaymentFixed, Coupon> toDerivative(final ZonedDateTime date, final DoubleTimeSeries<ZonedDateTime> data, final String... yieldCurveNames) {
+  public BondInterestIndexedTransaction<PaymentFixed, Coupon> toDerivative(final ZonedDateTime date, final DoubleTimeSeries<ZonedDateTime> data,
+      final String... yieldCurveNames) {
     return toDerivative(date, data);
   }
 
@@ -76,12 +88,13 @@ public class BondInterestIndexedTransactionDefinition<N extends PaymentFixedDefi
     return toDerivative(date, series);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public BondInterestIndexedTransaction<PaymentFixed, Coupon> toDerivative(final ZonedDateTime date, final DoubleTimeSeries<ZonedDateTime> data) {
     ArgumentChecker.notNull(date, "date");
     ArgumentChecker.notNull(data, "Price index fixing time series");
-    final BondInterestIndexedSecurity<PaymentFixed, Coupon> bondPurchase = ((BondInterestIndexedSecurityDefinition<PaymentFixedDefinition, CouponInflationDefinition>) getUnderlyingBond())
-        .toDerivative(date, getSettlementDate(), data);
+    final BondInterestIndexedSecurity<PaymentFixed, Coupon> bondPurchase = 
+        ((BondInterestIndexedSecurityDefinition<PaymentFixedDefinition, CouponInflationDefinition>) getUnderlyingBond()).toDerivative(date, getSettlementDate(), data);
     final ZonedDateTime spot = ScheduleCalculator.getAdjustedDate(date, getUnderlyingBond().getSettlementDays(), getUnderlyingBond().getCalendar());
     final BondInterestIndexedSecurity<PaymentFixed, Coupon> bondStandard = ((BondInterestIndexedSecurityDefinition<PaymentFixedDefinition, CouponInflationDefinition>) getUnderlyingBond())
         .toDerivative(date, spot, data);
@@ -94,7 +107,8 @@ public class BondInterestIndexedTransactionDefinition<N extends PaymentFixedDefi
       }
     }
     final double notionalStandard = getUnderlyingBond().getCoupons().getNthPayment(couponIndex).getNotional();
-    final BondInterestIndexedTransaction<PaymentFixed, Coupon> result = new BondInterestIndexedTransaction<>(bondPurchase, getQuantity(), getPrice(), bondStandard, notionalStandard);
+    final BondInterestIndexedTransaction<PaymentFixed, Coupon> result = new BondInterestIndexedTransaction<>(bondPurchase, getQuantity(), getPrice(),
+        bondStandard, notionalStandard);
     return result;
   }
 

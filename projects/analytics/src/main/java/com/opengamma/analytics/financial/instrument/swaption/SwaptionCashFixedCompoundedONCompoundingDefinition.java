@@ -28,7 +28,8 @@ import com.opengamma.util.time.Expiry;
 /**
  * Class describing a European swaption on a vanilla swap with cash delivery.
  */
-public final class SwaptionCashFixedCompoundedONCompoundingDefinition implements InstrumentDefinitionWithData<SwaptionCashFixedCompoundedONCompounded, ZonedDateTimeDoubleTimeSeries> {
+public final class SwaptionCashFixedCompoundedONCompoundingDefinition
+    implements InstrumentDefinitionWithData<SwaptionCashFixedCompoundedONCompounded, ZonedDateTimeDoubleTimeSeries> {
 
   /**
    * Swap underlying the swaption.
@@ -61,16 +62,21 @@ public final class SwaptionCashFixedCompoundedONCompoundingDefinition implements
 
   /**
    * Constructor from the expiry date, the underlying swap and the long/short flag.
-   * @param expiryDate The expiry date.
-   * @param underlyingSwap The underlying swap.
-   * @param isCall True if the swaption is a call
-   * @param isLong The long (true) / short (false) flag.
+   *
+   * @param expiryDate
+   *          The expiry date.
+   * @param underlyingSwap
+   *          The underlying swap.
+   * @param isCall
+   *          True if the swaption is a call
+   * @param isLong
+   *          The long (true) / short (false) flag.
    */
   private SwaptionCashFixedCompoundedONCompoundingDefinition(final ZonedDateTime expiryDate, final SwapFixedCompoundedONCompoundedDefinition underlyingSwap,
       final boolean isCall, final boolean isLong) {
     ArgumentChecker.notNull(expiryDate, "expiry date");
     ArgumentChecker.notNull(underlyingSwap, "underlying swap");
-    //TODO do we need to check that the swaption expiry is consistent with the underlying swap?
+    // TODO do we need to check that the swaption expiry is consistent with the underlying swap?
     final CouponFixedAccruedCompoundingDefinition firstPayment = underlyingSwap.getFixedLeg().getNthPayment(0);
     _underlyingSwap = underlyingSwap;
     _currency = underlyingSwap.getCurrency();
@@ -83,14 +89,19 @@ public final class SwaptionCashFixedCompoundedONCompoundingDefinition implements
 
   /**
    * Builder from the expiry date, the underlying swap and the long/short flag.
-   * @param expiryDate The expiry date.
-   * @param underlyingSwap The underlying swap.
-   * @param isLong The long (true) / short (false) flag.
+   *
+   * @param expiryDate
+   *          The expiry date.
+   * @param underlyingSwap
+   *          The underlying swap.
+   * @param isLong
+   *          The long (true) / short (false) flag.
    * @return The swaption.
    * @deprecated This relies on the {@link AnnuityDefinition#isPayer()} method to determine if the swaption is a call or a put, which is deprecated
    */
   @Deprecated
-  public static SwaptionCashFixedCompoundedONCompoundingDefinition from(final ZonedDateTime expiryDate, final SwapFixedCompoundedONCompoundedDefinition underlyingSwap, final boolean isLong) {
+  public static SwaptionCashFixedCompoundedONCompoundingDefinition from(final ZonedDateTime expiryDate,
+      final SwapFixedCompoundedONCompoundedDefinition underlyingSwap, final boolean isLong) {
     ArgumentChecker.notNull(expiryDate, "expiry date");
     ArgumentChecker.notNull(underlyingSwap, "underlying swap");
     // Implementation note: cash-settled swaptions underlying have the same rate on all coupons and standard conventions.
@@ -99,14 +110,19 @@ public final class SwaptionCashFixedCompoundedONCompoundingDefinition implements
 
   /**
    * Builder from the expiry date, the underlying swap, a call/put flag and the long/short flag.
-   * @param expiryDate The expiry date.
-   * @param underlyingSwap The underlying swap.
-   * @param isCall True if the swaption is a call (i.e. the underlying swap is a payer)
-   * @param isLong The long (true) / short (false) flag.
+   *
+   * @param expiryDate
+   *          The expiry date.
+   * @param underlyingSwap
+   *          The underlying swap.
+   * @param isCall
+   *          True if the swaption is a call (i.e. the underlying swap is a payer)
+   * @param isLong
+   *          The long (true) / short (false) flag.
    * @return The swaption.
    */
-  public static SwaptionCashFixedCompoundedONCompoundingDefinition from(final ZonedDateTime expiryDate, final SwapFixedCompoundedONCompoundedDefinition underlyingSwap,
-      final boolean isCall, final boolean isLong) {
+  public static SwaptionCashFixedCompoundedONCompoundingDefinition from(final ZonedDateTime expiryDate,
+      final SwapFixedCompoundedONCompoundedDefinition underlyingSwap, final boolean isCall, final boolean isLong) {
     ArgumentChecker.notNull(expiryDate, "expiry date");
     ArgumentChecker.notNull(underlyingSwap, "underlying swap");
     // Implementation note: cash-settled swaptions underlying have the same rate on all coupons and standard conventions.
@@ -115,8 +131,10 @@ public final class SwaptionCashFixedCompoundedONCompoundingDefinition implements
 
   /**
    * {@inheritDoc}
+   *
    * @deprecated Use the method that does not take yield curve names
    */
+  @SuppressWarnings("unchecked")
   @Deprecated
   @Override
   public SwaptionCashFixedCompoundedONCompounded toDerivative(final ZonedDateTime dateTime, final String... yieldCurveNames) {
@@ -126,11 +144,12 @@ public final class SwaptionCashFixedCompoundedONCompoundingDefinition implements
     ArgumentChecker.notNull(yieldCurveNames, "yield curve names");
     final double expiryTime = TimeCalculator.getTimeBetween(dateTime, _expiry.getExpiry());
     final double settlementTime = TimeCalculator.getTimeBetween(dateTime, _settlementDate);
-    final Swap<CouponFixedAccruedCompounding, CouponONCompounded> underlyingSwap = (Swap<CouponFixedAccruedCompounding, CouponONCompounded>)
-        _underlyingSwap.toDerivative(dateTime, yieldCurveNames);
+    final Swap<CouponFixedAccruedCompounding, CouponONCompounded> underlyingSwap = (Swap<CouponFixedAccruedCompounding, CouponONCompounded>) _underlyingSwap
+        .toDerivative(dateTime, yieldCurveNames);
     return SwaptionCashFixedCompoundedONCompounded.from(expiryTime, underlyingSwap, settlementTime, _isLong, _strike, _isCall);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public SwaptionCashFixedCompoundedONCompounded toDerivative(final ZonedDateTime dateTime) {
     ArgumentChecker.notNull(dateTime, "date");
@@ -138,28 +157,33 @@ public final class SwaptionCashFixedCompoundedONCompoundingDefinition implements
     ArgumentChecker.isTrue(!dayConversion.isAfter(getExpiry().getExpiry().toLocalDate()), "date is after expiry date");
     final double expiryTime = TimeCalculator.getTimeBetween(dateTime, _expiry.getExpiry());
     final double settlementTime = TimeCalculator.getTimeBetween(dateTime, _settlementDate);
-    final Swap<CouponFixedAccruedCompounding, CouponONCompounded> underlyingSwap = (Swap<CouponFixedAccruedCompounding, CouponONCompounded>) _underlyingSwap.toDerivative(dateTime);
+    final Swap<CouponFixedAccruedCompounding, CouponONCompounded> underlyingSwap = (Swap<CouponFixedAccruedCompounding, CouponONCompounded>) _underlyingSwap
+        .toDerivative(dateTime);
     return SwaptionCashFixedCompoundedONCompounded.from(expiryTime, underlyingSwap, settlementTime, _isLong, _strike, _isCall);
   }
 
   /**
    * {@inheritDoc}
+   *
    * @deprecated Use the method that does not take yield curve names
    */
+  @SuppressWarnings("unchecked")
   @Deprecated
   @Override
-  public SwaptionCashFixedCompoundedONCompounded toDerivative(final ZonedDateTime dateTime, final ZonedDateTimeDoubleTimeSeries ts, final String... yieldCurveNames) {
+  public SwaptionCashFixedCompoundedONCompounded toDerivative(final ZonedDateTime dateTime, final ZonedDateTimeDoubleTimeSeries ts,
+      final String... yieldCurveNames) {
     ArgumentChecker.notNull(dateTime, "date");
     final LocalDate dayConversion = dateTime.toLocalDate();
     ArgumentChecker.isTrue(!dayConversion.isAfter(getExpiry().getExpiry().toLocalDate()), "date is after expiry date");
     ArgumentChecker.notNull(yieldCurveNames, "yield curve names");
     final double expiryTime = TimeCalculator.getTimeBetween(dateTime, _expiry.getExpiry());
     final double settlementTime = TimeCalculator.getTimeBetween(dateTime, _settlementDate);
-    final Swap<CouponFixedAccruedCompounding, CouponONCompounded> underlyingSwap = (Swap<CouponFixedAccruedCompounding, CouponONCompounded>)
-        _underlyingSwap.toDerivative(dateTime, new ZonedDateTimeDoubleTimeSeries[] {ts}, yieldCurveNames);
+    final Swap<CouponFixedAccruedCompounding, CouponONCompounded> underlyingSwap = (Swap<CouponFixedAccruedCompounding, CouponONCompounded>) _underlyingSwap
+        .toDerivative(dateTime, new ZonedDateTimeDoubleTimeSeries[] { ts }, yieldCurveNames);
     return SwaptionCashFixedCompoundedONCompounded.from(expiryTime, underlyingSwap, settlementTime, _isLong, _strike, _isCall);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public SwaptionCashFixedCompoundedONCompounded toDerivative(final ZonedDateTime dateTime, final ZonedDateTimeDoubleTimeSeries ts) {
     ArgumentChecker.notNull(dateTime, "date");
@@ -167,13 +191,14 @@ public final class SwaptionCashFixedCompoundedONCompoundingDefinition implements
     ArgumentChecker.isTrue(!dayConversion.isAfter(getExpiry().getExpiry().toLocalDate()), "date is after expiry date");
     final double expiryTime = TimeCalculator.getTimeBetween(dateTime, _expiry.getExpiry());
     final double settlementTime = TimeCalculator.getTimeBetween(dateTime, _settlementDate);
-    final Swap<CouponFixedAccruedCompounding, CouponONCompounded> underlyingSwap = (Swap<CouponFixedAccruedCompounding, CouponONCompounded>)
-        _underlyingSwap.toDerivative(dateTime, new ZonedDateTimeDoubleTimeSeries[] {ts});
+    final Swap<CouponFixedAccruedCompounding, CouponONCompounded> underlyingSwap = (Swap<CouponFixedAccruedCompounding, CouponONCompounded>) _underlyingSwap
+        .toDerivative(dateTime, new ZonedDateTimeDoubleTimeSeries[] { ts });
     return SwaptionCashFixedCompoundedONCompounded.from(expiryTime, underlyingSwap, settlementTime, _isLong, _strike, _isCall);
   }
 
   /**
    * Gets the underlying swap field.
+   *
    * @return The underlying swap.
    */
   public SwapDefinition getUnderlyingSwap() {
@@ -182,6 +207,7 @@ public final class SwaptionCashFixedCompoundedONCompoundingDefinition implements
 
   /**
    * Gets the long / short flag.
+   *
    * @return True if the option is long
    */
   public boolean isLong() {
@@ -190,6 +216,7 @@ public final class SwaptionCashFixedCompoundedONCompoundingDefinition implements
 
   /**
    * Gets the call / put flag.
+   *
    * @return True if the option is a call
    */
   public boolean isCall() {
@@ -198,6 +225,7 @@ public final class SwaptionCashFixedCompoundedONCompoundingDefinition implements
 
   /**
    * Gets the swaption settlement date.
+   *
    * @return The settlement date.
    */
   public ZonedDateTime getSettlementDate() {
@@ -206,6 +234,7 @@ public final class SwaptionCashFixedCompoundedONCompoundingDefinition implements
 
   /**
    * Gets the swaption expiry date.
+   *
    * @return The expiry date.
    */
   public Expiry getExpiry() {
@@ -214,6 +243,7 @@ public final class SwaptionCashFixedCompoundedONCompoundingDefinition implements
 
   /**
    * Gets the currency.
+   *
    * @return The currency
    */
   public Currency getCurrency() {

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.function.special;
@@ -12,16 +12,12 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
- * The incomplete gamma function is defined as:
- * $$
- * \begin{equation*}
- * P(a, x) = \frac{\gamma(a, x)}{\Gamma(a)}\int_0^x e^{-t}t^{a-1}dt
- * \end{equation*}
- * $$
- * where $a > 0$.
+ *
+ * The incomplete gamma function is defined as: $$ \begin{equation*} P(a, x) = \frac{\gamma(a, x)}{\Gamma(a)}\int_0^x e^{-t}t^{a-1}dt \end{equation*} $$ where
+ * $a > 0$.
  * <p>
- * This class is a wrapper for the Commons Math library implementation of the incomplete gamma function <a href="http://commons.apache.org/math/api-2.1/index.html">link</a>
+ * This class is a wrapper for the Commons Math library implementation of the incomplete gamma function
+ * <a href="http://commons.apache.org/math/api-2.1/index.html">link</a>
  *
  */
 public class IncompleteGammaFunction extends Function1D<Double, Double> {

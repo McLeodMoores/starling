@@ -33,6 +33,7 @@ public final class ConvexityFromYieldCalculator extends InstrumentDerivativeVisi
 
   /**
    * Return the calculator instance.
+   * 
    * @return The instance.
    */
   public static ConvexityFromYieldCalculator getInstance() {
@@ -77,7 +78,6 @@ public final class ConvexityFromYieldCalculator extends InstrumentDerivativeVisi
   public Double visitBondCapitalIndexedTransaction(final BondCapitalIndexedTransaction<?> bond, final Double yield) {
     ArgumentChecker.notNull(bond, "bond");
     ArgumentChecker.notNull(yield, "yield");
-    ArgumentChecker.notNull(bond.getBondStandard() instanceof BondCapitalIndexedSecurity<?>, "the bond should be a BondCapitalIndexedSecurity");
     final BondCapitalIndexedSecurity<?> bondSecurity = bond.getBondStandard();
     return METHOD_INFLATION_BOND_SECURITY.convexityFromYieldFiniteDifference(bondSecurity, yield) / 100;
   }
@@ -86,7 +86,6 @@ public final class ConvexityFromYieldCalculator extends InstrumentDerivativeVisi
   public Double visitBondCapitalIndexedSecurity(final BondCapitalIndexedSecurity<?> bond, final Double yield) {
     ArgumentChecker.notNull(bond, "bond");
     ArgumentChecker.notNull(yield, "yield");
-    ArgumentChecker.notNull(bond instanceof BondCapitalIndexedSecurity<?>, "the bond should be a BondCapitalIndexedSecurity");
     return METHOD_INFLATION_BOND_SECURITY.convexityFromYieldFiniteDifference(bond, yield) / 100;
   }
 }

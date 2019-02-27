@@ -14,8 +14,8 @@ import com.opengamma.analytics.math.surface.Surface;
 import com.opengamma.analytics.math.surface.SurfaceShiftFunctionFactory;
 
 /**
- * Shifts an {@link InterpolatedFromSurfacesCubeAdditiveShiftFunction}. If an <i>x</i> (<i>y</i>) shift does not coincide with the one of the <i>x</i> (<i>y</i>) values
- * of the intersection of the curves with the axis, an exception is thrown.
+ * Shifts an {@link InterpolatedFromSurfacesCubeAdditiveShiftFunction}. If an <i>x</i> (<i>y</i>) shift does not coincide with the one of the <i>x</i>
+ * (<i>y</i>) values of the intersection of the curves with the axis, an exception is thrown.
  */
 public class InterpolatedFromSurfacesCubeAdditiveShiftFunction implements CubeShiftFunction<InterpolatedFromSurfacesDoublesCube> {
 
@@ -47,23 +47,27 @@ public class InterpolatedFromSurfacesCubeAdditiveShiftFunction implements CubeSh
 
   /**
    * {@inheritDoc}
-   * @throws UnsupportedOperationException If the <i>x</i> (<i>y</i>) position of the shift does not coincide with one of the <i>x</i> (<i>y</i>) intersections 
-   * of the curves with the axis
+   * 
+   * @throws UnsupportedOperationException
+   *           If the <i>x</i> (<i>y</i>) position of the shift does not coincide with one of the <i>x</i> (<i>y</i>) intersections of the curves with the axis
    */
 
   @Override
-  public InterpolatedFromSurfacesDoublesCube evaluate(final InterpolatedFromSurfacesDoublesCube surface, final double x, final double y, final double z, final double shift) {
+  public InterpolatedFromSurfacesDoublesCube evaluate(final InterpolatedFromSurfacesDoublesCube surface, final double x, final double y, final double z,
+      final double shift) {
     Validate.notNull(surface, "surface");
     return evaluate(surface, x, y, z, shift, "SINGLE_SHIFT_" + surface.getName());
   }
 
   /**
    * {@inheritDoc}
-   * @throws UnsupportedOperationException If the <i>x</i> (<i>y</i>) position of the shift does not coincide with one of the <i>x</i> (<i>y</i>) intersections 
-   * of the curves with the axis
+   * 
+   * @throws UnsupportedOperationException
+   *           If the <i>x</i> (<i>y</i>) position of the shift does not coincide with one of the <i>x</i> (<i>y</i>) intersections of the curves with the axis
    */
   @Override
-  public InterpolatedFromSurfacesDoublesCube evaluate(final InterpolatedFromSurfacesDoublesCube cube, final double x, final double y, final double z, final double shift, final String newName) {
+  public InterpolatedFromSurfacesDoublesCube evaluate(final InterpolatedFromSurfacesDoublesCube cube, final double x, final double y, final double z,
+      final double shift, final String newName) {
     Validate.notNull(cube, "cube");
     final double[] points = cube.getPoints();
 
@@ -100,23 +104,26 @@ public class InterpolatedFromSurfacesCubeAdditiveShiftFunction implements CubeSh
 
   /**
    * {@inheritDoc}
-   * @throws UnsupportedOperationException If the <i>x</i> (<i>y</i>) positions of the shifts do not coincide with one of the <i>x</i> (<i>y</i>) intersections 
-   * of the curves with the axis
+   * 
+   * @throws UnsupportedOperationException
+   *           If the <i>x</i> (<i>y</i>) positions of the shifts do not coincide with one of the <i>x</i> (<i>y</i>) intersections of the curves with the axis
    */
   @Override
-  public InterpolatedFromSurfacesDoublesCube evaluate(final InterpolatedFromSurfacesDoublesCube surface, final double[] xShift, final double[] yShift, final double[] zShift, final double[] shift) {
+  public InterpolatedFromSurfacesDoublesCube evaluate(final InterpolatedFromSurfacesDoublesCube surface, final double[] xShift, final double[] yShift,
+      final double[] zShift, final double[] shift) {
     Validate.notNull(surface, "surface");
     return evaluate(surface, xShift, yShift, zShift, shift, "MULTIPLE_SHIFT_" + surface.getName());
   }
 
   /**
    * {@inheritDoc}
-   * @throws UnsupportedOperationException If the <i>x</i> (<i>y</i>) positions of the shifts do not coincide with one of the <i>x</i> (<i>y</i>) intersections 
-   * of the curves with the axis
+   * 
+   * @throws UnsupportedOperationException
+   *           If the <i>x</i> (<i>y</i>) positions of the shifts do not coincide with one of the <i>x</i> (<i>y</i>) intersections of the curves with the axis
    */
   @Override
-  public InterpolatedFromSurfacesDoublesCube evaluate(final InterpolatedFromSurfacesDoublesCube cube, final double[] xShift, final double[] yShift, final double[] zShift, final double[] shift,
-      final String newName) {
+  public InterpolatedFromSurfacesDoublesCube evaluate(final InterpolatedFromSurfacesDoublesCube cube, final double[] xShift, final double[] yShift,
+      final double[] zShift, final double[] shift, final String newName) {
     Validate.notNull(cube, "surface");
     Validate.notNull(xShift, "x shifts");
     Validate.notNull(yShift, "y shifts");

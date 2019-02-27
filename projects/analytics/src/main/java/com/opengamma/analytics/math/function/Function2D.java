@@ -9,14 +9,19 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * 2-D function implementation.
- * @param <S> Type of the arguments
- * @param <T> Return type of function
+ * 
+ * @param <S>
+ *          Type of the arguments
+ * @param <T>
+ *          Return type of function
  */
 public abstract class Function2D<S, T> implements Function<S, T> {
 
   /**
    * Implementation of the interface. This method only uses the first and second arguments.
-   * @param x The list of inputs into the function, not null and no null elements
+   * 
+   * @param x
+   *          The list of inputs into the function, not null and no null elements
    * @return The value of the function
    */
   @SuppressWarnings("unchecked")
@@ -28,9 +33,12 @@ public abstract class Function2D<S, T> implements Function<S, T> {
   }
 
   /**
-   * 2-D function method
-   * @param x1 The first argument of the function, not null
-   * @param x2 The second argument of the function, not null
+   * 2-D function method.
+   * 
+   * @param x1
+   *          The first argument of the function, not null
+   * @param x2
+   *          The second argument of the function, not null
    * @return The value of the function
    */
   public abstract T evaluate(S x1, S x2);

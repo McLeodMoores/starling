@@ -17,7 +17,8 @@ import com.opengamma.util.tuple.Triple;
 public class FunctionalDoublesCube extends Cube<Double, Double, Double, Double> {
 
   /**
-   * @param function The function that defines the cube, not null
+   * @param function
+   *          The function that defines the cube, not null
    * @return A functional cube with an automatically-generated name
    */
   public static FunctionalDoublesCube from(final Function<Double, Double> function) {
@@ -25,8 +26,10 @@ public class FunctionalDoublesCube extends Cube<Double, Double, Double, Double> 
   }
 
   /**
-   * @param function The function that defines the cube, not null
-   * @param name The name of the cube
+   * @param function
+   *          The function that defines the cube, not null
+   * @param name
+   *          The name of the cube
    * @return A functional cube
    */
   public static FunctionalDoublesCube from(final Function<Double, Double> function, final String name) {
@@ -36,7 +39,8 @@ public class FunctionalDoublesCube extends Cube<Double, Double, Double, Double> 
   private final Function<Double, Double> _function;
 
   /**
-   * @param function The function that defines the cube, not null
+   * @param function
+   *          The function that defines the cube, not null
    */
   public FunctionalDoublesCube(final Function<Double, Double> function) {
     super();
@@ -45,8 +49,10 @@ public class FunctionalDoublesCube extends Cube<Double, Double, Double, Double> 
   }
 
   /**
-   * @param function The function that defines the cube, not null
-   * @param name The name of the cube
+   * @param function
+   *          The function that defines the cube, not null
+   * @param name
+   *          The name of the cube
    */
   public FunctionalDoublesCube(final Function<Double, Double> function, final String name) {
     super(name);
@@ -56,7 +62,6 @@ public class FunctionalDoublesCube extends Cube<Double, Double, Double, Double> 
 
   /**
    * @return Not supported
-   * @throws UnsupportedOperationException
    */
   @Override
   public Double[] getXData() {
@@ -65,7 +70,6 @@ public class FunctionalDoublesCube extends Cube<Double, Double, Double, Double> 
 
   /**
    * @return Not supported
-   * @throws UnsupportedOperationException
    */
   @Override
   public Double[] getYData() {
@@ -74,7 +78,6 @@ public class FunctionalDoublesCube extends Cube<Double, Double, Double, Double> 
 
   /**
    * @return Not supported
-   * @throws UnsupportedOperationException
    */
   @Override
   public Double[] getZData() {
@@ -83,7 +86,6 @@ public class FunctionalDoublesCube extends Cube<Double, Double, Double, Double> 
 
   /**
    * @return Not supported
-   * @throws UnsupportedOperationException
    */
   @Override
   public Double[] getValues() {
@@ -92,7 +94,6 @@ public class FunctionalDoublesCube extends Cube<Double, Double, Double, Double> 
 
   /**
    * @return Not supported
-   * @throws UnsupportedOperationException
    */
   @Override
   public int size() {

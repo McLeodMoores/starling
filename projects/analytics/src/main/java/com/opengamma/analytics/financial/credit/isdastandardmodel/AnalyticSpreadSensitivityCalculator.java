@@ -16,45 +16,51 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class AnalyticSpreadSensitivityCalculator {
 
-  private final MarketQuoteConverter _pufConverter;
   private final ISDACompliantCreditCurveBuilder _curveBuilder;
   private final AnalyticCDSPricer _pricer;
 
   public AnalyticSpreadSensitivityCalculator() {
-    _pufConverter = new MarketQuoteConverter();
     _curveBuilder = new FastCreditCurveBuilder();
     _pricer = new AnalyticCDSPricer();
   }
 
   public AnalyticSpreadSensitivityCalculator(final AccrualOnDefaultFormulae formula) {
-    _pufConverter = new MarketQuoteConverter(formula);
     _curveBuilder = new FastCreditCurveBuilder(formula);
     _pricer = new AnalyticCDSPricer(formula);
   }
 
-  //***************************************************************************************************************
+  // ***************************************************************************************************************
   // parallel CS01 of a CDS from single market quote of that CDS
-  //***************************************************************************************************************
+  // ***************************************************************************************************************
 
   /**
-   * The CS01 (or credit DV01)  of a CDS - the sensitivity of the PV to a finite increase of market spread (on NOT the CDS's
-   * coupon). If the CDS is quoted as points up-front, this is first converted to a quoted spread, and <b>this</b> is bumped
-   * @param cds analytic description of a CDS traded at a certain time - it is this CDS that we are calculation CDV01 for
-   * @param quote The market quote for the CDS - these can be ParSpread, PointsUpFront or QuotedSpread
-   * @param yieldCurve The yield (or discount) curve
+   * The CS01 (or credit DV01) of a CDS - the sensitivity of the PV to a finite increase of market spread (on NOT the CDS's coupon). If the CDS is quoted as
+   * points up-front, this is first converted to a quoted spread, and <b>this</b> is bumped
+   *
+   * @param cds
+   *          analytic description of a CDS traded at a certain time - it is this CDS that we are calculation CDV01 for
+   * @param quote
+   *          The market quote for the CDS - these can be ParSpread, PointsUpFront or QuotedSpread
+   * @param yieldCurve
+   *          The yield (or discount) curve
    * @return the parallel CS01
    */
   public double parallelCS01(final CDSAnalytic cds, final CDSQuoteConvention quote, final ISDACompliantYieldCurve yieldCurve) {
-    return parallelCS01(cds, quote.getCoupon(), new CDSAnalytic[] {cds }, new CDSQuoteConvention[] {quote }, yieldCurve);
+    return parallelCS01(cds, quote.getCoupon(), new CDSAnalytic[] { cds }, new CDSQuoteConvention[] { quote }, yieldCurve);
   }
 
   /**
-   *The analytic CS01 (or credit DV01)
-   * @param cds  analytic description of a CDS traded at a certain time - it is this CDS that we are calculation CDV01 for
-   * @param coupon  the of the traded CDS  (expressed as <b>fractions not basis points</b>)
-   * @param yieldCurve The yield (or discount) curve
-   * @param puf points up-front (as a fraction)
-   * @return  The credit DV01
+   * The analytic CS01 (or credit DV01).
+   *
+   * @param cds
+   *          analytic description of a CDS traded at a certain time - it is this CDS that we are calculation CDV01 for
+   * @param coupon
+   *          the of the traded CDS (expressed as <b>fractions not basis points</b>)
+   * @param yieldCurve
+   *          The yield (or discount) curve
+   * @param puf
+   *          points up-front (as a fraction)
+   * @return The credit DV01
    */
   public double parallelCS01FromPUF(final CDSAnalytic cds, final double coupon, final ISDACompliantYieldCurve yieldCurve, final double puf) {
 
@@ -70,35 +76,41 @@ public class AnalyticSpreadSensitivityCalculator {
   }
 
   /**
-   * The analytic CS01 (or credit DV01)
-   * @param cds analytic description of a CDS traded at a certain time - it is this CDS that we are calculation CDV01 for
-   * @param coupon the of the traded CDS  (expressed as <b>fractions not basis points</b>)
-   * @param yieldCurve  The yield (or discount) curve
-   * @param marketSpread the market spread of the reference CDS (in this case it is irrelevant whether this is par or quoted spread)
+   * The analytic CS01 (or credit DV01).
+   *
+   * @param cds
+   *          analytic description of a CDS traded at a certain time - it is this CDS that we are calculation CDV01 for
+   * @param coupon
+   *          the of the traded CDS (expressed as <b>fractions not basis points</b>)
+   * @param yieldCurve
+   *          The yield (or discount) curve
+   * @param marketSpread
+   *          the market spread of the reference CDS (in this case it is irrelevant whether this is par or quoted spread)
    * @return The credit DV01
    */
   public double parallelCS01FromSpread(final CDSAnalytic cds, final double coupon, final ISDACompliantYieldCurve yieldCurve, final double marketSpread) {
 
     final ISDACompliantCreditCurve cc = _curveBuilder.calibrateCreditCurve(cds, marketSpread, yieldCurve);
     final double a = _pricer.protectionLeg(cds, yieldCurve, cc);
-    final double b = a / marketSpread; //shortcut calculation of RPV01
+    final double b = a / marketSpread; // shortcut calculation of RPV01
     final double diff = marketSpread - coupon;
     if (diff == 0) {
       return b;
     }
     final double aPrime = _pricer.protectionLegCreditSensitivity(cds, yieldCurve, cc, 0);
     final double bPrime = _pricer.pvPremiumLegCreditSensitivity(cds, yieldCurve, cc, 0);
-    final double dSdh = (aPrime - marketSpread * bPrime); //note - this has not been divided by b
+    final double dSdh = aPrime - marketSpread * bPrime; // note - this has not been divided by b
     return b * (1 + diff * bPrime / dSdh);
   }
 
-  public double parallelCS01(final CDSAnalytic cds, final double cdsCoupon, final CDSAnalytic[] pillarCDSs, final CDSQuoteConvention[] marketQuotes, final ISDACompliantYieldCurve yieldCurve) {
+  public double parallelCS01(final CDSAnalytic cds, final double cdsCoupon, final CDSAnalytic[] pillarCDSs, final CDSQuoteConvention[] marketQuotes,
+      final ISDACompliantYieldCurve yieldCurve) {
     final ISDACompliantCreditCurve creditCurve = _curveBuilder.calibrateCreditCurve(pillarCDSs, marketQuotes, yieldCurve);
     return parallelCS01FromCreditCurve(cds, cdsCoupon, pillarCDSs, yieldCurve, creditCurve);
   }
 
-  public double parallelCS01FromCreditCurve(final CDSAnalytic cds, final double cdsCoupon, final CDSAnalytic[] bucketCDSs, final ISDACompliantYieldCurve yieldCurve,
-      final ISDACompliantCreditCurve creditCurve) {
+  public double parallelCS01FromCreditCurve(final CDSAnalytic cds, final double cdsCoupon, final CDSAnalytic[] bucketCDSs,
+      final ISDACompliantYieldCurve yieldCurve, final ISDACompliantCreditCurve creditCurve) {
     final double[] temp = bucketedCS01FromCreditCurve(cds, cdsCoupon, bucketCDSs, yieldCurve, creditCurve);
     double sum = 0;
     for (final double cs : temp) {
@@ -107,16 +119,18 @@ public class AnalyticSpreadSensitivityCalculator {
     return sum;
   }
 
-  //***************************************************************************************************************
+  // ***************************************************************************************************************
   // bucketed CS01 of a CDS from single market quote of that CDS
-  //***************************************************************************************************************
+  // ***************************************************************************************************************
 
-  public double[] bucketedCS01FromSpread(final CDSAnalytic cds, final double coupon, final ISDACompliantYieldCurve yieldCurve, final double marketSpread, final CDSAnalytic[] buckets) {
+  public double[] bucketedCS01FromSpread(final CDSAnalytic cds, final double coupon, final ISDACompliantYieldCurve yieldCurve, final double marketSpread,
+      final CDSAnalytic[] buckets) {
     final ISDACompliantCreditCurve cc = _curveBuilder.calibrateCreditCurve(cds, marketSpread, yieldCurve);
     return bucketedCS01FromCreditCurve(cds, coupon, buckets, yieldCurve, cc);
   }
 
-  public double[] bucketedCS01(final CDSAnalytic cds, final double cdsCoupon, final CDSAnalytic[] pillarCDSs, final CDSQuoteConvention[] marketQuotes, final ISDACompliantYieldCurve yieldCurve) {
+  public double[] bucketedCS01(final CDSAnalytic cds, final double cdsCoupon, final CDSAnalytic[] pillarCDSs, final CDSQuoteConvention[] marketQuotes,
+      final ISDACompliantYieldCurve yieldCurve) {
     final ISDACompliantCreditCurve creditCurve = _curveBuilder.calibrateCreditCurve(pillarCDSs, marketQuotes, yieldCurve);
     return bucketedCS01FromCreditCurve(cds, cdsCoupon, pillarCDSs, yieldCurve, creditCurve);
   }
@@ -127,13 +141,14 @@ public class AnalyticSpreadSensitivityCalculator {
     return bucketedCS01FromCreditCurve(cds, cdsCoupons, pillarCDSs, yieldCurve, creditCurve);
   }
 
-  public double[] bucketedCS01FromParSpreads(final CDSAnalytic cds, final double cdsCoupon, final ISDACompliantYieldCurve yieldCurve, final CDSAnalytic[] pillarCDSs, final double[] spreads) {
+  public double[] bucketedCS01FromParSpreads(final CDSAnalytic cds, final double cdsCoupon, final ISDACompliantYieldCurve yieldCurve,
+      final CDSAnalytic[] pillarCDSs, final double[] spreads) {
     final ISDACompliantCreditCurve creditCurve = _curveBuilder.calibrateCreditCurve(pillarCDSs, spreads, yieldCurve);
     return bucketedCS01FromCreditCurve(cds, cdsCoupon, pillarCDSs, yieldCurve, creditCurve);
   }
 
-  public double[] bucketedCS01FromCreditCurve(final CDSAnalytic cds, final double cdsCoupon, final CDSAnalytic[] bucketCDSs, final ISDACompliantYieldCurve yieldCurve,
-      final ISDACompliantCreditCurve creditCurve) {
+  public double[] bucketedCS01FromCreditCurve(final CDSAnalytic cds, final double cdsCoupon, final CDSAnalytic[] bucketCDSs,
+      final ISDACompliantYieldCurve yieldCurve, final ISDACompliantCreditCurve creditCurve) {
     ArgumentChecker.notNull(cds, "cds");
     ArgumentChecker.noNulls(bucketCDSs, "bucketCDSs");
     ArgumentChecker.notNull(creditCurve, "creditCurve");
@@ -155,8 +170,8 @@ public class AnalyticSpreadSensitivityCalculator {
     return vS.getData();
   }
 
-  public double[][] bucketedCS01FromCreditCurve(final CDSAnalytic[] cds, final double[] cdsCoupon, final CDSAnalytic[] bucketCDSs, final ISDACompliantYieldCurve yieldCurve,
-      final ISDACompliantCreditCurve creditCurve) {
+  public double[][] bucketedCS01FromCreditCurve(final CDSAnalytic[] cds, final double[] cdsCoupon, final CDSAnalytic[] bucketCDSs,
+      final ISDACompliantYieldCurve yieldCurve, final ISDACompliantCreditCurve creditCurve) {
     ArgumentChecker.noNulls(cds, "cds");
     ArgumentChecker.notEmpty(cdsCoupon, "cdsCoupons");
     ArgumentChecker.noNulls(bucketCDSs, "bucketCDSs");

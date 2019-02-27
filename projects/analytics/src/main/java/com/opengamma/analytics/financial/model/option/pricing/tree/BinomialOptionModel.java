@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.tree;
@@ -24,15 +24,15 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * 
+ *
  * @param <T>
  */
 public class BinomialOptionModel<T extends StandardOptionDataBundle> extends TreeOptionModel<OptionDefinition, T> {
   private final int _n;
   private final int _j;
   private final BinomialOptionModelDefinition<OptionDefinition, T> _model;
-  private int _maxDepthToSave; //TODO better names
-  private int _maxWidthToSave; //TODO better names
+  private int _maxDepthToSave; // TODO better names
+  private int _maxWidthToSave; // TODO better names
 
   public BinomialOptionModel(final BinomialOptionModelDefinition<OptionDefinition, T> model) {
     this(model, 1000);
@@ -68,7 +68,8 @@ public class BinomialOptionModel<T extends StandardOptionDataBundle> extends Tre
     return results;
   }
 
-  public GreekVisitor<Double> getGreekVisitor(final Function1D<T, RecombiningBinomialTree<DoublesPair>> treeFunction, final T data, final OptionDefinition definition) {
+  public GreekVisitor<Double> getGreekVisitor(final Function1D<T, RecombiningBinomialTree<DoublesPair>> treeFunction, final T data,
+      final OptionDefinition definition) {
     final Function1D<T, Double> function = new Function1D<T, Double>() {
 
       @Override
@@ -84,7 +85,7 @@ public class BinomialOptionModel<T extends StandardOptionDataBundle> extends Tre
   public Function1D<T, RecombiningBinomialTree<DoublesPair>> getTreeGeneratingFunction(final OptionDefinition definition) {
     return new Function1D<T, RecombiningBinomialTree<DoublesPair>>() {
 
-      @SuppressWarnings({"synthetic-access" })
+      @SuppressWarnings({ "synthetic-access", "unchecked" })
       @Override
       public RecombiningBinomialTree<DoublesPair> evaluate(final T data) {
         final DoublesPair[] tempResults = new DoublesPair[_j];
@@ -115,7 +116,8 @@ public class BinomialOptionModel<T extends StandardOptionDataBundle> extends Tre
             optionValue = df * ((1 - p) * tempResults[j].second + p * tempResults[j + 1].second);
             spotValue = tempResults[j].first / d;
             newData = (T) data.withSpot(spotValue);
-            tempResults[j] = DoublesPair.of(spotValue, exerciseFunction.shouldExercise(newData, optionValue) ? payoffFunction.getPayoff(newData, optionValue) : optionValue);
+            tempResults[j] = DoublesPair.of(spotValue,
+                exerciseFunction.shouldExercise(newData, optionValue) ? payoffFunction.getPayoff(newData, optionValue) : optionValue);
             if (i <= _maxDepthToSave) {
               spotAndOptionPrices[i][j] = tempResults[j];
             }
@@ -127,14 +129,15 @@ public class BinomialOptionModel<T extends StandardOptionDataBundle> extends Tre
   }
 
   /**
-   * 
+   *
    */
   protected class BinomialModelFiniteDifferenceGreekVisitor extends FiniteDifferenceGreekVisitor<T, OptionDefinition> {
     private final RecombiningBinomialTree<DoublesPair> _tree;
     private final double _dt;
 
     @SuppressWarnings("synthetic-access")
-    public BinomialModelFiniteDifferenceGreekVisitor(final RecombiningBinomialTree<DoublesPair> tree, final Function1D<T, Double> function, final T data, final OptionDefinition definition) {
+    public BinomialModelFiniteDifferenceGreekVisitor(final RecombiningBinomialTree<DoublesPair> tree, final Function1D<T, Double> function, final T data,
+        final OptionDefinition definition) {
       super(function, data, definition);
       _tree = tree;
       _dt = definition.getTimeToExpiry(data.getDate()) / _n;

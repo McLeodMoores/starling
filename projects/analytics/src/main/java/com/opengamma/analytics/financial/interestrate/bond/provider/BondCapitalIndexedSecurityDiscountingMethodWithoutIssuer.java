@@ -33,7 +33,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * TODO : remove when inflation curves with issuer are integrated 
+ * TODO : remove when inflation curves with issuer are integrated
  */
 public class BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer {
 
@@ -44,6 +44,7 @@ public class BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer {
 
   /**
    * Return the class instance.
+   *
    * @return The instance.
    */
   public static BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer getInstance() {
@@ -55,8 +56,9 @@ public class BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer {
    */
   private static final PresentValueDiscountingInflationCalculator PVIC = PresentValueDiscountingInflationCalculator.getInstance();
   private static final NetAmountInflationCalculator NAIC = NetAmountInflationCalculator.getInstance();
-  private static final PresentValueCurveSensitivityDiscountingInflationCalculator PVCSIC = PresentValueCurveSensitivityDiscountingInflationCalculator.getInstance();
-  //TODO: REVIEW: Method depends on Calculator; Calculator would depend on Method (code duplicated to avoid circularity).
+  private static final PresentValueCurveSensitivityDiscountingInflationCalculator PVCSIC = PresentValueCurveSensitivityDiscountingInflationCalculator
+      .getInstance();
+  // TODO: REVIEW: Method depends on Calculator; Calculator would depend on Method (code duplicated to avoid circularity).
   /**
    * The root bracket used for yield finding.
    */
@@ -67,9 +69,13 @@ public class BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer {
   private static final RealSingleRootFinder ROOT_FINDER = new BrentSingleRootFinder();
 
   /**
-   * Computes the present value of a capital indexed bound by index estimation and discounting. The value is the value of the nominal and the coupons but not the settlement.
-   * @param bond The bond.
-   * @param provider The provider.
+   * Computes the present value of a capital indexed bound by index estimation and discounting. The value is the value of the nominal and the coupons but not
+   * the settlement.
+   *
+   * @param bond
+   *          The bond.
+   * @param provider
+   *          The provider.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final BondCapitalIndexedSecurity<?> bond, final InflationProviderInterface provider) {
@@ -80,14 +86,19 @@ public class BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer {
   }
 
   /**
-   * Computes the security present value from a quoted clean real price. The real accrued are added to the clean real price,
-   * the result is multiplied by the inflation index ratio and then discounted from settlement time to 0 with the discounting curve.
-   * @param bondCapitalIndexedSecurity The bond security.
-   * @param market The market.
-   * @param cleanPriceReal The clean price.
+   * Computes the security present value from a quoted clean real price. The real accrued are added to the clean real price, the result is multiplied by the
+   * inflation index ratio and then discounted from settlement time to 0 with the discounting curve.
+   *
+   * @param bondCapitalIndexedSecurity
+   *          The bond security.
+   * @param market
+   *          The market.
+   * @param cleanPriceReal
+   *          The clean price.
    * @return The present value.
    */
-  public MultipleCurrencyAmount presentValueFromCleanPriceReal(final BondCapitalIndexedSecurity<?> bondCapitalIndexedSecurity, final InflationProviderInterface market, final double cleanPriceReal) {
+  public MultipleCurrencyAmount presentValueFromCleanPriceReal(final BondCapitalIndexedSecurity<?> bondCapitalIndexedSecurity,
+      final InflationProviderInterface market, final double cleanPriceReal) {
     Validate.notNull(bondCapitalIndexedSecurity, "Coupon");
     Validate.notNull(market, "Market");
     final double notional = bondCapitalIndexedSecurity.getCoupon().getNthPayment(0).getNotional();
@@ -97,10 +108,12 @@ public class BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer {
   }
 
   /**
-   * Calculates the accrued interest for a fixed-coupon bond using the clean price. The accrued interest is defined
-   * as dirty price - clean price.
-   * @param bond The bond, not null
-   * @param cleanPrice The clean price
+   * Calculates the accrued interest for a fixed-coupon bond using the clean price. The accrued interest is defined as dirty price - clean price.
+   *
+   * @param bond
+   *          The bond, not null
+   * @param cleanPrice
+   *          The clean price
    * @return The accrued interest
    */
   public double accruedInterestFromCleanRealPrice(final BondCapitalIndexedSecurity<?> bond, final double cleanPrice) {
@@ -109,10 +122,12 @@ public class BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer {
   }
 
   /**
-   * Calculates the accrued interest for a fixed-coupon bond using the clean price. The accrued interest is defined
-   * as dirty price - clean price.
-   * @param bond The bond, not null
-   * @param yield The yield
+   * Calculates the accrued interest for a fixed-coupon bond using the clean price. The accrued interest is defined as dirty price - clean price.
+   *
+   * @param bond
+   *          The bond, not null
+   * @param yield
+   *          The yield
    * @return The accrued interest
    */
   public double accruedInterestFromCleanYield(final BondCapitalIndexedSecurity<?> bond, final double yield) {
@@ -122,8 +137,11 @@ public class BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer {
 
   /**
    * Computes the clean real price of a bond security from a dirty real price.
-   * @param bond The bond security.
-   * @param dirtyPrice The dirty price.
+   *
+   * @param bond
+   *          The bond security.
+   * @param dirtyPrice
+   *          The dirty price.
    * @return The clean price.
    */
   public double cleanRealPriceFromDirtyRealPrice(final BondCapitalIndexedSecurity<?> bond, final double dirtyPrice) {
@@ -133,8 +151,11 @@ public class BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer {
 
   /**
    * Computes the clean nominal price of a bond security from a dirty real price.
-   * @param bond The bond security.
-   * @param dirtyPrice The dirty price.
+   *
+   * @param bond
+   *          The bond security.
+   * @param dirtyPrice
+   *          The dirty price.
    * @return The clean price.
    */
   public double cleanNominalPriceFromDirtyNominalPrice(final BondCapitalIndexedSecurity<?> bond, final double dirtyPrice) {
@@ -147,8 +168,11 @@ public class BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer {
 
   /**
    * Computes the clean price of a bond security from curves.
-   * @param bond The bond security.
-   * @param issuerMulticurves The issuer and multi-curves provider.
+   *
+   * @param bond
+   *          The bond security.
+   * @param issuerMulticurves
+   *          The issuer and multi-curves provider.
    * @return The clean price.
    */
   public double cleanRealPriceFromCurves(final BondCapitalIndexedSecurity<?> bond, final InflationProviderInterface issuerMulticurves) {
@@ -158,8 +182,11 @@ public class BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer {
 
   /**
    * Compute the dirty price of a bond security from curves.
-   * @param bond The bond security.
-   * @param issuerMulticurves The issuer and multi-curves provider.
+   *
+   * @param bond
+   *          The bond security.
+   * @param issuerMulticurves
+   *          The issuer and multi-curves provider.
    * @return The dirty price.
    */
   public double dirtyRealPriceFromCurves(final BondCapitalIndexedSecurity<?> bond, final InflationProviderInterface issuerMulticurves) {
@@ -173,8 +200,11 @@ public class BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer {
 
   /**
    * Computes the dirty real price of a bond security from the clean real price.
-   * @param bond The bond security.
-   * @param cleanPrice The clean price.
+   *
+   * @param bond
+   *          The bond security.
+   * @param cleanPrice
+   *          The clean price.
    * @return The clean price.
    */
   public double dirtyRealPriceFromCleanRealPrice(final BondCapitalIndexedSecurity<?> bond, final double cleanPrice) {
@@ -184,9 +214,13 @@ public class BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer {
 
   /**
    * The net amount paid at settlement date for a given clean real price.
-   * @param bond The bond.
-   * @param market The market.
-   * @param cleanPriceReal The clean real price.
+   *
+   * @param bond
+   *          The bond.
+   * @param market
+   *          The market.
+   * @param cleanPriceReal
+   *          The clean real price.
    * @return The net amount.
    */
   public MultipleCurrencyAmount netAmount(final BondCapitalIndexedSecurity<Coupon> bond, final InflationProviderInterface market, final double cleanPriceReal) {
@@ -199,8 +233,11 @@ public class BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer {
 
   /**
    * Computes the dirty (real or nominal depending of the convention) price from the conventional real yield.
-   * @param bond  The bond security.
-   * @param yield The bond yield.
+   *
+   * @param bond
+   *          The bond security.
+   * @param yield
+   *          The bond yield.
    * @return The dirty price.
    */
   public double dirtyPriceFromRealYield(final BondCapitalIndexedSecurity<?> bond, final double yield) {
@@ -245,18 +282,17 @@ public class BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer {
       final double a = rpiLast / rpibase * Math.pow(u, 2 * nbMonth / 12);
       if (bond.getCoupon().getNumberOfPayments() == 1) {
         return Math.pow(u * v, bond.getAccrualFactorToNextCoupon()) * (firstCashFlow + 1) * a / u;
-      } else {
-        double secondYearFraction = 0.0;
-        if (bond.getCoupon().getNthPayment(1) instanceof CouponInflationZeroCouponInterpolationGearing) {
-          secondYearFraction = ((CouponInflationZeroCouponInterpolationGearing) bond.getCoupon().getNthPayment(1)).getPaymentYearFraction();
-        } else if (bond.getCoupon().getNthPayment(1) instanceof CouponInflationZeroCouponMonthlyGearing) {
-          secondYearFraction = ((CouponInflationZeroCouponMonthlyGearing) bond.getCoupon().getNthPayment(1)).getPaymentYearFraction();
-        }
-        final double secondCashFlow = secondYearFraction * realRate;
-        final double vn = Math.pow(v, nbCoupon - 1);
-        final double pvAtFirstCoupon = firstCashFlow + secondCashFlow * u * v + a * realRate * v * v * (1 - vn / v) / (1 - v) + a * vn;
-        return pvAtFirstCoupon * Math.pow(u * v, bond.getAccrualFactorToNextCoupon());
       }
+      double secondYearFraction = 0.0;
+      if (bond.getCoupon().getNthPayment(1) instanceof CouponInflationZeroCouponInterpolationGearing) {
+        secondYearFraction = ((CouponInflationZeroCouponInterpolationGearing) bond.getCoupon().getNthPayment(1)).getPaymentYearFraction();
+      } else if (bond.getCoupon().getNthPayment(1) instanceof CouponInflationZeroCouponMonthlyGearing) {
+        secondYearFraction = ((CouponInflationZeroCouponMonthlyGearing) bond.getCoupon().getNthPayment(1)).getPaymentYearFraction();
+      }
+      final double secondCashFlow = secondYearFraction * realRate;
+      final double vn = Math.pow(v, nbCoupon - 1);
+      final double pvAtFirstCoupon = firstCashFlow + secondCashFlow * u * v + a * realRate * v * v * (1 - vn / v) / (1 - v) + a * vn;
+      return pvAtFirstCoupon * Math.pow(u * v, bond.getAccrualFactorToNextCoupon());
     }
     if (yieldConvention.equals(UK_IL_BOND)) {
       double firstYearFraction = 0.0;
@@ -270,26 +306,28 @@ public class BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer {
       final double v = 1 / (1 + yield / bond.getCouponPerYear());
       if (bond.getCoupon().getNumberOfPayments() == 1) {
         return Math.pow(v, bond.getAccrualFactorToNextCoupon()) * (firstCashFlow + 1);
-      } else {
-        double secondYearFraction = 0.0;
-        if (bond.getCoupon().getNthPayment(1) instanceof CouponInflationZeroCouponInterpolationGearing) {
-          secondYearFraction = ((CouponInflationZeroCouponInterpolationGearing) bond.getCoupon().getNthPayment(1)).getPaymentYearFraction();
-        } else if (bond.getCoupon().getNthPayment(1) instanceof CouponInflationZeroCouponMonthlyGearing) {
-          secondYearFraction = ((CouponInflationZeroCouponMonthlyGearing) bond.getCoupon().getNthPayment(1)).getPaymentYearFraction();
-        }
-        final double secondCashFlow = secondYearFraction * realRate;
-        final double vn = Math.pow(v, nbCoupon - 1);
-        final double pvAtFirstCoupon = firstCashFlow + secondCashFlow * v + realRate * v * v * (1 - vn / v) / (1 - v) + vn;
-        return pvAtFirstCoupon * Math.pow(v, bond.getAccrualFactorToNextCoupon());
       }
+      double secondYearFraction = 0.0;
+      if (bond.getCoupon().getNthPayment(1) instanceof CouponInflationZeroCouponInterpolationGearing) {
+        secondYearFraction = ((CouponInflationZeroCouponInterpolationGearing) bond.getCoupon().getNthPayment(1)).getPaymentYearFraction();
+      } else if (bond.getCoupon().getNthPayment(1) instanceof CouponInflationZeroCouponMonthlyGearing) {
+        secondYearFraction = ((CouponInflationZeroCouponMonthlyGearing) bond.getCoupon().getNthPayment(1)).getPaymentYearFraction();
+      }
+      final double secondCashFlow = secondYearFraction * realRate;
+      final double vn = Math.pow(v, nbCoupon - 1);
+      final double pvAtFirstCoupon = firstCashFlow + secondCashFlow * v + realRate * v * v * (1 - vn / v) / (1 - v) + vn;
+      return pvAtFirstCoupon * Math.pow(v, bond.getAccrualFactorToNextCoupon());
     }
     throw new UnsupportedOperationException("The convention " + bond.getYieldConvention().getName() + " is not supported.");
   }
 
   /**
    * Computes the clean price (real or nominal depending on the convention) from the conventional real yield.
-   * @param bond  The bond security.
-   * @param yield The bond yield.
+   *
+   * @param bond
+   *          The bond security.
+   * @param yield
+   *          The bond yield.
    * @return The clean price.
    */
   public double cleanPriceFromYield(final BondCapitalIndexedSecurity<?> bond, final double yield) {
@@ -300,8 +338,11 @@ public class BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer {
 
   /**
    * Compute the conventional yield from the dirty price.
-   * @param bond The bond security.
-   * @param dirtyPrice The bond dirty price.
+   *
+   * @param bond
+   *          The bond security.
+   * @param dirtyPrice
+   *          The bond dirty price.
    * @return The yield.
    */
   public double yieldRealFromDirtyRealPrice(final BondCapitalIndexedSecurity<?> bond, final double dirtyPrice) {
@@ -320,12 +361,17 @@ public class BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer {
   }
 
   /**
-   * Computes the present value sensitivity of a capital indexed bound by index estimation and discounting. The sensitivity is the sensitivity of the nominal and the coupons but not the settlement.
-   * @param bond The bond.
-   * @param provider The provider.
+   * Computes the present value sensitivity of a capital indexed bound by index estimation and discounting. The sensitivity is the sensitivity of the nominal
+   * and the coupons but not the settlement.
+   *
+   * @param bond
+   *          The bond.
+   * @param provider
+   *          The provider.
    * @return The present value.
    */
-  public MultipleCurrencyInflationSensitivity presentValueCurveSensitivity(final BondCapitalIndexedSecurity<?> bond, final InflationProviderInterface provider) {
+  public MultipleCurrencyInflationSensitivity presentValueCurveSensitivity(final BondCapitalIndexedSecurity<?> bond,
+      final InflationProviderInterface provider) {
     ArgumentChecker.notNull(bond, "Bond");
     final MultipleCurrencyInflationSensitivity sensitivityNominal = bond.getNominal().accept(PVCSIC, provider);
     final MultipleCurrencyInflationSensitivity sensitivityCoupon = bond.getCoupon().accept(PVCSIC, provider);
@@ -334,8 +380,11 @@ public class BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer {
 
   /**
    * Computes the bill yield from the curves. The yield is in the bill yield convention.
-   * @param bond The bond.
-   * @param provider The inflation and multi-curves provider.
+   *
+   * @param bond
+   *          The bond.
+   * @param provider
+   *          The inflation and multi-curves provider.
    * @return The yield.
    */
   public double yieldRealFromCurves(final BondCapitalIndexedSecurity<?> bond, final InflationProviderInterface provider) {
@@ -348,8 +397,11 @@ public class BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer {
 
   /**
    * Calculates the modified duration from a standard yield.
-   * @param bond The bond
-   * @param yield The yield
+   *
+   * @param bond
+   *          The bond
+   * @param yield
+   *          The yield
    * @return The modified duration
    */
   private double modifiedDurationFromYieldStandard(final BondCapitalIndexedSecurity<?> bond, final double yield) {
@@ -360,7 +412,8 @@ public class BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer {
     double mdAtFirstCoupon = 0;
     double pvAtFirstCoupon = 0;
     for (int loopcpn = 0; loopcpn < nbCoupon; loopcpn++) {
-      mdAtFirstCoupon += bond.getCoupon().getNthPayment(loopcpn).getNotional() / Math.pow(factorOnPeriod, loopcpn + 1) * (loopcpn + bond.getAccrualFactorToNextCoupon()) / bond.getCouponPerYear();
+      mdAtFirstCoupon += bond.getCoupon().getNthPayment(loopcpn).getNotional() / Math.pow(factorOnPeriod, loopcpn + 1)
+          * (loopcpn + bond.getAccrualFactorToNextCoupon()) / bond.getCouponPerYear();
       pvAtFirstCoupon += bond.getCoupon().getNthPayment(loopcpn).getNotional() / Math.pow(factorOnPeriod, loopcpn);
     }
     mdAtFirstCoupon += nominal / Math.pow(factorOnPeriod, nbCoupon) * (nbCoupon - 1 + bond.getAccrualFactorToNextCoupon()) / bond.getCouponPerYear();
@@ -372,8 +425,11 @@ public class BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer {
 
   /**
    * Computes the modified duration of a bond from the curves.
-   * @param bond  The bond security.
-   * @param issuerMulticurves The issuer and multi-curves provider.
+   *
+   * @param bond
+   *          The bond security.
+   * @param issuerMulticurves
+   *          The issuer and multi-curves provider.
    * @return The modified duration.
    */
   public double modifiedDurationFromCurves(final BondCapitalIndexedSecurity<?> bond, final InflationProviderInterface issuerMulticurves) {
@@ -383,8 +439,11 @@ public class BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer {
 
   /**
    * Compute the conventional yield from the clean price.
-   * @param bond The bond security.
-   * @param cleanPrice The bond clean price.
+   *
+   * @param bond
+   *          The bond security.
+   * @param cleanPrice
+   *          The bond clean price.
    * @return The yield.
    */
   public double yieldRealFromCleanRealPrice(final BondCapitalIndexedSecurity<?> bond, final double cleanPrice) {
@@ -395,8 +454,11 @@ public class BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer {
 
   /**
    * Computes the modified duration of a bond from the clean price.
-   * @param bond  The bond security.
-   * @param cleanPrice The bond clean price.
+   *
+   * @param bond
+   *          The bond security.
+   * @param cleanPrice
+   *          The bond clean price.
    * @return The modified duration.
    */
   public double modifiedDurationFromCleanPrice(final BondCapitalIndexedSecurity<?> bond, final double cleanPrice) {
@@ -406,8 +468,11 @@ public class BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer {
 
   /**
    * Calculates the convexity from a standard yield.
-   * @param bond The bond
-   * @param yield The yield
+   *
+   * @param bond
+   *          The bond
+   * @param yield
+   *          The yield
    * @return The convexity
    */
   private double convexityFromYieldStandard(final BondCapitalIndexedSecurity<?> bond, final double yield) {
@@ -418,12 +483,13 @@ public class BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer {
     double cvAtFirstCoupon = 0;
     double pvAtFirstCoupon = 0;
     for (int loopcpn = 0; loopcpn < nbCoupon; loopcpn++) {
-      cvAtFirstCoupon += bond.getCoupon().getNthPayment(loopcpn).getNotional() / Math.pow(factorOnPeriod, loopcpn + 2) * (loopcpn + bond.getAccrualFactorToNextCoupon())
-          * (loopcpn + bond.getAccrualFactorToNextCoupon() + 1) / (bond.getCouponPerYear() * bond.getCouponPerYear());
+      cvAtFirstCoupon += bond.getCoupon().getNthPayment(loopcpn).getNotional() / Math.pow(factorOnPeriod, loopcpn + 2)
+          * (loopcpn + bond.getAccrualFactorToNextCoupon()) * (loopcpn + bond.getAccrualFactorToNextCoupon() + 1)
+          / (bond.getCouponPerYear() * bond.getCouponPerYear());
       pvAtFirstCoupon += bond.getCoupon().getNthPayment(loopcpn).getNotional() / Math.pow(factorOnPeriod, loopcpn);
     }
-    cvAtFirstCoupon += nominal / Math.pow(factorOnPeriod, nbCoupon + 1) * (nbCoupon - 1 + bond.getAccrualFactorToNextCoupon()) * (nbCoupon + bond.getAccrualFactorToNextCoupon())
-        / (bond.getCouponPerYear() * bond.getCouponPerYear());
+    cvAtFirstCoupon += nominal / Math.pow(factorOnPeriod, nbCoupon + 1) * (nbCoupon - 1 + bond.getAccrualFactorToNextCoupon())
+        * (nbCoupon + bond.getAccrualFactorToNextCoupon()) / (bond.getCouponPerYear() * bond.getCouponPerYear());
     pvAtFirstCoupon += nominal / Math.pow(factorOnPeriod, nbCoupon - 1);
     final double pv = pvAtFirstCoupon * Math.pow(factorOnPeriod, -bond.getAccrualFactorToNextCoupon());
     final double cv = cvAtFirstCoupon * Math.pow(factorOnPeriod, -bond.getAccrualFactorToNextCoupon()) / pv;
@@ -432,8 +498,11 @@ public class BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer {
 
   /**
    * Computes the convexity of a bond from the curves.
-   * @param bond  The bond security.
-   * @param issuerMulticurves The issuer and multi-curves provider.
+   *
+   * @param bond
+   *          The bond security.
+   * @param issuerMulticurves
+   *          The issuer and multi-curves provider.
    * @return The convexity.
    */
   public double convexityFromCurves(final BondCapitalIndexedSecurity<?> bond, final InflationProviderInterface issuerMulticurves) {
@@ -443,8 +512,11 @@ public class BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer {
 
   /**
    * Calculates the modified duration from a standard yield.
-   * @param bond The bond
-   * @param yield The yield
+   *
+   * @param bond
+   *          The bond
+   * @param yield
+   *          The yield
    * @return The modified duration
    */
   public double modifiedDurationFromYieldFiniteDifference(final BondCapitalIndexedSecurity<?> bond, final double yield) {
@@ -457,8 +529,11 @@ public class BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer {
 
   /**
    * Calculates the modified duration from a standard yield.
-   * @param bond The bond
-   * @param yield The yield
+   *
+   * @param bond
+   *          The bond
+   * @param yield
+   *          The yield
    * @return The modified duration
    */
   public double convexityFromYieldFiniteDifference(final BondCapitalIndexedSecurity<?> bond, final double yield) {
@@ -471,24 +546,33 @@ public class BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer {
   }
 
   /**
-   * Computes the present value of a bond security from z-spread. The z-spread is a parallel shift applied to the discounting curve associated to the bond (Issuer Entity).
-   * The parallel shift is done in the curve convention.
-   * @param bond The bond security.
-   * @param issuerMulticurves The issuer and multi-curves provider.
-   * @param zSpread The z-spread.
+   * Computes the present value of a bond security from z-spread. The z-spread is a parallel shift applied to the discounting curve associated to the bond
+   * (Issuer Entity). The parallel shift is done in the curve convention.
+   *
+   * @param bond
+   *          The bond security.
+   * @param issuerMulticurves
+   *          The issuer and multi-curves provider.
+   * @param zSpread
+   *          The z-spread.
    * @return The present value.
    */
-  public MultipleCurrencyAmount presentValueFromZSpread(final BondCapitalIndexedSecurity<?> bond, final InflationProviderInterface issuerMulticurves, final double zSpread) {
+  public MultipleCurrencyAmount presentValueFromZSpread(final BondCapitalIndexedSecurity<?> bond, final InflationProviderInterface issuerMulticurves,
+      final double zSpread) {
     final InflationProviderInterface issuerShifted = new InflationProviderDecorated(issuerMulticurves, zSpread);
     return presentValue(bond, issuerShifted);
   }
 
   /**
-   * Computes the present value of a bond security from z-spread. The z-spread is a parallel shift applied to the discounting curve associated to the bond (Issuer Entity).
-   * The parallel shift is done in the curve convention.
-   * @param bond The bond security.
-   * @param issuerMulticurves The issuer and multi-curves provider.
-   * @param zSpread The z-spread.
+   * Computes the present value of a bond security from z-spread. The z-spread is a parallel shift applied to the discounting curve associated to the bond
+   * (Issuer Entity). The parallel shift is done in the curve convention.
+   *
+   * @param bond
+   *          The bond security.
+   * @param issuerMulticurves
+   *          The issuer and multi-curves provider.
+   * @param zSpread
+   *          The z-spread.
    * @return The present value.
    */
   public double cleanPriceFromZSpread(final BondCapitalIndexedSecurity<?> bond, final InflationProviderInterface issuerMulticurves, final double zSpread) {
@@ -497,14 +581,19 @@ public class BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer {
   }
 
   /**
-   * Computes a bond z-spread from the curves and a present value.
-   * The z-spread is a parallel shift applied to the discounting curve associated to the bond (Issuer Entity) to match the present value.
-   * @param bond The bond.
-   * @param issuerMulticurves The issuer and multi-curves provider.
-   * @param cleanRealPrice The target clean real price.
+   * Computes a bond z-spread from the curves and a present value. The z-spread is a parallel shift applied to the discounting curve associated to the bond
+   * (Issuer Entity) to match the present value.
+   *
+   * @param bond
+   *          The bond.
+   * @param issuerMulticurves
+   *          The issuer and multi-curves provider.
+   * @param cleanRealPrice
+   *          The target clean real price.
    * @return The z-spread.
    */
-  public double zSpreadFromCurvesAndCleanRealPriceDirect(final BondCapitalIndexedSecurity<?> bond, final InflationProviderInterface issuerMulticurves, final double cleanRealPrice) {
+  public double zSpreadFromCurvesAndCleanRealPriceDirect(final BondCapitalIndexedSecurity<?> bond, final InflationProviderInterface issuerMulticurves,
+      final double cleanRealPrice) {
     ArgumentChecker.notNull(bond, "Bond");
     ArgumentChecker.notNull(issuerMulticurves, "Issuer and multi-curves provider");
     final Function1D<Double, Double> residual = new Function1D<Double, Double>() {
@@ -519,14 +608,19 @@ public class BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer {
   }
 
   /**
-   * Computes a bond z-spread from the curves and a present value.
-   * The z-spread is a parallel shift applied to the discounting curve associated to the bond (Issuer Entity) to match the present value.
-   * @param bond The bond.
-   * @param issuerMulticurves The issuer and multi-curves provider.
-   * @param pv The target present value.
+   * Computes a bond z-spread from the curves and a present value. The z-spread is a parallel shift applied to the discounting curve associated to the bond
+   * (Issuer Entity) to match the present value.
+   *
+   * @param bond
+   *          The bond.
+   * @param issuerMulticurves
+   *          The issuer and multi-curves provider.
+   * @param pv
+   *          The target present value.
    * @return The z-spread.
    */
-  public double zSpreadFromCurvesAndPV(final BondCapitalIndexedSecurity<?> bond, final InflationProviderInterface issuerMulticurves, final MultipleCurrencyAmount pv) {
+  public double zSpreadFromCurvesAndPV(final BondCapitalIndexedSecurity<?> bond, final InflationProviderInterface issuerMulticurves,
+      final MultipleCurrencyAmount pv) {
     ArgumentChecker.notNull(bond, "Bond");
     ArgumentChecker.notNull(issuerMulticurves, "Issuer and multi-curves provider");
     final Currency ccy = bond.getCurrency();
@@ -543,14 +637,19 @@ public class BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer {
   }
 
   /**
-   * Computes a bond z-spread from the curves and a clean price. 
-   * The z-spread is a parallel shift applied to the discounting curve associated to the bond (Issuer Entity) to match the CleanPrice present value.
-   * @param bond The bond.
-   * @param issuerMulticurves The issuer and multi-curves provider.
-   * @param cleanPrice The target clean price.
+   * Computes a bond z-spread from the curves and a clean price. The z-spread is a parallel shift applied to the discounting curve associated to the bond
+   * (Issuer Entity) to match the CleanPrice present value.
+   *
+   * @param bond
+   *          The bond.
+   * @param issuerMulticurves
+   *          The issuer and multi-curves provider.
+   * @param cleanPrice
+   *          The target clean price.
    * @return The z-spread.
    */
-  public double zSpreadFromCurvesAndCleanPrice(final BondCapitalIndexedSecurity<Coupon> bond, final InflationProviderInterface issuerMulticurves, final double cleanPrice) {
+  public double zSpreadFromCurvesAndCleanPrice(final BondCapitalIndexedSecurity<Coupon> bond, final InflationProviderInterface issuerMulticurves,
+      final double cleanPrice) {
     return zSpreadFromCurvesAndPV(bond, issuerMulticurves, presentValueFromCleanPriceReal(bond, issuerMulticurves, cleanPrice));
   }
 

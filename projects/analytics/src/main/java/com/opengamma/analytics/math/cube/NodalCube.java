@@ -16,12 +16,17 @@ import com.opengamma.util.tuple.Quadruple;
 import com.opengamma.util.tuple.Triple;
 
 /**
- * A cube that is defined by a set of nodal points (i.e. <i>(x, y, z)</i> data). Any attempt to find a <i>z</i> value
- * for which there is no <i>(x, y)</i> nodal point will result in failure.
- * @param <X> type of <i>x</i> data points
- * @param <Y> type of <i>y</i> data points
- * @param <Z> type of <i>z</i> data points
- * @param <V> type of <i>v</i> data points
+ * A cube that is defined by a set of nodal points (i.e. <i>(x, y, z)</i> data). Any attempt to find a <i>z</i> value for which there is no <i>(x, y)</i> nodal
+ * point will result in failure.
+ *
+ * @param <X>
+ *          type of <i>x</i> data points
+ * @param <Y>
+ *          type of <i>y</i> data points
+ * @param <Z>
+ *          type of <i>z</i> data points
+ * @param <V>
+ *          type of <i>v</i> data points
  */
 public class NodalCube<X, Y, Z, V> extends Cube<X, Y, Z, V> {
 
@@ -32,9 +37,12 @@ public class NodalCube<X, Y, Z, V> extends Cube<X, Y, Z, V> {
   private final String _name;
 
   /**
-   * @param points A collection of data points, not null
-   * @param name A cube name
+   * @param points
+   *          A collection of data points, not null
+   * @param name
+   *          A cube name
    */
+  @SuppressWarnings("unchecked")
   public NodalCube(final Collection<Quadruple<X, Y, Z, V>> points, final String name) {
     final List<X> xData = newArrayList();
     final List<Y> yData = newArrayList();
@@ -55,96 +63,142 @@ public class NodalCube<X, Y, Z, V> extends Cube<X, Y, Z, V> {
   }
 
   /**
-   * @param xData An array of <i>x</i> data points, not null
-   * @param yData An array of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
-   * @param zData An array of <i>z</i> data points, not null, contains same number of entries as <i>x</i>
-   * @param vData An array of <i>v</i> data points, not null, contains same number of entries as <i>x</i>
-   * @param <X> type of <i>x</i> data points
-   * @param <Y> type of <i>y</i> data points
-   * @param <Z> type of <i>z</i> data points
-   * @param <V> type of <i>v</i> data points
+   * @param xData
+   *          An array of <i>x</i> data points, not null
+   * @param yData
+   *          An array of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
+   * @param zData
+   *          An array of <i>z</i> data points, not null, contains same number of entries as <i>x</i>
+   * @param vData
+   *          An array of <i>v</i> data points, not null, contains same number of entries as <i>x</i>
+   * @param <X>
+   *          type of <i>x</i> data points
+   * @param <Y>
+   *          type of <i>y</i> data points
+   * @param <Z>
+   *          type of <i>z</i> data points
+   * @param <V>
+   *          type of <i>v</i> data points
    * @return A nodal cube with automatically-generated name
    */
-  public static <X, Y, Z, V> NodalCube from(final X[] xData, final Y[] yData, final Z[] zData, final V[] vData) {
-    return new NodalCube(xData, yData, zData, vData);
+  public static <X, Y, Z, V> NodalCube<X, Y, Z, V> from(final X[] xData, final Y[] yData, final Z[] zData, final V[] vData) {
+    return new NodalCube<>(xData, yData, zData, vData);
   }
 
   /**
-   * @param xData A list of <i>x</i> data points, not null
-   * @param yData A list of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
-   * @param zData A list of <i>z</i> data points, not null, contains same number of entries as <i>x</i>
-   * @param vData An array of <i>v</i> data points, not null, contains same number of entries as <i>x</i>
-   * @param <X> type of <i>x</i> data points
-   * @param <Y> type of <i>y</i> data points
-   * @param <Z> type of <i>z</i> data points
-   * @param <V> type of <i>v</i> data points
+   * @param xData
+   *          A list of <i>x</i> data points, not null
+   * @param yData
+   *          A list of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
+   * @param zData
+   *          A list of <i>z</i> data points, not null, contains same number of entries as <i>x</i>
+   * @param vData
+   *          An array of <i>v</i> data points, not null, contains same number of entries as <i>x</i>
+   * @param <X>
+   *          type of <i>x</i> data points
+   * @param <Y>
+   *          type of <i>y</i> data points
+   * @param <Z>
+   *          type of <i>z</i> data points
+   * @param <V>
+   *          type of <i>v</i> data points
    * @return A nodal cube with automatically-generated name
    */
-  public static <X, Y, Z, V> NodalCube from(final List<X> xData, final List<Y> yData, final List<Z> zData, final List<V> vData) {
-    return new NodalCube(xData, yData, zData, vData);
+  public static <X, Y, Z, V> NodalCube<X, Y, Z, V> from(final List<X> xData, final List<Y> yData, final List<Z> zData, final List<V> vData) {
+    return new NodalCube<>(xData, yData, zData, vData);
   }
 
   /**
-   * @param xData An array of <i>x</i> data points, not null
-   * @param yData An array of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
-   * @param zData An array of <i>z</i> data points, not null, contains same number of entries as <i>x</i>
-   * @param vData An array of <i>v</i> data points, not null, contains same number of entries as <i>x</i>
-   * @param <X> type of <i>x</i> data points
-   * @param <Y> type of <i>y</i> data points
-   * @param <Z> type of <i>z</i> data points
-   * @param <V> type of <i>v</i> data points
-   * @param name The name of the cube
+   * @param xData
+   *          An array of <i>x</i> data points, not null
+   * @param yData
+   *          An array of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
+   * @param zData
+   *          An array of <i>z</i> data points, not null, contains same number of entries as <i>x</i>
+   * @param vData
+   *          An array of <i>v</i> data points, not null, contains same number of entries as <i>x</i>
+   * @param <X>
+   *          type of <i>x</i> data points
+   * @param <Y>
+   *          type of <i>y</i> data points
+   * @param <Z>
+   *          type of <i>z</i> data points
+   * @param <V>
+   *          type of <i>v</i> data points
+   * @param name
+   *          The name of the cube
    * @return A nodal cube with automatically-generated name
    */
-  public static <X, Y, Z, V> NodalCube from(final X[] xData, final Y[] yData, final Z[] zData, final V[] vData, final String name) {
-    return new NodalCube(xData, yData, zData, vData, name);
+  public static <X, Y, Z, V> NodalCube<X, Y, Z, V> from(final X[] xData, final Y[] yData, final Z[] zData, final V[] vData, final String name) {
+    return new NodalCube<>(xData, yData, zData, vData, name);
   }
 
   /**
-   * @param xData A list of <i>x</i> data points, not null
-   * @param yData A list of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
-   * @param zData A list of <i>z</i> data points, not null, contains same number of entries as <i>x</i>
-   * @param vData An array of <i>v</i> data points, not null, contains same number of entries as <i>x</i>
-   * @param <X> type of <i>x</i> data points
-   * @param <Y> type of <i>y</i> data points
-   * @param <Z> type of <i>z</i> data points
-   * @param <V> type of <i>v</i> data points
-   * @param name The name of the cube
+   * @param xData
+   *          A list of <i>x</i> data points, not null
+   * @param yData
+   *          A list of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
+   * @param zData
+   *          A list of <i>z</i> data points, not null, contains same number of entries as <i>x</i>
+   * @param vData
+   *          An array of <i>v</i> data points, not null, contains same number of entries as <i>x</i>
+   * @param <X>
+   *          type of <i>x</i> data points
+   * @param <Y>
+   *          type of <i>y</i> data points
+   * @param <Z>
+   *          type of <i>z</i> data points
+   * @param <V>
+   *          type of <i>v</i> data points
+   * @param name
+   *          The name of the cube
    * @return A nodal cube with automatically-generated name
    */
-  public static <X, Y, Z, V> NodalCube from(final List<X> xData, final List<Y> yData, final List<Z> zData, final List<V> vData, final String name) {
-    return new NodalCube(xData, yData, zData, vData, name);
+  public static <X, Y, Z, V> NodalCube<X, Y, Z, V> from(final List<X> xData, final List<Y> yData, final List<Z> zData, final List<V> vData, final String name) {
+    return new NodalCube<>(xData, yData, zData, vData, name);
   }
 
   /**
-   * @param xData An array of <i>x</i> data points, not null
-   * @param yData An array of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
-   * @param zData An array of <i>z</i> data points, not null, contains same number of entries as <i>x</i>
-   * @param vData An array of <i>v</i> data points, not null, contains same number of entries as <i>x</i>
+   * @param xData
+   *          An array of <i>x</i> data points, not null
+   * @param yData
+   *          An array of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
+   * @param zData
+   *          An array of <i>z</i> data points, not null, contains same number of entries as <i>x</i>
+   * @param vData
+   *          An array of <i>v</i> data points, not null, contains same number of entries as <i>x</i>
    */
   public NodalCube(final X[] xData, final Y[] yData, final Z[] zData, final V[] vData) {
     this(xData, yData, zData, vData, null);
   }
 
   /**
-   * @param xData A list of <i>x</i> data points, not null
-   * @param yData A list of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
-   * @param zData A list of <i>z</i> data points, not null, contains same number of entries as <i>x</i>
-   * @param vData An array of <i>v</i> data points, not null, contains same number of entries as <i>x</i>
+   * @param xData
+   *          A list of <i>x</i> data points, not null
+   * @param yData
+   *          A list of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
+   * @param zData
+   *          A list of <i>z</i> data points, not null, contains same number of entries as <i>x</i>
+   * @param vData
+   *          An array of <i>v</i> data points, not null, contains same number of entries as <i>x</i>
    */
   public NodalCube(final List<X> xData, final List<Y> yData, final List<Z> zData, final List<V> vData) {
     this(xData, yData, zData, vData, null);
   }
 
   /**
-   * @param xData An array of <i>x</i> data points, not null
-   * @param yData An array of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
-   * @param zData An array of <i>z</i> data points, not null, contains same number of entries as <i>x</i>
-   * @param vData An array of <i>v</i> data points, not null, contains same number of entries as <i>x</i>
-   * @param name The name of the cube
+   * @param xData
+   *          An array of <i>x</i> data points, not null
+   * @param yData
+   *          An array of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
+   * @param zData
+   *          An array of <i>z</i> data points, not null, contains same number of entries as <i>x</i>
+   * @param vData
+   *          An array of <i>v</i> data points, not null, contains same number of entries as <i>x</i>
+   * @param name
+   *          The name of the cube
    */
-  public NodalCube(final X[] xData, final Y[] yData, final Z[] zData, final V[] vData,
-      final String name) {
+  public NodalCube(final X[] xData, final Y[] yData, final Z[] zData, final V[] vData, final String name) {
     _xData = xData;
     _yData = yData;
     _zData = zData;
@@ -153,14 +207,19 @@ public class NodalCube<X, Y, Z, V> extends Cube<X, Y, Z, V> {
   }
 
   /**
-   * @param xData A list of <i>x</i> data points, not null
-   * @param yData A list of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
-   * @param zData A list of <i>z</i> data points, not null, contains same number of entries as <i>x</i>
-   * @param vData An array of <i>v</i> data points, not null, contains same number of entries as <i>x</i>
-   * @param name The name of the cube
+   * @param xData
+   *          A list of <i>x</i> data points, not null
+   * @param yData
+   *          A list of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
+   * @param zData
+   *          A list of <i>z</i> data points, not null, contains same number of entries as <i>x</i>
+   * @param vData
+   *          An array of <i>v</i> data points, not null, contains same number of entries as <i>x</i>
+   * @param name
+   *          The name of the cube
    */
-  public NodalCube(final List<X> xData, final List<Y> yData, final List<Z> zData, final List<V> vData,
-      final String name) {
+  @SuppressWarnings("unchecked")
+  public NodalCube(final List<X> xData, final List<Y> yData, final List<Z> zData, final List<V> vData, final String name) {
     _xData = (X[]) xData.toArray();
     _yData = (Y[]) yData.toArray();
     _zData = (Z[]) zData.toArray();
@@ -170,7 +229,9 @@ public class NodalCube<X, Y, Z, V> extends Cube<X, Y, Z, V> {
 
   /**
    * {@inheritDoc}
-   * @throws IllegalArgumentException If the <i>(x, y, z)</i> value is not a nodal point
+   *
+   * @throws IllegalArgumentException
+   *           If the <i>(x, y, z)</i> value is not a nodal point
    */
   @Override
   public V getValue(final X x, final Y y, final Z z) {
@@ -191,7 +252,9 @@ public class NodalCube<X, Y, Z, V> extends Cube<X, Y, Z, V> {
 
   /**
    * {@inheritDoc}
-   * @throws IllegalArgumentException If the <i>(x, y, z)</i> value is not a nodal point
+   *
+   * @throws IllegalArgumentException
+   *           If the <i>(x, y, z)</i> value is not a nodal point
    */
   @Override
   public V getValue(final Triple<X, Y, Z> xyz) {

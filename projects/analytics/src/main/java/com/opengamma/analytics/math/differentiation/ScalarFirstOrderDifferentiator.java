@@ -14,9 +14,8 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Differentiates a scalar function with respect to its argument using finite difference.
  * <p>
- * For a function $y = f(x)$ where $x$ and $y$ are scalars, this class produces
- * a gradient function $g(x)$, i.e. a function that returns the gradient for
- * each point $x$, where $g$ is the scalar $\frac{dy}{dx}$.
+ * For a function $y = f(x)$ where $x$ and $y$ are scalars, this class produces a gradient function $g(x)$, i.e. a function that returns the gradient for each
+ * point $x$, where $g$ is the scalar $\frac{dy}{dx}$.
  */
 public class ScalarFirstOrderDifferentiator implements Differentiator<Double, Double, Double> {
   private static final double DEFAULT_EPS = 1e-5;
@@ -35,18 +34,22 @@ public class ScalarFirstOrderDifferentiator implements Differentiator<Double, Do
   }
 
   /**
-   * Uses the default value of eps (10<sup>-5</sup>)
-   * @param differenceType The differencing type to be used in calculating the gradient function
+   * Uses the default value of eps (10<sup>-5</sup>).
+   *
+   * @param differenceType
+   *          The differencing type to be used in calculating the gradient function
    */
   public ScalarFirstOrderDifferentiator(final FiniteDifferenceType differenceType) {
     this(differenceType, DEFAULT_EPS);
   }
 
   /**
-   * @param differenceType {@link FiniteDifferenceType#FORWARD}, {@link FiniteDifferenceType#BACKWARD}, or {@link FiniteDifferenceType#CENTRAL}. In most situations,
-   * {@link FiniteDifferenceType#CENTRAL} is preferable. Not null
-   * @param eps The step size used to approximate the derivative. If this value is too small, the result will most likely be dominated by noise.
-   * Use around 10<sup>5</sup> times the domain size.
+   * @param differenceType
+   *          {@link FiniteDifferenceType#FORWARD}, {@link FiniteDifferenceType#BACKWARD}, or {@link FiniteDifferenceType#CENTRAL}. In most situations,
+   *          {@link FiniteDifferenceType#CENTRAL} is preferable. Not null
+   * @param eps
+   *          The step size used to approximate the derivative. If this value is too small, the result will most likely be dominated by noise. Use around
+   *          10<sup>5</sup> times the domain size.
    */
   public ScalarFirstOrderDifferentiator(final FiniteDifferenceType differenceType, final double eps) {
     Validate.notNull(differenceType);
@@ -102,9 +105,9 @@ public class ScalarFirstOrderDifferentiator implements Differentiator<Double, Do
     Validate.notNull(function);
     Validate.notNull(domain);
 
-    final double[] wFwd = new double[] {-3. / _twoEps, 4. / _twoEps, -1. / _twoEps };
-    final double[] wCent = new double[] {-1. / _twoEps, 0., 1. / _twoEps };
-    final double[] wBack = new double[] {1. / _twoEps, -4. / _twoEps, 3. / _twoEps };
+    final double[] wFwd = new double[] { -3. / _twoEps, 4. / _twoEps, -1. / _twoEps };
+    final double[] wCent = new double[] { -1. / _twoEps, 0., 1. / _twoEps };
+    final double[] wBack = new double[] { 1. / _twoEps, -4. / _twoEps, 3. / _twoEps };
 
     return new Function1D<Double, Double>() {
 

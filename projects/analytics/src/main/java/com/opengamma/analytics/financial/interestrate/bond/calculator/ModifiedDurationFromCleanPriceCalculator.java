@@ -26,6 +26,7 @@ public final class ModifiedDurationFromCleanPriceCalculator extends InstrumentDe
 
   /**
    * Return the calculator instance.
+   * 
    * @return The instance.
    */
   public static ModifiedDurationFromCleanPriceCalculator getInstance() {
@@ -61,7 +62,6 @@ public final class ModifiedDurationFromCleanPriceCalculator extends InstrumentDe
   public Double visitBondCapitalIndexedTransaction(final BondCapitalIndexedTransaction<?> bond, final Double price) {
     ArgumentChecker.notNull(bond, "bond");
     ArgumentChecker.notNull(price, "yield");
-    ArgumentChecker.notNull(bond.getBondStandard() instanceof BondCapitalIndexedSecurity<?>, "the bond should be a BondCapitalIndexedSecurity");
 
     final BondCapitalIndexedSecurity<?> bondSecurity = bond.getBondStandard();
     return METHOD_INFLATION_BOND_SECURITY.modifiedDurationFromCleanPrice(bondSecurity, price);

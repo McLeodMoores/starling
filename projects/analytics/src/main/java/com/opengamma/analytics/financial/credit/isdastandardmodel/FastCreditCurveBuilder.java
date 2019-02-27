@@ -18,8 +18,8 @@ import com.opengamma.analytics.math.rootfinding.RealSingleRootFinder;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * This is a fast bootstrapper for the credit curve that is consistent with ISDA in that it will produce the same curve from
- * the same inputs (up to numerical round-off).
+ * This is a fast bootstrapper for the credit curve that is consistent with ISDA in that it will produce the same curve from the same inputs (up to numerical
+ * round-off).
  */
 
 public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
@@ -30,7 +30,7 @@ public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
   private final double _omega;
 
   /**
-   *Construct a credit curve builder that uses the Original ISDA accrual-on-default formula (version 1.8.2 and lower).
+   * Construct a credit curve builder that uses the Original ISDA accrual-on-default formula (version 1.8.2 and lower).
    */
   public FastCreditCurveBuilder() {
     super();
@@ -39,7 +39,9 @@ public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
 
   /**
    * Construct a credit curve builder that uses the specified accrual-on-default formula.
-   * @param formula The accrual on default formulae. <b>Note</b> The MarkitFix is erroneous
+   * 
+   * @param formula
+   *          The accrual on default formulae. <b>Note</b> The MarkitFix is erroneous
    */
   public FastCreditCurveBuilder(final AccrualOnDefaultFormulae formula) {
     super(formula);
@@ -52,8 +54,11 @@ public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
 
   /**
    * Construct a credit curve builder that uses the specified accrual-on-default formula and arbitrage handling.
-   * @param formula The accrual on default formulae. <b>Note</b> The MarkitFix is erroneous
-   * @param arbHandling How should any arbitrage in the input date be handled
+   * 
+   * @param formula
+   *          The accrual on default formulae. <b>Note</b> The MarkitFix is erroneous
+   * @param arbHandling
+   *          How should any arbitrage in the input date be handled
    */
   public FastCreditCurveBuilder(final AccrualOnDefaultFormulae formula, final ArbitrageHandling arbHandling) {
     super(formula, arbHandling);
@@ -100,10 +105,10 @@ public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
         case Ignore: {
           try {
             final double[] bracket = BRACKER.getBracketedPoints(func, 0.8 * guess[i], 1.25 * guess[i], Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
-            final double zeroRate = bracket[0] > bracket[1]
-                ? ROOTFINDER.getRoot(func, bracket[1], bracket[0]) : ROOTFINDER.getRoot(func, bracket[0], bracket[1]); //Negative guess handled
+            final double zeroRate = bracket[0] > bracket[1] ? ROOTFINDER.getRoot(func, bracket[1], bracket[0])
+                : ROOTFINDER.getRoot(func, bracket[0], bracket[1]); // Negative guess handled
             creditCurve = creditCurve.withRate(zeroRate, i);
-          } catch (final MathException e) { //handling bracketing failure due to small survival probability
+          } catch (final MathException e) { // handling bracketing failure due to small survival probability
             if (Math.abs(func.evaluate(creditCurve.getZeroRateAtIndex(i - 1))) < 1.e-12) {
               creditCurve = creditCurve.withRate(creditCurve.getZeroRateAtIndex(i - 1), i);
             } else {
@@ -114,7 +119,7 @@ public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
         }
         case Fail: {
           final double minValue = i == 0 ? 0.0 : creditCurve.getRTAtIndex(i - 1) / creditCurve.getTimeAtIndex(i);
-          if (i > 0 && func.evaluate(minValue) > 0.0) { //can never fail on the first spread
+          if (i > 0 && func.evaluate(minValue) > 0.0) { // can never fail on the first spread
             final StringBuilder msg = new StringBuilder();
             if (pointsUpfront[i] == 0.0) {
               msg.append("The par spread of " + premiums[i] + " at index " + i);
@@ -132,7 +137,7 @@ public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
         }
         case ZeroHazardRate: {
           final double minValue = i == 0 ? 0.0 : creditCurve.getRTAtIndex(i - 1) / creditCurve.getTimeAtIndex(i);
-          if (i > 0 && func.evaluate(minValue) > 0.0) { //can never fail on the first spread
+          if (i > 0 && func.evaluate(minValue) > 0.0) { // can never fail on the first spread
             creditCurve = creditCurve.withRate(minValue, i);
           } else {
             guess[i] = Math.max(minValue, guess[i]);
@@ -160,7 +165,6 @@ public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
     private final double _valuationDF;
     private final double _fracSpread;
     private final double _pointsUpfront;
-    private final double[] _ccKnotTimes;
 
     // protection leg
     private final int _nProPoints;
@@ -184,7 +188,6 @@ public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
       _cds = cds;
       _fracSpread = fractionalSpread;
       _pointsUpfront = pointsUpfront;
-      _ccKnotTimes = creditCurveKnots;
 
       // protection leg
       _proLegIntPoints = getIntegrationsPoints(cds.getEffectiveProtectionStart(), cds.getProtectionEnd(), yieldCurve.getKnotTimes(), creditCurveKnots);

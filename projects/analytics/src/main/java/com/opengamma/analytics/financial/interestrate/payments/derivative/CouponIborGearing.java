@@ -14,7 +14,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Class describing a Ibor-like floating coupon with a gearing (multiplicative) factor and a spread. The coupon payment is: notional * accrual factor * (factor * Ibor + spread).
+ * Class describing a Ibor-like floating coupon with a gearing (multiplicative) factor and a spread. The coupon payment is: notional * accrual factor * (factor
+ * * Ibor + spread).
  */
 public class CouponIborGearing extends CouponFloating {
 
@@ -53,19 +54,33 @@ public class CouponIborGearing extends CouponFloating {
 
   /**
    * Constructor from all the details.
-   * @param currency The payment currency.
-   * @param paymentTime Time (in years) up to the payment.
-   * @param discountingCurveName Name of the funding curve.
-   * @param paymentYearFraction The year fraction (or accrual factor) for the coupon payment.
-   * @param notional Coupon notional.
-   * @param fixingTime Time (in years) up to fixing.
-   * @param index Ibor-like index on which the coupon fixes. The index currency should be the same as the index currency.
-   * @param fixingPeriodStartTime The fixing period start time (in years).
-   * @param fixingPeriodEndTime The fixing period end time (in years).
-   * @param fixingAccrualFactor The fixing period accrual factor (or year fraction) in the fixing convention.
-   * @param spread The spread paid above the Ibor rate.
-   * @param factor The gearing (multiplicative) factor applied to the Ibor rate.
-   * @param forwardCurveName The forward curve name used in to estimate the fixing index.
+   * 
+   * @param currency
+   *          The payment currency.
+   * @param paymentTime
+   *          Time (in years) up to the payment.
+   * @param discountingCurveName
+   *          Name of the funding curve.
+   * @param paymentYearFraction
+   *          The year fraction (or accrual factor) for the coupon payment.
+   * @param notional
+   *          Coupon notional.
+   * @param fixingTime
+   *          Time (in years) up to fixing.
+   * @param index
+   *          Ibor-like index on which the coupon fixes. The index currency should be the same as the index currency.
+   * @param fixingPeriodStartTime
+   *          The fixing period start time (in years).
+   * @param fixingPeriodEndTime
+   *          The fixing period end time (in years).
+   * @param fixingAccrualFactor
+   *          The fixing period accrual factor (or year fraction) in the fixing convention.
+   * @param spread
+   *          The spread paid above the Ibor rate.
+   * @param factor
+   *          The gearing (multiplicative) factor applied to the Ibor rate.
+   * @param forwardCurveName
+   *          The forward curve name used in to estimate the fixing index.
    * @deprecated Use the constructor that does not take yield curve names.
    */
   @Deprecated
@@ -88,20 +103,33 @@ public class CouponIborGearing extends CouponFloating {
 
   /**
    * Constructor from all the details.
-   * @param currency The payment currency.
-   * @param paymentTime Time (in years) up to the payment.
-   * @param paymentYearFraction The year fraction (or accrual factor) for the coupon payment.
-   * @param notional Coupon notional.
-   * @param fixingTime Time (in years) up to fixing.
-   * @param index Ibor-like index on which the coupon fixes. The index currency should be the same as the index currency.
-   * @param fixingPeriodStartTime The fixing period start time (in years).
-   * @param fixingPeriodEndTime The fixing period end time (in years).
-   * @param fixingAccrualFactor The fixing period accrual factor (or year fraction) in the fixing convention.
-   * @param spread The spread paid above the Ibor rate.
-   * @param factor The gearing (multiplicative) factor applied to the Ibor rate.
+   * 
+   * @param currency
+   *          The payment currency.
+   * @param paymentTime
+   *          Time (in years) up to the payment.
+   * @param paymentYearFraction
+   *          The year fraction (or accrual factor) for the coupon payment.
+   * @param notional
+   *          Coupon notional.
+   * @param fixingTime
+   *          Time (in years) up to fixing.
+   * @param index
+   *          Ibor-like index on which the coupon fixes. The index currency should be the same as the index currency.
+   * @param fixingPeriodStartTime
+   *          The fixing period start time (in years).
+   * @param fixingPeriodEndTime
+   *          The fixing period end time (in years).
+   * @param fixingAccrualFactor
+   *          The fixing period accrual factor (or year fraction) in the fixing convention.
+   * @param spread
+   *          The spread paid above the Ibor rate.
+   * @param factor
+   *          The gearing (multiplicative) factor applied to the Ibor rate.
    */
-  public CouponIborGearing(final Currency currency, final double paymentTime, final double paymentYearFraction, final double notional, final double fixingTime, final IborIndex index,
-      final double fixingPeriodStartTime, final double fixingPeriodEndTime, final double fixingAccrualFactor, final double spread, final double factor) {
+  public CouponIborGearing(final Currency currency, final double paymentTime, final double paymentYearFraction, final double notional, final double fixingTime,
+      final IborIndex index, final double fixingPeriodStartTime, final double fixingPeriodEndTime, final double fixingAccrualFactor, final double spread,
+      final double factor) {
     super(currency, paymentTime, paymentYearFraction, notional, fixingTime);
     ArgumentChecker.notNull(index, "Index");
     ArgumentChecker.isTrue(currency.equals(index.getCurrency()), "currency does not match index currency");
@@ -117,6 +145,7 @@ public class CouponIborGearing extends CouponFloating {
 
   /**
    * Gets the Ibor index.
+   * 
    * @return The index.
    */
   public IborIndex getIndex() {
@@ -125,6 +154,7 @@ public class CouponIborGearing extends CouponFloating {
 
   /**
    * Gets the fixing period start date.
+   * 
    * @return The fixing period start date.
    */
   public double getFixingPeriodStartTime() {
@@ -133,6 +163,7 @@ public class CouponIborGearing extends CouponFloating {
 
   /**
    * Gets the fixing period end date.
+   * 
    * @return The fixing period end date.
    */
   public double getFixingPeriodEndTime() {
@@ -141,6 +172,7 @@ public class CouponIborGearing extends CouponFloating {
 
   /**
    * Gets the fixing period accrual factor.
+   * 
    * @return The fixing period accrual factor.
    */
   public double getFixingAccrualFactor() {
@@ -149,6 +181,7 @@ public class CouponIborGearing extends CouponFloating {
 
   /**
    * Gets the spread.
+   * 
    * @return The spread.
    */
   public double getSpread() {
@@ -157,6 +190,7 @@ public class CouponIborGearing extends CouponFloating {
 
   /**
    * Gets the spread amount.
+   * 
    * @return The spread amount.
    */
   public double getSpreadAmount() {
@@ -165,6 +199,7 @@ public class CouponIborGearing extends CouponFloating {
 
   /**
    * Gets the factor.
+   * 
    * @return The factor.
    */
   public double getFactor() {
@@ -173,6 +208,7 @@ public class CouponIborGearing extends CouponFloating {
 
   /**
    * Gets the forward curve name.
+   * 
    * @return the _forward curve name
    * @deprecated Curve names should no longer be set in {@link InstrumentDefinition}s
    */
@@ -188,18 +224,18 @@ public class CouponIborGearing extends CouponFloating {
   @Override
   public CouponIborGearing withNotional(final double notional) {
     try {
-      return new CouponIborGearing(getCurrency(), getPaymentTime(), getFundingCurveName(), getPaymentYearFraction(), notional, getFixingTime(), _index, _fixingPeriodStartTime, _fixingPeriodEndTime,
-          _fixingAccrualFactor, _spread, _factor, _forwardCurveName);
+      return new CouponIborGearing(getCurrency(), getPaymentTime(), getFundingCurveName(), getPaymentYearFraction(), notional, getFixingTime(), _index,
+          _fixingPeriodStartTime, _fixingPeriodEndTime, _fixingAccrualFactor, _spread, _factor, _forwardCurveName);
     } catch (final IllegalStateException e) {
-      return new CouponIborGearing(getCurrency(), getPaymentTime(), getPaymentYearFraction(), notional, getFixingTime(), _index, _fixingPeriodStartTime, _fixingPeriodEndTime,
-          _fixingAccrualFactor, _spread, _factor);
+      return new CouponIborGearing(getCurrency(), getPaymentTime(), getPaymentYearFraction(), notional, getFixingTime(), _index, _fixingPeriodStartTime,
+          _fixingPeriodEndTime, _fixingAccrualFactor, _spread, _factor);
     }
   }
 
   @Override
   public String toString() {
-    return "CouponIborGearing: " + super.toString() + ", fixing: [" + _fixingPeriodStartTime + " - " + _fixingPeriodEndTime + " - " + _fixingAccrualFactor + "], spread: " + _spread + ", factor: "
-        + _factor + ",forward curve: " + _forwardCurveName;
+    return "CouponIborGearing: " + super.toString() + ", fixing: [" + _fixingPeriodStartTime + " - " + _fixingPeriodEndTime + " - " + _fixingAccrualFactor
+        + "], spread: " + _spread + ", factor: " + _factor + ",forward curve: " + _forwardCurveName;
   }
 
   @Override
@@ -218,19 +254,19 @@ public class CouponIborGearing extends CouponFloating {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_factor);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_fixingAccrualFactor);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_fixingPeriodEndTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_fixingPeriodStartTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + (_forwardCurveName == null ? 0 : _forwardCurveName.hashCode());
     result = prime * result + _index.hashCode();
     temp = Double.doubleToLongBits(_spread);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_spreadAmount);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

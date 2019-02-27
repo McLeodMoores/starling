@@ -28,6 +28,7 @@ public final class AccruedInterestFromCleanPriceCalculator extends InstrumentDer
 
   /**
    * Return the calculator instance.
+   *
    * @return The instance.
    */
   public static AccruedInterestFromCleanPriceCalculator getInstance() {
@@ -68,18 +69,14 @@ public final class AccruedInterestFromCleanPriceCalculator extends InstrumentDer
     final double accruedInterest = METHOD_INFLATION_BOND_SECURITY.accruedInterestFromCleanRealPrice(bond, cleanRealPrice) * 100;
     if (bond.getYieldConvention().equals(INDEX_LINKED_FLOAT)) {
       return accruedInterest * bond.getIndexRatio();
-    } else {
-      return accruedInterest;
     }
+    return accruedInterest;
   }
 
   @Override
   public Double visitBondCapitalIndexedTransaction(final BondCapitalIndexedTransaction<?> bond, final Double cleanPrice) {
     ArgumentChecker.notNull(bond, "bond");
     ArgumentChecker.notNull(cleanPrice, "yield");
-    if (!(bond.getBondStandard() instanceof BondCapitalIndexedSecurity<?>)) {
-      throw new IllegalArgumentException("Bond should be a BondCapitalIndexedSecurity");
-    }
     final BondCapitalIndexedSecurity<?> bondSecurity = bond.getBondStandard();
     return visitBondCapitalIndexedSecurity(bondSecurity, cleanPrice);
   }

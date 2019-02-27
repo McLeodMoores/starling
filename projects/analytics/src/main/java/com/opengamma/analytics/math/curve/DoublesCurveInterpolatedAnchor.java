@@ -24,35 +24,37 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.ParallelArrayBinarySort;
 
 /**
- * A curve that is defined by a set of nodal points (i.e. <i>x-y</i> data) and an interpolator
- * to return values of <i>y</i> for values of <i>x</i> that do not lie on nodal <i>x</i> values.
- * One extra node point with a set value is added (called anchor point).
- * The value is often 0.0 (rate anchor) or 1.0 (discount factor anchor).
- * This is used in particular for spread curves; without anchor points, each curve in the
- * spread could be shifted in opposite directions for the same total result.
- * To anchor is used to remove the translation indetermination.
+ * A curve that is defined by a set of nodal points (i.e. <i>x-y</i> data) and an interpolator to return values of <i>y</i> for values of <i>x</i> that do not
+ * lie on nodal <i>x</i> values. One extra node point with a set value is added (called anchor point). The value is often 0.0 (rate anchor) or 1.0 (discount
+ * factor anchor). This is used in particular for spread curves; without anchor points, each curve in the spread could be shifted in opposite directions for the
+ * same total result. To anchor is used to remove the translation indetermination.
  */
 @BeanDefinition
 public final class DoublesCurveInterpolatedAnchor extends InterpolatedDoublesCurve {
 
   /**
-   * The anchor index.
-   * The index in the x value of the anchor.
+   * The anchor index. The index in the x value of the anchor.
    */
   @PropertyDefinition(get = "manual", set = "private")
   private int _anchorIndex;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Private constructor.
    *
-   * @param xData The sorted xData, including the anchor.
-   * @param yData The yData, including the anchor.
-   * @param anchorIndex The index in the xData at which the anchor is located.
-   * @param interpolator The interpolator.
-   * @param name The curve name.
+   * @param xData
+   *          The sorted xData, including the anchor.
+   * @param yData
+   *          The yData, including the anchor.
+   * @param anchorIndex
+   *          The index in the xData at which the anchor is located.
+   * @param interpolator
+   *          The interpolator.
+   * @param name
+   *          The curve name.
    */
-  private DoublesCurveInterpolatedAnchor(final double[] xData, final double[] yData, final int anchorIndex, final Interpolator1D interpolator, final String name) {
+  private DoublesCurveInterpolatedAnchor(final double[] xData, final double[] yData, final int anchorIndex, final Interpolator1D interpolator,
+      final String name) {
     super(xData, yData, interpolator, true, name);
     _anchorIndex = anchorIndex;
   }
@@ -60,14 +62,20 @@ public final class DoublesCurveInterpolatedAnchor extends InterpolatedDoublesCur
   /**
    * Constructor.
    *
-   * @param xData The x data without the anchor.
-   * @param yData The y data.
-   * @param anchor The anchor point. Should not be in xData.
-   * @param interpolator The interpolator.
-   * @param name The curve name.
+   * @param xData
+   *          The x data without the anchor.
+   * @param yData
+   *          The y data.
+   * @param anchor
+   *          The anchor point. Should not be in xData.
+   * @param interpolator
+   *          The interpolator.
+   * @param name
+   *          The curve name.
    * @return The curve.
    */
-  public static DoublesCurveInterpolatedAnchor from(final double[] xData, final double[] yData, final double anchor, final Interpolator1D interpolator, final String name) {
+  public static DoublesCurveInterpolatedAnchor from(final double[] xData, final double[] yData, final double anchor, final Interpolator1D interpolator,
+      final String name) {
     ArgumentChecker.notNull(xData, "X data");
     final int xLength = xData.length;
     ArgumentChecker.notNull(yData, "Y data");
@@ -85,15 +93,22 @@ public final class DoublesCurveInterpolatedAnchor extends InterpolatedDoublesCur
   /**
    * Constructor.
    *
-   * @param xData The x data without the anchor.
-   * @param yData The y data.
-   * @param anchor The anchor point. Should not be in xData.
-   * @param anchorValue The anchor point value.
-   * @param interpolator The interpolator.
-   * @param name The curve name.
+   * @param xData
+   *          The x data without the anchor.
+   * @param yData
+   *          The y data.
+   * @param anchor
+   *          The anchor point. Should not be in xData.
+   * @param anchorValue
+   *          The anchor point value.
+   * @param interpolator
+   *          The interpolator.
+   * @param name
+   *          The curve name.
    * @return The curve.
    */
-  public static DoublesCurveInterpolatedAnchor from(final double[] xData, final double[] yData, final double anchor, final double anchorValue, final Interpolator1D interpolator, final String name) {
+  public static DoublesCurveInterpolatedAnchor from(final double[] xData, final double[] yData, final double anchor, final double anchorValue,
+      final Interpolator1D interpolator, final String name) {
     ArgumentChecker.notNull(xData, "X data");
     final int xLength = xData.length;
     ArgumentChecker.notNull(yData, "Y data");
@@ -109,14 +124,14 @@ public final class DoublesCurveInterpolatedAnchor extends InterpolatedDoublesCur
     return new DoublesCurveInterpolatedAnchor(xExtended, yExtended, anchorIndex, interpolator, name);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Constructor for Joda-Beans.
    */
   protected DoublesCurveInterpolatedAnchor() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the anchor index.
    *
@@ -134,7 +149,8 @@ public final class DoublesCurveInterpolatedAnchor extends InterpolatedDoublesCur
   /**
    * The sensitivity is the sensitivity of the underlying interpolated .
    *
-   * @param x  the value for which the sensitivity is computed, not null
+   * @param x
+   *          the value for which the sensitivity is computed, not null
    * @return the sensitivity, not null
    */
   @Override
@@ -147,7 +163,7 @@ public final class DoublesCurveInterpolatedAnchor extends InterpolatedDoublesCur
     return sensitivity;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public boolean equals(final Object obj) {
     if (this == obj) {
@@ -195,8 +211,7 @@ public final class DoublesCurveInterpolatedAnchor extends InterpolatedDoublesCur
 
   //-----------------------------------------------------------------------
   /**
-   * Sets the anchor index.
-   * The index in the x value of the anchor.
+   * Sets the anchor index. The index in the x value of the anchor.
    * @param anchorIndex  the new value of the property
    */
   private void setAnchorIndex(int anchorIndex) {
@@ -205,7 +220,6 @@ public final class DoublesCurveInterpolatedAnchor extends InterpolatedDoublesCur
 
   /**
    * Gets the the {@code anchorIndex} property.
-   * The index in the x value of the anchor.
    * @return the property, not null
    */
   public Property<Integer> anchorIndex() {

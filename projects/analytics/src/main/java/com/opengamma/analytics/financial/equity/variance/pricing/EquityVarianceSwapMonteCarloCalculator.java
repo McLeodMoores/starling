@@ -17,7 +17,8 @@ import cern.jet.random.engine.MersenneTwister64;
 import cern.jet.random.engine.RandomEngine;
 
 /**
- * Monte-Carlo calculator to price a variance swap in the presence of discrete dividends. <p>
+ * Monte-Carlo calculator to price a variance swap in the presence of discrete dividends.
+ * <p>
  * <b>Note</b> this is primarily to test other numerical methods
  */
 public class EquityVarianceSwapMonteCarloCalculator {
@@ -34,9 +35,10 @@ public class EquityVarianceSwapMonteCarloCalculator {
   private final NormalDistribution _norm;
 
   /**
-   * Constructor taking a seed for the random number generator. The calculator is set up to use antithetic variables
-   * and calculate the variance of the result.
-   * @param seed The seed
+   * Constructor taking a seed for the random number generator. The calculator is set up to use antithetic variables and calculate the variance of the result.
+   * 
+   * @param seed
+   *          The seed
    */
   public EquityVarianceSwapMonteCarloCalculator(final int seed) {
     _useAntithetics = true;
@@ -46,9 +48,12 @@ public class EquityVarianceSwapMonteCarloCalculator {
   }
 
   /**
-   * @param seed The seed
-   * @param useAntithetics true if antithetic variables are to be used
-   * @param calculateVariance true if the variance of the result is to be calculated
+   * @param seed
+   *          The seed
+   * @param useAntithetics
+   *          true if antithetic variables are to be used
+   * @param calculateVariance
+   *          true if the variance of the result is to be calculated
    */
   public EquityVarianceSwapMonteCarloCalculator(final int seed, final boolean useAntithetics, final boolean calculateVariance) {
     _useAntithetics = useAntithetics;
@@ -58,17 +63,23 @@ public class EquityVarianceSwapMonteCarloCalculator {
   }
 
   /**
-   * @param spot The spot value, not negative
-   * @param discountCurve The discount curve, not null
-   * @param dividends The dividends, not null
-   * @param expiry The time to expiry in years, not negative
-   * @param localVol A local volatility surface parameterised by strike, not null
-   * @param nSims The number of simulations to run, not negative
-   * @return An array containing the final value of spot, realized variance with dividends, realized variance without dividends
-   * and the variance of these values of requested.
+   * @param spot
+   *          The spot value, not negative
+   * @param discountCurve
+   *          The discount curve, not null
+   * @param dividends
+   *          The dividends, not null
+   * @param expiry
+   *          The time to expiry in years, not negative
+   * @param localVol
+   *          A local volatility surface parameterised by strike, not null
+   * @param nSims
+   *          The number of simulations to run, not negative
+   * @return An array containing the final value of spot, realized variance with dividends, realized variance without dividends and the variance of these values
+   *         of requested.
    */
-  public double[] solve(final double spot, final YieldAndDiscountCurve discountCurve, final AffineDividends dividends,
-      final double expiry, final LocalVolatilitySurfaceStrike localVol, final int nSims) {
+  public double[] solve(final double spot, final YieldAndDiscountCurve discountCurve, final AffineDividends dividends, final double expiry,
+      final LocalVolatilitySurfaceStrike localVol, final int nSims) {
 
     ArgumentChecker.notNull(dividends, "null dividends");
     ArgumentChecker.notNegative(expiry, "negative expiry");
@@ -105,8 +116,8 @@ public class EquityVarianceSwapMonteCarloCalculator {
     /** The drift at each time step */
     private final double[] _drift;
 
-    MonteCarloPath(final AffineDividends dividends, final double expiry, final double spot,
-        final YieldAndDiscountCurve discountCurve, final LocalVolatilitySurfaceStrike localVol) {
+    MonteCarloPath(final AffineDividends dividends, final double expiry, final double spot, final YieldAndDiscountCurve discountCurve,
+        final LocalVolatilitySurfaceStrike localVol) {
 
       _dividends = dividends;
       _spot = spot;
@@ -116,21 +127,21 @@ public class EquityVarianceSwapMonteCarloCalculator {
 
       _dt = 1.0 / DAYS_PER_YEAR;
       _rootDt = Math.sqrt(_dt);
-      _nSteps = (int) Math.ceil(expiry * DAYS_PER_YEAR); //Effectively move expiry to end of day
+      _nSteps = (int) Math.ceil(expiry * DAYS_PER_YEAR); // Effectively move expiry to end of day
       _drift = new double[_nSteps];
       final double[] logP = new double[_nSteps + 1];
       logP[0] = 0.0;
       for (int i = 0; i < _nSteps; i++) {
         final double t = (i + 1) * _dt;
         logP[i + 1] = -discountCurve.getInterestRate(t) * t;
-        _drift[i] = -(logP[i + 1] - logP[i]) / _dt; //forward difference to get drift
+        _drift[i] = -(logP[i + 1] - logP[i]) / _dt; // forward difference to get drift
       }
 
       int nDivsBeforeExpiry = 0;
       int totalSteps = 0;
       final int[] steps = new int[nDivs + 1];
 
-      if (nDivs == 0 || dividends.getTau(0) > expiry) { //no dividends or first dividend after option expiry
+      if (nDivs == 0 || dividends.getTau(0) > expiry) { // no dividends or first dividend after option expiry
         steps[0] = (int) Math.ceil(expiry * DAYS_PER_YEAR);
         totalSteps = steps[0];
       } else {
@@ -139,7 +150,7 @@ public class EquityVarianceSwapMonteCarloCalculator {
         totalSteps += steps[0] + 1;
         nDivsBeforeExpiry++;
         for (int i = 1; i < nDivs; i++) {
-          if (dividends.getTau(i) > expiry) { //if dividend after expiry, step steps up to expiry and do not consider any more dividends
+          if (dividends.getTau(i) > expiry) { // if dividend after expiry, step steps up to expiry and do not consider any more dividends
             steps[i] = (int) Math.ceil(expiry * DAYS_PER_YEAR) - totalSteps;
             totalSteps += steps[i];
             break;
@@ -155,10 +166,10 @@ public class EquityVarianceSwapMonteCarloCalculator {
         }
       }
 
-      //check
+      // check
       ArgumentChecker.isTrue(totalSteps == _nSteps, "got the steps wrong");
 
-      //only care about the dividends that occur before expiry
+      // only care about the dividends that occur before expiry
       _steps = Arrays.copyOfRange(steps, 0, nDivsBeforeExpiry + 1);
       _nDivs = nDivsBeforeExpiry;
 
@@ -210,31 +221,32 @@ public class EquityVarianceSwapMonteCarloCalculator {
 
     /**
      *
-     * @param z Set of iid standard normal random variables
+     * @param z
+     *          Set of iid standard normal random variables
      * @return The final value of spot and the realized variance with and without dividends correction
      */
     public double[] runPath(final double[] z) {
 
-      double sOld = _spot; //previous value of stock
-      double s = 0; //current value of stock
-      double sTotOld = _spot; //previous value of total returns process
-      double sTot = 0; //current value of total returns process
-      double rv1 = 0.0; //Accumulator of realised variance (with correction made for dividends)
-      double rv2 = 0.0; //Accumulator of realised variance (without correction made for dividends)
-      double t = 0.0; //current time
-      double vol; //value of local vol at start of step
-      double mu; //The drift at start of step
-      double ret; //The daily return
+      double sOld = _spot; // previous value of stock
+      double s = 0; // current value of stock
+      double sTotOld = _spot; // previous value of total returns process
+      double sTot = 0; // current value of total returns process
+      double rv1 = 0.0; // Accumulator of realised variance (with correction made for dividends)
+      double rv2 = 0.0; // Accumulator of realised variance (without correction made for dividends)
+      double t = 0.0; // current time
+      double vol; // value of local vol at start of step
+      double mu; // The drift at start of step
+      double ret; // The daily return
       double temp;
 
       int tSteps = 0;
       for (int k = 0; k < _nDivs; k++) {
         final int steps = _steps[k];
-        //simulate the continuous path between dividends
+        // simulate the continuous path between dividends
         for (int i = 0; i < steps; i++) {
           vol = _localVol.getVolatility(t, sOld);
           mu = _drift[tSteps];
-          //this Euler step is exact if the volatility and drift are constant, otherwise it is subject to discretisation error
+          // this Euler step is exact if the volatility and drift are constant, otherwise it is subject to discretisation error
           ret = (mu - vol * vol / 2) * _dt + vol * _rootDt * z[tSteps];
           temp = Math.exp(ret);
           s = sOld * temp;
@@ -248,12 +260,12 @@ public class EquityVarianceSwapMonteCarloCalculator {
           tSteps++;
         }
 
-        //simulate the path on dividend day
-        //The dividend payment is effectively moved to the end of the day
+        // simulate the path on dividend day
+        // The dividend payment is effectively moved to the end of the day
         vol = _localVol.getVolatility(t, sOld);
         mu = _drift[tSteps];
         temp = Math.exp((mu - vol * vol / 2) * _dt + vol * _rootDt * z[tSteps]);
-        final double sm = sOld * temp; //the stock price immediately before the dividend payment
+        final double sm = sOld * temp; // the stock price immediately before the dividend payment
         sTot = sTotOld * temp;
         s = sm * (1 - _dividends.getBeta(k)) - _dividends.getAlpha(k);
         rv1 += FunctionUtils.square(Math.log(sm / sOld));
@@ -264,13 +276,13 @@ public class EquityVarianceSwapMonteCarloCalculator {
         tSteps++;
       }
 
-      //simulate the remaining continuous path from the last dividend to the expiry
+      // simulate the remaining continuous path from the last dividend to the expiry
       final int steps = _steps[_nDivs];
-      //simulate the continuous path between dividends
+      // simulate the continuous path between dividends
       for (int i = 0; i < steps; i++) {
         vol = _localVol.getVolatility(t, sOld);
         mu = _drift[tSteps];
-        ret = (mu - vol * vol / 2) * _dt + vol * _rootDt * z[tSteps]; //this Euler step will be subject to discretisation error
+        ret = (mu - vol * vol / 2) * _dt + vol * _rootDt * z[tSteps]; // this Euler step will be subject to discretisation error
         temp = Math.exp(ret);
         sTot = sTotOld * temp;
         s = sOld * temp;
@@ -282,17 +294,16 @@ public class EquityVarianceSwapMonteCarloCalculator {
         tSteps++;
       }
 
-      //correct for mean and bias
+      // correct for mean and bias
       rv1 -= FunctionUtils.square(Math.log(sTot / _spot)) / _nSteps;
       rv2 -= FunctionUtils.square(Math.log(s / _spot)) / _nSteps;
       final double biasCorr = (double) DAYS_PER_YEAR / (_nSteps - 1);
       rv1 *= biasCorr;
       rv2 *= biasCorr;
 
-      return new double[] {s, rv1, rv2 };
+      return new double[] { s, rv1, rv2 };
     }
 
-    @SuppressWarnings("synthetic-access")
     private double[] getNormals() {
       final double[] z = new double[_nSteps];
       for (int i = 0; i < _nSteps; i++) {

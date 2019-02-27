@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.differentiation;
@@ -16,7 +16,7 @@ import com.opengamma.analytics.math.matrix.OGMatrixAlgebra;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class MatrixFieldFirstOrderDifferentiator implements Differentiator<DoubleMatrix1D, DoubleMatrix2D, DoubleMatrix2D[]> {
 
@@ -46,7 +46,6 @@ public class MatrixFieldFirstOrderDifferentiator implements Differentiator<Doubl
 
     return new Function1D<DoubleMatrix1D, DoubleMatrix2D[]>() {
 
-      @SuppressWarnings("synthetic-access")
       @Override
       public DoubleMatrix2D[] evaluate(final DoubleMatrix1D x) {
         Validate.notNull(x, "x");
@@ -60,7 +59,7 @@ public class MatrixFieldFirstOrderDifferentiator implements Differentiator<Doubl
           final DoubleMatrix2D up = function.evaluate(x);
           xData[i] -= _twoEps;
           final DoubleMatrix2D down = function.evaluate(x);
-          res[i] = (DoubleMatrix2D) MA.scale(MA.subtract(up, down), _oneOverTwpEps); //TODO have this in one operation
+          res[i] = (DoubleMatrix2D) MA.scale(MA.subtract(up, down), _oneOverTwpEps); // TODO have this in one operation
           xData[i] = oldValue;
         }
         return res;
@@ -69,17 +68,17 @@ public class MatrixFieldFirstOrderDifferentiator implements Differentiator<Doubl
   }
 
   @Override
-  public Function1D<DoubleMatrix1D, DoubleMatrix2D[]> differentiate(final Function1D<DoubleMatrix1D, DoubleMatrix2D> function, final Function1D<DoubleMatrix1D, Boolean> domain) {
+  public Function1D<DoubleMatrix1D, DoubleMatrix2D[]> differentiate(final Function1D<DoubleMatrix1D, DoubleMatrix2D> function,
+      final Function1D<DoubleMatrix1D, Boolean> domain) {
     Validate.notNull(function);
     Validate.notNull(domain);
 
-    final double[] wFwd = new double[] {-3. / _twoEps, 4. / _twoEps, -1. / _twoEps };
-    final double[] wCent = new double[] {-1. / _twoEps, 0., 1. / _twoEps };
-    final double[] wBack = new double[] {1. / _twoEps, -4. / _twoEps, 3. / _twoEps };
+    final double[] wFwd = new double[] { -3. / _twoEps, 4. / _twoEps, -1. / _twoEps };
+    final double[] wCent = new double[] { -1. / _twoEps, 0., 1. / _twoEps };
+    final double[] wBack = new double[] { 1. / _twoEps, -4. / _twoEps, 3. / _twoEps };
 
     return new Function1D<DoubleMatrix1D, DoubleMatrix2D[]>() {
 
-      @SuppressWarnings("synthetic-access")
       @Override
       public DoubleMatrix2D[] evaluate(final DoubleMatrix1D x) {
         Validate.notNull(x, "x");
