@@ -35,7 +35,12 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.web.analytics.formatting.TypeFormatter;
 
 /**
- * Grid for displaying analytics data for a portfolio or for calculated values that aren't associated with the portfolio (primitives). This class isn't thread safe.
+ * Grid for displaying analytics data for a portfolio or for calculated values
+ * that aren't associated with the portfolio (primitives). This class isn't
+ * thread safe.
+ *
+ * @param <T>
+ *          the type of the viewport
  */
 /* package */abstract class MainAnalyticsGrid<T extends MainGridViewport> extends AnalyticsGrid<T> {
 
@@ -302,12 +307,20 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
     return _cycle;
   }
 
-  /** For looking up calculation targets using their specifications. */
+  /**
+   * For looking up calculation targets using their specifications.
+   *
+   * @return the target resolver
+   */
   ComputationTargetResolver getTargetResolver() {
     return _targetResolver;
   }
 
-  /** For lookup up function metadata based on the function identifier */
+  /**
+   * For lookup up function metadata based on the function identifier.
+   *
+   * @return the function metadata resolver
+   */
   /* package */FunctionRepositoryFactory getFunctionRepository() {
     return _functions;
   }

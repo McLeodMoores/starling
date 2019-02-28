@@ -128,7 +128,7 @@ public class BundleParser {
     }
   }
 
-  private boolean isValidFragment(final String fragment) {
+  private static boolean isValidFragment(final String fragment) {
     if (StringUtils.isNotBlank(fragment)) {
       return true;
     }
@@ -188,39 +188,39 @@ public class BundleParser {
     }
   }
 
-  private boolean isValidRootElement(final Element rootElement) {
+  private static boolean isValidRootElement(final Element rootElement) {
     if (rootElement.getNodeName().equals("uiResourceConfig")) {
       return true;
     }
     throw new OpenGammaRuntimeException("parsing bundle XML : invalid root element " + rootElement.getNodeName());
   }
 
-  private boolean isValidBundleElement(final Element element) {
+  private static boolean isValidBundleElement(final Element element) {
     return isBundleElement(element) && hasChildren(element) && hasValidId(element);
   }
 
-  private boolean hasValidId(final Element element) {
+  private static boolean hasValidId(final Element element) {
     if (element.hasAttribute(ID_ATTR) && StringUtils.isNotBlank(element.getAttribute(ID_ATTR))) {
       return true;
     }
     throw new OpenGammaRuntimeException("parsing bundle XML : bundle element needs id attribute");
   }
 
-  private boolean hasChildren(final Element element) {
+  private static boolean hasChildren(final Element element) {
     if (element.hasChildNodes()) {
       return true;
     }
     throw new OpenGammaRuntimeException("parsing bundle XML : missing children elements in bundle");
   }
 
-  private boolean isBundleElement(final Element element) {
+  private static boolean isBundleElement(final Element element) {
     if (element.getNodeName().equals(BUNDLE_ELEMENT)) {
       return true;
     }
     throw new OpenGammaRuntimeException("parsing bundle XML : element not a bundle");
   }
 
-  private DocumentBuilder getDocumentBuilder() {
+  private static DocumentBuilder getDocumentBuilder() {
     DocumentBuilder builder = null;
     final DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
     try {

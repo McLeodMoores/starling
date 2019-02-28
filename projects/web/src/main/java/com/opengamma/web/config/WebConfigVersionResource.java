@@ -75,7 +75,7 @@ public class WebConfigVersionResource extends AbstractWebConfigResource {
     return Response.ok(json).tag(etag).build();
   }
 
-  private String toJSON(final Object config) {
+  private static String toJSON(final Object config) {
     if (config.getClass().isAssignableFrom(ViewDefinition.class)) {
       return  ViewDefinitionJSONBuilder.INSTANCE.toJSON((ViewDefinition) config);
     }

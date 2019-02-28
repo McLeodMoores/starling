@@ -58,7 +58,7 @@ public final class CurveSpecificationBuilderConfigurationJSONBuilder extends Abs
     return message.toString();
   }
 
-  private String[] getTenors(final CurveSpecificationBuilderConfiguration curveSpec) {
+  private static String[] getTenors(final CurveSpecificationBuilderConfiguration curveSpec) {
     final SortedSet<Tenor> allTenors = curveSpec.getAllTenors();
     final String[] periods = new String[allTenors.size()];
     final Iterator<Tenor> iterator = allTenors.iterator();

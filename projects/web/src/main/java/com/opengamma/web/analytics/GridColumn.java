@@ -45,21 +45,21 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
   }
 
   /* package */ GridColumn(final String header,
-                           final String description,
-                           final Class<?> type,
-                           final CellRenderer renderer,
-                           final ColumnSpecification columnSpec) {
+      final String description,
+      final Class<?> type,
+      final CellRenderer renderer,
+      final ColumnSpecification columnSpec) {
     this(header, description, type, null, renderer, columnSpec, null, null);
   }
 
   /* package */ GridColumn(final String header,
-                           final String description,
-                           final Class<?> type,
-                           final Class<?> underlyingType,
-                           final CellRenderer renderer,
-                           final ColumnSpecification columnSpec,
-                           final Object inlineKey,
-                           final Integer inlineIndex) {
+      final String description,
+      final Class<?> type,
+      final Class<?> underlyingType,
+      final CellRenderer renderer,
+      final ColumnSpecification columnSpec,
+      final Object inlineKey,
+      final Integer inlineIndex) {
     ArgumentChecker.notNull(header, "header");
     ArgumentChecker.notNull(renderer, "renderer");
     _inlineIndex = inlineIndex;
@@ -77,47 +77,64 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
   }
 
   /**
-   * Factory method that creates a column for a column specification, calculation configutation and data type.
-   * @param columnSpec The column specification
-   * @param columnType Type of data displayed in the column
-   * @return A column for displaying data calculated for the requirement and calculation configuration
+   * Factory method that creates a column for a column specification,
+   * calculation configuration and data type.
+   *
+   * @param columnSpec
+   *          The column specification
+   * @param columnType
+   *          Type of data displayed in the column
+   * @param targetLookup
+   *          allows the target to be looked up
+   * @return A column for displaying data calculated for the requirement and
+   *         calculation configuration
    */
   /* package */ static GridColumn forSpec(final ColumnSpecification columnSpec,
-                                          final Class<?> columnType,
-                                          final TargetLookup targetLookup) {
+      final Class<?> columnType,
+      final TargetLookup targetLookup) {
     return forSpec(columnSpec.getHeader(), columnSpec, columnType, null, targetLookup, null, null);
   }
 
   /**
-   * Factory method to create a column for inlined values. These are single values (e.g. vectors) displayed over
-   * multiple columns.
-   * @param header The column header
-   * @param columnSpec Specification of the column's value
-   * @param columnType The type displayed in the column
-   * @param underlyingType The type of the column's underlying data, can be different from the type displayed in the
-   * column for types that are displayed inline, e.g. vectors of doubles where the double values are displayed but
-   * the underlying type is a vector
-   * @param targetLookup For looking up values to populate the column
-   * @param inlineIndex The index of the individual data item in this column. This is used to extract each cell's data
-   * from the value.
+   * Factory method to create a column for inlined values. These are single
+   * values (e.g. vectors) displayed over multiple columns.
+   *
+   * @param header
+   *          The column header
+   * @param columnSpec
+   *          Specification of the column's value
+   * @param columnType
+   *          The type displayed in the column
+   * @param underlyingType
+   *          The type of the column's underlying data, can be different from
+   *          the type displayed in the column for types that are displayed
+   *          inline, e.g. vectors of doubles where the double values are
+   *          displayed but the underlying type is a vector
+   * @param targetLookup
+   *          For looking up values to populate the column
+   * @param inlineKey
+   *          the key of the data item
+   * @param inlineIndex
+   *          The index of the individual data item in this column. This is used
+   *          to extract each cell's data from the value.
    * @return The column
    */
   /* package */ static GridColumn forSpec(final String header,
-                                          final ColumnSpecification columnSpec,
-                                          final Class<?> columnType,
-                                          final Class<?> underlyingType,
-                                          final TargetLookup targetLookup,
-                                          final Object inlineKey,
-                                          final Integer inlineIndex) {
+      final ColumnSpecification columnSpec,
+      final Class<?> columnType,
+      final Class<?> underlyingType,
+      final TargetLookup targetLookup,
+      final Object inlineKey,
+      final Integer inlineIndex) {
     final CellRenderer renderer = new AnalyticsRenderer(columnSpec, targetLookup);
     return new GridColumn(header,
-                          createDescription(columnSpec.getValueProperties()),
-                          columnType,
-                          underlyingType,
-                          renderer,
-                          columnSpec,
-                          inlineKey,
-                          inlineIndex);
+        createDescription(columnSpec.getValueProperties()),
+        columnType,
+        underlyingType,
+        renderer,
+        columnSpec,
+        inlineKey,
+        inlineIndex);
   }
 
   /**
@@ -161,9 +178,8 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
   /* package */ Class<?> getUnderlyingType() {
     if (_underlyingType != null) {
       return _underlyingType;
-    } else {
-      return _type;
     }
+    return _type;
   }
 
   /* package */ ResultsCell buildResults(final int rowIndex, final TypeFormatter.Format format, final ResultsCache cache) {
@@ -225,9 +241,9 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
   /* package */ interface CellRenderer {
 
     ResultsCell getResults(int rowIndex,
-                           TypeFormatter.Format format,
-                           ResultsCache cache,
-                           Class<?> columnType,
-                           Object inlineKey);
+        TypeFormatter.Format format,
+        ResultsCache cache,
+        Class<?> columnType,
+        Object inlineKey);
   }
 }

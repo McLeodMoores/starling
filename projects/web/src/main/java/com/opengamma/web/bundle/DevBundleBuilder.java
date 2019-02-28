@@ -63,7 +63,7 @@ public class DevBundleBuilder {
     return devBundleManager;
   }
 
-  private void buildVirtualBundles(final BundleManager bundleManager, final String bundleId, final List<Fragment> fragments) {
+  private static void buildVirtualBundles(final BundleManager bundleManager, final String bundleId, final List<Fragment> fragments) {
     final long fragmentSize = fragments.size();
     if (fragmentSize <= MAX_IMPORTS) {
       final Bundle rootNode = new Bundle(bundleId);
@@ -78,7 +78,7 @@ public class DevBundleBuilder {
     }
   }
 
-  private void buildLevelTwoBundles(final BundleManager bundleManager, final String bundleId, final List<Fragment> fragments) {
+  private static void buildLevelTwoBundles(final BundleManager bundleManager, final String bundleId, final List<Fragment> fragments) {
     final Map<Integer, List<Fragment>> parentFragmentMap = split(fragments);
     final Bundle rootNode = new Bundle(bundleId);
     for (final Entry<Integer, List<Fragment>> parentEntry : parentFragmentMap.entrySet()) {
@@ -99,7 +99,7 @@ public class DevBundleBuilder {
     bundleManager.addBundle(rootNode);
   }
 
-  private void buildLevelOneBundles(final BundleManager bundleManager, final String bundleId, final List<Fragment> fragments) {
+  private static void buildLevelOneBundles(final BundleManager bundleManager, final String bundleId, final List<Fragment> fragments) {
     final Map<Integer, List<Fragment>> fragmentMap = split(fragments);
     final Bundle rootNode = new Bundle(bundleId);
     for (final Entry<Integer, List<Fragment>> entry : fragmentMap.entrySet()) {
@@ -114,7 +114,7 @@ public class DevBundleBuilder {
     bundleManager.addBundle(rootNode);
   }
 
-  private String buildBundleName(final String bundleId, final String parent, final String  child) {
+  private static String buildBundleName(final String bundleId, final String parent, final String child) {
     final BundleType type = BundleType.getType(bundleId);
     final StringBuilder buf = new StringBuilder(bundleId.substring(0, bundleId.indexOf(type.getSuffix()) - 1));
     if (parent != null) {
@@ -129,7 +129,7 @@ public class DevBundleBuilder {
     return buf.toString();
   }
 
-  private Map<Integer, List<Fragment>> split(final List<Fragment> fragments) {
+  private static Map<Integer, List<Fragment>> split(final List<Fragment> fragments) {
     final Map<Integer, List<Fragment>> result = new TreeMap<>();
     int bundleSize = fragments.size() / MAX_IMPORTS;
     if (fragments.size() % MAX_IMPORTS != 0) {

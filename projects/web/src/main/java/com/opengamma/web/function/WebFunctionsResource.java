@@ -96,7 +96,7 @@ public class WebFunctionsResource extends AbstractWebFunctionResource {
     return out;
   }
 
-  private Predicate<WebFunctionTypeDetails> buildPredicate(final String name, final String parameterized) {
+  private static Predicate<WebFunctionTypeDetails> buildPredicate(final String name, final String parameterized) {
     final List<Predicate<WebFunctionTypeDetails>> predicates = Lists.newLinkedList();
     if (!isEmpty(parameterized)) {
       if ("Y".equals(parameterized)) {

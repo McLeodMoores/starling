@@ -29,8 +29,13 @@ import com.opengamma.util.ArgumentChecker;
 
   /**
    * For rows representing portfolio nodes which have no security or quantity
-   * @param target The row's target
-   * @param name The row name
+   *
+   * @param target
+   *          The row's target
+   * @param name
+   *          The row name
+   * @param nodeId
+   *          the node identifier, not null
    */
   /* package */ PortfolioGridRow(final ComputationTargetSpecification target, final String name, final UniqueId nodeId) {
     super(target, name);
@@ -43,23 +48,30 @@ import com.opengamma.util.ArgumentChecker;
   }
 
   /**
-   * For rows representing position nodes which have a security and quantity
-   * @param target The row's target
-   * @param securityId The position's security ID, not null
+   * For rows representing position nodes which have a security and quantity.
+   *
+   * @param target
+   *          The row's target
+   * @param name
+   *          the row name
+   * @param securityId
+   *          The position's security ID, not null
+   * @param nodeId
+   *          the node identifier, not null
+   * @param positionId
+   *          the position identifier, not null
    */
   /* package */ PortfolioGridRow(final ComputationTargetSpecification target,
-                                 final String name,
-                                 final UniqueId securityId,
-                                 //UniqueId underlyingId,
-                                 final UniqueId nodeId,
-                                 final UniqueId positionId) {
+      final String name,
+      final UniqueId securityId,
+      final UniqueId nodeId,
+      final UniqueId positionId) {
     super(target, name);
     ArgumentChecker.notNull(securityId, "securityId");
     ArgumentChecker.notNull(nodeId, "nodeId");
     ArgumentChecker.notNull(positionId, "positionId");
     _securityId = securityId;
     _underlyingId = null;
-    //_underlyingId = underlyingId;
     _nodeId = nodeId;
     _positionId = positionId;
     _tradeId = null;
@@ -67,16 +79,26 @@ import com.opengamma.util.ArgumentChecker;
 
   /**
    * For rows representing position nodes which have a security and quantity
-   * @param target The row's target
-   * @param securityId The position's security ID, not null
+   *
+   * @param target
+   *          The row's target
+   * @param name
+   *          the name
+   * @param securityId
+   *          The position's security ID, not null
+   * @param nodeId
+   *          the node identifier, not null
+   * @param positionId
+   *          the position identifier, not null
+   * @param tradeId
+   *          the trade identifier, not null
    */
   /* package */ PortfolioGridRow(final ComputationTargetSpecification target,
-                                 final String name,
-                                 final UniqueId securityId,
-                                 //UniqueId underlyingId,
-                                 final UniqueId nodeId,
-                                 final UniqueId positionId,
-                                 final UniqueId tradeId) {
+      final String name,
+      final UniqueId securityId,
+      final UniqueId nodeId,
+      final UniqueId positionId,
+      final UniqueId tradeId) {
     super(target, name);
     ArgumentChecker.notNull(securityId, "securityId");
     ArgumentChecker.notNull(nodeId, "nodeId");
@@ -84,7 +106,6 @@ import com.opengamma.util.ArgumentChecker;
     ArgumentChecker.notNull(tradeId, "tradeId");
     _securityId = securityId;
     _underlyingId = null;
-    //_underlyingId = underlyingId;
     _nodeId = nodeId;
     _positionId = positionId;
     _tradeId = tradeId;

@@ -51,13 +51,12 @@ import com.opengamma.util.time.Tenor;
         data.add(new Double[] {x, (Double) ys[i]});
       }
       return data;
-    } else {
-      LOGGER.info("Unable to format curve {}", value);
-      return null;
     }
+    LOGGER.info("Unable to format curve {}", value);
+    return null;
   }
 
-  private List<Double[]> formatExpanded(final NodalObjectsCurve value) {
+  private static List<Double[]> formatExpanded(final NodalObjectsCurve value) {
     if (value.size() != 0 && value.getXData()[0] instanceof Tenor && value.getYData()[0] instanceof Double) {
       final Tenor[] tenors = (Tenor[]) value.getXData();
       final Object[] ys = value.getYData();
@@ -72,10 +71,9 @@ import com.opengamma.util.time.Tenor;
         detailedData.add(new Double[]{xs[i], (Double) ys[i]});
       }
       return detailedData;
-    } else {
-      LOGGER.info("Unable to format curve {}", value);
-      return null;
     }
+    LOGGER.info("Unable to format curve {}", value);
+    return null;
   }
 
   @Override

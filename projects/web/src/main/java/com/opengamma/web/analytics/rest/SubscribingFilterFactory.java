@@ -103,17 +103,16 @@ public class SubscribingFilterFactory implements ResourceFilterFactory {
           uidParamNames.add(paramName);
         } else {
           LOGGER.warn("@Subscribe annotation found without matching @PathParam on method {}.{}(), no subscription " +
-                            "will be created", method.getDeclaringClass().getSimpleName(), method.getName());
+              "will be created", method.getDeclaringClass().getSimpleName(), method.getName());
         }
       }
     }
     if (!uidParamNames.isEmpty()) {
       LOGGER.debug("Creating subscribing filter for parameters {} on method {}.{}()",
-                     new Object[]{uidParamNames, method.getDeclaringClass().getSimpleName(), method.getName()});
+          new Object[]{uidParamNames, method.getDeclaringClass().getSimpleName(), method.getName()});
       return new EntitySubscriptionFilter(uidParamNames, getUpdateManager(), _httpContext, _servletRequest);
-    } else {
-      return null;
     }
+    return null;
   }
 
   /**
@@ -129,11 +128,10 @@ public class SubscribingFilterFactory implements ResourceFilterFactory {
       final MasterType[] masterTypes = annotation.value();
       if (masterTypes.length > 0) {
         return new MasterSubscriptionFilter(getUpdateManager(), Arrays.asList(masterTypes), _httpContext, _servletRequest);
-      } else {
-        LOGGER.warn("@SubscribeMaster annotation found on {}.{}() with no masters specified",
-                      abstractMethod.getMethod().getDeclaringClass().getSimpleName(),
-                      abstractMethod.getMethod().getName());
       }
+      LOGGER.warn("@SubscribeMaster annotation found on {}.{}() with no masters specified",
+          abstractMethod.getMethod().getDeclaringClass().getSimpleName(),
+          abstractMethod.getMethod().getName());
     }
     return null;
   }

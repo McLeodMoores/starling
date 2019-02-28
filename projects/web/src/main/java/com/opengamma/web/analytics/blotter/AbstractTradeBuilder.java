@@ -49,10 +49,10 @@ import com.opengamma.util.ArgumentChecker;
   private final PortfolioMaster _portfolioMaster;
 
   /* package */ AbstractTradeBuilder(final PositionMaster positionMaster,
-                                     final PortfolioMaster portfolioMaster,
-                                     final SecurityMaster securityMaster,
-                                     final Set<MetaBean> metaBeans,
-                                     final StringConvert stringConvert) {
+      final PortfolioMaster portfolioMaster,
+      final SecurityMaster securityMaster,
+      final Set<MetaBean> metaBeans,
+      final StringConvert stringConvert) {
     ArgumentChecker.notNull(securityMaster, "securityManager");
     ArgumentChecker.notNull(positionMaster, "positionMaster");
     ArgumentChecker.notEmpty(metaBeans, "metaBeans");
@@ -66,14 +66,14 @@ import com.opengamma.util.ArgumentChecker;
   }
 
   protected static Map<String, Object> property(final String name,
-                                                final boolean optional,
-                                                final boolean readOnly,
-                                                final Map<String, Object> typeInfo) {
+      final boolean optional,
+      final boolean readOnly,
+      final Map<String, Object> typeInfo) {
     return ImmutableMap.<String, Object>of("name", name,
-                                           "type", "single",
-                                           "optional", optional,
-                                           "readOnly", readOnly,
-                                           "types", ImmutableList.of(typeInfo));
+        "type", "single",
+        "optional", optional,
+        "readOnly", readOnly,
+        "types", ImmutableList.of(typeInfo));
   }
 
   protected static Map<String, Object> attributesProperty() {
@@ -102,9 +102,8 @@ import com.opengamma.util.ArgumentChecker;
     final ManageablePortfolioNode node = findNode(portfolio.getRootNode(), nodeId);
     if (node != null) {
       return node;
-    } else {
-      throw new DataNotFoundException("Node " + nodeId + " not found");
     }
+    throw new DataNotFoundException("Node " + nodeId + " not found");
   }
 
   private static ManageablePortfolioNode findNode(final ManageablePortfolioNode node, final UniqueId nodeId) {

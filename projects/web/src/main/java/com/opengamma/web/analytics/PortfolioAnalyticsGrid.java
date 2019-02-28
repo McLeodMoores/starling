@@ -29,10 +29,15 @@ import com.opengamma.id.ObjectId;
   }
 
   /**
-   * Creates a new grid when the structure is updated using an existing grid as the basis
+   * Creates a new grid when the structure is updated using an existing grid as
+   * the basis
    *
-   * @param gridStructure The updated grid structure
-   * @param previousGrid The old grid whose state is the basis for the new grid
+   * @param gridStructure
+   *          The updated grid structure
+   * @param previousGrid
+   *          The old grid whose state is the basis for the new grid
+   * @param compiledViewDef
+   *          a compiled view definition
    */
   /* package */PortfolioAnalyticsGrid(final PortfolioGridStructure gridStructure, final PortfolioAnalyticsGrid previousGrid, final CompiledViewDefinition compiledViewDef) {
     super(AnalyticsView.GridType.PORTFOLIO, previousGrid, compiledViewDef, gridStructure.getValueMappings());
@@ -71,9 +76,8 @@ import com.opengamma.id.ObjectId;
     // TODO implement equals()?
     if (updatedStructure == _gridStructure) {
       return this;
-    } else {
-      return new PortfolioAnalyticsGrid(updatedStructure, this, getViewCycle().getCompiledViewDefinition());
     }
+    return new PortfolioAnalyticsGrid(updatedStructure, this, getViewCycle().getCompiledViewDefinition());
   }
 
   /* package */static PortfolioAnalyticsGrid forAnalytics(final String gridId, final Portfolio portfolio, final ComputationTargetResolver targetResolver, final FunctionRepositoryFactory functions,

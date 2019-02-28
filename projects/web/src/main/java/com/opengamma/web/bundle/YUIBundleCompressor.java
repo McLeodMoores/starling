@@ -74,7 +74,7 @@ public class YUIBundleCompressor implements BundleCompressor {
     return writer.toString();
   }
 
-  private JavaScriptCompressor createJavaScriptCompressor(final Reader in) throws IOException {
+  private static JavaScriptCompressor createJavaScriptCompressor(final Reader in) throws IOException {
     return new JavaScriptCompressor(in, new ErrorReporter() {
       private String getMessage(final String source, final String message, final int line, final int lineOffset) {
         String logMessage;

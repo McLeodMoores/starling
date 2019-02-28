@@ -65,8 +65,7 @@ public class UnversionedValueMappings extends ValueMappings {
 
       }
       return valueRequirement;
-    } else {
-      return valueRequirement;
     }
+    return valueRequirement;
   }
 }

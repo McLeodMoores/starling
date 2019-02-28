@@ -118,7 +118,9 @@ public class MinimalWebHomeResource extends AbstractSingletonWebResource {
   //-------------------------------------------------------------------------
   /**
    * Creates the resource.
+   * 
    * @param publishedTypes
+   *          the published types
    */
   public MinimalWebHomeResource(final Set<Class<?>> publishedTypes) {
     _publishedTypes = publishedTypes;

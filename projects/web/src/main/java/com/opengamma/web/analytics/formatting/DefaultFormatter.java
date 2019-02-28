@@ -38,8 +38,7 @@ import com.opengamma.engine.value.ValueSpecification;
   private static String trim(final String str) {
     if (str.length() < MAX_VALUE_LENGTH) {
       return str;
-    } else {
-      return str.substring(0, MAX_VALUE_LENGTH) + "...";
     }
+    return str.substring(0, MAX_VALUE_LENGTH) + "...";
   }
 }

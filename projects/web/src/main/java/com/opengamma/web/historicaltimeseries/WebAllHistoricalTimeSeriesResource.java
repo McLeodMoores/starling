@@ -326,7 +326,7 @@ public class WebAllHistoricalTimeSeriesResource extends AbstractWebHistoricalTim
     return added;
   }
 
-  private Set<ExternalId> buildSecurityRequest(final ExternalScheme identificationScheme, final String idValue) {
+  private static Set<ExternalId> buildSecurityRequest(final ExternalScheme identificationScheme, final String idValue) {
     if (idValue == null) {
       return Collections.emptySet();
     }

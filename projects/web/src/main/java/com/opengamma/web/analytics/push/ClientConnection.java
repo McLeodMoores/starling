@@ -67,9 +67,9 @@ public class ClientConnection implements ChangeListener, MasterChangeListener, U
    * @param timeoutTask Task that closes this connection if it is idle for too long
    */
   /* package */ ClientConnection(final String userId,
-                                 final String clientId,
-                                 final UpdateListener listener,
-                                 final ConnectionTimeoutTask timeoutTask) {
+      final String clientId,
+      final UpdateListener listener,
+      final ConnectionTimeoutTask timeoutTask) {
     ArgumentChecker.notNull(listener, "listener");
     ArgumentChecker.notNull(clientId, "clientId");
     ArgumentChecker.notNull(timeoutTask, "timeoutTask");
@@ -238,21 +238,19 @@ public class ClientConnection implements ChangeListener, MasterChangeListener, U
     private static UrlMapping create(final UrlMapping urlMapping, final MasterType masterType) {
       if (urlMapping == null) {
         return new UrlMapping(ImmutableSet.of(masterType), Collections.<ObjectId>emptySet());
-      } else {
-        final ImmutableSet<MasterType> masterTypes =
-            ImmutableSet.<MasterType>builder().addAll(urlMapping.getMasterTypes()).add(masterType).build();
-        return new UrlMapping(masterTypes, urlMapping.getEntityIds());
       }
+      final ImmutableSet<MasterType> masterTypes =
+          ImmutableSet.<MasterType>builder().addAll(urlMapping.getMasterTypes()).add(masterType).build();
+      return new UrlMapping(masterTypes, urlMapping.getEntityIds());
     }
 
     private static UrlMapping create(final UrlMapping urlMapping, final ObjectId entityId) {
       if (urlMapping == null) {
         return new UrlMapping(Collections.<MasterType>emptySet(), ImmutableSet.of(entityId));
-      } else {
-        final ImmutableSet<ObjectId> entityIds =
-            ImmutableSet.<ObjectId>builder().addAll(urlMapping.getEntityIds()).add(entityId).build();
-        return new UrlMapping(urlMapping.getMasterTypes(), entityIds);
       }
+      final ImmutableSet<ObjectId> entityIds =
+          ImmutableSet.<ObjectId>builder().addAll(urlMapping.getEntityIds()).add(entityId).build();
+      return new UrlMapping(urlMapping.getMasterTypes(), entityIds);
     }
   }
 

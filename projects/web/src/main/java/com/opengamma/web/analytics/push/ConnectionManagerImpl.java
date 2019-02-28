@@ -47,20 +47,20 @@ public class ConnectionManagerImpl implements ConnectionManager {
   private final MasterChangeManager _masterChangeManager;
 
   public ConnectionManagerImpl(final ChangeManager changeManager,
-                               final MasterChangeManager masterChangeManager,
-                               final LongPollingConnectionManager longPollingConnectionManager) {
+      final MasterChangeManager masterChangeManager,
+      final LongPollingConnectionManager longPollingConnectionManager) {
     this(changeManager,
-         masterChangeManager,
-         longPollingConnectionManager,
-         DEFAULT_TIMEOUT,
-         DEFAULT_TIMEOUT_CHECK_PERIOD);
+        masterChangeManager,
+        longPollingConnectionManager,
+        DEFAULT_TIMEOUT,
+        DEFAULT_TIMEOUT_CHECK_PERIOD);
   }
 
   public ConnectionManagerImpl(final ChangeManager changeManager,
-                               final MasterChangeManager masterChangeManager,
-                               final LongPollingConnectionManager longPollingConnectionManager,
-                               final long timeout,
-                               final long timeoutCheckPeriod) {
+      final MasterChangeManager masterChangeManager,
+      final LongPollingConnectionManager longPollingConnectionManager,
+      final long timeout,
+      final long timeoutCheckPeriod) {
     _changeManager = changeManager;
     _longPollingConnectionManager = longPollingConnectionManager;
     _timeout = timeout;
@@ -115,19 +115,19 @@ public class ConnectionManagerImpl implements ConnectionManager {
    * @return The connection
    * @throws DataNotFoundException If there is no connection for the specified ID, the user ID is invalid or if
    * the client and user IDs don't correspond
-   * TODO not sure this should be public
-   * TODO or should it be specified in ClientConnection?
    */
+  // TODO not sure this should be public
+  // TODO or should it be specified in ClientConnection?
   @Override
-  public ClientConnection getConnectionByClientId(String userId, final String clientId) {
+  public ClientConnection getConnectionByClientId(final String userId, final String clientId) {
     ArgumentChecker.notEmpty(clientId, "clientId");
     final ClientConnection connection = _connectionsByClientId.get(clientId);
     if (connection == null) {
       throw new DataNotFoundException("Unknown client ID: " + clientId);
     }
-    userId = "permissive".equals(userId) ? null : userId;
-    if (!Objects.equal(userId, connection.getUserId())) {
-      throw new DataNotFoundException("User ID " + userId + " is not associated with client ID " + clientId);
+    final String uId = "permissive".equals(userId) ? null : userId;
+    if (!Objects.equal(uId, connection.getUserId())) {
+      throw new DataNotFoundException("User ID " + uId + " is not associated with client ID " + clientId);
     }
     return connection;
   }

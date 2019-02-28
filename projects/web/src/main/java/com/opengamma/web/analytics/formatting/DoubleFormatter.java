@@ -44,27 +44,24 @@ import com.opengamma.util.ArgumentChecker;
     final BigDecimal bigDecimal = convertToBigDecimal(value);
     if (bigDecimal == null) {
       return Double.toString(value);
-    } else {
-      return _bigDecimalFormatter.formatCell(bigDecimal, valueSpec, inlineKey);
     }
+    return _bigDecimalFormatter.formatCell(bigDecimal, valueSpec, inlineKey);
   }
 
   private Object formatExpanded(final Double value, final ValueSpecification valueSpec) {
     final BigDecimal bigDecimal = convertToBigDecimal(value);
     if (bigDecimal == null) {
       return Double.toString(value);
-    } else {
-      return _bigDecimalFormatter.format(bigDecimal, valueSpec, Format.EXPANDED, null);
     }
+    return _bigDecimalFormatter.format(bigDecimal, valueSpec, Format.EXPANDED, null);
   }
 
   private Object formatHistory(final Double history, final ValueSpecification valueSpec) {
     final BigDecimal bigDecimal = convertToBigDecimal(history);
     if (bigDecimal == null) {
       return null;
-    } else {
-      return _bigDecimalFormatter.format(bigDecimal, valueSpec, Format.HISTORY, null);
     }
+    return _bigDecimalFormatter.format(bigDecimal, valueSpec, Format.HISTORY, null);
   }
 
   @Override
@@ -75,8 +72,7 @@ import com.opengamma.util.ArgumentChecker;
   private static BigDecimal convertToBigDecimal(final Double value) {
     if (Double.isInfinite(value) || Double.isNaN(value)) {
       return null;
-    } else {
-      return new BigDecimal(value.toString());
     }
+    return new BigDecimal(value.toString());
   }
 }

@@ -20,8 +20,8 @@ import com.opengamma.util.tuple.Pairs;
 /**
  * Allows the {@link ValueSpecification} and calculation configuration name to be looked up for a cell in the main
  * grid.
- * TODO this needs a better name, not sure what though
  */
+// TODO this needs a better name, not sure what though
 /* package */ class TargetLookup {
 
   /** Mappings of requirements to specifications. */
@@ -67,9 +67,8 @@ import com.opengamma.util.tuple.Pairs;
     final ValueSpecification valueSpec = _valueMappings.getValueSpecification(calcConfigName, valueReq);
     if (valueSpec != null) {
       return Pairs.of(calcConfigName, valueSpec);
-    } else {
-      return null;
     }
+    return null;
   }
 
   /* package */ Iterator<Pair<String, ValueSpecification>> getTargetsForColumn(final ColumnSpecification colSpec) {

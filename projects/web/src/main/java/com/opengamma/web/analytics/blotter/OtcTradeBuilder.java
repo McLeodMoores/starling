@@ -61,23 +61,23 @@ import com.opengamma.util.OpenGammaClock;
   /* package */ static final String TRADE_TYPE_NAME = "OtcTrade";
 
   /* package */ OtcTradeBuilder(final PositionMaster positionMaster,
-                                final PortfolioMaster portfoioMaster,
-                                final SecurityMaster securityMaster,
-                                final Set<MetaBean> metaBeans,
-                                final StringConvert stringConvert) {
+      final PortfolioMaster portfoioMaster,
+      final SecurityMaster securityMaster,
+      final Set<MetaBean> metaBeans,
+      final StringConvert stringConvert) {
     super(positionMaster, portfoioMaster, securityMaster, metaBeans, stringConvert);
   }
 
   @SuppressWarnings("deprecation")
   UniqueId addTrade(final BeanDataSource tradeData,
-                                  final BeanDataSource securityData,
-                                  final BeanDataSource underlyingData,
-                                  final UniqueId nodeId) {
+      final BeanDataSource securityData,
+      final BeanDataSource underlyingData,
+      final UniqueId nodeId) {
     /*
     validate:
       underlying is present
       underlying type is correct
-    */
+     */
     final ManageableSecurity underlying = buildUnderlying(underlyingData);
     ManageableSecurity security;
     if (underlying == null) {
@@ -107,9 +107,9 @@ import com.opengamma.util.OpenGammaClock;
   }
 
   /* package */ UniqueId updatePosition(final UniqueId positionId,
-                                        final BeanDataSource tradeData,
-                                        final BeanDataSource securityData,
-                                        final BeanDataSource underlyingData) {
+      final BeanDataSource tradeData,
+      final BeanDataSource securityData,
+      final BeanDataSource underlyingData) {
     final ManageableTrade trade = buildTrade(tradeData);
     final ManageablePosition position = getPositionMaster().get(positionId).getPosition();
     final ManageableSecurity previousSecurity = loadSecurity(position.getSecurityLink());
@@ -117,11 +117,11 @@ import com.opengamma.util.OpenGammaClock;
   }
 
   /* package */ UniqueId updateTrade(final BeanDataSource tradeData,
-                                     final BeanDataSource securityData,
-                                     final BeanDataSource underlyingData) {
+      final BeanDataSource securityData,
+      final BeanDataSource underlyingData) {
     if (!TRADE_TYPE_NAME.equals(tradeData.getBeanTypeName())) {
       throw new IllegalArgumentException("Can only build trades of type " + TRADE_TYPE_NAME +
-                                             ", type name = " + tradeData.getBeanTypeName());
+          ", type name = " + tradeData.getBeanTypeName());
     }
     /*
     validate:
@@ -129,7 +129,7 @@ import com.opengamma.util.OpenGammaClock;
       underlying type is correct
       security type hasn't changed
       trade ID is versioned
-    */
+     */
     final ManageableTrade trade = buildTrade(tradeData);
     final ManageableTrade previousTrade = getPositionMaster().getTrade(trade.getUniqueId());
     final ManageableSecurity previousSecurity = loadSecurity(previousTrade.getSecurityLink());
@@ -154,10 +154,10 @@ import com.opengamma.util.OpenGammaClock;
 
   @SuppressWarnings("deprecation")
   private UniqueId updateSecuritiesAndPosition(final BeanDataSource securityData,
-                                               final BeanDataSource underlyingData,
-                                               final ManageableTrade trade,
-                                               final ManageableSecurity previousSecurity,
-                                               final UniqueId positionId) {
+      final BeanDataSource underlyingData,
+      final ManageableTrade trade,
+      final ManageableSecurity previousSecurity,
+      final UniqueId positionId) {
     // need the previous underlying so we don't lose the ID bundle, the data doesn't contain it
     ExternalIdBundle previousUnderlyingIdBundle;
     if (previousSecurity instanceof FinancialSecurity) {
@@ -201,9 +201,8 @@ import com.opengamma.util.OpenGammaClock;
     if (security instanceof FinancialSecurity) {
       final UnderlyingSecurityVisitor visitor = new UnderlyingSecurityVisitor(versionCorrection, getSecurityMaster());
       return ((FinancialSecurity) security).accept(visitor);
-    } else {
-      return null;
     }
+    return null;
   }
 
   /**
@@ -215,15 +214,15 @@ import com.opengamma.util.OpenGammaClock;
   private static void validateSecurity(final ManageableSecurity newVersion, final ManageableSecurity previousVersion) {
     if (!newVersion.getClass().equals(previousVersion.getClass())) {
       throw new IllegalArgumentException("Security type cannot change, new version " + newVersion + ", " +
-                                             "previousVersion: " + previousVersion);
+          "previousVersion: " + previousVersion);
     }
     // TODO this should check for equality between the IDs but that's not working ATM
     // needs to be part of the bigger fix for the problem caused by the weak links between the different parts
     // of OTC trades
     if (newVersion.getUniqueId() != null && !newVersion.getUniqueId().equalObjectId(previousVersion.getUniqueId())) {
       throw new IllegalArgumentException("Cannot update a security with a different ID, " +
-                                             "new ID: " + newVersion.getUniqueId() + ", " +
-                                             "previous ID: " + previousVersion.getUniqueId());
+          "new ID: " + newVersion.getUniqueId() + ", " +
+          "previous ID: " + previousVersion.getUniqueId());
     }
   }
 
@@ -231,13 +230,13 @@ import com.opengamma.util.OpenGammaClock;
     final ManageableTrade.Meta meta = ManageableTrade.meta();
     final BeanBuilder<? extends ManageableTrade> tradeBuilder =
         tradeBuilder(tradeData,
-                     meta.uniqueId(),
-                     meta.tradeDate(),
-                     meta.tradeTime(),
-                     meta.premium(),
-                     meta.premiumCurrency(),
-                     meta.premiumDate(),
-                     meta.premiumTime());
+            meta.uniqueId(),
+            meta.tradeDate(),
+            meta.tradeTime(),
+            meta.premium(),
+            meta.premiumCurrency(),
+            meta.premiumDate(),
+            meta.premiumTime());
     tradeBuilder.set(meta.attributes(), tradeData.getMapValues(meta.attributes().name()));
     tradeBuilder.set(meta.quantity(), BigDecimal.ONE);
     // the link needs to be non-null but the real ID can't be set until the security has been created later
@@ -292,7 +291,7 @@ import com.opengamma.util.OpenGammaClock;
     final BeanBuilder<? extends ManageableTrade> builder = ManageableTrade.meta().builder();
     for (final MetaProperty<?> property : properties) {
       builder.set(property, getStringConvert().convertFromString(property.propertyType(),
-                                                                 (String) tradeData.getValue(property.name())));
+          (String) tradeData.getValue(property.name())));
     }
     return builder;
   }
@@ -315,11 +314,11 @@ import com.opengamma.util.OpenGammaClock;
     return BlotterUtils.buildSecurity(dataSource, idBundle);
   }
 
-  private FinancialSecurity buildUnderlying(final BeanDataSource underlyingData) {
+  private static FinancialSecurity buildUnderlying(final BeanDataSource underlyingData) {
     return buildUnderlying(underlyingData, ExternalIdBundle.EMPTY);
   }
 
-  private FinancialSecurity buildUnderlying(final BeanDataSource underlyingData, final ExternalIdBundle idBundle) {
+  private static FinancialSecurity buildUnderlying(final BeanDataSource underlyingData, final ExternalIdBundle idBundle) {
     if (underlyingData == null) {
       return null;
     }

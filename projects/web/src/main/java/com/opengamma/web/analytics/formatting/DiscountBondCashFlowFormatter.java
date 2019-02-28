@@ -25,7 +25,6 @@ public class DiscountBondCashFlowFormatter extends AbstractFormatter<DiscountBon
   private static final String MATRIX = "matrix";
 
   private final DoubleFormatter _doubleFormatter;
-  private final RateFormatter _rateFormatter;
   private final CurrencyAmountFormatter _currencyAmountFormatter;
 
   /**
@@ -38,7 +37,6 @@ public class DiscountBondCashFlowFormatter extends AbstractFormatter<DiscountBon
     super(DiscountBondCashFlows.class);
     _doubleFormatter = doubleFormatter;
     _currencyAmountFormatter = currencyAmountFormatter;
-    _rateFormatter = rateFormatter;
     addFormatter(new Formatter<DiscountBondCashFlows>(Format.EXPANDED) {
       @Override
       protected Object formatValue(final DiscountBondCashFlows value, final ValueSpecification valueSpec, final Object inlineKey) {

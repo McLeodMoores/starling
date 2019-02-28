@@ -235,12 +235,11 @@ import com.opengamma.web.server.conversion.PercentageValueSignificantFiguresForm
     final DoubleValueFormatter valueNameFormatter = FORMATTERS.get(valueSpec.getValueName());
     if (valueNameFormatter != null) {
       return valueNameFormatter;
-    } else {
-      if (valueSpec.getProperties().getValues(ValuePropertyNames.CURRENCY) != null) {
-        return DEFAULT_CCY_FORMATTER;
-      }
-      return DEFAULT_FORMATTER;
     }
+    if (valueSpec.getProperties().getValues(ValuePropertyNames.CURRENCY) != null) {
+      return DEFAULT_CCY_FORMATTER;
+    }
+    return DEFAULT_FORMATTER;
   }
 
   @Override
@@ -257,7 +256,7 @@ import com.opengamma.web.server.conversion.PercentageValueSignificantFiguresForm
           formattedNumber;
   }
 
-  private String formatWithCurrency(final String formattedNumber, final ValueSpecification valueSpec) {
+  private static String formatWithCurrency(final String formattedNumber, final ValueSpecification valueSpec) {
     final Set<String> currencyValues = valueSpec.getProperties().getValues(ValuePropertyNames.CURRENCY);
     return currencyValues == null || currencyValues.isEmpty() ?
         formattedNumber :

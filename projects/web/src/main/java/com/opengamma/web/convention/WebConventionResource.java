@@ -93,20 +93,20 @@ public class WebConventionResource extends AbstractWebConventionResource {
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
   public Response putHTML(
-      @FormParam("name") String name,
-      @FormParam("conventionxml") String xml) {
+      @FormParam("name") final String name,
+      @FormParam("conventionxml") final String xml) {
     if (data().getConvention().isLatest() == false) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
 
-    name = StringUtils.trimToNull(name);
-    xml = StringUtils.trimToNull(xml);
-    if (name == null || xml == null) {
+    final String trimmedName = StringUtils.trimToNull(name);
+    final String trimmedXml = StringUtils.trimToNull(xml);
+    if (trimmedName == null || trimmedXml == null) {
       final FlexiBean out = createRootData();
-      if (name == null) {
+      if (trimmedName == null) {
         out.put("err_nameMissing", true);
       }
-      if (xml == null) {
+      if (trimmedXml == null) {
         out.put("err_xmlMissing", true);
       }
       final String html = getFreemarker().build(HTML_DIR + "convention-update.ftl", out);
@@ -114,12 +114,12 @@ public class WebConventionResource extends AbstractWebConventionResource {
     }
 
     try {
-      final ManageableConvention convention = parseXML(xml, data().getConvention().getConvention().getClass());
-      final URI uri = updateConvention(name, convention);
+      final ManageableConvention convention = parseXML(trimmedXml, data().getConvention().getConvention().getClass());
+      final URI uri = updateConvention(trimmedName, convention);
       return Response.seeOther(uri).build();
     } catch (final Exception ex) {
       final FlexiBean out = createRootData();
-      out.put("conventionXml", StringEscapeUtils.escapeJava(StringUtils.defaultString(xml)));
+      out.put("conventionXml", StringEscapeUtils.escapeJava(StringUtils.defaultString(trimmedXml)));
       out.put("err_conventionXmlMsg", StringUtils.defaultString(ex.getMessage()));
       final String html = getFreemarker().build(HTML_DIR + "convention-update.ftl", out);
       return Response.ok(html).build();

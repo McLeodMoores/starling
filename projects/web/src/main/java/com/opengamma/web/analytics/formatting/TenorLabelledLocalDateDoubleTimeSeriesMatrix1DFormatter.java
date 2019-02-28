@@ -28,7 +28,7 @@ import com.opengamma.util.time.Tenor;
     addFormatter(new Formatter<TenorLabelledLocalDateDoubleTimeSeriesMatrix1D>(Format.EXPANDED) {
       @Override
       protected Object formatValue(final TenorLabelledLocalDateDoubleTimeSeriesMatrix1D value, final ValueSpecification valueSpec, final Object inlineKey) {
-        return formatExpanded(value, valueSpec, inlineKey);
+        return formatExpanded(value, inlineKey);
       }
     });
 
@@ -38,9 +38,8 @@ import com.opengamma.util.time.Tenor;
   public Object formatCell(final TenorLabelledLocalDateDoubleTimeSeriesMatrix1D value, final ValueSpecification valueSpec, final Object inlineKey) {
     if (inlineKey == null) {
       return "Vector (" + value.size() + ")";
-    } else {
-      return formatInline(value, valueSpec, Format.CELL, inlineKey);
     }
+    return formatInline(value, valueSpec, Format.CELL, inlineKey);
   }
 
   private Object formatInline(final TenorLabelledLocalDateDoubleTimeSeriesMatrix1D matrix, final ValueSpecification valueSpec, final Format format, final Object inlineKey) {
@@ -48,12 +47,12 @@ import com.opengamma.util.time.Tenor;
     return ts != null ? _timeSeriesFormatter.format(ts, valueSpec, format, inlineKey) : null;
   }
 
-  private Object formatExpanded(final TenorLabelledLocalDateDoubleTimeSeriesMatrix1D matrix, final ValueSpecification valueSpec, final Object inlineKey) {
+  private Object formatExpanded(final TenorLabelledLocalDateDoubleTimeSeriesMatrix1D matrix, final Object inlineKey) {
     final LocalDateDoubleTimeSeries ts = getTimeSeries(matrix, inlineKey);
     return ts != null ? _timeSeriesFormatter.formatExpanded(ts) : null;
   }
 
-  private LocalDateDoubleTimeSeries getTimeSeries(final TenorLabelledLocalDateDoubleTimeSeriesMatrix1D matrix, final Object inlineKey) {
+  private static LocalDateDoubleTimeSeries getTimeSeries(final TenorLabelledLocalDateDoubleTimeSeriesMatrix1D matrix, final Object inlineKey) {
     final Tenor tenorKey = (Tenor) inlineKey;
     for (int i = 0; i < matrix.size(); i++) {
       if (tenorKey.equals(matrix.getKeys()[i])) {

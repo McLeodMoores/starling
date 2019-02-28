@@ -57,11 +57,11 @@ public abstract class ViewportDefinition implements Iterable<GridCell> {
    * @return A new viewport definition
    */
   public static ViewportDefinition create(final int version,
-                                          final List<Integer> rows,
-                                          final List<Integer> columns,
-                                          final List<GridCell> cells,
-                                          final TypeFormatter.Format format,
-                                          final Boolean enableLogging) {
+      final List<Integer> rows,
+      final List<Integer> columns,
+      final List<GridCell> cells,
+      final TypeFormatter.Format format,
+      final Boolean enableLogging) {
     ArgumentChecker.notNull(cells, "cells");
     ArgumentChecker.notNull(rows, "rows");
     ArgumentChecker.notNull(columns, "columns");
@@ -71,12 +71,11 @@ public abstract class ViewportDefinition implements Iterable<GridCell> {
         throw new IllegalArgumentException("rows and columns must be empty if cells are specified");
       }
       return new ArbitraryViewportDefinition(version, cells, logging);
-    } else {
-      if (rows.size() == 0 || columns.size() == 0) {
-        throw new IllegalArgumentException("rows and columns must not be empty if no cells are specified");
-      }
-      return new RectangularViewportDefinition(version, rows, columns, format, logging);
     }
+    if (rows.size() == 0 || columns.size() == 0) {
+      throw new IllegalArgumentException("rows and columns must not be empty if no cells are specified");
+    }
+    return new RectangularViewportDefinition(version, rows, columns, format, logging);
   }
 
   public static ViewportDefinition createEmpty(final int version) {

@@ -40,14 +40,28 @@ public final class DependencyGraphGrid extends AnalyticsGrid<DependencyGraphView
   /**
    * Creates a new grid for displaying a dependency graph of calculations.
    *
-   * @param compiledViewDef the view definition from which the graph and calculations were derived
-   * @param valueRequirement target value requirement
-   * @param calcConfigName the calculation configuration used for the calculations, not null
-   * @param cycle the view cycle that calculated the results, not null
-   * @param callbackId the ID that's passed to listeners when the row and column structure of the grid changes
-   * @param targetResolver the resolver for looking up the target of the calculation given its specification
-   * @param functions the function repository for any additional function metadata, not null
-   * @param viewportListener receives notifications when any viewport changes, not null
+   * @param compiledViewDef
+   *          the view definition from which the graph and calculations were
+   *          derived
+   * @param valueRequirement
+   *          target value requirement
+   * @param calcConfigName
+   *          the calculation configuration used for the calculations, not null
+   * @param cycle
+   *          the view cycle that calculated the results, not null
+   * @param callbackId
+   *          the ID that's passed to listeners when the row and column
+   *          structure of the grid changes
+   * @param targetResolver
+   *          the resolver for looking up the target of the calculation given
+   *          its specification
+   * @param functions
+   *          the function repository for any additional function metadata, not
+   *          null
+   * @param viewportListener
+   *          receives notifications when any viewport changes, not null
+   * @param valueMappings
+   *          maps between the requirement and specification
    * @return the grid, not null
    */
   /* package */static DependencyGraphGrid create(final CompiledViewDefinition compiledViewDef, final ValueRequirement valueRequirement, final String calcConfigName, final ViewCycle cycle, final String callbackId,

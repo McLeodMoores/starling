@@ -28,7 +28,7 @@ public abstract class AbstractJSONBuilder<T> implements JSONBuilder<T> {
     return new FudgeDeserializer(FUDGE_CONTEXT).fudgeMsgToObject(clazz, fudgeMsg);
   }
 
-  private FudgeMsg toFudgeMsg(final String json) {
+  private static FudgeMsg toFudgeMsg(final String json) {
     final FudgeMsgJSONReader fudgeJSONReader = new FudgeMsgJSONReader(FUDGE_CONTEXT, new StringReader(json));
     return fudgeJSONReader.readMessage();
   }

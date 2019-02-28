@@ -23,9 +23,12 @@ public class ArbitraryViewportDefinition extends ViewportDefinition {
 
   /**
    * @param version
-   * @param cells Cells in the viewport, not empty
-   * @param format
-   * @param enableLogging Whether full logging info should be collected for the viewport's cells
+   *          the version
+   * @param cells
+   *          Cells in the viewport, not empty
+   * @param enableLogging
+   *          Whether full logging info should be collected for the viewport's
+   *          cells
    */
   /* package */ ArbitraryViewportDefinition(final int version, final List<GridCell> cells, final boolean enableLogging) {
     super(version, enableLogging);

@@ -203,7 +203,7 @@ public class WebConventionsResource extends AbstractWebConventionResource {
         if (jsonBuilder != null) {
           convention = (ManageableConvention) jsonBuilder.fromJSON(trimmedJson);
         }
-//        convention = (ManageableConvention) parseJSON(trimmedJson);
+        //        convention = (ManageableConvention) parseJSON(trimmedJson);
       } else if (trimmedXml != null) {
         convention = parseXML(trimmedXml, typeClazz);
       }
@@ -220,7 +220,7 @@ public class WebConventionsResource extends AbstractWebConventionResource {
     return result;
   }
 
-  private boolean isEmptyConventionData(final String json, final String xml) {
+  private static boolean isEmptyConventionData(final String json, final String xml) {
     return json == null && xml == null;
   }
 

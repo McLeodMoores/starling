@@ -32,15 +32,23 @@ public class ViewportResults {
   private final Instant _valuationTime;
 
   /**
-   * @param allResults Cells in the viewport containing the data, history and the value specification. The outer
-   * list contains the data by rows and the inner lists contain the data for each row
-   * @param viewportDefinition Definition of the rows and columns in the viewport
-   * @param columns The columns in the viewport's grid
+   * @param allResults
+   *          Cells in the viewport containing the data, history and the value
+   *          specification. The outer list contains the data by rows and the
+   *          inner lists contain the data for each row
+   * @param viewportDefinition
+   *          Definition of the rows and columns in the viewport
+   * @param columns
+   *          The columns in the viewport's grid
+   * @param calculationDuration
+   *          the duration of the calculation, not null
+   * @param valuationTime
+   *          the valuation time, not null
    */
   /* package */ ViewportResults(final List<ResultsCell> allResults,
-                                final ViewportDefinition viewportDefinition,
-                                final GridColumnGroups columns,
-                                final Duration calculationDuration, final Instant valuationTime) {
+      final ViewportDefinition viewportDefinition,
+      final GridColumnGroups columns,
+      final Duration calculationDuration, final Instant valuationTime) {
     ArgumentChecker.notNull(allResults, "allResults");
     ArgumentChecker.notNull(columns, "columns");
     ArgumentChecker.notNull(viewportDefinition, "viewportDefinition");

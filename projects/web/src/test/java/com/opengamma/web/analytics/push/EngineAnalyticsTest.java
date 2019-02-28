@@ -1,10 +1,7 @@
 package com.opengamma.web.analytics.push;
 
-import java.io.IOException;
-
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -12,7 +9,7 @@ import org.json.JSONObject;
  */
 public class EngineAnalyticsTest {
 
-  public static void main(final String[] args) throws IOException, JSONException {
+  public static void main(final String[] args) throws Exception {
     final WebPushTestUtils webPushTestUtils = new WebPushTestUtils();
     final String clientId = webPushTestUtils.handshake();
     final String viewDefJson = "{" +

@@ -45,9 +45,8 @@ import com.sun.jersey.spi.container.ContainerRequest;
     }
     if (clientIds == null || clientIds.size() != 1) {
       return null;
-    } else {
-      return clientIds.get(0);
     }
+    return clientIds.get(0);
   }
 
   /**
@@ -63,8 +62,7 @@ import com.sun.jersey.spi.container.ContainerRequest;
       /*LOGGER.debug("No user principal, not subscribing, url: {}", url);
      return response;*/
       return null;
-    } else {
-      return userPrincipal.getName();
     }
+    return userPrincipal.getName();
   }
 }

@@ -158,9 +158,8 @@ import com.opengamma.util.money.CurrencyAmount;
       // flag whether this result was updated by the last set of results that were put into the cache
       final boolean updatedByLastResults = item.getLastUpdateId() == _lastUpdateId;
       return Result.forValue(item.getValue(), null, null, updatedByLastResults);
-    } else {
-      return EMPTY_RESULT;
     }
+    return EMPTY_RESULT;
   }
 
   /**
@@ -178,13 +177,11 @@ import com.opengamma.util.money.CurrencyAmount;
       // flag whether this result was updated by the last set of results that were put into the cache
       final boolean updatedByLastResults = item.getLastUpdateId() == _lastUpdateId;
       return Result.forValue(item.getValue(), item.getHistory(), item.getAggregatedExecutionLog(), updatedByLastResults);
-    } else {
-      if (HISTORY_TYPES.contains(columnType)) {
-        return EMPTY_RESULT_WITH_HISTORY;
-      } else {
-        return EMPTY_RESULT;
-      }
     }
+    if (HISTORY_TYPES.contains(columnType)) {
+      return EMPTY_RESULT_WITH_HISTORY;
+    }
+    return EMPTY_RESULT;
   }
 
   /**
@@ -211,9 +208,8 @@ import com.opengamma.util.money.CurrencyAmount;
   /* package */ Collection<Object> emptyHistory(final Class<?> type) {
     if (HISTORY_TYPES.contains(type)) {
       return Collections.emptyList();
-    } else {
-      return null;
     }
+    return null;
   }
 
   /**
@@ -257,9 +253,9 @@ import com.opengamma.util.money.CurrencyAmount;
     }
 
     private static Result forValue(final Object value,
-                                   final Collection<Object> history,
-                                   final AggregatedExecutionLog aggregatedExecutionLog,
-                                   final boolean updated) {
+        final Collection<Object> history,
+        final AggregatedExecutionLog aggregatedExecutionLog,
+        final boolean updated) {
       ArgumentChecker.notNull(value, "value");
       return new Result(value, history, aggregatedExecutionLog, updated);
     }
@@ -328,9 +324,8 @@ import com.opengamma.util.money.CurrencyAmount;
     /* package */ Collection<Object> getHistory() {
       if (_history != null) {
         return Collections.unmodifiableCollection(_history);
-      } else {
-        return null;
       }
+      return null;
     }
 
     /**

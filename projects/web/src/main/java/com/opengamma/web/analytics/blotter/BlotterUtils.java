@@ -239,7 +239,7 @@ import com.opengamma.util.time.Expiry;
   @SuppressWarnings("unchecked")
   /* package */ static FinancialSecurity buildSecurity(final BeanDataSource data, final ExternalIdBundle idBundle) {
     final BeanVisitor<BeanBuilder<FinancialSecurity>> visitor = new BeanBuildingVisitor<>(data, META_BEAN_FACTORY,
-                                                                                    BEAN_BUILDING_CONVERTERS);
+        BEAN_BUILDING_CONVERTERS);
     final MetaBean metaBean = META_BEAN_FACTORY.beanFor(data);
     // TODO check it's a FinancialSecurity metaBean
     if (!(metaBean instanceof FinancialSecurity.Meta)) {
@@ -330,9 +330,8 @@ import com.opengamma.util.time.Expiry;
   public OffsetTime convertFromString(final Class<? extends OffsetTime> cls, final String timeString) {
     if (!StringUtils.isEmpty(timeString)) {
       return OffsetTime.of(LocalTime.parse(timeString.trim()), ZoneOffset.UTC);
-    } else {
-      return null;
     }
+    return null;
   }
 
   @Override
@@ -391,9 +390,8 @@ import com.opengamma.util.time.Expiry;
       // is NaN or +/- infinity in which case it returns a Double
       if (number instanceof BigDecimal) {
         return (BigDecimal) number;
-      } else {
-        throw new IllegalArgumentException("Failed to parse number as BigDecimal: " + number);
       }
+      throw new IllegalArgumentException("Failed to parse number as BigDecimal: " + number);
     } catch (final ParseException e) {
       throw new IllegalArgumentException("Failed to parse number", e);
     }

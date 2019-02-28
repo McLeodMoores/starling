@@ -19,8 +19,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
 import org.threeten.bp.format.DateTimeParseException;
@@ -91,7 +89,6 @@ public class HolidayLoaderResource {
     }
   }
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(HolidayLoaderResource.class);
   private final HolidayMaster _holidayMaster;
 
   /**

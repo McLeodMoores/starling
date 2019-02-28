@@ -37,7 +37,7 @@ import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
     return type != null &&
         (LocalDateLabelledMatrix1D.class.isAssignableFrom(type) &&
             LOCAL_DATE_LABELLED_MATRIX_1D_VALUE_NAMES.contains(spec.getValueName()) ||
-        TenorLabelledLocalDateDoubleTimeSeriesMatrix1D.class.isAssignableFrom(type) &&
+            TenorLabelledLocalDateDoubleTimeSeriesMatrix1D.class.isAssignableFrom(type) &&
             TENOR_LABELLED_TIME_SERIES_MATRIX_1D_VALUE_NAMES.contains(spec.getValueName()));
   }
 
@@ -112,9 +112,8 @@ import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
   public int compareTo(final ColumnMeta meta) {
     if (!meta._key.getClass().equals(_key.getClass())) {
       return 0;
-    } else {
-      return _key.compareTo(meta._key);
     }
+    return _key.compareTo(meta._key);
   }
 
   @Override

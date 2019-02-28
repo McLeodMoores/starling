@@ -80,7 +80,7 @@ public class ScriptTag {
     return buf.toString();
   }
 
-  private String printDevInline(final Bundle bundle) {
+  private static String printDevInline(final Bundle bundle) {
     final StringBuilder buf = new StringBuilder();
     buf.append("<script src=\"text/javascript\"><!--//--><![CDATA[//><!--\n");
     buf.append(BundleUtils.readBundleSource(bundle));

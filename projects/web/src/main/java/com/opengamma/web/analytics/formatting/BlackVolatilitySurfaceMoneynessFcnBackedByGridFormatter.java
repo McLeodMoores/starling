@@ -21,15 +21,15 @@ import com.opengamma.analytics.financial.model.volatility.surface.BlackVolatilit
 import com.opengamma.engine.value.ValueSpecification;
 
 /* package */ class BlackVolatilitySurfaceMoneynessFcnBackedByGridFormatter
-    extends AbstractFormatter<BlackVolatilitySurfaceMoneynessFcnBackedByGrid> {
+extends AbstractFormatter<BlackVolatilitySurfaceMoneynessFcnBackedByGrid> {
 
   /* package */ BlackVolatilitySurfaceMoneynessFcnBackedByGridFormatter() {
     super(BlackVolatilitySurfaceMoneynessFcnBackedByGrid.class);
     addFormatter(new Formatter<BlackVolatilitySurfaceMoneynessFcnBackedByGrid>(Format.EXPANDED) {
       @Override
       protected Object formatValue(final BlackVolatilitySurfaceMoneynessFcnBackedByGrid value,
-                    final ValueSpecification valueSpec,
-                    final Object inlineKey) {
+          final ValueSpecification valueSpec,
+          final Object inlineKey) {
         return formatExpanded(value);
       }
     });
@@ -37,14 +37,14 @@ import com.opengamma.engine.value.ValueSpecification;
 
   @Override
   public Object formatCell(final BlackVolatilitySurfaceMoneynessFcnBackedByGrid value,
-                           final ValueSpecification valueSpec,
-                           final Object inlineKey) {
+      final ValueSpecification valueSpec,
+      final Object inlineKey) {
     return SurfaceFormatterUtils.formatCell(value.getSurface());
   }
 
-  private Object formatExpanded(final BlackVolatilitySurfaceMoneynessFcnBackedByGrid value) {
+  private static Object formatExpanded(final BlackVolatilitySurfaceMoneynessFcnBackedByGrid value) {
     final SmileSurfaceDataBundle gridData = value.getGridData();
-    final Set<Double> strikes = new TreeSet<Double>();
+    final Set<Double> strikes = new TreeSet<>();
     for (final double[] outer : gridData.getStrikes()) {
       for (final double inner : outer) {
         strikes.add(inner);

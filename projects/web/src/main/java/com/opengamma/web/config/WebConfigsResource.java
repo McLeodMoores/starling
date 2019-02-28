@@ -104,15 +104,15 @@ public class WebConfigsResource extends AbstractWebConfigResource {
 
   @SuppressWarnings("unchecked")
   private FlexiBean search(final PagingRequest request, final ConfigSearchSortOrder so, final String name,
-      String typeName, final List<String> configIdStrs, final UriInfo uriInfo) {
+      final String typeName, final List<String> configIdStrs, final UriInfo uriInfo) {
     final FlexiBean out = createRootData();
 
     @SuppressWarnings("rawtypes")
     final
     ConfigSearchRequest searchRequest = new ConfigSearchRequest();
-    typeName = StringUtils.trimToNull(typeName);
-    if (typeName != null) {
-      final Class<?> typeClazz = data().getTypeMap().get(typeName);
+    final String trimmedTypeName = StringUtils.trimToNull(typeName);
+    if (trimmedTypeName != null) {
+      final Class<?> typeClazz = data().getTypeMap().get(trimmedTypeName);
       searchRequest.setType(typeClazz);
     } else {
       searchRequest.setType(Object.class);
@@ -121,7 +121,7 @@ public class WebConfigsResource extends AbstractWebConfigResource {
     searchRequest.setSortOrder(so);
     searchRequest.setName(StringUtils.trimToNull(name));
     out.put("searchRequest", searchRequest);
-    out.put("type", typeName);
+    out.put("type", trimmedTypeName);
     for (final String configIdStr : configIdStrs) {
       searchRequest.addConfigId(ObjectId.parse(configIdStr));
     }
@@ -226,7 +226,7 @@ public class WebConfigsResource extends AbstractWebConfigResource {
     return result;
   }
 
-  private boolean isEmptyConfigData(final String json, final String xml) {
+  private static boolean isEmptyConfigData(final String json, final String xml) {
     return json == null && xml == null;
   }
 

@@ -137,9 +137,8 @@ import com.opengamma.util.ArgumentChecker;
           return false;
         }
         return !isOTC;
-      } else {
-        return false;
       }
+      return false;
     }
 
     /* package */ AnalyticsNode getRoot() {

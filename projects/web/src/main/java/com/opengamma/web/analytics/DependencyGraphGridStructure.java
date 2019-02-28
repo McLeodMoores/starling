@@ -68,10 +68,10 @@ public class DependencyGraphGridStructure implements GridStructure {
   private final GridColumnGroups _nonFixedColumnGroups;
 
   /* package */ DependencyGraphGridStructure(final AnalyticsNode root,
-                                             final String calcConfigName,
-                                             final List<ValueSpecification> valueSpecifications,
-                                             final List<String> fnNames,
-                                             final ComputationTargetResolver targetResolver) {
+      final String calcConfigName,
+      final List<ValueSpecification> valueSpecifications,
+      final List<String> fnNames,
+      final ComputationTargetResolver targetResolver) {
     ArgumentChecker.notNull(valueSpecifications, "valueSpecifications");
     ArgumentChecker.notNull(fnNames, "fnNames");
     ArgumentChecker.notNull(targetResolver, "targetResolver");
@@ -89,7 +89,7 @@ public class DependencyGraphGridStructure implements GridStructure {
         column("Value", null, 3),
         column("Function", 4),
         column("Properties", ValueProperties.class, 5)),
-      false);
+        false);
     _nonFixedColumnGroups = new GridColumnGroups(nonFixedColumnGroup);
     _columnGroups = new GridColumnGroups(ImmutableList.of(_fixedColumnGroup, nonFixedColumnGroup));
 
@@ -112,17 +112,17 @@ public class DependencyGraphGridStructure implements GridStructure {
    * @return The results for the cells in the viewport and the new viewport state
    */
   /* package */ Pair<ViewportResults, Viewport.State> createResults(final ViewportDefinition viewportDefinition,
-                                                                    final ResultsCache cache,
-                                                                    final ViewportResults previousResults) {
+      final ResultsCache cache,
+      final ViewportResults previousResults) {
     final List<ResultsCell> results = Lists.newArrayList();
     for (final GridCell cell : viewportDefinition) {
       final GridColumn column = _columnGroups.getColumn(cell.getColumn());
       results.add(column.buildResults(cell.getRow(), cell.getFormat(), cache));
     }
     final ViewportResults newResults = new ViewportResults(results,
-                                                     viewportDefinition,
-                                                     _columnGroups,
-                                                     cache.getLastCalculationDuration(), cache.getValuationTime());
+        viewportDefinition,
+        _columnGroups,
+        cache.getLastCalculationDuration(), cache.getValuationTime());
     Viewport.State state;
     if (previousResults != null && results.equals(previousResults.getResults())) {
       state = Viewport.State.STALE_DATA;
@@ -151,10 +151,10 @@ public class DependencyGraphGridStructure implements GridStructure {
    */
   private GridColumn column(final String header, final Class<?> type, final int colIndex) {
     final DependencyGraphCellRenderer renderer = new DependencyGraphCellRenderer(colIndex,
-                                                                           _valueSpecifications,
-                                                                           _fnNames,
-                                                                           _computationTargetResolver,
-                                                                           _calcConfigName);
+        _valueSpecifications,
+        _fnNames,
+        _computationTargetResolver,
+        _calcConfigName);
     return new GridColumn(header, header, type, renderer);
   }
 
@@ -241,10 +241,10 @@ public class DependencyGraphGridStructure implements GridStructure {
 
 
     private DependencyGraphCellRenderer(final int colIndex,
-                                        final List<ValueSpecification> valueSpecs,
-                                        final List<String> fnNames,
-                                        final ComputationTargetResolver computationTargetResolver,
-                                        final String calcConfigName) {
+        final List<ValueSpecification> valueSpecs,
+        final List<String> fnNames,
+        final ComputationTargetResolver computationTargetResolver,
+        final String calcConfigName) {
       ArgumentChecker.notNull(valueSpecs, "valueSpecs");
       ArgumentChecker.notNull(fnNames, "fnNames");
       ArgumentChecker.notNull(computationTargetResolver, "computationTargetResolver");
@@ -258,10 +258,10 @@ public class DependencyGraphGridStructure implements GridStructure {
 
     @Override
     public ResultsCell getResults(final int rowIndex,
-                                  final TypeFormatter.Format format,
-                                  final ResultsCache cache,
-                                  final Class<?> columnType,
-                                  final Object inlineKey) {
+        final TypeFormatter.Format format,
+        final ResultsCache cache,
+        final Class<?> columnType,
+        final Object inlineKey) {
       final ValueSpecification valueSpec = _valueSpecs.get(rowIndex);
       switch (_colIndex) {
         case TARGET_COL:
@@ -295,22 +295,19 @@ public class DependencyGraphGridStructure implements GridStructure {
       // TODO I don't think LATEST will do long term. resolution time available on the result model
       if (targetSpec.getType() == ComputationTargetType.NULL) {
         return getNullTargetName(valueSpec);
-      } else {
-        final ComputationTarget target = _computationTargetResolver.resolve(targetSpec, VersionCorrection.LATEST);
-        if (target != null) { // doubt this branch ever happens - don't think it will be executed for NULL targets.
-          return target.getName();
-        } else {
-          final UniqueId uid = targetSpec.getUniqueId();
-          if (uid != null) {
-            return uid.toString();
-          } else {
-            return getNullTargetName(valueSpec);
-          }
-        }
       }
+      final ComputationTarget target = _computationTargetResolver.resolve(targetSpec, VersionCorrection.LATEST);
+      if (target != null) { // doubt this branch ever happens - don't think it will be executed for NULL targets.
+        return target.getName();
+      }
+      final UniqueId uid = targetSpec.getUniqueId();
+      if (uid != null) {
+        return uid.toString();
+      }
+      return getNullTargetName(valueSpec);
     }
 
-    private String getNullTargetName(final ValueSpecification valueSpec) {
+    private static String getNullTargetName(final ValueSpecification valueSpec) {
       final String curveName = valueSpec.getProperty(ValuePropertyNames.CURVE);
       final String surfaceName = valueSpec.getProperty(ValuePropertyNames.SURFACE);
       if (curveName != null) {

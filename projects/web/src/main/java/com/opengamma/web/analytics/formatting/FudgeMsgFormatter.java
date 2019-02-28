@@ -49,7 +49,7 @@ import com.opengamma.engine.value.ValueSpecification;
         final List<String> yLabels = Lists.newArrayListWithCapacity(fieldCount);
         // Sorting fields to ensure a consistent order for display purposes.
         // This could change the meaning of the Fudge message so assumes no repeated fields.
-        final List<FudgeField> orderedFields = new ArrayList<FudgeField>(msg.getAllFields());
+        final List<FudgeField> orderedFields = new ArrayList<>(msg.getAllFields());
         Collections.sort(orderedFields, NAME_COMPARATOR);
         for (final FudgeField field : orderedFields) {
           final List<String> row = Lists.newArrayListWithCapacity(2);

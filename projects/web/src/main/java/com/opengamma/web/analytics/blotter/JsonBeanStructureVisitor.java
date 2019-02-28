@@ -119,9 +119,8 @@ import com.opengamma.util.ArgumentChecker;
   private static String optional(final MetaProperty<?> property, final String type) {
     if (nullable(property)) {
       return type + "?";
-    } else {
-      return type;
     }
+    return type;
   }
 
   @Override
@@ -141,22 +140,20 @@ import com.opengamma.util.ArgumentChecker;
     final String typeName = TYPES.get(type);
     if (typeName != null) {
       return typeName;
-    } else {
-      try {
-        _stringConvert.findConverter(type);
-        return STRING;
-      } catch (final Exception e) {
-        throw new OpenGammaRuntimeException("No type mapping found for class " + type.getName(), e);
-      }
+    }
+    try {
+      _stringConvert.findConverter(type);
+      return STRING;
+    } catch (final Exception e) {
+      throw new OpenGammaRuntimeException("No type mapping found for class " + type.getName(), e);
     }
   }
 
   private static boolean nullable(final MetaProperty<?> property) {
     if (property.propertyType().isPrimitive()) {
       return false;
-    } else {
-      final PropertyDefinition definitionAnnotation = property.annotation(PropertyDefinition.class);
-      return !definitionAnnotation.validate().equals("notNull");
     }
+    final PropertyDefinition definitionAnnotation = property.annotation(PropertyDefinition.class);
+    return !definitionAnnotation.validate().equals("notNull");
   }
 }

@@ -52,9 +52,8 @@ public class LongPollingConnectionManager {
       }
       listener.connect(continuation);
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
 
   // for testing

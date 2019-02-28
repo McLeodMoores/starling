@@ -23,7 +23,6 @@ import org.fudgemsg.FudgeRuntimeException;
 import org.fudgemsg.taxonomy.FudgeTaxonomy;
 import org.fudgemsg.types.SecondaryFieldTypeBase;
 import org.fudgemsg.wire.FudgeRuntimeIOException;
-import org.fudgemsg.wire.FudgeSize;
 import org.fudgemsg.wire.json.FudgeJSONSettings;
 import org.fudgemsg.wire.types.FudgeWireType;
 import org.json.JSONException;
@@ -119,6 +118,11 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
     return null;
   }
 
+  /**
+   * Gets the Fudge context.
+   *
+   * @return the Fudge context
+   */
   public FudgeContext getFudgeContext() {
     return _fudgeContext;
   }
@@ -209,8 +213,7 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
     if (envelope == null) {
       return;
     }
-    final int messageSize = FudgeSize.calculateMessageEnvelopeSize(getTaxonomy(taxonomyId), envelope);
-    writeEnvelopeHeader(envelope.getProcessingDirectives(), envelope.getVersion(), messageSize, taxonomyId);
+    writeEnvelopeHeader(envelope.getProcessingDirectives(), envelope.getVersion(), taxonomyId);
     writeData(envelope.getMessage(), taxonomyId);
     writeMeta(envelope.getMessage(), taxonomyId);
     envelopeComplete();
@@ -318,14 +321,17 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
   }
 
   @SuppressWarnings("unchecked")
-  private void fudgeFieldValue(final FudgeFieldType type, Object fieldValue, final boolean meta) {
+  private void fudgeFieldValue(final FudgeFieldType type, final Object fieldValue, final boolean meta) {
     try {
       if (meta) {
         final String typeIdToString = getSettings().fudgeTypeIdToString(type.getTypeId());
         getWriter().value(typeIdToString);
       } else {
+        Object actualFieldValue;
         if (type instanceof SecondaryFieldTypeBase<?, ?, ?>) {
-          fieldValue = ((SecondaryFieldTypeBase<Object, Object, Object>) type).secondaryToPrimary(fieldValue);
+          actualFieldValue = ((SecondaryFieldTypeBase<Object, Object, Object>) type).secondaryToPrimary(fieldValue);
+        } else {
+          actualFieldValue = fieldValue;
         }
         switch (type.getTypeId()) {
           case FudgeWireType.INDICATOR_TYPE_ID:
@@ -341,25 +347,25 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
           case FudgeWireType.BYTE_ARRAY_128_TYPE_ID:
           case FudgeWireType.BYTE_ARRAY_256_TYPE_ID:
           case FudgeWireType.BYTE_ARRAY_512_TYPE_ID:
-            writeArray((byte[]) fieldValue);
+            writeArray((byte[]) actualFieldValue);
             break;
           case FudgeWireType.SHORT_ARRAY_TYPE_ID:
-            writeArray((short[]) fieldValue);
+            writeArray((short[]) actualFieldValue);
             break;
           case FudgeWireType.INT_ARRAY_TYPE_ID:
-            writeArray((int[]) fieldValue);
+            writeArray((int[]) actualFieldValue);
             break;
           case FudgeWireType.LONG_ARRAY_TYPE_ID:
-            writeArray((long[]) fieldValue);
+            writeArray((long[]) actualFieldValue);
             break;
           case FudgeWireType.FLOAT_ARRAY_TYPE_ID:
-            writeArray((float[]) fieldValue);
+            writeArray((float[]) actualFieldValue);
             break;
           case FudgeWireType.DOUBLE_ARRAY_TYPE_ID:
-            writeArray((double[]) fieldValue);
+            writeArray((double[]) actualFieldValue);
             break;
           default:
-            getWriter().value(fieldValue);
+            getWriter().value(actualFieldValue);
             break;
         }
       }
@@ -483,7 +489,7 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
     return result;
   }
 
-  private List<FudgeField> getFieldList(final Map<String, List<FudgeField>> fieldName2Fields, final String fieldName) {
+  private static List<FudgeField> getFieldList(final Map<String, List<FudgeField>> fieldName2Fields, final String fieldName) {
     List<FudgeField> fields = fieldName2Fields.get(fieldName);
     if (fields == null) {
       fields = Lists.newArrayList();
@@ -508,7 +514,7 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
     }
   }
 
-  private void writeEnvelopeHeader(final int processingDirectives, final int version, final int messageSize, final int taxonomyId) {
+  private void writeEnvelopeHeader(final int processingDirectives, final int version, final int taxonomyId) {
     fudgeEnvelopeStart(processingDirectives, version, taxonomyId);
   }
 

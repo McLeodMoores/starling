@@ -24,7 +24,7 @@ import com.opengamma.util.money.CurrencyAmount;
   private final ResultsFormatter.CurrencyDisplay _currencyDisplay;
 
   /* package */ CurrencyAmountFormatter(final ResultsFormatter.CurrencyDisplay currencyDisplay,
-                                        final BigDecimalFormatter bigDecimalFormatter) {
+      final BigDecimalFormatter bigDecimalFormatter) {
     super(CurrencyAmount.class);
     ArgumentChecker.notNull(bigDecimalFormatter, "bigDecimalFormatter");
     ArgumentChecker.notNull(currencyDisplay, "currencyDisplay");
@@ -50,17 +50,17 @@ import com.opengamma.util.money.CurrencyAmount;
     final BigDecimal bigDecimal = convertToBigDecimal(amount);
     return bigDecimal == null ?
         Double.toString(amount) :
-        formatValue(value, valueSpec, inlineKey, bigDecimal);
+          formatValue(value, valueSpec, inlineKey, bigDecimal);
   }
 
   private String formatValue(final CurrencyAmount value,
-                             final ValueSpecification valueSpec,
-                             final Object inlineKey,
-                             final BigDecimal bigDecimal) {
+      final ValueSpecification valueSpec,
+      final Object inlineKey,
+      final BigDecimal bigDecimal) {
 
     final String prefix = _currencyDisplay == ResultsFormatter.CurrencyDisplay.DISPLAY_CURRENCY ?
         value.getCurrency().getCode() + " " :
-        "";
+          "";
     return prefix + _bigDecimalFormatter.formatCell(bigDecimal, valueSpec, inlineKey);
   }
 
@@ -69,9 +69,8 @@ import com.opengamma.util.money.CurrencyAmount;
     final BigDecimal bigDecimal = convertToBigDecimal(amount);
     if (bigDecimal == null) {
       return Double.toString(amount);
-    } else {
-      return _bigDecimalFormatter.format(bigDecimal, valueSpec, Format.EXPANDED, null);
     }
+    return _bigDecimalFormatter.format(bigDecimal, valueSpec, Format.EXPANDED, null);
   }
 
   private Object formatHistory(final CurrencyAmount history, final ValueSpecification valueSpec) {
@@ -79,9 +78,8 @@ import com.opengamma.util.money.CurrencyAmount;
     final BigDecimal bigDecimal = convertToBigDecimal(amount);
     if (bigDecimal == null) {
       return null;
-    } else {
-      return _bigDecimalFormatter.format(bigDecimal, valueSpec, Format.HISTORY, null);
     }
+    return _bigDecimalFormatter.format(bigDecimal, valueSpec, Format.HISTORY, null);
   }
 
   @Override
@@ -96,8 +94,7 @@ import com.opengamma.util.money.CurrencyAmount;
   private static BigDecimal convertToBigDecimal(final Double value) {
     if (Double.isInfinite(value) || Double.isNaN(value)) {
       return null;
-    } else {
-      return new BigDecimal(value.toString());
     }
+    return new BigDecimal(value.toString());
   }
 }

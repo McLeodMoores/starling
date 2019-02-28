@@ -36,7 +36,7 @@ import com.opengamma.financial.currency.CurrencyPairs;
     });
   }
 
-  private Map<String, Object> formatExpanded(final CurrencyPairs currencyPairs) {
+  private static Map<String, Object> formatExpanded(final CurrencyPairs currencyPairs) {
     final Set<CurrencyPair> pairs = currencyPairs.getPairs();
     final List<String> pairNames = Lists.newArrayListWithCapacity(pairs.size());
     for (final CurrencyPair pair : pairs) {

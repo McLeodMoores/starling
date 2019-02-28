@@ -71,17 +71,15 @@ import com.opengamma.web.server.conversion.LabelFormatter;
   /* package */ static DataType getDataType(final Surface<Double, Double, Double> surface) {
     if (surface instanceof InterpolatedDoublesSurface) {
       return DataType.SURFACE_DATA;
-    } else {
-      return DataType.LABELLED_MATRIX_2D;
     }
+    return DataType.LABELLED_MATRIX_2D;
   }
 
   /* package */ static Object formatCell(final Surface<Double, Double, Double> surface) {
     if (surface instanceof InterpolatedDoublesSurface || surface instanceof NodalDoublesSurface) {
       return "Volatility Surface (" + surface.getXData().length + " x " + surface.getYData().length + ")";
-    } else {
-      return "Volatility Surface";
     }
+    return "Volatility Surface";
   }
 
   /* package */ static List<String> getAxisLabels(final Collection<?> values) {

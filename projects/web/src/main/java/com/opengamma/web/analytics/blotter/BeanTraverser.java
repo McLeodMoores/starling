@@ -71,9 +71,8 @@ import com.opengamma.util.ArgumentChecker;
     }
     if (failures.isEmpty()) {
       return decoratedVisitor.finish();
-    } else {
-      throw new BeanTraversalException(metaBean, visitor, failures);
     }
+    throw new BeanTraversalException(metaBean, visitor, failures);
   }
 
   private BeanVisitor<?> decorate(final BeanVisitor<?> visitor) {

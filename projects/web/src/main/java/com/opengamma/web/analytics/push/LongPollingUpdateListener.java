@@ -149,7 +149,7 @@ import com.opengamma.util.ArgumentChecker;
    * @return {@code {updates: [url]}}
    * @throws JSONException Never
    */
-  private String formatUpdate(final Object url) throws JSONException {
+  private static String formatUpdate(final Object url) throws JSONException {
     return new JSONObject().put(UPDATES, new Object[]{url}).toString();
   }
 
@@ -159,7 +159,7 @@ import com.opengamma.util.ArgumentChecker;
    * @return {@code {updates: [url1, url2, ...]}}
    * @throws JSONException Never
    */
-  private String formatUpdate(final Collection<?> urls) throws JSONException {
+  private static String formatUpdate(final Collection<?> urls) throws JSONException {
     return new JSONObject().put(UPDATES, urls).toString();
   }
 

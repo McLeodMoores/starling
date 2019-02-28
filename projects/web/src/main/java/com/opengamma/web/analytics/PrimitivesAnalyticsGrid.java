@@ -46,8 +46,11 @@ import com.opengamma.engine.view.compilation.CompiledViewDefinition;
   }
 
   /**
-   * Factory method for creating a primitives grid that doesn't contain any data.
+   * Factory method for creating a primitives grid that doesn't contain any
+   * data.
    *
+   * @param gridId
+   *          the grid id
    * @return An empty primitives grid
    */
   /* package */static PrimitivesAnalyticsGrid empty(final String gridId) {

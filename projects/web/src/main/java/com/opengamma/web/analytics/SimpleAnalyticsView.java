@@ -68,15 +68,41 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
   private Portfolio _pendingPortfolio;
 
   /**
-   * @param viewId client ID of the view
-   * @param portfolioCallbackId ID that is passed to the listener when the structure of the portfolio grid changes. This class makes no assumptions about its value
-   * @param primitivesCallbackId ID that is passed to the listener when the structure of the primitives grid changes. This class makes no assumptions about its value
-   * @param targetResolver For looking up calculation targets by specification
-   * @param viewportListener Notified when any viewport is created, updated or deleted
-   * @param blotterColumnMapper For populating the blotter columns with details for each different security type
-   * @param portfolioSupplier Supplies an up to date version of the portfolio
-   * @param showBlotterColumns Whether the blotter columns should be shown in the portfolio analytics grid
-   * @param errorManager Holds information about errors that occur compiling and executing the view
+   * @param viewDefinitionId
+   *          the identifier of the view definition, not null
+   * @param primitivesOnly
+   *          true if the view only contains primitives
+   * @param versionCorrection
+   *          the version of the view definition, not null
+   * @param viewId
+   *          client ID of the view
+   * @param portfolioCallbackId
+   *          ID that is passed to the listener when the structure of the
+   *          portfolio grid changes. This class makes no assumptions about its
+   *          value
+   * @param primitivesCallbackId
+   *          ID that is passed to the listener when the structure of the
+   *          primitives grid changes. This class makes no assumptions about its
+   *          value
+   * @param targetResolver
+   *          For looking up calculation targets by specification
+   * @param functions
+   *          the function repository, not null
+   * @param viewportListener
+   *          Notified when any viewport is created, updated or deleted
+   * @param blotterColumnMapper
+   *          For populating the blotter columns with details for each different
+   *          security type
+   * @param portfolioSupplier
+   *          Supplies an up to date version of the portfolio
+   * @param portfolioEntityExtractor
+   *          extracts the portfolio entities, not null
+   * @param showBlotterColumns
+   *          Whether the blotter columns should be shown in the portfolio
+   *          analytics grid
+   * @param errorManager
+   *          Holds information about errors that occur compiling and executing
+   *          the view
    */
   /* package */SimpleAnalyticsView(final UniqueId viewDefinitionId, final boolean primitivesOnly, final VersionCorrection versionCorrection, final String viewId, final String portfolioCallbackId,
       final String primitivesCallbackId, final ComputationTargetResolver targetResolver, final FunctionRepositoryFactory functions, final ViewportListener viewportListener,
@@ -326,31 +352,29 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
         // return the IDs of all grids because the portfolio structure has changed
         // TODO if we had separate IDs for rows and columns it would save the client rebuilding the column metadata
         return getGridIds();
-      } else {
-        final UniqueIdentifiable entity = notification.getEntity();
-        _cache.put(entity);
-        final List<ObjectId> entityIds = Lists.newArrayList(entity.getUniqueId().getObjectId());
-        // TODO get rid of this duplication when ManageablePosition implements Position
-        // TODO would it be nicer to have a getEntities() method on MasterChangeNotification?
-        // would need different impls for different entity types. probably not worth it
-        if (entity instanceof Position) {
-          for (final Trade trade : ((Position) entity).getTrades()) {
-            entityIds.add(trade.getUniqueId().getObjectId());
-            _cache.put(trade);
-          }
-        } else if (entity instanceof ManageablePosition) {
-          for (final Trade trade : ((ManageablePosition) entity).getTrades()) {
-            entityIds.add(trade.getUniqueId().getObjectId());
-            _cache.put(trade);
-          }
-        }
-        final List<String> ids = _portfolioGrid.updateEntities(_cache, entityIds);
-        LOGGER.debug("Entity changed {}, firing updates for viewports {}", notification.getEntity().getUniqueId(), ids);
-        return ids;
       }
-    } else {
-      return Collections.emptyList();
+      final UniqueIdentifiable entity = notification.getEntity();
+      _cache.put(entity);
+      final List<ObjectId> entityIds = Lists.newArrayList(entity.getUniqueId().getObjectId());
+      // TODO get rid of this duplication when ManageablePosition implements Position
+      // TODO would it be nicer to have a getEntities() method on MasterChangeNotification?
+      // would need different impls for different entity types. probably not worth it
+      if (entity instanceof Position) {
+        for (final Trade trade : ((Position) entity).getTrades()) {
+          entityIds.add(trade.getUniqueId().getObjectId());
+          _cache.put(trade);
+        }
+      } else if (entity instanceof ManageablePosition) {
+        for (final Trade trade : ((ManageablePosition) entity).getTrades()) {
+          entityIds.add(trade.getUniqueId().getObjectId());
+          _cache.put(trade);
+        }
+      }
+      final List<String> ids = _portfolioGrid.updateEntities(_cache, entityIds);
+      LOGGER.debug("Entity changed {}, firing updates for viewports {}", notification.getEntity().getUniqueId(), ids);
+      return ids;
     }
+    return Collections.emptyList();
   }
 
   /**

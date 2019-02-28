@@ -50,7 +50,8 @@ class WebFunctionQueryDelegate {
    * Returns the types which match the predicate.
    *
    * @param predicate
-   * @return
+   *          the predicate
+   * @return a map from name to function details that matched predicate
    */
   public SortedMap<String, WebFunctionTypeDetails> query(final Predicate<WebFunctionTypeDetails> predicate) {
     final FunctionConfigurationBundle functionConfiguration = _functionConfigurationSource.getFunctionConfiguration(Instant.now());
@@ -103,7 +104,7 @@ class WebFunctionQueryDelegate {
 
   }
 
-  private void sortParameters(final WebFunctionTypeDetails typeDetails) {
+  private static void sortParameters(final WebFunctionTypeDetails typeDetails) {
 
     final List<List<String>> parameters = typeDetails.getParameters();
 

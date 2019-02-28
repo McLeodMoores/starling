@@ -19,7 +19,9 @@ public class WebFunctionUris {
 
   /**
    * Creates an instance.
-   * @param data  the web data, not null
+   * 
+   * @param data
+   *          the web data, not null
    */
   public WebFunctionUris(final WebFunctionData data) {
     _data = data;
@@ -28,6 +30,7 @@ public class WebFunctionUris {
   //-------------------------------------------------------------------------
   /**
    * Gets the base URI.
+   *
    * @return the URI
    */
   public URI base() {
@@ -37,6 +40,7 @@ public class WebFunctionUris {
 
   /**
    * Gets the URI.
+   *
    * @return the URI
    */
   public URI functions() {
@@ -45,7 +49,9 @@ public class WebFunctionUris {
 
   /**
    * Gets the URI.
+   *
    * @param functionId
+   *          the function identifier
    * @return the URI
    */
   public URI parameterziedFunction(final String functionId) {

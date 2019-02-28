@@ -64,18 +64,18 @@ public class MasterSubscriptionFilter implements ResourceFilter {
   private class ResponseFilter implements ContainerResponseFilter {
 
     /** The masters whose data is returned by the REST method */
-    private final List<MasterType> _masterTypes;
+    private final List<MasterType> _mastersTypes;
 
     /**
      * @param masterTypes The masters whose data is returned by the REST method
      */
     public ResponseFilter(final List<MasterType> masterTypes) {
-      _masterTypes = masterTypes;
+      _mastersTypes = masterTypes;
     }
 
     /**
      * Extracts the client ID from the query parameter named {@link LongPollingServlet#CLIENT_ID} and subscribes
-     * for updates when the data changes in any of the masters in {@link #_masterTypes}.
+     * for updates when the data changes in any of the masters in {@link #_mastersTypes}.
      * @param request The request
      * @param response The response
      * @return The unmodified response
@@ -91,7 +91,7 @@ public class MasterSubscriptionFilter implements ResourceFilter {
       final String userId = AuthUtils.isPermissive() ? null : FilterUtils.getUserId(_httpContext);
       final String url = _servletRequest.getRequestURI();
       // TODO should we only subscribe if there were query params, i.e. it was a search request, not just a request for the search page
-      for (final MasterType masterType : _masterTypes) {
+      for (final MasterType masterType : _mastersTypes) {
         _updateManager.subscribe(userId, clientId, masterType, url);
       }
       return response;

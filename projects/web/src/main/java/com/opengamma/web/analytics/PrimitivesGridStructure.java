@@ -32,9 +32,9 @@ public final class PrimitivesGridStructure extends MainGridStructure {
   /** Target type for anything that isn't part of a portoflio structure. */
   private static final ComputationTargetType NON_PRIMITIVE =
       ComputationTargetType.PORTFOLIO_NODE
-          .or(ComputationTargetType.POSITION)
-          .or(ComputationTargetType.TRADE)
-          .or(ComputationTargetType.SECURITY);
+      .or(ComputationTargetType.POSITION)
+      .or(ComputationTargetType.TRADE)
+      .or(ComputationTargetType.SECURITY);
 
   /** Creates names for the label column in the grid. */
   private static final ComputationTargetReferenceVisitor<String> NAME_VISITOR = new ComputationTargetReferenceVisitor<String>() {
@@ -48,9 +48,8 @@ public final class PrimitivesGridStructure extends MainGridStructure {
     public String visitComputationTargetSpecification(final ComputationTargetSpecification specification) {
       if (specification.getUniqueId() != null) {
         return specification.getUniqueId().toString();
-      } else {
-        return "No target";
       }
+      return "No target";
     }
   };
 
@@ -58,9 +57,9 @@ public final class PrimitivesGridStructure extends MainGridStructure {
   }
 
   private PrimitivesGridStructure(final GridColumnGroup fixedColumns,
-                                  final GridColumnGroups nonFixedColumns,
-                                  final TargetLookup targetLookup,
-                                  final UnversionedValueMappings valueMappings) {
+      final GridColumnGroups nonFixedColumns,
+      final TargetLookup targetLookup,
+      final UnversionedValueMappings valueMappings) {
     super(fixedColumns, nonFixedColumns, targetLookup, valueMappings);
   }
 

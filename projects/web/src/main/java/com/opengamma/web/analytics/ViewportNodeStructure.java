@@ -42,15 +42,14 @@ import com.opengamma.util.ArgumentChecker;
     // root can be null if a view only contains primitives and doesn't have a portfolio
     if (root == null) {
       return null;
-    } else {
-      return createNode(root, Collections.<String>emptyList(), targetLookup, expandedNodes);
     }
+    return createNode(root, Collections.<String>emptyList(), targetLookup, expandedNodes);
   }
 
   private AnalyticsNode createNode(final AnalyticsNode gridStructureNode,
-                                   final List<String> parentPath,
-                                   final TargetLookup targetLookup,
-                                   final Set<List<String>> expandedNodes) {
+      final List<String> parentPath,
+      final TargetLookup targetLookup,
+      final Set<List<String>> expandedNodes) {
     final List<String> path = Lists.newArrayList(parentPath);
     path.add(targetLookup.getRow(gridStructureNode.getStartRow()).getName());
     final boolean expanded = expandedNodes.contains(path);
@@ -65,9 +64,9 @@ import com.opengamma.util.ArgumentChecker;
     _rowToPath.put(gridStructureNode.getStartRow(), Collections.unmodifiableList(path));
 
     return new AnalyticsNode(gridStructureNode.getStartRow(),
-                             gridStructureNode.getEndRow(),
-                             viewportStructureChildNodes,
-                             !expanded);
+        gridStructureNode.getEndRow(),
+        viewportStructureChildNodes,
+        !expanded);
   }
 
   /* package */ List<String> getPathForRow(final int rowIndex) {

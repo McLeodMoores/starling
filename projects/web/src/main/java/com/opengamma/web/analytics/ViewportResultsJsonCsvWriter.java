@@ -154,8 +154,8 @@ public class ViewportResultsJsonCsvWriter {
     }
     final String duration = _durationFormatter.format(new BigDecimal(viewportResults.getCalculationDuration().toMillis()));
     final ImmutableMap<String, Object> resultsMap = ImmutableMap.of(VERSION, viewportResults.getVersion(),
-                                                              CALCULATION_DURATION, duration,
-                                                              DATA, results);
+        CALCULATION_DURATION, duration,
+        DATA, results);
     return new JSONObject(resultsMap).toString();
   }
 
@@ -226,8 +226,7 @@ public class ViewportResultsJsonCsvWriter {
     // there is history for the underlying value
     if (formattedHistory.isEmpty()) {
       return null;
-    } else {
-      return formattedHistory;
     }
+    return formattedHistory;
   }
 }

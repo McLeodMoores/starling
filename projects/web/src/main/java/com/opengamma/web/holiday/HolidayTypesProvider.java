@@ -5,9 +5,6 @@ package com.opengamma.web.holiday;
 
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.collect.ImmutableSortedMap;
 import com.opengamma.core.holiday.HolidayType;
 
@@ -15,8 +12,6 @@ import com.opengamma.core.holiday.HolidayType;
  * Provides all supported holiday types.
  */
 public final class HolidayTypesProvider {
-  /** The logger */
-  private static final Logger LOGGER = LoggerFactory.getLogger(HolidayTypesProvider.class);
   /** An instance */
   private static final HolidayTypesProvider INSTANCE = new HolidayTypesProvider();
   /** A map of holiday types */

@@ -31,10 +31,10 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
 
   @Override
   public ResultsCell getResults(final int rowIndex,
-                                final TypeFormatter.Format format,
-                                final ResultsCache cache,
-                                final Class<?> columnType,
-                                final Object inlineKey) {
+      final TypeFormatter.Format format,
+      final ResultsCache cache,
+      final Class<?> columnType,
+      final Object inlineKey) {
     final PortfolioGridRow row = _rows.get(rowIndex);
     final ComputationTargetReference target = row.getTarget();
     final ComputationTargetType targetType = target.getType();
@@ -71,8 +71,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
   private static boolean isOtc(final Security security) {
     if (security instanceof FinancialSecurity) {
       return ((FinancialSecurity) security).accept(new OtcSecurityVisitor());
-    } else {
-      return false;
     }
+    return false;
   }
 }

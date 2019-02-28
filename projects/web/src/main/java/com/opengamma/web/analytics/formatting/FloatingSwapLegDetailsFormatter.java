@@ -41,11 +41,12 @@ import com.opengamma.util.money.CurrencyAmount;
 /**
  * Formatter for the details of the fixed leg of a swap.
  */
+@SuppressWarnings("deprecation")
 /* package */class FloatingSwapLegDetailsFormatter extends AbstractFormatter<FloatingSwapLegDetails> {
   /** Column labels */
   private static final String[] COLUMN_LABELS = new String[] {START_ACCRUAL_DATES, END_ACCRUAL_DATES, ACCRUAL_YEAR_FRACTION,
-    START_FIXING_DATES, END_FIXING_DATES, FIXING_FRACTIONS, FORWARD_RATE, FIXED_RATE, PAYMENT_DATE, PAYMENT_TIME, PAYMENT_DISCOUNT_FACTOR,
-    PAYMENT_AMOUNT, PROJECTED_AMOUNT, NOTIONAL, SPREAD, GEARING, INDEX_TERM, DISCOUNTED_PAYMENT_AMOUNT, DISCOUNTED_PROJECTED_PAYMENT };
+      START_FIXING_DATES, END_FIXING_DATES, FIXING_FRACTIONS, FORWARD_RATE, FIXED_RATE, PAYMENT_DATE, PAYMENT_TIME, PAYMENT_DISCOUNT_FACTOR,
+      PAYMENT_AMOUNT, PROJECTED_AMOUNT, NOTIONAL, SPREAD, GEARING, INDEX_TERM, DISCOUNTED_PAYMENT_AMOUNT, DISCOUNTED_PROJECTED_PAYMENT };
   /** Number of columns */
   private static final int COLUMN_COUNT = COLUMN_LABELS.length;
   /** x labels field */
