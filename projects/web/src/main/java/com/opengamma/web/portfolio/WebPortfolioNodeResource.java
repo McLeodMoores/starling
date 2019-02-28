@@ -85,24 +85,24 @@ public class WebPortfolioNodeResource extends AbstractWebPortfolioResource {
   @POST
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
-  public Response postHTML(@FormParam("name") String name) {
-    name = StringUtils.trimToNull(name);
-    if (name == null) {
+  public Response postHTML(@FormParam("name") final String name) {
+    final String trimmedName = StringUtils.trimToNull(name);
+    if (trimmedName == null) {
       final FlexiBean out = createRootData();
       out.put("err_nameMissing", true);
       final String html = getFreemarker().build(HTML_DIR + "portfolionode-add.ftl", out);
       return Response.ok(html).build();
     }
-    final URI uri = createPortfolioNode(name);
+    final URI uri = createPortfolioNode(trimmedName);
     return Response.seeOther(uri).build();
   }
 
   @POST
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response postJSON(@FormParam("name") String name) {
-    name = StringUtils.trimToNull(name);
-    final URI uri = createPortfolioNode(name);
+  public Response postJSON(@FormParam("name") final String name) {
+    final String trimmedName = StringUtils.trimToNull(name);
+    final URI uri = createPortfolioNode(trimmedName);
     return Response.created(uri).build();
   }
 
@@ -121,42 +121,42 @@ public class WebPortfolioNodeResource extends AbstractWebPortfolioResource {
   @PUT
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
-  public Response putHTML(@FormParam("name") String name) {
+  public Response putHTML(@FormParam("name") final String name) {
     final PortfolioDocument doc = data().getPortfolio();
     if (doc.isLatest() == false) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
-    name = StringUtils.trimToNull(name);
-    if (name == null) {
+    final String trimmedName = StringUtils.trimToNull(name);
+    if (trimmedName == null) {
       final FlexiBean out = createRootData();
       out.put("err_nameMissing", true);
       final String html = getFreemarker().build(HTML_DIR + "portfolionode-update.ftl", out);
       return Response.ok(html).build();
     }
-    final URI uri = updatePortfolioNode(name, doc);
+    final URI uri = updatePortfolioNode(trimmedName, doc);
     return Response.seeOther(uri).build();
   }
 
   @PUT
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response putJSON(@FormParam("name") String name) {
+  public Response putJSON(@FormParam("name") final String name) {
     final PortfolioDocument doc = data().getPortfolio();
     if (doc.isLatest() == false) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
-    name = StringUtils.trimToNull(name);
-    updatePortfolioNode(name, doc);
+    final String trimmedName = StringUtils.trimToNull(name);
+    updatePortfolioNode(trimmedName, doc);
     return Response.ok().build();
   }
 
-  private URI updatePortfolioNode(final String name, PortfolioDocument doc) {
+  private URI updatePortfolioNode(final String name, final PortfolioDocument doc) {
     final ManageablePortfolioNode node = data().getNode();
     final URI uri = WebPortfolioNodeResource.uri(data());  // lock URI before updating data()
     if (Objects.equal(node.getName(), name) == false) {
       node.setName(name);
-      doc = data().getPortfolioMaster().update(doc);
-      data().setPortfolio(doc);
+      final PortfolioDocument updated = data().getPortfolioMaster().update(doc);
+      data().setPortfolio(updated);
     }
     return uri;
   }
@@ -239,7 +239,7 @@ public class WebPortfolioNodeResource extends AbstractWebPortfolioResource {
       result.addFirst(ObjectsPair.of(currentNode.getUniqueId(), currentNode.getName()));
       currentNode = currentNode.getParentNodeId() == null
           ? null
-          : data().getPortfolioMaster().getNode(currentNode.getParentNodeId());
+              : data().getPortfolioMaster().getNode(currentNode.getParentNodeId());
     }
     return result;
   }

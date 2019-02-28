@@ -92,21 +92,21 @@ public abstract class AbstractWebResource {
    * @param defaultOrder  the default order, not null
    * @return the sort order, not null
    */
-  protected <T extends Enum<T>> T buildSortOrder(String order, final T defaultOrder) {
+  protected <T extends Enum<T>> T buildSortOrder(final String order, final T defaultOrder) {
     if (StringUtils.isEmpty(order)) {
       return defaultOrder;
     }
-    order = order.toUpperCase(Locale.ENGLISH);
-    if (order.endsWith(" ASC")) {
-      order = StringUtils.replace(order, " ASC", "_ASC");
-    } else if (order.endsWith(" DESC")) {
-      order = StringUtils.replace(order, " DESC", "_DESC");
-    } else if (order.endsWith("_ASC") == false && order.endsWith("_DESC") == false) {
-      order = order + "_ASC";
+    String orderStr = order.toUpperCase(Locale.ENGLISH);
+    if (orderStr.endsWith(" ASC")) {
+      orderStr = StringUtils.replace(orderStr, " ASC", "_ASC");
+    } else if (orderStr.endsWith(" DESC")) {
+      orderStr = StringUtils.replace(orderStr, " DESC", "_DESC");
+    } else if (!orderStr.endsWith("_ASC") && !orderStr.endsWith("_DESC")) {
+      orderStr = orderStr + "_ASC";
     }
     try {
       final Class<T> cls = defaultOrder.getDeclaringClass();
-      return Enum.valueOf(cls, order);
+      return Enum.valueOf(cls, orderStr);
     } catch (final IllegalArgumentException ex) {
       return defaultOrder;
     }
@@ -125,9 +125,8 @@ public abstract class AbstractWebResource {
   protected <T> T parseXML(final String xml, final Class<T> type) {
     if (xml.contains("<fudgeEnvelope")) {
       return (T) parseXML(xml);
-    } else {
-      return JodaBeanSerialization.deserializer().xmlReader().read(xml, type);
     }
+    return JodaBeanSerialization.deserializer().xmlReader().read(xml, type);
   }
 
   /**

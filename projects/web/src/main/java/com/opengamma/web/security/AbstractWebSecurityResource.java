@@ -143,7 +143,6 @@ public abstract class AbstractWebSecurityResource
       if (security.getSecurityType().equals(FactorExposureData.EXTERNAL_SENSITIVITIES_RISK_FACTORS_SECURITY_TYPE)) {
         final RawSecurity rawSecurity = (RawSecurity) security;
         final FudgeMsgEnvelope msg = OpenGammaFudgeContext.getInstance().deserialize(rawSecurity.getRawData());
-        @SuppressWarnings("unchecked")
         final
         List<FactorExposureData> factorExposureDataList = OpenGammaFudgeContext.getInstance().fromFudgeMsg(List.class, msg.getMessage());
         final List<FactorExposure> factorExposuresList = convertToFactorExposure(factorExposureDataList);

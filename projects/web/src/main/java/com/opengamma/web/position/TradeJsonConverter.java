@@ -26,7 +26,7 @@ import com.opengamma.master.position.ManageableTrade;
 import com.opengamma.util.money.Currency;
 
 /**
- * Converts Trades to Json
+ * Converts Trades to JSON.
  */
 public final class TradeJsonConverter {
 

@@ -90,7 +90,7 @@ public class WebRegionsResource extends AbstractWebRegionResource {
   }
 
   /**
-   * Creates a HTML GET request that returns the web page.
+   * Creates a JSON GET request that returns the web page.
    *
    * @param pgIdx
    *          the paging first-item index, can be null

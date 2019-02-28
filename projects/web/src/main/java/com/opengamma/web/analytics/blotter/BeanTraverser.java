@@ -22,9 +22,13 @@ import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * TODO is there a generally useful way to have pluggable handlers to override default behaviour for specific properties?
- * or would that have to be done in the visitors?
- * could also handle it by property name instead of using the metaproperty
+ *
+ */
+/*
+ * TODO is there a generally useful way to have pluggable handlers to override
+ * default behaviour for specific properties? or would that have to be done in
+ * the visitors? could also handle it by property name instead of using the
+ * metaproperty
  */
 /* package */ class BeanTraverser {
 
@@ -130,9 +134,9 @@ import com.opengamma.util.ArgumentChecker;
     ArgumentChecker.notEmpty(failures, "failures");
     ArgumentChecker.notNull(visitor, "visitor");
     return "Bean traversal failed. " +
-        "bean: " + metaBean + ", " +
-        "visitor: " + visitor + ", " +
-        "failures: [" + StringUtils.join(failures, ", ") + "]";
+    "bean: " + metaBean + ", " +
+    "visitor: " + visitor + ", " +
+    "failures: [" + StringUtils.join(failures, ", ") + "]";
   }
 
 }

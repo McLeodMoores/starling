@@ -94,25 +94,67 @@ public class WebMarketDataSnapshotsResource extends AbstractWebMarketDataSnapsho
   private static final Logger LOGGER = LoggerFactory.getLogger(WebMarketDataSnapshotsResource.class);
   /** Time format: HH:mm:ss */
   private static final DateTimeFormatter VALUATION_TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss");
-  private static final DateTimeFormatter HISORICAL_SNAPSHOT_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+  private static final DateTimeFormatter HISTORICAL_SNAPSHOT_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
   /**
    * Creates the resource.
-   * @param marketSnapshotMaster  the market data snapshot master, not null
-   * @param configMaster  the config master, not null
-   * @param liveMarketDataProviderFactory the live market data provider factory, Either this or marketDataSpecificationRepository must be set
-   * @param marketDataSpecificationRepository the market data specification repository
-   * @param configSource the config source, not null
-   * @param targetResolver the computation target resolver, not null
-   * @param viewProcessor the view processor, not null
-   * @param htsSource the historical timeseries source, not null
-   * @param volatilityCubeDefinitionSource the volatility cube definition source, not null
+   *
+   * @param marketSnapshotMaster
+   *          the market data snapshot master, not null
+   * @param configMaster
+   *          the config master, not null
+   * @param liveMarketDataProviderFactory
+   *          the live market data provider factory, Either this or
+   *          marketDataSpecificationRepository must be set
+   * @param marketDataSpecificationRepository
+   *          the market data specification repository
+   * @param configSource
+   *          the config source, not null
+   * @param targetResolver
+   *          the computation target resolver, not null
+   * @param viewProcessor
+   *          the view processor, not null
+   * @param htsSource
+   *          the historical timeseries source, not null
+   * @param volatilityCubeDefinitionSource
+   *          the volatility cube definition source, not null
+   * @deprecated don't use the NamedMarketDataSpecificationRepository
    */
+  @Deprecated
   public WebMarketDataSnapshotsResource(final MarketDataSnapshotMaster marketSnapshotMaster, final ConfigMaster configMaster,
       final LiveMarketDataProviderFactory liveMarketDataProviderFactory, final NamedMarketDataSpecificationRepository marketDataSpecificationRepository, final ConfigSource configSource,
       final ComputationTargetResolver targetResolver, final ViewProcessor viewProcessor, final HistoricalTimeSeriesSource htsSource,
       final VolatilityCubeDefinitionSource volatilityCubeDefinitionSource) {
     super(marketSnapshotMaster, configMaster, liveMarketDataProviderFactory, marketDataSpecificationRepository, configSource, targetResolver, viewProcessor, htsSource, volatilityCubeDefinitionSource);
+  }
+
+  /**
+   * Creates the resource.
+   *
+   * @param marketSnapshotMaster
+   *          the market data snapshot master, not null
+   * @param configMaster
+   *          the config master, not null
+   * @param liveMarketDataProviderFactory
+   *          the live market data provider factory, Either this or
+   *          marketDataSpecificationRepository must be set
+   * @param configSource
+   *          the config source, not null
+   * @param targetResolver
+   *          the computation target resolver, not null
+   * @param viewProcessor
+   *          the view processor, not null
+   * @param htsSource
+   *          the historical timeseries source, not null
+   * @param volatilityCubeDefinitionSource
+   *          the volatility cube definition source, not null
+   */
+  public WebMarketDataSnapshotsResource(final MarketDataSnapshotMaster marketSnapshotMaster, final ConfigMaster configMaster,
+      final LiveMarketDataProviderFactory liveMarketDataProviderFactory,
+      final ConfigSource configSource, final ComputationTargetResolver targetResolver, final ViewProcessor viewProcessor,
+      final HistoricalTimeSeriesSource htsSource, final VolatilityCubeDefinitionSource volatilityCubeDefinitionSource) {
+    super(marketSnapshotMaster, configMaster, liveMarketDataProviderFactory, configSource, targetResolver, viewProcessor,
+        htsSource, volatilityCubeDefinitionSource);
   }
 
   //-------------------------------------------------------------------------
@@ -246,39 +288,39 @@ public class WebMarketDataSnapshotsResource extends AbstractWebMarketDataSnapsho
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
   public Response postHTML(
-      @FormParam("name") String name,
-      @FormParam("view") String view,
-      @FormParam("valuationTime") String valuationTime,
+      @FormParam("name") final String name,
+      @FormParam("view") final String view,
+      @FormParam("valuationTime") final String valuationTime,
       @FormParam("tsResolverKeys") final List<String> tsResolverKeys,
       @FormParam("userSnapshotIds") final List<String> userSnapshotIds,
       @FormParam("liveDataSources") final List<String> liveDataSources,
       final MultivaluedMap<String, String> formParameters) {
-    name = StringUtils.trimToNull(name);
-    view = StringUtils.trimToNull(view);
-    valuationTime = StringUtils.trimToNull(valuationTime);
+    final String trimmedName = StringUtils.trimToNull(name);
+    final String trimmedView = StringUtils.trimToNull(view);
+    final String trimmedValuationTime = StringUtils.trimToNull(valuationTime);
 
     Instant valuationInstant = null;
-    if (valuationTime != null) {
+    if (trimmedValuationTime != null) {
       try {
-        final LocalTime time = LocalTime.parse(valuationTime, VALUATION_TIME_FORMATTER);
+        final LocalTime time = LocalTime.parse(trimmedValuationTime, VALUATION_TIME_FORMATTER);
         valuationInstant = ZonedDateTime.now().with(time.truncatedTo(SECONDS)).toInstant();
       } catch (final Exception ex) {
-        LOGGER.warn("Invalid valuation time {}", valuationTime);
+        LOGGER.warn("Invalid valuation time {}", trimmedValuationTime);
       }
     } else {
       valuationInstant = Instant.now();
     }
 
     final List<MarketDataSpecification> marketDataSpecs = getMarketDataSpecs(tsResolverKeys, userSnapshotIds, liveDataSources, formParameters);
-    if (view == null || marketDataSpecs.isEmpty() || valuationInstant == null) {
+    if (trimmedView == null || marketDataSpecs.isEmpty() || valuationInstant == null) {
       final FlexiBean out = createRootData();
       if (valuationInstant == null) {
         out.put("err_valutionTimeInvalid", true);
       }
-      if (view == null) {
+      if (trimmedView == null) {
         out.put("err_viewMissing", true);
       } else {
-        out.put("selectedView", view);
+        out.put("selectedView", trimmedView);
       }
       if (marketDataSpecs.isEmpty()) {
         out.put("err_marketDataSpecsMissing", true);
@@ -290,16 +332,16 @@ public class WebMarketDataSnapshotsResource extends AbstractWebMarketDataSnapsho
 
       //include other inputs
       final MarketDataSnapshotSearchRequest searchRequest = new MarketDataSnapshotSearchRequest();
-      searchRequest.setName(name);
+      searchRequest.setName(trimmedName);
       out.put("searchRequest", searchRequest);
-      out.put("valuationTime", valuationTime);
+      out.put("valuationTime", trimmedValuationTime);
       final String html = getFreemarker().build(HTML_DIR + "snapshot-add.ftl", out);
       return Response.ok(html).build();
     }
 
     MarketDataSnapshotDocument snapshot = null;
     try {
-      snapshot = createSnapshot(name, view, valuationInstant, marketDataSpecs);
+      snapshot = createSnapshot(trimmedName, trimmedView, valuationInstant, marketDataSpecs);
     } catch (final Exception ex) {
       LOGGER.error("Unable to create market data snapshot");
       throw new OpenGammaRuntimeException("Unable to create market data snapshot");
@@ -308,7 +350,7 @@ public class WebMarketDataSnapshotsResource extends AbstractWebMarketDataSnapsho
     return Response.seeOther(uri).build();
   }
 
-  private Map<String, String> getTsResolverKeyInputs(final List<String> tsResolverKeys, final MultivaluedMap<String, String> formParameters) {
+  private static Map<String, String> getTsResolverKeyInputs(final List<String> tsResolverKeys, final MultivaluedMap<String, String> formParameters) {
     final Map<String, String> result = Maps.newHashMap();
     for (final String tsResolverKey : tsResolverKeys) {
       final List<String> tsDates = formParameters.get(tsResolverKey + CUSTOM_DATE_SUFFIX);
@@ -319,7 +361,8 @@ public class WebMarketDataSnapshotsResource extends AbstractWebMarketDataSnapsho
     return result;
   }
 
-  private List<MarketDataSpecification> getMarketDataSpecs(final List<String> tsResolverKeys, final List<String> userSnapshotIds, final List<String> liveDataSources, final MultivaluedMap<String, String> formParameters) {
+  private static List<MarketDataSpecification> getMarketDataSpecs(final List<String> tsResolverKeys, final List<String> userSnapshotIds,
+      final List<String> liveDataSources, final MultivaluedMap<String, String> formParameters) {
     final List<MarketDataSpecification> marketDataSpecs = Lists.newArrayList();
     for (String liveDataSource : liveDataSources) {
       liveDataSource = StringUtils.trimToNull(liveDataSource);
@@ -334,7 +377,7 @@ public class WebMarketDataSnapshotsResource extends AbstractWebMarketDataSnapsho
       } else {
         final String tsDate = StringUtils.trimToNull(Iterables.getFirst(tsDates, null));
         if (tsDate != null) {
-          final LocalDate snapshotDate = LocalDate.parse(tsDate, HISORICAL_SNAPSHOT_DATE_FORMATTER);
+          final LocalDate snapshotDate = LocalDate.parse(tsDate, HISTORICAL_SNAPSHOT_DATE_FORMATTER);
           marketDataSpecs.add(new FixedHistoricalMarketDataSpecification(tsResolverKey, snapshotDate));
         }
       }
@@ -346,7 +389,7 @@ public class WebMarketDataSnapshotsResource extends AbstractWebMarketDataSnapsho
         try {
           marketDataSpecs.add(UserMarketDataSpecification.of(UniqueId.parse(userSnapshotId)));
         } catch (final IllegalArgumentException ex) {
-          LOGGER.warn("Illegal format in snapshot {}, ignorning... ", userSnapshotId);
+          LOGGER.warn("Illegal format in snapshot {}, ignoring... ", userSnapshotId);
         }
       }
     }

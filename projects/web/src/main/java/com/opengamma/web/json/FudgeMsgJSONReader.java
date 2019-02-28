@@ -133,13 +133,12 @@ public class FudgeMsgJSONReader {
     return _settings;
   }
 
-  private RuntimeException wrapException(String message, final JSONException ex) {
-    message = "Error " + message + " from JSON stream";
+  private static RuntimeException wrapException(final String message, final JSONException ex) {
+    final String newMessage = "Error " + message + " from JSON stream";
     if (ex.getCause() instanceof IOException) {
-      return new FudgeRuntimeIOException(message, (IOException) ex.getCause());
-    } else {
-      return new FudgeRuntimeException(message, ex);
+      return new FudgeRuntimeIOException(newMessage, (IOException) ex.getCause());
     }
+    return new FudgeRuntimeException(newMessage, ex);
   }
 
 
@@ -168,18 +167,18 @@ public class FudgeMsgJSONReader {
       final JSONObject meta = (JSONObject) _jsonObject.get("meta");
       final JSONObject data = (JSONObject) _jsonObject.get("data");
       final MutableFudgeMsg msg = processFields(data, meta);
-      msgEnv = getFudgeMsgEnvelope(msg, _jsonObject);
+      msgEnv = getFudgeMsgEnvelope(msg);
     } catch (final JSONException ex) {
       wrapException("reading message envelope", ex);
     }
     return msgEnv;
   }
 
-  private FudgeMsgEnvelope getFudgeMsgEnvelope(final MutableFudgeMsg fudgeMsg, final JSONObject jsonObject) throws JSONException {
+  private FudgeMsgEnvelope getFudgeMsgEnvelope(final MutableFudgeMsg fudgeMsg) {
     return new FudgeMsgEnvelope(fudgeMsg, _schemaVersion, _processingDirectives);
   }
 
-  private int integerValue(final Object o) {
+  private static int integerValue(final Object o) {
     if (o instanceof Number) {
       return ((Number) o).intValue();
     } else if (o instanceof String) {
@@ -189,7 +188,7 @@ public class FudgeMsgJSONReader {
     }
   }
 
-  private byte byteValue(final Object o) {
+  private static byte byteValue(final Object o) {
     if (o instanceof Number) {
       return ((Number) o).byteValue();
     } else if (o instanceof String) {
@@ -199,7 +198,7 @@ public class FudgeMsgJSONReader {
     }
   }
 
-  private short shortValue(final Object o) {
+  private static short shortValue(final Object o) {
     if (o instanceof Number) {
       return ((Number) o).shortValue();
     } else if (o instanceof String) {
@@ -209,7 +208,7 @@ public class FudgeMsgJSONReader {
     }
   }
 
-  private long longValue(final Object o) {
+  private static long longValue(final Object o) {
     if (o instanceof Number) {
       return ((Number) o).longValue();
     } else if (o instanceof String) {
@@ -219,7 +218,7 @@ public class FudgeMsgJSONReader {
     }
   }
 
-  private double doubleValue(final Object o) {
+  private static double doubleValue(final Object o) {
     if (o instanceof Number) {
       return ((Number) o).doubleValue();
     } else if (o instanceof String) {
@@ -229,7 +228,7 @@ public class FudgeMsgJSONReader {
     }
   }
 
-  private float floatValue(final Object o) {
+  private static float floatValue(final Object o) {
     if (o instanceof Number) {
       return ((Number) o).floatValue();
     } else if (o instanceof String) {
@@ -241,7 +240,6 @@ public class FudgeMsgJSONReader {
 
   private MutableFudgeMsg processFields(final JSONObject data, final JSONObject meta) {
     final MutableFudgeMsg fudgeMsg = getFudgeContext().newMessage();
-    @SuppressWarnings("unchecked")
     final
     Iterator<String> keys = data.keys();
     while (keys.hasNext()) {
@@ -281,7 +279,7 @@ public class FudgeMsgJSONReader {
     return fudgeMsg;
   }
 
-  private boolean isPrimitiveArray(final Object metaValue) {
+  private static boolean isPrimitiveArray(final Object metaValue) {
     if (metaValue instanceof JSONArray) {
       return false;
     }
@@ -329,7 +327,7 @@ public class FudgeMsgJSONReader {
     }
   }
 
-  private LocalDate toLocalDate(final Object fieldValue) {
+  private static LocalDate toLocalDate(final Object fieldValue) {
     if (fieldValue != null) {
       return LocalDate.parse((String) fieldValue);
     }
@@ -366,7 +364,7 @@ public class FudgeMsgJSONReader {
     return getFudgeContext().getTypeDictionary().getByTypeId(typeId);
   }
 
-  private Object jsonArrayToPrimitiveArray(final JSONArray arr, final FudgeFieldType fieldType) throws JSONException {
+  private static Object jsonArrayToPrimitiveArray(final JSONArray arr, final FudgeFieldType fieldType) throws JSONException {
     switch (fieldType.getTypeId()) {
       case FudgeWireType.BYTE_ARRAY_TYPE_ID:
       case FudgeWireType.BYTE_ARRAY_4_TYPE_ID:
@@ -418,7 +416,7 @@ public class FudgeMsgJSONReader {
     }
   }
 
-  private Object getFieldValue(final JSONObject jsonObject, final String fieldName) {
+  private static Object getFieldValue(final JSONObject jsonObject, final String fieldName) {
     Object fieldValue = null;
     try {
       fieldValue = jsonObject.get(fieldName);

@@ -89,7 +89,7 @@ public class CurveConverter implements ResultConverter<DoublesCurve> {
     return "CURVE";
   }
 
-  private List<Double[]> getData(final InterpolatedDoublesCurve detailedCurve) {
+  private static List<Double[]> getData(final InterpolatedDoublesCurve detailedCurve) {
     final List<Double[]> detailedData = new ArrayList<>();
 
     final Double[] xs = detailedCurve.getXData();

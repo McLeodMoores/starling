@@ -76,7 +76,7 @@ public class YieldCurveConverter implements ResultConverter<YieldCurve> {
     return result;
   }
 
-  private List<Double[]> getData(final NodalDoublesCurve detailedCurve) {
+  private static List<Double[]> getData(final NodalDoublesCurve detailedCurve) {
     final List<Double[]> detailedData = new ArrayList<>();
 
     final Double[] xs = detailedCurve.getXData();
@@ -109,9 +109,8 @@ public class YieldCurveConverter implements ResultConverter<YieldCurve> {
         sb.append(xData[i]).append("=").append(yData[i]);
       }
       return sb.length() > 0 ? sb.toString() : null;
-    } else {
-      return value.getClass().getSimpleName();
     }
+    return value.getClass().getSimpleName();
   }
 
   @Override

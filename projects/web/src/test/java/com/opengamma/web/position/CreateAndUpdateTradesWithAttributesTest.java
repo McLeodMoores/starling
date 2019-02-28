@@ -37,7 +37,7 @@ public class CreateAndUpdateTradesWithAttributesTest extends AbstractWebPosition
   private static final BigDecimal TRADE_QUANTITY = BigDecimal.valueOf(80);
   private static final OffsetTime PREMIUM_TIME = OffsetTime.parse("18:04+01:00");
   private static final LocalDate PREMIUM_DATE = LocalDate.parse("2011-12-11");
-  private static final String COUNTER_PARTY = "BACS";
+  private static final String CTPTY = "BACS";
   private static final double TRADE_PREMIUM = 40.0;
 
   private static final Pattern URL_PATTERN = Pattern.compile("^(/positions/)(MemPos~[0-9]+)$");
@@ -276,7 +276,7 @@ public class CreateAndUpdateTradesWithAttributesTest extends AbstractWebPosition
     assertTrue(trade.getAttributes().isEmpty());
   }
 
-  private ManageableTrade assertTrade(final PositionDocument positionDocument) {
+  private static ManageableTrade assertTrade(final PositionDocument positionDocument) {
     assertNotNull(positionDocument);
 
     final ManageablePosition position = positionDocument.getPosition();
@@ -286,7 +286,7 @@ public class CreateAndUpdateTradesWithAttributesTest extends AbstractWebPosition
 
     assertEquals(SECURITY_LINK, trade.getSecurityLink());
     assertEquals(TRADE_PREMIUM, trade.getPremium());
-    assertEquals(COUNTER_PARTY, trade.getCounterpartyExternalId().getValue());
+    assertEquals(CTPTY, trade.getCounterpartyExternalId().getValue());
     assertEquals(Currency.USD, trade.getPremiumCurrency());
     assertEquals(PREMIUM_DATE, trade.getPremiumDate());
     assertEquals(PREMIUM_TIME, trade.getPremiumTime());

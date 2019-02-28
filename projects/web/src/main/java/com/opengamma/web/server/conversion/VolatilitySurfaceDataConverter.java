@@ -20,7 +20,6 @@ public class VolatilitySurfaceDataConverter implements ResultConverter<Volatilit
   @Override
   // TODO PLAT-2249 Add field to allow transposing the display surface
   public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final VolatilitySurfaceData rawValue, final ConversionMode mode) {
-    @SuppressWarnings("unchecked")
     final
     VolatilitySurfaceData<Object, Object> value = rawValue;
     final Map<String, Object> result = new HashMap<>();

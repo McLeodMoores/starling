@@ -35,7 +35,7 @@ public class DoubleConverter implements ResultConverter<Object> {
   // types of client.
 
   private static final DoubleValueFormatter DEFAULT_CONVERSION = DoubleValueSignificantFiguresFormatter.NON_CCY_5SF;
-  private static final Map<String, DoubleValueFormatter> VALUE_CONVERSION_MAP = new HashMap<String, DoubleValueFormatter>();
+  private static final Map<String, DoubleValueFormatter> VALUE_CONVERSION_MAP = new HashMap<>();
 
   static {
     // General
@@ -268,12 +268,12 @@ public class DoubleConverter implements ResultConverter<Object> {
       return Pairs.of(currencyAmount.getAmount(), (BigDecimal) null);
     }
     if (value instanceof BigDecimal) {
-      return Pairs.of((Double) null, ((BigDecimal) value));
+      return Pairs.of((Double) null, (BigDecimal) value);
     }
     throw new OpenGammaRuntimeException(getClass().getSimpleName() + " is unable to process value of type " + value.getClass());
   }
 
-  private DoubleValueFormatter getFormatter(final ValueSpecification valueSpec) {
+  private static DoubleValueFormatter getFormatter(final ValueSpecification valueSpec) {
     DoubleValueFormatter conversion = null;
     if (valueSpec != null) {
       conversion = VALUE_CONVERSION_MAP.get(valueSpec.getValueName());

@@ -205,8 +205,8 @@ public class MockUriBuilder extends UriBuilder {
   @Override
   public URI build(final Object... values) throws IllegalArgumentException, UriBuilderException {
     String url = null;
-    try {
-      url = new Formatter().format(_pathFormat, values).toString();
+    try (Formatter formatter = new Formatter()) {
+      url = formatter.format(_pathFormat, values).toString();
       if (_query.length() > 0) {
         url += "?" + _query.toString();
       }

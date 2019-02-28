@@ -17,12 +17,17 @@ public final class JsonTestUtils {
   }
 
   /**
-   * Checks all elements of two JSON arrays for equality. Individual elements are checked using
-   * {@link #equal(Object, Object)}.
-   * @param array1 A JSON array
-   * @param array2 Another JSON array
-   * @return {@code true} if the arrays are the same size and every corresponding element is equal
-   * @throws JSONException Never
+   * Checks all elements of two JSON arrays for equality. Individual elements
+   * are checked using {@link #equal(Object, Object)}.
+   * 
+   * @param array1
+   *          A JSON array
+   * @param array2
+   *          Another JSON array
+   * @return {@code true} if the arrays are the same size and every
+   *         corresponding element is equal
+   * @throws JSONException
+   *           Never
    */
   public static boolean equal(final JSONArray array1, final JSONArray array2) throws JSONException {
     if (array1.length() != array2.length()) {
@@ -39,12 +44,17 @@ public final class JsonTestUtils {
   }
 
   /**
-   * Checks all values of two JSON objects for equality. Individual elements are checked using
-   * {@link #equal(Object, Object)}.
-   * @param object1 A JSON object
-   * @param object2 A JSON object
-   * @return {@code true} if the objects contains the same mappings and every corresponding value is equal.
-   * @throws JSONException Never
+   * Checks all values of two JSON objects for equality. Individual elements are
+   * checked using {@link #equal(Object, Object)}.
+   *
+   * @param object1
+   *          A JSON object
+   * @param object2
+   *          A JSON object
+   * @return {@code true} if the objects contains the same mappings and every
+   *         corresponding value is equal.
+   * @throws JSONException
+   *           Never
    */
   public static boolean equal(final JSONObject object1, final JSONObject object2) throws JSONException {
     if (object1.length() != object2.length()) {
@@ -62,13 +72,19 @@ public final class JsonTestUtils {
   }
 
   /**
-   * Checks two objects for equality. If they are instances of {@link JSONObject} or {@link JSONArray} they are
-   * checked recursively using {@link #equal(JSONObject, JSONObject)} and {@link #equal(JSONArray, JSONArray)}.
-   * Values of other types are checked using {@link Objects#equal(Object, Object)}.
+   * Checks two objects for equality. If they are instances of
+   * {@link JSONObject} or {@link JSONArray} they are checked recursively using
+   * {@link #equal(JSONObject, JSONObject)} and
+   * {@link #equal(JSONArray, JSONArray)}. Values of other types are checked
+   * using {@link Objects#equal(Object, Object)}.
+   *
    * @param value1
+   *          the first value
    * @param value2
-   * @return
+   *          the second value
+   * @return true if the two objects are equal
    * @throws JSONException
+   *           if there is a problem reading the JSON
    */
   public static boolean equal(final Object value1, final Object value2) throws JSONException {
     if (value1 instanceof JSONArray && value2 instanceof JSONArray) {

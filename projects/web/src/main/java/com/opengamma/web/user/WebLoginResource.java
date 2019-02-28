@@ -136,19 +136,18 @@ public class WebLoginResource extends AbstractSingletonWebResource {
       final HttpServletRequest request,
       final ServletContext servletContext,
       final UriInfo uriInfo,
-      String username,
-      String password,
+      final String username, final String password,
       final String ftlFile) {
-    username = StringUtils.trimToNull(username);
-    password = StringUtils.trimToNull(password);
-    if (username == null) {
-      return displayError(servletContext, uriInfo, username, ftlFile, "UserNameMissing");
+    final String trimmedUsername = StringUtils.trimToNull(username);
+    final String trimmedPassword = StringUtils.trimToNull(password);
+    if (trimmedUsername == null) {
+      return displayError(servletContext, uriInfo, trimmedUsername, ftlFile, "UserNameMissing");
     }
-    if (password == null) {
-      return displayError(servletContext, uriInfo, username, ftlFile, "PasswordMissing");
+    if (trimmedPassword == null) {
+      return displayError(servletContext, uriInfo, trimmedUsername, ftlFile, "PasswordMissing");
     }
     final String ipAddress = findIpAddress(request);
-    final UsernamePasswordToken token = new UsernamePasswordToken(username, password, false, ipAddress);
+    final UsernamePasswordToken token = new UsernamePasswordToken(trimmedUsername, trimmedPassword, false, ipAddress);
     try {
       final Subject subject = AuthUtils.getSubject();
       subject.login(token);
@@ -169,7 +168,7 @@ public class WebLoginResource extends AbstractSingletonWebResource {
 
     } catch (final AuthenticationException ex) {
       final String errorCode = StringUtils.substringBeforeLast(ex.getClass().getSimpleName(), "Exception");
-      return displayError(servletContext, uriInfo, username, ftlFile, errorCode);
+      return displayError(servletContext, uriInfo, trimmedUsername, ftlFile, errorCode);
     }
   }
 

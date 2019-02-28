@@ -78,10 +78,10 @@ public class FungibleTradeBuilderTest {
     final BigDecimal quantity = BigDecimal.valueOf(20);
     final ManageablePosition position = new ManageablePosition(quantity, APPLE_SECURITY.getExternalIdBundle());
     position.addTrade(new ManageableTrade(quantity,
-                                          APPLE_BUNDLE,
-                                          LocalDate.of(2012, 12, 1),
-                                          OffsetTime.of(LocalTime.of(9, 30), ZoneOffset.UTC),
-                                          ExternalId.of(AbstractTradeBuilder.CPTY_SCHEME, "existingCpty")));
+        APPLE_BUNDLE,
+        LocalDate.of(2012, 12, 1),
+        OffsetTime.of(LocalTime.of(9, 30), ZoneOffset.UTC),
+        ExternalId.of(AbstractTradeBuilder.CPTY_SCHEME, "existingCpty")));
     _savedPosition = _positionMaster.add(new PositionDocument(position)).getPosition();
     final ManageablePortfolioNode root = new ManageablePortfolioNode("root");
     final ManageablePortfolioNode node = new ManageablePortfolioNode("node");
@@ -91,27 +91,27 @@ public class FungibleTradeBuilderTest {
     _savedPortfolio = _portfolioMaster.add(new PortfolioDocument(portfolio)).getPortfolio();
     final Set<MetaBean> metaBeans = Sets.<MetaBean>newHashSet(ManageableTrade.meta());
     _tradeBuilder = new FungibleTradeBuilder(_positionMaster,
-                                             _portfolioMaster,
-                                             securityMaster,
-                                             metaBeans,
-                                             BlotterUtils.getStringConvert());
+        _portfolioMaster,
+        securityMaster,
+        metaBeans,
+        BlotterUtils.getStringConvert());
     _savedNode = _savedPortfolio.getRootNode().getChildNodes().get(0);
   }
 
-  private BeanDataSource createTradeData(final String securityTicker, final String id) {
+  private static BeanDataSource createTradeData(final String securityTicker, final String id) {
     final String securityId = ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, securityTicker).toString();
     return BlotterTestUtils.beanData("uniqueId", id,
-                                     "type", FungibleTradeBuilder.TRADE_TYPE_NAME,
-                                     "tradeDate", "2012-12-21",
-                                     "tradeTime", "14:25",
-                                     "securityIdBundle", securityId,
-                                     "premium", "1234",
-                                     "premiumCurrency", "USD",
-                                     "premiumDate", "2012-12-22",
-                                     "premiumTime", "13:30",
-                                     "quantity", "30",
-                                     "counterparty", "cptyName",
-                                     "attributes", Maps.newHashMap());
+        "type", FungibleTradeBuilder.TRADE_TYPE_NAME,
+        "tradeDate", "2012-12-21",
+        "tradeTime", "14:25",
+        "securityIdBundle", securityId,
+        "premium", "1234",
+        "premiumCurrency", "USD",
+        "premiumDate", "2012-12-22",
+        "premiumTime", "13:30",
+        "quantity", "30",
+        "counterparty", "cptyName",
+        "attributes", Maps.newHashMap());
   }
 
   /**
@@ -209,7 +209,7 @@ public class FungibleTradeBuilderTest {
 
     _tradeBuilder.updatePosition(createTradeData("AAPL US Equity", null), savedPosition.getUniqueId());
     final ManageablePosition updatedPosition = _positionMaster.get(savedPosition.getUniqueId().getObjectId(),
-                                                             VersionCorrection.LATEST).getPosition();
+        VersionCorrection.LATEST).getPosition();
     assertEquals(BigDecimal.valueOf(30), updatedPosition.getQuantity());
     assertEquals(1, updatedPosition.getTrades().size());
     final ManageableTrade trade = updatedPosition.getTrades().get(0);

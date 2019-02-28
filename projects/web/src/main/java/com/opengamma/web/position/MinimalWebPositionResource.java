@@ -78,20 +78,20 @@ public class MinimalWebPositionResource extends AbstractMinimalWebPositionResour
   @PUT
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
-  public Response putHTML(@FormParam(POSITION_XML) String positionXml) {
+  public Response putHTML(@FormParam(POSITION_XML) final String positionXml) {
     final PositionDocument doc = data().getPosition();
     if (doc.isLatest() == false) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
-    positionXml = trimToNull(positionXml);
-    if (positionXml == null) {
+    final String trimmedPositionXml = trimToNull(positionXml);
+    if (trimmedPositionXml == null) {
       final FlexiBean out = createRootData();
       out.put("err_xmlMissing", true);
-      out.put(POSITION_XML, defaultString(positionXml));
+      out.put(POSITION_XML, defaultString(trimmedPositionXml));
       final String html = getFreemarker().build(HTML_DIR + "position-update.ftl", out);
       return Response.ok(html).build();
     }
-    final URI uri = updatePosition(positionXml);
+    final URI uri = updatePosition(trimmedPositionXml);
     return Response.seeOther(uri).build();
   }
 
@@ -105,46 +105,48 @@ public class MinimalWebPositionResource extends AbstractMinimalWebPositionResour
   @PUT
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response putJSON(@FormParam("quantity") String quantityStr,
-      @FormParam("tradesJson") String tradesJson,
-      @FormParam("type") String type,
+  public Response putJSON(@FormParam("quantity") final String quantityStr,
+      @FormParam("tradesJson") final String tradesJson,
+      @FormParam("type") final String type,
       @FormParam(POSITION_XML) final String positionXml) {
 
     final PositionDocument doc = data().getPosition();
     if (doc.isLatest() == false) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
-    type = defaultString(trimToNull(type));
-    switch (type) {
+    final String trimmedType = defaultString(trimToNull(type));
+    switch (trimmedType) {
       case "xml":
         updatePosition(trimToEmpty(positionXml));
         break;
       default:
-        quantityStr = replace(trimToNull(quantityStr), ",", "");
-        tradesJson = trimToNull(tradesJson);
+        final String trimmedQuantityStr = replace(trimToNull(quantityStr), ",", "");
+        final String trimmedTradesJson = trimToNull(tradesJson);
         Collection<ManageableTrade> trades = null;
-        if (tradesJson != null) {
-          trades = parseTrades(tradesJson);
+        if (trimmedTradesJson != null) {
+          trades = parseTrades(trimmedTradesJson);
         } else {
           trades = Collections.<ManageableTrade>emptyList();
         }
-        final BigDecimal quantity = quantityStr != null && NumberUtils.isNumber(quantityStr) ? new BigDecimal(quantityStr) : null;
+        final BigDecimal quantity = trimmedQuantityStr != null && NumberUtils.isNumber(trimmedQuantityStr) ? new BigDecimal(trimmedQuantityStr) : null;
         updatePosition(doc, quantity, trades);
     }
     return Response.ok().build();
   }
 
-  private URI updatePosition(PositionDocument doc, final BigDecimal quantity, final Collection<ManageableTrade> trades) {
+  private URI updatePosition(final PositionDocument doc, final BigDecimal quantity, final Collection<ManageableTrade> trades) {
     final ManageablePosition position = doc.getPosition();
     if (!Objects.equal(position.getQuantity(), quantity) || trades != null) {
       position.setQuantity(quantity);
       position.getTrades().clear();
-      for (final ManageableTrade trade : trades) {
-        trade.setSecurityLink(position.getSecurityLink());
-        position.addTrade(trade);
+      if (trades != null) {
+        for (final ManageableTrade trade : trades) {
+          trade.setSecurityLink(position.getSecurityLink());
+          position.addTrade(trade);
+        }
       }
-      doc = data().getPositionMaster().update(doc);
-      data().setPosition(doc);
+      final PositionDocument updated = data().getPositionMaster().update(doc);
+      data().setPosition(updated);
     }
     return MinimalWebPositionResource.uri(data());
   }

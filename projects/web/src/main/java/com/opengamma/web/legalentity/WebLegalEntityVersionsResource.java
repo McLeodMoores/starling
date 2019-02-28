@@ -24,7 +24,9 @@ import com.opengamma.master.legalentity.LegalEntityHistoryResult;
 import com.opengamma.util.paging.PagingRequest;
 import com.opengamma.web.WebPaging;
 
-/** RESTful resource for all versions of an legalEntity. */
+/**
+ * RESTful resource for all versions of a legal entity.
+ */
 @Path("/legalentities/{legalEntityId}/versions")
 @Produces(MediaType.TEXT_HTML)
 public class WebLegalEntityVersionsResource extends AbstractWebLegalEntityResource {

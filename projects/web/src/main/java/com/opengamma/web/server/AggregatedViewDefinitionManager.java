@@ -58,12 +58,12 @@ public class AggregatedViewDefinitionManager {
   private final Map<Pair<UniqueId, List<String>>, ViewDefinitionReference> _aggregatedViewDefinitions = Maps.newHashMap();
 
   public AggregatedViewDefinitionManager(final PositionSource positionSource,
-                                         final SecuritySource securitySource,
-                                         final ConfigSource combinedConfigSource,
-                                         final ConfigMaster userConfigMaster,
-                                         final PortfolioMaster userPortfolioMaster,
-                                         final PositionMaster userPositionMaster,
-                                         final Map<String, AggregationFunction<?>> portfolioAggregators) {
+      final SecuritySource securitySource,
+      final ConfigSource combinedConfigSource,
+      final ConfigMaster userConfigMaster,
+      final PortfolioMaster userPortfolioMaster,
+      final PositionMaster userPositionMaster,
+      final Map<String, AggregationFunction<?>> portfolioAggregators) {
     _positionSource = positionSource;
     _securitySource = securitySource;
     _combinedConfigSource = combinedConfigSource;
@@ -113,8 +113,8 @@ public class AggregatedViewDefinitionManager {
         }
         final String aggregatedViewDefinitionName = getAggregatedViewDefinitionName(baseViewDefinition.getName(), aggregatorNames);
         final ViewDefinition aggregatedViewDefinition = baseViewDefinition.copyWith(aggregatedViewDefinitionName,
-                                                                              aggregatedPortfolioReference.incrementReferenceCount(),
-                                                                              baseViewDefinition.getMarketDataUser());
+            aggregatedPortfolioReference.incrementReferenceCount(),
+            baseViewDefinition.getMarketDataUser());
 
         // Treat as a transient view definition that should not be persistent
         //aggregatedViewDefinition.setPersistent(false);
@@ -164,7 +164,7 @@ public class AggregatedViewDefinitionManager {
     }
   }
 
-  private String getAggregatedViewDefinitionName(final String baseViewDefinitionName, final List<String> aggregatorNames) {
+  private static String getAggregatedViewDefinitionName(final String baseViewDefinitionName, final List<String> aggregatorNames) {
     return baseViewDefinitionName + " aggregated by " + StringUtils.join(aggregatorNames, ", ");
   }
 

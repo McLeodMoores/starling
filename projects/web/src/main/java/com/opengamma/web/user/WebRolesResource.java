@@ -69,30 +69,49 @@ public class WebRolesResource extends AbstractWebRoleResource {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Produces an HTML GET request
+   *
+   * @param pgIdx
+   *          the paging first-item index, can be null
+   * @param pgNum
+   *          the paging page, can be null
+   * @param pgSze
+   *          the page size, can be null
+   * @param sort
+   *          the sorting type, can be null
+   * @param rolename
+   *          the role name, can be null
+   * @param name
+   *          the name, can be null
+   * @param roleIdStrs
+   *          the identifiers of the role, not null
+   * @param uriInfo
+   *          the URI info, not null
+   * @return the Freemarker output
+   */
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String getHTML(
       @QueryParam("pgIdx") final Integer pgIdx,
       @QueryParam("pgNum") final Integer pgNum,
       @QueryParam("pgSze") final Integer pgSze,
-      @QueryParam("sort") String sort,
-      @QueryParam("rolename") String rolename,
-      @QueryParam("name") String name,
+      @QueryParam("sort") final String sort,
+      @QueryParam("rolename") final String rolename,
+      @QueryParam("name") final String name,
       @QueryParam("roleId") final List<String> roleIdStrs,
       @Context final UriInfo uriInfo) {
-    sort = StringUtils.trimToNull(sort);
-    rolename = StringUtils.trimToNull(rolename);
-    name = StringUtils.trimToNull(name);
+    final String trimmedSort = StringUtils.trimToNull(sort);
+    final String trimmedRolename = StringUtils.trimToNull(rolename);
     final PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
-    final RoleSearchSortOrder so = buildSortOrder(sort, RoleSearchSortOrder.NAME_ASC);
-    final FlexiBean out = createSearchResultData(pr, so, rolename, name, roleIdStrs, uriInfo);
+    final RoleSearchSortOrder so = buildSortOrder(trimmedSort, RoleSearchSortOrder.NAME_ASC);
+    final FlexiBean out = createSearchResultData(pr, so, trimmedRolename, roleIdStrs, uriInfo);
     return getFreemarker().build(ROLES_PAGE, out);
   }
 
   private FlexiBean createSearchResultData(
       final PagingRequest pr, final RoleSearchSortOrder so,
-      final String rolename, final String name,
-      final List<String> roleIdStrs, final UriInfo uriInfo) {
+      final String rolename, final List<String> roleIdStrs, final UriInfo uriInfo) {
     final FlexiBean out = createRootData();
 
     final RoleSearchRequest searchRequest = new RoleSearchRequest();
@@ -113,6 +132,21 @@ public class WebRolesResource extends AbstractWebRoleResource {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Creates an HTML POST response.
+   *
+   * @param roleName
+   *          the role name, can be null
+   * @param description
+   *          the description, can be null
+   * @param addRoles
+   *          the roles to add, can be null
+   * @param addPerms
+   *          the permissions to add, can be null
+   * @param addUsers
+   *          the users to add, can be null
+   * @return the Freemarket output
+   */
   @POST
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
@@ -147,6 +181,15 @@ public class WebRolesResource extends AbstractWebRoleResource {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Finds a role by name. If there is no role of that name, the history is
+   * searched if the master supports this functionality. If no value is found,
+   * an exception is thrown.
+   * 
+   * @param roleName
+   *          the role name
+   * @return the role
+   */
   @Path("name/{roleName}")
   public WebRoleResource findRole(@PathParam("roleName") final String roleName) {
     data().setUriRoleName(roleName);

@@ -375,7 +375,7 @@ public class SecurityTemplateNameProvider extends FinancialSecurityVisitorSameVa
    * Gets the template for all bonds.
    * @return The bond template
    */
-  private String getBond() {
+  private static String getBond() {
     return "bond.ftl";
   }
 
@@ -383,7 +383,7 @@ public class SecurityTemplateNameProvider extends FinancialSecurityVisitorSameVa
    * Gets the template for all futures.
    * @return The future template
    */
-  private String getFuture() {
+  private static String getFuture() {
     return "future.ftl";
   }
 

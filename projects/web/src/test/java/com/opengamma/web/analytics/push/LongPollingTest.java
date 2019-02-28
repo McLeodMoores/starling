@@ -8,7 +8,6 @@ package com.opengamma.web.analytics.push;
 import static org.testng.AssertJUnit.assertEquals;
 
 import java.io.IOException;
-import java.util.concurrent.ExecutionException;
 
 import org.eclipse.jetty.server.Server;
 import org.json.JSONException;
@@ -60,9 +59,12 @@ public class LongPollingTest {
 
   /**
    * Tests sending an update to a client that is blocked on a long poll request
+   *
+   * @throws Exception
+   *           if there is a problem with the polling or the JSON output
    */
   @Test
-  public void longPollBlocking() throws IOException, ExecutionException, InterruptedException, JSONException {
+  public void longPollBlocking() throws Exception {
     final String clientId = _webPushTestUtils.handshake();
     new Thread(new Runnable() {
       @Override
@@ -75,10 +77,14 @@ public class LongPollingTest {
   }
 
   /**
-   * Tests sending a single update to a client's connection when it's not connected and then connecting.
+   * Tests sending a single update to a client's connection when it's not
+   * connected and then connecting.
+   *
+   * @throws Exception
+   *           if there is a problem with the polling or the JSON output
    */
   @Test
-  public void longPollNotBlocking() throws IOException, JSONException {
+  public void longPollNotBlocking() throws Exception {
     final String clientId = _webPushTestUtils.handshake();
     _updateManager.sendUpdate(RESULT1);
     final String result = _webPushTestUtils.readFromPath("/updates/" + clientId);
@@ -86,10 +92,14 @@ public class LongPollingTest {
   }
 
   /**
-   * Tests sending multiple updates to a connection where the client isn't currently connected.
+   * Tests sending multiple updates to a connection where the client isn't
+   * currently connected.
+   *
+   * @throws Exception
+   *           if there is a problem with the polling or the JSON output
    */
   @Test
-  public void longPollQueue() throws IOException, JSONException {
+  public void longPollQueue() throws Exception {
     final String clientId = _webPushTestUtils.handshake();
     _updateManager.sendUpdate(RESULT1);
     _updateManager.sendUpdate(RESULT2);
@@ -99,10 +109,13 @@ public class LongPollingTest {
   }
 
   /**
-   * test multiple updates for the same url get squashed into a single update
+   * Test multiple updates for the same url get squashed into a single update.
+   *
+   * @throws Exception
+   *           if there is a problem with the polling or the JSON output
    */
   @Test
-  public void longPollQueueMultipleUpdates() throws IOException, JSONException {
+  public void longPollQueueMultipleUpdates() throws Exception {
     final String clientId = _webPushTestUtils.handshake();
     _updateManager.sendUpdate(RESULT1);
     _updateManager.sendUpdate(RESULT1);
@@ -114,7 +127,7 @@ public class LongPollingTest {
   }
 
   @Test
-  public void repeatingLongPoll() throws IOException, JSONException {
+  public void repeatingLongPoll() throws Exception {
     final String clientId = _webPushTestUtils.handshake();
     new Thread(new Runnable() {
       @Override

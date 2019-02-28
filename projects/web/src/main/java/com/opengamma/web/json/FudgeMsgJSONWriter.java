@@ -530,13 +530,12 @@ public class FudgeMsgJSONWriter implements Flushable, Closeable {
    * @param message message describing the current operation
    * @param e the originating exception
    */
-  private void wrapException(String message, final JSONException e) {
-    message = "Error writing " + message + " to JSON";
+  private static void wrapException(final String message, final JSONException e) {
+    final String newMessage = "Error writing " + message + " to JSON";
     if (e.getCause() instanceof IOException) {
-      throw new FudgeRuntimeIOException(message, (IOException) e.getCause());
-    } else {
-      throw new FudgeRuntimeException(message, e);
+      throw new FudgeRuntimeIOException(newMessage, (IOException) e.getCause());
     }
+    throw new FudgeRuntimeException(newMessage, e);
   }
 
   /**

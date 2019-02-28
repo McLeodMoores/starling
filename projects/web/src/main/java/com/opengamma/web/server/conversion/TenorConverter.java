@@ -33,7 +33,7 @@ public class TenorConverter implements ResultConverter<Tenor> {
     return "TENOR";
   }
 
-  private String getPeriodName(final Tenor value) {
+  private static String getPeriodName(final Tenor value) {
     return value.getPeriod().toString();
   }
 

@@ -142,9 +142,9 @@ public final class WebResourceTestUtils {
         ExternalSchemes.bloombergTickerSecurityId("GV912810FA1")), 1.0396));
 
     final BondFutureSecurity sec = new BondFutureSecurity(expiry, "XCBT", "XCBT", Currency.USD, 1000, basket,
-                                                    LocalDate.of(2010, 6, 01).atStartOfDay(ZoneOffset.UTC),
-                                                    LocalDate.of(2010, 6, 01).atStartOfDay(ZoneOffset.UTC),
-                                                    "Bond");
+        LocalDate.of(2010, 6, 01).atStartOfDay(ZoneOffset.UTC),
+        LocalDate.of(2010, 6, 01).atStartOfDay(ZoneOffset.UTC),
+        "Bond");
     sec.setName("US LONG BOND(CBT) Jun10");
     final Set<ExternalId> identifiers = new HashSet<>();
     identifiers.add(ExternalSchemes.bloombergBuidSecurityId("IX8530684-0"));
@@ -161,7 +161,6 @@ public final class WebResourceTestUtils {
     return new JSONObject(jsonText);
   }
 
-  @SuppressWarnings("rawtypes")
   public static void assertJSONObjectEquals(final JSONObject expectedJson, final JSONObject actualJson) throws Exception {
     assertNotNull(expectedJson);
     assertNotNull(actualJson);

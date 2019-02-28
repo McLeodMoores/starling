@@ -85,24 +85,24 @@ public class WebSecurityResource extends AbstractWebSecurityResource {
   @PUT
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
-  public Response putHTML(@FormParam("type") String type, @FormParam(SECURITY_XML) String securityXml) {
+  public Response putHTML(@FormParam("type") final String type, @FormParam(SECURITY_XML) final String securityXml) {
 
     final SecurityDocument doc = data().getSecurity();
     if (doc.isLatest() == false) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
     URI responseURI = null;
-    type = StringUtils.defaultString(StringUtils.trimToNull(type), "");
-    switch (type) {
+    final String trimmedType = StringUtils.defaultString(StringUtils.trimToNull(type), "");
+    switch (trimmedType) {
       case "xml":
-        securityXml = StringUtils.trimToNull(securityXml);
+        final String trimmedSecurityXml = StringUtils.trimToNull(securityXml);
         try {
-          responseURI = updateSecurity(securityXml);
+          responseURI = updateSecurity(trimmedSecurityXml);
         } catch (final Exception ex) {
           final FlexiBean out = createRootData();
           out.put("err_securityXml", true);
           out.put("err_securityXmlMsg", ex.getMessage());
-          out.put(SECURITY_XML, StringEscapeUtils.escapeJavaScript(securityXml));
+          out.put(SECURITY_XML, StringEscapeUtils.escapeJavaScript(trimmedSecurityXml));
           final String html = getFreemarker().build(HTML_DIR + "security-update.ftl", out);
           return Response.ok(html).build();
         }
@@ -119,17 +119,17 @@ public class WebSecurityResource extends AbstractWebSecurityResource {
   @PUT
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response putJSON(@FormParam("type") String type, @FormParam(SECURITY_XML) String securityXml) {
+  public Response putJSON(@FormParam("type") final String type, @FormParam(SECURITY_XML) final String securityXml) {
     final SecurityDocument doc = data().getSecurity();
     if (doc.isLatest() == false) {  // TODO: idempotent
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
 
-    type = StringUtils.defaultString(StringUtils.trimToNull(type), "");
-    switch (type) {
+    final String trimmedType = StringUtils.defaultString(StringUtils.trimToNull(type), "");
+    switch (trimmedType) {
       case "xml":
-        securityXml = StringUtils.trimToNull(securityXml);
-        updateSecurity(securityXml);
+        final String trimmedSecurityXml = StringUtils.trimToNull(securityXml);
+        updateSecurity(trimmedSecurityXml);
         break;
       case "": // update security by ID if type is missing
       case "id":

@@ -122,10 +122,10 @@ public class WebUserResource extends AbstractWebUserResource {
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
   public Response postResetPwHTML(
-      @FormParam("password") String password) {
-    password = StringUtils.trimToNull(password);
+      @FormParam("password") final String password) {
+    final String trimmedPassword = StringUtils.trimToNull(password);
     try {
-      final UserForm form = new UserForm(data().getUser(), password);
+      final UserForm form = new UserForm(data().getUser(), trimmedPassword);
       form.update(data().getUserMaster(), data().getPasswordService());
       return Response.seeOther(uri(data())).build();
 
@@ -144,10 +144,10 @@ public class WebUserResource extends AbstractWebUserResource {
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
   public Response postStatusHTML(
-      @FormParam("status") String status) {
-    status = StringUtils.trimToNull(status);
+      @FormParam("status") final String status) {
+    final String trimmedStatus = StringUtils.trimToNull(status);
     final ManageableUser user = data().getUser();
-    user.setStatus("ENABLED".equals(status) ? UserAccountStatus.ENABLED : UserAccountStatus.DISABLED);
+    user.setStatus("ENABLED".equals(trimmedStatus) ? UserAccountStatus.ENABLED : UserAccountStatus.DISABLED);
     data().getUserMaster().update(user);
     return Response.seeOther(uri(data())).build();
   }

@@ -57,13 +57,11 @@ public class WebConfigData extends WebPerRequestData {
   private String _uriVersionId;
   /**
    * The config.
-   * The {@code Object} type is necessary to handle generics in a practical way.
    */
   @PropertyDefinition
   private ConfigDocument _config;
   /**
    * The versioned config.
-   * The {@code Object} type is necessary to handle generics in a practical way.
    */
   @PropertyDefinition
   private ConfigDocument _versioned;
@@ -230,7 +228,6 @@ public class WebConfigData extends WebPerRequestData {
   //-----------------------------------------------------------------------
   /**
    * Gets the config.
-   * The {@code Object} type is necessary to handle generics in a practical way.
    * @return the value of the property
    */
   public ConfigDocument getConfig() {
@@ -239,7 +236,6 @@ public class WebConfigData extends WebPerRequestData {
 
   /**
    * Sets the config.
-   * The {@code Object} type is necessary to handle generics in a practical way.
    * @param config  the new value of the property
    */
   public void setConfig(ConfigDocument config) {
@@ -248,7 +244,6 @@ public class WebConfigData extends WebPerRequestData {
 
   /**
    * Gets the the {@code config} property.
-   * The {@code Object} type is necessary to handle generics in a practical way.
    * @return the property, not null
    */
   public final Property<ConfigDocument> config() {
@@ -258,7 +253,6 @@ public class WebConfigData extends WebPerRequestData {
   //-----------------------------------------------------------------------
   /**
    * Gets the versioned config.
-   * The {@code Object} type is necessary to handle generics in a practical way.
    * @return the value of the property
    */
   public ConfigDocument getVersioned() {
@@ -267,7 +261,6 @@ public class WebConfigData extends WebPerRequestData {
 
   /**
    * Sets the versioned config.
-   * The {@code Object} type is necessary to handle generics in a practical way.
    * @param versioned  the new value of the property
    */
   public void setVersioned(ConfigDocument versioned) {
@@ -276,7 +269,6 @@ public class WebConfigData extends WebPerRequestData {
 
   /**
    * Gets the the {@code versioned} property.
-   * The {@code Object} type is necessary to handle generics in a practical way.
    * @return the property, not null
    */
   public final Property<ConfigDocument> versioned() {

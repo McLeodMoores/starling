@@ -47,7 +47,7 @@ public class ResultConverterCache {
   private final ResultConverter<Object> _genericConverter;
   private final ClassMap<ResultConverter<?>> _converterMap;
 
-  private final Map<String, ResultConverter<?>> _valueNameConverterCache = new ConcurrentHashMap<String, ResultConverter<?>>();
+  private final Map<String, ResultConverter<?>> _valueNameConverterCache = new ConcurrentHashMap<>();
 
   public ResultConverterCache(final FudgeContext fudgeContext) {
     _genericConverter = new ToStringConverter();
@@ -55,7 +55,7 @@ public class ResultConverterCache {
     final ResultConverter<Object> primitiveConverter = new PrimitiveConverter();
 
     // Add standard custom converters here
-    _converterMap = new ClassMap<ResultConverter<?>>();
+    _converterMap = new ClassMap<>();
     registerConverter(Boolean.class, primitiveConverter);
     registerConverter(String.class, primitiveConverter);
     registerConverter(Double.class, _doubleConverter);

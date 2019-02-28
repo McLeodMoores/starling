@@ -74,43 +74,43 @@ public class MinimalWebPortfolioResource extends AbstractMinimalWebPortfolioReso
   @PUT
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
-  public Response putHTML(@FormParam("name") String name, @FormParam("hidden") final Boolean isHidden) {
+  public Response putHTML(@FormParam("name") final String name, @FormParam("hidden") final Boolean isHidden) {
     final PortfolioDocument doc = data().getPortfolio();
     if (doc.isLatest() == false) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
 
-    name = StringUtils.trimToNull(name);
+    final String trimmedName = StringUtils.trimToNull(name);
     final DocumentVisibility visibility = BooleanUtils.isTrue(isHidden) ? DocumentVisibility.HIDDEN : DocumentVisibility.VISIBLE;
-    if (name == null) {
+    if (trimmedName == null) {
       final FlexiBean out = createRootData();
       out.put("err_nameMissing", true);
       final String html = getFreemarker().build(HTML_DIR + "portfolio-update.ftl", out);
       return Response.ok(html).build();
     }
-    final URI uri = updatePortfolio(name, visibility, doc);
+    final URI uri = updatePortfolio(trimmedName, visibility, doc);
     return Response.seeOther(uri).build();
   }
 
   @PUT
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response putJSON(@FormParam("name") String name, @FormParam("hidden") final Boolean isHidden) {
+  public Response putJSON(@FormParam("name") final String name, @FormParam("hidden") final Boolean isHidden) {
     final PortfolioDocument doc = data().getPortfolio();
     if (doc.isLatest() == false) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
-    name = StringUtils.trimToNull(name);
+    final String trimmedName = StringUtils.trimToNull(name);
     final DocumentVisibility visibility = BooleanUtils.isTrue(isHidden) ? DocumentVisibility.HIDDEN : DocumentVisibility.VISIBLE;
-    updatePortfolio(name, visibility, doc);
+    updatePortfolio(trimmedName, visibility, doc);
     return Response.ok().build();
   }
 
-  private URI updatePortfolio(final String name, final DocumentVisibility visibility, PortfolioDocument doc) {
+  private URI updatePortfolio(final String name, final DocumentVisibility visibility, final PortfolioDocument doc) {
     doc.getPortfolio().setName(name);
     doc.setVisibility(visibility);
-    doc = data().getPortfolioMaster().update(doc);
-    data().setPortfolio(doc);
+    final PortfolioDocument updated = data().getPortfolioMaster().update(doc);
+    data().setPortfolio(updated);
     final URI uri = MinimalWebPortfolioResource.uri(data());
     return uri;
   }
