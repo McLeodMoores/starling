@@ -76,8 +76,6 @@ public class ViewClientImpl implements ViewClient {
 
   @SuppressWarnings("unused")
   private volatile boolean _canAccessCompiledViewDefinition;
-
-  @SuppressWarnings("unused")
   private volatile boolean _canAccessComputationResults;
   private volatile CountDownLatch _completionLatch = new CountDownLatch(0);
   private final AtomicReference<ViewComputationResultModel> _latestResult = new AtomicReference<>();
