@@ -82,8 +82,8 @@ public class PortfolioDocumentation extends AbstractDocumentation {
     request.setDepth(0);
     request.setIncludePositions(false);
     request.setName(null);
-    final Collection<UniqueId> result = new ArrayList<UniqueId>();
-    for (PortfolioDocument document : PortfolioSearchIterator.iterable(_portfolioMaster, request)) {
+    final Collection<UniqueId> result = new ArrayList<>();
+    for (final PortfolioDocument document : PortfolioSearchIterator.iterable(_portfolioMaster, request)) {
       result.add(document.getUniqueId());
     }
     LOGGER.info("Found {} portfolios", result.size());
@@ -100,18 +100,18 @@ public class PortfolioDocumentation extends AbstractDocumentation {
         final long t2 = System.nanoTime();
         final Portfolio resolvedPortfolio = PortfolioCompiler.resolvePortfolio(rawPortfolio, getExecutorService(), getSecuritySource());
         final long t3 = System.nanoTime();
-        LOGGER.debug("Got portfolio {} in {}ms", portfolioId, (double) (t2 - t1) / 1e6);
-        LOGGER.debug("Resolved portfolio {} in {}ms", portfolioId, (double) (t3 - t2) / 1e6);
+        LOGGER.debug("Got portfolio {} in {}ms", portfolioId, (t2 - t1) / 1.e6);
+        LOGGER.debug("Resolved portfolio {} in {}ms", portfolioId, (t3 - t2) / 1.e6);
         getExecutorService().execute(new Runnable() {
           @Override
           public void run() {
             processAvailablePortfolioOutputs(resolvedPortfolio);
           }
         });
-        if ((++count) > 0) {
+        if (++count > 0) {
           break;
         }
-      } catch (OpenGammaRuntimeException e) {
+      } catch (final OpenGammaRuntimeException e) {
         LOGGER.debug("Couldn't resolve {} - {}", portfolioId, e);
       }
     }
@@ -119,7 +119,7 @@ public class PortfolioDocumentation extends AbstractDocumentation {
       LOGGER.info("Waiting for portfolio analysis");
       getExecutorService().shutdown();
       getExecutorService().awaitTermination(30, TimeUnit.MINUTES);
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
       throw new OpenGammaRuntimeException("Interrupted", e);
     }
     super.run();

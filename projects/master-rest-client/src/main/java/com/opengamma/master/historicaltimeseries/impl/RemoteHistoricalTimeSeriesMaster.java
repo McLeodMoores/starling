@@ -34,8 +34,8 @@ import com.sun.jersey.api.client.GenericType;
  * Provides access to a remote {@link HistoricalTimeSeriesMaster}.
  */
 public class RemoteHistoricalTimeSeriesMaster
-    extends AbstractRemoteDocumentMaster<HistoricalTimeSeriesInfoDocument>
-    implements HistoricalTimeSeriesMaster {
+extends AbstractRemoteDocumentMaster<HistoricalTimeSeriesInfoDocument>
+implements HistoricalTimeSeriesMaster {
 
   /**
    * Creates an instance.
@@ -82,9 +82,8 @@ public class RemoteHistoricalTimeSeriesMaster
     if (uniqueId.isVersioned()) {
       final URI uri = new DataHistoricalTimeSeriesUris().uriVersion(getBaseUri(), uniqueId);
       return accessRemote(uri).get(HistoricalTimeSeriesInfoDocument.class);
-    } else {
-      return get(uniqueId, VersionCorrection.LATEST);
     }
+    return get(uniqueId, VersionCorrection.LATEST);
   }
 
   //-------------------------------------------------------------------------
@@ -155,9 +154,8 @@ public class RemoteHistoricalTimeSeriesMaster
     if (uniqueId.isVersioned()) {
       final URI uri = DataHistoricalDataPointsUris.uriVersion(getBaseUri(), uniqueId, null);
       return accessRemote(uri).get(ManageableHistoricalTimeSeries.class);
-    } else {
-      return getTimeSeries(uniqueId, VersionCorrection.LATEST);
     }
+    return getTimeSeries(uniqueId, VersionCorrection.LATEST);
   }
 
   @Override
@@ -167,9 +165,8 @@ public class RemoteHistoricalTimeSeriesMaster
     if (uniqueId.isVersioned()) {
       final URI uri = DataHistoricalDataPointsUris.uriVersion(getBaseUri(), uniqueId, filter);
       return accessRemote(uri).get(ManageableHistoricalTimeSeries.class);
-    } else {
-      return getTimeSeries(uniqueId, VersionCorrection.LATEST);
     }
+    return getTimeSeries(uniqueId, VersionCorrection.LATEST);
   }
 
   @Override

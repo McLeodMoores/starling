@@ -29,8 +29,8 @@ import com.sun.jersey.api.client.GenericType;
  * Provides access to a remote {@link SecurityMaster}.
  */
 public class RemoteSecurityMaster
-    extends AbstractRemoteDocumentMaster<SecurityDocument>
-    implements SecurityMaster {
+extends AbstractRemoteDocumentMaster<SecurityDocument>
+implements SecurityMaster {
 
   /**
    * Creates an instance.
@@ -77,9 +77,8 @@ public class RemoteSecurityMaster
     if (uniqueId.isVersioned()) {
       final URI uri = new DataSecurityUris().uriVersion(getBaseUri(), uniqueId);
       return accessRemote(uri).get(SecurityDocument.class);
-    } else {
-      return get(uniqueId, VersionCorrection.LATEST);
     }
+    return get(uniqueId, VersionCorrection.LATEST);
   }
 
   //-------------------------------------------------------------------------

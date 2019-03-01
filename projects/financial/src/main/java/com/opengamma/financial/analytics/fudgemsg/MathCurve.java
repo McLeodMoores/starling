@@ -92,7 +92,7 @@ final class MathCurve {
     private static final String CURVE_FUNCTION_FIELD_NAME = "function";
     private static final String CURVE_NAME_FIELD_NAME = "name";
 
-    @SuppressWarnings({"unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked" })
     @Override
     public FunctionalDoublesCurve buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
       final String name = deserializer.fieldValueToObject(String.class, message.getByName(CURVE_NAME_FIELD_NAME));
@@ -175,7 +175,7 @@ final class MathCurve {
   }
 
   /**
-   * Fudge builder for {@link NodalObjectCurve}
+   * Fudge builder for {@link NodalObjectsCurve}
    */
   @FudgeBuilderFor(NodalObjectsCurve.class)
   public static final class NodalObjectsCurveBuilder extends AbstractFudgeBuilder<NodalObjectsCurve<?, ?>> {
@@ -183,6 +183,7 @@ final class MathCurve {
     private static final String Y_DATA_FIELD_NAME = "y data";
     private static final String CURVE_NAME_FIELD_NAME = "curve name";
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public NodalObjectsCurve<?, ?> buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
       final Comparable[] xs = deserializer.fieldValueToObject(Comparable[].class, message.getByName(X_DATA_FIELD_NAME));

@@ -83,6 +83,7 @@ public class VolatilityCubeFunctions extends AbstractFunctionConfigurationBean {
       return _configMaster;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
       final ConfigSearchRequest<VolatilityCubeDefinition<?, ?, ?>> searchRequest = new ConfigSearchRequest<>();

@@ -39,7 +39,6 @@ import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.core.holiday.HolidaySource;
 import com.opengamma.core.region.RegionSource;
 import com.opengamma.core.security.Security;
-import com.opengamma.core.security.SecuritySource;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.ComputationTargetSpecification;
 import com.opengamma.engine.function.FunctionCompilationContext;
@@ -56,7 +55,6 @@ import com.opengamma.financial.analytics.conversion.DefaultTradeConverter;
 import com.opengamma.financial.analytics.conversion.FixedIncomeConverterDataProvider;
 import com.opengamma.financial.analytics.conversion.FutureTradeConverter;
 import com.opengamma.financial.analytics.model.discounting.DiscountingFunction;
-import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.financial.convention.IborIndexConvention;
 import com.opengamma.financial.convention.frequency.Frequency;
 import com.opengamma.financial.security.FinancialSecurityUtils;
@@ -80,10 +78,8 @@ public abstract class ShiftedLognormalDiscountingCapFloorFunction extends Discou
 
   @Override
   protected DefaultTradeConverter getTargetToDefinitionConverter(final FunctionCompilationContext context) {
-    final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
     final HolidaySource holidaySource = OpenGammaCompilationContext.getHolidaySource(context);
     final RegionSource regionSource = OpenGammaCompilationContext.getRegionSource(context);
-    final ConventionBundleSource conventionBundleSource = OpenGammaCompilationContext.getConventionBundleSource(context);
     final ConventionSource conventionSource = OpenGammaCompilationContext.getConventionSource(context);
     final CapFloorSecurityConverter converter = new CapFloorSecurityConverter(holidaySource, conventionSource, regionSource);
     final FinancialSecurityVisitor<InstrumentDefinition<?>> securityConverter = FinancialSecurityVisitorAdapter.<InstrumentDefinition<?>>builder().capFloorVisitor(converter).create();

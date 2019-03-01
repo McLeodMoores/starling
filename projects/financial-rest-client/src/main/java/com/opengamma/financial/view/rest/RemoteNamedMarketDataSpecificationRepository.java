@@ -28,7 +28,6 @@ public class RemoteNamedMarketDataSpecificationRepository implements NamedMarket
     _client = FudgeRestClient.create();
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public List<String> getNames() {
     final URI uri = DataNamedMarketDataSpecificationRepositoryUris.uriNames(_baseUri);

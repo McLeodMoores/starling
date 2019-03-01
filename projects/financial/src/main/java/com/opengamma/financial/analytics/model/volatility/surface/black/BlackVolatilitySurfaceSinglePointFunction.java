@@ -11,8 +11,6 @@ import static com.opengamma.engine.value.ValuePropertyNames.SURFACE;
 import java.util.Collections;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.threeten.bp.ZonedDateTime;
 
 import com.google.common.collect.Sets;
@@ -113,7 +111,7 @@ public class BlackVolatilitySurfaceSinglePointFunction extends AbstractFunction.
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
     final ValueProperties properties = createValueProperties()
         .with(SURFACE, "SinglePoint")
-        .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, getInstrumentType(target))
+        .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, getInstrumentType())
         .withAny(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD)
         .withAny(CURVE)
         .get();
@@ -122,7 +120,7 @@ public class BlackVolatilitySurfaceSinglePointFunction extends AbstractFunction.
 
   // TODO: Review: I would prefer not to have to create a version of this for each instrument type...
   // TODO: InstrumentType is hard-coded. Could this be derived from the target Security?
-  private String getInstrumentType(final ComputationTarget target) {
+  private String getInstrumentType() {
     return InstrumentTypeProperties.EQUITY_OPTION;
   }
 
@@ -164,5 +162,4 @@ public class BlackVolatilitySurfaceSinglePointFunction extends AbstractFunction.
     return new ValueRequirement(ValueRequirementNames.FORWARD_CURVE, underlyingSpec, properties);
   }
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(BlackVolatilitySurfaceSinglePointFunction.class);
 }

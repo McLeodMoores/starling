@@ -386,7 +386,7 @@ public class DefaultPnLRequirementsGatherer implements PnLRequirementsGatherer {
       }
 
       private Set<ValueRequirement> createValueRequirementsForCashLikeSecurity(final Currency currency) {
-        final String config = _curveCalculationConfigs.get(currency);
+        final String config = _curveCalculationConfigs.get(currency.getCode());
         if (config == null) {
           throw new OpenGammaRuntimeException("Could not get curve calculation configuration for " + currency);
         }

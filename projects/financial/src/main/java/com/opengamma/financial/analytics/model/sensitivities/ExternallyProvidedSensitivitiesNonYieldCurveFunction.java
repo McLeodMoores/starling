@@ -1,12 +1,9 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.sensitivities;
-
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
-import it.unimi.dsi.fastutil.doubles.DoubleList;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -46,8 +43,11 @@ import com.opengamma.master.security.RawSecurity;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 import com.opengamma.util.money.Currency;
 
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+import it.unimi.dsi.fastutil.doubles.DoubleList;
+
 /**
- * 
+ *
  */
 public class ExternallyProvidedSensitivitiesNonYieldCurveFunction extends AbstractFunction.NonCompiledInvoker {
   private static final Logger LOGGER = LoggerFactory.getLogger(ExternallyProvidedSensitivitiesNonYieldCurveFunction.class);
@@ -150,12 +150,10 @@ public class ExternallyProvidedSensitivitiesNonYieldCurveFunction extends Abstra
     final RawSecurity underlyingRawSecurity = (RawSecurity) secSource.getSingle(securityEntryData.getFactorSetId().toBundle());
     if (underlyingRawSecurity != null) {
       final FudgeMsgEnvelope factorIdMsg = OpenGammaFudgeContext.getInstance().deserialize(underlyingRawSecurity.getRawData());
-      @SuppressWarnings("unchecked")
       final List<FactorExposureData> factorExposureDataList = OpenGammaFudgeContext.getInstance().fromFudgeMsg(List.class, factorIdMsg.getMessage());
       return factorExposureDataList;
-    } else {
-      throw new OpenGammaRuntimeException("Couldn't find factor list security " + securityEntryData.getFactorSetId());
     }
+      throw new OpenGammaRuntimeException("Couldn't find factor list security " + securityEntryData.getFactorSetId());
   }
 
   @Override

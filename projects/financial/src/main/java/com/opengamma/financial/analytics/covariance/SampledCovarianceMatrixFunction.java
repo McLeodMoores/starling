@@ -97,6 +97,7 @@ public abstract class SampledCovarianceMatrixFunction extends AbstractFunction.N
     return new ViewCalculationConfiguration(viewDefinition, calcConfigName);
   }
 
+  @SuppressWarnings("unchecked")
   protected <T extends Comparable<? super T>> DoubleLabelledMatrix2D createCovarianceMatrix(DoubleTimeSeries<T>[] timeSeries, Object[] labels) {
     final CovarianceMatrixCalculator calculator = new CovarianceMatrixCalculator(new HistoricalCovarianceCalculator());
     int len = timeSeries.length;

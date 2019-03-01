@@ -5,7 +5,7 @@
  */
 package com.opengamma.financial.timeseries.exchange;
 
-import org.apache.commons.lang.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
  * A simple definition of an exchange.
@@ -159,7 +159,7 @@ public class Exchange {
 
   @Override
   public String toString() {
-    return ReflectionToStringBuilder.reflectionToString(this);
+    return ToStringBuilder.reflectionToString(this);
   }
 
 }

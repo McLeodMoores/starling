@@ -8,14 +8,11 @@ package com.opengamma.financial.analytics.model.curve.forward;
 import static com.opengamma.financial.analytics.model.curve.forward.ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_INTERPOLATOR;
 import static com.opengamma.financial.analytics.model.curve.forward.ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_LEFT_EXTRAPOLATOR;
 import static com.opengamma.financial.analytics.model.curve.forward.ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_RIGHT_EXTRAPOLATOR;
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.threeten.bp.Clock;
 import org.threeten.bp.Instant;
 import org.threeten.bp.LocalTime;
@@ -50,11 +47,12 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.util.money.UnorderedCurrencyPair;
 import com.opengamma.util.time.Tenor;
 
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+
 /**
  *
  */
 public class FXForwardCurveFromMarketQuotesFunction extends AbstractFunction {
-  private static final Logger LOGGER = LoggerFactory.getLogger(FXForwardCurveFromMarketQuotesFunction.class);
   /** Name of the calculation method */
   public static final String FX_FORWARD_QUOTES = "FXForwardQuotes";
 

@@ -98,7 +98,6 @@ public final class OpenGammaExecutionContext {
    */
   public static final String VIEW_PROCESSOR_NAME = "viewProcessor";
 
-  private static final String CURRENCY_PAIRS_SOURCE = "currencyPairsSource";
 
   /**
    * Restricted constructor.

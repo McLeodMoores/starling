@@ -109,12 +109,12 @@ public class ExternallyProvidedSensitivitiesYieldCurveNodeSensitivitiesFunction 
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final Set<String> curves = desiredValue.getConstraints().getValues(ValuePropertyNames.CURVE);
     final Set<String> curveCalcConfigs = desiredValue.getConstraints().getValues(ValuePropertyNames.CURVE_CALCULATION_CONFIG);
-    if ((curves == null) || (curves.size() != 1)) {
+    if (curves == null || curves.size() != 1) {
       LOGGER.warn("no curve specified");
       // Can't support an unbound request; an injection function must be used (or declare all as optional and use [PLAT-1771])
       return null;
     }
-    if ((curveCalcConfigs == null) || (curveCalcConfigs.size() != 1)) {
+    if (curveCalcConfigs == null || curveCalcConfigs.size() != 1) {
       LOGGER.warn("no curve config specified");
       return null;
     }
@@ -184,10 +184,10 @@ public class ExternallyProvidedSensitivitiesYieldCurveNodeSensitivitiesFunction 
     }
     final YieldAndDiscountCurve curve = (YieldAndDiscountCurve) curveObject;
     final InterpolatedYieldCurveSpecificationWithSecurities curveSpec = (InterpolatedYieldCurveSpecificationWithSecurities) curveSpecObject;
-    final LinkedHashMap<String, YieldAndDiscountCurve> interpolatedCurves = new LinkedHashMap<String, YieldAndDiscountCurve>();
+    final LinkedHashMap<String, YieldAndDiscountCurve> interpolatedCurves = new LinkedHashMap<>();
     interpolatedCurves.put(curveName, curve);
     final YieldCurveBundle bundle = new YieldCurveBundle(interpolatedCurves);
-    final DoubleMatrix1D sensitivitiesForCurves = getSensitivities(executionContext.getSecuritySource(), inputs, security, curveSpec, curve);
+    final DoubleMatrix1D sensitivitiesForCurves = getSensitivities(executionContext.getSecuritySource(), inputs, security, curveSpec);
     final ValueProperties.Builder properties = createValueProperties(target)
         .with(ValuePropertyNames.CURVE, curveName)
         .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfig);
@@ -199,8 +199,7 @@ public class ExternallyProvidedSensitivitiesYieldCurveNodeSensitivitiesFunction 
   }
 
   private DoubleMatrix1D getSensitivities(final SecuritySource secSource, final FunctionInputs inputs, final RawSecurity rawSecurity,
-      final InterpolatedYieldCurveSpecificationWithSecurities curveSpec,
-      final YieldAndDiscountCurve curve) {
+      final InterpolatedYieldCurveSpecificationWithSecurities curveSpec) {
     final Collection<FactorExposureData> decodedSensitivities = RawSecurityUtils.decodeFactorExposureData(secSource, rawSecurity);
     final double[] entries = new double[curveSpec.getStrips().size()];
     int i = 0;

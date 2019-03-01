@@ -6,7 +6,7 @@
 package com.opengamma.financial.mock;
 
 
-import org.springframework.util.Assert;
+import org.testng.Assert;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
@@ -15,7 +15,6 @@ import com.opengamma.core.region.RegionSource;
 import com.opengamma.engine.function.FunctionExecutionContext;
 import com.opengamma.financial.OpenGammaExecutionContext;
 import com.opengamma.financial.convention.ConventionBundleSource;
-import com.opengamma.financial.mock.MockSources;
 import com.opengamma.util.test.TestGroup;
 
 /**
@@ -39,9 +38,9 @@ public abstract class AbstractMockSourcesTest {
 
   @Test(enabled = true)
   public void testSourcesInited() {
-    Assert.notNull(_regionSource);
-    Assert.notNull(_holidaySource);
-    Assert.notNull(_conventionBundleSource);
+    Assert.assertNotNull(_regionSource);
+    Assert.assertNotNull(_holidaySource);
+    Assert.assertNotNull(_conventionBundleSource);
   }
 
 

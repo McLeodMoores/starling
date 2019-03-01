@@ -34,9 +34,6 @@ import com.opengamma.util.time.Tenor;
 @BeanDefinition
 public class ForwardSwapCurveInstrumentProvider implements Bean, SurfaceInstrumentProvider<Tenor, Tenor>, UniqueIdentifiable {
 
-  /** Serialization version */
-  private static final long serialVersionUID = 1L;
-
   /**
    * The unique id.
    */

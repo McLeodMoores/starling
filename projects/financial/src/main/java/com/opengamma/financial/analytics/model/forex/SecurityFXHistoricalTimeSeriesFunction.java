@@ -60,7 +60,7 @@ public class SecurityFXHistoricalTimeSeriesFunction extends AbstractFunction.Non
     return Collections.singleton(new ValueSpecification(ValueRequirementNames.HISTORICAL_FX_TIME_SERIES, target.toSpecification(), properties));
   }
 
-  private ValueRequirement createRequirement(final FunctionCompilationContext context, final Currency desiredCurrency, final Currency securityCurrency) {
+  private ValueRequirement createRequirement(final Currency desiredCurrency, final Currency securityCurrency) {
     if (desiredCurrency.equals(securityCurrency)) {
       return null;
     }
@@ -73,18 +73,18 @@ public class SecurityFXHistoricalTimeSeriesFunction extends AbstractFunction.Non
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
     final Collection<Currency> securityCurrencies = FinancialSecurityUtils.getCurrencies(security, getSecuritySource());
     final Set<String> resultCurrencies = constraints.getValues(ValuePropertyNames.CURRENCY);
-    if ((resultCurrencies == null) || (resultCurrencies.size() != 1)) {
+    if (resultCurrencies == null || resultCurrencies.size() != 1) {
       return null;
     }
     final Currency desiredCurrency = Currency.of(Iterables.getOnlyElement(resultCurrencies));
     if (securityCurrencies.size() == 1) {
       final Currency securityCurrency = Iterables.getOnlyElement(securityCurrencies);
-      final ValueRequirement htsRequirement = createRequirement(context, desiredCurrency, securityCurrency);
+      final ValueRequirement htsRequirement = createRequirement(desiredCurrency, securityCurrency);
       return htsRequirement != null ? ImmutableSet.of(htsRequirement) : null;
     }
     final Set<ValueRequirement> requirements = new HashSet<>();
     for (final Currency securityCurrency : securityCurrencies) {
-      final ValueRequirement htsRequirement = createRequirement(context, desiredCurrency, securityCurrency);
+      final ValueRequirement htsRequirement = createRequirement(desiredCurrency, securityCurrency);
       if (htsRequirement != null) {
         requirements.add(htsRequirement);
       }

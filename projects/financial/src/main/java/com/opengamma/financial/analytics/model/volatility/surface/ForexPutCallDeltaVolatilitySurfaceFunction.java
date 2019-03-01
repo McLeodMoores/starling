@@ -1,11 +1,9 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.volatility.surface;
-
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -34,8 +32,10 @@ import com.opengamma.financial.analytics.model.InterpolatedDataProperties;
 import com.opengamma.financial.analytics.volatility.surface.VolatilitySurfaceShiftFunction;
 import com.opengamma.util.time.Tenor;
 
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+
 /**
- * 
+ *
  */
 public abstract class ForexPutCallDeltaVolatilitySurfaceFunction extends ForexVolatilitySurfaceFunction {
   /** The logger */
@@ -69,7 +69,7 @@ public abstract class ForexPutCallDeltaVolatilitySurfaceFunction extends ForexVo
     final int nSmileValues = deltaValues.length;
     final Set<String> shifts = desiredValues.iterator().next().getConstraints().getValues(VolatilitySurfaceShiftFunction.SHIFT);
     final double shiftMultiplier;
-    if ((shifts != null) && (shifts.size() == 1)) {
+    if (shifts != null && shifts.size() == 1) {
       final String shift = shifts.iterator().next();
       shiftMultiplier = 1 + Double.parseDouble(shift);
     } else {
@@ -83,7 +83,7 @@ public abstract class ForexPutCallDeltaVolatilitySurfaceFunction extends ForexVo
       for (int j = 0; j < nSmileValues; j++) {
         final Double delta = deltaValues[j];
         if (delta != null) {
-          Double volatility = fxVolatilitySurface.getVolatility((Object) tenor, (Object) delta);
+          Double volatility = fxVolatilitySurface.getVolatility(tenor, delta);
           if (volatility != null) {
             volatility *= shiftMultiplier;
             if (delta < 50) {

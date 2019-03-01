@@ -65,7 +65,7 @@ public class InterpolatedYieldCurveSpecificationWithSecuritiesFudgeEncodingTest 
     fra.setExternalIdBundle(bundle);
     final FixedIncomeStripWithSecurity fraStrip = new FixedIncomeStripWithSecurity(new FixedIncomeStrip(StripInstrumentType.FRA_3M, Tenor.FIVE_MONTHS, "DEFAULT"), Tenor.FIVE_MONTHS, endDate, dummyId, fra);
 
-    final Collection<FixedIncomeStripWithSecurity> strips = new ArrayList<FixedIncomeStripWithSecurity>();
+    final Collection<FixedIncomeStripWithSecurity> strips = new ArrayList<>();
     strips.add(cashStrip);
     strips.add(futureStrip);
     strips.add(fraStrip);

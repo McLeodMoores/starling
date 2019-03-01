@@ -75,6 +75,7 @@ public class RawVolatilityCubeDataFunction extends AbstractFunction.NonCompiledI
    * @throws OpenGammaRuntimeException If the cube specification or definition is null or if the cube quote types
    * are not equal
    */
+  @SuppressWarnings("unchecked")
   public static <X, Y, Z> Set<ValueRequirement> buildDataRequirements(final VolatilityCubeSpecificationSource specificationSource,
       final VolatilityCubeDefinitionSource definitionSource, final String specificationName, final String definitionName) {
     final VolatilityCubeSpecification specification = specificationSource.getSpecification(specificationName);
@@ -85,7 +86,7 @@ public class RawVolatilityCubeDataFunction extends AbstractFunction.NonCompiledI
     if (definition == null) {
       throw new OpenGammaRuntimeException("Could not get volatility cube definition named " + definitionName);
     }
-    if (!(definition.getCubeQuoteType().equals(specification.getCubeQuoteType()))) {
+    if (!definition.getCubeQuoteType().equals(specification.getCubeQuoteType())) {
       throw new OpenGammaRuntimeException("Inconsistent cube quote type for definition (" + definition.getCubeQuoteType() +
           ") and specification (" + specification.getCubeQuoteType() + ")");
     }
@@ -137,10 +138,10 @@ public class RawVolatilityCubeDataFunction extends AbstractFunction.NonCompiledI
     final Map<Triple<Tenor, Tenor, Double>, Double> data = new HashMap<>();
     for (final Object xObj : definition.getXs()) {
       for (final Object yObj : definition.getYs()) {
-        for (final Object zObj : definition.getZs()) { 
-          final Tenor x = (xObj instanceof Tenor) ? (Tenor) xObj : Tenor.parse((String) xObj);
-          final Tenor y = (yObj instanceof Tenor) ? (Tenor) yObj : Tenor.parse((String) yObj);
-          final Double z = (zObj instanceof Double) ? (Double) zObj : Double.parseDouble((String) zObj);
+        for (final Object zObj : definition.getZs()) {
+          final Tenor x = xObj instanceof Tenor ? (Tenor) xObj : Tenor.parse((String) xObj);
+          final Tenor y = yObj instanceof Tenor ? (Tenor) yObj : Tenor.parse((String) yObj);
+          final Double z = zObj instanceof Double ? (Double) zObj : Double.parseDouble((String) zObj);
           final ExternalId identifier = provider.getInstrument(x, y, z);
           final ValueRequirement requirement = new ValueRequirement(provider.getDataFieldName(), ComputationTargetType.PRIMITIVE, identifier);
           final Object volatilityObject = inputs.getValue(requirement);

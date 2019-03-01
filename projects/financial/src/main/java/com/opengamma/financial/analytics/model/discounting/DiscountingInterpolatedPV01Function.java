@@ -70,6 +70,7 @@ public class DiscountingInterpolatedPV01Function extends DiscountingInterpolated
         final ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);
         final String desiredCurveName = desiredValue.getConstraint(CURVE);
         final ValueProperties properties = desiredValue.getConstraints();
+        @SuppressWarnings("unchecked")
         final Map<Pair<String, Currency>, Double> pv01s = (Map<Pair<String, Currency>, Double>) inputs.getValue(ALL_PV01S);
         final Set<ComputedValue> results = new HashSet<>();
         for (final Map.Entry<Pair<String, Currency>, Double> entry : pv01s.entrySet()) {
@@ -115,7 +116,7 @@ public class DiscountingInterpolatedPV01Function extends DiscountingInterpolated
             .withAny(CURVE);
         final Security security = target.getTrade().getSecurity();
         if (security instanceof SwapSecurity && InterestRateInstrumentType.isFixedIncomeInstrumentType((SwapSecurity) security)) {
-          if ((InterestRateInstrumentType.getInstrumentTypeFromSecurity((SwapSecurity) security) != InterestRateInstrumentType.SWAP_CROSS_CURRENCY)) {
+          if (InterestRateInstrumentType.getInstrumentTypeFromSecurity((SwapSecurity) security) != InterestRateInstrumentType.SWAP_CROSS_CURRENCY) {
             final SwapSecurity swapSecurity = (SwapSecurity) security;
             if (swapSecurity.getPayLeg().getNotional() instanceof InterestRateNotional) {
               final String currency = ((InterestRateNotional) swapSecurity.getPayLeg().getNotional()).getCurrency().getCode();

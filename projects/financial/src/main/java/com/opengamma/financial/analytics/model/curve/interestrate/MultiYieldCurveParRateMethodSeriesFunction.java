@@ -87,7 +87,6 @@ import com.opengamma.financial.OpenGammaCompilationContext;
 import com.opengamma.financial.OpenGammaExecutionContext;
 import com.opengamma.financial.analytics.conversion.FixedIncomeConverterDataProvider;
 import com.opengamma.financial.analytics.conversion.InterestRateInstrumentTradeOrSecurityConverter;
-import com.opengamma.financial.analytics.conversion.YieldCurveFixingSeriesProvider;
 import com.opengamma.financial.analytics.ircurve.ConfigDBInterpolatedYieldCurveSpecificationBuilder;
 import com.opengamma.financial.analytics.ircurve.FixedIncomeStripIdentifierAndMaturityBuilder;
 import com.opengamma.financial.analytics.ircurve.FixedIncomeStripWithIdentifier;
@@ -164,8 +163,6 @@ public class MultiYieldCurveParRateMethodSeriesFunction extends MultiYieldCurveS
     final ConfigSource configSource = OpenGammaExecutionContext.getConfigSource(executionContext);
     final MultiCurveCalculationConfig curveCalculationConfig = new ConfigDBCurveCalculationConfigSource(configSource).getConfig(curveCalculationConfigName);
     final ComputationTargetSpecification targetSpec = target.toSpecification();
-    final ConventionBundleSource conventionBundleSource = OpenGammaExecutionContext.getConventionBundleSource(executionContext);
-    final YieldCurveFixingSeriesProvider provider = new YieldCurveFixingSeriesProvider(conventionBundleSource);
 
     final Set<ComputedValue> results = new HashSet<>();
     final double absoluteTolerance = Double.parseDouble(absoluteToleranceName);
@@ -281,7 +278,6 @@ public class MultiYieldCurveParRateMethodSeriesFunction extends MultiYieldCurveS
         final Function1D<DoubleMatrix1D, DoubleMatrix1D> curveCalculator = new MultipleYieldCurveFinderFunction(data, PAR_SPREAD_RATE_CALCULATOR);
         final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacobianCalculator = new MultipleYieldCurveFinderIRSJacobian(data, PAR_SPREAD_RATE_SENSITIVITY_CALCULATOR);
         final double[] fittedYields = rootFinder.getRoot(curveCalculator, jacobianCalculator, new DoubleMatrix1D(initialRatesGuess.toDoubleArray())).getData();
-        final DoubleMatrix2D jacobianMatrix = jacobianCalculator.evaluate(new DoubleMatrix1D(fittedYields));
         int i = 0;
         for (final String curveName : curveNames) {
           final Integer offset = nodesPerCurve.get(curveName);

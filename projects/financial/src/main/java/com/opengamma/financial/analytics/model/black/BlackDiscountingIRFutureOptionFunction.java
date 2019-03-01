@@ -53,7 +53,6 @@ import com.opengamma.financial.analytics.conversion.FutureTradeConverter;
 import com.opengamma.financial.analytics.conversion.InterestRateFutureOptionSecurityConverter;
 import com.opengamma.financial.analytics.model.discounting.DiscountingFunction;
 import com.opengamma.financial.analytics.model.irfutureoption.IRFutureOptionFunctionHelper;
-import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.financial.convention.IborIndexConvention;
 import com.opengamma.financial.convention.InterestRateFutureConvention;
 import com.opengamma.financial.security.FinancialSecurityUtils;
@@ -80,7 +79,6 @@ public abstract class BlackDiscountingIRFutureOptionFunction extends Discounting
     final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
     final HolidaySource holidaySource = OpenGammaCompilationContext.getHolidaySource(context);
     final RegionSource regionSource = OpenGammaCompilationContext.getRegionSource(context);
-    final ConventionBundleSource conventionBundleSource = OpenGammaCompilationContext.getConventionBundleSource(context);
     final ConventionSource conventionSource = OpenGammaCompilationContext.getConventionSource(context);
     final InterestRateFutureOptionSecurityConverter irFutureOptionConverter = new InterestRateFutureOptionSecurityConverter(holidaySource, conventionSource, regionSource, securitySource);
     final FinancialSecurityVisitor<InstrumentDefinition<?>> securityConverter = FinancialSecurityVisitorAdapter.<InstrumentDefinition<?>>builder()

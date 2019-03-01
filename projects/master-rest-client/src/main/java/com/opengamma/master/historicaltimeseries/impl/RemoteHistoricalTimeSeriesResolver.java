@@ -71,11 +71,10 @@ public class RemoteHistoricalTimeSeriesResolver extends AbstractRemoteClient imp
     private String getAdjustmentString(final ExternalIdBundle securityIdBundle) {
       if (_bundle.equals(securityIdBundle)) {
         return _adjustment;
-      } else {
-        final URI uri = UriBuilder.fromUri(_base).path("adjustment").queryParam("id", securityIdBundle.toStringList().toArray()).build();
-        final FudgeMsg response = accessRemote(uri).get(FudgeMsg.class);
-        return response.getString("adjustment");
       }
+      final URI uri = UriBuilder.fromUri(_base).path("adjustment").queryParam("id", securityIdBundle.toStringList().toArray()).build();
+      final FudgeMsg response = accessRemote(uri).get(FudgeMsg.class);
+      return response.getString("adjustment");
     }
 
     @Override

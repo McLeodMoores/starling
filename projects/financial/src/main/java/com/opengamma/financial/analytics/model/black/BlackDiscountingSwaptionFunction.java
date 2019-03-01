@@ -49,7 +49,6 @@ import com.opengamma.financial.analytics.conversion.SwapSecurityConverter;
 import com.opengamma.financial.analytics.conversion.SwaptionSecurityConverter;
 import com.opengamma.financial.analytics.model.discounting.DiscountingFunction;
 import com.opengamma.financial.analytics.model.swaption.SwaptionUtils;
-import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.financial.security.FinancialSecurityUtils;
 import com.opengamma.financial.security.FinancialSecurityVisitor;
 import com.opengamma.financial.security.FinancialSecurityVisitorAdapter;
@@ -73,7 +72,6 @@ public abstract class BlackDiscountingSwaptionFunction extends DiscountingFuncti
     final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
     final HolidaySource holidaySource = OpenGammaCompilationContext.getHolidaySource(context);
     final RegionSource regionSource = OpenGammaCompilationContext.getRegionSource(context);
-    final ConventionBundleSource conventionBundleSource = OpenGammaCompilationContext.getConventionBundleSource(context);
     final ConventionSource conventionSource = OpenGammaCompilationContext.getConventionSource(context);
     final SwapSecurityConverter swapConverter = new SwapSecurityConverter(securitySource, holidaySource, conventionSource, regionSource);
     final InterestRateSwapSecurityConverter irsConverter = new InterestRateSwapSecurityConverter(holidaySource, conventionSource, securitySource);

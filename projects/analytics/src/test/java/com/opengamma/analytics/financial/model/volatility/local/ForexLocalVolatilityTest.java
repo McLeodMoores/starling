@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.local;
@@ -207,7 +207,7 @@ public class ForexLocalVolatilityTest {
     //    PDEUtilityTools.printSurface("density surface", dens, 0.01, 1.0, 0.75, 1.25, 200, 100);
     //    Surface<Double, Double, Double> theta = DUPIRE.getTheta(surface);
     //  PDEUtilityTools.printSurface("theta surface", theta, 0, 10, 0.1, 3.0, 200, 100);
-    LocalVolatilitySurfaceMoneyness lv = DUPIRE.getLocalVolatility(surface);
+    final LocalVolatilitySurfaceMoneyness lv = DUPIRE.getLocalVolatility(surface);
     PDEUtilityTools.printSurface("LV surface", lv.getSurface(), 0, 7 / 365., 0.95, 1.05, 200, 100);
     //    final LocalVolatilitySurfaceMoneyness lv2 = DUPIRE.getLocalVolatility(surface);
     //
@@ -347,13 +347,13 @@ public class ForexLocalVolatilityTest {
         final double t = x[0];
         final double k = x[1];
         final double d = Math.abs(Math.log(k / FORWARDS[0])) / Math.sqrt(0.1 + t);
-        if (d < (0.1 - width)) {
+        if (d < 0.1 - width) {
           return hVol;
-        } else if (d < (0.1 + width)) {
+        } else if (d < 0.1 + width) {
           return a + b * Math.sin(-(d - 0.1) * lambda);
-        } else if (d > (0.3 + width)) {
+        } else if (d > 0.3 + width) {
           return hVol;
-        } else if (d > (0.3 - width)) {
+        } else if (d > 0.3 - width) {
           return a + b * Math.sin((d - 0.3) * lambda);
         } else {
           return lVol;
@@ -417,7 +417,6 @@ public class ForexLocalVolatilityTest {
 
     final Function<Double, Double> func = new Function<Double, Double>() {
 
-      @SuppressWarnings("synthetic-access")
       @Override
       public Double evaluate(final Double... tx) {
         final double t = tx[0];
@@ -435,7 +434,6 @@ public class ForexLocalVolatilityTest {
     final ForwardCurve fc = MARKET_DATA.getForwardCurve();
     final Function<Double, Double> func = new Function<Double, Double>() {
 
-      @SuppressWarnings("synthetic-access")
       @Override
       public Double evaluate(final Double... tx) {
         final double t = tx[0];

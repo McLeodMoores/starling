@@ -8,8 +8,6 @@ package com.opengamma.engine.management;
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.threeten.bp.Duration;
 import org.threeten.bp.Instant;
 import org.threeten.bp.ZoneId;
@@ -39,7 +37,6 @@ import net.sf.ehcache.CacheException;
  */
 public class ViewProcessMXBeanImpl implements ViewProcessMXBean {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(ViewProcessMXBeanImpl.class);
   /**
    * The backing view process instance
    */

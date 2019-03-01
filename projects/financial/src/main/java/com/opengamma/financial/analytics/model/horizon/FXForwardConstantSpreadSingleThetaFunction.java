@@ -8,7 +8,6 @@ package com.opengamma.financial.analytics.model.horizon;
 import static com.opengamma.engine.value.ValuePropertyNames.CURRENCY;
 import static com.opengamma.engine.value.ValuePropertyNames.FUNCTION;
 import static com.opengamma.engine.value.ValueRequirementNames.CURRENCY_PAIRS;
-import static com.opengamma.financial.analytics.model.horizon.ThetaPropertyNamesAndValues.PROPERTY_DAYS_TO_MOVE_FORWARD;
 import static com.opengamma.financial.analytics.model.horizon.ThetaPropertyNamesAndValues.PROPERTY_THETA_CALCULATION_METHOD;
 
 import java.util.Collections;
@@ -154,7 +153,6 @@ public class FXForwardConstantSpreadSingleThetaFunction extends FXForwardConstan
 
   @Override
   protected ValueProperties.Builder getResultProperties(final ComputationTarget target, final ValueRequirement desiredValue) {
-    final String daysForward = desiredValue.getConstraint(PROPERTY_DAYS_TO_MOVE_FORWARD);
     final ValueProperties.Builder properties = super.getResultProperties(target, desiredValue)
         .withoutAny(PROPERTY_THETA_CALCULATION_METHOD)
         .with(PROPERTY_THETA_CALCULATION_METHOD, CONSTANT_SPREAD_COLLAPSED)

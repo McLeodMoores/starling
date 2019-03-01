@@ -250,6 +250,7 @@ public class CurveFunctions extends AbstractFunctionConfigurationBean {
       functions.add(functionConfiguration(ISDACompliantCurveFunction.class, curveConfigName));
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
       final ConfigSearchRequest<CurveDefinition> searchRequest = new ConfigSearchRequest<>();
@@ -330,6 +331,7 @@ public class CurveFunctions extends AbstractFunctionConfigurationBean {
       return _configMaster;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
       final ConfigSearchRequest<HullWhiteOneFactorParameters> hwSearchRequest = new ConfigSearchRequest<>();

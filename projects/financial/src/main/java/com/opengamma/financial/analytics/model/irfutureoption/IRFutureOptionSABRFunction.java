@@ -122,8 +122,9 @@ public abstract class IRFutureOptionSABRFunction extends AbstractFunction.NonCom
     _curveCalculationConfigSource = ConfigDBCurveCalculationConfigSource.init(context, this);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, 
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
       final Set<ValueRequirement> desiredValues)
     throws AsynchronousExecution {
     final ConventionBundleSource conventionSource = OpenGammaExecutionContext.getConventionBundleSource(executionContext);
@@ -149,7 +150,7 @@ public abstract class IRFutureOptionSABRFunction extends AbstractFunction.NonCom
     if (dayCount == null) {
       throw new OpenGammaRuntimeException("Could not get daycount");
     }
-    final SABRInterestRateDataBundle data = new SABRInterestRateDataBundle(getModelParameters(target, inputs, dayCount), curves);
+    final SABRInterestRateDataBundle data = new SABRInterestRateDataBundle(getModelParameters(inputs, dayCount), curves);
     final InstrumentDefinition<InstrumentDerivative> irFutureOptionDefinition = (InstrumentDefinition<InstrumentDerivative>) getConverter(executionContext).convert(trade);
     final InstrumentDerivative irFutureOption = _dataConverter.convert(trade.getSecurity(), irFutureOptionDefinition, now, curveNames, timeSeries);
     return getResult(executionContext, desiredValues, inputs, target, irFutureOption, data);
@@ -223,21 +224,12 @@ public abstract class IRFutureOptionSABRFunction extends AbstractFunction.NonCom
     final Trade trade = target.getTrade();
     final Currency currency = FinancialSecurityUtils.getCurrency(trade.getSecurity());
     final Set<ValueRequirement> requirements = new HashSet<>();
-    requirements.addAll(getCurveRequirement(trade, curveCalculationConfig, context));
+    requirements.addAll(getCurveRequirement(trade, curveCalculationConfig));
     final ValueRequirement surfaceRequirement = SABRFittingPropertyUtils.getSurfaceRequirement(desiredValue, surfaceName, currency, InstrumentTypeProperties.IR_FUTURE_OPTION);
     if (surfaceRequirement == null) {
       return null;
     }
     requirements.add(surfaceRequirement);
-    // REVIEW Andrew 2012-01-17 -- This check shouldn't be necessary; we know the security is a IRFutureOptionSecurity because of #canApplyTo
-    /*
-    final SecuritySource secSource = context.getSecuritySource();
-    final Security secFromIdBundle = secSource.getSingle(security.getExternalIdBundle());
-    if (!(secFromIdBundle instanceof IRFutureOptionSecurity)) {
-      //  LOGGER.error("Loader error: " + secFromIdBundle.toString() + " has been loaded as an InterestRateFutureOption.");
-      return null;
-    }
-     */
     final Set<ValueRequirement> timeSeriesRequirement = getTimeSeriesRequirement(context, trade);
     if (timeSeriesRequirement == null) {
       return null;
@@ -305,7 +297,7 @@ public abstract class IRFutureOptionSABRFunction extends AbstractFunction.NonCom
     return _valueRequirementNames;
   }
 
-  private Set<ValueRequirement> getCurveRequirement(final Trade trade, final String curveCalculationConfigName, final FunctionCompilationContext context) {
+  private Set<ValueRequirement> getCurveRequirement(final Trade trade, final String curveCalculationConfigName) {
     final Set<ValueRequirement> requirements = new HashSet<>();
     final MultiCurveCalculationConfig curveCalculationConfig = _curveCalculationConfigSource.getConfig(curveCalculationConfigName);
     if (curveCalculationConfig == null) {
@@ -325,7 +317,7 @@ public abstract class IRFutureOptionSABRFunction extends AbstractFunction.NonCom
     return _dataConverter.getConversionTimeSeriesRequirements(trade.getSecurity(), getConverter(context).convert(trade));
   }
 
-  private SABRInterestRateParameters getModelParameters(final ComputationTarget target, final FunctionInputs inputs, final DayCount dayCount) {
+  private SABRInterestRateParameters getModelParameters(final FunctionInputs inputs, final DayCount dayCount) {
     final Object surfacesObject = inputs.getValue(ValueRequirementNames.SABR_SURFACES);
     if (surfacesObject == null) {
       throw new OpenGammaRuntimeException("Could not get SABR fitted surfaces");

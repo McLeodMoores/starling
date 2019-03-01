@@ -213,6 +213,7 @@ public class IRFutureOptionVolatilitySurfaceDataFunction extends AbstractFunctio
       final VolatilitySurfaceData<Object, Object> optionPrices, final NodalDoublesCurve futurePrices, final ZonedDateTime now,
       final String surfaceQuoteType, final Calendar calendar, final SecuritySource securitySource) {
     double callAboveStrike = 0;
+    @SuppressWarnings("unchecked")
     final SurfaceInstrumentProvider<Number, Double> instrumentProvider =
         (SurfaceInstrumentProvider<Number, Double>) specification.getSurfaceInstrumentProvider();
     ExchangeTradedInstrumentExpiryCalculator expiryRule;

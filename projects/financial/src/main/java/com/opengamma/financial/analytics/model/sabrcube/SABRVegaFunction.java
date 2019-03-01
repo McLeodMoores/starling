@@ -61,6 +61,7 @@ import com.opengamma.util.tuple.DoublesPair;
 @Deprecated
 public abstract class SABRVegaFunction extends SABRFunction {
 
+  @SuppressWarnings("unchecked")
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
     final ValueRequirement desiredValue = desiredValues.iterator().next();

@@ -9,8 +9,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.ZonedDateTime;
 
@@ -52,13 +50,11 @@ import com.opengamma.util.money.Currency;
  * Function that computes the profit or loss since previous close,
  * as defined by {@link ValueRequirementNames#HISTORICAL_TIME_SERIES_LATEST}. This will get most recent closing price before today.
  * By intention, this will not be today's close even if it's available. Note that this may be stale, if time series aren't updated nightly, as we take latest value.
- * Illiquid securities do not trade each day..
+ * Illiquid securities do not trade each day.
  * As the name MarkToMarket implies, this simple Function applies to Trades on Exchange-Traded Securities.
  */
 public class MarkToMarketPnLFunction extends AbstractFunction.NonCompiledInvoker {
 
-  /** The logger */
-  private static final Logger LOGGER = LoggerFactory.getLogger(MarkToMarketPnLFunction.class);
 
   private final String _costOfCarryField;
   private final String _closingPriceField;
@@ -86,7 +82,7 @@ public class MarkToMarketPnLFunction extends AbstractFunction.NonCompiledInvoker
     if (FXUtils.isFXSecurity(security)) {
       return false;
     }
-    return FinancialSecurityUtils.isExchangeTraded(security) || (security instanceof BondSecurity); // See SecurityMarketValueFunction
+    return FinancialSecurityUtils.isExchangeTraded(security) || security instanceof BondSecurity; // See SecurityMarketValueFunction
   }
 
   @Override
@@ -112,7 +108,7 @@ public class MarkToMarketPnLFunction extends AbstractFunction.NonCompiledInvoker
     // Create output specification. Check for trivial cases
     final ValueSpecification valueSpecification = new ValueSpecification(getValueRequirementName(), target.toSpecification(), desiredValue.getConstraints());
     if (isNewTrade && tradeType.equalsIgnoreCase(PnLFunctionUtils.PNL_TRADE_TYPE_OPEN) ||
-        (!isNewTrade) && tradeType.equalsIgnoreCase(PnLFunctionUtils.PNL_TRADE_TYPE_NEW)) {
+        !isNewTrade && tradeType.equalsIgnoreCase(PnLFunctionUtils.PNL_TRADE_TYPE_NEW)) {
       return Sets.newHashSet(new ComputedValue(valueSpecification, 0.0));
     }
 
@@ -131,7 +127,7 @@ public class MarkToMarketPnLFunction extends AbstractFunction.NonCompiledInvoker
       if (referencePrice == null) {
         throw new NullPointerException("New Trades require a premium to compute PNL on trade date. Premium was null for " + trade.getUniqueId());
       }
-      if ((security instanceof InterestRateFutureSecurity || security instanceof IRFutureOptionSecurity) && (trade.getPremium() > 1.0)) {
+      if ((security instanceof InterestRateFutureSecurity || security instanceof IRFutureOptionSecurity) && trade.getPremium() > 1.0) {
         referencePrice /= 100.0;
       }
     } else {

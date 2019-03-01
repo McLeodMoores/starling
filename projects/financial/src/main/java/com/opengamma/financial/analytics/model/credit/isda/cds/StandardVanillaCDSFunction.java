@@ -15,8 +15,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.threeten.bp.ZonedDateTime;
 
 import com.google.common.collect.Iterables;
@@ -55,8 +53,6 @@ import com.opengamma.financial.analytics.model.credit.CreditInstrumentPropertyNa
 import com.opengamma.financial.analytics.model.credit.CreditSecurityToIdentifierVisitor;
 import com.opengamma.financial.analytics.model.credit.CreditSecurityToRecoveryRateVisitor;
 import com.opengamma.financial.analytics.model.credit.IMMDateGenerator;
-import com.opengamma.financial.convention.businessday.BusinessDayConvention;
-import com.opengamma.financial.convention.businessday.BusinessDayConventions;
 import com.opengamma.financial.credit.CdsRecoveryRateIdentifier;
 import com.opengamma.financial.security.FinancialSecurity;
 import com.opengamma.financial.security.FinancialSecurityTypes;
@@ -72,9 +68,7 @@ import com.opengamma.util.time.Tenor;
  */
 //TODO rename to make clear that these functions use the ISDA methodology (specifically, for effective dates)
 public abstract class StandardVanillaCDSFunction extends AbstractFunction.NonCompiledInvoker {
-  private static final BusinessDayConvention FOLLOWING = BusinessDayConventions.FOLLOWING;
   private final String[] _valueRequirements;
-  private static final Logger LOGGER = LoggerFactory.getLogger(StandardVanillaCDSFunction.class);
 
   public StandardVanillaCDSFunction(final String... valueRequirements) {
     ArgumentChecker.notNull(valueRequirements, "value requirements");

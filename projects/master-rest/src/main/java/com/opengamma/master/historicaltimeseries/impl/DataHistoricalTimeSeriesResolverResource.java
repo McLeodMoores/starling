@@ -77,9 +77,8 @@ public class DataHistoricalTimeSeriesResolverResource extends AbstractDataResour
     public Resolve id(@PathParam("id") final String id) {
       if (_identifierBundle == null) {
         return new Resolve(ExternalIdBundle.of(ExternalId.parse(id)), _identifierValidityDate, _dataSource, _dataProvider, _dataField, _resolutionKey);
-      } else {
-        return new Resolve(_identifierBundle.withExternalId(ExternalId.parse(id)), _identifierValidityDate, _dataSource, _dataProvider, _dataField, _resolutionKey);
       }
+      return new Resolve(_identifierBundle.withExternalId(ExternalId.parse(id)), _identifierValidityDate, _dataSource, _dataProvider, _dataField, _resolutionKey);
     }
 
     @Path("identifierValidityDate/{date}")

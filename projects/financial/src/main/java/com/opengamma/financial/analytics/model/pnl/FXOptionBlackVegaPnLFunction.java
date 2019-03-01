@@ -264,6 +264,7 @@ public class FXOptionBlackVegaPnLFunction extends AbstractFunction {
 
   private VolatilitySurfaceDefinition<Object, Object> getSurfaceDefinition(final UnorderedCurrencyPair currencyPair, final String definitionName) {
     final String fullDefinitionName = definitionName + "_" + currencyPair.getUniqueId().getValue();
+    @SuppressWarnings("unchecked")
     final VolatilitySurfaceDefinition<Object, Object> definition = (VolatilitySurfaceDefinition<Object, Object>) _volatilitySurfaceDefinitionSource.getDefinition(fullDefinitionName,
         InstrumentTypeProperties.FOREX);
     if (definition == null) {
@@ -296,6 +297,7 @@ public class FXOptionBlackVegaPnLFunction extends AbstractFunction {
   private DoubleTimeSeries<?> getPnLSeries(final VolatilitySurfaceDefinition<Object, Object> definition, final VolatilitySurfaceSpecification specification,
       final HistoricalTimeSeriesBundle timeSeriesBundle, final DoubleLabelledMatrix2D vegaMatrix, final LocalDate endDate, final LocalDate[] schedule,
       final TimeSeriesSamplingFunction samplingFunction) {
+    @SuppressWarnings("unchecked")
     final SurfaceInstrumentProvider<Object, Object> provider = (SurfaceInstrumentProvider<Object, Object>) specification.getSurfaceInstrumentProvider();
     final double[][] vegas = vegaMatrix.getValues();
     if (vegas.length != definition.getYs().length || vegas[0].length != definition.getXs().length) {

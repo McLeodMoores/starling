@@ -66,7 +66,6 @@ public final class MarketDataPointSelector implements DistinctMarketDataSelector
     return msg;
   }
 
-  @SuppressWarnings("unchecked")
   public static MarketDataSelector fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     return new MarketDataPointSelector(msg.getValue(ExternalId.class, EXTERNAL_ID));
   }

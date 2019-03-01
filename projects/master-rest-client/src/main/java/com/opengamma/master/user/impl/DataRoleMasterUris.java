@@ -90,9 +90,8 @@ public class DataRoleMasterUris {
     final UriBuilder bld = UriBuilder.fromUri(baseUri);
     if (request.getObjectId() != null) {
       return bld.path("/roles/{objectId}/eventHistory").build(request.getObjectId());
-    } else {
-      return bld.path("/roles/name/{roleName}/eventHistory").build(request.getRoleName());
     }
+    return bld.path("/roles/name/{roleName}/eventHistory").build(request.getRoleName());
   }
 
   /**

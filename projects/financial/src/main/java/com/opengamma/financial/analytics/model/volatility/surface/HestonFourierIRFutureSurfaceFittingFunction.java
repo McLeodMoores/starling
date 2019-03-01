@@ -1,11 +1,9 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.volatility.surface;
-
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,8 +12,6 @@ import java.util.Set;
 import java.util.SortedSet;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Sets;
 import com.opengamma.OpenGammaRuntimeException;
@@ -50,11 +46,12 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.DoublesPair;
 import com.opengamma.util.tuple.ObjectsPair;
 
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+
 /**
- * 
+ *
  */
 public class HestonFourierIRFutureSurfaceFittingFunction extends AbstractFunction.NonCompiledInvoker {
-  private static final Logger LOGGER = LoggerFactory.getLogger(HestonFourierIRFutureSurfaceFittingFunction.class);
   private static final double ERROR = 0.001;
   private static final HestonVolatilityFunction HESTON_FUNCTION = new HestonVolatilityFunction();
   private static final DoubleMatrix1D HESTON_INITIAL_VALUES = new DoubleMatrix1D(new double[] {1.5, 0.1, 0.1, 0.5, 0.0});
@@ -99,7 +96,7 @@ public class HestonFourierIRFutureSurfaceFittingFunction extends AbstractFunctio
     final DoubleArrayList omegaList = new DoubleArrayList();
     final DoubleArrayList rhoList = new DoubleArrayList();
     final DoubleArrayList chiSqList = new DoubleArrayList();
-    final Map<DoublesPair, DoubleMatrix2D> inverseJacobians = new HashMap<DoublesPair, DoubleMatrix2D>();
+    final Map<DoublesPair, DoubleMatrix2D> inverseJacobians = new HashMap<>();
     for (final Double t : x) {
       final List<ObjectsPair<Double, Double>> strip = volatilitySurfaceData.getYValuesForX(t);
       final int n = strip.size();

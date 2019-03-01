@@ -52,7 +52,7 @@ public abstract class SABRNoExtrapolationFunction extends SABRFunction {
         return false;
       }
       final InterestRateInstrumentType type = SwapSecurityUtils.getSwapType((SwapSecurity) security);
-      if ((type != InterestRateInstrumentType.SWAP_FIXED_CMS) && (type != InterestRateInstrumentType.SWAP_CMS_CMS) && (type != InterestRateInstrumentType.SWAP_IBOR_CMS)) {
+      if (type != InterestRateInstrumentType.SWAP_FIXED_CMS && type != InterestRateInstrumentType.SWAP_CMS_CMS && type != InterestRateInstrumentType.SWAP_IBOR_CMS) {
         return false;
       }
     }
@@ -96,7 +96,6 @@ public abstract class SABRNoExtrapolationFunction extends SABRFunction {
     final String cubeSpecificationName = desiredValue.getConstraint(SurfaceAndCubePropertyNames.PROPERTY_CUBE_SPECIFICATION);
     final String surfaceDefinitionName = desiredValue.getConstraint(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_DEFINITION);
     final String surfaceSpecificationName = desiredValue.getConstraint(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_SPECIFICATION);
-    final String cubeName = desiredValue.getConstraint(ValuePropertyNames.CUBE);
     final String fittingMethod = desiredValue.getConstraint(SmileFittingPropertyNamesAndValues.PROPERTY_FITTING_METHOD);
     final String curveCalculationConfig = desiredValue.getConstraint(ValuePropertyNames.CURVE_CALCULATION_CONFIG);
     return properties.copy()

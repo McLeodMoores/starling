@@ -34,8 +34,6 @@ public class ConfigDBCurveSpecificationBuilder implements CurveSpecificationBuil
 
   /** The curve node id mapper */
   private final ConfigSourceQuery<CurveNodeIdMapper> _queryCurveNodeIdMapper;
-  /** The curve definition source */
-  private final CurveDefinitionSource _definitionSource;
 
   /**
    * @param configSource The config source, not null
@@ -56,7 +54,6 @@ public class ConfigDBCurveSpecificationBuilder implements CurveSpecificationBuil
 
   private ConfigDBCurveSpecificationBuilder(final ConfigSourceQuery<CurveNodeIdMapper> queryCurveNodeIdMapper, final CurveDefinitionSource definitionSource) {
     _queryCurveNodeIdMapper = queryCurveNodeIdMapper;
-    _definitionSource = definitionSource;
   }
 
   public static ConfigDBCurveSpecificationBuilder init(final FunctionCompilationContext context, final FunctionDefinition function) {

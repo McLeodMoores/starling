@@ -38,10 +38,8 @@ import com.opengamma.financial.OpenGammaExecutionContext;
 import com.opengamma.financial.analytics.conversion.CreditDefaultSwapSecurityConverter;
 import com.opengamma.financial.analytics.model.credit.CreditSecurityToRecoveryRateVisitor;
 import com.opengamma.financial.analytics.model.credit.IMMDateGenerator;
-import com.opengamma.financial.convention.HolidaySourceCalendarAdapter;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
-import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.financial.credit.CdsRecoveryRateIdentifier;
 import com.opengamma.financial.security.FinancialSecurity;
 import com.opengamma.financial.security.FinancialSecurityTypes;
@@ -70,8 +68,6 @@ public class StandardVanillaAccruedCDSFunction extends AbstractFunction.NonCompi
     final LegalEntitySource legalEntitySource = OpenGammaExecutionContext.getLegalEntitySource(executionContext);
     final ZonedDateTime valuationTime = ZonedDateTime.now(executionContext.getValuationClock());
     final CreditDefaultSwapSecurity security = (CreditDefaultSwapSecurity) target.getSecurity();
-    final Calendar calendar = new HolidaySourceCalendarAdapter(holidaySource, FinancialSecurityUtils.getCurrency(
-        security));
     final CdsRecoveryRateIdentifier recoveryRateIdentifier = security.accept(new CreditSecurityToRecoveryRateVisitor(securitySource));
     final Object recoveryRateObject = inputs.getValue(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, recoveryRateIdentifier.getExternalId()));
     if (recoveryRateObject == null) {

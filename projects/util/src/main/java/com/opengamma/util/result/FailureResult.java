@@ -36,8 +36,8 @@ import com.opengamma.util.ArgumentChecker;
  */
 @BeanDefinition
 public final class FailureResult<T>
-    extends Result<T>
-    implements ImmutableBean {
+extends Result<T>
+implements ImmutableBean {
 
   /**
    * The set of failure instances.

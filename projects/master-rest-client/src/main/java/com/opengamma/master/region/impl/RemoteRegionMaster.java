@@ -27,8 +27,8 @@ import com.sun.jersey.api.client.GenericType;
  * Provides access to a remote {@link RegionMaster}.
  */
 public class RemoteRegionMaster
-    extends AbstractRemoteDocumentMaster<RegionDocument>
-    implements RegionMaster {
+extends AbstractRemoteDocumentMaster<RegionDocument>
+implements RegionMaster {
 
   /**
    * Creates an instance.
@@ -66,9 +66,8 @@ public class RemoteRegionMaster
     if (uniqueId.isVersioned()) {
       final URI uri = new DataRegionUris().uriVersion(getBaseUri(), uniqueId);
       return accessRemote(uri).get(RegionDocument.class);
-    } else {
-      return get(uniqueId, VersionCorrection.LATEST);
     }
+    return get(uniqueId, VersionCorrection.LATEST);
   }
 
   //-------------------------------------------------------------------------

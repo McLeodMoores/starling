@@ -101,6 +101,7 @@ public class InterestRateFutureOptionHestonPresentValueFunction extends Abstract
     _curveCalculationConfigSource = ConfigDBCurveCalculationConfigSource.init(context, this);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
     final ValueRequirement desiredValue = desiredValues.iterator().next();
@@ -138,7 +139,7 @@ public class InterestRateFutureOptionHestonPresentValueFunction extends Abstract
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final ValueProperties constraints = desiredValue.getConstraints();
-    final Set<ValueRequirement> requirements = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> requirements = new HashSet<>();
     final Trade trade = target.getTrade();
     final Currency currency = FinancialSecurityUtils.getCurrency(trade.getSecurity());
     final Set<String> surfaceNames = constraints.getValues(ValuePropertyNames.SURFACE);

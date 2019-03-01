@@ -89,9 +89,8 @@ public class DataUserMasterUris {
     final UriBuilder bld = UriBuilder.fromUri(baseUri);
     if (request.getObjectId() != null) {
       return bld.path("/users/{objectId}/eventHistory").build(request.getObjectId());
-    } else {
-      return bld.path("/users/name/{userName}/eventHistory").build(request.getUserName());
     }
+    return bld.path("/users/name/{userName}/eventHistory").build(request.getUserName());
   }
 
   /**

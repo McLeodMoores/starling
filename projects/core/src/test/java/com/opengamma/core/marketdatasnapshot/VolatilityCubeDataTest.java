@@ -73,7 +73,7 @@ public class VolatilityCubeDataTest extends AbstractFudgeBuilderTestCase {
           xs[count] = uniqueXValues[i];
           ys[count] = uniqueYValues[j];
           zs[count++] = uniqueZValues[k];
-          values.put(Triple.<Object, Object, Object>of(uniqueXValues[i], uniqueYValues[j], uniqueZValues[k]), vols[i][j][k]);
+          values.put(Triple.<Object, Object, Object> of(uniqueXValues[i], uniqueYValues[j], uniqueZValues[k]), vols[i][j][k]);
         }
       }
     }
@@ -134,7 +134,7 @@ public class VolatilityCubeDataTest extends AbstractFudgeBuilderTestCase {
     final double[] vols = new double[] {10., 11., 12., 13., 14., 15., 16., 17., 18., 210., 211., 212., 213., 214., 215., 216., 217., 218. };
     final Map<Triple<Object, Object, Object>, Double> values = new HashMap<>();
     for (int i = 0; i < xs.length; i++) {
-      values.put(Triple.<Object, Object, Object>of(xs[i], ys[i], zs[i]), vols[i]);
+      values.put(Triple.<Object, Object, Object> of(xs[i], ys[i], zs[i]), vols[i]);
     }
     final String name = "test";
     final VolatilityCubeData<Object, Object, Object> data = new VolatilityCubeData<>(name, name, values);

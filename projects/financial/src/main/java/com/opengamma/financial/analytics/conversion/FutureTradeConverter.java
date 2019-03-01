@@ -43,6 +43,7 @@ public class FutureTradeConverter implements TradeConverter {
    * @param trade The trade
    * @return EquityFutureDefinition
    */
+  @Override
   public InstrumentDefinitionWithData<?, Double> convert(final Trade trade) {
     ArgumentChecker.notNull(trade, "trade");
     final Security security = trade.getSecurity();
@@ -53,11 +54,10 @@ public class FutureTradeConverter implements TradeConverter {
         tradePremium = trade.getPremium(); // TODO: The trade price is stored in the trade premium.
       }
       ZonedDateTime tradeDate = DateUtils.getUTCDate(1900, 1, 1);
-      if ((trade.getTradeDate() != null) && trade.getTradeTime() != null && (trade.getTradeTime().toLocalTime() != null)) {
+      if (trade.getTradeDate() != null && trade.getTradeTime() != null && trade.getTradeTime().toLocalTime() != null) {
         tradeDate = trade.getTradeDate().atTime(trade.getTradeTime().toLocalTime()).atZone(ZoneOffset.UTC); //TODO get the real time zone
       }
-      final int quantity = trade.getQuantity().intValue();
-      final InstrumentDefinitionWithData<?, Double> tradeDefinition = securityToTrade(securityDefinition, tradePremium, tradeDate, quantity);
+      final InstrumentDefinitionWithData<?, Double> tradeDefinition = securityToTrade(securityDefinition, tradePremium, tradeDate);
       return tradeDefinition;
     }
     throw new IllegalArgumentException("Can only handle FutureSecurity");
@@ -71,7 +71,7 @@ public class FutureTradeConverter implements TradeConverter {
    * @return The tradeDefinition.
    */
   private static InstrumentDefinitionWithData<?, Double> securityToTrade(final InstrumentDefinitionWithData<?, Double> securityDefinition, final Double tradePrice,
-      final ZonedDateTime tradeDate, final int quantity) {
+      final ZonedDateTime tradeDate) {
 
     final InstrumentDefinitionVisitorAdapter<InstrumentDefinitionWithData<?, Double>, InstrumentDefinitionWithData<?, Double>> visitor =
         new InstrumentDefinitionVisitorAdapter<InstrumentDefinitionWithData<?, Double>, InstrumentDefinitionWithData<?, Double>>() {

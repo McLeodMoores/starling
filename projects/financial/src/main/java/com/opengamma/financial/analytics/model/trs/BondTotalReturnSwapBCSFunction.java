@@ -17,8 +17,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.threeten.bp.Instant;
 
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
@@ -47,7 +45,6 @@ import com.opengamma.financial.security.swap.BondTotalReturnSwapSecurity;
  */
 public class BondTotalReturnSwapBCSFunction extends BondTotalReturnSwapFunction {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(BondTotalReturnSwapBCSFunction.class);
 
   /** The curve sensitivity calculator */
   private static final InstrumentDerivativeVisitor<ParameterIssuerProviderInterface, MultipleCurrencyMulticurveSensitivity> PVCSDC =

@@ -18,7 +18,6 @@ import com.opengamma.analytics.math.curve.Curve;
 import com.opengamma.analytics.math.curve.FunctionalDoublesCurve;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
 import com.opengamma.analytics.math.curve.NodalTenorDoubleCurve;
-import com.opengamma.analytics.math.function.Function;
 import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.interpolation.LinearInterpolator1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
@@ -26,12 +25,11 @@ import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.Tenor;
 
 /**
- * 
+ *
  */
 @Test(groups = TestGroup.UNIT)
 public class MathCurveTest extends AnalyticsTestBase {
 
-  @SuppressWarnings("unchecked")
   @Test
   public void testConstantCurve() {
     Curve<Double, Double> c1 = ConstantDoublesCurve.from(4.);
@@ -42,7 +40,6 @@ public class MathCurveTest extends AnalyticsTestBase {
     assertEquals(c1, c2);
   }
 
-  @SuppressWarnings("unchecked")
   @Test
   public void testInterpolatedCurve() {
     Curve<Double, Double> c1 = InterpolatedDoublesCurve.from(new double[] {1, 2, 3, 4}, new double[] {4, 5, 6, 7}, new LinearInterpolator1D());
@@ -75,7 +72,6 @@ public class MathCurveTest extends AnalyticsTestBase {
     }
   }
 
-  @SuppressWarnings("unchecked")
   @Test
   public void testFunctionalCurve_NSS() {
     final NelsonSiegelSvennsonBondCurveModel curveBondModel = new NelsonSiegelSvennsonBondCurveModel();
@@ -88,7 +84,6 @@ public class MathCurveTest extends AnalyticsTestBase {
     assertCurveEquals(c1, c2);
   }
 
-  @SuppressWarnings("unchecked")
   @Test
   public void testFunctionalCurve_NS() {
     final NelsonSiegelBondCurveModel curveBondModel = new NelsonSiegelBondCurveModel();
@@ -101,11 +96,10 @@ public class MathCurveTest extends AnalyticsTestBase {
     assertCurveEquals(c1, c2);
   }
 
-  @SuppressWarnings("unchecked")
   @Test
   public void testNodalDoubleCurve() {
-    NodalTenorDoubleCurve c1 = NodalTenorDoubleCurve.from(new Tenor[] { Tenor.ONE_DAY, Tenor.ONE_YEAR }, new Double[] { 1.2345, 67.89 });
-    NodalTenorDoubleCurve c2 = cycleObject(NodalTenorDoubleCurve.class, c1);
+    final NodalTenorDoubleCurve c1 = NodalTenorDoubleCurve.from(new Tenor[] { Tenor.ONE_DAY, Tenor.ONE_YEAR }, new Double[] { 1.2345, 67.89 });
+    final NodalTenorDoubleCurve c2 = cycleObject(NodalTenorDoubleCurve.class, c1);
     assertTrue(c1.equals(c2));
   }
 }

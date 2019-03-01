@@ -153,6 +153,7 @@ public abstract class RawVolatilitySurfaceDataFunction extends AbstractFunction 
       return null;
     }
     final Set<ValueRequirement> result = new HashSet<>();
+    @SuppressWarnings("unchecked")
     final SurfaceInstrumentProvider<X, Y> provider = (SurfaceInstrumentProvider<X, Y>) specification.getSurfaceInstrumentProvider();
     for (final X x : definition.getXs()) {
       for (final Y y : definition.getYs()) {
@@ -314,6 +315,7 @@ public abstract class RawVolatilitySurfaceDataFunction extends AbstractFunction 
       final VolatilitySurfaceDefinition<Object, Object> definition = (VolatilitySurfaceDefinition<Object, Object>) definitionObject;
       final VolatilitySurfaceSpecification specification = (VolatilitySurfaceSpecification) specificationObject;
       final LocalDate valuationDate = LocalDate.now(executionContext.getValuationClock());
+      @SuppressWarnings("unchecked")
       final SurfaceInstrumentProvider<Object, Object> provider = (SurfaceInstrumentProvider<Object, Object>) specification.getSurfaceInstrumentProvider();
       final Map<Pair<Object, Object>, Double> volatilityValues = new HashMap<>();
       final ObjectArrayList<Object> xList = new ObjectArrayList<>();

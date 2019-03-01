@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.ircurve.calcconfig;
@@ -45,9 +45,9 @@ public class MultiCurveCalculationConfigTest extends FinancialTestBase {
   private static final LinkedHashMap<String, String[]> EXOGENOUS_CURVES;
 
   static {
-    EXOGENOUS_CURVES = new LinkedHashMap<String, String[]>();
+    EXOGENOUS_CURVES = new LinkedHashMap<>();
     EXOGENOUS_CURVES.put(DEFAULT_USD_CONFIG_NAME, new String[] {"FUNDING" });
-    CURVE_EXPOSURES = new LinkedHashMap<String, CurveInstrumentConfig>();
+    CURVE_EXPOSURES = new LinkedHashMap<>();
     CURVE_EXPOSURES.put("FUNDING", new CurveInstrumentConfig(Collections.singletonMap(StripInstrumentType.CASH, new String[] {"FUNDING" })));
     DEFAULT_USD_CONFIG = new MultiCurveCalculationConfig(DEFAULT_USD_CONFIG_NAME, DEFAULT_USD_YIELD_CURVE_NAMES, DEFAULT_USD_ID,
         DEFAULT_USD_CALCULATION_METHOD, CURVE_EXPOSURES);
@@ -64,7 +64,7 @@ public class MultiCurveCalculationConfigTest extends FinancialTestBase {
     final String name = "Extra";
     final String[] curveNames = new String[] {"FORWARD_6M", "FORWARD_12M", "FORWARD_1M" };
     final ComputationTargetSpecification target = ComputationTargetSpecification.of(Currency.USD);
-    final LinkedHashMap<String, String[]> exogenousCurves = new LinkedHashMap<String, String[]>();
+    final LinkedHashMap<String, String[]> exogenousCurves = new LinkedHashMap<>();
     exogenousCurves.put(DEFAULT_USD_CONFIG_NAME, new String[] {"FUNDING" });
     final MultiCurveCalculationConfig config = new MultiCurveCalculationConfig(name, curveNames, target, "Par Rate", CURVE_EXPOSURES, exogenousCurves);
     assertEquals(EXTRA_USD_CONFIG, config);

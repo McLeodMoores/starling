@@ -15,13 +15,6 @@ import com.opengamma.analytics.financial.credit.DebtSeniority;
 import com.opengamma.analytics.financial.credit.RestructuringClause;
 import com.opengamma.analytics.financial.credit.creditdefaultswap.definition.legacy.LegacyVanillaCreditDefaultSwapDefinition;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.StubType;
-import com.opengamma.analytics.financial.credit.obligor.CreditRating;
-import com.opengamma.analytics.financial.credit.obligor.CreditRatingFitch;
-import com.opengamma.analytics.financial.credit.obligor.CreditRatingMoodys;
-import com.opengamma.analytics.financial.credit.obligor.CreditRatingStandardAndPoors;
-import com.opengamma.analytics.financial.credit.obligor.Region;
-import com.opengamma.analytics.financial.credit.obligor.Sector;
-import com.opengamma.analytics.financial.credit.obligor.definition.Obligor;
 import com.opengamma.core.holiday.HolidaySource;
 import com.opengamma.core.legalentity.LegalEntity;
 import com.opengamma.core.region.RegionSource;
@@ -85,12 +78,7 @@ public class CreditDefaultSwapSecurityConverterDeprecated extends FinancialSecur
     final double recoveryRate = _recoveryRate;
     final boolean includeAccruedPremium = security.isIncludeAccruedPremium();
     final boolean protectionStart = security.isProtectionStart();
-    final double quotedSpread = security.getQuotedSpread();
-    final double premiumLegCoupon = security.getCoupon();
-    final double upFrontAmount = security.getUpfrontAmount().getAmount();
     final StubType stubType = security.getStubType().toAnalyticsType();
-    final ZonedDateTime cashSettlementDate = security.getCashSettlementDate();
-    final boolean adjustCashSettlementDate = security.isAdjustCashSettlementDate();
     final double coupon = security.getCoupon();
     return new LegacyVanillaCreditDefaultSwapDefinition(buySellProtection, convert(DUMMY_OBLIGOR_A), convert(DUMMY_OBLIGOR_B), convert(DUMMY_OBLIGOR_C), currency,
         debtSeniority, restructuringClause, calendar, startDate, effectiveDate, maturityDate, stubType,

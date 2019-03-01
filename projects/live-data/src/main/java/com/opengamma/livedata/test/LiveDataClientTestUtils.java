@@ -113,30 +113,29 @@ public class LiveDataClientTestUtils {
   private static FudgeRequestSender sender(final FudgeRequestSender sender, final ExecutorService executor) {
     if (executor == null) {
       return sender;
-    } else {
-      return new FudgeRequestSender() {
-
-        @Override
-        public FudgeContext getFudgeContext() {
-          return sender.getFudgeContext();
-        }
-
-        @Override
-        public void sendRequest(final FudgeMsg request, final FudgeMessageReceiver responseReceiver) {
-          executor.execute(new Runnable() {
-            @Override
-            public void run() {
-              try {
-                sender.sendRequest(request, responseReceiver);
-              } catch (final Throwable t) {
-                t.printStackTrace();
-              }
-            }
-          });
-        }
-
-      };
     }
+    return new FudgeRequestSender() {
+
+      @Override
+      public FudgeContext getFudgeContext() {
+        return sender.getFudgeContext();
+      }
+
+      @Override
+      public void sendRequest(final FudgeMsg request, final FudgeMessageReceiver responseReceiver) {
+        executor.execute(new Runnable() {
+          @Override
+          public void run() {
+            try {
+              sender.sendRequest(request, responseReceiver);
+            } catch (final Throwable t) {
+              t.printStackTrace();
+            }
+          }
+        });
+      }
+
+    };
   }
 
   private static FudgeRequestSender getEntitlementRequestSender(final StandardLiveDataServer server, final ExecutorService executor) {

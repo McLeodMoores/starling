@@ -36,7 +36,6 @@ import com.opengamma.engine.value.ValuePropertyNames;
 import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
-import com.opengamma.financial.OpenGammaCompilationContext;
 import com.opengamma.financial.config.ConfigSourceQuery;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.daycount.DayCounts;
@@ -117,7 +116,7 @@ public class ImpliedYieldCurveSpecificationFunction extends AbstractFunction {
         marketData.setDataPoint(strip.getSecurity(), 0);
       }
       final InterpolatedYieldCurveSpecificationWithSecurities curveSpecificationWithSecurities =
-          resolveToDummySecurity(getCurveSpecification(), marketData, _currency);
+          resolveToDummySecurity(getCurveSpecification(), _currency);
       return Collections.singleton(new ComputedValue(_resultSpec, curveSpecificationWithSecurities));
     }
 
@@ -128,7 +127,6 @@ public class ImpliedYieldCurveSpecificationFunction extends AbstractFunction {
   public CompiledFunctionDefinition compile(final FunctionCompilationContext context, final Instant atInstant) {
     final ZonedDateTime atInstantZDT = ZonedDateTime.ofInstant(atInstant, ZoneOffset.UTC);
     final LocalDate curveDate = atInstantZDT.toLocalDate();
-    final InterpolatedYieldCurveSpecificationBuilder curveSpecificationBuilder = OpenGammaCompilationContext.getInterpolatedYieldCurveSpecificationBuilder(context);
     final YieldCurveDefinition definition = _yieldCurveDefinition.get(_curveName + "_" + _currency.getCode());
     final InterpolatedYieldCurveSpecification curveSpecification = buildDummyCurve(curveDate, definition);
     return new CompiledImpl(atInstantZDT.with(LocalTime.MIDNIGHT).toInstant(), atInstantZDT.plusDays(1).with(LocalTime.MIDNIGHT).minusNanos(1000000).toInstant(), curveSpecification);
@@ -151,7 +149,7 @@ public class ImpliedYieldCurveSpecificationFunction extends AbstractFunction {
     return new InterpolatedYieldCurveSpecification(curveDate, definition.getName(), definition.getCurrency(), interpolator, interpolateYield, ids, definition.getRegionId());
   }
 
-  private static InterpolatedYieldCurveSpecificationWithSecurities resolveToDummySecurity(final InterpolatedYieldCurveSpecification curveSpecification, final SnapshotDataBundle marketData,
+  private static InterpolatedYieldCurveSpecificationWithSecurities resolveToDummySecurity(final InterpolatedYieldCurveSpecification curveSpecification,
       final Currency currency) {
     final Collection<FixedIncomeStripWithSecurity> securityStrips = new TreeSet<>();
     final LocalDate curveDate = curveSpecification.getCurveDate();

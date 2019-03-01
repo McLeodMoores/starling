@@ -88,7 +88,7 @@ public class EquityFuturePriceCurveFunction extends FuturePriceCurveFunction {
       final FuturePriceCurveDefinition<Object> futurePriceCurveDefinition, final ValueRequirement desiredValue, final ZonedDateTime atInstant) {
     final Set<ValueRequirement> result = new HashSet<>();
     final FuturePriceCurveInstrumentProvider<Number> futurePriceCurveProvider = (FuturePriceCurveInstrumentProvider<Number>) futurePriceCurveSpecification.getCurveInstrumentProvider();
-    final String dataFieldName = getDataFieldName(futurePriceCurveProvider, desiredValue);
+    final String dataFieldName = getDataFieldName(futurePriceCurveProvider);
     for (final Object x : futurePriceCurveDefinition.getXs()) {
       final ExternalId identifier = futurePriceCurveProvider.getInstrument((Number) x, atInstant.toLocalDate());
       result.add(new ValueRequirement(dataFieldName, ComputationTargetType.PRIMITIVE, identifier));
@@ -96,7 +96,7 @@ public class EquityFuturePriceCurveFunction extends FuturePriceCurveFunction {
     return result;
   }
 
-  private static String getDataFieldName(final FuturePriceCurveInstrumentProvider<Number> futurePriceCurveProvider, final ValueRequirement desiredValue) {
+  private static String getDataFieldName(final FuturePriceCurveInstrumentProvider<Number> futurePriceCurveProvider) {
     return futurePriceCurveProvider.getDataFieldName();
   }
 
@@ -151,7 +151,7 @@ public class EquityFuturePriceCurveFunction extends FuturePriceCurveFunction {
           return null;
         }
         final FuturePriceCurveInstrumentProvider<Number> futurePriceCurveProvider = (FuturePriceCurveInstrumentProvider<Number>) priceCurveSpecification.getCurveInstrumentProvider();
-        final String dataFieldName = getDataFieldName(futurePriceCurveProvider, desiredValue);
+        final String dataFieldName = getDataFieldName(futurePriceCurveProvider);
 
         final Set<ValueRequirement> requirements = Sets.newHashSet();
         requirements.add(getSpotRequirement(target, dataFieldName));
@@ -185,7 +185,7 @@ public class EquityFuturePriceCurveFunction extends FuturePriceCurveFunction {
         final DoubleArrayList xList = new DoubleArrayList();
         final DoubleArrayList prices = new DoubleArrayList();
         final FuturePriceCurveInstrumentProvider<Number> futurePriceCurveProvider = (FuturePriceCurveInstrumentProvider<Number>) priceCurveSpecification.getCurveInstrumentProvider();
-        final String dataFieldName = getDataFieldName(futurePriceCurveProvider, desiredValue);
+        final String dataFieldName = getDataFieldName(futurePriceCurveProvider);
         final ExchangeTradedInstrumentExpiryCalculator expiryCalc = futurePriceCurveProvider.getExpiryRuleCalculator();
         final LocalDate valDate = now.toLocalDate();
         if (inputs.getAllValues().isEmpty()) {

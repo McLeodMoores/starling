@@ -49,15 +49,13 @@ public final class YieldCurveSelector implements DistinctMarketDataSelector {
 
   @Override
   public DistinctMarketDataSelector findMatchingSelector(final ValueSpecification valueSpecification,
-                                                         final String calculationConfigurationName,
-                                                         final SelectorResolver resolver) {
+      final String calculationConfigurationName, final SelectorResolver resolver) {
     final Currency currency = Currency.of(valueSpecification.getTargetSpecification().getUniqueId().getValue());
     final String curve = valueSpecification.getProperties().getStrictValue(ValuePropertyNames.CURVE);
     if (_key.getName().equals(curve) && _key.getCurrency().equals(currency)) {
       return this;
-    } else {
-      return null;
     }
+    return null;
   }
 
   public MutableFudgeMsg toFudgeMsg(final FudgeSerializer serializer) {
@@ -66,7 +64,6 @@ public final class YieldCurveSelector implements DistinctMarketDataSelector {
     return msg;
   }
 
-  @SuppressWarnings("unchecked")
   public static MarketDataSelector fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     final YieldCurveKey key = deserializer.fieldValueToObject(YieldCurveKey.class, msg.getByName(KEY));
     return new YieldCurveSelector(key);

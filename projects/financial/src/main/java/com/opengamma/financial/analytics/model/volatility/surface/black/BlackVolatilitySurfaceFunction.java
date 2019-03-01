@@ -72,13 +72,13 @@ public abstract class BlackVolatilitySurfaceFunction extends AbstractFunction.No
     }
     final ValueRequirement forwardCurveRequirement = getForwardCurveRequirement(target, desiredValue);
     final ValueRequirement volatilitySurfaceRequirement = getVolatilityDataRequirement(target, surfaceName);
-    final ValueRequirement interpolatorRequirement = getInterpolatorRequirement(target, desiredValue);
+    final ValueRequirement interpolatorRequirement = getInterpolatorRequirement(desiredValue);
     return Sets.newHashSet(forwardCurveRequirement, volatilitySurfaceRequirement, interpolatorRequirement);
   }
 
   /**
    * Gets the data in a form that the analytics library can understand
-   * 
+   *
    * @param inputs The inputs
    * @return The data
    */
@@ -86,34 +86,34 @@ public abstract class BlackVolatilitySurfaceFunction extends AbstractFunction.No
 
   /**
    * Gets the instrument type supported by the function
-   * 
+   *
    * @return The instrument type
    */
   protected abstract String getInstrumentType();
 
   /**
    * Gets general result properties
-   * 
+   *
    * @return The result properties
    */
   protected abstract ValueProperties getResultProperties();
 
   /**
    * Gets result properties with the constraints set
-   * 
+   *
    * @param desiredValue The desired value
    * @return The result properties
    */
   protected abstract ValueProperties getResultProperties(final ValueRequirement desiredValue);
 
-  private ValueRequirement getInterpolatorRequirement(final ComputationTarget target, final ValueRequirement desiredValue) {
+  private ValueRequirement getInterpolatorRequirement(final ValueRequirement desiredValue) {
     return new ValueRequirement(ValueRequirementNames.BLACK_VOLATILITY_SURFACE_INTERPOLATOR, ComputationTargetSpecification.NULL,
         BlackVolatilitySurfacePropertyUtils.addVolatilityInterpolatorProperties(ValueProperties.builder().get(), desiredValue).get());
   }
 
   /**
    * Gets the forward curve requirement
-   * 
+   *
    * @param target The target
    * @param desiredValue The desired value
    * @return The forward curve requirement
@@ -122,7 +122,7 @@ public abstract class BlackVolatilitySurfaceFunction extends AbstractFunction.No
 
   /**
    * Gets the volatility surface data requirement
-   * 
+   *
    * @param target The target
    * @param surfaceName The surface name
    * @return The volatility surface data requirement

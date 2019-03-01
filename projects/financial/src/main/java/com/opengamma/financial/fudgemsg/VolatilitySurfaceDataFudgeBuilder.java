@@ -58,6 +58,7 @@ public class VolatilitySurfaceDataFudgeBuilder implements FudgeBuilder<Volatilit
   /** The y labels field */
   private static final String Y_LABEL_FIELD = "yLabel";
 
+  @SuppressWarnings("unchecked")
   @Override
   public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final VolatilitySurfaceData<?, ?> object) {
     final MutableFudgeMsg message = serializer.newMessage();

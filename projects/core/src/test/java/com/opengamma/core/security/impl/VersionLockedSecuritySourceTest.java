@@ -31,7 +31,7 @@ import com.opengamma.util.test.TestGroup;
  * Tests the {@link VersionLockedSecuritySource} class.
  */
 @Test(groups = TestGroup.UNIT)
-@SuppressWarnings({ "deprecation", "javadoc" })
+@SuppressWarnings({ "deprecation" })
 public class VersionLockedSecuritySourceTest {
 
   /**

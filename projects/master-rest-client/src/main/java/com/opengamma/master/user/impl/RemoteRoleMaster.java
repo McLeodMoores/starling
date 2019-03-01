@@ -28,8 +28,8 @@ import com.sun.jersey.api.client.ClientResponse;
  * Provides access to a remote {@link RoleMaster}.
  */
 public class RemoteRoleMaster
-    extends AbstractRemoteMaster
-    implements RoleMaster {
+extends AbstractRemoteMaster
+implements RoleMaster {
 
   /**
    * Creates an instance.
@@ -99,9 +99,8 @@ public class RemoteRoleMaster
     ArgumentChecker.notNull(role, "role");
     if (role.getUniqueId() != null) {
       return update(role);
-    } else {
-      return add(role);
     }
+    return add(role);
   }
 
   @Override

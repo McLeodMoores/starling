@@ -18,7 +18,6 @@ import com.opengamma.financial.convention.frequency.SimpleFrequency;
 import com.opengamma.financial.security.FinancialSecurityVisitorAdapter;
 import com.opengamma.financial.security.cds.LegacyVanillaCDSSecurity;
 import com.opengamma.financial.security.cds.StandardVanillaCDSSecurity;
-import com.opengamma.id.ExternalId;
 
 /**
  * Creates a {@link CDSAnalytic} object from the security
@@ -28,7 +27,6 @@ public class CDSAnalyticVisitor extends FinancialSecurityVisitorAdapter<CDSAnaly
 
   private final LocalDate _valuationDate;
   private final HolidaySource _holidaySource;
-  private final RegionSource _regionSource;
   private final LocalDate _startDate;
   private final LocalDate _maturityDate;
   private final double _recoveryRate;
@@ -36,7 +34,6 @@ public class CDSAnalyticVisitor extends FinancialSecurityVisitorAdapter<CDSAnaly
   public CDSAnalyticVisitor(final LocalDate valuationDate, final HolidaySource holidaySource, final RegionSource regionSource, final double recoveryRate) {
     _valuationDate = valuationDate;
     _holidaySource = holidaySource;
-    _regionSource = regionSource;
     _startDate = null;
     _maturityDate = null;
     _recoveryRate = recoveryRate;
@@ -54,7 +51,6 @@ public class CDSAnalyticVisitor extends FinancialSecurityVisitorAdapter<CDSAnaly
                             final LocalDate startDate, final LocalDate maturityDate, final double recoveryRate) {
     _valuationDate = valuationDate;
     _holidaySource = holidaySource;
-    _regionSource = regionSource;
     _startDate = startDate;
     _maturityDate = maturityDate;
     _recoveryRate = recoveryRate;
@@ -64,7 +60,7 @@ public class CDSAnalyticVisitor extends FinancialSecurityVisitorAdapter<CDSAnaly
   public CDSAnalytic visitLegacyVanillaCDSSecurity(final LegacyVanillaCDSSecurity security) {
     final Calendar calendar = new HolidaySourceCalendarAdapter(_holidaySource, security.getNotional().getCurrency());
     final StubType stubType = security.getStubType().toAnalyticsType();
-    final Period period = (IMMDateGenerator.isIMMDate(security.getMaturityDate())) ? getPeriodFrequency(security.getCouponFrequency()).getPeriod() :
+    final Period period = IMMDateGenerator.isIMMDate(security.getMaturityDate()) ? getPeriodFrequency(security.getCouponFrequency()).getPeriod() :
         Period.ofMonths(6); // non IMM forced to semi annual
     final CDSAnalytic cdsAnalytic = new CDSAnalytic(_valuationDate,
                                                     security.getEffectiveDate().toLocalDate(),
@@ -87,7 +83,7 @@ public class CDSAnalyticVisitor extends FinancialSecurityVisitorAdapter<CDSAnaly
   public CDSAnalytic visitStandardVanillaCDSSecurity(final StandardVanillaCDSSecurity security) {
     final Calendar calendar = new HolidaySourceCalendarAdapter(_holidaySource, security.getNotional().getCurrency());
     final StubType stubType = security.getStubType().toAnalyticsType();
-    final Period period = (IMMDateGenerator.isIMMDate(security.getMaturityDate())) ? getPeriodFrequency(security.getCouponFrequency()).getPeriod() :
+    final Period period = IMMDateGenerator.isIMMDate(security.getMaturityDate()) ? getPeriodFrequency(security.getCouponFrequency()).getPeriod() :
         Period.ofMonths(6); // non IMM forced to semi annual
     final CDSAnalytic cdsAnalytic = new CDSAnalytic(_valuationDate,
                                                     security.getEffectiveDate().toLocalDate(),

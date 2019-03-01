@@ -28,7 +28,6 @@ import com.opengamma.web.AbstractBeanTestCase;
  */
 @Test(groups = TestGroup.UNIT)
 public class WebPositionsDataTest extends AbstractBeanTestCase {
-  private static final String NAME = "position";
   private static final String POSITION_URI = "pos";
   private static final String VERSION_URI = "version=1";
   private static final ManageablePosition POSITION = new ManageablePosition(BigDecimal.TEN, ExternalId.of("sec", "1"));

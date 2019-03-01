@@ -28,7 +28,6 @@ import com.opengamma.analytics.financial.schedule.ScheduleCalculatorFactory;
 import com.opengamma.analytics.financial.schedule.TimeSeriesSamplingFunction;
 import com.opengamma.analytics.financial.schedule.TimeSeriesSamplingFunctionFactory;
 import com.opengamma.analytics.financial.timeseries.util.TimeSeriesDifferenceOperator;
-import com.opengamma.core.config.ConfigSource;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeries;
 import com.opengamma.core.position.Position;
 import com.opengamma.core.security.Security;
@@ -83,7 +82,7 @@ public class YieldCurveNodePnLFunction extends AbstractFunction.NonCompiledInvok
   // Please see http://jira.opengamma.com/browse/PLAT-2330 for information about this constant.
   /**
    * Property name of the contribution to the P&L (e.g. yield curve, FX rate)
-   * 
+   *
    * @deprecated Use {@link ValuePropertyNames#PROPERTY_PNL_CONTRIBUTIONS} instead
    */
   @Deprecated
@@ -105,7 +104,6 @@ public class YieldCurveNodePnLFunction extends AbstractFunction.NonCompiledInvok
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
     final Position position = target.getPosition();
-    final ConfigSource configSource = OpenGammaExecutionContext.getConfigSource(executionContext);
     final Clock snapshotClock = executionContext.getValuationClock();
     final LocalDate now = ZonedDateTime.now(snapshotClock).toLocalDate();
     final Currency currency = FinancialSecurityUtils.getCurrency(position.getSecurity());
@@ -132,6 +130,7 @@ public class YieldCurveNodePnLFunction extends AbstractFunction.NonCompiledInvok
     boolean isInverse = true;
     if (!desiredCurrency.equals(currencyString)) {
       if (inputs.getValue(ValueRequirementNames.HISTORICAL_FX_TIME_SERIES) != null) {
+        @SuppressWarnings("unchecked")
         final Map<UnorderedCurrencyPair, DoubleTimeSeries<?>> allFXSeries = (Map<UnorderedCurrencyPair, DoubleTimeSeries<?>>) inputs
             .getValue(ValueRequirementNames.HISTORICAL_FX_TIME_SERIES);
         final CurrencyPairs currencyPairs = OpenGammaExecutionContext.getCurrencyPairsSource(executionContext).getCurrencyPairs(CurrencyPairs.DEFAULT_CURRENCY_PAIRS);
@@ -314,7 +313,7 @@ public class YieldCurveNodePnLFunction extends AbstractFunction.NonCompiledInvok
 
   /**
    * Creates the result properties for the P&L series
-   * 
+   *
    * @param desiredValue The desired value
    * @param currency The currency
    * @param curveNames The curve names
@@ -416,7 +415,7 @@ public class YieldCurveNodePnLFunction extends AbstractFunction.NonCompiledInvok
 
   /**
    * Given a yield curve name, returns the yield curve node sensitivities requirement for that name
-   * 
+   *
    * @param currencyString The currency
    * @param curveCalculationConfigName The curve calculation configuration
    * @param yieldCurveName The yield curve name

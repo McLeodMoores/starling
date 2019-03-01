@@ -110,7 +110,7 @@ public abstract class AbstractTradeOrDailyPositionPnLFunction extends AbstractFu
     LocalDate tradeDate = getPreferredTradeDate(executionContext.getValuationClock(), trade);
     tradeDate = checkAvailableData(tradeDate, htsMarkToMarket, security, _mark2MarketField, _resolutionKey);
     final ValueSpecification valueSpecification = new ValueSpecification(getResultValueRequirementName(), target.toSpecification(), desiredValue.getConstraints());
-    final double costOfCarry = getCostOfCarry(security, tradeDate, htsCostOfCarry);
+    final double costOfCarry = getCostOfCarry(tradeDate, htsCostOfCarry);
     Double markToMarket = htsMarkToMarket.getTimeSeries().getValue(tradeDate);
     if (security instanceof FutureSecurity) {
       final FutureSecurity futureSecurity = (FutureSecurity) security;
@@ -123,7 +123,7 @@ public abstract class AbstractTradeOrDailyPositionPnLFunction extends AbstractFu
     return Sets.newHashSet(result);
   }
 
-  private double getCostOfCarry(final Security security, final LocalDate tradeDate, final HistoricalTimeSeries costOfCarryTS) {
+  private double getCostOfCarry(final LocalDate tradeDate, final HistoricalTimeSeries costOfCarryTS) {
     double result = 0.0d;
     if (costOfCarryTS != null) {
       final Double histCost = costOfCarryTS.getTimeSeries().getValue(tradeDate);

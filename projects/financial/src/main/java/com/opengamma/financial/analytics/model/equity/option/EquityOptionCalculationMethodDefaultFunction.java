@@ -33,9 +33,6 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class EquityOptionCalculationMethodDefaultFunction extends StaticDefaultPropertyFunction {
 
-  /** The priority of this set of defaults */
-  private final PriorityClass _priority;
-
   /** The CalculationMethod for EQUITY_OPTION_SECURITY */
   private final Set<String> _equityOptionMethod;
 
@@ -94,7 +91,6 @@ public class EquityOptionCalculationMethodDefaultFunction extends StaticDefaultP
     ArgumentChecker.notNull(equityIndexOptionMethod, "No CalculationMethod provided for " + FinancialSecurityTypes.EQUITY_INDEX_OPTION_SECURITY);
     ArgumentChecker.notNull(equityIndexFutureOptionMethod, "No CalculationMethod provided for " + FinancialSecurityTypes.EQUITY_INDEX_FUTURE_OPTION_SECURITY);
     ArgumentChecker.notNull(equityBarrierOptionMethod, "No CalculationMethod provided for " + FinancialSecurityTypes.EQUITY_BARRIER_OPTION_SECURITY);
-    _priority = PriorityClass.valueOf(priority);
     _equityOptionMethod = Collections.singleton(equityOptionMethod);
     _equityIndexOptionMethod = Collections.singleton(equityIndexOptionMethod);
     _equityIndexFutureOptionMethod = Collections.singleton(equityIndexFutureOptionMethod);
@@ -111,7 +107,6 @@ public class EquityOptionCalculationMethodDefaultFunction extends StaticDefaultP
     ArgumentChecker.notNull(equityOptionMethod, "No CalculationMethod provided for " + FinancialSecurityTypes.EQUITY_OPTION_SECURITY);
     ArgumentChecker.notNull(equityIndexOptionMethod, "No CalculationMethod provided for " + FinancialSecurityTypes.EQUITY_INDEX_OPTION_SECURITY);
     ArgumentChecker.notNull(equityIndexFutureOptionMethod, "No CalculationMethod provided for " + FinancialSecurityTypes.EQUITY_INDEX_FUTURE_OPTION_SECURITY);
-    _priority = PriorityClass.valueOf(priority);
     _equityOptionMethod = Collections.singleton(equityOptionMethod);
     _equityIndexOptionMethod = Collections.singleton(equityIndexOptionMethod);
     _equityIndexFutureOptionMethod = Collections.singleton(equityIndexFutureOptionMethod);
@@ -130,7 +125,6 @@ public class EquityOptionCalculationMethodDefaultFunction extends StaticDefaultP
         true, VALUE_REQUIREMENTS);
     ArgumentChecker.notNull(priority, "priority");
     ArgumentChecker.notNull(calculationMethod, "No CalculationMethod provided");
-    _priority = PriorityClass.valueOf(priority);
     _equityOptionMethod = Collections.singleton(calculationMethod);
     _equityIndexOptionMethod = Collections.singleton(calculationMethod);
     _equityIndexFutureOptionMethod = Collections.singleton(calculationMethod);

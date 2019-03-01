@@ -90,6 +90,7 @@ public class TimeSeriesFunctions extends AbstractFunctionConfigurationBean {
       return _configMaster;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
       // search for the names of implied deposit curves and exclude from historical time series function
@@ -98,7 +99,6 @@ public class TimeSeriesFunctions extends AbstractFunctionConfigurationBean {
       searchRequest.setType(MultiCurveCalculationConfig.class);
       searchRequest.setVersionCorrection(getVersionCorrection());
       for (final ConfigDocument configDocument : ConfigSearchIterator.iterable(_configMaster, searchRequest)) {
-        final String documentName = configDocument.getName();
         final MultiCurveCalculationConfig config = ((ConfigItem<MultiCurveCalculationConfig>) configDocument.getConfig()).getValue();
         if (config.getCalculationMethod().equals(ImpliedDepositCurveFunction.IMPLIED_DEPOSIT)) {
           excludedCurves.addAll(Arrays.asList(config.getYieldCurveNames()));

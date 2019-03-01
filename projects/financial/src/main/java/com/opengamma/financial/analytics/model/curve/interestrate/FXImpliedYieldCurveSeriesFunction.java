@@ -26,7 +26,6 @@ import static com.opengamma.financial.analytics.timeseries.HistoricalTimeSeriesF
 import static com.opengamma.financial.analytics.timeseries.HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY;
 import static com.opengamma.financial.analytics.timeseries.HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY;
 import static com.opengamma.financial.analytics.timeseries.HistoricalTimeSeriesFunctionUtils.YES_VALUE;
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -114,9 +113,11 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.UnorderedCurrencyPair;
 import com.opengamma.util.time.Tenor;
 
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+
 /**
  * Constructs a single yield curve and its Jacobian from exogenously-supplied yield curves and a {@link FXForwardCurveDefinition} and {@link FXForwardCurveSpecification}.
- * 
+ *
  * @deprecated This function uses configuration objects that have been superseded. Use functions that descend from {@link MultiCurveFunction}. Curves that use FX forwards directly in
  *             {@link CurveDefinition} (see {@link FXForwardNode}) are constructed in these classes.
  */
@@ -203,6 +204,7 @@ public class FXImpliedYieldCurveSeriesFunction extends AbstractFunction.NonCompi
       throw new OpenGammaRuntimeException("Could not get spot FX time series");
     }
     final LocalDateDoubleTimeSeries spotTS = spotTimeSeries.getTimeSeries();
+    @SuppressWarnings("unchecked")
     final Map<LocalDate, YieldAndDiscountCurve> foreignCurves = (Map<LocalDate, YieldAndDiscountCurve>) foreignCurveObject;
     final Map<LocalDate, YieldAndDiscountCurve> domesticCurves = new LinkedHashMap<>();
     final Calendar calendar = CalendarUtils.getCalendar(holidaySource, domesticCurrency, foreignCurrency);
@@ -299,7 +301,7 @@ public class FXImpliedYieldCurveSeriesFunction extends AbstractFunction.NonCompi
         final YieldCurve curve = YieldCurve.from(InterpolatedDoublesCurve.from(nodeTimes.toDoubleArray(), fittedYields, interpolator));
 
         domesticCurves.put(valuationDate, curve);
-      } catch (Exception e) {
+      } catch (final Exception e) {
         LOGGER.error("Exception building domestic curve for valuation date " + valuationDate, e);
       }
     }
@@ -355,13 +357,13 @@ public class FXImpliedYieldCurveSeriesFunction extends AbstractFunction.NonCompi
     }
     ValueProperties.Builder seriesConstraints = null;
     Set<String> values = desiredValue.getConstraints().getValues(DATA_FIELD_PROPERTY);
-    if ((values == null) || values.isEmpty()) {
+    if (values == null || values.isEmpty()) {
       seriesConstraints = desiredValue.getConstraints().copy().with(DATA_FIELD_PROPERTY, MarketDataRequirementNames.MARKET_VALUE);
     } else if (values.size() > 1) {
       seriesConstraints = desiredValue.getConstraints().copy().withoutAny(DATA_FIELD_PROPERTY).with(DATA_FIELD_PROPERTY, values.iterator().next());
     }
     values = desiredValue.getConstraints().getValues(RESOLUTION_KEY_PROPERTY);
-    if ((values == null) || values.isEmpty()) {
+    if (values == null || values.isEmpty()) {
       if (seriesConstraints == null) {
         seriesConstraints = desiredValue.getConstraints().copy();
       }
@@ -373,28 +375,28 @@ public class FXImpliedYieldCurveSeriesFunction extends AbstractFunction.NonCompi
       seriesConstraints.withoutAny(RESOLUTION_KEY_PROPERTY).with(RESOLUTION_KEY_PROPERTY, values.iterator().next());
     }
     values = desiredValue.getConstraints().getValues(START_DATE_PROPERTY);
-    if ((values == null) || values.isEmpty()) {
+    if (values == null || values.isEmpty()) {
       if (seriesConstraints == null) {
         seriesConstraints = desiredValue.getConstraints().copy();
       }
       seriesConstraints.with(START_DATE_PROPERTY, "Null");
     }
     values = desiredValue.getConstraints().getValues(INCLUDE_START_PROPERTY);
-    if ((values == null) || (values.size() != 1)) {
+    if (values == null || values.size() != 1) {
       if (seriesConstraints == null) {
         seriesConstraints = desiredValue.getConstraints().copy();
       }
       seriesConstraints.with(INCLUDE_START_PROPERTY, YES_VALUE);
     }
     values = desiredValue.getConstraints().getValues(END_DATE_PROPERTY);
-    if ((values == null) || values.isEmpty()) {
+    if (values == null || values.isEmpty()) {
       if (seriesConstraints == null) {
         seriesConstraints = desiredValue.getConstraints().copy();
       }
       seriesConstraints.with(END_DATE_PROPERTY, "Now");
     }
     values = desiredValue.getConstraints().getValues(INCLUDE_END_PROPERTY);
-    if ((values == null) || (values.size() != 1)) {
+    if (values == null || values.size() != 1) {
       if (seriesConstraints == null) {
         seriesConstraints = desiredValue.getConstraints().copy();
       }
@@ -514,7 +516,6 @@ public class FXImpliedYieldCurveSeriesFunction extends AbstractFunction.NonCompi
         .withOptional(CURVE_CALCULATION_CONFIG).get();
     final String foreignCurveName = foreignCurveConfigNames.getValue()[0];
     final ValueProperties foreignCurveProperties = getForeignCurveProperties(foreignConfig, foreignCurveName, constraints);
-    final FXForwardCurveInstrumentProvider provider = fxForwardCurveSpec.getCurveInstrumentProvider();
     final ComputationTargetSpecification currencyTarget = ComputationTargetSpecification.of(foreignCurrency);
     requirements
         .add(new ValueRequirement(FX_FORWARD_CURVE_HISTORICAL_TIME_SERIES, ComputationTargetType.UNORDERED_CURRENCY_PAIR.specification(currencyPair), fxForwardCurveSeriesProperties));
@@ -554,7 +555,7 @@ public class FXImpliedYieldCurveSeriesFunction extends AbstractFunction.NonCompi
 
   /**
    * Gets the properties for the FX forward curve
-   * 
+   *
    * @param forwardCurveName The forward curve name
    * @return The forward curve properties
    */
@@ -567,7 +568,7 @@ public class FXImpliedYieldCurveSeriesFunction extends AbstractFunction.NonCompi
 
   /**
    * Gets the properties for the foreign curve i.e. the fixed yield curve that is being used to imply the yield curve.
-   * 
+   *
    * @param foreignConfig The foreign curve configuration name
    * @param foreignCurveName The foreign curve name
    * @return The foreign curve properties
@@ -582,7 +583,7 @@ public class FXImpliedYieldCurveSeriesFunction extends AbstractFunction.NonCompi
 
   /**
    * Gets the properties of the implied yield curve with no values set.
-   * 
+   *
    * @return The properties
    */
   private ValueProperties getCurveSeriesProperties() {
@@ -594,7 +595,7 @@ public class FXImpliedYieldCurveSeriesFunction extends AbstractFunction.NonCompi
 
   /**
    * Gets the properties of the implied yield curve with no values set.
-   * 
+   *
    * @return The properties
    */
   private ValueProperties getCurveSeriesProperties(final String curveCalculationConfigName, final String curveName) {
@@ -607,7 +608,7 @@ public class FXImpliedYieldCurveSeriesFunction extends AbstractFunction.NonCompi
 
   /**
    * Gets the bundle containing historical values for the FX forward curve.
-   * 
+   *
    * @param inputs The inputs
    * @param targetSpec The specification of the historical data
    * @param curveName The curve name

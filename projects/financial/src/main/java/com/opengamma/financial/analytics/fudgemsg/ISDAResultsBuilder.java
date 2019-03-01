@@ -53,9 +53,7 @@ final class ISDAResultsBuilder {
   @FudgeBuilderFor(ISDACompliantYieldCurve.class)
   public static final class ISDACompliantYieldCurveBuilder extends AbstractFudgeBuilder<ISDACompliantYieldCurve> {
     private static final String T_FIELD_NAME = "t";
-    private static final String R_FIELD_NAME = "r";
     private static final String RT_FIELD_NAME = "rt";
-    private static final String DF_FIELD_NAME = "df";
 
     @Override
     public ISDACompliantYieldCurve buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {

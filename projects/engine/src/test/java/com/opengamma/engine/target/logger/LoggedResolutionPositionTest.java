@@ -105,7 +105,6 @@ public class LoggedResolutionPositionTest {
     Mockito.verifyNoMoreInteractions(logger);
   }
 
-  @SuppressWarnings("unchecked")
   public void getAttributes() {
     final Position position = Mockito.mock(Position.class);
     final ResolutionLogger logger = Mockito.mock(ResolutionLogger.class);

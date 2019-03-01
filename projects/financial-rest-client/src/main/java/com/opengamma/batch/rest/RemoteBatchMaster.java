@@ -11,7 +11,6 @@ import java.net.URI;
 import java.util.List;
 
 import com.opengamma.batch.BatchMaster;
-import com.opengamma.batch.rest.BatchRunSearchRequest;
 import com.opengamma.batch.domain.MarketData;
 import com.opengamma.batch.domain.MarketDataValue;
 import com.opengamma.batch.domain.RiskRun;
@@ -38,7 +37,6 @@ public class RemoteBatchMaster extends AbstractRemoteMaster implements BatchMast
   }
 
 
-  @SuppressWarnings("unchecked")
   @Override
   public Pair<List<RiskRun>, Paging> searchRiskRun(final BatchRunSearchRequest batchRunSearchRequest) {
     ArgumentChecker.notNull(batchRunSearchRequest, "batchRunSearchRequest");
@@ -60,7 +58,6 @@ public class RemoteBatchMaster extends AbstractRemoteMaster implements BatchMast
     accessRemote(uri).delete();
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public Pair<List<ViewResultEntry>, Paging> getBatchValues(final ObjectId batchId, final PagingRequest pagingRequest) {
     ArgumentChecker.notNull(batchId, "batchId");
@@ -71,7 +68,6 @@ public class RemoteBatchMaster extends AbstractRemoteMaster implements BatchMast
   //////////////////////////////////
 
 
-  @SuppressWarnings("unchecked")
   @Override
   public Pair<List<MarketData>, Paging> getMarketData(final PagingRequest pagingRequest) {
     final URI uri = DataMarketDataUris.uriMarketData(getBaseUri());
@@ -84,7 +80,6 @@ public class RemoteBatchMaster extends AbstractRemoteMaster implements BatchMast
     return accessRemote(uri).get(MarketData.class);
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public Pair<List<MarketDataValue>, Paging> getMarketDataValues(final ObjectId marketDataId, final PagingRequest pagingRequest) {
     final URI uri = DataMarketDataUris.uriMarketDataValues(getBaseUri(), marketDataId);

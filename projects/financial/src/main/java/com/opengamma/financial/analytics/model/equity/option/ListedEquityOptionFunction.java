@@ -45,7 +45,6 @@ import com.opengamma.financial.analytics.conversion.BondFutureSecurityConverter;
 import com.opengamma.financial.analytics.conversion.BondSecurityConverter;
 import com.opengamma.financial.analytics.conversion.EquityOptionsConverter;
 import com.opengamma.financial.analytics.conversion.FutureSecurityConverterDeprecated;
-import com.opengamma.financial.analytics.conversion.InterestRateFutureSecurityConverterDeprecated;
 import com.opengamma.financial.analytics.model.CalculationPropertyNamesAndValues;
 import com.opengamma.financial.analytics.model.InstrumentTypeProperties;
 import com.opengamma.financial.analytics.model.curve.forward.ForwardCurveValuePropertyNames;
@@ -107,7 +106,6 @@ public abstract class ListedEquityOptionFunction extends AbstractFunction.NonCom
     final RegionSource regionSource = OpenGammaCompilationContext.getRegionSource(context);
     final ConventionBundleSource conventionSource = OpenGammaCompilationContext.getConventionBundleSource(context);
     final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
-    final InterestRateFutureSecurityConverterDeprecated irFutureConverter = new InterestRateFutureSecurityConverterDeprecated(holidaySource, conventionSource, regionSource);
     final BondSecurityConverter bondConverter = new BondSecurityConverter(holidaySource, conventionSource, regionSource);
     final BondFutureSecurityConverter bondFutureConverter = new BondFutureSecurityConverter(securitySource, bondConverter);
     final FutureSecurityConverterDeprecated futureSecurityConverter = new FutureSecurityConverterDeprecated(bondFutureConverter);

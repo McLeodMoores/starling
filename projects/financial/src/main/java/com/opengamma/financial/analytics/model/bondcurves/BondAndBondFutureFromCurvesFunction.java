@@ -82,6 +82,7 @@ public abstract class BondAndBondFutureFromCurvesFunction<S extends ParameterIss
     _instrumentExposuresProvider = ConfigDBInstrumentExposuresProvider.init(context, this);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
       final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {

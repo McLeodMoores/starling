@@ -19,7 +19,6 @@ import org.threeten.bp.ZonedDateTime;
 import com.google.common.collect.Iterables;
 import com.opengamma.analytics.financial.credit.creditdefaultswap.definition.vanilla.CreditDefaultSwapDefinition;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.CDSAnalytic;
-import com.opengamma.analytics.financial.credit.isdastandardmodel.FiniteDifferenceSpreadSensitivityCalculator;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.ISDACompliantCreditCurve;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.ISDACompliantYieldCurve;
 import com.opengamma.engine.ComputationTarget;
@@ -44,7 +43,6 @@ import com.opengamma.util.time.Tenor;
  *
  */
 public class ISDACDXAsSingleNameBucketedCS01Function extends ISDACDXAsSingleNameCS01Function {
-  private static final FiniteDifferenceSpreadSensitivityCalculator CALCULATOR = new FiniteDifferenceSpreadSensitivityCalculator();
 
   public ISDACDXAsSingleNameBucketedCS01Function() {
     super(ValueRequirementNames.BUCKETED_CS01);

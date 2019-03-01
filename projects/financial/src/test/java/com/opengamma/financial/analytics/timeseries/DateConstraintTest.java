@@ -101,7 +101,7 @@ public class DateConstraintTest {
     assertEquals(x.periodUntil(DateConstraint.of(nowDate)), Period.of(2, 10, 10));
   }
 
-  private void testPlusMinus(final DateConstraint base) {
+  private static void testPlusMinus(final DateConstraint base) {
     assertEquals(base.plus(Period.ofDays(7)).plus(Period.ofDays(7)), base.plus(Period.ofDays(14)));
     assertEquals(base.minus(Period.ofDays(7)).minus(Period.ofDays(7)), base.minus(Period.ofDays(14)));
     assertEquals(base.plus(Period.ofDays(7)).minus(Period.ofDays(7)), base);
@@ -116,7 +116,7 @@ public class DateConstraintTest {
     testPlusMinus(DateConstraint.VALUATION_TIME.previousWeekDay());
   }
 
-  private void testWeekDay(final DateConstraint base) {
+  private static void testWeekDay(final DateConstraint base) {
     assertEquals(base.previousWeekDay().nextWeekDay(), base);
     assertEquals(base.nextWeekDay().previousWeekDay(), base);
   }

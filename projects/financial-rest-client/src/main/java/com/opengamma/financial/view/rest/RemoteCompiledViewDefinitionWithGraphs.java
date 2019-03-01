@@ -99,28 +99,24 @@ public class RemoteCompiledViewDefinitionWithGraphs implements CompiledViewDefin
     return _client.accessFudge(uri).get(CompiledViewCalculationConfiguration.class);
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public Collection<CompiledViewCalculationConfiguration> getCompiledCalculationConfigurations() {
     final URI uri = UriBuilder.fromUri(_baseUri).path(DataCompiledViewDefinitionUris.PATH_COMPILED_CALCULATION_CONFIGURATIONS).build();
     return _client.accessFudge(uri).get(List.class);
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public Map<String, CompiledViewCalculationConfiguration> getCompiledCalculationConfigurationsMap() {
     final URI uri = UriBuilder.fromUri(_baseUri).path(DataCompiledViewDefinitionUris.PATH_COMPILED_CALCULATION_CONFIGURATIONS_MAP).build();
     return _client.accessFudge(uri).get(Map.class);
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public Set<ValueSpecification> getMarketDataRequirements() {
     final URI uri = UriBuilder.fromUri(_baseUri).path(DataCompiledViewDefinitionUris.PATH_MARKET_DATA_REQUIREMENTS).build();
     return _client.accessFudge(uri).get(Set.class);
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public Set<ComputationTargetSpecification> getComputationTargets() {
     final URI uri = UriBuilder.fromUri(_baseUri).path(DataCompiledViewDefinitionUris.PATH_COMPUTATION_TARGETS).build();

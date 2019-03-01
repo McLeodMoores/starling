@@ -45,7 +45,6 @@ import com.opengamma.analytics.financial.interestrate.payments.derivative.Paymen
 import com.opengamma.analytics.financial.interestrate.swap.derivative.Swap;
 import com.opengamma.analytics.financial.interestrate.swap.derivative.SwapFixedCoupon;
 import com.opengamma.analytics.financial.provider.calculator.generic.TodayPaymentCalculator;
-import com.opengamma.analytics.financial.schedule.NoHolidayCalendar;
 import com.opengamma.analytics.util.time.TimeCalculator;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.financial.convention.calendar.MondayToFridayCalendar;
@@ -64,7 +63,6 @@ import com.opengamma.util.tuple.DoublesPair;
 @Test(groups = TestGroup.UNIT)
 public class SwapCalculatorTest {
 
-  private static final Calendar CALENDAR_NONE = new NoHolidayCalendar();
   private static final Calendar CALENDAR_USD = new MondayToFridayCalendar("USD Calendar");
   private static final GeneratorSwapFixedIborMaster GENERATOR_SWAP_MASTER = GeneratorSwapFixedIborMaster.getInstance();
   private static final IndexIborMaster INDEX_IBOR_MASTER = IndexIborMaster.getInstance();

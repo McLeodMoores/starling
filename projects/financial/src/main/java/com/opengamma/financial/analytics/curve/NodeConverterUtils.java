@@ -212,10 +212,10 @@ public final class NodeConverterUtils {
     final boolean isFloatFloat = isFloatFloatRoll(payLegConvention, receiveLegConvention);
     final AnnuityDefinition<? extends PaymentDefinition> payLeg =
         getCalendarSwapLeg(payLegConvention, unadjustedStartDate, startDateNumber, endDateNumber, calendarStartEndDate,
-        securitySource, regionSource, holidaySource, conventionSource, marketData, dataId, valuationTime, true, isFloatFloat);
+        securitySource, regionSource, holidaySource, conventionSource, marketData, dataId, true, isFloatFloat);
     final AnnuityDefinition<? extends PaymentDefinition> receiveLeg =
         getCalendarSwapLeg(receiveLegConvention, unadjustedStartDate, startDateNumber, endDateNumber, calendarStartEndDate,
-        securitySource, regionSource, holidaySource, conventionSource, marketData, dataId, valuationTime, false, isFloatFloat);
+        securitySource, regionSource, holidaySource, conventionSource, marketData, dataId, false, isFloatFloat);
     return new SwapDefinition(payLeg, receiveLeg);
   }
 
@@ -553,7 +553,7 @@ public final class NodeConverterUtils {
       final FinancialConvention legConvention, final ZonedDateTime unadjustedStartDate, final int calendarDateStartOffset,
       final int calendarDateEndOffset, final DateSet offsetDates,
       final SecuritySource securitySource, final RegionSource regionSource, final HolidaySource holidaySource, final ConventionSource conventionSource,
-      final SnapshotDataBundle marketData, final ExternalId dataId, final ZonedDateTime valuationTime, final boolean isPayer,
+      final SnapshotDataBundle marketData, final ExternalId dataId, final boolean isPayer,
       final boolean isMarketDataSpread) {
 
     final FinancialConventionVisitor<AnnuityDefinition<? extends PaymentDefinition>> visitor =

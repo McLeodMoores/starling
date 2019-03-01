@@ -18,7 +18,6 @@ import static com.opengamma.engine.value.ValueRequirementNames.VOLATILITY_CUBE_M
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -37,8 +36,6 @@ import com.opengamma.financial.analytics.volatility.CubeQuoteType;
 import com.opengamma.financial.analytics.volatility.VolatilityQuoteUnits;
 import com.opengamma.util.async.AsynchronousExecution;
 import com.opengamma.util.time.Tenor;
-import com.opengamma.util.tuple.ObjectsPair;
-import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Triple;
 
 /**
@@ -46,6 +43,7 @@ import com.opengamma.util.tuple.Triple;
  */
 public class RelativeStrikeLognormalVolatilityCubeConverterFunction extends StandardVolatilityCubeDataFunction {
 
+  @SuppressWarnings("unchecked")
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
       final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
@@ -54,12 +52,12 @@ public class RelativeStrikeLognormalVolatilityCubeConverterFunction extends Stan
     final Map<Triple<Object, Object, Object>, Double> values = new HashMap<>();
     for (final Object x : volatilityCubeData.getXs()) {
       for (final Object y : volatilityCubeData.getYs()) {
-        final Double forward = forwardSurfaceData.getValue((Tenor) x, (Tenor) y);
+        final Double forward = forwardSurfaceData.getValue(x, y);
         if (forward != null) {
           for (final Object z : volatilityCubeData.getZs()) {
-            final Double data = volatilityCubeData.getVolatility((Tenor) x, (Tenor) y, (Double) z);
+            final Double data = volatilityCubeData.getVolatility(x, y, z);
             if (data != null) {
-              final double strike = forward + ((Double) z) / 10000.;
+              final double strike = forward + (Double) z / 10000.;
               values.put(Triple.<Object, Object, Object>of((Tenor) x, (Tenor) y, strike), data);
             }
           }

@@ -5,9 +5,6 @@
  */
 package com.opengamma.financial.analytics.model.volatility.local;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.opengamma.engine.target.ComputationTargetType;
 import com.opengamma.financial.analytics.model.InstrumentTypeProperties;
 import com.opengamma.financial.analytics.model.volatility.surface.black.BlackVolatilitySurfacePropertyNamesAndValues;
@@ -16,7 +13,6 @@ import com.opengamma.financial.analytics.model.volatility.surface.black.BlackVol
  *
  */
 public abstract class ForexDupireLocalVolatilitySurfaceFunction extends DupireLocalVolatilitySurfaceFunction {
-  private static final Logger LOGGER = LoggerFactory.getLogger(ForexDupireLocalVolatilitySurfaceFunction.class);
 
   @Override
   public ComputationTargetType getTargetType() {

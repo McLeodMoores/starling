@@ -135,7 +135,6 @@ public class FXForwardYieldCurvesPnLFunction extends AbstractFunction {
       final Currency receiveCurrency = security.accept(ForexVisitors.getReceiveCurrencyVisitor());
 
       final CurrencyPair currencyPair = _currencyPairs.getCurrencyPair(payCurrency, receiveCurrency);
-      final Currency currencyBase = currencyPair.getBase();
       LocalDateDoubleTimeSeries payPnLSeries = null;
       LocalDateDoubleTimeSeries receivePnLSeries = null;
       for (final ComputedValue input : inputs.getAllValues()) {

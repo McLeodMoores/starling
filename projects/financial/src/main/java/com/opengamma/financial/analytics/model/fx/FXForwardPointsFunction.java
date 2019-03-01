@@ -44,10 +44,7 @@ import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
 import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
-import com.opengamma.core.convention.ConventionSource;
-import com.opengamma.core.holiday.HolidaySource;
 import com.opengamma.core.marketdatasnapshot.SnapshotDataBundle;
-import com.opengamma.core.region.RegionSource;
 import com.opengamma.core.security.Security;
 import com.opengamma.core.security.SecuritySource;
 import com.opengamma.engine.ComputationTarget;
@@ -135,11 +132,6 @@ public abstract class FXForwardPointsFunction extends AbstractFunction {
    * @return The converter
    */
   protected DefaultTradeConverter getTargetToDefinitionConverter(final FunctionCompilationContext context) {
-    final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
-    final HolidaySource holidaySource = OpenGammaCompilationContext.getHolidaySource(context);
-    final RegionSource regionSource = OpenGammaCompilationContext.getRegionSource(context);
-    final ConventionBundleSource conventionBundleSource = OpenGammaCompilationContext.getConventionBundleSource(context);
-    final ConventionSource conventionSource = OpenGammaCompilationContext.getConventionSource(context);
     final FXForwardSecurityConverter fxForwardSecurityConverter = new FXForwardSecurityConverter();
     final NonDeliverableFXForwardSecurityConverter nonDeliverableFXForwardSecurityConverter = new NonDeliverableFXForwardSecurityConverter();
     final FinancialSecurityVisitor<InstrumentDefinition<?>> securityConverter = FinancialSecurityVisitorAdapter.<InstrumentDefinition<?>>builder()

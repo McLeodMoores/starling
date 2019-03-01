@@ -7,8 +7,6 @@ package com.opengamma.financial.convention;
 
 import static org.testng.Assert.assertSame;
 
-import net.sf.ehcache.CacheManager;
-
 import org.mockito.Mockito;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -20,6 +18,8 @@ import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.UniqueId;
 import com.opengamma.util.ehcache.EHCacheUtils;
 import com.opengamma.util.test.TestGroup;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Test.
@@ -45,7 +45,7 @@ public class EHCachingConventionBundleSourceTest {
   }
 
   //-------------------------------------------------------------------------
-  private ConventionBundle createBundle() {
+  private static ConventionBundle createBundle() {
     final ConventionBundle bundle = Mockito.mock(ConventionBundle.class);
     Mockito.when(bundle.getUniqueId()).thenReturn(UniqueId.of("Mock", "0"));
     Mockito.when(bundle.getIdentifiers()).thenReturn(ExternalIdBundle.of(ExternalId.of("Test", "Foo"), ExternalId.of("Test", "Bar")));

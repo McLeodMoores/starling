@@ -14,11 +14,10 @@ import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.function.FunctionCompilationContext;
 import com.opengamma.engine.value.ValuePropertyNames;
 import com.opengamma.financial.OpenGammaCompilationContext;
+import com.opengamma.financial.analytics.conversion.DefaultTradeConverter;
 import com.opengamma.financial.analytics.conversion.FixedIncomeConverterDataProvider;
 import com.opengamma.financial.analytics.conversion.FutureTradeConverter;
 import com.opengamma.financial.analytics.conversion.InflationSwapSecurityConverter;
-import com.opengamma.financial.analytics.conversion.DefaultTradeConverter;
-import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.financial.security.swap.YearOnYearInflationSwapSecurity;
 import com.opengamma.financial.security.swap.ZeroCouponInflationSwapSecurity;
 
@@ -41,7 +40,6 @@ public abstract class DiscountingInflationFunction extends DiscountingFunction {
     final ConventionSource conventionSource = OpenGammaCompilationContext.getConventionSource(context);
     final RegionSource regionSource = OpenGammaCompilationContext.getRegionSource(context);
     final HolidaySource holidaySource = OpenGammaCompilationContext.getHolidaySource(context);
-    final ConventionBundleSource conventionBundleSource = OpenGammaCompilationContext.getConventionBundleSource(context);
     final InflationSwapSecurityConverter swapConverter = new InflationSwapSecurityConverter(securitySource, conventionSource, regionSource, holidaySource);
     final FutureTradeConverter futureTradeConverter = new FutureTradeConverter();
     return new DefaultTradeConverter(futureTradeConverter, swapConverter);

@@ -111,7 +111,7 @@ public abstract class EquityFutureOptionFunction extends FutureOptionFunction {
     final String forwardCurveCalculationMethod = Iterables.getOnlyElement(forwardCurveCalculationMethods);
     final String forwardCurveName = Iterables.getOnlyElement(forwardCurveNames);
     final ValueRequirement volReq =
-        getVolatilitySurfaceRequirement(desiredValue, volSurfaceName, forwardCurveName, surfaceCalculationMethod, underlyingIndexId);
+        getVolatilitySurfaceRequirement(desiredValue, volSurfaceName, forwardCurveName, underlyingIndexId);
     final ValueRequirement forwardCurveReq = getForwardCurveRequirement(forwardCurveName, forwardCurveCalculationMethod, underlyingIndexId);
     return Sets.newHashSet(discountingReq, forwardCurveReq, volReq);
   }
@@ -123,7 +123,7 @@ public abstract class EquityFutureOptionFunction extends FutureOptionFunction {
   }
 
   private ValueRequirement getVolatilitySurfaceRequirement(final ValueRequirement desiredValue, final String surfaceName, final String forwardCurveName,
-      final String surfaceCalculationMethod, final ExternalId underlyingBuid) {
+      final ExternalId underlyingBuid) {
     // REVIEW Andrew 2012-01-17 -- Could we pass a CTRef to the getSurfaceRequirement and use the underlyingBuid external identifier
     // directly with a target type of SECURITY
     // TODO Casey - Replace desiredValue with smileInterpolatorName in BlackVolatilitySurfacePropertyUtils.getSurfaceRequirement

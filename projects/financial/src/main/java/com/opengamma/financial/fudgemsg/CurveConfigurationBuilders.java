@@ -172,7 +172,7 @@ import com.opengamma.util.time.Tenor;
       return message;
     }
 
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings({ "deprecation", "unchecked" })
     @Override
     public IssuerCurveTypeConfiguration buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
       if (message.hasField(ISSUER_NAME_FIELD)) {
@@ -358,7 +358,7 @@ import com.opengamma.util.time.Tenor;
       for (final FudgeField field : curveTypeFields) {
         curveTypes.add(deserializer.fieldValueToObject(CurveGroupConfiguration.class, field));
       }
-      List<String> exogenousConfigurations = new ArrayList<>();
+      final List<String> exogenousConfigurations = new ArrayList<>();
       for (final FudgeField field : message.getAllByName(EXOGENOUS_CONFIGURATION_FIELD)) {
         exogenousConfigurations.add((String) field.getValue());
       }

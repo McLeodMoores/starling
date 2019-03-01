@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.credit.isda.cdx;
@@ -51,10 +51,6 @@ import com.opengamma.financial.analytics.model.credit.CreditFunctionUtils;
 import com.opengamma.financial.analytics.model.credit.CreditInstrumentPropertyNamesAndValues;
 import com.opengamma.financial.analytics.model.credit.CreditSecurityToIdentifierVisitor;
 import com.opengamma.financial.analytics.model.credit.IMMDateGenerator;
-import com.opengamma.financial.convention.HolidaySourceCalendarAdapter;
-import com.opengamma.financial.convention.businessday.BusinessDayConvention;
-import com.opengamma.financial.convention.businessday.BusinessDayConventions;
-import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.financial.security.FinancialSecurityTypes;
 import com.opengamma.financial.security.FinancialSecurityUtils;
 import com.opengamma.financial.security.cds.CreditDefaultSwapIndexDefinitionSecurity;
@@ -66,11 +62,10 @@ import com.opengamma.util.async.AsynchronousExecution;
 import com.opengamma.util.time.Tenor;
 
 /**
- * 
+ *
  */
 //TODO rename to make clear that these functions use the ISDA methodology (specifically, for effective dates)
 public abstract class ISDACDXAsSingleNameFunction extends AbstractFunction.NonCompiledInvoker {
-  private static final BusinessDayConvention FOLLOWING = BusinessDayConventions.FOLLOWING;
   private final String[] _valueRequirements;
 
   public ISDACDXAsSingleNameFunction(final String... valueRequirements) {
@@ -93,8 +88,7 @@ public abstract class ISDACDXAsSingleNameFunction extends AbstractFunction.NonCo
       throw new OpenGammaRuntimeException("Could not get underlying index definition");
     }
     final double recoveryRate = underlyingDefinition.getRecoveryRate();
-    final Calendar calendar = new HolidaySourceCalendarAdapter(holidaySource, FinancialSecurityUtils.getCurrency(security));
-    LegacyVanillaCreditDefaultSwapDefinition definition = (LegacyVanillaCreditDefaultSwapDefinition) security.accept(converter);
+    final LegacyVanillaCreditDefaultSwapDefinition definition = (LegacyVanillaCreditDefaultSwapDefinition) security.accept(converter);
     //definition = definition.withEffectiveDate(FOLLOWING.adjustDate(calendar, valuationTime.withHour(0).withMinute(0).withSecond(0).withNano(0).plusDays(1)));
     //definition = definition.withRecoveryRate(recoveryRate);
     final Object yieldCurveObject = inputs.getValue(ValueRequirementNames.YIELD_CURVE);
@@ -117,7 +111,7 @@ public abstract class ISDACDXAsSingleNameFunction extends AbstractFunction.NonCo
       times[i] = IMMDateGenerator.getNextIMMDate(valuationTime, tenors[i]).withHour(0).withMinute(0).withSecond(0).withNano(0);
       marketSpreads[i] = marketSpreadObjects[i] * 1e-4;
     }
-    ISDACompliantCreditCurve hazardCurve = (ISDACompliantCreditCurve) inputs.getValue(ValueRequirementNames.HAZARD_RATE_CURVE);
+    final ISDACompliantCreditCurve hazardCurve = (ISDACompliantCreditCurve) inputs.getValue(ValueRequirementNames.HAZARD_RATE_CURVE);
     final CDSAnalyticFactory analyticFactory = new CDSAnalyticFactory(recoveryRate, definition.getCouponFrequency().getPeriod())
         .with(definition.getBusinessDayAdjustmentConvention())
         .with(definition.getCalendar()).with(definition.getStubType())

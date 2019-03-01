@@ -118,7 +118,7 @@ public class MinimalWebHomeResource extends AbstractSingletonWebResource {
   //-------------------------------------------------------------------------
   /**
    * Creates the resource.
-   * 
+   *
    * @param publishedTypes
    *          the published types
    */
@@ -159,7 +159,7 @@ public class MinimalWebHomeResource extends AbstractSingletonWebResource {
     return out;
   }
 
-  private Object createUriObj(final ResourceConfig resourceConfig, final UriInfo uriInfo) {
+  private static Object createUriObj(final ResourceConfig resourceConfig, final UriInfo uriInfo) {
     try {
       final Bean dataInstance = resourceConfig._dataClazz.newInstance();
       dataInstance.property("uriInfo").set(uriInfo);

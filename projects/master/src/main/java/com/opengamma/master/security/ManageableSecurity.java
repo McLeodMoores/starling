@@ -142,6 +142,7 @@ public class ManageableSecurity extends DirectBean implements Serializable, Secu
 
   /**
    * @deprecated use {@link #getRequiredPermissions()}
+   * @return the permissions
    */
   @Deprecated
   public Set<String> getPermissions() {
@@ -150,6 +151,8 @@ public class ManageableSecurity extends DirectBean implements Serializable, Secu
 
   /**
    * @deprecated use {@link #setRequiredPermissions}
+   * @param permissions
+   *          the permissions
    */
   @Deprecated
   public void setPermissions(final Set<String> permissions) {

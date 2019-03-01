@@ -59,7 +59,6 @@ import com.opengamma.financial.analytics.conversion.SwaptionSecurityConverter;
 import com.opengamma.financial.analytics.model.discounting.DiscountingFunction;
 import com.opengamma.financial.analytics.model.swaption.SwaptionUtils;
 import com.opengamma.financial.analytics.volatility.fittedresults.SABRFittedSurfaces;
-import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.security.FinancialSecurityUtils;
 import com.opengamma.financial.security.FinancialSecurityVisitor;
@@ -83,7 +82,6 @@ public abstract class SABRDiscountingFunction extends DiscountingFunction {
     final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
     final HolidaySource holidaySource = OpenGammaCompilationContext.getHolidaySource(context);
     final RegionSource regionSource = OpenGammaCompilationContext.getRegionSource(context);
-    final ConventionBundleSource conventionBundleSource = OpenGammaCompilationContext.getConventionBundleSource(context);
     final ConventionSource conventionSource = OpenGammaCompilationContext.getConventionSource(context);
     final SwapSecurityConverter swapConverter = new SwapSecurityConverter(securitySource, holidaySource, conventionSource, regionSource);
     final InterestRateSwapSecurityConverter irsConverter = new InterestRateSwapSecurityConverter(holidaySource, conventionSource, securitySource);

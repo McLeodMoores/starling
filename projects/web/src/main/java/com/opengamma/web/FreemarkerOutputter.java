@@ -272,7 +272,7 @@ public class FreemarkerOutputter {
    * @param ex  the exception from Freemarker, not null
    * @return a dummy return type for Java compiler reasons
    */
-  private String handleException(final Exception ex) {
+  private static String handleException(final Exception ex) {
     throw new RuntimeException(ex);
   }
 

@@ -58,7 +58,6 @@ public final class ParSpreadInflationMarketQuoteCurveSensitivityDiscountingCalcu
    */
   private static final PresentValueDiscountingInflationCalculator PVIC = PresentValueDiscountingInflationCalculator.getInstance();
   private static final PresentValueCurveSensitivityDiscountingInflationCalculator PVISC = PresentValueCurveSensitivityDiscountingInflationCalculator.getInstance();
-  private static final PresentValueCurveSensitivityDiscountingCalculator PVSC = PresentValueCurveSensitivityDiscountingCalculator.getInstance();
 
   /**
    * The methods and calculators.
@@ -94,7 +93,7 @@ public final class ParSpreadInflationMarketQuoteCurveSensitivityDiscountingCalcu
       final double discountFactor = inflation.getDiscountFactor(swap.getFirstLeg().getCurrency(), cpn.getPaymentTime());
       final double tenor = cpn.getPaymentAccrualFactors().length;
       final double notional = ((CouponInflation) swap.getSecondLeg().getNthPayment(0)).getNotional();
-      final double intermediateVariable = (1 / tenor) * Math.pow(pvInflationLeg / discountFactor / notional + 1, 1 / tenor - 1);
+      final double intermediateVariable = 1 / tenor * Math.pow(pvInflationLeg / discountFactor / notional + 1, 1 / tenor - 1);
       final InflationSensitivity pvcis = swap.getSecondLeg().accept(PVISC, inflation).getSensitivity(swap.getSecondLeg().getCurrency()).multipliedBy(1 / discountFactor / notional);
       final InflationSensitivity modifiedpvcis = pvcis.multipliedBy(intermediateVariable);
       return InflationSensitivity.ofPriceIndex(modifiedpvcis.getPriceCurveSensitivities());

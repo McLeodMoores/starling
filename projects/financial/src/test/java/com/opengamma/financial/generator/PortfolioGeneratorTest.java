@@ -32,7 +32,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class PortfolioGeneratorTest {
 
-  private PositionGenerator createSimplePositionGenerator(final InMemorySecuritySource source) {
+  private static PositionGenerator createSimplePositionGenerator(final InMemorySecuritySource source) {
     return new SimplePositionGenerator<>(new StaticQuantityGenerator(10), new SecurityGenerator<RawSecurity>() {
       @Override
       public RawSecurity createSecurity() {
@@ -52,7 +52,7 @@ public class PortfolioGeneratorTest {
     }, new InMemorySecurityPersister(source));
   }
 
-  private void testPositions(final Collection<Position> positions, final SecuritySource source) {
+  private static void testPositions(final Collection<Position> positions, final SecuritySource source) {
     for (final Position position : positions) {
       assertEquals(position.getQuantity().intValue(), 10);
       assertNull(position.getSecurity());

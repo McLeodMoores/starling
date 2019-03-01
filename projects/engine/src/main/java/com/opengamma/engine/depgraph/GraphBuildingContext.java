@@ -291,7 +291,6 @@ import com.opengamma.util.tuple.Pairs;
     } while (true);
   }
 
-  @SuppressWarnings("unchecked")
   public Pair<ResolveTask[], ResolvedValueProducer[]> getTasksProducing(final ValueSpecification valueSpecification) {
     do {
       final MapEx<ResolveTask, ResolvedValueProducer> tasks = getBuilder().getTasks(valueSpecification);
@@ -316,9 +315,8 @@ import com.opengamma.util.tuple.Pairs;
           }
         }
         return Pairs.of(resultTasks, resultProducers);
-      } else {
-        return null;
       }
+      return null;
     } while (true);
   }
 

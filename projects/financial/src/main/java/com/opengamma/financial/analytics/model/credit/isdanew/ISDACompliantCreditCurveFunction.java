@@ -20,7 +20,6 @@ import com.google.common.collect.Sets;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.credit.BuySellProtection;
 import com.opengamma.analytics.financial.credit.creditdefaultswap.StandardCDSQuotingConvention;
-import com.opengamma.analytics.financial.credit.creditdefaultswap.definition.legacy.LegacyVanillaCreditDefaultSwapDefinition;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.CDSAnalytic;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.CDSQuoteConvention;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.FastCreditCurveBuilder;
@@ -185,7 +184,6 @@ public class ISDACompliantCreditCurveFunction extends AbstractFunction.NonCompil
         _holidaySource,
         _regionSource,
         recoveryRate);
-    final LegacyVanillaCreditDefaultSwapDefinition cds = converter.visitLegacyVanillaCDSSecurity(security);
     final StandardCDSQuotingConvention quoteConvention = StandardCDSQuotingConvention.parse(requirement.getConstraint(
         ISDAFunctionConstants.CDS_QUOTE_CONVENTION));
     final NodalTenorDoubleCurve spreadCurve = (NodalTenorDoubleCurve) inputs.getValue(ValueRequirementNames.BUCKETED_SPREADS);

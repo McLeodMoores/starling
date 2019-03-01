@@ -9,9 +9,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.collect.Maps;
 import com.opengamma.core.security.Security;
 import com.opengamma.engine.ComputationTarget;
@@ -29,8 +26,6 @@ import com.opengamma.util.ArgumentChecker;
  * Populates {@link EquityOptionFunction}, including {@link EquityVanillaBarrierOptionBlackFunction}, with defaults appropriate for pricing using an interpolated Black lognormal volatility surface.
  */
 public abstract class EquityOptionSurfaceCalculationMethodDefaults extends StaticDefaultPropertyFunction {
-  /** The logger */
-  private static final Logger LOGGER = LoggerFactory.getLogger(EquityOptionSurfaceCalculationMethodDefaults.class);
   /** Map of id name to surface calculation method */
   private final Map<String, Set<String>> _idToSurfaceCalculationMethod;
   /** The priority of this set of defaults */

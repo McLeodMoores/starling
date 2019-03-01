@@ -6,10 +6,8 @@
 package com.opengamma.financial.analytics.conversion;
 
 import static com.opengamma.financial.convention.initializer.PerCurrencyConventionHelper.IBOR;
-import static com.opengamma.financial.convention.initializer.PerCurrencyConventionHelper.IRS_IBOR_LEG;
 import static com.opengamma.financial.convention.initializer.PerCurrencyConventionHelper.SCHEME_NAME;
 import static com.opengamma.financial.convention.initializer.PerCurrencyConventionHelper.SWAP_INDEX;
-import static com.opengamma.financial.convention.initializer.PerCurrencyConventionHelper.TENOR_STR_3M;
 import static com.opengamma.financial.convention.initializer.PerCurrencyConventionHelper.getConventionName;
 
 import org.threeten.bp.Period;
@@ -29,7 +27,6 @@ import com.opengamma.financial.convention.IborIndexConvention;
 import com.opengamma.financial.convention.SwapConvention;
 import com.opengamma.financial.convention.SwapFixedLegConvention;
 import com.opengamma.financial.convention.SwapIndexConvention;
-import com.opengamma.financial.convention.VanillaIborLegConvention;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.financial.convention.frequency.Frequency;
 import com.opengamma.financial.security.FinancialSecurityVisitorAdapter;
@@ -76,9 +73,6 @@ public class CapFloorSecurityConverter extends FinancialSecurityVisitorAdapter<I
     final IborIndex index = new IborIndex(currency, iborTenor, iborIndexConvention.getSettlementDays(), iborIndexConvention.getDayCount(),
         iborIndexConvention.getBusinessDayConvention(), iborIndexConvention.isIsEOM(), iborIndexConvention.getName());
     if (isIbor) { // Cap/floor on Ibor
-      final String vanillaIborLegConventionName = getConventionName(Currency.USD, TENOR_STR_3M, IRS_IBOR_LEG);
-      final VanillaIborLegConvention vanillaIborLegConvention =
-          _conventionSource.getSingle(ExternalId.of(SCHEME_NAME, vanillaIborLegConventionName), VanillaIborLegConvention.class);
       return AnnuityCapFloorIborDefinition.from(startDate, endDate, notional, index, capFloorSecurity.getDayCount(), tenorPayment, capFloorSecurity.isPayer(), capFloorSecurity.getStrike(),
           capFloorSecurity.isCap(), calendar);
     }

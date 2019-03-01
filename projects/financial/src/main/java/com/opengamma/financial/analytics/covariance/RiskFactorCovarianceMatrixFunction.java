@@ -33,7 +33,7 @@ public class RiskFactorCovarianceMatrixFunction extends SampledCovarianceMatrixF
 
   /**
    * Initializes the function.
-   * 
+   *
    * @param context the compilation context
    * @deprecated [PLAT-2240] This just checks whether the context is suitably configured
    */
@@ -67,6 +67,7 @@ public class RiskFactorCovarianceMatrixFunction extends SampledCovarianceMatrixF
 
   // FunctionInvoker
 
+  @SuppressWarnings("unchecked")
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
     final HistoricalViewEvaluationResult riskFactors = (HistoricalViewEvaluationResult) inputs.getValue(ValueRequirementNames.HISTORICAL_TIME_SERIES);

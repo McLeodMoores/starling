@@ -6,8 +6,6 @@
 package com.opengamma.financial.analytics.ircurve;
 
 import org.apache.commons.lang.Validate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.threeten.bp.Instant;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
@@ -32,7 +30,6 @@ import com.opengamma.util.tuple.Triple;
  *
  */
 public class YieldCurveFunctionHelper {
-  private static final Logger LOGGER = LoggerFactory.getLogger(YieldCurveFunctionHelper.class);
 
   private final Currency _currency;
   private final String _curveName;
@@ -67,7 +64,7 @@ public class YieldCurveFunctionHelper {
     final LocalDate curveDate = atInstantZDT.toLocalDate();
     final InterpolatedYieldCurveSpecification specification = buildCurve(curveDate);
     final Instant expiry = findCurveExpiryDate(context.getSecuritySource(), atInstant, specification, atInstantZDT.with(LocalTime.MIDNIGHT).plusDays(1).minusNanos(1000000).toInstant());
-    return new Triple<>((expiry != null) ? atInstantZDT.with(LocalTime.MIDNIGHT).toInstant() : null, expiry, specification);
+    return new Triple<>(expiry != null ? atInstantZDT.with(LocalTime.MIDNIGHT).toInstant() : null, expiry, specification);
   }
 
   private Instant findCurveExpiryDate(final SecuritySource securitySource, final Instant curveDate, final InterpolatedYieldCurveSpecification specification, final Instant eod) {

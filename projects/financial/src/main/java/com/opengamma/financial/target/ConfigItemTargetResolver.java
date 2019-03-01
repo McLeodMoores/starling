@@ -15,7 +15,7 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * A target resolver implementation to connect a config source to the engine framework.
- * 
+ *
  * @param <T> the type of the item encoded in configuration
  */
 public class ConfigItemTargetResolver<T extends UniqueIdentifiable> extends AbstractSourceResolver<ConfigItem<?>, ConfigSource> {
@@ -40,7 +40,7 @@ public class ConfigItemTargetResolver<T extends UniqueIdentifiable> extends Abst
 
   @Override
   protected UniqueIdentifiable lookupByName(final String name, final VersionCorrection versionCorrection) {
-    return (T) getUnderlying().getSingle(getItemType(), name, versionCorrection);
+    return getUnderlying().getSingle(getItemType(), name, versionCorrection);
   }
 
 }

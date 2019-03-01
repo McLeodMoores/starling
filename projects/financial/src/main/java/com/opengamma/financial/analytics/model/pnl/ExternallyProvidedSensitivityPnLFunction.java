@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.pnl;
@@ -61,7 +61,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * 
+ *
  */
 public class ExternallyProvidedSensitivityPnLFunction extends AbstractFunction.NonCompiledInvoker {
   private static final Logger LOGGER = LoggerFactory.getLogger(ExternallyProvidedSensitivityPnLFunction.class);
@@ -97,7 +97,7 @@ public class ExternallyProvidedSensitivityPnLFunction extends AbstractFunction.N
     final TimeSeriesSamplingFunction samplingFunction = getSamplingFunction(constraints.getValues(ValuePropertyNames.SAMPLING_FUNCTION));
     final LocalDate[] schedule = HOLIDAY_REMOVER.getStrippedSchedule(scheduleCalculator.getSchedule(startDate, now, true, false), WEEKEND_CALENDAR); //REVIEW emcleod should "fromEnd" be hard-coded?
     final HistoricalTimeSeriesBundle timeSeries = HistoricalTimeSeriesFunctionUtils.getHistoricalTimeSeriesInputs(executionContext, inputs);
-    DoubleTimeSeries<?> result = getPnLSeries(security, secSource, timeSeries, inputs, startDate, now, schedule, samplingFunction);
+    DoubleTimeSeries<?> result = getPnLSeries(security, secSource, timeSeries, inputs, schedule, samplingFunction);
     result = result.multiply(position.getQuantity().doubleValue());
     final ValueProperties resultProperties = getResultProperties(desiredValue, currencyString);
     final ValueSpecification resultSpec = new ValueSpecification(ValueRequirementNames.PNL_SERIES, positionSpec, resultProperties);
@@ -168,7 +168,7 @@ public class ExternallyProvidedSensitivityPnLFunction extends AbstractFunction.N
   }
 
   private DoubleTimeSeries<?> getPnLSeries(final RawSecurity security, final SecuritySource secSource, final HistoricalTimeSeriesBundle timeSeries,
-      final FunctionInputs inputs, final LocalDate startDate, final LocalDate now, final LocalDate[] schedule, final TimeSeriesSamplingFunction samplingFunction) {
+      final FunctionInputs inputs, final LocalDate[] schedule, final TimeSeriesSamplingFunction samplingFunction) {
     DoubleTimeSeries<?> pnlSeries = null;
     final List<FactorExposureData> factors = RawSecurityUtils.decodeFactorExposureData(secSource, security);
     for (final FactorExposureData factor : factors) {
@@ -192,8 +192,8 @@ public class ExternallyProvidedSensitivityPnLFunction extends AbstractFunction.N
       }
     }
     if (pnlSeries == null) {
-      final List<LocalDate> dates = new ArrayList<LocalDate>();
-      final List<Double> values = new ArrayList<Double>();
+      final List<LocalDate> dates = new ArrayList<>();
+      final List<Double> values = new ArrayList<>();
       dates.add(MAGIC_DATE.minusDays(7));
       dates.add(MAGIC_DATE);
       values.add(0d);

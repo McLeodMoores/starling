@@ -29,8 +29,8 @@ import com.sun.jersey.api.client.GenericType;
  * Provides access to a remote {@link ConfigMaster}.
  */
 public class RemoteConfigMaster
-    extends AbstractRemoteDocumentMaster<ConfigDocument>
-    implements ConfigMaster {
+extends AbstractRemoteDocumentMaster<ConfigDocument>
+implements ConfigMaster {
 
   /**
    * Creates an instance.
@@ -61,7 +61,6 @@ public class RemoteConfigMaster
   }
 
   //-------------------------------------------------------------------------
-  @SuppressWarnings("unchecked")
   @Override
   public <R> ConfigSearchResult<R> search(final ConfigSearchRequest<R> request) {
     ArgumentChecker.notNull(request, "request");
@@ -78,9 +77,8 @@ public class RemoteConfigMaster
     if (uniqueId.isVersioned()) {
       final URI uri = DataConfigUris.uriVersion(getBaseUri(), uniqueId);
       return accessRemote(uri).get(ConfigDocument.class);
-    } else {
-      return get(uniqueId, VersionCorrection.LATEST);
     }
+    return get(uniqueId, VersionCorrection.LATEST);
   }
 
   //-------------------------------------------------------------------------
@@ -123,7 +121,6 @@ public class RemoteConfigMaster
   }
 
   //-------------------------------------------------------------------------
-  @SuppressWarnings("unchecked")
   @Override
   public <R> ConfigHistoryResult<R> history(final ConfigHistoryRequest<R> request) {
     ArgumentChecker.notNull(request, "request");

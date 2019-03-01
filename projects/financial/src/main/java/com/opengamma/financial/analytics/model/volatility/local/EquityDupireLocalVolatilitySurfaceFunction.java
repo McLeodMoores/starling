@@ -1,12 +1,9 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.volatility.local;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.engine.ComputationTarget;
@@ -21,16 +18,15 @@ import com.opengamma.financial.analytics.model.volatility.surface.black.BlackVol
 import com.opengamma.financial.analytics.model.volatility.surface.black.BlackVolatilitySurfacePropertyUtils;
 
 /**
- * 
+ *
  */
 public abstract class EquityDupireLocalVolatilitySurfaceFunction extends DupireLocalVolatilitySurfaceFunction {
-  private static final Logger LOGGER = LoggerFactory.getLogger(EquityDupireLocalVolatilitySurfaceFunction.class);
 
   @Override
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
     final String targetScheme = target.getUniqueId().getScheme();
-    return (targetScheme.equalsIgnoreCase(ExternalSchemes.BLOOMBERG_TICKER.getName()) ||
-        targetScheme.equalsIgnoreCase(ExternalSchemes.BLOOMBERG_TICKER_WEAK.getName()));
+    return targetScheme.equalsIgnoreCase(ExternalSchemes.BLOOMBERG_TICKER.getName()) ||
+        targetScheme.equalsIgnoreCase(ExternalSchemes.BLOOMBERG_TICKER_WEAK.getName());
   }
 
   @Override

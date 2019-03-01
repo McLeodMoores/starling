@@ -80,6 +80,7 @@ public class RawSurfaceDataFunction extends AbstractFunction.NonCompiledInvoker 
    * @return The set of market data ids required to populate to surface data snapshot object
    * @throws OpenGammaRuntimeException If the surface specification or definition is null
    */
+  @SuppressWarnings("unchecked")
   public static <X, Y> Set<ValueRequirement> buildDataRequirements(final SurfaceSpecificationSource specificationSource,
       final SurfaceDefinitionSource definitionSource, final String specificationName, final String definitionName) {
     final SurfaceSpecification specification = specificationSource.getSpecification(specificationName);
@@ -137,8 +138,8 @@ public class RawSurfaceDataFunction extends AbstractFunction.NonCompiledInvoker 
       for (final Object y : definition.getYs()) {
         try {
           //TODO the type is not picked up successfully
-          final Tenor xTenor = (x instanceof Tenor) ? (Tenor) x : Tenor.parse((String) x);
-          final Tenor yTenor = (y instanceof Tenor) ? (Tenor) y : Tenor.parse((String) y);
+          final Tenor xTenor = x instanceof Tenor ? (Tenor) x : Tenor.parse((String) x);
+          final Tenor yTenor = y instanceof Tenor ? (Tenor) y : Tenor.parse((String) y);
           final ExternalId identifier = provider.getInstrument(xTenor, yTenor);
 
           final ValueRequirement requirement = new ValueRequirement(provider.getDataFieldName(), ComputationTargetType.PRIMITIVE, identifier);

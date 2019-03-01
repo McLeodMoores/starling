@@ -205,11 +205,12 @@ public class WebPushTestUtils {
    * @param viewportDefJson
    *          the viewport definition
    * @return The URL of the viewport relative to the root
-   * @throws Exception
-   *           if there is a problem with the connection or the JSON that is
-   *           produced
+   * @throws IOException
+   *           if there is a problem with the connection
+   * @throws JSONException
+   *           if there is a problem with the JSON that is produced
    */
-  public String createViewport(final String clientId, final String viewportDefJson) throws Exception {
+  public String createViewport(final String clientId, final String viewportDefJson) throws IOException, JSONException {
     String viewportJson;
     BufferedReader reader = null;
     BufferedWriter writer = null;

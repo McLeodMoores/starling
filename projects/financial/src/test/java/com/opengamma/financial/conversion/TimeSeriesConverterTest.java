@@ -22,35 +22,35 @@ import com.opengamma.util.test.TestGroup;
  */
 @Test(groups = TestGroup.UNIT)
 public class TimeSeriesConverterTest {
-  
+
   private final TimeSeriesConverter _converter = new TimeSeriesConverter();
-  
+
   @Test
   public void convertEmpty() {
-    Map<String, Double> expected = new HashMap<String, Double>();
-    
-    Map<String, Double> actual = _converter.convert("Foo", ImmutableLocalDateDoubleTimeSeries.EMPTY_SERIES);
-    
+    final Map<String, Double> expected = new HashMap<>();
+
+    final Map<String, Double> actual = _converter.convert("Foo", ImmutableLocalDateDoubleTimeSeries.EMPTY_SERIES);
+
     assertEquals(expected, actual);
   }
-  
+
   @Test
   public void convertNonEmpty() {
-    Map<String, Double> expected = new HashMap<String, Double>();
+    final Map<String, Double> expected = new HashMap<>();
     expected.put("Foo[2005-04-04]", 5.5);
     expected.put("Foo[2005-04-05]", 6.6);
-    
-    Map<String, Double> actual = _converter.convert("Foo", 
+
+    final Map<String, Double> actual = _converter.convert("Foo",
         ImmutableLocalDateDoubleTimeSeries.of(
             new LocalDate[] { LocalDate.of(2005, 4, 4), LocalDate.of(2005, 4, 5) },
             new double[] { 5.5, 6.6 }));
-    
+
     assertEquals(expected, actual);
   }
 
   @Test
   public void getConvertedClass() {
-    assertEquals(DoubleTimeSeries.class, _converter.getConvertedClass());  
+    assertEquals(DoubleTimeSeries.class, _converter.getConvertedClass());
   }
 
 }

@@ -25,7 +25,6 @@ import com.opengamma.core.legalentity.Rating;
 import com.opengamma.core.region.RegionSource;
 import com.opengamma.financial.convention.HolidaySourceCalendarAdapter;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
-import com.opengamma.financial.convention.businessday.BusinessDayConventions;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.frequency.Frequency;
@@ -49,14 +48,11 @@ import com.opengamma.util.money.Currency;
  */
 public class CreditDefaultSwapSecurityConverter extends FinancialSecurityVisitorAdapter<CreditDefaultSwapDefinition> {
 
-  private static final BusinessDayConvention FOLLOWING = BusinessDayConventions.FOLLOWING;
-
   static final LegalEntity DUMMY_OBLIGOR_A = new ManageableLegalEntity("Dummy_A", ExternalIdBundle.of(ExternalId.of("DUMMY", "Dummy_A")));
   static final LegalEntity DUMMY_OBLIGOR_B = new ManageableLegalEntity("Dummy_B", ExternalIdBundle.of(ExternalId.of("DUMMY", "Dummy_B")));
   static final LegalEntity DUMMY_OBLIGOR_C = new ManageableLegalEntity("Dummy_C", ExternalIdBundle.of(ExternalId.of("DUMMY", "Dummy_C")));
 
   private final HolidaySource _holidaySource;
-  private final RegionSource _regionSource;
   private final LegalEntitySource _legalEntitySource;
   private double _recoveryRate = 0.5;
   private final ZonedDateTime _valuationTime;
@@ -69,7 +65,6 @@ public class CreditDefaultSwapSecurityConverter extends FinancialSecurityVisitor
         "");
     //ArgumentChecker.notNull(legalEntitySource, "organization source");
     _holidaySource = holidaySource;
-    _regionSource = regionSource;
     _legalEntitySource = legalEntitySource;
     _recoveryRate = recoveryRate;
     _valuationTime = valuationTime;
@@ -81,7 +76,6 @@ public class CreditDefaultSwapSecurityConverter extends FinancialSecurityVisitor
     ArgumentChecker.notNull(valuationTime, "valuation time");
     //ArgumentChecker.notNull(legalEntitySource, "organization source");
     _holidaySource = holidaySource;
-    _regionSource = regionSource;
     _legalEntitySource = legalEntitySource;
     _valuationTime = valuationTime;
   }
@@ -107,11 +101,8 @@ public class CreditDefaultSwapSecurityConverter extends FinancialSecurityVisitor
   public LegacyVanillaCreditDefaultSwapDefinition visitStandardVanillaCDSSecurity(final StandardVanillaCDSSecurity security) {
     ArgumentChecker.notNull(security, "security");
     final BuySellProtection buySellProtection = security.isBuy() ? BuySellProtection.BUY : BuySellProtection.SELL;
-    //final ExternalId regionId = security.getRegionId();
-    //final Calendar calendar = new HolidaySourceCalendarAdapter(_holidaySource, _regionSource.getHighestLevelRegion(regionId));
     final Calendar calendar = new HolidaySourceCalendarAdapter(_holidaySource, security.getNotional().getCurrency());
     final ZonedDateTime startDate = security.getStartDate();
-    //final ZonedDateTime effectiveDate = IMMDateLogic.getPrevIMMDate(_valuationTime.toLocalDate()).atStartOfDay(ZoneId.systemDefault());
     final ZonedDateTime effectiveDate = _valuationTime;
     final ZonedDateTime maturityDate = security.getMaturityDate();
     final PeriodFrequency couponFrequency = getPeriodFrequency(security.getCouponFrequency());
@@ -127,12 +118,7 @@ public class CreditDefaultSwapSecurityConverter extends FinancialSecurityVisitor
     final double amount = notional.getAmount();
     final boolean includeAccruedPremium = security.isIncludeAccruedPremium();
     final boolean protectionStart = security.isProtectionStart();
-    final double quotedSpread = security.getQuotedSpread();
-    final double premiumLegCoupon = security.getCoupon();
-    final double upFrontAmount = security.getUpfrontAmount().getAmount();
     final StubType stubType = security.getStubType().toAnalyticsType();
-    final ZonedDateTime cashSettlementDate = security.getCashSettlementDate();
-    final boolean adjustCashSettlementDate = security.isAdjustCashSettlementDate();
     final double coupon = security.getCoupon();
     final LegalEntity protectionBuyer = getObligorForProtectionBuyer(security.getProtectionBuyer());
     final LegalEntity protectionSeller = getObligorForProtectionSeller(security.getProtectionSeller());
@@ -148,8 +134,6 @@ public class CreditDefaultSwapSecurityConverter extends FinancialSecurityVisitor
   public LegacyVanillaCreditDefaultSwapDefinition visitLegacyVanillaCDSSecurity(final LegacyVanillaCDSSecurity security) {
     ArgumentChecker.notNull(security, "security");
     final BuySellProtection buySellProtection = security.isBuy() ? BuySellProtection.BUY : BuySellProtection.SELL;
-    //    final ExternalId regionId = security.getRegionId();
-    //    final Calendar calendar = new HolidaySourceCalendarAdapter(_holidaySource, _regionSource.getHighestLevelRegion(regionId));
     final Calendar calendar = new HolidaySourceCalendarAdapter(_holidaySource, security.getNotional().getCurrency());
     final ZonedDateTime startDate = security.getStartDate();
     final ZonedDateTime effectiveDate = security.getEffectiveDate(); //FOLLOWING.adjustDate(calendar, valuationDate.withHour(0).withMinute(0).withSecond(0).withNano(0).plusDays(1));

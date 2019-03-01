@@ -239,7 +239,6 @@ public abstract class AbstractRestfulJmsResultConsumer<L> {
     try {
       _startedSignalLatch = new CountDownLatch(1);
       final ByteArrayFudgeMessageReceiver bafmr = new ByteArrayFudgeMessageReceiver(new FudgeMessageReceiver() {
-        @SuppressWarnings("unchecked")
         @Override
         public void messageReceived(final FudgeContext fudgeContext, final FudgeMsgEnvelope msgEnvelope) {
           LOGGER.debug("Result listener call received");

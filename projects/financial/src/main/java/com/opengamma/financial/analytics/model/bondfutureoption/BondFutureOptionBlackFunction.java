@@ -140,13 +140,12 @@ public abstract class BondFutureOptionBlackFunction extends AbstractFunction.Non
     if (futurePriceObject == null) {
       throw new OpenGammaRuntimeException("Could not get bond future price for " + security.getUnderlyingId());
     }
-    final double futurePrice = (Double) futurePriceObject;
     final InstrumentDefinition<?> bondFutureOptionDefinition = _converter.convert(trade);
     final BondFutureOptionPremiumTransaction bondFutureOption = (BondFutureOptionPremiumTransaction) _dataConverter.convert(security, bondFutureOptionDefinition, now, fullCurveNames,
         timeSeries);
     final ValueProperties properties = getResultProperties(desiredValue, security);
     final ValueSpecification spec = new ValueSpecification(_valueRequirementName, target.toSpecification(), properties);
-    final YieldCurveWithBlackCubeBundle data = new YieldCurveWithBlackCubeBundle(getVolatilitySurface(volatilitySurface.getSurface(), callPrice, putPrice, futurePrice, bondFutureOption,
+    final YieldCurveWithBlackCubeBundle data = new YieldCurveWithBlackCubeBundle(getVolatilitySurface(volatilitySurface.getSurface(), callPrice, putPrice, bondFutureOption,
         curves), curves);
     return getResult(bondFutureOption, data, curveCalculationConfig, spec, inputs, desiredValues, security);
   }
@@ -191,7 +190,7 @@ public abstract class BondFutureOptionBlackFunction extends AbstractFunction.Non
       LOGGER.error("Security currency and curve calculation config id were not equal; have {} and {}", currency, curveCalculationConfig.getTarget());
       return null;
     }
-    final Set<ValueRequirement> requirements = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> requirements = new HashSet<>();
     requirements.addAll(YieldCurveFunctionUtils.getCurveRequirements(curveCalculationConfig, _curveCalculationConfigSource));
     requirements.add(getVolatilityRequirement(surfaceName, currency));
     try {
@@ -255,7 +254,7 @@ public abstract class BondFutureOptionBlackFunction extends AbstractFunction.Non
     throw new OpenGammaRuntimeException("Could not find option ticker");
   }
 
-  private Surface<Double, Double, Double> getVolatilitySurface(final Surface<Double, Double, Double> surface, final double callPrice, final double putPrice, final double futureMarketPrice,
+  private Surface<Double, Double, Double> getVolatilitySurface(final Surface<Double, Double, Double> surface, final double callPrice, final double putPrice,
       final BondFutureOptionPremiumTransaction futureOption, final YieldCurveBundle data) {
     final BondFutureOptionPremiumSecurity underlyingOption = futureOption.getUnderlyingOption();
     final double futurePrice = BondFutureDiscountingMethod.getInstance().price(underlyingOption.getUnderlyingFuture(), data);

@@ -162,7 +162,7 @@ public class SecurityFromNodeConverter extends CurveNodeVisitorAdapter<Financial
     final ZonedDateTime fixingDate = ScheduleCalculator.getAdjustedDate(accrualStartDate,
                                                                         -iborIndex.getSpotLag(),
                                                                         fixingCalendar);
-    FRASecurity security = new FRASecurity(currency,
+    final FRASecurity security = new FRASecurity(currency,
                                            indexConvention.getRegionCalendar(),
                                            accrualStartDate,
                                            accrualEndDate,
@@ -212,7 +212,7 @@ public class SecurityFromNodeConverter extends CurveNodeVisitorAdapter<Financial
         isFloatFloat);
 
 
-    SwapSecurity security = new SwapSecurity(_tradeDateTime,
+    final SwapSecurity security = new SwapSecurity(_tradeDateTime,
                                              payLeg.getSecond(),
                                              payLeg.getThird(),
                                              "counterparty",
@@ -250,7 +250,6 @@ public class SecurityFromNodeConverter extends CurveNodeVisitorAdapter<Financial
                                                                        businessDayConvention,
                                                                        calendar,
                                                                        isEOM);
-      final double accrualFactor = dayCount.getDayCountFraction(startDate, endDate);
       return new CashSecurity(currency,
                               depositConvention.getRegionCalendar(),
                               startDate,
@@ -279,19 +278,7 @@ public class SecurityFromNodeConverter extends CurveNodeVisitorAdapter<Financial
                                                                        businessDayConvention,
                                                                        calendar,
                                                                        isEOM);
-      final double accrualFactor = dayCount.getDayCountFraction(startDate, endDate);
-      final int spotLag = iborConvention.getSettlementDays();
-      final boolean eom = iborConvention.isIsEOM();
-      final long months = maturityPeriod.toTotalMonths() - startPeriod.toTotalMonths();
-      final Period indexTenor = Period.ofMonths((int) months);
-      final IborIndex iborIndex = new IborIndex(currency,
-                                                indexTenor,
-                                                spotLag,
-                                                dayCount,
-                                                businessDayConvention,
-                                                eom,
-                                                convention.getName());
-      CashSecurity security = new CashSecurity(currency,
+      final CashSecurity security = new CashSecurity(currency,
                                                iborConvention.getRegionCalendar(),
                                                startDate,
                                                endDate,

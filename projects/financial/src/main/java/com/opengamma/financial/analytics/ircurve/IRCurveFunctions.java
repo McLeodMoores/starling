@@ -42,7 +42,7 @@ public class IRCurveFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Default instance of a repository configuration source exposing the functions from this package.
-   * 
+   *
    * @return the configuration source exposing functions from this package
    */
   public static FunctionConfigurationSource instance() {
@@ -76,10 +76,10 @@ public class IRCurveFunctions extends AbstractFunctionConfigurationBean {
     private static final Set<String> MONITORED_TYPES;
 
     static {
-      MONITORED_TYPES = new HashSet<String>();
+      MONITORED_TYPES = new HashSet<>();
       MONITORED_TYPES.add(MultiCurveCalculationConfig.class.getName());
       MONITORED_TYPES.add(YieldCurveDefinition.class.getName());
-      for (Class<?> curveClass : CURVE_CLASSES) {
+      for (final Class<?> curveClass : CURVE_CLASSES) {
         MONITORED_TYPES.add(curveClass.getName());
       }
     }
@@ -106,6 +106,7 @@ public class IRCurveFunctions extends AbstractFunctionConfigurationBean {
       functions.add(functionConfiguration(CurveMarketDataFunction.class, curveName));
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
 

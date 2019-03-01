@@ -265,9 +265,6 @@ public class FXForwardYieldCurveNodePnLFunction extends AbstractFunction {
       final TenorLabelledLocalDateDoubleTimeSeriesMatrix1D fcReturnSeries = (TenorLabelledLocalDateDoubleTimeSeriesMatrix1D) inputs
           .getValue(ValueRequirementNames.FX_FORWARD_CURVE_RETURN_SERIES);
       final DoubleLabelledMatrix1D sensitivities = (DoubleLabelledMatrix1D) inputs.getValue(ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES);
-      final Currency payCurrency = security.getPayCurrency();
-      final Currency receiveCurrency = security.getReceiveCurrency();
-      final CurrencyPair currencyPair = _currencyPairs.getCurrencyPair(payCurrency, receiveCurrency);
       final String curveCurrency = desiredValue.getConstraint(CURVE_CURRENCY);
       final ValueProperties resultProperties = desiredValues.iterator().next().getConstraints();
       TenorLabelledLocalDateDoubleTimeSeriesMatrix1D returnSeries;

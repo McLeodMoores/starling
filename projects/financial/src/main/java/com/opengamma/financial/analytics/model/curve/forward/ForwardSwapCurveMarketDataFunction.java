@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.curve.forward;
@@ -11,8 +11,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.threeten.bp.Clock;
 import org.threeten.bp.Instant;
 import org.threeten.bp.LocalTime;
@@ -45,10 +43,9 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
 
 /**
- * 
+ *
  */
 public class ForwardSwapCurveMarketDataFunction extends AbstractFunction {
-  private static final Logger LOGGER = LoggerFactory.getLogger(ForwardSwapCurveMarketDataFunction.class);
   /** Name of the calculation method */
   public static final String FORWARD_SWAP_QUOTES = "ForwardSwapQuotes";
   /** Name of the forward tenor property */
@@ -102,7 +99,7 @@ public class ForwardSwapCurveMarketDataFunction extends AbstractFunction {
         if (specification == null) {
           throw new OpenGammaRuntimeException("Couldn't find a forward swap curve specification called " + curveName + " with target " + target);
         }
-        final Set<ValueRequirement> requirements = new HashSet<ValueRequirement>();
+        final Set<ValueRequirement> requirements = new HashSet<>();
         final ForwardSwapCurveInstrumentProvider provider = (ForwardSwapCurveInstrumentProvider) specification.getCurveInstrumentProvider();
         final Tenor forwardTenor = Tenor.of(Period.parse(forwardTenorName));
         for (final Tenor tenor : definition.getTenors()) {
@@ -137,7 +134,7 @@ public class ForwardSwapCurveMarketDataFunction extends AbstractFunction {
           throw new OpenGammaRuntimeException("Could not get value for spot; requirement was " + spotRequirement);
         }
         final Double spot = (Double) inputs.getValue(spotRequirement);
-        final Map<ExternalId, Double> data = new HashMap<ExternalId, Double>();
+        final Map<ExternalId, Double> data = new HashMap<>();
         for (final Tenor tenor : definition.getTenors()) {
           final ExternalId identifier = provider.getInstrument(now.toLocalDate(), tenor, forwardTenor);
           final ValueRequirement requirement = new ValueRequirement(provider.getDataFieldName(), ComputationTargetType.PRIMITIVE, identifier);

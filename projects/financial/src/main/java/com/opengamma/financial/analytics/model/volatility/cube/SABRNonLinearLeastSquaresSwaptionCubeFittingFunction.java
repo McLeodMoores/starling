@@ -89,6 +89,7 @@ public class SABRNonLinearLeastSquaresSwaptionCubeFittingFunction extends Abstra
     FIXED.set(1);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
       final Set<ValueRequirement> desiredValues) {

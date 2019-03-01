@@ -164,11 +164,6 @@ public class EquityFutureOptionVolatilitySurfaceDataFunction extends AbstractFun
         .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.EQUITY_FUTURE_OPTION)
         .with(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_QUOTE_TYPE, specification.getSurfaceQuoteType())
         .with(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_UNITS, quoteUnits).get();
-    final ValueProperties fullNameProperties = ValueProperties.builder()
-        .with(ValuePropertyNames.SURFACE, givenName)
-        .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.EQUITY_FUTURE_OPTION)
-        .with(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_QUOTE_TYPE, specification.getSurfaceQuoteType())
-        .with(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_UNITS, quoteUnits).get();
     final ValueRequirement surfaceReq = new ValueRequirement(ValueRequirementNames.VOLATILITY_SURFACE_DATA, target.toSpecification(), properties);
     final ValueRequirement specificationReq = new ValueRequirement(ValueRequirementNames.VOLATILITY_SURFACE_SPEC, target.toSpecification(), properties);
     final Set<ValueRequirement> requirements = new HashSet<>();

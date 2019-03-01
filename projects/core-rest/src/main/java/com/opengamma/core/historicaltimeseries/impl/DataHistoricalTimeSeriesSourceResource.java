@@ -194,7 +194,6 @@ public class DataHistoricalTimeSeriesSourceResource extends AbstractDataResource
     return responseOkObject(result);
   }
 
-  @SuppressWarnings("unchecked")
   @POST
   @Path("htsSearches/bulk")
   public Response searchBulk(final FudgeMsgEnvelope request) {

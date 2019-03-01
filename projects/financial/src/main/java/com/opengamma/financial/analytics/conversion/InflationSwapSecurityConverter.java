@@ -38,8 +38,6 @@ import com.opengamma.util.money.Currency;
 public class InflationSwapSecurityConverter extends FinancialSecurityVisitorAdapter<InstrumentDefinition<?>> {
   /** A security source */
   private final SecuritySource _securitySource;
-  /** The convention source */
-  private final ConventionSource _conventionSource;
   /** The region source */
   private final RegionSource _regionSource;
   /** The holiday source */
@@ -57,7 +55,6 @@ public class InflationSwapSecurityConverter extends FinancialSecurityVisitorAdap
     ArgumentChecker.notNull(regionSource, "region source");
     ArgumentChecker.notNull(holidaySource, "holiday source");
     _securitySource = securitySource;
-    _conventionSource = conventionSource;
     _regionSource = regionSource;
     _holidaySource = holidaySource;
   }

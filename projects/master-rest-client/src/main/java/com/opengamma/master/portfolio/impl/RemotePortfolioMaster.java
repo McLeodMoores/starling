@@ -28,8 +28,8 @@ import com.sun.jersey.api.client.GenericType;
  * Provides access to a remote {@link PortfolioMaster}.
  */
 public class RemotePortfolioMaster
-    extends AbstractRemoteDocumentMaster<PortfolioDocument>
-    implements PortfolioMaster {
+extends AbstractRemoteDocumentMaster<PortfolioDocument>
+implements PortfolioMaster {
 
   /**
    * Creates an instance.
@@ -67,9 +67,8 @@ public class RemotePortfolioMaster
     if (uniqueId.isVersioned()) {
       final URI uri = new DataPortfolioUris().uriVersion(getBaseUri(), uniqueId);
       return accessRemote(uri).get(PortfolioDocument.class);
-    } else {
-      return get(uniqueId, VersionCorrection.LATEST);
     }
+    return get(uniqueId, VersionCorrection.LATEST);
   }
 
   //-------------------------------------------------------------------------

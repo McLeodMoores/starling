@@ -40,7 +40,6 @@ public class ISDACompliantYieldCurveBuildTest {
   private static final BusinessDayConvention FOLLOWING = BusinessDayConventions.FOLLOWING;
   private static final BusinessDayConvention MOD_FOLLOWING = BusinessDayConventions.MODIFIED_FOLLOWING;
 
-  @SuppressWarnings("unused")
   @Test
   public void test() {
     final boolean print = false;

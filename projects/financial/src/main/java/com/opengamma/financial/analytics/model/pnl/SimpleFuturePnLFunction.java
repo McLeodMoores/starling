@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.pnl;
@@ -56,7 +56,7 @@ import com.opengamma.timeseries.date.DateDoubleTimeSeries;
 import com.opengamma.util.money.Currency;
 
 /**
- * 
+ *
  */
 public class SimpleFuturePnLFunction extends AbstractFunction.NonCompiledInvoker {
   private static final HolidayDateRemovalFunction HOLIDAY_REMOVER = HolidayDateRemovalFunction.getInstance();
@@ -115,7 +115,7 @@ public class SimpleFuturePnLFunction extends AbstractFunction.NonCompiledInvoker
   @Override
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
     final Position position = target.getPosition();
-    final Security security = (Security) position.getSecurity();
+    final Security security = position.getSecurity();
     return security instanceof EnergyFutureSecurity || security instanceof MetalFutureSecurity || security instanceof IndexFutureSecurity;
   }
 
@@ -153,7 +153,7 @@ public class SimpleFuturePnLFunction extends AbstractFunction.NonCompiledInvoker
     }
     final Position position = target.getPosition();
     final FutureSecurity future = (FutureSecurity) position.getSecurity();
-    final Set<ValueRequirement> requirements = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> requirements = new HashSet<>();
     final ValueProperties pvProperties = ValueProperties.builder()
         .with(ValuePropertyNames.CURRENCY, future.getCurrency().getCode())
         .with(ValuePropertyNames.CURVE, curveName).get();

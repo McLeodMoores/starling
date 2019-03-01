@@ -29,8 +29,8 @@ import com.sun.jersey.api.client.GenericType;
  * Provides access to a remote {@link PortfolioMaster}.
  */
 public class RemotePositionMaster
-    extends AbstractRemoteDocumentMaster<PositionDocument>
-    implements PositionMaster {
+extends AbstractRemoteDocumentMaster<PositionDocument>
+implements PositionMaster {
 
   /**
    * Creates an instance.
@@ -68,9 +68,8 @@ public class RemotePositionMaster
     if (uniqueId.isVersioned()) {
       final URI uri = new DataPositionUris().uriVersion(getBaseUri(), uniqueId);
       return accessRemote(uri).get(PositionDocument.class);
-    } else {
-      return get(uniqueId, VersionCorrection.LATEST);
     }
+    return get(uniqueId, VersionCorrection.LATEST);
   }
 
   //-------------------------------------------------------------------------

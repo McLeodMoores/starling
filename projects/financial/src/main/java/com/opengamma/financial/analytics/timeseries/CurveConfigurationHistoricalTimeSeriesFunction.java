@@ -11,9 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.collect.Iterables;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
@@ -45,8 +42,6 @@ import com.opengamma.util.async.AsynchronousExecution;
  * used to convert {@link InstrumentDefinition}s into the {@link InstrumentDerivative}s used in pricing and curve construction.
  */
 public class CurveConfigurationHistoricalTimeSeriesFunction extends AbstractFunction.NonCompiledInvoker {
-  /** The logger */
-  private static final Logger LOGGER = LoggerFactory.getLogger(CurveConfigurationHistoricalTimeSeriesFunction.class);
 
   private ConfigDBCurveConstructionConfigurationSource _curveConstructionConfigurationSource;
 

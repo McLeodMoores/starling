@@ -96,7 +96,7 @@ public class PropertyPreservingFunctionTest {
       Collections.rotate(specses, 1);
     }
     //Check repeats, since there are 2 code branches
-    final List<ValueSpecification> doubled = new ArrayList<ValueSpecification>(inputs.length * 2);
+    final List<ValueSpecification> doubled = new ArrayList<>(inputs.length * 2);
     doubled.addAll(specses);
     doubled.addAll(specses);
     assertEqualOrdered(expected, func, doubled);
@@ -113,7 +113,7 @@ public class PropertyPreservingFunctionTest {
   }
 
   private List<ValueSpecification> getSpecs(final Collection<ValueProperties> props) {
-    final List<ValueSpecification> ret = new ArrayList<ValueSpecification>();
+    final List<ValueSpecification> ret = new ArrayList<>();
     for (final ValueProperties valueProp : props) {
       ret.add(getSpec(valueProp));
     }

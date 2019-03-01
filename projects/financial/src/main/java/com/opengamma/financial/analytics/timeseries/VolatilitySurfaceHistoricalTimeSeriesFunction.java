@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.timeseries;
@@ -42,7 +42,7 @@ import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.async.AsynchronousExecution;
 
 /**
- * 
+ *
  */
 public abstract class VolatilitySurfaceHistoricalTimeSeriesFunction extends AbstractFunction.NonCompiledInvoker {
   private static final Logger LOGGER = LoggerFactory.getLogger(VolatilitySurfaceHistoricalTimeSeriesFunction.class);
@@ -78,11 +78,12 @@ public abstract class VolatilitySurfaceHistoricalTimeSeriesFunction extends Abst
     } else {
       endDateString = Iterables.getOnlyElement(endDateConstraint);
     }
-    LocalDate endDate = DateConstraint.evaluate(executionContext, endDateString);
+    final LocalDate endDate = DateConstraint.evaluate(executionContext, endDateString);
     final boolean includeEnd = HistoricalTimeSeriesFunctionUtils.parseBoolean(desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY));
     final String surfaceName = desiredValue.getConstraint(ValuePropertyNames.SURFACE);
     final VolatilitySurfaceDefinition<Object, Object> definition = getSurfaceDefinition(target, surfaceName);
     final VolatilitySurfaceSpecification specification = getSurfaceSpecification(target, surfaceName);
+    @SuppressWarnings("unchecked")
     final SurfaceInstrumentProvider<Object, Object> provider = (SurfaceInstrumentProvider<Object, Object>) specification.getSurfaceInstrumentProvider();
     final HistoricalTimeSeriesBundle bundle = new HistoricalTimeSeriesBundle();
     for (final Object x : definition.getXs()) {
@@ -125,14 +126,14 @@ public abstract class VolatilitySurfaceHistoricalTimeSeriesFunction extends Abst
     ValueProperties.Builder constraints = null;
     final ValueProperties desiredValueConstraints = desiredValue.getConstraints();
     Set<String> values = desiredValueConstraints.getValues(HistoricalTimeSeriesFunctionUtils.DATA_FIELD_PROPERTY);
-    if ((values == null) || values.isEmpty()) {
+    if (values == null || values.isEmpty()) {
       constraints = desiredValueConstraints.copy().with(HistoricalTimeSeriesFunctionUtils.DATA_FIELD_PROPERTY, MarketDataRequirementNames.MARKET_VALUE);
     } else if (values.size() > 1) {
       constraints = desiredValueConstraints.copy().withoutAny(HistoricalTimeSeriesFunctionUtils.DATA_FIELD_PROPERTY)
           .with(HistoricalTimeSeriesFunctionUtils.DATA_FIELD_PROPERTY, values.iterator().next());
     }
     values = desiredValueConstraints.getValues(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY);
-    if ((values == null) || values.isEmpty()) {
+    if (values == null || values.isEmpty()) {
       if (constraints == null) {
         constraints = desiredValueConstraints.copy();
       }
@@ -144,28 +145,28 @@ public abstract class VolatilitySurfaceHistoricalTimeSeriesFunction extends Abst
       constraints.withoutAny(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY).with(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY, values.iterator().next());
     }
     values = desiredValueConstraints.getValues(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY);
-    if ((values == null) || values.isEmpty()) {
+    if (values == null || values.isEmpty()) {
       if (constraints == null) {
         constraints = desiredValueConstraints.copy();
       }
       constraints.with(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY, "");
     }
     values = desiredValueConstraints.getValues(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY);
-    if ((values == null) || (values.size() != 1)) {
+    if (values == null || values.size() != 1) {
       if (constraints == null) {
         constraints = desiredValueConstraints.copy();
       }
       constraints.with(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY, HistoricalTimeSeriesFunctionUtils.YES_VALUE);
     }
     values = desiredValueConstraints.getValues(HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY);
-    if ((values == null) || values.isEmpty()) {
+    if (values == null || values.isEmpty()) {
       if (constraints == null) {
         constraints = desiredValueConstraints.copy();
       }
       constraints.with(HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY, "");
     }
     values = desiredValueConstraints.getValues(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY);
-    if ((values == null) || (values.size() != 1)) {
+    if (values == null || values.size() != 1) {
       if (constraints == null) {
         constraints = desiredValueConstraints.copy();
       }
@@ -185,6 +186,7 @@ public abstract class VolatilitySurfaceHistoricalTimeSeriesFunction extends Abst
 
   private VolatilitySurfaceDefinition<Object, Object> getSurfaceDefinition(final ComputationTarget target, final String definitionName) {
     final String fullDefinitionName = definitionName + "_" + target.getUniqueId().getValue();
+    @SuppressWarnings("unchecked")
     final VolatilitySurfaceDefinition<Object, Object> definition = (VolatilitySurfaceDefinition<Object, Object>) _volatilitySurfaceDefinitionSource.getDefinition(fullDefinitionName,
         getInstrumentType());
     if (definition == null) {

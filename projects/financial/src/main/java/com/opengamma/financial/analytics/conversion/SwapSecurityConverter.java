@@ -291,13 +291,13 @@ public class SwapSecurityConverter extends FinancialSecurityVisitorAdapter<Instr
         final Calendar calendar = CalendarUtils.getCalendar(_regionSource, _holidaySource, swapLeg.getRegionId());
         switch (swapLeg.getFloatingRateType()) {
           case IBOR:
-            return getIborAnnuity(swapLeg, interestRateNotional, currency, calendar);
+            return getIborAnnuity(swapLeg, interestRateNotional, calendar);
           case OIS:
-            return getOISAnnuity(swapLeg, interestRateNotional, currency);
+            return getOISAnnuity(swapLeg, interestRateNotional);
           case CMS:
             return getCMSAnnuity(swapLeg, interestRateNotional, currency, calendar);
           case OVERNIGHT_ARITHMETIC_AVERAGE:
-            return getOvernightAAverageAnnuity(swapLeg, interestRateNotional, currency);
+            return getOvernightAAverageAnnuity(swapLeg, interestRateNotional);
           default:
             throw new OpenGammaRuntimeException("Cannot handle floating type " + swapLeg.getFloatingRateType());
         }
@@ -310,13 +310,13 @@ public class SwapSecurityConverter extends FinancialSecurityVisitorAdapter<Instr
         final Calendar calendar = CalendarUtils.getCalendar(_regionSource, _holidaySource, swapLeg.getRegionId());
         switch (swapLeg.getFloatingRateType()) {
           case IBOR:
-            return getIborAnnuity(swapLeg, interestRateNotional, currency, calendar);
+            return getIborAnnuity(swapLeg, interestRateNotional, calendar);
           case OIS:
-            return getOISAnnuity(swapLeg, interestRateNotional, currency);
+            return getOISAnnuity(swapLeg, interestRateNotional);
           case CMS:
             return getCMSAnnuity(swapLeg, interestRateNotional, currency, calendar);
           case OVERNIGHT_ARITHMETIC_AVERAGE:
-            return getOvernightAAverageAnnuity(swapLeg, interestRateNotional, currency);
+            return getOvernightAAverageAnnuity(swapLeg, interestRateNotional);
           default:
             throw new OpenGammaRuntimeException("Cannot handle floating type " + swapLeg.getFloatingRateType());
         }
@@ -348,7 +348,7 @@ public class SwapSecurityConverter extends FinancialSecurityVisitorAdapter<Instr
       }
 
       private AnnuityDefinition<? extends PaymentDefinition> getIborAnnuity(final FloatingInterestRateLeg swapLeg, final InterestRateNotional interestRateNotional,
-          final Currency currency, final Calendar calendar) {
+          final Calendar calendar) {
         final Security sec = _securitySource.getSingle(swapLeg.getFloatingReferenceRateId().toBundle());
         if (sec == null) {
           throw new OpenGammaRuntimeException("Ibor index with id " + swapLeg.getFloatingReferenceRateId() + " was null");
@@ -371,8 +371,7 @@ public class SwapSecurityConverter extends FinancialSecurityVisitorAdapter<Instr
             isFinalNotionalExchange);
       }
 
-      private AnnuityDefinition<? extends PaymentDefinition> getOISAnnuity(final FloatingInterestRateLeg swapLeg, final InterestRateNotional interestRateNotional,
-          final Currency currency) {
+      private AnnuityDefinition<? extends PaymentDefinition> getOISAnnuity(final FloatingInterestRateLeg swapLeg, final InterestRateNotional interestRateNotional) {
         final OvernightIndex overnightIndex = (OvernightIndex) _securitySource.getSingle(swapLeg.getFloatingReferenceRateId().toBundle());
         final OvernightIndexConvention indexConvention = _conventionSource.getSingle(overnightIndex.getConventionId(), OvernightIndexConvention.class);
         final IndexON index = ConverterUtils.indexON(overnightIndex.getName(), indexConvention);
@@ -398,7 +397,6 @@ public class SwapSecurityConverter extends FinancialSecurityVisitorAdapter<Instr
           throw new OpenGammaRuntimeException("Cannot create an annuity for a CMS leg with a spread");
         }
         final String tenorString = getTenorString(swapLeg.getFrequency());
-        final String iborLegConventionName = getConventionName(currency, tenorString, IRS_IBOR_LEG);
         final VanillaIborLegConvention iborLegConvention = _conventionSource.getSingle(ExternalId.of(SCHEME_NAME, getConventionName(currency, tenorString, IRS_IBOR_LEG)),
             VanillaIborLegConvention.class);
         final IborIndexConvention iborIndexConvention = _conventionSource.getSingle(iborLegConvention.getIborIndexConvention(), IborIndexConvention.class);
@@ -406,12 +404,10 @@ public class SwapSecurityConverter extends FinancialSecurityVisitorAdapter<Instr
         final SwapIndexConvention swapIndexConvention = _conventionSource.getSingle(ExternalId.of(SCHEME_NAME, swapIndexConventionName), SwapIndexConvention.class);
         final SwapConvention underlyingSwapConvention = _conventionSource.getSingle(swapIndexConvention.getSwapConvention(), SwapConvention.class);
         final SwapFixedLegConvention payLegConvention = _conventionSource.getSingle(underlyingSwapConvention.getPayLegConvention(), SwapFixedLegConvention.class);
-        final VanillaIborLegConvention receiveLegConvention = _conventionSource.getSingle(underlyingSwapConvention.getReceiveLegConvention(), VanillaIborLegConvention.class);
         final Frequency freqIbor = swapLeg.getFrequency();
         final Period tenorIbor = ConversionUtils.getTenor(freqIbor);
         final int spotLag = iborIndexConvention.getSettlementDays();
         final DayCount dayCount = swapLeg.getDayCount();
-        final BusinessDayConvention businessDayConvention = swapLeg.getBusinessDayConvention();
         final double notional = interestRateNotional.getAmount();
         final IborIndex iborIndex = new IborIndex(currency, tenorIbor, spotLag, iborIndexConvention.getDayCount(), iborIndexConvention.getBusinessDayConvention(),
             iborIndexConvention.isIsEOM(), iborIndexConvention.getName());
@@ -422,8 +418,7 @@ public class SwapSecurityConverter extends FinancialSecurityVisitorAdapter<Instr
         return AnnuityCouponCMSDefinition.from(effectiveDate, maturityDate, notional, swapIndex, tenorIbor, dayCount, isPayer, calendar);
       }
 
-      private AnnuityDefinition<? extends PaymentDefinition> getOvernightAAverageAnnuity(final FloatingInterestRateLeg swapLeg, final InterestRateNotional interestRateNotional,
-          final Currency currency) {
+      private AnnuityDefinition<? extends PaymentDefinition> getOvernightAAverageAnnuity(final FloatingInterestRateLeg swapLeg, final InterestRateNotional interestRateNotional) {
         final OvernightIndex overnightIndex = (OvernightIndex) _securitySource.getSingle(swapLeg.getFloatingReferenceRateId().toBundle());
         final OvernightIndexConvention indexConvention = _conventionSource.getSingle(overnightIndex.getConventionId(), OvernightIndexConvention.class);
         final IndexON index = ConverterUtils.indexON(overnightIndex.getName(), indexConvention);

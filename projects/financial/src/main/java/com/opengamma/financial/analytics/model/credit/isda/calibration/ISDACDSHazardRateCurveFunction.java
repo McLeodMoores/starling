@@ -53,8 +53,6 @@ import com.opengamma.financial.analytics.model.credit.CreditSecurityToIdentifier
 import com.opengamma.financial.analytics.model.credit.CreditSecurityToRecoveryRateVisitor;
 import com.opengamma.financial.analytics.model.credit.IMMDateGenerator;
 import com.opengamma.financial.convention.HolidaySourceCalendarAdapter;
-import com.opengamma.financial.convention.businessday.BusinessDayConvention;
-import com.opengamma.financial.convention.businessday.BusinessDayConventions;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.financial.credit.CdsRecoveryRateIdentifier;
 import com.opengamma.financial.security.FinancialSecurity;
@@ -69,7 +67,6 @@ import com.opengamma.util.time.Tenor;
  *
  */
 public class ISDACDSHazardRateCurveFunction extends ISDAHazardRateCurveFunction {
-  private static final BusinessDayConvention FOLLOWING = BusinessDayConventions.FOLLOWING;
   private static final FastCreditCurveBuilder CREDIT_CURVE_BUILDER = new FastCreditCurveBuilder();
 
   @Override

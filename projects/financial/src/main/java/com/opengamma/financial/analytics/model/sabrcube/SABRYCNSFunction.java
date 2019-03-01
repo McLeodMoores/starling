@@ -47,7 +47,6 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.OpenGammaCompilationContext;
-import com.opengamma.financial.OpenGammaExecutionContext;
 import com.opengamma.financial.analytics.conversion.CapFloorCMSSpreadSecurityConverter;
 import com.opengamma.financial.analytics.conversion.CapFloorSecurityConverterDeprecated;
 import com.opengamma.financial.analytics.conversion.FixedIncomeConverterDataProvider;
@@ -127,7 +126,6 @@ public abstract class SABRYCNSFunction extends AbstractFunction.NonCompiledInvok
     if (definition == null) {
       throw new OpenGammaRuntimeException("Definition for security " + security + " was null");
     }
-    final ConventionBundleSource conventionSource = OpenGammaExecutionContext.getConventionBundleSource(executionContext);
     final String curveCalculationConfigName = desiredValue.getConstraint(ValuePropertyNames.CURVE_CALCULATION_CONFIG);
     final MultiCurveCalculationConfig curveCalculationConfig = _curveCalculationConfigSource.getConfig(curveCalculationConfigName);
     if (curveCalculationConfig == null) {

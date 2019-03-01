@@ -24,7 +24,6 @@ import com.opengamma.engine.value.ValuePropertyNames;
 import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
-import com.opengamma.financial.security.FinancialSecurityUtils;
 import com.opengamma.util.async.AsynchronousExecution;
 
 /**
@@ -75,7 +74,6 @@ public class NetCapitalFunction extends AbstractFunction.NonCompiledInvoker {
       return null;
     }
     final Security security = target.getPositionOrTrade().getSecurity();
-    final String currency = FinancialSecurityUtils.getCurrency(security).getCode();
     final ValueProperties properties = netMarketValueSpec.getProperties().copy()
         .withoutAny(ValuePropertyNames.FUNCTION).with(ValuePropertyNames.FUNCTION, getUniqueId())
         .withoutAny(ValuePropertyNames.CURRENCY)

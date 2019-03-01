@@ -79,7 +79,7 @@ public class BondTotalReturnSwapAssetLegDetailsFunction extends BondTotalReturnS
         final BondTotalReturnSwapDefinition trsDefinition = (BondTotalReturnSwapDefinition) getTargetToDefinitionConverter(context).convert(trade);
         final SecuritySource securitySource = OpenGammaExecutionContext.getSecuritySource(executionContext);
         final IssuerProviderInterface issuerCurves = getMergedWithIssuerProviders(inputs, getFXMatrix(inputs, target, securitySource));
-        final BondFixedSecurityDefinition bondDefinition = (BondFixedSecurityDefinition) trsDefinition.getAsset();
+        final BondFixedSecurityDefinition bondDefinition = trsDefinition.getAsset();
         final BondSecurity<? extends Payment, ? extends Coupon> bondDerivative = bondDefinition.toDerivative(now);
         final AnnuityDefinition<? extends CouponDefinition> couponDefinitions = bondDefinition.getCoupons();
         final Annuity<? extends Payment> couponDerivatives = couponDefinitions.toDerivative(now);

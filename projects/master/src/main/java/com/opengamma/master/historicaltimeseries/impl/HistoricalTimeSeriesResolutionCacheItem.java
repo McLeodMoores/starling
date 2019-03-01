@@ -41,7 +41,8 @@ public class HistoricalTimeSeriesResolutionCacheItem {
   // -------------------------------------------------------------------------
   /**
    * @param validityDate
-   * @return
+   *          the validity date
+   * @return true if the date is invalid
    */
   public boolean isInvalid(final LocalDate validityDate) {
     if (_allInvalid.get()) {
@@ -55,6 +56,7 @@ public class HistoricalTimeSeriesResolutionCacheItem {
 
   /**
    * @param validityDate
+   *          the validity date
    */
   public void putInvalid(final LocalDate validityDate) {
     if (validityDate == null) {
@@ -72,7 +74,8 @@ public class HistoricalTimeSeriesResolutionCacheItem {
   // -------------------------------------------------------------------------
   /**
    * @param validityDate
-   * @return
+   *          the validity date
+   * @return the resolution result
    */
   public HistoricalTimeSeriesResolutionResult get(final LocalDate validityDate) {
     for (final Map.Entry<ExternalIdWithDates, HistoricalTimeSeriesResolutionResult> result : _results.entrySet()) {
@@ -85,7 +88,9 @@ public class HistoricalTimeSeriesResolutionCacheItem {
 
   /**
    * @param externalIdWithDates
+   *          the identifiers, not null
    * @param result
+   *          the resolution result, not ull
    */
   public void put(final ExternalIdWithDates externalIdWithDates, final HistoricalTimeSeriesResolutionResult result) {
     ArgumentChecker.notNull(externalIdWithDates, "externalIdWithDates");

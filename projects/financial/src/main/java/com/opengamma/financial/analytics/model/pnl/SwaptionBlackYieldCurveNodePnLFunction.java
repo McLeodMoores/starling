@@ -6,7 +6,6 @@
 package com.opengamma.financial.analytics.model.pnl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -238,8 +237,6 @@ public class SwaptionBlackYieldCurveNodePnLFunction extends AbstractFunction.Non
       final HistoricalTimeSeriesBundle timeSeriesBundle, final LocalDate[] schedule, final TimeSeriesSamplingFunction samplingFunction) {
     DoubleTimeSeries<?> pnlSeries = null;
     final int n = curveSensitivities.size();
-    final Object[] labels = curveSensitivities.getLabels();
-    final List<Object> labelsList = Arrays.asList(labels);
     final double[] values = curveSensitivities.getValues();
     final SortedSet<FixedIncomeStripWithSecurity> strips = (SortedSet<FixedIncomeStripWithSecurity>) spec.getStrips();
     final FixedIncomeStripWithSecurity[] stripsArray = strips.toArray(new FixedIncomeStripWithSecurity[] {});

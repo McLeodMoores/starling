@@ -5,9 +5,6 @@
  */
 package com.opengamma.financial.analytics.volatility.surface;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.target.ComputationTargetType;
@@ -18,8 +15,6 @@ import com.opengamma.id.VersionCorrection;
  * Constructs volatility surface data objects for IR future options if the target is the currency of the option.
  */
 public class RawIRFutureOptionVolatilitySurfaceDataFunction extends RawVolatilitySurfaceDataFunction {
-  /** The logger */
-  private static final Logger LOGGER = LoggerFactory.getLogger(RawIRFutureOptionVolatilitySurfaceDataFunction.class);
 
   /**
    * Default constructor

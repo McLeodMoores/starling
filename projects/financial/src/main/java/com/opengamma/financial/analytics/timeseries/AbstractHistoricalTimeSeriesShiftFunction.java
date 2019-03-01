@@ -68,7 +68,7 @@ public abstract class AbstractHistoricalTimeSeriesShiftFunction<T> extends Abstr
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final ValueProperties constraints = desiredValue.getConstraints();
     final Set<String> shift = constraints.getValues(SHIFT_PROPERTY);
-    if ((shift == null) || shift.isEmpty() || constraints.isOptional(SHIFT_PROPERTY)) {
+    if (shift == null || shift.isEmpty() || constraints.isOptional(SHIFT_PROPERTY)) {
       return null;
     }
     final ValueProperties properties = desiredValue.getConstraints().copy().withoutAny(SHIFT_PROPERTY).with(SHIFT_PROPERTY, "0").withOptional(SHIFT_PROPERTY).get();
@@ -82,13 +82,13 @@ public abstract class AbstractHistoricalTimeSeriesShiftFunction<T> extends Abstr
     return Collections.singleton(new ValueSpecification(input.getValueName(), input.getTargetSpecification(), properties));
   }
 
-  private ValueRequirement createRequirement(final FunctionExecutionContext context, final String field, final ExternalIdBundle identifiers) {
+  private ValueRequirement createRequirement(final String field, final ExternalIdBundle identifiers) {
     return new ValueRequirement(field, ComputationTargetType.SECURITY, identifiers);
   }
 
   protected HistoricalTimeSeries applyOverride(final FunctionExecutionContext context, final OverrideOperation operation, final String field, final ExternalIdBundle identifiers,
       final HistoricalTimeSeries value) {
-    final ValueRequirement requirement = createRequirement(context, field, identifiers);
+    final ValueRequirement requirement = createRequirement(field, identifiers);
     LOGGER.debug("Synthetic requirement {} on {}", requirement, value);
     return new SimpleHistoricalTimeSeries(value.getUniqueId(), value.getTimeSeries().operate(new UnaryOperator() {
       @Override
@@ -99,7 +99,7 @@ public abstract class AbstractHistoricalTimeSeriesShiftFunction<T> extends Abstr
   }
 
   protected Double applyOverride(final FunctionExecutionContext context, final OverrideOperation operation, final String field, final ExternalIdBundle identifiers, final Double value) {
-    final ValueRequirement requirement = createRequirement(context, field, identifiers);
+    final ValueRequirement requirement = createRequirement(field, identifiers);
     LOGGER.debug("Synthetic requirement {} on {}", requirement, value);
     return (Double) operation.apply(requirement, value);
   }
