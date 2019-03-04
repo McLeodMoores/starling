@@ -28,7 +28,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.model.BondAndBondFutureFunctionUtils;
 import com.opengamma.financial.security.FinancialSecurityUtils;
@@ -41,7 +40,8 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 public class BondAndBondFuturePresentValueFromCurvesFunction extends BondAndBondFutureFromCurvesFunction<IssuerProviderInterface, MultipleCurrencyAmount> {
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#PRESENT_VALUE}.
+   * Sets the value requirement name to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#PRESENT_VALUE}.
    */
   public BondAndBondFuturePresentValueFromCurvesFunction() {
     super(PRESENT_VALUE, null);
@@ -58,7 +58,7 @@ public class BondAndBondFuturePresentValueFromCurvesFunction extends BondAndBond
     final ValueSpecification spec = new ValueSpecification(PRESENT_VALUE, target.toSpecification(), properties);
     final MultipleCurrencyAmount pv = derivative.accept(PresentValueIssuerCalculator.getInstance(), issuerCurves);
     final String expectedCurrency = spec.getProperty(CURRENCY);
-    if (pv.size() != 1 || !(expectedCurrency.equals(pv.getCurrencyAmounts()[0].getCurrency().getCode()))) {
+    if (pv.size() != 1 || !expectedCurrency.equals(pv.getCurrencyAmounts()[0].getCurrency().getCode())) {
       throw new OpenGammaRuntimeException("Expecting a single result in " + expectedCurrency);
     }
     return Collections.singleton(new ComputedValue(spec, pv.getCurrencyAmounts()[0].getAmount()));

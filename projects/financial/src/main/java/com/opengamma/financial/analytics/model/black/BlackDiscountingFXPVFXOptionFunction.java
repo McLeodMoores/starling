@@ -27,7 +27,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.model.forex.FXUtils;
 import com.opengamma.util.money.MultipleCurrencyAmount;
@@ -42,7 +41,8 @@ public class BlackDiscountingFXPVFXOptionFunction extends BlackDiscountingFXOpti
       PresentValueForexBlackSmileCalculator.getInstance();
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#FX_PRESENT_VALUE}
+   * Sets the value requirement to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#FX_PRESENT_VALUE}
    */
   public BlackDiscountingFXPVFXOptionFunction() {
     super(FX_PRESENT_VALUE);

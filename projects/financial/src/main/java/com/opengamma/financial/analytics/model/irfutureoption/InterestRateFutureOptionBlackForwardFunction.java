@@ -13,19 +13,20 @@ import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.interestrate.UnderlyingMarketPriceCalculator;
 import com.opengamma.analytics.financial.interestrate.future.derivative.InterestRateFutureOptionMarginTransaction;
 import com.opengamma.analytics.financial.interestrate.future.derivative.InterestRateFutureOptionPremiumTransaction;
-import com.opengamma.analytics.financial.interestrate.future.method.InterestRateFutureSecurityDiscountingMethod;
 import com.opengamma.analytics.financial.model.option.definition.YieldCurveWithBlackCubeBundle;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
-import com.opengamma.financial.analytics.model.black.BlackDiscountingForwardIRFutureOptionFunction;
 
 /**
- * Calls into {@link InterestRateFutureSecurityDiscountingMethod} to compute forward used in BlackFunctions. No convexity is applied, so this may be used to compare to
- * {@link ValueRequirementNames#UNDERLYING_MARKET_PRICE} computed in {@link InterestRateFutureOptionMarketUnderlyingPriceFunction}
+ * Calls into {@link InterestRateFutureSecurityDiscountingMethod} to compute
+ * forward used in BlackFunctions. No convexity is applied, so this may be used
+ * to compare to {@link ValueRequirementNames#UNDERLYING_MARKET_PRICE} computed
+ * in {@link InterestRateFutureOptionMarketUnderlyingPriceFunction}
  *
- * @deprecated Use {@link BlackDiscountingForwardIRFutureOptionFunction}
+ * @deprecated Use
+ *             {@link com.opengamma.financial.analytics.model.black.BlackDiscountingForwardIRFutureOptionFunction}
  */
 @Deprecated
 public class InterestRateFutureOptionBlackForwardFunction extends InterestRateFutureOptionBlackFunction {

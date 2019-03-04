@@ -36,13 +36,13 @@ public final class CreditCurveDataSnapshot implements NamedSnapshot, ImmutableBe
   /**
    * The unique id of the snapshot.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private final UniqueId _uniqueId;
 
   /**
    * The name of the snapshot.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private final String _name;
 
   /**
@@ -109,6 +109,7 @@ public final class CreditCurveDataSnapshot implements NamedSnapshot, ImmutableBe
    * Gets the unique id of the snapshot.
    * @return the value of the property
    */
+  @Override
   public UniqueId getUniqueId() {
     return _uniqueId;
   }
@@ -118,6 +119,7 @@ public final class CreditCurveDataSnapshot implements NamedSnapshot, ImmutableBe
    * Gets the name of the snapshot.
    * @return the value of the property, not null
    */
+  @Override
   public String getName() {
     return _name;
   }

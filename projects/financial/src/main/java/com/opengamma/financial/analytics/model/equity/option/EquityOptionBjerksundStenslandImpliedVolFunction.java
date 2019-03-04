@@ -23,9 +23,6 @@ import com.opengamma.analytics.financial.model.interestrate.curve.ForwardCurve;
 import com.opengamma.analytics.financial.model.interestrate.curve.ForwardCurveAffineDividends;
 import com.opengamma.analytics.financial.model.option.pricing.analytic.BjerksundStenslandModel;
 import com.opengamma.analytics.financial.model.volatility.BlackFormulaRepository;
-import com.opengamma.analytics.financial.model.volatility.BlackImpliedVolatilityFormula;
-import com.opengamma.analytics.math.MathException;
-import com.opengamma.analytics.math.rootfinding.BracketRoot;
 import com.opengamma.core.value.MarketDataRequirementNames;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.ComputationTargetSpecification;
@@ -39,8 +36,11 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.security.FinancialSecurity;
+
 /**
- * Calculates the implied volatility of an equity index or equity option using the {@link BjerksundStenslandModel} */
+ * Calculates the implied volatility of an equity index or equity option using
+ * the {@link BjerksundStenslandModel}
+ */
 public class EquityOptionBjerksundStenslandImpliedVolFunction extends EquityOptionBjerksundStenslandFunction {
 
   /** The BjerksundStensland present value calculator */
@@ -107,7 +107,7 @@ public class EquityOptionBjerksundStenslandImpliedVolFunction extends EquityOpti
 
     final double volatility = market.getVolatilitySurface().getVolatility(timeToExpiry, strike);
     Double impliedVol = null;
-    
+
     if (derivative instanceof EquityOption) {
       final double spot = market.getForwardCurve().getSpot();
       final double discountRate = market.getDiscountCurve().getInterestRate(timeToExpiry);
@@ -127,7 +127,7 @@ public class EquityOptionBjerksundStenslandImpliedVolFunction extends EquityOpti
       } else {
         costOfCarry = Math.log(fCurve.getForward(timeToExpiry) / spot) / timeToExpiry;
       }
-      
+
       try {
         if (timeToExpiry < 7. / 365.) {
           impliedVol = BlackFormulaRepository.impliedVolatility(optionPrice / market.getDiscountCurve().getDiscountFactor(timeToExpiry), fCurve.getForward(timeToExpiry), strike, timeToExpiry, isCall);
@@ -143,12 +143,12 @@ public class EquityOptionBjerksundStenslandImpliedVolFunction extends EquityOpti
         }
       }
     } else {
-      impliedVol = volatility;      
+      impliedVol = volatility;
     }
     final ValueSpecification resultSpec = new ValueSpecification(getValueRequirementNames()[0], targetSpec, resultProperties);
     return Collections.singleton(new ComputedValue(resultSpec, impliedVol));
   }
-  
+
 
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {

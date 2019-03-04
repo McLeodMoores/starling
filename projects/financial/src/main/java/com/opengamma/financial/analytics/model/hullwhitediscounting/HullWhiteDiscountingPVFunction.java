@@ -26,7 +26,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.security.FinancialSecurityUtils;
 import com.opengamma.util.money.Currency;
@@ -42,7 +41,8 @@ public class HullWhiteDiscountingPVFunction extends HullWhiteDiscountingFunction
       PresentValueHullWhiteCalculator.getInstance();
 
   /**
-   * Sets the value requirements to {@link ValueRequirementNames#PRESENT_VALUE}
+   * Sets the value requirements to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#PRESENT_VALUE}
    */
   public HullWhiteDiscountingPVFunction() {
     super(PRESENT_VALUE);

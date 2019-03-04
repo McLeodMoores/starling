@@ -7,11 +7,9 @@ package com.opengamma.batch;
 
 import java.util.List;
 
-import com.opengamma.DataNotFoundException;
 import com.opengamma.batch.domain.MarketData;
 import com.opengamma.batch.domain.MarketDataValue;
 import com.opengamma.batch.domain.RiskRun;
-import com.opengamma.batch.rest.BatchGetRequest;
 import com.opengamma.batch.rest.BatchRunSearchRequest;
 import com.opengamma.engine.view.ViewResultEntry;
 import com.opengamma.id.ObjectId;
@@ -42,14 +40,17 @@ public interface BatchMaster {
   /**
    * Gets a batch document by unique identifier.
    * <p>
-   * This returns a single batch document by unique identifier.
-   * It will return all the risk data and the total count of the errors.
-   * For more control, use {@link #get(BatchGetRequest)}.
+   * This returns a single batch document by unique identifier. It will return
+   * all the risk data and the total count of the errors. For more control, use
+   * {@link #get(com.opengamma.batch.rest.BatchGetRequest)}.
    *
-   * @param batchId  the unique identifier, not null
+   * @param batchId
+   *          the unique identifier, not null
    * @return the document, not null
-   * @throws IllegalArgumentException if the request is invalid
-   * @throws DataNotFoundException if there is no document with that unique identifier
+   * @throws IllegalArgumentException
+   *           if the request is invalid
+   * @throws com.opengamma.DataNotFoundException
+   *           if there is no document with that unique identifier
    */
   RiskRun getRiskRun(ObjectId batchId);
 
@@ -67,8 +68,8 @@ public interface BatchMaster {
    * @return list of batch values
    */
   Pair<List<ViewResultEntry>, Paging> getBatchValues(final ObjectId batchId, final PagingRequest pagingRequest);
-  
-  
+
+
   /**
    * Search batch data snapshots.
    *
@@ -81,7 +82,7 @@ public interface BatchMaster {
   /**
    * Search market data by id.
    *
-   * @param marketDataId the id of the market data to get               
+   * @param marketDataId the id of the market data to get
    * @return requested market data, not null
    * @throws IllegalArgumentException if the request is invalid
    */

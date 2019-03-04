@@ -19,7 +19,6 @@ import com.opengamma.analytics.financial.forex.method.PresentValueForexBlackVola
 import com.opengamma.analytics.financial.forex.method.PresentValueForexBlackVolatilityQuoteSensitivityDataBundle;
 import com.opengamma.analytics.financial.interestrate.sensitivity.PresentValueBlackSwaptionSensitivity;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
-import com.opengamma.analytics.util.amount.SurfaceValue;
 import com.opengamma.financial.analytics.DoubleLabelledMatrix2D;
 import com.opengamma.financial.analytics.DoubleLabelledMatrix3D;
 import com.opengamma.financial.analytics.volatility.surface.VolatilitySurfaceDefinition;
@@ -27,7 +26,6 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.time.Tenor;
 import com.opengamma.util.tuple.DoublesPair;
 import com.opengamma.util.tuple.Pair;
-import com.opengamma.util.tuple.Pairs;
 
 /**
  * Contains utility methods that vega output from the analytics libraries into objects that
@@ -40,7 +38,9 @@ public class VegaMatrixUtils {
 
   /**
    * Returns a bucketed FX option vega matrix with delta / expiry axes.
-   * @param vegas The vegas, not null
+   * 
+   * @param vegas
+   *          The vegas, not null
    * @return A labelled vega matrix.
    */
   public static DoubleLabelledMatrix2D getVegaFXMatrix(final PresentValueForexBlackVolatilityNodeSensitivityDataBundle vegas) {
@@ -223,32 +223,32 @@ public class VegaMatrixUtils {
     final Double[] yLabels = yLabelsList.toArray(ArrayUtils.EMPTY_DOUBLE_OBJECT_ARRAY);
     final int nMaturities = yLabels.length;
     final double[][] values = new double[nMaturities][nExpiries];
-    
+
     for (int i = 0; i < nExpiries; i++) {
       for (int j = 0; j < nMaturities; j++) {
-        DoublesPair key = DoublesPair.of(xKeys[i].doubleValue(), yKeys[j].doubleValue());
-        Double value = vegaMap.get(key);
+        final DoublesPair key = DoublesPair.of(xKeys[i].doubleValue(), yKeys[j].doubleValue());
+        final Double value = vegaMap.get(key);
         values[j][i] = value == null ? 0.0 : value;
       }
     }
-    
+
     return new DoubleLabelledMatrix2D(xKeys, xLabels, yKeys, yLabels, values);
   }
-  
+
   public static String getFXVolatilityFormattedExpiry(final double expiry) {
     if (expiry < 1. / 54) {
-      final int days = (int) Math.ceil((365 * expiry));
+      final int days = (int) Math.ceil(365 * expiry);
       return days + "D";
     }
     if (expiry < 1. / 13) {
-      final int weeks = (int) Math.ceil((52 * expiry));
+      final int weeks = (int) Math.ceil(52 * expiry);
       return weeks + "W";
     }
     if (expiry < 0.95) {
-      final int months = (int) Math.ceil((12 * expiry));
+      final int months = (int) Math.ceil(12 * expiry);
       return months + "M";
     }
-    return ((int) Math.ceil(expiry)) + "Y";
+    return (int) Math.ceil(expiry) + "Y";
   }
 
   private static double getTime(final Tenor tenor) { //TODO this should be moved into a utils class
@@ -256,7 +256,7 @@ public class VegaMatrixUtils {
     final double months = period.toTotalMonths();
     return months / 12.;
   }
-  
 
-  
+
+
 }

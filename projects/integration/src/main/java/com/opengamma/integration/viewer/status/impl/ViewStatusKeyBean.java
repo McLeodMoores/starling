@@ -29,16 +29,16 @@ import com.opengamma.util.ArgumentChecker;
 @BeanDefinition
 public class ViewStatusKeyBean extends DirectBean implements ViewStatusKey {
 
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private String _securityType;
 
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private String _valueRequirementName;
 
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private String _currency;
 
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private String _targetType;
 
   /**
@@ -91,6 +91,7 @@ public class ViewStatusKeyBean extends DirectBean implements ViewStatusKey {
    * Gets the securityType.
    * @return the value of the property, not null
    */
+  @Override
   public String getSecurityType() {
     return _securityType;
   }
@@ -117,6 +118,7 @@ public class ViewStatusKeyBean extends DirectBean implements ViewStatusKey {
    * Gets the valueRequirementName.
    * @return the value of the property, not null
    */
+  @Override
   public String getValueRequirementName() {
     return _valueRequirementName;
   }
@@ -143,6 +145,7 @@ public class ViewStatusKeyBean extends DirectBean implements ViewStatusKey {
    * Gets the currency.
    * @return the value of the property, not null
    */
+  @Override
   public String getCurrency() {
     return _currency;
   }
@@ -169,6 +172,7 @@ public class ViewStatusKeyBean extends DirectBean implements ViewStatusKey {
    * Gets the targetType.
    * @return the value of the property, not null
    */
+  @Override
   public String getTargetType() {
     return _targetType;
   }

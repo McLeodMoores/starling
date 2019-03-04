@@ -35,7 +35,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.curve.ConfigDBCurveConstructionConfigurationSource;
 import com.opengamma.financial.analytics.curve.CurveConstructionConfiguration;
@@ -46,7 +45,7 @@ import com.opengamma.financial.analytics.curve.exposure.InstrumentExposuresProvi
 import com.opengamma.util.tuple.Pair;
 
 /**
- * 
+ *
  */
 public class InflationBondZspreadFromCurvesFunction extends InflationBondFromCleanPriceAndCurvesFunction {
   /** The logger */
@@ -59,7 +58,8 @@ public class InflationBondZspreadFromCurvesFunction extends InflationBondFromCle
   private InstrumentExposuresProvider _instrumentExposuresProvider;
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#Z_SPREAD}
+   * Sets the value requirement name to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#Z_SPREAD}
    */
   public InflationBondZspreadFromCurvesFunction() {
     super(Z_SPREAD);
@@ -119,8 +119,8 @@ public class InflationBondZspreadFromCurvesFunction extends InflationBondFromCle
           }
         }
       }
-      List<String> exoConfigs = curveConstructionConfiguration.getExogenousConfigurations();
-      for (String curveConstructionConfigurationExogenousName : exoConfigs) {
+      final List<String> exoConfigs = curveConstructionConfiguration.getExogenousConfigurations();
+      for (final String curveConstructionConfigurationExogenousName : exoConfigs) {
         final CurveConstructionConfiguration curveConstructionConfigurationExogenous =
             _curveConstructionConfigurationSource.getCurveConstructionConfiguration(curveConstructionConfigurationExogenousName);
         final List<CurveGroupConfiguration> groupsExogenous = curveConstructionConfigurationExogenous.getCurveGroups();

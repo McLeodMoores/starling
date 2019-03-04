@@ -27,11 +27,13 @@ import com.opengamma.engine.function.FunctionExecutionContext;
 import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Calculates the (Black Lognormal) {@link ValueRequirementNames#SECURITY_IMPLIED_VOLATILITY} of target Swaption Trade from calibrated SABR model.<p>
+ * Calculates the (Black Lognormal)
+ * {@link com.opengamma.engine.value.ValueRequirementNames#SECURITY_IMPLIED_VOLATILITY}
+ * of target Swaption Trade from calibrated SABR model.
+ * <p>
  * Uses curves constructed using the discounting method.
  */
 public class RightExtrapolationSABRDiscountingImpliedVolFunction extends SABRDiscountingFunction {
@@ -39,7 +41,10 @@ public class RightExtrapolationSABRDiscountingImpliedVolFunction extends SABRDis
   /** The Implied Vol calculator */
   private static final InstrumentDerivativeVisitor<SABRSwaptionProviderInterface, Double> CALCULATOR = ImpliedVolatilitySABRSwaptionCalculator.getInstance();
 
-  /** Sets the value requirements to {@link ValueRequirementNames#SECURITY_IMPLIED_VOLATILITY} */
+  /**
+   * Sets the value requirements to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#SECURITY_IMPLIED_VOLATILITY}
+   */
   public RightExtrapolationSABRDiscountingImpliedVolFunction() {
     super(SECURITY_IMPLIED_VOLATILITY);
   }

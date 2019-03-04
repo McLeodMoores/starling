@@ -43,7 +43,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.OpenGammaExecutionContext;
 import com.opengamma.financial.analytics.model.fixedincome.FixedSwapLegDetails;
@@ -58,7 +57,8 @@ import com.opengamma.util.tuple.Pair;
 public class BondTotalReturnSwapAssetLegDetailsFunction extends BondTotalReturnSwapFunction {
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#BOND_DETAILS}.
+   * Sets the value requirement name to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#BOND_DETAILS}.
    */
   public BondTotalReturnSwapAssetLegDetailsFunction() {
     super(BOND_DETAILS);

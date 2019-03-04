@@ -27,7 +27,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.StringLabelledMatrix1D;
 import com.opengamma.financial.analytics.model.BondAndBondFutureFunctionUtils;
@@ -42,7 +41,8 @@ import com.opengamma.util.async.AsynchronousExecution;
 public class BondFutureGrossBasisFromCurvesFunction extends BondAndBondFutureFromCurvesFunction<IssuerProviderInterface, Void> {
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#GROSS_BASIS} and
+   * Sets the value requirement name to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#GROSS_BASIS} and
    * the calculator to null.
    */
   public BondFutureGrossBasisFromCurvesFunction() {

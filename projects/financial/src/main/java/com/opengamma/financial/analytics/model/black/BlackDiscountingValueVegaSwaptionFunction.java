@@ -28,7 +28,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
@@ -41,7 +40,8 @@ public class BlackDiscountingValueVegaSwaptionFunction extends BlackDiscountingS
       PresentValueBlackSensitivityBlackSwaptionCalculator.getInstance();
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#VALUE_VEGA}
+   * Sets the value requirement to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#VALUE_VEGA}
    */
   public BlackDiscountingValueVegaSwaptionFunction() {
     super(VALUE_VEGA);

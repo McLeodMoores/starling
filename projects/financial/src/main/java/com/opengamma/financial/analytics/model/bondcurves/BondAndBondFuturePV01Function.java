@@ -32,7 +32,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.model.BondAndBondFutureFunctionUtils;
 import com.opengamma.financial.security.FinancialSecurityUtils;
@@ -49,8 +48,9 @@ public class BondAndBondFuturePV01Function extends BondAndBondFutureFromCurvesFu
       new PV01CurveParametersCalculator<>(PresentValueCurveSensitivityIssuerCalculator.getInstance());
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#PV01} and
-   * sets the calculator to {@link PV01CurveParametersCalculator}
+   * Sets the value requirement name to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#PV01} and sets the
+   * calculator to {@link PV01CurveParametersCalculator}
    */
   public BondAndBondFuturePV01Function() {
     super(PV01, CALCULATOR);

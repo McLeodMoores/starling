@@ -7,7 +7,6 @@ package com.opengamma.integration.marketdata.manipulator.dsl;
 
 import java.util.Arrays;
 
-import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.util.ArgumentChecker;
 
 /**
@@ -66,9 +65,13 @@ public class YieldCurveManipulatorBuilder {
   }
 
   /**
-   * Shifts the curve using {@link YieldAndDiscountCurve#withSingleShift}
-   * @param t The time.
-   * @param shift The shift amount.
+   * Shifts the curve using
+   * {@link com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve#withSingleShift}
+   * 
+   * @param t
+   *          The time.
+   * @param shift
+   *          The shift amount.
    * @return This builder
    */
   public YieldCurveManipulatorBuilder singleShift(final Number t, final Number shift) {

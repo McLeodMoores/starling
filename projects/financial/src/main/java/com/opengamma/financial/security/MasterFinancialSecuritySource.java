@@ -8,16 +8,18 @@ package com.opengamma.financial.security;
 import java.util.Collection;
 
 import com.opengamma.core.security.Security;
-import com.opengamma.core.security.SecuritySource;
 import com.opengamma.financial.security.bond.BondSecuritySearchRequest;
 import com.opengamma.master.security.SecurityMaster;
 import com.opengamma.master.security.impl.MasterSecuritySource;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * A {@code FinancialSecuritySource} implemented using an underlying {@code SecurityMaster}.
+ * A {@code FinancialSecuritySource} implemented using an underlying
+ * {@code SecurityMaster}.
  * <p>
- * The {@link SecuritySource} interface provides securities to the engine via a narrow API. This class provides the source on top of a standard {@link SecurityMaster}.
+ * The {@link com.opengamma.core.security.SecuritySource} interface provides
+ * securities to the engine via a narrow API. This class provides the source on
+ * top of a standard {@link SecurityMaster}.
  */
 public class MasterFinancialSecuritySource extends MasterSecuritySource implements FinancialSecuritySource {
 

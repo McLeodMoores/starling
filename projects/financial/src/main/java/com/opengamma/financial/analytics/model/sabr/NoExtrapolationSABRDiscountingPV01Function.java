@@ -36,7 +36,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.daycount.DayCounts;
@@ -54,7 +53,8 @@ public class NoExtrapolationSABRDiscountingPV01Function extends SABRDiscountingF
       PresentValueCurveSensitivitySABRSwaptionCalculator.getInstance());
 
   /**
-   * Sets the value requirements to {@link ValueRequirementNames#PV01}
+   * Sets the value requirements to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#PV01}
    */
   public NoExtrapolationSABRDiscountingPV01Function() {
     super(PV01);
@@ -94,7 +94,7 @@ public class NoExtrapolationSABRDiscountingPV01Function extends SABRDiscountingF
       @Override
       protected Collection<ValueProperties.Builder> getResultProperties(final FunctionCompilationContext compilationContext, final ComputationTarget target) {
         final Collection<ValueProperties.Builder> properties = super.getResultProperties(compilationContext, target);
-        for (ValueProperties.Builder builder : properties) {
+        for (final ValueProperties.Builder builder : properties) {
           builder.withAny(CURVE);
         }
         return properties;

@@ -39,7 +39,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.OpenGammaExecutionContext;
 import com.opengamma.financial.analytics.conversion.CalendarUtils;
@@ -63,7 +62,8 @@ public class EquityTotalReturnSwapConstantSpreadThetaFunction extends EquityTota
       EqyTrsConstantSpreadHorizonCalculator.getInstance();
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#VALUE_THETA}.
+   * Sets the value requirement to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#VALUE_THETA}.
    */
   public EquityTotalReturnSwapConstantSpreadThetaFunction() {
     super(VALUE_THETA);

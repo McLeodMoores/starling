@@ -28,7 +28,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.model.VegaMatrixUtils;
 
@@ -43,7 +42,8 @@ public class BlackDiscountingVegaQuoteMatrixFXOptionFunction extends BlackDiscou
       QuoteBucketedVegaForexBlackSmileCalculator.getInstance();
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#VEGA_QUOTE_MATRIX}
+   * Sets the value requirement to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#VEGA_QUOTE_MATRIX}
    */
   public BlackDiscountingVegaQuoteMatrixFXOptionFunction() {
     super(VEGA_QUOTE_MATRIX);

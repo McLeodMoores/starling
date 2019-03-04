@@ -34,17 +34,17 @@ public class FixedCouponBondDetailsProvider implements ImmutableBean, Instrument
   /**
    * The curves data.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private final IssuerProviderInterface _curves;
   /**
    * The valuation time.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private final ZonedDateTime _valuationTime;
   /**
    * The bond definition
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private final BondFixedTransactionDefinition _definition;
 
   @ImmutableConstructor
@@ -96,6 +96,7 @@ public class FixedCouponBondDetailsProvider implements ImmutableBean, Instrument
    * Gets the curves data.
    * @return the value of the property
    */
+  @Override
   public IssuerProviderInterface getCurves() {
     return _curves;
   }
@@ -105,6 +106,7 @@ public class FixedCouponBondDetailsProvider implements ImmutableBean, Instrument
    * Gets the valuation time.
    * @return the value of the property
    */
+  @Override
   public ZonedDateTime getValuationTime() {
     return _valuationTime;
   }
@@ -114,6 +116,7 @@ public class FixedCouponBondDetailsProvider implements ImmutableBean, Instrument
    * Gets the bond definition
    * @return the value of the property
    */
+  @Override
   public BondFixedTransactionDefinition getDefinition() {
     return _definition;
   }

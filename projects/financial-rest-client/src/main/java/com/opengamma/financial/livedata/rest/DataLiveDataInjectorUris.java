@@ -5,8 +5,6 @@
  */
 package com.opengamma.financial.livedata.rest;
 
-import com.opengamma.engine.marketdata.MarketDataInjector;
-
 /**
  * RESTful URIs for {@link MarketDataInjector}.
  */

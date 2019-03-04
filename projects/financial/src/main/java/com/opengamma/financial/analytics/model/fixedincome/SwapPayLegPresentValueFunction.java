@@ -19,7 +19,6 @@ import com.opengamma.analytics.financial.interestrate.swap.derivative.Swap;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.function.FunctionCompilationContext;
 import com.opengamma.engine.value.ComputedValue;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.financial.security.FinancialSecurity;
 import com.opengamma.financial.security.swap.SwapSecurity;
 
@@ -33,7 +32,8 @@ public class SwapPayLegPresentValueFunction extends InterestRateInstrumentFuncti
   private static final PresentValueCalculator CALCULATOR = PresentValueCalculator.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#PAY_LEG_PRESENT_VALUE}
+   * Sets the value requirement name to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#PAY_LEG_PRESENT_VALUE}
    */
   public SwapPayLegPresentValueFunction() {
     super(PAY_LEG_PRESENT_VALUE);

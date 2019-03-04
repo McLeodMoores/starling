@@ -20,7 +20,6 @@ import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.security.FinancialSecurityUtils;
 import com.opengamma.util.money.MultipleCurrencyAmount;
@@ -34,7 +33,8 @@ public class InflationBondPresentValueFromCleanPriceFunction extends InflationBo
   private static final PresentValueDiscountingInflationCalculator PVIC = PresentValueDiscountingInflationCalculator.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#PRESENT_VALUE}.
+   * Sets the value requirement name to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#PRESENT_VALUE}.
    */
   public InflationBondPresentValueFromCleanPriceFunction() {
     super(PRESENT_VALUE);
@@ -48,7 +48,7 @@ public class InflationBondPresentValueFromCleanPriceFunction extends InflationBo
     final MultipleCurrencyAmount pvSettlement = bond.getBondTransaction().getSettlement().accept(PVIC, provider.getInflationProvider()).multipliedBy(
         bond.getQuantity() * bond.getBondTransaction().getCoupon().getNthPayment(0).getNotional());
     final MultipleCurrencyAmount pv = pvBond.plus(pvSettlement);
-    if (pv.size() != 1 || !(expectedCurrency.equals(pv.getCurrencyAmounts()[0].getCurrency().getCode()))) {
+    if (pv.size() != 1 || !expectedCurrency.equals(pv.getCurrencyAmounts()[0].getCurrency().getCode())) {
       throw new OpenGammaRuntimeException("Expecting a single result in " + expectedCurrency);
     }
     return Collections.singleton(new ComputedValue(spec, pv.getCurrencyAmounts()[0].getAmount()));

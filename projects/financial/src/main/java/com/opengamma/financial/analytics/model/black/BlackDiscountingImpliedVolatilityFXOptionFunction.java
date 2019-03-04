@@ -27,7 +27,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
@@ -40,7 +39,8 @@ public class BlackDiscountingImpliedVolatilityFXOptionFunction extends BlackDisc
       ImpliedVolatilityForexBlackSmileCalculator.getInstance();
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#SECURITY_IMPLIED_VOLATILITY}.
+   * Sets the value requirement to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#SECURITY_IMPLIED_VOLATILITY}.
    */
   public BlackDiscountingImpliedVolatilityFXOptionFunction() {
     super(SECURITY_IMPLIED_VOLATILITY);

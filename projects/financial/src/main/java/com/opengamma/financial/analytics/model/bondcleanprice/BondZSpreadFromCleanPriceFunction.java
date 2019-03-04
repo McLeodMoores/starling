@@ -34,7 +34,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.curve.ConfigDBCurveConstructionConfigurationSource;
 import com.opengamma.financial.analytics.curve.CurveConstructionConfiguration;
@@ -58,7 +57,8 @@ public class BondZSpreadFromCleanPriceFunction extends BondFromCleanPriceAndCurv
   private InstrumentExposuresProvider _instrumentExposuresProvider;
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#Z_SPREAD}
+   * Sets the value requirement name to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#Z_SPREAD}
    */
   public BondZSpreadFromCleanPriceFunction() {
     super(Z_SPREAD);

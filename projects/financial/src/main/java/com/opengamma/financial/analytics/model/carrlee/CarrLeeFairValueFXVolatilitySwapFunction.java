@@ -27,7 +27,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
@@ -38,7 +37,8 @@ public class CarrLeeFairValueFXVolatilitySwapFunction extends CarrLeeFXVolatilit
   private static final InstrumentDerivativeVisitor<CarrLeeFXData, VolatilitySwapCalculatorResult> CALCULATOR = new CarrLeeFXVolatilitySwapCalculator();
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#FAIR_VALUE}.
+   * Sets the value requirement to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#FAIR_VALUE}.
    */
   public CarrLeeFairValueFXVolatilitySwapFunction() {
     super(FAIR_VALUE);

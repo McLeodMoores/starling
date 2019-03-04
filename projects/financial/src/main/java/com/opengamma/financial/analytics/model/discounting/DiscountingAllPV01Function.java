@@ -27,7 +27,6 @@ import com.opengamma.engine.function.FunctionExecutionContext;
 import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
@@ -42,7 +41,8 @@ public class DiscountingAllPV01Function extends DiscountingFunction {
       new PV01CurveParametersCalculator<>(PresentValueCurveSensitivityDiscountingCalculator.getInstance());
 
   /**
-   * Sets the value requirements to {@link ValueRequirementNames#ALL_PV01S}
+   * Sets the value requirements to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#ALL_PV01S}
    */
   public DiscountingAllPV01Function() {
     super(ALL_PV01S);

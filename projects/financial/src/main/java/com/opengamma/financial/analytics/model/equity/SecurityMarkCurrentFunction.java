@@ -16,15 +16,11 @@ import com.opengamma.engine.function.FunctionExecutionContext;
 import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.target.ComputationTargetType;
 import com.opengamma.engine.value.ComputedValue;
-import com.opengamma.engine.value.ValueProperties;
-import com.opengamma.engine.value.ValuePropertyNames;
 import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.security.FinancialSecurity;
-import com.opengamma.financial.security.FinancialSecurityUtils;
 import com.opengamma.financial.security.MarketSecurityVisitor;
-import com.opengamma.util.money.Currency;
 
 /**
  * Produces output {@link ValueRequirementNames#MARK_CURRENT}. <p>

@@ -23,7 +23,6 @@ import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.horizon.ConstantSpreadHorizonThetaCalculator;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.future.InterestRateFutureOptionMarginTransactionDefinition;
-import com.opengamma.analytics.financial.interestrate.PresentValueBlackCalculator;
 import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.analytics.financial.model.option.definition.YieldCurveWithBlackCubeBundle;
 import com.opengamma.analytics.financial.model.volatility.surface.VolatilitySurface;
@@ -66,11 +65,16 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * Function computes the amount a position is expected to gain or lose over a horizon specified by {@link ThetaPropertyNamesAndValues#PROPERTY_DAYS_TO_MOVE_FORWARD}. Horizon calculation is specified
- * in {@link ConstantSpreadHorizonThetaCalculator}.
+ * Function computes the amount a position is expected to gain or lose over a
+ * horizon specified by
+ * {@link ThetaPropertyNamesAndValues#PROPERTY_DAYS_TO_MOVE_FORWARD}. Horizon
+ * calculation is specified in {@link ConstantSpreadHorizonThetaCalculator}.
  * <p>
- * For interest rate future options, {@link PresentValueBlackCalculator} is currently used.
+ * For interest rate future options,
+ * {@link com.opengamma.analytics.financial.interestrate.PresentValueBlackCalculator}
+ * is currently used.
  * <p>
+ * 
  * @deprecated Deprecated
  */
 @Deprecated

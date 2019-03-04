@@ -23,10 +23,9 @@ import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import org.threeten.bp.Period;
 
-import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
-
 /**
- * Applies a point shift to a {@link YieldAndDiscountCurve}.
+ * Applies a point shift to a
+ * {@link com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve}.
  */
 @BeanDefinition
 public final class YieldCurveDataPointShift implements ImmutableBean {

@@ -35,7 +35,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
@@ -54,7 +53,8 @@ public class ShiftedLognormalDiscountingBCSCapFloorFunction extends ShiftedLogno
       new MarketQuoteSensitivityBlockCalculator<>(PSC);
 
   /**
-   * Sets the value requirements to {@link ValueRequirementNames#BLOCK_CURVE_SENSITIVITIES}
+   * Sets the value requirements to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#BLOCK_CURVE_SENSITIVITIES}
    */
   public ShiftedLognormalDiscountingBCSCapFloorFunction() {
     super(BLOCK_CURVE_SENSITIVITIES);

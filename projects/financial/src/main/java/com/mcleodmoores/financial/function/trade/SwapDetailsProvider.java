@@ -39,12 +39,12 @@ public class SwapDetailsProvider implements ImmutableBean, InstrumentDetailsProv
   /**
    * The MulticurveProviderInterface bundle
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private final MulticurveProviderInterface _curves;
   /**
    * The valuation time
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private final ZonedDateTime _valuationTime;
   /**
    * Boolean, whether the leg is fixed or floating
@@ -54,7 +54,7 @@ public class SwapDetailsProvider implements ImmutableBean, InstrumentDetailsProv
   /**
    * The swap definition
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private final SwapDefinition _definition;
   /**
    * The PayReceiveType, whether the leg is pay or receive
@@ -73,7 +73,7 @@ public class SwapDetailsProvider implements ImmutableBean, InstrumentDetailsProv
    */
   @ImmutableConstructor
   public SwapDetailsProvider(final MulticurveProviderInterface curves, final ZonedDateTime valuationTime,
-                             final SwapDefinition definition, final SwapSecurity security, final PayReceiveType type) {
+      final SwapDefinition definition, final SwapSecurity security, final PayReceiveType type) {
     _curves = ArgumentChecker.notNull(curves, "curves");
     _valuationTime = ArgumentChecker.notNull(valuationTime, "valuationTime");
     _definition = ArgumentChecker.notNull(definition, "definition");
@@ -136,6 +136,7 @@ public class SwapDetailsProvider implements ImmutableBean, InstrumentDetailsProv
    * Gets the MulticurveProviderInterface bundle
    * @return the value of the property, not null
    */
+  @Override
   public MulticurveProviderInterface getCurves() {
     return _curves;
   }
@@ -145,6 +146,7 @@ public class SwapDetailsProvider implements ImmutableBean, InstrumentDetailsProv
    * Gets the valuation time
    * @return the value of the property, not null
    */
+  @Override
   public ZonedDateTime getValuationTime() {
     return _valuationTime;
   }
@@ -163,6 +165,7 @@ public class SwapDetailsProvider implements ImmutableBean, InstrumentDetailsProv
    * Gets the swap definition
    * @return the value of the property, not null
    */
+  @Override
   public SwapDefinition getDefinition() {
     return _definition;
   }

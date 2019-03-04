@@ -41,37 +41,37 @@ public class RestComponentsImpl extends DirectBean implements RestComponents {
    * The base URI.
    * This is normally the base URI of all the JAX-RS resources.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private final URI _baseUri = URI.create("/jax");
   /**
    * The managed components.
    * These will be controlled by {@link DataComponentServerResource}.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private final List<RestComponent> _localComponents = new ArrayList<>();
   /**
    * The remote components.
    * These have been imported from another server and are being re-exposed.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private final List<ComponentInfo> _remoteComponents = new ArrayList<>();
   /**
    * The set of root resources.
    * These are not managed by {@link DataComponentServerResource}.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private final Set<Object> _rootResourceSingletons = new LinkedHashSet<>();
   /**
    * The set of root resource factories.
    * These are not managed by {@link DataComponentServerResource}.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private final Set<RestResourceFactory> _rootResourceFactories = new LinkedHashSet<>();
   /**
    * The set of additional singleton JAX-RS helper objects that are used by JAX-RS.
    * This may include filters, providers and consumers that should be used directly by JAX-RS.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private final Set<Object> _helpers = new LinkedHashSet<>();
 
   /**
@@ -220,6 +220,7 @@ public class RestComponentsImpl extends DirectBean implements RestComponents {
    * This is normally the base URI of all the JAX-RS resources.
    * @return the value of the property, not null
    */
+  @Override
   public URI getBaseUri() {
     return _baseUri;
   }
@@ -239,6 +240,7 @@ public class RestComponentsImpl extends DirectBean implements RestComponents {
    * These will be controlled by {@link DataComponentServerResource}.
    * @return the value of the property, not null
    */
+  @Override
   public List<RestComponent> getLocalComponents() {
     return _localComponents;
   }
@@ -269,6 +271,7 @@ public class RestComponentsImpl extends DirectBean implements RestComponents {
    * These have been imported from another server and are being re-exposed.
    * @return the value of the property, not null
    */
+  @Override
   public List<ComponentInfo> getRemoteComponents() {
     return _remoteComponents;
   }
@@ -299,6 +302,7 @@ public class RestComponentsImpl extends DirectBean implements RestComponents {
    * These are not managed by {@link DataComponentServerResource}.
    * @return the value of the property, not null
    */
+  @Override
   public Set<Object> getRootResourceSingletons() {
     return _rootResourceSingletons;
   }
@@ -329,6 +333,7 @@ public class RestComponentsImpl extends DirectBean implements RestComponents {
    * These are not managed by {@link DataComponentServerResource}.
    * @return the value of the property, not null
    */
+  @Override
   public Set<RestResourceFactory> getRootResourceFactories() {
     return _rootResourceFactories;
   }
@@ -359,6 +364,7 @@ public class RestComponentsImpl extends DirectBean implements RestComponents {
    * This may include filters, providers and consumers that should be used directly by JAX-RS.
    * @return the value of the property, not null
    */
+  @Override
   public Set<Object> getHelpers() {
     return _helpers;
   }

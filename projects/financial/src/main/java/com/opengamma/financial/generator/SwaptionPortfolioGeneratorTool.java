@@ -5,8 +5,6 @@
  */
 package com.opengamma.financial.generator;
 
-import com.opengamma.financial.security.option.SwaptionSecurity;
-
 /**
  * Utility for constructing a random swaption portfolio.
  */

@@ -36,7 +36,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
@@ -44,7 +43,7 @@ import com.opengamma.engine.value.ValueSpecification;
  */
 public class EquityTotalReturnSwapBCSFunction extends EquityTotalReturnSwapFunction {
 
-   /** The curve sensitivity calculator */
+  /** The curve sensitivity calculator */
   private static final InstrumentDerivativeVisitor<EquityTrsDataBundle, MultipleCurrencyMulticurveSensitivity> PVCSEDC =
       PresentValueCurveSensitivityEquityDiscountingCalculator.getInstance();
   /** The parameter sensitivity calculator */
@@ -55,7 +54,8 @@ public class EquityTotalReturnSwapBCSFunction extends EquityTotalReturnSwapFunct
       new MarketQuoteSensitivityBlockCalculator<>(PSC);
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#BLOCK_CURVE_SENSITIVITIES}.
+   * Sets the value requirement to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#BLOCK_CURVE_SENSITIVITIES}.
    */
   public EquityTotalReturnSwapBCSFunction() {
     super(BLOCK_CURVE_SENSITIVITIES);
@@ -64,16 +64,16 @@ public class EquityTotalReturnSwapBCSFunction extends EquityTotalReturnSwapFunct
   @Override
   public CompiledFunctionDefinition compile(final FunctionCompilationContext context, final Instant atInstant) {
     return new EquityTotalReturnSwapCompiledFunction(getTargetToDefinitionConverter(context),
-                                                     getDefinitionToDerivativeConverter(context),
-                                                     true) {
+        getDefinitionToDerivativeConverter(context),
+        true) {
 
       @Override
       protected Set<ComputedValue> getValues(final FunctionExecutionContext executionContext,
-                                             final FunctionInputs inputs,
-                                             final ComputationTarget target,
-                                             final Set<ValueRequirement> desiredValues,
-                                             final InstrumentDerivative derivative,
-                                             final FXMatrix fxMatrix) {
+          final FunctionInputs inputs,
+          final ComputationTarget target,
+          final Set<ValueRequirement> desiredValues,
+          final InstrumentDerivative derivative,
+          final FXMatrix fxMatrix) {
         final EquityTrsDataBundle data = getDataBundle(inputs, fxMatrix);
         final CurveBuildingBlockBundle blocks = new CurveBuildingBlockBundle();
         for (final ComputedValue cv : inputs.getAllValues()) {
@@ -86,8 +86,8 @@ public class EquityTotalReturnSwapBCSFunction extends EquityTotalReturnSwapFunct
         final MultipleCurrencyParameterSensitivity sensitivities = CALCULATOR.fromInstrument(derivative, data, blocks);
         for (final ValueRequirement desiredValue : desiredValues) {
           final ValueSpecification spec = new ValueSpecification(BLOCK_CURVE_SENSITIVITIES,
-                                                                 target.toSpecification(),
-                                                                 desiredValue.getConstraints().copy().get());
+              target.toSpecification(),
+              desiredValue.getConstraints().copy().get());
           result.add(new ComputedValue(spec, sensitivities));
         }
         return result;
@@ -95,7 +95,7 @@ public class EquityTotalReturnSwapBCSFunction extends EquityTotalReturnSwapFunct
 
       @Override
       protected Collection<ValueProperties.Builder> getResultProperties(final FunctionCompilationContext compilationContext,
-                                                                        final ComputationTarget target) {
+          final ComputationTarget target) {
         final ValueProperties.Builder properties = createValueProperties()
             .with(PROPERTY_CURVE_TYPE, DISCOUNTING)
             .withAny(CURVE_EXPOSURES)

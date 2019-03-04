@@ -29,7 +29,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.security.option.IRFutureOptionSecurity;
 import com.opengamma.util.time.Expiry;
@@ -45,7 +44,8 @@ public class BlackDiscountingWeightedVegaIRFutureOptionFunction extends BlackDis
   private static final double DEFAULT_BASE_DAYS = 90;
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#POSITION_WEIGHTED_VEGA}
+   * Sets the value requirement to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#POSITION_WEIGHTED_VEGA}
    */
   public BlackDiscountingWeightedVegaIRFutureOptionFunction() {
     super(POSITION_WEIGHTED_VEGA);
@@ -96,7 +96,7 @@ public class BlackDiscountingWeightedVegaIRFutureOptionFunction extends BlackDis
       @Override
       protected Collection<ValueProperties.Builder> getResultProperties(final FunctionCompilationContext compilationContext, final ComputationTarget target) {
         final Collection<ValueProperties.Builder> properties = super.getResultProperties(compilationContext, target);
-        for (ValueProperties.Builder builder : properties) {
+        for (final ValueProperties.Builder builder : properties) {
           builder.withAny(PROPERTY_BASE_DAYS);
         }
         return properties;

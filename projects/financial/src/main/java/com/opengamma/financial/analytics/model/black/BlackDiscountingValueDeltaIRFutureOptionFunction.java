@@ -26,7 +26,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
@@ -36,7 +35,8 @@ import com.opengamma.engine.value.ValueSpecification;
 public class BlackDiscountingValueDeltaIRFutureOptionFunction extends BlackDiscountingIRFutureOptionFunction {
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#VALUE_GAMMA}
+   * Sets the value requirement to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#VALUE_GAMMA}
    */
   public BlackDiscountingValueDeltaIRFutureOptionFunction() {
     super(VALUE_GAMMA);

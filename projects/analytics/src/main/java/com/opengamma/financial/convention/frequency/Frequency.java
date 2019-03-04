@@ -69,31 +69,31 @@ public interface Frequency extends NamedInstance {
    * Continuous convention name
    */
   String CONTINUOUS_NAME = "Continuous";
-  /** 
+  /**
    * Four month convention name
    */
   String FOUR_MONTH_NAME = "Four Month";
-  /** 
+  /**
    * Five month convention name
    */
   String FIVE_MONTH_NAME = "Five Month";
-  /** 
+  /**
    * Four month convention name
    */
   String SEVEN_MONTH_NAME = "Seven Month";
-  /** 
+  /**
    * Eight month convention name
    */
   String EIGHT_MONTH_NAME = "Eight Month";
-  /** 
+  /**
    * Four month convention name
    */
   String NINE_MONTH_NAME = "Nine Month";
-  /** 
+  /**
    * Ten month convention name
    */
   String TEN_MONTH_NAME = "Ten Month";
-  /** 
+  /**
    * Eleven month convention name
    */
   String ELEVEN_MONTH_NAME = "Eleven Month";
@@ -104,7 +104,7 @@ public interface Frequency extends NamedInstance {
 
   /**
    * Gets the name of the convention.
-   * 
+   *
    * @return the name, not null
    * @deprecated use getName()
    */
@@ -113,9 +113,10 @@ public interface Frequency extends NamedInstance {
 
   /**
    * Gets the name of the convention.
-   * 
+   *
    * @return the name, not null
    */
+  @Override
   @ToString
   String getName();
 

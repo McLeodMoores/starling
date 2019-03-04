@@ -27,7 +27,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
@@ -39,7 +38,8 @@ public class G2ppDiscountingParRateFunction extends G2ppDiscountingFunction {
   private static final InstrumentDerivativeVisitor<MulticurveProviderInterface, Double> CALCULATOR = ParRateDiscountingCalculator.getInstance();
 
   /**
-   * Sets the value requirements to {@link ValueRequirementNames#PAR_RATE}
+   * Sets the value requirements to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#PAR_RATE}
    */
   public G2ppDiscountingParRateFunction() {
     super(PAR_RATE);

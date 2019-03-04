@@ -22,8 +22,6 @@ import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.annuity.AnnuityDefinition;
 import com.opengamma.analytics.financial.instrument.payment.PaymentDefinition;
 import com.opengamma.analytics.financial.instrument.swap.SwapDefinition;
-import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
-import com.opengamma.analytics.financial.interestrate.annuity.derivative.Annuity;
 import com.opengamma.analytics.financial.interestrate.AnnuityAccrualDatesVisitor;
 import com.opengamma.analytics.financial.interestrate.AnnuityFixedRatesVisitor;
 import com.opengamma.analytics.financial.interestrate.AnnuityFixingDatesVisitor;
@@ -36,6 +34,8 @@ import com.opengamma.analytics.financial.interestrate.AnnuityPaymentDatesVisitor
 import com.opengamma.analytics.financial.interestrate.AnnuityPaymentFractionsVisitor;
 import com.opengamma.analytics.financial.interestrate.AnnuityPaymentTimesVisitor;
 import com.opengamma.analytics.financial.interestrate.AnnuitySpreadsVisitor;
+import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
+import com.opengamma.analytics.financial.interestrate.annuity.derivative.Annuity;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.Payment;
 import com.opengamma.analytics.financial.interestrate.swap.derivative.Swap;
 import com.opengamma.analytics.financial.interestrate.swap.provider.AnnuityDiscountFactorsVisitor;
@@ -50,7 +50,6 @@ import com.opengamma.engine.function.FunctionExecutionContext;
 import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.model.fixedincome.FixedSwapLegDetails;
 import com.opengamma.financial.analytics.model.fixedincome.FloatingSwapLegDetails;
@@ -68,18 +67,28 @@ public class DiscountingSwapLegDetailFunction extends DiscountingFunction {
   private final boolean _payLeg;
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#SWAP_PAY_LEG_DETAILS} or {@link ValueRequirementNames#SWAP_RECEIVE_LEG_DETAILS}
+   * Sets the value requirement name to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#SWAP_PAY_LEG_DETAILS}
+   * or
+   * {@link com.opengamma.engine.value.ValueRequirementNames#SWAP_RECEIVE_LEG_DETAILS}
    *
-   * @param payLeg True if the details to be returned are for the pay leg; false returns details for receive legs.
+   * @param payLeg
+   *          True if the details to be returned are for the pay leg; false
+   *          returns details for receive legs.
    */
   public DiscountingSwapLegDetailFunction(final String payLeg) {
     this(Boolean.parseBoolean(payLeg));
   }
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#SWAP_PAY_LEG_DETAILS} or {@link ValueRequirementNames#SWAP_RECEIVE_LEG_DETAILS}
+   * Sets the value requirement name to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#SWAP_PAY_LEG_DETAILS}
+   * or
+   * {@link com.opengamma.engine.value.ValueRequirementNames#SWAP_RECEIVE_LEG_DETAILS}
    *
-   * @param payLeg True if the details to be returned are for the pay leg; false returns details for receive legs.
+   * @param payLeg
+   *          True if the details to be returned are for the pay leg; false
+   *          returns details for receive legs.
    */
   public DiscountingSwapLegDetailFunction(final boolean payLeg) {
     super(payLeg ? SWAP_PAY_LEG_DETAILS : SWAP_RECEIVE_LEG_DETAILS);

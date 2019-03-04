@@ -26,7 +26,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
@@ -38,7 +37,8 @@ public class HullWhiteDiscountingParRateFunction extends HullWhiteDiscountingFun
   private static final InstrumentDerivativeVisitor<HullWhiteOneFactorProviderInterface, Double> CALCULATOR = ParRateHullWhiteCalculator.getInstance();
 
   /**
-   * Sets the value requirements to {@link ValueRequirementNames#PAR_RATE}
+   * Sets the value requirements to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#PAR_RATE}
    */
   public HullWhiteDiscountingParRateFunction() {
     super(PAR_RATE);

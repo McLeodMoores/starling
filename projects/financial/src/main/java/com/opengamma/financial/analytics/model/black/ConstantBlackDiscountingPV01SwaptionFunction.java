@@ -35,7 +35,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
@@ -49,7 +48,8 @@ public class ConstantBlackDiscountingPV01SwaptionFunction extends ConstantBlackD
       PresentValueCurveSensitivityBlackSwaptionCalculator.getInstance());
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#PV01}
+   * Sets the value requirement to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#PV01}
    */
   public ConstantBlackDiscountingPV01SwaptionFunction() {
     super(PV01);
@@ -87,7 +87,7 @@ public class ConstantBlackDiscountingPV01SwaptionFunction extends ConstantBlackD
       @Override
       protected Collection<ValueProperties.Builder> getResultProperties(final FunctionCompilationContext compilationContext, final ComputationTarget target) {
         final Collection<ValueProperties.Builder> properties = super.getResultProperties(compilationContext, target);
-        for (ValueProperties.Builder builder : properties) {
+        for (final ValueProperties.Builder builder : properties) {
           builder.withAny(CURVE);
         }
         return properties;
@@ -121,7 +121,7 @@ public class ConstantBlackDiscountingPV01SwaptionFunction extends ConstantBlackD
         final Collection<ValueProperties.Builder> commonPropertiesSet = super.getResultProperties(compilationContext, target);
         final Set<ValueSpecification> results = Sets.newHashSetWithExpectedSize(commonPropertiesSet.size() * curveNames.size());
         for (final String curveName : curveNames) {
-          for (ValueProperties.Builder commonProperties : commonPropertiesSet) {
+          for (final ValueProperties.Builder commonProperties : commonPropertiesSet) {
             final ValueProperties properties = commonProperties.withoutAny(CURVE).with(CURVE, curveName).get();
             results.add(new ValueSpecification(PV01, target.toSpecification(), properties));
           }

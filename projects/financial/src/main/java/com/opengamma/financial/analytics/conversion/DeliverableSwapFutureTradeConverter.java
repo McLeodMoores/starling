@@ -18,8 +18,6 @@ import com.opengamma.core.position.Trade;
 import com.opengamma.core.security.Security;
 import com.opengamma.core.security.SecuritySource;
 import com.opengamma.financial.security.future.DeliverableSwapFutureSecurity;
-import com.opengamma.financial.security.irs.InterestRateSwapSecurity;
-import com.opengamma.financial.security.swap.SwapSecurity;
 import com.opengamma.util.ArgumentChecker;
 
 /**
@@ -34,13 +32,19 @@ public class DeliverableSwapFutureTradeConverter implements TradeConverter {
 
   /**
    * Construct a deliverable swap future trade.
-   * @param securitySource the security source used to load the underlying swap.
-   * @param swapConverter the swap converter, only used if the underlying is a {@link SwapSecurity}.
-   * @param interestRateSwapConverter the swap converter, only used if the underlying is a {@link InterestRateSwapSecurity}.
+   * 
+   * @param securitySource
+   *          the security source used to load the underlying swap.
+   * @param swapConverter
+   *          the swap converter, only used if the underlying is a
+   *          {@link com.opengamma.financial.security.swap.SwapSecurity}.
+   * @param interestRateSwapConverter
+   *          the swap converter, only used if the underlying is a
+   *          {@link com.opengamma.financial.security.irs.InterestRateSwapSecurity}.
    */
   public DeliverableSwapFutureTradeConverter(final SecuritySource securitySource,
-                                             final SwapSecurityConverter swapConverter,
-                                             final InterestRateSwapSecurityConverter interestRateSwapConverter) {
+      final SwapSecurityConverter swapConverter,
+      final InterestRateSwapSecurityConverter interestRateSwapConverter) {
     ArgumentChecker.notNull(securitySource, "securitySource");
     ArgumentChecker.notNull(interestRateSwapConverter, "interestRateSwapSecurityConverter");
     _securityConverter = new DeliverableSwapFutureSecurityConverter(securitySource, swapConverter, interestRateSwapConverter);

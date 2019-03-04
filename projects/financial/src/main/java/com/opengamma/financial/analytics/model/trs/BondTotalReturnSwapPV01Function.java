@@ -41,7 +41,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.security.swap.BondTotalReturnSwapSecurity;
 import com.opengamma.util.money.Currency;
@@ -58,7 +57,8 @@ public class BondTotalReturnSwapPV01Function extends BondTotalReturnSwapFunction
       new PV01CurveParametersCalculator<>(PresentValueCurveSensitivityIssuerCalculator.getInstance());
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#PV01}.
+   * Sets the value requirement to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#PV01}.
    */
   public BondTotalReturnSwapPV01Function() {
     super(PV01);

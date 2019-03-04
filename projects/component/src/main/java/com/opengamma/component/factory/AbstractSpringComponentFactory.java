@@ -19,7 +19,6 @@ import org.joda.beans.impl.direct.DirectBean;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
-import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.xml.ResourceEntityResolver;
@@ -29,16 +28,17 @@ import org.springframework.core.io.Resource;
 
 import com.opengamma.component.ComponentFactory;
 import com.opengamma.component.ComponentRepository;
-import com.opengamma.component.spring.ComponentRepositoryBeanPostProcessor;
 
 /**
  * Base factory for reading components from a Spring file.
  * <p>
- * The component is configured with a Spring XML file and a single properties file.
- * This class contains the tools to read the file, parse it and extract components.
+ * The component is configured with a Spring XML file and a single properties
+ * file. This class contains the tools to read the file, parse it and extract
+ * components.
  * <p>
- * The Spring file may use {@link ComponentRepositoryBeanPostProcessor} to pull the
- * components into the Spring context.
+ * The Spring file may use
+ * {@link com.opengamma.component.spring.ComponentRepositoryBeanPostProcessor}
+ * to pull the components into the Spring context.
  */
 @BeanDefinition
 public abstract class AbstractSpringComponentFactory extends DirectBean implements ComponentFactory {
@@ -126,11 +126,14 @@ public abstract class AbstractSpringComponentFactory extends DirectBean implemen
   /**
    * Registers the spring context to be stopped at the end of the application.
    * <p>
-   * This will call {@link ConfigurableListableBeanFactory#destroySingletons()}
+   * This will call
+   * {@link org.springframework.beans.factory.config.ConfigurableListableBeanFactorys#destroySingletons()}
    * at the end of the application.
    *
-   * @param repo  the repository to register in, not null
-   * @param appContext  the Spring context, not null
+   * @param repo
+   *          the repository to register in, not null
+   * @param appContext
+   *          the Spring context, not null
    */
   protected void registerSpringLifecycleStop(final ComponentRepository repo, final GenericApplicationContext appContext) {
     repo.registerLifecycleStop(appContext.getBeanFactory(), "destroySingletons");

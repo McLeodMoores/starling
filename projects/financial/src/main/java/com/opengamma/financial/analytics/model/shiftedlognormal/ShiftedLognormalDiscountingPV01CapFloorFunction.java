@@ -34,7 +34,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
@@ -48,7 +47,8 @@ public class ShiftedLognormalDiscountingPV01CapFloorFunction extends ShiftedLogn
       PresentValueCurveSensitivityBlackSmileShiftCapCalculator.getInstance());
 
   /**
-   * Sets the value requirements to {@link ValueRequirementNames#PV01}
+   * Sets the value requirements to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#PV01}
    */
   public ShiftedLognormalDiscountingPV01CapFloorFunction() {
     super(PV01);
@@ -86,7 +86,7 @@ public class ShiftedLognormalDiscountingPV01CapFloorFunction extends ShiftedLogn
       @Override
       protected Collection<ValueProperties.Builder> getResultProperties(final FunctionCompilationContext compilationContext, final ComputationTarget target) {
         final Collection<ValueProperties.Builder> properties = super.getResultProperties(compilationContext, target);
-        for (ValueProperties.Builder builder : properties) {
+        for (final ValueProperties.Builder builder : properties) {
           builder.withAny(CURVE);
         }
         return properties;
@@ -119,8 +119,8 @@ public class ShiftedLognormalDiscountingPV01CapFloorFunction extends ShiftedLogn
         }
         final Collection<ValueProperties.Builder> commonPropertiesSet = super.getResultProperties(compilationContext, target);
         final Set<ValueSpecification> results = Sets.newHashSetWithExpectedSize(commonPropertiesSet.size() * curveNames.size());
-        for (ValueProperties.Builder commonProperties : commonPropertiesSet) {
-          for (String curveName : curveNames) {
+        for (final ValueProperties.Builder commonProperties : commonPropertiesSet) {
+          for (final String curveName : curveNames) {
             final ValueProperties properties = commonProperties.withoutAny(CURVE).with(CURVE, curveName).get();
             results.add(new ValueSpecification(PV01, target.toSpecification(), properties));
           }

@@ -5,12 +5,10 @@
  */
 package com.opengamma.component.factory;
 
-import com.opengamma.component.ComponentInfo;
-
 /**
  * Component info attribute names.
  * <p>
- * See {@link ComponentInfo#getAttributes()}.
+ * See {@link com.opengamma.component.ComponentInfo#getAttributes()}.
  * <p>
  * This is a class of constants.
  */

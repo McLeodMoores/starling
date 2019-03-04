@@ -12,7 +12,6 @@ import org.threeten.bp.Period;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.value.MarketDataRequirementNames;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.financial.analytics.ircurve.IndexType;
 import com.opengamma.financial.analytics.ircurve.strips.DataFieldType;
 import com.opengamma.id.ExternalId;
@@ -46,11 +45,17 @@ public class BloombergFXForwardCurveInstrumentProvider implements FXForwardCurve
   private final boolean _useSpotRateFromGraph;
 
   /**
-   * Constructor where only FX forward ticker information is supplied. This sets the _useSpotRateFromGraph
-   * field to true, which means that the FX spot rate will be supplied by {@link ValueRequirementNames#SPOT_RATE}.
-   * @param prefix The FX forward prefix, not null
-   * @param postfix The FX forward postfix, not null
-   * @param dataFieldName The Bloomberg data field name, not null
+   * Constructor where only FX forward ticker information is supplied. This sets
+   * the _useSpotRateFromGraph field to true, which means that the FX spot rate
+   * will be supplied by
+   * {@link com.opengamma.engine.value.ValueRequirementNames#SPOT_RATE}.
+   * 
+   * @param prefix
+   *          The FX forward prefix, not null
+   * @param postfix
+   *          The FX forward postfix, not null
+   * @param dataFieldName
+   *          The Bloomberg data field name, not null
    */
   public BloombergFXForwardCurveInstrumentProvider(final String prefix, final String postfix, final String dataFieldName) {
     ArgumentChecker.notNull(prefix, "prefix");

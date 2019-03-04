@@ -27,7 +27,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
@@ -39,7 +38,8 @@ public class DiscountingInflationParSpreadFunction extends DiscountingInflationF
   private static final InstrumentDerivativeVisitor<InflationProviderInterface, Double> CALCULATOR = ParSpreadInflationMarketQuoteDiscountingCalculator.getInstance();
 
   /**
-   * Sets the value requirements to {@link ValueRequirementNames#PAR_SPREAD}
+   * Sets the value requirements to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#PAR_SPREAD}
    */
   public DiscountingInflationParSpreadFunction() {
     super(PAR_SPREAD);

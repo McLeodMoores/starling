@@ -26,7 +26,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.security.FinancialSecurityUtils;
 import com.opengamma.util.money.Currency;
@@ -42,7 +41,8 @@ public class G2ppDiscountingPVFunction extends G2ppDiscountingFunction {
       PresentValueG2ppCalculator.getInstance();
 
   /**
-   * Sets the value requirements to {@link ValueRequirementNames#PRESENT_VALUE}
+   * Sets the value requirements to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#PRESENT_VALUE}
    */
   public G2ppDiscountingPVFunction() {
     super(PRESENT_VALUE);

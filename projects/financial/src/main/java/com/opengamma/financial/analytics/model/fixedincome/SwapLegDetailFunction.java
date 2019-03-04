@@ -47,7 +47,6 @@ import com.opengamma.engine.target.ComputationTargetType;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValuePropertyNames;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.fixedincome.FixedIncomeInstrumentCurveExposureHelper;
 import com.opengamma.financial.analytics.ircurve.calcconfig.MultiCurveCalculationConfig;
@@ -73,18 +72,28 @@ public class SwapLegDetailFunction extends InterestRateInstrumentFunction {
   private final boolean _payLeg;
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#SWAP_PAY_LEG_DETAILS} or {@link ValueRequirementNames#SWAP_RECEIVE_LEG_DETAILS}
+   * Sets the value requirement name to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#SWAP_PAY_LEG_DETAILS}
+   * or
+   * {@link com.opengamma.engine.value.ValueRequirementNames#SWAP_RECEIVE_LEG_DETAILS}
    *
-   * @param payLeg True if the details to be returned are for the pay leg; false returns details for receive legs.
+   * @param payLeg
+   *          True if the details to be returned are for the pay leg; false
+   *          returns details for receive legs.
    */
   public SwapLegDetailFunction(final String payLeg) {
     this(Boolean.parseBoolean(payLeg));
   }
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#SWAP_PAY_LEG_DETAILS} or {@link ValueRequirementNames#SWAP_RECEIVE_LEG_DETAILS}
+   * Sets the value requirement name to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#SWAP_PAY_LEG_DETAILS}
+   * or
+   * {@link com.opengamma.engine.value.ValueRequirementNames#SWAP_RECEIVE_LEG_DETAILS}
    *
-   * @param payLeg True if the details to be returned are for the pay leg; false returns details for receive legs.
+   * @param payLeg
+   *          True if the details to be returned are for the pay leg; false
+   *          returns details for receive legs.
    */
   public SwapLegDetailFunction(final boolean payLeg) {
     super(payLeg ? SWAP_PAY_LEG_DETAILS : SWAP_RECEIVE_LEG_DETAILS);

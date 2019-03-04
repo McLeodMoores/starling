@@ -1,12 +1,10 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.fxforwardcurve;
 
-import com.opengamma.core.value.MarketDataRequirementNames;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.financial.analytics.ircurve.CurveInstrumentProvider;
 import com.opengamma.id.ExternalId;
 
@@ -17,9 +15,11 @@ import com.opengamma.id.ExternalId;
 public interface FXForwardCurveInstrumentProvider extends CurveInstrumentProvider {
 
   /**
-   * If true, uses the spot ticker defined in this provider to get the spot market
-   * data. Otherwise, gets spot rate information from the dependency graph using
-   * {@link ValueRequirementNames#SPOT_RATE}
+   * If true, uses the spot ticker defined in this provider to get the spot
+   * market data. Otherwise, gets spot rate information from the dependency
+   * graph using
+   * {@link com.opengamma.engine.value.ValueRequirementNames#SPOT_RATE}
+   * 
    * @return True if the spot ticker is to be used to get the spot rate
    */
   boolean useSpotRateFromGraph();

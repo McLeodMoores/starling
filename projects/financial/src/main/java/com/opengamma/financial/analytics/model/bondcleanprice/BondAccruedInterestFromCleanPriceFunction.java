@@ -8,7 +8,6 @@ package com.opengamma.financial.analytics.model.bondcleanprice;
 import static com.opengamma.engine.value.ValueRequirementNames.ACCRUED_INTEREST;
 
 import com.opengamma.analytics.financial.interestrate.bond.calculator.AccruedInterestFromCleanPriceCalculator;
-import com.opengamma.engine.value.ValueRequirementNames;
 
 /**
  * Calculates the accrued interest of a bond from the clean price.
@@ -16,7 +15,8 @@ import com.opengamma.engine.value.ValueRequirementNames;
 public class BondAccruedInterestFromCleanPriceFunction extends BondFromCleanPriceFunction<Double> {
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#ACCRUED_INTEREST}
+   * Sets the value requirement name to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#ACCRUED_INTEREST}
    * and the calculator to {@link AccruedInterestFromCleanPriceCalculator}
    */
   public BondAccruedInterestFromCleanPriceFunction() {

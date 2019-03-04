@@ -37,7 +37,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.model.BondAndBondFutureFunctionUtils;
 import com.opengamma.financial.security.FinancialSecurityUtils;
@@ -60,7 +59,8 @@ public class BondAndBondFutureConstantSpreadThetaFunction extends BondAndBondFut
       BondConstantSpreadHorizonCalculator.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#VALUE_THETA} and
+   * Sets the value requirement name to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#VALUE_THETA} and
    * the calculator to null
    */
   public BondAndBondFutureConstantSpreadThetaFunction() {

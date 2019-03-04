@@ -5,19 +5,13 @@
  */
 package com.opengamma.engine.value;
 
-import com.opengamma.core.id.ExternalSchemes;
-import com.opengamma.core.position.Position;
-import com.opengamma.core.value.MarketDataRequirementNames;
-import com.opengamma.engine.function.FunctionDefinition;
-import com.opengamma.engine.function.TargetSourcingFunction;
-
 /**
  * Standard names used to refer to particular computed values.
  * <p>
- * These name are used as keys to define specific required values in the engine. They should be used by a {@link FunctionDefinition} to state
+ * These name are used as keys to define specific required values in the engine. They should be used by a {@link com.opengamma.engine.function.FunctionDefinition} to state
  * their required inputs and their potential outputs. These are a typical common set of names, which may be extended.
  * <p>
- * For names used to refer to market data, see {@link MarketDataRequirementNames}.
+ * For names used to refer to market data, see {@link com.opengamma.core.value.MarketDataRequirementNames}.
  */
 public final class ValueRequirementNames {
 
@@ -282,12 +276,14 @@ public final class ValueRequirementNames {
    */
   public static final String ISIN = "ISIN";
   /**
-   * Ticker symbol used to identify a security in Bloomberg. See {@link ExternalSchemes}
+   * Ticker symbol used to identify a security in Bloomberg. See
+   * {@link com.opengamma.core.id.ExternalSchemes}
    */
   public static final String BLOOMBERG_TICKER = "BLOOMBERG_TICKER";
   /**
-   * Bloomberg's older security identifier scheme.
-   * They now wish users to adopt their new Bloomberg Global ID (BBGID). See {@link ExternalSchemes}
+   * Bloomberg's older security identifier scheme. They now wish users to adopt
+   * their new Bloomberg Global ID (BBGID). See
+   * {@link com.opengamma.core.id.ExternalSchemes}
    */
   public static final String BLOOMBERG_BUID = "BLOOMBERG_BUID";
   /**
@@ -768,7 +764,9 @@ public final class ValueRequirementNames {
    */
   public static final String POSITION_CARRY_RHO = "PositionCarryRho";
   /**
-   * The aggregate delta of an option position (change in the value of the {@link Position} with respect to the underlying).
+   * The aggregate delta of an option position (change in the value of the
+   * {@link com.opengamma.core.position.Position} with respect to the
+   * underlying).
    */
   public static final String POSITION_DELTA = "PositionDelta";
   /**
@@ -1682,9 +1680,11 @@ public final class ValueRequirementNames {
   ///// Miscellaneous
 
   /**
-   * The object referenced by a target specification. Can be used to load an item, referenced by a target specification, directly from a database
-   * and receive it as an input to a function. See the documentation for {@link TargetSourcingFunction} for details on requesting target resolved
-   * items.
+   * The object referenced by a target specification. Can be used to load an
+   * item, referenced by a target specification, directly from a database and
+   * receive it as an input to a function. See the documentation for
+   * {@link com.opengamma.engine.function.TargetSourcingFunction} for details on
+   * requesting target resolved items.
    */
   public static final String TARGET = "Target";
 

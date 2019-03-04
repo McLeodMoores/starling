@@ -39,7 +39,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.OpenGammaCompilationContext;
 import com.opengamma.financial.analytics.DoubleLabelledMatrix1D;
@@ -57,7 +56,8 @@ public class HullWhiteDiscountingYCNSFunction extends HullWhiteDiscountingFuncti
   private static final Logger LOGGER = LoggerFactory.getLogger(HullWhiteDiscountingYCNSFunction.class);
 
   /**
-   * Sets the value requirements to {@link ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}
+   * Sets the value requirements to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}
    */
   public HullWhiteDiscountingYCNSFunction() {
     super(YIELD_CURVE_NODE_SENSITIVITIES);

@@ -53,7 +53,7 @@ public class IntegrationToolContext extends ToolContext implements BloombergTool
   /**
    * The Bloomberg reference data provider.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private volatile ReferenceDataProvider _bloombergReferenceDataProvider;
 
   @PropertyDefinition
@@ -130,6 +130,7 @@ public class IntegrationToolContext extends ToolContext implements BloombergTool
    * Gets the Bloomberg reference data provider.
    * @return the value of the property
    */
+  @Override
   public ReferenceDataProvider getBloombergReferenceDataProvider() {
     return _bloombergReferenceDataProvider;
   }

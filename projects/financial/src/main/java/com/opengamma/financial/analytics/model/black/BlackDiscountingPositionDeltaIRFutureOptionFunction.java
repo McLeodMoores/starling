@@ -26,7 +26,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
@@ -39,7 +38,8 @@ public class BlackDiscountingPositionDeltaIRFutureOptionFunction extends BlackDi
       PositionDeltaSTIRFutureOptionCalculator.getInstance();
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#POSITION_DELTA}
+   * Sets the value requirement to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#POSITION_DELTA}
    */
   public BlackDiscountingPositionDeltaIRFutureOptionFunction() {
     super(POSITION_DELTA);

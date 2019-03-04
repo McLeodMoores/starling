@@ -22,7 +22,6 @@ import org.threeten.bp.ZonedDateTime;
 import com.google.common.collect.Iterables;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
-import com.opengamma.analytics.financial.provider.calculator.discounting.PV01CurveParametersCalculator;
 import com.opengamma.analytics.financial.provider.calculator.inflation.PV01CurveParametersInflationCalculator;
 import com.opengamma.analytics.financial.provider.calculator.inflation.PresentValueCurveSensitivityIssuerDiscountingInflationCalculator;
 import com.opengamma.analytics.financial.provider.description.inflation.InflationIssuerProviderInterface;
@@ -34,7 +33,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.model.BondAndBondFutureFunctionUtils;
 import com.opengamma.financial.security.FinancialSecurityUtils;
@@ -54,7 +52,7 @@ public class InflationBondPV01Function extends InflationBondFromCurvesFunction<I
 
   /**
    * Sets the value requirement name to {@link ValueRequirementNames#PV01} and
-   * sets the calculator to {@link PV01CurveParametersCalculator}
+   * sets the calculator to {@link PV01CurveParametersInflationCalculator}
    */
   public InflationBondPV01Function() {
     super(PV01, CALCULATOR);

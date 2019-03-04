@@ -5,8 +5,6 @@
  */
 package com.opengamma.financial.generator;
 
-import com.opengamma.financial.security.fra.FRASecurity;
-
 /**
  * Utility for constructing a random FRA portfolio.
  */

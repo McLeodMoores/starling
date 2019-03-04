@@ -8,7 +8,6 @@ package com.opengamma.financial.analytics.model.bondcleanprice;
 import static com.opengamma.engine.value.ValueRequirementNames.MACAULAY_DURATION;
 
 import com.opengamma.analytics.financial.interestrate.bond.calculator.MacaulayDurationFromCleanPriceCalculator;
-import com.opengamma.engine.value.ValueRequirementNames;
 
 /**
  * Calculates the Macaulay duration of a bond from the clean price.
@@ -16,7 +15,8 @@ import com.opengamma.engine.value.ValueRequirementNames;
 public class BondMacaulayDurationFromCleanPriceFunction extends BondFromCleanPriceFunction<Double> {
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#MACAULAY_DURATION}
+   * Sets the value requirement name to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#MACAULAY_DURATION}
    * and the calculator to {@link MacaulayDurationFromCleanPriceCalculator}
    */
   public BondMacaulayDurationFromCleanPriceFunction() {

@@ -41,7 +41,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueProperties.Builder;
-import com.opengamma.engine.value.ValuePropertyNames;
 import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.financial.OpenGammaCompilationContext;
 import com.opengamma.financial.analytics.conversion.CashFlowSecurityConverter;
@@ -63,12 +62,7 @@ import com.opengamma.financial.security.FinancialSecurity;
 import com.opengamma.financial.security.FinancialSecurityUtils;
 import com.opengamma.financial.security.FinancialSecurityVisitor;
 import com.opengamma.financial.security.FinancialSecurityVisitorAdapter;
-import com.opengamma.financial.security.cash.CashSecurity;
-import com.opengamma.financial.security.cashflow.CashFlowSecurity;
-import com.opengamma.financial.security.fra.FRASecurity;
 import com.opengamma.financial.security.future.DeliverableSwapFutureSecurity;
-import com.opengamma.financial.security.future.FederalFundsFutureSecurity;
-import com.opengamma.financial.security.future.InterestRateFutureSecurity;
 import com.opengamma.financial.security.fx.FXForwardSecurity;
 import com.opengamma.financial.security.fx.NonDeliverableFXForwardSecurity;
 import com.opengamma.financial.security.option.SwaptionSecurity;
@@ -76,19 +70,23 @@ import com.opengamma.financial.security.swap.InterestRateNotional;
 import com.opengamma.financial.security.swap.SwapSecurity;
 
 /**
- * Base function for all pricing and risk functions that use curves constructed using the G2++ method. Produces results for trades with following underlying securities:
+ * Base function for all pricing and risk functions that use curves constructed
+ * using the G2++ method. Produces results for trades with following underlying
+ * securities:
  * <p>
  * <ul>
- * <li> {@link CashSecurity}
- * <li> {@link CashFlowSecurity}
- * <li> {@link FRASecurity}
- * <li> {@link SwapSecurity}
- * <li> {@link SwaptionSecurity}
- * <li> {@link FXForwardSecurity}
- * <li> {@link InterestRateFutureSecurity}
- * <li> {@link NonDeliverableFXForwardSecurity}
- * <li> {@link DeliverableSwapFutureSecurity}
- * <li> {@link FederalFundsFutureSecurity}
+ * <li>{@link com.opengamma.financial.security.cash.CashSecurity}
+ * <li>{@link com.opengamma.financial.security.cashflow.CashFlowSecurity}
+ * <li>{@link com.opengamma.financial.security.fra.FRASecurity}
+ * <li>{@link SwapSecurity}
+ * <li>{@link SwaptionSecurity}
+ * <li>{@link FXForwardSecurity}
+ * <li>
+ * {@link com.opengamma.financial.security.future.InterestRateFutureSecurity}
+ * <li>{@link NonDeliverableFXForwardSecurity}
+ * <li>{@link DeliverableSwapFutureSecurity}
+ * <li>
+ * {@link com.opengamma.financial.security.future.FederalFundsFutureSecurity}
  * </ul>
  */
 public abstract class G2ppDiscountingFunction extends MultiCurvePricingFunction {
@@ -126,13 +124,17 @@ public abstract class G2ppDiscountingFunction extends MultiCurvePricingFunction 
    * Base compiled function for all pricing and risk functions that use the Hull-White one-factor curve construction method.
    */
   protected abstract class G2ppCompiledFunction extends MultiCurveCompiledFunction {
-    /** True if the result properties set the {@link ValuePropertyNames#CURRENCY} property */
     private final boolean _withCurrency;
 
     /**
-     * @param tradeToDefinitionConverter Converts targets to definitions, not null
-     * @param definitionToDerivativeConverter Converts definitions to derivatives, not null
-     * @param withCurrency True if the result properties set the {@link ValuePropertyNames#CURRENCY} property
+     * @param tradeToDefinitionConverter
+     *          Converts targets to definitions, not null
+     * @param definitionToDerivativeConverter
+     *          Converts definitions to derivatives, not null
+     * @param withCurrency
+     *          True if the result properties set the
+     *          {@link com.opengamma.engine.value.ValuePropertyNames#CURRENCY}
+     *          property
      */
     protected G2ppCompiledFunction(final DefaultTradeConverter tradeToDefinitionConverter, final FixedIncomeConverterDataProvider definitionToDerivativeConverter, final boolean withCurrency) {
       super(tradeToDefinitionConverter, definitionToDerivativeConverter);

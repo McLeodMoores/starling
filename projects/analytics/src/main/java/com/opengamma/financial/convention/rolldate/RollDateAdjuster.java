@@ -20,16 +20,17 @@ public interface RollDateAdjuster extends TemporalAdjuster, NamedInstance {
 
   /**
    * Returns the number of months by which to adjust - e.g. 3 for quarterly.
-   * 
+   *
    * @return The number of months
    */
   long getMonthsToAdjust();
 
   /**
    * Returns the name of the adjuster convention.
-   * 
+   *
    * @return the name, not null
    */
+  @Override
   @ToString
   String getName();
 

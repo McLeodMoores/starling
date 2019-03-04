@@ -35,15 +35,15 @@ import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.forex.derivative.Forex;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
-import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.analytics.financial.provider.description.interestrate.ProviderUtils;
 import com.opengamma.analytics.math.curve.DoublesCurve;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.core.marketdatasnapshot.SnapshotDataBundle;
 import com.opengamma.core.security.Security;
 import com.opengamma.core.security.SecuritySource;
@@ -56,7 +56,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.target.ComputationTargetType;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
-import com.opengamma.engine.value.ValuePropertyNames;
 import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
@@ -141,9 +140,12 @@ public abstract class FXForwardPointsFunction extends AbstractFunction {
   }
 
   /**
-   * Constructs an object capable of converting from {@link InstrumentDefinition} to {@link InstrumentDerivative}.
+   * Constructs an object capable of converting from
+   * {@link InstrumentDefinition} to
+   * {@link com.opengamma.analytics.financial.interestrate.InstrumentDerivative}.
    *
-   * @param context The compilation context, not null
+   * @param context
+   *          The compilation context, not null
    * @return The converter
    */
   protected FixedIncomeConverterDataProvider getDefinitionToDerivativeConverter(final FunctionCompilationContext context) {
@@ -314,12 +316,16 @@ public abstract class FXForwardPointsFunction extends AbstractFunction {
     }
 
     /**
-     * Gets an {@link InstrumentDerivative}.
+     * Gets a {@link Forex}.
      *
-     * @param target The target, not null
-     * @param now The valuation time, not null
-     * @param timeSeries The conversion time series bundle, not null but may be empty
-     * @param definition The definition, not null
+     * @param target
+     *          The target, not null
+     * @param now
+     *          The valuation time, not null
+     * @param timeSeries
+     *          The conversion time series bundle, not null but may be empty
+     * @param definition
+     *          The definition, not null
      * @return The instrument derivative
      */
     protected Forex getForex(final ComputationTarget target, final ZonedDateTime now, final HistoricalTimeSeriesBundle timeSeries, final InstrumentDefinition<?> definition) {
@@ -377,13 +383,13 @@ public abstract class FXForwardPointsFunction extends AbstractFunction {
           leftExtrapolatorName = interpolatedDefinition.getLeftExtrapolatorName();
           rightExtrapolatorName = interpolatedDefinition.getRightExtrapolatorName();
         } else {
-          leftExtrapolatorName = Interpolator1DFactory.LINEAR_EXTRAPOLATOR;
-          rightExtrapolatorName = Interpolator1DFactory.LINEAR_EXTRAPOLATOR;
+          leftExtrapolatorName = LinearExtrapolator1dAdapter.NAME;
+          rightExtrapolatorName = LinearExtrapolator1dAdapter.NAME;
         }
       } else {
-        interpolatorName = Interpolator1DFactory.LINEAR;
-        leftExtrapolatorName = Interpolator1DFactory.LINEAR_EXTRAPOLATOR;
-        rightExtrapolatorName = Interpolator1DFactory.LINEAR_EXTRAPOLATOR;
+        interpolatorName = LinearInterpolator1dAdapter.NAME;
+        leftExtrapolatorName = LinearExtrapolator1dAdapter.NAME;
+        rightExtrapolatorName = LinearExtrapolator1dAdapter.NAME;
       }
       final CurveSpecification specification = (CurveSpecification) inputs.getValue(CURVE_SPECIFICATION);
       final SnapshotDataBundle data = (SnapshotDataBundle) inputs.getValue(CURVE_MARKET_DATA);
@@ -402,8 +408,7 @@ public abstract class FXForwardPointsFunction extends AbstractFunction {
         tList.add(DateUtils.getDifferenceInYears(now, now.plus(tenor.getPeriod())));
         fxList.add(fxForward);
       }
-      final Interpolator1D interpolator =
-          CombinedInterpolatorExtrapolatorFactory.getInterpolator(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
+      final Interpolator1D interpolator = NamedInterpolator1dFactory.of(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
       return InterpolatedDoublesCurve.from(tList.toDoubleArray(), fxList.toDoubleArray(), interpolator);
     }
   }
