@@ -8,12 +8,12 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertTrue;
 
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.testng.annotations.Test;
+import org.threeten.bp.LocalDate;
 
 import com.opengamma.util.test.TestGroup;
 

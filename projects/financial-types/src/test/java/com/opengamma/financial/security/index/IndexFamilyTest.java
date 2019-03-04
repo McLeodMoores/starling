@@ -7,7 +7,6 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -37,7 +36,7 @@ public class IndexFamilyTest extends AbstractBeanTestCase {
   @Override
   public JodaBeanProperties<? extends Bean> getJodaBeanProperties() {
     return new JodaBeanProperties<>(IndexFamily.class, Arrays.asList("name", "members"), Arrays.asList(NAME, MEMBERS),
-        Arrays.asList("other", Collections.emptySortedMap()));
+        Arrays.asList("other", new TreeMap<>()));
   }
 
   /**

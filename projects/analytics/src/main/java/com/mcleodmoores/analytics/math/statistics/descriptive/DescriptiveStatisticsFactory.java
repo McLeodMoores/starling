@@ -3,6 +3,7 @@
  */
 package com.mcleodmoores.analytics.math.statistics.descriptive;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.util.Locale;
 import java.util.Set;
@@ -63,7 +64,18 @@ public class DescriptiveStatisticsFactory extends AbstractNamedInstanceFactory<D
     final AnnotationReflector reflector = new AnnotationReflector(config);
     final Set<Class<?>> classes = reflector.getReflector().getTypesAnnotatedWith(DescriptiveStatistic.class);
     for (final Class<?> clazz : classes) {
-      final DescriptiveStatistic annotation = clazz.getDeclaredAnnotation(DescriptiveStatistic.class);
+      clazz.getDeclaredAnnotations();
+      final Annotation[] annotations = clazz.getDeclaredAnnotations();
+      DescriptiveStatistic annotation = null;
+      for (final Annotation a : annotations) {
+        if (a.annotationType().equals(DescriptiveStatistic.class)) {
+          annotation = (DescriptiveStatistic) a;
+        }
+      }
+      if (annotation == null) {
+        LOGGER.error("Could not get DescriptiveStatistic annotation for {}", clazz.getSimpleName());
+        continue;
+      }
       final String name = annotation.name().toLowerCase(Locale.ENGLISH);
       final String[] aliases = annotation.aliases();
       if (!name.equals(lowerName)) {
@@ -87,7 +99,7 @@ public class DescriptiveStatisticsFactory extends AbstractNamedInstanceFactory<D
           }
         } catch (final Exception e) {
           throw new IllegalArgumentException("Could not get calculator called " + statisticName + " with arguments "
-                + Arrays.toString(args) + ": " + e.getMessage());
+              + Arrays.toString(args) + ": " + e.getMessage());
         }
       }
     }
@@ -107,7 +119,17 @@ public class DescriptiveStatisticsFactory extends AbstractNamedInstanceFactory<D
     final AnnotationReflector reflector = new AnnotationReflector(config);
     final Set<Class<?>> classes = reflector.getReflector().getTypesAnnotatedWith(DescriptiveStatistic.class);
     for (final Class<?> clazz : classes) {
-      final DescriptiveStatistic annotation = clazz.getDeclaredAnnotation(DescriptiveStatistic.class);
+      final Annotation[] annotations = clazz.getDeclaredAnnotations();
+      DescriptiveStatistic annotation = null;
+      for (final Annotation a : annotations) {
+        if (a.annotationType().equals(DescriptiveStatistic.class)) {
+          annotation = (DescriptiveStatistic) a;
+        }
+      }
+      if (annotation == null) {
+        LOGGER.error("Could not get DescriptiveStatistic annotation for {}", clazz.getSimpleName());
+        continue;
+      }
       final String[] aliases = annotation.aliases();
       DescriptiveStatisticsCalculator instance = null;
       final Constructor<?>[] constructors = clazz.getDeclaredConstructors();

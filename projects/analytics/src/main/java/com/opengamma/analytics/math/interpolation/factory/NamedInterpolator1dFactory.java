@@ -3,6 +3,7 @@
  */
 package com.opengamma.analytics.math.interpolation.factory;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
@@ -109,7 +110,17 @@ public final class NamedInterpolator1dFactory extends AbstractNamedInstanceFacto
     final Set<Class<?>> classes = reflector.getReflector().getTypesAnnotatedWith(InterpolationType.class);
     for (final Class<?> clazz : classes) {
       try {
-        final InterpolationType annotation = clazz.getDeclaredAnnotation(InterpolationType.class);
+        final Annotation[] annotations = clazz.getDeclaredAnnotations();
+        InterpolationType annotation = null;
+        for (final Annotation a : annotations) {
+          if (a.annotationType().equals(InterpolationType.class)) {
+            annotation = (InterpolationType) a;
+          }
+        }
+        if (annotation == null) {
+          LOGGER.error("Could not get InterpolationType annotation for {}", clazz.getSimpleName());
+          continue;
+        }
         final String name = annotation.name();
         final String[] aliases = annotation.aliases();
         NamedInterpolator1d instance = null;

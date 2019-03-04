@@ -3,6 +3,7 @@
  */
 package com.mcleodmoores.analytics.math.rootfinding;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
@@ -45,7 +46,17 @@ public final class VectorRootFinderFactory extends AbstractNamedInstanceFactory<
     final Set<Class<?>> classes = reflector.getReflector().getTypesAnnotatedWith(VectorRootFinderType.class);
     for (final Class<?> clazz : classes) {
       try {
-        final VectorRootFinderType annotation = clazz.getDeclaredAnnotation(VectorRootFinderType.class);
+        final Annotation[] annotations = clazz.getDeclaredAnnotations();
+        VectorRootFinderType annotation = null;
+        for (final Annotation a : annotations) {
+          if (a.annotationType().equals(VectorRootFinderType.class)) {
+            annotation = (VectorRootFinderType) a;
+          }
+        }
+        if (annotation == null) {
+          LOGGER.error("Could not get VectorRootFinderType annotation for {}", clazz.getSimpleName());
+          continue;
+        }
         final String name = annotation.name();
         final VectorRootFinder instance = (VectorRootFinder) clazz.getConstructor().newInstance(new Object[0]);
         CLASS_REFERENCES.putIfAbsent(name, (Class<VectorRootFinder>) clazz);
@@ -120,7 +131,7 @@ public final class VectorRootFinderFactory extends AbstractNamedInstanceFactory<
 
   /**
    * Transforms the name of the interpolator into the extrapolator: (EXTRAPOLATOR_NAME, NAME) -> EXTRAPOLATOR_NAME[NAME].
-   * 
+   *
    * @param extrapolatorName
    *          the version of the name of the linear extrapolator, not null
    * @param interpolatorName
